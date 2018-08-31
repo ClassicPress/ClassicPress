@@ -2,12 +2,13 @@
 
 [![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
-This is a fork of the WordPress 4.9 branch (the 4.9.x releases are expected to
-be the last ones without Gutenberg included).
+**WordPress without Gutenberg / React.js**
 
-The fork is in very early stages.  Help is welcome while we get ready for an
-initial release.  For more information, see:
+<img src="src/wp-includes/images/ClassicPress-icon-blue-1600.png" width="400">
 
-- https://www.classicpress.net/
-- This repository's
-  [open issues](https://github.com/ClassicPress/ClassicPress/issues)
+ClassicPress will start as a long term support (LTS) fork of WordPress 4.9.x with the goal of providing ongoing security patches, bug fixes and compatibility updates for at least 2 years, giving you peace of mind that the WordPress you know and love can be used for the foreseeable future.
+
+For more information, see:
+
+- [The official ClassicPress website](https://www.classicpress.net/)
+- [This repository's open issues](https://github.com/ClassicPress/ClassicPress/issues)
