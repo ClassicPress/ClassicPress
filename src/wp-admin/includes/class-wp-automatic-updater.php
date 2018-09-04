@@ -829,7 +829,7 @@ class WP_Automatic_Updater {
 "BETA TESTING?
 =============
 
-This debugging email is sent when you are using a development version of WordPress.
+This debugging email is sent when you are using a development version of ClassicPress.
 
 If you think these failures might be due to a bug in WordPress, could you report it?
  * Open a thread in the support forums: https://wordpress.org/support/forum/alphabeta

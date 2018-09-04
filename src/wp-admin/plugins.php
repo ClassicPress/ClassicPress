@@ -410,7 +410,7 @@ get_current_screen()->add_help_tab( array(
 'id'		=> 'overview',
 'title'		=> __('Overview'),
 'content'	=>
-	'<p>' . __('Plugins extend and expand the functionality of WordPress. Once a plugin is installed, you may activate it or deactivate it here.') . '</p>' .
+	'<p>' . __('Plugins extend and expand the functionality of ClassicPress. Once a plugin is installed, you may activate it or deactivate it here.') . '</p>' .
 	'<p>' . __( 'The search for installed plugins will search for terms in their name, description, or author.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
 	'<p>' . sprintf(
 		/* translators: %s: WordPress Plugin Directory URL */

@@ -92,7 +92,7 @@ function find_core_auto_update() {
 }
 
 /**
- * Gets and caches the checksums for the given version of WordPress.
+ * Gets and caches the checksums for the given version of ClassicPress.
  *
  * @since 3.7.0
  *

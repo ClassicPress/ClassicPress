@@ -707,7 +707,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	}
 
 	/**
-	 * Filters the data for a file before it is uploaded to WordPress.
+	 * Filters the data for a file before it is uploaded to ClassicPress.
 	 *
 	 * The dynamic portion of the hook name, `$action`, refers to the post action.
 	 *

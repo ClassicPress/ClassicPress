@@ -64,7 +64,7 @@ function _wp_credits_add_profile_link( &$display_name, $username, $profiles ) {
 }
 
 /**
- * Retrieve the link to an external library used in WordPress.
+ * Retrieve the link to an external library used in ClassicPress.
  *
  * @access private
  * @since 3.2.0

@@ -54,7 +54,7 @@ function list_core_update( $update ) {
 	$mysql_version  = $wpdb->db_version();
 	$show_buttons = true;
 	if ( 'development' == $update->response ) {
-		$message = __('You are using a development version of WordPress. You can update to the latest nightly build automatically:');
+		$message = __('You are using a development version of ClassicPress. You can update to the latest nightly build automatically:');
 	} else {
 		if ( $current ) {
 			$message = sprintf( __( 'If you need to re-install version %s, you can do so here:' ), $version_string );
@@ -162,7 +162,7 @@ function core_upgrade_preamble() {
 
 	if ( !isset($updates[0]->response) || 'latest' == $updates[0]->response ) {
 		echo '<h2>';
-		_e('You have the latest version of WordPress.');
+		_e('You have the latest version of ClassicPress.');
 
 		if ( wp_http_supports( array( 'ssl' ) ) ) {
 			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
@@ -261,7 +261,7 @@ function list_plugin_updates() {
 			}			
 		}
 
-		// Get plugin compat for running version of WordPress.
+		// Get plugin compat for running version of ClassicPress.
 		if ( isset($plugin_data->update->tested) && version_compare($plugin_data->update->tested, $cur_wp_version, '>=') ) {
 			$compat = '<br />' . sprintf(__('Compatibility with WordPress %1$s: 100%% (according to its author)'), $cur_wp_version);
 		} elseif ( isset($plugin_data->update->compatibility->{$cur_wp_version}) ) {
@@ -270,7 +270,7 @@ function list_plugin_updates() {
 		} else {
 			$compat = '<br />' . sprintf(__('Compatibility with WordPress %1$s: Unknown'), $cur_wp_version);
 		}
-		// Get plugin compat for updated version of WordPress.
+		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
 				$compat .= '<br />' . sprintf( __( 'Compatibility with WordPress %1$s: 100%% (according to its author)' ), $core_update_version );

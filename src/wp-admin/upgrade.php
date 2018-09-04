@@ -7,7 +7,7 @@
  */
 
 /**
- * We are upgrading WordPress.
+ * We are upgrading ClassicPress.
  *
  * @since 1.5.1
  * @var bool
@@ -68,7 +68,7 @@ else
 	?>
 </head>
 <body class="wp-core-ui">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://wordpress.org/' ) ); ?>" tabindex="-1"><?php _e( 'WordPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( __( 'https://classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'WordPress' ); ?></a></p>
 
 <?php if ( get_option( 'db_version' ) == $wp_db_version || !is_blog_installed() ) : ?>
 

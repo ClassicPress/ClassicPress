@@ -817,7 +817,7 @@ $_new_bundled_files = array(
 );
 
 /**
- * Upgrades the core of WordPress.
+ * Upgrades the core of ClassicPress.
  *
  * This will create a .maintenance file at the base of the WordPress directory
  * to ensure that people can not access the web site, when the files are being

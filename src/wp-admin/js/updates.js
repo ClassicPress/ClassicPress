@@ -194,7 +194,7 @@
 	};
 
 	/**
-	 * Handles Ajax requests to WordPress.
+	 * Handles Ajax requests to ClassicPress.
 	 *
 	 * @since 4.6.0
 	 *

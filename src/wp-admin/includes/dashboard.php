@@ -1556,7 +1556,7 @@ function wp_check_browser_version() {
 function wp_dashboard_empty() {}
 
 /**
- * Displays a welcome panel to introduce users to WordPress.
+ * Displays a welcome panel to introduce users to ClassicPress.
  *
  * @since 3.3.0
  */

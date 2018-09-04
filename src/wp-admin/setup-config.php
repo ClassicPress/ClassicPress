@@ -107,7 +107,7 @@ function setup_config_display_header( $body_classes = array() ) {
 	<?php wp_admin_css( 'install', true ); ?>
 </head>
 <body class="<?php echo implode( ' ', $body_classes ); ?>">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://wordpress.org/' ) ); ?>" tabindex="-1"><?php _e( 'WordPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( __( 'https://classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'WordPress' ); ?></a></p>
 <?php
 } // end function setup_config_display_header();
 
@@ -150,7 +150,7 @@ switch($step) {
 		}
 ?>
 <h1 class="screen-reader-text"><?php _e( 'Before getting started' ) ?></h1>
-<p><?php _e( 'Welcome to WordPress. Before getting started, we need some information on the database. You will need to know the following items before proceeding.' ) ?></p>
+<p><?php _e( 'Welcome to ClassicPress. Before getting started, we need some information on the database. You will need to know the following items before proceeding.' ) ?></p>
 <ol>
 	<li><?php _e( 'Database name' ); ?></li>
 	<li><?php _e( 'Database username' ); ?></li>
@@ -196,7 +196,7 @@ switch($step) {
 		<tr>
 			<th scope="row"><label for="dbname"><?php _e( 'Database Name' ); ?></label></th>
 			<td><input name="dbname" id="dbname" type="text" size="25" value="wordpress" /></td>
-			<td><?php _e( 'The name of the database you want to use with WordPress.' ); ?></td>
+			<td><?php _e( 'The name of the database you want to use with ClassicPress.' ); ?></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="uname"><?php _e( 'Username' ); ?></label></th>
