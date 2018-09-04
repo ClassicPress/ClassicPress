@@ -26,7 +26,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @since 2.8.0
 	 */
 	public function upgrade_strings() {
-		$this->strings['up_to_date'] = __('WordPress is at the latest version.');
+		$this->strings['up_to_date'] = __('ClassicPress is at the latest version.');
 		$this->strings['locked'] = __('Another update is currently in progress.');
 		$this->strings['no_package'] = __('Update package not available.');
 		/* translators: %s: package URL */

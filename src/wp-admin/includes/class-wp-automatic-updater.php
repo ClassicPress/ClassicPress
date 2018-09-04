@@ -294,7 +294,7 @@ class WP_Automatic_Updater {
 		switch ( $type ) {
 			case 'core':
 				$skin->feedback( __( 'Updating to ClassicPress %s' ), $item->version );
-				$item_name = sprintf( __( 'WordPress %s' ), $item->version );
+				$item_name = sprintf( __( 'ClassicPress %s' ), $item->version );
 				break;
 			case 'theme':
 				$upgrader_item = $item->theme;
@@ -346,7 +346,7 @@ class WP_Automatic_Updater {
 			if ( is_wp_error( $upgrade_result ) ) {
 				$skin->error( __( 'Installation Failed' ), $upgrade_result );
 			} else {
-				$skin->feedback( __( 'WordPress updated successfully' ) );
+				$skin->feedback( __( 'ClassicPress updated successfully' ) );
 			}
 		}
 
@@ -640,7 +640,7 @@ class WP_Automatic_Updater {
 				$body .= "\n" . admin_url( 'about.php' );
 
 				if ( $newer_version_available ) {
-					$body .= "\n\n" . sprintf( __( 'WordPress %s is also now available.' ), $next_user_core_update->current ) . ' ';
+					$body .= "\n\n" . sprintf( __( 'ClassicPress %s is also now available.' ), $next_user_core_update->current ) . ' ';
 					$body .= __( 'Updating is easy and only takes a few moments:' );
 					$body .= "\n" . network_admin_url( 'update-core.php' );
 				}
@@ -666,7 +666,7 @@ class WP_Automatic_Updater {
 				if ( $newer_version_available )
 					$body .= sprintf( __( 'Your site at %1$s experienced a critical failure while trying to update ClassicPress to version %2$s.' ), home_url(), $core_update->current );
 				else
-					$body .= sprintf( __( 'Your site at %1$s experienced a critical failure while trying to update to the latest version of WordPress, %2$s.' ), home_url(), $core_update->current );
+					$body .= sprintf( __( 'Your site at %1$s experienced a critical failure while trying to update to the latest version of ClassicPress, %2$s.' ), home_url(), $core_update->current );
 
 				$body .= "\n\n" . __( "This means your site may be offline or broken. Don't panic; this can be fixed." );
 
@@ -773,7 +773,7 @@ class WP_Automatic_Updater {
 		$body = array();
 		$failures = 0;
 
-		$body[] = sprintf( __( 'WordPress site: %s' ), network_home_url( '/' ) );
+		$body[] = sprintf( __( 'ClassicPress site: %s' ), network_home_url( '/' ) );
 
 		// Core
 		if ( isset( $this->update_results['core'] ) ) {
@@ -831,7 +831,7 @@ class WP_Automatic_Updater {
 
 This debugging email is sent when you are using a development version of ClassicPress.
 
-If you think these failures might be due to a bug in WordPress, could you report it?
+If you think these failures might be due to a bug in ClassicPress, could you report it?
  * Open a thread in the support forums: https://wordpress.org/support/forum/alphabeta
  * Or, if you're comfortable writing a bug report: https://core.trac.wordpress.org/
 

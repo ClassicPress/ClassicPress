@@ -63,7 +63,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <label for="use_smilies">
 <input name="use_smilies" type="checkbox" id="use_smilies" value="1" <?php checked('1', get_option('use_smilies')); ?> />
 <?php _e('Convert emoticons like <code>:-)</code> and <code>:-P</code> to graphics on display') ?></label><br />
-<label for="use_balanceTags"><input name="use_balanceTags" type="checkbox" id="use_balanceTags" value="1" <?php checked('1', get_option('use_balanceTags')); ?> /> <?php _e('WordPress should correct invalidly nested XHTML automatically') ?></label>
+<label for="use_balanceTags"><input name="use_balanceTags" type="checkbox" id="use_balanceTags" value="1" <?php checked('1', get_option('use_balanceTags')); ?> /> <?php _e('ClassicPress should correct invalidly nested XHTML automatically') ?></label>
 </fieldset></td>
 </tr>
 <?php endif; ?>
@@ -183,7 +183,7 @@ if ( apply_filters( 'enable_update_services_configuration', true ) ) {
 	<p><?php
 		printf(
 			/* translators: 1: Codex URL, 2: Reading Settings URL */
-			__( 'WordPress is not notifying any <a href="%1$s">Update Services</a> because of your site&#8217;s <a href="%2$s">visibility settings</a>.' ),
+			__( 'ClassicPress is not notifying any <a href="%1$s">Update Services</a> because of your site&#8217;s <a href="%2$s">visibility settings</a>.' ),
 			__( 'https://codex.wordpress.org/Update_Services' ),
 			'options-reading.php'
 		);

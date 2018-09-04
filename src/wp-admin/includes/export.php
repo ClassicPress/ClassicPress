@@ -414,7 +414,7 @@ function export_wp( $args = array() ) {
 <!-- To import this information into a ClassicPress site follow these steps: -->
 <!-- 1. Log in to that site as an administrator. -->
 <!-- 2. Go to Tools: Import in the ClassicPress admin panel. -->
-<!-- 3. Install the "WordPress" importer from the list. -->
+<!-- 3. Install the "ClassicPress" importer from the list. -->
 <!-- 4. Activate & Run Importer. -->
 <!-- 5. Upload this file using the form provided on that page. -->
 <!-- 6. You will first be asked to map the authors in this export file to users -->

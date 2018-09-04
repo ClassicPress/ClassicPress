@@ -683,7 +683,7 @@ function validate_file_to_edit( $file, $allowed_files = array() ) {
 }
 
 /**
- * Handle PHP uploads in WordPress, sanitizing file names, checking extensions for mime type,
+ * Handle PHP uploads in ClassicPress, sanitizing file names, checking extensions for mime type,
  * and moving the file to the appropriate directory within the uploads directory.
  *
  * @access private

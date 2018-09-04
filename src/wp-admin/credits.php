@@ -39,7 +39,7 @@ $credits = wp_credits();
 if ( ! $credits ) {
 	echo '<p class="about-description">';
 	/* translators: 1: https://wordpress.org/about/, 2: https://make.wordpress.org/ */
-	printf( __( 'WordPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals. <a href="%2$s">Get involved in WordPress</a>.' ),
+	printf( __( 'ClassicPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals. <a href="%2$s">Get involved in ClassicPress</a>.' ),
 		'https://wordpress.org/about/',
 		__( 'https://make.wordpress.org/' )
 	);
@@ -50,11 +50,11 @@ if ( ! $credits ) {
 	exit;
 }
 
-echo '<p class="about-description">' . __( 'WordPress is created by a worldwide team of passionate individuals.' ) . "</p>\n";
+echo '<p class="about-description">' . __( 'ClassicPress is created by a worldwide team of passionate individuals.' ) . "</p>\n";
 
 echo '<p>' . sprintf(
 	/* translators: %s: https://make.wordpress.org/ */
-	__( 'Want to see your name in lights on this page? <a href="%s">Get involved in WordPress</a>.' ),
+	__( 'Want to see your name in lights on this page? <a href="%s">Get involved in ClassicPress</a>.' ),
 	__( 'https://make.wordpress.org/' )
 ) . '</p>';
 
