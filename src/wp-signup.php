@@ -1,6 +1,6 @@
 <?php
 
-/** Sets up the WordPress Environment. */
+/** Sets up the ClassicPress Environment. */
 require( dirname(__FILE__) . '/wp-load.php' );
 
 add_action( 'wp_head', 'wp_no_robots' );
