@@ -34,7 +34,7 @@
  * @subpackage Plugin
  */
 
-/** Load WordPress Bootstrap */
+/** Load ClassicPress Bootstrap */
 require_once(dirname(dirname(__FILE__)).'/wp-load.php');
 
 if ( ! function_exists('maybe_create_table') ) :

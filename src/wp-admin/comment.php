@@ -6,7 +6,7 @@
  * @subpackage Administration
  */
 
-/** Load WordPress Bootstrap */
+/** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 $parent_file = 'edit-comments.php';

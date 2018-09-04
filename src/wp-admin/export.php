@@ -6,13 +6,13 @@
  * @subpackage Administration
  */
 
-/** Load WordPress Bootstrap */
+/** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( !current_user_can('export') )
 	wp_die(__('Sorry, you are not allowed to export the content of this site.'));
 
-/** Load WordPress export API */
+/** Load ClassicPress export API */
 require_once( ABSPATH . 'wp-admin/includes/export.php' );
 $title = __('Export');
 

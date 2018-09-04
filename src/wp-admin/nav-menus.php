@@ -9,7 +9,7 @@
  * @subpackage Administration
  */
 
-/** Load WordPress Administration Bootstrap */
+/** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 // Load all the nav menu interface functions

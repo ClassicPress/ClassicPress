@@ -9,7 +9,7 @@
  * @subpackage Administration
  */
 
-/** Load WordPress Administration Bootstrap */
+/** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 wp_reset_vars( array( 'action', 'cat_id', 'link_id' ) );

@@ -7,7 +7,7 @@
  * @since 3.0.0
  */
 
-/** Load WordPress Administration Bootstrap */
+/** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 require_once( ABSPATH . WPINC . '/http.php' );

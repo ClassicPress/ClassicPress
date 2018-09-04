@@ -14,7 +14,7 @@
  */
 define( 'WP_INSTALLING', true );
 
-/** Load WordPress Bootstrap */
+/** Load ClassicPress Bootstrap */
 require( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
 
 nocache_headers();
