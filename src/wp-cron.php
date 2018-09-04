@@ -1,6 +1,6 @@
 <?php
 /**
- * A pseudo-CRON daemon for scheduling WordPress tasks
+ * A pseudo-CRON daemon for scheduling ClassicPress tasks
  *
  * WP Cron is triggered when the site receives a visit. In the scenario
  * where a site may not receive enough visits to execute scheduled tasks
@@ -13,7 +13,7 @@
  * The HTTP request to this file will not slow down the visitor who happens to
  * visit when the cron job is needed to run.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 ignore_user_abort(true);
@@ -22,14 +22,14 @@ if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
 	die();
 
 /**
- * Tell WordPress we are doing the CRON task.
+ * Tell ClassicPress we are doing the CRON task.
  *
  * @var bool
  */
 define('DOING_CRON', true);
 
 if ( !defined('ABSPATH') ) {
-	/** Set up WordPress environment */
+	/** Set up ClassicPress environment */
 	require_once( dirname( __FILE__ ) . '/wp-load.php' );
 }
 
@@ -41,7 +41,7 @@ if ( !defined('ABSPATH') ) {
  * @ignore
  * @since 3.3.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @return string|false Value of the `doing_cron` transient, 0|false otherwise.
  */

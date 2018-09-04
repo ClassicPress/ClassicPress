@@ -1,10 +1,10 @@
 <?php
 /**
- * Handle Trackbacks and Pingbacks Sent to WordPress
+ * Handle Trackbacks and Pingbacks Sent to ClassicPress
  *
  * @since 0.71
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Trackbacks
  */
 
