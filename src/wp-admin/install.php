@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Installer
+ * ClassicPress Installer
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

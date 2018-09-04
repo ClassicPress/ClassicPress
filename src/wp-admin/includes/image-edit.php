@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Image Editor
+ * ClassicPress Image Editor
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

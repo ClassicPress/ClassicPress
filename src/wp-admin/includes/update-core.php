@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress core upgrade functionality.
+ * ClassicPress core upgrade functionality.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 2.7.0
  */

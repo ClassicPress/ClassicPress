@@ -4,7 +4,7 @@
  * functions and look for the alternatives instead. The functions will be removed
  * in a later version.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Deprecated
  */
 
@@ -326,7 +326,7 @@ function get_nonauthor_user_ids() {
 
 if ( ! class_exists( 'WP_User_Search', false ) ) :
 /**
- * WordPress User Search class.
+ * ClassicPress User Search class.
  *
  * @since 2.1.0
  * @deprecated 3.1.0 Use WP_User_Query

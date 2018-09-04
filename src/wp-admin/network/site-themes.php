@@ -2,7 +2,7 @@
 /**
  * Edit Site Themes Administration Screen
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.1.0
  */

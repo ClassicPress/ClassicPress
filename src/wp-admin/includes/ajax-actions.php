@@ -2,7 +2,7 @@
 /**
  * Administration API: Core Ajax handlers
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 2.1.0
  */
@@ -3338,7 +3338,7 @@ function wp_ajax_generate_password() {
 }
 
 /**
- * Ajax handler for saving the user's WordPress.org username.
+ * Ajax handler for saving the user's ClassicPress.net username.
  *
  * @since 4.4.0
  */

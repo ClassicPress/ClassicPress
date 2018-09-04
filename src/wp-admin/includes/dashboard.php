@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Dashboard Widget Administration Screen API
+ * ClassicPress Dashboard Widget Administration Screen API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -1269,7 +1269,7 @@ function wp_print_community_events_templates() {
 }
 
 /**
- * WordPress News dashboard widget.
+ * ClassicPress News dashboard widget.
  *
  * @since 2.7.0
  * @since 4.8.0 Removed popular plugins feed.

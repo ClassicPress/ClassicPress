@@ -6,7 +6,7 @@
  * Includes functionality for theme-specific files as well as operations for uploading,
  * archiving, and rendering output when necessary.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Filesystem
  * @since 2.3.0
  */
@@ -65,7 +65,7 @@ $wp_file_descriptions = array(
 
 /**
  * Get the description for standard WordPress theme files and other various standard
- * WordPress files
+ * ClassicPress files
  *
  * @since 1.5.0
  *

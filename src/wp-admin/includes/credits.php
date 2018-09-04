@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Credits Administration API.
+ * ClassicPress Credits Administration API.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 4.4.0
  */
@@ -50,14 +50,14 @@ function wp_credits() {
 }
 
 /**
- * Retrieve the link to a contributor's WordPress.org profile page.
+ * Retrieve the link to a contributor's ClassicPress.net profile page.
  *
  * @access private
  * @since 3.2.0
  *
  * @param string $display_name  The contributor's display name (passed by reference).
  * @param string $username      The contributor's username.
- * @param string $profiles      URL to the contributor's WordPress.org profile page.
+ * @param string $profiles      URL to the contributor's ClassicPress.net profile page.
  */
 function _wp_credits_add_profile_link( &$display_name, $username, $profiles ) {
 	$display_name = '<a href="' . esc_url( sprintf( $profiles, $username ) ) . '">' . esc_html( $display_name ) . '</a>';

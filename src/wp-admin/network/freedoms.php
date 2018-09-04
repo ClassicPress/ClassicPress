@@ -2,7 +2,7 @@
 /**
  * Network Freedoms administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.4.0
  */

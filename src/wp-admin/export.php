@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Export Administration Screen
+ * ClassicPress Export Administration Screen
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

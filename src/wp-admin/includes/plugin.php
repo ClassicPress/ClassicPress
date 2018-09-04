@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Plugin Administration API
+ * ClassicPress Plugin Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -220,7 +220,7 @@ function get_plugin_files( $plugin ) {
 /**
  * Check the plugins directory and retrieve all plugin files with plugin data.
  *
- * WordPress only supports plugin files in the base plugins directory
+ * ClassicPress only supports plugin files in the base plugins directory
  * (wp-content/plugins) and in one directory above the plugins directory
  * (wp-content/plugins/my-plugin). The file it looks for has the plugin data
  * and must be found in those two locations. It is recommended to keep your
@@ -302,7 +302,7 @@ function get_plugins($plugin_folder = '') {
 /**
  * Check the mu-plugins directory and retrieve all mu-plugin files with any plugin data.
  *
- * WordPress only includes mu-plugin files in the base mu-plugins directory (wp-content/mu-plugins).
+ * ClassicPress only includes mu-plugin files in the base mu-plugins directory (wp-content/mu-plugins).
  *
  * @since 3.0.0
  * @return array Key is the mu-plugin file path and the value is an array of the mu-plugin data.

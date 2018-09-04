@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Network Administration Bootstrap
+ * ClassicPress Network Administration Bootstrap
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.1.0
  */

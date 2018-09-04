@@ -2,7 +2,7 @@
 /**
  * Edit links form for inclusion in administration panels.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

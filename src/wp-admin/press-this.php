@@ -2,13 +2,13 @@
 /**
  * Press This Display and Handler.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Press_This
  */
 
 define( 'IFRAME_REQUEST' , true );
 
-/** WordPress Administration Bootstrap */
+/** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 function wp_load_press_this() {

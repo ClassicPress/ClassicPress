@@ -5,7 +5,7 @@
  * There are many filters in here for media. Plugins can extend functionality
  * by hooking into the filters.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

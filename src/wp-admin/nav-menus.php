@@ -1,11 +1,11 @@
 <?php
 /**
- * WordPress Administration for Navigation Menus
+ * ClassicPress Administration for Navigation Menus
  * Interface functions
  *
  * @version 2.0.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

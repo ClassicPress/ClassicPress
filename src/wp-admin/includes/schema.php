@@ -1,10 +1,10 @@
 <?php
 /**
- * WordPress Administration Scheme API
+ * ClassicPress Administration Scheme API
  *
  * Here we keep the DB structure and option values.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

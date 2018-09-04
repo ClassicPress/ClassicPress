@@ -1,10 +1,10 @@
 <?php
 /**
- * WordPress Upgrade API
+ * ClassicPress Upgrade API
  *
  * Most of the functions are pluggable and can be overwritten.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -12,10 +12,10 @@
 if ( file_exists(WP_CONTENT_DIR . '/install.php') )
 	require (WP_CONTENT_DIR . '/install.php');
 
-/** WordPress Administration API */
+/** ClassicPress Administration API */
 require_once(ABSPATH . 'wp-admin/includes/admin.php');
 
-/** WordPress Schema API */
+/** ClassicPress Schema API */
 require_once(ABSPATH . 'wp-admin/includes/schema.php');
 
 if ( !function_exists('wp_install') ) :
@@ -2932,7 +2932,7 @@ endif;
  *
  * In a future iteration, this function may use `wp_is_large_network()` to more-
  * intelligently prevent global table upgrades. Until then, we make sure
- * WordPress is on the main site of the main network, to avoid running queries
+ * ClassicPress is on the main site of the main network, to avoid running queries
  * more than once in multi-site or multi-network environments.
  *
  * @since 4.3.0

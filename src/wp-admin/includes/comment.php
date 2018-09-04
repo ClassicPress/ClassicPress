@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Comment Administration API.
+ * ClassicPress Comment Administration API.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 2.3.0
  */

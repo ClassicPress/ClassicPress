@@ -2,7 +2,7 @@
 /**
  * File contains all the administration image manipulation functions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

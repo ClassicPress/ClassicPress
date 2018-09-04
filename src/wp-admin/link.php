@@ -5,7 +5,7 @@
  * This page is accessed by the link management pages and handles the forms and
  * Ajax processes for link actions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

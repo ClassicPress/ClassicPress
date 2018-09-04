@@ -2,7 +2,7 @@
 /**
  * Install theme network administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.1.0
  */

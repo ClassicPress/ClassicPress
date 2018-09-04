@@ -2,7 +2,7 @@
 /**
  * Upgrader API: Theme_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */

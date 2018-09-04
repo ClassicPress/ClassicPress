@@ -2,10 +2,10 @@
 /**
  * Discussion settings administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
-/** WordPress Administration Bootstrap */
+/** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( ! current_user_can( 'manage_options' ) )

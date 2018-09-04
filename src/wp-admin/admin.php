@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Bootstrap
+ * ClassicPress Administration Bootstrap
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

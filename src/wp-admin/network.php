@@ -6,13 +6,13 @@
  *
  * @since 3.0.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
 define( 'WP_INSTALLING_NETWORK', true );
 
-/** WordPress Administration Bootstrap */
+/** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( ! current_user_can( 'setup_network' ) ) {

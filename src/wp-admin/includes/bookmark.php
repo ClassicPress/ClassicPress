@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Bookmark Administration API
+ * ClassicPress Bookmark Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Theme Administration API
+ * ClassicPress Theme Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -227,7 +227,7 @@ function get_theme_update_available( $theme ) {
  *
  * @since 3.1.0
  *
- * @param bool $api Optional. Whether try to fetch tags from the WordPress.org API. Defaults to true.
+ * @param bool $api Optional. Whether try to fetch tags from the ClassicPress.net API. Defaults to true.
  * @return array Array of features keyed by category with translations keyed by slug.
  */
 function get_theme_feature_list( $api = true ) {
@@ -316,7 +316,7 @@ function get_theme_feature_list( $api = true ) {
 }
 
 /**
- * Retrieves theme installer pages from the WordPress.org Themes API.
+ * Retrieves theme installer pages from the ClassicPress.net Themes API.
  *
  * It is possible for a theme to override the Themes API result with three
  * filters. Assume this is for themes, which can extend on the Theme Info to
@@ -327,7 +327,7 @@ function get_theme_feature_list( $api = true ) {
  * as the second parameter. The hook for {@see 'themes_api_args'} must ensure that
  * an object is returned.
  *
- * The second filter, {@see 'themes_api'}, allows a plugin to override the WordPress.org
+ * The second filter, {@see 'themes_api'}, allows a plugin to override the ClassicPress.net
  * Theme API entirely. If `$action` is 'query_themes', 'theme_information', or 'feature_list',
  * an object MUST be passed. If `$action` is 'hot_tags', an array should be passed.
  *
@@ -411,29 +411,29 @@ function themes_api( $action, $args = array() ) {
 	}
 
 	/**
-	 * Filters arguments used to query for installer pages from the WordPress.org Themes API.
+	 * Filters arguments used to query for installer pages from the ClassicPress.net Themes API.
 	 *
 	 * Important: An object MUST be returned to this filter.
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param object $args   Arguments used to query for installer pages from the WordPress.org Themes API.
+	 * @param object $args   Arguments used to query for installer pages from the ClassicPress.net Themes API.
 	 * @param string $action Requested action. Likely values are 'theme_information',
 	 *                       'feature_list', or 'query_themes'.
 	 */
 	$args = apply_filters( 'themes_api_args', $args, $action );
 
 	/**
-	 * Filters whether to override the WordPress.org Themes API.
+	 * Filters whether to override the ClassicPress.net Themes API.
 	 *
-	 * Passing a non-false value will effectively short-circuit the WordPress.org API request.
+	 * Passing a non-false value will effectively short-circuit the ClassicPress.net API request.
 	 *
 	 * If `$action` is 'query_themes', 'theme_information', or 'feature_list', an object MUST
 	 * be passed. If `$action` is 'hot_tags', an array should be passed.
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param false|object|array $override Whether to override the WordPress.org Themes API. Default false.
+	 * @param false|object|array $override Whether to override the ClassicPress.net Themes API. Default false.
 	 * @param string             $action   Requested action. Likely values are 'theme_information',
 	 *                                    'feature_list', or 'query_themes'.
 	 * @param object             $args     Arguments used to query for installer pages from the Themes API.
@@ -462,9 +462,9 @@ function themes_api( $action, $args = array() ) {
 				trigger_error(
 					sprintf(
 						/* translators: %s: support forums URL */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://wordpress.org/support/' )
-					) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+					) . ' ' . __( '(WordPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 					headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 				);
 			}
@@ -475,7 +475,7 @@ function themes_api( $action, $args = array() ) {
 			$res = new WP_Error( 'themes_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
-					__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+					__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 					__( 'https://wordpress.org/support/' )
 				),
 				$request->get_error_message()
@@ -486,7 +486,7 @@ function themes_api( $action, $args = array() ) {
 				$res = new WP_Error( 'themes_api_failed',
 					sprintf(
 						/* translators: %s: support forums URL */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://wordpress.org/support/' )
 					),
 					wp_remote_retrieve_body( $request )
@@ -496,14 +496,14 @@ function themes_api( $action, $args = array() ) {
 	}
 
 	/**
-	 * Filters the returned WordPress.org Themes API response.
+	 * Filters the returned ClassicPress.net Themes API response.
 	 *
 	 * @since 2.8.0
 	 *
-	 * @param array|object|WP_Error $res    WordPress.org Themes API response.
+	 * @param array|object|WP_Error $res    ClassicPress.net Themes API response.
 	 * @param string                $action Requested action. Likely values are 'theme_information',
 	 *                                      'feature_list', or 'query_themes'.
-	 * @param object                $args   Arguments used to query for installer pages from the WordPress.org Themes API.
+	 * @param object                $args   Arguments used to query for installer pages from the ClassicPress.net Themes API.
 	 */
 	return apply_filters( 'themes_api_result', $res, $action, $args );
 }

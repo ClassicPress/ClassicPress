@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Export Administration API
+ * ClassicPress Export Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

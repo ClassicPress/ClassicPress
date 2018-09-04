@@ -2,7 +2,7 @@
 /**
  * Upgrade API: WP_Automatic_Updater class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
@@ -218,7 +218,7 @@ class WP_Automatic_Updater {
 		 * Filters whether to notify the site administrator of a new core update.
 		 *
 		 * By default, administrators are notified when the update offer received
-		 * from WordPress.org sets a particular flag. This allows some discretion
+		 * from ClassicPress.net sets a particular flag. This allows some discretion
 		 * in if and when to notify.
 		 *
 		 * This filter is only evaluated once per release. If the same email address
@@ -536,7 +536,7 @@ class WP_Automatic_Updater {
 		 *
 		 * For certain 'transient' failures, like download_failed, we should allow retries.
 		 * In fact, let's schedule a special update for an hour from now. (It's possible
-		 * the issue could actually be on WordPress.org's side.) If that one fails, then email.
+		 * the issue could actually be on ClassicPress.net's side.) If that one fails, then email.
 		 */
 		$send = true;
   		$transient_failures = array( 'incompatible_archive', 'download_failed', 'insane_distro', 'locked' );
@@ -681,7 +681,7 @@ class WP_Automatic_Updater {
 			$body .= "\n\n" . sprintf( __( "The WordPress team is willing to help you. Forward this email to %s and the team will work with you to make sure your site is working." ), $core_update->support_email );
 		} else {
 			// Add a note about the support forums.
-			$body .= "\n\n" . __( 'If you experience any issues or need support, the volunteers in the WordPress.org support forums may be able to help.' );
+			$body .= "\n\n" . __( 'If you experience any issues or need support, the volunteers in the ClassicPress.net support forums may be able to help.' );
 			$body .= "\n" . __( 'https://wordpress.org/support/' );
 		}
 

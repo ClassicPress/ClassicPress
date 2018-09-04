@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Importer API.
+ * ClassicPress Administration Importer API.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -116,7 +116,7 @@ function wp_import_handle_upload() {
 }
 
 /**
- * Returns a list from WordPress.org of popular importer plugins.
+ * Returns a list from ClassicPress.net of popular importer plugins.
  *
  * @since 3.5.0
  *

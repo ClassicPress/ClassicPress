@@ -2,7 +2,7 @@
 /**
  * Media management action handler.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

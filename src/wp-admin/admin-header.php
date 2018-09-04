@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Template Header
+ * ClassicPress Administration Template Header
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

@@ -3,7 +3,7 @@
  *
  * @version 4.2.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -531,7 +531,7 @@
 	 * @since 4.6.0
 	 *
 	 * @param {object}                args         Arguments.
-	 * @param {string}                args.slug    Plugin identifier in the WordPress.org Plugin repository.
+	 * @param {string}                args.slug    Plugin identifier in the ClassicPress.net Plugin repository.
 	 * @param {installPluginSuccess=} args.success Optional. Success callback. Default: wp.updates.installPluginSuccess
 	 * @param {installPluginError=}   args.error   Optional. Error callback. Default: wp.updates.installPluginError
 	 * @return {$.promise} A jQuery promise that represents the request,

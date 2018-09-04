@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress FTP Filesystem.
+ * ClassicPress FTP Filesystem.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Filesystem
  */
 
 /**
- * WordPress Filesystem Class for implementing FTP.
+ * ClassicPress Filesystem Class for implementing FTP.
  *
  * @since 2.5.0
  *

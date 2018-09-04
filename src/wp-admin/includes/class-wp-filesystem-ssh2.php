@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress Filesystem Class for implementing SSH2
+ * ClassicPress Filesystem Class for implementing SSH2
  *
  * To use this class you must follow these steps for PHP 5.2.6+
  *
@@ -30,7 +30,7 @@
  *
  * @since 2.7.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Filesystem
  */
 class WP_Filesystem_SSH2 extends WP_Filesystem_Base {

@@ -2,7 +2,7 @@
 /**
  * Post advanced form for inclusion in the administration panels.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
