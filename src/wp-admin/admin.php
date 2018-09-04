@@ -7,7 +7,7 @@
  */
 
 /**
- * In WordPress Administration Screens
+ * In ClassicPress Administration Screens
  *
  * @since 2.3.2
  */

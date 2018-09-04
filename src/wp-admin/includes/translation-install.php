@@ -8,7 +8,7 @@
 
 
 /**
- * Retrieve translations from WordPress Translation API.
+ * Retrieve translations from ClassicPress Translation API.
  *
  * @since 4.0.0
  *
@@ -237,7 +237,7 @@ function wp_download_language_pack( $download ) {
 }
 
 /**
- * Check if WordPress has access to the filesystem without asking for
+ * Check if ClassicPress has access to the filesystem without asking for
  * credentials.
  *
  * @since 4.0.0

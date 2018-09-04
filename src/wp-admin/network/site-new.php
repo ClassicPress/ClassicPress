@@ -49,7 +49,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		if ( in_array( $domain, $subdirectory_reserved_names ) ) {
 			wp_die(
 				/* translators: %s: reserved names list */
-				sprintf( __( 'The following words are reserved for use by WordPress functions and cannot be used as blog names: %s' ),
+				sprintf( __( 'The following words are reserved for use by ClassicPress functions and cannot be used as blog names: %s' ),
 					'<code>' . implode( '</code>, <code>', $subdirectory_reserved_names ) . '</code>'
 				)
 			);

@@ -8,7 +8,7 @@
  */
 
 /**
- * Upgrader Skin for Ajax WordPress upgrades.
+ * Upgrader Skin for Ajax ClassicPress upgrades.
  *
  * This skin is designed to be used for Ajax updates.
  *

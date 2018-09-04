@@ -384,7 +384,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 	 * Initialize functionality.
 	 *
 	 * This function exists to prevent the JS file from having to boot itself.
-	 * When WordPress enqueues this script, it should have an inline script
+	 * When ClassicPress enqueues this script, it should have an inline script
 	 * attached which calls wp.textWidgets.init().
 	 *
 	 * @param {object} settings - Options for code editor, exported from PHP.

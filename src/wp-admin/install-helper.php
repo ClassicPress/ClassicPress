@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugins may load this file to gain access to special helper functions for
- * plugin installation. This file is not included by WordPress and it is
+ * plugin installation. This file is not included by ClassicPress and it is
  * recommended, to prevent fatal errors, that this file is included using
  * require_once().
  *
@@ -43,7 +43,7 @@ if ( ! function_exists('maybe_create_table') ) :
  *
  * @since 1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $table_name Database table name.
  * @param string $create_ddl Create database table SQL.
@@ -75,7 +75,7 @@ if ( ! function_exists('maybe_add_column') ) :
  *
  * @since 1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $table_name Database table name
  * @param string $column_name Table column name
@@ -109,7 +109,7 @@ endif;
  *
  * @since 1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $table_name Table name
  * @param string $column_name Column name
@@ -154,7 +154,7 @@ function maybe_drop_column($table_name, $column_name, $drop_ddl) {
  *
  * @since 1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $table_name Table name
  * @param string $col_name   Column name

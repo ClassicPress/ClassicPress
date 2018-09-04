@@ -1,6 +1,6 @@
 <?php
 /**
- * Misc WordPress Administration API.
+ * Misc ClassicPress Administration API.
  *
  * @package ClassicPress
  * @subpackage Administration
@@ -657,7 +657,7 @@ function set_screen_options() {
 }
 
 /**
- * Check if rewrite rule for WordPress already exists in the IIS 7+ configuration file
+ * Check if rewrite rule for ClassicPress already exists in the IIS 7+ configuration file
  *
  * @since 2.8.0
  *
@@ -683,7 +683,7 @@ function iis7_rewrite_rule_exists($filename) {
 }
 
 /**
- * Delete WordPress rewrite rule from web.config file if it exists there
+ * Delete ClassicPress rewrite rule from web.config file if it exists there
  *
  * @since 2.8.0
  *
@@ -717,7 +717,7 @@ function iis7_delete_rewrite_rule($filename) {
 }
 
 /**
- * Add WordPress rewrite rule to the IIS 7+ configuration file.
+ * Add ClassicPress rewrite rule to the IIS 7+ configuration file.
  *
  * @since 2.8.0
  *
@@ -1700,12 +1700,12 @@ final class WP_Privacy_Policy_Content {
 			'<p class="privacy-policy-tutorial">' . __( 'You should also note any collection and retention of sensitive personal data, such as data concerning health.' ) . '</p>' .
 			'<p class="privacy-policy-tutorial">' . __( 'In addition to listing what personal data you collect, you need to note why you collect it. These explanations must note either the legal basis for your data collection and retention or the active consent the user has given.' ) . '</p>' .
 			'<p class="privacy-policy-tutorial">' . __( 'Personal data is not just created by a user&#8217;s interactions with your site. Personal data is also generated from technical processes such as contact forms, comments, cookies, analytics, and third party embeds.' ) . '</p>' .
-			'<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not collect any personal data about visitors, and only collects the data shown on the User Profile screen from registered users. However some of your plugins may collect personal data. You should add the relevant information below.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any personal data about visitors, and only collects the data shown on the User Profile screen from registered users. However some of your plugins may collect personal data. You should add the relevant information below.' ) . '</p>';
 
 		$content .=
 			'<h3>' . __( 'Comments' ) . '</h3>';
 		$descr && $content .=
-			'<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what information is captured through comments. We have noted the data which WordPress collects by default.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what information is captured through comments. We have noted the data which ClassicPress collects by default.' ) . '</p>';
 		$content .=
 			'<p>' . $suggested_text . __( 'When visitors leave comments on the site we collect the data shown in the comments form, and also the visitor&#8217;s IP address and browser user agent string to help spam detection.' ) . '</p>' .
 			'<p>' . __( 'An anonymized string created from your email address (also called a hash) may be provided to the Gravatar service to see if you are using it. The Gravatar service privacy policy is available here: https://automattic.com/privacy/. After approval of your comment, your profile picture is visible to the public in the context of your comment.' ) . '</p>' .
@@ -1718,12 +1718,12 @@ final class WP_Privacy_Policy_Content {
 
 			'<h3>' . __( 'Contact forms' ) . '</h3>';
 		$descr && $content .=
-			'<p class="privacy-policy-tutorial">' . __( 'By default, WordPress does not include a contact form. If you use a contact form plugin, use this subsection to note what personal data is captured when someone submits a contact form, and how long you keep it. For example, you may note that you keep contact form submissions for a certain period for customer service purposes, but you do not use the information submitted through them for marketing purposes.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'By default, ClassicPress does not include a contact form. If you use a contact form plugin, use this subsection to note what personal data is captured when someone submits a contact form, and how long you keep it. For example, you may note that you keep contact form submissions for a certain period for customer service purposes, but you do not use the information submitted through them for marketing purposes.' ) . '</p>';
 
 		$content .=
 			'<h3>' . __( 'Cookies' ) . '</h3>';
 		$descr && $content .=
-			'<p class="privacy-policy-tutorial">' . __( 'In this subsection you should list the cookies your web site uses, including those set by your plugins, social media, and analytics. We have provided the cookies which WordPress installs by default.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'In this subsection you should list the cookies your web site uses, including those set by your plugins, social media, and analytics. We have provided the cookies which ClassicPress installs by default.' ) . '</p>';
 		$content .=
 			'<p>' . $suggested_text . __( 'If you leave a comment on our site you may opt-in to saving your name, email address and website in cookies. These are for your convenience so that you do not have to fill in your details again when you leave another comment. These cookies will last for one year.' ) . '</p>' .
 			'<p>' . __( 'If you have an account and you log in to this site, we will set a temporary cookie to determine if your browser accepts cookies. This cookie contains no personal data and is discarded when you close your browser.' ) . '</p>' .
@@ -1737,13 +1737,13 @@ final class WP_Privacy_Policy_Content {
 			'<h3>' . __( 'Analytics' ) . '</h3>';
 		$descr && $content .=
 			'<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what analytics package you use, how users can opt out of analytics tracking, and a link to your analytics provider&#8217;s privacy policy, if any.' ) . '</p>' .
-			'<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a WordPress plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a ClassicPress plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
 
 		$content .=
 			'<h2>' . __( 'Who we share your data with' ) . '</h2>';
 		$descr && $content .=
 			'<p class="privacy-policy-tutorial">' . __( 'In this section you should name and list all third party providers with whom you share site data, including partners, cloud-based services, payment processors, and third party service providers, and note what data you share with them and why. Link to their own privacy policies if possible.' ) . '</p>' .
-			'<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not share any personal data with anyone.' ) . '</p>';
+			'<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not share any personal data with anyone.' ) . '</p>';
 
 		$content .=
 			'<h2>' . __( 'How long we retain your data' ) . '</h2>';

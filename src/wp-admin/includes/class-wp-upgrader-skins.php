@@ -1,6 +1,6 @@
 <?php
 /**
- * The User Interface "Skins" for the WordPress File Upgrader
+ * The User Interface "Skins" for the ClassicPress File Upgrader
  *
  * @package ClassicPress
  * @subpackage Upgrader

@@ -13,7 +13,7 @@
 			bgImage = $( '#custom-background-image' );
 
 		/**
-		 * @summary Instantiates the WordPress color picker and binds the change and clear events.
+		 * @summary Instantiates the ClassicPress color picker and binds the change and clear events.
 		 *
 		 * @since 3.5.0
 		 *

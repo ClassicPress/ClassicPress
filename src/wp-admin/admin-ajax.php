@@ -31,7 +31,7 @@ if ( empty( $_REQUEST['action'] ) )
 /** Load ClassicPress Administration APIs */
 require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
-/** Load Ajax Handlers for WordPress Core */
+/** Load Ajax Handlers for ClassicPress Core */
 require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
 
 @header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );

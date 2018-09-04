@@ -20,7 +20,7 @@
  *     Description: Plugin Description
  *     Author: Plugin author's name
  *     Author URI: Link to the author's web site
- *     Version: Must be set in the plugin for WordPress 2.3+
+ *     Version: Must be set in the plugin for ClassicPress 2.3+
  *     Text Domain: Optional. Unique identifier, should be same as the one used in
  *    		load_plugin_textdomain()
  *     Domain Path: Optional. Only useful if the translations are located in a
@@ -400,7 +400,7 @@ function get_dropins() {
 }
 
 /**
- * Returns drop-ins that WordPress uses.
+ * Returns drop-ins that ClassicPress uses.
  *
  * Includes Multisite drop-ins only when is_multisite()
  *
@@ -816,7 +816,7 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 	// Get the base plugin folder.
 	$plugins_dir = $wp_filesystem->wp_plugins_dir();
 	if ( empty( $plugins_dir ) ) {
-		return new WP_Error( 'fs_no_plugins_dir', __( 'Unable to locate WordPress plugin directory.' ) );
+		return new WP_Error( 'fs_no_plugins_dir', __( 'Unable to locate ClassicPress plugin directory.' ) );
 	}
 
 	$plugins_dir = trailingslashit( $plugins_dir );
@@ -1133,7 +1133,7 @@ function add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $func
  * @global array $_parent_pages
  *
  * @param string   $parent_slug The slug name for the parent menu (or the file name of a standard
- *                              WordPress admin page).
+ *                              ClassicPress admin page).
  * @param string   $page_title  The text to be displayed in the title tags of the page when the menu
  *                              is selected.
  * @param string   $menu_title  The text to be used for the menu.

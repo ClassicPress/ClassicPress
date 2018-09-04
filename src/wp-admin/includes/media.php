@@ -36,7 +36,7 @@ function media_upload_tabs() {
  *
  * @since 2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $tabs
  * @return array $tabs with gallery if post has image attachment
@@ -2666,7 +2666,7 @@ function media_upload_flash_bypass() {
 function media_upload_html_bypass() {
 	?>
 	<p class="upload-html-bypass hide-if-no-js">
-	   <?php _e('You are using the browser&#8217;s built-in file uploader. The WordPress uploader includes multiple file selection and drag and drop capability. <a href="#">Switch to the multi-file uploader</a>.'); ?>
+	   <?php _e('You are using the browser&#8217;s built-in file uploader. The ClassicPress uploader includes multiple file selection and drag and drop capability. <a href="#">Switch to the multi-file uploader</a>.'); ?>
 	</p>
 	<?php
 }
@@ -3210,7 +3210,7 @@ function wp_get_media_creation_timestamp( $metadata ) {
  *
  * @since 4.2.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int    $parent_id Attachment parent ID.
  * @param string $action    Optional. Attach/detach action. Accepts 'attach' or 'detach'.

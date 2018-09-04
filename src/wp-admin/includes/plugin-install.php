@@ -72,7 +72,7 @@
  *         @type bool $sections          Whether to return the plugin readme sections: description, installation,
  *                                       FAQ, screenshots, other notes, and changelog. Default false.
  *         @type bool $tested            Whether to return the 'Compatible up to' value. Default true.
- *         @type bool $requires          Whether to return the required WordPress version. Default true.
+ *         @type bool $requires          Whether to return the required ClassicPress version. Default true.
  *         @type bool $rating            Whether to return the rating in percent and total number of ratings.
  *                                       Default true.
  *         @type bool $ratings           Whether to return the number of rating for each star (1-5). Default true.
@@ -82,7 +82,7 @@
  *         @type bool $added             Whether to return the date when the plugin was added to the wordpress.org
  *                                       repository. Default true.
  *         @type bool $tags              Whether to return the assigned tags. Default true.
- *         @type bool $compatibility     Whether to return the WordPress compatibility list. Default true.
+ *         @type bool $compatibility     Whether to return the ClassicPress compatibility list. Default true.
  *         @type bool $homepage          Whether to return the plugin homepage link. Default true.
  *         @type bool $versions          Whether to return the list of all available versions. Default false.
  *         @type bool $donate_link       Whether to return the donation link. Default true.
@@ -209,7 +209,7 @@ function plugins_api( $action, $args = array() ) {
 }
 
 /**
- * Retrieve popular WordPress plugin tags.
+ * Retrieve popular ClassicPress plugin tags.
  *
  * @since 2.7.0
  *
@@ -582,7 +582,7 @@ function install_plugin_information() {
 				</li>
 			<?php } if ( ! empty( $api->requires ) ) { ?>
 				<li>
-					<strong><?php _e( 'Requires WordPress Version:' ); ?></strong>
+					<strong><?php _e( 'Requires ClassicPress Version:' ); ?></strong>
 					<?php
 					/* translators: %s: version number */
 					printf( __( '%s or higher' ), $api->requires );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Import WordPress Administration Screen
+ * Import ClassicPress Administration Screen
  *
  * @package ClassicPress
  * @subpackage Administration
@@ -65,7 +65,7 @@ $parent_file = 'tools.php';
 		?></p>
 	</div>
 <?php endif; ?>
-<p><?php _e('If you have posts or comments in another system, WordPress can import those into this site. To get started, choose a system to import from below:'); ?></p>
+<p><?php _e('If you have posts or comments in another system, ClassicPress can import those into this site. To get started, choose a system to import from below:'); ?></p>
 
 <?php
 // Registered (already installed) importers. They're stored in the global $wp_importers.

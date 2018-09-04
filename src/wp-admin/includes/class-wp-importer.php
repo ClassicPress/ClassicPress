@@ -10,9 +10,9 @@ class WP_Importer {
 	public function __construct() {}
 
 	/**
-	 * Returns array with imported permalinks from WordPress database
+	 * Returns array with imported permalinks from ClassicPress database
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $importer_name
 	 * @param string $bid
@@ -50,9 +50,9 @@ class WP_Importer {
 	}
 
 	/**
-	 * Return count of imported permalinks from WordPress database
+	 * Return count of imported permalinks from ClassicPress database
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $importer_name
 	 * @param string $bid
@@ -79,9 +79,9 @@ class WP_Importer {
 	}
 
 	/**
-	 * Set array with imported comments from WordPress database
+	 * Set array with imported comments from ClassicPress database
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $bid
 	 * @return array
@@ -252,7 +252,7 @@ class WP_Importer {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @global wpdb  $wpdb       WordPress database abstraction object.
+	 * @global wpdb  $wpdb       ClassicPress database abstraction object.
 	 * @global array $wp_actions
 	 */
 	public function stop_the_insanity() {

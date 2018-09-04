@@ -64,7 +64,7 @@ function delete_theme($stylesheet, $redirect = '') {
 	// Get the base plugin folder.
 	$themes_dir = $wp_filesystem->wp_themes_dir();
 	if ( empty( $themes_dir ) ) {
-		return new WP_Error( 'fs_no_themes_dir', __( 'Unable to locate WordPress theme directory.' ) );
+		return new WP_Error( 'fs_no_themes_dir', __( 'Unable to locate ClassicPress theme directory.' ) );
 	}
 
 	$themes_dir = trailingslashit( $themes_dir );
@@ -223,7 +223,7 @@ function get_theme_update_available( $theme ) {
 }
 
 /**
- * Retrieve list of WordPress theme features (aka theme tags)
+ * Retrieve list of ClassicPress theme features (aka theme tags)
  *
  * @since 3.1.0
  *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Upgrade WordPress Page.
+ * Upgrade ClassicPress Page.
  *
  * @package ClassicPress
  * @subpackage Administration
@@ -61,7 +61,7 @@ else
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php echo get_option( 'blog_charset' ); ?>" />
 	<meta name="robots" content="noindex,nofollow" />
-	<title><?php _e( 'WordPress &rsaquo; Update' ); ?></title>
+	<title><?php _e( 'ClassicPress &rsaquo; Update' ); ?></title>
 	<?php
 	wp_admin_css( 'install', true );
 	wp_admin_css( 'ie', true );
@@ -73,7 +73,7 @@ else
 <?php if ( get_option( 'db_version' ) == $wp_db_version || !is_blog_installed() ) : ?>
 
 <h1><?php _e( 'No Update Required' ); ?></h1>
-<p><?php _e( 'Your WordPress database is already up-to-date!' ); ?></p>
+<p><?php _e( 'Your ClassicPress database is already up-to-date!' ); ?></p>
 <p class="step"><a class="button button-large" href="<?php echo get_option( 'home' ); ?>/"><?php _e( 'Continue' ); ?></a></p>
 
 <?php elseif ( !$php_compat || !$mysql_compat ) :
@@ -94,9 +94,9 @@ switch ( $step ) :
 		}
 ?>
 <h1><?php _e( 'Database Update Required' ); ?></h1>
-<p><?php _e( 'WordPress has been updated! Before we send you on your way, we have to update your database to the newest version.' ); ?></p>
+<p><?php _e( 'ClassicPress has been updated! Before we send you on your way, we have to update your database to the newest version.' ); ?></p>
 <p><?php _e( 'The database update process may take a little while, so please be patient.' ); ?></p>
-<p class="step"><a class="button button-large button-primary" href="upgrade.php?step=1&amp;backto=<?php echo $goback; ?>"><?php _e( 'Update WordPress Database' ); ?></a></p>
+<p class="step"><a class="button button-large button-primary" href="upgrade.php?step=1&amp;backto=<?php echo $goback; ?>"><?php _e( 'Update ClassicPress Database' ); ?></a></p>
 <?php
 		break;
 	case 1:
@@ -107,7 +107,7 @@ switch ( $step ) :
 			$backto = wp_validate_redirect($backto, __get_option( 'home' ) . '/');
 ?>
 <h1><?php _e( 'Update Complete' ); ?></h1>
-	<p><?php _e( 'Your WordPress database has been successfully updated!' ); ?></p>
+	<p><?php _e( 'Your ClassicPress database has been successfully updated!' ); ?></p>
 	<p class="step"><a class="button button-large" href="<?php echo $backto; ?>"><?php _e( 'Continue' ); ?></a></p>
 
 <!--

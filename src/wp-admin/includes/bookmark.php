@@ -79,7 +79,7 @@ function get_default_link_to_edit() {
  *
  * @since 2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int $link_id ID of the link to delete
  * @return true Always true.
@@ -143,7 +143,7 @@ function get_link_to_edit( $link ) {
  *
  * @since 2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $linkdata Elements that make up the link to insert.
  * @param bool  $wp_error Optional. Whether to return a WP_Error object on failure. Default false.
@@ -291,7 +291,7 @@ function wp_update_link( $linkdata ) {
 }
 
 /**
- * Outputs the 'disabled' message for the WordPress Link Manager.
+ * Outputs the 'disabled' message for the ClassicPress Link Manager.
  *
  * @since 3.5.0
  * @access private

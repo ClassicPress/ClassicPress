@@ -26,7 +26,7 @@
  * Restart Apache!
  * Check phpinfo() streams to confirm that: ssh2.shell, ssh2.exec, ssh2.tunnel, ssh2.scp, ssh2.sftp  exist.
  *
- * Note: as of WordPress 2.8, This utilises the PHP5+ function 'stream_get_contents'
+ * Note: as of ClassicPress 2.8, This utilises the PHP5+ function 'stream_get_contents'
  *
  * @since 2.7.0
  *

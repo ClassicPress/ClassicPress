@@ -18,9 +18,9 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 <div class="wrap about-wrap full-width-layout">
 
-<h1><?php printf( __( 'Welcome to WordPress %s' ), $display_version ); ?></h1>
+<h1><?php printf( __( 'Welcome to ClassicPress %s' ), $display_version ); ?></h1>
 
-<p class="about-text"><?php printf( __( 'Thank you for updating to the latest version! WordPress %s will smooth your design workflow and keep you safe from coding errors.' ), $display_version ); ?></p>
+<p class="about-text"><?php printf( __( 'Thank you for updating to the latest version! ClassicPress %s will smooth your design workflow and keep you safe from coding errors.' ), $display_version ); ?></p>
 
 <div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
 
@@ -117,7 +117,7 @@ return;
 
 // These are strings returned by the API that we want to be translatable
 __( 'Project Leaders' );
-__( 'Core Contributors to WordPress %s' );
+__( 'Core Contributors to ClassicPress %s' );
 __( 'Noteworthy Contributors' );
 __( 'Cofounder, Project Lead' );
 __( 'Lead Developer' );

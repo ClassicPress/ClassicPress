@@ -1,5 +1,5 @@
 /**
- * Functions for ajaxified updates, deletions and installs inside the WordPress admin.
+ * Functions for ajaxified updates, deletions and installs inside the ClassicPress admin.
  *
  * @version 4.2.0
  *

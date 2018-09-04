@@ -12,7 +12,7 @@
  *
  * @since 3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @return Whether a network exists.
  */
@@ -45,7 +45,7 @@ function allow_subdomain_install() {
  *
  * @since 3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @return bool Whether subdirectory installation is allowed
  */
@@ -167,7 +167,7 @@ function network_step1( $errors = false ) {
 	}
 	?>
 	<p><?php _e( 'Welcome to the Network installation process!' ); ?></p>
-	<p><?php _e( 'Fill in the information below and you&#8217;ll be on your way to creating a network of WordPress sites. We will create configuration files in the next step.' ); ?></p>
+	<p><?php _e( 'Fill in the information below and you&#8217;ll be on your way to creating a network of ClassicPress sites. We will create configuration files in the next step.' ); ?></p>
 	<?php
 
 	if ( isset( $_POST['subdomain_install'] ) ) {
@@ -208,7 +208,7 @@ function network_step1( $errors = false ) {
 
 	if ( allow_subdomain_install() && allow_subdirectory_install() ) : ?>
 		<h3><?php esc_html_e( 'Addresses of Sites in your Network' ); ?></h3>
-		<p><?php _e( 'Please choose whether you would like sites in your WordPress network to use sub-domains or sub-directories.' ); ?>
+		<p><?php _e( 'Please choose whether you would like sites in your ClassicPress network to use sub-domains or sub-directories.' ); ?>
 			<strong><?php _e( 'You cannot change this later.' ); ?></strong></p>
 		<p><?php _e( 'You will need a wildcard DNS record if you are going to use the virtual host (sub-domain) functionality.' ); ?></p>
 		<?php // @todo: Link to an MS readme? ?>
@@ -270,7 +270,7 @@ function network_step1( $errors = false ) {
 				<td><?php
 					printf(
 						/* translators: 1: localhost 2: localhost.localdomain */
-						__( 'Because you are using %1$s, the sites in your WordPress network must use sub-directories. Consider using %2$s if you wish to use sub-domains.' ),
+						__( 'Because you are using %1$s, the sites in your ClassicPress network must use sub-directories. Consider using %2$s if you wish to use sub-domains.' ),
 						'<code>localhost</code>',
 						'<code>localhost.localdomain</code>'
 					);
@@ -283,7 +283,7 @@ function network_step1( $errors = false ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sub-directory Installation' ); ?></th>
 				<td><?php
-					_e( 'Because your installation is in a directory, the sites in your WordPress network must use sub-directories.' );
+					_e( 'Because your installation is in a directory, the sites in your ClassicPress network must use sub-directories.' );
 					// Uh oh:
 					if ( !allow_subdirectory_install() )
 						echo ' <strong>' . __( 'Warning:' ) . ' ' . __( 'The main site in a sub-directory installation will need to use a modified permalink structure, potentially breaking existing links.' ) . '</strong>';
@@ -292,7 +292,7 @@ function network_step1( $errors = false ) {
 		<?php elseif ( !allow_subdirectory_install() ) : ?>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sub-domain Installation' ); ?></th>
-				<td><?php _e( 'Because your installation is not new, the sites in your WordPress network must use sub-domains.' );
+				<td><?php _e( 'Because your installation is not new, the sites in your ClassicPress network must use sub-domains.' );
 					echo ' <strong>' . __( 'The main site in a sub-directory installation will need to use a modified permalink structure, potentially breaking existing links.' ) . '</strong>';
 				?></td>
 			</tr>
@@ -338,7 +338,7 @@ function network_step1( $errors = false ) {
  *
  * @since 3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param WP_Error $errors
  */
@@ -379,7 +379,7 @@ function network_step2( $errors = false ) {
 		} else {
 			$subdomain_install = (bool) $wpdb->get_var( "SELECT meta_value FROM $wpdb->sitemeta WHERE site_id = 1 AND meta_key = 'subdomain_install'" );
 ?>
-	<div class="error"><p><strong><?php _e( 'Warning:' ); ?></strong> <?php _e( 'An existing WordPress network was detected.' ); ?></p></div>
+	<div class="error"><p><strong><?php _e( 'Warning:' ); ?></strong> <?php _e( 'An existing ClassicPress network was detected.' ); ?></p></div>
 	<p><?php _e( 'Please complete the configuration steps. To create a new network, you will need to empty or remove the network database tables.' ); ?></p>
 <?php
 		}
@@ -545,7 +545,7 @@ define('BLOG_ID_CURRENT_SITE', 1);
 		echo '<li><p>';
 		printf(
 			/* translators: 1: a filename like .htaccess. 2: a file path. */
-			__( 'Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:' ),
+			__( 'Add the following to your %1$s file in %2$s, <strong>replacing</strong> other ClassicPress rules:' ),
 			'<code>web.config</code>',
 			'<code>' . $home_path . '</code>'
 		);
@@ -585,7 +585,7 @@ EOF;
 		echo '<li><p>';
 		printf(
 			/* translators: 1: a filename like .htaccess. 2: a file path. */
-			__( 'Add the following to your %1$s file in %2$s, <strong>replacing</strong> other WordPress rules:' ),
+			__( 'Add the following to your %1$s file in %2$s, <strong>replacing</strong> other ClassicPress rules:' ),
 			'<code>.htaccess</code>',
 			'<code>' . $home_path . '</code>'
 		);
