@@ -171,7 +171,7 @@ function wp_install_defaults( $user_id ) {
 		$first_post = str_replace( 'SITE_URL', esc_url( network_home_url() ), $first_post );
 		$first_post = str_replace( 'SITE_NAME', get_network()->site_name, $first_post );
 	} else {
-		$first_post = __( 'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!' );
+		$first_post = __( 'Welcome to ClassicPress. This is your first post. Edit or delete it, then start writing!' );
 	}
 
 	$wpdb->insert( $wpdb->posts, array(
@@ -201,7 +201,7 @@ function wp_install_defaults( $user_id ) {
 		$first_comment = get_site_option( 'first_comment' );
 	}
 
-	$first_comment_author = ! empty( $first_comment_author ) ? $first_comment_author : __( 'A WordPress Commenter' );
+	$first_comment_author = ! empty( $first_comment_author ) ? $first_comment_author : __( 'A ClassicPress Commenter' );
 	$first_comment_email = ! empty( $first_comment_email ) ? $first_comment_email : 'wapuu@classicpress.example';
 	$first_comment_url = ! empty( $first_comment_url ) ? $first_comment_url : 'https://classicpress.net/';
 	$first_comment = ! empty( $first_comment ) ? $first_comment :  __( 'Hi, this is a comment.
@@ -229,7 +229,7 @@ Commenter avatars come from <a href="https://gravatar.com">Gravatar</a>.' );
 
 <blockquote>The XYZ Doohickey Company was founded in 1971, and has been providing quality doohickeys to the public ever since. Located in Gotham City, XYZ employs over 2,000 people and does all kinds of awesome things for the Gotham community.</blockquote>
 
-As a new WordPress user, you should go to <a href=\"%s\">your dashboard</a> to delete this page and create new pages for your content. Have fun!" ), admin_url() );
+As a new ClassicPress user, you should go to <a href=\"%s\">your dashboard</a> to delete this page and create new pages for your content. Have fun!" ), admin_url() );
 
 	$first_post_guid = get_option('home') . '/?page_id=2';
 	$wpdb->insert( $wpdb->posts, array(
@@ -337,7 +337,7 @@ endif;
  *
  * @since 4.2.0
  *
- * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
+ * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
  *
  * @return bool Whether pretty permalinks are enabled. False otherwise.
  */
@@ -373,7 +373,7 @@ function wp_install_maybe_enable_pretty_permalinks() {
 
 		$test_url = '';
 
-		// Test against a real WordPress Post
+		// Test against a real ClassicPress Post
 		$first_post = get_page_by_path( sanitize_title( _x( 'hello-world', 'Default post slug' ) ), OBJECT, 'post' );
 		if ( $first_post ) {
 			$test_url = get_permalink( $first_post->ID );
@@ -425,7 +425,7 @@ function wp_new_blog_notification($blog_title, $blog_url, $user_id, $password) {
 	$name = $user->user_login;
 	$login_url = wp_login_url();
 	/* translators: New site notification email. 1: New site URL, 2: User login, 3: User password or password reset link, 4: Login URL */
-	$message = sprintf( __( "Your new WordPress site has been successfully set up at:
+	$message = sprintf( __( "Your new ClassicPress site has been successfully set up at:
 
 %1\$s
 
@@ -437,17 +437,17 @@ Log in here: %4\$s
 
 We hope you enjoy your new site. Thanks!
 
---The WordPress Team
-https://wordpress.org/
+--The ClassicPress Team
+https://classicpress.net/
 "), $blog_url, $name, $password, $login_url );
 
-	@wp_mail($email, __('New WordPress Site'), $message);
+	@wp_mail($email, __('New ClassicPress Site'), $message);
 }
 endif;
 
 if ( !function_exists('wp_upgrade') ) :
 /**
- * Runs WordPress Upgrade functions.
+ * Runs ClassicPress Upgrade functions.
  *
  * Upgrades the database if needed during a site update.
  *
@@ -455,7 +455,7 @@ if ( !function_exists('wp_upgrade') ) :
  *
  * @global int  $wp_current_db_version
  * @global int  $wp_db_version
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function wp_upgrade() {
 	global $wp_current_db_version, $wp_db_version, $wpdb;
@@ -628,7 +628,7 @@ function upgrade_all() {
  * @ignore
  * @since 1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_100() {
 	global $wpdb;
@@ -687,7 +687,7 @@ function upgrade_100() {
  * @ignore
  * @since 1.0.1
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_101() {
 	global $wpdb;
@@ -708,7 +708,7 @@ function upgrade_101() {
  * @ignore
  * @since 1.2.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_110() {
 	global $wpdb;
@@ -771,7 +771,7 @@ function upgrade_110() {
  * @ignore
  * @since 1.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_130() {
 	global $wpdb;
@@ -858,7 +858,7 @@ function upgrade_130() {
  * @ignore
  * @since 2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_current_db_version
  */
 function upgrade_160() {
@@ -945,7 +945,7 @@ function upgrade_160() {
  * @ignore
  * @since 2.1.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_current_db_version
  */
 function upgrade_210() {
@@ -993,7 +993,7 @@ function upgrade_210() {
  * @ignore
  * @since 2.3.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_current_db_version
  */
 function upgrade_230() {
@@ -1173,7 +1173,7 @@ function upgrade_230() {
  * @ignore
  * @since 2.3.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_230_options_table() {
 	global $wpdb;
@@ -1190,7 +1190,7 @@ function upgrade_230_options_table() {
  * @ignore
  * @since 2.3.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_230_old_tables() {
 	global $wpdb;
@@ -1205,7 +1205,7 @@ function upgrade_230_old_tables() {
  * @ignore
  * @since 2.2.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_old_slugs() {
 	// Upgrade people who were using the Redirect Old Slugs plugin.
@@ -1236,7 +1236,7 @@ function upgrade_250() {
  * @ignore
  * @since 2.5.2
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_252() {
 	global $wpdb;
@@ -1265,7 +1265,7 @@ function upgrade_260() {
  * @ignore
  * @since 2.7.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_current_db_version
  */
 function upgrade_270() {
@@ -1286,7 +1286,7 @@ function upgrade_270() {
  * @since 2.8.0
  *
  * @global int  $wp_current_db_version
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_280() {
 	global $wp_current_db_version, $wpdb;
@@ -1337,7 +1337,7 @@ function upgrade_290() {
  * @since 3.0.0
  *
  * @global int  $wp_current_db_version
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function upgrade_300() {
 	global $wp_current_db_version, $wpdb;
@@ -1602,7 +1602,7 @@ function upgrade_420() {}
  * @since 4.3.0
  *
  * @global int  $wp_current_db_version Current version.
- * @global wpdb $wpdb                  WordPress database abstraction object.
+ * @global wpdb $wpdb                  ClassicPress database abstraction object.
  */
 function upgrade_430() {
 	global $wp_current_db_version, $wpdb;
@@ -1641,7 +1641,7 @@ function upgrade_430() {
  * @since 4.3.0
  *
  * @global int  $wp_current_db_version Current version.
- * @global wpdb $wpdb                  WordPress database abstraction object.
+ * @global wpdb $wpdb                  ClassicPress database abstraction object.
  */
 function upgrade_430_fix_comments() {
 	global $wp_current_db_version, $wpdb;
@@ -1706,7 +1706,7 @@ function upgrade_431() {
  * @since 4.4.0
  *
  * @global int  $wp_current_db_version Current version.
- * @global wpdb $wpdb                  WordPress database abstraction object.
+ * @global wpdb $wpdb                  ClassicPress database abstraction object.
  */
 function upgrade_440() {
 	global $wp_current_db_version, $wpdb;
@@ -1731,7 +1731,7 @@ function upgrade_440() {
  * @since 4.5.0
  *
  * @global int  $wp_current_db_version Current database version.
- * @global wpdb $wpdb                  WordPress database abstraction object.
+ * @global wpdb $wpdb                  ClassicPress database abstraction object.
  */
 function upgrade_450() {
 	global $wp_current_db_version, $wpdb;
@@ -2823,7 +2823,7 @@ function maybe_disable_automattic_widgets() {
  * @since 3.5.0
  *
  * @global int  $wp_current_db_version
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function maybe_disable_link_manager() {
 	global $wp_current_db_version, $wpdb;
@@ -2838,7 +2838,7 @@ function maybe_disable_link_manager() {
  * @since 2.9.0
  *
  * @global int  $wp_current_db_version
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function pre_schema_upgrade() {
 	global $wp_current_db_version, $wpdb;
@@ -2925,7 +2925,7 @@ endif;
  * Determine if global tables should be upgraded.
  *
  * This function performs a series of checks to ensure the environment allows
- * for the safe upgrading of global WordPress database tables. It is necessary
+ * for the safe upgrading of global ClassicPress database tables. It is necessary
  * because global tables will commonly grow to millions of rows on large
  * installations, and the ability to control their upgrade routines can be
  * critical to the operation of large networks.

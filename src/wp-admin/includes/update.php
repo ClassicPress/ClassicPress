@@ -61,7 +61,7 @@ function get_core_updates( $options = array() ) {
 }
 
 /**
- * Gets the best available (and enabled) Auto-Update for WordPress Core.
+ * Gets the best available (and enabled) Auto-Update for ClassicPress Core.
  *
  * If there's 1.2.3 and 1.3 on offer, it'll choose 1.3 if the installation allows it, else, 1.2.3
  *
@@ -117,7 +117,7 @@ function get_core_checksums( $version, $locale ) {
 				/* translators: %s: support forums URL */
 				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 				__( 'https://wordpress.org/support/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$response = wp_remote_get( $http_url, $options );
@@ -207,7 +207,7 @@ function core_update_footer( $msg = '' ) {
 
 	switch ( $cur->response ) {
 	case 'development' :
-		/* translators: 1: WordPress version number, 2: WordPress updates admin screen URL */
+		/* translators: 1: ClassicPress version number, 2: ClassicPress updates admin screen URL */
 		return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), get_bloginfo( 'version', 'display' ), network_admin_url( 'update-core.php' ) );
 
 	case 'upgrade' :
@@ -240,23 +240,23 @@ function update_nag() {
 
 	if ( current_user_can( 'update_core' ) ) {
 		$msg = sprintf(
-			/* translators: 1: Codex URL to release notes, 2: new WordPress version, 3: URL to network admin, 4: accessibility text */
-			__( '<a href="%1$s">WordPress %2$s</a> is available! <a href="%3$s" aria-label="%4$s">Please update now</a>.' ),
+			/* translators: 1: Codex URL to release notes, 2: new ClassicPress version, 3: URL to network admin, 4: accessibility text */
+			__( '<a href="%1$s">ClassicPress %2$s</a> is available! <a href="%3$s" aria-label="%4$s">Please update now</a>.' ),
 			sprintf(
-				/* translators: %s: WordPress version */
+				/* translators: %s: ClassicPress version */
 				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
 				$cur->current
 			),
 			$cur->current,
 			network_admin_url( 'update-core.php' ),
-			esc_attr__( 'Please update WordPress now' )
+			esc_attr__( 'Please update ClassicPress now' )
 		);
 	} else {
 		$msg = sprintf(
-			/* translators: 1: Codex URL to release notes, 2: new WordPress version */
-			__( '<a href="%1$s">WordPress %2$s</a> is available! Please notify the site administrator.' ),
+			/* translators: 1: Codex URL to release notes, 2: new ClassicPress version */
+			__( '<a href="%1$s">ClassicPress %2$s</a> is available! Please notify the site administrator.' ),
 			sprintf(
-				/* translators: %s: WordPress version */
+				/* translators: %s: ClassicPress version */
 				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
 				$cur->current
 			),
@@ -283,7 +283,7 @@ function update_right_now_message() {
 	}
 
 	/* translators: 1: version number, 2: theme name */
-	$content = __( 'WordPress %1$s running %2$s theme.' );
+	$content = __( 'ClassicPress %1$s running %2$s theme.' );
 
 	/**
 	 * Filters the text displayed in the 'At a Glance' dashboard widget.
@@ -613,9 +613,9 @@ function maintenance_nag() {
 		return false;
 
 	if ( current_user_can('update_core') )
-		$msg = sprintf( __('An automated WordPress update has failed to complete - <a href="%s">please attempt the update again now</a>.'), 'update-core.php' );
+		$msg = sprintf( __('An automated ClassicPress update has failed to complete - <a href="%s">please attempt the update again now</a>.'), 'update-core.php' );
 	else
-		$msg = __('An automated WordPress update has failed to complete! Please notify the site administrator.');
+		$msg = __('An automated ClassicPress update has failed to complete! Please notify the site administrator.');
 
 	echo "<div class='update-nag'>$msg</div>";
 }

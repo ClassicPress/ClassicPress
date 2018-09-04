@@ -467,7 +467,7 @@ function do_core_upgrade( $reinstall = false ) {
 
 ?>
 	<div class="wrap">
-	<h1><?php _e( 'Update WordPress' ); ?></h1>
+	<h1><?php _e( 'Update ClassicPress' ); ?></h1>
 <?php
 
 	if ( false === ( $credentials = request_filesystem_credentials( $url, '', false, ABSPATH, array( 'version', 'locale' ), $allow_relaxed_file_ownership ) ) ) {

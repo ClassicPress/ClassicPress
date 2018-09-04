@@ -157,7 +157,7 @@ function wp_get_popular_importers() {
 
 		foreach ( $popular_importers['importers'] as &$importer ) {
 			$importer['description'] = translate( $importer['description'] );
-			if ( $importer['name'] != 'WordPress' )
+			if ( $importer['name'] != 'ClassicPress' )
 				$importer['name'] = translate( $importer['name'] );
 		}
 		return $popular_importers['importers'];
@@ -208,7 +208,7 @@ function wp_get_popular_importers() {
 			'importer-id' => 'tumblr',
 		),
 		'wordpress' => array(
-			'name' => 'WordPress',
+			'name' => 'ClassicPress',
 			'description' => __( 'Import posts, pages, comments, custom fields, categories, and tags from a WordPress export file.' ),
 			'plugin-slug' => 'wordpress-importer',
 			'importer-id' => 'wordpress',
