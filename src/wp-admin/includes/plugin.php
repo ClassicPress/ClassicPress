@@ -20,7 +20,7 @@
  *     Description: Plugin Description
  *     Author: Plugin author's name
  *     Author URI: Link to the author's web site
- *     Version: Must be set in the plugin for ClassicPress 2.3+
+ *     Version: Must be set in the plugin (as of WordPress 2.3)
  *     Text Domain: Optional. Unique identifier, should be same as the one used in
  *    		load_plugin_textdomain()
  *     Domain Path: Optional. Only useful if the translations are located in a

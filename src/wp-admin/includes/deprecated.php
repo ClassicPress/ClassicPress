@@ -1237,7 +1237,7 @@ function screen_icon() {
  */
 function get_screen_icon() {
 	_deprecated_function( __FUNCTION__, '3.8.0' );
-	return '<!-- Screen icons are no longer used as of ClassicPress 3.8. -->';
+	return '<!-- Screen icons are no longer used as of WordPress 3.8. -->';
 }
 
 /**
