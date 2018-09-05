@@ -476,22 +476,17 @@ html:lang(he-il) .rtl #wpadminbar *  {
 }
 
 /**
- * WP Logo
+ * ClassicPress Logo
  */
-#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
-	width: 15px;
-	height: 20px;
-	margin-right: 0;
-	padding: 6px 0 5px;
+#wpadminbar #wp-admin-bar-wp-logo > .ab-item .cp-logo {
+	width: 18px;
+	height: 18px;
+	margin: 7px 2px 6px 1px;
+	vertical-align: top;
 }
 
 #wpadminbar #wp-admin-bar-wp-logo > .ab-item {
 	padding: 0 7px;
-}
-
-#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
-	content: "\f120";
-	top: 2px;
 }
 
 /*
@@ -856,22 +851,11 @@ html:lang(he-il) .rtl #wpadminbar *  {
 		display: none;
 	}
 
-	/* WP logo */
-	#wpadminbar #wp-admin-bar-wp-logo > .ab-item {
-		padding: 0;
-	}
-
-	#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon {
-		padding: 0;
-		width: 52px;
-		height: 46px;
-		text-align: center;
-		vertical-align: top;
-	}
-
-	#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
-		font: 28px/1 dashicons !important;
-		top: -3px;
+	/* ClassicPress logo */
+	#wpadminbar #wp-admin-bar-wp-logo > .ab-item .cp-logo {
+		padding: 3px 4px 3px 5px;
+		width: 26px;
+		height: 26px;
 	}
 
 	#wpadminbar .ab-icon,

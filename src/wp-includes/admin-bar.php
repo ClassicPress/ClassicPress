@@ -115,9 +115,13 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		$about_url = false;
 	}
 
+	$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
 	$wp_logo_menu_args = array(
 		'id'    => 'wp-logo',
-		'title' => '<span class="ab-icon"></span><span class="screen-reader-text">' . __( 'About WordPress' ) . '</span>',
+		'title' => (
+			'<img class="cp-logo" src="' . $cp_logo_src . '" />'
+			. '<span class="screen-reader-text">' . __( 'About WordPress' ) . '</span>'
+		),
 		'href'  => $about_url,
 	);
 
