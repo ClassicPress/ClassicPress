@@ -696,6 +696,11 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			global $wp_version;
 			$output = $wp_version;
 			break;
+		case 'classicpress_version':
+		case 'classicpress_display_version': // May be different in the future.
+			global $cp_version;
+			$output = $cp_version;
+			break;
 		case 'language':
 			/* translators: Translate this to the correct language tag for your locale,
 			 * see https://www.w3.org/International/articles/language-tags/ for reference.

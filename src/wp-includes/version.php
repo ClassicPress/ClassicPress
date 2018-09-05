@@ -1,6 +1,18 @@
 <?php
 /**
+ * The ClassicPress version string
+ *
+ * @global string $cp_version
+ */
+$cp_version = '1.0.0-alpha';
+
+/**
  * The WordPress version string
+ *
+ * This is still used internally for various core and plugin functions.  The
+ * ClassicPress version is stored in a separate variable.
+ *
+ * @see $cp_version
  *
  * @global string $wp_version
  */
