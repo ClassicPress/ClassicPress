@@ -2,13 +2,13 @@
 /**
  * Upgrader API: Theme_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Theme Upgrader Skin for WordPress Theme Upgrades.
+ * Theme Upgrader Skin for ClassicPress Theme Upgrades.
  *
  * @since 2.8.0
  * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.

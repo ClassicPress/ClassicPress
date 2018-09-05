@@ -1,8 +1,8 @@
 <?php
 /**
- * XML-RPC protocol support for WordPress
+ * XML-RPC protocol support for ClassicPress
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**
@@ -25,7 +25,7 @@ if ( !isset( $HTTP_RAW_POST_DATA ) ) {
 if ( isset($HTTP_RAW_POST_DATA) )
 	$HTTP_RAW_POST_DATA = trim($HTTP_RAW_POST_DATA);
 
-/** Include the bootstrap for setting up WordPress environment */
+/** Include the bootstrap for setting up ClassicPress environment */
 include( dirname( __FILE__ ) . '/wp-load.php' );
 
 if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
@@ -61,7 +61,7 @@ exit;
 
 include_once(ABSPATH . 'wp-admin/includes/admin.php');
 include_once(ABSPATH . WPINC . '/class-IXR.php');
-include_once(ABSPATH . WPINC . '/class-wp-xmlrpc-server.php'); 
+include_once(ABSPATH . WPINC . '/class-wp-xmlrpc-server.php');
 
 /**
  * Posts submitted via the XML-RPC interface get that title

@@ -2,7 +2,7 @@
 /**
  * Build User Administration Menu.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 3.1.0
  */

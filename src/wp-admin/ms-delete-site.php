@@ -2,7 +2,7 @@
 /**
  * Multisite delete site panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.0.0
  */

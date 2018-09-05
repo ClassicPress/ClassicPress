@@ -1,14 +1,14 @@
 <?php
 /**
- * Import WordPress Administration Screen
+ * Import ClassicPress Administration Screen
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
 define('WP_LOAD_IMPORTERS', true);
 
-/** Load WordPress Bootstrap */
+/** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( ! current_user_can( 'import' ) ) {
@@ -21,7 +21,7 @@ get_current_screen()->add_help_tab( array(
 	'id'      => 'overview',
 	'title'   => __('Overview'),
 	'content' => '<p>' . __('This screen lists links to plugins to import data from blogging/content management platforms. Choose the platform you want to import from, and click Install Now when you are prompted in the popup window. If your platform is not listed, click the link to search the plugin directory for other importer plugins to see if there is one for your platform.') . '</p>' .
-		'<p>' . __('In previous versions of WordPress, all importers were built-in. They have been turned into plugins since most people only use them once or infrequently.') . '</p>',
+		'<p>' . __('In previous versions of ClassicPress, all importers were built-in. They have been turned into plugins since most people only use them once or infrequently.') . '</p>',
 ) );
 
 get_current_screen()->set_help_sidebar(
@@ -31,7 +31,7 @@ get_current_screen()->set_help_sidebar(
 );
 
 if ( current_user_can( 'install_plugins' ) ) {
-	// List of popular importer plugins from the WordPress.org API.
+	// List of popular importer plugins from the ClassicPress.net API.
 	$popular_importers = wp_get_popular_importers();
 } else {
  	$popular_importers = array();
@@ -65,7 +65,7 @@ $parent_file = 'tools.php';
 		?></p>
 	</div>
 <?php endif; ?>
-<p><?php _e('If you have posts or comments in another system, WordPress can import those into this site. To get started, choose a system to import from below:'); ?></p>
+<p><?php _e('If you have posts or comments in another system, ClassicPress can import those into this site. To get started, choose a system to import from below:'); ?></p>
 
 <?php
 // Registered (already installed) importers. They're stored in the global $wp_importers.
@@ -78,7 +78,7 @@ foreach ( $popular_importers as $pop_importer => $pop_data ) {
 	if ( isset( $importers[ $pop_data['importer-id'] ] ) )
 		continue;
 
-	// Fill the array of registered (already installed) importers with data of the popular importers from the WordPress.org API.
+	// Fill the array of registered (already installed) importers with data of the popular importers from the ClassicPress.net API.
 	$importers[ $pop_data['importer-id'] ] = array( $pop_data['name'], $pop_data['description'], 'install' => $pop_data['plugin-slug'] );
 }
 

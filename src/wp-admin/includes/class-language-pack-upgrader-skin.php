@@ -2,13 +2,13 @@
 /**
  * Upgrader API: Language_Pack_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Translation Upgrader Skin for WordPress Translation Upgrades.
+ * Translation Upgrader Skin for ClassicPress Translation Upgrades.
  *
  * @since 3.7.0
  * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
@@ -67,7 +67,7 @@ class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
 	public function bulk_footer() {
 		$this->decrement_update_count( 'translation' );
 		$update_actions = array();
-		$update_actions['updates_page'] = '<a href="' . self_admin_url( 'update-core.php' ) . '" target="_parent">' . __( 'Return to WordPress Updates page' ) . '</a>';
+		$update_actions['updates_page'] = '<a href="' . self_admin_url( 'update-core.php' ) . '" target="_parent">' . __( 'Return to ClassicPress Updates page' ) . '</a>';
 
 		/**
 		 * Filters the list of action links available following a translations update.

@@ -2,7 +2,7 @@
 /**
  * Edit comment form for inclusion in another file.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * The User Interface "Skins" for the WordPress File Upgrader
+ * The User Interface "Skins" for the ClassicPress File Upgrader
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 2.8.0
  */

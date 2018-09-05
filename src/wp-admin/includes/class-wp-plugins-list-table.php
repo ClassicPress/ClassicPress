@@ -2,7 +2,7 @@
 /**
  * List Table API: WP_Plugins_List_Table class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  * @since 3.1.0
  */
@@ -333,7 +333,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 			// We assume that somebody who can install plugins in multisite is experienced enough to not need this helper link.
 			if ( ! is_multisite() && current_user_can( 'install_plugins' ) ) {
-				echo ' <a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&s=' . urlencode( $s ) ) ) . '">' . __( 'Search for plugins in the WordPress Plugin Directory.' ) . '</a>';
+				echo ' <a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&s=' . urlencode( $s ) ) ) . '">' . __( 'Search for plugins in the ClassicPress Plugin Directory.' ) . '</a>';
 			}
 		} elseif ( ! empty( $plugins['all'] ) )
 			_e( 'No plugins found.' );
@@ -503,7 +503,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			) . '</p>';
 		} elseif ( 'top' === $which && 'dropins' === $status ) {
 			/* translators: %s: wp-content directory name */
-			echo '<p>' . sprintf( __( 'Drop-ins are advanced plugins in the %s directory that replace WordPress functionality when present.' ),
+			echo '<p>' . sprintf( __( 'Drop-ins are advanced plugins in the %s directory that replace ClassicPress functionality when present.' ),
 				'<code>' . str_replace( ABSPATH, '', WP_CONTENT_DIR ) . '</code>'
 			) . '</p>';
 		}

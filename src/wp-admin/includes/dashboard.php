@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Dashboard Widget Administration Screen API
+ * ClassicPress Dashboard Widget Administration Screen API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -52,8 +52,8 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( 'dashboard_quick_press', $quick_draft_title, 'wp_dashboard_quick_press' );
 	}
 
-	// WordPress Events and News
-	wp_add_dashboard_widget( 'dashboard_primary', __( 'WordPress Events and News' ), 'wp_dashboard_events_news' );
+	// ClassicPress Events and News
+	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
 
 	if ( is_network_admin() ) {
 
@@ -1269,7 +1269,7 @@ function wp_print_community_events_templates() {
 }
 
 /**
- * WordPress News dashboard widget.
+ * ClassicPress News dashboard widget.
  *
  * @since 2.7.0
  * @since 4.8.0 Removed popular plugins feed.
@@ -1279,7 +1279,7 @@ function wp_dashboard_primary() {
 		'news' => array(
 
 			/**
-			 * Filters the primary link URL for the 'WordPress News' dashboard widget.
+			 * Filters the primary link URL for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.5.0
 			 *
@@ -1288,7 +1288,7 @@ function wp_dashboard_primary() {
 			'link' => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
 
 			/**
-			 * Filters the primary feed URL for the 'WordPress News' dashboard widget.
+			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.3.0
 			 *
@@ -1297,13 +1297,13 @@ function wp_dashboard_primary() {
 			'url' => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
 
 			/**
-			 * Filters the primary link title for the 'WordPress News' dashboard widget.
+			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.3.0
 			 *
 			 * @param string $title Title attribute for the widget's primary link.
 			 */
-			'title'        => apply_filters( 'dashboard_primary_title', __( 'WordPress Blog' ) ),
+			'title'        => apply_filters( 'dashboard_primary_title', __( 'ClassicPress Blog' ) ),
 			'items'        => 1,
 			'show_summary' => 0,
 			'show_author'  => 0,
@@ -1312,7 +1312,7 @@ function wp_dashboard_primary() {
 		'planet' => array(
 
 			/**
-			 * Filters the secondary link URL for the 'WordPress News' dashboard widget.
+			 * Filters the secondary link URL for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.3.0
 			 *
@@ -1321,7 +1321,7 @@ function wp_dashboard_primary() {
 			'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
 
 			/**
-			 * Filters the secondary feed URL for the 'WordPress News' dashboard widget.
+			 * Filters the secondary feed URL for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.3.0
 			 *
@@ -1330,16 +1330,16 @@ function wp_dashboard_primary() {
 			'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
 
 			/**
-			 * Filters the secondary link title for the 'WordPress News' dashboard widget.
+			 * Filters the secondary link title for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 2.3.0
 			 *
 			 * @param string $title Title attribute for the widget's secondary link.
 			 */
-			'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other WordPress News' ) ),
+			'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other ClassicPress News' ) ),
 
 			/**
-			 * Filters the number of secondary link items for the 'WordPress News' dashboard widget.
+			 * Filters the number of secondary link items for the 'ClassicPress News' dashboard widget.
 			 *
 			 * @since 4.4.0
 			 *
@@ -1356,7 +1356,7 @@ function wp_dashboard_primary() {
 }
 
 /**
- * Display the WordPress news feeds.
+ * Display the ClassicPress news feeds.
  *
  * @since 3.8.0
  * @since 4.8.0 Removed popular plugins feed.
@@ -1440,12 +1440,12 @@ function wp_dashboard_browser_nag() {
 	if ( $response ) {
 		if ( $response['insecure'] ) {
 			/* translators: %s: browser name and link */
-			$msg = sprintf( __( "It looks like you're using an insecure version of %s. Using an outdated browser makes your computer unsafe. For the best WordPress experience, please update your browser." ),
+			$msg = sprintf( __( "It looks like you're using an insecure version of %s. Using an outdated browser makes your computer unsafe. For the best ClassicPress experience, please update your browser." ),
 				sprintf( '<a href="%s">%s</a>', esc_url( $response['update_url'] ), esc_html( $response['name'] ) )
 			);
 		} else {
 			/* translators: %s: browser name and link */
-			$msg = sprintf( __( "It looks like you're using an old version of %s. For the best WordPress experience, please update your browser." ),
+			$msg = sprintf( __( "It looks like you're using an old version of %s. For the best ClassicPress experience, please update your browser." ),
 				sprintf( '<a href="%s">%s</a>', esc_url( $response['update_url'] ), esc_html( $response['name'] ) )
 			);
 		}
@@ -1515,7 +1515,7 @@ function wp_check_browser_version() {
 		$url = 'http://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(
 			'body'       => array( 'useragent' => $_SERVER['HTTP_USER_AGENT'] ),
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' )
+			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 		);
 
 		if ( wp_http_supports( array( 'ssl' ) ) ) {
@@ -1556,14 +1556,14 @@ function wp_check_browser_version() {
 function wp_dashboard_empty() {}
 
 /**
- * Displays a welcome panel to introduce users to WordPress.
+ * Displays a welcome panel to introduce users to ClassicPress.
  *
  * @since 3.3.0
  */
 function wp_welcome_panel() {
 	?>
 	<div class="welcome-panel-content">
-	<h2><?php _e( 'Welcome to WordPress!' ); ?></h2>
+	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
 	<div class="welcome-panel-column-container">
 	<div class="welcome-panel-column">

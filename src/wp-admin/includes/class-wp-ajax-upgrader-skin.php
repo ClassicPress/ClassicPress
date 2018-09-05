@@ -2,13 +2,13 @@
 /**
  * Upgrader API: WP_Ajax_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Upgrader Skin for Ajax WordPress upgrades.
+ * Upgrader Skin for Ajax ClassicPress upgrades.
  *
  * This skin is designed to be used for Ajax updates.
  *

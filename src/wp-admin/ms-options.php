@@ -2,7 +2,7 @@
 /**
  * Multisite network settings administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.0.0
  */

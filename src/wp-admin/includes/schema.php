@@ -1,10 +1,10 @@
 <?php
 /**
- * WordPress Administration Scheme API
+ * ClassicPress Administration Scheme API
  *
  * Here we keep the DB structure and option values.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -27,7 +27,7 @@ $charset_collate = $wpdb->get_charset_collate();
  *
  * @since 3.3.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $scope Optional. The tables for which to retrieve SQL. Can be all, global, ms_global, or blog tables. Defaults to all.
  * @param int $blog_id Optional. The site ID for which to retrieve SQL. Default is the current site ID.
@@ -339,11 +339,11 @@ CREATE TABLE $wpdb->signups (
 $wp_queries = wp_get_db_schema( 'all' );
 
 /**
- * Create WordPress options and set the default values.
+ * Create ClassicPress options and set the default values.
  *
  * @since 1.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_db_version
  * @global int  $wp_current_db_version
  */
@@ -352,7 +352,7 @@ function populate_options() {
 
 	$guessurl = wp_guess_url();
 	/**
-	 * Fires before creating WordPress options and populating their default values.
+	 * Fires before creating ClassicPress options and populating their default values.
 	 *
 	 * @since 2.6.0
 	 */
@@ -395,7 +395,7 @@ function populate_options() {
 	'home' => $guessurl,
 	'blogname' => __('My Site'),
 	/* translators: site tagline */
-	'blogdescription' => __('Just another WordPress site'),
+	'blogdescription' => __('Just another ClassicPress site'),
 	'users_can_register' => 0,
 	'admin_email' => 'you@example.com',
 	/* translators: default start of the week. 0 = Sunday, 1 = Monday */

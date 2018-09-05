@@ -2,7 +2,7 @@
 /**
  * The custom background script.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

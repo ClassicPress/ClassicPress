@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Taxonomy Administration API.
+ * ClassicPress Taxonomy Administration API.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

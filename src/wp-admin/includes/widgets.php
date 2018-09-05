@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Widgets Administration API
+ * ClassicPress Widgets Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

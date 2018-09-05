@@ -2,13 +2,13 @@
 /**
  * Upgrader API: Automatic_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Upgrader Skin for Automatic WordPress Upgrades
+ * Upgrader Skin for Automatic ClassicPress Upgrades
  *
  * This skin is designed to be used when no output is intended, all output
  * is captured and stored for the caller to process and log/email/discard.

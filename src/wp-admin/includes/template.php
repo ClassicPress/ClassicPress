@@ -1,10 +1,10 @@
 <?php
 /**
- * Template WordPress Administration API.
+ * Template ClassicPress Administration API.
  *
  * A Big Mess. Also some neat functions that are nicely written.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -590,7 +590,7 @@ function _list_meta_row( $entry, &$count ) {
  *
  * @since 1.2.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param WP_Post $post Optional. The post being edited.
  */
@@ -798,7 +798,7 @@ function page_template_dropdown( $default = '', $post_type = 'page' ) {
  * @since 1.5.0
  * @since 4.4.0 `$post` argument was added.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int         $default Optional. The default page ID to be pre-selected. Default 0.
  * @param int         $parent  Optional. The parent page ID. Default 0.
@@ -1634,7 +1634,7 @@ function iframe_header( $title = '', $deprecated = false ) {
 	@header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
 	_wp_admin_html_begin();
 ?>
-<title><?php bloginfo('name') ?> &rsaquo; <?php echo $title ?> &#8212; <?php _e('WordPress'); ?></title>
+<title><?php bloginfo('name') ?> &rsaquo; <?php echo $title ?> &#8212; <?php _e('ClassicPress'); ?></title>
 <?php
 wp_enqueue_style( 'colors' );
 ?>

@@ -2,11 +2,11 @@
 /**
  * Edit plugin editor administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
-/** WordPress Administration Bootstrap */
+/** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( is_multisite() && ! is_network_admin() ) {
@@ -298,7 +298,7 @@ if ( ! in_array( 'plugin_editor_notice', $dismissed_pointers, true ) ) :
 		<div class="file-editor-warning-content">
 			<div class="file-editor-warning-message">
 				<h1><?php _e( 'Heads up!' ); ?></h1>
-				<p><?php _e( 'You appear to be making direct edits to your plugin in the WordPress dashboard. We recommend that you don&#8217;t! Editing plugins directly may introduce incompatibilities that break your site and your changes may be lost in future updates.' ); ?></p>
+				<p><?php _e( 'You appear to be making direct edits to your plugin in the ClassicPress dashboard. We recommend that you don&#8217;t! Editing plugins directly may introduce incompatibilities that break your site and your changes may be lost in future updates.' ); ?></p>
 				<p><?php _e( 'If you absolutely have to make direct edits to this plugin, use a file manager to create a copy with a new name and hang on to the original. That way, you can re-enable a functional version if something goes wrong.' ); ?></p>
 			</div>
 			<p>

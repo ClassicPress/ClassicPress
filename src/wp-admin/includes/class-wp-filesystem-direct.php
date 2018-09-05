@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress Direct Filesystem.
+ * ClassicPress Direct Filesystem.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Filesystem
  */
 
 /**
- * WordPress Filesystem Class for direct PHP file and folder manipulation.
+ * ClassicPress Filesystem Class for direct PHP file and folder manipulation.
  *
  * @since 2.5.0
  *

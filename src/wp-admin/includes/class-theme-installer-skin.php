@@ -2,13 +2,13 @@
 /**
  * Upgrader API: Theme_Installer_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Theme Installer Skin for the WordPress Theme Installer.
+ * Theme Installer Skin for the ClassicPress Theme Installer.
  *
  * @since 2.8.0
  * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
@@ -92,7 +92,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		 * @since 2.8.0
 		 *
 		 * @param array    $install_actions Array of theme action links.
-		 * @param object   $api             Object containing WordPress.org API theme data.
+		 * @param object   $api             Object containing ClassicPress.net API theme data.
 		 * @param string   $stylesheet      Theme directory name.
 		 * @param WP_Theme $theme_info      Theme object.
 		 */

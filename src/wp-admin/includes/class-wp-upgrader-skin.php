@@ -2,13 +2,13 @@
 /**
  * Upgrader API: WP_Upgrader_Skin class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
 
 /**
- * Generic Skin for the WordPress Upgrader classes. This skin is designed to be extended for specific purposes.
+ * Generic Skin for the ClassicPress Upgrader classes. This skin is designed to be extended for specific purposes.
  *
  * @since 2.8.0
  * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.

@@ -2,7 +2,7 @@
 /**
  * Post advanced form for inclusion in the administration panels.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -460,7 +460,7 @@ if ( 'post' == $post_type ) {
 		'content' => $publish_box,
 	) );
 
-	$discussion_settings  = '<p>' . __('<strong>Send Trackbacks</strong> &mdash; Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. Enter the URL(s) you want to send trackbacks. If you link to other WordPress sites they&#8217;ll be notified automatically using pingbacks, and this field is unnecessary.') . '</p>';
+	$discussion_settings  = '<p>' . __('<strong>Send Trackbacks</strong> &mdash; Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. Enter the URL(s) you want to send trackbacks. If you link to other ClassicPress sites they&#8217;ll be notified automatically using pingbacks, and this field is unnecessary.') . '</p>';
 	$discussion_settings .= '<p>' . __('<strong>Discussion</strong> &mdash; You can turn comments and pings on or off, and if there are comments on the post, you can see them here and moderate them.') . '</p>';
 
 	get_current_screen()->add_help_tab( array(

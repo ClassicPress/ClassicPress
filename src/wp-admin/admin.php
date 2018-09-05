@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress Administration Bootstrap
+ * ClassicPress Administration Bootstrap
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
 /**
- * In WordPress Administration Screens
+ * In ClassicPress Administration Screens
  *
  * @since 2.3.2
  */

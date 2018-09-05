@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Theme Installation Administration API
+ * ClassicPress Theme Installation Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
@@ -20,7 +20,7 @@ $theme_field_defaults = array( 'description' => true, 'sections' => false, 'test
 );
 
 /**
- * Retrieve list of WordPress theme features (aka theme tags)
+ * Retrieve list of ClassicPress theme features (aka theme tags)
  *
  * @since 2.8.0
  *

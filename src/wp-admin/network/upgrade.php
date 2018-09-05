@@ -2,12 +2,12 @@
 /**
  * Multisite upgrade administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since 3.0.0
  */
 
-/** Load WordPress Administration Bootstrap */
+/** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 require_once( ABSPATH . WPINC . '/http.php' );
@@ -19,7 +19,7 @@ get_current_screen()->add_help_tab( array(
 	'id'      => 'overview',
 	'title'   => __('Overview'),
 	'content' =>
-		'<p>' . __('Only use this screen once you have updated to a new version of WordPress through Updates/Available Updates (via the Network Administration navigation menu or the Toolbar). Clicking the Upgrade Network button will step through each site in the network, five at a time, and make sure any database updates are applied.') . '</p>' .
+		'<p>' . __('Only use this screen once you have updated to a new version of ClassicPress through Updates/Available Updates (via the Network Administration navigation menu or the Toolbar). Clicking the Upgrade Network button will step through each site in the network, five at a time, and make sure any database updates are applied.') . '</p>' .
 		'<p>' . __('If a version update to core has not happened, clicking this button won&#8217;t affect anything.') . '</p>' .
 		'<p>' . __('If this process fails for any reason, users logging in to their sites will force the same update.') . '</p>'
 ) );
@@ -124,7 +124,7 @@ switch ( $action ) {
 		if ( get_site_option( 'wpmu_upgrade_site' ) != $GLOBALS['wp_db_version'] ) :
 		?>
 		<h2><?php _e( 'Database Update Required' ); ?></h2>
-		<p><?php _e( 'WordPress has been updated! Before we send you on your way, we need to individually upgrade the sites in your network.' ); ?></p>
+		<p><?php _e( 'ClassicPress has been updated! Before we send you on your way, we need to individually upgrade the sites in your network.' ); ?></p>
 		<?php endif; ?>
 
 		<p><?php _e( 'The database update process may take a little while, so please be patient.' ); ?></p>

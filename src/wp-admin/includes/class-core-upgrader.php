@@ -2,7 +2,7 @@
 /**
  * Upgrade API: Core_Upgrader class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Upgrader
  * @since 4.6.0
  */
@@ -10,7 +10,7 @@
 /**
  * Core class used for updating core.
  *
- * It allows for WordPress to upgrade itself in combination with
+ * It allows for ClassicPress to upgrade itself in combination with
  * the wp-admin/includes/update-core.php file.
  *
  * @since 2.8.0
@@ -26,7 +26,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @since 2.8.0
 	 */
 	public function upgrade_strings() {
-		$this->strings['up_to_date'] = __('WordPress is at the latest version.');
+		$this->strings['up_to_date'] = __('ClassicPress is at the latest version.');
 		$this->strings['locked'] = __('Another update is currently in progress.');
 		$this->strings['no_package'] = __('Update package not available.');
 		/* translators: %s: package URL */
@@ -35,20 +35,20 @@ class Core_Upgrader extends WP_Upgrader {
 		$this->strings['copy_failed'] = __('Could not copy files.');
 		$this->strings['copy_failed_space'] = __('Could not copy files. You may have run out of disk space.' );
 		$this->strings['start_rollback'] = __( 'Attempting to roll back to previous version.' );
-		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, WordPress has rolled back to your previous version.' );
+		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, ClassicPress has rolled back to your previous version.' );
 	}
 
 	/**
-	 * Upgrade WordPress core.
+	 * Upgrade ClassicPress core.
 	 *
 	 * @since 2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 * @global callable           $_wp_filesystem_direct_method
 	 *
-	 * @param object $current Response object for whether WordPress is current.
+	 * @param object $current Response object for whether ClassicPress is current.
 	 * @param array  $args {
-	 *        Optional. Arguments for upgrading WordPress core. Default empty array.
+	 *        Optional. Arguments for upgrading ClassicPress core. Default empty array.
 	 *
 	 *        @type bool $pre_check_md5    Whether to check the file checksums before
 	 *                                     attempting the upgrade. Default true.
@@ -224,7 +224,7 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Determines if this WordPress Core version should update to an offered version or not.
+	 * Determines if this ClassicPress Core version should update to an offered version or not.
 	 *
 	 * @since 3.7.0
 	 *

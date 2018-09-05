@@ -1,14 +1,14 @@
 <?php
 /**
- * WordPress Translation Installation Administration API
+ * ClassicPress Translation Installation Administration API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
 
 /**
- * Retrieve translations from WordPress Translation API.
+ * Retrieve translations from ClassicPress Translation API.
  *
  * @since 4.0.0
  *
@@ -24,7 +24,7 @@ function translations_api( $type, $args = null ) {
 	}
 
 	/**
-	 * Allows a plugin to override the WordPress.org Translation Installation API entirely.
+	 * Allows a plugin to override the ClassicPress.net Translation Installation API entirely.
 	 *
 	 * @since 4.0.0
 	 *
@@ -59,9 +59,9 @@ function translations_api( $type, $args = null ) {
 			trigger_error(
 				sprintf(
 					/* translators: %s: support forums URL */
-					__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+					__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 					__( 'https://wordpress.org/support/' )
-				) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+				) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 				headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 			);
 
@@ -72,7 +72,7 @@ function translations_api( $type, $args = null ) {
 			$res = new WP_Error( 'translations_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
-					__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+					__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 					__( 'https://wordpress.org/support/' )
 				),
 				$request->get_error_message()
@@ -83,7 +83,7 @@ function translations_api( $type, $args = null ) {
 				$res = new WP_Error( 'translations_api_failed',
 					sprintf(
 						/* translators: %s: support forums URL */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://wordpress.org/support/' )
 					),
 					wp_remote_retrieve_body( $request )
@@ -105,7 +105,7 @@ function translations_api( $type, $args = null ) {
 }
 
 /**
- * Get available translations from the WordPress.org API.
+ * Get available translations from the ClassicPress.net API.
  *
  * @since 4.0.0
  *
@@ -237,7 +237,7 @@ function wp_download_language_pack( $download ) {
 }
 
 /**
- * Check if WordPress has access to the filesystem without asking for
+ * Check if ClassicPress has access to the filesystem without asking for
  * credentials.
  *
  * @since 4.0.0

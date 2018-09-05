@@ -4,7 +4,7 @@
  *
  * Redirects to edit-comments.php?comment_status=moderated.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );

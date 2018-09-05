@@ -2,16 +2,16 @@
 /**
  * About This Version administration panel.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
-/** WordPress Administration Bootstrap */
+/** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 wp_enqueue_script( 'underscore' );
 
-/* translators: Page title of the About WordPress page in the admin. */
+/* translators: Page title of the About ClassicPress page in the admin. */
 $title = _x( 'About', 'page title' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
@@ -19,9 +19,9 @@ list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 	<div class="wrap about-wrap full-width-layout">
-		<h1><?php printf( __( 'Welcome to WordPress&nbsp;%s' ), $display_version ); ?></h1>
+		<h1><?php printf( __( 'Welcome to ClassicPress&nbsp;%s' ), $display_version ); ?></h1>
 
-		<p class="about-text"><?php printf( __( 'Thank you for updating to the latest version! WordPress %s will smooth your design workflow and keep you safe from coding errors.' ), $display_version ); ?></p>
+		<p class="about-text"><?php printf( __( 'Thank you for updating to the latest version! ClassicPress %s will smooth your design workflow and keep you safe from coding errors.' ), $display_version ); ?></p>
 		<div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">
@@ -36,7 +36,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed %2$s bugs.',
@@ -56,7 +56,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.',
@@ -74,7 +74,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed %2$s bugs.',
@@ -92,7 +92,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.',
@@ -110,7 +110,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed %2$s bugs.',
@@ -128,7 +128,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed %2$s bugs.',
@@ -146,7 +146,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.',
@@ -164,7 +164,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				printf(
-					/* translators: 1: WordPress version number, 2: plural number of bugs. */
+					/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 					_n(
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
 						'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.',
@@ -334,9 +334,9 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				?>
 			</h2>
 			<p><?php printf(
-				__( 'WordPress is working on a new way to create and control your content and we&#8217;d love to have your help. Interested in being an <a href="%s">early tester</a> or getting involved with the Gutenberg project? <a href="%s">Contribute on GitHub</a>.' ),
+				__( 'ClassicPress is working on a new way to create and control your content and we&#8217;d love to have your help. Interested in being an <a href="%s">early tester</a> or getting involved with the Gutenberg project? <a href="%s">Contribute on GitHub</a>.' ),
 				__( 'https://wordpress.org/plugins/gutenberg/' ),
-				'https://github.com/WordPress/gutenberg' ); ?></p>
+				'https://github.com/ClassicPress/gutenberg' ); ?></p>
 		</div>
 
 		<hr />
@@ -497,20 +497,20 @@ __( 'Security Releases' );
 __( 'Maintenance and Security Release' );
 __( 'Maintenance and Security Releases' );
 
-/* translators: %s: WordPress version number */
+/* translators: %s: ClassicPress version number */
 __( '<strong>Version %s</strong> addressed one security issue.' );
-/* translators: %s: WordPress version number */
+/* translators: %s: ClassicPress version number */
 __( '<strong>Version %s</strong> addressed some security issues.' );
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. */
+/* translators: 1: ClassicPress version number, 2: plural number of bugs. */
 _n_noop( '<strong>Version %1$s</strong> addressed %2$s bug.',
          '<strong>Version %1$s</strong> addressed %2$s bugs.' );
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. Singular security issue. */
+/* translators: 1: ClassicPress version number, 2: plural number of bugs. Singular security issue. */
 _n_noop( '<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug.',
          '<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs.' );
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. More than one security issue. */
+/* translators: 1: ClassicPress version number, 2: plural number of bugs. More than one security issue. */
 _n_noop( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
          '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.' );
 

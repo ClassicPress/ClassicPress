@@ -1,14 +1,14 @@
 <?php
 /**
- * WordPress Generic Request (POST/GET) Handler
+ * ClassicPress Generic Request (POST/GET) Handler
  *
  * Intended for form submission handling in themes and plugins.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 
-/** We are located in WordPress Administration Screens */
+/** We are located in ClassicPress Administration Screens */
 if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
 }

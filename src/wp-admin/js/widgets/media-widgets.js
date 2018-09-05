@@ -1264,7 +1264,7 @@ wp.mediaWidgets = ( function( $ ) {
 	 * Initialize functionality.
 	 *
 	 * This function exists to prevent the JS file from having to boot itself.
-	 * When WordPress enqueues this script, it should have an inline script
+	 * When ClassicPress enqueues this script, it should have an inline script
 	 * attached which calls wp.mediaWidgets.init().
 	 *
 	 * @returns {void}
