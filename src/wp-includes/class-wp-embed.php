@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Embed
- * @since 2.9.0
+ * @since WP-2.9.0
  */
 class WP_Embed {
 	public $handlers = array();
@@ -173,7 +173,7 @@ class WP_Embed {
 						/**
 						 * Filters the returned embed handler.
 						 *
-						 * @since 2.9.0
+						 * @since WP-2.9.0
 						 *
 						 * @see WP_Embed::shortcode()
 						 *
@@ -201,7 +201,7 @@ class WP_Embed {
 		/**
 		 * Filters the oEmbed TTL value (time to live).
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @param int    $time    Time to live (in seconds).
 		 * @param string $url     The attempted embed URL.
@@ -241,7 +241,7 @@ class WP_Embed {
 				/**
 				 * Filters the cached oEmbed HTML.
 				 *
-				 * @since 2.9.0
+				 * @since WP-2.9.0
 				 *
 				 * @see WP_Embed::shortcode()
 				 *
@@ -257,8 +257,8 @@ class WP_Embed {
 		/**
 		 * Filters whether to inspect the given URL for discoverable link tags.
 		 *
-		 * @since 2.9.0
-		 * @since 4.4.0 The default value changed to true.
+		 * @since WP-2.9.0
+		 * @since WP-4.4.0 The default value changed to true.
 		 *
 		 * @see WP_oEmbed::discover()
 		 *
@@ -356,7 +356,7 @@ class WP_Embed {
 		/**
 		 * Filters the array of post types to cache oEmbed results for.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param array $post_types Array of post types to cache oEmbed results for. Defaults to post types with `show_ui` set to true.
 		 */
@@ -430,7 +430,7 @@ class WP_Embed {
 		/**
 		 * Filters the returned, maybe-linked embed URL.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $output The linked or original URL.
 		 * @param string $url    The original URL.
@@ -441,7 +441,7 @@ class WP_Embed {
 	/**
 	 * Find the oEmbed cache post ID for a given cache key.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param string $cache_key oEmbed cache key.
 	 * @return int|null Post ID on success, null on failure.

@@ -21,7 +21,7 @@ require_once( ABSPATH . 'wp-admin/includes/class-wp-internal-pointers.php' );
 /**
  * Output an unordered list of checkbox input elements labeled with category names.
  *
- * @since 2.5.1
+ * @since WP-2.5.1
  *
  * @see wp_terms_checklist()
  *
@@ -53,8 +53,8 @@ function wp_category_checklist( $post_id = 0, $descendants_and_self = 0, $select
  *
  * Taxonomy-independent version of wp_category_checklist().
  *
- * @since 3.0.0
- * @since 4.4.0 Introduced the `$echo` argument.
+ * @since WP-3.0.0
+ * @since WP-4.4.0 Introduced the `$echo` argument.
  *
  * @param int          $post_id Optional. Post ID. Default 0.
  * @param array|string $args {
@@ -88,7 +88,7 @@ function wp_terms_checklist( $post_id = 0, $args = array() ) {
 	/**
 	 * Filters the taxonomy terms checklist arguments.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @see wp_terms_checklist()
 	 *
@@ -180,7 +180,7 @@ function wp_terms_checklist( $post_id = 0, $args = array() ) {
  * If the $post_ID global isn't empty then the terms associated with that
  * post will be marked as checked.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $taxonomy Taxonomy to retrieve terms from.
  * @param int $default Not used.
@@ -227,7 +227,7 @@ function wp_popular_terms_checklist( $taxonomy, $default = 0, $number = 10, $ech
 /**
  * Outputs a link category checklist element.
  *
- * @since 2.5.1
+ * @since WP-2.5.1
  *
  * @param int $link_id
  */
@@ -264,7 +264,7 @@ function wp_link_category_checklist( $link_id = 0 ) {
 /**
  * Adds hidden fields with the data for use in the inline editor for posts and pages.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param WP_Post $post Post object.
  */
@@ -340,7 +340,7 @@ function get_inline_data($post) {
 	/**
 	 * Fires after outputting the fields for the inline editor for posts and pages.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 *
 	 * @param WP_Post      $post             The current post object.
 	 * @param WP_Post_Type $post_type_object The current post's post type object.
@@ -353,7 +353,7 @@ function get_inline_data($post) {
 /**
  * Outputs the in-line comment reply-to form in the Comments list table.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global WP_List_Table $wp_list_table
  *
@@ -372,7 +372,7 @@ function wp_comment_reply( $position = 1, $checkbox = false, $mode = 'single', $
 	 * of the in-line comment-reply form in the Comments list table,
 	 * echoing the returned value instead.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @see wp_comment_reply()
 	 *
@@ -474,7 +474,7 @@ function wp_comment_reply( $position = 1, $checkbox = false, $mode = 'single', $
 /**
  * Output 'undo move to trash' text for comments
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  */
 function wp_comment_trashnotice() {
 ?>
@@ -490,7 +490,7 @@ function wp_comment_trashnotice() {
 /**
  * Outputs a post's public meta data in the Custom Fields meta box.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param array $meta
  */
@@ -533,7 +533,7 @@ function list_meta( $meta ) {
 /**
  * Outputs a single row of public meta data in the Custom Fields meta box.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @staticvar string $update_nonce
  *
@@ -588,7 +588,7 @@ function _list_meta_row( $entry, &$count ) {
 /**
  * Prints the form in the Custom Fields meta box.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -604,7 +604,7 @@ function meta_form( $post = null ) {
 	 * Returning a non-null value will effectively short-circuit and avoid a
 	 * potentially expensive query against postmeta.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array|null $keys Pre-defined meta keys to be used in place of a postmeta query. Default null.
 	 * @param WP_Post    $post The current post object.
@@ -616,7 +616,7 @@ function meta_form( $post = null ) {
 		 * Filters the number of custom fields to retrieve for the drop-down
 		 * in the Custom Fields meta box.
 		 *
-		 * @since 2.1.0
+		 * @since WP-2.1.0
 		 *
 		 * @param int $limit Number of custom fields to retrieve. Default 30.
 		 */
@@ -687,8 +687,8 @@ function meta_form( $post = null ) {
 /**
  * Print out HTML form date elements for editing post or comment publish date.
  *
- * @since 0.71
- * @since 4.4.0 Converted to use get_comment() instead of the global `$comment`.
+ * @since WP-0.71
+ * @since WP-4.4.0 Converted to use get_comment() instead of the global `$comment`.
  *
  * @global WP_Locale  $wp_locale
  *
@@ -777,8 +777,8 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 /**
  * Print out option HTML elements for the page templates drop-down.
  *
- * @since 1.5.0
- * @since 4.7.0 Added the `$post_type` parameter.
+ * @since WP-1.5.0
+ * @since WP-4.7.0 Added the `$post_type` parameter.
  *
  * @param string $default   Optional. The template file name. Default empty.
  * @param string $post_type Optional. Post type to get templates for. Default 'post'.
@@ -795,8 +795,8 @@ function page_template_dropdown( $default = '', $post_type = 'page' ) {
 /**
  * Print out option HTML elements for the page parents drop-down.
  *
- * @since 1.5.0
- * @since 4.4.0 `$post` argument was added.
+ * @since WP-1.5.0
+ * @since WP-4.4.0 `$post` argument was added.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -832,7 +832,7 @@ function parent_dropdown( $default = 0, $parent = 0, $level = 0, $post = null ) 
 /**
  * Print out option html elements for role selectors.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $selected Slug for the role that should be already selected.
  */
@@ -857,7 +857,7 @@ function wp_dropdown_roles( $selected = '' ) {
 /**
  * Outputs the form used by the importers to accept the data to be imported
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param string $action The action attribute for the form.
  */
@@ -866,7 +866,7 @@ function wp_import_upload_form( $action ) {
 	/**
 	 * Filters the maximum allowed upload size for import files.
 	 *
-	 * @since 2.3.0
+	 * @since WP-2.3.0
 	 *
 	 * @see wp_max_upload_size()
 	 *
@@ -896,8 +896,8 @@ function wp_import_upload_form( $action ) {
 /**
  * Adds a meta box to one or more screens.
  *
- * @since 2.5.0
- * @since 4.4.0 The `$screen` parameter now accepts an array of screen IDs.
+ * @since WP-2.5.0
+ * @since WP-4.4.0 The `$screen` parameter now accepts an array of screen IDs.
  *
  * @global array $wp_meta_boxes
  *
@@ -1001,7 +1001,7 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 /**
  * Meta-Box template function
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global array $wp_meta_boxes
  *
@@ -1087,8 +1087,8 @@ function do_meta_boxes( $screen, $context, $object ) {
 /**
  * Removes a meta box from one or more screens.
  *
- * @since 2.6.0
- * @since 4.4.0 The `$screen` parameter now accepts an array of screen IDs.
+ * @since WP-2.6.0
+ * @since WP-4.4.0 The `$screen` parameter now accepts an array of screen IDs.
  *
  * @global array $wp_meta_boxes
  *
@@ -1139,7 +1139,7 @@ function remove_meta_box( $id, $screen, $context ) {
  * function serves to build meta boxes as list items for display as
  * a collapsible accordion.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @uses global $wp_meta_boxes Used to retrieve registered meta boxes.
  *
@@ -1217,7 +1217,7 @@ function do_accordion_sections( $screen, $context, $object ) {
  * content you want to show at the top of the settings section before the actual
  * fields. It can output nothing if you want.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global $wp_settings_sections Storage array of all settings sections added to admin pages
  *
@@ -1265,8 +1265,8 @@ function add_settings_section($id, $title, $callback, $page) {
  * html input tags for this setting field. Use get_option() to retrieve existing
  * values to show.
  *
- * @since 2.7.0
- * @since 4.2.0 The `$class` argument was added.
+ * @since WP-2.7.0
+ * @since WP-4.2.0 The `$class` argument was added.
  *
  * @global $wp_settings_fields Storage array of settings fields and info about their pages/sections
  *
@@ -1324,7 +1324,7 @@ function add_settings_field($id, $title, $callback, $page, $section = 'default',
  *
  * @global $wp_settings_sections Storage array of all settings sections added to admin pages
  * @global $wp_settings_fields Storage array of settings fields and info about their pages/sections
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $page The slug name of the page whose settings sections you want to output
  */
@@ -1358,7 +1358,7 @@ function do_settings_sections( $page ) {
  *
  * @global $wp_settings_fields Storage array of settings fields and their pages/sections
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $page Slug title of the admin page who's settings fields you want to show.
  * @param string $section Slug title of the settings section who's fields you want to show.
@@ -1404,7 +1404,7 @@ function do_settings_fields($page, $section) {
  * Additional calls to settings_errors() can be used to show errors even when the settings
  * page is first accessed.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $wp_settings_errors Storage array of errors registered during this pageload
  *
@@ -1441,7 +1441,7 @@ function add_settings_error( $setting, $code, $message, $type = 'error' ) {
  * hasn't submitted data (i.e. when they first load an options page, or in the {@see 'admin_notices'}
  * action hook).
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $wp_settings_errors Storage array of errors registered during this pageload
  *
@@ -1504,7 +1504,7 @@ function get_settings_errors( $setting = '', $sanitize = false ) {
  * reporting after submission. This is useful to show general errors like
  * missing settings when the user arrives at the settings page.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param string $setting        Optional slug title of a specific setting who's errors you want.
  * @param bool   $sanitize       Whether to re-sanitize the setting value before returning errors.
@@ -1535,7 +1535,7 @@ function settings_errors( $setting = '', $sanitize = false, $hide_on_update = fa
 /**
  * Outputs the modal window used for attaching media to posts or pages in the media-listing screen.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $found_action
  */
@@ -1574,7 +1574,7 @@ function find_posts_div($found_action = '') {
  *
  * The password is passed through esc_attr() to ensure that it is safe for placing in an html attribute.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function the_post_password() {
 	$post = get_post();
@@ -1588,7 +1588,7 @@ function the_post_password() {
  * The post title is fetched and if it is blank then a default string is
  * returned.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return string The post title if set.
@@ -1606,7 +1606,7 @@ function _draft_or_post_title( $post = 0 ) {
  * A simple wrapper to display the "s" parameter in a `GET` URI. This function
  * should only be used when the_search_query() cannot.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function _admin_search_query() {
 	echo isset($_REQUEST['s']) ? esc_attr( wp_unslash( $_REQUEST['s'] ) ) : '';
@@ -1615,7 +1615,7 @@ function _admin_search_query() {
 /**
  * Generic Iframe header for use with Thickbox
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string    $hook_suffix
  * @global string    $admin_body_class
@@ -1700,7 +1700,7 @@ document.body.className = c;
 /**
  * Generic Iframe footer for use with Thickbox
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function iframe_footer() {
 	/*
@@ -1782,8 +1782,8 @@ function _post_states($post) {
 	/**
 	 * Filters the default post display states used in the posts list table.
 	 *
-	 * @since 2.8.0
-	 * @since 3.6.0 Added the `$post` parameter.
+	 * @since WP-2.8.0
+	 * @since WP-3.6.0 Added the `$post` parameter.
 	 *
 	 * @param array   $post_states An array of post display states.
 	 * @param WP_Post $post        The current post object.
@@ -1859,8 +1859,8 @@ function _media_states( $post ) {
 	/**
 	 * Filters the default media display states for items in the Media list table.
 	 *
-	 * @since 3.2.0
-	 * @since 4.8.0 Added the `$post` parameter.
+	 * @since WP-3.2.0
+	 * @since WP-4.8.0 Added the `$post` parameter.
 	 *
 	 * @param array   $media_states An array of media states. Default 'Header Image',
 	 *                              'Background Image', 'Site Icon', 'Logo'.
@@ -1888,7 +1888,7 @@ function _media_states( $post ) {
  * is not an administrator. To run the test again the option 'can_compress_scripts'
  * has to be deleted.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function compression_test() {
 ?>
@@ -1947,7 +1947,7 @@ function compression_test() {
 /**
  * Echoes a submit button, with provided text and appropriate class(es).
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @see get_submit_button()
  *
@@ -1973,7 +1973,7 @@ function submit_button( $text = null, $type = 'primary', $name = 'submit', $wrap
 /**
  * Returns a submit button, with provided text and appropriate class
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string       $text             Optional. The text of the button. Default 'Save Changes'.
  * @param string       $type             Optional. The type and CSS class(es) of the button. Core values
@@ -2056,7 +2056,7 @@ function _wp_admin_html_begin() {
 	/**
 	 * Fires inside the HTML tag in the admin header.
 	 *
-	 * @since 2.2.0
+	 * @since WP-2.2.0
 	 */
 	do_action( 'admin_xml_ns' );
 ?> <?php language_attributes(); ?>>
@@ -2075,7 +2075,7 @@ function _wp_admin_html_begin() {
 /**
  * Convert a screen string to a screen object
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param string $hook_name The hook name (also known as the hook suffix) used to determine the screen.
  * @return WP_Screen Screen object.
@@ -2102,7 +2102,7 @@ function convert_to_screen( $hook_name ) {
 /**
  * Output the HTML for restoring the post data from DOM storage
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  * @access private
  */
 function _local_storage_notice() {
@@ -2126,8 +2126,8 @@ function _local_storage_notice() {
  * half star increments (ie. 1, 1.5, 2 stars). Optionally, if specified, the
  * number of ratings may also be displayed by passing the $number parameter.
  *
- * @since 3.8.0
- * @since 4.4.0 Introduced the `echo` parameter.
+ * @since WP-3.8.0
+ * @since WP-4.4.0 Introduced the `echo` parameter.
  *
  * @param array $args {
  *     Optional. Array of star ratings arguments.
@@ -2191,7 +2191,7 @@ function wp_star_rating( $args = array() ) {
  * Output a notice when editing the page for posts (internal use only).
  *
  * @ignore
- * @since 4.2.0
+ * @since WP-4.2.0
  */
 function _wp_posts_page_notice() {
 	echo '<div class="notice notice-warning inline"><p>' . __( 'You are currently editing the page that shows your latest posts.' ) . '</p></div>';

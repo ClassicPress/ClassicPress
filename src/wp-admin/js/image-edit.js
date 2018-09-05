@@ -2,7 +2,7 @@
 /**
  * @summary   The functions necessary for editing images.
  *
- * @since     2.9.0
+ * @since     WP-2.9.0
  */
 
 (function($) {
@@ -22,7 +22,7 @@
 	 * @summary Converts a value to an integer.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} f The float value that should be converted.
 	 *
@@ -41,7 +41,7 @@
 	 *          or a field set.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {jQuery}         el The element that should be modified.
 	 * @param {bool|number}    s  The state for the element. If set to true
@@ -70,7 +70,7 @@
 	 * @summary Initializes the image editor.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 *
@@ -113,7 +113,7 @@
 	 * @summary Toggles the wait/load icon in the editor.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 * @param {number} toggle Is 0 or 1, fades the icon in then 1 and out when 0.
@@ -134,7 +134,7 @@
 	 * @summary Shows or hides the image edit help box.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {HTMLElement} el The element to create the help window in.
 	 *
@@ -156,7 +156,7 @@
 	 * have to be applied to.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 *
@@ -173,7 +173,7 @@
 	 * If the original image size is exceeded a red exclamation mark is shown.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number}         postid The current post id.
 	 * @param {number}         x      Is 0 when it applies the y-axis
@@ -209,7 +209,7 @@
 	 * @summary Gets the selected aspect ratio.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 *
@@ -236,7 +236,7 @@
 	 * The history consist of (edit) actions performed on the image.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid  The post id.
 	 * @param {number} setSize 0 or 1, when 1 the image resets to its original size.
@@ -301,7 +301,7 @@
 	 * When the image source is reloaded the image will be reloaded.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number}   postid   The post id.
 	 * @param {string}   nonce    The nonce to verify the request.
@@ -375,7 +375,7 @@
 	 * @summary Performs an image edit action.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param  {number}  postid The post id.
 	 * @param  {string}  nonce  The nonce to verify the request.
@@ -442,7 +442,7 @@
 	 * @summary Stores the changes that are made to the image.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number}  postid   The post id to get the image from the database.
 	 * @param {string}  nonce    The nonce to verify the request.
@@ -507,7 +507,7 @@
 	 * @summary Creates the image edit window.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid   The post id for the image.
 	 * @param {string} nonce    The nonce to verify the request.
@@ -564,7 +564,7 @@
 	 * @summary Initializes the cropping tool and sets a default cropping selection.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 *
@@ -589,7 +589,7 @@
 	 * @summary Initializes the cropping tool.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number}      postid The post id.
 	 * @param {HTMLElement} image  The preview image.
@@ -682,7 +682,7 @@
 	 * @summary Stores the current crop selection.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 * @param {object} c      The selection.
@@ -713,7 +713,7 @@
 	 * @summary Closes the image editor.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number}  postid The post id.
 	 * @param {bool}    warn   Warning message.
@@ -754,7 +754,7 @@
 	 * @summary Checks if the image edit history is saved.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 *
@@ -778,7 +778,7 @@
 	 * @summary Adds an image edit action to the history.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {object} op     The original position.
 	 * @param {number} postid The post id.
@@ -811,7 +811,7 @@
 	 * @summary Rotates the image.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {string} angle  The angle the image is rotated with.
 	 * @param {number} postid The post id.
@@ -832,7 +832,7 @@
 	 * @summary Flips the image.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} axis   The axle the image is flipped on.
 	 * @param {number} postid The post id.
@@ -853,7 +853,7 @@
 	 * @summary Crops the image.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 * @param {string} nonce  The nonce.
@@ -882,7 +882,7 @@
 	 * @summary Undoes an image edit action.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid   The post id.
 	 * @param {string} nonce    The nonce.
@@ -915,7 +915,7 @@
 	 * Reverts a undo action.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 * @param {string} nonce  The nonce.
@@ -945,7 +945,7 @@
 	 * @summary Sets the selection for the height and width in pixels.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid The post id.
 	 * @param {jQuery} el     The element containing the values.
@@ -1002,7 +1002,7 @@
 	 * Rounds a number to a whole.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} num The number.
 	 *
@@ -1031,7 +1031,7 @@
 	 * Sets a locked aspect ratio for the selection.
 	 *
 	 * @memberof imageEdit
-	 * @since    2.9.0
+	 * @since    WP-2.9.0
 	 *
 	 * @param {number} postid     The post id.
 	 * @param {number} n          The ratio to set.
@@ -1075,7 +1075,7 @@
 	 * Validates if a value in a jQuery.HTMLElement is numeric.
 	 *
 	 * @memberof imageEdit
-	 * @since    4.6
+	 * @since    WP-4.6
 	 *
 	 * @param {jQuery} el The html element.
 	 *

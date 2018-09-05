@@ -28,7 +28,7 @@ class MockPHPMailer extends PHPMailer {
 	/**
 	 * Decorator to return the information for a sent mock.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @param int $index Optional. Array index of mock_sent value.
 	 * @return object
@@ -44,7 +44,7 @@ class MockPHPMailer extends PHPMailer {
 	/**
 	 * Get a recipient for a sent mock.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @param string $address_type    The type of address for the email such as to, cc or bcc.
 	 * @param int    $mock_sent_index Optional. The sent_mock index we want to get the recipient for.
@@ -73,7 +73,7 @@ class MockPHPMailer extends PHPMailer {
 /**
  * Helper method to return the global phpmailer instance defined in the bootstrap
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @return object|bool
  */
@@ -88,7 +88,7 @@ function tests_retrieve_phpmailer_instance() {
 /**
  * Helper method to reset the phpmailer instance.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @return bool
  */

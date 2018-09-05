@@ -1,7 +1,7 @@
 /**
  * @summary Handles the addition of the comment form.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @type {Object}
  */
@@ -9,7 +9,7 @@ var addComment = {
 	/**
 	 * @summary Retrieves the elements corresponding to the given IDs.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param {string} commId The comment ID.
 	 * @param {string} parentId The parent ID.
@@ -116,7 +116,7 @@ var addComment = {
 	/**
 	 * @summary Returns the object corresponding to the given ID.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param {string} id The ID.
 	 * @returns {Element} The element belonging to the ID.

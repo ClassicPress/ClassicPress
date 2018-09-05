@@ -854,7 +854,7 @@ class Requests {
 	 * takes place. For a simple progmatic way to determine the magic offset in use, see:
 	 * https://core.trac.wordpress.org/ticket/18273
 	 *
-	 * @since 2.8.1
+	 * @since WP-2.8.1
 	 * @link https://core.trac.wordpress.org/ticket/18273
 	 * @link https://secure.php.net/manual/en/function.gzinflate.php#70875
 	 * @link https://secure.php.net/manual/en/function.gzinflate.php#77336

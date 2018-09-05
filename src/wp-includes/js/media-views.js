@@ -255,7 +255,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Activate a mode.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} mode
 	 *
@@ -294,7 +294,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Render a mode.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} mode
 	 *
@@ -342,7 +342,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Get the region's view.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @returns {wp.media.View}
 	 */
@@ -353,7 +353,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Set the region's view as a subview of the frame.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {Array|Object} views
 	 * @param {Object} [options={}]
@@ -369,7 +369,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Trigger regional view events on the frame.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} event
 	 * @returns {undefined|wp.media.controller.Region} Returns itself to allow chaining.
@@ -412,7 +412,7 @@ module.exports = Region;
  *
  * @memberOf wp.media.controller
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @class
  * @augments Backbone.Model
@@ -440,7 +440,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * Ensure that the `states` collection exists so the `StateMachine`
 	 *   can be used as a mixin.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} id
 	 * @returns {wp.media.controller.State} Returns a State model
@@ -465,7 +465,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * created the `states` collection, or are trying to select a state
 	 * that does not exist.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} id
 	 *
@@ -498,7 +498,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * Call the `state()` method with no parameters to retrieve the current
 	 * active state.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @returns {wp.media.controller.State} Returns a State model
 	 *    from the StateMachine collection
@@ -570,7 +570,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	constructor: function() {
 		this.on( 'activate', this._preActivate, this );
@@ -591,7 +591,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Ready event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	ready: function() {},
 
@@ -599,7 +599,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Activate event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {},
 
@@ -607,7 +607,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Deactivate event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {},
 
@@ -615,13 +615,13 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Reset event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	reset: function() {},
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_ready: function() {
 		this._updateMenu();
@@ -629,7 +629,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	*/
 	_preActivate: function() {
 		this.active = true;
@@ -637,7 +637,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_postActivate: function() {
 		this.on( 'change:menu', this._menu, this );
@@ -656,7 +656,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_deactivate: function() {
 		this.active = false;
@@ -671,7 +671,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_title: function() {
 		this.frame.title.render( this.get('titleMode') || 'default' );
@@ -679,7 +679,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_renderTitle: function( view ) {
 		view.$el.text( this.get('title') || '' );
@@ -687,7 +687,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_router: function() {
 		var router = this.frame.router,
@@ -709,7 +709,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_menu: function() {
 		var menu = this.frame.menu,
@@ -731,7 +731,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_updateMenu: function() {
 		var previous = this.previous('menu'),
@@ -750,7 +750,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Create a view in the media menu for the state.
 	 *
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {media.view.Menu} view The menu view.
 	 */
@@ -808,7 +808,7 @@ module.exports = State;
  */
 var selectionSync = {
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	syncSelection: function() {
 		var selection = this.get('selection'),
@@ -838,7 +838,7 @@ var selectionSync = {
 	 * attachments that this specific selection considered invalid.
 	 * Reset the difference and record the single attachment.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	recordSelection: function() {
 		var selection = this.get('selection'),
@@ -929,7 +929,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * If a library isn't provided, query all media items.
 	 * If a selection instance isn't provided, create one.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		var selection = this.get('selection'),
@@ -957,7 +957,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		this.syncSelection();
@@ -973,7 +973,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		this.recordSelection();
@@ -990,7 +990,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Reset the library to its initial state.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	reset: function() {
 		this.get('selection').reset();
@@ -1003,7 +1003,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 *
 	 * If site options don't define them, fall back to a persistent user setting.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	resetDisplays: function() {
 		var defaultProps = wp.media.view.settings.defaultProps;
@@ -1018,7 +1018,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Create a model to represent display settings (alignment, etc.) for an attachment.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Backbone.Model}
@@ -1035,7 +1035,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Given an attachment, create attachment display settings properties.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Object}
@@ -1055,7 +1055,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Whether an attachment is image.
 	 *
-	 * @since 4.4.1
+	 * @since WP-4.4.1
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Boolean}
@@ -1072,7 +1072,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Whether an attachment can be embedded (audio or video).
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Boolean}
@@ -1095,7 +1095,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * content mode is not an option in the state's router (provided
 	 * the state has a router), reset the content mode to the default.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	refreshContent: function() {
 		var selection = this.get('selection'),
@@ -1119,7 +1119,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * attachments are uploaded, the last attachment in the upload queue will
 	 * be selected.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 */
@@ -1139,7 +1139,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Persist the mode of the content region as a user setting.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	saveContentMode: function() {
 		if ( 'browse' !== this.get('router') ) {
@@ -1210,7 +1210,7 @@ ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototyp
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options Attributes
 	 */
@@ -1220,7 +1220,7 @@ ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototyp
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		this.frame.modal.$el.addClass('image-details');
@@ -1293,7 +1293,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		// If we haven't been provided a `library`, create a `Selection`.
@@ -1310,7 +1310,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		var library = this.get('library');
@@ -1327,7 +1327,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		// Stop watching for uploaded attachments.
@@ -1339,7 +1339,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param browser
 	 */
@@ -1433,7 +1433,7 @@ GalleryAdd = Library.extend(/** @lends wp.media.controller.GalleryAdd.prototype 
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		// If a library wasn't supplied, create a library of images.
@@ -1445,7 +1445,7 @@ GalleryAdd = Library.extend(/** @lends wp.media.controller.GalleryAdd.prototype 
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		var library = this.get('library'),
@@ -1538,7 +1538,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	initialize: function() {
 		var collectionType = this.get('collectionType');
@@ -1562,7 +1562,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		var library = this.get('library');
@@ -1579,7 +1579,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	deactivate: function() {
 		// Stop watching for uploaded attachments.
@@ -1596,7 +1596,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	 * @todo This is against the pattern elsewhere in media. Typically the frame
 	 *       is responsible for adding region mode callbacks. Explain.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param {wp.media.view.attachmentsBrowser} The attachments browser view.
 	 */
@@ -1698,7 +1698,7 @@ CollectionAdd = Library.extend(/** @lends wp.media.controller.CollectionAdd.prot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	initialize: function() {
 		var collectionType = this.get('collectionType');
@@ -1719,7 +1719,7 @@ CollectionAdd = Library.extend(/** @lends wp.media.controller.CollectionAdd.prot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		var library = this.get('library'),
@@ -1804,7 +1804,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		var library, comparator;
@@ -1840,7 +1840,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		this.updateSelection();
@@ -1850,7 +1850,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		this.frame.off( 'open', this.updateSelection, this );
@@ -1859,7 +1859,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	updateSelection: function() {
 		var selection = this.get('selection'),
@@ -1932,7 +1932,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options
 	 */
@@ -1971,7 +1971,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		this.updateSelection();
@@ -1979,7 +1979,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	updateSelection: function() {
 		var selection = this.get('selection'),
@@ -2030,21 +2030,21 @@ EditImage = wp.media.controller.State.extend(/** @lends wp.media.controller.Edit
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		this.frame.on( 'toolbar:render:edit-image', _.bind( this.toolbar, this ) );
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	deactivate: function() {
 		this.frame.off( 'toolbar:render:edit-image' );
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	toolbar: function() {
 		var frame = this.frame,
@@ -2102,7 +2102,7 @@ MediaLibrary = Library.extend(/** @lends wp.media.controller.MediaLibrary.protot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options
 	 */
@@ -2115,7 +2115,7 @@ MediaLibrary = Library.extend(/** @lends wp.media.controller.MediaLibrary.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		// @todo this should use this.frame.

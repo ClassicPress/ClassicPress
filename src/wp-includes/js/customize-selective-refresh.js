@@ -31,7 +31,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	 *
 	 * @class
 	 * @augments wp.customize.Class
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	Partial = self.Partial = api.Class.extend(/** @lends wp.customize.SelectiveRefresh.Partial.prototype */{
 
@@ -40,7 +40,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Default params.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @var {object}
 		 */
 		defaults: {
@@ -53,7 +53,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Constructor.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @param {string} id                      - Unique identifier for the partial instance.
 		 * @param {object} options                 - Options hash for the partial instance.
@@ -88,7 +88,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Set up the partial.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 */
 		ready: function() {
 			var partial = this;
@@ -112,7 +112,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Create and show the edit shortcut for a given partial placement container.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @param {Placement} placement The placement container element.
@@ -141,7 +141,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Add an edit shortcut to the placement container.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @param {Placement} placement The placement for the partial.
@@ -159,7 +159,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Return the unique class name for the edit shortcut button for this partial.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @return {string} Partial ID converted into a class name for use in shortcut.
@@ -173,7 +173,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Return the appropriate translated string for the edit shortcut button.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @return {string} Tooltip for edit shortcut.
@@ -199,7 +199,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		 *
 		 * Will use `params.type` if set, but otherwise will try to infer type from settingId.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @return {string} Type of partial derived from type param or the related setting ID.
@@ -222,7 +222,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Create an edit shortcut button for this partial.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 * @access public
 		 *
 		 * @return {jQuery} The edit shortcut button element.
@@ -247,7 +247,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Find all placements for this partial int he document.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @return {Array.<Placement>}
 		 */
@@ -279,7 +279,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Get list of setting IDs related to this partial.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @return {String[]}
 		 */
@@ -297,7 +297,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Return whether the setting is related to the partial.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @param {wp.customize.Value|string} setting  ID or object for setting.
 		 * @return {boolean} Whether the setting is related to the partial.
@@ -318,7 +318,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		 *
 		 * This may be overridden for inline editing.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 */
 		showControl: function() {
 			var partial = this, settingId = partial.params.primarySetting;
@@ -338,7 +338,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Prepare container for selective refresh.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @param {Placement} placement
 		 */
@@ -349,7 +349,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Reference to the pending promise returned from self.requestPartial().
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 * @private
 		 */
 		_pendingRefreshPromise: null,
@@ -357,7 +357,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Request the new partial and render it into the placements.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @this {wp.customize.selectiveRefresh.Partial}
 		 * @return {jQuery.Promise}
@@ -398,7 +398,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		 * Note the placement object will have its container and removedNodes
 		 * properties updated.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @param {Placement}             placement
 		 * @param {Element|jQuery}        [placement.container]  - This param will be empty if there was no element matching the selector.
@@ -504,7 +504,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		 *
 		 * The first argument is either the failing jqXHR or an Error object, and the second argument is the array of containers.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 */
 		fallback: function() {
 			var partial = this;
@@ -525,7 +525,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	 *
 	 * @class Placement
 	 * @augments wp.customize.Class
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	self.Placement = Placement = api.Class.extend(/** @lends wp.customize.selectiveRefresh.prototype */{
 
@@ -596,7 +596,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Constructor.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 *
 		 * @param {object}                   args
 		 * @param {Partial}                  args.partial
@@ -627,7 +627,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Mapping of type names to Partial constructor subclasses.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @type {Object.<string, wp.customize.selectiveRefresh.Partial>}
 	 */
@@ -638,7 +638,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Get the POST vars for a Customizer preview request.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 * @see wp.customize.previewer.query()
 	 *
 	 * @return {object}
@@ -663,7 +663,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Currently-requested partials and their associated deferreds.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 * @type {Object<string, { deferred: jQuery.Promise, partial: wp.customize.selectiveRefresh.Partial }>}
 	 */
 	self._pendingPartialRequests = {};
@@ -671,7 +671,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Timeout ID for the current requesr, or null if no request is current.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 * @type {number|null}
 	 * @private
 	 */
@@ -680,7 +680,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Current jqXHR for the request to the partials.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 * @type {jQuery.jqXHR|null}
 	 * @private
 	 */
@@ -692,7 +692,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	 * When selective refresh is embedded in the context of front-end editing, this request
 	 * must fail or else changes will be lost, unless transactions are implemented.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	self.requestFullRefresh = function() {
 		api.preview.send( 'refresh' );
@@ -701,7 +701,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	/**
 	 * Request a re-rendering of a partial.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @param {wp.customize.selectiveRefresh.Partial} partial
 	 * @return {jQuery.Promise}
@@ -850,7 +850,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 	 * This method may be called multiple times. Containers that already have been
 	 * seen will be skipped.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @param {jQuery|HTMLElement} [rootElement]
 	 * @param {object}             [options]
@@ -944,7 +944,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		 * will only include the changed setting object as an argument, not including the
 		 * new value or the old value.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 * @this {wp.customize.Setting}
 		 *
 		 * @param {*|null} newValue New value, or null if the setting was just removed.
@@ -962,7 +962,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Trigger the initial change for the added setting, and watch for changes.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 * @this {wp.customize.Values}
 		 *
 		 * @param {wp.customize.Setting} setting
@@ -975,7 +975,7 @@ wp.customize.selectiveRefresh = ( function( $, api ) {
 		/**
 		 * Trigger the final change for the removed setting, and unwatch for changes.
 		 *
-		 * @since 4.5.0
+		 * @since WP-4.5.0
 		 * @this {wp.customize.Values}
 		 *
 		 * @param {wp.customize.Setting} setting

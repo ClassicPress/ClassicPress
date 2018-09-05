@@ -4,7 +4,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since 1.6
+ * @since Requests 1.6
  */
 
 /**
@@ -18,7 +18,7 @@
  * @see Requests_Hooks
  * @package Requests
  * @subpackage Proxy
- * @since 1.6
+ * @since Requests 1.6
  */
 interface Requests_Proxy {
 	/**

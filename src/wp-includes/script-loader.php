@@ -41,7 +41,7 @@ require( ABSPATH . WPINC . '/functions.wp-styles.php' );
  * args order: `$scripts->add( 'handle', 'url', 'dependencies', 'query-string', 1 );`
  * when last arg === 1 queues the script for the footer
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param WP_Scripts $scripts WP_Scripts object.
  */
@@ -153,7 +153,7 @@ function wp_default_scripts( &$scripts ) {
 		/**
 		 * Filters the Heartbeat settings.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param array $settings Heartbeat settings array.
 		 */
@@ -167,7 +167,7 @@ function wp_default_scripts( &$scripts ) {
 		/**
 		 * Filters the authentication check interval.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param int $interval The interval in which to check a user's authentication.
 		 *                      Default 3 minutes in seconds, or 180.
@@ -458,7 +458,7 @@ function wp_default_scripts( &$scripts ) {
 		/**
 		 * Filters the MediaElement configuration settings.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param array $mejs_settings MediaElement settings array.
 		 */
@@ -919,7 +919,7 @@ function wp_default_scripts( &$scripts ) {
  * Adding default styles is not the only task, it also assigns the base_url
  * property, the default version, and text direction for the object.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param WP_Styles $styles
  */
@@ -1051,7 +1051,7 @@ function wp_default_styles( &$styles ) {
 /**
  * Reorder JavaScript scripts array to place prototype before jQuery.
  *
- * @since 2.3.1
+ * @since WP-2.3.1
  *
  * @param array $js_array JavaScript scripts array
  * @return array Reordered array, if needed.
@@ -1078,7 +1078,7 @@ function wp_prototype_before_jquery( $js_array ) {
  *
  * These localizations require information that may not be loaded even by init.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  */
 function wp_just_in_time_script_localization() {
 
@@ -1105,7 +1105,7 @@ function wp_just_in_time_script_localization() {
 /**
  * Localizes the jQuery UI datepicker.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @link https://api.jqueryui.com/datepicker/#options
  *
@@ -1154,7 +1154,7 @@ function wp_localize_jquery_ui_datepicker() {
 /**
  * Localizes community events data that needs to be passed to dashboard.js.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 function wp_localize_community_events() {
 	if ( ! wp_script_is( 'dashboard' ) ) {
@@ -1228,7 +1228,7 @@ function wp_localize_community_events() {
  * The query from $src parameter will be appended to the URL that is given from
  * the $_wp_admin_css_colors array value URL.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  * @global array $_wp_admin_css_colors
  *
  * @param string $src    Source URL.
@@ -1272,7 +1272,7 @@ function wp_style_loader_src( $src, $handle ) {
  * Postpones the scripts that were queued for the footer.
  * print_footer_scripts() is called in the footer to print these scripts.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @see wp_print_scripts()
  *
@@ -1297,7 +1297,7 @@ function print_head_scripts() {
 	/**
 	 * Filters whether to print the head scripts.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param bool $print Whether to print the head scripts. Default true.
 	 */
@@ -1312,7 +1312,7 @@ function print_head_scripts() {
 /**
  * Prints the scripts that were queued for the footer or too late for the HTML head.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global WP_Scripts $wp_scripts
  * @global bool       $concatenate_scripts
@@ -1332,7 +1332,7 @@ function print_footer_scripts() {
 	/**
 	 * Filters whether to print the footer scripts.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param bool $print Whether to print the footer scripts. Default true.
 	 */
@@ -1386,7 +1386,7 @@ function _print_scripts() {
  * Postpones the scripts that were queued for the footer.
  * wp_print_footer_scripts() is called in the footer to print these scripts.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global WP_Scripts $wp_scripts
  *
@@ -1409,7 +1409,7 @@ function wp_print_head_scripts() {
 /**
  * Private, for use in *_footer_scripts hooks
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 function _wp_footer_scripts() {
 	print_late_styles();
@@ -1419,13 +1419,13 @@ function _wp_footer_scripts() {
 /**
  * Hooks to print the scripts and styles in the footer.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function wp_print_footer_scripts() {
 	/**
 	 * Fires when footer scripts are printed.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	do_action( 'wp_print_footer_scripts' );
 }
@@ -1436,13 +1436,13 @@ function wp_print_footer_scripts() {
  * Allows plugins to queue scripts for the front end using wp_enqueue_script().
  * Runs first in wp_head() where all is_home(), is_page(), etc. functions are available.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function wp_enqueue_scripts() {
 	/**
 	 * Fires when scripts and styles are enqueued.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	do_action( 'wp_enqueue_scripts' );
 }
@@ -1450,7 +1450,7 @@ function wp_enqueue_scripts() {
 /**
  * Prints the styles queue in the HTML head on admin pages.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global bool $concatenate_scripts
  *
@@ -1468,7 +1468,7 @@ function print_admin_styles() {
 	/**
 	 * Filters whether to print the admin styles.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param bool $print Whether to print the admin styles. Default true.
 	 */
@@ -1483,7 +1483,7 @@ function print_admin_styles() {
 /**
  * Prints the styles that were queued too late for the HTML head.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @global WP_Styles $wp_styles
  * @global bool      $concatenate_scripts
@@ -1504,7 +1504,7 @@ function print_late_styles() {
 	/**
 	 * Filters whether to print the styles queued too late for the HTML head.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param bool $print Whether to print the 'late' styles. Default true.
 	 */
@@ -1520,7 +1520,7 @@ function print_late_styles() {
  * Print styles (internal use only)
  *
  * @ignore
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @global bool $compress_css
  */
@@ -1557,7 +1557,7 @@ function _print_styles() {
 /**
  * Determine the concatenation and compression settings for scripts and styles.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global bool $concatenate_scripts
  * @global bool $compress_scripts

@@ -8,7 +8,7 @@
  * - Sends the REST API nonce as a request header.
  * - Allows specifying only an endpoint namespace/path instead of a full URL.
  *
- * @since     4.9.0
+ * @since     WP-4.9.0
  */
 
 ( function( $ ) {

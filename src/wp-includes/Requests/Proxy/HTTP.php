@@ -4,7 +4,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since 1.6
+ * @since Requests 1.6
  */
 
 /**
@@ -14,7 +14,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since 1.6
+ * @since Requests 1.6
  */
 class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
@@ -50,7 +50,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @throws Requests_Exception On incorrect number of arguments (`authbasicbadargs`)
 	 * @param array|null $args Array of user and password. Must have exactly two elements
 	 */
@@ -75,7 +75,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Register the necessary callbacks
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @see curl_before_send
 	 * @see fsockopen_remote_socket
 	 * @see fsockopen_remote_host_path
@@ -95,7 +95,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Set cURL parameters before the data is sent
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @param resource $handle cURL resource
 	 */
 	public function curl_before_send(&$handle) {
@@ -111,7 +111,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Alter remote socket information before opening socket connection
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @param string $remote_socket Socket connection string
 	 */
 	public function fsockopen_remote_socket(&$remote_socket) {
@@ -121,7 +121,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Alter remote path before getting stream data
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @param string $path Path to send in HTTP request string ("GET ...")
 	 * @param string $url Full URL we're requesting
 	 */
@@ -132,7 +132,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Add extra headers to the request before sending
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @param string $out HTTP header string
 	 */
 	public function fsockopen_header(&$out) {
@@ -142,7 +142,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Get the authentication string (user:pass)
 	 *
-	 * @since 1.6
+	 * @since Requests 1.6
 	 * @return string
 	 */
 	public function get_auth_string() {

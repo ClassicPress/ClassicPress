@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Customize
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Customize Image Control class.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @see WP_Customize_Upload_Control
  */
@@ -19,13 +19,13 @@ class WP_Customize_Image_Control extends WP_Customize_Upload_Control {
 	public $mime_type = 'image';
 
 	/**
-	 * @since 3.4.2
+	 * @since WP-3.4.2
 	 * @deprecated 4.1.0
 	 */
 	public function prepare_control() {}
 
 	/**
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 * @deprecated 4.1.0
 	 *
 	 * @param string $id
@@ -37,7 +37,7 @@ class WP_Customize_Image_Control extends WP_Customize_Upload_Control {
     }
 
 	/**
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 * @deprecated 4.1.0
 	 *
 	 * @param string $id
@@ -47,7 +47,7 @@ class WP_Customize_Image_Control extends WP_Customize_Upload_Control {
     }
 
 	/**
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 * @deprecated 4.1.0
 	 *
 	 * @param string $url

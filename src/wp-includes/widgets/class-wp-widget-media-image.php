@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Widgets
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 
 /**
  * Core class that implements an image widget.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  *
  * @see WP_Widget
  */
@@ -19,7 +19,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	/**
 	 * Constructor.
 	 *
-	 * @since  4.8.0
+	 * @since  WP-4.8.0
 	 */
 	public function __construct() {
 		parent::__construct( 'media_image', __( 'Image' ), array(
@@ -46,7 +46,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	/**
 	 * Get schema for properties of a widget instance (item).
 	 *
-	 * @since  4.8.0
+	 * @since  WP-4.8.0
 	 *
 	 * @see WP_REST_Controller::get_item_schema()
 	 * @see WP_REST_Controller::get_additional_fields()
@@ -161,7 +161,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	/**
 	 * Render the media on the frontend.
 	 *
-	 * @since  4.8.0
+	 * @since  WP-4.8.0
 	 *
 	 * @param array $instance Widget instance props.
 	 * @return void
@@ -271,7 +271,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function enqueue_admin_scripts() {
 		parent::enqueue_admin_scripts();
@@ -309,7 +309,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	/**
 	 * Render form template scripts.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function render_control_template_scripts() {
 		parent::render_control_template_scripts();

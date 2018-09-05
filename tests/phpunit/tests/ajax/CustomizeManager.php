@@ -4,7 +4,7 @@
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      4.3.0
+ * @since      WP-4.3.0
  * @group      ajax
  */
 class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {

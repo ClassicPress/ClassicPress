@@ -3,7 +3,7 @@
 /**
  * @summary Registers all events for customizing the background.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @requires jQuery
  */
@@ -15,7 +15,7 @@
 		/**
 		 * @summary Instantiates the ClassicPress color picker and binds the change and clear events.
 		 *
-		 * @since 3.5.0
+		 * @since WP-3.5.0
 		 *
 		 * @returns {void}
 		 */
@@ -31,7 +31,7 @@
 		/**
 		 * @summary Alters the background size CSS property whenever the background size input has changed.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @returns {void}
 		 */
@@ -42,7 +42,7 @@
 		/**
 		 * @summary Alters the background position CSS property whenever the background position input has changed.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @returns {void}
 		 */
@@ -53,7 +53,7 @@
 		/**
 		 * @summary Alters the background repeat CSS property whenever the background repeat input has changed.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @returns {void}
 		 */
@@ -64,7 +64,7 @@
 		/**
 		 * @summary Alters the background attachment CSS property whenever the background attachment input has changed.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @returns {void}
 		 */
@@ -75,7 +75,7 @@
 		/**
 		 * @summary Binds the event for opening the WP Media dialog.
 		 *
-		 * @since 3.5.0
+		 * @since WP-3.5.0
 		 *
 		 * @returns {void}
 		 */
@@ -115,7 +115,7 @@
 			/**
 			 * @summary When an image is selected, run a callback.
 			 *
-			 * @since 3.5.0
+			 * @since WP-3.5.0
 			 *
 			 * @returns {void}
  			 */

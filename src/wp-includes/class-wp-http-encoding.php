@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage HTTP
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * Includes RFC 1950, RFC 1951, and RFC 1952.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 class WP_Http_Encoding {
 
@@ -21,7 +21,7 @@ class WP_Http_Encoding {
 	 *
 	 * Supports the RFC 1951 standard.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *
@@ -42,7 +42,7 @@ class WP_Http_Encoding {
 	 * 1952 standard gzip decode will be attempted. If all fail, then the
 	 * original compressed string will be returned.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *
@@ -86,7 +86,7 @@ class WP_Http_Encoding {
 	 * takes place. For a simple progmatic way to determine the magic offset in use, see:
 	 * https://core.trac.wordpress.org/ticket/18273
 	 *
-	 * @since 2.8.1
+	 * @since WP-2.8.1
 	 * @link https://core.trac.wordpress.org/ticket/18273
 	 * @link https://secure.php.net/manual/en/function.gzinflate.php#70875
 	 * @link https://secure.php.net/manual/en/function.gzinflate.php#77336
@@ -130,7 +130,7 @@ class WP_Http_Encoding {
 	/**
 	 * What encoding types to accept and their priority values.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *
@@ -163,7 +163,7 @@ class WP_Http_Encoding {
 		/**
 		 * Filters the allowed encoding types.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param array  $type Encoding types allowed. Accepts 'gzinflate',
 		 *                     'gzuncompress', 'gzdecode'.
@@ -178,7 +178,7 @@ class WP_Http_Encoding {
 	/**
 	 * What encoding the content used when it was compressed to send in the headers.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *
@@ -191,7 +191,7 @@ class WP_Http_Encoding {
 	/**
 	 * Whether the content be decoded based on the headers.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *
@@ -216,7 +216,7 @@ class WP_Http_Encoding {
 	 * ensure that the functions all exist in the PHP version and aren't
 	 * disabled.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @static
 	 *

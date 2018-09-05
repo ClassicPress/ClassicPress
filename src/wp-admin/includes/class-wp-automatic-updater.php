@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
  * Core class used for handling automatic background updates.
  *
- * @since 3.7.0
- * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
+ * @since WP-3.7.0
+ * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  */
 class WP_Automatic_Updater {
 
@@ -25,7 +25,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Whether the entire automatic updater is disabled.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 */
 	public function is_disabled() {
 		// Background updates are disabled if you don't want file changes.
@@ -46,7 +46,7 @@ class WP_Automatic_Updater {
 		 *
 		 * This also disables update notification emails. That may change in the future.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool $disabled Whether the updater should be disabled.
 		 */
@@ -65,7 +65,7 @@ class WP_Automatic_Updater {
 	 * using version control *anywhere*, then you should be making decisions for
 	 * how things get updated.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param string $context The filesystem path to check, in addition to ABSPATH.
 	 */
@@ -104,7 +104,7 @@ class WP_Automatic_Updater {
 		 * Filters whether the automatic updater should consider a filesystem
 		 * location to be potentially managed by a version control system.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool $checkout  Whether a VCS checkout was discovered at $context
 		 *                        or ABSPATH, or anywhere higher.
@@ -117,7 +117,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Tests to see if we can and should update a specific item.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -167,7 +167,7 @@ class WP_Automatic_Updater {
 		 * and {@see 'allow_major_auto_core_updates'} filters for a more straightforward way to
 		 * adjust core updates.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool   $update Whether to update.
 		 * @param object $item   The update offer.
@@ -200,7 +200,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Notifies an administrator of a core update.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param object $item The update offer.
 	 */
@@ -228,7 +228,7 @@ class WP_Automatic_Updater {
 		 * This filter is also used on about.php to check if a plugin has disabled
 		 * these notifications.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool   $notify Whether the site administrator is notified.
 		 * @param object $item   The update offer.
@@ -243,7 +243,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Update an item, if appropriate.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param string $type The type of update being checked: 'core', 'theme', 'plugin', 'translation'.
 	 * @param object $item The update offer.
@@ -281,7 +281,7 @@ class WP_Automatic_Updater {
 		/**
 		 * Fires immediately prior to an auto-update.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param string $type    The type of update being checked: 'core', 'theme', 'plugin', or 'translation'.
 		 * @param object $item    The update offer.
@@ -363,7 +363,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Kicks off the background update process, looping through all pending updates.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 */
 	public function run() {
 		if ( $this->is_disabled() )
@@ -450,7 +450,7 @@ class WP_Automatic_Updater {
 			/**
 			 * Filters whether to send a debugging email for each automatic background update.
 			 *
-			 * @since 3.7.0
+			 * @since WP-3.7.0
 			 *
 			 * @param bool $development_version By default, emails are sent if the
 			 *                                  install is a development version.
@@ -465,7 +465,7 @@ class WP_Automatic_Updater {
 			/**
 			 * Fires after all automatic updates have run.
 			 *
-			 * @since 3.8.0
+			 * @since WP-3.8.0
 			 *
 			 * @param array $update_results The results of all attempted updates.
 			 */
@@ -479,7 +479,7 @@ class WP_Automatic_Updater {
 	 * If we tried to perform a core update, check if we should send an email,
 	 * and if we need to avoid processing future updates.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param object $update_result The result of the core update. Includes the update offer and result.
 	 */
@@ -566,7 +566,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Sends an email upon the completion or failure of a background core update.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param string $type        The type of email to send. Can be one of 'success', 'fail', 'manual', 'critical'.
 	 * @param object $core_update The update offer that was attempted.
@@ -589,7 +589,7 @@ class WP_Automatic_Updater {
 		/**
 		 * Filters whether to send an email following an automatic background core update.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool   $send        Whether to send the email. Default true.
 		 * @param string $type        The type of email to send. Can be one of
@@ -739,7 +739,7 @@ class WP_Automatic_Updater {
 		/**
 		 * Filters the email sent following an automatic background core update.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param array $email {
 		 *     Array of email arguments that will be passed to wp_mail().
@@ -763,7 +763,7 @@ class WP_Automatic_Updater {
 	/**
 	 * Prepares and sends an email of a full log of background update results, useful for debugging and geekery.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 */
 	protected function send_debug_email() {
 		$update_count = 0;
@@ -892,7 +892,7 @@ Thanks! -- The ClassicPress Team" ) );
 		 * Filters the debug email that can be sent following an automatic
 		 * background core update.
 		 *
-		 * @since 3.8.0
+		 * @since WP-3.8.0
 		 *
 		 * @param array $email {
 		 *     Array of email arguments that will be passed to wp_mail().

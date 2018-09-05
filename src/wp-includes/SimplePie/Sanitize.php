@@ -197,7 +197,7 @@ class SimplePie_Sanitize
 	 * |form|@action, |img|@longdesc, |img|@src, |input|@src, |ins|@cite,
 	 * |q|@cite
 	 *
-	 * @since 1.0
+	 * @since WP-1.0
 	 * @param array|null $element_attribute Element/attribute key/value pairs, null for default
 	 */
 	public function set_url_replacements($element_attribute = null)

@@ -11,7 +11,7 @@
  *
  * Handles POST data, sets up filters.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global array $wp_registered_widgets
  * @global array $wp_registered_widget_controls
@@ -60,14 +60,14 @@ function wp_dashboard_setup() {
 		/**
 		 * Fires after core widgets for the Network Admin dashboard have been registered.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 */
 		do_action( 'wp_network_dashboard_setup' );
 
 		/**
 		 * Filters the list of widgets to load for the Network Admin dashboard.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param array $dashboard_widgets An array of dashboard widgets.
 		 */
@@ -77,14 +77,14 @@ function wp_dashboard_setup() {
 		/**
 		 * Fires after core widgets for the User Admin dashboard have been registered.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 */
 		do_action( 'wp_user_dashboard_setup' );
 
 		/**
 		 * Filters the list of widgets to load for the User Admin dashboard.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param array $dashboard_widgets An array of dashboard widgets.
 		 */
@@ -94,14 +94,14 @@ function wp_dashboard_setup() {
 		/**
 		 * Fires after core widgets for the admin dashboard have been registered.
 		 *
-		 * @since 2.5.0
+		 * @since WP-2.5.0
 		 */
 		do_action( 'wp_dashboard_setup' );
 
 		/**
 		 * Filters the list of widgets to load for the admin dashboard.
 		 *
-		 * @since 2.5.0
+		 * @since WP-2.5.0
 		 *
 		 * @param array $dashboard_widgets An array of dashboard widgets.
 		 */
@@ -132,7 +132,7 @@ function wp_dashboard_setup() {
 /**
  * Adds a new dashboard widget.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global array $wp_dashboard_control_callbacks
  *
@@ -185,7 +185,7 @@ function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_
  * Outputs controls for the current dashboard widget.
  *
  * @access private
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param mixed $dashboard
  * @param array $meta_box
@@ -202,7 +202,7 @@ function _wp_dashboard_control_callback( $dashboard, $meta_box ) {
 /**
  * Displays the dashboard.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  */
 function wp_dashboard() {
 	$screen = get_current_screen();
@@ -243,7 +243,7 @@ function wp_dashboard() {
  *
  * Formerly 'Right Now'. A streamlined 'At a Glance' as of 3.8.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function wp_dashboard_right_now() {
 ?>
@@ -297,7 +297,7 @@ function wp_dashboard_right_now() {
 	 * Prior to 3.8.0, the widget was named 'Right Now'. Each element
 	 * is wrapped in list-item tags on output.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 *
 	 * @param array $items Array of extra 'At a Glance' widget items.
 	 */
@@ -321,8 +321,8 @@ function wp_dashboard_right_now() {
 		 *
 		 * Prior to 3.8.0, the widget was named 'Right Now'.
 		 *
-		 * @since 3.0.0
-		 * @since 4.5.0 The default for `$title` was updated to an empty string.
+		 * @since WP-3.0.0
+		 * @since WP-4.5.0 The default for `$title` was updated to an empty string.
 		 *
 		 * @param string $title Default attribute text.
 		 */
@@ -334,7 +334,7 @@ function wp_dashboard_right_now() {
 		 *
 		 * Prior to 3.8.0, the widget was named 'Right Now'.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string $content Default text.
 		 */
@@ -357,7 +357,7 @@ function wp_dashboard_right_now() {
 	 *
 	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 */
 	do_action( 'rightnow_end' );
 
@@ -366,7 +366,7 @@ function wp_dashboard_right_now() {
 	 *
 	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 */
 	do_action( 'activity_box_end' );
 
@@ -380,7 +380,7 @@ function wp_dashboard_right_now() {
 }
 
 /**
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 function wp_network_dashboard_right_now() {
 	$actions = array();
@@ -419,7 +419,7 @@ function wp_network_dashboard_right_now() {
 		 * Fires in the Network Admin 'Right Now' dashboard widget
 		 * just before the user and site search form fields.
 		 *
-		 * @since MU (3.0.0)
+		 * @since WP-MU (3.0.0)
 		 *
 		 * @param null $unused
 		 */
@@ -445,14 +445,14 @@ function wp_network_dashboard_right_now() {
 	/**
 	 * Fires at the end of the 'Right Now' widget in the Network Admin dashboard.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 */
 	do_action( 'mu_rightnow_end' );
 
 	/**
 	 * Fires at the end of the 'Right Now' widget in the Network Admin dashboard.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 */
 	do_action( 'mu_activity_box_end' );
 }
@@ -460,7 +460,7 @@ function wp_network_dashboard_right_now() {
 /**
  * The Quick Draft widget display and creation of drafts.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @global int $post_ID
  *
@@ -533,7 +533,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 /**
  * Show recent drafts of the user on the dashboard.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param array $drafts
  */
@@ -551,7 +551,7 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 		/**
 		 * Filters the post query arguments for the 'Recent Drafts' dashboard widget.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param array $query_args The query arguments for the 'Recent Drafts' dashboard widget.
 		 */
@@ -589,7 +589,7 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
  * Outputs a row for the Recent Comments widget.
  *
  * @access private
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global WP_Comment $comment
  *
@@ -647,7 +647,7 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 		 * Filters the action links displayed for each comment in the 'Recent Comments'
 		 * dashboard widget.
 		 *
-		 * @since 2.6.0
+		 * @since WP-2.6.0
 		 *
 		 * @param array      $actions An array of comment actions. Default actions include:
 		 *                            'Approve', 'Unapprove', 'Edit', 'Reply', 'Spam',
@@ -755,7 +755,7 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 /**
  * Callback function for Activity widget.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  */
 function wp_dashboard_site_activity() {
 
@@ -791,7 +791,7 @@ function wp_dashboard_site_activity() {
 /**
  * Generates Publishing Soon and Recently Published sections.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @param array $args {
  *     An array of query and display arguments.
@@ -819,7 +819,7 @@ function wp_dashboard_recent_posts( $args ) {
 	/**
 	 * Filters the query arguments used for the Recent Posts widget.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param array $query_args The arguments passed to WP_Query to produce the list of posts.
 	 */
@@ -883,7 +883,7 @@ function wp_dashboard_recent_posts( $args ) {
 /**
  * Show Comments section.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @param int $total_items Optional. Number of comments to query. Default 5.
  * @return bool False if no comments were found. True otherwise.
@@ -941,7 +941,7 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 /**
  * Display generic dashboard RSS widget feed.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $widget_id
  */
@@ -960,7 +960,7 @@ function wp_dashboard_rss_output( $widget_id ) {
  * echoes out output for this widget. If not cache, echo a "Loading..." stub
  * which is later replaced by Ajax call (see top of /wp-admin/index.php)
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $widget_id
  * @param callable $callback
@@ -1010,7 +1010,7 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
 /**
  * Calls widget control callback.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global array $wp_dashboard_control_callbacks
  *
@@ -1030,7 +1030,7 @@ function wp_dashboard_trigger_widget_control( $widget_control_id = false ) {
  * Sets up $args to be used as input to wp_widget_rss_form(). Handles POST data
  * from RSS-type widgets.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $widget_id
  * @param array $form_inputs
@@ -1074,7 +1074,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 /**
  * Renders the Events and News dashboard widget.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 function wp_dashboard_events_news() {
 	wp_print_community_events_markup();
@@ -1128,7 +1128,7 @@ function wp_dashboard_events_news() {
 /**
  * Prints the markup for the Community Events section of the Events and News Dashboard widget.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 function wp_print_community_events_markup() {
 	?>
@@ -1200,7 +1200,7 @@ function wp_print_community_events_markup() {
 /**
  * Renders the events templates for the Event and News widget.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 function wp_print_community_events_templates() {
 	?>
@@ -1271,8 +1271,8 @@ function wp_print_community_events_templates() {
 /**
  * ClassicPress News dashboard widget.
  *
- * @since 2.7.0
- * @since 4.8.0 Removed popular plugins feed.
+ * @since WP-2.7.0
+ * @since WP-4.8.0 Removed popular plugins feed.
  */
 function wp_dashboard_primary() {
 	$feeds = array(
@@ -1281,7 +1281,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the primary link URL for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.5.0
+			 * @since WP-2.5.0
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
@@ -1290,7 +1290,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.3.0
+			 * @since WP-2.3.0
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
@@ -1299,7 +1299,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.3.0
+			 * @since WP-2.3.0
 			 *
 			 * @param string $title Title attribute for the widget's primary link.
 			 */
@@ -1314,7 +1314,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the secondary link URL for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.3.0
+			 * @since WP-2.3.0
 			 *
 			 * @param string $link The widget's secondary link URL.
 			 */
@@ -1323,7 +1323,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the secondary feed URL for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.3.0
+			 * @since WP-2.3.0
 			 *
 			 * @param string $url The widget's secondary feed URL.
 			 */
@@ -1332,7 +1332,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the secondary link title for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 2.3.0
+			 * @since WP-2.3.0
 			 *
 			 * @param string $title Title attribute for the widget's secondary link.
 			 */
@@ -1341,7 +1341,7 @@ function wp_dashboard_primary() {
 			/**
 			 * Filters the number of secondary link items for the 'ClassicPress News' dashboard widget.
 			 *
-			 * @since 4.4.0
+			 * @since WP-4.4.0
 			 *
 			 * @param string $items How many items to show in the secondary feed.
 			 */
@@ -1358,8 +1358,8 @@ function wp_dashboard_primary() {
 /**
  * Display the ClassicPress news feeds.
  *
- * @since 3.8.0
- * @since 4.8.0 Removed popular plugins feed.
+ * @since WP-3.8.0
+ * @since WP-4.8.0 Removed popular plugins feed.
  *
  * @param string $widget_id Widget ID.
  * @param array  $feeds     Array of RSS feeds.
@@ -1378,7 +1378,7 @@ function wp_dashboard_primary_output( $widget_id, $feeds ) {
  *
  * Runs on the {@see 'activity_box_end'} hook in wp_dashboard_right_now().
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return bool|null True if not multisite, user can't upload files, or the space check option is disabled.
  */
@@ -1472,7 +1472,7 @@ function wp_dashboard_browser_nag() {
 	/**
 	* Filters the notice output for the 'Browse Happy' nag meta box.
 	*
-	* @since 3.2.0
+	* @since WP-3.2.0
 	*
 	* @param string $notice   The notice content.
 	* @param array  $response An array containing web browser information.
@@ -1481,7 +1481,7 @@ function wp_dashboard_browser_nag() {
 }
 
 /**
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @param array $classes
  * @return array
@@ -1498,7 +1498,7 @@ function dashboard_browser_nag_class( $classes ) {
 /**
  * Check if the user needs a browser update
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @return array|bool False on failure, array of browser data on success.
  */
@@ -1558,7 +1558,7 @@ function wp_dashboard_empty() {}
 /**
  * Displays a welcome panel to introduce users to ClassicPress.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 function wp_welcome_panel() {
 	?>

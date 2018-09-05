@@ -48,7 +48,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		var library, comparator;
@@ -84,7 +84,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		this.updateSelection();
@@ -94,7 +94,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		this.frame.off( 'open', this.updateSelection, this );
@@ -103,7 +103,7 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	updateSelection: function() {
 		var selection = this.get('selection'),

@@ -8,7 +8,7 @@
  *
  * @memberOf wp.media.controller
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @class
  * @augments Backbone.Model
@@ -36,7 +36,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * Ensure that the `states` collection exists so the `StateMachine`
 	 *   can be used as a mixin.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} id
 	 * @returns {wp.media.controller.State} Returns a State model
@@ -61,7 +61,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * created the `states` collection, or are trying to select a state
 	 * that does not exist.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} id
 	 *
@@ -94,7 +94,7 @@ _.extend( StateMachine.prototype, Backbone.Events,/** @lends wp.media.controller
 	 * Call the `state()` method with no parameters to retrieve the current
 	 * active state.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @returns {wp.media.controller.State} Returns a State model
 	 *    from the StateMachine collection

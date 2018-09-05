@@ -31,7 +31,7 @@ global $menu, $submenu, $parent_file, $submenu_file;
  *
  * Allows plugins to move sub-menu items around.
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string $parent_file The parent file.
  */
@@ -40,7 +40,7 @@ $parent_file = apply_filters( 'parent_file', $parent_file );
 /**
  * Filters the file of an admin menu sub-menu item.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $submenu_file The submenu file.
  * @param string $parent_file  The submenu item's parent file.
@@ -53,7 +53,7 @@ get_admin_page_parent();
  * Display menu.
  *
  * @access private
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $self
  * @global string $parent_file
@@ -265,7 +265,7 @@ _wp_menu_output( $menu, $submenu );
 /**
  * Fires after the admin menu has been output.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  */
 do_action( 'adminmenu' );
 

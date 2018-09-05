@@ -23,7 +23,7 @@
  * - heartbeat-connection-restored
  * - heartbeat-nonces-expired
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  */
 
 ( function( $, window, undefined ) {

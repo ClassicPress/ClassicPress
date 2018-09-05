@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
@@ -13,8 +13,8 @@
  * It allows for ClassicPress to upgrade itself in combination with
  * the wp-admin/includes/update-core.php file.
  *
- * @since 2.8.0
- * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
+ * @since WP-2.8.0
+ * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  *
  * @see WP_Upgrader
  */
@@ -23,7 +23,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the upgrade strings.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __('ClassicPress is at the latest version.');
@@ -41,7 +41,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Upgrade ClassicPress core.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 * @global callable           $_wp_filesystem_direct_method
@@ -226,7 +226,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Determines if this ClassicPress Core version should update to an offered version or not.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @static
 	 *
@@ -291,7 +291,7 @@ class Core_Upgrader extends WP_Upgrader {
 			/**
 			 * Filters whether to enable automatic core updates for development versions.
 			 *
-			 * @since 3.7.0
+			 * @since WP-3.7.0
 			 *
 			 * @param bool $upgrade_dev Whether to enable automatic updates for
 			 *                          development versions.
@@ -307,7 +307,7 @@ class Core_Upgrader extends WP_Upgrader {
 			/**
 			 * Filters whether to enable minor automatic core updates.
 			 *
-			 * @since 3.7.0
+			 * @since WP-3.7.0
 			 *
 			 * @param bool $upgrade_minor Whether to enable minor automatic core updates.
 			 */
@@ -320,7 +320,7 @@ class Core_Upgrader extends WP_Upgrader {
 			/**
 			 * Filters whether to enable major automatic core updates.
 			 *
-			 * @since 3.7.0
+			 * @since WP-3.7.0
 			 *
 			 * @param bool $upgrade_major Whether to enable major automatic core updates.
 			 */
@@ -334,7 +334,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Compare the disk file checksums against the expected checksums.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @global string $wp_version
 	 * @global string $wp_local_package

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
@@ -13,8 +13,8 @@
  * It is designed to upgrade/install themes from a local zip, remote zip URL,
  * or uploaded zip file.
  *
- * @since 2.8.0
- * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
+ * @since WP-2.8.0
+ * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  *
  * @see WP_Upgrader
  */
@@ -23,7 +23,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Result of the theme upgrade offer.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 * @var array|WP_Error $result
 	 * @see WP_Upgrader::$result
 	 */
@@ -32,7 +32,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Whether multiple themes are being upgraded/installed in bulk.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 * @var bool $bulk
 	 */
 	public $bulk = false;
@@ -40,7 +40,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the upgrade strings.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __('The theme is at the latest version.');
@@ -57,7 +57,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the installation strings.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	public function install_strings() {
 		$this->strings['no_package'] = __('Installation package not available.');
@@ -86,7 +86,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 *
 	 * Hooked to the {@see 'upgrader_post_install'} filter by Theme_Upgrader::install().
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param bool  $install_result
 	 * @param array $hook_extra
@@ -159,7 +159,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * Theme_Upgrader::check_parent_theme_filter() when installing
 	 * a child theme and installing the parent theme fails.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param array $actions Preview actions.
 	 * @return array
@@ -172,8 +172,8 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Install a theme package.
 	 *
-	 * @since 2.8.0
-	 * @since 3.7.0 The `$args` parameter was added, making clearing the update cache optional.
+	 * @since WP-2.8.0
+	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the update cache optional.
 	 *
 	 * @param string $package The full local path or URI of the package.
 	 * @param array  $args {
@@ -229,8 +229,8 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Upgrade a theme.
 	 *
-	 * @since 2.8.0
-	 * @since 3.7.0 The `$args` parameter was added, making clearing the update cache optional.
+	 * @since WP-2.8.0
+	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the update cache optional.
 	 *
 	 * @param string $theme The theme slug.
 	 * @param array  $args {
@@ -299,8 +299,8 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Upgrade several themes at once.
 	 *
-	 * @since 3.0.0
-	 * @since 3.7.0 The `$args` parameter was added, making clearing the update cache optional.
+	 * @since WP-3.0.0
+	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the update cache optional.
 	 *
 	 * @param array $themes The theme slugs.
 	 * @param array $args {
@@ -420,7 +420,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * It will return an error if the theme doesn't have style.css or index.php
 	 * files.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -478,7 +478,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * Hooked to the {@see 'upgrader_pre_install'} filter by Theme_Upgrader::upgrade() and
 	 * Theme_Upgrader::bulk_upgrade().
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param bool|WP_Error  $return
 	 * @param array          $theme
@@ -505,7 +505,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * Hooked to the {@see 'upgrader_post_install'} filter by Theme_Upgrader::upgrade()
 	 * and Theme_Upgrader::bulk_upgrade().
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param bool|WP_Error  $return
 	 * @param array          $theme
@@ -539,7 +539,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * Hooked to the {@see 'upgrader_clear_destination'} filter by Theme_Upgrader::upgrade()
 	 * and Theme_Upgrader::bulk_upgrade().
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -571,8 +571,8 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * Get the WP_Theme object for a theme.
 	 *
-	 * @since 2.8.0
-	 * @since 3.0.0 The `$theme` argument was added.
+	 * @since WP-2.8.0
+	 * @since WP-3.0.0 The `$theme` argument was added.
 	 *
 	 * @param string $theme The directory name of the theme. This is optional, and if not supplied,
 	 *                      the directory name from the last result will be used.

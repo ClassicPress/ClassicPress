@@ -9,7 +9,7 @@ require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      3.5.0
+ * @since      WP-3.5.0
  * @group      ajax
  */
 class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {

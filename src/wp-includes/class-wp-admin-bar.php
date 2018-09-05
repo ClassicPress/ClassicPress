@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Toolbar
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement the Toolbar API.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 class WP_Admin_Bar {
 	private $nodes = array();
@@ -75,7 +75,7 @@ class WP_Admin_Bar {
 		/**
 		 * Fires after WP_Admin_Bar is initialized.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 */
 		do_action( 'admin_bar_init' );
 	}
@@ -97,8 +97,8 @@ class WP_Admin_Bar {
 	/**
 	 * Adds a node to the menu.
 	 *
-	 * @since 3.1.0
-	 * @since 4.5.0 Added the ability to pass 'lang' and 'dir' meta data.
+	 * @since WP-3.1.0
+	 * @since WP-4.5.0 Added the ability to pass 'lang' and 'dir' meta data.
 	 *
 	 * @param array $args {
 	 *     Arguments for adding a node.
@@ -222,7 +222,7 @@ class WP_Admin_Bar {
 	/**
 	 * Add a group to a menu node.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param array $args {
 	 *     Array of arguments for adding a group.
@@ -555,7 +555,7 @@ class WP_Admin_Bar {
 	/**
 	 * Renders toolbar items recursively.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 * @deprecated 3.3.0 Use WP_Admin_Bar::_render_item() or WP_Admin_bar::render() instead.
 	 * @see WP_Admin_Bar::_render_item()
 	 * @see WP_Admin_Bar::render()
@@ -596,7 +596,7 @@ class WP_Admin_Bar {
 		/**
 		 * Fires after menus are added to the menu bar.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 */
 		do_action( 'add_admin_bar_menus' );
 	}

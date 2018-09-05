@@ -27,7 +27,7 @@ if ( false ) {
 /**
  * We are installing ClassicPress.
  *
- * @since 1.5.1
+ * @since WP-1.5.1
  * @var bool
  */
 define( 'WP_INSTALLING', true );
@@ -51,7 +51,7 @@ $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 0;
 /**
  * Display installation header.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $body_classes
  */
@@ -85,7 +85,7 @@ function display_header( $body_classes = '' ) {
 /**
  * Display installer setup form.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *

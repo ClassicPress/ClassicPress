@@ -4,7 +4,7 @@
  *
  * @package WordPress\UnitTests
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 
 /**
@@ -13,7 +13,7 @@
  * @group functions.php
  * @group privacy
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 class Tests_Functions_Anonymization extends WP_UnitTestCase {
 	/**
@@ -42,7 +42,7 @@ class Tests_Functions_Anonymization extends WP_UnitTestCase {
 	/**
 	 * Provide test cases for `test_wp_privacy_anonymize_ip()`.
 	 *
-	 * @since 4.9.6 Moved from `Test_WP_Community_Events::data_get_unsafe_client_ip_anonymization()`.
+	 * @since WP-4.9.6 Moved from `Test_WP_Community_Events::data_get_unsafe_client_ip_anonymization()`.
 	 *
 	 * @return array {
 	 *     @type array {
@@ -261,7 +261,7 @@ class Tests_Functions_Anonymization extends WP_UnitTestCase {
 	/**
 	 * Change the anonymized value for URLs.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 *
 	 * @param string  $anonymous Anonymized data.
 	 * @param string  $type      Type of the data.

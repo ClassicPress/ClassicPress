@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage REST_API
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
  * Core class used to access post statuses via the REST API.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @see WP_REST_Controller
  */
@@ -19,7 +19,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 */
 	public function __construct() {
 		$this->namespace = 'wp/v2';
@@ -29,7 +29,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes for the objects of the controller.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @see register_rest_route()
 	 */
@@ -67,7 +67,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Checks whether a given request has permission to read post statuses.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|bool True if the request has read access, WP_Error object otherwise.
@@ -90,7 +90,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves all post statuses, depending on user context.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
@@ -117,7 +117,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to read a post status.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|bool True if the request has read access for the item, WP_Error object otherwise.
@@ -141,7 +141,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Checks whether a given post status should be visible.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param object $status Post status.
 	 * @return bool True if the post status is visible, otherwise false.
@@ -167,7 +167,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves a specific post status.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
@@ -187,7 +187,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a post status object for serialization.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param stdClass        $status  Post status data.
 	 * @param WP_REST_Request $request Full details about the request.
@@ -243,7 +243,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 		 *
 		 * Allows modification of the status data right before it is returned.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param WP_REST_Response $response The response object.
 		 * @param object           $status   The original status object.
@@ -255,7 +255,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the post status' schema, conforming to JSON Schema.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array Item schema data.
 	 */
@@ -316,7 +316,7 @@ class WP_REST_Post_Statuses_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the query params for collections.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array Collection parameters.
 	 */

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement displaying installed plugins in a list table.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -20,7 +20,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -79,7 +79,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		/**
 		 * Filters the full array of plugins to list in the Plugins list table.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @see get_plugins()
 		 *
@@ -111,7 +111,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			 * The $type parameter allows you to differentiate between the type of advanced
 			 * plugins to filter the display of. Contexts include 'mustuse' and 'dropins'.
 			 *
-			 * @since 3.0.0
+			 * @since WP-3.0.0
 			 *
 			 * @param bool   $show Whether to show the advanced plugins for the specified
 			 *                     plugin type. Default true.
@@ -146,7 +146,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			 *
 			 * Plugins cannot be network-activated or network-deactivated from this screen.
 			 *
-			 * @since 4.4.0
+			 * @since WP-4.4.0
 			 *
 			 * @param bool $show Whether to show network-active plugins. Default is whether the current
 			 *                   user can manage network plugins (ie. a Super Admin).
@@ -344,7 +344,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	/**
 	 * Displays the search box.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string $text     The 'submit' button label.
 	 * @param string $input_id ID attribute value for the search input field.
@@ -647,7 +647,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			/**
 			 * Filters the action links displayed for each plugin in the Network Admin Plugins list table.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 *
 			 * @param array  $actions     An array of plugin action links. By default this can include 'activate',
 			 *                            'deactivate', and 'delete'.
@@ -664,7 +664,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			 * The dynamic portion of the hook name, `$plugin_file`, refers to the path
 			 * to the plugin file, relative to the plugins directory.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 *
 			 * @param array  $actions     An array of plugin action links. By default this can include 'activate',
 			 *                            'deactivate', and 'delete'.
@@ -680,9 +680,9 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			/**
 			 * Filters the action links displayed for each plugin in the Plugins list table.
 			 *
-			 * @since 2.5.0
-			 * @since 2.6.0 The `$context` parameter was added.
-			 * @since 4.9.0 The 'Edit' link was removed from the list of action links.
+			 * @since WP-2.5.0
+			 * @since WP-2.6.0 The `$context` parameter was added.
+			 * @since WP-4.9.0 The 'Edit' link was removed from the list of action links.
 			 *
 			 * @param array  $actions     An array of plugin action links. By default this can include 'activate',
 			 *                            'deactivate', and 'delete'. With Multisite active this can also include
@@ -700,8 +700,8 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			 * The dynamic portion of the hook name, `$plugin_file`, refers to the path
 			 * to the plugin file, relative to the plugins directory.
 			 *
-			 * @since 2.7.0
-			 * @since 4.9.0 The 'Edit' link was removed from the list of action links.
+			 * @since WP-2.7.0
+			 * @since WP-4.9.0 The 'Edit' link was removed from the list of action links.
 			 *
 			 * @param array  $actions     An array of plugin action links. By default this can include 'activate',
 			 *                            'deactivate', and 'delete'. With Multisite active this can also include
@@ -791,7 +791,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 					/**
 					 * Filters the array of row meta for each plugin in the Plugins list table.
 					 *
-					 * @since 2.8.0
+					 * @since WP-2.8.0
 					 *
 					 * @param array  $plugin_meta An array of the plugin's metadata,
 					 *                            including the version, author,
@@ -815,7 +815,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 					/**
 					 * Fires inside each custom column of the Plugins list table.
 					 *
-					 * @since 3.1.0
+					 * @since WP-3.1.0
 					 *
 					 * @param string $column_name Name of the column.
 					 * @param string $plugin_file Path to the plugin file.
@@ -832,7 +832,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		/**
 		 * Fires after each row in the Plugins list table.
 		 *
-		 * @since 2.3.0
+		 * @since WP-2.3.0
 		 *
 		 * @param string $plugin_file Path to the plugin file, relative to the plugins directory.
 		 * @param array  $plugin_data An array of plugin data.
@@ -848,7 +848,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		 * The dynamic portion of the hook name, `$plugin_file`, refers to the path
 		 * to the plugin file, relative to the plugins directory.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param string $plugin_file Path to the plugin file, relative to the plugins directory.
 		 * @param array  $plugin_data An array of plugin data.
@@ -862,7 +862,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the primary column for this specific list table.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return string Unalterable name for the primary column, in this case, 'name'.
 	 */

@@ -4,7 +4,7 @@
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      4.3.0
+ * @since      WP-4.3.0
  * @group      ajax
  */
 class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
@@ -82,7 +82,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 * Provides various post_args to induce error messages in the that can be
 	 * compared to the expected_results.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -149,7 +149,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 * Provides various post_args to induce error messages in the that can be
 	 * compared to the expected_results.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -256,7 +256,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 * Provides various post_args to retrieve results and compare against
 	 * the success status.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -386,7 +386,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 *
 	 * Provides various post_args to return a list of items to test the array structure of.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -456,7 +456,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 * Provides various post_args to induce error messages in the that can be
 	 * compared to the expected_results.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @todo Make this more DRY
 	 *
@@ -537,7 +537,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	 *
 	 * Provides various post_args to test the results.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return array {
 	 *     @type array {

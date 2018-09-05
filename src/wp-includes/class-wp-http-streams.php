@@ -4,14 +4,14 @@
  *
  * @package WordPress
  * @subpackage HTTP
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used to integrate PHP Streams as an HTTP transport.
  *
- * @since 2.7.0
- * @since 3.7.0 Combined with the fsockopen transport and switched to `stream_socket_client()`.
+ * @since WP-2.7.0
+ * @since WP-3.7.0 Combined with the fsockopen transport and switched to `stream_socket_client()`.
  */
 class WP_Http_Streams {
 	/**
@@ -19,8 +19,8 @@ class WP_Http_Streams {
 	 *
 	 * @see WP_Http::request For default options descriptions.
 	 *
-	 * @since 2.7.0
-	 * @since 3.7.0 Combined with the fsockopen transport and switched to stream_socket_client().
+	 * @since WP-2.7.0
+	 * @since WP-3.7.0 Combined with the fsockopen transport and switched to stream_socket_client().
 	 *
 	 * @param string $url The request URL.
 	 * @param string|array $args Optional. Override the defaults.
@@ -90,7 +90,7 @@ class WP_Http_Streams {
 			/**
 			 * Filters whether SSL should be verified for local requests.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param bool $ssl_verify Whether to verify the SSL connection. Default true.
 			 */
@@ -99,7 +99,7 @@ class WP_Http_Streams {
 			/**
 			 * Filters whether SSL should be verified for non-local requests.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param bool $ssl_verify Whether to verify the SSL connection. Default true.
 			 */
@@ -327,7 +327,7 @@ class WP_Http_Streams {
 	 *
 	 * IP Address support is included if the request is being made to an IP address.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 * @static
 	 *
 	 * @param stream $stream The PHP Stream which the SSL request is being made over
@@ -385,8 +385,8 @@ class WP_Http_Streams {
 	 * Determines whether this class can be used for retrieving a URL.
 	 *
 	 * @static
-	 * @since 2.7.0
-	 * @since 3.7.0 Combined with the fsockopen transport and switched to stream_socket_client().
+	 * @since WP-2.7.0
+	 * @since WP-3.7.0 Combined with the fsockopen transport and switched to stream_socket_client().
 	 *
 	 * @param array $args Optional. Array of request arguments. Default empty array.
 	 * @return bool False means this class can not be used, true means it can.
@@ -407,7 +407,7 @@ class WP_Http_Streams {
 		/**
 		 * Filters whether streams can be used as a transport for retrieving a URL.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param bool  $use_class Whether the class can be used. Default true.
 		 * @param array $args      Request arguments.
@@ -424,7 +424,7 @@ class WP_Http_Streams {
  *
  * @see WP_HTTP::request
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @deprecated 3.7.0 Please use WP_HTTP::request() directly
  */
 class WP_HTTP_Fsockopen extends WP_HTTP_Streams {

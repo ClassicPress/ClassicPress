@@ -453,7 +453,7 @@ class Requests_Transport_cURL implements Requests_Transport {
 	/**
 	 * Collect data as it's received
 	 *
-	 * @since 1.6.1
+	 * @since Requests 1.6.1
 	 *
 	 * @param resource $handle cURL resource
 	 * @param string $data Body data

@@ -48,7 +48,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options
 	 */
@@ -87,7 +87,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		this.updateSelection();
@@ -95,7 +95,7 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	updateSelection: function() {
 		var selection = this.get('selection'),

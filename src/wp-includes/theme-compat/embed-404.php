@@ -7,7 +7,7 @@
  *
  * @package WordPress
  * @subpackage Theme_Compat
- * @since 4.5.0
+ * @since WP-4.5.0
  */
 ?>
 <div class="wp-embed">

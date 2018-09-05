@@ -7,7 +7,7 @@
 	/**
 	 * Custom gallery details frame.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @class GalleryDetailsMediaFrame
 	 * @constructor
 	 */
@@ -16,7 +16,7 @@
 		/**
 		 * Create the default states.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {void}
 		 */
 		createStates: function createStates() {
@@ -52,7 +52,7 @@
 	 *
 	 * See WP_Widget_Gallery::enqueue_admin_scripts() for amending prototype from PHP exports.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @class GalleryWidgetModel
 	 * @constructor
 	 */
@@ -63,7 +63,7 @@
 	 *
 	 * See WP_Widget_Gallery::enqueue_admin_scripts() for amending prototype from PHP exports.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @class GalleryWidgetControl
 	 * @constructor
 	 */
@@ -72,7 +72,7 @@
 		/**
 		 * View events.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @type {object}
 		 */
 		events: _.extend( {}, component.MediaWidgetControl.prototype.events, {
@@ -82,7 +82,7 @@
 		/**
 		 * Initialize.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @param {Object}         options - Options.
 		 * @param {Backbone.Model} options.model - Model.
 		 * @param {jQuery}         options.el - Control field container element.
@@ -120,7 +120,7 @@
 		/**
 		 * Update the selected attachments if necessary.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {void}
 		 */
 		updateSelectedAttachments: function updateSelectedAttachments() {
@@ -153,7 +153,7 @@
 		/**
 		 * Render preview.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {void}
 		 */
 		renderPreview: function renderPreview() {
@@ -174,7 +174,7 @@
 		/**
 		 * Determine whether there are selected attachments.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {boolean} Selected.
 		 */
 		isSelected: function isSelected() {
@@ -190,7 +190,7 @@
 		/**
 		 * Open the media select frame to edit images.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {void}
 		 */
 		editMedia: function editMedia() {
@@ -253,7 +253,7 @@
 		/**
 		 * Open the media select frame to chose an item.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @returns {void}
 		 */
 		selectMedia: function selectMedia() {
@@ -318,7 +318,7 @@
 		/**
 		 * Clear the selected attachment when it is deleted in the media select frame.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 * @param {wp.media.models.Attachment} attachment - Attachment.
 		 * @returns {void}
 		 */

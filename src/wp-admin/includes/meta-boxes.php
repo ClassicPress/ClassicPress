@@ -5,7 +5,7 @@
 /**
  * Displays post submit form fields.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $action
  *
@@ -69,7 +69,7 @@ $preview_button = sprintf( '%1$s<span class="screen-reader-text"> %2$s</span>',
 /**
  * Fires before the post time/date setting in the Publish meta box.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param WP_Post $post WP_Post object for the current post.
  */
@@ -247,8 +247,8 @@ if ( $can_publish ) : // Contributors don't get to choose the date of publish ?>
 /**
  * Fires after the post time/date setting in the Publish meta box.
  *
- * @since 2.9.0
- * @since 4.4.0 Added the `$post` parameter.
+ * @since WP-2.9.0
+ * @since WP-4.4.0 Added the `$post` parameter.
  *
  * @param WP_Post $post WP_Post object for the current post.
  */
@@ -263,8 +263,8 @@ do_action( 'post_submitbox_misc_actions', $post );
 /**
  * Fires at the beginning of the publishing actions section of the Publish meta box.
  *
- * @since 2.7.0
- * @since 4.9.0 Added the `$post` parameter.
+ * @since WP-2.7.0
+ * @since WP-4.9.0 Added the `$post` parameter.
  *
  * @param WP_Post|null $post WP_Post object for the current post on Edit Post screen,
  *                           null on Edit Link screen.
@@ -316,7 +316,7 @@ if ( !in_array( $post->post_status, array('publish', 'future', 'private') ) || 0
 /**
  * Display attachment submit form fields.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @param object $post
  */
@@ -353,8 +353,8 @@ function attachment_submit_meta_box( $post ) {
 	 * Fires after the 'Uploaded on' section of the Save meta box
 	 * in the attachment editing screen.
 	 *
-	 * @since 3.5.0
-	 * @since 4.9.0 Added the `$post` parameter.
+	 * @since WP-3.5.0
+	 * @since WP-4.9.0 Added the `$post` parameter.
 	 *
 	 * @param WP_Post $post WP_Post object for the current attachment. 
 	 */
@@ -393,7 +393,7 @@ function attachment_submit_meta_box( $post ) {
 /**
  * Display post format form elements.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param WP_Post $post Post object.
  * @param array   $box {
@@ -432,7 +432,7 @@ function post_format_meta_box( $post, $box ) {
 /**
  * Display post tags form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @todo Create taxonomy-agnostic wrapper for this.
  *
@@ -495,7 +495,7 @@ function post_tags_meta_box( $post, $box ) {
 /**
  * Display post categories form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @todo Create taxonomy-agnostic wrapper for this.
  *
@@ -572,7 +572,7 @@ function post_categories_meta_box( $post, $box ) {
 					/**
 					 * Filters the arguments for the taxonomy parent dropdown on the Post Edit page.
 					 *
-					 * @since 4.4.0
+					 * @since WP-4.4.0
 					 *
 					 * @param array $parent_dropdown_args {
 					 *     Optional. Array of arguments to generate parent dropdown.
@@ -610,7 +610,7 @@ function post_categories_meta_box( $post, $box ) {
 /**
  * Display post excerpt form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -630,7 +630,7 @@ function post_excerpt_meta_box($post) {
 /**
  * Display trackback links form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -667,7 +667,7 @@ if ( ! empty($pings) )
 /**
  * Display custom fields form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -697,7 +697,7 @@ meta_form( $post ); ?>
 /**
  * Display comments status form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -716,7 +716,7 @@ function post_comment_status_meta_box($post) {
 	/**
 	 * Fires at the end of the Discussion meta box on the post editing screen.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param WP_Post $post WP_Post object of the current post.
 	 */
@@ -729,7 +729,7 @@ function post_comment_status_meta_box($post) {
 /**
  * Display comments for post table header
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param array $result table header rows
  * @return array
@@ -742,7 +742,7 @@ function post_comment_meta_box_thead($result) {
 /**
  * Display comments for post.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param object $post
  */
@@ -777,7 +777,7 @@ function post_comment_meta_box( $post ) {
 /**
  * Display slug form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -792,7 +792,7 @@ $editable_slug = apply_filters( 'editable_slug', $post->post_name, $post );
 /**
  * Display form field with list of authors.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @global int $user_ID
  *
@@ -815,7 +815,7 @@ function post_author_meta_box($post) {
 /**
  * Display list of revisions.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $post
  */
@@ -828,7 +828,7 @@ function post_revisions_meta_box( $post ) {
 /**
  * Display page attributes form fields.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param object $post
  */
@@ -847,7 +847,7 @@ function page_attributes_meta_box($post) {
 		/**
 		 * Filters the arguments used to generate a Pages drop-down element.
 		 *
-		 * @since 3.3.0
+		 * @since WP-3.3.0
 		 *
 		 * @see wp_dropdown_pages()
 		 *
@@ -872,7 +872,7 @@ function page_attributes_meta_box($post) {
 	 * Fires immediately after the label inside the 'Template' section
 	 * of the 'Page Attributes' meta box.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string  $template The template used for the current post.
 	 * @param WP_Post $post     The current post.
@@ -884,7 +884,7 @@ function page_attributes_meta_box($post) {
 /**
  * Filters the title of the default page template displayed in the drop-down.
  *
- * @since 4.1.0
+ * @since WP-4.1.0
  *
  * @param string $label   The display value for the default page template title.
  * @param string $context Where the option label is displayed. Possible values
@@ -903,7 +903,7 @@ $default_title = apply_filters( 'default_page_template_title',  __( 'Default Tem
 /**
  * Fires before the help hint text in the 'Page Attributes' meta box.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param WP_Post $post The current post.
  */
@@ -920,7 +920,7 @@ do_action( 'page_attributes_misc_attributes', $post );
 /**
  * Display link create form fields.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param object $link
  */
@@ -977,7 +977,7 @@ if ( !empty($_GET['action']) && 'edit' == $_GET['action'] && current_user_can('m
 /**
  * Fires at the end of the Publish box in the Link editing screen.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  */
 do_action( 'submitlink_box' );
 ?>
@@ -989,7 +989,7 @@ do_action( 'submitlink_box' );
 /**
  * Display link categories form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $link
  */
@@ -1035,7 +1035,7 @@ function link_categories_meta_box($link) {
 /**
  * Display form fields for changing link target.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $link
  */
@@ -1058,7 +1058,7 @@ function link_target_meta_box($link) { ?>
 /**
  * Display checked checkboxes attribute for xfn microformat options.
  *
- * @since 1.0.1
+ * @since WP-1.0.1
  *
  * @global object $link
  *
@@ -1091,7 +1091,7 @@ function xfn_check( $class, $value = '', $deprecated = '' ) {
 /**
  * Display xfn form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $link
  */
@@ -1209,7 +1209,7 @@ function link_xfn_meta_box($link) {
 /**
  * Display advanced link options form fields.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param object $link
  */
@@ -1248,7 +1248,7 @@ function link_advanced_meta_box($link) {
 /**
  * Display post thumbnail meta box.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @param WP_Post $post A post object.
  */
@@ -1260,7 +1260,7 @@ function post_thumbnail_meta_box( $post ) {
 /**
  * Display fields for ID3 data
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @param WP_Post $post A post object.
  */

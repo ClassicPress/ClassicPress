@@ -44,7 +44,7 @@
  * | `$is_ssl`            | Yes           |  Yes               | No       | No             |
  * | `$fields`            | Yes           |  Yes               | No       | No             |
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string       $action API action to perform: 'query_plugins', 'plugin_information',
  *                             'hot_tags' or 'hot_categories'.
@@ -117,7 +117,7 @@ function plugins_api( $action, $args = array() ) {
 	 *
 	 * Important: An object MUST be returned to this filter.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param object $args   Plugin API arguments.
 	 * @param string $action The type of information being requested from the Plugin Installation API.
@@ -132,7 +132,7 @@ function plugins_api( $action, $args = array() ) {
 	 * If `$action` is 'query_plugins' or 'plugin_information', an object MUST be passed.
 	 * If `$action` is 'hot_tags' or 'hot_categories', an array should be passed.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param false|object|array $result The result object or array. Default false.
 	 * @param string             $action The type of information being requested from the Plugin Installation API.
@@ -199,7 +199,7 @@ function plugins_api( $action, $args = array() ) {
 	/**
 	 * Filters the Plugin Installation API response results.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param object|WP_Error $res    Response object or WP_Error.
 	 * @param string          $action The type of information being requested from the Plugin Installation API.
@@ -211,7 +211,7 @@ function plugins_api( $action, $args = array() ) {
 /**
  * Retrieve popular ClassicPress plugin tags.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param array $args
  * @return array
@@ -232,7 +232,7 @@ function install_popular_tags( $args = array() ) {
 }
 
 /**
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function install_dashboard() {
 	?>
@@ -272,8 +272,8 @@ function install_dashboard() {
 /**
  * Displays a search form for searching plugins.
  *
- * @since 2.7.0
- * @since 4.6.0 The `$type_selector` parameter was deprecated.
+ * @since WP-2.7.0
+ * @since WP-4.6.0 The `$type_selector` parameter was deprecated.
  *
  * @param bool $deprecated Not used.
  */
@@ -297,7 +297,7 @@ function install_search_form( $deprecated = true ) {
 
 /**
  * Upload from zip
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function install_plugins_upload() {
 ?>
@@ -315,7 +315,7 @@ function install_plugins_upload() {
 
 /**
  * Show a username form for the favorites page
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  */
 function install_plugins_favorites_form() {
@@ -338,7 +338,7 @@ function install_plugins_favorites_form() {
 /**
  * Display plugin content based on plugin list.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global WP_List_Table $wp_list_table
  */
@@ -372,7 +372,7 @@ function display_plugins_table() {
 /**
  * Determine the status we can perform on a plugin.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param  array|object $api  Data about the plugin retrieved from the API.
  * @param  bool         $loop Optional. Disable further loops. Default false.
@@ -453,7 +453,7 @@ function install_plugin_install_status($api, $loop = false) {
 /**
  * Display plugin information in dialog box form.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $tab
  */

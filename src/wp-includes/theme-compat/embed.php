@@ -7,7 +7,7 @@
  *
  * @package WordPress
  * @subpackage oEmbed
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 get_header( 'embed' );

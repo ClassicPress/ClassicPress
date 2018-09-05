@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement displaying themes in a list table for the network admin.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -25,7 +25,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -93,7 +93,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 			 * Filters the full array of WP_Theme objects to list in the Multisite
 			 * themes list table.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 *
 			 * @param array $all An array of WP_Theme objects to display in the list table.
 			 */
@@ -260,7 +260,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the primary column.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return string Unalterable name of the primary column name, in this case, 'name'.
 	 */
@@ -349,7 +349,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Handles the checkbox column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_Theme $theme The current WP_Theme object.
 	 */
@@ -364,7 +364,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Handles the name column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @global string $status
 	 * @global int    $page
@@ -475,7 +475,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		 * The default action links for the Site themes list table include
 		 * 'Enable', and 'Disable'.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param array    $actions An array of action links.
 		 * @param WP_Theme $theme   The current WP_Theme object.
@@ -491,7 +491,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		 * directory name of the theme, which in most cases is synonymous
 		 * with the template name.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param array    $actions An array of action links.
 		 * @param WP_Theme $theme   The current WP_Theme object.
@@ -505,7 +505,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Handles the description column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @global string $status
 	 * @global array  $totals
@@ -554,7 +554,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		 * Filters the array of row meta for each theme in the Multisite themes
 		 * list table.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param array    $theme_meta An array of the theme's metadata,
 		 *                             including the version, author, and
@@ -572,7 +572,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Handles default column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_Theme $theme       The current WP_Theme object.
 	 * @param string   $column_name The current column name.
@@ -583,7 +583,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		/**
 		 * Fires inside each custom column of the Multisite themes list table.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param string   $column_name Name of the column.
 		 * @param string   $stylesheet  Directory name of the theme.
@@ -595,7 +595,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Handles the output for a single table row.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_Theme $item The current WP_Theme object.
 	 */
@@ -700,7 +700,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		/**
 		 * Fires after each row in the Multisite themes list table.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param string   $stylesheet Directory name of the theme.
 		 * @param WP_Theme $theme      Current WP_Theme object.
@@ -715,7 +715,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 		 * directory name of the theme, most often synonymous with the template
 		 * name of the theme.
 		 *
-		 * @since 3.5.0
+		 * @since WP-3.5.0
 		 *
 		 * @param string   $stylesheet Directory name of the theme.
 		 * @param WP_Theme $theme      Current WP_Theme object.

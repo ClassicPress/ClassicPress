@@ -2,7 +2,7 @@
 /**
  * These functions are needed to load Multisite.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @package WordPress
  * @subpackage Multisite
@@ -11,7 +11,7 @@
 /**
  * Whether a subdomain configuration is enabled.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return bool True if subdomain configuration is enabled, false otherwise.
  */
@@ -29,7 +29,7 @@ function is_subdomain_install() {
  * manually, define `WP_PLUGIN_DIR` and `WP_PLUGIN_URL` in `wp-config.php`.
  *
  * @access private
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @return array Files to include.
  */
@@ -63,7 +63,7 @@ function wp_get_active_network_plugins() {
  * use the wp-content/blog-deleted.php, blog-inactive.php and
  * blog-suspended.php drop-ins.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return true|string Returns true on success, or drop-in file to include.
  */
@@ -72,7 +72,7 @@ function ms_site_check() {
 	/**
 	 * Filters checking the status of the current blog.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param bool null Whether to skip the blog status check. Default null.
 	*/
@@ -120,7 +120,7 @@ function ms_site_check() {
 /**
  * Retrieve the closest matching network for a domain and path.
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @internal In 4.4.0, converted to a wrapper for WP_Network::get_by_path()
  *
@@ -143,8 +143,8 @@ function get_network_by_path( $domain, $path, $segments = null ) {
  * The intent of this method is to match a site object during bootstrap for a
  * requested site address
  *
- * @since 3.9.0
- * @since 4.7.0 Updated to always return a `WP_Site` object.
+ * @since WP-3.9.0
+ * @since WP-4.7.0 Updated to always return a `WP_Site` object.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -159,7 +159,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
 	/**
 	 * Filters the number of path segments to consider when searching for a site.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param int|null $segments The number of path segments to consider. WordPress by default looks at
 	 *                           one path segment following the network path. The function default of
@@ -192,7 +192,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
 	 * can be found at the requested domain and path. Otherwise, return
 	 * a site object.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param null|bool|WP_Site $site     Site value to return by path.
 	 * @param string            $domain   The requested domain.
@@ -265,7 +265,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
  * If neither a network or site is found, `false` or a URL string will be returned
  * so that either an error can be shown or a redirect can occur.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  * @access private
  *
  * @global WP_Network $current_site The current network.
@@ -334,7 +334,7 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
 			 * At the time of this action, the only recourse is to redirect somewhere
 			 * and exit. If you want to declare a particular network, do so earlier.
 			 *
-			 * @since 4.4.0
+			 * @since WP-4.4.0
 			 *
 			 * @param string $domain       The domain used to search for a network.
 			 * @param string $path         The path used to search for a path.
@@ -391,7 +391,7 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
 		 * At the time of this action, the only recourse is to redirect somewhere
 		 * and exit. If you want to declare a particular site, do so earlier.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param object $current_site The network that had been determined.
 		 * @param string $domain       The domain used to search for a site.
@@ -435,8 +435,8 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
  * Used when a blog's tables do not exist. Checks for a missing $wpdb->site table as well.
  *
  * @access private
- * @since 3.0.0
- * @since 4.4.0 The `$domain` and `$path` parameters were added.
+ * @since WP-3.0.0
+ * @since WP-4.4.0 The `$domain` and `$path` parameters were added.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -496,7 +496,7 @@ function ms_not_installed( $domain, $path ) {
  * The bootstrap takes care of setting site_name.
  *
  * @access private
- * @since 3.0.0
+ * @since WP-3.0.0
  * @deprecated 3.9.0 Use get_current_site() instead.
  *
  * @param object $current_site
@@ -514,7 +514,7 @@ function get_current_site_name( $current_site ) {
  * well as setting the global $current_site object.
  *
  * @access private
- * @since 3.0.0
+ * @since WP-3.0.0
  * @deprecated 3.9.0
  *
  * @global object $current_site
@@ -530,7 +530,7 @@ function wpmu_current_site() {
 /**
  * Retrieve an object containing information about the requested network.
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  * @deprecated 4.7.0 Use `get_network()`
  * @see get_network()
  *

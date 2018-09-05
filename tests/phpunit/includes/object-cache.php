@@ -165,7 +165,7 @@ function wp_cache_cas_by_key( $cas_token, $server_key, $key, $value, $group = ''
  * does not mean that plugins can't implement this function when they need to
  * make sure that the cache is cleaned up after WordPress no longer needs it.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @return  bool    Always returns True
  */

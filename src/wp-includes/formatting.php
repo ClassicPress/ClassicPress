@@ -22,7 +22,7 @@
  *
  * Do not use this function before the {@see 'init'} action hook; everything will break.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @global array $wp_cockneyreplace Array of formatted entities for certain common phrases
  * @global array $shortcode_tags
@@ -83,7 +83,7 @@ function wptexturize( $text, $reset = false ) {
 		 *
 		 * The filter runs only once, the first time wptexturize() is called.
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @see wptexturize()
 		 *
@@ -207,7 +207,7 @@ function wptexturize( $text, $reset = false ) {
 	/**
 	 * Filters the list of HTML elements not to texturize.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $default_no_texturize_tags An array of HTML element names.
 	 */
@@ -215,7 +215,7 @@ function wptexturize( $text, $reset = false ) {
 	/**
 	 * Filters the list of shortcodes not to texturize.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $default_no_texturize_shortcodes An array of shortcode names.
 	 */
@@ -303,7 +303,7 @@ function wptexturize( $text, $reset = false ) {
  * Implements a logic tree to determine whether or not "7'." represents seven feet,
  * then converts the special char into either a prime char or a closing quote char.
  *
- * @since 4.3.0
+ * @since WP-4.3.0
  *
  * @param string $haystack    The plain text to be searched.
  * @param string $needle      The character to search for such as ' or ".
@@ -375,7 +375,7 @@ function wptexturize_primes( $haystack, $needle, $prime, $open_quote, $close_quo
  * Assumes first char of $text is tag opening and last char is tag closing.
  * Assumes second char of $text is optionally '/' to indicate closing as in </html>.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  * @access private
  *
  * @param string $text Text to check. Must be a tag like `<html>` or `[shortcode]`.
@@ -429,7 +429,7 @@ function _wptexturize_pushpop_element( $text, &$stack, $disabled_elements ) {
  * replace double line-breaks with HTML paragraph tags. The remaining line-breaks
  * after conversion become <<br />> tags, unless $br is set to '0' or 'false'.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $pee The text which has to be formatted.
  * @param bool   $br  Optional. If set, this will convert all remaining line-breaks
@@ -595,7 +595,7 @@ function wpautop( $pee, $br = true ) {
 /**
  * Separate HTML elements and comments from the text.
  *
- * @since 4.2.4
+ * @since WP-4.2.4
  *
  * @param string $input The text which has to be formatted.
  * @return array The formatted text.
@@ -607,7 +607,7 @@ function wp_html_split( $input ) {
 /**
  * Retrieve the regular expression for an HTML element.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @staticvar string $regex
  *
@@ -666,7 +666,7 @@ function get_html_split_regex() {
  * @access private
  * @ignore
  * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @staticvar string $html_regex
  *
@@ -709,7 +709,7 @@ function _get_wptexturize_split_regex( $shortcode_regex = '' ) {
  * @access private
  * @ignore
  * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param array $tagnames List of shortcodes to find.
  * @return string The regular expression
@@ -735,7 +735,7 @@ function _get_wptexturize_shortcode_regex( $tagnames ) {
 /**
  * Replace characters or phrases within HTML elements only.
  *
- * @since 4.2.3
+ * @since WP-4.2.3
  *
  * @param string $haystack The text which has to be formatted.
  * @param array $replace_pairs In the form array('from' => 'to', ...).
@@ -785,7 +785,7 @@ function wp_replace_in_html_tags( $haystack, $replace_pairs ) {
 /**
  * Newline preservation help function for wpautop
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @param array $matches preg_replace_callback matches array
@@ -800,7 +800,7 @@ function _autop_newline_preservation_helper( $matches ) {
  *
  * Ensures that shortcodes are not wrapped in `<p>...</p>`.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global array $shortcode_tags
  *
@@ -859,7 +859,7 @@ function shortcode_unautop( $pee ) {
  *       has Bytes Sequences with a maximum length of 4.
  *
  * @author bmorel at ssi dot fr (modified)
- * @since 1.2.1
+ * @since WP-1.2.1
  *
  * @param string $str The string to be checked
  * @return bool True if $str fits a UTF-8 model, false otherwise.
@@ -893,7 +893,7 @@ function seems_utf8( $str ) {
  * $quote_style can be set to ENT_COMPAT to encode " to
  * &quot;, or ENT_QUOTES to do both. Default is ENT_NOQUOTES where no quotes are encoded.
  *
- * @since 1.2.2
+ * @since WP-1.2.2
  * @access private
  *
  * @staticvar string $_charset
@@ -969,7 +969,7 @@ function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = fals
  * $quote_style can be set to ENT_COMPAT to decode " entities,
  * or ENT_QUOTES to do both " and '. Default is ENT_NOQUOTES where no quotes are decoded.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string     $string The text which is to be decoded.
  * @param string|int $quote_style Optional. Converts double quotes if set to ENT_COMPAT,
@@ -1032,7 +1032,7 @@ function wp_specialchars_decode( $string, $quote_style = ENT_NOQUOTES ) {
 /**
  * Checks for invalid UTF8 in a string.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @staticvar bool $is_utf8
  * @staticvar bool $utf8_pcre
@@ -1083,7 +1083,7 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
 /**
  * Encode the Unicode values to be used in the URI.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $utf8_string
  * @param int    $length Max  length of the string
@@ -1517,10 +1517,10 @@ function utf8_uri_encode( $utf8_string, $length = 0 ) {
  * | U+0110   | Đ     | DJ          | Latin capital letter D with stroke      |
  * | U+0111   | đ     | dj          | Latin small letter d with stroke        |
  *
- * @since 1.2.1
- * @since 4.6.0 Added locale support for `de_CH`, `de_CH_informal`, and `ca`.
- * @since 4.7.0 Added locale support for `sr_RS`.
- * @since 4.8.0 Added locale support for `bs_BA`.
+ * @since WP-1.2.1
+ * @since WP-4.6.0 Added locale support for `de_CH`, `de_CH_informal`, and `ca`.
+ * @since WP-4.7.0 Added locale support for `sr_RS`.
+ * @since WP-4.8.0 Added locale support for `bs_BA`.
  *
  * @param string $string Text that might have accent characters
  * @return string Filtered string with replaced "nice" characters.
@@ -1768,7 +1768,7 @@ function remove_accents( $string ) {
  * and end of filename. It is not guaranteed that this function will return a
  * filename that is allowed to be uploaded.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $filename The filename to be sanitized
  * @return string The sanitized filename
@@ -1779,7 +1779,7 @@ function sanitize_file_name( $filename ) {
 	/**
 	 * Filters the list of characters to remove from a filename.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array  $special_chars Characters to remove.
 	 * @param string $filename_raw  Filename as it was passed into sanitize_file_name().
@@ -1807,7 +1807,7 @@ function sanitize_file_name( $filename ) {
 		/**
 		 * Filters a sanitized filename string.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param string $filename     Sanitized filename.
 		 * @param string $filename_raw The filename prior to sanitization.
@@ -1853,7 +1853,7 @@ function sanitize_file_name( $filename ) {
  * raw username (the username in the parameter), and the value of $strict as
  * parameters for the {@see 'sanitize_user'} filter.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param string $username The username to be sanitized.
  * @param bool   $strict   If set limits $username to specific characters. Default false.
@@ -1878,7 +1878,7 @@ function sanitize_user( $username, $strict = false ) {
 	/**
 	 * Filters a sanitized username string.
 	 *
-	 * @since 2.0.1
+	 * @since WP-2.0.1
 	 *
 	 * @param string $username     Sanitized username.
 	 * @param string $raw_username The username prior to sanitization.
@@ -1892,7 +1892,7 @@ function sanitize_user( $username, $strict = false ) {
  *
  * Keys are used as internal identifiers. Lowercase alphanumeric characters, dashes and underscores are allowed.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param string $key String key
  * @return string Sanitized key
@@ -1905,7 +1905,7 @@ function sanitize_key( $key ) {
 	/**
 	 * Filters a sanitized key string.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $key     Sanitized key.
 	 * @param string $raw_key The key prior to sanitization.
@@ -1920,7 +1920,7 @@ function sanitize_key( $key ) {
  * via the plugin API. If $title is empty and $fallback_title is set, the latter
  * will be used.
  *
- * @since 1.0.0
+ * @since WP-1.0.0
  *
  * @param string $title          The string to be sanitized.
  * @param string $fallback_title Optional. A title to use if $title is empty.
@@ -1936,7 +1936,7 @@ function sanitize_title( $title, $fallback_title = '', $context = 'save' ) {
 	/**
 	 * Filters a sanitized title string.
 	 *
-	 * @since 1.2.0
+	 * @since WP-1.2.0
 	 *
 	 * @param string $title     Sanitized title.
 	 * @param string $raw_title The title prior to sanitization.
@@ -1955,7 +1955,7 @@ function sanitize_title( $title, $fallback_title = '', $context = 'save' ) {
  *
  * Used for querying the database for a value from URL.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $title The string to be sanitized.
  * @return string The sanitized string.
@@ -1970,7 +1970,7 @@ function sanitize_title_for_query( $title ) {
  * Limits the output to alphanumeric characters, underscore (_) and dash (-).
  * Whitespace becomes a dash.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param string $title     The title to be sanitized.
  * @param string $raw_title Optional. Not used.
@@ -2043,7 +2043,7 @@ function sanitize_title_with_dashes( $title, $raw_title = '', $context = 'displa
  *
  * Also accepts 'RAND()'.
  *
- * @since 2.5.1
+ * @since WP-2.5.1
  *
  * @param string $orderby Order by clause to be validated.
  * @return string|false Returns $orderby if valid, false otherwise.
@@ -2063,7 +2063,7 @@ function sanitize_sql_orderby( $orderby ) {
  *
  * @todo Expand to support the full range of CDATA that a class attribute can contain.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $class    The classname to be sanitized
  * @param string $fallback Optional. The value to return if the sanitization ends up as an empty string.
@@ -2083,7 +2083,7 @@ function sanitize_html_class( $class, $fallback = '' ) {
 	/**
 	 * Filters a sanitized HTML class string.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $sanitized The sanitized HTML class.
 	 * @param string $class     HTML class before sanitization.
@@ -2095,7 +2095,7 @@ function sanitize_html_class( $class, $fallback = '' ) {
 /**
  * Converts lone & characters into `&#038;` (a.k.a. `&amp;`)
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $content    String of characters to be converted.
  * @param string $deprecated Not used.
@@ -2116,7 +2116,7 @@ function convert_chars( $content, $deprecated = '' ) {
 /**
  * Converts invalid Unicode references range to valid range.
  *
- * @since 4.3.0
+ * @since WP-4.3.0
  *
  * @param string $content String with entities that need converting.
  * @return string Converted string.
@@ -2167,7 +2167,7 @@ function convert_invalid_entities( $content ) {
 /**
  * Balances tags if forced to, or if the 'use_balanceTags' option is set to true.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $text  Text to be balanced
  * @param bool   $force If true, forces balancing, ignoring the value of the option. Default false.
@@ -2184,7 +2184,7 @@ function balanceTags( $text, $force = false ) {
 /**
  * Balances tags of string using a modified stack.
  *
- * @since 2.0.4
+ * @since WP-2.0.4
  *
  * @author Leonard Lin <leonard@acm.org>
  * @license GPL
@@ -2319,8 +2319,8 @@ function force_balance_tags( $text ) {
  * to convert special characters to HTML entities. If `$richedit` is set to true,
  * it is simply a holder for the {@see 'format_to_edit'} filter.
  *
- * @since 0.71
- * @since 4.4.0 The `$richedit` parameter was renamed to `$rich_text` for clarity.
+ * @since WP-0.71
+ * @since WP-4.4.0 The `$richedit` parameter was renamed to `$rich_text` for clarity.
  *
  * @param string $content   The text about to be edited.
  * @param bool   $rich_text Optional. Whether `$content` should be considered rich text,
@@ -2332,7 +2332,7 @@ function format_to_edit( $content, $rich_text = false ) {
 	/**
 	 * Filters the text to be formatted for editing.
 	 *
-	 * @since 1.2.0
+	 * @since WP-1.2.0
 	 *
 	 * @param string $content The text, prior to formatting for editing.
 	 */
@@ -2353,7 +2353,7 @@ function format_to_edit( $content, $rich_text = false ) {
  * and the size of the number. If the number is large enough, then no zeros will
  * be appended.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param int $number     Number to append zeros to if not greater than threshold.
  * @param int $threshold  Digit places number needs to be to not have zeros added.
@@ -2366,7 +2366,7 @@ function zeroise( $number, $threshold ) {
 /**
  * Adds backslashes before letters and before a number at the start of a string.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $string Value to which backslashes will be added.
  * @return string String with backslashes inserted.
@@ -2386,7 +2386,7 @@ function backslashit( $string ) {
  * The primary use of this is for paths and thus should be used for paths. It is
  * not restricted to paths and offers no specific path support.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param string $string What to add the trailing slash to.
  * @return string String with trailing slash added.
@@ -2401,7 +2401,7 @@ function trailingslashit( $string ) {
  * The primary use of this is for paths and thus should be used for paths. It is
  * not restricted to paths and offers no specific path support.
  *
- * @since 2.2.0
+ * @since WP-2.2.0
  *
  * @param string $string What to remove the trailing slashes from.
  * @return string String without the trailing slashes.
@@ -2416,7 +2416,7 @@ function untrailingslashit( $string ) {
  * Slashes will first be removed if magic_quotes_gpc is set, see {@link
  * https://secure.php.net/magic_quotes} for more details.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $gpc The string returned from HTTP request data.
  * @return string Returns a string escaped with slashes.
@@ -2431,7 +2431,7 @@ function addslashes_gpc($gpc) {
 /**
  * Navigates through an array, object, or scalar, and removes slashes from the values.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param mixed $value The value to be stripped.
  * @return mixed Stripped value.
@@ -2443,7 +2443,7 @@ function stripslashes_deep( $value ) {
 /**
  * Callback function for `stripslashes_deep()` which strips slashes from strings.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param mixed $value The array or string to be stripped.
  * @return mixed $value The stripped value.
@@ -2455,7 +2455,7 @@ function stripslashes_from_strings_only( $value ) {
 /**
  * Navigates through an array, object, or scalar, and encodes the values to be used in a URL.
  *
- * @since 2.2.0
+ * @since WP-2.2.0
  *
  * @param mixed $value The array or string to be encoded.
  * @return mixed $value The encoded value.
@@ -2467,7 +2467,7 @@ function urlencode_deep( $value ) {
 /**
  * Navigates through an array, object, or scalar, and raw-encodes the values to be used in a URL.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param mixed $value The array or string to be encoded.
  * @return mixed $value The encoded value.
@@ -2479,7 +2479,7 @@ function rawurlencode_deep( $value ) {
 /**
  * Navigates through an array, object, or scalar, and decodes URL-encoded values
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param mixed $value The array or string to be decoded.
  * @return mixed $value The decoded value.
@@ -2491,7 +2491,7 @@ function urldecode_deep( $value ) {
 /**
  * Converts email addresses characters to HTML entities to block spam bots.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $email_address Email address.
  * @param int    $hex_encoding  Optional. Set to 1 to enable hex encoding.
@@ -2518,7 +2518,7 @@ function antispambot( $email_address, $hex_encoding = 0 ) {
  *
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
- * @since 2.3.2
+ * @since WP-2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -2554,7 +2554,7 @@ function _make_url_clickable_cb( $matches ) {
  *
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
- * @since 2.3.2
+ * @since WP-2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -2583,7 +2583,7 @@ function _make_web_ftp_clickable_cb( $matches ) {
  *
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
- * @since 2.3.2
+ * @since WP-2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -2600,7 +2600,7 @@ function _make_email_clickable_cb( $matches ) {
  * Converts URI, www and ftp, and email addresses. Finishes by fixing links
  * within links.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $text Content to convert URIs.
  * @return string Content with converted URIs.
@@ -2685,7 +2685,7 @@ function make_clickable( $text ) {
  *         7 => '1 3 5 7 90 ',  // 11 characters: End of $string
  *     );
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  * @access private
  *
  * @param string $string The string to split.
@@ -2722,7 +2722,7 @@ function _split_str_by_whitespace( $string, $goal ) {
 /**
  * Adds rel nofollow string to all HTML A elements in content.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $text Content that may contain HTML A elements.
  * @return string Converted content.
@@ -2740,7 +2740,7 @@ function wp_rel_nofollow( $text ) {
  * Will remove already existing rel="nofollow" and rel='nofollow' from the
  * string to prevent from invalidating (X)HTML.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @param array $matches Single Match
  * @return string HTML A Element with rel nofollow.
@@ -2781,7 +2781,7 @@ function wp_rel_nofollow_callback( $matches ) {
  * Looks up one smiley code in the $wpsmiliestrans global array and returns an
  * `<img>` string for that smiley.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global array $wpsmiliestrans
  *
@@ -2809,7 +2809,7 @@ function translate_smiley( $matches ) {
 	/**
 	 * Filters the Smiley image URL before it's used in the image element.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $smiley_url URL for the smiley image.
 	 * @param string $img        Filename for the smiley image.
@@ -2826,7 +2826,7 @@ function translate_smiley( $matches ) {
  * Will only convert smilies if the option 'use_smilies' is true and the global
  * used in the function isn't empty.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @global string|array $wp_smiliessearch
  *
@@ -2877,7 +2877,7 @@ function convert_smilies( $text ) {
  *
  * Does not grok i18n domains. Not RFC compliant.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $email      Email address to verify.
  * @param bool   $deprecated Deprecated.
@@ -2896,7 +2896,7 @@ function is_email( $email, $deprecated = false ) {
 		 * 'email_no_at', 'local_invalid_chars', 'domain_period_sequence', 'domain_period_limits',
 		 * 'domain_no_periods', 'sub_hyphen_limits', 'sub_invalid_chars', or no specific context.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param bool   $is_email Whether the email address has passed the is_email() checks. Default false.
 		 * @param string $email    The email address being checked.
@@ -2966,7 +2966,7 @@ function is_email( $email, $deprecated = false ) {
 /**
  * Convert to ASCII from email subjects.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param string $string Subject line
  * @return string Converted string to ASCII
@@ -2984,7 +2984,7 @@ function wp_iso_descrambler( $string ) {
 /**
  * Helper function to convert hex encoded chars to ASCII
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @param array $match The preg_replace_callback matches array
@@ -3002,7 +3002,7 @@ function _wp_iso_convert( $match ) {
  * otherwise it simply subtracts the value of the 'gmt_offset' option. Return
  * format can be overridden using the $format parameter.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param string $string The date to be converted.
  * @param string $format The format string for the returned date (default is Y-m-d H:i:s)
@@ -3039,7 +3039,7 @@ function get_gmt_from_date( $string, $format = 'Y-m-d H:i:s' ) {
  * it simply adds the value of gmt_offset. Return format can be overridden
  * using the $format parameter
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param string $string The date to be converted.
  * @param string $format The format string for the returned date (default is Y-m-d H:i:s)
@@ -3065,7 +3065,7 @@ function get_date_from_gmt( $string, $format = 'Y-m-d H:i:s' ) {
 /**
  * Computes an offset in seconds from an iso8601 timezone.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $timezone Either 'Z' for 0 offset or '±hhmm'.
  * @return int|float The offset in seconds.
@@ -3086,7 +3086,7 @@ function iso8601_timezone_to_offset( $timezone ) {
 /**
  * Converts an iso8601 date to MySQL DateTime format used by post_date[_gmt].
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $date_string Date and time in ISO 8601 format {@link https://en.wikipedia.org/wiki/ISO_8601}.
  * @param string $timezone    Optional. If set to GMT returns the time minus gmt_offset. Default is 'user'.
@@ -3118,7 +3118,7 @@ function iso8601_to_datetime( $date_string, $timezone = 'user' ) {
 /**
  * Strips out all characters that are not allowable in an email.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $email Email address to filter.
  * @return string Filtered email address.
@@ -3133,7 +3133,7 @@ function sanitize_email( $email ) {
 		 * 'email_no_at', 'local_invalid_chars', 'domain_period_sequence', 'domain_period_limits',
 		 * 'domain_no_periods', 'domain_no_valid_subs', or no context.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param string $email   The sanitized email address.
 		 * @param string $email   The email address, as provided to sanitize_email().
@@ -3223,7 +3223,7 @@ function sanitize_email( $email ) {
  * The difference is returned in a human readable format such as "1 hour",
  * "5 mins", "2 days".
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param int $from Unix timestamp from which the difference begins.
  * @param int $to   Optional. Unix timestamp to end the time difference. Default becomes time() if not set.
@@ -3277,7 +3277,7 @@ function human_time_diff( $from, $to = '' ) {
 	/**
 	 * Filters the human readable difference between two timestamps.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $since The difference in human readable text.
 	 * @param int    $diff  The difference in seconds.
@@ -3297,7 +3297,7 @@ function human_time_diff( $from, $to = '' ) {
  * The 55 word limit can be modified by plugins/themes using the {@see 'excerpt_length'} filter
  * The ' [&hellip;]' string can be modified by plugins/themes using the {@see 'excerpt_more'} filter
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $text Optional. The excerpt. If set to empty, an excerpt is generated.
  * @return string The excerpt.
@@ -3316,7 +3316,7 @@ function wp_trim_excerpt( $text = '' ) {
 		/**
 		 * Filters the number of words in an excerpt.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param int $number The number of words. Default 55.
 		 */
@@ -3324,7 +3324,7 @@ function wp_trim_excerpt( $text = '' ) {
 		/**
 		 * Filters the string in the "more" link displayed after a trimmed excerpt.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $more_string The string shown within the more link.
 		 */
@@ -3334,7 +3334,7 @@ function wp_trim_excerpt( $text = '' ) {
 	/**
 	 * Filters the trimmed excerpt string.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $text        The trimmed text.
 	 * @param string $raw_excerpt The text prior to trimming.
@@ -3349,7 +3349,7 @@ function wp_trim_excerpt( $text = '' ) {
  * character (such as East Asian languages), the $num_words argument will apply
  * to the number of individual characters.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @param string $text      Text to trim.
  * @param int    $num_words Number of words. Default 55.
@@ -3390,7 +3390,7 @@ function wp_trim_words( $text, $num_words = 55, $more = null ) {
 	/**
 	 * Filters the text content after words have been trimmed.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $text          The trimmed text.
 	 * @param int    $num_words     The number of words to trim the text to. Default 55.
@@ -3403,7 +3403,7 @@ function wp_trim_words( $text, $num_words = 55, $more = null ) {
 /**
  * Converts named entities into numbered entities.
  *
- * @since 1.5.1
+ * @since WP-1.5.1
  *
  * @param string $text The text within which entities will be converted.
  * @return string Text with converted entities.
@@ -3415,7 +3415,7 @@ function ent2ncr( $text ) {
 	 *
 	 * A non-null string must be returned for the filter to be evaluated.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param null   $converted_text The text to be converted. Default null.
 	 * @param string $text           The text prior to entity conversion.
@@ -3695,7 +3695,7 @@ function ent2ncr( $text ) {
  * The filter {@see 'format_for_editor'} is applied here. If `$text` is empty the
  * filter will be applied to an empty string.
  *
- * @since 4.3.0
+ * @since WP-4.3.0
  *
  * @see _WP_Editors::editor()
  *
@@ -3712,7 +3712,7 @@ function format_for_editor( $text, $default_editor = null ) {
 	/**
 	 * Filters the text after it is formatted for the editor.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param string $text           The formatted text.
 	 * @param string $default_editor The default editor for the current user.
@@ -3728,7 +3728,7 @@ function format_for_editor( $text, $default_editor = null ) {
  * e.g. $subject = '%0%0%0DDD', $search ='%0D', $result ='' rather than the '%0%0DD' that
  * str_replace would return
  *
- * @since 2.8.1
+ * @since WP-2.8.1
  * @access private
  *
  * @param string|array $search  The value being searched for, otherwise known as the needle.
@@ -3759,7 +3759,7 @@ function _deep_replace( $search, $subject ) {
  * may cause issues for code that expects the return value of esc_sql() to be useable
  * for other purposes.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -3778,7 +3778,7 @@ function esc_sql( $data ) {
  * (the default behaviour) ampersands are also replaced. The {@see 'clean_url'} filter
  * is applied to the returned cleaned URL.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $url       The URL to be cleaned.
  * @param array  $protocols Optional. An array of acceptable protocols.
@@ -3870,7 +3870,7 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
 	/**
 	 * Filters a string cleaned and escaped for output as a URL.
 	 *
-	 * @since 2.3.0
+	 * @since WP-2.3.0
 	 *
 	 * @param string $good_protocol_url The cleaned URL to be returned.
 	 * @param string $original_url      The URL prior to cleaning.
@@ -3882,7 +3882,7 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
 /**
  * Performs esc_url() for database usage.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $url       The URL to be cleaned.
  * @param array  $protocols An array of acceptable protocols.
@@ -3897,7 +3897,7 @@ function esc_url_raw( $url, $protocols = null ) {
  *
  * @link https://secure.php.net/htmlentities Borrowed from the PHP Manual user notes.
  *
- * @since 1.2.2
+ * @since WP-1.2.2
  *
  * @param string $myHTML The text to be converted.
  * @return string Converted text.
@@ -3915,7 +3915,7 @@ function htmlentities2( $myHTML ) {
  * (in a tag attribute, for example onclick="..."). Note that the strings have to
  * be in single quotes. The {@see 'js_escape'} filter is also applied here.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $text The text to be escaped.
  * @return string Escaped text.
@@ -3932,7 +3932,7 @@ function esc_js( $text ) {
 	 * Text passed to esc_js() is stripped of invalid or special characters,
 	 * and properly slashed for output.
 	 *
-	 * @since 2.0.6
+	 * @since WP-2.0.6
 	 *
 	 * @param string $safe_text The text after it has been escaped.
  	 * @param string $text      The text prior to being escaped.
@@ -3943,7 +3943,7 @@ function esc_js( $text ) {
 /**
  * Escaping for HTML blocks.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $text
  * @return string
@@ -3957,7 +3957,7 @@ function esc_html( $text ) {
 	 * Text passed to esc_html() is stripped of invalid or special characters
 	 * before output.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $safe_text The text after it has been escaped.
  	 * @param string $text      The text prior to being escaped.
@@ -3968,7 +3968,7 @@ function esc_html( $text ) {
 /**
  * Escaping for HTML attributes.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $text
  * @return string
@@ -3982,7 +3982,7 @@ function esc_attr( $text ) {
 	 * Text passed to esc_attr() is stripped of invalid or special characters
 	 * before output.
 	 *
-	 * @since 2.0.6
+	 * @since WP-2.0.6
 	 *
 	 * @param string $safe_text The text after it has been escaped.
  	 * @param string $text      The text prior to being escaped.
@@ -3993,7 +3993,7 @@ function esc_attr( $text ) {
 /**
  * Escaping for textarea values.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $text
  * @return string
@@ -4003,7 +4003,7 @@ function esc_textarea( $text ) {
 	/**
 	 * Filters a string cleaned and escaped for output in a textarea element.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param string $safe_text The text after it has been escaped.
  	 * @param string $text      The text prior to being escaped.
@@ -4014,7 +4014,7 @@ function esc_textarea( $text ) {
 /**
  * Escape an HTML tag name.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $tag_name
  * @return string
@@ -4024,7 +4024,7 @@ function tag_escape( $tag_name ) {
 	/**
 	 * Filters a string cleaned and escaped for output as an HTML tag.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $safe_tag The tag name after it has been escaped.
  	 * @param string $tag_name The text before it was escaped.
@@ -4038,8 +4038,8 @@ function tag_escape( $tag_name ) {
  * Removes the http or https protocols and the domain. Keeps the path '/' at the
  * beginning, so it isn't a true relative link, but from the web root base.
  *
- * @since 2.1.0
- * @since 4.1.0 Support was added for relative URLs.
+ * @since WP-2.1.0
+ * @since WP-4.1.0 Support was added for relative URLs.
  *
  * @param string $link Full URL path.
  * @return string Absolute path.
@@ -4054,7 +4054,7 @@ function wp_make_link_relative( $link ) {
  * This is basically a switch statement which will pass $value through a number
  * of functions depending on the $option.
  *
- * @since 2.0.5
+ * @since WP-2.0.5
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -4304,8 +4304,8 @@ function sanitize_option( $option, $value ) {
 	/**
 	 * Filters an option value following sanitization.
 	 *
-	 * @since 2.3.0
-	 * @since 4.3.0 Added the `$original_value` parameter.
+	 * @since WP-2.3.0
+	 * @since WP-4.3.0 Added the `$original_value` parameter.
 	 *
 	 * @param string $value          The sanitized option value.
 	 * @param string $option         The option name.
@@ -4319,7 +4319,7 @@ function sanitize_option( $option, $value ) {
  *
  * This is similar to `array_walk_recursive()` but acts upon objects too.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param mixed    $value    The array, object, or scalar.
  * @param callable $callback The function to map onto $value.
@@ -4348,7 +4348,7 @@ function map_deep( $value, $callback ) {
  * Uses {@link https://secure.php.net/parse_str parse_str()} and stripslashes if
  * {@link https://secure.php.net/magic_quotes magic_quotes_gpc} is on.
  *
- * @since 2.2.1
+ * @since WP-2.2.1
  *
  * @param string $string The string to be parsed.
  * @param array  $array  Variables will be stored in this array.
@@ -4360,7 +4360,7 @@ function wp_parse_str( $string, &$array ) {
 	/**
 	 * Filters the array of variables derived from a parsed string.
 	 *
-	 * @since 2.3.0
+	 * @since WP-2.3.0
 	 *
 	 * @param array $array The array populated with variables.
 	 */
@@ -4372,7 +4372,7 @@ function wp_parse_str( $string, &$array ) {
  *
  * KSES already converts lone greater than signs.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @param string $text Text to be converted.
  * @return string Converted text.
@@ -4384,7 +4384,7 @@ function wp_pre_kses_less_than( $text ) {
 /**
  * Callback function used by preg_replace.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @param array $matches Populated by matches to preg_replace.
  * @return string The text returned after esc_html if needed.
@@ -4398,7 +4398,7 @@ function wp_pre_kses_less_than_callback( $matches ) {
 /**
  * WordPress implementation of PHP sprintf() with filters.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  * @link https://secure.php.net/sprintf
  *
  * @param string $pattern   The string which formatted args are inserted.
@@ -4447,7 +4447,7 @@ function wp_sprintf( $pattern ) {
 			 *
 			 * If the fragment is unchanged, then sprintf() will be run on the fragment.
 			 *
-			 * @since 2.5.0
+			 * @since WP-2.5.0
 			 *
 			 * @param string $fragment A fragment from the pattern.
 			 * @param string $arg      The argument.
@@ -4473,7 +4473,7 @@ function wp_sprintf( $pattern ) {
  * content. The list items will have ', ', ', and', and ' and ' added depending
  * on the amount of list items in the $args parameter.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $pattern Content containing '%l' at the beginning.
  * @param array  $args    List items to prepend to the content and replace '%l'.
@@ -4495,7 +4495,7 @@ function wp_sprintf_l( $pattern, $args ) {
 	 *
 	 * Please note: Ampersands and entities should be avoided here.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 *
 	 * @param array $delimiters An array of translated delimiters.
 	 */
@@ -4532,7 +4532,7 @@ function wp_sprintf_l( $pattern, $args ) {
  * be counted as one character. For example &amp; will be counted as 4, &lt; as
  * 3, etc.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $str   String to get the excerpt from.
  * @param int    $count Maximum number of characters to take.
@@ -4557,7 +4557,7 @@ function wp_html_excerpt( $str, $count, $more = null ) {
  * By default it supports the 'src' and 'href' attributes. However this can be
  * changed via the 3rd param.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $_links_add_base
  *
@@ -4576,7 +4576,7 @@ function links_add_base_url( $content, $base, $attrs = array('src', 'href') ) {
 /**
  * Callback to add a base url to relative links in passed content.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @access private
  *
  * @global string $_links_add_base
@@ -4603,7 +4603,7 @@ function _links_add_base( $m ) {
  *
  * *NOTE:* Any current target attributed will be stripped and replaced.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $_links_add_target
  *
@@ -4622,7 +4622,7 @@ function links_add_target( $content, $target = '_blank', $tags = array('a') ) {
 /**
  * Callback to add a target attribute to all links in passed content.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @access private
  *
  * @global string $_links_add_target
@@ -4640,7 +4640,7 @@ function _links_add_target( $m ) {
 /**
  * Normalize EOL characters and strip duplicate whitespace.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $str The string to normalize.
  * @return string The normalized string.
@@ -4659,7 +4659,7 @@ function normalize_whitespace( $str ) {
  * the `<script>` and `<style>` tags. E.g. `strip_tags( '<script>something</script>' )`
  * will return 'something'. wp_strip_all_tags will return ''
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @param string $string        String containing HTML tags
  * @param bool   $remove_breaks Optional. Whether to remove left over line breaks and white space chars
@@ -4684,7 +4684,7 @@ function wp_strip_all_tags($string, $remove_breaks = false) {
  * - Removes line breaks, tabs, and extra whitespace
  * - Strips octets
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see sanitize_textarea_field()
  * @see wp_check_invalid_utf8()
@@ -4699,7 +4699,7 @@ function sanitize_text_field( $str ) {
 	/**
 	 * Filters a sanitized text field string.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $filtered The sanitized string.
 	 * @param string $str      The string prior to being sanitized.
@@ -4716,7 +4716,7 @@ function sanitize_text_field( $str ) {
  *
  * @see sanitize_text_field()
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @param string $str String to sanitize.
  * @return string Sanitized string.
@@ -4727,7 +4727,7 @@ function sanitize_textarea_field( $str ) {
 	/**
 	 * Filters a sanitized textarea field string.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string $filtered The sanitized string.
 	 * @param string $str      The string prior to being sanitized.
@@ -4738,7 +4738,7 @@ function sanitize_textarea_field( $str ) {
 /**
  * Internal helper function to sanitize a string from user input or from the db
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  * @access private
  *
  * @param string $str String to sanitize.
@@ -4780,7 +4780,7 @@ function _sanitize_text_fields( $str, $keep_newlines = false ) {
 /**
  * i18n friendly version of basename()
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $path   A path.
  * @param string $suffix If the filename ends in suffix this will also be cut off.
@@ -4795,7 +4795,7 @@ function wp_basename( $path, $suffix = '' ) {
  *
  * Violating our coding standards for a good function name.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @staticvar string|false $dblq
  *
@@ -4821,7 +4821,7 @@ function capital_P_dangit( $text ) {
 /**
  * Sanitize a mime type
  *
- * @since 3.1.3
+ * @since WP-3.1.3
  *
  * @param string $mime_type Mime type
  * @return string Sanitized mime type
@@ -4831,7 +4831,7 @@ function sanitize_mime_type( $mime_type ) {
 	/**
 	 * Filters a mime type following sanitization.
 	 *
-	 * @since 3.1.3
+	 * @since WP-3.1.3
 	 *
 	 * @param string $sani_mime_type The sanitized mime type.
 	 * @param string $mime_type      The mime type prior to sanitization.
@@ -4842,7 +4842,7 @@ function sanitize_mime_type( $mime_type ) {
 /**
  * Sanitize space or carriage return separated URLs that are used to send trackbacks.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param string $to_ping Space or carriage return separated URLs
  * @return string URLs starting with the http or https protocol, separated by a carriage return.
@@ -4861,7 +4861,7 @@ function sanitize_trackback_urls( $to_ping ) {
 	 * The string returned here consists of a space or carriage return-delimited list
 	 * of trackback URLs.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param string $urls_to_ping Sanitized space or carriage return separated URLs.
 	 * @param string $to_ping      Space or carriage return separated URLs before sanitization.
@@ -4875,7 +4875,7 @@ function sanitize_trackback_urls( $to_ping ) {
  * This should be used when preparing data for core API that expects slashed data.
  * This should not be used to escape data going directly into an SQL query.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param string|array $value String or array of strings to slash.
  * @return string|array Slashed $value
@@ -4902,7 +4902,7 @@ function wp_slash( $value ) {
  * This should be used to remove slashes from data passed to core API that
  * expects data to be unslashed.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param string|array $value String or array of strings to unslash.
  * @return string|array Unslashed $value
@@ -4914,7 +4914,7 @@ function wp_unslash( $value ) {
 /**
  * Extract and return the first URL from passed content.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param string $content A string which might contain a URL.
  * @return string|false The found URL.
@@ -4938,7 +4938,7 @@ function get_url_in_content( $content ) {
  * This is designed to replace the PCRE \s sequence.  In ticket #22692, that
  * sequence was found to be unreliable due to random inclusion of the A0 byte.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @staticvar string $spaces
  *
@@ -4956,7 +4956,7 @@ function wp_spaces_regexp() {
 		 * may represent whitespace. For websites not encoded in UTF-8, the 0xC2 0xA0
 		 * sequence may not be in use.
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @param string $spaces Regexp pattern for matching common whitespace characters.
 		 */
@@ -4969,7 +4969,7 @@ function wp_spaces_regexp() {
 /**
  * Print the important emoji-related styles.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @staticvar bool $printed
  */
@@ -5002,7 +5002,7 @@ img.emoji {
 /**
  * Print the inline Emoji detection script if it is not already printed.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  * @staticvar bool $printed
  */
 function print_emoji_detection_script() {
@@ -5021,7 +5021,7 @@ function print_emoji_detection_script() {
  * Prints inline Emoji dection script
  *
  * @ignore
- * @since 4.6.0
+ * @since WP-4.6.0
  * @access private
  */
 function _print_emoji_detection_script() {
@@ -5029,7 +5029,7 @@ function _print_emoji_detection_script() {
 		/**
 		 * Filters the URL where emoji png images are hosted.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param string The emoji base URL for png images.
 		 */
@@ -5038,7 +5038,7 @@ function _print_emoji_detection_script() {
 		/**
 		 * Filters the extension of the emoji png files.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param string The emoji extension for png files. Default .png.
 		 */
@@ -5047,7 +5047,7 @@ function _print_emoji_detection_script() {
 		/**
 		 * Filters the URL where emoji SVG images are hosted.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param string The emoji base URL for svg images.
 		 */
@@ -5056,7 +5056,7 @@ function _print_emoji_detection_script() {
 		/**
 		 * Filters the extension of the emoji SVG files.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param string The emoji extension for svg files. Default .svg.
 		 */
@@ -5109,7 +5109,7 @@ function _print_emoji_detection_script() {
  *
  * This allows us to store emoji in a DB using the utf8 character set.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @param string $content The content to encode.
  * @return string The encoded content.
@@ -5134,7 +5134,7 @@ function wp_encode_emoji( $content ) {
 /**
  * Convert emoji to a static img element.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @param string $text The content to encode.
  * @return string The encoded content.
@@ -5233,7 +5233,7 @@ function wp_staticize_emoji( $text ) {
 /**
  * Convert emoji in emails into static images.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @param array $mail The email data array.
  * @return array The email data array, with emoji in the message staticized.
@@ -5303,7 +5303,7 @@ function wp_staticize_emoji_for_email( $mail ) {
  * These arrays automatically built from the regex in twemoji.js - if they need to be updated,
  * you should update the regex there, then run the `grunt precommit:emoji` job.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  * @access private
  *
  * @param string $type Optional. Which array type to return. Accepts 'partials' or 'entities', default 'entities'.
@@ -5327,8 +5327,8 @@ function _wp_emoji_list( $type = 'entities' ) {
 /**
  * Shorten a URL, to be used as link text.
  *
- * @since 1.2.0
- * @since 4.4.0 Moved to wp-includes/formatting.php from wp-admin/includes/misc.php and added $length param.
+ * @since WP-1.2.0
+ * @since WP-4.4.0 Moved to wp-includes/formatting.php from wp-admin/includes/misc.php and added $length param.
  *
  * @param string $url    URL to shorten.
  * @param int    $length Optional. Maximum length of the shortened URL. Default 35 characters.
@@ -5350,7 +5350,7 @@ function url_shorten( $url, $length = 35 ) {
  * Returns either '', a 3 or 6 digit hex color (with #), or nothing.
  * For sanitizing values without a #, see sanitize_hex_color_no_hash().
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param string $color
  * @return string|void
@@ -5375,7 +5375,7 @@ function sanitize_hex_color( $color ) {
  *
  * Returns either '', a 3 or 6 digit hex color (without a #), or null.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param string $color
  * @return string|null
@@ -5396,7 +5396,7 @@ function sanitize_hex_color_no_hash( $color ) {
  *
  * This method should only be necessary if using sanitize_hex_color_no_hash().
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param string $color
  * @return string

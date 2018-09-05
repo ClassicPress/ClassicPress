@@ -4,19 +4,19 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used to implement an internal admin pointers API.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 final class WP_Internal_Pointers {
 	/**
 	 * Initializes the new feature pointers.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * All pointers can be disabled using the following:
 	 *     remove_action( 'admin_enqueue_scripts', array( 'WP_Internal_Pointers', 'enqueue_scripts' ) );
@@ -101,7 +101,7 @@ final class WP_Internal_Pointers {
 	/**
 	 * Print the pointer JavaScript data.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @static
 	 *
@@ -158,7 +158,7 @@ final class WP_Internal_Pointers {
 	/**
 	 * Display a pointer for the new privacy tools.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public static function pointer_wp496_privacy() {
 		$content  = '<h3>' . __( 'Personal Data and Privacy' ) . '</h3>';
@@ -191,7 +191,7 @@ final class WP_Internal_Pointers {
 	/**
 	 * Prevents new users from seeing existing 'new feature' pointers.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @static
 	 *

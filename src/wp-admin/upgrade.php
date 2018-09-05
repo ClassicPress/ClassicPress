@@ -9,7 +9,7 @@
 /**
  * We are upgrading ClassicPress.
  *
- * @since 1.5.1
+ * @since WP-1.5.1
  * @var bool
  */
 define( 'WP_INSTALLING', true );

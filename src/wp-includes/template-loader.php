@@ -7,7 +7,7 @@ if ( defined('WP_USE_THEMES') && WP_USE_THEMES )
 	/**
 	 * Fires before determining which template to load.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 */
 	do_action( 'template_redirect' );
 
@@ -17,7 +17,7 @@ if ( defined('WP_USE_THEMES') && WP_USE_THEMES )
  * Provides a significant performance bump by exiting before the page
  * content loads for 'HEAD' requests. See #14348.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @param bool $exit Whether to exit without generating any content for 'HEAD' requests. Default true.
  */
@@ -29,7 +29,7 @@ if ( is_robots() ) :
 	/**
 	 * Fired when the template loader determines a robots.txt request.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	do_action( 'do_robots' );
 	return;
@@ -66,7 +66,7 @@ if ( defined('WP_USE_THEMES') && WP_USE_THEMES ) :
 	/**
 	 * Filters the path of the current template before including it.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $template The path of the template to include.
 	 */

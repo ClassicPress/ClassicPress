@@ -19,7 +19,7 @@ $title = __('Export');
 /**
  * Display JavaScript on the page.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  */
 function export_add_js() {
 ?>
@@ -105,7 +105,7 @@ if ( isset( $_GET['download'] ) ) {
 	/**
 	 * Filters the export args.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param array $args The arguments to send to the exporter.
 	 */
@@ -123,7 +123,7 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
  * @global wpdb      $wpdb      ClassicPress database abstraction object.
  * @global WP_Locale $wp_locale Date and Time Locale object.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $post_type The post type. Default 'post'.
  */
@@ -282,7 +282,7 @@ function export_date_options( $post_type = 'post' ) {
 /**
  * Fires at the end of the export filters form.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  */
 do_action( 'export_filters' );
 ?>

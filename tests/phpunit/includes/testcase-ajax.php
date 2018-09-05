@@ -4,7 +4,7 @@
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      3.4.0
+ * @since      WP-3.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      3.4.0
+ * @since      WP-3.4.0
  */
 abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 

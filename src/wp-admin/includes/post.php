@@ -11,7 +11,7 @@
  *
  * Manipulates $_POST directly.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param bool $update Are we updating a pre-existing post?
  * @param array $post_data Array of post data. Defaults to the contents of $_POST.
@@ -177,7 +177,7 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 /**
  * Update an existing post with values provided in $_POST.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -409,7 +409,7 @@ function edit_post( $post_data = null ) {
  * Updates all bulk edited posts/pages, adding (but not removing) tags and
  * categories. Skips pages when they would be their own parent or child.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -585,7 +585,7 @@ function bulk_edit_posts( $post_data = null ) {
 /**
  * Default post information to use when populating the "Write Post" form.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param string $post_type    Optional. A post type string. Default 'post'.
  * @param bool   $create_in_db Optional. Whether to insert the post into database. Default false.
@@ -634,7 +634,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	/**
 	 * Filters the default post content initially used in the "Write Post" form.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string  $post_content Default post content.
 	 * @param WP_Post $post         Post object.
@@ -644,7 +644,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	/**
 	 * Filters the default post title initially used in the "Write Post" form.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string  $post_title Default post title.
 	 * @param WP_Post $post       Post object.
@@ -654,7 +654,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	/**
 	 * Filters the default post excerpt initially used in the "Write Post" form.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string  $post_excerpt Default post excerpt.
 	 * @param WP_Post $post         Post object.
@@ -667,7 +667,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 /**
  * Determine if a post exists based on title, content, and date
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -710,7 +710,7 @@ function post_exists($title, $content = '', $date = '') {
 /**
  * Creates a new post from the "Write Post" form using $_POST information.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @global WP_User $current_user
  *
@@ -781,7 +781,7 @@ function wp_write_post() {
 /**
  * Calls wp_write_post() and handles the errors.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @return int|null
  */
@@ -800,7 +800,7 @@ function write_post() {
 /**
  * Add post meta data defined in $_POST superglobal for post with given ID.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param int $post_ID
  * @return int|bool
@@ -839,7 +839,7 @@ function add_meta( $post_ID ) {
 /**
  * Delete post meta data by meta ID.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param int $mid
  * @return bool
@@ -851,7 +851,7 @@ function delete_meta( $mid ) {
 /**
  * Get a list of previously defined keys.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -872,7 +872,7 @@ function get_meta_keys() {
 /**
  * Get post meta data by meta ID.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param int $mid
  * @return object|bool
@@ -884,7 +884,7 @@ function get_post_meta_by_id( $mid ) {
 /**
  * Get meta data for the given post ID.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -902,7 +902,7 @@ function has_meta( $postid ) {
 /**
  * Update post meta data by meta ID.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @param int    $meta_id
  * @param string $meta_key Expect Slashed
@@ -923,7 +923,7 @@ function update_meta( $meta_id, $meta_key, $meta_value ) {
 /**
  * Replace hrefs of attachment anchors with up-to-date permalinks.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  * @access private
  *
  * @param int|object $post Post ID or post object.
@@ -976,7 +976,7 @@ function _fix_attachment_links( $post ) {
 /**
  * Get all the possible statuses for a post_type
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $type The post_type you want the statuses for
  * @return array As array of all the statuses for the supplied post type
@@ -990,7 +990,7 @@ function get_available_post_statuses($type = 'post') {
 /**
  * Run the wp query to fetch the posts for listing on the edit posts page
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param array|bool $q Array of query variables to use to build the query or false to use $_GET superglobal.
  * @return array
@@ -1039,7 +1039,7 @@ function wp_edit_posts_query( $q = false ) {
 	 * Some examples of filter hooks generated here include: 'edit_attachment_per_page',
 	 * 'edit_post_per_page', 'edit_page_per_page', etc.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param int $posts_per_page Number of posts to display per page for the given post
 	 *                            type. Default 20.
@@ -1049,7 +1049,7 @@ function wp_edit_posts_query( $q = false ) {
 	/**
 	 * Filters the number of posts displayed per page when specifically listing "posts".
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param int    $posts_per_page Number of posts to be displayed. Default 20.
 	 * @param string $post_type      The post type.
@@ -1078,7 +1078,7 @@ function wp_edit_posts_query( $q = false ) {
 /**
  * Get all available post MIME types for a given post type.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -1095,7 +1095,7 @@ function get_available_post_mime_types($type = 'attachment') {
 /**
  * Get the query variables for the current attachments request.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @param array|false $q Optional. Array of query variables to use to build the query or false
  *                       to use $_GET superglobal. Default false.
@@ -1125,7 +1125,7 @@ function wp_edit_attachments_query_vars( $q = false ) {
 	/**
 	 * Filters the number of items to list per page when listing media items.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param int $media_per_page Number of media to list. Default 20.
 	 */
@@ -1163,7 +1163,7 @@ function wp_edit_attachments_query_vars( $q = false ) {
  * Executes a query for attachments. An array of WP_Query arguments
  * can be passed in, which will override the arguments set by this function.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param array|false $q Array of query variables to use to build the query or false to use $_GET superglobal.
  * @return array
@@ -1180,7 +1180,7 @@ function wp_edit_attachments_query( $q = false ) {
 /**
  * Returns the list of classes to be used by a meta box.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param string $id
  * @param string $page
@@ -1205,7 +1205,7 @@ function postbox_classes( $id, $page ) {
 	 * The dynamic portions of the hook name, `$page` and `$id`, refer to
 	 * the screen and screen ID, respectively.
 	 *
-	 * @since 3.2.0
+	 * @since WP-3.2.0
 	 *
 	 * @param array $classes An array of postbox classes.
 	 */
@@ -1216,7 +1216,7 @@ function postbox_classes( $id, $page ) {
 /**
  * Get a sample permalink based off of the post name.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param int    $id    Post ID or post object.
  * @param string $title Optional. Title to override the post's current title when generating the post name. Default null.
@@ -1280,7 +1280,7 @@ function get_sample_permalink($id, $title = null, $name = null) {
 	/**
 	 * Filters the sample permalink.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array   $permalink Array containing the sample permalink with placeholder for the post name, and the post name.
 	 * @param int     $post_id   Post ID.
@@ -1294,7 +1294,7 @@ function get_sample_permalink($id, $title = null, $name = null) {
 /**
  * Returns the HTML of the sample permalink slug editor.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param int    $id        Post ID or post object.
  * @param string $new_title Optional. New title. Default null.
@@ -1360,8 +1360,8 @@ function get_sample_permalink_html( $id, $new_title = null, $new_slug = null ) {
 	/**
 	 * Filters the sample permalink HTML markup.
 	 *
-	 * @since 2.9.0
-	 * @since 4.4.0 Added `$post` parameter.
+	 * @since WP-2.9.0
+	 * @since WP-4.4.0 Added `$post` parameter.
 	 *
 	 * @param string  $return    Sample permalink HTML markup.
 	 * @param int     $post_id   Post ID.
@@ -1377,7 +1377,7 @@ function get_sample_permalink_html( $id, $new_title = null, $new_slug = null ) {
 /**
  * Output HTML for the post thumbnail meta-box.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @param int $thumbnail_id ID of the attachment used for thumbnail
  * @param mixed $post The post ID or object associated with the thumbnail, defaults to global $post.
@@ -1408,7 +1408,7 @@ function _wp_post_thumbnail_html( $thumbnail_id = null, $post = null ) {
 		 * managed via the Settings > Media screen. See the `$size` parameter description
 		 * for more information on default values.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param string|array $size         Post thumbnail image size to display in the meta box. Accepts any valid
 		 *                                   image size, or an array of width and height values in pixels (in that order).
@@ -1437,9 +1437,9 @@ function _wp_post_thumbnail_html( $thumbnail_id = null, $post = null ) {
 	/**
 	 * Filters the admin post thumbnail HTML markup to return.
 	 *
-	 * @since 2.9.0
-	 * @since 3.5.0 Added the `$post_id` parameter.
-	 * @since 4.6.0 Added the `$thumbnail_id` parameter.
+	 * @since WP-2.9.0
+	 * @since WP-3.5.0 Added the `$post_id` parameter.
+	 * @since WP-4.6.0 Added the `$thumbnail_id` parameter.
 	 *
 	 * @param string $content      Admin post thumbnail HTML markup.
 	 * @param int    $post_id      Post ID.
@@ -1451,7 +1451,7 @@ function _wp_post_thumbnail_html( $thumbnail_id = null, $post = null ) {
 /**
  * Check to see if the post is currently being edited by another user.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param int $post_id ID of the post to check for editing.
  * @return int|false ID of the user with lock. False if the post does not exist, post is not locked,
@@ -1487,7 +1487,7 @@ function wp_check_post_lock( $post_id ) {
 /**
  * Mark the post as currently being edited by the current user
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @param int $post_id ID of the post being edited.
  * @return array|false Array of the lock time and user ID. False if the post does not exist, or
@@ -1513,7 +1513,7 @@ function wp_set_post_lock( $post_id ) {
 /**
  * Outputs the HTML for the notice to say that someone else is editing or has taken over editing of this post.
  *
- * @since 2.8.5
+ * @since WP-2.8.5
  * @return none
  */
 function _admin_notice_post_locked() {
@@ -1531,7 +1531,7 @@ function _admin_notice_post_locked() {
 		 *
 		 * Returning a falsey value to the filter will short-circuit displaying the dialog.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param bool         $display Whether to display the dialog. Default true.
 		 * @param WP_Post      $post    Post object.
@@ -1585,7 +1585,7 @@ function _admin_notice_post_locked() {
 		 * Returning a falsey value to the filter will disable the ability
 		 * to override the post lock.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param bool    $override Whether to allow overriding post locks. Default true.
 		 * @param WP_Post $post     Post object.
@@ -1612,7 +1612,7 @@ function _admin_notice_post_locked() {
 		/**
 		 * Fires inside the post locked dialog before the buttons are displayed.
 		 *
-		 * @since 3.6.0
+		 * @since WP-3.6.0
 		 *
 		 * @param WP_Post $post Post object.
 		 */
@@ -1649,7 +1649,7 @@ function _admin_notice_post_locked() {
 			/**
 			 * Fires inside the dialog displayed when a user has lost the post lock.
 			 *
-			 * @since 3.6.0
+			 * @since WP-3.6.0
 			 *
 			 * @param WP_Post $post Post object.
 			 */
@@ -1669,7 +1669,7 @@ function _admin_notice_post_locked() {
 /**
  * Creates autosave data for the specified post from $_POST data.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param mixed $post_data Associative array containing the post data or int post ID.
  * @return mixed The autosave revision ID. WP_Error or 0 on error.
@@ -1712,7 +1712,7 @@ function wp_create_post_autosave( $post_data ) {
 		/**
 		 * Fires before an autosave is stored.
 		 *
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 *
 		 * @param array $new_autosave Post array - the autosave that is about to be saved.
 		 */
@@ -1731,7 +1731,7 @@ function wp_create_post_autosave( $post_data ) {
 /**
  * Saves a draft or manually autosaves for the purpose of showing a post preview.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @return string URL to redirect to show the preview.
  */
@@ -1787,7 +1787,7 @@ function post_preview() {
  *
  * Intended for use with heartbeat and autosave.js
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @param array $post_data Associative array of the submitted post data.
  * @return mixed The value 0 or WP_Error on failure. The saved post ID on success.
@@ -1866,7 +1866,7 @@ function redirect_post($post_id = '') {
 	/**
 	 * Filters the post redirect destination URL.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $location The destination URL.
 	 * @param int    $post_id  The post ID.

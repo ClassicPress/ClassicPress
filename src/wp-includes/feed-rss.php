@@ -25,7 +25,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
 	/**
 	 * Fires at the end of the RSS Feed Header.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 */
 	do_action( 'rss_head' );
 	?>
@@ -39,7 +39,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
 		/**
 		 * Fires at the end of each RSS feed item.
 		 *
-		 * @since 2.0.0
+		 * @since WP-2.0.0
 		 */
 		do_action( 'rss_item' );
 		?>

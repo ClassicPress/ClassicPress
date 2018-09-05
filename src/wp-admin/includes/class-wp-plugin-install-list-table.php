@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement displaying plugins to install in a list table.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -37,7 +37,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 * Uses the transient data from the updates API to determine the known
 	 * installed plugins.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @access protected
 	 *
 	 * @return array
@@ -70,7 +70,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 * known installed plugins. This might be better elsewhere, perhaps even
 	 * within get_plugins().
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @return array
 	 */
@@ -121,7 +121,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		/**
 		 * Filters the tabs shown on the Plugin Install screen.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param array $tabs The tabs shown on the Plugin Install screen. Defaults include 'featured', 'popular',
 		 *                    'recommended', 'favorites', and 'upload'.
@@ -131,7 +131,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		/**
 		 * Filters tabs not associated with a menu item on the Plugin Install screen.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param array $nonmenu_tabs The tabs that don't have a Menu item on the Plugin Install screen.
 		 */
@@ -213,7 +213,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		 * The dynamic portion of the hook name, `$tab`, refers to the plugin install tabs.
 		 * Default tabs include 'featured', 'popular', 'recommended', 'favorites', and 'upload'.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param array|bool $args Plugin Install API arguments.
 		 */
@@ -373,7 +373,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					/**
 					 * Fires before the Plugin Install table header pagination is displayed.
 					 *
-					 * @since 2.7.0
+					 * @since WP-2.7.0
 					 */
 					do_action( 'install_plugins_table_header' ); ?>
 				</div>
@@ -557,7 +557,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			/**
 			 * Filters the install action links for a plugin.
 			 *
-			 * @since 2.7.0
+			 * @since WP-2.7.0
 			 *
 			 * @param array $action_links An array of plugin action hyperlinks. Defaults are links to Details and Install Now.
 			 * @param array $plugin       The plugin currently being listed.

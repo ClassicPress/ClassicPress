@@ -10,7 +10,7 @@
  * @package WordPress
  * @subpackage Multisite
  * @see default-filters.php
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 add_action( 'init', 'ms_subdomain_constants' );

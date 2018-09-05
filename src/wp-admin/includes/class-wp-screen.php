@@ -4,19 +4,19 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used to implement an admin screen API.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 final class WP_Screen {
 	/**
 	 * Any action associated with the screen. 'add' for *-add.php and *-new.php screens. Empty otherwise.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $action;
@@ -25,7 +25,7 @@ final class WP_Screen {
 	 * The base type of the screen. This is typically the same as $id but with any post types and taxonomies stripped.
 	 * For example, for an $id of 'edit-post' the base is 'edit'.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $base;
@@ -33,7 +33,7 @@ final class WP_Screen {
 	/**
 	 * The number of columns to display. Access with get_columns().
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 * @var int
 	 */
 	private $columns = 0;
@@ -41,7 +41,7 @@ final class WP_Screen {
 	/**
 	 * The unique ID of the screen.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $id;
@@ -49,7 +49,7 @@ final class WP_Screen {
 	/**
 	 * Which admin the screen is in. network | user | site | false
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 * @var string
 	 */
 	protected $in_admin;
@@ -59,7 +59,7 @@ final class WP_Screen {
 	 *
 	 * Deprecated. Use in_admin() instead.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @deprecated 3.5.0
 	 * @var bool
 	 */
@@ -70,7 +70,7 @@ final class WP_Screen {
 	 *
 	 * Deprecated. Use in_admin() instead.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @deprecated 3.5.0
 	 * @var bool
 	 */
@@ -81,7 +81,7 @@ final class WP_Screen {
 	 * This is derived from $parent_file by removing the query string and any .php extension.
 	 * $parent_file values of 'edit.php?post_type=page' and 'edit.php?post_type=post' have a $parent_base of 'edit'.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $parent_base;
@@ -90,7 +90,7 @@ final class WP_Screen {
 	 * The parent_file for the screen per the admin menu system.
 	 * Some $parent_file values are 'edit.php?post_type=page', 'edit.php', and 'options-general.php'.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $parent_file;
@@ -100,7 +100,7 @@ final class WP_Screen {
 	 * The 'edit.php?post_type=page' screen has a post type of 'page'.
 	 * The 'edit-tags.php?taxonomy=$taxonomy&post_type=page' screen has a post type of 'page'.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $post_type;
@@ -108,7 +108,7 @@ final class WP_Screen {
 	/**
 	 * The taxonomy associated with the screen, if any.
 	 * The 'edit-tags.php?taxonomy=category' screen has a taxonomy of 'category'.
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	public $taxonomy;
@@ -116,7 +116,7 @@ final class WP_Screen {
 	/**
 	 * The help tab data associated with the screen, if any.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var array
 	 */
 	private $_help_tabs = array();
@@ -124,7 +124,7 @@ final class WP_Screen {
 	/**
 	 * The help sidebar data associated with screen, if any.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	private $_help_sidebar = '';
@@ -132,7 +132,7 @@ final class WP_Screen {
  	/**
 	 * The accessible hidden headings and text associated with the screen, if any.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @var array
 	 */
 	private $_screen_reader_content = array();
@@ -149,7 +149,7 @@ final class WP_Screen {
 	/**
 	 * The screen options associated with screen, if any.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var array
 	 */
 	private $_options = array();
@@ -157,7 +157,7 @@ final class WP_Screen {
 	/**
 	 * The screen object registry.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @static
 	 *
@@ -168,7 +168,7 @@ final class WP_Screen {
 	/**
 	 * Stores the result of the public show_screen_options function.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var bool
 	 */
 	private $_show_screen_options;
@@ -176,7 +176,7 @@ final class WP_Screen {
 	/**
 	 * Stores the 'screen_settings' section of screen options.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 * @var string
 	 */
 	private $_screen_settings;
@@ -184,7 +184,7 @@ final class WP_Screen {
 	/**
 	 * Fetches a screen object.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @static
 	 *
@@ -354,7 +354,7 @@ final class WP_Screen {
 	 * Makes the screen object the current screen.
 	 *
 	 * @see set_current_screen()
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @global WP_Screen $current_screen
 	 * @global string    $taxnow
@@ -369,7 +369,7 @@ final class WP_Screen {
 		/**
 		 * Fires after the current screen has been set.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param WP_Screen $current_screen Current WP_Screen object.
 		 */
@@ -379,14 +379,14 @@ final class WP_Screen {
 	/**
 	 * Constructor
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 */
 	private function __construct() {}
 
 	/**
 	 * Indicates whether the screen is in a particular admin
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param string $admin The admin to check against (network | user | site).
 	 *                      If empty any of the three admins will result in true.
@@ -402,7 +402,7 @@ final class WP_Screen {
 	/**
 	 * Sets the old string-based contextual help for the screen for backward compatibility.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @static
 	 *
@@ -417,7 +417,7 @@ final class WP_Screen {
 	 * Set the parent information for the screen.
 	 * This is called in admin-header.php after the menu parent for the screen has been determined.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $parent_file The parent file of the screen. Typically the $parent_file global.
 	 */
@@ -431,7 +431,7 @@ final class WP_Screen {
 	 * Adds an option for the screen.
 	 * Call this in template files after admin.php is loaded and before admin-header.php is loaded to add screen options.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $option Option ID
 	 * @param mixed $args Option-dependent arguments.
@@ -443,7 +443,7 @@ final class WP_Screen {
 	/**
 	 * Remove an option from the screen.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 *
 	 * @param string $option Option ID.
 	 */
@@ -454,7 +454,7 @@ final class WP_Screen {
 	/**
 	 * Remove all options from the screen.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 */
 	public function remove_options() {
 		$this->_options = array();
@@ -463,7 +463,7 @@ final class WP_Screen {
 	/**
 	 * Get the options registered for the screen.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 *
 	 * @return array Options with arguments.
 	 */
@@ -474,7 +474,7 @@ final class WP_Screen {
 	/**
 	 * Gets the arguments for an option for the screen.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $option Option name.
 	 * @param string $key    Optional. Specific array key for when the option is an array.
@@ -495,8 +495,8 @@ final class WP_Screen {
 	/**
 	 * Gets the help tabs registered for the screen.
 	 *
-	 * @since 3.4.0
-	 * @since 4.4.0 Help tabs are ordered by their priority.
+	 * @since WP-3.4.0
+	 * @since WP-4.4.0 Help tabs are ordered by their priority.
 	 *
 	 * @return array Help tabs with arguments.
 	 */
@@ -527,7 +527,7 @@ final class WP_Screen {
 	/**
 	 * Gets the arguments for a help tab.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param string $id Help Tab ID.
 	 * @return array Help tab arguments.
@@ -542,8 +542,8 @@ final class WP_Screen {
 	 * Add a help tab to the contextual help for the screen.
 	 * Call this on the load-$pagenow hook for the relevant screen.
 	 *
-	 * @since 3.3.0
-	 * @since 4.4.0 The `$priority` argument was added.
+	 * @since WP-3.3.0
+	 * @since WP-4.4.0 The `$priority` argument was added.
 	 *
 	 * @param array $args {
 	 *     Array of arguments used to display the help tab.
@@ -578,7 +578,7 @@ final class WP_Screen {
 	/**
 	 * Removes a help tab from the contextual help for the screen.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $id The help tab ID.
 	 */
@@ -589,7 +589,7 @@ final class WP_Screen {
 	/**
 	 * Removes all help tabs from the contextual help for the screen.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 */
 	public function remove_help_tabs() {
 		$this->_help_tabs = array();
@@ -598,7 +598,7 @@ final class WP_Screen {
 	/**
 	 * Gets the content from a contextual help sidebar.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @return string Contents of the help sidebar.
 	 */
@@ -610,7 +610,7 @@ final class WP_Screen {
 	 * Add a sidebar to the contextual help for the screen.
 	 * Call this in template files after admin.php is loaded and before admin-header.php is loaded to add a sidebar to the contextual help.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param string $content Sidebar content in plain text or HTML.
 	 */
@@ -627,7 +627,7 @@ final class WP_Screen {
 	 * provisioned in layout_columns is returned. If the screen does not support
 	 * selecting the number of layout columns, 0 is returned.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @return int Number of columns to display.
 	 */
@@ -638,7 +638,7 @@ final class WP_Screen {
  	/**
 	 * Get the accessible hidden headings and text used in the screen.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @see set_screen_reader_content() For more information on the array format.
 	 *
@@ -651,7 +651,7 @@ final class WP_Screen {
 	/**
 	 * Get a screen reader text string.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $key Screen reader text array named key.
 	 * @return string Screen reader text string.
@@ -666,7 +666,7 @@ final class WP_Screen {
 	/**
 	 * Add accessible hidden headings and text for the screen.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array $content {
 	 *     An associative array of screen reader text strings.
@@ -693,7 +693,7 @@ final class WP_Screen {
 	/**
 	 * Remove all the accessible hidden headings and text for the screen.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 */
 	public function remove_screen_reader_content() {
 		$this->_screen_reader_content = array();
@@ -704,7 +704,7 @@ final class WP_Screen {
 	 *
 	 * This will trigger the deprecated filters for backward compatibility.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @global string $screen_layout_columns
 	 */
@@ -713,7 +713,7 @@ final class WP_Screen {
 		/**
 		 * Filters the legacy contextual help list.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
 		 *                   get_current_screen()->remove_help_tab() instead.
 		 *
@@ -727,7 +727,7 @@ final class WP_Screen {
 		/**
 		 * Filters the legacy contextual help text.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
 		 *                   get_current_screen()->remove_help_tab() instead.
 		 *
@@ -744,7 +744,7 @@ final class WP_Screen {
 			/**
 			 * Filters the default legacy contextual help text.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
 			 *                   get_current_screen()->remove_help_tab() instead.
 			 *
@@ -836,7 +836,7 @@ final class WP_Screen {
 		 * This hook provides back-compat for plugins using the back-compat
 		 * Filters instead of add_screen_option().
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param array     $empty_columns Empty array.
 		 * @param string    $screen_id     Screen ID.
@@ -917,7 +917,7 @@ final class WP_Screen {
 		 * This filter is currently only used on the Widgets screen to enable
 		 * accessibility mode.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string    $screen_settings Screen settings.
 		 * @param WP_Screen $this            WP_Screen object.
@@ -930,7 +930,7 @@ final class WP_Screen {
 		/**
 		 * Filters whether to show the Screen Options tab.
 		 *
-		 * @since 3.2.0
+		 * @since WP-3.2.0
 		 *
 		 * @param bool      $show_screen Whether to show Screen Options tab.
 		 *                               Default true.
@@ -943,7 +943,7 @@ final class WP_Screen {
 	/**
 	 * Render the screen options tab.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param array $options {
 	 *     @type bool $wrap  Whether the screen-options-wrap div will be included. Defaults to true.
@@ -980,7 +980,7 @@ final class WP_Screen {
 		/**
 		 * Filters whether to show the Screen Options submit button.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param bool      $show_button Whether to show Screen Options submit button.
 		 *                               Default false.
@@ -998,7 +998,7 @@ final class WP_Screen {
 	/**
 	 * Render the meta boxes preferences.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @global array $wp_meta_boxes
 	 */
@@ -1040,7 +1040,7 @@ final class WP_Screen {
 	/**
 	 * Render the list table columns preferences.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 */
 	public function render_list_table_columns_preferences() {
 
@@ -1088,7 +1088,7 @@ final class WP_Screen {
 	/**
 	 * Render the option for number of columns on the page
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 */
 	public function render_screen_layout() {
 		if ( ! $this->get_option( 'layout_columns' ) ) {
@@ -1117,7 +1117,7 @@ final class WP_Screen {
 	/**
 	 * Render the items per page option
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 */
 	public function render_per_page_options() {
 		if ( null === $this->get_option( 'per_page' ) ) {
@@ -1181,7 +1181,7 @@ final class WP_Screen {
 	/**
 	 * Render the list table view mode preferences.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @global string $mode List table view mode.
 	 */
@@ -1198,7 +1198,7 @@ final class WP_Screen {
 		/**
 		 * Filters the post types that have different view mode options.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param array $view_mode_post_types Array of post types that can change view modes.
 		 *                                    Default non-hierarchical post types with show_ui on.
@@ -1231,7 +1231,7 @@ final class WP_Screen {
 	/**
 	 * Render screen reader text.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $key The screen reader text array named key.
 	 * @param string $tag Optional. The HTML tag to wrap the screen reader text. Default h2.

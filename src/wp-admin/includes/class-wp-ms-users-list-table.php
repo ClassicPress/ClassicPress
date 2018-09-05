@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement displaying users in a list table for the network admin.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -174,7 +174,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		/**
 		 * Filters the columns displayed in the Network Admin Users list table.
 		 *
-		 * @since MU (3.0.0)
+		 * @since WP-MU (3.0.0)
 		 *
 		 * @param array $users_columns An array of user columns. Default 'cb', 'username',
 		 *                             'name', 'email', 'registered', 'blogs'.
@@ -198,7 +198,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the checkbox column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -215,7 +215,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the ID column output.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -226,7 +226,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the username column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -248,7 +248,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the name column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -267,7 +267,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the email column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -278,7 +278,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the registered date column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @global string $mode List table view mode.
 	 *
@@ -295,7 +295,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user
 	 * @param string  $classes
@@ -312,7 +312,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the sites column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user The current WP_User object.
 	 */
@@ -354,7 +354,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 			 * Filters the action links displayed next the sites a user belongs to
 			 * in the Network Admin Users list table.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 *
 			 * @param array $actions     An array of action links to be displayed.
 			 *                           Default 'Edit', 'View'.
@@ -376,7 +376,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Handles the default column output.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_User $user       The current WP_User object.
 	 * @param string $column_name The current column name.
@@ -409,7 +409,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the default primary column.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return string Name of the default primary column, in this case, 'username'.
 	 */
@@ -420,7 +420,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 	/**
 	 * Generates and displays row action links.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param object $user        User being acted upon.
 	 * @param string $column_name Current column name.
@@ -445,7 +445,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		/**
 		 * Filters the action links displayed under each user in the Network Admin Users list table.
 		 *
-		 * @since 3.2.0
+		 * @since WP-3.2.0
 		 *
 		 * @param array   $actions An array of action links to be displayed.
 		 *                         Default 'Edit', 'Delete'.

@@ -12,7 +12,7 @@
  * Despite advances over get_themes(), this function is quite expensive, and grows
  * linearly with additional themes. Stick to wp_get_theme() if possible.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @global array $wp_theme_directories
  * @staticvar array $_themes
@@ -85,7 +85,7 @@ function wp_get_themes( $args = array() ) {
 /**
  * Gets a WP_Theme object for a theme.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @global array $wp_theme_directories
  *
@@ -114,7 +114,7 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 /**
  * Clears the cache held by get_theme_roots() and WP_Theme.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  * @param bool $clear_update_cache Whether to clear the Theme updates cache
  */
 function wp_clean_themes_cache( $clear_update_cache = true ) {
@@ -128,7 +128,7 @@ function wp_clean_themes_cache( $clear_update_cache = true ) {
 /**
  * Whether a child theme is in use.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return bool true if a child theme is in use, false otherwise.
  **/
@@ -145,7 +145,7 @@ function is_child_theme() {
  * For all intents and purposes, the template name and the stylesheet name are
  * going to be the same for most cases.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string Stylesheet name.
  */
@@ -153,7 +153,7 @@ function get_stylesheet() {
 	/**
 	 * Filters the name of current stylesheet.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $stylesheet Name of the current stylesheet.
 	 */
@@ -163,7 +163,7 @@ function get_stylesheet() {
 /**
  * Retrieve stylesheet directory path for current theme.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string Path to current theme directory.
  */
@@ -175,7 +175,7 @@ function get_stylesheet_directory() {
 	/**
 	 * Filters the stylesheet directory path for current theme.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $stylesheet_dir Absolute path to the current theme.
 	 * @param string $stylesheet     Directory name of the current theme.
@@ -187,7 +187,7 @@ function get_stylesheet_directory() {
 /**
  * Retrieve stylesheet directory URI.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string
  */
@@ -199,7 +199,7 @@ function get_stylesheet_directory_uri() {
 	/**
 	 * Filters the stylesheet directory URI.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $stylesheet_dir_uri Stylesheet directory URI.
 	 * @param string $stylesheet         Name of the activated theme's directory.
@@ -214,7 +214,7 @@ function get_stylesheet_directory_uri() {
  * The stylesheet file name is 'style.css' which is appended to the stylesheet directory URI path.
  * See get_stylesheet_directory_uri().
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string
  */
@@ -224,7 +224,7 @@ function get_stylesheet_uri() {
 	/**
 	 * Filters the URI of the current theme stylesheet.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $stylesheet_uri     Stylesheet URI for the current theme/child theme.
 	 * @param string $stylesheet_dir_uri Stylesheet directory URI for the current theme/child theme.
@@ -247,7 +247,7 @@ function get_stylesheet_uri() {
  * WordPress workflow, then change the former. If you just have the locale in a
  * separate folder, then change the latter.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @global WP_Locale $wp_locale
  *
@@ -267,7 +267,7 @@ function get_locale_stylesheet_uri() {
 	/**
 	 * Filters the localized stylesheet URI.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string $stylesheet_uri     Localized stylesheet URI.
 	 * @param string $stylesheet_dir_uri Stylesheet directory URI.
@@ -278,7 +278,7 @@ function get_locale_stylesheet_uri() {
 /**
  * Retrieve name of the current theme.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string Template name.
  */
@@ -286,7 +286,7 @@ function get_template() {
 	/**
 	 * Filters the name of the current theme.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $template Current theme's directory name.
 	 */
@@ -296,7 +296,7 @@ function get_template() {
 /**
  * Retrieve current theme directory.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string Template directory path.
  */
@@ -308,7 +308,7 @@ function get_template_directory() {
 	/**
 	 * Filters the current theme directory path.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $template_dir The URI of the current theme directory.
 	 * @param string $template     Directory name of the current theme.
@@ -320,7 +320,7 @@ function get_template_directory() {
 /**
  * Retrieve theme directory URI.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @return string Template directory URI.
  */
@@ -332,7 +332,7 @@ function get_template_directory_uri() {
 	/**
 	 * Filters the current theme directory URI.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $template_dir_uri The URI of the current theme directory.
 	 * @param string $template         Directory name of the current theme.
@@ -344,7 +344,7 @@ function get_template_directory_uri() {
 /**
  * Retrieve theme roots.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global array $wp_theme_directories
  *
@@ -368,7 +368,7 @@ function get_theme_roots() {
 /**
  * Register a directory that contains themes.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global array $wp_theme_directories
  *
@@ -402,7 +402,7 @@ function register_theme_directory( $directory ) {
 /**
  * Search all registered theme directories for complete and valid themes.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global array $wp_theme_directories
  * @staticvar array $found_themes
@@ -438,7 +438,7 @@ function search_theme_directories( $force = false ) {
 	/**
 	 * Filters whether to get the cache of the registered theme directories.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param bool   $cache_expiration Whether to get the cache of the theme directories. Default false.
 	 * @param string $cache_directory  Directory to be searched for the cache.
@@ -533,7 +533,7 @@ function search_theme_directories( $force = false ) {
  *
  * Does not have trailing slash.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global array $wp_theme_directories
  *
@@ -555,7 +555,7 @@ function get_theme_root( $stylesheet_or_template = false ) {
 	/**
 	 * Filters the absolute path to the themes directory.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $theme_root Absolute path to themes directory.
 	 */
@@ -567,7 +567,7 @@ function get_theme_root( $stylesheet_or_template = false ) {
  *
  * Does not have trailing slash.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global array $wp_theme_directories
  *
@@ -604,7 +604,7 @@ function get_theme_root_uri( $stylesheet_or_template = false, $theme_root = fals
 	/**
 	 * Filters the URI for themes directory.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $theme_root_uri         The URI for themes directory.
 	 * @param string $siteurl                WordPress web address which is set in General Options.
@@ -616,7 +616,7 @@ function get_theme_root_uri( $stylesheet_or_template = false, $theme_root = fals
 /**
  * Get the raw theme root relative to the content directory with no filters applied.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global array $wp_theme_directories
  *
@@ -654,7 +654,7 @@ function get_raw_theme_root( $stylesheet_or_template, $skip_cache = false ) {
 /**
  * Display localized stylesheet link element.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 function locale_stylesheet() {
 	$stylesheet = get_locale_stylesheet_uri();
@@ -669,7 +669,7 @@ function locale_stylesheet() {
  * Accepts one argument: $stylesheet of the theme. It also accepts an additional function signature
  * of two arguments: $template then $stylesheet. This is for backward compatibility.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global array                $wp_theme_directories
  * @global WP_Customize_Manager $wp_customize
@@ -743,8 +743,8 @@ function switch_theme( $stylesheet ) {
 	/**
 	 * Fires after the theme is switched.
 	 *
-	 * @since 1.5.0
-	 * @since 4.5.0 Introduced the `$old_theme` parameter.
+	 * @since WP-1.5.0
+	 * @since WP-4.5.0 Introduced the `$old_theme` parameter.
 	 *
 	 * @param string   $new_name  Name of the new theme.
 	 * @param WP_Theme $new_theme WP_Theme instance of the new theme.
@@ -763,7 +763,7 @@ function switch_theme( $stylesheet ) {
  * You can use the {@see 'validate_current_theme'} filter to return false to
  * disable this functionality.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  * @see WP_DEFAULT_THEME
  *
  * @return bool
@@ -772,7 +772,7 @@ function validate_current_theme() {
 	/**
 	 * Filters whether to validate the current theme.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param bool $validate Whether to validate the current theme. Default true.
 	 */
@@ -817,7 +817,7 @@ function validate_current_theme() {
 /**
  * Retrieve all theme modifications.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @return array|void Theme modifications.
  */
@@ -845,7 +845,7 @@ function get_theme_mods() {
  * string the template directory URI and the second string the stylesheet
  * directory URI.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string      $name    Theme modification name.
  * @param bool|string $default
@@ -863,7 +863,7 @@ function get_theme_mod( $name, $default = false ) {
 		 * 'header_textcolor', 'header_image', and so on depending
 		 * on the theme options.
 		 *
-		 * @since 2.2.0
+		 * @since WP-2.2.0
 		 *
 		 * @param string $current_mod The value of the current theme modification.
 		 */
@@ -880,7 +880,7 @@ function get_theme_mod( $name, $default = false ) {
 /**
  * Update theme modification value for the current theme.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $name  Theme modification name.
  * @param mixed  $value Theme modification value.
@@ -896,7 +896,7 @@ function set_theme_mod( $name, $value ) {
 	 * the modification array. For example, 'header_textcolor', 'header_image',
 	 * and so on depending on the theme options.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param string $value     The new value of the theme mod.
 	 * @param string $old_value The current value of the theme mod.
@@ -913,7 +913,7 @@ function set_theme_mod( $name, $value ) {
  * If removing the name also removes all elements, then the entire option will
  * be removed.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $name Theme modification name.
  */
@@ -936,7 +936,7 @@ function remove_theme_mod( $name ) {
 /**
  * Remove theme modifications option for current theme.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 function remove_theme_mods() {
 	delete_option( 'theme_mods_' . get_option( 'stylesheet' ) );
@@ -951,7 +951,7 @@ function remove_theme_mods() {
 /**
  * Retrieves the custom header text color in 3- or 6-digit hexadecimal form.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @return string Header text color in 3- or 6-digit hexadecimal form (minus the hash symbol).
  */
@@ -962,7 +962,7 @@ function get_header_textcolor() {
 /**
  * Displays the custom header text color in 3- or 6-digit hexadecimal form (minus the hash symbol).
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 function header_textcolor() {
 	echo get_header_textcolor();
@@ -971,7 +971,7 @@ function header_textcolor() {
 /**
  * Whether to display the header text.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @return bool
  */
@@ -986,7 +986,7 @@ function display_header_text() {
 /**
  * Check whether a header image is set or not.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @see get_header_image()
  *
@@ -999,7 +999,7 @@ function has_header_image() {
 /**
  * Retrieve header image for custom header.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @return string|false
  */
@@ -1018,7 +1018,7 @@ function get_header_image() {
 /**
  * Create image tag markup for a custom header image.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param array $attr Optional. Additional attributes for the image tag. Can be used
  *                              to override the default attributes. Default empty.
@@ -1073,7 +1073,7 @@ function get_header_image_tag( $attr = array() ) {
 	/**
 	 * Filters the markup of header images.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $html   The HTML image tag markup being filtered.
 	 * @param object $header The custom header object returned by 'get_custom_header()'.
@@ -1085,7 +1085,7 @@ function get_header_image_tag( $attr = array() ) {
 /**
  * Display the image markup for a custom header image.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param array $attr Optional. Attributes for the image markup. Default empty.
  */
@@ -1096,7 +1096,7 @@ function the_header_image_tag( $attr = array() ) {
 /**
  * Get random header image data from registered images in theme.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @access private
  *
@@ -1138,7 +1138,7 @@ function _get_random_header_data() {
 /**
  * Get random header image url from registered images in theme.
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @return string Path to header image
  */
@@ -1156,7 +1156,7 @@ function get_random_header_image() {
  * Also true if theme has multiple header images registered, no specific header image
  * is chosen, and theme turns on random headers with add_theme_support().
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @param string $type The random pool to use. any|default|uploaded
  * @return bool
@@ -1180,7 +1180,7 @@ function is_random_header_image( $type = 'any' ) {
 /**
  * Display header image URL.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 function header_image() {
 	$image = get_header_image();
@@ -1192,7 +1192,7 @@ function header_image() {
 /**
  * Get the header images uploaded for the current theme.
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @return array
  */
@@ -1229,7 +1229,7 @@ function get_uploaded_header_images() {
 /**
  * Get the header image data.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @global array $_wp_default_headers
  *
@@ -1273,7 +1273,7 @@ function get_custom_header() {
 /**
  * Register a selection of default headers to be displayed by the custom header admin UI.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $_wp_default_headers
  *
@@ -1292,7 +1292,7 @@ function register_default_headers( $headers ) {
  * header you want to remove.
  *
  * @see register_default_headers()
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $_wp_default_headers
  *
@@ -1315,7 +1315,7 @@ function unregister_default_headers( $header ) {
 /**
  * Check whether a header video is set or not.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @see get_header_video_url()
  *
@@ -1330,7 +1330,7 @@ function has_header_video() {
  *
  * Uses a local video if present, or falls back to an external video.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return string|false Header video URL or false if there is no video.
  */
@@ -1346,7 +1346,7 @@ function get_header_video_url() {
 	/**
 	 * Filters the header video URL.
 	 *
-	 * @since 4.7.3
+	 * @since WP-4.7.3
 	 *
 	 * @param string $url Header video URL, if available.
 	 */
@@ -1362,7 +1362,7 @@ function get_header_video_url() {
 /**
  * Display header video URL.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 function the_header_video_url() {
 	$video = get_header_video_url();
@@ -1374,7 +1374,7 @@ function the_header_video_url() {
 /**
  * Retrieve header video settings.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return array
  */
@@ -1411,7 +1411,7 @@ function get_header_video_settings() {
 /**
  * Check whether a custom header is set or not.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return bool True if a custom header is set. False if not.
  */
@@ -1426,7 +1426,7 @@ function has_custom_header() {
 /**
  * Checks whether the custom header video is eligible to show on the current page.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return bool True if the custom header video should be shown. False if not.
  */
@@ -1446,7 +1446,7 @@ function is_header_video_active() {
 	/**
 	 * Modify whether the custom header video is eligible to show on the current page.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param bool $show_video Whether the custom header video should be shown. Returns the value
 	 *                         of the theme setting for the `custom-header`'s `video-active-callback`.
@@ -1460,7 +1460,7 @@ function is_header_video_active() {
  *
  * The container div will always be returned in the Customizer preview.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return string The markup for a custom header on success.
  */
@@ -1480,7 +1480,7 @@ function get_custom_header_markup() {
  *
  * A container div will always be printed in the Customizer preview.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 function the_custom_header_markup() {
 	$custom_header = get_custom_header_markup();
@@ -1499,7 +1499,7 @@ function the_custom_header_markup() {
 /**
  * Retrieve background image for custom background.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return string
  */
@@ -1510,7 +1510,7 @@ function get_background_image() {
 /**
  * Display background image path.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function background_image() {
 	echo get_background_image();
@@ -1519,7 +1519,7 @@ function background_image() {
 /**
  * Retrieve value for custom background color.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return string
  */
@@ -1530,7 +1530,7 @@ function get_background_color() {
 /**
  * Display background color value.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function background_color() {
 	echo get_background_color();
@@ -1539,7 +1539,7 @@ function background_color() {
 /**
  * Default custom background callback.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function _custom_background_cb() {
 	// $background is the saved custom image, or the default image.
@@ -1618,7 +1618,7 @@ body.custom-background { <?php echo trim( $style ); ?> }
 /**
  * Render the Custom CSS style element.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 function wp_custom_css_cb() {
 	$styles = wp_get_custom_css();
@@ -1632,7 +1632,7 @@ function wp_custom_css_cb() {
 /**
  * Fetch the `custom_css` post for a given theme.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @param string $stylesheet Optional. A theme object stylesheet name. Defaults to the current theme.
  * @return WP_Post|null The custom_css post or null if none exists.
@@ -1683,7 +1683,7 @@ function wp_get_custom_css_post( $stylesheet = '' ) {
 /**
  * Fetch the saved Custom CSS content for rendering.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @param string $stylesheet Optional. A theme object stylesheet name. Defaults to the current theme.
  * @return string The Custom CSS Post content.
@@ -1703,7 +1703,7 @@ function wp_get_custom_css( $stylesheet = '' ) {
 	/**
 	 * Filters the Custom CSS Output into the <head>.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string $css        CSS pulled in from the Custom CSS CPT.
 	 * @param string $stylesheet The theme stylesheet name.
@@ -1718,7 +1718,7 @@ function wp_get_custom_css( $stylesheet = '' ) {
  *
  * Inserts a `custom_css` post when one doesn't yet exist.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @param string $css CSS, stored in `post_content`.
  * @param array  $args {
@@ -1758,7 +1758,7 @@ function wp_update_custom_css_post( $css, $args = array() ) {
 	 * }, 10, 2 );
 	 * </code>
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @param array $data {
 	 *     Custom CSS data.
 	 *
@@ -1825,7 +1825,7 @@ function wp_update_custom_css_post( $css, $args = array() ) {
  * Since version 3.4 the TinyMCE body has .rtl CSS class.
  * It is a better option to use that class and add any RTL styles to the main stylesheet.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $editor_styles
  *
@@ -1852,7 +1852,7 @@ function add_editor_style( $stylesheet = 'editor-style.css' ) {
 /**
  * Removes all visual editor stylesheets.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global array $editor_styles
  *
@@ -1870,7 +1870,7 @@ function remove_editor_styles() {
 /**
  * Retrieve any registered editor stylesheets
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @global array $editor_styles Registered editor stylesheets
  *
@@ -1916,7 +1916,7 @@ function get_editor_stylesheets() {
 	/**
 	 * Filters the array of stylesheets applied to the editor.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param array $stylesheets Array of stylesheets to be applied to the editor.
 	 */
@@ -1926,7 +1926,7 @@ function get_editor_stylesheets() {
 /**
  * Expand a theme's starter content configuration using core-provided data.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return array Array of starter content.
  */
@@ -2189,7 +2189,7 @@ function get_theme_starter_content() {
 	/**
 	 * Filters the expanded array of starter content.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param array $content Array of starter content.
 	 * @param array $config  Array of theme-specific starter content configuration.
@@ -2204,12 +2204,12 @@ function get_theme_starter_content() {
  * If attached to a hook, it must be {@see 'after_setup_theme'}.
  * The {@see 'init'} hook may be too late for some features.
  *
- * @since 2.9.0
- * @since 3.6.0 The `html5` feature was added
- * @since 3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'
- * @since 4.1.0 The `title-tag` feature was added
- * @since 4.5.0 The `customize-selective-refresh-widgets` feature was added
- * @since 4.7.0 The `starter-content` feature was added
+ * @since WP-2.9.0
+ * @since WP-3.6.0 The `html5` feature was added
+ * @since WP-3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'
+ * @since WP-4.1.0 The `title-tag` feature was added
+ * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
+ * @since WP-4.7.0 The `starter-content` feature was added
  *
  * @global array $_wp_theme_features
  *
@@ -2428,7 +2428,7 @@ function add_theme_support( $feature ) {
 /**
  * Registers the internal custom header and background routines.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  * @access private
  *
  * @global Custom_Image_Header $custom_image_header
@@ -2468,7 +2468,7 @@ function _custom_header_background_just_in_time() {
 /**
  * Adds CSS to hide header text for custom logo, based on Customizer setting.
  *
- * @since 4.5.0
+ * @since WP-4.5.0
  * @access private
  */
 function _custom_logo_header_styles() {
@@ -2492,7 +2492,7 @@ function _custom_logo_header_styles() {
 /**
  * Gets the theme support arguments passed when registering that support
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global array $_wp_theme_features
  *
@@ -2527,7 +2527,7 @@ function get_theme_support( $feature ) {
  * Should be called in the theme's functions.php file. Generally would
  * be used for child themes to override support from the parent theme.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @see add_theme_support()
  * @param string $feature the feature being added
  * @return bool|void Whether feature was removed.
@@ -2544,7 +2544,7 @@ function remove_theme_support( $feature ) {
  * Do not use. Removes theme support internally, ignorant of the blacklist.
  *
  * @access private
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global array               $_wp_theme_features
  * @global Custom_Image_Header $custom_image_header
@@ -2597,7 +2597,7 @@ function _remove_theme_support( $feature ) {
 /**
  * Checks a theme's support for a given feature
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global array $_wp_theme_features
  *
@@ -2654,7 +2654,7 @@ function current_theme_supports( $feature ) {
 	 * 'custom-header', 'menus', 'automatic-feed-links', 'html5',
 	 * 'starter-content', and 'customize-selective-refresh-widgets'.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param bool   true     Whether the current theme supports the given feature. Default true.
 	 * @param array  $args    Array of arguments for the feature.
@@ -2666,7 +2666,7 @@ function current_theme_supports( $feature ) {
 /**
  * Checks a theme's support for a given feature before loading the functions which implement it.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @param string $feature The feature being checked.
  * @param string $include Path to the file.
@@ -2687,9 +2687,9 @@ function require_if_theme_supports( $feature, $include ) {
  * attachment.
  *
  * @access private
- * @since 3.0.0
- * @since 4.3.0 Also removes `header_image_data`.
- * @since 4.5.0 Also removes custom logo theme mods.
+ * @since WP-3.0.0
+ * @since WP-4.3.0 Also removes `header_image_data`.
+ * @since WP-4.5.0 Also removes custom logo theme mods.
  *
  * @param int $id The attachment id.
  */
@@ -2719,7 +2719,7 @@ function _delete_attachment_theme_mod( $id ) {
  *
  * See {@see 'after_switch_theme'}.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 function check_theme_switched() {
 	if ( $stylesheet = get_option( 'theme_switched' ) ) {
@@ -2741,7 +2741,7 @@ function check_theme_switched() {
 			 * If the old theme is missing, the parameter will be the slug
 			 * of the old theme.
 			 *
-			 * @since 3.3.0
+			 * @since WP-3.3.0
 			 *
 			 * @param string   $old_name  Old theme name.
 			 * @param WP_Theme $old_theme WP_Theme instance of the old theme.
@@ -2766,7 +2766,7 @@ function check_theme_switched() {
  * WordPress is loading, especially in the Customizer preview
  * or when making Customizer Ajax requests for widgets or menus.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @global WP_Customize_Manager $wp_customize
  */
@@ -2846,7 +2846,7 @@ function _wp_customize_include() {
 /**
  * Publishes a snapshot's changes.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  * @access private
  *
  * @global wpdb                 $wpdb         WordPress database abstraction object.
@@ -2921,7 +2921,7 @@ function _wp_customize_publish_changeset( $new_status, $old_status, $changeset_p
  * This is needed to prevent the post_name from being dropped when the post is
  * transitioned into pending status by a contributor.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  * @see wp_insert_post()
  *
  * @param array $post_data          An array of slashed post data.
@@ -2942,7 +2942,7 @@ function _wp_customize_changeset_filter_insert_post_data( $post_data, $supplied_
 /**
  * Adds settings for the customize-loader script.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  */
 function _wp_customize_loader_settings() {
 	$admin_origin = parse_url( admin_url() );
@@ -2977,7 +2977,7 @@ function _wp_customize_loader_settings() {
 /**
  * Returns a URL to load the Customizer.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param string $stylesheet Optional. Theme to customize. Defaults to current theme.
  * 	                         The theme's stylesheet will be urlencoded if necessary.
@@ -3003,8 +3003,8 @@ function wp_customize_url( $stylesheet = null ) {
  * It is also recommended that you add the "no-customize-support" class
  * to the body tag by default.
  *
- * @since 3.4.0
- * @since 4.7.0 Support for IE8 and below is explicitly removed via conditional comments.
+ * @since WP-3.4.0
+ * @since WP-4.7.0 Support for IE8 and below is explicitly removed via conditional comments.
  */
 function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
@@ -3040,7 +3040,7 @@ function wp_customize_support_script() {
 /**
  * Whether the site is being previewed in the Customizer.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @global WP_Customize_Manager $wp_customize Customizer instance.
  *
@@ -3070,7 +3070,7 @@ function is_customize_preview() {
  *
  * @link https://core.trac.wordpress.org/ticket/39752
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  * @access private
  * @see wp_delete_auto_drafts()
  *

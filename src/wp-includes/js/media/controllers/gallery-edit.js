@@ -57,7 +57,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		// If we haven't been provided a `library`, create a `Selection`.
@@ -74,7 +74,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		var library = this.get('library');
@@ -91,7 +91,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		// Stop watching for uploaded attachments.
@@ -103,7 +103,7 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param browser
 	 */

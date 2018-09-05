@@ -3,7 +3,7 @@
 /*
  * Validate that's badly named charsets always return the correct format for UTF-8 and ISO-8859-1
  *
- *  @since 4.8.0
+ *  @since WP-4.8.0
  */
 
 class Tests_Functions_canonical_charset extends WP_UnitTestCase {

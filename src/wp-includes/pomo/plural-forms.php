@@ -3,13 +3,13 @@
 /**
  * A gettext Plural-Forms parser.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  */
 class Plural_Forms {
 	/**
 	 * Operator characters.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var string OP_CHARS Operator characters.
 	 */
 	const OP_CHARS = '|&><!=%?:';
@@ -17,7 +17,7 @@ class Plural_Forms {
 	/**
 	 * Valid number characters.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var string NUM_CHARS Valid number characters.
 	 */
 	const NUM_CHARS = '0123456789';
@@ -30,7 +30,7 @@ class Plural_Forms {
 	 *
 	 * @see https://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B#Operator_precedence
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var array $op_precedence Operator precedence from highest to lowest.
 	 */
 	protected static $op_precedence = array(
@@ -58,7 +58,7 @@ class Plural_Forms {
 	/**
 	 * Tokens generated from the string.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var array $tokens List of tokens.
 	 */
 	protected $tokens = array();
@@ -66,7 +66,7 @@ class Plural_Forms {
 	/**
 	 * Cache for repeated calls to the function.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var array $cache Map of $n => $result
 	 */
 	protected $cache = array();
@@ -74,7 +74,7 @@ class Plural_Forms {
 	/**
 	 * Constructor.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param string $str Plural function (just the bit after `plural=` from Plural-Forms)
 	 */
@@ -88,7 +88,7 @@ class Plural_Forms {
 	 * Uses the shunting-yard algorithm to convert the string to Reverse Polish
 	 * Notation tokens.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param string $str String to parse.
 	 */
@@ -231,7 +231,7 @@ class Plural_Forms {
 	 *
 	 * Caches the value for repeated calls.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param int $num Number to get plural form for.
 	 * @return int Plural form value.
@@ -246,7 +246,7 @@ class Plural_Forms {
 	/**
 	 * Execute the plural form function.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param int $n Variable "n" to substitute.
 	 * @return int Plural form value.

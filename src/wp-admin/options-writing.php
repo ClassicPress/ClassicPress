@@ -158,7 +158,7 @@ wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'default_email_categor
 /**
  * Filters whether to enable the Update Services section in the Writing settings screen.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param bool $enable Whether to enable the Update Services settings area. Default true.
  */

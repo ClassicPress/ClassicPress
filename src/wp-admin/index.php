@@ -123,7 +123,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		 *
 		 *     remove_action( 'welcome_panel', 'wp_welcome_panel' );
 		 *
-		 * @since 3.5.0
+		 * @since WP-3.5.0
 		 */
 		do_action( 'welcome_panel' );
 		?>

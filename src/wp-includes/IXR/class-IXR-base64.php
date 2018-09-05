@@ -4,7 +4,7 @@
  * IXR_Base64
  *
  * @package IXR
- * @since 1.5.0
+ * @since WP-1.5.0
  */
 class IXR_Base64
 {

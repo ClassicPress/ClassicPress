@@ -11,7 +11,7 @@ if ( 'undefined' === typeof window.wp.codeEditor ) {
 	/**
 	 * Default settings for code editor.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @type {object}
 	 */
 	wp.codeEditor.defaultSettings = {
@@ -248,7 +248,7 @@ if ( 'undefined' === typeof window.wp.codeEditor ) {
 	/**
 	 * Initialize Code Editor (CodeMirror) for an existing textarea.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param {string|jQuery|Element} textarea - The HTML id, jQuery object, or DOM Element for the textarea that is used for the editor.
 	 * @param {object}                [settings] - Settings to override defaults.

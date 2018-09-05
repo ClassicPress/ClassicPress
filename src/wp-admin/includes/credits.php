@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Retrieve the contributor credits.
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @return array|false A list of all of the contributors, or false on error.
  */
@@ -53,7 +53,7 @@ function wp_credits() {
  * Retrieve the link to a contributor's ClassicPress.net profile page.
  *
  * @access private
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @param string $display_name  The contributor's display name (passed by reference).
  * @param string $username      The contributor's username.
@@ -67,7 +67,7 @@ function _wp_credits_add_profile_link( &$display_name, $username, $profiles ) {
  * Retrieve the link to an external library used in ClassicPress.
  *
  * @access private
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @param string $data External library data (passed by reference).
  */

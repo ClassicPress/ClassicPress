@@ -25,7 +25,7 @@ $charset_collate = $wpdb->get_charset_collate();
 /**
  * Retrieve the SQL for creating database tables.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -341,7 +341,7 @@ $wp_queries = wp_get_db_schema( 'all' );
 /**
  * Create ClassicPress options and set the default values.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  * @global int  $wp_db_version
@@ -354,7 +354,7 @@ function populate_options() {
 	/**
 	 * Fires before creating ClassicPress options and populating their default values.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	do_action( 'populate_options' );
 
@@ -597,7 +597,7 @@ function populate_options() {
 /**
  * Execute WordPress role creation for the various WordPress versions.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  */
 function populate_roles() {
 	populate_roles_160();
@@ -613,7 +613,7 @@ function populate_roles() {
 /**
  * Create the roles for WordPress 2.0
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  */
 function populate_roles_160() {
 	// Add roles
@@ -718,7 +718,7 @@ function populate_roles_160() {
 /**
  * Create and modify WordPress roles for WordPress 2.1.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 function populate_roles_210() {
 	$roles = array('administrator', 'editor');
@@ -765,7 +765,7 @@ function populate_roles_210() {
 /**
  * Create and modify WordPress roles for WordPress 2.3.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  */
 function populate_roles_230() {
 	$role = get_role( 'administrator' );
@@ -778,7 +778,7 @@ function populate_roles_230() {
 /**
  * Create and modify WordPress roles for WordPress 2.5.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  */
 function populate_roles_250() {
 	$role = get_role( 'administrator' );
@@ -791,7 +791,7 @@ function populate_roles_250() {
 /**
  * Create and modify WordPress roles for WordPress 2.6.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  */
 function populate_roles_260() {
 	$role = get_role( 'administrator' );
@@ -805,7 +805,7 @@ function populate_roles_260() {
 /**
  * Create and modify WordPress roles for WordPress 2.7.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function populate_roles_270() {
 	$role = get_role( 'administrator' );
@@ -819,7 +819,7 @@ function populate_roles_270() {
 /**
  * Create and modify WordPress roles for WordPress 2.8.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function populate_roles_280() {
 	$role = get_role( 'administrator' );
@@ -832,7 +832,7 @@ function populate_roles_280() {
 /**
  * Create and modify WordPress roles for WordPress 3.0.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function populate_roles_300() {
 	$role = get_role( 'administrator' );
@@ -852,7 +852,7 @@ if ( !function_exists( 'install_network' ) ) :
 /**
  * Install Network.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function install_network() {
 	if ( ! defined( 'WP_INSTALLING_NETWORK' ) )
@@ -865,7 +865,7 @@ endif;
 /**
  * Populate network settings.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global wpdb       $wpdb
  * @global object     $current_site
@@ -1023,7 +1023,7 @@ We hope you enjoy your new site. Thanks!
 	/**
 	 * Filters meta for a network on creation.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param array $sitemeta   Associative array of network meta keys and values to be inserted.
 	 * @param int   $network_id ID of network to populate.

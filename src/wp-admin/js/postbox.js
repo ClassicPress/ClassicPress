@@ -4,7 +4,7 @@
  *
  * @summary Contains postboxes logic
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  * @requires jQuery
  */
 
@@ -14,7 +14,7 @@
  * This object contains all function to handle the behaviour of the post boxes. The post boxes are the boxes you see
  * around the content on the edit page.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @namespace postboxes
  *
@@ -34,7 +34,7 @@ var postboxes;
 		 * Calls postboxes.pbshow if the postbox has been opened, calls postboxes.pbhide
 		 * if the postbox has been closed.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 * @memberof postboxes
 		 * @fires postboxes#postbox-toggled
 		 *
@@ -80,7 +80,7 @@ var postboxes;
 			 *
 			 * Contains a jQuery object with the relevant postbox element.
 			 *
-			 * @since 4.0.0
+			 * @since WP-4.0.0
 			 * @event postboxes#postbox-toggled
 			 * @type {Object}
 			 */
@@ -90,7 +90,7 @@ var postboxes;
 		/**
 		 * Adds event handlers to all postboxes and screen option on the current page.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @memberof postboxes
 		 *
 		 * @param {string} page The page we are currently on.
@@ -108,7 +108,7 @@ var postboxes;
 			$handles.on( 'click.postboxes', this.handle_click );
 
 			/**
-			 * @since 2.7.0
+			 * @since WP-2.7.0
 			 */
 			$('.postbox .hndle a').click( function(e) {
 				e.stopPropagation();
@@ -120,7 +120,7 @@ var postboxes;
 			 * Event handler for the postbox dismiss button. After clicking the button
 			 * the postbox will be hidden.
 			 *
-			 * @since 3.2.0
+			 * @since WP-3.2.0
 			 *
 			 * @returns {void}
 			 */
@@ -136,7 +136,7 @@ var postboxes;
 			 * Event handler for the screen options checkboxes. When a checkbox is
 			 * clicked this function will hide or show the relevant postboxes.
 			 *
-			 * @since 2.7.0
+			 * @since WP-2.7.0
 			 * @fires postboxes#postbox-toggled
 			 *
 			 * @returns {void}
@@ -162,7 +162,7 @@ var postboxes;
 				postboxes._mark_area();
 
 				/**
-				 * @since 4.0.0
+				 * @since WP-4.0.0
 				 * @see postboxes.handle_click
 				 */
 				$document.trigger( 'postbox-toggled', $postbox );
@@ -171,7 +171,7 @@ var postboxes;
 			/**
 			 * @summary Changes the amount of columns based on the layout preferences.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @returns {void}
 			 */
@@ -188,7 +188,7 @@ var postboxes;
 		/**
 		 * @summary Initializes all the postboxes, mainly their sortable behaviour.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @memberof postboxes
 		 *
 		 * @param {string} page The page we are currently on.
@@ -270,7 +270,7 @@ var postboxes;
 		 * Saves the state of the postboxes to the server. It sends two lists, one with
 		 * all the closed postboxes, one with all the hidden postboxes.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @memberof postboxes
 		 *
 		 * @param {string} page The page we are currently on.
@@ -302,7 +302,7 @@ var postboxes;
 		 * Saves the order of the postboxes to the server. Sends a list of all postboxes
 		 * inside a sortable area to the server.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 * @memberof postboxes
 		 *
 		 * @param {string} page The page we are currently on.
@@ -332,7 +332,7 @@ var postboxes;
 		 * border around the side area on the post edit screen if there are no postboxes
 		 * present.
 		 *
-		 * @since 3.3.0
+		 * @since WP-3.3.0
 		 * @memberof postboxes
 		 * @access private
 		 *
@@ -364,7 +364,7 @@ var postboxes;
 		/**
 		 * @summary Changes the amount of columns on the post edit page.
 		 *
-		 * @since 3.3.0
+		 * @since WP-3.3.0
 		 * @memberof postboxes
 		 * @fires postboxes#postboxes-columnchange
 		 * @access private
@@ -382,7 +382,7 @@ var postboxes;
 			/**
 			 * Fires when the amount of columns on the post edit page has been changed.
 			 *
-			 * @since 4.0.0
+			 * @since WP-4.0.0
 			 * @event postboxes#postboxes-columnchange
 			 */
 			$( document ).trigger( 'postboxes-columnchange' );
@@ -392,7 +392,7 @@ var postboxes;
 		 * @summary Changes the amount of columns the postboxes are in based on the
 		 *          current orientation of the browser.
 		 *
-		 * @since 3.3.0
+		 * @since WP-3.3.0
 		 * @memberof postboxes
 		 * @access private
 		 *
@@ -422,7 +422,7 @@ var postboxes;
 		/* Callbacks */
 
 		/**
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @memberof postboxes
 		 * @access public
 		 * @property {Function|boolean} pbshow A callback that is called when a postbox
@@ -431,7 +431,7 @@ var postboxes;
 		pbshow : false,
 
 		/**
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 * @memberof postboxes
 		 * @access public
 		 * @property {Function|boolean} pbhide A callback that is called when a postbox

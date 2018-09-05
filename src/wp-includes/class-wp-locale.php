@@ -4,20 +4,20 @@
  *
  * @package WordPress
  * @subpackage i18n
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
  * Core class used to store translated data for a locale.
  *
- * @since 2.1.0
- * @since 4.6.0 Moved to its own file from wp-includes/locale.php.
+ * @since WP-2.1.0
+ * @since WP-4.6.0 Moved to its own file from wp-includes/locale.php.
  */
 class WP_Locale {
 	/**
 	 * Stores the translated strings for the full weekday names.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $weekday;
@@ -30,7 +30,7 @@ class WP_Locale {
 	 *
 	 * @see WP_Locale::init() for how to handle the hack.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $weekday_initial;
@@ -38,7 +38,7 @@ class WP_Locale {
 	/**
 	 * Stores the translated strings for the abbreviated weekday names.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $weekday_abbrev;
@@ -46,7 +46,7 @@ class WP_Locale {
 	/**
 	 * Stores the default start of the week.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @var string
 	 */
 	public $start_of_week;
@@ -54,7 +54,7 @@ class WP_Locale {
 	/**
 	 * Stores the translated strings for the full month names.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $month;
@@ -62,7 +62,7 @@ class WP_Locale {
 	/**
 	 * Stores the translated strings for the month names in genitive case, if the locale specifies.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @var array
 	 */
 	public $month_genitive;
@@ -70,7 +70,7 @@ class WP_Locale {
 	/**
 	 * Stores the translated strings for the abbreviated month names.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $month_abbrev;
@@ -80,7 +80,7 @@ class WP_Locale {
 	 *
 	 * Also the capitalized versions.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $meridiem;
@@ -90,7 +90,7 @@ class WP_Locale {
 	 *
 	 * Default is left to right 'ltr'.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var string
 	 */
 	public $text_direction = 'ltr';
@@ -98,7 +98,7 @@ class WP_Locale {
 	/**
 	 * The thousands separator and decimal point values used for localizing numbers.
 	 *
-	 * @since 2.3.0
+	 * @since WP-2.3.0
 	 * @var array
 	 */
 	public $number_format;
@@ -106,7 +106,7 @@ class WP_Locale {
 	/**
 	 * Constructor which calls helper methods to set up object variables.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function __construct() {
 		$this->init();
@@ -120,7 +120,7 @@ class WP_Locale {
 	 * calendar elements. Which allows for specifying locale
 	 * specific calendar names and text direction.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @global string $text_direction
 	 */
@@ -237,7 +237,7 @@ class WP_Locale {
 	/**
 	 * Outputs an admin notice if the /build directory must be used for RTL.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 */
 	public function rtl_src_admin_notice() {
 		/* translators: %s: Name of the directory (build) */
@@ -251,7 +251,7 @@ class WP_Locale {
 	 * by using 0 (zero). So the week starts with 0 (zero)
 	 * and ends on Saturday with is fetched by using 6 (six).
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param int $weekday_number 0 for Sunday through 6 Saturday
 	 * @return string Full translated weekday
@@ -268,7 +268,7 @@ class WP_Locale {
 	 * pay attention to make sure that the starting letter does
 	 * not conflict.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string $weekday_name
 	 * @return string
@@ -283,7 +283,7 @@ class WP_Locale {
 	 * The weekday abbreviation is retrieved by the translated
 	 * full weekday word.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string $weekday_name Full translated weekday word
 	 * @return string Translated weekday abbreviation
@@ -303,7 +303,7 @@ class WP_Locale {
 	 * You can use an integer instead and it will add the
 	 * '0' before the numbers less than 10 for you.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string|int $month_number '01' through '12'
 	 * @return string Translated full month name
@@ -318,7 +318,7 @@ class WP_Locale {
 	 * The $month_name parameter is expected to be the translated or
 	 * translatable version of the month.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string $month_name Translated month to get abbreviated version
 	 * @return string Translated abbreviated month
@@ -332,7 +332,7 @@ class WP_Locale {
 	 *
 	 * The $meridiem parameter is expected to not be translated.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string $meridiem Either 'am', 'pm', 'AM', or 'PM'. Not translated version.
 	 * @return string Translated version
@@ -354,7 +354,7 @@ class WP_Locale {
 	 * @global array $month
 	 * @global array $month_abbrev
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function register_globals() {
 		$GLOBALS['weekday']         = $this->weekday;
@@ -367,7 +367,7 @@ class WP_Locale {
 	/**
 	 * Checks if current locale is RTL.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 * @return bool Whether locale is RTL.
 	 */
 	public function is_rtl() {
@@ -381,7 +381,7 @@ class WP_Locale {
 	 * on wp-admin/options-general.php to the general POT that would
 	 * otherwise be added to the admin POT.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 */
 	public function _strings_for_pot() {
 		/* translators: localized date format, see https://secure.php.net/date */

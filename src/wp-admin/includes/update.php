@@ -65,7 +65,7 @@ function get_core_updates( $options = array() ) {
  *
  * If there's 1.2.3 and 1.3 on offer, it'll choose 1.3 if the installation allows it, else, 1.2.3
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  *
  * @return array|false False on failure, otherwise the core update offering.
  */
@@ -94,7 +94,7 @@ function find_core_auto_update() {
 /**
  * Gets and caches the checksums for the given version of ClassicPress.
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  *
  * @param string $version Version string to query.
  * @param string $locale  Locale to query.
@@ -290,7 +290,7 @@ function update_right_now_message() {
 	 *
 	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $content Default text.
 	 */
@@ -302,7 +302,7 @@ function update_right_now_message() {
 }
 
 /**
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @return array
  */
@@ -321,7 +321,7 @@ function get_plugin_updates() {
 }
 
 /**
- * @since 2.9.0
+ * @since WP-2.9.0
  */
 function wp_plugin_update_rows() {
 	if ( !current_user_can('update_plugins' ) )
@@ -422,7 +422,7 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		 * The dynamic portion of the hook name, `$file`, refers to the path
 		 * of the plugin's primary file relative to the plugins directory.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param array $plugin_data {
 		 *     An array of plugin metadata.
@@ -476,7 +476,7 @@ function get_theme_updates() {
 }
 
 /**
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 function wp_theme_update_rows() {
 	if ( !current_user_can('update_themes' ) )
@@ -567,7 +567,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 	 * The dynamic portion of the hook name, `$theme_key`, refers to
 	 * the theme slug as found in the ClassicPress.net themes repository.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param WP_Theme $theme    The WP_Theme object.
 	 * @param array    $response {
@@ -634,7 +634,7 @@ function maintenance_nag() {
  *         @type string type      The type of update the notice is for. Either 'plugin' or 'theme'.
  *     }
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 function wp_print_admin_notice_templates() {
 	?>
@@ -726,7 +726,7 @@ function wp_print_admin_notice_templates() {
  *         @type string colspan The number of table columns this row spans.
  *     }
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 function wp_print_update_row_templates() {
 	?>

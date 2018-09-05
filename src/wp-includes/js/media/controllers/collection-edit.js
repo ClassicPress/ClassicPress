@@ -57,7 +57,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	initialize: function() {
 		var collectionType = this.get('collectionType');
@@ -81,7 +81,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		var library = this.get('library');
@@ -98,7 +98,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	deactivate: function() {
 		// Stop watching for uploaded attachments.
@@ -115,7 +115,7 @@ CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.pr
 	 * @todo This is against the pattern elsewhere in media. Typically the frame
 	 *       is responsible for adding region mode callbacks. Explain.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param {wp.media.view.attachmentsBrowser} The attachments browser view.
 	 */

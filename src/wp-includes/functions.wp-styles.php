@@ -2,7 +2,7 @@
 /**
  * Dependencies API: Styles functions
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @package WordPress
  * @subpackage Dependencies
@@ -13,7 +13,7 @@
  *
  * @global WP_Styles $wp_styles
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @return WP_Styles WP_Styles instance.
  */
@@ -34,7 +34,7 @@ function wp_styles() {
  *
  * @global WP_Styles $wp_styles The WP_Styles object for printing styles.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param string|bool|array $handles Styles to be printed. Default 'false'.
  * @return array On success, a processed array of WP_Dependencies items; otherwise, an empty array.
@@ -46,7 +46,7 @@ function wp_print_styles( $handles = false ) {
 	/**
 	 * Fires before styles in the $handles queue are printed.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	if ( ! $handles ) {
 		do_action( 'wp_print_styles' );
@@ -74,7 +74,7 @@ function wp_print_styles( $handles = false ) {
  *
  * @see WP_Styles::add_inline_style()
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @param string $handle Name of the stylesheet to add the extra styles to.
  * @param string $data   String containing the CSS styles to be added.
@@ -102,8 +102,8 @@ function wp_add_inline_style( $handle, $data ) {
  * @see WP_Dependencies::add()
  * @link https://www.w3.org/TR/CSS2/media.html#media-types List of CSS media types.
  *
- * @since 2.6.0
- * @since 4.3.0 A return value was added.
+ * @since WP-2.6.0
+ * @since WP-4.3.0 A return value was added.
  *
  * @param string           $handle Name of the stylesheet. Should be unique.
  * @param string           $src    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.
@@ -128,7 +128,7 @@ function wp_register_style( $handle, $src, $deps = array(), $ver = false, $media
  *
  * @see WP_Dependencies::remove()
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $handle Name of the stylesheet to be removed.
  */
@@ -147,7 +147,7 @@ function wp_deregister_style( $handle ) {
  * @see WP_Dependencies::enqueue()
  * @link https://www.w3.org/TR/CSS2/media.html#media-types List of CSS media types.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param string           $handle Name of the stylesheet. Should be unique.
  * @param string           $src    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.
@@ -178,7 +178,7 @@ function wp_enqueue_style( $handle, $src = '', $deps = array(), $ver = false, $m
  *
  * @see WP_Dependencies::dequeue()
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $handle Name of the stylesheet to be removed.
  */
@@ -191,7 +191,7 @@ function wp_dequeue_style( $handle ) {
 /**
  * Check whether a CSS stylesheet has been added to the queue.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $handle Name of the stylesheet.
  * @param string $list   Optional. Status of the stylesheet to check. Default 'enqueued'.
@@ -218,7 +218,7 @@ function wp_style_is( $handle, $list = 'enqueued' ) {
  *
  * @see WP_Dependency::add_data()
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param string $handle Name of the stylesheet.
  * @param string $key    Name of data point for which we're storing a value.

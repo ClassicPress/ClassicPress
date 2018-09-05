@@ -15,7 +15,7 @@
 		/**
 		 * Detect if the browser supports SVG.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @return {Boolean} True if the browser supports svg, false if not.
 		 */
@@ -34,7 +34,7 @@
 		/**
 		 * Runs when the document load event is fired, so we can do our first parse of the page.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 */
 		function load() {
 			if ( loaded ) {
@@ -125,7 +125,7 @@
 		/**
 		 * Test if a text string contains emoji characters.
 		 *
-		 * @since 4.3.0
+		 * @since WP-4.3.0
 		 *
 		 * @param {String} text The string to test
 		 *
@@ -147,7 +147,7 @@
 		/**
 		 * Given an element or string, parse any emoji characters into Twemoji images.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param {HTMLElement|String} object The element or string to parse.
 		 * @param {Object} args Additional options for Twemoji.

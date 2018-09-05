@@ -12,7 +12,7 @@
  *
  * @author  Milian Wolff <mail@milianw.de>
  * @package Text_Diff
- * @since   0.3.0
+ * @since   TextDiff 0.3.0
  */
 class Text_Diff_Engine_shell {
 

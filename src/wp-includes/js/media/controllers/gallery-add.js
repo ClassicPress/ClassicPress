@@ -49,7 +49,7 @@ GalleryAdd = Library.extend(/** @lends wp.media.controller.GalleryAdd.prototype 
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		// If a library wasn't supplied, create a library of images.
@@ -61,7 +61,7 @@ GalleryAdd = Library.extend(/** @lends wp.media.controller.GalleryAdd.prototype 
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		var library = this.get('library'),

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 /**
  * Core class used to implement displaying terms in a list table.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -24,7 +24,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -79,7 +79,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			/**
 			 * Filters the number of terms displayed per page for the Tags list table.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param int $tags_per_page Number of tags to be displayed. Default 20.
 			 */
@@ -88,7 +88,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			/**
 			 * Filters the number of terms displayed per page for the Tags list table.
 			 *
-			 * @since 2.7.0
+			 * @since WP-2.7.0
 			 * @deprecated 2.8.0 Use edit_tags_per_page instead.
 			 *
 			 * @param int $tags_per_page Number of tags to be displayed. Default 20.
@@ -98,7 +98,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			/**
 			 * Filters the number of terms displayed per page for the Categories list table.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param int $tags_per_page Number of categories to be displayed. Default 20.
 			 */
@@ -354,7 +354,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 * The default output may include padding due to the term's
 		 * current level in the term hierarchy.
 		 *
-		 * @since 2.5.0
+		 * @since WP-2.5.0
 		 *
 		 * @see WP_Terms_List_Table::column_name()
 		 *
@@ -394,7 +394,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the default primary column.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @return string Name of the default primary column, in this case, 'name'.
 	 */
@@ -405,7 +405,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	/**
 	 * Generates and displays row action links.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param WP_Term $tag         Tag being acted upon.
 	 * @param string  $column_name Current column name.
@@ -465,7 +465,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		/**
 		 * Filters the action links displayed for each term in the Tags list table.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 * @deprecated 3.0.0 Use {$taxonomy}_row_actions instead.
 		 *
 		 * @param array  $actions An array of action links to be displayed. Default
@@ -479,7 +479,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 *
 		 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param array  $actions An array of action links to be displayed. Default
 		 *                        'Edit', 'Quick Edit', 'Delete', and 'View'.
@@ -562,7 +562,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 * The dynamic portion of the hook name, `$this->screen->taxonomy`,
 		 * refers to the slug of the current taxonomy.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param string $string      Blank string.
 		 * @param string $column_name Name of the column.
@@ -574,7 +574,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	/**
 	 * Outputs the hidden row displayed when inline editing
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 */
 	public function inline_edit() {
 		$tax = get_taxonomy( $this->screen->taxonomy );

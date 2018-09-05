@@ -75,7 +75,7 @@ $user_can_edit = current_user_can( 'edit_posts' ) || current_user_can( 'edit_pag
  *
  * The filter was introduced to replace the EDIT_ANY_USER constant.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param bool $allow Whether to allow editing of any user. Default true.
  */
@@ -125,7 +125,7 @@ if ( IS_PROFILE_PAGE ) {
 	 *
 	 * The action only fires if the current user is editing their own profile.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @param int $user_id The user ID.
 	 */
@@ -134,7 +134,7 @@ if ( IS_PROFILE_PAGE ) {
 	/**
 	 * Fires before the page loads on the 'Edit User' screen.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param int $user_id The user ID.
 	 */
@@ -225,7 +225,7 @@ if ( ! IS_PROFILE_PAGE ) {
 	/**
 	 * Fires inside the your-profile form tag on the user editing screen.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	do_action( 'user_edit_form_tag' );
 ?>>
@@ -277,8 +277,8 @@ $show_syntax_highlighting_preference = (
 	 * The section is only enabled if a callback is hooked to the action,
 	 * and if there is more than one defined color scheme for the admin.
 	 *
-	 * @since 3.0.0
-	 * @since 3.8.1 Added `$user_id` parameter.
+	 * @since WP-3.0.0
+	 * @since WP-3.8.1 Added `$user_id` parameter.
 	 *
 	 * @param int $user_id The user ID.
 	 */
@@ -340,7 +340,7 @@ endif;
 /**
  * Fires at the end of the 'Personal Options' settings table on the user editing screen.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param WP_User $profileuser The current WP_User object.
  */
@@ -355,7 +355,7 @@ do_action( 'personal_options', $profileuser );
 		 *
 		 * The action only fires if the current user is editing their own profile.
 		 *
-		 * @since 2.0.0
+		 * @since WP-2.0.0
 		 *
 		 * @param WP_User $profileuser The current WP_User object.
 		 */
@@ -498,7 +498,7 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 		 * The dynamic portion of the filter hook, `$name`, refers to
 		 * each of the keys in the contactmethods array.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $desc The translatable label for the contactmethod.
 		 */
@@ -539,8 +539,8 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 			/**
 			 * Filters the user profile picture description displayed under the Gravatar.
 			 *
-			 * @since 4.4.0
-			 * @since 4.7.0 Added the `$profileuser` parameter.
+			 * @since WP-4.4.0
+			 * @since WP-4.7.0 Added the `$profileuser` parameter.
 			 *
 			 * @param string  $description The description that will be printed.
 			 * @param WP_User $profileuser The current WP_User object.
@@ -555,9 +555,9 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 /**
  * Filters the display of the password fields.
  *
- * @since 1.5.1
- * @since 2.8.0 Added the `$profileuser` parameter.
- * @since 4.4.0 Now evaluated only in user-edit.php.
+ * @since WP-1.5.1
+ * @since WP-2.8.0 Added the `$profileuser` parameter.
+ * @since WP-4.4.0 Now evaluated only in user-edit.php.
  *
  * @param bool    $show        Whether to show the password fields. Default true.
  * @param WP_User $profileuser User object for the current user to edit.
@@ -651,7 +651,7 @@ if ( IS_PROFILE_PAGE && count( $sessions->get_all() ) === 1 ) : ?>
 		 *
 		 * The action only fires if the current user is editing their own profile.
 		 *
-		 * @since 2.0.0
+		 * @since WP-2.0.0
 		 *
 		 * @param WP_User $profileuser The current WP_User object.
 		 */
@@ -660,7 +660,7 @@ if ( IS_PROFILE_PAGE && count( $sessions->get_all() ) === 1 ) : ?>
 		/**
 		 * Fires after the 'About the User' settings table on the 'Edit User' screen.
 		 *
-		 * @since 2.0.0
+		 * @since WP-2.0.0
 		 *
 		 * @param WP_User $profileuser The current WP_User object.
 		 */
@@ -676,7 +676,7 @@ if ( IS_PROFILE_PAGE && count( $sessions->get_all() ) === 1 ) : ?>
  * the number of the user's capabilities exceeds their number of
  * roles.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param bool    $enable      Whether to display the capabilities. Default true.
  * @param WP_User $profileuser The current WP_User object.

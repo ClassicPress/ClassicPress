@@ -3,7 +3,7 @@
 /**
  * @summary Creates a dialog containing posts that can have a particular media attached to it.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global
  * @namespace
@@ -19,7 +19,7 @@ var findPosts;
 		 *
 		 * Adds an overlay prior to retrieving a list of posts to attach the media to.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @memberOf findPosts
 		 *
@@ -61,7 +61,7 @@ var findPosts;
 		/**
 		 * @summary Clears the found posts lists before hiding the attach media dialog.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @memberOf findPosts
 		 *
@@ -76,7 +76,7 @@ var findPosts;
 		/**
 		 * @summary Binds a click event listener to the overlay which closes the attach media dialog.
 		 *
-		 * @since 3.5.0
+		 * @since WP-3.5.0
 		 *
 		 * @memberOf findPosts
 		 *
@@ -94,7 +94,7 @@ var findPosts;
 		 * Sends a post request to the admin_ajax.php, requesting posts based on the search term provided by the user.
 		 * Defaults to all posts if no search term is provided.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @memberOf findPosts
 		 *

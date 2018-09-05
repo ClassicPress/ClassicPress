@@ -291,8 +291,8 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	/**
 	* Filters the default date formats.
 	*
-	* @since 2.7.0
-	* @since 4.0.0 Added ISO date standard YYYY-MM-DD format.
+	* @since WP-2.7.0
+	* @since WP-4.0.0 Added ISO date standard YYYY-MM-DD format.
 	*
 	* @param array $default_date_formats Array of default date formats.
 	*/
@@ -329,7 +329,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	/**
 	* Filters the default time formats.
 	*
-	* @since 2.7.0
+	* @since WP-2.7.0
 	*
 	* @param array $default_time_formats Array of default time formats.
 	*/

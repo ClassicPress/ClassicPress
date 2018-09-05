@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage HTTP
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
  * Bridge to connect Requests internal hooks to WordPress actions.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @see Requests_Hooks
  */

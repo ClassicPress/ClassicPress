@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 
 /**
@@ -14,13 +14,13 @@
  * @group privacy
  * @covers get_the_privacy_policy_link
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 class Tests_Link_GetThePrivacyPolicyLink extends WP_UnitTestCase {
 	/**
 	 * The ID of the Privacy Policy page.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 * @var int $privacy_policy_page_id
 	 */
 	protected static $privacy_policy_page_id;
@@ -28,7 +28,7 @@ class Tests_Link_GetThePrivacyPolicyLink extends WP_UnitTestCase {
 	/**
 	 * The URL of the Privacy Policy page.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 * @var string $privacy_policy_url
 	 */
 	protected static $privacy_policy_url;
@@ -36,7 +36,7 @@ class Tests_Link_GetThePrivacyPolicyLink extends WP_UnitTestCase {
 	/**
 	 * The text that gets prepended to the `get_the_privacy_policy_link()` output.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 * @var string $before
 	 */
 	protected static $before;
@@ -44,7 +44,7 @@ class Tests_Link_GetThePrivacyPolicyLink extends WP_UnitTestCase {
 	/**
 	 * The text that gets appended to the `get_the_privacy_policy_link()` output.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 * @var string $after
 	 */
 	protected static $after;

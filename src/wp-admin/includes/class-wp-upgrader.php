@@ -6,7 +6,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 
 /** WP_Upgrader_Skin class */
@@ -46,14 +46,14 @@ require_once ABSPATH . 'wp-admin/includes/class-wp-ajax-upgrader-skin.php';
  * Core class used for upgrading/installing a local set of files via
  * the Filesystem Abstraction classes from a Zip file.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 class WP_Upgrader {
 
 	/**
 	 * The error/notification strings used to update the user on the progress.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 * @var array $strings
 	 */
 	public $strings = array();
@@ -61,7 +61,7 @@ class WP_Upgrader {
 	/**
 	 * The upgrader skin being used.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 * @var Automatic_Upgrader_Skin|WP_Upgrader_Skin $skin
 	 */
 	public $skin = null;
@@ -74,7 +74,7 @@ class WP_Upgrader {
 	 * {@see 'upgrader_post_install'} filter. In that case, the WP_Error will be assigned to
 	 * it.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @var WP_Error|array $result {
 	 *      @type string $source             The full path to the source the files were installed from.
@@ -96,7 +96,7 @@ class WP_Upgrader {
 	 *
 	 * Set by the bulk update methods.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 * @var int $update_count
 	 */
 	public $update_count = 0;
@@ -106,7 +106,7 @@ class WP_Upgrader {
 	 *
 	 * Used by the bulk update methods, and incremented for each update.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 * @var int
 	 */
 	public $update_current = 0;
@@ -114,7 +114,7 @@ class WP_Upgrader {
 	/**
 	 * Construct the upgrader with a skin.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param WP_Upgrader_Skin $skin The upgrader skin to use. Default is a WP_Upgrader_Skin.
 	 *                               instance.
@@ -132,7 +132,7 @@ class WP_Upgrader {
 	 * This will set the relationship between the skin being used and this upgrader,
 	 * and also add the generic strings to `WP_Upgrader::$strings`.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	public function init() {
 		$this->skin->set_upgrader($this);
@@ -142,7 +142,7 @@ class WP_Upgrader {
 	/**
 	 * Add the generic strings to WP_Upgrader::$strings.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	public function generic_strings() {
 		$this->strings['bad_request'] = __('Invalid data provided.');
@@ -170,7 +170,7 @@ class WP_Upgrader {
 	/**
 	 * Connect to the filesystem.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -233,7 +233,7 @@ class WP_Upgrader {
 	/**
 	 * Download a package.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $package The URI of the package. If this is the full path to an
 	 *                        existing local file, it will be returned untouched.
@@ -244,7 +244,7 @@ class WP_Upgrader {
 		/**
 		 * Filters whether to return the package.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param bool        $reply   Whether to bail without returning the package.
 		 *                             Default false.
@@ -274,7 +274,7 @@ class WP_Upgrader {
 	/**
 	 * Unpack a compressed package file.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -325,7 +325,7 @@ class WP_Upgrader {
 	/**
 	 * Flatten the results of WP_Filesystem::dirlist() for iterating over.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @access protected
 	 *
 	 * @param  array  $nested_files  Array of files as returned by WP_Filesystem::dirlist()
@@ -353,7 +353,7 @@ class WP_Upgrader {
 	/**
 	 * Clears the directory where this item is going to be installed into.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -405,7 +405,7 @@ class WP_Upgrader {
 	 * a destination directory. Optionally removes the source. It can also optionally
 	 * clear out the destination folder if it already exists.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 * @global array              $wp_theme_directories
@@ -461,7 +461,7 @@ class WP_Upgrader {
 		 * will effectively short-circuit the installation, returning that value
 		 * instead.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param bool|WP_Error $response   Response.
 		 * @param array         $hook_extra Extra arguments passed to hooked filters.
@@ -491,8 +491,8 @@ class WP_Upgrader {
 		/**
 		 * Filters the source file location for the upgrade package.
 		 *
-		 * @since 2.8.0
-		 * @since 4.4.0 The $hook_extra parameter became available.
+		 * @since WP-2.8.0
+		 * @since WP-4.4.0 The $hook_extra parameter became available.
 		 *
 		 * @param string      $source        File source location.
 		 * @param string      $remote_source Remote file source location.
@@ -537,7 +537,7 @@ class WP_Upgrader {
 			/**
 			 * Filters whether the upgrader cleared the destination.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param mixed  $removed            Whether the destination was cleared. true on success, WP_Error on failure
 			 * @param string $local_destination  The local package destination.
@@ -589,7 +589,7 @@ class WP_Upgrader {
 		/**
 		 * Filters the installation response after the installation has finished.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param bool  $response   Installation response.
 		 * @param array $hook_extra Extra arguments passed to hooked filters.
@@ -612,7 +612,7 @@ class WP_Upgrader {
 	 * Attempts to download the package (if it is not a local file), unpack it, and
 	 * install it in the destination folder.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $options {
 	 *     Array or string of arguments for upgrading/installing a package.
@@ -658,7 +658,7 @@ class WP_Upgrader {
 		 *
 		 * See also {@see 'upgrader_process_complete'}.
 		 *
-		 * @since 4.3.0
+		 * @since WP-4.3.0
 		 *
 		 * @param array $options {
 		 *     Options used by the upgrader.
@@ -765,9 +765,9 @@ class WP_Upgrader {
 			 *
 			 * See also {@see 'upgrader_package_options'}.
 			 *
-			 * @since 3.6.0
-			 * @since 3.7.0 Added to WP_Upgrader::run().
-			 * @since 4.6.0 `$translations` was added as a possible argument to `$hook_extra`.
+			 * @since WP-3.6.0
+			 * @since WP-3.7.0 Added to WP_Upgrader::run().
+			 * @since WP-4.6.0 `$translations` was added as a possible argument to `$hook_extra`.
 			 *
 			 * @param WP_Upgrader $this WP_Upgrader instance. In other contexts, $this, might be a
 			 *                          Theme_Upgrader, Plugin_Upgrader, Core_Upgrade, or Language_Pack_Upgrader instance.
@@ -803,7 +803,7 @@ class WP_Upgrader {
 	 *
 	 * Creates/deletes the maintenance file to enable/disable maintenance mode.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -827,7 +827,7 @@ class WP_Upgrader {
 	/**
  	 * Creates a lock using ClassicPress options.
  	 *
- 	 * @since 4.5.0
+ 	 * @since WP-4.5.0
  	 * @static
  	 *
  	 * @param string $lock_name       The name of this unique lock.
@@ -873,7 +873,7 @@ class WP_Upgrader {
 	/**
  	 * Releases an upgrader lock.
  	 *
- 	 * @since 4.5.0
+ 	 * @since WP-4.5.0
  	 * @static
 	 *
 	 * @see WP_Upgrader::create_lock()

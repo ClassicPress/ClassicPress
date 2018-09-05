@@ -11,7 +11,7 @@
 /**
  * Display the ID of the current item in the WordPress Loop.
  *
- * @since 0.71
+ * @since WP-0.71
  */
 function the_ID() {
 	echo get_the_ID();
@@ -20,7 +20,7 @@ function the_ID() {
 /**
  * Retrieve the ID of the current item in the WordPress Loop.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @return int|false The ID of the current item in the WordPress Loop. False if $post is not set.
  */
@@ -32,7 +32,7 @@ function get_the_ID() {
 /**
  * Display or retrieve the current post title with optional markup.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $before Optional. Markup to prepend to the title. Default empty.
  * @param string $after  Optional. Markup to append to the title. Default empty.
@@ -63,7 +63,7 @@ function the_title( $before = '', $after = '', $echo = true ) {
  * before it is passed to the user or displayed. The default as with the_title(),
  * is to display the title.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @param string|array $args {
  *     Title attribute arguments. Optional.
@@ -102,7 +102,7 @@ function the_title_attribute( $args = '' ) {
  * will be displayed before the post title. If the post is private, then
  * "Private" will be located before the post title.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return string
@@ -121,7 +121,7 @@ function get_the_title( $post = 0 ) {
 			 *
 			 * The filter is only applied on the front end.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param string  $prepend Text displayed before the post title.
 			 *                         Default 'Protected: %s'.
@@ -136,7 +136,7 @@ function get_the_title( $post = 0 ) {
 			 *
 			 * The filter is only applied on the front end.
 			 *
-			 * @since 2.8.0
+			 * @since WP-2.8.0
 			 *
 			 * @param string  $prepend Text displayed before the post title.
 			 *                         Default 'Private: %s'.
@@ -150,7 +150,7 @@ function get_the_title( $post = 0 ) {
 	/**
 	 * Filters the post title.
 	 *
-	 * @since 0.71
+	 * @since WP-0.71
 	 *
 	 * @param string $title The post title.
 	 * @param int    $id    The post ID.
@@ -167,7 +167,7 @@ function get_the_title( $post = 0 ) {
  *
  * URL is escaped to make it XML-safe.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param int|WP_Post $post Optional. Post ID or post object. Default is global $post.
  */
@@ -180,7 +180,7 @@ function the_guid( $post = 0 ) {
 	/**
 	 * Filters the escaped Global Unique Identifier (guid) of the post.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @see get_the_guid()
 	 *
@@ -197,7 +197,7 @@ function the_guid( $post = 0 ) {
  * post. The reason you should not use it as a link, is because of moving the
  * blog across domains.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param int|WP_Post $post Optional. Post ID or post object. Default is global $post.
  * @return string
@@ -211,7 +211,7 @@ function get_the_guid( $post = 0 ) {
 	/**
 	 * Filters the Global Unique Identifier (guid) of the post.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $guid Global Unique Identifier (guid) of the post.
 	 * @param int    $id   The post ID.
@@ -222,7 +222,7 @@ function get_the_guid( $post = 0 ) {
 /**
  * Display the post content.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @param string $more_link_text Optional. Content for when there is more text.
  * @param bool   $strip_teaser   Optional. Strip teaser content before the more text. Default is false.
@@ -233,7 +233,7 @@ function the_content( $more_link_text = null, $strip_teaser = false) {
 	/**
 	 * Filters the post content.
 	 *
-	 * @since 0.71
+	 * @since WP-0.71
 	 *
 	 * @param string $content Content of the current post.
 	 */
@@ -245,7 +245,7 @@ function the_content( $more_link_text = null, $strip_teaser = false) {
 /**
  * Retrieve the post content.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @global int   $page      Page number of a single post/page.
  * @global int   $more      Boolean indicator for whether single post/page is being viewed.
@@ -314,7 +314,7 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 				/**
 				 * Filters the Read More link text.
 				 *
-				 * @since 2.8.0
+				 * @since WP-2.8.0
 				 *
 				 * @param string $more_link_element Read More link element.
 				 * @param string $more_link_text    Read More text.
@@ -333,7 +333,7 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 /**
  * Preview fix for JavaScript bug with foreign languages.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @param array $match Match array from preg_replace_callback.
@@ -346,14 +346,14 @@ function _convert_urlencoded_to_entities( $match ) {
 /**
  * Display the post excerpt.
  *
- * @since 0.71
+ * @since WP-0.71
  */
 function the_excerpt() {
 
 	/**
 	 * Filters the displayed post excerpt.
 	 *
-	 * @since 0.71
+	 * @since WP-0.71
 	 *
 	 * @see get_the_excerpt()
 	 *
@@ -365,8 +365,8 @@ function the_excerpt() {
 /**
  * Retrieves the post excerpt.
  *
- * @since 0.71
- * @since 4.5.0 Introduced the `$post` parameter.
+ * @since WP-0.71
+ * @since WP-4.5.0 Introduced the `$post` parameter.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return string Post excerpt.
@@ -388,8 +388,8 @@ function get_the_excerpt( $post = null ) {
 	/**
 	 * Filters the retrieved post excerpt.
 	 *
-	 * @since 1.2.0
-	 * @since 4.5.0 Introduced the `$post` parameter.
+	 * @since WP-1.2.0
+	 * @since WP-4.5.0 Introduced the `$post` parameter.
 	 *
 	 * @param string $post_excerpt The post excerpt.
 	 * @param WP_Post $post Post object.
@@ -400,7 +400,7 @@ function get_the_excerpt( $post = null ) {
 /**
  * Whether the post has a custom excerpt.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return bool True if the post has a custom excerpt, false otherwise.
@@ -413,7 +413,7 @@ function has_excerpt( $post = 0 ) {
 /**
  * Display the classes for the post div.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string|array $class   One or more classes to add to the class list.
  * @param int|WP_Post  $post_id Optional. Post ID or post object. Defaults to the global `$post`.
@@ -437,8 +437,8 @@ function post_class( $class = '', $post_id = null ) {
  * passed through the filter, {@see 'post_class'}, with the list of classes, followed by
  * $class parameter value, with the post ID as the last parameter.
  *
- * @since 2.7.0
- * @since 4.2.0 Custom taxonomy classes were added.
+ * @since WP-2.7.0
+ * @since WP-4.2.0 Custom taxonomy classes were added.
  *
  * @param string|array $class   One or more classes to add to the class list.
  * @param int|WP_Post  $post_id Optional. Post ID or post object.
@@ -534,7 +534,7 @@ function get_post_class( $class = '', $post_id = null ) {
 	/**
 	 * Filters the list of CSS classes for the current post.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param array $classes An array of post classes.
 	 * @param array $class   An array of additional classes added to the post.
@@ -548,7 +548,7 @@ function get_post_class( $class = '', $post_id = null ) {
 /**
  * Display the classes for the body element.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string|array $class One or more classes to add to the class list.
  */
@@ -560,7 +560,7 @@ function body_class( $class = '' ) {
 /**
  * Retrieve the classes for the body element as an array.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global WP_Query $wp_query
  *
@@ -762,7 +762,7 @@ function get_body_class( $class = '' ) {
 	/**
 	 * Filters the list of CSS body classes for the current post or page.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $classes An array of body classes.
 	 * @param array $class   An array of additional classes added to the body.
@@ -775,7 +775,7 @@ function get_body_class( $class = '' ) {
 /**
  * Whether post requires password and correct password has been provided.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param int|WP_Post|null $post An optional post. Global $post used if not provided.
  * @return bool false if a password is not required or the correct password cookie is present, true otherwise.
@@ -806,7 +806,7 @@ function post_password_required( $post = null ) {
 	/**
 	 * Filters whether a post requires the user to supply a password.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param bool    $required Whether the user needs to supply a password. True if password has not been
 	 *                          provided or is incorrect, false if password has been supplied or is not required.
@@ -825,7 +825,7 @@ function post_password_required( $post = null ) {
  * Displays page links for paginated posts (i.e. includes the <!--nextpage-->.
  * Quicktag one or more times). This tag must be within The Loop.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @global int $page
  * @global int $numpages
@@ -874,7 +874,7 @@ function wp_link_pages( $args = '' ) {
 	/**
 	 * Filters the arguments used in retrieving page links for paginated posts.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param array $params An array of arguments for page links for paginated posts.
 	 */
@@ -892,7 +892,7 @@ function wp_link_pages( $args = '' ) {
 				/**
 				 * Filters the HTML output of individual page number links.
 				 *
-				 * @since 3.6.0
+				 * @since WP-3.6.0
 				 *
 				 * @param string $link The page number HTML output.
 				 * @param int    $i    Page number for paginated posts' page links.
@@ -930,7 +930,7 @@ function wp_link_pages( $args = '' ) {
 	/**
 	 * Filters the HTML output of page links for paginated posts.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param string $output HTML output of paginated posts' page links.
 	 * @param array  $args   An array of arguments.
@@ -946,7 +946,7 @@ function wp_link_pages( $args = '' ) {
 /**
  * Helper function for wp_link_pages().
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  * @access private
  *
  * @global WP_Rewrite $wp_rewrite
@@ -990,7 +990,7 @@ function _wp_link_page( $i ) {
 /**
  * Retrieve post custom meta data field.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $key Meta data key name.
  * @return false|string|array Array of values or single value, if only one element exists. False will be returned if key does not exist.
@@ -1009,7 +1009,7 @@ function post_custom( $key = '' ) {
 /**
  * Display list of post custom fields.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @internal This will probably change at some point...
  *
@@ -1035,7 +1035,7 @@ function the_meta() {
 			/**
 			 * Filters the HTML output of the li element in the post custom fields list.
 			 *
-			 * @since 2.2.0
+			 * @since WP-2.2.0
 			 *
 			 * @param string $html  The HTML output for the li element.
 			 * @param string $key   Meta key.
@@ -1054,9 +1054,9 @@ function the_meta() {
 /**
  * Retrieve or display list of pages as a dropdown (select list).
  *
- * @since 2.1.0
- * @since 4.2.0 The `$value_field` argument was added.
- * @since 4.3.0 The `$class` argument was added.
+ * @since WP-2.1.0
+ * @since WP-4.2.0 The `$value_field` argument was added.
+ * @since WP-4.3.0 The `$class` argument was added.
  *
  * @param array|string $args {
  *     Optional. Array or string of arguments to generate a pages drop-down element.
@@ -1119,8 +1119,8 @@ function wp_dropdown_pages( $args = '' ) {
 	/**
 	 * Filters the HTML output of a list of pages as a drop down.
 	 *
-	 * @since 2.1.0
-	 * @since 4.4.0 `$r` and `$pages` added as arguments.
+	 * @since WP-2.1.0
+	 * @since WP-4.4.0 `$r` and `$pages` added as arguments.
 	 *
 	 * @param string $output HTML output for drop down list of pages.
 	 * @param array  $r      The parsed arguments array.
@@ -1137,8 +1137,8 @@ function wp_dropdown_pages( $args = '' ) {
 /**
  * Retrieve or display list of pages (or hierarchical post type items) in list (li) format.
  *
- * @since 1.5.0
- * @since 4.7.0 Added the `item_spacing` argument.
+ * @since WP-1.5.0
+ * @since WP-4.7.0 Added the `item_spacing` argument.
  *
  * @see get_pages()
  *
@@ -1210,7 +1210,7 @@ function wp_list_pages( $args = '' ) {
 	/**
 	 * Filters the array of pages to exclude from the pages list.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param array $exclude_array An array of page IDs to exclude.
 	 */
@@ -1244,8 +1244,8 @@ function wp_list_pages( $args = '' ) {
 	/**
 	 * Filters the HTML output of the pages to list.
 	 *
-	 * @since 1.5.1
-	 * @since 4.4.0 `$pages` added as arguments.
+	 * @since WP-1.5.1
+	 * @since WP-4.4.0 `$pages` added as arguments.
 	 *
 	 * @see wp_list_pages()
 	 *
@@ -1268,9 +1268,9 @@ function wp_list_pages( $args = '' ) {
  * The arguments are listed below and part of the arguments are for wp_list_pages()} function.
  * Check that function for more info on those arguments.
  *
- * @since 2.7.0
- * @since 4.4.0 Added `menu_id`, `container`, `before`, `after`, and `walker` arguments.
- * @since 4.7.0 Added the `item_spacing` argument.
+ * @since WP-2.7.0
+ * @since WP-4.4.0 Added `menu_id`, `container`, `before`, `after`, and `walker` arguments.
+ * @since WP-4.7.0 Added the `item_spacing` argument.
  *
  * @param array|string $args {
  *     Optional. Arguments to generate a page menu. See wp_list_pages() for additional arguments.
@@ -1325,7 +1325,7 @@ function wp_page_menu( $args = array() ) {
 	/**
 	 * Filters the arguments used to generate a page-based menu.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @see wp_page_menu()
 	 *
@@ -1396,7 +1396,7 @@ function wp_page_menu( $args = array() ) {
 	/**
 	 * Filters the HTML output of a page-based menu.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @see wp_page_menu()
 	 *
@@ -1418,7 +1418,7 @@ function wp_page_menu( $args = array() ) {
  * Retrieve HTML list content for page list.
  *
  * @uses Walker_Page to create HTML list content.
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param array $pages
  * @param int   $depth
@@ -1445,7 +1445,7 @@ function walk_page_tree( $pages, $depth, $current_page, $r ) {
  * Retrieve HTML dropdown (select) content for page list.
  *
  * @uses Walker_PageDropdown to create HTML dropdown content.
- * @since 2.1.0
+ * @since WP-2.1.0
  * @see Walker_PageDropdown::walk() for parameters and return description.
  *
  * @return string
@@ -1467,7 +1467,7 @@ function walk_page_dropdown_tree() {
 /**
  * Display an attachment page link using an image or icon.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param int|WP_Post $id Optional. Post ID or post object.
  * @param bool        $fullsize     Optional, default is false. Whether to use full size.
@@ -1487,8 +1487,8 @@ function the_attachment_link( $id = 0, $fullsize = false, $deprecated = false, $
 /**
  * Retrieve an attachment page link using an image or icon, if possible.
  *
- * @since 2.5.0
- * @since 4.4.0 The `$id` parameter can now accept either a post ID or `WP_Post` object.
+ * @since WP-2.5.0
+ * @since WP-4.4.0 The `$id` parameter can now accept either a post ID or `WP_Post` object.
  *
  * @param int|WP_Post  $id        Optional. Post ID or post object.
  * @param string|array $size      Optional. Image size. Accepts any valid image size, or an array
@@ -1530,7 +1530,7 @@ function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = fals
 	/**
 	 * Filters a retrieved attachment page link.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param string       $link_html The page link HTML output.
 	 * @param int          $id        Post ID.
@@ -1546,7 +1546,7 @@ function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = fals
 /**
  * Wrap attachment in paragraph tag before content.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param string $content
  * @return string
@@ -1580,7 +1580,7 @@ function prepend_attachment($content) {
 	/**
 	 * Filters the attachment markup to be prepended to the post content.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @see prepend_attachment()
 	 *
@@ -1598,7 +1598,7 @@ function prepend_attachment($content) {
 /**
  * Retrieve protected post password form content.
  *
- * @since 1.0.0
+ * @since WP-1.0.0
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return string HTML content for password form for password protected post.
@@ -1618,7 +1618,7 @@ function get_the_password_form( $post = 0 ) {
 	 * limits the password field to 20 characters regardless of the value of the
 	 * size attribute in the form input.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param string $output The password form HTML output.
 	 */
@@ -1632,9 +1632,9 @@ function get_the_password_form( $post = 0 ) {
  * You can optionally provide a template name or array of template names
  * and then the check will be specific to that template.
  *
- * @since 2.5.0
- * @since 4.2.0 The `$template` parameter was changed to also accept an array of page templates.
- * @since 4.7.0 Now works with any post type, not just pages.
+ * @since WP-2.5.0
+ * @since WP-4.2.0 The `$template` parameter was changed to also accept an array of page templates.
+ * @since WP-4.7.0 Now works with any post type, not just pages.
  *
  * @param string|array $template The specific template name or array of templates to match.
  * @return bool True on success, false on failure.
@@ -1666,8 +1666,8 @@ function is_page_template( $template = '' ) {
 /**
  * Get the specific template name for a given post.
  *
- * @since 3.4.0
- * @since 4.7.0 Now works with any post type, not just pages.
+ * @since WP-3.4.0
+ * @since WP-4.7.0 Now works with any post type, not just pages.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global $post.
  * @return string|false Page template filename. Returns an empty string when the default page template
@@ -1692,7 +1692,7 @@ function get_page_template_slug( $post = null ) {
 /**
  * Retrieve formatted date timestamp of a revision (linked to that revisions's page).
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param int|object $revision Revision ID or revision object.
  * @param bool       $link     Optional, default is true. Link to revisions's page?
@@ -1727,7 +1727,7 @@ function wp_post_revision_title( $revision, $link = true ) {
 /**
  * Retrieve formatted date timestamp of a revision (linked to that revisions's page).
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param int|object $revision Revision ID or revision object.
  * @param bool       $link     Optional, default is true. Link to revisions's page?
@@ -1772,7 +1772,7 @@ function wp_post_revision_title_expanded( $revision, $link = true ) {
 	/**
 	 * Filters the formatted author and date for a revision.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string  $revision_date_author The formatted string.
 	 * @param WP_Post $revision             The revision object.
@@ -1788,7 +1788,7 @@ function wp_post_revision_title_expanded( $revision, $link = true ) {
  * Can output either a UL with edit links or a TABLE with diff interface, and
  * restore action links.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param int|WP_Post $post_id Optional. Post ID or WP_Post object. Default is global $post.
  * @param string      $type    'all' (default), 'revision' or 'autosave'

@@ -61,7 +61,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * If a library isn't provided, query all media items.
 	 * If a selection instance isn't provided, create one.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	initialize: function() {
 		var selection = this.get('selection'),
@@ -89,7 +89,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {
 		this.syncSelection();
@@ -105,7 +105,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	},
 
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {
 		this.recordSelection();
@@ -122,7 +122,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Reset the library to its initial state.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	reset: function() {
 		this.get('selection').reset();
@@ -135,7 +135,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 *
 	 * If site options don't define them, fall back to a persistent user setting.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	resetDisplays: function() {
 		var defaultProps = wp.media.view.settings.defaultProps;
@@ -150,7 +150,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Create a model to represent display settings (alignment, etc.) for an attachment.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Backbone.Model}
@@ -167,7 +167,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Given an attachment, create attachment display settings properties.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Object}
@@ -187,7 +187,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Whether an attachment is image.
 	 *
-	 * @since 4.4.1
+	 * @since WP-4.4.1
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Boolean}
@@ -204,7 +204,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Whether an attachment can be embedded (audio or video).
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 * @returns {Boolean}
@@ -227,7 +227,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * content mode is not an option in the state's router (provided
 	 * the state has a router), reset the content mode to the default.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	refreshContent: function() {
 		var selection = this.get('selection'),
@@ -251,7 +251,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	 * attachments are uploaded, the last attachment in the upload queue will
 	 * be selected.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {wp.media.model.Attachment} attachment
 	 */
@@ -271,7 +271,7 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 	/**
 	 * Persist the mode of the content region as a user setting.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	saveContentMode: function() {
 		if ( 'browse' !== this.get('router') ) {

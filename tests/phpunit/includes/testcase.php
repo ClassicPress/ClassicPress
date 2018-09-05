@@ -141,7 +141,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	 *
 	 * We use this method to detect expectedDeprecated and expectedIncorrectUsage annotations.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 */
 	protected function assertPostConditions() {
 		$this->expectedDeprecated();
@@ -343,7 +343,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Commit the queries in a transaction.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 */
 	public static function commit_transaction() {
 		global $wpdb;
@@ -427,7 +427,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_deprecated_function()` or `_deprecated_argument()` call from within a test.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, class, or argument that is deprecated. Must match
 	 *                           first parameter of the `_deprecated_function()` or `_deprecated_argument()` call.
@@ -439,7 +439,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_doing_it_wrong()` call from within a test.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, or class that appears in the first argument of the
 	 *                           source `_doing_it_wrong()` call.
@@ -843,7 +843,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Multisite-agnostic way to delete a user from the database.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 */
 	public static function delete_user( $user_id ) {
 		if ( is_multisite() ) {
@@ -856,7 +856,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Utility method that resets permalinks and flushes rewrites.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @global WP_Rewrite $wp_rewrite
 	 *

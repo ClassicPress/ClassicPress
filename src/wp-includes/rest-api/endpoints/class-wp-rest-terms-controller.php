@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage REST_API
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
  * Core class used to managed terms associated with a taxonomy via the REST API.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @see WP_REST_Controller
  */
@@ -19,7 +19,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Taxonomy key.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var string
 	 */
 	protected $taxonomy;
@@ -27,7 +27,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Instance of a term meta fields object.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var WP_REST_Term_Meta_Fields
 	 */
 	protected $meta;
@@ -35,7 +35,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Column to have the terms be sorted by.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var string
 	 */
 	protected $sort_column;
@@ -43,7 +43,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Number of terms that were found.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var int
 	 */
 	protected $total_terms;
@@ -51,7 +51,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string $taxonomy Taxonomy key.
 	 */
@@ -67,7 +67,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes for the objects of the controller.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @see register_rest_route()
 	 */
@@ -129,7 +129,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a request has access to read terms in the specified taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has read access, otherwise false or WP_Error object.
@@ -148,7 +148,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves terms associated with a taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -225,7 +225,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 * Enables adding extra arguments or setting defaults for a terms
 		 * collection request.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @link https://developer.wordpress.org/reference/functions/get_terms/
 		 *
@@ -298,7 +298,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Get the term, if the ID is valid.
 	 *
-	 * @since 4.7.2
+	 * @since WP-4.7.2
 	 *
 	 * @param int $id Supplied ID.
 	 * @return WP_Term|WP_Error Term object if ID is valid, WP_Error otherwise.
@@ -325,7 +325,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a request has access to read or edit the specified term.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has read access for the item, otherwise false or WP_Error object.
@@ -345,7 +345,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Gets a single term from a taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -364,7 +364,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a request has access to create a term.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has access to create items, false or WP_Error object otherwise.
@@ -389,7 +389,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Creates a single term in a taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -431,7 +431,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->taxonomy`, refers to the taxonomy slug.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param WP_Term         $term     Inserted or updated term object.
 		 * @param WP_REST_Request $request  Request object.
@@ -468,7 +468,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a request has access to update the specified term.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has access to update the item, false or WP_Error object otherwise.
@@ -489,7 +489,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Updates a single term from a taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -553,7 +553,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a request has access to delete the specified term.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has access to delete the item, otherwise false or WP_Error object.
@@ -574,7 +574,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Deletes a single term from a taxonomy.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -611,7 +611,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->taxonomy`, refers to the taxonomy slug.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param WP_Term          $term     The deleted term.
 		 * @param WP_REST_Response $response The response data.
@@ -625,7 +625,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a single term for create or update.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 * @return object $prepared_term Term object.
@@ -666,7 +666,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->taxonomy`, refers to the taxonomy slug.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param object          $prepared_term Term object.
 		 * @param WP_REST_Request $request       Request object.
@@ -677,7 +677,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a single term output for response.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param obj             $item    Term object.
 	 * @param WP_REST_Request $request Request object.
@@ -739,7 +739,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 *
 		 * Allows modification of the term data right before it is returned.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param WP_REST_Response  $response  The response object.
 		 * @param object            $item      The original term object.
@@ -751,7 +751,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares links for the request.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param object $term Term object.
 	 * @return array Links for the given term.
@@ -812,7 +812,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the term's schema, conforming to JSON Schema.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array Item schema data.
 	 */
@@ -891,7 +891,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the query params for collections.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array Collection parameters.
 	 */
@@ -989,7 +989,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		 * collection parameter to an internal WP_Term_Query parameter.  Use the
 		 * `rest_{$this->taxonomy}_query` filter to set WP_Term_Query parameters.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 *
 		 * @param array       $query_params JSON Schema-formatted collection parameters.
 		 * @param WP_Taxonomy $taxonomy     Taxonomy object.
@@ -1000,7 +1000,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks that the taxonomy is valid.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string $taxonomy Taxonomy to check.
 	 * @return bool Whether the taxonomy is allowed for REST management.
