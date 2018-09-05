@@ -17,7 +17,7 @@ if ( is_array( get_site_option( 'illegal_names' )) && isset( $_GET[ 'new' ] ) &&
 /**
  * Prints signup_header via wp_head
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  */
 function do_signup_header() {
 	/**
@@ -52,7 +52,7 @@ do_action( 'before_signup_header' );
 /**
  * Prints styles for front-end Multisite signup pages
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  */
 function wpmu_signup_stylesheet() {
 	?>
@@ -91,7 +91,7 @@ do_action( 'before_signup_form' );
 /**
  * Generates and displays the Signup and Create Site forms
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string          $blogname   The new site name.
  * @param string          $blog_title The new site title.
@@ -200,7 +200,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 /**
  * Validate the new site signup
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return array Contains the new site data and error messages.
  */
@@ -215,7 +215,7 @@ function validate_blog_form() {
 /**
  * Display user registration form
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string          $user_name  The entered username.
  * @param string          $user_email The entered email address.
@@ -257,7 +257,7 @@ function show_user_form($user_name = '', $user_email = '', $errors = '') {
 /**
  * Validate user signup name and email
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return array Contains username, email, and error messages.
  */
@@ -268,7 +268,7 @@ function validate_user_form() {
 /**
  * Allow returning users to sign up for another site
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string          $blogname   The new site name
  * @param string          $blog_title The new site title.
@@ -334,7 +334,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 		/**
 		 * Hidden sign-up form fields output when creating another site or user.
 		 *
-		 * @since MU (3.0.0)
+		 * @since WP-MU (3.0.0)
 		 *
 		 * @param string $context A string describing the steps of the sign-up process. The value can be
 		 *                        'create-another-site', 'validate-user', or 'validate-site'.
@@ -350,7 +350,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 /**
  * Validate a new site signup.
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return null|bool True if site signup was validated, false if error.
  *                   The function halts all execution if the user is not logged in.
@@ -403,7 +403,7 @@ function validate_another_blog_signup() {
 	 *
 	 * Use the {@see 'add_signup_meta'} filter instead.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 * @deprecated 3.0.0 Use the {@see 'add_signup_meta'} filter instead.
 	 *
 	 * @param array $blog_meta_defaults An array of default blog meta variables.
@@ -437,7 +437,7 @@ function validate_another_blog_signup() {
 /**
  * Confirm a new site signup.
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  * @since WP-4.4.0 Added the `$blog_id` parameter.
  *
  * @param string $domain     The domain URL.
@@ -495,7 +495,7 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
 /**
  * Setup the new user signup process
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string          $user_name  The username.
  * @param string          $user_email The user's email.
@@ -569,7 +569,7 @@ function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
 /**
  * Validate the new user signup
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return bool True if new user signup was validated, false if error
  */
@@ -599,7 +599,7 @@ function validate_user_signup() {
 /**
  * New user signup confirmation
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string $user_name The username
  * @param string $user_email The user's email address
@@ -620,7 +620,7 @@ function confirm_user_signup($user_name, $user_email) {
 /**
  * Setup the new site signup
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string          $user_name  The username.
  * @param string          $user_email The user's email address.
@@ -683,7 +683,7 @@ function signup_blog($user_name = '', $user_email = '', $blogname = '', $blog_ti
 /**
  * Validate new site signup
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return bool True if the site signup was validated, false if error
  */
@@ -740,7 +740,7 @@ function validate_blog_signup() {
 /**
  * New site signup confirmation
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @param string $domain The domain URL
  * @param string $path The site root path

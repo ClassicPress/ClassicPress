@@ -95,7 +95,7 @@ else :
 	 * string to this filter will enable the section, and allow new settings
 	 * to be added, either globally or for specific sites.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 *
 	 * @param string $settings_html The settings HTML markup. Default empty.
 	 * @param object $context       Context of the setting (global or site-specific). Default 'global'.
@@ -122,7 +122,7 @@ else :
 		/**
 		 * Filters the row links displayed for each site on the My Sites screen.
 		 *
-		 * @since MU (3.0.0)
+		 * @since WP-MU (3.0.0)
 		 *
 		 * @param string $actions   The HTML site link markup.
 		 * @param object $user_blog An object containing the site data.

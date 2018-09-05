@@ -423,7 +423,7 @@ function count_many_users_posts( $users, $post_type = 'post', $public_only = fal
 /**
  * Get the current user's ID
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @return int The current user's ID, or 0 if no user is logged in.
  */
@@ -679,7 +679,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 	/**
 	 * Filters the list of sites a user belongs to.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 *
 	 * @param array $sites   An array of site objects belonging to the user.
 	 * @param int   $user_id User ID.
@@ -692,7 +692,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 /**
  * Find out whether a user is a member of a given blog.
  *
- * @since MU (3.0.0)
+ * @since WP-MU (3.0.0)
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -2686,7 +2686,7 @@ All at ###SITENAME###
 		 * ###SITENAME###  The name of the site.
 		 * ###SITEURL###   The URL to the site.
 		 *
-		 * @since MU (3.0.0)
+		 * @since WP-MU (3.0.0)
 		 * @since WP-4.9.0 This filter is no longer Multisite specific.
 		 *
 		 * @param string $email_text     Text in the email.

@@ -1197,7 +1197,7 @@ All at ###SITENAME###
 	 * ###SITENAME###  The name of the site.
 	 * ###SITEURL###   The URL to the site.
 	 *
-	 * @since MU (3.0.0)
+	 * @since WP-MU (3.0.0)
 	 * @since WP-4.9.0 This filter is no longer Multisite specific.
 	 *
 	 * @param string $email_text      Text in the email.
