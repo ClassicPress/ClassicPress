@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Post
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used to create an HTML drop-down list of pages.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @see Walker
  */
@@ -19,7 +19,7 @@ class Walker_PageDropdown extends Walker {
 	/**
 	 * What the class handles.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var string
 	 *
 	 * @see Walker::$tree_type
@@ -29,7 +29,7 @@ class Walker_PageDropdown extends Walker {
 	/**
 	 * Database fields to use.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 *
 	 * @see Walker::$db_fields
@@ -40,7 +40,7 @@ class Walker_PageDropdown extends Walker {
 	/**
 	 * Starts the element output.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::start_el()
 	 *
@@ -74,7 +74,7 @@ class Walker_PageDropdown extends Walker {
 		/**
 		 * Filters the page title when creating an HTML drop-down list of pages.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param string $title Page title.
 		 * @param object $page  Page data object.

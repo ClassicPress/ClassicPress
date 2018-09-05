@@ -181,14 +181,14 @@ var tagBox, array_unique_noempty;
 		/**
 		 * Track the user's last action.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 */
 		userAction: '',
 
 		/**
 		 * Dispatch an audible message to screen readers.
 		 *
-		 * @since 4.7.0
+		 * @since WP-4.7.0
 		 */
 		screenReadersMessage: function() {
 			var message;

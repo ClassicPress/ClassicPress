@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Administration
- * @since 4.3.0
+ * @since WP-4.3.0
  */
 
 // Bookmark hooks.

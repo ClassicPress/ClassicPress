@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Plugin
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
  * Core class used to implement action and filter hook functionality.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @see Iterator
  * @see ArrayAccess
@@ -20,7 +20,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Hook callbacks.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	public $callbacks = array();
@@ -28,7 +28,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * The priority keys of actively running iterations of a hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	private $iterations = array();
@@ -36,7 +36,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * The current priority of actively running iterations of a hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	private $current_priority = array();
@@ -44,7 +44,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Number of levels this hook can be recursively called.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var int
 	 */
 	private $nesting_level = 0;
@@ -52,7 +52,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Flag for if we're current doing an action, rather than a filter.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var bool
 	 */
 	private $doing_action = false;
@@ -60,7 +60,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Hooks a function or method to a specific filter action.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string   $tag             The name of the filter to hook the $function_to_add callback to.
 	 * @param callable $function_to_add The callback to be run when the filter is applied.
@@ -92,7 +92,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Handles reseting callback priority keys mid-iteration.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param bool|int $new_priority     Optional. The priority of the new filter being added. Default false,
 	 *                                   for no priority being added.
@@ -160,7 +160,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Unhooks a function or method from a specific filter action.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string   $tag                The filter hook to which the function to be removed is hooked. Used
 	 *                                     for building the callback ID when SPL is not available.
@@ -187,7 +187,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Checks if a specific action has been registered for this hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string        $tag               Optional. The name of the filter hook. Used for building
 	 *                                         the callback ID when SPL is not available. Default empty.
@@ -216,7 +216,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Checks if any callbacks have been registered for this hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return bool True if callbacks have been registered for the current hook, otherwise false.
 	 */
@@ -232,7 +232,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Removes all callbacks from the current filter.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param int|bool $priority Optional. The priority number to remove. Default false.
 	 */
@@ -255,7 +255,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Calls the callback functions added to a filter hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param mixed $value The value to filter.
 	 * @param array $args  Arguments to pass to callbacks.
@@ -301,7 +301,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Executes the callback functions hooked on a specific action hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param mixed $args Arguments to pass to the hook callbacks.
 	 */
@@ -318,7 +318,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Processes the functions hooked into the 'all' hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param array $args Arguments to pass to the hook callbacks. Passed by reference.
 	 */
@@ -340,7 +340,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Return the current priority level of the currently running iteration of the hook.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return int|false If the hook is running, return the current priority level. If it isn't running, return false.
 	 */
@@ -355,7 +355,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Normalizes filters set up before WordPress has initialized to WP_Hook objects.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @static
 	 *
 	 * @param array $filters Filters to normalize.
@@ -388,7 +388,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Determines whether an offset value exists.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/arrayaccess.offsetexists.php
 	 *
@@ -402,7 +402,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Retrieves a value at a specified offset.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/arrayaccess.offsetget.php
 	 *
@@ -416,7 +416,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Sets a value at a specified offset.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/arrayaccess.offsetset.php
 	 *
@@ -434,7 +434,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Unsets a specified offset.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/arrayaccess.offsetunset.php
 	 *
@@ -447,7 +447,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Returns the current element.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.current.php
 	 *
@@ -460,7 +460,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Moves forward to the next element.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.next.php
 	 *
@@ -473,7 +473,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Returns the key of the current element.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.key.php
 	 *
@@ -486,7 +486,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Checks if current position is valid.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.valid.php
 	 *
@@ -499,7 +499,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	/**
 	 * Rewinds the Iterator to the first element.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.rewind.php
 	 */

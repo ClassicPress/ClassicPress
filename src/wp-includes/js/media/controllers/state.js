@@ -21,7 +21,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	/**
 	 * Constructor.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	constructor: function() {
 		this.on( 'activate', this._preActivate, this );
@@ -42,7 +42,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Ready event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	ready: function() {},
 
@@ -50,7 +50,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Activate event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	activate: function() {},
 
@@ -58,7 +58,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Deactivate event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	deactivate: function() {},
 
@@ -66,13 +66,13 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Reset event callback.
 	 *
 	 * @abstract
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	reset: function() {},
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_ready: function() {
 		this._updateMenu();
@@ -80,7 +80,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	*/
 	_preActivate: function() {
 		this.active = true;
@@ -88,7 +88,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_postActivate: function() {
 		this.on( 'change:menu', this._menu, this );
@@ -107,7 +107,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_deactivate: function() {
 		this.active = false;
@@ -122,7 +122,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_title: function() {
 		this.frame.title.render( this.get('titleMode') || 'default' );
@@ -130,7 +130,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_renderTitle: function( view ) {
 		view.$el.text( this.get('title') || '' );
@@ -138,7 +138,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_router: function() {
 		var router = this.frame.router,
@@ -160,7 +160,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_menu: function() {
 		var menu = this.frame.menu,
@@ -182,7 +182,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 
 	/**
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	_updateMenu: function() {
 		var previous = this.previous('menu'),
@@ -201,7 +201,7 @@ var State = Backbone.Model.extend(/** @lends wp.media.controller.State.prototype
 	 * Create a view in the media menu for the state.
 	 *
 	 * @access private
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {media.view.Menu} view The menu view.
 	 */

@@ -4,7 +4,7 @@
  * IXR_MESSAGE
  *
  * @package IXR
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  */
 class IXR_Message
@@ -79,7 +79,7 @@ class IXR_Message
             /**
              * Filters the number of elements to parse in an XML-RPC response.
              *
-             * @since 4.0.0
+             * @since WP-4.0.0
              *
              * @param int $element_limit Default elements limit.
              */
@@ -103,7 +103,7 @@ class IXR_Message
         /**
          * Filters the chunk size that can be used to parse an XML-RPC reponse message.
          *
-         * @since 4.4.0
+         * @since WP-4.4.0
          *
          * @param int $chunk_size Chunk size to parse in bytes.
          */

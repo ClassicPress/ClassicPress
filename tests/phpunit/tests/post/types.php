@@ -8,7 +8,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	/**
 	 * Post type.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 * @var string
 	 */
 	public $post_type;
@@ -16,7 +16,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function setUp() {
 		parent::setUp();
@@ -532,7 +532,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	 *
 	 * Uses `$this->post_type` initialized in setUp().
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 *
 	 * @param array $args register_post_type() arguments.
 	 * @return WP_Post_Type Post type object for `$this->post_type`.

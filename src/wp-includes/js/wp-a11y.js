@@ -11,8 +11,8 @@ window.wp = window.wp || {};
 	/**
 	 * Update the ARIA live notification area text node.
 	 *
-	 * @since 4.2.0
-	 * @since 4.3.0 Introduced the 'ariaLive' argument.
+	 * @since WP-4.2.0
+	 * @since WP-4.3.0 Introduced the 'ariaLive' argument.
 	 *
 	 * @param {String} message    The message to be announced by Assistive Technologies.
 	 * @param {String} [ariaLive] The politeness level for aria-live. Possible values:
@@ -47,7 +47,7 @@ window.wp = window.wp || {};
 	/**
 	 * Build the live regions markup.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param {String} ariaLive Optional. Value for the 'aria-live' attribute, default 'polite'.
 	 *
@@ -71,7 +71,7 @@ window.wp = window.wp || {};
 	/**
 	 * Clear the live regions.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 */
 	function clear() {
 		$( '.wp-a11y-speak-region' ).text( '' );
@@ -80,8 +80,8 @@ window.wp = window.wp || {};
 	/**
 	 * Initialize wp.a11y and define ARIA live notification area.
 	 *
-	 * @since 4.2.0
-	 * @since 4.3.0 Added the assertive live region.
+	 * @since WP-4.2.0
+	 * @since WP-4.3.0 Added the assertive live region.
 	 */
 	$( document ).ready( function() {
 		$containerPolite = $( '#wp-a11y-speak-polite' );

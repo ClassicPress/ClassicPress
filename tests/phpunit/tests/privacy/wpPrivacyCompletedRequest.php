@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 
 /**
@@ -13,13 +13,13 @@
  * @group privacy
  * @covers _wp_privacy_completed_request
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 class Tests_WpPrivacyCompletedRequest extends WP_UnitTestCase {
 	/**
 	 * Request ID
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var int $request_id
 	 */

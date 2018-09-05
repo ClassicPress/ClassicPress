@@ -8,7 +8,7 @@
 /**
  * Return the HTTP protocol sent by the server.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @return string The HTTP protocol. Default: HTTP/1.0.
  */
@@ -23,7 +23,7 @@ function wp_get_server_protocol() {
 /**
  * Turn register globals off.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  * @access private
  */
 function wp_unregister_GLOBALS() {
@@ -46,7 +46,7 @@ function wp_unregister_GLOBALS() {
 /**
  * Fix `$_SERVER` variables for various setups.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @global string $PHP_SELF The filename of the currently executing script,
@@ -112,7 +112,7 @@ function wp_fix_server_vars() {
  *
  * Dies if requirements are not met.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @global string $required_php_version The required PHP version string.
@@ -147,7 +147,7 @@ function wp_check_php_mysql_versions() {
  *
  * Instead, send the headers for a zero-length favicon and bail.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function wp_favicon_request() {
 	if ( '/favicon.ico' == $_SERVER['REQUEST_URI'] ) {
@@ -167,7 +167,7 @@ function wp_favicon_request() {
  * The default message can be replaced by using a drop-in (maintenance.php in
  * the wp-content directory).
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @global int $upgrading the unix timestamp marking when upgrading WordPress began.
@@ -191,7 +191,7 @@ function wp_maintenance() {
 	 * active and the request will end. If false, the request will be allowed to
 	 * continue processing even if maintenance mode should be active.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param bool $enable_checks Whether to enable maintenance mode. Default true.
 	 * @param int  $upgrading     The timestamp set in the .maintenance file.
@@ -230,7 +230,7 @@ function wp_maintenance() {
 /**
  * Start the WordPress micro-timer.
  *
- * @since 0.71
+ * @since WP-0.71
  * @access private
  *
  * @global float $timestart Unix timestamp set at the beginning of the page load.
@@ -247,7 +247,7 @@ function timer_start() {
 /**
  * Retrieve or display the time from the page start to when function is called.
  *
- * @since 0.71
+ * @since WP-0.71
  *
  * @global float   $timestart Seconds from when timer_start() is called.
  * @global float   $timeend   Seconds from when function is called.
@@ -297,7 +297,7 @@ function timer_stop( $display = 0, $precision = 3 ) {
  *
  * Errors are never displayed for XML-RPC, REST, and Ajax requests.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  */
 function wp_debug_mode() {
@@ -309,7 +309,7 @@ function wp_debug_mode() {
 	 * constants to not be checked and the default php values for errors
 	 * will be used unless you take care to update them yourself.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param bool $enable_debug_mode Whether to enable debug mode checks to occur. Default true.
 	 */
@@ -348,7 +348,7 @@ function wp_debug_mode() {
  * is used. Otherwise the language directory is assumed to live
  * in `WPINC`.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  */
 function wp_set_lang_dir() {
@@ -359,7 +359,7 @@ function wp_set_lang_dir() {
 			 *
 			 * No leading slash, no trailing slash, full path, not relative to ABSPATH
 			 *
-			 * @since 2.1.0
+			 * @since WP-2.1.0
 			 */
 			define( 'WP_LANG_DIR', WP_CONTENT_DIR . '/languages' );
 			if ( !defined( 'LANGDIR' ) ) {
@@ -372,7 +372,7 @@ function wp_set_lang_dir() {
 			 *
 			 * No leading slash, no trailing slash, full path, not relative to `ABSPATH`.
 			 *
-			 * @since 2.1.0
+			 * @since WP-2.1.0
 			 */
 			define( 'WP_LANG_DIR', ABSPATH . WPINC . '/languages' );
 			if ( !defined( 'LANGDIR' ) ) {
@@ -386,7 +386,7 @@ function wp_set_lang_dir() {
 /**
  * Load the database class file and instantiate the `$wpdb` global.
  *
- * @since 2.5.0
+ * @since WP-2.5.0
  *
  * @global wpdb $wpdb The WordPress database class.
  */
@@ -410,7 +410,7 @@ function require_wp_db() {
  *
  * Columns not listed here default to `%s`.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @global wpdb   $wpdb         The WordPress database class.
@@ -447,7 +447,7 @@ function wp_set_wpdb_vars() {
  * Toggle `$_wp_using_ext_object_cache` on and off without directly
  * touching global.
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  *
  * @global bool $_wp_using_ext_object_cache
  *
@@ -468,7 +468,7 @@ function wp_using_ext_object_cache( $using = null ) {
  * If an object-cache.php file exists in the wp-content directory,
  * it uses that drop-in as an external object cache.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @global array $wp_filter Stores all of the filters.
@@ -527,7 +527,7 @@ function wp_start_object_cache() {
  *
  * Dies with an error message when Multisite is enabled.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  */
 function wp_not_installed() {
@@ -558,7 +558,7 @@ function wp_not_installed() {
  * directory manually, define `WPMU_PLUGIN_DIR` and `WPMU_PLUGIN_URL`
  * in wp-config.php.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @return array Files to include.
@@ -588,7 +588,7 @@ function wp_get_mu_plugins() {
  * directory manually, define `WP_PLUGIN_DIR` and `WP_PLUGIN_URL`
  * in wp-config.php.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  *
  * @return array Files.
@@ -626,7 +626,7 @@ function wp_get_active_and_valid_plugins() {
  * In most cases the default internal encoding is latin1, which is
  * of no use, since we want to use the `mb_` functions for `utf-8` strings.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  */
 function wp_set_internal_encoding() {
@@ -643,7 +643,7 @@ function wp_set_internal_encoding() {
  * Also forces `$_REQUEST` to be `$_GET + $_POST`. If `$_SERVER`,
  * `$_COOKIE`, or `$_ENV` are needed, use those superglobals directly.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @access private
  */
 function wp_magic_quotes() {
@@ -667,14 +667,14 @@ function wp_magic_quotes() {
 /**
  * Runs just before PHP shuts down execution.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  * @access private
  */
 function shutdown_action_hook() {
 	/**
 	 * Fires just before PHP shuts down execution.
 	 *
-	 * @since 1.2.0
+	 * @since WP-1.2.0
 	 */
 	do_action( 'shutdown' );
 
@@ -684,7 +684,7 @@ function shutdown_action_hook() {
 /**
  * Copy an object.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @deprecated 3.2.0
  *
  * @param object $object The object to clone.
@@ -701,7 +701,7 @@ function wp_clone( $object ) {
  * Does not check if the user is an administrator; current_user_can()
  * for checking roles and capabilities.
  *
- * @since 1.5.1
+ * @since WP-1.5.1
  *
  * @global WP_Screen $current_screen
  *
@@ -724,7 +724,7 @@ function is_admin() {
  * Does not check if the user is an administrator; current_user_can()
  * for checking roles and capabilities.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global WP_Screen $current_screen
  *
@@ -747,7 +747,7 @@ function is_blog_admin() {
  * Does not check if the user is an administrator; current_user_can()
  * for checking roles and capabilities.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global WP_Screen $current_screen
  *
@@ -771,7 +771,7 @@ function is_network_admin() {
  * checks to tell if the user should be accessing a section or not
  * current_user_can().
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global WP_Screen $current_screen
  *
@@ -789,7 +789,7 @@ function is_user_admin() {
 /**
  * If Multisite is enabled.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return bool True if Multisite is enabled, false otherwise.
  */
@@ -806,7 +806,7 @@ function is_multisite() {
 /**
  * Retrieve the current site ID.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global int $blog_id
  *
@@ -820,7 +820,7 @@ function get_current_blog_id() {
 /**
  * Retrieves the current network ID.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @return int The ID of the current network.
  */
@@ -848,7 +848,7 @@ function get_current_network_id() {
  * the script will then terminate with an error, otherwise there is a risk
  * that a file can be double-included.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  * @access private
  *
  * @global WP_Locale $wp_locale The WordPress date and time locale object.
@@ -932,7 +932,7 @@ function wp_load_translations_early() {
  *
  * If the `WP_INSTALLING` constant is defined during the bootstrap, `wp_installing()` will default to `true`.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @staticvar bool $installing
  *
@@ -961,8 +961,8 @@ function wp_installing( $is_installing = null ) {
 /**
  * Determines if SSL is used.
  *
- * @since 2.6.0
- * @since 4.6.0 Moved from functions.php to load.php.
+ * @since WP-2.6.0
+ * @since WP-4.6.0 Moved from functions.php to load.php.
  *
  * @return bool True if SSL, otherwise false.
  */
@@ -984,8 +984,8 @@ function is_ssl() {
 /**
  * Converts a shorthand byte value to an integer byte value.
  *
- * @since 2.3.0
- * @since 4.6.0 Moved from media.php to load.php.
+ * @since WP-2.3.0
+ * @since WP-4.6.0 Moved from media.php to load.php.
  *
  * @link https://secure.php.net/manual/en/function.ini-get.php
  * @link https://secure.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
@@ -1012,7 +1012,7 @@ function wp_convert_hr_to_bytes( $value ) {
 /**
  * Determines whether a PHP ini value is changeable at runtime.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @staticvar array $ini_all
  *
@@ -1048,7 +1048,7 @@ function wp_is_ini_value_changeable( $setting ) {
 /**
  * Determines whether the current request is a WordPress Ajax request.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return bool True if it's a WordPress Ajax request, false otherwise.
  */
@@ -1056,7 +1056,7 @@ function wp_doing_ajax() {
 	/**
 	 * Filters whether the current request is a WordPress Ajax request.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param bool $wp_doing_ajax Whether the current request is a WordPress Ajax request.
 	 */
@@ -1066,7 +1066,7 @@ function wp_doing_ajax() {
 /**
  * Determines whether the current request is a WordPress cron request.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  *
  * @return bool True if it's a WordPress cron request, false otherwise.
  */
@@ -1074,7 +1074,7 @@ function wp_doing_cron() {
 	/**
 	 * Filters whether the current request is a WordPress cron request.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param bool $wp_doing_cron Whether the current request is a WordPress cron request.
 	 */
@@ -1086,7 +1086,7 @@ function wp_doing_cron() {
  *
  * Returns true if $thing is an object of the WP_Error class.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param mixed $thing Check if unknown variable is a WP_Error object.
  * @return bool True, if WP_Error. False, if not WP_Error.
@@ -1098,7 +1098,7 @@ function is_wp_error( $thing ) {
 /**
  * Determines whether file modifications are allowed.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  *
  * @param string $context The usage context.
  * @return bool True if file modification is allowed, false otherwise.
@@ -1107,7 +1107,7 @@ function wp_is_file_mod_allowed( $context ) {
 	/**
 	 * Filters whether file modifications are allowed.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param bool   $file_mod_allowed Whether file modifications are allowed.
 	 * @param string $context          The usage context.
@@ -1118,7 +1118,7 @@ function wp_is_file_mod_allowed( $context ) {
 /**
  * Start scraping edited file errors.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  */
 function wp_start_scraping_edited_file_errors() {
 	if ( ! isset( $_REQUEST['wp_scrape_key'] ) || ! isset( $_REQUEST['wp_scrape_nonce'] ) ) {
@@ -1142,7 +1142,7 @@ function wp_start_scraping_edited_file_errors() {
 /**
  * Finalize scraping for edited file errors.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param string $scrape_key Scrape key.
  */

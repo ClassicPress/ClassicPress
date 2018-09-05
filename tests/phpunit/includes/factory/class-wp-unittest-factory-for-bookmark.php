@@ -6,7 +6,7 @@
  * Note: The below @method notations are defined solely for the benefit of IDEs,
  * as a way to indicate expected return values from the given factory methods.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @method int create( $args = array(), $generation_definitions = null )
  * @method object create_and_get( $args = array(), $generation_definitions = null )

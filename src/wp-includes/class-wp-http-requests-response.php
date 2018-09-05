@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage HTTP
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
  * Core wrapper object for a Requests_Response for standardisation.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @see WP_HTTP_Response
  */
@@ -18,7 +18,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Requests Response object.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var Requests_Response
 	 */
 	protected $response;
@@ -26,7 +26,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Filename the response was saved to.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var string|null
 	 */
 	protected $filename;
@@ -34,7 +34,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Constructor.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param Requests_Response $response HTTP response.
 	 * @param string            $filename Optional. File name. Default empty.
@@ -47,7 +47,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Retrieves the response object for the request.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return Requests_Response HTTP response.
 	 */
@@ -58,7 +58,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Retrieves headers associated with the response.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @see \Requests_Utility_CaseInsensitiveDictionary
 	 *
@@ -82,7 +82,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Sets all header values.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param array $headers Map of header name to header value.
 	 */
@@ -93,7 +93,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Sets a single HTTP header.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string $key     Header name.
 	 * @param string $value   Header value.
@@ -111,7 +111,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Retrieves the HTTP return code for the response.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return int The 3-digit HTTP status code.
 	 */
@@ -122,7 +122,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Sets the 3-digit HTTP status code.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param int $code HTTP status.
 	 */
@@ -133,7 +133,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Retrieves the response data.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return mixed Response data.
 	 */
@@ -144,7 +144,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Sets the response data.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param mixed $data Response data.
 	 */
@@ -155,7 +155,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Retrieves cookies from the response.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return WP_HTTP_Cookie[] List of cookie objects.
 	 */
@@ -177,7 +177,7 @@ class WP_HTTP_Requests_Response extends WP_HTTP_Response {
 	/**
 	 * Converts the object to a WP_Http response array.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return array WP_Http response array, per WP_Http::request().
 	 */

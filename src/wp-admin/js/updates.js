@@ -36,7 +36,7 @@
 	/**
 	 * The WP Updates object.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @type {object}
 	 */
@@ -45,7 +45,7 @@
 	/**
 	 * User nonce for ajax calls.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @type {string}
 	 */
@@ -54,7 +54,7 @@
 	/**
 	 * Localized strings.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @type {object}
 	 */
@@ -63,7 +63,7 @@
 	/**
 	 * Current search term.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @type {string}
 	 */
@@ -72,7 +72,7 @@
 	/**
 	 * Whether filesystem credentials need to be requested from the user.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @type {bool}
 	 */
@@ -81,8 +81,8 @@
 	/**
 	 * Filesystem credentials to be packaged along with the request.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 Added `available` property to indicate whether credentials have been provided.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 Added `available` property to indicate whether credentials have been provided.
 	 *
 	 * @type {object} filesystemCredentials                    Holds filesystem credentials.
 	 * @type {object} filesystemCredentials.ftp                Holds FTP credentials.
@@ -116,8 +116,8 @@
 	/**
 	 * Whether we're waiting for an Ajax request to complete.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 More accurately named `ajaxLocked`.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 More accurately named `ajaxLocked`.
 	 *
 	 * @type {bool}
 	 */
@@ -126,7 +126,7 @@
 	/**
 	 * Admin notice template.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @type {function} A function that lazily-compiles the template requested.
 	 */
@@ -138,8 +138,8 @@
 	 * If the user tries to update a plugin while an update is
 	 * already happening, it can be placed in this queue to perform later.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 More accurately named `queue`.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 More accurately named `queue`.
 	 *
 	 * @type {Array.object}
 	 */
@@ -148,7 +148,7 @@
 	/**
 	 * Holds a jQuery reference to return focus to when exiting the request credentials modal.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @type {jQuery}
 	 */
@@ -157,7 +157,7 @@
 	/**
 	 * Adds or updates an admin notice.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}  data
 	 * @param {*=}      data.selector      Optional. Selector of an element to be replaced with the admin notice.
@@ -196,7 +196,7 @@
 	/**
 	 * Handles Ajax requests to WordPress.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {string} action The type of Ajax request ('update-plugin', 'install-theme', etc).
 	 * @param {object} data   Data that needs to be passed to the ajax callback.
@@ -246,7 +246,7 @@
 	/**
 	 * Actions performed after every Ajax request.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}  response
 	 * @param {array=}  response.debug     Optional. Debug information.
@@ -268,7 +268,7 @@
 	/**
 	 * Refreshes update counts everywhere on the screen.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 */
 	wp.updates.refreshCount = function() {
 		var $adminBarUpdates              = $( '#wp-admin-bar-updates' ),
@@ -336,7 +336,7 @@
 	 * This includes the toolbar, the "Updates" menu item and the menu items
 	 * for plugins and themes.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param {string} type The type of item that was updated or deleted.
 	 *                      Can be 'plugin', 'theme'.
@@ -356,8 +356,8 @@
 	/**
 	 * Sends an Ajax request to the server to update a plugin.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 More accurately named `updatePlugin`.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 More accurately named `updatePlugin`.
 	 *
 	 * @param {object}               args         Arguments.
 	 * @param {string}               args.plugin  Plugin basename.
@@ -404,8 +404,8 @@
 	/**
 	 * Updates the UI appropriately after a successful plugin update.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 More accurately named `updatePluginSuccess`.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 More accurately named `updatePluginSuccess`.
 	 *
 	 * @typedef {object} updatePluginSuccess
 	 * @param {object} response            Response from the server.
@@ -449,8 +449,8 @@
 	/**
 	 * Updates the UI appropriately after a failed plugin update.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 More accurately named `updatePluginError`.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 More accurately named `updatePluginError`.
 	 *
 	 * @typedef {object} updatePluginError
 	 * @param {object}  response              Response from the server.
@@ -528,7 +528,7 @@
 	/**
 	 * Sends an Ajax request to the server to install a plugin.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}                args         Arguments.
 	 * @param {string}                args.slug    Plugin identifier in the WordPress.org Plugin repository.
@@ -572,7 +572,7 @@
 	/**
 	 * Updates the UI appropriately after a successful plugin install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installPluginSuccess
 	 * @param {object} response             Response from the server.
@@ -615,7 +615,7 @@
 	/**
 	 * Updates the UI appropriately after a failed plugin install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installPluginError
 	 * @param {object}  response              Response from the server.
@@ -666,7 +666,7 @@
 	/**
 	 * Updates the UI appropriately after a successful importer install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installImporterSuccess
 	 * @param {object} response             Response from the server.
@@ -698,7 +698,7 @@
 	/**
 	 * Updates the UI appropriately after a failed importer install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installImporterError
 	 * @param {object}  response              Response from the server.
@@ -739,7 +739,7 @@
 	/**
 	 * Sends an Ajax request to the server to delete a plugin.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}               args         Arguments.
 	 * @param {string}               args.plugin  Basename of the plugin to be deleted.
@@ -773,7 +773,7 @@
 	/**
 	 * Updates the UI appropriately after a successful plugin deletion.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} deletePluginSuccess
 	 * @param {object} response            Response from the server.
@@ -863,7 +863,7 @@
 	/**
 	 * Updates the UI appropriately after a failed plugin deletion.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} deletePluginError
 	 * @param {object}  response              Response from the server.
@@ -921,7 +921,7 @@
 	/**
 	 * Sends an Ajax request to the server to update a theme.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}              args         Arguments.
 	 * @param {string}              args.slug    Theme stylesheet.
@@ -976,7 +976,7 @@
 	/**
 	 * Updates the UI appropriately after a successful theme update.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} updateThemeSuccess
 	 * @param {object} response
@@ -1038,7 +1038,7 @@
 	/**
 	 * Updates the UI appropriately after a failed theme update.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} updateThemeError
 	 * @param {object} response              Response from the server.
@@ -1085,7 +1085,7 @@
 	/**
 	 * Sends an Ajax request to the server to install a theme.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}               args
 	 * @param {string}               args.slug    Theme stylesheet.
@@ -1124,7 +1124,7 @@
 	/**
 	 * Updates the UI appropriately after a successful theme install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installThemeSuccess
 	 * @param {object} response              Response from the server.
@@ -1175,7 +1175,7 @@
 	/**
 	 * Updates the UI appropriately after a failed theme install.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} installThemeError
 	 * @param {object} response              Response from the server.
@@ -1231,7 +1231,7 @@
 	/**
 	 * Sends an Ajax request to the server to delete a theme.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {object}              args
 	 * @param {string}              args.slug    Theme stylesheet.
@@ -1273,7 +1273,7 @@
 	/**
 	 * Updates the UI appropriately after a successful theme deletion.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} deleteThemeSuccess
 	 * @param {object} response      Response from the server.
@@ -1332,7 +1332,7 @@
 	/**
 	 * Updates the UI appropriately after a failed theme deletion.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} deleteThemeError
 	 * @param {object} response              Response from the server.
@@ -1383,7 +1383,7 @@
 	/**
 	 * Adds the appropriate callback based on the type of action and the current page.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @private
 	 *
 	 * @param {object} data   AJAX payload.
@@ -1402,8 +1402,8 @@
 	/**
 	 * Pulls available jobs from the queue and runs them.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 Can handle multiple job types.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 Can handle multiple job types.
 	 */
 	wp.updates.queueChecker = function() {
 		var job;
@@ -1448,7 +1448,7 @@
 	/**
 	 * Requests the users filesystem credentials if they aren't already known.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param {Event=} event Optional. Event interface.
 	 */
@@ -1470,7 +1470,7 @@
 	/**
 	 * Requests the users filesystem credentials if needed and there is no lock.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param {Event=} event Optional. Event interface.
 	 */
@@ -1486,7 +1486,7 @@
 	 * Closes the modal when the escape key is pressed and
 	 * constrains keyboard navigation to inside the modal.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param {Event} event Event interface.
 	 */
@@ -1511,7 +1511,7 @@
 	/**
 	 * Opens the request for credentials modal.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 */
 	wp.updates.requestForCredentialsModalOpen = function() {
 		var $modal = $( '#request-filesystem-credentials-dialog' );
@@ -1525,7 +1525,7 @@
 	/**
 	 * Closes the request for credentials modal.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 */
 	wp.updates.requestForCredentialsModalClose = function() {
 		$( '#request-filesystem-credentials-dialog' ).hide();
@@ -1539,8 +1539,8 @@
 	/**
 	 * Takes care of the steps that need to happen when the modal is canceled out.
 	 *
-	 * @since 4.2.0
-	 * @since 4.6.0 Triggers an event for callbacks to listen to and add their actions.
+	 * @since WP-4.2.0
+	 * @since WP-4.6.0 Triggers an event for callbacks to listen to and add their actions.
 	 */
 	wp.updates.requestForCredentialsModalCancel = function() {
 
@@ -1563,7 +1563,7 @@
 	/**
 	 * Displays an error message in the request for credentials form.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param {string} message Error message.
 	 */
@@ -1578,7 +1578,7 @@
 	/**
 	 * Handles credential errors and runs events that need to happen in that case.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param {object} response Ajax response.
 	 * @param {string} action   The type of request to perform.
@@ -1606,7 +1606,7 @@
 	/**
 	 * Handles credentials errors if it could not connect to the filesystem.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @typedef {object} maybeHandleCredentialError
 	 * @param {object} response              Response from the server.
@@ -1711,7 +1711,7 @@
 	 * If an update is on-going and a user attempts to leave the page,
 	 * opens an "Are you sure?" alert.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 */
 	wp.updates.beforeunload = function() {
 		if ( wp.updates.ajaxLocked ) {
@@ -1745,7 +1745,7 @@
 		/**
 		 * File system credentials form submit noop-er / handler.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 */
 		$filesystemModal.on( 'submit', 'form', function( event ) {
 			event.preventDefault();
@@ -1770,14 +1770,14 @@
 		/**
 		 * Closes the request credentials modal when clicking the 'Cancel' button or outside of the modal.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 */
 		$filesystemModal.on( 'click', '[data-js-action="close"], .notification-dialog-background', wp.updates.requestForCredentialsModalCancel );
 
 		/**
 		 * Hide SSH fields when not selected.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 */
 		$filesystemForm.on( 'change', 'input[name="connection_type"]', function() {
 			$( '#ssh-keys' ).toggleClass( 'hidden', ( 'ssh' !== $( this ).val() ) );
@@ -1786,7 +1786,7 @@
 		/**
 		 * Handles events after the credential modal was closed.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event}  event Event interface.
 		 * @param {string} job   The install/update.delete request.
@@ -1841,7 +1841,7 @@
 		/**
 		 * Click handler for plugin updates in List Table view.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -1868,7 +1868,7 @@
 		/**
 		 * Click handler for plugin updates in plugin install view.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -1891,7 +1891,7 @@
 		/**
 		 * Click handler for plugin installs in plugin install view.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -1925,7 +1925,7 @@
 		/**
 		 * Click handler for importer plugins installs in the Import screen.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -1964,7 +1964,7 @@
 		/**
 		 * Click handler for plugin deletions.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -1989,7 +1989,7 @@
 		/**
 		 * Click handler for theme updates.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2015,7 +2015,7 @@
 		/**
 		 * Click handler for theme deletions.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2040,7 +2040,7 @@
 		 *
 		 * Handles both deletions and updates.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2188,7 +2188,7 @@
 		 * Handles changes to the plugin search box on the new-plugin page,
 		 * searching the repository dynamically.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 */
 		$pluginInstallSearch.on( 'keyup input', _.debounce( function( event, eventtype ) {
 			var $searchTab = $( '.plugin-install-search' ), data, searchLocation;
@@ -2261,7 +2261,7 @@
 		 * Handles changes to the plugin search box on the Installed Plugins screen,
 		 * searching the plugin list dynamically.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 */
 		$pluginSearch.on( 'keyup input', _.debounce( function( event ) {
 			var data = {
@@ -2331,7 +2331,7 @@
 		/**
 		 * Trigger a search event when the search form gets submitted.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 */
 		$document.on( 'submit', '.search-plugins', function( event ) {
 			event.preventDefault();
@@ -2342,7 +2342,7 @@
 		/** 
 		 * Trigger a search event when the "Try Again" button is clicked. 
 		 * 
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 */ 
 		$document.on( 'click', '.try-again', function( event ) { 
 			event.preventDefault(); 
@@ -2352,7 +2352,7 @@
 		/**
 		 * Trigger a search event when the search type gets changed.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 */
 		$( '#typeselector' ).on( 'change', function() {
 			var $search = $( 'input[name="s"]' );
@@ -2365,7 +2365,7 @@
 		/**
 		 * Click handler for updating a plugin from the details modal on `plugin-install.php`.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2395,7 +2395,7 @@
 		/**
 		 * Click handler for installing a plugin from the details modal on `plugin-install.php`.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2424,8 +2424,8 @@
 		/**
 		 * Handles postMessage events.
 		 *
-		 * @since 4.2.0
-		 * @since 4.6.0 Switched `update-plugin` action to use the queue.
+		 * @since WP-4.2.0
+		 * @since WP-4.6.0 Switched `update-plugin` action to use the queue.
 		 *
 		 * @param {Event} event Event interface.
 		 */
@@ -2473,7 +2473,7 @@
 		/**
 		 * Adds a callback to display a warning before leaving the page.
 		 *
-		 * @since 4.2.0
+		 * @since WP-4.2.0
 		 */
 		$( window ).on( 'beforeunload', wp.updates.beforeunload );
 	} );

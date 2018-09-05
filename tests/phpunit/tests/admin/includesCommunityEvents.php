@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 
 /**
@@ -13,14 +13,14 @@
  * @group admin
  * @group community-events
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * An instance of the class to test.
 	 *
 	 * @access private
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @var WP_Community_Events
 	 */
@@ -29,7 +29,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Performs setup tasks for every test.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function setUp() {
 		parent::setUp();
@@ -43,7 +43,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Simulates a stored user location.
 	 *
 	 * @access private
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return array The mock location.
 	 */
@@ -59,7 +59,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Test: get_events() should return an instance of WP_Error if the response code is not 200.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_events_bad_response_code() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_bad_response_code' ) );
@@ -72,7 +72,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Test: The response body should not be cached if the response code is not 200.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_cached_events_bad_response_code() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_bad_response_code' ) );
@@ -87,7 +87,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Simulates an HTTP response with a non-200 response code.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return array A mock response with a 404 HTTP status code
 	 */
@@ -107,7 +107,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Test: get_events() should return an instance of WP_Error if the response body does not have
 	 * the required properties.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_events_invalid_response() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_invalid_response' ) );
@@ -120,7 +120,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Test: The response body should not be cached if it does not have the required properties.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_cached_events_invalid_response() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_invalid_response' ) );
@@ -135,7 +135,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Simulates an HTTP response with a body that does not have the required properties.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return array A mock response that's missing required properties.
 	 */
@@ -155,7 +155,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Test: With a valid response, get_events() should return an associated array containing a location array and
 	 * an events array with individual events that have formatted time and date.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_events_valid_response() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_valid_response' ) );
@@ -174,7 +174,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Test: get_cached_events() should return the same data as get_events(), including formatted time
 	 * and date values for each event.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public function test_get_cached_events_valid_response() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_valid_response' ) );
@@ -194,7 +194,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Simulates an HTTP response with valid location and event data.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return array A mock HTTP response with valid data.
 	 */
@@ -259,7 +259,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Test: get_events() should return the events with the WordCamp pinned in the prepared list.
 	 *
-	 * @since 4.9.7
+	 * @since WP-4.9.7
 	 */
 	public function test_get_events_pin_wordcamp() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_valid_response_unpinned_wordcamp' ) );
@@ -281,7 +281,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	/**
 	 * Simulates a valid HTTP response where a WordCamp needs to be pinned higher than it's default position.
 	 *
-	 * @since 4.9.7
+	 * @since WP-4.9.7
 	 *
 	 * @return array A mock HTTP response.
 	 */
@@ -361,7 +361,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Test: get_events() shouldn't stick an extra WordCamp when there's already one that naturally
 	 * falls into the list.
 	 *
-	 * @since 4.9.7
+	 * @since WP-4.9.7
 	 */
 	public function test_get_events_dont_pin_multiple_wordcamps() {
 		add_filter( 'pre_http_request', array( $this, '_http_request_valid_response_multiple_wordcamps' ) );
@@ -384,7 +384,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 * Simulates a valid HTTP response where a WordCamp needs to be pinned higher than it's default position.
 	 * no need to pin extra camp b/c one already exists in response
 	 *
-	 * @since 4.9.7
+	 * @since WP-4.9.7
 	 *
 	 * @return array A mock HTTP response.
 	 */

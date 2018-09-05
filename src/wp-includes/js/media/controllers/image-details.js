@@ -42,7 +42,7 @@ ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototyp
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options Attributes
 	 */
@@ -52,7 +52,7 @@ ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototyp
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		this.frame.modal.$el.addClass('image-details');

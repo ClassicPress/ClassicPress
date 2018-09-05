@@ -49,7 +49,7 @@ CollectionAdd = Library.extend(/** @lends wp.media.controller.CollectionAdd.prot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	initialize: function() {
 		var collectionType = this.get('collectionType');
@@ -70,7 +70,7 @@ CollectionAdd = Library.extend(/** @lends wp.media.controller.CollectionAdd.prot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		var library = this.get('library'),

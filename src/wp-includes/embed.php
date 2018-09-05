@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage oEmbed
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * Should probably only be used for sites that do not support oEmbed.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global WP_Embed $wp_embed
  *
@@ -30,7 +30,7 @@ function wp_embed_register_handler( $id, $regex, $callback, $priority = 10 ) {
 /**
  * Unregisters a previously-registered embed handler.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global WP_Embed $wp_embed
  *
@@ -52,7 +52,7 @@ function wp_embed_unregister_handler( $id, $priority = 10 ) {
  *
  * The {@see 'embed_defaults'} filter can be used to adjust either of these values.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @global int $content_width
  *
@@ -72,7 +72,7 @@ function wp_embed_defaults( $url = '' ) {
 	/**
 	 * Filters the default array of embed dimensions.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param array  $size An array of embed width and height values
 	 *                     in pixels (in that order).
@@ -84,7 +84,7 @@ function wp_embed_defaults( $url = '' ) {
 /**
  * Attempts to fetch the embed HTML for a provided URL using oEmbed.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see WP_oEmbed
  *
@@ -101,7 +101,7 @@ function wp_oembed_get( $url, $args = '' ) {
 /**
  * Returns the initialized WP_oEmbed object.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  * @access private
  *
  * @staticvar WP_oEmbed $wp_oembed
@@ -120,7 +120,7 @@ function _wp_oembed_get_object() {
 /**
  * Adds a URL format and oEmbed provider URL pair.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see WP_oEmbed
  *
@@ -141,7 +141,7 @@ function wp_oembed_add_provider( $format, $provider, $regex = false ) {
 /**
  * Removes an oEmbed provider.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @see WP_oEmbed
  *
@@ -169,7 +169,7 @@ function wp_oembed_remove_provider( $format ) {
  * Checks to make sure that the embeds library hasn't already been loaded. If
  * it hasn't, then it will load the embeds library.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see wp_embed_register_handler()
  */
@@ -179,7 +179,7 @@ function wp_maybe_load_embeds() {
 	 *
 	 * Returning a falsey value will prevent loading the default embed handlers.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param bool $maybe_load_embeds Whether to load the embeds library. Default true.
 	 */
@@ -192,7 +192,7 @@ function wp_maybe_load_embeds() {
 	/**
 	 * Filters the audio embed handler callback.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param callable $handler Audio embed handler callback function.
 	 */
@@ -201,7 +201,7 @@ function wp_maybe_load_embeds() {
 	/**
 	 * Filters the video embed handler callback.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param callable $handler Video embed handler callback function.
 	 */
@@ -213,7 +213,7 @@ function wp_maybe_load_embeds() {
  *
  * Catches YouTube iframe embed URLs that are not parsable by oEmbed but can be translated into a URL that is.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @global WP_Embed $wp_embed
  *
@@ -231,7 +231,7 @@ function wp_embed_handler_youtube( $matches, $attr, $url, $rawattr ) {
 	/**
 	 * Filters the YoutTube embed output.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @see wp_embed_handler_youtube()
 	 *
@@ -246,7 +246,7 @@ function wp_embed_handler_youtube( $matches, $attr, $url, $rawattr ) {
 /**
  * Audio embed handler callback.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param array  $matches The RegEx matches from the provided regex when calling wp_embed_register_handler().
  * @param array  $attr Embed attributes.
@@ -260,7 +260,7 @@ function wp_embed_handler_audio( $matches, $attr, $url, $rawattr ) {
 	/**
 	 * Filters the audio embed output.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param string $audio   Audio embed output.
 	 * @param array  $attr    An array of embed attributes.
@@ -273,7 +273,7 @@ function wp_embed_handler_audio( $matches, $attr, $url, $rawattr ) {
 /**
  * Video embed handler callback.
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param array  $matches The RegEx matches from the provided regex when calling wp_embed_register_handler().
  * @param array  $attr    Embed attributes.
@@ -292,7 +292,7 @@ function wp_embed_handler_video( $matches, $attr, $url, $rawattr ) {
 	/**
 	 * Filters the video embed output.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param string $video   Video embed output.
 	 * @param array  $attr    An array of embed attributes.
@@ -305,7 +305,7 @@ function wp_embed_handler_video( $matches, $attr, $url, $rawattr ) {
 /**
  * Registers the oEmbed REST API route.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function wp_oembed_register_route() {
 	$controller = new WP_oEmbed_Controller();
@@ -315,7 +315,7 @@ function wp_oembed_register_route() {
 /**
  * Adds oEmbed discovery links in the website <head>.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function wp_oembed_add_discovery_links() {
 	$output = '';
@@ -331,7 +331,7 @@ function wp_oembed_add_discovery_links() {
 	/**
 	 * Filters the oEmbed discovery links HTML.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $output HTML of the discovery links.
 	 */
@@ -341,7 +341,7 @@ function wp_oembed_add_discovery_links() {
 /**
  * Adds the necessary JavaScript to communicate with the embedded iframes.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function wp_oembed_add_host_js() {
 	wp_enqueue_script( 'wp-embed' );
@@ -350,7 +350,7 @@ function wp_oembed_add_host_js() {
 /**
  * Retrieves the URL to embed a specific post in an iframe.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param int|WP_Post $post Optional. Post ID or object. Defaults to the current post.
  * @return string|false The post embed URL on success, false if the post doesn't exist.
@@ -372,7 +372,7 @@ function get_post_embed_url( $post = null ) {
 	/**
 	 * Filters the URL to embed a specific post.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string  $embed_url The post embed URL.
 	 * @param WP_Post $post      The corresponding post object.
@@ -385,7 +385,7 @@ function get_post_embed_url( $post = null ) {
  *
  * Pass an empty string as the first argument to get the endpoint base URL.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $permalink Optional. The permalink used for the `url` query arg. Default empty.
  * @param string $format    Optional. The requested response format. Default 'json'.
@@ -404,7 +404,7 @@ function get_oembed_endpoint_url( $permalink = '', $format = 'json' ) {
 	/**
 	 * Filters the oEmbed endpoint URL.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $url       The URL to the oEmbed endpoint.
 	 * @param string $permalink The permalink used for the `url` query arg.
@@ -416,7 +416,7 @@ function get_oembed_endpoint_url( $permalink = '', $format = 'json' ) {
 /**
  * Retrieves the embed code for a specific post.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param int         $width  The width for the response.
  * @param int         $height The height for the response.
@@ -474,7 +474,7 @@ JS;
 	/**
 	 * Filters the embed HTML output for a given post.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string  $output The default iframe tag to display embedded content.
 	 * @param WP_Post $post   Current post object.
@@ -487,7 +487,7 @@ JS;
 /**
  * Retrieves the oEmbed response data for a given post.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param WP_Post|int $post  Post object or ID.
  * @param int         $width The requested width.
@@ -508,7 +508,7 @@ function get_oembed_response_data( $post, $width ) {
 	/**
 	 * Filters the allowed minimum and maximum widths for the oEmbed response.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array $min_max_width {
 	 *     Minimum and maximum widths for the oEmbed response.
@@ -545,7 +545,7 @@ function get_oembed_response_data( $post, $width ) {
 	/**
 	 * Filters the oEmbed response data.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array   $data   The response data.
 	 * @param WP_Post $post   The post object.
@@ -558,7 +558,7 @@ function get_oembed_response_data( $post, $width ) {
 /**
  * Filters the oEmbed response data to return an iframe embed code.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param array   $data   The response data.
  * @param WP_Post $post   The post object.
@@ -601,7 +601,7 @@ function get_oembed_response_data_rich( $data, $post, $width, $height ) {
 /**
  * Ensures that the specified format is either 'json' or 'xml'.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $format The oEmbed response format. Accepts 'json' or 'xml'.
  * @return string The format, either 'xml' or 'json'. Default 'json'.
@@ -621,7 +621,7 @@ function wp_oembed_ensure_format( $format ) {
  * which supports both formats.
  *
  * @access private
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param bool                      $served  Whether the request has already been served.
  * @param WP_HTTP_ResponseInterface $result  Result to send to the client. Usually a WP_REST_Response.
@@ -668,7 +668,7 @@ function _oembed_rest_pre_serve_request( $served, $result, $request, $server ) {
 /**
  * Creates an XML string from a given array.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  * @access private
  *
  * @param array            $data The original oEmbed response data.
@@ -708,7 +708,7 @@ function _oembed_create_xml( $data, $node = null ) {
  *
  * Only filters 'rich' and 'html' response types.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $result The oEmbed HTML result.
  * @param object $data   A data object result from an oEmbed provider.
@@ -787,7 +787,7 @@ function wp_filter_oembed_result( $result, $data, $url ) {
  * Replaces '[...]' (appended to automatically generated excerpts) with an
  * ellipsis and a "Continue reading" link in the embed template.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $more_string Default 'more' string.
  * @return string 'Continue reading' link prepended with an ellipsis.
@@ -810,7 +810,7 @@ function wp_embed_excerpt_more( $more_string ) {
  *
  * Intended to be used in 'The Loop'.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function the_excerpt_embed() {
 	$output = get_the_excerpt();
@@ -818,7 +818,7 @@ function the_excerpt_embed() {
 	/**
 	 * Filters the post excerpt for the embed template.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $output The current post excerpt.
 	 */
@@ -830,7 +830,7 @@ function the_excerpt_embed() {
  *
  * Shows players for video and audio attachments.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $content The current post excerpt.
  * @return string The modified post excerpt.
@@ -851,7 +851,7 @@ function wp_embed_excerpt_attachment( $content ) {
  * Allows plugins to queue scripts for the embed iframe end using wp_enqueue_script().
  * Runs first in oembed_head().
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function enqueue_embed_scripts() {
 	wp_enqueue_style( 'wp-embed-template-ie' );
@@ -859,7 +859,7 @@ function enqueue_embed_scripts() {
 	/**
 	 * Fires when scripts and styles are enqueued for the embed iframe.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 */
 	do_action( 'enqueue_embed_scripts' );
 }
@@ -867,7 +867,7 @@ function enqueue_embed_scripts() {
 /**
  * Prints the CSS in the embed iframe header.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function print_embed_styles() {
 	?>
@@ -898,7 +898,7 @@ function print_embed_styles() {
 /**
  * Prints the JavaScript in the embed iframe header.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function print_embed_scripts() {
 	?>
@@ -929,7 +929,7 @@ function print_embed_scripts() {
 /**
  * Prepare the oembed HTML to be displayed in an RSS feed.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  * @access private
  *
  * @param string $content The content to filter.
@@ -942,7 +942,7 @@ function _oembed_filter_feed_content( $content ) {
 /**
  * Prints the necessary markup for the embed comments button.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function print_embed_comments_button() {
 	if ( is_404() || ! ( get_comments_number() || comments_open() ) ) {
@@ -970,7 +970,7 @@ function print_embed_comments_button() {
 /**
  * Prints the necessary markup for the embed sharing button.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function print_embed_sharing_button() {
 	if ( is_404() ) {
@@ -988,7 +988,7 @@ function print_embed_sharing_button() {
 /**
  * Prints the necessary markup for the embed sharing dialog.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 function print_embed_sharing_dialog() {
 	if ( is_404() ) {
@@ -1033,7 +1033,7 @@ function print_embed_sharing_dialog() {
 /**
  * Prints the necessary markup for the site title in an embed template.
  *
- * @since 4.5.0
+ * @since WP-4.5.0
  */
 function the_embed_site_title() {
 	$site_title = sprintf(
@@ -1049,7 +1049,7 @@ function the_embed_site_title() {
 	/**
 	 * Filters the site title HTML in the embed footer.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $site_title The site title HTML.
 	 */
@@ -1062,7 +1062,7 @@ function the_embed_site_title() {
  * If the URL belongs to the current site, the result is fetched directly instead of
  * going through the oEmbed discovery process.
  *
- * @since 4.5.3
+ * @since WP-4.5.3
  *
  * @param null|string $result The UNSANITIZED (and potentially unsafe) HTML that should be used to embed. Default null.
  * @param string      $url    The URL that should be inspected for discovery `<link>` tags.

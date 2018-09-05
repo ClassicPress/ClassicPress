@@ -36,7 +36,7 @@ do_action( 'add_meta_boxes', 'link', $link );
 /**
  * Fires when link-specific meta boxes are added.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param object $link Link object.
  */

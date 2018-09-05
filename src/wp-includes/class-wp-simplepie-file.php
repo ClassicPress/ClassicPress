@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Feed
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
  * Core class for fetching remote files and reading local files with SimplePie.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @see SimplePie_File
  */
@@ -19,8 +19,8 @@ class WP_SimplePie_File extends SimplePie_File {
 	/**
 	 * Constructor.
 	 *
-	 * @since 2.8.0
-	 * @since 3.2.0 Updated to use a PHP5 constructor.
+	 * @since WP-2.8.0
+	 * @since WP-3.2.0 Updated to use a PHP5 constructor.
 	 *
 	 * @param string       $url             Remote file URL.
 	 * @param integer      $timeout         Optional. How long the connection should stay open in seconds.

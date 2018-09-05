@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
 	 * Adds an event handler to the delete term link on the term overview page.
 	 * Cancels default event handling and event bubbling.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @returns boolean Always returns false to cancel the default event handling.
 	 */
@@ -70,7 +70,7 @@ jQuery(document).ready(function($) {
 	/**
 	 * Adds a deletion confirmation when removing a tag.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @returns {void}
 	 */
@@ -91,7 +91,7 @@ jQuery(document).ready(function($) {
 	 *
 	 * Cancels default event handling and event bubbling.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @returns boolean Always returns false to cancel the default event handling.
 	 */

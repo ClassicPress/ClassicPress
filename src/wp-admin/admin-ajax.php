@@ -11,7 +11,7 @@
 /**
  * Executing Ajax process.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 define( 'DOING_AJAX', true );
 if ( ! defined( 'WP_ADMIN' ) ) {
@@ -94,7 +94,7 @@ if ( is_user_logged_in() ) {
 	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
 	 * refers to the name of the Ajax action callback being fired.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	do_action( 'wp_ajax_' . $_REQUEST['action'] );
 } else {
@@ -109,7 +109,7 @@ if ( is_user_logged_in() ) {
 	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
 	 * refers to the name of the Ajax action callback being fired.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	do_action( 'wp_ajax_nopriv_' . $_REQUEST['action'] );
 }

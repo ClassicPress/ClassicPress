@@ -81,7 +81,7 @@ $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
  * Display setup wp-config.php file header.
  *
  * @ignore
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @global string    $wp_local_package
  * @global WP_Locale $wp_locale

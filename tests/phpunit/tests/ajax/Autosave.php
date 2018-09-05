@@ -10,7 +10,7 @@ require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
  *
  * @package    WordPress
  * @subpackage UnitTests
- * @since      3.4.0
+ * @since      WP-3.4.0
  * @group      ajax
  */
 class Tests_Ajax_Autosave extends WP_Ajax_UnitTestCase {

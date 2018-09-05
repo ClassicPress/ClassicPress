@@ -3,13 +3,13 @@
  * Send XML response back to Ajax request.
  *
  * @package WordPress
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 class WP_Ajax_Response {
 	/**
 	 * Store XML responses to send.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 */
 	public $responses = array();
@@ -17,7 +17,7 @@ class WP_Ajax_Response {
 	/**
 	 * Constructor - Passes args to WP_Ajax_Response::add().
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @see WP_Ajax_Response::add()
 	 *
 	 * @param string|array $args Optional. Will be passed to add() method.
@@ -38,7 +38,7 @@ class WP_Ajax_Response {
 	 *      </$what>
 	 *     </response>
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string|array $args {
 	 *     Optional. An array or string of XML response arguments.
@@ -140,7 +140,7 @@ class WP_Ajax_Response {
 	 *
 	 * Sets the content type header to text/xml.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function send() {
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ) );

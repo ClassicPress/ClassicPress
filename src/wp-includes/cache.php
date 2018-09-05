@@ -11,7 +11,7 @@
 /**
  * Adds data to the cache, if the cache key doesn't already exist.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::add()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -39,7 +39,7 @@ function wp_cache_add( $key, $data, $group = '', $expire = 0 ) {
  * This does not mean that plugins can't implement this function when they need
  * to make sure that the cache is cleaned up after WordPress no longer needs it.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @return true Always returns true.
  */
@@ -50,7 +50,7 @@ function wp_cache_close() {
 /**
  * Decrements numeric cache item's value.
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @see WP_Object_Cache::decr()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -69,7 +69,7 @@ function wp_cache_decr( $key, $offset = 1, $group = '' ) {
 /**
  * Removes the cache contents matching key and group.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::delete()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -87,7 +87,7 @@ function wp_cache_delete( $key, $group = '' ) {
 /**
  * Removes all cache items.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::flush()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -103,7 +103,7 @@ function wp_cache_flush() {
 /**
  * Retrieves the cache contents from the cache by key and group.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::get()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -126,7 +126,7 @@ function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
 /**
  * Increment numeric cache item's value
  *
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * @see WP_Object_Cache::incr()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -145,7 +145,7 @@ function wp_cache_incr( $key, $offset = 1, $group = '' ) {
 /**
  * Sets up Object Cache Global and assigns it.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @global WP_Object_Cache $wp_object_cache
  */
@@ -156,7 +156,7 @@ function wp_cache_init() {
 /**
  * Replaces the contents of the cache with new data.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::replace()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -180,7 +180,7 @@ function wp_cache_replace( $key, $data, $group = '', $expire = 0 ) {
  *
  * Differs from wp_cache_add() and wp_cache_replace() in that it will always write data.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @see WP_Object_Cache::set()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -204,7 +204,7 @@ function wp_cache_set( $key, $data, $group = '', $expire = 0 ) {
  *
  * This changes the blog id used to create keys in blog specific groups.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @see WP_Object_Cache::switch_to_blog()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -220,7 +220,7 @@ function wp_cache_switch_to_blog( $blog_id ) {
 /**
  * Adds a group or set of groups to the list of global groups.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @see WP_Object_Cache::add_global_groups()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -236,7 +236,7 @@ function wp_cache_add_global_groups( $groups ) {
 /**
  * Adds a group or set of groups to the list of non-persistent groups.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param string|array $groups A group or an array of groups to add.
  */
@@ -257,7 +257,7 @@ function wp_cache_add_non_persistent_groups( $groups ) {
  * recommended outside of unit tests as the performance penalty for using it is
  * high.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  * @deprecated 3.5.0 WP_Object_Cache::reset()
  * @see WP_Object_Cache::reset()
  *
@@ -283,14 +283,14 @@ function wp_cache_reset() {
  * in the wp-content folder which is looked at in wp-settings. If that file
  * exists, then this file will not be included.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  */
 class WP_Object_Cache {
 
 	/**
 	 * Holds the cached objects.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 * @var array
 	 */
 	private $cache = array();
@@ -298,7 +298,7 @@ class WP_Object_Cache {
 	/**
 	 * The amount of times the cache data was already stored in the cache.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 * @var int
 	 */
 	public $cache_hits = 0;
@@ -306,7 +306,7 @@ class WP_Object_Cache {
 	/**
 	 * Amount of times the cache did not have the request in cache.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 * @var int
 	 */
 	public $cache_misses = 0;
@@ -314,7 +314,7 @@ class WP_Object_Cache {
 	/**
 	 * List of global cache groups.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 * @var array
 	 */
 	protected $global_groups = array();
@@ -322,7 +322,7 @@ class WP_Object_Cache {
 	/**
 	 * The blog prefix to prepend to keys in non-global groups.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 * @var int
 	 */
 	private $blog_prefix;
@@ -330,7 +330,7 @@ class WP_Object_Cache {
 	/**
 	 * Holds the value of is_multisite().
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 * @var bool
 	 */
 	private $multisite;
@@ -338,7 +338,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties readable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to get.
 	 * @return mixed Property.
@@ -350,7 +350,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties settable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name  Property to set.
 	 * @param mixed  $value Property value.
@@ -363,7 +363,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties checkable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to check if set.
 	 * @return bool Whether the property is set.
@@ -375,7 +375,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties un-settable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to unset.
 	 */
@@ -386,7 +386,7 @@ class WP_Object_Cache {
 	/**
 	 * Adds data to the cache if it doesn't already exist.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @uses WP_Object_Cache::_exists() Checks to see if the cache already has data.
 	 * @uses WP_Object_Cache::set()     Sets the data after the checking the cache
@@ -418,7 +418,7 @@ class WP_Object_Cache {
 	/**
 	 * Sets the list of global cache groups.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param array $groups List of groups that are global.
 	 */
@@ -432,7 +432,7 @@ class WP_Object_Cache {
 	/**
 	 * Decrements numeric cache item's value.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param int|string $key    The cache key to decrement.
 	 * @param int        $offset Optional. The amount by which to decrement the item's value. Default 1.
@@ -467,7 +467,7 @@ class WP_Object_Cache {
 	 *
 	 * If the cache key does not exist in the group, then nothing will happen.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @param int|string $key        What the contents in the cache are called.
 	 * @param string     $group      Optional. Where the cache contents are grouped. Default 'default'.
@@ -491,7 +491,7 @@ class WP_Object_Cache {
 	/**
 	 * Clears the object cache of all data.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @return true Always returns true.
 	 */
@@ -510,7 +510,7 @@ class WP_Object_Cache {
 	 *
 	 * On failure, the number of cache misses will be incremented.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @param int|string $key    What the contents in the cache are called.
 	 * @param string     $group  Optional. Where the cache contents are grouped. Default 'default'.
@@ -544,7 +544,7 @@ class WP_Object_Cache {
 	/**
 	 * Increments numeric cache item's value.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param int|string $key    The cache key to increment
 	 * @param int        $offset Optional. The amount by which to increment the item's value. Default 1.
@@ -577,7 +577,7 @@ class WP_Object_Cache {
 	/**
 	 * Replaces the contents in the cache, if contents already exist.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @see WP_Object_Cache::set()
 	 *
@@ -604,7 +604,7 @@ class WP_Object_Cache {
 	/**
 	 * Resets cache keys.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @deprecated 3.5.0 Use switch_to_blog()
 	 * @see switch_to_blog()
@@ -631,7 +631,7 @@ class WP_Object_Cache {
 	 * expire for each time a page is accessed and PHP finishes. The method is
 	 * more for cache plugins which use files.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 *
 	 * @param int|string $key    What to call the contents in the cache.
 	 * @param mixed      $data   The contents to store in the cache.
@@ -659,7 +659,7 @@ class WP_Object_Cache {
 	 * Gives the cache hits, and cache misses. Also prints every cached group,
 	 * key and the data.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 */
 	public function stats() {
 		echo "<p>";
@@ -678,7 +678,7 @@ class WP_Object_Cache {
 	 *
 	 * This changes the blog ID used to create keys in blog specific groups.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int $blog_id Blog ID.
 	 */
@@ -690,7 +690,7 @@ class WP_Object_Cache {
 	/**
 	 * Serves as a utility function to determine whether a key exists in the cache.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param int|string $key   Cache key to check for existence.
 	 * @param string     $group Cache group for the key existence check.
@@ -703,7 +703,7 @@ class WP_Object_Cache {
 	/**
 	 * Sets up object properties; PHP 5 style constructor.
 	 *
-	 * @since 2.0.8
+	 * @since WP-2.0.8
 	 */
 	public function __construct() {
 		$this->multisite = is_multisite();
@@ -722,7 +722,7 @@ class WP_Object_Cache {
 	 *
 	 * Called upon object destruction, which should be when PHP ends.
 	 *
-	 * @since 2.0.8
+	 * @since WP-2.0.8
 	 *
 	 * @return true Always returns true.
 	 */

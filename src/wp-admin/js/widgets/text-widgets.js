@@ -96,7 +96,7 @@ wp.textWidgets = ( function( $ ) {
 		/**
 		 * Dismiss pointers for Custom HTML widget.
 		 *
-		 * @since 4.8.1
+		 * @since WP-4.8.1
 		 *
 		 * @param {Array} pointers Pointer IDs to dismiss.
 		 * @returns {void}
@@ -113,7 +113,7 @@ wp.textWidgets = ( function( $ ) {
 		/**
 		 * Open available widgets panel.
 		 *
-		 * @since 4.8.1
+		 * @since WP-4.8.1
 		 * @returns {void}
 		 */
 		openAvailableWidgetsPanel: function openAvailableWidgetsPanel() {

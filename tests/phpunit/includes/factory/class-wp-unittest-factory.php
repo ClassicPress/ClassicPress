@@ -43,7 +43,7 @@ class WP_UnitTest_Factory {
 	public $tag;
 
 	/**
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var WP_UnitTest_Factory_For_Bookmark
 	 */
 	public $bookmark;

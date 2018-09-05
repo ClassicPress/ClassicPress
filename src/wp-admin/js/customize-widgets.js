@@ -462,7 +462,7 @@
 		},
 
 		/**
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 */
 		initialize: function( id, options ) {
 			var control = this;
@@ -484,7 +484,7 @@
 		/**
 		 * Set up the control.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 */
 		ready: function() {
 			var control = this;
@@ -516,7 +516,7 @@
 		/**
 		 * Embed the .widget element inside the li container.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 */
 		embedWidgetControl: function() {
 			var control = this, widgetControl;
@@ -543,7 +543,7 @@
 		/**
 		 * Embed the actual widget form inside of .widget-content and finally trigger the widget-added event.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 */
 		embedWidgetContent: function() {
 			var control = this, widgetContent;
@@ -939,7 +939,7 @@
 		 *
 		 * Overrides api.Control.toggle()
 		 *
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 *
 		 * @param {Boolean}   active
 		 * @param {Object}    args
@@ -1312,7 +1312,7 @@
 		},
 
 		/**
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 *
 		 * @param {Boolean} expanded
 		 * @param {Object} [params]
@@ -1321,7 +1321,7 @@
 		_toggleExpanded: api.Section.prototype._toggleExpanded,
 
 		/**
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 *
 		 * @param {Object} [params]
 		 * @returns {Boolean} false if already expanded
@@ -1338,7 +1338,7 @@
 		},
 
 		/**
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 *
 		 * @param {Object} [params]
 		 * @returns {Boolean} false if already collapsed
@@ -1573,14 +1573,14 @@
 	 *
 	 * Customizer panel containing the widget area sections.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 */
 	api.Widgets.WidgetsPanel = api.Panel.extend({
 
 		/**
 		 * Add and manage the display of the no-rendered-areas notice.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 */
 		ready: function () {
 			var panel = this;
@@ -1679,7 +1679,7 @@
 		 * This ensures that the widgets panel appears even when there are no
 		 * sidebars displayed on the URL currently being previewed.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @returns {boolean}
 		 */
@@ -1694,14 +1694,14 @@
 	 *
 	 * Customizer section representing a widget area widget
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 */
 	api.Widgets.SidebarSection = api.Section.extend({
 
 		/**
 		 * Sync the section's active state back to the Backbone model's is_rendered attribute
 		 *
-		 * @since 4.1.0
+		 * @since WP-4.1.0
 		 */
 		ready: function () {
 			var section = this, registeredSidebar;
@@ -1720,7 +1720,7 @@
 	 * Customizer control for widgets.
 	 * Note that 'sidebar_widgets' must match the WP_Widget_Area_Customize_Control::$type
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @constructor
 	 * @augments wp.customize.Control
@@ -2012,7 +2012,7 @@
 		/**
 		 * Get the widget_form Customize controls associated with the current sidebar.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 * @return {wp.customize.controlConstructor.widget_form[]}
 		 */
 		getWidgetFormControls: function() {

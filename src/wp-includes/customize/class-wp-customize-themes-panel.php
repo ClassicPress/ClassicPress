@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Customize
- * @since 4.9.0
+ * @since WP-4.9.0
  */
 
 /**
  * Customize Themes Panel Class
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @see WP_Customize_Panel
  */
@@ -19,7 +19,7 @@ class WP_Customize_Themes_Panel extends WP_Customize_Panel {
 	/**
 	 * Panel type.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 * @var string
 	 */
 	public $type = 'themes';
@@ -31,7 +31,7 @@ class WP_Customize_Themes_Panel extends WP_Customize_Panel {
 	 *
 	 * @see WP_Customize_Panel::print_template()
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 */
 	protected function render_template() {
 		?>
@@ -60,7 +60,7 @@ class WP_Customize_Themes_Panel extends WP_Customize_Panel {
 	 * Class variables for this panel class are available in the `data` JS object;
 	 * export custom variables by overriding WP_Customize_Panel::json().
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @see WP_Customize_Panel::print_template()
 	 */

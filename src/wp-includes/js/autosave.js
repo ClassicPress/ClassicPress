@@ -7,7 +7,7 @@ window.autosave = function() {
 /**
  * @summary Adds autosave to the window object on dom ready.
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @param {jQuery} $ jQuery object.
  * @param {window} The window object.
@@ -17,7 +17,7 @@ window.autosave = function() {
 	/**
 	 * @summary Auto saves the post.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @returns {Object}
 	 * 	{{
@@ -38,7 +38,7 @@ window.autosave = function() {
 		/**
 		 * @summary Returns the data saved in both local and remote autosave.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param {string} type The type of autosave either local or remote.
 		 *
@@ -103,7 +103,7 @@ window.autosave = function() {
 		 *
 		 * This is used to track changes when auto-saving.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param {Object} postData The object containing the post data.
 		 *
@@ -120,7 +120,7 @@ window.autosave = function() {
 		/**
 		 * @summary Disables save buttons.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @returns {void}
 		 */
@@ -134,7 +134,7 @@ window.autosave = function() {
 		/**
 		 * @summary Enables save buttons.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @returns {void}
 		 */
@@ -145,7 +145,7 @@ window.autosave = function() {
 		/**
 		 * @summary Gets the content editor.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @returns {boolean|*} Returns either false if the editor is undefined,
 		 * 						or the instance of the content editor.
@@ -157,7 +157,7 @@ window.autosave = function() {
 		/**
 		 * @summary Autosave in localStorage.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @returns {
 		 * {
@@ -178,7 +178,7 @@ window.autosave = function() {
 			/**
 			 * @summary Checks if the browser supports sessionStorage and it's not disabled.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {boolean} True if the sessionStorage is supported and enabled.
 			 */
@@ -199,7 +199,7 @@ window.autosave = function() {
 			/**
 			 * @summary Initializes the local storage.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {boolean|Object} False if no sessionStorage in the browser or an Object
 			 *                           containing all postData for this blog.
@@ -225,7 +225,7 @@ window.autosave = function() {
 			 *
 			 * Confirms that the data was saved successfully.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {boolean} True if the data was saved successfully, false if it wasn't saved.
 			 */
@@ -244,7 +244,7 @@ window.autosave = function() {
 			/**
 			 * @summary Gets the saved post data for the current post.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {boolean|Object} False if no storage or no data or the postData as an Object.
 			 */
@@ -263,7 +263,7 @@ window.autosave = function() {
 			 *
 			 * If stored_data evaluates to 'false' the storage key for the current post will be removed.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @param {Object|boolean|null} stored_data The post data to store or null/false/empty to delete the key.
 			 *
@@ -290,7 +290,7 @@ window.autosave = function() {
 			/**
 			 * @summary Sets isSuspended to true.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -301,7 +301,7 @@ window.autosave = function() {
 			/**
 			 * @summary Sets isSuspended to false.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -315,7 +315,7 @@ window.autosave = function() {
 			 * Runs on a 15 sec. interval, saves when there are differences in the post title or content.
 			 * When the optional data is provided, updates the last saved post data.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @param {Object} data The post data for saving, minimum 'post_title' and 'content'.
 			 *
@@ -366,7 +366,7 @@ window.autosave = function() {
 			 *
 			 * Runs on DOM ready.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -423,7 +423,7 @@ window.autosave = function() {
 			 *
 			 * Removes whitespaces in the strings before comparing them.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @param {string} str1 The first string.
 			 * @param {string} str2 The second string.
@@ -443,7 +443,7 @@ window.autosave = function() {
 			 *
 			 * Shows a standard message letting the user restore the post data if different.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -509,7 +509,7 @@ window.autosave = function() {
 			/**
 			 * @summary Restores the current title, content and excerpt from postData.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @param {Object} postData The object containing all post data.
 			 *
@@ -577,7 +577,7 @@ window.autosave = function() {
 		/**
 		 * @summary Auto saves the post on the server.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @returns {Object} {
 		 * 	{
@@ -598,7 +598,7 @@ window.autosave = function() {
 			/**
 			 * @summary  Blocks saving for the next 10 seconds.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -614,7 +614,7 @@ window.autosave = function() {
 			/**
 			 * @summary Sets isSuspended to true.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -625,7 +625,7 @@ window.autosave = function() {
 			/**
 			 * @summary Sets isSuspended to false.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -636,7 +636,7 @@ window.autosave = function() {
 			/**
 			 * @summary Triggers the autosave with the post data.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @param {Object} data The post data.
 			 *
@@ -662,7 +662,7 @@ window.autosave = function() {
 			 *
 			 * Resets the timing and tells heartbeat to connect now.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -677,7 +677,7 @@ window.autosave = function() {
 			 * This also happens when TinyMCE is active and editor.save() is triggered by
 			 * wp.autosave.getPostData().
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @return {boolean} True if the post has been changed.
 			 */
@@ -691,7 +691,7 @@ window.autosave = function() {
 			 * If the post hasn't changed or it cannot be updated,
 			 * because the autosave is blocked or suspended, the function returns false.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {Object} Returns the post data.
 			 */
@@ -737,7 +737,7 @@ window.autosave = function() {
 			 *
 			 * @private
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -748,7 +748,7 @@ window.autosave = function() {
 			/**
 			 * @summary Sets the autosaveData on the autosave heartbeat.
 			 *
-			 * @since 3.9.0
+			 * @since WP-3.9.0
 			 *
 			 * @returns {void}
 			 */
@@ -763,7 +763,7 @@ window.autosave = function() {
 				 * @summary Triggers the autosave of the post with the autosave data
 				 * on the autosave heartbeat.
 				 *
-				 * @since 3.9.0
+				 * @since WP-3.9.0
 				 *
 				 * @returns {void}
 				 */
@@ -774,7 +774,7 @@ window.autosave = function() {
 				/**
 				 * @summary Disables buttons and throws a notice when the connection is lost.
 				 *
-				 * @since 3.9.0
+				 * @since WP-3.9.0
 				 *
 				 * @returns {void}
 				 */
@@ -795,7 +795,7 @@ window.autosave = function() {
 				/**
 				 * @summary Enables buttons when the connection is restored.
 				 *
-				 * @since 3.9.0
+				 * @since WP-3.9.0
 				 *
 				 * @returns {void}
 				 */
@@ -823,7 +823,7 @@ window.autosave = function() {
 		 * This avoids any insignificant differences between the initial textarea content and the content
 		 * extracted from the editor.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @returns {void}
 		 */

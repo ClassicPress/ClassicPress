@@ -2,13 +2,13 @@
 /**
  * Test cases for the `_wp_privacy_send_request_confirmation_notification()` function.
  *
- * @since 4.9.8
+ * @since WP-4.9.8
  */
 
 /**
  * Tests_User_WpPrivacySendRequestConfirmationNotification class.
  *
- * @since 4.9.8
+ * @since WP-4.9.8
  *
  * @group privacy
  * @group user
@@ -18,7 +18,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * Reset the mocked PHPMailer instance before each test method.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 */
 	public function setUp() {
 		parent::setUp();
@@ -28,7 +28,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * Reset the mocked PHPMailer instance after each test method.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 */
 	public function tearDown() {
 		reset_phpmailer_instance();
@@ -152,7 +152,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * Filter callback that modifies the recipient of the data request confirmation notification.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 *
 	 * @param string          $admin_email  The email address of the notification recipient.
 	 * @param WP_User_Request $request_data The request that is initiating the notification.
@@ -185,7 +185,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * Filter callback that modifies the body of the user request confirmation email.
 	 *
-	 * @since 4.9.8
+	 * @since WP-4.9.8
 	 *
 	 * @param string $email_text Email text.
 	 * @param array  $email_data {

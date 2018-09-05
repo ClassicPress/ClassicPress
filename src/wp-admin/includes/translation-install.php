@@ -10,7 +10,7 @@
 /**
  * Retrieve translations from WordPress Translation API.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @param string       $type Type of translations. Accepts 'plugins', 'themes', 'core'.
  * @param array|object $args Translation API arguments. Optional.
@@ -26,7 +26,7 @@ function translations_api( $type, $args = null ) {
 	/**
 	 * Allows a plugin to override the WordPress.org Translation Installation API entirely.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param bool|array  $result The result object. Default false.
 	 * @param string      $type   The type of translations being requested.
@@ -95,7 +95,7 @@ function translations_api( $type, $args = null ) {
 	/**
 	 * Filters the Translation Installation API response results.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param object|WP_Error $res  Response object or WP_Error.
 	 * @param string          $type The type of translations being requested.
@@ -107,7 +107,7 @@ function translations_api( $type, $args = null ) {
 /**
  * Get available translations from the WordPress.org API.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @see translations_api()
  *
@@ -143,7 +143,7 @@ function wp_get_available_translations() {
 /**
  * Output the select form for the language selection on the installation screen.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @global string $wp_local_package
  *
@@ -188,7 +188,7 @@ function wp_install_language_form( $languages ) {
 /**
  * Download a language pack.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @see wp_get_available_translations()
  *
@@ -240,7 +240,7 @@ function wp_download_language_pack( $download ) {
  * Check if WordPress has access to the filesystem without asking for
  * credentials.
  *
- * @since 4.0.0
+ * @since WP-4.0.0
  *
  * @return bool Returns true on success, false on failure.
  */

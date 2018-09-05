@@ -84,7 +84,7 @@ if ( isset($_REQUEST['action']) && 'adduser' == $_REQUEST['action'] ) {
 			/**
 			 * Fires immediately after a user is invited to join a site, but before the notification is sent.
 			 *
-			 * @since 4.4.0
+			 * @since WP-4.4.0
 			 *
 			 * @param int    $user_id     The invited user's ID.
 			 * @param array  $role        The role of invited user.
@@ -147,7 +147,7 @@ Please click the following link to confirm the invite:
 			/**
 			 * Filters the user_login, also known as the username, before it is added to the site.
 			 *
-			 * @since 2.0.3
+			 * @since WP-2.0.3
 			 *
 			 * @param string $user_login The sanitized username.
 			 */
@@ -227,7 +227,7 @@ wp_enqueue_script( 'user-profile' );
 /**
  * Filters whether to enable user auto-complete for non-super admins in Multisite.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @param bool $enable Whether to enable auto-complete for non-super admins. Default false.
  */
@@ -340,7 +340,7 @@ if ( is_multisite() && current_user_can( 'promote_users' ) ) {
 	/**
 	 * Fires inside the adduser form tag.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	do_action( 'user_new_form_tag' );
 ?>>
@@ -377,7 +377,7 @@ if ( is_multisite() && current_user_can( 'promote_users' ) ) {
  * uniquely targetable. Contexts are 'add-existing-user' (Multisite),
  * and 'add-new-user' (single site and network admin).
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  *
  * @param string $type A contextual string specifying which type of new user form the hook follows.
  */

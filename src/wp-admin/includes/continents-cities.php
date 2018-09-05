@@ -6,7 +6,7 @@
  *
  * @package WordPress
  * @subpackage i18n
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 
 __('Africa', 'continents-cities');

@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Upgrader
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 
 _deprecated_file( basename( __FILE__ ), '4.7.0', 'class-wp-upgrader.php' );

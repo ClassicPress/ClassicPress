@@ -1389,7 +1389,7 @@ themes.view.Search = wp.Backbone.View.extend({
 /**
  * Navigate router.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param {string} url - URL to navigate to.
  * @param {object} state - State.

@@ -19,7 +19,7 @@
  * Any scalar values will be returned as strings. You may coerce the return type of
  * a given option by registering an {@see 'option_$option'} filter callback.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -42,9 +42,9 @@ function get_option( $option, $default = false ) {
 	 * Passing a truthy value to the filter will short-circuit retrieving
 	 * the option value, returning the passed value instead.
 	 *
-	 * @since 1.5.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.9.0 The `$default` parameter was added.
+	 * @since WP-1.5.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.9.0 The `$default` parameter was added.
 	 *
 	 *
 	 * @param bool|mixed $pre_option The value to return instead of the option value. This differs from
@@ -75,9 +75,9 @@ function get_option( $option, $default = false ) {
 			 *
 			 * The dynamic portion of the hook name, `$option`, refers to the option name.
 			 *
-			 * @since 3.4.0
-			 * @since 4.4.0 The `$option` parameter was added.
-			 * @since 4.7.0 The `$passed_default` parameter was added to distinguish between a `false` value and the default parameter value.
+			 * @since WP-3.4.0
+			 * @since WP-4.4.0 The `$option` parameter was added.
+			 * @since WP-4.7.0 The `$passed_default` parameter was added to distinguish between a `false` value and the default parameter value.
 			 *
 			 * @param mixed  $default The default value to return if the option does not exist
 			 *                        in the database.
@@ -137,9 +137,9 @@ function get_option( $option, $default = false ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 1.5.0 As 'option_' . $setting
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
+	 * @since WP-1.5.0 As 'option_' . $setting
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
 	 *
 	 * @param mixed  $value  Value of the option. If stored serialized, it will be
 	 *                       unserialized prior to being returned.
@@ -154,7 +154,7 @@ function get_option( $option, $default = false ) {
  * Will die if $option is in protected list. Protected options are 'alloptions'
  * and 'notoptions' options.
  *
- * @since 2.2.0
+ * @since WP-2.2.0
  *
  * @param string $option Option name.
  */
@@ -166,7 +166,7 @@ function wp_protect_special_option( $option ) {
 /**
  * Print option value after sanitizing for forms.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $option Option name.
  */
@@ -177,7 +177,7 @@ function form_option( $option ) {
 /**
  * Loads and caches all autoloaded options, if available or all options.
  *
- * @since 2.2.0
+ * @since WP-2.2.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -208,7 +208,7 @@ function wp_load_alloptions() {
 			/**
 			 * Filters all options before caching them.
 			 *
-			 * @since 4.9.0
+			 * @since WP-4.9.0
 			 *
 			 * @param array $alloptions Array with all options.
 			 */
@@ -220,7 +220,7 @@ function wp_load_alloptions() {
 	/**
 	 * Filters all options after retrieving them.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param array $alloptions Array with all options.
 	 */
@@ -230,7 +230,7 @@ function wp_load_alloptions() {
 /**
  * Loads and caches certain often requested site options if is_multisite() and a persistent cache is not being used.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -269,8 +269,8 @@ function wp_load_core_site_options( $network_id = null ) {
  * If the option does not exist, then the option will be added with the option value,
  * with an `$autoload` value of 'yes'.
  *
- * @since 1.0.0
- * @since 4.2.0 The `$autoload` parameter was added.
+ * @since WP-1.0.0
+ * @since WP-4.2.0 The `$autoload` parameter was added.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -302,8 +302,8 @@ function update_option( $option, $value, $autoload = null ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.6.0
-	 * @since 4.4.0 The `$option` parameter was added.
+	 * @since WP-2.6.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
 	 *
 	 * @param mixed  $value     The new, unserialized option value.
 	 * @param mixed  $old_value The old option value.
@@ -314,7 +314,7 @@ function update_option( $option, $value, $autoload = null ) {
 	/**
 	 * Filters an option before its value is (maybe) serialized and updated.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param mixed  $value     The new, unserialized option value.
 	 * @param string $option    Name of the option.
@@ -350,7 +350,7 @@ function update_option( $option, $value, $autoload = null ) {
 	/**
 	 * Fires immediately before an option value is updated.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $option    Name of the option to update.
 	 * @param mixed  $old_value The old option value.
@@ -391,8 +391,8 @@ function update_option( $option, $value, $autoload = null ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.0.1
-	 * @since 4.4.0 The `$option` parameter was added.
+	 * @since WP-2.0.1
+	 * @since WP-4.4.0 The `$option` parameter was added.
 	 *
 	 * @param mixed  $old_value The old option value.
 	 * @param mixed  $value     The new option value.
@@ -403,7 +403,7 @@ function update_option( $option, $value, $autoload = null ) {
 	/**
 	 * Fires after the value of an option has been successfully updated.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $option    Name of the updated option.
 	 * @param mixed  $old_value The old option value.
@@ -425,7 +425,7 @@ function update_option( $option, $value, $autoload = null ) {
  * aren't adding a protected WordPress option. Care should be taken to not name
  * options the same as the ones which are protected.
  *
- * @since 1.0.0
+ * @since WP-1.0.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -466,7 +466,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	/**
 	 * Fires before an option is added.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $option Name of the option to add.
 	 * @param mixed  $value  Value of the option.
@@ -499,8 +499,8 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.5.0 As "add_option_{$name}"
-	 * @since 3.0.0
+	 * @since WP-2.5.0 As "add_option_{$name}"
+	 * @since WP-3.0.0
 	 *
 	 * @param string $option Name of the option to add.
 	 * @param mixed  $value  Value of the option.
@@ -510,7 +510,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	/**
 	 * Fires after an option has been added.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $option Name of the added option.
 	 * @param mixed  $value  Value of the option.
@@ -522,7 +522,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 /**
  * Removes option by name. Prevents removal of protected WordPress options.
  *
- * @since 1.2.0
+ * @since WP-1.2.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -546,7 +546,7 @@ function delete_option( $option ) {
 	/**
 	 * Fires immediately before an option is deleted.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $option Name of the option to delete.
 	 */
@@ -571,7 +571,7 @@ function delete_option( $option ) {
 		 *
 		 * The dynamic portion of the hook name, `$option`, refers to the option name.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string $option Name of the deleted option.
 		 */
@@ -580,7 +580,7 @@ function delete_option( $option ) {
 		/**
 		 * Fires after an option has been deleted.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $option Name of the deleted option.
 		 */
@@ -593,7 +593,7 @@ function delete_option( $option ) {
 /**
  * Delete a transient.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $transient Transient name. Expected to not be SQL-escaped.
  * @return bool true if successful, false otherwise
@@ -605,7 +605,7 @@ function delete_transient( $transient ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $transient Transient name.
 	 */
@@ -626,7 +626,7 @@ function delete_transient( $transient ) {
 		/**
 		 * Fires after a transient is deleted.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string $transient Deleted transient name.
 		 */
@@ -642,7 +642,7 @@ function delete_transient( $transient ) {
  * If the transient does not exist, does not have a value, or has expired,
  * then the return value will be false.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $transient Transient name. Expected to not be SQL-escaped.
  * @return mixed Value of transient.
@@ -657,8 +657,8 @@ function get_transient( $transient ) {
 	 * Passing a truthy value to the filter will effectively short-circuit retrieval
 	 * of the transient, returning the passed value instead.
 	 *
-	 * @since 2.8.0
-	 * @since 4.4.0 The `$transient` parameter was added
+	 * @since WP-2.8.0
+	 * @since WP-4.4.0 The `$transient` parameter was added
 	 *
 	 * @param mixed  $pre_transient The default value to return if the transient does not exist.
 	 *                              Any value other than false will short-circuit the retrieval
@@ -696,8 +696,8 @@ function get_transient( $transient ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 2.8.0
-	 * @since 4.4.0 The `$transient` parameter was added
+	 * @since WP-2.8.0
+	 * @since WP-4.4.0 The `$transient` parameter was added
 	 *
 	 * @param mixed  $value     Value of transient.
 	 * @param string $transient Transient name.
@@ -711,7 +711,7 @@ function get_transient( $transient ) {
  * You do not need to serialize values. If the value needs to be serialized, then
  * it will be serialized before it is set.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
  *                           172 characters or fewer in length.
@@ -729,9 +729,9 @@ function set_transient( $transient, $value, $expiration = 0 ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 3.0.0
-	 * @since 4.2.0 The `$expiration` parameter was added.
-	 * @since 4.4.0 The `$transient` parameter was added.
+	 * @since WP-3.0.0
+	 * @since WP-4.2.0 The `$expiration` parameter was added.
+	 * @since WP-4.4.0 The `$transient` parameter was added.
 	 *
 	 * @param mixed  $value      New value of transient.
 	 * @param int    $expiration Time until expiration in seconds.
@@ -744,7 +744,7 @@ function set_transient( $transient, $value, $expiration = 0 ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param int    $expiration Time until expiration in seconds. Use 0 for no expiration.
 	 * @param mixed  $value      New value of transient.
@@ -791,9 +791,9 @@ function set_transient( $transient, $value, $expiration = 0 ) {
 		 *
 		 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 		 *
-		 * @since 3.0.0
-		 * @since 3.6.0 The `$value` and `$expiration` parameters were added.
-		 * @since 4.4.0 The `$transient` parameter was added.
+		 * @since WP-3.0.0
+		 * @since WP-3.6.0 The `$value` and `$expiration` parameters were added.
+		 * @since WP-4.4.0 The `$transient` parameter was added.
 		 *
 		 * @param mixed  $value      Transient value.
 		 * @param int    $expiration Time until expiration in seconds.
@@ -804,8 +804,8 @@ function set_transient( $transient, $value, $expiration = 0 ) {
 		/**
 		 * Fires after the value for a transient has been set.
 		 *
-		 * @since 3.0.0
-		 * @since 3.6.0 The `$value` and `$expiration` parameters were added.
+		 * @since WP-3.0.0
+		 * @since WP-3.6.0 The `$value` and `$expiration` parameters were added.
 		 *
 		 * @param string $transient  The name of the transient.
 		 * @param mixed  $value      Transient value.
@@ -822,7 +822,7 @@ function set_transient( $transient, $value, $expiration = 0 ) {
  * The multi-table delete syntax is used to delete the transient record
  * from table a, and the corresponding transient_timeout record from table b.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param bool $force_db Optional. Force cleanup to run against the database even when an external object cache is used.
  */
@@ -878,7 +878,7 @@ function delete_expired_transients( $force_db = false ) {
  * cookie exists (different browser used), adds the last saved cookie restoring
  * the settings.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function wp_user_settings() {
 
@@ -924,7 +924,7 @@ function wp_user_settings() {
 /**
  * Retrieve user interface setting value based on setting name.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $name    The name of the setting.
  * @param string $default Optional default value to return when $name is not set.
@@ -943,7 +943,7 @@ function get_user_setting( $name, $default = false ) {
  *
  * This function has to be used before any output has started as it calls setcookie().
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $name  The name of the setting.
  * @param string $value The value for the setting.
@@ -967,7 +967,7 @@ function set_user_setting( $name, $value ) {
  *
  * This function has to be used before any output has started as it calls setcookie().
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string $names The name or array of names of the setting to be deleted.
  * @return bool|null True if deleted successfully, false if not. Null if the current user can't be established.
@@ -998,7 +998,7 @@ function delete_user_setting( $names ) {
 /**
  * Retrieve all user interface settings.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global array $_updated_user_settings
  *
@@ -1038,7 +1038,7 @@ function get_all_user_settings() {
 /**
  * Private. Set all user interface settings.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  * @access private
  *
  * @global array $_updated_user_settings
@@ -1080,7 +1080,7 @@ function wp_set_all_user_settings( $user_settings ) {
 /**
  * Delete the user settings of the current user.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function delete_all_user_settings() {
 	if ( ! $user_id = get_current_user_id() ) {
@@ -1094,9 +1094,9 @@ function delete_all_user_settings() {
 /**
  * Retrieve an option value for the current network based on name of option.
  *
- * @since 2.8.0
- * @since 4.4.0 The `$use_cache` parameter was deprecated.
- * @since 4.4.0 Modified into wrapper for get_network_option()
+ * @since WP-2.8.0
+ * @since WP-4.4.0 The `$use_cache` parameter was deprecated.
+ * @since WP-4.4.0 Modified into wrapper for get_network_option()
  *
  * @see get_network_option()
  *
@@ -1114,8 +1114,8 @@ function get_site_option( $option, $default = false, $deprecated = true ) {
  *
  * Existing options will not be updated. Note that prior to 3.3 this wasn't the case.
  *
- * @since 2.8.0
- * @since 4.4.0 Modified into wrapper for add_network_option()
+ * @since WP-2.8.0
+ * @since WP-4.4.0 Modified into wrapper for add_network_option()
  *
  * @see add_network_option()
  *
@@ -1130,8 +1130,8 @@ function add_site_option( $option, $value ) {
 /**
  * Removes a option by name for the current network.
  *
- * @since 2.8.0
- * @since 4.4.0 Modified into wrapper for delete_network_option()
+ * @since WP-2.8.0
+ * @since WP-4.4.0 Modified into wrapper for delete_network_option()
  *
  * @see delete_network_option()
  *
@@ -1145,8 +1145,8 @@ function delete_site_option( $option ) {
 /**
  * Update the value of an option that was already added for the current network.
  *
- * @since 2.8.0
- * @since 4.4.0 Modified into wrapper for update_network_option()
+ * @since WP-2.8.0
+ * @since WP-4.4.0 Modified into wrapper for update_network_option()
  *
  * @see update_network_option()
  *
@@ -1161,7 +1161,7 @@ function update_site_option( $option, $value ) {
 /**
  * Retrieve a network's option value based on the option name.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @see get_option()
  *
@@ -1194,11 +1194,11 @@ function get_network_option( $network_id, $option, $default = false ) {
 	 * Passing a truthy value to the filter will effectively short-circuit retrieval,
 	 * returning the passed value instead.
 	 *
-	 * @since 2.9.0 As 'pre_site_option_' . $key
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.7.0 The `$network_id` parameter was added.
-	 * @since 4.9.0 The `$default` parameter was added.
+	 * @since WP-2.9.0 As 'pre_site_option_' . $key
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.7.0 The `$network_id` parameter was added.
+	 * @since WP-4.9.0 The `$default` parameter was added.
 	 *
 	 * @param mixed  $pre_option The value to return instead of the option value. This differs from
 	 *                           `$default`, which is used as the fallback value in the event the
@@ -1226,9 +1226,9 @@ function get_network_option( $network_id, $option, $default = false ) {
 		 *
 		 * The dynamic portion of the hook name, `$option`, refers to the option name.
 		 *
-		 * @since 3.4.0
-		 * @since 4.4.0 The `$option` parameter was added.
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-3.4.0
+		 * @since WP-4.4.0 The `$option` parameter was added.
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param mixed  $default    The value to return if the site option does not exist
 		 *                           in the database.
@@ -1272,10 +1272,10 @@ function get_network_option( $network_id, $option, $default = false ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.9.0 As 'site_option_' . $key
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.7.0 The `$network_id` parameter was added.
+	 * @since WP-2.9.0 As 'site_option_' . $key
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.7.0 The `$network_id` parameter was added.
 	 *
 	 * @param mixed  $value      Value of network option.
 	 * @param string $option     Option name.
@@ -1289,7 +1289,7 @@ function get_network_option( $network_id, $option, $default = false ) {
  *
  * Existing options will not be updated.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @see add_option()
  *
@@ -1321,10 +1321,10 @@ function add_network_option( $network_id, $option, $value ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.9.0 As 'pre_add_site_option_' . $key
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.7.0 The `$network_id` parameter was added.
+	 * @since WP-2.9.0 As 'pre_add_site_option_' . $key
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.7.0 The `$network_id` parameter was added.
 	 *
 	 * @param mixed  $value      Value of network option.
 	 * @param string $option     Option name.
@@ -1373,9 +1373,9 @@ function add_network_option( $network_id, $option, $value ) {
 		 *
 		 * The dynamic portion of the hook name, `$option`, refers to the option name.
 		 *
-		 * @since 2.9.0 As "add_site_option_{$key}"
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-2.9.0 As "add_site_option_{$key}"
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param mixed  $value      Value of the network option.
@@ -1386,8 +1386,8 @@ function add_network_option( $network_id, $option, $value ) {
 		/**
 		 * Fires after a network option has been successfully added.
 		 *
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param mixed  $value      Value of the network option.
@@ -1404,7 +1404,7 @@ function add_network_option( $network_id, $option, $value ) {
 /**
  * Removes a network option by name.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @see delete_option()
  *
@@ -1433,9 +1433,9 @@ function delete_network_option( $network_id, $option ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.7.0 The `$network_id` parameter was added.
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.7.0 The `$network_id` parameter was added.
 	 *
 	 * @param string $option     Option name.
 	 * @param int    $network_id ID of the network.
@@ -1462,9 +1462,9 @@ function delete_network_option( $network_id, $option ) {
 		 *
 		 * The dynamic portion of the hook name, `$option`, refers to the option name.
 		 *
-		 * @since 2.9.0 As "delete_site_option_{$key}"
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-2.9.0 As "delete_site_option_{$key}"
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param int    $network_id ID of the network.
@@ -1474,8 +1474,8 @@ function delete_network_option( $network_id, $option ) {
 		/**
 		 * Fires after a network option has been deleted.
 		 *
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param int    $network_id ID of the network.
@@ -1491,7 +1491,7 @@ function delete_network_option( $network_id, $option ) {
 /**
  * Update the value of a network option that was already added.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @see update_option()
  *
@@ -1525,10 +1525,10 @@ function update_network_option( $network_id, $option, $value ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the option name.
 	 *
-	 * @since 2.9.0 As 'pre_update_site_option_' . $key
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$option` parameter was added.
-	 * @since 4.7.0 The `$network_id` parameter was added.
+	 * @since WP-2.9.0 As 'pre_update_site_option_' . $key
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$option` parameter was added.
+	 * @since WP-4.7.0 The `$network_id` parameter was added.
 	 *
 	 * @param mixed  $value      New value of the network option.
 	 * @param mixed  $old_value  Old value of the network option.
@@ -1573,9 +1573,9 @@ function update_network_option( $network_id, $option, $value ) {
 		 *
 		 * The dynamic portion of the hook name, `$option`, refers to the option name.
 		 *
-		 * @since 2.9.0 As "update_site_option_{$key}"
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-2.9.0 As "update_site_option_{$key}"
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param mixed  $value      Current value of the network option.
@@ -1587,8 +1587,8 @@ function update_network_option( $network_id, $option, $value ) {
 		/**
 		 * Fires after the value of a network option has been successfully updated.
 		 *
-		 * @since 3.0.0
-		 * @since 4.7.0 The `$network_id` parameter was added.
+		 * @since WP-3.0.0
+		 * @since WP-4.7.0 The `$network_id` parameter was added.
 		 *
 		 * @param string $option     Name of the network option.
 		 * @param mixed  $value      Current value of the network option.
@@ -1606,7 +1606,7 @@ function update_network_option( $network_id, $option, $value ) {
 /**
  * Delete a site transient.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @param string $transient Transient name. Expected to not be SQL-escaped.
  * @return bool True if successful, false otherwise
@@ -1618,7 +1618,7 @@ function delete_site_transient( $transient ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $transient Transient name.
 	 */
@@ -1638,7 +1638,7 @@ function delete_site_transient( $transient ) {
 		/**
 		 * Fires after a transient is deleted.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string $transient Deleted transient name.
 		 */
@@ -1654,7 +1654,7 @@ function delete_site_transient( $transient ) {
  * If the transient does not exist, does not have a value, or has expired,
  * then the return value will be false.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see get_transient()
  *
@@ -1671,8 +1671,8 @@ function get_site_transient( $transient ) {
 	 * Passing a truthy value to the filter will effectively short-circuit retrieval,
 	 * returning the passed value instead.
 	 *
-	 * @since 2.9.0
-	 * @since 4.4.0 The `$transient` parameter was added.
+	 * @since WP-2.9.0
+	 * @since WP-4.4.0 The `$transient` parameter was added.
 	 *
 	 * @param mixed  $pre_site_transient The default value to return if the site transient does not exist.
 	 *                                   Any value other than false will short-circuit the retrieval
@@ -1709,8 +1709,8 @@ function get_site_transient( $transient ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 2.9.0
-	 * @since 4.4.0 The `$transient` parameter was added.
+	 * @since WP-2.9.0
+	 * @since WP-4.4.0 The `$transient` parameter was added.
 	 *
 	 * @param mixed  $value     Value of site transient.
 	 * @param string $transient Transient name.
@@ -1724,7 +1724,7 @@ function get_site_transient( $transient ) {
  * You do not need to serialize values, if the value needs to be serialize, then
  * it will be serialized before it is set.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see set_transient()
  *
@@ -1741,8 +1741,8 @@ function set_site_transient( $transient, $value, $expiration = 0 ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 3.0.0
-	 * @since 4.4.0 The `$transient` parameter was added.
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 The `$transient` parameter was added.
 	 *
 	 * @param mixed  $value     New value of site transient.
 	 * @param string $transient Transient name.
@@ -1756,7 +1756,7 @@ function set_site_transient( $transient, $value, $expiration = 0 ) {
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param int    $expiration Time until expiration in seconds. Use 0 for no expiration.
 	 * @param mixed  $value      New value of site transient.
@@ -1786,8 +1786,8 @@ function set_site_transient( $transient, $value, $expiration = 0 ) {
 		 *
 		 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 		 *
-		 * @since 3.0.0
-		 * @since 4.4.0 The `$transient` parameter was added
+		 * @since WP-3.0.0
+		 * @since WP-4.4.0 The `$transient` parameter was added
 		 *
 		 * @param mixed  $value      Site transient value.
 		 * @param int    $expiration Time until expiration in seconds.
@@ -1798,7 +1798,7 @@ function set_site_transient( $transient, $value, $expiration = 0 ) {
 		/**
 		 * Fires after the value for a site transient has been set.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param string $transient  The name of the site transient.
 		 * @param mixed  $value      Site transient value.
@@ -1815,7 +1815,7 @@ function set_site_transient( $transient, $value, $expiration = 0 ) {
  * The settings registered here are primarily useful for the REST API, so this
  * does not encompass all settings available in WordPress.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 function register_initial_settings() {
 	register_setting( 'general', 'blogname', array(
@@ -1946,8 +1946,8 @@ function register_initial_settings() {
 /**
  * Register a setting and its data.
  *
- * @since 2.7.0
- * @since 4.7.0 `$args` can be passed to set flags on the setting, similar to `register_meta()`.
+ * @since WP-2.7.0
+ * @since WP-4.7.0 `$args` can be passed to set flags on the setting, similar to `register_meta()`.
  *
  * @global array $new_whitelist_options
  * @global array $wp_registered_settings
@@ -1987,7 +1987,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 	/**
 	 * Filters the registration arguments when registering a setting.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param array  $args         Array of setting registration arguments.
 	 * @param array  $defaults     Array of default arguments.
@@ -2035,8 +2035,8 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 /**
  * Unregister a setting.
  *
- * @since 2.7.0
- * @since 4.7.0 `$sanitize_callback` was deprecated. The callback from `register_setting()` is now used instead.
+ * @since WP-2.7.0
+ * @since WP-4.7.0 `$sanitize_callback` was deprecated. The callback from `register_setting()` is now used instead.
  *
  * @global array $new_whitelist_options
  *
@@ -2095,7 +2095,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 /**
  * Retrieves an array of registered settings.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @return array List of registered settings, keyed by option name.
  */
@@ -2115,7 +2115,7 @@ function get_registered_settings() {
  * For settings which register a default setting in `register_setting()`, this
  * function is added as a filter to `default_option_{$option}`.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @param mixed $default Existing default value to return.
  * @param string $option Option name.

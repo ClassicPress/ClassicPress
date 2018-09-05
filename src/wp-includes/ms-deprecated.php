@@ -6,7 +6,7 @@
  *
  * @package WordPress
  * @subpackage Deprecated
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 /*
@@ -450,7 +450,7 @@ function get_admin_users_for_domain( $domain = '', $path = '' ) {
 /**
  * Return an array of sites for a network or networks.
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  * @deprecated 4.6.0 Use get_sites()
  * @see get_sites()
  *

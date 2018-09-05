@@ -15,7 +15,7 @@ class WPDieException extends Exception {}
  *
  * @package    WordPress
  * @subpackage Unit Tests
- * @since      3.4.0
+ * @since      WP-3.4.0
  */
 class WPAjaxDieStopException extends WPDieException {}
 
@@ -28,6 +28,6 @@ class WPAjaxDieStopException extends WPDieException {}
  *
  * @package    WordPress
  * @subpackage Unit Tests
- * @since      3.4.0
+ * @since      WP-3.4.0
  */
 class WPAjaxDieContinueException extends WPDieException {}

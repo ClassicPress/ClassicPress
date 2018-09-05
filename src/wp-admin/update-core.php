@@ -117,7 +117,7 @@ function list_core_update( $update ) {
 }
 
 /**
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function dismissed_updates() {
 	$dismissed = get_core_updates( array( 'dismissed' => true, 'available' => false ) );
@@ -149,7 +149,7 @@ function dismissed_updates() {
 /**
  * Display upgrade WordPress for downloading latest or upgrading automatically form.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global string $required_php_version
  * @global string $required_mysql_version
@@ -341,7 +341,7 @@ function list_plugin_updates() {
 }
 
 /**
- * @since 2.9.0
+ * @since WP-2.9.0
  */
 function list_theme_updates() {
 	$themes = get_theme_updates();
@@ -412,7 +412,7 @@ function list_theme_updates() {
 }
 
 /**
- * @since 3.7.0
+ * @since WP-3.7.0
  */
 function list_translation_updates() {
 	$updates = wp_get_translation_updates();
@@ -438,7 +438,7 @@ function list_translation_updates() {
 /**
  * Upgrade WordPress core display.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global WP_Filesystem_Base $wp_filesystem Subclass
  *
@@ -519,7 +519,7 @@ function do_core_upgrade( $reinstall = false ) {
 }
 
 /**
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function do_dismiss_core_update() {
 	$version = isset( $_POST['version'] )? $_POST['version'] : false;
@@ -533,7 +533,7 @@ function do_dismiss_core_update() {
 }
 
 /**
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 function do_undismiss_core_update() {
 	$version = isset( $_POST['version'] )? $_POST['version'] : false;
@@ -634,7 +634,7 @@ if ( 'upgrade-core' == $action ) {
 	/**
 	 * Fires after the core, plugin, and theme update tables.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 */
 	do_action( 'core_upgrade_preamble' );
 	echo '</div>';
@@ -773,7 +773,7 @@ if ( 'upgrade-core' == $action ) {
 	 * passed update action. The hook fires in lieu of all available
 	 * default update actions.
 	 *
-	 * @since 3.2.0
+	 * @since WP-3.2.0
 	 */
 	do_action( "update-core-custom_{$action}" );
 }

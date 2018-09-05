@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage oEmbed
- * @since 4.4.0
+ * @since WP-4.4.0
  * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php
  */
 

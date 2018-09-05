@@ -345,7 +345,7 @@ function _unregister_taxonomy( $taxonomy_name ) {
 /**
  * Unregister a post status.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  *
  * @param string $status
  */

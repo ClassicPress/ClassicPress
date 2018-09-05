@@ -22,7 +22,7 @@ do_action( 'rss_tag_pre', 'atom' );
   /**
    * Fires at end of the Atom feed root to add namespaces.
    *
-   * @since 2.0.0
+   * @since WP-2.0.0
    */
   do_action( 'atom_ns' );
   ?>
@@ -43,7 +43,7 @@ do_action( 'rss_tag_pre', 'atom' );
 	/**
 	 * Fires just before the first Atom feed entry.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 */
 	do_action( 'atom_head' );
 
@@ -59,7 +59,7 @@ do_action( 'rss_tag_pre', 'atom' );
 			/**
 			 * Fires at the end of each Atom feed author entry.
 			 *
-			 * @since 3.2.0
+			 * @since WP-3.2.0
 			 */
 			do_action( 'atom_author' );
 		?>
@@ -78,7 +78,7 @@ do_action( 'rss_tag_pre', 'atom' );
 	/**
 	 * Fires at the end of each Atom feed item.
 	 *
-	 * @since 2.0.0
+	 * @since WP-2.0.0
 	 */
 	do_action( 'atom_entry' );
 

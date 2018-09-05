@@ -35,7 +35,7 @@ echo '<?xml version="1.0"?'.">\n";
 		/**
 		 * Fires in the OPML header.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 */
 		do_action( 'opml_head' );
 		?>
@@ -51,7 +51,7 @@ foreach ( (array)$cats as $cat ) :
 	/**
 	 * Filters the OPML outline link category name.
 	 *
-	 * @since 2.2.0
+	 * @since WP-2.2.0
 	 *
 	 * @param string $catname The OPML outline category name.
 	 */
@@ -65,7 +65,7 @@ foreach ( (array)$cats as $cat ) :
 		/**
 		 * Filters the OPML outline link title text.
 		 *
-		 * @since 2.2.0
+		 * @since WP-2.2.0
 		 *
 		 * @param string $title The OPML outline title text.
 		 */

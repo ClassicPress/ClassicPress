@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Users
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used for querying users.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @see WP_User_Query::prepare_query() for information on accepted arguments.
  */
@@ -19,7 +19,7 @@ class WP_User_Query {
 	/**
 	 * Query vars, after parsing
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 * @var array
 	 */
 	public $query_vars = array();
@@ -27,7 +27,7 @@ class WP_User_Query {
 	/**
 	 * List of found user ids
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 * @var array
 	 */
 	private $results;
@@ -35,7 +35,7 @@ class WP_User_Query {
 	/**
 	 * Total number of found users for the current query
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 * @var int
 	 */
 	private $total_users = 0;
@@ -43,7 +43,7 @@ class WP_User_Query {
 	/**
 	 * Metadata query container.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 * @var WP_Meta_Query
 	 */
 	public $meta_query = false;
@@ -51,7 +51,7 @@ class WP_User_Query {
 	/**
 	 * The SQL query used to fetch matching users.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @var string
 	 */
 	public $request;
@@ -68,7 +68,7 @@ class WP_User_Query {
 	/**
 	 * PHP5 constructor.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param null|string|array $query Optional. The query variables.
 	 */
@@ -82,7 +82,7 @@ class WP_User_Query {
 	/**
 	 * Fills in missing query variables with default values.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array $args Query vars, as passed to `WP_User_Query`.
 	 * @return array Complete query variables with undefined ones filled in with defaults.
@@ -123,15 +123,15 @@ class WP_User_Query {
 	/**
 	 * Prepare the query variables.
 	 *
-	 * @since 3.1.0
-	 * @since 4.1.0 Added the ability to order by the `include` value.
-	 * @since 4.2.0 Added 'meta_value_num' support for `$orderby` parameter. Added multi-dimensional array syntax
+	 * @since WP-3.1.0
+	 * @since WP-4.1.0 Added the ability to order by the `include` value.
+	 * @since WP-4.2.0 Added 'meta_value_num' support for `$orderby` parameter. Added multi-dimensional array syntax
 	 *              for `$orderby` parameter.
-	 * @since 4.3.0 Added 'has_published_posts' parameter.
-	 * @since 4.4.0 Added 'paged', 'role__in', and 'role__not_in' parameters. The 'role' parameter was updated to
+	 * @since WP-4.3.0 Added 'has_published_posts' parameter.
+	 * @since WP-4.4.0 Added 'paged', 'role__in', and 'role__not_in' parameters. The 'role' parameter was updated to
 	 *              permit an array or comma-separated list of values. The 'number' parameter was updated to support
 	 *              querying for all users with using -1.
-	 * @since 4.7.0 Added 'nicename', 'nicename__in', 'nicename__not_in', 'login', 'login__in',
+	 * @since WP-4.7.0 Added 'nicename', 'nicename__in', 'nicename__not_in', 'login', 'login__in',
 	 *              and 'login__not_in' parameters.
 	 *
 	 *
@@ -222,7 +222,7 @@ class WP_User_Query {
 		 * The passed WP_User_Query object contains the query variables, not
 		 * yet passed into SQL.
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @param WP_User_Query $this The current WP_User_Query instance,
 		 *                            passed by reference.
@@ -535,7 +535,7 @@ class WP_User_Query {
 			 * The default columns depend on the search term, and include 'user_email',
 			 * 'user_login', 'ID', 'user_url', 'display_name', and 'user_nicename'.
 			 *
-			 * @since 3.6.0
+			 * @since WP-3.6.0
 			 *
 			 * @param array         $search_columns Array of column names to be searched.
 			 * @param string        $search         Text being searched.
@@ -568,7 +568,7 @@ class WP_User_Query {
 		 * The passed WP_User_Query object contains SQL parts formed
 		 * from parsing the given query.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param WP_User_Query $this The current WP_User_Query instance,
 		 *                            passed by reference.
@@ -579,7 +579,7 @@ class WP_User_Query {
 	/**
 	 * Execute the query, with the current variables.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 */
@@ -599,7 +599,7 @@ class WP_User_Query {
 		/**
 		 * Filters SELECT FOUND_ROWS() query for the current WP_User_Query instance.
 		 *
-		 * @since 3.2.0
+		 * @since WP-3.2.0
 		 *
 		 * @global wpdb $wpdb WordPress database abstraction object.
 		 *
@@ -629,7 +629,7 @@ class WP_User_Query {
 	/**
 	 * Retrieve query variable.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param string $query_var Query variable key.
 	 * @return mixed
@@ -644,7 +644,7 @@ class WP_User_Query {
 	/**
 	 * Set query variable.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param string $query_var Query variable key.
 	 * @param mixed $value Query variable value.
@@ -656,7 +656,7 @@ class WP_User_Query {
 	/**
 	 * Used internally to generate an SQL string for searching across multiple columns
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
@@ -688,7 +688,7 @@ class WP_User_Query {
 	/**
 	 * Return the list of users.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @return array Array of results.
 	 */
@@ -699,7 +699,7 @@ class WP_User_Query {
 	/**
 	 * Return the total number of users for the current query.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @return int Number of total users.
 	 */
@@ -710,7 +710,7 @@ class WP_User_Query {
 	/**
 	 * Parse and sanitize 'orderby' keys passed to the user query.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
@@ -769,7 +769,7 @@ class WP_User_Query {
 	/**
 	 * Parse an 'order' query variable and cast it to ASC or DESC as necessary.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param string $order The 'order' query variable.
 	 * @return string The sanitized 'order' query variable.
@@ -789,7 +789,7 @@ class WP_User_Query {
 	/**
 	 * Make private properties readable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to get.
 	 * @return mixed Property.
@@ -803,7 +803,7 @@ class WP_User_Query {
 	/**
 	 * Make private properties settable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name  Property to check if set.
 	 * @param mixed  $value Property value.
@@ -818,7 +818,7 @@ class WP_User_Query {
 	/**
 	 * Make private properties checkable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to check if set.
 	 * @return bool Whether the property is set.
@@ -832,7 +832,7 @@ class WP_User_Query {
 	/**
 	 * Make private properties un-settable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $name Property to unset.
 	 */
@@ -845,7 +845,7 @@ class WP_User_Query {
 	/**
 	 * Make private/protected methods readable for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param callable $name      Method to call.
 	 * @param array    $arguments Arguments to pass when calling.

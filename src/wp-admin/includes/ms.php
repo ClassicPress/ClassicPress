@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Multisite
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 /**
  * Determine if uploaded file exceeds space quota.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param array $file $_FILES array for a given file.
  * @return array $_FILES array with 'error' key set if file exceeds quota. 'error' is empty otherwise.
@@ -52,7 +52,7 @@ function check_upload_size( $file ) {
 /**
  * Delete a site.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -176,7 +176,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 	/**
 	 * Fires after the site is deleted from the network.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param int  $blog_id The site ID.
 	 * @param bool $drop    True if site's tables should be dropped. Default is false.
@@ -190,7 +190,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 /**
  * Delete a user from the network and remove from all sites.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @todo Merge with wp_delete_user() ?
  *
@@ -339,7 +339,7 @@ function fix_import_form_size( $size ) {
 /**
  * Displays the site upload space quota setting form on the Edit Site Settings screen.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param int $id The ID of the site to display the setting for.
  */
@@ -367,7 +367,7 @@ function upload_space_setting( $id ) {
  *
  * Used in core to mark a user as spam or "ham" (not spam) in Multisite.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -394,7 +394,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 			/**
 			 * Fires after the user is marked as a SPAM user.
 			 *
-			 * @since 3.0.0
+			 * @since WP-3.0.0
 			 *
 			 * @param int $id ID of the user marked as SPAM.
 			 */
@@ -403,7 +403,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 			/**
 			 * Fires after the user is marked as a HAM user. Opposite of SPAM.
 			 *
-			 * @since 3.0.0
+			 * @since WP-3.0.0
 			 *
 			 * @param int $id ID of the user marked as HAM.
 			 */
@@ -417,7 +417,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 /**
  * Cleans the user cache for a specific user.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param int $id The user ID.
  * @return bool|int The ID of the refreshed user or false if the user does not exist.
@@ -436,7 +436,7 @@ function refresh_user_details( $id ) {
 /**
  * Returns the language for a language code.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param string $code Optional. The two-letter language code. Default empty.
  * @return string The language corresponding to $code if it exists. If it does not exist,
@@ -472,7 +472,7 @@ function format_code_lang( $code = '' ) {
 /**
  * Synchronize category and post tag slugs when global terms are enabled.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param object $term     The term.
  * @param string $taxonomy The taxonomy for `$term`. Should be 'category' or 'post_tag', as these are
@@ -496,7 +496,7 @@ function sync_category_tag_slugs( $term, $taxonomy ) {
  * Displays an access denied message when a user tries to view a site's dashboard they
  * do not have access to.
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  * @access private
  */
 function _access_denied_splash() {
@@ -535,7 +535,7 @@ function _access_denied_splash() {
 /**
  * Checks if the current user has permissions to import new users.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param string $permission A permission to be checked. Currently not used.
  * @return bool True if the user has proper permissions, false if they do not.
@@ -552,7 +552,7 @@ function check_import_new_users( $permission ) {
 /**
  * Generates and displays a drop-down of available languages.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param array  $lang_files Optional. An array of the language files. Default empty array.
  * @param string $current    Optional. The current language code. Default empty.
@@ -602,7 +602,7 @@ function mu_dropdown_languages( $lang_files = array(), $current = '' ) {
 /**
  * Displays an admin notice to upgrade all sites after a core upgrade.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global int    $wp_db_version The version number of the database.
  * @global string $pagenow
@@ -631,7 +631,7 @@ function site_admin_notice() {
  * In a subdirectory installation this will make sure that a site and a post do not use the
  * same subdirectory by checking for a site with the same name as a new post.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param array $data    An array of post data.
  * @param array $postarr An array of posts. Not currently used.
@@ -665,7 +665,7 @@ function avoid_blog_page_permalink_collision( $data, $postarr ) {
  * This displays the user's primary site and allows the user to choose
  * which site is primary.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 function choose_primary_blog() {
 	?>
@@ -713,7 +713,7 @@ function choose_primary_blog() {
  * By default editing of network is restricted to the Network Admin for that `$network_id`.
  * This function allows for this to be overridden.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param int $network_id The network ID to check.
  * @return bool True if network can be edited, otherwise false.
@@ -727,7 +727,7 @@ function can_edit_network( $network_id ) {
 	/**
 	 * Filters whether this network can be edited from this page.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param bool $result     Whether the network can be edited from this page.
 	 * @param int  $network_id The network ID to check.
@@ -738,7 +738,7 @@ function can_edit_network( $network_id ) {
 /**
  * Thickbox image paths for Network Admin.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @access private
  */
@@ -862,7 +862,7 @@ function confirm_delete_users( $users ) {
 /**
  * Print JavaScript in the header on the Network Settings screen.
  *
- * @since 4.1.0
+ * @since WP-4.1.0
  */
 function network_settings_add_js() {
 ?>
@@ -884,7 +884,7 @@ jQuery(document).ready( function($) {
 /**
  * Outputs the HTML for a network's "Edit Site" tabular interface.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @param $args {
  *     Optional. Array or string of Query parameters. Default empty array.
@@ -901,7 +901,7 @@ function network_edit_site_nav( $args = array() ) {
 	 *
 	 * Default links: 'site-info', 'site-users', 'site-themes', and 'site-settings'.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param array $links {
 	 *     An array of link data representing individual network admin pages.
@@ -967,7 +967,7 @@ function network_edit_site_nav( $args = array() ) {
 /**
  * Returns the arguments for the help tab on the Edit Site screens.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @return array Help tab arguments.
  */
@@ -987,7 +987,7 @@ function get_site_screen_help_tab_args() {
 /**
  * Returns the content for the help sidebar on the Edit Site screens.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @return string Help sidebar content.
  */

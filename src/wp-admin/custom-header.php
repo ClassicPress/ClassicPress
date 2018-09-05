@@ -9,7 +9,7 @@
 /**
  * The custom header image class.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  */
 class Custom_Image_Header {
 
@@ -17,7 +17,7 @@ class Custom_Image_Header {
 	 * Callback for administration header.
 	 *
 	 * @var callable
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public $admin_header_callback;
 
@@ -25,7 +25,7 @@ class Custom_Image_Header {
 	 * Callback for header div.
 	 *
 	 * @var callable
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	public $admin_image_div_callback;
 
@@ -33,14 +33,14 @@ class Custom_Image_Header {
 	 * Holds default headers.
 	 *
 	 * @var array
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	public $default_headers = array();
 
 	/**
 	 * Used to trigger a success message when settings updated and set to true.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 * @var bool
 	 */
 	private $updated;
@@ -48,7 +48,7 @@ class Custom_Image_Header {
 	/**
 	 * Constructor - Register administration header callback.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @param callable $admin_header_callback
 	 * @param callable $admin_image_div_callback Optional custom image div output callback.
 	 */
@@ -67,7 +67,7 @@ class Custom_Image_Header {
 	/**
 	 * Set up the hooks for the Custom Header admin page.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function init() {
 		$page = add_theme_page( __( 'Header' ), __( 'Header' ), 'edit_theme_options', 'custom-header', array( $this, 'admin_page' ) );
@@ -88,7 +88,7 @@ class Custom_Image_Header {
 	/**
 	 * Adds contextual help.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	public function help() {
 		get_current_screen()->add_help_tab( array(
@@ -128,7 +128,7 @@ class Custom_Image_Header {
 	/**
 	 * Get the current step.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 *
 	 * @return int Current step
 	 */
@@ -149,7 +149,7 @@ class Custom_Image_Header {
 	/**
 	 * Set up the enqueue for the JavaScript files.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function js_includes() {
 		$step = $this->step();
@@ -167,7 +167,7 @@ class Custom_Image_Header {
 	/**
 	 * Set up the enqueue for the CSS files
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 */
 	public function css_includes() {
 		$step = $this->step();
@@ -181,7 +181,7 @@ class Custom_Image_Header {
 	/**
 	 * Execute custom header modification.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	public function take_action() {
 		if ( ! current_user_can('edit_theme_options') )
@@ -227,7 +227,7 @@ class Custom_Image_Header {
 	/**
 	 * Process the default headers
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @global array $_wp_default_headers
 	 */
@@ -256,7 +256,7 @@ class Custom_Image_Header {
 	 * Show the random image option if this theme has multiple header images.
 	 * Random image option is on by default if no header has been set.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $type The header type. One of 'default' (for the Uploaded Images control)
 	 *                     or 'uploaded' (for the Uploaded Images control).
@@ -296,7 +296,7 @@ class Custom_Image_Header {
 	/**
 	 * Execute JavaScript depending on step.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function js() {
 		$step = $this->step();
@@ -309,7 +309,7 @@ class Custom_Image_Header {
 	/**
 	 * Display JavaScript based on Step 1 and 3.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	public function js_1() {
 		$default_color = '';
@@ -370,7 +370,7 @@ class Custom_Image_Header {
 	/**
 	 * Display JavaScript based on Step 2.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	public function js_2() { ?>
 <script type="text/javascript">
@@ -442,7 +442,7 @@ class Custom_Image_Header {
 	/**
 	 * Display first step of custom header image page.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function step_1() {
 		$this->process_default_headers();
@@ -698,7 +698,7 @@ class Custom_Image_Header {
 /**
  * Fires just before the submit button in the custom header options form.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 do_action( 'custom_header_options' );
 
@@ -713,7 +713,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Display second step of custom header image page.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function step_2() {
 		check_admin_referer('custom-header-upload', '_wpnonce-custom-header-upload');
@@ -768,7 +768,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 			/**
 			 * Fires after the header image is set or an error is returned.
 			 *
-			 * @since 2.1.0
+			 * @since WP-2.1.0
 			 *
 			 * @param string $file          Path to the file.
 			 * @param int    $attachment_id Attachment ID.
@@ -831,7 +831,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Upload the file to be cropped in the second step.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 */
 	public function step_2_manage_upload() {
 		$overrides = array('test_form' => false);
@@ -868,8 +868,8 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Display third step of custom header image page.
 	 *
-	 * @since 2.1.0
-	 * @since 4.4.0 Switched to using wp_get_attachment_url() instead of the guid
+	 * @since WP-2.1.0
+	 * @since WP-4.4.0 Switched to using wp_get_attachment_url() instead of the guid
 	 *              for retrieving the header image URL.
 	 */
 	public function step_3() {
@@ -948,7 +948,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Display last step of custom header image page.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function finished() {
 		$this->updated = true;
@@ -958,7 +958,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Display the page based on the current step.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 */
 	public function admin_page() {
 		if ( ! current_user_can('edit_theme_options') )
@@ -975,7 +975,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Unused since 3.5.0.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param array $form_fields
 	 * @return array $form_fields
@@ -987,7 +987,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Unused since 3.5.0.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param array $tabs
 	 * @return array $tabs
@@ -1000,7 +1000,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	 * Choose a header image, selected from existing uploaded and default headers,
 	 * or provide an array of uploaded header data (either new, or from media library).
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @param mixed $choice Which header image to select. Allows for values of 'random-default-image',
 	 * 	for randomly cycling among the default images; 'random-uploaded-image', for randomly cycling
@@ -1055,7 +1055,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Remove a header image.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 */
 	final public function remove_header_image() {
 		$this->set_header_image( 'remove-header' );
@@ -1066,7 +1066,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	 *
 	 * This method does not do anything if the theme does not have a default header image.
 	 *
-	 * @since 3.4.0
+	 * @since WP-3.4.0
 	 */
 	final public function reset_header_image() {
 		$this->process_default_headers();
@@ -1093,7 +1093,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Calculate width and height based on what the currently selected theme supports.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param array $dimensions
 	 * @return array dst_height and dst_width of header image.
@@ -1145,7 +1145,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Create an attachment 'object'.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param string $cropped              Cropped image URL.
 	 * @param int    $parent_attachment_id Attachment ID of parent image.
@@ -1174,7 +1174,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Insert an attachment and its metadata.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param array  $object  Attachment object.
 	 * @param string $cropped Cropped image URL.
@@ -1195,7 +1195,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		/**
 		 * Filters the header image attachment metadata.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @see wp_generate_attachment_metadata()
 		 *
@@ -1212,7 +1212,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	 * Gets attachment uploaded by Media Manager, crops it, then saves it as a
 	 * new object. Returns JSON-encoded object details.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	public function ajax_header_crop() {
 		check_ajax_referer( 'image_editor-' . $_POST['id'], 'nonce' );
@@ -1278,7 +1278,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	 * Triggered when the user tries adds a new header image from the
 	 * Media Manager, even if s/he doesn't save that change.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	public function ajax_header_add() {
 		check_ajax_referer( 'header-add', 'nonce' );
@@ -1306,7 +1306,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	 * Triggered when the user clicks the overlay "X" button next to each image
 	 * choice in the Customizer's Header tool.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	public function ajax_header_remove() {
 		check_ajax_referer( 'header-remove', 'nonce' );
@@ -1330,7 +1330,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Updates the last-used postmeta on a header image attachment after saving a new header image via the Customizer.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param WP_Customize_Manager $wp_customize Customize manager.
 	 */
@@ -1354,7 +1354,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Gets the details of default header images if defined.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @return array Default header images.
 	 */
@@ -1397,7 +1397,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Gets the previously uploaded header images.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @return array Uploaded header images.
 	 */
@@ -1418,7 +1418,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	/**
 	 * Get the ID of a previous crop from the same base image.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param  array $object A crop attachment object.
 	 * @return int|false An attachment ID if one exists. False if none.

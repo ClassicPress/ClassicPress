@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Template
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core class used to create an HTML list of categories.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @see Walker
  */
@@ -19,7 +19,7 @@ class Walker_Category extends Walker {
 	/**
 	 * What the class handles.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var string
 	 *
 	 * @see Walker::$tree_type
@@ -29,7 +29,7 @@ class Walker_Category extends Walker {
 	/**
 	 * Database fields to use.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 *
 	 * @see Walker::$db_fields
@@ -40,7 +40,7 @@ class Walker_Category extends Walker {
 	/**
 	 * Starts the list before the elements are added.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::start_lvl()
 	 *
@@ -60,7 +60,7 @@ class Walker_Category extends Walker {
 	/**
 	 * Ends the list of after the elements are added.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::end_lvl()
 	 *
@@ -80,7 +80,7 @@ class Walker_Category extends Walker {
 	/**
 	 * Starts the element output.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::start_el()
 	 *
@@ -108,7 +108,7 @@ class Walker_Category extends Walker {
 			/**
 			 * Filters the category description for display.
 			 *
-			 * @since 1.2.0
+			 * @since WP-1.2.0
 			 *
 			 * @param string $description Category description.
 			 * @param object $category    Category object.
@@ -186,7 +186,7 @@ class Walker_Category extends Walker {
 			/**
 			 * Filters the list of CSS classes to include with each category in the list.
 			 *
-			 * @since 4.2.0
+			 * @since WP-4.2.0
 			 *
 			 * @see wp_list_categories()
 			 *
@@ -209,7 +209,7 @@ class Walker_Category extends Walker {
 	/**
 	 * Ends the element output, if needed.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::end_el()
 	 *

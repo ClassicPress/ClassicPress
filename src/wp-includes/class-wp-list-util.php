@@ -3,7 +3,7 @@
  * WordPress List utility class
  *
  * @package WordPress
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 
 /**
@@ -11,13 +11,13 @@
  *
  * Utility class to handle operations on an array of objects.
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  */
 class WP_List_Util {
 	/**
 	 * The input array.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	private $input = array();
@@ -25,7 +25,7 @@ class WP_List_Util {
 	/**
 	 * The output array.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	private $output = array();
@@ -33,7 +33,7 @@ class WP_List_Util {
 	/**
 	 * Temporary arguments for sorting.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 * @var array
 	 */
 	private $orderby = array();
@@ -43,7 +43,7 @@ class WP_List_Util {
 	 *
 	 * Sets the input array.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param array $input Array to perform operations on.
 	 */
@@ -54,7 +54,7 @@ class WP_List_Util {
 	/**
 	 * Returns the original input array.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array The input array.
 	 */
@@ -65,7 +65,7 @@ class WP_List_Util {
 	/**
 	 * Returns the output array.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @return array The output array.
 	 */
@@ -76,7 +76,7 @@ class WP_List_Util {
 	/**
 	 * Filters the list, based on a set of key => value arguments.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param array  $args     Optional. An array of key => value arguments to match
 	 *                         against each object. Default empty array.
@@ -130,7 +130,7 @@ class WP_List_Util {
 	 * This has the same functionality and prototype of
 	 * array_column() (PHP 5.5) but also supports objects.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param int|string $field     Field from the object to place instead of the entire object
 	 * @param int|string $index_key Optional. Field from the object to use as keys for the new array.
@@ -184,7 +184,7 @@ class WP_List_Util {
 	/**
 	 * Sorts the list, based on one or more orderby arguments.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @param string|array $orderby       Optional. Either the field name to order by or an array
 	 *                                    of multiple orderby fields as $orderby => $order.
@@ -222,7 +222,7 @@ class WP_List_Util {
 	/**
 	 * Callback to sort the list by specific fields.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @see WP_List_Util::sort()
 	 *

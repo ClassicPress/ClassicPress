@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Administration
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 
 /**
@@ -12,13 +12,13 @@
  *
  * A client for api.wordpress.org/events.
  *
- * @since 4.8.0
+ * @since WP-4.8.0
  */
 class WP_Community_Events {
 	/**
 	 * ID for a WordPress user account.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @var int
 	 */
@@ -27,7 +27,7 @@ class WP_Community_Events {
 	/**
 	 * Stores location data for the user.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @var bool|array
 	 */
@@ -36,7 +36,7 @@ class WP_Community_Events {
 	/**
 	 * Constructor for WP_Community_Events.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param int        $user_id       WP user ID.
 	 * @param bool|array $user_location Stored location data for the user.
@@ -76,7 +76,7 @@ class WP_Community_Events {
 	 * the opportunity to anonymize the IP before sending it to w.org, which
 	 * mitigates possible privacy concerns.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param string $location_search Optional. City name to help determine the location.
 	 *                                e.g., "Seattle". Default empty string.
@@ -170,7 +170,7 @@ class WP_Community_Events {
 	/**
 	 * Builds an array of args to use in an HTTP request to the w.org Events API.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param string $search   Optional. City search string. Default empty string.
 	 * @param string $timezone Optional. Timezone string. Default empty string.
@@ -227,7 +227,7 @@ class WP_Community_Events {
 	 * _NOT_ guarantee that the returned address is valid or accurate, and it can
 	 * be easily spoofed.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return false|string The anonymized address on success; the given address
 	 *                      or false on failure.
@@ -276,7 +276,7 @@ class WP_Community_Events {
 	/**
 	 * Test if two pairs of latitude/longitude coordinates match each other.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param array $a The first pair, with indexes 'latitude' and 'longitude'.
 	 * @param array $b The second pair, with indexes 'latitude' and 'longitude'.
@@ -298,7 +298,7 @@ class WP_Community_Events {
 	 * functions, and having it abstracted keeps the logic consistent and DRY,
 	 * which is less prone to errors.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param  array $location Should contain 'latitude' and 'longitude' indexes.
 	 * @return bool|string false on failure, or a string on success.
@@ -318,7 +318,7 @@ class WP_Community_Events {
 	/**
 	 * Caches an array of events data from the Events API.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param array    $events     Response body from the API request.
 	 * @param int|bool $expiration Optional. Amount of time to cache the events. Defaults to false.
@@ -339,7 +339,7 @@ class WP_Community_Events {
 	/**
 	 * Gets cached events.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @return false|array false on failure; an array containing `location`
 	 *                     and `events` items on success.
@@ -359,7 +359,7 @@ class WP_Community_Events {
 	 * the cache, then all users would see the events in the localized data/time
 	 * of the user who triggered the cache refresh, rather than their own.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param  array $response_body The response which contains the events.
 	 * @return array The response with dates and times formatted.
@@ -394,8 +394,8 @@ class WP_Community_Events {
 	 * the event will be at the end of the list, and will need to be moved into a
 	 * higher position, so that it doesn't get trimmed off.
 	 *
-	 * @since 4.8.0
-	 * @since 4.9.7 Stick a WordCamp to the final list.
+	 * @since WP-4.8.0
+	 * @since WP-4.9.7 Stick a WordCamp to the final list.
 	 *
 	 * @param  array $response_body The response body which contains the events.
 	 * @return array The response body with events trimmed.
@@ -438,7 +438,7 @@ class WP_Community_Events {
 	/**
 	 * Logs responses to Events API requests.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 * @deprecated 4.9.0 Use a plugin instead. See #41217 for an example.
 	 *
 	 * @param string $message A description of what occurred.

@@ -7,7 +7,7 @@
  *
  * @author Elias Torres <elias@torrez.us>
  * @version 0.4
- * @since 2.3.0
+ * @since WP-2.3.0
  */
 
 /**

@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Multisite
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 /** Load WordPress Administration Bootstrap */
@@ -312,7 +312,7 @@ if ( isset( $_GET['updated'] ) ) {
 			 * The dynamic portion of the hook name, `$_GET['updated']`, refers to the
 			 * non-default site update action.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 *
 			 * @param string $msg The update message. Default 'Settings saved'.
 			 */

@@ -187,7 +187,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Builds and retrieves a custom site icon meta tag.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param $meta_tags
 	 * @return array
@@ -201,7 +201,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Sets a site icon in options for testing.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 */
 	function _set_site_icon() {
 		if ( ! $this->site_icon_id ) {
@@ -216,7 +216,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Removes the site icon from options.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 */
 	function _remove_site_icon() {
 		delete_option( 'site_icon' );
@@ -225,7 +225,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Inserts an attachment for testing site icons.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 */
 	function _insert_attachment() {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
@@ -243,7 +243,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group custom_logo
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function test_has_custom_logo() {
 		$this->assertFalse( has_custom_logo() );
@@ -283,7 +283,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group custom_logo
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function test_get_custom_logo() {
 		$this->assertEmpty( get_custom_logo() );
@@ -330,7 +330,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group custom_logo
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function test_the_custom_logo() {
 		$this->expectOutputString( '' );
@@ -378,7 +378,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Sets a site icon in options for testing.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function _set_custom_logo() {
 		if ( ! $this->custom_logo_id ) {
@@ -391,7 +391,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Removes the site icon from options.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function _remove_custom_logo() {
 		remove_theme_mod( 'custom_logo' );
@@ -400,7 +400,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Inserts an attachment for testing custom logos.
 	 *
-	 * @since 4.5.0
+	 * @since WP-4.5.0
 	 */
 	function _insert_custom_logo() {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
@@ -418,7 +418,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_time_default() {
 		$details = array(
@@ -441,7 +441,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_time_failures_are_filtered() {
 		// Remove global post objet
@@ -470,7 +470,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_date_with_post_id() {
 		$details = array(
@@ -489,7 +489,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_date_default() {
 		$details = array(
@@ -512,7 +512,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_date_failures_are_filtered() {
 		// Remove global post objet
@@ -541,7 +541,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 *
 	 * @ticket 37059
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 */
 	function test_get_the_modified_time_with_post_id() {
 		$details = array(

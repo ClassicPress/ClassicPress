@@ -389,7 +389,7 @@ class Tests_Widgets extends WP_UnitTestCase {
 	 *
 	 * Passes the expected field name and the value to test.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -441,7 +441,7 @@ class Tests_Widgets extends WP_UnitTestCase {
 	 *
 	 * Passes the expected field id and the value to be used in the tests.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @return array {
 	 *     @type array {

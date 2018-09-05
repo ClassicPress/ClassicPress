@@ -9,7 +9,7 @@
 /**
  * Remove a theme
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global WP_Filesystem_Base $wp_filesystem Subclass
  *
@@ -101,8 +101,8 @@ function delete_theme($stylesheet, $redirect = '') {
 /**
  * Get the Page Templates available in this theme
  *
- * @since 1.5.0
- * @since 4.7.0 Added the `$post_type` parameter.
+ * @since WP-1.5.0
+ * @since WP-4.7.0 Added the `$post_type` parameter.
  *
  * @param WP_Post|null $post      Optional. The post being edited, provided for context.
  * @param string       $post_type Optional. Post type to get the templates for. Default 'page'.
@@ -115,7 +115,7 @@ function get_page_templates( $post = null, $post_type = 'page' ) {
 /**
  * Tidies a filename for url display by the theme editor.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  * @access private
  *
  * @param string $fullpath Full path to the theme file
@@ -131,7 +131,7 @@ function _get_template_edit_filename($fullpath, $containingfolder) {
  *
  * Will display link, if there is an update available.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @see get_theme_update_available()
  *
  * @param WP_Theme $theme Theme data object.
@@ -145,7 +145,7 @@ function theme_update_available( $theme ) {
  *
  * Will return a link if there is an update available.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @staticvar object $themes_update
  *
@@ -225,7 +225,7 @@ function get_theme_update_available( $theme ) {
 /**
  * Retrieve list of WordPress theme features (aka theme tags)
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param bool $api Optional. Whether try to fetch tags from the WordPress.org API. Defaults to true.
  * @return array Array of features keyed by category with translations keyed by slug.
@@ -350,7 +350,7 @@ function get_theme_feature_list( $api = true ) {
  * | `$locale`          | Yes            |  Yes                | No         | No               |
  * | `$fields`          | Yes            |  Yes                | No         | No               |
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string       $action API action to perform: 'query_themes', 'theme_information',
  *                             'hot_tags' or 'feature_list'.
@@ -415,7 +415,7 @@ function themes_api( $action, $args = array() ) {
 	 *
 	 * Important: An object MUST be returned to this filter.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param object $args   Arguments used to query for installer pages from the WordPress.org Themes API.
 	 * @param string $action Requested action. Likely values are 'theme_information',
@@ -431,7 +431,7 @@ function themes_api( $action, $args = array() ) {
 	 * If `$action` is 'query_themes', 'theme_information', or 'feature_list', an object MUST
 	 * be passed. If `$action` is 'hot_tags', an array should be passed.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param false|object|array $override Whether to override the WordPress.org Themes API. Default false.
 	 * @param string             $action   Requested action. Likely values are 'theme_information',
@@ -498,7 +498,7 @@ function themes_api( $action, $args = array() ) {
 	/**
 	 * Filters the returned WordPress.org Themes API response.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array|object|WP_Error $res    WordPress.org Themes API response.
 	 * @param string                $action Requested action. Likely values are 'theme_information',
@@ -511,7 +511,7 @@ function themes_api( $action, $args = array() ) {
 /**
  * Prepare themes for JavaScript.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @param array $themes Optional. Array of WP_Theme objects to prepare.
  *                      Defaults to all allowed themes.
@@ -527,7 +527,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
 	 * Passing a non-empty array will result in wp_prepare_themes_for_js() returning
 	 * early with that value instead.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param array      $prepared_themes An associative array of theme data. Default empty array.
 	 * @param null|array $themes          An array of WP_Theme objects to prepare, if any.
@@ -614,7 +614,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
 	 *
 	 * Could be useful for changing the order, which is by name by default.
 	 *
-	 * @since 3.8.0
+	 * @since WP-3.8.0
 	 *
 	 * @param array $prepared_themes Array of themes.
 	 */
@@ -626,7 +626,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
 /**
  * Print JS templates for the theme-browsing UI in the Customizer.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  */
 function customize_themes_print_templates() {
 	?>

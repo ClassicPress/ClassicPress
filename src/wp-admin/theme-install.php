@@ -80,7 +80,7 @@ if ( $tab ) {
 	 * theme installation tab. Possible values are 'dashboard', 'search', 'upload',
 	 * 'featured', 'new', or 'updated'.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 */
 	do_action( "install_themes_pre_{$tab}" );
 }
@@ -134,7 +134,7 @@ include(ABSPATH . 'wp-admin/admin-header.php');
 	 *
 	 * This filter is for backward compatibility only, for the suppression of the upload tab.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $tabs The tabs shown on the Add Themes screen. Default is 'upload'.
 	 */
@@ -240,7 +240,7 @@ if ( $tab ) {
 	 * theme installation tab. Possible values are 'dashboard', 'search', 'upload',
 	 * 'featured', 'new', or 'updated'.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param int $paged Number of the current page of results being viewed.
 	 */

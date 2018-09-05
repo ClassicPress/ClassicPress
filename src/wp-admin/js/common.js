@@ -385,7 +385,7 @@ $document.ready( function() {
 	/**
 	 * Ensure an admin submenu is within the visual viewport.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 *
 	 * @param {jQuery} $menuItem The parent menu item containing the submenu.
 	 */
@@ -1020,7 +1020,7 @@ $document.ready( function() {
 	/**
 	 * @summary Get the viewport width.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @returns {number|boolean} The current viewport width or false if the
 	 *                           browser doesn't support innerWidth (IE < 9).
@@ -1042,7 +1042,7 @@ $document.ready( function() {
 	 * Sets the global variable `menuState` and triggers a custom event passing
 	 * the current menu state.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @returns {void}
 	 */
@@ -1070,7 +1070,7 @@ $document.ready( function() {
 	 * `aria-label` attributes of the button to give feedback to assistive
 	 * technologies. In the responsive view, the button is always hidden.
 	 *
-	 * @since 4.7.0
+	 * @since WP-4.7.0
 	 *
 	 * @returns {void}
 	 */

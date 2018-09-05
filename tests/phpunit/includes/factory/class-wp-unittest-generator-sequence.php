@@ -24,7 +24,7 @@ class WP_UnitTest_Generator_Sequence {
 	/**
 	 * Get the incrementor.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return int
 	 */
@@ -35,7 +35,7 @@ class WP_UnitTest_Generator_Sequence {
 	/**
 	 * Get the template string.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return string
 	 */

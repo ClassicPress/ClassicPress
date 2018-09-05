@@ -242,7 +242,7 @@ var plupload = {
 	/**
 	 * While working on files runtime may run out of memory and will throw this error.
 	 *
-	 * @since 2.1.2
+	 * @since WP-2.1.2
 	 * @property MEMORY_ERROR
 	 * @static
 	 * @final
@@ -770,7 +770,7 @@ plupload.Uploader = function(options) {
 	Fires when the option is changed in via uploader.setOption().
 	
 	@event OptionChanged
-	@since 2.1
+	@since WP-2.1
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	@param {String} name Name of the option that was changed
 	@param {Mixed} value New value for the specified option
@@ -795,7 +795,7 @@ plupload.Uploader = function(options) {
 	Fires when browse_button is clicked and browse dialog shows.
 	
 	@event Browse
-	@since 2.1.2
+	@since WP-2.1.2
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	 */	
 
@@ -803,7 +803,7 @@ plupload.Uploader = function(options) {
 	Fires for every filtered file before it is added to the queue.
 	
 	@event FileFiltered
-	@since 2.1
+	@since WP-2.1
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	@param {plupload.File} file Another file that has to be added to the queue.
 	 */
@@ -1814,7 +1814,7 @@ plupload.Uploader = function(options) {
 		 * Set the value for the specified option(s).
 		 *
 		 * @method setOption
-		 * @since 2.1
+		 * @since WP-2.1
 		 * @param {String|Object} option Name of the option to change or the set of key/value pairs
 		 * @param {Mixed} [value] Value for the option (is ignored, if first argument is object)
 		 */
@@ -1826,7 +1826,7 @@ plupload.Uploader = function(options) {
 		 * Get the value for the specified option or the whole configuration, if not specified.
 		 * 
 		 * @method getOption
-		 * @since 2.1
+		 * @since WP-2.1
 		 * @param {String} [option] Name of the option to get
 		 * @return {Mixed} Value for the option or the whole set
 		 */
@@ -1920,7 +1920,7 @@ plupload.Uploader = function(options) {
 		 * if any files were added to the queue. Otherwise nothing happens.
 		 *
 		 * @method addFile
-		 * @since 2.0
+		 * @since WP-2.0
 		 * @param {plupload.File|mOxie.File|File|Node|Array} file File or files to add to the queue.
 		 * @param {String} [fileName] If specified, will be used as a name for the file
 		 */

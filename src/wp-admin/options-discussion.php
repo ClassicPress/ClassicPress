@@ -90,7 +90,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 /**
  * Filters the maximum depth of threaded/nested comments.
  *
- * @since 2.7.0.
+ * @since WP-2.7.0.
  *
  * @param int $max_depth The maximum depth of threaded comments. Default 10.
  */
@@ -247,7 +247,7 @@ $avatar_defaults = array(
  * Avatars are stored in key/value pairs, where the key is option value,
  * and the name is the displayed avatar name.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param array $avatar_defaults Array of default avatars.
  */
@@ -271,7 +271,7 @@ remove_filter( 'pre_option_show_avatars', '__return_true', 100 );
 /**
  * Filters the HTML output of the default avatar list.
  *
- * @since 2.6.0
+ * @since WP-2.6.0
  *
  * @param string $avatar_list HTML markup of the avatar list.
  */

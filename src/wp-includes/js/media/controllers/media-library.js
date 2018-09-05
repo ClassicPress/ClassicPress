@@ -22,7 +22,7 @@ MediaLibrary = Library.extend(/** @lends wp.media.controller.MediaLibrary.protot
 	}, Library.prototype.defaults ),
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @param options
 	 */
@@ -35,7 +35,7 @@ MediaLibrary = Library.extend(/** @lends wp.media.controller.MediaLibrary.protot
 	},
 
 	/**
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	activate: function() {
 		// @todo this should use this.frame.

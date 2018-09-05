@@ -87,7 +87,7 @@ wp.mediaWidgets = ( function( $ ) {
 		/**
 		 * Initialize.
 		 *
-		 * @since 4.9.0
+		 * @since WP-4.9.0
 		 *
 		 * @param {object} options - Options.
 		 * @returns {void}
@@ -159,7 +159,7 @@ wp.mediaWidgets = ( function( $ ) {
 					/**
 					 * Update oEmbed.
 					 *
-					 * @since 4.9.0
+					 * @since WP-4.9.0
 					 *
 					 * @returns {void}
 					 */

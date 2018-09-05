@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Customize
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Widget Form Customize Control class.
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @see WP_Customize_Control
  */
@@ -27,7 +27,7 @@ class WP_Widget_Form_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Gather control params for exporting to JavaScript.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 *
 	 * @global array $wp_registered_widgets
 	 */
@@ -63,14 +63,14 @@ class WP_Widget_Form_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Override render_content to be no-op since content is exported via to_json for deferred embedding.
 	 *
-	 * @since 3.9.0
+	 * @since WP-3.9.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * Whether the current widget is rendered on the page.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @return bool Whether the widget is rendered.
 	 */

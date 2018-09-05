@@ -3,7 +3,7 @@
  * Facilitates adding of the WordPress editor as used on the Write and Edit screens.
  *
  * @package WordPress
- * @since 3.3.0
+ * @since WP-3.3.0
  *
  * Private, not included by default. See wp_editor() in wp-includes/general-template.php.
  */
@@ -71,7 +71,7 @@ final class _WP_Editors {
 		/**
 		 * Filters the wp_editor() settings.
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @see _WP_Editors()::parse_settings()
 		 *
@@ -219,7 +219,7 @@ final class _WP_Editors {
 				/**
 				 * Fires after the default media button(s) are displayed.
 				 *
-				 * @since 2.5.0
+				 * @since WP-2.5.0
 				 *
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
 				 */
@@ -246,7 +246,7 @@ final class _WP_Editors {
 		/**
 		 * Filters the HTML markup output that displays the editor.
 		 *
-		 * @since 2.1.0
+		 * @since WP-2.1.0
 		 *
 		 * @param string $output Editor's HTML markup.
 		 */
@@ -263,7 +263,7 @@ final class _WP_Editors {
 		/**
 		 * Filters the default editor content.
 		 *
-		 * @since 2.1.0
+		 * @since WP-2.1.0
 		 *
 		 * @param string $content        Default editor content.
 		 * @param string $default_editor The default editor for the current user.
@@ -336,7 +336,7 @@ final class _WP_Editors {
 			/**
 			 * Filters the Quicktags settings.
 			 *
-			 * @since 3.3.0
+			 * @since WP-3.3.0
 			 *
 			 * @param array  $qtInit    Quicktags settings.
 			 * @param string $editor_id The unique editor ID, e.g. 'content'.
@@ -360,7 +360,7 @@ final class _WP_Editors {
 					/**
 					 * Filters the list of teenyMCE plugins.
 					 *
-					 * @since 2.7.0
+					 * @since WP-2.7.0
 					 *
 					 * @param array  $plugins   An array of teenyMCE plugins.
 					 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -381,7 +381,7 @@ final class _WP_Editors {
 					 * If the external plugin adds a button, it should be added with
 					 * one of the 'mce_buttons' filters.
 					 *
-					 * @since 2.5.0
+					 * @since WP-2.5.0
 					 *
 					 * @param array $external_plugins An array of external TinyMCE plugins.
 					 */
@@ -418,7 +418,7 @@ final class _WP_Editors {
 					 * The filter specifies which of the default plugins included
 					 * in WordPress should be added to the TinyMCE instance.
 					 *
-					 * @since 3.3.0
+					 * @since WP-3.3.0
 					 *
 					 * @param array $plugins An array of default TinyMCE plugins.
 					 */
@@ -441,7 +441,7 @@ final class _WP_Editors {
 						 * The language file should follow the same format as wp_mce_translation(),
 						 * and should define a variable ($strings) that holds all translated strings.
 						 *
-						 * @since 2.5.0
+						 * @since WP-2.5.0
 						 *
 						 * @param array $translations Translations for external TinyMCE plugins.
 						 */
@@ -538,7 +538,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the comma-delimited list of stylesheets to load in TinyMCE.
 				 *
-				 * @since 2.1.0
+				 * @since WP-2.1.0
 				 *
 				 * @param string $stylesheets Comma-delimited list of stylesheets.
 				 */
@@ -558,7 +558,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the list of teenyMCE buttons (Text tab).
 				 *
-				 * @since 2.7.0
+				 * @since WP-2.7.0
 				 *
 				 * @param array  $buttons   An array of teenyMCE buttons.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -581,7 +581,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the first-row list of TinyMCE buttons (Visual tab).
 				 *
-				 * @since 2.0.0
+				 * @since WP-2.0.0
 				 *
 				 * @param array  $buttons   First-row list of buttons.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -597,7 +597,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the second-row list of TinyMCE buttons (Visual tab).
 				 *
-				 * @since 2.0.0
+				 * @since WP-2.0.0
 				 *
 				 * @param array  $buttons   Second-row list of buttons.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -607,7 +607,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the third-row list of TinyMCE buttons (Visual tab).
 				 *
-				 * @since 2.0.0
+				 * @since WP-2.0.0
 				 *
 				 * @param array  $buttons   Third-row list of buttons.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -617,7 +617,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the fourth-row list of TinyMCE buttons (Visual tab).
 				 *
-				 * @since 2.5.0
+				 * @since WP-2.5.0
 				 *
 				 * @param array  $buttons   Fourth-row list of buttons.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -684,7 +684,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the teenyMCE config before init.
 				 *
-				 * @since 2.7.0
+				 * @since WP-2.7.0
 				 *
 				 * @param array  $mceInit   An array with teenyMCE config.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -695,7 +695,7 @@ final class _WP_Editors {
 				/**
 				 * Filters the TinyMCE config before init.
 				 *
-				 * @since 2.5.0
+				 * @since WP-2.5.0
 				 *
 				 * @param array  $mceInit   An array with TinyMCE config.
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
@@ -776,7 +776,7 @@ final class _WP_Editors {
 		/**
 		 * Fires when scripts and styles are enqueued for the editor.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param array $to_load An array containing boolean values whether TinyMCE
 		 *                       and Quicktags are being loaded.
@@ -791,7 +791,7 @@ final class _WP_Editors {
 	 * Enqueue all editor scripts.
 	 * For use when the editor is going to be initialized after page load.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 */
 	public static function enqueue_default_editor() {
 		// We are past the point where scripts can be enqueued properly.
@@ -815,7 +815,7 @@ final class _WP_Editors {
 	 * Print (output) all editor scripts and default settings.
 	 * For use when the editor is going to be initialized after page load.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 */
 	public static function print_default_editor_scripts() {
@@ -900,7 +900,7 @@ final class _WP_Editors {
 		 * Fires when the editor scripts are loaded for later initialization,
 		 * after all scripts and settings are printed.
 		 *
-		 * @since 4.8.0
+		 * @since WP-4.8.0
 		 */
 		do_action( 'print_default_editor_scripts' );
 
@@ -1338,7 +1338,7 @@ final class _WP_Editors {
 		/**
 		 * Filters translated strings prepared for TinyMCE.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param array  $mce_translation Key/value pairs of strings.
 		 * @param string $mce_locale      Locale.
@@ -1375,7 +1375,7 @@ final class _WP_Editors {
 	/**
 	 * Print (output) the main TinyMCE scripts.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @static
 	 * @global string $tinymce_version
@@ -1468,7 +1468,7 @@ final class _WP_Editors {
 		/**
 		 * Fires immediately before the TinyMCE settings are printed.
 		 *
-		 * @since 3.2.0
+		 * @since WP-3.2.0
 		 *
 		 * @param array $mce_settings TinyMCE settings array.
 		 */
@@ -1507,7 +1507,7 @@ final class _WP_Editors {
 		 * Fires after tinymce.js is loaded, but before any TinyMCE editor
 		 * instances are created.
 		 *
-		 * @since 3.9.0
+		 * @since WP-3.9.0
 		 *
 		 * @param array $mce_settings TinyMCE settings array.
 		 */
@@ -1568,7 +1568,7 @@ final class _WP_Editors {
 		/**
 		 * Fires after any core TinyMCE editor instances are created.
 		 *
-		 * @since 3.2.0
+		 * @since WP-3.2.0
 		 *
 		 * @param array $mce_settings TinyMCE settings array.
 		 */
@@ -1578,7 +1578,7 @@ final class _WP_Editors {
 	/**
 	 * Outputs the HTML for distraction-free writing mode.
 	 *
-	 * @since 3.2.0
+	 * @since WP-3.2.0
 	 * @deprecated 4.3.0
 	 *
 	 * @static
@@ -1590,7 +1590,7 @@ final class _WP_Editors {
 	/**
 	 * Performs post queries for internal linking.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @static
 	 * @param array $args Optional. Accepts 'pagenum' and 's' (search) arguments.
@@ -1623,7 +1623,7 @@ final class _WP_Editors {
 		 *
 		 * @see WP_Query for a full list of arguments
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @param array $query An array of WP_Query arguments.
 		 */
@@ -1654,7 +1654,7 @@ final class _WP_Editors {
 		 *
 		 * Allows modification of the returned link query results.
 		 *
-		 * @since 3.7.0
+		 * @since WP-3.7.0
 		 *
 		 * @see 'wp_link_query_args' filter
 		 *
@@ -1679,7 +1679,7 @@ final class _WP_Editors {
 	/**
 	 * Dialog for internal linking.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @static
 	 */

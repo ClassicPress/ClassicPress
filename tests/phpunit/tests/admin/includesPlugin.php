@@ -364,7 +364,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 *
 	 * This creates a single-file plugin.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 *
@@ -394,7 +394,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	/**
 	 * Move existing mu-plugins to wp-content/mu-plugin/backup.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 */
@@ -425,7 +425,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	/**
 	 * Restore backed-up mu-plugins.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 */
@@ -454,7 +454,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	/**
 	 * Move existing drop-ins to wp-content/drop-ins-backup.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 */
@@ -474,7 +474,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	/**
 	 * Restore backed-up drop-ins.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 */

@@ -12,7 +12,7 @@
  */
 var selectionSync = {
 	/**
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	syncSelection: function() {
 		var selection = this.get('selection'),
@@ -42,7 +42,7 @@ var selectionSync = {
 	 * attachments that this specific selection considered invalid.
 	 * Reset the difference and record the single attachment.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	recordSelection: function() {
 		var selection = this.get('selection'),

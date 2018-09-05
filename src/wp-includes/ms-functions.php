@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Multisite
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 /**
@@ -97,7 +97,7 @@ function get_active_blog_for_user( $user_id ) {
  * The count is cached and updated twice daily. This is not a live count.
  *
  * @since MU (3.0.0)
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  * @return int Number of active users on the network.
@@ -112,8 +112,8 @@ function get_user_count( $network_id = null ) {
  * The count is cached and updated twice daily. This is not a live count.
  *
  * @since MU (3.0.0)
- * @since 3.7.0 The $network_id parameter has been deprecated.
- * @since 4.8.0 The $network_id parameter is now being used.
+ * @since WP-3.7.0 The $network_id parameter has been deprecated.
+ * @since WP-4.8.0 The $network_id parameter is now being used.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  * @return int Number of active sites on the network.
@@ -164,7 +164,7 @@ function add_user_to_blog( $blog_id, $user_id, $role ) {
 	/**
 	 * Filters whether a user should be added to a site.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param bool|WP_Error $retval  True if the user should be added to the site, false
 	 *                               or error object otherwise.
@@ -405,7 +405,7 @@ function is_email_address_unsafe( $user_email ) {
 	/**
 	 * Filters whether an email address is unsafe.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param bool   $is_email_address_unsafe Whether the email address is "unsafe". Default false.
 	 * @param string $user_email              User email address.
@@ -605,7 +605,7 @@ function wpmu_validate_blog_signup( $blogname, $blog_title, $user = '' ) {
 	/**
 	 * Filters the minimum site name length required when validating a site signup.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param int $length The minimum site name length. Default 4.
 	 */
@@ -713,7 +713,7 @@ function wpmu_signup_blog( $domain, $path, $title, $user, $user_email, $meta = a
 	 *
 	 * The metadata will be serialized prior to storing it in the database.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param array  $meta       Signup meta data. Default empty array.
 	 * @param string $domain     The requested domain.
@@ -739,7 +739,7 @@ function wpmu_signup_blog( $domain, $path, $title, $user, $user_email, $meta = a
 	/**
 	 * Fires after site signup information has been written to the database.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $domain     The requested domain.
 	 * @param string $path       The requested path.
@@ -779,7 +779,7 @@ function wpmu_signup_user( $user, $user_email, $meta = array() ) {
 	 *
 	 * The metadata will be serialized prior to storing it in the database.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param array  $meta       Signup meta data. Default empty array.
 	 * @param string $user       The user's requested login name.
@@ -802,7 +802,7 @@ function wpmu_signup_user( $user, $user_email, $meta = array() ) {
 	/**
 	 * Fires after a user's signup information has been written to the database.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param string $user       The user's requested login name.
 	 * @param string $user_email The user's email address.
@@ -1373,7 +1373,7 @@ function domain_exists( $domain, $path, $network_id = 1 ) {
 	 * The name is the site's subdomain or the site's subdirectory
 	 * path depending on the network settings.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int|null $result     The site ID if the site name exists, null otherwise.
 	 * @param string   $domain     Domain to be checked.
@@ -1817,7 +1817,7 @@ function get_dirsize( $directory ) {
  * other directories.
  *
  * @since MU (3.0.0)
- * @since 4.3.0 $exclude parameter added.
+ * @since WP-4.3.0 $exclude parameter added.
  *
  * @param string $directory Full path of a directory.
  * @param string $exclude   Optional. Full path of a subdirectory to exclude from the total.
@@ -1915,7 +1915,7 @@ function wpmu_log_new_registrations( $blog_id, $user_id ) {
 /**
  * Maintains a canonical list of terms by syncing terms created for each blog with the global terms table.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @see term_id_filter
  *
@@ -2060,7 +2060,7 @@ function maybe_redirect_404() {
 	 *
 	 * The filter is only evaluated if the NOBLOGREDIRECT constant is defined.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
 	 */
@@ -2247,7 +2247,7 @@ Thanks!
 /**
  * Whether to force SSL on content.
  *
- * @since 2.8.5
+ * @since WP-2.8.5
  *
  * @staticvar bool $forced_content
  *
@@ -2271,7 +2271,7 @@ function force_ssl_content( $force = '' ) {
  *
  * Useful as a filter.
  *
- * @since 2.8.5
+ * @since WP-2.8.5
  *
  * @param string $url URL
  * @return string URL with https as the scheme
@@ -2289,7 +2289,7 @@ function filter_SSL( $url ) {
 /**
  * Schedule update of the network-wide counts for the current network.
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 function wp_schedule_update_network_counts() {
 	if ( !is_main_site() )
@@ -2302,8 +2302,8 @@ function wp_schedule_update_network_counts() {
 /**
  * Update the network-wide counts for the current network.
  *
- * @since 3.1.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.1.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  */
@@ -2318,8 +2318,8 @@ function wp_update_network_counts( $network_id = null ) {
  * If enabled through the {@see 'enable_live_network_counts'} filter, update the sites count
  * on a network when a site is created or its status is updated.
  *
- * @since 3.7.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.7.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  */
@@ -2329,7 +2329,7 @@ function wp_maybe_update_network_site_counts( $network_id = null ) {
 	/**
 	 * Filters whether to update network site or user counts when a new site is created.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @see wp_is_large_network()
 	 *
@@ -2348,8 +2348,8 @@ function wp_maybe_update_network_site_counts( $network_id = null ) {
  * If enabled through the {@see 'enable_live_network_counts'} filter, update the users count
  * on a network when a user is created or its status is updated.
  *
- * @since 3.7.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.7.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  */
@@ -2366,8 +2366,8 @@ function wp_maybe_update_network_user_counts( $network_id = null ) {
 /**
  * Update the network-wide site count.
  *
- * @since 3.7.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.7.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param int|null $network_id ID of the network. Default is the current network.
  */
@@ -2391,8 +2391,8 @@ function wp_update_network_site_counts( $network_id = null ) {
 /**
  * Update the network-wide user count.
  *
- * @since 3.7.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.7.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -2408,7 +2408,7 @@ function wp_update_network_user_counts( $network_id = null ) {
 /**
  * Returns the space used by the current blog.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @return int Used space in megabytes
  */
@@ -2416,7 +2416,7 @@ function get_space_used() {
 	/**
 	 * Filters the amount of storage space used by the current site.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int|bool $space_used The amount of used space, in megabytes. Default false.
 	 */
@@ -2448,7 +2448,7 @@ function get_space_allowed() {
 	/**
 	 * Filters the upload quota for the current site.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param int $space_allowed Upload quota in megabytes for the current blog.
 	 */
@@ -2458,7 +2458,7 @@ function get_space_allowed() {
 /**
  * Determines if there is any upload space left in the current blog's quota.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @return int of upload space available in bytes
  */
@@ -2482,7 +2482,7 @@ function get_upload_space_available() {
 /**
  * Determines if there is any upload space left in the current blog's quota.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  * @return bool True if space is available, false otherwise.
  */
 function is_upload_space_available() {
@@ -2495,7 +2495,7 @@ function is_upload_space_available() {
 /**
  * Filters the maximum upload file size allowed, in bytes.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param  int $size Upload size limit in bytes.
  * @return int       Upload size limit in bytes.
@@ -2514,8 +2514,8 @@ function upload_size_limit_filter( $size ) {
  * The default criteria for a large network is either more than 10,000 users or more than 10,000 sites.
  * Plugins can alter this criteria using the {@see 'wp_is_large_network'} filter.
  *
- * @since 3.3.0
- * @since 4.8.0 The $network_id parameter has been added.
+ * @since WP-3.3.0
+ * @since WP-4.8.0 The $network_id parameter has been added.
  *
  * @param string   $using      'sites or 'users'. Default is 'sites'.
  * @param int|null $network_id ID of the network. Default is the current network.
@@ -2532,8 +2532,8 @@ function wp_is_large_network( $using = 'sites', $network_id = null ) {
 		/**
 		 * Filters whether the network is considered large.
 		 *
-		 * @since 3.3.0
-		 * @since 4.8.0 The $network_id parameter has been added.
+		 * @since WP-3.3.0
+		 * @since WP-4.8.0 The $network_id parameter has been added.
 		 *
 		 * @param bool   $is_large_network Whether the network has more than 10000 users or sites.
 		 * @param string $component        The component to count. Accepts 'users', or 'sites'.
@@ -2551,7 +2551,7 @@ function wp_is_large_network( $using = 'sites', $network_id = null ) {
 /**
  * Retrieves a list of reserved site on a sub-directory Multisite installation.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @return array $names Array of reserved subdirectory names.
  */
@@ -2564,8 +2564,8 @@ function get_subdirectory_reserved_names() {
 	/**
 	 * Filters reserved site names on a sub-directory Multisite installation.
 	 *
-	 * @since 3.0.0
-	 * @since 4.4.0 'wp-admin', 'wp-content', 'wp-includes', 'wp-json', and 'embed' were added
+	 * @since WP-3.0.0
+	 * @since WP-4.4.0 'wp-admin', 'wp-content', 'wp-includes', 'wp-json', and 'embed' were added
 	 *              to the reserved names list.
 	 *
 	 * @param array $subdirectory_reserved_names Array of reserved names.
@@ -2578,7 +2578,7 @@ function get_subdirectory_reserved_names() {
  *
  * The new network admin address will not become active until confirmed.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param string $old_value The old network admin email address.
  * @param string $value     The proposed new network admin email address.
@@ -2625,7 +2625,7 @@ All at ###SITENAME###
 	 * ###SITENAME###  The name of the network.
 	 * ###SITEURL###   The URL to the network.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param string $email_text      Text in the email.
 	 * @param array  $new_admin_email {
@@ -2654,7 +2654,7 @@ All at ###SITENAME###
 /**
  * Send an email to the old network admin email address when the network admin email address changes.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  *
  * @param string $option_name The relevant database option name.
  * @param string $new_email   The new network admin email address.
@@ -2672,7 +2672,7 @@ function wp_network_admin_email_change_notification( $option_name, $new_email, $
 	/**
 	 * Filters whether to send the network admin email change notification email.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param bool   $send       Whether to send the email notification.
 	 * @param string $old_email  The old network admin email address.
@@ -2711,7 +2711,7 @@ All at ###SITENAME###
 	/**
 	 * Filters the contents of the email notification sent when the network admin email address is changed.
 	 *
-	 * @since 4.9.0
+	 * @since WP-4.9.0
 	 *
 	 * @param array $email_change_email {
 	 *            Used to build wp_mail().

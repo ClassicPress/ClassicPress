@@ -31,7 +31,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Activate a mode.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} mode
 	 *
@@ -70,7 +70,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Render a mode.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} mode
 	 *
@@ -118,7 +118,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Get the region's view.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @returns {wp.media.View}
 	 */
@@ -129,7 +129,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Set the region's view as a subview of the frame.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {Array|Object} views
 	 * @param {Object} [options={}]
@@ -145,7 +145,7 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Trigger regional view events on the frame.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param {string} event
 	 * @returns {undefined|wp.media.controller.Region} Returns itself to allow chaining.

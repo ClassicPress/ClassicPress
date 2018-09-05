@@ -9,7 +9,7 @@
 /**
  * Returns whether the server is running Apache with the mod_rewrite module loaded.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @return bool
  */
@@ -22,7 +22,7 @@ function got_mod_rewrite() {
 	 * This filter was previously used to force URL rewriting for other servers,
 	 * like nginx. Use the {@see 'got_url_rewrite'} filter in got_url_rewrite() instead.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 *
 	 * @see got_url_rewrite()
 	 *
@@ -36,7 +36,7 @@ function got_mod_rewrite() {
  *
  * Detects Apache's mod_rewrite, IIS 7.0+ permalink support, and nginx.
  *
- * @since 3.7.0
+ * @since WP-3.7.0
  *
  * @global bool $is_nginx
  *
@@ -48,7 +48,7 @@ function got_url_rewrite() {
 	/**
 	 * Filters whether URL rewriting is available.
 	 *
-	 * @since 3.7.0
+	 * @since WP-3.7.0
 	 *
 	 * @param bool $got_url_rewrite Whether URL rewriting is available.
 	 */
@@ -58,7 +58,7 @@ function got_url_rewrite() {
 /**
  * Extracts strings from between the BEGIN and END markers in the .htaccess file.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $filename
  * @param string $marker
@@ -96,7 +96,7 @@ function extract_from_markers( $filename, $marker ) {
  * Replaces existing marked info. Retains surrounding
  * data. Creates file if none exists.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string       $filename  Filename to alter.
  * @param string       $marker    The marker to alter.
@@ -191,7 +191,7 @@ function insert_with_markers( $filename, $marker, $insertion ) {
  * Always writes to the file if it exists and is writable to ensure that we
  * blank out old rules.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -227,7 +227,7 @@ function save_mod_rewrite_rules() {
  * Updates the IIS web.config file with the current rules if it is writable.
  * If the permalinks do not require rewrite rules then the rules are deleted from the web.config file.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -260,7 +260,7 @@ function iis7_save_url_rewrite_rules(){
 /**
  * Update the "recently-edited" file for the plugin or theme editor.
  *
- * @since 1.5.0
+ * @since WP-1.5.0
  *
  * @param string $file
  */
@@ -282,7 +282,7 @@ function update_recently_edited( $file ) {
 /**
  * Makes a tree structure for the Theme Editor's file list.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  * @access private
  *
  * @param array $allowed_files List of theme file paths.
@@ -304,7 +304,7 @@ function wp_make_theme_file_tree( $allowed_files ) {
 /**
  * Outputs the formatted file list for the Theme Editor.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  * @access private
  *
  * @param array|string $tree  List of file/folder paths, or filename.
@@ -371,7 +371,7 @@ function wp_print_theme_file_tree( $tree, $level = 2, $size = 1, $index = 1 ) {
 /**
  * Makes a tree structure for the Plugin Editor's file list.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  * @access private
  *
  * @param string $plugin_editable_files List of plugin file paths.
@@ -393,7 +393,7 @@ function wp_make_plugin_file_tree( $plugin_editable_files ) {
 /**
  * Outputs the formatted file list for the Plugin Editor.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  * @access private
  *
  * @param array|string $tree  List of file/folder paths, or filename.
@@ -454,7 +454,7 @@ function wp_print_plugin_file_tree( $tree, $label = '', $level = 2, $size = 1, $
 /**
  * Flushes rewrite rules if siteurl, home or page_on_front changed.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string $old_value
  * @param string $value
@@ -478,7 +478,7 @@ function update_home_siteurl( $old_value, $value ) {
  * in the $vars array to the value of $_POST[$var] or $_GET[$var] or ''
  * if neither is defined.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param array $vars An array of globals to reset.
  */
@@ -499,7 +499,7 @@ function wp_reset_vars( $vars ) {
 /**
  * Displays the given administration message.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @param string|WP_Error $message
  */
@@ -516,7 +516,7 @@ function show_message($message) {
 }
 
 /**
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $content
  * @return array
@@ -553,7 +553,7 @@ function wp_doc_link_parse( $content ) {
 	/**
 	 * Filters the list of functions and classes to be ignored from the documentation lookup.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $ignore_functions Functions and classes to be ignored.
 	 */
@@ -574,7 +574,7 @@ function wp_doc_link_parse( $content ) {
 /**
  * Saves option for number of rows when listing posts, pages, comments, etc.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  */
 function set_screen_options() {
 
@@ -629,7 +629,7 @@ function set_screen_options() {
 				 *
 				 * Returning false to the filter will skip saving the current option.
 				 *
-				 * @since 2.8.0
+				 * @since WP-2.8.0
 				 *
 				 * @see set_screen_options()
 				 *
@@ -659,7 +659,7 @@ function set_screen_options() {
 /**
  * Check if rewrite rule for WordPress already exists in the IIS 7+ configuration file
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @return bool
  * @param string $filename The file path to the configuration file
@@ -685,7 +685,7 @@ function iis7_rewrite_rule_exists($filename) {
 /**
  * Delete WordPress rewrite rule from web.config file if it exists there
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $filename Name of the configuration file
  * @return bool
@@ -719,7 +719,7 @@ function iis7_delete_rewrite_rule($filename) {
 /**
  * Add WordPress rewrite rule to the IIS 7+ configuration file.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param string $filename The file path to the configuration file
  * @param string $rewrite_rule The XML fragment with URL Rewrite rule
@@ -800,7 +800,7 @@ function iis7_add_rewrite_rule($filename, $rewrite_rule) {
 /**
  * Saves the XML document into a file
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param DOMDocument $doc
  * @param string $filename
@@ -816,7 +816,7 @@ function saveDomDocument($doc, $filename) {
 /**
  * Display the default admin color scheme picker (Used in user-edit.php)
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @global array $_wp_admin_css_colors
  *
@@ -901,7 +901,7 @@ function wp_color_scheme_settings() {
 }
 
 /**
- * @since 3.3.0
+ * @since WP-3.3.0
  */
 function _ipad_meta() {
 	if ( wp_is_mobile() ) {
@@ -914,7 +914,7 @@ function _ipad_meta() {
 /**
  * Check lock status for posts displayed on the Posts screen
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -949,7 +949,7 @@ function wp_check_locked_posts( $response, $data, $screen_id ) {
 /**
  * Check lock status on the New/Edit Post screen and refresh the lock
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -992,7 +992,7 @@ function wp_refresh_post_lock( $response, $data, $screen_id ) {
 /**
  * Check nonce expiration on the New/Edit Post screen and refresh if needed
  *
- * @since 3.6.0
+ * @since WP-3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -1030,7 +1030,7 @@ function wp_refresh_post_nonces( $response, $data, $screen_id ) {
 /**
  * Disable suspension of Heartbeat on the Add/Edit Post screens.
  *
- * @since 3.8.0
+ * @since WP-3.8.0
  *
  * @global string $pagenow
  *
@@ -1050,7 +1050,7 @@ function wp_heartbeat_set_suspension( $settings ) {
 /**
  * Autosave with heartbeat
  *
- * @since 3.9.0
+ * @since WP-3.9.0
  *
  * @param array $response The Heartbeat response.
  * @param array $data     The $_POST data sent.
@@ -1081,7 +1081,7 @@ function heartbeat_autosave( $response, $data ) {
  * Remove specific query string parameters from a URL, create the canonical link,
  * put it in the admin header, and change the current URL to match.
  *
- * @since 4.2.0
+ * @since WP-4.2.0
  */
 function wp_admin_canonical_url() {
 	$removable_query_args = wp_removable_query_args();
@@ -1106,7 +1106,7 @@ function wp_admin_canonical_url() {
 /**
  * Send a referrer policy header so referrers are not sent externally from administration screens.
  *
- * @since 4.9.0
+ * @since WP-4.9.0
  */
 function wp_admin_headers() {
 	$policy = 'strict-origin-when-cross-origin';
@@ -1114,8 +1114,8 @@ function wp_admin_headers() {
 	/**
 	 * Filters the admin referrer policy header value.
 	 *
-	 * @since 4.9.0
-	 * @since 4.9.5 The default value was changed to 'strict-origin-when-cross-origin'.
+	 * @since WP-4.9.0
+	 * @since WP-4.9.5 The default value was changed to 'strict-origin-when-cross-origin'.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	 *
@@ -1132,7 +1132,7 @@ function wp_admin_headers() {
  * Used on the Edit Post and Add New Post screens. Needed to ensure the page is not loaded from browser cache,
  * so the post title and editor content are the last saved versions. Ideally this script should run first in the head.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 function wp_page_reload_on_back_button_js() {
 	?>
@@ -1149,8 +1149,8 @@ function wp_page_reload_on_back_button_js() {
  *
  * The new site admin address will not become active until confirmed.
  *
- * @since 3.0.0
- * @since 4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
+ * @since WP-3.0.0
+ * @since WP-4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
  *
  * @param string $old_value The old site admin email address.
  * @param string $value     The proposed new site admin email address.
@@ -1198,7 +1198,7 @@ All at ###SITENAME###
 	 * ###SITEURL###   The URL to the site.
 	 *
 	 * @since MU (3.0.0)
-	 * @since 4.9.0 This filter is no longer Multisite specific.
+	 * @since WP-4.9.0 This filter is no longer Multisite specific.
 	 *
 	 * @param string $email_text      Text in the email.
 	 * @param array  $new_admin_email {
@@ -1228,7 +1228,7 @@ All at ###SITENAME###
  * Appends '(Draft)' to draft page titles in the privacy page dropdown
  * so that unpublished content is obvious.
  *
- * @since 4.9.8
+ * @since WP-4.9.8
  * @access private
  *
  * @param string  $title Page title.
@@ -1249,7 +1249,7 @@ function _wp_privacy_settings_filter_draft_page_titles( $title, $page ) {
  * WP_Privacy_Policy_Content class.
  * TODO: move this to a new file.
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 final class WP_Privacy_Policy_Content {
 
@@ -1258,7 +1258,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Constructor
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	private function __construct() {}
 
@@ -1294,7 +1294,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Quick check if any privacy info has changed.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public static function text_change_check() {
 
@@ -1368,7 +1368,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Output a warning when some privacy info has changed.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public static function policy_text_changed_notice() {
 		global $post;
@@ -1395,7 +1395,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Update the cached policy info when the policy page is updated.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 * @access private
 	 */
 	public static function _policy_page_updated( $post_id ) {
@@ -1444,7 +1444,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * Caches the current info in post_meta of the policy page.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @return array The privacy policy text/informtion added by core and plugins.
 	 */
@@ -1539,7 +1539,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Add a notice with a link to the guide when editing the privacy policy page.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param $post WP_Post The currently edited post.
 	 */
@@ -1583,7 +1583,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Output the privacy policy guide together with content from the theme and plugins.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public static function privacy_policy_guide() {
 
@@ -1673,7 +1673,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Return the default suggested privacy policy content.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param bool $descr Whether to include the descriptions under the section headings. Default false.
 	 * @return string The default policy content.
@@ -1805,7 +1805,7 @@ final class WP_Privacy_Policy_Content {
 		/**
 		 * Filters the default content suggested for inclusion in a privacy policy.
 		 *
-		 * @since 4.9.6
+		 * @since WP-4.9.6
 		 *
 		 * @param $content string The default policy content.
 		 */
@@ -1815,7 +1815,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Add the suggested privacy policy text to the policy postbox.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public static function add_suggested_content() {
 		$content = self::get_default_content( true );

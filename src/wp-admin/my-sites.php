@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Multisite
- * @since 3.0.0
+ * @since WP-3.0.0
  */
 
 require_once( dirname( __FILE__ ) . '/admin.php' );
@@ -81,7 +81,7 @@ else :
 	/**
 	 * Fires before the sites list on the My Sites screen.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 */
 	do_action( 'myblogs_allblogs_options' );
 	?>

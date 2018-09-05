@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Template
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 
 /**
  * Core walker class used to create an HTML list of pages.
  *
- * @since 2.1.0
+ * @since WP-2.1.0
  *
  * @see Walker
  */
@@ -19,7 +19,7 @@ class Walker_Page extends Walker {
 	/**
 	 * What the class handles.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var string
 	 *
 	 * @see Walker::$tree_type
@@ -29,7 +29,7 @@ class Walker_Page extends Walker {
 	/**
 	 * Database fields to use.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 * @var array
 	 *
 	 * @see Walker::$db_fields
@@ -40,7 +40,7 @@ class Walker_Page extends Walker {
 	/**
 	 * Outputs the beginning of the current level in the tree before elements are output.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::start_lvl()
 	 *
@@ -64,7 +64,7 @@ class Walker_Page extends Walker {
 	/**
 	 * Outputs the end of the current level in the tree after elements are output.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::end_lvl()
 	 *
@@ -89,7 +89,7 @@ class Walker_Page extends Walker {
 	 * Outputs the beginning of the current element in the tree.
 	 *
 	 * @see Walker::start_el()
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @param string  $output       Used to append additional content. Passed by reference.
 	 * @param WP_Post $page         Page data object.
@@ -134,7 +134,7 @@ class Walker_Page extends Walker {
 		/**
 		 * Filters the list of CSS classes to include with each page item in the list.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @see wp_list_pages()
 		 *
@@ -161,7 +161,7 @@ class Walker_Page extends Walker {
 		/**
 		 * Filters the HTML attributes applied to a page menu item's anchor element.
 		 *
-		 * @since 4.8.0
+		 * @since WP-4.8.0
 		 *
 		 * @param array $atts {
 		 *     The HTML attributes applied to the menu item's `<a>` element, empty strings are ignored.
@@ -208,7 +208,7 @@ class Walker_Page extends Walker {
 	/**
 	 * Outputs the end of the current element in the tree.
 	 *
-	 * @since 2.1.0
+	 * @since WP-2.1.0
 	 *
 	 * @see Walker::end_el()
 	 *

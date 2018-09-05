@@ -7,13 +7,13 @@
  *
  * @package WordPress
  * @subpackage Theme_Compat
- * @since 4.5.0
+ * @since WP-4.5.0
  */
 
 /**
  * Prints scripts or data before the closing body tag in the embed template.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  */
 do_action( 'embed_footer' );
 ?>

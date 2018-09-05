@@ -2,7 +2,7 @@
 /**
  * Dependencies API: _WP_Dependency class
  *
- * @since 4.7.0
+ * @since WP-4.7.0
  *
  * @package WordPress
  * @subpackage Dependencies
@@ -14,13 +14,13 @@
  * Helper class to register a handle and associated data.
  *
  * @access private
- * @since 2.6.0
+ * @since WP-2.6.0
  */
 class _WP_Dependency {
 	/**
 	 * The handle name.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var null
 	 */
 	public $handle;
@@ -28,7 +28,7 @@ class _WP_Dependency {
 	/**
 	 * The handle source.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var null
 	 */
 	public $src;
@@ -36,7 +36,7 @@ class _WP_Dependency {
 	/**
 	 * An array of handle dependencies.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var array
 	 */
 	public $deps = array();
@@ -46,7 +46,7 @@ class _WP_Dependency {
 	 *
 	 * Used for cache-busting.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var bool|string
 	 */
 	public $ver = false;
@@ -54,7 +54,7 @@ class _WP_Dependency {
 	/**
 	 * Additional arguments for the handle.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var null
 	 */
 	public $args = null;  // Custom property, such as $in_footer or $media.
@@ -62,7 +62,7 @@ class _WP_Dependency {
 	/**
 	 * Extra data to supply to the handle.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 * @var array
 	 */
 	public $extra = array();
@@ -70,7 +70,7 @@ class _WP_Dependency {
 	/**
 	 * Setup dependencies.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 */
 	public function __construct() {
 		@list( $this->handle, $this->src, $this->deps, $this->ver, $this->args ) = func_get_args();
@@ -81,7 +81,7 @@ class _WP_Dependency {
 	/**
 	 * Add handle data.
 	 *
-	 * @since 2.6.0
+	 * @since WP-2.6.0
 	 *
 	 * @param string $name The data key to add.
 	 * @param mixed  $data The data value to add.

@@ -6,7 +6,7 @@
  * by Mark Jaquith
  *
  * @package WordPress
- * @since 2.3.0
+ * @since WP-2.3.0
  */
 
 /**
@@ -26,7 +26,7 @@
  * not exist based on exact WordPress query. Will instead try to parse the URL
  * or query in an attempt to figure the correct page to go to.
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @global WP_Rewrite $wp_rewrite
  * @global bool $is_IIS
@@ -497,7 +497,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			/**
 			 * Converts the first hex-encoded octet match to lowercase.
 			 *
-			 * @since 3.1.0
+			 * @since WP-3.1.0
 			 * @ignore
 			 *
 			 * @param array $matches Hex-encoded octet matches for the requested URL.
@@ -515,7 +515,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 	 *
 	 * Returning false to this filter will cancel the redirect.
 	 *
-	 * @since 2.3.0
+	 * @since WP-2.3.0
 	 *
 	 * @param string $redirect_url  The redirect URL.
 	 * @param string $requested_url The requested URL.
@@ -546,7 +546,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
  * Removes arguments from a query string if they are not present in a URL
  * DO NOT use this in plugin code.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  * @access private
  *
  * @param string $query_string
@@ -571,7 +571,7 @@ function _remove_qs_args_if_not_in_url( $query_string, Array $args_to_check, $ur
 /**
  * Strips the #fragment from a URL, if one is present.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string $url The URL to strip.
  * @return string The altered URL.
@@ -600,7 +600,7 @@ function strip_fragment_from_url( $url ) {
 /**
  * Attempts to guess the correct URL based on query vars
  *
- * @since 2.3.0
+ * @since WP-2.3.0
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
@@ -645,7 +645,7 @@ function redirect_guess_404_permalink() {
  * If a user visits example.com/admin, they'll be redirected to /wp-admin.
  * Visiting /login redirects to /wp-login.php, and so on.
  *
- * @since 3.4.0
+ * @since WP-3.4.0
  *
  * @global WP_Rewrite $wp_rewrite
  */

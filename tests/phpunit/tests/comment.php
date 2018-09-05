@@ -431,7 +431,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	/**
 	 * Helper function to set up comment for 761 tests.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @access public
 	 */
 	public function setup_notify_comment(){
@@ -545,7 +545,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	/**
 	 * Helper function to test moderator notifications.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @access public
 	 */
 	public function try_sending_moderator_notification( $comment, $post ) {
@@ -581,7 +581,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	/**
 	 * Helper function to test sending author notifications.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 * @access public
 	 */
 	public function try_sending_author_notification( $comment, $post ) {

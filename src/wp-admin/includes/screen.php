@@ -9,7 +9,7 @@
 /**
  * Get the column headers for a screen
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @staticvar array $column_headers
  *
@@ -32,7 +32,7 @@ function get_column_headers( $screen ) {
 		 * list table is edit-post, so the filter for that screen would be
 		 * manage_edit-post_columns.
 		 *
-		 * @since 3.0.0
+		 * @since WP-3.0.0
 		 *
 		 * @param array $columns An array of column headers. Default empty.
 		 */
@@ -45,7 +45,7 @@ function get_column_headers( $screen ) {
 /**
  * Get a list of hidden columns.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string|WP_Screen $screen The screen you want the hidden columns for
  * @return array
@@ -65,7 +65,7 @@ function get_hidden_columns( $screen ) {
 		/**
 		 * Filters the default list of hidden columns.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param array     $hidden An array of columns hidden by default.
 		 * @param WP_Screen $screen WP_Screen object of the current screen.
@@ -76,8 +76,8 @@ function get_hidden_columns( $screen ) {
 	/**
 	 * Filters the list of hidden columns.
 	 *
-	 * @since 4.4.0
-	 * @since 4.4.1 Added the `use_defaults` parameter.
+	 * @since WP-4.4.0
+	 * @since WP-4.4.1 Added the `use_defaults` parameter.
 	 *
 	 * @param array     $hidden An array of hidden columns.
 	 * @param WP_Screen $screen WP_Screen object of the current screen.
@@ -89,7 +89,7 @@ function get_hidden_columns( $screen ) {
 /**
  * Prints the meta box preferences for screen meta.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @global array $wp_meta_boxes
  *
@@ -138,7 +138,7 @@ function meta_box_prefs( $screen ) {
 /**
  * Get Hidden Meta Boxes
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  *
  * @param string|WP_Screen $screen Screen identifier
  * @return array Hidden Meta Boxes
@@ -164,7 +164,7 @@ function get_hidden_meta_boxes( $screen ) {
 		/**
 		 * Filters the default list of hidden meta boxes.
 		 *
-		 * @since 3.1.0
+		 * @since WP-3.1.0
 		 *
 		 * @param array     $hidden An array of meta boxes hidden by default.
 		 * @param WP_Screen $screen WP_Screen object of the current screen.
@@ -175,7 +175,7 @@ function get_hidden_meta_boxes( $screen ) {
 	/**
 	 * Filters the list of hidden meta boxes.
 	 *
-	 * @since 3.3.0
+	 * @since WP-3.3.0
 	 *
 	 * @param array     $hidden       An array of hidden meta boxes.
 	 * @param WP_Screen $screen       WP_Screen object of the current screen.
@@ -188,7 +188,7 @@ function get_hidden_meta_boxes( $screen ) {
 /**
  * Register and configure an admin screen option
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @param string $option An option name.
  * @param mixed $args Option-dependent arguments.
@@ -205,7 +205,7 @@ function add_screen_option( $option, $args = array() ) {
 /**
  * Get the current screen object
  *
- * @since 3.1.0
+ * @since WP-3.1.0
  *
  * @global WP_Screen $current_screen
  *
@@ -223,7 +223,7 @@ function get_current_screen() {
 /**
  * Set the current screen object
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @param mixed $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen,
  *	                       or an existing screen object.

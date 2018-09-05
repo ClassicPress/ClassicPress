@@ -14,14 +14,14 @@
 /**
  * Core class used to implement oEmbed functionality.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  */
 class WP_oEmbed {
 
 	/**
 	 * A list of oEmbed providers.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 * @var array
 	 */
 	public $providers = array();
@@ -29,7 +29,7 @@ class WP_oEmbed {
 	/**
 	 * A list of an early oEmbed providers.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 * @static
 	 * @var array
 	 */
@@ -38,7 +38,7 @@ class WP_oEmbed {
 	/**
 	 * A list of private/protected methods, used for backward compatibility.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 * @var array
 	 */
 	private $compat_methods = array( '_fetch_with_format', '_parse_json', '_parse_xml', '_parse_xml_body' );
@@ -46,7 +46,7 @@ class WP_oEmbed {
 	/**
 	 * Constructor.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 */
 	public function __construct() {
 		$host = urlencode( home_url() );
@@ -214,7 +214,7 @@ class WP_oEmbed {
 		 *
 		 * @see wp_oembed_add_provider()
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param array $providers An array of popular oEmbed providers.
 		 */
@@ -227,7 +227,7 @@ class WP_oEmbed {
 	/**
 	 * Exposes private/protected methods for backward compatibility.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param callable $name      Method to call.
 	 * @param array    $arguments Arguments to pass when calling.
@@ -243,7 +243,7 @@ class WP_oEmbed {
 	/**
 	 * Takes a URL and returns the corresponding oEmbed provider's URL, if there is one.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @see WP_oEmbed::discover()
 	 *
@@ -289,7 +289,7 @@ class WP_oEmbed {
 	 * The just-in-time addition is for the benefit of the {@see 'oembed_providers'} filter.
 	 *
 	 * @static
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @see wp_oembed_add_provider()
 	 *
@@ -315,7 +315,7 @@ class WP_oEmbed {
 	 *
 	 * The just-in-time removal is for the benefit of the {@see 'oembed_providers'} filter.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 * @static
 	 *
 	 * @see wp_oembed_remove_provider()
@@ -336,7 +336,7 @@ class WP_oEmbed {
 	 *
 	 * @see WP_oEmbed::fetch()
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param string       $url  The URL to the content that should be attempted to be embedded.
 	 * @param array|string $args Optional. Arguments, usually passed from a shortcode. Default empty.
@@ -366,7 +366,7 @@ class WP_oEmbed {
 	 * @see WP_oEmbed::fetch()
 	 * @see WP_oEmbed::data2html()
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string       $url  The URL to the content that should be attempted to be embedded.
 	 * @param array|string $args Optional. Arguments, usually passed from a shortcode. Default empty.
@@ -382,7 +382,7 @@ class WP_oEmbed {
 		 * Passing a non-null value to the filter will effectively short-circuit retrieval,
 		 * returning the passed value instead.
 		 *
-		 * @since 4.5.3
+		 * @since WP-4.5.3
 		 *
 		 * @param null|string $result The UNSANITIZED (and potentially unsafe) HTML that should be used to embed. Default null.
 		 * @param string      $url    The URL to the content that should be attempted to be embedded.
@@ -403,7 +403,7 @@ class WP_oEmbed {
 		/**
 		 * Filters the HTML returned by the oEmbed provider.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $data The returned oEmbed HTML.
 		 * @param string $url  URL of the content to be embedded.
@@ -415,7 +415,7 @@ class WP_oEmbed {
 	/**
 	 * Attempts to discover link tags at the given URL for an oEmbed provider.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string $url The URL that should be inspected for discovery `<link>` tags.
 	 * @return false|string False on failure, otherwise the oEmbed provider URL.
@@ -429,7 +429,7 @@ class WP_oEmbed {
 		/**
 		 * Filters oEmbed remote get arguments.
 		 *
-		 * @since 4.0.0
+		 * @since WP-4.0.0
 		 *
 		 * @see WP_Http::request()
 		 *
@@ -445,7 +445,7 @@ class WP_oEmbed {
 			/**
 			 * Filters the link types that contain oEmbed provider URLs.
 			 *
-			 * @since 2.9.0
+			 * @since WP-2.9.0
 			 *
 			 * @param array $format Array of oEmbed link types. Accepts 'application/json+oembed',
 			 *                      'text/xml+oembed', and 'application/xml+oembed' (incorrect,
@@ -498,7 +498,7 @@ class WP_oEmbed {
 	/**
 	 * Connects to a oEmbed provider and returns the result.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string       $provider The URL to the oEmbed provider.
 	 * @param string       $url      The URL to the content that is desired to be embedded.
@@ -516,8 +516,8 @@ class WP_oEmbed {
 		/**
 		 * Filters the oEmbed URL to be fetched.
 		 *
-		 * @since 2.9.0
-		 * @since 4.9.0 The `dnt` (Do Not Track) query parameter was added to all oEmbed provider URLs.
+		 * @since WP-2.9.0
+		 * @since WP-4.9.0 The `dnt` (Do Not Track) query parameter was added to all oEmbed provider URLs.
 		 *
 		 * @param string $provider URL of the oEmbed provider.
 		 * @param string $url      URL of the content to be embedded.
@@ -537,7 +537,7 @@ class WP_oEmbed {
 	/**
 	 * Fetches result from an oEmbed provider for a specific format and complete provider URL
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $provider_url_with_args URL to the provider with full arguments list (url, maxheight, etc.)
 	 * @param string $format Format to use
@@ -561,7 +561,7 @@ class WP_oEmbed {
 	/**
 	 * Parses a json response body.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $response_body
 	 * @return object|false
@@ -574,7 +574,7 @@ class WP_oEmbed {
 	/**
 	 * Parses an XML response body.
 	 *
-	 * @since 3.0.0
+	 * @since WP-3.0.0
 	 *
 	 * @param string $response_body
 	 * @return object|false
@@ -597,7 +597,7 @@ class WP_oEmbed {
 	/**
 	 * Serves as a helper function for parsing an XML response body.
 	 *
-	 * @since 3.6.0
+	 * @since WP-3.6.0
 	 *
 	 * @param string $response_body
 	 * @return stdClass|false
@@ -634,7 +634,7 @@ class WP_oEmbed {
 	/**
 	 * Converts a data object from WP_oEmbed::fetch() and returns the HTML.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param object $data A data object result from an oEmbed provider.
 	 * @param string $url The URL to the content that is desired to be embedded.
@@ -677,7 +677,7 @@ class WP_oEmbed {
 		 *
 		 * Use this filter to add support for custom data types, or to filter the result.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $return The returned oEmbed HTML.
 		 * @param object $data   A data object result from an oEmbed provider.
@@ -689,8 +689,8 @@ class WP_oEmbed {
 	/**
 	 * Strips any new lines from the HTML.
 	 *
-	 * @since 2.9.0 as strip_scribd_newlines()
-	 * @since 3.0.0
+	 * @since WP-2.9.0 as strip_scribd_newlines()
+	 * @since WP-3.0.0
 	 *
 	 * @param string $html Existing HTML.
 	 * @param object $data Data object from WP_oEmbed::data2html()

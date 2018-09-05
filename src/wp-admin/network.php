@@ -4,7 +4,7 @@
  *
  * A multi-step process allowing the user to enable a network of WordPress sites.
  *
- * @since 3.0.0
+ * @since WP-3.0.0
  *
  * @package WordPress
  * @subpackage Administration

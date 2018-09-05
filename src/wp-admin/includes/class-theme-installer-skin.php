@@ -4,14 +4,14 @@
  *
  * @package WordPress
  * @subpackage Upgrader
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
  * Theme Installer Skin for the WordPress Theme Installer.
  *
- * @since 2.8.0
- * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since WP-2.8.0
+ * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  *
  * @see WP_Upgrader_Skin
  */
@@ -89,7 +89,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the list of action links available following a single theme installation.
 		 *
-		 * @since 2.8.0
+		 * @since WP-2.8.0
 		 *
 		 * @param array    $install_actions Array of theme action links.
 		 * @param object   $api             Object containing WordPress.org API theme data.

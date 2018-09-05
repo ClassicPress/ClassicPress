@@ -1,7 +1,7 @@
 /**
  * Text pattern plugin for TinyMCE
  *
- * @since 4.3.0
+ * @since WP-4.3.0
  *
  * This plugin can automatically format text patterns as you type. It includes several groups of patterns.
  *

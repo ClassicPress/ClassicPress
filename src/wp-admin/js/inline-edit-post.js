@@ -2,7 +2,7 @@
 /**
  * This file contains the functions needed for the inline editing of posts.
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  */
 
 window.wp = window.wp || {};
@@ -12,7 +12,7 @@ window.wp = window.wp || {};
  *
  * @namespace
  *
- * @since 2.7.0
+ * @since WP-2.7.0
  * @access public
  *
  * @type {Object}
@@ -34,7 +34,7 @@ var inlineEditPost;
 	 * editing. Adds event handler to bulk edit.
 	 *
 	 * @memberof inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @returns {void}
 	 */
@@ -159,7 +159,7 @@ var inlineEditPost;
 	 * Hides the window when it's active and shows the window when inactive.
 	 *
 	 * @memberof inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param {Object} el Element within a post table row.
 	 */
@@ -172,7 +172,7 @@ var inlineEditPost;
 	 * @summary Creates the bulk editor row to edit multiple posts at once.
 	 *
 	 * @memberof inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 */
 	setBulk : function(){
 		var te = '', type = this.type, c = true;
@@ -244,7 +244,7 @@ var inlineEditPost;
 	 * @summary Creates a quick edit window for the post that has been clicked.
 	 *
 	 * @memberof inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param {number|Object} id The id of the clicked post or an element within a post
 	 *                           table row.
@@ -384,7 +384,7 @@ var inlineEditPost;
 	 * @summary Saves the changes made in the quick edit window to the post.
 	 * AJAX saving is only for Quick Edit and not for bulk edit.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param   {int}     id The id for the post that has been changed.
 	 * @returns {boolean}    false, so the form does not submit when pressing
@@ -450,7 +450,7 @@ var inlineEditPost;
 	 * @summary Hides and empties the Quick Edit and/or Bulk Edit windows.
 	 *
 	 * @memberof    inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @returns {boolean} Always returns false.
 	 */
@@ -492,7 +492,7 @@ var inlineEditPost;
 	 * in the quick edit table.
 	 *
 	 * @memberof    inlineEditPost
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param   {Object} o DOM row object to get the id for.
 	 * @returns {string}   The post id extracted from the table row in the object.

@@ -17,7 +17,7 @@ global $opml;
 /**
  * XML callback function for the start of a new XML tag.
  *
- * @since 0.71
+ * @since WP-0.71
  * @access private
  *
  * @global array $names
@@ -61,7 +61,7 @@ function startElement($parser, $tagName, $attrs) {
 /**
  * XML callback function that is called at the end of a XML tag.
  *
- * @since 0.71
+ * @since WP-0.71
  * @access private
  *
  * @param mixed $parser XML Parser resource.

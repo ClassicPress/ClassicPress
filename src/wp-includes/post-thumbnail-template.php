@@ -12,8 +12,8 @@
 /**
  * Check if post has an image attached.
  *
- * @since 2.9.0
- * @since 4.4.0 `$post` can be a post ID or WP_Post object.
+ * @since WP-2.9.0
+ * @since WP-4.4.0 `$post` can be a post ID or WP_Post object.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return bool Whether the post has an image attached.
@@ -25,8 +25,8 @@ function has_post_thumbnail( $post = null ) {
 /**
  * Retrieve post thumbnail ID.
  *
- * @since 2.9.0
- * @since 4.4.0 `$post` can be a post ID or WP_Post object.
+ * @since WP-2.9.0
+ * @since WP-4.4.0 `$post` can be a post ID or WP_Post object.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return string|int Post thumbnail ID or empty string.
@@ -49,7 +49,7 @@ function get_post_thumbnail_id( $post = null ) {
  * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image
  * size is used by default, though a different size can be specified instead as needed.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  *
  * @see get_the_post_thumbnail()
  *
@@ -65,7 +65,7 @@ function the_post_thumbnail( $size = 'post-thumbnail', $attr = '' ) {
 /**
  * Update cache for thumbnails in the current loop.
  *
- * @since 3.2.0
+ * @since WP-3.2.0
  *
  * @global WP_Query $wp_query
  *
@@ -101,8 +101,8 @@ function update_post_thumbnail_cache( $wp_query = null ) {
  * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image
  * size is used by default, though a different size can be specified instead as needed.
  *
- * @since 2.9.0
- * @since 4.4.0 `$post` can be a post ID or WP_Post object.
+ * @since WP-2.9.0
+ * @since WP-4.4.0 `$post` can be a post ID or WP_Post object.
  *
  * @param int|WP_Post  $post Optional. Post ID or WP_Post object.  Default is global `$post`.
  * @param string|array $size Optional. Image size to use. Accepts any valid image size, or
@@ -121,8 +121,8 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 	/**
 	 * Filters the post thumbnail size.
 	 *
-	 * @since 2.9.0
-	 * @since 4.9.0 Added the `$post_id` parameter.
+	 * @since WP-2.9.0
+	 * @since WP-4.9.0 Added the `$post_id` parameter.
 	 *
 	 * @param string|array $size    The post thumbnail size. Image size or array of width and height
 	 *                              values (in that order). Default 'post-thumbnail'.
@@ -137,7 +137,7 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		 *
 		 * Provides "just in time" filtering of all filters in wp_get_attachment_image().
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param int          $post_id           The post ID.
 		 * @param string       $post_thumbnail_id The post thumbnail ID.
@@ -152,7 +152,7 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		/**
 		 * Fires after fetching the post thumbnail HTML.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param int          $post_id           The post ID.
 		 * @param string       $post_thumbnail_id The post thumbnail ID.
@@ -167,7 +167,7 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 	/**
 	 * Filters the post thumbnail HTML.
 	 *
-	 * @since 2.9.0
+	 * @since WP-2.9.0
 	 *
 	 * @param string       $html              The post thumbnail HTML.
 	 * @param int          $post_id           The post ID.
@@ -182,7 +182,7 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 /**
  * Return the post thumbnail URL.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param int|WP_Post  $post Optional. Post ID or WP_Post object.  Default is global `$post`.
  * @param string|array $size Optional. Registered image size to retrieve the source for or a flat
@@ -200,7 +200,7 @@ function get_the_post_thumbnail_url( $post = null, $size = 'post-thumbnail' ) {
 /**
  * Display the post thumbnail URL.
  *
- * @since 4.4.0
+ * @since WP-4.4.0
  *
  * @param string|array $size Optional. Image size to use. Accepts any valid image size,
  *                           or an array of width and height values in pixels (in that order).
@@ -216,7 +216,7 @@ function the_post_thumbnail_url( $size = 'post-thumbnail' ) {
 /**
  * Returns the post thumbnail caption.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return string Post thumbnail caption.
@@ -239,7 +239,7 @@ function get_the_post_thumbnail_caption( $post = null ) {
 /**
  * Displays the post thumbnail caption.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
  */
@@ -247,7 +247,7 @@ function the_post_thumbnail_caption( $post = null ) {
 	/**
 	 * Filters the displayed post thumbnail caption.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string $caption Caption for the given attachment.
 	 */

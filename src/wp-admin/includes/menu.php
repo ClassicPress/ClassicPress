@@ -14,7 +14,7 @@ if ( is_network_admin() ) {
 	 * The hook fires before menus and sub-menus are removed based on user privileges.
 	 *
 	 * @private
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 */
 	do_action( '_network_admin_menu' );
 } elseif ( is_user_admin() ) {
@@ -25,7 +25,7 @@ if ( is_network_admin() ) {
 	 * The hook fires before menus and sub-menus are removed based on user privileges.
 	 *
 	 * @private
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 */
 	do_action( '_user_admin_menu' );
 } else {
@@ -36,7 +36,7 @@ if ( is_network_admin() ) {
 	 * The hook fires before menus and sub-menus are removed based on user privileges.
 	 *
 	 * @private
-	 * @since 2.2.0
+	 * @since WP-2.2.0
 	 */
 	do_action( '_admin_menu' );
 }
@@ -122,7 +122,7 @@ if ( is_network_admin() ) {
 	/**
 	 * Fires before the administration menu loads in the Network Admin.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param string $context Empty context.
 	 */
@@ -132,7 +132,7 @@ if ( is_network_admin() ) {
 	/**
 	 * Fires before the administration menu loads in the User Admin.
 	 *
-	 * @since 3.1.0
+	 * @since WP-3.1.0
 	 *
 	 * @param string $context Empty context.
 	 */
@@ -142,7 +142,7 @@ if ( is_network_admin() ) {
 	/**
 	 * Fires before the administration menu loads in the admin.
 	 *
-	 * @since 1.5.0
+	 * @since WP-1.5.0
 	 *
 	 * @param string $context Empty context.
 	 */
@@ -231,7 +231,7 @@ function add_menu_classes($menu) {
 	/**
 	 * Filters administration menus array with classes added for top-level items.
 	 *
-	 * @since 2.7.0
+	 * @since WP-2.7.0
 	 *
 	 * @param array $menu Associative array of administration menu items.
 	 */
@@ -245,7 +245,7 @@ uksort($menu, "strnatcasecmp"); // make it all pretty
  *
  * See the {@see 'menu_order'} filter for reordering menu items.
  *
- * @since 2.8.0
+ * @since WP-2.8.0
  *
  * @param bool $custom Whether custom ordering is enabled. Default false.
  */
@@ -265,7 +265,7 @@ if ( apply_filters( 'custom_menu_order', false ) ) {
 	 *
 	 *     add_filter( 'custom_menu_order', '__return_true' );
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param array $menu_order An ordered array of menu items.
 	 */
@@ -335,7 +335,7 @@ if ( !user_can_access_admin_page() ) {
 	/**
 	 * Fires when access to an admin page is denied.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 */
 	do_action( 'admin_page_access_denied' );
 

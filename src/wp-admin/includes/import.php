@@ -9,7 +9,7 @@
 /**
  * Retrieve list of importers.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @global array $wp_importers
  * @return array
@@ -27,7 +27,7 @@ function get_importers() {
  *
  * Used by uasort() as a callback, should not be used directly.
  *
- * @since 2.9.0
+ * @since WP-2.9.0
  * @access private
  *
  * @param array $a
@@ -41,7 +41,7 @@ function _usort_by_first_member( $a, $b ) {
 /**
  * Register importer for WordPress.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @global array $wp_importers
  *
@@ -63,7 +63,7 @@ function register_importer( $id, $name, $description, $callback ) {
  *
  * Removes attachment based on ID.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @param string $id Importer ID.
  */
@@ -74,7 +74,7 @@ function wp_import_cleanup( $id ) {
 /**
  * Handle importer uploading and add attachment.
  *
- * @since 2.0.0
+ * @since WP-2.0.0
  *
  * @return array Uploaded file's details on success, error message on failure
  */
@@ -118,7 +118,7 @@ function wp_import_handle_upload() {
 /**
  * Returns a list from WordPress.org of popular importer plugins.
  *
- * @since 3.5.0
+ * @since WP-3.5.0
  *
  * @return array Importers with metadata for each.
  */

@@ -4,13 +4,13 @@
  *
  * @package WordPress
  * @subpackage Multisite
- * @since 4.6.0
+ * @since WP-4.6.0
  */
 
 /**
  * Core class used for querying networks.
  *
- * @since 4.6.0
+ * @since WP-4.6.0
  *
  * @see WP_Network_Query::__construct() for accepted arguments.
  */
@@ -19,7 +19,7 @@ class WP_Network_Query {
 	/**
 	 * SQL for database query.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var string
 	 */
 	public $request;
@@ -27,7 +27,7 @@ class WP_Network_Query {
 	/**
 	 * SQL query clauses.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var array
 	 */
 	protected $sql_clauses = array(
@@ -42,7 +42,7 @@ class WP_Network_Query {
 	/**
 	 * Query vars set by the user.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var array
 	 */
 	public $query_vars;
@@ -50,7 +50,7 @@ class WP_Network_Query {
 	/**
 	 * Default values for query vars.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var array
 	 */
 	public $query_var_defaults;
@@ -58,7 +58,7 @@ class WP_Network_Query {
 	/**
 	 * List of networks located by the query.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var array
 	 */
 	public $networks;
@@ -66,7 +66,7 @@ class WP_Network_Query {
 	/**
 	 * The amount of found networks for the current query.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var int
 	 */
 	public $found_networks = 0;
@@ -74,7 +74,7 @@ class WP_Network_Query {
 	/**
 	 * The number of pages.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 * @var int
 	 */
 	public $max_num_pages = 0;
@@ -84,7 +84,7 @@ class WP_Network_Query {
 	 *
 	 * Sets up the network query, based on the query vars passed.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string|array $query {
 	 *     Optional. Array or query string of network query parameters. Default empty.
@@ -142,7 +142,7 @@ class WP_Network_Query {
 	/**
 	 * Parses arguments passed to the network query with default query parameters.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 *
 	 * @param string|array $query WP_Network_Query arguments. See WP_Network_Query::__construct()
@@ -157,7 +157,7 @@ class WP_Network_Query {
 		/**
 		 * Fires after the network query vars have been parsed.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param WP_Network_Query $this The WP_Network_Query instance (passed by reference).
 		 */
@@ -167,7 +167,7 @@ class WP_Network_Query {
 	/**
 	 * Sets up the WordPress query for retrieving networks.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string|array $query Array or URL query string of parameters.
 	 * @return array|int List of WP_Network objects, a list of network ids when 'fields' is set to 'ids',
@@ -181,7 +181,7 @@ class WP_Network_Query {
 	/**
 	 * Gets a list of networks matching the query vars.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @return array|int List of WP_Network objects, a list of network ids when 'fields' is set to 'ids',
 	 *                   or the number of networks when 'count' is passed as a query var.
@@ -192,7 +192,7 @@ class WP_Network_Query {
 		/**
 		 * Fires before networks are retrieved.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param WP_Network_Query $this Current instance of WP_Network_Query (passed by reference).
 		 */
@@ -258,7 +258,7 @@ class WP_Network_Query {
 		/**
 		 * Filters the network query results.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param array            $_networks An array of WP_Network objects.
 		 * @param WP_Network_Query $this      Current instance of WP_Network_Query (passed by reference).
@@ -274,7 +274,7 @@ class WP_Network_Query {
 	/**
 	 * Used internally to get a list of network IDs matching the query vars.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
@@ -398,7 +398,7 @@ class WP_Network_Query {
 		/**
 		 * Filters the network query clauses.
 		 *
-		 * @since 4.6.0
+		 * @since WP-4.6.0
 		 *
 		 * @param array            $pieces A compacted array of network query clauses.
 		 * @param WP_Network_Query $this   Current instance of WP_Network_Query (passed by reference).
@@ -450,7 +450,7 @@ class WP_Network_Query {
 	 * Populates found_networks and max_num_pages properties for the current query
 	 * if the limit clause was used.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 */
@@ -461,7 +461,7 @@ class WP_Network_Query {
 			/**
 			 * Filters the query used to retrieve found network count.
 			 *
-			 * @since 4.6.0
+			 * @since WP-4.6.0
 			 *
 			 * @param string           $found_networks_query SQL query. Default 'SELECT FOUND_ROWS()'.
 			 * @param WP_Network_Query $network_query        The `WP_Network_Query` instance.
@@ -475,7 +475,7 @@ class WP_Network_Query {
 	/**
 	 * Used internally to generate an SQL string for searching across multiple columns.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @global wpdb  $wpdb WordPress database abstraction object.
 	 *
@@ -500,7 +500,7 @@ class WP_Network_Query {
 	/**
 	 * Parses and sanitizes 'orderby' keys passed to the network query.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
@@ -533,7 +533,7 @@ class WP_Network_Query {
 	/**
 	 * Parses an 'order' query variable and cast it to 'ASC' or 'DESC' as necessary.
 	 *
-	 * @since 4.6.0
+	 * @since WP-4.6.0
 	 *
 	 * @param string $order The 'order' query variable.
 	 * @return string The sanitized 'order' query variable.

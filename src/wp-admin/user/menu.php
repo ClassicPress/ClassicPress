@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Administration
- * @since 3.1.0
+ * @since WP-3.1.0
  */
 
 $menu[2] = array(__('Dashboard'), 'exist', 'index.php', '', 'menu-top menu-top-first menu-icon-dashboard', 'menu-dashboard', 'dashicons-dashboard');
