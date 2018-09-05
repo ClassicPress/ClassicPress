@@ -87,8 +87,8 @@ label {
 	text-align:center
 }
 #logo a {
-	background-image: url(../images/ClassicPress-icon-blue-80.png);
-	background-image: none, url(../images/ClassicPress-icon-blue.svg);
+	background-image: url(../images/w-logo-blue.png);
+	background-image: none, url(../images/wordpress-logo.svg);
 	background-size: 84px;
 	background-position: center top;
 	background-repeat: no-repeat;
