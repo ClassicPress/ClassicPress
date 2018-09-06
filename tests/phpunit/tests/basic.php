@@ -18,14 +18,18 @@ class Tests_Basic extends WP_UnitTestCase {
 	}
 
 	function test_package_json() {
+		global $cp_version;
 		$package_json = file_get_contents( dirname( ABSPATH ) . '/package.json' );
 		$package_json = json_decode( $package_json, true );
-		list( $version ) = explode( '-', $GLOBALS['wp_version'] );
-		// package.json uses x.y.z, so fill cleaned $wp_version for .0 releases
-		if ( 1 == substr_count( $version, '.' ) ) {
-			$version .= '.0';
+		if ( isset( $cp_version ) ) {
+			$this->assertEquals(
+				$cp_version,
+				$package_json['version'],
+				"package.json's version needs to be updated to $cp_version."
+			);
+		} else {
+			error_log( 'FIXME after PR #32 is merged' );
 		}
-		$this->assertEquals( $version, $package_json['version'], "package.json's version needs to be updated to $version." );
 		return $package_json;
 	}
 
