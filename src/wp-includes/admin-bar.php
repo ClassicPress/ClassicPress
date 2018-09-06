@@ -144,8 +144,8 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',
-		'title'     => __('WordPress.org'),
-		'href'      => __('https://wordpress.org/'),
+		'title'     => __('ClassicPress.net'),
+		'href'      => __('https://www.classicpress.net'),
 	) );
 
 	// Add codex link
