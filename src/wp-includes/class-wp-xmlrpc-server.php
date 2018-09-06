@@ -60,7 +60,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 */
 	public function __construct() {
 		$this->methods = array(
-			// WordPress API
+			// ClassicPress API
 			'wp.getUsersBlogs'		=> 'this:wp_getUsersBlogs',
 			'wp.newPost'			=> 'this:wp_newPost',
 			'wp.editPost'			=> 'this:wp_editPost',
