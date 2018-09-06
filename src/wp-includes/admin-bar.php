@@ -140,7 +140,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		) );
 	}
 
-	// Add ClassicPress.org link
+	// Add ClassicPress.net link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',

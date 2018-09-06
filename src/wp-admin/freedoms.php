@@ -38,7 +38,7 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 <div class="about-wrap-content">
 	<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send data to ClassicPress.net &#8212; including, but not limited to &#8212; the version of ClassicPress you are using, and a list of installed plugins and themes.' ); ?></p>
 
-	<p><?php printf( __( 'This data is used to provide general enhancements to ClassicPress, which includes helping to protect your site by finding and automatically installing new updates. It is also used to calculate statistics, such as those shown on the <a href="%s">ClassicPress.org stats page</a>.' ), 'https://wordpress.org/about/stats/' ); ?></p>
+	<p><?php printf( __( 'This data is used to provide general enhancements to ClassicPress, which includes helping to protect your site by finding and automatically installing new updates. It is also used to calculate statistics, such as those shown on the <a href="%s">WordPress.org stats page</a>.' ), 'https://wordpress.org/about/stats/' ); ?></p>
 
 	<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, and how we use it, please visit <a href="%s">WordPress.org/about/privacy</a>.' ), 'https://wordpress.org/about/privacy/' ); ?></p>
 </div>
