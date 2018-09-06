@@ -1,10 +1,10 @@
 {
-  "name": "WordPress",
-  "version": "4.9.9",
+  "name": "ClassicPress",
+  "version": "1.0.0-alpha",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
-    "type": "svn",
-    "url": "https://develop.svn.wordpress.org/trunk"
+    "type": "git",
+    "url": "https://github.com/ClassicPress/ClassicPress"
   },
   "engines": {
     "node": "6.9.1"
