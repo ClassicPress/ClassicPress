@@ -2,7 +2,7 @@
 /**
  * User API: WP_User class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Users
  * @since WP-4.4.0
  */
@@ -114,7 +114,7 @@ class WP_User {
 	 *
 	 * @since WP-2.0.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int|string|stdClass|WP_User $id User's ID, a WP_User object, or a user object from the DB.
 	 * @param string $name Optional. User's username
@@ -182,7 +182,7 @@ class WP_User {
 	 *
 	 * @static
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $field The field to query against: 'id', 'ID', 'slug', 'email' or 'login'.
 	 * @param string|int $value The field value
@@ -443,7 +443,7 @@ class WP_User {
 	 * @since WP-2.1.0
 	 * @deprecated 4.9.0 Use WP_User::for_site()
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $cap_key Optional capability key
 	 */
@@ -638,7 +638,7 @@ class WP_User {
 	 *
 	 * @since WP-2.0.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	public function update_user_level_from_caps() {
 		global $wpdb;
@@ -683,7 +683,7 @@ class WP_User {
 	 *
 	 * @since WP-2.1.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	public function remove_all_caps() {
 		global $wpdb;
@@ -776,7 +776,7 @@ class WP_User {
 	 * @since WP-3.0.0
 	 * @deprecated 4.9.0 Use WP_User::for_site()
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $blog_id Optional. Site ID, defaults to current site.
 	 */
@@ -791,7 +791,7 @@ class WP_User {
 	 *
 	 * @since WP-4.9.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $site_id Site ID to initialize user capabilities for. Default is the current site.
 	 */

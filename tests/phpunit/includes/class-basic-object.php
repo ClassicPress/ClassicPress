@@ -2,7 +2,7 @@
 /**
  * Unit Tests: Basic_Object cloass
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage UnitTests
  * @since WP-4.7.0
  */

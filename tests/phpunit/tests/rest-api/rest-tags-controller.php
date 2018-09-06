@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Terms_Controller functionality, used for Tags.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

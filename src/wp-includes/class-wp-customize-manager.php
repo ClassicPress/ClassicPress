@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Manager classes
+ * ClassicPress Customize Manager classes
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-3.4.0
  */
@@ -528,7 +528,7 @@ final class WP_Customize_Manager {
 		/*
 		 * Clear incoming post data if the user lacks a CSRF token (nonce). Note that the customizer
 		 * application will inject the customize_preview_nonce query parameter into all Ajax requests.
-		 * For similar behavior elsewhere in WordPress, see rest_cookie_check_errors() which logs out
+		 * For similar behavior elsewhere in ClassicPress, see rest_cookie_check_errors() which logs out
 		 * a user when a valid nonce isn't present.
 		 */
 		$has_post_data_nonce = (
@@ -781,8 +781,8 @@ final class WP_Customize_Manager {
 		 * initial auto-drafts and then once initially saved, autosave revisions on top of that
 		 * user's specific post.
 		 *
-		 * Since linear changesets are deemed to be more suitable for the majority of WordPress users,
-		 * they are the default. For WordPress sites that have heavy site management in the Customizer
+		 * Since linear changesets are deemed to be more suitable for the majority of ClassicPress users,
+		 * they are the default. For ClassicPress sites that have heavy site management in the Customizer
 		 * by multiple users then branching changesets should be enabled by means of this filter.
 		 *
 		 * @since WP-4.9.0
@@ -917,7 +917,7 @@ final class WP_Customize_Manager {
 		$this->register_control_type( 'WP_Customize_Date_Time_Control' );
 
 		/**
-		 * Fires once WordPress has loaded, allowing scripts and styles to be initialized.
+		 * Fires once ClassicPress has loaded, allowing scripts and styles to be initialized.
 		 *
 		 * @since WP-3.4.0
 		 *
@@ -1586,7 +1586,7 @@ final class WP_Customize_Manager {
 			return $prepared_attachments;
 		}
 
-		// Such is The WordPress Way.
+		// Such is The ClassicPress Way.
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
@@ -1830,7 +1830,7 @@ final class WP_Customize_Manager {
 		 * and natural URLs with transaction UUIDs added, we need to ensure that
 		 * the responses are never cached by proxies. In practice, this will not
 		 * be needed if the user is logged-in anyway. But if anonymous access is
-		 * allowed then the auth cookies would not be sent and WordPress would
+		 * allowed then the auth cookies would not be sent and ClassicPress would
 		 * not send no-cache headers by default.
 		 */
 		if ( ! headers_sent() ) {
@@ -2920,7 +2920,7 @@ final class WP_Customize_Manager {
 	 * untouched.
 	 *
 	 * @since WP-4.9.0
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 * @see wp_trash_post()
 	 *
 	 * @param int|WP_Post $post The changeset post.
@@ -3620,7 +3620,7 @@ final class WP_Customize_Manager {
 	 * that have no corresponding setting created.
 	 *
 	 * This is a mechanism to "wake up" settings that have been dynamically created
-	 * on the front end and have been sent to WordPress in `$_POST['customized']`. When WP
+	 * on the front end and have been sent to ClassicPress in `$_POST['customized']`. When WP
 	 * loads, the dynamically-created settings then will get created and previewed
 	 * even though they are not directly created statically with code.
 	 *
@@ -4909,7 +4909,7 @@ final class WP_Customize_Manager {
 		$this->add_control( new WP_Customize_Site_Icon_Control( $this, 'site_icon', array(
 			'label'       => __( 'Site Icon' ),
 			'description' => sprintf(
-				'<p>' . __( 'Site Icons are what you see in browser tabs, bookmark bars, and within the WordPress mobile apps. Upload one here!' ) . '</p>' .
+				'<p>' . __( 'Site Icons are what you see in browser tabs, bookmark bars, and within the ClassicPress mobile apps. Upload one here!' ) . '</p>' .
 				/* translators: %s: site icon size in pixels */
 				'<p>' . __( 'Site Icons should be square and at least %s pixels.' ) . '</p>',
 				'<strong>512 &times; 512</strong>'

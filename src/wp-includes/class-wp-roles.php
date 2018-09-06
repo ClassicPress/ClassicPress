@@ -2,7 +2,7 @@
 /**
  * User API: WP_Roles class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Users
  * @since WP-4.4.0
  */
@@ -295,7 +295,7 @@ class WP_Roles {
 	 *
 	 * @since WP-4.9.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $site_id Site ID to initialize roles for. Default is the current site.
 	 */

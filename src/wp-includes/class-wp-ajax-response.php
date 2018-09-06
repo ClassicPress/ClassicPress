@@ -2,7 +2,7 @@
 /**
  * Send XML response back to Ajax request.
  *
- * @package WordPress
+ * @package ClassicPress
  * @since WP-2.1.0
  */
 class WP_Ajax_Response {

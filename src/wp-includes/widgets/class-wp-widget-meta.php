@@ -2,7 +2,7 @@
 /**
  * Widget API: WP_Widget_Meta class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Widgets
  * @since WP-4.4.0
  */
@@ -60,7 +60,7 @@ class WP_Widget_Meta extends WP_Widget {
 			<li><a href="<?php echo esc_url( get_bloginfo( 'comments_rss2_url' ) ); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
 			<?php
 			/**
-			 * Filters the "Powered by WordPress" text in the Meta widget.
+			 * Filters the "Powered by ClassicPress" text in the Meta widget.
 			 *
 			 * @since WP-3.6.0
 			 * @since WP-4.9.0 Added the `$instance` parameter.
@@ -70,7 +70,7 @@ class WP_Widget_Meta extends WP_Widget {
 			 */
 			echo apply_filters( 'widget_meta_poweredby', sprintf( '<li><a href="%s" title="%s">%s</a></li>',
 				esc_url( __( 'https://wordpress.org/' ) ),
-				esc_attr__( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.' ),
+				esc_attr__( 'Powered by ClassicPress, state-of-the-art semantic personal publishing platform.' ),
 				_x( 'WordPress.org', 'meta widget link text' )
 			), $instance );
 

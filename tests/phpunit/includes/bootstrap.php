@@ -1,6 +1,6 @@
 <?php
 /**
- * Installs WordPress for running the tests and loads WordPress and the test libraries
+ * Installs ClassicPress for running the tests and loads ClassicPress and the test libraries
  */
 
 /**
@@ -19,7 +19,7 @@ if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 $config_file_path .= '/wp-tests-config.php';
 
 /*
- * Globalize some WordPress variables, because PHPUnit loads this file inside a function
+ * Globalize some ClassicPress variables, because PHPUnit loads this file inside a function
  * See: https://github.com/sebastianbergmann/phpunit/issues/325
  */
 global $wpdb, $current_site, $current_blog, $wp_rewrite, $shortcode_tags, $wp, $phpmailer, $wp_theme_directories;
@@ -88,7 +88,7 @@ $GLOBALS['_wp_die_disabled'] = false;
 // Allow tests to override wp_die
 tests_add_filter( 'wp_die_handler', '_wp_die_handler_filter' );
 
-// Preset WordPress options defined in bootstrap file.
+// Preset ClassicPress options defined in bootstrap file.
 // Used to activate themes, plugins, as well as  other settings.
 if(isset($GLOBALS['wp_tests_options'])) {
 	function wp_tests_options( $value ) {
@@ -101,7 +101,7 @@ if(isset($GLOBALS['wp_tests_options'])) {
 	}
 }
 
-// Load WordPress
+// Load ClassicPress
 require_once ABSPATH . '/wp-settings.php';
 
 // Delete any default posts & related data

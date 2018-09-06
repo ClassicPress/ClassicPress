@@ -754,7 +754,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		register_post_type( 'handbook', array( 'hierarchical' => true ) );
 
 		$post_1 = self::factory()->post->create( array( 'post_title' => 'Getting Started', 'post_type' => 'handbook' ) );
-		$post_2 = self::factory()->post->create( array( 'post_title' => 'Contributing to the WordPress Codex', 'post_type' => 'handbook' ) );
+		$post_2 = self::factory()->post->create( array( 'post_title' => 'Contributing to the ClassicPress Codex', 'post_type' => 'handbook' ) );
 		$post_3 = self::factory()->post->create( array( 'post_title' => 'Getting Started', 'post_parent' => $post_2, 'post_type' => 'handbook' ) );
 
 		$result = $this->q->query( array( 'handbook' => 'getting-started', 'post_type' => 'handbook' ) );
@@ -767,7 +767,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	function test_child_post_in_hierarchical_post_type_with_default_permalinks() {
 		register_post_type( 'handbook', array( 'hierarchical' => true ) );
 
-		$post_1 = self::factory()->post->create( array( 'post_title' => 'Contributing to the WordPress Codex', 'post_type' => 'handbook' ) );
+		$post_1 = self::factory()->post->create( array( 'post_title' => 'Contributing to the ClassicPress Codex', 'post_type' => 'handbook' ) );
 		$post_2 = self::factory()->post->create( array( 'post_title' => 'Getting Started', 'post_parent' => $post_1, 'post_type' => 'handbook' ) );
 
 		$this->assertContains( 'contributing-to-the-wordpress-codex/getting-started', get_permalink( $post_2 ) );

@@ -59,7 +59,7 @@ class Tests_XMLRPC_wp_getUser extends WP_XMLRPC_UnitTestCase {
 			'user_pass' => 'password',
 			'first_name' => 'First',
 			'last_name' => 'Last',
-			'description' => 'I love WordPress',
+			'description' => 'I love ClassicPress',
 			'user_email' => 'getUserTestUser@example.com',
 			'nickname' => 'nickname',
 			'user_nicename' => 'nicename',

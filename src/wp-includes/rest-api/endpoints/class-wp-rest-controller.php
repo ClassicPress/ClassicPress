@@ -2,7 +2,7 @@
 /**
  * REST API: WP_REST_Controller class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST_API
  * @since WP-4.7.0
  */
@@ -188,7 +188,7 @@ abstract class WP_REST_Controller {
 	 *
 	 * @since WP-4.7.0
 	 *
-	 * @param mixed           $item    WordPress representation of the item.
+	 * @param mixed           $item    ClassicPress representation of the item.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_Error|WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */

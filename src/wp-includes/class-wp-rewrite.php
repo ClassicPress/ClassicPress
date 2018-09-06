@@ -2,7 +2,7 @@
 /**
  * Rewrite API: WP_Rewrite class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Rewrite
  * @since WP-1.5.0
  */
@@ -10,11 +10,11 @@
 /**
  * Core class used to implement a rewrite component API.
  *
- * The WordPress Rewrite class writes the rewrite module rules to the .htaccess
+ * The ClassicPress Rewrite class writes the rewrite module rules to the .htaccess
  * file. It also handles parsing the request to get the correct setup for the
- * WordPress Query class.
+ * ClassicPress Query class.
  *
- * The Rewrite along with WP class function as a front controller for WordPress.
+ * The Rewrite along with WP class function as a front controller for ClassicPress.
  * You can add rules to trigger your page view and processing using this
  * component. The full functionality of a front controller does not exist,
  * meaning you can't define how the template files load based on the rewrite
@@ -209,7 +209,7 @@ class WP_Rewrite {
 	var $extra_rules_top = array();
 
 	/**
-	 * Rules that don't redirect to WordPress' index.php.
+	 * Rules that don't redirect to ClassicPress' index.php.
 	 *
 	 * These rules are written to the mod_rewrite portion of the .htaccess,
 	 * and are added by add_external_rule().
@@ -236,7 +236,7 @@ class WP_Rewrite {
 	var $endpoints;
 
 	/**
-	 * Whether to write every mod_rewrite rule for WordPress into the .htaccess file.
+	 * Whether to write every mod_rewrite rule for ClassicPress into the .htaccess file.
 	 *
 	 * This is off by default, turning it on might print a lot of rewrite rules
 	 * to the .htaccess file.
@@ -253,7 +253,7 @@ class WP_Rewrite {
 	 *
 	 * If the first rewrite tag in the post permalink structure is one that could
 	 * also match a page name (e.g. %postname% or %author%) then this flag is
-	 * set to true. Prior to WordPress 3.3 this flag indicated that every page
+	 * set to true. Prior to ClassicPress 3.3 this flag indicated that every page
 	 * would have a set of rules added to the top of the rewrite rules array.
 	 * Now it tells WP::parse_request() to check if a URL matching the page
 	 * permastruct is actually a page before accepting it.
@@ -419,7 +419,7 @@ class WP_Rewrite {
 	 *
 	 * @since WP-2.5.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @return array Array of page URIs as first element and attachment URIs as second element.
 	 */
@@ -1442,7 +1442,7 @@ class WP_Rewrite {
 	 * the process that will.
 	 *
 	 * Will add the non_wp_rules property rules to the .htaccess file before
-	 * the WordPress rewrite rules one.
+	 * the ClassicPress rewrite rules one.
 	 *
 	 * @since WP-1.5.0
 	 *

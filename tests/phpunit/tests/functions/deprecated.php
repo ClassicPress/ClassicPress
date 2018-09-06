@@ -3,7 +3,7 @@
 /**
  * Test cases for deprecated functions, arguments, and files
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage Unit Tests
  * @since      WP-3.5
  * @group      deprecated

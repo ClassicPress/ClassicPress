@@ -7,7 +7,7 @@ var mockedApiResponse = {};
 
 mockedApiResponse.Schema = {
     "name": "Test Blog",
-    "description": "Just another WordPress site",
+    "description": "Just another ClassicPress site",
     "url": "http://example.org",
     "home": "http://example.org",
     "gmt_offset": "0",
@@ -3342,7 +3342,7 @@ mockedApiResponse.Schema = {
                         },
                         "language": {
                             "required": false,
-                            "description": "WordPress locale code.",
+                            "description": "ClassicPress locale code.",
                             "type": "string"
                         },
                         "use_smilies": {
@@ -4549,7 +4549,7 @@ mockedApiResponse.CommentModel = {
 
 mockedApiResponse.settings = {
     "title": "Test Blog",
-    "description": "Just another WordPress site",
+    "description": "Just another ClassicPress site",
     "url": "http://example.org",
     "email": "admin@example.org",
     "timezone": "",

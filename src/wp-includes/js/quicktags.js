@@ -2,7 +2,7 @@
 /*
  * Quicktags
  *
- * This is the HTML editor in WordPress. It can be attached to any textarea and will
+ * This is the HTML editor in ClassicPress. It can be attached to any textarea and will
  * append a toolbar above it. This script is self-contained (does not require external libraries).
  *
  * Run quicktags(settings) to initialize it, where settings is an object containing up to 3 properties:

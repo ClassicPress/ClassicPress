@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Development (4.4.x)\n"
 "Language: es_ES\n"
 
-#. translators: 'rtl' or 'ltr'. This sets the text direction for WordPress.
+#. translators: 'rtl' or 'ltr'. This sets the text direction for ClassicPress.
 #: wp-includes/locale.php:201
 msgctxt "text direction"
 msgid "ltr"

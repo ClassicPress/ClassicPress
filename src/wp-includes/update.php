@@ -2,19 +2,19 @@
 /**
  * A simple set of functions to check our version 1.0 update service.
  *
- * @package WordPress
+ * @package ClassicPress
  * @since WP-2.3.0
  */
 
 /**
- * Check WordPress version against the newest version.
+ * Check ClassicPress version against the newest version.
  *
- * The WordPress version, PHP version, and Locale is sent. Checks against the
- * WordPress server at api.wordpress.org server. Will only check if WordPress
+ * The ClassicPress version, PHP version, and Locale is sent. Checks against the
+ * ClassicPress server at api.wordpress.org server. Will only check if ClassicPress
  * isn't installing.
  *
  * @since WP-2.3.0
- * @global string $wp_version Used to check against the newest WordPress version.
+ * @global string $wp_version Used to check against the newest ClassicPress version.
  * @global wpdb   $wpdb
  * @global string $wp_local_package
  *
@@ -55,7 +55,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	/**
-	 * Filters the locale requested for WordPress core translations.
+	 * Filters the locale requested for ClassicPress core translations.
 	 *
 	 * @since WP-2.8.0
 	 *
@@ -108,15 +108,15 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * @param array $query {
 	 *     Version check query arguments. 
 	 *
-	 *     @type string $version            WordPress version number.
+	 *     @type string $version            ClassicPress version number.
 	 *     @type string $php                PHP version number.
 	 *     @type string $locale             The locale to retrieve updates for.
 	 *     @type string $mysql              MySQL version number.
 	 *     @type string $local_package      The value of the $wp_local_package global, when set.
-	 *     @type int    $blogs              Number of sites on this WordPress installation.
-	 *     @type int    $users              Number of users on this WordPress installation.
-	 *     @type int    $multisite_enabled  Whether this WordPress installation uses Multisite.
-	 *     @type int    $initial_db_version Database version of WordPress at time of installation.
+	 *     @type int    $blogs              Number of sites on this ClassicPress installation.
+	 *     @type int    $users              Number of users on this ClassicPress installation.
+	 *     @type int    $multisite_enabled  Whether this ClassicPress installation uses Multisite.
+	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
 	 * }
 	 */
 	$query = apply_filters( 'core_version_check_query_args', $query );
@@ -136,7 +136,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	$options = array(
 		'timeout' => $doing_cron ? 30 : 3,
-		'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+		'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
 		'headers' => array(
 			'wp_install' => $wp_install,
 			'wp_blog' => home_url( '/' )
@@ -151,7 +151,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 				/* translators: %s: support forums URL */
 				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 				__( 'https://wordpress.org/support/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$response = wp_remote_post( $http_url, $options );
@@ -211,12 +211,12 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 /**
  * Check plugin versions against the latest versions hosted on WordPress.org.
  *
- * The WordPress version, PHP version, and Locale is sent along with a list of
- * all plugins installed. Checks against the WordPress server at
- * api.wordpress.org. Will only check if WordPress isn't installing.
+ * The ClassicPress version, PHP version, and Locale is sent along with a list of
+ * all plugins installed. Checks against the ClassicPress server at
+ * api.wordpress.org. Will only check if ClassicPress isn't installing.
  *
  * @since WP-2.3.0
- * @global string $wp_version Used to notify the WordPress version.
+ * @global string $wp_version Used to notify the ClassicPress version.
  *
  * @param array $extra_stats Extra statistics to report to the WordPress.org API.
  */
@@ -325,7 +325,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 			'locale'       => wp_json_encode( $locales ),
 			'all'          => wp_json_encode( true ),
 		),
-		'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' )
+		'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 	);
 
 	if ( $extra_stats ) {
@@ -343,7 +343,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 				/* translators: %s: support forums URL */
 				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 				__( 'https://wordpress.org/support/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$raw_response = wp_remote_post( $http_url, $options );
@@ -387,7 +387,7 @@ function wp_update_plugins( $extra_stats = array() ) {
  * Check theme versions against the latest versions hosted on WordPress.org.
  *
  * A list of all themes installed in sent to WP. Checks against the
- * WordPress server at api.wordpress.org. Will only check if WordPress isn't
+ * ClassicPress server at api.wordpress.org. Will only check if ClassicPress isn't
  * installing.
  *
  * @since WP-2.7.0
@@ -507,7 +507,7 @@ function wp_update_themes( $extra_stats = array() ) {
 			'translations' => wp_json_encode( $translations ),
 			'locale'       => wp_json_encode( $locales ),
 		),
-		'user-agent'	=> 'WordPress/' . $wp_version . '; ' . home_url( '/' )
+		'user-agent'	=> 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 	);
 
 	if ( $extra_stats ) {
@@ -525,7 +525,7 @@ function wp_update_themes( $extra_stats = array() ) {
 				/* translators: %s: support forums URL */
 				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 				__( 'https://wordpress.org/support/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$raw_response = wp_remote_post( $http_url, $options );
@@ -550,7 +550,7 @@ function wp_update_themes( $extra_stats = array() ) {
 }
 
 /**
- * Performs WordPress automatic background updates.
+ * Performs ClassicPress automatic background updates.
  *
  * @since WP-3.7.0
  */
@@ -618,8 +618,8 @@ function wp_get_update_data() {
 	$counts['total'] = $counts['plugins'] + $counts['themes'] + $counts['wordpress'] + $counts['translations'];
 	$titles = array();
 	if ( $counts['wordpress'] ) {
-		/* translators: 1: Number of updates available to WordPress */
-		$titles['wordpress'] = sprintf( __( '%d WordPress Update'), $counts['wordpress'] );
+		/* translators: 1: Number of updates available to ClassicPress */
+		$titles['wordpress'] = sprintf( __( '%d ClassicPress Update'), $counts['wordpress'] );
 	}
 	if ( $counts['plugins'] ) {
 		/* translators: 1: Number of updates available to plugins */
@@ -637,14 +637,14 @@ function wp_get_update_data() {
 
 	$update_data = array( 'counts' => $counts, 'title' => $update_title );
 	/**
-	 * Filters the returned array of update data for plugins, themes, and WordPress core.
+	 * Filters the returned array of update data for plugins, themes, and ClassicPress core.
 	 *
 	 * @since WP-3.5.0
 	 *
 	 * @param array $update_data {
 	 *     Fetched update data.
 	 *
-	 *     @type array   $counts       An array of counts for available plugin, theme, and WordPress updates.
+	 *     @type array   $counts       An array of counts for available plugin, theme, and ClassicPress updates.
 	 *     @type string  $update_title Titles of available updates.
 	 * }
 	 * @param array $titles An array of update counts and UI strings for available updates.
@@ -675,7 +675,7 @@ function _maybe_update_core() {
 /**
  * Check the last time plugins were run before checking plugin versions.
  *
- * This might have been backported to WordPress 2.6.1 for performance reasons.
+ * This might have been backported to ClassicPress 2.6.1 for performance reasons.
  * This is used for the wp-admin to check only so often instead of every page
  * load.
  *

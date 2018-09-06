@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress Imagick Image Editor
+ * ClassicPress Imagick Image Editor
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Image_Editor
  */
 
 /**
- * WordPress Image Editor Class for Image Manipulation through Imagick PHP Module
+ * ClassicPress Image Editor Class for Image Manipulation through Imagick PHP Module
  *
  * @since WP-3.5.0
  *
@@ -274,7 +274,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 	/**
 	 * Efficiently resize the current image
 	 *
-	 * This is a WordPress specific implementation of Imagick::thumbnailImage(),
+	 * This is a ClassicPress specific implementation of Imagick::thumbnailImage(),
 	 * which resizes an image to given dimensions and removes any associated profiles.
 	 *
 	 * @since WP-4.5.0

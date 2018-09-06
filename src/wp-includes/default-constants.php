@@ -2,18 +2,18 @@
 /**
  * Defines constants and global variables that can be overridden, generally in wp-config.php.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**
- * Defines initial WordPress constants
+ * Defines initial ClassicPress constants
  *
  * @see wp_debug_mode()
  *
  * @since WP-3.0.0
  *
  * @global int    $blog_id    The current site ID.
- * @global string $wp_version The WordPress version string.
+ * @global string $wp_version The ClassicPress version string.
  */
 function wp_initial_constants() {
 	global $blog_id;
@@ -128,7 +128,7 @@ function wp_initial_constants() {
 }
 
 /**
- * Defines plugin directory WordPress constants
+ * Defines plugin directory ClassicPress constants
  *
  * Defines must-use plugin directory constants, which may be overridden in the sunrise.php drop-in
  *
@@ -190,7 +190,7 @@ function wp_plugin_directory_constants() {
 }
 
 /**
- * Defines cookie related WordPress constants
+ * Defines cookie related ClassicPress constants
  *
  * Defines constants after multisite is loaded.
  * @since WP-3.0.0
@@ -277,7 +277,7 @@ function wp_cookie_constants() {
 }
 
 /**
- * Defines cookie related WordPress constants
+ * Defines cookie related ClassicPress constants
  *
  * @since WP-3.0.0
  */
@@ -304,7 +304,7 @@ function wp_ssl_constants() {
 }
 
 /**
- * Defines functionality related WordPress constants
+ * Defines functionality related ClassicPress constants
  *
  * @since WP-3.0.0
  */
@@ -332,7 +332,7 @@ function wp_functionality_constants() {
 }
 
 /**
- * Defines templating related WordPress constants
+ * Defines templating related ClassicPress constants
  *
  * @since WP-3.0.0
  */

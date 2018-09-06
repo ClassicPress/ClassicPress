@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Panel classes
+ * ClassicPress Customize Panel classes
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.0.0
  */

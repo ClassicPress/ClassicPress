@@ -33,7 +33,7 @@ and
 
   Copyright 2003-2010 by the contributors
 
-  WordPress is released under the GPL
+  ClassicPress is released under the GPL
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -380,6 +380,6 @@ Public License instead of this License.
 WRITTEN OFFER
 
 The source code for any program binaries or compressed scripts that are
-included with WordPress can be freely obtained at the following URL:
+included with ClassicPress can be freely obtained at the following URL:
 
 	https://wordpress.org/download/source/

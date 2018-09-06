@@ -8,7 +8,7 @@ require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
 /**
  * Testing ajax compression test functionality
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-3.4.0
  * @group      ajax

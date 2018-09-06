@@ -2,13 +2,13 @@
 /**
  * REST API: WP_REST_Server class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST_API
  * @since WP-4.4.0
  */
 
 /**
- * Core class used to implement the WordPress REST API server.
+ * Core class used to implement the ClassicPress REST API server.
  *
  * @since WP-4.4.0
  */

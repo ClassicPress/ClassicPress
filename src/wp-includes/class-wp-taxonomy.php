@@ -2,7 +2,7 @@
 /**
  * Taxonomy API: WP_Taxonomy class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Taxonomy
  * @since WP-4.7.0
  */
@@ -358,7 +358,7 @@ final class WP_Taxonomy {
 	 *
 	 * @since WP-4.7.0
 	 *
-	 * @global WP $wp Current WordPress environment instance.
+	 * @global WP $wp Current ClassicPress environment instance.
 	 */
 	public function add_rewrite_rules() {
 		/* @var WP $wp */
@@ -386,7 +386,7 @@ final class WP_Taxonomy {
 	 *
 	 * @since WP-4.7.0
 	 *
-	 * @global WP $wp Current WordPress environment instance.
+	 * @global WP $wp Current ClassicPress environment instance.
 	 */
 	public function remove_rewrite_rules() {
 		/* @var WP $wp */

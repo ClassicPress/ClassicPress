@@ -1,6 +1,6 @@
 <?php
 /**
- * Installs WordPress for the purpose of the unit-tests
+ * Installs ClassicPress for the purpose of the unit-tests
  *
  * @todo Reuse the init/load code in init.php
  */

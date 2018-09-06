@@ -2,7 +2,7 @@
 /**
  * Nav Menu API: Template functions
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Nav_Menus
  * @since WP-3.0.0
  */

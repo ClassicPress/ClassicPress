@@ -45,10 +45,10 @@ class Tests_TermExists extends WP_UnitTestCase {
 	public function test_term_exists_unslash_term() {
 		$t = self::factory()->term->create( array(
 			'taxonomy' => 'post_tag',
-			'name' => 'I "love" WordPress\'s taxonomy system',
+			'name' => 'I "love" ClassicPress\'s taxonomy system',
 		) );
 
-		$found = term_exists( 'I \"love\" WordPress\\\'s taxonomy system' );
+		$found = term_exists( 'I \"love\" ClassicPress\\\'s taxonomy system' );
 		$this->assertEquals( $t, $found );
 	}
 

@@ -2,7 +2,7 @@
 ## Bundle of CA Root Certificates
 ##
 ## Certificate data from Mozilla as of: Wed Sep 16 08:58:11 2015
-## Includes a WordPress Modification - We include the 'legacy' 1024bit certificates
+## Includes a ClassicPress Modification - We include the 'legacy' 1024bit certificates
 ## for backward compatibility. See https://core.trac.wordpress.org/ticket/34935#comment:10
 ##
 ## This is a bundle of X.509 certificates of public Certificate Authorities

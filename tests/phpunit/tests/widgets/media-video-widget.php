@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_Widget_Media_Video functionality.
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage widgets
  */
 

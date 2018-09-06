@@ -2,7 +2,7 @@
 /**
  * WP_Customize_Selective_Refresh tests.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**

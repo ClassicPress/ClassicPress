@@ -2,7 +2,7 @@
 /**
  * REST API: WP_REST_Response class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST_API
  * @since WP-4.4.0
  */

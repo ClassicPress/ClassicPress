@@ -7,7 +7,7 @@
 $wp_version = '4.9.9-alpha-43554-src';
 
 /**
- * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
+ * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
  *
  * @global int $wp_db_version
  */

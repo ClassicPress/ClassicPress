@@ -1,7 +1,7 @@
 <?php
 /**
  * Console application, which adds metadata strings from
- * a WordPress extension to a POT file
+ * a ClassicPress extension to a POT file
  *
  * @package wordpress-i18n
  * @subpackage tools
@@ -27,7 +27,7 @@ class PotExtMeta {
 
 	function usage() {
 		fwrite(STDERR, "Usage: php pot-ext-meta.php EXT POT\n");
-		fwrite(STDERR, "Adds metadata from a WordPress theme or plugin file EXT to POT file\n");
+		fwrite(STDERR, "Adds metadata from a ClassicPress theme or plugin file EXT to POT file\n");
 		exit(1);
 	}
 

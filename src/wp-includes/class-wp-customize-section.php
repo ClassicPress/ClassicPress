@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Section classes
+ * ClassicPress Customize Section classes
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-3.4.0
  */

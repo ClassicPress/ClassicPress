@@ -2,7 +2,7 @@
 /**
  * Locale API: WP_Locale class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage i18n
  * @since WP-4.6.0
  */
@@ -224,7 +224,7 @@ class WP_Locale {
 		// Set text direction.
 		if ( isset( $GLOBALS['text_direction'] ) )
 			$this->text_direction = $GLOBALS['text_direction'];
-		/* translators: 'rtl' or 'ltr'. This sets the text direction for WordPress. */
+		/* translators: 'rtl' or 'ltr'. This sets the text direction for ClassicPress. */
 		elseif ( 'rtl' == _x( 'ltr', 'text direction' ) )
 			$this->text_direction = 'rtl';
 

@@ -13,7 +13,7 @@ class WPDieException extends Exception {}
  * Exception for cases of wp_die(), for ajax tests.
  * This means there was an error (no output, and a call to wp_die)
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage Unit Tests
  * @since      WP-3.4.0
  */
@@ -26,7 +26,7 @@ class WPAjaxDieStopException extends WPDieException {}
  * error (output happened, but wp_die was called to end execution)  This is
  * used with WP_Ajax_Response::send
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage Unit Tests
  * @since      WP-3.4.0
  */

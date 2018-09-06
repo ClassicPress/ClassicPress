@@ -2,7 +2,7 @@
 /**
  * Post format functions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Post
  */
 

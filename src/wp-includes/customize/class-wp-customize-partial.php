@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Partial class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.5.0
  */

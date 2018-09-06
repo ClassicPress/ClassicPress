@@ -1,7 +1,7 @@
 {
   "name": "WordPress",
   "version": "4.9.9",
-  "description": "WordPress is web software you can use to create a beautiful website or blog.",
+  "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "svn",
     "url": "https://develop.svn.wordpress.org/trunk"
@@ -9,7 +9,7 @@
   "engines": {
     "node": "6.9.1"
   },
-  "author": "The WordPress Contributors",
+  "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
     "autoprefixer": "^6.5.1",

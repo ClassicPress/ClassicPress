@@ -2,7 +2,7 @@
 /**
  * WP_Customize_Selective_Refresh Ajax tests.
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  */
 

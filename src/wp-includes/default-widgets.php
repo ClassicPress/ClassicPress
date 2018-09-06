@@ -2,7 +2,7 @@
 /**
  * Widget API: Default core widgets
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Widgets
  * @since WP-2.8.0
  */

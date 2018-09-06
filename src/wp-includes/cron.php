@@ -1,16 +1,16 @@
 <?php
 /**
- * WordPress Cron API
+ * ClassicPress Cron API
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**
  * Schedules an event to run only once.
  *
- * Schedules an event which will execute once by the WordPress actions core at
+ * Schedules an event which will execute once by the ClassicPress actions core at
  * a time which you specify. The action will fire off when someone visits your
- * WordPress site, if the schedule time has passed.
+ * ClassicPress site, if the schedule time has passed.
  *
  * Note that scheduling an event to occur within 10 minutes of an existing event
  * with the same action hook will be ignored unless you pass unique `$args` values
@@ -68,9 +68,9 @@ function wp_schedule_single_event( $timestamp, $hook, $args = array()) {
 /**
  * Schedule a recurring event.
  *
- * Schedules a hook which will be executed by the WordPress actions core on a
+ * Schedules a hook which will be executed by the ClassicPress actions core on a
  * specific interval, specified by you. The action will trigger when someone
- * visits your WordPress site, if the scheduled time has passed.
+ * visits your ClassicPress site, if the scheduled time has passed.
  *
  * Valid values for the recurrence are hourly, daily, and twicedaily. These can
  * be extended using the {@see 'cron_schedules'} filter in wp_get_schedules().

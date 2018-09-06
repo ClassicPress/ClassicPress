@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Server functionality.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 
@@ -833,7 +833,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			),
 		) );
 
-		// WordPress internally will slash the superglobals on bootstrap
+		// ClassicPress internally will slash the superglobals on bootstrap
 		$_GET = wp_slash( array(
 			'data' => 'data\\with\\slashes',
 		) );
@@ -855,7 +855,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			),
 		) );
 
-		// WordPress internally will slash the superglobals on bootstrap
+		// ClassicPress internally will slash the superglobals on bootstrap
 		$_POST = wp_slash( array(
 			'data' => 'data\\with\\slashes',
 		) );
@@ -900,7 +900,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			),
 		) );
 
-		// WordPress internally will slash the superglobals on bootstrap
+		// ClassicPress internally will slash the superglobals on bootstrap
 		$_FILES = array(
 			'data' => array(
 				'name' => 'data\\with\\slashes',
@@ -924,7 +924,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			),
 		) );
 
-		// WordPress internally will slash the superglobals on bootstrap
+		// ClassicPress internally will slash the superglobals on bootstrap
 		$_SERVER['HTTP_X_MY_HEADER'] = wp_slash( 'data\\with\\slashes' );
 
 		$result = $this->server->serve_request( '/test/data\\with\\slashes' );

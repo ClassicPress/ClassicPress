@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A factory for making WordPress data with a cross-object type API.
+ * A factory for making ClassicPress data with a cross-object type API.
  *
  * Tests should use this factory to generate test fixtures.
  */

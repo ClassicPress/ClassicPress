@@ -4,7 +4,7 @@
  *
  * @since WP-3.0.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  */
 
@@ -146,7 +146,7 @@ function get_network_by_path( $domain, $path, $segments = null ) {
  * @since WP-3.9.0
  * @since WP-4.7.0 Updated to always return a `WP_Site` object.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string   $domain   Domain to check.
  * @param string   $path     Path to check.
@@ -161,7 +161,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
 	 *
 	 * @since WP-3.9.0
 	 *
-	 * @param int|null $segments The number of path segments to consider. WordPress by default looks at
+	 * @param int|null $segments The number of path segments to consider. ClassicPress by default looks at
 	 *                           one path segment following the network path. The function default of
 	 *                           null only makes sense when you know the requested path should match a site.
 	 * @param string   $domain   The requested domain.
@@ -438,7 +438,7 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
  * @since WP-3.0.0
  * @since WP-4.4.0 The `$domain` and `$path` parameters were added.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $domain The requested domain for the error to reference.
  * @param string $path   The requested path for the error to reference.
@@ -461,7 +461,7 @@ function ms_not_installed( $domain, $path ) {
 	if ( ! $wpdb->get_var( $query ) ) {
 		$msg .= '<p>' . sprintf(
 			/* translators: %s: table name */
-			__( '<strong>Database tables are missing.</strong> This means that MySQL is not running, WordPress was not installed properly, or someone deleted %s. You really should look at your database now.' ),
+			__( '<strong>Database tables are missing.</strong> This means that MySQL is not running, ClassicPress was not installed properly, or someone deleted %s. You really should look at your database now.' ),
 			'<code>' . $wpdb->site . '</code>'
 		) . '</p>';
 	} else {

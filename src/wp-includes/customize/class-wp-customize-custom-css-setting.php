@@ -4,7 +4,7 @@
  *
  * This handles validation, sanitization and saving of the value.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.7.0
  */

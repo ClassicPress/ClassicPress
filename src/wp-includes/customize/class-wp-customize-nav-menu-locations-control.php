@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Nav_Menu_Locations_Control class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.9.0
  */

@@ -97,7 +97,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		// Generic tests that should hold true for any theme
 		foreach ( $themes as $k => $theme ) {
 			// Don't run these checks for custom themes.
-			if ( empty( $theme['Author'] ) || false === strpos( $theme['Author'], 'WordPress' ) ) {
+			if ( empty( $theme['Author'] ) || false === strpos( $theme['Author'], 'ClassicPress' ) ) {
 				continue;
 			}
 

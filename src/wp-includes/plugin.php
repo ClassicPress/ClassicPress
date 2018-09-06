@@ -16,7 +16,7 @@
  *
  * This file should have no external dependencies.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Plugin
  * @since WP-1.5.0
  */
@@ -42,7 +42,7 @@ if ( ! isset( $wp_current_filter ) )
 /**
  * Hook a function or method to a specific filter action.
  *
- * WordPress offers filter hooks to allow plugins to modify
+ * ClassicPress offers filter hooks to allow plugins to modify
  * various types of internal data at runtime.
  *
  * A plugin can modify data by binding a callback to a filter hook. When the filter
@@ -378,7 +378,7 @@ function doing_action( $action = null ) {
 /**
  * Hooks a function on to a specific action.
  *
- * Actions are the hooks that the WordPress core launches at specific points
+ * Actions are the hooks that the ClassicPress core launches at specific points
  * during execution, or when specific events occur. Plugins can specify that
  * one or more of its PHP functions are executed at these points, using the
  * Action API.
@@ -590,7 +590,7 @@ function remove_all_actions($tag, $priority = false) {
  *
  * @param string $tag         The name of the filter hook.
  * @param array  $args        Array of additional function arguments to be passed to apply_filters().
- * @param string $version     The version of WordPress that deprecated the hook.
+ * @param string $version     The version of ClassicPress that deprecated the hook.
  * @param string $replacement Optional. The hook that should have been used. Default false.
  * @param string $message     Optional. A message regarding the change. Default null.
  */
@@ -617,7 +617,7 @@ function apply_filters_deprecated( $tag, $args, $version, $replacement = false, 
  *
  * @param string $tag         The name of the action hook.
  * @param array  $args        Array of additional function arguments to be passed to do_action().
- * @param string $version     The version of WordPress that deprecated the hook.
+ * @param string $version     The version of ClassicPress that deprecated the hook.
  * @param string $replacement Optional. The hook that should have been used.
  * @param string $message     Optional. A message regarding the change.
  */

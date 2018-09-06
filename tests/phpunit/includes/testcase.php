@@ -6,11 +6,11 @@ require_once dirname( __FILE__ ) . '/trac.php';
 /**
  * Defines a basic fixture to run multiple tests.
  *
- * Resets the state of the WordPress installation before and after every test.
+ * Resets the state of the ClassicPress installation before and after every test.
  *
- * Includes utility functions and assertions useful for testing WordPress.
+ * Includes utility functions and assertions useful for testing ClassicPress.
  *
- * All WordPress unit tests should inherit from this class.
+ * All ClassicPress unit tests should inherit from this class.
  */
 class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
@@ -34,7 +34,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
  	}
 
 	/**
-	 * Fetches the factory object for generating WordPress fixtures.
+	 * Fetches the factory object for generating ClassicPress fixtures.
 	 *
 	 * @return WP_UnitTest_Factory The fixture factory.
 	 */
@@ -148,7 +148,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * After a test method runs, reset any state in WordPress the test method might have changed.
+	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
 	 */
 	function tearDown() {
 		global $wpdb, $wp_query, $wp;
@@ -553,7 +553,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Modify WordPress's query internals as if a given URL has been requested.
+	 * Modify ClassicPress's query internals as if a given URL has been requested.
 	 *
 	 * @param string $url The URL for the request.
 	 */
@@ -634,13 +634,13 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Skips the current test if there is an open WordPress ticket with id $ticket_id
+	 * Skips the current test if there is an open ClassicPress ticket with id $ticket_id
 	 */
 	function knownWPBug( $ticket_id ) {
 		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( $ticket_id, self::$forced_tickets ) )
 			return;
 		if ( ! TracTickets::isTracTicketClosed( 'https://core.trac.wordpress.org', $ticket_id ) )
-			$this->markTestSkipped( sprintf( 'WordPress Ticket #%d is not fixed', $ticket_id ) );
+			$this->markTestSkipped( sprintf( 'ClassicPress Ticket #%d is not fixed', $ticket_id ) );
 	}
 
 	/**
@@ -657,7 +657,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( 'Plugin' . $ticket_id, self::$forced_tickets ) )
 			return;
 		if ( ! TracTickets::isTracTicketClosed( 'https://plugins.trac.wordpress.org', $ticket_id ) )
-			$this->markTestSkipped( sprintf( 'WordPress Plugin Ticket #%d is not fixed', $ticket_id ) );
+			$this->markTestSkipped( sprintf( 'ClassicPress Plugin Ticket #%d is not fixed', $ticket_id ) );
 	}
 
 	public static function forceTicket( $ticket ) {

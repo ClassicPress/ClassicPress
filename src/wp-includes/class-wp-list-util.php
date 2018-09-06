@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress List utility class
+ * ClassicPress List utility class
  *
- * @package WordPress
+ * @package ClassicPress
  * @since WP-4.7.0
  */
 

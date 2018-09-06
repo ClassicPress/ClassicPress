@@ -14,7 +14,7 @@ msgstr[1] "ztrut1"
 msgstr[2] "ztrut2"
 
 msgid ""
-"The first thing you need to do is tell Blogger to let WordPress access your "
+"The first thing you need to do is tell Blogger to let ClassicPress access your "
 "account. You will be sent back here after providing authorization."
 msgstr "baba\n"
 "dyado"

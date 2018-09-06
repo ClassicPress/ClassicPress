@@ -2,7 +2,7 @@
 /**
  * Meta API: WP_Meta_Query class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Meta
  * @since WP-4.4.0
  */
@@ -464,7 +464,7 @@ class WP_Meta_Query {
 	 *
 	 * @since WP-4.1.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param array  $clause       Query clause (passed by reference).
 	 * @param array  $parent_query Parent query array.

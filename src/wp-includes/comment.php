@@ -2,7 +2,7 @@
 /**
  * Core Comment API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Comment
  */
 
@@ -24,7 +24,7 @@
  *
  * @since WP-1.2.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $author       Comment author name.
  * @param string $email        Comment author email.
@@ -227,7 +227,7 @@ function get_comments( $args = '' ) {
 }
 
 /**
- * Retrieve all of the WordPress supported comment statuses.
+ * Retrieve all of the ClassicPress supported comment statuses.
  *
  * Comments have a limited set of valid status values, this provides the comment
  * status values and descriptions.
@@ -297,7 +297,7 @@ function get_default_comment_status( $post_type = 'post', $comment_type = 'comme
  * @since WP-4.7.0 Replaced caching the modified date in a local static variable
  *              with the Object Cache API.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $timezone Which timezone to use in reference to 'gmt', 'blog', or 'server' locations.
  * @return string|false Last comment modified date on success, false on failure.
@@ -344,7 +344,7 @@ function get_lastcommentmodified( $timezone = 'server' ) {
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int $post_id Optional. Comment amount in post if > 0, else total comments blog wide.
  * @return array The amount of spam, approved, awaiting moderation, and total comments.
@@ -626,7 +626,7 @@ function sanitize_comment_cookies() {
  * @since WP-4.7.0 The `$avoid_die` parameter was added, allowing the function to
  *              return a WP_Error object instead of dying.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $commentdata Contains information on the comment.
  * @param bool  $avoid_die   When true, a disallowed comment will result in the function
@@ -815,7 +815,7 @@ function check_comment_flood_db() {
  *
  * @since WP-4.7.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param bool   $is_flood  Is a comment flooding occurring?
  * @param string $ip        Comment author's IP address.
@@ -972,7 +972,7 @@ function get_comment_pages_count( $comments = null, $per_page = null, $threaded 
  *
  * @since WP-2.7.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int   $comment_ID Comment ID.
  * @param array $args {
@@ -1094,7 +1094,7 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
  *
  * @since WP-4.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @return array Maximum character length for the comment form fields.
  */
@@ -1295,7 +1295,7 @@ function wp_count_comments( $post_id = 0 ) {
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Comment $comment_id   Comment ID or WP_Comment object.
  * @param bool           $force_delete Whether to bypass trash and force deletion. Default is false.
@@ -1723,7 +1723,7 @@ function wp_get_current_commenter() {
  * @since WP-2.0.0
  * @since WP-4.4.0 Introduced `$comment_meta` argument.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $commentdata {
  *     Array of arguments for inserting a new comment.
@@ -1900,7 +1900,7 @@ function wp_throttle_comment_flood($block, $time_lastcomment, $time_newcomment) 
  *
  * Filters new comment to ensure that the fields are sanitized and valid before
  * inserting comment into database. Calls {@see 'comment_post'} action with comment ID
- * and whether comment is approved by WordPress. Also has {@see 'preprocess_comment'}
+ * and whether comment is approved by ClassicPress. Also has {@see 'preprocess_comment'}
  * filter for processing the comment data before the function handles it.
  *
  * We use `REMOTE_ADDR` here directly. If you are behind a proxy, you should ensure
@@ -1914,7 +1914,7 @@ function wp_throttle_comment_flood($block, $time_lastcomment, $time_newcomment) 
  *              return a WP_Error object instead of dying.
  *
  * @see wp_insert_comment()
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $commentdata {
  *     Comment data.
@@ -2106,7 +2106,7 @@ function wp_new_comment_notify_postauthor( $comment_ID ) {
  *
  * @since WP-1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Comment $comment_id     Comment ID or WP_Comment object.
  * @param string         $comment_status New comment status, either 'hold', 'approve', 'spam', or 'trash'.
@@ -2176,7 +2176,7 @@ function wp_set_comment_status($comment_id, $comment_status, $wp_error = false) 
  * @since WP-2.0.0
  * @since WP-4.9.0 Add updating comment meta during comment update.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $commentarr Contains information on the comment.
  * @return int Comment was updated if value is 1, or was not updated if value is 0.
@@ -2353,7 +2353,7 @@ function wp_update_comment_count($post_id, $do_deferred=false) {
  *
  * @since WP-2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int $post_id Post ID
  * @return bool True on success, false on '0' $post_id or if post with ID does not exist.
@@ -2489,7 +2489,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
  *
  * @since WP-2.1.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function do_all_pings() {
 	global $wpdb;
@@ -2522,7 +2522,7 @@ function do_all_pings() {
  * @since WP-1.5.0
  * @since WP-4.7.0 $post_id can be a WP_Post object.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Post $post_id Post object or ID to do trackbacks on.
  */
@@ -2670,14 +2670,14 @@ function pingback( $content, $post_id ) {
 			 *
 			 * @since WP-2.9.0
 			 *
-			 * @param string $concat_useragent    The user agent concatenated with ' -- WordPress/'
-			 *                                    and the WordPress version.
+			 * @param string $concat_useragent    The user agent concatenated with ' -- ClassicPress/'
+			 *                                    and the ClassicPress version.
 			 * @param string $useragent           The useragent.
 			 * @param string $pingback_server_url The server URL being linked to.
 			 * @param string $pagelinkedto        URL of page linked to.
 			 * @param string $pagelinkedfrom      URL of page linked from.
 			 */
-			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- WordPress/' . get_bloginfo( 'version' ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
+			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ClassicPress/' . get_bloginfo( 'version' ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
 			// when set to true, this outputs debug messages by itself
 			$client->debug = false;
 
@@ -2709,7 +2709,7 @@ function privacy_ping_filter($sites) {
  *
  * @since WP-0.71
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $trackback_url URL to send trackbacks.
  * @param string $title Title of post.
@@ -2756,7 +2756,7 @@ function weblog_ping($server = '', $path = '') {
 	// using a timeout of 3 seconds should be enough to cover slow servers
 	$client = new WP_HTTP_IXR_Client($server, ((!strlen(trim($path)) || ('/' == $path)) ? false : $path));
 	$client->timeout = 3;
-	$client->useragent .= ' -- WordPress/' . get_bloginfo( 'version' );
+	$client->useragent .= ' -- ClassicPress/' . get_bloginfo( 'version' );
 
 	// when set to true, this outputs debug messages by itself
 	$client->debug = false;
@@ -2858,7 +2858,7 @@ function update_comment_cache( $comments, $update_meta_cache = true ) {
  * @access private
  *
  * @see update_comment_cache()
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $comment_ids       Array of comment IDs.
  * @param bool  $update_meta_cache Optional. Whether to update the meta cache. Default true.
@@ -3170,7 +3170,7 @@ function wp_handle_comment_submission( $comment_data ) {
  */
 function wp_register_comment_personal_data_exporter( $exporters ) {
 	$exporters['wordpress-comments'] = array(
-		'exporter_friendly_name' => __( 'WordPress Comments' ),
+		'exporter_friendly_name' => __( 'ClassicPress Comments' ),
 		'callback'               => 'wp_comments_personal_data_exporter',
 	);
 
@@ -3279,7 +3279,7 @@ function wp_comments_personal_data_exporter( $email_address, $page = 1 ) {
  */
 function wp_register_comment_personal_data_eraser( $erasers ) {
 	$erasers['wordpress-comments'] = array(
-		'eraser_friendly_name' => __( 'WordPress Comments' ),
+		'eraser_friendly_name' => __( 'ClassicPress Comments' ),
 		'callback'             => 'wp_comments_personal_data_eraser',
 	);
 

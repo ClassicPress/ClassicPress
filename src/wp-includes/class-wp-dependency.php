@@ -4,7 +4,7 @@
  *
  * @since WP-4.7.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Dependencies
  */
 

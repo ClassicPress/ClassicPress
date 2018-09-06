@@ -2,7 +2,7 @@
 /**
  * WP_MatchesMapRegex helper class
  *
- * @package WordPress
+ * @package ClassicPress
  * @since WP-4.7.0
  */
 

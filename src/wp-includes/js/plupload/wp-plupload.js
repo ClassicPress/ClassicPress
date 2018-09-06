@@ -10,11 +10,11 @@ window.wp = window.wp || {};
 	}
 
 	/**
-	 * A WordPress uploader.
+	 * A ClassicPress uploader.
 	 *
 	 * The Plupload library provides cross-browser uploader UI integration.
 	 * This object bridges the Plupload API to integrate uploads into the
-	 * WordPress back end and the WordPress media experience.
+	 * ClassicPress back end and the ClassicPress media experience.
 	 *
 	 * @param {object} options           The options passed to the new plupload instance.
 	 * @param {object} options.container The id of uploader container.

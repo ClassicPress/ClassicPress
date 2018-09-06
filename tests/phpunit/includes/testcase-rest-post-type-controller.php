@@ -294,7 +294,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	/**
 	 * Overwrite the default protected title format.
 	 *
-	 * By default WordPress will show password protected posts with a title of
+	 * By default ClassicPress will show password protected posts with a title of
 	 * "Protected: %s", as the REST API communicates the protected status of a post
 	 * in a machine readable format, we remove the "Protected: " prefix.
 	 *

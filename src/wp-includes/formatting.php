@@ -1,10 +1,10 @@
 <?php
 /**
- * Main WordPress Formatting API.
+ * Main ClassicPress Formatting API.
  *
  * Handles many functions for formatting output.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**
@@ -3761,7 +3761,7 @@ function _deep_replace( $search, $subject ) {
  *
  * @since WP-2.8.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string|array $data Unescaped data
  * @return string|array Escaped data
@@ -4056,7 +4056,7 @@ function wp_make_link_relative( $link ) {
  *
  * @since WP-2.0.5
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $option The name of the option.
  * @param string $value  The unsanitised value.
@@ -4183,7 +4183,7 @@ function sanitize_option( $option, $value ) {
 				if ( preg_match( '#http(s?)://(.+)#i', $value ) ) {
 					$value = esc_url_raw( $value );
 				} else {
-					$error = __( 'The WordPress address you entered did not appear to be a valid URL. Please enter a valid URL.' );
+					$error = __( 'The ClassicPress address you entered did not appear to be a valid URL. Please enter a valid URL.' );
 				}
 			}
 			break;
@@ -4396,7 +4396,7 @@ function wp_pre_kses_less_than_callback( $matches ) {
 }
 
 /**
- * WordPress implementation of PHP sprintf() with filters.
+ * ClassicPress implementation of PHP sprintf() with filters.
  *
  * @since WP-2.5.0
  * @link https://secure.php.net/sprintf
@@ -4791,7 +4791,7 @@ function wp_basename( $path, $suffix = '' ) {
 }
 
 /**
- * Forever eliminate "Wordpress" from the planet (or at least the little bit we can influence).
+ * Forever eliminate "Classicpress" from the planet (or at least the little bit we can influence).
  *
  * Violating our coding standards for a good function name.
  *
@@ -4806,15 +4806,15 @@ function capital_P_dangit( $text ) {
 	// Simple replacement for titles
 	$current_filter = current_filter();
 	if ( 'the_title' === $current_filter || 'wp_title' === $current_filter )
-		return str_replace( 'Wordpress', 'WordPress', $text );
+		return str_replace( 'Classicpress', 'ClassicPress', $text );
 	// Still here? Use the more judicious replacement
 	static $dblq = false;
 	if ( false === $dblq ) {
 		$dblq = _x( '&#8220;', 'opening curly double quote' );
 	}
 	return str_replace(
-		array( ' Wordpress', '&#8216;Wordpress', $dblq . 'Wordpress', '>Wordpress', '(Wordpress' ),
-		array( ' WordPress', '&#8216;WordPress', $dblq . 'WordPress', '>WordPress', '(WordPress' ),
+		array( ' Classicpress', '&#8216;Classicpress', $dblq . 'Classicpress', '>Classicpress', '(Classicpress' ),
+		array( ' ClassicPress', '&#8216;ClassicPress', $dblq . 'ClassicPress', '>ClassicPress', '(ClassicPress' ),
 	$text );
 }
 
@@ -5307,7 +5307,7 @@ function wp_staticize_emoji_for_email( $mail ) {
  * @access private
  *
  * @param string $type Optional. Which array type to return. Accepts 'partials' or 'entities', default 'entities'.
- * @return array An array to match all emoji that WordPress recognises.
+ * @return array An array to match all emoji that ClassicPress recognises.
  */
 function _wp_emoji_list( $type = 'entities' ) {
 	// Do not remove the START/END comments - they're used to find where to insert the arrays.

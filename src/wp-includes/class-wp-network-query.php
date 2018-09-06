@@ -2,7 +2,7 @@
 /**
  * Network API: WP_Network_Query class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since WP-4.6.0
  */
@@ -165,7 +165,7 @@ class WP_Network_Query {
 	}
 
 	/**
-	 * Sets up the WordPress query for retrieving networks.
+	 * Sets up the ClassicPress query for retrieving networks.
 	 *
 	 * @since WP-4.6.0
 	 *
@@ -276,7 +276,7 @@ class WP_Network_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @return int|array A single count of network IDs if a count query. An array of network IDs if a full query.
 	 */
@@ -452,7 +452,7 @@ class WP_Network_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	private function set_found_networks() {
 		global $wpdb;
@@ -477,7 +477,7 @@ class WP_Network_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb  $wpdb WordPress database abstraction object.
+	 * @global wpdb  $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $string  Search string.
 	 * @param array  $columns Columns to search.
@@ -502,7 +502,7 @@ class WP_Network_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $orderby Alias for the field to order by.
 	 * @return string|false Value to used in the ORDER clause. False otherwise.

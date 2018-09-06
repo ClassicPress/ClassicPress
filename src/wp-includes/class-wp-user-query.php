@@ -2,7 +2,7 @@
 /**
  * User API: WP_User_Query class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Users
  * @since WP-4.4.0
  */
@@ -135,7 +135,7 @@ class WP_User_Query {
 	 *              and 'login__not_in' parameters.
 	 *
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 * @global int  $blog_id
 	 *
 	 * @param string|array $query {
@@ -581,7 +581,7 @@ class WP_User_Query {
 	 *
 	 * @since WP-3.1.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	public function query() {
 		global $wpdb;
@@ -601,7 +601,7 @@ class WP_User_Query {
 		 *
 		 * @since WP-3.2.0
 		 *
-		 * @global wpdb $wpdb WordPress database abstraction object.
+		 * @global wpdb $wpdb ClassicPress database abstraction object.
 		 *
 		 * @param string $sql The SELECT FOUND_ROWS() query for the current WP_User_Query.
 		 */
@@ -658,7 +658,7 @@ class WP_User_Query {
 	 *
 	 * @since WP-3.1.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $string
 	 * @param array  $cols
@@ -712,7 +712,7 @@ class WP_User_Query {
 	 *
 	 * @since WP-4.2.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $orderby Alias for the field to order by.
 	 * @return string Value to used in the ORDER clause, if `$orderby` is valid.

@@ -18,7 +18,7 @@ msgstr ""
 msgid "html_lang_attribute"
 msgstr "de-DE"
 
-#. translators: 'rtl' or 'ltr'. This sets the text direction for WordPress.
+#. translators: 'rtl' or 'ltr'. This sets the text direction for ClassicPress.
 #: wp-includes/class-wp-locale.php:223
 msgctxt "text direction"
 msgid "ltr"

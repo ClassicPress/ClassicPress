@@ -9,11 +9,11 @@ if ( !defined( 'STDERR' ) ) {
 
 /**
  * Class to create POT files for
- *  - WordPress 3.4+
- *  - WordPress plugins
- *  - WordPress themes
+ *  - ClassicPress 3.4+
+ *  - ClassicPress plugins
+ *  - ClassicPress themes
  *  - GlotPress (standalone)
- *  - WordPress.org projects (Rosetta, forums, directories)
+ *  - ClassicPress.org projects (Rosetta, forums, directories)
  *  - WordCamp.org
  *
  * Support for older projects can be found in the legacy branch:
@@ -82,38 +82,38 @@ class MakePOT {
 		),
 		'generic' => array(),
 		'wp-frontend' => array(
-			'description' => 'Translation of frontend strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+			'description' => 'Translation of frontend strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
 		'wp-admin' => array(
-			'description' => 'Translation of site admin strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+			'description' => 'Translation of site admin strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
 		'wp-network-admin' => array(
-			'description' => 'Translation of network admin strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+			'description' => 'Translation of network admin strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
 		'wp-tz' => array(
-			'description' => 'Translation of timezone strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+			'description' => 'Translation of timezone strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
 		'wp-plugin' => array(
-			'description' => 'Translation of the WordPress plugin {name} {version} by {author}',
+			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
 			'msgid-bugs-address' => 'https://wordpress.org/support/plugin/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
 		),
 		'wp-theme' => array(
-			'description' => 'Translation of the WordPress theme {name} {version} by {author}',
+			'description' => 'Translation of the ClassicPress theme {name} {version} by {author}',
 			'msgid-bugs-address' => 'https://wordpress.org/support/theme/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
@@ -126,23 +126,23 @@ class MakePOT {
 			'package-name' => 'GlotPress',
 		),
 		'wporg-bb-forums' => array(
-			'description' => 'WordPress.org International Forums',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress.org International Forums',
+			'description' => 'ClassicPress.org International Forums',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress.org International Forums',
 		),
 		'wporg' => array(
-			'description' => 'WordPress.org',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress.org',
+			'description' => 'ClassicPress.org',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress.org',
 		),
 		'wordcamporg' => array(
 			'description' => 'WordCamp.org',
-			'copyright-holder' => 'WordPress',
+			'copyright-holder' => 'ClassicPress',
 			'package-name' => 'WordCamp.org',
 		),
 		'rosetta' => array(
 			'description' => 'Rosetta (.wordpress.org locale sites)',
-			'copyright-holder' => 'WordPress',
+			'copyright-holder' => 'ClassicPress',
 			'package-name' => 'Rosetta',
 		),
 	);

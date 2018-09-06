@@ -16,6 +16,6 @@ msgstr "Translation: There doesn't seem to be a <code>wp-config.php</code> file.
 
 #. Not gettexted string WP_I18N_ERROR
 #: not-gettext-0.php:11
-msgid "WordPress &rsaquo; Error"
-msgstr "Translation: WordPress &rsaquo; Error"
+msgid "ClassicPress &rsaquo; Error"
+msgstr "Translation: ClassicPress &rsaquo; Error"
 

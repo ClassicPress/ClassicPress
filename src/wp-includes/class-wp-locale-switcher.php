@@ -2,7 +2,7 @@
 /**
  * Locale API: WP_Locale_Switcher class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage i18n
  * @since WP-4.7.0
  */
@@ -158,11 +158,11 @@ class WP_Locale_Switcher {
 	}
 
 	/**
-	 * Filters the locale of the WordPress installation.
+	 * Filters the locale of the ClassicPress installation.
 	 *
 	 * @since WP-4.7.0
 	 *
-	 * @param string $locale The locale of the WordPress installation.
+	 * @param string $locale The locale of the ClassicPress installation.
 	 * @return string The locale currently being switched to.
 	 */
 	public function filter_locale( $locale ) {
@@ -211,7 +211,7 @@ class WP_Locale_Switcher {
 	 *
 	 * @since WP-4.7.0
 	 *
-	 * @global WP_Locale $wp_locale The WordPress date and time locale object.
+	 * @global WP_Locale $wp_locale The ClassicPress date and time locale object.
 	 *
 	 * @param string $locale The locale to change to.
 	 */

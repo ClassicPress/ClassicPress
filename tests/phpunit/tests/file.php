@@ -32,9 +32,9 @@ class Tests_File extends WP_UnitTestCase {
 		$actual = get_file_data( DIR_TESTDATA . '/themedir1/default/style.css', $theme_headers );
 
 		$expected = array(
-			'Name' => 'WordPress Default',
+			'Name' => 'ClassicPress Default',
 			'ThemeURI' => 'http://wordpress.org/',
-			'Description' => 'The default WordPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.',
+			'Description' => 'The default ClassicPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.',
 			'Version' => '1.6',
 			'Author' => 'Michael Heilemann',
 			'AuthorURI' => 'http://binarybonsai.com/',

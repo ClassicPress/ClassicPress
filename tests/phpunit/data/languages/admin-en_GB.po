@@ -12,8 +12,8 @@ msgstr ""
 "Language: en_GB\n"
 
 #: wp-admin/about.php:42 wp-admin/credits.php:23 wp-admin/freedoms.php:22
-msgid "Thank you for updating! WordPress %s makes your site more connected and responsive."
-msgstr "Thank you for updating! WordPress %s makes your site more connected and responsive."
+msgid "Thank you for updating! ClassicPress %s makes your site more connected and responsive."
+msgstr "Thank you for updating! ClassicPress %s makes your site more connected and responsive."
 
 #. translators: 1: WP_Term class name, WP_Comment class name, WP_Network class
 #. name

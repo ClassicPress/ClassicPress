@@ -2,7 +2,7 @@
 /**
  * Testing ajax customize menus functionality
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-4.3.0
  * @group      ajax

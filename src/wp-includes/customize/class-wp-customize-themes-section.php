@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Themes_Section class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.4.0
  */
@@ -81,7 +81,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 						<?php $this->filter_bar_content_template(); ?>
 					</div>
 					<?php $this->filter_drawer_content_template(); ?>
-					<div class="error unexpected-error" style="display: none; "><p><?php _e( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/">support forums</a>.' ); ?></p></div>
+					<div class="error unexpected-error" style="display: none; "><p><?php _e( 'An unexpected error occurred. Something may be wrong with ClassicPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="https://wordpress.org/support/">support forums</a>.' ); ?></p></div>
 					<ul class="themes">
 					</ul>
 					<p class="no-themes"><?php _e( 'No themes found. Try a different search.' ); ?></p>

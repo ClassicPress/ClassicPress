@@ -7,7 +7,7 @@
  *
  * Not all of the Multisite default hooks are found in ms-default-filters.php
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @see default-filters.php
  * @since WP-3.0.0
