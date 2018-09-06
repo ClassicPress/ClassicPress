@@ -12,9 +12,15 @@ class Tests_Basic extends WP_UnitTestCase {
 		$this->skipOnAutomatedBranches();
 
 		$license = file_get_contents( ABSPATH . 'license.txt' );
-		preg_match( '#Copyright 2011-(\d+) by the contributors#', $license, $matches );
 		$this_year = date( 'Y' );
+
+		// Check WordPress copyright years
+		// TODO: This only applies if we actually pull changes from WP in 2019 or later!
+		preg_match( '#Copyright 2003-(\d+) by the WordPress contributors#', $license, $matches );
 		$this->assertEquals( $this_year, trim( $matches[1] ), "license.txt's year needs to be updated to $this_year." );
+
+		preg_match( '#Copyright (2018-)?(\d+) by the contributors#', $license, $matches );
+		$this->assertEquals( $this_year, trim( $matches[2] ), "license.txt's year needs to be updated to $this_year." );
 	}
 
 	function test_package_json() {
