@@ -9,8 +9,8 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @ticket 23605
 	 */
 	function test_spaces() {
-		$this->assertEquals( 'http://example.com/Mr%20WordPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr%20WordPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
+		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
+		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
 		$this->assertEquals( 'http://example.com/Mr%20%20ClassicPress', esc_url( 'http://example.com/Mr%20%20ClassicPress' ) );
 		$this->assertEquals( 'http://example.com/Mr+ClassicPress',      esc_url( 'http://example.com/Mr+ClassicPress' ) );
 

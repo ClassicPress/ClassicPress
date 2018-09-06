@@ -770,9 +770,9 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		$post_1 = self::factory()->post->create( array( 'post_title' => 'Contributing to the ClassicPress Codex', 'post_type' => 'handbook' ) );
 		$post_2 = self::factory()->post->create( array( 'post_title' => 'Getting Started', 'post_parent' => $post_1, 'post_type' => 'handbook' ) );
 
-		$this->assertContains( 'contributing-to-the-wordpress-codex/getting-started', get_permalink( $post_2 ) );
+		$this->assertContains( 'contributing-to-the-classicpress-codex/getting-started', get_permalink( $post_2 ) );
 
-		$result = $this->q->query( array( 'handbook' => 'contributing-to-the-wordpress-codex/getting-started', 'post_type' => 'handbook' ) );
+		$result = $this->q->query( array( 'handbook' => 'contributing-to-the-classicpress-codex/getting-started', 'post_type' => 'handbook' ) );
 		$this->assertCount( 1, $result );
 	}
 
