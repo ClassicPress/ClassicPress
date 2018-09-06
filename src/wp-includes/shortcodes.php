@@ -15,7 +15,7 @@
  * shortcode parser in your function to account for that.
  *
  * {@internal
- * Please be aware that the above note was made during the beta of ClassicPress 2.6
+ * Please be aware that the above note was made during the beta of WordPress 2.6
  * and in the future may not be accurate. Please update the note when it is no
  * longer the case.}}
  *

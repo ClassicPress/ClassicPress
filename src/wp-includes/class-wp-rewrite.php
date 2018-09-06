@@ -253,7 +253,7 @@ class WP_Rewrite {
 	 *
 	 * If the first rewrite tag in the post permalink structure is one that could
 	 * also match a page name (e.g. %postname% or %author%) then this flag is
-	 * set to true. Prior to ClassicPress 3.3 this flag indicated that every page
+	 * set to true. Prior to WordPress 3.3 this flag indicated that every page
 	 * would have a set of rules added to the top of the rewrite rules array.
 	 * Now it tells WP::parse_request() to check if a URL matching the page
 	 * permastruct is actually a page before accepting it.

@@ -294,7 +294,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	function test_legacy_user_activation_key_is_rejected() {
 		global $wpdb;
 
-		// A legacy user_activation_key is one without the `time()` prefix introduced in ClassicPress 4.3.
+		// A legacy user_activation_key is one without the `time()` prefix introduced in WordPress 4.3.
 
 		$key  = wp_generate_password( 20, false );
 		$wpdb->update( $wpdb->users, array(

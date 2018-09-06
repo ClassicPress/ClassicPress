@@ -7,7 +7,7 @@
  *
  * Includes both internal ClassicPress routines and theme-use routines.
  *
- * This functionality was found in a plugin before the ClassicPress 2.2 release, which
+ * This functionality was found in a plugin before the WordPress 2.2 release, which
  * included it in the core from that point on.
  *
  * @link https://codex.wordpress.org/Plugins/WordPress_Widgets ClassicPress Widgets

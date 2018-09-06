@@ -9,7 +9,7 @@ if ( !defined( 'STDERR' ) ) {
 
 /**
  * Class to create POT files for
- *  - ClassicPress 3.4+
+ *  - ClassicPress
  *  - ClassicPress plugins
  *  - ClassicPress themes
  *  - GlotPress (standalone)
