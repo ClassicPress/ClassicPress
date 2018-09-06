@@ -319,7 +319,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	function test_plaintext_user_activation_key_is_rejected() {
 		global $wpdb;
 
-		// A plaintext user_activation_key is one stored before hashing was introduced in ClassicPress 3.7.
+		// A plaintext user_activation_key is one stored before hashing was introduced in WordPress 3.7.
 
 		$key  = wp_generate_password( 20, false );
 		$wpdb->update( $wpdb->users, array(

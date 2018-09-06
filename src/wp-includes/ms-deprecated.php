@@ -15,7 +15,7 @@
 
 /**
  * Get the "dashboard blog", the blog where users without a blog edit their profile data.
- * Dashboard blog functionality was removed in ClassicPress 3.1, replaced by the user admin.
+ * Dashboard blog functionality was removed in WordPress 3.1, replaced by the user admin.
  *
  * @since WP-MU (3.0.0)
  * @deprecated 3.1.0 Use get_site()

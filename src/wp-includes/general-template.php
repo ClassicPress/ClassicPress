@@ -3973,7 +3973,7 @@ function wp_admin_css_uri( $file = 'wp-admin' ) {
  * be printed. Printing may be forced by passing true as the $force_echo
  * (second) parameter.
  *
- * For backward compatibility with ClassicPress 2.3 calling method: If the $file
+ * For backward compatibility with WordPress 2.3 calling method: If the $file
  * (first) parameter does not correspond to a registered CSS file, we assume
  * $file is a file relative to wp-admin/ without its ".css" extension. A
  * stylesheet link to that generated URL is printed.
