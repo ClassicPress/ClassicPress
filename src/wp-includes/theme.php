@@ -2013,7 +2013,7 @@ function get_theme_starter_content() {
 
 			'link_email' => array(
 				'title' => _x( 'Email', 'Theme starter content' ),
-				'url' => 'mailto:wordpress@example.com',
+				'url' => 'mailto:classicpress@example.com',
 			),
 			'link_facebook' => array(
 				'title' => _x( 'Facebook', 'Theme starter content' ),
