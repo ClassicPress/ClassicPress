@@ -14,7 +14,7 @@ wp_enqueue_script( 'underscore' );
 /* translators: Page title of the About ClassicPress page in the admin. */
 $title = _x( 'About', 'page title' );
 
-$display_version = get_bloginfo( 'classicpress_display_version' );
+$display_version = classicpress_version();
 
 include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>

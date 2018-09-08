@@ -12,7 +12,7 @@ require_once( dirname( __FILE__ ) . '/includes/credits.php' );
 
 $title = __( 'Credits' );
 
-$display_version = get_bloginfo( 'classicpress_display_version' );
+$display_version = classicpress_version();
 
 include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
