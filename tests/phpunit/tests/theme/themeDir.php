@@ -239,8 +239,8 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertEquals( 'My Subdir Theme', $theme_data['Name'] );
 		$this->assertEquals( 'http://example.org/', $theme_data['URI'] );
 		$this->assertEquals( 'An example theme in a sub directory', $theme_data['Description'] );
-		$this->assertEquals( '<a href="http://wordpress.org/">Mr. ClassicPress</a>', $theme_data['Author'] );
-		$this->assertEquals( 'http://wordpress.org/', $theme_data['AuthorURI'] );
+		$this->assertEquals( '<a href="https://www.classicpress.net">Mr. ClassicPress</a>', $theme_data['Author'] );
+		$this->assertEquals( 'https://www.classicpress.net', $theme_data['AuthorURI'] );
 		$this->assertEquals( '0.1', $theme_data['Version'] );
 		$this->assertEquals( '', $theme_data['Template'] );
 		$this->assertEquals( 'publish', $theme_data['Status'] );

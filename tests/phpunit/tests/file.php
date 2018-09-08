@@ -33,7 +33,7 @@ class Tests_File extends WP_UnitTestCase {
 
 		$expected = array(
 			'Name' => 'ClassicPress Default',
-			'ThemeURI' => 'http://wordpress.org/',
+			'ThemeURI' => 'https://www.classicpress.net',
 			'Description' => 'The default ClassicPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.',
 			'Version' => '1.6',
 			'Author' => 'Michael Heilemann',

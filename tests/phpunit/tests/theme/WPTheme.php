@@ -59,7 +59,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		$this->assertEquals( 'http://example.org/',$theme->get('ThemeURI') );
 		$this->assertEquals( 'An example theme in a sub directory', $theme->get('Description') );
 		$this->assertEquals( 'Mr. ClassicPress', $theme->get('Author') );
-		$this->assertEquals( 'http://wordpress.org/', $theme->get('AuthorURI') );
+		$this->assertEquals( 'https://www.classicpress.net', $theme->get('AuthorURI') );
 		$this->assertEquals( '0.1', $theme->get('Version') );
 		$this->assertEquals( '', $theme->get('Template') );
 		$this->assertEquals( 'publish', $theme->get('Status') );
@@ -82,7 +82,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		$this->assertEquals( 'http://example.org/',$theme->get('ThemeURI') );
 		$this->assertEquals( 'An example theme in a sub directory', $theme->get('Description') );
 		$this->assertEquals( 'Mr. ClassicPress', $theme->get('Author') );
-		$this->assertEquals( 'http://wordpress.org/', $theme->get('AuthorURI') );
+		$this->assertEquals( 'https://www.classicpress.net', $theme->get('AuthorURI') );
 		$this->assertEquals( '0.1', $theme->get('Version') );
 		$this->assertEquals( '', $theme->get('Template') );
 		$this->assertEquals( 'publish', $theme->get('Status') );
