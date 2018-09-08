@@ -15,10 +15,6 @@ define( 'WP_DEFAULT_THEME', 'default' );
 // Alternatively, use the tests/phpunit/multisite.xml configuration file.
 // define( 'WP_TESTS_MULTISITE', true );
 
-// Force known bugs to be run.
-// Tests with an associated Trac ticket that is still open are normally skipped.
-// define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
-
 // Test with WordPress debug mode (default).
 define( 'WP_DEBUG', true );
 

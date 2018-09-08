@@ -1,7 +1,6 @@
 <?php
 
 require_once dirname( __FILE__ ) . '/factory.php';
-require_once dirname( __FILE__ ) . '/trac.php';
 
 /**
  * Defines a basic fixture to run multiple tests.
@@ -14,7 +13,6 @@ require_once dirname( __FILE__ ) . '/trac.php';
  */
 class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
-	protected static $forced_tickets = array();
 	protected $expected_deprecated = array();
 	protected $caught_deprecated = array();
 	protected $expected_doing_it_wrong = array();
@@ -613,55 +611,6 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 				$this->skipWithMultisite();
 			}
 		}
-
-		// Core tests no longer check against open Trac tickets, but others using WP_UnitTestCase may do so.
-		if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
-			return;
-		}
-
-		if ( WP_TESTS_FORCE_KNOWN_BUGS )
-			return;
-		$tickets = PHPUnit_Util_Test::getTickets( get_class( $this ), $this->getName( false ) );
-		foreach ( $tickets as $ticket ) {
-			if ( is_numeric( $ticket ) ) {
-				$this->knownWPBug( $ticket );
-			} elseif ( 'Plugin' == substr( $ticket, 0, 6 ) ) {
-				$ticket = substr( $ticket, 6 );
-				if ( $ticket && is_numeric( $ticket ) )
-					$this->knownPluginBug( $ticket );
-			}
-		}
-	}
-
-	/**
-	 * Skips the current test if there is an open WordPress ticket with id $ticket_id
-	 */
-	function knownWPBug( $ticket_id ) {
-		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( $ticket_id, self::$forced_tickets ) )
-			return;
-		if ( ! TracTickets::isTracTicketClosed( 'https://core.trac.wordpress.org', $ticket_id ) )
-			$this->markTestSkipped( sprintf( 'WordPress Ticket #%d is not fixed', $ticket_id ) );
-	}
-
-	/**
-	 * @deprecated No longer used since the unit test Trac was merged into Core's.
-	 */
-	function knownUTBug( $ticket_id ) {
-		return;
-	}
-
-	/**
-	 * Skips the current test if there is an open plugin ticket with id $ticket_id
-	 */
-	function knownPluginBug( $ticket_id ) {
-		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( 'Plugin' . $ticket_id, self::$forced_tickets ) )
-			return;
-		if ( ! TracTickets::isTracTicketClosed( 'https://plugins.trac.wordpress.org', $ticket_id ) )
-			$this->markTestSkipped( sprintf( 'WordPress Plugin Ticket #%d is not fixed', $ticket_id ) );
-	}
-
-	public static function forceTicket( $ticket ) {
-		self::$forced_tickets[] = $ticket;
 	}
 
 	/**

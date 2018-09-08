@@ -38,9 +38,6 @@ define( 'DIR_TESTDATA', dirname( __FILE__ ) . '/../data' );
 
 define( 'WP_LANG_DIR', DIR_TESTDATA . '/languages' );
 
-if ( ! defined( 'WP_TESTS_FORCE_KNOWN_BUGS' ) )
-	define( 'WP_TESTS_FORCE_KNOWN_BUGS', false );
-
 // Cron tries to make an HTTP request to the blog, which always fails, because tests are run in CLI mode only
 define( 'DISABLE_WP_CRON', true );
 
@@ -123,13 +120,6 @@ require dirname( __FILE__ ) . '/spy-rest-server.php';
  *
  * Used to access the protected longOptions property, to parse the arguments
  * passed to the script.
- *
- * If it is determined that phpunit was called with a --group that corresponds
- * to an @ticket annotation (such as `phpunit --group 12345` for bugs marked
- * as #WP12345), then it is assumed that known bugs should not be skipped.
- *
- * If WP_TESTS_FORCE_KNOWN_BUGS is already set in wp-tests-config.php, then
- * how you call phpunit has no effect.
  */
 class WP_PHPUnit_Util_Getopt extends PHPUnit_Util_Getopt {
 	protected $longOptions = array(
@@ -169,11 +159,6 @@ class WP_PHPUnit_Util_Getopt extends PHPUnit_Util_Getopt {
 					continue 2;
 				case '--group' :
 					$groups = explode( ',', $option[1] );
-					foreach ( $groups as $group ) {
-						if ( is_numeric( $group ) || preg_match( '/^(UT|Plugin)\d+$/', $group ) ) {
-							WP_UnitTestCase::forceTicket( $group );
-						}
-					}
 
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						if ( in_array( $group_name, $groups ) ) {
