@@ -22,7 +22,7 @@ class Tests_Formatting_Slashit extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22267
+	 * @see https://core.trac.wordpress.org/ticket/22267
 	 */
 	function test_removes_trailing_backslashes() {
 		$this->assertEquals("a", untrailingslashit("a\\"));
@@ -30,7 +30,7 @@ class Tests_Formatting_Slashit extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22267
+	 * @see https://core.trac.wordpress.org/ticket/22267
 	 */
 	function test_removes_trailing_mixed_slashes() {
 		$this->assertEquals("a", untrailingslashit("a/\\"));
@@ -46,7 +46,7 @@ class Tests_Formatting_Slashit extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22267
+	 * @see https://core.trac.wordpress.org/ticket/22267
 	 */
 	function test_converts_trailing_backslash_to_slash_if_one_exists() {
 		$this->assertEquals("a/", trailingslashit("a\\"));

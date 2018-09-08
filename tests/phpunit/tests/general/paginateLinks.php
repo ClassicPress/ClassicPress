@@ -91,7 +91,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 25735
+	 * @see https://core.trac.wordpress.org/ticket/25735
 	 */
 	function test_paginate_links_number_format() {
 		$this->i18n_count = 0;
@@ -111,7 +111,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 24606
+	 * @see https://core.trac.wordpress.org/ticket/24606
 	 */
 	function test_paginate_links_base_value() {
 
@@ -185,7 +185,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 29636
+	 * @see https://core.trac.wordpress.org/ticket/29636
 	 */
 	function test_paginate_links_query_args() {
 		add_filter( 'get_pagenum_link', array( $this, 'add_query_arg' ) );
@@ -221,7 +221,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 30831
+	 * @see https://core.trac.wordpress.org/ticket/30831
 	 */
 	function test_paginate_links_with_custom_query_args() {
 		add_filter( 'get_pagenum_link', array( $this, 'add_query_arg' ) );
@@ -259,7 +259,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 30831
+	 * @see https://core.trac.wordpress.org/ticket/30831
 	 */
 	public function test_paginate_links_should_allow_non_default_format_without_add_args() {
 		// Fake the query params.
@@ -283,7 +283,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 30831
+	 * @see https://core.trac.wordpress.org/ticket/30831
 	 */
 	public function test_paginate_links_should_allow_add_args_to_be_bool_false() {
 		// Fake the query params.
@@ -303,7 +303,7 @@ EXPECTED;
 	}
 
 	/**
-	 * @ticket 31939
+	 * @see https://core.trac.wordpress.org/ticket/31939
 	 */
 	public function test_custom_base_query_arg_should_be_stripped_from_current_url_before_generating_pag_links() {
 		// Fake the current URL: example.com?foo

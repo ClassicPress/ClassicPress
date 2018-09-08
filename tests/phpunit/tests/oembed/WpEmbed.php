@@ -221,7 +221,7 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34115
+	 * @see https://core.trac.wordpress.org/ticket/34115
 	 */
 	public function test_shortcode_should_cache_data_in_custom_post() {
 		$url        = 'https://example.com/';
@@ -247,7 +247,7 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34115
+	 * @see https://core.trac.wordpress.org/ticket/34115
 	 */
 	public function test_shortcode_should_cache_failure_in_custom_post() {
 		$url        = 'https://example.com/';
@@ -275,7 +275,7 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 	/**
 	 * Test that parsing an embed shortcode should cause oembed_cache to be updated.
 	 *
-	 * @ticket 42310
+	 * @see https://core.trac.wordpress.org/ticket/42310
 	 */
 	public function test_shortcode_should_update_custom_post() {
 		add_filter( 'oembed_ttl', '__return_zero' );

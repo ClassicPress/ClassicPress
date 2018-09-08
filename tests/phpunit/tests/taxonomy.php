@@ -13,7 +13,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 5417
+	 * @see https://core.trac.wordpress.org/ticket/5417
 	 */
 	function test_get_unknown_taxonomies() {
 		// taxonomies for an unknown object type
@@ -50,7 +50,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27238
+	 * @see https://core.trac.wordpress.org/ticket/27238
 	 */
 	public function test_get_the_taxonomies_term_template() {
 		$post_id = self::factory()->post->create();
@@ -76,7 +76,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27238
+	 * @see https://core.trac.wordpress.org/ticket/27238
 	 */
 	function test_the_taxonomies_term_template() {
 		$post_id = self::factory()->post->create();
@@ -154,7 +154,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21593
+	 * @see https://core.trac.wordpress.org/ticket/21593
 	 *
 	 * @expectedIncorrectUsage register_taxonomy
 	 */
@@ -163,7 +163,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31135
+	 * @see https://core.trac.wordpress.org/ticket/31135
 	 *
 	 * @expectedIncorrectUsage register_taxonomy
 	 */
@@ -172,7 +172,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26948
+	 * @see https://core.trac.wordpress.org/ticket/26948
 	 */
 	public function test_register_taxonomy_show_in_quick_edit_should_default_to_value_of_show_ui() {
 		register_taxonomy( 'wptests_tax_1', 'post', array(
@@ -191,7 +191,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 11058
+	 * @see https://core.trac.wordpress.org/ticket/11058
 	 */
 	function test_registering_taxonomies_to_object_types() {
 		// Create a taxonomy to test with
@@ -240,7 +240,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32590
+	 * @see https://core.trac.wordpress.org/ticket/32590
 	 */
 	public function test_register_taxonomy_for_post_type_for_taxonomy_with_no_object_type_should_filter_out_empty_object_types() {
 		register_taxonomy( 'wptests_tax', '' );
@@ -292,7 +292,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37094
+	 * @see https://core.trac.wordpress.org/ticket/37094
 	 */
 	public function test_term_assignment_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -315,7 +315,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37094
+	 * @see https://core.trac.wordpress.org/ticket/37094
 	 */
 	public function test_term_deletion_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -338,7 +338,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37094
+	 * @see https://core.trac.wordpress.org/ticket/37094
 	 */
 	public function test_post_deletion_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -361,7 +361,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25706
+	 * @see https://core.trac.wordpress.org/ticket/25706
 	 */
 	function test_in_category() {
 		$post = self::factory()->post->create_and_get();
@@ -481,7 +481,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15029
+	 * @see https://core.trac.wordpress.org/ticket/15029
 	 */
 	public function test_get_ancestors_taxonomy_post_type_conflict_resource_type_taxonomy() {
 		register_post_type( 'wptests_conflict', array(
@@ -513,7 +513,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21949
+	 * @see https://core.trac.wordpress.org/ticket/21949
 	 */
 	public function test_nonpublicly_queryable_taxonomy_should_not_be_queryable_using_taxname_query_var() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -533,7 +533,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21949
+	 * @see https://core.trac.wordpress.org/ticket/21949
 	 */
 	public function test_it_should_be_possible_to_register_a_query_var_that_matches_the_name_of_a_nonpublicly_queryable_taxonomy() {
 		global $wp;
@@ -568,7 +568,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21949
+	 * @see https://core.trac.wordpress.org/ticket/21949
 	 */
 	public function test_nonpublicly_queryable_taxonomy_should_not_be_queryable_using_taxonomy_and_term_vars() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -588,7 +588,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34491
+	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_public_taxonomy_should_be_publicly_queryable() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -610,7 +610,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34491
+	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_private_taxonomy_should_not_be_publicly_queryable() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -632,7 +632,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34491
+	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_private_taxonomy_should_be_overridden_by_publicly_queryable() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -655,7 +655,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35089
+	 * @see https://core.trac.wordpress.org/ticket/35089
 	 */
 	public function test_query_var_should_be_forced_to_false_for_non_public_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array(
@@ -668,14 +668,14 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_unknown_taxonomy() {
 		$this->assertWPError( unregister_taxonomy( 'foo' ) );
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_twice() {
 		register_taxonomy( 'foo', 'post' );
@@ -684,7 +684,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_disallow_builtin_taxonomy() {
 		$this->assertWPError( unregister_taxonomy( 'post_tag' ) );
@@ -692,7 +692,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_removes_query_vars() {
 		global $wp;
@@ -705,7 +705,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_removes_permastruct() {
 		$this->set_permalink_structure( '/%postname%' );
@@ -720,7 +720,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_removes_rewrite_rules() {
 		$this->set_permalink_structure( '/%postname%' );
@@ -740,7 +740,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_removes_taxonomy_from_global() {
 		global $wp_taxonomies;
@@ -757,7 +757,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_unregister_taxonomy_removes_meta_box_callback() {
 		global $wp_filter;
@@ -771,7 +771,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35227
+	 * @see https://core.trac.wordpress.org/ticket/35227
 	 */
 	public function test_taxonomy_does_not_exist_after_unregister_taxonomy() {
 		register_taxonomy( 'foo', 'post' );
@@ -781,7 +781,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39308
+	 * @see https://core.trac.wordpress.org/ticket/39308
 	 */
 	public function test_taxonomy_name_property_should_not_get_overridden_by_passed_args() {
 		register_taxonomy( 'foo', 'post', array( 'name' => 'bar' ) );

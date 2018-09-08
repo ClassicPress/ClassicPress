@@ -37,7 +37,7 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22896
+	 * @see https://core.trac.wordpress.org/ticket/22896
 	 *
 	 * @expectedIncorrectUsage wp_deregister_script
 	 */
@@ -63,7 +63,7 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24994
+	 * @see https://core.trac.wordpress.org/ticket/24994
 	 */
 	function test_exclusion_of_sourcemaps() {
 		$contents = trim( file_get_contents( ABSPATH . WPINC . '/js/jquery/jquery.js' ) );
@@ -71,7 +71,7 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28404
+	 * @see https://core.trac.wordpress.org/ticket/28404
 	 */
 	function test_wp_script_is_dep_enqueued() {
 		wp_enqueue_script( 'jquery-ui-accordion' );
@@ -85,7 +85,7 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 	/**
 	 * Test placing of jQuery in footer.
 	 *
-	 * @ticket 25247
+	 * @see https://core.trac.wordpress.org/ticket/25247
 	 */
 	function test_jquery_in_footer() {
 		$scripts = new WP_Scripts;

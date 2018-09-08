@@ -35,7 +35,7 @@ class Tests_Comment_GetCommentAuthorEmailLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36571
+	 * @see https://core.trac.wordpress.org/ticket/36571
 	 */
 	public function test_all_parameters() {
 		unset( $GLOBALS['comment'] );
@@ -81,7 +81,7 @@ class Tests_Comment_GetCommentAuthorEmailLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36571
+	 * @see https://core.trac.wordpress.org/ticket/36571
 	 */
 	public function test_comment_param_should_override_global() {
 		$comment = self::factory()->comment->create_and_get( array(

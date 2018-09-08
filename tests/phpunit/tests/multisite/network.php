@@ -117,7 +117,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37050
+	 * @see https://core.trac.wordpress.org/ticket/37050
 	 */
 	function test_wp_network_object_id_property_is_int() {
 		$id = self::factory()->network->create();
@@ -128,7 +128,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22917
+	 * @see https://core.trac.wordpress.org/ticket/22917
 	 */
 	public function test_get_blog_count_no_filter_applied() {
 		wp_update_network_counts();
@@ -146,7 +146,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22917
+	 * @see https://core.trac.wordpress.org/ticket/22917
 	 */
 	public function test_get_blog_count_enable_live_network_counts_false() {
 		wp_update_network_counts();
@@ -166,7 +166,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22917
+	 * @see https://core.trac.wordpress.org/ticket/22917
 	 */
 	public function test_get_blog_count_enabled_live_network_counts_true() {
 		wp_update_network_counts();
@@ -186,7 +186,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37865
+	 * @see https://core.trac.wordpress.org/ticket/37865
 	 */
 	public function test_get_blog_count_on_different_network() {
 		wp_update_network_site_counts( self::$different_network_id );
@@ -197,7 +197,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37866
+	 * @see https://core.trac.wordpress.org/ticket/37866
 	 */
 	public function test_get_user_count_on_different_network() {
 		wp_update_network_user_counts();
@@ -214,7 +214,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22917
+	 * @see https://core.trac.wordpress.org/ticket/22917
 	 */
 	function test_enable_live_network_user_counts_filter() {
 		// false for large networks by default
@@ -274,7 +274,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28651
+	 * @see https://core.trac.wordpress.org/ticket/28651
 	 */
 	function test_duplicate_network_active_plugin() {
 		$path = "hello.php";
@@ -357,7 +357,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37528
+	 * @see https://core.trac.wordpress.org/ticket/37528
 	 */
 	function test_wp_update_network_site_counts() {
 		update_network_option( null, 'blog_count', 40 );
@@ -377,7 +377,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37528
+	 * @see https://core.trac.wordpress.org/ticket/37528
 	 */
 	function test_wp_update_network_site_counts_on_different_network() {
 		update_network_option( self::$different_network_id, 'blog_count', 40 );
@@ -389,7 +389,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40349
+	 * @see https://core.trac.wordpress.org/ticket/40349
 	 */
 	public function test_wp_update_network_user_counts() {
 		global $wpdb;
@@ -405,7 +405,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40349
+	 * @see https://core.trac.wordpress.org/ticket/40349
 	 */
 	public function test_wp_update_network_user_counts_on_different_network() {
 		global $wpdb;
@@ -421,7 +421,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40386
+	 * @see https://core.trac.wordpress.org/ticket/40386
 	 */
 	public function test_wp_update_network_counts() {
 		delete_network_option( null, 'blog_count' );
@@ -436,7 +436,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40386
+	 * @see https://core.trac.wordpress.org/ticket/40386
 	 */
 	public function test_wp_update_network_counts_on_different_network() {
 		delete_network_option( self::$different_network_id, 'blog_count' );
@@ -451,7 +451,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40489
+	 * @see https://core.trac.wordpress.org/ticket/40489
 	 * @dataProvider data_wp_is_large_network
 	 */
 	public function test_wp_is_large_network( $using, $count, $expected, $different_network ) {
@@ -482,7 +482,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40489
+	 * @see https://core.trac.wordpress.org/ticket/40489
 	 * @dataProvider data_wp_is_large_network_filtered_by_component
 	 */
 	public function test_wp_is_large_network_filtered_by_component( $using, $count, $expected, $different_network ) {
@@ -524,7 +524,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40489
+	 * @see https://core.trac.wordpress.org/ticket/40489
 	 * @dataProvider data_wp_is_large_network_filtered_by_network
 	 */
 	public function test_wp_is_large_network_filtered_by_network( $using, $count, $expected, $different_network ) {
@@ -566,7 +566,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38699
+	 * @see https://core.trac.wordpress.org/ticket/38699
 	 */
 	public function test_wpmu_create_blog_updates_correct_network_site_count() {
 		$original_count = get_blog_count( self::$different_network_id );
@@ -585,7 +585,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29684
+	 * @see https://core.trac.wordpress.org/ticket/29684
 	 */
 	public function test_network_blog_id_set() {
 		$network = get_network( self::$different_network_id );

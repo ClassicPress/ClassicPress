@@ -190,7 +190,7 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * Test the magic __unset method
 	 *
-	 * @ticket 20043
+	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
 	public function test_user_unset() {
 		$user = new WP_User( self::$author_id );
@@ -206,7 +206,7 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * @depends test_user_unset
 	 * @expectedDeprecated WP_User->id
-	 * @ticket 20043
+	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
 	function test_user_unset_lowercase_id( $user ) {
 		// Test 'id' (lowercase)
@@ -218,7 +218,7 @@ class Tests_User extends WP_UnitTestCase {
 
 	/**
 	 * @depends test_user_unset_lowercase_id
-	 * @ticket 20043
+	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
 	function test_user_unset_uppercase_id( $user ) {
 		// Test 'ID'
@@ -442,7 +442,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 13317
+	 * @see https://core.trac.wordpress.org/ticket/13317
 	 */
 	function test_get_userdata() {
 		$this->assertFalse( get_userdata( 0 ) );
@@ -456,7 +456,7 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'stdClass', $user );
 		$this->assertEquals( self::$author_id, $user->ID );
 
-		// @ticket 23480
+		// @see https://core.trac.wordpress.org/ticket/23480
 		$user1 = WP_User::get_data_by( 'id', -1 );
 		$this->assertEquals( false, $user1 );
 
@@ -480,7 +480,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33869
+	 * @see https://core.trac.wordpress.org/ticket/33869
 	 */
 	public function test_user_get_data_by_ID_should_alias_to_id() {
 		$user = WP_User::get_data_by( 'ID', self::$author_id );
@@ -488,7 +488,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21431
+	 * @see https://core.trac.wordpress.org/ticket/21431
 	 */
 	function test_count_many_users_posts() {
 		$user_id_b = self::factory()->user->create( array( 'role' => 'author' ) );
@@ -516,7 +516,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22858
+	 * @see https://core.trac.wordpress.org/ticket/22858
 	 */
 	function test_wp_update_user_on_nonexistent_users() {
 		$user_id = 1;
@@ -529,7 +529,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28435
+	 * @see https://core.trac.wordpress.org/ticket/28435
 	 */
 	function test_wp_update_user_should_not_change_password_when_passed_WP_User_instance() {
 		$testuserid = 1;
@@ -543,7 +543,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28315
+	 * @see https://core.trac.wordpress.org/ticket/28315
 	 */
 	function test_user_meta_error() {
 		$id1 = wp_insert_user( array(
@@ -570,7 +570,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30647
+	 * @see https://core.trac.wordpress.org/ticket/30647
 	 */
 	function test_user_update_email_error() {
 		$id1 = wp_insert_user( array(
@@ -606,7 +606,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27317
+	 * @see https://core.trac.wordpress.org/ticket/27317
 	 * @dataProvider _illegal_user_logins_data
 	 */
 	function test_illegal_user_logins_single( $user_login ) {
@@ -630,7 +630,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27317
+	 * @see https://core.trac.wordpress.org/ticket/27317
 	 * @dataProvider _illegal_user_logins_data
 	 */
 	function test_illegal_user_logins_single_wp_create_user( $user_login ) {
@@ -650,7 +650,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27317
+	 * @see https://core.trac.wordpress.org/ticket/27317
 	 * @group ms-required
 	 */
 	function test_illegal_user_logins_multisite() {
@@ -689,7 +689,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24618
+	 * @see https://core.trac.wordpress.org/ticket/24618
 	 */
 	public function test_validate_username_string() {
 		$this->assertTrue( validate_username( 'johndoe' ) );
@@ -697,7 +697,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24618
+	 * @see https://core.trac.wordpress.org/ticket/24618
 	 */
 	public function test_validate_username_contains_uppercase_letters() {
 		if ( is_multisite() ) {
@@ -708,21 +708,21 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24618
+	 * @see https://core.trac.wordpress.org/ticket/24618
 	 */
 	public function test_validate_username_empty() {
 		$this->assertFalse( validate_username( '' ) );
 	}
 
 	/**
-	 * @ticket 24618
+	 * @see https://core.trac.wordpress.org/ticket/24618
 	 */
 	public function test_validate_username_invalid() {
 		$this->assertFalse( validate_username( '@#&99sd' ) );
 	}
 
  	/**
-	 * @ticket 29880
+	 * @see https://core.trac.wordpress.org/ticket/29880
 	 */
 	public function test_wp_insert_user_should_not_wipe_existing_password() {
 		$user_details = array(
@@ -744,7 +744,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29696
+	 * @see https://core.trac.wordpress.org/ticket/29696
 	 */
 	public function test_wp_insert_user_should_sanitize_user_nicename_parameter() {
 		$user = $this->author;
@@ -759,7 +759,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_accept_user_login_with_60_characters() {
 		$user_login = str_repeat( 'a', 60 );
@@ -778,7 +778,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_reject_user_login_over_60_characters() {
 		$user_login = str_repeat( 'a', 61 );
@@ -794,7 +794,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_reject_user_nicename_over_50_characters() {
 		$user_nicename = str_repeat( 'a', 51 );
@@ -810,7 +810,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_not_generate_user_nicename_longer_than_50_chars() {
 		$user_login = str_repeat( 'a', 55 );
@@ -827,7 +827,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_not_truncate_to_a_duplicate_user_nicename() {
 		$u1 = self::factory()->user->create( array(
@@ -853,7 +853,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33793
+	 * @see https://core.trac.wordpress.org/ticket/33793
 	 */
 	public function test_wp_insert_user_should_not_truncate_to_a_duplicate_user_nicename_when_suffix_has_more_than_one_character() {
 		$user_ids = self::factory()->user->create_many( 4, array(
@@ -884,7 +884,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28004
+	 * @see https://core.trac.wordpress.org/ticket/28004
 	 */
 	public function test_wp_insert_user_with_invalid_user_id() {
 		global $wpdb;
@@ -901,7 +901,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35750
+	 * @see https://core.trac.wordpress.org/ticket/35750
 	 */
 	public function test_wp_update_user_should_delete_userslugs_cache() {
 		$u = self::factory()->user->create();
@@ -980,7 +980,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32158
+	 * @see https://core.trac.wordpress.org/ticket/32158
 	 */
 	function test_email_case() {
 		// Alter the case of the email address (which stays the same).
@@ -994,7 +994,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32158
+	 * @see https://core.trac.wordpress.org/ticket/32158
 	 */
 	function test_email_change() {
 		// Change the email address.
@@ -1016,8 +1016,8 @@ class Tests_User extends WP_UnitTestCase {
 	 * Testing wp_new_user_notification email statuses.
 	 *
 	 * @dataProvider data_wp_new_user_notifications
-	 * @ticket 33654
-	 * @ticket 36009
+	 * @see https://core.trac.wordpress.org/ticket/33654
+	 * @see https://core.trac.wordpress.org/ticket/36009
 	 */
 	function test_wp_new_user_notification( $notify, $admin_email_sent_expected, $user_email_sent_expected ) {
 		reset_phpmailer_instance();
@@ -1092,7 +1092,7 @@ class Tests_User extends WP_UnitTestCase {
 	 * Set up a user and try sending a notification using the old, deprecated
 	 * function signature `wp_new_user_notification( $user, 'plaintext_password' );`.
 	 *
-	 * @ticket 33654
+	 * @see https://core.trac.wordpress.org/ticket/33654
 	 * @expectedDeprecated wp_new_user_notification
 	 */
 	function test_wp_new_user_notification_old_signature_throws_deprecated_warning_but_sends() {
@@ -1118,7 +1118,7 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * Set up a user and try sending a notification using `wp_new_user_notification( $user );`.
 	 *
-	 * @ticket 34377
+	 * @see https://core.trac.wordpress.org/ticket/34377
 	 */
 	function test_wp_new_user_notification_old_signature_no_password() {
 		reset_phpmailer_instance();
@@ -1142,7 +1142,7 @@ class Tests_User extends WP_UnitTestCase {
 
 	/**
 	 * Ensure blog's admin email change notification emails do not contain encoded HTML entities
-	 * @ticket 40015
+	 * @see https://core.trac.wordpress.org/ticket/40015
 	 */
 	function test_new_admin_email_notification_html_entities_decoded() {
 		reset_phpmailer_instance();
@@ -1277,7 +1277,7 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * Checks that calling edit_user() with no password returns an error when adding, and doesn't when updating.
 	 *
-	 * @ticket 35715
+	 * @see https://core.trac.wordpress.org/ticket/35715
 	 */
 	function test_edit_user_blank_pw() {
 		$_POST = $_GET = $_REQUEST = array();
@@ -1342,7 +1342,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16470
+	 * @see https://core.trac.wordpress.org/ticket/16470
 	 */
 	function test_send_confirmation_on_profile_email() {
 		reset_phpmailer_instance();
@@ -1375,7 +1375,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16470
+	 * @see https://core.trac.wordpress.org/ticket/16470
 	 */
 	function test_remove_send_confirmation_on_profile_email() {
 		remove_action( 'personal_options_update', 'send_confirmation_on_profile_email' );
@@ -1412,8 +1412,8 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * Ensure user email address change confirmation emails do not contain encoded HTML entities
 	 *
-	 * @ticket 16470
-	 * @ticket 40015
+	 * @see https://core.trac.wordpress.org/ticket/16470
+	 * @see https://core.trac.wordpress.org/ticket/40015
 	 */
 	function test_send_confirmation_on_profile_email_html_entities_decoded() {
 		$user_id = self::factory()->user->create( array(
@@ -1449,7 +1449,7 @@ class Tests_User extends WP_UnitTestCase {
 	/**
 	 * Testing the `wp_user_personal_data_exporter_no_user` function when no user exists.
 	 *
-	 * @ticket 43547
+	 * @see https://core.trac.wordpress.org/ticket/43547
 	 */
 	function test_wp_user_personal_data_exporter_no_user() {
 		$actual = wp_user_personal_data_exporter( 'not-a-user-email@test.com' );
@@ -1466,7 +1466,7 @@ class Tests_User extends WP_UnitTestCase {
 	 * Testing the `wp_user_personal_data_exporter_no_user` function when the requested
 	 * user exists.
 	 *
-	 * @ticket 43547
+	 * @see https://core.trac.wordpress.org/ticket/43547
 	 */
 	function test_wp_user_personal_data_exporter() {
 		$test_user = new WP_User( self::$contrib_id );

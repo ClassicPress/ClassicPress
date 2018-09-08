@@ -34,7 +34,7 @@ class Tests_XMLRPC_Basic extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34336
+	 * @see https://core.trac.wordpress.org/ticket/34336
 	 */
 	function test_multicall_invalidates_all_calls_after_invalid_call() {
 		$editor_id = $this->make_user_by_role( 'editor' );
@@ -95,7 +95,7 @@ class Tests_XMLRPC_Basic extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36586
+	 * @see https://core.trac.wordpress.org/ticket/36586
 	 */
 	function test_isStruct_on_non_numerically_indexed_array() {
 		$value  = new IXR_Value( array( '0.0' => 100 ) );

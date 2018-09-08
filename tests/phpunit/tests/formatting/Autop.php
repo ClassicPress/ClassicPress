@@ -65,7 +65,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 	/**
 	 * wpautop() Should not alter the contents of "<pre>" elements
 	 *
-	 * @ticket 19855
+	 * @see https://core.trac.wordpress.org/ticket/19855
 	 */
 	public function test_skip_pre_elements() {
 		$code = file_get_contents( DIR_TESTDATA . '/formatting/sizzle.js' );
@@ -92,7 +92,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 	/**
 	 * wpautop() Should not add <br/> to "<input>" elements
 	 *
-	 * @ticket 16456
+	 * @see https://core.trac.wordpress.org/ticket/16456
 	 */
 	public function test_skip_input_elements() {
 		$str = 'Username: <input type="text" id="username" name="username" /><br />Password: <input type="password" id="password1" name="password1" />';
@@ -102,7 +102,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 	/**
 	 * wpautop() Should not add <p> and <br/> around <source> and <track>
 	 *
-	 * @ticket 26864
+	 * @see https://core.trac.wordpress.org/ticket/26864
 	 */
 	public function test_source_track_elements() {
 		$content = "Paragraph one.\n\n" .
@@ -188,7 +188,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 	/**
 	 * wpautop() Should not add <p> and <br/> around <param> and <embed>
 	 *
-	 * @ticket 26864
+	 * @see https://core.trac.wordpress.org/ticket/26864
 	 */
 	public function test_param_embed_elements() {
 		$content1 = '
@@ -267,7 +267,7 @@ Paragraph two.';
 	/**
 	 * wpautop() Should not add <br/> to "<select>" or "<option>" elements
 	 *
-	 * @ticket 22230
+	 * @see https://core.trac.wordpress.org/ticket/22230
 	 */
 	public function test_skip_select_option_elements() {
 		$str = 'Country: <select id="state" name="state"><option value="1">Alabama</option><option value="2">Alaska</option><option value="3">Arizona</option><option value="4">Arkansas</option><option value="5">California</option></select>';
@@ -277,7 +277,7 @@ Paragraph two.';
 	/**
 	 * wpautop() should treat block level HTML elements as blocks.
 	 *
-	 * @ticket 27268
+	 * @see https://core.trac.wordpress.org/ticket/27268
 	 */
 	function test_that_wpautop_treats_block_level_elements_as_blocks() {
 		$blocks = array(
@@ -372,7 +372,7 @@ Paragraph two.';
 	/**
 	 * wpautop() should autop a blockquote's contents but not the blockquote itself
 	 *
-	 * @ticket 27268
+	 * @see https://core.trac.wordpress.org/ticket/27268
 	 */
 	function test_that_wpautop_does_not_wrap_blockquotes_but_does_autop_their_contents() {
 		$content  = "<blockquote>foo</blockquote>";
@@ -384,7 +384,7 @@ Paragraph two.';
 	/**
 	 * wpautop() should treat inline HTML elements as inline.
 	 *
-	 * @ticket 27268
+	 * @see https://core.trac.wordpress.org/ticket/27268
 	 */
 	function test_that_wpautop_treats_inline_elements_as_inline() {
 		$inlines = array(
@@ -432,7 +432,7 @@ Paragraph two.';
 	/**
 	 * Do not allow newlines within HTML elements to become mangled.
 	 *
-	 * @ticket 33106
+	 * @see https://core.trac.wordpress.org/ticket/33106
 	 * @dataProvider data_element_sanity
 	 */
 	function test_element_sanity( $input, $output ) {
@@ -485,7 +485,7 @@ Paragraph two.';
 	/**
 	 * wpautop() should not convert line breaks after <br /> tags
 	 *
-	 * @ticket 33377
+	 * @see https://core.trac.wordpress.org/ticket/33377
 	 */
 	function test_that_wpautop_skips_line_breaks_after_br() {
 		$content = '
@@ -508,7 +508,7 @@ line 5</p>';
 	/**
 	 * wpautop() should convert multiple line breaks into a paragraph regarless of <br /> format
 	 *
-	 * @ticket 33377
+	 * @see https://core.trac.wordpress.org/ticket/33377
 	 */
 	function test_that_wpautop_adds_a_paragraph_after_multiple_br() {
 		$content = '
@@ -526,7 +526,7 @@ line 2<br/>
 
 
 	/**
-	 * @ticket 4857
+	 * @see https://core.trac.wordpress.org/ticket/4857
 	 */
 	function test_that_text_before_blocks_is_peed() {
 		$content = 'a<div>b</div>';
@@ -541,7 +541,7 @@ line 2<br/>
 	 * @covers ::wpautop
 	 * @uses trim
 	 *
-	 * @ticket 39307
+	 * @see https://core.trac.wordpress.org/ticket/39307
 	 */
 	function test_that_wpautop_doses_not_add_extra_closing_p_in_figure() {
 		$content1 = $expected1 = '<figure><img src="example.jpg" /><figcaption>Caption</figcaption></figure>';

@@ -1018,7 +1018,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 39061
+	 * @see https://core.trac.wordpress.org/ticket/39061
 	 */
 	public function test_get_items_invalid_max_pages() {
 		// Out of bounds
@@ -1429,7 +1429,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38698
+	 * @see https://core.trac.wordpress.org/ticket/38698
 	 */
 	public function test_create_item_with_template() {
 		wp_set_current_user( self::$editor_id );
@@ -1458,7 +1458,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38698
+	 * @see https://core.trac.wordpress.org/ticket/38698
 	 */
 	public function test_create_item_with_template_none_available() {
 		wp_set_current_user( self::$editor_id );
@@ -1474,7 +1474,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38877
+	 * @see https://core.trac.wordpress.org/ticket/38877
 	 */
 	public function test_create_item_with_template_none() {
 		wp_set_current_user( self::$editor_id );
@@ -2019,7 +2019,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_create_post_with_categories_that_cannot_be_assigned_by_current_user() {
 		$cats = self::factory()->category->create_many( 2 );
@@ -2629,7 +2629,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_update_post_with_categories_that_cannot_be_assigned_by_current_user() {
 		$cats = self::factory()->category->create_many( 2 );
@@ -2651,7 +2651,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38698
+	 * @see https://core.trac.wordpress.org/ticket/38698
 	 */
 	public function test_update_item_with_template() {
 		wp_set_current_user( self::$editor_id );
@@ -2678,7 +2678,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 38877
+	 * @see https://core.trac.wordpress.org/ticket/38877
 	 */
 	public function test_update_item_with_template_none() {
 		wp_set_current_user( self::$editor_id );
@@ -2709,7 +2709,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	 * Test update_item() with same template that no longer exists.
 	 *
 	 * @covers WP_REST_Posts_Controller::check_template()
-	 * @ticket 39996
+	 * @see https://core.trac.wordpress.org/ticket/39996
 	 */
 	public function test_update_item_with_same_template_that_no_longer_exists() {
 
@@ -3064,7 +3064,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	}
 
 	/**
-	 * @ticket 39805
+	 * @see https://core.trac.wordpress.org/ticket/39805
 	 */
 	public function test_get_post_view_context_properties() {
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );

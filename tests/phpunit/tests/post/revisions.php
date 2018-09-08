@@ -27,8 +27,8 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Note: Test needs reviewing when #16215 is fixed because I'm not sure the test current tests the "correct" behavior
-	 * @ticket 20982
-	 * @ticket 16215
+	 * @see https://core.trac.wordpress.org/ticket/20982
+	 * @see https://core.trac.wordpress.org/ticket/16215
 	 */
 	function test_revision_restore_updates_edit_last_post_meta() {
 		//create a post as Author
@@ -59,8 +59,8 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 7392
-	* @ticket 9843
+	* @see https://core.trac.wordpress.org/ticket/7392
+	* @see https://core.trac.wordpress.org/ticket/9843
 	*/
 	function test_revision_dont_save_revision_if_unchanged() {
 		$post = get_default_post_to_edit( 'post', true );
@@ -95,8 +95,8 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 7392
-	* @ticket 9843
+	* @see https://core.trac.wordpress.org/ticket/7392
+	* @see https://core.trac.wordpress.org/ticket/9843
 	*/
 	function test_revision_force_save_revision_even_if_unchanged() {
 		add_filter( 'wp_save_post_revision_check_for_changes', '__return_false' );
@@ -134,7 +134,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=view case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_view_caps_post() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'post', 'post_author' => self::$editor_user_id ) );
@@ -156,7 +156,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=restore case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_restore_caps_post() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'post', 'post_author' => self::$editor_user_id ) );
@@ -176,7 +176,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=diff case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_diff_caps_post() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'post', 'post_author' => self::$editor_user_id ) );
@@ -198,7 +198,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=view case of wp-admin/revision.php with a CPT with Custom Capabilities
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_view_caps_cpt() {
 		register_post_type( $this->post_type, array(
@@ -226,7 +226,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=restore case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_restore_caps_cpt() {
 		register_post_type( $this->post_type, array(
@@ -258,7 +258,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=restore case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_restore_caps_before_publish() {
 		register_post_type( $this->post_type, array(
@@ -298,7 +298,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 	/**
 	 * Tests the Caps used in the action=diff case of wp-admin/revision.php
-	 * @ticket 16847
+	 * @see https://core.trac.wordpress.org/ticket/16847
 	 */
 	function test_revision_diff_caps_cpt() {
 		register_post_type( $this->post_type, array(
@@ -325,7 +325,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26042
+	 * @see https://core.trac.wordpress.org/ticket/26042
 	 */
 	function test_wp_get_post_revisions_should_order_by_post_date() {
 		global $wpdb;
@@ -355,7 +355,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26042
+	 * @see https://core.trac.wordpress.org/ticket/26042
 	 */
 	function test_wp_get_post_revisions_should_order_by_ID_when_post_date_matches() {
 		$post = self::factory()->post->create_and_get( array( 'post_title' => 'some-post', 'post_type' => 'post', 'post_content' => 'some_content' ) );

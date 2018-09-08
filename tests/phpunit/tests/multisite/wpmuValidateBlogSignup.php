@@ -90,7 +90,7 @@ class Tests_Multisite_WpmuValidateBlogSignup extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39676
+	 * @see https://core.trac.wordpress.org/ticket/39676
 	 *
 	 * @dataProvider data_filter_minimum_site_name_length
 	 */

@@ -37,7 +37,7 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 13905
+	 * @see https://core.trac.wordpress.org/ticket/13905
 	 */
 	function test_capability_type_post_with_invalid_id() {
 		$this->assertEquals(
@@ -226,7 +226,7 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20488
+	 * @see https://core.trac.wordpress.org/ticket/20488
 	 */
 	function test_file_edit_caps_not_reliant_on_unfiltered_html_constant() {
 		$this->assertFalse( defined( 'DISALLOW_FILE_MODS' ) );
@@ -244,7 +244,7 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	/**
 	 * Test a post without an author.
 	 *
-	 * @ticket 27020
+	 * @see https://core.trac.wordpress.org/ticket/27020
 	 */
 	function test_authorless_posts_capabilties() {
 		$post_id = self::factory()->post->create( array( 'post_author' => 0, 'post_type' => 'post', 'post_status' => 'publish' ) );
@@ -258,7 +258,7 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	/**
 	 * Test deleting front page.
 	 *
-	 * @ticket 37580
+	 * @see https://core.trac.wordpress.org/ticket/37580
 	 */
 	function test_only_users_who_can_manage_options_can_delete_page_on_front() {
 		$post_id = self::factory()->post->create( array(
@@ -276,7 +276,7 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	/**
 	 * Test deleting posts page.
 	 *
-	 * @ticket 37580
+	 * @see https://core.trac.wordpress.org/ticket/37580
 	 */
 	function test_only_users_who_can_manage_options_can_delete_page_for_posts() {
 		$post_id = self::factory()->post->create( array(

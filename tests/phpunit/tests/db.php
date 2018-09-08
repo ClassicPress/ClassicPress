@@ -53,7 +53,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * Test that WPDB will reconnect when the DB link dies
-	 * @ticket 5932
+	 * @see https://core.trac.wordpress.org/ticket/5932
 	 */
 	public function test_db_reconnect() {
 		global $wpdb;
@@ -76,7 +76,7 @@ class Tests_DB extends WP_UnitTestCase {
 	 * Test that floats formatted as "0,700" get sanitized properly by wpdb
 	 * @global mixed $wpdb
 	 *
-	 * @ticket 19861
+	 * @see https://core.trac.wordpress.org/ticket/19861
 	 */
 	public function test_locale_floats() {
 		global $wpdb;
@@ -120,7 +120,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10041
+	 * @see https://core.trac.wordpress.org/ticket/10041
 	 */
 	function test_esc_like() {
 		global $wpdb;
@@ -152,7 +152,7 @@ class Tests_DB extends WP_UnitTestCase {
 	 * When escaped properly, a string literal is always LIKE itself (1)
 	 * and never LIKE any other string literal (0) no matter how crazy the SQL looks.
 	 *
-	 * @ticket 10041
+	 * @see https://core.trac.wordpress.org/ticket/10041
 	 * @dataProvider data_like_query
 	 * @param $data string The haystack, raw.
 	 * @param $like string The like phrase, raw.
@@ -219,7 +219,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18510
+	 * @see https://core.trac.wordpress.org/ticket/18510
 	 */
 	function test_wpdb_supposedly_protected_properties() {
 		global $wpdb;
@@ -235,7 +235,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_wpdb_actually_protected_properties() {
 		global $wpdb;
@@ -250,7 +250,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18510
+	 * @see https://core.trac.wordpress.org/ticket/18510
 	 */
 	function test_wpdb_nonexistent_properties() {
 		global $wpdb;
@@ -265,7 +265,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * Test that an escaped %%f is not altered
-	 * @ticket 19861
+	 * @see https://core.trac.wordpress.org/ticket/19861
 	 */
 	public function test_double_escaped_placeholders() {
 		global $wpdb;
@@ -279,7 +279,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * Test that SQL modes are set correctly
-	 * @ticket 26847
+	 * @see https://core.trac.wordpress.org/ticket/26847
 	 */
 	function test_set_sql_mode() {
 		global $wpdb;
@@ -298,7 +298,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * Test that incompatible SQL modes are blocked
-	 * @ticket 26847
+	 * @see https://core.trac.wordpress.org/ticket/26847
 	 */
 	function test_set_incompatible_sql_mode() {
 		global $wpdb;
@@ -315,7 +315,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * Test that incompatible SQL modes can be changed
-	 * @ticket 26847
+	 * @see https://core.trac.wordpress.org/ticket/26847
 	 */
 	function test_set_allowed_incompatible_sql_mode() {
 		global $wpdb;
@@ -347,7 +347,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25604
+	 * @see https://core.trac.wordpress.org/ticket/25604
 	 * @expectedIncorrectUsage wpdb::prepare
 	 */
 	function test_prepare_without_arguments() {
@@ -399,7 +399,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42040
+	 * @see https://core.trac.wordpress.org/ticket/42040
 	 * @dataProvider data_prepare_incorrect_arg_count
 	 * @expectedIncorrectUsage wpdb::prepare
 	 */
@@ -579,7 +579,7 @@ class Tests_DB extends WP_UnitTestCase {
 	/**
 	 * wpdb::update() requires a WHERE condition.
 	 *
-	 * @ticket 26106
+	 * @see https://core.trac.wordpress.org/ticket/26106
 	 */
 	function test_empty_where_on_update() {
 		global $wpdb;
@@ -601,7 +601,7 @@ class Tests_DB extends WP_UnitTestCase {
 	/**
 	 * mysqli_ incorrect flush and further sync issues.
 	 *
-	 * @ticket 28155
+	 * @see https://core.trac.wordpress.org/ticket/28155
 	 */
 	function test_mysqli_flush_sync() {
 		global $wpdb;
@@ -634,7 +634,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_get_table_from_query() {
 		$table = 'a_test_table_name';
@@ -740,7 +740,7 @@ class Tests_DB extends WP_UnitTestCase {
 			"SHOW CREATE TABLE $table",
 			"SHOW INDEX FROM $table",
 
-			// @ticket 32763
+			// @see https://core.trac.wordpress.org/ticket/32763
 			"SELECT " . str_repeat( 'a', 10000 ) . " FROM (SELECT * FROM $table) as subquery",
 		);
 
@@ -758,7 +758,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_get_table_from_query
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_get_table_from_query( $query, $table ) {
 		$this->assertEquals( $table, self::$_wpdb->get_table_from_query( $query ) );
@@ -773,14 +773,14 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_get_table_from_query_false
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_get_table_from_query_false( $query ) {
 		$this->assertFalse( self::$_wpdb->get_table_from_query( $query ) );
 	}
 
 	/**
-	 * @ticket 38751
+	 * @see https://core.trac.wordpress.org/ticket/38751
 	 */
 	function data_get_escaped_table_from_show_query() {
 		return array(
@@ -800,14 +800,14 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_get_escaped_table_from_show_query
-	 * @ticket 38751
+	 * @see https://core.trac.wordpress.org/ticket/38751
 	 */
 	function test_get_escaped_table_from_show_query( $query, $table ) {
 		$this->assertEquals( $table, self::$_wpdb->get_table_from_query( $query ) );
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_process_field_formats() {
 		$core_db_fields_no_format_specified = array(
@@ -866,7 +866,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_process_field_formats
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_process_field_formats( $data, $format, $expected, $message ) {
 		$actual = self::$_wpdb->process_field_formats( $data, $format );
@@ -874,7 +874,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_process_fields() {
 		global $wpdb;
@@ -903,7 +903,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 * @depends test_process_fields
 	 */
 	function test_process_fields_on_nonexistent_table( $data ) {
@@ -914,7 +914,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_pre_get_table_charset_filter() {
 		add_filter( 'pre_get_table_charset', array( $this, 'filter_pre_get_table_charset' ), 10, 2 );
@@ -928,7 +928,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_pre_get_col_charset_filter() {
 		add_filter( 'pre_get_col_charset', array( $this, 'filter_pre_get_col_charset' ), 10, 3 );
@@ -942,7 +942,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15158
+	 * @see https://core.trac.wordpress.org/ticket/15158
 	 */
 	function test_null_insert() {
 		global $wpdb;
@@ -964,7 +964,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15158
+	 * @see https://core.trac.wordpress.org/ticket/15158
 	 */
 	function test_null_update_value() {
 		global $wpdb;
@@ -1002,7 +1002,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15158
+	 * @see https://core.trac.wordpress.org/ticket/15158
 	 */
 	function test_null_update_where() {
 		global $wpdb;
@@ -1040,7 +1040,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15158
+	 * @see https://core.trac.wordpress.org/ticket/15158
 	 */
 	function test_null_delete() {
 		global $wpdb;
@@ -1076,7 +1076,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34903
+	 * @see https://core.trac.wordpress.org/ticket/34903
 	 */
 	function test_close() {
 		global $wpdb;
@@ -1095,7 +1095,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36917
+	 * @see https://core.trac.wordpress.org/ticket/36917
 	 */
 	function test_charset_not_determined_when_disconnected() {
 		global $wpdb;
@@ -1113,7 +1113,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36917
+	 * @see https://core.trac.wordpress.org/ticket/36917
 	 */
 	function test_charset_switched_to_utf8mb4() {
 		global $wpdb;
@@ -1131,8 +1131,8 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32105
-	 * @ticket 36917
+	 * @see https://core.trac.wordpress.org/ticket/32105
+	 * @see https://core.trac.wordpress.org/ticket/36917
 	 */
 	function test_collate_switched_to_utf8mb4_520() {
 		global $wpdb;
@@ -1150,8 +1150,8 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32405
-	 * @ticket 36917
+	 * @see https://core.trac.wordpress.org/ticket/32405
+	 * @see https://core.trac.wordpress.org/ticket/36917
 	 */
 	function test_non_unicode_collations() {
 		global $wpdb;
@@ -1169,7 +1169,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37982
+	 * @see https://core.trac.wordpress.org/ticket/37982
 	 */
 	function test_charset_switched_to_utf8() {
 		global $wpdb;
@@ -1513,7 +1513,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider parse_db_host_data_provider
-	 * @ticket 41722
+	 * @see https://core.trac.wordpress.org/ticket/41722
 	 */
 	public function test_parse_db_host( $host_string, $expect_bail, $host, $port, $socket, $is_ipv6 ) {
 		global $wpdb;

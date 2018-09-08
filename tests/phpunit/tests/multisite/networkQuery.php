@@ -381,7 +381,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41347
+	 * @see https://core.trac.wordpress.org/ticket/41347
 	 */
 	public function test_wp_network_query_cache_with_different_fields_no_count() {
 		global $wpdb;
@@ -404,7 +404,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41347
+	 * @see https://core.trac.wordpress.org/ticket/41347
 	 */
 	public function test_wp_network_query_cache_with_different_fields_active_count() {
 		global $wpdb;
@@ -429,7 +429,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41347
+	 * @see https://core.trac.wordpress.org/ticket/41347
 	 */
 	public function test_wp_network_query_cache_with_same_fields_different_count() {
 		global $wpdb;

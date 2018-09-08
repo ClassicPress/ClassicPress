@@ -21,7 +21,7 @@ class Tests_Canonical_HTTPS extends WP_Canonical_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27954
+	 * @see https://core.trac.wordpress.org/ticket/27954
 	 */
 	public function test_http_request_with_http_home() {
 
@@ -32,7 +32,7 @@ class Tests_Canonical_HTTPS extends WP_Canonical_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27954
+	 * @see https://core.trac.wordpress.org/ticket/27954
 	 */
 	public function test_https_request_with_http_home() {
 
@@ -43,7 +43,7 @@ class Tests_Canonical_HTTPS extends WP_Canonical_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27954
+	 * @see https://core.trac.wordpress.org/ticket/27954
 	 */
 	public function test_https_request_with_https_home() {
 

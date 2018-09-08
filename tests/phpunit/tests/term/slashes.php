@@ -3,7 +3,7 @@
 /**
  * @group term
  * @group slashes
- * @ticket 21767
+ * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Term_Slashes extends WP_Ajax_UnitTestCase {
 	function setUp() {

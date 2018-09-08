@@ -58,7 +58,7 @@ class Tests_Functions_WpValidateBoolean extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30238
+	 * @see https://core.trac.wordpress.org/ticket/30238
 	 */
 	public function test_string_false_uppercase() {
 		// Differs from (bool) conversion.
@@ -66,7 +66,7 @@ class Tests_Functions_WpValidateBoolean extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30238
+	 * @see https://core.trac.wordpress.org/ticket/30238
 	 */
 	public function test_string_false_mixedcase() {
 		// Differs from (bool) conversion.

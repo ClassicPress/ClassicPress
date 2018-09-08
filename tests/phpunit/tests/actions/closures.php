@@ -8,7 +8,7 @@
 class Tests_Actions_Closures extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 10493
+	 * @see https://core.trac.wordpress.org/ticket/10493
 	 */
 	function test_action_closure() {
 		$tag = 'test_action_closure';

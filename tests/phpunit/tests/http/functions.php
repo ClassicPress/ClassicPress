@@ -77,7 +77,7 @@ class Tests_HTTP_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33711
+	 * @see https://core.trac.wordpress.org/ticket/33711
 	 */
 	function test_get_response_cookies() {
 		$url = 'https://login.wordpress.org/wp-login.php';
@@ -103,7 +103,7 @@ class Tests_HTTP_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37437
+	 * @see https://core.trac.wordpress.org/ticket/37437
 	 */
 	function test_get_response_cookies_with_wp_http_cookie_object() {
 		$url = 'http://example.org';
@@ -124,7 +124,7 @@ class Tests_HTTP_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37437
+	 * @see https://core.trac.wordpress.org/ticket/37437
 	 */
 	function test_get_response_cookies_with_name_value_array() {
 		$url = 'http://example.org';

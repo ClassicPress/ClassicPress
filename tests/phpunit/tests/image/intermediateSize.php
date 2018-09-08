@@ -63,7 +63,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 17626
+	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
 	function test_get_intermediate_sizes_by_name() {
 		add_image_size( 'test-size', 330, 220, true );
@@ -83,7 +83,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 17626
+	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
 	function test_get_intermediate_sizes_by_array_exact() {
 		// Only one dimention match shouldn't return false positive (see: 17626)
@@ -104,7 +104,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 17626
+	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
 	function test_get_intermediate_sizes_by_array_nearest() {
 		// If an exact size is not found, it should be returned
@@ -126,7 +126,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 17626
+	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
 	function test_get_intermediate_sizes_by_array_nearest_false() {
 		// If an exact size is not found, it should be returned
@@ -147,7 +147,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	* @ticket 17626
+	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
 	function test_get_intermediate_sizes_by_array_zero_height() {
 		// Generate random width
@@ -174,8 +174,8 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17626
-	 * @ticket 34087
+	 * @see https://core.trac.wordpress.org/ticket/17626
+	 * @see https://core.trac.wordpress.org/ticket/34087
 	 */
 	function test_get_intermediate_sizes_by_array_zero_width() {
 		// 202 is the smallest height that will trigger a miss for 'false-height'.
@@ -202,8 +202,8 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17626
-	 * @ticket 34087
+	 * @see https://core.trac.wordpress.org/ticket/17626
+	 * @see https://core.trac.wordpress.org/ticket/34087
 	 */
 	public function test_get_intermediate_sizes_should_match_size_with_off_by_one_aspect_ratio() {
 		// Original is 600x400. 300x201 is close enough to match.
@@ -226,7 +226,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34384
+	 * @see https://core.trac.wordpress.org/ticket/34384
 	 */
 	public function test_get_intermediate_size_with_small_size_array() {
 		// Add a hard cropped size that matches the aspect ratio we're going to test.
@@ -243,7 +243,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34384
+	 * @see https://core.trac.wordpress.org/ticket/34384
 	 */
 	public function test_get_intermediate_size_with_small_size_array_fallback() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';

@@ -10,7 +10,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23167
+	 * @see https://core.trac.wordpress.org/ticket/23167
 	 */
 	function test_get_pages_cache() {
 		global $wpdb;
@@ -96,7 +96,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_cache_should_be_invalidated_by_add_post_meta() {
 		$posts = self::factory()->post->create_many( 2, array(
@@ -125,7 +125,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_cache_should_be_invalidated_by_update_post_meta() {
 		$posts = self::factory()->post->create_many( 2, array(
@@ -155,7 +155,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_cache_should_be_invalidated_by_delete_post_meta() {
 		$posts = self::factory()->post->create_many( 2, array(
@@ -185,7 +185,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_cache_should_be_invalidated_by_delete_post_meta_by_key() {
 		$posts = self::factory()->post->create_many( 2, array(
@@ -215,7 +215,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20376
+	 * @see https://core.trac.wordpress.org/ticket/20376
 	 */
 	function test_get_pages_meta() {
 		$posts = self::factory()->post->create_many( 3, array( 'post_type' => 'page' ) );
@@ -229,7 +229,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22074
+	 * @see https://core.trac.wordpress.org/ticket/22074
 	 */
 	function test_get_pages_include_exclude() {
 		$page_ids = array();
@@ -254,7 +254,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 9470
+	 * @see https://core.trac.wordpress.org/ticket/9470
 	 */
 	function test_get_pages_parent() {
 		$page_id1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -282,7 +282,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22389
+	 * @see https://core.trac.wordpress.org/ticket/22389
 	 */
 	function test_wp_dropdown_pages() {
 		self::factory()->post->create_many( 5, array( 'post_type' => 'page' ) );
@@ -293,7 +293,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22208
+	 * @see https://core.trac.wordpress.org/ticket/22208
 	 */
 	function test_get_chidren_fields_ids() {
 		$post_id = self::factory()->post->create();
@@ -304,7 +304,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25750
+	 * @see https://core.trac.wordpress.org/ticket/25750
 	 */
 	function test_get_pages_hierarchical_and_no_parent() {
 		global $wpdb;
@@ -334,7 +334,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18701
+	 * @see https://core.trac.wordpress.org/ticket/18701
 	 */
 	public function test_get_pages_hierarchical_empty_child_of() {
 		$page_1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -368,7 +368,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18701
+	 * @see https://core.trac.wordpress.org/ticket/18701
 	 */
 	public function test_get_pages_non_hierarchical_empty_child_of() {
 		$page_1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -394,7 +394,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18701
+	 * @see https://core.trac.wordpress.org/ticket/18701
 	 */
 	public function test_get_pages_hierarchical_non_empty_child_of() {
 		$page_1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -422,7 +422,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18701
+	 * @see https://core.trac.wordpress.org/ticket/18701
 	 */
 	public function test_get_pages_non_hierarchical_non_empty_child_of() {
 		$page_1 = self::factory()->post->create( array( 'post_type' => 'page' ) );

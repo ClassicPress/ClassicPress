@@ -87,7 +87,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17305
+	 * @see https://core.trac.wordpress.org/ticket/17305
 	 */
 	function test_wp_mail_rfc2822_addresses() {
 		$to        = 'Name <address@tld.com>';
@@ -117,7 +117,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17305
+	 * @see https://core.trac.wordpress.org/ticket/17305
 	 */
 	function test_wp_mail_multiple_rfc2822_to_addresses() {
 		$to      = 'Name <address@tld.com>, Another Name <another_address@different-tld.com>';
@@ -150,7 +150,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18463
+	 * @see https://core.trac.wordpress.org/ticket/18463
 	 */
 	function test_wp_mail_to_address_no_name() {
 		$to      = '<address@tld.com>';
@@ -165,7 +165,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23642
+	 * @see https://core.trac.wordpress.org/ticket/23642
 	 */
 	function test_wp_mail_return_value() {
 		// No errors
@@ -179,7 +179,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_valid_from_header() {
 		$to       = 'address@tld.com';
@@ -195,7 +195,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_empty_from_header() {
 		$to       = 'address@tld.com';
@@ -211,7 +211,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_empty_from_name_for_the_from_header() {
 		$to       = 'address@tld.com';
@@ -227,7 +227,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_valid_content_type_header() {
 		$to       = 'address@tld.com';
@@ -243,7 +243,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_empty_content_type_header() {
 		$to       = 'address@tld.com';
@@ -259,7 +259,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_empty_charset_for_the_content_type_header() {
 		$to       = 'address@tld.com';
@@ -292,7 +292,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	 * > Content-Transfer-Encoding header field is not present.
 	 * https://tools.ietf.org/html/rfc2045#section-6.1
 	 *
-	 * @ticket 28039
+	 * @see https://core.trac.wordpress.org/ticket/28039
 	 */
 	function test_wp_mail_content_transfer_encoding_in_quoted_printable_multipart() {
 		add_action( 'phpmailer_init', array( $this, 'wp_mail_quoted_printable' ) );
@@ -309,7 +309,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21659
+	 * @see https://core.trac.wordpress.org/ticket/21659
 	 */
 	public function test_wp_mail_addresses_arent_encoded() {
 		$to      = 'Lukáš To <to@example.org>';
@@ -351,7 +351,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	 * by the receiving MTA, so it's the admin's responsibility to
 	 * set it correctly.
 	 *
-	 * @ticket 37736
+	 * @see https://core.trac.wordpress.org/ticket/37736
 	 */
 	public function test_wp_mail_sender_not_set() {
 		wp_mail( 'user@example.org', 'Testing the Sender field', 'The Sender field should not have been set.' );
@@ -362,7 +362,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35598
+	 * @see https://core.trac.wordpress.org/ticket/35598
 	 */
 	public function test_phpmailer_exception_thrown() {
 		$to       = 'an_invalid_address';

@@ -46,7 +46,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	/**
 	 * Test all key only meta queries use the same INNER JOIN when using relation=OR
 	 *
-	 * @ticket 19729
+	 * @see https://core.trac.wordpress.org/ticket/19729
 	 */
 	public function test_single_inner_join_for_keys_only() {
 
@@ -197,7 +197,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23033
+	 * @see https://core.trac.wordpress.org/ticket/23033
 	 */
 	public function test_get_cast_for_type() {
 		$query = new WP_Meta_Query();
@@ -462,7 +462,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22096
+	 * @see https://core.trac.wordpress.org/ticket/22096
 	 */
 	public function test_empty_value_sql() {
 		global $wpdb;
@@ -483,7 +483,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22967
+	 * @see https://core.trac.wordpress.org/ticket/22967
 	 */
 	public function test_null_value_sql() {
 		global $wpdb;
@@ -808,7 +808,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32592
+	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_false() {
 		$q = new WP_Meta_Query( array(
@@ -834,7 +834,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32592
+	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_true_for_top_level_or() {
 		$q = new WP_Meta_Query( array(
@@ -860,7 +860,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32592
+	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_true_for_nested_or() {
 		$q = new WP_Meta_Query( array(

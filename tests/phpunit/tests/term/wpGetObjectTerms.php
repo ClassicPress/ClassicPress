@@ -28,7 +28,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 11003
+	 * @see https://core.trac.wordpress.org/ticket/11003
 	 */
 	public function test_should_not_filter_out_duplicate_terms_associated_with_different_objects() {
 		$post_id1 = self::factory()->post->create();
@@ -51,7 +51,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17646
+	 * @see https://core.trac.wordpress.org/ticket/17646
 	 */
 	public function test_should_return_objects_with_int_properties() {
 		$post_id = self::factory()->post->create();
@@ -70,7 +70,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26339
+	 * @see https://core.trac.wordpress.org/ticket/26339
 	 */
 	public function test_references_should_be_reset_after_wp_get_object_terms_filter() {
 		$post_id = self::factory()->post->create();
@@ -86,7 +86,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40154
+	 * @see https://core.trac.wordpress.org/ticket/40154
 	 */
 	public function test_taxonomies_passed_to_wp_get_object_terms_filter_should_be_quoted() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -247,7 +247,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28688
+	 * @see https://core.trac.wordpress.org/ticket/28688
 	 */
 	public function test_orderby_parent() {
 		$p = self::factory()->post->create();
@@ -282,7 +282,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28688
+	 * @see https://core.trac.wordpress.org/ticket/28688
 	 */
 	public function test_orderby_taxonomy() {
 		register_taxonomy( 'wptests_tax_2', 'post' );
@@ -313,7 +313,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28688
+	 * @see https://core.trac.wordpress.org/ticket/28688
 	 */
 	public function test_orderby_tt_id() {
 		$p = self::factory()->post->create();
@@ -376,7 +376,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15675
+	 * @see https://core.trac.wordpress.org/ticket/15675
 	 */
 	public function test_parent() {
 		register_taxonomy( 'wptests_tax2', 'post', array(
@@ -411,7 +411,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15675
+	 * @see https://core.trac.wordpress.org/ticket/15675
 	 */
 	public function test_parent_0() {
 		$t1 = self::factory()->term->create( array(
@@ -442,7 +442,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10142
+	 * @see https://core.trac.wordpress.org/ticket/10142
 	 */
 	public function test_termmeta_cache_should_be_primed_by_default() {
 		global $wpdb;
@@ -468,7 +468,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10142
+	 * @see https://core.trac.wordpress.org/ticket/10142
 	 */
 	public function test_termmeta_cache_should_not_be_primed_when_update_term_meta_cache_is_false() {
 		global $wpdb;
@@ -496,7 +496,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36932
+	 * @see https://core.trac.wordpress.org/ticket/36932
 	 */
 	public function test_termmeta_cache_should_be_primed_when_fields_is_all_with_object_id() {
 		global $wpdb;
@@ -525,7 +525,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36932
+	 * @see https://core.trac.wordpress.org/ticket/36932
 	 */
 	public function test_termmeta_cache_should_be_primed_when_fields_is_ids() {
 		global $wpdb;
@@ -554,7 +554,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10142
+	 * @see https://core.trac.wordpress.org/ticket/10142
 	 */
 	public function test_meta_query() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -580,7 +580,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_should_return_wp_term_objects_for_fields_all() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -599,7 +599,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_should_return_wp_term_objects_for_fields_all_with_object_id() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -618,7 +618,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_should_prime_cache_for_found_terms() {
 		global $wpdb;
@@ -638,7 +638,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_object_id_should_not_be_cached_with_term_object() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -659,7 +659,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_term_cache_should_be_primed_for_all_taxonomies() {
 		global $wpdb;
@@ -688,7 +688,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_object_id_should_be_set_on_objects_that_share_terms() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -734,7 +734,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35925
+	 * @see https://core.trac.wordpress.org/ticket/35925
 	 */
 	public function test_wp_get_object_terms_args_filter() {
 		$taxonomy = 'wptests_tax_4';
@@ -762,7 +762,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41010
+	 * @see https://core.trac.wordpress.org/ticket/41010
 	 */
 	public function test_duplicate_terms_should_not_be_returned_when_passed_multiple_taxonomies_registered_with_args_array() {
 		$taxonomy1 = 'wptests_tax';

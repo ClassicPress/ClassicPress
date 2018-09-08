@@ -6,7 +6,7 @@
 class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 23605
+	 * @see https://core.trac.wordpress.org/ticket/23605
 	 */
 	function test_spaces() {
 		$this->assertEquals( 'http://example.com/Mr%20WordPress',    esc_url( 'http://example.com/Mr WordPress' ) );
@@ -108,7 +108,7 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23187
+	 * @see https://core.trac.wordpress.org/ticket/23187
 	 */
 	function test_protocol_case() {
 		$this->assertEquals('http://example.com', esc_url('HTTP://example.com'));
@@ -135,7 +135,7 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16859
+	 * @see https://core.trac.wordpress.org/ticket/16859
 	 */
 	function test_square_brackets() {
 		$this->assertEquals( '/example.php?one%5B%5D=two', esc_url( '/example.php?one[]=two' ) );
@@ -158,14 +158,14 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21974
+	 * @see https://core.trac.wordpress.org/ticket/21974
 	 */
 	function test_protocol_relative_with_colon() {
 		$this->assertEquals( '//example.com/foo?foo=abc:def', esc_url( '//example.com/foo?foo=abc:def' ) );
 	}
 
 	/**
-	 * @ticket 31632
+	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_with_newline() {
 		$body = <<<EOT
@@ -179,7 +179,7 @@ EOT;
 	}
 
 	/**
-	 * @ticket 31632
+	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_in_http_url_with_newline() {
 		$body = <<<EOT
@@ -193,7 +193,7 @@ EOT;
 	}
 
 	/**
-	 * @ticket 23605
+	 * @see https://core.trac.wordpress.org/ticket/23605
 	 */
 	function test_mailto_with_spaces() {
 		$body = 'Hi there, I thought you might want to sign up for this newsletter';
@@ -204,14 +204,14 @@ EOT;
 	}
 
 	/**
-	 * @ticket 28015
+	 * @see https://core.trac.wordpress.org/ticket/28015
 	 */
 	function test_invalid_charaters() {
 		$this->assertEmpty( esc_url_raw('"^<>{}`') );
 	}
 
 	/** 
-	 * @ticket 34202
+	 * @see https://core.trac.wordpress.org/ticket/34202
 	 */
 	function test_ipv6_hosts() {
 		$this->assertEquals( '//[::127.0.0.1]', esc_url( '//[::127.0.0.1]' ) );

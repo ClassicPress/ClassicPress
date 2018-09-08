@@ -138,7 +138,7 @@ class Tests_Image_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21819
+	 * @see https://core.trac.wordpress.org/ticket/21819
 	 */
 	function test_check_get_previous_crop() {
 		$id = wp_insert_attachment( array(

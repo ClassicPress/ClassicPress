@@ -65,7 +65,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23494
+	 * @see https://core.trac.wordpress.org/ticket/23494
 	 */
 	function test_password_trimming() {
 		$passwords_to_test = array(
@@ -90,7 +90,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	 * This is similar to test_password_trimming but tests the "lower level"
 	 * wp_hash_password function
 	 *
-	 * @ticket 24973
+	 * @see https://core.trac.wordpress.org/ticket/24973
 	 */
 	function test_wp_hash_password_trimming() {
 
@@ -111,7 +111,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29217
+	 * @see https://core.trac.wordpress.org/ticket/29217
 	 */
 	function test_wp_verify_nonce_with_empty_arg() {
 		$this->assertFalse( wp_verify_nonce( '' ) );
@@ -119,14 +119,14 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29542
+	 * @see https://core.trac.wordpress.org/ticket/29542
 	 */
 	function test_wp_verify_nonce_with_integer_arg() {
 		$this->assertFalse( wp_verify_nonce( 1 ) );
 	}
 
 	/**
-	 * @ticket 24030
+	 * @see https://core.trac.wordpress.org/ticket/24030
 	 */
 	function test_wp_nonce_verify_failed() {
 		$nonce = substr( md5( uniqid() ), 0, 10 );
@@ -138,7 +138,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24030
+	 * @see https://core.trac.wordpress.org/ticket/24030
 	 */
 	function test_wp_nonce_verify_success() {
 		$nonce = wp_create_nonce( 'nonce_test_action' );
@@ -150,7 +150,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36361
+	 * @see https://core.trac.wordpress.org/ticket/36361
 	 */
 	public function test_check_admin_referer_with_no_action_triggers_doing_it_wrong() {
 		$this->setExpectedIncorrectUsage( 'check_admin_referer' );
@@ -164,7 +164,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36361
+	 * @see https://core.trac.wordpress.org/ticket/36361
 	 */
 	public function test_check_ajax_referer_with_no_action_triggers_doing_it_wrong() {
 		$this->setExpectedIncorrectUsage( 'check_ajax_referer' );
@@ -225,7 +225,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32429
+	 * @see https://core.trac.wordpress.org/ticket/32429
 	 */
 	function test_user_activation_key_is_checked() {
 		global $wpdb;
@@ -258,7 +258,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32429
+	 * @see https://core.trac.wordpress.org/ticket/32429
 	 */
 	function test_expired_user_activation_key_is_rejected() {
 		global $wpdb;
@@ -276,7 +276,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32429
+	 * @see https://core.trac.wordpress.org/ticket/32429
 	 */
 	function test_empty_user_activation_key_fails_key_check() {
 		// An empty user_activation_key should not allow any key to be accepted
@@ -289,7 +289,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32429
+	 * @see https://core.trac.wordpress.org/ticket/32429
 	 */
 	function test_legacy_user_activation_key_is_rejected() {
 		global $wpdb;
@@ -313,8 +313,8 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32429
-	 * @ticket 24783
+	 * @see https://core.trac.wordpress.org/ticket/32429
+	 * @see https://core.trac.wordpress.org/ticket/24783
 	 */
 	function test_plaintext_user_activation_key_is_rejected() {
 		global $wpdb;
@@ -340,7 +340,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	/**
 	 * Ensure users can log in using both their username and their email address.
 	 *
-	 * @ticket 9568
+	 * @see https://core.trac.wordpress.org/ticket/9568
 	 */
 	function test_log_in_using_email() {
 		$user_args = array(

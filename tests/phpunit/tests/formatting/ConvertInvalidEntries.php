@@ -11,7 +11,7 @@ class Tests_Formatting_ConvertInvalidEntities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20503
+	 * @see https://core.trac.wordpress.org/ticket/20503
 	 */
 	function test_replaces_latin_letter_z_with_caron() {
 		$input = "&#142;&#158;";

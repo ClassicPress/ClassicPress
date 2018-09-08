@@ -509,7 +509,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41059
+	 * @see https://core.trac.wordpress.org/ticket/41059
 	 */
 	public function test_do_not_allow_is_denied_for_all_roles() {
 		foreach ( self::$users as $role => $user ) {
@@ -538,7 +538,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 	/**
 	 * @group ms-required
-	 * @ticket 41059
+	 * @see https://core.trac.wordpress.org/ticket/41059
 	 */
 	public function test_do_not_allow_is_denied_for_super_admins() {
 		# Test adding the cap directly to the user
@@ -1116,7 +1116,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27020
+	 * @see https://core.trac.wordpress.org/ticket/27020
 	 * @dataProvider authorless_post_statuses
 	 */
 	function test_authorless_post( $status ) {
@@ -1141,7 +1141,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16714
+	 * @see https://core.trac.wordpress.org/ticket/16714
 	 */
 	function test_create_posts_caps() {
 		$admin       = self::$users['administrator'];
@@ -1244,7 +1244,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	/**
 	 * @dataProvider dataTaxonomies
 	 *
-	 * @ticket 35614
+	 * @see https://core.trac.wordpress.org/ticket/35614
 	 */
 	public function test_taxonomy_capabilities_are_correct( $taxonomy ) {
 		if ( ! taxonomy_exists( $taxonomy ) ) {
@@ -1273,7 +1273,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	/**
 	 * @dataProvider dataTaxonomies
 	 *
-	 * @ticket 35614
+	 * @see https://core.trac.wordpress.org/ticket/35614
 	 */
 	public function test_default_taxonomy_term_cannot_be_deleted( $taxonomy ) {
 		if ( ! taxonomy_exists( $taxonomy ) ) {
@@ -1295,7 +1295,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	/**
 	 * @dataProvider dataTaxonomies
 	 *
-	 * @ticket 35614
+	 * @see https://core.trac.wordpress.org/ticket/35614
 	 */
 	public function test_taxonomy_caps_map_correctly_to_their_meta_cap( $taxonomy ) {
 		if ( ! taxonomy_exists( $taxonomy ) ) {
@@ -1342,7 +1342,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35614
+	 * @see https://core.trac.wordpress.org/ticket/35614
 	 */
 	public function test_taxonomy_capabilities_with_custom_caps_are_correct() {
 		$expected = array(
@@ -1368,7 +1368,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40891
+	 * @see https://core.trac.wordpress.org/ticket/40891
 	 */
 	public function test_taxonomy_meta_capabilities_with_non_existent_terms() {
 		$caps = array(
@@ -1389,7 +1389,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21786
+	 * @see https://core.trac.wordpress.org/ticket/21786
 	 */
 	function test_negative_caps() {
 		$author = self::$users['author'];
@@ -1404,7 +1404,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18932
+	 * @see https://core.trac.wordpress.org/ticket/18932
 	 */
 	function test_set_role_same_role() {
 		$user = self::$users['administrator'];
@@ -1470,7 +1470,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28374
+	 * @see https://core.trac.wordpress.org/ticket/28374
 	 */
 	function test_current_user_edit_caps() {
 		$user = self::$users['contributor'];
@@ -1570,7 +1570,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33694
+	 * @see https://core.trac.wordpress.org/ticket/33694
 	 */
 	function test_contributor_cannot_edit_scheduled_post() {
 
@@ -1635,7 +1635,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16956
+	 * @see https://core.trac.wordpress.org/ticket/16956
 	 * @expectedIncorrectUsage map_meta_cap
 	 */
 	function test_require_edit_others_posts_if_post_type_doesnt_exist() {
@@ -1658,7 +1658,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17253
+	 * @see https://core.trac.wordpress.org/ticket/17253
 	 */
 	function test_cpt_with_page_capability_type() {
 
@@ -1723,7 +1723,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 	protected $_role_test_wp_roles_role;
 	/**
-	 * @ticket 23016
+	 * @see https://core.trac.wordpress.org/ticket/23016
 	 */
 	public function test_wp_roles_init_action() {
 		$this->_role_test_wp_roles_init = array(
@@ -1752,7 +1752,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23016
+	 * @see https://core.trac.wordpress.org/ticket/23016
 	 * @expectedDeprecated WP_Roles::reinit
 	 */
 	public function test_wp_roles_reinit_deprecated() {
@@ -1761,7 +1761,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_no_one_can_edit_user_meta_for_non_existent_term() {
 		wp_set_current_user( self::$super_admin->ID );
@@ -1769,7 +1769,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_can_edit_user_meta() {
 		wp_set_current_user( self::$users['administrator']->ID );
@@ -1780,7 +1780,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_cannot_edit_user_meta() {
 		wp_set_current_user( self::$users['editor']->ID );
@@ -1788,7 +1788,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_no_one_can_delete_user_meta_for_non_existent_term() {
 		wp_set_current_user( self::$super_admin->ID );
@@ -1796,7 +1796,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_can_delete_user_meta() {
 		wp_set_current_user( self::$users['administrator']->ID );
@@ -1807,7 +1807,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_cannot_delete_user_meta() {
 		wp_set_current_user( self::$users['editor']->ID );
@@ -1815,7 +1815,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_no_one_can_add_user_meta_for_non_existent_term() {
 		wp_set_current_user( self::$super_admin->ID );
@@ -1823,7 +1823,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_can_add_user_meta() {
 		wp_set_current_user( self::$users['administrator']->ID );
@@ -1834,7 +1834,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38412
+	 * @see https://core.trac.wordpress.org/ticket/38412
 	 */
 	public function test_user_cannot_add_user_meta() {
 		wp_set_current_user( self::$users['editor']->ID );
@@ -1842,7 +1842,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39063
+	 * @see https://core.trac.wordpress.org/ticket/39063
 	 * @group ms-required
 	 */
 	public function test_only_super_admins_can_remove_themselves_on_multisite() {
@@ -1856,7 +1856,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36961
+	 * @see https://core.trac.wordpress.org/ticket/36961
 	 * @group ms-required
 	 */
 	function test_init_user_caps_for_different_site() {
@@ -1880,7 +1880,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36961
+	 * @see https://core.trac.wordpress.org/ticket/36961
 	 * @group ms-required
 	 */
 	function test_init_user_caps_for_different_site_by_user_switch() {
@@ -1906,7 +1906,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36961
+	 * @see https://core.trac.wordpress.org/ticket/36961
 	 */
 	function test_get_caps_data() {
 		global $wpdb;
@@ -1924,7 +1924,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36961
+	 * @see https://core.trac.wordpress.org/ticket/36961
 	 */
 	function test_user_get_site_id_default() {
 		$user = new WP_User( self::$users['subscriber']->ID );
@@ -1932,7 +1932,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36961
+	 * @see https://core.trac.wordpress.org/ticket/36961
 	 */
 	function test_user_get_site_id() {
 		global $wpdb;
@@ -1947,7 +1947,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38645
+	 * @see https://core.trac.wordpress.org/ticket/38645
 	 * @group ms-required
 	 */
 	function test_init_roles_for_different_site() {
@@ -1972,7 +1972,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38645
+	 * @see https://core.trac.wordpress.org/ticket/38645
 	 */
 	function test_get_roles_data() {
 		global $wpdb;
@@ -1995,7 +1995,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38645
+	 * @see https://core.trac.wordpress.org/ticket/38645
 	 */
 	function test_roles_get_site_id_default() {
 		$roles = new WP_Roles();
@@ -2003,7 +2003,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38645
+	 * @see https://core.trac.wordpress.org/ticket/38645
 	 */
 	function test_roles_get_site_id() {
 		global $wpdb;

@@ -114,7 +114,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26627
+	 * @see https://core.trac.wordpress.org/ticket/26627
 	 */
 	function test_cat_uncat_action_tax() {
 		// category with tax added
@@ -140,7 +140,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26728
+	 * @see https://core.trac.wordpress.org/ticket/26728
 	 */
 	function test_tax_action_tax() {
 		// tax with tax added
@@ -181,7 +181,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30623
+	 * @see https://core.trac.wordpress.org/ticket/30623
 	 */
 	public function test_get_queried_object_with_custom_taxonomy_tax_query_and_field_term_id_should_return_term_object() {
 		// Don't override the args provided below.
@@ -209,7 +209,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30623
+	 * @see https://core.trac.wordpress.org/ticket/30623
 	 */
 	public function test_get_queried_object_with_custom_taxonomy_tax_query_and_field_slug_should_return_term_object() {
 		// Don't override the args provided below.
@@ -238,7 +238,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30623
+	 * @see https://core.trac.wordpress.org/ticket/30623
 	 */
 	public function test_get_queried_object_with_custom_taxonomy_tax_query_with_multiple_clauses_should_return_term_object_corresponding_to_the_first_queried_tax() {
 		// Don't override the args provided below.

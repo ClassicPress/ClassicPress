@@ -46,7 +46,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33565
+	 * @see https://core.trac.wordpress.org/ticket/33565
 	 */
 	public function test_current_category_should_accept_an_array_of_ids() {
 		$cats = self::factory()->category->create_many( 3 );
@@ -63,7 +63,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16792
+	 * @see https://core.trac.wordpress.org/ticket/16792
 	 */
 	public function test_should_not_create_element_when_cat_name_is_filtered_to_empty_string() {
 		$c1 = self::factory()->category->create( array(
@@ -118,7 +118,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21881
+	 * @see https://core.trac.wordpress.org/ticket/21881
 	 */
 	public function test_show_option_all_link_should_link_to_post_type_archive_when_taxonomy_does_not_apply_to_posts() {
 		register_post_type( 'wptests_pt', array( 'has_archive' => true ) );
@@ -142,7 +142,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21881
+	 * @see https://core.trac.wordpress.org/ticket/21881
 	 */
 	public function test_show_option_all_link_should_not_link_to_post_type_archive_if_has_archive_is_false() {
 		register_post_type( 'wptests_pt', array( 'has_archive' => false ) );
@@ -216,7 +216,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33460
+	 * @see https://core.trac.wordpress.org/ticket/33460
 	 */
 	public function test_title_li_should_be_shown_by_default_for_empty_lists() {
 		$found = wp_list_categories( array(
@@ -227,7 +227,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33460
+	 * @see https://core.trac.wordpress.org/ticket/33460
 	 */
 	public function test_hide_title_if_empty_should_be_respected_for_empty_lists_when_true() {
 		$found = wp_list_categories( array(
@@ -239,7 +239,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33460
+	 * @see https://core.trac.wordpress.org/ticket/33460
 	 */
 	public function test_hide_title_if_empty_should_be_respected_for_empty_lists_when_false() {
 		$found = wp_list_categories( array(
@@ -251,7 +251,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33460
+	 * @see https://core.trac.wordpress.org/ticket/33460
 	 */
 	public function test_hide_title_if_empty_should_be_ignored_when_category_list_is_not_empty() {
 		$cat = self::factory()->category->create();
@@ -266,7 +266,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38839
+	 * @see https://core.trac.wordpress.org/ticket/38839
 	 */
 	public function test_hide_title_if_empty_should_not_output_stray_closing_tags() {
 		$cat = self::factory()->category->create();
@@ -282,7 +282,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12981
+	 * @see https://core.trac.wordpress.org/ticket/12981
 	 */
 	public function test_exclude_tree_should_be_respected() {
 		$c = self::factory()->category->create();
@@ -299,7 +299,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12981
+	 * @see https://core.trac.wordpress.org/ticket/12981
 	 */
 	public function test_exclude_tree_should_be_merged_with_exclude() {
 		$c = self::factory()->category->create();
@@ -325,7 +325,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35156
+	 * @see https://core.trac.wordpress.org/ticket/35156
 	 */
 	public function test_comma_separated_exclude_tree_should_be_merged_with_exclude() {
 		$c = self::factory()->category->create();
@@ -362,7 +362,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35156
+	 * @see https://core.trac.wordpress.org/ticket/35156
 	 */
 	public function test_array_exclude_tree_should_be_merged_with_exclude() {
 		$c = self::factory()->category->create();
@@ -399,7 +399,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10676
+	 * @see https://core.trac.wordpress.org/ticket/10676
 	 */
 	public function test_class_containing_current_cat_ancestor() {
 		$parent = self::factory()->category->create( array( 'name' => 'Parent', 'slug' => 'parent' ) );

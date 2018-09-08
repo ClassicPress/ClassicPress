@@ -250,7 +250,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25775
+	 * @see https://core.trac.wordpress.org/ticket/25775
 	 */
 	public function test_validate_column_with_date_query_valid_columns_filter() {
 		$q = new WP_Date_Query( array() );
@@ -263,7 +263,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25775
+	 * @see https://core.trac.wordpress.org/ticket/25775
 	 */
 	public function test_validate_column_prefixed_column_name() {
 		$q = new WP_Date_Query( array() );
@@ -272,7 +272,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25775
+	 * @see https://core.trac.wordpress.org/ticket/25775
 	 */
 	public function test_validate_column_prefixed_column_name_with_illegal_characters() {
 		$q = new WP_Date_Query( array() );
@@ -288,7 +288,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_in() {
 		$q = new WP_Date_Query( array() );
@@ -311,7 +311,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_not_in() {
 		$q = new WP_Date_Query( array() );
@@ -341,7 +341,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_between_single_non_numeric() {
 		$q = new WP_Date_Query( array() );
@@ -351,7 +351,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_between_array_with_other_than_two_items() {
 		$q = new WP_Date_Query( array() );
@@ -361,7 +361,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_between_incorrect_array_key() {
 		$q = new WP_Date_Query( array() );
@@ -375,7 +375,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_between_array_contains_non_numeric() {
 		$q = new WP_Date_Query( array() );
@@ -399,7 +399,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_not_between_single_non_numeric() {
 		$q = new WP_Date_Query( array() );
@@ -409,7 +409,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_not_between_array_with_other_than_two_items() {
 		$q = new WP_Date_Query( array() );
@@ -419,7 +419,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_not_between_incorrect_array_key() {
 		$q = new WP_Date_Query( array() );
@@ -433,7 +433,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_not_between_array_contains_non_numeric() {
 		$q = new WP_Date_Query( array() );
@@ -457,7 +457,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29801
+	 * @see https://core.trac.wordpress.org/ticket/29801
 	 */
 	public function test_build_value_compare_default_value_non_numeric() {
 		$q = new WP_Date_Query( array() );
@@ -509,7 +509,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34228
+	 * @see https://core.trac.wordpress.org/ticket/34228
 	 */
 	public function test_build_time_query_should_not_discard_hour_0() {
 		global $wpdb;
@@ -646,7 +646,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_query_before_after(){
@@ -693,7 +693,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_query_before_after_with_month(){
@@ -739,7 +739,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_week() {
@@ -792,7 +792,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_month() {
@@ -810,7 +810,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_day() {
@@ -867,7 +867,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_hour() {
@@ -885,7 +885,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_minute() {
@@ -903,7 +903,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_second() {
@@ -922,7 +922,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_day_of_week() {
@@ -940,7 +940,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28063
+	 * @see https://core.trac.wordpress.org/ticket/28063
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_day_of_week_iso() {
@@ -958,7 +958,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25834
+	 * @see https://core.trac.wordpress.org/ticket/25834
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_day_of_year() {
@@ -976,7 +976,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31001
+	 * @see https://core.trac.wordpress.org/ticket/31001
 	 */
 	public function test_validate_date_values_should_process_array_value_for_year() {
 		$p1 = self::factory()->post->create( array( 'post_date' => '2015-01-12 00:00:00' ) );
@@ -996,7 +996,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31001
+	 * @see https://core.trac.wordpress.org/ticket/31001
 	 */
 	public function test_validate_date_values_should_process_array_value_for_day() {
 		$p1 = self::factory()->post->create( array( 'post_date' => '2015-01-12 00:00:00' ) );
@@ -1016,7 +1016,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31001
+	 * @see https://core.trac.wordpress.org/ticket/31001
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_validate_date_values_should_process_array_value_for_day_when_values_are_invalid() {

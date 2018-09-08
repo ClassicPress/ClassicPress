@@ -3,7 +3,7 @@
 /**
  * @group post
  * @group slashes
- * @ticket 21767
+ * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Post_Slashes extends WP_UnitTestCase {
 	function setUp() {
@@ -125,7 +125,7 @@ class Tests_Post_Slashes extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27550
+	 * @see https://core.trac.wordpress.org/ticket/27550
 	 */
 	function test_wp_trash_untrash() {
 		$post = array(

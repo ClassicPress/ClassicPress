@@ -33,7 +33,7 @@ class Tests_Menu_WpAjaxMenuQuickSeach extends WP_UnitTestCase {
 	/**
 	 * Test search returns results for pages.
 	 *
-	 * @ticket 27042
+	 * @see https://core.trac.wordpress.org/ticket/27042
 	 */
 	public function test_search_returns_results_for_pages() {
 		include_once ABSPATH . 'wp-admin/includes/nav-menu.php';
@@ -57,7 +57,7 @@ class Tests_Menu_WpAjaxMenuQuickSeach extends WP_UnitTestCase {
 	/**
 	 * Test that search only returns results for published posts.
 	 *
-	 * @ticket 33742
+	 * @see https://core.trac.wordpress.org/ticket/33742
 	 */
 	public function test_search_returns_results_for_published_posts() {
 		require_once ABSPATH . 'wp-admin/includes/nav-menu.php';

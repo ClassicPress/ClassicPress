@@ -5,7 +5,7 @@
  */
 class Tests_Formatting_StripSlashesDeep extends WP_UnitTestCase {
 	/**
-	 * @ticket 18026
+	 * @see https://core.trac.wordpress.org/ticket/18026
 	 */
 	function test_preserves_original_datatype() {
 

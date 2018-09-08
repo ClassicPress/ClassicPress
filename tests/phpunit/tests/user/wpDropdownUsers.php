@@ -8,7 +8,7 @@
 class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 31251
+	 * @see https://core.trac.wordpress.org/ticket/31251
 	 */
 	public function test_default_value_of_show_should_be_display_name() {
 
@@ -28,7 +28,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31251
+	 * @see https://core.trac.wordpress.org/ticket/31251
 	 */
 	public function test_show_should_display_display_name_show_is_specified_as_empty() {
 
@@ -50,7 +50,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31251
+	 * @see https://core.trac.wordpress.org/ticket/31251
 	 */
 	public function test_show_should_display_user_property_when_the_value_of_show_is_a_valid_user_property() {
 
@@ -72,7 +72,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31251
+	 * @see https://core.trac.wordpress.org/ticket/31251
 	 */
 	public function test_show_display_name_with_login() {
 
@@ -94,7 +94,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31251
+	 * @see https://core.trac.wordpress.org/ticket/31251
 	 */
 	public function test_include_selected() {
 		$users = self::factory()->user->create_many( 2 );
@@ -112,7 +112,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38135
+	 * @see https://core.trac.wordpress.org/ticket/38135
 	 */
 	public function test_role() {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
@@ -129,7 +129,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38135
+	 * @see https://core.trac.wordpress.org/ticket/38135
 	 */
 	public function test_role__in() {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
@@ -146,7 +146,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38135
+	 * @see https://core.trac.wordpress.org/ticket/38135
 	 */
 	public function test_role__not_in() {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );

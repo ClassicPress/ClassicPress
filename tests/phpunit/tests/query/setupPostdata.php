@@ -32,7 +32,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30970
+	 * @see https://core.trac.wordpress.org/ticket/30970
 	 */
 	public function test_setup_by_id() {
 		$p = self::factory()->post->create_and_get();
@@ -42,7 +42,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30970
+	 * @see https://core.trac.wordpress.org/ticket/30970
 	 */
 	public function test_setup_by_fake_post() {
 		$fake = new stdClass;
@@ -54,7 +54,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30970
+	 * @see https://core.trac.wordpress.org/ticket/30970
 	 */
 	public function test_setup_by_postish_object() {
 		$p = self::factory()->post->create();
@@ -164,7 +164,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16746
+	 * @see https://core.trac.wordpress.org/ticket/16746
 	 */
 	public function test_nextpage_at_start_of_content() {
 		$post = self::factory()->post->create_and_get( array(
@@ -187,7 +187,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25349
+	 * @see https://core.trac.wordpress.org/ticket/25349
 	 */
 	public function test_secondary_query_nextpage() {
 		$post1 = self::factory()->post->create( array(
@@ -245,7 +245,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
+	 * @see https://core.trac.wordpress.org/ticket/20904
 	 */
 	public function test_secondary_query_page() {
 		$post = self::factory()->post->create_and_get();
@@ -276,7 +276,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
+	 * @see https://core.trac.wordpress.org/ticket/20904
 	 */
 	public function test_more_when_on_setup_post() {
 		$post = self::factory()->post->create_and_get();
@@ -287,7 +287,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
+	 * @see https://core.trac.wordpress.org/ticket/20904
 	 *
 	 * $more should not be true when the set-up post is not the same as the current post.
 	 */
@@ -301,7 +301,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
+	 * @see https://core.trac.wordpress.org/ticket/20904
 	 *
 	 * $more should not be true when the set-up post is not the same as the current page.
 	 */
@@ -317,7 +317,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
+	 * @see https://core.trac.wordpress.org/ticket/20904
 	 */
 	public function test_more_when_on_feed() {
 		$post = self::factory()->post->create_and_get();
@@ -328,8 +328,8 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20904
-	 * @ticket 25349
+	 * @see https://core.trac.wordpress.org/ticket/20904
+	 * @see https://core.trac.wordpress.org/ticket/25349
 	 */
 	public function test_secondary_query_more() {
 		$post = self::factory()->post->create_and_get();
@@ -358,7 +358,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24330
+	 * @see https://core.trac.wordpress.org/ticket/24330
 	 *
 	 * setup_postdata( $a_post ) followed by the_content() in a loop that does not update
 	 * global $post should use the content of $a_post rather then the global post.

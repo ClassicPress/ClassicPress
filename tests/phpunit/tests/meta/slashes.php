@@ -3,7 +3,7 @@
 /**
  * @group meta
  * @group slashes
- * @ticket 21767
+ * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Meta_Slashes extends WP_UnitTestCase {
 	protected static $editor_id;

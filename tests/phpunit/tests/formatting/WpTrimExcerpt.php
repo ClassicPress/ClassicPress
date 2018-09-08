@@ -6,7 +6,7 @@
  */
 class Tests_Formatting_WpTrimExcerpt extends WP_UnitTestCase {
 	/**
-	 * @ticket 25349
+	 * @see https://core.trac.wordpress.org/ticket/25349
 	 */
 	public function test_secondary_loop_respect_more() {
 		$post1 = self::factory()->post->create( array(
@@ -31,7 +31,7 @@ class Tests_Formatting_WpTrimExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25349
+	 * @see https://core.trac.wordpress.org/ticket/25349
 	 */
 	public function test_secondary_loop_respect_nextpage() {
 		$post1 = self::factory()->post->create( array(

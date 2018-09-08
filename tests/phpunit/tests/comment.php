@@ -41,7 +41,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30627
+	 * @see https://core.trac.wordpress.org/ticket/30627
 	 */
 	function test_wp_update_comment_updates_comment_type() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id ) );
@@ -53,7 +53,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36784
+	 * @see https://core.trac.wordpress.org/ticket/36784
 	 */
 	function test_wp_update_comment_updates_comment_meta() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id ) );
@@ -68,7 +68,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30307
+	 * @see https://core.trac.wordpress.org/ticket/30307
 	 */
 	function test_wp_update_comment_updates_user_id() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id ) );
@@ -80,7 +80,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34954
+	 * @see https://core.trac.wordpress.org/ticket/34954
 	 */
 	function test_wp_update_comment_with_no_post_id() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => 0 ) );
@@ -124,7 +124,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30412
+	 * @see https://core.trac.wordpress.org/ticket/30412
 	 */
 	public function test_get_approved_comments_with_post_id_0_should_return_empty_array() {
 		$ca1 = self::factory()->comment->create( array(
@@ -137,7 +137,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14279
+	 * @see https://core.trac.wordpress.org/ticket/14279
 	 */
 	public function test_wp_new_comment_respects_dates() {
 		$data = array(
@@ -160,7 +160,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14601
+	 * @see https://core.trac.wordpress.org/ticket/14601
 	 */
 	public function test_wp_new_comment_respects_author_ip() {
 		$data = array(
@@ -181,7 +181,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14601
+	 * @see https://core.trac.wordpress.org/ticket/14601
 	 */
 	public function test_wp_new_comment_respects_author_ip_empty_string() {
 		$data = array(
@@ -202,7 +202,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14601
+	 * @see https://core.trac.wordpress.org/ticket/14601
 	 */
 	public function test_wp_new_comment_respects_comment_agent() {
 		$data = array(
@@ -224,7 +224,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14601
+	 * @see https://core.trac.wordpress.org/ticket/14601
 	 */
 	public function test_wp_new_comment_should_trim_provided_comment_agent_to_254_chars() {
 		$data = array(
@@ -246,7 +246,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14601
+	 * @see https://core.trac.wordpress.org/ticket/14601
 	 */
 	public function test_wp_new_comment_respects_comment_agent_empty_string() {
 		$data = array(
@@ -288,7 +288,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32566
+	 * @see https://core.trac.wordpress.org/ticket/32566
 	 */
 	public function test_wp_notify_moderator_should_not_throw_notice_when_post_author_is_0() {
 		$p = self::factory()->post->create( array(
@@ -322,7 +322,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33587
+	 * @see https://core.trac.wordpress.org/ticket/33587
 	 */
 	public function test_wp_new_comment_notify_postauthor_should_not_send_email_when_comment_has_been_marked_as_spam() {
 		$c = self::factory()->comment->create( array(
@@ -335,7 +335,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35006
+	 * @see https://core.trac.wordpress.org/ticket/35006
 	 */
 	public function test_wp_new_comment_notify_postauthor_should_not_send_email_when_comment_has_been_trashed() {
 		$c = self::factory()->comment->create( array(
@@ -348,7 +348,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12431
+	 * @see https://core.trac.wordpress.org/ticket/12431
 	 */
 	public function test_wp_new_comment_with_meta() {
 		$c = self::factory()->comment->create( array(
@@ -363,7 +363,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_wp_comment_get_children_should_fill_children() {
 		$c1 = self::factory()->comment->create( array(
@@ -411,7 +411,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27571
+	 * @see https://core.trac.wordpress.org/ticket/27571
 	 */
 	public function test_post_properties_should_be_lazyloaded() {
 		$c = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id ) );
@@ -458,7 +458,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 761
+	 * @see https://core.trac.wordpress.org/ticket/761
 	 */
 	public function test_wp_notify_moderator_filter_moderation_notify_option_true_filter_false() {
 		$comment_data = $this->setup_notify_comment();
@@ -479,7 +479,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 761
+	 * @see https://core.trac.wordpress.org/ticket/761
 	 */
 	public function test_wp_notify_moderator_filter_moderation_notify_option_false_filter_true() {
 		$comment_data = $this->setup_notify_comment();
@@ -500,7 +500,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 761
+	 * @see https://core.trac.wordpress.org/ticket/761
 	 */
 	public function test_wp_notify_post_author_filter_comments_notify_option_true_filter_false() {
 
@@ -522,7 +522,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 761
+	 * @see https://core.trac.wordpress.org/ticket/761
 	 */
 	public function test_wp_notify_post_author_filter_comments_notify_option_false_filter_true() {
 		$comment_data = $this->setup_notify_comment();
@@ -650,7 +650,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35276
+	 * @see https://core.trac.wordpress.org/ticket/35276
 	 */
 	public function test_wp_update_comment_author_id_and_agent() {
 
@@ -704,7 +704,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * The `wp_comments_personal_data_eraser()` function should erase user's comments.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_comments_personal_data_eraser() {
 
@@ -761,7 +761,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_eraser()` function's output on an empty first page.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_comments_personal_data_eraser_empty_first_page_output() {
 
@@ -780,7 +780,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_eraser()` function's output, for the non-empty first page.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_comments_personal_data_eraser_non_empty_first_page_output() {
 
@@ -812,7 +812,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_eraser()` function's output, for an empty second page.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_comments_personal_data_eraser_empty_second_page_output() {
 
@@ -844,7 +844,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_anonymize_comment` filter, to prevent comment anonymization.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_anonymize_comment_filter_to_prevent_comment_anonymization() {
 
@@ -881,7 +881,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_anonymize_comment` filter, to prevent comment anonymization, with a custom message.
 	 *
 	 * @group privacy
-	 * @ticket 43442
+	 * @see https://core.trac.wordpress.org/ticket/43442
 	 */
 	public function test_wp_anonymize_comment_filter_to_prevent_comment_anonymization_with_custom_message() {
 
@@ -1009,7 +1009,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_exporter()` function.
 	 *
 	 * @group privacy
-	 * @ticket 43440
+	 * @see https://core.trac.wordpress.org/ticket/43440
 	 */
 	public function test_wp_comments_personal_data_exporter() {
 		$args = array(
@@ -1055,7 +1055,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_exporter()` function for no comments found.
 	 *
 	 * @group privacy
-	 * @ticket 43440
+	 * @see https://core.trac.wordpress.org/ticket/43440
 	 */
 	public function test_wp_comments_personal_data_exporter_no_comments_found() {
 
@@ -1073,7 +1073,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_exporter()` function for an empty comment property.
 	 *
 	 * @group privacy
-	 * @ticket 43440
+	 * @see https://core.trac.wordpress.org/ticket/43440
 	 */
 	public function test_wp_comments_personal_data_exporter_empty_comment_prop() {
 		$args = array(
@@ -1104,7 +1104,7 @@ class Tests_Comment extends WP_UnitTestCase {
 	 * Testing the `wp_comments_personal_data_exporter()` function with an empty second page.
 	 *
 	 * @group privacy
-	 * @ticket 43440
+	 * @see https://core.trac.wordpress.org/ticket/43440
 	 */
 	public function test_wp_comments_personal_data_exporter_empty_second_page() {
 		$args = array(

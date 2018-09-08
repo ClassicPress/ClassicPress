@@ -131,7 +131,7 @@ class Tests_Comment_CheckComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28603
+	 * @see https://core.trac.wordpress.org/ticket/28603
 	 */
 	public function test_should_return_true_when_comment_whitelist_is_enabled_and_user_has_previously_approved_comments_with_different_email() {
 		$subscriber_id = $this->factory()->user->create( array(
@@ -154,7 +154,7 @@ class Tests_Comment_CheckComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28603
+	 * @see https://core.trac.wordpress.org/ticket/28603
 	 */
 	public function test_should_return_false_when_comment_whitelist_is_enabled_and_user_does_not_have_a_previously_approved_comment_with_any_email() {
 		$subscriber_id = $this->factory()->user->create( array(

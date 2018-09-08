@@ -60,7 +60,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27810
+	 * @see https://core.trac.wordpress.org/ticket/27810
 	 */
 	public function test_field_name_should_work_for_names_with_spaces() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -298,7 +298,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18105
+	 * @see https://core.trac.wordpress.org/ticket/18105
 	 */
 	public function test_tax_query_single_query_multiple_queries_operator_not_in() {
 		$t1 = self::factory()->term->create( array(
@@ -378,7 +378,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29181
+	 * @see https://core.trac.wordpress.org/ticket/29181
 	 */
 	public function test_tax_query_operator_not_exists() {
 		register_taxonomy( 'wptests_tax1', 'post' );
@@ -410,7 +410,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36343
+	 * @see https://core.trac.wordpress.org/ticket/36343
 	 */
 	public function test_tax_query_operator_not_exists_combined() {
 		register_post_type( 'wptests_cpt1' );
@@ -455,7 +455,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29181
+	 * @see https://core.trac.wordpress.org/ticket/29181
 	 */
 	public function test_tax_query_operator_exists() {
 		register_taxonomy( 'wptests_tax1', 'post' );
@@ -487,7 +487,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29181
+	 * @see https://core.trac.wordpress.org/ticket/29181
 	 */
 	public function test_tax_query_operator_exists_should_ignore_terms() {
 		register_taxonomy( 'wptests_tax1', 'post' );
@@ -520,7 +520,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29181
+	 * @see https://core.trac.wordpress.org/ticket/29181
 	 */
 	public function test_tax_query_operator_exists_with_no_taxonomy() {
 		register_taxonomy( 'wptests_tax1', 'post' );
@@ -671,7 +671,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_tax_query_two_nested_queries() {
 		register_taxonomy( 'foo', 'post' );
@@ -743,7 +743,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_tax_query_one_nested_query_one_first_order_query() {
 		register_taxonomy( 'foo', 'post' );
@@ -807,7 +807,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_tax_query_one_double_nested_query_one_first_order_query() {
 		register_taxonomy( 'foo', 'post' );
@@ -880,7 +880,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20604
+	 * @see https://core.trac.wordpress.org/ticket/20604
 	 */
 	public function test_tax_query_relation_or_both_clauses_empty_terms() {
 		// An empty tax query should return an empty array, not all posts.
@@ -913,7 +913,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20604
+	 * @see https://core.trac.wordpress.org/ticket/20604
 	 */
 	public function test_tax_query_relation_or_one_clause_empty_terms() {
 		// An empty tax query should return an empty array, not all posts.
@@ -1196,7 +1196,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_populate_taxonomy_query_var_from_tax_query() {
 		register_taxonomy( 'foo', 'post' );
@@ -1301,7 +1301,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_populate_cat_category_name_query_var_from_tax_query() {
 		register_taxonomy( 'foo', 'post' );
@@ -1342,7 +1342,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_populate_tag_id_query_var_from_tax_query() {
 		register_taxonomy( 'foo', 'post' );
@@ -1382,7 +1382,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39315
+	 * @see https://core.trac.wordpress.org/ticket/39315
 	 */
 	public function test_tax_terms_should_not_be_double_escaped() {
 		$name = "Don't worry be happy";

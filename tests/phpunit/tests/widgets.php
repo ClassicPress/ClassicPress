@@ -48,7 +48,7 @@ class Tests_Widgets extends WP_UnitTestCase {
 	 *
 	 * @see register_widget()
 	 * @see unregister_widget()
-	 * @ticket 28216
+	 * @see https://core.trac.wordpress.org/ticket/28216
 	 */
 	function test_register_and_unregister_widget_instance() {
 		global $wp_widget_factory, $wp_registered_widgets;

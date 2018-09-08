@@ -2,7 +2,7 @@
 
 /**
  * @group rewrite
- * @ticket 5305
+ * @see https://core.trac.wordpress.org/ticket/5305
  */
 class Tests_Rewrite_NumericSlugs extends WP_UnitTestCase {
 	private $old_current_user;

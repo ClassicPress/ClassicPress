@@ -81,7 +81,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37368
+	 * @see https://core.trac.wordpress.org/ticket/37368
 	 */
 	public function test_should_respect_output_objects() {
 		register_taxonomy( 'wptests_tax2', 'attachment:image' );
@@ -101,7 +101,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 
 
 	/**
-	 * @ticket 37368
+	 * @see https://core.trac.wordpress.org/ticket/37368
 	 */
 	public function test_should_return_unique_taxonomies_for_output_objects() {
 		register_taxonomy( 'wptests_tax2', array( 'attachment:image', 'attachment:image/jpeg' ) );

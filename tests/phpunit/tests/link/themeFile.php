@@ -15,7 +15,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */
@@ -28,7 +28,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */
@@ -43,7 +43,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */
@@ -56,7 +56,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */
@@ -73,7 +73,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	/**
 	 * Test the tests.
 	 *
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */
@@ -94,7 +94,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18302
+	 * @see https://core.trac.wordpress.org/ticket/18302
 	 *
 	 * @dataProvider data_theme_files
 	 */

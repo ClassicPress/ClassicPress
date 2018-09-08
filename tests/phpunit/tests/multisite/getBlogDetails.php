@@ -3,7 +3,7 @@
 if ( is_multisite() ) :
 
 /**
- * @ticket 29845
+ * @see https://core.trac.wordpress.org/ticket/29845
  * @group ms-site
  * @group multisite
  */
@@ -121,7 +121,7 @@ class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
 	/**
 	 * @dataProvider data_get_all
 	 *
-	 * @ticket 40228
+	 * @see https://core.trac.wordpress.org/ticket/40228
 	 */
 	public function test_get_blog_details_get_object_vars( $get_all ) {
 		$site = get_blog_details( array( 'domain' => 'wordpress.org', 'path' => '/' ), $get_all );
@@ -134,7 +134,7 @@ class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
 	/**
 	 * @dataProvider data_get_all
 	 *
-	 * @ticket 40228
+	 * @see https://core.trac.wordpress.org/ticket/40228
 	 */
 	public function test_get_blog_details_iterate_over_result( $get_all ) {
 		$site = get_blog_details( array( 'domain' => 'wordpress.org', 'path' => '/' ), $get_all );

@@ -464,7 +464,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	/**
 	 * Test the image created with WP_Image_Editor_GD preserves alpha when resizing
 	 *
-	 * @ticket 23039
+	 * @see https://core.trac.wordpress.org/ticket/23039
 	 */
 	public function test_image_preserves_alpha_on_resize() {
 		if ( ! ( imagetypes() & IMG_PNG ) ) {
@@ -491,7 +491,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	/**
 	 * Test the image created with WP_Image_Editor_GD preserves alpha with no resizing etc
 	 *
-	 * @ticket 23039
+	 * @see https://core.trac.wordpress.org/ticket/23039
 	 */
 	public function test_image_preserves_alpha() {
 		if ( ! ( imagetypes() & IMG_PNG ) ) {
@@ -517,7 +517,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 	/**
 	 *
-	 * @ticket 30596
+	 * @see https://core.trac.wordpress.org/ticket/30596
 	 */
 	public function test_image_preserves_alpha_on_rotate() {
 		if ( ! ( imagetypes() & IMG_PNG ) ) {
@@ -545,7 +545,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 	/**
 	 * Test WP_Image_Editor_GD handles extension-less images
-	 * @ticket 39195
+	 * @see https://core.trac.wordpress.org/ticket/39195
 	 */
 	public function test_image_non_existent_extension() {
 		$image_editor = new WP_Image_Editor_GD( DIR_TESTDATA.'/images/test-image-no-extension' );

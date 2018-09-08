@@ -23,7 +23,7 @@ class Tests_Term_WpComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37738
+	 * @see https://core.trac.wordpress.org/ticket/37738
 	 */
 	public function test_get_instance_should_work_for_numeric_string() {
 		$found = WP_Comment::get_instance( (string) self::$comment_id );
@@ -32,7 +32,7 @@ class Tests_Term_WpComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37738
+	 * @see https://core.trac.wordpress.org/ticket/37738
 	 */
 	public function test_get_instance_should_fail_for_negative_number() {
 		$found = WP_Comment::get_instance( -self::$comment_id );
@@ -41,7 +41,7 @@ class Tests_Term_WpComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37738
+	 * @see https://core.trac.wordpress.org/ticket/37738
 	 */
 	public function test_get_instance_should_fail_for_non_numeric_string() {
 		$found = WP_Comment::get_instance( 'abc' );
@@ -50,7 +50,7 @@ class Tests_Term_WpComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37738
+	 * @see https://core.trac.wordpress.org/ticket/37738
 	 */
 	public function test_get_instance_should_succeed_for_float_that_is_equal_to_post_id() {
 		$found = WP_Comment::get_instance( 1.0 );

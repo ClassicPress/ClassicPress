@@ -824,7 +824,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 	}
 
 	/**
-	 * @ticket 38989
+	 * @see https://core.trac.wordpress.org/ticket/38989
 	 */
 	public function test_set_value_invalid_meta_string_request_type() {
 		update_post_meta( self::$post_id, 'test_single', 'So I tied an onion to my belt, which was the style at the time.' );
@@ -854,7 +854,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 	}
 
 	/**
-	 * @ticket 38989
+	 * @see https://core.trac.wordpress.org/ticket/38989
 	 */
 	public function test_set_value_invalid_meta_float_request_type() {
 		update_post_meta( self::$post_id, 'test_single', 'Now, to take the ferry cost a nickel, and in those days, nickels had pictures of bumblebees on them.' );
@@ -1042,7 +1042,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 	}
 
 	/**
-	 * @ticket 38323
+	 * @see https://core.trac.wordpress.org/ticket/38323
 	 * @dataProvider data_get_subtype_meta_value
 	 */
 	public function test_get_subtype_meta_value( $post_type, $meta_key, $single, $in_post_type ) {
@@ -1094,7 +1094,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 	}
 
 	/**
-	 * @ticket 38323
+	 * @see https://core.trac.wordpress.org/ticket/38323
 	 * @dataProvider data_set_subtype_meta_value
 	 */
 	public function test_set_subtype_meta_value( $post_type, $meta_key, $single, $in_post_type, $can_write ) {

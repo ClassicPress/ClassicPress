@@ -170,7 +170,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminute_expecting_results() {
 		$posts = $this->_get_query_result( array(
@@ -186,7 +186,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminute_expecting_noresults() {
 		$posts = $this->_get_query_result( array(
@@ -197,7 +197,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminutesecond_expecting_results() {
 		$posts = $this->_get_query_result( array(
@@ -212,7 +212,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminutesecond_expecting_noresults() {
 		$posts = $this->_get_query_result( array(
@@ -223,7 +223,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminutesecond_and_dashes_expecting_results() {
 		$posts = $this->_get_query_result( array(
@@ -238,7 +238,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24884
+	 * @see https://core.trac.wordpress.org/ticket/24884
 	 */
 	public function test_simple_m_with_yearmonthdayhourminutesecond_and_dashesletters_expecting_results() {
 		$posts = $this->_get_query_result( array(
@@ -253,7 +253,7 @@ class Tests_Query_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36718
+	 * @see https://core.trac.wordpress.org/ticket/36718
 	 */
 	public function test_non_scalar_m_should_be_discarded() {
 		$expected = $this->_get_query_result( );

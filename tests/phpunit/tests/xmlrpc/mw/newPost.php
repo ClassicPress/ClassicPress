@@ -86,7 +86,7 @@ class Tests_XMLRPC_mw_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20356
+	 * @see https://core.trac.wordpress.org/ticket/20356
 	 */
 	function test_invalid_author() {
 		$this->make_user_by_role( 'editor' );
@@ -151,7 +151,7 @@ class Tests_XMLRPC_mw_newPost extends WP_XMLRPC_UnitTestCase {
 
 
 	/**
-	 * @ticket 16985
+	 * @see https://core.trac.wordpress.org/ticket/16985
 	 */
 	function test_draft_post_date() {
 		$this->make_user_by_role( 'editor' );

@@ -479,7 +479,7 @@ class Test_WP_Community_Events extends WP_UnitTestCase {
 	 *
 	 * @dataProvider data_get_unsafe_client_ip
 	 *
-	 * @ticket 41083
+	 * @see https://core.trac.wordpress.org/ticket/41083
 	 */
 	public function test_get_unsafe_client_ip( $raw_ip, $expected_result ) {
 		$_SERVER['REMOTE_ADDR']    = 'this should not be used';

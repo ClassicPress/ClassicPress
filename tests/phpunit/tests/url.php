@@ -366,7 +366,7 @@ class Tests_URL extends WP_UnitTestCase {
 	/**
 	 * Test get_adjacent_post returns the next private post when the author is the currently logged in user.
 	 *
-	 * @ticket 30287
+	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_return_private_posts_belonging_to_the_current_user() {
 		$u = self::factory()->user->create( array( 'role' => 'author' ) );
@@ -392,7 +392,7 @@ class Tests_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30287
+	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_return_private_posts_belonging_to_other_users_if_the_current_user_can_read_private_posts() {
 		$u1 = self::factory()->user->create( array( 'role' => 'author' ) );
@@ -419,7 +419,7 @@ class Tests_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30287
+	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_not_return_private_posts_belonging_to_other_users_if_the_current_user_cannot_read_private_posts() {
 		$u1 = self::factory()->user->create( array( 'role' => 'author' ) );
@@ -449,7 +449,7 @@ class Tests_URL extends WP_UnitTestCase {
 	/**
 	 * Test that *_url functions handle paths with ".."
 	 *
-	 * @ticket 19032
+	 * @see https://core.trac.wordpress.org/ticket/19032
 	 */
 	public function test_url_functions_for_dots_in_paths() {
 		$functions = array(

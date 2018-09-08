@@ -54,7 +54,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22080
+	 * @see https://core.trac.wordpress.org/ticket/22080
 	 */
 	public function test_post_thumbnails_mixed_args() {
 		add_theme_support( 'post-thumbnails', array( 'post', 'page' ) );
@@ -84,7 +84,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24932
+	 * @see https://core.trac.wordpress.org/ticket/24932
 	 */
 	function test_supports_html5() {
 		remove_theme_support( 'html5' );
@@ -99,7 +99,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24932
+	 * @see https://core.trac.wordpress.org/ticket/24932
 	 *
 	 * @expectedIncorrectUsage add_theme_support( 'html5' )
 	 */
@@ -130,7 +130,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24932
+	 * @see https://core.trac.wordpress.org/ticket/24932
 	 *
 	 * @expectedIncorrectUsage add_theme_support( 'html5' )
 	 */
@@ -163,7 +163,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26900
+	 * @see https://core.trac.wordpress.org/ticket/26900
 	 */
 	function test_supports_menus() {
 		// Start fresh
