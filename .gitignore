@@ -7,8 +7,6 @@ wp-tests-config.php
 
 # Files and folders related to build/test tools
 /phpunit.xml
-/tests/phpunit/data/plugins/wordpress-importer
-/tests/phpunit/data/.trac-ticket-cache*
 /tests/qunit/compiled.html
 /src/.wp-tests-version
 /node_modules
