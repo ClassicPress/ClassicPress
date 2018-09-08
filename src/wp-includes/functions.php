@@ -3823,7 +3823,7 @@ function absint( $maybeint ) {
  * @access private
  *
  * @param string $function    The function that was called.
- * @param string $version     The version of ClassicPress that deprecated the function.
+ * @param string $version     The version of ClassicPress or WordPress that deprecated the function.
  * @param string $replacement Optional. The function that should have been called. Default null.
  */
 function _deprecated_function( $function, $version, $replacement = null ) {
@@ -3835,7 +3835,7 @@ function _deprecated_function( $function, $version, $replacement = null ) {
 	 *
 	 * @param string $function    The function that was called.
 	 * @param string $replacement The function that should have been called.
-	 * @param string $version     The version of ClassicPress that deprecated the function.
+	 * @param string $version     The version of ClassicPress or WordPress that deprecated the function.
 	 */
 	do_action( 'deprecated_function_run', $function, $replacement, $version );
 
@@ -3881,7 +3881,7 @@ function _deprecated_function( $function, $version, $replacement = null ) {
  * @access private
  *
  * @param string $class        The class containing the deprecated constructor.
- * @param string $version      The version of ClassicPress that deprecated the function.
+ * @param string $version      The version of ClassicPress or WordPress that deprecated the function.
  * @param string $parent_class Optional. The parent class calling the deprecated constructor.
  *                             Default empty string.
  */
@@ -3894,7 +3894,7 @@ function _deprecated_constructor( $class, $version, $parent_class = '' ) {
 	 * @since WP-4.5.0 Added the `$parent_class` parameter.
 	 *
 	 * @param string $class        The class containing the deprecated constructor.
-	 * @param string $version      The version of ClassicPress that deprecated the function.
+	 * @param string $version      The version of ClassicPress or WordPress that deprecated the function.
 	 * @param string $parent_class The parent class calling the deprecated constructor.
 	 */
 	do_action( 'deprecated_constructor_run', $class, $version, $parent_class );
@@ -3947,7 +3947,7 @@ function _deprecated_constructor( $class, $version, $parent_class = '' ) {
  * @access private
  *
  * @param string $file        The file that was included.
- * @param string $version     The version of ClassicPress that deprecated the file.
+ * @param string $version     The version of ClassicPress or WordPress that deprecated the file.
  * @param string $replacement Optional. The file that should have been included based on ABSPATH.
  *                            Default null.
  * @param string $message     Optional. A message regarding the change. Default empty.
@@ -3961,7 +3961,7 @@ function _deprecated_file( $file, $version, $replacement = null, $message = '' )
 	 *
 	 * @param string $file        The file that was called.
 	 * @param string $replacement The file that should have been included based on ABSPATH.
-	 * @param string $version     The version of ClassicPress that deprecated the file.
+	 * @param string $version     The version of ClassicPress or WordPress that deprecated the file.
 	 * @param string $message     A message regarding the change.
 	 */
 	do_action( 'deprecated_file_included', $file, $replacement, $version, $message );
@@ -4015,7 +4015,7 @@ function _deprecated_file( $file, $version, $replacement = null, $message = '' )
  * @access private
  *
  * @param string $function The function that was called.
- * @param string $version  The version of ClassicPress that deprecated the argument used.
+ * @param string $version  The version of ClassicPress or WordPress that deprecated the argument used.
  * @param string $message  Optional. A message regarding the change. Default null.
  */
 function _deprecated_argument( $function, $version, $message = null ) {
@@ -4027,7 +4027,7 @@ function _deprecated_argument( $function, $version, $message = null ) {
 	 *
 	 * @param string $function The function that was called.
 	 * @param string $message  A message regarding the change.
-	 * @param string $version  The version of ClassicPress that deprecated the argument used.
+	 * @param string $version  The version of ClassicPress or WordPress that deprecated the argument used.
 	 */
 	do_action( 'deprecated_argument_run', $function, $message, $version );
 
@@ -4072,7 +4072,7 @@ function _deprecated_argument( $function, $version, $message = null ) {
  * @access private
  *
  * @param string $hook        The hook that was used.
- * @param string $version     The version of ClassicPress that deprecated the hook.
+ * @param string $version     The version of ClassicPress or WordPress that deprecated the hook.
  * @param string $replacement Optional. The hook that should have been used.
  * @param string $message     Optional. A message regarding the change.
  */
@@ -4084,7 +4084,7 @@ function _deprecated_hook( $hook, $version, $replacement = null, $message = null
 	 *
 	 * @param string $hook        The hook that was called.
 	 * @param string $replacement The hook that should be used as a replacement.
-	 * @param string $version     The version of ClassicPress that deprecated the argument used.
+	 * @param string $version     The version of ClassicPress or WordPress that deprecated the argument used.
 	 * @param string $message     A message regarding the change.
 	 */
 	do_action( 'deprecated_hook_run', $hook, $replacement, $version, $message );
@@ -4100,10 +4100,10 @@ function _deprecated_hook( $hook, $version, $replacement = null, $message = null
 	if ( WP_DEBUG && apply_filters( 'deprecated_hook_trigger_error', true ) ) {
 		$message = empty( $message ) ? '' : ' ' . $message;
 		if ( ! is_null( $replacement ) ) {
-			/* translators: 1: ClassicPress hook name, 2: version number, 3: alternative hook name */
+			/* translators: 1: hook name, 2: ClassicPress or WordPress version number, 3: alternative hook name */
 			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.' ), $hook, $version, $replacement ) . $message );
 		} else {
-			/* translators: 1: ClassicPress hook name, 2: version number */
+			/* translators: 1: hook name, 2: ClassicPress or WordPress version number */
 			trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.' ), $hook, $version ) . $message );
 		}
 	}
@@ -4123,7 +4123,7 @@ function _deprecated_hook( $hook, $version, $replacement = null, $message = null
  *
  * @param string $function The function that was called.
  * @param string $message  A message explaining what has been done incorrectly.
- * @param string $version  The version of ClassicPress where the message was added.
+ * @param string $version  The version of ClassicPress or WordPress where the message was added.
  */
 function _doing_it_wrong( $function, $message, $version ) {
 
@@ -4134,7 +4134,7 @@ function _doing_it_wrong( $function, $message, $version ) {
 	 *
 	 * @param string $function The function that was called.
 	 * @param string $message  A message explaining what has been done incorrectly.
-	 * @param string $version  The version of ClassicPress where the message was added.
+	 * @param string $version  The version of ClassicPress or WordPress where the message was added.
 	 */
 	do_action( 'doing_it_wrong_run', $function, $message, $version );
 

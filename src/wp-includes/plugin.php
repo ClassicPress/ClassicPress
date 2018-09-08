@@ -590,7 +590,7 @@ function remove_all_actions($tag, $priority = false) {
  *
  * @param string $tag         The name of the filter hook.
  * @param array  $args        Array of additional function arguments to be passed to apply_filters().
- * @param string $version     The version of ClassicPress that deprecated the hook.
+ * @param string $version     The version of ClassicPress or WordPress that deprecated the hook.
  * @param string $replacement Optional. The hook that should have been used. Default false.
  * @param string $message     Optional. A message regarding the change. Default null.
  */
@@ -617,7 +617,7 @@ function apply_filters_deprecated( $tag, $args, $version, $replacement = false, 
  *
  * @param string $tag         The name of the action hook.
  * @param array  $args        Array of additional function arguments to be passed to do_action().
- * @param string $version     The version of ClassicPress that deprecated the hook.
+ * @param string $version     The version of ClassicPress or WordPress that deprecated the hook.
  * @param string $replacement Optional. The hook that should have been used.
  * @param string $message     Optional. A message regarding the change.
  */

@@ -18,7 +18,7 @@ _deprecated_file(
 
 <hr />
 <div id="footer" role="contentinfo">
-<!-- If you'd like to support ClassicPress, having the "powered by" link somewhere on your blog is the best way; it's our only promotion or advertising. -->
+<!-- Having the "powered by" link on your site is a great way to support ClassicPress. -->
 	<p>
 		<?php
 		printf(

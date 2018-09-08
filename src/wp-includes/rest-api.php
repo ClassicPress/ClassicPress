@@ -491,10 +491,10 @@ function rest_handle_deprecated_function( $function, $replacement, $version ) {
 		return;
 	}
 	if ( ! empty( $replacement ) ) {
-		/* translators: 1: function name, 2: ClassicPress version number, 3: new function name */
+		/* translators: 1: function name, 2: ClassicPress or WordPress version number, 3: new function name */
 		$string = sprintf( __( '%1$s (since %2$s; use %3$s instead)' ), $function, $version, $replacement );
 	} else {
-		/* translators: 1: function name, 2: ClassicPress version number */
+		/* translators: 1: function name, 2: ClassicPress or WordPress version number */
 		$string = sprintf( __( '%1$s (since %2$s; no alternative available)' ), $function, $version );
 	}
 
@@ -515,10 +515,10 @@ function rest_handle_deprecated_argument( $function, $message, $version ) {
 		return;
 	}
 	if ( ! empty( $message ) ) {
-		/* translators: 1: function name, 2: ClassicPress version number, 3: error message */
+		/* translators: 1: function name, 2: ClassicPress or WordPress version number, 3: error message */
 		$string = sprintf( __( '%1$s (since %2$s; %3$s)' ), $function, $version, $message );
 	} else {
-		/* translators: 1: function name, 2: ClassicPress version number */
+		/* translators: 1: function name, 2: ClassicPress or WordPress version number */
 		$string = sprintf( __( '%1$s (since %2$s; no alternative available)' ), $function, $version );
 	}
 
