@@ -120,7 +120,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'id'    => 'wp-logo',
 		'title' => (
 			'<img class="cp-logo" src="' . $cp_logo_src . '" />'
-			. '<span class="screen-reader-text">' . __( 'About WordPress' ) . '</span>'
+			. '<span class="screen-reader-text">' . __( 'About ClassicPress' ) . '</span>'
 		),
 		'href'  => $about_url,
 	);
