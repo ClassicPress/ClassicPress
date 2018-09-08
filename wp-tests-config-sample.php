@@ -25,7 +25,7 @@ define( 'WP_DEBUG', true );
 // ** MySQL settings ** //
 
 // This configuration file will be used by the copy of ClassicPress being tested.
-// wordpress/wp-config.php will be ignored.
+// src/wp-config.php will be ignored.
 
 // WARNING WARNING WARNING!
 // These tests will DROP ALL TABLES in the database with the prefix named below.
@@ -53,7 +53,7 @@ define('SECURE_AUTH_SALT', 'put your unique phrase here');
 define('LOGGED_IN_SALT',   'put your unique phrase here');
 define('NONCE_SALT',       'put your unique phrase here');
 
-$table_prefix  = 'wptests_';   // Only numbers, letters, and underscores please!
+$table_prefix  = 'cptests_';   // Only numbers, letters, and underscores please!
 
 define( 'WP_TESTS_DOMAIN', 'example.org' );
 define( 'WP_TESTS_EMAIL', 'admin@example.org' );
