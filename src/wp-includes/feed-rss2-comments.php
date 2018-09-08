@@ -2,7 +2,7 @@
 /**
  * RSS2 Feed Template for displaying RSS2 Comments feed.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 header('Content-Type: ' . feed_content_type('rss2') . '; charset=' . get_option('blog_charset'), true);

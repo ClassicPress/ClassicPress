@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress environment setup class.
+ * ClassicPress environment setup class.
  *
- * @package WordPress
+ * @package ClassicPress
  * @since WP-2.0.0
  */
 class WP {
@@ -35,7 +35,7 @@ class WP {
 	public $extra_query_vars = array();
 
 	/**
-	 * Query variables for setting up the WordPress Query Loop.
+	 * Query variables for setting up the ClassicPress Query Loop.
 	 *
 	 * @since WP-2.0.0
 	 * @var array
@@ -118,7 +118,7 @@ class WP {
 	}
 
 	/**
-	 * Parse request to find correct WordPress query.
+	 * Parse request to find correct ClassicPress query.
 	 *
 	 * Sets up the query variables based on the request. There are also many
 	 * filters and actions that can be used to further manipulate the result.
@@ -138,7 +138,7 @@ class WP {
 		 * @since WP-3.5.0
 		 *
 		 * @param bool         $bool             Whether or not to parse the request. Default true.
-		 * @param WP           $this             Current WordPress environment instance.
+		 * @param WP           $this             Current ClassicPress environment instance.
 		 * @param array|string $extra_query_vars Extra passed query variables.
 		 */
 		if ( ! apply_filters( 'do_parse_request', true, $this, $extra_query_vars ) )
@@ -368,7 +368,7 @@ class WP {
 		 *
 		 * @since WP-2.1.0
 		 *
-		 * @param WP $this Current WordPress environment instance (passed by reference).
+		 * @param WP $this Current ClassicPress environment instance (passed by reference).
 		 */
 		do_action_ref_array( 'parse_request', array( &$this ) );
 	}
@@ -462,7 +462,7 @@ class WP {
 		 * @since WP-2.8.0
 		 *
 		 * @param array $headers The list of headers to be sent.
-		 * @param WP    $this    Current WordPress environment instance.
+		 * @param WP    $this    Current ClassicPress environment instance.
 		 */
 		$headers = apply_filters( 'wp_headers', $headers, $this );
 
@@ -499,7 +499,7 @@ class WP {
 		 *
 		 * @since WP-2.1.0
 		 *
-		 * @param WP $this Current WordPress environment instance (passed by reference).
+		 * @param WP $this Current ClassicPress environment instance (passed by reference).
 		 */
 		do_action_ref_array( 'send_headers', array( &$this ) );
 	}
@@ -538,11 +538,11 @@ class WP {
 	}
 
 	/**
-	 * Set up the WordPress Globals.
+	 * Set up the ClassicPress Globals.
 	 *
 	 * The query_vars property will be extracted to the GLOBALS. So care should
 	 * be taken when naming global variables that might interfere with the
-	 * WordPress environment.
+	 * ClassicPress environment.
 	 *
 	 * @since WP-2.0.0
 	 *
@@ -628,7 +628,7 @@ class WP {
 		 * @since WP-4.5.0
 		 *
 		 * @param bool     $preempt  Whether to short-circuit default header status handling. Default false.
-		 * @param WP_Query $wp_query WordPress Query object.
+		 * @param WP_Query $wp_query ClassicPress Query object.
 		 */
 		if ( false !== apply_filters( 'pre_handle_404', false, $wp_query ) ) {
 			return;
@@ -698,7 +698,7 @@ class WP {
 	}
 
 	/**
-	 * Sets up all of the variables required by the WordPress environment.
+	 * Sets up all of the variables required by the ClassicPress environment.
 	 *
 	 * The action {@see 'wp'} has one parameter that references the WP object. It
 	 * allows for accessing the properties and methods to further manipulate the
@@ -717,11 +717,11 @@ class WP {
 		$this->register_globals();
 
 		/**
-		 * Fires once the WordPress environment has been set up.
+		 * Fires once the ClassicPress environment has been set up.
 		 *
 		 * @since WP-2.1.0
 		 *
-		 * @param WP $this Current WordPress environment instance (passed by reference).
+		 * @param WP $this Current ClassicPress environment instance (passed by reference).
 		 */
 		do_action_ref_array( 'wp', array( &$this ) );
 	}

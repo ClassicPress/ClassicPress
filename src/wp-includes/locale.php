@@ -2,7 +2,7 @@
 /**
  * Locale API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage i18n
  * @since WP-1.2.0
  */

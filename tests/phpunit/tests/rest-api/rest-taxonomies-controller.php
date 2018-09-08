@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Taxonomies_Controller functionality.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

@@ -1,12 +1,12 @@
 <?php
 /**
- * Deprecated pluggable functions from past WordPress versions. You shouldn't use these
+ * Deprecated pluggable functions from past ClassicPress versions. You shouldn't use these
  * functions and look for the alternatives instead. The functions will be removed in a
  * later version.
  *
  * Deprecated warnings are also thrown if one of these functions is being defined by a plugin.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Deprecated
  * @see pluggable.php
  */
@@ -131,7 +131,7 @@ if ( !function_exists('wp_get_cookie_login') ):
  * Gets the user cookie login. This function is deprecated.
  *
  * This function is deprecated and should no longer be extended as it won't be
- * used anywhere in WordPress. Also, plugins shouldn't use it either.
+ * used anywhere in ClassicPress. Also, plugins shouldn't use it either.
  *
  * @since WP-2.0.3
  * @deprecated 2.5.0
@@ -185,7 +185,7 @@ else :
 endif;
 
 /**
- * WordPress AtomPub API implementation.
+ * ClassicPress AtomPub API implementation.
  *
  * Originally stored in wp-app.php, and later wp-includes/class-wp-atom-server.php.
  * It is kept here in case a plugin directly referred to the class.

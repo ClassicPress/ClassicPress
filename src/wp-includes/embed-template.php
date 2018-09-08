@@ -2,7 +2,7 @@
 /**
  * Back-compat placeholder for the base embed template
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage oEmbed
  * @since WP-4.4.0
  * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php

@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress GD Image Editor
+ * ClassicPress GD Image Editor
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Image_Editor
  */
 
 /**
- * WordPress Image Editor Class for Image Manipulation through GD
+ * ClassicPress Image Editor Class for Image Manipulation through GD
  *
  * @since WP-3.5.0
  *

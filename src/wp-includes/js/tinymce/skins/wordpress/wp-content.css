@@ -130,7 +130,7 @@ img[data-mce-selected]::selection {
 	background-color: transparent;
 }
 
-/* Styles for the WordPress plugins */
+/* Styles for the ClassicPress plugins */
 .mce-content-body img[data-mce-placeholder] {
 	border-radius: 0;
 	padding: 0;

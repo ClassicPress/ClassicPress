@@ -2,7 +2,7 @@
 /**
  * WP_oEmbed_Controller class, used to provide an oEmbed endpoint.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Embeds
  * @since WP-4.4.0
  */

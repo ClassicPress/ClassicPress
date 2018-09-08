@@ -2,7 +2,7 @@
 /**
  * User API: WP_Role class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Users
  * @since WP-4.4.0
  */

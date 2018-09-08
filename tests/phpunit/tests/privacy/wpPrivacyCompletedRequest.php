@@ -2,7 +2,7 @@
 /**
  * Test the `_wp_privacy_completed_request()` function.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage UnitTests
  * @since WP-4.9.6
  */

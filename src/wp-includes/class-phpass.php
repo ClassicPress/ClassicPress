@@ -3,7 +3,7 @@
  * Portable PHP password hashing framework.
  * @package phpass
  * @since WP-2.5.0
- * @version 0.3 / WordPress
+ * @version 0.3 / ClassicPress
  * @link http://www.openwall.com/phpass/
  */
 
@@ -29,7 +29,7 @@
  * Portable PHP password hashing framework.
  *
  * @package phpass
- * @version 0.3 / WordPress
+ * @version 0.3 / ClassicPress
  * @link http://www.openwall.com/phpass/
  * @since WP-2.5.0
  */

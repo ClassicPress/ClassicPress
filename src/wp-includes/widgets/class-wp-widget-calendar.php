@@ -2,7 +2,7 @@
 /**
  * Widget API: WP_Widget_Calendar class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Widgets
  * @since WP-4.4.0
  */

@@ -5,15 +5,15 @@
  * This API is used for creating dynamic sidebar without hardcoding functionality into
  * themes
  *
- * Includes both internal WordPress routines and theme-use routines.
+ * Includes both internal ClassicPress routines and theme-use routines.
  *
  * This functionality was found in a plugin before the WordPress 2.2 release, which
  * included it in the core from that point on.
  *
- * @link https://codex.wordpress.org/Plugins/WordPress_Widgets WordPress Widgets
+ * @link https://codex.wordpress.org/Plugins/WordPress_Widgets ClassicPress Widgets
  * @link https://codex.wordpress.org/Plugins/WordPress_Widgets_Api Widgets API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Widgets
  * @since WP-2.2.0
  */
@@ -200,7 +200,7 @@ function register_sidebars( $number = 1, $args = array() ) {
  * Builds the definition for a single sidebar and returns the ID.
  *
  * Accepts either a string or an array and then parses that against a set
- * of default arguments for the new sidebar. WordPress will automatically
+ * of default arguments for the new sidebar. ClassicPress will automatically
  * generate a sidebar ID and name based on the current number of registered
  * sidebars if those arguments are not included.
  *
@@ -1592,9 +1592,9 @@ function wp_widget_rss_process( $widget_rss, $check_feed = true ) {
 }
 
 /**
- * Registers all of the default WordPress widgets on startup.
+ * Registers all of the default ClassicPress widgets on startup.
  *
- * Calls {@see 'widgets_init'} action after all of the WordPress widgets have been registered.
+ * Calls {@see 'widgets_init'} action after all of the ClassicPress widgets have been registered.
  *
  * @since WP-2.2.0
  */
@@ -1642,7 +1642,7 @@ function wp_widgets_init() {
 	register_widget( 'WP_Widget_Custom_HTML' );
 
 	/**
-	 * Fires after all default WordPress widgets have been registered.
+	 * Fires after all default ClassicPress widgets have been registered.
 	 *
 	 * @since WP-2.2.0
 	 */

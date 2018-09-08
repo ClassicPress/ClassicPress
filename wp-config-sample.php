@@ -1,6 +1,6 @@
 <?php
 /**
- * The base configuration for WordPress
+ * The base configuration for ClassicPress
  *
  * The wp-config.php creation script uses this file during the
  * installation. You don't have to use the web site, you can
@@ -15,11 +15,11 @@
  *
  * @link https://codex.wordpress.org/Editing_wp-config.php
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 // ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
+/** The name of the database for ClassicPress */
 define('DB_NAME', 'database_name_here');
 
 /** MySQL database username */
@@ -58,15 +58,15 @@ define('NONCE_SALT',       'put your unique phrase here');
 /**#@-*/
 
 /**
- * WordPress Database Table prefix.
+ * ClassicPress Database Table prefix.
  *
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = 'wp_';
+$table_prefix  = 'cp_';
 
 /**
- * For developers: WordPress debugging mode.
+ * For developers: ClassicPress debugging mode.
  *
  * Change this to true to enable the display of notices during development.
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
@@ -81,9 +81,9 @@ define('WP_DEBUG', false);
 
 /* That's all, stop editing! Happy blogging. */
 
-/** Absolute path to the WordPress directory. */
+/** Absolute path to the ClassicPress directory. */
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
-/** Sets up WordPress vars and included files. */
+/** Sets up ClassicPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');

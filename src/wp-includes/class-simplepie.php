@@ -17,7 +17,7 @@ require ABSPATH . WPINC . '/SimplePie/Parse/Date.php';
 require ABSPATH . WPINC . '/SimplePie/Author.php';
 
 /**
- * WordPress autoloader for SimplePie.
+ * ClassicPress autoloader for SimplePie.
  *
  * @since WP-3.5.0
  */

@@ -3,7 +3,7 @@
  * Unit tests covering WP_REST_Posts_Controller functionality, used for
  * Pages
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

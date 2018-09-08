@@ -734,7 +734,7 @@ plupload.addFileFilter('prevent_duplicates', function(value, file, cb) {
 		@param {Array} [settings.filters.mime_types=[]] List of file types to accept, each one defined by title and list of extensions. `e.g. {title : "Image files", extensions : "jpg,jpeg,gif,png"}`. Dispatches `plupload.FILE_EXTENSION_ERROR`
 		@param {String|Number} [settings.filters.max_file_size=0] Maximum file size that the user can pick, in bytes. Optionally supports b, kb, mb, gb, tb suffixes. `e.g. "10mb" or "1gb"`. By default - not set. Dispatches `plupload.FILE_SIZE_ERROR`.
 		@param {Boolean} [settings.filters.prevent_duplicates=false] Do not let duplicates into the queue. Dispatches `plupload.FILE_DUPLICATE_ERROR`.
-	@param {String} [settings.flash_swf_url] URL of the Flash swf. (Not used in WordPress)
+	@param {String} [settings.flash_swf_url] URL of the Flash swf. (Not used in ClassicPress)
 	@param {Object} [settings.headers] Custom headers to send with the upload. Hash of name/value pairs.
 	@param {Number} [settings.max_retries=0] How many times to retry the chunk or file, before triggering Error event.
 	@param {Boolean} [settings.multipart=true] Whether to send file and additional parameters as Multipart formated message.
@@ -747,7 +747,7 @@ plupload.addFileFilter('prevent_duplicates', function(value, file, cb) {
 		@param {Number} [settings.resize.quality=90] Compression quality for jpegs (1-100).
 		@param {Boolean} [settings.resize.crop=false] Whether to crop images to exact dimensions. By default they will be resized proportionally.
 	@param {String} [settings.runtimes="html5,html4"] Comma separated list of runtimes, that Plupload will try in turn, moving to the next if previous fails.
-	@param {String} [settings.silverlight_xap_url] URL of the Silverlight xap. (Not used in WordPress)
+	@param {String} [settings.silverlight_xap_url] URL of the Silverlight xap. (Not used in ClassicPress)
 	@param {Boolean} [settings.unique_names=false] If true will generate unique filenames for uploaded files.
 	@param {Boolean} [settings.send_file_name=true] Whether to send file name as additional argument - 'name' (required for chunked uploads and some other cases where file name cannot be sent via normal ways).
 */

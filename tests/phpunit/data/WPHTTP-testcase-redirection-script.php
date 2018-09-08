@@ -1,6 +1,6 @@
 <?php
 
-// Thanks WordPress..
+// Thanks ClassicPress..
 function is_ssl() {
 	if ( isset($_SERVER['HTTPS']) ) {
 		if ( 'on' == strtolower($_SERVER['HTTPS']) )

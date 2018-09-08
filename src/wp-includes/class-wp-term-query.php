@@ -3,7 +3,7 @@
 /**
  * Taxonomy API: WP_Term_Query class.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Taxonomy
  * @since WP-4.6.0
  */
@@ -293,7 +293,7 @@ class WP_Term_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @return array List of terms.
 	 */
@@ -816,7 +816,7 @@ class WP_Term_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $orderby_raw Alias for the field to order by.
 	 * @return string|false Value to used in the ORDER clause. False otherwise.
@@ -954,7 +954,7 @@ class WP_Term_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $string
 	 * @return string

@@ -7,7 +7,7 @@
  * @link https://codex.wordpress.org/oEmbed oEmbed Codex Article
  * @link http://oembed.com/ oEmbed Homepage
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage oEmbed
  */
 

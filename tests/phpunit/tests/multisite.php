@@ -3,7 +3,7 @@
 if ( is_multisite() ) :
 
 /**
- * A set of unit tests for WordPress Multisite
+ * A set of unit tests for ClassicPress Multisite
  *
  * @group multisite
  */

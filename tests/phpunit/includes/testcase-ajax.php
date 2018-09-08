@@ -2,7 +2,7 @@
 /**
  * Ajax test cases
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-3.4.0
  */
@@ -10,7 +10,7 @@
 /**
  * Ajax test case class
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-3.4.0
  */

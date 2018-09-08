@@ -2,7 +2,7 @@
 /**
  * Plugin API: WP_Hook class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Plugin
  * @since WP-4.7.0
  */
@@ -353,7 +353,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	}
 
 	/**
-	 * Normalizes filters set up before WordPress has initialized to WP_Hook objects.
+	 * Normalizes filters set up before ClassicPress has initialized to WP_Hook objects.
 	 *
 	 * @since WP-4.7.0
 	 * @static

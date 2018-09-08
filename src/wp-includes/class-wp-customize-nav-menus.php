@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Nav Menus classes
+ * ClassicPress Customize Nav Menus classes
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.3.0
  */

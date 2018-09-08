@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Sidebar_Section class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.4.0
  */

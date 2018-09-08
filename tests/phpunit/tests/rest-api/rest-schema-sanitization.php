@@ -2,7 +2,7 @@
 /**
  * Unit tests covering schema validation and sanitization functionality.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

@@ -12,61 +12,61 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init('
-			/var/www/wordpress/
-			/var/www/wordpress/wp-includes/
-			/var/www/wordpress/index.php
+			/var/www/classicpress/
+			/var/www/classicpress/wp-includes/
+			/var/www/classicpress/index.php
 		');
 
-		$path = $fs->find_folder( '/var/www/wordpress/' );
-		$this->assertEquals( '/var/www/wordpress/', $path );
+		$path = $fs->find_folder( '/var/www/classicpress/' );
+		$this->assertEquals( '/var/www/classicpress/', $path );
 
 		$path = $fs->find_folder( '/this/directory/doesnt/exist/' );
 		$this->assertFalse( $path );
 
 	}
 
-	function test_sibling_wordpress_in_subdir() {
+	function test_sibling_classicpress_in_subdir() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init('
-			/www/example.com/wordpress/
-			/www/example.com/wordpress/wp-includes/
-			/www/example.com/wordpress/index.php
-			/www/wp.example.com/wordpress/
-			/www/wp.example.com/wordpress/wp-includes/
-			/www/wp.example.com/wordpress/wp-content/
-			/www/wp.example.com/wordpress/index.php
+			/www/example.com/classicpress/
+			/www/example.com/classicpress/wp-includes/
+			/www/example.com/classicpress/index.php
+			/www/cp.example.com/classicpress/
+			/www/cp.example.com/classicpress/wp-includes/
+			/www/cp.example.com/classicpress/wp-content/
+			/www/cp.example.com/classicpress/index.php
 			/www/index.php
 		');
 
-		$path = $fs->find_folder( '/var/www/example.com/wordpress/' );
-		$this->assertEquals( '/www/example.com/wordpress/', $path );
+		$path = $fs->find_folder( '/var/www/example.com/classicpress/' );
+		$this->assertEquals( '/www/example.com/classicpress/', $path );
 		
-		$path = $fs->find_folder( '/var/www/wp.example.com/wordpress/wp-content/' );
-		$this->assertEquals( '/www/wp.example.com/wordpress/wp-content/', $path );
+		$path = $fs->find_folder( '/var/www/cp.example.com/classicpress/wp-content/' );
+		$this->assertEquals( '/www/cp.example.com/classicpress/wp-content/', $path );
 
 	}
 
 	/**
-	 * Two WordPress installations, with one contained within the other
+	 * Two ClassicPress installations, with one contained within the other
 	 * FTP / = /var/www/example.com/ on Disk
 	 * example.com at /
-	 * wp.example.com at /wp.example.com/wordpress/
+	 * cp.example.com at /cp.example.com/classicpress/
 	 */
 	function test_subdir_of_another() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init('
-			/wp.example.com/index.php
-			/wp.example.com/wordpress/
-			/wp.example.com/wordpress/wp-includes/
-			/wp.example.com/wordpress/index.php
+			/cp.example.com/index.php
+			/cp.example.com/classicpress/
+			/cp.example.com/classicpress/wp-includes/
+			/cp.example.com/classicpress/index.php
 			/wp-includes/
 			/index.php
 		');
 
-		$path = $fs->abspath( '/var/www/example.com/wp.example.com/wordpress/' );
-		$this->assertEquals( '/wp.example.com/wordpress/', $path );
+		$path = $fs->abspath( '/var/www/example.com/cp.example.com/classicpress/' );
+		$this->assertEquals( '/cp.example.com/classicpress/', $path );
 		
 		$path = $fs->abspath( '/var/www/example.com/' );
 		$this->assertEquals( '/', $path );
@@ -74,7 +74,7 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	}
 
 	/**
-	 * Test the WordPress ABSPATH containing TWO tokens (www) of which exists in the current FTP home.
+	 * Test the ClassicPress ABSPATH containing TWO tokens (www) of which exists in the current FTP home.
 	 *
 	 * @ticket 20934
 	 */

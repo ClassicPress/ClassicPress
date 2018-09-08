@@ -1,13 +1,13 @@
 <?php
 
-/* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
+/* Path to the ClassicPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', dirname( __FILE__ ) . '/src/' );
 
 /*
  * Path to the theme to test with.
  *
  * The 'default' theme is symlinked from test/phpunit/data/themedir1/default into
- * the themes directory of the WordPress installation defined above.
+ * the themes directory of the ClassicPress installation defined above.
  */
 define( 'WP_DEFAULT_THEME', 'default' );
 
@@ -19,13 +19,13 @@ define( 'WP_DEFAULT_THEME', 'default' );
 // Tests with an associated Trac ticket that is still open are normally skipped.
 // define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
 
-// Test with WordPress debug mode (default).
+// Test with ClassicPress debug mode (default).
 define( 'WP_DEBUG', true );
 
 // ** MySQL settings ** //
 
-// This configuration file will be used by the copy of WordPress being tested.
-// wordpress/wp-config.php will be ignored.
+// This configuration file will be used by the copy of ClassicPress being tested.
+// src/wp-config.php will be ignored.
 
 // WARNING WARNING WARNING!
 // These tests will DROP ALL TABLES in the database with the prefix named below.
@@ -53,7 +53,7 @@ define('SECURE_AUTH_SALT', 'put your unique phrase here');
 define('LOGGED_IN_SALT',   'put your unique phrase here');
 define('NONCE_SALT',       'put your unique phrase here');
 
-$table_prefix  = 'wptests_';   // Only numbers, letters, and underscores please!
+$table_prefix  = 'cptests_';   // Only numbers, letters, and underscores please!
 
 define( 'WP_TESTS_DOMAIN', 'example.org' );
 define( 'WP_TESTS_EMAIL', 'admin@example.org' );

@@ -2,7 +2,7 @@
 /**
  * REST API: WP_REST_Revisions_Controller class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST_API
  * @since WP-4.7.0
  */

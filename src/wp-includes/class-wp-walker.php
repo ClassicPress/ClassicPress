@@ -8,7 +8,7 @@
  *
  * @since WP-2.1.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @abstract
  */
 class Walker {

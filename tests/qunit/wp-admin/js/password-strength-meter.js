@@ -96,7 +96,7 @@ jQuery( function() {
 		var blacklist = wp.passwordStrength.userInputBlacklist();
 
 		ok( jQuery.isArray( blacklist ), 'blacklist is an array' );
-		ok( jQuery.inArray( 'WordPress', blacklist ) > -1, 'blacklist contains "WordPress" from page title' );
+		ok( jQuery.inArray( 'ClassicPress', blacklist ) > -1, 'blacklist contains "ClassicPress" from page title' );
 		ok( jQuery.inArray( 'tests', blacklist ) > -1, 'blacklist contains "tests" from site URL' );
 	});
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress API for creating bbcode-like tags or what WordPress calls
+ * ClassicPress API for creating bbcode-like tags or what ClassicPress calls
  * "shortcodes". The tag and attribute parsing or regular expression code is
  * based on the Textpattern tag parser.
  *
@@ -25,7 +25,7 @@
  *
  * @link https://codex.wordpress.org/Shortcode_API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Shortcodes
  * @since WP-2.5.0
  */

@@ -2,7 +2,7 @@
 /**
  * Define a class to test `get_privacy_policy_url()`.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage UnitTests
  * @since WP-4.9.6
  */

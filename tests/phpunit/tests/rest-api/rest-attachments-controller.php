@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Attachments_Controller functionality
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

@@ -7,7 +7,7 @@ require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
 /**
  * Testing ajax media editing
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-3.5.0
  * @group      ajax

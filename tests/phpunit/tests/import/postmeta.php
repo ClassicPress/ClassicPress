@@ -81,7 +81,7 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 	function test_serialized_postmeta_with_cdata() {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-with-cdata.xml', array( 'johncoswell' => 'johncoswell' ) );
 
-		//HTML in the CDATA should work with old WordPress version
+		//HTML in the CDATA should work with old ClassicPress version
 		$this->assertEquals( '<pre>some html</pre>', get_post_meta( 10, 'contains-html', true ) );
 		//Serialised will only work with 3.0 onwards.
 		$expected["special_post_title"] = "A special title";
