@@ -30,7 +30,7 @@ class TestFactoryFor extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32536
+	 * @see https://core.trac.wordpress.org/ticket/32536
 	 */
 	public function test_term_factory_create_and_get_should_return_term_object() {
 		register_taxonomy( 'wptests_tax', 'post' );

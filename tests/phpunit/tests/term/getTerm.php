@@ -122,7 +122,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14162
+	 * @see https://core.trac.wordpress.org/ticket/14162
 	 */
 	public function test_numeric_properties_should_be_cast_to_ints() {
 		global $wpdb;
@@ -143,7 +143,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34332
+	 * @see https://core.trac.wordpress.org/ticket/34332
 	 */
 	 public function test_should_return_null_when_provided_taxonomy_does_not_match_actual_term_taxonomy() {
 		$term_id = self::factory()->term->create( array( 'taxonomy' => 'post_tag' ) );
@@ -151,7 +151,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_should_return_wp_error_when_term_is_shared_and_no_taxonomy_is_specified() {
 		$terms = $this->generate_shared_terms();
@@ -162,7 +162,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_should_return_term_when_term_is_shared_and_correct_taxonomy_is_specified() {
 		$terms = $this->generate_shared_terms();
@@ -174,7 +174,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_should_return_null_when_term_is_shared_and_incorrect_taxonomy_is_specified() {
 		$terms = $this->generate_shared_terms();
@@ -185,7 +185,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_shared_term_in_cache_should_be_ignored_when_specifying_a_different_taxonomy() {
 		global $wpdb;
@@ -206,7 +206,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_should_return_error_when_only_matching_term_is_in_an_invalid_taxonomy() {
 		$t = self::factory()->term->create( array( 'taxonomy' => 'wptests_tax' ) );
@@ -219,7 +219,7 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34533
+	 * @see https://core.trac.wordpress.org/ticket/34533
 	 */
 	public function test_term_should_be_returned_when_id_is_shared_only_with_invalid_taxonomies() {
 		$terms = $this->generate_shared_terms();

@@ -71,7 +71,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -88,7 +88,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -115,7 +115,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -148,7 +148,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -173,7 +173,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -202,7 +202,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40673
+	 * @see https://core.trac.wordpress.org/ticket/40673
 	 * @group multisite
 	 * @group ms-required
 	 */

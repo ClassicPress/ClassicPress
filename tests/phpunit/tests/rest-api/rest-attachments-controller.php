@@ -698,7 +698,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @ticket 40861
+	 * @see https://core.trac.wordpress.org/ticket/40861
 	 */
 	public function test_create_item_ensure_relative_path() {
 		wp_set_current_user( self::$author_id );
@@ -1329,7 +1329,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @ticket 43751
+	 * @see https://core.trac.wordpress.org/ticket/43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1359,7 +1359,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @ticket 43751
+	 * @see https://core.trac.wordpress.org/ticket/43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1380,7 +1380,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @ticket 43751
+	 * @see https://core.trac.wordpress.org/ticket/43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1410,7 +1410,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @ticket 43751
+	 * @see https://core.trac.wordpress.org/ticket/43751
 	 * @group multisite
 	 * @group ms-required
 	 */

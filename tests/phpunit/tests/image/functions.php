@@ -114,7 +114,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 	/**
 	 * Test save image file and mime_types
-	 * @ticket 6821
+	 * @see https://core.trac.wordpress.org/ticket/6821
 	 */
 	public function test_wp_save_image_file() {
 		if ( ! extension_loaded( 'fileinfo' ) ) {
@@ -166,7 +166,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 	/**
 	 * Test that a passed mime type overrides the extension in the filename
-	 * @ticket 6821
+	 * @see https://core.trac.wordpress.org/ticket/6821
 	 */
 	public function test_mime_overrides_filename() {
 		if ( ! extension_loaded( 'fileinfo' ) ) {
@@ -204,7 +204,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 	/**
 	 * Test that mime types are correctly inferred from file extensions
-	 * @ticket 6821
+	 * @see https://core.trac.wordpress.org/ticket/6821
 	 */
 	public function test_inferred_mime_types() {
 		if ( ! extension_loaded( 'fileinfo' ) ) {
@@ -259,7 +259,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	/**
 	 * Try loading a directory
 	 *
-	 * @ticket 17814
+	 * @see https://core.trac.wordpress.org/ticket/17814
 	 * @expectedDeprecated wp_load_image
 	 */
 	public function test_load_directory() {
@@ -345,7 +345,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23325
+	 * @see https://core.trac.wordpress.org/ticket/23325
 	 */
 	public function test_wp_crop_image_error_on_saving() {
 		WP_Image_Editor_Mock::$save_return = new WP_Error();
@@ -360,7 +360,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31050
+	 * @see https://core.trac.wordpress.org/ticket/31050
 	 */
 	public function test_wp_generate_attachment_metadata_pdf() {
 		if ( ! wp_image_editor_supports( array( 'mime_type' => 'application/pdf' ) ) ) {
@@ -418,7 +418,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	/**
 	 * Crop setting for PDF.
 	 *
-	 * @ticket 43226
+	 * @see https://core.trac.wordpress.org/ticket/43226
 	 */
 	public function test_crop_setting_for_pdf() {
 
@@ -479,7 +479,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39231
+	 * @see https://core.trac.wordpress.org/ticket/39231
 	 */
 	public function test_fallback_intermediate_image_sizes() {
 		if ( ! wp_image_editor_supports( array( 'mime_type' => 'application/pdf' ) ) ) {
@@ -528,7 +528,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 	/**
 	 * Test PDF preview doesn't overwrite existing JPEG.
-	 * @ticket 39875
+	 * @see https://core.trac.wordpress.org/ticket/39875
 	 */
 	public function test_pdf_preview_doesnt_overwrite_existing_jpeg() {
 		if ( ! wp_image_editor_supports( array( 'mime_type' => 'application/pdf' ) ) ) {

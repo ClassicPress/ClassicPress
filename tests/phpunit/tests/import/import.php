@@ -246,7 +246,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21007
+	 * @see https://core.trac.wordpress.org/ticket/21007
 	 */
 	public function test_slashes_should_not_be_stripped() {
 		global $wpdb;

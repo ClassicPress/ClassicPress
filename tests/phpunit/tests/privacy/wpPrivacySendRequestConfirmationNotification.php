@@ -38,7 +38,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The function should not send emails when the request ID does not exist.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_function_should_not_send_email_when_not_a_valid_request_id() {
 		_wp_privacy_send_request_confirmation_notification( 1234567890 );
@@ -50,7 +50,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The function should not send emails when the ID passed is not a WP_User_Request.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_function_should_not_send_email_when_not_a_wp_user_request() {
 		$post_id = $this->factory->post->create( array(
@@ -66,7 +66,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The function should send an email to the site admin when a user request is confirmed.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_function_should_send_email_to_site_admin_when_user_request_confirmed() {
 		$email      = 'export.request.from.unregistered.user@example.com';
@@ -89,7 +89,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The function should only send an email to the site admin when a user request is confirmed.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_function_should_only_send_email_to_site_admin_when_user_request_is_confirmed() {
 		$email      = 'export.request.from.unregistered.user@example.com';
@@ -109,7 +109,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The function should only send an email once to the site admin when a user request is confirmed.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_function_should_only_send_email_once_to_admin_when_user_request_is_confirmed() {
 		$email      = 'export.request.from.unregistered.user@example.com';
@@ -133,7 +133,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The email address should be filterable.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_email_address_should_be_filterable() {
 		$email      = 'export.request.from.unregistered.user@example.com';
@@ -166,7 +166,7 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 	/**
 	 * The email content should be filterable.
 	 *
-	 * @ticket 43967
+	 * @see https://core.trac.wordpress.org/ticket/43967
 	 */
 	public function test_email_content_should_be_filterable() {
 		$email      = 'export.request.from.unregistered.user@example.com';

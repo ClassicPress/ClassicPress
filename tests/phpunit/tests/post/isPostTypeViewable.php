@@ -73,7 +73,7 @@ class Tests_Post_IsPostTypeViewable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35609
+	 * @see https://core.trac.wordpress.org/ticket/35609
 	 */
 	public function test_should_accept_post_type_name() {
 		register_post_type( 'wptests_pt', array(
@@ -86,7 +86,7 @@ class Tests_Post_IsPostTypeViewable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35609
+	 * @see https://core.trac.wordpress.org/ticket/35609
 	 */
 	public function test_should_return_false_for_bad_post_type_name() {
 		$this->assertFalse( is_post_type_viewable( 'foo' ) );

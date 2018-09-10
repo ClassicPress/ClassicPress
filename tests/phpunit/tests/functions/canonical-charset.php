@@ -49,7 +49,7 @@ class Tests_Functions_canonical_charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23688
+	 * @see https://core.trac.wordpress.org/ticket/23688
 	 */
 	function test_update_option_blog_charset() {
 		$orig_blog_charset = get_option( 'blog_charset' );

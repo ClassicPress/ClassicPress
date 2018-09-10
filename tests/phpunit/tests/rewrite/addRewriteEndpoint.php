@@ -44,7 +44,7 @@ class Tests_Rewrite_AddRewriteEndpoint extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25143
+	 * @see https://core.trac.wordpress.org/ticket/25143
 	 */
 	public function test_should_register_query_var_using_name_param_if_true_is_passed_as_query_var() {
 		add_rewrite_endpoint( 'foo', EP_ALL, true );
@@ -52,7 +52,7 @@ class Tests_Rewrite_AddRewriteEndpoint extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25143
+	 * @see https://core.trac.wordpress.org/ticket/25143
 	 */
 	public function test_should_not_register_query_var_if_query_var_param_is_false() {
 		$qvs = $GLOBALS['wp']->public_query_vars;
@@ -61,7 +61,7 @@ class Tests_Rewrite_AddRewriteEndpoint extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25143
+	 * @see https://core.trac.wordpress.org/ticket/25143
 	 */
 	public function test_is_home_should_be_false_when_visiting_custom_endpoint_without_a_registered_query_var_and_page_on_front_is_set() {
 

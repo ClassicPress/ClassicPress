@@ -53,7 +53,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 33981
+	 * @see https://core.trac.wordpress.org/ticket/33981
 	 */
 	function test_img_caption_shortcode_with_empty_params_but_content() {
 		$result = img_caption_shortcode( array(), $this->caption );
@@ -61,7 +61,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 33981
+	 * @see https://core.trac.wordpress.org/ticket/33981
 	 */
 	function test_img_caption_shortcode_short_circuit_filter() {
 		add_filter( 'img_caption_shortcode', array( $this, '_return_alt_caption' ) );
@@ -78,7 +78,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 33981
+	 * @see https://core.trac.wordpress.org/ticket/33981
 	 */
 	function test_img_caption_shortcode_empty_width() {
 		$result = img_caption_shortcode(
@@ -91,7 +91,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 33981
+	 * @see https://core.trac.wordpress.org/ticket/33981
 	 */
 	function test_img_caption_shortcode_empty_caption() {
 		$result = img_caption_shortcode(
@@ -103,7 +103,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 33981
+	 * @see https://core.trac.wordpress.org/ticket/33981
 	 */
 	function test_img_caption_shortcode_empty_caption_and_content() {
 		$result = img_caption_shortcode(
@@ -211,7 +211,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 23776
+	 * @see https://core.trac.wordpress.org/ticket/23776
 	 */
 	function test_autoembed_empty() {
 		global $wp_embed;
@@ -223,7 +223,7 @@ CAP;
 	}
 
 	/**
-	 * @ticket 23776
+	 * @see https://core.trac.wordpress.org/ticket/23776
 	 */
 	function test_autoembed_no_paragraphs_around_urls() {
 		global $wp_embed;
@@ -358,7 +358,7 @@ https://w.org</a>'
 	}
 
 	/**
-	 * @ticket 38965
+	 * @see https://core.trac.wordpress.org/ticket/38965
 	 */
 	function test_wp_prepare_attachment_for_js_without_image_sizes() {
 		// Create the attachement post.
@@ -383,7 +383,7 @@ https://w.org</a>'
 	}
 
 	/**
-	 * @ticket 19067
+	 * @see https://core.trac.wordpress.org/ticket/19067
 	 * @expectedDeprecated wp_convert_bytes_to_hr
 	 */
 	function test_wp_convert_bytes_to_hr() {
@@ -422,7 +422,7 @@ https://w.org</a>'
 	}
 
 	/**
-	 * @ticket 22960
+	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_get_attached_images() {
 		$post_id = self::factory()->post->create();
@@ -436,7 +436,7 @@ https://w.org</a>'
 	}
 
 	/**
-	 * @ticket 22960
+	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_post_galleries_images() {
 		$ids1 = array();
@@ -479,7 +479,7 @@ BLOB;
 	}
 
 	/**
-	 * @ticket 39304
+	 * @see https://core.trac.wordpress.org/ticket/39304
 	 */
 	function test_post_galleries_images_without_global_post() {
 		// Set up an unattached image.
@@ -500,7 +500,7 @@ BLOB;
 	}
 
 	/**
-	 * @ticket 39304
+	 * @see https://core.trac.wordpress.org/ticket/39304
 	 */
 	function test_post_galleries_ignores_global_post() {
 		$global_post_id = $this->factory->post->create( array(
@@ -529,7 +529,7 @@ BLOB;
 	}
 
 	/**
-	 * @ticket 39304
+	 * @see https://core.trac.wordpress.org/ticket/39304
 	 */
 	function test_post_galleries_respects_id_attrs() {
 		$post_id = $this->factory->post->create( array(
@@ -562,7 +562,7 @@ BLOB;
 	}
 
 	/**
-	 * @ticket 22960
+	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_post_gallery_images() {
 		$ids1 = array();
@@ -690,14 +690,14 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 */
 	function test_wp_audio_shortcode_with_empty_params() {
 		$this->assertNull( wp_audio_shortcode( array() ) );
 	}
 
 	/**
-	 * @ticket 35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 */
 	function test_wp_audio_shortcode_with_bad_attr() {
 		$this->assertSame(
@@ -709,7 +709,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 */
 	function test_wp_audio_shortcode_attributes() {
 		$actual = wp_audio_shortcode( array(
@@ -788,7 +788,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket  35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_with_empty_params() {
@@ -796,7 +796,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket  35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_with_bad_attr() {
@@ -809,7 +809,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket  35367
+	 * @see https://core.trac.wordpress.org/ticket/35367
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_attributes() {
@@ -847,7 +847,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 40866
+	 * @see https://core.trac.wordpress.org/ticket/40866
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_youtube_remove_feature() {
@@ -859,7 +859,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 40866
+	 * @see https://core.trac.wordpress.org/ticket/40866
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_youtube_force_ssl() {
@@ -871,7 +871,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 40866
+	 * @see https://core.trac.wordpress.org/ticket/40866
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_force_ssl_remove_query_args() {
@@ -884,7 +884,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 40977
+	 * @see https://core.trac.wordpress.org/ticket/40977
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_adds_loop() {
@@ -896,7 +896,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 40977
+	 * @see https://core.trac.wordpress.org/ticket/40977
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_force_adds_loop_true() {
@@ -909,7 +909,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 26768
+	 * @see https://core.trac.wordpress.org/ticket/26768
 	 */
 	function test_add_image_size() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
@@ -930,7 +930,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 26768
+	 * @see https://core.trac.wordpress.org/ticket/26768
 	 */
 	function test_remove_image_size() {
 		add_image_size( 'test-size', 200, 600 );
@@ -940,7 +940,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 26951
+	 * @see https://core.trac.wordpress.org/ticket/26951
 	 */
 	function test_has_image_size() {
 		add_image_size( 'test-size', 200, 600 );
@@ -951,7 +951,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 30346
+	 * @see https://core.trac.wordpress.org/ticket/30346
 	 */
 	function test_attachment_url_to_postid() {
 		$image_path = '2014/11/' . $this->img_name;
@@ -972,7 +972,8 @@ VIDEO;
 		) );
 
 		/**
-		 * @ticket 33109 Testing protocols not matching
+		 * @see https://core.trac.wordpress.org/ticket/33109
+		 * Testing protocols not matching
 		 */
 		$image_url  = 'https://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path;
 		$this->assertEquals( $attachment_id, attachment_url_to_postid( $image_url ) );
@@ -997,7 +998,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 31044
+	 * @see https://core.trac.wordpress.org/ticket/31044
 	 */
 	function test_attachment_url_to_postid_with_empty_url() {
 		$post_id = attachment_url_to_postid( '' );
@@ -1006,7 +1007,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 22768
+	 * @see https://core.trac.wordpress.org/ticket/22768
 	 */
 	public function test_media_handle_upload_sets_post_excerpt() {
 		$iptc_file = DIR_TESTDATA . '/images/test-image-iptc.jpg';
@@ -1037,7 +1038,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 37989
+	 * @see https://core.trac.wordpress.org/ticket/37989
 	 */
 	public function test_media_handle_upload_expected_titles() {
 		$test_file = DIR_TESTDATA . '/images/test-image.jpg';
@@ -1068,7 +1069,7 @@ VIDEO;
 	}
 
 	/**
-	 * @ticket 33016
+	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function test_multiline_cdata() {
 		global $wp_embed;
@@ -1085,7 +1086,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33016
+	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function test_multiline_comment() {
 		global $wp_embed;
@@ -1102,7 +1103,7 @@ EOF;
 
 
 	/**
-	 * @ticket 33016
+	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function test_multiline_comment_with_embeds() {
 		$content = <<<EOF
@@ -1135,7 +1136,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33016
+	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function filter_wp_embed_shortcode_custom( $content, $url ) {
 		if ( 'https://www.example.com/?video=1' == $url ) {
@@ -1145,7 +1146,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33016
+	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function test_oembed_explicit_media_link() {
 		global $wp_embed;
@@ -1181,7 +1182,7 @@ EOF;
 
 	/**
 	 * Tests the default output of `wp_get_attachment_image()`.
-	 * @ticket 34635
+	 * @see https://core.trac.wordpress.org/ticket/34635
 	 */
 	function test_wp_get_attachment_image_defaults() {
 		$image = image_downsize( self::$large_id, 'thumbnail' );
@@ -1192,7 +1193,7 @@ EOF;
 
 	/**
 	 * Test that `wp_get_attachment_image()` returns a proper alt value.
-	 * @ticket 34635
+	 * @see https://core.trac.wordpress.org/ticket/34635
 	 */
 	function test_wp_get_attachment_image_with_alt() {
 		// Add test alt metadata.
@@ -1208,7 +1209,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33878
+	 * @see https://core.trac.wordpress.org/ticket/33878
 	 */
 	function test_wp_get_attachment_image_url() {
 		$this->assertFalse( wp_get_attachment_image_url( 0 ) );
@@ -1225,7 +1226,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 12235
+	 * @see https://core.trac.wordpress.org/ticket/12235
 	 */
 	function test_wp_get_attachment_caption() {
 		$this->assertFalse( wp_get_attachment_caption( 0 ) );
@@ -1245,7 +1246,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 12235
+	 * @see https://core.trac.wordpress.org/ticket/12235
 	 */
 	function test_wp_get_attachment_caption_empty() {
 		$post_id = self::factory()->post->create();
@@ -1291,7 +1292,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
@@ -1331,7 +1332,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_no_date_uploads() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
@@ -1380,7 +1381,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_with_edits() {
 		// For this test we're going to mock metadata changes from an edit.
@@ -1413,7 +1414,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35106
+	 * @see https://core.trac.wordpress.org/ticket/35106
 	 */
 	function test_wp_calculate_image_srcset_with_absolute_path_in_meta() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
@@ -1456,7 +1457,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_false() {
 		$sizes = wp_calculate_image_srcset( array( 400, 300 ), 'file.png', array() );
@@ -1466,7 +1467,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_no_width() {
 		$file = get_attached_file( self::$large_id );
@@ -1482,8 +1483,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 34955
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/34955
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_ratio_variance() {
 		// Mock data for this test.
@@ -1527,8 +1528,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35108
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/35108
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_include_src() {
 		// Mock data for this test.
@@ -1572,7 +1573,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35480
+	 * @see https://core.trac.wordpress.org/ticket/35480
 	 */
 	function test_wp_calculate_image_srcset_corrupted_image_meta() {
 		$size_array = array( 300, 150 );
@@ -1645,8 +1646,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 36549
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/36549
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_with_spaces_in_filenames() {
 		// Mock data for this test.
@@ -1689,7 +1690,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_srcset() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
@@ -1728,7 +1729,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_srcset_single_srcset() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1743,7 +1744,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_srcset_invalidsize() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1759,7 +1760,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_sizes() {
 		// Test sizes against the default WP sizes.
@@ -1779,7 +1780,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_sizes() {
 		// Test sizes against the default WP sizes.
@@ -1802,7 +1803,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_make_content_images_responsive() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1865,8 +1866,8 @@ EOF;
 	 * the 'src' attribute manually. To avoid incorrect images
 	 * being displayed, ensure we don't add attributes in this case.
 	 *
-	 * @ticket 34898
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/34898
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_make_content_images_responsive_wrong() {
 		$image = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -1878,7 +1879,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_make_content_images_responsive_with_preexisting_srcset() {
 		// Generate HTML and add a dummy srcset attribute.
@@ -1890,8 +1891,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 33641
-	 * @ticket 34528
+	 * @see https://core.trac.wordpress.org/ticket/33641
+	 * @see https://core.trac.wordpress.org/ticket/34528
 	 */
 	function test_wp_calculate_image_srcset_animated_gifs() {
 		// Mock meta for an animated gif.
@@ -1934,8 +1935,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35045
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/35045
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_make_content_images_responsive_schemes() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1972,8 +1973,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 34945
-	 * @ticket 33641
+	 * @see https://core.trac.wordpress.org/ticket/34945
+	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_with_https_on() {
 		// Mock meta for the image.
@@ -2013,7 +2014,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 36084
+	 * @see https://core.trac.wordpress.org/ticket/36084
 	 */
 	function test_get_image_send_to_editor_defaults() {
 		$id      = self::$large_id;
@@ -2033,7 +2034,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 36084
+	 * @see https://core.trac.wordpress.org/ticket/36084
 	 */
 	function test_get_image_send_to_editor_defaults_with_optional_params() {
 		$id      = self::$large_id;
@@ -2057,7 +2058,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 36084
+	 * @see https://core.trac.wordpress.org/ticket/36084
 	 */
 	function test_get_image_send_to_editor_defaults_no_caption_no_rel() {
 		$id      = self::$large_id;
@@ -2088,7 +2089,7 @@ EOF;
 	 * The test checks if the image size that is added in the filter is
 	 * used in the output of `wp_get_attachment_image()`.
 	 *
-	 * @ticket 36246
+	 * @see https://core.trac.wordpress.org/ticket/36246
 	 */
 	function test_wp_get_attachment_image_should_use_wp_get_attachment_metadata() {
 		add_filter( 'wp_get_attachment_metadata', array( $this, '_filter_36246' ), 10, 2 );
@@ -2121,7 +2122,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 37813
+	 * @see https://core.trac.wordpress.org/ticket/37813
 	 */
 	public function test_return_type_when_inserting_attachment_with_error_in_data() {
 		$data = array(
@@ -2140,7 +2141,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_get_media_creation_timestamp_video_asf() {
 		$metadata = array(
@@ -2156,7 +2157,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_get_media_creation_timestamp_video_matroska() {
 		$metadata = array(
@@ -2174,7 +2175,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_get_media_creation_timestamp_video_quicktime() {
 		$metadata = array(
@@ -2194,7 +2195,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_get_media_creation_timestamp_video_webm() {
 		$metadata = array(
@@ -2212,7 +2213,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_read_video_metadata_adds_creation_date_with_quicktime() {
 		$video    = DIR_TESTDATA . '/uploads/small-video.mov';
@@ -2222,7 +2223,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_read_video_metadata_adds_creation_date_with_mp4() {
 		$video    = DIR_TESTDATA . '/uploads/small-video.mp4';
@@ -2232,7 +2233,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_read_video_metadata_adds_creation_date_with_mkv() {
 		$video    = DIR_TESTDATA . '/uploads/small-video.mkv';
@@ -2242,7 +2243,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35218
+	 * @see https://core.trac.wordpress.org/ticket/35218
 	 */
 	function test_wp_read_video_metadata_adds_creation_date_with_webm() {
 		$video    = DIR_TESTDATA . '/uploads/small-video.webm';
@@ -2252,7 +2253,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 10752
+	 * @see https://core.trac.wordpress.org/ticket/10752
 	 */
 	public function test_media_handle_upload_uses_post_parent_for_directory_date() {
 		$iptc_file = DIR_TESTDATA . '/images/test-image-iptc.jpg';
@@ -2286,7 +2287,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 10752
+	 * @see https://core.trac.wordpress.org/ticket/10752
 	 */
 	public function test_media_handle_upload_ignores_page_parent_for_directory_date() {
 		$iptc_file = DIR_TESTDATA . '/images/test-image-iptc.jpg';

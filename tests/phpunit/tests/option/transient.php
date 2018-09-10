@@ -43,7 +43,7 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22807
+	 * @see https://core.trac.wordpress.org/ticket/22807
 	 */
 	function test_transient_data_with_timeout() {
 		$key = rand_str();
@@ -64,7 +64,7 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22807
+	 * @see https://core.trac.wordpress.org/ticket/22807
 	 */
 	function test_transient_add_timeout() {
 		$key = rand_str();
@@ -87,7 +87,7 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 	/**
 	 * If get_option( $transient_timeout ) returns false, don't bother trying to delete the transient.
 	 *
-	 * @ticket 30380
+	 * @see https://core.trac.wordpress.org/ticket/30380
 	 */
 	function test_nonexistent_key_dont_delete_if_false() {
 		// Create a bogus a transient
@@ -115,7 +115,7 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30380
+	 * @see https://core.trac.wordpress.org/ticket/30380
 	 */
 	function test_nonexistent_key_old_timeout() {
 		// Create a transient

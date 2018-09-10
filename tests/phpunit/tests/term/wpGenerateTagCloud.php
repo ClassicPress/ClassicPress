@@ -228,7 +228,7 @@ class Tests_WP_Generate_Tag_Cloud extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 5172
+	 * @see https://core.trac.wordpress.org/ticket/5172
 	 */
 	public function test_should_include_tag_link_position_class() {
 		register_taxonomy( 'wptests_tax', 'post' );

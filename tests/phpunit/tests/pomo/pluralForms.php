@@ -38,7 +38,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41562
+	 * @see https://core.trac.wordpress.org/ticket/41562
 	 * @group external-http
 	 */
 	public function test_locales_provider() {
@@ -69,7 +69,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41562
+	 * @see https://core.trac.wordpress.org/ticket/41562
 	 * @dataProvider locales_provider
 	 * @group external-http
 	 */
@@ -147,7 +147,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41562
+	 * @see https://core.trac.wordpress.org/ticket/41562
 	 * @dataProvider simple_provider
 	 */
 	public function test_simple( $expression, $expected ) {
@@ -207,7 +207,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	 * exception of type `Exception` is not supported before PHPUnit 3.7. The CI tests for PHP 5.2
 	 * run on PHPUnit 3.6.
 	 *
-	 * @ticket 41562
+	 * @see https://core.trac.wordpress.org/ticket/41562
 	 * @dataProvider data_exceptions
 	 */
 	public function test_exceptions( $expression, $expected_exception, $call_get ) {
@@ -225,7 +225,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41562
+	 * @see https://core.trac.wordpress.org/ticket/41562
 	 */
 	public function test_cache() {
 		$mock = $this->getMockBuilder( 'Plural_Forms' )

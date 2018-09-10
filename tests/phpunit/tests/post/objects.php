@@ -89,7 +89,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22882
+	 * @see https://core.trac.wordpress.org/ticket/22882
 	 */
 	function test_get_post_ancestors_with_falsey_values() {
 		foreach ( array( null, 0, false, '0', '' ) as $post_id ) {
@@ -191,7 +191,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22223
+	 * @see https://core.trac.wordpress.org/ticket/22223
 	 */
 	function test_get_post_cache() {
 		global $wpdb;

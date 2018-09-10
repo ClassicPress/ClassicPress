@@ -54,7 +54,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32312
+	 * @see https://core.trac.wordpress.org/ticket/32312
 	 */
 	public function test_submit_button_and_submit_field_should_fall_back_on_defaults_when_filtered_defaults_do_not_contain_the_keys() {
 		$p = self::factory()->post->create();
@@ -82,7 +82,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 44126
+	 * @see https://core.trac.wordpress.org/ticket/44126
 	 */
 	public function test_fields_should_include_cookies_consent() {
 		$p = self::factory()->post->create();

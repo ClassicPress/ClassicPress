@@ -12,7 +12,7 @@ class Tests_Comment_Walker extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14041
+	 * @see https://core.trac.wordpress.org/ticket/14041
 	 */
 	function test_has_children() {
 		$comment_parent = self::factory()->comment->create( array( 'comment_post_ID' => $this->post_id ) );

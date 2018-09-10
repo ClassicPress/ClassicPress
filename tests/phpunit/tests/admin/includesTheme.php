@@ -37,8 +37,8 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10959
-	 * @ticket 11216
+	 * @see https://core.trac.wordpress.org/ticket/10959
+	 * @see https://core.trac.wordpress.org/ticket/11216
 	 * @expectedDeprecated get_theme
 	 * @expectedDeprecated get_themes
 	 */
@@ -67,7 +67,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18375
+	 * @see https://core.trac.wordpress.org/ticket/18375
 	 */
 	function test_page_templates_different_post_types() {
 		$theme = wp_get_theme( 'page-templates' );
@@ -87,7 +87,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38766
+	 * @see https://core.trac.wordpress.org/ticket/38766
 	 */
 	function test_page_templates_for_post_types_with_trailing_periods() {
 		$theme = wp_get_theme( 'page-templates' );
@@ -113,7 +113,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38696
+	 * @see https://core.trac.wordpress.org/ticket/38696
 	 */
 	function test_page_templates_child_theme() {
 		$theme = wp_get_theme( 'page-templates-child' );
@@ -143,7 +143,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41717
+	 * @see https://core.trac.wordpress.org/ticket/41717
 	 */
 	public function test_get_post_templates_child_theme() {
 		$theme = wp_get_theme( 'page-templates-child' );
@@ -178,7 +178,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	 * Differences in the structure can also trigger failure by causing PHP notices/warnings.
 	 *
 	 * @group external-http
-	 * @ticket 28121
+	 * @see https://core.trac.wordpress.org/ticket/28121
 	 */
 	function test_get_theme_featured_list_api() {
 		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
@@ -192,7 +192,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	 * Differences in the structure can also trigger failure by causing PHP notices/warnings.
 	 *
 	 * @group external-http
-	 * @ticket 28121
+	 * @see https://core.trac.wordpress.org/ticket/28121
 	 */
 	function test_get_theme_featured_list_hardcoded() {
 		$featured_list_hardcoded = get_theme_feature_list( false );

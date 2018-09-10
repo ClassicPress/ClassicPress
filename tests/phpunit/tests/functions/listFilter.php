@@ -67,7 +67,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28666
+	 * @see https://core.trac.wordpress.org/ticket/28666
 	 */
 	function test_wp_list_pluck_index_key() {
 		$list = wp_list_pluck( $this->array_list, 'name', 'id' );
@@ -75,7 +75,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28666
+	 * @see https://core.trac.wordpress.org/ticket/28666
 	 */
 	function test_wp_list_pluck_object_index_key() {
 		$list = wp_list_pluck( $this->object_list, 'name', 'id' );
@@ -83,7 +83,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28666
+	 * @see https://core.trac.wordpress.org/ticket/28666
 	 */
 	function test_wp_list_pluck_missing_index_key() {
 		$list = wp_list_pluck( $this->array_list, 'name', 'nonexistent' );
@@ -91,7 +91,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28666
+	 * @see https://core.trac.wordpress.org/ticket/28666
 	 */
 	function test_wp_list_pluck_partial_missing_index_key() {
 		$array_list = $this->array_list;
@@ -101,7 +101,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28666
+	 * @see https://core.trac.wordpress.org/ticket/28666
 	 */
 	function test_wp_list_pluck_mixed_index_key() {
 		$mixed_list = $this->array_list;

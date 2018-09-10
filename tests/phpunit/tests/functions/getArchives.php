@@ -100,7 +100,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 21596
+	 * @see https://core.trac.wordpress.org/ticket/21596
 	 */
 	function test_wp_get_archives_post_type() {
 		register_post_type( 'taco', array( 'public' => true ) );

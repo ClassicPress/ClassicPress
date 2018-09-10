@@ -109,7 +109,7 @@ class Tests_Dependencies extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21741
+	 * @see https://core.trac.wordpress.org/ticket/21741
 	 */
 	function test_query_and_registered_enqueued() {
 		$dep = new WP_Dependencies;

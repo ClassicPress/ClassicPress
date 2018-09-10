@@ -54,7 +54,7 @@ class Tests_Multisite_Get_Id_From_Blogname extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34450
+	 * @see https://core.trac.wordpress.org/ticket/34450
 	 */
 	public function test_get_id_from_blogname_no_www() {
 		global $current_site;
@@ -75,7 +75,7 @@ class Tests_Multisite_Get_Id_From_Blogname extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34450
+	 * @see https://core.trac.wordpress.org/ticket/34450
 	 */
 	public function test_get_id_from_blogname_www() {
 		global $current_site;

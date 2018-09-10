@@ -58,7 +58,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29552
+	 * @see https://core.trac.wordpress.org/ticket/29552
 	 */
 	public function test_no_found_rows_default_with_nopaging_true() {
 		$p = $this->factory->post->create();
@@ -73,7 +73,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29552
+	 * @see https://core.trac.wordpress.org/ticket/29552
 	 */
 	public function test_no_found_rows_default_with_postsperpage_minus1() {
 		$p = $this->factory->post->create();

@@ -147,7 +147,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35991
+	 * @see https://core.trac.wordpress.org/ticket/35991
 	 */
 	public function test_update_term_meta() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -183,7 +183,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35991
+	 * @see https://core.trac.wordpress.org/ticket/35991
 	 */
 	public function test_delete_term_meta() {
 		register_taxonomy( 'wptests_tax', 'post' );

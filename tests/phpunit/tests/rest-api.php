@@ -448,7 +448,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34299
+	 * @see https://core.trac.wordpress.org/ticket/34299
 	 */
 	public function test_rest_url_scheme() {
 		$_SERVER['SERVER_NAME'] = parse_url( home_url(), PHP_URL_HOST );

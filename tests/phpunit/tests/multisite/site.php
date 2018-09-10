@@ -380,7 +380,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	/**
 	 * Test cached data for a site that does not exist and then again after it exists.
 	 *
-	 * @ticket 23405
+	 * @see https://core.trac.wordpress.org/ticket/23405
 	 */
 	function test_get_blog_details_when_site_does_not_exist() {
 		// Create an unused site so that we can then assume an invalid site ID.
@@ -632,7 +632,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27952
+	 * @see https://core.trac.wordpress.org/ticket/27952
 	 */
 	function test_posts_count() {
 		self::factory()->post->create();
@@ -644,7 +644,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 26410
+	 * @see https://core.trac.wordpress.org/ticket/26410
 	 */
 	function test_blog_details_cache_invalidation() {
 		update_option( 'blogname', 'foo' );
@@ -891,7 +891,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14867
+	 * @see https://core.trac.wordpress.org/ticket/14867
 	 */
 	function test_get_blogaddress_by_id_scheme_reflects_blog_scheme() {
 		$blog = self::factory()->blog->create();
@@ -904,7 +904,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 14867
+	 * @see https://core.trac.wordpress.org/ticket/14867
 	 */
 	function test_get_blogaddress_by_id_scheme_is_unaffected_by_request() {
 		$blog = self::factory()->blog->create();
@@ -922,7 +922,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33620
+	 * @see https://core.trac.wordpress.org/ticket/33620
 	 * @dataProvider data_new_blog_url_schemes
 	 */
 	function test_new_blog_url_schemes( $home_scheme, $siteurl_scheme, $force_ssl_admin ) {
@@ -982,7 +982,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36918
+	 * @see https://core.trac.wordpress.org/ticket/36918
 	 */
 	function test_new_blog_locale() {
 		$current_site = get_current_site();
@@ -1017,7 +1017,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40503
+	 * @see https://core.trac.wordpress.org/ticket/40503
 	 */
 	function test_different_network_language() {
 		$network = get_network( self::$network_ids['make.wordpress.org/'] );
@@ -1045,21 +1045,21 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29684
+	 * @see https://core.trac.wordpress.org/ticket/29684
 	 */
 	public function test_is_main_site_different_network() {
 		$this->assertTrue( is_main_site( self::$site_ids['make.wordpress.org/'], self::$network_ids['make.wordpress.org/'] ) );
 	}
 
 	/**
-	 * @ticket 29684
+	 * @see https://core.trac.wordpress.org/ticket/29684
 	 */
 	public function test_is_main_site_different_network_random_site() {
 		$this->assertFalse( is_main_site( self::$site_ids['make.wordpress.org/foo/'], self::$network_ids['make.wordpress.org/'] ) );
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_clean_blog_cache( $key, $group ) {
@@ -1085,7 +1085,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_clean_blog_cache_with_id( $key, $group ) {
@@ -1111,7 +1111,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_resets_last_changed() {
 		$site = get_site( self::$site_ids['make.wordpress.org/'] );
@@ -1123,7 +1123,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_fires_action() {
 		$site = get_site( self::$site_ids['make.wordpress.org/'] );
@@ -1135,7 +1135,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_bails_on_suspend_cache_invalidation() {
 		$site = get_site( self::$site_ids['make.wordpress.org/'] );
@@ -1149,7 +1149,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_bails_on_empty_input() {
 		$old_count = did_action( 'clean_site_cache' );
@@ -1159,7 +1159,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_bails_on_non_numeric_input() {
 		$old_count = did_action( 'clean_site_cache' );
@@ -1169,7 +1169,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_clean_blog_cache_works_with_deleted_site() {
 		$site_id = 12345;
@@ -1181,7 +1181,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_refresh_blog_details( $key, $group ) {
@@ -1207,7 +1207,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_refresh_blog_details_works_with_deleted_site() {
 		$site_id = 12345;
@@ -1219,7 +1219,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40201
+	 * @see https://core.trac.wordpress.org/ticket/40201
 	 */
 	public function test_refresh_blog_details_uses_current_site_as_default() {
 		$site_id = get_current_blog_id();

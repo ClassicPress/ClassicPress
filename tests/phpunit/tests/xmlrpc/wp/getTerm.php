@@ -98,7 +98,7 @@ class Tests_XMLRPC_wp_getTerm extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35991
+	 * @see https://core.trac.wordpress.org/ticket/35991
 	 */
 	public function test_get_term_meta() {
 		$this->make_user_by_role( 'editor' );

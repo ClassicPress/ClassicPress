@@ -117,7 +117,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21779
+	 * @see https://core.trac.wordpress.org/ticket/21779
 	 */
 	function test_query_tag_nun() {
 		$posts = $this->q->query('tag=tag-נ');
@@ -298,7 +298,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 11056
+	 * @see https://core.trac.wordpress.org/ticket/11056
 	 */
 	function test_query_post_parent__in() {
 		// Query for first parent's children
@@ -348,7 +348,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 11056
+	 * @see https://core.trac.wordpress.org/ticket/11056
 	 */
 	function test_query_orderby_post_parent__in() {
 		$posts = $this->q->query( array(
@@ -366,7 +366,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post_parent__in_with_order_desc() {
 		$post_parent__in_array = array( self::$parent_two, self::$parent_one );
@@ -383,7 +383,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post__in_with_no_order_specified() {
 		$post__in_array = array( self::$post_ids[2], self::$post_ids[0], self::$post_ids[1] );
@@ -400,7 +400,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post__in_with_order_asc() {
 		$post__in_array = array( self::$post_ids[2], self::$post_ids[0], self::$post_ids[1] );
@@ -418,7 +418,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	 }
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post__in_with_order_desc() {
 		$post__in_array = array( self::$post_ids[1], self::$post_ids[2], self::$post_ids[0] );
@@ -437,7 +437,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post_name__in_with_order_asc() {
 		$post_name__in_array = array( 'parent-two', 'parent-one', 'parent-three' );
@@ -452,7 +452,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39055
+	 * @see https://core.trac.wordpress.org/ticket/39055
 	 */
 	function test_query_orderby_post_name__in_with_order_desc() {
 		$post_name__in_array = array( 'parent-two', 'parent-one', 'parent-three' );
@@ -468,8 +468,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27252
-	 * @ticket 31194
+	 * @see https://core.trac.wordpress.org/ticket/27252
+	 * @see https://core.trac.wordpress.org/ticket/31194
 	 */
 	function test_query_fields_integers() {
 
@@ -507,7 +507,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28099
+	 * @see https://core.trac.wordpress.org/ticket/28099
 	 */
 	function test_empty_post__in() {
 		$posts1 = $this->q->query( array() );
@@ -519,7 +519,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19198
+	 * @see https://core.trac.wordpress.org/ticket/19198
 	 */
 	function test_exclude_from_search_empty() {
 		global $wp_post_types;
@@ -541,7 +541,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16854
+	 * @see https://core.trac.wordpress.org/ticket/16854
 	 */
 	function test_query_author_vars() {
 		$author_1 = self::factory()->user->create( array( 'user_login' => 'author1', 'role' => 'author' ) );
@@ -645,7 +645,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10935
+	 * @see https://core.trac.wordpress.org/ticket/10935
 	 */
 	function test_query_is_date() {
 		$this->q->query( array(
@@ -680,7 +680,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10935
+	 * @see https://core.trac.wordpress.org/ticket/10935
 	 * @expectedIncorrectUsage WP_Date_Query
 	 */
 	public function test_query_is_date_with_bad_date() {
@@ -708,7 +708,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20308
+	 * @see https://core.trac.wordpress.org/ticket/20308
 	 */
 	function test_post_password() {
 		$one   = (string) self::factory()->post->create( array( 'post_password' => '' ) );
@@ -748,7 +748,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28611
+	 * @see https://core.trac.wordpress.org/ticket/28611
 	 */
 	function test_duplicate_slug_in_hierarchical_post_type() {
 		register_post_type( 'handbook', array( 'hierarchical' => true ) );
@@ -762,7 +762,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29615
+	 * @see https://core.trac.wordpress.org/ticket/29615
 	 */
 	function test_child_post_in_hierarchical_post_type_with_default_permalinks() {
 		register_post_type( 'handbook', array( 'hierarchical' => true ) );
@@ -793,7 +793,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 15610
+	 * @see https://core.trac.wordpress.org/ticket/15610
 	 */
 	public function test_main_comments_feed_includes_attachment_comments() {
 		$attachment_id = self::factory()->post->create( array( 'post_type' => 'attachment' ) );

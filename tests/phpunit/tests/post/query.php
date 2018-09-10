@@ -37,7 +37,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28099
+	 * @see https://core.trac.wordpress.org/ticket/28099
 	 * @group taxonomy
 	 */
 	function test_empty_category__in() {
@@ -67,7 +67,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22448
+	 * @see https://core.trac.wordpress.org/ticket/22448
 	 */
 	function test_the_posts_filter() {
 		// Create posts and clear their caches.
@@ -179,7 +179,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36515
+	 * @see https://core.trac.wordpress.org/ticket/36515
 	 */
 	public function test_post_name__in_ordering() {
 		$post_id1 = self::factory()->post->create( array( 'post_name' => 'id-1', 'post_type' => 'page' ) );
@@ -223,7 +223,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 	/**
 	 *
-	 * @ticket 17065
+	 * @see https://core.trac.wordpress.org/ticket/17065
 	 */
 	function test_orderby_array() {
 		global $wpdb;
@@ -258,7 +258,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 	/**
 	 *
-	 * @ticket 17065
+	 * @see https://core.trac.wordpress.org/ticket/17065
 	 */
 	function test_order() {
 		global $wpdb;
@@ -292,7 +292,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29629
+	 * @see https://core.trac.wordpress.org/ticket/29629
 	 */
 	function test_orderby() {
 		// 'rand' is a valid value
@@ -327,7 +327,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35692
+	 * @see https://core.trac.wordpress.org/ticket/35692
 	 */
 	public function test_orderby_rand_with_seed() {
 		$q = new WP_Query( array(
@@ -338,7 +338,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35692
+	 * @see https://core.trac.wordpress.org/ticket/35692
 	 */
 	public function test_orderby_rand_should_ignore_invalid_seed() {
 		$q = new WP_Query( array(
@@ -349,7 +349,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35692
+	 * @see https://core.trac.wordpress.org/ticket/35692
 	 */
 	public function test_orderby_rand_with_seed_should_be_case_insensitive() {
 		$q = new WP_Query( array(
@@ -362,7 +362,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	/**
 	 * Tests the post_name__in attribute of WP_Query.
 	 *
-	 * @ticket 33065
+	 * @see https://core.trac.wordpress.org/ticket/33065
 	 */
 	public function test_post_name__in() {
 		$q = new WP_Query();
@@ -390,7 +390,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_posts_pre_query_filter_should_bypass_database_query() {
 		global $wpdb;
@@ -414,7 +414,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_posts_pre_query_filter_should_respect_set_found_posts() {
 		global $wpdb;
@@ -449,7 +449,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_set_found_posts_fields_ids() {
 		register_post_type( 'wptests_pt' );
@@ -471,7 +471,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_set_found_posts_fields_idparent() {
 		register_post_type( 'wptests_pt' );
@@ -492,7 +492,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_set_found_posts_fields_split_the_query() {
 		register_post_type( 'wptests_pt' );
@@ -514,7 +514,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36687
+	 * @see https://core.trac.wordpress.org/ticket/36687
 	 */
 	public function test_set_found_posts_fields_not_split_the_query() {
 		register_post_type( 'wptests_pt' );
@@ -547,7 +547,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42860
+	 * @see https://core.trac.wordpress.org/ticket/42860
 	 *
 	 * @dataProvider set_found_posts_provider
 	 */

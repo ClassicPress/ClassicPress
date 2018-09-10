@@ -673,7 +673,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_update_item_with_edit_term_cap_granted() {
 		wp_set_current_user( self::$subscriber );
@@ -698,7 +698,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_update_item_with_edit_term_cap_revoked() {
 		wp_set_current_user( self::$administrator );
@@ -868,7 +868,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_delete_item_with_delete_term_cap_granted() {
 		wp_set_current_user( self::$subscriber );
@@ -894,7 +894,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @ticket 38505
+	 * @see https://core.trac.wordpress.org/ticket/38505
 	 */
 	public function test_delete_item_with_delete_term_cap_revoked() {
 		wp_set_current_user( self::$administrator );
@@ -1025,7 +1025,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @ticket 38504
+	 * @see https://core.trac.wordpress.org/ticket/38504
 	 */
 	public function test_object_term_queries_are_cached() {
 		global $wpdb;

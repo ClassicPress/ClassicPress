@@ -289,7 +289,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23756
+	 * @see https://core.trac.wordpress.org/ticket/23756
 	 */
 	function test_no_links_inside_pre_or_code() {
 		$before = array(
@@ -329,7 +329,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16892
+	 * @see https://core.trac.wordpress.org/ticket/16892
 	 */
 	function test_click_inside_html() {
 		$urls_before = array(
@@ -356,7 +356,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16892
+	 * @see https://core.trac.wordpress.org/ticket/16892
 	 */
 	function test_no_segfault() {
 		$in = str_repeat( 'http://example.com/2011/03/18/post-title/', 256 );
@@ -365,7 +365,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19028
+	 * @see https://core.trac.wordpress.org/ticket/19028
 	 */
 	function test_line_break_in_existing_clickable_link() {
 		$html = "<a
@@ -375,7 +375,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_script_and_style_tags
-	 * @ticket 30162
+	 * @see https://core.trac.wordpress.org/ticket/30162
 	 */
 	public function test_dont_link_script_and_style_tags( $tag ) {
 		$this->assertEquals( $tag, make_clickable( $tag ) );

@@ -59,7 +59,7 @@ class Tests_XMLRPC_wp_getPages extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20629
+	 * @see https://core.trac.wordpress.org/ticket/20629
 	 */
 	function test_semi_capable_user() {
 		add_filter( 'map_meta_cap', array( $this, 'remove_editor_edit_page_cap') , 10, 4 );

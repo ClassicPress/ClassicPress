@@ -6,7 +6,7 @@
  */
 class Tests_User_DateQuery extends WP_UnitTestCase {
 	/**
-	 * @ticket 27283
+	 * @see https://core.trac.wordpress.org/ticket/27283
 	 */
 	public function test_user_registered() {
 		$u1 = self::factory()->user->create( array(
@@ -28,7 +28,7 @@ class Tests_User_DateQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27283
+	 * @see https://core.trac.wordpress.org/ticket/27283
 	 */
 	public function test_user_registered_relation_or() {
 		$u1 = self::factory()->user->create( array(

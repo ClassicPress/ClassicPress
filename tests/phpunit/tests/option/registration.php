@@ -40,7 +40,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38176
+	 * @see https://core.trac.wordpress.org/ticket/38176
 	 */
 	public function test_register_with_default() {
 		register_setting( 'test_group', 'test_default', array(
@@ -51,7 +51,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38176
+	 * @see https://core.trac.wordpress.org/ticket/38176
 	 */
 	public function test_register_with_default_override() {
 		register_setting( 'test_group', 'test_default', array(
@@ -62,7 +62,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38930
+	 * @see https://core.trac.wordpress.org/ticket/38930
 	 */
 	public function test_add_option_with_no_options_cache() {
 		register_setting( 'test_group', 'test_default', array(

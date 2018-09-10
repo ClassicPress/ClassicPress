@@ -773,7 +773,7 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33665
+	 * @see https://core.trac.wordpress.org/ticket/33665
 	 */
 	function test_invalid_nav_menu_item() {
 		$menu_id = wp_create_nav_menu( 'Primary' );
@@ -877,7 +877,7 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Nav_Menu_Item_Setting::value_as_wp_post_nav_menu_item() to set url for posts, terms, and post type archives.
 	 *
-	 * @ticket 38945
+	 * @see https://core.trac.wordpress.org/ticket/38945
 	 * @covers WP_Customize_Nav_Menu_Item_Setting::value_as_wp_post_nav_menu_item()
 	 */
 	function test_value_as_wp_post_nav_menu_item_term_urls() {
@@ -938,7 +938,7 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Nav_Menu_Item_Setting::value_as_wp_post_nav_menu_item() for obtaining original title.
 	 *
-	 * @ticket 38945
+	 * @see https://core.trac.wordpress.org/ticket/38945
 	 * @covers WP_Customize_Nav_Menu_Item_Setting::get_original_title()
 	 */
 	function test_get_original_title() {
@@ -1099,7 +1099,7 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Nav_Menu_Item_Setting::value_as_wp_post_nav_menu_item() where title is empty.
 	 *
-	 * @ticket 38015
+	 * @see https://core.trac.wordpress.org/ticket/38015
 	 * @see WP_Customize_Nav_Menu_Item_Setting::value_as_wp_post_nav_menu_item()
 	 */
 	function test_value_as_wp_post_nav_menu_item_with_empty_title() {

@@ -457,7 +457,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 	/**
 	 * Test the image created with WP_Image_Editor_Imagick preserves alpha when resizing
 	 *
-	 * @ticket 24871
+	 * @see https://core.trac.wordpress.org/ticket/24871
 	 */
 	public function test_image_preserves_alpha_on_resize() {
 		$file = DIR_TESTDATA . '/images/transparent.png';
@@ -484,7 +484,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 	/**
 	 * Test the image created with WP_Image_Editor_Imagick preserves alpha with no resizing etc
 	 *
-	 * @ticket 24871
+	 * @see https://core.trac.wordpress.org/ticket/24871
 	 */
 	public function test_image_preserves_alpha() {
 		$file = DIR_TESTDATA . '/images/transparent.png';
@@ -510,7 +510,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 	/**
 	 *
-	 * @ticket 30596
+	 * @see https://core.trac.wordpress.org/ticket/30596
 	 */
 	public function test_image_preserves_alpha_on_rotate() {
 		$file = DIR_TESTDATA . '/images/transparent.png';
@@ -534,7 +534,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 	/**
 	 * Test WP_Image_Editor_Imagick handles extension-less images
-	 * @ticket 39195
+	 * @see https://core.trac.wordpress.org/ticket/39195
 	 */
 	public function test_image_non_existent_extension() {
 		$image_editor = new WP_Image_Editor_Imagick( DIR_TESTDATA.'/images/test-image-no-extension' );
@@ -546,7 +546,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 	/**
 	 * Test resetting Exif orientation data on rotate
 	 *
-	 * @ticket 37140
+	 * @see https://core.trac.wordpress.org/ticket/37140
 	 */
 	public function test_remove_orientation_data_on_rotate() {
 		$file = DIR_TESTDATA . "/images/test-image-upside-down.jpg";

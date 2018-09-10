@@ -45,7 +45,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_query_type_empty_string() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -64,7 +64,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_query_type_comment() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -135,7 +135,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 
 	/**
 	 * Comments and custom
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_comments_and_custom() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -155,7 +155,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_not__in_array_custom() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -175,7 +175,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type__in_array_and_not_type_array_custom() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -196,7 +196,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_and_type__not_in_array_custom() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -217,7 +217,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type__not_in_custom() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -237,7 +237,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_comments_and_pings() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -256,7 +256,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_comment_pings() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -273,7 +273,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_pingback() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -290,7 +290,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_custom_pingpack() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -307,7 +307,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_pings() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -324,7 +324,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_status_approved_array_comment_pings() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -343,7 +343,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_trackback() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -360,7 +360,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_custom_trackback() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -377,7 +377,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 12668
+	 * @see https://core.trac.wordpress.org/ticket/12668
 	 */
 	public function test_type_array_pings_approved() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -396,7 +396,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29612
+	 * @see https://core.trac.wordpress.org/ticket/29612
 	 */
 	public function test_status_empty_string() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -413,7 +413,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21101
+	 * @see https://core.trac.wordpress.org/ticket/21101
 	 */
 	public function test_status_hold() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -429,7 +429,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21101
+	 * @see https://core.trac.wordpress.org/ticket/21101
 	 */
 	public function test_status_approve() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -486,7 +486,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29612
+	 * @see https://core.trac.wordpress.org/ticket/29612
 	 */
 	public function test_status_comma_any() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -503,7 +503,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29612
+	 * @see https://core.trac.wordpress.org/ticket/29612
 	 */
 	public function test_status_comma_separated() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -520,7 +520,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29612
+	 * @see https://core.trac.wordpress.org/ticket/29612
 	 */
 	public function test_status_array() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -537,7 +537,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35478
+	 * @see https://core.trac.wordpress.org/ticket/35478
 	 */
 	public function test_multiple_post_fields_should_all_be_respected() {
 		$posts = array();
@@ -618,7 +618,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21003
+	 * @see https://core.trac.wordpress.org/ticket/21003
 	 */
 	function test_orderby_meta() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id ) );
@@ -668,7 +668,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_clause_key() {
 		$comments = self::factory()->comment->create_many( 3 );
@@ -693,7 +693,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_clause_key_as_secondary_sort() {
 		$c1 = self::factory()->comment->create( array(
@@ -729,7 +729,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_more_than_one_clause_key() {
 		$comments = self::factory()->comment->create_many( 3 );
@@ -764,7 +764,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32081
+	 * @see https://core.trac.wordpress.org/ticket/32081
 	 */
 	public function test_meta_query_should_work_with_comment__in() {
 		$comments = self::factory()->comment->create_many( 3 );
@@ -788,7 +788,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32081
+	 * @see https://core.trac.wordpress.org/ticket/32081
 	 */
 	public function test_meta_query_should_work_with_comment__not_in() {
 		$comments = self::factory()->comment->create_many( 3 );
@@ -812,7 +812,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27064
+	 * @see https://core.trac.wordpress.org/ticket/27064
 	 */
 	function test_get_comments_by_user() {
 		$users = self::factory()->user->create_many( 2 );
@@ -844,7 +844,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35377
+	 * @see https://core.trac.wordpress.org/ticket/35377
 	 */
 	public function test_get_comments_by_author_url() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_author' => 'bar', 'comment_author_email' => 'bar@example.com', 'comment_author_url' => 'http://foo.bar' ) );
@@ -860,7 +860,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28434
+	 * @see https://core.trac.wordpress.org/ticket/28434
 	 */
 	function test_fields_ids_query() {
 		$comment_1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -878,7 +878,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29189
+	 * @see https://core.trac.wordpress.org/ticket/29189
 	 */
 	function test_fields_comment__in() {
 		$comment_1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -894,7 +894,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29189
+	 * @see https://core.trac.wordpress.org/ticket/29189
 	 */
 	function test_fields_comment__not_in() {
 		$comment_1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -910,7 +910,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29189
+	 * @see https://core.trac.wordpress.org/ticket/29189
 	 */
 	function test_fields_post__in() {
 		$p1 = self::factory()->post->create();
@@ -930,7 +930,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29189
+	 * @see https://core.trac.wordpress.org/ticket/29189
 	 */
 	function test_fields_post__not_in() {
 		$p1 = self::factory()->post->create();
@@ -950,7 +950,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29885
+	 * @see https://core.trac.wordpress.org/ticket/29885
 	 */
 	function test_fields_post_author__in() {
 		$author_id1 = 105;
@@ -973,7 +973,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29885
+	 * @see https://core.trac.wordpress.org/ticket/29885
 	 */
 	function test_fields_post_author__not_in() {
 		$author_id1 = 111;
@@ -996,7 +996,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
         /**
-         * @ticket 29885
+         * @see https://core.trac.wordpress.org/ticket/29885
          */
 	function test_fields_author__in() {
 		$p1 = self::factory()->post->create();
@@ -1018,7 +1018,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
         /**
-         * @ticket 29885
+         * @see https://core.trac.wordpress.org/ticket/29885
          */
 	function test_fields_author__not_in() {
 		$p1 = self::factory()->post->create();
@@ -1040,7 +1040,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_status_all() {
 		$comment_1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1053,7 +1053,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_user_id() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1071,7 +1071,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_user_id_array() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1090,7 +1090,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_user_id_comma_separated() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1109,7 +1109,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_author_email() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1127,7 +1127,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_mixed_array() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1146,7 +1146,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19623
+	 * @see https://core.trac.wordpress.org/ticket/19623
 	 */
 	public function test_get_comments_with_include_unapproved_mixed_comma_separated() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7, 'comment_approved' => '1' ) );
@@ -1182,7 +1182,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35513
+	 * @see https://core.trac.wordpress.org/ticket/35513
 	 */
 	public function test_search_false_should_be_ignored() {
 		$q = new WP_Comment_Query();
@@ -1193,7 +1193,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35513
+	 * @see https://core.trac.wordpress.org/ticket/35513
 	 */
 	public function test_search_null_should_be_ignored() {
 		$q = new WP_Comment_Query();
@@ -1204,7 +1204,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35513
+	 * @see https://core.trac.wordpress.org/ticket/35513
 	 */
 	public function test_search_empty_string_should_be_ignored() {
 		$q = new WP_Comment_Query();
@@ -1215,7 +1215,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35513
+	 * @see https://core.trac.wordpress.org/ticket/35513
 	 */
 	public function test_search_int_0_should_not_be_ignored() {
 		global $wpdb;
@@ -1227,7 +1227,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35513
+	 * @see https://core.trac.wordpress.org/ticket/35513
 	 */
 	public function test_search_string_0_should_not_be_ignored() {
 		global $wpdb;
@@ -1325,7 +1325,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29902
+	 * @see https://core.trac.wordpress.org/ticket/29902
 	 */
 	public function test_orderby_none() {
 		$q = new WP_Comment_Query();
@@ -1337,7 +1337,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29902
+	 * @see https://core.trac.wordpress.org/ticket/29902
 	 */
 	public function test_orderby_empty_array() {
 		$q = new WP_Comment_Query();
@@ -1349,7 +1349,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29902
+	 * @see https://core.trac.wordpress.org/ticket/29902
 	 */
 	public function test_orderby_false() {
 		$q = new WP_Comment_Query();
@@ -1361,7 +1361,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array() {
 		global $wpdb;
@@ -1380,7 +1380,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array_should_discard_invalid_columns() {
 		global $wpdb;
@@ -1399,7 +1399,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array_should_convert_invalid_order_to_DESC() {
 		global $wpdb;
@@ -1418,7 +1418,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array_should_sort_by_comment_ID_as_fallback_and_should_inherit_order_from_comment_date_gmt() {
 		global $wpdb;
@@ -1436,7 +1436,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array_should_sort_by_comment_ID_as_fallback_and_should_inherit_order_from_comment_date() {
 		global $wpdb;
@@ -1454,7 +1454,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_array_should_sort_by_comment_ID_DESC_as_fallback_when_not_sorted_by_date() {
 		global $wpdb;
@@ -1471,7 +1471,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_date_modified_gmt_should_order_by_comment_ID_in_case_of_tie_ASC() {
 		$now = current_time( 'mysql', 1 );
@@ -1491,7 +1491,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30478
+	 * @see https://core.trac.wordpress.org/ticket/30478
 	 */
 	public function test_orderby_date_modified_gmt_should_order_by_comment_ID_in_case_of_tie_DESC() {
 		$now = current_time( 'mysql', 1 );
@@ -1540,7 +1540,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23369
+	 * @see https://core.trac.wordpress.org/ticket/23369
 	 */
 	public function test_count_with_meta_query() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 7 ) );
@@ -1564,7 +1564,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38268
+	 * @see https://core.trac.wordpress.org/ticket/38268
 	 */
 	public function test_paged() {
 		$now = time();
@@ -1600,7 +1600,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38268
+	 * @see https://core.trac.wordpress.org/ticket/38268
 	 */
 	public function test_offset_should_take_precedence_over_paged() {
 		$now = time();
@@ -1660,7 +1660,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_type_singleton_array() {
 		register_post_type( 'post-type-1' );
@@ -1685,7 +1685,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_type_array() {
 		register_post_type( 'post-type-1' );
@@ -1726,7 +1726,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_name_singleton_array() {
 		$p1 = self::factory()->post->create( array( 'post_name' => 'foo' ) );
@@ -1745,7 +1745,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_name_array() {
 		$p1 = self::factory()->post->create( array( 'post_name' => 'foo' ) );
@@ -1782,7 +1782,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_status_singleton_array() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'publish' ) );
@@ -1801,7 +1801,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20006
+	 * @see https://core.trac.wordpress.org/ticket/20006
 	 */
 	public function test_post_status_array() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'publish' ) );
@@ -1822,7 +1822,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35512
+	 * @see https://core.trac.wordpress.org/ticket/35512
 	 */
 	public function test_post_type_any_should_override_other_post_types() {
 		register_post_type( 'post-type-1', array( 'exclude_from_search' => false ) );
@@ -1843,7 +1843,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35512
+	 * @see https://core.trac.wordpress.org/ticket/35512
 	 */
 	public function test_post_type_any_as_part_of_an_array_of_post_types() {
 		register_post_type( 'post-type-1', array( 'exclude_from_search' => false ) );
@@ -1864,7 +1864,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35512
+	 * @see https://core.trac.wordpress.org/ticket/35512
 	 */
 	public function test_post_status_any_should_override_other_post_statuses() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'publish' ) );
@@ -1882,7 +1882,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35512
+	 * @see https://core.trac.wordpress.org/ticket/35512
 	 */
 	public function test_post_status_any_as_part_of_an_array_of_post_statuses() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'publish' ) );
@@ -1900,7 +1900,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24826
+	 * @see https://core.trac.wordpress.org/ticket/24826
 	 */
 	public function test_comment_query_object() {
 		$comment_id = self::factory()->comment->create();
@@ -1920,7 +1920,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22400
+	 * @see https://core.trac.wordpress.org/ticket/22400
 	 */
 	public function test_comment_cache_key_should_ignore_custom_params() {
 		global $wpdb;
@@ -1947,7 +1947,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35677
+	 * @see https://core.trac.wordpress.org/ticket/35677
 	 */
 	public function test_cache_should_be_sensitive_to_parent__in() {
 		global $wpdb;
@@ -1966,7 +1966,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35677
+	 * @see https://core.trac.wordpress.org/ticket/35677
 	 */
 	public function test_cache_should_be_sensitive_to_parent__not_in() {
 		global $wpdb;
@@ -1985,7 +1985,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32762
+	 * @see https://core.trac.wordpress.org/ticket/32762
 	 */
 	public function test_it_should_be_possible_to_modify_meta_query_using_pre_get_comments_action() {
 		$comments = self::factory()->comment->create_many( 2, array(
@@ -2016,7 +2016,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32762
+	 * @see https://core.trac.wordpress.org/ticket/32762
 	 */
 	public function test_it_should_be_possible_to_modify_meta_params_using_pre_get_comments_action() {
 		$comments = self::factory()->comment->create_many( 2, array(
@@ -2043,7 +2043,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33882
+	 * @see https://core.trac.wordpress.org/ticket/33882
 	 */
 	public function test_parent__in() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -2063,7 +2063,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33882
+	 * @see https://core.trac.wordpress.org/ticket/33882
 	 */
 	public function test_parent__in_commas() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -2092,7 +2092,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33882
+	 * @see https://core.trac.wordpress.org/ticket/33882
 	 */
 	public function test_parent__not_in() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -2113,7 +2113,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33882
+	 * @see https://core.trac.wordpress.org/ticket/33882
 	 */
 	public function test_parent__not_in_commas() {
 		$c1 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -2143,7 +2143,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33883
+	 * @see https://core.trac.wordpress.org/ticket/33883
 	 */
 	public function test_orderby_comment__in() {
 		self::factory()->comment->create( array(
@@ -2177,7 +2177,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_no_found_rows_should_default_to_true() {
 		$comments = self::factory()->comment->create_many( 3, array( 'comment_post_ID' => self::$post_id ) );
@@ -2192,7 +2192,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_no_found_rows_true() {
 		$comments = self::factory()->comment->create_many( 3, array( 'comment_post_ID' => self::$post_id ) );
@@ -2208,7 +2208,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_no_found_rows_false() {
 		$comments = self::factory()->comment->create_many( 3, array( 'comment_post_ID' => self::$post_id ) );
@@ -2224,7 +2224,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37184
+	 * @see https://core.trac.wordpress.org/ticket/37184
 	 */
 	public function test_found_rows_should_be_fetched_from_the_cache() {
 		$comments = self::factory()->comment->create_many( 3, array( 'comment_post_ID' => self::$post_id ) );
@@ -2247,7 +2247,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_hierarchical_should_skip_child_comments_in_offset() {
 		$top_level_0 = self::factory()->comment->create( array(
@@ -2280,7 +2280,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_hierarchical_should_not_include_child_comments_in_number() {
 		$top_level_0 = self::factory()->comment->create( array(
@@ -2311,7 +2311,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_hierarchical_threaded() {
 		$c1 = self::factory()->comment->create( array(
@@ -2374,7 +2374,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8071
+	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_hierarchical_threaded_approved() {
 		$c1 = self::factory()->comment->create( array(
@@ -2435,7 +2435,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35192
+	 * @see https://core.trac.wordpress.org/ticket/35192
 	 */
 	public function test_comment_clauses_prepend_callback_should_be_respected_when_filling_descendants() {
 		$top_level_0 = self::factory()->comment->create( array(
@@ -2481,7 +2481,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35192
+	 * @see https://core.trac.wordpress.org/ticket/35192
 	 */
 	public function test_comment_clauses_append_callback_should_be_respected_when_filling_descendants() {
 		$top_level_0 = self::factory()->comment->create( array(
@@ -2527,7 +2527,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36487
+	 * @see https://core.trac.wordpress.org/ticket/36487
 	 */
 	public function test_cache_should_be_hit_when_querying_descendants() {
 		global $wpdb;
@@ -2571,7 +2571,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37696
+	 * @see https://core.trac.wordpress.org/ticket/37696
 	 */
 	public function test_hierarchy_should_be_filled_when_cache_is_incomplete() {
 		global $wpdb;
@@ -2620,8 +2620,8 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37966
-	 * @ticket 37696
+	 * @see https://core.trac.wordpress.org/ticket/37966
+	 * @see https://core.trac.wordpress.org/ticket/37696
 	 */
 	public function test_fill_hierarchy_should_disregard_offset_and_number() {
 		$c0 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'comment_approved' => '1' ) );
@@ -2654,7 +2654,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27571
+	 * @see https://core.trac.wordpress.org/ticket/27571
 	 */
 	public function test_update_comment_post_cache_should_be_disabled_by_default() {
 		global $wpdb;
@@ -2672,7 +2672,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27571
+	 * @see https://core.trac.wordpress.org/ticket/27571
 	 */
 	public function test_should_respect_update_comment_post_cache_true() {
 		global $wpdb;
@@ -2691,7 +2691,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34138
+	 * @see https://core.trac.wordpress.org/ticket/34138
 	 */
 	public function test_comment_objects_should_be_filled_from_cache() {
 		global $wpdb;
@@ -2717,7 +2717,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34138
+	 * @see https://core.trac.wordpress.org/ticket/34138
 	 */
 	public function test_comment_objects_should_be_fetched_from_database_when_suspend_cache_addition() {
 		$suspend = wp_suspend_cache_addition();
@@ -2955,7 +2955,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41348
+	 * @see https://core.trac.wordpress.org/ticket/41348
 	 */
 	public function test_count_query_should_miss_noncount_cache() {
 		global $wpdb;
@@ -2980,7 +2980,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41348
+	 * @see https://core.trac.wordpress.org/ticket/41348
 	 */
 	public function test_count_query_should_hit_count_cache() {
 		global $wpdb;
@@ -3005,7 +3005,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41348
+	 * @see https://core.trac.wordpress.org/ticket/41348
 	 */
 	public function test_different_values_of_fields_should_share_cached_values() {
 		global $wpdb;
@@ -3029,7 +3029,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_add_comment_meta_should_invalidate_query_cache() {
 		global $wpdb;
@@ -3074,7 +3074,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_update_comment_meta_should_invalidate_query_cache() {
 		global $wpdb;
@@ -3119,7 +3119,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40669
+	 * @see https://core.trac.wordpress.org/ticket/40669
 	 */
 	public function test_delete_comment_meta_should_invalidate_query_cache() {
 		global $wpdb;

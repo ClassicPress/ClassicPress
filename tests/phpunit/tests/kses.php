@@ -8,7 +8,7 @@
 class Tests_Kses extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 20210
+	 * @see https://core.trac.wordpress.org/ticket/20210
 	 */
 	function test_wp_filter_post_kses_address() {
 		global $allowedposttags;
@@ -31,7 +31,7 @@ class Tests_Kses extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20210
+	 * @see https://core.trac.wordpress.org/ticket/20210
 	 */
 	function test_wp_filter_post_kses_a() {
 		global $allowedposttags;
@@ -56,7 +56,7 @@ class Tests_Kses extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20210
+	 * @see https://core.trac.wordpress.org/ticket/20210
 	 */
 	function test_wp_filter_post_kses_abbr() {
 		global $allowedposttags;
@@ -310,7 +310,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 20210
+	 * @see https://core.trac.wordpress.org/ticket/20210
 	 */
 	public function test_wp_kses_allowed_html() {
 		global $allowedposttags, $allowedtags, $allowedentitynames;
@@ -375,7 +375,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 26290
+	 * @see https://core.trac.wordpress.org/ticket/26290
 	 */
 	public function test_wp_kses_normalize_entities() {
 		$this->assertEquals( '&spades;', wp_kses_normalize_entities( '&spades;' ) );
@@ -392,7 +392,7 @@ EOF;
 	/**
 	 * Test removal of invalid binary data for HTML.
 	 *
-	 * @ticket 28506
+	 * @see https://core.trac.wordpress.org/ticket/28506
 	 * @dataProvider data_ctrl_removal
 	 */
 	function test_ctrl_removal( $input, $output ) {
@@ -429,7 +429,7 @@ EOF;
 	/**
 	 * Test removal of '\0' strings.
 	 *
-	 * @ticket 28699
+	 * @see https://core.trac.wordpress.org/ticket/28699
 	 * @dataProvider data_slash_zero_removal
 	 */
 	function test_slash_zero_removal( $input, $output ) {
@@ -658,7 +658,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 34063
+	 * @see https://core.trac.wordpress.org/ticket/34063
 	 */
 	function test_bdo() {
 		global $allowedposttags;
@@ -669,7 +669,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 35079
+	 * @see https://core.trac.wordpress.org/ticket/35079
 	 */
 	function test_ol_reversed() {
 		global $allowedposttags;
@@ -680,7 +680,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 40680
+	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_no_attributes_allowed_with_empty_array() {
 		$element = 'foo';
@@ -690,7 +690,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 40680
+	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_no_attributes_allowed_with_true() {
 		$element = 'foo';
@@ -700,7 +700,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 40680
+	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_single_attribute_is_allowed() {
 		$element = 'foo';
@@ -710,7 +710,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 43312
+	 * @see https://core.trac.wordpress.org/ticket/43312
 	 */
 	function test_wp_kses_attr_no_attributes_allowed_with_false() {
 		$element   = 'foo';

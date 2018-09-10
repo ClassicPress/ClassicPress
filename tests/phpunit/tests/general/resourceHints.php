@@ -2,7 +2,7 @@
 
 /**
  * @group template
- * @ticket 34292
+ * @see https://core.trac.wordpress.org/ticket/34292
  */
 class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	private $old_wp_scripts;
@@ -67,7 +67,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37652
+	 * @see https://core.trac.wordpress.org/ticket/37652
 	 */
 	function test_preconnect() {
 		$expected = "<link rel='dns-prefetch' href='//s.w.org' />\n" .
@@ -196,7 +196,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37502
+	 * @see https://core.trac.wordpress.org/ticket/37502
 	 */
 	function test_deregistered_scripts_are_ignored() {
 		$expected = "<link rel='dns-prefetch' href='//s.w.org' />\n";
@@ -209,7 +209,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37652
+	 * @see https://core.trac.wordpress.org/ticket/37652
 	 */
 	function test_malformed_urls() {
 		$expected = "<link rel='dns-prefetch' href='//s.w.org' />\n";

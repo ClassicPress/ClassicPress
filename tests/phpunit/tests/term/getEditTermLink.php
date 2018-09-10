@@ -22,7 +22,7 @@ class Tests_Term_GetEditTermLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32786
+	 * @see https://core.trac.wordpress.org/ticket/32786
 	 */
 	public function test_get_edit_term_link_invalid_id() {
 		$term1 = self::factory()->term->create( array(
@@ -35,7 +35,7 @@ class Tests_Term_GetEditTermLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32786
+	 * @see https://core.trac.wordpress.org/ticket/32786
 	 */
 	public function test_get_edit_term_link_empty_id() {
 		$actual = get_edit_term_link( '', 'wptests_tax' );
@@ -43,7 +43,7 @@ class Tests_Term_GetEditTermLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32786
+	 * @see https://core.trac.wordpress.org/ticket/32786
 	 */
 	public function test_get_edit_term_link_bad_tax() {
 		$actual = get_edit_term_link( '', 'bad_tax' );
@@ -51,7 +51,7 @@ class Tests_Term_GetEditTermLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35922
+	 * @see https://core.trac.wordpress.org/ticket/35922
 	 */
 	public function test_taxonomy_should_not_be_required() {
 		$t = self::factory()->term->create( array(
@@ -64,7 +64,7 @@ class Tests_Term_GetEditTermLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35922
+	 * @see https://core.trac.wordpress.org/ticket/35922
 	 */
 	public function test_cap_check_should_use_correct_taxonomy_when_taxonomy_is_not_specified() {
 		register_taxonomy( 'wptests_tax_subscriber', 'post', array(

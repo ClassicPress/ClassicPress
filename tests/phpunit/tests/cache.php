@@ -180,7 +180,7 @@ class Tests_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21327
+	 * @see https://core.trac.wordpress.org/ticket/21327
 	 */
 	function test_wp_cache_decr() {
 		$key = __FUNCTION__;

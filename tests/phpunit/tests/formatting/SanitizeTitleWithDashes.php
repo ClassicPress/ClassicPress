@@ -64,7 +64,7 @@ class Tests_Formatting_SanitizeTitleWithDashes extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31790
+	 * @see https://core.trac.wordpress.org/ticket/31790
 	 */
 	function test_replaces_nbsp_entities() {
 		$this->assertEquals("dont-break-the-space", sanitize_title_with_dashes("don't&nbsp;break&#160;the&nbsp;space", '', 'save'));
@@ -76,7 +76,7 @@ class Tests_Formatting_SanitizeTitleWithDashes extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31790
+	 * @see https://core.trac.wordpress.org/ticket/31790
 	 */
 	function test_replaces_ndash_mdash_entities() {
 		$this->assertEquals("do-the-dash", sanitize_title_with_dashes("Do &ndash; the &#8211; Dash", '', 'save'));
@@ -109,7 +109,7 @@ class Tests_Formatting_SanitizeTitleWithDashes extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 10792
+	 * @see https://core.trac.wordpress.org/ticket/10792
 	 */
 	function test_replaces_forward_slash() {
 		$this->assertEquals("songs-by-lennon-mccartney", sanitize_title_with_dashes("songs by Lennon/McCartney", '', 'save'));
@@ -120,21 +120,21 @@ class Tests_Formatting_SanitizeTitleWithDashes extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19820
+	 * @see https://core.trac.wordpress.org/ticket/19820
 	 */
 	function test_replaces_multiply_sign() {
 		$this->assertEquals("6x7-is-42", sanitize_title_with_dashes("6×7 is 42", '', 'save'));
 	}
 
 	/**
-	 * @ticket 20772
+	 * @see https://core.trac.wordpress.org/ticket/20772
 	 */
 	function test_replaces_standalone_diacritic() {
 		$this->assertEquals("aaaa", sanitize_title_with_dashes("āáǎà", '', 'save'));
 	}
 
 	/**
-	 * @ticket 22395
+	 * @see https://core.trac.wordpress.org/ticket/22395
 	 */
 	function test_replaces_acute_accents() {
 		$this->assertEquals("aaaa", sanitize_title_with_dashes("ááa´aˊ", '', 'save'));

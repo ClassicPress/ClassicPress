@@ -34,7 +34,7 @@ class Tests_Plugin_Basename extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29154
+	 * @see https://core.trac.wordpress.org/ticket/29154
 	 */
 	function test_return_correct_basename_for_symlinked_plugins() {
 		global $wp_plugin_paths;
@@ -48,7 +48,7 @@ class Tests_Plugin_Basename extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28441
+	 * @see https://core.trac.wordpress.org/ticket/28441
 	 */
 	function test_return_correct_basename_for_symlinked_plugins_with_path_conflicts() {
 		global $wp_plugin_paths;

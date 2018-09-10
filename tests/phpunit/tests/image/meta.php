@@ -82,7 +82,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 6571
+	 * @see https://core.trac.wordpress.org/ticket/6571
 	 */
 	function test_exif_error() {
 
@@ -119,7 +119,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 9417
+	 * @see https://core.trac.wordpress.org/ticket/9417
 	 */
 	function test_utf8_iptc_tags() {
 
@@ -140,7 +140,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 
 
 	/**
-	 * @ticket 33772
+	 * @see https://core.trac.wordpress.org/ticket/33772
 	 */
 	public function test_exif_keywords() {
 		$out = wp_read_image_metadata(DIR_TESTDATA.'/images/33772.jpg');

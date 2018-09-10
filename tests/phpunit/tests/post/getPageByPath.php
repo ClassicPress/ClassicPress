@@ -5,7 +5,7 @@
  */
 class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	/**
-	 * @ticket 15665
+	 * @see https://core.trac.wordpress.org/ticket/15665
 	 */
 	public function test_get_page_by_path_priority() {
 		global $wpdb;
@@ -125,7 +125,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36711
+	 * @see https://core.trac.wordpress.org/ticket/36711
 	 */
 	public function test_should_hit_cache() {
 		global $wpdb;
@@ -147,7 +147,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36711
+	 * @see https://core.trac.wordpress.org/ticket/36711
 	 */
 	public function test_bad_path_should_be_cached() {
 		global $wpdb;
@@ -164,7 +164,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36711
+	 * @see https://core.trac.wordpress.org/ticket/36711
 	 */
 	public function test_bad_path_served_from_cache_should_not_fall_back_on_current_post() {
 		global $wpdb, $post;
@@ -186,7 +186,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36711
+	 * @see https://core.trac.wordpress.org/ticket/36711
 	 */
 	public function test_cache_should_not_match_post_in_different_post_type_with_same_path() {
 		global $wpdb;
@@ -216,7 +216,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36711
+	 * @see https://core.trac.wordpress.org/ticket/36711
 	 */
 	public function test_cache_should_be_invalidated_when_post_name_is_edited() {
 		global $wpdb;
@@ -244,7 +244,7 @@ class Tests_Post_GetPageByPath extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 37611
+	 * @see https://core.trac.wordpress.org/ticket/37611
 	 */
 	public function test_output_param_should_be_obeyed_for_cached_value() {
 		$page = self::factory()->post->create( array(

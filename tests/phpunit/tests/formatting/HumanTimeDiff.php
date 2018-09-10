@@ -2,13 +2,13 @@
 
 /**
  * @group formatting
- * @ticket 38773
+ * @see https://core.trac.wordpress.org/ticket/38773
  */
 class Tests_Formatting_HumanTimeDiff extends WP_UnitTestCase {
 
 	/**
 	 * @group formatting
-	 * @ticket 38773
+	 * @see https://core.trac.wordpress.org/ticket/38773
 	 * @dataProvider data_test_human_time_diff
 	 */
 	function test_human_time_diff( $expected, $stopdate, $message ) {

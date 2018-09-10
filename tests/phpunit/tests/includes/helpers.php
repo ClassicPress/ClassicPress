@@ -5,7 +5,7 @@
  */
 class Tests_TestHelpers extends WP_UnitTestCase {
 	/**
-	 * @ticket 30522
+	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
 	function data_assertEqualSets() {
 		return array(
@@ -49,7 +49,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_assertEqualSets
-	 * @ticket 30522
+	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
 	function test_assertEqualSets( $expected, $actual, $exception ) {
 		if ( $exception ) {
@@ -66,7 +66,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30522
+	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
 	function data_assertEqualSetsWithIndex() {
 		return array(
@@ -144,7 +144,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 	/**
 	 * @dataProvider data_assertEqualSetsWithIndex
-	 * @ticket 30522
+	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
 	function test_assertEqualSetsWithIndex( $expected, $actual, $exception ) {
 		if ( $exception ) {
@@ -170,7 +170,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28486
+	 * @see https://core.trac.wordpress.org/ticket/28486
 	 */
 	public function test_setExpectedDeprecated() {
 		$this->setExpectedDeprecated( 'Tests_TestHelpers::mock_deprecated' );
@@ -178,7 +178,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28486
+	 * @see https://core.trac.wordpress.org/ticket/28486
 	 */
 	public function test_setExpectedIncorrectUsage() {
 		$this->setExpectedIncorrectUsage( 'Tests_TestHelpers::mock_incorrect_usage' );
@@ -186,7 +186,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31417
+	 * @see https://core.trac.wordpress.org/ticket/31417
 	 */
 	public function test_go_to_should_go_to_home_page_when_passing_the_untrailingslashed_home_url() {
 		$this->assertFalse( is_home() );
@@ -206,7 +206,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36166
+	 * @see https://core.trac.wordpress.org/ticket/36166
 	 * @expectedException WPDieException
 	 */
 	public function test_die_handler_should_handle_wp_error() {
@@ -216,7 +216,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	/**
 	 * This test is just a setup for the one that follows.
 	 *
-	 * @ticket 38196
+	 * @see https://core.trac.wordpress.org/ticket/38196
 	 */
 	public function test_setup_postdata_globals_should_be_reset_on_teardown__setup() {
 		$post = self::factory()->post->create_and_get();
@@ -226,7 +226,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38196
+	 * @see https://core.trac.wordpress.org/ticket/38196
 	 */
 	public function test_setup_postdata_globals_should_be_reset_on_teardown() {
 		$globals = array( 'post', 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );

@@ -72,7 +72,7 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 9633
+	 * @see https://core.trac.wordpress.org/ticket/9633
 	 */
 	function test_serialized_postmeta_with_cdata() {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-with-cdata.xml', array( 'johncoswell' => 'johncoswell' ) );
@@ -86,7 +86,7 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 11574
+	 * @see https://core.trac.wordpress.org/ticket/11574
 	 */
 	function test_serialized_postmeta_with_evil_stuff_in_cdata() {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-with-cdata.xml', array( 'johncoswell' => 'johncoswell' ) );

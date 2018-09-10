@@ -183,7 +183,7 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19828
+	 * @see https://core.trac.wordpress.org/ticket/19828
 	 */
 	function test_help_tabs_priority() {
 		$tab_1      = 'tab1';
@@ -275,7 +275,7 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25799
+	 * @see https://core.trac.wordpress.org/ticket/25799
 	 */
 	function test_options() {
 		$option = __FUNCTION__;

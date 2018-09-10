@@ -26,7 +26,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16840
+	 * @see https://core.trac.wordpress.org/ticket/16840
 	 */
 	public function test_add_rule() {
 		global $wp_rewrite;
@@ -44,7 +44,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16840
+	 * @see https://core.trac.wordpress.org/ticket/16840
 	 */
 	public function test_add_rule_redirect_array() {
 		global $wp_rewrite;
@@ -65,7 +65,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 16840
+	 * @see https://core.trac.wordpress.org/ticket/16840
 	 */
 	public function test_add_rule_top() {
 		global $wp_rewrite;
@@ -117,7 +117,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35531
+	 * @see https://core.trac.wordpress.org/ticket/35531
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -239,7 +239,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30438
+	 * @see https://core.trac.wordpress.org/ticket/30438
 	 */
 	function test_parse_request_home_path() {
 		$home_url = home_url( '/path/' );
@@ -253,7 +253,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30438
+	 * @see https://core.trac.wordpress.org/ticket/30438
 	 */
 	function test_parse_request_home_path_with_regex_character() {
 		$home_url = home_url( '/ma.ch/' );
@@ -272,7 +272,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30018
+	 * @see https://core.trac.wordpress.org/ticket/30018
 	 */
 	function test_parse_request_home_path_non_public_type() {
 		register_post_type( 'foo', array( 'public' => false ) );
@@ -328,7 +328,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21970
+	 * @see https://core.trac.wordpress.org/ticket/21970
 	 */
 	function test_url_to_postid_with_post_slug_that_clashes_with_a_trashed_page() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -340,7 +340,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34971
+	 * @see https://core.trac.wordpress.org/ticket/34971
 	 */
 	function test_url_to_postid_static_front_page() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -360,7 +360,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39373
+	 * @see https://core.trac.wordpress.org/ticket/39373
 	 */
 	public function test_url_to_postid_should_bail_when_host_does_not_match() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -374,7 +374,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21970
+	 * @see https://core.trac.wordpress.org/ticket/21970
 	 */
 	function test_parse_request_with_post_slug_that_clashes_with_a_trashed_page() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -389,7 +389,7 @@ class Tests_Rewrite extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29107
+	 * @see https://core.trac.wordpress.org/ticket/29107
 	 */
 	public function test_flush_rules_does_not_delete_option() {
 		$this->set_permalink_structure( '' );

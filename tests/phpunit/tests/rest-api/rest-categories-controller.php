@@ -629,7 +629,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 	}
 
 	/**
-	 * @ticket 41370
+	 * @see https://core.trac.wordpress.org/ticket/41370
 	 */
 	public function test_create_item_term_already_exists() {
 		wp_set_current_user( self::$administrator );

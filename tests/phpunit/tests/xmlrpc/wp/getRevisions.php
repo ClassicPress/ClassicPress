@@ -47,7 +47,7 @@ class Tests_XMLRPC_wp_getRevisions extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 22687
+	 * @see https://core.trac.wordpress.org/ticket/22687
 	 */
 	function test_revision_count_for_auto_draft_post_creation() {
 		$this->make_user_by_role( 'editor' );

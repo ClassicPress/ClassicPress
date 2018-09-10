@@ -5,7 +5,7 @@
  */
 class Tests_Query_ParseQuery extends WP_UnitTestCase {
 	/**
-	 * @ticket 29736
+	 * @see https://core.trac.wordpress.org/ticket/29736
 	 */
 	public function test_parse_query_s_array() {
 		$q = new WP_Query();
@@ -53,7 +53,7 @@ class Tests_Query_ParseQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33372
+	 * @see https://core.trac.wordpress.org/ticket/33372
 	 */
 	public function test_parse_query_p_negative_int() {
 		$q = new WP_Query();
@@ -65,7 +65,7 @@ class Tests_Query_ParseQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33372
+	 * @see https://core.trac.wordpress.org/ticket/33372
 	 */
 	public function test_parse_query_p_array() {
 		$q = new WP_Query();
@@ -77,7 +77,7 @@ class Tests_Query_ParseQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33372
+	 * @see https://core.trac.wordpress.org/ticket/33372
 	 */
 	public function test_parse_query_p_object() {
 		$q = new WP_Query();

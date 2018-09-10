@@ -140,7 +140,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 12494
+	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_should_default_to_ID() {
 		$p = self::factory()->post->create( array(
@@ -156,7 +156,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 12494
+	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_ID() {
 		$p = self::factory()->post->create( array(
@@ -172,7 +172,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 12494
+	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_post_name() {
 		$p = self::factory()->post->create( array(
@@ -189,7 +189,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 12494
+	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_should_fall_back_on_ID_when_an_invalid_value_is_provided() {
 		$p = self::factory()->post->create( array(
@@ -206,7 +206,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 30082
+	 * @see https://core.trac.wordpress.org/ticket/30082
 	 */
 	public function test_wp_dropdown_pages_should_not_contain_class_attribute_when_no_class_is_passed() {
 		$p = self::factory()->post->create( array(
@@ -222,7 +222,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 30082
+	 * @see https://core.trac.wordpress.org/ticket/30082
 	 */
 	public function test_wp_dropdown_pages_should_obey_class_parameter() {
 		$p = self::factory()->post->create( array(
@@ -239,7 +239,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 31389
+	 * @see https://core.trac.wordpress.org/ticket/31389
 	 */
 	public function test_get_page_template_slug_by_id() {
 		$page_id = self::factory()->post->create( array(
@@ -256,7 +256,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 31389
+	 * @see https://core.trac.wordpress.org/ticket/31389
 	 */
 	public function test_get_page_template_slug_from_loop() {
 		$page_id = self::factory()->post->create( array(
@@ -270,8 +270,8 @@ NO;
 	}
 
 	/**
-	 * @ticket 31389
-	 * @ticket 18375
+	 * @see https://core.trac.wordpress.org/ticket/31389
+	 * @see https://core.trac.wordpress.org/ticket/18375
 	 */
 	public function test_get_page_template_slug_non_page() {
 		$post_id = self::factory()->post->create();
@@ -287,7 +287,7 @@ NO;
 	}
 
 	/**
-	 * @ticket 18375
+	 * @see https://core.trac.wordpress.org/ticket/18375
 	 */
 	public function test_get_page_template_slug_non_page_from_loop() {
 		$post_id = self::factory()->post->create();
@@ -300,8 +300,8 @@ NO;
 	}
 
 	/**
-	 * @ticket 11095
-	 * @ticket 33974
+	 * @see https://core.trac.wordpress.org/ticket/11095
+	 * @see https://core.trac.wordpress.org/ticket/33974
 	 */
 	public function test_wp_page_menu_wp_nav_menu_fallback() {
 		$pages = self::factory()->post->create_many( 3, array( 'post_type' => 'page' ) );

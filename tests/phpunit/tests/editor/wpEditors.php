@@ -40,7 +40,7 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41825
+	 * @see https://core.trac.wordpress.org/ticket/41825
 	 */
 	public function test_wp_link_query_returns_filtered_result_when_nothing_found() {
 		add_filter( 'wp_link_query', array( $this, 'wp_link_query_callback' ) );

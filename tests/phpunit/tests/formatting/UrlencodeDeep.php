@@ -2,7 +2,7 @@
 
 /**
  * @group formatting
- * @ticket 22300
+ * @see https://core.trac.wordpress.org/ticket/22300
  */
 class Tests_Formatting_UrlencodeDeep extends WP_UnitTestCase {
 

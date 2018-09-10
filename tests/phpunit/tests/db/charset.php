@@ -36,7 +36,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_strip_invalid_text() {
 		$fields = array(
@@ -359,7 +359,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_strip_invalid_text
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_strip_invalid_text( $data, $expected, $message ) {
 		if ( version_compare( PHP_VERSION, '5.3', '<') && stristr( php_uname( 's' ), 'win' ) ) {
@@ -394,7 +394,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_process_fields_failure() {
 		global $wpdb;
@@ -410,7 +410,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_process_field_charsets() {
 		if ( $GLOBALS['wpdb']->charset ) {
@@ -454,7 +454,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_process_field_charsets
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_process_field_charsets( $data, $expected, $message ) {
 		$actual = self::$_wpdb->process_field_charsets( $data, $GLOBALS['wpdb']->posts );
@@ -465,7 +465,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	 * The test this test depends on first verifies that this
 	 * would normally work against the posts table.
 	 *
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 * @depends test_process_field_charsets
 	 */
 	function test_process_field_charsets_on_nonexistent_table() {
@@ -476,7 +476,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_check_ascii() {
 		$ascii = "\0\t\n\r '" . '!"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
@@ -484,14 +484,14 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_check_ascii_false() {
 		$this->assertFalse( self::$_wpdb->check_ascii( 'ABCDEFGHIJKLMNOPQRSTUVWXYZ¡©«' ) );
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_strip_invalid_text_for_column() {
 		global $wpdb;
@@ -556,7 +556,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	);
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_test_get_table_charset() {
 		$table_name = 'test_get_table_charset';
@@ -574,7 +574,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_test_get_table_charset
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_get_table_charset( $drop, $create, $table, $expected_charset ) {
 		self::$_wpdb->query( $drop );
@@ -596,7 +596,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_test_get_column_charset() {
 		$table_name = 'test_get_column_charset';
@@ -614,7 +614,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_test_get_column_charset
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_get_column_charset( $drop, $create, $table, $expected_charset ) {
 		self::$_wpdb->query( $drop );
@@ -636,7 +636,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_test_get_column_charset
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_get_column_charset_non_mysql( $drop, $create, $table, $columns ) {
 		self::$_wpdb->query( $drop );
@@ -662,7 +662,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_test_get_column_charset
-	 * @ticket 33501
+	 * @see https://core.trac.wordpress.org/ticket/33501
 	 */
 	function test_get_column_charset_is_mysql_undefined( $drop, $create, $table, $columns ) {
 		self::$_wpdb->query( $drop );
@@ -687,7 +687,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_strip_invalid_text_from_query() {
 		$table_name = 'strip_invalid_text_from_query_table';
@@ -721,7 +721,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_strip_invalid_text_from_query
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_strip_invalid_text_from_query( $create, $query, $expected, $drop ) {
 		self::$_wpdb->query( $drop );
@@ -740,7 +740,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32104
+	 * @see https://core.trac.wordpress.org/ticket/32104
 	 */
 	function data_dont_strip_text_from_schema_queries() {
 		// An obviously invalid and fake table name.
@@ -764,7 +764,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_dont_strip_text_from_schema_queries
-	 * @ticket 32104
+	 * @see https://core.trac.wordpress.org/ticket/32104
 	 */
 	function test_dont_strip_text_from_schema_queries( $query ) {
 		$return = self::$_wpdb->strip_invalid_text_from_query( $query );
@@ -772,7 +772,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_invalid_characters_in_query() {
 		global $wpdb;
@@ -786,7 +786,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_table_collation_check() {
 		$table_name = 'table_collation_check';
@@ -842,7 +842,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 	/**
 	 * @dataProvider data_table_collation_check
-	 * @ticket 21212
+	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function test_table_collation_check( $create, $expected, $query, $drop, $always_true ) {
 		self::$_wpdb->query( $drop );
@@ -873,7 +873,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32279
+	 * @see https://core.trac.wordpress.org/ticket/32279
 	 */
 	function test_strip_invalid_text_from_query_cp1251_is_safe() {
 		$tablename = 'test_cp1251_query_' . rand_str( 5 );
@@ -890,7 +890,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34708
+	 * @see https://core.trac.wordpress.org/ticket/34708
 	 */
 	function test_no_db_charset_defined() {
 		$tablename = 'test_cp1251_query_' . rand_str( 5 );
@@ -912,7 +912,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36649
+	 * @see https://core.trac.wordpress.org/ticket/36649
 	 */
 	function test_set_charset_changes_the_connection_collation() {
 		self::$_wpdb->set_charset( self::$_wpdb->dbh, 'utf8', 'utf8_general_ci' );

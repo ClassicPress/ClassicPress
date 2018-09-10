@@ -97,7 +97,7 @@ class Tests_Formatting_SanitizeTextField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 32257
+	 * @see https://core.trac.wordpress.org/ticket/32257
 	 * @dataProvider data_sanitize_text_field
 	 */
 	function test_sanitize_text_field( $string, $expected ) {

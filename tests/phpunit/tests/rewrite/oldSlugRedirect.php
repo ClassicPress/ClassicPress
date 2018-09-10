@@ -2,7 +2,7 @@
 
 /**
  * @group rewrite
- * @ticket 33920
+ * @see https://core.trac.wordpress.org/ticket/33920
  */
 class Tests_Rewrite_OldSlugRedirect extends WP_UnitTestCase {
 	protected $old_slug_redirect_url;
@@ -104,7 +104,7 @@ class Tests_Rewrite_OldSlugRedirect extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 35031
+	 * @see https://core.trac.wordpress.org/ticket/35031
 	 */
 	public function test_old_slug_doesnt_redirect_when_reused() {
 		$old_permalink = user_trailingslashit( get_permalink( $this->post_id ) );

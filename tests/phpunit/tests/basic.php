@@ -117,7 +117,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 17884
+	 * @see https://core.trac.wordpress.org/ticket/17884
 	 */
 	function test_setting_nonexistent_arrays() {
 		$page = 1;

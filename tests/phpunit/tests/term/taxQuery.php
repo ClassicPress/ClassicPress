@@ -86,7 +86,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30117
+	 * @see https://core.trac.wordpress.org/ticket/30117
 	 */
 	public function test_construct_empty_strings_array_members_should_be_discarded() {
 		$q = new WP_Tax_Query( array(
@@ -235,7 +235,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18105
+	 * @see https://core.trac.wordpress.org/ticket/18105
 	 */
 	public function test_get_sql_relation_or_operator_in() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -279,7 +279,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18105
+	 * @see https://core.trac.wordpress.org/ticket/18105
 	 */
 	public function test_get_sql_relation_and_operator_in() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -322,7 +322,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18105
+	 * @see https://core.trac.wordpress.org/ticket/18105
 	 */
 	public function test_get_sql_nested_relation_or_operator_in() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -368,7 +368,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_get_sql_operator_not_in_empty_terms() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -395,7 +395,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 29738
+	 * @see https://core.trac.wordpress.org/ticket/29738
 	 */
 	public function test_get_sql_operator_and_empty_terms() {
 		register_taxonomy( 'wptests_tax', 'post' );

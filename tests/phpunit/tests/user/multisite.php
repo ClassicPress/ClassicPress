@@ -195,7 +195,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23192
+	 * @see https://core.trac.wordpress.org/ticket/23192
 	 */
 	function test_is_user_spammy() {
 		$user_id = self::factory()->user->create( array(
@@ -215,7 +215,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20601
+	 * @see https://core.trac.wordpress.org/ticket/20601
 	 */
 	function test_user_member_of_blog() {
 		global $wp_rewrite;
@@ -309,7 +309,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 27205
+	 * @see https://core.trac.wordpress.org/ticket/27205
 	 */
 	function test_granting_super_admins() {
 		if ( isset( $GLOBALS['super_admins'] ) ) {
@@ -352,14 +352,14 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33800
+	 * @see https://core.trac.wordpress.org/ticket/33800
 	 */
 	public function test_should_return_false_for_non_numeric_string_user_id() {
 		$this->assertFalse( wpmu_delete_user( 'abcde' ) );
 	}
 
 	/**
-	 * @ticket 33800
+	 * @see https://core.trac.wordpress.org/ticket/33800
 	 */
 	public function test_should_return_false_for_object_user_id() {
 		$u_obj = self::factory()->user->create_and_get();
@@ -368,7 +368,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38356
+	 * @see https://core.trac.wordpress.org/ticket/38356
 	 */
 	public function test_add_user_to_blog_subscriber() {
 		$site_id = self::factory()->blog->create();
@@ -387,7 +387,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 38356
+	 * @see https://core.trac.wordpress.org/ticket/38356
 	 */
 	public function test_add_user_to_blog_invalid_user() {
 		$site_id = self::factory()->blog->create();
@@ -399,7 +399,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41101
+	 * @see https://core.trac.wordpress.org/ticket/41101
 	 */
 	public function test_should_fail_can_add_user_to_blog_filter() {
 		$site_id = self::factory()->blog->create();
@@ -412,7 +412,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41101
+	 * @see https://core.trac.wordpress.org/ticket/41101
 	 */
 	public function test_should_succeed_can_add_user_to_blog_filter() {
 		$site_id = self::factory()->blog->create();
@@ -425,7 +425,7 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23016
+	 * @see https://core.trac.wordpress.org/ticket/23016
 	 */
 	public function test_wp_roles_global_is_reset() {
 		global $wp_roles;
