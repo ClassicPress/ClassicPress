@@ -2,7 +2,7 @@
 /**
  * Comment API: Walker_Comment class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Comments
  * @since WP-4.4.0
  */

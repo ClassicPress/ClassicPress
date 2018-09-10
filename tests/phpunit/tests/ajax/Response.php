@@ -2,7 +2,7 @@
 /**
  * Testing ajax response class
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-3.5.0
  * @group      ajax

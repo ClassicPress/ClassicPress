@@ -1,11 +1,11 @@
 <?php
 /**
- * WordPress Feed API
+ * ClassicPress Feed API
  *
  * Many of the functions used in here belong in The Loop, or The Loop for the
  * Feeds.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Feed
  * @since WP-2.1.0
  */
@@ -521,7 +521,7 @@ function atom_enclosure() {
  *
  * Tell whether the type is text, html, or xhtml, per RFC 4287 section 3.1.
  *
- * In the case of WordPress, text is defined as containing no markup,
+ * In the case of ClassicPress, text is defined as containing no markup,
  * xhtml is defined as "well formed", and html as tag soup (i.e., the rest).
  *
  * Container div tags are added to xhtml values, per section 3.1.1.3.

@@ -3,7 +3,7 @@
  * These functions can be replaced via plugins. If plugins do not redefine these
  * functions, then these will be used instead.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 if ( !function_exists('wp_set_current_user') ) :
@@ -12,7 +12,7 @@ if ( !function_exists('wp_set_current_user') ) :
  *
  * Set $id to null and specify a name if you do not know a user's ID.
  *
- * Some WordPress functionality is based on the current user and not based on
+ * Some ClassicPress functionality is based on the current user and not based on
  * the signed in user. Therefore, it opens the ability to edit and perform
  * actions on users who aren't signed in.
  *
@@ -114,7 +114,7 @@ if ( !function_exists('cache_users') ) :
  *
  * @since WP-3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $user_ids User ID numbers list
  */
@@ -316,9 +316,9 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	// From email and name
 	// If we don't have a name from the input headers
 	if ( !isset( $from_name ) )
-		$from_name = 'WordPress';
+		$from_name = 'ClassicPress';
 
-	/* If we don't have an email from the input headers default to wordpress@$sitename
+	/* If we don't have an email from the input headers default to classicpress@$sitename
 	 * Some hosts will block outgoing mail from this address if it doesn't exist but
 	 * there's no easy alternative. Defaulting to admin_email might appear to be another
 	 * option but some hosts may refuse to relay mail from an unknown domain. See
@@ -332,7 +332,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 			$sitename = substr( $sitename, 4 );
 		}
 
-		$from_email = 'wordpress@' . $sitename;
+		$from_email = 'classicpress@' . $sitename;
 	}
 
 	/**
@@ -1515,7 +1515,7 @@ function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 		$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "\r\n";
 	}
 
-	$wp_email = 'wordpress@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME']));
+	$wp_email = 'classicpress@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME']));
 
 	if ( '' == $comment->comment_author ) {
 		$from = "From: \"$blogname\" <$wp_email>";
@@ -1581,7 +1581,7 @@ if ( !function_exists('wp_notify_moderator') ) :
  *
  * @since WP-1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * Uses the {@see 'notify_moderator'} filter to determine whether the site moderator
  * should be notified, overriding the site setting.
@@ -1804,7 +1804,7 @@ if ( !function_exists('wp_new_user_notification') ) :
  * @since WP-4.3.1 The `$plaintext_pass` parameter was deprecated. `$notify` added as a third parameter.
  * @since WP-4.6.0 The `$notify` parameter accepts 'user' for sending notification only to the user created.
  *
- * @global wpdb         $wpdb      WordPress database object for queries.
+ * @global wpdb         $wpdb      ClassicPress database object for queries.
  * @global PasswordHash $wp_hasher Portable PHP password hashing framework instance.
  *
  * @param int    $user_id    User ID.
@@ -2096,7 +2096,7 @@ function wp_salt( $scheme = 'auth' ) {
 	static $cached_salts = array();
 	if ( isset( $cached_salts[ $scheme ] ) ) {
 		/**
-		 * Filters the WordPress salt.
+		 * Filters the ClassicPress salt.
 		 *
 		 * @since WP-2.5.0
 		 *
@@ -2397,7 +2397,7 @@ if ( !function_exists('wp_set_password') ) :
  *
  * @since WP-2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $password The plaintext new user password
  * @param int    $user_id  User ID

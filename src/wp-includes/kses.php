@@ -665,7 +665,7 @@ function wp_kses_allowed_html( $context = '' ) {
 /**
  * You add any kses hooks here.
  *
- * There is currently only one kses WordPress hook, {@see 'pre_kses'}, and it is called here.
+ * There is currently only one kses ClassicPress hook, {@see 'pre_kses'}, and it is called here.
  * All parameters are passed to the hooks and expected to receive a string.
  *
  * @since WP-1.0.0
@@ -1634,7 +1634,7 @@ function kses_init_filters() {
  * Removes all Kses input form content filters.
  *
  * A quick procedural method to removing all of the filters that kses uses for
- * content in WordPress Loop.
+ * content in ClassicPress Loop.
  *
  * Does not remove the kses_init() function from {@see 'init'} hook (priority is
  * default). Also does not remove kses_init() function from {@see 'set_current_user'}

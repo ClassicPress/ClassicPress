@@ -2,7 +2,7 @@
 /**
  * Session API: WP_Session_Tokens class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Session
  * @since WP-4.7.0
  */

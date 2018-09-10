@@ -2,7 +2,7 @@
 /**
  * Template loading functions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Template
  */
 
@@ -650,9 +650,9 @@ function locate_template($template_names, $load = false, $require_once = true ) 
 }
 
 /**
- * Require the template file with WordPress environment.
+ * Require the template file with ClassicPress environment.
  *
- * The globals are set up for the template file to ensure that the WordPress
+ * The globals are set up for the template file to ensure that the ClassicPress
  * environment is available from within the function. The query variables are
  * also available.
  *

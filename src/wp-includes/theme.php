@@ -2,7 +2,7 @@
 /**
  * Theme, template, and stylesheet functions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Theme
  */
 
@@ -244,7 +244,7 @@ function get_stylesheet_uri() {
  * the {@see 'stylesheet_directory_uri'} or {@see 'locale_stylesheet_uri'} filters.
  *
  * If you want to change the location of the stylesheet files for the entire
- * WordPress workflow, then change the former. If you just have the locale in a
+ * ClassicPress workflow, then change the former. If you just have the locale in a
  * separate folder, then change the latter.
  *
  * @since WP-2.1.0
@@ -607,7 +607,7 @@ function get_theme_root_uri( $stylesheet_or_template = false, $theme_root = fals
 	 * @since WP-1.5.0
 	 *
 	 * @param string $theme_root_uri         The URI for themes directory.
-	 * @param string $siteurl                WordPress web address which is set in General Options.
+	 * @param string $siteurl                ClassicPress web address which is set in General Options.
 	 * @param string $stylesheet_or_template Stylesheet or template name of the theme.
 	 */
 	return apply_filters( 'theme_root_uri', $theme_root_uri, get_option( 'siteurl' ), $stylesheet_or_template );
@@ -2013,7 +2013,7 @@ function get_theme_starter_content() {
 
 			'link_email' => array(
 				'title' => _x( 'Email', 'Theme starter content' ),
-				'url' => 'mailto:wordpress@example.com',
+				'url' => 'mailto:classicpress@example.com',
 			),
 			'link_facebook' => array(
 				'title' => _x( 'Facebook', 'Theme starter content' ),
@@ -2763,7 +2763,7 @@ function check_theme_switched() {
  * Loads the Customizer at plugins_loaded when accessing the customize.php admin
  * page or when any request includes a wp_customize=on param or a customize_changeset
  * param (a UUID). This param is a signal for whether to bootstrap the Customizer when
- * WordPress is loading, especially in the Customizer preview
+ * ClassicPress is loading, especially in the Customizer preview
  * or when making Customizer Ajax requests for widgets or menus.
  *
  * @since WP-3.4.0
@@ -2849,7 +2849,7 @@ function _wp_customize_include() {
  * @since WP-4.7.0
  * @access private
  *
- * @global wpdb                 $wpdb         WordPress database abstraction object.
+ * @global wpdb                 $wpdb         ClassicPress database abstraction object.
  * @global WP_Customize_Manager $wp_customize Customizer instance.
  *
  * @param string  $new_status     New post status.

@@ -2,7 +2,7 @@
 /**
  * RSS 0.92 Feed Template for displaying RSS 0.92 Posts feed.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 header('Content-Type: ' . feed_content_type('rss') . '; charset=' . get_option('blog_charset'), true);

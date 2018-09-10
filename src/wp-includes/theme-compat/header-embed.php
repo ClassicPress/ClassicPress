@@ -5,7 +5,7 @@
  * When a post is embedded in an iframe, this file is used to create the header output
  * if the active theme does not include a header-embed.php template.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Theme_Compat
  * @since WP-4.5.0
  */

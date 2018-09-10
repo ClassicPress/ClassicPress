@@ -4,7 +4,7 @@
  *
  * @since WP-2.6.0
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Dependencies
  */
 
@@ -132,11 +132,11 @@ function wp_add_inline_script( $handle, $data, $position = 'after' ) {
  * @since WP-4.3.0 A return value was added.
  *
  * @param string           $handle    Name of the script. Should be unique.
- * @param string           $src       Full URL of the script, or path of the script relative to the WordPress root directory.
+ * @param string           $src       Full URL of the script, or path of the script relative to the ClassicPress root directory.
  * @param array            $deps      Optional. An array of registered script handles this script depends on. Default empty array.
  * @param string|bool|null $ver       Optional. String specifying script version number, if it has one, which is added to the URL
  *                                    as a query string for cache busting purposes. If version is set to false, a version
- *                                    number is automatically added equal to current installed WordPress version.
+ *                                    number is automatically added equal to current installed ClassicPress version.
  *                                    If set to null, no version is added.
  * @param bool             $in_footer Optional. Whether to enqueue the script before </body> instead of in the <head>.
  *                                    Default 'false'.
@@ -251,12 +251,12 @@ function wp_deregister_script( $handle ) {
  * @since WP-2.1.0
  *
  * @param string           $handle    Name of the script. Should be unique.
- * @param string           $src       Full URL of the script, or path of the script relative to the WordPress root directory.
+ * @param string           $src       Full URL of the script, or path of the script relative to the ClassicPress root directory.
  *                                    Default empty.
  * @param array            $deps      Optional. An array of registered script handles this script depends on. Default empty array.
  * @param string|bool|null $ver       Optional. String specifying script version number, if it has one, which is added to the URL
  *                                    as a query string for cache busting purposes. If version is set to false, a version
- *                                    number is automatically added equal to current installed WordPress version.
+ *                                    number is automatically added equal to current installed ClassicPress version.
  *                                    If set to null, no version is added.
  * @param bool             $in_footer Optional. Whether to enqueue the script before </body> instead of in the <head>.
  *                                    Default 'false'.

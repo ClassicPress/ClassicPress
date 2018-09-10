@@ -2,7 +2,7 @@
 /**
  * REST API: WP_REST_Post_Meta_Fields class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST_API
  * @since WP-4.7.0
  */

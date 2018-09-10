@@ -2,7 +2,7 @@
 /**
  * Comment API: WP_Comment_Query class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Comments
  * @since WP-4.4.0
  */
@@ -329,7 +329,7 @@ class WP_Comment_Query {
 	}
 
 	/**
-	 * Sets up the WordPress query for retrieving comments.
+	 * Sets up the ClassicPress query for retrieving comments.
 	 *
 	 * @since WP-3.1.0
 	 * @since WP-4.1.0 Introduced 'comment__in', 'comment__not_in', 'post_author__in',
@@ -351,7 +351,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-4.2.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @return int|array List of comments or number of found comments if `$count` argument is true.
 	 */
@@ -470,7 +470,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-4.4.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	protected function get_comment_ids() {
 		global $wpdb;
@@ -900,7 +900,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-4.6.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
 	private function set_found_comments() {
 		global $wpdb;
@@ -928,7 +928,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-4.4.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param array $comments Array of top-level comments whose descendants should be filled in.
 	 * @return array
@@ -1042,7 +1042,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-3.1.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $string
 	 * @param array $cols
@@ -1066,7 +1066,7 @@ class WP_Comment_Query {
 	 *
 	 * @since WP-4.2.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param string $orderby Alias for the field to order by.
 	 * @return string|false Value to used in the ORDER clause. False otherwise.

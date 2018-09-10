@@ -86,24 +86,24 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 
 	public function test_wp_insert_term_unslash_name() {
 		register_taxonomy( 'wptests_tax', 'post' );
-		$found = wp_insert_term( 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy', 'wptests_tax' );
+		$found = wp_insert_term( 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy', 'wptests_tax' );
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->name );
+		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->name );
 	}
 
 	public function test_wp_insert_term_unslash_description() {
 		register_taxonomy( 'wptests_tax', 'post' );
 		$found = wp_insert_term( 'Quality', 'wptests_tax', array(
-			'description' => 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy',
+			'description' => 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy',
 		) );
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->description );
+		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->description );
 	}
 
 	public function test_wp_insert_term_parent_string() {
@@ -648,7 +648,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		) );
 
 		/**
-		 * It doesn't appear that WordPress itself ever sets these
+		 * It doesn't appear that ClassicPress itself ever sets these
 		 * caches, but we should ensure that they're being cleared for
 		 * compatibility with third-party addons. Prime the caches
 		 * manually.

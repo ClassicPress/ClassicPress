@@ -2,7 +2,7 @@
 /**
  * Core Post API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Post
  */
 
@@ -417,7 +417,7 @@ function _wp_relative_upload_path( $path ) {
  * Retrieve all children of the post parent ID.
  *
  * Normally, without any enhancements, the children would apply to pages. In the
- * context of the inner workings of WordPress, pages, posts, and attachments
+ * context of the inner workings of ClassicPress, pages, posts, and attachments
  * share the same table, so therefore the functionality could apply to any one
  * of them. It is then noted that while this function does not work on posts, it
  * does not mean that it won't work on posts. It is recommended that you know
@@ -447,7 +447,7 @@ function _wp_relative_upload_path( $path ) {
  * retrieve that amount of posts.
  *
  * The 'post_type' and 'post_status' arguments can be used to choose what
- * criteria of posts to retrieve. The 'post_type' can be anything, but WordPress
+ * criteria of posts to retrieve. The 'post_type' can be anything, but ClassicPress
  * post types are 'post', 'pages', and 'attachments'. The 'post_status'
  * argument will accept any post status within the write administration panels.
  *
@@ -732,7 +732,7 @@ function get_post_status( $ID = '' ) {
 }
 
 /**
- * Retrieve all of the WordPress supported post statuses.
+ * Retrieve all of the ClassicPress supported post statuses.
  *
  * Posts have a limited set of valid status values, this provides the
  * post_status values and descriptions.
@@ -753,7 +753,7 @@ function get_post_statuses() {
 }
 
 /**
- * Retrieve all of the WordPress support page statuses.
+ * Retrieve all of the ClassicPress support page statuses.
  *
  * Pages have a limited set of valid status values, this provides the
  * post_status values and descriptions.
@@ -1666,7 +1666,7 @@ function get_post_types_by_support( $feature, $operator = 'and' ) {
  *
  * @since WP-2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int    $post_id   Optional. Post ID to change post type. Default 0.
  * @param string $post_type Optional. Post type. Accepts 'post' or 'page' to
@@ -2302,7 +2302,7 @@ function _count_posts_cache_key( $type = 'post', $perm = '' ) {
  *
  * @since WP-2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $type Optional. Post type to retrieve count. Default 'post'.
  * @param string $perm Optional. 'readable' or empty. Default empty.
@@ -2367,7 +2367,7 @@ function wp_count_posts( $type = 'post', $perm = '' ) {
  *
  * @since WP-2.5.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string|array $mime_type Optional. Array or comma-separated list of
  *                                MIME patterns. Default empty.
@@ -2536,7 +2536,7 @@ function wp_post_mime_type_where( $post_mime_types, $table_alias = '' ) {
  *
  * @since WP-1.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  * @see wp_delete_attachment()
  * @see wp_trash_post()
  *
@@ -2838,7 +2838,7 @@ function wp_untrash_post( $post_id = 0 ) {
  *
  * @since WP-2.9.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
  * @return mixed|void False on failure.
@@ -2894,7 +2894,7 @@ function wp_trash_post_comments( $post = null ) {
  *
  * @since WP-2.9.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
  * @return true|void
@@ -3087,7 +3087,7 @@ function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
  * @since WP-4.4.0 A 'meta_input' array can now be passed to `$postarr` to add post meta data.
  *
  * @see sanitize_post()
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $postarr {
  *     An array of elements that make up a post to update or insert.
@@ -3751,7 +3751,7 @@ function wp_update_post( $postarr = array(), $wp_error = false ) {
  *
  * @since WP-2.1.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Post $post Post ID or post object.
  */
@@ -3822,7 +3822,7 @@ function check_and_publish_future_post( $post_id ) {
  *
  * @since WP-2.8.0
  *
- * @global wpdb       $wpdb WordPress database abstraction object.
+ * @global wpdb       $wpdb ClassicPress database abstraction object.
  * @global WP_Rewrite $wp_rewrite
  *
  * @param string $slug        The desired slug (post_name).
@@ -4172,7 +4172,7 @@ function wp_transition_post_status( $new_status, $old_status, $post ) {
  * @since WP-4.7.0 $post_id can be a WP_Post object.
  * @since WP-4.7.0 $uri can be an array of URIs.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int|WP_Post  $post_id Post object or ID.
  * @param string|array $uri     Ping URI or array of URIs.
@@ -4340,7 +4340,7 @@ function trackback_url_list( $tb_list, $post_id ) {
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @return array List of page IDs.
  */
@@ -4380,7 +4380,7 @@ function get_page( $page, $output = OBJECT, $filter = 'raw') {
  *
  * @since WP-2.1.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string       $page_path Page path.
  * @param string       $output    Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
@@ -4472,7 +4472,7 @@ function get_page_by_path( $page_path, $output = OBJECT, $post_type = 'page' ) {
  *
  * @since WP-2.1.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string       $page_title Page title
  * @param string       $output     Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
@@ -4641,7 +4641,7 @@ function get_page_uri( $page = 0 ) {
 /**
  * Retrieve a list of pages (or hierarchical post type items).
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @since WP-1.5.0
  *
@@ -5016,7 +5016,7 @@ function wp_insert_attachment( $args, $file = false, $parent = 0, $wp_error = fa
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int  $post_id      Attachment ID.
  * @param bool $force_delete Optional. Whether to bypass trash and force deletion.
@@ -5689,7 +5689,7 @@ function get_private_posts_cap_sql( $post_type ) {
  * @since WP-4.3.0 Introduced the ability to pass an array of post types to `$post_type`.
  *
  * @see get_private_posts_cap_sql()
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array|string   $post_type   Single post type or an array of post types.
  * @param bool           $full        Optional. Returns a full WHERE statement instead of just
@@ -5855,7 +5855,7 @@ function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
  * @since WP-4.4.0 The `$post_type` argument was added.
  * @access private
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $timezone  The timezone for the timestamp. See get_lastpostdate().
  *                          for information on accepted values.
@@ -6098,7 +6098,7 @@ function clean_attachment_cache( $id, $clean_terms = false ) {
  * @access private
  *
  * @see wp_clear_scheduled_hook()
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string  $new_status New post status.
  * @param string  $old_status Previous post status.
@@ -6292,7 +6292,7 @@ function delete_post_thumbnail( $post ) {
  *
  * @since WP-3.4.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  */
 function wp_delete_auto_drafts() {
 	global $wpdb;
@@ -6371,7 +6371,7 @@ function _update_term_count_on_transition_post_status( $new_status, $old_status,
  *
  * @see update_post_caches()
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $ids               ID list.
  * @param bool  $update_term_cache Optional. Whether to update the term cache. Default true.
@@ -6453,7 +6453,7 @@ function wp_add_trashed_suffix_to_post_name_for_post( $post ) {
  * @since WP-4.7.0
  * @access private
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array $clauses An array including WHERE, GROUP BY, JOIN, ORDER BY,
  *                       DISTINCT, fields (SELECT), and LIMITS clauses.

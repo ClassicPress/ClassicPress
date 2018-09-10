@@ -2,7 +2,7 @@
 /**
  * Comment API: WP_Comment class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Comments
  * @since WP-4.4.0
  */
@@ -164,7 +164,7 @@ final class WP_Comment {
 	 * @since WP-4.4.0
 	 * @static
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $id Comment ID.
 	 * @return WP_Comment|false Comment object, otherwise false.

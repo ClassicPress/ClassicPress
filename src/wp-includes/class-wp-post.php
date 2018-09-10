@@ -2,7 +2,7 @@
 /**
  * Post API: WP_Post class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Post
  * @since WP-4.4.0
  */
@@ -225,7 +225,7 @@ final class WP_Post {
 	 * @since WP-3.5.0
 	 * @static
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $post_id Post ID.
 	 * @return WP_Post|false Post object, false otherwise.

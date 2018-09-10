@@ -5,11 +5,11 @@ require_once dirname( __FILE__ ) . '/factory.php';
 /**
  * Defines a basic fixture to run multiple tests.
  *
- * Resets the state of the WordPress installation before and after every test.
+ * Resets the state of the ClassicPress installation before and after every test.
  *
- * Includes utility functions and assertions useful for testing WordPress.
+ * Includes utility functions and assertions useful for testing ClassicPress.
  *
- * All WordPress unit tests should inherit from this class.
+ * All ClassicPress unit tests should inherit from this class.
  */
 class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
@@ -32,7 +32,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
  	}
 
 	/**
-	 * Fetches the factory object for generating WordPress fixtures.
+	 * Fetches the factory object for generating ClassicPress fixtures.
 	 *
 	 * @return WP_UnitTest_Factory The fixture factory.
 	 */
@@ -146,7 +146,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * After a test method runs, reset any state in WordPress the test method might have changed.
+	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
 	 */
 	function tearDown() {
 		global $wpdb, $wp_query, $wp;
@@ -551,7 +551,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Modify WordPress's query internals as if a given URL has been requested.
+	 * Modify ClassicPress's query internals as if a given URL has been requested.
 	 *
 	 * @param string $url The URL for the request.
 	 */

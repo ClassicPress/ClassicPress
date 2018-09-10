@@ -2,7 +2,7 @@
 /**
  * Core Translation API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage i18n
  * @since WP-1.2.0
  */
@@ -32,7 +32,7 @@ function get_locale() {
 
 	if ( isset( $locale ) ) {
 		/**
-		 * Filters the locale ID of the WordPress installation.
+		 * Filters the locale ID of the ClassicPress installation.
 		 *
 		 * @since WP-1.5.0
 		 *
@@ -651,7 +651,7 @@ function unload_textdomain( $domain ) {
 /**
  * Load default translated strings based on locale.
  *
- * Loads the .mo file in WP_LANG_DIR constant path from WordPress root.
+ * Loads the .mo file in WP_LANG_DIR constant path from ClassicPress root.
  * The translated (.mo) file is named based on the locale.
  *
  * @see load_textdomain()

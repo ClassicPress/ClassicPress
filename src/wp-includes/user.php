@@ -2,7 +2,7 @@
 /**
  * Core User API
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Users
  */
 
@@ -253,7 +253,7 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 }
 
 /**
- * Authenticate the user using the WordPress auth cookie.
+ * Authenticate the user using the ClassicPress auth cookie.
  *
  * @since WP-2.8.0
  *
@@ -352,7 +352,7 @@ function wp_validate_logged_in_cookie( $user_id ) {
  * @since WP-4.3.0 Added `$public_only` argument. Added the ability to pass an array
  *              of post types to `$post_type`.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int          $userid      User ID.
  * @param array|string $post_type   Optional. Single post type or array of post types to count the number of posts for. Default 'post'.
@@ -386,7 +386,7 @@ function count_user_posts( $userid, $post_type = 'post', $public_only = false ) 
  *
  * @since WP-3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array        $users       Array of user IDs.
  * @param string|array $post_type   Optional. Single post type or array of post types to check. Defaults to 'post'.
@@ -446,7 +446,7 @@ function get_current_user_id() {
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string $option     User option name.
  * @param int    $user       Optional. User ID.
@@ -492,13 +492,13 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
  *
  * User options are just like user metadata except that they have support for
  * global blog options. If the 'global' parameter is false, which it is by default
- * it will prepend the WordPress table prefix to the option name.
+ * it will prepend the ClassicPress table prefix to the option name.
  *
  * Deletes the user option if $newvalue is empty.
  *
  * @since WP-2.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int    $user_id     User ID.
  * @param string $option_name User option name.
@@ -522,11 +522,11 @@ function update_user_option( $user_id, $option_name, $newvalue, $global = false 
  *
  * User options are just like user metadata except that they have support for
  * global blog options. If the 'global' parameter is false, which it is by default
- * it will prepend the WordPress table prefix to the option name.
+ * it will prepend the ClassicPress table prefix to the option name.
  *
  * @since WP-3.0.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int    $user_id     User ID
  * @param string $option_name User option name.
@@ -569,7 +569,7 @@ function get_users( $args = array() ) {
  * @since WP-3.0.0
  * @since WP-4.7.0 Converted to use get_sites().
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int  $user_id User ID
  * @param bool $all     Whether to retrieve all sites, or only sites that are not
@@ -694,7 +694,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
  *
  * @since WP-MU (3.0.0)
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int $user_id Optional. The unique ID of the user. Defaults to the current user.
  * @param int $blog_id Optional. ID of the blog to check. Defaults to the current site.
@@ -837,7 +837,7 @@ function update_user_meta($user_id, $meta_key, $meta_value, $prev_value = '') {
  * @since WP-4.4.0 The number of users with no role is now included in the `none` element.
  * @since WP-4.9.0 The `$site_id` parameter was added to support multisite.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param string   $strategy Optional. The computational strategy to use when counting the users.
  *                           Accepts either 'time' or 'memory'. Default 'time'.
@@ -1392,7 +1392,7 @@ function validate_username( $username ) {
  *              methods for new installations. See wp_get_user_contact_methods().
  * @since WP-4.7.0 The user's locale can be passed to `$userdata`.
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param array|object|WP_User $userdata {
  *     An array, object, or WP_User object of user data arguments.
@@ -2122,7 +2122,7 @@ function wp_get_password_hint() {
  *
  * @since WP-4.4.0
  *
- * @global wpdb         $wpdb      WordPress database abstraction object.
+ * @global wpdb         $wpdb      ClassicPress database abstraction object.
  * @global PasswordHash $wp_hasher Portable PHP password hashing framework.
  *
  * @param WP_User $user User to retrieve password reset key for.
@@ -2211,7 +2211,7 @@ function get_password_reset_key( $user ) {
  *
  * @since WP-3.1.0
  *
- * @global wpdb         $wpdb      WordPress database object for queries.
+ * @global wpdb         $wpdb      ClassicPress database object for queries.
  * @global PasswordHash $wp_hasher Portable PHP password hashing framework instance.
  *
  * @param string $key       Hash to validate sending user's password.
@@ -2618,7 +2618,7 @@ function _wp_get_current_user() {
  * @since WP-4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
  *
  * @global WP_Error $errors WP_Error object.
- * @global wpdb     $wpdb   WordPress database object.
+ * @global wpdb     $wpdb   ClassicPress database object.
  */
 function send_confirmation_on_profile_email() {
 	global $errors, $wpdb;
@@ -2753,7 +2753,7 @@ function _wp_privacy_action_request_types() {
  */
 function wp_register_user_personal_data_exporter( $exporters ) {
 	$exporters['wordpress-user'] = array(
-		'exporter_friendly_name' => __( 'WordPress User' ),
+		'exporter_friendly_name' => __( 'ClassicPress User' ),
 		'callback'               => 'wp_user_personal_data_exporter',
 	);
 

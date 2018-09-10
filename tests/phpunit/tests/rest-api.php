@@ -2,7 +2,7 @@
 /**
  * REST API functions.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage REST API
  */
 

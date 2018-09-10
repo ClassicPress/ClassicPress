@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress media templates.
+ * ClassicPress media templates.
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Media
  * @since WP-3.5.0
  */

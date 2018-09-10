@@ -24,8 +24,8 @@ class Tests_Kses extends WP_UnitTestCase {
 		);
 
 		foreach ( $attributes as $name => $value ) {
-			$string = "<address $name='$value'>1 WordPress Avenue, The Internet.</address>";
-			$expect_string = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 WordPress Avenue, The Internet.</address>";
+			$string = "<address $name='$value'>1 ClassicPress Avenue, The Internet.</address>";
+			$expect_string = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 ClassicPress Avenue, The Internet.</address>";
 			$this->assertEquals( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
 	}

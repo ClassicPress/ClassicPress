@@ -1,10 +1,10 @@
 /**
- * WordPress inline HTML embed
+ * ClassicPress inline HTML embed
  *
  * @since WP-4.4.0
  *
  * This file cannot have ampersands in it. This is to ensure
- * it can be embedded in older versions of WordPress.
+ * it can be embedded in older versions of ClassicPress.
  * See https://core.trac.wordpress.org/changeset/35708.
  */
 (function ( window, document ) {

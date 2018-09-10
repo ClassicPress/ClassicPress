@@ -2,7 +2,7 @@
 /**
  * Toolbar API: Top-level Toolbar functionality
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Toolbar
  * @since WP-3.1.0
  */
@@ -100,7 +100,7 @@ function wp_admin_bar_render() {
 }
 
 /**
- * Add the WordPress logo menu.
+ * Add the ClassicPress logo menu.
  *
  * @since WP-3.3.0
  *
@@ -135,21 +135,21 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 	$wp_admin_bar->add_menu( $wp_logo_menu_args );
 
 	if ( $about_url ) {
-		// Add "About WordPress" link
+		// Add "About ClassicPress" link
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'wp-logo',
 			'id'     => 'about',
-			'title'  => __('About WordPress'),
+			'title'  => __('About ClassicPress'),
 			'href'   => $about_url,
 		) );
 	}
 
-	// Add WordPress.org link
+	// Add ClassicPress.net link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',
-		'title'     => __('WordPress.org'),
-		'href'      => __('https://wordpress.org/'),
+		'title'     => __('ClassicPress.net'),
+		'href'      => __('https://www.classicpress.net'),
 	) );
 
 	// Add codex link

@@ -314,7 +314,7 @@
 				 * This helper function accepts a field and Date object. It converts the passed Date
 				 * to an ISO string and sets that on the model field.
 				 *
-				 * @param {Date}   date   A JavaScript date object. WordPress expects dates in UTC.
+				 * @param {Date}   date   A JavaScript date object. ClassicPress expects dates in UTC.
 				 * @param {string} field  The date field to set. One of 'date', 'date_gmt', 'date_modified'
 				 *                        or 'date_modified_gmt'. Optional, defaults to 'date'.
 				 */
@@ -332,7 +332,7 @@
 				/**
 				 * Get a JavaScript Date from the passed field.
 				 *
-				 * WordPress returns 'date' and 'date_modified' in the timezone of the server as well as
+				 * ClassicPress returns 'date' and 'date_modified' in the timezone of the server as well as
 				 * UTC dates as 'date_gmt' and 'date_modified_gmt'. Draft posts do not include UTC dates.
 				 *
 				 * @param {string} field  The date field to set. One of 'date', 'date_gmt', 'date_modified'

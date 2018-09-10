@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Class_Reference/WP_Object_Cache
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Cache
  */
 
@@ -37,7 +37,7 @@ function wp_cache_add( $key, $data, $group = '', $expire = 0 ) {
  * functionality was removed along with the rest of the persistent cache.
  *
  * This does not mean that plugins can't implement this function when they need
- * to make sure that the cache is cleaned up after WordPress no longer needs it.
+ * to make sure that the cache is cleaned up after ClassicPress no longer needs it.
  *
  * @since WP-2.0.0
  *
@@ -274,7 +274,7 @@ function wp_cache_reset() {
 /**
  * Core class that implements an object cache.
  *
- * The WordPress Object Cache is used to save on trips to the database. The
+ * The ClassicPress Object Cache is used to save on trips to the database. The
  * Object Cache stores all of the cache data to memory and makes the cache
  * contents available by using a key, which is used to name and later retrieve
  * the cache contents.
@@ -625,7 +625,7 @@ class WP_Object_Cache {
 	 * The cache contents is grouped by the $group parameter followed by the
 	 * $key. This allows for duplicate ids in unique groups. Therefore, naming of
 	 * the group should be used with care and should follow normal function
-	 * naming guidelines outside of core WordPress usage.
+	 * naming guidelines outside of core ClassicPress usage.
 	 *
 	 * The $expire parameter is not used, because the cache will automatically
 	 * expire for each time a page is accessed and PHP finishes. The method is

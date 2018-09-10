@@ -6,7 +6,7 @@ buttons in the following files are updated.
 * jquery-ui-dialog.css
 * editor.css
 
-WordPress-style Buttons
+ClassicPress-style Buttons
 =======================
 Create a button by adding the `.button` class to an element. For backward
 compatibility, we support several other classes (such as `.button-secondary`),

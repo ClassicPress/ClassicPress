@@ -16,7 +16,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
 		$this->assertInternalType( 'array', $result );
-		$this->assertEquals( 'WordPress', $result['software_name']['value'] );
+		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
 	}
 
 	function test_option_value() {
@@ -40,7 +40,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertInternalType( 'array', $result );
 
 		// Read Only options
-		$this->assertEquals( 'WordPress', $result['software_name']['value'] );
+		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
 		$this->assertEquals( $wp_version, $result['software_version']['value'] );
@@ -129,7 +129,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertInternalType( 'array', $result );
 
 		// Read Only options
-		$this->assertEquals( 'WordPress', $result['software_name']['value'] );
+		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
 		$this->assertEquals( $wp_version, $result['software_version']['value'] );

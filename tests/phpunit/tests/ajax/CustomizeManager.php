@@ -2,7 +2,7 @@
 /**
  * Testing ajax customize manager functionality
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage UnitTests
  * @since      WP-4.3.0
  * @group      ajax

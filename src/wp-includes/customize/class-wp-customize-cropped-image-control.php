@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Cropped_Image_Control class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.4.0
  */

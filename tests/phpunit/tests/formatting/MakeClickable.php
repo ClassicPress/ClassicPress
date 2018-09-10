@@ -193,14 +193,14 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	// Based on a real comments which were incorrectly linked. #11211
 	function test_real_world_examples() {
 		$urls_before = array(
-			'Example: WordPress, test (some text), I love example.com (http://example.org), it is brilliant',
-			'Example: WordPress, test (some text), I love example.com (http://example.com), it is brilliant',
+			'Example: ClassicPress, test (some text), I love example.com (http://example.org), it is brilliant',
+			'Example: ClassicPress, test (some text), I love example.com (http://example.com), it is brilliant',
 			'Some text followed by a bracketed link with a trailing elipsis (http://example.com)...',
 			'In his famous speech “You and Your research” (here: http://www.cs.virginia.edu/~robins/YouAndYourResearch.html) Richard Hamming wrote about people getting more done with their doors closed...',
 		);
 		$urls_expected = array(
-			'Example: WordPress, test (some text), I love example.com (<a href="http://example.org" rel="nofollow">http://example.org</a>), it is brilliant',
-			'Example: WordPress, test (some text), I love example.com (<a href="http://example.com" rel="nofollow">http://example.com</a>), it is brilliant',
+			'Example: ClassicPress, test (some text), I love example.com (<a href="http://example.org" rel="nofollow">http://example.org</a>), it is brilliant',
+			'Example: ClassicPress, test (some text), I love example.com (<a href="http://example.com" rel="nofollow">http://example.com</a>), it is brilliant',
 			'Some text followed by a bracketed link with a trailing elipsis (<a href="http://example.com" rel="nofollow">http://example.com</a>)...',
 			'In his famous speech “You and Your research” (here: <a href="http://www.cs.virginia.edu/~robins/YouAndYourResearch.html" rel="nofollow">http://www.cs.virginia.edu/~robins/YouAndYourResearch.html</a>) Richard Hamming wrote about people getting more done with their doors closed...',
 		);

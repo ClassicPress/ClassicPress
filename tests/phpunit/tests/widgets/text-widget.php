@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_Widget_Text functionality.
  *
- * @package    WordPress
+ * @package    ClassicPress
  * @subpackage widgets
  */
 

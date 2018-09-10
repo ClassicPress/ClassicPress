@@ -1,6 +1,6 @@
 <?php
 /**
- * WordPress implementation for PHP functions either missing from older PHP versions or not included by default.
+ * ClassicPress implementation for PHP functions either missing from older PHP versions or not included by default.
  *
  * @package PHP
  * @access private
@@ -439,14 +439,14 @@ if ( ! function_exists( 'array_replace_recursive' ) ) :
 	/**
 	 * PHP-agnostic version of {@link array_replace_recursive()}.
 	 *
-	 * The array_replace_recursive() function is a PHP 5.3 function. WordPress
+	 * The array_replace_recursive() function is a PHP 5.3 function. ClassicPress
 	 * currently supports down to PHP 5.2, so this method is a workaround
 	 * for PHP 5.2.
 	 *
 	 * Note: array_replace_recursive() supports infinite arguments, but for our use-
 	 * case, we only need to support two arguments.
 	 *
-	 * Subject to removal once WordPress makes PHP 5.3.0 the minimum requirement.
+	 * Subject to removal once ClassicPress makes PHP 5.3.0 the minimum requirement.
 	 *
 	 * @since WP-4.5.3
 	 *

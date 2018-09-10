@@ -2,7 +2,7 @@
 /**
  * Test_WP_Customize_Partial tests.
  *
- * @package WordPress
+ * @package ClassicPress
  */
 
 /**

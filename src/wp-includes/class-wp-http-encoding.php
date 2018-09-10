@@ -2,7 +2,7 @@
 /**
  * HTTP API: WP_Http_Encoding class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage HTTP
  * @since WP-4.4.0
  */

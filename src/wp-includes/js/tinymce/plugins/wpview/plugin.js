@@ -1,5 +1,5 @@
 /**
- * WordPress View plugin.
+ * ClassicPress View plugin.
  */
 ( function( tinymce, wp ) {
 	tinymce.PluginManager.add( 'wpview', function( editor ) {

@@ -1,7 +1,7 @@
 <?php
 
 /*
-A simple manually-instrumented profiler for WordPress.
+A simple manually-instrumented profiler for ClassicPress.
 
 This records basic execution time, and a summary of the actions and SQL queries run within each block.
 

@@ -45,16 +45,16 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	 */
 	function test_theme_default() {
 		$themes = get_themes();
-		$theme = get_theme('WordPress Default');
-		$this->assertEquals( $themes['WordPress Default'], $theme );
+		$theme = get_theme('ClassicPress Default');
+		$this->assertEquals( $themes['ClassicPress Default'], $theme );
 
 		$this->assertFalse( empty($theme) );
 
 		#echo gen_tests_array('theme', $theme);
 
-		$this->assertEquals( 'WordPress Default', $theme['Name'] );
-		$this->assertEquals( 'WordPress Default', $theme['Title'] );
-		$this->assertEquals( 'The default WordPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
+		$this->assertEquals( 'ClassicPress Default', $theme['Name'] );
+		$this->assertEquals( 'ClassicPress Default', $theme['Title'] );
+		$this->assertEquals( 'The default ClassicPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
 		$this->assertEquals( '<a href="http://binarybonsai.com/">Michael Heilemann</a>', $theme['Author'] );
 		$this->assertEquals( '1.6', $theme['Version'] );
 		$this->assertEquals( 'default', $theme['Template'] );
@@ -151,7 +151,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		$theme_names = array_keys($themes);
 		$expected = array(
-			'WordPress Default',
+			'ClassicPress Default',
 			'Sandbox',
 			'Stylesheet Only',
 			'My Theme',
@@ -239,14 +239,14 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertEquals( 'My Subdir Theme', $theme_data['Name'] );
 		$this->assertEquals( 'http://example.org/', $theme_data['URI'] );
 		$this->assertEquals( 'An example theme in a sub directory', $theme_data['Description'] );
-		$this->assertEquals( '<a href="http://wordpress.org/">Mr. WordPress</a>', $theme_data['Author'] );
-		$this->assertEquals( 'http://wordpress.org/', $theme_data['AuthorURI'] );
+		$this->assertEquals( '<a href="https://www.classicpress.net">Mr. ClassicPress</a>', $theme_data['Author'] );
+		$this->assertEquals( 'https://www.classicpress.net', $theme_data['AuthorURI'] );
 		$this->assertEquals( '0.1', $theme_data['Version'] );
 		$this->assertEquals( '', $theme_data['Template'] );
 		$this->assertEquals( 'publish', $theme_data['Status'] );
 		$this->assertEquals( array(), $theme_data['Tags'] );
 		$this->assertEquals( 'My Subdir Theme', $theme_data['Title'] );
-		$this->assertEquals( 'Mr. WordPress', $theme_data['AuthorName'] );
+		$this->assertEquals( 'Mr. ClassicPress', $theme_data['AuthorName'] );
 	}
 
 	/**

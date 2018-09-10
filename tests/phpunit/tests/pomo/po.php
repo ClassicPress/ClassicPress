@@ -7,7 +7,7 @@ class Tests_POMO_PO extends WP_UnitTestCase {
 	function setUp() {
 		require_once ABSPATH . '/wp-includes/pomo/po.php';
 		// not so random wordpress.pot string -- multiple lines
-		$this->mail = "Your new WordPress blog has been successfully set up at:
+		$this->mail = "Your new ClassicPress blog has been successfully set up at:
 
 %1\$s
 
@@ -18,11 +18,11 @@ Password: %3\$s
 
 We hope you enjoy your new blog. Thanks!
 
---The WordPress Team
+--The ClassicPress Team
 http://wordpress.org/
 ";
 	$this->po_mail = '""
-"Your new WordPress blog has been successfully set up at:\n"
+"Your new ClassicPress blog has been successfully set up at:\n"
 "\n"
 "%1$s\n"
 "\n"
@@ -33,7 +33,7 @@ http://wordpress.org/
 "\n"
 "We hope you enjoy your new blog. Thanks!\n"
 "\n"
-"--The WordPress Team\n"
+"--The ClassicPress Team\n"
 "http://wordpress.org/\n"';
 		$this->a90 = str_repeat("a", 90);
 		$this->po_a90 = "\"$this->a90\"";
@@ -193,7 +193,7 @@ msgstr[2] "бабаяга"', $po->export_entry($entry));
 			'translations' => array('ztrut0', 'ztrut1', 'ztrut2')));
 		$this->assertEquals($all_types_entry, $po->entries[$all_types_entry->key()]);
 
-		$multiple_line_entry = new Translation_Entry(array('singular' => 'The first thing you need to do is tell Blogger to let WordPress access your account. You will be sent back here after providing authorization.', 'translations' => array("baba\ndyadogugu")));
+		$multiple_line_entry = new Translation_Entry(array('singular' => 'The first thing you need to do is tell Blogger to let ClassicPress access your account. You will be sent back here after providing authorization.', 'translations' => array("baba\ndyadogugu")));
 		$this->assertEquals($multiple_line_entry, $po->entries[$multiple_line_entry->key()]);
 
 		$multiple_line_all_types_entry = new Translation_Entry(array('context' => 'context', 'singular' => 'singular',

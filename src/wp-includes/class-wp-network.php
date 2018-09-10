@@ -2,7 +2,7 @@
 /**
  * Network API: WP_Network class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Multisite
  * @since WP-4.4.0
  */
@@ -13,7 +13,7 @@
  * This class is used during load to populate the `$current_site` global and
  * setup the current network.
  *
- * This class is most useful in WordPress multi-network installations where the
+ * This class is most useful in ClassicPress multi-network installations where the
  * ability to interact with any network of sites is required.
  *
  * @since WP-4.4.0
@@ -86,7 +86,7 @@ class WP_Network {
 	 *
 	 * @since WP-4.4.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $network_id The ID of the network to retrieve.
 	 * @return WP_Network|bool The network's object if found. False if not.
@@ -368,7 +368,7 @@ class WP_Network {
 			 *
 			 * @since WP-3.9.0
 			 *
-			 * @param int|null $segments The number of path segments to consider. WordPress by default looks at
+			 * @param int|null $segments The number of path segments to consider. ClassicPress by default looks at
 			 *                           one path segment. The function default of null only makes sense when you
 			 *                           know the requested path should match a network.
 			 * @param string   $domain   The requested domain.

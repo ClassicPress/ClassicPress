@@ -2,7 +2,7 @@
 /**
  * Test anonymization functions.
  *
- * @package WordPress\UnitTests
+ * @package ClassicPress\UnitTests
  *
  * @since WP-4.9.6
  */

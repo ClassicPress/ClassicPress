@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Widget_Area_Customize_Control class
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-3.4.0
  */

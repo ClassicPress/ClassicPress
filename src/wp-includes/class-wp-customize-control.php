@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Control classes
+ * ClassicPress Customize Control classes
  *
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Customize
  * @since WP-3.4.0
  */
