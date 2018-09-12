@@ -16,7 +16,7 @@ if ( false ) {
 	<title>Error: PHP is not running</title>
 </head>
 <body class="wp-core-ui">
-	<p id="logo"><a href="https://classicpress.net/">ClassicPress</a></p>
+	<p id="logo"><a href="https://www.classicpress.net/">ClassicPress</a></p>
 	<h1>Error: PHP is not running</h1>
 	<p>ClassicPress requires that your web server is running PHP. Your server does not have PHP installed, or PHP is turned off.</p>
 </body>
@@ -77,7 +77,7 @@ function display_header( $body_classes = '' ) {
 	?>
 </head>
 <body class="wp-core-ui<?php echo $body_classes ?>">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( __( 'https://www.classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
 
 <?php
 } // end display_header()
