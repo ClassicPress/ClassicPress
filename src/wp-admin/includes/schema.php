@@ -962,7 +962,7 @@ function populate_network( $network_id = 1, $domain = '', $email = '', $site_nam
 	}
 
 	/* translators: Do not translate USERNAME, SITE_NAME, BLOG_URL, PASSWORD: those are placeholders. */
-	$welcome_email = __( 'Hello USERNAME,
+	$welcome_email = __( 'Howdy USERNAME,
 
 Your new SITE_NAME site has been successfully set up at:
 BLOG_URL

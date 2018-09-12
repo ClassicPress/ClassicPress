@@ -45,7 +45,7 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'deleteblog' && isset( $_P
 	$switched_locale = switch_to_locale( get_locale() );
 
 	/* translators: Do not translate USERNAME, URL_DELETE, SITE_NAME: those are placeholders. */
-	$content = __( "Hello ###USERNAME###,
+	$content = __( "Howdy ###USERNAME###,
 
 You recently clicked the 'Delete Site' link on your site and filled in a
 form on that page.
