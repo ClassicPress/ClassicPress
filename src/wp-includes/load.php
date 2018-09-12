@@ -116,7 +116,7 @@ function wp_fix_server_vars() {
  * @access private
  *
  * @global string $required_php_version The required PHP version string.
- * @global string $wp_version           The ClassicPress version string.
+ * @global string $wp_version           The WordPress version string.
  */
 function wp_check_php_mysql_versions() {
 	global $required_php_version, $wp_version;
