@@ -1170,7 +1170,7 @@ function update_option_new_admin_email( $old_value, $value ) {
 	$switched_locale = switch_to_locale( get_user_locale() );
 
 	/* translators: Do not translate USERNAME, ADMIN_URL, EMAIL, SITENAME, SITEURL: those are placeholders. */
-	$email_text = __( 'Howdy ###USERNAME###,
+	$email_text = __( 'Hello ###USERNAME###,
 
 You recently requested to have the administration email address on
 your site changed.

@@ -629,7 +629,7 @@ class WP_Automatic_Updater {
 
 		switch ( $type ) {
 			case 'success' :
-				$body .= sprintf( __( 'Howdy! Your site at %1$s has been updated automatically to ClassicPress %2$s.' ), home_url(), $core_update->current );
+				$body .= sprintf( __( 'Hello! Your site at %1$s has been updated automatically to ClassicPress %2$s.' ), home_url(), $core_update->current );
 				$body .= "\n\n";
 				if ( ! $newer_version_available )
 					$body .= __( 'No further action is needed on your part.' ) . ' ';

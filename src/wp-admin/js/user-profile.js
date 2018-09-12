@@ -374,7 +374,7 @@
 			});
 
 			/**
-			 * Replaces "Howdy, *" in the admin toolbar whenever the display name dropdown is updated for one's own profile.
+			 * Replaces "Hello, *" in the admin toolbar whenever the display name dropdown is updated for one's own profile.
 			 */
 			select.on( 'change', function() {
 				if ( user_id !== current_user_id ) {
