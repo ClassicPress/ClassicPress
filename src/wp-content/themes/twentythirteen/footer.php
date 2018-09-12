@@ -21,8 +21,8 @@
 					the_privacy_policy_link( '', '<span role="separator" aria-hidden="true"></span>' );
 				}
 				?>
-				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentythirteen' ) ); ?>" class="imprint">
-					<?php printf( __( 'Proudly powered by %s', 'twentythirteen' ), 'WordPress' ); ?>
+				<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentythirteen' ) ); ?>" class="imprint">
+					<?php printf( __( 'Proudly powered by %s', 'twentythirteen' ), 'ClassicPress' ); ?>
 				</a>
 			</div><!-- .site-info -->
 		</footer><!-- #colophon -->
