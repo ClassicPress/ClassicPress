@@ -9,12 +9,9 @@ if ( !defined( 'STDERR' ) ) {
 
 /**
  * Class to create POT files for
- *  - WordPress 3.4+
- *  - WordPress plugins
- *  - WordPress themes
- *  - GlotPress (standalone)
- *  - WordPress.org projects (Rosetta, forums, directories)
- *  - WordCamp.org
+ *  - ClassicPress 1.0.0
+ *  - ClassicPress plugins
+ *  - ClassicPress themes
  *
  * Support for older projects can be found in the legacy branch:
  * https://i18n.trac.wordpress.org/browser/tools/branches/legacy
@@ -24,19 +21,12 @@ class MakePOT {
 
 	public $projects = array(
 		'generic',
-		'wp-frontend',
-		'wp-admin',
-		'wp-network-admin',
-		'wp-tz',
-		'wp-plugin',
-		'wp-theme',
-		'glotpress',
-		'rosetta',
-		'wporg-bb-forums',
-		'wporg-themes',
-		'wporg-plugins',
-		'wporg-forums',
-		'wordcamporg',
+		'cp-frontend',
+		'cp-admin',
+		'cp-network-admin',
+		'cp-tz',
+		'cp-plugin',
+		'cp-theme',
 	);
 
 	public $rules = array(
@@ -81,69 +71,44 @@ class MakePOT {
 			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
 		'generic' => array(),
-		'wp-frontend' => array(
-			'description' => 'Translation of frontend strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+		'cp-frontend' => array(
+			'description' => 'Translation of frontend strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
-		'wp-admin' => array(
-			'description' => 'Translation of site admin strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+		'cp-admin' => array(
+			'description' => 'Translation of site admin strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
-		'wp-network-admin' => array(
-			'description' => 'Translation of network admin strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+		'cp-network-admin' => array(
+			'description' => 'Translation of network admin strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
-		'wp-tz' => array(
-			'description' => 'Translation of timezone strings in WordPress {version}',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress',
+		'cp-tz' => array(
+			'description' => 'Translation of timezone strings in ClassicPress {version}',
+			'copyright-holder' => 'ClassicPress',
+			'package-name' => 'ClassicPress',
 			'package-version' => '{version}',
 		),
-		'wp-plugin' => array(
-			'description' => 'Translation of the WordPress plugin {name} {version} by {author}',
+		'cp-plugin' => array(
+			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
 			'msgid-bugs-address' => 'https://wordpress.org/support/plugin/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
 		),
-		'wp-theme' => array(
-			'description' => 'Translation of the WordPress theme {name} {version} by {author}',
+		'cp-theme' => array(
+			'description' => 'Translation of the ClassicPress theme {name} {version} by {author}',
 			'msgid-bugs-address' => 'https://wordpress.org/support/theme/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
 			'comments' => 'Copyright (C) {year} {author}\nThis file is distributed under the same license as the {package-name} package.',
-		),
-		'glotpress' => array(
-			'description' => 'Translation of GlotPress',
-			'copyright-holder' => 'GlotPress',
-			'package-name' => 'GlotPress',
-		),
-		'wporg-bb-forums' => array(
-			'description' => 'WordPress.org International Forums',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress.org International Forums',
-		),
-		'wporg' => array(
-			'description' => 'WordPress.org',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordPress.org',
-		),
-		'wordcamporg' => array(
-			'description' => 'WordCamp.org',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'WordCamp.org',
-		),
-		'rosetta' => array(
-			'description' => 'Rosetta (.wordpress.org locale sites)',
-			'copyright-holder' => 'WordPress',
-			'package-name' => 'Rosetta',
 		),
 	);
 
@@ -197,7 +162,7 @@ class MakePOT {
 
 	public function wp_generic($dir, $args) {
 		$defaults = array(
-			'project' => 'wp-core',
+			'project' => 'cp-core',
 			'output' => null,
 			'default_output' => 'wordpress.pot',
 			'includes' => array(),
@@ -324,7 +289,7 @@ class MakePOT {
 			return false;
 
 		$result = $this->wp_generic( $dir, array(
-			'project' => 'wp-network-admin', 'output' => $output,
+			'project' => 'cp-network-admin', 'output' => $output,
 			'includes' => $this->get_wp_network_admin_files( $dir ),
 			'excludes' => array(),
 			'default_output' => 'wordpress-admin-network.pot',
@@ -363,7 +328,7 @@ class MakePOT {
 
 	public function wp_tz( $dir, $output ) {
 		return $this->wp_generic( $dir, array(
-			'project' => 'wp-tz', 'output' => $output,
+			'project' => 'cp-tz', 'output' => $output,
 			'includes' => array( 'wp-admin/includes/continents-cities\.php' ),
 			'excludes' => array(),
 			'default_output' => 'wordpress-continents-cities.pot',
@@ -493,7 +458,7 @@ class MakePOT {
 		$placeholders['slug'] = $slug;
 
 		$output = is_null($output)? "$slug.pot" : $output;
-		$res = $this->xgettext( 'wp-plugin', $dir, $output, $placeholders, $args['excludes'], $args['includes'] );
+		$res = $this->xgettext( 'cp-plugin', $dir, $output, $placeholders, $args['excludes'], $args['includes'] );
 		if (!$res) return false;
 		$potextmeta = new PotExtMeta;
 		$res = $potextmeta->append($main_file, $output);
@@ -519,12 +484,12 @@ class MakePOT {
 
 		$license = $this->get_addon_header( 'License', $source );
 		if ( $license )
-			$this->meta['wp-theme']['comments'] = "Copyright (C) {year} {author}\nThis file is distributed under the {$license}.";
+			$this->meta['cp-theme']['comments'] = "Copyright (C) {year} {author}\nThis file is distributed under the {$license}.";
 		else
-			$this->meta['wp-theme']['comments'] = "Copyright (C) {year} {author}\nThis file is distributed under the same license as the {package-name} package.";
+			$this->meta['cp-theme']['comments'] = "Copyright (C) {year} {author}\nThis file is distributed under the same license as the {package-name} package.";
 
 		$output = is_null($output)? "$slug.pot" : $output;
-		$res = $this->xgettext('wp-theme', $dir, $output, $placeholders);
+		$res = $this->xgettext('cp-theme', $dir, $output, $placeholders);
 		if (! $res )
 			return false;
 		$potextmeta = new PotExtMeta;
@@ -558,28 +523,6 @@ class MakePOT {
 		return $res;
 	}
 
-	public function glotpress( $dir, $output ) {
-		$output = is_null( $output ) ? "glotpress.pot" : $output;
-		return $this->xgettext( 'glotpress', $dir, $output );
-	}
-
-	public function wporg_bb_forums( $dir, $output ) {
-		$output = is_null( $output ) ? 'wporg.pot' : $output;
-		return $this->xgettext( 'wporg-bb-forums', $dir, $output, array(), array(
-			'bb-plugins/elfakismet/.*',
-			'bb-plugins/support-forum/.*',
-			'themes/.*',
-		) );
-	}
-
-	public function wporg_themes( $dir, $output ) {
-		$output = is_null( $output ) ? 'wporg-themes.pot' : $output;
-		return $this->xgettext( 'wporg', $dir, $output, array(), array(), array(
-			'plugins/theme-directory/.*',
-			'themes/pub/wporg-themes/.*'
-		) );
-	}
-
 	public function wporg_plugins( $dir, $output ) {
 		$output = is_null( $output ) ? 'wporg-plugins.pot' : $output;
 		return $this->xgettext( 'wporg', $dir, $output, array(), array(
@@ -589,34 +532,6 @@ class MakePOT {
 		) );
 	}
 
-	public function wporg_forums( $dir, $output ) {
-		$output = is_null( $output ) ? 'wporg-forums.pot' : $output;
-		return $this->xgettext( 'wporg', $dir, $output, array(), array(), array(
-			'.*\.php',
-		) );
-	}
-
-	public function wordcamporg( $dir, $output ) {
-		$output = is_null( $output ) ? 'wordcamporg.pot' : $output;
-		return $this->xgettext( 'wordcamporg', $dir, $output, array(), array(), array(
-			'.*\.php',
-		) );
-	}
-
-	public function rosetta( $dir, $output ) {
-		$output = is_null( $output )? 'rosetta.pot' : $output;
-		return $this->xgettext( 'rosetta', $dir, $output, array(), array(
-			'mu-plugins/rosetta/i18n-tools/.*',
-			'mu-plugins/rosetta/locales/.*',
-			), array(
-			'mu-plugins/(roles|showcase|downloads)/.*\.php',
-			'mu-plugins/jetpack-settings.php',
-			'mu-plugins/rosetta.*\.php',
-			'mu-plugins/rosetta/[^/]+\.php',
-			'mu-plugins/rosetta/tmpl/.*\.php',
-			'themes/rosetta/.*\.php',
-		) );
-	}
 }
 
 // run the CLI only if the file
