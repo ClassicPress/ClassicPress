@@ -196,12 +196,12 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	protected function mock_deprecated() {
-		_deprecated_function( __METHOD__, '2.5' );
+		_deprecated_function( __METHOD__, 'WP-2.5' );
 		return true;
 	}
 
 	protected function mock_incorrect_usage() {
-		_doing_it_wrong( __METHOD__, __( 'Incorrect usage test' ), '2.5' );
+		_doing_it_wrong( __METHOD__, __( 'Incorrect usage test' ), 'WP-2.5' );
 		return true;
 	}
 

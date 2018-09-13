@@ -169,6 +169,6 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 	 * @deprecated WP-4.4.0 Fragment caching was removed in favor of split queries.
 	 */
 	public function flush_widget_cache() {
-		_deprecated_function( __METHOD__, '4.4.0' );
+		_deprecated_function( __METHOD__, 'WP-4.4.0' );
 	}
 }

@@ -1187,7 +1187,7 @@ function register_post_type( $post_type, $args = array() ) {
 	$post_type = sanitize_key( $post_type );
 
 	if ( empty( $post_type ) || strlen( $post_type ) > 20 ) {
-		_doing_it_wrong( __FUNCTION__, __( 'Post type names must be between 1 and 20 characters in length.' ), '4.2.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Post type names must be between 1 and 20 characters in length.' ), 'WP-4.2.0' );
 		return new WP_Error( 'post_type_length_invalid', __( 'Post type names must be between 1 and 20 characters in length.' ) );
 	}
 
@@ -3043,7 +3043,7 @@ function wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array(
 function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
 
 	if ( is_numeric( $args ) ) {
-		_deprecated_argument( __FUNCTION__, '3.1.0', __( 'Passing an integer number of posts is deprecated. Pass an array of arguments instead.' ) );
+		_deprecated_argument( __FUNCTION__, 'WP-3.1.0', __( 'Passing an integer number of posts is deprecated. Pass an array of arguments instead.' ) );
 		$args = array( 'numberposts' => absint( $args ) );
 	}
 
@@ -3509,7 +3509,7 @@ function wp_insert_post( $postarr, $wp_error = false ) {
 			$taxonomy_obj = get_taxonomy($taxonomy);
 			if ( ! $taxonomy_obj ) {
 				/* translators: %s: taxonomy name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), '4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), 'WP-4.4.0' );
 				continue;
 			}
 

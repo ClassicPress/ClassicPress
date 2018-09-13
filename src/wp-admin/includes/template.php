@@ -1232,7 +1232,7 @@ function add_settings_section($id, $title, $callback, $page) {
 	global $wp_settings_sections;
 
 	if ( 'misc' == $page ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
 			/* translators: %s: misc */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'misc'
@@ -1242,7 +1242,7 @@ function add_settings_section($id, $title, $callback, $page) {
 	}
 
 	if ( 'privacy' == $page ) {
-		_deprecated_argument( __FUNCTION__, '3.5.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.5.0',
 			/* translators: %s: privacy */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'privacy'
@@ -1293,7 +1293,7 @@ function add_settings_field($id, $title, $callback, $page, $section = 'default',
 	global $wp_settings_fields;
 
 	if ( 'misc' == $page ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
 			/* translators: %s: misc */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'misc'
@@ -1303,7 +1303,7 @@ function add_settings_field($id, $title, $callback, $page, $section = 'default',
 	}
 
 	if ( 'privacy' == $page ) {
-		_deprecated_argument( __FUNCTION__, '3.5.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.5.0',
 			/* translators: %s: privacy */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'privacy'
@@ -2091,7 +2091,7 @@ function convert_to_screen( $hook_name ) {
 				'<code>add_meta_box()</code>',
 				'<code>add_meta_boxes</code>'
 			),
-			'3.3.0'
+			'WP-3.3.0'
 		);
 		return (object) array( 'id' => '_invalid', 'base' => '_are_belong_to_us' );
 	}

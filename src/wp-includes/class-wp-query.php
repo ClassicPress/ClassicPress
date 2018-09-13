@@ -1664,7 +1664,7 @@ class WP_Query {
 		$page = 1;
 
 		if ( isset( $q['caller_get_posts'] ) ) {
-			_deprecated_argument( 'WP_Query', '3.1.0',
+			_deprecated_argument( 'WP_Query', 'WP-3.1.0',
 				/* translators: 1: caller_get_posts, 2: ignore_sticky_posts */
 				sprintf( __( '%1$s is deprecated. Use %2$s instead.' ),
 					'<code>caller_get_posts</code>',
@@ -3596,7 +3596,7 @@ class WP_Query {
 	 * @return bool
 	 */
 	public function is_comments_popup() {
-		_deprecated_function( __FUNCTION__, '4.5.0' );
+		_deprecated_function( __FUNCTION__, 'WP-4.5.0' );
 
 		return false;
 	}
@@ -4073,7 +4073,7 @@ class WP_Query {
 	 * @return mixed
 	 */
 	public function lazyload_term_meta( $check, $term_id ) {
-		_deprecated_function( __METHOD__, '4.5.0' );
+		_deprecated_function( __METHOD__, 'WP-4.5.0' );
 		return $check;
 	}
 
@@ -4088,7 +4088,7 @@ class WP_Query {
 	 * @return mixed
 	 */
 	public function lazyload_comment_meta( $check, $comment_id ) {
-		_deprecated_function( __METHOD__, '4.5.0' );
+		_deprecated_function( __METHOD__, 'WP-4.5.0' );
 		return $check;
 	}
 }

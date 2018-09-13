@@ -1082,7 +1082,7 @@ class wpdb {
 	 */
 	function _weak_escape( $string ) {
 		if ( func_num_args() === 1 && function_exists( '_deprecated_function' ) )
-			_deprecated_function( __METHOD__, '3.6.0', 'wpdb::prepare() or esc_sql()' );
+			_deprecated_function( __METHOD__, 'WP-3.6.0', 'wpdb::prepare() or esc_sql()' );
 		return addslashes( $string );
 	}
 
@@ -1107,9 +1107,9 @@ class wpdb {
 			$class = get_class( $this );
 			if ( function_exists( '__' ) ) {
 				/* translators: %s: database access abstraction class, usually wpdb or a class extending wpdb */
-				_doing_it_wrong( $class, sprintf( __( '%s must set a database connection for use with escaping.' ), $class ), '3.6.0' );
+				_doing_it_wrong( $class, sprintf( __( '%s must set a database connection for use with escaping.' ), $class ), 'WP-3.6.0' );
 			} else {
-				_doing_it_wrong( $class, sprintf( '%s must set a database connection for use with escaping.', $class ), '3.6.0' );
+				_doing_it_wrong( $class, sprintf( '%s must set a database connection for use with escaping.', $class ), 'WP-3.6.0' );
 			}
 			$escaped = addslashes( $string );
 		}
@@ -1157,7 +1157,7 @@ class wpdb {
 	 */
 	public function escape( $data ) {
 		if ( func_num_args() === 1 && function_exists( '_deprecated_function' ) )
-			_deprecated_function( __METHOD__, '3.6.0', 'wpdb::prepare() or esc_sql()' );
+			_deprecated_function( __METHOD__, 'WP-3.6.0', 'wpdb::prepare() or esc_sql()' );
 		if ( is_array( $data ) ) {
 			foreach ( $data as $k => $v ) {
 				if ( is_array( $v ) )
@@ -1227,7 +1227,7 @@ class wpdb {
 		// This is not meant to be foolproof -- but it will catch obviously incorrect usage.
 		if ( strpos( $query, '%' ) === false ) {
 			wp_load_translations_early();
-			_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'The query argument of %s must have a placeholder.' ), 'wpdb::prepare()' ), '3.9.0' );
+			_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'The query argument of %s must have a placeholder.' ), 'wpdb::prepare()' ), 'WP-3.9.0' );
 		}
 
 		$args = func_get_args();
@@ -1243,7 +1243,7 @@ class wpdb {
 		foreach ( $args as $arg ) {
 			if ( ! is_scalar( $arg ) && ! is_null( $arg ) ) {
 				wp_load_translations_early();
-				_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'Unsupported value type (%s).' ), gettype( $arg ) ), '4.8.2' );
+				_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'Unsupported value type (%s).' ), gettype( $arg ) ), 'WP-4.8.2' );
 			}
 		}
 
@@ -1280,7 +1280,7 @@ class wpdb {
 			if ( 1 === $placeholders && $passed_as_array ) {
 				// If the passed query only expected one argument, but the wrong number of arguments were sent as an array, bail.
 				wp_load_translations_early();
-				_doing_it_wrong( 'wpdb::prepare', __( 'The query only expected one placeholder, but an array of multiple placeholders was sent.' ), '4.9.0' );
+				_doing_it_wrong( 'wpdb::prepare', __( 'The query only expected one placeholder, but an array of multiple placeholders was sent.' ), 'WP-4.9.0' );
 
 				return;
 			} else {
@@ -1294,7 +1294,7 @@ class wpdb {
 					sprintf( __( 'The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d).' ),
 						$placeholders,
 						count( $args ) ),
-					'4.8.3'
+					'WP-4.8.3'
 				);
 			}
 		}
@@ -3325,7 +3325,7 @@ class wpdb {
 	 * @return bool True if collation is supported, false if version does not
 	 */
 	public function supports_collation() {
-		_deprecated_function( __FUNCTION__, '3.5.0', 'wpdb::has_cap( \'collation\' )' );
+		_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'wpdb::has_cap( \'collation\' )' );
 		return $this->has_cap( 'collation' );
 	}
 

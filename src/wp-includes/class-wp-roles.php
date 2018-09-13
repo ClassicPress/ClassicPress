@@ -117,7 +117,7 @@ class WP_Roles {
 	 * @deprecated WP-4.9.0 Use WP_Roles::for_site()
 	 */
 	protected function _init() {
-		_deprecated_function( __METHOD__, '4.9.0', 'WP_Roles::for_site()' );
+		_deprecated_function( __METHOD__, 'WP-4.9.0', 'WP_Roles::for_site()' );
 
 		$this->for_site();
 	}
@@ -132,7 +132,7 @@ class WP_Roles {
 	 * @deprecated WP-4.7.0 Use WP_Roles::for_site()
 	 */
 	public function reinit() {
-		_deprecated_function( __METHOD__, '4.7.0', 'WP_Roles::for_site()' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0', 'WP_Roles::for_site()' );
 
 		$this->for_site();
 	}

@@ -50,7 +50,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	 * @deprecated WP-4.5.0 Deprecated in favor of wp_nav_menu_manage_columns().
 	 */
 	public function wp_nav_menu_manage_columns() {
-		_deprecated_function( __METHOD__, '4.5.0', 'wp_nav_menu_manage_columns' );
+		_deprecated_function( __METHOD__, 'WP-4.5.0', 'wp_nav_menu_manage_columns' );
 		require_once ABSPATH . 'wp-admin/includes/nav-menu.php';
 		return wp_nav_menu_manage_columns();
 	}

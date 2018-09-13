@@ -867,7 +867,7 @@ class WP_Http {
 	 *                    See parse_url()'s return values.
 	 */
 	protected static function parse_url( $url ) {
-		_deprecated_function( __METHOD__, '4.4.0', 'wp_parse_url()' );
+		_deprecated_function( __METHOD__, 'WP-4.4.0', 'wp_parse_url()' );
 		return wp_parse_url( $url );
 	}
 

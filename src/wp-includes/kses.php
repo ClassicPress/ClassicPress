@@ -1688,7 +1688,7 @@ function kses_init() {
  */
 function safecss_filter_attr( $css, $deprecated = '' ) {
 	if ( !empty( $deprecated ) )
-		_deprecated_argument( __FUNCTION__, '2.8.1' ); // Never implemented
+		_deprecated_argument( __FUNCTION__, 'WP-2.8.1' ); // Never implemented
 
 	$css = wp_kses_no_null($css);
 	$css = str_replace(array("\n","\r","\t"), '', $css);

@@ -440,7 +440,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	global $wpdb;
 
 	if ( !empty( $deprecated ) )
-		_deprecated_argument( __FUNCTION__, '2.3.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-2.3.0' );
 
 	$option = trim($option);
 	if ( empty($option) )
@@ -2002,7 +2002,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 	}
 
 	if ( 'misc' == $option_group ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
 			/* translators: %s: misc */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'misc'
@@ -2012,7 +2012,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 	}
 
 	if ( 'privacy' == $option_group ) {
-		_deprecated_argument( __FUNCTION__, '3.5.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.5.0',
 			/* translators: %s: privacy */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'privacy'
@@ -2048,7 +2048,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	global $new_whitelist_options, $wp_registered_settings;
 
 	if ( 'misc' == $option_group ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
 			/* translators: %s: misc */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'misc'
@@ -2058,7 +2058,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	}
 
 	if ( 'privacy' == $option_group ) {
-		_deprecated_argument( __FUNCTION__, '3.5.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.5.0',
 			/* translators: %s: privacy */
 			sprintf( __( 'The "%s" options group has been removed. Use another settings group.' ),
 				'privacy'
@@ -2072,7 +2072,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 		unset( $new_whitelist_options[ $option_group ][ $pos ] );
 	}
 	if ( '' !== $deprecated ) {
-		_deprecated_argument( __FUNCTION__, '4.7.0',
+		_deprecated_argument( __FUNCTION__, 'WP-4.7.0',
 			/* translators: 1: $sanitize_callback, 2: register_setting() */
 			sprintf( __( '%1$s is deprecated. The callback from %2$s is used instead.' ),
 				'<code>$sanitize_callback</code>',
