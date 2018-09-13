@@ -109,7 +109,7 @@ function display_setup_form( $error = null ) {
 
 	if ( ! is_null( $error ) ) {
 ?>
-<h1><?php _ex( 'Welcome', 'Howdy' ); ?></h1>
+<h1><?php _ex( 'Welcome', 'Hello' ); ?></h1>
 <p class="message"><?php echo $error; ?></p>
 <?php } ?>
 <form id="setup" method="post" action="install.php?step=2" novalidate="novalidate">
@@ -314,7 +314,7 @@ switch($step) {
 
 		display_header();
 ?>
-<h1><?php _ex( 'Welcome', 'Howdy' ); ?></h1>
+<h1><?php _ex( 'Welcome', 'Hello' ); ?></h1>
 <p><?php _e( 'Welcome to the famous five-minute ClassicPress installation process! Just fill in the information below and you&#8217;ll be on your way to using the most extendable and powerful personal publishing platform in the world.' ); ?></p>
 
 <h2><?php _e( 'Information needed' ); ?></h2>
