@@ -9,7 +9,7 @@
 _deprecated_file(
 	/* translators: %s: template name */
 	sprintf( __( 'Theme without %s' ), basename( __FILE__ ) ),
-	'3.0.0',
+	'WP-3.0.0',
 	null,
 	/* translators: %s: template name */
 	sprintf( __( 'Please include a %s template in your theme.' ), basename( __FILE__ ) )
