@@ -2103,7 +2103,7 @@ function sanitize_html_class( $class, $fallback = '' ) {
  */
 function convert_chars( $content, $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, '0.71' );
+		_deprecated_argument( __FUNCTION__, 'WP-0.71' );
 	}
 
 	if ( strpos( $content, '&' ) !== false ) {
@@ -2885,7 +2885,7 @@ function convert_smilies( $text ) {
  */
 function is_email( $email, $deprecated = false ) {
 	if ( ! empty( $deprecated ) )
-		_deprecated_argument( __FUNCTION__, '3.0.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
 
 	// Test for the minimum length the email can be
 	if ( strlen( $email ) < 6 ) {

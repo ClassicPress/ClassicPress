@@ -310,7 +310,7 @@ class WP_Customize_Nav_Menu_Setting extends WP_Customize_Setting {
 	 * @see WP_Customize_Nav_Menu_Setting::filter_wp_get_nav_menus()
 	 */
 	protected function _sort_menus_by_orderby( $menu1, $menu2 ) {
-		_deprecated_function( __METHOD__, '4.7.0', 'wp_list_sort' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0', 'wp_list_sort' );
 
 		$key = $this->_current_menus_sort_orderby;
 		return strcmp( $menu1->$key, $menu2->$key );

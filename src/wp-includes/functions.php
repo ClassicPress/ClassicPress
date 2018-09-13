@@ -643,7 +643,7 @@ function do_enclose( $content, $post_ID ) {
  */
 function wp_get_http_headers( $url, $deprecated = false ) {
 	if ( !empty( $deprecated ) )
-		_deprecated_argument( __FUNCTION__, '2.7.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-2.7.0' );
 
 	$response = wp_safe_remote_head( $url );
 
@@ -2143,7 +2143,7 @@ function wp_unique_filename( $dir, $filename, $unique_filename_callback = null )
  */
 function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 	if ( !empty( $deprecated ) )
-		_deprecated_argument( __FUNCTION__, '2.0.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-2.0.0' );
 
 	if ( empty( $name ) )
 		return array( 'error' => __( 'Empty filename' ) );
@@ -4001,7 +4001,7 @@ function _deprecated_file( $file, $version, $replacement = null, $message = '' )
  * For example:
  *
  *     if ( ! empty( $deprecated ) ) {
- *         _deprecated_argument( __FUNCTION__, '3.0.0' );
+ *         _deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
  *     }
  *
  *

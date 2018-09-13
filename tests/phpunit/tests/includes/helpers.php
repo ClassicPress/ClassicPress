@@ -196,7 +196,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	protected function mock_deprecated() {
-		_deprecated_function( __METHOD__, '2.5' );
+		_deprecated_function( __METHOD__, 'WP-2.5' );
 		return true;
 	}
 

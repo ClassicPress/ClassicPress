@@ -582,7 +582,7 @@ function remove_all_actions($tag, $priority = false) {
  *     return apply_filters( 'wpdocs_filter', $value, $extra_arg );
  *
  *     // Deprecated.
- *     return apply_filters_deprecated( 'wpdocs_filter', array( $value, $extra_arg ), '4.9', 'wpdocs_new_filter' );
+ *     return apply_filters_deprecated( 'wpdocs_filter', array( $value, $extra_arg ), 'WP-4.9', 'wpdocs_new_filter' );
  *
  * @since WP-4.6.0
  *

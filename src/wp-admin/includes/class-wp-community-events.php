@@ -446,7 +446,7 @@ class WP_Community_Events {
 	 *                        log entry.
 	 */
 	protected function maybe_log_events_response( $message, $details ) {
-		_deprecated_function( __METHOD__, '4.9.0' );
+		_deprecated_function( __METHOD__, 'WP-4.9.0' );
 
 		if ( ! WP_DEBUG_LOG ) {
 			return;

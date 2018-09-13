@@ -890,7 +890,7 @@ function is_active_sidebar( $index ) {
  */
 function wp_get_sidebars_widgets( $deprecated = true ) {
 	if ( $deprecated !== true )
-		_deprecated_argument( __FUNCTION__, '2.8.1' );
+		_deprecated_argument( __FUNCTION__, 'WP-2.8.1' );
 
 	global $_wp_sidebars_widgets, $sidebars_widgets;
 

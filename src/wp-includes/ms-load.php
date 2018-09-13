@@ -503,7 +503,7 @@ function ms_not_installed( $domain, $path ) {
  * @return object
  */
 function get_current_site_name( $current_site ) {
-	_deprecated_function( __FUNCTION__, '3.9.0', 'get_current_site()' );
+	_deprecated_function( __FUNCTION__, 'WP-3.9.0', 'get_current_site()' );
 	return $current_site;
 }
 
@@ -523,7 +523,7 @@ function get_current_site_name( $current_site ) {
  */
 function wpmu_current_site() {
 	global $current_site;
-	_deprecated_function( __FUNCTION__, '3.9.0' );
+	_deprecated_function( __FUNCTION__, 'WP-3.9.0' );
 	return $current_site;
 }
 
@@ -540,7 +540,7 @@ function wpmu_current_site() {
  * @return WP_Network|false Object containing network information if found, false if not.
  */
 function wp_get_network( $network ) {
-	_deprecated_function( __FUNCTION__, '4.7.0', 'get_network()' );
+	_deprecated_function( __FUNCTION__, 'WP-4.7.0', 'get_network()' );
 
 	$network = get_network( $network );
 	if ( null === $network ) {

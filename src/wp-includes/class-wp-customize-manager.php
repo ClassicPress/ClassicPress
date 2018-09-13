@@ -485,7 +485,7 @@ final class WP_Customize_Manager {
 	 * @return callable Die handler.
 	 */
 	public function wp_die_handler() {
-		_deprecated_function( __METHOD__, '4.7.0' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0' );
 
 		if ( $this->doing_ajax() || isset( $_POST['customized'] ) ) {
 			return '_ajax_wp_die_handler';
@@ -949,7 +949,7 @@ final class WP_Customize_Manager {
 	 * @return int
 	 */
 	public function wp_redirect_status( $status ) {
-		_deprecated_function( __FUNCTION__, '4.7.0' );
+		_deprecated_function( __FUNCTION__, 'WP-4.7.0' );
 
 		if ( $this->is_preview() && ! is_admin() ) {
 			return 200;
@@ -1938,7 +1938,7 @@ final class WP_Customize_Manager {
 	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_override_404_status() {
-		_deprecated_function( __METHOD__, '4.7.0' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0' );
 	}
 
 	/**
@@ -1948,7 +1948,7 @@ final class WP_Customize_Manager {
 	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_base() {
-		_deprecated_function( __METHOD__, '4.7.0' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0' );
 	}
 
 	/**
@@ -1958,7 +1958,7 @@ final class WP_Customize_Manager {
 	 * @deprecated 4.7.0 Customizer no longer supports IE8, so all supported browsers recognize HTML5.
 	 */
 	public function customize_preview_html5() {
-		_deprecated_function( __FUNCTION__, '4.7.0' );
+		_deprecated_function( __FUNCTION__, 'WP-4.7.0' );
 	}
 
 	/**
@@ -2151,7 +2151,7 @@ final class WP_Customize_Manager {
 	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_signature() {
-		_deprecated_function( __METHOD__, '4.7.0' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0' );
 	}
 
 	/**
@@ -2164,7 +2164,7 @@ final class WP_Customize_Manager {
 	 * @return mixed Value passed through for {@see 'wp_die_handler'} filter.
 	 */
 	public function remove_preview_signature( $return = null ) {
-		_deprecated_function( __METHOD__, '4.7.0' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0' );
 
 		return $return;
 	}
@@ -4233,7 +4233,7 @@ final class WP_Customize_Manager {
 	 * @return int
 	 */
 	protected function _cmp_priority( $a, $b ) {
-		_deprecated_function( __METHOD__, '4.7.0', 'wp_list_sort' );
+		_deprecated_function( __METHOD__, 'WP-4.7.0', 'wp_list_sort' );
 
 		if ( $a->priority === $b->priority ) {
 			return $a->instance_number - $b->instance_number;

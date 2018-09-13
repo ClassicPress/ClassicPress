@@ -44,7 +44,7 @@ function get_category_link( $category ) {
 function get_category_parents( $id, $link = false, $separator = '/', $nicename = false, $deprecated = array() ) {
 
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, '4.8.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-4.8.0' );
 	}
 
 	$format = $nicename ? 'slug' : 'name';
@@ -338,7 +338,7 @@ function wp_dropdown_categories( $args = '' ) {
 
 	// Back compat.
 	if ( isset( $args['type'] ) && 'link' == $args['type'] ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0',
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
 			/* translators: 1: "type => link", 2: "taxonomy => link_category" */
 			sprintf( __( '%1$s is deprecated. Use %2$s instead.' ),
 				'<code>type => link</code>',

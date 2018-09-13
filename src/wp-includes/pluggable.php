@@ -1385,7 +1385,7 @@ if ( ! function_exists('wp_notify_postauthor') ) :
  */
 function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 	if ( null !== $deprecated ) {
-		_deprecated_argument( __FUNCTION__, '3.8.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-3.8.0' );
 	}
 
 	$comment = get_comment( $comment_id );
@@ -1814,7 +1814,7 @@ if ( !function_exists('wp_new_user_notification') ) :
  */
 function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) {
 	if ( $deprecated !== null ) {
-		_deprecated_argument( __FUNCTION__, '4.3.1' );
+		_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
 	}
 
 	global $wpdb, $wp_hasher;

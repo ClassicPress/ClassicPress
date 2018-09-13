@@ -258,7 +258,7 @@ class WP_User {
 	 */
 	public function __isset( $key ) {
 		if ( 'id' == $key ) {
-			_deprecated_argument( 'WP_User->id', '2.1.0',
+			_deprecated_argument( 'WP_User->id', 'WP-2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -287,7 +287,7 @@ class WP_User {
 	 */
 	public function __get( $key ) {
 		if ( 'id' == $key ) {
-			_deprecated_argument( 'WP_User->id', '2.1.0',
+			_deprecated_argument( 'WP_User->id', 'WP-2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -325,7 +325,7 @@ class WP_User {
 	 */
 	public function __set( $key, $value ) {
 		if ( 'id' == $key ) {
-			_deprecated_argument( 'WP_User->id', '2.1.0',
+			_deprecated_argument( 'WP_User->id', 'WP-2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -348,7 +348,7 @@ class WP_User {
 	 */
 	public function __unset( $key ) {
 		if ( 'id' == $key ) {
-			_deprecated_argument( 'WP_User->id', '2.1.0',
+			_deprecated_argument( 'WP_User->id', 'WP-2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -450,7 +450,7 @@ class WP_User {
 	protected function _init_caps( $cap_key = '' ) {
 		global $wpdb;
 
-		_deprecated_function( __METHOD__, '4.9.0', 'WP_User::for_site()' );
+		_deprecated_function( __METHOD__, 'WP-4.9.0', 'WP_User::for_site()' );
 
 		if ( empty( $cap_key ) ) {
 			$this->cap_key = $wpdb->get_blog_prefix( $this->site_id ) . 'capabilities';
@@ -713,7 +713,7 @@ class WP_User {
 	 */
 	public function has_cap( $cap ) {
 		if ( is_numeric( $cap ) ) {
-			_deprecated_argument( __FUNCTION__, '2.0.0', __( 'Usage of user levels is deprecated. Use capabilities instead.' ) );
+			_deprecated_argument( __FUNCTION__, 'WP-2.0.0', __( 'Usage of user levels is deprecated. Use capabilities instead.' ) );
 			$cap = $this->translate_level_to_cap( $cap );
 		}
 
@@ -781,7 +781,7 @@ class WP_User {
 	 * @param int $blog_id Optional. Site ID, defaults to current site.
 	 */
 	public function for_blog( $blog_id = '' ) {
-		_deprecated_function( __METHOD__, '4.9.0', 'WP_User::for_site()' );
+		_deprecated_function( __METHOD__, 'WP-4.9.0', 'WP_User::for_site()' );
 
 		$this->for_site( $blog_id );
 	}

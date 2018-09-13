@@ -242,7 +242,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	 *
 	 * @param object $details The blog details.
 	 */
-	$details = apply_filters_deprecated( 'blog_details', array( $details ), '4.7.0', 'site_details' );
+	$details = apply_filters_deprecated( 'blog_details', array( $details ), 'WP-4.7.0', 'site_details' );
 
 	wp_cache_set( $blog_id . $all, $details, 'blog-details' );
 
@@ -483,7 +483,7 @@ function clean_blog_cache( $blog ) {
 	 *
 	 * @param int $blog_id Blog ID.
 	 */
-	do_action_deprecated( 'refresh_blog_details', array( $blog_id ), '4.9.0', 'clean_site_cache' );
+	do_action_deprecated( 'refresh_blog_details', array( $blog_id ), 'WP-4.9.0', 'clean_site_cache' );
 }
 
 /**
@@ -763,7 +763,7 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
 	$id = (int) $id;
 
 	if ( null !== $deprecated  )
-		_deprecated_argument( __FUNCTION__, '3.1.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-3.1.0' );
 
 	if ( get_current_blog_id() == $id )
 		return update_option( $option, $value );
@@ -1008,7 +1008,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 	global $wpdb;
 
 	if ( null !== $deprecated  )
-		_deprecated_argument( __FUNCTION__, '3.1.0' );
+		_deprecated_argument( __FUNCTION__, 'WP-3.1.0' );
 
 	if ( ! in_array( $pref, array( 'site_id', 'domain', 'path', 'registered', 'last_updated', 'public', 'archived', 'mature', 'spam', 'deleted', 'lang_id') ) )
 		return $value;

@@ -264,7 +264,7 @@ function wp_cache_add_non_persistent_groups( $groups ) {
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
  */
 function wp_cache_reset() {
-	_deprecated_function( __FUNCTION__, '3.5.0', 'WP_Object_Cache::reset()' );
+	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Object_Cache::reset()' );
 
 	global $wp_object_cache;
 
@@ -610,7 +610,7 @@ class WP_Object_Cache {
 	 * @see switch_to_blog()
 	 */
 	public function reset() {
-		_deprecated_function( __FUNCTION__, '3.5.0', 'switch_to_blog()' );
+		_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'switch_to_blog()' );
 
 		// Clear out non-global caches since the blog ID has changed.
 		foreach ( array_keys( $this->cache ) as $group ) {
