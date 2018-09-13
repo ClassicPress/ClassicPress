@@ -231,7 +231,7 @@ function wp_deregister_script( $handle ) {
 				"<code>$handle</code>",
 				'<code>wp_enqueue_scripts</code>'
 			);
-			_doing_it_wrong( __FUNCTION__, $message, '3.6.0' );
+			_doing_it_wrong( __FUNCTION__, $message, 'WP-3.6.0' );
 			return;
 		}
 	}
