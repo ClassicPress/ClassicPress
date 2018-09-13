@@ -290,7 +290,7 @@ if ( post_type_supports($post_type, 'custom-fields') )
  * Fires in the middle of built-in meta box registration.
  *
  * @since WP-2.1.0
- * @deprecated 3.7.0 Use 'add_meta_boxes' instead.
+ * @deprecated WP-3.7.0 Use 'add_meta_boxes' instead.
  *
  * @param WP_Post $post Post object.
  */

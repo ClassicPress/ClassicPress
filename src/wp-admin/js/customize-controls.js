@@ -3928,7 +3928,7 @@
 		},
 
 		/**
-		 * @deprecated 4.1.0 Use this.onChangeActive() instead.
+		 * @deprecated WP-4.1.0 Use this.onChangeActive() instead.
 		 */
 		toggle: function ( active ) {
 			return this.onChangeActive( active, this.defaultActiveArguments );

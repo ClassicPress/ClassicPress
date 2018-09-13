@@ -859,7 +859,7 @@ class WP_Http {
 	/**
 	 * Used as a wrapper for PHP's parse_url() function that handles edgecases in < PHP 5.4.7.
 	 *
-	 * @deprecated 4.4.0 Use wp_parse_url()
+	 * @deprecated WP-4.4.0 Use wp_parse_url()
 	 * @see wp_parse_url()
 	 *
 	 * @param string $url The URL to parse.

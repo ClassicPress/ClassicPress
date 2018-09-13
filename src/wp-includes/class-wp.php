@@ -528,7 +528,7 @@ class WP {
 			 * Filters the query string before parsing.
 			 *
 			 * @since WP-1.5.0
-			 * @deprecated 2.1.0 Use 'query_vars' or 'request' filters instead.
+			 * @deprecated WP-2.1.0 Use 'query_vars' or 'request' filters instead.
 			 *
 			 * @param string $query_string The query string to modify.
 			 */

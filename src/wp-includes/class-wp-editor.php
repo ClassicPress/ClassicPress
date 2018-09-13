@@ -1579,7 +1579,7 @@ final class _WP_Editors {
 	 * Outputs the HTML for distraction-free writing mode.
 	 *
 	 * @since WP-3.2.0
-	 * @deprecated 4.3.0
+	 * @deprecated WP-4.3.0
 	 *
 	 * @static
 	 */

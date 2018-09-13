@@ -497,7 +497,7 @@ function ms_not_installed( $domain, $path ) {
  *
  * @access private
  * @since WP-3.0.0
- * @deprecated 3.9.0 Use get_current_site() instead.
+ * @deprecated WP-3.9.0 Use get_current_site() instead.
  *
  * @param object $current_site
  * @return object
@@ -515,7 +515,7 @@ function get_current_site_name( $current_site ) {
  *
  * @access private
  * @since WP-3.0.0
- * @deprecated 3.9.0
+ * @deprecated WP-3.9.0
  *
  * @global object $current_site
  *
@@ -531,7 +531,7 @@ function wpmu_current_site() {
  * Retrieve an object containing information about the requested network.
  *
  * @since WP-3.9.0
- * @deprecated 4.7.0 Use `get_network()`
+ * @deprecated WP-4.7.0 Use `get_network()`
  * @see get_network()
  *
  * @internal In 4.6.0, converted to use get_network()

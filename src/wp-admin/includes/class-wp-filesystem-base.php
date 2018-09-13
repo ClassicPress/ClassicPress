@@ -115,7 +115,7 @@ class WP_Filesystem_Base {
 	 * Locate a folder on the remote filesystem.
 	 *
 	 * @since WP-2.5.0
-	 * @deprecated 2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() instead.
+	 * @deprecated WP-2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() instead.
 	 * @see WP_Filesystem::abspath()
 	 * @see WP_Filesystem::wp_content_dir()
 	 * @see WP_Filesystem::wp_plugins_dir()
@@ -137,7 +137,7 @@ class WP_Filesystem_Base {
 	 * Locate a folder on the remote filesystem.
 	 *
 	 * @since WP-2.5.0
-	 * @deprecated 2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() methods instead.
+	 * @deprecated WP-2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() methods instead.
 	 * @see WP_Filesystem::abspath()
 	 * @see WP_Filesystem::wp_content_dir()
 	 * @see WP_Filesystem::wp_plugins_dir()

@@ -696,7 +696,7 @@ class WP_Customize_Setting {
 	 * Deprecated method.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.4.0 Deprecated in favor of update() method.
+	 * @deprecated WP-4.4.0 Deprecated in favor of update() method.
 	 */
 	protected function _update_theme_mod() {
 		_deprecated_function( __METHOD__, '4.4.0', __CLASS__ . '::update()' );
@@ -706,7 +706,7 @@ class WP_Customize_Setting {
 	 * Deprecated method.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.4.0 Deprecated in favor of update() method.
+	 * @deprecated WP-4.4.0 Deprecated in favor of update() method.
 	 */
 	protected function _update_option() {
 		_deprecated_function( __METHOD__, '4.4.0', __CLASS__ . '::update()' );

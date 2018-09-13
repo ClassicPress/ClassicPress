@@ -4008,7 +4008,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 		 * Filters the tag link.
 		 *
 		 * @since WP-2.3.0
-		 * @deprecated 2.5.0 Use 'term_link' instead.
+		 * @deprecated WP-2.5.0 Use 'term_link' instead.
 		 *
 		 * @param string $termlink Tag link URL.
 		 * @param int    $term_id  Term ID.
@@ -4020,7 +4020,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 		 * Filters the category link.
 		 *
 		 * @since WP-1.5.0
-		 * @deprecated 2.5.0 Use 'term_link' instead.
+		 * @deprecated WP-2.5.0 Use 'term_link' instead.
 		 *
 		 * @param string $termlink Category link URL.
 		 * @param int    $term_id  Term ID.

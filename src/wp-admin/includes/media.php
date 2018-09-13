@@ -582,7 +582,7 @@ function media_buttons($editor_id = 'content') {
 	 * Use {@see 'media_buttons'} action instead.
 	 *
 	 * @since WP-2.5.0
-	 * @deprecated 3.5.0 Use {@see 'media_buttons'} action instead.
+	 * @deprecated WP-3.5.0 Use {@see 'media_buttons'} action instead.
 	 *
 	 * @param string $string Media buttons context. Default empty.
 	 */

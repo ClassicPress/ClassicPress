@@ -4362,7 +4362,7 @@ function get_all_page_ids() {
  * Use get_post() instead of get_page().
  *
  * @since WP-1.5.1
- * @deprecated 3.5.0 Use get_post()
+ * @deprecated WP-3.5.0 Use get_post()
  *
  * @param mixed  $page   Page object or page ID. Passed by reference.
  * @param string $output Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
@@ -5720,7 +5720,7 @@ function get_posts_by_author_sql( $post_type, $full = true, $post_author = null,
 		 * when generating SQL for getting posts by author.
 		 *
 		 * @since WP-2.2.0
-		 * @deprecated 3.2.0 The hook transitioned from "somewhat useless" to "totally useless".
+		 * @deprecated WP-3.2.0 The hook transitioned from "somewhat useless" to "totally useless".
 		 *
 		 * @param string $cap Capability.
 		 */
@@ -6116,7 +6116,7 @@ function _transition_post_status( $new_status, $old_status, $post ) {
 		 * Fires when a post's status is transitioned from private to published.
 		 *
 		 * @since WP-1.5.0
-		 * @deprecated 2.3.0 Use 'private_to_publish' instead.
+		 * @deprecated WP-2.3.0 Use 'private_to_publish' instead.
 		 *
 		 * @param int $post_id Post ID.
 		 */

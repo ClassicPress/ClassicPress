@@ -685,7 +685,7 @@ function shutdown_action_hook() {
  * Copy an object.
  *
  * @since WP-2.7.0
- * @deprecated 3.2.0
+ * @deprecated WP-3.2.0
  *
  * @param object $object The object to clone.
  * @return object The cloned object.
