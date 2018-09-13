@@ -1073,7 +1073,7 @@ class wpdb {
 	 * Use esc_sql() or wpdb::prepare() instead.
 	 *
 	 * @since WP-2.8.0
-	 * @deprecated 3.6.0 Use wpdb::prepare()
+	 * @deprecated WP-3.6.0 Use wpdb::prepare()
 	 * @see wpdb::prepare
 	 * @see esc_sql()
 	 *
@@ -1148,7 +1148,7 @@ class wpdb {
 	 * Use esc_sql() or wpdb::prepare() instead.
 	 *
 	 * @since WP-0.71
-	 * @deprecated 3.6.0 Use wpdb::prepare()
+	 * @deprecated WP-3.6.0 Use wpdb::prepare()
 	 * @see wpdb::prepare()
 	 * @see esc_sql()
 	 *
@@ -3320,7 +3320,7 @@ class wpdb {
 	 * Use `wpdb::has_cap( 'collation' )`.
 	 *
 	 * @since WP-2.5.0
-	 * @deprecated 3.5.0 Use wpdb::has_cap()
+	 * @deprecated WP-3.5.0 Use wpdb::has_cap()
 	 *
 	 * @return bool True if collation is supported, false if version does not
 	 */

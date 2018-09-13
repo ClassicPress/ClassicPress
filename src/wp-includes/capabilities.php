@@ -345,7 +345,7 @@ function map_meta_cap( $cap, $user_id ) {
 				 *
 				 * @since WP-4.6.0 As `auth_post_{$post_type}_meta_{$meta_key}`.
 				 * @since WP-4.7.0
-				 * @deprecated 4.9.8 Use `auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}`
+				 * @deprecated WP-4.9.8 Use `auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}`
 				 *
 				 * @param bool     $allowed   Whether the user can add the object meta. Default false.
 				 * @param string   $meta_key  The meta key.

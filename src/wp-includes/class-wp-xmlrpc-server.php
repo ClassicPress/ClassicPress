@@ -301,7 +301,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * Check user's credentials. Deprecated.
 	 *
 	 * @since WP-1.5.0
-	 * @deprecated 2.8.0 Use wp_xmlrpc_server::login()
+	 * @deprecated WP-2.8.0 Use wp_xmlrpc_server::login()
 	 * @see wp_xmlrpc_server::login()
 	 *
 	 * @param string $username User's username.
@@ -4649,7 +4649,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * Deprecated.
 	 *
 	 * @since WP-1.5.0
-	 * @deprecated 3.5.0
+	 * @deprecated WP-3.5.0
 	 *
 	 * @param array $args Unused.
 	 * @return IXR_Error Error object.
@@ -4662,7 +4662,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * Deprecated.
 	 *
 	 * @since WP-1.5.0
-	 * @deprecated 3.5.0
+	 * @deprecated WP-3.5.0
 	 *
 	 * @param array $args Unused.
 	 * @return IXR_Error Error object.

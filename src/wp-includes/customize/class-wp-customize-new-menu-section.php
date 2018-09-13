@@ -5,14 +5,14 @@
  * @package ClassicPress
  * @subpackage Customize
  * @since WP-4.4.0
- * @deprecated 4.9.0 This file is no longer used as of the menu creation UX introduced in #40104.
+ * @deprecated WP-4.9.0 This file is no longer used as of the menu creation UX introduced in #40104.
  */
 
 /**
  * Customize Menu Section Class
  *
  * @since WP-4.3.0
- * @deprecated 4.9.0 This class is no longer used as of the menu creation UX introduced in #40104.
+ * @deprecated WP-4.9.0 This class is no longer used as of the menu creation UX introduced in #40104.
  *
  * @see WP_Customize_Section
  */

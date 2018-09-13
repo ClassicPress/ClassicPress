@@ -60,7 +60,7 @@ final class WP_Screen {
 	 * Deprecated. Use in_admin() instead.
 	 *
 	 * @since WP-3.3.0
-	 * @deprecated 3.5.0
+	 * @deprecated WP-3.5.0
 	 * @var bool
 	 */
 	public $is_network;
@@ -71,7 +71,7 @@ final class WP_Screen {
 	 * Deprecated. Use in_admin() instead.
 	 *
 	 * @since WP-3.3.0
-	 * @deprecated 3.5.0
+	 * @deprecated WP-3.5.0
 	 * @var bool
 	 */
 	public $is_user;
@@ -714,7 +714,7 @@ final class WP_Screen {
 		 * Filters the legacy contextual help list.
 		 *
 		 * @since WP-2.7.0
-		 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
+		 * @deprecated WP-3.3.0 Use get_current_screen()->add_help_tab() or
 		 *                   get_current_screen()->remove_help_tab() instead.
 		 *
 		 * @param array     $old_compat_help Old contextual help.
@@ -728,7 +728,7 @@ final class WP_Screen {
 		 * Filters the legacy contextual help text.
 		 *
 		 * @since WP-2.7.0
-		 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
+		 * @deprecated WP-3.3.0 Use get_current_screen()->add_help_tab() or
 		 *                   get_current_screen()->remove_help_tab() instead.
 		 *
 		 * @param string    $old_help  Help text that appears on the screen.
@@ -745,7 +745,7 @@ final class WP_Screen {
 			 * Filters the default legacy contextual help text.
 			 *
 			 * @since WP-2.8.0
-			 * @deprecated 3.3.0 Use get_current_screen()->add_help_tab() or
+			 * @deprecated WP-3.3.0 Use get_current_screen()->add_help_tab() or
 			 *                   get_current_screen()->remove_help_tab() instead.
 			 *
 			 * @param string $old_help_default Default contextual help text.

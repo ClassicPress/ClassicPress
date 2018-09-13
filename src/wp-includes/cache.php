@@ -258,7 +258,7 @@ function wp_cache_add_non_persistent_groups( $groups ) {
  * high.
  *
  * @since WP-2.6.0
- * @deprecated 3.5.0 WP_Object_Cache::reset()
+ * @deprecated WP-3.5.0 WP_Object_Cache::reset()
  * @see WP_Object_Cache::reset()
  *
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -606,7 +606,7 @@ class WP_Object_Cache {
 	 *
 	 * @since WP-3.0.0
 	 *
-	 * @deprecated 3.5.0 Use switch_to_blog()
+	 * @deprecated WP-3.5.0 Use switch_to_blog()
 	 * @see switch_to_blog()
 	 */
 	public function reset() {

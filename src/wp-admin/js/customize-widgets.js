@@ -1331,7 +1331,7 @@
 		/**
 		 * Expand the widget form control
 		 *
-		 * @deprecated 4.1.0 Use this.expand() instead.
+		 * @deprecated WP-4.1.0 Use this.expand() instead.
 		 */
 		expandForm: function() {
 			this.expand();
@@ -1348,7 +1348,7 @@
 		/**
 		 * Collapse the widget form control
 		 *
-		 * @deprecated 4.1.0 Use this.collapse() instead.
+		 * @deprecated WP-4.1.0 Use this.collapse() instead.
 		 */
 		collapseForm: function() {
 			this.collapse();

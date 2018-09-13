@@ -441,7 +441,7 @@ class WP_User {
 	 * used.
 	 *
 	 * @since WP-2.1.0
-	 * @deprecated 4.9.0 Use WP_User::for_site()
+	 * @deprecated WP-4.9.0 Use WP_User::for_site()
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -774,7 +774,7 @@ class WP_User {
 	 * Set the site to operate on. Defaults to the current site.
 	 *
 	 * @since WP-3.0.0
-	 * @deprecated 4.9.0 Use WP_User::for_site()
+	 * @deprecated WP-4.9.0 Use WP_User::for_site()
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *

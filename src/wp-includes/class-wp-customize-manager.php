@@ -480,7 +480,7 @@ final class WP_Customize_Manager {
 	 * Return the Ajax wp_die() handler if it's a customized request.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 *
 	 * @return callable Die handler.
 	 */
@@ -943,7 +943,7 @@ final class WP_Customize_Manager {
 	 * Instead, the JS will sniff out the location header.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 *
 	 * @param int $status Status.
 	 * @return int
@@ -1935,7 +1935,7 @@ final class WP_Customize_Manager {
 	 * preview, since it causes the jQuery Ajax to fail. Send 200 instead.
 	 *
 	 * @since WP-4.0.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 */
 	public function customize_preview_override_404_status() {
 		_deprecated_function( __METHOD__, '4.7.0' );
@@ -1945,7 +1945,7 @@ final class WP_Customize_Manager {
 	 * Print base element for preview frame.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 */
 	public function customize_preview_base() {
 		_deprecated_function( __METHOD__, '4.7.0' );
@@ -1955,7 +1955,7 @@ final class WP_Customize_Manager {
 	 * Print a workaround to handle HTML5 tags in IE < 9.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0 Customizer no longer supports IE8, so all supported browsers recognize HTML5.
+	 * @deprecated WP-4.7.0 Customizer no longer supports IE8, so all supported browsers recognize HTML5.
 	 */
 	public function customize_preview_html5() {
 		_deprecated_function( __FUNCTION__, '4.7.0' );
@@ -2148,7 +2148,7 @@ final class WP_Customize_Manager {
 	 * Prints a signature so we can ensure the Customizer was properly executed.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 */
 	public function customize_preview_signature() {
 		_deprecated_function( __METHOD__, '4.7.0' );
@@ -2158,7 +2158,7 @@ final class WP_Customize_Manager {
 	 * Removes the signature in case we experience a case where the Customizer was not properly executed.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0
+	 * @deprecated WP-4.7.0
 	 *
 	 * @param mixed $return Value passed through for {@see 'wp_die_handler'} filter.
 	 * @return mixed Value passed through for {@see 'wp_die_handler'} filter.
@@ -4226,7 +4226,7 @@ final class WP_Customize_Manager {
 	 * Helper function to compare two objects by priority, ensuring sort stability via instance_number.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.7.0 Use wp_list_sort()
+	 * @deprecated WP-4.7.0 Use wp_list_sort()
 	 *
 	 * @param WP_Customize_Panel|WP_Customize_Section|WP_Customize_Control $a Object A.
 	 * @param WP_Customize_Panel|WP_Customize_Section|WP_Customize_Control $b Object B.

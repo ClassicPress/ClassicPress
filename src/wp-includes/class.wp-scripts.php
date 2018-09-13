@@ -62,7 +62,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * Holds a string which contains script handles and their version.
 	 *
 	 * @since WP-2.8.0
-	 * @deprecated 3.4.0
+	 * @deprecated WP-3.4.0
 	 * @var string
 	 */
 	public $concat_version = '';
@@ -171,7 +171,7 @@ class WP_Scripts extends WP_Dependencies {
 	 *
 	 * @since WP-2.1.0
 	 * @since WP-2.8.0 Added the `$echo` parameter.
-	 * @deprecated 3.3.0
+	 * @deprecated WP-3.3.0
 	 *
 	 * @see print_extra_script()
 	 *

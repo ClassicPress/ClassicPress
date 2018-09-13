@@ -238,7 +238,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	 * Filters a blog's details.
 	 *
 	 * @since WP-MU (3.0.0)
-	 * @deprecated 4.7.0 Use site_details
+	 * @deprecated WP-4.7.0 Use site_details
 	 *
 	 * @param object $details The blog details.
 	 */
@@ -479,7 +479,7 @@ function clean_blog_cache( $blog ) {
 	 * Fires after the blog details cache is cleared.
 	 *
 	 * @since WP-3.4.0
-	 * @deprecated 4.9.0 Use clean_site_cache
+	 * @deprecated WP-4.9.0 Use clean_site_cache
 	 *
 	 * @param int $blog_id Blog ID.
 	 */

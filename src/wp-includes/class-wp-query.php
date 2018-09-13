@@ -3591,7 +3591,7 @@ class WP_Query {
 	 * Whether the current URL is within the comments popup window.
 	 *
 	 * @since WP-3.1.0
-	 * @deprecated 4.5.0
+	 * @deprecated WP-4.5.0
 	 *
 	 * @return bool
 	 */
@@ -4066,7 +4066,7 @@ class WP_Query {
 	 * Lazyload term meta for posts in the loop.
 	 *
 	 * @since WP-4.4.0
-	 * @deprecated 4.5.0 See wp_queue_posts_for_term_meta_lazyload().
+	 * @deprecated WP-4.5.0 See wp_queue_posts_for_term_meta_lazyload().
 	 *
 	 * @param mixed $check
 	 * @param int   $term_id
@@ -4081,7 +4081,7 @@ class WP_Query {
 	 * Lazyload comment meta for comments in the loop.
 	 *
 	 * @since WP-4.4.0
-	 * @deprecated 4.5.0 See wp_queue_comments_for_comment_meta_lazyload().
+	 * @deprecated WP-4.5.0 See wp_queue_comments_for_comment_meta_lazyload().
 	 *
 	 * @param mixed $check
 	 * @param int   $comment_id

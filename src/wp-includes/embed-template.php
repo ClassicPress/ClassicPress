@@ -5,7 +5,7 @@
  * @package ClassicPress
  * @subpackage oEmbed
  * @since WP-4.4.0
- * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php
+ * @deprecated WP-4.5.0 Moved to wp-includes/theme-compat/embed.php
  */
 
 _deprecated_file( basename( __FILE__ ), '4.5.0', 'wp-includes/theme-compat/embed.php' );

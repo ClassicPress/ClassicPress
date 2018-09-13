@@ -3,7 +3,7 @@
  * ClassicPress Upgrade Functions. Old file, must not be used. Include
  * wp-admin/includes/upgrade.php instead.
  *
- * @deprecated 2.5.0
+ * @deprecated WP-2.5.0
  * @package ClassicPress
  * @subpackage Administration
  */

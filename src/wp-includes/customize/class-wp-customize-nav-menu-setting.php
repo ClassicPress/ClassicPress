@@ -301,7 +301,7 @@ class WP_Customize_Nav_Menu_Setting extends WP_Customize_Setting {
 	 * This is a workaround for a lack of closures.
 	 *
 	 * @since WP-4.3.0
-	 * @deprecated 4.7.0 Use wp_list_sort()
+	 * @deprecated WP-4.7.0 Use wp_list_sort()
 	 *
 	 * @param object $menu1
 	 * @param object $menu2

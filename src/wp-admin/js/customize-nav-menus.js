@@ -3029,14 +3029,14 @@
 	 *
 	 * @constructor
 	 * @augments wp.customize.Control
-	 * @deprecated 4.9.0 This class is no longer used due to new menu creation UX.
+	 * @deprecated WP-4.9.0 This class is no longer used due to new menu creation UX.
 	 */
 	api.Menus.NewMenuControl = api.Control.extend({
 
 		/**
 		 * Initialize.
 		 *
-		 * @deprecated 4.9.0
+		 * @deprecated WP-4.9.0
 		 */
 		initialize: function() {
 			if ( 'undefined' !== typeof console && console.warn ) {
@@ -3048,7 +3048,7 @@
 		/**
 		 * Set up the control.
 		 *
-		 * @deprecated 4.9.0
+		 * @deprecated WP-4.9.0
 		 */
 		ready: function() {
 			this._bindHandlers();
@@ -3073,7 +3073,7 @@
 		/**
 		 * Create the new menu with the name supplied.
 		 *
-		 * @deprecated 4.9.0
+		 * @deprecated WP-4.9.0
 		 */
 		submit: function() {
 

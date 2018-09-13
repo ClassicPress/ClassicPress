@@ -2,7 +2,7 @@
 /**
  * @package ClassicPress
  * @subpackage Theme_Compat
- * @deprecated 3.0.0
+ * @deprecated WP-3.0.0
  *
  * This file is here for backward compatibility with old themes and will be removed in a future version.
  */

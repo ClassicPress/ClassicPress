@@ -153,7 +153,7 @@ function install_themes_upload() {
 /**
  * Prints a theme on the Install Themes pages.
  *
- * @deprecated 3.4.0
+ * @deprecated WP-3.4.0
  *
  * @global WP_Theme_Install_List_Table $wp_list_table
  *

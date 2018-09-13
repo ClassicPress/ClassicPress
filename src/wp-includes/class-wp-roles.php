@@ -114,7 +114,7 @@ class WP_Roles {
 	 * be used and the role option will not be updated or used.
 	 *
 	 * @since WP-2.1.0
-	 * @deprecated 4.9.0 Use WP_Roles::for_site()
+	 * @deprecated WP-4.9.0 Use WP_Roles::for_site()
 	 */
 	protected function _init() {
 		_deprecated_function( __METHOD__, '4.9.0', 'WP_Roles::for_site()' );
@@ -129,7 +129,7 @@ class WP_Roles {
 	 * after switching wpdb to a new site ID.
 	 *
 	 * @since WP-3.5.0
-	 * @deprecated 4.7.0 Use WP_Roles::for_site()
+	 * @deprecated WP-4.7.0 Use WP_Roles::for_site()
 	 */
 	public function reinit() {
 		_deprecated_function( __METHOD__, '4.7.0', 'WP_Roles::for_site()' );
