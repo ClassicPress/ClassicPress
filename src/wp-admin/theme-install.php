@@ -182,10 +182,10 @@ include(ABSPATH . 'wp-admin/admin-header.php');
 				$user = get_user_option( 'wporg_favorites' );
 			}
 			?>
-			<p class="install-help"><?php _e( 'If you have marked themes as favorites on ClassicPress.net, you can browse them here.' ); ?></p>
+			<p class="install-help"><?php _e( 'If you have marked themes as favorites on WordPress.org, you can browse them here.' ); ?></p>
 
 			<p>
-				<label for="wporg-username-input"><?php _e( 'Your ClassicPress.net username:' ); ?></label>
+				<label for="wporg-username-input"><?php _e( 'Your WordPress.org username:' ); ?></label>
 				<input type="hidden" id="wporg-username-nonce" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( $action ) ); ?>" />
 				<input type="search" id="wporg-username-input" value="<?php echo esc_attr( $user ); ?>" />
 				<input type="button" class="button favorites-form-submit" value="<?php esc_attr_e( 'Get Favorites' ); ?>" />

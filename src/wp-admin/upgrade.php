@@ -68,7 +68,7 @@ else
 	?>
 </head>
 <body class="wp-core-ui">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( __( 'https://www.classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
 
 <?php if ( get_option( 'db_version' ) == $wp_db_version || !is_blog_installed() ) : ?>
 

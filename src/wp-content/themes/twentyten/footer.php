@@ -42,8 +42,8 @@
 				 * @since Twenty Ten 1.0
 				 */
 				do_action( 'twentyten_credits' ); ?>
-				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentyten' ) ); ?>" class="imprint" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentyten' ); ?>">
-					<?php printf( __( 'Proudly powered by %s.', 'twentyten' ), 'WordPress' ); ?>
+				<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentyten' ) ); ?>" class="imprint" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentyten' ); ?>">
+					<?php printf( __( 'Proudly powered by %s.', 'twentyten' ), 'ClassicPress' ); ?>
 				</a>
 			</div><!-- #site-generator -->
 

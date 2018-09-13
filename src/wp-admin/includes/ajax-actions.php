@@ -3338,7 +3338,7 @@ function wp_ajax_generate_password() {
 }
 
 /**
- * Ajax handler for saving the user's ClassicPress.net username.
+ * Ajax handler for saving the user's WordPress.org username.
  *
  * @since WP-4.4.0
  */

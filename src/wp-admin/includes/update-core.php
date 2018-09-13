@@ -927,7 +927,7 @@ function update_core($from, $to) {
 
 	$php_version    = phpversion();
 	$mysql_version  = $wpdb->db_version();
-	$old_wp_version = $GLOBALS['wp_version']; // The version of ClassicPress we're updating from
+	$old_wp_version = $GLOBALS['wp_version']; // The version of ClassicPress or WordPress we're updating from
 	$development_build = ( false !== strpos( $old_wp_version . $wp_version, '-' )  ); // a dash in the version indicates a Development release
 	$php_compat     = version_compare( $php_version, $required_php_version, '>=' );
 	if ( file_exists( WP_CONTENT_DIR . '/db.php' ) && empty( $wpdb->is_mysql ) )
@@ -1192,7 +1192,7 @@ function update_core($from, $to) {
 	 *
 	 * @since WP-3.3.0
 	 *
-	 * @param string $wp_version The current ClassicPress version.
+	 * @param string $wp_version The current WordPress version.
 	 */
 	do_action( '_core_updated_successfully', $wp_version );
 

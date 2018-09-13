@@ -18,8 +18,8 @@
 				the_privacy_policy_link( '', '<span role="separator" aria-hidden="true"></span>' );
 			}
 			?>
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentytwelve' ) ); ?>" class="imprint" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentytwelve' ); ?>">
-				<?php printf( __( 'Proudly powered by %s', 'twentytwelve' ), 'WordPress' ); ?>
+			<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentytwelve' ) ); ?>" class="imprint" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentytwelve' ); ?>">
+				<?php printf( __( 'Proudly powered by %s', 'twentytwelve' ), 'ClassicPress' ); ?>
 			</a>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->

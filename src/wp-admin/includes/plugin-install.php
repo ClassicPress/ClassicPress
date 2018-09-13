@@ -322,11 +322,11 @@ function install_plugins_favorites_form() {
 	$user   = get_user_option( 'wporg_favorites' );
 	$action = 'save_wporg_username_' . get_current_user_id();
 	?>
-	<p class="install-help"><?php _e( 'If you have marked plugins as favorites on ClassicPress.net, you can browse them here.' ); ?></p>
+	<p class="install-help"><?php _e( 'If you have marked plugins as favorites on WordPress.org, you can browse them here.' ); ?></p>
 	<form method="get">
 		<input type="hidden" name="tab" value="favorites" />
 		<p>
-			<label for="user"><?php _e( 'Your ClassicPress.net username:' ); ?></label>
+			<label for="user"><?php _e( 'Your WordPress.org username:' ); ?></label>
 			<input type="search" id="user" name="user" value="<?php echo esc_attr( $user ); ?>" />
 			<input type="submit" class="button" value="<?php esc_attr_e( 'Get Favorites' ); ?>" />
 			<input type="hidden" id="wporg-username-nonce" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( $action ) ); ?>" />
@@ -624,7 +624,7 @@ function install_plugin_information() {
 
 		if ( ! empty( $api->ratings ) && array_sum( (array) $api->ratings ) > 0 ) { ?>
 			<h3><?php _e( 'Reviews' ); ?></h3>
-			<p class="fyi-description"><?php _e( 'Read all reviews on ClassicPress.net or write your own!' ); ?></p>
+			<p class="fyi-description"><?php _e( 'Read all reviews on WordPress.org or write your own!' ); ?></p>
 			<?php
 			foreach ( $api->ratings as $key => $ratecount ) {
 				// Avoid div-by-zero.
