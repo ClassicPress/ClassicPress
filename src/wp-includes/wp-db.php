@@ -1294,7 +1294,7 @@ class wpdb {
 					sprintf( __( 'The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d).' ),
 						$placeholders,
 						count( $args ) ),
-					'4.8.3'
+					'WP-4.8.3'
 				);
 			}
 		}

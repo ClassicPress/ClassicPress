@@ -1926,7 +1926,7 @@ function wp_add_privacy_policy_content( $plugin_name, $policy_text ) {
 				__( 'The suggested privacy policy content should be added only in wp-admin by using the %s (or later) action.' ),
 				'<code>admin_init</code>'
 			),
-			'4.9.7'
+			'WP-4.9.7'
 		);
 		return;
 	} elseif ( ! doing_action( 'admin_init' ) && ! did_action( 'admin_init' ) ) {
@@ -1937,7 +1937,7 @@ function wp_add_privacy_policy_content( $plugin_name, $policy_text ) {
 				__( 'The suggested privacy policy content should be added by using the %s (or later) action. Please see the inline documentation.' ),
 				'<code>admin_init</code>'
 			),
-			'4.9.7'
+			'WP-4.9.7'
 		);
 		return;
 	}

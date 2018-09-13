@@ -2091,7 +2091,7 @@ function convert_to_screen( $hook_name ) {
 				'<code>add_meta_box()</code>',
 				'<code>add_meta_boxes</code>'
 			),
-			'3.3.0'
+			'WP-3.3.0'
 		);
 		return (object) array( 'id' => '_invalid', 'base' => '_are_belong_to_us' );
 	}
