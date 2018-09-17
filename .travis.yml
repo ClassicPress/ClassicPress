@@ -21,12 +21,6 @@ matrix:
   - php: 5.6
     env: WP_TRAVIS_OBJECT_CACHE=true
     services: memcached
-  - php: 5.5
-  - php: 5.4
-  - php: 5.3
-    dist: precise
-  - php: 5.2
-    dist: precise
   - php: nightly
   allow_failures:
   - php: nightly
@@ -53,11 +47,9 @@ before_script:
     echo "xdebug.ini does not exist"
   fi
 - |
-  # Export Composer's global bin dir to PATH, but not on PHP 5.2:
-  if [[ ${TRAVIS_PHP_VERSION:0:3} != "5.2" ]]; then
-    composer config --list --global
-    export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
-  fi
+  # Export Composer's global bin dir to PATH
+  composer config --list --global
+  export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
 - |
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
@@ -66,13 +58,9 @@ before_script:
         echo "Using PHPUnit 6.x"
         composer global require "phpunit/phpunit:^6"
         ;;
-      5.6|5.5|5.4|5.3)
+      5.6)
         echo "Using PHPUnit 4.x"
         composer global require "phpunit/phpunit:^4"
-        ;;
-      5.2)
-        # Do nothing, use default PHPUnit 3.6.x
-        echo "Using default PHPUnit, hopefully 3.6"
         ;;
       *)
         echo "No PHPUnit version handling for PHP version $TRAVIS_PHP_VERSION"
