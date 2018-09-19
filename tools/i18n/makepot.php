@@ -252,11 +252,6 @@ class MakePOT {
 			}
 		}
 
-		$result = $potextmeta->append( "$dir/wp-content/plugins/hello.php", $output );
-		if ( ! $result ) {
-			return false;
-		}
-
 		/* Adding non-gettexted strings can repeat some phrases */
 		$output_shell = escapeshellarg( $output );
 		system( "msguniq $output_shell -o $output_shell" );
