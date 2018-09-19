@@ -6,11 +6,10 @@
  * @group themes
  */
 class Tests_Theme extends WP_UnitTestCase {
-	protected $theme_slug = 'twentyeleven';
-	protected $theme_name = 'Twenty Eleven';
+	protected $theme_slug = 'twentysixteen';
+	protected $theme_name = 'Twenty Sixteen';
 	protected $default_themes = array(
-		'twentyten', 'twentyeleven', 'twentytwelve', 'twentythirteen',
-		'twentyfourteen', 'twentyfifteen', 'twentysixteen', 'twentyseventeen',
+		'twentyfifteen', 'twentysixteen', 'twentyseventeen',
 	);
 
 	function setUp() {
