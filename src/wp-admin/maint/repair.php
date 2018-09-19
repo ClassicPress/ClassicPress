@@ -66,7 +66,7 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 		echo '<h2 class="screen-reader-text">' . __( 'Check secret keys' ) . '</h2>';
 
 		// Translators: 1: wp-config.php; 2: Secret key service URL.
-		echo '<p>' . sprintf( __( 'While you are editing your %1$s file, take a moment to make sure you have all 8 keys and that they are unique. You can generate these using the <a href="%2$s">WordPress.org secret key service</a>.' ), '<code>wp-config.php</code>', 'https://api.wordpress.org/secret-key/1.1/salt/' ) . '</p>';
+		echo '<p>' . sprintf( __( 'While you are editing your %1$s file, take a moment to make sure you have all 8 keys and that they are unique. You can generate these using the <a href="%2$s">ClassicPress.net secret key service</a>.' ), '<code>wp-config.php</code>', 'https://api.classicpress.net/secret-key/1.0/salt/' ) . '</p>';
 	}
 
 } elseif ( isset( $_GET['repair'] ) ) {
