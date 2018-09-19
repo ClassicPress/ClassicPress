@@ -6,9 +6,6 @@
     "type": "git",
     "url": "https://github.com/ClassicPress/ClassicPress"
   },
-  "engines": {
-    "node": "6.9.1"
-  },
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
