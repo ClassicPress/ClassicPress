@@ -195,7 +195,7 @@ switch($step) {
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="dbname"><?php _e( 'Database Name' ); ?></label></th>
-			<td><input name="dbname" id="dbname" type="text" size="25" value="wordpress" /></td>
+			<td><input name="dbname" id="dbname" type="text" size="25" value="classicpress" /></td>
 			<td><?php _e( 'The name of the database you want to use with ClassicPress.' ); ?></td>
 		</tr>
 		<tr>
