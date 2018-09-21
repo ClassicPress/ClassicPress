@@ -1,5 +1,6 @@
 <!--- Provide a general summary of the issue in the Title above -->
-<!--- Don't open a ticket without follow the workflow of a https://petitions.classicpress.net/ -->
+<!--- We welcome PRs for bug fixes and minor improvements, but please note that major changes must be approved and planned. -->
+<!--- See https://www.classicpress.net/democracy/ for more details. -->
 
 ## Expected Behavior
 <!--- If you're describing a bug, tell us what should happen -->
