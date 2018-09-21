@@ -1,5 +1,6 @@
 <!--- Provide a general summary of your changes in the Title above -->
-<!--- Don't open a PR without follow the workflow of an issue and before a https://petitions.classicpress.net/ -->
+<!--- We welcome PRs for bug fixes and minor improvements, but please note that major changes must be approved and planned. -->
+<!--- See https://www.classicpress.net/democracy/ for more details. -->
 
 ## Description
 <!--- Describe your changes in detail -->
