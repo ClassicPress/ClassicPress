@@ -19,7 +19,7 @@ class Tests_Basic extends WP_UnitTestCase {
 		preg_match( '#Copyright 2003-(\d+) by the WordPress contributors#', $license, $matches );
 		$this->assertEquals( $this_year, trim( $matches[1] ), "license.txt's year needs to be updated to $this_year." );
 
-		preg_match( '#Copyright (2018-)?(\d+) by the contributors#', $license, $matches );
+		preg_match( '#Copyright © (2018-)?(\d+) ClassicPress and contributors#', $license, $matches );
 		$this->assertEquals( $this_year, trim( $matches[2] ), "license.txt's year needs to be updated to $this_year." );
 	}
 

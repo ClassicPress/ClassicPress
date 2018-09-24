@@ -1,6 +1,6 @@
 ClassicPress - Web publishing software
 
-Copyright 2018 by the contributors
+Copyright © 2018 ClassicPress and contributors
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
