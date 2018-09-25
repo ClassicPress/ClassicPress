@@ -36,5 +36,16 @@
     "matchdep": "~1.0.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
+  },
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.0",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/classicpress-294"
+  },
+  "scripts": {
+    "postinstall": "opencollective-postinstall"
   }
 }
