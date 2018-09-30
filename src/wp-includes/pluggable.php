@@ -2180,34 +2180,27 @@ function wp_hash($data, $scheme = 'auth') {
 }
 endif;
 
-if ( !function_exists('wp_hash_password') ) :
+if ( !function_exists( 'wp_hash_password' ) ) :
 /**
- * Create a hash (encrypt) of a plain text password.
+ * Create a hash (encrypt) of a plain text password using bcrypt.
+ * 
+ * See http://php.net/manual/en/function.password-hash.php
  *
  * For integration with other applications, this function can be overwritten to
- * instead use the other package password checking algorithm.
+ * instead use a different password checking algorithm.
  *
- * @since WP-2.5.0
- *
- * @global PasswordHash $wp_hasher PHPass object
+ * @since CP-1.0.0
  *
  * @param string $password Plain text user password to hash
  * @return string The hash string of the password
  */
-function wp_hash_password($password) {
-	global $wp_hasher;
-
-	if ( empty($wp_hasher) ) {
-		require_once( ABSPATH . WPINC . '/class-phpass.php');
-		// By default, use the portable hash from phpass
-		$wp_hasher = new PasswordHash(8, true);
-	}
-
-	return $wp_hasher->HashPassword( trim( $password ) );
+function wp_hash_password( $password ) {
+	$options = apply_filters( 'wp_hash_password_options', [] );
+	return password_hash( $password, PASSWORD_BCRYPT, $options ) ;
 }
 endif;
 
-if ( !function_exists('wp_check_password') ) :
+if ( !function_exists( 'wp_check_password' ) ) :
 /**
  * Checks the plaintext password against the encrypted Password.
  *
@@ -2217,9 +2210,9 @@ if ( !function_exists('wp_check_password') ) :
  * against the already encrypted password to see if they match.
  *
  * For integration with other applications, this function can be overwritten to
- * instead use the other package password checking algorithm.
+ * instead use a different password checking algorithm.
  *
- * @since WP-2.5.0
+ * @since CP-1.0.0
  *
  * @global PasswordHash $wp_hasher PHPass object used for checking the password
  *	against the $hash + $password
@@ -2230,42 +2223,39 @@ if ( !function_exists('wp_check_password') ) :
  * @param string|int $user_id  Optional. User ID.
  * @return bool False, if the $password does not match the hashed password
  */
-function wp_check_password($password, $hash, $user_id = '') {
-	global $wp_hasher;
+function wp_check_password( $password, $hash, $user_id = '' ) {
 
-	// If the hash is still md5...
-	if ( strlen($hash) <= 32 ) {
-		$check = hash_equals( $hash, md5( $password ) );
-		if ( $check && $user_id ) {
-			// Rehash using new hash.
-			wp_set_password($password, $user_id);
-			$hash = wp_hash_password($password);
+	// Check for old md5 hash
+	if ( strpos( $hash, '$P$' ) === 0 ) {
+		global $wp_hasher;
+
+		if ( empty( $wp_hasher ) ) {
+			require_once( ABSPATH . WPINC . '/class-phpass.php' );
+			// By default, use the portable hash from phpass
+			$wp_hasher = new PasswordHash( 8, true );
 		}
 
-		/**
-		 * Filters whether the plaintext password matches the encrypted password.
-		 *
-		 * @since WP-2.5.0
-		 *
-		 * @param bool       $check    Whether the passwords match.
-		 * @param string     $password The plaintext password.
-		 * @param string     $hash     The hashed password.
-		 * @param string|int $user_id  User ID. Can be empty.
-		 */
-		return apply_filters( 'check_password', $check, $password, $hash, $user_id );
+		$check = $wp_hasher->CheckPassword( $password, $hash );
+
+		if ( $check && $user_id ) {
+			$hash = wp_set_password( $password, $user_id );
+		}
 	}
 
-	// If the stored hash is longer than an MD5, presume the
-	// new style phpass portable hash.
-	if ( empty($wp_hasher) ) {
-		require_once( ABSPATH . WPINC . '/class-phpass.php');
-		// By default, use the portable hash from phpass
-		$wp_hasher = new PasswordHash(8, true);
-	}
+	$check = password_verify( $password, $hash );
 
-	$check = $wp_hasher->CheckPassword($password, $hash);
-
-	/** This filter is documented in wp-includes/pluggable.php */
+	/**
+	 * Filters whether the plaintext password matches the encrypted password.
+	 *
+	 * @since WP-2.5.0
+	 *
+	 * @param bool       $check    Whether the passwords match.
+	 * @param string     $password The plaintext password.
+	 * @param string     $hash     The hashed password.
+	 * @param string|int $user_id  User ID. Can be empty.
+	 * 
+	 * This filter is documented in wp-includes/pluggable.php
+	 */
 	return apply_filters( 'check_password', $check, $password, $hash, $user_id );
 }
 endif;
@@ -2384,12 +2374,12 @@ function wp_rand( $min = 0, $max = 0 ) {
 }
 endif;
 
-if ( !function_exists('wp_set_password') ) :
+if ( !function_exists( 'wp_set_password' ) ) :
 /**
  * Updates the user's password with a new encrypted one.
  *
  * For integration with other applications, this function can be overwritten to
- * instead use the other package password checking algorithm.
+ * instead use a different password checking algorithm.
  *
  * Please note: This function should be used sparingly and is really only meant for single-time
  * application. Leveraging this improperly in a plugin or theme could result in an endless loop
@@ -2406,9 +2396,9 @@ function wp_set_password( $password, $user_id ) {
 	global $wpdb;
 
 	$hash = wp_hash_password( $password );
-	$wpdb->update($wpdb->users, array('user_pass' => $hash, 'user_activation_key' => ''), array('ID' => $user_id) );
+	$wpdb->update( $wpdb->users, array( 'user_pass' => $hash, 'user_activation_key' => '' ), array( 'ID' => $user_id ) );
 
-	wp_cache_delete($user_id, 'users');
+	wp_cache_delete( $user_id, 'users' );
 }
 endif;
 
