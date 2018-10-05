@@ -180,7 +180,8 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
-					outputStyle: 'expanded'
+					outputStyle: 'expanded',
+					implementation: require( 'node-sass' )
 				}
 			}
 		},
