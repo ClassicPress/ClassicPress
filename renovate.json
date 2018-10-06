@@ -4,5 +4,6 @@
 	],
 	"labels": [
 		"bot"
-	]
+	],
+	"commitMessagePrefix": "Renovate[bot]:"
 }
