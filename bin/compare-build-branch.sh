@@ -33,7 +33,8 @@ unminify_build_dir() {
 
 rm -rf build/ build-branch/ build-unminified/ build-branch-unminified/ build-compare.diff
 
-git checkout "$branch"
+git fetch origin
+git checkout "origin/$branch" -B "$branch"
 grunt build
 mv build/ build-branch/
 cp -var build-branch/ build-branch-unminified/
