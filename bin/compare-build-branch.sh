@@ -18,6 +18,9 @@ if [ ! -x "$(which js-beautify)" ] || [ ! -x "$(which css-beautify)" ]; then
 	exit 1
 fi
 
+# exit on error
+set -e
+
 unminify_build_dir() {
 	dir="$1"
 	find "$dir" -name '*.min.css' | while read i; do
