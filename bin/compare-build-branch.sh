@@ -46,8 +46,13 @@ unminify_build_dir build-unminified/
 # Changes in version.php (timestamp) are normal
 rm -v build-unminified/wp-includes/version.php
 rm -v build-branch-unminified/wp-includes/version.php
+
 diff -ur build-unminified/ build-branch-unminified/ > build-compare.diff
 
+echo
+echo "Diff results for branch: $branch"
+echo "Diff results for branch: $branch" | sed -r 's/./=/g'
 wc -l build-compare.diff
+echo
 
 git checkout "$branch"
