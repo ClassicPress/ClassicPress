@@ -27,7 +27,7 @@
     "grunt-jsvalidate": "0.2.2",
     "grunt-legacy-util": "0.2.0",
     "grunt-patch-wordpress": "0.4.2",
-    "grunt-postcss": "0.7.2",
+    "grunt-postcss": "0.9.0",
     "grunt-replace": "1.0.1",
     "grunt-rtlcss": "2.0.1",
     "grunt-sass": "1.2.1",
