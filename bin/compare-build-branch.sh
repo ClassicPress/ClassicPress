@@ -18,6 +18,11 @@ if [ ! -x "$(which js-beautify)" ] || [ ! -x "$(which css-beautify)" ]; then
 	exit 1
 fi
 
+if [ ! -f ~/.nvm/nvm.sh ]; then
+	echo "Expected to find nvm at ~/.nvm/nvm.sh"
+	exit 1
+fi
+
 # exit on error
 set -e
 
@@ -31,18 +36,33 @@ unminify_build_dir() {
 	done
 }
 
+. ~/.nvm/nvm.sh --no-use
+
 rm -rf build/ build-branch/ build-unminified/ build-branch-unminified/ build-compare.diff
 
 git fetch origin
+
+git checkout package.json package-lock.json
 git checkout "origin/$branch" -B "$branch"
+
+nvm use || nvm install
+rm -rf node_modules/
+npm install
 grunt build
+
 mv build/ build-branch/
 cp -var build-branch/ build-branch-unminified/
 
 unminify_build_dir build-branch-unminified/
 
+git checkout package.json package-lock.json
 git checkout "$(git merge-base origin/master $branch)"
+
+nvm use || nvm install
+rm -rf node_modules/
+npm install
 grunt build
+
 cp -var build/ build-unminified/
 
 unminify_build_dir build-unminified/
@@ -51,7 +71,7 @@ unminify_build_dir build-unminified/
 rm -v build-unminified/wp-includes/version.php
 rm -v build-branch-unminified/wp-includes/version.php
 
-diff -ur build-unminified/ build-branch-unminified/ > build-compare.diff
+( diff -ur build-unminified/ build-branch-unminified/ || true ) > build-compare.diff
 
 echo
 echo "Diff results for branch: $branch"
@@ -59,4 +79,5 @@ echo "Diff results for branch: $branch" | sed -r 's/./=/g'
 wc -l build-compare.diff
 echo
 
+git checkout package.json package-lock.json
 git checkout "$branch"
