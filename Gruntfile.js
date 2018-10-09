@@ -12,6 +12,12 @@ module.exports = function(grunt) {
  		BANNER_TEXT = '/*! This file is auto-generated */',
 		autoprefixer = require( 'autoprefixer' );
 
+	var puppeteerOptions = {};
+	if (process.env.TRAVIS) {
+		// Avoid error: Failed to launch chrome! No usable sandbox!
+		puppeteerOptions.args = [ '--no-sandbox' ];
+	}
+
 	// Load tasks.
 	require('matchdep').filterDev(['grunt-*', '!grunt-legacy-util']).forEach( grunt.loadNpmTasks );
 	// Load legacy utils
@@ -180,6 +186,7 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
+					implementation: require( 'node-sass' ),
 					outputStyle: 'expanded'
 				}
 			}
@@ -439,10 +446,34 @@ module.exports = function(grunt) {
 			}
 		},
 		qunit: {
-			files: [
-				'tests/qunit/**/*.html',
-				'!tests/qunit/editor/**'
-			]
+			all: {
+				options: {
+					urls: [
+						'http://localhost:8008/tests/qunit/compiled.html',
+						'http://localhost:8008/tests/qunit/index.html'
+					],
+					puppeteer: puppeteerOptions
+				}
+			}
+		},
+		connect: {
+			server: {
+				options: {
+					port: 8008,
+					base: '.',
+					middleware: function( connect, options, middlewares ) {
+						middlewares.unshift( function( req, res, next ) {
+							if (req.method === 'POST') { // admin-ajax.php
+								// The 'connect' web server will return HTTP
+								// 405 (Method Not Allowed) here.
+								return res.end('');
+							}
+							return next();
+						} );
+						return middlewares;
+					}
+				}
+			}
 		},
 		phpunit: {
 			'default': {
@@ -749,7 +780,7 @@ module.exports = function(grunt) {
 					'tests/qunit/**',
 					'!tests/qunit/editor/**'
 				],
-				tasks: ['qunit']
+				tasks: ['connect', 'qunit']
 			}
 		}
 	});
@@ -767,6 +798,9 @@ module.exports = function(grunt) {
 
 	// Webpack task.
 	grunt.loadNpmTasks( 'grunt-webpack' );
+
+	// Connect task (local server for QUnit tests).
+	grunt.loadNpmTasks( 'grunt-contrib-connect' );
 
 	// RTL task.
 	grunt.registerTask('rtl', ['rtlcss:core', 'rtlcss:colors']);
@@ -959,8 +993,11 @@ module.exports = function(grunt) {
 		}, this.async());
 	});
 
+	grunt.registerTask('qunit:local', 'Runs QUnit tests with a local server.',
+		['connect', 'qunit']);
+
 	grunt.registerTask('qunit:compiled', 'Runs QUnit tests on compiled as well as uncompiled scripts.',
-		['build', 'copy:qunit', 'qunit']);
+		['build', 'copy:qunit', 'qunit:local']);
 
 	grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
