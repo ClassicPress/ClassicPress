@@ -38,8 +38,9 @@
     "webpack-dev-server": "3.1.9"
   },
   "dependencies": {
-    "opencollective-postinstall": "2.0.0",
-    "opencollective": "1.0.3"
+    "node-sass": "^4.9.3",
+    "opencollective": "1.0.3",
+    "opencollective-postinstall": "2.0.0"
   },
   "collective": {
     "type": "opencollective",
