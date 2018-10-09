@@ -507,7 +507,7 @@ module.exports = function(grunt) {
 				output: {
 					ascii_only: true
 				},
-				ie8: false
+				ie8: true
 			},
 			// Subtasks
 			core: {
