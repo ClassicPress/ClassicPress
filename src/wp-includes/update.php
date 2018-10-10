@@ -27,7 +27,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	global $wpdb, $wp_local_package;
-	// include an unmodified $wp_version
+	// include an unmodified $cp_version
 	include( ABSPATH . WPINC . '/version.php' );
 	$php_version = phpversion();
 
@@ -35,13 +35,13 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	$translations = wp_get_installed_translations( 'core' );
 
 	// Invalidate the transient when $wp_version changes
-	if ( is_object( $current ) && $wp_version != $current->version_checked )
+	if ( is_object( $current ) && $cp_version != $current->version_checked )
 		$current = false;
 
 	if ( ! is_object($current) ) {
 		$current = new stdClass;
 		$current->updates = array();
-		$current->version_checked = $wp_version;
+		$current->version_checked = $cp_version;
 	}
 
 	if ( ! empty( $extra_stats ) )
@@ -86,7 +86,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	$query = array(
-		'version'            => $wp_version,
+		'version'            => $cp_version,
 		'php'                => $php_version,
 		'locale'             => $locale,
 		'mysql'              => $mysql_version,
@@ -136,7 +136,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	$options = array(
 		'timeout' => $doing_cron ? 30 : 3,
-		'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
+		'user-agent' => 'ClassicPress/' . $cp_version . '; ' . home_url( '/' ),
 		'headers' => array(
 			'wp_install' => $wp_install,
 			'wp_blog' => home_url( '/' )
@@ -187,7 +187,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	$updates = new stdClass();
 	$updates->updates = $offers;
 	$updates->last_checked = time();
-	$updates->version_checked = $wp_version;
+	$updates->version_checked = $cp_version;
 
 	if ( isset( $body['translations'] ) )
 		$updates->translations = $body['translations'];
@@ -660,14 +660,14 @@ function wp_get_update_data() {
  * @global string $wp_version
  */
 function _maybe_update_core() {
-	// include an unmodified $wp_version
+	// include an unmodified $cp_version
 	include( ABSPATH . WPINC . '/version.php' );
 
 	$current = get_site_transient( 'update_core' );
 
 	if ( isset( $current->last_checked, $current->version_checked ) &&
 		12 * HOUR_IN_SECONDS > ( time() - $current->last_checked ) &&
-		$current->version_checked == $wp_version ) {
+		$current->version_checked == $cp_version ) {
 		return;
 	}
 	wp_version_check();
