@@ -99,13 +99,19 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
+							// Exclude Hello Dolly (it's used in the source tree for tests)
+							'!wp-content/plugins/hello.php',
 							// Ignore unminified versions of external libs we don't ship:
 							'!wp-includes/js/backbone.js',
 							'!wp-includes/js/underscore.js',
 							'!wp-includes/js/jquery/jquery.masonry.js',
 							'!wp-includes/js/jquery/ui/*.js',
 							'!wp-includes/js/tinymce/tinymce.js',
-							'!wp-includes/version.php' // Exclude version.php
+							// Exclude some things present in a configured install
+							'!wp-config.php',
+							'!wp-content/uploads/**',
+							// Exclude version.php (handled in `copy:version` task)
+							'!wp-includes/version.php'
 						],
 						dest: BUILD_DIR
 					},
