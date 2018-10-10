@@ -107,11 +107,11 @@ module.exports = function(grunt) {
 							'!wp-includes/js/jquery/jquery.masonry.js',
 							'!wp-includes/js/jquery/ui/*.js',
 							'!wp-includes/js/tinymce/tinymce.js',
-							// Exclude version.php (handled in `copy:version` task)
-							'!wp-includes/version.php',
 							// Exclude some things present in a configured install
 							'!wp-config.php',
 							'!wp-content/uploads/**',
+							// Exclude version.php (handled in `copy:version` task)
+							'!wp-includes/version.php'
 						],
 						dest: BUILD_DIR
 					},
