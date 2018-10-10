@@ -14,7 +14,6 @@
  * isn't installing.
  *
  * @since WP-2.3.0
- * @global string $wp_version Used to check against the newest WordPress version.
  * @global wpdb   $wpdb
  * @global string $wp_local_package
  *
@@ -34,7 +33,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	$current = get_site_transient( 'update_core' );
 	$translations = wp_get_installed_translations( 'core' );
 
-	// Invalidate the transient when $wp_version changes
+	// Invalidate the transient when $cp_version changes
 	if ( is_object( $current ) && $cp_version != $current->version_checked )
 		$current = false;
 
