@@ -2,9 +2,10 @@
 
 [![Backers on Open Collective](https://opencollective.com/classicpress/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/classicpress/sponsors/badge.svg)](#sponsors) [![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
-**Meet ClassicPress: No Gutenberg. Great Future!**
+**ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
 
-Version 1 of ClassicPress will be a Gutenberg free experience of WordPress, compatible with your existing site. Version 2 will be community led – features will be brought up and voted for by the community. If you always wanted to have a say but felt your voice was never heard **NOW** is your chance to make ClassicPress **your** CMS!
+(_Without Gutenberg_). ClassicPress is a hard fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers. 
+
 
 For more information, see:
 
