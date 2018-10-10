@@ -128,11 +128,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	if ( is_array( $extra_stats ) )
 		$post_body = array_merge( $post_body, $extra_stats );
 
-	/**
-	 * The auto-update API URL needs to be changed to point to the ClassicPress API instead of WP
-	 *
-	 * @since CP-1.0.0
-	 */
 	$url = $http_url = 'https://api-v1.classicpress.net/core/version-check/1.0/?' . http_build_query( $query, null, '&' );
 	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
 		$url = set_url_scheme( $url, 'https' );
@@ -154,8 +149,8 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */
-				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support channel</a>.' ),
-				__( 'https://classicpress.net/' )
+				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please join our <a href="%s">Slack group</a> and report this issue.' ),
+				__( 'https://www.classicpress.net/' )
 			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
