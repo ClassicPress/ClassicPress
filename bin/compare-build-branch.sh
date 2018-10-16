@@ -12,12 +12,6 @@ if [ -z "$branch" ]; then
 	exit 1
 fi
 
-if [ ! -x "$(which js-beautify)" ] || [ ! -x "$(which css-beautify)" ]; then
-	echo "Install js-beautify and css-beautify first:"
-	echo "npm install -g js-beautify"
-	exit 1
-fi
-
 if [ ! -f ~/.nvm/nvm.sh ]; then
 	echo "Expected to find nvm at ~/.nvm/nvm.sh"
 	exit 1
@@ -46,6 +40,7 @@ git checkout package.json package-lock.json
 git checkout "origin/$branch" -B "$branch"
 
 nvm use || nvm install
+npm install -g js-beautify
 rm -rf node_modules/
 npm install
 grunt build
@@ -59,6 +54,7 @@ git checkout package.json package-lock.json
 git checkout "$(git merge-base origin/master $branch)"
 
 nvm use || nvm install
+npm install -g js-beautify
 rm -rf node_modules/
 npm install
 grunt build
