@@ -508,10 +508,14 @@ module.exports = function(grunt) {
 			}
 		},
 		uglify: {
+			// Settings for all subtasks
 			options: {
-				ASCIIOnly: true,
-				screwIE8: false
+				output: {
+					ascii_only: true
+				},
+				ie8: true
 			},
+			// Subtasks
 			core: {
 				expand: true,
 				cwd: SOURCE_DIR,
