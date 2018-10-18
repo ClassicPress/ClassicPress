@@ -895,19 +895,25 @@ function update_core($from, $to) {
 	apply_filters( 'update_feedback', __( 'Verifying the unpacked files&#8230;' ) );
 
 	// Sanity check the unzipped distribution.
-	$distro = '';
-	$roots = array( '/wordpress/', '/wordpress-mu/' );
-	foreach ( $roots as $root ) {
-		if ( $wp_filesystem->exists( $from . $root . 'readme.html' ) && $wp_filesystem->exists( $from . $root . 'wp-includes/version.php' ) ) {
-			$distro = $root;
-			break;
+	$distro = null;
+	$entries = array_values( $wp_filesystem->dirlist( $from ) );
+	if (
+		count( $entries ) === 1 &&
+		substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' &&
+		$entries[0]['type'] === 'd'
+	) {
+		$distro = '/' . $entries[0]['name'] . '/';
+		if (
+			! $wp_filesystem->exists( $from . $distro . 'readme.html' ) ||
+			! $wp_filesystem->exists( $from . $distro . 'wp-includes/version.php' )
+		) {
+			$distro = null;
 		}
 	}
 	if ( ! $distro ) {
 		$wp_filesystem->delete( $from, true );
 		return new WP_Error( 'insane_distro', __('The update could not be unpacked') );
 	}
-
 
 	/*
 	 * Import $wp_version, $required_php_version, and $required_mysql_version from the new version.
