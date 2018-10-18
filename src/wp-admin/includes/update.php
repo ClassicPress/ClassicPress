@@ -190,7 +190,7 @@ function find_core_update( $version, $locale ) {
  */
 function core_update_footer( $msg = '' ) {
 	if ( !current_user_can('update_core') )
-		return sprintf( __( 'Version %s' ), get_bloginfo( 'version', 'display' ) );
+		return sprintf( __( 'Version %s' ), classicpress_version() );
 
 	$cur = get_preferred_from_update_core();
 	if ( ! is_object( $cur ) )
@@ -208,14 +208,14 @@ function core_update_footer( $msg = '' ) {
 	switch ( $cur->response ) {
 	case 'development' :
 		/* translators: 1: ClassicPress version number, 2: ClassicPress updates admin screen URL */
-		return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), get_bloginfo( 'version', 'display' ), network_admin_url( 'update-core.php' ) );
+		return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), classicpress_version(), network_admin_url( 'update-core.php' ) );
 
 	case 'upgrade' :
 		return '<strong><a href="' . network_admin_url( 'update-core.php' ) . '">' . sprintf( __( 'Get Version %s' ), $cur->current ) . '</a></strong>';
 
 	case 'latest' :
 	default :
-		return sprintf( __( 'Version %s' ), get_bloginfo( 'version', 'display' ) );
+		return sprintf( __( 'Version %s' ), classicpress_version() );
 	}
 }
 
@@ -296,7 +296,7 @@ function update_right_now_message() {
 	 */
 	$content = apply_filters( 'update_right_now_text', $content );
 
-	$msg .= sprintf( '<span id="wp-version">' . $content . '</span>', get_bloginfo( 'version', 'display' ), $theme_name );
+	$msg .= sprintf( '<span id="wp-version">' . $content . '</span>', classicpress_version(), $theme_name );
 
 	echo "<p id='wp-version-message'>$msg</p>";
 }
