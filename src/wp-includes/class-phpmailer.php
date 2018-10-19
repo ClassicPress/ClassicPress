@@ -1092,11 +1092,7 @@ class PHPMailer
                 $patternselect = 'pcre';
             } else {
                 //Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
-                if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
-                    $patternselect = 'php';
-                } else {
-                    $patternselect = 'noregex';
-                }
+                $patternselect = 'php';
             }
         }
         switch ($patternselect) {

@@ -5139,11 +5139,8 @@ function wp_allowed_protocols() {
  *                      of individual calls.
  */
 function wp_debug_backtrace_summary( $ignore_class = null, $skip_frames = 0, $pretty = true ) {
-	if ( version_compare( PHP_VERSION, '5.2.5', '>=' ) )
-		$trace = debug_backtrace( false );
-	else
-		$trace = debug_backtrace();
 
+	$trace = debug_backtrace( false );
 	$caller = array();
 	$check_class = ! is_null( $ignore_class );
 	$skip_frames++; // skip this function
