@@ -3,30 +3,31 @@
  * The ClassicPress version string
  *
  * This string is the "base" version of the current source tree.  It may have
- * one of the following formats:
+ * one of the following semver-compliant formats:
  *
- * - 1.0.0-alpha0-dev  : development version, before any official releases of
+ * - 1.0.0-alpha0+dev  : development version, before any official releases of
  *                       the 1.0.0 series
  * - 1.0.0-alpha1      : official release 1.0.0-alpha1
- * - 1.0.0-alpha2-dev  : the commit immediately after 1.0.0-alpha1, and any
+ * - 1.0.0-alpha2+dev  : the commit immediately after 1.0.0-alpha1, and any
  *                       development commits before the next release
  * - 1.0.0-beta1       : official release 1.0.0-beta1
- * - 1.0.0-beta2-dev   : the commit immediately after 1.0.0-beta1, and any
+ * - 1.0.0-beta2+dev   : the commit immediately after 1.0.0-beta1, and any
  *                       development commits before the next release
  * - 1.0.0             : official release 1.0.0
- * - 1.0.1-alpha0-dev  : the commit immediately after 1.0.0, and any
+ * - 1.0.1-alpha0+dev  : the commit immediately after 1.0.0, and any
  *                       development commits before the 1.0.1 alpha, beta, or
  *                       final release(s)
  *
- * On the `develop` branch this string will always contain the '-dev' suffix.
- * On the `master` branch it will never contain the '-dev' suffix.
+ * In the source repository this string will always contain the '+dev' suffix.
+ * In released builds it will never contain the '+dev' suffix.
  *
- * When nightly (development) builds are created, this is automatically updated
- * to a more appropriate value during the build process.
+ * When nightly (development) builds are created, this suffix is automatically
+ * updated to e.g. '+build.20181019'.  When alpha, beta, or final release
+ * builds are created, the suffix is removed.
  *
  * @global string $cp_version
  */
-$cp_version = '1.0.0-alpha0-dev';
+$cp_version = '1.0.0-alpha0+dev';
 
 /**
  * Return the ClassicPress version string.
