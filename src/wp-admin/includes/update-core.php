@@ -899,7 +899,10 @@ function update_core($from, $to) {
 	$entries = array_values( $wp_filesystem->dirlist( $from ) );
 	if (
 		count( $entries ) === 1 &&
-		substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' &&
+		(
+			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
+			$entries[0]['name'] === 'wordpress' // migration build
+		) &&
 		$entries[0]['type'] === 'd'
 	) {
 		$distro = '/' . $entries[0]['name'] . '/';
