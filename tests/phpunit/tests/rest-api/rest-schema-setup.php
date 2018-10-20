@@ -368,6 +368,18 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			);
 			$this->assertTrue( ! empty( $data ), $route['name'] . ' route should return data.' );
 
+			$fixture = $this->normalize_fixture( $data, $route['name'] );
+			$mocked_responses .= "\nmockedApiResponse." . $route['name'] . ' = '
+				. json_encode( $fixture, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
+				. ";\n";
+
+		}
+
+		// Only generate API client fixtures in single site.
+		if ( ! is_multisite() ) {
+			// Save the route object for QUnit tests.
+			$file = './tests/qunit/fixtures/wp-api-generated.js';
+			file_put_contents( $file, $mocked_responses );
 		}
 
 		// Clean up our test data.
