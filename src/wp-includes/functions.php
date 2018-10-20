@@ -2992,13 +2992,7 @@ function wp_json_encode( $data, $options = 0, $depth = 512 ) {
 	 * $options was added in 5.3, and $depth in 5.5.
 	 * We need to make sure we call it with the correct arguments.
 	 */
-	if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
-		$args = array( $data, $options, $depth );
-	} elseif ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
-		$args = array( $data, $options );
-	} else {
-		$args = array( $data );
-	}
+	$args = array( $data, $options, $depth );
 
 	// Prepare the data for JSON serialization.
 	$args[0] = _wp_json_prepare_data( $data );
