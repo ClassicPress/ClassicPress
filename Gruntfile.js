@@ -151,7 +151,11 @@ module.exports = function(grunt) {
 				options: {
 					processContent: function( src ) {
 						return src.replace( /^\$cp_version = '(.+?)';/m, function( str, version ) {
-							if ( process.env.CLASSICPRESS_NIGHTLY ) {
+							if ( process.env.CLASSICPRESS_RELEASE ) {
+								// This is an official build.  Remove the
+								// '+dev' suffix from the source tree.
+								version = version.replace( /\+dev$/, '' );
+							} else {
 								// This is a nightly build.  Replace the '+dev'
 								// suffix from the source tree with e.g.
 								// '+build.20181019'.  Use yesterday's date -
@@ -162,10 +166,6 @@ module.exports = function(grunt) {
 									/\+dev$/,
 									'+build.' + grunt.template.date( d, 'yyyymmdd' )
 								);
-							} else {
-								// This is an official build.  Remove the
-								// '+dev' suffix from the source tree.
-								version = version.replace( /\+dev$/, '' );
 							}
 
 							/* jshint quotmark: true */
