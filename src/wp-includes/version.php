@@ -55,7 +55,7 @@ if ( ! function_exists( 'classicpress_version' ) ) {
  *
  * @global string $wp_version
  */
-$wp_version = '4.9.9-alpha-43554-src';
+$wp_version = '4.9.8';
 
 /**
  * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
