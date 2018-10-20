@@ -150,14 +150,26 @@ module.exports = function(grunt) {
 			version: {
 				options: {
 					processContent: function( src ) {
-						return src.replace( /^\$wp_version = '(.+?)';/m, function( str, version ) {
-							version = version.replace( /-src$/, '' );
-
-							// If the version includes an SVN commit (-12345), it's not a released alpha/beta. Append a timestamp.
-							version = version.replace( /-[\d]{5}$/, '-' + grunt.template.today( 'yyyymmdd.HHMMss' ) );
+						return src.replace( /^\$cp_version = '(.+?)';/m, function( str, version ) {
+							if ( process.env.CLASSICPRESS_RELEASE ) {
+								// This is an official build.  Remove the
+								// '+dev' suffix from the source tree.
+								version = version.replace( /\+dev$/, '' );
+							} else {
+								// This is a nightly build.  Replace the '+dev'
+								// suffix from the source tree with e.g.
+								// '+build.20181019'.  Use yesterday's date -
+								// nightly builds are baked at midnight UTC.
+								var d = new Date();
+								d.setDate( d.getDate() - 1 );
+								version = version.replace(
+									/\+dev$/,
+									'+build.' + grunt.template.date( d, 'yyyymmdd' )
+								);
+							}
 
 							/* jshint quotmark: true */
-							return "$wp_version = '" + version + "';";
+							return "$cp_version = '" + version + "';";
 						});
 					}
 				},
