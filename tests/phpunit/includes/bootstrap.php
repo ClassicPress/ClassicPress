@@ -12,7 +12,7 @@ if ( class_exists( 'PHPUnit\Runner\Version' ) ) {
 
 $config_file_path = dirname( dirname( __FILE__ ) );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
-	// Support the config file from the root of the develop repository.
+	// Support the config file from the root of the source repository.
 	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' )
 		$config_file_path = dirname( dirname( $config_file_path ) );
 }

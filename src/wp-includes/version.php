@@ -38,10 +38,26 @@ $cp_version = '1.0.0-alpha0+dev';
  * @return string The ClassicPress version string.
  */
 if ( ! function_exists( 'classicpress_version' ) ) {
-    function classicpress_version() {
-        global $cp_version;
-        return $cp_version;
-    }
+	function classicpress_version() {
+		global $cp_version;
+		return $cp_version;
+	}
+}
+
+/**
+ * Return whether ClassicPress is running as a source install (the result of
+ * cloning the source repository rather than installing a built version).
+ *
+ * This is mostly supported, but there are a few things that need to work
+ * slightly differently or need to be disabled.
+ *
+ * @return bool Whether ClassicPress is running as a source install.
+ */
+if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
+	function classicpress_is_dev_install() {
+		global $cp_version;
+		return substr( $cp_version, -4 ) === '+dev';
+	}
 }
 
 /**
