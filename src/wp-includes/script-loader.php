@@ -46,9 +46,9 @@ require( ABSPATH . WPINC . '/functions.wp-styles.php' );
  * @param WP_Scripts $scripts WP_Scripts object.
  */
 function wp_default_scripts( &$scripts ) {
-	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $cp_version
 
-	$develop_src = false !== strpos( $wp_version, '-src' );
+	$develop_src = classicpress_is_dev_install();
 
 	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 		define( 'SCRIPT_DEBUG', $develop_src );
@@ -926,11 +926,13 @@ function wp_default_scripts( &$scripts ) {
 function wp_default_styles( &$styles ) {
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
 
-	if ( ! defined( 'SCRIPT_DEBUG' ) )
-		define( 'SCRIPT_DEBUG', false !== strpos( $wp_version, '-src' ) );
+	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
+		define( 'SCRIPT_DEBUG', classicpress_is_dev_install() );
+	}
 
-	if ( ! $guessurl = site_url() )
+	if ( ! $guessurl = site_url() ) {
 		$guessurl = wp_guess_url();
+	}
 
 	$styles->base_url = $guessurl;
 	$styles->content_url = defined('WP_CONTENT_URL')? WP_CONTENT_URL : '';
