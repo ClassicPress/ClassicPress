@@ -61,7 +61,7 @@ function wp_default_scripts( &$scripts ) {
 
 	$scripts->base_url = $guessurl;
 	$scripts->content_url = defined('WP_CONTENT_URL')? WP_CONTENT_URL : '';
-	$scripts->default_version = get_bloginfo( 'version' );
+	$scripts->default_version = preg_replace( '#\+.*$#', '', classicpress_version() );
 	$scripts->default_dirs = array('/wp-admin/js/', '/wp-includes/js/');
 
 	$suffix = SCRIPT_DEBUG ? '' : '.min';
@@ -934,7 +934,7 @@ function wp_default_styles( &$styles ) {
 
 	$styles->base_url = $guessurl;
 	$styles->content_url = defined('WP_CONTENT_URL')? WP_CONTENT_URL : '';
-	$styles->default_version = get_bloginfo( 'version' );
+	$styles->default_version = preg_replace( '#\+.*$#', '', classicpress_version() );
 	$styles->text_direction = function_exists( 'is_rtl' ) && is_rtl() ? 'rtl' : 'ltr';
 	$styles->default_dirs = array('/wp-admin/', '/wp-includes/css/');
 
