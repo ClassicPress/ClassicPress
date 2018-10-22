@@ -6,15 +6,15 @@
  * one of the following semver-compliant formats:
  *
  * - 1.0.0-alpha0+dev  : development version, before any official releases of
- *                       the 1.0.0 series
+ *                       the 1.0.0 series (after the "null release" 1.0.0-alpha0)
  * - 1.0.0-alpha1      : official release 1.0.0-alpha1
- * - 1.0.0-alpha2+dev  : the commit immediately after 1.0.0-alpha1, and any
+ * - 1.0.0-alpha1+dev  : the commit immediately after 1.0.0-alpha1, and any
  *                       development commits before the next release
  * - 1.0.0-beta1       : official release 1.0.0-beta1
- * - 1.0.0-beta2+dev   : the commit immediately after 1.0.0-beta1, and any
+ * - 1.0.0-beta1+dev   : the commit immediately after 1.0.0-beta1, and any
  *                       development commits before the next release
  * - 1.0.0             : official release 1.0.0
- * - 1.0.1-alpha0+dev  : the commit immediately after 1.0.0, and any
+ * - 1.0.0+dev         : the commit immediately after 1.0.0, and any
  *                       development commits before the 1.0.1 alpha, beta, or
  *                       final release(s)
  *
