@@ -14,15 +14,18 @@ wp_enqueue_script( 'underscore' );
 /* translators: Page title of the About ClassicPress page in the admin. */
 $title = _x( 'About', 'page title' );
 
-$display_version = classicpress_version();
-
 include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 	<div class="wrap about-wrap full-width-layout">
-		<h1><?php printf( __( 'Welcome to ClassicPress&nbsp;%s' ), $display_version ); ?></h1>
+		<h1><?php _e( 'Welcome to ClassicPress!' ); ?></h1>
 
-		<p class="about-text"><?php printf( __( 'Thank you for trying ClassicPress! We are under heavy development while we prepare for an initial release.' ), $display_version ); ?></p>
-		<div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
+		<p class="about-text">
+			<?php printf( __( 'Version %s' ), classicpress_version() ); ?>
+		</p>
+		<p class="about-text">
+			<?php _e( 'Thank you for trying ClassicPress! We are under heavy development while we prepare for an initial release.' ); ?>
+		</p>
+		<div class="wp-badge"></div>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">
 			<a href="about.php" class="nav-tab nav-tab-active"><?php _e( 'What&#8217;s New' ); ?></a>
