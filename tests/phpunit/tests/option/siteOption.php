@@ -130,7 +130,7 @@ class Tests_Option_SiteOption extends WP_UnitTestCase {
 		$this->assertEquals( $value, get_site_option( $key ) );
 	}
 
-	// #15497 - ensure update_site_option will add options with false-y values
+	// https://core.trac.wordpress.org/ticket/15497 - ensure update_site_option will add options with false-y values
 	function test_update_adds_falsey_value() {
 		$key = __FUNCTION__;
 		$value = 0;
@@ -141,7 +141,7 @@ class Tests_Option_SiteOption extends WP_UnitTestCase {
 		$this->assertEquals( $value, get_site_option( $key ) );
 	}
 
-	// #18955 - ensure get_site_option doesn't cache the default value for non-existent options
+	// https://core.trac.wordpress.org/ticket/18955 - ensure get_site_option doesn't cache the default value for non-existent options
 	function test_get_doesnt_cache_default_value() {
 		$option = __FUNCTION__;
 		$default = 'a default';

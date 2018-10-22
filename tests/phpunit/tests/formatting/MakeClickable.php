@@ -138,7 +138,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 		}
 	}
 
-	// #4570
+	// https://core.trac.wordpress.org/ticket/4570
 	function test_iri() {
 		$urls_before = array(
 			'http://www.詹姆斯.com/',
@@ -155,7 +155,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 		}
 	}
 
-	// #10990
+	// https://core.trac.wordpress.org/ticket/10990
 	function test_brackets_in_urls() {
 		$urls_before = array(
 			'http://en.wikipedia.org/wiki/PC_Tools_(Central_Point_Software)',
@@ -190,7 +190,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 		}
 	}
 
-	// Based on a real comments which were incorrectly linked. #11211
+	// Based on a real comments which were incorrectly linked. https://core.trac.wordpress.org/ticket/11211
 	function test_real_world_examples() {
 		$urls_before = array(
 			'Example: ClassicPress, test (some text), I love example.com (http://example.org), it is brilliant',
@@ -209,7 +209,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 		}
 	}
 
-	// #14993
+	// https://core.trac.wordpress.org/ticket/14993
 	function test_twitter_hash_bang() {
 		$urls_before = array(
 			'http://twitter.com/#!/wordpress/status/25907440233',

@@ -326,7 +326,7 @@ https://w.org</a>'
 		$this->assertEquals( '', $prepped['mime'] );
 		$this->assertEquals( '', $prepped['type'] );
 		$this->assertEquals( '', $prepped['subtype'] );
-		// #21963, there will be a guid always, so there will be a URL
+		// https://core.trac.wordpress.org/ticket/21963, there will be a guid always, so there will be a URL
 		$this->assertNotEquals( '', $prepped['url'] );
 		$this->assertEquals( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
 

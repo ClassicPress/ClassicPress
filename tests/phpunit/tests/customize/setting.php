@@ -373,7 +373,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		$name = "unset_{$type}_without_post_value";
 		$default = "default_value_{$name}";
 		$setting = new WP_Customize_Setting( $this->manager, $name, compact( 'type', 'default' ) );
-		// Note: #29316 will allow us to have one filter for all settings of a given type, which is what we need.
+		// Note: https://core.trac.wordpress.org/ticket/29316 will allow us to have one filter for all settings of a given type, which is what we need.
 		add_filter( "customize_value_{$name}", array( $this, 'custom_type_value_filter' ), 10, 2 );
 		$this->assertEquals( $this->undefined, $this->custom_type_getter( $name, $this->undefined ) );
 		$this->assertEquals( $default, $setting->value() );
@@ -389,7 +389,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		$initial_value = "initial_value_{$name}";
 		$this->custom_type_setter( $name, $initial_value );
 		$setting = new WP_Customize_Setting( $this->manager, $name, compact( 'type', 'default' ) );
-		// Note: #29316 will allow us to have one filter for all settings of a given type, which is what we need.
+		// Note: https://core.trac.wordpress.org/ticket/29316 will allow us to have one filter for all settings of a given type, which is what we need.
 		add_filter( "customize_value_{$name}", array( $this, 'custom_type_value_filter' ), 10, 2 );
 		$this->assertEquals( $initial_value, $this->custom_type_getter( $name, $this->undefined ) );
 		$this->assertEquals( $initial_value, $setting->value() );
@@ -409,7 +409,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		$name = "unset_{$type}_with_post_value";
 		$default = "default_value_{$name}";
 		$setting = new WP_Customize_Setting( $this->manager, $name, compact( 'type', 'default' ) );
-		// Note: #29316 will allow us to have one filter for all settings of a given type, which is what we need.
+		// Note: https://core.trac.wordpress.org/ticket/29316 will allow us to have one filter for all settings of a given type, which is what we need.
 		add_filter( "customize_value_{$name}", array( $this, 'custom_type_value_filter' ), 10, 2 );
 		$this->assertEquals( $this->undefined, $this->custom_type_getter( $name, $this->undefined ) );
 		$this->assertEquals( $default, $setting->value() );
@@ -425,7 +425,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		$initial_value = "initial_value_{$name}";
 		$this->custom_type_setter( $name, $initial_value );
 		$setting = new WP_Customize_Setting( $this->manager, $name, compact( 'type', 'default' ) );
-		// Note: #29316 will allow us to have one filter for all settings of a given type, which is what we need.
+		// Note: https://core.trac.wordpress.org/ticket/29316 will allow us to have one filter for all settings of a given type, which is what we need.
 		add_filter( "customize_value_{$name}", array( $this, 'custom_type_value_filter' ), 10, 2 );
 		$this->assertEquals( $initial_value, $this->custom_type_getter( $name, $this->undefined ) );
 		$this->assertEquals( $initial_value, $setting->value() );
@@ -444,7 +444,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		) );
 
 		/*
-		 * In #36952 the conditions were such that get_theme_mod() be erroneously used
+		 * In https://core.trac.wordpress.org/ticket/36952 the conditions were such that get_theme_mod() be erroneously used
 		 * to source the root value for a custom multidimensional type.
 		 * Add a theme mod with the same name as the custom setting to test fix.
 		 */
