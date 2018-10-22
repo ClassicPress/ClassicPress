@@ -1575,20 +1575,20 @@ function wp_welcome_panel() {
 				<?php printf(
 						__(
 							/* translators: link with instructions to join ClassicPress Slack */
-							'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%s" target="_blank">join our Slack group</a> and send us a message in the <a href="%s" target="_blank"><strong>#support</strong></a> or <a href="%s" target="_blank"><strong>#testing</strong></a> channels.'
+							'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%s">join our Slack group</a> and send us a message in the <a href="%s"><strong>#support</strong></a> or <a href="%s"><strong>#testing</strong></a> channels.'
 						),
-						'https://join.slack.com/t/classicpress/shared_invite/enQtNDIwNjY2OTg1MjAxLWJiM2U2NmY3ZjFlZjQ4Zjk2OGI4ZTg3NzY1ZTU3NzI3OTRjMTU0YzAzOWUyZmZlODgyOWE1YTViYjcwY2Y5YzI', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
+						'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
 					); ?>
 			</p>
 			<p>
 				<?php printf(
-			__(
-				/* translators: link to create a new GitHub issue for this plugin */
-				'For <strong>specific</strong> bug reports or suggestions, <a href="%s" target="_blank">add a new issue on GitHub</a>.',
-				'switch-to-classicpress'
-			),
-			'https://github.com/ClassicPress/ClassicPress/issues/new'
-		); ?>
+					__(
+						/* translators: link to create a new GitHub issue for this plugin */
+						'For <strong>specific</strong> bug reports or suggestions, <a href="%s">add a new issue on GitHub</a>.',
+						'switch-to-classicpress'
+					),
+					'https://github.com/ClassicPress/ClassicPress/issues/new'
+				); ?>
 			</p>
 
 	</div>
