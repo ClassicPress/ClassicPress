@@ -22,7 +22,7 @@
  * In released builds it will never contain the '+dev' suffix.
  *
  * When nightly (development) builds are created, this suffix is automatically
- * updated to e.g. '+build.20181019'.  When alpha, beta, or final release
+ * updated to e.g. '+nightly.20181019'.  When alpha, beta, or final release
  * builds are created, the suffix is removed.
  *
  * @global string $cp_version

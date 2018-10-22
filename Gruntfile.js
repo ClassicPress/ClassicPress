@@ -152,19 +152,26 @@ module.exports = function(grunt) {
 					processContent: function( src ) {
 						return src.replace( /^\$cp_version = '(.+?)';/m, function( str, version ) {
 							if ( process.env.CLASSICPRESS_RELEASE ) {
-								// This is an official build.  Remove the
-								// '+dev' suffix from the source tree.
+								// This is an official build that will receive auto-updates to newer
+								// official builds.  Remove the '+dev' suffix from the source tree.
 								version = version.replace( /\+dev$/, '' );
-							} else {
-								// This is a nightly build.  Replace the '+dev'
-								// suffix from the source tree with e.g.
-								// '+build.20181019'.  Use yesterday's date -
-								// nightly builds are baked at midnight UTC.
+							} else if ( process.env.CLASSICPRESS_NIGHTLY ) {
+								// This is an official nightly build that will receive auto-updates
+								// to newer official nightly builds.  Replace the '+dev' suffix from
+								// the source tree with e.g.  '+nightly.20181019'.  Use yesterday's
+								// date - nightly builds are baked at midnight UTC.
 								var d = new Date();
 								d.setDate( d.getDate() - 1 );
 								version = version.replace(
 									/\+dev$/,
-									'+build.' + grunt.template.date( d, 'yyyymmdd' )
+									'+nightly.' + grunt.template.date( d, 'yyyymmdd' )
+								);
+							} else {
+								// This is another type of build, probably someone generating one
+								// for their own purposes.  Use e.g. '+build.20181020'.
+								version = version.replace(
+									/\+dev$/,
+									'+build.' + grunt.template.today( 'yyyymmdd' )
 								);
 							}
 
