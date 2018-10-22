@@ -115,7 +115,7 @@ wp.mediaWidgets = ( function( $ ) {
 				Constructor = wp.media.view.EmbedImage;
 			} else {
 
-				// This should be eliminated once #40450 lands of when this is merged into core.
+				// This should be eliminated once https://core.trac.wordpress.org/ticket/40450 lands of when this is merged into core.
 				Constructor = wp.media.view.EmbedLink.extend({
 
 					/**

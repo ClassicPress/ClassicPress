@@ -51,7 +51,7 @@ $action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : 'edit';
 
 /*
  * If a JSON blob of navigation menu data is found, expand it and inject it
- * into `$_POST` to avoid PHP `max_input_vars` limitations. See #14134.
+ * into `$_POST` to avoid PHP `max_input_vars` limitations. See https://core.trac.wordpress.org/ticket/14134.
  */
 _wp_expand_nav_menu_post_data();
 

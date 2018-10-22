@@ -54,7 +54,7 @@
 	 */
 	setDisabled : function( el, s ) {
 		/*
-		 * `el` can be a single form element or a fieldset. Before #28864, the disabled state on
+		 * `el` can be a single form element or a fieldset. Before https://core.trac.wordpress.org/ticket/28864, the disabled state on
 		 * some text fields  was handled targeting $('input', el). Now we need to handle the
 		 * disabled state on buttons too so we can just target `el` regardless if it's a single
 		 * element or a fieldset because when a fieldset is disabled, its descendants are disabled too.

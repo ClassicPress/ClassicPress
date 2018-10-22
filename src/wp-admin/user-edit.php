@@ -571,7 +571,7 @@ if ( $show_password_fields = apply_filters( 'show_password_fields', true, $profi
 <tr id="password" class="user-pass1-wrap">
 	<th><label for="pass1"><?php _e( 'New Password' ); ?></label></th>
 	<td>
-		<input class="hidden" value=" " /><!-- #24364 workaround -->
+		<input class="hidden" value=" " /><!-- https://core.trac.wordpress.org/ticket/24364 workaround -->
 		<button type="button" class="button wp-generate-pw hide-if-no-js"><?php _e( 'Generate Password' ); ?></button>
 		<div class="wp-pwd hide-if-js">
 			<span class="password-input-wrapper">

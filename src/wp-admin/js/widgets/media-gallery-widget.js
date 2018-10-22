@@ -108,7 +108,7 @@
 			 * would not be necessary because all of the state should be contained inside the changeset,
 			 * as everything done in the Customizer should not make a change to the site unless the
 			 * changeset itself is published. Attachments are a current exception to this rule.
-			 * For a proposal to include attachments in the customized state, see #37887.
+			 * For a proposal to include attachments in the customized state, see https://core.trac.wordpress.org/ticket/37887.
 			 */
 			if ( wp.customize && wp.customize.previewer ) {
 				control.selectedAttachments.on( 'change', function() {

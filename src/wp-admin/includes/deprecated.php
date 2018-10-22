@@ -1470,7 +1470,7 @@ function add_utility_page( $page_title, $menu_title, $capability, $menu_slug, $f
 /**
  * Disables autocomplete on the 'post' form (Add/Edit Post screens) for WebKit browsers,
  * as they disregard the autocomplete setting on the editor textarea. That can break the editor
- * when the user navigates to it with the browser's Back button. See #28037
+ * when the user navigates to it with the browser's Back button. See https://core.trac.wordpress.org/ticket/28037
  *
  * Replaced with wp_page_reload_on_back_button_js() that also fixes this problem.
  *
