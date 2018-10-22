@@ -782,7 +782,7 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
  * from other blogs. You can switch back afterwards using restore_current_blog().
  *
  * Things that aren't switched:
- *  - plugins. See #14941
+ *  - plugins. See https://core.trac.wordpress.org/ticket/14941
  *
  * @see restore_current_blog()
  * @since WP-MU (3.0.0)

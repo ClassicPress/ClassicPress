@@ -5212,7 +5212,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			$found = false;
 			if ( $enclosures = get_post_meta( $post_ID, 'enclosure' ) ) {
 				foreach ( $enclosures as $enc ) {
-					// This method used to omit the trailing new line. #23219
+					// This method used to omit the trailing new line. https://core.trac.wordpress.org/ticket/23219
 					if ( rtrim( $enc, "\n" ) == rtrim( $encstring, "\n" ) ) {
 						$found = true;
 						break;

@@ -317,7 +317,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in 5.0. See #42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php' );
 
@@ -325,7 +325,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in 5.0. See #42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-custom-css-setting.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-filter-setting.php' );
@@ -1188,7 +1188,7 @@ final class WP_Customize_Manager {
 			 * However, when doing an explicit save it is currently possible for
 			 * nav menus and nav menu items specifically to lose their starter_content
 			 * flags, thus resulting in duplicates being created since they fail
-			 * to get re-used. See #40146.
+			 * to get re-used. See https://core.trac.wordpress.org/ticket/40146.
 			 */
 			if ( 'auto-draft' !== get_post_status( $this->changeset_post_id() ) ) {
 				return;
@@ -2821,7 +2821,7 @@ final class WP_Customize_Manager {
 		if ( defined( 'JSON_UNESCAPED_SLASHES' ) ) {
 			$json_options |= JSON_UNESCAPED_SLASHES; // Introduced in PHP 5.4. This is only to improve readability as slashes needn't be escaped in storage.
 		}
-		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See WP Trac #30139.
+		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See WP Trac https://core.trac.wordpress.org/ticket/30139.
 		$post_array = array(
 			'post_content' => wp_json_encode( $data, $json_options ),
 		);
@@ -3051,7 +3051,7 @@ final class WP_Customize_Manager {
 	 * required in core for `wp_create_post_autosave()` because it will call
 	 * `_wp_translate_postdata()` which in turn will check if a user can 'edit_post', but the
 	 * the caps for the customize_changeset post type are all mapping to the meta capability.
-	 * This should be able to be removed once #40922 is addressed in core.
+	 * This should be able to be removed once https://core.trac.wordpress.org/ticket/40922 is addressed in core.
 	 *
 	 * @since WP-4.9.0
 	 * @link https://core.trac.wordpress.org/ticket/40922
@@ -4711,7 +4711,7 @@ final class WP_Customize_Manager {
 			),
 		);
 
-		// Temporarily disable installation in Customizer. See #42184.
+		// Temporarily disable installation in Customizer. See https://core.trac.wordpress.org/ticket/42184.
 		$filesystem_method = get_filesystem_method();
 		ob_start();
 		$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );

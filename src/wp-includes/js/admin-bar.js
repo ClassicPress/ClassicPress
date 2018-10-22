@@ -30,7 +30,7 @@ if ( typeof(jQuery) != 'undefined' ) {
 					el.addClass('hover');
 				} else if ( ! $( e.target ).closest( 'div' ).hasClass( 'ab-sub-wrapper' ) ) {
 					// We're dealing with an already-touch-opened menu genericon (we know el.hasClass('hover')),
-					// so close it on a second tap and prevent propag and defaults. See #29906
+					// so close it on a second tap and prevent propag and defaults. See https://core.trac.wordpress.org/ticket/29906
 					e.stopPropagation();
 					e.preventDefault();
 					el.removeClass('hover');

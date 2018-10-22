@@ -691,7 +691,7 @@ function shutdown_action_hook() {
  * @return object The cloned object.
  */
 function wp_clone( $object ) {
-	// Use parens for clone to accommodate PHP 4. See #17880
+	// Use parens for clone to accommodate PHP 4. See https://core.trac.wordpress.org/ticket/17880
 	return clone( $object );
 }
 

@@ -63,7 +63,7 @@ class WP_HTTP_IXR_Client extends IXR_Client {
 			'body'       => $xml,
 		);
 
-		// Merge Custom headers ala #8145
+		// Merge Custom headers ala https://core.trac.wordpress.org/ticket/8145
 		foreach ( $this->headers as $header => $value ) {
 			$args['headers'][$header] = $value;
 		}
