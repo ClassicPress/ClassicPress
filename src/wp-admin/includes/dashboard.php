@@ -1565,20 +1565,21 @@ function wp_welcome_panel() {
 	?>
 	<div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
-	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s' ), $display_version ); ?></p>
+	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
 			<h3><?php _e( 'Feedback and Support' ); ?></h3>
 			<p>
 				<?php _e(
-					"Do you have any feedback about this version of ClassicPress?"); ?>
+					'Do you have any feedback about this version of ClassicPress?'
+				); ?>
 			</p>
 			<p>
 				<?php printf(
-						__(
-							/* translators: link with instructions to join ClassicPress Slack */
-							'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%s">join our Slack group</a> and send us a message in the <a href="%s"><strong>#support</strong></a> or <a href="%s"><strong>#testing</strong></a> channels.'
-						),
-						'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
-					); ?>
+					__(
+						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support channel, 3: link to Testing channel */
+						'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> and send us a message in the <a href="%2s"><strong>#support</strong></a> or <a href="%3s"><strong>#testing</strong></a> channels.'
+					),
+					'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
+				); ?>
 			</p>
 			<p>
 				<?php printf(
