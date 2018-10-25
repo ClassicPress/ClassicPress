@@ -228,7 +228,7 @@ class WP_Locale {
 		elseif ( 'rtl' == _x( 'ltr', 'text direction' ) )
 			$this->text_direction = 'rtl';
 
-		if ( 'rtl' === $this->text_direction && strpos( get_bloginfo( 'version' ), '-src' ) ) {
+		if ( 'rtl' === $this->text_direction && classicpress_is_dev_install() ) {
 			$this->text_direction = 'ltr';
 			add_action( 'all_admin_notices', array( $this, 'rtl_src_admin_notice' ) );
 		}
@@ -241,7 +241,7 @@ class WP_Locale {
 	 */
 	public function rtl_src_admin_notice() {
 		/* translators: %s: Name of the directory (build) */
-		echo '<div class="error"><p>' . sprintf( __( 'The %s directory of the develop repository must be used for RTL.' ), '<code>build</code>' ) . '</p></div>';
+		echo '<div class="error"><p>' . sprintf( __( 'The %s directory of the source repository must be used for RTL.' ), '<code>build</code>' ) . '</p></div>';
 	}
 
 	/**

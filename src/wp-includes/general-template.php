@@ -3887,7 +3887,7 @@ function register_admin_color_schemes() {
 	);
 
 	// Other color schemes are not available when running out of src
-	if ( false !== strpos( get_bloginfo( 'version' ), '-src' ) ) {
+	if ( classicpress_is_dev_install() ) {
 		return;
 	}
 
