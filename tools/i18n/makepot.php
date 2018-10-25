@@ -188,7 +188,7 @@ class MakePOT {
 			'default_output' => 'classicpress.pot',
 			'includes' => array(),
 			'excludes' => array_merge(
-				array( 'wp-content/plugins/*', 'wp-content/themes/*', )
+				array( 'wp-content/plugins/*', 'wp-content/themes/*', 'wp-includes/class-pop3.php' )
 			),
 			'extract_not_gettexted' => false,
 			'not_gettexted_files_filter' => false,
