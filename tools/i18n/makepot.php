@@ -131,6 +131,46 @@ class MakePOT {
 		return true;
 	}
 
+	public function wp_generic($dir, $args) {
+		$defaults = array(
+			'project' => 'cp-core',
+			'output' => null,
+			'default_output' => 'wordpress.pot',
+			'includes' => array(),
+			'excludes' => array_merge(
+				array( 'wp-admin/includes/continents-cities\.php', 'wp-content/themes/twenty.*', ),
+				$this->ms_files
+			),
+			'extract_not_gettexted' => false,
+			'not_gettexted_files_filter' => false,
+		);
+		$args = array_merge( $defaults, $args );
+		extract( $args );
+		$placeholders = array();
+		if ( $wp_version = $this->wp_version( $dir ) )
+			$placeholders['version'] = $wp_version;
+		else
+			return false;
+		$output = is_null( $output )? $default_output : $output;
+		$res = $this->xgettext( $project, $dir, $output, $placeholders, $excludes, $includes );
+		if ( !$res ) return false;
+
+		if ( $extract_not_gettexted ) {
+			$old_dir = getcwd();
+			$output = realpath( $output );
+			chdir( $dir );
+			$php_files = NotGettexted::list_php_files('.');
+			$php_files = array_filter( $php_files, $not_gettexted_files_filter );
+			$not_gettexted = new NotGettexted;
+			$res = $not_gettexted->command_extract( $output, $php_files );
+			chdir( $old_dir );
+			/* Adding non-gettexted strings can repeat some phrases */
+			$output_shell = escapeshellarg( $output );
+			system( "msguniq --use-first $output_shell -o $output_shell" );
+		}
+		return $res;
+	}
+
 	private function cp_version( $dir ) {
 		$version_php = $dir.'/wp-includes/version.php';
 		if ( !is_readable( $version_php ) ) return false;

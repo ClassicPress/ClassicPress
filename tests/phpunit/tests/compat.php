@@ -86,7 +86,7 @@ class Tests_Compat extends WP_UnitTestCase {
 		$this->assertEquals( 'DEF', _mb_substr($string_ascii, 3) );
 		$this->assertEquals( 'DEF', _mb_substr($string_ascii, 3, 5, 'ISO-8859-1') );
 
-		// specific latin-1 as that is the default the core php test opporates under	
+		// specific latin-1 as that is the default the core php test opporates under
 		$this->assertEquals( 'peacrOiqng==' , base64_encode( _mb_substr($string_mb, 2, 7, 'latin-1' ) ) );
 		$this->assertEquals( '6Kqe44OG44Kt44K544OI44Gn44GZ', base64_encode( _mb_substr($string_mb, 2, 7, 'utf-8') ) );
 
@@ -98,7 +98,7 @@ class Tests_Compat extends WP_UnitTestCase {
 		$heredoc = <<<EOT
 hello world
 EOT;
-		$inputs = array( 
+		$inputs = array(
 		/*1*/  0,
 			   1,
 			   12345,
@@ -246,11 +246,6 @@ EOT;
 			$this->markTestSkipped( 'The intl extension is not loaded. ResourceBundle not tested for is_countable().' );
 		}
 
-		if ( version_compare( PHP_VERSION, '5.4', '<' ) ) {
-			$this->markTestSkipped( 'ResourceBundle is only countable in PHP 5.4+' );
-			return;
-		}
-
 		$this->assertTrue( is_countable( new ResourceBundle( 'en', null ) ) );
 	}
 
@@ -314,7 +309,7 @@ EOT;
 	}
 }
 
-/* used in test_mb_substr_phpcore */ 
+/* used in test_mb_substr_phpcore */
 class classA {
 	public function __toString() {
 		return "Class A object";
