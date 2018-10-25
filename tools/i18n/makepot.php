@@ -182,12 +182,10 @@ class MakePOT {
 		return trim( preg_replace( '/\s*(?:\*\/|\?>).*/', '', $str ) );
 	}
 
-	public function generic($dir, $output, $slug = null, $args = array()) {
-		$output = is_null($output)? "generic.pot" : $output;
+	public function generic($dir, $output = null, $slug = null, $args = array()) {
 		$defaults = array(
 			'project' => 'generic',
-			'output' => null,
-			'default_output' => 'wordpress.pot',
+			'default_output' => 'classicpress.pot',
 			'includes' => array(),
 			'excludes' => array_merge(
 				array( 'wp-content/plugins/*', 'wp-content/themes/*', )
