@@ -58,24 +58,23 @@
 /* ClassicPress Version Badge */
 
 .wp-badge {
-	background: #0073aa url(../images/w-logo-white.png?ver=20160308) no-repeat;
-	background-position: center 25px;
+	background: #0073aa url(../images/w-logo-white.png?ver=20180905) no-repeat;
+	background-position: center;
 	background-size: 80px 80px;
 	color: #fff;
 	font-size: 14px;
 	text-align: center;
 	font-weight: 600;
 	margin: 5px 0 0;
-	padding-top: 120px;
-	height: 40px;
+	width: 130px;
+	height: 130px;
 	display: inline-block;
-	width: 140px;
 	text-rendering: optimizeLegibility;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .svg .wp-badge {
-	background-image: url(../images/wordpress-logo-white.svg?ver=20160308);
+	background-image: url(../images/wordpress-logo-white.svg?ver=20180905);
 }
 
 .about-wrap .wp-badge {
@@ -161,16 +160,13 @@
 
 .about-wrap .about-text {
 	margin: 1em 200px 1em 0;
-	min-height: 60px;
 	color: #555d66;
 }
 
 /* 1.2 - Structure */
 
 .about-wrap [class$="-col"] {
-	display: -webkit-box;
 	display: flex;
-	-webkit-box-pack: justify;
 	justify-content: space-between;
 	flex-wrap: wrap;
 }
@@ -191,7 +187,6 @@
 }
 
 .about-wrap [class$="-col"] .col {
-	-webkit-box-flex: 1;
 	flex: 1;
 }
 
@@ -201,7 +196,6 @@
 }
 
 .about-wrap .three-col .col {
-	-webkit-align-self: flex-start;
 	align-self: flex-start;
 	min-width: 31%;
 	max-width: 31%;
@@ -259,9 +253,7 @@
 }
 
 .about-wrap .two-col-text {
-	-webkit-column-count: 2;
 	column-count: 2;
-	-webkit-column-gap: 40px;
 	column-gap: 40px;
 }
 
@@ -381,22 +373,15 @@
 .about-wrap .floating-header-section .section-content {
 	-ms-grid-column: 2;
 	grid-column: 2;
-	display: -webkit-box;
 	display: flex;
-	-webkit-box-pack: justify;
 	justify-content: space-between;
-	-webkit-box-align: start;
 	align-items: flex-start;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
 	flex-flow: row wrap;
-	-webkit-box-flex: 2;
 	flex-grow: 2;
 	flex-shrink: 0;
 }
 
 .about-wrap .floating-header-section .section-item {
-	-webkit-box-flex: 1;
 	flex-grow: 1;
 	max-width: calc(50% - 30px);
 }
@@ -425,7 +410,6 @@
 }
 
 .about-wrap .floating-header-section.has-long-title .section-content {
-	-webkit-box-pack: start;
 	justify-content: flex-start;
 }
 
@@ -548,7 +532,6 @@
 
 @media screen and (max-width: 782px) {
 	.about-wrap .two-col-text {
-		-webkit-column-count: 1;
 		column-count: 1;
 	}
 

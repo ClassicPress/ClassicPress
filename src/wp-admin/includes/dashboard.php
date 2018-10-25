@@ -1561,61 +1561,37 @@ function wp_dashboard_empty() {}
  * @since WP-3.3.0
  */
 function wp_welcome_panel() {
+	$display_version = classicpress_version();
 	?>
 	<div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
-	<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
-	<div class="welcome-panel-column-container">
-	<div class="welcome-panel-column">
-		<?php if ( current_user_can( 'customize' ) ) : ?>
-			<h3><?php _e( 'Get Started' ); ?></h3>
-			<a class="button button-primary button-hero load-customize hide-if-no-customize" href="<?php echo wp_customize_url(); ?>"><?php _e( 'Customize Your Site' ); ?></a>
-		<?php endif; ?>
-		<a class="button button-primary button-hero hide-if-customize" href="<?php echo admin_url( 'themes.php' ); ?>"><?php _e( 'Customize Your Site' ); ?></a>
-		<?php if ( current_user_can( 'install_themes' ) || ( current_user_can( 'switch_themes' ) && count( wp_get_themes( array( 'allowed' => true ) ) ) > 1 ) ) : ?>
-			<?php $themes_link = current_user_can( 'customize' ) ? add_query_arg( 'autofocus[panel]', 'themes', admin_url( 'customize.php' ) ) : admin_url( 'themes.php' ); ?>
-			<p class="hide-if-no-customize"><?php printf( __( 'or, <a href="%s">change your theme completely</a>' ), $themes_link ); ?></p>
-		<?php endif; ?>
-	</div>
-	<div class="welcome-panel-column">
-		<h3><?php _e( 'Next Steps' ); ?></h3>
-		<ul>
-		<?php if ( 'page' == get_option( 'show_on_front' ) && ! get_option( 'page_for_posts' ) ) : ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Edit your front page' ) . '</a>', get_edit_post_link( get_option( 'page_on_front' ) ) ); ?></li>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add additional pages' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
-		<?php elseif ( 'page' == get_option( 'show_on_front' ) ) : ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Edit your front page' ) . '</a>', get_edit_post_link( get_option( 'page_on_front' ) ) ); ?></li>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add additional pages' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-write-blog">' . __( 'Add a blog post' ) . '</a>', admin_url( 'post-new.php' ) ); ?></li>
-		<?php else : ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-write-blog">' . __( 'Write your first blog post' ) . '</a>', admin_url( 'post-new.php' ) ); ?></li>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add an About page' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
-		<?php endif; ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-view-site">' . __( 'View your site' ) . '</a>', home_url( '/' ) ); ?></li>
-		</ul>
-	</div>
-	<div class="welcome-panel-column welcome-panel-last">
-		<h3><?php _e( 'More Actions' ); ?></h3>
-		<ul>
-		<?php if ( current_theme_supports( 'widgets' ) || current_theme_supports( 'menus' ) ) : ?>
-			<li><div class="welcome-icon welcome-widgets-menus"><?php
-				if ( current_theme_supports( 'widgets' ) && current_theme_supports( 'menus' ) ) {
-					printf( __( 'Manage <a href="%1$s">widgets</a> or <a href="%2$s">menus</a>' ),
-						admin_url( 'widgets.php' ), admin_url( 'nav-menus.php' ) );
-				} elseif ( current_theme_supports( 'widgets' ) ) {
-					echo '<a href="' . admin_url( 'widgets.php' ) . '">' . __( 'Manage widgets' ) . '</a>';
-				} else {
-					echo '<a href="' . admin_url( 'nav-menus.php' ) . '">' . __( 'Manage menus' ) . '</a>';
-				}
-			?></div></li>
-		<?php endif; ?>
-		<?php if ( current_user_can( 'manage_options' ) ) : ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-comments">' . __( 'Turn comments on or off' ) . '</a>', admin_url( 'options-discussion.php' ) ); ?></li>
-		<?php endif; ?>
-			<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', __( 'https://codex.wordpress.org/First_Steps_With_WordPress' ) ); ?></li>
-		</ul>
-	</div>
-	</div>
+	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
+			<h3><?php _e( 'Feedback and Support' ); ?></h3>
+			<p>
+				<?php _e(
+					'Do you have any feedback about this version of ClassicPress?'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					__(
+						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support channel, 3: link to Testing channel */
+						'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> and send us a message in the <a href="%2s"><strong>#support</strong></a> or <a href="%3s"><strong>#testing</strong></a> channels.'
+					),
+					'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					__(
+						/* translators: link to create a new GitHub issue for this plugin */
+						'For <strong>specific</strong> bug reports or suggestions, <a href="%s">add a new issue on GitHub</a>.',
+						'switch-to-classicpress'
+					),
+					'https://github.com/ClassicPress/ClassicPress/issues/new'
+				); ?>
+			</p>
+
 	</div>
 	<?php
 }
