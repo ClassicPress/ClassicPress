@@ -40,7 +40,7 @@ require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
 
 nocache_headers();
 
-// Support wp-config-sample.php one level up, for the develop repo.
+// Support wp-config-sample.php one level up, for the source repository.
 if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
 	$config_file = file( ABSPATH . 'wp-config-sample.php' );
 } elseif ( file_exists( dirname( ABSPATH ) . '/wp-config-sample.php' ) ) {

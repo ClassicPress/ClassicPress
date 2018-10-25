@@ -11,6 +11,7 @@ mediaBuilds.forEach( function ( build ) {
 } );
 
 module.exports = {
+	mode: 'production',
 	cache: true,
 	entry: mediaConfig,
 	output: {
@@ -19,5 +20,11 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.optimize.ModuleConcatenationPlugin()
-	]
+	],
+	optimization: {
+		// The media JavaScript files are minified by uglify during the build.
+		// Prevent minifying them in the source repository and avoid doing this
+		// work twice.
+		minimize: false
+	}
 };
