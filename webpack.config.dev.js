@@ -11,6 +11,7 @@ mediaBuilds.forEach( function ( build ) {
 } );
 
 module.exports = {
+	mode: 'development',
 	cache: true,
 	watch: true,
 	entry: mediaConfig,
