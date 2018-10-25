@@ -56,6 +56,7 @@ class StringExtractor {
 			}
 			if ( !$matched_any_include ) return false;
 		}
+
 		if ( $excludes ) {
 			foreach( $excludes as $exclude ) {
 				if ( preg_match( '|^'.$exclude.'$|', $path ) ) {
