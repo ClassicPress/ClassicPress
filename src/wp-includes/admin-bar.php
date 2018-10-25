@@ -513,7 +513,9 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 	foreach ( (array) $wp_admin_bar->user->blogs as $blog ) {
 		switch_to_blog( $blog->userblog_id );
 
-		$blavatar = '<div class="blavatar"></div>';
+		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
+
+		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" />';
 
 		$blogname = $blog->blogname;
 
@@ -527,7 +529,7 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 			$wp_admin_bar->add_menu( array(
 				'parent'    => 'my-sites-list',
 				'id'        => $menu_id,
-				'title'     => $blavatar . $blogname,
+				'title'     => $cplogo . $blogname,
 				'href'      => admin_url(),
 			) );
 
