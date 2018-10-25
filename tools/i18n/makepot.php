@@ -21,10 +21,6 @@ class MakePOT {
 
 	public $projects = array(
 		'generic',
-		'cp-frontend',
-		'cp-admin',
-		'cp-network-admin',
-		'cp-tz',
 		'cp-plugin',
 		'cp-theme',
 	);
@@ -70,30 +66,9 @@ class MakePOT {
 			'add-comments' => 'translators',
 			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
-		'generic' => array(),
-		'cp-frontend' => array(
-			'description' => 'Translation of frontend strings in ClassicPress {version}',
-			'copyright-holder' => 'ClassicPress',
+		'generic' => array(
 			'package-name' => 'ClassicPress',
-			'package-version' => '{version}',
-		),
-		'cp-admin' => array(
-			'description' => 'Translation of site admin strings in ClassicPress {version}',
-			'copyright-holder' => 'ClassicPress',
-			'package-name' => 'ClassicPress',
-			'package-version' => '{version}',
-		),
-		'cp-network-admin' => array(
-			'description' => 'Translation of network admin strings in ClassicPress {version}',
-			'copyright-holder' => 'ClassicPress',
-			'package-name' => 'ClassicPress',
-			'package-version' => '{version}',
-		),
-		'cp-tz' => array(
-			'description' => 'Translation of timezone strings in ClassicPress {version}',
-			'copyright-holder' => 'ClassicPress',
-			'package-name' => 'ClassicPress',
-			'package-version' => '{version}',
+			'package-version' => 'Dev'
 		),
 		'cp-plugin' => array(
 			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
@@ -198,136 +173,6 @@ class MakePOT {
 			system( "msguniq --use-first $output_shell -o $output_shell" );
 		}
 		return $res;
-	}
-
-	public function wp_frontend( $dir, $output ) {
-		if ( ! file_exists( "$dir/wp-admin/user/about.php" ) ) {
-			return false;
-		}
-
-		$excludes = array( 'wp-admin/.*', 'wp-content/themes/.*', 'wp-includes/class-pop3\.php' );
-
-		// Exclude Akismet all together for 3.9+.
-		if ( file_exists( "$dir/wp-admin/css/about.css" ) ) {
-			$excludes[] = 'wp-content/plugins/akismet/.*';
-		}
-
-		return $this->wp_generic( $dir, array(
-			'project' => 'wp-frontend', 'output' => $output,
-			'includes' => array(),
-			'excludes' => $excludes,
-			'default_output' => 'wordpress.pot',
-		) );
-	}
-
-	public function wp_admin($dir, $output) {
-		$frontend_pot = $this->tempnam( 'frontend.pot' );
-		if ( false === $frontend_pot ) {
-			return false;
-		}
-
-		$frontend_result = $this->wp_frontend( $dir, $frontend_pot );
-		if ( ! $frontend_result ) {
-			return false;
-		}
-
-		$network_admin_files = $this->get_wp_network_admin_files( $dir );
-
-		$result = $this->wp_generic( $dir, array(
-			'project' => 'wp-admin', 'output' => $output,
-			'includes' => array( 'wp-admin/.*' ),
-			'excludes' => array_merge( array( 'wp-admin/includes/continents-cities\.php' ), $network_admin_files ),
-			'default_output' => 'wordpress-admin.pot',
-		) );
-		if ( ! $result ) {
-			return false;
-		}
-
-		$potextmeta = new PotExtMeta;
-
-		if ( ! file_exists( "$dir/wp-admin/css/about.css" ) ) { // < 3.9
-			$result = $potextmeta->append( "$dir/wp-content/plugins/akismet/akismet.php", $output );
-			if ( ! $result ) {
-				return false;
-			}
-		}
-
-		/* Adding non-gettexted strings can repeat some phrases */
-		$output_shell = escapeshellarg( $output );
-		system( "msguniq $output_shell -o $output_shell" );
-
-		$common_pot = $this->tempnam( 'common.pot' );
-		if ( ! $common_pot ) {
-			return false;
-		}
-		$admin_pot = realpath( is_null( $output ) ? 'wordpress-admin.pot' : $output );
-		system( "msgcat --more-than=1 --use-first $frontend_pot $admin_pot > $common_pot" );
-		system( "msgcat -u --use-first $admin_pot $common_pot -o $admin_pot" );
-		return true;
-	}
-
-	public function wp_network_admin($dir, $output) {
-		if ( ! file_exists( "$dir/wp-admin/user/about.php" ) ) return false;
-
-		$frontend_pot = $this->tempnam( 'frontend.pot' );
-		if ( false === $frontend_pot ) return false;
-
-		$frontend_result = $this->wp_frontend( $dir, $frontend_pot );
-		if ( ! $frontend_result )
-			return false;
-
-		$admin_pot = $this->tempnam( 'admin.pot' );
-		if ( false === $admin_pot ) return false;
-
-		$admin_result = $this->wp_admin( $dir, $admin_pot );
-		if ( ! $admin_result )
-			return false;
-
-		$result = $this->wp_generic( $dir, array(
-			'project' => 'cp-network-admin', 'output' => $output,
-			'includes' => $this->get_wp_network_admin_files( $dir ),
-			'excludes' => array(),
-			'default_output' => 'wordpress-admin-network.pot',
-		) );
-
-		if ( ! $result ) {
-			return false;
-		}
-
-		$common_pot = $this->tempnam( 'common.pot' );
-		if ( ! $common_pot )
-			return false;
-
-		$net_admin_pot = realpath( is_null( $output ) ? 'wordpress-network-admin.pot' : $output );
-		system( "msgcat --more-than=1 --use-first $frontend_pot $admin_pot $net_admin_pot > $common_pot" );
-		system( "msgcat -u --use-first $net_admin_pot $common_pot -o $net_admin_pot" );
-		return true;
-	}
-
-	private function get_wp_network_admin_files( $dir ) {
-		$wp_version = $this->wp_version( $dir );
-
-		// https://core.trac.wordpress.org/ticket/19852
-		$files = array( 'wp-admin/network/.*', 'wp-admin/network.php' );
-
-		// https://core.trac.wordpress.org/ticket/34910
-		if ( version_compare( $wp_version, '4.5-beta', '>=' ) ) {
-			$files = array_merge( $files, array(
-				'wp-admin/includes/class-wp-ms.*',
-				'wp-admin/includes/network.php',
-			) );
-		}
-
-		return $files;
-	}
-
-	public function wp_tz( $dir, $output ) {
-		return $this->wp_generic( $dir, array(
-			'project' => 'cp-tz', 'output' => $output,
-			'includes' => array( 'wp-admin/includes/continents-cities\.php' ),
-			'excludes' => array(),
-			'default_output' => 'wordpress-continents-cities.pot',
-		) );
 	}
 
 	private function wp_version( $dir ) {

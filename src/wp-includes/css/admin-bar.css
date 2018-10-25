@@ -492,27 +492,13 @@ html:lang(he-il) .rtl #wpadminbar *  {
 /*
  * My Sites & Site Title
  */
-#wpadminbar .quicklinks li .blavatar {
-	float: left;
-	font: normal 16px/1 dashicons !important;
-	speak: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #eee;
-}
-
-#wpadminbar .quicklinks li a:hover .blavatar,
-#wpadminbar .quicklinks li a:focus .blavatar,
-#wpadminbar .quicklinks .ab-sub-wrapper .menupop.hover > a .blavatar {
-	color: #00b9eb;
-}
-
-#wpadminbar .quicklinks li .blavatar:before {
-	content: "\f120";
-	height: 16px;
-	width: 16px;
-	display: inline-block;
-	margin: 6px 8px 0 -2px;
+#wp-admin-bar-my-sites-list .ab-item img.cp-logo {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: top;
+    padding-top: 4px;
+    margin-left: -2px;
 }
 
 #wpadminbar #wp-admin-bar-appearance {
