@@ -11,8 +11,6 @@ require_once( dirname( __FILE__ ) . '/admin.php' );
 
 $title = __( 'Freedoms' );
 
-$display_version = classicpress_version();
-
 include( ABSPATH . 'wp-admin/admin-header.php' );
 
 $is_privacy_notice = isset( $_GET['privacy-notice'] );
@@ -20,11 +18,16 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 ?>
 <div class="wrap about-wrap full-width-layout">
 
-<h1><?php printf( __( 'Welcome to ClassicPress %s' ), $display_version ); ?></h1>
+<h1><?php _e( 'Welcome to ClassicPress!' ); ?></h1>
 
-<p class="about-text"><?php printf( __( 'Thank you for trying ClassicPress! We are under heavy development while we prepare for an initial release.' ), $display_version ); ?></p>
+<p class="about-text">
+	<?php printf( __( 'Version %s' ), classicpress_version() ); ?>
+</p>
+<p class="about-text">
+	<?php _e( 'Thank you for trying ClassicPress! We are under heavy development while we prepare for an initial release.' ); ?>
+</p>
 
-<div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
+<div class="wp-badge"></div>
 
 <h2 class="nav-tab-wrapper wp-clearfix">
 	<a href="about.php" class="nav-tab"><?php _e( 'What&#8217;s New' ); ?></a>
