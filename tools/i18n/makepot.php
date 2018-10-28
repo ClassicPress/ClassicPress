@@ -50,12 +50,6 @@ class MakePOT {
 		'comments_number_link' => array('string', 'singular', 'plural'),
 	);
 
-	private $ms_files = array(
-		'ms-.*', '.*/ms-.*', '.*/my-.*', 'wp-activate\.php', 'wp-signup\.php',
-		'wp-admin/network\.php', 'wp-admin/network/.*\.php', 'wp-admin/includes/ms\.php',
-		'wp-admin/includes/class-wp-ms.*', 'wp-admin/includes/network\.php',
-	);
-
 	private $temp_files = array();
 
 	public $meta = array(
@@ -67,8 +61,10 @@ class MakePOT {
 			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
 		'generic' => array(
+			'language' => 'php',
+			'package-version' => 'Dev',
 			'package-name' => 'ClassicPress',
-			'package-version' => 'Dev'
+			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
 		'cp-plugin' => array(
 			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
@@ -175,10 +171,10 @@ class MakePOT {
 		return $res;
 	}
 
-	private function wp_version( $dir ) {
+	private function cp_version( $dir ) {
 		$version_php = $dir.'/wp-includes/version.php';
 		if ( !is_readable( $version_php ) ) return false;
-		return preg_match( '/\$wp_version\s*=\s*\'(.*?)\';/', file_get_contents( $version_php ), $matches )? $matches[1] : false;
+		return preg_match( '/\$cp_version\s*=\s*\'(.*?)\';/', file_get_contents( $version_php ), $matches )? $matches[1] : false;
 	}
 
 	public function get_first_lines($filename, $lines = 30) {
@@ -226,9 +222,41 @@ class MakePOT {
 		return trim( preg_replace( '/\s*(?:\*\/|\?>).*/', '', $str ) );
 	}
 
-	public function generic($dir, $output) {
-		$output = is_null($output)? "generic.pot" : $output;
-		return $this->xgettext('generic', $dir, $output, array());
+	public function generic($dir, $output = null, $slug = null, $args = array()) {
+		$defaults = array(
+			'project' => 'generic',
+			'default_output' => 'classicpress.pot',
+			'includes' => array(),
+			'excludes' => array_merge(
+				array( 'wp-content/plugins/*', 'wp-content/themes/*', 'wp-includes/class-pop3.php' )
+			),
+			'extract_not_gettexted' => false,
+			'not_gettexted_files_filter' => false,
+		);
+		$args = array_merge( $defaults, $args );
+		extract( $args );
+		$placeholders = array();
+		if ( $cp_version = $this->cp_version( $dir ) )
+			$placeholders['version'] = $cp_version;
+		else
+			return false;
+		$output = is_null( $output )? $default_output : $output;
+		$res = $this->xgettext( $project, $dir, $output, $placeholders, $excludes, $includes );
+		if ( !$res ) return false;
+		if ( $extract_not_gettexted ) {
+			$old_dir = getcwd();
+			$output = realpath( $output );
+			chdir( $dir );
+			$php_files = NotGettexted::list_php_files('.');
+			$php_files = array_filter( $php_files, $not_gettexted_files_filter );
+			$not_gettexted = new NotGettexted;
+			$res = $not_gettexted->command_extract( $output, $php_files );
+			chdir( $old_dir );
+			/* Adding non-gettexted strings can repeat some phrases */
+			$output_shell = escapeshellarg( $output );
+			system( "msguniq --use-first $output_shell -o $output_shell" );
+		}
+		return $res;
 	}
 
 	private function guess_plugin_slug($dir) {
