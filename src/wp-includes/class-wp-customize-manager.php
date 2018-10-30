@@ -2821,7 +2821,7 @@ final class WP_Customize_Manager {
 		if ( defined( 'JSON_UNESCAPED_SLASHES' ) ) {
 			$json_options |= JSON_UNESCAPED_SLASHES; // Introduced in PHP 5.4. This is only to improve readability as slashes needn't be escaped in storage.
 		}
-		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See WP Trac https://core.trac.wordpress.org/ticket/30139.
+		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See https://core.trac.wordpress.org/ticket/30139.
 		$post_array = array(
 			'post_content' => wp_json_encode( $data, $json_options ),
 		);

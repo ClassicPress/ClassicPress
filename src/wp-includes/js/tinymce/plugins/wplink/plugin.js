@@ -498,7 +498,7 @@
 						.attr( 'role', 'listbox' )
 						.removeAttr( 'tabindex' ) // Remove the `tabindex=0` attribute added by jQuery UI.
 						/*
-						 * Looks like Safari and VoiceOver need an `aria-selected` attribute. See ticket https://core.trac.wordpress.org/ticket/33301.
+						 * Looks like Safari and VoiceOver need an `aria-selected` attribute. See https://core.trac.wordpress.org/ticket/33301.
 						 * The `menufocus` and `menublur` events are the same events used to add and remove
 						 * the `ui-state-focus` CSS class on the menu items. See jQuery UI Menu Widget.
 						 */
