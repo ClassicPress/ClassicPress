@@ -878,7 +878,7 @@ var wpNavMenu;
 			/*
 			 * Use feature detection to determine whether inputs should use
 			 * the `keyup` or `input` event. Input is preferred but lacks support
-			 * in legacy browsers. See changeset 34078, see also ticket https://core.trac.wordpress.org/ticket/26600#comment:59
+			 * in legacy browsers. See https://core.trac.wordpress.org/changeset/34078/trunk, see also https://core.trac.wordpress.org/ticket/26600#comment:59
 			 */
 			if ( 'oninput' in document.createElement( 'input' ) ) {
 				inputEvent = 'input';
@@ -1105,7 +1105,7 @@ var wpNavMenu;
 
 			/*
 			 * Delegate the `click` event and attach it just to the pagination
-			 * links thus excluding the current page `<span>`. See ticket https://core.trac.wordpress.org/ticket/35577.
+			 * links thus excluding the current page `<span>`. See https://core.trac.wordpress.org/ticket/35577.
 			 */
 			$( '#nav-menu-meta' ).on( 'click', 'a.page-numbers', function() {
 				var $container = $( this ).closest( '.inside' );
