@@ -1,4 +1,4 @@
-# ClassicPress <img src="src/wp-includes/images/ClassicPress-icon-blue-1600.png" height="32" valign="middle">
+# ClassicPress <img src="src/wp-includes/images/ClassicPress-icon-blue-600.png" height="32" valign="middle">
 
 [![Backers on Open Collective](https://opencollective.com/classicpress/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/classicpress/sponsors/badge.svg)](#sponsors) [![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
@@ -21,7 +21,7 @@ For more information, see:
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute.
 <a href="https://github.com/ClassicPress/ClassicPress/contributors"><img src="https://opencollective.com/classicpress/contributors.svg?width=890&button=false" /></a>
 
 
