@@ -958,6 +958,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			$original_args['fallback_cb'] = '\\' . $original_args['fallback_cb'];
 		}
 
+    // Add global namespace prefix to check #41488.
+		$original_args['fallback_cb'] = '\\' . $original_args['fallback_cb'];
+
 		$args = $menus->filter_wp_nav_menu_args( $original_args );
 
 		ob_start();
