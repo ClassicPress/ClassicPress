@@ -512,7 +512,7 @@
 	border-right: none;
 	background: #fff;
 	transition: background-color 0.15s;
-	/* Reset the value inherited from the base .accordion-section-title style. Ticket https://core.trac.wordpress.org/ticket/37589. */
+	/* Reset the value inherited from the base .accordion-section-title style see https://core.trac.wordpress.org/ticket/37589. */
 	-webkit-user-select: auto;
 	-moz-user-select: auto;
 	-ms-user-select: auto;
