@@ -32,19 +32,19 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 
 	}
 
-	//WP Ticket https://core.trac.wordpress.org/ticket/1418
+	// https://core.trac.wordpress.org/ticket/1418
 	function test_bracketed_quotes_1418() {
 		$this->assertEquals('(&#8220;test&#8221;)', wptexturize('("test")'));
 		$this->assertEquals('(&#8216;test&#8217;)', wptexturize("('test')"));
 		$this->assertEquals('(&#8217;twas)', wptexturize("('twas)"));
 	}
 
-	//WP Ticket https://core.trac.wordpress.org/ticket/3810
+	// https://core.trac.wordpress.org/ticket/3810
 	function test_bracketed_quotes_3810() {
 		$this->assertEquals('A dog (&#8220;Hubertus&#8221;) was sent out.', wptexturize('A dog ("Hubertus") was sent out.'));
 	}
 
-	//WP Ticket https://core.trac.wordpress.org/ticket/4539
+	// https://core.trac.wordpress.org/ticket/4539
 	function test_basic_quotes() {
 		$this->assertEquals('test&#8217;s', wptexturize('test\'s'));
 

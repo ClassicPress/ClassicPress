@@ -105,7 +105,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 	 * Ensure multi_resize doesn't create an image when
 	 * both height and weight are missing, null, or 0.
 	 *
-	 * ticket 26823
+	 * https://core.trac.wordpress.org/ticket/26823
 	 */
 	public function test_multi_resize_does_not_create() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -173,7 +173,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 	/**
 	 * Test multi_resize with multiple sizes
 	 *
-	 * ticket 26823
+	 * https://core.trac.wordpress.org/ticket/26823
 	 */
 	public function test_multi_resize() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -465,7 +465,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 		$editor = new WP_Image_Editor_Imagick( $file );
 
 		$this->assertNotInstanceOf( 'WP_Error', $editor );
-		
+
 		$editor->load();
 		$editor->resize( 5, 5 );
 		$save_to_file = tempnam( get_temp_dir(), '' ) . '.png';

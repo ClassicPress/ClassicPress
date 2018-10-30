@@ -52,7 +52,7 @@ If you would prefer to do things manually then follow these instructions:
 * Fix PHP notices.
 
 = 0.6.2 =
-* Add `wp_import_existing_post` filter, see [Trac ticket #33721](https://core.trac.wordpress.org/ticket/33721).
+* Add `wp_import_existing_post` filter, see https://core.trac.wordpress.org/ticket/33721.
 
 = 0.6 =
 * Support for WXR 1.2 and multiple CDATA sections
@@ -75,7 +75,7 @@ an export file is uploaded to a server with bad permissions and WordPress 3.3 or
 = 0.3 =
 * Use an XML Parser if possible
 * Proper import support for nav menus
-* ... and much more, see [Trac ticket #15197](https://core.trac.wordpress.org/ticket/15197)
+* ... and much more, see https://core.trac.wordpress.org/ticket/15197
 
 = 0.1 =
 * Initial release
