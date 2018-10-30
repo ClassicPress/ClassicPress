@@ -2987,11 +2987,6 @@ function _scalar_wp_die_handler( $message = '' ) {
  * @return string|false The JSON encoded string, or false if it cannot be encoded.
  */
 function wp_json_encode( $data, $options = 0, $depth = 512 ) {
-	/*
-	 * json_encode() has had extra params added over the years.
-	 * $options was added in 5.3, and $depth in 5.5.
-	 * We need to make sure we call it with the correct arguments.
-	 */
 	$args = array( $data, $options, $depth );
 
 	// Prepare the data for JSON serialization.
