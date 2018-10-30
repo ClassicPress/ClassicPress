@@ -540,7 +540,7 @@ $document.ready( function() {
 	// Init screen meta
 	screenMeta.init();
 
-	// This event needs to be delegated. Ticket https://core.trac.wordpress.org/ticket/37973.
+	// This event needs to be delegated. See https://core.trac.wordpress.org/ticket/37973.
 	$body.on( 'click', 'tbody > tr > .check-column :checkbox', function( event ) {
 		// Shift click to select a range of checkboxes.
 		if ( 'undefined' == event.shiftKey ) { return true; }
@@ -571,7 +571,7 @@ $document.ready( function() {
 		return true;
 	});
 
-	// This event needs to be delegated. Ticket https://core.trac.wordpress.org/ticket/37973.
+	// This event needs to be delegated. See https://core.trac.wordpress.org/ticket/37973.
 	$body.on( 'click.wp-toggle-checkboxes', 'thead .check-column :checkbox, tfoot .check-column :checkbox', function( event ) {
 		var $this = $(this),
 			$table = $this.closest( 'table' ),
