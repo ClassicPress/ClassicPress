@@ -1365,8 +1365,6 @@ final class WP_Customize_Manager {
 						)
 					);
 
-					clearstatcache();
-
 					$attachment_id = media_handle_sideload( $file_array, 0, null, $attachment_post_data );
 					if ( is_wp_error( $attachment_id ) ) {
 						continue;
