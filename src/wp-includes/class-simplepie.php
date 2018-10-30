@@ -694,7 +694,7 @@ class SimplePie
 	 */
 	public function __destruct()
 	{
-		if ((!gc_enabled()) && !ini_get('zend.ze1_compatibility_mode'))
+		if ((version_compare(PHP_VERSION, '5.3', '<') || (!gc_enabled()) && !ini_get('zend.ze1_compatibility_mode'))
 		{
 			if (!empty($this->data['items']))
 			{
