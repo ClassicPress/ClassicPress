@@ -23,7 +23,7 @@ header( 'Content-Type: text/html; charset=utf-8' );
 	?>
 </head>
 <body class="wp-core-ui">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://www.classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( 'https://www.classicpress.net/' ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
 
 <?php
 
