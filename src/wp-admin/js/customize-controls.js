@@ -6320,7 +6320,7 @@
 				title: api.l10n.previewIframeTitle,
 				name: 'customize-' + previewFrame.channel()
 			} );
-			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See WP Trac https://core.trac.wordpress.org/ticket/38149.
+			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See https://core.trac.wordpress.org/ticket/38149.
 
 			if ( ! hasPendingChangesetUpdate ) {
 				previewFrame.iframe.attr( 'src', urlParser.href );
