@@ -315,7 +315,7 @@ switch($step) {
 		display_header();
 ?>
 <h1><?php _ex( 'Welcome', 'Hello' ); ?></h1>
-<p><?php _e( 'Welcome to the famous five-minute ClassicPress installation process! Just fill in the information below and you&#8217;ll be on your way to using the most extendable and powerful personal publishing platform in the world.' ); ?></p>
+<p><?php _e( 'Welcome to the ClassicPress installation process! ClassicPress brings a rich set of features expected from an advanced modern CMS while keeping the old and proven way to compose and manage your content. Fill in the information below and the impressive power of the ClassicPress publishing platform will be ready to serve your business.' ); ?></p>
 
 <h2><?php _e( 'Information needed' ); ?></h2>
 <p><?php _e( 'Please provide the following information. Don&#8217;t worry, you can always change these settings later.' ); ?></p>
