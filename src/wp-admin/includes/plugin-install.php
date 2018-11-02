@@ -156,7 +156,7 @@ function plugins_api( $action, $args = array() ) {
 		);
 		$request = wp_remote_post( $url, $http_args );
 
-		if ( $ssl && is_wp_error( $request ) ) {
+		if ( is_wp_error( $request ) ) {
 			trigger_error(
 				sprintf(
 					/* translators: %s: support forums URL */

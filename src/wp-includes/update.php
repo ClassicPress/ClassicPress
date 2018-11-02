@@ -142,7 +142,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	);
 
 	$response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $response ) ) {
+	if ( is_wp_error( $response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */
@@ -332,7 +332,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 	$url = $http_url = 'https://api.wordpress.org/plugins/update-check/1.1/';
 
 	$raw_response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */
@@ -512,7 +512,7 @@ function wp_update_themes( $extra_stats = array() ) {
 	$url = $http_url = 'https://api.wordpress.org/themes/update-check/1.1/';
 
 	$raw_response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */

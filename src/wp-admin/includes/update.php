@@ -108,7 +108,7 @@ function get_core_checksums( $version, $locale ) {
 	);
 
 	$response = wp_remote_get( $url, $options );
-	if ( $ssl && is_wp_error( $response ) ) {
+	if ( is_wp_error( $response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */

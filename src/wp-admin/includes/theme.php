@@ -455,7 +455,7 @@ function themes_api( $action, $args = array() ) {
 		);
 		$request = wp_remote_post( $url, $http_args );
 
-		if ( $ssl && is_wp_error( $request ) ) {
+		if ( is_wp_error( $request ) ) {
 			if ( ! wp_doing_ajax() ) {
 				trigger_error(
 					sprintf(
