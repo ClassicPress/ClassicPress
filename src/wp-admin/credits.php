@@ -39,13 +39,13 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 echo '<p class="about-description">' . sprintf(
 	/* translators: %s: https://www.classicpress.net/contributors/ */
 	__( 'ClassicPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals.' ),
-	__( 'https://www.classicpress.net/contributors/' )
+	'https://www.classicpress.net/contributors/'
 ) . '</p>';
 
 echo '<p class="about-description">' . sprintf(
 	/* translators: %s: https://www.classicpress.net/get-involved/ */
 	__( 'Interested in helping out with development? <a href="%s">Get involved in ClassicPress</a>.' ),
-	__( 'https://www.classicpress.net/get-involved/' )
+	'https://www.classicpress.net/get-involved/'
 ) . '</p>';
 
 ?>

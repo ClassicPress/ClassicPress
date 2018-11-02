@@ -105,7 +105,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * @since WP-4.9.0
 	 *
 	 * @param array $query {
-	 *     Version check query arguments. 
+	 *     Version check query arguments.
 	 *
 	 *     @type string $version            WordPress version number.
 	 *     @type string $php                PHP version number.
@@ -149,7 +149,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 			sprintf(
 				/* translators: %s: support forums URL */
 				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please join our <a href="%s">Slack group</a> and report this issue.' ),
-				__( 'https://www.classicpress.net/' )
+				'https://www.classicpress.net/get-involved/'
 			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);

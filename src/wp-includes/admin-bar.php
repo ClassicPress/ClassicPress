@@ -149,7 +149,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',
 		'title'     => __('ClassicPress.net'),
-		'href'      => __('https://www.classicpress.net'),
+		'href'      => 'https://www.classicpress.net',
 	) );
 
 	// Add documentation link

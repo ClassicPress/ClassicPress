@@ -107,7 +107,7 @@ function setup_config_display_header( $body_classes = array() ) {
 	<?php wp_admin_css( 'install', true ); ?>
 </head>
 <body class="<?php echo implode( ' ', $body_classes ); ?>">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://www.classicpress.net/' ) ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
+<p id="logo"><a href="<?php echo esc_url( 'https://www.classicpress.net/' ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
 <?php
 } // end function setup_config_display_header();
 
