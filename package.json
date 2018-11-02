@@ -40,15 +40,10 @@
     "webpack-dev-server": "3.1.9"
   },
   "dependencies": {
-    "node-sass": "4.9.4",
-    "opencollective": "1.0.3",
-    "opencollective-postinstall": "2.0.0"
+    "node-sass": "4.9.4"
   },
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/classicpress-294"
-  },
-  "scripts": {
-    "postinstall": "opencollective-postinstall"
   }
 }
