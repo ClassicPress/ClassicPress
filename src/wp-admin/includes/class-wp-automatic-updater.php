@@ -832,7 +832,7 @@ class WP_Automatic_Updater {
 This debugging email is sent when you are using a development version of ClassicPress.
 
 If you think these failures might be due to a bug in ClassicPress, could you report it?
- * Open a thread in the support forums: https://wordpress.org/support/forum/alphabeta
+ * Open a thread in the support forums: https://docs.classicpress.net/faq-support/
  * Or, if you're comfortable writing a bug report: https://core.trac.wordpress.org/
 
 Thanks! -- The ClassicPress Team" ) );
