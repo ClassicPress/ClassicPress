@@ -2987,18 +2987,7 @@ function _scalar_wp_die_handler( $message = '' ) {
  * @return string|false The JSON encoded string, or false if it cannot be encoded.
  */
 function wp_json_encode( $data, $options = 0, $depth = 512 ) {
-	/*
-	 * json_encode() has had extra params added over the years.
-	 * $options was added in 5.3, and $depth in 5.5.
-	 * We need to make sure we call it with the correct arguments.
-	 */
-	if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
-		$args = array( $data, $options, $depth );
-	} elseif ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
-		$args = array( $data, $options );
-	} else {
-		$args = array( $data );
-	}
+	$args = array( $data, $options, $depth );
 
 	// Prepare the data for JSON serialization.
 	$args[0] = _wp_json_prepare_data( $data );
@@ -3006,9 +2995,7 @@ function wp_json_encode( $data, $options = 0, $depth = 512 ) {
 	$json = @call_user_func_array( 'json_encode', $args );
 
 	// If json_encode() was successful, no need to do more sanity checking.
-	// ... unless we're in an old version of PHP, and json_encode() returned
-	// a string containing 'null'. Then we need to do more sanity checking.
-	if ( false !== $json && ( version_compare( PHP_VERSION, '5.5', '>=' ) || false === strpos( $json, 'null' ) ) )  {
+	if ( false !== $json )  {
 		return $json;
 	}
 
@@ -5139,10 +5126,7 @@ function wp_allowed_protocols() {
  *                      of individual calls.
  */
 function wp_debug_backtrace_summary( $ignore_class = null, $skip_frames = 0, $pretty = true ) {
-	if ( version_compare( PHP_VERSION, '5.2.5', '>=' ) )
-		$trace = debug_backtrace( false );
-	else
-		$trace = debug_backtrace();
+	$trace = debug_backtrace( false );
 
 	$caller = array();
 	$check_class = ! is_null( $ignore_class );

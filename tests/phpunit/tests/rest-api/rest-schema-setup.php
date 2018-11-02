@@ -372,7 +372,6 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			$mocked_responses .= "\nmockedApiResponse." . $route['name'] . ' = '
 				. json_encode( $fixture, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
 				. ";\n";
-
 		}
 
 		// Only generate API client fixtures in single site.
