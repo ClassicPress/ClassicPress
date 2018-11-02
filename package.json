@@ -45,8 +45,5 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/classicpress-294"
-  },
-  "scripts": {
-    "postinstall": "opencollective-postinstall"
   }
 }
