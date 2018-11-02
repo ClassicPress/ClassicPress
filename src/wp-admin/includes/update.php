@@ -101,10 +101,7 @@ function find_core_auto_update() {
  * @return bool|array False on failure. An array of checksums on success.
  */
 function get_core_checksums( $version, $locale ) {
-	$url = $http_url = 'http://api.wordpress.org/core/checksums/1.0/?' . http_build_query( compact( 'version', 'locale' ), null, '&' );
-
-	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-		$url = set_url_scheme( $url, 'https' );
+	$url = $http_url = 'https://api.wordpress.org/core/checksums/1.0/?' . http_build_query( compact( 'version', 'locale' ), null, '&' );
 
 	$options = array(
 		'timeout' => wp_doing_cron() ? 30 : 3,

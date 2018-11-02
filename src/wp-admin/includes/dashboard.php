@@ -1512,15 +1512,11 @@ function wp_check_browser_version() {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = 'http://api.wordpress.org/core/browse-happy/1.1/';
+		$url = 'https://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(
 			'body'       => array( 'useragent' => $_SERVER['HTTP_USER_AGENT'] ),
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 		);
-
-		if ( wp_http_supports( array( 'ssl' ) ) ) {
-			$url = set_url_scheme( $url, 'https' );
-		}
 
 		$response = wp_remote_post( $url, $options );
 

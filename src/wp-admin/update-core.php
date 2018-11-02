@@ -164,19 +164,18 @@ function core_upgrade_preamble() {
 		echo '<h2>';
 		_e('You have the latest version of ClassicPress.');
 
-		if ( wp_http_supports( array( 'ssl' ) ) ) {
-			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-			$upgrader = new WP_Automatic_Updater;
-			$future_minor_update = (object) array(
-				'current'       => $wp_version . '.1.next.minor',
-				'version'       => $wp_version . '.1.next.minor',
-				'php_version'   => $required_php_version,
-				'mysql_version' => $required_mysql_version,
-			);
-			$should_auto_update = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
-			if ( $should_auto_update )
-				echo ' ' . __( 'Future security updates will be applied automatically.' );
-		}
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		$upgrader = new WP_Automatic_Updater;
+		$future_minor_update = (object) array(
+			'current'       => $wp_version . '.1.next.minor',
+			'version'       => $wp_version . '.1.next.minor',
+			'php_version'   => $required_php_version,
+			'mysql_version' => $required_mysql_version,
+		);
+		$should_auto_update = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
+		if ( $should_auto_update )
+			echo ' ' . __( 'Future security updates will be applied automatically.' );
+
 		echo '</h2>';
 	} else {
 		echo '<div class="notice notice-warning"><p>';
@@ -191,7 +190,7 @@ function core_upgrade_preamble() {
 	if ( isset( $updates[0] ) && $updates[0]->response == 'development' ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		$upgrader = new WP_Automatic_Updater;
-		if ( wp_http_supports( 'ssl' ) && $upgrader->should_update( 'core', $updates[0], ABSPATH ) ) {
+		if ( $upgrader->should_update( 'core', $updates[0], ABSPATH ) ) {
 			echo '<div class="updated inline"><p>';
 			echo '<strong>' . __( 'BETA TESTERS:' ) . '</strong> ' . __( 'This site is set up to install updates of future beta versions automatically.' );
 			echo '</p></div>';

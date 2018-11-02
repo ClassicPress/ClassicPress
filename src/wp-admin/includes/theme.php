@@ -444,9 +444,7 @@ function themes_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = $http_url = 'http://api.wordpress.org/themes/info/1.0/';
-		if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-			$url = set_url_scheme( $url, 'https' );
+		$url = $http_url = 'https://api.wordpress.org/themes/info/1.0/';
 
 		$http_args = array(
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
