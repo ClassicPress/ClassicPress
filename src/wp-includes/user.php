@@ -831,7 +831,7 @@ function update_user_meta($user_id, $meta_key, $meta_value, $prev_value = '') {
  * Assumes there are neither duplicated nor orphaned capabilities meta_values.
  * Assumes role names are unique phrases. Same assumption made by WP_User_Query::prepare_query()
  * Using $strategy = 'time' this is CPU-intensive and should handle around 10^7 users.
- * Using $strategy = 'memory' this is memory-intensive and should handle around 10^5 users, but see WP Bug #12257.
+ * Using $strategy = 'memory' this is memory-intensive and should handle around 10^5 users, but see https://core.trac.wordpress.org/ticket/12257.
  *
  * @since WP-3.0.0
  * @since WP-4.4.0 The number of users with no role is now included in the `none` element.

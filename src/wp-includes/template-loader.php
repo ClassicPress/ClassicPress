@@ -15,7 +15,7 @@ if ( defined('WP_USE_THEMES') && WP_USE_THEMES )
  * Filters whether to allow 'HEAD' requests to generate content.
  *
  * Provides a significant performance bump by exiting before the page
- * content loads for 'HEAD' requests. See #14348.
+ * content loads for 'HEAD' requests. See https://core.trac.wordpress.org/ticket/14348.
  *
  * @since WP-3.5.0
  *

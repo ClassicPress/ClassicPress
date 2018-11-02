@@ -339,7 +339,7 @@ function wptexturize_primes( $haystack, $needle, $prime, $open_quote, $close_quo
 						$pos = strrpos( $sentence, "$flag." );
 					} else {
 						// When all else fails, make the rightmost candidate a closing quote.
-						// This is most likely to be problematic in the context of bug #18549.
+						// This is most likely to be problematic in the context of bug https://core.trac.wordpress.org/ticket/18549.
 						$pos = strrpos( $sentence, $flag );
 					}
 					$sentence = substr_replace( $sentence, $close_quote, $pos, strlen( $flag ) );
@@ -4935,7 +4935,7 @@ function get_url_in_content( $content ) {
  * Returns the regexp for common whitespace characters.
  *
  * By default, spaces include new lines, tabs, nbsp entities, and the UTF-8 nbsp.
- * This is designed to replace the PCRE \s sequence.  In ticket #22692, that
+ * This is designed to replace the PCRE \s sequence.  In https://core.trac.wordpress.org/ticket/22692, that
  * sequence was found to be unreliable due to random inclusion of the A0 byte.
  *
  * @since WP-4.0.0

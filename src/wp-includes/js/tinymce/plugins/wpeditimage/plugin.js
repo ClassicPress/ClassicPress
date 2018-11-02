@@ -698,7 +698,7 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 					editor.nodeChanged();
 				} else {
 					// Clicking Indent or Outdent while an image with a caption is selected breaks the caption.
-					// See #38313.
+					// See https://core.trac.wordpress.org/ticket/38313.
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					return false;

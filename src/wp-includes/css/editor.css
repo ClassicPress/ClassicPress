@@ -778,7 +778,7 @@ div.mce-menu .mce-menu-item-sep,
 	margin-top: 2px;
 }
 
-/* Don't show the tooltip. Used in Chrome RTL, see #42018 */
+/* Don't show the tooltip. Used in Chrome RTL, see https://core.trac.wordpress.org/ticket/42018 */
 .rtl .mce-tooltip.wp-hide-mce-tooltip {
 	display: none !important;
 }

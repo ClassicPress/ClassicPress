@@ -595,7 +595,7 @@ html:lang(he-il) .rtl #wpadminbar *  {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* The admin bar search field needs to reset many styles that might be inherited from the active Theme CSS. See ticket #40313. */
+/* The admin bar search field needs to reset many styles that might be inherited from the active Theme CSS. See https://core.trac.wordpress.org/ticket/40313. */
 #wpadminbar > #wp-toolbar > #wp-admin-bar-top-secondary > #wp-admin-bar-search #adminbarsearch input.adminbar-input {
 	display: inline-block;
 	float: none;

@@ -241,7 +241,7 @@ audio {
 	visibility: hidden;
 }
 
-/* Fix for proprietary Mozilla display attribute, see #38757 */
+/* Fix for proprietary Mozilla display attribute, see https://core.trac.wordpress.org/ticket/38757 */
 [_moz_abspos] {
 	outline: none;
 }

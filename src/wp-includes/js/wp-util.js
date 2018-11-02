@@ -22,7 +22,7 @@ window.wp = window.wp || {};
 			 * Underscore's default ERB-style templates are incompatible with PHP
 			 * when asp_tags is enabled, so ClassicPress uses Mustache-inspired templating syntax.
 			 *
-			 * @see trac ticket #22344.
+			 * @see https://core.trac.wordpress.org/ticket/22344.
 			 */
 			options = {
 				evaluate:    /<#([\s\S]+?)#>/g,

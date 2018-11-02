@@ -864,7 +864,7 @@ var Attachments = Backbone.Collection.extend(/** @lends wp.media.model.Attachmen
 	/**
 	 * A custom AJAX-response parser.
 	 *
-	 * See trac ticket #24753
+	 * See https://core.trac.wordpress.org/ticket/24753
 	 *
 	 * @param {Object|Array} resp The raw response Object/Array.
 	 * @param {Object} xhr

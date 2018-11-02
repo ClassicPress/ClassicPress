@@ -1127,7 +1127,7 @@ function wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attac
 	/**
 	 * To make sure the ID matches our image src, we will check to see if any sizes in our attachment
 	 * meta match our $image_src. If no matches are found we don't return a srcset to avoid serving
-	 * an incorrect image. See #35045.
+	 * an incorrect image. See https://core.trac.wordpress.org/ticket/35045.
 	 */
 	$src_matched = false;
 
@@ -1170,7 +1170,7 @@ function wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attac
 				'value'      => $image['width'],
 			);
 
-			// The 'src' image has to be the first in the 'srcset', because of a bug in iOS8. See #35030.
+			// The 'src' image has to be the first in the 'srcset', because of a bug in iOS8. See https://core.trac.wordpress.org/ticket/35030.
 			if ( $is_src ) {
 				$sources = array( $image['width'] => $source ) + $sources;
 			} else {
@@ -2551,15 +2551,15 @@ function wp_video_shortcode( $attr, $content = '' ) {
 	// update the URL to prevent the ME.js player from breaking.
 	if ( 'mediaelement' === $library ) {
 		if ( $is_youtube ) {
-			// Remove `feature` query arg and force SSL - see #40866.
+			// Remove `feature` query arg and force SSL - see https://core.trac.wordpress.org/ticket/40866.
 			$atts['src'] = remove_query_arg( 'feature', $atts['src'] );
 			$atts['src'] = set_url_scheme( $atts['src'], 'https' );
 		} elseif ( $is_vimeo ) {
-			// Remove all query arguments and force SSL - see #40866.
+			// Remove all query arguments and force SSL - see https://core.trac.wordpress.org/ticket/40866.
 			$parsed_vimeo_url = wp_parse_url( $atts['src'] );
 			$vimeo_src = 'https://' . $parsed_vimeo_url['host'] . $parsed_vimeo_url['path'];
 
-			// Add loop param for mejs bug - see #40977, not needed after #39686.
+			// Add loop param for mejs bug - see https://core.trac.wordpress.org/ticket/40977, not needed after https://core.trac.wordpress.org/ticket/39686.
 			$loop = $atts['loop'] ? '1' : '0';
 			$atts['src'] = add_query_arg( 'loop', $loop, $vimeo_src );
 		}
@@ -3016,7 +3016,7 @@ function wp_plupload_default_settings() {
 	);
 
 	// Currently only iOS Safari supports multiple files uploading but iOS 7.x has a bug that prevents uploading of videos
-	// when enabled. See #29602.
+	// when enabled. See https://core.trac.wordpress.org/ticket/29602.
 	if ( wp_is_mobile() && strpos( $_SERVER['HTTP_USER_AGENT'], 'OS 7_' ) !== false &&
 		strpos( $_SERVER['HTTP_USER_AGENT'], 'like Mac OS X' ) !== false ) {
 
@@ -3637,7 +3637,7 @@ function wp_enqueue_media( $args = array() ) {
 	$strings['settings'] = $settings;
 
 	// Ensure we enqueue media-editor first, that way media-views is
-	// registered internally before we try to localize it. see #24724.
+	// registered internally before we try to localize it. see https://core.trac.wordpress.org/ticket/24724.
 	wp_enqueue_script( 'media-editor' );
 	wp_localize_script( 'media-views', '_wpMediaViewsL10n', $strings );
 
