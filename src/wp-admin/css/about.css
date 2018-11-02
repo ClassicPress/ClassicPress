@@ -53,7 +53,7 @@
 /* ClassicPress Version Badge */
 
 .wp-badge {
-	background: #0073aa url(../images/w-logo-white.png?ver=20180905) no-repeat;
+	background: #0073aa url(../images/w-logo-white.png?ver=20181031) no-repeat;
 	background-position: center;
 	background-size: 80px 80px;
 	color: #fff;
@@ -69,7 +69,7 @@
 }
 
 .svg .wp-badge {
-	background-image: url(../images/wordpress-logo-white.svg?ver=20180905);
+	background-image: url(../images/wordpress-logo-white.svg?ver=20181031);
 }
 
 .about-wrap .wp-badge {
