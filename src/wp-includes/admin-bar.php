@@ -152,29 +152,21 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'href'      => __('https://www.classicpress.net'),
 	) );
 
-	// Add codex link
+	// Add documentation link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
 		'id'        => 'documentation',
 		'title'     => __('Documentation'),
-		'href'      => __('https://codex.wordpress.org/'),
+		'href'      => __('https://docs.classicpress.net/'),
 	) );
 
-	// Add forums link
+	// Add support link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
-		'id'        => 'support-forums',
-		'title'     => __('Support Forums'),
-		'href'      => __('https://wordpress.org/support/'),
-	) );
-
-	// Add feedback link
-	$wp_admin_bar->add_menu( array(
-		'parent'    => 'wp-logo-external',
-		'id'        => 'feedback',
-		'title'     => __('Feedback'),
-		'href'      => __('https://wordpress.org/support/forum/requests-and-feedback'),
-	) );
+		'id'        => 'support',
+		'title'     => __('Support'),
+		'href'      => __('https://docs.classicpress.net/faq-support/'),
+	) );	
 }
 
 /**
