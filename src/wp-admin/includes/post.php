@@ -1241,7 +1241,7 @@ function get_sample_permalink($id, $title = null, $name = null) {
 	}
 
 	// If the user wants to set a new name -- override the current one
-	// Note: if empty name is supplied -- use the title instead, see #6072
+	// Note: if empty name is supplied -- use the title instead, see https://core.trac.wordpress.org/ticket/6072
 	if ( !is_null($name) )
 		$post->post_name = sanitize_title($name ? $name : $title, $post->ID);
 

@@ -305,7 +305,7 @@
 	line-height: 30px;
 }
 
-/* rework the arrow indicator implementation for NVDA bug same as #32715 */
+/* rework the arrow indicator implementation for NVDA bug same as https://core.trac.wordpress.org/ticket/32715 */
 .wp-customizer .toggle-indicator {
 	display: inline-block;
 	font-size: 20px;
@@ -512,7 +512,7 @@
 	border-right: none;
 	background: #fff;
 	transition: background-color 0.15s;
-	/* Reset the value inherited from the base .accordion-section-title style. Ticket #37589. */
+	/* Reset the value inherited from the base .accordion-section-title style. See https://core.trac.wordpress.org/ticket/37589. */
 	-webkit-user-select: auto;
 	-moz-user-select: auto;
 	-ms-user-select: auto;
@@ -524,7 +524,7 @@
 	background: #eee;
 }
 
-/* rework the arrow indicator implementation for NVDA bug see #32715 */
+/* rework the arrow indicator implementation for NVDA bug. See https://core.trac.wordpress.org/ticket/32715 */
 #available-menu-items .accordion-section-title:after {
 	content: none !important;
 }

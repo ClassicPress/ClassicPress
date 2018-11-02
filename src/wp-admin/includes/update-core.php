@@ -598,7 +598,7 @@ $_old_files = array(
 'wp-admin/css/colors.min.css',
 'wp-admin/css/colors-rtl.css',
 'wp-admin/css/colors-rtl.min.css',
-// Following files added back in 4.5 see #36083
+// Following files added back in 4.5 see https://core.trac.wordpress.org/ticket/36083
 // 'wp-admin/css/media-rtl.min.css',
 // 'wp-admin/css/media.min.css',
 // 'wp-admin/css/farbtastic-rtl.min.css',
@@ -613,7 +613,7 @@ $_old_files = array(
 'wp-includes/js/plupload/changelog.txt',
 'wp-includes/js/plupload/plupload.silverlight.js',
 'wp-includes/js/plupload/plupload.flash.js',
-// Added back in 4.9 [41328], see #41755
+// Added back in 4.9 [41328], see https://core.trac.wordpress.org/ticket/41755
 // 'wp-includes/js/plupload/plupload.js',
 'wp-includes/js/tinymce/plugins/spellchecker',
 'wp-includes/js/tinymce/plugins/inlinepopups',
@@ -705,7 +705,7 @@ $_old_files = array(
 // 4.5
 'wp-includes/theme-compat/comments-popup.php',
 // 4.6
-'wp-admin/includes/class-wp-automatic-upgrader.php', // Wrong file name, see #37628.
+'wp-admin/includes/class-wp-automatic-upgrader.php', // Wrong file name, see https://core.trac.wordpress.org/ticket/37628.
 // 4.8
 'wp-includes/js/tinymce/plugins/wpembed',
 'wp-includes/js/tinymce/plugins/media/moxieplayer.swf',

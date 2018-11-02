@@ -3111,7 +3111,7 @@
 		nav_menu_item: api.Menus.MenuItemControl,
 		nav_menu: api.Menus.MenuControl,
 		nav_menu_name: api.Menus.MenuNameControl,
-		new_menu: api.Menus.NewMenuControl, // @todo Remove in 5.0. See #42364.
+		new_menu: api.Menus.NewMenuControl, // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
 		nav_menu_locations: api.Menus.MenuLocationsControl,
 		nav_menu_auto_add: api.Menus.MenuAutoAddControl
 	});

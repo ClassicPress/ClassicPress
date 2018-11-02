@@ -439,7 +439,7 @@ class WP_Community_Events {
 	 * Logs responses to Events API requests.
 	 *
 	 * @since WP-4.8.0
-	 * @deprecated WP-4.9.0 Use a plugin instead. See #41217 for an example.
+	 * @deprecated WP-4.9.0 Use a plugin instead. See https://core.trac.wordpress.org/ticket/41217 for an example.
 	 *
 	 * @param string $message A description of what occurred.
 	 * @param array  $details Details that provide more context for the

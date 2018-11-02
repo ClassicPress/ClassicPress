@@ -150,7 +150,7 @@ jQuery( document ).ready( function( $ ) {
 	 * Open the Plugin details modal. The event is delegated to get also the links
 	 * in the plugins search tab, after the AJAX search rebuilds the HTML. It's
 	 * delegated on the closest ancestor and not on the body to avoid conflicts
-	 * with other handlers, see Trac ticket #43082.
+	 * with other handlers, see https://core.trac.wordpress.org/ticket/43082.
 	 */
 	$( '.wrap' ).on( 'click', '.thickbox.open-plugin-details-modal', function( e ) {
 		// The `data-title` attribute is used only in the Plugin screens.

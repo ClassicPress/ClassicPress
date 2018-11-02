@@ -49,7 +49,7 @@
 }
 
 .wp-color-result:active {
-	/* See Trac ticket #39662 */
+	/* See https://core.trac.wordpress.org/ticket/39662 */
 	transform: none !important;
 }
 

@@ -1765,7 +1765,7 @@ function upgrade_460() {
 		delete_post_meta_by_key( '_post_restored_from' );
 	}
 
-	// Remove plugins with callback as an array object/method as the uninstall hook, see #13786.
+	// Remove plugins with callback as an array object/method as the uninstall hook, see https://core.trac.wordpress.org/ticket/13786.
 	if ( $wp_current_db_version < 37965 ) {
 		$uninstall_plugins = get_option( 'uninstall_plugins', array() );
 

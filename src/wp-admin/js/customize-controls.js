@@ -2562,7 +2562,7 @@
 				return ! panel.canSwitchTheme( theme.id );
 			}
 
-			// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
+			// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
 			function disableInstallButtons() {
 				return disableSwitchButtons() || false === api.settings.theme._canInstall || true === api.settings.theme._filesystemCredentialsNeeded;
 			}
@@ -3073,7 +3073,7 @@
 			// Attach regular panel events.
 			api.Panel.prototype.attachEvents.apply( panel );
 
-			// Temporary since supplying SFTP credentials does not work yet. See #42184
+			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184
 			if ( api.settings.theme._canInstall && api.settings.theme._filesystemCredentialsNeeded ) {
 				panel.notifications.add( new api.Notification( 'theme_install_unavailable', {
 					message: api.l10n.themeInstallUnavailable,
@@ -3196,7 +3196,7 @@
 			var panel = this, preview, onInstallSuccess, slug = $( event.target ).data( 'slug' ), deferred = $.Deferred(), request;
 			preview = $( event.target ).hasClass( 'preview' );
 
-			// Temporary since supplying SFTP credentials does not work yet. See #42184.
+			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
 			if ( api.settings.theme._filesystemCredentialsNeeded ) {
 				deferred.reject({
 					errorCode: 'theme_install_unavailable'
@@ -3410,7 +3410,7 @@
 
 			event.preventDefault();
 
-			// Temporary since supplying SFTP credentials does not work yet. See #42184.
+			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
 			if ( api.settings.theme._filesystemCredentialsNeeded ) {
 				return;
 			}
@@ -3535,11 +3535,11 @@
 			}
 
 			control.id = id;
-			control.selector = '#customize-control-' + id.replace( /\]/g, '' ).replace( /\[/g, '-' ); // Deprecated, likely dead code from time before #28709.
+			control.selector = '#customize-control-' + id.replace( /\]/g, '' ).replace( /\[/g, '-' ); // Deprecated, likely dead code from time before https://core.trac.wordpress.org/ticket/28709.
 			if ( control.params.content ) {
 				control.container = $( control.params.content );
 			} else {
-				control.container = $( control.selector ); // Likely dead, per above. See #28709.
+				control.container = $( control.selector ); // Likely dead, per above. See https://core.trac.wordpress.org/ticket/28709.
 			}
 
 			if ( control.params.templateId ) {
@@ -5130,7 +5130,7 @@
 				return ! panel.canSwitchTheme( control.params.theme.id );
 			}
 
-			// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
+			// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
 			function disableInstallButtons() {
 				return disableSwitchButtons() || false === api.settings.theme._canInstall || true === api.settings.theme._filesystemCredentialsNeeded;
 			}
@@ -5168,7 +5168,7 @@
 				section = api.section( control.section() );
 				section.showDetails( control.params.theme, function() {
 
-					// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
+					// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
 					if ( api.settings.theme._filesystemCredentialsNeeded ) {
 						section.overlay.find( '.theme-actions .delete-theme' ).remove();
 					}
@@ -6320,7 +6320,7 @@
 				title: api.l10n.previewIframeTitle,
 				name: 'customize-' + previewFrame.channel()
 			} );
-			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See WP Trac #38149.
+			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See https://core.trac.wordpress.org/ticket/38149.
 
 			if ( ! hasPendingChangesetUpdate ) {
 				previewFrame.iframe.attr( 'src', urlParser.href );

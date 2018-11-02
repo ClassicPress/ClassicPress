@@ -504,7 +504,7 @@ $document.ready( function() {
 
 	/*
 	 * The `.below-h2` class is here just for backward compatibility with plugins
-	 * that are (incorrectly) using it. Do not use. Use `.inline` instead. See #34570.
+	 * that are (incorrectly) using it. Do not use. Use `.inline` instead. See https://core.trac.wordpress.org/ticket/34570.
 	 * If '.wp-header-end' is found, append the notices after it otherwise
 	 * after the first h1 or h2 heading found within the main content.
 	 */
@@ -540,7 +540,7 @@ $document.ready( function() {
 	// Init screen meta
 	screenMeta.init();
 
-	// This event needs to be delegated. Ticket #37973.
+	// This event needs to be delegated. See https://core.trac.wordpress.org/ticket/37973.
 	$body.on( 'click', 'tbody > tr > .check-column :checkbox', function( event ) {
 		// Shift click to select a range of checkboxes.
 		if ( 'undefined' == event.shiftKey ) { return true; }
@@ -571,7 +571,7 @@ $document.ready( function() {
 		return true;
 	});
 
-	// This event needs to be delegated. Ticket #37973.
+	// This event needs to be delegated. See https://core.trac.wordpress.org/ticket/37973.
 	$body.on( 'click.wp-toggle-checkboxes', 'thead .check-column :checkbox, tfoot .check-column :checkbox', function( event ) {
 		var $this = $(this),
 			$table = $this.closest( 'table' ),
@@ -679,7 +679,7 @@ $document.ready( function() {
 	if ( pageInput.length ) {
 		pageInput.closest('form').submit( function() {
 
-			// Reset paging var for new filters/searches but not for bulk actions. See #17685.
+			// Reset paging var for new filters/searches but not for bulk actions. See https://core.trac.wordpress.org/ticket/17685.
 			if ( $('select[name="action"]').val() == -1 && $('select[name="action2"]').val() == -1 && pageInput.val() == currentPage )
 				pageInput.val('1');
 		});
