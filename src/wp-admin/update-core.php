@@ -179,7 +179,12 @@ function core_upgrade_preamble() {
 		echo '</h2>';
 	} else {
 		echo '<div class="notice notice-warning"><p>';
-		_e('<strong>Important:</strong> before updating, please <a href="https://codex.wordpress.org/WordPress_Backups">back up your database and files</a>. For help with updates, visit the <a href="https://codex.wordpress.org/Updating_WordPress">Updating ClassicPress</a> Codex page.');
+		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
+		printf(
+			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
+			'https://codex.wordpress.org/WordPress_Backups',
+			'https://docs.classicpress.net/updating-classicpress/'
+		);
 		echo '</p></div>';
 
 		echo '<h2 class="response">';
