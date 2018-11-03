@@ -119,7 +119,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 	$wp_logo_menu_args = array(
 		'id'    => 'wp-logo',
 		'title' => (
-			'<img class="cp-logo" src="' . $cp_logo_src . '" />'
+			'<img class="cp-logo" src="' . $cp_logo_src . '" alt="ClassicPress logo" />'
 			. '<span class="screen-reader-text">' . __( 'About ClassicPress' ) . '</span>'
 		),
 		'href'  => $about_url,
@@ -166,7 +166,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'id'        => 'support',
 		'title'     => __('Support'),
 		'href'      => __('https://docs.classicpress.net/faq-support/'),
-	) );	
+	) );
 }
 
 /**
@@ -507,7 +507,7 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 
 		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
 
-		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" />';
+		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" alt="" />';
 
 		$blogname = $blog->blogname;
 
