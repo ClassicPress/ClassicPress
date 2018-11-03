@@ -37,7 +37,7 @@
     "matchdep": "2.0.0",
     "uglify-js": "3.4.8",
     "webpack": "4.21.0",
-    "webpack-dev-server": "3.1.9"
+    "webpack-dev-server": "3.1.10"
   },
   "dependencies": {
     "node-sass": "4.9.4"
