@@ -128,8 +128,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		$post_body = array_merge( $post_body, $extra_stats );
 
 	$url = $http_url = 'https://api-v1.classicpress.net/core/version-check/1.0/?' . http_build_query( $query, null, '&' );
-	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-		$url = set_url_scheme( $url, 'https' );
 
 	$doing_cron = wp_doing_cron();
 
@@ -144,7 +142,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	);
 
 	$response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $response ) ) {
+	if ( is_wp_error( $response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */
@@ -331,12 +329,10 @@ function wp_update_plugins( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url = $http_url = 'http://api.wordpress.org/plugins/update-check/1.1/';
-	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-		$url = set_url_scheme( $url, 'https' );
+	$url = $http_url = 'https://api.wordpress.org/plugins/update-check/1.1/';
 
 	$raw_response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */
@@ -513,12 +509,10 @@ function wp_update_themes( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url = $http_url = 'http://api.wordpress.org/themes/update-check/1.1/';
-	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-		$url = set_url_scheme( $url, 'https' );
+	$url = $http_url = 'https://api.wordpress.org/themes/update-check/1.1/';
 
 	$raw_response = wp_remote_post( $url, $options );
-	if ( $ssl && is_wp_error( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) ) {
 		trigger_error(
 			sprintf(
 				/* translators: %s: support forums URL */

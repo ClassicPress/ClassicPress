@@ -444,9 +444,7 @@ function themes_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = $http_url = 'http://api.wordpress.org/themes/info/1.0/';
-		if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-			$url = set_url_scheme( $url, 'https' );
+		$url = $http_url = 'https://api.wordpress.org/themes/info/1.0/';
 
 		$http_args = array(
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
@@ -457,7 +455,7 @@ function themes_api( $action, $args = array() ) {
 		);
 		$request = wp_remote_post( $url, $http_args );
 
-		if ( $ssl && is_wp_error( $request ) ) {
+		if ( is_wp_error( $request ) ) {
 			if ( ! wp_doing_ajax() ) {
 				trigger_error(
 					sprintf(
