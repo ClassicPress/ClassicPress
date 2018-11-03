@@ -994,5 +994,5 @@ function get_site_screen_help_tab_args() {
 function get_site_screen_help_sidebar_content() {
 	return '<p><strong>' . __('For more information:') . '</strong></p>' .
 		'<p>' . __('<a href="https://codex.wordpress.org/Network_Admin_Sites_Screen">Documentation on Site Management</a>') . '</p>' .
-		'<p>' . __('<a href="https://wordpress.org/support/forum/multisite/">Support Forums</a>') . '</p>';
+		'<p>' . __('<a href="https://docs.classicpress.net/faq-support/">Support</a>') . '</p>';
 }
