@@ -973,7 +973,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	}
 
 	/**
-	 * Unused since 3.5.0.
+	 * Unused since WP-3.5.0.
 	 *
 	 * @since WP-3.4.0
 	 *
@@ -985,7 +985,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 	}
 
 	/**
-	 * Unused since 3.5.0.
+	 * Unused since WP-3.5.0.
 	 *
 	 * @since WP-3.4.0
 	 *

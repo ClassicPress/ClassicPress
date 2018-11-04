@@ -1165,7 +1165,7 @@ function wp_update_core($current, $feedback = '') {
  *
  * Deprecated in favor of instantating a Plugin_Upgrader instance directly,
  * and calling the 'upgrade' method.
- * Unused since 2.8.0.
+ * Unused since WP-2.8.0.
  *
  * @since WP-2.5.0
  * @deprecated WP-3.7.0 Use Plugin_Upgrader
@@ -1187,7 +1187,7 @@ function wp_update_plugin($plugin, $feedback = '') {
  *
  * Deprecated in favor of instantiating a Theme_Upgrader instance directly,
  * and calling the 'upgrade' method.
- * Unused since 2.8.0.
+ * Unused since WP-2.8.0.
  *
  * @since WP-2.7.0
  * @deprecated WP-3.7.0 Use Theme_Upgrader
