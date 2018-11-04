@@ -122,7 +122,7 @@ function ms_site_check() {
  *
  * @since WP-3.9.0
  *
- * @internal In 4.4.0, converted to a wrapper for WP_Network::get_by_path()
+ * @internal In WP-4.4.0, converted to a wrapper for WP_Network::get_by_path()
  *
  * @param string   $domain   Domain to check.
  * @param string   $path     Path to check.
@@ -534,7 +534,7 @@ function wpmu_current_site() {
  * @deprecated WP-4.7.0 Use `get_network()`
  * @see get_network()
  *
- * @internal In 4.6.0, converted to use get_network()
+ * @internal In WP-4.6.0, converted to use get_network()
  *
  * @param object|int $network The network's database row or ID.
  * @return WP_Network|false Object containing network information if found, false if not.

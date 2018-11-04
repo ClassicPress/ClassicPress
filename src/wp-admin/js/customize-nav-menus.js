@@ -854,12 +854,12 @@
 		}, 2000 ),
 
 		/**
-		 * @deprecated Since 4.7.0 now that the nav_menu sections are responsible for toggling the classes on their own containers.
+		 * @deprecated Since WP-4.7.0 now that the nav_menu sections are responsible for toggling the classes on their own containers.
 		 */
 		checked: function() {},
 
 		/**
-		 * @deprecated Since 4.7.0 now that the nav_menu sections are responsible for toggling the classes on their own containers.
+		 * @deprecated Since WP-4.7.0 now that the nav_menu sections are responsible for toggling the classes on their own containers.
 		 */
 		unchecked: function() {},
 

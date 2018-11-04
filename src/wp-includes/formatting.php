@@ -3754,7 +3754,7 @@ function _deep_replace( $search, $subject ) {
  * Sometimes, spot-escaping is required or useful. One example
  * is preparing an array for use in an IN clause.
  *
- * NOTE: Since 4.8.3, '%' characters will be replaced with a placeholder string,
+ * NOTE: Since WP-4.8.3, '%' characters will be replaced with a placeholder string,
  * this prevents certain SQLi attacks from taking place. This change in behaviour
  * may cause issues for code that expects the return value of esc_sql() to be useable
  * for other purposes.

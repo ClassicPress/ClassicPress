@@ -1029,7 +1029,7 @@ function get_term_to_edit( $id, $taxonomy ) {
  *         'hide_empty' => false,
  *     ) );
  *
- * Since 4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
+ * Since WP-4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
  *
  *     $terms = get_terms( array(
  *         'taxonomy' => 'post_tag',

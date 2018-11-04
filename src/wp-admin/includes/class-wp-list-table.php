@@ -938,7 +938,7 @@ class WP_List_Table {
 		// $_column_headers is already set / cached
 		if ( isset( $this->_column_headers ) && is_array( $this->_column_headers ) ) {
 			// Back-compat for list tables that have been manually setting $_column_headers for horse reasons.
-			// In 4.3, we added a fourth argument for primary column.
+			// In WP-4.3, we added a fourth argument for primary column.
 			$column_headers = array( array(), array(), array(), $this->get_primary_column_name() );
 			foreach ( $this->_column_headers as $key => $value ) {
 				$column_headers[ $key ] = $value;

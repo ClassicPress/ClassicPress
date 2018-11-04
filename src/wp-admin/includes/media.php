@@ -1870,7 +1870,7 @@ $post_params = array(
 $post_params = apply_filters( 'upload_post_params', $post_params );
 
 /*
- * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
+ * Since WP-4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
  * and the `flash_swf_url` and `silverlight_xap_url` are not used.
  */
 $plupload_init = array(
