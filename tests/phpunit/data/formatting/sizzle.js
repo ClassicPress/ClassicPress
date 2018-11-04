@@ -1300,7 +1300,7 @@ if ( document.querySelectorAll ) {
 		return;
 	}
 
-	// Safari caches class attributes, doesn't catch changes (in WP-3.2)
+	// Safari caches class attributes, doesn't catch changes (in 3.2)
 	div.lastChild.className = "e";
 
 	if ( div.getElementsByClassName("e").length === 1 ) {
