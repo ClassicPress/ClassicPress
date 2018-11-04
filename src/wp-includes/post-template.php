@@ -1797,7 +1797,7 @@ function wp_list_post_revisions( $post_id = 0, $type = 'all' ) {
 	if ( ! $post = get_post( $post_id ) )
 		return;
 
-	// $args array with (parent, format, right, left, type) deprecated since 3.6
+	// $args array with (parent, format, right, left, type) deprecated since WP-3.6
 	if ( is_array( $type ) ) {
 		$type = ! empty( $type['type'] ) ? $type['type']  : $type;
 		_deprecated_argument( __FUNCTION__, 'WP-3.6.0' );

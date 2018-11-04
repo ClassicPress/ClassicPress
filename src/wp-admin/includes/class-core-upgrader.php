@@ -280,7 +280,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 			// Cannot update if we're retrying the same A to B update that caused a non-critical failure.
 			// Some non-critical failures do allow retries, like download_failed.
-			// 3.7.1 => 3.7.2 resulted in files_not_writable, if we are still on 3.7.1 and still trying to update to 3.7.2.
+			// WP-3.7.1 => WP-3.7.2 resulted in files_not_writable, if we are still on WP-3.7.1 and still trying to update to WP-3.7.2.
 			if ( empty( $failure_data['retry'] ) && $wp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
 				return false;
 		}

@@ -2,9 +2,9 @@
 /**
  * Twenty Fifteen back compat functionality
  *
- * Prevents Twenty Fifteen from running on WordPress versions prior to 4.1,
+ * Prevents Twenty Fifteen from running on WordPress versions prior to WP-4.1,
  * since this theme is not meant to be backward compatible beyond that and
- * relies on many newer functions and markup changes introduced in 4.1.
+ * relies on many newer functions and markup changes introduced in WP-4.1.
  *
  * @package WordPress
  * @subpackage Twenty_Fifteen
@@ -29,7 +29,7 @@ add_action( 'after_switch_theme', 'twentyfifteen_switch_theme' );
  * Add message for unsuccessful theme switch.
  *
  * Prints an update nag after an unsuccessful attempt to switch to
- * Twenty Fifteen on WordPress versions prior to 4.1.
+ * Twenty Fifteen on WordPress versions prior to WP-4.1.
  *
  * @since Twenty Fifteen 1.0
  */
@@ -39,7 +39,7 @@ function twentyfifteen_upgrade_notice() {
 }
 
 /**
- * Prevent the Customizer from being loaded on WordPress versions prior to 4.1.
+ * Prevent the Customizer from being loaded on WordPress versions prior to WP-4.1.
  *
  * @since Twenty Fifteen 1.0
  */
@@ -51,7 +51,7 @@ function twentyfifteen_customize() {
 add_action( 'load-customize.php', 'twentyfifteen_customize' );
 
 /**
- * Prevent the Theme Preview from being loaded on WordPress versions prior to 4.1.
+ * Prevent the Theme Preview from being loaded on WordPress versions prior to WP-4.1.
  *
  * @since Twenty Fifteen 1.0
  */

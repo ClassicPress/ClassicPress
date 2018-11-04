@@ -2,7 +2,7 @@
  * Distraction-Free Writing (wp-fullscreen) backward compatibility stub.
  * Todo: remove at the end of 2016.
  *
- * Original was deprecated in 4.1, removed in 4.3.
+ * Original was deprecated in WP-4.1, removed in WP-4.3.
  */
 ( function() {
 	var noop = function(){};

@@ -337,7 +337,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 				"word&#8217;99word",
 			),
 			array(
-				"word '99&#8217;s word", // Appears as a separate but logically superfluous pattern in 3.8.
+				"word '99&#8217;s word", // Appears as a separate but logically superfluous pattern in WP-3.8.
 				"word &#8217;99&#8217;s word",
 			),
 			array(
@@ -1872,7 +1872,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				'[audio]...[/audio]]...', // These are potentially usable shortcodes.  Unfortunately, the meaning of [/audio]] is ambiguous unless we run the entire shortcode regexp.
-				'[audio]...[/audio]]...', // This test would not pass in 3.9 because the extra brace was always ignored by texturize.
+				'[audio]...[/audio]]...', // This test would not pass in WP-3.9 because the extra brace was always ignored by texturize.
 			),
 			array(
 				'<span>hello[/audio]---</span>',

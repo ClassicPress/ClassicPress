@@ -598,7 +598,7 @@ $_old_files = array(
 'wp-admin/css/colors.min.css',
 'wp-admin/css/colors-rtl.css',
 'wp-admin/css/colors-rtl.min.css',
-// Following files added back in 4.5 see https://core.trac.wordpress.org/ticket/36083
+// Following files added back in WP-4.5 see https://core.trac.wordpress.org/ticket/36083
 // 'wp-admin/css/media-rtl.min.css',
 // 'wp-admin/css/media.min.css',
 // 'wp-admin/css/farbtastic-rtl.min.css',
@@ -613,7 +613,7 @@ $_old_files = array(
 'wp-includes/js/plupload/changelog.txt',
 'wp-includes/js/plupload/plupload.silverlight.js',
 'wp-includes/js/plupload/plupload.flash.js',
-// Added back in 4.9 [41328], see https://core.trac.wordpress.org/ticket/41755
+// Added back in WP-4.9 [41328], see https://core.trac.wordpress.org/ticket/41755
 // 'wp-includes/js/plupload/plupload.js',
 'wp-includes/js/tinymce/plugins/spellchecker',
 'wp-includes/js/tinymce/plugins/inlinepopups',
@@ -1100,7 +1100,7 @@ function update_core($from, $to) {
 	// Remove maintenance file, we're done with potential site-breaking changes
 	$wp_filesystem->delete( $maintenance_file );
 
-	// 3.5 -> 3.5+ - an empty twentytwelve directory was created upon upgrade to 3.5 for some users, preventing installation of Twenty Twelve.
+	// WP-3.5 -> WP-3.5+ - an empty twentytwelve directory was created upon upgrade to WP-3.5 for some users, preventing installation of Twenty Twelve.
 	if ( '3.5' == $old_wp_version ) {
 		if ( is_dir( WP_CONTENT_DIR . '/themes/twentytwelve' ) && ! file_exists( WP_CONTENT_DIR . '/themes/twentytwelve/style.css' )  ) {
 			$wp_filesystem->delete( $wp_filesystem->wp_themes_dir() . 'twentytwelve/' );

@@ -24,7 +24,7 @@ $theme_field_defaults = array( 'description' => true, 'sections' => false, 'test
  *
  * @since WP-2.8.0
  *
- * @deprecated since 3.1.0 Use get_theme_feature_list() instead.
+ * @deprecated since WP-3.1.0 Use get_theme_feature_list() instead.
  *
  * @return array
  */
