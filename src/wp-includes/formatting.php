@@ -665,7 +665,7 @@ function get_html_split_regex() {
  *
  * @access private
  * @ignore
- * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
+ * @internal This function will be removed in WP-4.5.0 per Shortcode API Roadmap.
  * @since WP-4.4.0
  *
  * @staticvar string $html_regex
@@ -708,7 +708,7 @@ function _get_wptexturize_split_regex( $shortcode_regex = '' ) {
  *
  * @access private
  * @ignore
- * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
+ * @internal This function will be removed in WP-4.5.0 per Shortcode API Roadmap.
  * @since WP-4.4.0
  *
  * @param array $tagnames List of shortcodes to find.

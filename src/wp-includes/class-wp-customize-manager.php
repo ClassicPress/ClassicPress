@@ -317,7 +317,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php' );
 
@@ -325,7 +325,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-custom-css-setting.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-filter-setting.php' );
@@ -1744,8 +1744,8 @@ final class WP_Customize_Manager {
 	 * @see WP_REST_Request::has_valid_params()
 	 *
 	 * @param WP_Customize_Setting $setting A WP_Customize_Setting derived object.
-	 * @param mixed                $default Value returned $setting has no post value (added in 4.2.0)
-	 *                                      or the post value is invalid (added in 4.6.0).
+	 * @param mixed                $default Value returned $setting has no post value (added in WP-4.2.0)
+	 *                                      or the post value is invalid (added in WP-4.6.0).
 	 * @return string|mixed $post_value Sanitized value or the $default provided.
 	 */
 	public function post_value( $setting, $default = null ) {

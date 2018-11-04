@@ -36,7 +36,7 @@ class WP_Customize_New_Menu_Control extends WP_Customize_Control {
 	 * @param array                $args    Args.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
-		_deprecated_file( basename( __FILE__ ), 'WP-4.9.0' ); // @todo Move this outside of class in 5.0, and remove its require_once() from class-wp-customize-control.php. See https://core.trac.wordpress.org/ticket/42364.
+		_deprecated_file( basename( __FILE__ ), 'WP-4.9.0' ); // @todo Move this outside of class in WP-5.0, and remove its require_once() from class-wp-customize-control.php. See https://core.trac.wordpress.org/ticket/42364.
 		parent::__construct( $manager, $id, $args );
 	}
 

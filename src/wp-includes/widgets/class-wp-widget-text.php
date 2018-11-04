@@ -89,7 +89,7 @@ class WP_Widget_Text extends WP_Widget {
 			return ! $instance['visual'];
 		}
 
-		// Or, the widget has been added/updated in 4.8.0 then filter prop is 'content' and it is no longer legacy.
+		// Or, the widget has been added/updated in WP-4.8.0 then filter prop is 'content' and it is no longer legacy.
 		if ( isset( $instance['filter'] ) && 'content' === $instance['filter'] ) {
 			return false;
 		}

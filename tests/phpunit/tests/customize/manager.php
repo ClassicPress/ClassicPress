@@ -350,7 +350,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 */
 	public function test_branching() {
 		$wp_customize = new WP_Customize_Manager();
-		$this->assertTrue( $wp_customize->branching(), 'Branching should default to true since it is original behavior in 4.7.' );
+		$this->assertTrue( $wp_customize->branching(), 'Branching should default to true since it is original behavior in WP-4.7.' );
 
 		$wp_customize = new WP_Customize_Manager( array( 'branching' => false ) );
 		$this->assertFalse( $wp_customize->branching() );

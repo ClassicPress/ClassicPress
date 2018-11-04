@@ -180,7 +180,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertContains( '[filter:widget_text]', $output );
 		$this->assertNotContains( '[filter:widget_text_content]', $output );
 
-		// Test with filter=content, the upgraded widget, in 4.8.0 only.
+		// Test with filter=content, the upgraded widget, in WP-4.8.0 only.
 		$this->widget_text_content_args = null;
 		$instance = array(
 			'title'  => 'Foo',
@@ -206,7 +206,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertEquals( $widget, $this->widget_text_content_args[2] );
 		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
 
-		// Test with filter=true&visual=true, the upgraded widget, in 4.8.1 and above.
+		// Test with filter=true&visual=true, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
 		$instance = array(
 			'title'  => 'Foo',
@@ -230,7 +230,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertEquals( $widget, $this->widget_text_content_args[2] );
 		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
 
-		// Test with filter=true&visual=true, the upgraded widget, in 4.8.1 and above.
+		// Test with filter=true&visual=true, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
 		$instance = array(
 			'title'  => 'Foo',
@@ -251,7 +251,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertNull( $this->widget_text_content_args );
 		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text]' ), $output );
 
-		// Test with filter=false&visual=false, the upgraded widget, in 4.8.1 and above.
+		// Test with filter=false&visual=false, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
 		$instance = array(
 			'title'  => 'Foo',

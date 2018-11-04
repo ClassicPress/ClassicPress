@@ -1314,7 +1314,7 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1359,7 +1359,7 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1436,7 +1436,7 @@ EOF;
 		$expected = '';
 
 		foreach( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1715,7 +1715,7 @@ EOF;
 		$expected = "";
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}

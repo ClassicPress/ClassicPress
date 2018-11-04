@@ -3911,7 +3911,7 @@ function wp_get_split_term( $old_term_id, $taxonomy ) {
 /**
  * Determine whether a term is shared between multiple taxonomies.
  *
- * Shared taxonomy terms began to be split in 4.3, but failed cron tasks or
+ * Shared taxonomy terms began to be split in WP-4.3, but failed cron tasks or
  * other delays in upgrade routines may cause shared terms to remain.
  *
  * @since WP-4.4.0

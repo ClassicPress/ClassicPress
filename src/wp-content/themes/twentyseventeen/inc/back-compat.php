@@ -4,7 +4,7 @@
  *
  * Prevents Twenty Seventeen from running on WordPress versions prior to 4.7,
  * since this theme is not meant to be backward compatible beyond that and
- * relies on many newer functions and markup changes introduced in 4.7.
+ * relies on many newer functions and markup changes introduced in WP-4.7.
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
