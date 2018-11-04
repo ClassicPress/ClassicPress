@@ -551,7 +551,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Error', $r );
 		$this->assertEquals( 'unknown_post_type', $r->get_error_code() );
 
-		// Non-existent post types allowed as of #39610.
+		// Non-existent post types allowed as of https://core.trac.wordpress.org/ticket/39610.
 		$r = $menus->insert_auto_draft_post( array( 'post_title' => 'Non-existent', 'post_type' => 'nonexistent' ) );
 		$this->assertInstanceOf( 'WP_Post', $r );
 		$this->assertEquals( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
@@ -953,7 +953,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'items_wrap'  => '<ul id="%1$s" class="%2$s">%3$s</ul>',
 		);
 
-		// Add global namespace prefix to check #41488.
+		// Add global namespace prefix to check https://core.trac.wordpress.org/ticket/41488.
 		$original_args['fallback_cb'] = '\\' . $original_args['fallback_cb'];
 
 		$args = $menus->filter_wp_nav_menu_args( $original_args );

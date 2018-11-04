@@ -68,7 +68,7 @@
 	<wp:category><wp:term_id>27</wp:term_id><wp:category_nicename>upsilon</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[uPsIlOn]]></wp:cat_name></wp:category>
 	<wp:category><wp:term_id>21</wp:term_id><wp:category_nicename>xi</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[Xi]]></wp:cat_name></wp:category>
 	<wp:category><wp:term_id>13</wp:term_id><wp:category_nicename>zeta</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[zeta]]></wp:cat_name></wp:category>
-	<wp:category><wp:term_id>7</wp:term_id><wp:category_nicename>eternity</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[远征手记]]></wp:cat_name><wp:category_description><![CDATA[No more duplicate categories, #13364]]></wp:category_description></wp:category>
+	<wp:category><wp:term_id>7</wp:term_id><wp:category_nicename>eternity</wp:category_nicename><wp:category_parent></wp:category_parent><wp:cat_name><![CDATA[远征手记]]></wp:cat_name><wp:category_description><![CDATA[No more duplicate categories, https://core.trac.wordpress.org/ticket/13364]]></wp:category_description></wp:category>
 	<wp:tag><wp:term_id>33</wp:term_id><wp:tag_slug>tag1</wp:tag_slug><wp:tag_name><![CDATA[Tag1]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>34</wp:term_id><wp:tag_slug>tag2</wp:tag_slug><wp:tag_name><![CDATA[Tag2]]></wp:tag_name></wp:tag>
 	<wp:tag><wp:term_id>35</wp:term_id><wp:tag_slug>tag3</wp:tag_slug><wp:tag_name><![CDATA[Tag3]]></wp:tag_name></wp:tag>

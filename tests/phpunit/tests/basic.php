@@ -34,7 +34,7 @@ class Tests_Basic extends WP_UnitTestCase {
 				"package.json's version needs to be updated to $cp_version."
 			);
 		} else {
-			error_log( 'FIXME after PR #32 is merged' );
+			error_log( 'FIXME after PR https://core.trac.wordpress.org/ticket/32 is merged' );
 		}
 		return $package_json;
 	}
