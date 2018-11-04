@@ -1228,7 +1228,7 @@ function screen_icon() {
 }
 
 /**
- * Retrieves the screen icon (no longer used in 3.8+).
+ * Retrieves the screen icon (no longer used in WP-3.8+).
  *
  * @since WP-3.2.0
  * @deprecated WP-3.8.0

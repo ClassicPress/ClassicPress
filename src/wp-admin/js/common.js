@@ -5,7 +5,7 @@ var showNotice, adminMenu, columns, validateForm, screenMeta;
 		$window = $( window ),
 		$body = $( document.body );
 
-// Removed in 3.3.
+// Removed in WP-3.3.
 // (perhaps) needed for back-compat
 adminMenu = {
 	init : function() {},

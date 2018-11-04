@@ -244,7 +244,7 @@ function get_taxonomy( $taxonomy ) {
 /**
  * Checks that the taxonomy name exists.
  *
- * Formerly is_taxonomy(), introduced in 2.3.0.
+ * Formerly is_taxonomy(), introduced in WP-2.3.0.
  *
  * @since WP-3.0.0
  *
@@ -1313,7 +1313,7 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
 /**
  * Check if Term exists.
  *
- * Formerly is_term(), introduced in 2.3.0.
+ * Formerly is_term(), introduced in WP-2.3.0.
  *
  * @since WP-3.0.0
  *

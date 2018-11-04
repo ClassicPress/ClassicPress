@@ -348,7 +348,7 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	function test_no_links_within_links() {
 		$in = array(
 			'Some text with a link <a href="http://example.com">http://example.com</a>',
-			//'<a href="http://wordpress.org">This is already a link www.wordpress.org</a>', // fails in 3.3.1 too
+			//'<a href="http://wordpress.org">This is already a link www.wordpress.org</a>', // fails in WP-3.3.1 too
 		);
 		foreach ( $in as $text ) {
 			$this->assertEquals( $text, make_clickable( $text ) );
