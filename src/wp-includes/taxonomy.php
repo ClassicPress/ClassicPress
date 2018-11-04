@@ -1023,7 +1023,7 @@ function get_term_to_edit( $id, $taxonomy ) {
  * The {@see 'get_terms_orderby'} filter passes the `ORDER BY` clause for the query
  * along with the $args array.
  *
- * Prior to 4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
+ * Prior to WP-4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
  *
  *     $terms = get_terms( 'post_tag', array(
  *         'hide_empty' => false,

@@ -87,7 +87,7 @@ function map_meta_cap( $cap, $user_id ) {
 
 		if ( ! $post_type->map_meta_cap ) {
 			$caps[] = $post_type->cap->$cap;
-			// Prior to 3.1 we would re-call map_meta_cap here.
+			// Prior to WP-3.1 we would re-call map_meta_cap here.
 			if ( 'delete_post' == $cap )
 				$cap = $post_type->cap->$cap;
 			break;
@@ -157,7 +157,7 @@ function map_meta_cap( $cap, $user_id ) {
 
 		if ( ! $post_type->map_meta_cap ) {
 			$caps[] = $post_type->cap->$cap;
-			// Prior to 3.1 we would re-call map_meta_cap here.
+			// Prior to WP-3.1 we would re-call map_meta_cap here.
 			if ( 'edit_post' == $cap )
 				$cap = $post_type->cap->$cap;
 			break;
@@ -225,7 +225,7 @@ function map_meta_cap( $cap, $user_id ) {
 
 		if ( ! $post_type->map_meta_cap ) {
 			$caps[] = $post_type->cap->$cap;
-			// Prior to 3.1 we would re-call map_meta_cap here.
+			// Prior to WP-3.1 we would re-call map_meta_cap here.
 			if ( 'read_post' == $cap )
 				$cap = $post_type->cap->$cap;
 			break;

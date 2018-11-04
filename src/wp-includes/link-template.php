@@ -2153,7 +2153,7 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 /**
  * Retrieves the next posts page link.
  *
- * Backported from 2.1.3 to 2.0.10.
+ * Backported from WP-2.1.3 to WP-2.0.10.
  *
  * @since WP-2.0.10
  *
@@ -2249,7 +2249,7 @@ function next_posts_link( $label = null, $max_page = 0 ) {
  *
  * Will only return string, if not on a single page or post.
  *
- * Backported to 2.0.10 from 2.1.3.
+ * Backported from WP-2.1.3 to WP-2.0.10.
  *
  * @since WP-2.0.10
  *

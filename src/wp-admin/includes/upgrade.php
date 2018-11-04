@@ -2843,7 +2843,7 @@ function maybe_disable_link_manager() {
 function pre_schema_upgrade() {
 	global $wp_current_db_version, $wpdb;
 
-	// Upgrade versions prior to 2.9
+	// Upgrade versions prior to WP-2.9
 	if ( $wp_current_db_version < 11557 ) {
 		// Delete duplicate options. Keep the option with the highest option_id.
 		$wpdb->query("DELETE o1 FROM $wpdb->options AS o1 JOIN $wpdb->options AS o2 USING (`option_name`) WHERE o2.option_id > o1.option_id");
@@ -2858,7 +2858,7 @@ function pre_schema_upgrade() {
 	// Multisite schema upgrades.
 	if ( $wp_current_db_version < 25448 && is_multisite() && wp_should_upgrade_global_tables() ) {
 
-		// Upgrade versions prior to 3.7
+		// Upgrade versions prior to WP-3.7
 		if ( $wp_current_db_version < 25179 ) {
 			// New primary key for signups.
 			$wpdb->query( "ALTER TABLE $wpdb->signups ADD signup_id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST" );
@@ -2872,7 +2872,7 @@ function pre_schema_upgrade() {
 		}
 	}
 
-	// Upgrade versions prior to 4.2.
+	// Upgrade versions prior to WP-4.2.
 	if ( $wp_current_db_version < 31351 ) {
 		if ( ! is_multisite() && wp_should_upgrade_global_tables() ) {
 			$wpdb->query( "ALTER TABLE $wpdb->usermeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))" );
@@ -2884,7 +2884,7 @@ function pre_schema_upgrade() {
 		$wpdb->query( "ALTER TABLE $wpdb->posts DROP INDEX post_name, ADD INDEX post_name(post_name(191))" );
 	}
 
-	// Upgrade versions prior to 4.4.
+	// Upgrade versions prior to WP-4.4.
 	if ( $wp_current_db_version < 34978 ) {
 		// If compatible termmeta table is found, use it, but enforce a proper index and update collation.
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->termmeta}'" ) && $wpdb->get_results( "SHOW INDEX FROM {$wpdb->termmeta} WHERE Column_name = 'meta_key'" ) ) {

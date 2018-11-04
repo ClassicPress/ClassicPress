@@ -253,7 +253,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
  * Identifies the network and site of a requested domain and path and populates the
  * corresponding network and site global objects as part of the multisite bootstrap process.
  *
- * Prior to 4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
+ * Prior to WP-4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
  * a function to facilitate unit tests. It should not be used outside of core.
  *
  * Usually, it's easier to query the site first, which then declares its network.

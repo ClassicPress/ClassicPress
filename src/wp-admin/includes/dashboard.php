@@ -294,7 +294,7 @@ function wp_dashboard_right_now() {
 	 * Filters the array of extra elements to list in the 'At a Glance'
 	 * dashboard widget.
 	 *
-	 * Prior to 3.8.0, the widget was named 'Right Now'. Each element
+	 * Prior to WP-3.8.0, the widget was named 'Right Now'. Each element
 	 * is wrapped in list-item tags on output.
 	 *
 	 * @since WP-3.8.0
@@ -319,7 +319,7 @@ function wp_dashboard_right_now() {
 		 * Filters the link title attribute for the 'Search Engines Discouraged'
 		 * message displayed in the 'At a Glance' dashboard widget.
 		 *
-		 * Prior to 3.8.0, the widget was named 'Right Now'.
+		 * Prior to WP-3.8.0, the widget was named 'Right Now'.
 		 *
 		 * @since WP-3.0.0
 		 * @since WP-4.5.0 The default for `$title` was updated to an empty string.
@@ -332,7 +332,7 @@ function wp_dashboard_right_now() {
 		 * Filters the link label for the 'Search Engines Discouraged' message
 		 * displayed in the 'At a Glance' dashboard widget.
 		 *
-		 * Prior to 3.8.0, the widget was named 'Right Now'.
+		 * Prior to WP-3.8.0, the widget was named 'Right Now'.
 		 *
 		 * @since WP-3.0.0
 		 *
@@ -355,7 +355,7 @@ function wp_dashboard_right_now() {
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
-	 * Prior to 3.8.0, the widget was named 'Right Now'.
+	 * Prior to WP-3.8.0, the widget was named 'Right Now'.
 	 *
 	 * @since WP-2.5.0
 	 */
@@ -364,7 +364,7 @@ function wp_dashboard_right_now() {
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
-	 * Prior to 3.8.0, the widget was named 'Right Now'.
+	 * Prior to WP-3.8.0, the widget was named 'Right Now'.
 	 *
 	 * @since WP-2.0.0
 	 */

@@ -672,7 +672,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		);
 		$result = $widget->update( $instance, array() );
 		$this->assertEquals( $expected, $result );
-		$this->assertTrue( ! empty( $expected['filter'] ), 'Expected filter prop to be truthy, to handle case where 4.8 is downgraded to 4.7.' );
+		$this->assertTrue( ! empty( $expected['filter'] ), 'Expected filter prop to be truthy, to handle case where WP-4.8 is downgraded to WP-4.7.' );
 
 		add_filter( 'map_meta_cap', array( $this, 'grant_unfiltered_html_cap' ), 10, 2 );
 		$this->assertTrue( current_user_can( 'unfiltered_html' ) );

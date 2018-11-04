@@ -2516,7 +2516,7 @@ function antispambot( $email_address, $hex_encoding = 0 ) {
 /**
  * Callback to convert URI match to HTML A element.
  *
- * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
+ * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
  *
  * @since WP-2.3.2
  * @access private
@@ -2552,7 +2552,7 @@ function _make_url_clickable_cb( $matches ) {
 /**
  * Callback to convert URL match to HTML A element.
  *
- * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
+ * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
  *
  * @since WP-2.3.2
  * @access private
@@ -2581,7 +2581,7 @@ function _make_web_ftp_clickable_cb( $matches ) {
 /**
  * Callback to convert email address match to HTML A element.
  *
- * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
+ * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
  *
  * @since WP-2.3.2
  * @access private
