@@ -1,4 +1,5 @@
 <?php
+// This should appear as a build change
 /**
  * Facilitates adding of the ClassicPress editor as used on the Write and Edit screens.
  *
