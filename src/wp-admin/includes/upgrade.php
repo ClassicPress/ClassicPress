@@ -116,7 +116,7 @@ if ( !function_exists('wp_install_defaults') ) :
 /**
  * Creates the initial content for a newly-installed site.
  *
- * Adds the default "Uncategorized" category, the first post (with comment),
+ * Adds the default "General" category, the first post (with comment),
  * first page, and default widgets for default theme for the current version.
  *
  * @since WP-2.1.0
@@ -131,9 +131,9 @@ function wp_install_defaults( $user_id ) {
 	global $wpdb, $wp_rewrite, $table_prefix;
 
 	// Default category
-	$cat_name = __('Uncategorized');
+	$cat_name = __('General');
 	/* translators: Default category slug */
-	$cat_slug = sanitize_title(_x('Uncategorized', 'Default category slug'));
+	$cat_slug = sanitize_title(_x('General', 'Default category slug'));
 
 	if ( global_terms_enabled() ) {
 		$cat_id = $wpdb->get_var( $wpdb->prepare( "SELECT cat_ID FROM {$wpdb->sitecategories} WHERE category_nicename = %s", $cat_slug ) );
