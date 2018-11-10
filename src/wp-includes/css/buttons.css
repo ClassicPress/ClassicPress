@@ -246,7 +246,7 @@ TABLE OF CONTENTS:
 .wp-core-ui .button-primary:hover,
 .wp-core-ui .button-primary.focus,
 .wp-core-ui .button-primary:focus {
-	background: #034b59;
+	background: #006b81;
 	border-color: #034b59;
 	color: #fff;
 }
@@ -261,9 +261,9 @@ TABLE OF CONTENTS:
 .wp-core-ui .button-primary.active:hover,
 .wp-core-ui .button-primary.active:focus,
 .wp-core-ui .button-primary:active {
-	background: #034b59;
+	background: #006b81;
 	border-color: #034b59;
-	box-shadow: inset 0 2px 0 #057f99;
+	box-shadow: inset 0 2px 0 #034b59;
 	vertical-align: top;
 }
 
