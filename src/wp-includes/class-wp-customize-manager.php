@@ -4902,7 +4902,7 @@ final class WP_Customize_Manager {
 		$this->add_control( new WP_Customize_Site_Icon_Control( $this, 'site_icon', array(
 			'label'       => __( 'Site Icon' ),
 			'description' => sprintf(
-				'<p>' . __( 'Site Icons are what you see in browser tabs, bookmark bars, and within the ClassicPress mobile apps. Upload one here!' ) . '</p>' .
+				'<p>' . __( 'Site Icons are what you see in browser tabs and bookmark bars. Upload one here!' ) . '</p>' .
 				/* translators: %s: site icon size in pixels */
 				'<p>' . __( 'Site Icons should be square and at least %s pixels.' ) . '</p>',
 				'<strong>512 &times; 512</strong>'
