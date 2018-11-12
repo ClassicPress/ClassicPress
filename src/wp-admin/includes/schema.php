@@ -395,7 +395,7 @@ function populate_options() {
 	'home' => $guessurl,
 	'blogname' => __('My Site'),
 	/* translators: site tagline */
-	'blogdescription' => __('Just another ClassicPress site'),
+	'blogdescription' => __('Another great website powered by ClassicPress'),
 	'users_can_register' => 0,
 	'admin_email' => 'you@example.com',
 	/* translators: default start of the week. 0 = Sunday, 1 = Monday */
@@ -533,7 +533,7 @@ function populate_options() {
 	// 3.0 multisite
 	if ( is_multisite() ) {
 		/* translators: site tagline */
-		$options[ 'blogdescription' ] = sprintf(__('Just another %s site'), get_network()->site_name );
+		$options[ 'blogdescription' ] = sprintf(__('Another great %s website powered by ClassicPress'), get_network()->site_name );
 		$options[ 'permalink_structure' ] = '/%year%/%monthnum%/%day%/%postname%/';
 	}
 
