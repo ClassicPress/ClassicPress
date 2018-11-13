@@ -5,7 +5,6 @@ var webpackDevConfig = require( './webpack.config.dev' );
 
 module.exports = function(grunt) {
 	var path = require('path'),
-		fs = require( 'fs' ),
 		spawn = require( 'child_process' ).spawnSync,
 		SOURCE_DIR = 'src/',
 		BUILD_DIR = 'build/',
@@ -524,6 +523,10 @@ module.exports = function(grunt) {
 			'restapi-jsclient': {
 				cmd: 'phpunit',
 				args: ['--verbose', '-c', 'phpunit.xml.dist', '--group', 'restapi-jsclient']
+			},
+			'wp-api-client-fixtures': {
+				cmd: 'phpunit',
+				args: ['--verbose', '-c', 'phpunit.xml.dist', '--filter', 'WP_Test_REST_Schema_Initialization::test_build_wp_api_client_fixtures']
 			}
 		},
 		uglify: {
@@ -882,97 +885,21 @@ module.exports = function(grunt) {
 		'replace:emojiRegex'
 	] );
 
-	grunt.registerTask( 'precommit', 'Runs test and build tasks in preparation for a commit', function() {
-		var done = this.async();
-		var map = {
-			svn: 'svn status --ignore-externals',
-			git: 'git status --short'
-		};
+	grunt.registerTask( 'precommit', [
+		'precommit:js',
+		'precommit:css',
+		'precommit:image',
+		'precommit:emoji',
+		'precommit:php'
+	] );
 
-		find( [
-			__dirname + '/.svn',
-			__dirname + '/.git',
-			path.dirname( __dirname ) + '/.svn'
-		] );
-
-		function find( set ) {
-			var dir;
-
-			if ( set.length ) {
-				fs.stat( dir = set.shift(), function( error ) {
-					error ? find( set ) : run( path.basename( dir ).substr( 1 ) );
-				} );
-			} else {
-				runAllTasks();
-			}
-		}
-
-		function runAllTasks() {
-			grunt.log.writeln( 'Cannot determine which files are modified as SVN and GIT are not available.' );
-			grunt.log.writeln( 'Running all tasks and all tests.' );
-			grunt.task.run([
-				'precommit:js',
-				'precommit:css',
-				'precommit:image',
-				'precommit:emoji',
-				'precommit:php'
-			]);
-
-			done();
-		}
-
-		function run( type ) {
-			var command = map[ type ].split( ' ' );
-
-			grunt.util.spawn( {
-				cmd: command.shift(),
-				args: command
-			}, function( error, result, code ) {
-				var taskList = [];
-
-				// Callback for finding modified paths.
-				function testPath( path ) {
-					var regex = new RegExp( ' ' + path + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				// Callback for finding modified files by extension.
-				function testExtension( extension ) {
-					var regex = new RegExp( '\.' + extension + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				if ( code === 0 ) {
-					if ( [ 'package.json', 'Gruntfile.js' ].some( testPath ) ) {
-						grunt.log.writeln( 'Configuration files modified. Running `prerelease`.' );
-						taskList.push( 'prerelease' );
-					} else {
-						if ( [ 'png', 'jpg', 'gif', 'jpeg' ].some( testExtension ) ) {
-							grunt.log.writeln( 'Image files modified. Minifying.' );
-							taskList.push( 'precommit:image' );
-						}
-
-						[ 'js', 'css', 'php' ].forEach( function( extension ) {
-							if ( testExtension( extension ) ) {
-								grunt.log.writeln( extension.toUpperCase() + ' files modified. ' + extension.toUpperCase() + ' tests will be run.' );
-								taskList.push( 'precommit:' + extension );
-							}
-						} );
-
-						if ( [ 'twemoji.js' ].some( testPath ) ) {
-							grunt.log.writeln( 'twemoji.js has updated. Running `precommit:emoji.' );
-							taskList.push( 'precommit:emoji' );
-						}
-					}
-
-					grunt.task.run( taskList );
-					done();
-				} else {
-					runAllTasks();
-				}
-			} );
-		}
-	} );
+	grunt.registerTask( 'precommit:fast', [
+		'precommit:js',
+		'precommit:css',
+		'precommit:image',
+		'precommit:emoji',
+		'phpunit:wp-api-client-fixtures'
+	] );
 
 	grunt.registerTask( 'copy:all', [
 		'copy:files',
