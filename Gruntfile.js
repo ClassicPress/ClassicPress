@@ -871,8 +871,7 @@ module.exports = function(grunt) {
 		'webpack:prod',
 		'jshint:corejs',
 		'uglify:masonry',
-		'uglify:imgareaselect',
-		'qunit:compiled'
+		'uglify:imgareaselect'
 	] );
 
 	grunt.registerTask( 'precommit:css', [
@@ -880,7 +879,7 @@ module.exports = function(grunt) {
 	] );
 
 	grunt.registerTask( 'precommit:php', [
-		'phpunit'
+		'phpunit:wp-api-client-fixtures'
 	] );
 
 	grunt.registerTask( 'precommit:emoji', [
@@ -895,13 +894,14 @@ module.exports = function(grunt) {
 		'precommit:php'
 	] );
 
-	grunt.registerTask( 'precommit:fast', [
-		'precommit:js',
-		'precommit:css',
-		'precommit:image',
-		'precommit:emoji',
-		'phpunit:wp-api-client-fixtures'
-	] );
+	grunt.registerTask(
+		'precommit:verify',
+		'Run precommit checks and verify no changed files.  Commit everything before running!',
+		[
+			'precommit',
+			'precommit:check-for-changes'
+		]
+	);
 
 	grunt.registerTask( 'precommit:check-for-changes', function() {
 		var done = this.async();
@@ -926,12 +926,10 @@ module.exports = function(grunt) {
 					.red
 				);
 				grunt.log.writeln();
-				files.forEach( f => {
-					grunt.log.writeln( ( 'Modified: ' + f ).yellow );
-				} );
+				files.forEach( f => grunt.log.writeln( f.yellow ) );
 				grunt.log.writeln();
 				grunt.log.writeln(
-					'Please run `grunt precommit:fast` and commit the results.'
+					'Please run `grunt precommit` and commit the results.'
 					.red.bold
 				);
 				grunt.log.writeln();
@@ -1000,8 +998,8 @@ module.exports = function(grunt) {
 		'travis:js',
 		'Runs Javascript Travis CI tasks.',
 		[
-			'precommit:fast', // -> precommit:js -> [jshint:corejs, qunit:compiled]
-			'precommit:check-for-changes'
+			'precommit:verify', // -> precommit:js -> jshint:corejs
+			'qunit:compiled'
 		]
 	);
 	grunt.registerTask(
