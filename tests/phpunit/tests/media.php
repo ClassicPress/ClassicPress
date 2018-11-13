@@ -2283,7 +2283,10 @@ EOF;
 		wp_delete_attachment( $post_id );
 		wp_delete_post( $parent_id );
 
-		$this->assertSame( 'http://example.org/wp-content/uploads/2010/01/test-image-iptc.jpg', $url );
+		$this->assertSame(
+			content_url( 'uploads/2010/01/test-image-iptc.jpg' ),
+			$url
+		);
 	}
 
 	/**
