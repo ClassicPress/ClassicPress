@@ -25,8 +25,8 @@ class Tests_Canonical_Category extends WP_Canonical_UnitTestCase {
 	/**
 	 * @dataProvider data_canonical_category
 	 */
-	public function test_canonical_category( $test_url, $expected, $ticket = 0, $expected_doing_it_wrong = array() ) {
-		$this->assertCanonical( $test_url, $expected, $ticket, $expected_doing_it_wrong );
+	public function test_canonical_category( $test_url, $expected ) {
+		$this->assertCanonical( $test_url, $expected );
 	}
 
 	public function data_canonical_category() {
@@ -36,8 +36,6 @@ class Tests_Canonical_Category extends WP_Canonical_UnitTestCase {
 		 *      array( 'url': expected redirection location, 'qv': expected query vars to be set via the rewrite AND $_GET );
 		 *      array( expected query vars to be set, same as 'qv' above )
 		 *      (string) expected redirect location
-		 * [2]: (optional) The ticket the test refers to, Can be skipped if unknown.
-		 * [3]: (optional) Array of class/function names expected to throw `_doing_it_wrong()` notices.
 		 */
 
 		return array(

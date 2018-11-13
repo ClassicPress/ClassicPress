@@ -18,8 +18,8 @@ class Tests_Canonical_CustomRules extends WP_Canonical_UnitTestCase {
 	/**
 	 * @dataProvider data
 	 */
-	function test( $test_url, $expected, $ticket = 0, $expected_doing_it_wrong = array() ) {
-		$this->assertCanonical( $test_url, $expected, $ticket, $expected_doing_it_wrong );
+	function test( $test_url, $expected ) {
+		$this->assertCanonical( $test_url, $expected );
 	}
 
 	function data() {
@@ -29,7 +29,6 @@ class Tests_Canonical_CustomRules extends WP_Canonical_UnitTestCase {
 		 *      array( 'url': expected redirection location, 'qv': expected query vars to be set via the rewrite AND $_GET );
 		 *      array( expected query vars to be set, same as 'qv' above )
 		 *      (string) expected redirect location
-		 * [3]: (optional) The ticket the test refers to, Can be skipped if unknown.
 		 */
 		return array(
 			// Custom Rewrite rules leading to Categories
