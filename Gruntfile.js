@@ -1,4 +1,6 @@
 /* jshint node:true */
+/* jshint es3:false */
+/* jshint esversion:6 */
 /* globals Set */
 var webpackConfig = require( './webpack.config.prod' );
 var webpackDevConfig = require( './webpack.config.dev' );
@@ -901,6 +903,46 @@ module.exports = function(grunt) {
 		'phpunit:wp-api-client-fixtures'
 	] );
 
+	grunt.registerTask( 'precommit:check-for-changes', function() {
+		var done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'ls-files', '-m' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( 'git ls-files failed: code ' + code );
+			}
+			var files = result.stdout.split( '\n' )
+				.map( f => f.trim() )
+				.filter( f => f !== '' )
+				.filter( f => f !== 'package-lock.json' );
+			if ( files.length ) {
+				grunt.log.writeln(
+					'One or more files were modified when running the precommit checks:'
+					.red
+				);
+				grunt.log.writeln();
+				files.forEach( f => {
+					grunt.log.writeln( ( 'Modified: ' + f ).yellow );
+				} );
+				grunt.log.writeln();
+				grunt.log.writeln(
+					'Please run `grunt precommit:fast` and commit the results.'
+					.red.bold
+				);
+				grunt.log.writeln();
+				throw new Error(
+					'Modified files detected during precommit checks!'
+				);
+			}
+			done();
+		} );
+	} );
+
 	grunt.registerTask( 'copy:all', [
 		'copy:files',
 		'copy:wp-admin-css-compat-rtl',
@@ -954,8 +996,19 @@ module.exports = function(grunt) {
 	grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
 	// Travis CI tasks.
-	grunt.registerTask('travis:js', 'Runs Javascript Travis CI tasks.', [ 'jshint:corejs', 'qunit:compiled' ]);
-	grunt.registerTask('travis:phpunit', 'Runs PHPUnit Travis CI tasks.', 'phpunit');
+	grunt.registerTask(
+		'travis:js',
+		'Runs Javascript Travis CI tasks.',
+		[
+			'precommit:fast', // -> precommit:js -> [jshint:corejs, qunit:compiled]
+			'precommit:check-for-changes'
+		]
+	);
+	grunt.registerTask(
+		'travis:phpunit',
+		'Runs PHPUnit Travis CI tasks.',
+		'phpunit'
+	);
 
 	// Patch task.
 	grunt.renameTask('patch_wordpress', 'patch');
