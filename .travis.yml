@@ -13,7 +13,7 @@ env:
 matrix:
   include:
   - php: 7.1
-    env: WP_TRAVISCI=travis:js
+    env: WP_TRAVISCI=travis:precommit-and-js
   - php: 7.2
   - php: 7.1
   - php: 7.0
@@ -26,13 +26,11 @@ matrix:
   - php: nightly
 before_install:
 - |
-  if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
-      mysql -u root -e "CREATE DATABASE wordpress_tests;"
-      cp wp-tests-config-sample.php wp-tests-config.php
-      sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
-      sed -i "s/yourusernamehere/root/" wp-tests-config.php
-      sed -i "s/yourpasswordhere//" wp-tests-config.php
-  fi
+  mysql -u root -e "CREATE DATABASE wordpress_tests;"
+  cp wp-tests-config-sample.php wp-tests-config.php
+  sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
+  sed -i "s/yourusernamehere/root/" wp-tests-config.php
+  sed -i "s/yourpasswordhere//" wp-tests-config.php
 - |
   if [[ "$WP_TRAVIS_OBJECT_CACHE" == "true" ]]; then
     cp tests/phpunit/includes/object-cache.php src/wp-content/object-cache.php
@@ -52,22 +50,20 @@ before_script:
   export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
 - |
   # Install the specified version of PHPUnit depending on the PHP version:
-  if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
-    case "$TRAVIS_PHP_VERSION" in
-      7.2|7.1|7.0|nightly)
-        echo "Using PHPUnit 6.x"
-        composer global require "phpunit/phpunit:^6"
-        ;;
-      5.6)
-        echo "Using PHPUnit 4.x"
-        composer global require "phpunit/phpunit:^4"
-        ;;
-      *)
-        echo "No PHPUnit version handling for PHP version $TRAVIS_PHP_VERSION"
-        exit 1
-        ;;
-    esac
-  fi
+  case "$TRAVIS_PHP_VERSION" in
+    7.2|7.1|7.0|nightly)
+      echo "Using PHPUnit 6.x"
+      composer global require "phpunit/phpunit:^6"
+      ;;
+    5.6)
+      echo "Using PHPUnit 4.x"
+      composer global require "phpunit/phpunit:^4"
+      ;;
+    *)
+      echo "No PHPUnit version handling for PHP version $TRAVIS_PHP_VERSION"
+      exit 1
+      ;;
+  esac
 - npm --version
 - node --version
 - nvm install

@@ -995,8 +995,8 @@ module.exports = function(grunt) {
 
 	// Travis CI tasks.
 	grunt.registerTask(
-		'travis:js',
-		'Runs Javascript Travis CI tasks.',
+		'travis:precommit-and-js',
+		'Runs precommit checks and JavaScript tests on Travis CI.',
 		[
 			'precommit:verify', // -> precommit:js -> jshint:corejs
 			'qunit:compiled'
@@ -1004,7 +1004,7 @@ module.exports = function(grunt) {
 	);
 	grunt.registerTask(
 		'travis:phpunit',
-		'Runs PHPUnit Travis CI tasks.',
+		'Runs PHPUnit tests on Travis CI.',
 		'phpunit'
 	);
 
