@@ -936,6 +936,8 @@ module.exports = function(grunt) {
 				throw new Error(
 					'Modified files detected during precommit checks!'
 				);
+			} else {
+				grunt.log.ok( 'No modified files detected.' );
 			}
 			done();
 		} );
