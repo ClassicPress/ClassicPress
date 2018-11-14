@@ -107,15 +107,15 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * @param array $query {
 	 *     Version check query arguments.
 	 *
-	 *     @type string $version            WordPress version number.
+	 *     @type string $version            ClassicPress version number.
 	 *     @type string $php                PHP version number.
 	 *     @type string $locale             The locale to retrieve updates for.
 	 *     @type string $mysql              MySQL version number.
 	 *     @type string $local_package      The value of the $wp_local_package global, when set.
-	 *     @type int    $blogs              Number of sites on this WordPress installation.
-	 *     @type int    $users              Number of users on this WordPress installation.
-	 *     @type int    $multisite_enabled  Whether this WordPress installation uses Multisite.
-	 *     @type int    $initial_db_version Database version of WordPress at time of installation.
+	 *     @type int    $blogs              Number of sites on this ClassicPress installation.
+	 *     @type int    $users              Number of users on this ClassicPress installation.
+	 *     @type int    $multisite_enabled  Whether this ClassicPress installation uses Multisite.
+	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
 	 * }
 	 */
 	$query = apply_filters( 'core_version_check_query_args', $query );
@@ -124,10 +124,21 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'translations' => wp_json_encode( $translations ),
 	);
 
-	if ( is_array( $extra_stats ) )
+	if ( is_array( $extra_stats ) ) {
 		$post_body = array_merge( $post_body, $extra_stats );
+	}
 
-	$url = $http_url = 'https://api-v1.classicpress.net/core/version-check/1.0/?' . http_build_query( $query, null, '&' );
+	// TODO: WP sent $post_body as HTTP POST, but it is now being discarded
+
+	// ClassicPress installed via the migration plugin has a version number
+	// like `1.0.0-alpha1+migration.20181113`.  The API does not generate
+	// upgrade paths for these versions, but what we actually want is to check
+	// for an upgrade from the base version, in this case `1.0.0-alpha1`.
+	$cp_base_version = preg_replace( '#\+migration\.\d+$#', '', $cp_version );
+
+	$url = 'https://api-v1.classicpress.net/upgrade/'
+		. $cp_base_version . '.json'
+		. '?' . http_build_query( $query, null, '&' );
 
 	$doing_cron = wp_doing_cron();
 
@@ -141,7 +152,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'body' => $post_body,
 	);
 
-	$response = wp_remote_post( $url, $options );
+	$response = wp_remote_get( $url, $options );
 	if ( is_wp_error( $response ) ) {
 		trigger_error(
 			sprintf(
@@ -151,10 +162,11 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
-		$response = wp_remote_post( $http_url, $options );
+		return;
 	}
 
-	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+	if ( 200 != wp_remote_retrieve_response_code( $response ) ) {
+		// Most likely 404 due to unrecognized ClassicPress version
 		return;
 	}
 
