@@ -35,11 +35,10 @@ function classicpress_dev_version_info() {
 	}
 
 	echo '<span class="dev-version-info">';
-	$commit_url = "https://github.com/ClassicPress/ClassicPress/commit/$git_commit";
-	/* translators: link to the current development commit on GitHub */
+	/* translators: current development commit on GitHub */
 	printf(
 		__( 'commit %s' ),
-		'<a href="' . $commit_url . '">' . substr( $git_commit, 0, 8 ) . '</a>'
+		substr( $git_commit, 0, 8 )
 	);
 	echo '</a>';
 	echo '</span>';
