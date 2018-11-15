@@ -6,6 +6,42 @@
  * @subpackage Administration
  */
 
+ /**
+  * Prints information about the ClassicPress development version, if any.
+  */
+function classicpress_dev_version_info() {
+	if ( ! classicpress_is_dev_install() ) {
+		return;
+	}
+
+	$git_head = ABSPATH . '../.git/HEAD';
+	$git_commit = null;
+	if ( @is_file( $git_head ) ) {
+		$git_head = trim( file_get_contents( $git_head ) );
+		if ( preg_match( '#^ref: (refs/.*)$#', $git_head, $matches ) ) {
+			// on a branch
+			$git_head = ABSPATH . '../.git/' . $matches[1];
+			if ( @is_file( $git_head ) ) {
+				$git_commit = trim( file_get_contents( $git_head ) );
+			}
+		} else {
+			// detached HEAD
+			$git_commit = $git_head;
+		}
+	}
+
+	if ( ! $git_commit ) {
+		return;
+	}
+
+	echo '<span class="dev-version-info">';
+	echo 'commit ';
+	echo '<a href="https://github.com/ClassicPress/ClassicPress/commit/' . $git_commit . '">';
+	echo '<code>' . substr( $git_commit, 0, 8 ) . '</code>';
+	echo '</a>';
+	echo '</span>';
+}
+
 /**
  * Returns whether the server is running Apache with the mod_rewrite module loaded.
  *
