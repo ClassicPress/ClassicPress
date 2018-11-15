@@ -494,6 +494,19 @@ function update_core($from, $to) {
 	/**
 	 * Fires after ClassicPress core has been successfully updated.
 	 *
+	 * @since 1.0.0-beta1
+	 *
+	 * @param string $cp_version The current WordPress version.
+	 */
+	do_action( 'classicpress_core_updated_successfully', classicpress_version() );
+
+	/**
+	 * Fires after ClassicPress core has been successfully updated.
+	 *
+	 * Note: Passes the equivalent compatible WordPress version for compatibility.
+	 *
+	 * @see 'classicpress_core_updated_successfully'
+	 *
 	 * @since WP-3.3.0
 	 *
 	 * @param string $wp_version The current WordPress version.
@@ -504,7 +517,7 @@ function update_core($from, $to) {
 	if ( function_exists( 'delete_site_option' ) )
 		delete_site_option( 'auto_core_update_failed' );
 
-	return $wp_version;
+	return classicpress_version();
 }
 
 /**
