@@ -39,7 +39,7 @@ function classicpress_dev_version_info() {
 	/* translators: link to the current development commit on GitHub */
 	printf(
 		__( 'commit %s' ),
-		'<a href="' . $commit_url . '">' . substr( $git_commit, 0, 7 ) . '</a>'
+		'<a href="' . $commit_url . '">' . substr( $git_commit, 0, 8 ) . '</a>'
 	);
 	echo '</a>';
 	echo '</span>';
