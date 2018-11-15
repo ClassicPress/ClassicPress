@@ -173,6 +173,9 @@ function core_upgrade_preamble() {
 				echo '<h2>';
 				_e( 'Unable to determine whether a ClassicPress update is available.' );
 				echo "</h2>\n";
+				echo '<p>';
+				_e( 'You may be running a customized build of ClassicPress, or your server may be having internet connectivity problems.' );
+				echo "</p>\n";
 			}
 		} else { // 'latest'
 			echo '<h2>';
