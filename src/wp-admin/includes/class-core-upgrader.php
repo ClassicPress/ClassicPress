@@ -39,6 +39,54 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
+	 * Verifies and returns the root directory entry of a ClassicPress update.
+	 *
+	 * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
+	 * GitHub builds our zip packages for us, the zip file (and therefore the
+	 * directory where it was unpacked) will contain a single directory entry whose
+	 * name starts with 'ClassicPress-'.
+	 *
+	 * We also need to allow the root directory to be called 'wordpress', since
+	 * this is used when migrating from WordPress to ClassicPress.  If the
+	 * directory is named otherwise, the WordPress updater will reject the update
+	 * package for the migration.
+	 *
+	 * @since 1.0.0-beta1
+	 *
+	 * @param string $working_dir The directory where a ClassicPress update package
+	 *                            has been extracted.
+	 *
+	 * @return string|null The root directory entry that contains the new files, or
+	 *                     `null` if this does not look like a valid update.
+	 */
+	public static function get_update_directory_root( $working_dir ) {
+		global $wp_filesystem;
+
+		$distro = null;
+		$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
+
+		if (
+			count( $entries ) === 1 &&
+			(
+				substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
+				$entries[0]['name'] === 'wordpress' // migration build
+			) &&
+			$entries[0]['type'] === 'd'
+		) {
+			$distro = '/' . $entries[0]['name'] . '/';
+			$root = $working_dir . $distro;
+			if (
+				! $wp_filesystem->exists( $root . 'readme.html' ) ||
+				! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
+			) {
+				$distro = null;
+			}
+		}
+
+		return $distro;
+	}
+
+	/**
 	 * Upgrade ClassicPress core.
 	 *
 	 * @since WP-2.8.0
@@ -131,7 +179,12 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		// Copy update-core.php from the new version into place.
-		if ( !$wp_filesystem->copy($working_dir . '/wordpress/wp-admin/includes/update-core.php', $wp_dir . 'wp-admin/includes/update-core.php', true) ) {
+		$distro = self::get_update_directory_root( $working_dir );
+		if ( ! $wp_filesystem->copy(
+			$working_dir . $distro . 'wp-admin/includes/update-core.php',
+			$wp_dir . 'wp-admin/includes/update-core.php',
+			true
+		) ) {
 			$wp_filesystem->delete($working_dir, true);
 			WP_Upgrader::release_lock( 'core_updater' );
 			return new WP_Error( 'copy_failed_for_update_core_file', __( 'The update cannot be installed because we will be unable to copy some files. This is usually due to inconsistent file permissions.' ), 'wp-admin/includes/update-core.php' );

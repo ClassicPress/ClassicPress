@@ -160,9 +160,28 @@ function core_upgrade_preamble() {
 	$wp_version = get_bloginfo( 'version' );
 	$updates = get_core_updates();
 
-	if ( !isset($updates[0]->response) || 'latest' == $updates[0]->response ) {
-		echo '<h2>';
-		_e('You have the latest version of ClassicPress.');
+	if ( ! isset( $updates[0]->response ) || 'latest' === $updates[0]->response ) {
+		if ( ! isset( $updates[0]->response ) ) {
+			if ( classicpress_is_dev_install() ) {
+				echo '<h2>';
+				_e( 'You are running a development version of ClassicPress.' );
+				echo "</h2>\n";
+				echo '<p>';
+				_e( 'Development versions of ClassicPress do not receive automatic updates.' );
+				echo "</p>\n";
+			} else {
+				echo '<h2>';
+				_e( 'Unable to determine whether a ClassicPress update is available.' );
+				echo "</h2>\n";
+				echo '<p>';
+				_e( 'You may be running a customized build of ClassicPress, or your server may be having internet connectivity problems.' );
+				echo "</p>\n";
+			}
+		} else { // 'latest'
+			echo '<h2>';
+			_e( 'You have the latest version of ClassicPress.' );
+			echo "</h2>\n";
+		}
 
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		$upgrader = new WP_Automatic_Updater;
@@ -173,10 +192,12 @@ function core_upgrade_preamble() {
 			'mysql_version' => $required_mysql_version,
 		);
 		$should_auto_update = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
-		if ( $should_auto_update )
-			echo ' ' . __( 'Future security updates will be applied automatically.' );
+		if ( $should_auto_update ) {
+			echo '<p>';
+			_e( 'Future security updates will be applied automatically.' );
+			echo "</p>\n";
+		}
 
-		echo '</h2>';
 	} else {
 		echo '<div class="notice notice-warning"><p>';
 		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
@@ -213,8 +234,11 @@ function core_upgrade_preamble() {
 	if ( $updates && ( count( $updates ) > 1 || $updates[0]->response != 'latest' ) ) {
 		echo '<p>' . __( 'While your site is being updated, it will be in maintenance mode. As soon as your updates are complete, your site will return to normal.' ) . '</p>';
 	} elseif ( ! $updates ) {
-		list( $normalized_version ) = explode( '-', $wp_version );
-		echo '<p>' . sprintf( __( '<a href="%s">Learn more about ClassicPress %s</a>.' ), esc_url( self_admin_url( 'about.php' ) ), $normalized_version ) . '</p>';
+		echo '<p>' . sprintf(
+			__( '<a href="%s">Learn more about ClassicPress %s</a>.' ),
+			esc_url( self_admin_url( 'about.php' ) ),
+			classicpress_version()
+		) . '</p>';
 	}
 	dismissed_updates();
 }
