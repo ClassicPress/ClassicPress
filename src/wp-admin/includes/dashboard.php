@@ -1566,10 +1566,10 @@ function wp_welcome_panel() {
 			<p>
 				<?php printf(
 					__(
-						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support Forum, 3: link to Testing Slack channel */
-						'For general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> or our <a href="%4$s">community forum</a>.</p><p>Suggestions for improvement are welcome at <a href="%5$s">Petitions</a>. For support issues please visit us in our <a href="%2$s"><strong>Support Forum</strong></a> or add a new issue on <a href="%3$s"><strong>Github</strong></a> if you found any bug.'
+						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums, 3: link to Petitions website, 4: link to Support Forum,  5: link to Github Issues */
+						'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.</p><p>Suggestions for improvement are welcome at <a href="%3$s"><strong>Petitions</strong></a>. For support issues please visit us in our <a href="%4$s"><strong>Support Forum</strong></a> or add a new issue on <a href="%5$s"><strong>Github</strong></a> if you found any bug.'
 					),
-					'https://www.classicpress.net/join-slack/', 'https://forums.classicpress.net/c/support/', 'https://github.com/ClassicPress/ClassicPress/issues/new', 'https://forums.classicpress.net/', 'https://petitions.classicpress.net/'
+					'https://www.classicpress.net/join-slack/', 'https://forums.classicpress.net/', 'https://petitions.classicpress.net/', 'https://forums.classicpress.net/c/support/', 'https://github.com/ClassicPress/ClassicPress/issues/new'
 				); ?>
 			</p>
 
