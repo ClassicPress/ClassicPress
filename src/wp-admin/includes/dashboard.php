@@ -1562,29 +1562,14 @@ function wp_welcome_panel() {
 	<div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-			<h3><?php _e( 'Feedback and Support' ); ?></h3>
-			<p>
-				<?php _e(
-					'Do you have any feedback about this version of ClassicPress?'
-				); ?>
-			</p>
+			<h3><?php _e( 'Join our growing community' ); ?></h3>
 			<p>
 				<?php printf(
 					__(
-						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support channel, 3: link to Testing channel */
-						'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> and send us a message in the <a href="%2s"><strong>#support</strong></a> or <a href="%3s"><strong>#testing</strong></a> channels.'
+						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support Forum, 3: link to Testing Slack channel */
+						'For general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> or our <a href="%4$s">community forum</a>.</p><p>Suggestions for improvement are welcome at <a href="%5$s">Petitions</a>. For support issues please visit us in our <a href="%2$s"><strong>Support Forum</strong></a> or add a new issue on <a href="%3$s"><strong>Github</strong></a> if you found any bug.'
 					),
-					'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
-				); ?>
-			</p>
-			<p>
-				<?php printf(
-					__(
-						/* translators: link to create a new GitHub issue for this plugin */
-						'For <strong>specific</strong> bug reports or suggestions, <a href="%s">add a new issue on GitHub</a>.',
-						'switch-to-classicpress'
-					),
-					'https://github.com/ClassicPress/ClassicPress/issues/new'
+					'https://www.classicpress.net/join-slack/', 'https://forums.classicpress.net/c/support/', 'https://github.com/ClassicPress/ClassicPress/issues/new', 'https://forums.classicpress.net/', 'https://petitions.classicpress.net/'
 				); ?>
 			</p>
 
