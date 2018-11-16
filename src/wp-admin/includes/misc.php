@@ -8,6 +8,8 @@
 
  /**
   * Prints information about the ClassicPress development version, if any.
+  *
+  * @since 1.0.0-beta1
   */
 function classicpress_dev_version_info() {
 	if ( ! classicpress_is_dev_install() ) {
