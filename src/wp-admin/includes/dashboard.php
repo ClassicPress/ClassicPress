@@ -1589,7 +1589,7 @@ function wp_welcome_panel() {
 	<p>
 		<?php printf(
 			/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
-			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>.  For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
+			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
 			'https://github.com/ClassicPress/ClassicPress',
 			'https://github.com/ClassicPress/ClassicPress/issues'
 		); ?>
