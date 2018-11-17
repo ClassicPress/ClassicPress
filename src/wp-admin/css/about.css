@@ -53,9 +53,19 @@
 /* ClassicPress Version Badge */
 
 .wp-badge {
-	background: #0073aa url(../images/w-logo-white.png?ver=20181031) no-repeat;
-	background-position: center;
+	/* Background: Really old browsers */
+	background: #057f99;
+	/* Background: Old browsers */
+	background-image: url(../images/wordpress-logo-white.svg?ver=20181031);
 	background-size: 80px 80px;
+	/* Background: Modern browsers */
+	background-image:
+		url(../images/wordpress-logo-white.svg?ver=20181031),
+		linear-gradient(-135deg, #3ebca6 0%, #057f99 50%, #006b81 100%);
+	background-size: 80px 80px, cover;
+	/* Other rules */
+	background-repeat: no-repeat;
+	background-position: center;
 	color: #fff;
 	font-size: 14px;
 	text-align: center;
@@ -66,10 +76,6 @@
 	display: inline-block;
 	text-rendering: optimizeLegibility;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.svg .wp-badge {
-	background-image: url(../images/wordpress-logo-white.svg?ver=20181031);
 }
 
 .about-wrap .wp-badge {
