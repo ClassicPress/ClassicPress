@@ -144,7 +144,7 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	}
 
 	if ( $problems ) {
-		printf( '<p>' . __('Some database problems could not be repaired. Please copy-and-paste the following list of errors into the #support channel in our <a href="%s">Slack</a> workspace for additional assistance.') . '</p>', __( 'https://www.classicpress.net/join-slack/' ) );
+		printf( '<p>' . __('Some database problems could not be repaired. Please copy-and-paste the following list of errors into the <a href="%s">support forum</a> for additional assistance.') . '</p>', __( 'https://forums.classicpress.net/c/support/' ) );
 		$problem_output = '';
 		foreach ( $problems as $table => $problem )
 			$problem_output .= "$table: $problem\n";

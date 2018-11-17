@@ -1559,35 +1559,41 @@ function wp_dashboard_empty() {}
 function wp_welcome_panel() {
 	$display_version = classicpress_version();
 	?>
-	<div class="welcome-panel-content">
+<div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-			<h3><?php _e( 'Feedback and Support' ); ?></h3>
-			<p>
-				<?php _e(
-					'Do you have any feedback about this version of ClassicPress?'
-				); ?>
-			</p>
-			<p>
-				<?php printf(
-					__(
-						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support channel, 3: link to Testing channel */
-						'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> and send us a message in the <a href="%2s"><strong>#support</strong></a> or <a href="%3s"><strong>#testing</strong></a> channels.'
-					),
-					'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
-				); ?>
-			</p>
-			<p>
-				<?php printf(
-					__(
-						/* translators: link to create a new GitHub issue for this plugin */
-						'For <strong>specific</strong> bug reports or suggestions, <a href="%s">add a new issue on GitHub</a>.',
-						'switch-to-classicpress'
-					),
-					'https://github.com/ClassicPress/ClassicPress/issues/new'
-				); ?>
-			</p>
-
-	</div>
+	<h3><?php _e( 'Join our growing community' ); ?></h3>
+	<p>
+		<?php printf(
+			/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
+			__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
+			'https://www.classicpress.net/join-slack/',
+			'https://forums.classicpress.net/'
+		); ?>
+	</p>
+	<p>
+		<?php printf(
+			/* translators: link to ClassicPress Petitions site for new features */
+			__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
+			'https://petitions.classicpress.net/'
+		); ?>
+	</p>
+	<p>
+		<?php printf(
+			/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
+			__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
+			'https://docs.classicpress.net/faq-support/',
+			'https://forums.classicpress.net/c/support/'
+		); ?>
+	</p>
+	<p>
+		<?php printf(
+			/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
+			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
+			'https://github.com/ClassicPress/ClassicPress',
+			'https://github.com/ClassicPress/ClassicPress/issues'
+		); ?>
+	</p>
+</div>
 	<?php
 }
