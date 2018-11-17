@@ -64,7 +64,8 @@ function wp_initial_constants() {
 	}
 
 	if ( ! defined( 'WP_CONTENT_DIR') ) {
-		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' ); // no trailing slash, full paths only - WP_CONTENT_URL is defined further down
+		// no trailing slash, full paths only - WP_CONTENT_URL is defined further down
+		define( 'WP_CONTENT_DIR', ABSPATH . ltrim( CP_CONTENT_PATH, '/' ) );
 	}
 
 	// Add define('WP_DEBUG', true); to wp-config.php to enable display of notices during development.
@@ -144,7 +145,8 @@ function wp_initial_constants() {
  */
 function wp_plugin_directory_constants() {
 	if ( !defined('WP_CONTENT_URL') ) {
-		define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' ); // full url - WP_CONTENT_DIR is defined further up
+		// full url - WP_CONTENT_DIR is defined further up
+		define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . CP_CONTENT_PATH );
 	}
 
 	/**
