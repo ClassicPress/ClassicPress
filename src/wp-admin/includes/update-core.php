@@ -213,12 +213,12 @@ function update_core($from, $to) {
 		return new WP_Error( 'insane_distro', __('The update could not be unpacked') );
 	}
 
-	/*
-	 * Import $wp_version, $required_php_version, and $required_mysql_version from the new version.
-	 * DO NOT globalise any variables imported from `version-current.php` in this function.
-	 *
-	 * BC Note: $wp_filesystem->wp_content_dir() returned unslashed pre-2.8
-	 */
+	// Import $cp_version, $wp_version, $required_php_version, and
+	// $required_mysql_version from the new version.
+	//
+	// NOTE: These variables are NOT modified in the global scope, and this
+	// function is using all variables imported from `version-current.php` in
+	// the local scope!  Do not declare any of these variables as global.
 	$versions_file = trailingslashit( $wp_filesystem->wp_content_dir() ) . 'upgrade/version-current.php';
 	if ( ! $wp_filesystem->copy( $from . $distro . 'wp-includes/version.php', $versions_file ) ) {
 		$wp_filesystem->delete( $from, true );
@@ -496,9 +496,9 @@ function update_core($from, $to) {
 	 *
 	 * @since 1.0.0-beta1
 	 *
-	 * @param string $cp_version The current WordPress version.
+	 * @param string $cp_version The current ClassicPress version.
 	 */
-	do_action( 'classicpress_core_updated_successfully', classicpress_version() );
+	do_action( 'classicpress_core_updated_successfully', $cp_version );
 
 	/**
 	 * Fires after ClassicPress core has been successfully updated.
@@ -509,7 +509,7 @@ function update_core($from, $to) {
 	 *
 	 * @since WP-3.3.0
 	 *
-	 * @param string $wp_version The current WordPress version.
+	 * @param string $wp_version The current equivalent WordPress version, for compatibility.
 	 */
 	do_action( '_core_updated_successfully', $wp_version );
 
@@ -517,7 +517,7 @@ function update_core($from, $to) {
 	if ( function_exists( 'delete_site_option' ) )
 		delete_site_option( 'auto_core_update_failed' );
 
-	return classicpress_version();
+	return $cp_version;
 }
 
 /**
