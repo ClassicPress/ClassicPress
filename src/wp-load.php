@@ -91,3 +91,12 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 
 	wp_die( $die, __( 'ClassicPress &rsaquo; Error' ) );
 }
+
+/**
+ * Sets up ClassicPress vars and included files.
+ *
+ * Only required this if not previously loaded via
+ * a legacy-style WordPress wp-config.php file that
+ * requires wp-settings.php at its end.
+ */
+require_once( ABSPATH . 'wp-settings.php' );
