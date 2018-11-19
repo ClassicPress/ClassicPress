@@ -9,6 +9,17 @@
  */
 
 /**
+ * This constant can be used to allow external PHP tools to parse
+ * `wp-config.php`.  To use it, set the constant from within your tool and then
+ * require `wp-load.php`.
+ *
+ * @since 1.0.0-beta1
+ */
+if ( defined( 'LOAD_CONFIG_ONLY' ) && LOAD_CONFIG_ONLY ) {
+	return;
+}
+
+/**
  * Stores the location of the ClassicPress directory of functions, classes, and core content.
  *
  * @since WP-1.0.0
