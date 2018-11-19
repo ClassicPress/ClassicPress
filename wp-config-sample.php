@@ -81,9 +81,30 @@ define('WP_DEBUG', false);
 
 /* That's all, stop editing! Happy blogging. */
 
+/**
+ * Allow developer to specify that ClassicPress core is stored
+ * somewhere else besides the root, such as '/classicpress',
+ * '/cp', '/core', or elsewhere. To use this feature define()
+ * `CORE_PATH` at the top of this file.
+ */
+if ( ! defined( 'CORE_PATH' ) ) {
+	define( 'CORE_PATH',  '/' );
+}
+
+/**
+ * Allow developer to specify that the ClassicPress "content"
+ * directory is located somewhere else besides '/wp-content',
+ * such as '/content', '/app', or other. To use this feature define()
+ * `CONTENT_PATH` at the top of this file.
+ */
+if ( ! defined( 'CONTENT_PATH' ) ) {
+	define( 'CONTENT_PATH',  '/wp-content' );
+}
+
 /** Absolute path to the ClassicPress directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __FILE__ ) . CORE_PATH );
+}
 
 /** Sets up ClassicPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');

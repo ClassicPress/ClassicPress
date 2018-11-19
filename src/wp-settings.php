@@ -9,6 +9,17 @@
  */
 
 /**
+ * Ensure these were not omitted from wp-config.
+ * @see: wp-config-sample.php for better PHPDoc of these constants.
+ */
+if ( ! defined( 'CORE_PATH' ) ) {
+	define( 'CORE_PATH',  '/' );
+}
+if ( ! defined( 'CONTENT_PATH' ) ) {
+	define( 'CONTENT_PATH',  '/wp-content' );
+}
+
+/**
  * Stores the location of the ClassicPress directory of functions, classes, and core content.
  *
  * @since WP-1.0.0
