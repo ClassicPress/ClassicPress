@@ -85,5 +85,16 @@ define('WP_DEBUG', false);
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
-/** Sets up ClassicPress vars and included files. */
+/**
+ * Sets up ClassicPress vars and included files.
+ *
+ * @since 1.0.0
+ *
+ * You may REMOVE this line from wp-config.php if you
+ * are certain that none of your plugins will load
+ * ClassicPress by requiring wp-config.php directly.
+ *
+ * This is possible (especially in older plugins) but
+ * not common and certainly not best practice.
+ */
 require_once(ABSPATH . 'wp-settings.php');
