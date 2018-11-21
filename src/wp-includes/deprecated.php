@@ -2396,7 +2396,7 @@ function automatic_feed_links( $add = true ) {
 	if ( $add )
 		add_theme_support( 'automatic-feed-links' );
 	else
-		remove_action( 'wp_head', 'feed_links_extra', 3 ); // Just do this yourself in 3.0+
+		remove_action( 'wp_head', 'feed_links_extra', 3 ); // Just do this yourself in WP-3.0+
 }
 
 /**
@@ -3116,7 +3116,7 @@ function clean_page_cache( $id ) {
 /**
  * Retrieve nonce action "Are you sure" message.
  *
- * Deprecated in 3.4.1 and 3.5.0. Backported to 3.3.3.
+ * Deprecated in WP-3.4.1 and WP-3.5.0. Backported to WP-3.3.3.
  *
  * @since WP-2.0.4
  * @deprecated WP-3.4.1 Use wp_nonce_ays()

@@ -299,7 +299,7 @@
 		// WP default shortcuts
 		editor.addShortcut( 'access+a', '', 'WP_Link' );
 		editor.addShortcut( 'access+s', '', 'wp_unlink' );
-		// The "de-facto standard" shortcut, see #27305
+		// The "de-facto standard" shortcut, see https://core.trac.wordpress.org/ticket/27305
 		editor.addShortcut( 'meta+k', '', 'WP_Link' );
 
 		editor.addButton( 'link', {
@@ -498,7 +498,7 @@
 						.attr( 'role', 'listbox' )
 						.removeAttr( 'tabindex' ) // Remove the `tabindex=0` attribute added by jQuery UI.
 						/*
-						 * Looks like Safari and VoiceOver need an `aria-selected` attribute. See ticket #33301.
+						 * Looks like Safari and VoiceOver need an `aria-selected` attribute. See https://core.trac.wordpress.org/ticket/33301.
 						 * The `menufocus` and `menublur` events are the same events used to add and remove
 						 * the `ui-state-focus` CSS class on the menu items. See jQuery UI Menu Widget.
 						 */

@@ -49,7 +49,7 @@ if ( $wp_customize->changeset_post_id() ) {
 		 * argument, settings cannot be reliably saved. Some logic short-circuits if the current value is the
 		 * same as the value being saved. This is particularly true for options via `update_option()`.
 		 *
-		 * By opening an Ajax request, this is avoided and the changeset is published. See #39221.
+		 * By opening an Ajax request, this is avoided and the changeset is published. See https://core.trac.wordpress.org/ticket/39221.
 		 */
 		$nonces = $wp_customize->get_nonces();
 		$request_args = array(

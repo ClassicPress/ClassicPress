@@ -2793,7 +2793,7 @@ body.adding-widget .add-new-widget:before,
 @media screen and ( max-width: 640px ) {
 
 	/* when the sidebar is collapsed and switching to responsive view,
-	   bring it back see ticket #35220 */
+	   bring it back see https://core.trac.wordpress.org/ticket/35220 */
 	.wp-full-overlay.collapsed #customize-controls {
 		margin-left: 0;
 	}

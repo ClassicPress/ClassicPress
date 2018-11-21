@@ -159,7 +159,7 @@ wpWidgets = {
 					}
 					/*
 					 * Don't change the order of attributes changes and animation:
-					 * it's important for screen readers, see ticket #31476.
+					 * it's important for screen readers, see https://core.trac.wordpress.org/ticket/31476.
 					 */
 					toggleBtn.attr( 'aria-expanded', 'true' );
 					inside.slideDown( 'fast', function() {
@@ -168,7 +168,7 @@ wpWidgets = {
 				} else {
 					/*
 					 * Don't change the order of attributes changes and animation:
-					 * it's important for screen readers, see ticket #31476.
+					 * it's important for screen readers, see https://core.trac.wordpress.org/ticket/31476.
 					 */
 					toggleBtn.attr( 'aria-expanded', 'false' );
 					inside.slideUp( 'fast', function() {

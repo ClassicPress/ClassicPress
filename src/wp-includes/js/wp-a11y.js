@@ -29,7 +29,7 @@ window.wp = window.wp || {};
 		/*
 		 * Safari 10+VoiceOver don't announce repeated, identical strings. We use
 		 * a `no-break space` to force them to think identical strings are different.
-		 * See ticket #36853.
+		 * See https://core.trac.wordpress.org/ticket/36853.
 		 */
 		if ( previousMessage === message ) {
 			message = message + '\u00A0';

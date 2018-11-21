@@ -136,7 +136,7 @@ class WP_Http_Curl {
 
 		/*
 		 * The option doesn't work with safe mode or when open_basedir is set, and there's
-		 * a bug #17490 with redirected POST requests, so handle redirections outside Curl.
+		 * a bug https://core.trac.wordpress.org/ticket/17490 with redirected POST requests, so handle redirections outside Curl.
 		 */
 		curl_setopt( $handle, CURLOPT_FOLLOWLOCATION, false );
 		if ( defined( 'CURLOPT_PROTOCOLS' ) ) // PHP 5.2.10 / cURL 7.19.4

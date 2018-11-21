@@ -247,7 +247,7 @@ class wpdb {
 	/**
 	 * List of deprecated ClassicPress tables
 	 *
-	 * categories, post2cat, and link2cat were deprecated in 2.3.0, db version 5539
+	 * categories, post2cat, and link2cat were deprecated in WP-2.3.0, db version 5539
 	 *
 	 * @since WP-2.9.0
 	 * @see wpdb::tables()
@@ -1499,7 +1499,7 @@ class wpdb {
 		$this->is_mysql = true;
 
 		/*
-		 * Deprecated in 3.9+ when using MySQLi. No equivalent
+		 * Deprecated in WP-3.9+ when using MySQLi. No equivalent
 		 * $new_link parameter exists for mysqli_* functions.
 		 */
 		$new_link = defined( 'MYSQL_NEW_LINK' ) ? MYSQL_NEW_LINK : true;

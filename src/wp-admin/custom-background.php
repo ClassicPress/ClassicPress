@@ -52,7 +52,7 @@ class Custom_Background {
 
 		add_action( 'wp_ajax_custom-background-add', array( $this, 'ajax_background_add' ) );
 
-		// Unused since 3.5.0.
+		// Unused since WP-3.5.0.
 		add_action( 'wp_ajax_set-background-image', array( $this, 'wp_set_background_image' ) );
 	}
 

@@ -858,7 +858,7 @@ p.pagenav {
 	left: -9999em;
 }
 
-/* ticket #34150 */
+/* https://core.trac.wordpress.org/ticket/34150 */
 .rtl .row-actions a {
 	display: inline-block;
 }

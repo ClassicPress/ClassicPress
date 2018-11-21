@@ -1416,7 +1416,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		if ( in_array( 'date_gmt', $fields, true ) ) {
 			// For drafts, `post_date_gmt` may not be set, indicating that the
 			// date of the draft should be updated each time it is saved (see
-			// #38883).  In this case, shim the value based on the `post_date`
+			// https://core.trac.wordpress.org/ticket/38883).  In this case, shim the value based on the `post_date`
 			// field with the site's timezone offset applied.
 			if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
 				$post_date_gmt = get_gmt_from_date( $post->post_date );

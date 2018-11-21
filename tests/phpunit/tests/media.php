@@ -326,7 +326,7 @@ https://w.org</a>'
 		$this->assertEquals( '', $prepped['mime'] );
 		$this->assertEquals( '', $prepped['type'] );
 		$this->assertEquals( '', $prepped['subtype'] );
-		// #21963, there will be a guid always, so there will be a URL
+		// https://core.trac.wordpress.org/ticket/21963, there will be a guid always, so there will be a URL
 		$this->assertNotEquals( '', $prepped['url'] );
 		$this->assertEquals( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
 
@@ -1314,7 +1314,7 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1359,7 +1359,7 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1436,7 +1436,7 @@ EOF;
 		$expected = '';
 
 		foreach( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -1715,7 +1715,7 @@ EOF;
 		$expected = "";
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
-			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
@@ -2283,7 +2283,10 @@ EOF;
 		wp_delete_attachment( $post_id );
 		wp_delete_post( $parent_id );
 
-		$this->assertSame( 'http://example.org/wp-content/uploads/2010/01/test-image-iptc.jpg', $url );
+		$this->assertSame(
+			content_url( 'uploads/2010/01/test-image-iptc.jpg' ),
+			$url
+		);
 	}
 
 	/**

@@ -432,7 +432,7 @@ body.adding-widget #customize-preview {
 #available-widgets [class*="twitter"] .widget-title:before { content: "\f301"; }
 
 @media screen and (max-height: 700px) and (min-width: 981px) {
-	/* Compact widget-tops on smaller laptops, but not tablets. See ticket #27112#comment:4 */
+	/* Compact widget-tops on smaller laptops, but not tablets. See https://core.trac.wordpress.org/ticket/27112#comment:4 */
 	.customize-control-widget_form {
 		margin-bottom: 0;
 	}

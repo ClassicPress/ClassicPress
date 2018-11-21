@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "1.0.0-alpha0+dev",
+  "version": "1.0.0-beta1+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "autoprefixer": "9.2.1",
+    "autoprefixer": "9.3.1",
     "grunt": "1.0.3",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.0",
@@ -18,7 +18,7 @@
     "grunt-contrib-connect": "2.0.0",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-cssmin": "3.0.0",
-    "grunt-contrib-imagemin": "3.0.0",
+    "grunt-contrib-imagemin": "3.1.0",
     "grunt-contrib-jshint": "2.0.0",
     "grunt-contrib-qunit": "3.0.1",
     "grunt-contrib-uglify": "4.0.0",
@@ -36,19 +36,14 @@
     "ink-docstrap": "1.3.2",
     "matchdep": "2.0.0",
     "uglify-js": "3.4.8",
-    "webpack": "4.21.0",
-    "webpack-dev-server": "3.1.9"
+    "webpack": "4.26.0",
+    "webpack-dev-server": "3.1.10"
   },
   "dependencies": {
-    "node-sass": "4.9.4",
-    "opencollective": "1.0.3",
-    "opencollective-postinstall": "2.0.0"
+    "node-sass": "4.10.0"
   },
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/classicpress-294"
-  },
-  "scripts": {
-    "postinstall": "opencollective-postinstall"
   }
 }

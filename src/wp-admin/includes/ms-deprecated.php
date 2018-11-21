@@ -17,7 +17,7 @@
  */
 function wpmu_menu() {
 	_deprecated_function(__FUNCTION__, 'WP-3.0.0' );
-	// Deprecated. See #11763.
+	// Deprecated. See https://core.trac.wordpress.org/ticket/11763.
 }
 
 /**

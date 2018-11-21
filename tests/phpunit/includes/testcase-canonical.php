@@ -151,13 +151,10 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @param string $test_url                Raw URL that will be run through redirect_canonical().
 	 * @param string $expected                Expected string.
-	 * @param int    $ticket                  Optional. Trac ticket number.
 	 * @param array  $expected_doing_it_wrong Array of class/function names expected to throw _doing_it_wrong() notices.
 	 */
-	public function assertCanonical( $test_url, $expected, $ticket = 0, $expected_doing_it_wrong = array() ) {
+	public function assertCanonical( $test_url, $expected, $expected_doing_it_wrong = array() ) {
 		$this->expected_doing_it_wrong = array_merge( $this->expected_doing_it_wrong, (array) $expected_doing_it_wrong );
-
-		$ticket_ref = ($ticket > 0) ? 'Ticket #' . $ticket : null;
 
 		if ( is_string($expected) )
 			$expected = array('url' => $expected);
@@ -175,7 +172,7 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 
 		// Just test the Path and Query if present
 		if ( isset($expected['url']) ) {
-			$this->assertEquals( $expected['url'], $parsed_can_url['path'] . (!empty($parsed_can_url['query']) ? '?' . $parsed_can_url['query'] : ''), $ticket_ref );
+			$this->assertEquals( $expected['url'], $parsed_can_url['path'] . (!empty($parsed_can_url['query']) ? '?' . $parsed_can_url['query'] : '') );
 		}
 
 		// If the test data doesn't include expected query vars, then we're done here
@@ -193,7 +190,7 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 			parse_str($parsed_can_url['query'], $_qv);
 
 			// $_qv should not contain any elements which are set in $query_vars already (ie. $_GET vars should not be present in the Rewrite)
-			$this->assertEquals( array(), array_intersect( $query_vars, $_qv ), 'Query vars are duplicated from the Rewrite into $_GET; ' . $ticket_ref );
+			$this->assertEquals( array(), array_intersect( $query_vars, $_qv ), 'Query vars are duplicated from the Rewrite into $_GET' );
 
 			$query_vars = array_merge($query_vars, $_qv);
 		}

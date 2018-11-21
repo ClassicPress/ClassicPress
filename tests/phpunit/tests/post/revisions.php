@@ -26,7 +26,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Note: Test needs reviewing when #16215 is fixed because I'm not sure the test current tests the "correct" behavior
+	 * Note: Test needs reviewing when https://core.trac.wordpress.org/ticket/16215 is fixed because I'm not sure the test current tests the "correct" behavior
 	 * @see https://core.trac.wordpress.org/ticket/20982
 	 * @see https://core.trac.wordpress.org/ticket/16215
 	 */
@@ -49,7 +49,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$lastrevision = end( $revisions );
 		$this->assertEquals( 'I cant spel werds.', $lastrevision->post_content );
-		// #16215
+		// https://core.trac.wordpress.org/ticket/16215
 		$this->assertEquals( self::$author_user_id , $lastrevision->post_author);
 
 		wp_restore_post_revision( $lastrevision->ID );

@@ -244,7 +244,7 @@ function get_taxonomy( $taxonomy ) {
 /**
  * Checks that the taxonomy name exists.
  *
- * Formerly is_taxonomy(), introduced in 2.3.0.
+ * Formerly is_taxonomy(), introduced in WP-2.3.0.
  *
  * @since WP-3.0.0
  *
@@ -1023,13 +1023,13 @@ function get_term_to_edit( $id, $taxonomy ) {
  * The {@see 'get_terms_orderby'} filter passes the `ORDER BY` clause for the query
  * along with the $args array.
  *
- * Prior to 4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
+ * Prior to WP-4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
  *
  *     $terms = get_terms( 'post_tag', array(
  *         'hide_empty' => false,
  *     ) );
  *
- * Since 4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
+ * Since WP-4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
  *
  *     $terms = get_terms( array(
  *         'taxonomy' => 'post_tag',
@@ -1313,7 +1313,7 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
 /**
  * Check if Term exists.
  *
- * Formerly is_term(), introduced in 2.3.0.
+ * Formerly is_term(), introduced in WP-2.3.0.
  *
  * @since WP-3.0.0
  *
@@ -3911,7 +3911,7 @@ function wp_get_split_term( $old_term_id, $taxonomy ) {
 /**
  * Determine whether a term is shared between multiple taxonomies.
  *
- * Shared taxonomy terms began to be split in 4.3, but failed cron tasks or
+ * Shared taxonomy terms began to be split in WP-4.3, but failed cron tasks or
  * other delays in upgrade routines may cause shared terms to remain.
  *
  * @since WP-4.4.0

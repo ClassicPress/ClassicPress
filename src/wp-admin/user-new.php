@@ -443,7 +443,7 @@ $new_user_ignore_pass = $creating && isset( $_POST['noconfirmation'] ) ? wp_unsl
 			</label>
 		</th>
 		<td>
-			<input class="hidden" value=" " /><!-- #24364 workaround -->
+			<input class="hidden" value=" " /><!-- https://core.trac.wordpress.org/ticket/24364 workaround -->
 			<button type="button" class="button wp-generate-pw hide-if-no-js"><?php _e( 'Show password' ); ?></button>
 			<div class="wp-pwd hide-if-js">
 				<?php $initial_password = wp_generate_password( 24 ); ?>

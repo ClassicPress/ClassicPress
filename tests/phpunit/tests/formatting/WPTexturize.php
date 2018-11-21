@@ -32,19 +32,19 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 
 	}
 
-	//WP Ticket #1418
+	// https://core.trac.wordpress.org/ticket/1418
 	function test_bracketed_quotes_1418() {
 		$this->assertEquals('(&#8220;test&#8221;)', wptexturize('("test")'));
 		$this->assertEquals('(&#8216;test&#8217;)', wptexturize("('test')"));
 		$this->assertEquals('(&#8217;twas)', wptexturize("('twas)"));
 	}
 
-	//WP Ticket #3810
+	// https://core.trac.wordpress.org/ticket/3810
 	function test_bracketed_quotes_3810() {
 		$this->assertEquals('A dog (&#8220;Hubertus&#8221;) was sent out.', wptexturize('A dog ("Hubertus") was sent out.'));
 	}
 
-	//WP Ticket #4539
+	// https://core.trac.wordpress.org/ticket/4539
 	function test_basic_quotes() {
 		$this->assertEquals('test&#8217;s', wptexturize('test\'s'));
 
@@ -337,7 +337,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 				"word&#8217;99word",
 			),
 			array(
-				"word '99&#8217;s word", // Appears as a separate but logically superfluous pattern in 3.8.
+				"word '99&#8217;s word", // Appears as a separate but logically superfluous pattern in WP-3.8.
 				"word &#8217;99&#8217;s word",
 			),
 			array(
@@ -1582,7 +1582,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			case '&#8221;' : return '!closeq2!';
 			case '&#8242;' : return '!prime1!';
 			case '&#8243;' : return '!prime2!';
-			case '&#8217;tain&#8217;t,&#8217;twere,&#8217;twas,&#8217;tis,&#8217;twill,&#8217;til,&#8217;bout,&#8217;nuff,&#8217;round,&#8217;cause,&#8217;em' : 
+			case '&#8217;tain&#8217;t,&#8217;twere,&#8217;twas,&#8217;tis,&#8217;twill,&#8217;til,&#8217;bout,&#8217;nuff,&#8217;round,&#8217;cause,&#8217;em' :
 				return '!apos!tain!apos!t,!apos!twere,!apos!twas,!apos!tis,!apos!twill,!apos!til,!apos!bout,!apos!nuff,!apos!round,!apos!cause,!apos!em';
 			default : return $translations;
 		}
@@ -1828,13 +1828,13 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 */
 	function test_unregistered_shortcodes( $input, $output ) {
 		add_filter( 'no_texturize_shortcodes', array( $this, 'filter_shortcodes' ), 10, 1 );
-	
+
 		$output = $this->assertEquals( $output, wptexturize( $input ) );
-	
+
 		remove_filter( 'no_texturize_shortcodes', array( $this, 'filter_shortcodes' ), 10, 1 );
 		return $output;
 	}
-	
+
 	function filter_shortcodes( $disabled ) {
 		$disabled[] = 'audio';
 		return $disabled;
@@ -1872,7 +1872,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				'[audio]...[/audio]]...', // These are potentially usable shortcodes.  Unfortunately, the meaning of [/audio]] is ambiguous unless we run the entire shortcode regexp.
-				'[audio]...[/audio]]...', // This test would not pass in 3.9 because the extra brace was always ignored by texturize.
+				'[audio]...[/audio]]...', // This test would not pass in WP-3.9 because the extra brace was always ignored by texturize.
 			),
 			array(
 				'<span>hello[/audio]---</span>',

@@ -233,7 +233,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	public function login( $username, $password ) {
 		/*
 		 * Respect old get_option() filters left for back-compat when the 'enable_xmlrpc'
-		 * option was deprecated in 3.5.0. Use the 'xmlrpc_enabled' hook instead.
+		 * option was deprecated in WP-3.5.0. Use the 'xmlrpc_enabled' hook instead.
 		 */
 		$enabled = apply_filters( 'pre_option_enable_xmlrpc', false );
 		if ( false === $enabled ) {
@@ -249,7 +249,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 *
 		 * Further, the filter does not control whether pingbacks or other custom endpoints that don't
 		 * require authentication are enabled. This behavior is expected, and due to how parity was matched
-		 * with the `enable_xmlrpc` UI option the filter replaced when it was introduced in 3.5.
+		 * with the `enable_xmlrpc` UI option the filter replaced when it was introduced in WP-3.5.
 		 *
 		 * To disable XML-RPC methods that require authentication, use:
 		 *
@@ -5212,7 +5212,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			$found = false;
 			if ( $enclosures = get_post_meta( $post_ID, 'enclosure' ) ) {
 				foreach ( $enclosures as $enc ) {
-					// This method used to omit the trailing new line. #23219
+					// This method used to omit the trailing new line. https://core.trac.wordpress.org/ticket/23219
 					if ( rtrim( $enc, "\n" ) == rtrim( $encstring, "\n" ) ) {
 						$found = true;
 						break;

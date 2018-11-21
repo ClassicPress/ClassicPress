@@ -317,7 +317,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in 5.0. See #42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php' ); // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php' );
 
@@ -325,7 +325,7 @@ final class WP_Customize_Manager {
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php' );
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in 5.0. See #42364.
+		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' ); // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-custom-css-setting.php' );
 		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-filter-setting.php' );
@@ -1188,7 +1188,7 @@ final class WP_Customize_Manager {
 			 * However, when doing an explicit save it is currently possible for
 			 * nav menus and nav menu items specifically to lose their starter_content
 			 * flags, thus resulting in duplicates being created since they fail
-			 * to get re-used. See #40146.
+			 * to get re-used. See https://core.trac.wordpress.org/ticket/40146.
 			 */
 			if ( 'auto-draft' !== get_post_status( $this->changeset_post_id() ) ) {
 				return;
@@ -1364,13 +1364,6 @@ final class WP_Customize_Manager {
 							'post_status' => 'auto-draft', // So attachment will be garbage collected in a week if changeset is never published.
 						)
 					);
-
-					// In PHP < 5.6 filesize() returns 0 for the temp files unless we clear the file status cache.
-					// Technically, PHP < 5.6.0 || < 5.5.13 || < 5.4.29 but no need to be so targeted.
-					// See https://bugs.php.net/bug.php?id=65701
-					if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
-						clearstatcache();
-					}
 
 					$attachment_id = media_handle_sideload( $file_array, 0, null, $attachment_post_data );
 					if ( is_wp_error( $attachment_id ) ) {
@@ -1751,8 +1744,8 @@ final class WP_Customize_Manager {
 	 * @see WP_REST_Request::has_valid_params()
 	 *
 	 * @param WP_Customize_Setting $setting A WP_Customize_Setting derived object.
-	 * @param mixed                $default Value returned $setting has no post value (added in 4.2.0)
-	 *                                      or the post value is invalid (added in 4.6.0).
+	 * @param mixed                $default Value returned $setting has no post value (added in WP-4.2.0)
+	 *                                      or the post value is invalid (added in WP-4.6.0).
 	 * @return string|mixed $post_value Sanitized value or the $default provided.
 	 */
 	public function post_value( $setting, $default = null ) {
@@ -2821,7 +2814,7 @@ final class WP_Customize_Manager {
 		if ( defined( 'JSON_UNESCAPED_SLASHES' ) ) {
 			$json_options |= JSON_UNESCAPED_SLASHES; // Introduced in PHP 5.4. This is only to improve readability as slashes needn't be escaped in storage.
 		}
-		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See WP Trac #30139.
+		$json_options |= JSON_PRETTY_PRINT; // Also introduced in PHP 5.4, but WP defines constant for back compat. See https://core.trac.wordpress.org/ticket/30139.
 		$post_array = array(
 			'post_content' => wp_json_encode( $data, $json_options ),
 		);
@@ -3051,7 +3044,7 @@ final class WP_Customize_Manager {
 	 * required in core for `wp_create_post_autosave()` because it will call
 	 * `_wp_translate_postdata()` which in turn will check if a user can 'edit_post', but the
 	 * the caps for the customize_changeset post type are all mapping to the meta capability.
-	 * This should be able to be removed once #40922 is addressed in core.
+	 * This should be able to be removed once https://core.trac.wordpress.org/ticket/40922 is addressed in core.
 	 *
 	 * @since WP-4.9.0
 	 * @link https://core.trac.wordpress.org/ticket/40922
@@ -4711,7 +4704,7 @@ final class WP_Customize_Manager {
 			),
 		);
 
-		// Temporarily disable installation in Customizer. See #42184.
+		// Temporarily disable installation in Customizer. See https://core.trac.wordpress.org/ticket/42184.
 		$filesystem_method = get_filesystem_method();
 		ob_start();
 		$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
@@ -4909,7 +4902,7 @@ final class WP_Customize_Manager {
 		$this->add_control( new WP_Customize_Site_Icon_Control( $this, 'site_icon', array(
 			'label'       => __( 'Site Icon' ),
 			'description' => sprintf(
-				'<p>' . __( 'Site Icons are what you see in browser tabs, bookmark bars, and within the ClassicPress mobile apps. Upload one here!' ) . '</p>' .
+				'<p>' . __( 'Site Icons are what you see in browser tabs and bookmark bars. Upload one here!' ) . '</p>' .
 				/* translators: %s: site icon size in pixels */
 				'<p>' . __( 'Site Icons should be square and at least %s pixels.' ) . '</p>',
 				'<strong>512 &times; 512</strong>'

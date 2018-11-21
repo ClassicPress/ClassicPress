@@ -7275,7 +7275,7 @@ AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.pro
 
 		/*
 		 * For accessibility reasons, place the Inline Uploader before other sections.
-		 * This way, in the Media Library, it's right after the Add New button, see ticket #37188.
+		 * This way, in the Media Library, it's right after the Add New button, see https://core.trac.wordpress.org/ticket/37188.
 		 */
 		this.createUploader();
 
@@ -7289,7 +7289,7 @@ AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.pro
 		// Create the list of attachments.
 		this.createAttachments();
 
-		// For accessibility reasons, place the normal sidebar after the attachments, see ticket #36909.
+		// For accessibility reasons, place the normal sidebar after the attachments, see https://core.trac.wordpress.org/ticket/36909.
 		if ( this.options.sidebar && 'errors' !== this.options.sidebar ) {
 			this.createSidebar();
 		}

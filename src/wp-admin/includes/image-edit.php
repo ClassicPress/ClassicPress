@@ -184,7 +184,7 @@ function wp_image_editor($post_id, $msg = false) {
 		<div class="imgedit-menu wp-clearfix">
 			<button type="button" onclick="imageEdit.crop(<?php echo "$post_id, '$nonce'"; ?>, this)" class="imgedit-crop button disabled" disabled><span class="screen-reader-text"><?php esc_html_e( 'Crop' ); ?></span></button><?php
 
-		// On some setups GD library does not provide imagerotate() - Ticket #11536
+		// On some setups GD library does not provide imagerotate() - See https://core.trac.wordpress.org/ticket/11536
 		if ( wp_image_editor_supports( array( 'mime_type' => get_post_mime_type( $post_id ), 'methods' => array( 'rotate' ) ) ) ) {
 			$note_no_rotate = '';
 	?>

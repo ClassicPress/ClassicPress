@@ -1112,7 +1112,7 @@ function get_site_option( $option, $default = false, $deprecated = true ) {
 /**
  * Add a new option for the current network.
  *
- * Existing options will not be updated. Note that prior to 3.3 this wasn't the case.
+ * Existing options will not be updated. Note that prior to WP-3.3 this wasn't the case.
  *
  * @since WP-2.8.0
  * @since WP-4.4.0 Modified into wrapper for add_network_option()

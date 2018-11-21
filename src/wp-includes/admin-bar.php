@@ -119,7 +119,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 	$wp_logo_menu_args = array(
 		'id'    => 'wp-logo',
 		'title' => (
-			'<img class="cp-logo" src="' . $cp_logo_src . '" />'
+			'<img class="cp-logo" src="' . $cp_logo_src . '" alt="ClassicPress logo" />'
 			. '<span class="screen-reader-text">' . __( 'About ClassicPress' ) . '</span>'
 		),
 		'href'  => $about_url,
@@ -149,31 +149,23 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'wporg',
 		'title'     => __('ClassicPress.net'),
-		'href'      => __('https://www.classicpress.net'),
+		'href'      => 'https://www.classicpress.net',
 	) );
 
-	// Add codex link
+	// Add documentation link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
 		'id'        => 'documentation',
 		'title'     => __('Documentation'),
-		'href'      => __('https://codex.wordpress.org/'),
+		'href'      => __('https://docs.classicpress.net/'),
 	) );
 
-	// Add forums link
+	// Add support link
 	$wp_admin_bar->add_menu( array(
 		'parent'    => 'wp-logo-external',
-		'id'        => 'support-forums',
-		'title'     => __('Support Forums'),
-		'href'      => __('https://wordpress.org/support/'),
-	) );
-
-	// Add feedback link
-	$wp_admin_bar->add_menu( array(
-		'parent'    => 'wp-logo-external',
-		'id'        => 'feedback',
-		'title'     => __('Feedback'),
-		'href'      => __('https://wordpress.org/support/forum/requests-and-feedback'),
+		'id'        => 'support',
+		'title'     => __('Support'),
+		'href'      => __('https://docs.classicpress.net/faq-support/'),
 	) );
 }
 
@@ -515,7 +507,7 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 
 		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
 
-		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" />';
+		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" alt="" />';
 
 		$blogname = $blog->blogname;
 

@@ -1,0 +1,22 @@
+{
+    "name": "classicpress/classicpress",
+    "description": "The business-focused CMS. Powerful. Versatile. Predictable. Also known as the WordPress fork.",
+    "keywords": [
+        "classicpress"
+    ],
+    "type": "wordpress-core",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.classicpress.net/",
+    "authors": [
+        {
+            "name": "ClassicPress Community",
+            "homepage": "https://www.classicpress.net/contributors/"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ClassicPress/ClassicPress/issues"
+    },
+    "require": {
+        "johnpbloch/wordpress-core-installer": "1.0.2"
+    }
+}

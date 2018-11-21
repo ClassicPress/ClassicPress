@@ -1095,7 +1095,7 @@ function wp_nav_menu_update_menu_items ( $nav_menu_selected_id, $nav_menu_select
 
 /**
  * If a JSON blob of navigation menu data is in POST data, expand it and inject
- * it into `$_POST` to avoid PHP `max_input_vars` limitations. See #14134.
+ * it into `$_POST` to avoid PHP `max_input_vars` limitations. See https://core.trac.wordpress.org/ticket/14134.
  *
  * @ignore
  * @since WP-4.5.3

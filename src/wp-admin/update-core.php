@@ -160,27 +160,52 @@ function core_upgrade_preamble() {
 	$wp_version = get_bloginfo( 'version' );
 	$updates = get_core_updates();
 
-	if ( !isset($updates[0]->response) || 'latest' == $updates[0]->response ) {
-		echo '<h2>';
-		_e('You have the latest version of ClassicPress.');
-
-		if ( wp_http_supports( array( 'ssl' ) ) ) {
-			require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-			$upgrader = new WP_Automatic_Updater;
-			$future_minor_update = (object) array(
-				'current'       => $wp_version . '.1.next.minor',
-				'version'       => $wp_version . '.1.next.minor',
-				'php_version'   => $required_php_version,
-				'mysql_version' => $required_mysql_version,
-			);
-			$should_auto_update = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
-			if ( $should_auto_update )
-				echo ' ' . __( 'Future security updates will be applied automatically.' );
+	if ( ! isset( $updates[0]->response ) || 'latest' === $updates[0]->response ) {
+		if ( ! isset( $updates[0]->response ) ) {
+			if ( classicpress_is_dev_install() ) {
+				echo '<h2>';
+				_e( 'You are running a development version of ClassicPress.' );
+				echo "</h2>\n";
+				echo '<p>';
+				_e( 'Development versions of ClassicPress do not receive automatic updates.' );
+				echo "</p>\n";
+			} else {
+				echo '<h2>';
+				_e( 'Unable to determine whether a ClassicPress update is available.' );
+				echo "</h2>\n";
+				echo '<p>';
+				_e( 'You may be running a customized build of ClassicPress, or your server may be having internet connectivity problems.' );
+				echo "</p>\n";
+			}
+		} else { // 'latest'
+			echo '<h2>';
+			_e( 'You have the latest version of ClassicPress.' );
+			echo "</h2>\n";
 		}
-		echo '</h2>';
+
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		$upgrader = new WP_Automatic_Updater;
+		$future_minor_update = (object) array(
+			'current'       => $wp_version . '.1.next.minor',
+			'version'       => $wp_version . '.1.next.minor',
+			'php_version'   => $required_php_version,
+			'mysql_version' => $required_mysql_version,
+		);
+		$should_auto_update = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
+		if ( $should_auto_update ) {
+			echo '<p>';
+			_e( 'Future security updates will be applied automatically.' );
+			echo "</p>\n";
+		}
+
 	} else {
 		echo '<div class="notice notice-warning"><p>';
-		_e('<strong>Important:</strong> before updating, please <a href="https://codex.wordpress.org/WordPress_Backups">back up your database and files</a>. For help with updates, visit the <a href="https://codex.wordpress.org/Updating_WordPress">Updating ClassicPress</a> Codex page.');
+		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
+		printf(
+			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
+			'https://codex.wordpress.org/WordPress_Backups',
+			'https://docs.classicpress.net/updating-classicpress/'
+		);
 		echo '</p></div>';
 
 		echo '<h2 class="response">';
@@ -191,7 +216,7 @@ function core_upgrade_preamble() {
 	if ( isset( $updates[0] ) && $updates[0]->response == 'development' ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		$upgrader = new WP_Automatic_Updater;
-		if ( wp_http_supports( 'ssl' ) && $upgrader->should_update( 'core', $updates[0], ABSPATH ) ) {
+		if ( $upgrader->should_update( 'core', $updates[0], ABSPATH ) ) {
 			echo '<div class="updated inline"><p>';
 			echo '<strong>' . __( 'BETA TESTERS:' ) . '</strong> ' . __( 'This site is set up to install updates of future beta versions automatically.' );
 			echo '</p></div>';
@@ -209,8 +234,11 @@ function core_upgrade_preamble() {
 	if ( $updates && ( count( $updates ) > 1 || $updates[0]->response != 'latest' ) ) {
 		echo '<p>' . __( 'While your site is being updated, it will be in maintenance mode. As soon as your updates are complete, your site will return to normal.' ) . '</p>';
 	} elseif ( ! $updates ) {
-		list( $normalized_version ) = explode( '-', $wp_version );
-		echo '<p>' . sprintf( __( '<a href="%s">Learn more about ClassicPress %s</a>.' ), esc_url( self_admin_url( 'about.php' ) ), $normalized_version ) . '</p>';
+		echo '<p>' . sprintf(
+			__( '<a href="%s">Learn more about ClassicPress %s</a>.' ),
+			esc_url( self_admin_url( 'about.php' ) ),
+			classicpress_version()
+		) . '</p>';
 	}
 	dismissed_updates();
 }

@@ -350,7 +350,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 */
 	public function test_branching() {
 		$wp_customize = new WP_Customize_Manager();
-		$this->assertTrue( $wp_customize->branching(), 'Branching should default to true since it is original behavior in 4.7.' );
+		$this->assertTrue( $wp_customize->branching(), 'Branching should default to true since it is original behavior in WP-4.7.' );
 
 		$wp_customize = new WP_Customize_Manager( array( 'branching' => false ) );
 		$this->assertFalse( $wp_customize->branching() );
@@ -499,7 +499,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			wp_list_pluck( $wp_customize->changeset_data(), 'value' )
 		);
 
-		// If there is no user, don't fetch the most recent autosave. See #42450.
+		// If there is no user, don't fetch the most recent autosave. See https://core.trac.wordpress.org/ticket/42450.
 		wp_set_current_user( 0 );
 		$wp_customize = new WP_Customize_Manager(
 			array(
@@ -610,7 +610,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			),
 		);
 
-		update_option( 'posts_per_page', 1 ); // To check #39022.
+		update_option( 'posts_per_page', 1 ); // To check https://core.trac.wordpress.org/ticket/39022.
 		add_theme_support( 'starter-content', $starter_content_config );
 		$this->assertEmpty( $wp_customize->unsanitized_post_values() );
 		$wp_customize->import_theme_starter_content();
@@ -2525,7 +2525,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$_SERVER['HTTP_REFERER'] = wp_slash( admin_url( 'customize.php' ) );
 		$this->assertEquals( $preview_url, $this->manager->get_return_url() );
 
-		// See #35355.
+		// See https://core.trac.wordpress.org/ticket/35355.
 		$_SERVER['HTTP_REFERER'] = wp_slash( admin_url( 'wp-login.php' ) );
 		$this->assertEquals( $preview_url, $this->manager->get_return_url() );
 

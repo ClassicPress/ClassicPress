@@ -1797,7 +1797,7 @@ function wp_update_custom_css_post( $css, $args = array() ) {
 				set_theme_mod( 'custom_css_post_id', $r );
 			}
 
-			// Trigger creation of a revision. This should be removed once #30854 is resolved.
+			// Trigger creation of a revision. This should be removed once https://core.trac.wordpress.org/ticket/30854 is resolved.
 			if ( 0 === count( wp_get_post_revisions( $r ) ) ) {
 				wp_save_post_revision( $r );
 			}
@@ -3066,7 +3066,7 @@ function is_customize_preview() {
  * publishing, then transition any dependent auto-drafts to a draft status so
  * that they likewise will not be garbage-collected but also so that they can
  * be edited in the admin before publishing since there is not yet a post/page
- * editing flow in the Customizer. See #39752.
+ * editing flow in the Customizer. See https://core.trac.wordpress.org/ticket/39752.
  *
  * @link https://core.trac.wordpress.org/ticket/39752
  *

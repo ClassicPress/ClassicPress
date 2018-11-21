@@ -11,6 +11,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 	protected $wp_site_icon;
 
 	public $attachment_id = 0;
+	public $attachment_filename = DIR_TESTDATA . '/images/test-image.jpg';
 
 	function setUp() {
 		parent::setUp();
@@ -100,7 +101,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 	function test_create_attachment_object() {
 		$attachment_id = $this->_insert_attachment();
-		$parent_url    = get_post( $attachment_id )->guid;
+		$parent_url    = $this->attachment_filename;
 		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
 
 		$object = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
@@ -108,13 +109,13 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$this->assertEquals( $object['post_title'],     'cropped-test-image.jpg' );
 		$this->assertEquals( $object['context'],        'site-icon' );
 		$this->assertEquals( $object['post_mime_type'], 'image/jpeg' );
-		$this->assertEquals( $object['post_content'],   $cropped );
-		$this->assertEquals( $object['guid'],           $cropped );
+		$this->assertEquals( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
+		$this->assertEquals( basename( $object['guid'] ),         'cropped-test-image.jpg' );
 	}
 
 	function test_insert_cropped_attachment() {
 		$attachment_id = $this->_insert_attachment();
-		$parent_url    = get_post( $attachment_id )->guid;
+		$parent_url    = $this->attachment_filename;
 		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
 
 		$object     = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
@@ -160,7 +161,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 			return $this->attachment_id;
 		}
 
-		$filename = DIR_TESTDATA . '/images/test-image.jpg';
+		$filename = $this->attachment_filename;
 		$contents = file_get_contents( $filename );
 
 		$upload = wp_upload_bits( basename( $filename ), null, $contents );

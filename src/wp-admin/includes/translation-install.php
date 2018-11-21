@@ -35,10 +35,7 @@ function translations_api( $type, $args = null ) {
 	$res = apply_filters( 'translations_api', false, $type, $args );
 
 	if ( false === $res ) {
-		$url = $http_url = 'http://api.wordpress.org/translations/' . $type . '/1.0/';
-		if ( $ssl = wp_http_supports( array( 'ssl' ) ) ) {
-			$url = set_url_scheme( $url, 'https' );
-		}
+		$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 
 		$options = array(
 			'timeout' => 3,
@@ -55,7 +52,7 @@ function translations_api( $type, $args = null ) {
 
 		$request = wp_remote_post( $url, $options );
 
-		if ( $ssl && is_wp_error( $request ) ) {
+		if ( is_wp_error( $request ) ) {
 			trigger_error(
 				sprintf(
 					/* translators: %s: support forums URL */

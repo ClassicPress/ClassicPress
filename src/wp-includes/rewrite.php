@@ -340,7 +340,7 @@ function _wp_filter_taxonomy_base( $base ) {
  * This function detects conflicts of this type and resolves them in favor of the
  * post permalink.
  *
- * Note that, since 4.3.0, wp_unique_post_slug() prevents the creation of post slugs
+ * Note that, since WP-4.3.0, wp_unique_post_slug() prevents the creation of post slugs
  * that would result in a date archive conflict. The resolution performed in this
  * function is primarily for legacy content, as well as cases when the admin has changed
  * the site's permalink structure in a way that introduces URL conflicts.
@@ -414,7 +414,7 @@ function wp_resolve_numeric_slug_conflicts( $query_vars = array() ) {
 	} elseif ( 'monthnum' === $compare && isset( $query_vars['day'] ) ) {
 		$maybe_page = $query_vars['day'];
 	}
-	// Bug found in #11694 - 'page' was returning '/4'
+	// Bug found in https://core.trac.wordpress.org/ticket/11694 - 'page' was returning '/4'
 	$maybe_page = (int) trim( $maybe_page, '/' );
 
 	$post_page_count = substr_count( $post->post_content, '<!--nextpage-->' ) + 1;

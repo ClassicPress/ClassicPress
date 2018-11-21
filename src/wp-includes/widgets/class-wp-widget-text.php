@@ -89,7 +89,7 @@ class WP_Widget_Text extends WP_Widget {
 			return ! $instance['visual'];
 		}
 
-		// Or, the widget has been added/updated in 4.8.0 then filter prop is 'content' and it is no longer legacy.
+		// Or, the widget has been added/updated in WP-4.8.0 then filter prop is 'content' and it is no longer legacy.
 		if ( isset( $instance['filter'] ) && 'content' === $instance['filter'] ) {
 			return false;
 		}
@@ -222,7 +222,7 @@ class WP_Widget_Text extends WP_Widget {
 		$text = ! empty( $instance['text'] ) ? $instance['text'] : '';
 		$is_visual_text_widget = ( ! empty( $instance['visual'] ) && ! empty( $instance['filter'] ) );
 
-		// In 4.8.0 only, visual Text widgets get filter=content, without visual prop; upgrade instance props just-in-time.
+		// In WP-4.8.0 only, visual Text widgets get filter=content, without visual prop; upgrade instance props just-in-time.
 		if ( ! $is_visual_text_widget ) {
 			$is_visual_text_widget = ( isset( $instance['filter'] ) && 'content' === $instance['filter'] );
 		}

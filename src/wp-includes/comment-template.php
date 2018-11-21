@@ -1151,7 +1151,7 @@ function trackback_url( $deprecated_echo = true ) {
 /**
  * Generate and display the RDF for the trackback information of current post.
  *
- * Deprecated in 3.0.0, and restored in 3.0.1.
+ * Deprecated in WP-3.0.0, and restored in WP-3.0.1.
  *
  * @since WP-0.71
  *
@@ -1238,11 +1238,11 @@ function pings_open( $post_id = null ) {
  * Will only display nonce token if the current user has permissions for
  * unfiltered html. Won't display the token for other users.
  *
- * The function was backported to 2.0.10 and was added to versions 2.1.3 and
- * above. Does not exist in versions prior to 2.0.10 in the 2.0 branch and in
- * the 2.1 branch, prior to 2.1.3. Technically added in 2.2.0.
+ * The function was backported to WP-2.0.10 and was added to versions WP-2.1.3 and
+ * above. Does not exist in versions prior to WP-2.0.10 in the WP-2.0 branch and in
+ * the WP-2.1 branch, prior to WP-2.1.3. Technically added in WP-2.2.0.
  *
- * Backported to 2.0.10.
+ * Backported to WP-2.0.10.
  *
  * @since WP-2.1.3
  */

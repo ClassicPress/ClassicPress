@@ -136,7 +136,7 @@
 		/**
 		 * Whether a url is a supported external host.
 		 *
-		 * @deprecated since 4.9.
+		 * @deprecated since WP-4.9.
 		 *
 		 * @returns {boolean} Whether url is a supported video host.
 		 */

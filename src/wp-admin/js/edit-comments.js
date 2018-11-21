@@ -289,7 +289,7 @@ setCommentsList = function() {
 
 			a.click(function( e ){
 				e.preventDefault();
-				e.stopPropagation(); // ticket #35904
+				e.stopPropagation(); // https://core.trac.wordpress.org/ticket/35904
 				list.wpList.del(this);
 				$('#undo-' + id).css( {backgroundColor:'#ceb'} ).fadeOut(350, function(){
 					$(this).remove();
@@ -318,7 +318,7 @@ setCommentsList = function() {
 			unapproved = commentRow.hasClass( 'unapproved' ),
 			spammed = commentRow.hasClass( 'spam' ),
 			trashed = commentRow.hasClass( 'trash' ),
-			undoing = false; // ticket #35904
+			undoing = false; // https://core.trac.wordpress.org/ticket/35904
 
 		updateDashboardText( newTotal );
 

@@ -1870,7 +1870,7 @@ $post_params = array(
 $post_params = apply_filters( 'upload_post_params', $post_params );
 
 /*
- * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
+ * Since WP-4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
  * and the `flash_swf_url` and `silverlight_xap_url` are not used.
  */
 $plupload_init = array(
@@ -1886,7 +1886,7 @@ $plupload_init = array(
 );
 
 // Currently only iOS Safari supports multiple files uploading but iOS 7.x has a bug that prevents uploading of videos
-// when enabled. See #29602.
+// when enabled. See https://core.trac.wordpress.org/ticket/29602.
 if ( wp_is_mobile() && strpos( $_SERVER['HTTP_USER_AGENT'], 'OS 7_' ) !== false &&
 	strpos( $_SERVER['HTTP_USER_AGENT'], 'like Mac OS X' ) !== false ) {
 
