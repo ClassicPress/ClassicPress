@@ -1113,7 +1113,7 @@ function wp_dashboard_events_news() {
 		<?php
 			printf(
 				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				esc_url( _x( 'https://www.classicpress.net/blog/', 'Events and News dashboard widget' ) ),
+				'https://www.classicpress.net/blog/',
 				__( 'News' ),
 				/* translators: accessibility text */
 				__( '(opens in a new window)' )
@@ -1284,7 +1284,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_primary_link', __( 'https://www.classicpress.net/blog/' ) ),
+			'link' => apply_filters( 'dashboard_primary_link', 'https://www.classicpress.net/blog/' ),
 
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
@@ -1293,7 +1293,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_primary_feed', __( 'https://www.classicpress.net/feed/' ) ),
+			'url' => apply_filters( 'dashboard_primary_feed', 'https://www.classicpress.net/feed/' ),
 
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
