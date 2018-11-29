@@ -1113,8 +1113,7 @@ function wp_dashboard_events_news() {
 		<?php
 			printf(
 				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				/* translators: If a Rosetta site exists (e.g. https://es.wordpress.org/news/), then use that. Otherwise, leave untranslated. */
-				esc_url( _x( 'https://wordpress.org/news/', 'Events and News dashboard widget' ) ),
+				'https://www.classicpress.net/blog/',
 				__( 'News' ),
 				/* translators: accessibility text */
 				__( '(opens in a new window)' )
@@ -1285,7 +1284,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
+			'link' => apply_filters( 'dashboard_primary_link', 'https://www.classicpress.net/blog/' ),
 
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
@@ -1294,7 +1293,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
+			'url' => apply_filters( 'dashboard_primary_feed', 'https://www.classicpress.net/feed/' ),
 
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
@@ -1304,52 +1303,11 @@ function wp_dashboard_primary() {
 			 * @param string $title Title attribute for the widget's primary link.
 			 */
 			'title'        => apply_filters( 'dashboard_primary_title', __( 'ClassicPress Blog' ) ),
-			'items'        => 1,
+			'items'        => 5,
 			'show_summary' => 0,
 			'show_author'  => 0,
 			'show_date'    => 0,
 		),
-		'planet' => array(
-
-			/**
-			 * Filters the secondary link URL for the 'ClassicPress News' dashboard widget.
-			 *
-			 * @since WP-2.3.0
-			 *
-			 * @param string $link The widget's secondary link URL.
-			 */
-			'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
-
-			/**
-			 * Filters the secondary feed URL for the 'ClassicPress News' dashboard widget.
-			 *
-			 * @since WP-2.3.0
-			 *
-			 * @param string $url The widget's secondary feed URL.
-			 */
-			'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
-
-			/**
-			 * Filters the secondary link title for the 'ClassicPress News' dashboard widget.
-			 *
-			 * @since WP-2.3.0
-			 *
-			 * @param string $title Title attribute for the widget's secondary link.
-			 */
-			'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other ClassicPress News' ) ),
-
-			/**
-			 * Filters the number of secondary link items for the 'ClassicPress News' dashboard widget.
-			 *
-			 * @since WP-4.4.0
-			 *
-			 * @param string $items How many items to show in the secondary feed.
-			 */
-			'items'        => apply_filters( 'dashboard_secondary_items', 3 ),
-			'show_summary' => 0,
-			'show_author'  => 0,
-			'show_date'    => 0,
-		)
 	);
 
 	wp_dashboard_cached_rss_widget( 'dashboard_primary', 'wp_dashboard_primary_output', $feeds );
