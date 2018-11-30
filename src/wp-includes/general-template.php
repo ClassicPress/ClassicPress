@@ -693,8 +693,8 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			$output = get_option('html_type');
 			break;
 		case 'version':
-			global $wp_version;
-			$output = $wp_version;
+			global $cp_version;
+			$output = $cp_version;
 			break;
 		case 'language':
 			/* translators: Translate this to the correct language tag for your locale,
