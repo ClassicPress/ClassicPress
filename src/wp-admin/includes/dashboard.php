@@ -54,6 +54,10 @@ function wp_dashboard_setup() {
 
 	// ClassicPress Events and News
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
+	
+	// ClassicPress Petitions
+	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+
 
 	if ( is_network_admin() ) {
 
@@ -294,7 +298,7 @@ function wp_dashboard_right_now() {
 	 * Filters the array of extra elements to list in the 'At a Glance'
 	 * dashboard widget.
 	 *
-	 * Prior to WP-3.8.0, the widget was named 'Right Now'. Each element
+	 * Prior to 3.8.0, the widget was named 'Right Now'. Each element
 	 * is wrapped in list-item tags on output.
 	 *
 	 * @since WP-3.8.0
@@ -319,7 +323,7 @@ function wp_dashboard_right_now() {
 		 * Filters the link title attribute for the 'Search Engines Discouraged'
 		 * message displayed in the 'At a Glance' dashboard widget.
 		 *
-		 * Prior to WP-3.8.0, the widget was named 'Right Now'.
+		 * Prior to 3.8.0, the widget was named 'Right Now'.
 		 *
 		 * @since WP-3.0.0
 		 * @since WP-4.5.0 The default for `$title` was updated to an empty string.
@@ -332,7 +336,7 @@ function wp_dashboard_right_now() {
 		 * Filters the link label for the 'Search Engines Discouraged' message
 		 * displayed in the 'At a Glance' dashboard widget.
 		 *
-		 * Prior to WP-3.8.0, the widget was named 'Right Now'.
+		 * Prior to 3.8.0, the widget was named 'Right Now'.
 		 *
 		 * @since WP-3.0.0
 		 *
@@ -355,7 +359,7 @@ function wp_dashboard_right_now() {
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
-	 * Prior to WP-3.8.0, the widget was named 'Right Now'.
+	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
 	 * @since WP-2.5.0
 	 */
@@ -364,7 +368,7 @@ function wp_dashboard_right_now() {
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
-	 * Prior to WP-3.8.0, the widget was named 'Right Now'.
+	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
 	 * @since WP-2.0.0
 	 */
@@ -1113,7 +1117,8 @@ function wp_dashboard_events_news() {
 		<?php
 			printf(
 				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				'https://www.classicpress.net/blog/',
+				/* translators: If a Rosetta site exists (e.g. https://es.wordpress.org/news/), then use that. Otherwise, leave untranslated. */
+				esc_url( _x( 'https://wordpress.org/news/', 'Events and News dashboard widget' ) ),
 				__( 'News' ),
 				/* translators: accessibility text */
 				__( '(opens in a new window)' )
@@ -1284,7 +1289,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_primary_link', 'https://www.classicpress.net/blog/' ),
+			'link' => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
 
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
@@ -1293,7 +1298,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_primary_feed', 'https://www.classicpress.net/feed/' ),
+			'url' => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
 
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
@@ -1303,11 +1308,52 @@ function wp_dashboard_primary() {
 			 * @param string $title Title attribute for the widget's primary link.
 			 */
 			'title'        => apply_filters( 'dashboard_primary_title', __( 'ClassicPress Blog' ) ),
-			'items'        => 5,
+			'items'        => 1,
 			'show_summary' => 0,
 			'show_author'  => 0,
 			'show_date'    => 0,
 		),
+		'planet' => array(
+
+			/**
+			 * Filters the secondary link URL for the 'ClassicPress News' dashboard widget.
+			 *
+			 * @since WP-2.3.0
+			 *
+			 * @param string $link The widget's secondary link URL.
+			 */
+			'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
+
+			/**
+			 * Filters the secondary feed URL for the 'ClassicPress News' dashboard widget.
+			 *
+			 * @since WP-2.3.0
+			 *
+			 * @param string $url The widget's secondary feed URL.
+			 */
+			'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
+
+			/**
+			 * Filters the secondary link title for the 'ClassicPress News' dashboard widget.
+			 *
+			 * @since WP-2.3.0
+			 *
+			 * @param string $title Title attribute for the widget's secondary link.
+			 */
+			'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other ClassicPress News' ) ),
+
+			/**
+			 * Filters the number of secondary link items for the 'ClassicPress News' dashboard widget.
+			 *
+			 * @since WP-4.4.0
+			 *
+			 * @param string $items How many items to show in the secondary feed.
+			 */
+			'items'        => apply_filters( 'dashboard_secondary_items', 3 ),
+			'show_summary' => 0,
+			'show_author'  => 0,
+			'show_date'    => 0,
+		)
 	);
 
 	wp_dashboard_cached_rss_widget( 'dashboard_primary', 'wp_dashboard_primary_output', $feeds );
@@ -1470,11 +1516,15 @@ function wp_check_browser_version() {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = 'https://api.wordpress.org/core/browse-happy/1.1/';
+		$url = 'http://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(
 			'body'       => array( 'useragent' => $_SERVER['HTTP_USER_AGENT'] ),
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 		);
+
+		if ( wp_http_supports( array( 'ssl' ) ) ) {
+			$url = set_url_scheme( $url, 'https' );
+		}
 
 		$response = wp_remote_post( $url, $options );
 
@@ -1517,41 +1567,278 @@ function wp_dashboard_empty() {}
 function wp_welcome_panel() {
 	$display_version = classicpress_version();
 	?>
-<div class="welcome-panel-content">
+	<div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-	<h3><?php _e( 'Join our growing community' ); ?></h3>
-	<p>
-		<?php printf(
-			/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
-			__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
-			'https://www.classicpress.net/join-slack/',
-			'https://forums.classicpress.net/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: link to ClassicPress Petitions site for new features */
-			__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
-			'https://petitions.classicpress.net/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
-			__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-			'https://docs.classicpress.net/faq-support/',
-			'https://forums.classicpress.net/c/support/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
-			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
-			'https://github.com/ClassicPress/ClassicPress',
-			'https://github.com/ClassicPress/ClassicPress/issues'
-		); ?>
-	</p>
-</div>
-	<?php
+			<h3><?php _e( 'Feedback and Support' ); ?></h3>
+			<p>
+				<?php _e(
+					'Do you have any feedback about this version of ClassicPress?'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					__(
+						/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to Support channel, 3: link to Testing channel */
+						'For support, suggestions for improvement, or general discussion about ClassicPress, <a href="%1$s">join our Slack group</a> and send us a message in the <a href="%2s"><strong>#support</strong></a> or <a href="%3s"><strong>#testing</strong></a> channels.'
+					),
+					'https://www.classicpress.net/join-slack/', 'https://classicpress.slack.com/messages/support/', 'https://classicpress.slack.com/messages/testing/'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					__(
+						/* translators: link to create a new GitHub issue for this plugin */
+						'For <strong>specific</strong> bug reports or suggestions, <a href="%s">add a new issue on GitHub</a>.',
+						'switch-to-classicpress'
+					),
+					'https://github.com/ClassicPress/ClassicPress/issues/new'
+				); ?>
+			</p>
+
+	</div>
+	<?php		
+}
+
+/**
+ * Returns HTML Mark up for the Petitions Dashboard Widget
+ *
+ * @since CP-1.0.0
+ */
+
+
+function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime ) {
+?>
+	<tr>
+		<td class="votes-count"><?php echo esc_attr( $votesCount ); ?></td>
+
+		<td class="petition">
+			<a target="_blank" href="<?php echo esc_url( $link ) ?>"><strong><?php echo esc_attr__( $title )?><span class="screen-reader-text"><?php echo esc_attr__( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></strong></a>
+			<?php
+				esc_attr__( 'by' ) . ' ' . ucwords(  esc_attr( $author ) );
+
+				if ( $status == "open" ){
+					echo esc_attr__( ' - ' ) . ' ' . human_time_diff( strtotime( $createdTime ), current_time('timestamp') ) . ' ' . esc_attr__( 'ago' );
+				} 
+				elseif ( $status == "planned" ){
+					echo ' - ' . '<span class="planned">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+				} 
+				else{
+					echo ' - ' . '<span class="started">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+				}
+			?>
+		</td>
+	</tr>
+<?php
+}
+
+/**
+ * Callback function for the petitions dashboard widget
+ *
+ * @since CP-1.0.0
+ */
+function cp_dashboard_petitions() {
+
+	
+	/**
+	 * Query API for JSON data -> decode results to php
+	 *
+	 * @since CP-1.0.0
+	 * @return array
+	 */
+	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
+
+	/**
+	 * Response should be an array with:
+	 *  'most-wanted []' - array() - A user-friendly platform name, if it can be determined
+	 *  'trending []' - array() - A user-friendly browser name
+	 *  'recent []' - array() - The version of the browser the user is using
+	 *  'tags [] - array() - The version of the browser the user is using
+	 *  'link - string - The version of the browser the user is using
+	 */
+	$response = wp_remote_get( $api_url );
+
+	if ( ! is_array( $response ) ) {
+		return;
+	}
+
+	if ( is_array( $response ) ) {
+		$body = $response['body']; // use the content
+	}
+
+	/** 
+	 * Parse URL Ouput into PHP array
+	 * 
+	 * @since CP-1.0.0
+	 * @return array
+	 */
+	$json = json_decode( $body, true );
+	
+	/**
+	 * Response should be an array with:
+	 * 'votes' - Count Up Voted of petition
+	 * 'link' - URL to the petitions website page 
+	 * 'title' - Title of Petition 
+	 * 'author' - Name of Petition Lead 
+	 * 'status' - Status of petition  
+	 * 'createdTime' - Timestamp of the petition request 
+	 */
+	$most_wanted = $json['most-wanted']; // get most wanted (upvoted)
+	$recent = $json['recent']; // get recent
+	$trending = $json['trending']; // get trending
+
+	/** 
+	 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
+	 * 
+	 * @since CP-1.0.0
+	 * @return array
+	 */
+	echo '<div class="sub">
+			<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+		</div>';
+
+	echo '<br>';
+
+	/** 
+	 * Get array of Lists (most wanted, trending, and recent) to loop over.
+	 * 
+	 * @since CP-1.0.0
+	 * @return array
+	 */
+	$list = array( 'trending', 'recent', 'most-wanted' );
+
+	/** 
+	 * Display tab Navigation head
+	 * 
+	 * @since CP-1.0.0
+	 * @return HTML
+	 */
+	echo '<div class="petitions_tab">';
+
+	foreach ( $list as $list_item ) {
+			echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
+	}
+
+	echo '</div>';
+	
+	/** 
+	 * Display tab Navigation body loop
+	 * 
+	 * @since CP-1.0.0
+	 * @return HTML
+	 */
+	foreach ( $list as $list_item ) {
+		echo '
+		<div id="' . $list_item . '" class="petitions_tabcontent">
+		<table class="cp_petitions">
+			<thead>
+				<tr>
+					<td>' . esc_attr__( 'Votes' ) . '</td>
+					<td>' . esc_attr__( 'Petitions' ) . '</td>
+				</tr>
+			</thead>
+		';
+
+		/** 
+		 * Loop over array to return list content for the Trending petitions.
+		 * 
+		 * @since CP-1.0.0
+		 * @return HTML
+		 */
+		if ( $list_item == 'trending' ) {
+			
+			foreach( $trending['data'] as $key => $value ) {
+
+				/**
+				 * Display the ClassicPress Most Wanted(voted) petitions.
+				 *
+				 * @since CP 1.0.0
+				 *
+				 * @param string $votesCount Up Voted of petition
+				 * @param string $link URL to the petitions website page
+				 * @param string $title Title of Petition
+				 * @param string $author Name of Petition Lead
+				 * @param string $status Status of petition 
+				 * @param string $createdTime Timestamp of the petition request
+				 * @param string $text_domain Text domain
+				 */
+				$votesCount = $value['votesCount'];
+				$link = $value['link'];
+				$title = $value['title'];
+				$author = $value['createdBy'];
+				$status = $value['status'];
+				$createdTime = $value['createdAt'];
+
+				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+			}
+		}
+
+		/** 
+		 * Loop over array to return list content for the Recent petitions.
+		 * 
+		 * @since CP-1.0.0
+		 * @return HTML
+		 */
+		if ( $list_item == 'recent' ) {
+			foreach( $recent['data'] as $key => $value ) {
+
+				/**
+				 * Display the ClassicPress Most Wanted(voted) petitions.
+				 *
+				 * @since CP 1.0.0
+				 *
+				 * @param string $votesCount Up Voted of petition
+				 * @param string $link URL to the petitions website page
+				 * @param string $title Title of Petition
+				 * @param string $author Name of Petition Lead
+				 * @param string $status Status of petition 
+				 * @param string $createdTime Timestamp of the petition request
+				 */
+				$votesCount = $value['votesCount'];
+				$link = $value['link'];
+				$title = $value['title'];
+				$author = $value['createdBy'];
+				$status = $value['status'];
+				$createdTime = $value['createdAt'];
+
+				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+			}
+		}
+
+		/** 
+		 * Loop over array to return list content for the Most Wanted(voted) petitions.
+		 * 
+		 * @since CP-1.0.0
+		 * @return HTML
+		 */
+		if ( $list_item == 'most-wanted' ) {
+			foreach( $most_wanted['data'] as $key => $value ) {
+
+				/**
+				 * Display the ClassicPress Most Wanted(voted) petitions.
+				 *
+				 * @since CP 1.0.0
+				 *
+				 * @param string $votesCount Up Voted of petition
+				 * @param string $link URL to the petitions website page
+				 * @param string $title Title of Petition
+				 * @param string $author Name of Petition Lead
+				 * @param string $status Status of petition 
+				 * @param string $createdTime Timestamp of the petition request
+				 */
+				$votesCount = $value['votesCount'];
+				$link = $value['link'];
+				$title = $value['title'];
+				$author = $value['createdBy'];
+				$status = $value['status'];
+				$createdTime = $value['createdAt'];
+
+				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+			}
+		}
+		echo '</table></div>';	
+	}							
 }
