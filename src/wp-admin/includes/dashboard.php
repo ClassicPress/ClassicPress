@@ -1678,7 +1678,7 @@ function cp_dashboard_petitions() {
 	echo '<div class="petitions_tab">';
 
 	foreach ( $list as $list_item ) {
-			echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
+		echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
 	}
 
 	echo '</div>';
