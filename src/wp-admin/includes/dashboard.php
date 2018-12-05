@@ -5,6 +5,7 @@
  * @package ClassicPress
  * @subpackage Administration
  */
+
 /**
  * Registers dashboard widgets.
  *
@@ -20,8 +21,11 @@ function wp_dashboard_setup() {
 	global $wp_registered_widgets, $wp_registered_widget_controls, $wp_dashboard_control_callbacks;
 	$wp_dashboard_control_callbacks = array();
 	$screen = get_current_screen();
+
 	/* Register Widgets and Controls */
+
 	$response = wp_check_browser_version();
+
 	if ( $response && $response['upgrade'] ) {
 		add_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' );
 		if ( $response['insecure'] )
@@ -29,31 +33,40 @@ function wp_dashboard_setup() {
 		else
 			wp_add_dashboard_widget( 'dashboard_browser_nag', __( 'Your browser is out of date!' ), 'wp_dashboard_browser_nag' );
 	}
+
 	// Right Now
 	if ( is_blog_admin() && current_user_can('edit_posts') )
 		wp_add_dashboard_widget( 'dashboard_right_now', __( 'At a Glance' ), 'wp_dashboard_right_now' );
+
 	if ( is_network_admin() )
 		wp_add_dashboard_widget( 'network_dashboard_right_now', __( 'Right Now' ), 'wp_network_dashboard_right_now' );
+
 	// Activity Widget
 	if ( is_blog_admin() ) {
 		wp_add_dashboard_widget( 'dashboard_activity', __( 'Activity' ), 'wp_dashboard_site_activity' );
 	}
+
 	// QuickPress Widget
 	if ( is_blog_admin() && current_user_can( get_post_type_object( 'post' )->cap->create_posts ) ) {
 		$quick_draft_title = sprintf( '<span class="hide-if-no-js">%1$s</span> <span class="hide-if-js">%2$s</span>', __( 'Quick Draft' ), __( 'Your Recent Drafts' ) );
 		wp_add_dashboard_widget( 'dashboard_quick_press', $quick_draft_title, 'wp_dashboard_quick_press' );
 	}
+
 	// ClassicPress Events and News
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
+
 	// ClassicPress Petitions
 	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+
 	if ( is_network_admin() ) {
+
 		/**
 		 * Fires after core widgets for the Network Admin dashboard have been registered.
 		 *
 		 * @since WP-3.1.0
 		 */
 		do_action( 'wp_network_dashboard_setup' );
+
 		/**
 		 * Filters the list of widgets to load for the Network Admin dashboard.
 		 *
@@ -63,12 +76,14 @@ function wp_dashboard_setup() {
 		 */
 		$dashboard_widgets = apply_filters( 'wp_network_dashboard_widgets', array() );
 	} elseif ( is_user_admin() ) {
+
 		/**
 		 * Fires after core widgets for the User Admin dashboard have been registered.
 		 *
 		 * @since WP-3.1.0
 		 */
 		do_action( 'wp_user_dashboard_setup' );
+
 		/**
 		 * Filters the list of widgets to load for the User Admin dashboard.
 		 *
@@ -78,12 +93,14 @@ function wp_dashboard_setup() {
 		 */
 		$dashboard_widgets = apply_filters( 'wp_user_dashboard_widgets', array() );
 	} else {
+
 		/**
 		 * Fires after core widgets for the admin dashboard have been registered.
 		 *
 		 * @since WP-2.5.0
 		 */
 		do_action( 'wp_dashboard_setup' );
+
 		/**
 		 * Filters the list of widgets to load for the admin dashboard.
 		 *
@@ -93,10 +110,12 @@ function wp_dashboard_setup() {
 		 */
 		$dashboard_widgets = apply_filters( 'wp_dashboard_widgets', array() );
 	}
+
 	foreach ( $dashboard_widgets as $widget_id ) {
 		$name = empty( $wp_registered_widgets[$widget_id]['all_link'] ) ? $wp_registered_widgets[$widget_id]['name'] : $wp_registered_widgets[$widget_id]['name'] . " <a href='{$wp_registered_widgets[$widget_id]['all_link']}' class='edit-box open-box'>" . __('View all') . '</a>';
 		wp_add_dashboard_widget( $widget_id, $name, $wp_registered_widgets[$widget_id]['callback'], $wp_registered_widget_controls[$widget_id]['callback'] );
 	}
+
 	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['widget_id']) ) {
 		check_admin_referer( 'edit-dashboard-widget_' . $_POST['widget_id'], 'dashboard-widget-nonce' );
 		ob_start(); // hack - but the same hack wp-admin/widgets.php uses
@@ -105,11 +124,14 @@ function wp_dashboard_setup() {
 		wp_redirect( remove_query_arg( 'edit' ) );
 		exit;
 	}
+
 	/** This action is documented in wp-admin/edit-form-advanced.php */
 	do_action( 'do_meta_boxes', $screen->id, 'normal', '' );
+
 	/** This action is documented in wp-admin/edit-form-advanced.php */
 	do_action( 'do_meta_boxes', $screen->id, 'side', '' );
 }
+
 /**
  * Adds a new dashboard widget.
  *
@@ -128,12 +150,15 @@ function wp_dashboard_setup() {
 function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_callback = null, $callback_args = null ) {
 	$screen = get_current_screen();
 	global $wp_dashboard_control_callbacks;
+
 	$private_callback_args = array( '__widget_basename' => $widget_name );
+
 	if ( is_null( $callback_args ) ) {
 		$callback_args = $private_callback_args;
 	} else if ( is_array( $callback_args ) ) {
 		$callback_args = array_merge( $callback_args, $private_callback_args );
 	}
+
 	if ( $control_callback && current_user_can( 'edit_dashboard' ) && is_callable( $control_callback ) ) {
 		$wp_dashboard_control_callbacks[$widget_id] = $control_callback;
 		if ( isset( $_GET['edit'] ) && $widget_id == $_GET['edit'] ) {
@@ -145,15 +170,20 @@ function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_
 			$widget_name .= ' <span class="postbox-title-action"><a href="' . esc_url( "$url#$widget_id" ) . '" class="edit-box open-box">' . __( 'Configure' ) . '</a></span>';
 		}
 	}
+
 	$side_widgets = array( 'dashboard_quick_press', 'dashboard_primary' );
+
 	$location = 'normal';
 	if ( in_array($widget_id, $side_widgets) )
 		$location = 'side';
+
 	$priority = 'core';
 	if ( 'dashboard_browser_nag' === $widget_id )
 		$priority = 'high';
+
 	add_meta_box( $widget_id, $widget_name, $callback, $screen, $location, $priority, $callback_args );
 }
+
 /**
  * Outputs controls for the current dashboard widget.
  *
@@ -171,6 +201,7 @@ function _wp_dashboard_control_callback( $dashboard, $meta_box ) {
 	submit_button( __('Submit') );
 	echo '</form>';
 }
+
 /**
  * Displays the dashboard.
  *
@@ -183,6 +214,7 @@ function wp_dashboard() {
 	if ( $columns ) {
 		$columns_css = " columns-$columns";
 	}
+
 ?>
 <div id="dashboard-widgets" class="metabox-holder<?php echo $columns_css; ?>">
 	<div id="postbox-container-1" class="postbox-container">
@@ -202,10 +234,13 @@ function wp_dashboard() {
 <?php
 	wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
 	wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+
 }
+
 //
 // Dashboard Widgets
 //
+
 /**
  * Dashboard widget that displays some basic stats about the site.
  *
@@ -234,6 +269,7 @@ function wp_dashboard_right_now() {
 			} else {
 				printf( '<li class="%1$s-count"><span>%2$s</span></li>', $post_type, $text );
 			}
+
 		}
 	}
 	// Comments
@@ -256,6 +292,7 @@ function wp_dashboard_right_now() {
 		?>"><a href="edit-comments.php?comment_status=moderated" aria-label="<?php esc_attr_e( $aria_label ); ?>"><?php echo $text; ?></a></li>
 		<?php
 	}
+
 	/**
 	 * Filters the array of extra elements to list in the 'At a Glance'
 	 * dashboard widget.
@@ -268,15 +305,19 @@ function wp_dashboard_right_now() {
 	 * @param array $items Array of extra 'At a Glance' widget items.
 	 */
 	$elements = apply_filters( 'dashboard_glance_items', array() );
+
 	if ( $elements ) {
 		echo '<li>' . implode( "</li>\n<li>", $elements ) . "</li>\n";
 	}
+
 	?>
 	</ul>
 	<?php
 	update_right_now_message();
+
 	// Check if search engines are asked not to index this site.
 	if ( ! is_network_admin() && ! is_user_admin() && current_user_can( 'manage_options' ) && '0' == get_option( 'blog_public' ) ) {
+
 		/**
 		 * Filters the link title attribute for the 'Search Engines Discouraged'
 		 * message displayed in the 'At a Glance' dashboard widget.
@@ -289,6 +330,7 @@ function wp_dashboard_right_now() {
 		 * @param string $title Default attribute text.
 		 */
 		$title = apply_filters( 'privacy_on_link_title', '' );
+
 		/**
 		 * Filters the link label for the 'Search Engines Discouraged' message
 		 * displayed in the 'At a Glance' dashboard widget.
@@ -301,6 +343,7 @@ function wp_dashboard_right_now() {
 		 */
 		$content = apply_filters( 'privacy_on_link_text' , __( 'Search Engines Discouraged' ) );
 		$title_attr = '' === $title ? '' : " title='$title'";
+
 		echo "<p><a href='options-reading.php'$title_attr>$content</a></p>";
 	}
 	?>
@@ -311,6 +354,7 @@ function wp_dashboard_right_now() {
 	 * Using an output buffer is the only way to really check if anything's displayed here.
 	 */
 	ob_start();
+
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
@@ -319,6 +363,7 @@ function wp_dashboard_right_now() {
 	 * @since WP-2.5.0
 	 */
 	do_action( 'rightnow_end' );
+
 	/**
 	 * Fires at the end of the 'At a Glance' dashboard widget.
 	 *
@@ -327,13 +372,16 @@ function wp_dashboard_right_now() {
 	 * @since WP-2.0.0
 	 */
 	do_action( 'activity_box_end' );
+
 	$actions = ob_get_clean();
+
 	if ( !empty( $actions ) ) : ?>
 	<div class="sub">
 		<?php echo $actions; ?>
 	</div>
 	<?php endif;
 }
+
 /**
  * @since WP-3.1.0
  */
@@ -343,14 +391,18 @@ function wp_network_dashboard_right_now() {
 		$actions['create-site'] = '<a href="' . network_admin_url('site-new.php') . '">' . __( 'Create a New Site' ) . '</a>';
 	if ( current_user_can('create_users') )
 		$actions['create-user'] = '<a href="' . network_admin_url('user-new.php') . '">' . __( 'Create a New User' ) . '</a>';
+
 	$c_users = get_user_count();
 	$c_blogs = get_blog_count();
+
 	/* translators: %s: number of users on the network */
 	$user_text = sprintf( _n( '%s user', '%s users', $c_users ), number_format_i18n( $c_users ) );
 	/* translators: %s: number of sites on the network */
 	$blog_text = sprintf( _n( '%s site', '%s sites', $c_blogs ), number_format_i18n( $c_blogs ) );
+
 	/* translators: 1: text indicating the number of sites on the network, 2: text indicating the number of users on the network */
 	$sentence = sprintf( __( 'You have %1$s and %2$s.' ), $blog_text, $user_text );
+
 	if ( $actions ) {
 		echo '<ul class="subsubsub">';
 		foreach ( $actions as $class => $action ) {
@@ -399,6 +451,7 @@ function wp_network_dashboard_right_now() {
 	 * @since WP-MU (3.0.0)
 	 */
 	do_action( 'mu_rightnow_end' );
+
 	/**
 	 * Fires at the end of the 'Right Now' widget in the Network Admin dashboard.
 	 *
@@ -406,6 +459,7 @@ function wp_network_dashboard_right_now() {
 	 */
 	do_action( 'mu_activity_box_end' );
 }
+
 /**
  * The Quick Draft widget display and creation of drafts.
  *
@@ -417,9 +471,11 @@ function wp_network_dashboard_right_now() {
  */
 function wp_dashboard_quick_press( $error_msg = false ) {
 	global $post_ID;
+
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		return;
 	}
+
 	/* Check if a new auto-draft (= no new post_ID) is needed or if the old can be used */
 	$last_post_id = (int) get_user_option( 'dashboard_quick_press_last_post_id' ); // Get the last post_ID
 	if ( $last_post_id ) {
@@ -437,6 +493,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 		if ( in_array( get_current_blog_id(), array_keys( get_blogs_of_user( $user_id ) ) ) )
 			update_user_option( $user_id, 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID
 	}
+
 	$post_ID = (int) $post->ID;
 ?>
 
@@ -475,6 +532,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 	<?php
 	wp_dashboard_recent_drafts();
 }
+
 /**
  * Show recent drafts of the user on the dashboard.
  *
@@ -492,6 +550,7 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 			'orderby'        => 'modified',
 			'order'          => 'DESC'
 		);
+
 		/**
 		 * Filters the post query arguments for the 'Recent Drafts' dashboard widget.
 		 *
@@ -500,16 +559,19 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 		 * @param array $query_args The query arguments for the 'Recent Drafts' dashboard widget.
 		 */
 		$query_args = apply_filters( 'dashboard_recent_drafts_query_args', $query_args );
+
 		$drafts = get_posts( $query_args );
 		if ( ! $drafts ) {
 			return;
  		}
  	}
+
 	echo '<div class="drafts">';
 	if ( count( $drafts ) > 3 ) {
 		echo '<p class="view-all"><a href="' . esc_url( admin_url( 'edit.php?post_status=draft' ) ) . '">' . __( 'View all drafts' ) . "</a></p>\n";
  	}
 	echo '<h2 class="hide-if-no-js">' . __( 'Your Recent Drafts' ) . "</h2>\n<ul>";
+
 	$drafts = array_slice( $drafts, 0, 3 );
 	foreach ( $drafts as $draft ) {
 		$url = get_edit_post_link( $draft->ID );
@@ -525,6 +587,7 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
  	}
 	echo "</ul>\n</div>";
 }
+
 /**
  * Outputs a row for the Recent Comments widget.
  *
@@ -538,13 +601,16 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
  */
 function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 	$GLOBALS['comment'] = clone $comment;
+
 	if ( $comment->comment_post_ID > 0 ) {
+
 		$comment_post_title = _draft_or_post_title( $comment->comment_post_ID );
 		$comment_post_url = get_the_permalink( $comment->comment_post_ID );
 		$comment_post_link = "<a href='$comment_post_url'>$comment_post_title</a>";
 	} else {
 		$comment_post_link = '';
 	}
+
 	$actions_string = '';
 	if ( current_user_can( 'edit_comment', $comment->comment_ID ) ) {
 		// Pre-order it: Approve | Reply | Edit | Spam | Trash.
@@ -556,24 +622,30 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 			'trash' => '', 'delete' => '',
 			'view' => '',
 		);
+
 		$del_nonce = esc_html( '_wpnonce=' . wp_create_nonce( "delete-comment_$comment->comment_ID" ) );
 		$approve_nonce = esc_html( '_wpnonce=' . wp_create_nonce( "approve-comment_$comment->comment_ID" ) );
+
 		$approve_url = esc_url( "comment.php?action=approvecomment&p=$comment->comment_post_ID&c=$comment->comment_ID&$approve_nonce" );
 		$unapprove_url = esc_url( "comment.php?action=unapprovecomment&p=$comment->comment_post_ID&c=$comment->comment_ID&$approve_nonce" );
 		$spam_url = esc_url( "comment.php?action=spamcomment&p=$comment->comment_post_ID&c=$comment->comment_ID&$del_nonce" );
 		$trash_url = esc_url( "comment.php?action=trashcomment&p=$comment->comment_post_ID&c=$comment->comment_ID&$del_nonce" );
 		$delete_url = esc_url( "comment.php?action=deletecomment&p=$comment->comment_post_ID&c=$comment->comment_ID&$del_nonce" );
+
 		$actions['approve'] = "<a href='$approve_url' data-wp-lists='dim:the-comment-list:comment-$comment->comment_ID:unapproved:e7e7d3:e7e7d3:new=approved' class='vim-a' aria-label='" . esc_attr__( 'Approve this comment' ) . "'>" . __( 'Approve' ) . '</a>';
 		$actions['unapprove'] = "<a href='$unapprove_url' data-wp-lists='dim:the-comment-list:comment-$comment->comment_ID:unapproved:e7e7d3:e7e7d3:new=unapproved' class='vim-u' aria-label='" . esc_attr__( 'Unapprove this comment' ) . "'>" . __( 'Unapprove' ) . '</a>';
 		$actions['edit'] = "<a href='comment.php?action=editcomment&amp;c={$comment->comment_ID}' aria-label='" . esc_attr__( 'Edit this comment' ) . "'>". __( 'Edit' ) . '</a>';
 		$actions['reply'] = '<a onclick="window.commentReply && commentReply.open(\'' . $comment->comment_ID . '\',\''.$comment->comment_post_ID.'\');return false;" class="vim-r hide-if-no-js" aria-label="' . esc_attr__( 'Reply to this comment' ) . '" href="#">' . __( 'Reply' ) . '</a>';
 		$actions['spam'] = "<a href='$spam_url' data-wp-lists='delete:the-comment-list:comment-$comment->comment_ID::spam=1' class='vim-s vim-destructive' aria-label='" . esc_attr__( 'Mark this comment as spam' ) . "'>" . /* translators: mark as spam link */ _x( 'Spam', 'verb' ) . '</a>';
+
 		if ( ! EMPTY_TRASH_DAYS ) {
 			$actions['delete'] = "<a href='$delete_url' data-wp-lists='delete:the-comment-list:comment-$comment->comment_ID::trash=1' class='delete vim-d vim-destructive' aria-label='" . esc_attr__( 'Delete this comment permanently' ) . "'>" . __( 'Delete Permanently' ) . '</a>';
 		} else {
 			$actions['trash'] = "<a href='$trash_url' data-wp-lists='delete:the-comment-list:comment-$comment->comment_ID::trash=1' class='delete vim-d vim-destructive' aria-label='" . esc_attr__( 'Move this comment to the Trash' ) . "'>" . _x( 'Trash', 'verb' ) . '</a>';
 		}
+
 		$actions['view'] = '<a class="comment-link" href="' . esc_url( get_comment_link( $comment ) ) . '" aria-label="' . esc_attr__( 'View this comment' ) . '">' . __( 'View' ) . '</a>';
+
 		/**
 		 * Filters the action links displayed for each comment in the 'Recent Comments'
 		 * dashboard widget.
@@ -586,14 +658,17 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 		 * @param WP_Comment $comment The comment object.
 		 */
 		$actions = apply_filters( 'comment_row_actions', array_filter($actions), $comment );
+
 		$i = 0;
 		foreach ( $actions as $action => $link ) {
 			++$i;
 			( ( ('approve' == $action || 'unapprove' == $action) && 2 === $i ) || 1 === $i ) ? $sep = '' : $sep = ' | ';
+
 			// Reply and quickedit need a hide-if-no-js span
 			if ( 'reply' == $action || 'quickedit' == $action ) {
 				$action .= ' hide-if-no-js';
 			}
+
 			if ( 'view' === $action && '1' !== $comment->comment_approved ) {
 				$action .= ' hidden';
 			}
@@ -679,13 +754,16 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 <?php
 	$GLOBALS['comment'] = null;
 }
+
 /**
  * Callback function for Activity widget.
  *
  * @since WP-3.8.0
  */
 function wp_dashboard_site_activity() {
+
 	echo '<div id="activity-widget">';
+
 	$future_posts = wp_dashboard_recent_posts( array(
 		'max'     => 5,
 		'status'  => 'future',
@@ -700,15 +778,19 @@ function wp_dashboard_site_activity() {
 		'title'   => __( 'Recently Published' ),
 		'id'      => 'published-posts',
 	) );
+
 	$recent_comments = wp_dashboard_recent_comments();
+
 	if ( !$future_posts && !$recent_posts && !$recent_comments ) {
 		echo '<div class="no-activity">';
 		echo '<p class="smiley" aria-hidden="true"></p>';
 		echo '<p>' . __( 'No activity yet!' ) . '</p>';
 		echo '</div>';
 	}
+
 	echo '</div>';
 }
+
 /**
  * Generates Publishing Soon and Recently Published sections.
  *
@@ -736,6 +818,7 @@ function wp_dashboard_recent_posts( $args ) {
 		'cache_results'  => false,
 		'perm'           => ( 'future' === $args['status'] ) ? 'editable' : 'readable',
 	);
+
 	/**
 	 * Filters the query arguments used for the Recent Posts widget.
 	 *
@@ -745,14 +828,21 @@ function wp_dashboard_recent_posts( $args ) {
 	 */
 	$query_args = apply_filters( 'dashboard_recent_posts_query_args', $query_args );
 	$posts = new WP_Query( $query_args );
+
 	if ( $posts->have_posts() ) {
+
 		echo '<div id="' . $args['id'] . '" class="activity-block">';
+
 		echo '<h3>' . $args['title'] . '</h3>';
+
 		echo '<ul>';
+
 		$today    = date( 'Y-m-d', current_time( 'timestamp' ) );
 		$tomorrow = date( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
+
 		while ( $posts->have_posts() ) {
 			$posts->the_post();
+
 			$time = get_the_time( 'U' );
 			if ( date( 'Y-m-d', $time ) == $today ) {
 				$relative = __( 'Today' );
@@ -765,8 +855,10 @@ function wp_dashboard_recent_posts( $args ) {
 				/* translators: date and time format for recent posts on the dashboard, see https://secure.php.net/date */
 				$relative = date_i18n( __( 'M jS' ), $time );
 			}
+
 			// Use the post edit link for those who can edit, the permalink otherwise.
 			$recent_post_link = current_user_can( 'edit_post', get_the_ID() ) ? get_edit_post_link() : get_permalink();
+
 			$draft_or_post_title = _draft_or_post_title();
 			printf(
 				'<li><span>%1$s</span> <a href="%2$s" aria-label="%3$s">%4$s</a></li>',
@@ -778,14 +870,19 @@ function wp_dashboard_recent_posts( $args ) {
 				$draft_or_post_title
 			);
 		}
+
 		echo '</ul>';
 		echo '</div>';
+
 	} else {
 		return false;
 	}
+
 	wp_reset_postdata();
+
 	return true;
 }
+
 /**
  * Show Comments section.
  *
@@ -797,12 +894,14 @@ function wp_dashboard_recent_posts( $args ) {
 function wp_dashboard_recent_comments( $total_items = 5 ) {
 	// Select all comment types and filter out spam later for better query performance.
 	$comments = array();
+
 	$comments_query = array(
 		'number' => $total_items * 5,
 		'offset' => 0
 	);
 	if ( ! current_user_can( 'edit_posts' ) )
 		$comments_query['status'] = 'approve';
+
 	while ( count( $comments ) < $total_items && $possible = get_comments( $comments_query ) ) {
 		if ( ! is_array( $possible ) ) {
 			break;
@@ -817,25 +916,31 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 		$comments_query['offset'] += $comments_query['number'];
 		$comments_query['number'] = $total_items * 10;
 	}
+
 	if ( $comments ) {
 		echo '<div id="latest-comments" class="activity-block">';
 		echo '<h3>' . __( 'Recent Comments' ) . '</h3>';
+
 		echo '<ul id="the-comment-list" data-wp-lists="list:comment">';
 		foreach ( $comments as $comment )
 			_wp_dashboard_recent_comments_row( $comment );
 		echo '</ul>';
+
 		if ( current_user_can( 'edit_posts' ) ) {
 			echo '<h3 class="screen-reader-text">' . __( 'View more comments' ) . '</h3>';
 			_get_list_table( 'WP_Comments_List_Table' )->views();
 		}
+
 		wp_comment_reply( -1, false, 'dashboard', false );
 		wp_comment_trashnotice();
+
 		echo '</div>';
 	} else {
 		return false;
 	}
 	return true;
 }
+
 /**
  * Display generic dashboard RSS widget feed.
  *
@@ -849,6 +954,7 @@ function wp_dashboard_rss_output( $widget_id ) {
 	wp_widget_rss_output( $widgets[ $widget_id ] );
 	echo "</div>";
 }
+
 /**
  * Checks to see if all of the feed url in $check_urls are cached.
  *
@@ -867,6 +973,7 @@ function wp_dashboard_rss_output( $widget_id ) {
 function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = array() ) {
 	$loading = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&#8230;' ) . '</p><div class="hide-if-js notice notice-error inline"><p>' . __( 'This widget requires JavaScript.' ) . '</p></div>';
 	$doing_ajax = wp_doing_ajax();
+
 	if ( empty($check_urls) ) {
 		$widgets = get_option( 'dashboard_widget_options' );
 		if ( empty($widgets[$widget_id]['url']) && ! $doing_ajax ) {
@@ -875,16 +982,19 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
 		}
 		$check_urls = array( $widgets[$widget_id]['url'] );
 	}
+
 	$locale = get_user_locale();
 	$cache_key = 'dash_v2_' . md5( $widget_id . '_' . $locale );
 	if ( false !== ( $output = get_transient( $cache_key ) ) ) {
 		echo $output;
 		return true;
 	}
+
 	if ( ! $doing_ajax ) {
 		echo $loading;
 		return false;
 	}
+
 	if ( $callback && is_callable( $callback ) ) {
 		$args = array_slice( func_get_args(), 3 );
 		array_unshift( $args, $widget_id, $check_urls );
@@ -892,11 +1002,14 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
 		call_user_func_array( $callback, $args );
 		set_transient( $cache_key, ob_get_flush(), 12 * HOUR_IN_SECONDS ); // Default lifetime in cache of 12 hours (same as the feeds)
 	}
+
 	return true;
 }
+
 //
 // Dashboard Widgets Controls
 //
+
 /**
  * Calls widget control callback.
  *
@@ -908,10 +1021,12 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
  */
 function wp_dashboard_trigger_widget_control( $widget_control_id = false ) {
 	global $wp_dashboard_control_callbacks;
+
 	if ( is_scalar($widget_control_id) && $widget_control_id && isset($wp_dashboard_control_callbacks[$widget_control_id]) && is_callable($wp_dashboard_control_callbacks[$widget_control_id]) ) {
 		call_user_func( $wp_dashboard_control_callbacks[$widget_control_id], '', array( 'id' => $widget_control_id, 'callback' => $wp_dashboard_control_callbacks[$widget_control_id] ) );
 	}
 }
+
 /**
  * The RSS dashboard widget control.
  *
@@ -926,14 +1041,18 @@ function wp_dashboard_trigger_widget_control( $widget_control_id = false ) {
 function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 	if ( !$widget_options = get_option( 'dashboard_widget_options' ) )
 		$widget_options = array();
+
 	if ( !isset($widget_options[$widget_id]) )
 		$widget_options[$widget_id] = array();
+
 	$number = 1; // Hack to use wp_widget_rss_form()
 	$widget_options[$widget_id]['number'] = $number;
+
 	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['widget-rss'][$number]) ) {
 		$_POST['widget-rss'][$number] = wp_unslash( $_POST['widget-rss'][$number] );
 		$widget_options[$widget_id] = wp_widget_rss_process( $_POST['widget-rss'][$number] );
 		$widget_options[$widget_id]['number'] = $number;
+
 		// Title is optional. If black, fill it if possible.
 		if ( !$widget_options[$widget_id]['title'] && isset($_POST['widget-rss'][$number]['title']) ) {
 			$rss = fetch_feed($widget_options[$widget_id]['url']);
@@ -950,8 +1069,11 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 		$cache_key = 'dash_v2_' . md5( $widget_id . '_' . $locale );
 		delete_transient( $cache_key );
 	}
+
 	wp_widget_rss_form( $widget_options[$widget_id], $form_inputs );
 }
+
+
 /**
  * Renders the Events and News dashboard widget.
  *
@@ -959,6 +1081,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
  */
 function wp_dashboard_events_news() {
 	wp_print_community_events_markup();
+
 	?>
 
 	<div class="wordpress-news hide-if-no-js">
@@ -1003,6 +1126,7 @@ function wp_dashboard_events_news() {
 
 	<?php
 }
+
 /**
  * Prints the markup for the Community Events section of the Events and News Dashboard widget.
  *
@@ -1074,6 +1198,7 @@ function wp_print_community_events_markup() {
 
 	<?php
 }
+
 /**
  * Renders the events templates for the Event and News widget.
  *
@@ -1144,6 +1269,7 @@ function wp_print_community_events_templates() {
 	</script>
 	<?php
 }
+
 /**
  * ClassicPress News dashboard widget.
  *
@@ -1153,6 +1279,7 @@ function wp_print_community_events_templates() {
 function wp_dashboard_primary() {
 	$feeds = array(
 		'news' => array(
+
 			/**
 			 * Filters the primary link URL for the 'ClassicPress News' dashboard widget.
 			 *
@@ -1161,6 +1288,7 @@ function wp_dashboard_primary() {
 			 * @param string $link The widget's primary link URL.
 			 */
 			'link' => apply_filters( 'dashboard_primary_link', 'https://www.classicpress.net/blog/' ),
+
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress News' dashboard widget.
 			 *
@@ -1169,6 +1297,7 @@ function wp_dashboard_primary() {
 			 * @param string $url The widget's primary feed URL.
 			 */
 			'url' => apply_filters( 'dashboard_primary_feed', 'https://www.classicpress.net/feed/' ),
+
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
 			 *
@@ -1183,8 +1312,10 @@ function wp_dashboard_primary() {
 			'show_date'    => 0,
 		),
 	);
+
 	wp_dashboard_cached_rss_widget( 'dashboard_primary', 'wp_dashboard_primary_output', $feeds );
 }
+
 /**
  * Display the ClassicPress news feeds.
  *
@@ -1202,6 +1333,7 @@ function wp_dashboard_primary_output( $widget_id, $feeds ) {
 		echo "</div>";
 	}
 }
+
 /**
  * Display file upload quota on dashboard.
  *
@@ -1214,8 +1346,10 @@ function wp_dashboard_primary_output( $widget_id, $feeds ) {
 function wp_dashboard_quota() {
 	if ( !is_multisite() || !current_user_can( 'upload_files' ) || get_site_option( 'upload_space_check_disabled' ) )
 		return true;
+
 	$quota = get_space_allowed();
 	$used = get_space_used();
+
 	if ( $used > $quota )
 		$percentused = '100';
 	else
@@ -1223,6 +1357,7 @@ function wp_dashboard_quota() {
 	$used_class = ( $percentused >= 70 ) ? ' warning' : '';
 	$used = round( $used, 2 );
 	$percentused = number_format( $percentused );
+
 	?>
 	<h3 class="mu-storage"><?php _e( 'Storage Space' ); ?></h3>
 	<div class="mu-storage">
@@ -1257,10 +1392,12 @@ function wp_dashboard_quota() {
 	</div>
 	<?php
 }
+
 // Display Browser Nag Meta Box
 function wp_dashboard_browser_nag() {
 	$notice = '';
 	$response = wp_check_browser_version();
+
 	if ( $response ) {
 		if ( $response['insecure'] ) {
 			/* translators: %s: browser name and link */
@@ -1273,21 +1410,26 @@ function wp_dashboard_browser_nag() {
 				sprintf( '<a href="%s">%s</a>', esc_url( $response['update_url'] ), esc_html( $response['name'] ) )
 			);
 		}
+
 		$browser_nag_class = '';
 		if ( !empty( $response['img_src'] ) ) {
 			$img_src = ( is_ssl() && ! empty( $response['img_src_ssl'] ) )? $response['img_src_ssl'] : $response['img_src'];
+
 			$notice .= '<div class="alignright browser-icon"><a href="' . esc_attr($response['update_url']) . '"><img src="' . esc_attr( $img_src ) . '" alt="" /></a></div>';
 			$browser_nag_class = ' has-browser-icon';
 		}
 		$notice .= "<p class='browser-update-nag{$browser_nag_class}'>{$msg}</p>";
+
 		$browsehappy = 'https://browsehappy.com/';
 		$locale = get_user_locale();
 		if ( 'en_US' !== $locale )
 			$browsehappy = add_query_arg( 'locale', $locale, $browsehappy );
+
 		$notice .= '<p>' . sprintf( __( '<a href="%1$s" class="update-browser-link">Update %2$s</a> or learn how to <a href="%3$s" class="browse-happy-link">browse happy</a>' ), esc_attr( $response['update_url'] ), esc_html( $response['name'] ), esc_url( $browsehappy ) ) . '</p>';
 		$notice .= '<p class="hide-if-no-js"><a href="" class="dismiss" aria-label="' . esc_attr__( 'Dismiss the browser warning panel' ) . '">' . __( 'Dismiss' ) . '</a></p>';
 		$notice .= '<div class="clear"></div>';
 	}
+
 	/**
 	* Filters the notice output for the 'Browse Happy' nag meta box.
 	*
@@ -1298,6 +1440,7 @@ function wp_dashboard_browser_nag() {
 	*/
 	echo apply_filters( 'browse-happy-notice', $notice, $response );
 }
+
 /**
  * @since WP-3.2.0
  *
@@ -1306,10 +1449,13 @@ function wp_dashboard_browser_nag() {
  */
 function dashboard_browser_nag_class( $classes ) {
 	$response = wp_check_browser_version();
+
 	if ( $response && $response['insecure'] )
 		$classes[] = 'browser-insecure';
+
 	return $classes;
 }
+
 /**
  * Check if the user needs a browser update
  *
@@ -1320,18 +1466,24 @@ function dashboard_browser_nag_class( $classes ) {
 function wp_check_browser_version() {
 	if ( empty( $_SERVER['HTTP_USER_AGENT'] ) )
 		return false;
+
 	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
+
 	if ( false === ($response = get_site_transient('browser_' . $key) ) ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
+
 		$url = 'https://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(
 			'body'       => array( 'useragent' => $_SERVER['HTTP_USER_AGENT'] ),
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
 		);
+
 		$response = wp_remote_post( $url, $options );
+
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) )
 			return false;
+
 		/**
 		 * Response should be an array with:
 		 *  'platform' - string - A user-friendly platform name, if it can be determined
@@ -1345,16 +1497,21 @@ function wp_check_browser_version() {
 		 *  'img_src_ssl' - string - An image (over SSL) representing the browser
 		 */
 		$response = json_decode( wp_remote_retrieve_body( $response ), true );
+
 		if ( ! is_array( $response ) )
 			return false;
+
 		set_site_transient( 'browser_' . $key, $response, WEEK_IN_SECONDS );
 	}
+
 	return $response;
 }
+
 /**
  * Empty function usable by plugins to output empty dashboard widget (to be populated later by JS).
  */
 function wp_dashboard_empty() {}
+
 /**
  * Displays a welcome panel to introduce users to ClassicPress.
  *
@@ -1408,237 +1565,242 @@ function wp_welcome_panel() {
  * @since 1.0.0
  */
 function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime ) {
-?>
-	<tr>
-		<td class="votes-count"><?php echo esc_attr( $votesCount ); ?></td>
-
-		<td class="petition">
-			<a target="_blank" href="<?php echo esc_url( $link ) ?>"><strong><?php echo esc_attr__( $title )?><span class="screen-reader-text"><?php echo esc_attr__( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></strong></a>
-			<?php
-				esc_attr__( 'by' ) . ' ' . ucwords(  esc_attr( $author ) );
-
-				if ( $status == "open" ){
-					echo esc_attr__( ' - ' ) . ' ' . human_time_diff( strtotime( $createdTime ), current_time('timestamp') ) . ' ' . esc_attr__( 'ago' );
-				} 
-				elseif ( $status == "planned" ){
-					echo ' - ' . '<span class="planned">' . esc_attr__( ucfirst( $status ) ) . '</span>';
-				} 
-				else{
-					echo ' - ' . '<span class="started">' . esc_attr__( ucfirst( $status ) ) . '</span>';
-				}
-			?>
-		</td>
-	</tr>
-<?php
-}
-
-/**
- * Callback function for the petitions dashboard widget
- *
- * @since 1.0.0
- */
-function cp_dashboard_petitions() {
-
+	?>
+		<tr>
+			<td class="votes-count"><?php echo esc_attr( $votesCount ); ?></td>
+	
+			<td class="petition">
+				<a target="_blank" href="<?php echo esc_url( $link ) ?>"><strong><?php echo esc_attr__( $title )?><span class="screen-reader-text"><?php echo esc_attr__( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></strong></a>
+				<?php
+					esc_attr__( 'by' ) . ' ' . ucwords(  esc_attr( $author ) );
+	
+					if ( $status == "open" ){
+						echo esc_attr__( ' - ' ) . ' ' . human_time_diff( strtotime( $createdTime ), current_time('timestamp') ) . ' ' . esc_attr__( 'ago' );
+					} 
+					elseif ( $status == "planned" ){
+						echo ' - ' . '<span class="planned">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+					} 
+					else{
+						echo ' - ' . '<span class="started">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+					}
+				?>
+			</td>
+		</tr>
+	<?php
+	}
 	
 	/**
-	 * Query API for JSON data -> decode results to php
+	 * Callback function for the petitions dashboard widget
 	 *
 	 * @since 1.0.0
-	 * @return array
 	 */
-	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
-
-	/**
-	 * Response should be an array with:
-	 *  'most-wanted []' - array() - A user-friendly platform name, if it can be determined
-	 *  'trending []' - array() - A user-friendly browser name
-	 *  'recent []' - array() - The version of the browser the user is using
-	 *  'tags [] - array() - The version of the browser the user is using
-	 *  'link - string - The version of the browser the user is using
-	 */
-	$response = wp_remote_get( $api_url );
-
-	if ( ! is_array( $response ) ) {
-		return;
-	}
-
-	if ( is_array( $response ) ) {
-		$body = $response['body']; // use the content
-	}
-
-	/** 
-	 * Parse URL Ouput into PHP array
-	 * 
-	 * @since 1.0.0
-	 * @return array
-	 */
-	$json = json_decode( $body, true );
+	function cp_dashboard_petitions() {
 	
-	/**
-	 * Response should be an array with:
-	 * 'votes' - Count Up Voted of petition
-	 * 'link' - URL to the petitions website page 
-	 * 'title' - Title of Petition 
-	 * 'author' - Name of Petition Lead 
-	 * 'status' - Status of petition  
-	 * 'createdTime' - Timestamp of the petition request 
-	 */
-	$most_wanted = $json['most-wanted']; // get most wanted (upvoted)
-	$recent = $json['recent']; // get recent
-	$trending = $json['trending']; // get trending
-
-	/** 
-	 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
-	 * 
-	 * @since 1.0.0
-	 * @return array
-	 */
-	echo '<div class="sub">
-			<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-		</div>';
-
-	echo '<br>';
-
-	/** 
-	 * Get array of Lists (most wanted, trending, and recent) to loop over.
-	 * 
-	 * @since 1.0.0
-	 * @return array
-	 */
-	$list = array( 'trending', 'recent', 'most-wanted' );
-
-	/** 
-	 * Display tab Navigation head
-	 * 
-	 * @since 1.0.0
-	 * @return HTML
-	 */
-	echo '<div class="petitions_tab">';
-
-	foreach ( $list as $list_item ) {
-			echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
-	}
-
-	echo '</div>';
+		// Get any existing copy of our transient data
+		if ( false === ( $dashboard_petitions_results = get_transient( 'dashboard_petitions_results' ) ) ) {
+			/**
+			 * It wasn't there, so regenerate the data and save the transient
+			 * Query API for JSON data -> decode results to php
+			 *
+			 * @since 1.0.0
+			 * @return array
+			 */
+			$api_url = 'https://api-v1.classicpress.net/features/1.0/';
 	
-	/** 
-	 * Display tab Navigation body loop
-	 * 
-	 * @since 1.0.0
-	 * @return HTML
-	 */
-	foreach ( $list as $list_item ) {
-		echo '
-		<div id="' . $list_item . '" class="petitions_tabcontent">
-		<table class="cp_petitions">
-			<thead>
-				<tr>
-					<td>' . esc_attr__( 'Votes' ) . '</td>
-					<td>' . esc_attr__( 'Petitions' ) . '</td>
-				</tr>
-			</thead>
-		';
-
+			/**
+			 * Response should be an array with:
+			 *  'most-wanted []' - array() - A user-friendly platform name, if it can be determined
+			 *  'trending []' - array() - A user-friendly browser name
+			 *  'recent []' - array() - The version of the browser the user is using
+			 *  'tags [] - array() - The version of the browser the user is using
+			 *  'link - string - The version of the browser the user is using
+			 */
+			$response = wp_remote_get( $api_url );
+	
+			if ( ! is_array( $response ) ) {
+				return;
+			}
+	
+			if ( is_array( $response ) ) {
+				$dashboard_petitions_results = $response['body']; // use the content
+			}
+	
+			set_transient( 'dashboard_petitions_results', $dashboard_petitions_results, 12 * HOUR_IN_SECONDS );
+		}
+	 
 		/** 
-		 * Loop over array to return list content for the Trending petitions.
+		 * Parse URL Ouput into PHP array
+		 * 
+		 * @since 1.0.0
+		 * @return array
+		 */
+		$json = json_decode( $dashboard_petitions_results, true );
+		
+		/**
+		 * Response should be an array with:
+		 * 'votes' - Count Up Voted of petition
+		 * 'link' - URL to the petitions website page 
+		 * 'title' - Title of Petition 
+		 * 'author' - Name of Petition Lead 
+		 * 'status' - Status of petition  
+		 * 'createdTime' - Timestamp of the petition request 
+		 */
+		$most_wanted = $json['most-wanted']; // get most wanted (upvoted)
+		$recent = $json['recent']; // get recent
+		$trending = $json['trending']; // get trending
+	
+		/** 
+		 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
+		 * 
+		 * @since 1.0.0
+		 * @return array
+		 */
+		echo '<div class="sub">
+				<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+			</div>';
+	
+		echo '<br>';
+	
+		/** 
+		 * Get array of Lists (most wanted, trending, and recent) to loop over.
+		 * 
+		 * @since 1.0.0
+		 * @return array
+		 */
+		$list = array( 'trending', 'recent', 'most-wanted' );
+	
+		/** 
+		 * Display tab Navigation head
 		 * 
 		 * @since 1.0.0
 		 * @return HTML
 		 */
-		if ( $list_item == 'trending' ) {
-			
-			foreach( $trending['data'] as $key => $value ) {
-
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
-				 * @param string $text_domain Text domain
-				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
-
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
-
-			}
+		echo '<div class="petitions_tab">';
+	
+		foreach ( $list as $list_item ) {
+				echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
 		}
-
+	
+		echo '</div>';
+		
 		/** 
-		 * Loop over array to return list content for the Recent petitions.
+		 * Display tab Navigation body loop
 		 * 
 		 * @since 1.0.0
 		 * @return HTML
 		 */
-		if ( $list_item == 'recent' ) {
-			foreach( $recent['data'] as $key => $value ) {
-
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
-				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
-
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
-
+		foreach ( $list as $list_item ) {
+			echo '
+			<div id="' . $list_item . '" class="petitions_tabcontent">
+			<table class="cp_petitions">
+				<thead>
+					<tr>
+						<td>' . esc_attr__( 'Votes' ) . '</td>
+						<td>' . esc_attr__( 'Petitions' ) . '</td>
+					</tr>
+				</thead>
+			';
+	
+			/** 
+			 * Loop over array to return list content for the Trending petitions.
+			 * 
+			 * @since 1.0.0
+			 * @return HTML
+			 */
+			if ( $list_item == 'trending' ) {
+				
+				foreach( $trending['data'] as $key => $value ) {
+	
+					/**
+					 * Display the ClassicPress Most Wanted(voted) petitions.
+					 *
+					 * @since CP 1.0.0
+					 *
+					 * @param string $votesCount Up Voted of petition
+					 * @param string $link URL to the petitions website page
+					 * @param string $title Title of Petition
+					 * @param string $author Name of Petition Lead
+					 * @param string $status Status of petition 
+					 * @param string $createdTime Timestamp of the petition request
+					 * @param string $text_domain Text domain
+					 */
+					$votesCount = $value['votesCount'];
+					$link = $value['link'];
+					$title = $value['title'];
+					$author = $value['createdBy'];
+					$status = $value['status'];
+					$createdTime = $value['createdAt'];
+	
+					cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+	
+				}
 			}
-		}
-
-		/** 
-		 * Loop over array to return list content for the Most Wanted(voted) petitions.
-		 * 
-		 * @since 1.0.0
-		 * @return HTML
-		 */
-		if ( $list_item == 'most-wanted' ) {
-			foreach( $most_wanted['data'] as $key => $value ) {
-
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
-				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
-
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
-
+	
+			/** 
+			 * Loop over array to return list content for the Recent petitions.
+			 * 
+			 * @since 1.0.0
+			 * @return HTML
+			 */
+			if ( $list_item == 'recent' ) {
+				foreach( $recent['data'] as $key => $value ) {
+	
+					/**
+					 * Display the ClassicPress Most Wanted(voted) petitions.
+					 *
+					 * @since CP 1.0.0
+					 *
+					 * @param string $votesCount Up Voted of petition
+					 * @param string $link URL to the petitions website page
+					 * @param string $title Title of Petition
+					 * @param string $author Name of Petition Lead
+					 * @param string $status Status of petition 
+					 * @param string $createdTime Timestamp of the petition request
+					 */
+					$votesCount = $value['votesCount'];
+					$link = $value['link'];
+					$title = $value['title'];
+					$author = $value['createdBy'];
+					$status = $value['status'];
+					$createdTime = $value['createdAt'];
+	
+					cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+	
+				}
 			}
-		}
-		echo '</table></div>';	
-	}							
-}
+	
+			/** 
+			 * Loop over array to return list content for the Most Wanted(voted) petitions.
+			 * 
+			 * @since 1.0.0
+			 * @return HTML
+			 */
+			if ( $list_item == 'most-wanted' ) {
+				foreach( $most_wanted['data'] as $key => $value ) {
+	
+					/**
+					 * Display the ClassicPress Most Wanted(voted) petitions.
+					 *
+					 * @since CP 1.0.0
+					 *
+					 * @param string $votesCount Up Voted of petition
+					 * @param string $link URL to the petitions website page
+					 * @param string $title Title of Petition
+					 * @param string $author Name of Petition Lead
+					 * @param string $status Status of petition 
+					 * @param string $createdTime Timestamp of the petition request
+					 */
+					$votesCount = $value['votesCount'];
+					$link = $value['link'];
+					$title = $value['title'];
+					$author = $value['createdBy'];
+					$status = $value['status'];
+					$createdTime = $value['createdAt'];
+	
+					cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+	
+				}
+			}
+			echo '</table></div>';	
+		}							
+	}
