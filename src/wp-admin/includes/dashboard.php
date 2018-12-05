@@ -1405,7 +1405,7 @@ function wp_welcome_panel() {
 /**
  * Returns HTML Mark up for the Petitions Dashboard Widget
  *
- * @since CP-1.0.0
+ * @since 1.0.0
  */
 function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime ) {
 ?>
@@ -1435,7 +1435,7 @@ function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author
 /**
  * Callback function for the petitions dashboard widget
  *
- * @since CP-1.0.0
+ * @since 1.0.0
  */
 function cp_dashboard_petitions() {
 
@@ -1443,7 +1443,7 @@ function cp_dashboard_petitions() {
 	/**
 	 * Query API for JSON data -> decode results to php
 	 *
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return array
 	 */
 	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
@@ -1469,7 +1469,7 @@ function cp_dashboard_petitions() {
 	/** 
 	 * Parse URL Ouput into PHP array
 	 * 
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return array
 	 */
 	$json = json_decode( $body, true );
@@ -1490,7 +1490,7 @@ function cp_dashboard_petitions() {
 	/** 
 	 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
 	 * 
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return array
 	 */
 	echo '<div class="sub">
@@ -1502,7 +1502,7 @@ function cp_dashboard_petitions() {
 	/** 
 	 * Get array of Lists (most wanted, trending, and recent) to loop over.
 	 * 
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return array
 	 */
 	$list = array( 'trending', 'recent', 'most-wanted' );
@@ -1510,7 +1510,7 @@ function cp_dashboard_petitions() {
 	/** 
 	 * Display tab Navigation head
 	 * 
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return HTML
 	 */
 	echo '<div class="petitions_tab">';
@@ -1524,7 +1524,7 @@ function cp_dashboard_petitions() {
 	/** 
 	 * Display tab Navigation body loop
 	 * 
-	 * @since CP-1.0.0
+	 * @since 1.0.0
 	 * @return HTML
 	 */
 	foreach ( $list as $list_item ) {
@@ -1542,7 +1542,7 @@ function cp_dashboard_petitions() {
 		/** 
 		 * Loop over array to return list content for the Trending petitions.
 		 * 
-		 * @since CP-1.0.0
+		 * @since 1.0.0
 		 * @return HTML
 		 */
 		if ( $list_item == 'trending' ) {
@@ -1577,7 +1577,7 @@ function cp_dashboard_petitions() {
 		/** 
 		 * Loop over array to return list content for the Recent petitions.
 		 * 
-		 * @since CP-1.0.0
+		 * @since 1.0.0
 		 * @return HTML
 		 */
 		if ( $list_item == 'recent' ) {
@@ -1610,7 +1610,7 @@ function cp_dashboard_petitions() {
 		/** 
 		 * Loop over array to return list content for the Most Wanted(voted) petitions.
 		 * 
-		 * @since CP-1.0.0
+		 * @since 1.0.0
 		 * @return HTML
 		 */
 		if ( $list_item == 'most-wanted' ) {

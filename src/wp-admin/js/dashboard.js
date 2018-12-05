@@ -560,6 +560,9 @@ jQuery(function($) {
   }
 });
 
+/*
+* Toggle the CP Petitions Dashboard Widget.
+*/
 function showTable(evt, type) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("petitions_tabcontent");
