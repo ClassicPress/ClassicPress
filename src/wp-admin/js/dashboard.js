@@ -508,7 +508,7 @@ jQuery( function( $ ) {
 	tabpanes[0].classList.add('active');
 
 	for (var i = 0; i < tabs.length; i++) {
-		tabs[i].addEventListener("click", switchTab);
+		tabs[i].addEventListener('click', switchTab);
 	}
 
 	function switchTab(event) {
@@ -517,7 +517,7 @@ jQuery( function( $ ) {
 
 		//Remove active classes to first tab and petitions-content pane
 		tabs.removeClass('active');
-		tabpanes.removeClass('active');;
+		tabpanes.removeClass('active');
 		
 		var clickedTab = event.currentTarget;
 		var anchor = event.target;
