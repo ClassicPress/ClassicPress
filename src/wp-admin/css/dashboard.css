@@ -358,7 +358,6 @@
 }
 
 .community-events .activity-block > p {
-	margin-bottom: 0;
 	display: inline;
 }
 
@@ -1135,49 +1134,68 @@ a.rsswidget {
 	margin: 1rem 0;
 }
 
-/* Style the tab */
-.petitions_tab {
-	overflow: hidden;
-	background-color: transparent;
-}
-
-/* Style the buttons inside the tab */
-.petitions_tab button {
-	background-color: #fff;
+.petitions-tabs {
 	float: left;
-	border: none;
-	outline: none;
-	cursor: pointer;
-	padding: 14px 16px;
-	transition: 0.3s;
+	width: 100%;
+	margin: 0;
+	list-style-type: none;
+	border-bottom: 1px solid #e7e7e7;
+	margin-top: 16px;
 }
 
-/* Change background color of buttons on hover */
-.petitions_tab button:hover {
-	background-color: #e8e8e8;
+.petitions-tabs > li {
+	float: left;
+	margin-bottom: -1px;
 }
 
-/* Create an active/current tablink class */
-.petitions_tab button.active {
-	background-color: #f5f5f5;
+.petitions-tabs > li > a {
+	margin-right: 2px;
+	line-height: 1.5;
+	padding: 10px;
+	border: 1px solid transparent;
+	float: left;
+	text-decoration: none;
 }
 
-/* Style the tab content */
-.petitions_tabcontent {
+.petitions-tabs > li > a:hover {
+	background-color: #f2f2f2;
+}
+
+.petitions-tabs > li.active > a, 
+.petitions-tabs > li.active > a:hover, 
+.petitions-tabs > li.active > a:focus {
+	color: #555;
+	cursor: default;
+	background-color: #f2f2f2;
+	border-color: #f2f2f2;
+}
+
+.petitions-content {
+	display: table;
+}
+
+.petitions-content > .petitions-pane {
+	float: left;
+	width: 100%;
 	display: none;
-	padding: 6px 0px;
-	background-color: #f5f5f5;
 }
 
+.petitions-content > .petitions-pane.active {
+	display: block;
+}
+      
 /* Petitions list */
 table.cp_petitions {
 	width: 100%;
 	padding: 0;
 	border-spacing: 0;
 }
+table.cp_petitions thead {
+	background-color: #f7f7f7;
+}
 
-table.cp_petitions tbody tr:nth-child(odd) {
-	background: #fff;
+table.cp_petitions tbody tr:nth-child(even) {
+	background: #f7f7f7;
 }
 
 table.cp_petitions .votes-count {
