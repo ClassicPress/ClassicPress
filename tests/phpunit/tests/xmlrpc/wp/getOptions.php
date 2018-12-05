@@ -33,7 +33,6 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/20201
 	 */
 	function test_option_values_subscriber() {
-		global $cp_version;
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
@@ -43,7 +42,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
-		$this->assertEquals( $cp_version, $result['software_version']['value'] );
+		$this->assertEquals( classicpress_version(), $result['software_version']['value'] );
 		$this->assertTrue( $result['software_version']['readonly'] );
 
 		$this->assertEquals( get_site_url(), $result['blog_url']['value'] );
@@ -121,8 +120,6 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 	}
 
 	function test_option_values_admin() {
-		global $cp_version;
-
 		$this->make_user_by_role( 'administrator' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'administrator', 'administrator' ) );
@@ -132,7 +129,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
-		$this->assertEquals( $cp_version, $result['software_version']['value'] );
+		$this->assertEquals( classicpress_version(), $result['software_version']['value'] );
 		$this->assertTrue( $result['software_version']['readonly'] );
 
 		$this->assertEquals( get_site_url(), $result['blog_url']['value'] );
