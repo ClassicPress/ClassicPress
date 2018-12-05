@@ -1659,8 +1659,6 @@ function cp_dashboard_petitions() {
 			<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
 		</div>';
 
-	echo '<br>';
-
 	/** 
 	 * Get array of Lists (most wanted, trending, and recent) to loop over.
 	 * 
@@ -1675,13 +1673,15 @@ function cp_dashboard_petitions() {
 	 * @since 1.0.0
 	 * @return HTML
 	 */
-	echo '<div class="petitions_tab">';
+	echo '<ul class="petitions-tabs">';
 
 	foreach ( $list as $list_item ) {
-		echo '<button class="tablinks '.$list_item.'"  onclick="showTable(event, \'' . $list_item . '\')">' . ucwords( str_replace("-"," ", $list_item )) . '</button>';
+		echo '<li><a href="' . $list_item . '">' . ucwords( str_replace("-"," ", $list_item )) . '</a></li>';
 	}
 
-	echo '</div>';
+	echo '</ul>';
+
+	echo '<div class="petitions-content">';
 	
 	/** 
 	 * Display tab Navigation body loop
@@ -1691,116 +1691,118 @@ function cp_dashboard_petitions() {
 	 */
 	foreach ( $list as $list_item ) {
 		echo '
-		<div id="' . $list_item . '" class="petitions_tabcontent">
-		<table class="cp_petitions">
-			<thead>
-				<tr>
-					<td>' . esc_attr__( 'Votes' ) . '</td>
-					<td>' . esc_attr__( 'Petitions' ) . '</td>
-				</tr>
-			</thead>
-		';
-
-		/** 
-		 * Loop over array to return list content for the Trending petitions.
-		 * 
-		 * @since 1.0.0
-		 * @return HTML
-		 */
-		if ( $list_item == 'trending' ) {
-			
-			foreach( $trending['data'] as $key => $value ) {
-
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
-				 * @param string $text_domain Text domain
+			<div id="' . $list_item . '" class="petitions-pane">';
+				echo '<table class="cp_petitions">
+					<thead>
+						<tr>
+							<td>' . esc_attr__( 'Votes' ) . '</td>
+							<td>' . esc_attr__( 'Petitions' ) . '</td>
+						</tr>
+					</thead>
+				';
+				/** 
+				 * Loop over array to return list content for the Trending petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
 				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
+				if ( $list_item == 'trending' ) {
+					
+					foreach( $trending['data'] as $key => $value ) {
 
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 * @param string $text_domain Text domain
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
 
-			}
-		}
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
 
-		/** 
-		 * Loop over array to return list content for the Recent petitions.
-		 * 
-		 * @since 1.0.0
-		 * @return HTML
-		 */
-		if ( $list_item == 'recent' ) {
-			foreach( $recent['data'] as $key => $value ) {
+					}
+				}
 
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
+				/** 
+				 * Loop over array to return list content for the Recent petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
 				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
+				if ( $list_item == 'recent' ) {
+					foreach( $recent['data'] as $key => $value ) {
 
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
 
-			}
-		}
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
 
-		/** 
-		 * Loop over array to return list content for the Most Wanted(voted) petitions.
-		 * 
-		 * @since 1.0.0
-		 * @return HTML
-		 */
-		if ( $list_item == 'most-wanted' ) {
-			foreach( $most_wanted['data'] as $key => $value ) {
+					}
+				}
 
-				/**
-				 * Display the ClassicPress Most Wanted(voted) petitions.
-				 *
-				 * @since CP 1.0.0
-				 *
-				 * @param string $votesCount Up Voted of petition
-				 * @param string $link URL to the petitions website page
-				 * @param string $title Title of Petition
-				 * @param string $author Name of Petition Lead
-				 * @param string $status Status of petition 
-				 * @param string $createdTime Timestamp of the petition request
+				/** 
+				 * Loop over array to return list content for the Most Wanted(voted) petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
 				 */
-				$votesCount = $value['votesCount'];
-				$link = $value['link'];
-				$title = $value['title'];
-				$author = $value['createdBy'];
-				$status = $value['status'];
-				$createdTime = $value['createdAt'];
+				if ( $list_item == 'most-wanted' ) {
+					foreach( $most_wanted['data'] as $key => $value ) {
 
-				cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
 
-			}
-		}
-		echo '</table></div>';	
-	}							
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+					}
+				}
+				echo '</table>';
+
+			echo '</div>';	
+		}							
+	echo '</div>';	
 }
