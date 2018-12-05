@@ -503,19 +503,19 @@ jQuery( function( $ ) {
 */
 function showTable(evt, type) {
 	var i, tabcontent, tablinks;
-	tabcontent = document.getElementsByClassName("petitions_tabcontent");
+	tabcontent = document.getElementsByClassName('petitions_tabcontent');
 	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
+		tabcontent[i].style.display = 'none';
 	}
-	tablinks = document.getElementsByClassName("tablinks");
+	tablinks = document.getElementsByClassName('tablinks');
 	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
+		tablinks[i].className = tablinks[i].className.replace(' active', '');
 	}
-	document.getElementById(type).style.display = "block";
-	evt.currentTarget.className += " active";
+	document.getElementById(type).style.display = 'block';
+	evt.currentTarget.className += ' active';
 }
 
-window.addEventListener("load", function() {
-	var trending = document.getElementsByClassName("trending");
+window.addEventListener('load', function() {
+	var trending = document.getElementsByClassName('trending');
  	trending[0].click();
 });
