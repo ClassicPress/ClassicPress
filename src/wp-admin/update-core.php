@@ -527,15 +527,41 @@ function do_core_upgrade( $reinstall = false ) {
 		'allow_relaxed_file_ownership' => $allow_relaxed_file_ownership
 	) );
 
-	if ( is_wp_error($result) ) {
-		show_message($result);
-		if ( 'up_to_date' != $result->get_error_code() && 'locked' != $result->get_error_code() )
-			show_message( __('Installation Failed') );
+	if ( is_wp_error( $result ) ) {
+		show_message( $result );
+		switch ( $result->get_error_code() ) {
+			case 'up_to_date':
+				// ClassicPress is already up to date, no need to show a different message
+				break;
+
+			case 'locked':
+				// Show a bit more info for this fairly common error
+				show_message( __(
+					'It\'s possible that an update started, but the server encountered a temporary issue and could not continue.'
+				) );
+				show_message( __(
+					'Or, you may have clicked the update button multiple times.'
+				) );
+				show_message( __(
+					'Please wait <strong>15 minutes</strong> and try again.'
+				) );
+				show_message( sprintf(
+					/* translators: URL to support forum */
+					__( 'If you see this message after waiting 15 minutes and trying the update again, please make a post on our <a href="%s">support forum</a>.' ),
+					'https://forums.classicpress.net/c/support/'
+				) );
+				break;
+
+			default:
+				// Show a generic failure message
+				show_message( __( 'Installation Failed' ) );
+				break;
+		}
 		echo '</div>';
 		return;
 	}
 
-	show_message( __('ClassicPress updated successfully') );
+	show_message( __( 'ClassicPress updated successfully' ) );
 	show_message( '<span class="hide-if-no-js">' . sprintf( __( 'Welcome to ClassicPress %1$s. You will be redirected to the About ClassicPress screen. If not, click <a href="%2$s">here</a>.' ), $result, esc_url( self_admin_url( 'about.php?updated' ) ) ) . '</span>' );
 	show_message( '<span class="hide-if-js">' . sprintf( __( 'Welcome to ClassicPress %1$s. <a href="%2$s">Learn more</a>.' ), $result, esc_url( self_admin_url( 'about.php?updated' ) ) ) . '</span>' );
 	?>
