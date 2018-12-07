@@ -547,7 +547,7 @@ function do_core_upgrade( $reinstall = false ) {
 				) );
 				show_message( sprintf(
 					/* translators: URL to support forum */
-					__( 'If you see this message multiple times, please make a post on our <a href="%s">support forum</a>.' ),
+					__( 'If you see this message after waiting 15 minutes and trying the update again, please make a post on our <a href="%s">support forum</a>.' ),
 					'https://forums.classicpress.net/c/support/'
 				) );
 				break;
