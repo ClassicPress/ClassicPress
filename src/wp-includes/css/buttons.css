@@ -118,6 +118,19 @@ TABLE OF CONTENTS:
   2.0 - Default Button Style
 ---------------------------------------------------------------------------- */
 
+/* For installation screens. */
+.wp-core-ui .cp-button {
+	background: #07989e !important;
+	color: #fff !important;
+	font-size:21px;
+	font-weight:bold;
+	}
+/* For installation screens. */
+.wp-core-ui .cp-button:hover {
+	background:#057f99 !important;
+	}
+
+
 .wp-core-ui .button,
 .wp-core-ui .button-secondary {
 	color: #555;
