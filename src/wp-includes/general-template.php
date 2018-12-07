@@ -625,6 +625,8 @@ function bloginfo( $show = '' ) {
  *
  * @since WP-0.71
  *
+ * @global string $wp_version
+ *
  * @param string $show   Optional. Site info to retrieve. Default empty (site name).
  * @param string $filter Optional. How to filter what is retrieved. Default 'raw'.
  * @return string Mostly string values, might be empty.
@@ -691,7 +693,8 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 			$output = get_option('html_type');
 			break;
 		case 'version':
-			$output = classicpress_version();
+			global $wp_version;
+			$output = $wp_version;
 			break;
 		case 'language':
 			/* translators: Translate this to the correct language tag for your locale,
