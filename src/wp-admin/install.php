@@ -95,7 +95,7 @@ if ( !$mysql_compat || !$php_compat ) {
 // Is the table prefix empty? If so, bail.
 if ( ! is_string( $wpdb->base_prefix ) || '' === $wpdb->base_prefix ) {
 	display_header( 'cp-installation-error' );
-	echo '<h1>'. __('Configuration Error') . '</h1>';
+	echo '<h1>' . __( 'Configuration Error' ) . '</h1>';
 	echo '<p>' . sprintf(
 		/* translators: %s: wp-config.php */
 		__( 'Your %s file has an empty database table prefix, which is not supported.' ),
@@ -190,7 +190,7 @@ switch($step) {
 		$scripts_to_print[] = 'user-profile';
 		// Print the branded page header.
 		display_header();
-		// Get and pare submitted data.
+		// Get and remove whitespace from submitted data.
 		$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
 		$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
 		$admin_password = isset($_POST['admin_password']) ? wp_unslash( $_POST['admin_password'] ) : '';
@@ -211,7 +211,7 @@ switch($step) {
 		} elseif ( ! is_email( $admin_email ) ) {
 			$error = __( 'Sorry, that isn&#8217;t a valid email address. Email addresses look like <code>username@example.com</code>.' );
 		}
-		if ($error) {
+		if ( $error ) {
 			display_setup_form( $error );
 		}
 		/**
