@@ -1560,249 +1560,141 @@ function wp_welcome_panel() {
 }
 
 /**
- * Returns HTML Mark up for the Petitions Dashboard Widget
- *
- * @since 1.0.0
- */
-function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime ) {
-?>
-	<tr>
-		<td class="votes-count"><?php echo esc_attr( $votesCount ); ?></td>
-
-		<td class="petition">
-			<a target="_blank" href="<?php echo esc_url( $link ) ?>"><strong><?php echo esc_attr__( $title )?><span class="screen-reader-text"><?php echo esc_attr__( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></strong></a>
-			<?php
-				esc_attr__( 'by' ) . ' ' . ucwords(  esc_attr( $author ) );
-
-				if ( $status == "open" ){
-					echo esc_attr__( ' - ' ) . ' ' . human_time_diff( strtotime( $createdTime ), current_time('timestamp') ) . ' ' . esc_attr__( 'ago' );
-				} 
-				elseif ( $status == "planned" ){
-					echo ' - ' . '<span class="planned">' . esc_attr__( ucfirst( $status ) ) . '</span>';
-				} 
-				else{
-					echo ' - ' . '<span class="started">' . esc_attr__( ucfirst( $status ) ) . '</span>';
-				}
-			?>
-		</td>
-	</tr>
-<?php
-}
-	
-/**
  * Callback function for the petitions dashboard widget
  *
  * @since 1.0.0
  */
 function cp_dashboard_petitions() {
+	$feeds = array(
+		'most-wanted' => array(
+			'title'        => __( 'Most Wanted' ),
+		),
+		'trending' => array(
+			'title'        => __( 'Trending' ),
+		),
+		'recent' => array(
+			'title'        => __( 'Recent' ),
+		),
+	);
 
-	// Get any existing copy of our transient data
-	if ( false === ( $dashboard_petitions_results = get_transient( 'dashboard_petitions_results' ) ) ) {
-		/**
-		 * It wasn't there, so regenerate the data and save the transient
-		 * Query API for JSON data -> decode results to php
-		 *
-		 * @since 1.0.0
-		 * @return array
-		 */
-		$api_url = 'https://api-v1.classicpress.net/features/1.0/';
+	wp_dashboard_cached_rss_widget( 'dashboard_petitions', 'cp_dashboard_petitions_output', $feeds );
+}
 
-		/**
-		 * Response should be an array with:
-		 *  'most-wanted []' - array() - A user-friendly platform name, if it can be determined
-		 *  'trending []' - array() - A user-friendly browser name
-		 *  'recent []' - array() - The version of the browser the user is using
-		 *  'tags [] - array() - The version of the browser the user is using
-		 *  'link - string - The version of the browser the user is using
-		 */
-		$response = wp_remote_get( $api_url );
+/**
+ * Display the ClassicPress petitions feeds.
+ *
+ * @since 1.0.0
+ *
+ * @param string $widget_id Widget ID.
+ * @param array  $feeds     Array of feeds.
+ */
+function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 
-		if ( ! is_array( $response ) ) {
-			return;
-		}
-
-		if ( is_array( $response ) ) {
-			$dashboard_petitions_results = $response['body']; // use the content
-		}
-
-		set_transient( 'dashboard_petitions_results', $dashboard_petitions_results, 12 * HOUR_IN_SECONDS );
-	}
-	
-	/** 
-	 * Parse URL Ouput into PHP array
-	 * 
-	 * @since 1.0.0
-	 * @return array
-	 */
-	$json = json_decode( $dashboard_petitions_results, true );
-	
 	/**
-	 * Response should be an array with:
-	 * 'votes' - Count Up Voted of petition
-	 * 'link' - URL to the petitions website page 
-	 * 'title' - Title of Petition 
-	 * 'author' - Name of Petition Lead 
-	 * 'status' - Status of petition  
-	 * 'createdTime' - Timestamp of the petition request 
-	 */
-	$most_wanted = $json['most-wanted']; // get most wanted (upvoted)
-	$recent = $json['recent']; // get recent
-	$trending = $json['trending']; // get trending
-
-	/** 
-	 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
-	 * 
+	 * Query API for JSON data -> decode results to php
+	 *
 	 * @since 1.0.0
 	 * @return array
 	 */
-	echo '<div class="sub">
-			<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-		</div>';
+	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
 
-	/** 
-	 * Get array of Lists (most wanted, trending, and recent) to loop over.
-	 * 
-	 * @since 1.0.0
-	 * @return array
+	/**
+	 * Response should be an object with:
+	 *  'most-wanted' - object - A user-friendly platform name, if it can be determined
+	 *  'trending' - object - A user-friendly browser name
+	 *  'recent' - object - The version of the browser the user is using
+	 *  'tags - object - The version of the browser the user is using
+	 *  'link - string - The version of the browser the user is using
 	 */
-	$list = array( 'trending', 'recent', 'most-wanted' );
+	$raw_response  = wp_remote_get( $api_url );
+	$response_code = wp_remote_retrieve_response_code( $raw_response );
 
-	/** 
-	 * Display tab Navigation head
-	 * 
-	 * @since 1.0.0
-	 * @return HTML
-	 */
-	echo '<ul class="petitions-tabs">';
-
-	foreach ( $list as $list_item ) {
-		echo '<li><a href="' . $list_item . '">' . ucwords( str_replace("-"," ", $list_item )) . '</a></li>';
+	if ( ! is_wp_error( $raw_response ) && 200 !== $response_code ) {
+		$raw_response = new WP_Error(
+			'api-error',
+			/* translators: %d: numeric HTTP status code, e.g. 400, 403, 500, 504, etc. */
+			sprintf( __( 'Invalid API response code (%d)' ), $response_code )
+		);
 	}
 
-	echo '</ul>';
+	if ( is_wp_error( $raw_response ) ) {
+		if ( is_admin() || current_user_can( 'manage_options' ) ) {
+			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $raw_response->get_error_message() . '</p>';
+		}
+		return;
+	}
 
-	echo '<div class="petitions-content">';
-	
-	/** 
-	 * Display tab Navigation body loop
-	 * 
-	 * @since 1.0.0
-	 * @return HTML
-	 */
-	foreach ( $list as $list_item ) {
-		echo '
-			<div id="' . $list_item . '" class="petitions-pane">';
-				echo '<table class="cp_petitions">
-					<thead>
-						<tr>
-							<td>' . esc_attr__( 'Votes' ) . '</td>
-							<td>' . esc_attr__( 'Petitions' ) . '</td>
-						</tr>
-					</thead>
-				';
-				/** 
-				 * Loop over array to return list content for the Trending petitions.
-				 * 
-				 * @since 1.0.0
-				 * @return HTML
-				 */
-				if ( $list_item == 'trending' ) {
-					
-					foreach( $trending['data'] as $key => $value ) {
+	$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
 
-						/**
-						 * Display the ClassicPress Most Wanted(voted) petitions.
-						 *
-						 * @since CP 1.0.0
-						 *
-						 * @param string $votesCount Up Voted of petition
-						 * @param string $link URL to the petitions website page
-						 * @param string $title Title of Petition
-						 * @param string $author Name of Petition Lead
-						 * @param string $status Status of petition 
-						 * @param string $createdTime Timestamp of the petition request
-						 * @param string $text_domain Text domain
-						 */
-						$votesCount = $value['votesCount'];
-						$link = $value['link'];
-						$title = $value['title'];
-						$author = $value['createdBy'];
-						$status = $value['status'];
-						$createdTime = $value['createdAt'];
+	?>
+	<div class="sub">
+		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+	</div>
 
-						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+	<ul class="petitions-tabs">
 
-					}
+	<?php
+	$active = array_shift( array_keys( $feeds ) );
+
+	foreach ( $feeds as $name => $args ) {
+		$class = $name === $active ? ' class="active"' : '';
+		?>
+		<li<?php echo $class; ?>><a href="#<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $args['title'] ); ?></a></li>
+		<?php
+	}
+	?>
+
+	</ul>
+
+	<div class="petitions-content">
+
+	<?php
+	foreach ( $feeds as $name => $args ) {
+
+		if ( empty( $response->$name ) ) {
+			continue;
+		}
+
+		$data   = $response->$name->data;
+		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
+		$active = $name === array_shift( array_keys( $feeds ) ) ? ' active' : '';
+		?>
+
+		<div id="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>">
+			<table class="cp_petitions">
+				<thead>
+					<tr>
+						<td><?php esc_html_e( 'Votes' ); ?></td>
+						<td><?php esc_html_e( 'Petitions' ); ?></td>
+					</tr>
+				</thead>
+
+				<?php
+				foreach( $data as $petition ) {
+					?>
+					<tr>
+						<td class="votes-count"><?php echo esc_html( $petition->votesCount ); ?></td>
+
+						<td class="petition">
+							<a target="_blank" href="<?php echo esc_url( $petition->link ) ?>"><?php echo esc_html( $petition->title )?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span></a>
+							<?php
+								if ( 'open' === $petition->status ){
+									echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );
+								} else {
+									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html(  $petition->status ) . '</span>';
+								}
+							?>
+						</td>
+					</tr>
+					<?php
 				}
+				?>
+				</table>
 
-				/** 
-				 * Loop over array to return list content for the Recent petitions.
-				 * 
-				 * @since 1.0.0
-				 * @return HTML
-				 */
-				if ( $list_item == 'recent' ) {
-					foreach( $recent['data'] as $key => $value ) {
-
-						/**
-						 * Display the ClassicPress Most Wanted(voted) petitions.
-						 *
-						 * @since CP 1.0.0
-						 *
-						 * @param string $votesCount Up Voted of petition
-						 * @param string $link URL to the petitions website page
-						 * @param string $title Title of Petition
-						 * @param string $author Name of Petition Lead
-						 * @param string $status Status of petition 
-						 * @param string $createdTime Timestamp of the petition request
-						 */
-						$votesCount = $value['votesCount'];
-						$link = $value['link'];
-						$title = $value['title'];
-						$author = $value['createdBy'];
-						$status = $value['status'];
-						$createdTime = $value['createdAt'];
-
-						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
-
-					}
-				}
-
-				/** 
-				 * Loop over array to return list content for the Most Wanted(voted) petitions.
-				 * 
-				 * @since 1.0.0
-				 * @return HTML
-				 */
-				if ( $list_item == 'most-wanted' ) {
-					foreach( $most_wanted['data'] as $key => $value ) {
-
-						/**
-						 * Display the ClassicPress Most Wanted(voted) petitions.
-						 *
-						 * @since CP 1.0.0
-						 *
-						 * @param string $votesCount Up Voted of petition
-						 * @param string $link URL to the petitions website page
-						 * @param string $title Title of Petition
-						 * @param string $author Name of Petition Lead
-						 * @param string $status Status of petition 
-						 * @param string $createdTime Timestamp of the petition request
-						 */
-						$votesCount = $value['votesCount'];
-						$link = $value['link'];
-						$title = $value['title'];
-						$author = $value['createdBy'];
-						$status = $value['status'];
-						$createdTime = $value['createdAt'];
-
-						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
-
-					}
-				}
-				echo '</table>';
-
-			echo '</div>';	
-		}							
-	echo '</div>';	
+			</div>
+			<?php
+		}
+		?>
+	</div>
+	<?php
 }

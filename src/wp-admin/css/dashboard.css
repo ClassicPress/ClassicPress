@@ -1117,7 +1117,7 @@ a.rsswidget {
 }
 
 /* ---------------------------------------------------------
-	Dashboard Petitions Widget  
+	Dashboard Petitions Widget
 ------------------------------------------------------------*/
 #dashboard_petitions .postbox .inside {
 	margin: 0;
@@ -1161,8 +1161,8 @@ a.rsswidget {
 	background-color: #f2f2f2;
 }
 
-.petitions-tabs > li.active > a, 
-.petitions-tabs > li.active > a:hover, 
+.petitions-tabs > li.active > a,
+.petitions-tabs > li.active > a:hover,
 .petitions-tabs > li.active > a:focus {
 	color: #555;
 	cursor: default;
@@ -1183,7 +1183,7 @@ a.rsswidget {
 .petitions-content > .petitions-pane.active {
 	display: block;
 }
-      
+
 /* Petitions list */
 table.cp_petitions {
 	width: 100%;

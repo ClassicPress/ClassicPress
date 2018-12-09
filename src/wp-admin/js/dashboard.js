@@ -32,7 +32,7 @@ jQuery(document).ready( function($) {
 	});
 
 	// These widgets are sometimes populated via ajax
-	ajaxWidgets = ['dashboard_primary'];
+	ajaxWidgets = ['dashboard_primary', 'dashboard_petitions'];
 
 	ajaxPopulateWidgets = function(el) {
 		function show(i, id) {
@@ -496,35 +496,20 @@ jQuery( function( $ ) {
 			}
 		});
 	}
-	
+
+
 	/*
 	* Toggle the CP Petitions Dashboard Widget.
 	*/
-	var tabs = $('ul.petitions-tabs > li');
-	var tabpanes = $('.petitions-pane');
-
-	//add active classes to first tab and petitions-content pane
-	tabs[0].classList.add('active');
-	tabpanes[0].classList.add('active');
-
-	for (var i = 0; i < tabs.length; i++) {
-		tabs[i].addEventListener('click', switchTab);
-	}
-
-	function switchTab(event) {
-			
-		event.preventDefault();
+	$( '#dashboard_petitions' ).on( 'click', 'ul.petitions-tabs > li', function( e ) {
+		e.preventDefault();
 
 		//Remove active classes to first tab and petitions-content pane
-		tabs.removeClass('active');
-		tabpanes.removeClass('active');
-		
-		var clickedTab = event.currentTarget;
-		var anchor = event.target;
-		var activePaneID = anchor.getAttribute('href');
-		
+		$( '#dashboard_petitions' ).find( '.petitions-tabs > li' ).removeClass( 'active' );
+		$( '#dashboard_petitions' ).find( '.petitions-pane' ).removeClass( 'active' );
+
 		// Get petitions-pane with same ID & add .active
-		clickedTab.classList.add('active');
-		$('#'+ activePaneID).addClass('active');
-	}
+		$( this ).addClass( 'active' );
+		$( $( this ).find( 'a' ).attr( 'href' ) ).addClass('active');
+	} );
 });
