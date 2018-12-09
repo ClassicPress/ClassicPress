@@ -59,12 +59,12 @@ if ( is_blog_installed() ) {
 }
 
 /**
- * @global string $wp_version
+ * @global string $cp_version
  * @global string $required_php_version
  * @global string $required_mysql_version
  * @global wpdb   $wpdb
  */
-global $wp_version, $required_php_version, $required_mysql_version;
+global $cp_version, $required_php_version, $required_mysql_version;
 
 // Get and check for sufficient versions of PHP and MySQL.
 $php_version   = phpversion();
@@ -72,20 +72,43 @@ $mysql_version = $wpdb->db_version();
 $php_compat    = version_compare( $php_version, $required_php_version, '>=' );
 $mysql_compat  = version_compare( $mysql_version, $required_mysql_version, '>=' ) || file_exists( WP_CONTENT_DIR . '/db.php' );
 
+// Generate the CP download URL.
+$cp_download_url = 'https://github.com/ClassicPress/ClassicPress-release';
+if ( ! strstr( $cp_version, '+' ) ) {
+	$cp_download_url .= '/releases/' . $cp_version;
+}
+
 // Insufficient PHP and/or MySQL? Set a flag with an error message.
-if ( !$mysql_compat && !$php_compat ) {
+if ( ! $mysql_compat && ! $php_compat ) {
 	/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number */
-	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">ClassicPress %1$s</a> requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ), $wp_version, $required_php_version, $required_mysql_version, $php_version, $mysql_version );
-} elseif ( !$php_compat ) {
+	$compat = sprintf(
+		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ),
+		$cp_version,
+		$required_php_version,
+		$requires_mysql_version,
+		$php_version,
+		$mysql_version
+	);
+} elseif ( ! $php_compat ) {
 	/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Current PHP version number */
-	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">ClassicPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_php_version, $php_version );
-} elseif ( !$mysql_compat ) {
+	$compat = sprintf(
+		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ),
+		$cp_version,
+		$required_php_version,
+		$php_version
+	);
+} elseif ( ! $mysql_compat ) {
 	/* translators: 1: ClassicPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number */
-	$compat = sprintf( __( 'You cannot install because <a href="https://codex.wordpress.org/Version_%1$s">ClassicPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ), $wp_version, $required_mysql_version, $mysql_version );
+	$compat = sprintf(
+		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ),
+		$cp_version,
+		$required_mysql_version,
+		$mysql_version
+	);
 }
 
 // Flag set for insufficient PHP and/or MySQL? Notify user, bail.
-if ( !$mysql_compat || !$php_compat ) {
+if ( ! $mysql_compat || ! $php_compat ) {
 	display_header( 'cp-installation-error' );
 	echo '<h1>'. __('Insufficient Requirements') . '</h1>';
 	echo '<p>' . $compat . '</p>';
