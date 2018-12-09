@@ -51,6 +51,11 @@ class Core_Upgrader extends WP_Upgrader {
 	 * directory is named otherwise, the WordPress updater will reject the update
 	 * package for the migration.
 	 *
+	 * NOTE: This function is duplicated in includes/update-core.php.  This
+	 * duplication is intentional, as the load order during an upgrade is quite
+	 * complicated and this is the simplest way to make sure that this code is
+	 * always available.
+	 *
 	 * @since 1.0.0-beta1
 	 *
 	 * @param string $working_dir The directory where a ClassicPress update package

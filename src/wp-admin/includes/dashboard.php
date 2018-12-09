@@ -55,6 +55,9 @@ function wp_dashboard_setup() {
 	// ClassicPress Events and News
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
 
+	// ClassicPress Petitions
+	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+
 	if ( is_network_admin() ) {
 
 		/**
@@ -1554,4 +1557,252 @@ function wp_welcome_panel() {
 	</p>
 </div>
 	<?php
+}
+
+/**
+ * Returns HTML Mark up for the Petitions Dashboard Widget
+ *
+ * @since 1.0.0
+ */
+function cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime ) {
+?>
+	<tr>
+		<td class="votes-count"><?php echo esc_attr( $votesCount ); ?></td>
+
+		<td class="petition">
+			<a target="_blank" href="<?php echo esc_url( $link ) ?>"><strong><?php echo esc_attr__( $title )?><span class="screen-reader-text"><?php echo esc_attr__( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></strong></a>
+			<?php
+				esc_attr__( 'by' ) . ' ' . ucwords(  esc_attr( $author ) );
+
+				if ( $status == "open" ){
+					echo esc_attr__( ' - ' ) . ' ' . human_time_diff( strtotime( $createdTime ), current_time('timestamp') ) . ' ' . esc_attr__( 'ago' );
+				} 
+				elseif ( $status == "planned" ){
+					echo ' - ' . '<span class="planned">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+				} 
+				else{
+					echo ' - ' . '<span class="started">' . esc_attr__( ucfirst( $status ) ) . '</span>';
+				}
+			?>
+		</td>
+	</tr>
+<?php
+}
+	
+/**
+ * Callback function for the petitions dashboard widget
+ *
+ * @since 1.0.0
+ */
+function cp_dashboard_petitions() {
+
+	// Get any existing copy of our transient data
+	if ( false === ( $dashboard_petitions_results = get_transient( 'dashboard_petitions_results' ) ) ) {
+		/**
+		 * It wasn't there, so regenerate the data and save the transient
+		 * Query API for JSON data -> decode results to php
+		 *
+		 * @since 1.0.0
+		 * @return array
+		 */
+		$api_url = 'https://api-v1.classicpress.net/features/1.0/';
+
+		/**
+		 * Response should be an array with:
+		 *  'most-wanted []' - array() - A user-friendly platform name, if it can be determined
+		 *  'trending []' - array() - A user-friendly browser name
+		 *  'recent []' - array() - The version of the browser the user is using
+		 *  'tags [] - array() - The version of the browser the user is using
+		 *  'link - string - The version of the browser the user is using
+		 */
+		$response = wp_remote_get( $api_url );
+
+		if ( ! is_array( $response ) ) {
+			return;
+		}
+
+		if ( is_array( $response ) ) {
+			$dashboard_petitions_results = $response['body']; // use the content
+		}
+
+		set_transient( 'dashboard_petitions_results', $dashboard_petitions_results, 12 * HOUR_IN_SECONDS );
+	}
+	
+	/** 
+	 * Parse URL Ouput into PHP array
+	 * 
+	 * @since 1.0.0
+	 * @return array
+	 */
+	$json = json_decode( $dashboard_petitions_results, true );
+	
+	/**
+	 * Response should be an array with:
+	 * 'votes' - Count Up Voted of petition
+	 * 'link' - URL to the petitions website page 
+	 * 'title' - Title of Petition 
+	 * 'author' - Name of Petition Lead 
+	 * 'status' - Status of petition  
+	 * 'createdTime' - Timestamp of the petition request 
+	 */
+	$most_wanted = $json['most-wanted']; // get most wanted (upvoted)
+	$recent = $json['recent']; // get recent
+	$trending = $json['trending']; // get trending
+
+	/** 
+	 * Output buttons for Navigation Tab to display lists (most wanted, trending, and recent).
+	 * 
+	 * @since 1.0.0
+	 * @return array
+	 */
+	echo '<div class="sub">
+			<a href="' . esc_url( $json['link'] ) . '" target="_blank" class="cp_petitions_link">' . esc_attr__( 'Your voice counts, create and vote on petitions.' ) . '<span class="screen-reader-text">' . esc_attr__( '(opens in a new window)' ) . '</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+		</div>';
+
+	/** 
+	 * Get array of Lists (most wanted, trending, and recent) to loop over.
+	 * 
+	 * @since 1.0.0
+	 * @return array
+	 */
+	$list = array( 'trending', 'recent', 'most-wanted' );
+
+	/** 
+	 * Display tab Navigation head
+	 * 
+	 * @since 1.0.0
+	 * @return HTML
+	 */
+	echo '<ul class="petitions-tabs">';
+
+	foreach ( $list as $list_item ) {
+		echo '<li><a href="' . $list_item . '">' . ucwords( str_replace("-"," ", $list_item )) . '</a></li>';
+	}
+
+	echo '</ul>';
+
+	echo '<div class="petitions-content">';
+	
+	/** 
+	 * Display tab Navigation body loop
+	 * 
+	 * @since 1.0.0
+	 * @return HTML
+	 */
+	foreach ( $list as $list_item ) {
+		echo '
+			<div id="' . $list_item . '" class="petitions-pane">';
+				echo '<table class="cp_petitions">
+					<thead>
+						<tr>
+							<td>' . esc_attr__( 'Votes' ) . '</td>
+							<td>' . esc_attr__( 'Petitions' ) . '</td>
+						</tr>
+					</thead>
+				';
+				/** 
+				 * Loop over array to return list content for the Trending petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
+				 */
+				if ( $list_item == 'trending' ) {
+					
+					foreach( $trending['data'] as $key => $value ) {
+
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 * @param string $text_domain Text domain
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
+
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+					}
+				}
+
+				/** 
+				 * Loop over array to return list content for the Recent petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
+				 */
+				if ( $list_item == 'recent' ) {
+					foreach( $recent['data'] as $key => $value ) {
+
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
+
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+					}
+				}
+
+				/** 
+				 * Loop over array to return list content for the Most Wanted(voted) petitions.
+				 * 
+				 * @since 1.0.0
+				 * @return HTML
+				 */
+				if ( $list_item == 'most-wanted' ) {
+					foreach( $most_wanted['data'] as $key => $value ) {
+
+						/**
+						 * Display the ClassicPress Most Wanted(voted) petitions.
+						 *
+						 * @since CP 1.0.0
+						 *
+						 * @param string $votesCount Up Voted of petition
+						 * @param string $link URL to the petitions website page
+						 * @param string $title Title of Petition
+						 * @param string $author Name of Petition Lead
+						 * @param string $status Status of petition 
+						 * @param string $createdTime Timestamp of the petition request
+						 */
+						$votesCount = $value['votesCount'];
+						$link = $value['link'];
+						$title = $value['title'];
+						$author = $value['createdBy'];
+						$status = $value['status'];
+						$createdTime = $value['createdAt'];
+
+						cp_dashboard_petitions_table_body ( $votesCount, $link, $title, $author, $status, $createdTime );
+
+					}
+				}
+				echo '</table>';
+
+			echo '</div>';	
+		}							
+	echo '</div>';	
 }

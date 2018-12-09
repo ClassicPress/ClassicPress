@@ -496,4 +496,35 @@ jQuery( function( $ ) {
 			}
 		});
 	}
+	
+	/*
+	* Toggle the CP Petitions Dashboard Widget.
+	*/
+	var tabs = $('ul.petitions-tabs > li');
+	var tabpanes = $('.petitions-pane');
+
+	//add active classes to first tab and petitions-content pane
+	tabs[0].classList.add('active');
+	tabpanes[0].classList.add('active');
+
+	for (var i = 0; i < tabs.length; i++) {
+		tabs[i].addEventListener('click', switchTab);
+	}
+
+	function switchTab(event) {
+			
+		event.preventDefault();
+
+		//Remove active classes to first tab and petitions-content pane
+		tabs.removeClass('active');
+		tabpanes.removeClass('active');
+		
+		var clickedTab = event.currentTarget;
+		var anchor = event.target;
+		var activePaneID = anchor.getAttribute('href');
+		
+		// Get petitions-pane with same ID & add .active
+		clickedTab.classList.add('active');
+		$('#'+ activePaneID).addClass('active');
+	}
 });

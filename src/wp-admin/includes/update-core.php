@@ -207,7 +207,7 @@ function update_core($from, $to) {
 	apply_filters( 'update_feedback', __( 'Verifying the unpacked files&#8230;' ) );
 
 	// Sanity check the unzipped distribution.
-	$distro = Core_Upgrader::get_update_directory_root( $from );
+	$distro = cp_get_update_directory_root( $from );
 	if ( ! $distro ) {
 		$wp_filesystem->delete( $from, true );
 		return new WP_Error( 'insane_distro', __('The update could not be unpacked') );
@@ -518,6 +518,59 @@ function update_core($from, $to) {
 		delete_site_option( 'auto_core_update_failed' );
 
 	return $cp_version;
+}
+
+/**
+ * Verifies and returns the root directory entry of a ClassicPress update.
+ *
+ * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
+ * GitHub builds our zip packages for us, the zip file (and therefore the
+ * directory where it was unpacked) will contain a single directory entry whose
+ * name starts with 'ClassicPress-'.
+ *
+ * We also need to allow the root directory to be called 'wordpress', since
+ * this is used when migrating from WordPress to ClassicPress.  If the
+ * directory is named otherwise, the WordPress updater will reject the update
+ * package for the migration.
+ *
+ * NOTE: This function is duplicated in class-core-upgrader.php.  This
+ * duplication is intentional, as the load order during an upgrade is quite
+ * complicated and this is the simplest way to make sure that this code is
+ * always available.
+ *
+ * @since 1.0.0-beta1
+ *
+ * @param string $working_dir The directory where a ClassicPress update package
+ *                            has been extracted.
+ *
+ * @return string|null The root directory entry that contains the new files, or
+ *                     `null` if this does not look like a valid update.
+ */
+function cp_get_update_directory_root( $working_dir ) {
+	global $wp_filesystem;
+
+	$distro = null;
+	$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
+
+	if (
+		count( $entries ) === 1 &&
+		(
+			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
+			$entries[0]['name'] === 'wordpress' // migration build
+		) &&
+		$entries[0]['type'] === 'd'
+	) {
+		$distro = '/' . $entries[0]['name'] . '/';
+		$root = $working_dir . $distro;
+		if (
+			! $wp_filesystem->exists( $root . 'readme.html' ) ||
+			! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
+		) {
+			$distro = null;
+		}
+	}
+
+	return $distro;
 }
 
 /**
