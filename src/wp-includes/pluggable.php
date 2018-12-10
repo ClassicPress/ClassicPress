@@ -216,7 +216,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	if ( ! ( $phpmailer instanceof PHPMailer ) ) {
 		require_once ABSPATH . WPINC . '/class-phpmailer.php';
 		require_once ABSPATH . WPINC . '/class-smtp.php';
-		$phpmailer = new PHPMailer( true );
+		$phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
 	}
 
 	// Headers
