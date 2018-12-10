@@ -4991,7 +4991,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		// Only use a password if one was given.
 		if ( isset($content_struct['wp_password']) ) {
 			$post_password = $content_struct['wp_password'];
-		} else{
+		} else {
 			$post_password = '';
 		}
 
