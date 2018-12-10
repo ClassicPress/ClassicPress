@@ -633,6 +633,7 @@ class WP_Comment_Query {
 		$number = absint( $this->query_vars['number'] );
 		$offset = absint( $this->query_vars['offset'] );
 		$paged = absint( $this->query_vars['paged'] );
+		$limits = '';
 
 		if ( ! empty( $number ) ) {
 			if ( $offset ) {
@@ -818,6 +819,7 @@ class WP_Comment_Query {
 		}
 
 		$join = '';
+		$groupby = '';
 
 		if ( $join_posts_table ) {
 			$join .= "JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->comments.comment_post_ID";

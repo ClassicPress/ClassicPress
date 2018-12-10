@@ -408,7 +408,7 @@ class wpdb_exposed_methods_for_testing extends wpdb {
  */
 function benchmark_pcre_backtracking( $pattern, $subject, $strategy ) {
 	$saved_config = ini_get( 'pcre.backtrack_limit' );
-	
+
 	// Attempt to prevent PHP crashes.  Adjust these lower when needed.
 	if ( version_compare( phpversion(), '5.4.8', '>' ) ) {
 		$limit = 1000000;
@@ -420,7 +420,7 @@ function benchmark_pcre_backtracking( $pattern, $subject, $strategy ) {
 	for( $i = 4; $i <= $limit; $i *= 2 ) {
 
 		ini_set( 'pcre.backtrack_limit', $i );
-		
+
 		switch( $strategy ) {
 		case 'split':
 			preg_split( $pattern, $subject );
@@ -440,7 +440,7 @@ function benchmark_pcre_backtracking( $pattern, $subject, $strategy ) {
 		case PREG_NO_ERROR:
 			return $i;
 		case PREG_BACKTRACK_LIMIT_ERROR:
-			continue;
+			continue 2;
 		case PREG_RECURSION_LIMIT_ERROR:
 			trigger_error('PCRE recursion limit encountered before backtrack limit.');
 			return;
