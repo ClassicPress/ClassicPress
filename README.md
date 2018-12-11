@@ -22,7 +22,6 @@ For more information, see:
 ## Contributors
 
 This project exists thanks to all the people who contribute.
-<a href="https://github.com/ClassicPress/ClassicPress/contributors"><img src="https://opencollective.com/classicpress/contributors.svg?width=890&button=false" /></a>
 
 
 ## Backers
