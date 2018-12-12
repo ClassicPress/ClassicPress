@@ -1566,14 +1566,14 @@ function wp_welcome_panel() {
  */
 function cp_dashboard_petitions() {
 	$feeds = array(
-		'most-wanted' => array(
-			'title'        => __( 'Most Wanted' ),
-		),
 		'trending' => array(
-			'title'        => __( 'Trending' ),
+			'title' => __( 'Trending' ),
+		),
+		'most-wanted' => array(
+			'title' => __( 'Most Wanted' ),
 		),
 		'recent' => array(
-			'title'        => __( 'Recent' ),
+			'title' => __( 'Recent' ),
 		),
 	);
 
