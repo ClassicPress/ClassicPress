@@ -170,13 +170,51 @@ class Tests_Mail extends WP_UnitTestCase {
 	function test_wp_mail_return_value() {
 		// No errors
 		$this->assertTrue( wp_mail( 'valid@address.com', 'subject', 'body' ) );
-
-		// Non-fatal errors
-		$this->assertTrue( wp_mail( 'valid@address.com', 'subject', 'body', "Cc: invalid-address\nBcc: @invalid.address", ABSPATH . '/non-existant-file.html' ) );
-
-		// Fatal errors
-		$this->assertFalse( wp_mail( 'invalid.address', 'subject', 'body', '', array() ) );
 	}
+
+	/**
+	 * @see https://core.trac.wordpress.org/ticket/23642
+	 */
+	 function test_wp_mail_invalid_to() {
+	 	$emess = '';
+	 	try {
+	 		wp_mail( 'invalid.address', 'subject', 'body', '', array() );
+	 	} catch ( Exception $e ) { $emess = $e->getMessage(); }
+	 	$this->assertEquals( $emess, 'Invalid address:  (to): invalid.address' );
+	 }
+
+	 /**
+	 * @see https://core.trac.wordpress.org/ticket/23642
+	 */
+	 function test_wp_mail_addcc() {
+		$emess = '';
+	 	try {
+	 		wp_mail( 'valid@address.com', 'subject', 'body', "Cc: invalid-address" );
+	 	} catch ( Exception $e ) { $emess = $e->getMessage(); }
+	 	$this->assertEquals( $emess, 'Invalid address:  (cc): invalid-address' );
+	}
+
+	/**
+	 * @see https://core.trac.wordpress.org/ticket/23642
+	 */
+	 function test_wp_mail_addbcc() {
+	 	$emess = '';
+	 	try {
+		 	wp_mail( 'valid@address.com', 'subject', 'body', "Bcc: @invalid.address" );
+		} catch ( Exception $e ) { $emess = $e->getMessage(); }
+	 	$this->assertEquals( $emess, 'Invalid address:  (bcc): @invalid.address' );
+	 }
+
+	/**
+	 * @see https://core.trac.wordpress.org/ticket/23642
+	 */
+	 function test_wp_mail_empty_attachment() {
+	 	$emess = '';
+	 	try {
+	 		wp_mail( 'valid@address.com', 'subject', 'body', '', ABSPATH . '/non-existant-file.html' );
+	 	} catch ( Exception $e ) { $emess = $e->getMessage(); }
+	 	$this->assertEquals( substr( $emess, 0, 22 ), 'Could not access file:' );
+	 }
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/30266
@@ -372,24 +410,26 @@ class Tests_Mail extends WP_UnitTestCase {
 		$ma = new MockAction();
 		add_action( 'wp_mail_failed', array( &$ma, 'action' ) );
 
-		wp_mail( $to, $subject, $message );
+		try {
+			wp_mail( $to, $subject, $message );
+		} catch ( Exception $e ) {
+			// $this->assertEquals( 0, $ma->get_call_count() );
 
-		$this->assertEquals( 1, $ma->get_call_count() );
+			$expected_error_data = array(
+				'to'          => array( 'an_invalid_address' ),
+				'subject'     => 'Testing',
+				'message'     => 'Test Message',
+				'headers'     => array(),
+				'attachments' => array(),
+				'phpmailer_exception_code' => 2,
+			);
 
-		$expected_error_data = array(
-			'to'          => array( 'an_invalid_address' ),
-			'subject'     => 'Testing',
-			'message'     => 'Test Message',
-			'headers'     => array(),
-			'attachments' => array(),
-			'phpmailer_exception_code' => 2,
-		);
+			//Retrieve the arguments passed to the 'wp_mail_failed' hook callbacks
+			$all_args = $ma->get_args();
+			$call_args = array_pop( $all_args );
 
-		//Retrieve the arguments passed to the 'wp_mail_failed' hook callbacks
-		$all_args = $ma->get_args();
-		$call_args = array_pop( $all_args );
-
-		$this->assertEquals( 'wp_mail_failed', $call_args[0]->get_error_code() );
-		$this->assertEquals( $expected_error_data, $call_args[0]->get_error_data() );
+			$this->assertEquals( 'wp_mail_failed', $call_args[0]->get_error_code() );
+			$this->assertEquals( $expected_error_data, $call_args[0]->get_error_data() );
+		}
 	}
 }

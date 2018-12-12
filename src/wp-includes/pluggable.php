@@ -217,7 +217,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 		require_once ABSPATH . WPINC . '/class-phpmailer.php';
 		require_once ABSPATH . WPINC . '/class-exception.php';
 		require_once ABSPATH . WPINC . '/class-smtp.php';
-		$phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
+		$phpmailer = new PHPMailer( true );
 	}
 
 	// Headers
@@ -480,7 +480,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	// Send!
 	try {
 		return $phpmailer->send();
-	} catch ( phpmailerException $e ) {
+	} catch ( Exception $e ) {
 
 		$mail_error_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
 		$mail_error_data['phpmailer_exception_code'] = $e->getCode();
