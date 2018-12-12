@@ -1686,7 +1686,7 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 								if ( 'open' === $petition->status ){
 									echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );
 								} else {
-									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html(  $petition->status ) . '</span>';
+									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html( $petition->status ) . '</span>';
 								}
 							?>
 						</td>
