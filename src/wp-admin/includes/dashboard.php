@@ -1603,25 +1603,33 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 	 * Each of these 'object' keys should have a 'data' property which is an
 	 * array of the top petitions sorted in the order represented by the key.
 	 */
-	$raw_response  = wp_remote_get( $api_url );
-	$response_code = wp_remote_retrieve_response_code( $raw_response );
+	$response      = wp_remote_get( $api_url );
+	$response_code = wp_remote_retrieve_response_code( $response );
 
-	if ( ! is_wp_error( $raw_response ) && 200 !== $response_code ) {
-		$raw_response = new WP_Error(
+	if ( ! is_wp_error( $response ) && 200 !== $response_code ) {
+		$response = new WP_Error(
 			'api-error',
 			/* translators: %d: numeric HTTP status code, e.g. 400, 403, 500, 504, etc. */
 			sprintf( __( 'Invalid API response code (%d)' ), $response_code )
 		);
 	}
 
-	if ( is_wp_error( $raw_response ) ) {
+	if ( ! is_wp_error( $response ) ) {
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+		if ( empty( $response ) || ! is_object( $response ) || ! isset( $response->link ) ) {
+			$response = new WP_Error(
+				'api-error',
+				__( 'Invalid API response (invalid JSON)' )
+			);
+		}
+	}
+
+	if ( is_wp_error( $response ) ) {
 		if ( is_admin() || current_user_can( 'manage_options' ) ) {
-			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $raw_response->get_error_message() . '</p>';
+			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $response->get_error_message() . '</p>';
 		}
 		return;
 	}
-
-	$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
 
 	?>
 	<div class="sub">
