@@ -1583,28 +1583,25 @@ function cp_dashboard_petitions() {
 /**
  * Display the ClassicPress petitions feeds.
  *
+ * Query the ClassicPress.net API for data about ClassicPress petitions, and
+ * echo the results as HTML.
+ *
  * @since 1.0.0
  *
  * @param string $widget_id Widget ID.
- * @param array  $feeds     Array of feeds.
+ * @param array  $feeds     Array of petition feeds (possible sort orders).
  */
 function cp_dashboard_petitions_output( $widget_id, $feeds ) {
-
-	/**
-	 * Query API for JSON data -> decode results to php
-	 *
-	 * @since 1.0.0
-	 * @return array
-	 */
 	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
 
 	/**
-	 * Response should be an object with:
-	 *  'most-wanted' - object - A user-friendly platform name, if it can be determined
-	 *  'trending' - object - A user-friendly browser name
-	 *  'recent' - object - The version of the browser the user is using
-	 *  'tags - object - The version of the browser the user is using
-	 *  'link - string - The version of the browser the user is using
+	 * Response body should be an object with:
+	 *  'link'        - string - Link to the ClassicPress petitions website.
+	 *  'most-wanted' - object - Petitions sorted by number of votes.
+	 *  'trending'    - object - Petitions sorted by activity and votes.
+	 *  'recent'      - object - Petitions sorted by date created.
+	 * Each of these 'object' keys should have a 'data' property which is an
+	 * array of the top petitions sorted in the order represented by the key.
 	 */
 	$raw_response  = wp_remote_get( $api_url );
 	$response_code = wp_remote_retrieve_response_code( $raw_response );
