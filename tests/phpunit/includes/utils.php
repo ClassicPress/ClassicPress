@@ -465,7 +465,7 @@ function test_rest_expand_compact_links( $links ) {
 	}
 	foreach ( $links as $rel => $links_array ) {
 		if ( ! strpos( $rel, ':' ) ) {
-			continue;
+			break;
 		}
 
 		$name = explode( ':', $rel );
