@@ -398,38 +398,4 @@ class Tests_Mail extends WP_UnitTestCase {
 
 		$this->assertEquals( '', $mailer->Sender );
 	}
-
-	/**
-	 * @see https://core.trac.wordpress.org/ticket/35598
-	 */
-	public function test_phpmailer_exception_thrown() {
-		$to       = 'an_invalid_address';
-		$subject  = 'Testing';
-		$message  = 'Test Message';
-
-		$ma = new MockAction();
-		add_action( 'wp_mail_failed', array( &$ma, 'action' ) );
-
-		try {
-			wp_mail( $to, $subject, $message );
-		} catch ( Exception $e ) {
-			// $this->assertEquals( 0, $ma->get_call_count() );
-
-			$expected_error_data = array(
-				'to'          => array( 'an_invalid_address' ),
-				'subject'     => 'Testing',
-				'message'     => 'Test Message',
-				'headers'     => array(),
-				'attachments' => array(),
-				'phpmailer_exception_code' => 2,
-			);
-
-			//Retrieve the arguments passed to the 'wp_mail_failed' hook callbacks
-			$all_args = $ma->get_args();
-			$call_args = array_pop( $all_args );
-
-			$this->assertEquals( 'wp_mail_failed', $call_args[0]->get_error_code() );
-			$this->assertEquals( $expected_error_data, $call_args[0]->get_error_data() );
-		}
-	}
 }
