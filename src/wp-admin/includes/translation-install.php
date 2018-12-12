@@ -35,7 +35,7 @@ function translations_api( $type, $args = null ) {
 	$res = apply_filters( 'translations_api', false, $type, $args );
 
 	if ( false === $res ) {
-		$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
+		$url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 
 		$options = array(
 			'timeout' => 3,
@@ -62,7 +62,8 @@ function translations_api( $type, $args = null ) {
 				headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 			);
 
-			$request = wp_remote_post( $http_url, $options );
+			// Retry request
+			$request = wp_remote_post( $url, $options );
 		}
 
 		if ( is_wp_error( $request ) ) {

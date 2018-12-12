@@ -144,7 +144,7 @@ function plugins_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = $http_url = 'https://api.wordpress.org/plugins/info/1.0/';
+		$url = 'https://api.wordpress.org/plugins/info/1.0/';
 
 		$http_args = array(
 			'timeout' => 15,
@@ -165,10 +165,12 @@ function plugins_api( $action, $args = array() ) {
 				) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
 				headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 			);
-			$request = wp_remote_post( $http_url, $http_args );
+
+			// Retry request
+			$request = wp_remote_post( $url, $http_args );
 		}
 
-		if ( is_wp_error($request) ) {
+		if ( is_wp_error( $request ) ) {
 			$res = new WP_Error( 'plugins_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
