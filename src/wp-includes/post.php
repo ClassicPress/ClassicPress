@@ -775,7 +775,7 @@ function get_page_statuses() {
 /**
  * Return statuses for privacy requests.
  *
- * @since WP-5.0.0
+ * @since WP-4.9.6
  *
  * @return array
  */

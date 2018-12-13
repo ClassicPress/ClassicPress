@@ -1311,7 +1311,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * Intended for use from `wp_add_privacy_policy_content()`.
 	 *
-	 * @since WP-4.9.6
+	 * $since 4.9.6
 	 *
 	 * @param string $plugin_name The name of the plugin or theme that is suggesting content for the site's privacy policy.
 	 * @param string $policy_text The suggested content for inclusion in the policy.
@@ -1581,7 +1581,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * @since WP-4.9.6
 	 *
-	 * @param $post WP_Post The currently edited post.
+	 * @param WP_Post $post The currently edited post.
 	 */
 	public static function notice( $post ) {
 		if ( ! ( $post instanceof WP_Post ) ) {

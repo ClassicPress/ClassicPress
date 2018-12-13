@@ -203,7 +203,7 @@
 }
 
 .welcome-panel .welcome-panel-column ul {
-		margin: 0.8em 1em 1em 0;
+	margin: 0.8em 1em 1em 0;
 }
 
 .welcome-panel .welcome-panel-column li {
@@ -1240,6 +1240,16 @@ table.cp_petitions span.started {
 @media only screen and (max-width: 799px) {
 	#wpbody-content #dashboard-widgets .postbox-container {
 		width: 100%;
+	}
+
+	.try-gutenberg-panel .try-gutenberg-panel-column:not(.try-gutenberg-panel-image-column) {
+		width: 50%;
+	}
+
+	@supports (display: grid) {
+		.try-gutenberg-panel .try-gutenberg-panel-column:not(.try-gutenberg-panel-image-column) {
+			width: auto;
+		}
 	}
 }
 
