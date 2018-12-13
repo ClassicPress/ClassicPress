@@ -589,7 +589,7 @@ function wp_kses_one_attr( $string, $element ) {
 		$value = '';
 		$vless = 'y';
 	}
-	
+
 	// Sanitize attribute by name.
 	wp_kses_attr_check( $name, $value, $string, $vless, $element, $allowed_html );
 
@@ -601,7 +601,7 @@ function wp_kses_one_attr( $string, $element ) {
  * Return a list of allowed tags and attributes for a given context.
  *
  * @since WP-3.5.0
- * @since 5.0.1 `form` removed as allowable HTML tag.
+ * @since WP-5.0.1 `form` removed as allowable HTML tag.
  *
  * @global array $allowedposttags
  * @global array $allowedtags
@@ -632,7 +632,7 @@ function wp_kses_allowed_html( $context = '' ) {
 			/** This filter is documented in wp-includes/kses.php */
 			$tags = apply_filters( 'wp_kses_allowed_html', $allowedposttags, $context );
 
-			// 5.0.1 removed the `<form>` tag, allow it if a filter is allowing it's sub-elements `<input>` or `<select>`.
+			// WP-5.0.1 removed the `<form>` tag, allow it if a filter is allowing it's sub-elements `<input>` or `<select>`.
 			if ( ! CUSTOM_TAGS && ! isset( $tags['form'] ) && ( isset( $tags['input'] ) || isset( $tags['select'] ) ) ) {
 				$tags = $allowedposttags;
 
@@ -743,7 +743,7 @@ function wp_kses_split( $string, $allowed_html, $allowed_protocols ) {
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
  *
- * @since 5.0.1
+ * @since WP-5.0.1
  *
  * @return array HTML attributes that must include a URL.
  */
@@ -774,7 +774,7 @@ function wp_kses_uri_attributes() {
 	 * Use this filter to add any `data-` attributes that are required to be
 	 * validated as a URL.
 	 *
-	 * @since 5.0.1
+	 * @since WP-5.0.1
 	 *
 	 * @param array $uri_attributes HTML attributes requiring validation as a URL.
 	 */
