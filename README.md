@@ -21,8 +21,11 @@ For more information, see:
 
 ## Contributors
 
-This project exists thanks to all the people who contribute.
+This project exists thanks to all the people who contribute and who have contributed in the past, whether as part of the long history of thousands of contributions to WordPress from many different people, or as contributions to ClassicPress itself.
 
+You can see a list of WordPress contributors by going to the [WordPress releases page](https://wordpress.org/news/category/releases/) and looking at the credits for each release.  All changes in WordPress 4.9.8 and earlier are part of ClassicPress, along with selected changes from later releases.
+
+We are working on several ways to recognize people for their contributions to ClassicPress.  In the meantime, you can view a list of code contributions [here on GitHub](https://github.com/ClassicPress/ClassicPress/compare/LAST_WP_COMMIT...develop).
 
 ## Backers
 
