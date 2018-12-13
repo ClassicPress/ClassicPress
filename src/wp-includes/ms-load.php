@@ -122,7 +122,7 @@ function ms_site_check() {
  *
  * @since WP-3.9.0
  *
- * @internal In 4.4.0, converted to a wrapper for WP_Network::get_by_path()
+ * @internal In WP-4.4.0, converted to a wrapper for WP_Network::get_by_path()
  *
  * @param string   $domain   Domain to check.
  * @param string   $path     Path to check.
@@ -253,7 +253,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
  * Identifies the network and site of a requested domain and path and populates the
  * corresponding network and site global objects as part of the multisite bootstrap process.
  *
- * Prior to 4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
+ * Prior to WP-4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
  * a function to facilitate unit tests. It should not be used outside of core.
  *
  * Usually, it's easier to query the site first, which then declares its network.
@@ -534,7 +534,7 @@ function wpmu_current_site() {
  * @deprecated WP-4.7.0 Use `get_network()`
  * @see get_network()
  *
- * @internal In 4.6.0, converted to use get_network()
+ * @internal In WP-4.6.0, converted to use get_network()
  *
  * @param object|int $network The network's database row or ID.
  * @return WP_Network|false Object containing network information if found, false if not.

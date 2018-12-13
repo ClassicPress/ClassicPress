@@ -128,8 +128,9 @@ if ( is_multisite() ) {
 register_shutdown_function( 'shutdown_action_hook' );
 
 // Stop most of ClassicPress from being loaded if we just want the basics.
-if ( SHORTINIT )
+if ( SHORTINIT ) {
 	return false;
+}
 
 // Load the L10n library.
 require_once( ABSPATH . WPINC . '/l10n.php' );
@@ -277,8 +278,9 @@ if ( is_multisite() ) {
  */
 do_action( 'muplugins_loaded' );
 
-if ( is_multisite() )
-	ms_cookie_constants(  );
+if ( is_multisite() ) {
+	ms_cookie_constants();
+}
 
 // Define constants after multisite is loaded.
 wp_cookie_constants();
@@ -314,8 +316,9 @@ require( ABSPATH . WPINC . '/pluggable-deprecated.php' );
 wp_set_internal_encoding();
 
 // Run wp_cache_postload() if object cache is enabled and the function exists.
-if ( WP_CACHE && function_exists( 'wp_cache_postload' ) )
+if ( WP_CACHE && function_exists( 'wp_cache_postload' ) ) {
 	wp_cache_postload();
+}
 
 /**
  * Fires once activated plugins have loaded.
@@ -397,8 +400,9 @@ load_default_textdomain();
 
 $locale = get_locale();
 $locale_file = WP_LANG_DIR . "/$locale.php";
-if ( ( 0 === validate_file( $locale ) ) && is_readable( $locale_file ) )
+if ( ( 0 === validate_file( $locale ) ) && is_readable( $locale_file ) ) {
 	require( $locale_file );
+}
 unset( $locale_file );
 
 /**
@@ -420,10 +424,12 @@ $GLOBALS['wp_locale_switcher']->init();
 
 // Load the functions for the active theme, for both parent and child theme if applicable.
 if ( ! wp_installing() || 'wp-activate.php' === $pagenow ) {
-	if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) )
+	if ( TEMPLATEPATH !== STYLESHEETPATH && file_exists( STYLESHEETPATH . '/functions.php' ) ) {
 		include( STYLESHEETPATH . '/functions.php' );
-	if ( file_exists( TEMPLATEPATH . '/functions.php' ) )
+	}
+	if ( file_exists( TEMPLATEPATH . '/functions.php' ) ) {
 		include( TEMPLATEPATH . '/functions.php' );
+	}
 }
 
 /**

@@ -1,11 +1,12 @@
 /* jshint node:true */
+/* jshint es3:false */
+/* jshint esversion:6 */
 /* globals Set */
 var webpackConfig = require( './webpack.config.prod' );
 var webpackDevConfig = require( './webpack.config.dev' );
 
 module.exports = function(grunt) {
 	var path = require('path'),
-		fs = require( 'fs' ),
 		spawn = require( 'child_process' ).spawnSync,
 		SOURCE_DIR = 'src/',
 		BUILD_DIR = 'build/',
@@ -524,6 +525,10 @@ module.exports = function(grunt) {
 			'restapi-jsclient': {
 				cmd: 'phpunit',
 				args: ['--verbose', '-c', 'phpunit.xml.dist', '--group', 'restapi-jsclient']
+			},
+			'wp-api-client-fixtures': {
+				cmd: 'phpunit',
+				args: ['--verbose', '-c', 'phpunit.xml.dist', '--filter', 'WP_Test_REST_Schema_Initialization::test_build_wp_api_client_fixtures']
 			}
 		},
 		uglify: {
@@ -866,8 +871,7 @@ module.exports = function(grunt) {
 		'webpack:prod',
 		'jshint:corejs',
 		'uglify:masonry',
-		'uglify:imgareaselect',
-		'qunit:compiled'
+		'uglify:imgareaselect'
 	] );
 
 	grunt.registerTask( 'precommit:css', [
@@ -875,103 +879,68 @@ module.exports = function(grunt) {
 	] );
 
 	grunt.registerTask( 'precommit:php', [
-		'phpunit'
+		'phpunit:wp-api-client-fixtures'
 	] );
 
 	grunt.registerTask( 'precommit:emoji', [
 		'replace:emojiRegex'
 	] );
 
-	grunt.registerTask( 'precommit', 'Runs test and build tasks in preparation for a commit', function() {
+	grunt.registerTask( 'precommit', [
+		'precommit:js',
+		'precommit:css',
+		'precommit:image',
+		'precommit:emoji',
+		'precommit:php'
+	] );
+
+	grunt.registerTask(
+		'precommit:verify',
+		'Run precommit checks and verify no changed files.  Commit everything before running!',
+		[
+			'precommit',
+			'precommit:check-for-changes'
+		]
+	);
+
+	grunt.registerTask( 'precommit:check-for-changes', function() {
 		var done = this.async();
-		var map = {
-			svn: 'svn status --ignore-externals',
-			git: 'git status --short'
-		};
 
-		find( [
-			__dirname + '/.svn',
-			__dirname + '/.git',
-			path.dirname( __dirname ) + '/.svn'
-		] );
-
-		function find( set ) {
-			var dir;
-
-			if ( set.length ) {
-				fs.stat( dir = set.shift(), function( error ) {
-					error ? find( set ) : run( path.basename( dir ).substr( 1 ) );
-				} );
-			} else {
-				runAllTasks();
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'ls-files', '-m' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
 			}
-		}
-
-		function runAllTasks() {
-			grunt.log.writeln( 'Cannot determine which files are modified as SVN and GIT are not available.' );
-			grunt.log.writeln( 'Running all tasks and all tests.' );
-			grunt.task.run([
-				'precommit:js',
-				'precommit:css',
-				'precommit:image',
-				'precommit:emoji',
-				'precommit:php'
-			]);
-
+			if ( code !== 0 ) {
+				throw new Error( 'git ls-files failed: code ' + code );
+			}
+			var files = result.stdout.split( '\n' )
+				.map( f => f.trim() )
+				.filter( f => f !== '' )
+				.filter( f => f !== 'package-lock.json' );
+			if ( files.length ) {
+				grunt.log.writeln(
+					'One or more files were modified when running the precommit checks:'
+					.red
+				);
+				grunt.log.writeln();
+				files.forEach( f => grunt.log.writeln( f.yellow ) );
+				grunt.log.writeln();
+				grunt.log.writeln(
+					'Please run `grunt precommit` and commit the results.'
+					.red.bold
+				);
+				grunt.log.writeln();
+				throw new Error(
+					'Modified files detected during precommit checks!'
+				);
+			} else {
+				grunt.log.ok( 'No modified files detected.' );
+			}
 			done();
-		}
-
-		function run( type ) {
-			var command = map[ type ].split( ' ' );
-
-			grunt.util.spawn( {
-				cmd: command.shift(),
-				args: command
-			}, function( error, result, code ) {
-				var taskList = [];
-
-				// Callback for finding modified paths.
-				function testPath( path ) {
-					var regex = new RegExp( ' ' + path + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				// Callback for finding modified files by extension.
-				function testExtension( extension ) {
-					var regex = new RegExp( '\.' + extension + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				if ( code === 0 ) {
-					if ( [ 'package.json', 'Gruntfile.js' ].some( testPath ) ) {
-						grunt.log.writeln( 'Configuration files modified. Running `prerelease`.' );
-						taskList.push( 'prerelease' );
-					} else {
-						if ( [ 'png', 'jpg', 'gif', 'jpeg' ].some( testExtension ) ) {
-							grunt.log.writeln( 'Image files modified. Minifying.' );
-							taskList.push( 'precommit:image' );
-						}
-
-						[ 'js', 'css', 'php' ].forEach( function( extension ) {
-							if ( testExtension( extension ) ) {
-								grunt.log.writeln( extension.toUpperCase() + ' files modified. ' + extension.toUpperCase() + ' tests will be run.' );
-								taskList.push( 'precommit:' + extension );
-							}
-						} );
-
-						if ( [ 'twemoji.js' ].some( testPath ) ) {
-							grunt.log.writeln( 'twemoji.js has updated. Running `precommit:emoji.' );
-							taskList.push( 'precommit:emoji' );
-						}
-					}
-
-					grunt.task.run( taskList );
-					done();
-				} else {
-					runAllTasks();
-				}
-			} );
-		}
+		} );
 	} );
 
 	grunt.registerTask( 'copy:all', [
@@ -1027,8 +996,19 @@ module.exports = function(grunt) {
 	grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
 	// Travis CI tasks.
-	grunt.registerTask('travis:js', 'Runs Javascript Travis CI tasks.', [ 'jshint:corejs', 'qunit:compiled' ]);
-	grunt.registerTask('travis:phpunit', 'Runs PHPUnit Travis CI tasks.', 'phpunit');
+	grunt.registerTask(
+		'travis:precommit-and-js',
+		'Runs precommit checks and JavaScript tests on Travis CI.',
+		[
+			'precommit:verify', // -> precommit:js -> jshint:corejs
+			'qunit:compiled'
+		]
+	);
+	grunt.registerTask(
+		'travis:phpunit',
+		'Runs PHPUnit tests on Travis CI.',
+		'phpunit'
+	);
 
 	// Patch task.
 	grunt.renameTask('patch_wordpress', 'patch');

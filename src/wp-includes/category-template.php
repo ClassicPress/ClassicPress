@@ -226,7 +226,7 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
  * @since WP-1.2.0
  *
  * @param int|string|array $category Category ID, name or slug, or array of said.
- * @param int|object $post Optional. Post to check instead of the current post. (since 2.7.0)
+ * @param int|object $post Optional. Post to check instead of the current post. (since WP-2.7.0)
  * @return bool True if the current post is in any of the given categories.
  */
 function in_category( $category, $post = null ) {
@@ -1380,7 +1380,7 @@ function has_category( $category = '', $post = null ) {
  * @since WP-2.6.0
  *
  * @param string|int|array $tag Optional. The tag name/term_id/slug or array of them to check for.
- * @param int|object $post Optional. Post to check instead of the current post. (since 2.7.0)
+ * @param int|object $post Optional. Post to check instead of the current post. (since WP-2.7.0)
  * @return bool True if the current post has any of the given tags (or any tag, if no tag specified).
  */
 function has_tag( $tag = '', $post = null ) {

@@ -3003,7 +3003,7 @@ function wp_plupload_default_settings() {
 	}
 
 	/*
-	 * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
+	 * Since WP-4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
 	 * and the `flash_swf_url` and `silverlight_xap_url` are not used.
 	 */
 	$defaults = array(

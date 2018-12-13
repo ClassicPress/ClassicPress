@@ -524,7 +524,7 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$wp_customize  = $this->set_up_valid_state( $uuid );
 		$valid_user_id = get_current_user_id();
 
-		// Temporarily remove user to test requirement that user is logged in. See #42450.
+		// Temporarily remove user to test requirement that user is logged in. See https://core.trac.wordpress.org/ticket/42450.
 		wp_set_current_user( 0 );
 		$this->make_ajax_call( 'customize_dismiss_autosave_or_lock' );
 		$this->assertFalse( $this->_last_response_parsed['success'] );

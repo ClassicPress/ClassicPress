@@ -51,7 +51,7 @@ cp -var build-branch/ build-branch-unminified/
 unminify_build_dir build-branch-unminified/
 
 git checkout package.json package-lock.json
-git checkout "$(git merge-base origin/master $branch)"
+git checkout "$(git merge-base origin/develop $branch)"
 
 nvm use || nvm install
 npm install -g js-beautify

@@ -6,6 +6,46 @@
  * @subpackage Administration
  */
 
+ /**
+  * Prints information about the ClassicPress development version, if any.
+  *
+  * @since 1.0.0-beta1
+  */
+function classicpress_dev_version_info() {
+	if ( ! classicpress_is_dev_install() ) {
+		return;
+	}
+
+	$git_head = ABSPATH . '../.git/HEAD';
+	$git_commit = null;
+	if ( @is_file( $git_head ) ) {
+		$git_head = trim( file_get_contents( $git_head ) );
+		if ( preg_match( '#^ref: (refs/.*)$#', $git_head, $matches ) ) {
+			// on a branch
+			$git_head = ABSPATH . '../.git/' . $matches[1];
+			if ( @is_file( $git_head ) ) {
+				$git_commit = trim( file_get_contents( $git_head ) );
+			}
+		} else {
+			// detached HEAD
+			$git_commit = $git_head;
+		}
+	}
+
+	if ( ! $git_commit ) {
+		return;
+	}
+
+	echo '<span class="dev-version-info">';
+	/* translators: current development commit on GitHub */
+	printf(
+		__( 'commit %s' ),
+		substr( $git_commit, 0, 8 )
+	);
+	echo '</a>';
+	echo '</span>';
+}
+
 /**
  * Returns whether the server is running Apache with the mod_rewrite module loaded.
  *
@@ -1271,7 +1311,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * Intended for use from `wp_add_privacy_policy_content()`.
 	 *
-	 * $since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param string $plugin_name The name of the plugin or theme that is suggesting content for the site's privacy policy.
 	 * @param string $policy_text The suggested content for inclusion in the policy.

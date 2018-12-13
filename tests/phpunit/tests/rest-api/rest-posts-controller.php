@@ -1527,7 +1527,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'POST', '/wp/v2/posts' );
 		$params = $this->set_post_data( array(
 			// This results in a special `post_date_gmt` value of
-			// '0000-00-00 00:00:00'.  See #38883.
+			// '0000-00-00 00:00:00'.  See https://core.trac.wordpress.org/ticket/38883.
 			'status' => 'pending',
 		) );
 

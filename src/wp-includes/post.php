@@ -3061,7 +3061,7 @@ function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
 
 	$results = get_posts( $r );
 
-	// Backward compatibility. Prior to 3.1 expected posts to be returned in array.
+	// Backward compatibility. Prior to WP-3.1 expected posts to be returned in array.
 	if ( ARRAY_A == $output ){
 		foreach ( $results as $key => $result ) {
 			$results[$key] = get_object_vars( $result );

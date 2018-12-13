@@ -1100,7 +1100,7 @@ function register_meta( $object_type, $meta_key, $args, $deprecated = null ) {
 		}
 	}
 
-	// Global registry only contains meta keys registered with the array of arguments added in 4.6.0.
+	// Global registry only contains meta keys registered with the array of arguments added in WP-4.6.0.
 	if ( ! $has_old_auth_cb && ! $has_old_sanitize_cb ) {
 		unset( $args['object_subtype'] );
 

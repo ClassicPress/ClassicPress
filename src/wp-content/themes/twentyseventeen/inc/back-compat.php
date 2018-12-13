@@ -2,9 +2,9 @@
 /**
  * Twenty Seventeen back compat functionality
  *
- * Prevents Twenty Seventeen from running on WordPress versions prior to 4.7,
+ * Prevents Twenty Seventeen from running on WordPress versions prior to WP-4.7,
  * since this theme is not meant to be backward compatible beyond that and
- * relies on many newer functions and markup changes introduced in 4.7.
+ * relies on many newer functions and markup changes introduced in WP-4.7.
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
@@ -29,7 +29,7 @@ add_action( 'after_switch_theme', 'twentyseventeen_switch_theme' );
  * Adds a message for unsuccessful theme switch.
  *
  * Prints an update nag after an unsuccessful attempt to switch to
- * Twenty Seventeen on WordPress versions prior to 4.7.
+ * Twenty Seventeen on WordPress versions prior to WP-4.7.
  *
  * @since Twenty Seventeen 1.0
  *
@@ -41,7 +41,7 @@ function twentyseventeen_upgrade_notice() {
 }
 
 /**
- * Prevents the Customizer from being loaded on WordPress versions prior to 4.7.
+ * Prevents the Customizer from being loaded on WordPress versions prior to WP-4.7.
  *
  * @since Twenty Seventeen 1.0
  *
@@ -55,7 +55,7 @@ function twentyseventeen_customize() {
 add_action( 'load-customize.php', 'twentyseventeen_customize' );
 
 /**
- * Prevents the Theme Preview from being loaded on WordPress versions prior to 4.7.
+ * Prevents the Theme Preview from being loaded on WordPress versions prior to WP-4.7.
  *
  * @since Twenty Seventeen 1.0
  *

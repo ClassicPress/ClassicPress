@@ -88,7 +88,7 @@ class Tests_Pluggable extends WP_UnitTestCase {
 			'wp-includes/pluggable.php',
 		);
 
-		// Pluggable function signatures are not tested when an external object cache is in use. #31491
+		// Pluggable function signatures are not tested when an external object cache is in use. https://core.trac.wordpress.org/ticket/31491
 		if ( ! wp_using_ext_object_cache() ) {
 			$test_files[] = 'wp-includes/cache.php';
 		}
@@ -175,7 +175,7 @@ class Tests_Pluggable extends WP_UnitTestCase {
 			'install_global_terms'               => array(),
 		);
 
-		// Pluggable function signatures are not tested when an external object cache is in use. #31491
+		// Pluggable function signatures are not tested when an external object cache is in use. https://core.trac.wordpress.org/ticket/31491
 		if ( ! wp_using_ext_object_cache() ) {
 			$signatures = array_merge( $signatures, array(
 

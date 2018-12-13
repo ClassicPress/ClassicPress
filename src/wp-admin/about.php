@@ -21,9 +21,11 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 		<p class="about-text">
 			<?php printf( __( 'Version %s' ), classicpress_version() ); ?>
+			<?php classicpress_dev_version_info(); ?>
 		</p>
 		<p class="about-text">
-			<?php _e( 'Thank you for trying ClassicPress! We are under heavy development while we prepare for an initial release.' ); ?>
+			<?php _e( 'Thank you for using ClassicPress, the business focused CMS.' ); ?><br>
+			<?php _e( 'Powerful. Versatile. Predictable.' ); ?>
 		</p>
 		<div class="wp-badge"></div>
 

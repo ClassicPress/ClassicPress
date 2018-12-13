@@ -190,5 +190,5 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 		}
 	}
 
-	// tags in CDATA #11574
+	// tags in CDATA https://core.trac.wordpress.org/ticket/11574
 }

@@ -313,7 +313,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	 */
 	public function test_wp_mail_addresses_arent_encoded() {
 		$to      = 'Lukáš To <to@example.org>';
-		$subject = 'Testing #21659';
+		$subject = 'Testing https://core.trac.wordpress.org/ticket/21659';
 		$message = 'Only the name should be encoded, not the address.';
 
 		$headers = array(

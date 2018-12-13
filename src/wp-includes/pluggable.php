@@ -1073,7 +1073,7 @@ if ( !function_exists('check_admin_referer') ) :
  * @since WP-1.2.0
  *
  * @param int|string $action    Action nonce.
- * @param string     $query_arg Optional. Key to check for nonce in `$_REQUEST` (since 2.5).
+ * @param string     $query_arg Optional. Key to check for nonce in `$_REQUEST` (since WP-2.5).
  *                              Default '_wpnonce'.
  * @return false|int False if the nonce is invalid, 1 if the nonce is valid and generated between
  *                   0-12 hours ago, 2 if the nonce is valid and generated between 12-24 hours ago.
@@ -1113,7 +1113,7 @@ if ( !function_exists('check_ajax_referer') ) :
  * @since WP-2.0.3
  *
  * @param int|string   $action    Action nonce.
- * @param false|string $query_arg Optional. Key to check for the nonce in `$_REQUEST` (since 2.5). If false,
+ * @param false|string $query_arg Optional. Key to check for the nonce in `$_REQUEST` (since WP-2.5). If false,
  *                                `$_REQUEST` values will be evaluated for '_ajax_nonce', and '_wpnonce'
  *                                (in that order). Default false.
  * @param bool         $die       Optional. Whether to die early when the nonce cannot be verified.

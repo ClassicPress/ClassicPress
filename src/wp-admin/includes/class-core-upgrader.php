@@ -26,16 +26,69 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @since WP-2.8.0
 	 */
 	public function upgrade_strings() {
-		$this->strings['up_to_date'] = __('ClassicPress is at the latest version.');
-		$this->strings['locked'] = __('Another update is currently in progress.');
-		$this->strings['no_package'] = __('Update package not available.');
+		$this->strings['up_to_date'] = __( 'ClassicPress is at the latest version.' );
+		$this->strings['locked'] = __( 'Another update was started but has not completed yet.' );
+		$this->strings['no_package'] = __( 'Update package not available.' );
 		/* translators: %s: package URL */
 		$this->strings['downloading_package'] = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
-		$this->strings['unpack_package'] = __('Unpacking the update&#8230;');
-		$this->strings['copy_failed'] = __('Could not copy files.');
-		$this->strings['copy_failed_space'] = __('Could not copy files. You may have run out of disk space.' );
+		$this->strings['unpack_package'] = __( 'Unpacking the update&#8230;' );
+		$this->strings['copy_failed'] = __( 'Could not copy files.' );
+		$this->strings['copy_failed_space'] = __( 'Could not copy files. You may have run out of disk space.'  );
 		$this->strings['start_rollback'] = __( 'Attempting to roll back to previous version.' );
 		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, ClassicPress has rolled back to your previous version.' );
+	}
+
+	/**
+	 * Verifies and returns the root directory entry of a ClassicPress update.
+	 *
+	 * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
+	 * GitHub builds our zip packages for us, the zip file (and therefore the
+	 * directory where it was unpacked) will contain a single directory entry whose
+	 * name starts with 'ClassicPress-'.
+	 *
+	 * We also need to allow the root directory to be called 'wordpress', since
+	 * this is used when migrating from WordPress to ClassicPress.  If the
+	 * directory is named otherwise, the WordPress updater will reject the update
+	 * package for the migration.
+	 *
+	 * NOTE: This function is duplicated in includes/update-core.php.  This
+	 * duplication is intentional, as the load order during an upgrade is quite
+	 * complicated and this is the simplest way to make sure that this code is
+	 * always available.
+	 *
+	 * @since 1.0.0-beta1
+	 *
+	 * @param string $working_dir The directory where a ClassicPress update package
+	 *                            has been extracted.
+	 *
+	 * @return string|null The root directory entry that contains the new files, or
+	 *                     `null` if this does not look like a valid update.
+	 */
+	public static function get_update_directory_root( $working_dir ) {
+		global $wp_filesystem;
+
+		$distro = null;
+		$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
+
+		if (
+			count( $entries ) === 1 &&
+			(
+				substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
+				$entries[0]['name'] === 'wordpress' // migration build
+			) &&
+			$entries[0]['type'] === 'd'
+		) {
+			$distro = '/' . $entries[0]['name'] . '/';
+			$root = $working_dir . $distro;
+			if (
+				! $wp_filesystem->exists( $root . 'readme.html' ) ||
+				! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
+			) {
+				$distro = null;
+			}
+		}
+
+		return $distro;
 	}
 
 	/**
@@ -131,7 +184,12 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		// Copy update-core.php from the new version into place.
-		if ( !$wp_filesystem->copy($working_dir . '/wordpress/wp-admin/includes/update-core.php', $wp_dir . 'wp-admin/includes/update-core.php', true) ) {
+		$distro = self::get_update_directory_root( $working_dir );
+		if ( ! $wp_filesystem->copy(
+			$working_dir . $distro . 'wp-admin/includes/update-core.php',
+			$wp_dir . 'wp-admin/includes/update-core.php',
+			true
+		) ) {
 			$wp_filesystem->delete($working_dir, true);
 			WP_Upgrader::release_lock( 'core_updater' );
 			return new WP_Error( 'copy_failed_for_update_core_file', __( 'The update cannot be installed because we will be unable to copy some files. This is usually due to inconsistent file permissions.' ), 'wp-admin/includes/update-core.php' );
@@ -280,7 +338,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 			// Cannot update if we're retrying the same A to B update that caused a non-critical failure.
 			// Some non-critical failures do allow retries, like download_failed.
-			// 3.7.1 => 3.7.2 resulted in files_not_writable, if we are still on 3.7.1 and still trying to update to 3.7.2.
+			// WP-3.7.1 => WP-3.7.2 resulted in files_not_writable, if we are still on WP-3.7.1 and still trying to update to WP-3.7.2.
 			if ( empty( $failure_data['retry'] ) && $wp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
 				return false;
 		}

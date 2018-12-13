@@ -2054,7 +2054,7 @@ function _get_additional_user_keys( $user ) {
 /**
  * Set up the user contact methods.
  *
- * Default contact methods were removed in 3.6. A filter dictates contact methods.
+ * Default contact methods were removed in WP-3.6. A filter dictates contact methods.
  *
  * @since WP-3.7.0
  *
