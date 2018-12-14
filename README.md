@@ -1,6 +1,6 @@
 # ClassicPress <img src="src/wp-includes/images/ClassicPress-icon-blue-600.png" height="32" valign="middle">
 
-(https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
+[![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
 **ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
 
