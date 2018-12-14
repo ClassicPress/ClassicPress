@@ -55,6 +55,9 @@ function wp_dashboard_setup() {
 	// ClassicPress Events and News
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
 
+	// ClassicPress Petitions
+	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+
 	if ( is_network_admin() ) {
 
 		/**
@@ -1553,5 +1556,145 @@ function wp_welcome_panel() {
 		); ?>
 	</p>
 </div>
+	<?php
+}
+
+/**
+ * Callback function for the petitions dashboard widget
+ *
+ * @since 1.0.0
+ */
+function cp_dashboard_petitions() {
+	$feeds = array(
+		'most-wanted' => array(
+			'title'        => __( 'Most Wanted' ),
+		),
+		'trending' => array(
+			'title'        => __( 'Trending' ),
+		),
+		'recent' => array(
+			'title'        => __( 'Recent' ),
+		),
+	);
+
+	wp_dashboard_cached_rss_widget( 'dashboard_petitions', 'cp_dashboard_petitions_output', $feeds );
+}
+
+/**
+ * Display the ClassicPress petitions feeds.
+ *
+ * @since 1.0.0
+ *
+ * @param string $widget_id Widget ID.
+ * @param array  $feeds     Array of feeds.
+ */
+function cp_dashboard_petitions_output( $widget_id, $feeds ) {
+
+	/**
+	 * Query API for JSON data -> decode results to php
+	 *
+	 * @since 1.0.0
+	 * @return array
+	 */
+	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
+
+	/**
+	 * Response should be an object with:
+	 *  'most-wanted' - object - A user-friendly platform name, if it can be determined
+	 *  'trending' - object - A user-friendly browser name
+	 *  'recent' - object - The version of the browser the user is using
+	 *  'tags - object - The version of the browser the user is using
+	 *  'link - string - The version of the browser the user is using
+	 */
+	$raw_response  = wp_remote_get( $api_url );
+	$response_code = wp_remote_retrieve_response_code( $raw_response );
+
+	if ( ! is_wp_error( $raw_response ) && 200 !== $response_code ) {
+		$raw_response = new WP_Error(
+			'api-error',
+			/* translators: %d: numeric HTTP status code, e.g. 400, 403, 500, 504, etc. */
+			sprintf( __( 'Invalid API response code (%d)' ), $response_code )
+		);
+	}
+
+	if ( is_wp_error( $raw_response ) ) {
+		if ( is_admin() || current_user_can( 'manage_options' ) ) {
+			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $raw_response->get_error_message() . '</p>';
+		}
+		return;
+	}
+
+	$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
+
+	?>
+	<div class="sub">
+		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+	</div>
+
+	<ul class="petitions-tabs">
+
+	<?php
+	$active = array_shift( array_keys( $feeds ) );
+
+	foreach ( $feeds as $name => $args ) {
+		$class = $name === $active ? ' class="active"' : '';
+		?>
+		<li<?php echo $class; ?>><a href="#<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $args['title'] ); ?></a></li>
+		<?php
+	}
+	?>
+
+	</ul>
+
+	<div class="petitions-content">
+
+	<?php
+	foreach ( $feeds as $name => $args ) {
+
+		if ( empty( $response->$name ) ) {
+			continue;
+		}
+
+		$data   = $response->$name->data;
+		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
+		$active = $name === array_shift( array_keys( $feeds ) ) ? ' active' : '';
+		?>
+
+		<div id="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>">
+			<table class="cp_petitions">
+				<thead>
+					<tr>
+						<td><?php esc_html_e( 'Votes' ); ?></td>
+						<td><?php esc_html_e( 'Petitions' ); ?></td>
+					</tr>
+				</thead>
+
+				<?php
+				foreach( $data as $petition ) {
+					?>
+					<tr>
+						<td class="votes-count"><?php echo esc_html( $petition->votesCount ); ?></td>
+
+						<td class="petition">
+							<a target="_blank" href="<?php echo esc_url( $petition->link ) ?>"><?php echo esc_html( $petition->title )?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span></a>
+							<?php
+								if ( 'open' === $petition->status ){
+									echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );
+								} else {
+									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html(  $petition->status ) . '</span>';
+								}
+							?>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
+				</table>
+
+			</div>
+			<?php
+		}
+		?>
+	</div>
 	<?php
 }

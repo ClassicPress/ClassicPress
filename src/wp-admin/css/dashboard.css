@@ -358,7 +358,6 @@
 }
 
 .community-events .activity-block > p {
-	margin-bottom: 0;
 	display: inline;
 }
 
@@ -1115,6 +1114,123 @@ a.rsswidget {
 .postbox#dashboard_browser_nag a,
 .postbox#dashboard_browser_nag p.browser-update-nag {
 	font-size: 16px;
+}
+
+/* ---------------------------------------------------------
+	Dashboard Petitions Widget
+------------------------------------------------------------*/
+#dashboard_petitions .postbox .inside {
+	margin: 0;
+	padding: 0;
+}
+
+#dashboard_petitions .sub {
+	background: #f5f5f5;
+	padding: 10px 12px 6px;
+}
+
+/* Link to the petitions website  */
+.cp_petitions_link {
+	margin: 1rem 0;
+}
+
+.petitions-tabs {
+	float: left;
+	width: 100%;
+	margin: 0;
+	list-style-type: none;
+	border-bottom: 1px solid #e7e7e7;
+	margin-top: 16px;
+}
+
+.petitions-tabs > li {
+	float: left;
+	margin-bottom: -1px;
+}
+
+.petitions-tabs > li > a {
+	margin-right: 2px;
+	line-height: 1.5;
+	padding: 10px;
+	border: 1px solid transparent;
+	float: left;
+	text-decoration: none;
+}
+
+.petitions-tabs > li > a:hover {
+	background-color: #f2f2f2;
+}
+
+.petitions-tabs > li.active > a,
+.petitions-tabs > li.active > a:hover,
+.petitions-tabs > li.active > a:focus {
+	color: #555;
+	cursor: default;
+	background-color: #f2f2f2;
+	border-color: #f2f2f2;
+}
+
+.petitions-content {
+	display: table;
+}
+
+.petitions-content > .petitions-pane {
+	float: left;
+	width: 100%;
+	display: none;
+}
+
+.petitions-content > .petitions-pane.active {
+	display: block;
+}
+
+/* Petitions list */
+table.cp_petitions {
+	width: 100%;
+	padding: 0;
+	border-spacing: 0;
+}
+table.cp_petitions thead {
+	background-color: #f7f7f7;
+}
+
+table.cp_petitions tbody tr:nth-child(even) {
+	background: #f7f7f7;
+}
+
+table.cp_petitions .votes-count {
+	font-size: 14px;
+}
+
+table.cp_petitions .petition {
+	text-align: left;
+	font-weight: normal;
+}
+
+table.cp_petitions thead {
+	font-weight: 700;
+}
+
+table.cp_petitions td {
+	padding: 8px;
+}
+
+table.cp_petitions td:nth-child(1) {
+	text-align: center;
+}
+
+table.cp_petitions span.planned {
+	/* display: inline; */
+	background: #89288f; /* 61ce70 is the classic green but a pain to read */
+	color: #fff;
+	padding: 2px 4px;
+}
+
+table.cp_petitions span.started {
+	/* display: inline; */
+	background: #1da21d;
+	color: #fff;
+	padding: 2px 4px;
 }
 
 /* =Media Queries

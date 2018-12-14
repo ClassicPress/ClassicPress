@@ -32,7 +32,7 @@ jQuery(document).ready( function($) {
 	});
 
 	// These widgets are sometimes populated via ajax
-	ajaxWidgets = ['dashboard_primary'];
+	ajaxWidgets = ['dashboard_primary', 'dashboard_petitions'];
 
 	ajaxPopulateWidgets = function(el) {
 		function show(i, id) {
@@ -496,4 +496,20 @@ jQuery( function( $ ) {
 			}
 		});
 	}
+
+
+	/*
+	* Toggle the CP Petitions Dashboard Widget.
+	*/
+	$( '#dashboard_petitions' ).on( 'click', 'ul.petitions-tabs > li', function( e ) {
+		e.preventDefault();
+
+		//Remove active classes to first tab and petitions-content pane
+		$( '#dashboard_petitions' ).find( '.petitions-tabs > li' ).removeClass( 'active' );
+		$( '#dashboard_petitions' ).find( '.petitions-pane' ).removeClass( 'active' );
+
+		// Get petitions-pane with same ID & add .active
+		$( this ).addClass( 'active' );
+		$( $( this ).find( 'a' ).attr( 'href' ) ).addClass('active');
+	} );
 });
