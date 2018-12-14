@@ -1,6 +1,6 @@
 # ClassicPress <img src="src/wp-includes/images/ClassicPress-icon-blue-600.png" height="32" valign="middle">
 
-[![Backers on Open Collective](https://opencollective.com/classicpress/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/classicpress/sponsors/badge.svg)](#sponsors) [![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
+(https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
 **ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
 
@@ -29,14 +29,14 @@ We are working on several ways to recognize people for their contributions to Cl
 
 ## Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/classicpress#backer)]
+Thank you to all our backers! 🙏 [[Become a backer](https://donate.classicpress.net/)]
 
-<a href="https://opencollective.com/classicpress#backers" target="_blank"><img src="https://opencollective.com/classicpress/backers.svg?width=890"></a>
+<a href="https://donate.classicpress.net/" target="_blank"><img src="https://opencollective.com/classicpress/backers.svg?width=890"></a>
 
 
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/classicpress#sponsor)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://donate.classicpress.net/)]
 
 <a href="https://opencollective.com/classicpress/sponsor/0/website" target="_blank"><img src="https://opencollective.com/classicpress/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/classicpress/sponsor/1/website" target="_blank"><img src="https://opencollective.com/classicpress/sponsor/1/avatar.svg"></a>
