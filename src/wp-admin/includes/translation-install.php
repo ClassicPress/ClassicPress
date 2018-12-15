@@ -113,7 +113,6 @@ function translations_api( $type, $args = null ) {
  *               in an error, an empty array will be returned.
  */
 function wp_get_available_translations() {
-	global $wp_version;
 	if ( ! wp_installing() && false !== ( $translations = get_site_transient( 'available_translations' ) ) ) {
 		return $translations;
 	}
