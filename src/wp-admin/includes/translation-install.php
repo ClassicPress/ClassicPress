@@ -17,8 +17,8 @@
  * @return object|WP_Error On success an object of translations, WP_Error on failure.
  */
 function translations_api( $type, $args = null ) {
-	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
-
+	include_once( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+	global $wp_version,$cp_version;
 	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ) ) ) {
 		return	new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
 	}
@@ -35,22 +35,24 @@ function translations_api( $type, $args = null ) {
 	$res = apply_filters( 'translations_api', false, $type, $args );
 
 	if ( false === $res ) {
-		$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
-
+		$stats = array(
+			'wp_version' => $cp_version,
+			'locale'     => get_locale(),
+			'version'    => $args['version'], // Version of plugin, theme or core
+		);
 		$options = array(
 			'timeout' => 3,
-			'body' => array(
-				'wp_version' => $wp_version,
-				'locale'     => get_locale(),
-				'version'    => $args['version'], // Version of plugin, theme or core
-			),
 		);
-
-		if ( 'core' !== $type ) {
+		if('core' !== $type){
+			$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 			$options['body']['slug'] = $args['slug']; // Plugin or theme slug
+			$request = wp_remote_post( $url, array_merge( $options, array(
+				'body' => $stats
+			)));
+		}else{
+			$url = $http_url = add_query_arg($stats,'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
+			$request = wp_remote_get( $url, $options);
 		}
-
-		$request = wp_remote_post( $url, $options );
 
 		if ( is_wp_error( $request ) ) {
 			trigger_error(
@@ -112,6 +114,7 @@ function translations_api( $type, $args = null ) {
  *               in an error, an empty array will be returned.
  */
 function wp_get_available_translations() {
+	global $wp_version;
 	if ( ! wp_installing() && false !== ( $translations = get_site_transient( 'available_translations' ) ) ) {
 		return $translations;
 	}
@@ -119,7 +122,6 @@ function wp_get_available_translations() {
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
 
 	$api = translations_api( 'core', array( 'version' => $wp_version ) );
-
 	if ( is_wp_error( $api ) || empty( $api['translations'] ) ) {
 		return array();
 	}
