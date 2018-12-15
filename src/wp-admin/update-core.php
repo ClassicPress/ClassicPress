@@ -548,7 +548,7 @@ function do_core_upgrade( $reinstall = false ) {
 				show_message( sprintf(
 					/* translators: URL to support forum */
 					__( 'If you see this message after waiting 15 minutes and trying the update again, please make a post on our <a href="%s">support forum</a>.' ),
-					'https://forums.classicpress.net/c/support/'
+					'https://forums.classicpress.net/c/supportc/support/'
 				) );
 				break;
 
@@ -637,7 +637,7 @@ get_current_screen()->add_help_tab( array(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __('For more information:') . '</strong></p>' .
 	'<p>' . __( '<a href="https://codex.wordpress.org/Dashboard_Updates_Screen">Documentation on Updating ClassicPress</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://forums.classicpress.net/">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
 if ( 'upgrade-core' == $action ) {
