@@ -9,7 +9,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	protected $theme_slug = 'twentysixteen';
 	protected $theme_name = 'Twenty Sixteen';
 	protected $default_themes = array(
-		'twentyfifteen', 'twentysixteen', 'twentyseventeen',
+		'twentyfifteen', 'twentysixteen', 'twentyseventeen', 'cp2017-child'
 	);
 
 	function setUp() {
