@@ -22,13 +22,12 @@ wp-tests-config.php
 /src/wp-content/mu-plugins
 /src/wp-content/plugins
 /src/wp-content/themes/*
-!/src/wp-content/themes/twentyten
-!/src/wp-content/themes/twentyeleven
-!/src/wp-content/themes/twentytwelve
-!/src/wp-content/themes/twentythirteen
-!/src/wp-content/themes/twentyfourteen
 !/src/wp-content/themes/twentyfifteen
+!/src/wp-content/themes/cp2015-child
+!/src/wp-content/themes/twentysixteen
+!/src/wp-content/themes/cp2016-child
 !/src/wp-content/themes/twentyseventeen
+!/src/wp-content/themes/cp2017-child
 /src/wp-content/upgrade
 /src/wp-content/uploads
 /src/wp-content/advanced-cache.php
