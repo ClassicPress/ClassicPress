@@ -17,8 +17,7 @@
  * @return object|WP_Error On success an object of translations, WP_Error on failure.
  */
 function translations_api( $type, $args = null ) {
-	include_once( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
-	global $wp_version,$cp_version;
+	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
 	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ) ) ) {
 		return	new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
 	}
@@ -43,14 +42,14 @@ function translations_api( $type, $args = null ) {
 		$options = array(
 			'timeout' => 3,
 		);
-		if('core' !== $type){
-			$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
+		if( 'core' !== $type ){
+			$url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 			$options['body']['slug'] = $args['slug']; // Plugin or theme slug
 			$request = wp_remote_post( $url, array_merge( $options, array(
 				'body' => $stats
 			)));
 		}else{
-			$url = $http_url = add_query_arg($stats,'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
+			$url = add_query_arg($stats,'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
 			$request = wp_remote_get( $url, $options);
 		}
 
