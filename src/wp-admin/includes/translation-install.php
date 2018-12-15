@@ -48,9 +48,9 @@ function translations_api( $type, $args = null ) {
 			$request = wp_remote_post( $url, array_merge( $options, array(
 				'body' => $stats
 			)));
-		}else{
-			$url = add_query_arg($stats,'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
-			$request = wp_remote_get( $url, $options);
+		} else {
+			$url = add_query_arg($stats, 'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
+			$request = wp_remote_get($url, $options);
 		}
 
 		if ( is_wp_error( $request ) ) {
