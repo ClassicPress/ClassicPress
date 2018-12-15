@@ -68,14 +68,14 @@ class MakePOT {
 		),
 		'cp-plugin' => array(
 			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
-			'msgid-bugs-address' => 'https://wordpress.org/support/plugin/{slug}',
+			'msgid-bugs-address' => 'https://forums.classicpress.net/plugin/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
 		),
 		'cp-theme' => array(
 			'description' => 'Translation of the ClassicPress theme {name} {version} by {author}',
-			'msgid-bugs-address' => 'https://wordpress.org/support/theme/{slug}',
+			'msgid-bugs-address' => 'https://forums.classicpress.net/theme/{slug}',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
