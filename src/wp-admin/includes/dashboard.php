@@ -1529,7 +1529,7 @@ function wp_welcome_panel() {
 			/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
 			__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
 			'https://www.classicpress.net/join-slack/',
-			'https://forums.classicpress.net/'
+			'https://forums.classicpress.net/c/support'
 		); ?>
 	</p>
 	<p>
