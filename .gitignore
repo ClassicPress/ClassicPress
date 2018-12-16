@@ -57,9 +57,3 @@ wp-tests-config.php
 .svn
 
 vendor
-
-# IntelliJ project files
-.idea
-*.iml
-out
-gen
