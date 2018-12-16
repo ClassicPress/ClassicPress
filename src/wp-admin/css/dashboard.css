@@ -203,7 +203,7 @@
 }
 
 .welcome-panel .welcome-panel-column ul {
-		margin: 0.8em 1em 1em 0;
+	margin: 0.8em 1em 1em 0;
 }
 
 .welcome-panel .welcome-panel-column li {
@@ -1322,9 +1322,6 @@ table.cp_petitions span.started {
 	.metabox-holder .postbox-container .empty-container:after {
 		display: block;
 	}
-}
-
-@media screen and (max-width: 1024px) {
 }
 
 @media screen and (max-width: 870px) {
