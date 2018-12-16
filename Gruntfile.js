@@ -150,14 +150,19 @@ module.exports = function(grunt) {
 					}
 				]
 			},
-			'script-loader': {
+			'script-loader-impl': {
 				options: {
 					processContent: function( src ) {
 						return src.replace( /\$version = 'cb' \. .*;/m, () => {
+							const hash = grunt.config.get( 'dev.git-version' );
+							if ( ! hash ) {
+								throw new Error( 'grunt.config dev.git-version not set' );
+							}
 							const chars = 'abcdefghijklmnopqrstuvwxyz';
 							let ver = '';
-							for ( var i = 0; i < 8; i++ ) {
-								ver += chars.charAt( Math.floor( Math.random() * chars.length ) );
+							for ( let i = 0; i < 16; i += 2 ) {
+								const x = parseInt( hash.substr( i, 2 ), 16 );
+								ver += chars.charAt( x % chars.length );
 							}
 							/* jshint quotmark: true */
 							return "$version = '" + ver + "';";
@@ -922,6 +927,45 @@ module.exports = function(grunt) {
 		]
 	);
 
+	grunt.registerTask( 'dev:git-version', function() {
+		var done = this.async();
+
+		if (
+			process.env.CLASSICPRESS_GIT_VERSION &&
+			/^[a-f0-9]{16}/.test( process.env.CLASSICPRESS_GIT_VERSION )
+		) {
+			grunt.log.ok(
+				'Using git version from env var: ' +
+				process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 16 )
+			);
+			grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
+			done();
+			return;
+		}
+			
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'rev-parse', 'HEAD' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( 'git rev-parse failed: code ' + code );
+			}
+			var hash = result.stdout.trim();
+			if ( ! hash || hash.length !== 40 ) {
+				throw new Error( 'git rev-parse returned invalid value: ' + hash );
+			}
+			grunt.config.set( 'dev.git-version', hash );
+			grunt.log.ok(
+				'Using git version from `git rev-parse`: ' +
+				hash.substr( 0, 16 )
+			);
+			done();
+		} );
+	} );
+
 	grunt.registerTask( 'precommit:check-for-changes', function() {
 		var done = this.async();
 
@@ -961,6 +1005,11 @@ module.exports = function(grunt) {
 			done();
 		} );
 	} );
+
+	grunt.registerTask( 'copy:script-loader', [
+		'dev:git-version',
+		'copy:script-loader-impl'
+	] );
 
 	grunt.registerTask( 'copy:all', [
 		'copy:files',
