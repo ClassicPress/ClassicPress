@@ -4114,25 +4114,25 @@ function get_the_generator( $type = '' ) {
 
 	switch ( $type ) {
 		case 'html':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '">';
+			$gen = '<meta name="generator" content="ClassicPress">';
 			break;
 		case 'xhtml':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '" />';
+			$gen = '<meta name="generator" content="ClassicPress" />';
 			break;
 		case 'atom':
-			$gen = '<generator uri="https://wordpress.org/" version="' . esc_attr( get_bloginfo_rss( 'version' ) ) . '">ClassicPress</generator>';
+			$gen = '<generator uri="https://www.classicpress.net">ClassicPress</generator>';
 			break;
 		case 'rss2':
-			$gen = '<generator>' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '</generator>';
+			$gen = '<generator>https://www.classicpress.net</generator>';
 			break;
 		case 'rdf':
-			$gen = '<admin:generatorAgent rdf:resource="' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '" />';
+			$gen = '<admin:generatorAgent rdf:resource="https://www.classicpress.net" />';
 			break;
 		case 'comment':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo( 'version' ) ) . '" -->';
+			$gen = '<!-- generator="ClassicPress" -->';
 			break;
 		case 'export':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . date( 'Y-m-d H:i' ) . '" -->';
+			$gen = '<!-- generator="ClassicPress/' . esc_attr( classicpress_version() ) . '" created="' . date( 'Y-m-d H:i' ) . '" -->';
 			break;
 	}
 
