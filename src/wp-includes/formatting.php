@@ -5063,14 +5063,15 @@ function _print_emoji_detection_script() {
 		'svgExt' => apply_filters( 'emoji_svg_ext', '.svg' ),
 	);
 
-	$version = 'ver=' . get_bloginfo( 'version' );
-
 	if ( SCRIPT_DEBUG ) {
+		$version_wpemoji = 'ver=' . classicpress_asset_version( 'script', 'wpemoji' );
+		$version_twemoji = 'ver=' . classicpress_asset_version( 'script', 'twemoji' );
+
 		$settings['source'] = array(
 			/** This filter is documented in wp-includes/class.wp-scripts.php */
-			'wpemoji' => apply_filters( 'script_loader_src', includes_url( "js/wp-emoji.js?$version" ), 'wpemoji' ),
+			'wpemoji' => apply_filters( 'script_loader_src', includes_url( "js/wp-emoji.js?$version_wpemoji" ), 'wpemoji' ),
 			/** This filter is documented in wp-includes/class.wp-scripts.php */
-			'twemoji' => apply_filters( 'script_loader_src', includes_url( "js/twemoji.js?$version" ), 'twemoji' ),
+			'twemoji' => apply_filters( 'script_loader_src', includes_url( "js/twemoji.js?$version_twemoji" ), 'twemoji' ),
 		);
 
 		?>
@@ -5080,6 +5081,7 @@ function _print_emoji_detection_script() {
 		</script>
 		<?php
 	} else {
+		$version = 'ver=' . classicpress_asset_version( 'script', 'concatemoji' );
 		$settings['source'] = array(
 			/** This filter is documented in wp-includes/class.wp-scripts.php */
 			'concatemoji' => apply_filters( 'script_loader_src', includes_url( "js/wp-emoji-release.min.js?$version" ), 'concatemoji' ),
