@@ -353,6 +353,8 @@ function wp_update_plugins( $extra_stats = array() ) {
 			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
+
+		// Retry request
 		$raw_response = wp_remote_post( $url, $options );
 	}
 
