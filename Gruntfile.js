@@ -153,14 +153,15 @@ module.exports = function(grunt) {
 			'script-loader': {
 				options: {
 					processContent: function( src ) {
-						return src.replace( /\$version = 'cb' \. .*;/m, function( str, version ) {
-							var chars = 'abcdefghijklmnopqrstuvwxyz', ver = '';
+						return src.replace( /\$version = 'cb' \. .*;/m, () => {
+							const chars = 'abcdefghijklmnopqrstuvwxyz';
+							let ver = '';
 							for ( var i = 0; i < 8; i++ ) {
 								ver += chars.charAt( Math.floor( Math.random() * chars.length ) );
 							}
 							/* jshint quotmark: true */
 							return "$version = '" + ver + "';";
-						});
+						} );
 					}
 				},
 				src: SOURCE_DIR + 'wp-includes/script-loader.php',
