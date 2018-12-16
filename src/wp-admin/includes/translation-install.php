@@ -42,15 +42,17 @@ function translations_api( $type, $args = null ) {
 		$options = array(
 			'timeout' => 3,
 		);
-		if( 'core' !== $type ){
+		if( 'core' !== $type ) {
+			$stats['wp_version'] = $wp_version;
+			$stats['cp_version'] = $cp_version;
 			$url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 			$options['body']['slug'] = $args['slug']; // Plugin or theme slug
 			$request = wp_remote_post( $url, array_merge( $options, array(
 				'body' => $stats
-			)));
+			) ) );
 		} else {
 			$url = add_query_arg($stats, 'https://translate.classicpress.net/wp-content/translations/' . $type . '/1.0.0/translations.json');
-			$request = wp_remote_get($url, $options);
+			$request = wp_remote_get( $url, $options );
 		}
 
 		if ( is_wp_error( $request ) ) {
