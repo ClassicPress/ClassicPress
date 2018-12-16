@@ -111,6 +111,8 @@ module.exports = function(grunt) {
 							// Exclude some things present in a configured install
 							'!wp-config.php',
 							'!wp-content/uploads/**',
+							// Exclude script-loader.php (handled in `copy:script-loader` task)
+							'!wp-includes/script-loader.php',
 							// Exclude version.php (handled in `copy:version` task)
 							'!wp-includes/version.php'
 						],
@@ -147,6 +149,22 @@ module.exports = function(grunt) {
 						dest: BUILD_DIR + 'wp-admin/css/wp-admin-rtl.min.css'
 					}
 				]
+			},
+			'script-loader': {
+				options: {
+					processContent: function( src ) {
+						return src.replace( /\$version = 'cb' \. .*;/m, function( str, version ) {
+							var chars = 'abcdefghijklmnopqrstuvwxyz', ver = '';
+							for ( var i = 0; i < 8; i++ ) {
+								ver += chars.charAt( Math.floor( Math.random() * chars.length ) );
+							}
+							/* jshint quotmark: true */
+							return "$version = '" + ver + "';";
+						});
+					}
+				},
+				src: SOURCE_DIR + 'wp-includes/script-loader.php',
+				dest: BUILD_DIR + 'wp-includes/script-loader.php'
 			},
 			version: {
 				options: {
@@ -947,6 +965,7 @@ module.exports = function(grunt) {
 		'copy:files',
 		'copy:wp-admin-css-compat-rtl',
 		'copy:wp-admin-css-compat-min',
+		'copy:script-loader',
 		'copy:version'
 	] );
 
