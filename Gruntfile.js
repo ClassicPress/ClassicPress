@@ -156,7 +156,10 @@ module.exports = function(grunt) {
 						return src.replace( /\$version = 'cb' \. .*;/m, () => {
 							const hash = grunt.config.get( 'dev.git-version' );
 							if ( ! hash ) {
-								throw new Error( 'grunt.config dev.git-version not set' );
+								grunt.log.fail(
+									'Do not run the copy:script-loader-impl task directly'
+								);
+								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
 							const chars = 'abcdefghijklmnopqrstuvwxyz';
 							let ver = '';
