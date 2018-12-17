@@ -682,7 +682,7 @@ class WP_Automatic_Updater {
 		} else {
 			// Add a note about the support forums.
 			$body .= "\n\n" . __( 'If you experience any issues or need support, the volunteers in the ClassicPress.net support forums may be able to help.' );
-			$body .= "\n" . __( 'https://wordpress.org/support/' );
+			$body .= "\n" . __( 'https://forums.classicpress.net/c/support' );
 		}
 
 		// Updates are important!
