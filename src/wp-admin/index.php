@@ -68,17 +68,10 @@ if ( current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( '<strong>Activity</strong> &mdash; Shows the upcoming scheduled posts, recently published posts, and the most recent comments on your posts and allows you to moderate them.' ) . '</p>';
 if ( is_blog_admin() && current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( "<strong>Quick Draft</strong> &mdash; Allows you to create a new post and save it as a draft. Also displays links to the 5 most recent draft posts you've started." ) . '</p>';
-if ( ! is_multisite() && current_user_can( 'install_plugins' ) )
-	$help .= '<p>' . sprintf(
+$help .= '<p>' . sprintf(
 		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official ClassicPress project, the <a href="%s">ClassicPress Planet</a>, and popular plugins.' ),
-		__( 'https://planet.wordpress.org/' )
-	) . '</p>';
-else
-	$help .= '<p>' . sprintf(
-		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official ClassicPress project and the <a href="%s">ClassicPress Planet</a>.' ),
-		__( 'https://planet.wordpress.org/' )
+		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official  <a href="%s">ClassicPress project</a></a>.' ),
+		__( 'https://www.classicpress.net/blog/' )
 	) . '</p>';
 if ( current_user_can( 'edit_theme_options' ) )
 	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
