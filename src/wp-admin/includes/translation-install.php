@@ -35,7 +35,7 @@ function translations_api( $type, $args = null ) {
 
 	if ( false === $res ) {
 		$stats = array(
-			'wp_version' => $cp_version,
+			'wp_version' => '4.9.9', //since CP is based on 4.9.9
 			'locale'     => get_locale(),
 			'version'    => $args['version'], // Version of plugin, theme or core
 		);
@@ -43,7 +43,6 @@ function translations_api( $type, $args = null ) {
 			'timeout' => 3,
 		);
 		if( 'core' !== $type ) {
-			$stats['wp_version'] = $wp_version;
 			$stats['cp_version'] = $cp_version;
 			$url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
 			$options['body']['slug'] = $args['slug']; // Plugin or theme slug
