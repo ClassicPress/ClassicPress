@@ -50,9 +50,11 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 * source repository this is calculated at runtime; in builds it is a
 	 * static string.
 	 */
-	static $default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
+	static $default_version;
 
-	$version = $default_version;
+    if ( empty( $default_version ) ) {
+        $default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
+    }
 
 	/**
 	 * Allows modifying the asset version for each script and style.
@@ -64,9 +66,7 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 * @param string $handle  The handle of the asset being enqueued (or `null` to
 	 *                        get the default asset version).
 	 */
-	$version = apply_filters( 'classicpress_asset_version', $version, $type, $handle );
-
-	return $version;
+	return apply_filters( 'classicpress_asset_version', $default_version, $type, $handle );
 }
 
 /**
