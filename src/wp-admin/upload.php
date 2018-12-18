@@ -64,7 +64,7 @@ if ( 'grid' === $mode ) {
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 		'<p>' . __( '<a href="https://codex.wordpress.org/Media_Library_Screen">Documentation on Media Library</a>' ) . '</p>' .
-		'<p>' . __( '<a href="https://wordpress.org/support/">Support Forums</a>' ) . '</p>'
+		'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 	);
 
 	$title = __('Media Library');
@@ -210,7 +210,7 @@ get_current_screen()->add_help_tab( array(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://codex.wordpress.org/Media_Library_Screen">Documentation on Media Library</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content( array(

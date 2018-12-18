@@ -134,7 +134,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		'<p><strong>' . __('For more information:') . '</strong></p>' .
 		'<p>' . __('<a href="https://codex.wordpress.org/Plugins_Editor_Screen">Documentation on Editing Plugins</a>') . '</p>' .
 		'<p>' . __('<a href="https://codex.wordpress.org/Writing_a_Plugin">Documentation on Writing Plugins</a>') . '</p>' .
-		'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
+		'<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>'
 	);
 
 	$settings = array(
