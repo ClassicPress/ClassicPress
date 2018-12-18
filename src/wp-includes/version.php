@@ -45,6 +45,20 @@ if ( ! function_exists( 'classicpress_version' ) ) {
 }
 
 /**
+ * Return the ClassicPress version number without any alpha/beta/etc suffixes.
+ *
+ * @since 1.0.0-beta2
+ *
+ * @return string The ClassicPress version number with no suffix.
+ */
+if ( ! function_exists( 'classicpress_version_short' ) ) {
+	function classicpress_version_short() {
+		global $cp_version;
+		return strtok( $cp_version, '-' );
+	}
+}
+
+/**
  * Return whether ClassicPress is running as a source install (the result of
  * cloning the source repository rather than installing a built version).
  *

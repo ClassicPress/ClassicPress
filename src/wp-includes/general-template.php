@@ -4086,6 +4086,8 @@ function the_generator( $type ) {
  * @return string|void The HTML content for the generator.
  */
 function get_the_generator( $type = '' ) {
+	global $wp_version;
+
 	if ( empty( $type ) ) {
 
 		$current_filter = current_filter();
@@ -4112,27 +4114,34 @@ function get_the_generator( $type = '' ) {
 		}
 	}
 
+	$esc_wp_version = esc_attr( $wp_version );
+	$esc_cp_version = esc_attr( classicpress_version_short() );
+	$esc_cp_url = esc_url_raw(
+		'https://www.classicpress.net/?v='
+		. $wp_version . '-cp-' . classicpress_version_short()
+	);
+
 	switch ( $type ) {
 		case 'html':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '">';
+			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
 			break;
 		case 'xhtml':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '" />';
+			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
 			break;
 		case 'atom':
-			$gen = '<generator uri="https://wordpress.org/" version="' . esc_attr( get_bloginfo_rss( 'version' ) ) . '">ClassicPress</generator>';
+			$gen = "<generator uri=\"https://www.classicpress.net/\" version=\"WordPress-$esc_wp_version-compatible-ClassicPress-$esc_cp_version\">ClassicPress</generator>";
 			break;
 		case 'rss2':
-			$gen = '<generator>' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '</generator>';
+			$gen = "<generator>$esc_cp_url</generator>";
 			break;
 		case 'rdf':
-			$gen = '<admin:generatorAgent rdf:resource="' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '" />';
+			$gen = "<admin:generatorAgent rdf:resource=\"$esc_cp_url\" />";
 			break;
 		case 'comment':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo( 'version' ) ) . '" -->';
+			$gen = "<!-- generator=\"WordPress/$esc_wp_version (compatible; ClassicPress/$esc_cp_version)\" -->";
 			break;
 		case 'export':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . date( 'Y-m-d H:i' ) . '" -->';
+			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . date( "Y-m-d H:i" ) . "\" -->";
 			break;
 	}
 
