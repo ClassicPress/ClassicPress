@@ -153,7 +153,7 @@ module.exports = function(grunt) {
 			'script-loader-impl': {
 				options: {
 					processContent: function( src ) {
-						return src.replace( /\$version = 'cp_' \. .*;/m, () => {
+						return src.replace( /\$default_version = 'cp_' \. .*;/m, () => {
 							const hash = grunt.config.get( 'dev.git-version' );
 							if ( ! hash ) {
 								grunt.log.fail(
@@ -162,7 +162,7 @@ module.exports = function(grunt) {
 								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
 							/* jshint quotmark: true */
-							return "$version = 'cp_" + hash.substr( 0, 8 ) + "';";
+							return "$default_version = 'cp_" + hash.substr( 0, 8 ) + "';";
 						} );
 					}
 				},

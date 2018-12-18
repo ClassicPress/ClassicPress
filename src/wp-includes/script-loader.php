@@ -52,9 +52,9 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 */
 	static $default_version;
 
-    if ( empty( $default_version ) ) {
-        $default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
-    }
+	if ( empty( $default_version ) ) {
+		$default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
+	}
 
 	/**
 	 * Allows modifying the asset version for each script and style.
