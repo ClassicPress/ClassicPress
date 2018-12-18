@@ -4117,8 +4117,8 @@ function get_the_generator( $type = '' ) {
 	$esc_wp_version = esc_attr( $wp_version );
 	$esc_cp_version = esc_attr( classicpress_version_short() );
 	$esc_cp_url = esc_url_raw(
-		'https://www.classicpress.net/?wp_version='
-		. $wp_version . '&cp_version=' . classicpress_version_short()
+		'https://www.classicpress.net/?v='
+		. $wp_version . '-cp-' . classicpress_version_short()
 	);
 
 	switch ( $type ) {
