@@ -153,7 +153,7 @@ module.exports = function(grunt) {
 			'script-loader-impl': {
 				options: {
 					processContent: function( src ) {
-						return src.replace( /\$version = 'cb' \. .*;/m, () => {
+						return src.replace( /\$version = 'cp_' \. .*;/m, () => {
 							const hash = grunt.config.get( 'dev.git-version' );
 							if ( ! hash ) {
 								grunt.log.fail(

@@ -50,7 +50,9 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 * source repository this is calculated at runtime; in builds it is a
 	 * static string.
 	 */
-	$version = 'cb' . substr( md5( classicpress_version() ), 0, 6 );
+	static $default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
+
+	$version = $default_version;
 
 	/**
 	 * Allows modifying the asset version for each script and style.
