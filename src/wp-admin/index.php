@@ -70,9 +70,9 @@ if ( is_blog_admin() && current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( "<strong>Quick Draft</strong> &mdash; Allows you to create a new post and save it as a draft. Also displays links to the 5 most recent draft posts you've started." ) . '</p>';
 $help .= '<p>' . sprintf(
 		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official  <a href="%s">ClassicPress project</a></a>.' ),
+		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official <a href="%s">ClassicPress blog</a></a>.' ),
 		__( 'https://www.classicpress.net/blog/' )
-	) . '</p>';
+) . '</p>';
 if ( current_user_can( 'edit_theme_options' ) )
 	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
 
