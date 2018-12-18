@@ -20,7 +20,7 @@ function translations_api( $type, $args = null ) {
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
 
 	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ) ) ) {
-		return	new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
+		return new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
 	}
 
 	/**
@@ -35,22 +35,31 @@ function translations_api( $type, $args = null ) {
 	$res = apply_filters( 'translations_api', false, $type, $args );
 
 	if ( false === $res ) {
-		$url = $http_url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
-
+		$stats = array(
+			'locale'  => get_locale(),
+			'version' => $args['version'], // Version of plugin, theme or core
+		);
 		$options = array(
 			'timeout' => 3,
-			'body' => array(
-				'wp_version' => $wp_version,
-				'locale'     => get_locale(),
-				'version'    => $args['version'], // Version of plugin, theme or core
-			),
+			'method'  => 'POST',
 		);
-
-		if ( 'core' !== $type ) {
+		if ( 'core' === $type ) {
+			// Get ClassicPress core translations from the ClassicPress.net API.
+			$stats['cp_version'] = $cp_version;
+			$options['method'] = 'GET';
+			$url = add_query_arg(
+				$stats,
+				'https://api-v1.classicpress.net/translations/core/1.0.0/translations.json'
+			);
+			$request = wp_remote_request( $url, $options );
+		} else {
+			// Get plugin and theme translations from the WP.org API.
+			$stats['wp_version'] = $wp_version;
+			$options['body'] = $stats;
 			$options['body']['slug'] = $args['slug']; // Plugin or theme slug
+			$url = 'https://api.wordpress.org/translations/' . $type . '/1.0/';
+			$request = wp_remote_request( $url, $options );
 		}
-
-		$request = wp_remote_post( $url, $options );
 
 		if ( is_wp_error( $request ) ) {
 			trigger_error(
@@ -62,7 +71,8 @@ function translations_api( $type, $args = null ) {
 				headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 			);
 
-			$request = wp_remote_post( $http_url, $options );
+			// Retry request
+			$request = wp_remote_request( $url, $options );
 		}
 
 		if ( is_wp_error( $request ) ) {
@@ -119,7 +129,6 @@ function wp_get_available_translations() {
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
 
 	$api = translations_api( 'core', array( 'version' => $wp_version ) );
-
 	if ( is_wp_error( $api ) || empty( $api['translations'] ) ) {
 		return array();
 	}
