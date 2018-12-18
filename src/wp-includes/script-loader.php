@@ -35,6 +35,41 @@ require( ABSPATH . WPINC . '/class.wp-styles.php' );
 require( ABSPATH . WPINC . '/functions.wp-styles.php' );
 
 /**
+ * Returns a cache buster string for an enqueued script or stylesheet.
+ *
+ * @since 1.0.0-beta2
+ *
+ * @param string $type    The type of asset being enqueued ('script' or 'style').
+ * @param string $handle  The handle of the asset being enqueued (or `null` to
+ *                        get the default asset version).
+ * @return string         The cache buster string for this asset.
+ */
+function classicpress_asset_version( $type = 'script', $handle = null ) {
+	/**
+	 * The default asset version, based on the ClassicPress version.  In the
+	 * source repository this is calculated at runtime; in builds it is a
+	 * static string.
+	 */
+	static $default_version;
+
+	if ( empty( $default_version ) ) {
+		$default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
+	}
+
+	/**
+	 * Allows modifying the asset version for each script and style.
+	 *
+	 * @since 1.0.0-beta2
+	 *
+	 * @param string $version The default version for this asset.
+	 * @param string $type    The type of asset being enqueued ('script' or 'style').
+	 * @param string $handle  The handle of the asset being enqueued (or `null` to
+	 *                        get the default asset version).
+	 */
+	return apply_filters( 'classicpress_asset_version', $default_version, $type, $handle );
+}
+
+/**
  * Register all ClassicPress scripts.
  *
  * Localizes some of them.
@@ -61,7 +96,7 @@ function wp_default_scripts( &$scripts ) {
 
 	$scripts->base_url = $guessurl;
 	$scripts->content_url = defined('WP_CONTENT_URL')? WP_CONTENT_URL : '';
-	$scripts->default_version = preg_replace( '#\+.*$#', '', classicpress_version() );
+	$scripts->default_version = classicpress_asset_version( 'script' );
 	$scripts->default_dirs = array('/wp-admin/js/', '/wp-includes/js/');
 
 	$suffix = SCRIPT_DEBUG ? '' : '.min';
@@ -936,7 +971,7 @@ function wp_default_styles( &$styles ) {
 
 	$styles->base_url = $guessurl;
 	$styles->content_url = defined('WP_CONTENT_URL')? WP_CONTENT_URL : '';
-	$styles->default_version = preg_replace( '#\+.*$#', '', classicpress_version() );
+	$styles->default_version = classicpress_asset_version( 'style' );
 	$styles->text_direction = function_exists( 'is_rtl' ) && is_rtl() ? 'rtl' : 'ltr';
 	$styles->default_dirs = array('/wp-admin/', '/wp-includes/css/');
 

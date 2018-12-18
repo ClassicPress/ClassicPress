@@ -269,7 +269,7 @@ if ( 'category' == $taxonomy || 'link_category' == $taxonomy || 'post_tag' == $t
 	else
 		$help .= '<p>' . __( '<a href="https://codex.wordpress.org/Posts_Tags_Screen">Documentation on Tags</a>' ) . '</p>';
 
-	$help .= '<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>';
+	$help .= '<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>';
 
 	get_current_screen()->set_help_sidebar( $help );
 

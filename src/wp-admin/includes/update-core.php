@@ -18,14 +18,14 @@
 global $_old_files;
 
 $_old_files = array(
-	// WP-4.8
+	// WP-4.8.0
 	'wp-includes/js/tinymce/plugins/wpembed',
 	'wp-includes/js/tinymce/plugins/media/moxieplayer.swf',
 	'wp-includes/js/tinymce/skins/lightgray/fonts/readme.md',
 	'wp-includes/js/tinymce/skins/lightgray/fonts/tinymce-small.json',
 	'wp-includes/js/tinymce/skins/lightgray/fonts/tinymce.json',
 	'wp-includes/js/tinymce/skins/lightgray/skin.ie7.min.css',
-	// WP-4.9
+	// WP-4.9.0
 	'wp-admin/css/press-this-editor-rtl.css',
 	'wp-admin/css/press-this-editor-rtl.min.css',
 	'wp-admin/css/press-this-editor.css',
@@ -91,6 +91,22 @@ $_old_files = array(
 	'wp-includes/js/mediaelement/renderers/soundcloud.min.js',
 	'wp-includes/js/mediaelement/renderers/twitch.js',
 	'wp-includes/js/mediaelement/renderers/twitch.min.js',
+	// WP-5.0.0
+	'wp-admin/includes/credits.php',
+	'wp-admin/edit-form-blocks.php',
+	'wp-includes/blocks',
+	'wp-includes/css/dist',
+	'wp-includes/js/dist',
+	'wp-includes/rest-api/endpoints/class-wp-rest-autosaves-controller.php',
+	'wp-includes/rest-api/endpoints/class-wp-rest-block-renderer-controller.php',
+	'wp-includes/rest-api/endpoints/class-wp-rest-blocks-controller.php',
+	'wp-includes/rest-api/endpoints/class-wp-rest-search-controller.php',
+	'wp-includes/rest-api/endpoints/class-wp-rest-themes-controller.php',
+	'wp-includes/rest-api/search',
+	'wp-includes/blocks.php',
+	'wp-includes/class-wp-block-parser.php',
+	'wp-includes/class-wp-block-type.php',
+	'wp-includes/class-wp-block-type-registry.php',
 );
 
 /**

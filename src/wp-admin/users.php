@@ -66,7 +66,7 @@ get_current_screen()->set_help_sidebar(
     '<p><strong>' . __('For more information:') . '</strong></p>' .
     '<p>' . __('<a href="https://codex.wordpress.org/Users_Screen">Documentation on Managing Users</a>') . '</p>' .
     '<p>' . __('<a href="https://codex.wordpress.org/Roles_and_Capabilities">Descriptions of Roles and Capabilities</a>') . '</p>' .
-    '<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
+    '<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content( array(

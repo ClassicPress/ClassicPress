@@ -26,14 +26,14 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @since WP-2.8.0
 	 */
 	public function upgrade_strings() {
-		$this->strings['up_to_date'] = __('ClassicPress is at the latest version.');
-		$this->strings['locked'] = __('Another update is currently in progress.');
-		$this->strings['no_package'] = __('Update package not available.');
+		$this->strings['up_to_date'] = __( 'ClassicPress is at the latest version.' );
+		$this->strings['locked'] = __( 'Another update was started but has not completed yet.' );
+		$this->strings['no_package'] = __( 'Update package not available.' );
 		/* translators: %s: package URL */
 		$this->strings['downloading_package'] = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
-		$this->strings['unpack_package'] = __('Unpacking the update&#8230;');
-		$this->strings['copy_failed'] = __('Could not copy files.');
-		$this->strings['copy_failed_space'] = __('Could not copy files. You may have run out of disk space.' );
+		$this->strings['unpack_package'] = __( 'Unpacking the update&#8230;' );
+		$this->strings['copy_failed'] = __( 'Could not copy files.' );
+		$this->strings['copy_failed_space'] = __( 'Could not copy files. You may have run out of disk space.'  );
 		$this->strings['start_rollback'] = __( 'Attempting to roll back to previous version.' );
 		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, ClassicPress has rolled back to your previous version.' );
 	}

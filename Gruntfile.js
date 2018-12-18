@@ -111,6 +111,8 @@ module.exports = function(grunt) {
 							// Exclude some things present in a configured install
 							'!wp-config.php',
 							'!wp-content/uploads/**',
+							// Exclude script-loader.php (handled in `copy:script-loader` task)
+							'!wp-includes/script-loader.php',
 							// Exclude version.php (handled in `copy:version` task)
 							'!wp-includes/version.php'
 						],
@@ -147,6 +149,25 @@ module.exports = function(grunt) {
 						dest: BUILD_DIR + 'wp-admin/css/wp-admin-rtl.min.css'
 					}
 				]
+			},
+			'script-loader-impl': {
+				options: {
+					processContent: function( src ) {
+						return src.replace( /\$default_version = 'cp_' \. .*;/m, () => {
+							const hash = grunt.config.get( 'dev.git-version' );
+							if ( ! hash ) {
+								grunt.log.fail(
+									'Do not run the copy:script-loader-impl task directly'
+								);
+								grunt.fatal( 'grunt.config dev.git-version not set' );
+							}
+							/* jshint quotmark: true */
+							return "$default_version = 'cp_" + hash.substr( 0, 8 ) + "';";
+						} );
+					}
+				},
+				src: SOURCE_DIR + 'wp-includes/script-loader.php',
+				dest: BUILD_DIR + 'wp-includes/script-loader.php'
 			},
 			version: {
 				options: {
@@ -903,6 +924,45 @@ module.exports = function(grunt) {
 		]
 	);
 
+	grunt.registerTask( 'dev:git-version', function() {
+		var done = this.async();
+
+		if (
+			process.env.CLASSICPRESS_GIT_VERSION &&
+			/^[a-f0-9]{8}/.test( process.env.CLASSICPRESS_GIT_VERSION )
+		) {
+			grunt.log.ok(
+				'Using git version from env var: ' +
+				process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 8 )
+			);
+			grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
+			done();
+			return;
+		}
+			
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'rev-parse', 'HEAD' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( 'git rev-parse failed: code ' + code );
+			}
+			var hash = result.stdout.trim();
+			if ( ! hash || hash.length !== 40 ) {
+				throw new Error( 'git rev-parse returned invalid value: ' + hash );
+			}
+			grunt.config.set( 'dev.git-version', hash );
+			grunt.log.ok(
+				'Using git version from `git rev-parse`: ' +
+				hash.substr( 0, 8 )
+			);
+			done();
+		} );
+	} );
+
 	grunt.registerTask( 'precommit:check-for-changes', function() {
 		var done = this.async();
 
@@ -943,10 +1003,16 @@ module.exports = function(grunt) {
 		} );
 	} );
 
+	grunt.registerTask( 'copy:script-loader', [
+		'dev:git-version',
+		'copy:script-loader-impl'
+	] );
+
 	grunt.registerTask( 'copy:all', [
 		'copy:files',
 		'copy:wp-admin-css-compat-rtl',
 		'copy:wp-admin-css-compat-min',
+		'copy:script-loader',
 		'copy:version'
 	] );
 
