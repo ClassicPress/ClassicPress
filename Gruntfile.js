@@ -161,14 +161,8 @@ module.exports = function(grunt) {
 								);
 								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
-							const chars = 'abcdefghijklmnopqrstuvwxyz';
-							let ver = '';
-							for ( let i = 0; i < 16; i += 2 ) {
-								const x = parseInt( hash.substr( i, 2 ), 16 );
-								ver += chars.charAt( x % chars.length );
-							}
 							/* jshint quotmark: true */
-							return "$version = '" + ver + "';";
+							return "$version = 'cp_" + hash.substr( 0, 8 ) + "';";
 						} );
 					}
 				},
@@ -935,11 +929,11 @@ module.exports = function(grunt) {
 
 		if (
 			process.env.CLASSICPRESS_GIT_VERSION &&
-			/^[a-f0-9]{16}/.test( process.env.CLASSICPRESS_GIT_VERSION )
+			/^[a-f0-9]{8}/.test( process.env.CLASSICPRESS_GIT_VERSION )
 		) {
 			grunt.log.ok(
 				'Using git version from env var: ' +
-				process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 16 )
+				process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 8 )
 			);
 			grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
 			done();
@@ -963,7 +957,7 @@ module.exports = function(grunt) {
 			grunt.config.set( 'dev.git-version', hash );
 			grunt.log.ok(
 				'Using git version from `git rev-parse`: ' +
-				hash.substr( 0, 16 )
+				hash.substr( 0, 8 )
 			);
 			done();
 		} );

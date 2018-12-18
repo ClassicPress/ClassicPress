@@ -46,9 +46,9 @@ require( ABSPATH . WPINC . '/functions.wp-styles.php' );
  */
 function classicpress_asset_version( $type = 'script', $handle = null ) {
 	/**
-	 * The default asset version.  In the source repository this is based on
-	 * the ClassicPress version; at build time it is replaced with a random
-	 * string.
+	 * The default asset version, based on the ClassicPress version.  In the
+	 * source repository this is calculated at runtime; in builds it is a
+	 * static string.
 	 */
 	$version = 'cb' . substr( md5( classicpress_version() ), 0, 6 );
 
