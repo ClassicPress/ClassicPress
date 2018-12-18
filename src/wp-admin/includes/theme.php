@@ -444,7 +444,7 @@ function themes_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
 
-		$url = $http_url = 'https://api.wordpress.org/themes/info/1.0/';
+		$url = 'https://api.wordpress.org/themes/info/1.0/';
 
 		$http_args = array(
 			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
@@ -466,10 +466,12 @@ function themes_api( $action, $args = array() ) {
 					headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 				);
 			}
-			$request = wp_remote_post( $http_url, $http_args );
+
+			// Retry request
+			$request = wp_remote_post( $url, $http_args );
 		}
 
-		if ( is_wp_error($request) ) {
+		if ( is_wp_error( $request ) ) {
 			$res = new WP_Error( 'themes_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
