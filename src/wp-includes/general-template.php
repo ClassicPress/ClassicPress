@@ -4147,7 +4147,7 @@ function get_the_generator( $type = '' ) {
 			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
 			break;
 		case 'atom':
-			$gen = "<generator uri=\"https://www.classicpress.net/\" version=\"WordPress-$esc_wp_version-compatible-ClassicPress-$esc_cp_version\">ClassicPress</generator>";
+			$gen = "<generator uri=\"https://www.classicpress.net/\" version=\"$esc_wp_version-cp-$esc_cp_version\">ClassicPress</generator>";
 			break;
 		case 'rss2':
 			$gen = "<generator>$esc_cp_url</generator>";
