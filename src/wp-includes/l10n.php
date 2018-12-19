@@ -105,6 +105,54 @@ function get_user_locale( $user_id = 0 ) {
 }
 
 /**
+ * Determine the current locale desired for the request.
+ *
+ * @since 5.0.0
+ *
+ * @global string $pagenow
+ *
+ * @return string The determined locale.
+ */
+function determine_locale() {
+	/**
+	 * Filters the locale for the current request prior to the default determination process.
+	 *
+	 * Using this filter allows to override the default logic, effectively short-circuiting the function.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string|null The locale to return and short-circuit, or null as default.
+	 */
+	$determined_locale = apply_filters( 'pre_determine_locale', null );
+	if ( ! empty( $determined_locale ) && is_string( $determined_locale ) ) {
+		return $determined_locale;
+	}
+
+	$determined_locale = get_locale();
+
+	if ( is_admin() ) {
+		$determined_locale = get_user_locale();
+	}
+
+	if ( isset( $_GET['_locale'] ) && 'user' === $_GET['_locale'] && wp_is_json_request() ) {
+		$determined_locale = get_user_locale();
+	}
+
+	if ( ! empty( $_GET['wp_lang'] ) && ! empty( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
+		$determined_locale = sanitize_text_field( $_GET['wp_lang'] );
+	}
+
+	/**
+	 * Filters the locale for the current request.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $locale The locale.
+	 */
+	return apply_filters( 'determine_locale', $determined_locale );
+}
+
+/**
  * Retrieve the translation of $text.
  *
  * If there is no translation, or the text domain isn't loaded, the original text is returned.
@@ -1210,7 +1258,7 @@ function wp_dropdown_languages( $args = array() ) {
 		selected( '', $parsed_args['selected'], false )
 	);
 
-	// List installed languages. 
+	// List installed languages.
 	foreach ( $languages as $language ) {
 		$structure[] = sprintf(
 			'<option value="%s" lang="%s"%s data-installed="1">%s</option>',
