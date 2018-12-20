@@ -1323,9 +1323,6 @@ table.cp_petitions span.started {
 	}
 }
 
-@media screen and (max-width: 1024px) {
-}
-
 @media screen and (max-width: 870px) {
 	.welcome-panel .welcome-panel-column,
 	.welcome-panel .welcome-panel-column:first-child {
