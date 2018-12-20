@@ -36,15 +36,15 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 		</h2>
 
-		<div class="changelog point-releases">
+		<div class="about-description">
 			<h3><?php _e( 'ClassicPress' ); ?></h3>
 
 			<?php
-			echo "<p>\n";
+			echo '<p class="about-description">';
 			_e( '<strong>We began a fork of WordPress</strong> named ClassicPress.' );
 			print ' ';
 			_e( 'The initial version will be based on the WordPress 4.9 branch.' );
-			echo "</p><p>\n";
+			echo '</p><p class="about-description">';
 			/* translators: 1: ClassicPress GitHub URL, 2: ClassicPress website URL */
 			printf(
 				__( 'To see how you can help, take a look at <a href="%s">our GitHub repository</a> and <a href="%s">the official ClassicPress website</a>!' ),
@@ -55,17 +55,17 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			?>
 
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
-			<p>
+			<p class="about-description">
 				<?php
 				/* translators: %s: WordPress version number */
-				printf( __( '<strong>Version %s</strong> addressed some security issues.' ), '4.9.9' );
+				printf( __( '<strong>WordPress Version %s</strong> addressed some security issues.' ), '4.9.9' );
 				?>
 				<?php
 				/* translators: %s: Codex URL */
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.9' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -86,7 +86,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				);
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -104,7 +104,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.7' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -122,7 +122,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.6' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -140,7 +140,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.5' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -158,7 +158,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.4' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -176,7 +176,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.3' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
@@ -194,7 +194,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.2' );
 				?>
 			</p>
-			<p>
+			<p class="about-description">
 				<?php
 				printf(
 					/* translators: 1: WordPress version number, 2: plural number of bugs. */
