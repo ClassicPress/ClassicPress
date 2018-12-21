@@ -964,6 +964,8 @@ module.exports = function(grunt) {
 	} );
 
 	grunt.registerTask( 'precommit:check-for-changes', function() {
+		grunt.task.requires( 'precommit' );
+
 		var done = this.async();
 
 		grunt.util.spawn( {
