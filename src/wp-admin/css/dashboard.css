@@ -118,12 +118,8 @@
 }
 
 .welcome-panel h3 {
-	margin: 1.33em 0 0;
+	margin: 0.7em 0 0;
 	font-size: 16px;
-}
-
-.welcome-panel li {
-	font-size: 14px;
 }
 
 .welcome-panel p {
@@ -134,8 +130,8 @@
 	text-decoration: none;
 }
 
-.welcome-panel .about-description {
-	font-size: 16px;
+.welcome-panel .welcome-panel-tagline {
+	font-size: 110%;
 	margin: 0;
 }
 

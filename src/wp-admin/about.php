@@ -36,7 +36,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 		</h2>
 
-		<div class="changelog point-releases">
+		<div class="changelog point-releases about-wrap-content">
 			<h3><?php _e( 'ClassicPress' ); ?></h3>
 
 			<?php
