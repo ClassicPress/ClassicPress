@@ -48,7 +48,7 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 
 <?php else : ?>
 <div class="about-wrap-content">
-	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of mostly volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
+	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
 
 	<ul class="about-freedoms">
 		<li><?php _e( 'You have the freedom to run the program, for any purpose. (freedom 0)' ); ?></li>
