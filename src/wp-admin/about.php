@@ -58,7 +58,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php
 				/* translators: %s: WordPress version number */
-				printf( __( '<strong>WordPress Version %s</strong> addressed some security issues.' ), '4.9.9' );
+				printf( __( '<strong>WordPress version %s</strong> addressed some security issues.' ), '4.9.9' );
 				?>
 				<?php
 				/* translators: %s: Codex URL */
