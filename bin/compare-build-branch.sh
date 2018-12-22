@@ -63,9 +63,14 @@ cp -var build/ build-unminified/
 
 unminify_build_dir build-unminified/
 
-# Changes in version.php (timestamp) are normal
-rm -v build-unminified/wp-includes/version.php
-rm -v build-branch-unminified/wp-includes/version.php
+# Ignore changes in `$cp_version` (date)
+perl -pi -we 's/(\$cp_version = ).*;$/$1"IGNORED";/' \
+	build-unminified/wp-includes/version.php \
+	build-branch-unminified/wp-includes/version.php
+# Ignore changes in `$default_version` (git hash)
+perl -pi -we 's/(\$default_version = ).*;$/$1"IGNORED";/' \
+	build-unminified/wp-includes/script-loader.php \
+	build-branch-unminified/wp-includes/script-loader.php
 
 ( diff -ur build-unminified/ build-branch-unminified/ || true ) > build-compare.diff
 
