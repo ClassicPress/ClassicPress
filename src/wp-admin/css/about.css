@@ -203,18 +203,12 @@
 
 /* Freedoms */
 
-.freedoms-php .about-wrap ol {
-	margin: auto 2.5em;
-}
-
-.freedoms-php .about-wrap ol li {
-	list-style-type: decimal;
-	font-weight: 600;
-}
-
-.freedoms-php .about-wrap ol p {
-	font-weight: 400;
-	margin: 0.6em 0;
+.about-wrap .about-freedoms {
+	list-style-type: disc;
+	list-style-position: outside;
+	margin: 1em;
+	padding-left: 1em;
+	font-size: 14px;
 }
 
 /*------------------------------------------------------------------------------
