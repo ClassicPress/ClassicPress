@@ -1522,7 +1522,7 @@ function wp_welcome_panel() {
 	?>
 <div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
-	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
+	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
 	<h3><?php _e( 'Join our growing community' ); ?></h3>
 	<p>
 		<?php printf(
@@ -1562,7 +1562,7 @@ function wp_welcome_panel() {
 /**
  * Callback function for the petitions dashboard widget
  *
- * @since 1.0.0
+ * @since 1.0.0-beta2
  */
 function cp_dashboard_petitions() {
 	$feeds = array(
@@ -1586,7 +1586,7 @@ function cp_dashboard_petitions() {
  * Query the ClassicPress.net API for data about ClassicPress petitions, and
  * echo the results as HTML.
  *
- * @since 1.0.0
+ * @since 1.0.0-beta2
  *
  * @param string $widget_id Widget ID.
  * @param array  $feeds     Array of petition feeds (possible sort orders).

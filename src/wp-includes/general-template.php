@@ -2813,6 +2813,24 @@ function wp_no_robots() {
 }
 
 /**
+ * Display a noindex,noarchive meta tag and referrer origin-when-cross-origin meta tag.
+ *
+ * Outputs a noindex,noarchive meta tag that tells web robots not to index or cache the page content.
+ * Outputs a referrer origin-when-cross-origin meta tag that tells the browser not to send the full
+ * url as a referrer to other sites when cross-origin assets are loaded.
+ *
+ * Typical usage is as a wp_head callback. add_action( 'wp_head', 'wp_sensitive_page_meta' );
+ *
+ * @since WP-5.0.0
+ */
+function wp_sensitive_page_meta() {
+	?>
+	<meta name='robots' content='noindex,noarchive' />
+	<meta name='referrer' content='strict-origin-when-cross-origin' />
+	<?php
+}
+
+/**
  * Display site icon meta tags.
  *
  * @since WP-4.3.0
@@ -4086,6 +4104,8 @@ function the_generator( $type ) {
  * @return string|void The HTML content for the generator.
  */
 function get_the_generator( $type = '' ) {
+	global $wp_version;
+
 	if ( empty( $type ) ) {
 
 		$current_filter = current_filter();
@@ -4112,27 +4132,34 @@ function get_the_generator( $type = '' ) {
 		}
 	}
 
+	$esc_wp_version = esc_attr( $wp_version );
+	$esc_cp_version = esc_attr( classicpress_version_short() );
+	$esc_cp_url = esc_url_raw(
+		'https://www.classicpress.net/?v='
+		. $wp_version . '-cp-' . classicpress_version_short()
+	);
+
 	switch ( $type ) {
 		case 'html':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '">';
+			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
 			break;
 		case 'xhtml':
-			$gen = '<meta name="generator" content="ClassicPress ' . esc_attr( get_bloginfo( 'version' ) ) . '" />';
+			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
 			break;
 		case 'atom':
-			$gen = '<generator uri="https://wordpress.org/" version="' . esc_attr( get_bloginfo_rss( 'version' ) ) . '">ClassicPress</generator>';
+			$gen = "<generator uri=\"https://www.classicpress.net/\" version=\"$esc_wp_version-cp-$esc_cp_version\">ClassicPress</generator>";
 			break;
 		case 'rss2':
-			$gen = '<generator>' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '</generator>';
+			$gen = "<generator>$esc_cp_url</generator>";
 			break;
 		case 'rdf':
-			$gen = '<admin:generatorAgent rdf:resource="' . esc_url_raw( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '" />';
+			$gen = "<admin:generatorAgent rdf:resource=\"$esc_cp_url\" />";
 			break;
 		case 'comment':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo( 'version' ) ) . '" -->';
+			$gen = "<!-- generator=\"WordPress/$esc_wp_version (compatible; ClassicPress/$esc_cp_version)\" -->";
 			break;
 		case 'export':
-			$gen = '<!-- generator="ClassicPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . date( 'Y-m-d H:i' ) . '" -->';
+			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . date( "Y-m-d H:i" ) . "\" -->";
 			break;
 	}
 

@@ -48,14 +48,14 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 
 <?php else : ?>
 <div class="about-wrap-content">
-	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of mostly volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
+	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
 
-	<ol start="0">
-		<li><p><?php _e( 'You have the freedom to run the program, for any purpose.' ); ?></p></li>
-		<li><p><?php _e( 'You have access to the source code, the freedom to study how the program works, and the freedom to change it to make it do what you wish.' ); ?></p></li>
-		<li><p><?php _e( 'You have the freedom to redistribute copies of the original program so you can help your neighbor.' ); ?></p></li>
-		<li><p><?php _e( 'You have the freedom to distribute copies of your modified versions to others. By doing this you can give the whole community a chance to benefit from your changes.' ); ?></p></li>
-	</ol>
+	<ul class="about-freedoms">
+		<li><?php _e( 'You have the freedom to run the program, for any purpose. (freedom 0)' ); ?></li>
+		<li><?php _e( 'You have access to the source code, the freedom to study how the program works, and the freedom to change it to make it do what you wish. (freedom 1)' ); ?></li>
+		<li><?php _e( 'You have the freedom to redistribute copies of the original program so you can help your neighbor. (freedom 2)' ); ?></li>
+		<li><?php _e( 'You have the freedom to distribute copies of your modified versions to others. By doing this you can give the whole community a chance to benefit from your changes. (freedom 3)' ); ?></li>
+	</ul>
 
 	<p><?php
 

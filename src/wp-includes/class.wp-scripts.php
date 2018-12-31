@@ -246,6 +246,9 @@ class WP_Scripts extends WP_Dependencies {
 		if ( isset($this->args[$handle]) )
 			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
 
+		/** This filter is documented in wp-includes/script-loader.php */
+		$ver = apply_filters( 'classicpress_asset_version', $ver, 'script', $handle );
+
 		$src = $obj->src;
 		$cond_before = $cond_after = '';
 		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';

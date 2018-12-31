@@ -36,7 +36,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 		</h2>
 
-		<div class="changelog point-releases">
+		<div class="changelog point-releases about-wrap-content">
 			<h3><?php _e( 'ClassicPress' ); ?></h3>
 
 			<?php
@@ -55,6 +55,16 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			?>
 
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
+			<p>
+				<?php
+				/* translators: %s: WordPress version number */
+				printf( __( '<strong>WordPress version %s</strong> addressed some security issues.' ), '4.9.9' );
+				?>
+				<?php
+				/* translators: %s: Codex URL */
+				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.9' );
+				?>
+			</p>
 			<p>
 				<?php
 				printf(
