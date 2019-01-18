@@ -2,10 +2,11 @@
 
 # First parameter is your fork
 # Second parameter is the changeset number
+# Third parameter is the WP branch
 
 if [ ! -d "ClassicPress" ]; then
     # Download ClassicPress from your fork
-    git clone git@github.com:$1/ClassicPress.git
+    git clone git@github.com:"$1"/ClassicPress.git
     cd ClassicPress
 
     # Download original ClassicPress
@@ -29,12 +30,12 @@ git push origin develop
 git checkout origin/develop -B develop
 
 # Create branch with the changeset from WordPress
-git checkout -b merge/wp-r$2
+git checkout -b merge/wp-r"$2"
 
 # Get the commit from WP git log
-commit=`git log wp/master --grep=$2 --oneline --pretty=format:'%h' -n 1`
-if [ -z "$var" ]; then
-    git cherry-pick $commit
+commit=`git log wp/"$3" --grep="https://develop.svn.wordpress.org/trunk@$2" --oneline --pretty=format:'%h' -n 1`
+if [ -z "$commit" ]; then
+    git cherry-pick "$commit"
 else
     echo "Commit not found"
 fi
