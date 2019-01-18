@@ -1,6 +1,6 @@
 #/usr/bin/env bash
 
-# First parameter is the ticket number
+# First parameter is the changeset number
 
 # To save the changes
 git commit

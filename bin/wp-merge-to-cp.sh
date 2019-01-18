@@ -1,7 +1,7 @@
 #/usr/bin/env bash
 
 # First parameter is your fork
-# Second parameter is the ticket merged
+# Second parameter is the changeset number
 
 if [ ! -d "ClassicPress" ]; then
     # Download ClassicPress from your fork
@@ -28,7 +28,7 @@ git merge cp/develop
 git push origin develop
 git checkout origin/develop -B develop
 
-# Create branch with the patch from WordPress
+# Create branch with the changeset from WordPress
 git checkout -b merge/wp-r$2
 
 # Get the commit from WP git log
