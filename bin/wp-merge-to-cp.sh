@@ -10,6 +10,7 @@ if [ -z "$find_wp_remote" ]; then
     git remote add wp https://github.com/WordPress/wordpress-develop > /dev/null 2>&1
     find_wp_remote='wp'
 fi
+
 find_cp_remote=$(git remote -v | grep ClassicPress/ClassicPress | tail -n1 | awk '{print $1;}')
 if [ -z "$find_cp_remote" ]; then
     echo "Adding CP remote"
@@ -17,7 +18,8 @@ if [ -z "$find_cp_remote" ]; then
     git remote add cp git@github.com:ClassicPress/ClassicPress.git > /dev/null 2>&1
     find_cp_remote='cp'
 fi
-echo "Fetc CP/WP git repository"
+
+echo "Fetch CP/WP git repository"
 git fetch "$find_wp_remote" > /dev/null 2>&1
 git fetch "$find_cp_remote" > /dev/null 2>&1
 
@@ -44,9 +46,16 @@ fi
 echo "Create branch for changeset $1"
 git checkout -b "$branch" > /dev/null 2>&1
 
+# Set the WP branch where search
+search_branch="trunk"
+if [[ "$2" -ne "master" || "$2" -ne "trunk" ]]; then
+    search_branch="$2"
+fi
+
 # Get the commit from WP git log
-commit=$(git log "$find_wp_remote"/"$2" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\\d\\.\\d)@$1" --oneline --pretty=format:'%h' -n 1)
-if [ -z "$commit" ]; then
+search="^git-svn-id: https://develop.svn.wordpress.org/$search_branch@$1"
+commit=$(git log "$find_wp_remote"/"$2" --grep="$search" --oneline --pretty=format:'%h' -n 1)
+if [ ! -z "$commit" ]; then
     echo "Backport the changeset"
     git cherry-pick "$commit"
 else
