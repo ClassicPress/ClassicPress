@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# First parameter is your fork
-# Second parameter is the changeset number
-# Third parameter is the WP branch
+# First parameter is the changeset number
+# Second parameter is the WP branch
 
 find_wp_remote=$(git remote -v | grep WordPress/wordpress-develop | tail -n1 | awk '{print $1;}')
 if [ -z "$find_wp_remote" ]; then
@@ -21,7 +20,7 @@ git merge cp/develop
 git push origin develop
 git checkout origin/develop -B develop
 
-branch="merge/wp-r$2"
+branch="merge/wp-r$1"
 # If branch already exist, remove so the process start from a clean status
 if [ ! -z $(git branch --list "$branch") ]; then
 	git checkout -D "$branch"
@@ -31,7 +30,7 @@ fi
 git checkout -b "$branch"
 
 # Get the commit from WP git log
-commit=$(git log "$find_wp_remote"/"$3" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\\d\\.\\d)@$2" --oneline --pretty=format:'%h' -n 1)
+commit=$(git log "$find_wp_remote"/"$2" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\\d\\.\\d)@$1" --oneline --pretty=format:'%h' -n 1)
 if [ -z "$commit" ]; then
     git cherry-pick "$commit"
 else
