@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 # First parameter is the changeset number
 
@@ -6,9 +6,9 @@
 git commit
 
 # Get the data to print
-commit=`git log wp/master --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\d\.\d)@$changeset" --oneline --pretty=format:'%h' -n 1`
-OLD_MSG=`git log --format=%B -n1`
-changeset=`echo $OLD_MSG | tail -n1 | cut -d "@" -f2 | cut -d " " -f1`
+commit=$(git log wp/master --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\\d\\.\\d)@$changeset" --oneline --pretty=format:'%h' -n 1)
+OLD_MSG=$(git log --format=%B -n1)
+changeset=$(echo "$OLD_MSG" | tail -n1 | cut -d "@" -f2 | cut -d " " -f1)
 message=$(printf "#WP-$1: $OLD_MSG\n\n----\nMerges https:\/\/core.trac.wordpress.org\/changeset\/$changeset \/ WordPress\/wordpress-develop@$commit to ClassicPress.")
 git commit --amend -m"$message"
 
