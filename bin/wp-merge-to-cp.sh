@@ -4,21 +4,13 @@
 # Second parameter is the changeset number
 # Third parameter is the WP branch
 
-if [ ! -d "ClassicPress" ]; then
-    # Download ClassicPress from your fork
-    git clone git@github.com:"$1"/ClassicPress.git
-    cd ClassicPress
-
-    # Download original ClassicPress
-    git remote add cp git@github.com:ClassicPress/ClassicPress.git
-
+find_wp_remote=`git remote -v | grep WordPress/wordpress-develop | tail -n1 | awk '{print $1;}'`
+if [ -z "$find_wp_remote" ]; then
     # Download WordPress dev
     git remote add wp https://github.com/WordPress/wordpress-develop
-else
-    cd ClassicPress
+    find_wp_remote='wp'
 fi
-git fetch cp
-git fetch wp
+git fetch "$find_wp_remote"
 
 # Switch to ClassicPress branch
 git fetch origin
@@ -33,7 +25,7 @@ git checkout origin/develop -B develop
 git checkout -b merge/wp-r"$2"
 
 # Get the commit from WP git log
-commit=`git log wp/"$3" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\d\.\d)@$2" --oneline --pretty=format:'%h' -n 1`
+commit=`git log "$find_wp_remote"/"$3" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\d\.\d)@$2" --oneline --pretty=format:'%h' -n 1`
 if [ -z "$commit" ]; then
     git cherry-pick "$commit"
 else
