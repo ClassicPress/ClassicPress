@@ -33,7 +33,7 @@ git checkout origin/develop -B develop
 git checkout -b merge/wp-r"$2"
 
 # Get the commit from WP git log
-commit=`git log wp/"$3" --grep="https://develop.svn.wordpress.org/trunk@$2" --oneline --pretty=format:'%h' -n 1`
+commit=`git log wp/"$3" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\d\.\d)@$2" --oneline --pretty=format:'%h' -n 1`
 if [ -z "$commit" ]; then
     git cherry-pick "$commit"
 else
