@@ -21,8 +21,14 @@ git merge cp/develop
 git push origin develop
 git checkout origin/develop -B develop
 
+branch="merge/wp-r$2"
+# If branch already exist, remove so the process start from a clean status
+if [ ! -z `git branch --list $branch` ]; then
+	git checkout -D "$branch"
+fi
+
 # Create branch with the changeset from WordPress
-git checkout -b merge/wp-r"$2"
+git checkout -b "$branch"
 
 # Get the commit from WP git log
 commit=`git log "$find_wp_remote"/"$3" --grep="^git-svn-id: https://develop.svn.wordpress.org/(trunk|\d\.\d)@$2" --oneline --pretty=format:'%h' -n 1`
