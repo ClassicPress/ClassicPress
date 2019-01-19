@@ -8,7 +8,9 @@ if [[ ! "$wp_changeset" =~ ^[0-9]+$ ]]; then
 	exit 1
 fi
 
-if [ ! -d .git ]; then
+# Sanity check: make sure we have a .git directory, and at least one remote
+# pointing to a repository named ClassicPress
+if [ ! -d .git ] || ! git remote -v | grep -q '\b/ClassicPress\b'; then
 	echo "Call this script from within your ClassicPress repository"
 	exit 1
 fi
@@ -85,9 +87,75 @@ else
 fi
 cmd git checkout "$cp_remote/develop" -B "$branch"
 
-echo "=== IMPORTANT ==="
-echo "=== Include this line in your PR message:"
-echo "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop@$commit_short to ClassicPress."
-echo "=== IMPORTANT ==="
+set +e
+cmd git cherry-pick --no-commit "$commit_short"
+conflict_status=$?
+set -e
 
-echo git cherry-pick "$commit_short"
+edit_merge_msg() {
+	echo 'Editing commit message'
+	# edit .git/MERGE_MSG which will be the commit message:
+	# - transform [12345] into WP changeset link
+	# - transform #12345 into WP ticket link
+	# - mark Props lines as coming from WP so we can identify them later
+	# - remove 'git-svn-id:' line
+	# - remove duplicate blank lines
+	perl -w <<PL
+		open MSG_R, '<', '.git/MERGE_MSG'
+			or die "Can't open .git/MERGE_MSG: \$!";
+		open MSG_W, '>', '.git/MERGE_MSG.tmp'
+			or die "Can't open .git/MERGE_MSG.tmp: \$!";
+		print MSG_W 'WP-r$wp_changeset: ';
+		my \$was_blank_line = 0;
+		while (<MSG_R>) {
+			s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
+			s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
+			s,^# Conflicts:,Conflicts:,;
+			s,^#\t,  ,;
+			s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
+			if (/\S/) {
+				if (!/^git-svn-id:/) {
+					\$was_blank_line = 0;
+					print MSG_W \$_;
+				}
+			} else {
+				print MSG_W \$_ if !\$was_blank_line;
+				\$was_blank_line = 1;
+			}
+		}
+		print MSG_W "----\n";
+		print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
+		close MSG_R;
+		close MSG_W;
+		rename '.git/MERGE_MSG.tmp', '.git/MERGE_MSG';
+PL
+}
+
+if [ "$conflict_status" -eq 0 ]; then
+	edit_merge_msg
+	cmd git commit --no-edit
+	echo
+	echo "All done!  You can push the changes to GitHub now:"
+	echo "git push origin $branch"
+else
+	# Apparently `git cherry-pick --no-commit` doesn't use the git sequencer,
+	# but we should because then `git status` shows you the next steps
+	echo "Redoing cherry-pick now that we know there's a conflict"
+	cmd git reset --hard
+	echo
+	set +e
+	cmd git cherry-pick "$commit_short"
+	set -e
+	echo
+	edit_merge_msg
+	echo
+	echo "WARNING: Conflict detected!"
+	echo "WARNING: Fix and commit the files marked as 'both modified' before proceeding:"
+	echo
+	git status
+	echo
+	echo "After resolving the conflict(s), commit and push the changes to GitHub:"
+	echo "git add ."
+	echo "git cherry-pick --continue"
+	echo "git push origin $branch"
+fi
