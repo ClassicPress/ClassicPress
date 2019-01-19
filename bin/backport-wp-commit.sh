@@ -76,7 +76,7 @@ for range in 'd7b6719f:4.9' '5d477aa7:5.0' 'ff6114f8:master'; do
 	search="^git-svn-id: https://develop.svn.wordpress.org/$svn_branch@$wp_changeset "
 	commit_hash=$(git log "$log_range" --grep="$search" --pretty=format:'%H' -n 1)
 	if [ ! -z "$commit_hash" ]; then
-		commit_short=$(echo "$commit_hash" | cut -c1-8)
+		commit_short=$(echo "$commit_hash" | cut -c1-10)
 		echo
 		echo "Found commit: $commit_short on $wp_remote/$search_branch branch"
 		cmd git log -n 1 "$commit_short"
