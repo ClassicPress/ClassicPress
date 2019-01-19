@@ -4,8 +4,19 @@ set -e
 
 wp_changeset="$1"
 if [[ ! "$wp_changeset" =~ ^[0-9]+$ ]]; then
-	echo "Usage: $0 WP_CHANGESET_NUMBER"
+	echo "Usage: $0 WP_CHANGESET_NUMBER [--current-branch]"
+	echo
+	echo "  WP_CHANGESET_NUMBER  The SVN changeset number to port.  If this change depends"
+	echo "                       on other changes, make sure they have already been ported."
+	echo "  --current-branch     Apply the commit directly to the current branch instead of"
+	echo "                       creating a new branch."
+	echo
 	exit 1
+fi
+
+create_branch=yes
+if [ "$2" = "--current-branch" ]; then
+	create_branch=no
 fi
 
 # Sanity check: make sure we have a .git directory, and at least one remote
@@ -90,17 +101,19 @@ if [ -z "$commit_hash" ]; then
 	exit 1
 fi
 
-# Create branch with the changeset from WordPress, based on the latest
-# ClassicPress develop branch
-branch="merge/wp-r$wp_changeset"
-if git rev-parse "$branch" > /dev/null 2>&1; then
-	echo "WARNING: Local branch '$branch' already exists!"
-	echo "Press Enter to remove it and start over, or Ctrl+C to exit."
-	read i
-else
-	echo "Creating branch for port: $branch"
+if [ $create_branch = yes ]; then
+	# Create branch with the changeset from WordPress, based on the latest
+	# ClassicPress develop branch
+	branch="merge/wp-r$wp_changeset"
+	if git rev-parse "$branch" > /dev/null 2>&1; then
+		echo "WARNING: Local branch '$branch' already exists!"
+		echo "Press Enter to remove it and start over, or Ctrl+C to exit."
+		read i
+	else
+		echo "Creating branch for port: $branch"
+	fi
+	cmd git checkout "$cp_remote/develop" -B "$branch"
 fi
-cmd git checkout "$cp_remote/develop" -B "$branch"
 
 set +e
 cmd git cherry-pick --no-commit "$commit_short"
@@ -151,8 +164,12 @@ if [ "$conflict_status" -eq 0 ]; then
 	edit_merge_msg
 	cmd git commit --no-edit
 	echo
-	echo "All done!  You can push the changes to GitHub now:"
-	echo "git push origin $branch"
+	if [ $create_branch = yes ]; then
+		echo "All done!  You can push the changes to GitHub now:"
+		echo "git push origin $branch"
+	else
+		echo "All done!  1 commit was added to your current branch."
+	fi
 else
 	# Apparently `git cherry-pick --no-commit` doesn't use the git sequencer,
 	# but we should because then `git status` shows you the next steps
@@ -172,8 +189,14 @@ else
 	echo
 	git status
 	echo
-	echo "After resolving the conflict(s), commit and push the changes to GitHub:"
-	echo "git add ."
-	echo "git cherry-pick --continue"
-	echo "git push origin $branch"
+	if [ $create_branch = yes ]; then
+		echo "After resolving the conflict(s), commit and push the changes to GitHub:"
+		echo "git add ."
+		echo "git cherry-pick --continue"
+		echo "git push origin $branch"
+	else
+		echo "After resolving the conflict(s), commit your changes:"
+		echo "git add ."
+		echo "git cherry-pick --continue"
+	fi
 fi
