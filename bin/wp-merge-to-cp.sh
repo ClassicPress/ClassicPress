@@ -54,17 +54,17 @@ for range in 'd7b6719f:4.9' '5d477aa7:5.0' 'ff6114f8:master'; do
 	if [ "$search_branch" = master ]; then
 		svn_branch=trunk
 	else
-		svn_branch="$search_branch"
+		svn_branch="branches/$search_branch"
 	fi
 	echo "Searching for r$wp_changeset in WP git: $wp_remote/$search_branch"
 	# Get the commit from WP git log
-	search="^git-svn-id: https://develop.svn.wordpress.org/branches/$svn_branch@$wp_changeset "
+	search="^git-svn-id: https://develop.svn.wordpress.org/$svn_branch@$wp_changeset "
 	commit_hash=$(git log "$log_range" --grep="$search" --pretty=format:'%H' -n 1)
 	if [ ! -z "$commit_hash" ]; then
 		commit_short=$(echo "$commit_hash" | cut -c1-8)
 		echo
-		echo "Found commit: $commit_short"
-		cmd git log -n 1 --stat "$commit_short"
+		echo "Found commit: $commit_short on $wp_remote/$search_branch branch"
+		cmd git log -n 1 "$commit_short"
 		echo
 		break
 	fi
