@@ -38,20 +38,20 @@ cmd() {
 
 wp_remote=$(git remote -v | grep '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
 if [ -z "$wp_remote" ]; then
-	echo "Adding WordPress/wordpress-develop git remote: wp"
+	echo "Adding git remote 'wp' for WordPress/wordpress-develop"
 	cmd git remote add wp https://github.com/WordPress/wordpress-develop.git
 	wp_remote="wp"
 else
-	echo "Found WordPress/wordpress-develop git remote: $wp_remote"
+	echo "Found git remote '$wp_remote' for WordPress/wordpress-develop"
 fi
 
 cp_remote=$(git remote -v | grep '\bClassicPress/ClassicPress\b' | awk 'END { print $1 }')
 if [ -z "$cp_remote" ]; then
-	echo "Adding ClassicPress/ClassicPress git remote: cp"
+	echo "Adding git remote 'cp' for ClassicPress/ClassicPress"
 	cmd git remote add cp https://github.com/ClassicPress/ClassicPress.git
 	cp_remote="cp"
 else
-	echo "Found ClassicPress/ClassicPress git remote: $cp_remote"
+	echo "Found git remote '$cp_remote' for ClassicPress/ClassicPress"
 fi
 
 echo "Updating repositories from GitHub"
@@ -94,7 +94,7 @@ fi
 # ClassicPress develop branch
 branch="merge/wp-r$wp_changeset"
 if git rev-parse "$branch" > /dev/null 2>&1; then
-	echo "Local branch '$branch' already exists!"
+	echo "WARNING: Local branch '$branch' already exists!"
 	echo "Press Enter to remove it and start over, or Ctrl+C to exit."
 	read i
 else
@@ -108,7 +108,7 @@ conflict_status=$?
 set -e
 
 edit_merge_msg() {
-	echo 'Editing commit message'
+	echo 'Modifying commit message'
 	# edit .git/MERGE_MSG which will be the commit message:
 	# - transform [12345] into WP changeset link
 	# - transform #12345 into WP ticket link
@@ -164,8 +164,10 @@ else
 	echo
 	edit_merge_msg
 	echo
+	echo "======="
 	echo "WARNING: Conflict detected!"
-	echo "WARNING: Fix and commit the files marked as 'both modified' before proceeding:"
+	echo "Fix and commit the files marked as 'both modified' before proceeding:"
+	echo "======="
 	echo
 	git status
 	echo
