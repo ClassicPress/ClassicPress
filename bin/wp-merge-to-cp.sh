@@ -11,7 +11,22 @@ fi
 # Sanity check: make sure we have a .git directory, and at least one remote
 # pointing to a repository named ClassicPress
 if [ ! -d .git ] || ! git remote -v | grep -q '\b/ClassicPress\b'; then
-	echo "Call this script from within your ClassicPress repository"
+	echo "ERROR: Call this script from within your ClassicPress repository"
+	exit 1
+fi
+
+# Make sure there are no modified files in the local repository
+change_type=
+if ! git diff --exit-code --quiet; then
+	change_type="Modified file(s)"
+elif ! git diff --cached --exit-code --quiet; then
+	change_type="Staged file(s)"
+fi
+if [ ! -z "$change_type" ]; then
+	git status
+	echo
+	echo "ERROR: $change_type detected"
+	echo "ERROR: You must start this script from a clean working tree!"
 	exit 1
 fi
 
@@ -71,7 +86,7 @@ for range in 'd7b6719f:4.9' '5d477aa7:5.0' 'ff6114f8:master'; do
 done
 
 if [ -z "$commit_hash" ]; then
-	echo "WP changeset $wp_changeset not found in any git branch"
+	echo "ERROR: WP changeset $wp_changeset not found in any git branch"
 	exit 1
 fi
 
