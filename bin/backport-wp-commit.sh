@@ -115,6 +115,7 @@ edit_merge_msg() {
 	# - mark Props lines as coming from WP so we can identify them later
 	# - remove 'git-svn-id:' line
 	# - remove duplicate blank lines
+	# - add 'Merges ... to ClassicPress' line for tracking backported commits
 	perl -w <<PL
 		open MSG_R, '<', '.git/MERGE_MSG'
 			or die "Can't open .git/MERGE_MSG: \$!";
