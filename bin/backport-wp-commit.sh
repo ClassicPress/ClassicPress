@@ -46,7 +46,7 @@ if [ ! -d .git ] || ! git remote -v | grep -q '\b/ClassicPress\b'; then
 fi
 
 # Make sure there are no modified files in the local repository
-change_type=
+change_type=""
 if ! git diff --exit-code --quiet; then
 	change_type="Modified file(s)"
 elif ! git diff --cached --exit-code --quiet; then
@@ -94,7 +94,7 @@ echo "Updating repositories from GitHub"
 cmd git fetch "$wp_remote"
 cmd git fetch "$cp_remote"
 
-commit_hash=
+commit_hash=""
 # Find the changeset in the WP git log
 # Only need to search after branch points, or after ClassicPress was forked
 # See: https://github.com/ClassicPress/ClassicPress-Bots/blob/4c1a9f2f/app/Http/Controllers/UpstreamCommitsList.php#L10-L36
