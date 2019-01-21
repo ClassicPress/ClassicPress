@@ -2,21 +2,40 @@
 
 set -e
 
-wp_changeset="$1"
+current_branch=no
+verbose=no
+wp_changeset=""
+
+for i in "$@"; do
+	case "$i" in
+		-c|--current-branch)
+			current_branch=yes
+			;;
+		-v|--verbose)
+			verbose=yes
+			;;
+		*)
+			if [ -z "$wp_changeset" ]; then
+				wp_changeset="$i"
+			else
+				# Multiple changesets not supported
+				wp_changeset="invalid"
+				break
+			fi
+			;;
+	esac
+done
+
 if [[ ! "$wp_changeset" =~ ^[0-9]+$ ]]; then
-	echo "Usage: $0 WP_CHANGESET_NUMBER [--current-branch]"
+	echo "Usage: $0 [-c] [-v] WP_CHANGESET_NUMBER"
 	echo
-	echo "  WP_CHANGESET_NUMBER  The SVN changeset number to port.  If this change depends"
-	echo "                       on other changes, make sure they have already been ported."
-	echo "  --current-branch     Apply the commit directly to the current branch instead of"
-	echo "                       creating a new branch."
+	echo "  WP_CHANGESET_NUMBER   The SVN changeset number to port.  If this change depends"
+	echo "                        on other changes, make sure they have already been ported."
+	echo "  -c, --current-branch  Apply the commit directly to the current branch instead of"
+	echo "                        creating a new branch."
+	echo "  -v, --verbose         Show intermediate commands and their output."
 	echo
 	exit 1
-fi
-
-create_branch=yes
-if [ "$2" = "--current-branch" ]; then
-	create_branch=no
 fi
 
 # Sanity check: make sure we have a .git directory, and at least one remote
@@ -42,9 +61,15 @@ if [ ! -z "$change_type" ]; then
 fi
 
 cmd() {
-	echo "+" "$@"
-	"$@" 2>&1 | sed 's/^/> /'
-	return ${PIPESTATUS[0]}
+	tmpfile="${TMPDIR:-/tmp}/backport.$$.log"
+	echo "+" "$@" > "$tmpfile"
+	"$@" 2>&1 | sed 's/^/> /' >> "$tmpfile"
+	retval=${PIPESTATUS[0]}
+	if [ $retval -gt 0 ] || [ $verbose = yes ]; then
+		cat "$tmpfile"
+	fi
+	rm "$tmpfile"
+	return $retval
 }
 
 wp_remote=$(git remote -v | grep '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
@@ -101,7 +126,7 @@ if [ -z "$commit_hash" ]; then
 	exit 1
 fi
 
-if [ $create_branch = yes ]; then
+if [ $current_branch = no ]; then
 	# Create branch with the changeset from WordPress, based on the latest
 	# ClassicPress develop branch
 	branch="merge/wp-r$wp_changeset"
@@ -164,7 +189,7 @@ if [ "$conflict_status" -eq 0 ]; then
 	edit_merge_msg
 	cmd git commit --no-edit
 	echo
-	if [ $create_branch = yes ]; then
+	if [ $current_branch = no ]; then
 		echo "All done!  You can push the changes to GitHub now:"
 		echo "git push origin $branch"
 	else
@@ -189,7 +214,7 @@ else
 	echo
 	git status
 	echo
-	if [ $create_branch = yes ]; then
+	if [ $current_branch = no ]; then
 		echo "After resolving the conflict(s), commit and push the changes to GitHub:"
 		echo "git add ."
 		echo "git cherry-pick --continue"
