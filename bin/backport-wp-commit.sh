@@ -68,11 +68,16 @@ if [ -t 1 ]; then
 fi
 
 cmd() {
+	failure_allowed=no
+	if [ "$1" = __failure_allowed ]; then
+		failure_allowed=yes
+		shift
+	fi
 	tmpfile="${TMPDIR:-/tmp}/backport.$$.log"
 	echo "+" "$@" > "$tmpfile"
 	"$@" 2>&1 | sed 's/^/> /' >> "$tmpfile"
 	retval=${PIPESTATUS[0]}
-	if [ $retval -gt 0 ] || [ $verbose = yes ]; then
+	if [ $retval -gt 0 -a $failure_allowed = no ] || [ $verbose = yes ]; then
 		cat "$tmpfile"
 	fi
 	rm "$tmpfile"
@@ -149,7 +154,7 @@ if [ $current_branch = no ]; then
 fi
 
 set +e
-cmd git cherry-pick --no-commit "$commit_short"
+cmd __failure_allowed git cherry-pick --no-commit "$commit_short"
 conflict_status=$?
 set -e
 
@@ -210,7 +215,7 @@ else
 	cmd git reset --hard
 	echo
 	set +e
-	cmd git cherry-pick "$commit_short"
+	cmd __failure_allowed git cherry-pick "$commit_short"
 	set -e
 	echo
 	edit_merge_msg
