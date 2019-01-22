@@ -146,9 +146,15 @@ if [ $current_branch = no ]; then
 	# ClassicPress develop branch
 	branch="merge/wp-r$wp_changeset"
 	if git rev-parse "$branch" > /dev/null 2>&1; then
-		echo "${color_bold_red}WARNING: Local branch '$branch' already exists!${color_reset}"
-		echo "Press Enter to remove it and start over, or Ctrl+C to exit."
-		read i
+		if [ -t 1 ]; then
+			echo "${color_bold_red}WARNING: Local branch '$branch' already exists!${color_reset}"
+			echo "Press Enter to remove it and start over, or Ctrl+C to exit."
+			read i
+		else
+			# Not running interactively, so treat this as an error and abort.
+			echo "ERROR: Local branch '$branch' already exists!"
+			exit 1
+		fi
 	else
 		echo "Creating branch for port: $branch"
 	fi
