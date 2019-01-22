@@ -244,4 +244,6 @@ else
 		echo "git add ."
 		echo "git cherry-pick --continue"
 	fi
+	# Use a special exit code to indicate conflict
+	exit 3
 fi
