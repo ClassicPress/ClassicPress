@@ -155,6 +155,7 @@ if [ $current_branch = no ]; then
 	cmd git checkout "$cp_remote/develop" -B "$branch"
 fi
 
+echo "Backporting commit using git cherry-pick"
 set +e
 cmd __failure_allowed git cherry-pick --no-commit "$commit_short"
 conflict_status=$?
