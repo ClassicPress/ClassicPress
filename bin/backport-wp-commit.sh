@@ -60,6 +60,13 @@ if [ ! -z "$change_type" ]; then
 	exit 1
 fi
 
+color_bold_red=""
+color_reset=""
+if [ -t 1 ]; then
+	color_bold_red=$(echo -ne "\033[1;31m")
+	color_reset=$(echo -ne "\033[0m")
+fi
+
 cmd() {
 	tmpfile="${TMPDIR:-/tmp}/backport.$$.log"
 	echo "+" "$@" > "$tmpfile"
@@ -207,10 +214,10 @@ else
 	echo
 	edit_merge_msg
 	echo
-	echo "======="
-	echo "WARNING: Conflict detected!"
-	echo "Fix and commit the files marked as 'both modified' before proceeding:"
-	echo "======="
+	echo "${color_bold_red}=======${color_reset}"
+	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
+	echo "Fix and commit the files marked as '${color_bold_red}both modified${color_reset}' before proceeding:"
+	echo "${color_bold_red}=======${color_reset}"
 	echo
 	git status
 	echo
