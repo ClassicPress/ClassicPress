@@ -213,11 +213,9 @@ else
 	# but we should because then `git status` shows you the next steps
 	echo "Redoing cherry-pick now that we know there's a conflict"
 	cmd git reset --hard
-	echo
 	set +e
 	cmd __failure_allowed git cherry-pick "$commit_short"
 	set -e
-	echo
 	edit_merge_msg
 	echo
 	echo "${color_bold_red}=======${color_reset}"
