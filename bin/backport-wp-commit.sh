@@ -128,7 +128,9 @@ for range in 'd7b6719f:4.9' '5d477aa7:5.0' 'ff6114f8:master'; do
 		commit_short=$(echo "$commit_hash" | cut -c1-10)
 		echo
 		echo "Found commit: $commit_short on $wp_remote/$search_branch branch"
-		cmd git log -n 1 "$commit_short"
+		if [ $verbose = yes ]; then
+			cmd git log -n 1 "$commit_short"
+		fi
 		echo
 		break
 	fi
