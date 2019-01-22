@@ -97,8 +97,9 @@ else
 	echo "Found git remote '$cp_remote' for ClassicPress/ClassicPress"
 fi
 
-echo "Updating repositories from GitHub"
+echo "Updating repositories from GitHub: WordPress..."
 cmd git fetch "$wp_remote"
+echo "Updating repositories from GitHub: ClassicPress..."
 cmd git fetch "$cp_remote"
 
 commit_hash=""
