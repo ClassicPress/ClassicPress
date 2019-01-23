@@ -59,7 +59,7 @@
  *     @type string  $tag               Tag to filter plugins. Default empty.
  *     @type string  $author            Username of an plugin author to filter plugins. Default empty.
  *     @type string  $user              Username to query for their favorites. Default empty.
- *     @type string  $browse            Browse view: 'popular', 'new', 'beta', 'recommended'.
+ *     @type string  $browse            Browse view: 'popular'.
  *     @type string  $locale            Locale to provide context-sensitive results. Default is the value
  *                                      of get_locale().
  *     @type string  $installed_plugins Installed plugins to provide context-sensitive results.
