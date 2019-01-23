@@ -1725,7 +1725,7 @@
 			$filesystemForm      = $( '#request-filesystem-credentials-form' ),
 			$filesystemModal     = $( '#request-filesystem-credentials-dialog' ),
 			$pluginSearch        = $( '.plugins-php .wp-filter-search' ),
-			$pluginInstallSearch = $( '.plugin-install-php .wp-filter-search' );
+			$pluginInstallSearch = $( '.plugin-install-php #search-plugin' );
 
 		settings = _.extend( settings, window._wpUpdatesItemCounts || {} );
 
@@ -2190,12 +2190,12 @@
 		 *
 		 * @since WP-4.6.0
 		 */
-		$pluginInstallSearch.on( 'keyup input', _.debounce( function( event, eventtype ) {
+		$pluginInstallSearch.on( 'click', _.debounce( function( event, eventtype ) {
 			var $searchTab = $( '.plugin-install-search' ), data, searchLocation;
 
 			data = {
 				_ajax_nonce: wp.updates.ajaxNonce,
-				s:           event.target.value,
+				s:           $( '.plugin-install-php .wp-filter-search' ).val(),
 				tab:         'search',
 				type:        $( '#typeselector' ).val(),
 				pagenow:     pagenow
