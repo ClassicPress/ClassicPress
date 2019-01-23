@@ -337,6 +337,37 @@ function install_plugins_favorites_form() {
 }
 
 /**
+ * Display plugin content based on plugin category (using tags).
+ *
+ * @since CP-1.0
+ *
+ */
+function display_plugins_categories_list() {
+	?>
+	<div class="plugin-categories-filter-holder">
+		<h3><?php _e( 'Browse Categories' ) ?></h3>
+		<ul class="plugin-categories-filter">
+			<li><a href="#" data-plugin-tag="form"><?php _e( 'Forms' ) ?></a></li>
+			<li><a href="#" data-plugin-tag="ecommerce"><?php _e( 'eCommerce' ) ?></a></li>
+			<li><a href="#" data-plugin-tag="seo"><?php _e( 'SEO' ) ?></a></li>
+			<li><a href="#" data-plugin-tag="newsletter"><?php _e( 'Newsletters' ) ?></a></li>
+			<li><a href="#" data-plugin-tag="forum"><?php _e( 'Forums' ) ?></a></li>
+			<li><a href="#" data-plugin-tag="advertising"><?php _e( 'Advertising' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Social Networking' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Media' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Membership' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Page Builders' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Utilities' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Widgets' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Interface Elements' ) ?></a></li>
+			<li><a href="#"><?php _e( 'Miscellaneous' ) ?></a></li>
+		</ul>
+		<h3><?php _e( 'Popular Plugins' ) ?></h3>
+	</div>
+	<?php
+}
+
+/**
  * Display plugin content based on plugin list.
  *
  * @since WP-2.7.0

@@ -2211,6 +2211,7 @@
 				return;
 			} else {
 				$pluginFilter.empty();
+				$( '.plugin-categories-filter-holder').remove();
 				wp.updates.searchTerm = data.s;
 			}
 
