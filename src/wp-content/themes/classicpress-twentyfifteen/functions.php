@@ -22,17 +22,13 @@ function cp2015_setup() {
 add_action( 'wp_enqueue_scripts', 'cp2015_enqueue_styles' );
 
 function cp2015_enqueue_styles() {
-
-    $parent_style = 'twentyfifteen-style';
-
-    wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
 	
-    $version = classicpress_asset_version( 'style', 'classicpress-twentyfifteen' );
-    wp_enqueue_style( 'classicpress-twentyfifteen',
-        get_stylesheet_directory_uri() . '/style.css',
-        array( $parent_style ),
-	$version
-        //filemtime( get_stylesheet_directory() . '/style.css' )
-    );
-
+	$parent_style = 'twentyfifteen-style';
+	
+	wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
+	wp_enqueue_style( 'classicpress-twentyfifteen',
+			 get_stylesheet_directory_uri() . '/style.css',
+			 array( $parent_style ),
+			 classicpress_asset_version( 'style', 'classicpress-twentyfifteen' );
+	);
 }
