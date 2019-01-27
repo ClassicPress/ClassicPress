@@ -26,10 +26,13 @@ function cp2015_enqueue_styles() {
     $parent_style = 'twentyfifteen-style';
 
     wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
+	
+    $version = classicpress_asset_version( 'style', 'classicpress-twentyseventeen' );
     wp_enqueue_style( 'classicpress-twentyfifteen',
         get_stylesheet_directory_uri() . '/style.css',
         array( $parent_style ),
-        filemtime( get_stylesheet_directory() . '/style.css' )
+	$version
+        //filemtime( get_stylesheet_directory() . '/style.css' )
     );
 
 }
