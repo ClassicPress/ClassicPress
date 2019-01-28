@@ -1519,14 +1519,24 @@ function wp_dashboard_empty() {}
  */
 function wp_welcome_panel() {
 	$display_version = classicpress_version();
-	?>
+?>
 <div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-<br>
+	<p>
+		<?php _e(
+			'<strong>Join our growing community</strong> and help us build the platform <strong>you</strong> want to see!'
+		); ?>
+	</p>
+	<p>
+		<?php printf(
+			/* translators: link to "About ClassicPress" dashboard page */
+			'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.',
+			esc_url( self_admin_url( 'about.php' ) )
+		); ?>
+	</p>
 </div>
-
-	<?php
+<?php
 }
 
 /**
