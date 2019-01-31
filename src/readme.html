@@ -35,23 +35,26 @@
 
 <h2 id="updating">Updating</h2>
 <h3>Using the Automatic Updater</h3>
-<p>If you are updating from beta version 1.0.0 or higher, you can use the automatic updater:</p>
+<p>If you are updating from beta version <code>1.0.0-beta1</code> or higher, you can use the automatic updater:</p>
 <ol>
 	<li>Open <span class="file"><a href="wp-admin/update-core.php">wp-admin/update-core.php</a></span> in your browser and follow the instructions.</li>
 	<li>That&#8217;s it!</li>
 </ol>
 
 <h3>Updating Manually</h3>
-<p>Updating manually can be done via (S)FTP or via the admin panel of the web host (such as cPanel).</p>
-<ol>
-	<li>Before anything, make sure you to backup the entire site as well as the database.</li>
-	<li>From the root of the WordPress install remove all files <strong>except</strong> `.htaccess`, `wp-config.php` and the entire `wp-content` folder. Also if there are any files present, such as google verification files, it is important to leave them too.</li>
-	<li>Remove the `wp-content` folder from the installation package, then upload the rest to the root.</li>
+<p>Updating manually can be done via remote connection methods such as SFTP (preferred) or FTP.</p>
+<p>For more information, see our <a href="https://docs.classicpress.net/updating-classicpress/#updating-classicpress-manually">manual update documentation</a>.</p>
+<ol start="0">
+	<li>Before doing anything, make sure you have a working backup of the entire site as well as the database.</li>
+	<li>Download the latest release of ClassicPress from our <a href="https://www.classicpress.net/releases/">releases page</a>.</li>
+	<li>On your <strong>local computer</strong>, unzip the ClassicPress release file into a directory.</li>
+	<li>On your <strong>local computer</strong>, remove the <code>wp-config-sample.php</code> file and the <code>wp-content</code> directory.</li>
+	<li>Upload what’s left over to your server, replacing the existing files (using either SSH or an application that connects over SFTP or FTP).
 	<li>Point the browser to <span class="file"><a href="wp-admin/upgrade.php">/wp-admin/upgrade.php</a></span> and follow the instructions.</li>
 </ol>
 
 <h2 id="migrating-from-wordpress">Migrating from WordPress</h2>
-<p>With the ClassicPress migration plugin, it is very easy to migrate from WordPress to ClassicPress. Please follow the <a href="https://docs.classicpress.net/installing-classicpress/#migrate-classicpress">documentation</a> for step-by-step instructions.</p>
+<p>With the ClassicPress migration plugin, it is very easy to migrate existing sites from WordPress to ClassicPress. Please follow the <a href="https://docs.classicpress.net/installing-classicpress/#migrate-classicpress">migration documentation</a> for step-by-step instructions.</p>
 
 <h2 id="requirements">System Requirements</h2>
 <ul>
