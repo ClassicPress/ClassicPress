@@ -1519,44 +1519,24 @@ function wp_dashboard_empty() {}
  */
 function wp_welcome_panel() {
 	$display_version = classicpress_version();
-	?>
+?>
 <div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
 	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-	<h3><?php _e( 'Join our growing community' ); ?></h3>
 	<p>
-		<?php printf(
-			/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
-			__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
-			'https://www.classicpress.net/join-slack/',
-			'https://forums.classicpress.net/c/support'
+		<?php _e(
+			'<strong>Join our growing community</strong> and help us build the platform <strong>you</strong> want to see!'
 		); ?>
 	</p>
 	<p>
 		<?php printf(
-			/* translators: link to ClassicPress Petitions site for new features */
-			__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
-			'https://petitions.classicpress.net/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
-			__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-			'https://docs.classicpress.net/faq-support/',
-			'https://forums.classicpress.net/c/support/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
-			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
-			'https://github.com/ClassicPress/ClassicPress',
-			'https://github.com/ClassicPress/ClassicPress/issues'
+			/* translators: link to "About ClassicPress" dashboard page */
+			'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.',
+			esc_url( self_admin_url( 'about.php' ) )
 		); ?>
 	</p>
 </div>
-	<?php
+<?php
 }
 
 /**

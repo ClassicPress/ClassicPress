@@ -1168,6 +1168,7 @@ a.rsswidget {
 
 .petitions-content {
 	display: table;
+	width: 100%;
 }
 
 .petitions-content > .petitions-pane {

@@ -81,26 +81,26 @@ label {
 }
 
 #logo {
-	margin: 6px 0 14px 0;
+	margin: 6px 0 34px 0;
 	padding: 0 0 7px 0;
 	border-bottom: none;
 	text-align:center
 }
 #logo a {
-	background-image: url(../images/w-logo-blue.png?ver=20181031);
-	background-image: none, url(../images/wordpress-logo.svg?ver=20181031);
-	background-size: 84px;
+	background-image: url(../images/cp-logo-gradient.png);
+	background-image: none, url(../images/cp-logo-gradient.svg);
+	background-size: 300px;
 	background-position: center top;
 	background-repeat: no-repeat;
 	color: #444; /* same as login.css */
-	height: 84px;
+	height: 60px;
 	font-size: 20px;
 	font-weight: 400;
 	line-height: 1.3em;
 	margin: -130px auto 25px;
 	padding: 0;
 	text-decoration: none;
-	width: 84px;
+	width: 300px;
 	text-indent: -9999px;
 	outline: none;
 	overflow: hidden;
