@@ -294,30 +294,6 @@ class Core_Upgrader extends WP_Upgrader {
 	public static function should_update_to_version( $offered_ver ) {
 		include( ABSPATH . WPINC . '/version.php' ); // $wp_version; // x.y.z
 
-		$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $wp_version  ), 0, 2 ) ); // x.y
-		$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) ); // x.y
-		$current_is_development_version = (bool) strpos( $wp_version, '-' );
-
-		// Defaults:
-		$upgrade_dev   = true;
-		$upgrade_minor = true;
-		$upgrade_major = false;
-
-		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
-		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
-			if ( false === WP_AUTO_UPDATE_CORE ) {
-				// Defaults to turned off, unless a filter allows it
-				$upgrade_dev = $upgrade_minor = $upgrade_major = false;
-			} elseif ( true === WP_AUTO_UPDATE_CORE ) {
-				// ALL updates for core
-				$upgrade_dev = $upgrade_minor = $upgrade_major = true;
-			} elseif ( 'minor' === WP_AUTO_UPDATE_CORE ) {
-				// Only minor updates for core
-				$upgrade_dev = $upgrade_major = false;
-				$upgrade_minor = true;
-			}
-		}
-
 		// 1: If we're already on that version, not much point in updating?
 		if ( $offered_ver == $wp_version )
 			return false;
@@ -343,24 +319,70 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 		}
 
-		// 3: 3.7-alpha-25000 -> 3.7-alpha-25678 -> 3.7-beta1 -> 3.7-beta2
-		if ( $current_is_development_version ) {
+		// that concludes all the sanity checks, now we can do some work
 
-			/**
-			 * Filters whether to enable automatic core updates for development versions.
-			 *
-			 * @since WP-3.7.0
-			 *
-			 * @param bool $upgrade_dev Whether to enable automatic updates for
-			 *                          development versions.
-			 */
-			if ( ! apply_filters( 'allow_dev_auto_core_updates', $upgrade_dev ) )
-				return false;
-			// Else fall through to minor + major branches below.
+		$ver_current = preg_split( '/[.-\+]/', $wp_version  );
+		$ver_offered = preg_split( '/[.-\+]/', $offered_ver );
+
+		// Defaults:
+		$upgrade_night = true;
+		$upgrade_patch = true;
+		$upgrade_minor = true;
+
+		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
+		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
+			if ( false === WP_AUTO_UPDATE_CORE ) {
+				// Defaults to turned off, unless a filter allows it
+				$upgrade_night = $upgrade_patch = $upgrade_minor = false;
+			} elseif ( true === WP_AUTO_UPDATE_CORE ) {
+				// default
+			} elseif ( 'minor' === WP_AUTO_UPDATE_CORE ) {
+				// Only minor updates for core
+				$upgrade_patch = false;
+			} elseif ( 'patch' == WP_AUTO_UPDATE_CORE ) {
+				// Only patch updates for core
+				$upgrade_minor = false;
+			}
 		}
 
-		// 4: Minor In-branch updates (3.7.0 -> 3.7.1 -> 3.7.2 -> 3.7.4)
-		if ( $current_branch == $new_branch ) {
+
+		// 3: 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
+		if ( strpos( $wp_version, 'nightly' ) ) {
+			$bld_current = intval( $ver_current[count($ver_current) - 1] );
+			$bld_offered = intval( $ver_offered[count($ver_offered) - 1] );
+
+			// we don't care about any of the other version parts
+			if ( $bld_current < $bld_offered ) {
+
+				/**
+				 * Filters whether to enable automatic core updates for nightly releases.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param bool $upgrade_nightly Whether to enable automatic updates for
+				 *                              nightly releases.
+				 */
+				return apply_filters( 'allow_nightly_auto_core_updates', $upgrade_night );
+			}
+		}
+
+		// 4: Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
+		// In theory we don't need the 3rd comparison, but let's check just in case
+		if ( $ver_current[0] == $ver_offered[0] && $ver_current[1] == $ver_offered[1] && intval( $ver_current[2] ) < intval( $ver_offered[2] ) ) {
+
+			/**
+			 * Filters whether to enable pitch automatic core updates.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param bool $upgrade_patch Whether to enable patch automatic core updates.
+			 */
+			return apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch );
+		}
+
+		// 5: Minor updates (1.1.3 -> 1.2.0)
+		// In theory we don't need the 2nd comparison, but let's check just in case
+		if ( $ver_current[0] == $ver_offered[0] && intval( $ver_current[1] ) < intval( $ver_offered[1] ) ) {
 
 			/**
 			 * Filters whether to enable minor automatic core updates.
@@ -372,17 +394,18 @@ class Core_Upgrader extends WP_Upgrader {
 			return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
 		}
 
-		// 5: Major version updates (3.7.0 -> 3.8.0 -> 3.9.1)
-		if ( version_compare( $new_branch, $current_branch, '>' ) ) {
+		// 6: Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
+		if ( intval( $ver_current[0] ) < intval( $ver_offered[0] ) ) {
 
 			/**
 			 * Filters whether to enable major automatic core updates.
 			 *
+			 * @since 1.0.0 Hard-code 'false' - should never auto-update major versions
 			 * @since WP-3.7.0
 			 *
 			 * @param bool $upgrade_major Whether to enable major automatic core updates.
 			 */
-			return apply_filters( 'allow_major_auto_core_updates', $upgrade_major );
+			return apply_filters( 'allow_major_auto_core_updates', false );
 		}
 
 		// If we're not sure, we don't want it
