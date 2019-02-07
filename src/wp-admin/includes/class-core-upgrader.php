@@ -292,14 +292,14 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @return bool True if we should update to the offered version, otherwise false.
 	 */
 	public static function should_update_to_version( $offered_ver ) {
-		include( ABSPATH . WPINC . '/version.php' ); // $wp_version; // x.y.z
+		include( ABSPATH . WPINC . '/version.php' ); // $cp_version; // x.y.z
 
 		// 1: If we're already on that version, not much point in updating?
-		if ( $offered_ver == $wp_version )
+		if ( $offered_ver == $cp_version )
 			return false;
 
 		// 2: If we're running a newer version, that's a nope
-		if ( version_compare( $wp_version, $offered_ver, '>' ) )
+		if ( version_compare( $cp_version, $offered_ver, '>' ) )
 			return false;
 
 		$failure_data = get_site_option( 'auto_core_update_failed' );
@@ -309,19 +309,19 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 
 			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
-			if ( $wp_version == $failure_data['current'] && false !== strpos( $offered_ver, '.1.next.minor' ) )
+			if ( $cp_version == $failure_data['current'] && false !== strpos( $offered_ver, '.1.next.minor' ) )
 				return false;
 
 			// Cannot update if we're retrying the same A to B update that caused a non-critical failure.
 			// Some non-critical failures do allow retries, like download_failed.
 			// WP-3.7.1 => WP-3.7.2 resulted in files_not_writable, if we are still on WP-3.7.1 and still trying to update to WP-3.7.2.
-			if ( empty( $failure_data['retry'] ) && $wp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
+			if ( empty( $failure_data['retry'] ) && $cp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
 				return false;
 		}
 
 		// that concludes all the sanity checks, now we can do some work
 
-		$ver_current = preg_split( '/[.-\+]/', $wp_version  );
+		$ver_current = preg_split( '/[.-\+]/', $cp_version  );
 		$ver_offered = preg_split( '/[.-\+]/', $offered_ver );
 
 		// Defaults:
@@ -347,7 +347,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 
 		// 3: 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
-		if ( strpos( $wp_version, 'nightly' ) ) {
+		if ( strpos( $cp_version, 'nightly' ) ) {
 			$bld_current = intval( $ver_current[count($ver_current) - 1] );
 			$bld_offered = intval( $ver_offered[count($ver_offered) - 1] );
 
