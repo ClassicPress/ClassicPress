@@ -318,28 +318,42 @@ class Core_Upgrader extends WP_Upgrader {
 		$auto_update_core
 	) {
 		// 1: If we're already on that version, not much point in updating?
-		if ( $offered_ver == $cp_version )
+		if ( $offered_ver == $cp_version ) {
 			return false;
+		}
 
 		// 2: If we're running a newer version, that's a nope
-		if ( version_compare( $cp_version, $offered_ver, '>' ) )
+		if ( version_compare( $cp_version, $offered_ver, '>' ) ) {
 			return false;
+		}
 
 		$failure_data = get_site_option( 'auto_core_update_failed' );
 		if ( $failure_data ) {
 			// If this was a critical update failure, cannot update.
-			if ( ! empty( $failure_data['critical'] ) )
+			if ( ! empty( $failure_data['critical'] ) ) {
 				return false;
+			}
 
 			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
-			if ( $cp_version == $failure_data['current'] && false !== strpos( $offered_ver, '.1.next.minor' ) )
+			if (
+				$cp_version == $failure_data['current'] &&
+				false !== strpos( $offered_ver, '.1.next.minor' )
+			) {
 				return false;
+			}
 
-			// Cannot update if we're retrying the same A to B update that caused a non-critical failure.
-			// Some non-critical failures do allow retries, like download_failed.
-			// WP-3.7.1 => WP-3.7.2 resulted in files_not_writable, if we are still on WP-3.7.1 and still trying to update to WP-3.7.2.
-			if ( empty( $failure_data['retry'] ) && $cp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
+			// Cannot update if we're retrying the same A to B update that
+			// caused a non-critical failure.  Some non-critical failures do
+			// allow retries, like download_failed.  WP-3.7.1 => WP-3.7.2
+			// resulted in files_not_writable, if we are still on WP-3.7.1 and
+			// still trying to update to WP-3.7.2.
+			if (
+				empty( $failure_data['retry'] ) &&
+				$cp_version == $failure_data['current'] &&
+				$offered_ver == $failure_data['attempted']
+			) {
 				return false;
+			}
 		}
 
 		// that concludes all the sanity checks, now we can do some work
@@ -368,15 +382,13 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-
 		// 3: 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
 		if ( strpos( $cp_version, 'nightly' ) ) {
-			$bld_current = intval( $ver_current[count($ver_current) - 1] );
-			$bld_offered = intval( $ver_offered[count($ver_offered) - 1] );
+			$bld_current = intval( $ver_current[ count( $ver_current ) - 1 ] );
+			$bld_offered = intval( $ver_offered[ count( $ver_offered ) - 1 ] );
 
 			// we don't care about any of the other version parts
 			if ( $bld_current < $bld_offered ) {
-
 				/**
 				 * Filters whether to enable automatic core updates for nightly releases.
 				 *
@@ -391,8 +403,11 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// 4: Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
 		// In theory we don't need the 3rd comparison, but let's check just in case
-		if ( $ver_current[0] == $ver_offered[0] && $ver_current[1] == $ver_offered[1] && intval( $ver_current[2] ) < intval( $ver_offered[2] ) ) {
-
+		if (
+			$ver_current[0] == $ver_offered[0] &&
+			$ver_current[1] == $ver_offered[1] &&
+			intval( $ver_current[2] ) < intval( $ver_offered[2] )
+		) {
 			/**
 			 * Filters whether to enable pitch automatic core updates.
 			 *
@@ -405,8 +420,10 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// 5: Minor updates (1.1.3 -> 1.2.0)
 		// In theory we don't need the 2nd comparison, but let's check just in case
-		if ( $ver_current[0] == $ver_offered[0] && intval( $ver_current[1] ) < intval( $ver_offered[1] ) ) {
-
+		if (
+			$ver_current[0] == $ver_offered[0] &&
+			intval( $ver_current[1] ) < intval( $ver_offered[1] )
+		) {
 			/**
 			 * Filters whether to enable minor automatic core updates.
 			 *
@@ -419,7 +436,6 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// 6: Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
 		if ( intval( $ver_current[0] ) < intval( $ver_offered[0] ) ) {
-
 			/**
 			 * Filters whether to enable major automatic core updates.
 			 *
@@ -431,7 +447,7 @@ class Core_Upgrader extends WP_Upgrader {
 			return apply_filters( 'allow_major_auto_core_updates', false );
 		}
 
-		// If we're not sure, we don't want it
+		// If we're still not sure, we don't want it
 		return false;
 	}
 
