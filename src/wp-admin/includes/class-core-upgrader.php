@@ -334,7 +334,8 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 			}
 
-			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
+			// Don't claim we can update on update-core.php if we have a
+			// non-critical failure logged.
 			if (
 				$cp_version == $failure_data['current'] &&
 				false !== strpos( $offered_ver, '.1.next.minor' )
