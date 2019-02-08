@@ -306,6 +306,8 @@ class Core_Upgrader extends WP_Upgrader {
 	 * Determines if an automatic update should be applied for a given set of
 	 * versions and auto-update constants.
 	 *
+	 * @since 1.0.0-rc1
+	 *
 	 * @param string $cp_version       The current version of ClassicPress.
 	 * @param string $offered_ver      The proposed version of ClassicPress.
 	 * @param mixed  $auto_update_core The automatic update settings (the value
@@ -393,7 +395,7 @@ class Core_Upgrader extends WP_Upgrader {
 				/**
 				 * Filters whether to enable automatic core updates for nightly releases.
 				 *
-				 * @since 1.0.0
+				 * @since 1.0.0-rc1
 				 *
 				 * @param bool $upgrade_nightly Whether to enable automatic updates for
 				 *                              nightly releases.
@@ -412,7 +414,7 @@ class Core_Upgrader extends WP_Upgrader {
 			/**
 			 * Filters whether to enable pitch automatic core updates.
 			 *
-			 * @since 1.0.0
+			 * @since 1.0.0-rc1
 			 *
 			 * @param bool $upgrade_patch Whether to enable patch automatic core updates.
 			 */
@@ -440,7 +442,7 @@ class Core_Upgrader extends WP_Upgrader {
 			/**
 			 * Filters whether to enable major automatic core updates.
 			 *
-			 * @since 1.0.0 Hard-code 'false' - should never auto-update major versions
+			 * @since 1.0.0-rc1 Hard-code 'false' - should never auto-update major versions
 			 * @since WP-3.7.0
 			 *
 			 * @param bool $upgrade_major Whether to enable major automatic core updates.
