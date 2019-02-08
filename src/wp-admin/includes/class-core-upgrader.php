@@ -344,8 +344,8 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// that concludes all the sanity checks, now we can do some work
 
-		$ver_current = preg_split( '/[.-\+]/', $cp_version  );
-		$ver_offered = preg_split( '/[.-\+]/', $offered_ver );
+		$ver_current = preg_split( '/[.\+-]/', $cp_version  );
+		$ver_offered = preg_split( '/[.\+-]/', $offered_ver );
 
 		// Defaults:
 		$upgrade_night = true;
