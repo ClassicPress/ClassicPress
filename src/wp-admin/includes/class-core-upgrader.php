@@ -401,54 +401,64 @@ class Core_Upgrader extends WP_Upgrader {
 				 *                              nightly releases.
 				 */
 				return apply_filters( 'allow_nightly_auto_core_updates', $upgrade_night );
+			} else {
+				return false;
 			}
 		}
 
-		// 4: Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
-		// In theory we don't need the 3rd comparison, but let's check just in case
-		if (
-			$ver_current[0] == $ver_offered[0] &&
-			$ver_current[1] == $ver_offered[1] &&
-			intval( $ver_current[2] ) < intval( $ver_offered[2] )
-		) {
+		if ( count($ver_current) == count($ver_offered) && $ver_current < $ver_offered ) {
+			// updating at the same level - this is the 99% case
+
+			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
+			if ( $ver_current[0] < $ver_offered[0] ) {
+				/**
+				 * Filters whether to enable major automatic core updates.
+				 *
+				 * @since 1.0.0-rc1 Hard-code 'false' - should never auto-update major versions
+				 * @since WP-3.7.0
+				 *
+				 * @param bool $upgrade_major Whether to enable major automatic core updates.
+				 */
+				return apply_filters( 'allow_major_auto_core_updates', false );
+			}
+
+			// Minor updates (1.1.3 -> 1.2.0)
+			if ( $ver_current[1] < $ver_offered[1] ) {
+				/**
+				 * Filters whether to enable minor automatic core updates.
+				 *
+				 * @since WP-3.7.0
+				 *
+				 * @param bool $upgrade_minor Whether to enable minor automatic core updates.
+				 */
+				return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
+			}
+
+			// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
+			if ( $ver_current[2]  < $ver_offered[2] ) {
+				/**
+				 * Filters whether to enable pitch automatic core updates.
+				 *
+				 * @since 1.0.0-rc1
+				 *
+				 * @param bool $upgrade_patch Whether to enable patch automatic core updates.
+				 */
+				return apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch );
+			}
+
 			/**
-			 * Filters whether to enable pitch automatic core updates.
+			 * Filters whether to enable pre-release automatic core updates.
 			 *
 			 * @since 1.0.0-rc1
 			 *
-			 * @param bool $upgrade_patch Whether to enable patch automatic core updates.
+			 * @param bool $upgrade_patch Whether to enable pre-release automatic core updates.
 			 */
-			return apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch );
+			return apply_filters( 'allow_prerelease_auto_core_updates', false );
+
+		} else {
+			// if we're here we're dealing with pre-to-rel or rel-to-pre
 		}
 
-		// 5: Minor updates (1.1.3 -> 1.2.0)
-		// In theory we don't need the 2nd comparison, but let's check just in case
-		if (
-			$ver_current[0] == $ver_offered[0] &&
-			intval( $ver_current[1] ) < intval( $ver_offered[1] )
-		) {
-			/**
-			 * Filters whether to enable minor automatic core updates.
-			 *
-			 * @since WP-3.7.0
-			 *
-			 * @param bool $upgrade_minor Whether to enable minor automatic core updates.
-			 */
-			return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
-		}
-
-		// 6: Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
-		if ( intval( $ver_current[0] ) < intval( $ver_offered[0] ) ) {
-			/**
-			 * Filters whether to enable major automatic core updates.
-			 *
-			 * @since 1.0.0-rc1 Hard-code 'false' - should never auto-update major versions
-			 * @since WP-3.7.0
-			 *
-			 * @param bool $upgrade_major Whether to enable major automatic core updates.
-			 */
-			return apply_filters( 'allow_major_auto_core_updates', false );
-		}
 
 		// If we're still not sure, we don't want it
 		return false;
