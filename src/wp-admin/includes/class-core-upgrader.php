@@ -282,7 +282,8 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Determines if this ClassicPress Core version should update to an offered version or not.
+	 * Determines if the current ClassicPress Core version should update to an
+	 * offered version or not.
 	 *
 	 * @since WP-3.7.0
 	 *
@@ -294,6 +295,28 @@ class Core_Upgrader extends WP_Upgrader {
 	public static function should_update_to_version( $offered_ver ) {
 		include( ABSPATH . WPINC . '/version.php' ); // $cp_version; // x.y.z
 
+		return self::auto_update_enabled_for_versions(
+			$cp_version,
+			$offered_ver,
+			defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : null
+		);
+	}
+
+	/**
+	 * Determines if an automatic update should be applied for a given set of
+	 * versions and auto-update constants.
+	 *
+	 * @param string $cp_version       The current version of ClassicPress.
+	 * @param string $offered_ver      The proposed version of ClassicPress.
+	 * @param mixed  $auto_update_core The automatic update settings (the value
+	 *                                 of the WP_AUTO_UPDATE_CORE constant).
+	 * @return bool Whether to apply the proposed update automatically.
+	 */
+	public static function auto_update_enabled_for_versions(
+		$cp_version,
+		$offered_ver,
+		$auto_update_core
+	) {
 		// 1: If we're already on that version, not much point in updating?
 		if ( $offered_ver == $cp_version )
 			return false;
