@@ -62,6 +62,16 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		) );
 	}
 
+	public function test_auto_update_invalid() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0', '1.1', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.a.0', '1.a.1', true
+		) );
+	}
+
 	public function test_auto_update_from_migration_build() {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+migration.20181220', '1.0.0-rc1', true

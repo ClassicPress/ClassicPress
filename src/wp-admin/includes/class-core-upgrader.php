@@ -364,6 +364,14 @@ class Core_Upgrader extends WP_Upgrader {
 		$array_current = preg_split( '/[.\+-]/', $ver_current  );
 		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
 
+		// Ensure valid version numbers (3 numbers in front).
+		if (
+			! self::is_valid_version_array( $array_current ) ||
+			! self::is_valid_version_array( $array_offered )
+		) {
+			return false;
+		}
+
 		// Default values.
 		$upgrade_nightly = true;
 		$upgrade_patch   = true;
@@ -468,6 +476,28 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// If we're still not sure, we don't want it.
 		return false;
+	}
+
+	/**
+	 * Returns whether a version array is valid.
+	 *
+	 * @since 1.0.0-rc1
+	 *
+	 * @param array $parts The array of the version number's parts.
+	 * @return bool Whether the input represents a valid version number.
+	 */
+	public static function is_valid_version_array( $parts ) {
+		if ( ! is_array( $parts ) || count( $parts ) < 3 ) {
+			return false;
+		}
+
+		for ( $i = 0; $i < 3; $i++ ) {
+			if ( ! preg_match( '#^[0-9]+$#', $parts[ $i ] ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
