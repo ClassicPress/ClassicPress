@@ -416,11 +416,13 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		if (
-			count( $array_current ) == count( $array_offered ) &&
-			$array_current < $array_offered
-		) {
-			// Updating at the same level - this is the trivial case.
+		if ( count( $array_current ) === count( $array_offered ) ) {
+			// Updating at the same version level - this is the trivial case.
+
+			if ( $array_current >= $array_offered ) {
+				// Another sanity check - probably not reachable.
+				return false;
+			}
 
 			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
 			if ( $array_current[0] < $array_offered[0] ) {
