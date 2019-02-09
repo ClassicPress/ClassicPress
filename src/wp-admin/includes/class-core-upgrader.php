@@ -287,8 +287,6 @@ class Core_Upgrader extends WP_Upgrader {
 	 *
 	 * @since WP-3.7.0
 	 *
-	 * @static
-	 *
 	 * @param string $offered_ver The offered version, of the format x.y.z.
 	 * @return bool True if we should update to the offered version, otherwise false.
 	 */
