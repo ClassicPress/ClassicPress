@@ -365,15 +365,15 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_offered = preg_split( '/[.\+-]/', $offered_ver );
 
 		// Defaults:
-		$upgrade_night = true;
-		$upgrade_patch = true;
-		$upgrade_minor = true;
+		$upgrade_nightly = true;
+		$upgrade_patch   = true;
+		$upgrade_minor   = true;
 
 		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
 		if ( ! is_null( $auto_update_core ) ) {
 			if ( false === $auto_update_core ) {
 				// Defaults to turned off, unless a filter allows it
-				$upgrade_night = $upgrade_patch = $upgrade_minor = false;
+				$upgrade_nightly = $upgrade_patch = $upgrade_minor = false;
 			} elseif ( true === $auto_update_core ) {
 				// default
 			} elseif ( 'minor' === $auto_update_core ) {
@@ -400,7 +400,7 @@ class Core_Upgrader extends WP_Upgrader {
 				 * @param bool $upgrade_nightly Whether to enable automatic updates for
 				 *                              nightly releases.
 				 */
-				return apply_filters( 'allow_nightly_auto_core_updates', $upgrade_night );
+				return apply_filters( 'allow_nightly_auto_core_updates', $upgrade_nightly );
 			} else {
 				return false;
 			}
