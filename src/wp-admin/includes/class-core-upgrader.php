@@ -319,12 +319,12 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_offered,
 		$auto_update_core
 	) {
-		// 1: If we're already on that version, not much point in updating?
+		// If we're already on that version, not much point in updating?
 		if ( $ver_offered == $ver_current ) {
 			return false;
 		}
 
-		// 2: If we're running a newer version, that's a nope
+		// If we're running a newer version, that's a nope.
 		if ( version_compare( $ver_current, $ver_offered, '>' ) ) {
 			return false;
 		}
@@ -359,17 +359,21 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		// that concludes all the sanity checks, now we can do some work
+		// That concludes all the sanity checks, now we can do some work.
 
 		$array_current = preg_split( '/[.\+-]/', $ver_current  );
 		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
 
-		// Defaults:
+		// Default values.
 		$upgrade_nightly = true;
 		$upgrade_patch   = true;
 		$upgrade_minor   = true;
 
-		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
+		// Values from WP_AUTO_UPDATE_CORE constant:
+		// - true    (update to newer minor or patch versions)
+		// - 'minor' (update to newer minor or patch versions) (default)
+		// - 'patch' (update to newer patch versions only)
+		// - false   (automatic updates disabled)
 		if ( ! is_null( $auto_update_core ) ) {
 			if ( false === $auto_update_core ) {
 				// Defaults to turned off, unless a filter allows it
@@ -385,7 +389,7 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		// 3: 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
+		// 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
 		if ( strpos( $ver_current, 'nightly' ) ) {
 			$bld_current = intval( $array_current[ count( $array_current ) - 1 ] );
 			$bld_offered = intval( $array_offered[ count( $array_offered ) - 1 ] );
@@ -406,10 +410,13 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		if ( count($array_current) == count($array_offered) && $array_current < $array_offered ) {
-			// updating at the same level - this is the 99% case
+		if (
+			count( $array_current ) == count( $array_offered ) &&
+			$array_current < $array_offered
+		) {
+			// Updating at the same level - this is the trivial case.
 
-			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
+			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
 			if ( $array_current[0] < $array_offered[0] ) {
 				/**
 				 * Filters whether to enable major automatic core updates.
@@ -422,7 +429,7 @@ class Core_Upgrader extends WP_Upgrader {
 				return apply_filters( 'allow_major_auto_core_updates', false );
 			}
 
-			// Minor updates (1.1.3 -> 1.2.0)
+			// Minor updates (1.1.3 -> 1.2.0).
 			if ( $array_current[1] < $array_offered[1] ) {
 				/**
 				 * Filters whether to enable minor automatic core updates.
@@ -434,8 +441,8 @@ class Core_Upgrader extends WP_Upgrader {
 				return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
 			}
 
-			// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
-			if ( $array_current[2]  < $array_offered[2] ) {
+			// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2).
+			if ( $array_current[2] < $array_offered[2] ) {
 				/**
 				 * Filters whether to enable pitch automatic core updates.
 				 *
@@ -454,13 +461,12 @@ class Core_Upgrader extends WP_Upgrader {
 			 * @param bool $upgrade_patch Whether to enable pre-release automatic core updates.
 			 */
 			return apply_filters( 'allow_prerelease_auto_core_updates', false );
-
 		} else {
-			// if we're here we're dealing with pre-to-rel or rel-to-pre
+			// If we're here, we're dealing with a prerelease-to-release (or
+			// release-to-prerelease) update.
 		}
 
-
-		// If we're still not sure, we don't want it
+		// If we're still not sure, we don't want it.
 		return false;
 	}
 
