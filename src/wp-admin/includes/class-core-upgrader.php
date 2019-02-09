@@ -308,24 +308,24 @@ class Core_Upgrader extends WP_Upgrader {
 	 *
 	 * @since 1.0.0-rc1
 	 *
-	 * @param string $cp_version       The current version of ClassicPress.
-	 * @param string $offered_ver      The proposed version of ClassicPress.
+	 * @param string $ver_current      The current version of ClassicPress.
+	 * @param string $ver_offered      The proposed version of ClassicPress.
 	 * @param mixed  $auto_update_core The automatic update settings (the value
 	 *                                 of the WP_AUTO_UPDATE_CORE constant).
 	 * @return bool Whether to apply the proposed update automatically.
 	 */
 	public static function auto_update_enabled_for_versions(
-		$cp_version,
-		$offered_ver,
+		$ver_current,
+		$ver_offered,
 		$auto_update_core
 	) {
 		// 1: If we're already on that version, not much point in updating?
-		if ( $offered_ver == $cp_version ) {
+		if ( $ver_offered == $ver_current ) {
 			return false;
 		}
 
 		// 2: If we're running a newer version, that's a nope
-		if ( version_compare( $cp_version, $offered_ver, '>' ) ) {
+		if ( version_compare( $ver_current, $ver_offered, '>' ) ) {
 			return false;
 		}
 
@@ -339,8 +339,8 @@ class Core_Upgrader extends WP_Upgrader {
 			// Don't claim we can update on update-core.php if we have a
 			// non-critical failure logged.
 			if (
-				$cp_version == $failure_data['current'] &&
-				false !== strpos( $offered_ver, '.1.next.minor' )
+				$ver_current == $failure_data['current'] &&
+				false !== strpos( $ver_offered, '.1.next.minor' )
 			) {
 				return false;
 			}
@@ -352,8 +352,8 @@ class Core_Upgrader extends WP_Upgrader {
 			// still trying to update to WP-3.7.2.
 			if (
 				empty( $failure_data['retry'] ) &&
-				$cp_version == $failure_data['current'] &&
-				$offered_ver == $failure_data['attempted']
+				$ver_current == $failure_data['current'] &&
+				$ver_offered == $failure_data['attempted']
 			) {
 				return false;
 			}
@@ -361,8 +361,8 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// that concludes all the sanity checks, now we can do some work
 
-		$ver_current = preg_split( '/[.\+-]/', $cp_version  );
-		$ver_offered = preg_split( '/[.\+-]/', $offered_ver );
+		$array_current = preg_split( '/[.\+-]/', $ver_current  );
+		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
 
 		// Defaults:
 		$upgrade_nightly = true;
@@ -386,9 +386,9 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		// 3: 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
-		if ( strpos( $cp_version, 'nightly' ) ) {
-			$bld_current = intval( $ver_current[ count( $ver_current ) - 1 ] );
-			$bld_offered = intval( $ver_offered[ count( $ver_offered ) - 1 ] );
+		if ( strpos( $ver_current, 'nightly' ) ) {
+			$bld_current = intval( $array_current[ count( $array_current ) - 1 ] );
+			$bld_offered = intval( $array_offered[ count( $array_offered ) - 1 ] );
 
 			// we don't care about any of the other version parts
 			if ( $bld_current < $bld_offered ) {
@@ -406,11 +406,11 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		if ( count($ver_current) == count($ver_offered) && $ver_current < $ver_offered ) {
+		if ( count($array_current) == count($array_offered) && $array_current < $array_offered ) {
 			// updating at the same level - this is the 99% case
 
 			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4)
-			if ( $ver_current[0] < $ver_offered[0] ) {
+			if ( $array_current[0] < $array_offered[0] ) {
 				/**
 				 * Filters whether to enable major automatic core updates.
 				 *
@@ -423,7 +423,7 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 
 			// Minor updates (1.1.3 -> 1.2.0)
-			if ( $ver_current[1] < $ver_offered[1] ) {
+			if ( $array_current[1] < $array_offered[1] ) {
 				/**
 				 * Filters whether to enable minor automatic core updates.
 				 *
@@ -435,7 +435,7 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 
 			// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2)
-			if ( $ver_current[2]  < $ver_offered[2] ) {
+			if ( $array_current[2]  < $array_offered[2] ) {
 				/**
 				 * Filters whether to enable pitch automatic core updates.
 				 *
