@@ -200,6 +200,10 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2', '1.0.0-rc2', true
 		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-rc1', '1.0.0-beta2', true
+		) );
 	}
 
 	public function test_auto_update_between_prereleases_of_different_releases() {
@@ -217,6 +221,14 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.1-rc1', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1-beta1', '1.0.0-rc1', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1-rc1', '1.0.0-beta1', true
 		) );
 	}
 
