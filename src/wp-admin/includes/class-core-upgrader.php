@@ -322,13 +322,41 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_current = preg_replace( '#\+migration\.\d+$#', '', $ver_current );
 		$ver_offered = preg_replace( '#\+migration\.\d+$#', '', $ver_offered );
 
-		// If we're already on that version, not much point in updating?
+		// If we're already on the offered version, not much point in updating.
 		if ( $ver_offered == $ver_current ) {
 			return false;
 		}
 
+		// Set up variables we'll need later on.
+
+		$array_current = preg_split( '/[.\+-]/', $ver_current  );
+		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
+
+		// Ensure valid version numbers (3 numbers in front).
+		if (
+			! self::is_valid_version_array( $array_current ) ||
+			! self::is_valid_version_array( $array_offered )
+		) {
+			return false;
+		}
+
+		// Determine whether we're running a nightly build.
+		$current_nightly = preg_match( '#\+nightly\.\d+$#', $ver_current );
+		$offered_nightly = preg_match( '#\+nightly\.\d+$#', $ver_offered );
+		$is_nightly_upgrade = $current_nightly && $offered_nightly;
+		if ( $current_nightly !== $offered_nightly ) {
+			// Upgrade between nightly and not-nightly.  Should never happen.
+			return false;
+		}
+
 		// If we're running a newer version, that's a nope.
-		if ( version_compare( $ver_current, $ver_offered, '>' ) ) {
+		// version_compare() is tripped up by nightly builds:
+		// - '1.0.0-rc1' < '1.0.0' (ok)
+		// - '1.0.0-rc1+nightly.20190220' > '1.0.0+nightly.20190226' (fail)
+		if (
+			! $is_nightly_upgrade &&
+			version_compare( $ver_current, $ver_offered, '>' )
+		) {
 			return false;
 		}
 
@@ -364,18 +392,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 		// That concludes all the sanity checks, now we can do some work.
 
-		$array_current = preg_split( '/[.\+-]/', $ver_current  );
-		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
-
-		// Ensure valid version numbers (3 numbers in front).
-		if (
-			! self::is_valid_version_array( $array_current ) ||
-			! self::is_valid_version_array( $array_offered )
-		) {
-			return false;
-		}
-
-		// Default values.
+		// Default values for upgrade control flags.
 		$upgrade_nightly = true;
 		$upgrade_patch   = true;
 		$upgrade_minor   = true;
@@ -401,7 +418,7 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		// 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
-		if ( strpos( $ver_current, 'nightly' ) ) {
+		if ( $is_nightly_upgrade ) {
 			$bld_current = intval( $array_current[ count( $array_current ) - 1 ] );
 			$bld_offered = intval( $array_offered[ count( $array_offered ) - 1 ] );
 
