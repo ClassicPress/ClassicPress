@@ -317,6 +317,14 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_offered,
 		$auto_update_core
 	) {
+		// Ensure valid ClassicPress release version strings.
+		if (
+			! self::is_valid_version_string( $ver_current ) ||
+			! self::is_valid_version_string( $ver_offered )
+		) {
+			return false;
+		}
+
 		// As far as the update system is concerned, migration builds are
 		// treated the same as the corresponding release build.
 		$ver_current = preg_replace( '#\+migration\.\d+$#', '', $ver_current );
@@ -332,14 +340,6 @@ class Core_Upgrader extends WP_Upgrader {
 		$array_current = preg_split( '/[.\+-]/', $ver_current  );
 		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
 
-		// Ensure valid version numbers (3 numbers in front).
-		if (
-			! self::is_valid_version_array( $array_current ) ||
-			! self::is_valid_version_array( $array_offered )
-		) {
-			return false;
-		}
-
 		// Determine whether we're running a nightly build.
 		$current_nightly = preg_match( '#\+nightly\.\d+$#', $ver_current );
 		$offered_nightly = preg_match( '#\+nightly\.\d+$#', $ver_offered );
@@ -348,6 +348,11 @@ class Core_Upgrader extends WP_Upgrader {
 			// Upgrade between nightly and not-nightly.  Should never happen.
 			return false;
 		}
+
+		// Determine whether we're running a prerelease build.
+		$prerelease_regex   = '#^\d+\.\d+\.\d+-(alpha|beta|rc)\d+(\+|$)#';
+		$current_prerelease = preg_match( $prerelease_regex, $ver_current );
+		$offered_prerelease = preg_match( $prerelease_regex, $ver_offered );
 
 		// If we're running a newer version, that's a nope.
 		// version_compare() is tripped up by nightly builds:
@@ -398,16 +403,16 @@ class Core_Upgrader extends WP_Upgrader {
 		$upgrade_minor   = true;
 
 		// Values from WP_AUTO_UPDATE_CORE constant:
-		// - true    (update to newer minor or patch versions)
+		// - true    (update to newer minor or patch versions) (default)
 		// - 'minor' (update to newer minor or patch versions) (default)
 		// - 'patch' (update to newer patch versions only)
 		// - false   (automatic updates disabled)
 		if ( ! is_null( $auto_update_core ) ) {
 			if ( false === $auto_update_core ) {
-				// Defaults to turned off, unless a filter allows it
+				// Defaults to turned off, unless a filter allows it.
 				$upgrade_nightly = $upgrade_patch = $upgrade_minor = false;
 			} elseif ( true === $auto_update_core ) {
-				// default
+				// This is the default setting.
 			} elseif ( 'minor' === $auto_update_core ) {
 				// Only minor updates for core
 				$upgrade_patch = false;
@@ -438,62 +443,93 @@ class Core_Upgrader extends WP_Upgrader {
 			}
 		}
 
-		if ( count( $array_current ) === count( $array_offered ) ) {
-			// Updating at the same version level - this is the trivial case.
-
-			if ( $array_current >= $array_offered ) {
-				// Another sanity check - probably not reachable.
-				return false;
-			}
-
-			// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
-			if ( $array_current[0] < $array_offered[0] ) {
+		$upgrade_possible = true;
+		if ( $current_prerelease ) {
+			$upgrade_possible = $upgrade_possible && (
 				/**
-				 * Filters whether to enable major automatic core updates.
-				 *
-				 * @since 1.0.0-rc1 Hard-code 'false' - should never auto-update major versions
-				 * @since WP-3.7.0
-				 *
-				 * @param bool $upgrade_major Whether to enable major automatic core updates.
-				 */
-				return apply_filters( 'allow_major_auto_core_updates', false );
-			}
-
-			// Minor updates (1.1.3 -> 1.2.0).
-			if ( $array_current[1] < $array_offered[1] ) {
-				/**
-				 * Filters whether to enable minor automatic core updates.
-				 *
-				 * @since WP-3.7.0
-				 *
-				 * @param bool $upgrade_minor Whether to enable minor automatic core updates.
-				 */
-				return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
-			}
-
-			// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2).
-			if ( $array_current[2] < $array_offered[2] ) {
-				/**
-				 * Filters whether to enable pitch automatic core updates.
+				 * Filters whether to enable automatic core updates from
+				 * prerelease versions.
 				 *
 				 * @since 1.0.0-rc1
 				 *
-				 * @param bool $upgrade_patch Whether to enable patch automatic core updates.
+				 * @param bool $upgrade_prerelease Whether to enable automatic
+				 *                                 updates from prereleases.
 				 */
-				return apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch );
-			}
+				apply_filters( 'allow_auto_core_updates_from_prerelease', false )
+			);
+		}
+		if ( $offered_prerelease ) {
+			$upgrade_possible = $upgrade_possible && (
+				/**
+				 * Filters whether to enable automatic core updates to
+				 * prerelease versions.
+				 *
+				 * @since 1.0.0-rc1
+				 *
+				 * @param bool $upgrade_prerelease Whether to enable automatic
+				 *                                 updates to prereleases.
+				 */
+				apply_filters( 'allow_auto_core_updates_to_prerelease', false )
+			);
+		}
 
-			/**
-			 * Filters whether to enable pre-release automatic core updates.
-			 *
-			 * @since 1.0.0-rc1
-			 *
-			 * @param bool $upgrade_patch Whether to enable pre-release automatic core updates.
-			 */
-			return apply_filters( 'allow_prerelease_auto_core_updates', false );
-		} else {
-			// If we're here, we're dealing with a prerelease-to-release (or
-			// release-to-prerelease) update.
+		// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
+		if ( $array_current[0] < $array_offered[0] ) {
+			return (
+				$upgrade_possible &&
+				/**
+				 * Filters whether to enable automatic core updates to
+				 * new major versions.
+				 *
+				 * @see https://semver.org/
+				 *
+				 * @since 1.0.0-rc1 Hard-code 'false' - should never
+				 *                  auto-update major versions.
+				 * @since WP-3.7.0
+				 *
+				 * @param bool $upgrade_major Whether to enable automatic
+				 *                            updates to new major versions.
+				 */
+				apply_filters( 'allow_major_auto_core_updates', false )
+			);
+		}
+
+		// Minor updates (1.1.3 -> 1.2.0).
+		if ( $array_current[1] < $array_offered[1] ) {
+			return (
+				$upgrade_possible &&
+				/**
+				 * Filters whether to enable automatic core updates to
+				 * new minor versions.
+				 *
+				 * @see https://semver.org/
+				 *
+				 * @since WP-3.7.0
+				 *
+				 * @param bool $upgrade_minor Whether to enable automatic
+				 *                            updates to new minor versions.
+				 */
+				apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor )
+			);
+		}
+
+		// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2).
+		if ( $array_current[2] < $array_offered[2] ) {
+			return (
+				$upgrade_possible &&
+				/**
+				 * Filters whether to enable automatic core updates to
+				 * new patch versions.
+				 *
+				 * @see https://semver.org/
+				 *
+				 * @since 1.0.0-rc1
+				 *
+				 * @param bool $upgrade_patch Whether to enable automatic
+				 *                            updates to new patch versions.
+				 */
+				apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch )
+			);
 		}
 
 		// If we're still not sure, we don't want it.
@@ -501,26 +537,28 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Returns whether an array of parts represents a valid ClassicPress
-	 * version number.
+	 * Returns whether a version string represents a valid ClassicPress release
+	 * version recognized by the automatic update system.
 	 *
 	 * @since 1.0.0-rc1
 	 *
-	 * @param array $parts The array of the version number's parts.
-	 * @return bool Whether the input represents a valid version number.
+	 * @param string $version The version string.
+	 * @return bool Whether the input represents a valid version string.
 	 */
-	public static function is_valid_version_array( $parts ) {
-		if ( ! is_array( $parts ) || count( $parts ) < 3 ) {
-			return false;
-		}
-
-		for ( $i = 0; $i < 3; $i++ ) {
-			if ( ! preg_match( '#^[0-9]+$#', $parts[ $i ] ) ) {
-				return false;
-			}
-		}
-
-		return true;
+	public static function is_valid_version_string( $version ) {
+		return preg_match(
+			// Start of version string.
+			'#^' .
+			// First 3 parts must be numbers.
+			'\d+\.\d+\.\d+' .
+			// Optional pre-release version indicator (-alpha1, -beta2, -rc1).
+			'(-(alpha|beta|rc)\d+)?' .
+			// Optional migration or nightly build (-migration.20190208).
+			'(\+(migration|nightly)\.\d{8})?' .
+			// End of version string.
+			'$#',
+			$version
+		);
 	}
 
 	/**

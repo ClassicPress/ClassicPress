@@ -214,6 +214,14 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-rc1', '1.0.0-beta2', true
 		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta2', '1.0.0-beta1', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-alpha2', true
+		) );
 	}
 
 	public function test_auto_update_between_prereleases_of_different_releases() {
@@ -240,6 +248,10 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.1-rc1', '1.0.0-beta1', true
 		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1-beta1', '1.0.0-rc1', true
+		) );
 	}
 
 	public function test_auto_update_prerelease_to_final() {
@@ -249,6 +261,16 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.1', true
+		) );
+	}
+
+	public function test_auto_update_unrecognized_to_final() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-rc1+build.20190225', '1.0.0', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+build.20190228', '1.0.1', true
 		) );
 	}
 }
