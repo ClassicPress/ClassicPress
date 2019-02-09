@@ -317,6 +317,11 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_offered,
 		$auto_update_core
 	) {
+		// As far as the update system is concerned, migration builds are
+		// treated the same as the corresponding release build.
+		$ver_current = preg_replace( '#\+migration\.\d+$#', '', $ver_current );
+		$ver_offered = preg_replace( '#\+migration\.\d+$#', '', $ver_offered );
+
 		// If we're already on that version, not much point in updating?
 		if ( $ver_offered == $ver_current ) {
 			return false;
@@ -479,7 +484,8 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Returns whether a version array is valid.
+	 * Returns whether an array of parts represents a valid ClassicPress
+	 * version number.
 	 *
 	 * @since 1.0.0-rc1
 	 *
