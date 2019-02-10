@@ -363,24 +363,20 @@ class Core_Upgrader extends WP_Upgrader {
 		$upgrade_patch   = true;
 		$upgrade_minor   = true;
 
-		// Values from WP_AUTO_UPDATE_CORE constant:
-		// - true    (update to newer minor or patch versions) (default)
-		// - 'minor' (update to newer minor or patch versions) (default)
-		// - 'patch' (update to newer patch versions only)
-		// - false   (automatic updates disabled)
+		// Process the value from the WP_AUTO_UPDATE_CORE constant.
 		if ( ! is_null( $auto_update_core ) ) {
 			if ( false === $auto_update_core ) {
-				// Defaults to turned off, unless a filter allows it.
+				// Disable automatic updates, unless a later filter allows it.
 				$upgrade_nightly = $upgrade_patch = $upgrade_minor = false;
-			} elseif ( true === $auto_update_core ) {
-				// This is the default setting.
-			} elseif ( 'minor' === $auto_update_core ) {
-				// Only minor updates for core
-				$upgrade_patch = false;
-			} elseif ( 'patch' == $auto_update_core ) {
-				// Only patch updates for core
+			} elseif ( 'patch' === $auto_update_core ) {
+				// Only allow patch or nightly version updates. If you're
+				// running nightly builds, this is probably not the setting you
+				// want, because you will still get new minor versions.
 				$upgrade_minor = false;
 			}
+			// Else: Default setting (true, 'minor', or any other unrecognized
+			// value). Automatically update to new minor, patch, or nightly
+			// versions.
 		}
 
 		// 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020

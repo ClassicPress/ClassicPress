@@ -203,6 +203,114 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		) );
 	}
 
+	/**
+	 * Simulate automatic updates being disabled via:
+	 *
+	 * define( WP_AUTO_UPDATE_CORE, false );
+	 */
+	public function test_auto_updates_constant_false() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', false // prerelease
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', false // nightly
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0', '1.0.1', false // patch
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', false // minor
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', false // major
+		) );
+	}
+
+	/**
+	 * Simulate automatic updates being fully enabled via:
+	 *
+	 * define( WP_AUTO_UPDATE_CORE, true );
+	 */
+	public function test_auto_updates_constant_true() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', true // prerelease
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', true // nightly
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0', '1.0.1', true // patch
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true // minor
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', true // major
+		) );
+	}
+
+	/**
+	 * Simulate automatic updates being enabled for minor versions via:
+	 *
+	 * define( WP_AUTO_UPDATE_CORE, 'minor' );
+	 */
+	public function test_auto_updates_constant_minor() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', 'minor' // prerelease
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', 'minor' // nightly
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0', '1.0.1', 'minor' // patch
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', 'minor' // minor
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', 'minor' // major
+		) );
+	}
+
+	/**
+	 * Simulate automatic updates being limited to patch versions via:
+	 *
+	 * define( WP_AUTO_UPDATE_CORE, 'patch' );
+	 */
+	public function test_auto_updates_constant_patch() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', 'patch' // prerelease
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', 'patch' // nightly
+		) );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0', '1.0.1', 'patch' // patch
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', 'patch' // minor
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', 'patch' // major
+		) );
+	}
+
 	public function test_auto_update_invalid() {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0', '1.1', true
@@ -304,28 +412,6 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0', '1.0.1+nightly.20190331', true
-		) );
-	}
-
-	public function test_auto_updates_disabled() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
-			'1.0.0-beta1', '1.0.0-beta2', true // prerelease
-		) );
-
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
-			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', false // nightly
-		) );
-
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
-			'1.0.0', '1.0.1', false // patch
-		) );
-
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
-			'1.0.1', '1.1.0', false // minor
-		) );
-
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
-			'1.0.1', '2.0.0', false // major
 		) );
 	}
 
