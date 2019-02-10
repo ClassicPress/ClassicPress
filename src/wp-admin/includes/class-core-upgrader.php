@@ -317,51 +317,12 @@ class Core_Upgrader extends WP_Upgrader {
 		$ver_offered,
 		$auto_update_core
 	) {
-		// Ensure valid ClassicPress release version strings.
-		if (
-			! self::is_valid_version_string( $ver_current ) ||
-			! self::is_valid_version_string( $ver_offered )
-		) {
-			return false;
-		}
+		// Parse the version strings.
+		$current = self::parse_version_string( $ver_current );
+		$offered = self::parse_version_string( $ver_offered );
 
-		// As far as the update system is concerned, migration builds are
-		// treated the same as the corresponding release build.
-		$ver_current = preg_replace( '#\+migration\.\d+$#', '', $ver_current );
-		$ver_offered = preg_replace( '#\+migration\.\d+$#', '', $ver_offered );
-
-		// If we're already on the offered version, not much point in updating.
-		if ( $ver_offered == $ver_current ) {
-			return false;
-		}
-
-		// Set up variables we'll need later on.
-
-		$array_current = preg_split( '/[.\+-]/', $ver_current  );
-		$array_offered = preg_split( '/[.\+-]/', $ver_offered );
-
-		// Determine whether we're running a nightly build.
-		$current_nightly = preg_match( '#\+nightly\.\d+$#', $ver_current );
-		$offered_nightly = preg_match( '#\+nightly\.\d+$#', $ver_offered );
-		$is_nightly_upgrade = $current_nightly && $offered_nightly;
-		if ( $current_nightly !== $offered_nightly ) {
-			// Upgrade between nightly and not-nightly.  Should never happen.
-			return false;
-		}
-
-		// Determine whether we're running a prerelease build.
-		$prerelease_regex   = '#^\d+\.\d+\.\d+-(alpha|beta|rc)\d+(\+|$)#';
-		$current_prerelease = preg_match( $prerelease_regex, $ver_current );
-		$offered_prerelease = preg_match( $prerelease_regex, $ver_offered );
-
-		// If we're running a newer version, that's a nope.
-		// version_compare() is tripped up by nightly builds:
-		// - '1.0.0-rc1' < '1.0.0' (ok)
-		// - '1.0.0-rc1+nightly.20190220' > '1.0.0+nightly.20190226' (fail)
-		if (
-			! $is_nightly_upgrade &&
-			version_compare( $ver_current, $ver_offered, '>' )
-		) {
+		// Ensure they are valid.
+		if ( is_null( $current ) || is_null( $offered ) ) {
 			return false;
 		}
 
@@ -423,112 +384,135 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		// 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
-		if ( $is_nightly_upgrade ) {
-			$bld_current = intval( $array_current[ count( $array_current ) - 1 ] );
-			$bld_offered = intval( $array_offered[ count( $array_offered ) - 1 ] );
-
-			// we don't care about any of the other version parts
-			if ( $bld_current < $bld_offered ) {
-				/**
-				 * Filters whether to enable automatic core updates for nightly releases.
-				 *
-				 * @since 1.0.0-rc1
-				 *
-				 * @param bool $upgrade_nightly Whether to enable automatic updates for
-				 *                              nightly releases.
-				 */
-				return apply_filters( 'allow_nightly_auto_core_updates', $upgrade_nightly );
-			} else {
-				return false;
-			}
-		}
-
-		$upgrade_possible = true;
-		if ( $current_prerelease ) {
-			$upgrade_possible = $upgrade_possible && (
-				/**
-				 * Filters whether to enable automatic core updates from
-				 * prerelease versions.
-				 *
-				 * @since 1.0.0-rc1
-				 *
-				 * @param bool $upgrade_prerelease Whether to enable automatic
-				 *                                 updates from prereleases.
-				 */
-				apply_filters( 'allow_auto_core_updates_from_prerelease', false )
+		// We only need to check the nightly build date.
+		if (
+			! is_null( $current['nightly'] ) &&
+			! is_null( $offered['nightly'] ) &&
+			$current['nightly'] < $offered['nightly']
+		) {
+			/**
+			 * Filters whether to enable automatic core updates for nightly
+			 * releases.
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_nightly Whether to enable automatic updates
+			 *                              for nightly releases.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_nightly_auto_core_updates',
+				$upgrade_nightly,
+				$current,
+				$offered
 			);
+		} else if (
+			! is_null( $current['nightly'] ) ||
+			! is_null( $offered['nightly'] )
+		) {
+			return false;
 		}
-		if ( $offered_prerelease ) {
-			$upgrade_possible = $upgrade_possible && (
-				/**
-				 * Filters whether to enable automatic core updates to
-				 * prerelease versions.
-				 *
-				 * @since 1.0.0-rc1
-				 *
-				 * @param bool $upgrade_prerelease Whether to enable automatic
-				 *                                 updates to prereleases.
-				 */
-				apply_filters( 'allow_auto_core_updates_to_prerelease', false )
+
+		if (
+			! is_null( $current['pre_type'] ) ||
+			! is_null( $offered['pre_type'] )
+		) {
+			/**
+			 * Filters whether to enable automatic core updates to or from
+			 * prerelease versions.
+			 *
+			 * This is called if either the current or the offered version
+			 * number is a pre-release.
+			 *
+			 * @note Be careful with this filter! The ClassicPress auto-update
+			 * system never updates to or from a prerelease version by default.
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_prerelease Whether to enable automatic
+			 *                                 updates from prereleases.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_prerelease_auto_core_updates',
+				false,
+				$current,
+				$offered
 			);
 		}
 
 		// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
-		if ( $array_current[0] < $array_offered[0] ) {
-			return (
-				$upgrade_possible &&
-				/**
-				 * Filters whether to enable automatic core updates to
-				 * new major versions.
-				 *
-				 * @see https://semver.org/
-				 *
-				 * @since 1.0.0-rc1 Hard-code 'false' - should never
-				 *                  auto-update major versions.
-				 * @since WP-3.7.0
-				 *
-				 * @param bool $upgrade_major Whether to enable automatic
-				 *                            updates to new major versions.
-				 */
-				apply_filters( 'allow_major_auto_core_updates', false )
+		if ( $current['major'] > $offered['major'] ) {
+			return false;
+		} else if ( $current['major'] < $offered['major'] ) {
+			/**
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver major release.
+			 *
+			 * @note Be careful with this filter! New major versions of
+			 * ClassicPress may contain breaking changes.
+			 * @see https://semver.org/
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_major Whether to enable automatic updates
+			 *                            to new major versions.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_major_auto_core_updates',
+				false,
+				$current,
+				$offered
 			);
 		}
 
 		// Minor updates (1.1.3 -> 1.2.0).
-		if ( $array_current[1] < $array_offered[1] ) {
-			return (
-				$upgrade_possible &&
-				/**
-				 * Filters whether to enable automatic core updates to
-				 * new minor versions.
-				 *
-				 * @see https://semver.org/
-				 *
-				 * @since WP-3.7.0
-				 *
-				 * @param bool $upgrade_minor Whether to enable automatic
-				 *                            updates to new minor versions.
-				 */
-				apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor )
+		if ( $current['minor'] > $offered['minor'] ) {
+			return false;
+		} else if ( $current['minor'] < $offered['minor'] ) {
+			/**
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver minor release.
+			 *
+			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
+			 *
+			 * @param bool $upgrade_minor Whether to enable automatic updates
+			 *                            to a newer semver minor release.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_minor_auto_core_updates',
+				$upgrade_minor,
+				$current,
+				$offered
 			);
 		}
 
 		// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2).
-		if ( $array_current[2] < $array_offered[2] ) {
-			return (
-				$upgrade_possible &&
-				/**
-				 * Filters whether to enable automatic core updates to
-				 * new patch versions.
-				 *
-				 * @see https://semver.org/
-				 *
-				 * @since 1.0.0-rc1
-				 *
-				 * @param bool $upgrade_patch Whether to enable automatic
-				 *                            updates to new patch versions.
-				 */
-				apply_filters( 'allow_patch_auto_core_updates', $upgrade_patch )
+		if ( $current['patch'] < $offered['patch'] ) {
+			/**
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver patch release.
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_patch Whether to enable automatic updates
+			 *                            to a newer semver patch release.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_patch_auto_core_updates',
+				$upgrade_patch,
+				$current,
+				$offered
 			);
 		}
 
