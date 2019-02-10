@@ -424,15 +424,17 @@ class Core_Upgrader extends WP_Upgrader {
 			 * @note Be careful with this filter! The ClassicPress auto-update
 			 * system never updates to or from a prerelease version by default.
 			 *
-			 * @since 1.0.0-rc1
+			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
-			 * @param bool $upgrade_prerelease Whether to enable automatic
-			 *                                 updates from prereleases.
+			 * @param bool $upgrade_dev Whether to enable automatic updates
+			 *                          from prereleases.
 			 * @param array $current The array of parts of the current version.
 			 * @param array $offered The array of parts of the offered version.
 			 */
 			return apply_filters(
-				'allow_prerelease_auto_core_updates',
+				'allow_dev_auto_core_updates',
 				false,
 				$current,
 				$offered
@@ -451,7 +453,9 @@ class Core_Upgrader extends WP_Upgrader {
 			 * ClassicPress may contain breaking changes.
 			 * @see https://semver.org/
 			 *
-			 * @since 1.0.0-rc1
+			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
 			 * @param bool $upgrade_major Whether to enable automatic updates
 			 *                            to new major versions.

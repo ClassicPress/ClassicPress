@@ -16,7 +16,7 @@ require_once ABSPATH . 'wp-admin/includes/class-core-upgrader.php';
 class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	public function tearDown() {
 		remove_all_filters( 'allow_nightly_auto_core_updates' );
-		remove_all_filters( 'allow_prerelease_auto_core_updates' );
+		remove_all_filters( 'allow_dev_auto_core_updates' );
 		remove_all_filters( 'allow_major_auto_core_updates' );
 		remove_all_filters( 'allow_minor_auto_core_updates' );
 		remove_all_filters( 'allow_patch_auto_core_updates' );
@@ -561,7 +561,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			'1.0.0-beta2', '1.0.0-beta1', true
 		) );
 
-		add_filter( 'allow_prerelease_auto_core_updates', '__return_true' );
+		add_filter( 'allow_dev_auto_core_updates', '__return_true' );
 
 		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', true
