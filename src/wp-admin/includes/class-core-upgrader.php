@@ -537,6 +537,68 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
+	 * Parses a version string into an array of parts with named keys.
+	 *
+	 * For valid version strings, returns an array with keys (`major`, `minor`,
+	 * `patch`, `pre_type`, `pre_number`, and `nightly`).  The first three are
+	 * always present and always an integer, and the rest are always present
+	 * but may be `null`.
+	 *
+	 * If the version string is not of a format recognized by the automatic
+	 * update system, then this function returns `null`.
+	 *
+	 * @param string $version The version string.
+	 * @return array|null An array of version parts, or `null`.
+	 */
+	public static function parse_version_string( $version ) {
+		$ok = preg_match(
+			// Start of version string.
+			'#^' .
+			// First 3 parts must be numbers.
+			'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)' .
+			// Optional pre-release version indicator (-alpha1, -beta2, -rc1).
+			'(-(?P<pre_type>alpha|beta|rc)(?P<pre_number>\d+))?' .
+			// Optional migration or nightly build (+nightly.20190208 or
+			// +migration.20181220).  Migration builds are treated the same as
+			// the corresponding release build.
+			'(\+(?P<build_type>migration|nightly)\.(?P<build_number>\d{8}))?' .
+			// End of version string.
+			'$#',
+			$version,
+			$matches
+		);
+
+		if ( ! $ok ) {
+			return null;
+		}
+
+		if ( empty( $matches['pre_type'] ) ) {
+			$matches['pre_type'] = null;
+		}
+
+		if ( empty( $matches['pre_number'] ) ) {
+			$matches['pre_number'] = null;
+		} else {
+			$matches['pre_number'] = intval( $matches['pre_number'] );
+		}
+
+		if ( isset( $matches['build_type'] ) && $matches['build_type'] === 'nightly' ) {
+			$nightly_build = $matches['build_number'];
+		} else {
+			$nightly_build = null;
+		}
+
+		return [
+			'major'      => intval( $matches['major'] ),
+			'minor'      => intval( $matches['minor'] ),
+			'patch'      => intval( $matches['patch'] ),
+			'pre_type'   => $matches['pre_type'],
+			'pre_number' => $matches['pre_number'],
+			'nightly'    => $nightly_build,
+		];
+	}
+
+	/**
 	 * Returns whether a version string represents a valid ClassicPress release
 	 * version recognized by the automatic update system.
 	 *
