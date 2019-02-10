@@ -14,6 +14,15 @@ require_once ABSPATH . 'wp-admin/includes/class-core-upgrader.php';
  * Test the logic for whether automatic updates should be enabled.
  */
 class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
+	public function tearDown() {
+		remove_all_filters( 'allow_nightly_auto_core_updates' );
+		remove_all_filters( 'allow_prerelease_auto_core_updates' );
+		remove_all_filters( 'allow_major_auto_core_updates' );
+		remove_all_filters( 'allow_minor_auto_core_updates' );
+		remove_all_filters( 'allow_patch_auto_core_updates' );
+		parent::tearDown();
+	}
+
 	public function test_parse_valid_versions() {
 		$this->assertSame(
 			[
@@ -514,6 +523,141 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0+build.20190228', '1.0.1', true
+		) );
+	}
+
+	public function test_filter_allow_nightly_auto_core_updates_1() {
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', true
+		) );
+
+		add_filter( 'allow_nightly_auto_core_updates', '__return_false' );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', true
+		) );
+	}
+
+	public function test_filter_allow_nightly_auto_core_updates_2() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', false
+		) );
+
+		add_filter( 'allow_nightly_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0+nightly.20190226', '1.0.1+nightly.20190331', false
+		) );
+	}
+
+	public function test_filter_allow_prerelease_auto_core_updates() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', true
+		) );
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta2', '1.0.0-beta2', true
+		) );
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta2', '1.0.0-beta1', true
+		) );
+
+		add_filter( 'allow_prerelease_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1', '1.0.0-beta2', true
+		) );
+		// Not the ideal behavior, but in practice it should never be possible
+		// to receive an automatic update for an older version, especially not
+		// a prerelease.
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta2', '1.0.0-beta2', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta2', '1.0.0-beta1', true
+		) );
+	}
+
+	public function test_filter_allow_major_auto_core_updates() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', true // major
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+
+		add_filter( 'allow_major_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '2.0.0', true // major
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+	}
+
+	public function test_filter_allow_minor_auto_core_updates_1() {
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+
+		add_filter( 'allow_minor_auto_core_updates', '__return_false' );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+	}
+
+	public function test_filter_allow_minor_auto_core_updates_2() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', false
+		) );
+
+		add_filter( 'allow_minor_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', false
+		) );
+	}
+
+	public function test_filter_allow_patch_auto_core_updates_1() {
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+
+		add_filter( 'allow_patch_auto_core_updates', '__return_false' );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', true
+		) );
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.1.0', true
+		) );
+	}
+
+	public function test_filter_allow_patch_auto_core_updates_2() {
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', false
+		) );
+
+		add_filter( 'allow_patch_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.1', '1.0.2', false
 		) );
 	}
 }
