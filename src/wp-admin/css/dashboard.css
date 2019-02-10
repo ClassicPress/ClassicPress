@@ -118,12 +118,8 @@
 }
 
 .welcome-panel h3 {
-	margin: 1.33em 0 0;
+	margin: 0.7em 0 0;
 	font-size: 16px;
-}
-
-.welcome-panel li {
-	font-size: 14px;
 }
 
 .welcome-panel p {
@@ -134,8 +130,8 @@
 	text-decoration: none;
 }
 
-.welcome-panel .about-description {
-	font-size: 16px;
+.welcome-panel .welcome-panel-tagline {
+	font-size: 110%;
 	margin: 0;
 }
 
@@ -203,7 +199,7 @@
 }
 
 .welcome-panel .welcome-panel-column ul {
-		margin: 0.8em 1em 1em 0;
+	margin: 0.8em 1em 1em 0;
 }
 
 .welcome-panel .welcome-panel-column li {
@@ -1172,6 +1168,7 @@ a.rsswidget {
 
 .petitions-content {
 	display: table;
+	width: 100%;
 }
 
 .petitions-content > .petitions-pane {
@@ -1322,9 +1319,6 @@ table.cp_petitions span.started {
 	.metabox-holder .postbox-container .empty-container:after {
 		display: block;
 	}
-}
-
-@media screen and (max-width: 1024px) {
 }
 
 @media screen and (max-width: 870px) {

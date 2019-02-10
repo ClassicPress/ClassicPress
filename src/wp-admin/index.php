@@ -68,18 +68,11 @@ if ( current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( '<strong>Activity</strong> &mdash; Shows the upcoming scheduled posts, recently published posts, and the most recent comments on your posts and allows you to moderate them.' ) . '</p>';
 if ( is_blog_admin() && current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( "<strong>Quick Draft</strong> &mdash; Allows you to create a new post and save it as a draft. Also displays links to the 5 most recent draft posts you've started." ) . '</p>';
-if ( ! is_multisite() && current_user_can( 'install_plugins' ) )
-	$help .= '<p>' . sprintf(
+$help .= '<p>' . sprintf(
 		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official ClassicPress project, the <a href="%s">ClassicPress Planet</a>, and popular plugins.' ),
-		__( 'https://planet.wordpress.org/' )
-	) . '</p>';
-else
-	$help .= '<p>' . sprintf(
-		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official ClassicPress project and the <a href="%s">ClassicPress Planet</a>.' ),
-		__( 'https://planet.wordpress.org/' )
-	) . '</p>';
+		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official <a href="%s">ClassicPress blog</a></a>.' ),
+		__( 'https://www.classicpress.net/blog/' )
+) . '</p>';
 if ( current_user_can( 'edit_theme_options' ) )
 	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
 
@@ -94,7 +87,7 @@ unset( $help );
 $screen->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://codex.wordpress.org/Dashboard_Screen">Documentation on Dashboard</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
 include( ABSPATH . 'wp-admin/admin-header.php' );
@@ -114,6 +107,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 	<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
 		<?php wp_nonce_field( 'welcome-panel-nonce', 'welcomepanelnonce', false ); ?>
+		<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( '?welcome=0' ) ); ?>" aria-label="<?php esc_attr_e( 'Dismiss the welcome panel' ); ?>"><?php _e( 'Dismiss' ); ?></a>
 		<?php
 		/**
 		 * Add content to the welcome panel on the admin dashboard.

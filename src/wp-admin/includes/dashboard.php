@@ -1519,61 +1519,41 @@ function wp_dashboard_empty() {}
  */
 function wp_welcome_panel() {
 	$display_version = classicpress_version();
-	?>
+?>
 <div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
-	<p class="about-description"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
-	<h3><?php _e( 'Join our growing community' ); ?></h3>
+	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
 	<p>
-		<?php printf(
-			/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
-			__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
-			'https://www.classicpress.net/join-slack/',
-			'https://forums.classicpress.net/'
+		<?php _e(
+			'<strong>Join our growing community</strong> and help us build the platform <strong>you</strong> want to see!'
 		); ?>
 	</p>
 	<p>
 		<?php printf(
-			/* translators: link to ClassicPress Petitions site for new features */
-			__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
-			'https://petitions.classicpress.net/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
-			__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-			'https://docs.classicpress.net/faq-support/',
-			'https://forums.classicpress.net/c/support/'
-		); ?>
-	</p>
-	<p>
-		<?php printf(
-			/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
-			__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
-			'https://github.com/ClassicPress/ClassicPress',
-			'https://github.com/ClassicPress/ClassicPress/issues'
+			/* translators: link to "About ClassicPress" dashboard page */
+			'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.',
+			esc_url( self_admin_url( 'about.php' ) )
 		); ?>
 	</p>
 </div>
-	<?php
+<?php
 }
 
 /**
  * Callback function for the petitions dashboard widget
  *
- * @since 1.0.0
+ * @since 1.0.0-beta2
  */
 function cp_dashboard_petitions() {
 	$feeds = array(
-		'most-wanted' => array(
-			'title'        => __( 'Most Wanted' ),
-		),
 		'trending' => array(
-			'title'        => __( 'Trending' ),
+			'title' => __( 'Trending' ),
+		),
+		'most-wanted' => array(
+			'title' => __( 'Most Wanted' ),
 		),
 		'recent' => array(
-			'title'        => __( 'Recent' ),
+			'title' => __( 'Recent' ),
 		),
 	);
 
@@ -1583,48 +1563,53 @@ function cp_dashboard_petitions() {
 /**
  * Display the ClassicPress petitions feeds.
  *
- * @since 1.0.0
+ * Query the ClassicPress.net API for data about ClassicPress petitions, and
+ * echo the results as HTML.
+ *
+ * @since 1.0.0-beta2
  *
  * @param string $widget_id Widget ID.
- * @param array  $feeds     Array of feeds.
+ * @param array  $feeds     Array of petition feeds (possible sort orders).
  */
 function cp_dashboard_petitions_output( $widget_id, $feeds ) {
-
-	/**
-	 * Query API for JSON data -> decode results to php
-	 *
-	 * @since 1.0.0
-	 * @return array
-	 */
 	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
 
 	/**
-	 * Response should be an object with:
-	 *  'most-wanted' - object - A user-friendly platform name, if it can be determined
-	 *  'trending' - object - A user-friendly browser name
-	 *  'recent' - object - The version of the browser the user is using
-	 *  'tags - object - The version of the browser the user is using
-	 *  'link - string - The version of the browser the user is using
+	 * Response body should be an object with:
+	 *  'link'        - string - Link to the ClassicPress petitions website.
+	 *  'most-wanted' - object - Petitions sorted by number of votes.
+	 *  'trending'    - object - Petitions sorted by activity and votes.
+	 *  'recent'      - object - Petitions sorted by date created.
+	 * Each of these 'object' keys should have a 'data' property which is an
+	 * array of the top petitions sorted in the order represented by the key.
 	 */
-	$raw_response  = wp_remote_get( $api_url );
-	$response_code = wp_remote_retrieve_response_code( $raw_response );
+	$response      = wp_remote_get( $api_url );
+	$response_code = wp_remote_retrieve_response_code( $response );
 
-	if ( ! is_wp_error( $raw_response ) && 200 !== $response_code ) {
-		$raw_response = new WP_Error(
+	if ( ! is_wp_error( $response ) && 200 !== $response_code ) {
+		$response = new WP_Error(
 			'api-error',
 			/* translators: %d: numeric HTTP status code, e.g. 400, 403, 500, 504, etc. */
 			sprintf( __( 'Invalid API response code (%d)' ), $response_code )
 		);
 	}
 
-	if ( is_wp_error( $raw_response ) ) {
+	if ( ! is_wp_error( $response ) ) {
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+		if ( empty( $response ) || ! is_object( $response ) || ! isset( $response->link ) ) {
+			$response = new WP_Error(
+				'api-error',
+				__( 'Invalid API response (invalid JSON)' )
+			);
+		}
+	}
+
+	if ( is_wp_error( $response ) ) {
 		if ( is_admin() || current_user_can( 'manage_options' ) ) {
-			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $raw_response->get_error_message() . '</p>';
+			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $response->get_error_message() . '</p>';
 		}
 		return;
 	}
-
-	$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
 
 	?>
 	<div class="sub">
@@ -1681,7 +1666,7 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 								if ( 'open' === $petition->status ){
 									echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );
 								} else {
-									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html(  $petition->status ) . '</span>';
+									echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html( $petition->status ) . '</span>';
 								}
 							?>
 						</td>
