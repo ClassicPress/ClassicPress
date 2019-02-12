@@ -209,7 +209,8 @@ PL
 
 if [ "$conflict_status" -eq 0 ]; then
 	edit_merge_msg
-	# Author information is preserved when there is a conflict, but not here.
+	# Author information is preserved when there is a conflict, but not here,
+	# because we used `git cherry-pick --no-commit` above.
 	author=$(git show -s --format='%an <%ae>' "$commit_short")
 	cmd git commit --no-edit --author="$author"
 	echo
