@@ -293,7 +293,7 @@ class Core_Upgrader extends WP_Upgrader {
 	public static function should_update_to_version( $offered_ver ) {
 		include( ABSPATH . WPINC . '/version.php' ); // $cp_version; // x.y.z
 
-		return self::auto_update_enabled_for_versions(
+		return self::_auto_update_enabled_for_versions(
 			$cp_version,
 			$offered_ver,
 			defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : null
@@ -304,6 +304,9 @@ class Core_Upgrader extends WP_Upgrader {
 	 * Determines if an automatic update should be applied for a given set of
 	 * versions and auto-update constants.
 	 *
+	 * @note This method is intended for internal use only!  It is only public
+	 * so that it can be unit-tested.
+	 *
 	 * @since 1.0.0-rc1
 	 *
 	 * @param string $ver_current      The current version of ClassicPress.
@@ -312,7 +315,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 *                                 of the WP_AUTO_UPDATE_CORE constant).
 	 * @return bool Whether to apply the proposed update automatically.
 	 */
-	public static function auto_update_enabled_for_versions(
+	public static function _auto_update_enabled_for_versions(
 		$ver_current,
 		$ver_offered,
 		$auto_update_core
