@@ -131,6 +131,18 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			],
 			Core_Upgrader::parse_version_string( '1.2.3+migration.20191231' )
 		);
+
+		$this->assertSame(
+			[
+				'major'      => 1,
+				'minor'      => 2,
+				'patch'      => 3,
+				'pre_type'   => 'zeta',
+				'pre_number' => 4,
+				'nightly'    => null,
+			],
+			Core_Upgrader::parse_version_string( '1.2.3-zeta4' )
+		);
 	}
 
 	public function test_parse_invalid_versions() {
@@ -140,7 +152,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			'a.0.0',
 			'1.0-0',
 			'1.0.0+alpha1',
-			'1.0.0-zeta1',
+			'1.0.0-épsilon1',
 			'1.0.0+build.20190209',
 			'1.0.0-build.20190209',
 			'1.2.3+migration.201912031',
@@ -245,7 +257,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	 * define( WP_AUTO_UPDATE_CORE, true );
 	 */
 	public function test_auto_updates_constant_true() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', true // prerelease
 		) );
 
@@ -272,7 +284,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	 * define( WP_AUTO_UPDATE_CORE, 'minor' );
 	 */
 	public function test_auto_updates_constant_minor() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', 'minor' // prerelease
 		) );
 
@@ -299,7 +311,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	 * define( WP_AUTO_UPDATE_CORE, 'patch' );
 	 */
 	public function test_auto_updates_constant_patch() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', 'patch' // prerelease
 		) );
 
@@ -331,19 +343,19 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	}
 
 	public function test_auto_update_from_migration_build() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+migration.20181220', '1.0.0-rc1', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+migration.20181220', '1.0.0', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+migration.20181220', '1.0.1', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+migration.20181220', '1.1.0', true
 		) );
 
@@ -402,6 +414,29 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 		) );
 	}
 
+	public function test_auto_update_newer_nightly_different_major() {
+		// This will allow us to run 1 nightly build per major version branch
+		// in the future.  We should probably never upgrade automatically to a
+		// nightly build of a newer major version, so this situation needs to
+		// pass both the "nightly" and the "major" version filters.
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1+nightly.20181218', '2.0.0-alpha0+nightly.20190630', true
+		) );
+
+		add_filter( 'allow_major_auto_core_updates', '__return_true' );
+
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1+nightly.20181218', '2.0.0-alpha0+nightly.20190630', true
+		) );
+
+		add_filter( 'allow_nightly_auto_core_updates', '__return_false' );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.0-beta1+nightly.20181218', '2.0.0-alpha0+nightly.20190630', true
+		) );
+	}
+
 	public function test_auto_update_older_nightly() {
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1+nightly.20181217', '1.0.0-beta1+nightly.20181216', true
@@ -409,6 +444,10 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2+nightly.20181218', '1.0.0-beta1+nightly.20181217', true
+		) );
+
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+			'1.0.2+nightly.20190701', '2.0.0-alpha0+nightly.20190630', true
 		) );
 	}
 
@@ -443,23 +482,23 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	}
 
 	public function test_auto_update_between_prereleases_of_same_release() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-alpha1', '1.0.0-alpha2', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-alpha2', '1.0.0-beta1', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2', '1.0.0-rc1', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2', '1.0.0-rc2', true
 		) );
 
@@ -477,7 +516,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	}
 
 	public function test_auto_update_between_prereleases_of_different_releases() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.1', true
 		) );
 
@@ -507,11 +546,11 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	}
 
 	public function test_auto_update_prerelease_to_final() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0', true
 		) );
 
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.1', true
 		) );
 	}
@@ -551,7 +590,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 	}
 
 	public function test_filter_allow_prerelease_auto_core_updates() {
-		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', true
 		) );
 		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
@@ -561,18 +600,15 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			'1.0.0-beta2', '1.0.0-beta1', true
 		) );
 
-		add_filter( 'allow_dev_auto_core_updates', '__return_true' );
+		add_filter( 'allow_dev_auto_core_updates', '__return_false' );
 
-		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta1', '1.0.0-beta2', true
 		) );
-		// Not the ideal behavior, but in practice it should never be possible
-		// to receive an automatic update for an older version, especially not
-		// a prerelease.
-		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2', '1.0.0-beta2', true
 		) );
-		$this->assertTrue( Core_Upgrader::auto_update_enabled_for_versions(
+		$this->assertFalse( Core_Upgrader::auto_update_enabled_for_versions(
 			'1.0.0-beta2', '1.0.0-beta1', true
 		) );
 	}
