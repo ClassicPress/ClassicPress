@@ -133,6 +133,17 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			],
 			Core_Upgrader::parse_version_string( '1.2.3-zeta4' )
 		);
+
+		$this->assertSame(
+			[
+				'major'      => 1,
+				'minor'      => 2,
+				'patch'      => 3,
+				'prerelease' => 'test',
+				'nightly'    => false,
+			],
+			Core_Upgrader::parse_version_string( '1.2.3-test' )
+		);
 	}
 
 	public function test_parse_invalid_versions() {
@@ -143,7 +154,6 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			'1.0-0',
 			'1.0.0+alpha1',
 			'1.0.0-épsilon1',
-			'1.0.0-test',
 			'1.0.0+build.20190209',
 			'1.0.0-build.20190209',
 			'1.2.3+migration.201912031',

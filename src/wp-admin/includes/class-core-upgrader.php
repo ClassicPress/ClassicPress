@@ -570,7 +570,7 @@ class Core_Upgrader extends WP_Upgrader {
 			// First 3 parts must be numbers.
 			'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)' .
 			// Optional pre-release version (-alpha1, -beta2, -rc1).
-			'(-(?P<prerelease>[a-z]+\d+))?' .
+			'(-(?P<prerelease>[[:alnum:]]+))?' .
 			// Optional migration or nightly build (+nightly.20190208 or
 			// +migration.20181220).  Migration builds are treated the same as
 			// the corresponding release build.
