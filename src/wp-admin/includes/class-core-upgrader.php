@@ -412,6 +412,15 @@ class Core_Upgrader extends WP_Upgrader {
 				$current,
 				$offered
 			);
+			// If we're running the same major version as the proposed nightly,
+			// then the above filter is all we need and we return its result.
+			//
+			// If the upgrade was denied via the WP_AUTO_UPDATE_CORE constant
+			// or via this filter, return false.
+			//
+			// Otherwise, fall through to the 'allow_major_auto_core_updates'
+			// filter below, because an auto-update to a nightly from a
+			// different major version should be specifically approved.
 			if ( $current['major'] === $offered['major'] ) {
 				return $upgrade_nightly;
 			} elseif ( ! $upgrade_nightly ) {
