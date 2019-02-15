@@ -414,21 +414,21 @@ class Core_Upgrader extends WP_Upgrader {
 			);
 			if ( $current['major'] === $offered['major'] ) {
 				return $upgrade_nightly;
-			} else if ( ! $upgrade_nightly ) {
+			} elseif ( ! $upgrade_nightly ) {
 				return false;
 			}
 
-		} else if ( $current['nightly'] || $offered['nightly'] ) {
+		} elseif ( $current['nightly'] || $offered['nightly'] ) {
 			// Never auto-update from a nightly build to a non-nightly build,
 			// or vice versa.
 			return false;
 
-		} else if ( ! $current['prerelease'] && $offered['prerelease'] ) {
+		} elseif ( ! $current['prerelease'] && $offered['prerelease'] ) {
 			// If not a nightly build, never auto-update from a release to a
 			// pre-release version.
 			return false;
 
-		} else if ( $offered['prerelease'] && (
+		} elseif ( $offered['prerelease'] && (
 			$current['major'] !== $offered['major'] ||
 			$current['minor'] !== $offered['minor'] ||
 			$current['patch'] !== $offered['patch']
@@ -441,7 +441,7 @@ class Core_Upgrader extends WP_Upgrader {
 		// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
 		if ( $current['major'] > $offered['major'] ) {
 			return false;
-		} else if ( $current['major'] < $offered['major'] ) {
+		} elseif ( $current['major'] < $offered['major'] ) {
 			/**
 			 * Filters whether to enable automatic core updates to a newer
 			 * semver major release.
@@ -470,7 +470,7 @@ class Core_Upgrader extends WP_Upgrader {
 		// Minor updates (1.1.3 -> 1.2.0).
 		if ( $current['minor'] > $offered['minor'] ) {
 			return false;
-		} else if ( $current['minor'] < $offered['minor'] ) {
+		} elseif ( $current['minor'] < $offered['minor'] ) {
 			/**
 			 * Filters whether to enable automatic core updates to a newer
 			 * semver minor release.
