@@ -29,9 +29,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => null,
-				'pre_number' => null,
-				'nightly'    => null,
+				'prerelease' => false,
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.0.0' )
 		);
@@ -41,9 +40,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 11,
 				'minor'      => 22,
 				'patch'      => 33,
-				'pre_type'   => null,
-				'pre_number' => null,
-				'nightly'    => null,
+				'prerelease' => false,
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '011.022.033' )
 		);
@@ -53,9 +51,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => 'alpha',
-				'pre_number' => 2,
-				'nightly'    => null,
+				'prerelease' => 'alpha2',
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.0.0-alpha2' )
 		);
@@ -65,9 +62,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => 'beta',
-				'pre_number' => 2,
-				'nightly'    => null,
+				'prerelease' => 'beta2',
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.0.0-beta2' )
 		);
@@ -77,9 +73,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => 'rc',
-				'pre_number' => 1,
-				'nightly'    => null,
+				'prerelease' => 'rc1',
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.0.0-rc1' )
 		);
@@ -89,9 +84,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => 'beta',
-				'pre_number' => 2,
-				'nightly'    => null,
+				'prerelease' => 'beta2',
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.0.0-beta2+migration.20181220' )
 		);
@@ -101,8 +95,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => 'beta',
-				'pre_number' => 2,
+				'prerelease' => 'beta2',
 				'nightly'    => '20190209',
 			],
 			Core_Upgrader::parse_version_string( '1.0.0-beta2+nightly.20190209' )
@@ -113,8 +106,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 0,
 				'patch'      => 0,
-				'pre_type'   => null,
-				'pre_number' => null,
+				'prerelease' => false,
 				'nightly'    => '20190226',
 			],
 			Core_Upgrader::parse_version_string( '1.0.0+nightly.20190226' )
@@ -125,9 +117,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 2,
 				'patch'      => 3,
-				'pre_type'   => null,
-				'pre_number' => null,
-				'nightly'    => null,
+				'prerelease' => false,
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.2.3+migration.20191231' )
 		);
@@ -137,9 +128,8 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 				'major'      => 1,
 				'minor'      => 2,
 				'patch'      => 3,
-				'pre_type'   => 'zeta',
-				'pre_number' => 4,
-				'nightly'    => null,
+				'prerelease' => 'zeta4',
+				'nightly'    => false,
 			],
 			Core_Upgrader::parse_version_string( '1.2.3-zeta4' )
 		);
@@ -153,6 +143,7 @@ class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
 			'1.0-0',
 			'1.0.0+alpha1',
 			'1.0.0-épsilon1',
+			'1.0.0-test',
 			'1.0.0+build.20190209',
 			'1.0.0-build.20190209',
 			'1.2.3+migration.201912031',

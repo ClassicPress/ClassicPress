@@ -325,7 +325,7 @@ class Core_Upgrader extends WP_Upgrader {
 		$offered = self::parse_version_string( $ver_offered );
 
 		// Ensure they are valid.
-		if ( is_null( $current ) || is_null( $offered ) ) {
+		if ( ! $current || ! $offered ) {
 			return false;
 		}
 
@@ -391,8 +391,8 @@ class Core_Upgrader extends WP_Upgrader {
 		// We only need to confirm that the major version is the same and check
 		// the nightly build date.
 		if (
-			! is_null( $current['nightly'] ) &&
-			! is_null( $offered['nightly'] ) &&
+			$current['nightly'] &&
+			$offered['nightly'] &&
 			$current['nightly'] < $offered['nightly']
 		) {
 			/**
@@ -418,17 +418,17 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 			}
 
-		} else if ( ! is_null( $current['nightly'] ) || ! is_null( $offered['nightly'] ) ) {
+		} else if ( $current['nightly'] || $offered['nightly'] ) {
 			// Never auto-update from a nightly build to a non-nightly build,
 			// or vice versa.
 			return false;
 
-		} else if ( is_null( $current['pre_type'] ) && ! is_null( $offered['pre_type'] ) ) {
+		} else if ( ! $current['prerelease'] && $offered['prerelease'] ) {
 			// If not a nightly build, never auto-update from a release to a
 			// pre-release version.
 			return false;
 
-		} else if ( ! is_null( $offered['pre_type'] ) && (
+		} else if ( $offered['prerelease'] && (
 			$current['major'] !== $offered['major'] ||
 			$current['minor'] !== $offered['minor'] ||
 			$current['patch'] !== $offered['patch']
@@ -516,13 +516,9 @@ class Core_Upgrader extends WP_Upgrader {
 		// Prerelease versions (same semver version, several different cases).
 		if (
 			// Update from pre-release to release of the same version.
-			( ! is_null( $current['pre_type'] ) && is_null( $offered['pre_type'] ) ) ||
+			( $current['prerelease'] && ! $offered['prerelease'] ) ||
 			// Update from pre-release to a later pre-release of the same version.
-			( $current['pre_type'] < $offered['pre_type'] ) ||
-			(
-				$current['pre_type'] === $offered['pre_type'] &&
-				$current['pre_number'] < $offered['pre_number']
-			)
+			( $current['prerelease'] < $offered['prerelease'] )
 		) {
 			/**
 			 * Filters whether to enable automatic core updates from prerelease
@@ -557,9 +553,9 @@ class Core_Upgrader extends WP_Upgrader {
 	 * Parses a version string into an array of parts with named keys.
 	 *
 	 * For valid version strings, returns an array with keys (`major`, `minor`,
-	 * `patch`, `pre_type`, `pre_number`, and `nightly`).  The first three are
-	 * always present and always an integer, and the rest are always present
-	 * but may be `null`.
+	 * `patch`, `prerelease`, and `nightly`).  The first three are always
+	 * present and always an integer, and the rest are always present but may
+	 * be `false`.
 	 *
 	 * If the version string is not of a format recognized by the automatic
 	 * update system, then this function returns `null`.
@@ -573,8 +569,8 @@ class Core_Upgrader extends WP_Upgrader {
 			'#^' .
 			// First 3 parts must be numbers.
 			'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)' .
-			// Optional pre-release version indicator (-alpha1, -beta2, -rc1).
-			'(-(?P<pre_type>[a-z]+)(?P<pre_number>\d+))?' .
+			// Optional pre-release version (-alpha1, -beta2, -rc1).
+			'(-(?P<prerelease>[a-z]+\d+))?' .
 			// Optional migration or nightly build (+nightly.20190208 or
 			// +migration.20181220).  Migration builds are treated the same as
 			// the corresponding release build.
@@ -589,28 +585,21 @@ class Core_Upgrader extends WP_Upgrader {
 			return null;
 		}
 
-		if ( empty( $matches['pre_type'] ) ) {
-			$matches['pre_type'] = null;
-		}
-
-		if ( empty( $matches['pre_number'] ) ) {
-			$matches['pre_number'] = null;
-		} else {
-			$matches['pre_number'] = intval( $matches['pre_number'] );
+		if ( empty( $matches['prerelease'] ) ) {
+			$matches['prerelease'] = false;
 		}
 
 		if ( isset( $matches['build_type'] ) && $matches['build_type'] === 'nightly' ) {
 			$nightly_build = $matches['build_number'];
 		} else {
-			$nightly_build = null;
+			$nightly_build = false;
 		}
 
 		return [
 			'major'      => intval( $matches['major'] ),
 			'minor'      => intval( $matches['minor'] ),
 			'patch'      => intval( $matches['patch'] ),
-			'pre_type'   => $matches['pre_type'],
-			'pre_number' => $matches['pre_number'],
+			'prerelease' => $matches['prerelease'],
 			'nightly'    => $nightly_build,
 		];
 	}
