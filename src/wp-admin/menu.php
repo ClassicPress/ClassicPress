@@ -254,6 +254,8 @@ if ( current_user_can( 'manage_privacy_options' ) && WP_Privacy_Policy_Content::
 	$change_notice = ' <span class="update-plugins 1"><span class="plugin-count">' . number_format_i18n( 1 ) . '</span></span>';
 }
 
+$menu[85] = array( __('Security'), 'manage_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
+
 // translators: %s is the update notification bubble, if updates are available.
 $menu[80]                               = array( sprintf( __( 'Settings %s' ), $change_notice ), 'manage_options', 'options-general.php', '', 'menu-top menu-icon-settings', 'menu-settings', 'dashicons-admin-settings' );
 	$submenu['options-general.php'][10] = array( _x( 'General', 'settings screen' ), 'manage_options', 'options-general.php' );
