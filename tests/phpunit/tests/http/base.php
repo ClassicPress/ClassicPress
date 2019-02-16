@@ -13,7 +13,7 @@
 abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	// You can use your own version of data/WPHTTP-testcase-redirection-script.php here.
 	var $redirection_script = 'http://api.wordpress.org/core/tests/1.0/redirection.php';
-	var $fileStreamUrl = 'http://s.w.org/screenshots/3.9/dashboard.png';
+	var $fileStreamUrl = 'https://classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
 
 	protected $http_request_args;
 
@@ -32,7 +32,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
-		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://s.w.org:80' ) ) {
+		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://twemoji.classicpress.net:80' ) ) {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
