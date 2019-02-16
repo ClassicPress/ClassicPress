@@ -1476,7 +1476,7 @@ function wp_check_browser_version() {
 		$url = 'https://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(
 			'body'       => array( 'useragent' => $_SERVER['HTTP_USER_AGENT'] ),
-			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' )
+			'user-agent' => classicpress_user_agent(),
 		);
 
 		$response = wp_remote_post( $url, $options );
