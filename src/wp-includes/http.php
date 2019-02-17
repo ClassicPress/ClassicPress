@@ -745,7 +745,8 @@ function _wp_translate_php_url_constant_to_key( $constant ) {
 function classicpress_user_agent( $include_url = true ) {
 	$ua = 'WordPress/' . get_bloginfo( 'version' );
 	if ( $include_url ) {
-		$ua .= '; https://www.classicpress.net/?wp_compatible=true';
+		$ua .= '; https://www.classicpress.net/?wp_compatible=true'
+			. '&ver=' . classicpress_version_short();
 	}
 
 	/**

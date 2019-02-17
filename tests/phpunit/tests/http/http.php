@@ -317,6 +317,11 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 			classicpress_user_agent()
 		);
 
+		$this->assertStringEndsWith(
+			'&ver=' . classicpress_version_short(),
+			classicpress_user_agent()
+		);
+
 		$this->assertEquals(
 			"WordPress/$wp_version",
 			classicpress_user_agent( false )
