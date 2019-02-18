@@ -13,7 +13,7 @@
 abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	// You can use your own version of data/WPHTTP-testcase-redirection-script.php here.
 	var $redirection_script = 'http://api.wordpress.org/core/tests/1.0/redirection.php';
-	var $fileStreamUrl = 'https://classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
+	var $fileStreamUrl = 'https://www.classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
 
 	protected $http_request_args;
 
