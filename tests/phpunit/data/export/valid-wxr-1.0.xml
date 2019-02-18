@@ -27,7 +27,7 @@
 <channel>
 	<title>Export Dataset</title>
 	<link>http://localhost/</link>
-	<description>Just another ClassicPress site</description>
+	<description>Another great website powered by ClassicPress</description>
 	<pubDate>Wed, 20 Oct 2010 14:10:09 +0000</pubDate>
 	<generator>http://wordpress.org/?v=3.0.1</generator>
 	<language>en</language>
@@ -43,7 +43,7 @@
 		<wp:tag><wp:tag_slug>face</wp:tag_slug><wp:tag_name><![CDATA[face]]></wp:tag_name></wp:tag>
 		<wp:tag><wp:tag_slug>news</wp:tag_slug><wp:tag_name><![CDATA[news]]></wp:tag_name></wp:tag>
 		<wp:tag><wp:tag_slug>roar</wp:tag_slug><wp:tag_name><![CDATA[roar]]></wp:tag_name></wp:tag>
-		
+
 	<generator>http://wordpress.org/?v=3.0.1</generator>
 
 		<item>
@@ -51,7 +51,7 @@
 		<link>http://localhost/?p=1</link>
 		<pubDate>Wed, 20 Oct 2010 14:08:20 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<category><![CDATA[Uncategorized]]></category>
 
 		<category domain="category" nicename="uncategorized"><![CDATA[Uncategorized]]></category>
@@ -92,7 +92,7 @@
 		<link>http://localhost/?page_id=2</link>
 		<pubDate>Wed, 20 Oct 2010 14:08:20 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<guid isPermaLink="false">http://localhost/?page_id=2</guid>
 		<description></description>
 		<content:encoded><![CDATA[This is an example of a ClassicPress page, you could edit this to put information about yourself or your site so readers know where you are coming from. You can create as many pages like this one or sub-pages as you like and manage all of your content inside of ClassicPress.]]></content:encoded>
@@ -119,7 +119,7 @@
 		<link>http://localhost/?p=4</link>
 		<pubDate>Wed, 20 Oct 2010 14:09:37 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<category><![CDATA[alpha]]></category>
 
 		<category domain="category" nicename="alpha"><![CDATA[alpha]]></category>
@@ -166,7 +166,7 @@
 		<link>http://localhost/?p=6</link>
 		<pubDate>Wed, 20 Oct 2010 14:10:09 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<category domain="tag"><![CDATA[chicken]]></category>
 
 		<category domain="tag" nicename="chicken"><![CDATA[chicken]]></category>
@@ -213,7 +213,7 @@
 		<link>http://localhost/?page_id=8</link>
 		<pubDate>Wed, 20 Oct 2010 14:10:35 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<guid isPermaLink="false">http://localhost/?page_id=8</guid>
 		<description></description>
 		<content:encoded><![CDATA[Should have lower ID than parent!]]></content:encoded>
@@ -248,7 +248,7 @@
 		<link>http://localhost/?page_id=10</link>
 		<pubDate>Wed, 20 Oct 2010 14:10:44 +0000</pubDate>
 		<dc:creator><![CDATA[admin]]></dc:creator>
-		
+
 		<guid isPermaLink="false">http://localhost/?page_id=10</guid>
 		<description></description>
 		<content:encoded><![CDATA[woop]]></content:encoded>

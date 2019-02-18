@@ -1,11 +1,12 @@
 /* jshint node:true */
+/* jshint es3:false */
+/* jshint esversion:6 */
 /* globals Set */
 var webpackConfig = require( './webpack.config.prod' );
 var webpackDevConfig = require( './webpack.config.dev' );
 
 module.exports = function(grunt) {
 	var path = require('path'),
-		fs = require( 'fs' ),
 		spawn = require( 'child_process' ).spawnSync,
 		SOURCE_DIR = 'src/',
 		BUILD_DIR = 'build/',
@@ -110,6 +111,8 @@ module.exports = function(grunt) {
 							// Exclude some things present in a configured install
 							'!wp-config.php',
 							'!wp-content/uploads/**',
+							// Exclude script-loader.php (handled in `copy:script-loader` task)
+							'!wp-includes/script-loader.php',
 							// Exclude version.php (handled in `copy:version` task)
 							'!wp-includes/version.php'
 						],
@@ -146,6 +149,25 @@ module.exports = function(grunt) {
 						dest: BUILD_DIR + 'wp-admin/css/wp-admin-rtl.min.css'
 					}
 				]
+			},
+			'script-loader-impl': {
+				options: {
+					processContent: function( src ) {
+						return src.replace( /\$default_version = 'cp_' \. .*;/m, () => {
+							const hash = grunt.config.get( 'dev.git-version' );
+							if ( ! hash ) {
+								grunt.log.fail(
+									'Do not run the copy:script-loader-impl task directly'
+								);
+								grunt.fatal( 'grunt.config dev.git-version not set' );
+							}
+							/* jshint quotmark: true */
+							return "$default_version = 'cp_" + hash.substr( 0, 8 ) + "';";
+						} );
+					}
+				},
+				src: SOURCE_DIR + 'wp-includes/script-loader.php',
+				dest: BUILD_DIR + 'wp-includes/script-loader.php'
 			},
 			version: {
 				options: {
@@ -524,6 +546,10 @@ module.exports = function(grunt) {
 			'restapi-jsclient': {
 				cmd: 'phpunit',
 				args: ['--verbose', '-c', 'phpunit.xml.dist', '--group', 'restapi-jsclient']
+			},
+			'wp-api-client-fixtures': {
+				cmd: 'phpunit',
+				args: ['--verbose', '-c', 'phpunit.xml.dist', '--filter', 'WP_Test_REST_Schema_Initialization::test_build_wp_api_client_fixtures']
 			}
 		},
 		uglify: {
@@ -866,8 +892,7 @@ module.exports = function(grunt) {
 		'webpack:prod',
 		'jshint:corejs',
 		'uglify:masonry',
-		'uglify:imgareaselect',
-		'qunit:compiled'
+		'uglify:imgareaselect'
 	] );
 
 	grunt.registerTask( 'precommit:css', [
@@ -875,109 +900,121 @@ module.exports = function(grunt) {
 	] );
 
 	grunt.registerTask( 'precommit:php', [
-		'phpunit'
+		'phpunit:wp-api-client-fixtures'
 	] );
 
 	grunt.registerTask( 'precommit:emoji', [
 		'replace:emojiRegex'
 	] );
 
-	grunt.registerTask( 'precommit', 'Runs test and build tasks in preparation for a commit', function() {
+	grunt.registerTask( 'precommit', [
+		'precommit:js',
+		'precommit:css',
+		'precommit:image',
+		'precommit:emoji',
+		'precommit:php'
+	] );
+
+	grunt.registerTask(
+		'precommit:verify',
+		'Run precommit checks and verify no changed files.  Commit everything before running!',
+		[
+			'precommit',
+			'precommit:check-for-changes'
+		]
+	);
+
+	grunt.registerTask( 'dev:git-version', function() {
 		var done = this.async();
-		var map = {
-			svn: 'svn status --ignore-externals',
-			git: 'git status --short'
-		};
 
-		find( [
-			__dirname + '/.svn',
-			__dirname + '/.git',
-			path.dirname( __dirname ) + '/.svn'
-		] );
-
-		function find( set ) {
-			var dir;
-
-			if ( set.length ) {
-				fs.stat( dir = set.shift(), function( error ) {
-					error ? find( set ) : run( path.basename( dir ).substr( 1 ) );
-				} );
-			} else {
-				runAllTasks();
-			}
-		}
-
-		function runAllTasks() {
-			grunt.log.writeln( 'Cannot determine which files are modified as SVN and GIT are not available.' );
-			grunt.log.writeln( 'Running all tasks and all tests.' );
-			grunt.task.run([
-				'precommit:js',
-				'precommit:css',
-				'precommit:image',
-				'precommit:emoji',
-				'precommit:php'
-			]);
-
+		if (
+			process.env.CLASSICPRESS_GIT_VERSION &&
+			/^[a-f0-9]{8}/.test( process.env.CLASSICPRESS_GIT_VERSION )
+		) {
+			grunt.log.ok(
+				'Using git version from env var: ' +
+				process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 8 )
+			);
+			grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
 			done();
+			return;
 		}
-
-		function run( type ) {
-			var command = map[ type ].split( ' ' );
-
-			grunt.util.spawn( {
-				cmd: command.shift(),
-				args: command
-			}, function( error, result, code ) {
-				var taskList = [];
-
-				// Callback for finding modified paths.
-				function testPath( path ) {
-					var regex = new RegExp( ' ' + path + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				// Callback for finding modified files by extension.
-				function testExtension( extension ) {
-					var regex = new RegExp( '\.' + extension + '$', 'm' );
-					return regex.test( result.stdout );
-				}
-
-				if ( code === 0 ) {
-					if ( [ 'package.json', 'Gruntfile.js' ].some( testPath ) ) {
-						grunt.log.writeln( 'Configuration files modified. Running `prerelease`.' );
-						taskList.push( 'prerelease' );
-					} else {
-						if ( [ 'png', 'jpg', 'gif', 'jpeg' ].some( testExtension ) ) {
-							grunt.log.writeln( 'Image files modified. Minifying.' );
-							taskList.push( 'precommit:image' );
-						}
-
-						[ 'js', 'css', 'php' ].forEach( function( extension ) {
-							if ( testExtension( extension ) ) {
-								grunt.log.writeln( extension.toUpperCase() + ' files modified. ' + extension.toUpperCase() + ' tests will be run.' );
-								taskList.push( 'precommit:' + extension );
-							}
-						} );
-
-						if ( [ 'twemoji.js' ].some( testPath ) ) {
-							grunt.log.writeln( 'twemoji.js has updated. Running `precommit:emoji.' );
-							taskList.push( 'precommit:emoji' );
-						}
-					}
-
-					grunt.task.run( taskList );
-					done();
-				} else {
-					runAllTasks();
-				}
-			} );
-		}
+			
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'rev-parse', 'HEAD' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( 'git rev-parse failed: code ' + code );
+			}
+			var hash = result.stdout.trim();
+			if ( ! hash || hash.length !== 40 ) {
+				throw new Error( 'git rev-parse returned invalid value: ' + hash );
+			}
+			grunt.config.set( 'dev.git-version', hash );
+			grunt.log.ok(
+				'Using git version from `git rev-parse`: ' +
+				hash.substr( 0, 8 )
+			);
+			done();
+		} );
 	} );
+
+	grunt.registerTask( 'precommit:check-for-changes', function() {
+		grunt.task.requires( 'precommit' );
+
+		var done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'ls-files', '-m' ]
+		}, function( error, result, code ) {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( 'git ls-files failed: code ' + code );
+			}
+			var files = result.stdout.split( '\n' )
+				.map( f => f.trim() )
+				.filter( f => f !== '' )
+				.filter( f => f !== 'package-lock.json' );
+			if ( files.length ) {
+				grunt.log.writeln(
+					'One or more files were modified when running the precommit checks:'
+					.red
+				);
+				grunt.log.writeln();
+				files.forEach( f => grunt.log.writeln( f.yellow ) );
+				grunt.log.writeln();
+				grunt.log.writeln(
+					'Please run `grunt precommit` and commit the results.'
+					.red.bold
+				);
+				grunt.log.writeln();
+				throw new Error(
+					'Modified files detected during precommit checks!'
+				);
+			} else {
+				grunt.log.ok( 'No modified files detected.' );
+			}
+			done();
+		} );
+	} );
+
+	grunt.registerTask( 'copy:script-loader', [
+		'dev:git-version',
+		'copy:script-loader-impl'
+	] );
 
 	grunt.registerTask( 'copy:all', [
 		'copy:files',
 		'copy:wp-admin-css-compat-rtl',
 		'copy:wp-admin-css-compat-min',
+		'copy:script-loader',
 		'copy:version'
 	] );
 
@@ -1027,8 +1064,19 @@ module.exports = function(grunt) {
 	grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
 	// Travis CI tasks.
-	grunt.registerTask('travis:js', 'Runs Javascript Travis CI tasks.', [ 'jshint:corejs', 'qunit:compiled' ]);
-	grunt.registerTask('travis:phpunit', 'Runs PHPUnit Travis CI tasks.', 'phpunit');
+	grunt.registerTask(
+		'travis:precommit-and-js',
+		'Runs precommit checks and JavaScript tests on Travis CI.',
+		[
+			'precommit:verify', // -> precommit:js -> jshint:corejs
+			'qunit:compiled'
+		]
+	);
+	grunt.registerTask(
+		'travis:phpunit',
+		'Runs PHPUnit tests on Travis CI.',
+		'phpunit'
+	);
 
 	// Patch task.
 	grunt.renameTask('patch_wordpress', 'patch');

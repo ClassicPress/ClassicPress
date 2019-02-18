@@ -7,7 +7,7 @@ var mockedApiResponse = {};
 
 mockedApiResponse.Schema = {
     "name": "Test Blog",
-    "description": "Just another ClassicPress site",
+    "description": "Another great website powered by ClassicPress",
     "url": "http://example.org",
     "home": "http://example.org",
     "gmt_offset": "0",
@@ -4278,7 +4278,11 @@ mockedApiResponse.CategoriesCollection = [
         "taxonomy": "category",
         "parent": 0,
         "meta": {
-            "meta_key": ""
+            "test_single": "",
+            "test_multi": [],
+            "meta_key": "",
+            "test_cat_single": "",
+            "test_cat_multi": []
         },
         "_links": {
             "self": [
@@ -4322,7 +4326,11 @@ mockedApiResponse.CategoryModel = {
     "taxonomy": "category",
     "parent": 0,
     "meta": {
-        "meta_key": ""
+        "test_single": "",
+        "test_multi": [],
+        "meta_key": "",
+        "test_cat_single": "",
+        "test_cat_multi": []
     }
 };
 
@@ -4336,7 +4344,10 @@ mockedApiResponse.TagsCollection = [
         "slug": "restapi-client-fixture-tag",
         "taxonomy": "post_tag",
         "meta": {
-            "meta_key": "meta_value"
+            "test_single": "",
+            "test_multi": [],
+            "meta_key": "meta_value",
+            "test_tag_meta": ""
         },
         "_links": {
             "self": [
@@ -4379,7 +4390,10 @@ mockedApiResponse.TagModel = {
     "slug": "restapi-client-fixture-tag",
     "taxonomy": "post_tag",
     "meta": {
-        "meta_key": "meta_value"
+        "test_single": "",
+        "test_multi": [],
+        "meta_key": "meta_value",
+        "test_tag_meta": ""
     }
 };
 
@@ -4549,7 +4563,7 @@ mockedApiResponse.CommentModel = {
 
 mockedApiResponse.settings = {
     "title": "Test Blog",
-    "description": "Just another ClassicPress site",
+    "description": "Another great website powered by ClassicPress",
     "url": "http://example.org",
     "email": "admin@example.org",
     "timezone": "",

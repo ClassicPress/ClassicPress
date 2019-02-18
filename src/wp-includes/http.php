@@ -356,8 +356,8 @@ function wp_remote_retrieve_cookie_value( $response, $name ) {
 /**
  * Determines if there is an HTTP Transport that can process this request.
  *
- * @since WP-3.2.0 
- * @deprecated 1.0.0-beta1 
+ * @since WP-3.2.0
+ * @deprecated 1.0.0-beta1
  *
  * @param array  $capabilities Array of capabilities to test or a wp_remote_request() $args array.
  * @param string $url          Optional. If given, will check if the URL requires SSL and adds

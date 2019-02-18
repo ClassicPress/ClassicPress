@@ -6,9 +6,11 @@
 class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public $old_wp_scripts;
 	public static $asset_version;
+	public $classicpress_asset_version_calls = array();
+	public $classicpress_asset_version_override = null;
 
 	public static function setUpBeforeClass() {
-		self::$asset_version = preg_replace( '#\+.*$#', '', classicpress_version() );
+		self::$asset_version = classicpress_asset_version( 'script' );
 		parent::setUpBeforeClass();
 	}
 
@@ -16,6 +18,12 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		parent::setUp();
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		remove_action( 'wp_default_scripts', 'wp_default_scripts' );
+		add_filter(
+			'classicpress_asset_version',
+			array( $this, 'classicpress_asset_version_handler' ),
+			10, 4
+		);
+		$this->classicpress_asset_version_calls = array();
 		$GLOBALS['wp_scripts'] = new WP_Scripts();
 		$GLOBALS['wp_scripts']->default_version = self::$asset_version;
 	}
@@ -23,7 +31,27 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	function tearDown() {
 		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
 		add_action( 'wp_default_scripts', 'wp_default_scripts' );
+		remove_filter(
+			'classicpress_asset_version',
+			array( $this, 'classicpress_asset_version_handler' ),
+			10
+		);
 		parent::tearDown();
+	}
+
+	function classicpress_asset_version_handler( $version, $type, $handle ) {
+		if ( is_null( $this->classicpress_asset_version_override ) ) {
+			$return = $version;
+		} else {
+			$return = $this->classicpress_asset_version_override;
+		}
+		array_push( $this->classicpress_asset_version_calls, array(
+			'version' => $version,
+			'type'    => $type,
+			'handle'  => $handle,
+			'return'  => $return,
+		) );
+		return $return;
 	}
 
 	/**
@@ -45,6 +73,113 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		// No scripts left to print
 		$this->assertEquals("", get_echo('wp_print_scripts'));
+
+		// 'classicpress_asset_version' filter called as expected
+		$this->assertEquals( array(
+			array(
+				'version' => $ver,
+				'type'    => 'script',
+				'handle'  => 'no-deps-no-version',
+				'return'  => $ver,
+			),
+			array(
+				'version' => $ver,
+				'type'    => 'script',
+				'handle'  => 'empty-deps-no-version',
+				'return'  => $ver,
+			),
+			array(
+				'version' => 1.2,
+				'type'    => 'script',
+				'handle'  => 'empty-deps-version',
+				'return'  => 1.2,
+			),
+			array(
+				'version' => '',
+				'type'    => 'script',
+				'handle'  => 'empty-deps-null-version',
+				'return'  => '',
+			),
+		), $this->classicpress_asset_version_calls );
+	}
+
+	function test_wp_enqueue_script_override_default_version() {
+		$ver = 'aaaa';
+		$GLOBALS['wp_scripts']->default_version = $ver;
+		wp_enqueue_script( 'override-default-version', 'example.com' );
+		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertEquals( array(
+			array(
+				'version' => $ver,
+				'type'    => 'script',
+				'handle'  => 'override-default-version',
+				'return'  => $ver,
+			),
+		), $this->classicpress_asset_version_calls );
+	}
+
+	function test_wp_enqueue_script_override_default_version_and_filter() {
+		$ver = 'bbbb';
+		$GLOBALS['wp_scripts']->default_version = 'aaaa';
+		$this->classicpress_asset_version_override = $ver;
+		wp_enqueue_script( 'override-default-version-and-filter', 'example.com' );
+		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertEquals( array(
+			array(
+				'version' => $GLOBALS['wp_scripts']->default_version,
+				'type'    => 'script',
+				'handle'  => 'override-default-version-and-filter',
+				'return'  => $ver,
+			),
+		), $this->classicpress_asset_version_calls );
+	}
+
+	function test_wp_enqueue_script_filter_default_version() {
+		$ver = 'cccc';
+		$this->classicpress_asset_version_override = $ver;
+		wp_enqueue_script( 'filter-default-version', 'example.com' );
+		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertEquals( array(
+			array(
+				'version' => $GLOBALS['wp_scripts']->default_version,
+				'type'    => 'script',
+				'handle'  => 'filter-default-version',
+				'return'  => $ver,
+			),
+		), $this->classicpress_asset_version_calls );
+	}
+
+	function test_wp_enqueue_script_filter_declared_version() {
+		$this->classicpress_asset_version_override = 'oooo';
+		wp_enqueue_script( 'filter-declared-version', 'example.com', array(), 'dddd' );
+		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertEquals( array(
+			array(
+				'version' => 'dddd',
+				'type'    => 'script',
+				'handle'  => 'filter-declared-version',
+				'return'  => 'oooo',
+			),
+		), $this->classicpress_asset_version_calls );
+	}
+
+	function test_wp_enqueue_script_filter_null_version() {
+		$this->classicpress_asset_version_override = 'oooo';
+		wp_enqueue_script( 'filter-null-version', 'example.com', array(), null );
+		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertEquals( array(
+			array(
+				'version' => '',
+				'type'    => 'script',
+				'handle'  => 'filter-null-version',
+				'return'  => 'oooo',
+			),
+		), $this->classicpress_asset_version_calls );
 	}
 
 	/**
@@ -825,6 +960,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_generated_array_by_compact_will_be_passed() {
+		$file                   = '';
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( compact( 'file' ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 

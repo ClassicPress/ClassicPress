@@ -87,12 +87,12 @@ class Tests_General_DocumentTitle extends WP_UnitTestCase {
 		add_filter( 'document_title_parts', array( $this, '_front_page_title_parts' ) );
 
 		$this->go_to( '/' );
-		$this->assertEquals( sprintf( '%s &#8211; Just another ClassicPress site', $this->blog_name ), wp_get_document_title() );
+		$this->assertEquals( sprintf( '%s &#8211; Another great website powered by ClassicPress', $this->blog_name ), wp_get_document_title() );
 
 		update_option( 'show_on_front', 'posts' );
 
 		$this->go_to( '/' );
-		$this->assertEquals( sprintf( '%s &#8211; Just another ClassicPress site', $this->blog_name ), wp_get_document_title() );
+		$this->assertEquals( sprintf( '%s &#8211; Another great website powered by ClassicPress', $this->blog_name ), wp_get_document_title() );
 	}
 
 	function _front_page_title_parts( $parts ) {
@@ -118,7 +118,7 @@ class Tests_General_DocumentTitle extends WP_UnitTestCase {
 
 		add_filter( 'document_title_parts', array( $this, '_paged_title_parts' ) );
 
-		$this->assertEquals( sprintf( '%s &#8211; Page 4 &#8211; Just another ClassicPress site', $this->blog_name ), wp_get_document_title() );
+		$this->assertEquals( sprintf( '%s &#8211; Page 4 &#8211; Another great website powered by ClassicPress', $this->blog_name ), wp_get_document_title() );
 	}
 
 	function _paged_title_parts( $parts ) {
