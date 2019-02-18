@@ -1529,11 +1529,27 @@ function wp_welcome_panel() {
 		); ?>
 	</p>
 	<p>
-		<?php printf(
+<?php
+	if ( get_locale() === 'en_US' ) {
+		printf(
 			/* translators: link to "About ClassicPress" dashboard page */
-			'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.',
+			__( 'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.' ),
 			esc_url( self_admin_url( 'about.php' ) )
-		); ?>
+		);
+	} else {
+		printf(
+			/* translators: link to learn more about translating ClassicPress */
+			__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
+			'https://www.classicpress.net/translating-classicpress/'
+		);
+		echo '</p><p>';
+		printf(
+			/* translators: link to "About ClassicPress" dashboard page */
+			__( 'For other ways you can help, visit the <a href="%s">About ClassicPress</a> page.' ),
+			esc_url( self_admin_url( 'about.php' ) )
+		);
+	}
+?>
 	</p>
 </div>
 <?php

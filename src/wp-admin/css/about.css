@@ -37,6 +37,11 @@
 	display: none !important;
 }
 
+.about-wrap .about-inline-notice {
+	margin: -12px 0 12px 0;
+	padding: 6px 8px;
+}
+
 .about-wrap hr {
 	border: 0;
 	height: 0;

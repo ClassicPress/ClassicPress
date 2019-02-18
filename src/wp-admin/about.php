@@ -42,6 +42,17 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		</h2>
 
 		<div class="changelog point-releases about-wrap-content">
+
+			<?php if ( get_locale() !== 'en_US' ) { ?>
+				<p class="about-inline-notice notice-warning">
+					<?php printf(
+						/* translators: link to learn more about translating ClassicPress */
+						__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
+						'https://www.classicpress.net/translating-classicpress/'
+					); ?>
+				</p>
+			<?php } ?>
+
 			<h3><?php _e( 'Introducing ClassicPress' ); ?></h3>
 
 			<p>
