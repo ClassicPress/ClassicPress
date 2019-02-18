@@ -6,11 +6,13 @@
 ( function() {
 	'use strict';
 
+	var testImageUrl = 'https://www.classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
+	var testImageFilename = 'celebrating-six-months-150x150.jpg';
+
 	module( 'Image Media Widget' );
 
 	test( 'image widget control', function() {
-		var ImageWidgetControl, imageWidgetControlInstance, imageWidgetModelInstance, mappedProps, testImageUrl, templateProps;
-		testImageUrl = 'http://s.w.org/style/images/wp-header-logo.png';
+		var ImageWidgetControl, imageWidgetControlInstance, imageWidgetModelInstance, mappedProps, templateProps;
 		equal( typeof wp.mediaWidgets.controlConstructors.media_image, 'function', 'wp.mediaWidgets.controlConstructors.media_image is a function' );
 		ImageWidgetControl = wp.mediaWidgets.controlConstructors.media_image;
 		ok( ImageWidgetControl.prototype instanceof wp.mediaWidgets.MediaWidgetControl, 'wp.mediaWidgets.controlConstructors.media_image subclasses wp.mediaWidgets.MediaWidgetControl' );
@@ -31,7 +33,7 @@
 		// Test mapModelToPreviewTemplateProps() when data is set on model.
 		imageWidgetControlInstance.model.set( { url: testImageUrl, alt: 'some alt text', link_type: 'none' } );
 		templateProps = imageWidgetControlInstance.mapModelToPreviewTemplateProps();
-		equal( templateProps.currentFilename, 'wp-header-logo.png', 'mapModelToPreviewTemplateProps should set currentFilename based off of url' );
+		equal( templateProps.currentFilename, testImageFilename, 'mapModelToPreviewTemplateProps should set currentFilename based off of url' );
 		equal( templateProps.url, testImageUrl, 'mapModelToPreviewTemplateProps should return the proper url' );
 		equal( templateProps.alt, 'some alt text', 'mapModelToPreviewTemplateProps should return the proper alt text' );
 		equal( templateProps.link_type, undefined, 'mapModelToPreviewTemplateProps should ignore attributes that are not needed in the preview' );
@@ -91,11 +93,11 @@
 			model: imageWidgetModelInstance
 		});
 		equal( imageWidgetControlInstance.$el.find( 'img' ).length, 0, 'No images should be rendered' );
-		imageWidgetControlInstance.model.set({ error: false, url: 'http://s.w.org/style/images/wp-header-logo.png' });
+		imageWidgetControlInstance.model.set({ error: false, url: testImageUrl });
 
 		// Due to renderPreview being deferred.
 		setTimeout( function() {
-			equal( imageWidgetControlInstance.$el.find( 'img[src="http://s.w.org/style/images/wp-header-logo.png"]' ).length, 1, 'One image should be rendered' );
+			equal( imageWidgetControlInstance.$el.find( 'img[src="' + testImageUrl + '"]' ).length, 1, 'One image should be rendered' );
 			done();
 		}, 50 );
 
