@@ -148,7 +148,7 @@ function plugins_api( $action, $args = array() ) {
 
 		$http_args = array(
 			'timeout' => 15,
-			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
+			'user-agent' => classicpress_user_agent(),
 			'body' => array(
 				'action' => $action,
 				'request' => serialize( $args )
