@@ -6405,8 +6405,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$remote_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 
-		/** This filter is documented in wp-includes/class-http.php */
-		$user_agent = apply_filters( 'http_headers_useragent', 'ClassicPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) );
+		$user_agent = classicpress_user_agent();
 
 		// Let's check the remote site
 		$http_api_args = array(

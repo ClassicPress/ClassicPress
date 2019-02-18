@@ -97,7 +97,7 @@ class WP_Community_Events {
 
 		$api_url      = 'https://api.wordpress.org/events/1.0/';
 		$request_args = $this->get_request_args( $location_search, $timezone );
-		$request_args['user-agent'] = 'ClassicPress/' . $wp_version . '; ' . home_url( '/' );
+		$request_args['user-agent'] = classicpress_user_agent();
 
 		$response       = wp_remote_get( $api_url, $request_args );
 		$response_code  = wp_remote_retrieve_response_code( $response );
