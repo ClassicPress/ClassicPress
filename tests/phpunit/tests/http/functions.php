@@ -21,7 +21,7 @@ class Tests_HTTP_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
-		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://twemoji.classicpress.net:80' ) ) {
+		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://twemoji.classicpress.net:443' ) ) {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 

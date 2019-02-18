@@ -32,7 +32,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
-		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://twemoji.classicpress.net:80' ) ) {
+		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://twemoji.classicpress.net:443' ) ) {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
@@ -237,7 +237,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	function test_file_stream() {
 		$url = $this->fileStreamUrl;
-		$size = 153204;
+		$size = 5461;
 		$res = wp_remote_request( $url, array( 'stream' => true, 'timeout' => 30 ) ); //Auto generate the filename.
 
 		// Cleanup before we assert, as it'll return early.
@@ -259,7 +259,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 */
 	function test_file_stream_limited_size() {
 		$url = $this->fileStreamUrl;
-		$size = 10000;
+		$size = 5000;
 		$res = wp_remote_request( $url, array( 'stream' => true, 'timeout' => 30, 'limit_response_size' => $size ) ); //Auto generate the filename.
 
 		// Cleanup before we assert, as it'll return early.
@@ -281,7 +281,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 */
 	function test_request_limited_size() {
 		$url = $this->fileStreamUrl;
-		$size = 10000;
+		$size = 5000;
 
 		$res = wp_remote_request( $url, array( 'timeout' => 30, 'limit_response_size' => $size ) );
 
