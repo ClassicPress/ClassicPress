@@ -103,7 +103,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		if ( 'search' === $tab ) {
 			$tabs['search'] = __( 'Search Results' );
 		}
-		$tabs['popular'] = _x( 'Popular', 'Plugin Installer' );
+		$tabs['popular']    = _x( 'Popular', 'Plugin Installer' );
 		$tabs['categories'] = _x( 'Categories', 'Plugin Installer' );
 		if ( current_user_can( 'upload_plugins' ) ) {
 			// No longer a real tab. Here for filter compatibility.
@@ -118,7 +118,8 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		 *
 		 * @since WP-2.7.0
 		 *
-		 * @param array $tabs The tabs shown on the Plugin Install screen. Defaults include 'popular'.
+		 * @param array $tabs The tabs shown on the Plugin Install screen.
+		 *                    Defaults include 'popular' and 'categories'.
 		 *
 		 */
 		$tabs = apply_filters( 'install_plugins_tabs', $tabs );
@@ -183,7 +184,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		 * Filters API request arguments for each Plugin Install screen tab.
 		 *
 		 * The dynamic portion of the hook name, `$tab`, refers to the plugin install tabs.
-		 * Default tabs include 'popular' and 'upload'.
+		 * Default tabs include 'popular', 'categories', and 'upload'.
 		 *
 		 * @since WP-3.7.0
 		 *
