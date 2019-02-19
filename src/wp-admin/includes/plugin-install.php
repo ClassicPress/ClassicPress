@@ -358,7 +358,7 @@ function display_plugins_categories_list() {
 	);
 	?>
 	<div class="plugin-categories-filter-container">
-		<h2><?php _e( 'Browse Plugin Categories' ) ?></h3>
+		<p><?php _e( 'These are some of the most common types of plugins. Not all categories are represented here.' ); ?></p>
 		<ul class="plugin-categories-filter">
 		<?php
 		foreach ( $categories as $tag => $label ) {
