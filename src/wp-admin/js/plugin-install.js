@@ -223,6 +223,6 @@ jQuery( document ).ready( function( $ ) {
 		event.preventDefault();
 		var category = $(this).attr( 'data-plugin-tag' );
 		$( '#typeselector' ).val( 'tag' );
-		$( '.plugin-install-php .wp-filter-search' ).val( category );
+		$( '.plugin-install-php .wp-filter-search' ).val( category ).trigger( 'input' );
 	});
 });

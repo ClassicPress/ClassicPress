@@ -342,27 +342,38 @@ function install_plugins_favorites_form() {
  *
  */
 function display_plugins_categories_list() {
+	$categories = array(
+		'form'         => __( 'Forms' ),
+		'widget'       => __( 'Widgets' ),
+		'admin'        => __( 'Admin Utilities' ),
+		'page-builder' => __( 'Page Builders' ),
+		'e-commerce'   => __( 'eCommerce' ),
+		'media'        => __( 'Media' ),
+		'seo'          => __( 'SEO' ),
+		'ads'          => __( 'Advertising' ),
+		'social'       => __( 'Social Networking' ),
+		'membership'   => __( 'Membership' ),
+		'newsletter'   => __( 'Newsletters' ),
+		'forum'        => __( 'Forums' ),
+	);
 	?>
-	<div class="plugin-categories-filter-holder">
+	<div class="plugin-categories-filter-container">
 		<h2><?php _e( 'Browse Plugin Categories' ) ?></h3>
 		<ul class="plugin-categories-filter">
-			<li><a href="#" data-plugin-tag="form"><?php _e( 'Forms' ) ?></a></li>
-			<li><a href="#" data-plugin-tag="ecommerce"><?php _e( 'eCommerce' ) ?></a></li>
-			<li><a href="#" data-plugin-tag="seo"><?php _e( 'SEO' ) ?></a></li>
-			<li><a href="#" data-plugin-tag="newsletter"><?php _e( 'Newsletters' ) ?></a></li>
-			<li><a href="#" data-plugin-tag="forum"><?php _e( 'Forums' ) ?></a></li>
-			<li><a href="#" data-plugin-tag="advertising"><?php _e( 'Advertising' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Social Networking' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Media' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Membership' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Page Builders' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Utilities' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Widgets' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Interface Elements' ) ?></a></li>
-			<li><a href="#"><?php _e( 'Miscellaneous' ) ?></a></li>
+		<?php
+		foreach ( $categories as $tag => $label ) {
+			$tag   = esc_attr( $tag );
+			$label = esc_html( $label );
+			$href  = esc_attr( self_admin_url(
+				'plugin-install.php?tab=search&type=tag&s=' . urlencode( $tag )
+			) );
+			echo "\t\t\t<li><a href=\"$href\" data-plugin-tag=\"$tag\">$label</a></li>\n";
+		}
+		?>
 		</ul>
 	</div>
 	<?php
+	display_plugins_table();
 }
 
 /**
