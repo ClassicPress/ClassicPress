@@ -16,8 +16,6 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 <div class="wrap">
   <h1><?php echo esc_html( $title ); ?></h1>
-  <hr class="wp-header-end">
-  <h2 class="nav-tab-wrapper wp-clearfix"><a class="nav-tab nav-tab-active" href="#">General</a></h2>
   <div class="card">
     <h2><?php _e( '"Security First"' ); ?></h2>
     <p><?php _e( "Security is important to business and it’s important to us here at ClassicPress. By bringing security forward to a place of greater prominence within the admin interface, we create a more streamlined experience for both users and developers." ); ?></p>
