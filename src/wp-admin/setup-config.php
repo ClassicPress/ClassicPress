@@ -317,8 +317,9 @@ switch ( $step ) {
 				}
 			} else {
 				$secret_keys = explode( "\n", wp_remote_retrieve_body( $secret_keys ) );
+				array_shift( $secret_keys ); // the first line just contains "<pre>"
 				foreach ( $secret_keys as $k => $v ) {
-					$secret_keys[ $k ] = substr( $v, 28, 64 );
+					$secret_keys[ $k ] = substr( $v, 29, 64 );
 				}
 			}
 		}
