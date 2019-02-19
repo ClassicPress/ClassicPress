@@ -249,7 +249,7 @@ switch($step) {
 			echo '<table class="form-table install-success">' . "\n";
 			echo '<tr>' . "\n";
 			echo '<th>' . __( 'Username' ) . '</th>' . "\n";
-			echo '<td><code>' . esc_html( sanitize_user( $user_name, true ) ) . '</code></td>' . "\n";
+			echo '<td><code>' . esc_html( $user_name ) . '</code></td>' . "\n";
 			echo '</tr>' . "\n";
 			echo '<tr>' . "\n";
 			echo '<th>' . __( 'Password' ) . '</th>' . "\n";
