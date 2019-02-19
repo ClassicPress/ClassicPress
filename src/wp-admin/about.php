@@ -24,7 +24,12 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<?php classicpress_dev_version_info(); ?>
 		</p>
 		<p class="about-text">
-			<?php _e( 'Thank you for using ClassicPress, the business focused CMS.' ); ?><br>
+			<?php printf(
+				/* translators: link to "business-focused CMS" article */
+				'Thank you for using ClassicPress, the <a href="%s">business-focused CMS</a>.',
+				'https://www.classicpress.net/blog/2018/10/29/classicpress-for-business-professional-organization-websites/'
+			); ?>
+			<br />
 			<?php _e( 'Powerful. Versatile. Predictable.' ); ?>
 		</p>
 		<div class="wp-badge"></div>
@@ -37,24 +42,56 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		</h2>
 
 		<div class="changelog point-releases about-wrap-content">
-			<h3><?php _e( 'ClassicPress' ); ?></h3>
+			<h3><?php _e( 'Introducing ClassicPress' ); ?></h3>
 
-			<?php
-			echo "<p>\n";
-			_e( '<strong>We began a fork of WordPress</strong> named ClassicPress.' );
-			print ' ';
-			_e( 'The initial version will be based on the WordPress 4.9 branch.' );
-			echo "</p><p>\n";
-			/* translators: 1: ClassicPress GitHub URL, 2: ClassicPress website URL */
-			printf(
-				__( 'To see how you can help, take a look at <a href="%s">our GitHub repository</a> and <a href="%s">the official ClassicPress website</a>!' ),
-				'https://github.com/ClassicPress/ClassicPress',
-				'https://www.classicpress.net'
-			);
-			echo "</p>\n";
-			?>
+			<p>
+				<?php _e(
+					'ClassicPress is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.'
+				); ?>
+			</p>
+			<p>
+				<?php _e(
+					'This has been a solid foundation for millions of sites for many years, and we believe it will also be an excellent foundation for the future.'
+				); ?>
+			</p>
+			<h3><?php _e( 'Join our growing community' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: 1: link with instructions to join ClassicPress Slack, 2: link to community forums */
+					__( 'For general discussion about ClassicPress, <a href="%1$s"><strong>join our Slack group</strong></a> or our <a href="%2$s"><strong>community forum</strong></a>.' ),
+					'https://www.classicpress.net/join-slack/',
+					'https://forums.classicpress.net/c/support'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					/* translators: link to ClassicPress Petitions site for new features */
+					__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
+					'https://petitions.classicpress.net/'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
+					__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
+					'https://docs.classicpress.net/faq-support/',
+					'https://forums.classicpress.net/c/support/'
+				); ?>
+			</p>
+			<p>
+				<?php printf(
+					/* translators: 1: link to ClassicPress GitHub repository, 2: link to GitHub issues list */
+					__( 'ClassicPress is developed <a href="%1$s"><strong>on GitHub</strong></a>. For specific bug reports or technical suggestions, see the <a href="%1$s"><strong>issues list</strong></a> and add your report if it is not already present.' ),
+					'https://github.com/ClassicPress/ClassicPress',
+					'https://github.com/ClassicPress/ClassicPress/issues'
+				); ?>
+			</p>
 
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
+			<p>
+				<?php _e(
+					'ClassicPress currently includes all changes from the following versions of WordPress:'
+				); ?>
 			<p>
 				<?php
 				/* translators: %s: WordPress version number */

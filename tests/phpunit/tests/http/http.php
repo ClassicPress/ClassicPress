@@ -309,4 +309,22 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 		);
 	}
 
+	function test_classicpress_user_agent() {
+		global $wp_version;
+
+		$this->assertStringStartsWith(
+			"WordPress/$wp_version; https://",
+			classicpress_user_agent()
+		);
+
+		$this->assertStringEndsWith(
+			'&ver=' . classicpress_version_short(),
+			classicpress_user_agent()
+		);
+
+		$this->assertEquals(
+			"WordPress/$wp_version",
+			classicpress_user_agent( false )
+		);
+	}
 }

@@ -160,13 +160,17 @@ class WP_Automatic_Updater {
 		 * being checked. Can be 'core', 'theme', 'plugin', or 'translation'.
 		 *
 		 * Generally speaking, plugins, themes, and major core versions are not updated
-		 * by default, while translations and minor and development versions for core
-		 * are updated by default.
+		 * by default, while translations and minor, patch, and nightly versions for core are
+		 * updated by default.
 		 *
-		 * See the {@see 'allow_dev_auto_core_updates', {@see 'allow_minor_auto_core_updates'},
-		 * and {@see 'allow_major_auto_core_updates'} filters for a more straightforward way to
-		 * adjust core updates.
+		 * See the
+		 * {@see 'allow_dev_auto_core_updates'},
+		 * {@see 'allow_nightly_auto_core_updates'},
+		 * {@see 'allow_minor_auto_core_updates'}, and
+		 * {@see 'allow_major_auto_core_updates'}
+		 * filters for a more straightforward way to adjust core updates.
 		 *
+		 * @since 1.0.0-rc1 Added filter for ClassicPress nightly updates.
 		 * @since WP-3.7.0
 		 *
 		 * @param bool   $update Whether to update.
