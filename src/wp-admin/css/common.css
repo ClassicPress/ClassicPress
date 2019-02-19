@@ -1021,7 +1021,7 @@ th.action-links {
 
 .filter-links {
 	display: inline-block;
-	margin: 0px 0px 0px 20px;
+	margin: 0;
 }
 
 .filter-links li {
