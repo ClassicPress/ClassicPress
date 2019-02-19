@@ -87,8 +87,8 @@ label {
 	text-align:center
 }
 #logo a {
-	background-image: url(../images/cp-logo-gradient.png);
-	background-image: none, url(../images/cp-logo-gradient.svg);
+	background-image: url(../images/classicpress-logo-wordmark-gradient-on-transparent-600x115.png);
+	background-image: none, url(../images/classicpress-logo-wordmark-gradient-on-transparent.svg);
 	background-size: 300px;
 	background-position: center top;
 	background-repeat: no-repeat;
