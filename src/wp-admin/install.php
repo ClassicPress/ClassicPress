@@ -326,12 +326,12 @@ function display_setup_form( $error = null ) {
 	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
 	$user_table = ( $wpdb->get_var( $sql ) != null );
 
-	// Ensure that Blogs appear in search engines by default.
+	// Ensure that sites appear in search engines by default.
 	$blog_public = 1;
 
-	// Get and pare submitted data.
+	// Get and parse submitted data.
 	if ( isset( $_POST['weblog_title'] ) ) {
-		$blog_public = isset( $_POST['blog_public'] );
+		$blog_public = isset( $_POST['blog_public'] ) ? 1 : 0;
 	}
 	$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
 	$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
@@ -419,15 +419,15 @@ function display_setup_form( $error = null ) {
 	echo '			<fieldset>' . "\n";
 	echo '				<legend class="screen-reader-text"><span>' . ( has_action( 'blog_privacy_selector' ) ? __( 'Site Visibility' ) : __( 'Search Engine Visibility' ) ) . '</span></legend>' . "\n";
 	if ( has_action( 'blog_privacy_selector' ) ) {
-		echo '				<input id="blog_public" type="radio" name="blog_public" value="1" ' . checked( 1, $blog_public ) . ' />' . "\n";
+		echo '				<input id="blog_public" type="radio" name="blog_public" value="1" ' . checked( 1, $blog_public, false ) . ' />' . "\n";
 		echo '				<label for="blog_public">' . __( 'Allow search engines to index this site' ) . '</label><br/>' . "\n";
-		echo '				<input id="blog-norobots" type="radio" name="blog_public" value="0" ' . checked( 0, $blog_public ) . ' />' . "\n";
+		echo '				<input id="blog-norobots" type="radio" name="blog_public" value="0" ' . checked( 0, $blog_public, false ) . ' />' . "\n";
 		echo '				<label for="blog-norobots">' . __( 'Discourage search engines from indexing this site' ) . '</label>' . "\n";
 		echo '				<p class="description">' . __( 'Note: Neither of these options blocks access to your site &mdash; it is up to search engines to honor your request.' ) . '</p>' . "\n";
 		/** This action is documented in wp-admin/options-reading.php */
 		do_action( 'blog_privacy_selector' );
 	} else {
-		echo '				<input name="blog_public" type="checkbox" id="blog_public" value="0" ' . checked( 0, $blog_public ) . ' /> ';
+		echo '				<input name="blog_public" type="checkbox" id="blog_public" value="0" ' . checked( 0, $blog_public, false ) . ' /> ';
 		echo '<label for="blog_public">' . __( 'Discourage search engines from indexing this site' ) . '</label>' . "\n";
 	}
 	echo '			</fieldset>' . "\n";
