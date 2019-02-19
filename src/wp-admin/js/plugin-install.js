@@ -220,7 +220,6 @@ jQuery( document ).ready( function( $ ) {
 
 	/* Plugin install Category filter JS */
 	$( '.plugin-categories-filter a' ).click( function( event ) {
-
 		event.preventDefault();
 		var category = $(this).attr( 'data-plugin-tag' );
 
@@ -229,7 +228,6 @@ jQuery( document ).ready( function( $ ) {
 		}
 		$( '#typeselector' ).val( 'tag' );
 		$( '.wp-filter-search' ).val( category );
-		$( '#search-plugin' ).trigger( 'click' );
-
+		$( '.search-plugins input.submit' ).trigger( 'click' );
 	});
 });

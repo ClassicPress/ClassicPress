@@ -288,7 +288,7 @@ function install_search_form( $deprecated = true ) {
 			<option value="author"<?php selected( 'author', $type ); ?>><?php _e( 'Author' ); ?></option>
 			<option value="tag"<?php selected( 'tag', $type ); ?>><?php _ex( 'Tag', 'Plugin Installer' ); ?></option>
 		</select>
-		<input type="submit" id="search-plugin" class="button" value="<?php _e( 'Search' ); ?>">
+		<input type="submit" class="button submit" value="<?php _e( 'Search' ); ?>">
 		<label><span class="screen-reader-text"><?php _e( 'Search Plugins' ); ?></span>
 			<input type="search" name="s" value="<?php echo esc_attr( $term ) ?>" class="wp-filter-search" placeholder="<?php esc_attr_e( 'Search plugins...' ); ?>" />
 		</label>
@@ -339,7 +339,7 @@ function install_plugins_favorites_form() {
 /**
  * Display plugin content based on plugin category (using tags).
  *
- * @since CP-1.0
+ * @since 1.0.0-rc1
  *
  */
 function display_plugins_categories_list() {

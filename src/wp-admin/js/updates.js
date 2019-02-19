@@ -1725,7 +1725,7 @@
 			$filesystemForm      = $( '#request-filesystem-credentials-form' ),
 			$filesystemModal     = $( '#request-filesystem-credentials-dialog' ),
 			$pluginSearch        = $( '.plugins-php .wp-filter-search' ),
-			$pluginInstallSearch = $( '.plugin-install-php #search-plugin' );
+			$pluginInstallSearch = $( '.plugin-install-php .search-plugins input.submit' );
 
 		settings = _.extend( settings, window._wpUpdatesItemCounts || {} );
 
