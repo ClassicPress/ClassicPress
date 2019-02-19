@@ -409,6 +409,7 @@ TABLE OF CONTENTS:
 
 .wp-core-ui .button.button-primary.button-hero.cp-button {
 	box-shadow: 0 2px 0 #034b59;
+	font-weight: bold;
 }
 
 .wp-core-ui .button-primary.cp-button.hover,
