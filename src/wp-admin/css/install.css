@@ -119,18 +119,19 @@ label {
 }
 #logo a {
 	background-image: url(../images/cp-logo-gradient.svg);
-	background-size: 300px;
 	background-position: center top;
 	background-repeat: no-repeat;
-	color: #444; /* same as login.css */
+	background-size: 100%;
+	width: 300px;
 	height: 60px;
+	max-width: 100%;
+	color: #444; /* same as login.css */
 	font-size: 20px;
 	font-weight: 400;
 	line-height: 1.3em;
 	margin: -130px auto 25px;
 	padding: 0;
 	text-decoration: none;
-	width: 300px;
 	text-indent: -9999px;
 	outline: none;
 	overflow: hidden;
