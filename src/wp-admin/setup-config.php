@@ -56,33 +56,33 @@ if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
 // No wp-config-sample.php found? Bail.
 if ( ! $config_file ) {
 	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>'.__('Sample Config File Missing').'</h1>';
+	echo '<h1>' . __( 'Sample Config File Missing' ) . '</h1>';
 	echo '<p>' . sprintf(
-		/* translators: %s: wp-config-sample.php */
-			__( 'A %s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%s" target="_blank" rel="noopener">fresh copy</a>?' ),
-			'<code>wp-config-sample.php</code>',
-			esc_url( 'https://raw.githubusercontent.com/ClassicPress/ClassicPress-release/master/wp-config-sample.php' )
-		) . '</p>';
+		/* translators: 1: wp-config-sample.php, 2: link to the contents of this file */
+		__( 'A %s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%s" target="_blank" rel="noopener">fresh copy</a>?' ),
+		'<code>wp-config-sample.php</code>',
+		esc_url( 'https://raw.githubusercontent.com/ClassicPress/ClassicPress-release/master/wp-config-sample.php' )
+	) . '</p>';
 	setup_config_display_footer();
 }
 
 // Does wp-config.php file already exist? Bail.
 if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>'.__('Config File Found').'</h1>';
+	echo '<h1>' . __( 'Config File Found' ) . '</h1>';
 	echo '<p>' . sprintf(
-			/* translators: 1: wp-config.php 2: install.php */
-			__( 'A %1$s file was found in your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
-			'<code>wp-config.php</code>',
-			'install.php'
-		) . '</p>';
+		/* translators: 1: wp-config.php, 2: link to install.php */
+		__( 'A %1$s file was found in your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
+		'<code>wp-config.php</code>',
+		'install.php'
+	) . '</p>';
 	setup_config_display_footer();
 }
 
 // Check if wp-config.php exists above the root directory but is not part of another installation
 if ( @file_exists( ABSPATH . '../wp-config.php' ) && ! @file_exists( ABSPATH . '../wp-settings.php' ) ) {
 	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>'.__('Config File Found').'</h1>';
+	echo '<h1>' . __( 'Config File Found' ) . '</h1>';
 	echo '<p>' . sprintf(
 			/* translators: 1: wp-config.php 2: install.php */
 			__( 'A %1$s file was found one level above your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
@@ -104,7 +104,7 @@ if ( ! empty( $_REQUEST['language'] ) ) {
 $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
 
 // React to current step.
-switch($step) {
+switch ( $step ) {
 
 	// Just getting started? Display the language picker.
 	case -1:
@@ -114,7 +114,7 @@ switch($step) {
 			echo '<form id="setup" method="post" action="?step=1">';
 			wp_install_language_form( $languages );
 			echo '</form>';
-			break; // end switch($step), case -1
+			break; // end switch ( $step ), case -1
 		}
 
 	// Notably, there is no longer a step 0 here.
@@ -144,56 +144,56 @@ switch($step) {
 		echo '<form method="post" action="setup-config.php?step=2">';
 
 		// Title.
-		echo '<h2>'.__( 'Database Setup' ).'</h2>';
+		echo '<h2>' . __( 'Database Setup' ) . '</h2>';
 
 		// Description.
-		echo '<p>' .
-			sprintf(
-				__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
-				'https://forums.classicpress.net/c/support'
-				) . '</p>';
+		echo '<p>' .  sprintf(
+			/* translators: link to support forums for more help */
+			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
+			'https://forums.classicpress.net/c/support'
+		) . '</p>';
 
 		// Database settings inputs.
 		echo '<table class="form-table">';
 		echo '	<tr>';
-		echo '		<th scope="row"><label for="dbname">'.__( 'Database Name' ).'</label></th>';
+		echo '		<th scope="row"><label for="dbname">' . __( 'Database Name' ) . '</label></th>';
 		echo '		<td><input name="dbname" id="dbname" type="text" size="25" value="classicpress" /></td>';
 		echo '	</tr>';
 		echo '	<tr>';
-		echo '		<th scope="row"><label for="uname">'.__( 'Database Username' ).'</label></th>';
-		echo '		<td><input name="uname" id="uname" type="text" size="25" value="'. htmlspecialchars( _x( 'username', 'example username' ), ENT_QUOTES ).'" /></td>';
+		echo '		<th scope="row"><label for="uname">' . __( 'Database Username' ) . '</label></th>';
+		echo '		<td><input name="uname" id="uname" type="text" size="25" value="' . htmlspecialchars( _x( 'username', 'example username' ), ENT_QUOTES ) . '" /></td>';
 		echo '	</tr>';
 		echo '	<tr>';
-		echo '		<th scope="row"><label for="pwd">'.__( 'Database Password' ).'</label></th>';
+		echo '		<th scope="row"><label for="pwd">' . __( 'Database Password' ) . '</label></th>';
 		echo '		<td><input name="pwd" id="pwd" type="text" size="25" value="1ejm127$69%" autocomplete="off" /></td>';
 		echo '	</tr>';
 		echo '	<tr>';
-		echo '		<th scope="row"><label for="dbhost">'.__( 'Database Host' ).'</label></th>';
+		echo '		<th scope="row"><label for="dbhost">' . __( 'Database Host' ) . '</label></th>';
 		echo '		<td><input name="dbhost" id="dbhost" type="text" size="25" value="localhost" /></td>';
 		echo '	</tr>';
 		echo '	<tr>';
-		echo '		<th scope="row"><label for="prefix">'.__( 'Table Prefix' ).'</label></th>';
-		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> '.
+		echo '		<th scope="row"><label for="prefix">' . __( 'Table Prefix' ) . '</label></th>';
+		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> ' .
 			sprintf(
-				'<a href="%s" target="_blank" rel="noopener">'.__( 'Learn More' ).'</a>',
+				'<a href="%s" target="_blank" rel="noopener">' . __( 'Learn More' ) . '</a>',
 				esc_url('https://docs.classicpress.net/installing-classicpress/#installation-steps')
-				).
-				'</td>';
+			) .
+			'</td>';
 		echo '	</tr>';
 		echo '</table>';
 
-		// Not sure what this was for; kept from prior version, just in case.
+		// Allow disabling calls to the salts API.
 		if ( isset( $_GET['noapi'] ) ) {
 			echo '<input name="noapi" type="hidden" value="1" />';
 		}
 
 		// Set a hidden lang arg.
-		echo '<input type="hidden" name="language" value="'. esc_attr( $language ) .'" />';
+		echo '<input type="hidden" name="language" value="' . esc_attr( $language ) . '" />';
 		// Add a submit button and close the form.
-		echo '<p class="step"><input name="submit" type="submit" value="'. htmlspecialchars( __( 'Continue' ), ENT_QUOTES ).'" class="button button-primary button-hero cp-button" /></p>';
+		echo '<p class="step"><input name="submit" type="submit" value="' . htmlspecialchars( __( 'Continue' ), ENT_QUOTES ) . '" class="button button-primary button-hero cp-button" /></p>';
 		echo '</form>';
 
-		break; //  end case 1
+		break; // end case 1
 
 	// Display the site setup (title/admin/SEO) screen.
 	case 2:
@@ -236,7 +236,7 @@ switch($step) {
 		// Is database prefix unacceptable? Bail with linkback.
 		if ( empty( $prefix ) ) {
 			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>'. __('Missing Table Prefix') . '</h1>';
+			echo '<h1>' . __( 'Missing Table Prefix' ) . '</h1>';
 			echo '<p>' . __( 'The table prefix field cannot be empty.' ) . '</p>';
 			echo '<p class="step">' . $tryagain_link . '</p>';
 			setup_config_display_footer();
@@ -245,7 +245,7 @@ switch($step) {
 		// Prefix is more than letters, numbers, underscores? Bail with linkback.
 		if ( preg_match( '|[^a-z0-9_]|i', $prefix ) ) {
 			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>' . __('Invalid Table Prefix') . '</h1>';
+			echo '<h1>' . __( 'Invalid Table Prefix' ) . '</h1>';
 			echo '<p>' . __( 'The table prefix field can only contain numbers, letters, and underscores.' ) . '</p>';
 			echo '<p class="step">' . $tryagain_link . '</p>';
 			setup_config_display_footer();
@@ -254,10 +254,10 @@ switch($step) {
 		/**#@+
 		 * @ignore
 		 */
-		define('DB_NAME', $dbname);
-		define('DB_USER', $uname);
-		define('DB_PASSWORD', $pwd);
-		define('DB_HOST', $dbhost);
+		define( 'DB_NAME', $dbname );
+		define( 'DB_USER', $uname );
+		define( 'DB_PASSWORD', $pwd );
+		define( 'DB_HOST', $dbhost );
 		/**#@-*/
 
 		// Kill and resurrect the database object with passed values.
@@ -280,17 +280,13 @@ switch($step) {
 			setup_config_display_footer();
 		}
 
-		// Prevent errors from displaying; also set a flag.
+		// Is the prefix a MySQL value (e.g. a number) by itself? Bail.
 		$errors = $wpdb->hide_errors();
-
-		// Does MySQL parse the prefix unwittingly? Bail with linkback.
 		$wpdb->query( "SELECT $prefix" );
-
-		// Show an error, if any.
 		$wpdb->show_errors( $errors );
 		if ( ! $wpdb->last_error ) {
 			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>' . __('Invalid Table Prefix') . '</h1>';
+			echo '<h1>' . __( 'Invalid Table Prefix' ) . '</h1>';
 			echo '<p>' . __( 'Your table prefix seems to be invalid. Try a different prefix using only letters, numbers, and underscores.' ) . '</p>';
 			echo '<p class="step">' . $tryagain_link . '</p>';
 			setup_config_display_footer();
@@ -322,7 +318,7 @@ switch($step) {
 			} else {
 				$secret_keys = explode( "\n", wp_remote_retrieve_body( $secret_keys ) );
 				foreach ( $secret_keys as $k => $v ) {
-					$secret_keys[$k] = substr( $v, 28, 64 );
+					$secret_keys[ $k ] = substr( $v, 28, 64 );
 				}
 			}
 		}
@@ -368,11 +364,11 @@ switch($step) {
 		unset( $line );
 
 		// Is config file writable? No?!?!
-		if ( ! is_writable(ABSPATH) ) {
+		if ( ! is_writable( ABSPATH ) ) {
 			// Page head.
 			setup_config_display_header( 'cp-installation-error' );
 			// Page heading.
-			echo '<h1>' . __('Config File Permissions Insufficient') . '</h1>';
+			echo '<h1>' . __( 'Config File Permissions Insufficient' ) . '</h1>';
 			// Error description.
 			/* translators: %s: wp-config.php */
 			echo '<p>' . sprintf( __( 'The %s file is not writable.' ), '<code>wp-config.php</code>' ) . '</p>';
@@ -386,15 +382,15 @@ switch($step) {
 			}
 			echo '</textarea>';
 			// Closing note.
-			echo '<p>' . __( 'After you&#8217;ve done that, click &#8220;Continue&#8221;' ) . '</p>';
+			echo '<p>' . __( 'After you&#8217;ve done that, click &#8220;Continue&#8221;.' ) . '</p>';
 			// Link to continue.
-			echo '<p class="step"><a href="'. $install .'" class="button button-primary button-hero cp-button">'. __( 'Continue' ) . '</a>.</p>';
+			echo '<p class="step"><a href="' . $install . '" class="button button-primary button-hero cp-button">' . __( 'Continue' ) . '</a></p>';
 			// Add footer scripts only relevant to this situation.
 			echo '<script>(function(){ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) { var el = document.getElementById("wp-config"); el.focus(); el.select(); } })();</script>';
 			// Close body/html tags; die.
 			setup_config_display_footer();
 
-		} // end ( ! is_writable(ABSPATH) )
+		} // end ( ! is_writable( ABSPATH ) )
 
 		/*
 		 * If this file doesn't exist, then we are using the wp-config-sample.php
@@ -424,10 +420,10 @@ switch($step) {
 		// Kill the script. With fire.
 		exit;
 
-		// For completeness; end switch($step) case 2
+		// For completeness; end switch ( $step ) case 2
 		break;
 
-} // end switch($step)
+} // end switch ( $step )
 
 // Print language chooser script.
 wp_print_scripts( 'language-chooser' );

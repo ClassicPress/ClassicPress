@@ -110,7 +110,7 @@ if ( ! $mysql_compat && ! $php_compat ) {
 // Flag set for insufficient PHP and/or MySQL? Notify user, bail.
 if ( ! $mysql_compat || ! $php_compat ) {
 	display_header( 'cp-installation-error' );
-	echo '<h1>'. __('Insufficient Requirements') . '</h1>';
+	echo '<h1>' . __( 'Insufficient Requirements' ) . '</h1>';
 	echo '<p>' . $compat . '</p>';
 	display_footer();
 }
@@ -130,7 +130,7 @@ if ( ! is_string( $wpdb->base_prefix ) || '' === $wpdb->base_prefix ) {
 // Set error message if DO_NOT_UPGRADE_GLOBAL_TABLES isn't set as it will break install.
 if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
 	display_header( 'cp-installation-error' );
-	echo '<h1>'. __('Configuration Error') . '</h1>';
+	echo '<h1>' . __( 'Configuration Error' ) . '</h1>';
 	echo '<p>' . sprintf(
 		/* translators: %s: DO_NOT_UPGRADE_GLOBAL_TABLES */
 		__( 'The constant %s cannot be defined when installing ClassicPress.' ),
@@ -185,7 +185,7 @@ switch($step) {
 		// Display the page header.
 		display_header();
 		// Add a main title.
-		echo '<h1>'. __( 'Admin Setup') .'</h1>';
+		echo '<h1>' . __( 'Admin Setup' ) .'</h1>';
 		// Add descriptive text.
 		echo '<p>' . __( 'Give your site a great title and fill out your administrator account details. Take note of your username and password – you will need these again in a moment.' ) . '</p>';
 		// Print the setup form.
@@ -205,7 +205,7 @@ switch($step) {
 		// Was there a database error? If so, bail with error message.
 		if ( ! empty( $wpdb->error ) ) {
 			display_header( 'cp-installation-error' );
-			echo '<h1>'. __('Configuration Error') . '</h1>';
+			echo '<h1>' . __( 'Configuration Error' ) . '</h1>';
 			echo '<p>' . $wpdb->error->get_error_message() . '</p>';
 			display_footer();
 		}
@@ -213,12 +213,12 @@ switch($step) {
 		$scripts_to_print[] = 'user-profile';
 		// Print the branded page header.
 		display_header();
-		// Get and remove whitespace from submitted data.
+		// Get and clean submitted data.
 		$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
 		$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
 		$admin_password = isset($_POST['admin_password']) ? wp_unslash( $_POST['admin_password'] ) : '';
 		$admin_password_check = isset($_POST['admin_password2']) ? wp_unslash( $_POST['admin_password2'] ) : '';
-		$admin_email  = isset( $_POST['admin_email'] ) ?trim( wp_unslash( $_POST['admin_email'] ) ) : '';
+		$admin_email  = isset( $_POST['admin_email'] ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
 		$public       = isset( $_POST['blog_public'] ) ? (int) $_POST['blog_public'] : 1;
 		// Initialize an error flag.
 		$error = false;
@@ -264,19 +264,19 @@ switch($step) {
 
 			echo '<p class="step"><a href="' . esc_url( wp_login_url() ) . '" class="button button-primary button-hero cp-button">' . __( 'Log In' ) . '</a></p>' . "\n";
 		}
-		break; // switch($step) end case 2
+		break; // switch( $step ) end case 2
 
-} // switch($step)
+} // switch( $step )
 
 // Add footer scripts; close body/html tags; die.
-display_footer($scripts_to_print);
+display_footer( $scripts_to_print );
 
 /**
  * Display ClassicPress-branded installation header.
  *
  * @since WP-2.5.0
  *
- * @param string $body_classes
+ * @param string|array $body_classes
  */
 function display_header( $body_classes = array() ) {
 
@@ -353,11 +353,11 @@ function display_setup_form( $error = null ) {
 	echo '	</tr>' . "\n";
 	// Admin username.
 	echo '	<tr>' . "\n";
-	echo '		<th scope="row"><label for="user_login">' . __('Admin Username') . '</label></th>' . "\n";
+	echo '		<th scope="row"><label for="user_login">' . __( 'Admin Username' ) . '</label></th>' . "\n";
 	echo '		<td>';
 	// Desired user already exists?
 	if ( $user_table ) {
-		_e('User(s) already exists.');
+		_e( 'User(s) already exists.' );
 		echo '<input name="user_name" type="hidden" value="admin" />';
 	} else { // ...no?
 		echo '<input name="user_name" type="text" id="user_login" size="25" value="' . esc_attr( sanitize_user( $user_name, true ) ) . '" />';
