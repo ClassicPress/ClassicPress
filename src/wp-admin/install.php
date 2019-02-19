@@ -225,9 +225,9 @@ switch($step) {
 		// Validate input; toggle error flag if any problems validating.
 		if ( empty( $user_name ) ) {
 			$error = __( 'Please provide a valid username.' );
-		} elseif ( $user_name != sanitize_user( $user_name, true ) ) {
+		} elseif ( $user_name !== sanitize_user( $user_name, true ) ) {
 			$error = __( 'The username you provided has invalid characters.' );
-		} elseif ( $admin_password != $admin_password_check ) {
+		} elseif ( $admin_password !== $admin_password_check ) {
 			$error = __( 'Your passwords do not match. Please try again.' );
 		} elseif ( empty( $admin_email ) ) {
 			$error = __( 'You must provide an email address.' );
