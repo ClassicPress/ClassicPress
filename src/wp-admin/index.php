@@ -130,6 +130,4 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 </div><!-- wrap -->
 
 <?php
-wp_print_community_events_templates();
-
 require( ABSPATH . 'wp-admin/admin-footer.php' );
