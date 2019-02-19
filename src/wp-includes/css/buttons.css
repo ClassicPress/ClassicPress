@@ -407,6 +407,20 @@ TABLE OF CONTENTS:
 		-1px 0 1px #034b59;
 }
 
+.wp-core-ui .button-primary.cp-button[disabled],
+.wp-core-ui .button-primary.cp-button:disabled,
+.wp-core-ui .button-primary-disabled.cp-button,
+.wp-core-ui .button-primary.disabled.cp-button {
+	background: #057f99 !important;
+	border-color: #034b59 !important;
+	text-shadow: 0 -1px 1px #034b59,
+		1px 0 1px #034b59,
+		0 1px 1px #034b59,
+		-1px 0 1px #034b59 !important;
+	color: rgba(255, 255, 255, 0.9) !important;
+	opacity: 0.7;
+}
+
 .wp-core-ui .button.button-primary.button-hero.cp-button {
 	box-shadow: 0 2px 0 #034b59;
 	font-weight: bold;
