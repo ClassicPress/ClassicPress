@@ -1725,7 +1725,7 @@
 			$filesystemForm      = $( '#request-filesystem-credentials-form' ),
 			$filesystemModal     = $( '#request-filesystem-credentials-dialog' ),
 			$pluginSearch        = $( '.plugins-php .wp-filter-search' ),
-			$pluginInstallSearch = $( '.plugin-install-php .search-plugins input.submit' );
+			$pluginInstallSearch = $( '.plugin-install-php .wp-filter-search' );
 
 		settings = _.extend( settings, window._wpUpdatesItemCounts || {} );
 
@@ -2190,12 +2190,12 @@
 		 *
 		 * @since WP-4.6.0
 		 */
-		$pluginInstallSearch.on( 'click', _.debounce( function( event, eventtype ) {
+		$pluginInstallSearch.on( 'keyup input', _.debounce( function( event, eventtype ) {
 			var $searchTab = $( '.plugin-install-search' ), data, searchLocation;
 
 			data = {
 				_ajax_nonce: wp.updates.ajaxNonce,
-				s:           $( '.plugin-install-php .wp-filter-search' ).val(),
+				s:           event.target.value,
 				tab:         'search',
 				type:        $( '#typeselector' ).val(),
 				pagenow:     pagenow
@@ -2211,7 +2211,6 @@
 				return;
 			} else {
 				$pluginFilter.empty();
-				$( '.plugin-categories-filter-holder').remove();
 				wp.updates.searchTerm = data.s;
 			}
 

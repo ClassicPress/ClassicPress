@@ -222,12 +222,7 @@ jQuery( document ).ready( function( $ ) {
 	$( '.plugin-categories-filter a' ).click( function( event ) {
 		event.preventDefault();
 		var category = $(this).attr( 'data-plugin-tag' );
-
-		if ( ! category ) {
-			return;
-		}
 		$( '#typeselector' ).val( 'tag' );
-		$( '.wp-filter-search' ).val( category );
-		$( '.search-plugins input.submit' ).trigger( 'click' );
+		$( '.plugin-install-php .wp-filter-search' ).val( category );
 	});
 });

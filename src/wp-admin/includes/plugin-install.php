@@ -236,7 +236,7 @@ function install_popular_tags( $args = array() ) {
  */
 function install_dashboard() {
 	?>
-	<p><?php printf( __( 'Plugins extend and expand the functionality of ClassicPress. You may automatically install plugins from the <a href="%1$s">ClassicPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page.' ), __( 'https://wordpress.org/plugins/' ) ); ?></p>
+	<p><?php printf( __( 'Plugins extend and expand the functionality of ClassicPress. You may automatically install plugins from the <a href="%1$s">WordPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page.' ), __( 'https://wordpress.org/plugins/' ) ); ?></p>
 
 	<?php display_plugins_table(); ?>
 
@@ -288,7 +288,6 @@ function install_search_form( $deprecated = true ) {
 			<option value="author"<?php selected( 'author', $type ); ?>><?php _e( 'Author' ); ?></option>
 			<option value="tag"<?php selected( 'tag', $type ); ?>><?php _ex( 'Tag', 'Plugin Installer' ); ?></option>
 		</select>
-		<input type="submit" class="button submit" value="<?php _e( 'Search' ); ?>">
 		<label><span class="screen-reader-text"><?php _e( 'Search Plugins' ); ?></span>
 			<input type="search" name="s" value="<?php echo esc_attr( $term ) ?>" class="wp-filter-search" placeholder="<?php esc_attr_e( 'Search plugins...' ); ?>" />
 		</label>
@@ -345,7 +344,7 @@ function install_plugins_favorites_form() {
 function display_plugins_categories_list() {
 	?>
 	<div class="plugin-categories-filter-holder">
-		<h3><?php _e( 'Browse Categories' ) ?></h3>
+		<h2><?php _e( 'Browse Plugin Categories' ) ?></h3>
 		<ul class="plugin-categories-filter">
 			<li><a href="#" data-plugin-tag="form"><?php _e( 'Forms' ) ?></a></li>
 			<li><a href="#" data-plugin-tag="ecommerce"><?php _e( 'eCommerce' ) ?></a></li>
@@ -362,7 +361,6 @@ function display_plugins_categories_list() {
 			<li><a href="#"><?php _e( 'Interface Elements' ) ?></a></li>
 			<li><a href="#"><?php _e( 'Miscellaneous' ) ?></a></li>
 		</ul>
-		<h3><?php _e( 'Popular Plugins' ) ?></h3>
 	</div>
 	<?php
 }
