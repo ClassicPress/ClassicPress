@@ -298,6 +298,15 @@
 
 /* Dashboard ClassicPress News */
 
+#dashboard_primary .classicpress-news-inline-notice {
+	border-bottom: 1px solid #eee;
+	border-left: 4px solid #00a0d2;
+	margin: 0 0 8px 0;
+	padding: 8px 12px;
+	background-color: #fafafa;
+	color: #72777c;
+}
+
 #dashboard_primary .inside {
 	margin: 0;
 	padding: 0;

@@ -1082,6 +1082,13 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
  */
 function wp_dashboard_events_news() {
 	?>
+	<div class="classicpress-news-inline-notice">
+		<?php printf(
+			/* translators: link to ClassicPress blog */
+			__( 'You can always find the latest ClassicPress news on our <a href="%s">official&nbsp;blog</a>.' ),
+			'https://www.classicpress.net/blog/'
+		); ?>
+	</div>
 	<div class="wordpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
 	</div>
