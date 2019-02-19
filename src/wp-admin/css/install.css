@@ -100,14 +100,14 @@ label {
 	font-family: monospace;
 	padding:3px 5px;
 }
-.cp-installation a:link,
-.cp-installation a:visited {
+.cp-installation a:not(.button):link,
+.cp-installation a:not(.button):visited {
 	color: #057f99;
 }
-.cp-installation a:active {
+.cp-installation a:not(.button):active {
 	color: #034a59;
 }
-.cp-installation a:hover {
+.cp-installation a:not(.button):hover {
 	color: #006b81;
 }
 
