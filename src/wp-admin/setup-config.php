@@ -26,7 +26,7 @@ define('WP_SETUP_CONFIG', true);
  *
  * Set this to error_reporting( -1 ) for debugging
  */
-error_reporting(0);
+error_reporting( 0 );
 
 // Everything relies on ABSPATH; make sure it's defined.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -295,7 +295,7 @@ switch ( $step ) {
 		// Generate keys and salts using secure CSPRNG; fallback to API if enabled; further fallback to original wp_generate_password().
 		try {
 			$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_ []{}<>~`+=,.;:/?|';
-			$max = strlen($chars) - 1;
+			$max = strlen( $chars ) - 1;
 			for ( $i = 0; $i < 8; $i++ ) {
 				$key = '';
 				for ( $j = 0; $j < 64; $j++ ) {
@@ -358,7 +358,7 @@ switch ( $step ) {
 				case 'SECURE_AUTH_SALT' :
 				case 'LOGGED_IN_SALT'   :
 				case 'NONCE_SALT'       :
-					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . $secret_keys[$key++] . "');\r\n";
+					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . $secret_keys[ $key++ ] . "');\r\n";
 					break;
 			}
 		}
@@ -416,7 +416,7 @@ switch ( $step ) {
 		chmod( $path_to_wp_config, 0666 );
 
 		// Redirect to success screen.
-		wp_redirect($install);
+		wp_redirect( $install );
 
 		// Kill the script. With fire.
 		exit;

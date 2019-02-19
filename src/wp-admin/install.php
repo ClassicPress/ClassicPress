@@ -447,7 +447,7 @@ function display_footer( $scripts_to_print = array( ) ) {
 	if ( ! wp_is_mobile() ) {
 		echo '<script type="text/javascript">var t = document.getElementById("weblog_title"); if (t){ t.focus(); }</script>' . "\n";
 	}
-	wp_print_scripts( (array)$scripts_to_print );
+	wp_print_scripts( (array) $scripts_to_print );
 	echo '<script type="text/javascript">jQuery( function( $ ) { $( ".hide-if-no-js" ).removeClass( "hide-if-no-js" ); } ); </script>' . "\n";
 	echo "\n" . '</body>' . "\n";
 	echo '</html>';
