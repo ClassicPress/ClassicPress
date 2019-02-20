@@ -243,7 +243,7 @@ function update_nag() {
 			__( '<a href="%1$s">ClassicPress %2$s</a> is available! <a href="%3$s" aria-label="%4$s">Please update now</a>.' ),
 			sprintf(
 				/* translators: %s: ClassicPress version */
-				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
+				esc_url( __( 'https://www.classicpress.net/version/%s' ) ),
 				$cur->current
 			),
 			$cur->current,
@@ -256,7 +256,7 @@ function update_nag() {
 			__( '<a href="%1$s">ClassicPress %2$s</a> is available! Please notify the site administrator.' ),
 			sprintf(
 				/* translators: %s: ClassicPress version */
-				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
+				esc_url( __( 'https://www.classicpress.net/version/%s' ) ),
 				$cur->current
 			),
 			$cur->current
