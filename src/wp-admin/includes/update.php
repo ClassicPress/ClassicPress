@@ -79,9 +79,6 @@ function find_core_auto_update() {
 	$auto_update = false;
 	$upgrader = new WP_Automatic_Updater;
 	foreach ( $updates->updates as $update ) {
-		if ( 'autoupdate' != $update->response )
-			continue;
-
 		if ( ! $upgrader->should_update( 'core', $update, ABSPATH ) )
 			continue;
 
