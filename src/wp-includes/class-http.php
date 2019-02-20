@@ -173,14 +173,9 @@ class WP_Http {
 			 *                        Default '1.0'.
 			 */
 			'httpversion' => apply_filters( 'http_request_version', '1.0' ),
-			/**
-			 * Filters the user agent value sent with an HTTP request.
-			 *
-			 * @since WP-2.7.0
-			 *
-			 * @param string $user_agent ClassicPress user agent string.
-			 */
-			'user-agent' => apply_filters( 'http_headers_useragent', 'ClassicPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ) ),
+
+			'user-agent' => classicpress_user_agent(),
+
 			/**
 			 * Filters whether to pass URLs through wp_http_validate_url() in an HTTP request.
 			 *

@@ -115,7 +115,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		$about_url = false;
 	}
 
-	$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
+	$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' );
 	$wp_logo_menu_args = array(
 		'id'    => 'wp-logo',
 		'title' => (
@@ -505,7 +505,7 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 	foreach ( (array) $wp_admin_bar->user->blogs as $blog ) {
 		switch_to_blog( $blog->userblog_id );
 
-		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-style.svg' );
+		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' );
 
 		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" alt="" />';
 

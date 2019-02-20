@@ -2670,14 +2670,14 @@ function pingback( $content, $post_id ) {
 			 *
 			 * @since WP-2.9.0
 			 *
-			 * @param string $concat_useragent    The user agent concatenated with ' -- ClassicPress/'
-			 *                                    and the ClassicPress version.
+			 * @param string $concat_useragent    The user agent concatenated with ' -- WordPress/'
+			 *                                    and the equivalent WordPress version.
 			 * @param string $useragent           The useragent.
 			 * @param string $pingback_server_url The server URL being linked to.
 			 * @param string $pagelinkedto        URL of page linked to.
 			 * @param string $pagelinkedfrom      URL of page linked from.
 			 */
-			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ClassicPress/' . get_bloginfo( 'version' ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
+			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ' . classicpress_user_agent( false ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
 			// when set to true, this outputs debug messages by itself
 			$client->debug = false;
 
@@ -2756,7 +2756,7 @@ function weblog_ping($server = '', $path = '') {
 	// using a timeout of 3 seconds should be enough to cover slow servers
 	$client = new WP_HTTP_IXR_Client($server, ((!strlen(trim($path)) || ('/' == $path)) ? false : $path));
 	$client->timeout = 3;
-	$client->useragent .= ' -- ClassicPress/' . get_bloginfo( 'version' );
+	$client->useragent .= ' -- ' . classicpress_user_agent( false );
 
 	// when set to true, this outputs debug messages by itself
 	$client->debug = false;
@@ -2977,7 +2977,7 @@ function _close_comments_for_old_post( $open, $post_id ) {
  */
 function wp_handle_comment_submission( $comment_data ) {
 
-	$comment_post_ID = $comment_parent = 0;
+	$comment_post_ID = $comment_parent = $user_ID = 0;
 	$comment_author = $comment_author_email = $comment_author_url = $comment_content = null;
 
 	if ( isset( $comment_data['comment_post_ID'] ) ) {

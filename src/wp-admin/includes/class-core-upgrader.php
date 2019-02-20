@@ -282,111 +282,335 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Determines if this ClassicPress Core version should update to an offered version or not.
+	 * Determines if the current ClassicPress Core version should update to an
+	 * offered version or not.
 	 *
 	 * @since WP-3.7.0
-	 *
-	 * @static
 	 *
 	 * @param string $offered_ver The offered version, of the format x.y.z.
 	 * @return bool True if we should update to the offered version, otherwise false.
 	 */
 	public static function should_update_to_version( $offered_ver ) {
-		include( ABSPATH . WPINC . '/version.php' ); // $wp_version; // x.y.z
+		include( ABSPATH . WPINC . '/version.php' ); // $cp_version; // x.y.z
 
-		$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $wp_version  ), 0, 2 ) ); // x.y
-		$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) ); // x.y
-		$current_is_development_version = (bool) strpos( $wp_version, '-' );
+		return self::_auto_update_enabled_for_versions(
+			$cp_version,
+			$offered_ver,
+			defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : null
+		);
+	}
 
-		// Defaults:
-		$upgrade_dev   = true;
-		$upgrade_minor = true;
-		$upgrade_major = false;
+	/**
+	 * Determines if an automatic update should be applied for a given set of
+	 * versions and auto-update constants.
+	 *
+	 * @note This method is intended for internal use only!  It is only public
+	 * so that it can be unit-tested.
+	 *
+	 * @since 1.0.0-rc1
+	 *
+	 * @param string $ver_current      The current version of ClassicPress.
+	 * @param string $ver_offered      The proposed version of ClassicPress.
+	 * @param mixed  $auto_update_core The automatic update settings (the value
+	 *                                 of the WP_AUTO_UPDATE_CORE constant).
+	 * @return bool Whether to apply the proposed update automatically.
+	 */
+	public static function _auto_update_enabled_for_versions(
+		$ver_current,
+		$ver_offered,
+		$auto_update_core
+	) {
+		// Parse the version strings.
+		$current = self::parse_version_string( $ver_current );
+		$offered = self::parse_version_string( $ver_offered );
 
-		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
-		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
-			if ( false === WP_AUTO_UPDATE_CORE ) {
-				// Defaults to turned off, unless a filter allows it
-				$upgrade_dev = $upgrade_minor = $upgrade_major = false;
-			} elseif ( true === WP_AUTO_UPDATE_CORE ) {
-				// ALL updates for core
-				$upgrade_dev = $upgrade_minor = $upgrade_major = true;
-			} elseif ( 'minor' === WP_AUTO_UPDATE_CORE ) {
-				// Only minor updates for core
-				$upgrade_dev = $upgrade_major = false;
-				$upgrade_minor = true;
-			}
+		// Ensure they are valid.
+		if ( ! $current || ! $offered ) {
+			return false;
 		}
-
-		// 1: If we're already on that version, not much point in updating?
-		if ( $offered_ver == $wp_version )
-			return false;
-
-		// 2: If we're running a newer version, that's a nope
-		if ( version_compare( $wp_version, $offered_ver, '>' ) )
-			return false;
 
 		$failure_data = get_site_option( 'auto_core_update_failed' );
 		if ( $failure_data ) {
 			// If this was a critical update failure, cannot update.
-			if ( ! empty( $failure_data['critical'] ) )
+			if ( ! empty( $failure_data['critical'] ) ) {
 				return false;
+			}
 
-			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
-			if ( $wp_version == $failure_data['current'] && false !== strpos( $offered_ver, '.1.next.minor' ) )
+			// Don't claim we can update on update-core.php if we have a
+			// non-critical failure logged.
+			if (
+				$ver_current == $failure_data['current'] &&
+				false !== strpos( $ver_offered, '.1.next.minor' )
+			) {
 				return false;
+			}
 
-			// Cannot update if we're retrying the same A to B update that caused a non-critical failure.
-			// Some non-critical failures do allow retries, like download_failed.
-			// WP-3.7.1 => WP-3.7.2 resulted in files_not_writable, if we are still on WP-3.7.1 and still trying to update to WP-3.7.2.
-			if ( empty( $failure_data['retry'] ) && $wp_version == $failure_data['current'] && $offered_ver == $failure_data['attempted'] )
+			// Cannot update if we're retrying the same A to B update that
+			// caused a non-critical failure.  Some non-critical failures do
+			// allow retries, like download_failed.  WP-3.7.1 => WP-3.7.2
+			// resulted in files_not_writable, if we are still on WP-3.7.1 and
+			// still trying to update to WP-3.7.2.
+			if (
+				empty( $failure_data['retry'] ) &&
+				$ver_current == $failure_data['current'] &&
+				$ver_offered == $failure_data['attempted']
+			) {
 				return false;
+			}
 		}
 
-		// 3: 3.7-alpha-25000 -> 3.7-alpha-25678 -> 3.7-beta1 -> 3.7-beta2
-		if ( $current_is_development_version ) {
+		// That concludes all the sanity checks, now we can do some work.
 
+		// Default values for upgrade control flags.
+		$upgrade_minor   = true;
+		$upgrade_patch   = true;
+		$upgrade_dev     = true;
+		$upgrade_nightly = true;
+
+		// Process the value from the WP_AUTO_UPDATE_CORE constant.
+		if ( ! is_null( $auto_update_core ) ) {
+			if ( false === $auto_update_core ) {
+				// Disable automatic updates, unless a later filter allows it.
+				$upgrade_minor   = false;
+				$upgrade_patch   = false;
+				$upgrade_dev     = false;
+				$upgrade_nightly = false;
+			} elseif ( 'patch' === $auto_update_core ) {
+				// Only allow patch, nightly, or dev (pre-release) version
+				// updates.  If you're running nightly builds, this is probably
+				// not the setting you want, because you will still get new
+				// minor versions.
+				$upgrade_minor = false;
+			}
+			// Else: Default setting (true, 'minor', or any other unrecognized
+			// value). Automatically update to new minor, patch, development
+			// (pre-release), or nightly versions.
+		}
+
+		// 1.0.0-beta2+nightly.20181019 -> 1.0.0-beta2+nightly.20181020
+		// We only need to confirm that the major version is the same and check
+		// the nightly build date.
+		if (
+			$current['nightly'] &&
+			$offered['nightly'] &&
+			$current['nightly'] < $offered['nightly']
+		) {
 			/**
-			 * Filters whether to enable automatic core updates for development versions.
+			 * Filters whether to enable automatic core updates for nightly
+			 * releases.
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_nightly Whether to enable automatic updates
+			 *                              for nightly releases.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			$upgrade_nightly = apply_filters(
+				'allow_nightly_auto_core_updates',
+				$upgrade_nightly,
+				$current,
+				$offered
+			);
+			// If we're running the same major version as the proposed nightly,
+			// then the above filter is all we need and we return its result.
+			//
+			// If the upgrade was denied via the WP_AUTO_UPDATE_CORE constant
+			// or via this filter, return false.
+			//
+			// Otherwise, fall through to the 'allow_major_auto_core_updates'
+			// filter below, because an auto-update to a nightly from a
+			// different major version should be specifically approved.
+			if ( $current['major'] === $offered['major'] ) {
+				return $upgrade_nightly;
+			} elseif ( ! $upgrade_nightly ) {
+				return false;
+			}
+
+		} elseif ( $current['nightly'] || $offered['nightly'] ) {
+			// Never auto-update from a nightly build to a non-nightly build,
+			// or vice versa.
+			return false;
+
+		} elseif ( ! $current['prerelease'] && $offered['prerelease'] ) {
+			// If not a nightly build, never auto-update from a release to a
+			// pre-release version.
+			return false;
+
+		} elseif ( $offered['prerelease'] && (
+			$current['major'] !== $offered['major'] ||
+			$current['minor'] !== $offered['minor'] ||
+			$current['patch'] !== $offered['patch']
+		) ) {
+			// If not a nightly build, never auto-update to a pre-release of a
+			// different semver version.
+			return false;
+		}
+
+		// Major version updates (1.2.3 -> 2.0.0, 1.2.3 -> 2.3.4).
+		if ( $current['major'] > $offered['major'] ) {
+			return false;
+		} elseif ( $current['major'] < $offered['major'] ) {
+			/**
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver major release.
+			 *
+			 * @note Be careful with this filter! New major versions of
+			 * ClassicPress may contain breaking changes.
+			 * @see https://semver.org/
 			 *
 			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
-			 * @param bool $upgrade_dev Whether to enable automatic updates for
-			 *                          development versions.
+			 * @param bool $upgrade_major Whether to enable automatic updates
+			 *                            to new major versions.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
 			 */
-			if ( ! apply_filters( 'allow_dev_auto_core_updates', $upgrade_dev ) )
-				return false;
-			// Else fall through to minor + major branches below.
+			return apply_filters(
+				'allow_major_auto_core_updates',
+				false,
+				$current,
+				$offered
+			);
 		}
 
-		// 4: Minor In-branch updates (3.7.0 -> 3.7.1 -> 3.7.2 -> 3.7.4)
-		if ( $current_branch == $new_branch ) {
-
+		// Minor updates (1.1.3 -> 1.2.0).
+		if ( $current['minor'] > $offered['minor'] ) {
+			return false;
+		} elseif ( $current['minor'] < $offered['minor'] ) {
 			/**
-			 * Filters whether to enable minor automatic core updates.
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver minor release.
 			 *
 			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
-			 * @param bool $upgrade_minor Whether to enable minor automatic core updates.
+			 * @param bool $upgrade_minor Whether to enable automatic updates
+			 *                            to a newer semver minor release.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
 			 */
-			return apply_filters( 'allow_minor_auto_core_updates', $upgrade_minor );
+			return apply_filters(
+				'allow_minor_auto_core_updates',
+				$upgrade_minor,
+				$current,
+				$offered
+			);
 		}
 
-		// 5: Major version updates (3.7.0 -> 3.8.0 -> 3.9.1)
-		if ( version_compare( $new_branch, $current_branch, '>' ) ) {
-
+		// Patch updates (1.0.0 -> 1.0.1 -> 1.0.2).
+		if ( $current['patch'] < $offered['patch'] ) {
 			/**
-			 * Filters whether to enable major automatic core updates.
+			 * Filters whether to enable automatic core updates to a newer
+			 * semver patch release.
+			 *
+			 * @since 1.0.0-rc1
+			 *
+			 * @param bool $upgrade_patch Whether to enable automatic updates
+			 *                            to a newer semver patch release.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
+			 */
+			return apply_filters(
+				'allow_patch_auto_core_updates',
+				$upgrade_patch,
+				$current,
+				$offered
+			);
+		}
+
+		// Prerelease versions (same semver version, several different cases).
+		if (
+			// Update from pre-release to release of the same version.
+			( $current['prerelease'] && ! $offered['prerelease'] ) ||
+			// Update from pre-release to a later pre-release of the same version.
+			( $current['prerelease'] < $offered['prerelease'] )
+		) {
+			/**
+			 * Filters whether to enable automatic core updates from prerelease
+			 * versions.
+			 *
+			 * This filter is called if the current version is a pre-release,
+			 * and the offered version is a newer pre-release of the same
+			 * semver version, or the final release of the same semver version.
 			 *
 			 * @since WP-3.7.0
+			 * @since 1.0.0-rc1 Version numbering scheme changed from WordPress
+			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
-			 * @param bool $upgrade_major Whether to enable major automatic core updates.
+			 * @param bool $upgrade_dev Whether to enable automatic updates
+			 *                          from prereleases.
+			 * @param array $current The array of parts of the current version.
+			 * @param array $offered The array of parts of the offered version.
 			 */
-			return apply_filters( 'allow_major_auto_core_updates', $upgrade_major );
+			return apply_filters(
+				'allow_dev_auto_core_updates',
+				$upgrade_dev,
+				$current,
+				$offered
+			);
 		}
 
-		// If we're not sure, we don't want it
+		// If we're still not sure, we don't want it.
 		return false;
+	}
+
+	/**
+	 * Parses a version string into an array of parts with named keys.
+	 *
+	 * For valid version strings, returns an array with keys (`major`, `minor`,
+	 * `patch`, `prerelease`, and `nightly`).  The first three are always
+	 * present and always an integer, and the rest are always present but may
+	 * be `false`.
+	 *
+	 * If the version string is not of a format recognized by the automatic
+	 * update system, then this function returns `null`.
+	 *
+	 * @param string $version The version string.
+	 * @return array|null An array of version parts, or `null`.
+	 */
+	public static function parse_version_string( $version ) {
+		$ok = preg_match(
+			// Start of version string.
+			'#^' .
+			// First 3 parts must be numbers.
+			'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)' .
+			// Optional pre-release version (-alpha1, -beta2, -rc1).
+			'(-(?P<prerelease>[[:alnum:]]+))?' .
+			// Optional migration or nightly build (+nightly.20190208 or
+			// +migration.20181220).  Migration builds are treated the same as
+			// the corresponding release build.
+			'(\+(?P<build_type>migration|nightly)\.(?P<build_number>\d{8}))?' .
+			// End of version string.
+			'$#',
+			$version,
+			$matches
+		);
+
+		if ( ! $ok ) {
+			return null;
+		}
+
+		if ( empty( $matches['prerelease'] ) ) {
+			$matches['prerelease'] = false;
+		}
+
+		if ( isset( $matches['build_type'] ) && $matches['build_type'] === 'nightly' ) {
+			$nightly_build = $matches['build_number'];
+		} else {
+			$nightly_build = false;
+		}
+
+		return [
+			'major'      => intval( $matches['major'] ),
+			'minor'      => intval( $matches['minor'] ),
+			'patch'      => intval( $matches['patch'] ),
+			'prerelease' => $matches['prerelease'],
+			'nightly'    => $nightly_build,
+		];
 	}
 
 	/**

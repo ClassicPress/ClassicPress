@@ -79,9 +79,6 @@ function find_core_auto_update() {
 	$auto_update = false;
 	$upgrader = new WP_Automatic_Updater;
 	foreach ( $updates->updates as $update ) {
-		if ( 'autoupdate' != $update->response )
-			continue;
-
 		if ( ! $upgrader->should_update( 'core', $update, ABSPATH ) )
 			continue;
 
@@ -243,7 +240,7 @@ function update_nag() {
 			__( '<a href="%1$s">ClassicPress %2$s</a> is available! <a href="%3$s" aria-label="%4$s">Please update now</a>.' ),
 			sprintf(
 				/* translators: %s: ClassicPress version */
-				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
+				esc_url( __( 'https://www.classicpress.net/version/%s' ) ),
 				$cur->current
 			),
 			$cur->current,
@@ -256,7 +253,7 @@ function update_nag() {
 			__( '<a href="%1$s">ClassicPress %2$s</a> is available! Please notify the site administrator.' ),
 			sprintf(
 				/* translators: %s: ClassicPress version */
-				esc_url( __( 'https://codex.wordpress.org/Version_%s' ) ),
+				esc_url( __( 'https://www.classicpress.net/version/%s' ) ),
 				$cur->current
 			),
 			$cur->current
