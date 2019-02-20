@@ -1337,6 +1337,24 @@ th.action-links {
 	}
 }
 
+/* Plugin Search Categories filter */
+.plugin-categories-filter {
+	display: inline-block;
+}
+.plugin-categories-filter li {
+	background-color: #FFF;
+	border: 1px solid #DDD;
+	float: left;
+	padding: 20px;
+	width: 21.5%;
+}
+.plugin-categories-filter li {
+	margin-right: 5px;
+}
+.plugin-categories-filter li a {
+	font-size: 1.5em;
+}
+
 /*------------------------------------------------------------------------------
   4.0 - Notifications
 ------------------------------------------------------------------------------*/

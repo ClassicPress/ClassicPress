@@ -59,7 +59,7 @@
  *     @type string  $tag               Tag to filter plugins. Default empty.
  *     @type string  $author            Username of an plugin author to filter plugins. Default empty.
  *     @type string  $user              Username to query for their favorites. Default empty.
- *     @type string  $browse            Browse view: 'popular', 'new', 'beta', 'recommended'.
+ *     @type string  $browse            Browse view: 'popular'.
  *     @type string  $locale            Locale to provide context-sensitive results. Default is the value
  *                                      of get_locale().
  *     @type string  $installed_plugins Installed plugins to provide context-sensitive results.
@@ -236,7 +236,7 @@ function install_popular_tags( $args = array() ) {
  */
 function install_dashboard() {
 	?>
-	<p><?php printf( __( 'Plugins extend and expand the functionality of ClassicPress. You may automatically install plugins from the <a href="%1$s">ClassicPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page.' ), __( 'https://wordpress.org/plugins/' ) ); ?></p>
+	<p><?php printf( __( 'Plugins extend and expand the functionality of ClassicPress. You may automatically install plugins from the <a href="%1$s">WordPress Plugin Directory</a> or upload a plugin in .zip format by clicking the button at the top of this page.' ), __( 'https://wordpress.org/plugins/' ) ); ?></p>
 
 	<?php display_plugins_table(); ?>
 
@@ -333,6 +333,47 @@ function install_plugins_favorites_form() {
 		</p>
 	</form>
 	<?php
+}
+
+/**
+ * Display plugin content based on plugin category (using tags).
+ *
+ * @since 1.0.0-rc1
+ *
+ */
+function display_plugins_categories_list() {
+	$categories = array(
+		'form'         => __( 'Forms' ),
+		'widget'       => __( 'Widgets' ),
+		'admin'        => __( 'Admin Utilities' ),
+		'page-builder' => __( 'Page Builders' ),
+		'e-commerce'   => __( 'eCommerce' ),
+		'media'        => __( 'Media' ),
+		'seo'          => __( 'SEO' ),
+		'ads'          => __( 'Advertising' ),
+		'social'       => __( 'Social Networking' ),
+		'membership'   => __( 'Membership' ),
+		'newsletter'   => __( 'Newsletters' ),
+		'forum'        => __( 'Forums' ),
+	);
+	?>
+	<div class="plugin-categories-filter-container">
+		<p><?php _e( 'These are some of the most common types of plugins. Not all categories are represented here.' ); ?></p>
+		<ul class="plugin-categories-filter">
+		<?php
+		foreach ( $categories as $tag => $label ) {
+			$tag   = esc_attr( $tag );
+			$label = esc_html( $label );
+			$href  = esc_attr( self_admin_url(
+				'plugin-install.php?tab=search&type=tag&s=' . urlencode( $tag )
+			) );
+			echo "\t\t\t<li><a href=\"$href\" data-plugin-tag=\"$tag\">$label</a></li>\n";
+		}
+		?>
+		</ul>
+	</div>
+	<?php
+	display_plugins_table();
 }
 
 /**
