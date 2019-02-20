@@ -80,6 +80,37 @@ label {
 	cursor: pointer;
 }
 
+/* for installation */
+.cp-installation .form-table tbody tr th,
+.cp-installation .form-table tbody tr td {
+	vertical-align: top;
+}
+.cp-installation p {
+	font-size: 18px !important;
+	line-height: 24px;
+	margin: 25px 0 20px;
+}
+.cp-installation p.description {
+	line-height: normal;
+	font-size: 12px !important;
+	font-style: italic;
+}
+.cp-installation code {
+	background: #f2f2f2;
+	font-family: monospace;
+	padding:3px 5px;
+}
+.cp-installation a:not(.button):link,
+.cp-installation a:not(.button):visited {
+	color: #057f99;
+}
+.cp-installation a:not(.button):active {
+	color: #034a59;
+}
+.cp-installation a:not(.button):hover {
+	color: #006b81;
+}
+
 #logo {
 	margin: 6px 0 34px 0;
 	padding: 0 0 7px 0;
@@ -89,18 +120,19 @@ label {
 #logo a {
 	background-image: url(../images/classicpress-logo-wordmark-gradient-on-transparent-600x115.png);
 	background-image: none, url(../images/classicpress-logo-wordmark-gradient-on-transparent.svg);
-	background-size: 300px;
 	background-position: center top;
 	background-repeat: no-repeat;
-	color: #444; /* same as login.css */
+	background-size: 100%;
+	width: 300px;
 	height: 60px;
+	max-width: 100%;
+	color: #444; /* same as login.css */
 	font-size: 20px;
 	font-weight: 400;
 	line-height: 1.3em;
 	margin: -130px auto 25px;
 	padding: 0;
 	text-decoration: none;
-	width: 300px;
 	text-indent: -9999px;
 	outline: none;
 	overflow: hidden;
