@@ -52,8 +52,8 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( 'dashboard_quick_press', $quick_draft_title, 'wp_dashboard_quick_press' );
 	}
 
-	// ClassicPress Events and News
-	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress Events and News' ), 'wp_dashboard_events_news' );
+	// ClassicPress News
+	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
 	// ClassicPress Petitions
 	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
@@ -1075,198 +1075,23 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 
 
 /**
- * Renders the Events and News dashboard widget.
+ * Renders the ClassicPress News dashboard widget.
  *
  * @since WP-4.8.0
+ * @since 1.0.0-rc1 Events section removed.
  */
 function wp_dashboard_events_news() {
-	wp_print_community_events_markup();
-
 	?>
-
+	<div class="classicpress-news-inline-notice">
+		<?php printf(
+			/* translators: link to ClassicPress blog */
+			__( 'You can always find the latest ClassicPress news on our <a href="%s">official&nbsp;blog</a>.' ),
+			'https://www.classicpress.net/blog/'
+		); ?>
+	</div>
 	<div class="wordpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
 	</div>
-
-	<p class="community-events-footer">
-		<?php
-			printf(
-				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				'https://make.wordpress.org/community/meetups-landing-page',
-				__( 'Meetups' ),
-				/* translators: accessibility text */
-				__( '(opens in a new window)' )
-			);
-		?>
-
-		|
-
-		<?php
-			printf(
-				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				'https://central.wordcamp.org/schedule/',
-				__( 'WordCamps' ),
-				/* translators: accessibility text */
-				__( '(opens in a new window)' )
-			);
-		?>
-
-		|
-
-		<?php
-			printf(
-				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
-				'https://www.classicpress.net/blog/',
-				__( 'News' ),
-				/* translators: accessibility text */
-				__( '(opens in a new window)' )
-			);
-		?>
-	</p>
-
-	<?php
-}
-
-/**
- * Prints the markup for the Community Events section of the Events and News Dashboard widget.
- *
- * @since WP-4.8.0
- */
-function wp_print_community_events_markup() {
-	?>
-
-	<div class="community-events-errors notice notice-error inline hide-if-js">
-		<p class="hide-if-js">
-			<?php _e( 'This widget requires JavaScript.' ); ?>
-		</p>
-
-		<p class="community-events-error-occurred" aria-hidden="true">
-			<?php _e( 'An error occurred. Please try again.' ); ?>
-		</p>
-
-		<p class="community-events-could-not-locate" aria-hidden="true"></p>
-	</div>
-
-	<div class="community-events-loading hide-if-no-js">
-		<?php _e( 'Loading&hellip;' ); ?>
-	</div>
-
-	<?php
-	/*
-	 * Hide the main element when the page first loads, because the content
-	 * won't be ready until wp.communityEvents.renderEventsTemplate() has run.
-	 */
-	?>
-	<div id="community-events" class="community-events" aria-hidden="true">
-		<div class="activity-block">
-			<p>
-				<span id="community-events-location-message"></span>
-
-				<button class="button-link community-events-toggle-location" aria-label="<?php esc_attr_e( 'Edit city' ); ?>" aria-expanded="false">
-					<span class="dashicons dashicons-edit"></span>
-				</button>
-			</p>
-
-			<form class="community-events-form" aria-hidden="true" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" method="post">
-				<label for="community-events-location">
-					<?php _e( 'City:' ); ?>
-				</label>
-				<?php
-				/* translators: Replace with a city related to your locale.
-				 * Test that it matches the expected location and has upcoming
-				 * events before including it. If no cities related to your
-				 * locale have events, then use a city related to your locale
-				 * that would be recognizable to most users. Use only the city
-				 * name itself, without any region or country. Use the endonym
-				 * (native locale name) instead of the English name if possible.
-				 */
-				?>
-				<input id="community-events-location" class="regular-text" type="text" name="community-events-location" placeholder="<?php esc_attr_e( 'Cincinnati' ); ?>" />
-
-				<?php submit_button( __( 'Submit' ), 'secondary', 'community-events-submit', false ); ?>
-
-				<button class="community-events-cancel button-link" type="button" aria-expanded="false">
-					<?php _e( 'Cancel' ); ?>
-				</button>
-
-				<span class="spinner"></span>
-			</form>
-		</div>
-
-		<ul class="community-events-results activity-block last"></ul>
-	</div>
-
-	<?php
-}
-
-/**
- * Renders the events templates for the Event and News widget.
- *
- * @since WP-4.8.0
- */
-function wp_print_community_events_templates() {
-	?>
-
-	<script id="tmpl-community-events-attend-event-near" type="text/template">
-		<?php printf(
-			/* translators: %s: the name of a city */
-			__( 'Attend an upcoming event near %s.' ),
-			'<strong>{{ data.location.description }}</strong>'
-		); ?>
-	</script>
-
-	<script id="tmpl-community-events-could-not-locate" type="text/template">
-		<?php printf(
-			/* translators: %s is the name of the city we couldn't locate.
-			 * Replace the examples with cities in your locale, but test
-			 * that they match the expected location before including them.
-			 * Use endonyms (native locale names) whenever possible.
-			 */
-			__( 'We couldn&#8217;t locate %s. Please try another nearby city. For example: Kansas City; Springfield; Portland.' ),
-			'<em>{{data.unknownCity}}</em>'
-		); ?>
-	</script>
-
-	<script id="tmpl-community-events-event-list" type="text/template">
-		<# _.each( data.events, function( event ) { #>
-			<li class="event event-{{ event.type }} wp-clearfix">
-				<div class="event-info">
-					<div class="dashicons event-icon" aria-hidden="true"></div>
-					<div class="event-info-inner">
-						<a class="event-title" href="{{ event.url }}">{{ event.title }}</a>
-						<span class="event-city">{{ event.location.location }}</span>
-					</div>
-				</div>
-
-				<div class="event-date-time">
-					<span class="event-date">{{ event.formatted_date }}</span>
-					<# if ( 'meetup' === event.type ) { #>
-						<span class="event-time">{{ event.formatted_time }}</span>
-					<# } #>
-				</div>
-			</li>
-		<# } ) #>
-	</script>
-
-	<script id="tmpl-community-events-no-upcoming-events" type="text/template">
-		<li class="event-none">
-			<# if ( data.location.description ) { #>
-				<?php printf(
-					/* translators: 1: the city the user searched for, 2: meetup organization documentation URL */
-					__( 'There aren&#8217;t any events scheduled near %1$s at the moment. Would you like to <a href="%2$s">organize one</a>?' ),
-					'{{ data.location.description }}',
-					__( 'https://make.wordpress.org/community/handbook/meetup-organizer/welcome/' )
-				); ?>
-
-			<# } else { #>
-				<?php printf(
-					/* translators: %s: meetup organization documentation URL */
-					__( 'There aren&#8217;t any events scheduled near you at the moment. Would you like to <a href="%s">organize one</a>?' ),
-					__( 'https://make.wordpress.org/community/handbook/meetup-organizer/welcome/' )
-				); ?>
-			<# } #>
-		</li>
-	</script>
 	<?php
 }
 
@@ -1529,11 +1354,27 @@ function wp_welcome_panel() {
 		); ?>
 	</p>
 	<p>
-		<?php printf(
+<?php
+	if ( get_locale() === 'en_US' ) {
+		printf(
 			/* translators: link to "About ClassicPress" dashboard page */
-			'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.',
+			__( 'To see how you can help, visit the <a href="%s">About ClassicPress</a> page.' ),
 			esc_url( self_admin_url( 'about.php' ) )
-		); ?>
+		);
+	} else {
+		printf(
+			/* translators: link to learn more about translating ClassicPress */
+			__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
+			'https://www.classicpress.net/translating-classicpress/'
+		);
+		echo '</p><p>';
+		printf(
+			/* translators: link to "About ClassicPress" dashboard page */
+			__( 'For other ways you can help, visit the <a href="%s">About ClassicPress</a> page.' ),
+			esc_url( self_admin_url( 'about.php' ) )
+		);
+	}
+?>
 	</p>
 </div>
 <?php

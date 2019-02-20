@@ -70,7 +70,7 @@ if ( is_blog_admin() && current_user_can( 'edit_posts' ) )
 	$help .= '<p>' . __( "<strong>Quick Draft</strong> &mdash; Allows you to create a new post and save it as a draft. Also displays links to the 5 most recent draft posts you've started." ) . '</p>';
 $help .= '<p>' . sprintf(
 		/* translators: %s: ClassicPress Planet URL */
-		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official <a href="%s">ClassicPress blog</a></a>.' ),
+		__( '<strong>ClassicPress News</strong> &mdash; Latest news from the official <a href="%s">ClassicPress blog</a>.' ),
 		__( 'https://www.classicpress.net/blog/' )
 ) . '</p>';
 if ( current_user_can( 'edit_theme_options' ) )
@@ -130,6 +130,4 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 </div><!-- wrap -->
 
 <?php
-wp_print_community_events_templates();
-
 require( ABSPATH . 'wp-admin/admin-footer.php' );

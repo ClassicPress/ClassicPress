@@ -37,6 +37,11 @@
 	display: none !important;
 }
 
+.about-wrap .about-inline-notice {
+	margin: -12px 0 12px 0;
+	padding: 6px 8px;
+}
+
 .about-wrap hr {
 	border: 0;
 	height: 0;
@@ -57,11 +62,11 @@
 	/* Background: Really old browsers */
 	background: #057f99;
 	/* Background: Old browsers */
-	background-image: url(../images/wordpress-logo-white.svg?ver=20181031);
+	background-image: url(../images/w-logo-white.png?ver=20190218);
 	background-size: 80px 80px;
 	/* Background: Modern browsers */
 	background-image:
-		url(../images/wordpress-logo-white.svg?ver=20181031),
+		url(../images/wordpress-logo-white.svg?ver=20190218),
 		linear-gradient(-135deg, #3ebca6 0%, #057f99 50%, #006b81 100%);
 	background-size: 80px 80px, cover;
 	/* Other rules */
