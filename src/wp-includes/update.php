@@ -144,7 +144,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	$options = array(
 		'timeout' => $doing_cron ? 30 : 3,
-		'user-agent' => 'ClassicPress/' . $cp_version . '; ' . home_url( '/' ),
+		'user-agent' => classicpress_user_agent(),
 		'headers' => array(
 			'wp_install' => $wp_install,
 			'wp_blog' => home_url( '/' )
@@ -334,7 +334,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 			'locale'       => wp_json_encode( $locales ),
 			'all'          => wp_json_encode( true ),
 		),
-		'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' )
+		'user-agent' => classicpress_user_agent(),
 	);
 
 	if ( $extra_stats ) {
@@ -516,7 +516,7 @@ function wp_update_themes( $extra_stats = array() ) {
 			'translations' => wp_json_encode( $translations ),
 			'locale'       => wp_json_encode( $locales ),
 		),
-		'user-agent'	=> 'WordPress/' . $wp_version . '; ' . home_url( '/' )
+		'user-agent' => classicpress_user_agent(),
 	);
 
 	if ( $extra_stats ) {

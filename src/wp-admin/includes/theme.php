@@ -447,7 +447,7 @@ function themes_api( $action, $args = array() ) {
 		$url = 'https://api.wordpress.org/themes/info/1.0/';
 
 		$http_args = array(
-			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
+			'user-agent' => classicpress_user_agent(),
 			'body' => array(
 				'action' => $action,
 				'request' => serialize( $args )

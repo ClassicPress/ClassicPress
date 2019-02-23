@@ -728,3 +728,35 @@ function _wp_translate_php_url_constant_to_key( $constant ) {
 		return false;
 	}
 }
+
+/**
+ * Returns the ClassicPress User-Agent header for outgoing requests.
+ *
+ * In WordPress, this header looks like "WordPress/X.Y.Z; https://siteurl.com".
+ * To ensure compatibility with third-party services that expect requests to
+ * come from WordPress, ClassicPress uses the same pattern, but uses the URL to
+ * indicate that requests come from a ClassicPress site.
+ *
+ * @since 1.0.0-rc1
+ *
+ * @param bool $include_url Whether to append a URL to the header.
+ * @return string The User-Agent header value.
+ */
+function classicpress_user_agent( $include_url = true ) {
+	$ua = 'WordPress/' . get_bloginfo( 'version' );
+	if ( $include_url ) {
+		$ua .= '; https://www.classicpress.net/?wp_compatible=true'
+			. '&ver=' . classicpress_version_short();
+	}
+
+	/**
+	 * Filters the user agent value sent with an HTTP request.
+	 *
+	 * @since WP-2.7.0
+	 * @since 1.0.0-rc1 Added the $include_url parameter.
+	 *
+	 * @param string $user_agent ClassicPress user agent string.
+	 * @param bool $include_url Whether to append a URL to the header.
+	 */
+	return apply_filters( 'http_headers_useragent', $ua, $include_url );
+}

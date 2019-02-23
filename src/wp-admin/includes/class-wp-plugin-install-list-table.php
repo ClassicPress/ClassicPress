@@ -103,13 +103,8 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		if ( 'search' === $tab ) {
 			$tabs['search'] = __( 'Search Results' );
 		}
-		if ( $tab === 'beta' || false !== strpos( get_bloginfo( 'version' ), '-' ) ) {
-			$tabs['beta'] = _x( 'Beta Testing', 'Plugin Installer' );
-		}
-		$tabs['featured']    = _x( 'Featured', 'Plugin Installer' );
-		$tabs['popular']     = _x( 'Popular', 'Plugin Installer' );
-		$tabs['recommended'] = _x( 'Recommended', 'Plugin Installer' );
-		$tabs['favorites']   = _x( 'Favorites', 'Plugin Installer' );
+		$tabs['popular']    = _x( 'Popular', 'Plugin Installer' );
+		$tabs['categories'] = _x( 'Categories', 'Plugin Installer' );
 		if ( current_user_can( 'upload_plugins' ) ) {
 			// No longer a real tab. Here for filter compatibility.
 			// Gets skipped in get_views().
@@ -123,8 +118,9 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		 *
 		 * @since WP-2.7.0
 		 *
-		 * @param array $tabs The tabs shown on the Plugin Install screen. Defaults include 'featured', 'popular',
-		 *                    'recommended', 'favorites', and 'upload'.
+		 * @param array $tabs The tabs shown on the Plugin Install screen.
+		 *                    Defaults include 'popular' and 'categories'.
+		 *
 		 */
 		$tabs = apply_filters( 'install_plugins_tabs', $tabs );
 
@@ -175,31 +171,8 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 
 				break;
 
-			case 'featured':
-				$args['fields']['group'] = true;
-				$this->orderby = 'group';
-				// No break!
 			case 'popular':
-			case 'new':
-			case 'beta':
-			case 'recommended':
 				$args['browse'] = $tab;
-				break;
-
-			case 'favorites':
-				$action = 'save_wporg_username_' . get_current_user_id();
-				if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( wp_unslash( $_GET['_wpnonce'] ), $action ) ) {
-					$user = isset( $_GET['user'] ) ? wp_unslash( $_GET['user'] ) : get_user_option( 'wporg_favorites' );
-					update_user_meta( get_current_user_id(), 'wporg_favorites', $user );
-				} else {
-					$user = get_user_option( 'wporg_favorites' );
-				}
-				if ( $user )
-					$args['user'] = $user;
-				else
-					$args = false;
-
-				add_action( 'install_plugins_favorites', 'install_plugins_favorites_form', 9, 0 );
 				break;
 
 			default:
@@ -211,7 +184,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		 * Filters API request arguments for each Plugin Install screen tab.
 		 *
 		 * The dynamic portion of the hook name, `$tab`, refers to the plugin install tabs.
-		 * Default tabs include 'featured', 'popular', 'recommended', 'favorites', and 'upload'.
+		 * Default tabs include 'popular', 'categories', and 'upload'.
 		 *
 		 * @since WP-3.7.0
 		 *
@@ -267,11 +240,12 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	/**
 	 */
 	public function no_items() {
+		global $tab;
 		if ( isset( $this->error ) ) { ?>
 			<div class="inline error"><p><?php echo $this->error->get_error_message(); ?></p>
 				<p class="hide-if-no-js"><button class="button try-again"><?php _e( 'Try Again' ); ?></button></p>
 			</div>
-		<?php } else { ?>
+		<?php } elseif ( $tab !== 'categories' ) { ?>
 			<div class="no-plugin-results"><?php _e( 'No plugins found. Try a different search.' ); ?></div>
 		<?php
 		}

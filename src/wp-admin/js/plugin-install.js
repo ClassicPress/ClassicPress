@@ -217,4 +217,12 @@ jQuery( document ).ready( function( $ ) {
 				$uploadViewToggle.attr( 'aria-expanded', $body.hasClass( 'show-upload-view' ) );
 			});
 	}
+
+	/* Plugin install Category filter JS */
+	$( '.plugin-categories-filter a' ).click( function( event ) {
+		event.preventDefault();
+		var category = $(this).attr( 'data-plugin-tag' );
+		$( '#typeselector' ).val( 'tag' );
+		$( '.plugin-install-php .wp-filter-search' ).val( category ).trigger( 'input' );
+	});
 });
