@@ -1,4 +1,4 @@
-# ClassicPress <img src="src/wp-includes/images/ClassicPress-icon-blue-600.png" height="32" valign="middle">
+# ClassicPress <img src="src/wp-admin/images/wordpress-logo.svg" height="32" valign="middle">
 
 [![Build status](https://img.shields.io/travis/ClassicPress/ClassicPress.svg?style=flat)](https://travis-ci.org/ClassicPress/ClassicPress)
 
