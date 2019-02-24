@@ -283,7 +283,7 @@ function save_mod_rewrite_rules() {
 	if ((!file_exists($htaccess_file) && is_writable($home_path) && $wp_rewrite->using_mod_rewrite_permalinks()) || is_writable($htaccess_file)) {
 		if ( got_mod_rewrite() ) {
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
-			return insert_with_markers( $htaccess_file, '(Classic|Word)Press', $rules, true );
+			return insert_with_markers( $htaccess_file, '(Classic|Word)Press', $rules, 'ClassicPress', true );
 		}
 	}
 
