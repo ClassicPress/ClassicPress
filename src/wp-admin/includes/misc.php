@@ -115,13 +115,13 @@ function extract_from_markers( $filename, $marker ) {
 
 	$state = false;
 	foreach ( $markerdata as $markerline ) {
-		if ( false !== strpos( $markerline, '# END ' . $marker ) ) {
+		if ( 1 == preg_match( "¬# END {$marker}¬", $markerline ) ) {
 			$state = false;
 		}
 		if ( $state ) {
 			$result[] = $markerline;
 		}
-		if ( false !== strpos( $markerline, '# BEGIN ' . $marker ) ) {
+		if ( 1 == preg_match( "¬# BEGIN {$marker}¬", $markerline ) ) {
 			$state = true;
 		}
 	}
@@ -159,8 +159,8 @@ function insert_with_markers( $filename, $marker, $insertion ) {
 		$insertion = explode( "\n", $insertion );
 	}
 
-	$start_marker = "# BEGIN {$marker}";
-	$end_marker   = "# END {$marker}";
+	$start_marker = "¬# BEGIN {$marker}¬";
+	$end_marker   = "¬# END {$marker}¬";
 
 	$fp = fopen( $filename, 'r+' );
 	if ( ! $fp ) {
@@ -179,10 +179,10 @@ function insert_with_markers( $filename, $marker, $insertion ) {
 	$pre_lines = $post_lines = $existing_lines = array();
 	$found_marker = $found_end_marker = false;
 	foreach ( $lines as $line ) {
-		if ( ! $found_marker && false !== strpos( $line, $start_marker ) ) {
+		if ( ! $found_marker && 1 == preg_match( $start_marker, $line ) ) {
 			$found_marker = true;
 			continue;
-		} elseif ( ! $found_end_marker && false !== strpos( $line, $end_marker ) ) {
+		} elseif ( ! $found_end_marker && 1 == preg_match( $end_marker, $line ) ) {
 			$found_end_marker = true;
 			continue;
 		}
