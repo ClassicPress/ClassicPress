@@ -102,26 +102,39 @@ function got_url_rewrite() {
  *
  * @param string $filename
  * @param string $marker
+ * @param bool   $is_regex  Set to 'true' if $marker is a regex; the
+ *                          delimiter is '/'
  * @return array An array of strings from a file (.htaccess ) from between BEGIN and END markers.
  */
-function extract_from_markers( $filename, $marker ) {
+function extract_from_markers( $filename, $marker, $is_regex = false ) {
 	$result = array ();
 
 	if ( ! file_exists( $filename ) ) {
 		return $result;
 	}
 
+	$start_marker = "# BEGIN {$marker}";
+	$end_marker   = "# END {$marker}";
+
+	if ( ! $is_regex ) {
+		$start_marker = preg_quote( $start_marker, '/' );
+		$end_marker   = preg_quote( $end_marker, '/' );
+	}
+
+	$start_marker = "/{$start_marker}/";
+	$end_marker   = "/{$end_marker}/";
+
 	$markerdata = explode( "\n", implode( '', file( $filename ) ) );
 
 	$state = false;
 	foreach ( $markerdata as $markerline ) {
-		if ( 1 == preg_match( "¬# END {$marker}¬", $markerline ) ) {
+		if ( 1 == preg_match( $end_marker, $markerline ) ) {
 			$state = false;
 		}
 		if ( $state ) {
 			$result[] = $markerline;
 		}
-		if ( 1 == preg_match( "¬# BEGIN {$marker}¬", $markerline ) ) {
+		if ( 1 == preg_match( $start_marker, $markerline ) ) {
 			$state = true;
 		}
 	}
@@ -141,9 +154,11 @@ function extract_from_markers( $filename, $marker ) {
  * @param string       $filename  Filename to alter.
  * @param string       $marker    The marker to alter.
  * @param array|string $insertion The new content to insert.
+ * @param bool         $is_regex  Set to 'true' if $marker is a regex; the
+ *                                delimiter is '/'
  * @return bool True on write success, false on failure.
  */
-function insert_with_markers( $filename, $marker, $insertion ) {
+function insert_with_markers( $filename, $marker, $insertion, $is_regex = false ) {
 	if ( ! file_exists( $filename ) ) {
 		if ( ! is_writable( dirname( $filename ) ) ) {
 			return false;
@@ -159,8 +174,16 @@ function insert_with_markers( $filename, $marker, $insertion ) {
 		$insertion = explode( "\n", $insertion );
 	}
 
-	$start_marker = "¬# BEGIN {$marker}¬";
-	$end_marker   = "¬# END {$marker}¬";
+	$start_marker = "# BEGIN {$marker}";
+	$end_marker   = "# END {$marker}";
+
+	if ( ! $is_regex ) {
+		$start_marker = preg_quote( $start_marker, '/' );
+		$end_marker   = preg_quote( $end_marker, '/' );
+	}
+
+	$start_marker = "/{$start_marker}/";
+	$end_marker   = "/{$end_marker}/";
 
 	$fp = fopen( $filename, 'r+' );
 	if ( ! $fp ) {
