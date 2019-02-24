@@ -160,7 +160,7 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
  *                                 delimiter is '/'
  * @return bool True on write success, false on failure.
  */
-function insert_with_markers( $filename, $marker_in, $insertion, $marker_out, $is_regex = false ) {
+function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '', $is_regex = false ) {
 	if ( ! file_exists( $filename ) ) {
 		if ( ! is_writable( dirname( $filename ) ) ) {
 			return false;
