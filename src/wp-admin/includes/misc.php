@@ -176,6 +176,10 @@ function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '
 		$insertion = explode( "\n", $insertion );
 	}
 
+	if ( '' == $marker_out ) {
+		$marker_out = $marker_in;
+	}
+
 	$start_marker_in  = "# BEGIN {$marker_in}";
 	$end_marker_in    = "# END {$marker_in}";
 	$start_marker_out = "# BEGIN {$marker_out}";
