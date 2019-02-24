@@ -151,14 +151,16 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
  *
  * @since WP-1.5.0
  *
- * @param string       $filename  Filename to alter.
- * @param string       $marker    The marker to alter.
- * @param array|string $insertion The new content to insert.
- * @param bool         $is_regex  Set to 'true' if $marker is a regex; the
- *                                delimiter is '/'
+ * @param string       $filename   Filename to alter.
+ * @param string       $marker_in  The marker to alter - matches on
+ *                     reading.
+ * @param array|string $insertion  The new content to insert.
+ * @param string       $marker_out The marker to write.
+ * @param bool         $is_regex   Set to 'true' if $marker is a regex; the
+ *                                 delimiter is '/'
  * @return bool True on write success, false on failure.
  */
-function insert_with_markers( $filename, $marker, $insertion, $is_regex = false ) {
+function insert_with_markers( $filename, $marker_in, $insertion, $marker_out, $is_regex = false ) {
 	if ( ! file_exists( $filename ) ) {
 		if ( ! is_writable( dirname( $filename ) ) ) {
 			return false;
@@ -174,16 +176,18 @@ function insert_with_markers( $filename, $marker, $insertion, $is_regex = false 
 		$insertion = explode( "\n", $insertion );
 	}
 
-	$start_marker = "# BEGIN {$marker}";
-	$end_marker   = "# END {$marker}";
+	$start_marker_in  = "# BEGIN {$marker_in}";
+	$end_marker_in    = "# END {$marker_in}";
+	$start_marker_out = "# BEGIN {$marker_out}";
+	$end_marker_out   = "# END {$marker_out}";
 
 	if ( ! $is_regex ) {
-		$start_marker = preg_quote( $start_marker, '/' );
-		$end_marker   = preg_quote( $end_marker, '/' );
+		$start_marker_in = preg_quote( $start_marker_in, '/' );
+		$end_marker_in   = preg_quote( $end_marker_in, '/' );
 	}
 
-	$start_marker = "/{$start_marker}/";
-	$end_marker   = "/{$end_marker}/";
+	$start_marker_in = "/{$start_marker_in}/";
+	$end_marker_in   = "/{$end_marker_in}/";
 
 	$fp = fopen( $filename, 'r+' );
 	if ( ! $fp ) {
@@ -202,10 +206,10 @@ function insert_with_markers( $filename, $marker, $insertion, $is_regex = false 
 	$pre_lines = $post_lines = $existing_lines = array();
 	$found_marker = $found_end_marker = false;
 	foreach ( $lines as $line ) {
-		if ( ! $found_marker && 1 == preg_match( $start_marker, $line ) ) {
+		if ( ! $found_marker && 1 == preg_match( $start_marker_in, $line ) ) {
 			$found_marker = true;
 			continue;
-		} elseif ( ! $found_end_marker && 1 == preg_match( $end_marker, $line ) ) {
+		} elseif ( ! $found_end_marker && 1 == preg_match( $end_marker_in, $line ) ) {
 			$found_end_marker = true;
 			continue;
 		}
@@ -229,9 +233,9 @@ function insert_with_markers( $filename, $marker, $insertion, $is_regex = false 
 	// Generate the new file data
 	$new_file_data = implode( "\n", array_merge(
 		$pre_lines,
-		array( $start_marker ),
+		array( $start_marker_out ),
 		$insertion,
-		array( $end_marker ),
+		array( $end_marker_out ),
 		$post_lines
 	) );
 
@@ -279,7 +283,7 @@ function save_mod_rewrite_rules() {
 	if ((!file_exists($htaccess_file) && is_writable($home_path) && $wp_rewrite->using_mod_rewrite_permalinks()) || is_writable($htaccess_file)) {
 		if ( got_mod_rewrite() ) {
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
-			return insert_with_markers( $htaccess_file, 'ClassicPress', $rules );
+			return insert_with_markers( $htaccess_file, '(Classic|Word)Press', $rules, true );
 		}
 	}
 
