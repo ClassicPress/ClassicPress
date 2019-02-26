@@ -110,7 +110,7 @@ suffix lines
 
 	public function test_extract_invalid_regex_marker() {
 		$this->setExpectedException(
-			'PHPUnit_Framework_Error_Error',
+			'PHPUnit_Framework_Error',
 			"preg_match(): Unknown modifier 'a'"
 		);
 
