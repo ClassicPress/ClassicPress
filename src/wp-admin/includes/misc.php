@@ -99,15 +99,20 @@ function got_url_rewrite() {
  * Extracts strings from between the BEGIN and END markers in the .htaccess file.
  *
  * @since WP-1.5.0
+ * @since 1.0.0-rc2 Added $is_regex parameter.
  *
- * @param string $filename
- * @param string $marker
- * @param bool   $is_regex  Set to 'true' if $marker is a regex; the
- *                          delimiter is '/'
- * @return array An array of strings from a file (.htaccess ) from between BEGIN and END markers.
+ * @param string $filename  The path to the file to process (e.g. `.htaccess`).
+ * @param string $marker    The marker string to search for (`# BEGIN $marker`
+ *                          and `# END $marker`).
+ * @param bool   $is_regex  Set to 'true' if $marker is a regex.  The regex
+ *                          delimiter is '/'; you must escape this character if
+ *                          it occurs in your marker pattern.  Default 'false'.
+ *
+ * @return array An array of strings from a file, extracted from between BEGIN
+ *               and END markers.
  */
 function extract_from_markers( $filename, $marker, $is_regex = false ) {
-	$result = array ();
+	$result = array();
 
 	if ( ! file_exists( $filename ) ) {
 		return $result;
@@ -124,18 +129,18 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 	$start_marker = "/{$start_marker}/";
 	$end_marker   = "/{$end_marker}/";
 
-	$markerdata = explode( "\n", implode( '', file( $filename ) ) );
+	$file_data = explode( "\n", implode( '', file( $filename ) ) );
 
-	$state = false;
-	foreach ( $markerdata as $markerline ) {
-		if ( 1 == preg_match( $end_marker, $markerline ) ) {
-			$state = false;
+	$inside_markers = false;
+	foreach ( $file_data as $line ) {
+		if ( preg_match( $end_marker, $line ) ) {
+			$inside_markers = false;
 		}
-		if ( $state ) {
-			$result[] = $markerline;
+		if ( $inside_markers ) {
+			$result[] = $line;
 		}
-		if ( 1 == preg_match( $start_marker, $markerline ) ) {
-			$state = true;
+		if ( preg_match( $start_marker, $line ) ) {
+			$inside_markers = true;
 		}
 	}
 
@@ -143,24 +148,32 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 }
 
 /**
- * Inserts an array of strings into a file (.htaccess ), placing it between
+ * Inserts an array of strings into a file (.htaccess), placing it between
  * BEGIN and END markers.
  *
- * Replaces existing marked info. Retains surrounding
- * data. Creates file if none exists.
+ * Replaces existing marked info. Retains surrounding data. Creates file if
+ * none exists.
  *
  * @since WP-1.5.0
+ * @since 1.0.0-rc2 Added $marker_out and $is_regex parameters.
  *
- * @param string       $filename   Filename to alter.
- * @param string       $marker_in  The marker to alter - matches on
- *                     reading.
+ * @param string       $filename   The path to the file to alter (e.g. `.htaccess`).
+ * @param string       $marker_in  The marker to alter - matches on reading.
  * @param array|string $insertion  The new content to insert.
- * @param string       $marker_out The marker to write.
- * @param bool         $is_regex   Set to 'true' if $marker is a regex; the
- *                                 delimiter is '/'
+ * @param bool         $is_regex   Set to 'true' if $marker_in is a regex.  The regex
+ *                                 delimiter is '/'; you must escape this character if
+ *                                 it occurs in your marker pattern.  Default 'false'.
+ * @param string|null  $marker_out The marker to write. Only needed if $is_regex is true.
+ *
  * @return bool True on write success, false on failure.
  */
-function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '', $is_regex = false ) {
+function insert_with_markers(
+	$filename,
+	$marker_in,
+	$insertion,
+	$is_regex = false,
+	$marker_out = null
+) {
 	if ( ! file_exists( $filename ) ) {
 		if ( ! is_writable( dirname( $filename ) ) ) {
 			return false;
@@ -176,7 +189,11 @@ function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '
 		$insertion = explode( "\n", $insertion );
 	}
 
-	if ( '' == $marker_out ) {
+	if ( null === $marker_out ) {
+		if ( $is_regex ) {
+			// The marker to write must be specified as a string!
+			return false;
+		}
 		$marker_out = $marker_in;
 	}
 
@@ -198,7 +215,8 @@ function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '
 		return false;
 	}
 
-	// Attempt to get a lock. If the filesystem supports locking, this will block until the lock is acquired.
+	// Attempt to get a lock. If the filesystem supports locking, this will
+	// block until the lock is acquired.
 	flock( $fp, LOCK_EX );
 
 	$lines = array();
@@ -206,14 +224,15 @@ function insert_with_markers( $filename, $marker_in, $insertion, $marker_out = '
 		$lines[] = rtrim( fgets( $fp ), "\r\n" );
 	}
 
-	// Split out the existing file into the preceding lines, and those that appear after the marker
+	// Split out the existing file into the preceding lines, and those that
+	// appear after the marker.
 	$pre_lines = $post_lines = $existing_lines = array();
 	$found_marker = $found_end_marker = false;
 	foreach ( $lines as $line ) {
-		if ( ! $found_marker && 1 == preg_match( $start_marker_in, $line ) ) {
+		if ( ! $found_marker && preg_match( $start_marker_in, $line ) ) {
 			$found_marker = true;
 			continue;
-		} elseif ( ! $found_end_marker && 1 == preg_match( $end_marker_in, $line ) ) {
+		} elseif ( ! $found_end_marker && preg_match( $end_marker_in, $line ) ) {
 			$found_end_marker = true;
 			continue;
 		}
@@ -287,7 +306,13 @@ function save_mod_rewrite_rules() {
 	if ((!file_exists($htaccess_file) && is_writable($home_path) && $wp_rewrite->using_mod_rewrite_permalinks()) || is_writable($htaccess_file)) {
 		if ( got_mod_rewrite() ) {
 			$rules = explode( "\n", $wp_rewrite->mod_rewrite_rules() );
-			return insert_with_markers( $htaccess_file, '(Classic|Word)Press', $rules, 'ClassicPress', true );
+			return insert_with_markers(
+				$htaccess_file,
+				'(Classic|Word)Press',
+				$rules,
+				true,
+				'ClassicPress'
+			);
 		}
 	}
 
