@@ -102,8 +102,8 @@ function got_url_rewrite() {
  * @since 1.0.0-rc2 Added $is_regex parameter.
  *
  * @param string $filename  The path to the file to process (e.g. `.htaccess`).
- * @param string $marker    The marker string to search for (`# BEGIN $marker`
- *                          and `# END $marker`).
+ * @param string $marker    The marker string to search for (in the form of
+ *                          `# BEGIN $marker` and `# END $marker` in the file).
  * @param bool   $is_regex  Set to 'true' if $marker is a regex.  The regex
  *                          delimiter is '/'; you must escape this character if
  *                          it occurs in your marker pattern.  Default 'false'.
@@ -158,7 +158,8 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
  * @since 1.0.0-rc2 Added $marker_out and $is_regex parameters.
  *
  * @param string       $filename   The path to the file to alter (e.g. `.htaccess`).
- * @param string       $marker_in  The marker to alter - matches on reading.
+ * @param string       $marker_in  The marker to alter (matches lines in the form of
+ *                                 `# BEGIN $marker` and `# END $marker` in the file).
  * @param array|string $insertion  The new content to insert.
  * @param bool         $is_regex   Set to 'true' if $marker_in is a regex.  The regex
  *                                 delimiter is '/'; you must escape this character if
