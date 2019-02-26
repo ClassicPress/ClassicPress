@@ -213,6 +213,53 @@ suffix lines
 		] );
 	}
 
+	public function test_update_existing_rules_regex_marker_3() {
+		// Sites that migrated from WordPress to ClassicPress 1.0.0-rc1 or
+		// earlier may find themselves in this situation.  The resulting
+		// behavior is not ideal, but attempting to remove duplicate rules
+		// would probably cause other issues.
+
+		$this->write_test_contents( '
+prefix lines
+
+# BEGIN WordPress
+WP rule 1
+# END WordPress
+
+other lines
+
+# BEGIN ClassicPress
+CP rule 1
+# END ClassicPress
+		' );
+
+		for ( $i = 0; $i < 2; $i++ ) {
+			$this->assertTrue( insert_with_markers(
+				$this->tmpfile,
+				'(Word|Classic)Press',
+				[ 'CP rule 1', 'CP rule 2' ],
+				true,
+				'ClassicPress'
+			) );
+
+			$this->assertTestFileLines( [
+				'prefix lines',
+				'',
+				'# BEGIN ClassicPress',
+				'CP rule 1',
+				'CP rule 2',
+				'# END ClassicPress',
+				'',
+				'other lines',
+				'',
+				'# BEGIN ClassicPress',
+				'CP rule 1',
+				'# END ClassicPress',
+				'',
+			] );
+		}
+	}
+
 	public function test_add_new_rules_string_marker() {
 		$this->write_test_contents( '
 existing line
