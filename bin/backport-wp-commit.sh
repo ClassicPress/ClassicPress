@@ -110,8 +110,8 @@ cmd git fetch "$cp_remote"
 commit_hash=""
 # Find the changeset in the WP git log
 # Only need to search after branch points, or after ClassicPress was forked
-# See: https://github.com/ClassicPress/ClassicPress-Bots/blob/4c1a9f2f/app/Http/Controllers/UpstreamCommitsList.php#L10-L36
-for range in 'd7b6719f:4.9' '5d477aa7:5.0' 'ff6114f8:master'; do
+# See: https://github.com/ClassicPress/ClassicPress-Bots/blob/755f43e2/app/Http/Controllers/UpstreamCommitsList.php#L12-L45
+for range in 'd7b6719f:4.9' '5d477aa7:5.0' '3ec31001:5.1' 'ff6114f8:master'; do
 	start_commit=$(echo "$range" | cut -d: -f1)
 	search_branch=$(echo "$range" | cut -d: -f2)
 	log_range="$start_commit..$wp_remote/$search_branch"
