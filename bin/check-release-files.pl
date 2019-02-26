@@ -63,7 +63,9 @@ for ( split /\r?\n/, $diff ) {
 	print "$op $fn\n";
 }
 
-if ( ! $ok ) {
+if ( $ok ) {
+	print "Release files look OK\n";
+} else {
 	print "\n";
 	die "Unexpected file(s) added to and/or removed from build!\n";
 }
