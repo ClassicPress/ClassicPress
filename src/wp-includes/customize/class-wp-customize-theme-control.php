@@ -102,7 +102,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<div class="notice inline notice-info notice-alt"><p><?php printf(
 					/* translators: ClassicPress child theme name */
 					'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-					'{{ data.theme.preferredChildName }} twentypress customize JS'
+					'{{ data.theme.preferredChildName }}'
 				); ?></p></div>
 			<# } #>
 

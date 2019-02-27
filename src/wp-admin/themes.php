@@ -274,7 +274,7 @@ foreach ( $themes as $theme ) :
 		<div class="notice inline notice-info notice-alt"><p><?php printf(
 			/* translators: ClassicPress child theme name */
 			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-			$theme['preferredChildName'] . ' twentypress themes.php PHP'
+			$theme['preferredChildName']
 		); ?></p></div>
 	<?php } ?>
 
@@ -413,7 +413,7 @@ $can_install = current_user_can( 'install_themes' );
 		<div class="notice inline notice-info notice-alt"><p><?php printf(
 			/* translators: ClassicPress child theme name */
 			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-			'{{ data.preferredChildName }} twentypress themes.php JS'
+			'{{ data.preferredChildName }}'
 		); ?></p></div>
 	<# } #>
 
