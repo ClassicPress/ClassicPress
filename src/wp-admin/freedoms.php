@@ -25,7 +25,12 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 	<?php classicpress_dev_version_info(); ?>
 </p>
 <p class="about-text">
-	<?php _e( 'Thank you for using ClassicPress, the business focused CMS.' ); ?><br>
+	<?php printf(
+		/* translators: link to "business-focused CMS" article */
+		__( 'Thank you for using ClassicPress, the <a href="%s">business-focused CMS</a>.' ),
+		'https://www.classicpress.net/blog/2018/10/29/classicpress-for-business-professional-organization-websites/'
+	); ?>
+	<br>
 	<?php _e( 'Powerful. Versatile. Predictable.' ); ?>
 </p>
 

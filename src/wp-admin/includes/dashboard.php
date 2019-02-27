@@ -1483,7 +1483,8 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 
 		$data   = $response->$name->data;
 		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
-		$active = $name === array_shift( array_keys( $feeds ) ) ? ' active' : '';
+		$keys   = array_keys( $feeds );
+		$active = $name === array_shift( $keys ) ? ' active' : '';
 		?>
 
 		<div id="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>">

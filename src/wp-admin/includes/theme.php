@@ -609,6 +609,18 @@ function wp_prepare_themes_for_js( $themes = null ) {
 		unset( $prepared_themes[ $parents[ $current_theme ] ]['actions']['delete'] );
 	}
 
+	// Indicate a preferred ClassicPress child theme for the WP parent themes
+	$wp_theme_slugs = array( 'twentyfifteen', 'twentysixteen', 'twentyseventeen' );
+	foreach ( $wp_theme_slugs as $slug ) {
+		if (
+			isset( $prepared_themes[ $slug ] ) &&
+			isset( $prepared_themes[ "classicpress-$slug" ] )
+		) {
+			$prepared_themes[ $slug ]['preferredChildName'] =
+				$prepared_themes[ "classicpress-$slug" ]['name'];
+		}
+	}
+
 	/**
 	 * Filters the themes prepared for JavaScript, for themes.php.
 	 *
