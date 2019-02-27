@@ -278,7 +278,6 @@ foreach ( $themes as $theme ) :
 		); ?></p></div>
 	<?php } ?>
 
-
 	<span class="more-details" id="<?php echo $aria_action; ?>"><?php _e( 'Theme Details' ); ?></span>
 	<div class="theme-author"><?php printf( __( 'By %s' ), $theme['author'] ); ?></div>
 
