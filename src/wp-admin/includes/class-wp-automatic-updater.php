@@ -170,7 +170,7 @@ class WP_Automatic_Updater {
 		 * {@see 'allow_major_auto_core_updates'}
 		 * filters for a more straightforward way to adjust core updates.
 		 *
-		 * @since 1.0.0-rc1 Added filter for ClassicPress nightly updates.
+		 * @since 1.0.0 Added filter for ClassicPress nightly updates.
 		 * @since WP-3.7.0
 		 *
 		 * @param bool   $update Whether to update.

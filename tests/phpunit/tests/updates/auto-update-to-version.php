@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage UnitTests
- * @since 1.0.0-rc1
+ * @since 1.0.0
  */
 
 require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';

@@ -338,7 +338,7 @@ function install_plugins_favorites_form() {
 /**
  * Display plugin content based on plugin category (using tags).
  *
- * @since 1.0.0-rc1
+ * @since 1.0.0
  *
  */
 function display_plugins_categories_list() {
