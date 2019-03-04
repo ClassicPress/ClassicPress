@@ -2677,7 +2677,7 @@ function pingback( $content, $post_id ) {
 			 * @param string $pagelinkedto        URL of page linked to.
 			 * @param string $pagelinkedfrom      URL of page linked from.
 			 */
-			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ' . classicpress_user_agent( false ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
+			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ' . classicpress_user_agent(), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
 			// when set to true, this outputs debug messages by itself
 			$client->debug = false;
 
@@ -2756,7 +2756,7 @@ function weblog_ping($server = '', $path = '') {
 	// using a timeout of 3 seconds should be enough to cover slow servers
 	$client = new WP_HTTP_IXR_Client($server, ((!strlen(trim($path)) || ('/' == $path)) ? false : $path));
 	$client->timeout = 3;
-	$client->useragent .= ' -- ' . classicpress_user_agent( false );
+	$client->useragent .= ' -- ' . classicpress_user_agent();
 
 	// when set to true, this outputs debug messages by itself
 	$client->debug = false;
