@@ -749,11 +749,11 @@ function classicpress_user_agent( $include_site_id = false ) {
 		. '&ver=' . classicpress_version_short();
 
 	if ( $include_site_id ) {
-		$url .= '&site=' . sha1( strtolower( preg_replace(
+		$url .= '&site=' . sha1( preg_replace(
 			'#^https?:#i',
 			'',
-			home_url( '/' )
-		) ) );
+			strtolower( home_url( '/' ) )
+		) );
 	}
 
 	$user_agent = 'WordPress/' . get_bloginfo( 'version' ) . '; ' . $url;
