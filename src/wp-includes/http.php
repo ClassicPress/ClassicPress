@@ -739,24 +739,32 @@ function _wp_translate_php_url_constant_to_key( $constant ) {
  *
  * @since 1.0.0-rc1
  *
- * @param bool $include_url Whether to append a URL to the header.
+ * @param bool $include_site_id Whether to include a site identifier (used when
+ *                              communicating with the ClassicPress API).  This
+ *                              is not personally identifiable information.
  * @return string The User-Agent header value.
  */
-function classicpress_user_agent( $include_url = true ) {
-	$ua = 'WordPress/' . get_bloginfo( 'version' );
-	if ( $include_url ) {
-		$ua .= '; https://www.classicpress.net/?wp_compatible=true'
-			. '&ver=' . classicpress_version_short();
+function classicpress_user_agent( $include_site_id = false ) {
+	$url = 'https://www.classicpress.net/?wp_compatible=true'
+		. '&ver=' . classicpress_version_short();
+
+	if ( $include_site_id ) {
+		$url .= '&site=' . sha1( preg_replace(
+			'#^https?:#',
+			'',
+			strtolower( home_url( '/' ) )
+		) );
 	}
+
+	$user_agent = 'WordPress/' . get_bloginfo( 'version' ) . '; ' . $url;
 
 	/**
 	 * Filters the user agent value sent with an HTTP request.
 	 *
 	 * @since WP-2.7.0
-	 * @since 1.0.0-rc1 Added the $include_url parameter.
+	 * @since 1.0.0-rc1 This filter is applied to all HTTP requests.
 	 *
 	 * @param string $user_agent ClassicPress user agent string.
-	 * @param bool $include_url Whether to append a URL to the header.
 	 */
-	return apply_filters( 'http_headers_useragent', $ua, $include_url );
+	return apply_filters( 'http_headers_useragent', $user_agent );
 }
