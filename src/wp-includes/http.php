@@ -752,7 +752,7 @@ function classicpress_user_agent( $include_site_id = false ) {
 		$url .= '&site=' . sha1( preg_replace(
 			'#^https?:#',
 			'',
-			strtolower( home_url( '/' ) )
+			strtolower( untrailingslashit( home_url( '/' ) ) )
 		) );
 	}
 
