@@ -30,6 +30,47 @@
 $cp_version = '1.0.0-rc2+dev';
 
 /**
+ * The WordPress version string
+ *
+ * This is still used internally for various core and plugin functions, and to
+ * keep compatibility checks working as intended.  The ClassicPress version is
+ * stored separately.
+ *
+ * @see classicpress_version()
+ *
+ * @global string $wp_version
+ */
+$wp_version = '4.9.9';
+
+/**
+ * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
+ *
+ * @global int $wp_db_version
+ */
+$wp_db_version = 38590;
+
+/**
+ * Holds the TinyMCE version
+ *
+ * @global string $tinymce_version
+ */
+$tinymce_version = '4800-20180716';
+
+/**
+ * Holds the required PHP version
+ *
+ * @global string $required_php_version
+ */
+$required_php_version = '5.6.0';
+
+/**
+ * Holds the required MySQL version
+ *
+ * @global string $required_mysql_version
+ */
+$required_mysql_version = '5.0';
+
+/**
  * Return the ClassicPress version string.
  *
  * `function_exists( 'classicpress_version' )` is the recommended way for
@@ -77,44 +118,3 @@ if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
 		return substr( $cp_version, -4 ) === '+dev';
 	}
 }
-
-/**
- * The WordPress version string
- *
- * This is still used internally for various core and plugin functions, and to
- * keep compatibility checks working as intended.  The ClassicPress version is
- * stored separately.
- *
- * @see classicpress_version()
- *
- * @global string $wp_version
- */
-$wp_version = '4.9.9';
-
-/**
- * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
- *
- * @global int $wp_db_version
- */
-$wp_db_version = 38590;
-
-/**
- * Holds the TinyMCE version
- *
- * @global string $tinymce_version
- */
-$tinymce_version = '4800-20180716';
-
-/**
- * Holds the required PHP version
- *
- * @global string $required_php_version
- */
-$required_php_version = '5.6.0';
-
-/**
- * Holds the required MySQL version
- *
- * @global string $required_mysql_version
- */
-$required_mysql_version = '5.0';
