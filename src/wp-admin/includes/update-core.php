@@ -512,7 +512,7 @@ function update_core($from, $to) {
 	/**
 	 * Fires after ClassicPress core has been successfully updated.
 	 *
-	 * @since 1.0.0-beta1
+	 * @since 1.0.0
 	 *
 	 * @param string $cp_version The current ClassicPress version.
 	 */
@@ -556,7 +556,7 @@ function update_core($from, $to) {
  * complicated and this is the simplest way to make sure that this code is
  * always available.
  *
- * @since 1.0.0-beta1
+ * @since 1.0.0
  *
  * @param string $working_dir The directory where a ClassicPress update package
  *                            has been extracted.

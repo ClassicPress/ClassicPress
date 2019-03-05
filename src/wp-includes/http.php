@@ -737,7 +737,7 @@ function _wp_translate_php_url_constant_to_key( $constant ) {
  * come from WordPress, ClassicPress uses the same pattern, but uses the URL to
  * indicate that requests come from a ClassicPress site.
  *
- * @since 1.0.0-rc1
+ * @since 1.0.0
  *
  * @param bool $include_site_id Whether to include a site identifier (used when
  *                              communicating with the ClassicPress API).  This
@@ -752,7 +752,7 @@ function classicpress_user_agent( $include_site_id = false ) {
 		$url .= '&site=' . sha1( preg_replace(
 			'#^https?:#',
 			'',
-			strtolower( home_url( '/' ) )
+			strtolower( untrailingslashit( home_url( '/' ) ) )
 		) );
 	}
 
@@ -762,7 +762,7 @@ function classicpress_user_agent( $include_site_id = false ) {
 	 * Filters the user agent value sent with an HTTP request.
 	 *
 	 * @since WP-2.7.0
-	 * @since 1.0.0-rc1 This filter is applied to all HTTP requests.
+	 * @since 1.0.0 This filter is applied to all HTTP requests.
 	 *
 	 * @param string $user_agent ClassicPress user agent string.
 	 */
