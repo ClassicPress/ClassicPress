@@ -94,6 +94,9 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'users'              => $user_count,
 		'multisite_enabled'  => $multisite_enabled,
 		'initial_db_version' => get_site_option( 'initial_db_version' ),
+		'extra_stats'        => $extra_stats,
+		'failure_data'       => get_site_option( 'auto_core_update_failed' ),
+		'translations'       => wp_json_encode( $translations ),
 	);
 
 	/**
@@ -103,6 +106,8 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * Please exercise extreme caution.
 	 *
 	 * @since WP-4.9.0
+	 * @since 1.0.0 Added `extra_stats`, `failure_data`, and `translations`
+	 * parameters to query (in WP these are passed in a POST body).
 	 *
 	 * @param array $query {
 	 *     Version check query arguments.
@@ -116,19 +121,12 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 *     @type int    $users              Number of users on this ClassicPress installation.
 	 *     @type int    $multisite_enabled  Whether this ClassicPress installation uses Multisite.
 	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
+	 *     @type array  $extra_stats        Failure data from the current update, if any.
+	 *     @type array  $failure_data       Failure data from a previous update, if any.
+	 *     @type array  $translations       Core translations installed on this site.
 	 * }
 	 */
 	$query = apply_filters( 'core_version_check_query_args', $query );
-
-	$post_body = array(
-		'translations' => wp_json_encode( $translations ),
-	);
-
-	if ( is_array( $extra_stats ) ) {
-		$post_body = array_merge( $post_body, $extra_stats );
-	}
-
-	// TODO: WP sent $post_body as HTTP POST, but it is now being discarded
 
 	// ClassicPress installed via the migration plugin has a version number
 	// like `1.0.0-alpha1+migration.20181113`.  The API does not generate
@@ -149,7 +147,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 			'wp_install' => $wp_install,
 			'wp_blog' => home_url( '/' )
 		),
-		'body' => $post_body,
 	);
 
 	$response = wp_remote_get( $url, $options );
