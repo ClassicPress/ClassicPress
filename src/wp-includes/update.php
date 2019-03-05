@@ -96,6 +96,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'initial_db_version' => get_site_option( 'initial_db_version' ),
 		'extra_stats'        => $extra_stats,
 		'translations'       => wp_json_encode( $translations ),
+		'failure_data'       => get_site_option( 'auto_core_update_failed' ),
 	);
 
 	/**
