@@ -1078,7 +1078,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
  * Renders the ClassicPress News dashboard widget.
  *
  * @since WP-4.8.0
- * @since 1.0.0-rc1 Events section removed.
+ * @since 1.0.0 Events section removed.
  */
 function wp_dashboard_events_news() {
 	?>
@@ -1383,7 +1383,7 @@ function wp_welcome_panel() {
 /**
  * Callback function for the petitions dashboard widget
  *
- * @since 1.0.0-beta2
+ * @since 1.0.0
  */
 function cp_dashboard_petitions() {
 	$feeds = array(
@@ -1407,7 +1407,7 @@ function cp_dashboard_petitions() {
  * Query the ClassicPress.net API for data about ClassicPress petitions, and
  * echo the results as HTML.
  *
- * @since 1.0.0-beta2
+ * @since 1.0.0
  *
  * @param string $widget_id Widget ID.
  * @param array  $feeds     Array of petition feeds (possible sort orders).

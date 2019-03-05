@@ -9,7 +9,7 @@
  /**
   * Prints information about the ClassicPress development version, if any.
   *
-  * @since 1.0.0-beta1
+  * @since 1.0.0
   */
 function classicpress_dev_version_info() {
 	if ( ! classicpress_is_dev_install() ) {
@@ -99,7 +99,7 @@ function got_url_rewrite() {
  * Extracts strings from between the BEGIN and END markers in the .htaccess file.
  *
  * @since WP-1.5.0
- * @since 1.0.0-rc2 Added $is_regex parameter.
+ * @since 1.0.0 Added $is_regex parameter.
  *
  * @param string $filename  The path to the file to process (e.g. `.htaccess`).
  * @param string $marker    The marker string to search for (in the form of
@@ -155,7 +155,7 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
  * none exists.
  *
  * @since WP-1.5.0
- * @since 1.0.0-rc2 Added $marker_out and $is_regex parameters.
+ * @since 1.0.0 Added $marker_out and $is_regex parameters.
  *
  * @param string       $filename   The path to the file to alter (e.g. `.htaccess`).
  * @param string       $marker_in  The marker to alter (matches lines in the form of
