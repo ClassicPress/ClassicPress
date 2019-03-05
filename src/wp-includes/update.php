@@ -95,8 +95,8 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'multisite_enabled'  => $multisite_enabled,
 		'initial_db_version' => get_site_option( 'initial_db_version' ),
 		'extra_stats'        => $extra_stats,
-		'translations'       => wp_json_encode( $translations ),
 		'failure_data'       => get_site_option( 'auto_core_update_failed' ),
+		'translations'       => wp_json_encode( $translations ),
 	);
 
 	/**
@@ -106,8 +106,8 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * Please exercise extreme caution.
 	 *
 	 * @since WP-4.9.0
-	 * @since 1.0.0 Added `extra_stats` and `translations` parameters to query
-	 * (in WP these are passed in the POST body, but we're using GET instead).
+	 * @since 1.0.0 Added `extra_stats`, `failure_data`, and `translations`
+	 * parameters to query (in WP these are passed in a POST body).
 	 *
 	 * @param array $query {
 	 *     Version check query arguments.
@@ -121,7 +121,8 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 *     @type int    $users              Number of users on this ClassicPress installation.
 	 *     @type int    $multisite_enabled  Whether this ClassicPress installation uses Multisite.
 	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
-	 *     @type array  $extra_stats        Update failure data, if any.
+	 *     @type array  $extra_stats        Failure data from the current update, if any.
+	 *     @type array  $failure_data       Failure data from a previous update, if any.
 	 *     @type array  $translations       Core translations installed on this site.
 	 * }
 	 */
