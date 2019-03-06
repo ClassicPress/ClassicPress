@@ -305,6 +305,12 @@ class WP_Http {
 			$options['hooks']->register( 'requests.before_redirect', array( get_class(), 'validate_redirects' ) );
 		}
 
+		// Allow overriding the protocol version.  The 'httpversion' argument
+		// claims to do this but appears to be broken.
+		if ( isset( $r['protocol_version'] ) ) {
+			$options['protocol_version'] = $r['protocol_version'];
+		}
+
 		if ( $r['stream'] ) {
 			$options['filename'] = $r['filename'];
 		}

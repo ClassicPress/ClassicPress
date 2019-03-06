@@ -973,7 +973,19 @@ function download_url( $url, $timeout = 300 ) {
 	if ( ! $tmpfname )
 		return new WP_Error('http_no_file', __('Could not create Temporary file.'));
 
-	$response = wp_safe_remote_get( $url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $tmpfname ) );
+	$options = array(
+		'timeout'  => $timeout,
+		'stream'   => true,
+		'filename' => $tmpfname,
+	);
+	if ( ! function_exists( 'curl_init' ) ) {
+		// Ask servers not to send us chunked responses.  See:
+		// - https://github.com/rmccue/Requests/issues/189
+		// - https://webmasters.stackexchange.com/a/44076/98758
+		error_log( 'The cURL extension for PHP is missing.  Please install it!' );
+		$options['protocol_version'] = '1.0';
+	}
+	$response = wp_safe_remote_get( $url, $options );
 
 	if ( is_wp_error( $response ) ) {
 		unlink( $tmpfname );
