@@ -728,7 +728,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			$plugin_name = $plugin_data['Name'];
 		}
 
-		if ( ! empty( $totals['upgrade'] ) && ! empty( $plugin_data['update'] ) )
+		if ( ! empty( $totals['upgrade'] ) && ( ! empty( $plugin_data['update'] ) || 'mustuse' === $context ) )
 			$class .= ' update';
 
 		$plugin_slug = isset( $plugin_data['slug'] ) ? $plugin_data['slug'] : sanitize_title( $plugin_name );

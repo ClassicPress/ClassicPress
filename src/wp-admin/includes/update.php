@@ -363,7 +363,11 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 	$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 
 	if ( is_network_admin() || ! is_multisite() ) {
-		if ( is_network_admin() ) {
+        $is_mu_plugin = array_key_exists( $file, get_mu_plugins() );
+
+        if ( $is_mu_plugin ) {
+            $active_class = ' active';
+		} elseif ( is_network_admin() ) {
 			$active_class = is_plugin_active_for_network( $file ) ? ' active' : '';
 		} else {
 			$active_class = is_plugin_active( $file ) ? ' active' : '';
@@ -382,6 +386,17 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 				),
 				$response->new_version
 			);
+        } elseif ( $is_mu_plugin ) {
+            /* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number */
+            printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>.' ),
+                $plugin_name,
+                esc_url( $details_url ),
+                sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
+                    /* translators: 1: plugin name, 2: version number */
+                    esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $plugin_name, $response->new_version ) )
+                ),
+                $response->new_version
+            );
 		} elseif ( empty( $response->package ) ) {
 			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number */
 			printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this plugin.</em>' ),

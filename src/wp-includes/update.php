@@ -238,7 +238,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 	if ( !function_exists( 'get_plugins' ) )
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-	$plugins = get_plugins();
+	$plugins = array_merge( get_mu_plugins(), get_plugins() );
 	$translations = wp_get_installed_translations( 'plugins' );
 
 	$active  = get_option( 'active_plugins', array() );
