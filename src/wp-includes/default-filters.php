@@ -140,12 +140,13 @@ add_filter( 'the_content', 'shortcode_unautop'                 );
 add_filter( 'the_content', 'prepend_attachment'                );
 add_filter( 'the_content', 'wp_make_content_images_responsive' );
 
-add_filter( 'the_excerpt',     'wptexturize'      );
-add_filter( 'the_excerpt',     'convert_smilies'  );
-add_filter( 'the_excerpt',     'convert_chars'    );
-add_filter( 'the_excerpt',     'wpautop'          );
-add_filter( 'the_excerpt',     'shortcode_unautop');
-add_filter( 'get_the_excerpt', 'wp_trim_excerpt'  );
+add_filter( 'the_excerpt',     'wptexturize'            );
+add_filter( 'the_excerpt',     'convert_smilies'        );
+add_filter( 'the_excerpt',     'convert_chars'          );
+add_filter( 'the_excerpt',     'wpautop'                );
+add_filter( 'the_excerpt',     'shortcode_unautop'      );
+add_filter( 'get_the_excerpt', 'wp_trim_excerpt'        );
+add_filter( 'get_the_excerpt', 'wp_trim_excerpt', 10, 2 );
 
 add_filter( 'the_post_thumbnail_caption', 'wptexturize'     );
 add_filter( 'the_post_thumbnail_caption', 'convert_smilies' );
