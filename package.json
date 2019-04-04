@@ -9,7 +9,7 @@
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "autoprefixer": "9.4.10",
+    "autoprefixer": "9.5.0",
     "grunt": "1.0.3",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.0",
