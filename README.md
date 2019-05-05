@@ -27,10 +27,6 @@ You can see a list of WordPress contributors by going to the [WordPress releases
 
 We are working on several ways to recognize people for their contributions to ClassicPress.  In the meantime, you can view a list of code contributions [here on GitHub](https://github.com/ClassicPress/ClassicPress/compare/LAST_WP_COMMIT...develop).
 
-## Backers
+## Donate to support ClassicPress
 
-Thank you to all our backers! 🙏 [[Become a backer](https://donate.classicpress.net/)]
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://donate.classicpress.net/)]
+Support the ClassicPress project by making a [[donation](https://donate.classicpress.net/)]! 🙏
