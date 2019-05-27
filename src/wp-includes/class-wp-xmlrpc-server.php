@@ -1664,7 +1664,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		// otherwise zeroed out post_date_gmt to get set with the value that was originally
 		// stored in the database when the draft was created.
 		if ( !isset( $content_struct['post_date'] ) ) {
-		        unset( $post['post_date'] );
+			unset( $post['post_date'] );
 		}
 
 		$this->escape( $post );
