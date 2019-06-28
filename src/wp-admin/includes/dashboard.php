@@ -1460,7 +1460,8 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 	<ul class="petitions-tabs">
 
 	<?php
-	$active = array_shift( array_keys( $feeds ) );
+	$keys   = array_keys( $feeds );
+	$active = array_shift( $keys );
 
 	foreach ( $feeds as $name => $args ) {
 		$class = $name === $active ? ' class="active"' : '';
@@ -1483,7 +1484,6 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 
 		$data   = $response->$name->data;
 		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
-		$keys   = array_keys( $feeds );
 		$active = $name === array_shift( $keys ) ? ' active' : '';
 		?>
 
