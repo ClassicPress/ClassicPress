@@ -6,7 +6,7 @@
 
 ClassicPress is a hard fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
 
-We welcome contributions of all kinds!  Have a look at
+We welcome contributions of all kinds! Have a look at
 [this repository's open issues](https://github.com/ClassicPress/ClassicPress/issues)
 and
 [our v1 project board](https://github.com/orgs/ClassicPress/projects/1),
@@ -23,9 +23,20 @@ For more information, see:
 
 This project exists thanks to all the people who contribute and who have contributed in the past, whether as part of the long history of thousands of contributions to WordPress from many different people, or as contributions to ClassicPress itself.
 
-You can see a list of WordPress contributors by going to the [WordPress releases page](https://wordpress.org/news/category/releases/) and looking at the credits for each release.  All changes in WordPress 4.9.8 and earlier are part of ClassicPress, along with selected changes from later releases.
+You can help Fix bugs by submitting Pull Requests. Most of the bugs are shared via the [issues page](https://github.com/ClassicPress/ClassicPress/issues). Here are some pointers on how to:
 
-We are working on several ways to recognize people for their contributions to ClassicPress.  In the meantime, you can view a list of code contributions [here on GitHub](https://github.com/ClassicPress/ClassicPress/compare/LAST_WP_COMMIT...develop).
+- Fix Bugs: Generally when evaluating bugfix PRs, we look for these things (ideally all of them)
+
+  - The change impacts existing ClassicPress users. (Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time.)
+  - The change is not going to break any other use cases.
+  - The change has automated tests.
+  - We understand the change very well or can ask questions of someone who understands it very well.
+
+* [Backporting Changesets from WordPress](https://classicpress.slack.com/files/UCFQJPU4Q/FFV8NM0TZ/How_to_backport_a_WordPress_changeset)
+
+You can see a list of WordPress contributors by going to the [WordPress releases page](https://wordpress.org/news/category/releases/) and looking at the credits for each release. All changes in WordPress 4.9.8 and earlier are part of ClassicPress, along with selected changes from later releases.
+
+We are working on several ways to recognize people for their contributions to ClassicPress. In the meantime, you can view a list of code contributions [here on GitHub](https://github.com/ClassicPress/ClassicPress/compare/LAST_WP_COMMIT...develop).
 
 ## Donate to support ClassicPress
 
