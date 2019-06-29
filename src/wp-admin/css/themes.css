@@ -825,6 +825,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	.theme-browser .theme:nth-child(odd) {
 		margin-right: 5%;
 	}
+
+	.theme .notice .cut {
+		display: none;
+	}
 }
 
 /* Admin menu is folded */
