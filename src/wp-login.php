@@ -180,9 +180,27 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	 * @since WP-4.6.0
 	 */
 	do_action( 'login_header' );
+
+	/**
+	* Get the image for login page from the theme logo via the customizer
+	*
+	* @since 1.0.2
+	*/
+	$default_logo_img_url = admin_url('/images/w-logo-blue.png?ver=20190218');
+	$custom_logo_id = get_theme_mod( 'custom_logo' );
+	if ( empty( $custom_logo_id ) ) {
+		$url_image = $default_logo_img_url; 
+	} else {
+		$image = wp_get_attachment_image_src( $custom_logo_id, 'full' );
+		if ( ! is_array( $image ) || ! isset( $image[0] ) ) {
+			$url_image = $default_logo_img_url; 
+		} else {
+			$url_image = $image[0];
+		}
+	}
 	?>
 	<div id="login">
-		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><?php echo $login_header_text; ?></a></h1>
+		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><img src="<?php echo $url_image; ?>" alt="<?php echo esc_attr( $login_header_title ); ?>" /></a></h1>
 	<?php
 
 	unset( $login_header_url, $login_header_title );

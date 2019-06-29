@@ -136,29 +136,22 @@ p {
 	line-height: 19px;
 }
 
-.login h1 {
-	text-align: center;
-}
-
 .login h1 a {
-	background-image: url(../images/w-logo-blue.png?ver=20190218);
-	background-image: none, url(../images/wordpress-logo.svg?ver=20190218);
-	background-size: 84px;
-	background-position: center top;
-	background-repeat: no-repeat;
-	color: #444;
 	height: 84px;
-	font-size: 20px;
-	font-weight: 400;
-	line-height: 1.3em;
 	margin: 0 auto 25px;
 	padding: 0;
 	text-decoration: none;
 	width: 84px;
-	text-indent: -9999px;
 	outline: none;
 	overflow: hidden;
 	display: block;
+}
+
+#login a img {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
 }
 
 #login {
