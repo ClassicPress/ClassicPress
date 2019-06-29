@@ -190,7 +190,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	* @since 1.1.0
 	*/
 	function get_logo_image_url() {
-		$default_logo_img_url = admin_url('/images/w-logo-blue.png?ver=20190218');
+		$default_logo_img_url = admin_url( '/images/w-logo-blue.png?ver=20190218' );
 		$custom_logo_id = get_theme_mod( 'custom_logo' );
 		if ( empty( $custom_logo_id ) ) {
 			$url_image = $default_logo_img_url; 
