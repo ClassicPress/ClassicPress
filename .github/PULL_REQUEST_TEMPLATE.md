@@ -25,7 +25,7 @@ If it fixes an open issue, please link to the issue here.
 
 ## How has this been tested?
 <!--
-Please describe in detail how you tested your changes.
+Please describe in detail how you tested your changes. If you have challenges writing tests, please consult the document linked. https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/
 
 Include details of your testing environment, and the tests you ran to see how
 your change affects other areas of the code, etc.
