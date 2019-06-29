@@ -87,23 +87,28 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				printf( _x( 'By %s', 'theme author' ), '{{ data.theme.author }}' );
 			?></div>
 
-			<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
-				<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
-					<p>
-						<?php
-						/* translators: %s: "Update now" button */
-						printf( __( 'New version available. %s' ), '<button class="button-link update-theme" type="button">' . __( 'Update now' ) . '</button>' );
-						?>
-					</p>
-				</div>
-			<# } #>
+			<# if ( ('installed' === data.theme.type && data.theme.hasUpdate) ||
+					data.theme.preferredChildName ) { #>
+				<div class="notices">
+					<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
+						<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
+							<p>
+								<?php
+								/* translators: %s: "Update now" button */
+								printf( __( 'New version available. %s' ), '<button class="button-link update-theme" type="button">' . __( 'Update now' ) . '</button>' );
+								?>
+							</p>
+						</div>
+					<# } #>
 
-			<# if ( data.theme.preferredChildName ) { #>
-				<div class="notice inline notice-info notice-alt"><p><?php printf(
-					/* translators: ClassicPress child theme name */
-					'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-					'{{ data.theme.preferredChildName }}'
-				); ?></p></div>
+					<# if ( data.theme.preferredChildName ) { #>
+						<div class="notice inline notice-info notice-alt"><p><?php printf(
+							/* translators: ClassicPress child theme name */
+							__( 'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.' ),
+							'{{ data.theme.preferredChildName }}'
+						); ?></p></div>
+					<# } #>
+				</div>
 			<# } #>
 
 			<# if ( data.theme.active ) { #>
