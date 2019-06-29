@@ -183,24 +183,30 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 
 	/**
 	* Get the image for login page from the theme logo via the customizer
+	* Else get the default ClassicPress logo
 	*
-	* @since 1.0.2
+	* @return url
+	*
+	* @since 1.1.0
 	*/
-	$default_logo_img_url = admin_url('/images/w-logo-blue.png?ver=20190218');
-	$custom_logo_id = get_theme_mod( 'custom_logo' );
-	if ( empty( $custom_logo_id ) ) {
-		$url_image = $default_logo_img_url; 
-	} else {
-		$image = wp_get_attachment_image_src( $custom_logo_id, 'full' );
-		if ( ! is_array( $image ) || ! isset( $image[0] ) ) {
+	function get_logo_image_url() {
+		$default_logo_img_url = admin_url('/images/w-logo-blue.png?ver=20190218');
+		$custom_logo_id = get_theme_mod( 'custom_logo' );
+		if ( empty( $custom_logo_id ) ) {
 			$url_image = $default_logo_img_url; 
 		} else {
-			$url_image = $image[0];
+			$image = wp_get_attachment_image_src( $custom_logo_id, 'full' );
+			if ( ! is_array( $image ) || ! isset( $image[0] ) ) {
+				$url_image = $default_logo_img_url; 
+			} else {
+				$url_image = $image[0];
+			}
 		}
+		return $url_image;
 	}
 	?>
 	<div id="login">
-		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><img src="<?php echo $url_image; ?>" alt="<?php echo esc_attr( $login_header_title ); ?>" /></a></h1>
+		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><img src="<?php echo get_logo_image_url(); ?>" alt="<?php echo esc_attr( $login_header_title ); ?>" /></a></h1>
 	<?php
 
 	unset( $login_header_url, $login_header_title );
