@@ -1,5 +1,8 @@
 You can help by submitting pull requests(PRs) to the develop branch. This is not limited to:
 
+## Documentation
+Good documentation will make the work of making ClassicPress a better software much faster and a better user experience.
+
 ## Fixing Bugs
 Most of the bugs are shared via the [issues page](https://github.com/ClassicPress/ClassicPress/issues). When evaluating bug fixes pull requests(PRs), we look for, if not all these things
 
@@ -20,11 +23,7 @@ The focus of ClassicPress is to be business oriented and avoid Gutenberg so one 
 First, check https://wpdirectory.net/ to evaluate how many plugins/themes are affected by this changeset. 
 
 1. ***Pick the branch***
-Selecting the right branch is important since 4.9.x is not developed actively except for security issues. 
-
-~~The other options is to check the 5.x branches but it is not a pre-requisite to do a check about the code if it exists in ClassicPress. 
-
-~~The backport script will create a branch with the changeset. A test will be done about change to check if it is supported. Some times  manual changes are required.
+Selecting the right branch is important since 4.9.x is not developed actively except for security issues. ~~The other options is to check the 5.x branches but it is not a pre-requisite to do a check about the code if it exists in ClassicPress. The backport script will create a branch with the changeset. A test will be done about change to check if it is supported. Some times  manual changes are required.~~
 
 1. ***Documenting***
 Properly written supporting documentation for the changeset is important. This will guide the mainatainers to evaluate the tests, consider the challenges the changeset seeks to solve or if the problem exists in ClassicPress posing a problem to the users.
