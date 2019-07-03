@@ -1,8 +1,9 @@
-## Our [Code of Conduct](https://www.classicpress.net/democracy/#democracy-conduct) and [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions)
+# Our [Code of Conduct](https://www.classicpress.net/democracy/#democracy-conduct) and [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions)
 Our code of conduct is simple: Be good to one another, take criticism well and follow the democratic process. When contributing to this repository, please note we have a [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) with some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions). 
 
 Our request is that you follow these guidelines in all your interactions with the project. 
 
+# Start helping
 You can start helping by submitting pull requests(PRs) to the develop branch. This is not limited to:
 
 ## Documentation
