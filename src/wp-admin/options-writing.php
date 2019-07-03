@@ -109,6 +109,39 @@ do_settings_fields('writing', 'remote_publishing'); // A deprecated section.
 ?>
 </table>
 
+
+<h2 class="title"><?php _e( 'Revisions' ); ?></h2>
+<?php
+	$rev_hardcoded = cp_is_revisions_option_hardcoded();
+	$rev_num = cp_get_revisions_limit();
+	$rev_attr = $rev_hardcoded ? 'disabled="disabled"' : '';
+?>
+<table class="form-table">
+<tr>
+<th scope="row"><label for="revisions_to_keep"><?php _e('Revisions to keep') ?></label></th>
+<td>
+	<input name="revisions_to_keep"
+		id="revisions_to_keep"
+		value="<?php echo $rev_num; ?>"
+		type="number"
+		step="1"
+		min="-1"
+		class="small-text"
+		<?php echo $rev_attr; ?>
+	/><br />
+	<?php if ( $rev_hardcoded ): ?>
+		<p><?php _e( 'This value is now <strong>hardcoded</strong> in your configuration files. You can remove <strong>WP_POST_REVISIONS</strong> constant definition to enable the field and manage revisions limit right here.' ); ?></p>
+	<?php else: ?>
+	<label for="revisions_to_keep">
+		<kbd>-1</kbd>: <?php _e( 'Store every revision (can bloat the database size).'); ?><br />
+		<kbd>0</kbd>: <?php _e( 'Do not store any revisions (except 1 autosave).'); ?><br />
+		<kbd>&gt; 0</kbd>: <?php _e('Store that many revisions per post (+1 autosave). Old revisions are automatically deleted.'); ?>
+	</label>
+	<?php endif; ?>
+</td>
+</tr>
+</table>
+
 <?php
 /** This filter is documented in wp-admin/options.php */
 if ( apply_filters( 'enable_post_by_email_configuration', true ) ) {

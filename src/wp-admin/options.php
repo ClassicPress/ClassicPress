@@ -144,6 +144,7 @@ $whitelist_options = array(
 		'default_email_category',
 		'default_link_category',
 		'default_post_format',
+		'revisions_to_keep',
 	),
 );
 $whitelist_options['misc'] = $whitelist_options['options'] = $whitelist_options['privacy'] = array();

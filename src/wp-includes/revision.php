@@ -473,8 +473,9 @@ function wp_revisions_enabled( $post ) {
  *
  * By default, an infinite number of revisions are kept.
  *
- * The constant WP_POST_REVISIONS can be set in wp-config to specify the limit
- * of revisions to keep.
+ * The limit of revisions can be specified by an option 'revisions_to_keep'
+ * in writing settings. Option can be overridden by a constant WP_POST_REVISIONS
+ * in wp-config.
  *
  * @since WP-3.6.0
  *
@@ -482,12 +483,8 @@ function wp_revisions_enabled( $post ) {
  * @return int The number of revisions to keep.
  */
 function wp_revisions_to_keep( $post ) {
-	$num = WP_POST_REVISIONS;
 
-	if ( true === $num )
-		$num = -1;
-	else
-		$num = intval( $num );
+	$num = cp_get_revisions_limit();
 
 	if ( ! post_type_supports( $post->post_type, 'revisions' ) )
 		$num = 0;
@@ -725,3 +722,67 @@ function _wp_upgrade_revisions_of_post( $post, $revisions ) {
 
 	return true;
 }
+
+
+/**
+ * Define a flag showing if revision option field should be enabled
+ *
+ * @since CP-1.0.1
+ * @access private
+ *
+ */
+
+function _cp_define_revisions_const() {
+	define( 'CP_REVISIONS_OPTION_DISABLE', defined( 'WP_POST_REVISIONS' ) );
+	return true;
+}
+add_action( 'plugins_loaded', '_cp_define_revisions_const' );
+
+
+/**
+ * Determines if revision limit constant was manually defined via wp-config
+ *
+ * @since CP-1.0.1
+ * @access private
+ *
+ * @return bool true if defined, false if not
+ */
+
+function cp_is_revisions_option_hardcoded() {
+	return ( defined( 'CP_REVISIONS_OPTION_DISABLE' ) &&
+			CP_REVISIONS_OPTION_DISABLE === true );
+}
+
+
+/**
+ * Determine how many revisions to retain for a given post
+ * considering admin writing settings
+ *
+ * @since CP-1.0.1
+ *
+ * @return int true if defined, false if not
+ */
+
+function cp_get_revisions_limit() {
+
+	// Default WP behavior is to keep all revisions
+	$default = -1;
+
+	// If revision const is NOT defined in wp-config file,
+	// using an option value specified in admin writing settings
+	$is_hardcoded = cp_is_revisions_option_hardcoded();
+	if ( $is_hardcoded === false ) {
+		$num = get_option( 'revisions_to_keep' );
+	}
+
+	// If revision const is defined, using it in a standard WP way
+	elseif ( defined ( 'WP_POST_REVISIONS' ) ) {
+		$num = WP_POST_REVISIONS;
+		if ( true === $num ) {
+			$num = -1;
+		}
+	}
+
+	return isset( $num ) ? intval( $num ) : $default;
+}
+

@@ -4109,6 +4109,10 @@ function sanitize_option( $option, $value ) {
 			$value = absint( $value );
 			break;
 
+		case 'revisions_to_keep':
+			$value = intval( $value );
+			break;
+
 		case 'posts_per_page':
 		case 'posts_per_rss':
 			$value = (int) $value;
