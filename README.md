@@ -25,7 +25,7 @@ This project exists thanks to all the people who contribute and who have contrib
 
 We are working on several ways to recognize people for their contributions to ClassicPress. In the meantime, you can view a list of code contributions [here on GitHub](https://github.com/ClassicPress/ClassicPress/compare/LAST_WP_COMMIT...develop).
 
-Would you like to help? [Here is how you can start](../documentation/.github/contributing.md).
+Would you like to help? [Here is how you can start](../documentation/.github/CONTRIBUTING.md).
 
 ## Donate to support ClassicPress
 
