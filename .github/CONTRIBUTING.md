@@ -1,6 +1,9 @@
-When contributing to this repository, please note we have a [code of conduct](https://forums.classicpress.net/tos#2) and request that you follow it in all your interactions with the project. 
+## Our [Code of Conduct](https://www.classicpress.net/democracy/#democracy-conduct) and [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions)
+Our code of conduct is simple: Be good to one another, take criticism well and follow the democratic process. When contributing to this repository, please note we have a [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) with some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions). 
 
-You can help by submitting pull requests(PRs) to the develop branch. This is not limited to:
+Our request is that you follow these guidelines in all your interactions with the project. 
+
+You can start helping by submitting pull requests(PRs) to the develop branch. This is not limited to:
 
 ## Documentation
 Good documentation will make the work of making ClassicPress a better software much faster and a better user experience.
@@ -31,29 +34,3 @@ Selecting the right branch is important since 4.9.x is not developed actively ex
 Properly written supporting documentation for the changeset is important. This will guide the mainatainers to evaluate the tests, consider the challenges the changeset seeks to solve or if the problem exists in ClassicPress posing a problem to the users.
 
 ***Note:*** ClassicPress seeks to improve the exisiting code quality, the documentation and tests. This might result in some delays in merging a pull request for merging. 
-
-## Code of Conduct
-
-### Our Pledge
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
-
-### Our Standards
-Examples of behavior that contributes to creating a positive environment include:
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive criticism
-* Focusing on what is best for the community
-* Showing empathy towards other community members
-
-Examples of unacceptable behavior by participants include:
-
-* The use of sexualized language or imagery and unwelcome sexual attention or advances
-* Trolling, insulting/derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic address, without explicit permission
-* Other conduct which could reasonably be considered inappropriate in a professional setting
-
-### Our Responsibilities
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
-
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
