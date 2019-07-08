@@ -128,6 +128,7 @@ class WP_Automatic_Updater {
 	 *                        access and status should be checked.
 	 */
 	public function should_update( $type, $item, $context ) {
+
 		// Used to see if WP_Filesystem is set up to allow unattended updates.
 		$skin = new Automatic_Upgrader_Skin;
 
@@ -196,6 +197,13 @@ class WP_Automatic_Updater {
 
 			if ( ! $php_compat || ! $mysql_compat )
 				return false;
+		}
+
+		// If updating a plugin, ensure the minimum PHP version requirements are satisfied.
+		if ( 'plugin' === $type ) {
+			if ( ! empty( $item->requires_php ) && version_compare( phpversion(), $item->requires_php, '<' ) ) {
+				return false;
+			}
 		}
 
 		return true;
