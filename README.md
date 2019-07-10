@@ -29,4 +29,4 @@ We are working on several ways to recognize people for their contributions to Cl
 
 ## Donate to support ClassicPress
 
-Support the ClassicPress project by making a [[donation](https://donate.classicpress.net/)]! 🙏
+Support the ClassicPress project by making a [donation](https://donate.classicpress.net)! 🙏
