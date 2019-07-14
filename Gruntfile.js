@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 							'last 1 Android versions',
 							'last 1 ChromeAndroid versions',
 							'last 2 Chrome versions',
-							'last 2 Firefox versions',
+							'Firefox >= 60',
 							'last 2 Safari versions',
 							'last 2 iOS versions',
 							'last 2 Edge versions',
