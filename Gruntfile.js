@@ -737,7 +737,7 @@ module.exports = function(grunt) {
 								entities = files.stdout.toString();
 
 								// Tidy up the file list
-								entities = entities.replace( /\.ai/g, '' );
+								entities = entities.replace( /\.svg/g, '' );
 								entities = entities.replace( /^$/g, '' );
 
 								// Convert the emoji entities to HTML entities
