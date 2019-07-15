@@ -39,6 +39,6 @@ First, check https://wpdirectory.net/ to evaluate how many plugins/themes are af
 Selecting the right branch is important since 4.9.x is not developed actively except for security issues. ~~The other options is to check the 5.x branches but it is not a pre-requisite to do a check about the code if it exists in ClassicPress. The backport script will create a branch with the changeset. A test will be done about change to check if it is supported. Some times  manual changes are required.~~
 
 1. ***Documenting***
-Properly written supporting documentation for the changeset is important. This will guide the mainatainers to evaluate the tests, consider the challenges the changeset seeks to solve or if the problem exists in ClassicPress posing a problem to the users.
+Properly written supporting documentation for the changeset is important. This will guide the maintainers to evaluate the tests, consider the challenges the changeset seeks to solve or if the problem exists in ClassicPress posing a problem to the users.
 
 ***Note:*** ClassicPress seeks to improve the exisiting code quality, the documentation and tests. This might result in some delays in merging a pull request for merging. 
