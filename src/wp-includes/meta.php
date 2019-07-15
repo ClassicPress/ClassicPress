@@ -498,7 +498,15 @@ function get_metadata($meta_type, $object_id, $meta_key = '', $single = false) {
 
 	if ( !$meta_cache ) {
 		$meta_cache = update_meta_cache( $meta_type, array( $object_id ) );
+<<<<<<< HEAD
 		$meta_cache = $meta_cache[$object_id];
+=======
+		if ( isset( $meta_cache[ $object_id ] ) ) {
+			$meta_cache = $meta_cache[ $object_id ];
+		} else {
+			$meta_cache = null;
+		}
+>>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
 	}
 
 	if ( ! $meta_key ) {
