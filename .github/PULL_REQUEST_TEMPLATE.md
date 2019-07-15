@@ -25,7 +25,7 @@ If it fixes an open issue, please link to the issue here.
 
 ## How has this been tested?
 <!--
-Please describe in detail how you tested your changes. If you have challenges writing tests, please consult the document linked. https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/
+Please describe in detail how you tested your changes. If you have challenges writing tests, please consult the document linked. https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/ or reach the community on [slack](https://join.slack.com/t/classicpress/shared_invite/enQtNDIwNjY2OTg1MjAxLWJiM2U2NmY3ZjFlZjQ4Zjk2OGI4ZTg3NzY1ZTU3NzI3OTRjMTU0YzAzOWUyZmZlODgyOWE1YTViYjcwY2Y5YzI)
 
 Include details of your testing environment, and the tests you ran to see how
 your change affects other areas of the code, etc.
