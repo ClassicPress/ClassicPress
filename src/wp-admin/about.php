@@ -284,16 +284,16 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<p>
 				<?php printf(
 					/* translators: link to learn more about translating ClassicPress */
-					__( 'The changes and new features included in each version of ClassicPress can be found at <a href="%s">the Forums Release Announcements</a> for ClassicPress 1.0.0.' ),
+					__( 'The changes and new features included in each version of ClassicPress can be found in <a href="%s">the Forums via the Release Announcements</a>' ),
 					'https://forums.classicpress.net/c/announcements/release-notes'
 				);
 				?>
 			</p>
-			<h3><?php _e( 'ClassicPress 1.0.0' ); ?></h3>
+			<h4><?php _e( 'ClassicPress 1.0.0' ); ?></h4>
 			<p>
 				<?php printf(
 					/* translators: link to learn more about translating ClassicPress */
-					__( 'For a list of major changes and new features from WordPress, go to <a href="%s">the release notes of ClassicPress 1.0.0 (Aurora)</a>' ),
+					__( 'For a list of major changes and new features that differ from WordPress 4.9.x, go to <a href="%s">the release notes of ClassicPress 1.0.0 (Aurora)</a>' ),
 					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
 				);
 				?>
