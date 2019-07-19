@@ -280,6 +280,24 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.1' );
 				?>
 			</p>
+			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: link to learn more about translating ClassicPress */
+					__( 'The changes and new features included in each version of ClassicPress can be found at <a href="%s">the Forums Release Announcements</a> for ClassicPress 1.0.0.' ),
+					'https://forums.classicpress.net/c/announcements/release-notes'
+				);
+				?>
+			</p>
+			<h3><?php _e( 'ClassicPress 1.0.0' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: link to learn more about translating ClassicPress */
+					__( 'For a list of major changes and new features from WordPress, go to <a href="%s">the release notes of ClassicPress 1.0.0 (Aurora)</a>' ),
+					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
+				);
+				?>
+			</p>
 		</div>
 	</div>
 <?php
