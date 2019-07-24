@@ -39,18 +39,6 @@
     "webpack": "4.35.3",
     "webpack-dev-server": "3.7.2"
   },
-  "browserslist": [
-    "> 1%",
-    "ie >= 11",
-    "last 1 Android versions",
-    "last 1 ChromeAndroid versions",
-    "last 2 Chrome versions",
-    "Firefox >= 60",
-    "last 2 Safari versions",
-    "last 2 iOS versions",
-    "last 2 Edge versions",
-    "last 2 Opera versions"
-  ],
   "dependencies": {
     "node-sass": "4.12.0"
   },
