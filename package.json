@@ -28,7 +28,7 @@
     "grunt-jsvalidate": "0.2.2",
     "grunt-legacy-util": "1.1.1",
     "grunt-patch-wordpress": "1.0.0",
-    "grunt-postcss": "0.9.0",
+    "@lodder/grunt-postcss": "1.0.9",
     "grunt-replace": "1.0.1",
     "grunt-rtlcss": "2.0.1",
     "grunt-sass": "3.0.2",
@@ -39,6 +39,18 @@
     "webpack": "4.35.3",
     "webpack-dev-server": "3.7.2"
   },
+  "browserslist": [
+    "> 1%",
+    "ie >= 11",
+    "last 1 Android versions",
+    "last 1 ChromeAndroid versions",
+    "last 2 Chrome versions",
+    "Firefox >= 60",
+    "last 2 Safari versions",
+    "last 2 iOS versions",
+    "last 2 Edge versions",
+    "last 2 Opera versions"
+  ],
   "dependencies": {
     "node-sass": "4.12.0"
   },

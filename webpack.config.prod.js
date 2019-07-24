@@ -5,10 +5,10 @@ var path         = require( 'path' ),
 	webpack      = require( 'webpack' );
 
 
-mediaBuilds.forEach( function ( build ) {
+mediaBuilds.forEach(( build ) => {
 	var path = SOURCE_DIR + 'wp-includes/js/media';
 	mediaConfig[ build ] = './' + path + '/' + build + '.manifest.js';
-} );
+});
 
 module.exports = {
 	mode: 'production',
