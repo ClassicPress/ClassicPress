@@ -738,9 +738,9 @@ module.exports = function(grunt) {
                                 entities = entities.replace( /-/g, '' );
 
                                 // Sort the entities list by length, so the longest emoji will be found first
-								emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
-									return b.length - a.length;
-								} );
+                                emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
+                                    return b.length - a.length;
+                                } );
 
                                 // Convert the entities list to PHP array syntax
                                 entities = `'${emojiArray.filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
