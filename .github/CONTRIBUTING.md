@@ -33,7 +33,7 @@ ClassicPress version 1.0.0 is a fork of WordPress 4.9.x however, since WordPress
 ClassicPress is commited to keeping compatibility of WordPress of WordPress 4.9. We however need help choosing, testing and documenting changesets to commit to the core with the backwards compatibility in mind. Below are some guidelines:
 
 1. ***Evaluate the changeset***
-First, check https://wpdirectory.net/ to evaluate how many plugins/themes are affected by this changeset. 
+For any changes in functions/methods, a check on https://wpdirectory.net/ is needed to evaluate how many plugins/themes use the function in question and are affected by the proposed changeset. wpdirectory provides a platform to search code in all the plugins in the WordPress Repository.
 
 1. ***Pick the branch***
 Selecting the right branch is important since 4.9.x is not developed actively except for security issues.
