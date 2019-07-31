@@ -9,6 +9,8 @@ https://petitions.classicpress.net/
 
 For more details about our governance and change planning process, see:
 https://www.classicpress.net/democracy/
+
+Please find guidelines on how to contribute to this project in our [CONTRIBUTING.md](../CONTRIBUTING.md)
 -->
 
 ## Expected behavior
