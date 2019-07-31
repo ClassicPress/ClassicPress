@@ -97,7 +97,24 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 					'https://github.com/ClassicPress/ClassicPress/issues'
 				); ?>
 			</p>
-
+			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: link to learn more about translating ClassicPress */
+					__( 'The changes and new features included in each version of ClassicPress can be found in <a href="%s">the Forums via the Release Announcements</a>' ),
+					'https://forums.classicpress.net/c/announcements/release-notes'
+				);
+				?>
+			</p>
+			<h4><?php _e( 'ClassicPress 1.0.0' ); ?></h4>
+			<p>
+				<?php printf(
+					/* translators: link to learn more about translating ClassicPress */
+					__( 'For a list of major changes and new features that differ from WordPress 4.9.x, go to <a href="%s">the release notes of ClassicPress 1.0.0 (Aurora)</a>' ),
+					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
+				);
+				?>
+			</p>
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
 			<p>
 				<?php _e(
@@ -278,24 +295,6 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				/* translators: %s: Codex URL */
 				printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.9.1' );
-				?>
-			</p>
-			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
-			<p>
-				<?php printf(
-					/* translators: link to learn more about translating ClassicPress */
-					__( 'The changes and new features included in each version of ClassicPress can be found in <a href="%s">the Forums via the Release Announcements</a>' ),
-					'https://forums.classicpress.net/c/announcements/release-notes'
-				);
-				?>
-			</p>
-			<h4><?php _e( 'ClassicPress 1.0.0' ); ?></h4>
-			<p>
-				<?php printf(
-					/* translators: link to learn more about translating ClassicPress */
-					__( 'For a list of major changes and new features that differ from WordPress 4.9.x, go to <a href="%s">the release notes of ClassicPress 1.0.0 (Aurora)</a>' ),
-					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
-				);
 				?>
 			</p>
 		</div>
