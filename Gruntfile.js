@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 							'last 1 Android versions',
 							'last 1 ChromeAndroid versions',
 							'last 2 Chrome versions',
-							'last 2 Firefox versions',
+							'Firefox >= 60',
 							'last 2 Safari versions',
 							'last 2 iOS versions',
 							'last 2 Edge versions',
@@ -729,7 +729,7 @@ module.exports = function(grunt) {
 								grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
 								// Fetch a list of the files that Twemoji supplies
-								files = spawn( 'svn', [ 'ls', 'https://github.com/twitter/twemoji.git/branches/gh-pages/2/assets' ] );
+								files = spawn( 'svn', [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ] );
 								if ( 0 !== files.status ) {
 									grunt.fatal( 'Unable to fetch Twemoji file list' );
 								}
@@ -737,7 +737,7 @@ module.exports = function(grunt) {
 								entities = files.stdout.toString();
 
 								// Tidy up the file list
-								entities = entities.replace( /\.ai/g, '' );
+								entities = entities.replace( /\.svg/g, '' );
 								entities = entities.replace( /^$/g, '' );
 
 								// Convert the emoji entities to HTML entities
