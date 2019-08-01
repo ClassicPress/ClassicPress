@@ -26,11 +26,15 @@ If your change meets all of these criteria then we will most likely accept it.
 
 We take a lot of care with our platform, and ClassicPress is maintained by volunteers in our free time. This means there may be some delays in merging pull requests.
 
-## Fixing Bugs
-Most of the bugs are shared via the [issues page](https://github.com/ClassicPress/ClassicPress/issues). 
+## What to work on?
 
-## New Feature Requests
-We have a number of [feature requests or petitions from our petitions website](https://petitions.classicpress.net/) submitted by different users and upvoted. It is desirable to start with the [planned](https://petitions.classicpress.net/?view=planned), [most wanted](https://petitions.classicpress.net/?view=most-wanted) requests or even submit PRs with your own suggested changes (However, the latter will be subject to review so as to keep inline with the projects direction).
+If you're not sure where to start contributing, here are some ideas:
+
+  - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above.
+  - Bugfixes, you can find a list of known bugs on our [issues page](https://github.com/ClassicPress/ClassicPress/issues).
+  - Issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) or [`good first issue`](https://github.com/ClassicPress/ClassicPress/labels/good%20first%20issue) labels.
+  - [Planned](https://petitions.classicpress.net/?view=planned) or [most wanted](https://petitions.classicpress.net/?view=most-wanted) feature requests from our petitions site.
+  - Exploratory PRs with your own suggested changes, but please remember these will be subject to review to make sure they are in line with the project's direction.
 
 ## Backporting Changesets from WordPress
 ClassicPress version 1.0.0 is a fork of WordPress 4.9.x however, since WordPress 5.0 a number of changes have been made to the core not limited to performance, bug fixes or new features. 
