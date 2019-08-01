@@ -97,11 +97,28 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 					'https://github.com/ClassicPress/ClassicPress/issues'
 				); ?>
 			</p>
-
+			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: link to ClassicPress release announcements subforum */
+					__( 'The changes and new features included in each version of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
+					'https://forums.classicpress.net/c/announcements/release-notes'
+				);
+				?>
+			</p>
+			<h4><?php _e( 'ClassicPress 1.0.0' ); ?></h4>
+			<p>
+				<?php printf(
+					/* translators: link to ClassicPress 1.0.0 changelog */
+					__( 'For a list of new features and other changes from WordPress 4.9.x, see the <a href="%s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
+					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
+				);
+				?>
+			</p>
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
 			<p>
 				<?php _e(
-					'ClassicPress currently includes all changes from the following versions of WordPress:'
+					'This version of ClassicPress includes all changes from the following versions of WordPress:'
 				); ?>
 			<p>
 				<?php
