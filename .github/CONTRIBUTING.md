@@ -1,8 +1,8 @@
-When considering to contribute to this repository, please note:
-- [Our code of conduct](https://www.classicpress.net/democracy/#democracy-conduct)
-- [Exceptions to contributions](https://www.classicpress.net/democracy/#democracy-exceptions). 
+Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [roadmap](https://www.classicpress.net/roadmap/) to see what's already planned for the next couple of releases.
 
-Our request is that you follow these guidelines stated in the documents above in all your interactions with the project. 
+The **petitions process** mentioned in that document is very important to help us prioritize new features based on the needs of our users. There are some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions) to this process for minor changes and bugfixes, but generally speaking it is a good idea to create an issue or a forum thread, or ask in Slack, before undertaking a change.
+
+Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
 # Start helping
 We encourage you to join our [slack channels](https://join.slack.com/t/classicpress/shared_invite/enQtNDIwNjY2OTg1MjAxLWJiM2U2NmY3ZjFlZjQ4Zjk2OGI4ZTg3NzY1ZTU3NzI3OTRjMTU0YzAzOWUyZmZlODgyOWE1YTViYjcwY2Y5YzI) for meetings to start guided PRs or get a detailed background of the project. The other avenues for PR direction are [issues on Github](https://github.com/ClassicPress/ClassicPress/issues), [forums](https://forums.classicpress.net/) and the [petitions](https://petitions.classicpress.net/) website.
