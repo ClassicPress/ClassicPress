@@ -36,18 +36,18 @@ If you're not sure where to start contributing, here are some ideas:
   - [Planned](https://petitions.classicpress.net/?view=planned) or [most wanted](https://petitions.classicpress.net/?view=most-wanted) feature requests from our petitions site.
   - Exploratory PRs with your own suggested changes, but please remember these will be subject to review to make sure they are in line with the project's direction.
 
-## Backporting Changesets from WordPress
-ClassicPress version 1.0.0 is a fork of WordPress 4.9.x however, since WordPress 5.0 a number of changes have been made to the core not limited to performance, bug fixes or new features. 
+## Backporting changes from WordPress
 
-ClassicPress is commited to keeping compatibility of WordPress of WordPress 4.9. We however need help choosing, testing and documenting changesets to commit to the core with the backwards compatibility in mind. Below are some guidelines:
+ClassicPress version `1.0.0` is a fork of WordPress `4.9.x`, and since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
 
-1. ***Evaluate the changeset***
-For any changes in functions/methods, a check on https://wpdirectory.net/ is needed to evaluate how many plugins/themes use the function in question and are affected by the proposed changeset. Wpdirectory provides a platform to search the code in all the plugins hosted on the WordPress Repository.
+ClassicPress is mainly committed to keeping compatibility with the WordPress 4.9 branch. However, we're also open to merging bugfixes and enhancements from later versions of WordPress, **as long as they meet the criteria listed above**.
 
-1. ***Pick the branch***
-Selecting the right branch is important since 4.9.x is not developed actively except for security issues.
+There are some changes that we already know we want to backport because they fit into our plans for future versions of ClassicPress. You can find some examples under the [`WP backport` label](https://github.com/ClassicPress/ClassicPress/labels/WP%20backport).
 
-1. ***Documenting***
-Properly written supporting documentation for the changeset is important. This will guide the maintainers to evaluate the tests, consider the challenges the changeset seeks to solve or if the problem exists in ClassicPress posing a problem to the users.
+Otherwise, if you're interested in backporting a change from WordPress, then please explain in a pull request or issue what the change is, how it works, and why it's something that makes sense for ClassicPress to adopt. Often there is a lot of good discussion about each change in the relevant WordPress Trac tickets, and it makes the maintainers' job much easier to see this discussion summarized and linked.
 
-***Note:*** ClassicPress seeks to improve the exisiting code quality, the documentation and tests. This might result in some delays in merging a pull request for merging. 
+If you're not sure about any of that, then it's a good idea to ask first. A good way is to create an issue for the specific change you're interested in, along with links to the relevant WordPress changesets and tickets, and any other information you have about how the change works.
+
+Finally, when you're ready to backport a code change, identify the WordPress **changeset number** that you'd like to port, and run the `bin/backport-wp-commit.sh` script to apply the change to the code. If you're porting multiple changesets, you can use the `-c` option to this script to apply all the changesets to the same branch. With each commit there may be some merge conflicts to resolve.
+
+Using this script for all backports saves time for you and for the maintainers, and it also helps us track which WordPress changes we've already included. You can see a list of those changes [here](https://bots.classicpress.net/).
