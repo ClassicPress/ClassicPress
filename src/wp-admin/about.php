@@ -118,7 +118,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
 			<p>
 				<?php _e(
-					'ClassicPress currently includes all changes from the following versions of WordPress:'
+					'This version of ClassicPress includes all changes from the following versions of WordPress:'
 				); ?>
 			<p>
 				<?php
