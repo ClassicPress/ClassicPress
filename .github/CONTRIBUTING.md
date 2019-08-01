@@ -4,12 +4,16 @@ The **petitions process** mentioned in that document is very important to help u
 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
-# Start helping
-We encourage you to join our [slack channels](https://join.slack.com/t/classicpress/shared_invite/enQtNDIwNjY2OTg1MjAxLWJiM2U2NmY3ZjFlZjQ4Zjk2OGI4ZTg3NzY1ZTU3NzI3OTRjMTU0YzAzOWUyZmZlODgyOWE1YTViYjcwY2Y5YzI) for meetings to start guided PRs or get a detailed background of the project. The other avenues for PR direction are [issues on Github](https://github.com/ClassicPress/ClassicPress/issues), [forums](https://forums.classicpress.net/) and the [petitions](https://petitions.classicpress.net/) website.
+## Communication channels
 
-***Considerations***
+We encourage you to join and ask any questions you have about contributing.
 
-When evaluating bug fixes and all pull requests(PRs), we look for, if not all these things
+- [Slack](https://www.classicpress.net/join-slack/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
+- [Petitions website](https://petitions.classicpress.net/) - for proposing new features or major changes for consideration by the community.
+- [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
+- [Forums](https://forums.classicpress.net/) - a lot of good info and discussion here too
+
+## Considerations
 
   - The change impacts existing ClassicPress users. (Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time.)
   - The change is not going to break backward compatibility ( apart from major changes which need a community backed petition and minor changes which should usually be discussed beforehand in Slack meetings or forums).
