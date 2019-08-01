@@ -1,3 +1,7 @@
+# Contributions
+
+ClassicPress is a volunteer-driven open source project that thrives when we have multiple contributors working towards a common goal.
+
 Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [roadmap](https://www.classicpress.net/roadmap/) to see what's already planned for the next couple of releases.
 
 The **petitions process** mentioned in that document is very important to help us prioritize new features based on the needs of our users. There are some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions) to this process for minor changes and bugfixes, but generally speaking it is a good idea to create an issue or a forum thread, or ask in Slack, before undertaking a change.
