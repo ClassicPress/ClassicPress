@@ -13,17 +13,18 @@ We encourage you to join and ask any questions you have about contributing.
 - [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
 - [Forums](https://forums.classicpress.net/) - a lot of good info and discussion here too
 
-## Considerations
+## Review criteria
 
-  - The change impacts existing ClassicPress users. (Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time.)
-  - The change is not going to break backward compatibility ( apart from major changes which need a community backed petition and minor changes which should usually be discussed beforehand in Slack meetings or forums).
-  - The change has automated tests.
-  - We understand the change very well or can ask questions of someone who understands it very well.
-  
-You can start helping by submitting pull requests(PRs) to the develop branch. These are not limited to:
+When evaluating bug fixes and other code changes in pull requests (PRs), we look for these things, ideally all of them:
 
-## Documentation
-Good documentation will make the work of making ClassicPress a better software much faster and a better user experience.
+  1. The change impacts existing ClassicPress users. Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time. Right now the best tool we have for this is the [petitions site](https://petitions.classicpress.net/).
+  2. The change is not going to break backward compatibility, and has minimal effects on the existing plugin and theme ecosystem. A good way to evaluate the effects of a change on plugins or themes is to do a search on https://wpdirectory.net. (Major changes are also a possibility but require a planning effort around when and how they will be released, as well as agreement from the community per our [democratic process](https://www.classicpress.net/democracy/).
+  3. The change has automated tests.
+  4. We understand the code change very well or can ask questions of someone who understands it very well.
+
+If your change meets all of these criteria then we will most likely accept it.
+
+We take a lot of care with our platform, and ClassicPress is maintained by volunteers in our free time. This means there may be some delays in merging pull requests.
 
 ## Fixing Bugs
 Most of the bugs are shared via the [issues page](https://github.com/ClassicPress/ClassicPress/issues). 
