@@ -270,6 +270,14 @@ foreach ( $themes as $theme ) :
 		</div>
 	<?php endif; ?>
 
+	<?php if ( isset( $theme['preferredChildName'] ) ) { ?>
+		<div class="notice inline notice-info notice-alt"><p><?php printf(
+			/* translators: ClassicPress child theme name */
+			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
+			$theme['preferredChildName']
+		); ?></p></div>
+	<?php } ?>
+
 	<span class="more-details" id="<?php echo $aria_action; ?>"><?php _e( 'Theme Details' ); ?></span>
 	<div class="theme-author"><?php printf( __( 'By %s' ), $theme['author'] ); ?></div>
 
@@ -398,6 +406,14 @@ $can_install = current_user_can( 'install_themes' );
 		<# } else { #>
 			<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available.' ); ?></p></div>
 		<# } #>
+	<# } #>
+
+	<# if ( data.preferredChildName ) { #>
+		<div class="notice inline notice-info notice-alt"><p><?php printf(
+			/* translators: ClassicPress child theme name */
+			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
+			'{{ data.preferredChildName }}'
+		); ?></p></div>
 	<# } #>
 
 	<span class="more-details" id="{{ data.id }}-action"><?php _e( 'Theme Details' ); ?></span>

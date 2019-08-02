@@ -1,14 +1,14 @@
-var path         = require( 'path' ),
-	SOURCE_DIR   = 'src/',
-	mediaConfig  = {},
-	mediaBuilds  = [ 'audiovideo', 'grid', 'models', 'views' ],
-	webpack      = require( 'webpack' );
+const path         = require( 'path' );
+const SOURCE_DIR   = 'src/';
+const mediaConfig  = {};
+const mediaBuilds  = [ 'audiovideo', 'grid', 'models', 'views' ];
+const webpack      = require( 'webpack' );
 
 
-mediaBuilds.forEach( function ( build ) {
-	var path = SOURCE_DIR + 'wp-includes/js/media';
-	mediaConfig[ build ] = './' + path + '/' + build + '.manifest.js';
-} );
+mediaBuilds.forEach(( build ) => {
+	const path = `${SOURCE_DIR}wp-includes/js/media`;
+	mediaConfig[ build ] = `./${path}/${build}.manifest.js`;
+});
 
 module.exports = {
 	mode: 'production',
