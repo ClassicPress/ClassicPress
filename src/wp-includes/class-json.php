@@ -363,8 +363,13 @@ class Services_JSON
                                 break;
                             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                             $char = pack('C*', $ord_var_c, ord($var{$c + 1}));
+=======
+                            
+                            $char = pack('C*', $ord_var_c, ord($var[$c + 1]));
+>>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
 =======
                             
                             $char = pack('C*', $ord_var_c, ord($var[$c + 1]));

@@ -297,9 +297,12 @@ function get_cli_args( $param, $required = false ) {
 		} elseif ( (bool) preg_match( "/^-([a-zA-Z0-9]+)/", $args[$i], $match ) ) {
 			for ( $j = 0, $jl = strlen( $match[1] ); $j < $jl; $j++ ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				$key = $match[1]{$j};
 				$out[$key] = true;
 =======
+=======
+>>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
 				$key         = $match[1][ $j ];
 				$out[ $key ] = true;
 >>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
