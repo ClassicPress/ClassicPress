@@ -463,6 +463,7 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 			$b['year'] = $lucifer[3];
 			$b['hour'] = $lucifer[4];
 			$b['minute'] = $lucifer[5];
+<<<<<<< HEAD
 			$b['time'] = @mktime($lucifer[4] + (strcasecmp($lucifer[6], "PM") == 0 ? 12 : 0), $lucifer[5], 0, $lucifer[1], $lucifer[2], $lucifer[3]);
 			$b['am/pm'] = $lucifer[6];
 			$b['name'] = $lucifer[8];
@@ -498,6 +499,40 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 					$b['year'] = date("Y");
 					$b['hour'] = $l2[1];
 					$b['minute'] = $l2[2];
+=======
+			$b['time']   = mktime( $lucifer[4] + ( strcasecmp( $lucifer[6], 'PM' ) == 0 ? 12 : 0 ), $lucifer[5], 0, $lucifer[1], $lucifer[2], $lucifer[3] );
+			$b['am/pm']  = $lucifer[6];
+			$b['name']   = $lucifer[8];
+		} elseif ( ! $is_windows ) {
+			$lucifer = preg_split( '/[ ]/', $line, 9, PREG_SPLIT_NO_EMPTY );
+			if ( $lucifer ) {
+				//echo $line."\n";
+				$lcount = count( $lucifer );
+				if ( $lcount < 8 ) {
+					return '';
+				}
+				$b           = array();
+				$b['isdir']  = $lucifer[0][0] === 'd';
+				$b['islink'] = $lucifer[0][0] === 'l';
+				if ( $b['isdir'] ) {
+					$b['type'] = 'd';
+				} elseif ( $b['islink'] ) {
+					$b['type'] = 'l';
+				} else {
+					$b['type'] = 'f';
+				}
+				$b['perms']  = $lucifer[0];
+				$b['permsn'] = $this->getnumchmodfromh( $b['perms'] );
+				$b['number'] = $lucifer[1];
+				$b['owner']  = $lucifer[2];
+				$b['group']  = $lucifer[3];
+				$b['size']   = $lucifer[4];
+				if ( $lcount == 8 ) {
+					sscanf( $lucifer[5], '%d-%d-%d', $b['year'], $b['month'], $b['day'] );
+					sscanf( $lucifer[6], '%d:%d', $b['hour'], $b['minute'] );
+					$b['time'] = mktime( $b['hour'], $b['minute'], 0, $b['month'], $b['day'], $b['year'] );
+					$b['name'] = $lucifer[7];
+>>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
 				} else {
 					$b['year'] = $lucifer[7];
 					$b['hour'] = 0;
