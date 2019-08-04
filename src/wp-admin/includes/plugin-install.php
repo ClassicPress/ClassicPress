@@ -581,6 +581,29 @@ function install_plugin_information() {
 			}
 		</style>
 		<?php
+	} else {
+		
+		// Check for existence of a header image in the plugin itself; for non-WP-repo-hosted plugins.
+
+		$extensions = array( '.jpg', '.png' );
+		$file = 'banner-772x250'; // Regular
+		$path  = 'plugins/' . sanitize_title( $_REQUEST['plugin'] ) . '/images/';
+
+		foreach ( $extensions as $extension ) {
+			if ( file_exists( WP_CONTENT_DIR . '/' . $path . $file . $extension ) ) {
+				$image = WP_CONTENT_URL . '/' . $path . $file . $extension;
+				$_with_banner = 'with-banner';
+				break;
+			}
+		}
+		?>
+		<style type="text/css">
+			#plugin-information-title.with-banner {
+				background: url('<?php echo esc_url( $image ); ?>');
+				background-size:cover;
+			}
+		</style>
+		<?php
 	}
 
 	echo '<div id="plugin-information-scrollable">';
