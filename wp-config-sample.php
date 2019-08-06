@@ -18,6 +18,8 @@
  * @package ClassicPress
  */
 
+/* START custom settings. */
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for ClassicPress */
 define('DB_NAME', 'database_name_here');
@@ -79,7 +81,10 @@ $table_prefix  = 'cp_';
  */
 define('WP_DEBUG', false);
 
-/* That's all, stop editing! Happy blogging. */
+/** 
+ * END custom settings.
+ * Any edit below this line may lead to unwanted errors. 
+ */
 
 /** Absolute path to the ClassicPress directory. */
 if ( !defined('ABSPATH') )
