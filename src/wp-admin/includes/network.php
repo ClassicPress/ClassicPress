@@ -424,7 +424,7 @@ function network_step2( $errors = false ) {
 ?>
 		<ol>
 			<li><p><?php printf(
-				/* translators: 1: wp-config.php 2: location of wp-config file, 3: translated version of "TEND custom settings. Any edit below this line may lead to unwanted errors." */
+				/* translators: 1: wp-config.php 2: location of wp-config file, 3: translated version of "END custom settings. Any edit below this line may lead to unwanted errors." */
 				__( 'Add the following to your %1$s file in %2$s <strong>above</strong> the line reading %3$s:' ),
 				'<code>wp-config.php</code>',
 				'<code>' . $location_of_wp_config . '</code>',
