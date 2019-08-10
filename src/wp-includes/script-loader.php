@@ -37,7 +37,7 @@ require( ABSPATH . WPINC . '/functions.wp-styles.php' );
 /**
  * Returns a cache buster string for an enqueued script or stylesheet.
  *
- * @since 1.0.0-beta2
+ * @since 1.0.0
  *
  * @param string $type    The type of asset being enqueued ('script' or 'style').
  * @param string $handle  The handle of the asset being enqueued (or `null` to
@@ -59,7 +59,7 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	/**
 	 * Allows modifying the asset version for each script and style.
 	 *
-	 * @since 1.0.0-beta2
+	 * @since 1.0.0
 	 *
 	 * @param string $version The default version for this asset.
 	 * @param string $type    The type of asset being enqueued ('script' or 'style').
@@ -1186,70 +1186,6 @@ function wp_localize_jquery_ui_datepicker() {
 	) );
 
 	wp_add_inline_script( 'jquery-ui-datepicker', "jQuery(document).ready(function(jQuery){jQuery.datepicker.setDefaults({$datepicker_defaults});});" );
-}
-
-/**
- * Localizes community events data that needs to be passed to dashboard.js.
- *
- * @since WP-4.8.0
- */
-function wp_localize_community_events() {
-	if ( ! wp_script_is( 'dashboard' ) ) {
-		return;
-	}
-
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-community-events.php' );
-
-	$user_id            = get_current_user_id();
-	$saved_location     = get_user_option( 'community-events-location', $user_id );
-	$saved_ip_address   = isset( $saved_location['ip'] ) ? $saved_location['ip'] : false;
-	$current_ip_address = WP_Community_Events::get_unsafe_client_ip();
-
-	/*
-	 * If the user's location is based on their IP address, then update their
-	 * location when their IP address changes. This allows them to see events
-	 * in their current city when travelling. Otherwise, they would always be
-	 * shown events in the city where they were when they first loaded the
-	 * Dashboard, which could have been months or years ago.
-	 */
-	if ( $saved_ip_address && $current_ip_address && $current_ip_address !== $saved_ip_address ) {
-		$saved_location['ip'] = $current_ip_address;
-		update_user_option( $user_id, 'community-events-location', $saved_location, true );
-	}
-
-	$events_client = new WP_Community_Events( $user_id, $saved_location );
-
-	wp_localize_script( 'dashboard', 'communityEventsData', array(
-		'nonce' => wp_create_nonce( 'community_events' ),
-		'cache' => $events_client->get_cached_events(),
-
-		'l10n' => array(
-			'enter_closest_city' => __( 'Enter your closest city to find nearby events.' ),
-			'error_occurred_please_try_again' => __( 'An error occurred. Please try again.' ),
-			'attend_event_near_generic' => __( 'Attend an upcoming event near you.' ),
-
-			/*
-			 * These specific examples were chosen to highlight the fact that a
-			 * state is not needed, even for cities whose name is not unique.
-			 * It would be too cumbersome to include that in the instructions
-			 * to the user, so it's left as an implication.
-			 */
-			/* translators: %s is the name of the city we couldn't locate.
-			 * Replace the examples with cities related to your locale. Test that
-			 * they match the expected location and have upcoming events before
-			 * including them. If no cities related to your locale have events,
-			 * then use cities related to your locale that would be recognizable
-			 * to most users. Use only the city name itself, without any region
-			 * or country. Use the endonym (native locale name) instead of the
-			 * English name if possible.
-			 */
-			'could_not_locate_city' => __( 'We couldn&#8217;t locate %s. Please try another nearby city. For example: Kansas City; Springfield; Portland.' ),
-
-			// This one is only used with wp.a11y.speak(), so it can/should be more brief.
-			/* translators: %s: the name of a city */
-			'city_updated' => __( 'City updated. Listing events near %s.' ),
-		)
-	) );
 }
 
 /**

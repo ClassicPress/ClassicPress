@@ -447,7 +447,7 @@ function themes_api( $action, $args = array() ) {
 		$url = 'https://api.wordpress.org/themes/info/1.0/';
 
 		$http_args = array(
-			'user-agent' => 'ClassicPress/' . $wp_version . '; ' . home_url( '/' ),
+			'user-agent' => classicpress_user_agent(),
 			'body' => array(
 				'action' => $action,
 				'request' => serialize( $args )
@@ -607,6 +607,18 @@ function wp_prepare_themes_for_js( $themes = null ) {
 	// Remove 'delete' action if theme has an active child
 	if ( ! empty( $parents ) && array_key_exists( $current_theme, $parents ) ) {
 		unset( $prepared_themes[ $parents[ $current_theme ] ]['actions']['delete'] );
+	}
+
+	// Indicate a preferred ClassicPress child theme for the WP parent themes
+	$wp_theme_slugs = array( 'twentyfifteen', 'twentysixteen', 'twentyseventeen' );
+	foreach ( $wp_theme_slugs as $slug ) {
+		if (
+			isset( $prepared_themes[ $slug ] ) &&
+			isset( $prepared_themes[ "classicpress-$slug" ] )
+		) {
+			$prepared_themes[ $slug ]['preferredChildName'] =
+				$prepared_themes[ "classicpress-$slug" ]['name'];
+		}
 	}
 
 	/**

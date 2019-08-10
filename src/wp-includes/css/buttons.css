@@ -392,3 +392,66 @@ TABLE OF CONTENTS:
 	}
 
 }
+
+/* ----------------------------------------------------------------------------
+  6.0 - ClassicPress Branded Button Styles
+---------------------------------------------------------------------------- */
+
+.wp-core-ui .button-primary.cp-button {
+	background: #057f99;
+	border-color: #034b59;
+	box-shadow: 0 1px 0 #034b59;
+	text-shadow: 0 -1px 1px #034b59,
+		1px 0 1px #034b59,
+		0 1px 1px #034b59,
+		-1px 0 1px #034b59;
+}
+
+.wp-core-ui .button-primary.cp-button[disabled],
+.wp-core-ui .button-primary.cp-button:disabled,
+.wp-core-ui .button-primary-disabled.cp-button,
+.wp-core-ui .button-primary.disabled.cp-button {
+	background: #057f99 !important;
+	border-color: #034b59 !important;
+	text-shadow: 0 -1px 1px #034b59,
+		1px 0 1px #034b59,
+		0 1px 1px #034b59,
+		-1px 0 1px #034b59 !important;
+	color: rgba(255, 255, 255, 0.9) !important;
+	opacity: 0.7;
+}
+
+.wp-core-ui .button.button-primary.button-hero.cp-button {
+	box-shadow: 0 2px 0 #034b59;
+	font-weight: bold;
+}
+
+.wp-core-ui .button-primary.cp-button.hover,
+.wp-core-ui .button-primary.cp-button:hover,
+.wp-core-ui .button-primary.cp-button.focus,
+.wp-core-ui .button-primary.cp-button:focus {
+	background: #006b81;
+	border-color: #034b59;
+}
+
+.wp-core-ui .button-primary.cp-button.focus,
+.wp-core-ui .button-primary.cp-button:focus {
+	box-shadow: 0 1px 0 #034b59,
+		0 0 2px 1px #07989e;
+}
+
+.wp-core-ui .button-primary.cp-button.active,
+.wp-core-ui .button-primary.cp-button.active:hover,
+.wp-core-ui .button-primary.cp-button.active:focus,
+.wp-core-ui .button-primary.cp-button:active {
+	background: #006b81;
+	border-color: #034b59;
+	box-shadow: inset 0 2px 0 #034b59;
+}
+
+.wp-core-ui .button.button-primary.button-hero.cp-button.active,
+.wp-core-ui .button.button-primary.button-hero.cp-button.active:hover,
+.wp-core-ui .button.button-primary.button-hero.cp-button.active:focus,
+.wp-core-ui .button.button-primary.button-hero.cp-button:active {
+	box-shadow: inset 0 3px 0 #034b59;
+}

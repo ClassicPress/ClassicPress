@@ -357,7 +357,7 @@ function wp_remote_retrieve_cookie_value( $response, $name ) {
  * Determines if there is an HTTP Transport that can process this request.
  *
  * @since WP-3.2.0
- * @deprecated 1.0.0-beta1
+ * @deprecated 1.0.0
  *
  * @param array  $capabilities Array of capabilities to test or a wp_remote_request() $args array.
  * @param string $url          Optional. If given, will check if the URL requires SSL and adds
@@ -727,4 +727,44 @@ function _wp_translate_php_url_constant_to_key( $constant ) {
 	} else {
 		return false;
 	}
+}
+
+/**
+ * Returns the ClassicPress User-Agent header for outgoing requests.
+ *
+ * In WordPress, this header looks like "WordPress/X.Y.Z; https://siteurl.com".
+ * To ensure compatibility with third-party services that expect requests to
+ * come from WordPress, ClassicPress uses the same pattern, but uses the URL to
+ * indicate that requests come from a ClassicPress site.
+ *
+ * @since 1.0.0
+ *
+ * @param bool $include_site_id Whether to include a site identifier (used when
+ *                              communicating with the ClassicPress API).  This
+ *                              is not personally identifiable information.
+ * @return string The User-Agent header value.
+ */
+function classicpress_user_agent( $include_site_id = false ) {
+	$url = 'https://www.classicpress.net/?wp_compatible=true'
+		. '&ver=' . classicpress_version_short();
+
+	if ( $include_site_id ) {
+		$url .= '&site=' . sha1( preg_replace(
+			'#^https?:#',
+			'',
+			strtolower( untrailingslashit( home_url( '/' ) ) )
+		) );
+	}
+
+	$user_agent = 'WordPress/' . get_bloginfo( 'version' ) . '; ' . $url;
+
+	/**
+	 * Filters the user agent value sent with an HTTP request.
+	 *
+	 * @since WP-2.7.0
+	 * @since 1.0.0 This filter is applied to all HTTP requests.
+	 *
+	 * @param string $user_agent ClassicPress user agent string.
+	 */
+	return apply_filters( 'http_headers_useragent', $user_agent );
 }

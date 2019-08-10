@@ -26,7 +26,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		<p class="about-text">
 			<?php printf(
 				/* translators: link to "business-focused CMS" article */
-				'Thank you for using ClassicPress, the <a href="%s">business-focused CMS</a>.',
+				__( 'Thank you for using ClassicPress, the <a href="%s">business-focused CMS</a>.' ),
 				'https://www.classicpress.net/blog/2018/10/29/classicpress-for-business-professional-organization-websites/'
 			); ?>
 			<br />
@@ -42,6 +42,17 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		</h2>
 
 		<div class="changelog point-releases about-wrap-content">
+
+			<?php if ( get_locale() !== 'en_US' ) { ?>
+				<p class="about-inline-notice notice-warning">
+					<?php printf(
+						/* translators: link to learn more about translating ClassicPress */
+						__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
+						'https://www.classicpress.net/translating-classicpress/'
+					); ?>
+				</p>
+			<?php } ?>
+
 			<h3><?php _e( 'Introducing ClassicPress' ); ?></h3>
 
 			<p>
@@ -86,12 +97,49 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 					'https://github.com/ClassicPress/ClassicPress/issues'
 				); ?>
 			</p>
-
+			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
+			<p>
+				<?php printf(
+					/* translators: link to ClassicPress release announcements subforum */
+					__( 'The changes and new features included in each version of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
+					'https://forums.classicpress.net/c/announcements/release-notes'
+				);
+				?>
+			</p>
+			<h4><?php _e( 'ClassicPress 1.0.0' ); ?></h4>
+			<p>
+				<?php printf(
+					/* translators: link to ClassicPress 1.0.0 changelog */
+					__( 'For a list of new features and other changes from WordPress 4.9.x, see the <a href="%s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
+					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
+				);
+				?>
+			</p>
 			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
 			<p>
 				<?php _e(
-					'ClassicPress currently includes all changes from the following versions of WordPress:'
+					'This version of ClassicPress includes all changes from the following versions of WordPress:'
 				); ?>
+			<p>
+				<?php
+				printf(
+					/* translators: %s: WordPress version number */
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					'4.9.10'
+				);
+				?>
+				<?php
+				printf(
+					/* translators: %s: HelpHub URL */
+					__( 'For more information, see <a href="%s">the release notes</a>.' ),
+					sprintf(
+						/* translators: %s: WordPress version */
+						esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
+						sanitize_title( '4.9.10' )
+					)
+				);
+				?>
+			</p>
 			<p>
 				<?php
 				/* translators: %s: WordPress version number */

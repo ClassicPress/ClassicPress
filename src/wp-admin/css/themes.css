@@ -48,6 +48,9 @@ body.js .theme-browser.search-loading {
 	right: 0;
 	top: 0;
 }
+.theme .notice.update-message + .notice {
+	top: 39px;
+}
 
 /**
  * Main theme element

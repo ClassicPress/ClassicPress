@@ -309,4 +309,41 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 		);
 	}
 
+	function test_classicpress_user_agent_short() {
+		global $wp_version;
+
+		$ua_short = classicpress_user_agent();
+
+		$this->assertStringStartsWith(
+			"WordPress/$wp_version; https://",
+			$ua_short
+		);
+
+		$this->assertStringEndsWith(
+			'?wp_compatible=true&ver=' . classicpress_version_short(),
+			$ua_short
+		);
+	}
+
+	function test_classicpress_user_agent_full() {
+		global $wp_version;
+
+		$ua_full = classicpress_user_agent( true );
+
+		$this->assertStringStartsWith(
+			"WordPress/$wp_version; https://",
+			$ua_full
+		);
+
+		$this->assertContains(
+			'&ver=' . classicpress_version_short() . '&site=',
+			$ua_full
+		);
+
+		$this->assertRegExp(
+			'#&site=[0-9a-f]{40}$#',
+			$ua_full
+		);
+	}
+
 }
