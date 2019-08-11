@@ -34,7 +34,7 @@ We take a lot of care with our platform, and ClassicPress is maintained by volun
 
 If you're not sure where to start contributing, here are some ideas:
 
-  - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above.
+  - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above. We need to be thorough and careful with any changes we make, and the more eyes we can get on our PRs the better.
   - Bugfixes, you can find a list of known bugs on our [issues page](https://github.com/ClassicPress/ClassicPress/issues).
   - Issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) or [`good first issue`](https://github.com/ClassicPress/ClassicPress/labels/good%20first%20issue) labels.
   - [Planned](https://petitions.classicpress.net/?view=planned) or [most wanted](https://petitions.classicpress.net/?view=most-wanted) feature requests from our petitions site.
