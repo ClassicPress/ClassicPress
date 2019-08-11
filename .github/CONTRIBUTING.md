@@ -4,7 +4,7 @@ ClassicPress is a volunteer-driven open source project that thrives when we have
 
 Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [roadmap](https://www.classicpress.net/roadmap/) to see what's already planned for the next couple of releases.
 
-The **petitions process** mentioned in that document is very important to help us prioritize new features based on the needs of our users. There are some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions) to this process for minor changes and bugfixes, but generally speaking it is a good idea to ask in one of our communication channels (see below) before undertaking a change.
+The **petitions process** mentioned in our Democracy document is very important to help us prioritize new features based on the needs of our users. There are some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions) to this process for minor changes and bugfixes, but generally speaking it is a good idea to search or ask in one of our communication channels (see below) before undertaking a change, because most changes should go through the petitions process.
 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
@@ -22,7 +22,7 @@ We encourage you to join and ask any questions you have about contributing.
 When evaluating bug fixes and other code changes in pull requests (PRs), we look for these things, ideally all of them:
 
   1. The change impacts existing ClassicPress users. Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time. Right now the best tool we have for this is the [petitions site](https://petitions.classicpress.net/).
-  2. The change is not going to break backward compatibility, and has minimal effects on the existing plugin and theme ecosystem. A good way to evaluate the effects of a change on plugins or themes is to do a search on https://wpdirectory.net. (Major changes are also a possibility but require a planning effort around when and how they will be released, as well as agreement from the community per our [democratic process](https://www.classicpress.net/democracy/).
+  2. The change is not going to break backward compatibility, and has minimal effects on the existing plugin and theme ecosystem. A good way to evaluate the effects of a change on plugins or themes is to do a search on https://wpdirectory.net. (Major changes are also a possibility but require a planning effort around when and how they will be released, as well as agreement from the community per our [democratic process](https://www.classicpress.net/democracy/).)
   3. The change has automated tests.
   4. We understand the code change very well or can ask questions of someone who understands it very well.
 
@@ -34,7 +34,7 @@ We take a lot of care with our platform, and ClassicPress is maintained by volun
 
 If you're not sure where to start contributing, here are some ideas:
 
-  - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above. We need to be thorough and careful with any changes we make, and the more eyes we can get on our PRs the better.
+  - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above. Let us know how you tested the changes and what you found. We need to be thorough and careful with any changes we make, and the more eyes we can get on our PRs the better.
   - Bugfixes, you can find a list of known bugs on our [issues page](https://github.com/ClassicPress/ClassicPress/issues).
   - Issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) or [`good first issue`](https://github.com/ClassicPress/ClassicPress/labels/good%20first%20issue) labels.
   - [Planned](https://petitions.classicpress.net/?view=planned) or [most wanted](https://petitions.classicpress.net/?view=most-wanted) feature requests from our petitions site.
@@ -52,17 +52,11 @@ If you're not familiar with automated tests, the concept is basically **code tha
 
 A good place to start with automated tests is to **run the existing test suite**. Here are brief steps to make this work:
 
-0. Linux and OS X are supported.
+0. **Linux and OS X are supported.** Windows users will probably have an easier time using a Linux virtual machine or the "Windows Subsystem for Linux" shell available for recent versions of Windows.
 
-Windows users will probably have an easier time using a Linux virtual machine or the "Windows Subsystem for Linux" shell available for recent versions of Windows.
+1. **Be sure your PHP installation supports the `mbstring` module.** If you're not sure, run `php -m` and look for `mbstring` in the list. If it's not present, and you're on Ubuntu or Debian Linux, you can run `sudo apt-get install php-mbstring` to fix this.
 
-1. Be sure your PHP installation supports the `mbstring` module.
-
-If you're not sure, run `php -m` and look for `mbstring` in the list. If it's not present, and you're on Ubuntu or Debian Linux, you can run `sudo apt-get install php-mbstring` to fix this.
-
-2. Install `phpunit` version `6.x`.
-
-Example terminal commands:
+2. **Install `phpunit` version `6.x`.** Example terminal commands:
 
 ```
 wget https://phar.phpunit.de/phpunit-6.5.9.phar
@@ -71,28 +65,24 @@ sudo mv phpunit-6.5.9.phar /usr/local/bin/phpunit
 phpunit --version
 ```
 
-3. Clone the ClassicPress `git` repository to your computer:
+3. **Clone the ClassicPress `git` repository to your computer:**
 
 ```
 git clone https://github.com/ClassicPress/ClassicPress.git
 cd ClassicPress
 ```
 
-4. Install MySQL and create an empty MySQL database.
+4. **Install MySQL and create an empty MySQL database.** The test suite will **delete all data** from all tables for whichever MySQL database is configured. *Use a separate database from any ClassicPress or WordPress installations on your computer*.
 
-The test suite will **delete all data** from all tables for whichever MySQL database is configured. **Use a separate database from any ClassicPress or WordPress installations on your computer**.
+5. **Set up a config file for the tests.** Copy `wp-tests-config-sample.php` to `wp-tests-config.php`, and enter your database credentials from the step above. *Use a separate database from any ClassicPress or WordPress installations on your computer*, because data in this database **will be deleted** with each test run.
 
-5. Set up a config file for the tests.
-
-Copy `wp-tests-config-sample.php` to `wp-tests-config.php`, and enter your database credentials from the step above. **Use a separate database from any ClassicPress or WordPress installations on your computer**, because data in this database will be deleted with each test run.
-
-6. Run the tests:
+6. **Run the tests:**
 
 ```
 phpunit
 ```
 
-7. Explore the existing tests in the `tests/phpunit/tests` directory, look at how they work, edit them and break them, and write your own.
+7. **Explore the existing tests** in the `tests/phpunit/tests` directory, look at how they work, edit them and break them, and write your own.
 
 _Note: this document is adapted from https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/ which contains more detail, but there are some differences in how automated tests work with recent versions of WordPress._
 
