@@ -15,7 +15,7 @@ We encourage you to join and ask any questions you have about contributing.
 - [Slack](https://www.classicpress.net/join-slack/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
 - [Petitions website](https://petitions.classicpress.net/) - for proposing new features or major changes for consideration by the community.
 - [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
-- [Forums](https://forums.classicpress.net/) - a lot of good info and discussion here too
+- [Forums](https://forums.classicpress.net/) - if you're not sure where to post your questions, searching and then posting on the forums is a good start. The forums are our most active community channel other than Slack.
 
 ## Review criteria
 
