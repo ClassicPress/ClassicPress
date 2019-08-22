@@ -15,8 +15,8 @@ class Tests_Login extends WP_UnitTestCase {
 	}
 
 	/**
-     * @runInSeparateProcess
-     */
+	 * @runInSeparateProcess
+	 */
      public function test_reset_password() {
      	ob_start();
 		include_once( ABSPATH . '/wp-login.php' );
@@ -26,7 +26,7 @@ class Tests_Login extends WP_UnitTestCase {
 		$mailer = tests_retrieve_phpmailer_instance();
 		ob_end_clean();
 
-		$regex = '/[^<]http:\/\/example.org\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login=admin[^>]$/i';
+		$regex = '/^http:\/\/' . WP_TESTS_DOMAIN . '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login=admin$/mi';
 
 		$test = preg_match( $regex, $mailer->get_sent()->body );
 
