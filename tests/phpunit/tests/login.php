@@ -4,7 +4,7 @@
  */
 class Tests_Login extends WP_UnitTestCase {
 	function setUp() {
-		//parent::setUp();
+		parent::setUp();
 		reset_phpmailer_instance();
 	}
 
