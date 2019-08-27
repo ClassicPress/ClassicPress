@@ -4,6 +4,8 @@
  * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
+	static $ignore_files = true;
+
 	function setUp() {
 		parent::setUp();
 		reset_phpmailer_instance();
