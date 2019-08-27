@@ -1,11 +1,10 @@
 <?php
 /**
  * @group login
- * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
 	function setUp() {
-		parent::setUp();
+		//parent::setUp();
 		reset_phpmailer_instance();
 	}
 
@@ -17,8 +16,8 @@ class Tests_Login extends WP_UnitTestCase {
 	/**
 	 * @runInSeparateProcess
 	 */
-     public function test_reset_password() {
-     	ob_start();
+	public function test_reset_password() {
+		ob_start();
 		include_once( ABSPATH . '/wp-login.php' );
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
