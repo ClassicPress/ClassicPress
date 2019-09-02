@@ -1306,6 +1306,8 @@ function do_feed_atom( $for_comments ) {
  * robots.txt file.
  *
  * @since WP-2.1.0
+ * @since WP-5.3.0 Remove the "Disallow: /" output if search engine visiblity is
+ *              discouraged in favor of robots meta HTML tag in wp_no_robots().
  */
 function do_robots() {
 	header( 'Content-Type: text/plain; charset=utf-8' );
@@ -1319,14 +1321,11 @@ function do_robots() {
 
 	$output = "User-agent: *\n";
 	$public = get_option( 'blog_public' );
-	if ( '0' == $public ) {
-		$output .= "Disallow: /\n";
-	} else {
-		$site_url = parse_url( site_url() );
-		$path = ( !empty( $site_url['path'] ) ) ? $site_url['path'] : '';
-		$output .= "Disallow: $path/wp-admin/\n";
-		$output .= "Allow: $path/wp-admin/admin-ajax.php\n";
-	}
+
+	$site_url = parse_url( site_url() );
+	$path     = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
+	$output  .= "Disallow: $path/wp-admin/\n";
+	$output  .= "Allow: $path/wp-admin/admin-ajax.php\n";
 
 	/**
 	 * Filters the robots.txt output.
@@ -2404,7 +2403,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2413,7 +2412,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
