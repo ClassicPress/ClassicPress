@@ -266,6 +266,7 @@ $menu[80]                               = array( sprintf( __( 'Settings %s' ), $
 	$submenu['options-general.php'][45] = array( sprintf( __( 'Privacy %s' ), $change_notice ), 'manage_privacy_options', 'privacy.php' );
 
 $menu[85] = array( __('Security'), 'manage_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
+	$submenu['security.php'][10] = array( _x( 'ClassicPress', 'security screen' ), 'manage_options', 'security.php' );
 
 $_wp_last_utility_menu = 85; // The index of the last top-level menu in the utility menu group
 
