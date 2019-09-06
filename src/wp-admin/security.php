@@ -67,7 +67,7 @@ switch ($active_tab):
               <div>
                 <p>The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its pupose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.</p>
                 <p>Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings - they may be in there somewhere, there may be none at all - without looking through everything there&lsquo;s no way to know.</p>
-                <p>Currenty, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all the security-related settings from all the plugins in one place means those settings can be autidted far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.</p>
+                <p>Currenty, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all security-related settings from all plugins in one place means those settings can be autidted far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.</p>
               </div>
             </div>
           </div>
