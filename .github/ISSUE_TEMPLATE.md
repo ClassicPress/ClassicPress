@@ -4,11 +4,9 @@ Provide a general summary of the issue in the Title above.
 We welcome issues and pull requests for bugs and minor improvements, but please
 note that major changes must be approved and planned.
 
-To suggest new features or major changes, please visit our Petitions website at:
-https://petitions.classicpress.net/
+Please read our contributing guidelines for more information:
 
-For more details about our governance and change planning process, see:
-https://www.classicpress.net/democracy/
+https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md
 -->
 
 ## Expected behavior
@@ -45,6 +43,6 @@ this bug. Include code to reproduce, if relevant.
 <!--
 How has this issue affected you? What are you trying to accomplish?
 
-Providing context helps us come up with a solution that is most useful in the
-real world.
+Providing context helps us come up with a solution that is most useful to our
+real-world users.
 -->
