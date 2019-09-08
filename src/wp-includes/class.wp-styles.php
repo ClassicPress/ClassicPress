@@ -158,10 +158,17 @@ class WP_Styles extends WP_Dependencies {
 		else
 			$media = 'all';
 
+		if ( ! current_theme_supports( 'html5' ) ) {
+			$type = " type='text/css'";
+		} else {
+			$type = '';
+		}
+
 		// A single item may alias a set of items, by having dependencies, but no source.
 		if ( ! $obj->src ) {
 			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$inline_style = sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+
+				$inline_style = sprintf( "<style%s id='%s-inline-css'>\n%s\n</style>\n", $type, esc_attr( $handle ), $inline_style );
 				if ( $this->do_concat ) {
 					$this->print_html .= $inline_style;
 				} else {
@@ -191,7 +198,7 @@ class WP_Styles extends WP_Dependencies {
 		 * @param string $href   The stylesheet's source URL.
 		 * @param string $media  The stylesheet's media attribute.
 		 */
-		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media);
+		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' media='$media' />\n", $handle, $href, $media);
 		if ( 'rtl' === $this->text_direction && isset($obj->extra['rtl']) && $obj->extra['rtl'] ) {
 			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
 				$suffix = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
@@ -201,7 +208,7 @@ class WP_Styles extends WP_Dependencies {
 			}
 
 			/** This filter is documented in wp-includes/class.wp-styles.php */
-			$rtl_tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-rtl-css' $title href='$rtl_href' type='text/css' media='$media' />\n", $handle, $rtl_href, $media );
+			$rtl_tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-rtl-css' $title href='$rtl_href'{$type} media='$media' />\n", $handle, $rtl_href, $media );
 
 			if ( $obj->extra['rtl'] === 'replace' ) {
 				$tag = $rtl_tag;
@@ -220,7 +227,7 @@ class WP_Styles extends WP_Dependencies {
 			$this->print_html .= $conditional_pre;
 			$this->print_html .= $tag;
 			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$this->print_html .= sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+				$this->print_html .= sprintf( "<style%s id='%s-inline-css'>\n%s\n</style>\n", $type, esc_attr( $handle ), $inline_style );
 			}
 			$this->print_html .= $conditional_post;
 		} else {
@@ -280,7 +287,13 @@ class WP_Styles extends WP_Dependencies {
 			return $output;
 		}
 
-		printf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $output );
+		if ( ! current_theme_supports( 'html5' ) ) {
+			$type = " type='text/css'";
+		} else {
+			$type = '';
+		}
+
+		printf( "<style%s id='%s-inline-css'>\n%s\n</style>\n", $type, esc_attr( $handle ), $output );
 
 		return true;
 	}

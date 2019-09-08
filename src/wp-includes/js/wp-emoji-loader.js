@@ -127,7 +127,7 @@
 		var script = document.createElement( 'script' );
 
 		script.src = src;
-		script.defer = script.type = 'text/javascript';
+		script.defer = script.type = '';
 		document.getElementsByTagName( 'head' )[0].appendChild( script );
 	}
 

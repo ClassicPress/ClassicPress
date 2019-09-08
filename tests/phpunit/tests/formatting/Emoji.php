@@ -146,4 +146,36 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	public function test_wp_staticize_emoji( $emoji, $expected ) {
 		$this->assertSame( $expected, wp_staticize_emoji( $emoji ) );
 	}
+
+	public function test_detecton_script_with_html5() {
+		add_theme_support( 'html5' );
+		$output = get_echo( '_print_emoji_detection_script' );
+
+		$this->assertFalse( strstr( $output, 'type="text/javascript"' ) );
+	}
+
+	public function test_detecton_script_without_html5() {
+		remove_theme_support( 'html5' );
+		$output = get_echo( '_print_emoji_detection_script' );
+
+		$this->assertNotFalse( strstr( $output, 'type="text/javascript"' ) );
+	}
+
+	public function test_print_emoji_styles_with_html5() {
+		add_theme_support( 'html5' );
+		$output = get_echo( 'print_emoji_styles' );
+
+		$this->assertFalse( strstr( $output, 'type="text/css"' ) );
+	}
+
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function test_print_emoji_styles_without_html5() {
+		remove_theme_support( 'html5' );
+		$printed = false;
+		$output = get_echo( 'print_emoji_styles' );
+
+		$this->assertNotFalse( strstr( $output, 'type="text/css"' ) );
+	}
 }

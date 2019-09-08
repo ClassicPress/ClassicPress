@@ -202,10 +202,16 @@ class WP_Scripts extends WP_Dependencies {
 		if ( !$echo )
 			return $output;
 
-		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5
-		echo "/* <![CDATA[ */\n";
+		if ( ! current_theme_supports( 'html5' ) ) {
+			echo "<script type='text/javascript'>\n";
+			echo "/* <![CDATA[ */\n";
+		} else {
+			echo "<script>\n"; // CDATA and is not needed for HTML 5
+		}
 		echo "$output\n";
-		echo "/* ]]> */\n";
+		if ( ! current_theme_supports( 'html5' ) ) {
+			echo "/* ]]> */\n";
+		}
 		echo "</script>\n";
 
 		return true;
@@ -261,12 +267,18 @@ class WP_Scripts extends WP_Dependencies {
 		$before_handle = $this->print_inline_script( $handle, 'before', false );
 		$after_handle = $this->print_inline_script( $handle, 'after', false );
 
+		if ( ! current_theme_supports( 'html5' ) ) {
+			$type = " type='text/javascript'";
+		} else {
+			$type = '';
+		}
+
 		if ( $before_handle ) {
-			$before_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $before_handle );
+			$before_handle = sprintf( "<script%s>\n%s\n</script>\n", $type, $before_handle );
 		}
 
 		if ( $after_handle ) {
-			$after_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $after_handle );
+			$after_handle = sprintf( "<script%s>\n%s\n</script>\n", $type, $after_handle );
 		}
 
 		if ( $this->do_concat ) {
@@ -327,7 +339,7 @@ class WP_Scripts extends WP_Dependencies {
 		if ( ! $src )
 			return true;
 
-		$tag = "{$cond_before}{$before_handle}<script type='text/javascript' src='$src'></script>\n{$after_handle}{$cond_after}";
+		$tag = "{$cond_before}{$before_handle}<script{$type} src='$src'></script>\n{$after_handle}{$cond_after}";
 
 		/**
 		 * Filters the HTML script tag of an enqueued script.
@@ -396,8 +408,14 @@ class WP_Scripts extends WP_Dependencies {
 
 		$output = trim( implode( "\n", $output ), "\n" );
 
+		if ( ! current_theme_supports( 'html5' ) ) {
+			$type = " type='text/javascript'";
+		} else {
+			$type = '';
+		}
+
 		if ( $echo ) {
-			printf( "<script type='text/javascript'>\n%s\n</script>\n", $output );
+			printf( "<script%s>\n%s\n</script>\n", $type, $output );
 		}
 
 		return $output;

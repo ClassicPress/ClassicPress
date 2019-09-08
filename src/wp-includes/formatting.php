@@ -4988,7 +4988,7 @@ function print_emoji_styles() {
 
 	$printed = true;
 ?>
-<style type="text/css">
+<style<?php if ( ! current_theme_supports( 'html5' ) ) { echo ' type="text/css"'; } ?>>
 img.wp-smiley,
 img.emoji {
 	display: inline !important;
@@ -5081,7 +5081,7 @@ function _print_emoji_detection_script() {
 		);
 
 		?>
-		<script type="text/javascript">
+		<script<?php if ( ! current_theme_supports( 'html5' ) ) { echo ' type="text/javascript"'; } ?>>
 			window._wpemojiSettings = <?php echo wp_json_encode( $settings ); ?>;
 			<?php readfile( ABSPATH . WPINC . "/js/wp-emoji-loader.js" ); ?>
 		</script>
@@ -5104,7 +5104,7 @@ function _print_emoji_detection_script() {
 		 * and edit wp-emoji-loader.js directly.
 		 */
 		?>
-		<script type="text/javascript">
+		<script<?php if ( ! current_theme_supports( 'html5' ) ) { echo ' type="text/javascript"'; } ?>>
 			window._wpemojiSettings = <?php echo wp_json_encode( $settings ); ?>;
 			include "js/wp-emoji-loader.min.js"
 		</script>

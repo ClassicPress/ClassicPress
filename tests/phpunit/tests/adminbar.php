@@ -716,6 +716,46 @@ class Tests_AdminBar extends WP_UnitTestCase {
 		}
 	}
 
+	public function test_style_type_with_html5_in_admin_bar_bump_cb() {
+		ob_start();
+		add_theme_support( 'html5' );
+		_admin_bar_bump_cb();
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertFalse( strstr( $output, 'type="text/css') );
+	}
+
+	public function test_style_type_without_html5_in_admin_bar_bump_cb() {
+		ob_start();
+		remove_theme_support( 'html5' );
+		_admin_bar_bump_cb();
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertNotFalse( strstr( $output, 'type="text/css') );
+	}
+
+	public function test_style_type_with_html5_in_admin_bar_header() {
+		ob_start();
+		add_theme_support( 'html5' );
+		wp_admin_bar_header();
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertFalse( strstr( $output, 'type="text/css') );
+	}
+
+	public function test_style_type_without_html5_in_admin_bar_header() {
+		ob_start();
+		remove_theme_support( 'html5' );
+		wp_admin_bar_header();
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertNotFalse( strstr( $output, 'type="text/css') );
+	}
+
 	private function get_my_sites_network_menu_items() {
 		return array(
 			'my-sites-super-admin' => 'manage_network',

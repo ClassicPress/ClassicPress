@@ -1226,4 +1226,30 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['htmlhint'] )
 		);
 	}
+
+	public function test_javascript_type_with_html5_in_print_inline_script() {
+		wp_enqueue_script( 'test-example', 'example.com', array(), null );
+		wp_add_inline_script( 'test-example', 'console.log("html5");' );
+		add_theme_support( 'html5' );
+		global $wp_scripts;
+		ob_start();
+		$wp_scripts->print_inline_script( 'test-example', 'after' );
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertFalse( strstr( $output, "type='text/javascript'" ) );
+	}
+
+	public function test_javascript_type_without_html5_in_print_inline_script() {
+		wp_enqueue_script( 'test-example', 'example.com', array(), null );
+		wp_add_inline_script( 'test-example', 'console.log("html5");' );
+		remove_theme_support( 'html5' );
+		global $wp_scripts;
+		ob_start();
+		$wp_scripts->print_inline_script( 'test-example', 'after' );
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assertNotFalse( strstr( $output, "type='text/javascript'" ) );
+	}
 }
