@@ -44,6 +44,21 @@ If you're not sure where to start contributing, here are some ideas:
 
 Here is some more information about a few subjects where we've noticed some frequent questions from contributors.
 
+### Tips for good PRs
+
+A good pull request (PR) should be for a single, specific change. The change should be explained using the template provided on GitHub, and any new or modified code should have automated tests, especially if the way it works is at all complicated.
+
+Generally it is best to only use one pull request for each change, even if the initial code needs revision after review and feedback. Closing the initial pull request and opening a new one makes it more difficult to follow the history of the change, and it is much better to just update the existing PR in response to any feedback received.
+
+To be accepted, a PR **must** pass the automated tests on Travis CI. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Generally when this happens we start a sepaate PR to resolve the failure, and once that is merged, the following sequence of commands will get the build passing again for your PR:
+
+```
+git checkout your-pr-branch
+git fetch upstream
+git merge upstream/develop
+git push origin your-pr-branch
+```
+
 ### Automated tests
 
 Any change that introduces new code or changes behavior should have automated tests. These tests mostly use [PHPUnit](https://phpunit.de/) to verify the behavior of the many thousands of lines of PHP code in ClassicPress.
