@@ -28,7 +28,7 @@ When evaluating bug fixes and other code changes in pull requests (PRs), we look
 
 If your change meets all of these criteria then we will most likely accept it.
 
-We take a lot of care with our platform, and ClassicPress is maintained by volunteers in our free time. This means there may be some delays in merging pull requests.
+We take a lot of care with our platform, and ClassicPress is maintained by volunteers in our free time. This means there may be some delays in reviewing and merging pull requests.
 
 ## What to work on?
 
@@ -90,14 +90,18 @@ _Note: this document is adapted from https://make.wordpress.org/core/handbook/te
 
 ClassicPress version `1.0.0` is a fork of WordPress `4.9.x`, and since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
 
-ClassicPress is mainly committed to keeping compatibility with the WordPress 4.9 branch. However, we're also open to merging bugfixes and enhancements from later versions of WordPress, **as long as they meet the criteria listed above**.
+ClassicPress is mainly committed to keeping compatibility with the WordPress 4.9 branch. However, we're also open to merging bugfixes and enhancements from later versions of WordPress, **as long as the review criteria listed above are met**.
+
+Changes must be proposed and reviewed **individually** - long lists of tickets or changesets from individual WordPress versions don't give us what we need in order to plan and understand each change well.
 
 There are some changes that we already know we want to backport because they fit into our plans for future versions of ClassicPress. You can find some examples under the [`WP backport` label](https://github.com/ClassicPress/ClassicPress/labels/WP%20backport).
 
-Otherwise, if you're interested in backporting a change from WordPress, then please explain in a pull request or issue what the change is, how it works, and why it's something that makes sense for ClassicPress to adopt. Often there is a lot of good discussion about each change in the relevant WordPress Trac tickets, and it makes the maintainers' job much easier to see this discussion summarized and linked.
+Otherwise, if you're interested in backporting a change from WordPress, then please explain in a pull request or issue what the specific change is, how it works, and why it's something that makes sense for ClassicPress to adopt. Often there is a lot of good discussion about each change in the relevant WordPress Trac tickets, and it makes the maintainers' job much easier to see this discussion summarized and linked.
 
 If you're not sure about any of that, then it's a good idea to ask first. A good way is to create an issue for the specific change you're interested in, along with links to the relevant WordPress changesets and tickets, and any other information you have about how the change works.
 
 Finally, when you're ready to backport a code change, identify the WordPress **changeset number** that you'd like to port, and run the `bin/backport-wp-commit.sh` script to apply the change to the code. If you're porting multiple changesets, you can use the `-c` option to this script to apply all the changesets to the same branch. With each commit there may be some merge conflicts to resolve.
 
-Using this script for all backports saves time for you and for the maintainers, and it also helps us track which WordPress changes we've already included. You can see a list of those changes [here](https://bots.classicpress.net/).
+Using this script for all backports saves time for you and for the maintainers, and it also uses a standardized format for commit messages which makes it possible for us to track which WordPress changes we've already included. If there are merge conflicts for your changes, be sure to use `git cherry-pick --continue` after resolving them, because this will preserve the commit message in the required format.
+
+You can see a list of all WordPress changes since the fork, along with information about which ones have already been included, at [backports.classicpress.net](https://backports.classicpress.net).
