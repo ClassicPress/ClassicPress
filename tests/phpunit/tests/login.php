@@ -26,7 +26,7 @@ class Tests_Login extends WP_UnitTestCase {
 		$mailer = tests_retrieve_phpmailer_instance();
 		ob_end_clean();
 
-		$regex = '/^http:\/\/' . WP_TESTS_DOMAIN . '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login=admin$/mi';
+		$regex = '/^http:\/\/' . WP_TESTS_DOMAIN . '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login=' . $_POST['user_login'] . '$/mi';
 
 		$test = preg_match( $regex, $mailer->get_sent()->body );
 
