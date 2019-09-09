@@ -59,6 +59,8 @@ git merge upstream/develop
 git push origin your-pr-branch
 ```
 
+It is always a good idea to look at the "Files" view on GitHub after submitting your PR, and verify that the changes look as expected. Generally there should be no "extra" changes that are not related to the purpose of your PR, like reformatting or re-aligning files (this is best done in a separate PR just for that purpose). If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
+
 ### Automated tests
 
 Any change that introduces new code or changes behavior should have automated tests. These tests mostly use [PHPUnit](https://phpunit.de/) to verify the behavior of the many thousands of lines of PHP code in ClassicPress.
