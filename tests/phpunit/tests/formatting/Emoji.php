@@ -9,6 +9,15 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	private $png_cdn = 'https://twemoji.classicpress.net/12/72x72/';
 	private $svn_cdn = 'https://twemoji.classicpress.net/12/svg/';
 
+	function setUp() {
+		// This is not done when loading the login page, but parent::setUp()
+		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
+		if ( wp_using_ext_object_cache() ) {
+			wp_cache_init();
+		}
+		parent::setUp();
+	}
+
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/36525
 	 */
@@ -173,8 +182,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	 */
 	public function test_print_emoji_styles_without_html5() {
 		remove_theme_support( 'html5' );
-		$printed = false;
 		$output = get_echo( 'print_emoji_styles' );
+
 
 		$this->assertNotFalse( strstr( $output, 'type="text/css"' ) );
 	}
