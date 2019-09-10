@@ -4,13 +4,13 @@
  */
 class Tests_Login extends WP_UnitTestCase {
 	function setUp() {
+		// This is not done when loading the login page, but parent::setUp()
+		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
 		if ( wp_using_ext_object_cache() ) {
-			$this->markTestSkipped( 'Not testable with an external object cache.' );
-		} else {
-			self::$ignore_files = true;
-			parent::setUp();
-			reset_phpmailer_instance();
+			wp_cache_init();
 		}
+		parent::setUp();
+		reset_phpmailer_instance();
 	}
 
 	function tearDown() {
@@ -30,7 +30,13 @@ class Tests_Login extends WP_UnitTestCase {
 		$mailer = tests_retrieve_phpmailer_instance();
 		ob_end_clean();
 
-		$regex = '/^http:\/\/' . WP_TESTS_DOMAIN . '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login=' . $_POST['user_login'] . '$/mi';
+		$regex = (
+			'/^http:\/\/'
+			. preg_quote( WP_TESTS_DOMAIN, '/' )
+			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
+			. preg_quote( $_POST['user_login'], '/' )
+			. '$/mi'
+		);
 
 		$test = preg_match( $regex, $mailer->get_sent()->body );
 

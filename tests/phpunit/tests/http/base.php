@@ -256,7 +256,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	function test_file_stream() {
 		$url = $this->fileStreamUrl;
-		$size = 5461;
+		$size = 5764;
 		$res = wp_remote_request( $url, array( 'stream' => true, 'timeout' => 30 ) ); //Auto generate the filename.
 
 		// Cleanup before we assert, as it'll return early.
