@@ -7,6 +7,9 @@ class Tests_Login extends WP_UnitTestCase {
 		self::$ignore_files = true;
 		parent::setUp();
 		reset_phpmailer_instance();
+		if ( wp_using_ext_object_cache() ) {
+			$this->markTestSkipped( 'Not testable with an external object cache.' );
+		}
 	}
 
 	function tearDown() {
