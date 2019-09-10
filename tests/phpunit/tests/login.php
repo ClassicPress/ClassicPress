@@ -4,12 +4,13 @@
  */
 class Tests_Login extends WP_UnitTestCase {
 	function setUp() {
-		self::$ignore_files = true;
+		// This is not done when loading the login page, but parent::setUp()
+		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
+		if ( wp_using_ext_object_cache() ) {
+			wp_cache_init();
+		}
 		parent::setUp();
 		reset_phpmailer_instance();
-		if ( wp_using_ext_object_cache() ) {
-			$this->markTestSkipped( 'Not testable with an external object cache.' );
-		}
 	}
 
 	function tearDown() {
