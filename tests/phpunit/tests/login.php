@@ -20,7 +20,6 @@ class Tests_Login extends WP_UnitTestCase {
 
 	/**
 	 * @runInSeparateProcess
-	 * @preserveGlobalState disabled
 	 */
 	public function test_reset_password() {
 		ob_start();
