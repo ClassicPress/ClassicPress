@@ -651,6 +651,7 @@ function wp_set_internal_encoding() {
  * @access private
  */
 function wp_magic_quotes() {
+<<<<<<< HEAD
 	// If already slashed, strip.
 	if ( get_magic_quotes_gpc() ) {
 		$_GET    = stripslashes_deep( $_GET    );
@@ -658,6 +659,8 @@ function wp_magic_quotes() {
 		$_COOKIE = stripslashes_deep( $_COOKIE );
 	}
 
+=======
+>>>>>>> 08df15ab58... GENERAL: Remove magic quote functions
 	// Escape with wpdb.
 	$_GET    = add_magic_quotes( $_GET    );
 	$_POST   = add_magic_quotes( $_POST   );
