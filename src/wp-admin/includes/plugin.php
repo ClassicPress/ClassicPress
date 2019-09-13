@@ -1417,21 +1417,35 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
 /**
  * Add submenu page to the Security main menu.
  *
- * This function takes a capability which will be used to determine whether
- * or not a page is included in the menu.
- *
  * The function which is hooked in to handle the output of the page must check
- * that the user has the required capability as well.
+ * that the user has at least 'manage_options' capability.
  *
  * @param string   $page_title The text to be displayed in the title tags of the page when the menu is selected.
  * @param string   $menu_title The text to be used for the menu.
- * @param string   $capability The capability required for this menu to be displayed to the user.
- * @param string   $menu_slug  The slug name to refer to this menu by (should be unique for this menu).
+ * @param string   $menu_slug  The slug name to refer to this menu by; must match an active plugin slug.
  * @param callable $function   The function to be called to output the content for this page.
  * @return false|string The resulting page's hook_suffix, or false if the user does not have the capability required.
  */
-function add_security_page( $page_title, $menu_title, $capability, $menu_slug, $function = '' ) {
-	return add_submenu_page( 'security.php', $page_title, $menu_title, $capability, $menu_slug, $function );
+function add_security_page( $page_title, $menu_title, $menu_slug, $function = '' ) {
+    if ( WP_DEBUG ) {
+        foreach ( get_option( 'active_plugins' ) as $path ) {
+            $parts = explode( '/', $path );
+            if ( $menu_slug === $parts[0] ) {
+                add_filter(
+                    'plugin_action_links_' . $path,
+                    function ( $links ) use ( $menu_slug ) {
+                        array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicons-shield" style="font: 16px dashicons; vertical-align: text-bottom;"></span></a>', admin_url( 'security.php' ), $menu_slug, __( 'Security' ) ) );
+                        return $links;
+                    }
+                );
+                return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
+            }
+        }
+
+        _doing_it_wrong(__METHOD__, '$menu_slug must match an active plugin slug; '.$menu_slug, '1.1.0');
+    } else {
+        return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
+    }
 }
 
 /**
