@@ -451,7 +451,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	if ( ! empty( $headers ) ) {
 		foreach ( (array) $headers as $name => $content ) {
 			// Only add custom headers not added automatically by PHPMailer.
-			if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer') ) ) {
+			if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ) ) ) {
 				$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
 			}
 		}
