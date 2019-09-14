@@ -139,6 +139,10 @@ switch ($active_tab):
               </div>
               <p>You will also need to change the logic on your settings pages, but that is outside the scope of this guide. However, you should remember that the idea is to <strong>move</strong> security-related settings, <strong>not</strong> to <em>duplicate</em> them.</p>
             </div>
+            <h2><span><?php _e( 'Security Plugins' ); ?></span></h2>
+            <div class="inside">
+              <p>If your plugin has nothing but security-related settings it may be more useful to provide a summary of the current settings, with links to where they can be changed.</p>
+            </div>
             <h2><span><?php _e( 'Plugin Action Links'); ?></span></h2>
             <div class="inside">
               <p>Many plugins add links to the plugin action links. [As above wrt rephrasing] You can declutter that area for your plugin by using a standard dashicon; for example, the "Settings" link:</p>
