@@ -1424,7 +1424,7 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
  * @param string   $menu_title The text to be used for the menu.
  * @param string   $menu_slug  The slug name to refer to this menu by; must match an active plugin slug.
  * @param callable $function   The function to be called to output the content for this page.
- * @return false|string The resulting page's hook_suffix, or false if the user does not have the capability required.
+ * @return false|string The resulting page's hook_suffix, or false if the user does not have the 'manage_options' capability.
  */
 function add_security_page( $page_title, $menu_title, $menu_slug, $function = '' ) {
     if ( WP_DEBUG ) {
@@ -1434,9 +1434,10 @@ function add_security_page( $page_title, $menu_title, $menu_slug, $function = ''
                 add_filter(
                     'plugin_action_links_' . $path,
                     function ( $links ) use ( $menu_slug ) {
-                        array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicons-shield" style="font: 16px dashicons; vertical-align: text-bottom;"></span></a>', admin_url( 'security.php' ), $menu_slug, __( 'Security' ) ) );
+                        array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>', admin_url( 'security.php' ), $menu_slug, __( 'Security' ) ) );
                         return $links;
-                    }
+                    },
+                    PHP_INT_MAX // make sure we're last so the shield is always first
                 );
                 return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
             }
