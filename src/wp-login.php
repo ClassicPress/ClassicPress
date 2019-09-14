@@ -110,42 +110,6 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	 */
 	do_action( 'login_head' );
 
-	if ( is_multisite() ) {
-		$login_header_url   = network_home_url();
-		$login_header_title = get_network()->site_name;
-	} else {
-		$login_header_url   = 'https://www.classicpress.net/';
-		$login_header_title = __( 'Powered by ClassicPress' );
-	}
-
-	/**
-	 * Filters link URL of the header logo above login form.
-	 *
-	 * @since WP-2.1.0
-	 *
-	 * @param string $login_header_url Login header logo URL.
-	 */
-	$login_header_url = apply_filters( 'login_headerurl', $login_header_url );
-
-	/**
-	 * Filters the title attribute of the header logo above login form.
-	 *
-	 * @since WP-2.1.0
-	 *
-	 * @param string $login_header_title Login header logo title attribute.
-	 */
-	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
-
-	/*
-	 * To match the URL/title set above, Multisite sites have the blog name,
-	 * while single sites get the header title.
-	 */
-	if ( is_multisite() ) {
-		$login_header_text = get_bloginfo( 'name', 'display' );
-	} else {
-		$login_header_text = $login_header_title;
-	}
-
 	$classes = array( 'login-action-' . $action, 'wp-core-ui' );
 	if ( is_rtl() )
 		$classes[] = 'rtl';
@@ -180,12 +144,13 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	 * @since WP-4.6.0
 	 */
 	do_action( 'login_header' );
-	?>
-	<div id="login">
-		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><?php echo $login_header_text; ?></a></h1>
-	<?php
 
-	unset( $login_header_url, $login_header_title );
+	/**
+	 * Fires in the login page header after the body tag is opened.
+	 *
+	 * @since 1.1.0
+	 */
+	get_login_image_html();
 
 	/**
 	 * Filters the message to display above the login form.
@@ -366,7 +331,7 @@ function retrieve_password() {
 	$message .= sprintf( __( 'Username: %s'), $user_login ) . "\r\n\r\n";
 	$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
 	$message .= __( 'To reset your password, visit the following address:' ) . "\r\n\r\n";
-	$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . "\r\n";
+	$message .= '<' . network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . ">\r\n";
 
 	/* translators: Password reset email subject. %s: Site name */
 	$title = sprintf( __( '[%s] Password Reset' ), $site_name );

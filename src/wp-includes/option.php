@@ -1834,6 +1834,15 @@ function register_initial_settings() {
 		'description'  => __( 'Site tagline.' ),
 	) );
 
+	register_setting( 'general', 'cp_login_custom_logo', array(
+		'show_in_rest' => array(
+			'name' => 'cp_login_custom_logo',
+		),
+		'type'         => 'boolean',
+		'default'		=> false,
+		'description'  => __( 'Turn on/off custom login image' ),
+	) );
+
 	if ( ! is_multisite() ) {
 		register_setting( 'general', 'siteurl', array(
 			'show_in_rest' => array(

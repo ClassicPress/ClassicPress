@@ -84,6 +84,7 @@ $whitelist_options = array(
 	'general' => array(
 		'blogname',
 		'blogdescription',
+		'cp_login_custom_logo',
 		'gmt_offset',
 		'date_format',
 		'time_format',
@@ -164,6 +165,7 @@ if ( !is_multisite() ) {
 	if ( !defined( 'WP_HOME' ) )
 		$whitelist_options['general'][] = 'home';
 
+	$whitelist_options['general'][] = 'cp_login_custom_logo';
 	$whitelist_options['general'][] = 'users_can_register';
 	$whitelist_options['general'][] = 'default_role';
 
