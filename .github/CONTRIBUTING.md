@@ -48,9 +48,11 @@ Here is some more information about a few subjects where we've noticed some freq
 
 A good pull request (PR) should be for a single, specific change. The change should be explained using the template provided on GitHub, and any new or modified code should have automated tests, especially if the way it works is at all complicated.
 
+It is always a good idea to look at the "Files" view on GitHub after submitting your PR, and verify that the changes look as expected. Generally there should be no "extra" changes that are not related to the purpose of your PR, like reformatting or re-aligning files (such changes are best done in a separate PR just for that purpose). If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
+
 Generally it is best to only use one pull request for each change, even if the initial code needs revision after review and feedback. Closing the initial pull request and opening a new one makes it more difficult to follow the history of the change, and it is much better to just update the existing PR in response to any feedback received.
 
-To be accepted, a PR **must** pass the automated tests on Travis CI. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Generally when this happens we start a sepaate PR to resolve the failure, and once that is merged, the following sequence of commands will get the build passing again for your PR:
+To be accepted, a PR **must** pass the automated tests on Travis CI. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Generally when this happens we start a separate PR to resolve the failure, and once that is merged, the following sequence of commands will get the build passing again for your PR:
 
 ```
 git checkout your-pr-branch
@@ -58,8 +60,6 @@ git fetch upstream
 git merge upstream/develop
 git push origin your-pr-branch
 ```
-
-It is always a good idea to look at the "Files" view on GitHub after submitting your PR, and verify that the changes look as expected. Generally there should be no "extra" changes that are not related to the purpose of your PR, like reformatting or re-aligning files (this is best done in a separate PR just for that purpose). If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
 
 ### Automated tests
 
@@ -121,4 +121,4 @@ Finally, when you're ready to backport a code change, identify the WordPress **c
 
 Using this script for all backports saves time for you and for the maintainers, and it also uses a standardized format for commit messages which makes it possible for us to track which WordPress changes we've already included. If there are merge conflicts for your changes, be sure to use `git cherry-pick --continue` after resolving them, because this will preserve the commit message in the required format.
 
-You can see a list of all WordPress changes since the fork, along with information about which ones have already been included, at [backports.classicpress.net](https://backports.classicpress.net).
+You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at [backports.classicpress.net](https://backports.classicpress.net).
