@@ -168,9 +168,14 @@ switch ($active_tab):
       <div id="postbox-container-1" class="postbox-container">
         <div class="meta-box-sortables">
           <div class="postbox">
-            <h2><span><?php esc_attr_e('Sidebar Content Header', 'WpAdminStyle'); ?></span></h2>
+            <h2><span><?php _e( 'Support and Documentation' ); ?></span></h2>
             <div class="inside">
-              <p>Links to docs and forums go here.</p>
+              <p>
+                <ul>
+                  <li><a href="https://forums.classicpress.net/c/support/security-page" target="_blank">Security Page forum</a></li>
+                  <li><a href="https://link.classicpress.net/security-page" target="_blank">Documentation</a></li>
+                </ul>
+              </p>
             </div>
           </div>
         </div>
