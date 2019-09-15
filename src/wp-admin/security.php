@@ -48,7 +48,7 @@ switch ($active_tab):
     <p><?php printf(
         /* translators: canonical link to security forum */
         __( "Watch this page and the ClassicPress <a href=\"%s\" target=\"_blank\">Security forum</a> for more news as development continues." ),
-        'https://forums.classicpress.net/security'
+        'https://link.classicpress.net/forum/security'
     ); ?></p>
   </div>
 
@@ -172,8 +172,8 @@ switch ($active_tab):
             <div class="inside">
               <p>
                 <ul>
-                  <li><a href="https://forums.classicpress.net/c/support/security-page" target="_blank">Security Page forum</a></li>
-                  <li><a href="https://link.classicpress.net/security-page" target="_blank">Documentation</a></li>
+                  <li><a href="https://link.classicpress.net/support/security-page" target="_blank"><?php _e( 'Security Page forum' ); ?></a></li>
+                  <li><a href="https://link.classicpress.net/security-page" target="_blank"><?php _e( 'Documentation' ); ?></a></li>
                 </ul>
               </p>
             </div>
