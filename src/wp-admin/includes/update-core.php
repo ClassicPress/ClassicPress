@@ -18,7 +18,7 @@
 global $_old_files;
 
 $_old_files = array(
-	// From WP-5.0.0 or newer, not included in ClassicPress
+	// Added in WP-5.0.0, not included in ClassicPress
 	'wp-admin/includes/credits.php',
 	'wp-admin/edit-form-blocks.php',
 	'wp-includes/blocks',
