@@ -56,7 +56,7 @@ p {
 	margin-left: 0;
 	margin-bottom: 20px;
 	background-color: #fff;
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
 }
 
 .login .success {
@@ -70,8 +70,7 @@ p {
 #loginform p.submit,
 .login-action-lostpassword p.submit {
 	border: none;
-	margin: -10px 0 20px;
-	/* May want to revisit this */
+	margin: -10px 0 20px; /* May want to revisit this */
 }
 
 .login * {
@@ -80,22 +79,22 @@ p {
 }
 
 .login .password-input-wrapper {
-	display: table;
+    display: table;
 }
 
 .login .input.password-input {
-	display: table-cell;
-	margin: 0;
+    display: table-cell;
+    margin: 0;
 }
 
 .login .pw-weak {
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .login .button.button-secondary {
-	display: table-cell;
-	border-radius: 0;
-	vertical-align: middle;
+    display: table-cell;
+    border-radius: 0;
+    vertical-align: middle;
 }
 
 .login form {
@@ -105,7 +104,7 @@ p {
 	font-weight: 400;
 	overflow: hidden;
 	background: #fff;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+	box-shadow: 0 1px 3px rgba(0,0,0,0.13);
 }
 
 .login form .forgetmenot {
@@ -277,13 +276,13 @@ body.interim-login {
 	width: device-width;
 }
 
-@media screen and (max-height: 550px) {
+@media screen and ( max-height: 550px ) {
 	#login {
 		padding: 20px 0;
 	}
 }
 
-@media screen and (max-width: 782px) {
+@media screen and ( max-width: 782px ) {
 	.interim-login input[type=checkbox] {
 		height: 16px;
 		width: 16px;
