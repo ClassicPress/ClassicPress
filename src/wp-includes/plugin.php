@@ -426,11 +426,17 @@ function do_action($tag, $arg = '') {
 	else
 		++$wp_actions[$tag];
 
+	$all_args = func_get_args();
+
 	// Do 'all' actions first
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
+<<<<<<< HEAD
 		$all_args = func_get_args();
 		_wp_call_all_hook($all_args);
+=======
+		_wp_call_all_hook( $all_args );
+>>>>>>> 31fa37f06d... Code Modernisation: Remove redundant PHP 4 code from `do_action()`.
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
@@ -442,6 +448,7 @@ function do_action($tag, $arg = '') {
 	if ( !isset($wp_filter['all']) )
 		$wp_current_filter[] = $tag;
 
+<<<<<<< HEAD
 	$args = array();
 	if ( is_array($arg) && 1 == count($arg) && isset($arg[0]) && is_object($arg[0]) ) // array(&$this)
 		$args[] =& $arg[0];
@@ -449,6 +456,14 @@ function do_action($tag, $arg = '') {
 		$args[] = $arg;
 	for ( $a = 2, $num = func_num_args(); $a < $num; $a++ )
 		$args[] = func_get_arg($a);
+=======
+	$args = $all_args;
+	array_shift( $args );
+
+	if ( empty( $args ) ) {
+		$args = array( '' );
+	}
+>>>>>>> 31fa37f06d... Code Modernisation: Remove redundant PHP 4 code from `do_action()`.
 
 	$wp_filter[ $tag ]->do_action( $args );
 
