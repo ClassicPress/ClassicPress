@@ -47,7 +47,7 @@ switch ($active_tab):
     <p><?php _e( "As ClassicPress continues to evolve, the Security page will become the hub for all security features for ClassicPress core and 3<sup>rd</sup> party plugins that choose to support it." ); ?></p>
     <p><?php printf(
         /* translators: canonical link to security forum */
-        __( "Watch this page and the ClassicPress <a href=\"%s\" target=\"_blank\">Security forum</a> for more news as development continues." ),
+        __( 'Watch this page and the ClassicPress <a href="%s" rel="noopener" target="_blank">Security forum</a> for more news as development continues.' ),
         'https://link.classicpress.net/forum/security'
     ); ?></p>
   </div>
@@ -70,9 +70,9 @@ switch ($active_tab):
             <h2><span><?php _e( 'Overview' ); ?></span></h2>
             <div class="inside">
               <div>
-                <p>The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its pupose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.</p>
-                <p>Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings - they may be in there somewhere, there may be none at all - without looking through everything there&lsquo;s no way to know.</p>
-                <p>Currently, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all security-related settings from all plugins in one place means those settings can be audited far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.</p>
+                <p><?php _e( 'The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its pupose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.' ); ?></p>
+                <p><?php _e( 'Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings - they may be in there somewhere, there may be none at all - without looking through everything there&lsquo;s no way to know.' ); ?></p>
+                <p><?php _e( 'Currently, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all security-related settings from all plugins in one place means those settings can be audited far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.' ); ?></p>
               </div>
             </div>
           </div>
@@ -81,11 +81,11 @@ switch ($active_tab):
           <div class="postbox">
             <h2><span><?php _e( 'API' ); ?></span></h2>
             <div class="inside">
-              <p>There is just one new function: <code>add_security_page()</code>. It works similarly to the other <code>add_xxx_page()</code> helpers, with two important changes:</p>
+              <p><?php _e( 'There is just one new function: <code>add_security_page()</code>. It works similarly to the other <code>add_xxx_page()</code> helpers, with two important changes:' ); ?></p>
               <p>
                 <ul class="ul-disc">
-                  <li>there is no <code>$capability</code> argument - it is always <code>manage_options</code></li>
-                  <li>the <code>$menu_slug</code> must match an active plugin slug.</li>
+                  <li><?php _e( 'there is no <code>$capability</code> argument - it is always <code>manage_options</code>' ); ?></li>
+                  <li><?php _e( 'the <code>$menu_slug</code> must match an active plugin slug.' ); ?></li>
                 </ul>
               </p>
               <p>The function also adds a link to your security page to the plugin actions. [This needs to be phrased better - brain fog, suggestions please.]</p>
@@ -113,7 +113,6 @@ switch ($active_tab):
     <span style="color: #19177C">$menu_slug</span>,
     <span style="color: #19177C">$function</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;&#39;</span>
 )
-
 </pre>
               </div>
             </div>
@@ -123,7 +122,7 @@ switch ($active_tab):
           <div class="postbox">
             <h2><span><?php _e( 'Usage' ); ?></span></h2>
             <div class="inside">
-              <p>You will need to change the logic in your plugin to check for <code>add_security_page()</code>. For example:</p>
+              <p><?php _e( 'You will need to change the logic in your plugin to check for <code>add_security_page()</code>. For example:' ); ?></p>
               <!-- HTML generated using hilite.me -->
               <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">if</span> ( <span style="color: #008000">function_exists</span>( <span style="color: #BA2121">&#39;\add_security_page&#39;</span> ) ) {
     add_security_page(
@@ -137,30 +136,11 @@ switch ($active_tab):
 }
 </pre>
               </div>
-              <p>You will also need to change the logic on your settings pages, but that is outside the scope of this guide. However, you should remember that the idea is to <strong>move</strong> security-related settings, <strong>not</strong> to <em>duplicate</em> them.</p>
+              <p><?php _e( 'You will also need to change the logic on your settings pages, but that is outside the scope of this guide. However, you should remember that the idea is to <strong>move</strong> security-related settings, <strong>not</strong> to <em>duplicate</em> them.' ); ?></p>
             </div>
             <h2><span><?php _e( 'Security Plugins' ); ?></span></h2>
             <div class="inside">
-              <p>If your plugin has nothing but security-related settings it may be more useful to provide a summary of the current settings, with links to where they can be changed.</p>
-            </div>
-            <h2><span><?php _e( 'Plugin Action Links'); ?></span></h2>
-            <div class="inside">
-              <p>Many plugins add links to the plugin action links. [As above wrt rephrasing] You can declutter that area for your plugin by using a standard dashicon; for example, the "Settings" link:</p>
-              <!-- HTML generated using hilite.me -->
-              <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #008000">array_unshift</span>(
-    <span style="color: #19177C">$links</span>,
-    <span style="color: #008000">sprintf</span>(
-        <span style="color: #BA2121">&#39;&lt;a href=&quot;%s?page=my-prodigious-plugin&quot; title=&quot;%s&quot;&gt;%s&lt;/a&gt;&#39;</span>,
-        admin_url( <span style="color: #BA2121">&#39;admin.php&#39;</span> ),
-        __( <span style="color: #BA2121">&#39;Settings&#39;</span> ),
-        <span style="color: #008000">function_exists</span>( <span style="color: #BA2121">&#39;\add_security_page&#39;</span> )
-            <span style="color: #666666">?</span> <span style="color: #BA2121">&#39;&lt;span class=&quot;dashicon dashicons-admin-generic&quot;&gt;&lt;/span&gt;&#39;</span>
-            <span style="color: #666666">:</span> __( <span style="color: #BA2121">&#39;Settings&#39;</span> )
-    )
-);
-</pre>
-              </div>
+              <p><?php _e( 'If your plugin has nothing but security-related settings it may be more useful to provide a summary of the current settings, with links to where they can be changed.' ); ?></p>
             </div>
           </div>
         </div>
@@ -172,8 +152,9 @@ switch ($active_tab):
             <div class="inside">
               <p>
                 <ul>
-                  <li><a href="https://link.classicpress.net/support/security-page" target="_blank"><?php _e( 'Security Page forum' ); ?></a></li>
-                  <li><a href="https://link.classicpress.net/security-page" target="_blank"><?php _e( 'Documentation' ); ?></a></li>
+                  <li><a href="https://link.classicpress.net/support/security-page" rel="noopener" target="_blank"><?php _e( 'Security Page forum' ); ?></a></li>
+                  <li><a href="https://link.classicpress.net/security-page" rel="noopener" target="_blank"><?php _e( 'Documentation' ); ?></a></li>
+                  <li><a href="https://link.classicpress.net/my-prodigious-plugin" rel="noopener" target="_blank"><?php _e( 'Example code - My Prodigious Plugin' ); ?></a></li>
                 </ul>
               </p>
             </div>
