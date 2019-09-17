@@ -432,7 +432,7 @@ $can_install = current_user_can( 'install_themes' );
 				<div class="notice inline notice-info notice-alt"><p><?php printf(
 						/* translators: %s: ClassicPress child theme name */
 						__('Use the "%s" child theme instead!'),
-						'{{ data.theme.preferredChildName }}'
+						'{{ data.preferredChildName }}'
 					); ?>
 					<span class="cut"><?php
 						/* translators: Advanced part of the notice text, hidden on mobiles */
