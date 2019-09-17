@@ -92,21 +92,25 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<div class="notices">
 					<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
 						<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
-							<p>
-								<?php
-								/* translators: %s: "Update now" button */
-								printf( __( 'New version available. %s' ), '<button class="button-link update-theme" type="button">' . __( 'Update now' ) . '</button>' );
-								?>
+							<p><?php /* translators: Notice text */ _e('New version available.');
+								?> <button class="button-link update-theme" type="button"><?php
+									/* translators: Button text */ _e('Update now');
+								?></button>
 							</p>
 						</div>
 					<# } #>
 
 					<# if ( data.theme.preferredChildName ) { #>
 						<div class="notice inline notice-info notice-alt"><p><?php printf(
-							/* translators: ClassicPress child theme name */
-							__( 'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.' ),
-							'{{ data.theme.preferredChildName }}'
-						); ?></p></div>
+								/* translators: %s: ClassicPress child theme name */
+								__('Use the "%s" child theme instead!'),
+								'{{ data.theme.preferredChildName }}'
+							); ?>
+							<span class="cut"><?php
+								/* translators: Advanced part of the notice text, hidden on mobiles */
+								_e('This is a parent theme that says "Powered by WordPress" in its footer.');
+							?></span>
+						</p></div>
 					<# } #>
 				</div>
 			<# } #>

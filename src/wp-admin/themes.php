@@ -265,7 +265,12 @@ foreach ( $themes as $theme ) :
 			<?php if ( $theme['hasUpdate'] ) : ?>
 				<div class="update-message notice inline notice-warning notice-alt">
 				<?php if ( $theme['hasPackage'] ) : ?>
-					<p><?php _e( '<span class="cut">New version available. </span><button class="button-link" type="button">Update now</button>' ); ?></p>
+					<p><?php
+							/* translators: Notice text */ _e('New version available.');
+						?> <button class="button-link update-theme" type="button"><?php
+							/* translators: Button text */ _e('Update now');
+						?></button>
+					</p>
 				<?php else : ?>
 					<p><?php _e( 'New version available.' ); ?></p>
 				<?php endif; ?>
@@ -274,10 +279,15 @@ foreach ( $themes as $theme ) :
 
 			<?php if ( isset( $theme['preferredChildName'] ) ) { ?>
 				<div class="notice inline notice-info notice-alt"><p><?php printf(
-					/* translators: ClassicPress child theme name */
-					__( 'Use the "%s" child theme instead!<span class="cut"> This is a parent theme that says "Powered by WordPress" in its footer.</span>' ),
-					$theme['preferredChildName']
-				); ?></p></div>
+						/* translators: %s: ClassicPress child theme name */
+						__('Use the "%s" child theme instead!'),
+						$theme['preferredChildName']
+					); ?>
+					<span class="cut"><?php
+						/* translators: Advanced part of the notice text, hidden on mobiles */
+						_e('This is a parent theme that says "Powered by WordPress" in its footer.');
+					?></span>
+				</p></div>
 			<?php } ?>
 		</div>
 	<?php endif; ?>
@@ -407,7 +417,12 @@ $can_install = current_user_can( 'install_themes' );
 		<div class="notices">
 			<# if ( data.hasUpdate ) { #>
 				<# if ( data.hasPackage ) { #>
-					<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( '<span class="cut">New version available. </span><button class="button-link" type="button">Update now</button>' ); ?></p></div>
+					<div class="update-message notice inline notice-warning notice-alt"><p><?php
+							/* translators: Notice text */ _e('New version available.');
+						?> <button class="button-link update-theme" type="button"><?php
+							/* translators: Button text */ _e('Update now');
+						?></button>
+					</p></div>
 				<# } else { #>
 					<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available.' ); ?></p></div>
 				<# } #>
@@ -415,10 +430,15 @@ $can_install = current_user_can( 'install_themes' );
 
 			<# if ( data.preferredChildName ) { #>
 				<div class="notice inline notice-info notice-alt"><p><?php printf(
-					/* translators: ClassicPress child theme name */
-					__( 'Use the "%s" child theme instead!<span class="cut"> This is a parent theme that says "Powered by WordPress" in its footer.</span>' ),
-					'{{ data.preferredChildName }}'
-				); ?></p></div>
+						/* translators: %s: ClassicPress child theme name */
+						__('Use the "%s" child theme instead!'),
+						'{{ data.theme.preferredChildName }}'
+					); ?>
+					<span class="cut"><?php
+						/* translators: Advanced part of the notice text, hidden on mobiles */
+						_e('This is a parent theme that says "Powered by WordPress" in its footer.');
+					?></span>
+				</p></div>
 			<# } #>
 		</div>
 	<# } #>
