@@ -1299,6 +1299,7 @@ EOF;
 
 		$year_month = date('Y/m');
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
 
 		// Set up test cases for all expected size names.
@@ -1345,6 +1346,7 @@ EOF;
 		$id = self::factory()->attachment->create_upload_object( $filename );
 
 		$image_meta = wp_get_attachment_metadata( $id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
 
 		// Set up test cases for all expected size names.
@@ -1387,6 +1389,7 @@ EOF;
 		// For this test we're going to mock metadata changes from an edit.
 		// Start by getting the attachment metadata.
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$image_url = wp_get_attachment_image_url( self::$large_id, 'medium' );
 		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
 
@@ -1421,6 +1424,7 @@ EOF;
 
 		$year_month = date('Y/m');
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
 
 		// Set up test cases for all expected size names.
@@ -1696,6 +1700,7 @@ EOF;
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$size_array = array( 1600, 1200 ); // full size
 
 		$srcset = wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta );
@@ -1786,6 +1791,7 @@ EOF;
 		// Test sizes against the default WP sizes.
 		$intermediates = array( 'thumbnail', 'medium', 'medium_large', 'large' );
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 
 		// Make sure themes aren't filtering the sizes array.
 		remove_all_filters( 'wp_calculate_image_sizes' );
@@ -1807,6 +1813,7 @@ EOF;
 	 */
 	function test_wp_make_content_images_responsive() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
 
 		$srcset = sprintf( 'srcset="%s"', wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta ) );
@@ -1940,6 +1947,7 @@ EOF;
 	 */
 	function test_wp_make_content_images_responsive_schemes() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
 
 		$srcset = sprintf( 'srcset="%s"', wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta ) );
@@ -2092,6 +2100,10 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/36246
 	 */
 	function test_wp_get_attachment_image_should_use_wp_get_attachment_metadata() {
+		// Do this check before the filter which will add $meta['sizes']['testsize']
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$this->assertAttachmentMetaHasSizes( $image_meta );
+
 		add_filter( 'wp_get_attachment_metadata', array( $this, '_filter_36246' ), 10, 2 );
 
 		remove_all_filters( 'wp_calculate_image_sizes' );
