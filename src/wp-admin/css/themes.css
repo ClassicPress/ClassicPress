@@ -826,9 +826,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		margin-right: 5%;
 	}
 
-	.theme .notice .cut {
-		display: none;
-	}
 }
 
 /* Admin menu is folded */
@@ -892,6 +889,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	.theme-browser.rendered .theme:hover .theme-screenshot img,
 	.theme-browser.rendered .theme:focus .theme-screenshot img {
 		opacity: 1.0;
+	}
+
+	.theme .notice .cut {
+		display: none;
 	}
 }
 
