@@ -71,8 +71,10 @@ switch ( $active_tab ) :
 		break;
 	case 'developers':
 		/**
-		 * hilite.me
-		 *   + The opening PHP tag is required to get the highlighting to work, but it's been removed here for clarity
+		 * HTML generated using hilite.me:
+		 *   + The opening PHP tag is required to get the highlighting to work,
+		 *     but it's been removed here for clarity
+		 *   + "tab-size: 4;" was added to the CSS for the containing element
 		 *   + The "default" colour scheme was used
 		 */
 		?>
@@ -106,7 +108,7 @@ switch ( $active_tab ) :
 							<p><?php _e( 'The function also adds a link from your plugin&#8217;s action row in the plugins list directly to your security page.' ); ?></p>
 							<!-- HTML generated using hilite.me -->
 							<div style="background: #f8f8f8; overflow:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #BA2121; font-style: italic">/**</span>
+<pre style="margin: 0; line-height: 125%; tab-size: 4; -moz-tab-size: 4; -o-tab-size: 4;"><span style="color: #BA2121; font-style: italic">/**</span>
 <span style="color: #BA2121; font-style: italic"> * Add submenu page to the Security main menu.</span>
 <span style="color: #BA2121; font-style: italic"> *</span>
 <span style="color: #BA2121; font-style: italic"> * The function which is hooked in to handle the output of the page must check</span>
@@ -139,7 +141,8 @@ switch ( $active_tab ) :
 						<div class="inside">
 							<p><?php _e( 'You will need to change the logic in your plugin to check for <code>add_security_page()</code>. For example:' ); ?></p>
 							<!-- HTML generated using hilite.me -->
-							<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">if</span> ( <span style="color: #008000">function_exists</span>( <span style="color: #BA2121">&#39;\add_security_page&#39;</span> ) ) {
+							<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+<pre style="margin: 0; line-height: 125%; tab-size: 4; -moz-tab-size: 4; -o-tab-size: 4;"><span style="color: #008000; font-weight: bold">if</span> ( <span style="color: #008000">function_exists</span>( <span style="color: #BA2121">&#39;\add_security_page&#39;</span> ) ) {
 	add_security_page(
 		<span style="color: #BA2121">&#39;My Prodigious Plugin&#39;</span>,
 		<span style="color: #BA2121">&#39;My Menu Title&#39;</span>,
