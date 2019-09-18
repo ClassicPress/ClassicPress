@@ -13,7 +13,7 @@ $title = __( 'Security' );
 
 require_once( ABSPATH . 'wp-admin/admin-header.php' );
 
-$tabs                             = [
+$tabs = [
 	'users'      => [
 		'title'   => __( 'For Users' ),
 		'classes' => [ 'nav-tab' ],
@@ -23,10 +23,12 @@ $tabs                             = [
 		'classes' => [ 'nav-tab' ],
 	],
 ];
-$tab                              = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : '';
-$active_tab                       = ( in_array( $tab, array_keys( $tabs ), true ) )
-	? $tab
-	: 'users';
+
+$active_tab = 'users'; // default
+if ( isset( $_GET['tab'] ) && isset( $tabs[ $_GET['tab'] ] ) ) {
+	$active_tab = $_GET['tab'];
+}
+
 $tabs[ $active_tab ]['classes'][] = 'nav-tab-active';
 
 ?>
