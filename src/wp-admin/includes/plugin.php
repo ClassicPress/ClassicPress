@@ -1415,6 +1415,35 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
 }
 
 /**
+ * Plugin action links filter for Security page.
+ *
+ * @param array  $actions     An array of plugin action links. By default this can include 'activate',
+ *                            'deactivate', and 'delete'. With Multisite active this can also include
+ *                            'network_active' and 'network_only' items.
+ * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+ * @param array  $plugin_data An array of plugin data. See `get_plugin_data()`.
+ * @param string $context     The plugin context. By default this can include 'all', 'active', 'inactive',
+ *                            'recently_activated', 'upgrade', 'mustuse', 'dropins', and 'search'.
+ */
+function _security_page_action_links( $actions, $plugin_file, $plugin_data, $context ) {
+	$admin_url = ( is_network_admin() )
+		? network_admin_url( 'security.php' )
+		: admin_url( 'security.php' );
+	$parts     = explode( '/', $plugin_file );
+	array_unshift(
+		$actions,
+		sprintf(
+			'<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>',
+			$admin_url,
+			$parts[0],
+			__( 'Security' )
+		)
+	);
+
+	return $actions;
+}
+
+/**
  * Add submenu page to the Security main menu.
  *
  * The function which is hooked in to handle the output of the page must check
@@ -1434,25 +1463,17 @@ function add_security_page( $page_title, $menu_title, $menu_slug, $function = ''
 		array_keys( $mu_plugins )
 	);
 	if ( is_network_admin() ) {
-		$filter_prefix = 'network_admin_';
-		$admin_url     = network_admin_url( 'security.php' );
+		$filter     = 'network_admin_plugin_action_links_';
+		$capability = 'manage_network_options';
 	} else {
-		$filter_prefix = '';
-		$admin_url     = admin_url( 'security.php' );
+		$filter     = 'plugin_action_links_';
+		$capability = 'manage_options';
 	}
 	foreach ( $plugins as $path ) {
 		$parts = explode( '/', $path );
 		if ( $menu_slug === $parts[0] ) {
-			$filter = 'plugin_action_links_' . $path;
-			add_filter(
-				$filter_prefix . $filter,
-				function ( $links ) use ( $admin_url, $menu_slug ) {
-					array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>', $admin_url, $menu_slug, __( 'Security' ) ) );
-					return $links;
-				},
-				PHP_INT_MAX // make sure we're last so the shield is always first
-			);
-			return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
+			add_filter( $filter . $path, '_security_page_action_links', PHP_INT_MAX, 4 );
+			return add_submenu_page( 'security.php', $page_title, $menu_title, $capability, $menu_slug, $function );
 		}
 	}
 
