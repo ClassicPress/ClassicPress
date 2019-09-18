@@ -172,6 +172,7 @@ p {
 	margin: 10px auto;
 	max-width: 100px;
 	height: 100px;
+	-o-object-fit: contain;
 	object-fit: contain;
 }
 
