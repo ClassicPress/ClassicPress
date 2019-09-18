@@ -71,6 +71,44 @@ switch ( $active_tab ) :
 	</div>
 
 		<?php
+		$security_pages = empty( $submenu['security.php'] )
+			? []
+			: array_slice( $submenu['security.php'], 1 );
+		echo '<h3>' . __( 'Plugin Security Settings' ) . '</h3>' . "\n";
+		if ( count( $security_pages ) ) {
+			echo '<ul class="ul-disc">' . "\n";
+			foreach ( $security_pages as $page ) {
+				echo (
+					'<li><a href="'
+					. esc_attr( admin_url( 'security.php?page=' . $page[2] ) )
+					. '">'
+					. esc_html( $page[0] )
+					. '</a></li>'
+					. "\n"
+				);
+			}
+			echo '</ul>' . "\n";
+		} else {
+			echo (
+				'<p><strong>'
+				. __( 'No registered security settings yet!' )
+				. '</strong></p>'
+				. "\n"
+			);
+			echo (
+				'<p style="max-width: 570px;">' // to match '.card'
+				. __( 'Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' )
+				. '</p>'
+				. "\n"
+			);
+		}
+		echo (
+			'<p style="max-width: 570px;">' // to match '.card'
+			. __( 'Note that security plugins written for WordPress will not display their settings here unless they have also been updated for ClassicPress.' )
+			. '</p>'
+			. "\n"
+		);
+
 		break;
 	case 'developers':
 		/**
