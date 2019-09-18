@@ -145,12 +145,12 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	 */
 	do_action( 'login_header' );
 
-	/**
-	 * Fires in the login page header after the body tag is opened.
-	 *
-	 * @since 1.1.0
-	 */
-	get_login_image_html();
+	?>
+	<div id="login">
+	<?php
+
+	// @since 1.1.0 Moved to a testable function and enabled logo image option.
+	echo get_login_image_html();
 
 	/**
 	 * Filters the message to display above the login form.

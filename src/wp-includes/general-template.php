@@ -860,10 +860,16 @@ function has_custom_logo( $blog_id = 0 ) {
  *
  * @since WP-4.5.0
  *
- * @param int $blog_id Optional. ID of the blog in question. Default is the ID of the current blog.
+ * @since 1.1.0 Added the $args parameter.
+ *
+ * @param int   $blog_id Optional. ID of the blog in question. Default or 0 is
+ *                       the ID of the current blog.
+ * @param array $args    Optional. May include 'title' key to set a link title
+ *                       or 'href' key to override the link URL.
+ *
  * @return string Custom logo markup.
  */
-function get_custom_logo( $blog_id = 0 ) {
+function get_custom_logo( $blog_id = 0, $args = array() ) {
 	$html = '';
 	$switched_blog = false;
 
@@ -884,18 +890,30 @@ function get_custom_logo( $blog_id = 0 ) {
 		/*
 		 * If the logo alt attribute is empty, get the site title and explicitly
 		 * pass it to the attributes used by wp_get_attachment_image().
+		 *
+		 * If the alt attribute is not empty, there's no need to explicitly pass
+		 * it because wp_get_attachment_image() already adds the alt attribute.
 		 */
 		$image_alt = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
 		if ( empty( $image_alt ) ) {
 			$custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
 		}
 
-		/*
-		 * If the alt attribute is not empty, there's no need to explicitly pass
-		 * it because wp_get_attachment_image() already adds the alt attribute.
-		 */
-		$html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
-			esc_url( home_url( '/' ) ),
+		// Determine the link URL.
+		if ( ! isset( $args['href'] ) ) {
+			$args['href'] = home_url( '/' );
+		}
+
+		// Set a link title attribute if requested.
+		$title_attr = '';
+		if ( isset( $args['title'] ) ) {
+			$title_attr = ' title="' . esc_attr( $args['title'] ) . '"';
+		}
+
+		// Generate the custom logo HTML.
+		$html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url"%2$s>%3$s</a>',
+			esc_url( $args['href'] ),
+			$title_attr,
 			wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
 		);
 	}
@@ -916,9 +934,11 @@ function get_custom_logo( $blog_id = 0 ) {
 	 *
 	 * @since WP-4.5.0
 	 * @since WP-4.6.0 Added the `$blog_id` parameter.
+	 * @since 1.1.0 Added the $args parameter.
 	 *
 	 * @param string $html    Custom logo HTML output.
 	 * @param int    $blog_id ID of the blog to get the custom logo for.
+	 * @param array  $args    Other arguments to get_custom_logo(), if any.
 	 */
 	return apply_filters( 'get_custom_logo', $html, $blog_id );
 }
@@ -4288,14 +4308,24 @@ function wp_heartbeat_settings( $settings ) {
 }
 
 /**
-* Check for option cp_login_custom_logo
-* Get the image for login page from the theme logo via the customizer
-*
-* @since 1.1.0
-*/
+ * Return the HTML for the image on the login screen. This is either a link
+ * showing the ClassicPress logo (the default) or the site's custom logo image
+ * (if a logo image is set and the `cp_login_custom_logo` option is enabled).
+ *
+ * @since 1.1.0
+ */
 function get_login_image_html() {
+	/**
+	 * Determine whether a site admin has enabled the `cp_login_custom_logo`
+	 * option and set a custom logo. If so, we can use it on the login page.
+	 */
+	$login_custom_logo = get_option( 'cp_login_custom_logo' );
+	$login_custom_logo = ! empty( $login_custom_logo ) && has_custom_logo();
 
-	if ( is_multisite() ) {
+	if ( $login_custom_logo ) {
+		$login_header_url   = home_url( '/' );
+		$login_header_title = get_bloginfo( 'name', 'display' );
+	} elseif ( is_multisite() ) {
 		$login_header_url   = network_home_url();
 		$login_header_title = get_network()->site_name;
 	} else {
@@ -4322,6 +4352,21 @@ function get_login_image_html() {
 	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
 
 	/**
+	 * If the user has enabled the `cp_login_custom_logo` option and set a
+	 * custom logo, then use the custom logo.
+	 */
+	if ( $login_custom_logo ) {
+		return get_custom_logo( 0, array(
+			'href'  => $login_header_url,
+			'title' => $login_header_title,
+		) );
+	}
+
+	// Otherwise use the ClassicPress logo.
+
+	/**
+	 * Set the link text (not displayed, but kept for compatibility).
+	 *
 	 * To match the URL/title set above, Multisite sites have the blog name,
 	 * while single sites get the header title.
 	 */
@@ -4330,15 +4375,14 @@ function get_login_image_html() {
 	} else {
 		$login_header_text = $login_header_title;
 	}
-?>
- 	<div id="login">
-	<?php
-	if ( get_option( 'cp_login_custom_logo' ) && has_custom_logo() ){
-		echo get_custom_logo();
-	} else {
-	?>
-		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><?php echo $login_header_text; ?></a></h1>
-	<?php
-	}
-	unset( $login_header_url, $login_header_title );
+
+	return (
+		'<h1>'
+		. '<a href="' . esc_url( $login_header_url ) . '"'
+		. ' title="' . esc_attr( $login_header_title ) . '"'
+		. ' tabindex="-1">'
+		. $login_header_text
+		. '</a>'
+		. '</h1>'
+	);
 }
