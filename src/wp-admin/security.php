@@ -57,7 +57,7 @@ switch ( $active_tab ) :
 
 	<div class="card">
 		<h2><?php _e( '"Security First"' ); ?></h2>
-		<p><?php _e( 'Security is important to business and it’s important to us here at ClassicPress. By bringing security forward to a place of greater prominence within the admin interface, we create a more streamlined experience for both users and developers.' ); ?></p>
+		<p><?php _e( 'Security is important to business and it&#8217;s important to us here at ClassicPress. By bringing security forward to a place of greater prominence within the admin interface, we create a more streamlined experience for both users and developers.' ); ?></p>
 		<p><?php _e( 'As ClassicPress continues to evolve, the Security page will become the hub for all security features for ClassicPress core and 3<sup>rd</sup> party plugins that choose to support it.' ); ?></p>
 		<p>
 		<?php
@@ -69,11 +69,44 @@ switch ( $active_tab ) :
 		?>
 		</p>
 	</div>
-	<div class="card">
-		<h2><?php _e( 'Plugin Security Settings' ); ?></h2>
-		<p>If you have a plugin installed that you know has security-related settings but it&#8217;s not appearing here, you should contact the author and ask them to add support for the ClassicPress Security page.</p>
+
+	<div style="max-width: 570px;"> <!-- matches '.card' plus its padding -->
+		<?php
+		$security_pages = empty( $submenu['security.php'] )
+			? []
+			: array_slice( $submenu['security.php'], 1 );
+		echo '<h3>';
+		esc_html_e( 'Plugin Security Settings' );
+		echo "</h3>\n";
+		if ( count( $security_pages ) ) {
+			echo '<ul class="ul-disc">' . "\n";
+			foreach ( $security_pages as $page ) {
+				printf(
+					'<li><a href="%s">%s</a></li>' . "\n",
+					esc_attr( admin_url( 'security.php?page=' . $page[2] ) ),
+					esc_html( $page[0] )
+				);
+			}
+			echo '</ul>' . "\n";
+		} else {
+			echo '<p><strong>';
+			esc_html_e( 'No registered security settings yet!' );
+			echo "</p></strong>\n";
+			echo '<p>';
+			esc_html_e( 'Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' );
+			echo "</p>\n";
+		}
+		echo '<p>';
+		printf(
+			/* translators: link that describes how to contact plugin authors about the ClassicPress security page */
+			__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" rel="noopener" target="_blank">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
+			'https://link.classicpress.net/security-page/contact-plugin-authors'
+		);
+		echo "</p>\n";
+		?>
 	</div>
 		<?php
+
 		break;
 	case 'developers':
 		/**
@@ -94,7 +127,7 @@ switch ( $active_tab ) :
 						<div class="inside">
 							<div>
 								<p><?php _e( 'The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its pupose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.' ); ?></p>
-								<p><?php _e( 'Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings - they may be in there somewhere, there may be none at all - without looking through everything there&lsquo;s no way to know.' ); ?></p>
+								<p><?php _e( 'Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings &mdash; they may be in there somewhere, there may be none at all &mdash; without looking through everything there&#8217;s no way to know.' ); ?></p>
 								<p><?php _e( 'Currently, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all security-related settings from all plugins in one place means those settings can be audited far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.' ); ?></p>
 							</div>
 						</div>
@@ -108,7 +141,7 @@ switch ( $active_tab ) :
 							<p>
 								<ul class="ul-disc">
 									<li><?php _e( 'there is no <code>$capability</code> argument - it is always <code>manage_options</code>' ); ?></li>
-									<li><?php _e( 'the <code>$menu_slug</code> must match an active plugin slug.' ); ?></li>
+									<li><?php _e( 'the <code>$menu_slug</code> must match an active plugin or mu-plugin slug.' ); ?></li>
 								</ul>
 							</p>
 							<p><?php _e( 'The function also adds a link from your plugin&#8217;s action row in the plugins list directly to your security page.' ); ?></p>
@@ -124,7 +157,7 @@ switch ( $active_tab ) :
 <span style="color: #BA2121; font-style: italic">                               the page when the menu is selected.</span>
 <span style="color: #BA2121; font-style: italic"> * @param string   $menu_title The text to be used for the menu.</span>
 <span style="color: #BA2121; font-style: italic"> * @param string   $menu_slug  The slug name to refer to this menu by; must </span>
-<span style="color: #BA2121; font-style: italic">                               match an active plugin slug.</span>
+<span style="color: #BA2121; font-style: italic">                               match an active plugin or mu-plugin slug.</span>
 <span style="color: #BA2121; font-style: italic"> * @param callable $function   The function to be called to output the content</span>
 <span style="color: #BA2121; font-style: italic">                               for this page.</span>
 <span style="color: #BA2121; font-style: italic"> * @return false|string The resulting page&#39;s hook_suffix, or false if the user</span>
