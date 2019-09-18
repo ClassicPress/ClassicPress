@@ -4288,65 +4288,6 @@ function wp_heartbeat_settings( $settings ) {
 }
 
 /**
-* Get the image for login page from the theme logo via the customizer
-* Else get the default ClassicPress logo
-*
-* @return html
-*
-* @since 1.1.0
-*/
-function get_logo_image_url( $blog_id = 0 ) {
-
-    $html          = '';
-    $switched_blog = false;
-
-    if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
-        switch_to_blog( $blog_id );
-        $switched_blog = true;
-	}
-
-	$login_custom_logo_id = get_theme_mod( 'custom_logo' );
-
-    if ( $login_custom_logo_id ) {
-
-		$custom_logo_attr = array(
-            'class' => 'custom-logo',
-        );
-
-        /*
-         * If the logo alt attribute is empty, get the site title and explicitly
-         * pass it to the attributes used by wp_get_attachment_image().
-         */
-        $image_alt = get_post_meta( $login_custom_logo_id, '_wp_attachment_image_alt', true );
-        if ( empty( $image_alt ) ) {
-            $custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
-        }
-
-        /*
-         * If the alt attribute is not empty, there's no need to explicitly pass
-         * it because wp_get_attachment_image() already adds the alt attribute.
-         */
-        $html = sprintf(
-            '<a href="%1$s" class="login-custom-logo" rel="home">%2$s</a>',
-            esc_url( home_url( '/' ) ),
-            wp_get_attachment_image( $login_custom_logo_id, 'full', false, $custom_logo_attr )
-		);
-
-		if ( $switched_blog ) {
-			restore_current_blog();
-		}
-
-		/**
-		 * Filters the custom logo output.
-		 *
-		 * @param string $html    Custom logo HTML output.
-		 * @param int    $blog_id ID of the blog to get the custom logo for.
-		 */
-		return apply_filters( 'login_custom_logo', $html, $blog_id );
-    }
-}
-
-/**
 * Check for option cp_login_custom_logo
 * Get the image for login page from the theme logo via the customizer
 *
@@ -4393,7 +4334,7 @@ function get_login_image_html() {
  	<div id="login">
 	<?php
 	if ( get_option( 'cp_login_custom_logo' ) && has_custom_logo() ){
-		echo get_logo_image_url();
+		echo get_custom_logo();
 	} else {
 	?>
 		<h1><a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1"><?php echo $login_header_text; ?></a></h1>
