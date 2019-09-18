@@ -3310,15 +3310,15 @@ mockedApiResponse.Schema = {
                             "description": "Site tagline.",
                             "type": "string"
                         },
-                        "login_custom_logo": {
-                            "required": false,
-                            "description": "Use the site logo as the login image",
-                            "type": "boolean"
-                        },
                         "url": {
                             "required": false,
                             "description": "Site URL.",
                             "type": "string"
+                        },
+                        "login_custom_logo": {
+                            "required": false,
+                            "description": "Use the site logo as the login image",
+                            "type": "boolean"
                         },
                         "email": {
                             "required": false,
@@ -4569,8 +4569,8 @@ mockedApiResponse.CommentModel = {
 mockedApiResponse.settings = {
     "title": "Test Blog",
     "description": "Another great website powered by ClassicPress",
-    "login_custom_logo": false,
     "url": "http://example.org",
+    "login_custom_logo": false,
     "email": "admin@example.org",
     "timezone": "",
     "date_format": "F j, Y",
