@@ -32,9 +32,17 @@ $tabs[$active_tab]['classes'][] = 'nav-tab-active';
 <div class="wrap">
   <h1><?php echo esc_html( $title ); ?></h1>
   <h2 class="nav-tab-wrapper">
-<?php   foreach ($tabs as $tab => $info): ?>
-    <a href="/wp-admin/security.php?tab=<?=$tab?>" class="<?=join(' ', $info['classes'])?>"><?=$info['title']?></a>
-<?php   endforeach; ?>
+<?php
+	foreach ( $tabs as $tab => $info ) {
+		printf(
+			'<a href="%s?tab=%s" class="%s">%s</a>',
+			admin_url( 'security.php' ),
+			$tab,
+			join( ' ', $info['classes'] ),
+			$info['title']
+		);
+	}
+?>
   </h2>
 <?php
 switch ($active_tab):
