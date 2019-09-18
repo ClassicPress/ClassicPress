@@ -105,7 +105,11 @@ switch ( $active_tab ) :
 		}
 		echo (
 			'<p>'
-			. __( 'Note that security plugins written for WordPress will not display their settings here unless they have also been updated for ClassicPress.' )
+			. sprintf(
+				/* translators: link that describes how to contact plugin authors about the ClassicPress security page */
+				__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" rel="noopener" target="_blank">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
+				'https://link.classicpress.net/security-page/contact-plugin-authors'
+			)
 			. '</p>'
 			. "\n"
 		);
