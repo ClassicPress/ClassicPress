@@ -1458,7 +1458,7 @@ function _security_page_action_links( $actions, $plugin_file, $plugin_data, $con
 function add_security_page( $page_title, $menu_title, $menu_slug, $function = '' ) {
 	$mu_plugins = get_mu_plugins();
 	$plugins    = array_merge(
-		(array) get_option( 'active_sitewide_plugins', [] ),
+		array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) ),
 		(array) get_option( 'active_plugins', [] ),
 		array_keys( $mu_plugins )
 	);
