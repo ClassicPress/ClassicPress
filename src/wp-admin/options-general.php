@@ -129,8 +129,8 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
-<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="cp_login_custom_logo">
-<input name="cp_login_custom_logo" type="checkbox" id="cp_login_custom_logo" value="1" <?php checked('1', get_option('cp_login_custom_logo')); ?> />
+<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo">
+<input name="login_custom_logo" type="checkbox" id="login_custom_logo" value="1" <?php checked('1', get_option('login_custom_logo')); ?> />
 <?php _e('Turn on/off custom login image') ?></label>
 <p class="description" id="tagline-description">Add your custom logo to your theme via the customizer.</p>
 </fieldset></td>

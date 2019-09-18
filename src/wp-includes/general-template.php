@@ -4310,16 +4310,16 @@ function wp_heartbeat_settings( $settings ) {
 /**
  * Return the HTML for the image on the login screen. This is either a link
  * showing the ClassicPress logo (the default) or the site's custom logo image
- * (if a logo image is set and the `cp_login_custom_logo` option is enabled).
+ * (if a logo image is set and the `login_custom_logo` option is enabled).
  *
  * @since 1.1.0
  */
 function get_login_image_html() {
 	/**
-	 * Determine whether a site admin has enabled the `cp_login_custom_logo`
+	 * Determine whether a site admin has enabled the `login_custom_logo`
 	 * option and set a custom logo. If so, we can use it on the login page.
 	 */
-	$login_custom_logo = get_option( 'cp_login_custom_logo' );
+	$login_custom_logo = get_option( 'login_custom_logo' );
 	$login_custom_logo = ! empty( $login_custom_logo ) && has_custom_logo();
 
 	if ( $login_custom_logo ) {
@@ -4352,7 +4352,7 @@ function get_login_image_html() {
 	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
 
 	/**
-	 * If the user has enabled the `cp_login_custom_logo` option and set a
+	 * If the user has enabled the `login_custom_logo` option and set a
 	 * custom logo, then use the custom logo.
 	 */
 	if ( $login_custom_logo ) {

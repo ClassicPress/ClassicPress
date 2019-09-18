@@ -1834,9 +1834,9 @@ function register_initial_settings() {
 		'description'  => __( 'Site tagline.' ),
 	) );
 
-	register_setting( 'general', 'cp_login_custom_logo', array(
+	register_setting( 'general', 'login_custom_logo', array(
 		'show_in_rest' => array(
-			'name' => 'cp_login_custom_logo',
+			'name' => 'login_custom_logo',
 		),
 		'type'         => 'boolean',
 		'default'		=> false,

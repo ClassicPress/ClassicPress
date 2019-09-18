@@ -561,10 +561,10 @@ class wp_xmlrpc_server extends IXR_Server {
 				'readonly'      => false,
 				'option'        => 'users_can_register'
 			),
-			'cp_login_custom_logo' => array(
+			'login_custom_logo' => array(
 				'desc'          => __( 'Get the image for login page from the theme logo' ),
 				'readonly'      => false,
-				'option'        => 'cp_login_custom_logo'
+				'option'        => 'login_custom_logo'
 			),
 			'thumbnail_size_w'  => array(
 				'desc'          => __( 'Thumbnail Width' ),
