@@ -167,16 +167,11 @@ p {
 	margin: auto;
 }
 
-.login .custom-logo-link {
-	display: block;
-	width: 100%;
-}
-
 .login .custom-logo-link img {
 	display: block;
 	margin: 10px auto;
-	max-width: 84px;
-	height: 84px;
+	max-width: 100px;
+	height: 100px;
 	object-fit: contain;
 }
 
