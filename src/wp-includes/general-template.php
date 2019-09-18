@@ -865,7 +865,7 @@ function has_custom_logo( $blog_id = 0 ) {
  * @param int   $blog_id Optional. ID of the blog in question. Default or 0 is
  *                       the ID of the current blog.
  * @param array $args    Optional. May include 'title' key to set a link title
- *                       or 'href' key to override the link URL.
+ *                       and/or 'href' key to override the link URL.
  *
  * @return string Custom logo markup.
  */
