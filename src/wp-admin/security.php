@@ -93,7 +93,7 @@ switch ( $active_tab ) :
 			esc_html_e( 'No registered security settings yet!' );
 			echo "</p></strong>\n";
 			echo '<p>';
-			esc_html_e('Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' );
+			esc_html_e( 'Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' );
 			echo "</p>\n";
 		}
 		echo '<p>';
