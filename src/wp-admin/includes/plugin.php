@@ -1426,19 +1426,21 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
  *                            'recently_activated', 'upgrade', 'mustuse', 'dropins', and 'search'.
  */
 function _security_page_action_links( $actions, $plugin_file, $plugin_data, $context ) {
-	$admin_url = ( is_network_admin() )
-		? network_admin_url( 'security.php' )
-		: admin_url( 'security.php' );
-	$parts     = explode( '/', $plugin_file );
-	array_unshift(
-		$actions,
-		sprintf(
-			'<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>',
-			$admin_url,
-			$parts[0],
-			__( 'Security' )
-		)
-	);
+	if ( current_user_can( 'manage_options' ) ) {
+		$admin_url = ( is_network_admin() )
+			? network_admin_url( 'security.php' )
+			: admin_url( 'security.php' );
+		$parts     = explode( '/', $plugin_file );
+		array_unshift(
+			$actions,
+			sprintf(
+				'<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>',
+				$admin_url,
+				$parts[0],
+				__( 'Security' )
+			)
+		);
+	}
 
 	return $actions;
 }
