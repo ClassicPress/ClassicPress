@@ -70,6 +70,7 @@ switch ( $active_tab ) :
 		</p>
 	</div>
 
+	<div style="max-width: 570px;"> <!-- matches '.card' plus its padding -->
 		<?php
 		$security_pages = empty( $submenu['security.php'] )
 			? []
@@ -96,18 +97,21 @@ switch ( $active_tab ) :
 				. "\n"
 			);
 			echo (
-				'<p style="max-width: 570px;">' // to match '.card'
+				'<p>'
 				. __( 'Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' )
 				. '</p>'
 				. "\n"
 			);
 		}
 		echo (
-			'<p style="max-width: 570px;">' // to match '.card'
+			'<p>'
 			. __( 'Note that security plugins written for WordPress will not display their settings here unless they have also been updated for ClassicPress.' )
 			. '</p>'
 			. "\n"
 		);
+		?>
+	</div>
+		<?php
 
 		break;
 	case 'developers':
