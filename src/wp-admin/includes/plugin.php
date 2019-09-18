@@ -1427,22 +1427,36 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
  * @return false|string The resulting page's hook_suffix, or false if the user does not have the 'manage_options' capability.
  */
 function add_security_page( $page_title, $menu_title, $menu_slug, $function = '' ) {
-    foreach ( get_option( 'active_plugins' ) as $path ) {
-        $parts = explode( '/', $path );
-        if ( $menu_slug === $parts[0] ) {
-            add_filter(
-                'plugin_action_links_' . $path,
-                function ( $links ) use ( $menu_slug ) {
-                    array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>', admin_url( 'security.php' ), $menu_slug, __( 'Security' ) ) );
-                    return $links;
-                },
-                PHP_INT_MAX // make sure we're last so the shield is always first
-            );
-            return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
-        }
-    }
+	$mu_plugins = get_mu_plugins();
+	$plugins    = array_merge(
+		(array) get_option( 'active_sitewide_plugins' ),
+		(array) get_option( 'active_plugins' ),
+		array_keys( $mu_plugins )
+	);
+	if ( is_network_admin() ) {
+		$filter_prefix = 'network_admin_';
+		$admin_url     = network_admin_url( 'security.php' );
+	} else {
+		$filter_prefix = '';
+		$admin_url     = admin_url( 'security.php' );
+	}
+	foreach ( $plugins as $path ) {
+		$parts = explode( '/', $path );
+		if ( $menu_slug === $parts[0] ) {
+			$filter = 'plugin_action_links_' . $path;
+			add_filter(
+				$filter_prefix . $filter,
+				function ( $links ) use ( $admin_url, $menu_slug ) {
+					array_unshift( $links, sprintf( '<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>', $admin_url, $menu_slug, __( 'Security' ) ) );
+					return $links;
+				},
+				PHP_INT_MAX // make sure we're last so the shield is always first
+			);
+			return add_submenu_page( 'security.php', $page_title, $menu_title, 'manage_options', $menu_slug, $function );
+		}
+	}
 
-    _doing_it_wrong(__METHOD__, '$menu_slug must match an active plugin slug; '.$menu_slug, '1.1.0');
+	_doing_it_wrong( __METHOD__, '$menu_slug must match an active plugin slug; ' . $menu_slug, '1.1.0' );
 }
 
 /**

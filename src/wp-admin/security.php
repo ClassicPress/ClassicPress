@@ -36,10 +36,13 @@ $tabs[ $active_tab ]['classes'][] = 'nav-tab-active';
 	<h1><?php echo esc_html( $title ); ?></h1>
 	<h2 class="nav-tab-wrapper">
 <?php
+$url = ( is_network_admin() )
+	? network_admin_url( 'security.php' )
+	: admin_url( 'security.php' );
 foreach ( $tabs as $tab => $info ) {
 	printf(
 		'<a href="%s?tab=%s" class="%s">%s</a>',
-		admin_url( 'security.php' ),
+		$url,
 		$tab,
 		join( ' ', $info['classes'] ),
 		$info['title']
