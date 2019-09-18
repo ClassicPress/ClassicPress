@@ -69,7 +69,10 @@ switch ( $active_tab ) :
 		?>
 		</p>
 	</div>
-
+	<div class="card">
+		<h2><?php _e( 'Plugin Security Settings' ); ?></h2>
+		<p>If you have a plugin installed that you know has security-related settings but it&#8217;s not appearing here, you should contact the author and ask them to add support for the ClassicPress Security page.</p>
+	</div>
 		<?php
 		break;
 	case 'developers':
