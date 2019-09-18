@@ -75,44 +75,34 @@ switch ( $active_tab ) :
 		$security_pages = empty( $submenu['security.php'] )
 			? []
 			: array_slice( $submenu['security.php'], 1 );
-		echo '<h3>' . __( 'Plugin Security Settings' ) . '</h3>' . "\n";
+		echo '<h3>';
+		esc_html_e( 'Plugin Security Settings' );
+		echo "</h3>\n";
 		if ( count( $security_pages ) ) {
 			echo '<ul class="ul-disc">' . "\n";
 			foreach ( $security_pages as $page ) {
-				echo (
-					'<li><a href="'
-					. esc_attr( admin_url( 'security.php?page=' . $page[2] ) )
-					. '">'
-					. esc_html( $page[0] )
-					. '</a></li>'
-					. "\n"
+				printf(
+					'<li><a href="%s">%s</a></li>' . "\n",
+					esc_attr( admin_url( 'security.php?page=' . $page[2] ) ),
+					esc_html( $page[0] )
 				);
 			}
 			echo '</ul>' . "\n";
 		} else {
-			echo (
-				'<p><strong>'
-				. __( 'No registered security settings yet!' )
-				. '</strong></p>'
-				. "\n"
-			);
-			echo (
-				'<p>'
-				. __( 'Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' )
-				. '</p>'
-				. "\n"
-			);
+			echo '<p><strong>';
+			esc_html_e( 'No registered security settings yet!' );
+			echo "</p></strong>\n";
+			echo '<p>';
+			esc_html_e('Install plugins that add their own security settings according to the ClassicPress guidelines, and their settings pages will be listed here and in the Security menu on the left.' );
+			echo "</p>\n";
 		}
-		echo (
-			'<p>'
-			. sprintf(
-				/* translators: link that describes how to contact plugin authors about the ClassicPress security page */
-				__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" rel="noopener" target="_blank">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
-				'https://link.classicpress.net/security-page/contact-plugin-authors'
-			)
-			. '</p>'
-			. "\n"
+		echo '<p>';
+		printf(
+			/* translators: link that describes how to contact plugin authors about the ClassicPress security page */
+			__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" rel="noopener" target="_blank">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
+			'https://link.classicpress.net/security-page/contact-plugin-authors'
 		);
+		echo "</p>\n";
 		?>
 	</div>
 		<?php
