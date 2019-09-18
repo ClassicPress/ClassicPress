@@ -1453,7 +1453,7 @@ function _security_page_action_links( $actions, $plugin_file, $plugin_data, $con
  *
  * @param string   $page_title The text to be displayed in the title tags of the page when the menu is selected.
  * @param string   $menu_title The text to be used for the menu.
- * @param string   $menu_slug  The slug name to refer to this menu by; must match an active plugin slug.
+ * @param string   $menu_slug  The slug name to refer to this menu by; must match an active plugin or mu-plugin slug.
  * @param callable $function   The function to be called to output the content for this page.
  * @return false|string The resulting page's hook_suffix, or false if the user does not have the 'manage_options' capability.
  */

@@ -105,7 +105,7 @@ switch ( $active_tab ) :
 							<p>
 								<ul class="ul-disc">
 									<li><?php _e( 'there is no <code>$capability</code> argument - it is always <code>manage_options</code>' ); ?></li>
-									<li><?php _e( 'the <code>$menu_slug</code> must match an active plugin slug.' ); ?></li>
+									<li><?php _e( 'the <code>$menu_slug</code> must match an active plugin or mu-plugin slug.' ); ?></li>
 								</ul>
 							</p>
 							<p><?php _e( 'The function also adds a link from your plugin&#8217;s action row in the plugins list directly to your security page.' ); ?></p>
@@ -121,7 +121,7 @@ switch ( $active_tab ) :
 <span style="color: #BA2121; font-style: italic">                               the page when the menu is selected.</span>
 <span style="color: #BA2121; font-style: italic"> * @param string   $menu_title The text to be used for the menu.</span>
 <span style="color: #BA2121; font-style: italic"> * @param string   $menu_slug  The slug name to refer to this menu by; must </span>
-<span style="color: #BA2121; font-style: italic">                               match an active plugin slug.</span>
+<span style="color: #BA2121; font-style: italic">                               match an active plugin or mu-plugin slug.</span>
 <span style="color: #BA2121; font-style: italic"> * @param callable $function   The function to be called to output the content</span>
 <span style="color: #BA2121; font-style: italic">                               for this page.</span>
 <span style="color: #BA2121; font-style: italic"> * @return false|string The resulting page&#39;s hook_suffix, or false if the user</span>
