@@ -75,7 +75,7 @@ $table_prefix  = 'cp_';
  * For information on other constants that can be used for debugging,
  * visit the Codex.
  *
- * @link https://codex.wordpress.org/Debugging_in_WordPress
+ * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define('WP_DEBUG', false);
 
