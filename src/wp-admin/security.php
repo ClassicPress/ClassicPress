@@ -101,7 +101,7 @@ switch ( $active_tab ) :
 									<li><?php _e( 'the <code>$menu_slug</code> must match an active plugin slug.' ); ?></li>
 								</ul>
 							</p>
-							<p>The function also adds a link to your security page to the plugin actions. [This needs to be phrased better - brain fog, suggestions please.]</p>
+							<p><?php _e( 'The function also adds a link from your plugin&#8217;s action row in the plugins list directly to your security page.' ); ?></p>
 							<!-- HTML generated using hilite.me -->
 							<div style="background: #f8f8f8; overflow:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
 <pre style="margin: 0; line-height: 125%"><span style="color: #BA2121; font-style: italic">/**</span>
@@ -167,7 +167,6 @@ switch ( $active_tab ) :
 								<ul>
 									<li><a href="https://link.classicpress.net/support/security-page" rel="noopener" target="_blank"><?php _e( 'Security Page forum' ); ?></a></li>
 									<li><a href="https://link.classicpress.net/security-page" rel="noopener" target="_blank"><?php _e( 'Documentation' ); ?></a></li>
-									<li><a href="https://link.classicpress.net/my-prodigious-plugin" rel="noopener" target="_blank"><?php _e( 'Example code - My Prodigious Plugin' ); ?></a></li>
 								</ul>
 							</p>
 						</div>
