@@ -1839,8 +1839,8 @@ function register_initial_settings() {
 			'name' => 'login_custom_logo',
 		),
 		'type'         => 'boolean',
-		'default'		=> false,
-		'description'  => __( 'Turn on/off custom login image' ),
+		'default'      => false,
+		'description'  => __( 'Use the site logo as the login image' ),
 	) );
 
 	if ( ! is_multisite() ) {

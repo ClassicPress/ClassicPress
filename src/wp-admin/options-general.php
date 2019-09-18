@@ -131,8 +131,18 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
 <td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo">
 <input name="login_custom_logo" type="checkbox" id="login_custom_logo" value="1" <?php checked('1', get_option('login_custom_logo')); ?> />
-<?php _e('Turn on/off custom login image') ?></label>
-<p class="description" id="tagline-description">Add your custom logo to your theme via the customizer.</p>
+<?php _e('Use the site logo as the login image') ?></label>
+<p class="description" id="tagline-description">
+<?php
+	// From src/wp-admin/menu.php
+	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
+	printf(
+		/* translators: link to the Customizer */
+		__( 'If you set a logo image in the <a href="%s">Customizer</a> and enable this option, then the logo image will be shown at the top of the login page instead of the ClassicPress logo.' ),
+		esc_attr( $customize_url )
+	);
+?>
+</p>
 </fieldset></td>
 </tr>
 
