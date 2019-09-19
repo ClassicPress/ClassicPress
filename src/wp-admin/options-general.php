@@ -130,9 +130,9 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
 <td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo">
-<input name="login_custom_logo" type="checkbox" id="login_custom_logo" value="1" <?php checked('1', get_option('login_custom_logo')); ?> />
+<input name="login_custom_logo" type="checkbox" id="login_custom_logo" aria-describedby="custom-login-image-description" <?php checked('1', get_option('login_custom_logo')); ?> />
 <?php _e('Use the site logo as the login image') ?></label>
-<p class="description" id="tagline-description">
+<p class="description" id="custom-login-image-description">
 <?php
 	// From src/wp-admin/menu.php
 	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
