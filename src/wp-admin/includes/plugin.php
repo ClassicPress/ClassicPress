@@ -1479,7 +1479,7 @@ function add_security_page( $page_title, $menu_title, $menu_slug, $function = ''
 		}
 	}
 
-	_doing_it_wrong( __METHOD__, '$menu_slug must match an active plugin slug; ' . $menu_slug, '1.1.0' );
+	_doing_it_wrong( __METHOD__, '$menu_slug must match an active plugin or mu-plugin slug; ' . $menu_slug, '1.1.0' );
 }
 
 /**
