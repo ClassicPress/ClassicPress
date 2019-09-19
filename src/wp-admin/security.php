@@ -81,10 +81,14 @@ switch ( $active_tab ) :
 		if ( count( $security_pages ) ) {
 			echo '<ul class="ul-disc">' . "\n";
 			foreach ( $security_pages as $page ) {
+				// TODO: show as
+				// "<a>Menu Title</a> provided by <strong>Plugin Name</strong>"
+				// if "Menu Title" and "Plugin Name" are different
+				list( $menu_title, $cap, $page_slug, $page_title ) = $page;
 				printf(
 					'<li><a href="%s">%s</a></li>' . "\n",
-					esc_attr( admin_url( 'security.php?page=' . $page[2] ) ),
-					esc_html( $page[0] )
+					esc_attr( admin_url( 'security.php?page=' . $page_slug ) ),
+					esc_html( $menu_title )
 				);
 			}
 			echo '</ul>' . "\n";
