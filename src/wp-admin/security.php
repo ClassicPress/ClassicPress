@@ -130,7 +130,7 @@ switch ( $active_tab ) :
 						<h2><span><?php _e( 'Overview' ); ?></span></h2>
 						<div class="inside">
 							<div>
-								<p><?php _e( 'The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its pupose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.' ); ?></p>
+								<p><?php _e( 'The Security page is the first visible step in improving the overall approach to security in ClassicPress. Its purpose is to solve two related problems: <strong>discovery</strong> and <strong>auditing</strong>.' ); ?></p>
 								<p><?php _e( 'Most plugins are organised around their core purpose; after all, that purpose is the reason they were installed. Unfortunately this leads to poor discoverability of security-related settings &mdash; they may be in there somewhere, there may be none at all &mdash; without looking through everything there&#8217;s no way to know.' ); ?></p>
 								<p><?php _e( 'Currently, auditing the overall security profile of a ClassicPress site is impractical if there are more than a few plugins. Having all security-related settings from all plugins in one place means those settings can be audited far more easily, as the time taken will be proportional to the number of settings, not the number of places to look for those settings.' ); ?></p>
 							</div>
