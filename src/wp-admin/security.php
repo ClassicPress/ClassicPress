@@ -70,7 +70,7 @@ switch ( $active_tab ) :
 		</p>
 	</div>
 
-	<div style="max-width: 570px;"> <!-- matches '.card' plus its padding -->
+	<div class="card">
 		<?php
 		$security_pages = empty( $submenu['security.php'] )
 			? []
