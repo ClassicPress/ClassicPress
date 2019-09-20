@@ -159,13 +159,14 @@ if ( get_site_option( 'initial_db_version' ) < 32453 ) {
 	$whitelist_options['writing'][] = 'use_balanceTags';
 }
 
+$whitelist_options['general'][] = 'login_custom_logo';
+
 if ( !is_multisite() ) {
 	if ( !defined( 'WP_SITEURL' ) )
 		$whitelist_options['general'][] = 'siteurl';
 	if ( !defined( 'WP_HOME' ) )
 		$whitelist_options['general'][] = 'home';
 
-	$whitelist_options['general'][] = 'login_custom_logo';
 	$whitelist_options['general'][] = 'users_can_register';
 	$whitelist_options['general'][] = 'default_role';
 
