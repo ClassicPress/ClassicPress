@@ -246,6 +246,8 @@ function core_upgrade_preamble() {
 function list_plugin_updates() {
 	$wp_version = get_bloginfo( 'version' );
 	$cur_wp_version = preg_replace( '/-.*$/', '', $wp_version );
+	global $cp_version;
+	$cur_cp_version = preg_replace( '/\+.*$/', '', $cp_version );
 
 	require_once(ABSPATH . 'wp-admin/includes/plugin-install.php');
 	$plugins = get_plugin_updates();
@@ -291,22 +293,28 @@ function list_plugin_updates() {
 
 		// Get plugin compat for running version of ClassicPress.
 		if ( isset($plugin_data->update->tested) && version_compare($plugin_data->update->tested, $cur_wp_version, '>=') ) {
-			$compat = '<br />' . sprintf(__('Compatibility with ClassicPress %1$s: 100%% (according to its author)'), $cur_wp_version);
+			$compat = '<br />' . sprintf(__('Expected compatibility with ClassicPress %1$s: 100%%.'), $cur_cp_version);
+			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		} elseif ( isset($plugin_data->update->compatibility->{$cur_wp_version}) ) {
 			$compat = $plugin_data->update->compatibility->{$cur_wp_version};
-			$compat = '<br />' . sprintf(__('Compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total)'), $cur_wp_version, $compat->percent, $compat->votes, $compat->total_votes);
+			$compat = '<br />' . sprintf(__('Expected Compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).'), $cur_cp_version, $compat->percent, $compat->votes, $compat->total_votes);
+			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		} else {
-			$compat = '<br />' . sprintf(__('Compatibility with ClassicPress %1$s: Unknown'), $cur_wp_version);
+			$compat = '<br />' . sprintf(__('Expected compatibility with ClassicPress %1$s: Unknown.'), $cur_cp_version);
+			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		}
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
-				$compat .= '<br />' . sprintf( __( 'Compatibility with ClassicPress %1$s: 100%% (according to its author)' ), $core_update_version );
+				$compat = '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: 100%%.' ), $core_update_version );
+				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			} elseif ( isset( $plugin_data->update->compatibility->{$core_update_version} ) ) {
 				$update_compat = $plugin_data->update->compatibility->{$core_update_version};
-				$compat .= '<br />' . sprintf(__('Compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total)'), $core_update_version, $update_compat->percent, $update_compat->votes, $update_compat->total_votes);
+				$compat .= '<br />' . sprintf(__('Expected compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).'), $core_update_version, $update_compat->percent, $update_compat->votes, $update_compat->total_votes);
+				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			} else {
-				$compat .= '<br />' . sprintf(__('Compatibility with ClassicPress %1$s: Unknown'), $core_update_version);
+				$compat = '<br />' . sprintf(__('Expected compatibility with ClassicPress %1$s: Unknown.'), $core_update_version);
+				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			}
 		}
 		// Get the upgrade notice for the new plugin version.
