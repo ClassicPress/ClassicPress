@@ -27,6 +27,8 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$this->_remove_custom_logo();
 		$this->_remove_site_icon();
 		$wp_customize = null;
+		remove_all_filters( 'login_headerurl' );
+		remove_all_filters( 'login_headertitle' );
 
 		parent::tearDown();
 	}
@@ -610,5 +612,205 @@ class Tests_General_Template extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_default() {
+		if ( is_multisite() ) {
+			$expected_login_html = (
+				'<h1><a href="'
+				. esc_attr( network_home_url() )
+				. '" title="'
+				. esc_attr( get_network()->site_name )
+				. '" tabindex="-1">'
+				. get_bloginfo( 'name', 'display' )
+				. '</a></h1>'
+			);
+			$this->assertEquals(
+				$expected_login_html,
+				get_login_image_html()
+			);
+		} else {
+			$this->assertEquals(
+				'<h1><a href="https://www.classicpress.net/" title="Powered by ClassicPress" tabindex="-1">Powered by ClassicPress</a></h1>',
+				get_login_image_html()
+			);
+		}
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_option_disabled_with_custom_logo() {
+		update_option( 'login_custom_logo', 0 );
+		$this->_set_custom_logo();
+
+		if ( is_multisite() ) {
+			$expected_login_html = (
+				'<h1><a href="'
+				. esc_attr( network_home_url() )
+				. '" title="'
+				. esc_attr( get_network()->site_name )
+				. '" tabindex="-1">'
+				. get_bloginfo( 'name', 'display' )
+				. '</a></h1>'
+			);
+			$this->assertEquals(
+				$expected_login_html,
+				get_login_image_html()
+			);
+		} else {
+			$this->assertEquals(
+				'<h1><a href="https://www.classicpress.net/" title="Powered by ClassicPress" tabindex="-1">Powered by ClassicPress</a></h1>',
+				get_login_image_html()
+			);
+		}
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_option_enabled_without_custom_logo() {
+		update_option( 'login_custom_logo', 1 );
+
+		if ( is_multisite() ) {
+			$expected_login_html = (
+				'<h1><a href="'
+				. esc_attr( network_home_url() )
+				. '" title="'
+				. esc_attr( get_network()->site_name )
+				. '" tabindex="-1">'
+				. get_bloginfo( 'name', 'display' )
+				. '</a></h1>'
+			);
+			$this->assertEquals(
+				$expected_login_html,
+				get_login_image_html()
+			);
+		} else {
+			$this->assertEquals(
+				'<h1><a href="https://www.classicpress.net/" title="Powered by ClassicPress" tabindex="-1">Powered by ClassicPress</a></h1>',
+				get_login_image_html()
+			);
+		}
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_option_enabled_with_custom_logo() {
+		update_option( 'login_custom_logo', 1 );
+		$this->_set_custom_logo();
+
+		$custom_logo_attr = array(
+			'class'    => 'custom-logo',
+			'itemprop' => 'logo',
+			'alt'      => get_bloginfo( 'name', 'display' ),
+		);
+		$image = wp_get_attachment_image(
+			$this->custom_logo_id,
+			'full',
+			false,
+			$custom_logo_attr
+		);
+		$expected_custom_login_image = (
+			'<a href="'
+			. esc_attr( home_url( '/' ) )
+			. '" class="custom-logo-link" rel="home" itemprop="url" title="'
+			. esc_attr( get_bloginfo( 'name', 'display' ) )
+			. '">'
+			. $image
+			. '</a>'
+		);
+		$this->assertEquals(
+			$expected_custom_login_image,
+			get_login_image_html()
+		);
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_default_with_filters() {
+		add_filter( 'login_headerurl', function() {
+			return 'https://example.com?"a&b"';
+		} );
+		add_filter( 'login_headertitle', function() {
+			return 'A <script>"special";</script> title';
+		} );
+
+		if ( is_multisite() ) {
+			$expected_login_html = (
+				'<h1><a href="'
+				. 'https://example.com?a&#038;b'
+				. '" title="'
+				. 'A &lt;script&gt;&quot;special&quot;;&lt;/script&gt; title'
+				. '" tabindex="-1">'
+				. get_bloginfo( 'name', 'display' )
+				. '</a></h1>'
+			);
+			$this->assertEquals(
+				$expected_login_html,
+				get_login_image_html()
+			);
+		} else {
+			// Note: the link text is NOT escaped! This preserves the behavior
+			// in WordPress and in ClassicPress versions prior to 1.1.0.
+			$expected_login_html = (
+				'<h1><a href="'
+				. 'https://example.com?a&#038;b'
+				. '" title="'
+				. 'A &lt;script&gt;&quot;special&quot;;&lt;/script&gt; title'
+				. '" tabindex="-1">'
+				. 'A <script>"special";</script> title'
+				. '</a></h1>'
+			);
+			$this->assertEquals(
+				$expected_login_html,
+				get_login_image_html()
+			);
+		}
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_option_enabled_with_custom_logo_and_filters() {
+		update_option( 'login_custom_logo', 1 );
+		$this->_set_custom_logo();
+
+		add_filter( 'login_headerurl', function() {
+			return 'https://example.com?"a&b"';
+		} );
+		add_filter( 'login_headertitle', function() {
+			return 'A <script>"special";</script> title';
+		} );
+
+		$custom_logo_attr = array(
+			'class'    => 'custom-logo',
+			'itemprop' => 'logo',
+			'alt'      => get_bloginfo( 'name', 'display' ),
+		);
+		$image = wp_get_attachment_image(
+			$this->custom_logo_id,
+			'full',
+			false,
+			$custom_logo_attr
+		);
+		$expected_custom_login_image = (
+			'<a href="'
+			. 'https://example.com?a&#038;b'
+			. '" class="custom-logo-link" rel="home" itemprop="url" title="'
+			. 'A &lt;script&gt;&quot;special&quot;;&lt;/script&gt; title'
+			. '">'
+			. $image
+			. '</a>'
+		);
+		$this->assertEquals(
+			$expected_custom_login_image,
+			get_login_image_html()
+		);
 	}
 }
