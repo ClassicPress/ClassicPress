@@ -75,6 +75,7 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$expected = array(
 			'title',
 			'description',
+			'login_custom_logo',
 			'timezone',
 			'date_format',
 			'time_format',

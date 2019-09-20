@@ -35,6 +35,9 @@ class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
 		$contents = file_get_contents($file);
 		$upload = wp_upload_bits(basename($file), null, $contents);
 
+		if ( ! empty( $upload['error'] ) ) {
+			throw new ErrorException( $upload['error'] );
+		}
 		$type = '';
 		if ( ! empty($upload['type']) ) {
 			$type = $upload['type'];

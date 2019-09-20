@@ -561,6 +561,11 @@ class wp_xmlrpc_server extends IXR_Server {
 				'readonly'      => false,
 				'option'        => 'users_can_register'
 			),
+			'login_custom_logo' => array(
+				'desc'          => __( 'Use the site logo as the login image' ),
+				'readonly'      => false,
+				'option'        => 'login_custom_logo'
+			),
 			'thumbnail_size_w'  => array(
 				'desc'          => __( 'Thumbnail Width' ),
 				'readonly'      => false,
@@ -1656,6 +1661,16 @@ class wp_xmlrpc_server extends IXR_Server {
 			unset( $post['post_date_gmt'] );
 		else
 			$post['post_date_gmt'] = $this->_convert_date( $post['post_date_gmt'] );
+		
+		// https://core.trac.wordpress.org/attachment/ticket/45322/fix-wp-editpost-draft-dates.patch
+		// If the API client did not provide post_date then we must not perpetuate the
+		// value that was stored in the database, or it will appear to be an intentional
+		// edit. Conveying it here as if it were coming from the API client will cause an
+		// otherwise zeroed out post_date_gmt to get set with the value that was originally
+		// stored in the database when the draft was created.
+		if ( !isset( $content_struct['post_date'] ) ) {
+			unset( $post['post_date'] );
+		}
 
 		$this->escape( $post );
 		$merged_content_struct = array_merge( $post, $content_struct );

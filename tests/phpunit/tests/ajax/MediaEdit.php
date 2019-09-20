@@ -43,12 +43,12 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$_REQUEST['history'] = '[{"c":{"x":5,"y":8,"w":289,"h":322}}]';
 
 		$media_meta = wp_get_attachment_metadata($id);
-		$this->assertArrayHasKey('sizes', $media_meta, 'attachment should have size data');
+		$this->assertAttachmentMetaHasSizes( $media_meta );
 		$this->assertArrayHasKey('medium', $media_meta['sizes'], 'attachment should have data for medium size');
 		$ret = wp_save_image($id);
 
 		$media_meta = wp_get_attachment_metadata($id);
-		$this->assertArrayHasKey('sizes', $media_meta, 'cropped attachment should have size data');
+		$this->assertAttachmentMetaHasSizes( $media_meta );
 		$this->assertArrayHasKey('medium', $media_meta['sizes'], 'cropped attachment should have data for medium size');
 	}
 
@@ -76,6 +76,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$ret = wp_save_image( $id );
 
 		$media_meta = wp_get_attachment_metadata( $id );
+		$this->assertAttachmentMetaHasSizes( $media_meta );
 		$sizes1 = $media_meta['sizes'];
 
 		$_REQUEST['history'] = '[{"c":{"x":5,"y":8,"w":189,"h":322}}]';
@@ -83,6 +84,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$ret = wp_save_image( $id );
 
 		$media_meta = wp_get_attachment_metadata( $id );
+		$this->assertAttachmentMetaHasSizes( $media_meta );
 		$sizes2 = $media_meta['sizes'];
 
 		$file_path = dirname( get_attached_file( $id ) );

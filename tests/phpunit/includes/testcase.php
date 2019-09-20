@@ -724,6 +724,16 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function assertAttachmentMetaHasSizes( $meta ) {
+		if ( ! isset( $meta['sizes'] ) ) {
+			throw new ErrorException(
+				"No 'sizes' attribute for attachment metadata:"
+				. "\n" . json_encode( $meta )
+				. "\n\nTry installing the `imagick` or `gd` extensions for PHP."
+			);
+		}
+	}
+
 	function unlink( $file ) {
 		$exists = is_file( $file );
 		if ( $exists && ! in_array( $file, self::$ignore_files ) ) {
@@ -835,6 +845,9 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function _make_attachment($upload, $parent_post_id = 0) {
+		if ( ! empty( $upload['error'] ) ) {
+			throw new ErrorException( $upload['error'] );
+		}
 		$type = '';
 		if ( !empty($upload['type']) ) {
 			$type = $upload['type'];

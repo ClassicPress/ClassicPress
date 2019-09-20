@@ -67,6 +67,8 @@ if ( defined( 'MULTISITE' ) && defined( 'WP_ALLOW_MULTISITE' ) && WP_ALLOW_MULTI
 	$submenu['settings.php'][5]  = array( __('Network Settings'), 'manage_network_options', 'settings.php' );
 	$submenu['settings.php'][10] = array( __('Network Setup'), 'setup_network', 'setup.php' );
 }
+$menu[30] = array( __('Security'), 'manage_network_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
+	$submenu['security.php'][10] = array( _x( 'ClassicPress', 'security screen' ), 'manage_network_options', 'security.php' );
 unset($update_data);
 
 $menu[99] = array( '', 'exist', 'separator-last', '', 'wp-menu-separator' );

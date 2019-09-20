@@ -1,19 +1,21 @@
 ( function( window, document, settings ) {
 	var src, ready, ii, tests;
 
-	/*
-	 * Create a canvas element for testing native browser support
-	 * of emoji.
-	 */
+	// Create a canvas element for testing native browser support of emoji.
 	var canvas = document.createElement( 'canvas' );
 	var context = canvas.getContext && canvas.getContext( '2d' );
 
 	/**
-	 * Check if two sets of Emoji characters render the same.
+	 * Checks if two sets of Emoji characters render the same visually.
 	 *
-	 * @param set1 array Set of Emoji characters.
-	 * @param set2 array Set of Emoji characters.
-	 * @returns {boolean} True if the two sets render the same.
+	 * @since 4.9.0
+	 *
+	 * @private
+	 *
+	 * @param {number[]} set1 Set of Emoji character codes.
+	 * @param {number[]} set2 Set of Emoji character codes.
+	 *
+	 * @return {boolean} True if the two sets render the same.
 	 */
 	function emojiSetsRenderIdentically( set1, set2 ) {
 		var stringFromCharCode = String.fromCharCode;
@@ -32,13 +34,18 @@
 	}
 
 	/**
-	 * Detect if the browser supports rendering emoji or flag emoji. Flag emoji are a single glyph
-	 * made of two characters, so some browsers (notably, Firefox OS X) don't support them.
+	 * Detects if the browser supports rendering emoji or flag emoji.
+	 *
+	 * Flag emoji are a single glyph made of two characters, so some browsers
+	 * (notably, Firefox OS X) don't support them.
 	 *
 	 * @since WP-4.2.0
 	 *
-	 * @param type {String} Whether to test for support of "flag" or "emoji".
-	 * @return {Boolean} True if the browser can render emoji, false if it cannot.
+	 * @private
+	 *
+	 * @param {string} type Whether to test for support of "flag" or "emoji".
+	 *
+	 * @return {boolean} True if the browser can render emoji, false if it cannot.
 	 */
 	function browserSupportsEmoji( type ) {
 		var isIdentical;
@@ -65,8 +72,8 @@
 				 * the browser doesn't render it correctly ([U] + [N]).
 				 */
 				isIdentical = emojiSetsRenderIdentically(
-					[ 55356, 56826, 55356, 56819 ],
-					[ 55356, 56826, 8203, 55356, 56819 ]
+					[ 0xD83C, 0xDDFA, 0xD83C, 0xDDF3 ],
+					[ 0xD83C, 0xDDFA, 0x200B, 0xD83C, 0xDDF3 ]
 				);
 
 				if ( isIdentical ) {
@@ -81,22 +88,24 @@
 				 * the browser doesn't render it correctly (black flag emoji + [G] + [B] + [E] + [N] + [G]).
 				 */
 				isIdentical = emojiSetsRenderIdentically(
-					[ 55356, 57332, 56128, 56423, 56128, 56418, 56128, 56421, 56128, 56430, 56128, 56423, 56128, 56447 ],
-					[ 55356, 57332, 8203, 56128, 56423, 8203, 56128, 56418, 8203, 56128, 56421, 8203, 56128, 56430, 8203, 56128, 56423, 8203, 56128, 56447 ]
+					[ 0xD83C, 0xDFF4, 0xDB40, 0xDC67, 0xDB40, 0xDC62, 0xDB40, 0xDC65, 0xDB40, 0xDC6E, 0xDB40, 0xDC67, 0xDB40, 0xDC7F ],
+					[ 0xD83C, 0xDFF4, 0x200B, 0xDB40, 0xDC67, 0x200B, 0xDB40, 0xDC62, 0x200B, 0xDB40, 0xDC65, 0x200B, 0xDB40, 0xDC6E, 0x200B, 0xDB40, 0xDC67, 0x200B, 0xDB40, 0xDC7F ]
 				);
 
 				return ! isIdentical;
 			case 'emoji':
 				/*
-				 * She's the hero Emoji deserves, but not the one it needs right now.
+				 * Love is love.
 				 *
-				 * To test for support, try to render a new emoji (female superhero),
-				 * then compare it to how it would look if the browser doesn't render it correctly
-				 * (superhero + female sign).
+				 * To test for Emoji 12 support, try to render a new emoji: men holding hands, with different skin
+				 * tone modifiers.
+				 *
+				 * When updating this test for future Emoji releases, ensure that individual emoji that make up the
+				 * sequence come from older emoji standards.
 				 */
 				isIdentical = emojiSetsRenderIdentically(
-					[55358, 56760, 9792, 65039],
-					[55358, 56760, 8203, 9792, 65039]
+					[0xD83D, 0xDC68, 0xD83C, 0xDFFE, 0x200D, 0xD83E, 0xDD1D, 0x200D, 0xD83D, 0xDC68, 0xD83C, 0xDFFC],
+					[0xD83D, 0xDC68, 0xD83C, 0xDFFE, 0x200B, 0xD83E, 0xDD1D, 0x200B, 0xD83D, 0xDC68, 0xD83C, 0xDFFC]
 				);
 				return ! isIdentical;
 		}
@@ -104,6 +113,16 @@
 		return false;
 	}
 
+	/**
+	 * Adds a script to the head of the document.
+	 *
+	 * @ignore
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param {Object} src The url where the script is located.
+	 * @return {void}
+	 */
 	function addScript( src ) {
 		var script = document.createElement( 'script' );
 
@@ -119,6 +138,10 @@
 		everythingExceptFlag: true
 	};
 
+	/*
+	 * Tests the browser support for flag emojis and other emojis, and adjusts the
+	 * support settings accordingly.
+	 */
 	for( ii = 0; ii < tests.length; ii++ ) {
 		settings.supports[ tests[ ii ] ] = browserSupportsEmoji( tests[ ii ] );
 
@@ -131,16 +154,21 @@
 
 	settings.supports.everythingExceptFlag = settings.supports.everythingExceptFlag && ! settings.supports.flag;
 
+	// Sets DOMReady to false and assigns a ready function to settings.
 	settings.DOMReady = false;
 	settings.readyCallback = function() {
 		settings.DOMReady = true;
 	};
 
+	// When the browser can not render everything we need to load a polyfill.
 	if ( ! settings.supports.everything ) {
 		ready = function() {
 			settings.readyCallback();
 		};
 
+		/*
+		 * Cross-browser version of adding a dom ready event.
+		 */
 		if ( document.addEventListener ) {
 			document.addEventListener( 'DOMContentLoaded', ready, false );
 			window.addEventListener( 'load', ready, false );
