@@ -1415,6 +1415,74 @@ function add_comments_page( $page_title, $menu_title, $capability, $menu_slug, $
 }
 
 /**
+ * Plugin action links filter for Security page.
+ *
+ * @param array  $actions     An array of plugin action links. By default this can include 'activate',
+ *                            'deactivate', and 'delete'. With Multisite active this can also include
+ *                            'network_active' and 'network_only' items.
+ * @param string $plugin_file Path to the plugin file relative to the plugins directory.
+ * @param array  $plugin_data An array of plugin data. See `get_plugin_data()`.
+ * @param string $context     The plugin context. By default this can include 'all', 'active', 'inactive',
+ *                            'recently_activated', 'upgrade', 'mustuse', 'dropins', and 'search'.
+ */
+function _security_page_action_links( $actions, $plugin_file, $plugin_data, $context ) {
+	if ( current_user_can( 'manage_options' ) ) {
+		$admin_url = ( is_network_admin() )
+			? network_admin_url( 'security.php' )
+			: admin_url( 'security.php' );
+		$parts     = explode( '/', $plugin_file );
+		array_unshift(
+			$actions,
+			sprintf(
+				'<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>',
+				$admin_url,
+				$parts[0],
+				__( 'Security' )
+			)
+		);
+	}
+
+	return $actions;
+}
+
+/**
+ * Add submenu page to the Security main menu.
+ *
+ * The function which is hooked in to handle the output of the page must check
+ * that the user has at least 'manage_options' capability.
+ *
+ * @param string   $page_title The text to be displayed in the title tags of the page when the menu is selected.
+ * @param string   $menu_title The text to be used for the menu.
+ * @param string   $menu_slug  The slug name to refer to this menu by; must match an active plugin or mu-plugin slug.
+ * @param callable $function   The function to be called to output the content for this page.
+ * @return false|string The resulting page's hook_suffix, or false if the user does not have the 'manage_options' capability.
+ */
+function add_security_page( $page_title, $menu_title, $menu_slug, $function = '' ) {
+	$mu_plugins = get_mu_plugins();
+	$plugins    = array_merge(
+		array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) ),
+		(array) get_option( 'active_plugins', [] ),
+		array_keys( $mu_plugins )
+	);
+	if ( is_network_admin() ) {
+		$filter     = 'network_admin_plugin_action_links_';
+		$capability = 'manage_network_options';
+	} else {
+		$filter     = 'plugin_action_links_';
+		$capability = 'manage_options';
+	}
+	foreach ( $plugins as $path ) {
+		$parts = explode( '/', $path );
+		if ( $menu_slug === $parts[0] ) {
+			add_filter( $filter . $path, '_security_page_action_links', PHP_INT_MAX, 4 );
+			return add_submenu_page( 'security.php', $page_title, $menu_title, $capability, $menu_slug, $function );
+		}
+	}
+
+	_doing_it_wrong( __METHOD__, '$menu_slug must match an active plugin or mu-plugin slug; ' . $menu_slug, '1.1.0' );
+}
+
+/**
  * Remove a top-level admin menu.
  *
  * @since WP-3.1.0
