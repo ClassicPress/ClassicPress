@@ -260,23 +260,39 @@ foreach ( $themes as $theme ) :
 		<div class="theme-screenshot blank"></div>
 	<?php } ?>
 
-	<?php if ( $theme['hasUpdate'] ) : ?>
-		<div class="update-message notice inline notice-warning notice-alt">
-		<?php if ( $theme['hasPackage'] ) : ?>
-			<p><?php _e( 'New version available. <button class="button-link" type="button">Update now</button>' ); ?></p>
-		<?php else : ?>
-			<p><?php _e( 'New version available.' ); ?></p>
-		<?php endif; ?>
+	<?php if ( $theme['hasUpdate'] || isset( $theme['preferredChildName'] ) ) : ?>
+		<div class="notices">
+			<?php if ( $theme['hasUpdate'] ) : ?>
+				<div class="update-message notice inline notice-warning notice-alt">
+				<?php if ( $theme['hasPackage'] ) : ?>
+					<p><?php
+						/* translators: Update notice text */
+						_e( 'New version available.' );
+						?> <button class="button-link update-theme" type="button"><?php
+							/* translators: Button text */
+							_e( 'Update now' );
+						?></button>
+					</p>
+				<?php else : ?>
+					<p><?php _e( 'New version available.' ); ?></p>
+				<?php endif; ?>
+				</div>
+			<?php endif; ?>
+
+			<?php if ( isset( $theme['preferredChildName'] ) ) { ?>
+				<div class="notice inline notice-info notice-alt"><p><?php printf(
+						/* translators: %s: ClassicPress child theme name */
+						__( 'Use the "%s" child theme instead!' ),
+						$theme['preferredChildName']
+					); ?>
+					<span class="cut"><?php
+						/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
+						_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
+					?></span>
+				</p></div>
+			<?php } ?>
 		</div>
 	<?php endif; ?>
-
-	<?php if ( isset( $theme['preferredChildName'] ) ) { ?>
-		<div class="notice inline notice-info notice-alt"><p><?php printf(
-			/* translators: ClassicPress child theme name */
-			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-			$theme['preferredChildName']
-		); ?></p></div>
-	<?php } ?>
 
 	<span class="more-details" id="<?php echo $aria_action; ?>"><?php _e( 'Theme Details' ); ?></span>
 	<div class="theme-author"><?php printf( __( 'By %s' ), $theme['author'] ); ?></div>
@@ -399,21 +415,38 @@ $can_install = current_user_can( 'install_themes' );
 	<# } else { #>
 		<div class="theme-screenshot blank"></div>
 	<# } #>
+	<# if ( data.hasUpdate || data.preferredChildName ) { #>
+		<div class="notices">
+			<# if ( data.hasUpdate ) { #>
+				<# if ( data.hasPackage ) { #>
+					<div class="update-message notice inline notice-warning notice-alt">
+						<p><?php
+							/* translators: Notice text */
+							_e( 'New version available.' );
+							?> <button class="button-link update-theme" type="button"><?php
+								/* translators: Button text */
+								_e( 'Update now' );
+							?></button>
+						</p>
+					</div>
+				<# } else { #>
+					<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available.' ); ?></p></div>
+				<# } #>
+			<# } #>
 
-	<# if ( data.hasUpdate ) { #>
-		<# if ( data.hasPackage ) { #>
-			<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available. <button class="button-link" type="button">Update now</button>' ); ?></p></div>
-		<# } else { #>
-			<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available.' ); ?></p></div>
-		<# } #>
-	<# } #>
-
-	<# if ( data.preferredChildName ) { #>
-		<div class="notice inline notice-info notice-alt"><p><?php printf(
-			/* translators: ClassicPress child theme name */
-			'Use the "%s" child theme instead! This is a parent theme that says "Powered by WordPress" in its footer.',
-			'{{ data.preferredChildName }}'
-		); ?></p></div>
+			<# if ( data.preferredChildName ) { #>
+				<div class="notice inline notice-info notice-alt"><p><?php printf(
+						/* translators: %s: ClassicPress child theme name */
+						__( 'Use the "%s" child theme instead!' ),
+						'{{ data.preferredChildName }}'
+					); ?>
+					<span class="cut"><?php
+						/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
+						_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
+					?></span>
+				</p></div>
+			<# } #>
+		</div>
 	<# } #>
 
 	<span class="more-details" id="{{ data.id }}-action"><?php _e( 'Theme Details' ); ?></span>

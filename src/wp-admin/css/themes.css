@@ -40,16 +40,15 @@ body.js .theme-browser.search-loading {
 }
 
 /* Position admin messages */
-.theme .notice,
-.theme .notice.is-dismissible {
+.theme .notices {
 	left: 0;
 	margin: 0;
 	position: absolute;
 	right: 0;
 	top: 0;
 }
-.theme .notice.update-message + .notice {
-	top: 39px;
+.theme .notices .notice {
+	margin: 0;
 }
 
 /**
@@ -889,6 +888,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	.theme-browser.rendered .theme:hover .theme-screenshot img,
 	.theme-browser.rendered .theme:focus .theme-screenshot img {
 		opacity: 1.0;
+	}
+
+	.theme .notice .cut {
+		display: none;
 	}
 }
 
