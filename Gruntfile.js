@@ -720,10 +720,18 @@ module.exports = function(grunt) {
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
                                 // Fetch a list of the files that Twemoji supplies
-                                files = spawn( 'svn', [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ] );
+                                const svnArgs = [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ];
+                                files = spawn( 'svn', svnArgs );
                                 if ( 0 !== files.status ) {
-									grunt.fatal( 'Unable to fetch Twemoji file list' );
-								}
+                                    grunt.log.writeln(
+                                        'Command FAILED, try running it manually:'.yellow
+                                    );
+                                    grunt.log.writeln(
+                                        ( 'svn ' + svnArgs.join( ' ' ) ).yellow
+                                    );
+                                    grunt.log.writeln();
+                                    grunt.fatal( 'Unable to fetch Twemoji file list' );
+                                }
 
                                 entities = files.stdout.toString();
 
