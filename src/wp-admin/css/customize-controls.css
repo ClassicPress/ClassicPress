@@ -2968,3 +2968,19 @@ body.adding-widget .add-new-widget:before,
 		left: 0;
 	}
 }
+
+/* Fix theme notices in customizer (overrides wp-admin/css/theme.css) */
+
+@media screen and ( min-width: 650px ) and ( max-width: 850px ) {
+	/* Themes are shown in 1 wide column, can show full notices */
+	.customize-control-theme .theme .notice .cut {
+		display: inline;
+	}
+}
+
+@media screen and ( min-width: 851px ) and ( max-width: 1018px )  {
+	/* Themes are shown in 2 narrow columns, cut the notices */
+	.customize-control-theme .theme .notice .cut {
+		display: none;
+	}
+}
