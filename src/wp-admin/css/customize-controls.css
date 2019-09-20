@@ -2971,7 +2971,7 @@ body.adding-widget .add-new-widget:before,
 
 /* Fix theme notices in customizer (overrides wp-admin/css/theme.css) */
 
-@media screen  and ( min-width: 650px ) and ( max-width: 850px ) {
+@media screen and ( min-width: 650px ) and ( max-width: 850px ) {
 	/* Themes are shown in 1 wide column, can show full notices */
 	.customize-control-theme .theme .notice .cut {
 		display: inline;

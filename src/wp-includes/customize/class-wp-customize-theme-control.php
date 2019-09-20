@@ -87,14 +87,19 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				printf( _x( 'By %s', 'theme author' ), '{{ data.theme.author }}' );
 			?></div>
 
-			<# if ( ('installed' === data.theme.type && data.theme.hasUpdate) ||
-					data.theme.preferredChildName ) { #>
+			<# if (
+				( 'installed' === data.theme.type && data.theme.hasUpdate ) ||
+				data.theme.preferredChildName
+			) { #>
 				<div class="notices">
 					<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
 						<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
-							<p><?php /* translators: Notice text */ _e('New version available.');
+							<p><?php
+								/* translators: Notice text */
+								_e( 'New version available.' );
 								?> <button class="button-link update-theme" type="button"><?php
-									/* translators: Button text */ _e('Update now');
+									/* translators: Button text */
+									_e( 'Update now' );
 								?></button>
 							</p>
 						</div>
@@ -103,12 +108,12 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					<# if ( data.theme.preferredChildName ) { #>
 						<div class="notice inline notice-info notice-alt"><p><?php printf(
 								/* translators: %s: ClassicPress child theme name */
-								__('Use the "%s" child theme instead!'),
+								__( 'Use the "%s" child theme instead!' ),
 								'{{ data.theme.preferredChildName }}'
 							); ?>
 							<span class="cut"><?php
-								/* translators: Advanced part of the notice text, hidden on mobiles */
-								_e('This is a parent theme that says "Powered by WordPress" in its footer.');
+								/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
+								_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
 							?></span>
 						</p></div>
 					<# } #>
