@@ -117,16 +117,6 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 </td>
 </tr>
 
-<?php if ( ! is_multisite() ) { ?>
-
-<tr>
-<th scope="row"><?php _e('Membership') ?></th>
-<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Membership') ?></span></legend><label for="users_can_register">
-<input name="users_can_register" type="checkbox" id="users_can_register" value="1" <?php checked('1', get_option('users_can_register')); ?> />
-<?php _e('Anyone can register') ?></label>
-</fieldset></td>
-</tr>
-
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
 <td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo">
@@ -143,6 +133,16 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 	);
 ?>
 </p>
+</fieldset></td>
+</tr>
+
+<?php if ( ! is_multisite() ) { ?>
+
+<tr>
+<th scope="row"><?php _e('Membership') ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Membership') ?></span></legend><label for="users_can_register">
+<input name="users_can_register" type="checkbox" id="users_can_register" value="1" <?php checked('1', get_option('users_can_register')); ?> />
+<?php _e('Anyone can register') ?></label>
 </fieldset></td>
 </tr>
 
