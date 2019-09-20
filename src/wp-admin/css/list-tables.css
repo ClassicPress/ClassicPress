@@ -1292,6 +1292,11 @@ ul.cat-checklist {
 	white-space: nowrap;
 }
 
+.plugins .dashicon {
+	font: 16px dashicons;
+	vertical-align: text-bottom;
+}
+
 .plugins .plugin-title img,
 .plugins .plugin-title .dashicons {
 	float: left;
