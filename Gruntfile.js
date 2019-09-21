@@ -720,20 +720,76 @@ module.exports = function(grunt) {
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
                                 // Fetch a list of the files that Twemoji supplies
-                                const svnArgs = [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ];
-                                files = spawn( 'svn', svnArgs );
-                                if ( 0 !== files.status ) {
-                                    grunt.log.writeln(
-                                        'Command FAILED, try running it manually:'.yellow
-                                    );
-                                    grunt.log.writeln(
-                                        ( 'svn ' + svnArgs.join( ' ' ) ).yellow
-                                    );
-                                    grunt.log.writeln();
-                                    grunt.fatal( 'Unable to fetch Twemoji file list' );
-                                }
+                                //files = spawn( 'svn', [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ] );
+                                master = 'https://api.github.com/repos/twitter/twemoji/branches/master';
+                                curl = spawn( 'curl', [ master ] );
+                                if ( 0 !== curl.status ) {
+									grunt.fatal( 'Unable to fetch Twemoji file list' );
+								}
 
-                                entities = files.stdout.toString();
+								var tree = JSON.parse( curl.stdout );
+								if ( 'message' in tree ) {
+									grunt.fatal( 'API rate limit exceeded, try again later.' );
+								}
+								if ( true === tree.truncated ) {
+									grunt.fatal( 'Emojis not built due to truncated response from ' + master );
+								}
+								curl = spawn( 'curl', [ tree.commit.commit.tree.url ] );
+
+                                if ( 0 !== curl.status ) {
+									grunt.fatal( 'Unable to fetch Twemoji file list' );
+								}
+
+								var assets = JSON.parse( curl.stdout );
+								if ( 'message' in assets ) {
+									grunt.fatal( 'API rate limit exceeded, try again later.' );
+								}
+								if ( true === assets.truncated ) {
+									grunt.fatal( 'Emojis not built due to truncated response from ' + tree.commit.commit.tree.url );
+								}
+								for ( i = 0; i < assets.tree.length; i++ ) {
+									if ( 'assets' === assets.tree[i].path ) {
+										var assetsUrl = assets.tree[i].url;
+									}
+								}
+
+								curl = spawn( 'curl', [ assetsUrl ] );
+                                if ( 0 !== curl.status ) {
+									grunt.fatal( 'Unable to fetch Twemoji file list' );
+								}
+
+								var svg = JSON.parse( curl.stdout );
+								if ( 'message' in svg ) {
+									grunt.fatal( 'API rate limit exceeded, try again later.' );
+								}
+								if ( true === tree.truncated ) {
+									grunt.fatal( 'Emojis not built due to truncated response from ' + assetsUrl );
+								}
+								for ( i = 0; i < svg.tree.length; i++ ) {
+									if ( 'svg' === svg.tree[i].path ) {
+										var svgUrl = svg.tree[i].url;
+									}
+								}
+
+								curl = spawn( 'curl', [ svgUrl ] );
+                                if ( 0 !== curl.status ) {
+									grunt.fatal( 'Unable to fetch Twemoji file list' );
+								}
+
+								var emojis = JSON.parse( curl.stdout );
+								if ( 'message' in emojis ) {
+									grunt.fatal( 'API rate limit exceeded, try again later.' );
+								}
+								if ( true === emojis.truncated ) {
+									grunt.fatal( 'Emojis not built due to truncated response from ' + assetsUrl );
+								}
+
+								var entityNames = [];
+								for ( i = 0; i < emojis.tree.length; i++ ) {
+									entityNames.push( emojis.tree[i].path );
+								}
+
+                                entities = entityNames.toString();
 
                                 // Tidy up the file list
                                 entities = entities.replace( /\.svg/g, '' );
@@ -934,7 +990,7 @@ module.exports = function(grunt) {
 			done();
 			return;
 		}
-			
+
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
