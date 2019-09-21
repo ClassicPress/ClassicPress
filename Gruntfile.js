@@ -711,11 +711,14 @@ module.exports = function(grunt) {
 							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
 							replacement() {
                                 let regex;
-                                let files;
+                                let curl;
                                 let partials;
                                 let partialsSet;
                                 let entities;
                                 let emojiArray;
+                                let master;
+                                let assetsUrl;
+                                let svgUrl;
 
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
@@ -747,9 +750,9 @@ module.exports = function(grunt) {
 								if ( true === assets.truncated ) {
 									grunt.fatal( 'Emojis not built due to truncated response from ' + tree.commit.commit.tree.url );
 								}
-								for ( i = 0; i < assets.tree.length; i++ ) {
+								for ( var i = 0; i < assets.tree.length; i++ ) {
 									if ( 'assets' === assets.tree[i].path ) {
-										var assetsUrl = assets.tree[i].url;
+										assetsUrl = assets.tree[i].url;
 									}
 								}
 
@@ -765,9 +768,9 @@ module.exports = function(grunt) {
 								if ( true === tree.truncated ) {
 									grunt.fatal( 'Emojis not built due to truncated response from ' + assetsUrl );
 								}
-								for ( i = 0; i < svg.tree.length; i++ ) {
-									if ( 'svg' === svg.tree[i].path ) {
-										var svgUrl = svg.tree[i].url;
+								for ( var j = 0; j < svg.tree.length; j++ ) {
+									if ( 'svg' === svg.tree[j].path ) {
+										svgUrl = svg.tree[j].url;
 									}
 								}
 
@@ -785,8 +788,8 @@ module.exports = function(grunt) {
 								}
 
 								var entityNames = [];
-								for ( i = 0; i < emojis.tree.length; i++ ) {
-									entityNames.push( emojis.tree[i].path );
+								for ( var k = 0; k < emojis.tree.length; k++ ) {
+									entityNames.push( emojis.tree[k].path );
 								}
 
                                 entities = entityNames.toString();
