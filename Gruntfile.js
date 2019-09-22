@@ -805,7 +805,7 @@ module.exports = function(grunt) {
                                 entities = entities.replace( /-/g, '' );
 
                                 // Sort the entities list by length, so the longest emoji will be found first
-                                emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
+                                emojiArray = entities.split( ',' ).sort( ( a, b ) => {
                                     return b.length - a.length;
                                 } );
 
@@ -813,10 +813,10 @@ module.exports = function(grunt) {
                                 entities = `'${emojiArray.filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
 
                                 // Create a list of all characters used by the emoji list
-                                partials = partials.replace( /-/g, '\n' );
+                                partials = partials.replace( /-/g, ',' );
 
                                 // Set automatically removes duplicates
-                                partialsSet = new Set( partials.split( '\n' ) );
+                                partialsSet = new Set( partials.split( ',' ) );
 
                                 // Convert the partials list to PHP array syntax
                                 partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
