@@ -4360,10 +4360,10 @@ function get_login_image_html() {
 		 * is covered by the 'alt' attribute of the logo <img> tag.
 		 */
 		$login_header_text = null;
-		$login_image_html  = get_custom_logo( 0, array(
+		$login_image_html  = get_custom_logo( 0, [
 			'href'  => $login_header_url,
 			'title' => $login_header_title,
-		) );
+		] );
 
 	} else {
 		/**
