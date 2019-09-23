@@ -1847,15 +1847,6 @@ function register_initial_settings() {
 		) );
 	}
 
-	register_setting( 'general', 'login_custom_logo', array(
-		'show_in_rest' => array(
-			'name' => 'login_custom_logo',
-		),
-		'type'         => 'boolean',
-		'default'      => false,
-		'description'  => __( 'Use the site logo as the login image' ),
-	) );
-
 	if ( ! is_multisite() ) {
 		register_setting( 'general', 'admin_email', array(
 			'show_in_rest' => array(
