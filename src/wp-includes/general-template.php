@@ -4351,38 +4351,70 @@ function get_login_image_html() {
 	 */
 	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
 
-	/**
-	 * If the user has enabled the `login_custom_logo` option and set a
-	 * custom logo, then use the custom logo.
-	 */
 	if ( $login_custom_logo ) {
-		return get_custom_logo( 0, array(
+		/**
+		 * If the user has enabled the `login_custom_logo` option and set a
+		 * custom logo, then use the custom logo.
+		 *
+		 * No link text is printed for this option; instead, this functionality
+		 * is covered by the 'alt' attribute of the logo <img> tag.
+		 */
+		$login_header_text = null;
+		$login_image_html  = get_custom_logo( 0, [
 			'href'  => $login_header_url,
 			'title' => $login_header_title,
-		) );
-	}
+		] );
 
-	// Otherwise use the ClassicPress logo.
+	} else {
+		/**
+		 * Otherwise use the ClassicPress logo.
+		 *
+		 * Set the link text (displayed only for screen readers).
+		 *
+		 * To match the URL/title set above, Multisite sites have the blog
+		 * name, while single sites get the header title.
+		 */
+		if ( is_multisite() ) {
+			$login_header_text = get_bloginfo( 'name', 'display' );
+		} else {
+			$login_header_text = $login_header_title;
+		}
+
+		$login_image_html = (
+			'<h1>'
+			. '<a href="' . esc_url( $login_header_url ) . '"'
+			. ' title="' . esc_attr( $login_header_title ) . '"'
+			. ' tabindex="-1">'
+			. $login_header_text
+			. '</a>'
+			. '</h1>'
+		);
+
+	}
 
 	/**
-	 * Set the link text (not displayed, but kept for compatibility).
+	 * Filters the HTML for the image displayed on the login page.
 	 *
-	 * To match the URL/title set above, Multisite sites have the blog name,
-	 * while single sites get the header title.
+	 * @since 1.1.0
+	 *
+	 * @param string $html The proposed login image HTML.
+	 * @param array  $args {
+	 *     Other relevant arguments (read-only, you must use earlier filters
+	 *     such as 'login_headerurl' to modify these values).
+	 *     @type bool   $login_custom_logo  Whether the option to use the custom
+	 *                                      logo on the login page is enabled.
+	 *     @type string $login_header_url   The URL used as a link for the
+	 *                                      login page.
+	 *     @type string $login_header_title The title attribute for the login
+	 *                                      page image.
+	 *     @type string $login_header_text  The screen reader text for the login
+	 *                                      page image.
+	 * }
 	 */
-	if ( is_multisite() ) {
-		$login_header_text = get_bloginfo( 'name', 'display' );
-	} else {
-		$login_header_text = $login_header_title;
-	}
-
-	return (
-		'<h1>'
-		. '<a href="' . esc_url( $login_header_url ) . '"'
-		. ' title="' . esc_attr( $login_header_title ) . '"'
-		. ' tabindex="-1">'
-		. $login_header_text
-		. '</a>'
-		. '</h1>'
-	);
+	return apply_filters( 'login_image_html', $login_image_html, [
+		'login_custom_logo'  => $login_custom_logo,
+		'login_header_url'   => $login_header_url,
+		'login_header_title' => $login_header_title,
+		'login_header_text'  => $login_header_text,
+	] );
 }
