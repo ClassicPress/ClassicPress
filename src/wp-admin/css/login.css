@@ -167,15 +167,6 @@ p {
 	margin: auto;
 }
 
-.login .custom-logo-link img {
-	display: block;
-	margin: 10px auto;
-	max-width: 100px;
-	height: 100px;
-	-o-object-fit: contain;
-	object-fit: contain;
-}
-
 .login #nav,
 .login #backtoblog {
 	font-size: 13px;
