@@ -7,10 +7,35 @@ const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
 const spawn = require( 'child_process' ).spawnSync;
+const request = require( 'sync-request' );
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
 const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
+
+const callGitHubAPI = function( url ) {
+	res = request(
+		'GET',
+		url,
+		{
+			headers: { 'User-Agent': 'Request' },
+			json: true
+		}
+	);
+
+   	if ( res.statusCode >= 300 ) {
+		grunt.fatal( 'Unable to fetch Twemoji file resource at:' + url );
+	}
+
+	var json = JSON.parse( res.getBody( 'UTF-8' ) );
+	if ( 'message' in json ) {
+		grunt.fatal( 'API rate limit exceeded, try again later.' );
+	} else if ( true === json.truncated ) {
+		grunt.fatal( 'Emojis not built due to truncated response from: ' + url );
+	} else {
+		return json;
+	}
+}
 
 module.exports = function(grunt) {
     const puppeteerOptions = {};
@@ -711,6 +736,7 @@ module.exports = function(grunt) {
 							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
 							replacement() {
                                 let regex;
+                                let res;
                                 let curl;
                                 let partials;
                                 let partialsSet;
@@ -723,73 +749,28 @@ module.exports = function(grunt) {
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
                                 // Fetch a list of the files that Twemoji supplies
-                                //files = spawn( 'svn', [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ] );
                                 master = 'https://api.github.com/repos/twitter/twemoji/branches/master';
-                                curl = spawn( 'curl', [ master ] );
-                                if ( 0 !== curl.status ) {
-									grunt.fatal( 'Unable to fetch Twemoji file list' );
-								}
+                                res = callGitHubAPI( master );
 
-								var tree = JSON.parse( curl.stdout );
-								if ( 'message' in tree ) {
-									grunt.fatal( 'API rate limit exceeded, try again later.' );
-								}
-								if ( true === tree.truncated ) {
-									grunt.fatal( 'Emojis not built due to truncated response from ' + master );
-								}
-								curl = spawn( 'curl', [ tree.commit.commit.tree.url ] );
-
-                                if ( 0 !== curl.status ) {
-									grunt.fatal( 'Unable to fetch Twemoji file list' );
-								}
-
-								var assets = JSON.parse( curl.stdout );
-								if ( 'message' in assets ) {
-									grunt.fatal( 'API rate limit exceeded, try again later.' );
-								}
-								if ( true === assets.truncated ) {
-									grunt.fatal( 'Emojis not built due to truncated response from ' + tree.commit.commit.tree.url );
-								}
-								for ( var i = 0; i < assets.tree.length; i++ ) {
-									if ( 'assets' === assets.tree[i].path ) {
-										assetsUrl = assets.tree[i].url;
+								res = callGitHubAPI( res.commit.commit.tree.url );
+								for ( var i = 0; i < res.tree.length; i++ ) {
+									if ( 'assets' === res.tree[i].path ) {
+										assetsUrl = res.tree[i].url;
 									}
 								}
 
-								curl = spawn( 'curl', [ assetsUrl ] );
-                                if ( 0 !== curl.status ) {
-									grunt.fatal( 'Unable to fetch Twemoji file list' );
-								}
-
-								var svg = JSON.parse( curl.stdout );
-								if ( 'message' in svg ) {
-									grunt.fatal( 'API rate limit exceeded, try again later.' );
-								}
-								if ( true === tree.truncated ) {
-									grunt.fatal( 'Emojis not built due to truncated response from ' + assetsUrl );
-								}
-								for ( var j = 0; j < svg.tree.length; j++ ) {
-									if ( 'svg' === svg.tree[j].path ) {
-										svgUrl = svg.tree[j].url;
+								res = callGitHubAPI( assetsUrl );
+								for ( var j = 0; j < res.tree.length; j++ ) {
+									if ( 'svg' === res.tree[j].path ) {
+										svgUrl = res.tree[j].url;
 									}
 								}
 
-								curl = spawn( 'curl', [ svgUrl ] );
-                                if ( 0 !== curl.status ) {
-									grunt.fatal( 'Unable to fetch Twemoji file list' );
-								}
-
-								var emojis = JSON.parse( curl.stdout );
-								if ( 'message' in emojis ) {
-									grunt.fatal( 'API rate limit exceeded, try again later.' );
-								}
-								if ( true === emojis.truncated ) {
-									grunt.fatal( 'Emojis not built due to truncated response from ' + assetsUrl );
-								}
+								res = callGitHubAPI( svgUrl );
 
 								var entityNames = [];
-								for ( var k = 0; k < emojis.tree.length; k++ ) {
-									entityNames.push( emojis.tree[k].path );
+								for ( var k = 0; k < res.tree.length; k++ ) {
+									entityNames.push( res.tree[k].path );
 								}
 
                                 entities = entityNames.toString();
