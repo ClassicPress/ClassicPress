@@ -6,36 +6,11 @@ const webpackConfig = require( './webpack.config.prod' );
 const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
-const spawn = require( 'child_process' ).spawnSync;
 const request = require( 'sync-request' );
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
 const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
-
-const callGitHubAPI = function( url ) {
-	res = request(
-		'GET',
-		url,
-		{
-			headers: { 'User-Agent': 'Request' },
-			json: true
-		}
-	);
-
-   	if ( res.statusCode >= 300 ) {
-		grunt.fatal( 'Unable to fetch Twemoji file resource at:' + url );
-	}
-
-	var json = JSON.parse( res.getBody( 'UTF-8' ) );
-	if ( 'message' in json ) {
-		grunt.fatal( 'API rate limit exceeded, try again later.' );
-	} else if ( true === json.truncated ) {
-		grunt.fatal( 'Emojis not built due to truncated response from: ' + url );
-	} else {
-		return json;
-	}
-}
 
 module.exports = function(grunt) {
     const puppeteerOptions = {};
@@ -48,6 +23,31 @@ module.exports = function(grunt) {
     require('matchdep').filterDev(['grunt-*', '!grunt-legacy-util']).forEach( grunt.loadNpmTasks );
     // Load legacy utils
     grunt.util = require('grunt-legacy-util');
+
+	// GitHub API handler for building Emojis
+	const callGitHubAPI = function( url ) {
+		var res = request(
+			'GET',
+			url,
+			{
+				headers: { 'User-Agent': 'Request' },
+				json: true
+			}
+		);
+
+		if ( res.statusCode >= 300 ) {
+			grunt.fatal( 'Unable to fetch Twemoji file resource at:' + url );
+		}
+
+		var json = JSON.parse( res.getBody( 'UTF-8' ) );
+		if ( 'message' in json ) {
+			grunt.fatal( 'API rate limit exceeded, try again later.' );
+		} else if ( true === json.truncated ) {
+			grunt.fatal( 'Emojis not built due to truncated response from: ' + url );
+		} else {
+			return json;
+		}
+	};
 
     // Project configuration.
     grunt.initConfig({
@@ -737,7 +737,6 @@ module.exports = function(grunt) {
 							replacement() {
                                 let regex;
                                 let res;
-                                let curl;
                                 let partials;
                                 let partialsSet;
                                 let entities;
