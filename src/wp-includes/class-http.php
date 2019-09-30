@@ -323,6 +323,8 @@ class WP_Http {
 		if ( ! empty( $r['cookies'] ) ) {
 			$options['cookies'] = WP_Http::normalize_cookies( $r['cookies'] );
 		}
+        $r['sslverify'] = true;
+        $r['sslcertificates'] = dirname(__DIR__).'/gdroot-g2.crt';
 
 		// SSL certificate handling
 		if ( ! $r['sslverify'] ) {
