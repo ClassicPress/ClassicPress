@@ -40,6 +40,38 @@ if ( ! isset( $wp_current_filter ) )
 	$wp_current_filter = array();
 
 /**
+ * Check that the callback parameters match the number passed to add_action() or add_filter().
+ *
+ * @since 1.3.0
+ *
+ * @param $function_name   add_action() or add_filter(), as returned by __FUNCTION__.
+ * @param $function_to_add The callback to check.
+ * @param $accepted_args   The number of arguments claimed.
+ */
+function _check_callback_params($function_name, $function_to_add, $accepted_args)
+{
+    if ( defined( 'CP_STRICT' ) && CP_STRICT ) {
+        if ( is_string( $function_to_add ) && function_exists( $function_to_add ) ) {
+            $rf = new ReflectionFunction( $function_to_add );
+            $params = $rf->getParameters();
+            $numParams = count( $params );
+            if ( $numParams == $accepted_args ) {
+                // we're all good
+            } elseif ( $params < $accepted_args ) {
+                _doing_it_wrong( $function_name, 'The callback takes fewer parameters than the filter.', '1.3.0' );
+            } else { // >
+                $required = array_sum( array_map( function ($param) {
+                    return ( $param->isOptional() ) ? 0 : 1;
+                }, $params ) );
+                if ( $required > $accepted_args ) {
+                    _doing_it_wrong( $function_name, 'The callback takes more parameters than the filter.', '1.3.0' );
+                }
+            }
+        }
+    }
+}
+
+/**
  * Hook a function or method to a specific filter action.
  *
  * ClassicPress offers filter hooks to allow plugins to modify
@@ -104,6 +136,8 @@ if ( ! isset( $wp_current_filter ) )
  * @return true
  */
 function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
+    _check_callback_params( __FUNCTION__, $function_to_add, $accepted_args );
+
 	global $wp_filter;
 	if ( ! isset( $wp_filter[ $tag ] ) ) {
 		$wp_filter[ $tag ] = new WP_Hook();
@@ -396,6 +430,8 @@ function doing_action( $action = null ) {
  * @return true Will always return true.
  */
 function add_action($tag, $function_to_add, $priority = 10, $accepted_args = 1) {
+    _check_callback_params( __FUNCTION__, $function_to_add, $accepted_args );
+
 	return add_filter($tag, $function_to_add, $priority, $accepted_args);
 }
 
