@@ -49,6 +49,56 @@ module.exports = function(grunt) {
 		}
 	};
 
+	//
+	const createEmojiArray = function ( emoji ) {
+		let entityNames = [];
+		let entities;
+		let emojiArray;
+		let partials;
+		let partialsSet;
+		let regex;
+
+		for ( var k = 0; k < emoji.tree.length; k++ ) {
+			entityNames.push( emoji.tree[k].path );
+		}
+
+		entities = entityNames.toString();
+
+		// Tidy up the file list
+		entities = entities.replace( /\.svg/g, '' );
+		entities = entities.replace( /^$/g, '' );
+
+		// Convert the emoji entities to HTML entities
+		partials = entities = entities.replace( /([a-z0-9]+)/g, '&#x$1;' );
+
+		// Remove the hyphens between the HTML entities
+		entities = entities.replace( /-/g, '' );
+
+		// Sort the entities list by length, so the longest emoji will be found first
+		emojiArray = entities.split( ',' ).sort( ( a, b ) => {
+			return b.length - a.length;
+		} );
+
+		// Convert the entities list to PHP array syntax
+		entities = `'${emojiArray.filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
+
+		// Create a list of all characters used by the emoji list
+		partials = partials.replace( /-/g, ',' );
+
+		// Set automatically removes duplicates
+		partialsSet = new Set( partials.split( ',' ) );
+
+		// Convert the partials list to PHP array syntax
+		partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
+
+		regex = '// START: emoji arrays\n';
+		regex += `\t$entities = array( ${entities} );\n`;
+		regex += `\t$partials = array( ${partials} );\n`;
+		regex += '\t// END: emoji arrays';
+
+		return regex;
+	};
+
     // Project configuration.
     grunt.initConfig({
 		postcss: {
@@ -735,30 +785,26 @@ module.exports = function(grunt) {
 						{
 							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
 							replacement() {
-                                let regex;
                                 let res;
-                                let partials;
-                                let partialsSet;
-                                let entities;
-                                let emojiArray;
                                 let master;
-                                let assetsUrl;
+                                let twoUrl;
                                 let svgUrl;
 
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
                                 // Fetch a list of the files that Twemoji supplies
-                                master = 'https://api.github.com/repos/twitter/twemoji/branches/master';
+                                // master = 'https://api.github.com/repos/twitter/twemoji/commits/6f3545b9649bba68ead0660328f318777c8a9416';
+                                master = 'https://api.github.com/repos/twitter/twemoji/branches/gh-pages';
                                 res = callGitHubAPI( master );
 
 								res = callGitHubAPI( res.commit.commit.tree.url );
 								for ( var i = 0; i < res.tree.length; i++ ) {
-									if ( 'assets' === res.tree[i].path ) {
-										assetsUrl = res.tree[i].url;
+									if ( '2' === res.tree[i].path ) {
+										twoUrl = res.tree[i].url;
 									}
 								}
 
-								res = callGitHubAPI( assetsUrl );
+								res = callGitHubAPI( twoUrl );
 								for ( var j = 0; j < res.tree.length; j++ ) {
 									if ( 'svg' === res.tree[j].path ) {
 										svgUrl = res.tree[j].url;
@@ -767,46 +813,7 @@ module.exports = function(grunt) {
 
 								res = callGitHubAPI( svgUrl );
 
-								var entityNames = [];
-								for ( var k = 0; k < res.tree.length; k++ ) {
-									entityNames.push( res.tree[k].path );
-								}
-
-                                entities = entityNames.toString();
-
-                                // Tidy up the file list
-                                entities = entities.replace( /\.svg/g, '' );
-                                entities = entities.replace( /^$/g, '' );
-
-                                // Convert the emoji entities to HTML entities
-                                partials = entities = entities.replace( /([a-z0-9]+)/g, '&#x$1;' );
-
-                                // Remove the hyphens between the HTML entities
-                                entities = entities.replace( /-/g, '' );
-
-                                // Sort the entities list by length, so the longest emoji will be found first
-                                emojiArray = entities.split( ',' ).sort( ( a, b ) => {
-                                    return b.length - a.length;
-                                } );
-
-                                // Convert the entities list to PHP array syntax
-                                entities = `'${emojiArray.filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
-
-                                // Create a list of all characters used by the emoji list
-                                partials = partials.replace( /-/g, ',' );
-
-                                // Set automatically removes duplicates
-                                partialsSet = new Set( partials.split( ',' ) );
-
-                                // Convert the partials list to PHP array syntax
-                                partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
-
-                                regex = '// START: emoji arrays\n';
-                                regex += `\t$entities = array( ${entities} );\n`;
-                                regex += `\t$partials = array( ${partials} );\n`;
-                                regex += '\t// END: emoji arrays';
-
-                                return regex;
+								return createEmojiArray( res );
                             }
 						}
 					]
