@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 			entityNames.push( emoji.tree[k].path );
 		}
 
-		entities = entityNames.toString();
+		entities = entityNames.join( '\n' );
 
 		// Tidy up the file list
 		entities = entities.replace( /\.svg/g, '' );
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 		entities = entities.replace( /-/g, '' );
 
 		// Sort the entities list by length, so the longest emoji will be found first
-		emojiArray = entities.split( ',' ).sort( ( a, b ) => {
+		emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
 			return b.length - a.length;
 		} );
 
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
 		partials = partials.replace( /-/g, ',' );
 
 		// Set automatically removes duplicates
-		partialsSet = new Set( partials.split( ',' ) );
+		partialsSet = new Set( partials.split( '\n' ) );
 
 		// Convert the partials list to PHP array syntax
 		partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
