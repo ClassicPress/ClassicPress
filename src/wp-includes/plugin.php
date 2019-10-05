@@ -40,35 +40,153 @@ if ( ! isset( $wp_current_filter ) )
 	$wp_current_filter = array();
 
 /**
- * Check that the callback parameters match the number passed to add_action() or add_filter().
+ * Log error for nonexistant hook callback.
  *
- * @since 1.3.0
+ * @since 1.2.0
  *
- * @param $function_name   add_action() or add_filter(), as returned by __FUNCTION__.
- * @param $function_to_add The callback to check.
- * @param $accepted_args   The number of arguments claimed.
+ * @param string $function_name   {@see _check_hook_callback_args}
+ * @param string $function_to_add {@see _check_hook_callback_args}
+ * @return false
  */
-function _check_callback_params($function_name, $function_to_add, $accepted_args)
+function _check_hook_callback_args_exist_error( $function_name, $function_to_add )
 {
-    if ( defined( 'CP_STRICT' ) && CP_STRICT ) {
-        if ( is_string( $function_to_add ) && function_exists( $function_to_add ) ) {
-            $rf = new ReflectionFunction( $function_to_add );
-            $params = $rf->getParameters();
-            $numParams = count( $params );
-            if ( $numParams == $accepted_args ) {
-                // we're all good
-            } elseif ( $params < $accepted_args ) {
-                _doing_it_wrong( $function_name, 'The callback takes fewer parameters than the filter.', '1.3.0' );
-            } else { // >
-                $required = array_sum( array_map( function ($param) {
-                    return ( $param->isOptional() ) ? 0 : 1;
-                }, $params ) );
-                if ( $required > $accepted_args ) {
-                    _doing_it_wrong( $function_name, 'The callback takes more parameters than the filter.', '1.3.0' );
-                }
-            }
-        }
-    }
+	$trace = debug_backtrace();
+	$msg = 'The callback "%s" passed to %s() in "%s" on line %d does not exist.';
+	error_log(
+		sprintf(
+			function_exists('__') ? __( $msg ) : $msg,
+			$function_to_add,
+			$function_name, $trace[2]['file'], $trace[2]['line']
+		)
+	);
+	return false;
+}
+
+/**
+ * Log and return error for invalid hook callback.
+ *
+ * @since 1.2.0
+ *
+ * @param string $function_name {@see _check_hook_callback_args}
+ * @return WP_Error
+ */
+function _check_hook_callback_args_invalid_error( $function_name )
+{
+	$trace = debug_backtrace();
+	$fmt = 'Invalid callback passed to %s() in "%s" on line %d.';
+	$msg = sprintf(
+		function_exists( '__' ) ? __( $fmt ) : $fmt,
+		$function_name,
+		$trace[2]['file'], $trace[2]['line']
+		);
+	error_log( $msg );
+	return new WP_Error( $function_name, $msg );
+}
+
+/**
+ * Log and return error for mismatched argument count.
+ *
+ * @since 1.2.0
+ *
+ * @param string $function_name {@see _check_hook_callback_args}
+ * @param string $fmt           Rrror message format string.
+ * @param array $args           Argument counts.
+ * @return WP_Error
+ */
+function _check_hook_callback_args_count_error( $function_name, $fmt, array $args )
+{
+	$trace = debug_backtrace();
+	$msg = sprintf(
+		( function_exists( '__' ) )
+			? __( $fmt )
+			: $fmt,
+		$function_name, $trace[2]['file'], $trace[2]['line'],
+		$args['required'],
+		$args['accepted']
+	);
+	error_log( $msg );
+	return new WP_Error( $function_name, $msg, $args );
+}
+
+/**
+ * Check that the callback args match the number passed to add_action() or add_filter().
+ *
+ * Don't use is_callable() to avoid autoloading things.
+ *
+ * @since 1.2.0
+ *
+ * @param string $function_name   add_action() or add_filter(), as returned by __FUNCTION__.
+ * @param mixed  $function_to_add The callback to check.
+ * @param int    $accepted_args   The number of arguments claimed.
+ * @return true|false|WP_Error    true on success, false if can't determine, WP_Error on mismatch.
+ */
+function _check_hook_callback_args( $function_name, $function_to_add, $accepted_args )
+{
+	if ( is_string( $function_to_add ) ) {
+		if ( function_exists( $function_to_add ) ) {
+			$rf = new ReflectionFunction( $function_to_add );
+			$params = $rf->getParameters();
+		} else {
+			return _check_hook_callback_args_exist_error( $function_name, $function_to_add );
+		}
+	} elseif ( is_array( $function_to_add ) ) {
+		if ( 2 === count( $function_to_add ) ) {
+			if ( method_exists( $function_to_add[0], $function_to_add[1] ) ) {
+				$rm = new ReflectionMethod( $function_to_add[0], $function_to_add[1] );
+				$params = $rm->getParameters();
+			} else {
+				$func = sprintf(
+					'%s::%s',
+					(is_string($function_to_add[0]))
+						? $function_to_add[0]
+						: get_class($function_to_add[0]),
+					$function_to_add[1]
+				);
+				return _check_hook_callback_args_exist_error( $function_name, $func );
+			}
+		} else {
+			return _check_hook_callback_args_invalid_error( $function_name );
+		}
+	} elseif ( $function_to_add instanceof Closure ) {
+		$rf = new ReflectionFunction( $function_to_add );
+		$params = $rf->getParameters();
+	} else {
+		return _check_hook_callback_args_invalid_error( $function_name );
+	}
+
+	$numParams = count( $params );
+
+	if ( $numParams == $accepted_args ) {
+		// we're all good
+		return true;
+	} elseif ( $numParams < $accepted_args ) {
+		if ( 0 === $numParams && 1 === $accepted_args ) {
+			// special-case the typical lazy `add_action('hook', 'func')` that technically niether uses nor provides any args
+			return true;
+		} else {
+			$fmt = 'The callback passed to %s() in "%s" on line %d declares fewer parameters than the filter provides; %d declared, %d provided.';
+			$args = [
+				'required' => $numParams,
+				'accepted' => $accepted_args
+			];
+			return _check_hook_callback_args_count_error( $function_name, $fmt, $args );
+		}
+	} else { // >
+		$required = array_sum( array_map( function ($param) {
+			return ( $param->isOptional() ) ? 0 : 1;
+		}, $params ) );
+		if ( $required > $accepted_args ) {
+			$fmt = 'The callback provided to %s() in "%s" on line %d requires more parameters than the filter provides; %d required, %d provided.';
+			$args = [
+				'required' => $required,
+				'accepted' => $accepted_args
+			];
+			return _check_hook_callback_args_count_error( $function_name, $fmt, $args );
+		} else {
+			// we have more params than needed, but not too many required
+			return true;
+		}
+	}
 }
 
 /**
@@ -133,10 +251,15 @@ function _check_callback_params($function_name, $function_to_add, $accepted_args
  *                                  and functions with the same priority are executed
  *                                  in the order in which they were added to the action.
  * @param int      $accepted_args   Optional. The number of arguments the function accepts. Default 1.
+ * @param bool     $check_arguments Optional. Whether to check callback arguments.
  * @return true
  */
-function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
-    _check_callback_params( __FUNCTION__, $function_to_add, $accepted_args );
+function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1, $check_arguments = true ) {
+	if ( defined( 'CP_STRICT' ) && ( CP_STRICT & CP_STRICT_HOOK_ARGS_DECL ) && $check_arguments ) {
+		if ( is_wp_error( $err = _check_hook_callback_args( __FUNCTION__, $function_to_add, $accepted_args ) ) ) {
+			wp_die( $err );
+		}
+	}
 
 	global $wp_filter;
 	if ( ! isset( $wp_filter[ $tag ] ) ) {
@@ -430,9 +553,13 @@ function doing_action( $action = null ) {
  * @return true Will always return true.
  */
 function add_action($tag, $function_to_add, $priority = 10, $accepted_args = 1) {
-    _check_callback_params( __FUNCTION__, $function_to_add, $accepted_args );
+	if ( defined( 'CP_STRICT' ) && ( CP_STRICT & CP_STRICT_HOOK_ARGS_DECL ) ) {
+		if ( is_wp_error( $err = _check_hook_callback_args( __FUNCTION__, $function_to_add, $accepted_args ) ) ) {
+			wp_die( $err );
+		}
+	}
 
-	return add_filter($tag, $function_to_add, $priority, $accepted_args);
+	return add_filter($tag, $function_to_add, $priority, $accepted_args, false);
 }
 
 /**

@@ -279,6 +279,13 @@ final class WP_Hook implements Iterator, ArrayAccess {
 					$args[ 0 ] = $value;
 				}
 
+				// this might be too strict?
+				if ( defined( 'CP_STRICT' ) && ( CP_STRICT & CP_STRICT_HOOK_ARGS_RUNTIME ) ) {
+					if ( is_wp_error( $err = _check_hook_callback_args( $the_['function'], $the_['function'], $the_['accepted_args'] ) ) ) {
+						wp_die( $err );
+					}
+				}
+
 				// Avoid the array_slice if possible.
 				if ( $the_['accepted_args'] == 0 ) {
 					$value = call_user_func_array( $the_['function'], array() );

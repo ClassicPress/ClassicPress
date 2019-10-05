@@ -277,4 +277,98 @@ class Tests_WP_Hook_Add_Filter extends WP_UnitTestCase {
 	public function _action_remove_and_add4() {
 		$this->action_output .= '4';
 	}
+
+	protected function _check_hook_callback_args_nosuch_test() {
+		$accepted_args = 1;
+
+		$callback = 'foobar';
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertFalse( $rv );
+
+		$callback = ['foo', 'bar'];
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertFalse( $rv );
+
+		$callback = ['foo', 'bar', 'baz'];
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertInstanceOf( WP_Error::class, $rv );
+
+		$callback = (object) 'foobar';
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertInstanceOf( WP_Error::class, $rv );
+	}
+
+	public function test_check_hook_callback_args_nosuch() {
+		$this->_check_hook_callback_args_nosuch_test();
+	}
+
+	public function test_check_hook_callback_args_equal() {
+		function _one_arg_equal($arg) {
+			return '1';
+		}
+		$accepted_args = 1;
+
+		$callback = '_one_arg_equal';
+		$rv = _check_hook_callback_args($callback, $callback, $accepted_args);
+		$this->assertTrue( $rv );
+
+		$a = new MockAction();
+		$callback = array( $a, 'action' );
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertTrue( $rv );
+
+		$callback = function ($arg) {
+			return '1';
+		};
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertTrue( $rv );
+	}
+
+	public function test_check_hook_callback_args_equal_optional() {
+		function _one_arg_equal_optional($arg1, $arg2=null) {
+			return '1';
+		}
+		$accepted_args = 1;
+
+		$callback = '_one_arg_equal_optional';
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertTrue( $rv );
+	}
+
+	protected function _one_arg_more_test() {
+		$accepted_args = 2;
+
+		$callback = '_one_arg_more';
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertInstanceOf( WP_Error::class, $rv );
+		$data = $rv->get_error_data();
+		$this->assertEquals( 1, $data['required'] );
+		$this->assertEquals( 2, $data['accepted'] );
+	}
+
+	public function test_check_hook_callback_args_more() {
+		function _one_arg_more($arg) {
+			return '1';
+		}
+		$this->_one_arg_more_test();
+	}
+
+	protected function _two_arg_fewer_test() {
+		$accepted_args = 1;
+
+		$callback = '_two_arg_fewer';
+		$rv = _check_hook_callback_args(__FUNCTION__, $callback, $accepted_args);
+		$this->assertInstanceOf( WP_Error::class, $rv );
+		$data = $rv->get_error_data();
+		$this->assertEquals( 2, $data['required'] );
+		$this->assertEquals( 1, $data['accepted'] );
+	}
+
+	public function test_check_hook_callback_args_fewer() {
+		function _two_arg_fewer($arg1, $arg2) {
+			return '2';
+		}
+		$this->_two_arg_fewer_test();
+	}
 }
+

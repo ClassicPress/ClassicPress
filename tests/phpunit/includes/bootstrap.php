@@ -10,6 +10,10 @@ if ( class_exists( 'PHPUnit\Runner\Version' ) ) {
 	require_once dirname( __FILE__ ) . '/phpunit6-compat.php';
 }
 
+if ( ! @ini_get( 'error_log' ) ) {
+    ini_set( 'error_log', 'php.log' );
+}
+
 $config_file_path = dirname( dirname( __FILE__ ) );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.

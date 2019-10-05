@@ -133,6 +133,15 @@ function wp_initial_constants() {
 	define( 'MONTH_IN_SECONDS',  30 * DAY_IN_SECONDS    );
 	define( 'YEAR_IN_SECONDS',  365 * DAY_IN_SECONDS    );
 	/**#@-*/
+
+	/**#@+
+	 * Constants for CP_STRICT.
+	 *
+	 * @since 1.2.0
+	 */
+	define( 'CP_STRICT_HOOK_ARGS_DECL',    0X00000001 );
+	define( 'CP_STRICT_HOOK_ARGS_RUNTIME', 0X00000002 );
+	/**#@-*/
 }
 
 /**
