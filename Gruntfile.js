@@ -6,6 +6,7 @@ const webpackConfig = require( './webpack.config.prod' );
 const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
+const spawn = require( 'child_process' ).spawnSync;
 const request = require( 'sync-request' );
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -62,7 +63,7 @@ module.exports = function(grunt) {
 			entityNames.push( emoji.tree[k].path );
 		}
 
-		entities = entityNames.toString();
+		entities = entityNames.join( '\n' );
 
 		// Tidy up the file list
 		entities = entities.replace( /\.svg/g, '' );
@@ -75,7 +76,7 @@ module.exports = function(grunt) {
 		entities = entities.replace( /-/g, '' );
 
 		// Sort the entities list by length, so the longest emoji will be found first
-		emojiArray = entities.split( ',' ).sort( ( a, b ) => {
+		emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
 			return b.length - a.length;
 		} );
 
@@ -86,7 +87,7 @@ module.exports = function(grunt) {
 		partials = partials.replace( /-/g, ',' );
 
 		// Set automatically removes duplicates
-		partialsSet = new Set( partials.split( ',' ) );
+		partialsSet = new Set( partials.split( '\n' ) );
 
 		// Convert the partials list to PHP array syntax
 		partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
@@ -793,11 +794,10 @@ module.exports = function(grunt) {
                                 grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
                                 // Fetch a list of the files that Twemoji supplies
-                                // master = 'https://api.github.com/repos/twitter/twemoji/commits/6f3545b9649bba68ead0660328f318777c8a9416';
-                                master = 'https://api.github.com/repos/twitter/twemoji/branches/gh-pages';
+                                master = 'https://api.github.com/repos/twitter/twemoji/commits/6f3545b9';
                                 res = callGitHubAPI( master );
 
-								res = callGitHubAPI( res.commit.commit.tree.url );
+								res = callGitHubAPI( res.commit.tree.url );
 								for ( var i = 0; i < res.tree.length; i++ ) {
 									if ( '2' === res.tree[i].path ) {
 										twoUrl = res.tree[i].url;
