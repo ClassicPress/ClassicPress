@@ -6,7 +6,6 @@ const webpackConfig = require( './webpack.config.prod' );
 const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
-const spawn = require( 'child_process' ).spawnSync;
 const request = require( 'sync-request' );
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
