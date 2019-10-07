@@ -54,8 +54,19 @@ exports.replaceEmojiRegex = () => {
 	entities = entities.replace( /-/g, '' );
 
 	// Sort the entities by length, so the longest emoji will be found first
+	// Secondary sort by JavaScript default sort order for consistency
 	const emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
-		return b.length - a.length;
+		if ( b.length > a.length ) {
+			return 1;
+		} else if ( a.length > b.length ) {
+			return -1;
+		} else if ( b > a ) {
+			return 1;
+		} else if ( a > b ) {
+			return -1;
+		} else {
+			return 0;
+		}
 	} );
 
 	// Convert the entities list to PHP array syntax
