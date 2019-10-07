@@ -1,18 +1,20 @@
 /* jshint node:true */
 /* jshint es3:false */
 /* jshint esversion:6 */
-/* globals Set */
+
+const buildTools = require( './tools/build' );
 const webpackConfig = require( './webpack.config.prod' );
 const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
-const spawn = require( 'child_process' ).spawnSync;
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
 const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
 
 module.exports = function(grunt) {
+    buildTools.setGruntReference( grunt );
+
     const puppeteerOptions = {};
     if (process.env.TRAVIS) {
 		// Avoid error: Failed to launch chrome! No usable sandbox!
@@ -349,7 +351,7 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js']
+				src: ['Gruntfile.js', 'tools/**/*.js']
 			},
 			tests: {
 				src: [
@@ -709,66 +711,7 @@ module.exports = function(grunt) {
 					patterns: [
 						{
 							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
-							replacement() {
-                                let regex;
-                                let files;
-                                let partials;
-                                let partialsSet;
-                                let entities;
-                                let emojiArray;
-
-                                grunt.log.writeln( 'Fetching list of Twemoji files...' );
-
-                                // Fetch a list of the files that Twemoji supplies
-                                const svnArgs = [ 'ls', 'https://github.com/twitter/twemoji/branches/gh-pages/2/svg' ];
-                                files = spawn( 'svn', svnArgs );
-                                if ( 0 !== files.status ) {
-                                    grunt.log.writeln(
-                                        'Command FAILED, try running it manually:'.yellow
-                                    );
-                                    grunt.log.writeln(
-                                        ( 'svn ' + svnArgs.join( ' ' ) ).yellow
-                                    );
-                                    grunt.log.writeln();
-                                    grunt.fatal( 'Unable to fetch Twemoji file list' );
-                                }
-
-                                entities = files.stdout.toString();
-
-                                // Tidy up the file list
-                                entities = entities.replace( /\.svg/g, '' );
-                                entities = entities.replace( /^$/g, '' );
-
-                                // Convert the emoji entities to HTML entities
-                                partials = entities = entities.replace( /([a-z0-9]+)/g, '&#x$1;' );
-
-                                // Remove the hyphens between the HTML entities
-                                entities = entities.replace( /-/g, '' );
-
-                                // Sort the entities list by length, so the longest emoji will be found first
-                                emojiArray = entities.split( '\n' ).sort( ( a, b ) => {
-                                    return b.length - a.length;
-                                } );
-
-                                // Convert the entities list to PHP array syntax
-                                entities = `'${emojiArray.filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
-
-                                // Create a list of all characters used by the emoji list
-                                partials = partials.replace( /-/g, '\n' );
-
-                                // Set automatically removes duplicates
-                                partialsSet = new Set( partials.split( '\n' ) );
-
-                                // Convert the partials list to PHP array syntax
-                                partials = `'${Array.from( partialsSet ).filter( val => val.length >= 8 ? val : false ).join( '\', \'' )}'`;
-
-                                regex = '// START: emoji arrays\n';
-                                regex += `\t$entities = array( ${entities} );\n`;
-                                regex += `\t$partials = array( ${partials} );\n`;
-                                regex += '\t// END: emoji arrays';
-
-                                return regex;
-                            }
+							replacement: buildTools.replaceEmojiRegex,
 						}
 					]
 				},
@@ -934,7 +877,7 @@ module.exports = function(grunt) {
 			done();
 			return;
 		}
-			
+
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
