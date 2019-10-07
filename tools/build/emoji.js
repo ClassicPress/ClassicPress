@@ -2,6 +2,8 @@
 /* jshint es3:false */
 /* jshint esversion:6 */
 
+const fs = require( 'fs' );
+
 // The grunt tasks we are using do not support async replacement.
 const request = require( 'sync-request' );
 
@@ -57,8 +59,18 @@ exports.replaceEmojiRegex = () => {
 
 	// Convert the entities list to PHP array syntax
 	entities = emojiArray
-		.filter( val => val.length >= 8 )
-		.join( '\', \'' );
+		.filter( val => val.length >= 8 );
+	if ( process.env.DEBUG_TWEMOJI_FILES ) {
+		fs.writeFileSync(
+			`entities-${process.env.DEBUG_TWEMOJI_FILES}.txt`,
+			entities.join( '\n' ) + '\n'
+		);
+		fs.writeFileSync(
+			`entities-${process.env.DEBUG_TWEMOJI_FILES}-sorted.txt`,
+			Array.from( entities ).sort().join( '\n' ) + '\n'
+		);
+	}
+	entities = entities.join( '\', \'' );
 
 	// Create a list of all characters used by the emoji list
 	partials = partials.replace( /-/g, '\n' );
@@ -68,8 +80,18 @@ exports.replaceEmojiRegex = () => {
 
 	// Convert the partials list to PHP array syntax
 	partials = Array.from( partialsSet )
-		.filter( val => val.length >= 8 )
-		.join( '\', \'' );
+		.filter( val => val.length >= 8 );
+	if ( process.env.DEBUG_TWEMOJI_FILES ) {
+		fs.writeFileSync(
+			`partials-${process.env.DEBUG_TWEMOJI_FILES}.txt`,
+			partials.join( '\n' ) + '\n'
+		);
+		fs.writeFileSync(
+			`partials-${process.env.DEBUG_TWEMOJI_FILES}-sorted.txt`,
+			Array.from( partials ).sort().join( '\n' ) + '\n'
+		);
+	}
+	partials = partials.join( '\', \'' );
 
 	let replacement = '// START: emoji arrays\n';
 	replacement += `\t$entities = array( ${entities} );\n`;
