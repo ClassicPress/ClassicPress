@@ -61,7 +61,7 @@ exports.replaceEmojiRegex = () => {
 		.join( '\', \'' );
 
 	// Create a list of all characters used by the emoji list
-	partials = partials.replace( /-/g, ',' );
+	partials = partials.replace( /-/g, '\n' );
 
 	// Set automatically removes duplicates
 	const partialsSet = new Set( partials.split( '\n' ) );
