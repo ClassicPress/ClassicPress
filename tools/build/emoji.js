@@ -77,10 +77,6 @@ exports.replaceEmojiRegex = () => {
 			`entities-${process.env.DEBUG_TWEMOJI_FILES}.txt`,
 			entities.join( '\n' ) + '\n'
 		);
-		fs.writeFileSync(
-			`entities-${process.env.DEBUG_TWEMOJI_FILES}-sorted.txt`,
-			Array.from( entities ).sort().join( '\n' ) + '\n'
-		);
 	}
 	entities = entities.join( '\', \'' );
 
@@ -98,10 +94,6 @@ exports.replaceEmojiRegex = () => {
 		fs.writeFileSync(
 			`partials-${process.env.DEBUG_TWEMOJI_FILES}.txt`,
 			partials.join( '\n' ) + '\n'
-		);
-		fs.writeFileSync(
-			`partials-${process.env.DEBUG_TWEMOJI_FILES}-sorted.txt`,
-			Array.from( partials ).sort().join( '\n' ) + '\n'
 		);
 	}
 	partials = partials.join( '\', \'' );
