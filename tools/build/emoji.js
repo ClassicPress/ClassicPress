@@ -47,7 +47,8 @@ exports.replaceEmojiRegex = () => {
 	entities = entities.replace( /^$/g, '' );
 
 	// Convert the emoji entities to HTML entities
-	let partials = entities = entities.replace( /([a-z0-9]+)/g, '&#x$1;' );
+	entities = entities.replace( /([a-z0-9]+)/g, '&#x$1;' );
+	let partials = entities;
 
 	// Remove the hyphens between the HTML entities
 	entities = entities.replace( /-/g, '' );
