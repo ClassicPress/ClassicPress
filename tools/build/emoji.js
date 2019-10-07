@@ -92,7 +92,8 @@ exports.replaceEmojiRegex = () => {
 
 	// Convert the partials list to PHP array syntax
 	partials = Array.from( partialsSet )
-		.filter( val => val.length >= 8 );
+		.filter( val => val.length >= 8 )
+		.sort();
 	if ( process.env.DEBUG_TWEMOJI_FILES ) {
 		fs.writeFileSync(
 			`partials-${process.env.DEBUG_TWEMOJI_FILES}.txt`,
