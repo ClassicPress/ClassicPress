@@ -94,8 +94,8 @@ exports.replaceEmojiRegex = () => {
 	partials = partials.join( '\', \'' );
 
 	let replacement = '// START: emoji arrays\n';
-	replacement += `\t$entities = array( ${entities} );\n`;
-	replacement += `\t$partials = array( ${partials} );\n`;
+	replacement += `\t$entities = array( '${entities}' );\n`;
+	replacement += `\t$partials = array( '${partials}' );\n`;
 	replacement += '\t// END: emoji arrays';
 
 	return replacement;
