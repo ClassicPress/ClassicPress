@@ -53,11 +53,13 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				</p>
 			<?php } ?>
 
-			<h3><?php _e( 'Introducing ClassicPress' ); ?></h3>
+			<h3><?php _e( 'About ClassicPress' ); ?></h3>
 
 			<p>
-				<?php _e(
-					'ClassicPress is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.'
+				<?php printf(
+					/* translators: link to ClassicPress site */
+					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
+					'https://www.classicpress.net'
 				); ?>
 			</p>
 			<p>
