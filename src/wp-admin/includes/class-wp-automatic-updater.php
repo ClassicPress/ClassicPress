@@ -837,7 +837,7 @@ This debugging email is sent when you are using a development version of Classic
 
 If you think these failures might be due to a bug in ClassicPress, could you report it?
  * If you need general support: https://docs.classicpress.net/faq-support/
- * Or, if you're comfortable writing a bug report: https://docs.classicpress.net/testing-classicpress/#reporting-bugs
+ * Or, if you're comfortable writing a bug report: https://links.classicpress.net/testing-classicpress/#reporting-bugs
 
 Thanks! -- The ClassicPress Team" ) );
 			$body[] = '';
