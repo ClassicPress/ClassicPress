@@ -204,7 +204,7 @@ function core_upgrade_preamble() {
 		printf(
 			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
 			'https://codex.wordpress.org/WordPress_Backups',
-			'https://links.classicpress.net/updating-classicpress/'
+			'https://link.classicpress.net/updating-classicpress/'
 		);
 		echo '</p></div>';
 
