@@ -150,7 +150,7 @@ switch ( $step ) {
 		echo '<p>' .  sprintf(
 			/* translators: link to support forums for more help */
 			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
-			'https://forums.classicpress.net/c/support'
+			'https://link.classicpress.net/support'
 		) . '</p>';
 
 		// Database settings inputs.
