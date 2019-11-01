@@ -157,7 +157,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'parent'    => 'wp-logo-external',
 		'id'        => 'documentation',
 		'title'     => __('Documentation'),
-		'href'      => __('https://docs.classicpress.net/'),
+		'href'      => __('https://link.classicpress.net/docs'),
 	) );
 
 	// Add support link
