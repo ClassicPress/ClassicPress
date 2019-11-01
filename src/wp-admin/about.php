@@ -85,7 +85,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php printf(
 					/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
 					__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-					'https://docs.classicpress.net/faq-support/',
+					'https://link.classicpress.net/faq-support/',
 					'https://forums.classicpress.net/c/support/'
 				); ?>
 			</p>

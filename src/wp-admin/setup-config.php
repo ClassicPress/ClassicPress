@@ -176,7 +176,7 @@ switch ( $step ) {
 		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> ' .
 			sprintf(
 				'<a href="%s" target="_blank" rel="noopener">' . __( 'Learn More' ) . '</a>',
-				esc_url('https://link.classicpress.net/installing-classicpress/#installation-steps')
+				esc_url('https://link.classicpress.net/installing-classicpress/installation-steps')
 			) .
 			'</td>';
 		echo '	</tr>';
