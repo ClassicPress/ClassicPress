@@ -102,7 +102,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php printf(
 					/* translators: link to ClassicPress release announcements subforum */
 					__( 'The changes and new features included in each version of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
-					'https://forums.classicpress.net/c/announcements/release-notes'
+					'https://link.classicpress.net/c/announcements/release-notes'
 				);
 				?>
 			</p>
