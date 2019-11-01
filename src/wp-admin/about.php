@@ -78,7 +78,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php printf(
 					/* translators: link to ClassicPress Petitions site for new features */
 					__( 'Suggestions for improvements to future versions of ClassicPress are welcome at <a href="%s"><strong>our petitions site</strong></a>.' ),
-					'https://petitions.classicpress.net/'
+					'https://link.classicpress.net/petitions'
 				); ?>
 			</p>
 			<p>
@@ -111,7 +111,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php printf(
 					/* translators: link to ClassicPress 1.0.0 changelog */
 					__( 'For a list of new features and other changes from WordPress 4.9.x, see the <a href="%s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
-					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
+					'https://link.classicpress.net/classicpress-1-0-0-aurora-release-notes'
 				);
 				?>
 			</p>
