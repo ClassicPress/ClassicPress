@@ -3034,7 +3034,7 @@ class WP_Query {
 			if ( is_array( $this->posts ) ) {
 				$this->found_posts = count( $this->posts );
 			} else {
-				if ( null === $this->posts ) {  
+				if ( null === $this->posts ) {
 					$this->found_posts = 0;
 				} else {
 					$this->found_posts = 1;
@@ -4046,6 +4046,99 @@ class WP_Query {
 
 		return true;
 	}
+
+	/**
+	 * Generate post data.
+	 *
+	 * @since WP-5.2.0
+	 *
+	 * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
+	 * @return array|bool $elements Elements of post or false on failure.
+	 */
+	public function generate_postdata( $post ) {
+
+		if ( ! ( $post instanceof WP_Post ) ) {
+			$post = get_post( $post );
+		}
+
+		if ( ! $post ) {
+			return false;
+		}
+
+		$id = (int) $post->ID;
+
+		$authordata = get_userdata( $post->post_author );
+
+		$currentday   = mysql2date( 'd.m.y', $post->post_date, false );
+		$currentmonth = mysql2date( 'm', $post->post_date, false );
+		$numpages     = 1;
+		$multipage    = 0;
+		$page         = $this->get( 'page' );
+		if ( ! $page ) {
+			$page = 1;
+		}
+
+		/*
+		 * Force full post content when viewing the permalink for the $post,
+		 * or when on an RSS feed. Otherwise respect the 'more' tag.
+		 */
+		if ( $post->ID === get_queried_object_id() && ( $this->is_page() || $this->is_single() ) ) {
+			$more = 1;
+		} elseif ( $this->is_feed() ) {
+			$more = 1;
+		} else {
+			$more = 0;
+		}
+
+		$content = $post->post_content;
+		if ( false !== strpos( $content, '<!--nextpage-->' ) ) {
+			$content = str_replace( "\n<!--nextpage-->\n", '<!--nextpage-->', $content );
+			$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
+			$content = str_replace( "<!--nextpage-->\n", '<!--nextpage-->', $content );
+
+			// Remove the nextpage block delimiters, to avoid invalid block structures in the split content.
+			$content = str_replace( '<!-- wp:nextpage -->', '', $content );
+			$content = str_replace( '<!-- /wp:nextpage -->', '', $content );
+
+			// Ignore nextpage at the beginning of the content.
+			if ( 0 === strpos( $content, '<!--nextpage-->' ) ) {
+				$content = substr( $content, 15 );
+			}
+
+			$pages = explode( '<!--nextpage-->', $content );
+		} else {
+			$pages = array( $post->post_content );
+		}
+
+		/**
+		 * Filters the "pages" derived from splitting the post content.
+		 *
+		 * "Pages" are determined by splitting the post content based on the presence
+		 * of `<!-- nextpage -->` tags.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param string[] $pages Array of "pages" from the post content split by `<!-- nextpage -->` tags.
+		 * @param WP_Post  $post  Current post object.
+		 */
+		$pages = apply_filters( 'content_pagination', $pages, $post );
+
+		$numpages = count( $pages );
+
+		if ( $numpages > 1 ) {
+			if ( $page > 1 ) {
+				$more = 1;
+			}
+			$multipage = 1;
+		} else {
+			$multipage = 0;
+		}
+
+		$elements = compact( 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );
+
+		return $elements;
+	}
+
 	/**
 	 * After looping through a nested query, this function
 	 * restores the $post global to the current post in this query.

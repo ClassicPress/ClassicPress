@@ -3308,10 +3308,11 @@ function human_time_diff( $from, $to = '' ) {
  * @param string $text Optional. The excerpt. If set to empty, an excerpt is generated.
  * @return string The excerpt.
  */
-function wp_trim_excerpt( $text = '' ) {
+function wp_trim_excerpt( $text = '', $post = null ) {
 	$raw_excerpt = $text;
 	if ( '' == $text ) {
-		$text = get_the_content('');
+		$post = get_post( $post );
+        $text = get_the_content( '', false, $post );
 
 		$text = strip_shortcodes( $text );
 

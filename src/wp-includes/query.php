@@ -1009,3 +1009,23 @@ function setup_postdata( $post ) {
 
 	return false;
 }
+
+/**
+ * Generates post data.
+ *
+ * @since WP-5.2.0
+ *
+ * @global WP_Query $wp_query Global WP_Query instance.
+ *
+ * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
+ * @return array|bool Elements of post, or false on failure.
+ */
+function generate_postdata( $post ) {
+	global $wp_query;
+
+	if ( ! empty( $wp_query ) && $wp_query instanceof WP_Query ) {
+		return $wp_query->generate_postdata( $post );
+	}
+
+	return false;
+}
