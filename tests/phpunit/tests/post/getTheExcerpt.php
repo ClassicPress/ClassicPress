@@ -52,15 +52,4 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create( array( 'post_excerpt' => 'Bar' ) );
 		$this->assertSame( 'Bar', get_the_excerpt( $post_id ) );
 	}
-
-	/**
-	 * @see https://github.com/ClassicPress/ClassicPress/issues/316
-	 */
-	public function test_get_the_excerpt() {
-		$excerpt = get_the_excerpt();
-		$this->assertEquals( $excerpt, '' );
-
-		$filtered = apply_filters( 'get_the_excerpt', '' );
-		$this->assertEquals( $filtered, '' );
-	}
 }
