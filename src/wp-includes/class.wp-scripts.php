@@ -573,7 +573,6 @@ JS;
 	}
 
 	/**
->>>>>>> 5fdf48c0ec... Script Loader: Introduce HTML5 support for scripts and styles.
 	 * Determines script dependencies.
      *
 	 * @since WP-2.1.0
