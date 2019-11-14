@@ -161,6 +161,11 @@ class WP_Styles extends WP_Dependencies {
 		/** This filter is documented in wp-includes/script-loader.php */
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'style', $handle );
 
+		$src = $obj->src;
+		$cond_before = '';
+		$cond_after = '';
+		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
+
 		if ( $conditional ) {
 			$cond_before = "<!--[if {$conditional}]>\n";
 			$cond_after  = "<![endif]-->\n";
