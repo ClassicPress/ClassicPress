@@ -189,7 +189,7 @@ class WP_Styles extends WP_Dependencies {
 				$this->concat .= "$handle,";
 				$this->concat_version .= "$handle$ver";
 
-				$this->print_code .= $this->print_inline_style( $handle, false );
+				$this->print_code .= $inline_style;
 
 				return true;
 			}
@@ -202,12 +202,11 @@ class WP_Styles extends WP_Dependencies {
 
 		// A single item may alias a set of items, by having dependencies, but no source.
 		if ( ! $obj->src ) {
-			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$inline_style = sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+			if ( $inline_style_tag ) {
 				if ( $this->do_concat ) {
-					$this->print_html .= $inline_style;
+					$this->print_html .= $inline_style_tag;
 				} else {
-					echo $inline_style;
+					echo $inline_style_tag;
 				}
 			}
 			return true;
@@ -243,7 +242,8 @@ class WP_Styles extends WP_Dependencies {
 		 * @param string $href   The stylesheet's source URL.
 		 * @param string $media  The stylesheet's media attribute.
 		 */
-		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media);
+		$tag = apply_filters( 'style_loader_tag', $tag, $handle, $href, $media );
+
 		if ( 'rtl' === $this->text_direction && isset($obj->extra['rtl']) && $obj->extra['rtl'] ) {
 			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
 				$suffix = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
@@ -252,7 +252,6 @@ class WP_Styles extends WP_Dependencies {
 				$rtl_href = $this->_css_href( $obj->extra['rtl'], $ver, "$handle-rtl" );
 			}
 
-			/** This filter is documented in wp-includes/class.wp-styles.php */
 			$rtl_tag = sprintf(
 				"<link rel='%s' id='%s-rtl-css' %s href='%s'%s media='%s' />\n",
 				$rel,
@@ -262,6 +261,9 @@ class WP_Styles extends WP_Dependencies {
 				$this->type_attr,
 				$media
 			);
+
+			/** This filter is documented in wp-includes/class.wp-styles.php */
+			$rtl_tag = apply_filters( 'style_loader_tag', $rtl_tag, $handle, $rtl_href, $media );
 
 			if ( $obj->extra['rtl'] === 'replace' ) {
 				$tag = $rtl_tag;
@@ -279,8 +281,8 @@ class WP_Styles extends WP_Dependencies {
 		if ( $this->do_concat ) {
 			$this->print_html .= $conditional_pre;
 			$this->print_html .= $tag;
-			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$this->print_html .= sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+			if ( $inline_style_tag ) {
+				$this->print_html .= $inline_style_tag;
 			}
 			$this->print_html .= $conditional_post;
 		} else {
