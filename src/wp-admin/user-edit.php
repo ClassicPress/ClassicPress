@@ -238,7 +238,7 @@ if ( ! IS_PROFILE_PAGE ) {
 <input type="hidden" name="checkuser_id" value="<?php echo get_current_user_id(); ?>" />
 </p>
 
-<h2><?php _e( 'Personal Options' ); ?></h2>
+<h2 class="user-profile-personal-options"><?php _e( 'Personal Options' ); ?></h2>
 
 <table class="form-table">
 <?php if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) : ?>
@@ -363,7 +363,7 @@ do_action( 'personal_options', $profileuser );
 	}
 ?>
 
-<h2><?php _e( 'Name' ); ?></h2>
+<h2 class="user-profile-name"><?php _e( 'Name' ); ?></h2>
 
 <table class="form-table">
 	<tr class="user-user-login-wrap">
@@ -454,7 +454,7 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 </tr>
 </table>
 
-<h2><?php _e( 'Contact Info' ); ?></h2>
+<h2 class="user-profile-contact-info"><?php _e( 'Contact Info' ); ?></h2>
 
 <table class="form-table">
 <tr class="user-email-wrap">
@@ -512,7 +512,7 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 ?>
 </table>
 
-<h2><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
+<h2 class="user-profile-about-yourself"><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
 
 <table class="form-table">
 <tr class="user-description-wrap">
@@ -566,7 +566,7 @@ if ( $show_password_fields = apply_filters( 'show_password_fields', true, $profi
 ?>
 </table>
 
-<h2><?php _e( 'Account Management' ); ?></h2>
+<h2 class="user-profile-account-management"><?php _e( 'Account Management' ); ?></h2>
 <table class="form-table">
 <tr id="password" class="user-pass1-wrap">
 	<th><label for="pass1"><?php _e( 'New Password' ); ?></label></th>
@@ -684,7 +684,7 @@ if ( IS_PROFILE_PAGE && count( $sessions->get_all() ) === 1 ) : ?>
 if ( count( $profileuser->caps ) > count( $profileuser->roles )
 	&& apply_filters( 'additional_capabilities_display', true, $profileuser )
 ) : ?>
-<h2><?php _e( 'Additional Capabilities' ); ?></h2>
+<h2 class="user-profile-additional-capabilities"><?php _e( 'Additional Capabilities' ); ?></h2>
 <table class="form-table">
 <tr class="user-capabilities-wrap">
 	<th scope="row"><?php _e( 'Capabilities' ); ?></th>
