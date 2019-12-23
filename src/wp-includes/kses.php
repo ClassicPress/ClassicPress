@@ -509,10 +509,10 @@ if ( ! CUSTOM_TAGS ) {
  *
  * @since WP-1.0.0
  *
- * @param string $string            Content to filter through kses
- * @param array  $allowed_html      List of allowed HTML elements
- * @param array  $allowed_protocols Optional. Allowed protocol in links.
- * @return string Filtered content with only allowed HTML elements
+ * @param string|array $string            Content to filter through kses
+ * @param array        $allowed_html      List of allowed HTML elements
+ * @param array        $allowed_protocols Optional. Allowed protocol in links.
+ * @return string                         Filtered content with only allowed HTML elements
  */
 function wp_kses( $string, $allowed_html, $allowed_protocols = array() ) {
 	if ( empty( $allowed_protocols ) )
@@ -683,10 +683,10 @@ function wp_kses_allowed_html( $context = '' ) {
  *
  * @since WP-1.0.0
  *
- * @param string $string            Content to filter through kses
- * @param array  $allowed_html      List of allowed HTML elements
- * @param array  $allowed_protocols Allowed protocol in links
- * @return string Filtered content through {@see 'pre_kses'} hook.
+ * @param string|array $string            Content to filter through kses
+ * @param array        $allowed_html      List of allowed HTML elements
+ * @param array        $allowed_protocols Allowed protocol in links
+ * @return string                         Filtered content through {@see 'pre_kses'} hook.
  */
 function wp_kses_hook( $string, $allowed_html, $allowed_protocols ) {
 	/**
@@ -694,9 +694,9 @@ function wp_kses_hook( $string, $allowed_html, $allowed_protocols ) {
 	 *
 	 * @since WP-2.3.0
 	 *
-	 * @param string $string            Content to run through kses.
-	 * @param array  $allowed_html      Allowed HTML elements.
-	 * @param array  $allowed_protocols Allowed protocol in links.
+	 * @param string|array $string            Content to run through kses.
+	 * @param array        $allowed_html      Allowed HTML elements.
+	 * @param array        $allowed_protocols Allowed protocol in links.
 	 */
 	return apply_filters( 'pre_kses', $string, $allowed_html, $allowed_protocols );
 }
@@ -722,10 +722,10 @@ function wp_kses_version() {
  * @global array $pass_allowed_html
  * @global array $pass_allowed_protocols
  *
- * @param string $string            Content to filter
- * @param array  $allowed_html      Allowed HTML elements
- * @param array  $allowed_protocols Allowed protocols to keep
- * @return string Content with fixed HTML tags
+ * @param string|array $string            Content to filter
+ * @param array        $allowed_html      Allowed HTML elements
+ * @param array        $allowed_protocols Allowed protocols to keep
+ * @return string                         Content with fixed HTML tags
  */
 function wp_kses_split( $string, $allowed_html, $allowed_protocols ) {
 	global $pass_allowed_html, $pass_allowed_protocols;
@@ -1300,8 +1300,8 @@ function wp_kses_bad_protocol($string, $allowed_protocols) {
  *
  * @since WP-1.0.0
  *
- * @param string $string
- * @param array $options Set 'slash_zero' => 'keep' when '\0' is allowed. Default is 'remove'.
+ * @param string|array $string
+ * @param array        $options Set 'slash_zero' => 'keep' when '\0' is allowed. Default is 'remove'.
  * @return string
  */
 function wp_kses_no_null( $string, $options = null ) {
@@ -1326,8 +1326,8 @@ function wp_kses_no_null( $string, $options = null ) {
  *
  * @since WP-1.0.0
  *
- * @param string $string String to strip slashes
- * @return string Fixed string with quoted slashes
+ * @param string|array $string String to strip slashes
+ * @return string              Fixed string with quoted slashes
  */
 function wp_kses_stripslashes($string) {
 	return preg_replace('%\\\\"%', '"', $string);
@@ -1365,7 +1365,7 @@ function wp_kses_array_lc($inarray) {
  *
  * @since WP-1.0.0
  *
- * @param string $string
+ * @param string|array $string
  * @return string
  */
 function wp_kses_html_error($string) {
@@ -1443,8 +1443,8 @@ function wp_kses_bad_protocol_once2( $string, $allowed_protocols ) {
  *
  * @since WP-1.0.0
  *
- * @param string $string Content to normalize entities
- * @return string Content with normalized entities
+ * @param string|array $string Content to normalize entities
+ * @return string              Content with normalized entities
  */
 function wp_kses_normalize_entities($string) {
 	// Disarm all entities by converting & to &amp;
@@ -1552,8 +1552,8 @@ function valid_unicode($i) {
  *
  * @since WP-1.0.0
  *
- * @param string $string Content to change entities
- * @return string Content after decoded entities
+ * @param string|array $string Content to change entities
+ * @return string              Content after decoded entities
  */
 function wp_kses_decode_entities($string) {
 	$string = preg_replace_callback('/&#([0-9]+);/', '_wp_kses_decode_entities_chr', $string);
@@ -1603,8 +1603,8 @@ function wp_filter_kses( $data ) {
  *
  * @since WP-2.9.0
  *
- * @param string $data Content to filter, expected to not be escaped
- * @return string Filtered content
+ * @param string|array $data Content to filter, expected to not be escaped
+ * @return string            Filtered content
  */
 function wp_kses_data( $data ) {
 	return wp_kses( $data, current_filter() );
@@ -1633,8 +1633,8 @@ function wp_filter_post_kses( $data ) {
  *
  * @since WP-2.9.0
  *
- * @param string $data Post content to filter
- * @return string Filtered post content with allowed HTML tags and attributes intact.
+ * @param string|array $data Post content to filter
+ * @return string            Filtered post content with allowed HTML tags and attributes intact.
  */
 function wp_kses_post( $data ) {
 	return wp_kses( $data, 'post' );
