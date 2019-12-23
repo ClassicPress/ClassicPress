@@ -515,6 +515,7 @@ if ( ! CUSTOM_TAGS ) {
  * @return string                         Filtered content with only allowed HTML elements
  */
 function wp_kses( $string, $allowed_html, $allowed_protocols = array() ) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	if ( empty( $allowed_protocols ) )
 		$allowed_protocols = wp_allowed_protocols();
 	$string = wp_kses_no_null( $string, array( 'slash_zero' => 'keep' ) );
@@ -689,6 +690,7 @@ function wp_kses_allowed_html( $context = '' ) {
  * @return string                         Filtered content through {@see 'pre_kses'} hook.
  */
 function wp_kses_hook( $string, $allowed_html, $allowed_protocols ) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	/**
 	 * Filters content to be run through kses.
 	 *
@@ -728,6 +730,7 @@ function wp_kses_version() {
  * @return string                         Content with fixed HTML tags
  */
 function wp_kses_split( $string, $allowed_html, $allowed_protocols ) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	global $pass_allowed_html, $pass_allowed_protocols;
 	$pass_allowed_html = $allowed_html;
 	$pass_allowed_protocols = $allowed_protocols;
@@ -1305,6 +1308,7 @@ function wp_kses_bad_protocol($string, $allowed_protocols) {
  * @return string
  */
 function wp_kses_no_null( $string, $options = null ) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	if ( ! isset( $options['slash_zero'] ) ) {
 		$options = array( 'slash_zero' => 'remove' );
 	}
@@ -1330,6 +1334,7 @@ function wp_kses_no_null( $string, $options = null ) {
  * @return string              Fixed string with quoted slashes
  */
 function wp_kses_stripslashes($string) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	return preg_replace('%\\\\"%', '"', $string);
 }
 
@@ -1369,6 +1374,7 @@ function wp_kses_array_lc($inarray) {
  * @return string
  */
 function wp_kses_html_error($string) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	return preg_replace('/^("[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*/', '', $string);
 }
 
@@ -1447,6 +1453,7 @@ function wp_kses_bad_protocol_once2( $string, $allowed_protocols ) {
  * @return string              Content with normalized entities
  */
 function wp_kses_normalize_entities($string) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	// Disarm all entities by converting & to &amp;
 	$string = str_replace('&', '&amp;', $string);
 
@@ -1556,6 +1563,7 @@ function valid_unicode($i) {
  * @return string              Content after decoded entities
  */
 function wp_kses_decode_entities($string) {
+	if ( is_array( $string ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	$string = preg_replace_callback('/&#([0-9]+);/', '_wp_kses_decode_entities_chr', $string);
 	$string = preg_replace_callback('/&#[Xx]([0-9A-Fa-f]+);/', '_wp_kses_decode_entities_chr_hexdec', $string);
 
@@ -1607,6 +1615,7 @@ function wp_filter_kses( $data ) {
  * @return string            Filtered content
  */
 function wp_kses_data( $data ) {
+	if ( is_array( $data ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	return wp_kses( $data, current_filter() );
 }
 
@@ -1637,6 +1646,7 @@ function wp_filter_post_kses( $data ) {
  * @return string            Filtered post content with allowed HTML tags and attributes intact.
  */
 function wp_kses_post( $data ) {
+	if ( is_array( $data ) && getenv( 'KSES_ARRAY_TEST' ) === __FUNCTION__ ) throw new ErrorException( 'KSES function passed array: ' . __FUNCTION__ );
 	return wp_kses( $data, 'post' );
 }
 
