@@ -756,9 +756,24 @@ EOF;
 		$this->assertEquals( "<{$element}>", wp_kses_attr( $element, $attribute, array( 'foo' => false ), array() ) );
 	}
 
-	function test_wp_kses_array() {
+	/**
+	 * Returns a list of KSES functions that should be tested with an array of
+	 * HTML strings to sanitize.
+	 */
+	function kses_array_functions() {
 		global $allowedposttags;
 
+		return [
+			[ 'wp_kses', [ $allowedposttags ] ],
+			[ 'wp_kses_data', [] ],
+			[ 'wp_kses_post', [] ],
+		];
+	}
+
+	/**
+	 * @dataProvider kses_array_functions
+	 */
+	function test_wp_kses_array( $kses_function, $args ) {
 		$attributes = array(
 			'class'  => 'classname',
 			'id'     => 'id',
@@ -776,11 +791,39 @@ EOF;
 		$output_actual   = [];
 
 		foreach ( $attributes as $name => $value ) {
-			$input[]           = "<a $name='$value'>I link this</a>";
-			$output_expected[] = "<a $name='" . trim( $value, ';' ) . "'>I link this</a>";
+			$this_input        = "<a $name='$value'>I link this</a>";
+			$input[]           = $this_input;
+			$output_expected[] = call_user_func_array(
+				$kses_function,
+				array_merge( [ $this_input ], $args )
+			);
 		}
 
-		$output_actual = wp_kses( $input, $allowedposttags );
+		$output_actual = call_user_func_array(
+			$kses_function,
+			array_merge( [ $input ], $args )
+		);
 		$this->assertEquals( $output_expected, $output_actual );
+	}
+
+	function test_wp_kses_decode_entities_array() {
+		$this->assertEquals(
+			[ 'A', ')' ],
+			wp_kses_decode_entities( [ '&#65;', '&#41;' ] )
+		);
+	}
+
+	function test_wp_kses_html_error_array() {
+		$this->assertEquals(
+			[ '', 'one' ],
+			wp_kses_html_error( [ 'remove', 'keep one' ] )
+		);
+	}
+
+	function test_wp_kses_stripslashes_array() {
+		$this->assertEquals(
+			[ '"', '"' ],
+			wp_kses_stripslashes( [ '"', '\\"' ] )
+		);
 	}
 }
