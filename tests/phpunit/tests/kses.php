@@ -755,4 +755,32 @@ EOF;
 
 		$this->assertEquals( "<{$element}>", wp_kses_attr( $element, $attribute, array( 'foo' => false ), array() ) );
 	}
+
+	function test_wp_kses_array() {
+		global $allowedposttags;
+
+		$attributes = array(
+			'class'  => 'classname',
+			'id'     => 'id',
+			'style'  => 'color: red;',
+			'title'  => 'title',
+			'href'   => 'http://example.com',
+			'rel'    => 'related',
+			'rev'    => 'revision',
+			'name'   => 'name',
+			'target' => '_blank',
+		);
+
+		$input           = [];
+		$output_expected = [];
+		$output_actual   = [];
+
+		foreach ( $attributes as $name => $value ) {
+			$input[]           = "<a $name='$value'>I link this</a>";
+			$output_expected[] = "<a $name='" . trim( $value, ';' ) . "'>I link this</a>";
+		}
+
+		$output_actual = wp_kses( $input, $allowedposttags );
+		$this->assertEquals( $output_expected, $output_actual );
+	}
 }
