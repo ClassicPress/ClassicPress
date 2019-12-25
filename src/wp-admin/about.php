@@ -98,10 +98,15 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				); ?>
 			</p>
 			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
+			<h4><?php printf(
+				/* translators: current ClassicPress version */
+				__( 'ClassicPress 1.0.1 - %s' ),
+				classicpress_version()
+			); ?></h4>
 			<p>
 				<?php printf(
 					/* translators: link to ClassicPress release announcements subforum */
-					__( 'The changes and new features included in each version of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
+					__( 'The changes and new features included in recent versions of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
 					'https://forums.classicpress.net/c/announcements/release-notes'
 				);
 				?>
@@ -120,6 +125,27 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php _e(
 					'This version of ClassicPress includes all changes from the following versions of WordPress:'
 				); ?>
+			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: %s: WordPress version number */
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					'4.9.13'
+				);
+				?>
+				<?php
+				printf(
+					/* translators: %s: HelpHub URL */
+					__( 'For more information, see <a href="%s">the release notes</a>.' ),
+					sprintf(
+					/* translators: %s: WordPress version */
+						esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
+						sanitize_title( '4.9.13' )
+					)
+				);
+				?>
+			</p>
 			<p>
 				<?php
 				printf(
