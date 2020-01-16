@@ -278,4 +278,3 @@ class Tests_WP_Hook_Add_Filter extends WP_UnitTestCase {
 		$this->action_output .= '4';
 	}
 }
-
