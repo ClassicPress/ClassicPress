@@ -275,15 +275,17 @@ final class WP_Hook implements Iterator, ArrayAccess {
 			$this->current_priority[ $nesting_level ] = $priority = current( $this->iterations[ $nesting_level ] );
 
 			foreach ( $this->callbacks[ $priority ] as $the_ ) {
-				if( ! $this->doing_action ) {
-					$args[ 0 ] = $value;
+				if ( defined( 'CP_STRICT_RUNTIME' ) ) {
+					$cp_strict_args = func_get_args();
+					array_unshift( $cp_strict_args, __FUNCTION__ );
+
+					if ( false === call_user_func_array( CP_STRICT_RUNTIME, $cp_strict_args ) ) {
+						continue;
+					}
 				}
 
-				// this might be too strict?
-				if ( defined( 'CP_STRICT' ) && ( CP_STRICT & CP_STRICT_HOOK_ARGS_RUNTIME ) ) {
-					if ( is_wp_error( $err = _check_hook_callback_args( $the_['function'], $the_['function'], $the_['accepted_args'] ) ) ) {
-						wp_die( $err );
-					}
+				if( ! $this->doing_action ) {
+					$args[ 0 ] = $value;
 				}
 
 				// Avoid the array_slice if possible.
