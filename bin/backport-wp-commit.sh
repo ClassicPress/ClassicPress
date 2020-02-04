@@ -40,7 +40,7 @@ fi
 
 # Sanity check: make sure we have a .git directory, and at least one remote
 # pointing to a repository named ClassicPress
-if [ ! -d .git ] || ! git remote -v | grep -q '\b/ClassicPress\b'; then
+if [ ! -d .git ] || ! git remote -v | grep -qi '\b/ClassicPress\b'; then
 	echo "ERROR: Call this script from within your ClassicPress repository"
 	exit 1
 fi
@@ -84,7 +84,7 @@ cmd() {
 	return $retval
 }
 
-wp_remote=$(git remote -v | grep '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
+wp_remote=$(git remote -v | grep -i '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
 if [ -z "$wp_remote" ]; then
 	echo "Adding git remote 'wp' for WordPress/wordpress-develop"
 	cmd git remote add wp https://github.com/WordPress/wordpress-develop.git
@@ -93,7 +93,7 @@ else
 	echo "Found git remote '$wp_remote' for WordPress/wordpress-develop"
 fi
 
-cp_remote=$(git remote -v | grep '\bClassicPress/ClassicPress\b' | awk 'END { print $1 }')
+cp_remote=$(git remote -v | grep -i '\bClassicPress/ClassicPress\b' | awk 'END { print $1 }')
 if [ -z "$cp_remote" ]; then
 	echo "Adding git remote 'cp' for ClassicPress/ClassicPress"
 	cmd git remote add cp https://github.com/ClassicPress/ClassicPress.git
