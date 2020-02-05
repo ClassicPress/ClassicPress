@@ -208,6 +208,27 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 		$this->assertEmpty( $q->posts );
 	}
 
+	public function test_single_post_with_nonpublic_status_should_not_be_shown_for_any_user() {
+		register_post_type( 'foo_pt' );
+		register_post_status( 'foo_ps', array( 'public' => false ) );
+		$p = self::factory()->post->create(
+			array(
+				'post_status' => 'foo_ps',
+				'post_author' => self::$author_user_id,
+			)
+		);
+
+		wp_set_current_user( self::$editor_user_id );
+
+		$q = new WP_Query(
+			array(
+				'p' => $p,
+			)
+		);
+
+		$this->assertEmpty( $q->posts );
+	}
+
 	public function test_single_post_with_nonpublic_and_protected_status_should_not_be_shown_for_user_who_cannot_edit_others_posts() {
 		register_post_type( 'foo_pt' );
 		register_post_status( 'foo_ps', array( 'public' => false, 'protected' => true ) );
@@ -264,10 +285,49 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 		$this->assertEquals( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
-	public function test_single_post_with_nonpublic_and_protected_status_should_not_be_shown_for_any_user() {
+	/**
+	 * @ticket 48653
+	 */
+	public function test_single_post_with_nonexisting_status_should_not_be_shown_for_user_who_cannot_edit_others_posts() {
 		register_post_type( 'foo_pt' );
+<<<<<<< HEAD
 		register_post_status( 'foo_ps', array( 'public' => false ) );
 		$p = self::factory()->post->create( array( 'post_status' => 'foo_ps', 'post_author' => self::$author_user_id ) );
+=======
+		register_post_status( 'foo_ps', array( 'public' => true ) );
+		$p = self::factory()->post->create(
+			array(
+				'post_status' => 'foo_ps',
+				'post_author' => self::$editor_user_id,
+			)
+		);
+		_unregister_post_status( 'foo_ps' );
+
+		wp_set_current_user( self::$author_user_id );
+
+		$q = new WP_Query(
+			array(
+				'p' => $p,
+			)
+		);
+
+		$this->assertEmpty( $q->posts );
+	}
+
+	/**
+	 * @ticket 48653
+	 */
+	public function test_single_post_with_nonexisting_status_should_be_shown_for_user_who_can_edit_others_posts() {
+		register_post_type( 'foo_pt' );
+		register_post_status( 'foo_ps', array( 'public' => true ) );
+		$p = self::factory()->post->create(
+			array(
+				'post_status' => 'foo_ps',
+				'post_author' => self::$author_user_id,
+			)
+		);
+		_unregister_post_status( 'foo_ps' );
+>>>>>>> 5e8563eb6b... Posts, Post Types: Fail gracefully when checking whether a single post with an unregistered post status should be displayed in `WP_Query::get_posts()`.
 
 		wp_set_current_user( self::$editor_user_id );
 
@@ -275,7 +335,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'p' => $p,
 		) );
 
-		$this->assertEmpty( $q->posts );
+		$this->assertEquals( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	/**
