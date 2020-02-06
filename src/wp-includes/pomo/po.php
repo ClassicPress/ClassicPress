@@ -7,7 +7,11 @@
  * @subpackage po
  */
 
+<<<<<<< HEAD
 require_once dirname(__FILE__) . '/translations.php';
+=======
+require_once __DIR__ . '/translations.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! defined( 'PO_MAX_LINE_LEN' ) ) {
 	define('PO_MAX_LINE_LEN', 79);

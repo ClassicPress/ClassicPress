@@ -142,8 +142,13 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 		if ( !function_exists( 'imagejpeg' ) )
 			$this->fail( 'jpeg support unavailable' );
 
+<<<<<<< HEAD
 		// Call wp_save_image_file
 		include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
+=======
+		// Call wp_save_image_file().
+		include_once ABSPATH . 'wp-admin/includes/image-edit.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		$file = wp_tempnam();
 		$img = imagecreatefromjpeg( DIR_TESTDATA . '/images/canola.jpg' );
 		wp_save_image_file( $file, $img, 'image/jpeg', 1 );
@@ -163,8 +168,13 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 		if ( !function_exists( 'imagejpeg' ) )
 			$this->fail( 'jpeg support unavailable' );
 
+<<<<<<< HEAD
 		// Call wp_save_image_file
 		include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
+=======
+		// Call wp_save_image_file().
+		include_once ABSPATH . 'wp-admin/includes/image-edit.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		$file = wp_tempnam();
 		$img = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
 		wp_save_image_file( $file, $img, 'image/jpeg', 1 );

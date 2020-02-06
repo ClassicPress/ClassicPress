@@ -55,8 +55,13 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 */
 	function setUp() {
 		parent::setUp();
+<<<<<<< HEAD
 		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
 		$this->manager = $this->instantiate();
+=======
+		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
+		$this->manager   = $this->instantiate();
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		$this->undefined = new stdClass();
 
 		$orig_file = DIR_TESTDATA . '/images/canola.jpg';

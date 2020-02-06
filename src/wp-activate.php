@@ -8,10 +8,15 @@
 
 define( 'WP_INSTALLING', true );
 
+<<<<<<< HEAD
 /** Sets up the ClassicPress Environment. */
 require( dirname(__FILE__) . '/wp-load.php' );
+=======
+/** Sets up the WordPress Environment. */
+require __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
-require( dirname( __FILE__ ) . '/wp-blog-header.php' );
+require __DIR__ . '/wp-blog-header.php';
 
 if ( !is_multisite() ) {
 	wp_redirect( wp_registration_url() );

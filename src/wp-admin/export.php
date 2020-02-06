@@ -6,15 +6,26 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( !current_user_can('export') )
 	wp_die(__('Sorry, you are not allowed to export the content of this site.'));
 
+<<<<<<< HEAD
 /** Load ClassicPress export API */
 require_once( ABSPATH . 'wp-admin/includes/export.php' );
 $title = __('Export');
+=======
+/** Load WordPress export API */
+require_once ABSPATH . 'wp-admin/includes/export.php';
+$title = __( 'Export' );
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * Display JavaScript on the page.
@@ -115,7 +126,7 @@ if ( isset( $_GET['download'] ) ) {
 	die();
 }
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 /**
  * Create the date options fields for exporting a given post type.
@@ -291,4 +302,4 @@ do_action( 'export_filters' );
 </form>
 </div>
 
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>

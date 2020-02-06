@@ -7,8 +7,13 @@
  * @since WP-1.0.0
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'list_users' ) ) {
 	wp_die(
@@ -222,11 +227,19 @@ case 'delete':
 		add_action( 'admin_head', 'delete_users_add_js' );
 	}
 
+<<<<<<< HEAD
 	include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 <form method="post" name="updateusers" id="updateusers">
 <?php wp_nonce_field('delete-users') ?>
 <?php echo $referer; ?>
+=======
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+		?>
+	<form method="post" name="updateusers" id="updateusers">
+		<?php wp_nonce_field( 'delete-users' ); ?>
+		<?php echo $referer; ?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 <div class="wrap">
 <h1><?php _e( 'Delete Users' ); ?></h1>
@@ -347,6 +360,7 @@ case 'remove':
 	if ( !current_user_can('remove_users') )
 		$error = new WP_Error('edit_users', __('Sorry, you are not allowed to remove users.'));
 
+<<<<<<< HEAD
 	if ( empty($_REQUEST['users']) )
 		$userids = array(intval($_REQUEST['user']));
 	else
@@ -357,6 +371,13 @@ case 'remove':
 <form method="post" name="updateusers" id="updateusers">
 <?php wp_nonce_field('remove-users') ?>
 <?php echo $referer; ?>
+=======
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+		?>
+	<form method="post" name="updateusers" id="updateusers">
+		<?php wp_nonce_field( 'remove-users' ); ?>
+		<?php echo $referer; ?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 <div class="wrap">
 <h1><?php _e( 'Remove Users from Site' ); ?></h1>
@@ -410,9 +431,69 @@ default:
 		/** This action is documented in wp-admin/edit-comments.php */
 		$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $wp_list_table->current_action(), $userids );
 
+<<<<<<< HEAD
 		wp_safe_redirect( $sendback );
 		exit;
 	}
+=======
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+
+		$messages = array();
+		if ( isset( $_GET['update'] ) ) :
+			switch ( $_GET['update'] ) {
+				case 'del':
+				case 'del_many':
+					$delete_count = isset( $_GET['delete_count'] ) ? (int) $_GET['delete_count'] : 0;
+					if ( 1 == $delete_count ) {
+						$message = __( 'User deleted.' );
+					} else {
+						/* translators: %s: Number of users. */
+						$message = _n( '%s user deleted.', '%s users deleted.', $delete_count );
+					}
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . sprintf( $message, number_format_i18n( $delete_count ) ) . '</p></div>';
+					break;
+				case 'add':
+					$message = __( 'New user created.' );
+
+					$user_id = isset( $_GET['id'] ) ? $_GET['id'] : false;
+					if ( $user_id && current_user_can( 'edit_user', $user_id ) ) {
+						$message .= sprintf(
+							' <a href="%s">%s</a>',
+							esc_url(
+								add_query_arg(
+									'wp_http_referer',
+									urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ),
+									self_admin_url( 'user-edit.php?user_id=' . $user_id )
+								)
+							),
+							__( 'Edit user' )
+						);
+					}
+
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . $message . '</p></div>';
+					break;
+				case 'promote':
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'Changed roles.' ) . '</p></div>';
+					break;
+				case 'err_admin_role':
+					$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'The current user&#8217;s role must have user editing capabilities.' ) . '</p></div>';
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'Other user roles have been changed.' ) . '</p></div>';
+					break;
+				case 'err_admin_del':
+					$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'You can&#8217;t delete the current user.' ) . '</p></div>';
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'Other users have been deleted.' ) . '</p></div>';
+					break;
+				case 'remove':
+					$messages[] = '<div id="message" class="updated notice is-dismissible fade"><p>' . __( 'User removed from this site.' ) . '</p></div>';
+					break;
+				case 'err_admin_remove':
+					$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( "You can't remove the current user." ) . '</p></div>';
+					$messages[] = '<div id="message" class="updated notice is-dismissible fade"><p>' . __( 'Other users have been removed.' ) . '</p></div>';
+					break;
+			}
+		endif;
+		?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$wp_list_table->prepare_items();
 	$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
@@ -523,4 +604,4 @@ break;
 
 } // end of the $doaction switch
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

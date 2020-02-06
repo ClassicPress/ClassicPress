@@ -7,8 +7,13 @@
  * @package ClassicPress
  */
 
+<<<<<<< HEAD
 /** Make sure that the ClassicPress bootstrap has run before continuing. */
 require(dirname(__FILE__) . '/wp-load.php');
+=======
+/** Make sure that the WordPress bootstrap has run before continuing. */
+require __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /** This filter is documented in wp-admin/options.php */
 if ( ! apply_filters( 'enable_post_by_email_configuration', true ) )
@@ -28,7 +33,7 @@ if ( 'mail.example.com' === $mailserver_url || empty( $mailserver_url ) ) {
 do_action( 'wp-mail.php' );
 
 /** Get the POP3 class with which to access the mailbox. */
-require_once( ABSPATH . WPINC . '/class-pop3.php' );
+require_once ABSPATH . WPINC . '/class-pop3.php';
 
 /** Only check at this interval for new messages. */
 if ( !defined('WP_MAIL_INTERVAL') )

@@ -36,8 +36,13 @@ if ( is_robots() ) :
 elseif ( is_feed() ) :
 	do_feed();
 	return;
+<<<<<<< HEAD
 elseif ( is_trackback() ) :
 	include( ABSPATH . 'wp-trackback.php' );
+=======
+} elseif ( is_trackback() ) {
+	require ABSPATH . 'wp-trackback.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	return;
 endif;
 
@@ -70,8 +75,14 @@ if ( defined('WP_USE_THEMES') && WP_USE_THEMES ) :
 	 *
 	 * @param string $template The path of the template to include.
 	 */
+<<<<<<< HEAD
 	if ( $template = apply_filters( 'template_include', $template ) ) {
 		include( $template );
+=======
+	$template = apply_filters( 'template_include', $template );
+	if ( $template ) {
+		include $template;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	} elseif ( current_user_can( 'switch_themes' ) ) {
 		$theme = wp_get_theme();
 		if ( $theme->errors() ) {

@@ -14,6 +14,7 @@
  */
 define( 'WP_INSTALLING', true );
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
 
@@ -21,6 +22,14 @@ nocache_headers();
 
 timer_start();
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+=======
+/** Load WordPress Bootstrap */
+require dirname( __DIR__ ) . '/wp-load.php';
+
+nocache_headers();
+
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 delete_site_transient('update_core');
 

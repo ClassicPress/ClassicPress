@@ -8,6 +8,12 @@
  * @since WP-MU (3.0.0)
  */
 
+<<<<<<< HEAD
+=======
+require_once ABSPATH . WPINC . '/ms-site.php';
+require_once ABSPATH . WPINC . '/ms-network.php';
+
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 /**
  * Update the last_updated field for the current site.
  *

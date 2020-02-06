@@ -180,7 +180,7 @@ EOT;
 	}
 
 	function test_json_encode_decode() {
-		require_once( ABSPATH . WPINC . '/class-json.php' );
+		require_once ABSPATH . WPINC . '/class-json.php';
 		$json = new Services_JSON();
 		// Super basic test to verify Services_JSON is intact and working.
 		$this->assertEquals( '["foo"]', $json->encodeUnsafe( array( 'foo' ) ) );

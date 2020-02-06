@@ -1468,12 +1468,22 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 	 * @param string $theme_template The path to the theme template file.
 	 */
 	$include = apply_filters( 'comments_template', $theme_template );
+<<<<<<< HEAD
 	if ( file_exists( $include ) )
 		require( $include );
 	elseif ( file_exists( TEMPLATEPATH . $file ) )
 		require( TEMPLATEPATH . $file );
 	else // Backward compat code will be removed in a future release
 		require( ABSPATH . WPINC . '/theme-compat/comments.php');
+=======
+	if ( file_exists( $include ) ) {
+		require $include;
+	} elseif ( file_exists( TEMPLATEPATH . $file ) ) {
+		require TEMPLATEPATH . $file;
+	} else { // Backward compat code will be removed in a future release.
+		require ABSPATH . WPINC . '/theme-compat/comments.php';
+	}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 
 /**

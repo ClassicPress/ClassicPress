@@ -996,6 +996,11 @@ class WP_Date_Query {
 			$time   .= sprintf( '%02d', $second );
 		}
 
+<<<<<<< HEAD
 		return $wpdb->prepare( "DATE_FORMAT( $column, %s ) $compare %f", $format, $time );
 	}
 }
+=======
+/** WP_Date_Query class */
+require_once ABSPATH . 'wp-includes/class-wp-date-query.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

@@ -9,8 +9,50 @@
  */
 
 /** Include user installation customization script. */
+<<<<<<< HEAD
 if ( file_exists(WP_CONTENT_DIR . '/install.php') )
 	require (WP_CONTENT_DIR . '/install.php');
+=======
+if ( file_exists( WP_CONTENT_DIR . '/install.php' ) ) {
+	require WP_CONTENT_DIR . '/install.php';
+}
+
+/** WordPress Administration API */
+require_once ABSPATH . 'wp-admin/includes/admin.php';
+
+/** WordPress Schema API */
+require_once ABSPATH . 'wp-admin/includes/schema.php';
+
+if ( ! function_exists( 'wp_install' ) ) :
+	/**
+	 * Installs the site.
+	 *
+	 * Runs the required functions to set up and populate the database,
+	 * including primary admin user and initial options.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $blog_title    Site title.
+	 * @param string $user_name     User's username.
+	 * @param string $user_email    User's email.
+	 * @param bool   $public        Whether site is public.
+	 * @param string $deprecated    Optional. Not used.
+	 * @param string $user_password Optional. User's chosen password. Default empty (random password).
+	 * @param string $language      Optional. Language chosen. Default empty.
+	 * @return array {
+	 *     Data for the newly installed site.
+	 *
+	 *     @type string $url              The URL of the site.
+	 *     @type int    $user_id          The ID of the site owner.
+	 *     @type string $password         The password of the site owner, if their user account didn't already exist.
+	 *     @type string $password_message The explanatory message regarding the password.
+	 * }
+	 */
+	function wp_install( $blog_title, $user_name, $user_email, $public, $deprecated = '', $user_password = '', $language = '' ) {
+		if ( ! empty( $deprecated ) ) {
+			_deprecated_argument( __FUNCTION__, '2.6.0' );
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /** ClassicPress Administration API */
 require_once(ABSPATH . 'wp-admin/includes/admin.php');
@@ -311,10 +353,21 @@ As a new ClassicPress user, you should go to <a href=\"%s\">your dashboard</a> t
 	elseif ( ! is_super_admin( $user_id ) && ! metadata_exists( 'user', $user_id, 'show_welcome_panel' ) )
 		update_user_meta( $user_id, 'show_welcome_panel', 2 );
 
+<<<<<<< HEAD
 	if ( is_multisite() ) {
 		// Flush rules to pick up the new page.
 		$wp_rewrite->init();
 		$wp_rewrite->flush_rules();
+=======
+		// Privacy Policy page.
+		if ( is_multisite() ) {
+			// Disable by default unless the suggested content is provided.
+			$privacy_policy_content = get_site_option( 'default_privacy_policy_content' );
+		} else {
+			if ( ! class_exists( 'WP_Privacy_Policy_Content' ) ) {
+				include_once ABSPATH . 'wp-admin/includes/class-wp-privacy-policy-content.php';
+			}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		$user = new WP_User($user_id);
 		$wpdb->update( $wpdb->options, array('option_value' => $user->user_email), array('option_name' => 'admin_email') );

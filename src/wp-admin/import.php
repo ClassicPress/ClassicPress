@@ -8,8 +8,13 @@
 
 define('WP_LOAD_IMPORTERS', true);
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'import' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to import content.' ) );
@@ -51,7 +56,7 @@ add_thickbox();
 wp_enqueue_script( 'plugin-install' );
 wp_enqueue_script( 'updates' );
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 $parent_file = 'tools.php';
 ?>
 
@@ -203,4 +208,4 @@ if ( current_user_can('install_plugins') )
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

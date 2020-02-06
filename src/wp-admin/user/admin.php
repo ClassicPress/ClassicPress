@@ -9,7 +9,11 @@
 
 define('WP_USER_ADMIN', true);
 
+<<<<<<< HEAD
 require_once( dirname(dirname(__FILE__)) . '/admin.php');
+=======
+require_once dirname( __DIR__ ) . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! is_multisite() ) {
 	wp_redirect( admin_url() );

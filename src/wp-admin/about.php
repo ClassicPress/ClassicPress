@@ -6,15 +6,20 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 wp_enqueue_script( 'underscore' );
 
 /* translators: Page title of the About ClassicPress page in the admin. */
 $title = _x( 'About', 'page title' );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 ?>
 	<div class="wrap about-wrap full-width-layout">
 		<h1><?php _e( 'Welcome to ClassicPress!' ); ?></h1>
@@ -367,7 +372,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 	</div>
 <?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';
 
 // These are strings we may use to describe maintenance/security releases, where we aim for no new strings.
 return;

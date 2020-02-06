@@ -16,6 +16,7 @@
  * @package ClassicPress
  */
 
+<<<<<<< HEAD
 /** ClassicPress Dependency Class */
 require( ABSPATH . WPINC . '/class-wp-dependency.php' );
 
@@ -33,12 +34,32 @@ require( ABSPATH . WPINC . '/class.wp-styles.php' );
 
 /** ClassicPress Styles Functions */
 require( ABSPATH . WPINC . '/functions.wp-styles.php' );
+=======
+/** WordPress Dependency Class */
+require ABSPATH . WPINC . '/class-wp-dependency.php';
+
+/** WordPress Dependencies Class */
+require ABSPATH . WPINC . '/class.wp-dependencies.php';
+
+/** WordPress Scripts Class */
+require ABSPATH . WPINC . '/class.wp-scripts.php';
+
+/** WordPress Scripts Functions */
+require ABSPATH . WPINC . '/functions.wp-scripts.php';
+
+/** WordPress Styles Class */
+require ABSPATH . WPINC . '/class.wp-styles.php';
+
+/** WordPress Styles Functions */
+require ABSPATH . WPINC . '/functions.wp-styles.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * Returns a cache buster string for an enqueued script or stylesheet.
  *
  * @since 1.0.0
  *
+<<<<<<< HEAD
  * @param string $type    The type of asset being enqueued ('script' or 'style').
  * @param string $handle  The handle of the asset being enqueued (or `null` to
  *                        get the default asset version).
@@ -51,6 +72,579 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 * static string.
 	 */
 	static $default_version;
+=======
+ * @param WP_Scripts $scripts WP_Scripts object.
+ */
+function wp_register_tinymce_scripts( &$scripts, $force_uncompressed = false ) {
+	global $tinymce_version, $concatenate_scripts, $compress_scripts;
+	$suffix     = wp_scripts_get_suffix();
+	$dev_suffix = wp_scripts_get_suffix( 'dev' );
+
+	script_concat_settings();
+
+	$compressed = $compress_scripts && $concatenate_scripts && isset( $_SERVER['HTTP_ACCEPT_ENCODING'] )
+		&& false !== stripos( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) && ! $force_uncompressed;
+
+	// Load tinymce.js when running from /src, otherwise load wp-tinymce.js.gz (in production)
+	// or tinymce.min.js (when SCRIPT_DEBUG is true).
+	if ( $compressed ) {
+		$scripts->add( 'wp-tinymce', includes_url( 'js/tinymce/' ) . 'wp-tinymce.js', array(), $tinymce_version );
+	} else {
+		$scripts->add( 'wp-tinymce-root', includes_url( 'js/tinymce/' ) . "tinymce$dev_suffix.js", array(), $tinymce_version );
+		$scripts->add( 'wp-tinymce', includes_url( 'js/tinymce/' ) . "plugins/compat3x/plugin$dev_suffix.js", array( 'wp-tinymce-root' ), $tinymce_version );
+	}
+
+	$scripts->add( 'wp-tinymce-lists', includes_url( "js/tinymce/plugins/lists/plugin$suffix.js" ), array( 'wp-tinymce' ), $tinymce_version );
+}
+
+/**
+ * Registers all the WordPress vendor scripts that are in the standardized
+ * `js/dist/vendor/` location.
+ *
+ * For the order of `$scripts->add` see `wp_default_scripts`.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Scripts $scripts WP_Scripts object.
+ */
+function wp_default_packages_vendor( &$scripts ) {
+	global $wp_locale;
+
+	$suffix = wp_scripts_get_suffix();
+
+	$vendor_scripts = array(
+		'react'     => array( 'wp-polyfill' ),
+		'react-dom' => array( 'react' ),
+		'moment',
+		'lodash',
+		'wp-polyfill-fetch',
+		'wp-polyfill-formdata',
+		'wp-polyfill-node-contains',
+		'wp-polyfill-element-closest',
+		'wp-polyfill',
+	);
+
+	$vendor_scripts_versions = array(
+		'react'                       => '16.9.0',
+		'react-dom'                   => '16.9.0',
+		'moment'                      => '2.22.2',
+		'lodash'                      => '4.17.15',
+		'wp-polyfill-fetch'           => '3.0.0',
+		'wp-polyfill-formdata'        => '3.0.12',
+		'wp-polyfill-node-contains'   => '3.26.0-0',
+		'wp-polyfill-element-closest' => '2.0.2',
+		'wp-polyfill'                 => '7.4.4',
+	);
+
+	foreach ( $vendor_scripts as $handle => $dependencies ) {
+		if ( is_string( $dependencies ) ) {
+			$handle       = $dependencies;
+			$dependencies = array();
+		}
+
+		$path    = "/wp-includes/js/dist/vendor/$handle$suffix.js";
+		$version = $vendor_scripts_versions[ $handle ];
+
+		$scripts->add( $handle, $path, $dependencies, $version, 1 );
+	}
+
+	$scripts->add( 'wp-polyfill', null, array( 'wp-polyfill' ) );
+	did_action( 'init' ) && $scripts->add_inline_script(
+		'wp-polyfill',
+		wp_get_script_polyfill(
+			$scripts,
+			array(
+				'\'fetch\' in window' => 'wp-polyfill-fetch',
+				'document.contains'   => 'wp-polyfill-node-contains',
+				'window.FormData && window.FormData.prototype.keys' => 'wp-polyfill-formdata',
+				'Element.prototype.matches && Element.prototype.closest' => 'wp-polyfill-element-closest',
+			)
+		)
+	);
+
+	did_action( 'init' ) && $scripts->add_inline_script( 'lodash', 'window.lodash = _.noConflict();' );
+
+	did_action( 'init' ) && $scripts->add_inline_script(
+		'moment',
+		sprintf(
+			"moment.locale( '%s', %s );",
+			get_user_locale(),
+			wp_json_encode(
+				array(
+					'months'         => array_values( $wp_locale->month ),
+					'monthsShort'    => array_values( $wp_locale->month_abbrev ),
+					'weekdays'       => array_values( $wp_locale->weekday ),
+					'weekdaysShort'  => array_values( $wp_locale->weekday_abbrev ),
+					'week'           => array(
+						'dow' => (int) get_option( 'start_of_week', 0 ),
+					),
+					'longDateFormat' => array(
+						'LT'   => get_option( 'time_format', __( 'g:i a', 'default' ) ),
+						'LTS'  => null,
+						'L'    => null,
+						'LL'   => get_option( 'date_format', __( 'F j, Y', 'default' ) ),
+						'LLL'  => __( 'F j, Y g:i a', 'default' ),
+						'LLLL' => null,
+					),
+				)
+			)
+		),
+		'after'
+	);
+}
+
+/**
+ * Returns contents of an inline script used in appending polyfill scripts for
+ * browsers which fail the provided tests. The provided array is a mapping from
+ * a condition to verify feature support to its polyfill script handle.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Scripts $scripts WP_Scripts object.
+ * @param array      $tests   Features to detect.
+ * @return string Conditional polyfill inline script.
+ */
+function wp_get_script_polyfill( &$scripts, $tests ) {
+	$polyfill = '';
+	foreach ( $tests as $test => $handle ) {
+		if ( ! array_key_exists( $handle, $scripts->registered ) ) {
+			continue;
+		}
+
+		$src = $scripts->registered[ $handle ]->src;
+		$ver = $scripts->registered[ $handle ]->ver;
+
+		if ( ! preg_match( '|^(https?:)?//|', $src ) && ! ( $scripts->content_url && 0 === strpos( $src, $scripts->content_url ) ) ) {
+			$src = $scripts->base_url . $src;
+		}
+
+		if ( ! empty( $ver ) ) {
+			$src = add_query_arg( 'ver', $ver, $src );
+		}
+
+		/** This filter is documented in wp-includes/class.wp-scripts.php */
+		$src = esc_url( apply_filters( 'script_loader_src', $src, $handle ) );
+
+		if ( ! $src ) {
+			continue;
+		}
+
+		$polyfill .= (
+			// Test presence of feature...
+			'( ' . $test . ' ) || ' .
+			/*
+			 * ...appending polyfill on any failures. Cautious viewers may balk
+			 * at the `document.write`. Its caveat of synchronous mid-stream
+			 * blocking write is exactly the behavior we need though.
+			 */
+			'document.write( \'<script src="' .
+			$src .
+			'"></scr\' + \'ipt>\' );'
+		);
+	}
+
+	return $polyfill;
+}
+
+/**
+ * Registers all the WordPress packages scripts that are in the standardized
+ * `js/dist/` location.
+ *
+ * For the order of `$scripts->add` see `wp_default_scripts`.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Scripts $scripts WP_Scripts object.
+ */
+function wp_default_packages_scripts( &$scripts ) {
+	$suffix = wp_scripts_get_suffix();
+
+	$packages = array(
+		'a11y',
+		'annotations',
+		'api-fetch',
+		'autop',
+		'blob',
+		'block-directory',
+		'block-editor',
+		'block-library',
+		'block-serialization-default-parser',
+		'blocks',
+		'components',
+		'compose',
+		'core-data',
+		'data',
+		'data-controls',
+		'date',
+		'deprecated',
+		'dom',
+		'dom-ready',
+		'edit-post',
+		'editor',
+		'element',
+		'escape-html',
+		'format-library',
+		'hooks',
+		'html-entities',
+		'i18n',
+		'is-shallow-equal',
+		'keycodes',
+		'list-reusable-blocks',
+		'media-utils',
+		'notices',
+		'nux',
+		'plugins',
+		'priority-queue',
+		'redux-routine',
+		'rich-text',
+		'shortcode',
+		'server-side-render',
+		'token-list',
+		'url',
+		'viewport',
+		'wordcount',
+	);
+
+	$package_translations = array(
+		'api-fetch',
+		'blocks',
+		'block-directory',
+		'block-editor',
+		'block-library',
+		'components',
+		'edit-post',
+		'editor',
+		'format-library',
+		'keycodes',
+		'list-reusable-blocks',
+		'nux',
+	);
+
+	foreach ( $packages as $package ) {
+		$handle = 'wp-' . $package;
+		$path   = "/wp-includes/js/dist/$package$suffix.js";
+
+		if ( ! file_exists( ABSPATH . $path ) ) {
+			continue;
+		}
+
+		$asset_file   = require ABSPATH . WPINC . "/assets/dist/$package$suffix.asset.php";
+		$dependencies = $asset_file['dependencies'];
+
+		// Add dependencies that cannot be detected and generated by build tools.
+		switch ( $handle ) {
+			case 'wp-block-library':
+				array_push( $dependencies, 'editor' );
+				break;
+			case 'wp-edit-post':
+				array_push( $dependencies, 'media-models', 'media-views', 'postbox', 'wp-dom-ready' );
+				break;
+		}
+
+		$scripts->add( $handle, $path, $dependencies, $asset_file['version'], 1 );
+
+		if ( in_array( $package, $package_translations, true ) ) {
+			$scripts->set_translations( $handle );
+		}
+	}
+}
+
+/**
+ * Adds inline scripts required for the WordPress JavaScript packages.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Scripts $scripts WP_Scripts object.
+ */
+function wp_default_packages_inline_scripts( &$scripts ) {
+	global $wp_locale;
+
+	if ( isset( $scripts->registered['wp-api-fetch'] ) ) {
+		$scripts->registered['wp-api-fetch']->deps[] = 'wp-hooks';
+	}
+	$scripts->add_inline_script(
+		'wp-api-fetch',
+		sprintf(
+			'wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "%s" ) );',
+			esc_url_raw( get_rest_url() )
+		),
+		'after'
+	);
+	$scripts->add_inline_script(
+		'wp-api-fetch',
+		implode(
+			"\n",
+			array(
+				sprintf(
+					'wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "%s" );',
+					( wp_installing() && ! is_multisite() ) ? '' : wp_create_nonce( 'wp_rest' )
+				),
+				'wp.apiFetch.use( wp.apiFetch.nonceMiddleware );',
+				'wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );',
+				sprintf(
+					'wp.apiFetch.nonceEndpoint = "%s";',
+					admin_url( 'admin-ajax.php?action=rest-nonce' )
+				),
+			)
+		),
+		'after'
+	);
+	$scripts->add_inline_script(
+		'wp-data',
+		implode(
+			"\n",
+			array(
+				'( function() {',
+				'	var userId = ' . get_current_user_ID() . ';',
+				'	var storageKey = "WP_DATA_USER_" + userId;',
+				'	wp.data',
+				'		.use( wp.data.plugins.persistence, { storageKey: storageKey } );',
+				'	wp.data.plugins.persistence.__unstableMigrate( { storageKey: storageKey } );',
+				'} )();',
+			)
+		)
+	);
+
+	$scripts->add_inline_script(
+		'wp-date',
+		sprintf(
+			'wp.date.setSettings( %s );',
+			wp_json_encode(
+				array(
+					'l10n'     => array(
+						'locale'        => get_user_locale(),
+						'months'        => array_values( $wp_locale->month ),
+						'monthsShort'   => array_values( $wp_locale->month_abbrev ),
+						'weekdays'      => array_values( $wp_locale->weekday ),
+						'weekdaysShort' => array_values( $wp_locale->weekday_abbrev ),
+						'meridiem'      => (object) $wp_locale->meridiem,
+						'relative'      => array(
+							/* translators: %s: Duration. */
+							'future' => __( '%s from now' ),
+							/* translators: %s: Duration. */
+							'past'   => __( '%s ago' ),
+						),
+					),
+					'formats'  => array(
+						/* translators: Time format, see https://www.php.net/date */
+						'time'                => get_option( 'time_format', __( 'g:i a' ) ),
+						/* translators: Date format, see https://www.php.net/date */
+						'date'                => get_option( 'date_format', __( 'F j, Y' ) ),
+						/* translators: Date/Time format, see https://www.php.net/date */
+						'datetime'            => __( 'F j, Y g:i a' ),
+						/* translators: Abbreviated date/time format, see https://www.php.net/date */
+						'datetimeAbbreviated' => __( 'M j, Y g:i a' ),
+					),
+					'timezone' => array(
+						'offset' => get_option( 'gmt_offset', 0 ),
+						'string' => get_option( 'timezone_string', 'UTC' ),
+					),
+				)
+			)
+		),
+		'after'
+	);
+
+	// Loading the old editor and its config to ensure the classic block works as expected.
+	$scripts->add_inline_script(
+		'editor',
+		'window.wp.oldEditor = window.wp.editor;',
+		'after'
+	);
+}
+
+/**
+ * Adds inline scripts required for the TinyMCE in the block editor.
+ *
+ * These TinyMCE init settings are used to extend and override the default settings
+ * from `_WP_Editors::default_settings()` for the Classic block.
+ *
+ * @since 5.0.0
+ *
+ * @global WP_Scripts $wp_scripts
+ */
+function wp_tinymce_inline_scripts() {
+	global $wp_scripts;
+
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$editor_settings = apply_filters( 'wp_editor_settings', array( 'tinymce' => true ), 'classic-block' );
+
+	$tinymce_plugins = array(
+		'charmap',
+		'colorpicker',
+		'hr',
+		'lists',
+		'media',
+		'paste',
+		'tabfocus',
+		'textcolor',
+		'fullscreen',
+		'wordpress',
+		'wpautoresize',
+		'wpeditimage',
+		'wpemoji',
+		'wpgallery',
+		'wplink',
+		'wpdialogs',
+		'wptextpattern',
+		'wpview',
+	);
+
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$tinymce_plugins = apply_filters( 'tiny_mce_plugins', $tinymce_plugins, 'classic-block' );
+	$tinymce_plugins = array_unique( $tinymce_plugins );
+
+	$disable_captions = false;
+	// Runs after `tiny_mce_plugins` but before `mce_buttons`.
+	/** This filter is documented in wp-admin/includes/media.php */
+	if ( apply_filters( 'disable_captions', '' ) ) {
+		$disable_captions = true;
+	}
+
+	$toolbar1 = array(
+		'formatselect',
+		'bold',
+		'italic',
+		'bullist',
+		'numlist',
+		'blockquote',
+		'alignleft',
+		'aligncenter',
+		'alignright',
+		'link',
+		'unlink',
+		'wp_more',
+		'spellchecker',
+		'wp_add_media',
+		'wp_adv',
+	);
+
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$toolbar1 = apply_filters( 'mce_buttons', $toolbar1, 'classic-block' );
+
+	$toolbar2 = array(
+		'strikethrough',
+		'hr',
+		'forecolor',
+		'pastetext',
+		'removeformat',
+		'charmap',
+		'outdent',
+		'indent',
+		'undo',
+		'redo',
+		'wp_help',
+	);
+
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$toolbar2 = apply_filters( 'mce_buttons_2', $toolbar2, 'classic-block' );
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$toolbar3 = apply_filters( 'mce_buttons_3', array(), 'classic-block' );
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$toolbar4 = apply_filters( 'mce_buttons_4', array(), 'classic-block' );
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$external_plugins = apply_filters( 'mce_external_plugins', array(), 'classic-block' );
+
+	$tinymce_settings = array(
+		'plugins'              => implode( ',', $tinymce_plugins ),
+		'toolbar1'             => implode( ',', $toolbar1 ),
+		'toolbar2'             => implode( ',', $toolbar2 ),
+		'toolbar3'             => implode( ',', $toolbar3 ),
+		'toolbar4'             => implode( ',', $toolbar4 ),
+		'external_plugins'     => wp_json_encode( $external_plugins ),
+		'classic_block_editor' => true,
+	);
+
+	if ( $disable_captions ) {
+		$tinymce_settings['wpeditimage_disable_captions'] = true;
+	}
+
+	if ( ! empty( $editor_settings['tinymce'] ) && is_array( $editor_settings['tinymce'] ) ) {
+		array_merge( $tinymce_settings, $editor_settings['tinymce'] );
+	}
+
+	/** This filter is documented in wp-includes/class-wp-editor.php */
+	$tinymce_settings = apply_filters( 'tiny_mce_before_init', $tinymce_settings, 'classic-block' );
+
+	// Do "by hand" translation from PHP array to js object.
+	// Prevents breakage in some custom settings.
+	$init_obj = '';
+	foreach ( $tinymce_settings as $key => $value ) {
+		if ( is_bool( $value ) ) {
+			$val       = $value ? 'true' : 'false';
+			$init_obj .= $key . ':' . $val . ',';
+			continue;
+		} elseif ( ! empty( $value ) && is_string( $value ) && (
+			( '{' === $value[0] && '}' === $value[ strlen( $value ) - 1 ] ) ||
+			( '[' === $value[0] && ']' === $value[ strlen( $value ) - 1 ] ) ||
+			preg_match( '/^\(?function ?\(/', $value ) ) ) {
+			$init_obj .= $key . ':' . $value . ',';
+			continue;
+		}
+		$init_obj .= $key . ':"' . $value . '",';
+	}
+
+	$init_obj = '{' . trim( $init_obj, ' ,' ) . '}';
+
+	$script = 'window.wpEditorL10n = {
+		tinymce: {
+			baseURL: ' . wp_json_encode( includes_url( 'js/tinymce' ) ) . ',
+			suffix: ' . ( SCRIPT_DEBUG ? '""' : '".min"' ) . ',
+			settings: ' . $init_obj . ',
+		}
+	}';
+
+	$wp_scripts->add_inline_script( 'wp-block-library', $script, 'before' );
+}
+
+/**
+ * Registers all the WordPress packages scripts.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Scripts $scripts WP_Scripts object.
+ */
+function wp_default_packages( &$scripts ) {
+	wp_default_packages_vendor( $scripts );
+	wp_register_tinymce_scripts( $scripts );
+	wp_default_packages_scripts( $scripts );
+
+	if ( did_action( 'init' ) ) {
+		wp_default_packages_inline_scripts( $scripts );
+	}
+}
+
+/**
+ * Returns the suffix that can be used for the scripts.
+ *
+ * There are two suffix types, the normal one and the dev suffix.
+ *
+ * @since 5.0.0
+ *
+ * @param string $type The type of suffix to retrieve.
+ * @return string The script suffix.
+ */
+function wp_scripts_get_suffix( $type = '' ) {
+	static $suffixes;
+
+	if ( $suffixes === null ) {
+		// Include an unmodified $wp_version.
+		require ABSPATH . WPINC . '/version.php';
+
+		$develop_src = false !== strpos( $wp_version, '-src' );
+
+		if ( ! defined( 'SCRIPT_DEBUG' ) ) {
+			define( 'SCRIPT_DEBUG', $develop_src );
+		}
+		$suffix     = SCRIPT_DEBUG ? '' : '.min';
+		$dev_suffix = $develop_src ? '' : '.min';
+
+		$suffixes = array(
+			'suffix'     => $suffix,
+			'dev_suffix' => $dev_suffix,
+		);
+	}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( empty( $default_version ) ) {
 		$default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
@@ -959,7 +1553,12 @@ function wp_default_scripts( &$scripts ) {
  * @param WP_Styles $styles
  */
 function wp_default_styles( &$styles ) {
+<<<<<<< HEAD
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 		define( 'SCRIPT_DEBUG', classicpress_is_dev_install() );
@@ -1189,6 +1788,78 @@ function wp_localize_jquery_ui_datepicker() {
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Localizes community events data that needs to be passed to dashboard.js.
+ *
+ * @since 4.8.0
+ */
+function wp_localize_community_events() {
+	if ( ! wp_script_is( 'dashboard' ) ) {
+		return;
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/class-wp-community-events.php';
+
+	$user_id            = get_current_user_id();
+	$saved_location     = get_user_option( 'community-events-location', $user_id );
+	$saved_ip_address   = isset( $saved_location['ip'] ) ? $saved_location['ip'] : false;
+	$current_ip_address = WP_Community_Events::get_unsafe_client_ip();
+
+	/*
+	 * If the user's location is based on their IP address, then update their
+	 * location when their IP address changes. This allows them to see events
+	 * in their current city when travelling. Otherwise, they would always be
+	 * shown events in the city where they were when they first loaded the
+	 * Dashboard, which could have been months or years ago.
+	 */
+	if ( $saved_ip_address && $current_ip_address && $current_ip_address !== $saved_ip_address ) {
+		$saved_location['ip'] = $current_ip_address;
+		update_user_option( $user_id, 'community-events-location', $saved_location, true );
+	}
+
+	$events_client = new WP_Community_Events( $user_id, $saved_location );
+
+	wp_localize_script(
+		'dashboard',
+		'communityEventsData',
+		array(
+			'nonce' => wp_create_nonce( 'community_events' ),
+			'cache' => $events_client->get_cached_events(),
+
+			'l10n'  => array(
+				'enter_closest_city'              => __( 'Enter your closest city to find nearby events.' ),
+				'error_occurred_please_try_again' => __( 'An error occurred. Please try again.' ),
+				'attend_event_near_generic'       => __( 'Attend an upcoming event near you.' ),
+
+				/*
+				 * These specific examples were chosen to highlight the fact that a
+				 * state is not needed, even for cities whose name is not unique.
+				 * It would be too cumbersome to include that in the instructions
+				 * to the user, so it's left as an implication.
+				 */
+				/*
+				 * translators: %s is the name of the city we couldn't locate.
+				 * Replace the examples with cities related to your locale. Test that
+				 * they match the expected location and have upcoming events before
+				 * including them. If no cities related to your locale have events,
+				 * then use cities related to your locale that would be recognizable
+				 * to most users. Use only the city name itself, without any region
+				 * or country. Use the endonym (native locale name) instead of the
+				 * English name if possible.
+				 */
+				'could_not_locate_city'           => __( 'We couldn&#8217;t locate %s. Please try another nearby city. For example: Kansas City; Springfield; Portland.' ),
+
+				// This one is only used with wp.a11y.speak(), so it can/should be more brief.
+				/* translators: %s: The name of a city. */
+				'city_updated'                    => __( 'City updated. Listing events near %s.' ),
+			),
+		)
+	);
+}
+
+/**
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
  * Administration Screen CSS for changing the styles.
  *
  * If installing the 'wp-admin/' directory will be replaced with './'.

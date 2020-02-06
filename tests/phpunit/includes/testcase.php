@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 require_once dirname( __FILE__ ) . '/factory.php';
+=======
+require_once __DIR__ . '/abstract-testcase.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * Defines a basic fixture to run multiple tests.

@@ -18,8 +18,13 @@ if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
 }
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
+=======
+/** Load WordPress Bootstrap */
+require_once dirname( __DIR__ ) . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /** Allow for cross-domain requests (from the front end). */
 send_origin_headers();
@@ -28,11 +33,19 @@ send_origin_headers();
 if ( empty( $_REQUEST['action'] ) )
 	wp_die( '0', 400 );
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration APIs */
 require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 
 /** Load Ajax Handlers for ClassicPress Core */
 require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+=======
+/** Load WordPress Administration APIs */
+require_once ABSPATH . 'wp-admin/includes/admin.php';
+
+/** Load Ajax Handlers for WordPress Core */
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 @header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 @header( 'X-Robots-Tag: noindex' );

@@ -20,7 +20,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_single', 'is_singular', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -46,7 +46,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_single', 'is_singular', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -63,7 +63,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_404', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -86,7 +86,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_single', 'is_singular', 'is_attachment', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -109,7 +109,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_404', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -131,7 +131,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_404', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -152,7 +152,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_404', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();
@@ -177,7 +177,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$this->assertQueryTrue( 'is_single', 'is_singular', 'is_embed' );
 
 		ob_start();
-		include( ABSPATH . WPINC . '/theme-compat/embed.php' );
+		require ABSPATH . WPINC . '/theme-compat/embed.php';
 		$actual = ob_get_clean();
 
 		$doc = new DOMDocument();

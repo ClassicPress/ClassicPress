@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'manage_privacy_options' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to manage privacy on this site.' ) );
@@ -15,8 +20,14 @@ if ( ! current_user_can( 'manage_privacy_options' ) ) {
 
 $action = isset( $_POST['action'] ) ? $_POST['action'] : '';
 
+<<<<<<< HEAD
 if ( ! empty( $action ) ) {
 	check_admin_referer( $action );
+=======
+require_once ABSPATH . 'wp-admin/admin-header.php';
+?>
+<div class="wrap about__container">
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( 'set-privacy-page' === $action ) {
 		$privacy_policy_page_id = isset( $_POST['page_for_privacy_policy'] ) ? (int) $_POST['page_for_privacy_policy'] : 0;
@@ -249,6 +260,10 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 		</tr>
 	</table>
 </div>
+<<<<<<< HEAD
 <?php
 
 include( ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

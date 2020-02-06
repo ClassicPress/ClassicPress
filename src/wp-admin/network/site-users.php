@@ -7,8 +7,13 @@
  * @since WP-3.1.0
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can('manage_sites') )
 	wp_die( __( 'Sorry, you are not allowed to edit this site.' ), 403 );
@@ -208,7 +213,7 @@ $submenu_file = 'sites.php';
 if ( ! wp_is_large_network( 'users' ) && apply_filters( 'show_network_site_users_add_existing_form', true ) )
 	wp_enqueue_script( 'user-suggest' );
 
-require( ABSPATH . 'wp-admin/admin-header.php' ); ?>
+require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 
 <script type="text/javascript">
 var current_site_id = <?php echo $id; ?>;
@@ -352,4 +357,4 @@ if ( current_user_can( 'create_users' ) && apply_filters( 'show_network_site_use
 <?php endif; ?>
 </div>
 <?php
-require( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

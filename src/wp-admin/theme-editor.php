@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( is_multisite() && ! is_network_admin() ) {
 	wp_redirect( network_admin_url( 'theme-editor.php' ) );
@@ -137,7 +142,11 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 	wp_add_inline_script( 'wp-theme-plugin-editor', sprintf( 'jQuery( function( $ ) { wp.themePluginEditor.init( $( "#template" ), %s ); } )', wp_json_encode( $settings ) ) );
 	wp_add_inline_script( 'wp-theme-plugin-editor', 'wp.themePluginEditor.themeOrPlugin = "theme";' );
 
+<<<<<<< HEAD
 	require_once( ABSPATH . 'wp-admin/admin-header.php' );
+=======
+require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	update_recently_edited( $file );
 
@@ -339,4 +348,8 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) :
 <?php
 endif; // editor warning notice
 
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

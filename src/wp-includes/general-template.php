@@ -203,7 +203,7 @@ function get_search_form( $echo = true ) {
 	$search_form_template = locate_template( 'searchform.php' );
 	if ( '' != $search_form_template ) {
 		ob_start();
-		require( $search_form_template );
+		require $search_form_template;
 		$form = ob_get_clean();
 	} else {
 		if ( 'html5' == $format ) {
@@ -3111,9 +3111,16 @@ function wp_default_editor() {
  * @param array  $settings  See _WP_Editors::editor().
  */
 function wp_editor( $content, $editor_id, $settings = array() ) {
+<<<<<<< HEAD
 	if ( ! class_exists( '_WP_Editors', false ) )
 		require( ABSPATH . WPINC . '/class-wp-editor.php' );
 	_WP_Editors::editor($content, $editor_id, $settings);
+=======
+	if ( ! class_exists( '_WP_Editors', false ) ) {
+		require ABSPATH . WPINC . '/class-wp-editor.php';
+	}
+	_WP_Editors::editor( $content, $editor_id, $settings );
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 
 /**
@@ -3127,7 +3134,7 @@ function wp_editor( $content, $editor_id, $settings = array() ) {
  */
 function wp_enqueue_editor() {
 	if ( ! class_exists( '_WP_Editors', false ) ) {
-		require( ABSPATH . WPINC . '/class-wp-editor.php' );
+		require ABSPATH . WPINC . '/class-wp-editor.php';
 	}
 
 	_WP_Editors::enqueue_default_editor();

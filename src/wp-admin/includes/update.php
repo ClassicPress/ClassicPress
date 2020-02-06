@@ -74,7 +74,7 @@ function find_core_auto_update() {
 	if ( ! $updates || empty( $updates->updates ) )
 		return false;
 
-	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 	$auto_update = false;
 	$upgrader = new WP_Automatic_Updater;
@@ -585,7 +585,12 @@ function wp_theme_update_row( $theme_key, $theme ) {
  * @return false|void
  */
 function maintenance_nag() {
+<<<<<<< HEAD
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	global $upgrading;
 	$nag = isset( $upgrading );
 	if ( ! $nag ) {

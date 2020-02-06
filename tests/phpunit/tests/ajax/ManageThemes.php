@@ -2,7 +2,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing Ajax handler for instlaling, updating, and deleting themes.

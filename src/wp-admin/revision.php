@@ -15,8 +15,13 @@
  * @param int    to       Optional, required if revision missing. The revision to compare to.
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 require ABSPATH . 'wp-admin/includes/revision.php';
 
@@ -122,7 +127,7 @@ $revisions_sidebar .= '<p>' . __( '<a href="https://forums.classicpress.net/c/su
 
 get_current_screen()->set_help_sidebar( $revisions_sidebar );
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 
@@ -133,4 +138,4 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 <?php
 wp_print_revision_templates();
 
-require_once( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

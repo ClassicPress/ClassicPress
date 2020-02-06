@@ -32,10 +32,17 @@ function delete_theme($stylesheet, $redirect = '') {
 	$data = ob_get_clean();
 
 	if ( false === $credentials ) {
+<<<<<<< HEAD
 		if ( ! empty( $data ) ){
 			include_once( ABSPATH . 'wp-admin/admin-header.php');
 			echo $data;
 			include( ABSPATH . 'wp-admin/admin-footer.php');
+=======
+		if ( ! empty( $data ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+			echo $data;
+			require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			exit;
 		}
 		return;
@@ -46,10 +53,17 @@ function delete_theme($stylesheet, $redirect = '') {
 		request_filesystem_credentials( $redirect, '', true ); // Failed to connect, Error and request again.
 		$data = ob_get_clean();
 
+<<<<<<< HEAD
 		if ( ! empty($data) ) {
 			include_once( ABSPATH . 'wp-admin/admin-header.php');
 			echo $data;
 			include( ABSPATH . 'wp-admin/admin-footer.php');
+=======
+		if ( ! empty( $data ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+			echo $data;
+			require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			exit;
 		}
 		return;
@@ -397,6 +411,11 @@ function get_theme_feature_list( $api = true ) {
  *         for more information on the make-up of possible return objects depending on the value of `$action`.
  */
 function themes_api( $action, $args = array() ) {
+<<<<<<< HEAD
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( is_array( $args ) ) {
 		$args = (object) $args;

@@ -1,7 +1,16 @@
 <?php
 
+<<<<<<< HEAD
 /* Path to the ClassicPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', dirname( __FILE__ ) . '/src/' );
+=======
+/* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
+if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+	define( 'ABSPATH', __DIR__ . '/build/' );
+} else {
+	define( 'ABSPATH', __DIR__ . '/src/' );
+}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /*
  * Path to the theme to test with.

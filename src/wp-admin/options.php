@@ -15,8 +15,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $title = __('Settings');
 $this_file = 'options.php';
@@ -237,7 +242,7 @@ if ( 'update' == $action ) {
 
 		// Handle translation installation.
 		if ( ! empty( $_POST['WPLANG'] ) && current_user_can( 'install_languages' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+			require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
 			if ( wp_can_install_language_pack() ) {
 				$language = wp_download_language_pack( $_POST['WPLANG'] );
@@ -302,7 +307,7 @@ if ( 'update' == $action ) {
 	exit;
 }
 
-include( ABSPATH . 'wp-admin/admin-header.php' ); ?>
+require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 
 <div class="wrap">
   <h1><?php esc_html_e( 'All Settings' ); ?></h1>
@@ -358,4 +363,4 @@ foreach ( (array) $options as $option ) :
 </div>
 
 <?php
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

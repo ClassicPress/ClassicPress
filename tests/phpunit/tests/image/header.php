@@ -1,5 +1,9 @@
 <?php
+<<<<<<< HEAD
 require_once( ABSPATH . 'wp-admin/custom-header.php');
+=======
+require_once ABSPATH . 'wp-admin/includes/class-custom-image-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * @group image

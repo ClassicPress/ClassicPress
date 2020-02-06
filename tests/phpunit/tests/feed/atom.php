@@ -64,7 +64,12 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 		// Nasty hack! In the future it would better to leverage do_feed( 'atom' ).
 		global $post;
 		try {
+<<<<<<< HEAD
 			@require( ABSPATH . 'wp-includes/feed-atom.php' );
+=======
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			@require ABSPATH . 'wp-includes/feed-atom.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			$out = ob_get_clean();
 		} catch ( Exception $e ) {
 			$out = ob_get_clean();

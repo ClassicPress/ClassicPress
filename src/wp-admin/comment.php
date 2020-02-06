@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $parent_file = 'edit-comments.php';
 $submenu_file = 'edit-comments.php';
@@ -46,11 +51,16 @@ case 'editcomment' :
 			'<p>' . __( 'You can also moderate the comment from this screen using the Status box, where you can also change the timestamp of the comment.' ) . '</p>'
 	) );
 
+<<<<<<< HEAD
 	get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://codex.wordpress.org/Administration_Screens#Comments">Documentation on Comments</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 	);
+=======
+		wp_enqueue_script( 'comment' );
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	wp_enqueue_script('comment');
 	require_once( ABSPATH . 'wp-admin/admin-header.php' );
@@ -66,7 +76,11 @@ case 'editcomment' :
 	if ( 'trash' == $comment->comment_approved )
 		comment_footer_die( __('This comment is in the Trash. Please move it out of the Trash if you want to edit it.') );
 
+<<<<<<< HEAD
 	$comment = get_comment_to_edit( $comment_id );
+=======
+		require ABSPATH . 'wp-admin/edit-form-comment.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	include( ABSPATH . 'wp-admin/edit-form-comment.php' );
 
@@ -86,10 +100,43 @@ case 'spam'    :
 		die();
 	}
 
+<<<<<<< HEAD
 	if ( !current_user_can( 'edit_comment', $comment->comment_ID ) ) {
 		wp_redirect( admin_url('edit-comments.php?error=2') );
 		die();
 	}
+=======
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+
+		$formaction    = $action . 'comment';
+		$nonce_action  = 'approve' == $action ? 'approve-comment_' : 'delete-comment_';
+		$nonce_action .= $comment_id;
+
+		?>
+	<div class="wrap">
+
+	<h1><?php echo esc_html( $title ); ?></h1>
+
+		<?php
+		switch ( $action ) {
+			case 'spam':
+				$caution_msg = __( 'You are about to mark the following comment as spam:' );
+				$button      = _x( 'Mark as Spam', 'comment' );
+				break;
+			case 'trash':
+				$caution_msg = __( 'You are about to move the following comment to the Trash:' );
+				$button      = __( 'Move to Trash' );
+				break;
+			case 'delete':
+				$caution_msg = __( 'You are about to delete the following comment:' );
+				$button      = __( 'Permanently Delete Comment' );
+				break;
+			default:
+				$caution_msg = __( 'You are about to approve the following comment:' );
+				$button      = __( 'Approve Comment' );
+				break;
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	// No need to re-approve/re-trash/re-spam a comment.
 	if ( $action == str_replace( '1', 'approve', $comment->comment_approved ) ) {
@@ -330,4 +377,4 @@ default:
 
 } // end switch
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

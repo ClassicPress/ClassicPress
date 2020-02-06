@@ -1220,7 +1220,11 @@ function _unzip_file_pclzip($file, $to, $needed_dirs = array()) {
 
 	mbstring_binary_safe_encoding();
 
+<<<<<<< HEAD
 	require_once(ABSPATH . 'wp-admin/includes/class-pclzip.php');
+=======
+	require_once ABSPATH . 'wp-admin/includes/class-pclzip.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$archive = new PclZip($file);
 
@@ -1374,7 +1378,11 @@ function copy_dir($from, $to, $skip_list = array() ) {
 function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) {
 	global $wp_filesystem;
 
+<<<<<<< HEAD
 	require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
+=======
+	require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$method = get_filesystem_method( $args, $context, $allow_relaxed_file_ownership );
 
@@ -1398,7 +1406,11 @@ function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_own
 		if ( ! file_exists($abstraction_file) )
 			return;
 
+<<<<<<< HEAD
 		require_once($abstraction_file);
+=======
+		require_once $abstraction_file;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	}
 	$method = "WP_Filesystem_$method";
 

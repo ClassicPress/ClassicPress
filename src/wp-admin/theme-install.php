@@ -6,9 +6,15 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 require( ABSPATH . 'wp-admin/includes/theme-install.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+require ABSPATH . 'wp-admin/includes/theme-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 wp_reset_vars( array( 'tab' ) );
 
@@ -121,7 +127,11 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>'
 );
 
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-header.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 ?>
 <div class="wrap">
@@ -335,4 +345,8 @@ if ( $tab ) {
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
 
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

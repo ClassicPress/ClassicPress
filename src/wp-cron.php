@@ -28,9 +28,15 @@ if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
  */
 define('DOING_CRON', true);
 
+<<<<<<< HEAD
 if ( !defined('ABSPATH') ) {
 	/** Set up ClassicPress environment */
 	require_once( dirname( __FILE__ ) . '/wp-load.php' );
+=======
+if ( ! defined( 'ABSPATH' ) ) {
+	/** Set up WordPress environment */
+	require_once __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 
 /**

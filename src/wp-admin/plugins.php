@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can('activate_plugins') )
 	wp_die( __( 'Sorry, you are not allowed to manage plugins for this site.' ) );
@@ -139,7 +144,11 @@ if ( $action ) {
 			$parent_file = 'plugins.php';
 
 			wp_enqueue_script( 'updates' );
+<<<<<<< HEAD
 			require_once(ABSPATH . 'wp-admin/admin-header.php');
+=======
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 			echo '<div class="wrap">';
 			echo '<h1>' . esc_html( $title ) . '</h1>';
@@ -149,7 +158,11 @@ if ( $action ) {
 
 			echo "<iframe src='$url' style='width: 100%; height:100%; min-height:850px;'></iframe>";
 			echo '</div>';
+<<<<<<< HEAD
 			require_once(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+			require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			exit;
 
 		case 'error_scrape':
@@ -272,6 +285,7 @@ if ( $action ) {
 				exit;
 			}
 
+<<<<<<< HEAD
 			include(ABSPATH . 'wp-admin/update.php');
 
 			$parent_file = 'plugins.php';
@@ -279,6 +293,15 @@ if ( $action ) {
 			if ( ! isset($_REQUEST['verify-delete']) ) {
 				wp_enqueue_script('jquery');
 				require_once(ABSPATH . 'wp-admin/admin-header.php');
+=======
+			require ABSPATH . 'wp-admin/update.php';
+
+			$parent_file = 'plugins.php';
+
+			if ( ! isset( $_REQUEST['verify-delete'] ) ) {
+				wp_enqueue_script( 'jquery' );
+				require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 				?>
 			<div class="wrap">
 				<?php
@@ -363,7 +386,11 @@ if ( $action ) {
 				</form>
 			</div>
 				<?php
+<<<<<<< HEAD
 				require_once(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+				require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 				exit;
 			} else {
 				$plugins_to_delete = count( $plugins );
@@ -445,7 +472,11 @@ get_current_screen()->set_screen_reader_content( array(
 $title = __('Plugins');
 $parent_file = 'plugins.php';
 
+<<<<<<< HEAD
 require_once(ABSPATH . 'wp-admin/admin-header.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $invalid = validate_active_plugins();
 if ( ! empty( $invalid ) ) {
@@ -573,4 +604,8 @@ wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
 wp_print_update_row_templates();
 
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

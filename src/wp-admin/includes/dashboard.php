@@ -34,8 +34,27 @@ function wp_dashboard_setup() {
 			wp_add_dashboard_widget( 'dashboard_browser_nag', __( 'Your browser is out of date!' ), 'wp_dashboard_browser_nag' );
 	}
 
+<<<<<<< HEAD
 	// Right Now
 	if ( is_blog_admin() && current_user_can('edit_posts') )
+=======
+	// Site Health.
+	if ( current_user_can( 'view_site_health_checks' ) ) {
+		if ( ! class_exists( 'WP_Site_Health' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+		}
+
+		WP_Site_Health::get_instance();
+
+		wp_enqueue_style( 'site-health' );
+		wp_enqueue_script( 'site-health' );
+
+		wp_add_dashboard_widget( 'dashboard_site_health', __( 'Site Health Status' ), 'wp_dashboard_site_health' );
+	}
+
+	// Right Now.
+	if ( is_blog_admin() && current_user_can( 'edit_posts' ) ) {
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		wp_add_dashboard_widget( 'dashboard_right_now', __( 'At a Glance' ), 'wp_dashboard_right_now' );
 
 	if ( is_network_admin() )
@@ -1294,9 +1313,16 @@ function wp_check_browser_version() {
 
 	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
 
+<<<<<<< HEAD
 	if ( false === ($response = get_site_transient('browser_' . $key) ) ) {
 		// include an unmodified $wp_version
 		include( ABSPATH . WPINC . '/version.php' );
+=======
+	$response = get_site_transient( 'browser_' . $key );
+	if ( false === $response ) {
+		// Include an unmodified $wp_version.
+		require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		$url = 'https://api.wordpress.org/core/browse-happy/1.1/';
 		$options = array(

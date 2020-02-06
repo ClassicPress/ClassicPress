@@ -1,7 +1,13 @@
 <?php
+<<<<<<< HEAD
 include_once(ABSPATH . 'wp-admin/includes/admin.php');
 include_once(ABSPATH . WPINC . '/class-IXR.php');
 include_once(ABSPATH . WPINC . '/class-wp-xmlrpc-server.php');
+=======
+require_once ABSPATH . 'wp-admin/includes/admin.php';
+require_once ABSPATH . WPINC . '/class-IXR.php';
+require_once ABSPATH . WPINC . '/class-wp-xmlrpc-server.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 class WP_XMLRPC_UnitTestCase extends WP_UnitTestCase {
 	protected $myxmlrpcserver;

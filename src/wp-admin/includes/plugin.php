@@ -550,7 +550,14 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 		ob_start();
 		wp_register_plugin_realpath( WP_PLUGIN_DIR . '/' . $plugin );
 		$_wp_plugin_file = $plugin;
+<<<<<<< HEAD
 		include_once( WP_PLUGIN_DIR . '/' . $plugin );
+=======
+		if ( ! defined( 'WP_SANDBOX_SCRAPING' ) ) {
+			define( 'WP_SANDBOX_SCRAPING', true );
+		}
+		include_once WP_PLUGIN_DIR . '/' . $plugin;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		$plugin = $_wp_plugin_file; // Avoid stomping of the $plugin variable in a plugin.
 
 		if ( ! $silent ) {
@@ -782,10 +789,17 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 	$data = ob_get_clean();
 
 	if ( false === $credentials ) {
+<<<<<<< HEAD
 		if ( ! empty($data) ){
 			include_once( ABSPATH . 'wp-admin/admin-header.php');
 			echo $data;
 			include( ABSPATH . 'wp-admin/admin-footer.php');
+=======
+		if ( ! empty( $data ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+			echo $data;
+			require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			exit;
 		}
 		return;
@@ -796,10 +810,17 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 		request_filesystem_credentials( $url, '', true ); // Failed to connect, Error and request again.
 		$data = ob_get_clean();
 
+<<<<<<< HEAD
 		if ( ! empty($data) ){
 			include_once( ABSPATH . 'wp-admin/admin-header.php');
 			echo $data;
 			include( ABSPATH . 'wp-admin/admin-footer.php');
+=======
+		if ( ! empty( $data ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+			echo $data;
+			require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			exit;
 		}
 		return;
@@ -1013,7 +1034,11 @@ function uninstall_plugin($plugin) {
 
 		define('WP_UNINSTALL_PLUGIN', $file);
 		wp_register_plugin_realpath( WP_PLUGIN_DIR . '/' . $file );
+<<<<<<< HEAD
 		include( WP_PLUGIN_DIR . '/' . dirname($file) . '/uninstall.php' );
+=======
+		include WP_PLUGIN_DIR . '/' . dirname( $file ) . '/uninstall.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		return true;
 	}
@@ -1025,7 +1050,7 @@ function uninstall_plugin($plugin) {
 		unset($uninstallable_plugins);
 
 		wp_register_plugin_realpath( WP_PLUGIN_DIR . '/' . $file );
-		include( WP_PLUGIN_DIR . '/' . $file );
+		include WP_PLUGIN_DIR . '/' . $file;
 
 		add_action( "uninstall_{$file}", $callable );
 
@@ -1960,7 +1985,7 @@ function wp_clean_plugins_cache( $clear_update_cache = true ) {
  */
 function plugin_sandbox_scrape( $plugin ) {
 	wp_register_plugin_realpath( WP_PLUGIN_DIR . '/' . $plugin );
-	include( WP_PLUGIN_DIR . '/' . $plugin );
+	include WP_PLUGIN_DIR . '/' . $plugin;
 }
 
 /**
@@ -2009,7 +2034,11 @@ function wp_add_privacy_policy_content( $plugin_name, $policy_text ) {
 	}
 
 	if ( ! class_exists( 'WP_Privacy_Policy_Content' ) ) {
+<<<<<<< HEAD
 		require_once( ABSPATH . 'wp-admin/includes/misc.php' );
+=======
+		require_once ABSPATH . 'wp-admin/includes/class-wp-privacy-policy-content.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	}
 
 	WP_Privacy_Policy_Content::add( $plugin_name, $policy_text );

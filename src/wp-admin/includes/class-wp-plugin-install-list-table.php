@@ -87,7 +87,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 * @global string $term
 	 */
 	public function prepare_items() {
+<<<<<<< HEAD
 		include( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+=======
+		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		global $tabs, $tab, $paged, $type, $term;
 

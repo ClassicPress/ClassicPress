@@ -6,15 +6,26 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $title = __( 'Freedoms' );
 
+<<<<<<< HEAD
 include( ABSPATH . 'wp-admin/admin-header.php' );
 
 $is_privacy_notice = isset( $_GET['privacy-notice'] );
 
+=======
+list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
+
+require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 ?>
 <div class="wrap about-wrap full-width-layout">
 
@@ -74,4 +85,4 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 
 <?php endif; ?>
 </div>
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>

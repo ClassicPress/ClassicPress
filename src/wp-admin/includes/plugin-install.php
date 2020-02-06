@@ -99,6 +99,11 @@
  *         for more information on the make-up of possible return values depending on the value of `$action`.
  */
 function plugins_api( $action, $args = array() ) {
+<<<<<<< HEAD
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( is_array( $args ) ) {
 		$args = (object) $args;

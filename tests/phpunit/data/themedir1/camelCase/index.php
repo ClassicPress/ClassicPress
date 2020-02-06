@@ -2,4 +2,4 @@
 
 // dummy theme
 
-echo dirname(__FILE__).'/'.basename(__FILE__);
+echo __DIR__ . '/' . basename(__FILE__);

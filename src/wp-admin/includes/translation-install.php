@@ -17,7 +17,12 @@
  * @return object|WP_Error On success an object of translations, WP_Error on failure.
  */
 function translations_api( $type, $args = null ) {
+<<<<<<< HEAD
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ) ) ) {
 		return new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
@@ -126,7 +131,12 @@ function wp_get_available_translations() {
 		return $translations;
 	}
 
+<<<<<<< HEAD
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$api = translations_api( 'core', array( 'version' => $wp_version ) );
 	if ( is_wp_error( $api ) || empty( $api['translations'] ) ) {

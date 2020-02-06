@@ -9,8 +9,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 wp_reset_vars( array( 'action', 'cat_id', 'link_id' ) );
 
@@ -108,8 +113,8 @@ switch ($action) {
 		if (!$link = get_link_to_edit($link_id))
 			wp_die(__('Link not found.'));
 
-		include( ABSPATH . 'wp-admin/edit-link-form.php' );
-		include( ABSPATH . 'wp-admin/admin-footer.php' );
+		require ABSPATH . 'wp-admin/edit-link-form.php';
+		require_once ABSPATH . 'wp-admin/admin-footer.php';
 		break;
 
 	default :

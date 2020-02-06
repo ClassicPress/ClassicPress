@@ -6,6 +6,7 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
@@ -19,6 +20,11 @@ wp_enqueue_script( 'dashboard' );
 if ( current_user_can( 'install_plugins' ) ) {
 	wp_enqueue_script( 'plugin-install' );
 	wp_enqueue_script( 'updates' );
+=======
+if ( file_exists( __DIR__ . '/../wp-includes/js/dist/edit-post.js' ) ) {
+	require_once __DIR__ . '/_index.php';
+	return;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 if ( current_user_can( 'upload_files' ) )
 	wp_enqueue_script( 'media-upload' );
@@ -56,6 +62,7 @@ $help .= '<p>' . __( '<strong>Screen Options</strong> &mdash; Use the Screen Opt
 $help .= '<p>' . __( '<strong>Drag and Drop</strong> &mdash; To rearrange the boxes, drag and drop by clicking on the title bar of the selected box and releasing when you see a gray dotted-line rectangle appear in the location you want to place the box.' ) . '</p>';
 $help .= '<p>' . __( '<strong>Box Controls</strong> &mdash; Click the title bar of the box to expand or collapse it. Some boxes added by plugins may have configurable content, and will show a &#8220;Configure&#8221; link in the title bar if you hover over it.' ) . '</p>';
 
+<<<<<<< HEAD
 $screen->add_help_tab( array(
 	'id'      => 'help-layout',
 	'title'   => __( 'Layout' ),
@@ -131,3 +138,6 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 <?php
 require( ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+require_once dirname( __DIR__ ) . '/index.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

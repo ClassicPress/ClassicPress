@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname( __FILE__ ) . '/base.php';
+require_once __DIR__ . '/base.php';
 
 /**
  * Test the WP_Image_Editor base class
@@ -13,10 +13,15 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 	/**
 	 * Setup test fixture
 	 */
+<<<<<<< HEAD
 	public function setup() {
 		require_once( ABSPATH . WPINC . '/class-wp-image-editor.php' );
+=======
+	public function setUp() {
+		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
-		include_once( DIR_TESTDATA . '/../includes/mock-image-editor.php' );
+		require_once DIR_TESTDATA . '/../includes/mock-image-editor.php';
 
 		parent::setUp();
 	}

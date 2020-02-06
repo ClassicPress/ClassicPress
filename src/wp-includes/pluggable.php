@@ -2171,6 +2171,7 @@ function wp_salt( $scheme = 'auth' ) {
 }
 endif;
 
+<<<<<<< HEAD
 if ( !function_exists('wp_hash') ) :
 /**
  * Get hash of given string.
@@ -2183,11 +2184,36 @@ if ( !function_exists('wp_hash') ) :
  */
 function wp_hash($data, $scheme = 'auth') {
 	$salt = wp_salt($scheme);
+=======
+if ( ! function_exists( 'wp_hash_password' ) ) :
+	/**
+	 * Create a hash (encrypt) of a plain text password.
+	 *
+	 * For integration with other applications, this function can be overwritten to
+	 * instead use the other package password checking algorithm.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @global PasswordHash $wp_hasher PHPass object
+	 *
+	 * @param string $password Plain text user password to hash
+	 * @return string The hash string of the password
+	 */
+	function wp_hash_password( $password ) {
+		global $wp_hasher;
+
+		if ( empty( $wp_hasher ) ) {
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+			// By default, use the portable hash from phpass.
+			$wp_hasher = new PasswordHash( 8, true );
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	return hash_hmac('md5', $data, $salt);
 }
 endif;
 
+<<<<<<< HEAD
 if ( !function_exists('wp_hash_password') ) :
 /**
  * Create a hash (encrypt) of a plain text password.
@@ -2204,6 +2230,65 @@ if ( !function_exists('wp_hash_password') ) :
  */
 function wp_hash_password($password) {
 	global $wp_hasher;
+=======
+if ( ! function_exists( 'wp_check_password' ) ) :
+	/**
+	 * Checks the plaintext password against the encrypted Password.
+	 *
+	 * Maintains compatibility between old version and the new cookie authentication
+	 * protocol using PHPass library. The $hash parameter is the encrypted password
+	 * and the function compares the plain text password when encrypted similarly
+	 * against the already encrypted password to see if they match.
+	 *
+	 * For integration with other applications, this function can be overwritten to
+	 * instead use the other package password checking algorithm.
+	 *
+	 * @since 2.5.0
+	 *
+	 * @global PasswordHash $wp_hasher PHPass object used for checking the password
+	 *  against the $hash + $password
+	 * @uses PasswordHash::CheckPassword
+	 *
+	 * @param string     $password Plaintext user's password
+	 * @param string     $hash     Hash of the user's password to check against.
+	 * @param string|int $user_id  Optional. User ID.
+	 * @return bool False, if the $password does not match the hashed password
+	 */
+	function wp_check_password( $password, $hash, $user_id = '' ) {
+		global $wp_hasher;
+
+		// If the hash is still md5...
+		if ( strlen( $hash ) <= 32 ) {
+			$check = hash_equals( $hash, md5( $password ) );
+			if ( $check && $user_id ) {
+				// Rehash using new hash.
+				wp_set_password( $password, $user_id );
+				$hash = wp_hash_password( $password );
+			}
+
+			/**
+			 * Filters whether the plaintext password matches the encrypted password.
+			 *
+			 * @since 2.5.0
+			 *
+			 * @param bool       $check    Whether the passwords match.
+			 * @param string     $password The plaintext password.
+			 * @param string     $hash     The hashed password.
+			 * @param string|int $user_id  User ID. Can be empty.
+			 */
+			return apply_filters( 'check_password', $check, $password, $hash, $user_id );
+		}
+
+		// If the stored hash is longer than an MD5,
+		// presume the new style phpass portable hash.
+		if ( empty( $wp_hasher ) ) {
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+			// By default, use the portable hash from phpass.
+			$wp_hasher = new PasswordHash( 8, true );
+		}
+
+		$check = $wp_hasher->CheckPassword( $password, $hash );
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( empty($wp_hasher) ) {
 		require_once( ABSPATH . WPINC . '/class-phpass.php');
@@ -2567,9 +2652,24 @@ function get_avatar( $id_or_email, $size = 96, $default = '', $alt = '', $args =
 	 * @param string $alt         Alternative text to use in the avatar image tag. Default empty.
 	 * @param array  $args        Arguments passed to get_avatar_data(), after processing.
 	 */
+<<<<<<< HEAD
 	return apply_filters( 'get_avatar', $avatar, $id_or_email, $args['size'], $args['default'], $args['alt'], $args );
 }
 endif;
+=======
+	function wp_text_diff( $left_string, $right_string, $args = null ) {
+		$defaults = array(
+			'title'           => '',
+			'title_left'      => '',
+			'title_right'     => '',
+			'show_split_view' => true,
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		if ( ! class_exists( 'WP_Text_Diff_Renderer_Table', false ) ) {
+			require ABSPATH . WPINC . '/wp-diff.php';
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( !function_exists( 'wp_text_diff' ) ) :
 /**

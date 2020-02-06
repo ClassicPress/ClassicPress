@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can('manage_links') )
 	wp_die(__('Sorry, you are not allowed to add links to this site.'));
@@ -24,6 +29,6 @@ if ( wp_is_mobile() )
 	wp_enqueue_script( 'jquery-touch-punch' );
 
 $link = get_default_link_to_edit();
-include( ABSPATH . 'wp-admin/edit-link-form.php' );
+require ABSPATH . 'wp-admin/edit-link-form.php';
 
-require( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

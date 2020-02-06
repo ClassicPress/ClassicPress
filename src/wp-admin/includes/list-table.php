@@ -40,8 +40,14 @@ function _get_list_table( $class, $args = array() ) {
 	);
 
 	if ( isset( $core_classes[ $class ] ) ) {
+<<<<<<< HEAD
 		foreach ( (array) $core_classes[ $class ] as $required )
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-' . $required . '-list-table.php' );
+=======
+		foreach ( (array) $core_classes[ $class ] as $required ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-' . $required . '-list-table.php';
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		if ( isset( $args['screen'] ) )
 			$args['screen'] = convert_to_screen( $args['screen'] );

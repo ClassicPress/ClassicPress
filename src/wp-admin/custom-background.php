@@ -549,6 +549,7 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 		if ( in_array( $_POST['size'], $sizes ) )
 			$size = esc_attr( $_POST['size'] );
 
+<<<<<<< HEAD
 		update_post_meta( $attachment_id, '_wp_attachment_is_custom_background', get_option('stylesheet' ) );
 		$url = wp_get_attachment_image_src( $attachment_id, $size );
 		$thumbnail = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
@@ -557,3 +558,7 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 		exit;
 	}
 }
+=======
+/** Custom_Background class */
+require_once ABSPATH . 'wp-admin/includes/class-custom-background.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

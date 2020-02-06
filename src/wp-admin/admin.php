@@ -28,7 +28,11 @@ if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
 if ( isset($_GET['import']) && !defined('WP_LOAD_IMPORTERS') )
 	define('WP_LOAD_IMPORTERS', true);
 
+<<<<<<< HEAD
 require_once(dirname(dirname(__FILE__)) . '/wp-load.php');
+=======
+require_once dirname( __DIR__ ) . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 nocache_headers();
 
@@ -68,9 +72,21 @@ if ( get_option('db_upgraded') ) {
 		 * If there are 50 or fewer sites, run every time. Otherwise, throttle to reduce load:
 		 * attempt to do no more than threshold value, with some +/- allowed.
 		 */
+<<<<<<< HEAD
 		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int)( $c / 50 ) ) == 1 ) ) {
 			require_once( ABSPATH . WPINC . '/http.php' );
 			$response = wp_remote_get( admin_url( 'upgrade.php?step=1' ), array( 'timeout' => 120, 'httpversion' => '1.1' ) );
+=======
+		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int) ( $c / 50 ) ) == 1 ) ) {
+			require_once ABSPATH . WPINC . '/http.php';
+			$response = wp_remote_get(
+				admin_url( 'upgrade.php?step=1' ),
+				array(
+					'timeout'     => 120,
+					'httpversion' => '1.1',
+				)
+			);
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			/** This action is documented in wp-admin/network/upgrade.php */
 			do_action( 'after_mu_upgrade', $response );
 			unset($response);
@@ -79,7 +95,11 @@ if ( get_option('db_upgraded') ) {
 	}
 }
 
+<<<<<<< HEAD
 require_once(ABSPATH . 'wp-admin/includes/admin.php');
+=======
+require_once ABSPATH . 'wp-admin/includes/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 auth_redirect();
 
@@ -132,12 +152,22 @@ if ( isset( $_REQUEST['taxonomy'] ) && taxonomy_exists( $_REQUEST['taxonomy'] ) 
 else
 	$taxnow = '';
 
+<<<<<<< HEAD
 if ( WP_NETWORK_ADMIN )
 	require(ABSPATH . 'wp-admin/network/menu.php');
 elseif ( WP_USER_ADMIN )
 	require(ABSPATH . 'wp-admin/user/menu.php');
 else
 	require(ABSPATH . 'wp-admin/menu.php');
+=======
+if ( WP_NETWORK_ADMIN ) {
+	require ABSPATH . 'wp-admin/network/menu.php';
+} elseif ( WP_USER_ADMIN ) {
+	require ABSPATH . 'wp-admin/user/menu.php';
+} else {
+	require ABSPATH . 'wp-admin/menu.php';
+}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( current_user_can( 'manage_options' ) ) {
 	wp_raise_memory_limit( 'admin' );
@@ -211,9 +241,16 @@ if ( isset($plugin_page) ) {
 		 *
 		 * @since WP-2.1.0
 		 */
+<<<<<<< HEAD
 		do_action( "load-{$page_hook}" );
 		if (! isset($_GET['noheader']))
 			require_once(ABSPATH . 'wp-admin/admin-header.php');
+=======
+		do_action( "load-{$page_hook}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		if ( ! isset( $_GET['noheader'] ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		/**
 		 * Used to call the registered callback for a plugin screen.
@@ -244,6 +281,7 @@ if ( isset($plugin_page) ) {
 		 */
 		do_action( "load-{$plugin_page}" );
 
+<<<<<<< HEAD
 		if ( !isset($_GET['noheader']))
 			require_once(ABSPATH . 'wp-admin/admin-header.php');
 
@@ -254,6 +292,20 @@ if ( isset($plugin_page) ) {
 	}
 
 	include(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+		if ( ! isset( $_GET['noheader'] ) ) {
+			require_once ABSPATH . 'wp-admin/admin-header.php';
+		}
+
+		if ( file_exists( WPMU_PLUGIN_DIR . "/$plugin_page" ) ) {
+			include WPMU_PLUGIN_DIR . "/$plugin_page";
+		} else {
+			include WP_PLUGIN_DIR . "/$plugin_page";
+		}
+	}
+
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	exit();
 } elseif ( isset( $_GET['import'] ) ) {
@@ -287,10 +339,18 @@ if ( isset($plugin_page) ) {
 	$submenu_file = 'import.php';
 	$title = __('Import');
 
+<<<<<<< HEAD
 	if (! isset($_GET['noheader']))
 		require_once(ABSPATH . 'wp-admin/admin-header.php');
 
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+=======
+	if ( ! isset( $_GET['noheader'] ) ) {
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	define('WP_IMPORTING', true);
 
@@ -310,7 +370,11 @@ if ( isset($plugin_page) ) {
 
 	call_user_func($wp_importers[$importer][2]);
 
+<<<<<<< HEAD
 	include(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	// Make sure rules are flushed
 	flush_rewrite_rules(false);

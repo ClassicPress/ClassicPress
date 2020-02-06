@@ -6,11 +6,19 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 /** ClassicPress Translation Installation API */
 require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+
+/** WordPress Translation Installation API */
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'manage_options' ) )
 	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
@@ -46,7 +54,7 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>'
 );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 ?>
 
 <div class="wrap">
@@ -386,4 +394,4 @@ endfor;
 
 </div>
 
-<?php include( ABSPATH . 'wp-admin/admin-footer.php' ); ?>
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>

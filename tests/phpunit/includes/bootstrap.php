@@ -7,6 +7,7 @@
  * Compatibility with PHPUnit 6+
  */
 if ( class_exists( 'PHPUnit\Runner\Version' ) ) {
+<<<<<<< HEAD
 	require_once dirname( __FILE__ ) . '/phpunit6-compat.php';
 }
 
@@ -15,6 +16,22 @@ if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.
 	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' )
 		$config_file_path = dirname( dirname( $config_file_path ) );
+=======
+	require_once __DIR__ . '/phpunit6/compat.php';
+}
+
+if ( defined( 'WP_TESTS_CONFIG_FILE_PATH' ) ) {
+	$config_file_path = WP_TESTS_CONFIG_FILE_PATH;
+} else {
+	$config_file_path = dirname( __DIR__ );
+	if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
+		// Support the config file from the root of the develop repository.
+		if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' ) {
+			$config_file_path = dirname( dirname( $config_file_path ) );
+		}
+	}
+	$config_file_path .= '/wp-tests-config.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 $config_file_path .= '/wp-tests-config.php';
 
@@ -29,12 +46,17 @@ if ( ! is_readable( $config_file_path ) ) {
 	exit( 1 );
 }
 require_once $config_file_path;
-require_once dirname( __FILE__ ) . '/functions.php';
+require_once __DIR__ . '/functions.php';
 
 tests_reset__SERVER();
 
 define( 'WP_TESTS_TABLE_PREFIX', $table_prefix );
+<<<<<<< HEAD
 define( 'DIR_TESTDATA', dirname( __FILE__ ) . '/../data' );
+=======
+define( 'DIR_TESTDATA', __DIR__ . '/../data' );
+define( 'DIR_TESTROOT', realpath( dirname( __DIR__ ) ) );
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 define( 'WP_LANG_DIR', DIR_TESTDATA . '/languages' );
 
@@ -53,8 +75,13 @@ $multisite = '1' == getenv( 'WP_MULTISITE' );
 $multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE') && WP_TESTS_MULTISITE );
 $multisite = $multisite || ( defined( 'MULTISITE' ) && MULTISITE );
 
+<<<<<<< HEAD
 // Override the PHPMailer
 require_once( dirname( __FILE__ ) . '/mock-mailer.php' );
+=======
+// Override the PHPMailer.
+require_once __DIR__ . '/mock-mailer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 $phpmailer = new MockPHPMailer( true );
 
 if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
@@ -66,9 +93,17 @@ if ( file_exists( DIR_TESTDATA . '/themedir1' ) ) {
 	$wp_theme_directories[] = DIR_TESTDATA . '/themedir1';
 }
 
+<<<<<<< HEAD
 system( WP_PHP_BINARY . ' ' . escapeshellarg( dirname( __FILE__ ) . '/install.php' ) . ' ' . escapeshellarg( $config_file_path ) . ' ' . $multisite, $retval );
 if ( 0 !== $retval ) {
 	exit( $retval );
+=======
+if ( '1' !== getenv( 'WP_TESTS_SKIP_INSTALL' ) ) {
+	system( WP_PHP_BINARY . ' ' . escapeshellarg( __DIR__ . '/install.php' ) . ' ' . escapeshellarg( $config_file_path ) . ' ' . $multisite, $retval );
+	if ( 0 !== $retval ) {
+		exit( $retval );
+	}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 }
 
 if ( $multisite ) {
@@ -104,6 +139,7 @@ require_once ABSPATH . '/wp-settings.php';
 // Delete any default posts & related data
 _delete_all_posts();
 
+<<<<<<< HEAD
 require dirname( __FILE__ ) . '/testcase.php';
 require dirname( __FILE__ ) . '/testcase-rest-api.php';
 require dirname( __FILE__ ) . '/testcase-rest-controller.php';
@@ -114,6 +150,25 @@ require dirname( __FILE__ ) . '/testcase-canonical.php';
 require dirname( __FILE__ ) . '/exceptions.php';
 require dirname( __FILE__ ) . '/utils.php';
 require dirname( __FILE__ ) . '/spy-rest-server.php';
+=======
+if ( version_compare( tests_get_phpunit_version(), '7.0', '>=' ) ) {
+	require __DIR__ . '/phpunit7/testcase.php';
+} else {
+	require __DIR__ . '/testcase.php';
+}
+
+require __DIR__ . '/testcase-rest-api.php';
+require __DIR__ . '/testcase-rest-controller.php';
+require __DIR__ . '/testcase-rest-post-type-controller.php';
+require __DIR__ . '/testcase-xmlrpc.php';
+require __DIR__ . '/testcase-ajax.php';
+require __DIR__ . '/testcase-canonical.php';
+require __DIR__ . '/exceptions.php';
+require __DIR__ . '/utils.php';
+require __DIR__ . '/spy-rest-server.php';
+require __DIR__ . '/class-wp-rest-test-search-handler.php';
+require __DIR__ . '/class-wp-fake-block-type.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * A child class of the PHP test runner.

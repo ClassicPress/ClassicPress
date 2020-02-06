@@ -30,9 +30,10 @@ error_reporting( 0 );
 
 // Everything relies on ABSPATH; make sure it's defined.
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/' );
+	define( 'ABSPATH', dirname( __DIR__ ) . '/' );
 }
 
+<<<<<<< HEAD
 // WP settings.
 require( ABSPATH . 'wp-settings.php' );
 
@@ -41,6 +42,15 @@ require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 /** Load ClassicPress Translation Installation API */
 require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+=======
+require ABSPATH . 'wp-settings.php';
+
+/** Load WordPress Administration Upgrade API */
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+/** Load WordPress Translation Installation API */
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 // Prevent browser caching.
 nocache_headers();

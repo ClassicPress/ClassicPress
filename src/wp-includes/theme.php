@@ -2446,7 +2446,11 @@ function _custom_header_background_just_in_time() {
 			add_action( 'wp_head', $args[0]['wp-head-callback'] );
 
 		if ( is_admin() ) {
+<<<<<<< HEAD
 			require_once( ABSPATH . 'wp-admin/custom-header.php' );
+=======
+			require_once ABSPATH . 'wp-admin/includes/class-custom-image-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			$custom_image_header = new Custom_Image_Header( $args[0]['admin-head-callback'], $args[0]['admin-preview-callback'] );
 		}
 	}
@@ -2459,7 +2463,11 @@ function _custom_header_background_just_in_time() {
 		add_action( 'wp_head', $args[0]['wp-head-callback'] );
 
 		if ( is_admin() ) {
+<<<<<<< HEAD
 			require_once( ABSPATH . 'wp-admin/custom-background.php' );
+=======
+			require_once ABSPATH . 'wp-admin/includes/class-custom-background.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 			$custom_background = new Custom_Background( $args[0]['admin-head-callback'], $args[0]['admin-preview-callback'] );
 		}
 	}
@@ -2674,7 +2682,11 @@ function current_theme_supports( $feature ) {
  */
 function require_if_theme_supports( $feature, $include ) {
 	if ( current_theme_supports( $feature ) ) {
+<<<<<<< HEAD
 		require ( $include );
+=======
+		require $include;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		return true;
 	}
 	return false;

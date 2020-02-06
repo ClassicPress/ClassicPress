@@ -7,8 +7,13 @@
  * @since WP-3.1.0
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can('create_users') )
 	wp_die(__('Sorry, you are not allowed to add users to this network.'));
@@ -85,7 +90,7 @@ if ( isset($_GET['update']) ) {
 $title = __('Add New User');
 $parent_file = 'users.php';
 
-require( ABSPATH . 'wp-admin/admin-header.php' ); ?>
+require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 
 <div class="wrap">
 <h1 id="add-new-user"><?php _e( 'Add New User' ); ?></h1>
@@ -131,4 +136,4 @@ if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) { ?>
 	</form>
 </div>
 <?php
-require( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

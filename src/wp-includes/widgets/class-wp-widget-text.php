@@ -403,7 +403,7 @@ class WP_Widget_Text extends WP_Widget {
 	 * @since WP-4.9.3
 	 */
 	public function enqueue_preview_scripts() {
-		require_once dirname( dirname( __FILE__ ) ) . '/media.php';
+		require_once dirname( __DIR__ ) . '/media.php';
 
 		wp_playlist_scripts( 'audio' );
 		wp_playlist_scripts( 'video' );

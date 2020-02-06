@@ -6,12 +6,26 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 $title = __( 'Credits' );
 
 include( ABSPATH . 'wp-admin/admin-header.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+require_once __DIR__ . '/includes/credits.php';
+
+$title = __( 'Credits' );
+
+list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
+
+require_once ABSPATH . 'wp-admin/admin-header.php';
+
+$credits = wp_credits();
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 ?>
 <div class="wrap about-wrap full-width-layout">
 
@@ -42,6 +56,34 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 
 <div class="about-wrap-content">
 <?php
+<<<<<<< HEAD
+=======
+if ( ! $credits ) {
+	echo '</div>';
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
+	exit;
+}
+?>
+
+	<hr />
+
+	<div class="about__section">
+		<div class="column has-subtle-background-color">
+			<?php wp_credits_section_title( $credits['groups']['core-developers'] ); ?>
+			<?php wp_credits_section_list( $credits, 'core-developers' ); ?>
+			<?php wp_credits_section_list( $credits, 'contributing-developers' ); ?>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="about__section">
+		<div class="column">
+			<?php wp_credits_section_title( $credits['groups']['props'] ); ?>
+			<?php wp_credits_section_list( $credits, 'props' ); ?>
+		</div>
+	</div>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 echo '<p class="about-description">' . sprintf(
 	/* translators: %s: https://www.classicpress.net/contributors/ */
@@ -60,6 +102,6 @@ echo '<p class="about-description">' . sprintf(
 </div>
 <?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';
 
 return;

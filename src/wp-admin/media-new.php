@@ -9,8 +9,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if (!current_user_can('upload_files'))
 	wp_die(__('Sorry, you are not allowed to upload files.'));
@@ -57,7 +62,7 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __('<a href="https://forums.classicpress.net/c/support">Support Forums</a>') . '</p>'
 );
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 $form_class = 'media-upload-form type-form validate';
 
@@ -81,4 +86,4 @@ if ( get_user_setting('uploader') || isset( $_GET['browser-uploader'] ) )
 </div>
 
 <?php
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

@@ -73,4 +73,8 @@ unset($update_data);
 
 $menu[99] = array( '', 'exist', 'separator-last', '', 'wp-menu-separator' );
 
+<<<<<<< HEAD
 require_once(ABSPATH . 'wp-admin/includes/menu.php');
+=======
+require_once ABSPATH . 'wp-admin/includes/menu.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

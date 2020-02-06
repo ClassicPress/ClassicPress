@@ -27,8 +27,12 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
+<<<<<<< HEAD
 		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
 		// @codingStandardsIgnoreStart
+=======
+		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
 		// @codingStandardsIgnoreEnd
 		$this->wp_customize = $GLOBALS['wp_customize'];

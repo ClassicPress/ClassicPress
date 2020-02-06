@@ -5,7 +5,7 @@
  * @package ClassicPress
  */
 
-require( ABSPATH . WPINC . '/option.php' );
+require ABSPATH . WPINC . '/option.php';
 
 /**
  * Convert given date string into a different format.
@@ -559,8 +559,13 @@ function wp_extract_urls( $content ) {
 function do_enclose( $content, $post_ID ) {
 	global $wpdb;
 
+<<<<<<< HEAD
 	//TODO: Tidy this ghetto code up and make the debug code optional
 	include_once( ABSPATH . WPINC . '/class-IXR.php' );
+=======
+	// @todo Tidy this code and make the debug code optional.
+	include_once ABSPATH . WPINC . '/class-IXR.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$post_links = array();
 
@@ -3764,7 +3769,7 @@ function wp_maybe_load_widgets() {
 		return;
 	}
 
-	require_once( ABSPATH . WPINC . '/default-widgets.php' );
+	require_once ABSPATH . WPINC . '/default-widgets.php';
 
 	add_action( '_admin_menu', 'wp_widgets_add_menu' );
 }
@@ -3824,7 +3829,7 @@ function dead_db() {
 
 	// Load custom DB error template, if present.
 	if ( file_exists( WP_CONTENT_DIR . '/db-error.php' ) ) {
-		require_once( WP_CONTENT_DIR . '/db-error.php' );
+		require_once WP_CONTENT_DIR . '/db-error.php';
 		die();
 	}
 
@@ -6103,9 +6108,18 @@ function wp_schedule_delete_old_privacy_export_files() {
  * @since WP-4.9.6
  */
 function wp_privacy_delete_old_export_files() {
+<<<<<<< HEAD
 	require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
 	$exports_dir  = wp_privacy_exports_dir();
+=======
+	$exports_dir = wp_privacy_exports_dir();
+	if ( ! is_dir( $exports_dir ) ) {
+		return;
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	$export_files = list_files( $exports_dir, 100, array( 'index.html' ) );
 
 	/**

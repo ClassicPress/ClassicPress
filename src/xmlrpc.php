@@ -25,8 +25,13 @@ if ( !isset( $HTTP_RAW_POST_DATA ) ) {
 if ( isset($HTTP_RAW_POST_DATA) )
 	$HTTP_RAW_POST_DATA = trim($HTTP_RAW_POST_DATA);
 
+<<<<<<< HEAD
 /** Include the bootstrap for setting up ClassicPress environment */
 include( dirname( __FILE__ ) . '/wp-load.php' );
+=======
+/** Include the bootstrap for setting up WordPress environment */
+require_once __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
@@ -59,9 +64,15 @@ header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 exit;
 }
 
+<<<<<<< HEAD
 include_once(ABSPATH . 'wp-admin/includes/admin.php');
 include_once(ABSPATH . WPINC . '/class-IXR.php');
 include_once(ABSPATH . WPINC . '/class-wp-xmlrpc-server.php');
+=======
+require_once ABSPATH . 'wp-admin/includes/admin.php';
+require_once ABSPATH . WPINC . '/class-IXR.php';
+require_once ABSPATH . WPINC . '/class-wp-xmlrpc-server.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * Posts submitted via the XML-RPC interface get that title

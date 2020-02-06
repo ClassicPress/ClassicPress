@@ -320,8 +320,13 @@ function spawn_cron( $gmt_time = 0 ) {
 		while ( @ob_end_flush() );
 		flush();
 
+<<<<<<< HEAD
 		WP_DEBUG ? include_once( ABSPATH . 'wp-cron.php' ) : @include_once( ABSPATH . 'wp-cron.php' );
 		return;
+=======
+		include_once ABSPATH . 'wp-cron.php';
+		return true;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	}
 
 	// Set the cron lock with the current unix timestamp, when the cron is being spawned.

@@ -211,8 +211,14 @@ final class _WP_Editors {
 			if ( $set['media_buttons'] ) {
 				self::$has_medialib = true;
 
+<<<<<<< HEAD
 				if ( ! function_exists( 'media_buttons' ) )
 					include( ABSPATH . 'wp-admin/includes/media.php' );
+=======
+				if ( ! function_exists( 'media_buttons' ) ) {
+					require ABSPATH . 'wp-admin/includes/media.php';
+				}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 				echo '<div id="wp-' . $editor_id_attr . '-media-buttons" class="wp-media-buttons">';
 
@@ -453,8 +459,13 @@ final class _WP_Editors {
 						if ( ! empty( $mce_external_languages ) ) {
 							foreach ( $mce_external_languages as $name => $path ) {
 								if ( @is_file( $path ) && @is_readable( $path ) ) {
+<<<<<<< HEAD
 									include_once( $path );
 									$ext_plugins .= $strings . "\n";
+=======
+									include_once $path;
+									$ext_plugins   .= $strings . "\n";
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 									$loaded_langs[] = $name;
 								}
 							}

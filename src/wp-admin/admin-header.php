@@ -6,9 +6,16 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 @header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 if ( ! defined( 'WP_ADMIN' ) )
 	require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+if ( ! defined( 'WP_ADMIN' ) ) {
+	require_once __DIR__ . '/admin.php';
+}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /**
  * In case admin-header.php is included in a function.
@@ -207,7 +214,11 @@ if ( current_user_can( 'customize' ) ) {
 ?>
 
 <div id="wpwrap">
+<<<<<<< HEAD
 <?php require(ABSPATH . 'wp-admin/menu-header.php'); ?>
+=======
+<?php require ABSPATH . 'wp-admin/menu-header.php'; ?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 <div id="wpcontent">
 
 <?php
@@ -262,5 +273,11 @@ if ( is_network_admin() ) {
  */
 do_action( 'all_admin_notices' );
 
+<<<<<<< HEAD
 if ( $parent_file == 'options-general.php' )
 	require(ABSPATH . 'wp-admin/options-head.php');
+=======
+if ( $parent_file == 'options-general.php' ) {
+	require ABSPATH . 'wp-admin/options-head.php';
+}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

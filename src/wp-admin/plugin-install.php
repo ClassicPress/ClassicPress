@@ -12,7 +12,7 @@ if ( !defined( 'IFRAME_REQUEST' ) && isset( $_GET['tab'] ) && ( 'plugin-informat
 /**
  * ClassicPress Administration Bootstrap.
  */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can('install_plugins') )
 	wp_die(__('Sorry, you are not allowed to install plugins on this site.'));
@@ -108,7 +108,11 @@ get_current_screen()->set_screen_reader_content( array(
 /**
  * ClassicPress Administration Template Header.
  */
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-header.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-header.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 ?>
 <div class="wrap <?php echo esc_attr( "plugin-install-tab-$tab" ); ?>">
 <h1 class="wp-heading-inline"><?php
@@ -167,4 +171,8 @@ wp_print_admin_notice_templates();
 /**
  * ClassicPress Administration Template Footer.
  */
+<<<<<<< HEAD
 include(ABSPATH . 'wp-admin/admin-footer.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

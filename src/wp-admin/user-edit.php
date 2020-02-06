@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 wp_reset_vars( array( 'action', 'user_id', 'wp_http_referer' ) );
 
@@ -172,11 +177,16 @@ $profileuser = get_user_to_edit($user_id);
 if ( !current_user_can('edit_user', $user_id) )
 	wp_die(__('Sorry, you are not allowed to edit this user.'));
 
+<<<<<<< HEAD
 $title = sprintf( $title, $profileuser->display_name );
 $sessions = WP_Session_Tokens::get_instance( $profileuser->ID );
 
 include(ABSPATH . 'wp-admin/admin-header.php');
 ?>
+=======
+		require_once ABSPATH . 'wp-admin/admin-header.php';
+		?>
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 <?php if ( !IS_PROFILE_PAGE && is_super_admin( $profileuser->ID ) && current_user_can( 'manage_network_options' ) ) { ?>
 	<div class="notice notice-info"><p><strong><?php _e('Important:'); ?></strong> <?php _e('This user has super admin privileges.'); ?></p></div>
@@ -722,4 +732,8 @@ break;
 	}
 </script>
 <?php
+<<<<<<< HEAD
 include( ABSPATH . 'wp-admin/admin-footer.php');
+=======
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

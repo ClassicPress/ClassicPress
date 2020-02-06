@@ -123,7 +123,12 @@ function wp_import_handle_upload() {
  * @return array Importers with metadata for each.
  */
 function wp_get_popular_importers() {
+<<<<<<< HEAD
 	include( ABSPATH . WPINC . '/version.php' ); // include an unmodified $wp_version
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$locale = get_user_locale();
 	$cache_key = 'popular_importers_' . md5( $locale . $wp_version );

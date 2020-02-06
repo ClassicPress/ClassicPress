@@ -8,8 +8,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $parent_file = 'edit.php';
 $submenu_file = 'edit.php';
@@ -122,8 +127,15 @@ case 'edit':
 	if ( ! current_user_can( 'edit_post', $post_id ) )
 		wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
 
+<<<<<<< HEAD
 	if ( 'trash' == $post->post_status )
 		wp_die( __( 'You can&#8217;t edit this item because it is in the Trash. Please restore it and try again.' ) );
+=======
+		if ( use_block_editor_for_post( $post ) ) {
+			require ABSPATH . 'wp-admin/edit-form-blocks.php';
+			break;
+		}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( ! empty( $_GET['get-post-lock'] ) ) {
 		check_admin_referer( 'lock-post_' . $post_id );
@@ -165,9 +177,13 @@ case 'edit':
 	if ( ! wp_check_post_lock( $post->ID ) ) {
 		$active_post_lock = wp_set_post_lock( $post->ID );
 
+<<<<<<< HEAD
 		if ( 'attachment' !== $post_type )
 			wp_enqueue_script('autosave');
 	}
+=======
+		require ABSPATH . 'wp-admin/edit-form-advanced.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$title = $post_type_object->labels->edit_item;
 	$post = get_post($post_id, OBJECT, 'edit');
@@ -281,6 +297,7 @@ case 'preview':
 	wp_redirect($url);
 	exit();
 
+<<<<<<< HEAD
 default:
 	/**
 	 * Fires for a given custom post action request.
@@ -297,3 +314,22 @@ default:
 	exit();
 } // end switch
 include( ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+	default:
+		/**
+		 * Fires for a given custom post action request.
+		 *
+		 * The dynamic portion of the hook name, `$action`, refers to the custom post action.
+		 *
+		 * @since 4.6.0
+		 *
+		 * @param int $post_id Post ID sent with the request.
+		 */
+		do_action( "post_action_{$action}", $post_id );
+
+		wp_redirect( admin_url( 'edit.php' ) );
+		exit();
+} // End switch.
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

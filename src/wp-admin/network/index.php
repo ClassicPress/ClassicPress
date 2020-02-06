@@ -7,11 +7,19 @@
  * @since WP-3.0.0
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 /** Load ClassicPress dashboard API */
 require_once( ABSPATH . 'wp-admin/includes/dashboard.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+
+/** Load WordPress dashboard API */
+require_once ABSPATH . 'wp-admin/includes/dashboard.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'manage_network' ) )
 	wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
@@ -57,7 +65,7 @@ wp_enqueue_script( 'dashboard' );
 wp_enqueue_script( 'plugin-install' );
 add_thickbox();
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 
@@ -74,4 +82,9 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 </div><!-- wrap -->
 
 <?php
+<<<<<<< HEAD
 include( ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+wp_print_community_events_templates();
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

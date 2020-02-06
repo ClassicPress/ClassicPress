@@ -26,8 +26,13 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	global $wpdb, $wp_local_package;
+<<<<<<< HEAD
 	// include an unmodified $cp_version
 	include( ABSPATH . WPINC . '/version.php' );
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	$php_version = phpversion();
 
 	$current = get_site_transient( 'update_core' );
@@ -231,12 +236,22 @@ function wp_update_plugins( $extra_stats = array() ) {
 		return;
 	}
 
+<<<<<<< HEAD
 	// include an unmodified $wp_version
 	include( ABSPATH . WPINC . '/version.php' );
 
 	// If running blog-side, bail unless we've not checked in the last 12 hours
 	if ( !function_exists( 'get_plugins' ) )
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+
+	// If running blog-side, bail unless we've not checked in the last 12 hours.
+	if ( ! function_exists( 'get_plugins' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$plugins = get_plugins();
 	$translations = wp_get_installed_translations( 'plugins' );
@@ -405,8 +420,13 @@ function wp_update_themes( $extra_stats = array() ) {
 		return;
 	}
 
+<<<<<<< HEAD
 	// include an unmodified $wp_version
 	include( ABSPATH . WPINC . '/version.php' );
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$installed_themes = wp_get_themes();
 	$translations = wp_get_installed_translations( 'themes' );
@@ -561,8 +581,13 @@ function wp_update_themes( $extra_stats = array() ) {
  * @since WP-3.7.0
  */
 function wp_maybe_auto_update() {
+<<<<<<< HEAD
 	include_once( ABSPATH . '/wp-admin/includes/admin.php' );
 	include_once( ABSPATH . '/wp-admin/includes/class-wp-upgrader.php' );
+=======
+	include_once ABSPATH . 'wp-admin/includes/admin.php';
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$upgrader = new WP_Automatic_Updater;
 	$upgrader->run();
@@ -666,8 +691,13 @@ function wp_get_update_data() {
  * @global string $wp_version
  */
 function _maybe_update_core() {
+<<<<<<< HEAD
 	// include an unmodified $cp_version
 	include( ABSPATH . WPINC . '/version.php' );
+=======
+	// Include an unmodified $wp_version.
+	require ABSPATH . WPINC . '/version.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$current = get_site_transient( 'update_core' );
 

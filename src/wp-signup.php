@@ -1,11 +1,16 @@
 <?php
 
+<<<<<<< HEAD
 /** Sets up the ClassicPress Environment. */
 require( dirname(__FILE__) . '/wp-load.php' );
+=======
+/** Sets up the WordPress Environment. */
+require __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 add_action( 'wp_head', 'wp_no_robots' );
 
-require( dirname( __FILE__ ) . '/wp-blog-header.php' );
+require __DIR__ . '/wp-blog-header.php';
 
 nocache_headers();
 

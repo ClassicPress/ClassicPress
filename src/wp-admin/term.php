@@ -7,8 +7,13 @@
  * @since WP-4.5.0
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( empty( $_REQUEST['tag_ID'] ) ) {
 	$sendback = admin_url( 'edit-tags.php' );
@@ -63,6 +68,6 @@ get_current_screen()->set_screen_reader_content( array(
 	'heading_list'       => $tax->labels->items_list,
 ) );
 wp_enqueue_script( 'admin-tags' );
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
-include( ABSPATH . 'wp-admin/edit-tag-form.php' );
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
+require ABSPATH . 'wp-admin/edit-tag-form.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

@@ -7,8 +7,13 @@
  * @subpackage translations
  */
 
+<<<<<<< HEAD
 require_once dirname(__FILE__) . '/plural-forms.php';
 require_once dirname(__FILE__) . '/entry.php';
+=======
+require_once __DIR__ . '/plural-forms.php';
+require_once __DIR__ . '/entry.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! class_exists( 'Translations', false ) ):
 class Translations {

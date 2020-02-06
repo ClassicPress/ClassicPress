@@ -8,8 +8,13 @@
  * @subpackage Trackbacks
  */
 
+<<<<<<< HEAD
 if (empty($wp)) {
 	require_once( dirname( __FILE__ ) . '/wp-load.php' );
+=======
+if ( empty( $wp ) ) {
+	require_once __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	wp( array( 'tb' => '1' ) );
 }
 

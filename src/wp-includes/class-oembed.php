@@ -723,6 +723,11 @@ class WP_oEmbed {
 		$pre = array_values( $found );
 		$tokens = array_keys( $found );
 
+<<<<<<< HEAD
 		return str_replace( $tokens, $pre, $stripped );
 	}
 }
+=======
+/** WP_oEmbed class */
+require_once ABSPATH . 'wp-includes/class-wp-oembed.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

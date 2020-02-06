@@ -378,12 +378,13 @@ class WP_Customize_Section {
 }
 
 /** WP_Customize_Themes_Section class */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 
 /** WP_Customize_Sidebar_Section class */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
 
 /** WP_Customize_Nav_Menu_Section class */
+<<<<<<< HEAD
 require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php' );
 
 /**
@@ -396,3 +397,6 @@ require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.
  * @deprecated WP-4.9.0 This file is no longer used due to new menu creation UX.
  */
 require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' );
+=======
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

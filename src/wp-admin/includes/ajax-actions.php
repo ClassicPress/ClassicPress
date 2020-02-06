@@ -217,8 +217,14 @@ function wp_ajax_imgedit_preview() {
 
 	check_ajax_referer( "image_editor-$post_id" );
 
+<<<<<<< HEAD
 	include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
 	if ( ! stream_preview_image($post_id) )
+=======
+	include_once ABSPATH . 'wp-admin/includes/image-edit.php';
+
+	if ( ! stream_preview_image( $post_id ) ) {
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		wp_die( -1 );
 
 	wp_die();
@@ -297,6 +303,61 @@ function wp_ajax_autocomplete_user() {
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Handles AJAX requests for community events
+ *
+ * @since 4.8.0
+ */
+function wp_ajax_get_community_events() {
+	require_once ABSPATH . 'wp-admin/includes/class-wp-community-events.php';
+
+	check_ajax_referer( 'community_events' );
+
+	$search         = isset( $_POST['location'] ) ? wp_unslash( $_POST['location'] ) : '';
+	$timezone       = isset( $_POST['timezone'] ) ? wp_unslash( $_POST['timezone'] ) : '';
+	$user_id        = get_current_user_id();
+	$saved_location = get_user_option( 'community-events-location', $user_id );
+	$events_client  = new WP_Community_Events( $user_id, $saved_location );
+	$events         = $events_client->get_events( $search, $timezone );
+	$ip_changed     = false;
+
+	if ( is_wp_error( $events ) ) {
+		wp_send_json_error(
+			array(
+				'error' => $events->get_error_message(),
+			)
+		);
+	} else {
+		if ( empty( $saved_location['ip'] ) && ! empty( $events['location']['ip'] ) ) {
+			$ip_changed = true;
+		} elseif ( isset( $saved_location['ip'] ) && ! empty( $events['location']['ip'] ) && $saved_location['ip'] !== $events['location']['ip'] ) {
+			$ip_changed = true;
+		}
+
+		/*
+		 * The location should only be updated when it changes. The API doesn't always return
+		 * a full location; sometimes it's missing the description or country. The location
+		 * that was saved during the initial request is known to be good and complete, though.
+		 * It should be left intact until the user explicitly changes it (either by manually
+		 * searching for a new location, or by changing their IP address).
+		 *
+		 * If the location was updated with an incomplete response from the API, then it could
+		 * break assumptions that the UI makes (e.g., that there will always be a description
+		 * that corresponds to a latitude/longitude location).
+		 *
+		 * The location is stored network-wide, so that the user doesn't have to set it on each site.
+		 */
+		if ( $ip_changed || $search ) {
+			update_user_option( $user_id, 'community-events-location', $events['location'], true );
+		}
+
+		wp_send_json_success( $events );
+	}
+}
+
+/**
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
  * Ajax handler for dashboard widgets.
  *
  * @since WP-3.4.0
@@ -1067,7 +1128,7 @@ function wp_ajax_replyto_comment( $action ) {
 
 	ob_start();
 	if ( isset( $_REQUEST['mode'] ) && 'dashboard' == $_REQUEST['mode'] ) {
-		require_once( ABSPATH . 'wp-admin/includes/dashboard.php' );
+		require_once ABSPATH . 'wp-admin/includes/dashboard.php';
 		_wp_dashboard_recent_comments_row( $comment );
 	} else {
 		if ( isset( $_REQUEST['mode'] ) && 'single' == $_REQUEST['mode'] ) {
@@ -1508,7 +1569,7 @@ function wp_ajax_wp_link_ajax() {
 	$args['pagenum'] = ! empty( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
 
 	if ( ! class_exists( '_WP_Editors', false ) ) {
-		require( ABSPATH . WPINC . '/class-wp-editor.php' );
+		require ABSPATH . WPINC . '/class-wp-editor.php';
 	}
 
 	$results = _WP_Editors::wp_link_query( $args );
@@ -2113,7 +2174,7 @@ function wp_ajax_image_editor() {
 		wp_die( -1 );
 
 	check_ajax_referer( "image_editor-$attachment_id" );
-	include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
+	include_once ABSPATH . 'wp-admin/includes/image-edit.php';
 
 	$msg = false;
 	switch ( $_POST['do'] ) {
@@ -3349,8 +3410,8 @@ function wp_ajax_install_theme() {
 		wp_send_json_error( $status );
 	}
 
-	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-	include_once( ABSPATH . 'wp-admin/includes/theme.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	include_once ABSPATH . 'wp-admin/includes/theme.php';
 
 	$api = themes_api( 'theme_information', array(
 		'slug'   => $slug,
@@ -3464,7 +3525,7 @@ function wp_ajax_update_theme() {
 		$status['oldVersion'] = $theme->get( 'Version' );
 	}
 
-	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 	$current = get_site_transient( 'update_themes' );
 	if ( empty( $current ) ) {
@@ -3574,7 +3635,7 @@ function wp_ajax_delete_theme() {
 		wp_send_json_error( $status );
 	}
 
-	include_once( ABSPATH . 'wp-admin/includes/theme.php' );
+	include_once ABSPATH . 'wp-admin/includes/theme.php';
 
 	$result = delete_theme( $stylesheet );
 
@@ -3619,8 +3680,8 @@ function wp_ajax_install_plugin() {
 		wp_send_json_error( $status );
 	}
 
-	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
 	$api = plugins_api( 'plugin_information', array(
 		'slug'   => sanitize_key( wp_unslash( $_POST['slug'] ) ),
@@ -3733,7 +3794,7 @@ function wp_ajax_update_plugin() {
 		$status['oldVersion'] = sprintf( __( 'Version %s' ), $plugin_data['Version'] );
 	}
 
-	include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 	wp_update_plugins();
 
@@ -4375,3 +4436,166 @@ function wp_ajax_wp_privacy_erase_personal_data() {
 
 	wp_send_json_success( $response );
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Ajax handler for site health checks on server communication.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_dotorg_communication() {
+	check_ajax_referer( 'health-check-site-status' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! class_exists( 'WP_Site_Health' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+	}
+
+	$site_health = WP_Site_Health::get_instance();
+	wp_send_json_success( $site_health->get_test_dotorg_communication() );
+}
+
+/**
+ * Ajax handler for site health checks on debug mode.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_is_in_debug_mode() {
+	wp_verify_nonce( 'health-check-site-status' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! class_exists( 'WP_Site_Health' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+	}
+
+	$site_health = WP_Site_Health::get_instance();
+	wp_send_json_success( $site_health->get_test_is_in_debug_mode() );
+}
+
+/**
+ * Ajax handler for site health checks on background updates.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_background_updates() {
+	check_ajax_referer( 'health-check-site-status' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! class_exists( 'WP_Site_Health' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+	}
+
+	$site_health = WP_Site_Health::get_instance();
+	wp_send_json_success( $site_health->get_test_background_updates() );
+}
+
+
+/**
+ * Ajax handler for site health checks on loopback requests.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_loopback_requests() {
+	check_ajax_referer( 'health-check-site-status' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) ) {
+		wp_send_json_error();
+	}
+
+	if ( ! class_exists( 'WP_Site_Health' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+	}
+
+	$site_health = WP_Site_Health::get_instance();
+	wp_send_json_success( $site_health->get_test_loopback_requests() );
+}
+
+/**
+ * Ajax handler for site health check to update the result status.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_site_status_result() {
+	check_ajax_referer( 'health-check-site-status-result' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) ) {
+		wp_send_json_error();
+	}
+
+	set_transient( 'health-check-site-status-result', wp_json_encode( $_POST['counts'] ) );
+
+	wp_send_json_success();
+}
+
+/**
+ * Ajax handler for site health check to get directories and database sizes.
+ *
+ * @since 5.2.0
+ */
+function wp_ajax_health_check_get_sizes() {
+	check_ajax_referer( 'health-check-site-status-result' );
+
+	if ( ! current_user_can( 'view_site_health_checks' ) || is_multisite() ) {
+		wp_send_json_error();
+	}
+
+	if ( ! class_exists( 'WP_Debug_Data' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-debug-data.php';
+	}
+
+	$sizes_data = WP_Debug_Data::get_sizes();
+	$all_sizes  = array( 'raw' => 0 );
+
+	foreach ( $sizes_data as $name => $value ) {
+		$name = sanitize_text_field( $name );
+		$data = array();
+
+		if ( isset( $value['size'] ) ) {
+			if ( is_string( $value['size'] ) ) {
+				$data['size'] = sanitize_text_field( $value['size'] );
+			} else {
+				$data['size'] = (int) $value['size'];
+			}
+		}
+
+		if ( isset( $value['debug'] ) ) {
+			if ( is_string( $value['debug'] ) ) {
+				$data['debug'] = sanitize_text_field( $value['debug'] );
+			} else {
+				$data['debug'] = (int) $value['debug'];
+			}
+		}
+
+		if ( ! empty( $value['raw'] ) ) {
+			$data['raw'] = (int) $value['raw'];
+		}
+
+		$all_sizes[ $name ] = $data;
+	}
+
+	if ( isset( $all_sizes['total_size']['debug'] ) && 'not available' === $all_sizes['total_size']['debug'] ) {
+		wp_send_json_error( $all_sizes );
+	}
+
+	wp_send_json_success( $all_sizes );
+}
+
+/**
+ * Ajax handler to renew the REST API nonce.
+ *
+ * @since 5.3.0
+ */
+function wp_ajax_rest_nonce() {
+	exit( wp_create_nonce( 'wp_rest' ) );
+}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

@@ -7,11 +7,19 @@
  * @since WP-3.1.0
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 /** ClassicPress Translation Installation API */
 require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+=======
+/** Load WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+
+/** WordPress Translation Installation API */
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! current_user_can( 'create_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to add sites to this network.' ) );
@@ -183,7 +191,7 @@ $parent_file = 'sites.php';
 
 wp_enqueue_script( 'user-suggest' );
 
-require( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 
@@ -266,4 +274,4 @@ if ( ! empty( $messages ) ) {
 	</form>
 </div>
 <?php
-require( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-footer.php';

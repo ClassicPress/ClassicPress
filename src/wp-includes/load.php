@@ -132,6 +132,10 @@ function wp_check_php_mysql_versions() {
 	}
 
 	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! extension_loaded( 'mysqlnd' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
+<<<<<<< HEAD
+=======
+		require_once ABSPATH . WPINC . '/functions.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		wp_load_translations_early();
 
 		$protocol = wp_get_server_protocol();
@@ -177,7 +181,7 @@ function wp_maintenance() {
 
 	global $upgrading;
 
-	include( ABSPATH . '.maintenance' );
+	require ABSPATH . '.maintenance';
 	// If the $upgrading timestamp is older than 10 minutes, don't die.
 	if ( ( time() - $upgrading ) >= 600 )
 		return;
@@ -200,10 +204,14 @@ function wp_maintenance() {
 	}
 
 	if ( file_exists( WP_CONTENT_DIR . '/maintenance.php' ) ) {
-		require_once( WP_CONTENT_DIR . '/maintenance.php' );
+		require_once WP_CONTENT_DIR . '/maintenance.php';
 		die();
 	}
 
+<<<<<<< HEAD
+=======
+	require_once ABSPATH . WPINC . '/functions.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	wp_load_translations_early();
 
 	$protocol = wp_get_server_protocol();
@@ -392,9 +400,16 @@ function wp_set_lang_dir() {
 function require_wp_db() {
 	global $wpdb;
 
+<<<<<<< HEAD
 	require_once( ABSPATH . WPINC . '/wp-db.php' );
 	if ( file_exists( WP_CONTENT_DIR . '/db.php' ) )
 		require_once( WP_CONTENT_DIR . '/db.php' );
+=======
+	require_once ABSPATH . WPINC . '/wp-db.php';
+	if ( file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
+		require_once WP_CONTENT_DIR . '/db.php';
+	}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	if ( isset( $wpdb ) ) {
 		return;
@@ -479,6 +494,27 @@ function wp_using_ext_object_cache( $using = null ) {
  */
 function wp_start_object_cache() {
 	global $wp_filter;
+<<<<<<< HEAD
+=======
+	static $first_init = true;
+
+	// Only perform the following checks once.
+	if ( $first_init ) {
+		if ( ! function_exists( 'wp_cache_init' ) ) {
+			/*
+			 * This is the normal situation. First-run of this function. No
+			 * caching backend has been loaded.
+			 *
+			 * We try to load a custom caching backend, and then, if it
+			 * results in a wp_cache_init() function existing, we note
+			 * that an external object cache is being used.
+			 */
+			if ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+				require_once WP_CONTENT_DIR . '/object-cache.php';
+				if ( function_exists( 'wp_cache_init' ) ) {
+					wp_using_ext_object_cache( true );
+				}
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 	$first_init = false;
  	if ( ! function_exists( 'wp_cache_init' ) ) {
@@ -506,7 +542,11 @@ function wp_start_object_cache() {
 	}
 
 	if ( ! wp_using_ext_object_cache() ) {
+<<<<<<< HEAD
 		require_once ( ABSPATH . WPINC . '/cache.php' );
+=======
+		require_once ABSPATH . WPINC . '/cache.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 	}
 
 	/*
@@ -544,9 +584,14 @@ function wp_not_installed() {
 	} elseif ( ! is_blog_installed() && ! wp_installing() ) {
 		nocache_headers();
 
+<<<<<<< HEAD
 		require( ABSPATH . WPINC . '/kses.php' );
 		require( ABSPATH . WPINC . '/pluggable.php' );
 		require( ABSPATH . WPINC . '/formatting.php' );
+=======
+		require ABSPATH . WPINC . '/kses.php';
+		require ABSPATH . WPINC . '/pluggable.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 		$link = wp_guess_url() . '/wp-admin/install.php';
 

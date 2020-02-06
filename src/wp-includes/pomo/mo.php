@@ -7,6 +7,7 @@
  * @subpackage mo
  */
 
+<<<<<<< HEAD
 require_once dirname(__FILE__) . '/translations.php';
 require_once dirname(__FILE__) . '/streams.php';
 
@@ -41,6 +42,30 @@ class MO extends Gettext_Translations {
 
 		if ( ! $reader->is_resource() ) {
 			return false;
+=======
+require_once __DIR__ . '/translations.php';
+require_once __DIR__ . '/streams.php';
+
+if ( ! class_exists( 'MO', false ) ) :
+	class MO extends Gettext_Translations {
+
+		var $_nplurals = 2;
+
+		/**
+		 * Loaded MO file.
+		 *
+		 * @var string
+		 */
+		private $filename = '';
+
+		/**
+		 * Returns the loaded MO file.
+		 *
+		 * @return string The loaded MO file.
+		 */
+		public function get_filename() {
+			return $this->filename;
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 		}
 
 		$this->filename = (string) $filename;

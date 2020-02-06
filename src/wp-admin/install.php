@@ -34,6 +34,7 @@ if ( false ) {
  */
 define( 'WP_INSTALLING', true );
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
 
@@ -42,9 +43,19 @@ require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 /** Load ClassicPress Translation Install API */
 require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+=======
+/** Load WordPress Bootstrap */
+require_once dirname( __DIR__ ) . '/wp-load.php';
+
+/** Load WordPress Administration Upgrade API */
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+/** Load WordPress Translation Install API */
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 /** Load wpdb */
-require_once( ABSPATH . WPINC . '/wp-db.php' );
+require_once ABSPATH . WPINC . '/wp-db.php';
 
 // Prevent browser caching.
 nocache_headers();

@@ -3,7 +3,7 @@
  * Plugins may load this file to gain access to special helper functions for
  * plugin installation. This file is not included by ClassicPress and it is
  * recommended, to prevent fatal errors, that this file is included using
- * require_once().
+ * require_once.
  *
  * These functions are not optimized for speed, but they should only be used
  * once in a while, so speed shouldn't be a concern. If it is and you are
@@ -34,8 +34,13 @@
  * @subpackage Plugin
  */
 
+<<<<<<< HEAD
 /** Load ClassicPress Bootstrap */
 require_once(dirname(dirname(__FILE__)).'/wp-load.php');
+=======
+/** Load WordPress Bootstrap */
+require_once dirname( __DIR__ ) . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 if ( ! function_exists('maybe_create_table') ) :
 /**

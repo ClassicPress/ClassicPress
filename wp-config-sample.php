@@ -81,9 +81,19 @@ define('WP_DEBUG', false);
 
 /* That's all, stop editing! Happy blogging. */
 
+<<<<<<< HEAD
 /** Absolute path to the ClassicPress directory. */
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Sets up ClassicPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
+=======
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', __DIR__ . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.

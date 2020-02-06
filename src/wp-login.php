@@ -8,8 +8,13 @@
  * @package ClassicPress
  */
 
+<<<<<<< HEAD
 /** Make sure that the ClassicPress bootstrap has run before continuing. */
 require( dirname(__FILE__) . '/wp-load.php' );
+=======
+/** Make sure that the WordPress bootstrap has run before continuing. */
+require __DIR__ . '/wp-load.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 // Redirect to https login if forced to use SSL
 if ( force_ssl_admin() && ! is_ssl() ) {

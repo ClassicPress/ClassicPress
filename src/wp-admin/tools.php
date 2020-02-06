@@ -6,8 +6,25 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 /** ClassicPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
+=======
+if ( isset( $_GET['page'] ) && ! empty( $_POST ) ) {
+	// Ensure POST-ing to `tools.php?page=export_personal_data` and `tools.php?page=remove_personal_data`
+	// continues to work after creating the new files for exporting and erasing of personal data.
+	if ( $_GET['page'] === 'export_personal_data' ) {
+		require_once ABSPATH . 'wp-admin/export-personal-data.php';
+		return;
+	} elseif ( $_GET['page'] === 'remove_personal_data' ) {
+		require_once ABSPATH . 'wp-admin/erase-personal-data.php';
+		return;
+	}
+}
+
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
 
 $is_privacy_guide = ( isset( $_GET['wp-privacy-policy-guide'] ) && current_user_can( 'manage_privacy_options' ) );
 
@@ -35,7 +52,7 @@ if ( $is_privacy_guide ) {
 	);
 }
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 <div class="wrap">
@@ -73,4 +90,9 @@ if ( $is_privacy_guide ) {
 ?>
 </div>
 <?php
+<<<<<<< HEAD
 include( ABSPATH . 'wp-admin/admin-footer.php' );
+=======
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> e72fff9cef... Code Modernization: Replace `dirname( __FILE__ )` calls with `__DIR__` magic constant.
