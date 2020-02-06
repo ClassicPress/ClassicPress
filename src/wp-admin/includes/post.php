@@ -1365,7 +1365,7 @@ function get_sample_permalink_html( $id, $new_title = null, $new_slug = null ) {
 
 		// Encourage a pretty permalink setting
 		if ( '' == get_option( 'permalink_structure' ) && current_user_can( 'manage_options' ) && !( 'page' == get_option('show_on_front') && $id == get_option('page_on_front') ) ) {
-			$return .= '<span id="change-permalinks"><a href="options-permalink.php" class="button button-small" target="_blank">' . __('Change Permalinks') . "</a></span>\n";
+			$return .= '<span id="change-permalinks"><a href="options-permalink.php" class="button button-small" target="_blank" rel="noopener noreferrer">' . __('Change Permalinks') . "</a></span>\n";
 		}
 	} else {
 		if ( mb_strlen( $post_name ) > 34 ) {

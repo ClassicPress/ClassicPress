@@ -2688,7 +2688,7 @@ function media_upload_max_image_resize() {
 	$a = $end = '';
 
 	if ( current_user_can( 'manage_options' ) ) {
-		$a = '<a href="' . esc_url( admin_url( 'options-media.php' ) ) . '" target="_blank">';
+		$a = '<a href="' . esc_url( admin_url( 'options-media.php' ) ) . '" target="_blank" rel="noopener noreferrer">';
 		$end = '</a>';
 	}
 ?>

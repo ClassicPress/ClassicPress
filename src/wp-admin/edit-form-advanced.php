@@ -103,13 +103,13 @@ $viewable = is_post_type_viewable( $post_type_object );
 if ( $viewable ) {
 
 	// Preview post link.
-	$preview_post_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
+	$preview_post_link_html = sprintf( ' <a target="_blank" rel="noopener noreferrer" href="%1$s">%2$s</a>',
 		esc_url( $preview_url ),
 		__( 'Preview post' )
 	);
 
 	// Scheduled post preview link.
-	$scheduled_post_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
+	$scheduled_post_link_html = sprintf( ' <a target="_blank" rel="noopener noreferrer" href="%1$s">%2$s</a>',
 		esc_url( $permalink ),
 		__( 'Preview post' )
 	);
@@ -121,13 +121,13 @@ if ( $viewable ) {
 	);
 
 	// Preview page link.
-	$preview_page_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
+	$preview_page_link_html = sprintf( ' <a target="_blank" rel="noopener noreferrer" href="%1$s">%2$s</a>',
 		esc_url( $preview_url ),
 		__( 'Preview page' )
 	);
 
 	// Scheduled page preview link.
-	$scheduled_page_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
+	$scheduled_page_link_html = sprintf( ' <a target="_blank" rel="noopener noreferrer" href="%1$s">%2$s</a>',
 		esc_url( $permalink ),
 		__( 'Preview page' )
 	);

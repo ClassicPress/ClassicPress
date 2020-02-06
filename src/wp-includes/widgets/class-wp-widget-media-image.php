@@ -250,7 +250,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				$link .= sprintf( ' rel="%s"', esc_attr( $instance['link_rel'] ) );
 			}
 			if ( ! empty( $instance['link_target_blank'] ) ) {
-				$link .= ' target="_blank"';
+				$link .= ' target="_blank" rel="noopener noreferrer"';
 			}
 			$link .= '>';
 			$link .= $image;
