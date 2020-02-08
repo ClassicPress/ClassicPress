@@ -14,6 +14,7 @@ matrix:
   include:
   - php: 7.1
     env: WP_TRAVISCI=travis:precommit-and-js
+  - php: 7.4
   - php: 7.3
   - php: 7.2
   - php: 7.1
@@ -52,7 +53,7 @@ before_script:
 - |
   # Install the specified version of PHPUnit depending on the PHP version:
   case "$TRAVIS_PHP_VERSION" in
-    7.3|7.2|7.1|7.0|nightly)
+    7.4|7.3|7.2|7.1|7.0|nightly)
       echo "Using PHPUnit 6.x"
       composer global require "phpunit/phpunit:^6"
       ;;
