@@ -362,18 +362,8 @@ class Services_JSON
                                 $ascii .= '?';
                                 break;
                             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-                            $char = pack('C*', $ord_var_c, ord($var{$c + 1}));
-=======
                             
                             $char = pack('C*', $ord_var_c, ord($var[$c + 1]));
->>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
-=======
-                            
-                            $char = pack('C*', $ord_var_c, ord($var[$c + 1]));
->>>>>>> 5ed5587545... PHP 7.4 compatibility fix / accessing arrays/string using curly brace syntax
                             $c += 1;
                             $utf16 = $this->utf82utf16($char);
                             $ascii .= sprintf('\u%04s', bin2hex($utf16));
