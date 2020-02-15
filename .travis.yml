@@ -26,6 +26,7 @@ matrix:
   - php: nightly
   allow_failures:
   - php: nightly
+  - php: 7.4
 before_install:
 - |
   mysql -u root -e "CREATE DATABASE wordpress_tests;"
