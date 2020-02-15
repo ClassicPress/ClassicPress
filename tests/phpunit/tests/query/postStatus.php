@@ -290,10 +290,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 	 */
 	public function test_single_post_with_nonexisting_status_should_not_be_shown_for_user_who_cannot_edit_others_posts() {
 		register_post_type( 'foo_pt' );
-<<<<<<< HEAD
-		register_post_status( 'foo_ps', array( 'public' => false ) );
-		$p = self::factory()->post->create( array( 'post_status' => 'foo_ps', 'post_author' => self::$author_user_id ) );
-=======
+
 		register_post_status( 'foo_ps', array( 'public' => true ) );
 		$p = self::factory()->post->create(
 			array(
@@ -327,7 +324,6 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			)
 		);
 		_unregister_post_status( 'foo_ps' );
->>>>>>> 5e8563eb6b... Posts, Post Types: Fail gracefully when checking whether a single post with an unregistered post status should be displayed in `WP_Query::get_posts()`.
 
 		wp_set_current_user( self::$editor_user_id );
 
