@@ -601,12 +601,10 @@ function maintenance_nag() {
 		 * This flag is cleared whenever a successful update occurs using Core_Upgrader.
 		 */
 		$comparison = ! empty( $failed['critical'] ) ? '>=' : '>';
-<<<<<<< HEAD
-		if ( version_compare( $failed['attempted'], $wp_version, $comparison ) )
-=======
+
 		if ( isset( $failed['attempted'] ) && version_compare( $failed['attempted'], $wp_version, $comparison ) ) {
->>>>>>> 3514a52019... PHP 7.4: Fix another instance of array access on a datatype that cannot be accessed as an array.
 			$nag = true;
+		}
 	}
 
 	if ( ! $nag )
