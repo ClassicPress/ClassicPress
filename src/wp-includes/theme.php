@@ -2291,14 +2291,10 @@ function add_theme_support( $feature ) {
 		case 'custom-header-uploads' :
 			return add_theme_support( 'custom-header', array( 'uploads' => true ) );
 
-<<<<<<< HEAD
-		case 'custom-header' :
-			if ( ! is_array( $args ) )
-=======
 		case 'custom-header':
 			if ( true === $args ) {
->>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
 				$args = array( 0 => array() );
+			}
 
 			$defaults = array(
 				'default-image' => '',
@@ -2375,14 +2371,10 @@ function add_theme_support( $feature ) {
 
 			break;
 
-<<<<<<< HEAD
-		case 'custom-background' :
-			if ( ! is_array( $args ) )
-=======
 		case 'custom-background':
 			if ( true === $args ) {
->>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
 				$args = array( 0 => array() );
+			}
 
 			$defaults = array(
 				'default-image'          => '',
