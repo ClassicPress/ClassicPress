@@ -205,55 +205,45 @@ function map_meta_cap( $cap, $user_id ) {
 		if ( ! $post ) {
 			$caps[] = 'do_not_allow';
 			break;
-<<<<<<< HEAD
 		}
-=======
-		case 'read_post':
-		case 'read_page':
-			$post = get_post( $args[0] );
+
+		if ( 'revision' == $post->post_type ) {
+			$post = get_post( $post->post_parent );
 			if ( ! $post ) {
 				$caps[] = 'do_not_allow';
 				break;
 			}
+		}
 
-			if ( 'revision' == $post->post_type ) {
-				$post = get_post( $post->post_parent );
-				if ( ! $post ) {
-					$caps[] = 'do_not_allow';
-					break;
-				}
-			}
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $post_type ) {
+			/* translators: 1: Post type, 2: Capability name. */
+			_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
+			$caps[] = 'edit_others_posts';
+			break;
+		}
 
-			$post_type = get_post_type_object( $post->post_type );
-			if ( ! $post_type ) {
-				/* translators: 1: Post type, 2: Capability name. */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
-				$caps[] = 'edit_others_posts';
-				break;
+		if ( ! $post_type->map_meta_cap ) {
+			$caps[] = $post_type->cap->$cap;
+			// Prior to 3.1 we would re-call map_meta_cap here.
+			if ( 'read_post' == $cap ) {
+				$cap = $post_type->cap->$cap;
 			}
+			break;
+		}
 
-			if ( ! $post_type->map_meta_cap ) {
-				$caps[] = $post_type->cap->$cap;
-				// Prior to 3.1 we would re-call map_meta_cap here.
-				if ( 'read_post' == $cap ) {
-					$cap = $post_type->cap->$cap;
-				}
-				break;
-			}
+		$status_obj = get_post_status_object( $post->post_status );
+		if ( ! $status_obj ) {
+			/* translators: 1: Post status, 2: Capability name. */
+			_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post status %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post with that status.' ), $post->post_status, $cap ), '5.4.0' );
+			$caps[] = 'edit_others_posts';
+			break;
+		}
 
-			$status_obj = get_post_status_object( $post->post_status );
-			if ( ! $status_obj ) {
-				/* translators: 1: Post status, 2: Capability name. */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post status %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post with that status.' ), $post->post_status, $cap ), '5.4.0' );
-				$caps[] = 'edit_others_posts';
-				break;
-			}
-
-			if ( $status_obj->public ) {
-				$caps[] = $post_type->cap->read;
-				break;
-			}
->>>>>>> 6f15251aa4... Posts, Post Types: Fail gracefully when checking mapped cap against unregistered post status.
+		if ( $status_obj->public ) {
+			$caps[] = $post_type->cap->read;
+			break;
+		}
 
 		if ( 'revision' == $post->post_type ) {
 			$post = get_post( $post->post_parent );

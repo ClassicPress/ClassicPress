@@ -1658,9 +1658,6 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/17253
-=======
 	 * @ticket 48653
 	 * @expectedIncorrectUsage map_meta_cap
 	 */
@@ -1684,8 +1681,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17253
->>>>>>> 6f15251aa4... Posts, Post Types: Fail gracefully when checking mapped cap against unregistered post status.
+	 * @see https://core.trac.wordpress.org/ticket/17253
 	 */
 	function test_cpt_with_page_capability_type() {
 
