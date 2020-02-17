@@ -613,7 +613,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 43590
+	 * @see https://core.trac.wordpress.org/ticket/43590
 	 */
 	function test_wp_no_robots() {
 		// Simulate private site (search engines discouraged).

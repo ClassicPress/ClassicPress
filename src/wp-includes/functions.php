@@ -2403,7 +2403,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*:
+				 * Everything else including image/* and application/*: 
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2412,7 +2412,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed
+	// The mime type must be allowed 
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
