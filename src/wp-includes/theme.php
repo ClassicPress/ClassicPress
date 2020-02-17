@@ -2244,13 +2244,8 @@ function add_theme_support( $feature ) {
 
 			break;
 
-<<<<<<< HEAD
-		case 'post-formats' :
-			if ( is_array( $args[0] ) ) {
-=======
 		case 'post-formats':
 			if ( isset( $args[0] ) && is_array( $args[0] ) ) {
->>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
 				$post_formats = get_post_format_slugs();
 				unset( $post_formats['standard'] );
 
@@ -2263,13 +2258,8 @@ function add_theme_support( $feature ) {
 			if ( empty( $args[0] ) ) {
 				// Build an array of types for back-compat.
 				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
-<<<<<<< HEAD
-			} elseif ( ! is_array( $args[0] ) ) {
-				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), 'WP-3.6.1' );
-=======
 			} elseif ( ! isset( $args[0] ) || ! is_array( $args[0] ) ) {
-				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), '3.6.1' );
->>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
+				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), 'WP-3.6.1' );
 				return false;
 			}
 

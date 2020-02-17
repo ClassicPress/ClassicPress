@@ -472,18 +472,12 @@ class WP_Customize_Nav_Menu_Item_Setting extends WP_Customize_Setting {
 	 * @return array Array of menu items,
 	 */
 	public function filter_wp_get_nav_menu_items( $items, $menu, $args ) {
-<<<<<<< HEAD
-		$this_item = $this->value();
-		$current_nav_menu_term_id = $this_item['nav_menu_term_id'];
-		unset( $this_item['nav_menu_term_id'] );
-=======
 		$this_item                = $this->value();
 		$current_nav_menu_term_id = null;
 		if ( isset( $this_item['nav_menu_term_id'] ) ) {
 			$current_nav_menu_term_id = $this_item['nav_menu_term_id'];
 			unset( $this_item['nav_menu_term_id'] );
 		}
->>>>>>> 2da7f9f524... Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.
 
 		$should_filter = (
 			$menu->term_id === $this->original_nav_menu_term_id
