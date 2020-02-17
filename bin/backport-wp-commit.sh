@@ -187,7 +187,7 @@ edit_merge_msg() {
 			s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
 			s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
 			s,^# Conflicts:,Conflicts:,;
-			s,^#\t,  ,;
+			s,^#\t,- ,;
 			s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
 			if (/\S/) {
 				if (!/^git-svn-id:/) {
@@ -199,7 +199,7 @@ edit_merge_msg() {
 				\$was_blank_line = 1;
 			}
 		}
-		print MSG_W "----\n";
+		print MSG_W "\n---\n\n";
 		print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
 		close MSG_R;
 		close MSG_W;
