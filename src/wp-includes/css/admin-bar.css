@@ -483,7 +483,7 @@ html:lang(he-il) .rtl #wpadminbar *  {
 	height: 18px;
 	margin: 7px 2px 6px 1px;
 	vertical-align: top;
-	display: inline;
+	display: inline-block;
 }
 
 #wpadminbar #wp-admin-bar-wp-logo > .ab-item {
@@ -500,7 +500,7 @@ html:lang(he-il) .rtl #wpadminbar *  {
 	vertical-align: top;
 	padding-top: 4px;
 	margin-left: -2px;
-	display: inline;
+	display: inline-block;
 }
 
 #wpadminbar #wp-admin-bar-appearance {
