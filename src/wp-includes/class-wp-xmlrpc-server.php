@@ -561,8 +561,13 @@ class wp_xmlrpc_server extends IXR_Server {
 				'readonly'      => false,
 				'option'        => 'users_can_register'
 			),
-			'login_custom_logo' => array(
+			'login_custom_logo_check' => array(
 				'desc'          => __( 'Use the site logo as the login image' ),
+				'readonly'      => false,
+				'option'        => 'login_custom_logo_check'
+			),
+			'login_custom_logo' => array(
+				'desc'          => __( 'Site logo for the admin login image' ),
 				'readonly'      => false,
 				'option'        => 'login_custom_logo'
 			),

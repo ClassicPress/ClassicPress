@@ -4310,19 +4310,19 @@ function wp_heartbeat_settings( $settings ) {
 /**
  * Return the HTML for the image on the login screen. This is either a link
  * showing the ClassicPress logo (the default) or the site's custom logo image
- * (if a logo image is set and the `login_custom_logo` option is enabled).
+ * (if a logo image is set and the `login_custom_logo_check` option is enabled).
  *
  * @since 1.1.0
  */
 function get_login_image_html() {
 	/**
-	 * Determine whether a site admin has enabled the `login_custom_logo`
+	 * Determine whether a site admin has enabled the `login_custom_logo_check`
 	 * option and set a custom logo. If so, we can use it on the login page.
 	 */
-	$login_custom_logo = get_option( 'login_custom_logo' );
-	$login_custom_logo = ! empty( $login_custom_logo ) && has_custom_logo();
+	$login_custom_logo_check = get_option( 'login_custom_logo_check' );
+	$login_custom_logo_check = ! empty( $login_custom_logo_check ) && has_custom_logo();
 
-	if ( $login_custom_logo ) {
+	if ( $login_custom_logo_check ) {
 		$login_header_url   = home_url( '/' );
 		$login_header_title = get_bloginfo( 'name', 'display' );
 	} elseif ( is_multisite() ) {
@@ -4351,19 +4351,18 @@ function get_login_image_html() {
 	 */
 	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
 
-	if ( $login_custom_logo ) {
-		/**
-		 * If the user has enabled the `login_custom_logo` option and set a
-		 * custom logo, then use the custom logo.
-		 *
-		 * No link text is printed for this option; instead, this functionality
-		 * is covered by the 'alt' attribute of the logo <img> tag.
-		 */
-		$login_header_text = null;
-		$login_image_html  = get_custom_logo( 0, [
-			'href'  => $login_header_url,
-			'title' => $login_header_title,
-		] );
+	/**
+	 * If the user has enabled the `login_custom_logo_check` option and set a
+	 * custom logo, then use the custom logo.
+	 */
+	if ( $login_custom_logo_check ) {
+		return get_custom_logo( 0, array(
+			array(
+				'href'  => $login_header_url,
+				'title' => $login_header_title,
+			)
+		)
+	);
 
 	} else {
 		/**

@@ -119,20 +119,26 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
-<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo">
-<input name="login_custom_logo" type="checkbox" id="login_custom_logo" aria-describedby="custom-login-image-description" value="1" <?php checked('1', get_option('login_custom_logo')); ?> />
-<?php _e('Use the site logo as the login image') ?></label>
-<p class="description" id="custom-login-image-description">
+<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo_check">
+<input name="login_custom_logo_check" type="checkbox" id="login_custom_logo_check" aria-describedby="custom-login-image-check-description" value="1" <?php checked('1', get_option('login_custom_logo_check')); ?> />
+<?php _e('Use the set image below as the login image.') ?></label>
+<p class="description" id="custom-login-image-check-description">
 <?php
-	// From src/wp-admin/menu.php
-	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
 	printf(
-		/* translators: link to the Customizer */
-		__( 'If you set a logo image in the <a href="%s">Customizer</a> and enable this option, then the logo image will be shown at the top of the login page instead of the ClassicPress logo.' ),
-		esc_attr( $customize_url )
+		__( 'If you set an image below and enable this option, then the logo image will be shown at the top of the login page instead of the ClassicPress logo.' )
 	);
 ?>
 </p>
+
+<p><?php // echo get_option('login_custom_logo_check'); ?></p>
+<p><?php // echo get_option('login_custom_logo'); ?></p>
+
+<p>
+<img src="<?php echo ! empty(get_option('login_custom_logo')) ? get_option('login_custom_logo') : 'http://localhost:8888/cc/wp-admin/images/wordpress-logo.svg'; ?>" alt="Admin login page logo" width="100px">
+<input type="button" class="button button-primary" value="Upload Image">
+<!-- <input type="button" class="button button-primary" value="Remove set Image"> -->
+</p>
+
 </fieldset></td>
 </tr>
 

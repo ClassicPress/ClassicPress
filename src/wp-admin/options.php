@@ -84,6 +84,7 @@ $whitelist_options = array(
 	'general' => array(
 		'blogname',
 		'blogdescription',
+		'login_custom_logo_check',
 		'login_custom_logo',
 		'gmt_offset',
 		'date_format',
@@ -159,6 +160,7 @@ if ( get_site_option( 'initial_db_version' ) < 32453 ) {
 	$whitelist_options['writing'][] = 'use_balanceTags';
 }
 
+$whitelist_options['general'][] = 'login_custom_logo_check';
 $whitelist_options['general'][] = 'login_custom_logo';
 
 if ( !is_multisite() ) {
