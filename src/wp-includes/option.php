@@ -1847,13 +1847,24 @@ function register_initial_settings() {
 		) );
 	}
 
-	register_setting( 'general', 'login_custom_logo', array(
+	register_setting( 'general', 'login_custom_logo_check', array(
 		'show_in_rest' => array(
-			'name' => 'login_custom_logo',
+			'name' => 'login_custom_logo_check',
 		),
 		'type'         => 'boolean',
 		'default'      => false,
 		'description'  => __( 'Use the site logo as the login image' ),
+	) );
+
+	register_setting( 'general', 'login_custom_logo', array(
+		'show_in_rest' => array(
+			'name' => 'login_custom_logo',
+			'schema'  => array(
+				'format' => 'uri',
+			),
+		),
+		'type'         => 'string',
+		'description'  => __( 'Site logo used as the login image' ),
 	) );
 
 	if ( ! is_multisite() ) {
