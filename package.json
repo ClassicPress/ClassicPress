@@ -41,7 +41,7 @@
     "webpack-dev-server": "3.8.2"
   },
   "dependencies": {
-    "node-sass": "4.12.0"
+    "node-sass": "4.13.1"
   },
   "collective": {
     "type": "opencollective",
