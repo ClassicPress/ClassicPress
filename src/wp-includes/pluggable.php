@@ -1904,7 +1904,7 @@ function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) 
 	/* translators: %s: user login */
 	$message = sprintf(__('Username: %s'), $user->user_login) . "\r\n\r\n";
 	$message .= __('To set your password, visit the following address:') . "\r\n\r\n";
-	$message .= '<' . network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . ">\r\n\r\n";
+	$message .= network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . "\r\n\r\n";
 
 	$message .= wp_login_url() . "\r\n";
 
