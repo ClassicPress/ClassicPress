@@ -167,53 +167,74 @@ cmd __failure_allowed git cherry-pick --no-commit "$commit_short"
 conflict_status=$?
 set -e
 
-edit_merge_msg() {
-	echo 'Modifying commit message'
-	# edit .git/MERGE_MSG which will be the commit message:
-	# - transform [12345] into WP changeset link
-	# - transform #12345 into WP ticket link
-	# - mark Props lines as coming from WP so we can identify them later
-	# - remove 'git-svn-id:' line
-	# - remove duplicate blank lines
-	# - add 'Merges ... to ClassicPress' line for tracking backported commits
-	perl -w <<PL
-		open MSG_R, '<', '.git/MERGE_MSG'
-			or die "Can't open .git/MERGE_MSG: \$!";
-		open MSG_W, '>', '.git/MERGE_MSG.tmp'
-			or die "Can't open .git/MERGE_MSG.tmp: \$!";
-		print MSG_W 'WP-r$wp_changeset: ';
-		my \$was_blank_line = 0;
-		while (<MSG_R>) {
-			s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
-			s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
-			s,^# Conflicts:,Conflicts:,;
-			s,^#\t,- ,;
-			s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
-			if (/\S/) {
-				if (!/^git-svn-id:/) {
-					\$was_blank_line = 0;
-					print MSG_W \$_;
-				}
-			} else {
-				print MSG_W \$_ if !\$was_blank_line;
-				\$was_blank_line = 1;
+echo 'Modifying commit message'
+# edit .git/MERGE_MSG which will be the commit message:
+# - transform [12345] into WP changeset link
+# - transform #12345 into WP ticket link
+# - mark Props lines as coming from WP so we can identify them later
+# - remove 'git-svn-id:' line
+# - remove duplicate blank lines
+# - add 'Merges ... to ClassicPress' line for tracking backported commits
+# - preserve information about conflicting files
+perl -w <<PL
+	open MSG_R, '<', '.git/MERGE_MSG'
+		or die "Can't open .git/MERGE_MSG: \$!";
+	open MSG_W, '>', '.git/MERGE_MSG.tmp'
+		or die "Can't open .git/MERGE_MSG.tmp: \$!";
+	print MSG_W 'WP-r$wp_changeset: ';
+	my \$was_blank_line = 0;
+	while (<MSG_R>) {
+		s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
+		s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
+		s,^# Conflicts:,Conflicts:,;
+		s,^#\t,- ,;
+		s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
+		if (/\S/) {
+			if (!/^git-svn-id:/) {
+				\$was_blank_line = 0;
+				print MSG_W \$_;
 			}
+		} else {
+			print MSG_W \$_ if !\$was_blank_line;
+			\$was_blank_line = 1;
 		}
-		print MSG_W "\n---\n\n";
-		print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
-		close MSG_R;
-		close MSG_W;
-		rename '.git/MERGE_MSG.tmp', '.git/MERGE_MSG';
+	}
+	print MSG_W "\n---\n\n";
+	print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
+	close MSG_R;
+	close MSG_W;
+	rename '.git/MERGE_MSG.tmp', '.git/MERGE_MSG';
 PL
-}
+
+# Debug info in case something goes wrong
+echo
+echo 'git status before:'
+git status --porcelain
+echo
+
+# Add "both modified" or "added by us/them" files
+git status --porcelain | grep -P '^[AU][AU] ' | cut -c4- | while read i; do
+	cmd git add "$i"
+done
+
+# Remove "deleted by us" or "deleted by them" files
+git status --porcelain | grep -P '^[DU][DU] ' | cut -c4- | while read i; do
+	cmd git rm "$i"
+done
+
+# Debug info in case something goes wrong
+echo
+echo 'git status after:'
+git status --porcelain
+echo
+
+# Author information is not preserved because we used
+# `git cherry-pick --no-commit` above.
+author=$(git show -s --format='%an <%ae>' "$commit_short")
+cmd git commit --no-edit --allow-empty --author="$author"
+echo
 
 if [ "$conflict_status" -eq 0 ]; then
-	edit_merge_msg
-	# Author information is preserved when there is a conflict, but not here,
-	# because we used `git cherry-pick --no-commit` above.
-	author=$(git show -s --format='%an <%ae>' "$commit_short")
-	cmd git commit --no-edit --author="$author"
-	echo
 	if [ $current_branch = no ]; then
 		echo "All done!  You can push the changes to GitHub now:"
 		echo "git push origin $branch"
@@ -221,31 +242,19 @@ if [ "$conflict_status" -eq 0 ]; then
 		echo "All done!  1 commit was added to your current branch."
 	fi
 else
-	# Apparently `git cherry-pick --no-commit` doesn't use the git sequencer,
-	# but we should because then `git status` shows you the next steps
-	echo "Redoing cherry-pick now that we know there's a conflict"
-	cmd git reset --hard
-	set +e
-	cmd __failure_allowed git cherry-pick "$commit_short"
-	set -e
-	edit_merge_msg
-	echo
 	echo "${color_bold_red}=======${color_reset}"
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
-	echo "Fix and commit the files marked as '${color_bold_red}both modified${color_reset}' before proceeding:"
+	echo "Fix and commit the files that contain <<<< or >>>> conflict markers:"
+	git log -n 1 | grep -P '^\s+- [a-z]'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
-	git status
+	echo "If you're not sure how to do this, just push your changes to GitHub"
+	echo "and we can take care of it!"
 	echo
 	if [ $current_branch = no ]; then
-		echo "After resolving the conflict(s), commit and push the changes to GitHub:"
-		echo "git add ."
-		echo "git cherry-pick --continue"
 		echo "git push origin $branch"
 	else
-		echo "After resolving the conflict(s), commit your changes:"
-		echo "git add ."
-		echo "git cherry-pick --continue"
+		echo "1 commit was added to your current branch."
 	fi
 	# Use a special exit code to indicate conflict
 	exit 3
