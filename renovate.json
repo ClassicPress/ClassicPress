@@ -5,5 +5,8 @@
 	"labels": [
 		"bot"
 	],
-	"commitMessagePrefix": "Renovate[bot]:"
+	"commitMessagePrefix": "Renovate[bot]:",
+	"ignoreDeps": [
+		"uglify-js"
+	]
 }
