@@ -1,15 +1,21 @@
-sudo: false
-dist: trusty
+dist: xenial
+
+services:
+  - mysql
+
 language: php
+
 cache:
   apt: true
   directories:
     - node_modules
     - vendor
     - $HOME/.composer/cache
+
 env:
   global:
     - WP_TRAVISCI=travis:phpunit
+
 matrix:
   include:
   - php: 7.1
@@ -26,6 +32,7 @@ matrix:
   - php: nightly
   allow_failures:
   - php: nightly
+
 before_install:
 - |
   mysql -u root -e "CREATE DATABASE wordpress_tests;"
@@ -38,6 +45,7 @@ before_install:
     cp tests/phpunit/includes/object-cache.php src/wp-content/object-cache.php
     echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   fi
+
 before_script:
 - |
   # Remove Xdebug for a huge performance increase:
@@ -85,4 +93,5 @@ before_script:
 - git --version
 - svn --version
 - locale -a
+
 script: grunt $WP_TRAVISCI
