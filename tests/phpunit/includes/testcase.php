@@ -181,13 +181,17 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Allow tests to be skipped on some automated runs
+	 * Allow tests to be skipped on some automated runs (i.e. Travis builds
+	 * that aren't running against the main branch).
 	 *
-	 * For test runs on Travis for something other than trunk/master 
-	 * we want to skip tests that only need to run for master.
+	 * DISABLED for ClassicPress (we will always run these tests on all
+	 * branches) since we definitely want to know when one of these is failing.
 	 */
 	public function skipOnAutomatedBranches() {
-		// gentenv can be disabled
+		// DISABLED for ClassicPress.
+		return false;
+
+		// getenv can be disabled
 		if ( ! function_exists( 'getenv' ) ) {
 			return false;
 		}
@@ -196,8 +200,13 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$travis_branch       = getenv( 'TRAVIS_BRANCH' );
 		$travis_pull_request = getenv( 'TRAVIS_PULL_REQUEST' );
 
-		if ( false !== $travis_pull_request && 'master' !== $travis_branch ) {
-			$this->markTestSkipped( 'For automated test runs, this test is only run on trunk/master' );
+		if (
+			false !== $travis_pull_request &&
+			'develop' !== $travis_branch
+		) {
+			$this->markTestSkipped(
+				'For automated test runs, this test is only run on the develop branch.'
+			);
 		}
 	}
 
