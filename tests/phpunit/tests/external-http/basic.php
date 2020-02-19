@@ -12,6 +12,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 			$readme,
 			$matches
 		);
+		$this->assertNotEmpty( $matches );
 
 		$response = wp_remote_get(
 			'https://secure.php.net/supported-versions.php'
@@ -26,6 +27,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 			$php,
 			$phpmatches
 		);
+		$this->assertNotEmpty( $phpmatches );
 
 		$this->assertContains(
 			$matches[1],
@@ -42,6 +44,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 			$readme,
 			$matches
 		);
+		$this->assertNotEmpty( $matches );
 
 		$response = wp_remote_get(
 			"https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/"
@@ -56,6 +59,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 			$mysql,
 			$mysqlmatches
 		);
+		$this->assertNotEmpty( $mysqlmatches );
 
 		// Per https://www.mysql.com/support/, Oracle actively supports MySQL
 		// releases for 5 years from GA release

@@ -17,6 +17,7 @@ class Tests_Basic extends WP_UnitTestCase {
 			$license,
 			$matches
 		);
+		$this->assertNotEmpty( $matches );
 		$this->assertEquals(
 			$this_year,
 			trim( $matches[1] ),
@@ -34,6 +35,7 @@ class Tests_Basic extends WP_UnitTestCase {
 			$license,
 			$matches
 		);
+		$this->assertNotEmpty( $matches );
 		$this->assertEquals(
 			$this_year,
 			trim( $matches[1] ),
