@@ -4,7 +4,7 @@
  */
 class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
-	function test_readme_php() {
+	function test_readme_recommended_php_version() {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
@@ -34,7 +34,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 	}
 
-	function test_readme_mysql() {
+	function test_readme_recommended_mysql_version() {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
