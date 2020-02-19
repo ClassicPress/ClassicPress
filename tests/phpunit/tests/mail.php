@@ -275,7 +275,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 43542
+	 * @see https://core.trac.wordpress.org/ticket/43542
 	 */
 	public function test_wp_mail_does_not_duplicate_mime_version_header() {
 		$to       = 'user@example.com';
