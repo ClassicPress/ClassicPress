@@ -97,7 +97,7 @@ if ( ! function_exists( 'classicpress_version' ) ) {
 if ( ! function_exists( 'classicpress_version_short' ) ) {
 	function classicpress_version_short() {
 		global $cp_version;
-		return strtok( $cp_version, '-' );
+		return preg_replace( '#[+-].*$#', '', $cp_version );
 	}
 }
 
