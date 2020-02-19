@@ -2238,14 +2238,14 @@ function add_theme_support( $feature ) {
 			 * Merge post types with any that already declared their support
 			 * for post thumbnails.
 			 */
-			if ( is_array( $args[0] ) && isset( $_wp_theme_features['post-thumbnails'] ) ) {
+			if ( isset( $args[0] ) && is_array( $args[0] ) && isset( $_wp_theme_features['post-thumbnails'] ) ) {
 				$args[0] = array_unique( array_merge( $_wp_theme_features['post-thumbnails'][0], $args[0] ) );
 			}
 
 			break;
 
-		case 'post-formats' :
-			if ( is_array( $args[0] ) ) {
+		case 'post-formats':
+			if ( isset( $args[0] ) && is_array( $args[0] ) ) {
 				$post_formats = get_post_format_slugs();
 				unset( $post_formats['standard'] );
 
@@ -2258,7 +2258,7 @@ function add_theme_support( $feature ) {
 			if ( empty( $args[0] ) ) {
 				// Build an array of types for back-compat.
 				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
-			} elseif ( ! is_array( $args[0] ) ) {
+			} elseif ( ! isset( $args[0] ) || ! is_array( $args[0] ) ) {
 				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), 'WP-3.6.1' );
 				return false;
 			}
@@ -2269,7 +2269,7 @@ function add_theme_support( $feature ) {
 			break;
 
 		case 'custom-logo':
-			if ( ! is_array( $args ) ) {
+			if ( true === $args ) {
 				$args = array( 0 => array() );
 			}
 			$defaults = array(
@@ -2291,9 +2291,10 @@ function add_theme_support( $feature ) {
 		case 'custom-header-uploads' :
 			return add_theme_support( 'custom-header', array( 'uploads' => true ) );
 
-		case 'custom-header' :
-			if ( ! is_array( $args ) )
+		case 'custom-header':
+			if ( true === $args ) {
 				$args = array( 0 => array() );
+			}
 
 			$defaults = array(
 				'default-image' => '',
@@ -2370,9 +2371,10 @@ function add_theme_support( $feature ) {
 
 			break;
 
-		case 'custom-background' :
-			if ( ! is_array( $args ) )
+		case 'custom-background':
+			if ( true === $args ) {
 				$args = array( 0 => array() );
+			}
 
 			$defaults = array(
 				'default-image'          => '',

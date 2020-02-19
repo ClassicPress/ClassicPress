@@ -90,6 +90,13 @@ class WXR_Parser_SimpleXML {
 
 		$base_url = $xml->xpath('/rss/channel/wp:base_site_url');
 		$base_url = (string) trim( $base_url[0] );
+		
+		$base_blog_url = $xml->xpath('/rss/channel/wp:base_blog_url');
+		if ( $base_blog_url ) {
+			$base_blog_url = (string) trim( $base_blog_url[0] );
+		} else {
+			$base_blog_url = $base_url;
+		}
 
 		$namespaces = $xml->getDocNamespaces();
 		if ( ! isset( $namespaces['wp'] ) )
@@ -259,6 +266,7 @@ class WXR_Parser_SimpleXML {
 			'tags' => $tags,
 			'terms' => $terms,
 			'base_url' => $base_url,
+			'base_blog_url' => $base_blog_url,
 			'version' => $wxr_version
 		);
 	}
@@ -312,6 +320,7 @@ class WXR_Parser_XML {
 			'tags' => $this->tag,
 			'terms' => $this->term,
 			'base_url' => $this->base_url,
+			'base_blog_url' => $this->base_blog_url,
 			'version' => $this->wxr_version
 		);
 	}
@@ -402,6 +411,12 @@ class WXR_Parser_XML {
 				break;
 			case 'wp:base_site_url':
 				$this->base_url = $this->cdata;
+				if ( ! isset( $this->base_blog_url ) ) {
+					$this->base_blog_url = $this->cdata;
+				}
+				break;
+			case 'wp:base_blog_url':
+				$this->base_blog_url = $this->cdata;
 				break;
 			case 'wp:wxr_version':
 				$this->wxr_version = $this->cdata;
@@ -431,7 +446,8 @@ class WXR_Parser_Regex {
 	var $tags = array();
 	var $terms = array();
 	var $base_url = '';
-
+	var $base_blog_url = '';
+	
 	function __construct() {
 		$this->has_gzip = is_callable( 'gzopen' );
 	}
@@ -460,6 +476,14 @@ class WXR_Parser_Regex {
 					preg_match( '|<wp:base_site_url>(.*?)</wp:base_site_url>|is', $importline, $url );
 					$this->base_url = $url[1];
 					continue;
+				}
+				
+				if ( false !== strpos( $importline, '<wp:base_blog_url>' ) ) {
+					preg_match( '|<wp:base_blog_url>(.*?)</wp:base_blog_url>|is', $importline, $blog_url );
+					$this->base_blog_url = $blog_url[1];
+					continue;
+				} else {
+					$this->base_blog_url = $this->base_url;	
 				}
 
 				if ( false !== strpos( $importline, '<wp:author>' ) ) {
@@ -508,6 +532,7 @@ class WXR_Parser_Regex {
 			'tags' => $this->tags,
 			'terms' => $this->terms,
 			'base_url' => $this->base_url,
+			'base_blog_url' => $this->base_blog_url,
 			'version' => $wxr_version
 		);
 	}

@@ -295,7 +295,9 @@ class WP_REST_Request implements ArrayAccess {
 	 *
 	 * @since WP-4.4.0
 	 *
-	 * @return array Map containing 'value' and 'parameters' keys.
+	 * @return array|null Map containing 'value' and 'parameters' keys
+	 *                    or null when no valid content-type header was
+	 *                    available.
 	 */
 	public function get_content_type() {
 		$value = $this->get_header( 'content-type' );
@@ -335,7 +337,7 @@ class WP_REST_Request implements ArrayAccess {
 		$order = array();
 
 		$content_type = $this->get_content_type();
-		if ( $content_type['value'] === 'application/json' ) {
+		if ( isset( $content_type['value'] ) && 'application/json' === $content_type['value'] ) {
 			$order[] = 'JSON';
 		}
 
@@ -687,15 +689,6 @@ class WP_REST_Request implements ArrayAccess {
 		}
 
 		parse_str( $this->get_body(), $params );
-
-		/*
-		 * Amazingly, parse_str follows magic quote rules. Sigh.
-		 *
-		 * NOTE: Do not refactor to use `wp_unslash`.
-		 */
-		if ( get_magic_quotes_gpc() ) {
-			$params = stripslashes_deep( $params );
-		}
 
 		/*
 		 * Add to the POST parameters stored internally. If a user has already
