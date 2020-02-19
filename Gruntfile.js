@@ -949,10 +949,11 @@ module.exports = function(grunt) {
 			cmd: 'bash',
 			args: [ '-c', "git ls-files -z | xargs -0 grep -P -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
 		}, (error, {stdout, stderr}, code) => {
-			if ( error ) {
-				throw error;
-			}
-			if ( ( code !== 0 && code !== 1 ) || stderr.length ) {
+			// Ignore error because it is populated for non-zero exit codes:
+			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
+			// An exit code of 1 from `grep` means "no match" which is fine.
+			// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
+			if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
 				throw new Error(
 					`checking for changes failed: code ${code}:\n${stderr + stdout}`
 				);
