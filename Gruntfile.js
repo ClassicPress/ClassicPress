@@ -954,7 +954,7 @@ module.exports = function(grunt) {
 			// An exit code of 1 from `grep` means "no match" which is fine.
 			// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
 			if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
-				throw new Error(
+				grunt.fatal(
 					`checking for changes failed: code ${code}:\n${stderr + stdout}`
 				);
 			}
@@ -964,7 +964,7 @@ module.exports = function(grunt) {
 						/^[^:]+:\d+:/.test( line ) ? line.red : line
 					);
 				} );
-				throw new Error(
+				grunt.fatal(
 					'git conflict markers detected in the above files!'
 				);
 			}
