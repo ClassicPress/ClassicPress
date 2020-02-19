@@ -851,7 +851,8 @@ module.exports = function(grunt) {
 		'precommit:css',
 		'precommit:image',
 		'precommit:emoji',
-		'precommit:php'
+		'precommit:php',
+		'precommit:git-conflicts'
 	] );
 
     grunt.registerTask(
@@ -938,6 +939,36 @@ module.exports = function(grunt) {
 			} else {
 				grunt.log.ok( 'No modified files detected.' );
 			}
+			done();
+		} );
+	} );
+
+    grunt.registerTask( 'precommit:git-conflicts', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'bash',
+			args: [ '-c', "git ls-files -z | xargs -0 grep -P -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+		}, (error, {stdout, stderr}, code) => {
+			if ( error ) {
+				throw error;
+			}
+			if ( ( code !== 0 && code !== 1 ) || stderr.length ) {
+				throw new Error(
+					`checking for changes failed: code ${code}:\n${stderr + stdout}`
+				);
+			}
+			if ( stdout.trim().length ) {
+				stdout.trim().split( '\n' ).forEach( line => {
+					grunt.log.writeln(
+						/^[^:]+:\d+:/.test( line ) ? line.red : line
+					);
+				} );
+				throw new Error(
+					'git conflict markers detected in the above files!'
+				);
+			}
+
 			done();
 		} );
 	} );
