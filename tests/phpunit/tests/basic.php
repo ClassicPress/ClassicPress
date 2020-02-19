@@ -8,9 +8,6 @@
 class Tests_Basic extends WP_UnitTestCase {
 
 	function test_license_wp() {
-		// This test is designed to only run on trunk/master
-		$this->skipOnAutomatedBranches();
-
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
@@ -28,9 +25,6 @@ class Tests_Basic extends WP_UnitTestCase {
 	}
 
 	function test_license_cp() {
-		// This test is designed to only run on trunk/master
-		$this->skipOnAutomatedBranches();
-
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 

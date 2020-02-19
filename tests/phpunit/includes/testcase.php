@@ -181,36 +181,6 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Allow tests to be skipped on some automated runs (i.e. Travis builds
-	 * that aren't running against the main branch).
-	 *
-	 * DISABLED for ClassicPress (we will always run these tests on all
-	 * branches) since we definitely want to know when one of these is failing.
-	 */
-	public function skipOnAutomatedBranches() {
-		// DISABLED for ClassicPress.
-		return false;
-
-		// getenv can be disabled
-		if ( ! function_exists( 'getenv' ) ) {
-			return false;
-		}
-
-		// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-		$travis_branch       = getenv( 'TRAVIS_BRANCH' );
-		$travis_pull_request = getenv( 'TRAVIS_PULL_REQUEST' );
-
-		if (
-			false !== $travis_pull_request &&
-			'develop' !== $travis_branch
-		) {
-			$this->markTestSkipped(
-				'For automated test runs, this test is only run on the develop branch.'
-			);
-		}
-	}
-
-	/**
 	 * Allow tests to be skipped when Multisite is not in use.
 	 *
 	 * Use in conjunction with the ms-required group.

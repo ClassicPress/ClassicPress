@@ -5,9 +5,6 @@
 class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 	function test_readme_php() {
-		// This test is designed to only run on trunk/master
-		$this->skipOnAutomatedBranches();
-
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
@@ -38,9 +35,6 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 	}
 
 	function test_readme_mysql() {
-		// This test is designed to only run on trunk/master
-		$this->skipOnAutomatedBranches();
-
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
