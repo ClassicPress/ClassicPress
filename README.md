@@ -1,16 +1,16 @@
-# <img src="src/wp-admin/images/classicpress-logo-wordmark-gradient-on-transparent.svg" height="60">
+<a href="https://www.classicpress.net"><img src="src/wp-admin/images/classicpress-logo-wordmark-gradient-on-transparent.svg" height="60"></a>
 
 **ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
 
 ClassicPress is a fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
+
+[![Build status](https://travis-ci.com/ClassicPress/ClassicPress.svg?branch=develop)](https://travis-ci.com/ClassicPress/ClassicPress)
 
 For more information, see:
 
 - [The official ClassicPress website](https://www.classicpress.net/)
 - [The ClassicPress Democracy](https://www.classicpress.net/democracy/) (our governance structure)
 - [Suggest features](https://petitions.classicpress.net/)
-
-[![Build status](https://travis-ci.com/ClassicPress/ClassicPress.svg?branch=develop)](https://travis-ci.com/ClassicPress/ClassicPress)
 
 ## Contributions
 
