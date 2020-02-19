@@ -7,20 +7,40 @@
  */
 class Tests_Basic extends WP_UnitTestCase {
 
-	function test_license() {
-		// This test is designed to only run on trunk/master
-		$this->skipOnAutomatedBranches();
-
+	function test_license_wp_copyright_years() {
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
 		// Check WordPress copyright years
-		// TODO: This only applies if we actually pull changes from WP in 2019 or later!
-		preg_match( '#Copyright 2003-(\d+) by the WordPress contributors#', $license, $matches );
-		$this->assertEquals( $this_year, trim( $matches[1] ), "license.txt's year needs to be updated to $this_year." );
+		preg_match(
+			'#Copyright 2003-(\d+) by the WordPress contributors#',
+			$license,
+			$matches
+		);
+		$this->assertNotEmpty( $matches );
+		$this->assertEquals(
+			$this_year,
+			trim( $matches[1] ),
+			"license.txt's year needs to be updated to $this_year : \"{$matches[0]}\""
+		);
+	}
 
-		preg_match( '#Copyright © (2018-)?(\d+) ClassicPress and contributors#', $license, $matches );
-		$this->assertEquals( $this_year, trim( $matches[2] ), "license.txt's year needs to be updated to $this_year." );
+	function test_license_cp_copyright_years() {
+		$license = file_get_contents( ABSPATH . 'license.txt' );
+		$this_year = date( 'Y' );
+
+		// Check ClassicPress copyright years
+		preg_match(
+			'#Copyright © 2018-(\d+) ClassicPress and contributors#',
+			$license,
+			$matches
+		);
+		$this->assertNotEmpty( $matches );
+		$this->assertEquals(
+			$this_year,
+			trim( $matches[1] ),
+			"license.txt's year needs to be updated to $this_year : \"{$matches[0]}\""
+		);
 	}
 
 	function test_package_json() {
