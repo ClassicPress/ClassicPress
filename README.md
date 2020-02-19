@@ -1,10 +1,10 @@
-# ClassicPress <img src="src/wp-admin/images/wordpress-logo.svg" height="32" valign="middle">
-
-[![Build status](https://travis-ci.com/ClassicPress/ClassicPress.svg?branch=develop)](https://travis-ci.com/ClassicPress/ClassicPress)
+<a href="https://www.classicpress.net"><img src="src/wp-admin/images/classicpress-logo-wordmark-gradient-on-transparent.svg" height="60"></a>
 
 **ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
 
-ClassicPress is a hard fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
+ClassicPress is a fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
+
+[![Build status](https://travis-ci.com/ClassicPress/ClassicPress.svg?branch=develop)](https://travis-ci.com/ClassicPress/ClassicPress)
 
 For more information, see:
 
