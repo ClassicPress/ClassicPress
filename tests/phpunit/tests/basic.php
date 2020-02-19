@@ -7,7 +7,7 @@
  */
 class Tests_Basic extends WP_UnitTestCase {
 
-	function test_license_wp() {
+	function test_license_wp_copyright_years() {
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
@@ -24,7 +24,7 @@ class Tests_Basic extends WP_UnitTestCase {
 		);
 	}
 
-	function test_license_cp() {
+	function test_license_cp_copyright_years() {
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
