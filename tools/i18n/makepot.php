@@ -160,7 +160,7 @@ class MakePOT {
 		$old_dir = getcwd();
 		chdir( $git_dir );
 		ob_start();
-		system( 'git describe 2>&1', $exit_code );
+		system( 'git describe', $exit_code );
 		$git_version = trim( ob_get_clean() );
 		if ( $exit_code ) {
 			fwrite( STDERR, "git describe exited with code $exit_code: $git_version\n" );
