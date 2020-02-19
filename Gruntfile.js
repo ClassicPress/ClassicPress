@@ -1,6 +1,7 @@
 /* jshint node:true */
 /* jshint es3:false */
 /* jshint esversion:6 */
+/* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
 const webpackConfig = require( './webpack.config.prod' );
@@ -151,7 +152,6 @@ module.exports = function(grunt) {
 								);
 								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
-							/* jshint quotmark: true */
 							return `$default_version = 'cp_${hash.substr( 0, 8 )}';`;
 						} );
 					}
@@ -187,7 +187,6 @@ module.exports = function(grunt) {
 								);
 							}
 
-							/* jshint quotmark: true */
 							return `$cp_version = '${version}';`;
 						});
 					}
