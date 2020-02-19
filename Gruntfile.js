@@ -881,16 +881,13 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
-		}, (error, {stdout}, code) => {
-			if ( error ) {
-				throw error;
-			}
+		}, (error, {stdout, stderr}, code) => {
 			if ( code !== 0 ) {
-				throw new Error( `git rev-parse failed: code ${code}` );
+				grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
 			}
 			const hash = stdout.trim();
 			if ( ! hash || hash.length !== 40 ) {
-				throw new Error( `git rev-parse returned invalid value: ${hash}` );
+				grunt.fatal( `git rev-parse returned invalid value: ${hash}` );
 			}
 			grunt.config.set( 'dev.git-version', hash );
 			grunt.log.ok(
