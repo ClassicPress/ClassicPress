@@ -374,8 +374,13 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @dataProvider data_script_and_style_tags
 	 * @see https://core.trac.wordpress.org/ticket/30162
+=======
+	 * @ticket 30162
+	 * @dataProvider data_script_and_style_tags
+>>>>>>> 1f7f0a1357... Comments: Add `rel="nofollow ugc"` attribute when converting plain URLs to `<a>` tags in comments via `make_clickable()`.
 	 */
 	public function test_dont_link_script_and_style_tags( $tag ) {
 		$this->assertEquals( $tag, make_clickable( $tag ) );
@@ -394,6 +399,37 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			),
 			array(
 				'<style type="text/css">http://wordpress.org</style>',
+			),
+		);
+	}
+
+	/**
+	 * @ticket 48022
+	 * @dataProvider data_add_rel_ugc_in_comments
+	 */
+	public function test_add_rel_ugc_in_comments( $content, $expected ) {
+		$comment_id = self::factory()->comment->create(
+			array(
+				'comment_content' => $content,
+			)
+		);
+
+		ob_start();
+		comment_text( $comment_id );
+		$comment_text = ob_get_clean();
+
+		$this->assertContains( $expected, make_clickable( $comment_text ) );
+	}
+
+	public function data_add_rel_ugc_in_comments() {
+		return array(
+			array(
+				'http://wordpress.org',
+				'<a href="http://wordpress.org" rel="nofollow ugc">http://wordpress.org</a>',
+			),
+			array(
+				'www.wordpress.org',
+				'<p><a href="http://www.wordpress.org" rel="nofollow ugc">http://www.wordpress.org</a>',
 			),
 		);
 	}

@@ -2544,7 +2544,24 @@ function _make_url_clickable_cb( $matches ) {
 	if ( empty($url) )
 		return $matches[0];
 
-	return $matches[1] . "<a href=\"$url\" rel=\"nofollow\">$url</a>" . $suffix;
+	if ( 'comment_text' === current_filter() ) {
+		$rel = 'nofollow ugc';
+	} else {
+		$rel = 'nofollow';
+	}
+
+	/**
+	 * Filters the rel value that is added to URL matches converted to links.
+	 *
+	 * @since 5.3.0
+	 *
+	 * @param string $rel The rel value.
+	 * @param string $url The matched URL being converted to a link tag.
+	 */
+	$rel = apply_filters( 'make_clickable_rel', $rel, $url );
+	$rel = esc_attr( $rel );
+
+	return $matches[1] . "<a href=\"$url\" rel=\"$rel\">$url</a>" . $suffix;
 }
 
 /**
@@ -2573,7 +2590,17 @@ function _make_web_ftp_clickable_cb( $matches ) {
 	if ( empty($dest) )
 		return $matches[0];
 
-	return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$dest</a>$ret";
+	if ( 'comment_text' === current_filter() ) {
+		$rel = 'nofollow ugc';
+	} else {
+		$rel = 'nofollow';
+	}
+
+	/** This filter is documented in wp-includes/formatting.php */
+	$rel = apply_filters( 'make_clickable_rel', $rel, $dest );
+	$rel = esc_attr( $rel );
+
+	return $matches[1] . "<a href=\"$dest\" rel=\"$rel\">$dest</a>$ret";
 }
 
 /**
@@ -2718,21 +2745,6 @@ function _split_str_by_whitespace( $string, $goal ) {
 }
 
 /**
- * Adds rel nofollow string to all HTML A elements in content.
- *
- * @since WP-1.5.0
- *
- * @param string $text Content that may contain HTML A elements.
- * @return string Converted content.
- */
-function wp_rel_nofollow( $text ) {
-	// This is a pre save filter, so text is already escaped.
-	$text = stripslashes($text);
-	$text = preg_replace_callback('|<a (.+?)>|i', 'wp_rel_nofollow_callback', $text);
-	return wp_slash( $text );
-}
-
-/**
  * Callback to add rel=nofollow string to HTML A element.
  *
  * Will remove already existing rel="nofollow" and rel='nofollow' from the
@@ -2774,7 +2786,187 @@ function wp_rel_nofollow_callback( $matches ) {
 		}
 		$text = trim( $html );
 	}
-	return "<a $text rel=\"" . esc_attr( $rel ) . "\">";
+
+	return "<a $text rel=\"" . esc_attr( $rel ) . '">';
+}
+
+/**
+ * Adds `rel="nofollow"` string to all HTML A elements in content.
+ *
+ * @since 1.5.0
+ *
+ * @param string $text Content that may contain HTML A elements.
+ * @return string Converted content.
+ */
+function wp_rel_nofollow( $text ) {
+	// This is a pre-save filter, so text is already escaped.
+	$text = stripslashes( $text );
+	$text = preg_replace_callback(
+		'|<a (.+?)>|i',
+		function( $matches ) {
+			return wp_rel_callback( $matches, 'nofollow' );
+		},
+		$text
+	);
+	return wp_slash( $text );
+}
+
+/**
+ * Callback to add `rel="nofollow"` string to HTML A element.
+ *
+ * @since 2.3.0
+ * @deprecated 5.3.0 Use wp_rel_callback()
+ *
+ * @param array $matches Single match.
+ * @return string HTML A Element with `rel="nofollow"`.
+ */
+function wp_rel_nofollow_callback( $matches ) {
+	return wp_rel_callback( $matches, 'nofollow' );
+}
+
+/**
+ * Adds `rel="nofollow ugc"` string to all HTML A elements in content.
+ *
+ * @since 5.3.0
+ *
+ * @param string $text Content that may contain HTML A elements.
+ * @return string Converted content.
+ */
+function wp_rel_ugc( $text ) {
+	// This is a pre-save filter, so text is already escaped.
+	$text = stripslashes( $text );
+	$text = preg_replace_callback(
+		'|<a (.+?)>|i',
+		function( $matches ) {
+			return wp_rel_callback( $matches, 'nofollow ugc' );
+		},
+		$text
+	);
+	return wp_slash( $text );
+}
+
+/**
+ * Adds rel noreferrer and noopener to all HTML A elements that have a target.
+ *
+ * @since 5.1.0
+ *
+ * @param string $text Content that may contain HTML A elements.
+ * @return string Converted content.
+ */
+function wp_targeted_link_rel( $text ) {
+	// Don't run (more expensive) regex if no links with targets.
+	if ( stripos( $text, 'target' ) !== false && stripos( $text, '<a ' ) !== false ) {
+		if ( ! is_serialized( $text ) ) {
+			$text = preg_replace_callback( '|<a\s([^>]*target\s*=[^>]*)>|i', 'wp_targeted_link_rel_callback', $text );
+		}
+	}
+
+	return $text;
+}
+
+/**
+ * Callback to add rel="noreferrer noopener" string to HTML A element.
+ *
+ * Will not duplicate existing noreferrer and noopener values
+ * to prevent from invalidating the HTML.
+ *
+ * @since 5.1.0
+ *
+ * @param array $matches Single Match
+ * @return string HTML A Element with rel noreferrer noopener in addition to any existing values
+ */
+function wp_targeted_link_rel_callback( $matches ) {
+	$link_html = $matches[1];
+	$rel_match = array();
+
+	/**
+	 * Filters the rel values that are added to links with `target` attribute.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param string $rel       The rel values.
+	 * @param string $link_html The matched content of the link tag including all HTML attributes.
+	 */
+	$rel = apply_filters( 'wp_targeted_link_rel', 'noopener noreferrer', $link_html );
+
+	// Avoid additional regex if the filter removes rel values.
+	if ( ! $rel ) {
+		return "<a $link_html>";
+	}
+
+	// Value with delimiters, spaces around are optional.
+	$attr_regex = '|rel\s*=\s*?(\\\\{0,1}["\'])(.*?)\\1|i';
+	preg_match( $attr_regex, $link_html, $rel_match );
+
+	if ( empty( $rel_match[0] ) ) {
+		// No delimiters, try with a single value and spaces, because `rel =  va"lue` is totally fine...
+		$attr_regex = '|rel\s*=(\s*)([^\s]*)|i';
+		preg_match( $attr_regex, $link_html, $rel_match );
+	}
+
+	if ( ! empty( $rel_match[0] ) ) {
+		$parts     = preg_split( '|\s+|', strtolower( $rel_match[2] ) );
+		$parts     = array_map( 'esc_attr', $parts );
+		$needed    = explode( ' ', $rel );
+		$parts     = array_unique( array_merge( $parts, $needed ) );
+		$delimiter = trim( $rel_match[1] ) ? $rel_match[1] : '"';
+		$rel       = 'rel=' . $delimiter . trim( implode( ' ', $parts ) ) . $delimiter;
+		$link_html = str_replace( $rel_match[0], $rel, $link_html );
+	} elseif ( preg_match( '|target\s*=\s*?\\\\"|', $link_html ) ) {
+		$link_html .= " rel=\\\"$rel\\\"";
+	} elseif ( preg_match( '#(target|href)\s*=\s*?\'#', $link_html ) ) {
+		$link_html .= " rel='$rel'";
+	} else {
+		$link_html .= " rel=\"$rel\"";
+	}
+
+	return "<a $link_html>";
+}
+
+/**
+ * Adds all filters modifying the rel attribute of targeted links.
+ *
+ * @since 5.1.0
+ */
+function wp_init_targeted_link_rel_filters() {
+	$filters = array(
+		'title_save_pre',
+		'content_save_pre',
+		'excerpt_save_pre',
+		'content_filtered_save_pre',
+		'pre_comment_content',
+		'pre_term_description',
+		'pre_link_description',
+		'pre_link_notes',
+		'pre_user_description',
+	);
+
+	foreach ( $filters as $filter ) {
+		add_filter( $filter, 'wp_targeted_link_rel' );
+	};
+}
+
+/**
+ * Removes all filters modifying the rel attribute of targeted links.
+ *
+ * @since 5.1.0
+ */
+function wp_remove_targeted_link_rel_filters() {
+	$filters = array(
+		'title_save_pre',
+		'content_save_pre',
+		'excerpt_save_pre',
+		'content_filtered_save_pre',
+		'pre_comment_content',
+		'pre_term_description',
+		'pre_link_description',
+		'pre_link_notes',
+		'pre_user_description',
+	);
+
+	foreach ( $filters as $filter ) {
+		remove_filter( $filter, 'wp_targeted_link_rel' );
+	};
 }
 
 /**
