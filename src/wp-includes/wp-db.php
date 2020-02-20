@@ -528,10 +528,6 @@ class wpdb {
 	 * @since WP-3.9.0
 	 * @var array
 	 */
-<<<<<<< HEAD
-	protected $incompatible_modes = array( 'NO_ZERO_DATE', 'ONLY_FULL_GROUP_BY',
-		'STRICT_TRANS_TABLES', 'STRICT_ALL_TABLES', 'TRADITIONAL' );
-=======
 	protected $incompatible_modes = array(
 		'NO_ZERO_DATE',
 		'ONLY_FULL_GROUP_BY',
@@ -540,7 +536,6 @@ class wpdb {
 		'TRADITIONAL',
 		'ANSI',
 	);
->>>>>>> b26b0ccf8c... Database: Add `ANSI` to the list of incompatible SQL modes.
 
 	/**
 	 * Whether to use mysqli over mysql.
