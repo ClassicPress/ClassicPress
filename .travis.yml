@@ -5,7 +5,6 @@ branches:
 
 notifications:
   slack:
-    on_start: never
     on_failure: always
     on_success: change
     on_pull_requests: false
