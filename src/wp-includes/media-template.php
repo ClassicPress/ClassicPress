@@ -141,9 +141,6 @@ function wp_print_media_templates() {
 	$class = 'media-modal wp-core-ui';
 	if ( $is_IE && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7') !== false )
 		$class .= ' ie7';
-<<<<<<< HEAD
-=======
-	}
 
 	$alt_text_description = sprintf(
 		/* translators: 1: link start tag, 2: accessibility text, 3: link end tag */
@@ -156,7 +153,6 @@ function wp_print_media_templates() {
 		),
 		'</a>'
 	);
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 	?>
 	<!--[if lte IE 8]>
 	<style>
