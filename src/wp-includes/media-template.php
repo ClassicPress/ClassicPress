@@ -384,13 +384,10 @@ function wp_print_media_templates() {
 			</div>
 
 			<div class="settings">
-<<<<<<< HEAD
 				<label class="setting" data-setting="url">
 					<span class="name"><?php _e('URL'); ?></span>
 					<input type="text" value="{{ data.url }}" readonly />
 				</label>
-=======
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 				<# if ( 'image' === data.type ) { #>
 					<label class="setting" data-setting="alt">
@@ -573,13 +570,11 @@ function wp_print_media_templates() {
 			</div>
 		</div>
 
-<<<<<<< HEAD
 		<label class="setting" data-setting="url">
 			<span class="name"><?php _e('URL'); ?></span>
 			<input type="text" value="{{ data.url }}" readonly />
 		</label>
-=======
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
+
 		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 		<# if ( 'image' === data.type ) { #>
 			<label class="setting" data-setting="alt">
@@ -609,15 +604,13 @@ function wp_print_media_templates() {
 			<span class="name"><?php _e('Caption'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
 		</label>
-<<<<<<< HEAD
 		<# if ( 'image' === data.type ) { #>
 			<label class="setting" data-setting="alt">
 				<span class="name"><?php _e('Alt Text'); ?></span>
 				<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
 			</label>
 		<# } #>
-=======
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
+
 		<label class="setting" data-setting="description">
 			<span class="name"><?php _e('Description'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
@@ -882,14 +875,11 @@ function wp_print_media_templates() {
 			</label>
 		<?php endif; ?>
 
-<<<<<<< HEAD
 		<label class="setting alt-text">
 			<span><?php _e('Alt Text'); ?></span>
 			<input type="text" data-setting="alt" />
 		</label>
 
-=======
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 		<div class="setting align">
 			<span><?php _e('Align'); ?></span>
 			<div class="button-group button-large" data-setting="align">
@@ -956,14 +946,11 @@ function wp_print_media_templates() {
 						</label>
 					<?php endif; ?>
 
-<<<<<<< HEAD
 					<label class="setting alt-text">
 						<span><?php _e('Alternative Text'); ?></span>
 						<input type="text" data-setting="alt" value="{{ data.model.alt }}" />
 					</label>
 
-=======
->>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 					<h2><?php _e( 'Display Settings' ); ?></h2>
 					<div class="setting align">
 						<span><?php _e('Align'); ?></span>
