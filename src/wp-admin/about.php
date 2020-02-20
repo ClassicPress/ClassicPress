@@ -35,7 +35,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		<div class="wp-badge"></div>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">
-			<a href="about.php" class="nav-tab nav-tab-active"><?php _e( 'What&#8217;s New' ); ?></a>
+			<a href="about.php" class="nav-tab nav-tab-active"><?php _e( 'About' ); ?></a>
 			<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
 			<a href="freedoms.php" class="nav-tab"><?php _e( 'Freedoms' ); ?></a>
 			<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
@@ -53,11 +53,13 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				</p>
 			<?php } ?>
 
-			<h3><?php _e( 'Introducing ClassicPress' ); ?></h3>
+			<h3><?php _e( 'About ClassicPress' ); ?></h3>
 
 			<p>
-				<?php _e(
-					'ClassicPress is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.'
+				<?php printf(
+					/* translators: link to ClassicPress site */
+					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
+					'https://www.classicpress.net'
 				); ?>
 			</p>
 			<p>
