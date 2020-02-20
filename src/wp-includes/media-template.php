@@ -141,6 +141,22 @@ function wp_print_media_templates() {
 	$class = 'media-modal wp-core-ui';
 	if ( $is_IE && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7') !== false )
 		$class .= ' ie7';
+<<<<<<< HEAD
+=======
+	}
+
+	$alt_text_description = sprintf(
+		/* translators: 1: link start tag, 2: accessibility text, 3: link end tag */
+		__( 'Describe %1$sthe purpose of the image%2$s%3$s. Leave empty if the image is purely decorative.' ),
+		'<a href="' . esc_url( 'https://www.w3.org/WAI/tutorials/images/decision-tree' ) . '" target="_blank" rel="noopener noreferrer">',
+		sprintf(
+			'<span class="screen-reader-text"> %s</span>',
+			/* translators: accessibility text */
+			__( '(opens in a new tab)' )
+		),
+		'</a>'
+	);
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 	?>
 	<!--[if lte IE 8]>
 	<style>
@@ -372,11 +388,21 @@ function wp_print_media_templates() {
 			</div>
 
 			<div class="settings">
+<<<<<<< HEAD
 				<label class="setting" data-setting="url">
 					<span class="name"><?php _e('URL'); ?></span>
 					<input type="text" value="{{ data.url }}" readonly />
 				</label>
+=======
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
+				<# if ( 'image' === data.type ) { #>
+					<label class="setting" data-setting="alt">
+						<span class="name"><?php _e( 'Alternative Text' ); ?></span>
+						<input type="text" value="{{ data.alt }}" aria-describedby="alt-text-description" {{ maybeReadOnly }} />
+					</label>
+					<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
+				<# } #>
 				<?php if ( post_type_supports( 'attachment', 'title' ) ) : ?>
 				<label class="setting" data-setting="title">
 					<span class="name"><?php _e('Title'); ?></span>
@@ -398,12 +424,6 @@ function wp_print_media_templates() {
 					<span class="name"><?php _e( 'Caption' ); ?></span>
 					<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
 				</label>
-				<# if ( 'image' === data.type ) { #>
-					<label class="setting" data-setting="alt">
-						<span class="name"><?php _e( 'Alt Text' ); ?></span>
-						<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
-					</label>
-				<# } #>
 				<label class="setting" data-setting="description">
 					<span class="name"><?php _e('Description'); ?></span>
 					<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
@@ -422,6 +442,10 @@ function wp_print_media_templates() {
 						<# } #>
 					</label>
 				<# } #>
+				<label class="setting" data-setting="url">
+					<span class="name"><?php _e( 'Copy Link' ); ?></span>
+					<input type="text" value="{{ data.url }}" readonly />
+				</label>
 				<div class="attachment-compat"></div>
 			</div>
 
@@ -553,11 +577,21 @@ function wp_print_media_templates() {
 			</div>
 		</div>
 
+<<<<<<< HEAD
 		<label class="setting" data-setting="url">
 			<span class="name"><?php _e('URL'); ?></span>
 			<input type="text" value="{{ data.url }}" readonly />
 		</label>
+=======
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
+		<# if ( 'image' === data.type ) { #>
+			<label class="setting" data-setting="alt">
+				<span class="name"><?php _e( 'Alt Text' ); ?></span>
+				<input type="text" value="{{ data.alt }}" aria-describedby="alt-text-description" {{ maybeReadOnly }} />
+			</label>
+			<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
+		<# } #>
 		<?php if ( post_type_supports( 'attachment', 'title' ) ) : ?>
 		<label class="setting" data-setting="title">
 			<span class="name"><?php _e('Title'); ?></span>
@@ -579,15 +613,22 @@ function wp_print_media_templates() {
 			<span class="name"><?php _e('Caption'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
 		</label>
+<<<<<<< HEAD
 		<# if ( 'image' === data.type ) { #>
 			<label class="setting" data-setting="alt">
 				<span class="name"><?php _e('Alt Text'); ?></span>
 				<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
 			</label>
 		<# } #>
+=======
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 		<label class="setting" data-setting="description">
 			<span class="name"><?php _e('Description'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
+		</label>
+		<label class="setting" data-setting="url">
+			<span class="name"><?php _e( 'Copy Link' ); ?></span>
+			<input type="text" value="{{ data.url }}" readonly />
 		</label>
 	</script>
 
@@ -830,6 +871,12 @@ function wp_print_media_templates() {
 			<img src="{{ data.model.url }}" draggable="false" alt="" />
 		</div>
 
+		<label class="setting alt-text has-description">
+			<span><?php _e( 'Alternative Text' ); ?></span>
+			<input type="text" data-setting="alt" aria-describedby="alt-text-description" />
+		</label>
+		<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
+
 		<?php
 		/** This filter is documented in wp-admin/includes/media.php */
 		if ( ! apply_filters( 'disable_captions', '' ) ) : ?>
@@ -839,11 +886,14 @@ function wp_print_media_templates() {
 			</label>
 		<?php endif; ?>
 
+<<<<<<< HEAD
 		<label class="setting alt-text">
 			<span><?php _e('Alt Text'); ?></span>
 			<input type="text" data-setting="alt" />
 		</label>
 
+=======
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 		<div class="setting align">
 			<span><?php _e('Align'); ?></span>
 			<div class="button-group button-large" data-setting="align">
@@ -895,6 +945,12 @@ function wp_print_media_templates() {
 					</div>
 				</div>
 				<div class="column-settings">
+					<label class="setting alt-text has-description">
+						<span><?php _e( 'Alternative Text' ); ?></span>
+						<input type="text" data-setting="alt" value="{{ data.model.alt }}" aria-describedby="alt-text-description" />
+					</label>
+					<p class="description" id="alt-text-description"><?php echo $alt_text_description; ?></p>
+
 					<?php
 					/** This filter is documented in wp-admin/includes/media.php */
 					if ( ! apply_filters( 'disable_captions', '' ) ) : ?>
@@ -904,11 +960,14 @@ function wp_print_media_templates() {
 						</label>
 					<?php endif; ?>
 
+<<<<<<< HEAD
 					<label class="setting alt-text">
 						<span><?php _e('Alternative Text'); ?></span>
 						<input type="text" data-setting="alt" value="{{ data.model.alt }}" />
 					</label>
 
+=======
+>>>>>>> 026abd4bc6... Accessibility: improve the "URL" and "Alt text" fields in the media modals.
 					<h2><?php _e( 'Display Settings' ); ?></h2>
 					<div class="setting align">
 						<span><?php _e('Align'); ?></span>
