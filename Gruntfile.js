@@ -1,6 +1,7 @@
 /* jshint node:true */
 /* jshint es3:false */
 /* jshint esversion:6 */
+/* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
 const webpackConfig = require( './webpack.config.prod' );
@@ -151,7 +152,6 @@ module.exports = function(grunt) {
 								);
 								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
-							/* jshint quotmark: true */
 							return `$default_version = 'cp_${hash.substr( 0, 8 )}';`;
 						} );
 					}
@@ -187,7 +187,6 @@ module.exports = function(grunt) {
 								);
 							}
 
-							/* jshint quotmark: true */
 							return `$cp_version = '${version}';`;
 						});
 					}
@@ -851,7 +850,8 @@ module.exports = function(grunt) {
 		'precommit:css',
 		'precommit:image',
 		'precommit:emoji',
-		'precommit:php'
+		'precommit:php',
+		'precommit:git-conflicts'
 	] );
 
     grunt.registerTask(
@@ -881,16 +881,13 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
-		}, (error, {stdout}, code) => {
-			if ( error ) {
-				throw error;
-			}
+		}, (error, {stdout, stderr}, code) => {
 			if ( code !== 0 ) {
-				throw new Error( `git rev-parse failed: code ${code}` );
+				grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
 			}
 			const hash = stdout.trim();
 			if ( ! hash || hash.length !== 40 ) {
-				throw new Error( `git rev-parse returned invalid value: ${hash}` );
+				grunt.fatal( `git rev-parse returned invalid value: ${hash}` );
 			}
 			grunt.config.set( 'dev.git-version', hash );
 			grunt.log.ok(
@@ -938,6 +935,37 @@ module.exports = function(grunt) {
 			} else {
 				grunt.log.ok( 'No modified files detected.' );
 			}
+			done();
+		} );
+	} );
+
+    grunt.registerTask( 'precommit:git-conflicts', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'bash',
+			args: [ '-c', "git ls-files -z | xargs -0 grep -P -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+		}, (error, {stdout, stderr}, code) => {
+			// Ignore error because it is populated for non-zero exit codes:
+			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
+			// An exit code of 1 from `grep` means "no match" which is fine.
+			// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
+			if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
+				grunt.fatal(
+					`checking for changes failed: code ${code}:\n${stderr + stdout}`
+				);
+			}
+			if ( stdout.trim().length ) {
+				stdout.trim().split( '\n' ).forEach( line => {
+					grunt.log.writeln(
+						/^[^:]+:\d+:/.test( line ) ? line.red : line
+					);
+				} );
+				grunt.fatal(
+					'git conflict markers detected in the above files!'
+				);
+			}
+
 			done();
 		} );
 	} );

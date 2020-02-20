@@ -244,7 +244,7 @@ if [ "$conflict_status" -eq 0 ]; then
 else
 	echo "${color_bold_red}=======${color_reset}"
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
-	echo "Fix and commit the files that contain <<<< or >>>> conflict markers:"
+	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
 	git log -n 1 | grep -P '^\s+- \S'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
