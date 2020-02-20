@@ -374,13 +374,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @dataProvider data_script_and_style_tags
 	 * @see https://core.trac.wordpress.org/ticket/30162
-=======
-	 * @ticket 30162
 	 * @dataProvider data_script_and_style_tags
->>>>>>> 1f7f0a1357... Comments: Add `rel="nofollow ugc"` attribute when converting plain URLs to `<a>` tags in comments via `make_clickable()`.
 	 */
 	public function test_dont_link_script_and_style_tags( $tag ) {
 		$this->assertEquals( $tag, make_clickable( $tag ) );
