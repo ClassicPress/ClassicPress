@@ -67,7 +67,7 @@ Any change that introduces new code or changes behavior should have automated te
 
 If you're not familiar with automated tests, the concept is basically **code that runs other code** and verifies its behavior.
 
-Documentation for running and updating our existing tests, as well as the code for the tests themselves, can be found in the [`tests/phpunit`](tests/phpunit) subdirectory of this repository.
+Documentation for running and updating our existing tests, as well as the code for the tests themselves, can be found in the [`tests/phpunit`](../tests/phpunit) subdirectory of this repository.
 
 ### Backporting changes from WordPress
 
