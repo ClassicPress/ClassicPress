@@ -1860,11 +1860,11 @@ function register_initial_settings() {
 		'show_in_rest' => array(
 			'name' => 'login_custom_logo',
 			'schema'  => array(
-				'format' => 'uri',
+				'format' => 'integer',
 			),
 		),
 		'type'         => 'string',
-		'description'  => __( 'Site logo used as the login image' ),
+		'description'  => __( 'Attachment ID for site logo used as the login image' ),
 	) );
 
 	if ( ! is_multisite() ) {
