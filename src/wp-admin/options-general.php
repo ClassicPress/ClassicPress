@@ -119,7 +119,7 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
-<td> <fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo_check">
+<td><fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo_check">
 <input name="login_custom_logo_check" type="checkbox" id="login_custom_logo_check" aria-describedby="custom-login-image-check-description" value="1" <?php checked('1', get_option('login_custom_logo_check')); ?> />
 <?php _e('Use the set image below as the login image.') ?></label>
 <p class="description" id="custom-login-image-check-description">
@@ -131,12 +131,22 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 </p>
 
 <p><?php // echo get_option('login_custom_logo_check'); ?></p>
-<p><?php // echo get_option('login_custom_logo'); ?></p>
+<p><?php // $local_image =  trailingslashit( admin_url() ) . 'images/wordpress-logo.svg'; ?></p>
 
 <p>
-<img src="<?php echo ! empty(get_option('login_custom_logo')) ? get_option('login_custom_logo') : 'http://localhost:8888/cc/wp-admin/images/wordpress-logo.svg'; ?>" alt="Admin login page logo" width="100px">
-<input type="button" class="button button-primary" value="Upload Image">
-<!-- <input type="button" class="button button-primary" value="Remove set Image"> -->
+<?php
+	$image = get_option('login_custom_logo'); 
+	if ( ! empty( $image ) ) {
+		?>
+		<img src="<?php echo $image; ?>" alt="Admin login page logo" width="100px">
+		<!-- <input type="button" class="button button-primary" value="Remove set Image"> -->
+		<?php
+	} else {
+		?>
+		<input type="button" class="button button-primary" value="Upload Image">
+		<?php
+	} 
+?>
 </p>
 
 </fieldset></td>
