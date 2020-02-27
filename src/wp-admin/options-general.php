@@ -136,16 +136,18 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 <p>
 <?php
 	$image = get_option('login_custom_logo'); 
-	if ( ! empty( $image ) ) {
+	// if ( ! empty( $image ) ) {
 		?>
-		<img src="<?php echo $image; ?>" alt="Admin login page logo" width="100px">
-		<!-- <input type="button" class="button button-primary" value="Remove set Image"> -->
+		<img id="login_custom_logo" src="<?php echo $image; ?>" alt="Admin login page logo" width="100px">
 		<?php
-	} else {
+	// } else {
 		?>
-		<input type="button" class="button button-primary" value="Upload Image">
+		<input type="hidden" id="hidden-image-field" name="custom_image_data">
+		<!-- TODO: Translate the buttons -->
+		<input type="button" id="image-upload-field" class="button button-primary" value="Upload Image">
+		<input type="button" id="image-delete-field" class="button button-primary" value="Remove Image">
 		<?php
-	} 
+	// } 
 ?>
 </p>
 
