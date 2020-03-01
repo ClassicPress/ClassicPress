@@ -550,11 +550,13 @@ function cp_get_update_directory_root( $working_dir ) {
 }
 
 /**
- * Copies a directory from one location to another via the ClassicPress Filesystem Abstraction.
- * Assumes that WP_Filesystem() has already been called and setup.
+ * Copies a directory from one location to another via the ClassicPress
+ * Filesystem Abstraction. Assumes that WP_Filesystem() has already been called
+ * and set up.
  *
- * This is a temporary function for the 3.1 -> 3.2 upgrade, as well as for those upgrading to
- * 3.7+
+ * This is a standalone copy of this function that is used to upgrade the core
+ * files. It is placed here so that the version of this function from the *new*
+ * ClassicPress version will be called.
  *
  * @ignore
  * @since WP-3.2.0

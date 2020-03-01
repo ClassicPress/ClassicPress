@@ -1302,8 +1302,9 @@ function _unzip_file_pclzip($file, $to, $needed_dirs = array()) {
 }
 
 /**
- * Copies a directory from one location to another via the ClassicPress Filesystem Abstraction.
- * Assumes that WP_Filesystem() has already been called and setup.
+ * Copies a directory from one location to another via the ClassicPress
+ * Filesystem Abstraction. Assumes that WP_Filesystem() has already been called
+ * and set up.
  *
  * @since WP-2.5.0
  *
