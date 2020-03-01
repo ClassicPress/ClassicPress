@@ -1333,6 +1333,22 @@ function copy_dir($from, $to, $skip_list = array() ) {
 				if ( ! $wp_filesystem->copy($from . $filename, $to . $filename, true, FS_CHMOD_FILE) )
 					return new WP_Error( 'copy_failed_copy_dir', __( 'Could not copy file.' ), $to . $filename );
 			}
+			if (
+				'.php' === strtolower( substr( $filename, -4 ) ) &&
+				function_exists( 'opcache_invalidate' ) &&
+				/**
+				 * Filters whether to invalidate a file in the PHP opcache
+				 * after it is written during an upgrade.
+				 *
+				 * @since 1.3.0
+				 *
+				 * @param bool $invalidate Whether to invalidate. Default true.
+				 * @param string $filename The PHP filename that was just copied.
+				 */
+				apply_filters( 'wp_opcache_invalidate_file', true, $to . $filename )
+			) {
+				opcache_invalidate( $to . $filename );
+			}
 		} elseif ( 'd' == $fileinfo['type'] ) {
 			if ( !$wp_filesystem->is_dir($to . $filename) ) {
 				if ( !$wp_filesystem->mkdir($to . $filename, FS_CHMOD_DIR) )

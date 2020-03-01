@@ -587,6 +587,14 @@ function _copy_dir($from, $to, $skip_list = array() ) {
 				if ( ! $wp_filesystem->copy($from . $filename, $to . $filename, true, FS_CHMOD_FILE) )
 					return new WP_Error( 'copy_failed__copy_dir', __( 'Could not copy file.' ), $to . $filename );
 			}
+			if (
+				'.php' === strtolower( substr( $filename, -4 ) ) &&
+				function_exists( 'opcache_invalidate' ) &&
+				/** This filter is documented in wp-admin/includes/file.php */
+				apply_filters( 'wp_opcache_invalidate_file', true, $to . $filename )
+			) {
+				opcache_invalidate( $to . $filename );
+			}
 		} elseif ( 'd' == $fileinfo['type'] ) {
 			if ( !$wp_filesystem->is_dir($to . $filename) ) {
 				if ( !$wp_filesystem->mkdir($to . $filename, FS_CHMOD_DIR) )
