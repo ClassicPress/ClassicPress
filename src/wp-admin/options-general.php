@@ -135,6 +135,9 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <p>
 <?php
+	wp_enqueue_media();
+	wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array('jquery'), '0.1' );
+
 	$image = get_option('login_custom_logo'); 
 	// if ( ! empty( $image ) ) {
 		?>
