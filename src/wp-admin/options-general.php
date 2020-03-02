@@ -130,39 +130,27 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 ?>
 </p>
 
-<p><?php echo get_option('login_custom_logo'); ?></p>
+<p><?php // echo get_option('login_custom_logo_check'); ?></p>
 <p><?php // $local_image =  trailingslashit( admin_url() ) . 'images/wordpress-logo.svg'; ?></p>
 
 <p>
 <?php
 	wp_enqueue_media();
 	wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array('jquery'), '0.1' );
-?>
-<img id="login_custom_logo" />
-<!-- TODO: Field below should be text="hidden" -->
-<input type="text" id="hidden-image-field" name="custom_image_data" value="<?php form_option( 'login_custom_logo' ); ?>" />
-<!-- TODO: Translate the buttons -->
-<input type="button" id="image-upload-button" class="button button-primary" value="Upload Image">
-<input type="button" id="image-delete-button" class="button button-primary" value="Remove Image">
-<?php
-/** Next steps
- * 1. Sanitize the data custom_image_data in hidden field
- * 2. Save the data as a json string
- * 3. Retrieve the data as an option and append the HTML
- * 
- * if( isset( $_POST[ 'hidden-image-field' ] ) ) {
- * $image_data = json_decode( stripslashes( $_POST[ 'hidden-image-field' ] ) );
- * 
- * if( is_object( $image_data[0] ) ) {
- * 		$image_data = array( 'id' => $image_data[0]->id, 'src' => $image_data[0]->url, 'description' => 			$image_data[0]  ->description, 'alt' => $image_data[0]->alt );
- * } else {
- * 		$image_data = [];
- * }
- * 
- * update_option( 'login_custom_logo' );
- * 
- * var_dump(get_option( 'login_custom_logo' ));
- */
+
+	$image = get_option('login_custom_logo'); 
+	// if ( ! empty( $image ) ) {
+		?>
+		<img id="login_custom_logo" src="<?php echo $image; ?>" alt="Admin login page logo" width="100px">
+		<?php
+	// } else {
+		?>
+		<input type="hidden" id="hidden-image-field" name="custom_image_data">
+		<!-- TODO: Translate the buttons -->
+		<input type="button" id="image-upload-field" class="button button-primary" value="Upload Image">
+		<input type="button" id="image-delete-field" class="button button-primary" value="Remove Image">
+		<?php
+	// } 
 ?>
 </p>
 
