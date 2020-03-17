@@ -10,7 +10,7 @@
   "license": "GPL-2.0+",
   "devDependencies": {
     "autoprefixer": "9.7.4",
-    "grunt": "1.0.4",
+    "grunt": "1.1.0",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.0",
     "grunt-contrib-compress": "1.6.0",
