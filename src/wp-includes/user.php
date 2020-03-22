@@ -1121,6 +1121,9 @@ function wp_dropdown_users( $args = '' ) {
 		}
 
 		foreach ( (array) $users as $user ) {
+			if ( false === $user ) {
+				continue;
+			}
 			if ( 'display_name_with_login' === $show ) {
 				/* translators: 1: display name, 2: user_login */
 				$display = sprintf( _x( '%1$s (%2$s)', 'user dropdown' ), $user->display_name, $user->user_login );
