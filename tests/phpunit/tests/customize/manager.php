@@ -1090,6 +1090,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Helper function to simulate a much simplified version of WP's
+	 * capital_P_dangit function.  This allows us to avoid changing more test
+	 * code below.
+	 */
+	public function wp_capital_P_dangit() {
+		return str_replace( 'Wordpress', 'WordPress', $text );
+	}
+
+	/**
 	 * Test saving changeset post without Kses or other content_save_pre filters mutating content.
 	 *
 	 * @covers WP_Customize_Manager::save_changeset_post()
@@ -1107,7 +1116,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		add_filter( 'map_meta_cap', array( $this, 'filter_map_meta_cap_to_disallow_unfiltered_html' ), 10, 2 );
 		kses_init();
-		add_filter( 'content_save_pre', 'capital_P_dangit' );
+		add_filter( 'content_save_pre', array( $this, 'wp_capital_P_dangit' ) );
 		add_post_type_support( 'customize_changeset', 'revisions' );
 
 		$options = array(
