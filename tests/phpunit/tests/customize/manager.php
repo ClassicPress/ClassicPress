@@ -1094,7 +1094,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 * capital_P_dangit function.  This allows us to avoid changing more test
 	 * code below.
 	 */
-	public function wp_capital_P_dangit() {
+	public function wp_capital_P_dangit( $text ) {
 		return str_replace( 'Wordpress', 'WordPress', $text );
 	}
 
