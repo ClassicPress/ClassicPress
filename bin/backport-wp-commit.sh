@@ -246,7 +246,8 @@ else
 	echo "${color_bold_red}=======${color_reset}"
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
-	git log -n 1 | grep -P '^\s+- \S'
+	git log -n 1 \
+		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"
