@@ -185,7 +185,7 @@ perl -w <<PL
 	my \$was_blank_line = 0;
 	while (<MSG_R>) {
 		s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
-		s#\[(\d+)-(\d+)\]#join ', ', map { "https://core.trac.wordpress.org/changeset/\$_" } \$1 .. \$2#ge;
+		s,\[(\d+)-(\d+)\],https://core.trac.wordpress.org/log/?revs=\$1-\$2,g;
 		s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
 		s,^# Conflicts:,Conflicts:,;
 		s,^#\t,- ,;
