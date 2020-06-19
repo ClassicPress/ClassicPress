@@ -125,10 +125,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
 					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
 					'4.9.15'
 				);
 				?>
@@ -148,8 +145,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> e35f8b6923... WordPress 4.9.15.
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
 					'4.9.14'
 				);
 				?>
@@ -169,11 +165,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
 					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> e35f8b6923... WordPress 4.9.15.
 					'4.9.13'
 				);
 				?>
@@ -193,11 +185,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
 					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> e35f8b6923... WordPress 4.9.15.
 					'4.9.12'
 				);
 				?>
@@ -217,11 +205,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
 					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> e35f8b6923... WordPress 4.9.15.
 					'4.9.11'
 				);
 				?>
