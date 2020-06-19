@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "name": "ClassicPress",
   "version": "1.1.3+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
+=======
+  "name": "WordPress",
+  "version": "4.9.15",
+  "description": "WordPress is web software you can use to create a beautiful website or blog.",
+>>>>>>> e35f8b6923... WordPress 4.9.15.
   "repository": {
     "type": "git",
     "url": "https://github.com/ClassicPress/ClassicPress"
