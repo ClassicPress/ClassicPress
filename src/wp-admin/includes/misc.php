@@ -727,7 +727,7 @@ function set_screen_options() {
 					 * Returning false to the filter will skip saving the current option.
 					 *
 					 * @since 2.8.0
-					 * @since 5.4.2 Only applied to options ending with '_page',
+					 * @since WP-4.9.15 Only applied to options ending with '_page',
 					 *              or the 'layout_columns' option.
 					 *
 					 * @see set_screen_options()
@@ -747,11 +747,7 @@ function set_screen_options() {
 				 *
 				 * Returning false to the filter will skip saving the current option.
 				 *
-<<<<<<< HEAD
-				 * @since WP-2.8.0
-=======
-				 * @since 5.4.2
->>>>>>> aa08e63c74... General: Backport several commits for release.
+				 * @since WP-4.9.15
 				 *
 				 * @see set_screen_options()
 				 *
