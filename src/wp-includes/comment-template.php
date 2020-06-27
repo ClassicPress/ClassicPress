@@ -1274,7 +1274,11 @@ function wp_comment_form_unfiltered_html_nonce() {
  *
  * Will not try to get the comments if the post has none.
  *
+<<<<<<< HEAD
  * @since WP-1.5.0
+=======
+ * @since 1.5.0
+>>>>>>> 6408e197bd... Comments: Remove `wp_get_include_unapproved_comments_argument()` for now.
  *
  * @global WP_Query   $wp_query
  * @global WP_Post    $post
@@ -1339,10 +1343,21 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		$comment_args['hierarchical'] = false;
 	}
 
+<<<<<<< HEAD
 	if ( $user_ID ) {
 		$comment_args['include_unapproved'] = array( $user_ID );
 	} elseif ( ! empty( $comment_author_email ) ) {
 		$comment_args['include_unapproved'] = array( $comment_author_email );
+=======
+	if ( is_user_logged_in() ) {
+		$comment_args['include_unapproved'] = array( get_current_user_id() );
+	} else {
+		$unapproved_email = wp_get_unapproved_comment_author_email();
+
+		if ( $unapproved_email ) {
+			$comment_args['include_unapproved'] = array( $unapproved_email );
+		}
+>>>>>>> 6408e197bd... Comments: Remove `wp_get_include_unapproved_comments_argument()` for now.
 	}
 
 	$per_page = 0;
@@ -1995,7 +2010,7 @@ function wp_list_comments( $args = array(), $comments = null ) {
 				);
 
 				if ( is_user_logged_in() ) {
-					$comment_args['include_unapproved'] = get_current_user_id();
+					$comment_args['include_unapproved'] = array( get_current_user_id() );
 				} else {
 					$commenter = wp_get_current_commenter();
 					if ( $commenter['comment_author_email'] ) {
