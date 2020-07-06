@@ -221,11 +221,17 @@ function wpmu_delete_user( $id ) {
 	/**
 	 * Fires before a user is deleted from the network.
 	 *
+<<<<<<< HEAD
 	 * @since WP-MU (3.0.0)
+=======
+	 * @since MU (3.0.0)
+	 * @since 5.5.0 Added the `$user` parameter.
+>>>>>>> d0f4f20df5... Users: Pass the `WP_User` object to the `wpmu_delete_user`, `delete_user`, and `deleted_user` actions.
 	 *
-	 * @param int $id ID of the user about to be deleted from the network.
+	 * @param int     $id   ID of the user about to be deleted from the network.
+	 * @param WP_User $user WP_User object of the user about to be deleted from the network.
 	 */
-	do_action( 'wpmu_delete_user', $id );
+	do_action( 'wpmu_delete_user', $id, $user );
 
 	$blogs = get_blogs_of_user( $id );
 
@@ -260,7 +266,7 @@ function wpmu_delete_user( $id ) {
 	clean_user_cache( $user );
 
 	/** This action is documented in wp-admin/includes/user.php */
-	do_action( 'deleted_user', $id, null );
+	do_action( 'deleted_user', $id, null, $user );
 
 	return true;
 }
