@@ -40,26 +40,12 @@ class Tests_Multisite_WpmuValidateUserSignup extends WP_UnitTestCase {
 		}
 	}
 
-<<<<<<< HEAD
 	public function test_should_fail_for_unsafe_email_address() {
 		add_filter( 'is_email_address_unsafe', '__return_true' );
 		$v = wpmu_validate_user_signup( 'foo123', 'foo@example.com' );
 		$this->assertContains( 'user_email', $v['errors']->get_error_codes() );
 		remove_filter( 'is_email_address_unsafe', '__return_true' );
 	}
-=======
-		public function test_should_fail_for_existing_user_email() {
-			$u = self::factory()->user->create( array( 'user_email' => 'foo@example.com' ) );
-			$v = wpmu_validate_user_signup( 'foo123', 'foo@example.com' );
-			$this->assertContains( 'user_email', $v['errors']->get_error_codes() );
-		}
-
-		public function test_should_fail_for_existing_signup_with_same_username() {
-			// Don't send notifications.
-			add_filter( 'wpmu_signup_user_notification', '__return_false' );
-			wpmu_signup_user( 'foo123', 'foo@example.com' );
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
->>>>>>> 2a22dcf8a6... Multisite: Delete the signup entry when a user is deleted from the database.
 
 	public function test_should_fail_for_invalid_email_address() {
 		add_filter( 'is_email', '__return_false' );
@@ -68,17 +54,9 @@ class Tests_Multisite_WpmuValidateUserSignup extends WP_UnitTestCase {
 		remove_filter( 'is_email', '__return_false' );
 	}
 
-<<<<<<< HEAD
 	public function test_should_fail_for_emails_from_non_whitelisted_domains() {
 		$domains = array( 'foo.com', 'bar.org' );
 		update_site_option( 'limited_email_domains', $domains );
-=======
-		public function test_should_not_fail_for_existing_signup_with_same_username_if_signup_is_old() {
-			// Don't send notifications.
-			add_filter( 'wpmu_signup_user_notification', '__return_false' );
-			wpmu_signup_user( 'foo123', 'foo@example.com' );
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
->>>>>>> 2a22dcf8a6... Multisite: Delete the signup entry when a user is deleted from the database.
 
 		$v = wpmu_validate_user_signup( 'foo123', 'foo@example.com' );
 		$this->assertContains( 'user_email', $v['errors']->get_error_codes() );
@@ -90,19 +68,11 @@ class Tests_Multisite_WpmuValidateUserSignup extends WP_UnitTestCase {
 		$this->assertContains( 'user_name', $v['errors']->get_error_codes() );
 	}
 
-<<<<<<< HEAD
 	public function test_should_fail_for_existing_user_email() {
 		$u = self::factory()->user->create( array( 'user_email' => 'foo@example.com' ) );
 		$v = wpmu_validate_user_signup( 'foo123', 'foo@example.com' );
 		$this->assertContains( 'user_email', $v['errors']->get_error_codes() );
 	}
-=======
-		public function test_should_fail_for_existing_signup_with_same_email() {
-			// Don't send notifications.
-			add_filter( 'wpmu_signup_user_notification', '__return_false' );
-			wpmu_signup_user( 'foo123', 'foo@example.com' );
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
->>>>>>> 2a22dcf8a6... Multisite: Delete the signup entry when a user is deleted from the database.
 
 	public function test_should_fail_for_existing_signup_with_same_username() {
 		// Don't send notifications.
@@ -110,17 +80,9 @@ class Tests_Multisite_WpmuValidateUserSignup extends WP_UnitTestCase {
 		wpmu_signup_user( 'foo123', 'foo@example.com' );
 		remove_filter( 'wpmu_signup_user_notification', '__return_true' );
 
-<<<<<<< HEAD
 		$v = wpmu_validate_user_signup( 'foo123', 'foo2@example.com' );
 		$this->assertContains( 'user_name', $v['errors']->get_error_codes() );
 	}
-=======
-		public function test_should_not_fail_for_existing_signup_with_same_email_if_signup_is_old() {
-			// Don't send notifications.
-			add_filter( 'wpmu_signup_user_notification', '__return_false' );
-			wpmu_signup_user( 'foo123', 'foo@example.com' );
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
->>>>>>> 2a22dcf8a6... Multisite: Delete the signup entry when a user is deleted from the database.
 
 	public function test_should_not_fail_for_existing_signup_with_same_username_if_signup_is_old() {
 		// Don't send notifications.
@@ -132,39 +94,9 @@ class Tests_Multisite_WpmuValidateUserSignup extends WP_UnitTestCase {
 		$date = date( 'Y-m-d H:i:s', time() - ( 2 * DAY_IN_SECONDS ) - 60 );
 		$wpdb->update( $wpdb->signups, array( 'registered' => $date ), array( 'user_login' => 'foo123' ) );
 
-<<<<<<< HEAD
 		$v = wpmu_validate_user_signup( 'foo123', 'foo2@example.com' );
 		$this->assertNotContains( 'user_name', $v['errors']->get_error_codes() );
 	}
-=======
-		/**
-		 * @ticket 43232
-		 */
-		public function test_should_not_fail_for_data_used_by_a_deleted_user() {
-			global $wpdb;
-
-			// Don't send notifications.
-			add_filter( 'wpmu_signup_user_notification', '__return_false' );
-			add_filter( 'wpmu_welcome_user_notification', '__return_false' );
-
-			// Signup, activate and delete new user.
-			wpmu_signup_user( 'foo123', 'foo@example.com' );
-			$key  = $wpdb->get_var( "SELECT activation_key FROM $wpdb->signups WHERE user_login = 'foo123'" );
-			$user = wpmu_activate_signup( $key );
-			wpmu_delete_user( $user['user_id'] );
-
-			$valid = wpmu_validate_user_signup( 'foo123', 'foo2@example.com' );
-
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
-			remove_filter( 'wpmu_signup_user_notification', '__return_false' );
-
-			$this->assertNotContains( 'user_name', $valid['errors']->get_error_codes() );
-			$this->assertNotContains( 'user_email', $valid['errors']->get_error_codes() );
-		}
-
-		public function test_invalid_email_address_with_no_banned_domains_results_in_error() {
-			$valid = wpmu_validate_user_signup( 'validusername', 'invalid-email' );
->>>>>>> 2a22dcf8a6... Multisite: Delete the signup entry when a user is deleted from the database.
 
 	public function test_should_fail_for_existing_signup_with_same_email() {
 		// Don't send notifications.

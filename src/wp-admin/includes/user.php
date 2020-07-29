@@ -325,12 +325,8 @@ function wp_delete_user( $id, $reassign = null ) {
 	/**
 	 * Fires immediately before a user is deleted from the database.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
-	 * @since 5.5.0 Added the `$user` parameter.
->>>>>>> d0f4f20df5... Users: Pass the `WP_User` object to the `wpmu_delete_user`, `delete_user`, and `deleted_user` actions.
+	 * @since WP-5.5.0 Added the `$user` parameter.
 	 *
 	 * @param int      $id       ID of the user to delete.
 	 * @param int|null $reassign ID of the user to reassign posts and links to.
@@ -403,12 +399,8 @@ function wp_delete_user( $id, $reassign = null ) {
 	/**
 	 * Fires immediately after a user is deleted from the database.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.9.0
-=======
-	 * @since 2.9.0
-	 * @since 5.5.0 Added the `$user` parameter.
->>>>>>> d0f4f20df5... Users: Pass the `WP_User` object to the `wpmu_delete_user`, `delete_user`, and `deleted_user` actions.
+	 * @since WP-5.5.0 Added the `$user` parameter.
 	 *
 	 * @param int      $id       ID of the deleted user.
 	 * @param int|null $reassign ID of the user to reassign posts and links to.
@@ -1146,7 +1138,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	public function process_bulk_action() {
 		$action      = $this->current_action();
 		$request_ids = isset( $_REQUEST['request_id'] ) ? wp_parse_id_list( wp_unslash( $_REQUEST['request_id'] ) ) : array();
-		
+
 		$count       = 0;
 
 		if ( $request_ids ) {
