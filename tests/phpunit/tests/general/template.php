@@ -659,7 +659,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_option_disabled_with_custom_logo() {
-		update_option( 'login_custom_logo', 0 );
+		update_option( 'login_custom_image_id', 0 );
 		$this->_set_custom_logo();
 
 		if ( is_multisite() ) {
@@ -688,7 +688,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_option_enabled_without_custom_logo() {
-		update_option( 'login_custom_logo', 1 );
+		update_option( 'login_custom_image_id', 1 );
 
 		if ( is_multisite() ) {
 			$expected_login_html = (
@@ -716,7 +716,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_option_enabled_with_custom_logo() {
-		update_option( 'login_custom_logo', 1 );
+		update_option( 'login_custom_image_id', 1 );
 		$this->_set_custom_logo();
 
 		$custom_logo_attr = array(
@@ -793,7 +793,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_option_enabled_with_custom_logo_and_filters() {
-		update_option( 'login_custom_logo', 1 );
+		update_option( 'login_custom_image_id', 1 );
 		$this->_set_custom_logo();
 
 		add_filter( 'login_headerurl', function() {

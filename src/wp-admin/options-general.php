@@ -119,8 +119,8 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <tr>
 <th scope="row"><?php _e('Custom Login Image') ?></th>
-<td><fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_logo_check">
-<input name="login_custom_logo_check" type="checkbox" id="login_custom_logo_check" aria-describedby="custom-login-image-check-description" value="1" <?php checked('1', get_option('login_custom_logo_check')); ?> />
+<td><fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_image_enabled">
+<input name="login_custom_image_enabled" type="checkbox" id="login_custom_image_enabled" aria-describedby="custom-login-image-check-description" value="1" <?php checked('1', get_option('login_custom_image_enabled')); ?> />
 <?php _e('Use the set image below as the login image.') ?></label>
 <p class="description" id="custom-login-image-check-description">
 <?php
@@ -130,7 +130,7 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 ?>
 </p>
 
-<p><?php echo get_option('login_custom_logo'); ?></p>
+<p><?php echo get_option('login_custom_image_id'); ?></p>
 <p><?php // $local_image =  trailingslashit( admin_url() ) . 'images/wordpress-logo.svg'; ?></p>
 
 <p>
@@ -138,9 +138,9 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 	wp_enqueue_media();
 	wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array('jquery'), '0.1' );
 ?>
-<img id="login_custom_logo" />
+<img id="login_custom_image_id" />
 <!-- TODO: Field below should be text="hidden" -->
-<input type="text" id="hidden-image-field" name="custom_image_data" value="<?php form_option( 'login_custom_logo' ); ?>" />
+<input type="text" id="hidden-image-field" name="custom_image_data" value="<?php form_option( 'login_custom_image_id' ); ?>" />
 <!-- TODO: Translate the buttons -->
 <input type="button" id="image-upload-button" class="button button-primary" value="Upload Image">
 <input type="button" id="image-delete-button" class="button button-primary" value="Remove Image">
@@ -159,9 +159,9 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
  * 		$image_data = [];
  * }
  * 
- * update_option( 'login_custom_logo' );
+ * update_option( 'login_custom_image_id' );
  * 
- * var_dump(get_option( 'login_custom_logo' ));
+ * var_dump(get_option( 'login_custom_image_id' ));
  */
 ?>
 </p>

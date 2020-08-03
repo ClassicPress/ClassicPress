@@ -3,12 +3,12 @@
  * 
  * @Since CP-1.2.0
  */
-var login_custom_logo = document.getElementById( 'login_custom_logo' );
+var login_custom_image_id = document.getElementById( 'login_custom_image_id' );
 var hidden_image_field = document.getElementById( 'hidden-image-field' );
 var image_upload_button = document.getElementById( 'image-upload-button' );
 var image_delete_button = document.getElementById( 'image-delete-button' );
 
-var custom_uploader_login_custom_logo = wp.media({
+var uploader_login_custom_image = wp.media({
 	title: 'Select an Image',
 	button: {
 		text: 'Use this image'
@@ -17,17 +17,17 @@ var custom_uploader_login_custom_logo = wp.media({
 });
 
 image_upload_button.addEventListener( 'click', function(){
-	if( custom_uploader_login_custom_logo ){
-		custom_uploader_login_custom_logo.open();
+	if( uploader_login_custom_image ){
+		uploader_login_custom_image.open();
 	}
 });
 
-custom_uploader_login_custom_logo.on( 'select', function(){
-	var attachment = custom_uploader_login_custom_logo.state().get('selection').first().toJSON();
-	login_custom_logo.setAttribute( 'width', '200px' );
-	login_custom_logo.setAttribute( 'src', attachment.url );
-	login_custom_logo.setAttribute( 'alt', attachment.alt );
-	login_custom_logo.setAttribute( 'title', attachment.description );
+uploader_login_custom_image.on( 'select', function(){
+	var attachment = uploader_login_custom_image.state().get('selection').first().toJSON();
+	login_custom_image_id.setAttribute( 'width', '200px' );
+	login_custom_image_id.setAttribute( 'src', attachment.url );
+	login_custom_image_id.setAttribute( 'alt', attachment.alt );
+	login_custom_image_id.setAttribute( 'title', attachment.description );
 	hidden_image_field.setAttribute( 'value', JSON.stringify( [ { id: attachment.id, url: attachment.url, alt: attachment.alt, title: attachment.description } ] ) );
 });
 
@@ -35,10 +35,10 @@ custom_uploader_login_custom_logo.on( 'select', function(){
 // TODO: Not working locally. Hmmmmmm!!!!
 image_delete_button.addEventListener( 'click', function(){
 	alert('remove');
-	login_custom_logo.removeAttribute( 'width', '200px' );
-	login_custom_logo.removeAttribute( 'src' );
-	login_custom_logo.removeAttribute( 'src' );
-	login_custom_logo.removeAttribute( 'alt' );
-	login_custom_logo.removeAttribute( 'title' );
+	login_custom_image_id.removeAttribute( 'width', '200px' );
+	login_custom_image_id.removeAttribute( 'src' );
+	login_custom_image_id.removeAttribute( 'src' );
+	login_custom_image_id.removeAttribute( 'alt' );
+	login_custom_image_id.removeAttribute( 'title' );
 	hidden_image_field.removeAttribute( 'value' );
 });

@@ -561,15 +561,15 @@ class wp_xmlrpc_server extends IXR_Server {
 				'readonly'      => false,
 				'option'        => 'users_can_register'
 			),
-			'login_custom_logo_check' => array(
+			'login_custom_image_enabled' => array(
 				'desc'          => __( 'Use the site logo as the login image' ),
 				'readonly'      => false,
-				'option'        => 'login_custom_logo_check'
+				'option'        => 'login_custom_image_enabled'
 			),
-			'login_custom_logo' => array(
+			'login_custom_image_id' => array(
 				'desc'          => __( 'Site logo for the admin login image' ),
 				'readonly'      => false,
-				'option'        => 'login_custom_logo'
+				'option'        => 'login_custom_image_id'
 			),
 			'thumbnail_size_w'  => array(
 				'desc'          => __( 'Thumbnail Width' ),

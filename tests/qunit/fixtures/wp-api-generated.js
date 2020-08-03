@@ -3315,7 +3315,7 @@ mockedApiResponse.Schema = {
                             "description": "Site URL.",
                             "type": "string"
                         },
-                        "login_custom_logo": {
+                        "login_custom_image_id": {
                             "required": false,
                             "description": "Use the site logo as the login image",
                             "type": "boolean"
@@ -4570,7 +4570,7 @@ mockedApiResponse.settings = {
     "title": "Test Blog",
     "description": "Another great website powered by ClassicPress",
     "url": "http://example.org",
-    "login_custom_logo": false,
+    "login_custom_image_id": false,
     "email": "admin@example.org",
     "timezone": "",
     "date_format": "F j, Y",

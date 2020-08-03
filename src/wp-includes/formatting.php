@@ -4123,8 +4123,8 @@ function sanitize_option( $option, $value ) {
 		case 'comments_per_page':
 		case 'thread_comments_depth':
 		case 'users_can_register':
-		case 'login_custom_logo_check':
-		case 'login_custom_logo':
+		case 'login_custom_image_enabled':
+		case 'login_custom_image_id':
 		case 'start_of_week':
 		case 'site_icon':
 			$value = absint( $value );
