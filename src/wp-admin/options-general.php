@@ -20,7 +20,11 @@ $parent_file = 'options-general.php';
 /* translators: date and time format for exact current time, mainly about timezones, see https://secure.php.net/date */
 $timezone_format = _x('Y-m-d H:i:s', 'timezone date format');
 
+// Old (pre-1.2.0) options-general JS
 add_action('admin_head', 'options_general_add_js');
+// New (1.2.0, custom login image) options-general JS
+wp_enqueue_media();
+wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array('jquery'), '0.1' );
 
 $options_help = '<p>' . __('The fields on this screen determine some of the basics of your site setup.') . '</p>' .
 	'<p>' . __('Most themes display the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. The tagline is also displayed by many themes.') . '</p>';
@@ -117,56 +121,58 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 </td>
 </tr>
 
+<?php
+$login_custom_image_state = get_option( 'login_custom_image_state' );
+if (
+	$login_custom_image_state !== '0' &&
+	$login_custom_image_state !== '1' &&
+	$login_custom_image_state !== '2'
+) {
+	$login_custom_image_state = '0';
+}
+
+error_log(json_encode([
+	'checked'  => checked( '1', $login_custom_image_state, false ),
+	'disabled' => disabled( '0', $login_custom_image_state, false ),
+]));
+ob_start();
+?>
+
 <tr>
-<th scope="row"><?php _e('Custom Login Image') ?></th>
-<td><fieldset><legend class="screen-reader-text"><span><?php _e('Custom Login Image') ?></span></legend><label for="login_custom_image_enabled">
-<input name="login_custom_image_enabled" type="checkbox" id="login_custom_image_enabled" aria-describedby="custom-login-image-check-description" value="1" <?php checked('1', get_option('login_custom_image_enabled')); ?> />
-<?php _e('Use the set image below as the login image.') ?></label>
-<p class="description" id="custom-login-image-check-description">
-<?php
-	printf(
-		__( 'If you set an image below and enable this option, then the logo image will be shown at the top of the login page instead of the ClassicPress logo.' )
-	);
-?>
-</p>
-
-<p><?php echo get_option('login_custom_image_id'); ?></p>
-<p><?php // $local_image =  trailingslashit( admin_url() ) . 'images/wordpress-logo.svg'; ?></p>
-
-<p>
-<?php
-	wp_enqueue_media();
-	wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array('jquery'), '0.1' );
-?>
-<img id="login_custom_image_id" />
-<!-- TODO: Field below should be text="hidden" -->
-<input type="text" id="hidden-image-field" name="custom_image_data" value="<?php form_option( 'login_custom_image_id' ); ?>" />
-<!-- TODO: Translate the buttons -->
-<input type="button" id="image-upload-button" class="button button-primary" value="Upload Image">
-<input type="button" id="image-delete-button" class="button button-primary" value="Remove Image">
-<?php
-/** Next steps
- * 1. Sanitize the data custom_image_data in hidden field
- * 2. Save the data as a json string
- * 3. Retrieve the data as an option and append the HTML
- * 
- * if( isset( $_POST[ 'hidden-image-field' ] ) ) {
- * $image_data = json_decode( stripslashes( $_POST[ 'hidden-image-field' ] ) );
- * 
- * if( is_object( $image_data[0] ) ) {
- * 		$image_data = array( 'id' => $image_data[0]->id, 'src' => $image_data[0]->url, 'description' => 			$image_data[0]  ->description, 'alt' => $image_data[0]->alt );
- * } else {
- * 		$image_data = [];
- * }
- * 
- * update_option( 'login_custom_image_id' );
- * 
- * var_dump(get_option( 'login_custom_image_id' ));
- */
-?>
-</p>
-
-</fieldset></td>
+<th scope="row"><?php _e( 'Custom Login Image' ) ?></th>
+<td>
+	<fieldset>
+		<legend class="screen-reader-text"><span><?php _e( 'Custom Login Image' ) ?></span></legend>
+		<p class="description" id="login_custom_image-description">
+			<?php _e( 'If you choose an image here and enable this option, then that image will be shown at the top of the login page instead of the ClassicPress logo.' ); ?>
+		</p>
+		<label>
+			<input name="login_custom_image_state" type="radio" value="0" <?php checked( '0', $login_custom_image_state ); ?> />
+			<?php _e( 'No custom image: use the <strong>ClassicPress logo</strong>' ); ?>
+		</label>
+		<br />
+		<label>
+			<input name="login_custom_image_state" type="radio" value="1" <?php checked( '1', $login_custom_image_state ); disabled( '0', $login_custom_image_state ); ?> />
+			<?php _e( 'Use my custom image as a <strong>logo</strong>' ); ?>
+		</label>
+		<br />
+		<label>
+			<input name="login_custom_image_state" type="radio" value="2" <?php checked( '2', $login_custom_image_state ); disabled( '0', $login_custom_image_state ); ?> />
+			<?php _e( 'Use my custom image as a <strong>banner</strong>' ); ?>
+		</label>
+		<p><img id="login_custom_image-img" class="hidden"></p>
+		<p id="login_custom_image-controls" class="hidden">
+			<input type="hidden" id="login_custom_image-input" name="login_custom_image_id" value="<?php form_option( 'login_custom_image_id' ); ?>" />
+			<input type="button" id="login_custom_image-choose" class="button" value="<?php _e( 'Choose Image' ); ?>">
+			<input type="button" id="login_custom_image-clear" class="button" value="<?php _e( 'Clear Image' ); ?>">
+		</p>
+		<noscript>
+			<p class="description">
+				<?php _e( 'Changing the custom login image requires JavaScript to be enabled.' ); ?>
+			</p>
+		</noscript>
+	</fieldset>
+</td>
 </tr>
 
 <?php if ( ! is_multisite() ) { ?>
