@@ -196,15 +196,10 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			return false;
 		if ( ! function_exists('posix_getpwuid') )
 			return $owneruid;
-<<<<<<< HEAD
-		$ownerarray = posix_getpwuid($owneruid);
-=======
-		}
 		$ownerarray = posix_getpwuid( $owneruid );
 		if ( ! $ownerarray ) {
 			return false;
 		}
->>>>>>> d32ec3352b... Filesystem API: Avoid a PHP notice in `WP_Filesystem_Direct::owner()` and `::group()` methods and their `WP_Filesystem_SSH2` counterparts.
 		return $ownerarray['name'];
 	}
 
@@ -232,15 +227,10 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			return false;
 		if ( ! function_exists('posix_getgrgid') )
 			return $gid;
-<<<<<<< HEAD
-		$grouparray = posix_getgrgid($gid);
-=======
-		}
 		$grouparray = posix_getgrgid( $gid );
 		if ( ! $grouparray ) {
 			return false;
 		}
->>>>>>> d32ec3352b... Filesystem API: Avoid a PHP notice in `WP_Filesystem_Direct::owner()` and `::group()` methods and their `WP_Filesystem_SSH2` counterparts.
 		return $grouparray['name'];
 	}
 
