@@ -1274,15 +1274,8 @@ function wp_comment_form_unfiltered_html_nonce() {
  *
  * Will not try to get the comments if the post has none.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
-=======
- * @since 1.5.0
-<<<<<<< HEAD
- * @since 5.5.0 Removed the need to use the $user_ID global.
->>>>>>> 7b08983ce4... Comments: Ensure the proper comment count and pages for unapproved comments.
-=======
->>>>>>> 6408e197bd... Comments: Remove `wp_get_include_unapproved_comments_argument()` for now.
+ * @since WP-5.5.0 Removed the need to use the $user_ID global.
  *
  * @global WP_Query   $wp_query
  * @global WP_Post    $post
@@ -1346,18 +1339,6 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		$comment_args['hierarchical'] = false;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	if ( $user_ID ) {
-		$comment_args['include_unapproved'] = array( $user_ID );
-	} elseif ( ! empty( $comment_author_email ) ) {
-		$comment_args['include_unapproved'] = array( $comment_author_email );
-=======
-	$include_unapproved = wp_get_include_unapproved_comments_argument();
-	if ( $include_unapproved ) {
-		$comment_args['include_unapproved'] = $include_unapproved;
->>>>>>> 7b08983ce4... Comments: Ensure the proper comment count and pages for unapproved comments.
-=======
 	if ( is_user_logged_in() ) {
 		$comment_args['include_unapproved'] = array( get_current_user_id() );
 	} else {
@@ -1366,7 +1347,6 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		if ( $unapproved_email ) {
 			$comment_args['include_unapproved'] = array( $unapproved_email );
 		}
->>>>>>> 6408e197bd... Comments: Remove `wp_get_include_unapproved_comments_argument()` for now.
 	}
 
 	$per_page = 0;

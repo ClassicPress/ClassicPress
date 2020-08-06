@@ -1047,14 +1047,6 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 			),
 		);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		$comment_query = new WP_Comment_Query();
-=======
-		$include_unapproved = wp_get_include_unapproved_comments_argument();
-		if ( $include_unapproved ) {
-			$comment_args['include_unapproved'] = $include_unapproved;
-=======
 		if ( is_user_logged_in() ) {
 			$comment_args['include_unapproved'] = array( get_current_user_id() );
 		} else {
@@ -1063,7 +1055,6 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 			if ( $unapproved_email ) {
 				$comment_args['include_unapproved'] = array( $unapproved_email );
 			}
->>>>>>> 6408e197bd... Comments: Remove `wp_get_include_unapproved_comments_argument()` for now.
 		}
 
 		/**
@@ -1092,8 +1083,7 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 		 */
 		$comment_args = apply_filters( 'get_page_of_comment_query_args', $comment_args );
 
-		$comment_query       = new WP_Comment_Query();
->>>>>>> 7b08983ce4... Comments: Ensure the proper comment count and pages for unapproved comments.
+		$comment_query = new WP_Comment_Query();
 		$older_comment_count = $comment_query->query( $comment_args );
 
 		// No older comments? Then it's page #1.
@@ -3108,7 +3098,7 @@ function wp_handle_comment_submission( $comment_data ) {
 		 * @param int $comment_post_ID Post ID.
 		 */
 		do_action( 'comment_on_draft', $comment_post_ID );
-		
+
 		if ( current_user_can( 'read_post', $comment_post_ID ) ) {
 			return new WP_Error( 'comment_on_draft', __( 'Sorry, comments are not allowed for this item.' ), 403 );
 		} else {
