@@ -1,22 +1,3 @@
-/** Next steps
- * 1. Sanitize the data custom_image_data in hidden field
- * 2. Save the data as a json string
- * 3. Retrieve the data as an option and append the HTML
- *
- * if( isset( $_POST[ 'hidden-image-field' ] ) ) {
- * $image_data = json_decode( stripslashes( $_POST[ 'hidden-image-field' ] ) );
- *
- * if( is_object( $image_data[0] ) ) {
- * 		$image_data = array( 'id' => $image_data[0]->id, 'src' => $image_data[0]->url, 'description' => 			$image_data[0]  ->description, 'alt' => $image_data[0]->alt );
- * } else {
- * 		$image_data = [];
- * }
- *
- * update_option( 'login_custom_image_id' );
- *
- * var_dump(get_option( 'login_custom_image_id' ));
- */
-
 /**
  * Custom Login Image upload
  *
@@ -53,6 +34,9 @@ jQuery( document ).ready( function( $ ) {
 		$img.attr( 'title', attachment.description );
 		$choices.prop( 'disabled', false );
 		$input.attr( 'value', attachment.id );
+		if ( $choices.filter( '[value=0]:checked' ).length ) {
+			$choices.filter( '[value=1]' ).prop( 'checked', true );
+		}
 	} );
 
 	// Reverse all steps above on removal of image.
@@ -65,7 +49,7 @@ jQuery( document ).ready( function( $ ) {
 		$input.attr( 'value', '' );
 		$choices.each( function( el ) {
 			if ( el.value === '0' ) {
-				$( el ).click();
+				$( el ).prop( 'checked', true );
 			} else {
 				$( el ).prop( 'disabled', true );
 			}

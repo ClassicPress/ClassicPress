@@ -658,9 +658,9 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group login
 	 */
-	function test_login_html_option_disabled_with_custom_logo() {
-		update_option( 'login_custom_image_id', 0 );
-		$this->_set_custom_logo();
+	function test_login_html_option_disabled_with_image_set() {
+		update_option( 'login_custom_image_state', '0' );
+		update_option( 'login_custom_image_id', (string) $this->_insert_attachment() );
 
 		if ( is_multisite() ) {
 			$expected_login_html = (
@@ -687,8 +687,9 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group login
 	 */
-	function test_login_html_option_enabled_without_custom_logo() {
-		update_option( 'login_custom_image_id', 1 );
+	function test_login_html_option_enabled_without_custom_image() {
+		update_option( 'login_custom_image_state', '1' );
+		update_option( 'login_custom_image_id', '' );
 
 		if ( is_multisite() ) {
 			$expected_login_html = (
@@ -715,25 +716,58 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group login
 	 */
-	function test_login_html_option_enabled_with_custom_logo() {
-		update_option( 'login_custom_image_id', 1 );
-		$this->_set_custom_logo();
+	function test_login_html_option_enabled_with_custom_image() {
+		update_option( 'login_custom_image_state', '1' );
+		update_option( 'login_custom_image_id', (string) $this->_insert_attachment() );
 
-		$custom_logo_attr = array(
-			'class'    => 'custom-logo',
+		$custom_image_attr = array(
+			'class'    => 'custom-login-image',
 			'itemprop' => 'logo',
 			'alt'      => get_bloginfo( 'name', 'display' ),
 		);
 		$image = wp_get_attachment_image(
-			$this->custom_logo_id,
+			$this->site_icon_id,
 			'full',
 			false,
-			$custom_logo_attr
+			$custom_image_attr
 		);
 		$expected_custom_login_image = (
 			'<a href="'
 			. esc_attr( home_url( '/' ) )
-			. '" class="custom-logo-link" rel="home" itemprop="url" title="'
+			. '" class="custom-login-image-container" rel="home" itemprop="url" title="'
+			. esc_attr( get_bloginfo( 'name', 'display' ) )
+			. '">'
+			. $image
+			. '</a>'
+		);
+		$this->assertEquals(
+			$expected_custom_login_image,
+			get_login_image_html()
+		);
+	}
+
+	/**
+	 * @group login
+	 */
+	function test_login_html_option_enabled_with_custom_image_banner() {
+		update_option( 'login_custom_image_state', '2' );
+		update_option( 'login_custom_image_id', (string) $this->_insert_attachment() );
+
+		$custom_image_attr = array(
+			'class'    => 'custom-login-image',
+			'itemprop' => 'logo',
+			'alt'      => get_bloginfo( 'name', 'display' ),
+		);
+		$image = wp_get_attachment_image(
+			$this->site_icon_id,
+			'full',
+			false,
+			$custom_image_attr
+		);
+		$expected_custom_login_image = (
+			'<a href="'
+			. esc_attr( home_url( '/' ) )
+			. '" class="custom-login-image-container banner" rel="home" itemprop="url" title="'
 			. esc_attr( get_bloginfo( 'name', 'display' ) )
 			. '">'
 			. $image
@@ -793,8 +827,8 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_option_enabled_with_custom_logo_and_filters() {
-		update_option( 'login_custom_image_id', 1 );
-		$this->_set_custom_logo();
+		update_option( 'login_custom_image_state', '1' );
+		update_option( 'login_custom_image_id', (string) $this->_insert_attachment() );
 
 		add_filter( 'login_headerurl', function() {
 			return 'https://example.com?"a&b"';
@@ -803,21 +837,21 @@ class Tests_General_Template extends WP_UnitTestCase {
 			return 'A <script>"special";</script> title';
 		} );
 
-		$custom_logo_attr = array(
-			'class'    => 'custom-logo',
+		$image_attrs = array(
+			'class'    => 'custom-login-image',
 			'itemprop' => 'logo',
 			'alt'      => get_bloginfo( 'name', 'display' ),
 		);
 		$image = wp_get_attachment_image(
-			$this->custom_logo_id,
+			$this->site_icon_id,
 			'full',
 			false,
-			$custom_logo_attr
+			$image_attrs
 		);
 		$expected_custom_login_image = (
 			'<a href="'
 			. 'https://example.com?a&#038;b'
-			. '" class="custom-logo-link" rel="home" itemprop="url" title="'
+			. '" class="custom-login-image-container" rel="home" itemprop="url" title="'
 			. 'A &lt;script&gt;&quot;special&quot;;&lt;/script&gt; title'
 			. '">'
 			. $image

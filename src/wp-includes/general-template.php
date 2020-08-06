@@ -4315,20 +4315,44 @@ function wp_heartbeat_settings( $settings ) {
 
 /**
  * Return the HTML for the image on the login screen. This is either a link
- * showing the ClassicPress logo (the default) or the site's custom logo image
- * (if a logo image is set and the `login_custom_image_enabled` option is enabled).
+ * showing the ClassicPress logo (the default) or the site's custom login image
+ * (if enabled).
  *
- * @since 1.1.0
+ * @since 1.2.0
  */
 function get_login_image_html() {
 	/**
-	 * Determine whether a site admin has enabled the `login_custom_image_enabled`
-	 * option and set a custom logo. If so, we can use it on the login page.
+	 * Determine whether the login page custom image option is enabled.
 	 */
-	$login_custom_image_enabled = get_option( 'login_custom_image_enabled' );
-	$login_custom_image_enabled = ! empty( $login_custom_image_enabled ) && has_custom_logo();
+	$login_custom_image_state = get_option( 'login_custom_image_state' );
+	$login_custom_image_id    = null;
+	$login_custom_image_html  = null;
 
-	if ( $login_custom_image_enabled ) {
+	if ( $login_custom_image_state === '1' || $login_custom_image_state === '2' ) {
+		$attrs = [
+			'class'    => 'custom-login-image',
+			'itemprop' => 'logo'
+		];
+		$login_custom_image_id = get_option( 'login_custom_image_id' );
+		$image_alt = get_post_meta(
+			$login_custom_image_id,
+			'_wp_attachment_image_alt',
+			true
+		);
+		if ( empty( $image_alt ) ) {
+			$attrs['alt'] = get_bloginfo( 'name', 'display' );
+		}
+		$login_custom_image_html = wp_get_attachment_image(
+			$login_custom_image_id,
+			'full',
+			false,
+			$attrs
+		);
+	} else if ( $login_custom_image_state !== '0' ) {
+		$login_custom_image_state = '0'; // normalize value
+	}
+
+	if ( ! empty( $login_custom_image_html ) ) {
 		$login_header_url   = home_url( '/' );
 		$login_header_title = get_bloginfo( 'name', 'display' );
 	} elseif ( is_multisite() ) {
@@ -4357,18 +4381,20 @@ function get_login_image_html() {
 	 */
 	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
 
-	/**
-	 * If the user has enabled the `login_custom_image_enabled` option and set a
-	 * custom logo, then use the custom logo.
-	 */
-	if ( $login_custom_image_enabled ) {
-		return get_custom_logo( 0, array(
-			array(
-				'href'  => $login_header_url,
-				'title' => $login_header_title,
-			)
-		)
-	);
+	if ( ! empty( $login_custom_image_html ) ) {
+		// Generate the custom login image HTML.
+		$login_image_class = 'custom-login-image-container';
+		if ( $login_custom_image_state === '2' ) {
+			$login_image_class .= ' banner';
+		}
+		$login_image_html = sprintf(
+			'<a href="%s" class="%s" rel="home" itemprop="url" title="%s">%s</a>',
+			esc_url( $login_header_url ),
+			$login_image_class,
+			esc_attr( $login_header_title ),
+			$login_custom_image_html
+		);
+		$login_header_text = null;
 
 	} else {
 		/**
@@ -4406,8 +4432,12 @@ function get_login_image_html() {
 	 * @param array  $args {
 	 *     Other relevant arguments (read-only, you must use earlier filters
 	 *     such as 'login_headerurl' to modify these values).
-	 *     @type bool   $login_custom_image_id  Whether the option to use the custom
-	 *                                      logo on the login page is enabled.
+	 *     @type string $login_custom_image_state
+	 *                                      '0' for disabled, '1' for logo
+	 *                                      style, '2' for banner style.
+	 *     @type string $login_custom_image_id
+	 *                                      The image ID to use as the custom
+	 *                                      login image (or null if disabled).
 	 *     @type string $login_header_url   The URL used as a link for the
 	 *                                      login page.
 	 *     @type string $login_header_title The title attribute for the login
@@ -4417,9 +4447,10 @@ function get_login_image_html() {
 	 * }
 	 */
 	return apply_filters( 'login_image_html', $login_image_html, [
-		'login_custom_image_id'  => $login_custom_image_id,
-		'login_header_url'   => $login_header_url,
-		'login_header_title' => $login_header_title,
-		'login_header_text'  => $login_header_text,
+		'login_custom_image_state' => $login_custom_image_state,
+		'login_custom_image_id'    => $login_custom_image_id,
+		'login_header_url'         => $login_header_url,
+		'login_header_title'       => $login_header_title,
+		'login_header_text'        => $login_header_text,
 	] );
 }
