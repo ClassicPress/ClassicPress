@@ -130,12 +130,6 @@ if (
 ) {
 	$login_custom_image_state = '0';
 }
-
-error_log(json_encode([
-	'checked'  => checked( '1', $login_custom_image_state, false ),
-	'disabled' => disabled( '0', $login_custom_image_state, false ),
-]));
-ob_start();
 ?>
 
 <tr>
