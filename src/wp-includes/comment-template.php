@@ -1274,7 +1274,12 @@ function wp_comment_form_unfiltered_html_nonce() {
  *
  * Will not try to get the comments if the post has none.
  *
+<<<<<<< HEAD
  * @since WP-1.5.0
+=======
+ * @since 1.5.0
+ * @since 5.5.0 Removed the need to use the $user_ID global.
+>>>>>>> 7b08983ce4... Comments: Ensure the proper comment count and pages for unapproved comments.
  *
  * @global WP_Query   $wp_query
  * @global WP_Post    $post
@@ -1282,7 +1287,6 @@ function wp_comment_form_unfiltered_html_nonce() {
  * @global int        $id
  * @global WP_Comment $comment
  * @global string     $user_login
- * @global int        $user_ID
  * @global string     $user_identity
  * @global bool       $overridden_cpage
  * @global bool       $withcomments
@@ -1292,7 +1296,7 @@ function wp_comment_form_unfiltered_html_nonce() {
  *                                  Default false.
  */
 function comments_template( $file = '/comments.php', $separate_comments = false ) {
-	global $wp_query, $withcomments, $post, $wpdb, $id, $comment, $user_login, $user_ID, $user_identity, $overridden_cpage;
+	global $wp_query, $withcomments, $post, $wpdb, $id, $comment, $user_login, $user_identity, $overridden_cpage;
 
 	if ( !(is_single() || is_page() || $withcomments) || empty($post) )
 		return;
@@ -1339,10 +1343,16 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		$comment_args['hierarchical'] = false;
 	}
 
+<<<<<<< HEAD
 	if ( $user_ID ) {
 		$comment_args['include_unapproved'] = array( $user_ID );
 	} elseif ( ! empty( $comment_author_email ) ) {
 		$comment_args['include_unapproved'] = array( $comment_author_email );
+=======
+	$include_unapproved = wp_get_include_unapproved_comments_argument();
+	if ( $include_unapproved ) {
+		$comment_args['include_unapproved'] = $include_unapproved;
+>>>>>>> 7b08983ce4... Comments: Ensure the proper comment count and pages for unapproved comments.
 	}
 
 	$per_page = 0;
