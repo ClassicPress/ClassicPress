@@ -355,9 +355,9 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( $value, $data['login_custom_image_state'] );
-		$this->assertSame( $value, get_option( 'login_custom_image_state' ) );
+		$this->assertSame( $value ? $value : '0', get_option( 'login_custom_image_state' ) );
 		$this->assertSame( 0, $data['login_custom_image_id'] );
-		$this->assertSame( 0, get_option( 'login_custom_image_id' ) );
+		$this->assertSame( '0', get_option( 'login_custom_image_id' ) );
 	}
 
 	/**
@@ -372,9 +372,9 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( 0, $data['login_custom_image_state'] );
-		$this->assertSame( 0, get_option( 'login_custom_image_state' ) );
+		$this->assertSame( '0', get_option( 'login_custom_image_state' ) );
 		$this->assertSame( $value, $data['login_custom_image_id'] );
-		$this->assertSame( $value, get_option( 'login_custom_image_id' ) );
+		$this->assertSame( $value ? $value : '0', get_option( 'login_custom_image_id' ) );
 	}
 
 	public function data_update_custom_login_image_options() {
