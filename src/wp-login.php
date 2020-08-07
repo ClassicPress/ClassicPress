@@ -149,7 +149,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	<div id="login">
 	<?php
 
-	// @since 1.1.0 Moved to a testable function and enabled logo image option.
+	// @since 1.2.0 Moved to a testable function and enabled custom image option.
 	echo get_login_image_html();
 
 	/**
