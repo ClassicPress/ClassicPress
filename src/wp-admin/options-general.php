@@ -123,19 +123,20 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <?php
 $login_custom_image_state = (int) get_option( 'login_custom_image_state' );
-$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
-$login_custom_image_src   = '';
-$login_custom_image_class = 'hidden';
 if ( $login_custom_image_state < 0 && $login_custom_image_state > 2 ) {
 	$login_custom_image_state = 0;
 }
-if ( $login_custom_image_state ) {
-	$login_custom_image_src = wp_get_attachment_image_url( $login_custom_image_id, 'full' );
-	if ( $login_custom_image_src ) {
-		$login_custom_image_class = '';
-	} else {
-		$login_custom_image_state = 0; // invalid image
-	}
+$login_custom_image_src = wp_get_attachment_image_url(
+	(int) get_option( 'login_custom_image_id' ),
+	'full'
+);
+$login_custom_image_class = 'hidden';
+if ( $login_custom_image_src ) {
+	$login_custom_image_class = '';
+} else {
+	// invalid image
+	$login_custom_image_src   = '';
+	$login_custom_image_state = 0;
 }
 ?>
 
@@ -156,12 +157,12 @@ if ( $login_custom_image_state ) {
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="1" <?php checked( 1, $login_custom_image_state ); disabled( 0, $login_custom_image_state ); ?> />
+			<input name="login_custom_image_state" type="radio" value="1" <?php checked( 1, $login_custom_image_state ); disabled( $login_custom_image_state === 0 && ! $login_custom_image_src ); ?> />
 			<?php _e( 'Use my custom image as a <strong>logo</strong>' ); ?>
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="2" <?php checked( 2, $login_custom_image_state ); disabled( 0, $login_custom_image_state ); ?> />
+			<input name="login_custom_image_state" type="radio" value="2" <?php checked( 2, $login_custom_image_state ); disabled( $login_custom_image_state === 0 && ! $login_custom_image_src ); ?> />
 			<?php _e( 'Use my custom image as a <strong>banner</strong>' ); ?>
 		</label>
 		<p><img id="login_custom_image-img" src="<?php echo esc_attr( $login_custom_image_src ); ?>" class="<?php echo esc_attr( $login_custom_image_class ); ?>"></p>
