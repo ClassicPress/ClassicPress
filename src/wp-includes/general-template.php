@@ -860,16 +860,10 @@ function has_custom_logo( $blog_id = 0 ) {
  *
  * @since WP-4.5.0
  *
- * @since 1.1.0 Added the $args parameter.
- *
- * @param int   $blog_id Optional. ID of the blog in question. Default or 0 is
- *                       the ID of the current blog.
- * @param array $args    Optional. May include 'title' key to set a link title
- *                       and/or 'href' key to override the link URL.
- *
+ * @param int $blog_id Optional. ID of the blog in question. Default is the ID of the current blog.
  * @return string Custom logo markup.
  */
-function get_custom_logo( $blog_id = 0, $args = array() ) {
+function get_custom_logo( $blog_id = 0 ) {
 	$html = '';
 	$switched_blog = false;
 
@@ -890,30 +884,18 @@ function get_custom_logo( $blog_id = 0, $args = array() ) {
 		/*
 		 * If the logo alt attribute is empty, get the site title and explicitly
 		 * pass it to the attributes used by wp_get_attachment_image().
-		 *
-		 * If the alt attribute is not empty, there's no need to explicitly pass
-		 * it because wp_get_attachment_image() already adds the alt attribute.
 		 */
 		$image_alt = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
 		if ( empty( $image_alt ) ) {
 			$custom_logo_attr['alt'] = get_bloginfo( 'name', 'display' );
 		}
 
-		// Determine the link URL.
-		if ( ! isset( $args['href'] ) ) {
-			$args['href'] = home_url( '/' );
-		}
-
-		// Set a link title attribute if requested.
-		$title_attr = '';
-		if ( isset( $args['title'] ) ) {
-			$title_attr = ' title="' . esc_attr( $args['title'] ) . '"';
-		}
-
-		// Generate the custom logo HTML.
-		$html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url"%2$s>%3$s</a>',
-			esc_url( $args['href'] ),
-			$title_attr,
+		/*
+		 * If the alt attribute is not empty, there's no need to explicitly pass
+		 * it because wp_get_attachment_image() already adds the alt attribute.
+		 */
+		$html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
+			esc_url( home_url( '/' ) ),
 			wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
 		);
 	}
@@ -934,11 +916,9 @@ function get_custom_logo( $blog_id = 0, $args = array() ) {
 	 *
 	 * @since WP-4.5.0
 	 * @since WP-4.6.0 Added the `$blog_id` parameter.
-	 * @since 1.1.0 Added the $args parameter.
 	 *
 	 * @param string $html    Custom logo HTML output.
 	 * @param int    $blog_id ID of the blog to get the custom logo for.
-	 * @param array  $args    Other arguments to get_custom_logo(), if any.
 	 */
 	return apply_filters( 'get_custom_logo', $html, $blog_id );
 }
@@ -4324,16 +4304,16 @@ function get_login_image_html() {
 	/**
 	 * Determine whether the login page custom image option is enabled.
 	 */
-	$login_custom_image_state = get_option( 'login_custom_image_state' );
+	$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
 	$login_custom_image_id    = null;
 	$login_custom_image_html  = null;
 
-	if ( $login_custom_image_state === '1' || $login_custom_image_state === '2' ) {
+	if ( $login_custom_image_state === 1 || $login_custom_image_state === 2 ) {
 		$attrs = [
 			'class'    => 'custom-login-image',
 			'itemprop' => 'logo'
 		];
-		$login_custom_image_id = get_option( 'login_custom_image_id' );
+		$login_custom_image_id = (int) get_option( 'login_custom_image_id' );
 		$image_alt = get_post_meta(
 			$login_custom_image_id,
 			'_wp_attachment_image_alt',
@@ -4348,8 +4328,8 @@ function get_login_image_html() {
 			false,
 			$attrs
 		);
-	} else if ( $login_custom_image_state !== '0' ) {
-		$login_custom_image_state = '0'; // normalize value
+	} else if ( $login_custom_image_state !== 0 ) {
+		$login_custom_image_state = 0; // normalize value
 	}
 
 	if ( ! empty( $login_custom_image_html ) ) {
@@ -4384,7 +4364,7 @@ function get_login_image_html() {
 	if ( ! empty( $login_custom_image_html ) ) {
 		// Generate the custom login image HTML.
 		$login_image_class = 'custom-login-image-container';
-		if ( $login_custom_image_state === '2' ) {
+		if ( $login_custom_image_state === 2 ) {
 			$login_image_class .= ' banner';
 		}
 		$login_image_html = sprintf(
@@ -4432,10 +4412,10 @@ function get_login_image_html() {
 	 * @param array  $args {
 	 *     Other relevant arguments (read-only, you must use earlier filters
 	 *     such as 'login_headerurl' to modify these values).
-	 *     @type string $login_custom_image_state
-	 *                                      '0' for disabled, '1' for logo
-	 *                                      style, '2' for banner style.
-	 *     @type string $login_custom_image_id
+	 *     @type int $login_custom_image_state
+	 *                                      0 for disabled, 1 for logo
+	 *                                      style, 2 for banner style.
+	 *     @type int|null $login_custom_image_id
 	 *                                      The image ID to use as the custom
 	 *                                      login image (or null if disabled).
 	 *     @type string $login_header_url   The URL used as a link for the

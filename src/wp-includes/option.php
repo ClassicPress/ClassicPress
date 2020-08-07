@@ -1847,24 +1847,17 @@ function register_initial_settings() {
 		) );
 	}
 
-	register_setting( 'general', 'login_custom_image_enabled', array(
-		'show_in_rest' => array(
-			'name' => 'login_custom_image_enabled',
-		),
-		'type'         => 'boolean',
+	register_setting( 'general', 'login_custom_image_state', array(
+		'show_in_rest' => true,
+		'type'         => 'integer',
 		'default'      => false,
-		'description'  => __( 'Use the site logo as the login image' ),
+		'description'  => __( 'The state of the "login custom image" feature (0, 1 or 2).' ),
 	) );
 
 	register_setting( 'general', 'login_custom_image_id', array(
-		'show_in_rest' => array(
-			'name' => 'login_custom_image_id',
-			'schema'  => array(
-				'format' => 'integer',
-			),
-		),
-		'type'         => 'string',
-		'description'  => __( 'Attachment ID for site logo used as the login image' ),
+		'show_in_rest' => true,
+		'type'         => 'integer',
+		'description'  => __( 'Attachment ID for the "login custom image" feature.' ),
 	) );
 
 	if ( ! is_multisite() ) {

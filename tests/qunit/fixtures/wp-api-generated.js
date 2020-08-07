@@ -3315,10 +3315,15 @@ mockedApiResponse.Schema = {
                             "description": "Site URL.",
                             "type": "string"
                         },
+                        "login_custom_image_state": {
+                            "required": false,
+                            "description": "The state of the \"login custom image\" feature (0, 1 or 2).",
+                            "type": "integer"
+                        },
                         "login_custom_image_id": {
                             "required": false,
-                            "description": "Use the site logo as the login image",
-                            "type": "boolean"
+                            "description": "Attachment ID for the \"login custom image\" feature.",
+                            "type": "integer"
                         },
                         "email": {
                             "required": false,
@@ -4570,7 +4575,8 @@ mockedApiResponse.settings = {
     "title": "Test Blog",
     "description": "Another great website powered by ClassicPress",
     "url": "http://example.org",
-    "login_custom_image_id": false,
+    "login_custom_image_state": 0,
+    "login_custom_image_id": 0,
     "email": "admin@example.org",
     "timezone": "",
     "date_format": "F j, Y",

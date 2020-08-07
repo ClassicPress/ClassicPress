@@ -39,19 +39,17 @@ jQuery( document ).ready( function( $ ) {
 		}
 	} );
 
-	// Reverse all steps above on removal of image.
-	// TODO: Not working locally. Hmmmmmm!!!!
 	$clear.on( 'click', function() {
 		$img.addClass( 'hidden' );
 		$img.removeAttr( 'src' );
 		$img.removeAttr( 'alt' );
 		$img.removeAttr( 'title' );
 		$input.attr( 'value', '' );
-		$choices.each( function( el ) {
-			if ( el.value === '0' ) {
-				$( el ).prop( 'checked', true );
+		$choices.each( function() {
+			if ( this.value === '0' ) {
+				$( this ).prop( 'checked', true );
 			} else {
-				$( el ).prop( 'disabled', true );
+				$( this ).prop( 'disabled', true );
 			}
 		} );
 	} );
