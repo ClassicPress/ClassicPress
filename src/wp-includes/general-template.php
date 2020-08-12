@@ -4309,27 +4309,27 @@ function get_login_image_html() {
 	$login_custom_image_html  = null;
 
 	if ( $login_custom_image_state === 1 || $login_custom_image_state === 2 ) {
-		$attrs = [
-			'class'    => 'custom-login-image',
-			'itemprop' => 'logo'
-		];
 		$login_custom_image_id = (int) get_option( 'login_custom_image_id' );
-		$image_alt = get_post_meta(
-			$login_custom_image_id,
-			'_wp_attachment_image_alt',
-			true
-		);
-		if ( empty( $image_alt ) ) {
-			$attrs['alt'] = get_bloginfo( 'name', 'display' );
+		if ( $login_custom_image_id ) {
+			$attrs = [
+				'class'    => 'custom-login-image',
+				'itemprop' => 'logo'
+			];
+			$image_alt = get_post_meta(
+				$login_custom_image_id,
+				'_wp_attachment_image_alt',
+				true
+			);
+			if ( empty( $image_alt ) ) {
+				$attrs['alt'] = get_bloginfo( 'name', 'display' );
+			}
+			$login_custom_image_html = wp_get_attachment_image(
+				$login_custom_image_id,
+				'full',
+				false,
+				$attrs
+			);
 		}
-		$login_custom_image_html = wp_get_attachment_image(
-			$login_custom_image_id,
-			'full',
-			false,
-			$attrs
-		);
-	} else if ( $login_custom_image_state !== 0 ) {
-		$login_custom_image_state = 0; // normalize value
 	}
 
 	if ( ! empty( $login_custom_image_html ) ) {

@@ -123,13 +123,15 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <?php
 $login_custom_image_state = (int) get_option( 'login_custom_image_state' );
+$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
 if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
 	$login_custom_image_state = 0;
 }
-$login_custom_image_src = wp_get_attachment_image_url(
-	(int) get_option( 'login_custom_image_id' ),
-	'full'
-);
+if ( $login_custom_image_id ) {
+	$login_custom_image_src = wp_get_attachment_image_url( $login_custom_image_id, 'full' );
+} else {
+	$login_custom_image_src = '';
+}
 $login_custom_image_class = 'hidden';
 if ( $login_custom_image_src ) {
 	$login_custom_image_class = '';
