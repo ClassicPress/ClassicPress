@@ -3317,7 +3317,7 @@ mockedApiResponse.Schema = {
                         },
                         "login_custom_image_state": {
                             "required": false,
-                            "description": "The state of the \"login custom image\" feature (0, 1 or 2).",
+                            "description": "The state of the \"login custom image\" feature (0=disabled, 1=square, or 2=banner).",
                             "type": "integer"
                         },
                         "login_custom_image_id": {
