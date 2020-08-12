@@ -123,7 +123,7 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 
 <?php
 $login_custom_image_state = (int) get_option( 'login_custom_image_state' );
-if ( $login_custom_image_state < 0 && $login_custom_image_state > 2 ) {
+if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
 	$login_custom_image_state = 0;
 }
 $login_custom_image_src = wp_get_attachment_image_url(
