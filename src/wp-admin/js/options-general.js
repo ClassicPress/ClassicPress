@@ -15,9 +15,9 @@ jQuery( document ).ready( function( $ ) {
 	$controls.removeClass( 'hidden' );
 
 	var uploader = wp.media( {
-		title: cpOptionsGeneralStrings.selectAnImage,
+		title: window.cpOptionsGeneralStrings.selectAnImage,
 		button: {
-			text: cpOptionsGeneralStrings.useThisImage
+			text: window.cpOptionsGeneralStrings.useThisImage
 		},
 		multiple: false
 	} );
