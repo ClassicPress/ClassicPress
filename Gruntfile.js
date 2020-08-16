@@ -4,8 +4,6 @@
 /* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
-const webpackConfig = require( './webpack.config.prod' );
-const webpackDevConfig = require( './webpack.config.dev' );
 const path = require('path');
 
 const SOURCE_DIR = 'src/';
@@ -635,10 +633,6 @@ module.exports = function(grunt) {
 				dest: `${SOURCE_DIR}wp-includes/js/imgareaselect/jquery.imgareaselect.min.js`
 			}
 		},
-		webpack: {
-			prod: webpackConfig,
-			dev: webpackDevConfig
-		},
 		concat: {
 			tinymce: {
 				options: {
@@ -754,8 +748,7 @@ module.exports = function(grunt) {
 			config: {
 				files: [
 					'Gruntfile.js',
-					'webpack-dev.config.js',
-					'webpack.config.js'
+					'rollup.config.cjs',
 				]
 			},
 			colors: {
@@ -815,9 +808,9 @@ module.exports = function(grunt) {
     grunt.renameTask( 'watch', '_watch' );
 
     grunt.registerTask( 'watch', function() {
-		if ( ! this.args.length || this.args.includes('webpack') ) {
+		if ( ! this.args.length || this.args.includes( 'rollup' ) ) {
 
-			grunt.task.run( 'webpack:dev' );
+			grunt.task.run( 'rollup' );
 		}
 
 		grunt.task.run( `_${this.nameArgs}` );
@@ -828,7 +821,7 @@ module.exports = function(grunt) {
 	] );
 
     grunt.registerTask( 'precommit:js', [
-		'webpack:prod',
+		'rollup',
 		'jshint:corejs',
 		'terser:masonry',
 		'terser:imgareaselect'
@@ -971,6 +964,22 @@ module.exports = function(grunt) {
 		} );
 	} );
 
+	grunt.registerTask( 'rollup', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'node',
+			args: [ './node_modules/.bin/rollup', '--config' ],
+		}, ( error, { stdout, stderr } ) => {
+			if ( error ) {
+				throw error;
+			}
+			console.log( stdout );
+			console.error( stderr );
+			done();
+		} );
+	} );
+
     grunt.registerTask( 'copy:script-loader', [
 		'dev:git-version',
 		'copy:script-loader-impl'
@@ -1054,7 +1063,7 @@ module.exports = function(grunt) {
     grunt.event.on('watch', (action, filepath, target) => {
 		let src;
 
-		if ( ![ 'all', 'rtl', 'webpack' ].includes(target) ) {
+		if ( ! [ 'all', 'rtl', 'rollup' ].includes(target) ) {
 			return;
 		}
 
