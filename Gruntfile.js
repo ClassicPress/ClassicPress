@@ -24,7 +24,9 @@ module.exports = function(grunt) {
 
     // Load tasks.
 	for ( const devDep in require( './package.json' ).devDependencies ) {
-		if ( /^grunt-(?!legacy-util$)/.test( devDep ) ) {
+		// Match: grunt-abc, @author/grunt-xyz
+		// Skip: grunt-legacy-util
+		if ( /^(@[^\/]+\/)?grunt-(?!legacy-util$)/.test( devDep ) ) {
 			grunt.loadNpmTasks( devDep );
 		}
 	}
@@ -787,15 +789,6 @@ module.exports = function(grunt) {
 	}
 
 
-    // Register tasks.
-    grunt.loadNpmTasks('@lodder/grunt-postcss');
-
-    // Webpack task.
-    grunt.loadNpmTasks( 'grunt-webpack' );
-
-    // Connect task (local server for QUnit tests).
-    grunt.loadNpmTasks( 'grunt-contrib-connect' );
-
     // RTL task.
     grunt.registerTask('rtl', ['rtlcss:core', 'rtlcss:colors']);
 
@@ -886,7 +879,7 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
-		}, (error, {stdout, stderr}, code) => {
+		}, ( error, { stdout, stderr }, code ) => {
 			if ( code !== 0 ) {
 				grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
 			}
@@ -910,7 +903,7 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'ls-files', '-m' ]
-		}, (error, {stdout}, code) => {
+		}, ( error, { stdout }, code ) => {
 			if ( error ) {
 				throw error;
 			}
@@ -950,7 +943,7 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'bash',
 			args: [ '-c', "git ls-files -z | xargs -0 grep -P -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
-		}, (error, {stdout, stderr}, code) => {
+		}, ( error, { stdout, stderr }, code ) => {
 			// Ignore error because it is populated for non-zero exit codes:
 			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
 			// An exit code of 1 from `grep` means "no match" which is fine.
