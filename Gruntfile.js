@@ -548,7 +548,7 @@ module.exports = function(grunt) {
 				args: ['--verbose', '-c', 'phpunit.xml.dist', '--filter', 'WP_Test_REST_Schema_Initialization::test_build_wp_api_client_fixtures']
 			}
 		},
-		uglify: {
+		terser: {
 			// Settings for all subtasks
 			options: {
 				output: {
@@ -581,7 +581,7 @@ module.exports = function(grunt) {
 					'!wp-includes/js/swfobject.js',
 					'!wp-includes/js/underscore.*',
 					'!wp-includes/js/zxcvbn.min.js',
-					'!wp-includes/js/wp-embed.js' // We have extra options for this, see uglify:embed
+					'!wp-includes/js/wp-embed.js' // We have extra options for this, see terser:embed
 				]
 			},
 			embed: {
@@ -609,9 +609,9 @@ module.exports = function(grunt) {
 				]
 			},
 			jqueryui: {
-				options: {
+				output: {
 					// Preserve comments that start with a bang.
-					preserveComments: /^!/
+					comments: /^!/
 				},
 				expand: true,
 				cwd: SOURCE_DIR,
@@ -620,9 +620,9 @@ module.exports = function(grunt) {
 				src: ['wp-includes/js/jquery/ui/*.js']
 			},
 			masonry: {
-				options: {
+				output: {
 					// Preserve comments that start with a bang.
-					preserveComments: /^!/
+					comments: /^!/
 				},
 				src: `${SOURCE_DIR}wp-includes/js/jquery/jquery.masonry.js`,
 				dest: `${SOURCE_DIR}wp-includes/js/jquery/jquery.masonry.min.js`
@@ -827,8 +827,8 @@ module.exports = function(grunt) {
     grunt.registerTask( 'precommit:js', [
 		'webpack:prod',
 		'jshint:corejs',
-		'uglify:masonry',
-		'uglify:imgareaselect'
+		'terser:masonry',
+		'terser:imgareaselect'
 	] );
 
     grunt.registerTask( 'precommit:css', [
@@ -989,9 +989,9 @@ module.exports = function(grunt) {
 		'rtl',
 		'cssmin:rtl',
 		'cssmin:colors',
-		'uglify:core',
-		'uglify:embed',
-		'uglify:jqueryui',
+		'terser:core',
+		'terser:embed',
+		'terser:jqueryui',
 		'concat:tinymce',
 		'compress:tinymce',
 		'clean:tinymce',
