@@ -1,8 +1,9 @@
 /*
  * grunt-terser
  * https://github.com/adascal/grunt-terser
+ * + modifications for async usage with terser v5
  *
- * Copyright (c) 2018 Alexandr Dascal
+ * Copyright (c) 2018 Alexandr Dascal, (c) 2020 James Nylen
  * Licensed under the MIT license.
  */
 
@@ -17,13 +18,15 @@ module.exports = function(grunt) {
   grunt.registerMultiTask(
     'terser',
     'Grunt plugin for A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.',
-    function() {
+    async function() {
+      var done = this.async();
+
       // Merge task-specific and/or target-specific options with these defaults.
       var options = this.options();
       var createdFiles = 0;
 
       // Iterate over all specified file groups.
-      this.files.forEach(function(f) {
+      for (const f of this.files) {
         // Concat specified files.
         var src = f.src
           .filter(function(filepath) {
@@ -42,7 +45,7 @@ module.exports = function(grunt) {
           }, {});
 
         // Minify file code.
-        var result = Terser.minify(src, options);
+        var result = await Terser.minify(src, options);
 
         if (result.error) {
           grunt.log.error(result.error);
@@ -69,13 +72,15 @@ module.exports = function(grunt) {
 
         // Increment created files counter
         createdFiles++;
-      });
+      }
 
       if (createdFiles > 0) {
         grunt.log.ok(
           `${createdFiles} ${grunt.util.pluralize(createdFiles, 'file/files')} created.`
         );
       }
+
+      done();
     }
   );
 };
