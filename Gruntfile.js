@@ -1043,12 +1043,6 @@ module.exports = function(grunt) {
 		'phpunit'
 	);
 
-    // Patch task.
-    grunt.renameTask('patch_wordpress', 'patch');
-
-    // Add an alias `apply` of the `patch` task name.
-    grunt.registerTask('apply', 'patch');
-
     // Default task.
     grunt.registerTask('default', ['build']);
 
