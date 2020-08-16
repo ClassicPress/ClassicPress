@@ -34,6 +34,9 @@ module.exports = function(grunt) {
     // Load legacy utils.
     grunt.util = require( 'grunt-legacy-util' );
 
+	// Load terser task.
+	require( './tools/build/grunt-terser' )( grunt );
+
     // Project configuration.
     grunt.initConfig({
 		postcss: {
@@ -357,7 +360,7 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js']
+				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
 			},
 			tests: {
 				src: [
