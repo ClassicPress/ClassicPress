@@ -23,9 +23,14 @@ module.exports = function(grunt) {
 	}
 
     // Load tasks.
-    require('matchdep').filterDev(['grunt-*', '!grunt-legacy-util']).forEach( grunt.loadNpmTasks );
-    // Load legacy utils
-    grunt.util = require('grunt-legacy-util');
+	for ( const devDep in require( './package.json' ).devDependencies ) {
+		if ( /^grunt-(?!legacy-util$)/.test( devDep ) ) {
+			grunt.loadNpmTasks( devDep );
+		}
+	}
+
+    // Load legacy utils.
+    grunt.util = require( 'grunt-legacy-util' );
 
     // Project configuration.
     grunt.initConfig({
