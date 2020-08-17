@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.MediaFrame.Manage.Router
  *
@@ -64,4 +66,6 @@ var Router = Backbone.Router.extend(/** @lends wp.media.view.MediaFrame.Manage.R
 	}
 });
 
-module.exports = Router;
+return Router;
+
+};

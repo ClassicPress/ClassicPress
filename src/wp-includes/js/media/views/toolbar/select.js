@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Toolbar = wp.media.view.Toolbar,
 	l10n = wp.media.view.l10n,
 	Select;
@@ -67,4 +69,6 @@ Select = Toolbar.extend(/** @lends wp.media.view.Toolbar.Select.prototype */{
 	}
 });
 
-module.exports = Select;
+return Select;
+
+};

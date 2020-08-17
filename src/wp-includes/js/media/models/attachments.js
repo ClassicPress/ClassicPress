@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.model.Attachments
  *
@@ -549,4 +551,6 @@ var Attachments = Backbone.Collection.extend(/** @lends wp.media.model.Attachmen
 	}
 });
 
-module.exports = Attachments;
+return Attachments;
+
+};

@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.UploaderStatusError
  *
@@ -13,4 +15,6 @@ var UploaderStatusError = wp.media.View.extend(/** @lends wp.media.view.Uploader
 	template:  wp.template('uploader-status-error')
 });
 
-module.exports = UploaderStatusError;
+return UploaderStatusError;
+
+};

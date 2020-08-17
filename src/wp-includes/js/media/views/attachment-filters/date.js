@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	DateFilter;
 
@@ -38,4 +40,6 @@ DateFilter = wp.media.view.AttachmentFilters.extend(/** @lends wp.media.view.Att
 	}
 });
 
-module.exports = DateFilter;
+return DateFilter;
+
+};

@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Label
  *
@@ -23,4 +25,6 @@ var Label = wp.media.View.extend(/** @lends wp.media.view.Label.prototype */{
 	}
 });
 
-module.exports = Label;
+return Label;
+
+};

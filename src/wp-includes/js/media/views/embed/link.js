@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = jQuery,
 	EmbedLink;
 
@@ -94,4 +96,6 @@ EmbedLink = wp.media.view.Settings.extend(/** @lends wp.media.view.EmbedLink.pro
 	}
 });
 
-module.exports = EmbedLink;
+return EmbedLink;
+
+};
