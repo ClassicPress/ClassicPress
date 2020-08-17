@@ -1,13 +1,11 @@
 // vim: ft=javascript
 
-const config = [];
-
 const createPluginCommonJS = require( '@rollup/plugin-commonjs' );
 
 const pluginCommonJS = createPluginCommonJS();
 
-[ 'audiovideo', 'grid', 'models', 'views' ].forEach( artifact => {
-	config.push( {
+module.exports = [ 'audiovideo', 'grid', 'models', 'views' ].map( artifact => {
+	return {
 		input: `src/wp-includes/js/media/${artifact}.manifest.ejs`,
 		output: {
 			file: `src/wp-includes/js/media-${artifact}.js`,
@@ -15,7 +13,5 @@ const pluginCommonJS = createPluginCommonJS();
 			strict: false,
 		},
 		plugins: [ pluginCommonJS ],
-	} );
+	};
 } );
-
-module.exports = config;
