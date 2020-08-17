@@ -9072,10 +9072,4 @@
 	media.view.EditImage = editImage$1();
 	media.view.Spinner = spinner();
 
-	var views_manifest = {
-
-	};
-
-	return views_manifest;
-
 }());

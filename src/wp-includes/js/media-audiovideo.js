@@ -1024,10 +1024,4 @@
 	media.view.AudioDetails = audioDetails$2();
 	media.view.VideoDetails = videoDetails$2();
 
-	var audiovideo_manifest = {
-
-	};
-
-	return audiovideo_manifest;
-
 }());

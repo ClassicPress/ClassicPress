@@ -958,10 +958,4 @@
 	media.view.DeleteSelectedButton = deleteSelected();
 	media.view.DeleteSelectedPermanentlyButton = deleteSelectedPermanently();
 
-	var grid_manifest = {
-
-	};
-
-	return grid_manifest;
-
 }());

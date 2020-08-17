@@ -1544,10 +1544,4 @@
 		window.wp = null;
 	});
 
-	var models_manifest = {
-
-	};
-
-	return models_manifest;
-
 }());

@@ -8,7 +8,7 @@ const pluginCommonJS = createPluginCommonJS();
 
 [ 'audiovideo', 'grid', 'models', 'views' ].forEach( artifact => {
 	config.push( {
-		input: `src/wp-includes/js/media/${artifact}.manifest.js`,
+		input: `src/wp-includes/js/media/${artifact}.manifest.ejs`,
 		output: {
 			file: `src/wp-includes/js/media-${artifact}.js`,
 			format: 'iife',
