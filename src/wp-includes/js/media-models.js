@@ -1,5 +1,6 @@
 (function () {
-	'use strict';
+
+	var attachment = function() { // ClassicPress: defer loading via require()
 
 	var $ = Backbone.$,
 		Attachment;
@@ -169,7 +170,11 @@
 		})
 	});
 
-	var attachment = Attachment;
+	return Attachment;
+
+	};
+
+	var attachments = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.model.Attachments
@@ -722,9 +727,13 @@
 		}
 	});
 
-	var attachments = Attachments;
+	return Attachments;
 
-	var Attachments$1 = wp.media.model.Attachments,
+	};
+
+	var query = function() { // ClassicPress: defer loading via require()
+
+	var Attachments = wp.media.model.Attachments,
 		Query;
 
 	/**
@@ -746,7 +755,7 @@
 	 * @param {object} [options.args]                Attachments query arguments.
 	 * @param {object} [options.args.posts_per_page]
 	 */
-	Query = Attachments$1.extend(/** @lends wp.media.model.Query.prototype */{
+	Query = Attachments.extend(/** @lends wp.media.model.Query.prototype */{
 		/**
 		 * @param {array}  [models=[]]  Array of initial models to populate the collection.
 		 * @param {object} [options={}]
@@ -755,7 +764,7 @@
 			var allowed;
 
 			options = options || {};
-			Attachments$1.prototype.initialize.apply( this, arguments );
+			Attachments.prototype.initialize.apply( this, arguments );
 
 			this.args     = options.args;
 			this._hasMore = true;
@@ -875,7 +884,7 @@
 				/**
 				 * Call wp.media.model.Attachments.sync or Backbone.sync
 				 */
-				fallback = Attachments$1.prototype.sync ? Attachments$1.prototype : Backbone;
+				fallback = Attachments.prototype.sync ? Attachments.prototype : Backbone;
 				return fallback.sync.apply( this, arguments );
 			}
 		}
@@ -1031,7 +1040,11 @@
 		}())
 	});
 
-	var query = Query;
+	return Query;
+
+	};
+
+	var postImage = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.model.PostImage
@@ -1186,9 +1199,13 @@
 		}
 	});
 
-	var postImage = PostImage;
+	return PostImage;
 
-	var Attachments$2 = wp.media.model.Attachments,
+	};
+
+	var selection = function() { // ClassicPress: defer loading via require()
+
+	var Attachments = wp.media.model.Attachments,
 		Selection;
 
 	/**
@@ -1202,7 +1219,7 @@
 	 * @augments wp.media.model.Attachments
 	 * @augments Backbone.Collection
 	 */
-	Selection = Attachments$2.extend(/** @lends wp.media.model.Selection.prototype */{
+	Selection = Attachments.extend(/** @lends wp.media.model.Selection.prototype */{
 		/**
 		 * Refresh the `single` model whenever the selection changes.
 		 * Binds `single` instead of using the context argument to ensure
@@ -1215,7 +1232,7 @@
 			/**
 			 * call 'initialize' directly on the parent class
 			 */
-			Attachments$2.prototype.initialize.apply( this, arguments );
+			Attachments.prototype.initialize.apply( this, arguments );
 			this.multiple = options && options.multiple;
 
 			this.on( 'add remove reset', _.bind( this.single, this, false ) );
@@ -1236,7 +1253,7 @@
 			/**
 			 * call 'add' directly on the parent class
 			 */
-			return Attachments$2.prototype.add.call( this, models, options );
+			return Attachments.prototype.add.call( this, models, options );
 		},
 
 		/**
@@ -1284,10 +1301,12 @@
 		}
 	});
 
-	var selection = Selection;
+	return Selection;
 
-	var $$1 = jQuery,
-		Attachment$1, Attachments$3, l10n, media;
+	};
+
+	var $ = jQuery,
+		Attachment, Attachments, l10n, media;
 
 	/** @namespace wp */
 	window.wp = window.wp || {};
@@ -1352,12 +1371,12 @@
 	media.model.settings = l10n.settings || {};
 	delete l10n.settings;
 
-	Attachment$1 = media.model.Attachment = attachment;
-	Attachments$3 = media.model.Attachments = attachments;
+	Attachment = media.model.Attachment = attachment();
+	Attachments = media.model.Attachments = attachments();
 
-	media.model.Query = query;
-	media.model.PostImage = postImage;
-	media.model.Selection = selection;
+	media.model.Query = query();
+	media.model.PostImage = postImage();
+	media.model.Selection = selection();
 
 	/**
 	 * ========================================================================
@@ -1495,7 +1514,7 @@
 	 * @returns {wp.media.model.Attachment}
 	 */
 	media.attachment = function( id ) {
-		return Attachment$1.get( id );
+		return Attachment.get( id );
 	};
 
 	/**
@@ -1504,7 +1523,7 @@
 	 * @static
 	 * @member {wp.media.model.Attachments}
 	 */
-	Attachments$3.all = new Attachments$3();
+	Attachments.all = new Attachments();
 
 	/**
 	 * wp.media.query
@@ -1515,13 +1534,13 @@
 	 * @returns {wp.media.model.Attachments}
 	 */
 	media.query = function( props ) {
-		return new Attachments$3( null, {
+		return new Attachments( null, {
 			props: _.extend( _.defaults( props || {}, { orderby: 'date' } ), { query: true } )
 		});
 	};
 
 	// Clean up. Prevents mobile browsers caching
-	$$1(window).on('unload', function(){
+	$(window).on('unload', function(){
 		window.wp = null;
 	});
 

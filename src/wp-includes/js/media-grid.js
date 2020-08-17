@@ -1,5 +1,6 @@
 (function () {
-	'use strict';
+
+	var editAttachmentMetadata = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		EditAttachmentMetadata;
@@ -28,7 +29,11 @@
 		}
 	});
 
-	var editAttachmentMetadata = EditAttachmentMetadata;
+	return EditAttachmentMetadata;
+
+	};
+
+	var manage = function() { // ClassicPress: defer loading via require()
 
 	var MediaFrame = wp.media.view.MediaFrame,
 		Library = wp.media.controller.Library,
@@ -316,7 +321,11 @@
 		}
 	});
 
-	var manage = Manage;
+	return Manage;
+
+	};
+
+	var detailsTwoColumn = function() { // ClassicPress: defer loading via require()
 
 	var Details = wp.media.view.Attachment.Details,
 		TwoColumn;
@@ -368,7 +377,11 @@
 		}
 	});
 
-	var detailsTwoColumn = TwoColumn;
+	return TwoColumn;
+
+	};
+
+	var manage$1 = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.MediaFrame.Manage.Router
@@ -436,11 +449,15 @@
 		}
 	});
 
-	var manage$1 = Router;
+	return Router;
+
+	};
+
+	var editImageDetails = function() { // ClassicPress: defer loading via require()
 
 	var View = wp.media.View,
 		EditImage = wp.media.view.EditImage,
-		Details$1;
+		Details;
 
 	/**
 	 * wp.media.view.EditImage.Details
@@ -453,7 +470,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Details$1 = EditImage.extend(/** @lends wp.media.view.EditImage.Details.prototype */{
+	Details = EditImage.extend(/** @lends wp.media.view.EditImage.Details.prototype */{
 		initialize: function( options ) {
 			this.editor = window.imageEdit;
 			this.frame = options.frame;
@@ -472,12 +489,16 @@
 		}
 	});
 
-	var editImageDetails = Details$1;
+	return Details;
+
+	};
+
+	var editAttachments = function() { // ClassicPress: defer loading via require()
 
 	var Frame = wp.media.view.Frame,
-		MediaFrame$1 = wp.media.view.MediaFrame,
+		MediaFrame = wp.media.view.MediaFrame,
 
-		$$1 = jQuery,
+		$ = jQuery,
 		EditAttachments;
 
 	/**
@@ -498,7 +519,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	EditAttachments = MediaFrame$1.extend(/** @lends wp.media.view.MediaFrame.EditAttachments.prototype */{
+	EditAttachments = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.EditAttachments.prototype */{
 
 		className: 'edit-attachment-frame',
 		template:  wp.template( 'edit-attachment-frame' ),
@@ -561,14 +582,14 @@
 				});
 
 				this.modal.on( 'open', _.bind( function () {
-					$$1( 'body' ).on( 'keydown.media-modal', _.bind( this.keyEvent, this ) );
+					$( 'body' ).on( 'keydown.media-modal', _.bind( this.keyEvent, this ) );
 				}, this ) );
 
 				// Completely destroy the modal DOM element when closing it.
 				this.modal.on( 'close', _.bind( function() {
-					$$1( 'body' ).off( 'keydown.media-modal' ); /* remove the keydown event */
+					$( 'body' ).off( 'keydown.media-modal' ); /* remove the keydown event */
 					// Restore the original focus item if possible
-					$$1( 'li.attachment[data-id="' + this.model.get( 'id' ) +'"]' ).focus();
+					$( 'li.attachment[data-id="' + this.model.get( 'id' ) +'"]' ).focus();
 					this.resetRoute();
 				}, this ) );
 
@@ -731,10 +752,15 @@
 		}
 	});
 
-	var editAttachments = EditAttachments;
+	return EditAttachments;
+
+	};
+
+	var selectModeToggle = function() { // ClassicPress: defer loading via require()
+
 
 	var Button = wp.media.view.Button,
-		l10n$1 = wp.media.view.l10n,
+		l10n = wp.media.view.l10n,
 		SelectModeToggle;
 
 	/**
@@ -787,7 +813,7 @@
 			if ( this.controller.isModeActive( 'select' ) ) {
 				this.model.set( {
 					size: 'large',
-					text: l10n$1.cancelSelection
+					text: l10n.cancelSelection
 				} );
 				children.not( '.spinner, .media-button' ).hide();
 				this.$el.show();
@@ -795,7 +821,7 @@
 			} else {
 				this.model.set( {
 					size: '',
-					text: l10n$1.bulkSelect
+					text: l10n.bulkSelect
 				} );
 				this.controller.content.get().$el.removeClass( 'fixed' );
 				toolbar.$el.css( 'width', '' );
@@ -806,10 +832,14 @@
 		}
 	});
 
-	var selectModeToggle = SelectModeToggle;
+	return SelectModeToggle;
 
-	var Button$1 = wp.media.view.Button,
-		l10n$2 = wp.media.view.l10n,
+	};
+
+	var deleteSelected = function() { // ClassicPress: defer loading via require()
+
+	var Button = wp.media.view.Button,
+		l10n = wp.media.view.l10n,
 		DeleteSelected;
 
 	/**
@@ -825,9 +855,9 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	DeleteSelected = Button$1.extend(/** @lends wp.media.view.DeleteSelectedButton.prototype */{
+	DeleteSelected = Button.extend(/** @lends wp.media.view.DeleteSelectedButton.prototype */{
 		initialize: function() {
-			Button$1.prototype.initialize.apply( this, arguments );
+			Button.prototype.initialize.apply( this, arguments );
 			if ( this.options.filters ) {
 				this.options.filters.model.on( 'change', this.filterChange, this );
 			}
@@ -836,11 +866,11 @@
 
 		filterChange: function( model ) {
 			if ( 'trash' === model.get( 'status' ) ) {
-				this.model.set( 'text', l10n$2.untrashSelected );
+				this.model.set( 'text', l10n.untrashSelected );
 			} else if ( wp.media.view.settings.mediaTrash ) {
-				this.model.set( 'text', l10n$2.trashSelected );
+				this.model.set( 'text', l10n.trashSelected );
 			} else {
-				this.model.set( 'text', l10n$2.deleteSelected );
+				this.model.set( 'text', l10n.deleteSelected );
 			}
 		},
 
@@ -849,7 +879,7 @@
 		},
 
 		render: function() {
-			Button$1.prototype.render.apply( this, arguments );
+			Button.prototype.render.apply( this, arguments );
 			if ( this.controller.isModeActive( 'select' ) ) {
 				this.$el.addClass( 'delete-selected-button' );
 			} else {
@@ -860,10 +890,14 @@
 		}
 	});
 
-	var deleteSelected = DeleteSelected;
+	return DeleteSelected;
 
-	var Button$2 = wp.media.view.Button,
-		DeleteSelected$1 = wp.media.view.DeleteSelectedButton,
+	};
+
+	var deleteSelectedPermanently = function() { // ClassicPress: defer loading via require()
+
+	var Button = wp.media.view.Button,
+		DeleteSelected = wp.media.view.DeleteSelectedButton,
 		DeleteSelectedPermanently;
 
 	/**
@@ -880,9 +914,9 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	DeleteSelectedPermanently = DeleteSelected$1.extend(/** @lends wp.media.view.DeleteSelectedPermanentlyButton.prototype */{
+	DeleteSelectedPermanently = DeleteSelected.extend(/** @lends wp.media.view.DeleteSelectedPermanentlyButton.prototype */{
 		initialize: function() {
-			DeleteSelected$1.prototype.initialize.apply( this, arguments );
+			DeleteSelected.prototype.initialize.apply( this, arguments );
 			this.controller.on( 'select:activate', this.selectActivate, this );
 			this.controller.on( 'select:deactivate', this.selectDeactivate, this );
 		},
@@ -902,25 +936,27 @@
 		},
 
 		render: function() {
-			Button$2.prototype.render.apply( this, arguments );
+			Button.prototype.render.apply( this, arguments );
 			this.selectActivate();
 			return this;
 		}
 	});
 
-	var deleteSelectedPermanently = DeleteSelectedPermanently;
+	return DeleteSelectedPermanently;
+
+	};
 
 	var media = wp.media;
 
-	media.controller.EditAttachmentMetadata = editAttachmentMetadata;
-	media.view.MediaFrame.Manage = manage;
-	media.view.Attachment.Details.TwoColumn = detailsTwoColumn;
-	media.view.MediaFrame.Manage.Router = manage$1;
-	media.view.EditImage.Details = editImageDetails;
-	media.view.MediaFrame.EditAttachments = editAttachments;
-	media.view.SelectModeToggleButton = selectModeToggle;
-	media.view.DeleteSelectedButton = deleteSelected;
-	media.view.DeleteSelectedPermanentlyButton = deleteSelectedPermanently;
+	media.controller.EditAttachmentMetadata = editAttachmentMetadata();
+	media.view.MediaFrame.Manage = manage();
+	media.view.Attachment.Details.TwoColumn = detailsTwoColumn();
+	media.view.MediaFrame.Manage.Router = manage$1();
+	media.view.EditImage.Details = editImageDetails();
+	media.view.MediaFrame.EditAttachments = editAttachments();
+	media.view.SelectModeToggleButton = selectModeToggle();
+	media.view.DeleteSelectedButton = deleteSelected();
+	media.view.DeleteSelectedPermanentlyButton = deleteSelectedPermanently();
 
 	var grid_manifest = {
 

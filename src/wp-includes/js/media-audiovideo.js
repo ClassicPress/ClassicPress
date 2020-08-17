@@ -1,5 +1,6 @@
 (function () {
-	'use strict';
+
+	var postMedia = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.model.PostMedia
@@ -42,7 +43,11 @@
 		}
 	});
 
-	var postMedia = PostMedia;
+	return PostMedia;
+
+	};
+
+	var audioDetails = function() { // ClassicPress: defer loading via require()
 
 	var State = wp.media.controller.State,
 		l10n = wp.media.view.l10n,
@@ -76,7 +81,11 @@
 		}
 	});
 
-	var audioDetails = AudioDetails;
+	return AudioDetails;
+
+	};
+
+	var videoDetails = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.VideoDetails
@@ -89,15 +98,15 @@
 	 * @augments wp.media.controller.State
 	 * @augments Backbone.Model
 	 */
-	var State$1 = wp.media.controller.State,
-		l10n$1 = wp.media.view.l10n,
+	var State = wp.media.controller.State,
+		l10n = wp.media.view.l10n,
 		VideoDetails;
 
-	VideoDetails = State$1.extend(/** @lends wp.media.controller.VideoDetails.prototype */{
+	VideoDetails = State.extend(/** @lends wp.media.controller.VideoDetails.prototype */{
 		defaults: {
 			id: 'video-details',
 			toolbar: 'video-details',
-			title: l10n$1.videoDetailsTitle,
+			title: l10n.videoDetailsTitle,
 			content: 'video-details',
 			menu: 'video-details',
 			router: false,
@@ -106,14 +115,18 @@
 
 		initialize: function( options ) {
 			this.media = options.media;
-			State$1.prototype.initialize.apply( this, arguments );
+			State.prototype.initialize.apply( this, arguments );
 		}
 	});
 
-	var videoDetails = VideoDetails;
+	return VideoDetails;
+
+	};
+
+	var mediaDetails = function() { // ClassicPress: defer loading via require()
 
 	var Select = wp.media.view.MediaFrame.Select,
-		l10n$2 = wp.media.view.l10n,
+		l10n = wp.media.view.l10n,
 		MediaDetails;
 
 	/**
@@ -218,14 +231,14 @@
 		},
 
 		renderDetailsToolbar: function() {
-			this.setPrimaryButton( l10n$2.update, function( controller, state ) {
+			this.setPrimaryButton( l10n.update, function( controller, state ) {
 				controller.close();
 				state.trigger( 'update', controller.media.toJSON() );
 			} );
 		},
 
 		renderReplaceToolbar: function() {
-			this.setPrimaryButton( l10n$2.replace, function( controller, state ) {
+			this.setPrimaryButton( l10n.replace, function( controller, state ) {
 				var attachment = state.get( 'selection' ).single();
 				controller.media.changeAttachment( attachment );
 				state.trigger( 'replace', controller.media.toJSON() );
@@ -241,13 +254,17 @@
 		}
 	});
 
-	var mediaDetails = MediaDetails;
+	return MediaDetails;
 
-	var MediaDetails$1 = wp.media.view.MediaFrame.MediaDetails,
+	};
+
+	var audioDetails$1 = function() { // ClassicPress: defer loading via require()
+
+	var MediaDetails = wp.media.view.MediaFrame.MediaDetails,
 		MediaLibrary = wp.media.controller.MediaLibrary,
 
-		l10n$3 = wp.media.view.l10n,
-		AudioDetails$1;
+		l10n = wp.media.view.l10n,
+		AudioDetails;
 
 	/**
 	 * wp.media.view.MediaFrame.AudioDetails
@@ -264,7 +281,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	AudioDetails$1 = MediaDetails$1.extend(/** @lends wp.media.view.MediaFrame.AudioDetails.prototype */{
+	AudioDetails = MediaDetails.extend(/** @lends wp.media.view.MediaFrame.AudioDetails.prototype */{
 		defaults: {
 			id:      'audio',
 			url:     '',
@@ -272,20 +289,20 @@
 			content: 'audio-details',
 			toolbar: 'audio-details',
 			type:    'link',
-			title:    l10n$3.audioDetailsTitle,
+			title:    l10n.audioDetailsTitle,
 			priority: 120
 		},
 
 		initialize: function( options ) {
 			options.DetailsView = wp.media.view.AudioDetails;
-			options.cancelText = l10n$3.audioDetailsCancel;
-			options.addText = l10n$3.audioAddSourceTitle;
+			options.cancelText = l10n.audioDetailsCancel;
+			options.addText = l10n.audioAddSourceTitle;
 
-			MediaDetails$1.prototype.initialize.call( this, options );
+			MediaDetails.prototype.initialize.call( this, options );
 		},
 
 		bindHandlers: function() {
-			MediaDetails$1.prototype.bindHandlers.apply( this, arguments );
+			MediaDetails.prototype.bindHandlers.apply( this, arguments );
 
 			this.on( 'toolbar:render:replace-audio', this.renderReplaceToolbar, this );
 			this.on( 'toolbar:render:add-audio-source', this.renderAddSourceToolbar, this );
@@ -300,7 +317,7 @@
 				new MediaLibrary( {
 					type: 'audio',
 					id: 'replace-audio',
-					title: l10n$3.audioReplaceTitle,
+					title: l10n.audioReplaceTitle,
 					toolbar: 'replace-audio',
 					media: this.media,
 					menu: 'audio-details'
@@ -309,7 +326,7 @@
 				new MediaLibrary( {
 					type: 'audio',
 					id: 'add-audio-source',
-					title: l10n$3.audioAddSourceTitle,
+					title: l10n.audioAddSourceTitle,
 					toolbar: 'add-audio-source',
 					media: this.media,
 					menu: false
@@ -318,12 +335,16 @@
 		}
 	});
 
-	var audioDetails$1 = AudioDetails$1;
+	return AudioDetails;
 
-	var MediaDetails$2 = wp.media.view.MediaFrame.MediaDetails,
-		MediaLibrary$1 = wp.media.controller.MediaLibrary,
-		l10n$4 = wp.media.view.l10n,
-		VideoDetails$1;
+	};
+
+	var videoDetails$1 = function() { // ClassicPress: defer loading via require()
+
+	var MediaDetails = wp.media.view.MediaFrame.MediaDetails,
+		MediaLibrary = wp.media.controller.MediaLibrary,
+		l10n = wp.media.view.l10n,
+		VideoDetails;
 
 	/**
 	 * wp.media.view.MediaFrame.VideoDetails
@@ -340,7 +361,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	VideoDetails$1 = MediaDetails$2.extend(/** @lends wp.media.view.MediaFrame.VideoDetails.prototype */{
+	VideoDetails = MediaDetails.extend(/** @lends wp.media.view.MediaFrame.VideoDetails.prototype */{
 		defaults: {
 			id:      'video',
 			url:     '',
@@ -348,20 +369,20 @@
 			content: 'video-details',
 			toolbar: 'video-details',
 			type:    'link',
-			title:    l10n$4.videoDetailsTitle,
+			title:    l10n.videoDetailsTitle,
 			priority: 120
 		},
 
 		initialize: function( options ) {
 			options.DetailsView = wp.media.view.VideoDetails;
-			options.cancelText = l10n$4.videoDetailsCancel;
-			options.addText = l10n$4.videoAddSourceTitle;
+			options.cancelText = l10n.videoDetailsCancel;
+			options.addText = l10n.videoAddSourceTitle;
 
-			MediaDetails$2.prototype.initialize.call( this, options );
+			MediaDetails.prototype.initialize.call( this, options );
 		},
 
 		bindHandlers: function() {
-			MediaDetails$2.prototype.bindHandlers.apply( this, arguments );
+			MediaDetails.prototype.bindHandlers.apply( this, arguments );
 
 			this.on( 'toolbar:render:replace-video', this.renderReplaceToolbar, this );
 			this.on( 'toolbar:render:add-video-source', this.renderAddSourceToolbar, this );
@@ -375,37 +396,37 @@
 					media: this.media
 				}),
 
-				new MediaLibrary$1( {
+				new MediaLibrary( {
 					type: 'video',
 					id: 'replace-video',
-					title: l10n$4.videoReplaceTitle,
+					title: l10n.videoReplaceTitle,
 					toolbar: 'replace-video',
 					media: this.media,
 					menu: 'video-details'
 				} ),
 
-				new MediaLibrary$1( {
+				new MediaLibrary( {
 					type: 'video',
 					id: 'add-video-source',
-					title: l10n$4.videoAddSourceTitle,
+					title: l10n.videoAddSourceTitle,
 					toolbar: 'add-video-source',
 					media: this.media,
 					menu: false
 				} ),
 
-				new MediaLibrary$1( {
+				new MediaLibrary( {
 					type: 'image',
 					id: 'select-poster-image',
-					title: l10n$4.videoSelectPosterImageTitle,
+					title: l10n.videoSelectPosterImageTitle,
 					toolbar: 'select-poster-image',
 					media: this.media,
 					menu: 'video-details'
 				} ),
 
-				new MediaLibrary$1( {
+				new MediaLibrary( {
 					type: 'text',
 					id: 'add-track',
-					title: l10n$4.videoAddTrackTitle,
+					title: l10n.videoAddTrackTitle,
 					toolbar: 'add-track',
 					media: this.media,
 					menu: 'video-details'
@@ -414,7 +435,7 @@
 		},
 
 		renderSelectPosterImageToolbar: function() {
-			this.setPrimaryButton( l10n$4.videoSelectPosterImageTitle, function( controller, state ) {
+			this.setPrimaryButton( l10n.videoSelectPosterImageTitle, function( controller, state ) {
 				var urls = [], attachment = state.get( 'selection' ).single();
 
 				controller.media.set( 'poster', attachment.get( 'url' ) );
@@ -436,7 +457,7 @@
 		},
 
 		renderAddTrackToolbar: function() {
-			this.setPrimaryButton( l10n$4.videoAddTrackTitle, function( controller, state ) {
+			this.setPrimaryButton( l10n.videoAddTrackTitle, function( controller, state ) {
 				var attachment = state.get( 'selection' ).single(),
 					content = controller.media.get( 'content' );
 
@@ -454,12 +475,16 @@
 		}
 	});
 
-	var videoDetails$1 = VideoDetails$1;
+	return VideoDetails;
+
+	};
+
+	var mediaDetails$1 = function() { // ClassicPress: defer loading via require()
 
 	/* global MediaElementPlayer */
 	var AttachmentDisplay = wp.media.view.Settings.AttachmentDisplay,
 		$ = jQuery,
-		MediaDetails$3;
+		MediaDetails;
 
 	/**
 	 * wp.media.view.MediaDetails
@@ -473,7 +498,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	MediaDetails$3 = AttachmentDisplay.extend(/** @lends wp.media.view.MediaDetails.prototype */{
+	MediaDetails = AttachmentDisplay.extend(/** @lends wp.media.view.MediaDetails.prototype */{
 		initialize: function() {
 			_.bindAll(this, 'success');
 			this.players = [];
@@ -609,7 +634,7 @@
 		 * @returns {HTMLElement}
 		 */
 		prepareSrc : function( elem ) {
-			var i = MediaDetails$3.instances++;
+			var i = MediaDetails.instances++;
 			_.each( $( elem ).find( 'source' ), function( source ) {
 				source.src = [
 					source.src,
@@ -623,10 +648,14 @@
 		}
 	});
 
-	var mediaDetails$1 = MediaDetails$3;
+	return MediaDetails;
 
-	var MediaDetails$4 = wp.media.view.MediaDetails,
-		AudioDetails$2;
+	};
+
+	var audioDetails$2 = function() { // ClassicPress: defer loading via require()
+
+	var MediaDetails = wp.media.view.MediaDetails,
+		AudioDetails;
 
 	/**
 	 * wp.media.view.AudioDetails
@@ -641,7 +670,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	AudioDetails$2 = MediaDetails$4.extend(/** @lends wp.media.view.AudioDetails.prototype */{
+	AudioDetails = MediaDetails.extend(/** @lends wp.media.view.AudioDetails.prototype */{
 		className: 'audio-details',
 		template:  wp.template('audio-details'),
 
@@ -652,7 +681,7 @@
 				if ( audio.is(':hidden') ) {
 					audio.show();
 				}
-				this.media = MediaDetails$4.prepareSrc( audio.get(0) );
+				this.media = MediaDetails.prepareSrc( audio.get(0) );
 			} else {
 				audio.hide();
 				this.media = false;
@@ -662,10 +691,14 @@
 		}
 	});
 
-	var audioDetails$2 = AudioDetails$2;
+	return AudioDetails;
 
-	var MediaDetails$5 = wp.media.view.MediaDetails,
-		VideoDetails$2;
+	};
+
+	var videoDetails$2 = function() { // ClassicPress: defer loading via require()
+
+	var MediaDetails = wp.media.view.MediaDetails,
+		VideoDetails;
 
 	/**
 	 * wp.media.view.VideoDetails
@@ -680,7 +713,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	VideoDetails$2 = MediaDetails$5.extend(/** @lends wp.media.view.VideoDetails.prototype */{
+	VideoDetails = MediaDetails.extend(/** @lends wp.media.view.VideoDetails.prototype */{
 		className: 'video-details',
 		template:  wp.template('video-details'),
 
@@ -693,7 +726,7 @@
 				}
 
 				if ( ! video.hasClass( 'youtube-video' ) && ! video.hasClass( 'vimeo-video' ) ) {
-					this.media = MediaDetails$5.prepareSrc( video.get(0) );
+					this.media = MediaDetails.prepareSrc( video.get(0) );
 				} else {
 					this.media = video.get(0);
 				}
@@ -706,11 +739,13 @@
 		}
 	});
 
-	var videoDetails$2 = VideoDetails$2;
+	return VideoDetails;
+
+	};
 
 	var media = wp.media,
 		baseSettings = window._wpmejsSettings || {},
-		l10n$5 = window._wpMediaViewsL10n || {};
+		l10n = window._wpMediaViewsL10n || {};
 
 	/**
 	 *
@@ -815,7 +850,7 @@
 	 */
 	wp.media.playlist = new wp.media.collection({
 		tag: 'playlist',
-		editTitle : l10n$5.editPlaylistTitle,
+		editTitle : l10n.editPlaylistTitle,
 		defaults : {
 			id: wp.media.view.settings.post.id,
 			style: 'light',
@@ -979,15 +1014,15 @@
 		}
 	};
 
-	media.model.PostMedia = postMedia;
-	media.controller.AudioDetails = audioDetails;
-	media.controller.VideoDetails = videoDetails;
-	media.view.MediaFrame.MediaDetails = mediaDetails;
-	media.view.MediaFrame.AudioDetails = audioDetails$1;
-	media.view.MediaFrame.VideoDetails = videoDetails$1;
-	media.view.MediaDetails = mediaDetails$1;
-	media.view.AudioDetails = audioDetails$2;
-	media.view.VideoDetails = videoDetails$2;
+	media.model.PostMedia = postMedia();
+	media.controller.AudioDetails = audioDetails();
+	media.controller.VideoDetails = videoDetails();
+	media.view.MediaFrame.MediaDetails = mediaDetails();
+	media.view.MediaFrame.AudioDetails = audioDetails$1();
+	media.view.MediaFrame.VideoDetails = videoDetails$1();
+	media.view.MediaDetails = mediaDetails$1();
+	media.view.AudioDetails = audioDetails$2();
+	media.view.VideoDetails = videoDetails$2();
 
 	var audiovideo_manifest = {
 

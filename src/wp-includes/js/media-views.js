@@ -1,5 +1,6 @@
 (function () {
-	'use strict';
+
+	var region = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.Region
@@ -174,7 +175,11 @@
 		}
 	});
 
-	var region = Region;
+	return Region;
+
+	};
+
+	var stateMachine = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.StateMachine
@@ -314,7 +319,11 @@
 		};
 	});
 
-	var stateMachine = StateMachine;
+	return StateMachine;
+
+	};
+
+	var state = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.State
@@ -556,7 +565,11 @@
 		};
 	});
 
-	var state = State;
+	return State;
+
+	};
+
+	var selectionSync = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.selectionSync
@@ -623,7 +636,11 @@
 		}
 	};
 
-	var selectionSync_1 = selectionSync;
+	return selectionSync;
+
+	};
+
+	var library = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		getUserSetting = window.getUserSetting,
@@ -918,11 +935,15 @@
 	// Make selectionSync available on any Media Library state.
 	_.extend( Library.prototype, wp.media.selectionSync );
 
-	var library = Library;
+	return Library;
 
-	var State$1 = wp.media.controller.State,
-		Library$1 = wp.media.controller.Library,
-		l10n$1 = wp.media.view.l10n,
+	};
+
+	var imageDetails = function() { // ClassicPress: defer loading via require()
+
+	var State = wp.media.controller.State,
+		Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		ImageDetails;
 
 	/**
@@ -951,17 +972,17 @@
 	 * @todo This state inherits some defaults from media.controller.Library.prototype.defaults,
 	 *       however this may not do anything.
 	 */
-	ImageDetails = State$1.extend(/** @lends wp.media.controller.ImageDetails.prototype */{
+	ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototype */{
 		defaults: _.defaults({
 			id:       'image-details',
-			title:    l10n$1.imageDetailsTitle,
+			title:    l10n.imageDetailsTitle,
 			content:  'image-details',
 			menu:     false,
 			router:   false,
 			toolbar:  'image-details',
 			editing:  false,
 			priority: 60
-		}, Library$1.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.9.0
@@ -970,7 +991,7 @@
 		 */
 		initialize: function( options ) {
 			this.image = options.image;
-			State$1.prototype.initialize.apply( this, arguments );
+			State.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -981,10 +1002,14 @@
 		}
 	});
 
-	var imageDetails = ImageDetails;
+	return ImageDetails;
 
-	var Library$2 = wp.media.controller.Library,
-		l10n$2 = wp.media.view.l10n,
+	};
+
+	var galleryEdit = function() { // ClassicPress: defer loading via require()
+
+	var Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		GalleryEdit;
 
 	/**
@@ -1021,10 +1046,10 @@
 	 * @param {view}                       [attributes.AttachmentView]        The single `Attachment` view to be used in the `Attachments`.
 	 *                                                                        If none supplied, defaults to wp.media.view.Attachment.EditLibrary.
 	 */
-	GalleryEdit = Library$2.extend(/** @lends wp.media.controller.GalleryEdit.prototype */{
+	GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototype */{
 		defaults: {
 			id:               'gallery-edit',
-			title:            l10n$2.editGalleryTitle,
+			title:            l10n.editGalleryTitle,
 			multiple:         false,
 			searchable:       false,
 			sortable:         true,
@@ -1055,7 +1080,7 @@
 				this.set( 'AttachmentView', wp.media.view.Attachment.EditLibrary );
 			}
 
-			Library$2.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -1072,7 +1097,7 @@
 
 			this.frame.on( 'content:render:browse', this.gallerySettings, this );
 
-			Library$2.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		},
 
 		/**
@@ -1084,7 +1109,7 @@
 
 			this.frame.off( 'content:render:browse', this.gallerySettings, this );
 
-			Library$2.prototype.deactivate.apply( this, arguments );
+			Library.prototype.deactivate.apply( this, arguments );
 		},
 
 		/**
@@ -1114,7 +1139,7 @@
 			});
 
 			browser.toolbar.set( 'reverse', {
-				text:     l10n$2.reverseOrder,
+				text:     l10n.reverseOrder,
 				priority: 80,
 
 				click: function() {
@@ -1124,11 +1149,15 @@
 		}
 	});
 
-	var galleryEdit = GalleryEdit;
+	return GalleryEdit;
+
+	};
+
+	var galleryAdd = function() { // ClassicPress: defer loading via require()
 
 	var Selection = wp.media.model.Selection,
-		Library$3 = wp.media.controller.Library,
-		l10n$3 = wp.media.view.l10n,
+		Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		GalleryAdd;
 
 	/**
@@ -1164,17 +1193,17 @@
 	 * @param {boolean}                    [attributes.syncSelection=false]     Whether the Attachments selection should be persisted from the last state.
 	 *                                                                          Defaults to false because for this state, because the library of the Edit Gallery state is the selection.
 	 */
-	GalleryAdd = Library$3.extend(/** @lends wp.media.controller.GalleryAdd.prototype */{
+	GalleryAdd = Library.extend(/** @lends wp.media.controller.GalleryAdd.prototype */{
 		defaults: _.defaults({
 			id:            'gallery-library',
-			title:         l10n$3.addToGalleryTitle,
+			title:         l10n.addToGalleryTitle,
 			multiple:      'add',
 			filterable:    'uploaded',
 			menu:          'gallery',
 			toolbar:       'gallery-add',
 			priority:      100,
 			syncSelection: false
-		}, Library$3.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.5.0
@@ -1185,7 +1214,7 @@
 				this.set( 'library', wp.media.query({ type: 'image' }) );
 			}
 
-			Library$3.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -1212,14 +1241,18 @@
 			library.observe( edit );
 			this.editLibrary = edit;
 
-			Library$3.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		}
 	});
 
-	var galleryAdd = GalleryAdd;
+	return GalleryAdd;
 
-	var Library$4 = wp.media.controller.Library,
-		l10n$4 = wp.media.view.l10n,
+	};
+
+	var collectionEdit = function() { // ClassicPress: defer loading via require()
+
+	var Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		$ = jQuery,
 		CollectionEdit;
 
@@ -1260,7 +1293,7 @@
 	 * @param {string}                     attributes.type                   The collection's media type. (e.g. 'video').
 	 * @param {string}                     attributes.collectionType         The collection type. (e.g. 'playlist').
 	 */
-	CollectionEdit = Library$4.extend(/** @lends wp.media.controller.CollectionEdit.prototype */{
+	CollectionEdit = Library.extend(/** @lends wp.media.controller.CollectionEdit.prototype */{
 		defaults: {
 			multiple:         false,
 			sortable:         true,
@@ -1297,7 +1330,7 @@
 			if ( ! this.get('AttachmentView') ) {
 				this.set( 'AttachmentView', wp.media.view.Attachment.EditLibrary );
 			}
-			Library$4.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -1314,7 +1347,7 @@
 
 			this.frame.on( 'content:render:browse', this.renderSettings, this );
 
-			Library$4.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		},
 
 		/**
@@ -1326,7 +1359,7 @@
 
 			this.frame.off( 'content:render:browse', this.renderSettings, this );
 
-			Library$4.prototype.deactivate.apply( this, arguments );
+			Library.prototype.deactivate.apply( this, arguments );
 		},
 
 		/**
@@ -1369,7 +1402,7 @@
 
 			// Add the 'Reverse order' button to the toolbar.
 			attachmentsBrowserView.toolbar.set( 'reverse', {
-				text:     l10n$4.reverseOrder,
+				text:     l10n.reverseOrder,
 				priority: 80,
 
 				click: function() {
@@ -1379,10 +1412,14 @@
 		}
 	});
 
-	var collectionEdit = CollectionEdit;
+	return CollectionEdit;
 
-	var Selection$1 = wp.media.model.Selection,
-		Library$5 = wp.media.controller.Library,
+	};
+
+	var collectionAdd = function() { // ClassicPress: defer loading via require()
+
+	var Selection = wp.media.model.Selection,
+		Library = wp.media.controller.Library,
 		CollectionAdd;
 
 	/**
@@ -1420,7 +1457,7 @@
 	 * @param {string}                     attributes.type                   The collection's media type. (e.g. 'video').
 	 * @param {string}                     attributes.collectionType         The collection type. (e.g. 'playlist').
 	 */
-	CollectionAdd = Library$5.extend(/** @lends wp.media.controller.CollectionAdd.prototype */{
+	CollectionAdd = Library.extend(/** @lends wp.media.controller.CollectionAdd.prototype */{
 		defaults: _.defaults( {
 			// Selection defaults. @see media.model.Selection
 			multiple:      'add',
@@ -1429,7 +1466,7 @@
 
 			priority:      100,
 			syncSelection: false
-		}, Library$5.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.9.0
@@ -1449,7 +1486,7 @@
 			if ( ! this.get('library') ) {
 				this.set( 'library', wp.media.query({ type: this.get('type') }) );
 			}
-			Library$5.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -1467,7 +1504,7 @@
 			// Accepts attachments that exist in the original library and
 			// that do not exist in gallery's library.
 			library.validator = function( attachment ) {
-				return !! this.mirroring.get( attachment.cid ) && ! edit.get( attachment.cid ) && Selection$1.prototype.validator.apply( this, arguments );
+				return !! this.mirroring.get( attachment.cid ) && ! edit.get( attachment.cid ) && Selection.prototype.validator.apply( this, arguments );
 			};
 
 			// Reset the library to ensure that all attachments are re-added
@@ -1477,15 +1514,19 @@
 			library.observe( edit );
 			this.set('editLibrary', edit);
 
-			Library$5.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		}
 	});
 
-	var collectionAdd = CollectionAdd;
+	return CollectionAdd;
+
+	};
+
+	var featuredImage = function() { // ClassicPress: defer loading via require()
 
 	var Attachment = wp.media.model.Attachment,
-		Library$6 = wp.media.controller.Library,
-		l10n$5 = wp.media.view.l10n,
+		Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		FeaturedImage;
 
 	/**
@@ -1521,16 +1562,16 @@
 	 * @param {boolean}                    [attributes.contentUserSetting=true]  Whether the content region's mode should be set and persisted per user.
 	 * @param {boolean}                    [attributes.syncSelection=true]       Whether the Attachments selection should be persisted from the last state.
 	 */
-	FeaturedImage = Library$6.extend(/** @lends wp.media.controller.FeaturedImage.prototype */{
+	FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prototype */{
 		defaults: _.defaults({
 			id:            'featured-image',
-			title:         l10n$5.setFeaturedImageTitle,
+			title:         l10n.setFeaturedImageTitle,
 			multiple:      false,
 			filterable:    'uploaded',
 			toolbar:       'featured-image',
 			priority:      60,
 			syncSelection: true
-		}, Library$6.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.5.0
@@ -1543,7 +1584,7 @@
 				this.set( 'library', wp.media.query({ type: 'image' }) );
 			}
 
-			Library$6.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 
 			library    = this.get('library');
 			comparator = library.comparator;
@@ -1575,7 +1616,7 @@
 			this.updateSelection();
 			this.frame.on( 'open', this.updateSelection, this );
 
-			Library$6.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		},
 
 		/**
@@ -1584,7 +1625,7 @@
 		deactivate: function() {
 			this.frame.off( 'open', this.updateSelection, this );
 
-			Library$6.prototype.deactivate.apply( this, arguments );
+			Library.prototype.deactivate.apply( this, arguments );
 		},
 
 		/**
@@ -1604,10 +1645,14 @@
 		}
 	});
 
-	var featuredImage = FeaturedImage;
+	return FeaturedImage;
 
-	var Library$7 = wp.media.controller.Library,
-		l10n$6 = wp.media.view.l10n,
+	};
+
+	var replaceImage = function() { // ClassicPress: defer loading via require()
+
+	var Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		ReplaceImage;
 
 	/**
@@ -1643,17 +1688,17 @@
 	 * @param {boolean}                    [attributes.contentUserSetting=true] Whether the content region's mode should be set and persisted per user.
 	 * @param {boolean}                    [attributes.syncSelection=true]      Whether the Attachments selection should be persisted from the last state.
 	 */
-	ReplaceImage = Library$7.extend(/** @lends wp.media.controller.ReplaceImage.prototype */{
+	ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.prototype */{
 		defaults: _.defaults({
 			id:            'replace-image',
-			title:         l10n$6.replaceImageTitle,
+			title:         l10n.replaceImageTitle,
 			multiple:      false,
 			filterable:    'uploaded',
 			toolbar:       'replace',
 			menu:          false,
 			priority:      60,
 			syncSelection: true
-		}, Library$7.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.9.0
@@ -1669,7 +1714,7 @@
 				this.set( 'library', wp.media.query({ type: 'image' }) );
 			}
 
-			Library$7.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 
 			library    = this.get('library');
 			comparator = library.comparator;
@@ -1699,7 +1744,7 @@
 		 */
 		activate: function() {
 			this.updateSelection();
-			Library$7.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		},
 
 		/**
@@ -1713,9 +1758,13 @@
 		}
 	});
 
-	var replaceImage = ReplaceImage;
+	return ReplaceImage;
 
-	var l10n$7 = wp.media.view.l10n,
+	};
+
+	var editImage = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		EditImage;
 
 	/**
@@ -1741,7 +1790,7 @@
 	EditImage = wp.media.controller.State.extend(/** @lends wp.media.controller.EditImage.prototype */{
 		defaults: {
 			id:      'edit-image',
-			title:   l10n$7.editImage,
+			title:   l10n.editImage,
 			menu:    false,
 			toolbar: 'edit-image',
 			content: 'edit-image',
@@ -1775,7 +1824,7 @@
 				items: {
 					back: {
 						style: 'primary',
-						text:     l10n$7.back,
+						text:     l10n.back,
 						priority: 20,
 						click:    function() {
 							if ( previous ) {
@@ -1790,7 +1839,11 @@
 		}
 	});
 
-	var editImage = EditImage;
+	return EditImage;
+
+	};
+
+	var mediaLibrary = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.MediaLibrary
@@ -1802,10 +1855,10 @@
 	 * @augments wp.media.controller.State
 	 * @augments Backbone.Model
 	 */
-	var Library$8 = wp.media.controller.Library,
+	var Library = wp.media.controller.Library,
 		MediaLibrary;
 
-	MediaLibrary = Library$8.extend(/** @lends wp.media.controller.MediaLibrary.prototype */{
+	MediaLibrary = Library.extend(/** @lends wp.media.controller.MediaLibrary.prototype */{
 		defaults: _.defaults({
 			// Attachments browser defaults. @see media.view.AttachmentsBrowser
 			filterable:      'uploaded',
@@ -1813,7 +1866,7 @@
 			displaySettings: false,
 			priority:        80,
 			syncSelection:   false
-		}, Library$8.prototype.defaults ),
+		}, Library.prototype.defaults ),
 
 		/**
 		 * @since WP-3.9.0
@@ -1825,7 +1878,7 @@
 			this.type = options.type;
 			this.set( 'library', wp.media.query({ type: this.type }) );
 
-			Library$8.prototype.initialize.apply( this, arguments );
+			Library.prototype.initialize.apply( this, arguments );
 		},
 
 		/**
@@ -1837,14 +1890,18 @@
 				this.set( 'library', wp.media.query({ type: wp.media.frame.lastMime }) );
 				delete wp.media.frame.lastMime;
 			}
-			Library$8.prototype.activate.apply( this, arguments );
+			Library.prototype.activate.apply( this, arguments );
 		}
 	});
 
-	var mediaLibrary = MediaLibrary;
+	return MediaLibrary;
 
-	var l10n$8 = wp.media.view.l10n,
-		$$1 = Backbone.$,
+	};
+
+	var embed = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
+		$ = Backbone.$,
 		Embed;
 
 	/**
@@ -1873,7 +1930,7 @@
 	Embed = wp.media.controller.State.extend(/** @lends wp.media.controller.Embed.prototype */{
 		defaults: {
 			id:       'embed',
-			title:    l10n$8.insertFromUrlTitle,
+			title:    l10n.insertFromUrlTitle,
 			content:  'embed',
 			menu:     'default',
 			toolbar:  'main-embed',
@@ -1916,7 +1973,7 @@
 			}
 
 			if ( attributes.scanners.length ) {
-				scanners = attributes.scanners = $$1.when.apply( $$1, attributes.scanners );
+				scanners = attributes.scanners = $.when.apply( $, attributes.scanners );
 				scanners.always( function() {
 					if ( embed.get('scanners') === scanners ) {
 						embed.set( 'loading', false );
@@ -1939,7 +1996,7 @@
 				state = this,
 				url = this.props.get('url'),
 				image = new Image(),
-				deferred = $$1.Deferred();
+				deferred = $.Deferred();
 
 			attributes.scanners.push( deferred.promise() );
 
@@ -1978,9 +2035,13 @@
 		}
 	});
 
-	var embed = Embed;
+	return Embed;
 
-	var l10n$9 = wp.media.view.l10n,
+	};
+
+	var cropper = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		Cropper;
 
 	/**
@@ -1997,7 +2058,7 @@
 	Cropper = wp.media.controller.State.extend(/** @lends wp.media.controller.Cropper.prototype */{
 		defaults: {
 			id:          'cropper',
-			title:       l10n$9.cropImage,
+			title:       l10n.cropImage,
 			// Region mode defaults.
 			toolbar:     'crop',
 			content:     'crop',
@@ -2043,7 +2104,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     l10n$9.cropImage,
+						text:     l10n.cropImage,
 						priority: 80,
 						requires: { library: false, selection: false },
 
@@ -2054,7 +2115,7 @@
 							selection = controller.state().get('selection').first();
 							selection.set({cropDetails: controller.state().imgSelect.getSelection()});
 
-							this.$el.text(l10n$9.cropping);
+							this.$el.text(l10n.cropping);
 							this.$el.attr('disabled', true);
 
 							controller.state().doCrop( selection ).done( function( croppedImage ) {
@@ -2072,7 +2133,7 @@
 				_.extend( toolbarOptions.items, {
 					skip: {
 						style:      'secondary',
-						text:       l10n$9.skipCropping,
+						text:       l10n.skipCropping,
 						priority:   70,
 						requires:   { library: false, selection: false },
 						click:      function() {
@@ -2101,7 +2162,11 @@
 		}
 	});
 
-	var cropper = Cropper;
+	return Cropper;
+
+	};
+
+	var customizeImageCropper = function() { // ClassicPress: defer loading via require()
 
 	var Controller = wp.media.controller,
 		CustomizeImageCropper;
@@ -2145,9 +2210,13 @@
 		}
 	});
 
-	var customizeImageCropper = CustomizeImageCropper;
+	return CustomizeImageCropper;
 
-	var Controller$1 = wp.media.controller,
+	};
+
+	var siteIconCropper = function() { // ClassicPress: defer loading via require()
+
+	var Controller = wp.media.controller,
 		SiteIconCropper;
 
 	/**
@@ -2162,7 +2231,7 @@
 	 * @augments wp.media.controller.State
 	 * @augments Backbone.Model
 	 */
-	SiteIconCropper = Controller$1.Cropper.extend(/** @lends wp.media.controller.SiteIconCropper.prototype */{
+	SiteIconCropper = Controller.Cropper.extend(/** @lends wp.media.controller.SiteIconCropper.prototype */{
 		activate: function() {
 			this.frame.on( 'content:create:crop', this.createCropContent, this );
 			this.frame.on( 'close', this.removeCropper, this );
@@ -2195,7 +2264,11 @@
 		}
 	});
 
-	var siteIconCropper = SiteIconCropper;
+	return SiteIconCropper;
+
+	};
+
+	var view = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.View
@@ -2262,7 +2335,11 @@
 		}
 	});
 
-	var view = View;
+	return View;
+
+	};
+
+	var frame = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Frame
@@ -2429,10 +2506,14 @@
 	// Make the `Frame` a `StateMachine`.
 	_.extend( Frame.prototype, wp.media.controller.StateMachine.prototype );
 
-	var frame = Frame;
+	return Frame;
 
-	var Frame$1 = wp.media.view.Frame,
-		$$2 = jQuery,
+	};
+
+	var mediaFrame = function() { // ClassicPress: defer loading via require()
+
+	var Frame = wp.media.view.Frame,
+		$ = jQuery,
 		MediaFrame;
 
 	/**
@@ -2449,7 +2530,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	MediaFrame = Frame$1.extend(/** @lends wp.media.view.MediaFrame.prototype */{
+	MediaFrame = Frame.extend(/** @lends wp.media.view.MediaFrame.prototype */{
 		className: 'media-frame',
 		template:  wp.template('media-frame'),
 		regions:   ['menu','title','content','toolbar','router'],
@@ -2462,7 +2543,7 @@
 		 * @constructs
 		 */
 		initialize: function() {
-			Frame$1.prototype.initialize.apply( this, arguments );
+			Frame.prototype.initialize.apply( this, arguments );
 
 			_.defaults( this.options, {
 				title:    '',
@@ -2525,7 +2606,7 @@
 			/**
 			 * call 'render' directly on the parent class
 			 */
-			return Frame$1.prototype.render.apply( this, arguments );
+			return Frame.prototype.render.apply( this, arguments );
 		},
 		/**
 		 * @param {Object} title
@@ -2583,7 +2664,7 @@
 			}
 
 			// Add the post ID to the tab URL if it exists.
-			$postId = $$2('#post_ID');
+			$postId = $('#post_ID');
 			if ( $postId.length ) {
 				tabUrl += '&post_id=' + $postId.val();
 			}
@@ -2709,10 +2790,14 @@
 		};
 	});
 
-	var mediaFrame = MediaFrame;
+	return MediaFrame;
 
-	var MediaFrame$1 = wp.media.view.MediaFrame,
-		l10n$a = wp.media.view.l10n,
+	};
+
+	var select = function() { // ClassicPress: defer loading via require()
+
+	var MediaFrame = wp.media.view.MediaFrame,
+		l10n = wp.media.view.l10n,
 		Select;
 
 	/**
@@ -2730,10 +2815,10 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	Select = MediaFrame$1.extend(/** @lends wp.media.view.MediaFrame.Select.prototype */{
+	Select = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.Select.prototype */{
 		initialize: function() {
 			// Call 'initialize' directly on the parent class.
-			MediaFrame$1.prototype.initialize.apply( this, arguments );
+			MediaFrame.prototype.initialize.apply( this, arguments );
 
 			_.defaults( this.options, {
 				selection: [],
@@ -2814,11 +2899,11 @@
 		browseRouter: function( routerView ) {
 			routerView.set({
 				upload: {
-					text:     l10n$a.uploadFilesTitle,
+					text:     l10n.uploadFilesTitle,
 					priority: 20
 				},
 				browse: {
-					text:     l10n$a.mediaLibraryTitle,
+					text:     l10n.mediaLibraryTitle,
 					priority: 40
 				}
 			});
@@ -2880,11 +2965,15 @@
 		}
 	});
 
-	var select = Select;
+	return Select;
 
-	var Select$1 = wp.media.view.MediaFrame.Select,
-		Library$9 = wp.media.controller.Library,
-		l10n$b = wp.media.view.l10n,
+	};
+
+	var post = function() { // ClassicPress: defer loading via require()
+
+	var Select = wp.media.view.MediaFrame.Select,
+		Library = wp.media.controller.Library,
+		l10n = wp.media.view.l10n,
 		Post;
 
 	/**
@@ -2903,7 +2992,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	Post = Select$1.extend(/** @lends wp.media.view.MediaFrame.Post.prototype */{
+	Post = Select.extend(/** @lends wp.media.view.MediaFrame.Post.prototype */{
 		initialize: function() {
 			this.counts = {
 				audio: {
@@ -2924,7 +3013,7 @@
 			});
 
 			// Call 'initialize' directly on the parent class.
-			Select$1.prototype.initialize.apply( this, arguments );
+			Select.prototype.initialize.apply( this, arguments );
 			this.createIframeStates();
 
 		},
@@ -2937,9 +3026,9 @@
 
 			this.states.add([
 				// Main states.
-				new Library$9({
+				new Library({
 					id:         'insert',
-					title:      l10n$b.insertMediaTitle,
+					title:      l10n.insertMediaTitle,
 					priority:   20,
 					toolbar:    'main-insert',
 					filterable: 'all',
@@ -2958,9 +3047,9 @@
 					displayUserSettings: true
 				}),
 
-				new Library$9({
+				new Library({
 					id:         'gallery',
-					title:      l10n$b.createGalleryTitle,
+					title:      l10n.createGalleryTitle,
 					priority:   40,
 					toolbar:    'main-gallery',
 					filterable: 'uploaded',
@@ -2986,9 +3075,9 @@
 
 				new wp.media.controller.GalleryAdd(),
 
-				new Library$9({
+				new Library({
 					id:         'playlist',
-					title:      l10n$b.createPlaylistTitle,
+					title:      l10n.createPlaylistTitle,
 					priority:   60,
 					toolbar:    'main-playlist',
 					filterable: 'uploaded',
@@ -3004,24 +3093,24 @@
 				new wp.media.controller.CollectionEdit({
 					type: 'audio',
 					collectionType: 'playlist',
-					title:          l10n$b.editPlaylistTitle,
+					title:          l10n.editPlaylistTitle,
 					SettingsView:   wp.media.view.Settings.Playlist,
 					library:        options.selection,
 					editing:        options.editing,
 					menu:           'playlist',
-					dragInfoText:   l10n$b.playlistDragInfo,
+					dragInfoText:   l10n.playlistDragInfo,
 					dragInfo:       false
 				}),
 
 				new wp.media.controller.CollectionAdd({
 					type: 'audio',
 					collectionType: 'playlist',
-					title: l10n$b.addToPlaylistTitle
+					title: l10n.addToPlaylistTitle
 				}),
 
-				new Library$9({
+				new Library({
 					id:         'video-playlist',
-					title:      l10n$b.createVideoPlaylistTitle,
+					title:      l10n.createVideoPlaylistTitle,
 					priority:   60,
 					toolbar:    'main-video-playlist',
 					filterable: 'uploaded',
@@ -3036,19 +3125,19 @@
 				new wp.media.controller.CollectionEdit({
 					type: 'video',
 					collectionType: 'playlist',
-					title:          l10n$b.editVideoPlaylistTitle,
+					title:          l10n.editVideoPlaylistTitle,
 					SettingsView:   wp.media.view.Settings.Playlist,
 					library:        options.selection,
 					editing:        options.editing,
 					menu:           'video-playlist',
-					dragInfoText:   l10n$b.videoPlaylistDragInfo,
+					dragInfoText:   l10n.videoPlaylistDragInfo,
 					dragInfo:       false
 				}),
 
 				new wp.media.controller.CollectionAdd({
 					type: 'video',
 					collectionType: 'playlist',
-					title: l10n$b.addToVideoPlaylistTitle
+					title: l10n.addToVideoPlaylistTitle
 				})
 			]);
 
@@ -3060,7 +3149,7 @@
 		bindHandlers: function() {
 			var handlers, checkCounts;
 
-			Select$1.prototype.bindHandlers.apply( this, arguments );
+			Select.prototype.bindHandlers.apply( this, arguments );
 
 			this.on( 'activate', this.activate, this );
 
@@ -3165,7 +3254,7 @@
 
 			view.set({
 				cancel: {
-					text:     l10n$b.cancelGalleryTitle,
+					text:     l10n.cancelGalleryTitle,
 					priority: 20,
 					click:    function() {
 						if ( previous ) {
@@ -3193,7 +3282,7 @@
 
 			view.set({
 				cancel: {
-					text:     l10n$b.cancelPlaylistTitle,
+					text:     l10n.cancelPlaylistTitle,
 					priority: 20,
 					click:    function() {
 						if ( previous ) {
@@ -3217,7 +3306,7 @@
 
 			view.set({
 				cancel: {
-					text:     l10n$b.cancelVideoPlaylistTitle,
+					text:     l10n.cancelVideoPlaylistTitle,
 					priority: 20,
 					click:    function() {
 						if ( previous ) {
@@ -3267,7 +3356,7 @@
 			}).render();
 
 			view.toolbar.set( 'backToLibrary', {
-				text:     l10n$b.returnToLibrary,
+				text:     l10n.returnToLibrary,
 				priority: -100,
 
 				click: function() {
@@ -3325,7 +3414,7 @@
 			view.set( 'insert', {
 				style:    'primary',
 				priority: 80,
-				text:     l10n$b.insertIntoPost,
+				text:     l10n.insertIntoPost,
 				requires: { selection: true },
 
 				/**
@@ -3352,7 +3441,7 @@
 
 			view.set( 'gallery', {
 				style:    'primary',
-				text:     l10n$b.createNewGallery,
+				text:     l10n.createNewGallery,
 				priority: 60,
 				requires: { selection: true },
 
@@ -3382,7 +3471,7 @@
 
 			view.set( 'playlist', {
 				style:    'primary',
-				text:     l10n$b.createNewPlaylist,
+				text:     l10n.createNewPlaylist,
 				priority: 100,
 				requires: { selection: true },
 
@@ -3412,7 +3501,7 @@
 
 			view.set( 'video-playlist', {
 				style:    'primary',
-				text:     l10n$b.createNewVideoPlaylist,
+				text:     l10n.createNewVideoPlaylist,
 				priority: 100,
 				requires: { selection: true },
 
@@ -3437,7 +3526,7 @@
 
 		featuredImageToolbar: function( toolbar ) {
 			this.createSelectToolbar( toolbar, {
-				text:  l10n$b.setFeaturedImage,
+				text:  l10n.setFeaturedImage,
 				state: this.options.state
 			});
 		},
@@ -3455,7 +3544,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     editing ? l10n$b.updateGallery : l10n$b.insertGallery,
+						text:     editing ? l10n.updateGallery : l10n.insertGallery,
 						priority: 80,
 						requires: { library: true },
 
@@ -3484,7 +3573,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     l10n$b.addToGallery,
+						text:     l10n.addToGallery,
 						priority: 80,
 						requires: { selection: true },
 
@@ -3512,7 +3601,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     editing ? l10n$b.updatePlaylist : l10n$b.insertPlaylist,
+						text:     editing ? l10n.updatePlaylist : l10n.insertPlaylist,
 						priority: 80,
 						requires: { library: true },
 
@@ -3541,7 +3630,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     l10n$b.addToPlaylist,
+						text:     l10n.addToPlaylist,
 						priority: 80,
 						requires: { selection: true },
 
@@ -3569,7 +3658,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     editing ? l10n$b.updateVideoPlaylist : l10n$b.insertVideoPlaylist,
+						text:     editing ? l10n.updateVideoPlaylist : l10n.insertVideoPlaylist,
 						priority: 140,
 						requires: { library: true },
 
@@ -3598,7 +3687,7 @@
 				items: {
 					insert: {
 						style:    'primary',
-						text:     l10n$b.addToVideoPlaylist,
+						text:     l10n.addToVideoPlaylist,
 						priority: 140,
 						requires: { selection: true },
 
@@ -3617,11 +3706,15 @@
 		}
 	});
 
-	var post = Post;
+	return Post;
 
-	var Select$2 = wp.media.view.MediaFrame.Select,
-		l10n$c = wp.media.view.l10n,
-		ImageDetails$1;
+	};
+
+	var imageDetails$1 = function() { // ClassicPress: defer loading via require()
+
+	var Select = wp.media.view.MediaFrame.Select,
+		l10n = wp.media.view.l10n,
+		ImageDetails;
 
 	/**
 	 * wp.media.view.MediaFrame.ImageDetails
@@ -3640,7 +3733,7 @@
 	 * @augments Backbone.View
 	 * @mixes wp.media.controller.StateMachine
 	 */
-	ImageDetails$1 = Select$2.extend(/** @lends wp.media.view.MediaFrame.ImageDetails.prototype */{
+	ImageDetails = Select.extend(/** @lends wp.media.view.MediaFrame.ImageDetails.prototype */{
 		defaults: {
 			id:      'image',
 			url:     '',
@@ -3648,18 +3741,18 @@
 			content: 'image-details',
 			toolbar: 'image-details',
 			type:    'link',
-			title:    l10n$c.imageDetailsTitle,
+			title:    l10n.imageDetailsTitle,
 			priority: 120
 		},
 
 		initialize: function( options ) {
 			this.image = new wp.media.model.PostImage( options.metadata );
 			this.options.selection = new wp.media.model.Selection( this.image.attachment, { multiple: false } );
-			Select$2.prototype.initialize.apply( this, arguments );
+			Select.prototype.initialize.apply( this, arguments );
 		},
 
 		bindHandlers: function() {
-			Select$2.prototype.bindHandlers.apply( this, arguments );
+			Select.prototype.bindHandlers.apply( this, arguments );
 			this.on( 'menu:create:image-details', this.createMenu, this );
 			this.on( 'content:create:image-details', this.imageDetailsContent, this );
 			this.on( 'content:render:edit-image', this.editImageContent, this );
@@ -3679,7 +3772,7 @@
 					library: wp.media.query( { type: 'image' } ),
 					image: this.image,
 					multiple:  false,
-					title:     l10n$c.imageReplaceTitle,
+					title:     l10n.imageReplaceTitle,
 					toolbar: 'replace',
 					priority:  80,
 					displaySettings: true
@@ -3723,7 +3816,7 @@
 				items: {
 					select: {
 						style:    'primary',
-						text:     l10n$c.update,
+						text:     l10n.update,
 						priority: 80,
 
 						click: function() {
@@ -3754,7 +3847,7 @@
 				controller: this,
 				items: {
 					back: {
-						text:     l10n$c.back,
+						text:     l10n.back,
 						priority: 20,
 						click:    function() {
 							if ( previous ) {
@@ -3767,7 +3860,7 @@
 
 					replace: {
 						style:    'primary',
-						text:     l10n$c.replace,
+						text:     l10n.replace,
 						priority: 80,
 						requires: { selection: true },
 
@@ -3796,9 +3889,13 @@
 
 	});
 
-	var imageDetails$1 = ImageDetails$1;
+	return ImageDetails;
 
-	var $$3 = jQuery,
+	};
+
+	var modal = function() { // ClassicPress: defer loading via require()
+
+	var $ = jQuery,
 		Modal;
 
 	/**
@@ -3896,7 +3993,7 @@
 			}
 
 			// Disable page scrolling.
-			$$3( 'body' ).addClass( 'modal-open' );
+			$( 'body' ).addClass( 'modal-open' );
 
 			$el.show();
 
@@ -3928,7 +4025,7 @@
 			}
 
 			// Enable page scrolling.
-			$$3( 'body' ).removeClass( 'modal-open' );
+			$( 'body' ).removeClass( 'modal-open' );
 
 			// Hide modal and remove restricted media modal tab focus once it's closed
 			this.$el.hide().undelegate( 'keydown' );
@@ -3937,7 +4034,7 @@
 			if ( null !== this.clickedOpenerEl ) {
 				this.clickedOpenerEl.focus();
 			} else {
-				$$3( '#wpbody-content' ).focus();
+				$( '#wpbody-content' ).focus();
 			}
 
 			this.propagate('close');
@@ -3999,7 +4096,11 @@
 		}
 	});
 
-	var modal = Modal;
+	return Modal;
+
+	};
+
+	var focusManager = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.FocusManager
@@ -4046,9 +4147,13 @@
 
 	});
 
-	var focusManager = FocusManager;
+	return FocusManager;
 
-	var $$4 = jQuery,
+	};
+
+	var window$1 = function() { // ClassicPress: defer loading via require()
+
+	var $ = jQuery,
 		UploaderWindow;
 
 	/**
@@ -4077,7 +4182,7 @@
 		initialize: function() {
 			var uploader;
 
-			this.$browser = $$4( '<button type="button" class="browser" />' ).hide().appendTo( 'body' );
+			this.$browser = $( '<button type="button" class="browser" />' ).hide().appendTo( 'body' );
 
 			uploader = this.options.uploader = _.defaults( this.options.uploader || {}, {
 				dropzone:  this.$el,
@@ -4086,8 +4191,8 @@
 			});
 
 			// Ensure the dropzone is a jQuery collection.
-			if ( uploader.dropzone && ! (uploader.dropzone instanceof $$4) ) {
-				uploader.dropzone = $$4( uploader.dropzone );
+			if ( uploader.dropzone && ! (uploader.dropzone instanceof $) ) {
+				uploader.dropzone = $( uploader.dropzone );
 			}
 
 			this.controller.on( 'activate', this.refresh, this );
@@ -4121,7 +4226,7 @@
 			dropzone.on( 'dropzone:enter', _.bind( this.show, this ) );
 			dropzone.on( 'dropzone:leave', _.bind( this.hide, this ) );
 
-			$$4( this.uploader ).on( 'uploader:ready', _.bind( this._ready, this ) );
+			$( this.uploader ).on( 'uploader:ready', _.bind( this._ready, this ) );
 		},
 
 		_ready: function() {
@@ -4158,11 +4263,15 @@
 		}
 	});
 
-	var window$1 = UploaderWindow;
+	return UploaderWindow;
 
-	var View$1 = wp.media.View,
-		l10n$d = wp.media.view.l10n,
-		$$5 = jQuery,
+	};
+
+	var editor = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		l10n = wp.media.view.l10n,
+		$ = jQuery,
 		EditorUploader;
 
 	/**
@@ -4178,7 +4287,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	EditorUploader = View$1.extend(/** @lends wp.media.view.EditorUploader.prototype */{
+	EditorUploader = View.extend(/** @lends wp.media.view.EditorUploader.prototype */{
 		tagName:   'div',
 		className: 'uploader-editor',
 		template:  wp.template( 'uploader-editor' ),
@@ -4199,7 +4308,7 @@
 				return this;
 			}
 
-			this.$document = $$5(document);
+			this.$document = $(document);
 			this.dropzones = [];
 			this.files = [];
 
@@ -4259,7 +4368,7 @@
 			}
 
 			if ( ! _.isUndefined( e ) ) {
-				$$5( e.target ).closest( '.uploader-editor' ).toggleClass( 'droppable', this.overDropzone );
+				$( e.target ).closest( '.uploader-editor' ).toggleClass( 'droppable', this.overDropzone );
 			}
 
 			if ( ! this.overContainer && ! this.overDropzone ) {
@@ -4274,8 +4383,8 @@
 				return this;
 			}
 
-			View$1.prototype.render.apply( this, arguments );
-			$$5( '.wp-editor-wrap' ).each( _.bind( this.attach, this ) );
+			View.prototype.render.apply( this, arguments );
+			$( '.wp-editor-wrap' ).each( _.bind( this.attach, this ) );
 			return this;
 		},
 
@@ -4283,7 +4392,7 @@
 			// Attach a dropzone to an editor.
 			var dropzone = this.$el.clone();
 			this.dropzones.push( dropzone );
-			$$5( editor ).append( dropzone );
+			$( editor ).append( dropzone );
 			return this;
 		},
 
@@ -4305,7 +4414,7 @@
 			}
 
 			// Set the active editor to the drop target.
-			$wrap = $$5( event.target ).parents( '.wp-editor-wrap' );
+			$wrap = $( event.target ).parents( '.wp-editor-wrap' );
 			if ( $wrap.length > 0 && $wrap[0].id ) {
 				window.wpActiveEditor = $wrap[0].id.slice( 3, -5 );
 			}
@@ -4314,7 +4423,7 @@
 				this.workflow = wp.media.editor.open( window.wpActiveEditor, {
 					frame:    'post',
 					state:    'insert',
-					title:    l10n$d.addMedia,
+					title:    l10n.addMedia,
 					multiple: true
 				});
 
@@ -4384,9 +4493,13 @@
 		}
 	});
 
-	var editor = EditorUploader;
+	return EditorUploader;
 
-	var View$2 = wp.media.View,
+	};
+
+	var inline = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
 		UploaderInline;
 
 	/**
@@ -4401,7 +4514,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	UploaderInline = View$2.extend(/** @lends wp.media.view.UploaderInline.prototype */{
+	UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype */{
 		tagName:   'div',
 		className: 'uploader-inline',
 		template:  wp.template('uploader-inline'),
@@ -4455,7 +4568,7 @@
 				/**
 				 * call 'dispose' directly on the parent class
 				 */
-				return View$2.prototype.dispose.apply( this, arguments );
+				return View.prototype.dispose.apply( this, arguments );
 			}
 
 			// Run remove on `dispose`, so we can be sure to refresh the
@@ -4471,7 +4584,7 @@
 			/**
 			 * call 'remove' directly on the parent class
 			 */
-			var result = View$2.prototype.remove.apply( this, arguments );
+			var result = View.prototype.remove.apply( this, arguments );
 
 			_.defer( _.bind( this.refresh, this ) );
 			return result;
@@ -4525,9 +4638,13 @@
 
 	});
 
-	var inline = UploaderInline;
+	return UploaderInline;
 
-	var View$3 = wp.media.View,
+	};
+
+	var status = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
 		UploaderStatus;
 
 	/**
@@ -4542,7 +4659,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	UploaderStatus = View$3.extend(/** @lends wp.media.view.UploaderStatus.prototype */{
+	UploaderStatus = View.extend(/** @lends wp.media.view.UploaderStatus.prototype */{
 		className: 'media-uploader-status',
 		template:  wp.template('uploader-status'),
 
@@ -4569,7 +4686,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			View$3.prototype.dispose.apply( this, arguments );
+			View.prototype.dispose.apply( this, arguments );
 			return this;
 		},
 
@@ -4661,7 +4778,11 @@
 		}
 	});
 
-	var status = UploaderStatus;
+	return UploaderStatus;
+
+	};
+
+	var statusError = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.UploaderStatusError
@@ -4678,9 +4799,13 @@
 		template:  wp.template('uploader-status-error')
 	});
 
-	var statusError = UploaderStatusError;
+	return UploaderStatusError;
 
-	var View$4 = wp.media.View,
+	};
+
+	var toolbar = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
 		Toolbar;
 
 	/**
@@ -4696,7 +4821,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Toolbar = View$4.extend(/** @lends wp.media.view.Toolbar.prototype */{
+	Toolbar = View.extend(/** @lends wp.media.view.Toolbar.prototype */{
 		tagName:   'div',
 		className: 'media-toolbar',
 
@@ -4745,7 +4870,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			return View$4.prototype.dispose.apply( this, arguments );
+			return View.prototype.dispose.apply( this, arguments );
 		},
 
 		ready: function() {
@@ -4841,11 +4966,15 @@
 		}
 	});
 
-	var toolbar = Toolbar;
+	return Toolbar;
 
-	var Toolbar$1 = wp.media.view.Toolbar,
-		l10n$e = wp.media.view.l10n,
-		Select$3;
+	};
+
+	var select$1 = function() { // ClassicPress: defer loading via require()
+
+	var Toolbar = wp.media.view.Toolbar,
+		l10n = wp.media.view.l10n,
+		Select;
 
 	/**
 	 * wp.media.view.Toolbar.Select
@@ -4858,7 +4987,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Select$3 = Toolbar$1.extend(/** @lends wp.media.view.Toolbar.Select.prototype */{
+	Select = Toolbar.extend(/** @lends wp.media.view.Toolbar.Select.prototype */{
 		initialize: function() {
 			var options = this.options;
 
@@ -4869,7 +4998,7 @@
 				state: false,
 				reset: true,
 				close: true,
-				text:  l10n$e.select,
+				text:  l10n.select,
 
 				// Does the button rely on the selection?
 				requires: {
@@ -4887,7 +5016,7 @@
 				}
 			});
 			// Call 'initialize' directly on the parent class.
-			Toolbar$1.prototype.initialize.apply( this, arguments );
+			Toolbar.prototype.initialize.apply( this, arguments );
 		},
 
 		clickSelect: function() {
@@ -4912,11 +5041,15 @@
 		}
 	});
 
-	var select$1 = Select$3;
+	return Select;
 
-	var Select$4 = wp.media.view.Toolbar.Select,
-		l10n$f = wp.media.view.l10n,
-		Embed$1;
+	};
+
+	var embed$1 = function() { // ClassicPress: defer loading via require()
+
+	var Select = wp.media.view.Toolbar.Select,
+		l10n = wp.media.view.l10n,
+		Embed;
 
 	/**
 	 * wp.media.view.Toolbar.Embed
@@ -4930,14 +5063,14 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Embed$1 = Select$4.extend(/** @lends wp.media.view.Toolbar.Embed.prototype */{
+	Embed = Select.extend(/** @lends wp.media.view.Toolbar.Embed.prototype */{
 		initialize: function() {
 			_.defaults( this.options, {
-				text: l10n$f.insertIntoPost,
+				text: l10n.insertIntoPost,
 				requires: false
 			});
 			// Call 'initialize' directly on the parent class.
-			Select$4.prototype.initialize.apply( this, arguments );
+			Select.prototype.initialize.apply( this, arguments );
 		},
 
 		refresh: function() {
@@ -4946,11 +5079,15 @@
 			/**
 			 * call 'refresh' directly on the parent class
 			 */
-			Select$4.prototype.refresh.apply( this, arguments );
+			Select.prototype.refresh.apply( this, arguments );
 		}
 	});
 
-	var embed$1 = Embed$1;
+	return Embed;
+
+	};
+
+	var button = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Button
@@ -5037,9 +5174,13 @@
 		}
 	});
 
-	var button = Button;
+	return Button;
 
-	var $$6 = Backbone.$,
+	};
+
+	var buttonGroup = function() { // ClassicPress: defer loading via require()
+
+	var $ = Backbone.$,
 		ButtonGroup;
 
 	/**
@@ -5079,12 +5220,16 @@
 		 * @returns {wp.media.view.ButtonGroup}
 		 */
 		render: function() {
-			this.$el.html( $$6( _.pluck( this.buttons, 'el' ) ).detach() );
+			this.$el.html( $( _.pluck( this.buttons, 'el' ) ).detach() );
 			return this;
 		}
 	});
 
-	var buttonGroup = ButtonGroup;
+	return ButtonGroup;
+
+	};
+
+	var priorityList = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.PriorityList
@@ -5182,9 +5327,13 @@
 		}
 	});
 
-	var priorityList = PriorityList;
+	return PriorityList;
 
-	var $$7 = jQuery,
+	};
+
+	var menuItem = function() { // ClassicPress: defer loading via require()
+
+	var $ = jQuery,
 		MenuItem;
 
 	/**
@@ -5227,7 +5376,7 @@
 			// When selecting a tab along the left side,
 			// focus should be transferred into the main panel
 			if ( ! wp.media.isTouchDevice ) {
-				$$7('.media-frame-content input').first().focus();
+				$('.media-frame-content input').first().focus();
 			}
 		},
 
@@ -5255,10 +5404,14 @@
 		}
 	});
 
-	var menuItem = MenuItem;
+	return MenuItem;
 
-	var MenuItem$1 = wp.media.view.MenuItem,
-		PriorityList$1 = wp.media.view.PriorityList,
+	};
+
+	var menu = function() { // ClassicPress: defer loading via require()
+
+	var MenuItem = wp.media.view.MenuItem,
+		PriorityList = wp.media.view.PriorityList,
 		Menu;
 
 	/**
@@ -5272,11 +5425,11 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Menu = PriorityList$1.extend(/** @lends wp.media.view.Menu.prototype */{
+	Menu = PriorityList.extend(/** @lends wp.media.view.Menu.prototype */{
 		tagName:   'div',
 		className: 'media-menu',
 		property:  'state',
-		ItemView:  MenuItem$1,
+		ItemView:  MenuItem,
 		region:    'menu',
 
 		/* TODO: alternatively hide on any click anywhere
@@ -5304,7 +5457,7 @@
 			/**
 			 * call 'ready' directly on the parent class
 			 */
-			PriorityList$1.prototype.ready.apply( this, arguments );
+			PriorityList.prototype.ready.apply( this, arguments );
 			this.visibility();
 		},
 
@@ -5312,7 +5465,7 @@
 			/**
 			 * call 'set' directly on the parent class
 			 */
-			PriorityList$1.prototype.set.apply( this, arguments );
+			PriorityList.prototype.set.apply( this, arguments );
 			this.visibility();
 		},
 
@@ -5320,7 +5473,7 @@
 			/**
 			 * call 'unset' directly on the parent class
 			 */
-			PriorityList$1.prototype.unset.apply( this, arguments );
+			PriorityList.prototype.unset.apply( this, arguments );
 			this.visibility();
 		},
 
@@ -5373,7 +5526,11 @@
 		}
 	});
 
-	var menu = Menu;
+	return Menu;
+
+	};
+
+	var routerItem = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.RouterItem
@@ -5398,9 +5555,13 @@
 		}
 	});
 
-	var routerItem = RouterItem;
+	return RouterItem;
 
-	var Menu$1 = wp.media.view.Menu,
+	};
+
+	var router = function() { // ClassicPress: defer loading via require()
+
+	var Menu = wp.media.view.Menu,
 		Router;
 
 	/**
@@ -5415,7 +5576,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Router = Menu$1.extend(/** @lends wp.media.view.Router.prototype */{
+	Router = Menu.extend(/** @lends wp.media.view.Router.prototype */{
 		tagName:   'div',
 		className: 'media-router',
 		property:  'contentMode',
@@ -5425,7 +5586,7 @@
 		initialize: function() {
 			this.controller.on( 'content:render', this.update, this );
 			// Call 'initialize' directly on the parent class.
-			Menu$1.prototype.initialize.apply( this, arguments );
+			Menu.prototype.initialize.apply( this, arguments );
 		},
 
 		update: function() {
@@ -5436,7 +5597,11 @@
 		}
 	});
 
-	var router = Router;
+	return Router;
+
+	};
+
+	var sidebar = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Sidebar
@@ -5453,11 +5618,15 @@
 		className: 'media-sidebar'
 	});
 
-	var sidebar = Sidebar;
+	return Sidebar;
 
-	var View$5 = wp.media.View,
-		$$8 = jQuery,
-		Attachment$1;
+	};
+
+	var attachment = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		$ = jQuery,
+		Attachment;
 
 	/**
 	 * wp.media.view.Attachment
@@ -5469,7 +5638,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Attachment$1 = View$5.extend(/** @lends wp.media.view.Attachment.prototype */{
+	Attachment = View.extend(/** @lends wp.media.view.Attachment.prototype */{
 		tagName:   'li',
 		className: 'attachment',
 		template:  wp.template('attachment'),
@@ -5540,7 +5709,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			View$5.prototype.dispose.apply( this, arguments );
+			View.prototype.dispose.apply( this, arguments );
 			return this;
 		},
 		/**
@@ -5842,7 +6011,7 @@
 		 * @param {Object} event
 		 */
 		updateSetting: function( event ) {
-			var $setting = $$8( event.target ).closest('[data-setting]'),
+			var $setting = $( event.target ).closest('[data-setting]'),
 				setting, value;
 
 			if ( ! $setting.length ) {
@@ -5867,7 +6036,7 @@
 			var view = this,
 				save = this._save = this._save || { status: 'ready' },
 				request = this.model.save.apply( this.model, arguments ),
-				requests = save.requests ? $$8.when( request, save.requests ) : request;
+				requests = save.requests ? $.when( request, save.requests ) : request;
 
 			// If we're waiting to remove 'Saved.', stop.
 			if ( save.savedTimer ) {
@@ -5911,14 +6080,14 @@
 				changed;
 
 			changed = _.chain( $settings ).map( function( el ) {
-				var $input = $$8('input, textarea, select, [value]', el ),
+				var $input = $('input, textarea, select, [value]', el ),
 					setting, value;
 
 				if ( ! $input.length ) {
 					return;
 				}
 
-				setting = $$8(el).data('setting');
+				setting = $(el).data('setting');
 				value = $input.val();
 
 				// Record the value if it changed.
@@ -6012,7 +6181,7 @@
 		 * @param {string} value
 		 * @returns {wp.media.view.Attachment} Returns itself to allow chaining
 		 */
-		Attachment$1.prototype[ method ] = function( model, value ) {
+		Attachment.prototype[ method ] = function( model, value ) {
 			var $setting = this.$('[data-setting="' + setting + '"]');
 
 			if ( ! $setting.length ) {
@@ -6031,7 +6200,11 @@
 		};
 	});
 
-	var attachment = Attachment$1;
+	return Attachment;
+
+	};
+
+	var library$1 = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Attachment.Library
@@ -6044,13 +6217,17 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	var Library$a = wp.media.view.Attachment.extend(/** @lends wp.media.view.Attachment.Library.prototype */{
+	var Library = wp.media.view.Attachment.extend(/** @lends wp.media.view.Attachment.Library.prototype */{
 		buttons: {
 			check: true
 		}
 	});
 
-	var library$1 = Library$a;
+	return Library;
+
+	};
+
+	var editLibrary = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Attachment.EditLibrary
@@ -6069,10 +6246,14 @@
 		}
 	});
 
-	var editLibrary = EditLibrary;
+	return EditLibrary;
 
-	var View$6 = wp.media.View,
-		$$9 = jQuery,
+	};
+
+	var attachments = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		$ = jQuery,
 		Attachments;
 
 	/**
@@ -6085,7 +6266,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Attachments = View$6.extend(/** @lends wp.media.view.Attachments.prototype */{
+	Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		tagName:   'ul',
 		className: 'attachments',
 
@@ -6102,11 +6283,11 @@
 				AttachmentView:     wp.media.view.Attachment,
 				sortable:           false,
 				resize:             true,
-				idealColumnWidth:   $$9( window ).width() < 640 ? 135 : 150
+				idealColumnWidth:   $( window ).width() < 640 ? 135 : 150
 			});
 
 			this._viewsByCid = {};
-			this.$window = $$9( window );
+			this.$window = $( window );
 			this.resizeEvent = 'resize.media-modal-columns';
 
 			this.collection.on( 'add', function( attachment ) {
@@ -6132,7 +6313,7 @@
 			this.scroll = _.chain( this.scroll ).bind( this ).throttle( this.options.refreshSensitivity ).value();
 
 			this.options.scrollElement = this.options.scrollElement || this.el;
-			$$9( this.options.scrollElement ).on( 'scroll', this.scroll );
+			$( this.options.scrollElement ).on( 'scroll', this.scroll );
 
 			this.initSortable();
 
@@ -6212,7 +6393,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			View$6.prototype.dispose.apply( this, arguments );
+			View.prototype.dispose.apply( this, arguments );
 		},
 
 		setColumns: function() {
@@ -6231,7 +6412,7 @@
 		initSortable: function() {
 			var collection = this.collection;
 
-			if ( ! this.options.sortable || ! $$9.fn.sortable ) {
+			if ( ! this.options.sortable || ! $.fn.sortable ) {
 				return;
 			}
 
@@ -6290,7 +6471,7 @@
 		},
 
 		refreshSortable: function() {
-			if ( ! this.options.sortable || ! $$9.fn.sortable ) {
+			if ( ! this.options.sortable || ! $.fn.sortable ) {
 				return;
 			}
 
@@ -6346,10 +6527,10 @@
 			// that should be checked is the document body.
 			if ( el === document ) {
 				el = document.body;
-				scrollTop = $$9(document).scrollTop();
+				scrollTop = $(document).scrollTop();
 			}
 
-			if ( ! $$9(el).is(':visible') || ! this.collection.hasMore() ) {
+			if ( ! $(el).is(':visible') || ! this.collection.hasMore() ) {
 				return;
 			}
 
@@ -6369,9 +6550,13 @@
 		}
 	});
 
-	var attachments = Attachments;
+	return Attachments;
 
-	var l10n$g = wp.media.view.l10n,
+	};
+
+	var search = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		Search;
 
 	/**
@@ -6391,7 +6576,7 @@
 
 		attributes: {
 			type:        'search',
-			placeholder: l10n$g.searchMediaPlaceholder
+			placeholder: l10n.searchMediaPlaceholder
 		},
 
 		events: {
@@ -6416,9 +6601,13 @@
 		}, 300 )
 	});
 
-	var search = Search;
+	return Search;
 
-	var $$a = jQuery,
+	};
+
+	var attachmentFilters = function() { // ClassicPress: defer loading via require()
+
+	var $ = jQuery,
 		AttachmentFilters;
 
 	/**
@@ -6449,7 +6638,7 @@
 			// Build `<option>` elements.
 			this.$el.html( _.chain( this.filters ).map( function( filter, value ) {
 				return {
-					el: $$a( '<option></option>' ).val( value ).html( filter.text )[0],
+					el: $( '<option></option>' ).val( value ).html( filter.text )[0],
 					priority: filter.priority || 50
 				};
 			}, this ).sortBy('priority').pluck('el').value() );
@@ -6494,9 +6683,13 @@
 		}
 	});
 
-	var attachmentFilters = AttachmentFilters;
+	return AttachmentFilters;
 
-	var l10n$h = wp.media.view.l10n,
+	};
+
+	var date = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		DateFilter;
 
 	/**
@@ -6525,7 +6718,7 @@
 				};
 			});
 			filters.all = {
-				text:  l10n$h.allDates,
+				text:  l10n.allDates,
 				props: {
 					monthnum: false,
 					year:  false
@@ -6536,9 +6729,13 @@
 		}
 	});
 
-	var date = DateFilter;
+	return DateFilter;
 
-	var l10n$i = wp.media.view.l10n,
+	};
+
+	var uploaded = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		Uploaded;
 
 	/**
@@ -6565,7 +6762,7 @@
 
 			this.filters = {
 				all: {
-					text:  text || l10n$i.allMediaItems,
+					text:  text || l10n.allMediaItems,
 					props: {
 						uploadedTo: null,
 						orderby: 'date',
@@ -6576,7 +6773,7 @@
 				},
 
 				uploaded: {
-					text:  l10n$i.uploadedToThisPost,
+					text:  l10n.uploadedToThisPost,
 					props: {
 						uploadedTo: wp.media.view.settings.post.id,
 						orderby: 'menuOrder',
@@ -6587,7 +6784,7 @@
 				},
 
 				unattached: {
-					text:  l10n$i.unattached,
+					text:  l10n.unattached,
 					props: {
 						uploadedTo: 0,
 						orderby: 'menuOrder',
@@ -6600,7 +6797,7 @@
 
 			if ( uid ) {
 				this.filters.mine = {
-					text:  l10n$i.mine,
+					text:  l10n.mine,
 					props: {
 						orderby: 'date',
 						order:   'DESC',
@@ -6612,9 +6809,13 @@
 		}
 	});
 
-	var uploaded = Uploaded;
+	return Uploaded;
 
-	var l10n$j = wp.media.view.l10n,
+	};
+
+	var all = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
 		All;
 
 	/**
@@ -6648,7 +6849,7 @@
 			});
 
 			filters.all = {
-				text:  l10n$j.allMediaItems,
+				text:  l10n.allMediaItems,
 				props: {
 					status:  null,
 					type:    null,
@@ -6662,7 +6863,7 @@
 
 			if ( wp.media.view.settings.post.id ) {
 				filters.uploaded = {
-					text:  l10n$j.uploadedToThisPost,
+					text:  l10n.uploadedToThisPost,
 					props: {
 						status:  null,
 						type:    null,
@@ -6676,7 +6877,7 @@
 			}
 
 			filters.unattached = {
-				text:  l10n$j.unattached,
+				text:  l10n.unattached,
 				props: {
 					status:     null,
 					uploadedTo: 0,
@@ -6690,7 +6891,7 @@
 
 			if ( uid ) {
 				filters.mine = {
-					text:  l10n$j.mine,
+					text:  l10n.mine,
 					props: {
 						status:		null,
 						type:		null,
@@ -6707,7 +6908,7 @@
 				this.controller.isModeActive( 'grid' ) ) {
 
 				filters.trash = {
-					text:  l10n$j.trash,
+					text:  l10n.trash,
 					props: {
 						uploadedTo: null,
 						status:     'trash',
@@ -6724,12 +6925,16 @@
 		}
 	});
 
-	var all = All;
+	return All;
 
-	var View$7 = wp.media.View,
+	};
+
+	var browser = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
 		mediaTrash = wp.media.view.settings.mediaTrash,
-		l10n$k = wp.media.view.l10n,
-		$$b = jQuery,
+		l10n = wp.media.view.l10n,
+		$ = jQuery,
 		AttachmentsBrowser;
 
 	/**
@@ -6754,7 +6959,7 @@
 	 * @param {boolean|string} [options.sidebar=true]  Whether to create a sidebar for the browser.
 	 *                                                 Accepts true, false, and 'errors'.
 	 */
-	AttachmentsBrowser = View$7.extend(/** @lends wp.media.view.AttachmentsBrowser.prototype */{
+	AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.prototype */{
 		tagName:   'div',
 		className: 'attachments-browser',
 
@@ -6819,7 +7024,7 @@
 		 */
 		dispose: function() {
 			this.options.selection.off( null, null, this );
-			View$7.prototype.dispose.apply( this, arguments );
+			View.prototype.dispose.apply( this, arguments );
 			return this;
 		},
 
@@ -6845,11 +7050,11 @@
 				priority: -60
 			}) );
 
-			if ( -1 !== $$b.inArray( this.options.filters, [ 'uploaded', 'all' ] ) ) {
+			if ( -1 !== $.inArray( this.options.filters, [ 'uploaded', 'all' ] ) ) {
 				// "Filters" will return a <select>, need to render
 				// screen reader text before
 				this.toolbar.set( 'filtersLabel', new wp.media.view.Label({
-					value: l10n$k.filterByType,
+					value: l10n.filterByType,
 					attributes: {
 						'for':  'media-attachment-filters'
 					},
@@ -6877,7 +7082,7 @@
 			// browser view. Is this a use case for doAction( 'add:toolbar-items:attachments-browser', this.toolbar );
 			// which the controller can tap into and add this view?
 			if ( this.controller.isModeActive( 'grid' ) ) {
-				LibraryViewSwitcher = View$7.extend({
+				LibraryViewSwitcher = View.extend({
 					className: 'view-switch media-grid-view-switch',
 					template: wp.template( 'media-library-view-switcher')
 				});
@@ -6889,7 +7094,7 @@
 
 				// DateFilter is a <select>, screen reader text needs to be rendered before
 				this.toolbar.set( 'dateFilterLabel', new wp.media.view.Label({
-					value: l10n$k.filterByDate,
+					value: l10n.filterByDate,
 					attributes: {
 						'for': 'media-attachment-date-filters'
 					},
@@ -6903,7 +7108,7 @@
 
 				// BulkSelection is a <div> with subviews, including screen reader text
 				this.toolbar.set( 'selectModeToggleButton', new wp.media.view.SelectModeToggleButton({
-					text: l10n$k.bulkSelect,
+					text: l10n.bulkSelect,
 					controller: this.controller,
 					priority: -70
 				}).render() );
@@ -6912,7 +7117,7 @@
 					filters: Filters,
 					style: 'primary',
 					disabled: true,
-					text: mediaTrash ? l10n$k.trashSelected : l10n$k.deleteSelected,
+					text: mediaTrash ? l10n.trashSelected : l10n.deleteSelected,
 					controller: this.controller,
 					priority: -60,
 					click: function() {
@@ -6924,13 +7129,13 @@
 							return;
 						}
 
-						if ( ! mediaTrash && ! window.confirm( l10n$k.warnBulkDelete ) ) {
+						if ( ! mediaTrash && ! window.confirm( l10n.warnBulkDelete ) ) {
 							return;
 						}
 
 						if ( mediaTrash &&
 							'trash' !== selection.at( 0 ).get( 'status' ) &&
-							! window.confirm( l10n$k.warnBulkTrash ) ) {
+							! window.confirm( l10n.warnBulkTrash ) ) {
 
 							return;
 						}
@@ -6957,7 +7162,7 @@
 						if ( changed.length ) {
 							selection.remove( removed );
 
-							$$b.when.apply( null, changed ).then( _.bind( function() {
+							$.when.apply( null, changed ).then( _.bind( function() {
 								library._requery( true );
 								this.controller.trigger( 'selection:action:done' );
 							}, this ) );
@@ -6972,7 +7177,7 @@
 						filters: Filters,
 						style: 'primary',
 						disabled: true,
-						text: l10n$k.deleteSelected,
+						text: l10n.deleteSelected,
 						controller: this.controller,
 						priority: -55,
 						click: function() {
@@ -6980,7 +7185,7 @@
 								destroy = [],
 								selection = this.controller.state().get( 'selection' );
 
-							if ( ! selection.length || ! window.confirm( l10n$k.warnBulkDelete ) ) {
+							if ( ! selection.length || ! window.confirm( l10n.warnBulkDelete ) ) {
 								return;
 							}
 
@@ -6998,7 +7203,7 @@
 							}
 
 							if ( destroy.length ) {
-								$$b.when.apply( null, destroy.map( function (item) {
+								$.when.apply( null, destroy.map( function (item) {
 									return item.destroy();
 								} ) ).then( _.bind( function() {
 									this.controller.trigger( 'selection:action:done' );
@@ -7011,7 +7216,7 @@
 			} else if ( this.options.date ) {
 				// DateFilter is a <select>, screen reader text needs to be rendered before
 				this.toolbar.set( 'dateFilterLabel', new wp.media.view.Label({
-					value: l10n$k.filterByDate,
+					value: l10n.filterByDate,
 					attributes: {
 						'for': 'media-attachment-date-filters'
 					},
@@ -7027,7 +7232,7 @@
 			if ( this.options.search ) {
 				// Search is an input, screen reader text needs to be rendered before
 				this.toolbar.set( 'searchLabel', new wp.media.view.Label({
-					value: l10n$k.searchMediaLabel,
+					value: l10n.searchMediaLabel,
 					attributes: {
 						'for': 'media-search-input'
 					},
@@ -7041,15 +7246,15 @@
 			}
 
 			if ( this.options.dragInfo ) {
-				this.toolbar.set( 'dragInfo', new View$7({
-					el: $$b( '<div class="instructions">' + l10n$k.dragInfo + '</div>' )[0],
+				this.toolbar.set( 'dragInfo', new View({
+					el: $( '<div class="instructions">' + l10n.dragInfo + '</div>' )[0],
 					priority: -40
 				}) );
 			}
 
 			if ( this.options.suggestedWidth && this.options.suggestedHeight ) {
-				this.toolbar.set( 'suggestedDimensions', new View$7({
-					el: $$b( '<div class="instructions">' + l10n$k.suggestedDimensions.replace( '%1$s', this.options.suggestedWidth ).replace( '%2$s', this.options.suggestedHeight ) + '</div>' )[0],
+				this.toolbar.set( 'suggestedDimensions', new View({
+					el: $( '<div class="instructions">' + l10n.suggestedDimensions.replace( '%1$s', this.options.suggestedWidth ).replace( '%2$s', this.options.suggestedHeight ) + '</div>' )[0],
 					priority: -40
 				}) );
 			}
@@ -7085,7 +7290,7 @@
 			this.uploader = new wp.media.view.UploaderInline({
 				controller: this.controller,
 				status:     false,
-				message:    this.controller.isModeActive( 'grid' ) ? '' : l10n$k.noItemsFound,
+				message:    this.controller.isModeActive( 'grid' ) ? '' : l10n.noItemsFound,
 				canClose:   this.controller.isModeActive( 'grid' )
 			});
 
@@ -7123,13 +7328,13 @@
 
 
 			if ( this.controller.isModeActive( 'grid' ) ) {
-				this.attachmentsNoResults = new View$7({
+				this.attachmentsNoResults = new View({
 					controller: this.controller,
 					tagName: 'p'
 				});
 
 				this.attachmentsNoResults.$el.addClass( 'hidden no-media' );
-				this.attachmentsNoResults.$el.html( l10n$k.noMedia );
+				this.attachmentsNoResults.$el.html( l10n.noMedia );
 
 				this.views.add( this.attachmentsNoResults );
 			}
@@ -7201,10 +7406,14 @@
 		}
 	});
 
-	var browser = AttachmentsBrowser;
+	return AttachmentsBrowser;
 
-	var l10n$l = wp.media.view.l10n,
-		Selection$2;
+	};
+
+	var selection = function() { // ClassicPress: defer loading via require()
+
+	var l10n = wp.media.view.l10n,
+		Selection;
 
 	/**
 	 * wp.media.view.Selection
@@ -7216,7 +7425,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Selection$2 = wp.media.View.extend(/** @lends wp.media.view.Selection.prototype */{
+	Selection = wp.media.View.extend(/** @lends wp.media.view.Selection.prototype */{
 		tagName:   'div',
 		className: 'media-selection',
 		template:  wp.template('media-selection'),
@@ -7265,7 +7474,7 @@
 			this.$el.toggleClass( 'one', 1 === collection.length );
 			this.$el.toggleClass( 'editing', editing );
 
-			this.$('.count').text( l10n$l.selected.replace('%d', collection.length) );
+			this.$('.count').text( l10n.selected.replace('%d', collection.length) );
 		},
 
 		edit: function( event ) {
@@ -7285,7 +7494,11 @@
 		}
 	});
 
-	var selection = Selection$2;
+	return Selection;
+
+	};
+
+	var selection$1 = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Attachment.Selection
@@ -7298,7 +7511,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	var Selection$3 = wp.media.view.Attachment.extend(/** @lends wp.media.view.Attachment.Selection.prototype */{
+	var Selection = wp.media.view.Attachment.extend(/** @lends wp.media.view.Attachment.Selection.prototype */{
 		className: 'attachment selection',
 
 		// On click, just select the model, instead of removing the model from
@@ -7308,10 +7521,14 @@
 		}
 	});
 
-	var selection$1 = Selection$3;
+	return Selection;
 
-	var Attachments$1 = wp.media.view.Attachments,
-		Selection$4;
+	};
+
+	var selection$2 = function() { // ClassicPress: defer loading via require()
+
+	var Attachments = wp.media.view.Attachments,
+		Selection;
 
 	/**
 	 * wp.media.view.Attachments.Selection
@@ -7324,7 +7541,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Selection$4 = Attachments$1.extend(/** @lends wp.media.view.Attachments.Selection.prototype */{
+	Selection = Attachments.extend(/** @lends wp.media.view.Attachments.Selection.prototype */{
 		events: {},
 		initialize: function() {
 			_.defaults( this.options, {
@@ -7335,11 +7552,15 @@
 				AttachmentView: wp.media.view.Attachment.Selection
 			});
 			// Call 'initialize' directly on the parent class.
-			return Attachments$1.prototype.initialize.apply( this, arguments );
+			return Attachments.prototype.initialize.apply( this, arguments );
 		}
 	});
 
-	var selection$2 = Selection$4;
+	return Selection;
+
+	};
+
+	var editSelection = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Attachment.EditSelection
@@ -7359,10 +7580,14 @@
 		}
 	});
 
-	var editSelection = EditSelection;
+	return EditSelection;
 
-	var View$8 = wp.media.View,
-		$$c = Backbone.$,
+	};
+
+	var settings = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		$ = Backbone.$,
 		Settings;
 
 	/**
@@ -7375,7 +7600,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Settings = View$8.extend(/** @lends wp.media.view.Settings.prototype */{
+	Settings = View.extend(/** @lends wp.media.view.Settings.prototype */{
 		events: {
 			'click button':    'updateHandler',
 			'change input':    'updateHandler',
@@ -7397,7 +7622,7 @@
 		 * @returns {wp.media.view.Settings} Returns itself to allow chaining
 		 */
 		render: function() {
-			View$8.prototype.render.apply( this, arguments );
+			View.prototype.render.apply( this, arguments );
 			// Select the correct values.
 			_( this.model.attributes ).chain().keys().each( this.update, this );
 			return this;
@@ -7449,7 +7674,7 @@
 		 * @param {Object} event
 		 */
 		updateHandler: function( event ) {
-			var $setting = $$c( event.target ).closest('[data-setting]'),
+			var $setting = $( event.target ).closest('[data-setting]'),
 				value = event.target.value,
 				userSetting;
 
@@ -7481,9 +7706,13 @@
 		}
 	});
 
-	var settings = Settings;
+	return Settings;
 
-	var Settings$1 = wp.media.view.Settings,
+	};
+
+	var attachmentDisplay = function() { // ClassicPress: defer loading via require()
+
+	var Settings = wp.media.view.Settings,
 		AttachmentDisplay;
 
 	/**
@@ -7497,7 +7726,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	AttachmentDisplay = Settings$1.extend(/** @lends wp.media.view.Settings.AttachmentDisplay.prototype */{
+	AttachmentDisplay = Settings.extend(/** @lends wp.media.view.Settings.AttachmentDisplay.prototype */{
 		className: 'attachment-display-settings',
 		template:  wp.template('attachment-display-settings'),
 
@@ -7508,7 +7737,7 @@
 				userSettings: false
 			});
 			// Call 'initialize' directly on the parent class.
-			Settings$1.prototype.initialize.apply( this, arguments );
+			Settings.prototype.initialize.apply( this, arguments );
 			this.listenTo( this.model, 'change:link', this.updateLinkTo );
 
 			if ( attachment ) {
@@ -7524,7 +7753,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			Settings$1.prototype.dispose.apply( this, arguments );
+			Settings.prototype.dispose.apply( this, arguments );
 		},
 		/**
 		 * @returns {wp.media.view.AttachmentDisplay} Returns itself to allow chaining
@@ -7540,7 +7769,7 @@
 			/**
 			 * call 'render' directly on the parent class
 			 */
-			Settings$1.prototype.render.call( this );
+			Settings.prototype.render.call( this );
 			this.updateLinkTo();
 			return this;
 		},
@@ -7576,7 +7805,11 @@
 		}
 	});
 
-	var attachmentDisplay = AttachmentDisplay;
+	return AttachmentDisplay;
+
+	};
+
+	var gallery = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Settings.Gallery
@@ -7594,7 +7827,11 @@
 		template:  wp.template('gallery-settings')
 	});
 
-	var gallery = Gallery;
+	return Gallery;
+
+	};
+
+	var playlist = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Settings.Playlist
@@ -7612,10 +7849,14 @@
 		template:  wp.template('playlist-settings')
 	});
 
-	var playlist = Playlist;
+	return Playlist;
 
-	var Attachment$2 = wp.media.view.Attachment,
-		l10n$m = wp.media.view.l10n,
+	};
+
+	var details = function() { // ClassicPress: defer loading via require()
+
+	var Attachment = wp.media.view.Attachment,
+		l10n = wp.media.view.l10n,
 		Details;
 
 	/**
@@ -7629,7 +7870,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Details = Attachment$2.extend(/** @lends wp.media.view.Attachment.Details.prototype */{
+	Details = Attachment.extend(/** @lends wp.media.view.Attachment.Details.prototype */{
 		tagName:   'div',
 		className: 'attachment-details',
 		template:  wp.template('attachment-details'),
@@ -7660,7 +7901,7 @@
 
 			this.on( 'ready', this.initialFocus );
 			// Call 'initialize' directly on the parent class.
-			Attachment$2.prototype.initialize.apply( this, arguments );
+			Attachment.prototype.initialize.apply( this, arguments );
 		},
 
 		initialFocus: function() {
@@ -7681,7 +7922,7 @@
 		deleteAttachment: function( event ) {
 			event.preventDefault();
 
-			if ( window.confirm( l10n$m.warnDelete ) ) {
+			if ( window.confirm( l10n.warnDelete ) ) {
 				this.model.destroy();
 				// Keep focus inside media modal
 				// after image is deleted
@@ -7751,9 +7992,13 @@
 		}
 	});
 
-	var details = Details;
+	return Details;
 
-	var View$9 = wp.media.View,
+	};
+
+	var attachmentCompat = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
 		AttachmentCompat;
 
 	/**
@@ -7768,7 +8013,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	AttachmentCompat = View$9.extend(/** @lends wp.media.view.AttachmentCompat.prototype */{
+	AttachmentCompat = View.extend(/** @lends wp.media.view.AttachmentCompat.prototype */{
 		tagName:   'form',
 		className: 'compat-item',
 
@@ -7792,7 +8037,7 @@
 			/**
 			 * call 'dispose' directly on the parent class
 			 */
-			return View$9.prototype.dispose.apply( this, arguments );
+			return View.prototype.dispose.apply( this, arguments );
 		},
 		/**
 		 * @returns {wp.media.view.AttachmentCompat} Returns itself to allow chaining
@@ -7837,7 +8082,11 @@
 		}
 	});
 
-	var attachmentCompat = AttachmentCompat;
+	return AttachmentCompat;
+
+	};
+
+	var iframe = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Iframe
@@ -7862,7 +8111,11 @@
 		}
 	});
 
-	var iframe = Iframe;
+	return Iframe;
+
+	};
+
+	var embed$2 = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Embed
@@ -7874,7 +8127,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	var Embed$2 = wp.media.View.extend(/** @lends wp.media.view.Ember.prototype */{
+	var Embed = wp.media.View.extend(/** @lends wp.media.view.Ember.prototype */{
 		className: 'media-embed',
 
 		initialize: function() {
@@ -7927,7 +8180,11 @@
 		}
 	});
 
-	var embed$2 = Embed$2;
+	return Embed;
+
+	};
+
+	var label = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Label
@@ -7954,10 +8211,14 @@
 		}
 	});
 
-	var label = Label;
+	return Label;
 
-	var View$a = wp.media.View,
-		$$d = jQuery,
+	};
+
+	var url = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		$ = jQuery,
 		EmbedUrl;
 
 	/**
@@ -7970,7 +8231,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	EmbedUrl = View$a.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
+	EmbedUrl = View.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
 		tagName:   'label',
 		className: 'embed-url',
 
@@ -7981,10 +8242,10 @@
 		},
 
 		initialize: function() {
-			this.$input = $$d('<input id="embed-url-field" type="url" />').val( this.model.get('url') );
+			this.$input = $('<input id="embed-url-field" type="url" />').val( this.model.get('url') );
 			this.input = this.$input[0];
 
-			this.spinner = $$d('<span class="spinner" />')[0];
+			this.spinner = $('<span class="spinner" />')[0];
 			this.$el.append([ this.input, this.spinner ]);
 
 			this.listenTo( this.model, 'change:url', this.render );
@@ -8009,7 +8270,7 @@
 			/**
 			 * Call `render` directly on parent class with passed arguments
 			 */
-			View$a.prototype.render.apply( this, arguments );
+			View.prototype.render.apply( this, arguments );
 			return this;
 		},
 
@@ -8020,7 +8281,7 @@
 		},
 
 		url: function( event ) {
-			this.model.set( 'url', $$d.trim( event.target.value ) );
+			this.model.set( 'url', $.trim( event.target.value ) );
 		},
 
 		/**
@@ -8034,9 +8295,13 @@
 		}
 	});
 
-	var url = EmbedUrl;
+	return EmbedUrl;
 
-	var $$e = jQuery,
+	};
+
+	var link = function() { // ClassicPress: defer loading via require()
+
+	var $ = jQuery,
 		EmbedLink;
 
 	/**
@@ -8078,7 +8343,7 @@
 			var url = this.model.get( 'url' ), re, youTubeEmbedMatch;
 
 			// check if they haven't typed in 500 ms
-			if ( $$e('#embed-url-field').val() !== url ) {
+			if ( $('#embed-url-field').val() !== url ) {
 				return;
 			}
 
@@ -8132,9 +8397,13 @@
 		}
 	});
 
-	var link = EmbedLink;
+	return EmbedLink;
 
-	var AttachmentDisplay$1 = wp.media.view.Settings.AttachmentDisplay,
+	};
+
+	var image = function() { // ClassicPress: defer loading via require()
+
+	var AttachmentDisplay = wp.media.view.Settings.AttachmentDisplay,
 		EmbedImage;
 
 	/**
@@ -8149,7 +8418,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	EmbedImage = AttachmentDisplay$1.extend(/** @lends wp.media.view.EmbedImage.prototype */{
+	EmbedImage = AttachmentDisplay.extend(/** @lends wp.media.view.EmbedImage.prototype */{
 		className: 'embed-media-settings',
 		template:  wp.template('embed-image-settings'),
 
@@ -8157,7 +8426,7 @@
 			/**
 			 * Call `initialize` directly on parent class with passed arguments
 			 */
-			AttachmentDisplay$1.prototype.initialize.apply( this, arguments );
+			AttachmentDisplay.prototype.initialize.apply( this, arguments );
 			this.listenTo( this.model, 'change:url', this.updateImage );
 		},
 
@@ -8166,11 +8435,15 @@
 		}
 	});
 
-	var image = EmbedImage;
+	return EmbedImage;
 
-	var AttachmentDisplay$2 = wp.media.view.Settings.AttachmentDisplay,
-		$$f = jQuery,
-		ImageDetails$2;
+	};
+
+	var imageDetails$2 = function() { // ClassicPress: defer loading via require()
+
+	var AttachmentDisplay = wp.media.view.Settings.AttachmentDisplay,
+		$ = jQuery,
+		ImageDetails;
 
 	/**
 	 * wp.media.view.ImageDetails
@@ -8184,10 +8457,10 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	ImageDetails$2 = AttachmentDisplay$2.extend(/** @lends wp.media.view.ImageDetails.prototype */{
+	ImageDetails = AttachmentDisplay.extend(/** @lends wp.media.view.ImageDetails.prototype */{
 		className: 'image-details',
 		template:  wp.template('image-details'),
-		events: _.defaults( AttachmentDisplay$2.prototype.events, {
+		events: _.defaults( AttachmentDisplay.prototype.events, {
 			'click .edit-attachment': 'editAttachment',
 			'click .replace-attachment': 'replaceAttachment',
 			'click .advanced-toggle': 'onToggleAdvanced',
@@ -8203,7 +8476,7 @@
 			this.listenTo( this.model, 'change:link', this.toggleLinkSettings );
 			this.listenTo( this.model, 'change:size', this.toggleCustomSize );
 
-			AttachmentDisplay$2.prototype.initialize.apply( this, arguments );
+			AttachmentDisplay.prototype.initialize.apply( this, arguments );
 		},
 
 		prepare: function() {
@@ -8224,16 +8497,16 @@
 			if ( this.model.attachment && 'pending' === this.model.dfd.state() ) {
 				this.model.dfd
 					.done( _.bind( function() {
-						AttachmentDisplay$2.prototype.render.apply( this, args );
+						AttachmentDisplay.prototype.render.apply( this, args );
 						this.postRender();
 					}, this ) )
 					.fail( _.bind( function() {
 						this.model.attachment = false;
-						AttachmentDisplay$2.prototype.render.apply( this, args );
+						AttachmentDisplay.prototype.render.apply( this, args );
 						this.postRender();
 					}, this ) );
 			} else {
-				AttachmentDisplay$2.prototype.render.apply( this, arguments );
+				AttachmentDisplay.prototype.render.apply( this, arguments );
 				this.postRender();
 			}
 
@@ -8276,8 +8549,8 @@
 		},
 
 		onCustomSize: function( event ) {
-			var dimension = $$f( event.target ).data('setting'),
-				num = $$f( event.target ).val(),
+			var dimension = $( event.target ).data('setting'),
+				num = $( event.target ).val(),
 				value;
 
 			// Ignore bogus input
@@ -8335,13 +8608,17 @@
 		}
 	});
 
-	var imageDetails$2 = ImageDetails$2;
+	return ImageDetails;
 
-	var View$b = wp.media.View,
-		UploaderStatus$1 = wp.media.view.UploaderStatus,
-		l10n$n = wp.media.view.l10n,
-		$$g = jQuery,
-		Cropper$1;
+	};
+
+	var cropper$1 = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		UploaderStatus = wp.media.view.UploaderStatus,
+		l10n = wp.media.view.l10n,
+		$ = jQuery,
+		Cropper;
 
 	/**
 	 * wp.media.view.Cropper
@@ -8359,7 +8636,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	Cropper$1 = View$b.extend(/** @lends wp.media.view.Cropper.prototype */{
+	Cropper = View.extend(/** @lends wp.media.view.Cropper.prototype */{
 		className: 'crop-content',
 		template: wp.template('crop-content'),
 		initialize: function() {
@@ -8369,17 +8646,17 @@
 			this.controller.frame.on('content:error:crop', this.onError, this);
 			this.$image = this.$el.find('.crop-image');
 			this.$image.on('load', this.onImageLoad);
-			$$g(window).on('resize.cropper', _.debounce(this.onImageLoad, 250));
+			$(window).on('resize.cropper', _.debounce(this.onImageLoad, 250));
 		},
 		remove: function() {
-			$$g(window).off('resize.cropper');
+			$(window).off('resize.cropper');
 			this.$el.remove();
 			this.$el.off();
-			View$b.prototype.remove.apply(this, arguments);
+			View.prototype.remove.apply(this, arguments);
 		},
 		prepare: function() {
 			return {
-				title: l10n$n.cropYourImage,
+				title: l10n.cropYourImage,
 				url: this.options.attachment.get('url')
 			};
 		},
@@ -8425,16 +8702,20 @@
 			var filename = this.options.attachment.get('filename');
 
 			this.views.add( '.upload-errors', new wp.media.view.UploaderStatusError({
-				filename: UploaderStatus$1.prototype.filename(filename),
+				filename: UploaderStatus.prototype.filename(filename),
 				message: window._wpMediaViewsL10n.cropError
 			}), { at: 0 });
 		}
 	});
 
-	var cropper$1 = Cropper$1;
+	return Cropper;
 
-	var View$c = wp.media.view,
-		SiteIconCropper$1;
+	};
+
+	var siteIconCropper$1 = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.view,
+		SiteIconCropper;
 
 	/**
 	 * wp.media.view.SiteIconCropper
@@ -8452,11 +8733,11 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	SiteIconCropper$1 = View$c.Cropper.extend(/** @lends wp.media.view.SiteIconCropper.prototype */{
+	SiteIconCropper = View.Cropper.extend(/** @lends wp.media.view.SiteIconCropper.prototype */{
 		className: 'crop-content site-icon',
 
 		ready: function () {
-			View$c.Cropper.prototype.ready.apply( this, arguments );
+			View.Cropper.prototype.ready.apply( this, arguments );
 
 			this.$( '.crop-image' ).on( 'load', _.bind( this.addSidebar, this ) );
 		},
@@ -8475,10 +8756,14 @@
 		}
 	});
 
-	var siteIconCropper$1 = SiteIconCropper$1;
+	return SiteIconCropper;
 
-	var View$d = wp.media.View,
-		$$h = jQuery,
+	};
+
+	var siteIconPreview = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		$ = jQuery,
 		SiteIconPreview;
 
 	/**
@@ -8493,7 +8778,7 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	SiteIconPreview = View$d.extend(/** @lends wp.media.view.SiteIconPreview.prototype */{
+	SiteIconPreview = View.extend(/** @lends wp.media.view.SiteIconPreview.prototype */{
 		className: 'site-icon-preview',
 		template: wp.template( 'site-icon-preview' ),
 
@@ -8516,14 +8801,14 @@
 				preview_rx = 16 / coords.width,
 				preview_ry = 16 / coords.height;
 
-			$$h( '#preview-app-icon' ).css({
+			$( '#preview-app-icon' ).css({
 				width: Math.round(rx * this.imageWidth ) + 'px',
 				height: Math.round(ry * this.imageHeight ) + 'px',
 				marginLeft: '-' + Math.round(rx * coords.x1) + 'px',
 				marginTop: '-' + Math.round(ry * coords.y1) + 'px'
 			});
 
-			$$h( '#preview-favicon' ).css({
+			$( '#preview-favicon' ).css({
 				width: Math.round( preview_rx * this.imageWidth ) + 'px',
 				height: Math.round( preview_ry * this.imageHeight ) + 'px',
 				marginLeft: '-' + Math.round( preview_rx * coords.x1 ) + 'px',
@@ -8532,10 +8817,14 @@
 		}
 	});
 
-	var siteIconPreview = SiteIconPreview;
+	return SiteIconPreview;
 
-	var View$e = wp.media.View,
-		EditImage$1;
+	};
+
+	var editImage$1 = function() { // ClassicPress: defer loading via require()
+
+	var View = wp.media.View,
+		EditImage;
 
 	/**
 	 * wp.media.view.EditImage
@@ -8547,14 +8836,14 @@
 	 * @augments wp.Backbone.View
 	 * @augments Backbone.View
 	 */
-	EditImage$1 = View$e.extend(/** @lends wp.media.view.EditImage.prototype */{
+	EditImage = View.extend(/** @lends wp.media.view.EditImage.prototype */{
 		className: 'image-editor',
 		template: wp.template('image-editor'),
 
 		initialize: function( options ) {
 			this.editor = window.imageEdit;
 			this.controller = options.controller;
-			View$e.prototype.initialize.apply( this, arguments );
+			View.prototype.initialize.apply( this, arguments );
 		},
 
 		prepare: function() {
@@ -8589,7 +8878,11 @@
 
 	});
 
-	var editImage$1 = EditImage$1;
+	return EditImage;
+
+	};
+
+	var spinner = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Spinner
@@ -8625,26 +8918,28 @@
 		}
 	});
 
-	var spinner = Spinner;
+	return Spinner;
+
+	};
 
 	var media = wp.media,
-		$$i = jQuery,
-		l10n$o;
+		$ = jQuery,
+		l10n;
 
 	media.isTouchDevice = ( 'ontouchend' in document );
 
 	// Link any localized strings.
-	l10n$o = media.view.l10n = window._wpMediaViewsL10n || {};
+	l10n = media.view.l10n = window._wpMediaViewsL10n || {};
 
 	// Link any settings.
-	media.view.settings = l10n$o.settings || {};
-	delete l10n$o.settings;
+	media.view.settings = l10n.settings || {};
+	delete l10n.settings;
 
 	// Copy the `post` setting over to the model settings.
 	media.model.settings.post = media.view.settings.post;
 
 	// Check if the browser supports CSS 3.0 transitions
-	$$i.support.transition = (function(){
+	$.support.transition = (function(){
 		var style = document.documentElement.style,
 			transitions = {
 				WebkitTransition: 'webkitTransitionEnd',
@@ -8677,17 +8972,17 @@
 	 * @returns {Promise}
 	 */
 	media.transition = function( selector, sensitivity ) {
-		var deferred = $$i.Deferred();
+		var deferred = $.Deferred();
 
 		sensitivity = sensitivity || 2000;
 
-		if ( $$i.support.transition ) {
-			if ( ! (selector instanceof $$i) ) {
-				selector = $$i( selector );
+		if ( $.support.transition ) {
+			if ( ! (selector instanceof $) ) {
+				selector = $( selector );
 			}
 
 			// Resolve the deferred when the first element finishes animating.
-			selector.first().one( $$i.support.transition.end, deferred.resolve );
+			selector.first().one( $.support.transition.end, deferred.resolve );
 
 			// Just in case the event doesn't trigger, fire a callback.
 			_.delay( deferred.resolve, sensitivity );
@@ -8700,82 +8995,82 @@
 		return deferred.promise();
 	};
 
-	media.controller.Region = region;
-	media.controller.StateMachine = stateMachine;
-	media.controller.State = state;
+	media.controller.Region = region();
+	media.controller.StateMachine = stateMachine();
+	media.controller.State = state();
 
-	media.selectionSync = selectionSync_1;
-	media.controller.Library = library;
-	media.controller.ImageDetails = imageDetails;
-	media.controller.GalleryEdit = galleryEdit;
-	media.controller.GalleryAdd = galleryAdd;
-	media.controller.CollectionEdit = collectionEdit;
-	media.controller.CollectionAdd = collectionAdd;
-	media.controller.FeaturedImage = featuredImage;
-	media.controller.ReplaceImage = replaceImage;
-	media.controller.EditImage = editImage;
-	media.controller.MediaLibrary = mediaLibrary;
-	media.controller.Embed = embed;
-	media.controller.Cropper = cropper;
-	media.controller.CustomizeImageCropper = customizeImageCropper;
-	media.controller.SiteIconCropper = siteIconCropper;
+	media.selectionSync = selectionSync();
+	media.controller.Library = library();
+	media.controller.ImageDetails = imageDetails();
+	media.controller.GalleryEdit = galleryEdit();
+	media.controller.GalleryAdd = galleryAdd();
+	media.controller.CollectionEdit = collectionEdit();
+	media.controller.CollectionAdd = collectionAdd();
+	media.controller.FeaturedImage = featuredImage();
+	media.controller.ReplaceImage = replaceImage();
+	media.controller.EditImage = editImage();
+	media.controller.MediaLibrary = mediaLibrary();
+	media.controller.Embed = embed();
+	media.controller.Cropper = cropper();
+	media.controller.CustomizeImageCropper = customizeImageCropper();
+	media.controller.SiteIconCropper = siteIconCropper();
 
-	media.View = view;
-	media.view.Frame = frame;
-	media.view.MediaFrame = mediaFrame;
-	media.view.MediaFrame.Select = select;
-	media.view.MediaFrame.Post = post;
-	media.view.MediaFrame.ImageDetails = imageDetails$1;
-	media.view.Modal = modal;
-	media.view.FocusManager = focusManager;
-	media.view.UploaderWindow = window$1;
-	media.view.EditorUploader = editor;
-	media.view.UploaderInline = inline;
-	media.view.UploaderStatus = status;
-	media.view.UploaderStatusError = statusError;
-	media.view.Toolbar = toolbar;
-	media.view.Toolbar.Select = select$1;
-	media.view.Toolbar.Embed = embed$1;
-	media.view.Button = button;
-	media.view.ButtonGroup = buttonGroup;
-	media.view.PriorityList = priorityList;
-	media.view.MenuItem = menuItem;
-	media.view.Menu = menu;
-	media.view.RouterItem = routerItem;
-	media.view.Router = router;
-	media.view.Sidebar = sidebar;
-	media.view.Attachment = attachment;
-	media.view.Attachment.Library = library$1;
-	media.view.Attachment.EditLibrary = editLibrary;
-	media.view.Attachments = attachments;
-	media.view.Search = search;
-	media.view.AttachmentFilters = attachmentFilters;
-	media.view.DateFilter = date;
-	media.view.AttachmentFilters.Uploaded = uploaded;
-	media.view.AttachmentFilters.All = all;
-	media.view.AttachmentsBrowser = browser;
-	media.view.Selection = selection;
-	media.view.Attachment.Selection = selection$1;
-	media.view.Attachments.Selection = selection$2;
-	media.view.Attachment.EditSelection = editSelection;
-	media.view.Settings = settings;
-	media.view.Settings.AttachmentDisplay = attachmentDisplay;
-	media.view.Settings.Gallery = gallery;
-	media.view.Settings.Playlist = playlist;
-	media.view.Attachment.Details = details;
-	media.view.AttachmentCompat = attachmentCompat;
-	media.view.Iframe = iframe;
-	media.view.Embed = embed$2;
-	media.view.Label = label;
-	media.view.EmbedUrl = url;
-	media.view.EmbedLink = link;
-	media.view.EmbedImage = image;
-	media.view.ImageDetails = imageDetails$2;
-	media.view.Cropper = cropper$1;
-	media.view.SiteIconCropper = siteIconCropper$1;
-	media.view.SiteIconPreview = siteIconPreview;
-	media.view.EditImage = editImage$1;
-	media.view.Spinner = spinner;
+	media.View = view();
+	media.view.Frame = frame();
+	media.view.MediaFrame = mediaFrame();
+	media.view.MediaFrame.Select = select();
+	media.view.MediaFrame.Post = post();
+	media.view.MediaFrame.ImageDetails = imageDetails$1();
+	media.view.Modal = modal();
+	media.view.FocusManager = focusManager();
+	media.view.UploaderWindow = window$1();
+	media.view.EditorUploader = editor();
+	media.view.UploaderInline = inline();
+	media.view.UploaderStatus = status();
+	media.view.UploaderStatusError = statusError();
+	media.view.Toolbar = toolbar();
+	media.view.Toolbar.Select = select$1();
+	media.view.Toolbar.Embed = embed$1();
+	media.view.Button = button();
+	media.view.ButtonGroup = buttonGroup();
+	media.view.PriorityList = priorityList();
+	media.view.MenuItem = menuItem();
+	media.view.Menu = menu();
+	media.view.RouterItem = routerItem();
+	media.view.Router = router();
+	media.view.Sidebar = sidebar();
+	media.view.Attachment = attachment();
+	media.view.Attachment.Library = library$1();
+	media.view.Attachment.EditLibrary = editLibrary();
+	media.view.Attachments = attachments();
+	media.view.Search = search();
+	media.view.AttachmentFilters = attachmentFilters();
+	media.view.DateFilter = date();
+	media.view.AttachmentFilters.Uploaded = uploaded();
+	media.view.AttachmentFilters.All = all();
+	media.view.AttachmentsBrowser = browser();
+	media.view.Selection = selection();
+	media.view.Attachment.Selection = selection$1();
+	media.view.Attachments.Selection = selection$2();
+	media.view.Attachment.EditSelection = editSelection();
+	media.view.Settings = settings();
+	media.view.Settings.AttachmentDisplay = attachmentDisplay();
+	media.view.Settings.Gallery = gallery();
+	media.view.Settings.Playlist = playlist();
+	media.view.Attachment.Details = details();
+	media.view.AttachmentCompat = attachmentCompat();
+	media.view.Iframe = iframe();
+	media.view.Embed = embed$2();
+	media.view.Label = label();
+	media.view.EmbedUrl = url();
+	media.view.EmbedLink = link();
+	media.view.EmbedImage = image();
+	media.view.ImageDetails = imageDetails$2();
+	media.view.Cropper = cropper$1();
+	media.view.SiteIconCropper = siteIconCropper$1();
+	media.view.SiteIconPreview = siteIconPreview();
+	media.view.EditImage = editImage$1();
+	media.view.Spinner = spinner();
 
 	var views_manifest = {
 
