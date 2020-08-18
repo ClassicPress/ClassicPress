@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Settings.Playlist
  *
@@ -14,4 +16,6 @@ var Playlist = wp.media.view.Settings.extend(/** @lends wp.media.view.Settings.P
 	template:  wp.template('playlist-settings')
 });
 
-module.exports = Playlist;
+return Playlist;
+
+};

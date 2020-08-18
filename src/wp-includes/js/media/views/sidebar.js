@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Sidebar
  *
@@ -13,4 +15,6 @@ var Sidebar = wp.media.view.PriorityList.extend(/** @lends wp.media.view.Sidebar
 	className: 'media-sidebar'
 });
 
-module.exports = Sidebar;
+return Sidebar;
+
+};

@@ -4,9 +4,6 @@
 /* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
-const webpackConfig = require( './webpack.config.prod' );
-const webpackDevConfig = require( './webpack.config.dev' );
-const path = require('path');
 
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -635,10 +632,6 @@ module.exports = function(grunt) {
 				dest: `${SOURCE_DIR}wp-includes/js/imgareaselect/jquery.imgareaselect.min.js`
 			}
 		},
-		webpack: {
-			prod: webpackConfig,
-			dev: webpackDevConfig
-		},
 		concat: {
 			tinymce: {
 				options: {
@@ -735,51 +728,6 @@ module.exports = function(grunt) {
 					}
 				]
 			}
-		},
-		_watch: {
-			all: {
-				files: [
-					`${SOURCE_DIR}**`,
-					`!${SOURCE_DIR}wp-includes/js/media/**`,
-					// Ignore version control directories.
-					`!${SOURCE_DIR}**/.{svn,git}/**`
-				],
-				tasks: ['clean:dynamic', 'copy:dynamic'],
-				options: {
-					dot: true,
-					spawn: false,
-					interval: 2000
-				}
-			},
-			config: {
-				files: [
-					'Gruntfile.js',
-					'webpack-dev.config.js',
-					'webpack.config.js'
-				]
-			},
-			colors: {
-				files: [`${SOURCE_DIR}wp-admin/css/colors/**`],
-				tasks: ['sass:colors']
-			},
-			rtl: {
-				files: [
-					`${SOURCE_DIR}wp-admin/css/*.css`,
-					`${SOURCE_DIR}wp-includes/css/*.css`
-				],
-				tasks: ['rtlcss:dynamic'],
-				options: {
-					spawn: false,
-					interval: 2000
-				}
-			},
-			test: {
-				files: [
-					'tests/qunit/**',
-					'!tests/qunit/editor/**'
-				],
-				tasks: ['connect', 'qunit']
-			}
 		}
 	});
 
@@ -812,23 +760,12 @@ module.exports = function(grunt) {
 		'qunit:compiled'
 	] );
 
-    grunt.renameTask( 'watch', '_watch' );
-
-    grunt.registerTask( 'watch', function() {
-		if ( ! this.args.length || this.args.includes('webpack') ) {
-
-			grunt.task.run( 'webpack:dev' );
-		}
-
-		grunt.task.run( `_${this.nameArgs}` );
-	} );
-
     grunt.registerTask( 'precommit:image', [
 		'imagemin:core'
 	] );
 
     grunt.registerTask( 'precommit:js', [
-		'webpack:prod',
+		'rollup',
 		'jshint:corejs',
 		'terser:masonry',
 		'terser:imgareaselect'
@@ -971,6 +908,22 @@ module.exports = function(grunt) {
 		} );
 	} );
 
+	grunt.registerTask( 'rollup', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'node',
+			args: [ './node_modules/.bin/rollup', '--config' ],
+		}, ( error, { stdout, stderr } ) => {
+			if ( error ) {
+				throw error;
+			}
+			console.log( stdout );
+			console.error( stderr );
+			done();
+		} );
+	} );
+
     grunt.registerTask( 'copy:script-loader', [
 		'dev:git-version',
 		'copy:script-loader-impl'
@@ -1046,28 +999,4 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', ['build']);
-
-    /*
-	 * Automatically updates the `:dynamic` configurations
-	 * so that only the changed files are updated.
-	 */
-    grunt.event.on('watch', (action, filepath, target) => {
-		let src;
-
-		if ( ![ 'all', 'rtl', 'webpack' ].includes(target) ) {
-			return;
-		}
-
-		src = [ path.relative( SOURCE_DIR, filepath ) ];
-
-		if ( action === 'deleted' ) {
-			grunt.config( [ 'clean', 'dynamic', 'src' ], src );
-		} else {
-			grunt.config( [ 'copy', 'dynamic', 'src' ], src );
-
-			if ( target === 'rtl' ) {
-				grunt.config( [ 'rtlcss', 'dynamic', 'src' ], src );
-			}
-		}
-	});
 };

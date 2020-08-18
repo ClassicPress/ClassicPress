@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	$ = jQuery,
 	SiteIconPreview;
@@ -53,4 +55,6 @@ SiteIconPreview = View.extend(/** @lends wp.media.view.SiteIconPreview.prototype
 	}
 });
 
-module.exports = SiteIconPreview;
+return SiteIconPreview;
+
+};

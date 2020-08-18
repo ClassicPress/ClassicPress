@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Spinner
  *
@@ -32,4 +34,6 @@ var Spinner = wp.media.View.extend(/** @lends wp.media.view.Spinner.prototype */
 	}
 });
 
-module.exports = Spinner;
+return Spinner;
+
+};
