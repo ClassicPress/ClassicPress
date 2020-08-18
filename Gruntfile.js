@@ -4,7 +4,6 @@
 /* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
-const path = require('path');
 
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -729,50 +728,6 @@ module.exports = function(grunt) {
 					}
 				]
 			}
-		},
-		_watch: {
-			all: {
-				files: [
-					`${SOURCE_DIR}**`,
-					`!${SOURCE_DIR}wp-includes/js/media/**`,
-					// Ignore version control directories.
-					`!${SOURCE_DIR}**/.{svn,git}/**`
-				],
-				tasks: ['clean:dynamic', 'copy:dynamic'],
-				options: {
-					dot: true,
-					spawn: false,
-					interval: 2000
-				}
-			},
-			config: {
-				files: [
-					'Gruntfile.js',
-					'rollup.config.cjs',
-				]
-			},
-			colors: {
-				files: [`${SOURCE_DIR}wp-admin/css/colors/**`],
-				tasks: ['sass:colors']
-			},
-			rtl: {
-				files: [
-					`${SOURCE_DIR}wp-admin/css/*.css`,
-					`${SOURCE_DIR}wp-includes/css/*.css`
-				],
-				tasks: ['rtlcss:dynamic'],
-				options: {
-					spawn: false,
-					interval: 2000
-				}
-			},
-			test: {
-				files: [
-					'tests/qunit/**',
-					'!tests/qunit/editor/**'
-				],
-				tasks: ['connect', 'qunit']
-			}
 		}
 	});
 
@@ -804,17 +759,6 @@ module.exports = function(grunt) {
 		'phpunit:restapi-jsclient',
 		'qunit:compiled'
 	] );
-
-    grunt.renameTask( 'watch', '_watch' );
-
-    grunt.registerTask( 'watch', function() {
-		if ( ! this.args.length || this.args.includes( 'rollup' ) ) {
-
-			grunt.task.run( 'rollup' );
-		}
-
-		grunt.task.run( `_${this.nameArgs}` );
-	} );
 
     grunt.registerTask( 'precommit:image', [
 		'imagemin:core'
@@ -1055,28 +999,4 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', ['build']);
-
-    /*
-	 * Automatically updates the `:dynamic` configurations
-	 * so that only the changed files are updated.
-	 */
-    grunt.event.on('watch', (action, filepath, target) => {
-		let src;
-
-		if ( ! [ 'all', 'rtl', 'rollup' ].includes(target) ) {
-			return;
-		}
-
-		src = [ path.relative( SOURCE_DIR, filepath ) ];
-
-		if ( action === 'deleted' ) {
-			grunt.config( [ 'clean', 'dynamic', 'src' ], src );
-		} else {
-			grunt.config( [ 'copy', 'dynamic', 'src' ], src );
-
-			if ( target === 'rtl' ) {
-				grunt.config( [ 'rtlcss', 'dynamic', 'src' ], src );
-			}
-		}
-	});
 };
