@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	$ = Backbone.$,
 	Embed;
@@ -133,4 +135,6 @@ Embed = wp.media.controller.State.extend(/** @lends wp.media.controller.Embed.pr
 	}
 });
 
-module.exports = Embed;
+return Embed;
+
+};

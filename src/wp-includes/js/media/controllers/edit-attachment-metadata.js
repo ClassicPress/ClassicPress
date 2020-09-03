@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	EditAttachmentMetadata;
 
@@ -25,4 +27,6 @@ EditAttachmentMetadata = wp.media.controller.State.extend(/** @lends wp.media.co
 	}
 });
 
-module.exports = EditAttachmentMetadata;
+return EditAttachmentMetadata;
+
+};

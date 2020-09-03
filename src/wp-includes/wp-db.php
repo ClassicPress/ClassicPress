@@ -528,8 +528,14 @@ class wpdb {
 	 * @since WP-3.9.0
 	 * @var array
 	 */
-	protected $incompatible_modes = array( 'NO_ZERO_DATE', 'ONLY_FULL_GROUP_BY',
-		'STRICT_TRANS_TABLES', 'STRICT_ALL_TABLES', 'TRADITIONAL' );
+	protected $incompatible_modes = array(
+		'NO_ZERO_DATE',
+		'ONLY_FULL_GROUP_BY',
+		'STRICT_TRANS_TABLES',
+		'STRICT_ALL_TABLES',
+		'TRADITIONAL',
+		'ANSI',
+	);
 
 	/**
 	 * Whether to use mysqli over mysql.
@@ -2964,7 +2970,7 @@ class wpdb {
 			foreach ( $data as $col => $value ) {
 				if ( ! empty( $value['db'] ) ) {
 					// We're going to need to truncate by characters or bytes, depending on the length value we have.
-					if ( 'byte' === $value['length']['type'] ) {
+					if ( isset( $value['length']['type'] ) && 'byte' === $value['length']['type'] ) {
 						// Using binary causes LEFT() to truncate by bytes.
 						$charset = 'binary';
 					} else {

@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	l10n = wp.media.view.l10n,
 	$ = jQuery,
@@ -222,4 +224,6 @@ EditorUploader = View.extend(/** @lends wp.media.view.EditorUploader.prototype *
 	}
 });
 
-module.exports = EditorUploader;
+return EditorUploader;
+
+};

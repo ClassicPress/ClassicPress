@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 
 var Button = wp.media.view.Button,
 	l10n = wp.media.view.l10n,
@@ -72,4 +74,6 @@ SelectModeToggle = Button.extend(/** @lends wp.media.view.SelectModeToggle.proto
 	}
 });
 
-module.exports = SelectModeToggle;
+return SelectModeToggle;
+
+};

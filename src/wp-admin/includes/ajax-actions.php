@@ -150,7 +150,7 @@ function wp_ajax_ajax_tag_search() {
 
 	$results = get_terms( $taxonomy, array( 'name__like' => $s, 'fields' => 'names', 'hide_empty' => false ) );
 
-	echo join( $results, "\n" );
+	echo join( "\n", $results );
 	wp_die();
 }
 

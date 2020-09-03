@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Menu = wp.media.view.Menu,
 	Router;
 
@@ -34,4 +36,6 @@ Router = Menu.extend(/** @lends wp.media.view.Router.prototype */{
 	}
 });
 
-module.exports = Router;
+return Router;
+
+};

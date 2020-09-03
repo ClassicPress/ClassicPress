@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.controller.Region
  *
@@ -171,4 +173,6 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	}
 });
 
-module.exports = Region;
+return Region;
+
+};

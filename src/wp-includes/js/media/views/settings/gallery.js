@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Settings.Gallery
  *
@@ -14,4 +16,6 @@ var Gallery = wp.media.view.Settings.extend(/** @lends wp.media.view.Settings.Ga
 	template:  wp.template('gallery-settings')
 });
 
-module.exports = Gallery;
+return Gallery;
+
+};

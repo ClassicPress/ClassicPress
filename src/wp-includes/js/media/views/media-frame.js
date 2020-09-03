@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Frame = wp.media.view.Frame,
 	$ = jQuery,
 	MediaFrame;
@@ -276,4 +278,6 @@ _.each(['open','close','attach','detach','escape'], function( method ) {
 	};
 });
 
-module.exports = MediaFrame;
+return MediaFrame;
+
+};

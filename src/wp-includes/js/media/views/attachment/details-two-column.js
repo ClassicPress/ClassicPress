@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Details = wp.media.view.Attachment.Details,
 	TwoColumn;
 
@@ -48,4 +50,6 @@ TwoColumn = Details.extend(/** @lends wp.media.view.Attachment.Details.TowColumn
 	}
 });
 
-module.exports = TwoColumn;
+return TwoColumn;
+
+};

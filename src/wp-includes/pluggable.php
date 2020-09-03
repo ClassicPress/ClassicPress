@@ -447,10 +447,13 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 */
 	$phpmailer->CharSet = apply_filters( 'wp_mail_charset', $charset );
 
-	// Set custom headers
-	if ( !empty( $headers ) ) {
+	// Set custom headers.
+	if ( ! empty( $headers ) ) {
 		foreach ( (array) $headers as $name => $content ) {
-			$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
+			// Only add custom headers not added automatically by PHPMailer.
+			if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ) ) ) {
+				$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
+			}
 		}
 
 		if ( false !== stripos( $content_type, 'multipart' ) && ! empty($boundary) )
@@ -1904,7 +1907,7 @@ function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) 
 	/* translators: %s: user login */
 	$message = sprintf(__('Username: %s'), $user->user_login) . "\r\n\r\n";
 	$message .= __('To set your password, visit the following address:') . "\r\n\r\n";
-	$message .= '<' . network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . ">\r\n\r\n";
+	$message .= network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login') . "\r\n\r\n";
 
 	$message .= wp_login_url() . "\r\n";
 

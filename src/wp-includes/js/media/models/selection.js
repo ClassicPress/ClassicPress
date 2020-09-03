@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Attachments = wp.media.model.Attachments,
 	Selection;
 
@@ -94,4 +96,6 @@ Selection = Attachments.extend(/** @lends wp.media.model.Selection.prototype */{
 	}
 });
 
-module.exports = Selection;
+return Selection;
+
+};

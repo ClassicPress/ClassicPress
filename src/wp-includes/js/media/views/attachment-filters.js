@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = jQuery,
 	AttachmentFilters;
 
@@ -74,4 +76,6 @@ AttachmentFilters = wp.media.View.extend(/** @lends wp.media.view.AttachmentFilt
 	}
 });
 
-module.exports = AttachmentFilters;
+return AttachmentFilters;
+
+};

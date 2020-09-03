@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = jQuery,
 	UploaderWindow;
 
@@ -108,4 +110,6 @@ UploaderWindow = wp.media.View.extend(/** @lends wp.media.view.UploaderWindow.pr
 	}
 });
 
-module.exports = UploaderWindow;
+return UploaderWindow;
+
+};

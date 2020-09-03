@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Frame = wp.media.view.Frame,
 	MediaFrame = wp.media.view.MediaFrame,
 
@@ -255,4 +257,6 @@ EditAttachments = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.EditAtta
 	}
 });
 
-module.exports = EditAttachments;
+return EditAttachments;
+
+};
