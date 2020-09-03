@@ -59,8 +59,12 @@ jQuery( document ).ready( function( $ ) {
 		var inputVal = $input.val();
 		if ( $( this ).val() !== '0' && ( inputVal === '' || inputVal === '0' ) ) {
 			var $notice = $( '<div class="notice error login_custom_image-notice">' );
-			$notice.text( window.cpOptionsGeneralStrings.chooseAnImageFirst );
+			$notice.text( window.cpOptionsGeneralStrings.chooseAnImage );
 			$( this ).closest( 'label' ).append( $notice );
 		}
 	} );
+
+	// If the user clicks an invalid choice then refreshes the page, that
+	// choice will still be selected. Make sure the notice shows in this case.
+	$choices.filter( ':checked' ).trigger( 'click' );
 } );

@@ -943,9 +943,9 @@ function wp_default_scripts( &$scripts ) {
 
 		$scripts->add( 'cp-options-general', admin_url( "/js/options-general$suffix.js" ), array( 'jquery' ), false, 1 );
 		did_action( 'init' ) && $scripts->localize( 'cp-options-general', 'cpOptionsGeneralStrings', array(
-			'selectAnImage'      => __( 'Select an image' ),
-			'useThisImage'       => __( 'Use this image' ),
-			'chooseAnImageFirst' => __( 'Choose an image first!' ),
+			'selectAnImage' => __( 'Select an image' ),
+			'useThisImage'  => __( 'Use this image' ),
+			'chooseAnImage' => __( 'Please choose an image!' ),
 		) );
 	}
 }
