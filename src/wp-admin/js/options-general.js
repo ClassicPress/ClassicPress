@@ -4,6 +4,7 @@
  * @since 1.2.0
  */
 jQuery( document ).ready( function( $ ) {
+	var $row      = $( '#login_custom_image-row' );
 	var $choices  = $( 'input[name=login_custom_image_state]' );
 	var $img      = $( '#login_custom_image-img' );
 	var $controls = $( '#login_custom_image-controls' );
@@ -13,6 +14,10 @@ jQuery( document ).ready( function( $ ) {
 
 	// Show controls for this setting
 	$controls.removeClass( 'hidden' );
+
+	// Enable all choices. An inline notice will be shown if an invalid choice
+	// is selected.
+	$choices.prop( 'disabled', false );
 
 	var uploader = wp.media( {
 		title: window.cpOptionsGeneralStrings.selectAnImage,
@@ -27,30 +32,35 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	uploader.on( 'select', function() {
+		$row.find( '.login_custom_image-notice' ).remove();
 		var attachment = uploader.state().get( 'selection' ).first().toJSON();
 		$img.removeClass( 'hidden' );
 		$img.attr( 'src', attachment.url );
 		$img.attr( 'alt', attachment.alt );
 		$img.attr( 'title', attachment.description );
-		$choices.prop( 'disabled', false );
-		$input.attr( 'value', attachment.id );
+		$input.val( attachment.id );
 		if ( $choices.filter( '[value=0]:checked' ).length ) {
 			$choices.filter( '[value=1]' ).prop( 'checked', true );
 		}
 	} );
 
 	$clear.on( 'click', function() {
+		$row.find( '.login_custom_image-notice' ).remove();
 		$img.addClass( 'hidden' );
 		$img.removeAttr( 'src' );
 		$img.removeAttr( 'alt' );
 		$img.removeAttr( 'title' );
-		$input.attr( 'value', '' );
-		$choices.each( function() {
-			if ( this.value === '0' ) {
-				$( this ).prop( 'checked', true );
-			} else {
-				$( this ).prop( 'disabled', true );
-			}
-		} );
+		$input.val( '' );
+		$choices.filter( '[value=0]' ).prop( 'checked', true );
+	} );
+
+	$choices.on( 'click', function() {
+		$row.find( '.login_custom_image-notice' ).remove();
+		var inputVal = $input.val();
+		if ( $( this ).val() !== '0' && ( inputVal === '' || inputVal === '0' ) ) {
+			var $notice = $( '<div class="notice error login_custom_image-notice">' );
+			$notice.text( window.cpOptionsGeneralStrings.chooseAnImageFirst );
+			$( this ).closest( 'label' ).append( $notice );
+		}
 	} );
 } );
