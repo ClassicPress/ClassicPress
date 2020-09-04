@@ -142,7 +142,7 @@ if ( $login_custom_image_src ) {
 }
 ?>
 
-<tr>
+<tr id="login_custom_image-row">
 <th scope="row"><?php _e( 'Custom Login Image' ) ?></th>
 <td>
 	<fieldset>
