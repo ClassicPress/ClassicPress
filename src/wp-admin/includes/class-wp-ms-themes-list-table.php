@@ -441,6 +441,7 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 			);
 		}
 
+<<<<<<< HEAD
 		if ( ! $allowed && current_user_can( 'delete_themes' ) && ! $this->is_site_themes && $stylesheet != get_option( 'stylesheet' ) && $stylesheet != get_option( 'template' ) ) {
 			$url = add_query_arg( array(
 				'action'       => 'delete-selected',
@@ -449,6 +450,23 @@ class WP_MS_Themes_List_Table extends WP_List_Table {
 				'paged'        => $page,
 				's'            => $s,
 			), 'themes.php' );
+=======
+		if ( ! $allowed && ! $this->is_site_themes
+			&& current_user_can( 'delete_themes' )
+			&& get_option( 'stylesheet' ) !== $stylesheet
+			&& get_option( 'template' ) !== $stylesheet
+		) {
+			$url = add_query_arg(
+				array(
+					'action'       => 'delete-selected',
+					'checked[]'    => $theme_key,
+					'theme_status' => $context,
+					'paged'        => $page,
+					's'            => $s,
+				),
+				'themes.php'
+			);
+>>>>>>> deb78bdf1c... Themes: Display a message on Themes list table if a theme update requires a higher version of PHP or WordPress.
 
 			/* translators: %s: theme name */
 			$aria_label = sprintf( _x( 'Delete %s', 'theme' ), $theme->display( 'Name' ) );
