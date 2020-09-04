@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	Cropper;
 
@@ -119,4 +121,6 @@ Cropper = wp.media.controller.State.extend(/** @lends wp.media.controller.Croppe
 	}
 });
 
-module.exports = Cropper;
+return Cropper;
+
+};

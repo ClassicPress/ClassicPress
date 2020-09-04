@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	$ = jQuery,
 	Attachments;
@@ -296,4 +298,6 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 	}
 });
 
-module.exports = Attachments;
+return Attachments;
+
+};

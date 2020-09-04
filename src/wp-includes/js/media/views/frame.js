@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Frame
  *
@@ -163,4 +165,6 @@ var Frame = wp.media.View.extend(/** @lends wp.media.view.Frame.prototype */{
 // Make the `Frame` a `StateMachine`.
 _.extend( Frame.prototype, wp.media.controller.StateMachine.prototype );
 
-module.exports = Frame;
+return Frame;
+
+};

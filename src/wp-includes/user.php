@@ -1116,12 +1116,24 @@ function wp_dropdown_users( $args = '' ) {
 			}
 
 			if ( ! $found_selected ) {
-				$users[] = get_userdata( $r['selected'] );
+				$selected_user = get_userdata( $r['selected'] );
+				if ( $selected_user ) {
+					$users[] = $selected_user;
+				} else {
+					// The selected user ID was not found as a valid user.
+					$users[] = (object) array(
+						'_invalid' => true,
+						'ID'       => $r['selected'],
+					);
+				}
 			}
 		}
 
 		foreach ( (array) $users as $user ) {
-			if ( 'display_name_with_login' === $show ) {
+			if ( ! empty( $user->_invalid ) ) {
+				/* translators: user ID */
+				$display = sprintf( __( '(Invalid user: ID=%d)' ), $user->ID );
+			} elseif ( 'display_name_with_login' === $show ) {
 				/* translators: 1: display name, 2: user_login */
 				$display = sprintf( _x( '%1$s (%2$s)', 'user dropdown' ), $user->display_name, $user->user_login );
 			} elseif ( ! empty( $user->$show ) ) {

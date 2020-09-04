@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Iframe
  *
@@ -21,4 +23,6 @@ var Iframe = wp.media.View.extend(/** @lends wp.media.view.Iframe.prototype */{
 	}
 });
 
-module.exports = Iframe;
+return Iframe;
+
+};

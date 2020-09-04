@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	$ = Backbone.$,
 	Settings;
@@ -118,4 +120,6 @@ Settings = View.extend(/** @lends wp.media.view.Settings.prototype */{
 	}
 });
 
-module.exports = Settings;
+return Settings;
+
+};

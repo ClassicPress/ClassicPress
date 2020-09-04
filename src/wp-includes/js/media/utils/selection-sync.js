@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.selectionSync
  *
@@ -63,4 +65,6 @@ var selectionSync = {
 	}
 };
 
-module.exports = selectionSync;
+return selectionSync;
+
+};

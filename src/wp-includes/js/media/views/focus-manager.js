@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.FocusManager
  *
@@ -43,4 +45,6 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 
 });
 
-module.exports = FocusManager;
+return FocusManager;
+
+};

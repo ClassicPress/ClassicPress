@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.PriorityList
  *
@@ -94,4 +96,6 @@ var PriorityList = wp.media.View.extend(/** @lends wp.media.view.PriorityList.pr
 	}
 });
 
-module.exports = PriorityList;
+return PriorityList;
+
+};
