@@ -882,7 +882,7 @@ module.exports = function(grunt) {
 
 		grunt.util.spawn( {
 			cmd: 'bash',
-			args: [ '-c', "git ls-files -z | xargs -0 grep -P -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+			args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
 		}, ( error, { stdout, stderr }, code ) => {
 			// Ignore error because it is populated for non-zero exit codes:
 			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
