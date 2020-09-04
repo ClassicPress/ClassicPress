@@ -582,6 +582,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
 			) );
 		}
 
+<<<<<<< HEAD
 		$prepared_themes[ $slug ] = array(
 			'id'           => $slug,
 			'name'         => $theme->display( 'Name' ),
@@ -600,6 +601,42 @@ function wp_prepare_themes_for_js( $themes = null ) {
 				'activate' => current_user_can( 'switch_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=activate&amp;stylesheet=' . $encoded_slug ), 'switch-theme_' . $slug ) : null,
 				'customize' => $customize_action,
 				'delete'   => current_user_can( 'delete_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=delete&amp;stylesheet=' . $encoded_slug ), 'delete-theme_' . $slug ) : null,
+=======
+		$update_requires_wp  = isset( $updates[ $slug ]['requires'] ) ? $updates[ $slug ]['requires'] : null;
+		$update_requires_php = isset( $updates[ $slug ]['requires_php'] ) ? $updates[ $slug ]['requires_php'] : null;
+
+		$auto_update        = in_array( $slug, $auto_updates, true );
+		$auto_update_action = $auto_update ? 'disable-auto-update' : 'enable-auto-update';
+
+		$prepared_themes[ $slug ] = array(
+			'id'             => $slug,
+			'name'           => $theme->display( 'Name' ),
+			'screenshot'     => array( $theme->get_screenshot() ), // @todo Multiple screenshots.
+			'description'    => $theme->display( 'Description' ),
+			'author'         => $theme->display( 'Author', false, true ),
+			'authorAndUri'   => $theme->display( 'Author' ),
+			'tags'           => $theme->display( 'Tags' ),
+			'version'        => $theme->get( 'Version' ),
+			'compatibleWP'   => is_wp_version_compatible( $theme->get( 'RequiresWP' ) ),
+			'compatiblePHP'  => is_php_version_compatible( $theme->get( 'RequiresPHP' ) ),
+			'updateResponse' => array(
+				'compatibleWP'  => is_wp_version_compatible( $update_requires_wp ),
+				'compatiblePHP' => is_php_version_compatible( $update_requires_php ),
+			),
+			'parent'         => $parent,
+			'active'         => $slug === $current_theme,
+			'hasUpdate'      => isset( $updates[ $slug ] ),
+			'hasPackage'     => isset( $updates[ $slug ] ) && ! empty( $updates[ $slug ]['package'] ),
+			'update'         => get_theme_update_available( $theme ),
+			'autoupdate'     => $auto_update,
+			'actions'        => array(
+				'activate'   => current_user_can( 'switch_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=activate&amp;stylesheet=' . $encoded_slug ), 'switch-theme_' . $slug ) : null,
+				'customize'  => $customize_action,
+				'delete'     => current_user_can( 'delete_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=delete&amp;stylesheet=' . $encoded_slug ), 'delete-theme_' . $slug ) : null,
+				'autoupdate' => wp_is_auto_update_enabled_for_type( 'theme' ) && ! is_multisite() && current_user_can( 'update_themes' )
+					? wp_nonce_url( admin_url( 'themes.php?action=' . $auto_update_action . '&amp;stylesheet=' . $encoded_slug ), 'updates' )
+					: null,
+>>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
 			),
 		);
 	}
@@ -679,10 +716,68 @@ function customize_themes_print_templates() {
 					<# } #>
 
 					<# if ( data.hasUpdate ) { #>
-						<div class="notice notice-warning notice-alt notice-large" data-slug="{{ data.id }}">
-							<h3 class="notice-title"><?php _e( 'Update Available' ); ?></h3>
-							{{{ data.update }}}
-						</div>
+						<# if ( data.updateResponse.compatibleWP && data.updateResponse.compatiblePHP ) { #>
+							<div class="notice notice-warning notice-alt notice-large" data-slug="{{ data.id }}">
+								<h3 class="notice-title"><?php _e( 'Update Available' ); ?></h3>
+								{{{ data.update }}}
+							</div>
+						<# } else { #>
+							<div class="notice notice-error notice-alt notice-large" data-slug="{{ data.id }}">
+								<h3 class="notice-title"><?php _e( 'Update Incompatible' ); ?></h3>
+								<p>
+									<# if ( ! data.updateResponse.compatibleWP && ! data.updateResponse.compatiblePHP ) { #>
+										<?php
+										_e( 'There is a new version available, but it doesn&#8217;t work with your versions of WordPress and PHP.' );
+										if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+											printf(
+												/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+												' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+												self_admin_url( 'update-core.php' ),
+												esc_url( wp_get_update_php_url() )
+											);
+											wp_update_php_annotation( '</p><p><em>', '</em>' );
+										} elseif ( current_user_can( 'update_core' ) ) {
+											printf(
+												/* translators: %s: URL to WordPress Updates screen. */
+												' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+												self_admin_url( 'update-core.php' )
+											);
+										} elseif ( current_user_can( 'update_php' ) ) {
+											printf(
+												/* translators: %s: URL to Update PHP page. */
+												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+												esc_url( wp_get_update_php_url() )
+											);
+											wp_update_php_annotation( '</p><p><em>', '</em>' );
+										}
+										?>
+									<# } else if ( ! data.updateResponse.compatibleWP ) { #>
+										<?php
+										_e( 'There is a new version available, but it doesn&#8217;t work with your version of WordPress.' );
+										if ( current_user_can( 'update_core' ) ) {
+											printf(
+												/* translators: %s: URL to WordPress Updates screen. */
+												' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+												self_admin_url( 'update-core.php' )
+											);
+										}
+										?>
+									<# } else if ( ! data.updateResponse.compatiblePHP ) { #>
+										<?php
+										_e( 'There is a new version available, but it doesn&#8217;t work with your version of PHP.' );
+										if ( current_user_can( 'update_php' ) ) {
+											printf(
+												/* translators: %s: URL to Update PHP page. */
+												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+												esc_url( wp_get_update_php_url() )
+											);
+											wp_update_php_annotation( '</p><p><em>', '</em>' );
+										}
+										?>
+									<# } #>
+								</p>
+							</div>
+						<# } #>
 					<# } #>
 
 					<# if ( data.parent ) { #>
