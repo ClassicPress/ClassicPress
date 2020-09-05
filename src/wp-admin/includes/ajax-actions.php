@@ -2936,9 +2936,26 @@ function wp_ajax_query_themes() {
 		$theme->author      = wp_kses( $theme->author, $themes_allowedtags );
 		$theme->version     = wp_kses( $theme->version, $themes_allowedtags );
 		$theme->description = wp_kses( $theme->description, $themes_allowedtags );
+<<<<<<< HEAD
 		$theme->stars       = wp_star_rating( array( 'rating' => $theme->rating, 'type' => 'percent', 'number' => $theme->num_ratings, 'echo' => false ) );
 		$theme->num_ratings = number_format_i18n( $theme->num_ratings );
 		$theme->preview_url = set_url_scheme( $theme->preview_url );
+=======
+
+		$theme->stars = wp_star_rating(
+			array(
+				'rating' => $theme->rating,
+				'type'   => 'percent',
+				'number' => $theme->num_ratings,
+				'echo'   => false,
+			)
+		);
+
+		$theme->num_ratings    = number_format_i18n( $theme->num_ratings );
+		$theme->preview_url    = set_url_scheme( $theme->preview_url );
+ 		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
+ 		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
+>>>>>>> b91e74d2f6... Themes: Prevent activation and live preview of themes that require a higher version of PHP or WordPress.
 	}
 
 	wp_send_json_success( $api );
