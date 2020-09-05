@@ -258,13 +258,8 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 
 			$overwrite = $this->is_downgrading ? 'downgrade-plugin' : 'update-plugin';
 
-<<<<<<< HEAD
-			$install_actions['ovewrite_plugin'] = sprintf(
-				'<a class="button button-primary" href="%s" target="_parent">%s</a>',
-=======
 			$install_actions['overwrite_plugin'] = sprintf(
 				'<a class="button button-primary update-from-upload-overwrite" href="%s" target="_parent">%s</a>',
->>>>>>> b60cf9ca31... Upgrade/Install: Correct spelling of “overwrite” in new hooks and array indexes.
 				wp_nonce_url( add_query_arg( 'overwrite', $overwrite, $this->url ), 'plugin-upload' ),
 				esc_html( __( 'Replace current with uploaded' ) )
 			);
