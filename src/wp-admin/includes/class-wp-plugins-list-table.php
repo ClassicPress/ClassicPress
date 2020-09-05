@@ -715,9 +715,17 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 		}
 
+<<<<<<< HEAD
 		$class = $is_active ? 'active' : 'inactive';
 		$checkbox_id =  "checkbox_" . md5($plugin_data['Name']);
 		if ( $restrict_network_active || $restrict_network_only || in_array( $status, array( 'mustuse', 'dropins' ) ) ) {
+=======
+		$requires_php   = isset( $plugin['requires_php'] ) ? $plugin['requires_php'] : null;
+		$compatible_php = is_php_version_compatible( $requires_php );
+		$class          = $is_active ? 'active' : 'inactive';
+		$checkbox_id    = 'checkbox_' . md5( $plugin_data['Name'] );
+		if ( $restrict_network_active || $restrict_network_only || in_array( $status, array( 'mustuse', 'dropins' ) ) || ! $compatible_php ) {
+>>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
 			$checkbox = '';
 		} else {
 			$checkbox = "<label class='screen-reader-text' for='" . $checkbox_id . "' >" . sprintf( __( 'Select %s' ), $plugin_data['Name'] ) . "</label>"

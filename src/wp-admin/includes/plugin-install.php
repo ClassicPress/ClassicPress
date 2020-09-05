@@ -715,12 +715,52 @@ function install_plugin_information() {
 	</div>
 	<div id="section-holder" class="wrap">
 	<?php
-	$wp_version = get_bloginfo( 'version' );
+	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
+	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
 
+<<<<<<< HEAD
 	if ( ! empty( $api->tested ) && version_compare( substr( $wp_version, 0, strlen( $api->tested ) ), $api->tested, '>' ) ) {
 		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been tested</strong> with your current version of ClassicPress.' ) . '</p></div>';
 	} elseif ( ! empty( $api->requires ) && version_compare( substr( $wp_version, 0, strlen( $api->requires ) ), $api->requires, '<' ) ) {
 		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been marked as compatible</strong> with your version of ClassicPress.' ) . '</p></div>';
+=======
+	$compatible_php = is_php_version_compatible( $requires_php );
+	$compatible_wp  = is_wp_version_compatible( $requires_wp );
+	$tested_wp      = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
+
+	if ( ! $compatible_php ) {
+		echo '<div class="notice notice-error notice-alt"><p>';
+		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
+		if ( current_user_can( 'update_php' ) ) {
+			printf(
+				/* translators: %s: "Update PHP" page URL */
+				' ' . __( '<a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
+				esc_url( wp_get_update_php_url() )
+			);
+
+			wp_update_php_annotation( '</p><p><em>', '</em>' );
+		} else {
+			echo '</p>';
+		}
+		echo '</div>';
+	}
+
+	if ( ! $tested_wp ) {
+		echo '<div class="notice notice-warning notice-alt"><p>';
+		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of WordPress.' );
+		echo '</p></div>';
+	} elseif ( ! $compatible_wp ) {
+		echo '<div class="notice notice-error notice-alt"><p>';
+		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.' );
+		if ( current_user_can( 'update_core' ) ) {
+			printf(
+				/* translators: %s: "Update WordPress" screen URL */
+				' ' . __( '<a href="%s" target="_parent">Click here to update WordPress</a>.' ),
+				self_admin_url( 'update-core.php' )
+			);
+		}
+		echo '</p></div>';
+>>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
 	}
 
 	foreach ( (array) $api->sections as $section_name => $content ) {
