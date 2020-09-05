@@ -277,12 +277,30 @@ if ( $tab ) {
 					<# } #>
 				<# } #>
 			<# } else { #>
+<<<<<<< HEAD
 				<?php
 				/* translators: %s: Theme name */
 				$aria_label = sprintf( __( 'Install %s' ), '{{ data.name }}' );
 				?>
 				<a class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}" href="{{ data.install_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Install' ); ?></a>
 				<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
+=======
+				<# if ( data.compatible_wp && data.compatible_php ) { #>
+					<?php
+					/* translators: %s: Theme name. */
+					$aria_label = sprintf( __( 'Install %s' ), '{{ data.name }}' );
+					?>
+					<a class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}" href="{{ data.install_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Install' ); ?></a>
+					<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
+				<# } else { #>
+					<?php
+					/* translators: %s: Theme name. */
+					$aria_label = sprintf( __( 'Cannot Install %s' ), '{{ data.name }}' );
+					?>
+					<a class="button button-primary disabled" data-name="{{ data.name }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Install', 'theme' ); ?></a>
+					<button class="button disabled"><?php _e( 'Preview' ); ?></button>
+				<# } #>
+>>>>>>> a60b30444f... Themes: Prevent installation of themes that require a higher version of PHP or WordPress.
 			<# } #>
 		</div>
 	</div>
@@ -299,9 +317,17 @@ if ( $tab ) {
 			<button class="previous-theme"><span class="screen-reader-text"><?php _ex( 'Previous', 'Button label for a theme' ); ?></span></button>
 			<button class="next-theme"><span class="screen-reader-text"><?php _ex( 'Next', 'Button label for a theme' ); ?></span></button>
 			<# if ( data.installed ) { #>
-				<a class="button button-primary activate" href="{{ data.activate_url }}"><?php _e( 'Activate' ); ?></a>
+				<# if ( data.compatible_wp && data.compatible_php ) { #>
+					<a class="button button-primary activate" href="{{ data.activate_url }}"><?php _e( 'Activate' ); ?></a>
+				<# } else { #>
+					<a class="button button-primary disabled" ><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
+				<# } #>
 			<# } else { #>
-				<a href="{{ data.install_url }}" class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}"><?php _e( 'Install' ); ?></a>
+				<# if ( data.compatible_wp && data.compatible_php ) { #>
+					<a href="{{ data.install_url }}" class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}"><?php _e( 'Install' ); ?></a>
+				<# } else { #>
+					<a class="button button-primary disabled" ><?php _ex( 'Cannot Install', 'theme' ); ?></a>
+				<# } #>
 			<# } #>
 		</div>
 		<div class="wp-full-overlay-sidebar-content">
