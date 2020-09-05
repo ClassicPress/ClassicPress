@@ -286,8 +286,13 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 
 			$overwrite = $this->is_downgrading ? 'downgrade-theme' : 'update-theme';
 
+<<<<<<< HEAD
 			$install_actions['ovewrite_theme'] = sprintf(
 				'<a class="button button-primary" href="%s" target="_parent">%s</a>',
+=======
+			$install_actions['overwrite_theme'] = sprintf(
+				'<a class="button button-primary update-from-upload-overwrite" href="%s" target="_parent">%s</a>',
+>>>>>>> b60cf9ca31... Upgrade/Install: Correct spelling of “overwrite” in new hooks and array indexes.
 				wp_nonce_url( add_query_arg( 'overwrite', $overwrite, $this->url ), 'theme-upload' ),
 				esc_html( __( 'Replace current with uploaded' ) )
 			);
@@ -302,7 +307,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		);
 
 		/**
-		 * Filters the list of action links available following a single theme installation failed but ovewrite is allowed.
+		 * Filters the list of action links available following a single theme installation failed but overwrite is allowed.
 		 *
 		 * @since 5.5.0
 		 *
@@ -310,7 +315,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		 * @param object   $api             Object containing WordPress.org API theme data.
 		 * @param array    $new_theme_data  Array with uploaded theme data.
 		 */
-		$install_actions = apply_filters( 'install_theme_ovewrite_actions', $install_actions, $this->api, $new_theme_data );
+		$install_actions = apply_filters( 'install_theme_overwrite_actions', $install_actions, $this->api, $new_theme_data );
 
 		if ( ! empty( $install_actions ) ) {
 			echo '<p class="update-from-upload-actions">' . implode( ' ', (array) $install_actions ) . '</p>';
