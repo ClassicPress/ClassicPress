@@ -73,9 +73,10 @@ class Theme_Upgrader extends WP_Upgrader {
 		$this->strings['no_package'] = __('Installation package not available.');
 		/* translators: %s: package URL */
 		$this->strings['downloading_package'] = sprintf( __( 'Downloading installation package from %s&#8230;' ), '<span class="code">%s</span>' );
-<<<<<<< HEAD
 		$this->strings['unpack_package'] = __('Unpacking the package&#8230;');
 		$this->strings['installing_package'] = __('Installing the theme&#8230;');
+		$this->strings['remove_old'] = __( 'Removing the old version of the theme&#8230;' );
+		$this->strings['remove_old_failed'] = __( 'Could not remove the old theme.' );
 		$this->strings['no_files'] = __('The theme contains no files.');
 		$this->strings['process_failed'] = __('Theme installation failed.');
 		$this->strings['process_success'] = __('Theme installed successfully.');
@@ -89,25 +90,6 @@ class Theme_Upgrader extends WP_Upgrader {
 		/* translators: 1: theme name, 2: version */
 		$this->strings['parent_theme_install_success'] = __('Successfully installed the parent theme, <strong>%1$s %2$s</strong>.');
 		/* translators: %s: theme name */
-=======
-		$this->strings['unpack_package']      = __( 'Unpacking the package&#8230;' );
-		$this->strings['installing_package']  = __( 'Installing the theme&#8230;' );
-		$this->strings['remove_old']          = __( 'Removing the old version of the theme&#8230;' );
-		$this->strings['remove_old_failed']   = __( 'Could not remove the old theme.' );
-		$this->strings['no_files']            = __( 'The theme contains no files.' );
-		$this->strings['process_failed']      = __( 'Theme installation failed.' );
-		$this->strings['process_success']     = __( 'Theme installed successfully.' );
-		/* translators: 1: Theme name, 2: Theme version. */
-		$this->strings['process_success_specific'] = __( 'Successfully installed the theme <strong>%1$s %2$s</strong>.' );
-		$this->strings['parent_theme_search']      = __( 'This theme requires a parent theme. Checking if it is installed&#8230;' );
-		/* translators: 1: Theme name, 2: Theme version. */
-		$this->strings['parent_theme_prepare_install'] = __( 'Preparing to install <strong>%1$s %2$s</strong>&#8230;' );
-		/* translators: 1: Theme name, 2: Theme version. */
-		$this->strings['parent_theme_currently_installed'] = __( 'The parent theme, <strong>%1$s %2$s</strong>, is currently installed.' );
-		/* translators: 1: Theme name, 2: Theme version. */
-		$this->strings['parent_theme_install_success'] = __( 'Successfully installed the parent theme, <strong>%1$s %2$s</strong>.' );
-		/* translators: %s: Theme name. */
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 		$this->strings['parent_theme_not_found'] = sprintf( __( '<strong>The parent theme could not be found.</strong> You will need to install the parent theme, %s, before you can use this child theme.' ), '<strong>%s</strong>' );
 		/* translators: %s: Theme error. */
 		$this->strings['current_theme_has_errors'] = __( 'The current theme has the following error: "%s".' );
@@ -230,12 +212,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * @return bool|WP_Error True if the installation was successful, false or a WP_Error object otherwise.
 	 */
 	public function install( $package, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 			'overwrite_package'  => false, // Do not overwrite files.
 		);
@@ -251,7 +228,6 @@ class Theme_Upgrader extends WP_Upgrader {
 			add_action( 'upgrader_process_complete', 'wp_clean_themes_cache', 9, 0 );
 		}
 
-<<<<<<< HEAD
 		$this->run( array(
 			'package' => $package,
 			'destination' => get_theme_root(),
@@ -262,20 +238,6 @@ class Theme_Upgrader extends WP_Upgrader {
 				'action' => 'install',
 			),
 		) );
-=======
-		$this->run(
-			array(
-				'package'           => $package,
-				'destination'       => get_theme_root(),
-				'clear_destination' => $args['overwrite_package'],
-				'clear_working'     => true,
-				'hook_extra'        => array(
-					'type'   => 'theme',
-					'action' => 'install',
-				),
-			)
-		);
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 
 		remove_action( 'upgrader_process_complete', 'wp_clean_themes_cache', 9 );
 		remove_filter('upgrader_source_selection', array($this, 'check_package') );
@@ -320,12 +282,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * @return bool|WP_Error True if the upgrade was successful, false or a WP_Error object otherwise.
 	 */
 	public function upgrade( $theme, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -394,12 +351,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * @return array[]|false An array of results, or false if unable to connect to the filesystem.
 	 */
 	public function bulk_upgrade( $themes, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -516,13 +468,9 @@ class Theme_Upgrader extends WP_Upgrader {
 	public function check_package( $source ) {
 		global $wp_filesystem;
 
-<<<<<<< HEAD
-		if ( is_wp_error($source) )
-=======
 		$this->new_theme_data = array();
 
-		if ( is_wp_error( $source ) ) {
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+		if ( is_wp_error($source) )
 			return $source;
 
 		// Check the folder contains a valid theme
@@ -540,9 +488,6 @@ class Theme_Upgrader extends WP_Upgrader {
 			);
 		}
 
-<<<<<<< HEAD
-		$info = get_file_data( $working_directory . 'style.css', array( 'Name' => 'Theme Name', 'Template' => 'Template' ) );
-=======
 		// All these headers are needed on Theme_Installer_Skin::do_overwrite().
 		$info = get_file_data(
 			$working_directory . 'style.css',
@@ -555,7 +500,6 @@ class Theme_Upgrader extends WP_Upgrader {
 				'RequiresPHP' => 'Requires PHP',
 			)
 		);
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 
 		if ( empty( $info['Name'] ) ) {
 			return new WP_Error( 'incompatible_archive_theme_no_name', $this->strings['incompatible_archive'],
@@ -687,16 +631,9 @@ class Theme_Upgrader extends WP_Upgrader {
 	 * @return WP_Theme|false The theme's info object, or false `$theme` is not supplied
 	 *                        and the last result isn't set.
 	 */
-<<<<<<< HEAD
-	public function theme_info($theme = null) {
-
-		if ( empty($theme) ) {
-			if ( !empty($this->result['destination_name']) )
-=======
 	public function theme_info( $theme = null ) {
 		if ( empty( $theme ) ) {
-			if ( ! empty( $this->result['destination_name'] ) ) {
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+			if ( ! empty( $this->result['destination_name'] ) )
 				$theme = $this->result['destination_name'];
 			else
 				return false;

@@ -738,7 +738,6 @@ class WP_Upgrader {
 		}
 
 		// With the given options, this installs it to the destination directory.
-<<<<<<< HEAD
 		$result = $this->install_package( array(
 			'source' => $working_dir,
 			'destination' => $options['destination'],
@@ -751,27 +750,10 @@ class WP_Upgrader {
 		$this->skin->set_result($result);
 		if ( is_wp_error($result) ) {
 			$this->skin->error($result);
-			$this->skin->feedback('process_failed');
-=======
-		$result = $this->install_package(
-			array(
-				'source'                      => $working_dir,
-				'destination'                 => $options['destination'],
-				'clear_destination'           => $options['clear_destination'],
-				'abort_if_destination_exists' => $options['abort_if_destination_exists'],
-				'clear_working'               => $options['clear_working'],
-				'hook_extra'                  => $options['hook_extra'],
-			)
-		);
-
-		$this->skin->set_result( $result );
-		if ( is_wp_error( $result ) ) {
-			$this->skin->error( $result );
 
 			if ( ! method_exists( $this->skin, 'hide_process_failed' ) || ! $this->skin->hide_process_failed( $result ) ) {
 				$this->skin->feedback( 'process_failed' );
 			}
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 		} else {
 			// Installation succeeded.
 			$this->skin->feedback('process_success');

@@ -1059,10 +1059,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	border: 1px solid #e5e5e5;
 	padding: 30px;
 	margin: 30px auto;
-<<<<<<< HEAD
-	max-width: 380px;
-}
-=======
 	display: inline-flex;
 	justify-content: space-between;
 	align-items: center;
@@ -1073,7 +1069,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	margin-right: 10px;
 }
 
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 .upload-theme .install-help,
 .upload-plugin .install-help {
 	color: #555d66; /* #f1f1f1 background */

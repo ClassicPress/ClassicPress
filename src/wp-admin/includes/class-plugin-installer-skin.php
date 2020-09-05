@@ -27,30 +27,14 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	 *
 	 * @param array $args
 	 */
-<<<<<<< HEAD
 	public function __construct($args = array()) {
-		$defaults = array( 'type' => 'web', 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => '' );
+		$defaults = array( 'type' => 'web', 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => '', 'overwrite' => '' );
 		$args = wp_parse_args($args, $defaults);
 
 		$this->type = $args['type'];
+		$this->url = $args['url'];
 		$this->api = isset($args['api']) ? $args['api'] : array();
-=======
-	public function __construct( $args = array() ) {
-		$defaults = array(
-			'type'      => 'web',
-			'url'       => '',
-			'plugin'    => '',
-			'nonce'     => '',
-			'title'     => '',
-			'overwrite' => '',
-		);
-		$args     = wp_parse_args( $args, $defaults );
-
-		$this->type      = $args['type'];
-		$this->url       = $args['url'];
-		$this->api       = isset( $args['api'] ) ? $args['api'] : array();
 		$this->overwrite = $args['overwrite'];
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 
 		parent::__construct($args);
 	}
@@ -58,18 +42,8 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 */
 	public function before() {
-<<<<<<< HEAD
 		if ( !empty($this->api) )
-			$this->upgrader->strings['process_success'] = sprintf( __('Successfully installed the plugin <strong>%s %s</strong>.'), $this->api->name, $this->api->version);
-=======
-		if ( ! empty( $this->api ) ) {
-			$this->upgrader->strings['process_success'] = sprintf(
-				$this->upgrader->strings['process_success_specific'],
-				$this->api->name,
-				$this->api->version
-			);
-		}
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version);
 	}
 
 	/**

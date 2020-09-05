@@ -27,30 +27,14 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	 *
 	 * @param array $args
 	 */
-<<<<<<< HEAD
 	public function __construct($args = array()) {
-		$defaults = array( 'type' => 'web', 'url' => '', 'theme' => '', 'nonce' => '', 'title' => '' );
+		$defaults = array( 'type' => 'web', 'url' => '', 'theme' => '', 'nonce' => '', 'title' => '', 'overwrite' => '' );
 		$args = wp_parse_args($args, $defaults);
 
 		$this->type = $args['type'];
+		$this->url = $args['url'];
 		$this->api = isset($args['api']) ? $args['api'] : array();
-=======
-	public function __construct( $args = array() ) {
-		$defaults = array(
-			'type'      => 'web',
-			'url'       => '',
-			'theme'     => '',
-			'nonce'     => '',
-			'title'     => '',
-			'overwrite' => '',
-		);
-		$args     = wp_parse_args( $args, $defaults );
-
-		$this->type      = $args['type'];
-		$this->url       = $args['url'];
-		$this->api       = isset( $args['api'] ) ? $args['api'] : array();
 		$this->overwrite = $args['overwrite'];
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 
 		parent::__construct($args);
 	}
@@ -85,15 +69,10 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 */
 	public function after() {
-<<<<<<< HEAD
-		if ( empty($this->upgrader->result['destination_name']) )
-=======
-		if ( $this->do_overwrite() ) {
+		if ( $this->do_overwrite() )
 			return;
-		}
 
-		if ( empty( $this->upgrader->result['destination_name'] ) ) {
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+		if ( empty( $this->upgrader->result['destination_name'] ) )
 			return;
 
 		$theme_info = $this->upgrader->theme_info();
@@ -133,14 +112,11 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) )
 			$install_actions['themes_page'] = '<a href="' . self_admin_url( 'themes.php' ) . '" target="_parent">' . __( 'Return to Themes page' ) . '</a>';
 
-		if ( ! $this->result || is_wp_error($this->result) || is_network_admin() || ! current_user_can( 'switch_themes' ) )
+		if ( ! $this->result || is_wp_error($this->result) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
 			unset( $install_actions['activate'], $install_actions['preview'] );
-<<<<<<< HEAD
-=======
 		} elseif ( get_option( 'template' ) === $stylesheet ) {
 			unset( $install_actions['activate'] );
 		}
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 
 		/**
 		 * Filters the list of action links available following a single theme installation.

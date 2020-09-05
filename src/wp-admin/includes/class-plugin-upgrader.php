@@ -54,7 +54,6 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * @since WP-2.8.0
 	 */
 	public function upgrade_strings() {
-<<<<<<< HEAD
 		$this->strings['up_to_date'] = __('The plugin is at the latest version.');
 		$this->strings['no_package'] = __('Update package not available.');
 		/* translators: %s: package URL */
@@ -65,21 +64,9 @@ class Plugin_Upgrader extends WP_Upgrader {
 		$this->strings['process_failed'] = __('Plugin update failed.');
 		$this->strings['process_success'] = __('Plugin updated successfully.');
 		$this->strings['process_bulk_success'] = __('Plugins updated successfully.');
-=======
-		$this->strings['up_to_date'] = __( 'The plugin is at the latest version.' );
-		$this->strings['no_package'] = __( 'Update package not available.' );
-		/* translators: %s: Package URL. */
-		$this->strings['downloading_package']  = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
-		$this->strings['unpack_package']       = __( 'Unpacking the update&#8230;' );
-		$this->strings['remove_old']           = __( 'Removing the old version of the plugin&#8230;' );
-		$this->strings['remove_old_failed']    = __( 'Could not remove the old plugin.' );
-		$this->strings['process_failed']       = __( 'Plugin update failed.' );
-		$this->strings['process_success']      = __( 'Plugin updated successfully.' );
-		$this->strings['process_bulk_success'] = __( 'Plugins updated successfully.' );
 
 		/* translators: 1: Plugin name, 2: Plugin version. */
 		$this->strings['process_success_specific'] = __( 'Successfully installed the plugin <strong>%1$s %2$s</strong>.' );
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 	}
 
 	/**
@@ -91,35 +78,28 @@ class Plugin_Upgrader extends WP_Upgrader {
 		$this->strings['no_package'] = __('Installation package not available.');
 		/* translators: %s: package URL */
 		$this->strings['downloading_package'] = sprintf( __( 'Downloading installation package from %s&#8230;' ), '<span class="code">%s</span>' );
-<<<<<<< HEAD
-		$this->strings['unpack_package'] = __('Unpacking the package&#8230;');
-		$this->strings['installing_package'] = __('Installing the plugin&#8230;');
-		$this->strings['no_files'] = __('The plugin contains no files.');
-		$this->strings['process_failed'] = __('Plugin installation failed.');
-		$this->strings['process_success'] = __('Plugin installed successfully.');
-=======
-		$this->strings['unpack_package']      = __( 'Unpacking the package&#8230;' );
-		$this->strings['installing_package']  = __( 'Installing the plugin&#8230;' );
-		$this->strings['remove_old']          = __( 'Removing the current plugin&#8230;' );
-		$this->strings['remove_old_failed']   = __( 'Could not remove the current plugin.' );
-		$this->strings['no_files']            = __( 'The plugin contains no files.' );
-		$this->strings['process_failed']      = __( 'Plugin installation failed.' );
-		$this->strings['process_success']     = __( 'Plugin installed successfully.' );
+
+		$this->strings['unpack_package'] = __( 'Unpacking the package&#8230;' );
+		$this->strings['installing_package'] = __( 'Installing the plugin&#8230;' );
+		$this->strings['remove_old'] = __( 'Removing the current plugin&#8230;' );
+		$this->strings['remove_old_failed'] = __( 'Could not remove the current plugin.' );
+		$this->strings['no_files'] = __( 'The plugin contains no files.' );
+		$this->strings['process_failed'] = __( 'Plugin installation failed.' );
+		$this->strings['process_success'] = __( 'Plugin installed successfully.' );
 
 		if ( ! empty( $this->skin->overwrite ) ) {
 			if ( 'update-plugin' === $this->skin->overwrite ) {
 				$this->strings['installing_package'] = __( 'Updating the plugin&#8230;' );
-				$this->strings['process_failed']     = __( 'Plugin update failed.' );
-				$this->strings['process_success']    = __( 'Plugin updated successfully.' );
+				$this->strings['process_failed'] = __( 'Plugin update failed.' );
+				$this->strings['process_success'] = __( 'Plugin updated successfully.' );
 			}
 
 			if ( 'downgrade-plugin' === $this->skin->overwrite ) {
 				$this->strings['installing_package'] = __( 'Downgrading the plugin&#8230;' );
-				$this->strings['process_failed']     = __( 'Plugin downgrade failed.' );
-				$this->strings['process_success']    = __( 'Plugin downgraded successfully.' );
+				$this->strings['process_failed'] = __( 'Plugin downgrade failed.' );
+				$this->strings['process_success'] = __( 'Plugin downgraded successfully.' );
 			}
 		}
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 	}
 
 	/**
@@ -138,12 +118,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * @return bool|WP_Error True if the installation was successful, false or a WP_Error otherwise.
 	 */
 	public function install( $package, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 			'overwrite_package'  => false, // Do not overwrite files.
 		);
@@ -158,7 +133,6 @@ class Plugin_Upgrader extends WP_Upgrader {
 			add_action( 'upgrader_process_complete', 'wp_clean_plugins_cache', 9, 0 );
 		}
 
-<<<<<<< HEAD
 		$this->run( array(
 			'package' => $package,
 			'destination' => WP_PLUGIN_DIR,
@@ -167,18 +141,6 @@ class Plugin_Upgrader extends WP_Upgrader {
 			'hook_extra' => array(
 				'type' => 'plugin',
 				'action' => 'install',
-=======
-		$this->run(
-			array(
-				'package'           => $package,
-				'destination'       => WP_PLUGIN_DIR,
-				'clear_destination' => $parsed_args['overwrite_package'],
-				'clear_working'     => true,
-				'hook_extra'        => array(
-					'type'   => 'plugin',
-					'action' => 'install',
-				),
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			)
 		) );
 
@@ -224,12 +186,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * @return bool|WP_Error True if the upgrade was successful, false or a WP_Error object otherwise.
 	 */
 	public function upgrade( $plugin, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -299,12 +256,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * @return array|false An array of results indexed by plugin file, or false if unable to connect to the filesystem.
 	 */
 	public function bulk_upgrade( $plugins, $args = array() ) {
-<<<<<<< HEAD
-
 		$defaults = array(
-=======
-		$defaults    = array(
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 			'clear_update_cache' => true,
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -420,25 +372,16 @@ class Plugin_Upgrader extends WP_Upgrader {
 	public function check_package($source) {
 		global $wp_filesystem;
 
-<<<<<<< HEAD
-		if ( is_wp_error($source) )
-=======
 		$this->new_plugin_data = array();
 
-		if ( is_wp_error( $source ) ) {
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+		if ( is_wp_error($source) ) {
 			return $source;
 
 		$working_directory = str_replace( $wp_filesystem->wp_content_dir(), trailingslashit(WP_CONTENT_DIR), $source);
 		if ( ! is_dir($working_directory) ) // Sanity check, if the above fails, let's not prevent installation.
 			return $source;
 
-<<<<<<< HEAD
-		// Check the folder contains at least 1 valid plugin.
-		$plugins_found = false;
-=======
 		// Check that the folder contains at least 1 valid plugin.
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
 		$files = glob( $working_directory . '*.php' );
 		if ( $files ) {
 			foreach ( $files as $file ) {
@@ -450,11 +393,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 			}
 		}
 
-<<<<<<< HEAD
-		if ( ! $plugins_found )
-=======
-		if ( empty( $this->new_plugin_data ) ) {
->>>>>>> 289c28637c... Upgrade/install: Allow plugin and theme updates from a uploaded .zip file.
+		if ( empty( $this->new_plugin_data ) )
 			return new WP_Error( 'incompatible_archive_no_plugins', $this->strings['incompatible_archive'], __( 'No valid plugins were found.' ) );
 
 		return $source;
