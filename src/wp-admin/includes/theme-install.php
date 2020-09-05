@@ -139,15 +139,9 @@ function install_themes_dashboard() {
  * @since WP-2.8.0
  */
 function install_themes_upload() {
-<<<<<<< HEAD
 ?>
 <p class="install-help"><?php _e('If you have a theme in a .zip format, you may install it by uploading it here.'); ?></p>
 <form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo self_admin_url('update.php?action=upload-theme'); ?>">
-=======
-	?>
-<p class="install-help"><?php _e( 'If you have a theme in a .zip format, you may install or update it by uploading it here.' ); ?></p>
-<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo self_admin_url( 'update.php?action=upload-theme' ); ?>">
->>>>>>> b39df4606a... Upgrade/install: Fix/clarify the "Upload in a zip format" string.
 	<?php wp_nonce_field( 'theme-upload' ); ?>
 	<label class="screen-reader-text" for="themezip"><?php _e( 'Theme zip file' ); ?></label>
 	<input type="file" id="themezip" name="themezip" accept=".zip"/>
