@@ -277,14 +277,6 @@ if ( $tab ) {
 					<# } #>
 				<# } #>
 			<# } else { #>
-<<<<<<< HEAD
-				<?php
-				/* translators: %s: Theme name */
-				$aria_label = sprintf( __( 'Install %s' ), '{{ data.name }}' );
-				?>
-				<a class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}" href="{{ data.install_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Install' ); ?></a>
-				<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
-=======
 				<# if ( data.compatible_wp && data.compatible_php ) { #>
 					<?php
 					/* translators: %s: Theme name. */
@@ -300,7 +292,6 @@ if ( $tab ) {
 					<a class="button button-primary disabled" data-name="{{ data.name }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Install', 'theme' ); ?></a>
 					<button class="button disabled"><?php _e( 'Preview' ); ?></button>
 				<# } #>
->>>>>>> a60b30444f... Themes: Prevent installation of themes that require a higher version of PHP or WordPress.
 			<# } #>
 		</div>
 	</div>

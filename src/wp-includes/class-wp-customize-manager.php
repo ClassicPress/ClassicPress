@@ -5532,19 +5532,12 @@ final class WP_Customize_Manager {
 				$theme->active = ( isset( $_POST['customized_theme'] ) && $_POST['customized_theme'] === $theme->slug );
 
 				// Map available theme properties to installed theme properties.
-<<<<<<< HEAD
 				$theme->id           = $theme->slug;
 				$theme->screenshot   = array( $theme->screenshot_url );
 				$theme->authorAndUri = $theme->author;
-				// The .org API can return the full parent theme details if passed the 'parent' arg, or if passed the 'template' option it'll return that in the event it's a child theme.
-=======
-				$theme->id            = $theme->slug;
-				$theme->screenshot    = array( $theme->screenshot_url );
-				$theme->authorAndUri  = wp_kses( $theme->author['display_name'], $themes_allowedtags );
 				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires );
 				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php );
-
->>>>>>> a60b30444f... Themes: Prevent installation of themes that require a higher version of PHP or WordPress.
+				// The .org API can return the full parent theme details if passed the 'parent' arg, or if passed the 'template' option it'll return that in the event it's a child theme.
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
 				} else {
