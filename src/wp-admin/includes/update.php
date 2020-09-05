@@ -519,47 +519,6 @@ function wp_theme_update_row( $theme_key, $theme ) {
 
 	$active = $theme->is_allowed( 'network' ) ? ' active' : '';
 
-<<<<<<< HEAD
-	echo '<tr class="plugin-update-tr' . $active . '" id="' . esc_attr( $theme->get_stylesheet() . '-update' ) . '" data-slug="' . esc_attr( $theme->get_stylesheet() ) . '"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message notice inline notice-warning notice-alt"><p>';
-	if ( ! current_user_can( 'update_themes' ) ) {
-		/* translators: 1: theme name, 2: details URL, 3: additional link attributes, 4: version number */
-		printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>.'),
-			$theme['Name'],
-			esc_url( $details_url ),
-			sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
-				/* translators: 1: theme name, 2: version number */
-				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
-			),
-			$response['new_version']
-		);
-	} elseif ( empty( $response['package'] ) ) {
-		/* translators: 1: theme name, 2: details URL, 3: additional link attributes, 4: version number */
-		printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>' ),
-			$theme['Name'],
-			esc_url( $details_url ),
-			sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
-				/* translators: 1: theme name, 2: version number */
-				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
-			),
-			$response['new_version']
-		);
-	} else {
-		/* translators: 1: theme name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
-		printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
-			$theme['Name'],
-			esc_url( $details_url ),
-			sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
-				/* translators: 1: theme name, 2: version number */
-				esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
-			),
-			$response['new_version'],
-			wp_nonce_url( self_admin_url( 'update.php?action=upgrade-theme&theme=' ) . $theme_key, 'upgrade-theme_' . $theme_key ),
-			sprintf( 'class="update-link" aria-label="%s"',
-				/* translators: %s: theme name */
-				esc_attr( sprintf( __( 'Update %s now' ), $theme['Name'] ) )
-			)
-		);
-=======
 	$requires_wp  = isset( $response['requires'] ) ? $response['requires'] : null;
 	$requires_php = isset( $response['requires_php'] ) ? $response['requires_php'] : null;
 
@@ -680,7 +639,6 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
 			}
 		}
->>>>>>> deb78bdf1c... Themes: Display a message on Themes list table if a theme update requires a higher version of PHP or WordPress.
 	}
 
 	/**
