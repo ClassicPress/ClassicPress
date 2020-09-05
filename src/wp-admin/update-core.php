@@ -355,65 +355,38 @@ function list_plugin_updates() {
 
 		$checkbox_id = "checkbox_" . md5( $plugin_data->Name );
 		?>
-<<<<<<< HEAD
 		<tr>
 			<td class="check-column">
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $plugin_file ); ?>" />
-				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text"><?php
-					/* translators: %s: plugin name */
-					printf( __( 'Select %s' ),
-						$plugin_data->Name
-					);
-				?></label>
+				<?php if ( $compatible_php ) : ?>
+					<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $plugin_file ); ?>" />
+					<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
+						<?php
+						/* translators: %s: Plugin name. */
+						printf( __( 'Select %s' ), $plugin_data->Name );
+						?>
+					</label>
+				<?php endif; ?>
 			</td>
 			<td class="plugin-title"><p>
 				<?php echo $icon; ?>
 				<strong><?php echo $plugin_data->Name; ?></strong>
 				<?php
-					/* translators: 1: plugin version, 2: new version */
-					printf( __( 'You have version %1$s installed. Update to %2$s.' ),
-						$plugin_data->Version,
-						$plugin_data->update->new_version
-					);
-					echo ' ' . $details . $compat . $upgrade_notice;
+				printf(
+					/* translators: 1: Plugin version, 2: New version. */
+					__( 'You have version %1$s installed. Update to %2$s.' ),
+					$plugin_data->Version,
+					$plugin_data->update->new_version
+				);
+
+				echo ' ' . $details . $compat . $upgrade_notice;
+
+				if ( in_array( $plugin_file, $auto_updates, true ) ) {
+					echo $auto_update_notice;
+				}
 				?>
 			</p></td>
 		</tr>
 		<?php
-=======
-	<tr>
-		<td class="check-column">
-			<?php if ( $compatible_php ) : ?>
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $plugin_file ); ?>" />
-				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
-					<?php
-					/* translators: %s: Plugin name. */
-					printf( __( 'Select %s' ), $plugin_data->Name );
-					?>
-				</label>
-			<?php endif; ?>
-		</td>
-		<td class="plugin-title"><p>
-			<?php echo $icon; ?>
-			<strong><?php echo $plugin_data->Name; ?></strong>
-			<?php
-			printf(
-				/* translators: 1: Plugin version, 2: New version. */
-				__( 'You have version %1$s installed. Update to %2$s.' ),
-				$plugin_data->Version,
-				$plugin_data->update->new_version
-			);
-
-			echo ' ' . $details . $compat . $upgrade_notice;
-
-			if ( in_array( $plugin_file, $auto_updates, true ) ) {
-				echo $auto_update_notice;
-			}
-			?>
-		</p></td>
-	</tr>
-			<?php
->>>>>>> 6f79ff4d1c... Themes: Display a message in theme updates list if an update requires a higher version of PHP or WordPress.
 	}
 ?>
 	</tbody>
@@ -460,33 +433,6 @@ function list_theme_updates() {
 	<tbody class="plugins">
 <?php
 	foreach ( $themes as $stylesheet => $theme ) {
-<<<<<<< HEAD
-		$checkbox_id = 'checkbox_' . md5( $theme->get( 'Name' ) );
-		?>
-		<tr>
-			<td class="check-column">
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $stylesheet ); ?>" />
-				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text"><?php
-					/* translators: %s: theme name */
-					printf( __( 'Select %s' ),
-						$theme->display( 'Name' )
-					);
-				?></label>
-			</td>
-			<td class="plugin-title"><p>
-				<img src="<?php echo esc_url( $theme->get_screenshot() ); ?>" width="85" height="64" class="updates-table-screenshot" alt="" />
-				<strong><?php echo $theme->display( 'Name' ); ?></strong>
-				<?php
-					/* translators: 1: theme version, 2: new version */
-					printf( __( 'You have version %1$s installed. Update to %2$s.' ),
-						$theme->display( 'Version' ),
-						$theme->update['new_version']
-					);
-				?>
-			</p></td>
-		</tr>
-		<?php
-=======
 		$requires_wp  = isset( $theme->update['requires'] ) ? $theme->update['requires'] : null;
 		$requires_php = isset( $theme->update['requires_php'] ) ? $theme->update['requires_php'] : null;
 
@@ -557,39 +503,38 @@ function list_theme_updates() {
 
 		$checkbox_id = 'checkbox_' . md5( $theme->get( 'Name' ) );
 		?>
-	<tr>
-		<td class="check-column">
-			<?php if ( $compatible_wp && $compatible_php ) : ?>
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $stylesheet ); ?>" />
-				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
-					<?php
-					/* translators: %s: Theme name. */
-					printf( __( 'Select %s' ), $theme->display( 'Name' ) );
-					?>
-				</label>
-			<?php endif; ?>
-		</td>
-		<td class="plugin-title"><p>
-			<img src="<?php echo esc_url( $theme->get_screenshot() ); ?>" width="85" height="64" class="updates-table-screenshot" alt="" />
-			<strong><?php echo $theme->display( 'Name' ); ?></strong>
-			<?php
-			printf(
-				/* translators: 1: Theme version, 2: New version. */
-				__( 'You have version %1$s installed. Update to %2$s.' ),
-				$theme->display( 'Version' ),
-				$theme->update['new_version']
-			);
+		<tr>
+			<td class="check-column">
+				<?php if ( $compatible_wp && $compatible_php ) : ?>
+					<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $stylesheet ); ?>" />
+					<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
+						<?php
+						/* translators: %s: Theme name. */
+						printf( __( 'Select %s' ), $theme->display( 'Name' ) );
+						?>
+					</label>
+				<?php endif; ?>
+			</td>
+			<td class="plugin-title"><p>
+				<img src="<?php echo esc_url( $theme->get_screenshot() ); ?>" width="85" height="64" class="updates-table-screenshot" alt="" />
+				<strong><?php echo $theme->display( 'Name' ); ?></strong>
+				<?php
+				printf(
+					/* translators: 1: Theme version, 2: New version. */
+					__( 'You have version %1$s installed. Update to %2$s.' ),
+					$theme->display( 'Version' ),
+					$theme->update['new_version']
+				);
 
-			echo ' ' . $compat;
+				echo ' ' . $compat;
 
-			if ( in_array( $stylesheet, $auto_updates, true ) ) {
-				echo $auto_update_notice;
-			}
-			?>
-		</p></td>
-	</tr>
-			<?php
->>>>>>> 6f79ff4d1c... Themes: Display a message in theme updates list if an update requires a higher version of PHP or WordPress.
+				if ( in_array( $stylesheet, $auto_updates, true ) ) {
+					echo $auto_update_notice;
+				}
+				?>
+			</p></td>
+		</tr>
+		<?php
 	}
 ?>
 	</tbody>
