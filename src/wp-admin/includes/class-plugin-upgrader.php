@@ -374,7 +374,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 
 		$this->new_plugin_data = array();
 
-		if ( is_wp_error($source) ) {
+		if ( is_wp_error($source) )
 			return $source;
 
 		$working_directory = str_replace( $wp_filesystem->wp_content_dir(), trailingslashit(WP_CONTENT_DIR), $source);
@@ -411,6 +411,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	public function plugin_info() {
 		if ( ! is_array($this->result) )
 			return false;
+
 		if ( empty($this->result['destination_name']) )
 			return false;
 
