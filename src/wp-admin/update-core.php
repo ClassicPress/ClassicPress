@@ -200,19 +200,11 @@ function core_upgrade_preamble() {
 
 	} else {
 		echo '<div class="notice notice-warning"><p>';
-<<<<<<< HEAD
 		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
 		printf(
 			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
 			'https://codex.wordpress.org/WordPress_Backups',
 			'https://docs.classicpress.net/updating-classicpress/'
-=======
-		printf(
-			/* translators: 1: Documentation on WordPress backups, 2: Documentation on updating WordPress. */
-			__( '<strong>Important:</strong> Before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating WordPress</a> documentation page.' ),
-			__( 'https://wordpress.org/support/article/wordpress-backups/' ),
-			__( 'https://wordpress.org/support/article/updating-wordpress/' )
->>>>>>> b161e126a0... I18N: Move the "WordPress Backups" support URL to its own translatable string.
 		);
 		echo '</p></div>';
 
