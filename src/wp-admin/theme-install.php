@@ -249,17 +249,6 @@ if ( $tab ) {
 		<div class="theme-actions">
 			<# console.log( data ); #>
 			<# if ( data.installed ) { #>
-<<<<<<< HEAD
-				<?php
-				/* translators: %s: Theme name */
-				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
-				?>
-				<# if ( data.activate_url ) { #>
-					<a class="button button-primary activate" href="{{ data.activate_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Activate' ); ?></a>
-				<# } #>
-				<# if ( data.customize_url ) { #>
-					<a class="button load-customize" href="{{ data.customize_url }}"><?php _e( 'Live Preview' ); ?></a>
-=======
 				<# if ( data.compatible_wp && data.compatible_php ) { #>
 					<?php
 					/* translators: %s: Theme name. */
@@ -273,7 +262,6 @@ if ( $tab ) {
 					<# } else { #>
 						<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
 					<# } #>
->>>>>>> b91e74d2f6... Themes: Prevent activation and live preview of themes that require a higher version of PHP or WordPress.
 				<# } else { #>
 					<?php
 					/* translators: %s: Theme name. */

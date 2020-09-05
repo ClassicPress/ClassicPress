@@ -484,14 +484,6 @@ $can_install = current_user_can( 'install_themes' );
 					<a class="button button-primary customize load-customize hide-if-no-customize" href="{{{ data.actions.customize }}}"><?php _e( 'Customize' ); ?></a>
 				<# } #>
 			<# } else { #>
-<<<<<<< HEAD
-				<?php
-				/* translators: %s: Theme name */
-				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
-				?>
-				<a class="button activate" href="{{{ data.actions.activate }}}" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Activate' ); ?></a>
-				<a class="button button-primary load-customize hide-if-no-customize" href="{{{ data.actions.customize }}}"><?php _e( 'Live Preview' ); ?></a>
-=======
 				<# if ( data.compatibleWP && data.compatiblePHP ) { #>
 					<?php
 					/* translators: %s: Theme name. */
@@ -507,7 +499,6 @@ $can_install = current_user_can( 'install_themes' );
 					<a class="button disabled" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
 					<a class="button button-primary hide-if-no-customize disabled"><?php _e( 'Live Preview' ); ?></a>
 				<# } #>
->>>>>>> b91e74d2f6... Themes: Prevent activation and live preview of themes that require a higher version of PHP or WordPress.
 			<# } #>
 		</div>
 	</div>
@@ -561,14 +552,6 @@ $can_install = current_user_can( 'install_themes' );
 				<?php echo implode( ' ', $current_theme_actions ); ?>
 			</div>
 			<div class="inactive-theme">
-<<<<<<< HEAD
-				<?php
-				/* translators: %s: Theme name */
-				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
-				?>
-				<# if ( data.actions.activate ) { #>
-					<a href="{{{ data.actions.activate }}}" class="button activate" aria-label="<?php echo $aria_label; ?>"><?php _e( 'Activate' ); ?></a>
-=======
 				<# if ( data.compatibleWP && data.compatiblePHP ) { #>
 					<?php
 					/* translators: %s: Theme name. */
@@ -587,7 +570,6 @@ $can_install = current_user_can( 'install_themes' );
 						<a class="button disabled" aria-label="<?php echo $aria_label; ?>"><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
 					<# } #>
 					<a class="button button-primary hide-if-no-customize disabled"><?php _e( 'Live Preview' ); ?></a>
->>>>>>> b91e74d2f6... Themes: Prevent activation and live preview of themes that require a higher version of PHP or WordPress.
 				<# } #>
 			</div>
 
