@@ -87,25 +87,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				printf( _x( 'By %s', 'theme author' ), '{{ data.theme.author }}' );
 			?></div>
 
-<<<<<<< HEAD
-			<# if (
-				( 'installed' === data.theme.type && data.theme.hasUpdate ) ||
-				data.theme.preferredChildName
-			) { #>
-				<div class="notices">
-					<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
-						<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
-							<p><?php
-								/* translators: Notice text */
-								_e( 'New version available.' );
-								?> <button class="button-link update-theme" type="button"><?php
-									/* translators: Button text */
-									_e( 'Update now' );
-								?></button>
-							</p>
-						</div>
-					<# } #>
-=======
 			<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
 				<# if ( data.theme.updateResponse.compatibleWP && data.theme.updateResponse.compatiblePHP ) { #>
 					<div class="update-message notice inline notice-warning notice-alt" data-slug="{{ data.theme.id }}">
@@ -180,8 +161,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					</div>
 				<# } #>
 			<# } #>
->>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
-
 					<# if ( data.theme.preferredChildName ) { #>
 						<div class="notice inline notice-info notice-alt"><p><?php printf(
 								/* translators: %s: ClassicPress child theme name */

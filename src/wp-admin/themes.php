@@ -260,40 +260,6 @@ foreach ( $themes as $theme ) :
 		<div class="theme-screenshot blank"></div>
 	<?php } ?>
 
-<<<<<<< HEAD
-	<?php if ( $theme['hasUpdate'] || isset( $theme['preferredChildName'] ) ) : ?>
-		<div class="notices">
-			<?php if ( $theme['hasUpdate'] ) : ?>
-				<div class="update-message notice inline notice-warning notice-alt">
-				<?php if ( $theme['hasPackage'] ) : ?>
-					<p><?php
-						/* translators: Update notice text */
-						_e( 'New version available.' );
-						?> <button class="button-link update-theme" type="button"><?php
-							/* translators: Button text */
-							_e( 'Update now' );
-						?></button>
-					</p>
-				<?php else : ?>
-					<p><?php _e( 'New version available.' ); ?></p>
-				<?php endif; ?>
-				</div>
-			<?php endif; ?>
-
-			<?php if ( isset( $theme['preferredChildName'] ) ) { ?>
-				<div class="notice inline notice-info notice-alt"><p><?php printf(
-						/* translators: %s: ClassicPress child theme name */
-						__( 'Use the "%s" child theme instead!' ),
-						$theme['preferredChildName']
-					); ?>
-					<span class="cut"><?php
-						/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
-						_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
-					?></span>
-				</p></div>
-			<?php } ?>
-		</div>
-=======
 	<?php if ( $theme['hasUpdate'] ) : ?>
 		<?php if ( $theme['updateResponse']['compatibleWP'] && $theme['updateResponse']['compatiblePHP'] ) : ?>
 			<div class="update-message notice inline notice-warning notice-alt"><p>
@@ -353,7 +319,6 @@ foreach ( $themes as $theme ) :
 				?>
 			</p></div>
 		<?php endif; ?>
->>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
 	<?php endif; ?>
 
 	<span class="more-details" id="<?php echo $aria_action; ?>"><?php _e( 'Theme Details' ); ?></span>
@@ -505,19 +470,6 @@ $can_install = current_user_can( 'install_themes' );
 				<# } #>
 			<# } #>
 
-<<<<<<< HEAD
-			<# if ( data.preferredChildName ) { #>
-				<div class="notice inline notice-info notice-alt"><p><?php printf(
-						/* translators: %s: ClassicPress child theme name */
-						__( 'Use the "%s" child theme instead!' ),
-						'{{ data.preferredChildName }}'
-					); ?>
-					<span class="cut"><?php
-						/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
-						_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
-					?></span>
-				</p></div>
-=======
 	<# if ( data.hasUpdate ) { #>
 		<# if ( data.updateResponse.compatibleWP && data.updateResponse.compatiblePHP ) { #>
 			<div class="update-message notice inline notice-warning notice-alt"><p>
@@ -634,7 +586,6 @@ $can_install = current_user_can( 'install_themes' );
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				}
 				?>
->>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
 			<# } #>
 		</div>
 	<# } #>
@@ -706,10 +657,7 @@ $can_install = current_user_can( 'install_themes' );
 				<# if ( data.active ) { #>
 					<span class="current-label"><?php _e( 'Current Theme' ); ?></span>
 				<# } #>
-<<<<<<< HEAD
-				<h2 class="theme-name">{{{ data.name }}}<span class="theme-version"><?php printf( __( 'Version: %s' ), '{{ data.version }}' ); ?></span></h2>
-				<p class="theme-author"><?php printf( __( 'By %s' ), '{{{ data.authorAndUri }}}' ); ?></p>
-=======
+
 				<h2 class="theme-name">{{{ data.name }}}<span class="theme-version">
 					<?php
 					/* translators: %s: Theme version. */
@@ -842,7 +790,6 @@ $can_install = current_user_can( 'install_themes' );
 						</div>
 					<# } #>
 				<# } #>
->>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
 
 				<# if ( data.actions.autoupdate ) { #>
 					<?php echo wp_theme_auto_update_setting_template(); ?>

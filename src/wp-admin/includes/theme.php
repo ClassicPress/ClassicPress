@@ -582,28 +582,6 @@ function wp_prepare_themes_for_js( $themes = null ) {
 			) );
 		}
 
-<<<<<<< HEAD
-		$prepared_themes[ $slug ] = array(
-			'id'            => $slug,
-			'name'          => $theme->display( 'Name' ),
-			'screenshot'    => array( $theme->get_screenshot() ), // @todo Multiple screenshots.
-			'description'   => $theme->display( 'Description' ),
-			'author'        => $theme->display( 'Author', false, true ),
-			'authorAndUri'  => $theme->display( 'Author' ),
-			'tags'          => $theme->display( 'Tags' ),
-			'version'       => $theme->get( 'Version' ),
- 			'compatibleWP'  => is_wp_version_compatible( $theme->get( 'RequiresWP' ) ),
- 			'compatiblePHP' => is_php_version_compatible( $theme->get( 'RequiresPHP' ) ),
-			'parent'        => $parent,
-			'active'        => $slug === $current_theme,
-			'hasUpdate'     => isset( $updates[ $slug ] ),
-			'hasPackage'    => isset( $updates[ $slug ] ) && ! empty( $updates[ $slug ]['package'] ),
-			'update'        => get_theme_update_available( $theme ),
-			'actions'       => array(
-				'activate'  => current_user_can( 'switch_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=activate&amp;stylesheet=' . $encoded_slug ), 'switch-theme_' . $slug ) : null,
-				'customize' => $customize_action,
-				'delete'   => current_user_can( 'delete_themes' ) ? wp_nonce_url( admin_url( 'themes.php?action=delete&amp;stylesheet=' . $encoded_slug ), 'delete-theme_' . $slug ) : null,
-=======
 		$update_requires_wp  = isset( $updates[ $slug ]['requires'] ) ? $updates[ $slug ]['requires'] : null;
 		$update_requires_php = isset( $updates[ $slug ]['requires_php'] ) ? $updates[ $slug ]['requires_php'] : null;
 
@@ -638,7 +616,6 @@ function wp_prepare_themes_for_js( $themes = null ) {
 				'autoupdate' => wp_is_auto_update_enabled_for_type( 'theme' ) && ! is_multisite() && current_user_can( 'update_themes' )
 					? wp_nonce_url( admin_url( 'themes.php?action=' . $auto_update_action . '&amp;stylesheet=' . $encoded_slug ), 'updates' )
 					: null,
->>>>>>> 7ea44b5add... Themes: Display a message in theme grid and Theme Details modal if a theme update requires a higher version of PHP or WordPress.
 			),
 		);
 	}
