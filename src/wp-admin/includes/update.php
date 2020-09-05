@@ -519,6 +519,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 
 	$active = $theme->is_allowed( 'network' ) ? ' active' : '';
 
+<<<<<<< HEAD
 	echo '<tr class="plugin-update-tr' . $active . '" id="' . esc_attr( $theme->get_stylesheet() . '-update' ) . '" data-slug="' . esc_attr( $theme->get_stylesheet() ) . '"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message notice inline notice-warning notice-alt"><p>';
 	if ( ! current_user_can( 'update_themes' ) ) {
 		/* translators: 1: theme name, 2: details URL, 3: additional link attributes, 4: version number */
@@ -558,6 +559,128 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				esc_attr( sprintf( __( 'Update %s now' ), $theme['Name'] ) )
 			)
 		);
+=======
+	$requires_wp  = isset( $response['requires'] ) ? $response['requires'] : null;
+	$requires_php = isset( $response['requires_php'] ) ? $response['requires_php'] : null;
+
+	$compatible_wp  = is_wp_version_compatible( $requires_wp );
+	$compatible_php = is_php_version_compatible( $compatible_php );
+
+	printf(
+		'<tr class="plugin-update-tr%s" id="%s" data-slug="%s">' .
+		'<td colspan="%s" class="plugin-update colspanchange">' .
+		'<div class="update-message notice inline notice-warning notice-alt"><p>',
+		$active,
+		esc_attr( $theme->get_stylesheet() . '-update' ),
+		esc_attr( $theme->get_stylesheet() ),
+		$wp_list_table->get_column_count()
+	);
+
+	if ( $compatible_wp && $compatible_php ) {
+		if ( ! current_user_can( 'update_themes' ) ) {
+			printf(
+				/* translators: 1: Theme name, 2: Details URL, 3: Additional link attributes, 4: Version number. */
+				__( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>.' ),
+				$theme['Name'],
+				esc_url( $details_url ),
+				sprintf(
+					'class="thickbox open-plugin-details-modal" aria-label="%s"',
+					/* translators: 1: Theme name, 2: Version number. */
+					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
+				),
+				$response['new_version']
+			);
+		} elseif ( empty( $response['package'] ) ) {
+			printf(
+				/* translators: 1: Theme name, 2: Details URL, 3: Additional link attributes, 4: Version number. */
+				__( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>' ),
+				$theme['Name'],
+				esc_url( $details_url ),
+				sprintf(
+					'class="thickbox open-plugin-details-modal" aria-label="%s"',
+					/* translators: 1: Theme name, 2: Version number. */
+					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
+				),
+				$response['new_version']
+			);
+		} else {
+			printf(
+				/* translators: 1: Theme name, 2: Details URL, 3: Additional link attributes, 4: Version number, 5: Update URL, 6: Additional link attributes. */
+				__( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
+				$theme['Name'],
+				esc_url( $details_url ),
+				sprintf(
+					'class="thickbox open-plugin-details-modal" aria-label="%s"',
+					/* translators: 1: Theme name, 2: Version number. */
+					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $theme['Name'], $response['new_version'] ) )
+				),
+				$response['new_version'],
+				wp_nonce_url( self_admin_url( 'update.php?action=upgrade-theme&theme=' ) . $theme_key, 'upgrade-theme_' . $theme_key ),
+				sprintf(
+					'class="update-link" aria-label="%s"',
+					/* translators: %s: Theme name. */
+					esc_attr( sprintf( _x( 'Update %s now', 'theme' ), $theme['Name'] ) )
+				)
+			);
+		}
+	} else {
+		if ( ! $compatible_wp && ! $compatible_php ) {
+			printf(
+				/* translators: %s: Theme name. */
+				__( 'There is a new version of %s available, but it doesn&#8217;t work with your versions of WordPress and PHP.' ),
+				$theme['Name']
+			);
+			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+				printf(
+					/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+					' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+					self_admin_url( 'update-core.php' ),
+					esc_url( wp_get_update_php_url() )
+				);
+				wp_update_php_annotation( '</p><p><em>', '</em>' );
+			} elseif ( current_user_can( 'update_core' ) ) {
+				printf(
+					/* translators: %s: URL to WordPress Updates screen. */
+					' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+					self_admin_url( 'update-core.php' )
+				);
+			} elseif ( current_user_can( 'update_php' ) ) {
+				printf(
+					/* translators: %s: URL to Update PHP page. */
+					' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+					esc_url( wp_get_update_php_url() )
+				);
+				wp_update_php_annotation( '</p><p><em>', '</em>' );
+			}
+		} elseif ( ! $compatible_wp ) {
+			printf(
+				/* translators: %s: Theme name. */
+				__( 'There is a new version of %s available, but it doesn&#8217;t work with your version of WordPress.' ),
+				$theme['Name']
+			);
+			if ( current_user_can( 'update_core' ) ) {
+				printf(
+					/* translators: %s: URL to WordPress Updates screen. */
+					' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+					self_admin_url( 'update-core.php' )
+				);
+			}
+		} elseif ( ! $compatible_php ) {
+			printf(
+				/* translators: %s: Theme name. */
+				__( 'There is a new version of %s available, but it doesn&#8217;t work with your version of PHP.' ),
+				$theme['Name']
+			);
+			if ( current_user_can( 'update_php' ) ) {
+				printf(
+					/* translators: %s: URL to Update PHP page. */
+					' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+					esc_url( wp_get_update_php_url() )
+				);
+				wp_update_php_annotation( '</p><p><em>', '</em>' );
+			}
+		}
+>>>>>>> deb78bdf1c... Themes: Display a message on Themes list table if a theme update requires a higher version of PHP or WordPress.
 	}
 
 	/**
