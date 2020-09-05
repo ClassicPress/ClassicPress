@@ -317,8 +317,6 @@ function list_plugin_updates() {
 				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			}
 		}
-<<<<<<< HEAD
-=======
 
 		$requires_php   = isset( $plugin_data->update->requires_php ) ? $plugin_data->update->requires_php : null;
 		$compatible_php = is_php_version_compatible( $requires_php );
@@ -338,7 +336,6 @@ function list_plugin_updates() {
 			}
 		}
 
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
 		// Get the upgrade notice for the new plugin version.
 		if ( isset($plugin_data->update->upgrade_notice) ) {
 			$upgrade_notice = '<br />' . strip_tags($plugin_data->update->upgrade_notice);

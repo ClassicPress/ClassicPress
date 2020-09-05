@@ -2403,7 +2403,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2412,7 +2412,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
@@ -3009,54 +3009,6 @@ function _xmlrpc_wp_die_handler( $message, $title = '', $args = array() ) {
  * @access private
  *
  * @param string       $message Error message.
-<<<<<<< HEAD
-=======
- * @param string       $title   Optional. Error title. Default empty.
- * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
- */
-function _xml_wp_die_handler( $message, $title = '', $args = array() ) {
-	list( $message, $title, $r ) = _wp_die_process_input( $message, $title, $args );
-
-	$message = htmlspecialchars( $message );
-	$title   = htmlspecialchars( $title );
-
-	$xml = <<<EOD
-<error>
-    <code>{$r['code']}</code>
-    <title><![CDATA[{$title}]]></title>
-    <message><![CDATA[{$message}]]></message>
-    <data>
-        <status>{$r['response']}</status>
-    </data>
-</error>
-
-EOD;
-
-	if ( ! headers_sent() ) {
-		header( 'Content-Type: text/xml; charset=utf-8' );
-		if ( null !== $r['response'] ) {
-			status_header( $r['response'] );
-		}
-		nocache_headers();
-	}
-
-	echo $xml;
-	if ( $r['exit'] ) {
-		die();
-	}
-}
-
-/**
- * Kills WordPress execution and displays an error message.
- *
- * This is the handler for wp_die() when processing APP requests.
- *
- * @since 3.4.0
- * @since 5.1.0 Added the $title and $args parameters.
- * @access private
- *
- * @param string       $message Optional. Response to print. Default empty.
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
  * @param string       $title   Optional. Error title (unused). Default empty.
  * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
  */
@@ -6175,8 +6127,6 @@ function wp_privacy_delete_old_export_files() {
 		}
 	}
 }
-<<<<<<< HEAD
-=======
 
 /**
  * Gets the URL to learn more about updating the PHP version the site is running on.
@@ -6186,7 +6136,7 @@ function wp_privacy_delete_old_export_files() {
  * default URL being used. Furthermore the page the URL links to should preferably be localized in the
  * site language.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  *
  * @return string URL to learn more about updating PHP.
  */
@@ -6224,7 +6174,7 @@ function wp_get_update_php_url() {
  * This function does not allow modifying the returned URL, and is only used to compare the actually used URL with the
  * default one.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  * @access private
  *
  * @return string Default URL to learn more about updating PHP.
@@ -6239,8 +6189,8 @@ function wp_get_default_update_php_url() {
  * This function is to be used after {@see wp_get_update_php_url()} to display a consistent
  * annotation if the web host has altered the default "Update PHP" page URL.
  *
- * @since 5.1.0
- * @since 5.2.0 Added the `$before` and `$after` parameters.
+ * @since WP-5.1.0
+ * @since WP-5.2.0 Added the `$before` and `$after` parameters.
  *
  * @param string $before Markup to output before the annotation. Default `<p class="description">`.
  * @param string $after  Markup to output after the annotation. Default `</p>`.
@@ -6259,7 +6209,7 @@ function wp_update_php_annotation( $before = '<p class="description">', $after =
  * This function is to be used after {@see wp_get_update_php_url()} to return a consistent
  * annotation if the web host has altered the default "Update PHP" page URL.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @return string $message Update PHP page annotation. An empty string if no custom URLs are provided.
  */
@@ -6287,7 +6237,7 @@ function wp_get_update_php_annotation() {
  * by using the {@see 'wp_direct_php_update_url'} filter. This allows hosts to send users directly to
  * the page where they can update PHP to a newer version.
  *
- * @since 5.1.1
+ * @since WP-5.1.1
  *
  * @return string URL for directly updating PHP or empty string.
  */
@@ -6317,7 +6267,7 @@ function wp_get_direct_php_update_url() {
  *
  * The button is only displayed if a URL is returned by `wp_get_direct_php_update_url()`.
  *
- * @since 5.1.1
+ * @since WP-5.1.1
  */
 function wp_direct_php_update_button() {
 	$direct_update_url = wp_get_direct_php_update_url();
@@ -6344,7 +6294,7 @@ function wp_direct_php_update_button() {
  * a blog has exceeded its allowed upload space.
  *
  * @since MU (3.0.0)
- * @since 5.2.0 $max_execution_time parameter added.
+ * @since WP-5.2.0 $max_execution_time parameter added.
  *
  * @param string $directory Full path of a directory.
  * @param int    $max_execution_time Maximum time to run before giving up. In seconds.
@@ -6381,8 +6331,8 @@ function get_dirsize( $directory, $max_execution_time = null ) {
  * other directories.
  *
  * @since MU (3.0.0)
- * @since 4.3.0 $exclude parameter added.
- * @since 5.2.0 $max_execution_time parameter added.
+ * @since WP-4.3.0 $exclude parameter added.
+ * @since WP-5.2.0 $max_execution_time parameter added.
  *
  * @param string $directory Full path of a directory.
  * @param string $exclude   Optional. Full path of a subdirectory to exclude from the total.
@@ -6442,7 +6392,7 @@ function recurse_dirsize( $directory, $exclude = null, $max_execution_time = nul
 /**
 * Checks compatibility with the current WordPress version.
 *
-* @since 5.2.0
+* @since WP-5.2.0
 *
 * @param string $required Minimum required WordPress version.
 * @return bool True if required version is compatible or empty, false if not.
@@ -6454,7 +6404,7 @@ function is_wp_version_compatible( $required ) {
 /**
  * Checks compatibility with the current PHP version.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @param string $required Minimum required PHP version.
  * @return bool True if required version is compatible or empty, false if not.
@@ -6462,4 +6412,3 @@ function is_wp_version_compatible( $required ) {
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.

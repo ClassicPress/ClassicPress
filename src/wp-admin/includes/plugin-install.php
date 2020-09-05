@@ -718,15 +718,9 @@ function install_plugin_information() {
 	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
 	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
 
-<<<<<<< HEAD
-	if ( ! empty( $api->tested ) && version_compare( substr( $wp_version, 0, strlen( $api->tested ) ), $api->tested, '>' ) ) {
-		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been tested</strong> with your current version of ClassicPress.' ) . '</p></div>';
-	} elseif ( ! empty( $api->requires ) && version_compare( substr( $wp_version, 0, strlen( $api->requires ) ), $api->requires, '<' ) ) {
-		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been marked as compatible</strong> with your version of ClassicPress.' ) . '</p></div>';
-=======
 	$compatible_php = is_php_version_compatible( $requires_php );
-	$compatible_wp  = is_wp_version_compatible( $requires_wp );
-	$tested_wp      = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
+	$compatible_wp = is_wp_version_compatible( $requires_wp );
+	$tested_wp = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
 
 	if ( ! $compatible_php ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
@@ -760,7 +754,6 @@ function install_plugin_information() {
 			);
 		}
 		echo '</p></div>';
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
 	}
 
 	foreach ( (array) $api->sections as $section_name => $content ) {

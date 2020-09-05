@@ -458,8 +458,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 				$author = ' <cite>' . sprintf( __( 'By %s' ), $author ) . '</cite>';
 			}
 
-<<<<<<< HEAD
-=======
 			$requires_php = isset( $plugin['requires_php'] ) ? $plugin['requires_php'] : null;
 			$requires_wp  = isset( $plugin['requires'] ) ? $plugin['requires'] : null;
 
@@ -467,7 +465,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			$compatible_wp  = is_wp_version_compatible( $requires_wp );
 			$tested_wp      = ( empty( $plugin['tested'] ) || version_compare( get_bloginfo( 'version' ), $plugin['tested'], '<=' ) );
 
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
 			$action_links = array();
 
 			if ( current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' ) ) {

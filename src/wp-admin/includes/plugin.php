@@ -962,11 +962,9 @@ function validate_plugin($plugin) {
 }
 
 /**
-<<<<<<< HEAD
-=======
  * Validate the plugin requirements for WP version and PHP version.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
@@ -987,7 +985,7 @@ function validate_plugin_requirements( $plugin ) {
 		return true;
 	}
 
-	$plugin_data['wp_compatible']  = is_wp_version_compatible( $plugin_data['requires'] );
+	$plugin_data['wp_compatible'] = is_wp_version_compatible( $plugin_data['requires'] );
 	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
 
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
@@ -1025,7 +1023,6 @@ function validate_plugin_requirements( $plugin ) {
 }
 
 /**
->>>>>>> 78e868e4c7... Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.
  * Whether the plugin can be uninstalled.
  *
  * @since WP-2.7.0
