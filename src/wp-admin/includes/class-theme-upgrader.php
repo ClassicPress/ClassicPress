@@ -221,13 +221,20 @@ class Theme_Upgrader extends WP_Upgrader {
 		$this->init();
 		$this->install_strings();
 
+<<<<<<< HEAD
 		add_filter('upgrader_source_selection', array($this, 'check_package') );
 		add_filter('upgrader_post_install', array($this, 'check_parent_theme_filter'), 10, 3);
+=======
+		add_filter( 'upgrader_source_selection', array( $this, 'check_package' ) );
+		add_filter( 'upgrader_post_install', array( $this, 'check_parent_theme_filter' ), 10, 3 );
+
+>>>>>>> c1101f08d5... Upgrade/Install: Pass correct argument to `clear_destination` in `Theme_Upgrader::install()`.
 		if ( $parsed_args['clear_update_cache'] ) {
 			// Clear cache so wp_update_themes() knows about the new theme.
 			add_action( 'upgrader_process_complete', 'wp_clean_themes_cache', 9, 0 );
 		}
 
+<<<<<<< HEAD
 		$this->run( array(
 			'package' => $package,
 			'destination' => get_theme_root(),
@@ -238,6 +245,20 @@ class Theme_Upgrader extends WP_Upgrader {
 				'action' => 'install',
 			),
 		) );
+=======
+		$this->run(
+			array(
+				'package'           => $package,
+				'destination'       => get_theme_root(),
+				'clear_destination' => $parsed_args['overwrite_package'],
+				'clear_working'     => true,
+				'hook_extra'        => array(
+					'type'   => 'theme',
+					'action' => 'install',
+				),
+			)
+		);
+>>>>>>> c1101f08d5... Upgrade/Install: Pass correct argument to `clear_destination` in `Theme_Upgrader::install()`.
 
 		remove_action( 'upgrader_process_complete', 'wp_clean_themes_cache', 9 );
 		remove_filter('upgrader_source_selection', array($this, 'check_package') );

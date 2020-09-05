@@ -127,7 +127,12 @@ class Plugin_Upgrader extends WP_Upgrader {
 		$this->init();
 		$this->install_strings();
 
+<<<<<<< HEAD
 		add_filter('upgrader_source_selection', array($this, 'check_package') );
+=======
+		add_filter( 'upgrader_source_selection', array( $this, 'check_package' ) );
+
+>>>>>>> c1101f08d5... Upgrade/Install: Pass correct argument to `clear_destination` in `Theme_Upgrader::install()`.
 		if ( $parsed_args['clear_update_cache'] ) {
 			// Clear cache so wp_update_plugins() knows about the new plugin.
 			add_action( 'upgrader_process_complete', 'wp_clean_plugins_cache', 9, 0 );
