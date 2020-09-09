@@ -178,8 +178,24 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 *
 	 * @since WP-2.2.0
 	 *
+<<<<<<< HEAD
 	 * @param array $args A compacted array of wp_mail() arguments, including the "to" email,
 	 *                    subject, message, headers, and attachments values.
+=======
+	 * The default charset is based on the charset used on the blog. The charset can
+	 * be set using the {@see 'wp_mail_charset'} filter.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @global PHPMailer\PHPMailer\PHPMailer $phpmailer
+	 *
+	 * @param string|array $to          Array or comma-separated list of email addresses to send message.
+	 * @param string       $subject     Email subject
+	 * @param string       $message     Message contents
+	 * @param string|array $headers     Optional. Additional headers.
+	 * @param string|array $attachments Optional. Files to attach.
+	 * @return bool Whether the email contents were sent successfully.
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 	 */
 	$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
 
@@ -212,12 +228,22 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	}
 	global $phpmailer;
 
+<<<<<<< HEAD
 	// (Re)create it, if it's gone missing
 	if ( ! ( $phpmailer instanceof PHPMailer ) ) {
 		require_once ABSPATH . WPINC . '/class-phpmailer.php';
 		require_once ABSPATH . WPINC . '/class-smtp.php';
 		$phpmailer = new PHPMailer( true );
 	}
+=======
+		// (Re)create it, if it's gone missing.
+		if ( ! ( $phpmailer instanceof PHPMailer\PHPMailer\PHPMailer ) ) {
+			require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+			require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+			require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+			$phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
+		}
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 
 	// Headers
 	$cc = $bcc = $reply_to = array();
@@ -307,6 +333,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 		}
 	}
 
+<<<<<<< HEAD
 	// Empty out the values that may be set
 	$phpmailer->clearAllRecipients();
 	$phpmailer->clearAttachments();
@@ -324,6 +351,34 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 * option but some hosts may refuse to relay mail from an unknown domain. See
 	 * https://core.trac.wordpress.org/ticket/5007.
 	 */
+=======
+		/**
+		 * Filters the email address to send from.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $from_email Email address to send from.
+		 */
+		$from_email = apply_filters( 'wp_mail_from', $from_email );
+
+		/**
+		 * Filters the name to associate with the "from" email address.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $from_name Name associated with the "from" email address.
+		 */
+		$from_name = apply_filters( 'wp_mail_from_name', $from_name );
+
+		try {
+			$phpmailer->setFrom( $from_email, $from_name, false );
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$mail_error_data                             = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
+
+			/** This filter is documented in wp-includes/pluggable.php */
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 
 	if ( !isset( $from_email ) ) {
 		// Get the site domain and get rid of www.
@@ -344,6 +399,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 */
 	$from_email = apply_filters( 'wp_mail_from', $from_email );
 
+<<<<<<< HEAD
 	/**
 	 * Filters the name to associate with the "from" email address.
 	 *
@@ -352,6 +408,27 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 * @param string $from_name Name associated with the "from" email address.
 	 */
 	$from_name = apply_filters( 'wp_mail_from_name', $from_name );
+=======
+					switch ( $address_header ) {
+						case 'to':
+							$phpmailer->addAddress( $address, $recipient_name );
+							break;
+						case 'cc':
+							$phpmailer->addCc( $address, $recipient_name );
+							break;
+						case 'bcc':
+							$phpmailer->addBcc( $address, $recipient_name );
+							break;
+						case 'reply_to':
+							$phpmailer->addReplyTo( $address, $recipient_name );
+							break;
+					}
+				} catch ( PHPMailer\PHPMailer\Exception $e ) {
+					continue;
+				}
+			}
+		}
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 
 	try {
 		$phpmailer->setFrom( $from_email, $from_name, false );
@@ -382,6 +459,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 				// Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
 				$recipient_name = '';
 
+<<<<<<< HEAD
 				if ( preg_match( '/(.*)<(.+)>/', $address, $matches ) ) {
 					if ( count( $matches ) == 3 ) {
 						$recipient_name = $matches[1];
@@ -402,6 +480,41 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 					case 'reply_to':
 						$phpmailer->addReplyTo( $address, $recipient_name );
 						break;
+=======
+		/**
+		 * Filters the default wp_mail() charset.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $charset Default email charset.
+		 */
+		$phpmailer->CharSet = apply_filters( 'wp_mail_charset', $charset );
+
+		// Set custom headers.
+		if ( ! empty( $headers ) ) {
+			foreach ( (array) $headers as $name => $content ) {
+				// Only add custom headers not added automatically by PHPMailer.
+				if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ), true ) ) {
+					try {
+						$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
+					} catch ( PHPMailer\PHPMailer\Exception $e ) {
+						continue;
+					}
+				}
+			}
+
+			if ( false !== stripos( $content_type, 'multipart' ) && ! empty( $boundary ) ) {
+				$phpmailer->addCustomHeader( sprintf( 'Content-Type: %s; boundary="%s"', $content_type, $boundary ) );
+			}
+		}
+
+		if ( ! empty( $attachments ) ) {
+			foreach ( $attachments as $attachment ) {
+				try {
+					$phpmailer->addAttachment( $attachment );
+				} catch ( PHPMailer\PHPMailer\Exception $e ) {
+					continue;
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 				}
 			} catch ( phpmailerException $e ) {
 				continue;
@@ -409,8 +522,37 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 		}
 	}
 
+<<<<<<< HEAD
 	// Set to use PHP's mail()
 	$phpmailer->isMail();
+=======
+		/**
+		 * Fires after PHPMailer is initialized.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param PHPMailer $phpmailer The PHPMailer instance (passed by reference).
+		 */
+		do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
+
+		// Send!
+		try {
+			return $phpmailer->send();
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+
+			$mail_error_data                             = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
+
+			/**
+			 * Fires after a PHPMailer\PHPMailer\Exception is caught.
+			 *
+			 * @since 4.4.0
+			 *
+			 * @param WP_Error $error A WP_Error object with the PHPMailer\PHPMailer\Exception message, and an array
+			 *                        containing the mail recipient, subject, message, headers, and attachments.
+			 */
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 
 	// Set Content-Type and charset
 	// If we don't have a content-type from the input headers

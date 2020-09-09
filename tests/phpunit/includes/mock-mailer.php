@@ -1,7 +1,12 @@
 <?php
+<<<<<<< HEAD
 require_once( ABSPATH . '/wp-includes/class-phpmailer.php' );
+=======
+require_once ABSPATH . '/wp-includes/PHPMailer/PHPMailer.php';
+require_once ABSPATH . '/wp-includes/PHPMailer/Exception.php';
+>>>>>>> 0933882c6e... External Libraries: Upgrade PHPMailer to version 6.1.6.
 
-class MockPHPMailer extends PHPMailer {
+class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	var $mock_sent = array();
 
 	function preSend() {
