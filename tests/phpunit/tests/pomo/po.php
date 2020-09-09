@@ -20,16 +20,9 @@ We hope you enjoy your new blog. Thanks!
 
 --The ClassicPress Team
 http://wordpress.org/
-<<<<<<< HEAD
 ";
 	$this->po_mail = '""
 "Your new ClassicPress blog has been successfully set up at:\n"
-=======
-';
-		$this->mail    = str_replace( "\r\n", "\n", $this->mail );
-		$this->po_mail = '""
-"Your new WordPress blog has been successfully set up at:\n"
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
 "\n"
 "%1$s\n"
 "\n"
@@ -69,11 +62,7 @@ http://wordpress.org/
 		$src = 'Categories can be selectively converted to tags using the <a href="%s">category to tag converter</a>.';
 		$this->assertEquals("\"Categories can be selectively converted to tags using the <a href=\\\"%s\\\">category to tag converter</a>.\"", $po->poify($src));
 
-<<<<<<< HEAD
-		$this->assertEquals($this->po_mail, $po->poify($this->mail));
-=======
-		$this->assertEqualsIgnoreEOL( $this->po_mail, $po->poify( $this->mail ) );
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
+		$this->assertEqualsIgnoreEOL($this->po_mail, $po->poify($this->mail));
 	}
 
 	function test_unpoify() {
@@ -83,13 +72,8 @@ http://wordpress.org/
 		$this->assertEquals($this->a90, $po->unpoify($this->po_a90));
 		$this->assertEquals('\\t\\n', $po->unpoify('"\\\\t\\\\n"'));
 		// wordwrapped
-<<<<<<< HEAD
 		$this->assertEquals('babadyado', $po->unpoify("\"\"\n\"baba\"\n\"dyado\""));
-		$this->assertEquals($this->mail, $po->unpoify($this->po_mail));
-=======
-		$this->assertEquals( 'babadyado', $po->unpoify( "\"\"\n\"baba\"\n\"dyado\"" ) );
-		$this->assertEqualsIgnoreEOL( $this->mail, $po->unpoify( $this->po_mail ) );
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
+		$this->assertEqualsIgnoreEOL($this->mail, $po->unpoify($this->po_mail));
 	}
 
 	function test_export_entry() {
@@ -97,7 +81,6 @@ http://wordpress.org/
 		$entry = new Translation_Entry(array('singular' => 'baba'));
 		$this->assertEquals("msgid \"baba\"\nmsgstr \"\"", $po->export_entry($entry));
 		// plural
-<<<<<<< HEAD
 		$entry = new Translation_Entry(array('singular' => 'baba', 'plural' => 'babas'));
 		$this->assertEquals('msgid "baba"
 msgid_plural "babas"
@@ -116,7 +99,7 @@ msgstr ""', $po->export_entry($entry));
 			'singular' => 'baba',
 			'extracted_comments' => "baba",
 			'references' => range(1, 29)));
-		$this->assertEquals('#. baba
+		$this->assertEqualsIgnoreEOL('#. baba
 #: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
 #: 29
 msgid "baba"
@@ -128,127 +111,19 @@ msgstr ""', $po->export_entry($entry));
 		$this->assertEquals("msgid \"baba\"\nmsgstr \"куку\"", $po->export_entry($entry));
 
 		$entry = new Translation_Entry(array('singular' => 'baba', 'plural' => 'babas', 'translations' => array('кукубуку')));
-		$this->assertEquals('msgid "baba"
+		$this->assertEqualsIgnoreEOL('msgid "baba"
 msgid_plural "babas"
 msgstr[0] "кукубуку"', $po->export_entry($entry));
 
 		$entry = new Translation_Entry(array('singular' => 'baba', 'plural' => 'babas', 'translations' => array('кукубуку', 'кукуруку', 'бабаяга')));
-		$this->assertEquals('msgid "baba"
-=======
-		$entry = new Translation_Entry(
-			array(
-				'singular' => 'baba',
-				'plural'   => 'babas',
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'msgid "baba"
-msgid_plural "babas"
-msgstr[0] ""
-msgstr[1] ""',
-			$po->export_entry( $entry )
-		);
-		$entry = new Translation_Entry(
-			array(
-				'singular'            => 'baba',
-				'translator_comments' => "baba\ndyado",
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'#  baba
-#  dyado
-msgid "baba"
-msgstr ""',
-			$po->export_entry( $entry )
-		);
-		$entry = new Translation_Entry(
-			array(
-				'singular'           => 'baba',
-				'extracted_comments' => 'baba',
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'#. baba
-msgid "baba"
-msgstr ""',
-			$po->export_entry( $entry )
-		);
-		$entry = new Translation_Entry(
-			array(
-				'singular'           => 'baba',
-				'extracted_comments' => 'baba',
-				'references'         => range( 1, 29 ),
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'#. baba
-#: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
-#: 29
-msgid "baba"
-msgstr ""',
-			$po->export_entry( $entry )
-		);
-		$entry = new Translation_Entry(
-			array(
-				'singular'     => 'baba',
-				'translations' => array(),
-			)
-		);
-		$this->assertEquals( "msgid \"baba\"\nmsgstr \"\"", $po->export_entry( $entry ) );
-
-		$entry = new Translation_Entry(
-			array(
-				'singular'     => 'baba',
-				'translations' => array( 'куку', 'буку' ),
-			)
-		);
-		$this->assertEquals( "msgid \"baba\"\nmsgstr \"куку\"", $po->export_entry( $entry ) );
-
-		$entry = new Translation_Entry(
-			array(
-				'singular'     => 'baba',
-				'plural'       => 'babas',
-				'translations' => array( 'кукубуку' ),
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'msgid "baba"
-msgid_plural "babas"
-msgstr[0] "кукубуку"',
-			$po->export_entry( $entry )
-		);
-
-		$entry = new Translation_Entry(
-			array(
-				'singular'     => 'baba',
-				'plural'       => 'babas',
-				'translations' => array( 'кукубуку', 'кукуруку', 'бабаяга' ),
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'msgid "baba"
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
+		$this->assertEqualsIgnoreEOL('msgid "baba"
 msgid_plural "babas"
 msgstr[0] "кукубуку"
 msgstr[1] "кукуруку"
 msgstr[2] "бабаяга"', $po->export_entry($entry));
 		// context
-<<<<<<< HEAD
 		$entry = new Translation_Entry(array('context' => 'ctxt', 'singular' => 'baba', 'plural' => 'babas', 'translations' => array('кукубуку', 'кукуруку', 'бабаяга'), 'flags' => array('fuzzy', 'php-format')));
-		$this->assertEquals('#, fuzzy, php-format
-=======
-		$entry = new Translation_Entry(
-			array(
-				'context'      => 'ctxt',
-				'singular'     => 'baba',
-				'plural'       => 'babas',
-				'translations' => array( 'кукубуку', 'кукуруку', 'бабаяга' ),
-				'flags'        => array( 'fuzzy', 'php-format' ),
-			)
-		);
-		$this->assertEqualsIgnoreEOL(
-			'#, fuzzy, php-format
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
+		$this->assertEqualsIgnoreEOL('#, fuzzy, php-format
 msgctxt "ctxt"
 msgid "baba"
 msgid_plural "babas"

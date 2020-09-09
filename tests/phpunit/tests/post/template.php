@@ -108,18 +108,8 @@ LINEAGE;
 
 DEPTH;
 
-<<<<<<< HEAD
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1 ) );
-		$this->assertEquals( $depth, $output );
-=======
-		$output = wp_dropdown_pages(
-			array(
-				'echo'  => 0,
-				'depth' => 1,
-			)
-		);
 		$this->assertEqualsIgnoreEOL( $depth, $output );
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
 
 		$option_none =<<<NONE
 <select name='page_id' id='page_id'>
@@ -129,22 +119,10 @@ DEPTH;
 
 NONE;
 
-<<<<<<< HEAD
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo'
 		) );
-		$this->assertEquals( $option_none, $output );
-=======
-		$output = wp_dropdown_pages(
-			array(
-				'echo'              => 0,
-				'depth'             => 1,
-				'show_option_none'  => 'Hoo',
-				'option_none_value' => 'Woo',
-			)
-		);
 		$this->assertEqualsIgnoreEOL( $option_none, $output );
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
 
 		$option_no_change =<<<NO
 <select name='page_id' id='page_id'>
@@ -154,25 +132,12 @@ NONE;
 </select>
 
 NO;
-<<<<<<< HEAD
+
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo',
 			'show_option_no_change' => 'Burrito'
 		) );
-		$this->assertEquals( $option_no_change, $output );
-=======
-
-		$output = wp_dropdown_pages(
-			array(
-				'echo'                  => 0,
-				'depth'                 => 1,
-				'show_option_none'      => 'Hoo',
-				'option_none_value'     => 'Woo',
-				'show_option_no_change' => 'Burrito',
-			)
-		);
 		$this->assertEqualsIgnoreEOL( $option_no_change, $output );
->>>>>>> b0419afba6... Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.
 	}
 
 	/**
