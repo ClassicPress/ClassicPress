@@ -215,12 +215,10 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 			'authors' => '2',
 		);
-		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3) . '">Parent 3</a></li>
+		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
 
-		ob_start();
-		wp_list_pages( $args );
-		$actual = ob_get_clean();
+		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['authors'], $actual );
 	}
 
