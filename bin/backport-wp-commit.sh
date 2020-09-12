@@ -222,12 +222,12 @@ git status --porcelain
 echo
 
 # Add "both modified" or "added by us/them" files
-git status --porcelain | grep -P '^[AU][AU] ' | cut -c4- | while read i; do
+git status --porcelain | grep -E '^[AU][AU] ' | cut -c4- | while read i; do
 	cmd git add "$i"
 done
 
 # Remove "deleted by us" or "deleted by them" files
-git status --porcelain | grep -P '^[DU][DU] ' | cut -c4- | while read i; do
+git status --porcelain | grep -E '^[DU][DU] ' | cut -c4- | while read i; do
 	cmd git rm "$i"
 done
 
