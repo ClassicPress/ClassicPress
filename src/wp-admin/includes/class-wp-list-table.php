@@ -461,12 +461,6 @@ class WP_List_Table {
 		if ( isset( $_REQUEST['action'] ) && -1 != $_REQUEST['action'] )
 			return $_REQUEST['action'];
 
-<<<<<<< HEAD
-		if ( isset( $_REQUEST['action2'] ) && -1 != $_REQUEST['action2'] )
-			return $_REQUEST['action2'];
-
-=======
->>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.)
 		return false;
 	}
 

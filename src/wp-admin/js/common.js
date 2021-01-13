@@ -607,9 +607,6 @@ $document.ready( function() {
 			});
 	});
 
-<<<<<<< HEAD:src/wp-admin/js/common.js
-	// Show row actions on keyboard focus of its parent container element or any other elements contained within
-=======
 	/**
 	 * Marries a secondary control to its primary control.
 	 *
@@ -623,7 +620,7 @@ $document.ready( function() {
 		/**
 		 * Updates the primary selector when the secondary selector is changed.
 		 *
-		 * @since 5.7.0
+		 * @since WP-5.7.0
 		 *
 		 * @return {void}
 		 */
@@ -635,7 +632,7 @@ $document.ready( function() {
 		/**
 		 * Updates the secondary selector when the primary selector is changed.
 		 *
-		 * @since 5.7.0
+		 * @since WP-5.7.0
 		 *
 		 * @return {void}
 		 */
@@ -647,7 +644,7 @@ $document.ready( function() {
 		/**
 		 * Triggers the primary submit when then secondary submit is clicked.
 		 *
-		 * @since 5.7.0
+		 * @since WP-5.7.0
 		 *
 		 * @return {void}
 		 */
@@ -671,7 +668,6 @@ $document.ready( function() {
 	 *
 	 * @return {void}
 	 */
->>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.):src/js/_enqueues/admin/common.js
 	$( '#wpbody-content' ).on({
 		focusin: function() {
 			clearTimeout( transitionTimeout );

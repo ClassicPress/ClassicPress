@@ -155,13 +155,8 @@ if ( isset( $_GET['action'] ) ) {
 			break;
 
 		case 'allblogs':
-<<<<<<< HEAD
-			if ( ( isset( $_POST['action'] ) || isset( $_POST['action2'] ) ) && isset( $_POST['allblogs'] ) ) {
-				$doaction = $_POST['action'] != -1 ? $_POST['action'] : $_POST['action2'];
-=======
 			if ( isset( $_POST['action'] ) && isset( $_POST['allblogs'] ) ) {
 				$doaction = $_POST['action'];
->>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.)
 
 				foreach ( (array) $_POST['allblogs'] as $key => $val ) {
 					if ( $val != '0' && $val != get_network()->site_id ) {
