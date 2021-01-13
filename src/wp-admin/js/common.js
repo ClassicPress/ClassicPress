@@ -737,17 +737,12 @@ $document.ready( function() {
 	});
 
 	if ( pageInput.length ) {
+		// Reset paging var for new filters/searches but not for bulk actions. See https://core.trac.wordpress.org/ticket/17685.
 		pageInput.closest('form').submit( function() {
-<<<<<<< HEAD:src/wp-admin/js/common.js
-
-			// Reset paging var for new filters/searches but not for bulk actions. See https://core.trac.wordpress.org/ticket/17685.
-			if ( $('select[name="action"]').val() == -1 && $('select[name="action2"]').val() == -1 && pageInput.val() == currentPage )
-=======
 			/*
 			 * action = bulk action dropdown at the top of the table
 			 */
 			if ( $('select[name="action"]').val() == -1 && pageInput.val() == currentPage )
->>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.):src/js/_enqueues/admin/common.js
 				pageInput.val('1');
 		});
 	}
