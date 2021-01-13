@@ -43,10 +43,17 @@ if ( isset( $_GET['action'] ) ) {
 			if ( !current_user_can( 'manage_network_users' ) )
 				wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
 
+<<<<<<< HEAD
 			if ( ( isset( $_POST['action']) || isset($_POST['action2'] ) ) && isset( $_POST['allusers'] ) ) {
 				check_admin_referer( 'bulk-users-network' );
 
 				$doaction = $_POST['action'] != -1 ? $_POST['action'] : $_POST['action2'];
+=======
+			if ( isset( $_POST['action'] ) && isset( $_POST['allusers'] ) ) {
+				check_admin_referer( 'bulk-users-network' );
+
+				$doaction     = $_POST['action'];
+>>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.)
 				$userfunction = '';
 
 				foreach ( (array) $_POST['allusers'] as $user_id ) {

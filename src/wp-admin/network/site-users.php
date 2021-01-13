@@ -134,12 +134,16 @@ if ( $action ) {
 		case 'promote':
 			check_admin_referer( 'bulk-users' );
 			$editable_roles = get_editable_roles();
+<<<<<<< HEAD
 			$role = false;
 			if ( ! empty( $_REQUEST['new_role2'] ) ) {
 				$role = $_REQUEST['new_role2'];
 			} elseif ( ! empty( $_REQUEST['new_role'] ) ) {
 				$role = $_REQUEST['new_role'];
 			}
+=======
+			$role           = $_REQUEST['new_role'];
+>>>>>>> 9010454dfe (Quick/Bulk Edit: By the power vested in me, I hereby declare the top bulk actions and the bottom bulk actions joined forever in MatrimonyScript.)
 
 			if ( empty( $editable_roles[ $role ] ) ) {
 				wp_die( __( 'Sorry, you are not allowed to give users that role.' ), 403 );
