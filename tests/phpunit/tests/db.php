@@ -569,7 +569,7 @@ class Tests_DB extends WP_UnitTestCase {
 	 *
 	 * @dataProvider data_test_get_col
 	 *
-	 * @ticket 45299
+	 * @see https://core.trac.wordpress.org/ticket/45299
 	 */
 	function test_get_col( $query, $expected, $last_result, $column ) {
 		global $wpdb;
