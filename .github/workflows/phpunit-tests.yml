@@ -84,6 +84,12 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
+      - name: Set up locale
+        run: |
+          sudo locale-gen en_US en_US.UTF-8 ru_RU.utf8 fr_FR.UTF-8 es_ES es_ES.UTF-8 en_GB en_GB.UTF-8
+          sudo update-locale LC_ALL="en_US en_US.UTF-8 ru_RU.utf8 fr_FR.UTF-8 es_ES es_ES.UTF-8 en_GB en_GB.UTF-8"
+          locale
+
       - name: Install PHPUnit
         run: |
           if [ ${{ matrix.php }} == '5.6.20' ]; then
