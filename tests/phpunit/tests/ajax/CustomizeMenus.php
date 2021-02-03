@@ -365,16 +365,12 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 			'url',
 		);
 
-<<<<<<< HEAD
-		$auto_draft_post = $this->wp_customize->nav_menus->insert_auto_draft_post( array( 'post_title' => 'Test Auto Draft', 'post_type' => 'post' ) );
-=======
 		$auto_draft_post = $this->wp_customize->nav_menus->insert_auto_draft_post(
 			array(
 				'post_title' => 'Test Auto Draft',
 				'post_type'  => 'post',
 			)
 		);
->>>>>>> 95751aeec2... Build/Test Tools: Remove unused posts from AJAX test `setUp()`.
 		$this->wp_customize->set_post_value( 'nav_menus_created_posts', array( $auto_draft_post->ID ) );
 		$this->wp_customize->get_setting( 'nav_menus_created_posts' )->preview();
 
