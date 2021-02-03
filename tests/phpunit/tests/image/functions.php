@@ -65,10 +65,6 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$files[] = 'test-image.ico';
 		}
 
-<<<<<<< HEAD
-		foreach ($files as $file) {
-			$this->assertTrue( file_is_valid_image( DIR_TESTDATA.'/images/'.$file ), "file_is_valid_image($file) should return true" );
-=======
 		// IMAGETYPE_ICO is only defined in PHP 5.3+.
 		if ( defined( 'IMAGETYPE_ICO' ) ) {
 			$files[] = 'test-image.ico';
@@ -76,7 +72,6 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		foreach ( $files as $file ) {
 			$this->assertTrue( file_is_valid_image( DIR_TESTDATA . '/images/' . $file ), "file_is_valid_image($file) should return true" );
->>>>>>> 007a7caad4... Media: Recognize `.ico` files as displayable images on PHP 5.3+ and allow attachment meta data to be generated for them.
 		}
 	}
 
@@ -106,13 +101,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$files[] = 'test-image.ico';
 		}
 
-<<<<<<< HEAD
-		foreach ($files as $file) {
-			$this->assertTrue( file_is_displayable_image( DIR_TESTDATA.'/images/'.$file ), "file_is_valid_image($file) should return true" );
-=======
 		foreach ( $files as $file ) {
 			$this->assertTrue( file_is_displayable_image( DIR_TESTDATA . '/images/' . $file ), "file_is_valid_image($file) should return true" );
->>>>>>> 007a7caad4... Media: Recognize `.ico` files as displayable images on PHP 5.3+ and allow attachment meta data to be generated for them.
 		}
 	}
 
