@@ -536,6 +536,7 @@ function file_is_valid_image($path) {
  * @param string $path File path to test.
  * @return bool True if suitable, false if not suitable.
  */
+<<<<<<< HEAD
 function file_is_displayable_image($path) {
 	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_ICO );
 
@@ -543,6 +544,10 @@ function file_is_displayable_image($path) {
 	if ( defined( 'IMAGETYPE_ICO' ) ) {
 		$displayable_image_types[] = IMAGETYPE_ICO;
 	}
+=======
+function file_is_displayable_image( $path ) {
+	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_ICO );
+>>>>>>> f3a0da9fca... Code Modernization: Remove a workaround for `IMAGETYPE_ICO` in `file_is_displayable_image()`.
 
 	$info = @getimagesize( $path );
 	if ( empty( $info ) ) {
