@@ -92,27 +92,27 @@ jobs:
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
-          extensions:
-            - bcmath
-            - curl
-            - dom
-            - exif
-            - gd
-            - iconv
-            - imagick
-            - intl
-            - libxml
-            - mbstring
-            - memcached
-            - mysql
-            - mysqli
-            - pcntl
-            - pdo
-            - pdo_mysql
-            - pdo_sqlite
-            - soap
-            - sqlite
-            - zip
+          extensions: >-
+            bcmath,
+            curl,
+            dom,
+            exif,
+            gd,
+            iconv,
+            imagick,
+            intl,
+            libxml,
+            mbstring,
+            memcached,
+            mysql,
+            mysqli,
+            pcntl,
+            pdo,
+            pdo_mysql,
+            pdo_sqlite,
+            soap,
+            sqlite,
+            zip
           coverage: none
 
       - name: Set up locale
