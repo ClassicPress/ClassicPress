@@ -34,6 +34,10 @@ jobs:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
         os: [ ubuntu-latest ]
         memcached: [ false ]
+        include:
+          - php: '7.2'
+            os: ubuntu-latest
+            memcached: true
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
@@ -95,6 +99,7 @@ jobs:
             - intl
             - libxml
             - mbstring
+            - memcached
             - mysql
             - mysqli
             - pcntl
@@ -139,6 +144,11 @@ jobs:
           sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
           sed -i 's/yourusernamehere/root/g' wp-tests-config.php
           sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+
+      - name: Set up object cache
+        if: ${{ matrix.memcached }}
+        run: |
+          cp tests/phpunit/includes/object-cache.php src/wp-content/object-cache.php
 
       - name: Run PHPUnit default
         env:
