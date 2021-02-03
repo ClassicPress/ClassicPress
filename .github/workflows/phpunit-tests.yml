@@ -38,6 +38,7 @@ jobs:
           - php: '7.2'
             os: ubuntu-latest
             memcached: true
+      fail-fast: false
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
