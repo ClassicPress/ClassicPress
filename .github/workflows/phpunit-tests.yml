@@ -21,7 +21,7 @@ jobs:
   # - Enable and start MySQL.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
-  # - Install PHPUnit 6.
+  # - Install PHPUnit.
   # - Log general debug information.
   # - Create config file.
   # - Run PHPUnit Tests.
@@ -76,12 +76,34 @@ jobs:
       - name: Install Dependencies
         run: npx install-changed --install-command="npm ci"
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php }}"
-          ini-values: mysql.default_host=127.0.0.1,mysql.default_port=3306,mysql.default_socket=/var/run/mysqld/mysqld.sock
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          ini-values: >-
+            mysql.default_host=127.0.0.1,
+            mysql.default_port=3306,
+            mysql.default_socket=/var/run/mysqld/mysqld.sock
+          extensions:
+            - bcmath
+            - curl
+            - dom
+            - exif
+            - gd
+            - iconv
+            - imagick
+            - intl
+            - libxml
+            - mbstring
+            - mysql
+            - mysqli
+            - pcntl
+            - pdo
+            - pdo_mysql
+            - pdo_sqlite
+            - soap
+            - sqlite
+            - zip
           coverage: none
 
       - name: Set up locale
