@@ -60,7 +60,7 @@ jobs:
         continue-on-error: true
         run: phpcs tests -q --report=checkstyle | cs2pr
 
-  # Runs the JavaScript coding standards checks.
+  # Runs the pre-commit checks.
   #
   # Performs the following steps:
   # - Checks out the repository.
@@ -69,9 +69,10 @@ jobs:
   # - Sets up caching for NPM.
   # - Logs updated debug information.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
-  # - Run the ClassicPress JSHint checks.
-  jshint:
-    name: JavaScript coding standards
+  # - Run the ClassicPress pre-commit checks (JSHint, no uncommitted
+  #   modifications to generated files).
+  precommit:
+    name: Pre-commit checks
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     env:
@@ -108,6 +109,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install PHPUnit
+        run: |
+          if [ ${{ matrix.php }} == '5.6.20' ]; then
+            wget -O phpunit https://phar.phpunit.de/phpunit-5.phar
+          else
+            wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+          fi
+          chmod +x phpunit
+          sudo mv phpunit /usr/bin/
+
       - name: Log debug information
         run: |
           npm --version
@@ -116,5 +127,5 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
-      - name: Run JSHint
-        run: grunt jshint
+      - name: Run pre-commit checks
+        run: grunt precommit:verify
