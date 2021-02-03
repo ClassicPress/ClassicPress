@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  # Runs the QUnit tests for WordPress.
+  # Runs the QUnit tests for ClassicPress.
   #
   # Performs the following steps:
   # - Cancels all previous workflow runs for pull requests that have not completed.
@@ -16,8 +16,8 @@ jobs:
   # - Installs NodeJS 12 (todo: install the version of NPM specified in the `.nvmrc` file to support older branches).
   # - Sets up caching for NPM.
   # - Logs updated debug information.
-  # _ Installs NPM dependencies using install-changed to hash the `package.json` file.
-  # - Run the WordPress QUnit tests.
+  # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Run the ClassicPress QUnit tests.
   # - todo: Configure Slack notifications for failing tests.
   test-js:
     name: QUnit Tests
