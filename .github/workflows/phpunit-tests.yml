@@ -144,6 +144,8 @@ jobs:
           composer --version
           grunt --version
           mysql --version
+          lsb_release -a
+          localectl list-locales
 
       - name: Create ClassicPress config file for tests
         run: |
