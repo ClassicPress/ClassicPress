@@ -22,7 +22,7 @@ jobs:
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
   # - Install PHPUnit.
-  # - Log general debug information.
+  # - Log debug information.
   # - Create config file.
   # - Run PHPUnit Tests.
   test-php:
@@ -133,6 +133,7 @@ jobs:
 
       - name: Show debug information
         run: |
+          set +e
           npm --version
           node --version
           curl --version

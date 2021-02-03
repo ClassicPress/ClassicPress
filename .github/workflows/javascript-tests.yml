@@ -12,10 +12,9 @@ jobs:
   # Performs the following steps:
   # - Cancels all previous workflow runs for pull requests that have not completed.
   # - Checks out the repository.
-  # - Logs debug information about the runner container.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
-  # - Logs updated debug information.
+  # - Logs debug information.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Run the ClassicPress QUnit tests.
   # - todo: Configure Slack notifications for failing tests.
@@ -56,6 +55,7 @@ jobs:
 
       - name: Show debug information
         run: |
+          set +e
           npm --version
           node --version
           curl --version
