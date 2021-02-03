@@ -34,13 +34,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Log debug information
-        run: |
-          npm --version
-          node --version
-          git --version
-          svn --version
-
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvmrc
@@ -61,10 +54,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Log debug information
+      - name: Show debug information
         run: |
           npm --version
           node --version
+          curl --version
+          git --version
+          svn --version
+          php --version
+          phpunit --version
+          composer --version
+          grunt --version
+          mysql --version
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"

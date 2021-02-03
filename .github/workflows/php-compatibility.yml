@@ -37,10 +37,18 @@ jobs:
           coverage: none
           tools: composer, cs2pr
 
-      - name: Log debug information
+      - name: Show debug information
         run: |
+          npm --version
+          node --version
+          curl --version
+          git --version
+          svn --version
           php --version
+          phpunit --version
           composer --version
+          grunt --version
+          mysql --version
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
