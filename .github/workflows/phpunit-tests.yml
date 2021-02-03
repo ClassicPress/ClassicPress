@@ -145,7 +145,7 @@ jobs:
           grunt --version
           mysql --version
 
-      - name: Create ClassicPress config file
+      - name: Create ClassicPress config file for tests
         run: |
           cp wp-tests-config-sample.php wp-tests-config.php
           sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php

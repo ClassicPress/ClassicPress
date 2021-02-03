@@ -128,5 +128,12 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
+      - name: Create ClassicPress config file for tests
+        run: |
+          cp wp-tests-config-sample.php wp-tests-config.php
+          sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
+          sed -i 's/yourusernamehere/root/g' wp-tests-config.php
+          sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+
       - name: Run pre-commit checks
         run: grunt precommit:verify
