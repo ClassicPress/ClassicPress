@@ -101,13 +101,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Setup PHP
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: 7.4
+          ini-values: mysql.default_host=127.0.0.1,mysql.default_port=3306,mysql.default_socket=/var/run/mysqld/mysqld.sock
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+          
       - name: Install PHPUnit
         run: |
-          if [ ${{ matrix.php }} == '5.6.20' ]; then
-            wget -O phpunit https://phar.phpunit.de/phpunit-5.phar
-          else
-            wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
-          fi
+          wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
           chmod +x phpunit
           sudo mv phpunit /usr/bin/
 
