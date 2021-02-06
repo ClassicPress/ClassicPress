@@ -15,18 +15,22 @@ jobs:
   # Performs the following steps:
   # - Cancel workflow if PR updated.
   # - Set environment variables.
+  # - Read .nvmrc.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
   # - Checkout ClassicPress.
   # - Enable and start MySQL.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
+  # - Set up locale.
   # - Install PHPUnit.
   # - Log debug information.
   # - Create config file.
+  # - Set up object cache if needed for memcached tests.
+  # - Set up a Memcached server if needed.
   # - Run PHPUnit Tests.
   test-php:
-    name: PHP Unit Tests - ${{ matrix.php }} on ${{ matrix.os }}
+    name: PHP Unit Tests - ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
@@ -158,6 +162,10 @@ jobs:
         if: ${{ matrix.memcached }}
         run: |
           cp tests/phpunit/includes/object-cache.php src/wp-content/object-cache.php
+
+      - name: Set up a Memcached server
+        if: ${{ matrix.memcached }}
+        uses: niden/actions-memcached@v7
 
       - name: Run PHPUnit default
         env:
