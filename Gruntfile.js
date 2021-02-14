@@ -834,7 +834,43 @@ module.exports = function(grunt) {
     grunt.registerTask( 'precommit:check-for-changes', function() {
 		grunt.task.requires( 'precommit' );
 
-		throw new Error('Intentionally broken');
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'git',
+			args: [ 'ls-files', '-m' ]
+		}, ( error, { stdout }, code ) => {
+			if ( error ) {
+				throw error;
+			}
+			if ( code !== 0 ) {
+				throw new Error( `git ls-files failed: code ${code}` );
+			}
+			const files = stdout.split( '\n' )
+				.map( f => f.trim() )
+				.filter( f => f !== '' )
+				.filter( f => f !== 'package-lock.json' );
+			if ( files.length ) {
+				grunt.log.writeln(
+					'One or more files were modified when running the precommit checks:'
+					.red
+				);
+				grunt.log.writeln();
+				files.forEach( ({yellow}) => grunt.log.writeln( yellow ) );
+				grunt.log.writeln();
+				grunt.log.writeln(
+					'Please run `grunt precommit` and commit the results.'
+					.red.bold
+				);
+				grunt.log.writeln();
+				throw new Error(
+					'Modified files detected during precommit checks!'
+				);
+			} else {
+				grunt.log.ok( 'No modified files detected.' );
+			}
+			done();
+		} );
 	} );
 
     grunt.registerTask( 'precommit:git-conflicts', function() {

@@ -7,7 +7,6 @@ class Tests_Login extends WP_UnitTestCase {
 		// This is not done when loading the login page, but parent::setUp()
 		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
 		if ( wp_using_ext_object_cache() ) {
-			throw new ErrorException('phpunit memcached intentionally broken');
 			wp_cache_init();
 		}
 		parent::setUp();
