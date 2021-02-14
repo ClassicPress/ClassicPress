@@ -834,8 +834,6 @@ module.exports = function(grunt) {
     grunt.registerTask( 'precommit:check-for-changes', function() {
 		grunt.task.requires( 'precommit' );
 
-		const done = this.async();
-
 		throw new Error('Intentionally broken');
 	} );
 
