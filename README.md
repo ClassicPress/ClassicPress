@@ -4,7 +4,11 @@
 
 ClassicPress is a fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
 
-[![Build status](https://travis-ci.com/ClassicPress/ClassicPress.svg?branch=develop)](https://travis-ci.com/ClassicPress/ClassicPress)
+![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)
+![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)
+![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/workflows/JavaScript%20Tests/badge.svg?branch=develop)
+![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/workflows/PHP%20Compatibility/badge.svg?branch=develop)
+
 
 For more information, see:
 
