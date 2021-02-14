@@ -836,6 +836,8 @@ module.exports = function(grunt) {
 
 		const done = this.async();
 
+		throw new Error('Intentionally broken');
+
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'ls-files', '-m' ]
