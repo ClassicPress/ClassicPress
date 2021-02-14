@@ -287,6 +287,7 @@ class Tests_Cache extends WP_UnitTestCase {
 		if ( wp_using_ext_object_cache() ) {
 			// External caches will contain property values that contain non-matching resource IDs
 			$this->assertInstanceOf( 'WP_Object_Cache', $wp_object_cache  );
+			throw new ErrorException('phpunit memcached intentionally broken 2');
 		} else {
 			$this->assertEquals( $wp_object_cache, $new_blank_cache_object );
 		}
