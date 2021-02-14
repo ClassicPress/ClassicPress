@@ -1,0 +1,204 @@
+name: PHPUnit Tests
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+  # Once weekly On Sundays at 00:00 UTC.
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  # Runs the PHPUnit tests for ClassicPress.
+  #
+  # Performs the following steps:
+  # - Cancel workflow if PR updated.
+  # - Set environment variables.
+  # - Read .nvmrc.
+  # - Installs NodeJS.
+  # - Sets up caching for NPM.
+  # - Checkout ClassicPress.
+  # - Enable and start MySQL.
+  # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Configure PHP.
+  # - Set up locale.
+  # - Install PHPUnit.
+  # - Log debug information.
+  # - Create config file.
+  # - Set up object cache if needed for memcached tests.
+  # - Set up a Memcached server if needed.
+  # - Run PHPUnit Tests.
+  test-php:
+    name: PHP Unit Tests - ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+    strategy:
+      matrix:
+        php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
+        os: [ ubuntu-latest ]
+        memcached: [ false ]
+        include:
+          - php: '7.2'
+            os: ubuntu-latest
+            memcached: true
+      fail-fast: false
+
+    steps:
+      - name: Cancel previous runs of this workflow (pull requests only)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: styfle/cancel-workflow-action@0.5.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Configure environment variables
+        run: |
+          echo "PHP_FPM_UID=$(id -u)" >> $GITHUB_ENV
+          echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
+
+      - name: Read .nvmrc
+        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        id: nvmrc
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
+
+      - name: Use cached Node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Enable, start and initialise MySQL
+        run: |
+          sudo systemctl enable mysql.service
+          sudo systemctl start mysql.service
+          mysql -u root -proot < tools/local-env/mysql-init.sql
+          mysql -u root -proot -e "SHOW DATABASES"
+
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+
+      - name: Set up PHP
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-values: >-
+            mysql.default_host=127.0.0.1,
+            mysql.default_port=3306,
+            mysql.default_socket=/var/run/mysqld/mysqld.sock
+          extensions: >-
+            bcmath,
+            curl,
+            dom,
+            exif,
+            gd,
+            iconv,
+            imagick,
+            intl,
+            libxml,
+            mbstring,
+            memcached,
+            mysql,
+            mysqli,
+            pcntl,
+            pdo,
+            pdo_mysql,
+            pdo_sqlite,
+            soap,
+            sqlite,
+            zip
+          coverage: none
+
+      - name: Set up locale
+        run: |
+          sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8
+          sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
+
+      - name: Install PHPUnit
+        run: |
+          if [ ${{ matrix.php }} == '5.6.20' ]; then
+            wget -O phpunit https://phar.phpunit.de/phpunit-5.phar
+          else
+            wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+          fi
+          chmod +x phpunit
+          sudo mv phpunit /usr/bin/
+
+      - name: Show debug information
+        run: |
+          set +e
+          set -x
+          npm --version
+          node --version
+          curl --version
+          git --version
+          svn --version
+          php --version
+          phpunit --version
+          composer --version
+          grunt --version
+          mysql --version
+          lsb_release -a
+          localectl list-locales
+
+      - name: Create ClassicPress config file for tests
+        run: |
+          cp wp-tests-config-sample.php wp-tests-config.php
+          sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
+          sed -i 's/yourusernamehere/root/g' wp-tests-config.php
+          sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+
+      - name: Set up object cache
+        if: ${{ matrix.memcached }}
+        run: |
+          cp tests/phpunit/includes/object-cache.php src/wp-content/object-cache.php
+
+      - name: Set up a Memcached server
+        if: ${{ matrix.memcached }}
+        uses: niden/actions-memcached@v7
+
+      - name: Run PHPUnit default
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:default
+
+      - name: Run PHPUnit ajax
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:ajax
+
+      - name: Run PHPUnit multisite
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:multisite
+
+      - name: Run PHPUnit ms-files
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:ms-files
+
+      - name: Run PHPUnit external-http
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:external-http
+
+      - name: Run PHPUnit restapi-jsclient
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:restapi-jsclient
+
+      - name: Run PHPUnit wp-api-client-fixtures
+        env:
+          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+        run: grunt phpunit:wp-api-client-fixtures

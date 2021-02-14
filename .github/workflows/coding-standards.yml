@@ -1,0 +1,151 @@
+name: Coding Standards
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+
+jobs:
+  # Runs PHP coding standards checks.
+  #
+  # Violations are reported inline with annotations.
+  #
+  # Performs the following steps:
+  # - Checks out the repository.
+  # - Sets up PHP.
+  # - Logs debug information.
+  # - Installs Composer dependencies (use cache if possible).
+  # - Make Composer packages available globally.
+  # - Logs PHP_CodeSniffer debug information.
+  # - Runs PHPCS on the full codebase with warnings suppressed.
+  # - Runs PHPCS on the `tests` directory without warnings suppressed.
+  phpcs:
+    name: PHP coding standards
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: Log debug information
+        run: |
+          php --version
+          composer --version
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: "--no-progress --no-ansi --no-interaction"
+
+      - name: Make Composer packages available globally
+        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
+
+      - name: Log PHPCS debug information
+        run: phpcs -i
+
+      - name: Run PHPCS on all Core files
+        continue-on-error: true
+        run: phpcs -q -n --report=checkstyle | cs2pr
+
+      - name: Check test suite files for warnings
+        continue-on-error: true
+        run: phpcs tests -q --report=checkstyle | cs2pr
+
+  # Runs the pre-commit checks.
+  #
+  # Performs the following steps:
+  # - Checks out the repository.
+  # - Installs NodeJS.
+  # - Sets up caching for NPM.
+  # - Logs debug information.
+  # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Run the ClassicPress pre-commit checks (JSHint, no uncommitted
+  #   modifications to generated files).
+  precommit:
+    name: Pre-commit checks
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+    env:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: ${{ true }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Read .nvmrc
+        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        id: nvmrc
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
+
+      - name: Cache NodeJS modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Setup PHP
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: 7.4
+          ini-values: mysql.default_host=127.0.0.1,mysql.default_port=3306,mysql.default_socket=/var/run/mysqld/mysqld.sock
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Install PHPUnit
+        run: |
+          wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+          chmod +x phpunit
+          sudo mv phpunit /usr/bin/
+
+      - name: Enable, start and initialise MySQL
+        run: |
+          sudo systemctl enable mysql.service
+          sudo systemctl start mysql.service
+          mysql -u root -proot < tools/local-env/mysql-init.sql
+          mysql -u root -proot -e "SHOW DATABASES"
+
+      - name: Show debug information
+        run: |
+          set +e
+          set -x
+          npm --version
+          node --version
+          curl --version
+          git --version
+          svn --version
+          php --version
+          phpunit --version
+          composer --version
+          grunt --version
+          mysql --version
+
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+
+      - name: Create ClassicPress config file for tests
+        run: |
+          cp wp-tests-config-sample.php wp-tests-config.php
+          sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
+          sed -i 's/yourusernamehere/root/g' wp-tests-config.php
+          sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+
+      - name: Run pre-commit checks
+        run: grunt precommit:verify
