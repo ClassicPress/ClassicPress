@@ -11,44 +11,7 @@
 	} );
 
 	QUnit.test( 'does not mutate original object', function( assert ) {
-		var settingsOriginal = {
-			url: 'aaaaa',
-			path: 'wp/v2/posts',
-			headers: {
-				'Header-Name': 'value'
-			},
-			data: {
-				orderby: 'something'
-			}
-		};
-
-		var settings = wp.apiRequest.buildAjaxOptions( settingsOriginal );
-
-		assert.notStrictEqual( settings, settingsOriginal );
-		assert.notStrictEqual( settings.headers, settingsOriginal.headers );
-		assert.strictEqual( settings.data, settingsOriginal.data );
-
-		assert.deepEqual( settings, {
-			url: 'http://localhost/wp-json/wp/v2/posts',
-			headers: {
-				'X-WP-Nonce': 'not_a_real_nonce',
-				'Header-Name': 'value'
-			},
-			data: {
-				orderby: 'something'
-			}
-		} );
-
-		assert.deepEqual( settingsOriginal, {
-			url: 'aaaaa',
-			path: 'wp/v2/posts',
-			headers: {
-				'Header-Name': 'value'
-			},
-			data: {
-				orderby: 'something'
-			}
-		} );
+		throw new Error('qunit intentionally broken');
 	} );
 
 	QUnit.test( 'does not add nonce header if already present', function( assert ) {
