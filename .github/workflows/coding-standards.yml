@@ -108,7 +108,7 @@ jobs:
           ini-values: mysql.default_host=127.0.0.1,mysql.default_port=3306,mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
-          
+
       - name: Install PHPUnit
         run: |
           wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
@@ -125,6 +125,7 @@ jobs:
       - name: Show debug information
         run: |
           set +e
+          set -x
           npm --version
           node --version
           curl --version

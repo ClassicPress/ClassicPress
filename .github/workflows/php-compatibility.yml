@@ -40,6 +40,7 @@ jobs:
       - name: Show debug information
         run: |
           set +e
+          set -x
           npm --version
           node --version
           curl --version
