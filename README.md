@@ -4,10 +4,10 @@
 
 ClassicPress is a fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
 
-![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)
-![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)
-![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/workflows/JavaScript%20Tests/badge.svg?branch=develop)
-![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/workflows/PHP%20Compatibility/badge.svg?branch=develop)
+[![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22Coding+Standards%22+branch%3Adevelop)
+[![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
+[![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/workflows/JavaScript%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22JavaScript+Tests%22+branch%3Adevelop)
+[![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/workflows/PHP%20Compatibility/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHP+Compatibility%22+branch%3Adevelop)
 
 
 For more information, see:
