@@ -28,7 +28,7 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 	<?php printf(
 		/* translators: link to "business-focused CMS" article */
 		__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
-		'https://www.classicpress.net/blog/2018/10/29/classicpress-for-business-professional-organization-websites/'
+		'https://link.classicpress.net/the-cms-for-creators'
 	); ?>
 	<br>
 	<?php _e( 'Stable. Secure. Instantly Familiar.' ); ?>
