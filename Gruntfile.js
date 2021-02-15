@@ -14,10 +14,6 @@ module.exports = function(grunt) {
     buildTools.setGruntReference( grunt );
 
     const puppeteerOptions = {};
-    if (process.env.TRAVIS) {
-		// Avoid error: Failed to launch chrome! No usable sandbox!
-		puppeteerOptions.args = [ '--no-sandbox' ];
-	}
 
     // Load tasks.
 	for ( const devDep in require( './package.json' ).devDependencies ) {
@@ -981,21 +977,6 @@ module.exports = function(grunt) {
 		['build', 'copy:qunit', 'qunit:local']);
 
     grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
-
-    // Travis CI tasks.
-    grunt.registerTask(
-		'travis:precommit-and-js',
-		'Runs precommit checks and JavaScript tests on Travis CI.',
-		[
-			'precommit:verify', // -> precommit:js -> jshint:corejs
-			'qunit:compiled'
-		]
-	);
-    grunt.registerTask(
-		'travis:phpunit',
-		'Runs PHPUnit tests on Travis CI.',
-		'phpunit'
-	);
 
     // Default task.
     grunt.registerTask('default', ['build']);
