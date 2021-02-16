@@ -1847,6 +1847,19 @@ function register_initial_settings() {
 		) );
 	}
 
+	register_setting( 'general', 'login_custom_image_state', array(
+		'show_in_rest' => true,
+		'type'         => 'integer',
+		'default'      => false,
+		'description'  => __( 'The state of the "login custom image" feature (0=disabled, 1=square, or 2=banner).' ),
+	) );
+
+	register_setting( 'general', 'login_custom_image_id', array(
+		'show_in_rest' => true,
+		'type'         => 'integer',
+		'description'  => __( 'Attachment ID for the "login custom image" feature.' ),
+	) );
+
 	if ( ! is_multisite() ) {
 		register_setting( 'general', 'admin_email', array(
 			'show_in_rest' => array(
