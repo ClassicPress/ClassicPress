@@ -1,6 +1,16 @@
 <?php
 
-/* Path to the ClassicPress codebase you'd like to test. Add a forward slash in the end. */
+/*
+ * This is a template configuration file for the ClassicPress phpunit automated
+ * tests.  For full instructions on how to set up the automated tests, see:
+ *
+ * https://github.com/ClassicPress/ClassicPress/tree/develop/tests/phpunit
+ */
+
+/*
+ * Path to the ClassicPress codebase you'd like to test. If you need to modify
+ * this, make sure there is a forward slash at the end.
+ */
 define( 'ABSPATH', dirname( __FILE__ ) . '/src/' );
 
 /*

@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var MenuItem = wp.media.view.MenuItem,
 	PriorityList = wp.media.view.PriorityList,
 	Menu;
@@ -114,4 +116,6 @@ Menu = PriorityList.extend(/** @lends wp.media.view.Menu.prototype */{
 	}
 });
 
-module.exports = Menu;
+return Menu;
+
+};

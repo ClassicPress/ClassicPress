@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	EditImage;
 
@@ -53,4 +55,6 @@ EditImage = View.extend(/** @lends wp.media.view.EditImage.prototype */{
 
 });
 
-module.exports = EditImage;
+return EditImage;
+
+};

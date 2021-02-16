@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Attachment = wp.media.model.Attachment,
 	Library = wp.media.controller.Library,
 	l10n = wp.media.view.l10n,
@@ -119,4 +121,6 @@ FeaturedImage = Library.extend(/** @lends wp.media.controller.FeaturedImage.prot
 	}
 });
 
-module.exports = FeaturedImage;
+return FeaturedImage;
+
+};

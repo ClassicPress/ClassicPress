@@ -75,6 +75,8 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$expected = array(
 			'title',
 			'description',
+			'login_custom_image_state',
+			'login_custom_image_id',
 			'timezone',
 			'date_format',
 			'time_format',
@@ -339,6 +341,48 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertEquals( 'The new title!', $data['title'] );
 		$this->assertEquals( get_option( 'blogname' ), $data['title'] );
+	}
+
+	/**
+	 * @dataProvider data_update_custom_login_image_options
+	 */
+	public function test_update_custom_login_image_state( $value ) {
+		wp_set_current_user( self::$administrator );
+		$request = new WP_REST_Request( 'PUT', '/wp/v2/settings' );
+		$request->set_param( 'login_custom_image_state', $value );
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( $value, $data['login_custom_image_state'] );
+		$this->assertSame( $value ? $value : '0', get_option( 'login_custom_image_state' ) );
+		$this->assertSame( 0, $data['login_custom_image_id'] );
+		$this->assertSame( '0', get_option( 'login_custom_image_id' ) );
+	}
+
+	/**
+	 * @dataProvider data_update_custom_login_image_options
+	 */
+	public function test_update_custom_login_image_id( $value ) {
+		wp_set_current_user( self::$administrator );
+		$request = new WP_REST_Request( 'PUT', '/wp/v2/settings' );
+		$request->set_param( 'login_custom_image_id', $value );
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 0, $data['login_custom_image_state'] );
+		$this->assertSame( '0', get_option( 'login_custom_image_state' ) );
+		$this->assertSame( $value, $data['login_custom_image_id'] );
+		$this->assertSame( $value ? $value : '0', get_option( 'login_custom_image_id' ) );
+	}
+
+	public function data_update_custom_login_image_options() {
+		return [
+			[ 0 ],
+			[ 1 ],
+			[ 2 ],
+		];
 	}
 
 	public function update_setting_custom_callback( $result, $name, $value, $args ) {
