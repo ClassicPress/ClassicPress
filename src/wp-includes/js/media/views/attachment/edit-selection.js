@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.Attachment.EditSelection
  *
@@ -16,4 +18,6 @@ var EditSelection = wp.media.view.Attachment.Selection.extend(/** @lends wp.medi
 	}
 });
 
-module.exports = EditSelection;
+return EditSelection;
+
+};

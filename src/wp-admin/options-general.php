@@ -20,7 +20,11 @@ $parent_file = 'options-general.php';
 /* translators: date and time format for exact current time, mainly about timezones, see https://secure.php.net/date */
 $timezone_format = _x('Y-m-d H:i:s', 'timezone date format');
 
+// Old (pre-1.2.0) options-general JS
 add_action('admin_head', 'options_general_add_js');
+// New (1.2.0, custom login image) options-general JS
+wp_enqueue_media();
+wp_enqueue_script( 'cp-options-general' );
 
 $options_help = '<p>' . __('The fields on this screen determine some of the basics of your site setup.') . '</p>' .
 	'<p>' . __('Most themes display the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. The tagline is also displayed by many themes.') . '</p>';
@@ -114,6 +118,67 @@ if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) : ?>
 	?></p>
 	</div>
 <?php endif; ?>
+</td>
+</tr>
+
+<?php
+$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
+$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
+if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
+	$login_custom_image_state = 0;
+}
+if ( $login_custom_image_id ) {
+	$login_custom_image_src = wp_get_attachment_image_url( $login_custom_image_id, 'full' );
+} else {
+	$login_custom_image_src = '';
+}
+$login_custom_image_class = 'hidden';
+if ( $login_custom_image_src ) {
+	$login_custom_image_class = '';
+} else {
+	// invalid image
+	$login_custom_image_src   = '';
+	$login_custom_image_state = 0;
+}
+?>
+
+<tr id="login_custom_image-row">
+<th scope="row"><?php _e( 'Custom Login Image' ) ?></th>
+<td>
+	<fieldset>
+		<legend class="screen-reader-text"><span><?php _e( 'Custom Login Image' ) ?></span></legend>
+		<p class="description" id="login_custom_image-description">
+			<?php _e( 'If you choose an image here and enable this option, then that image will be shown at the top of the login page instead of the ClassicPress logo.' ); ?>
+			<a href="https://link.classicpress.net/docs/custom-login-image" target="_blank" rel="noopener noreferrer">
+				<?php _e( 'Documentation &#187;' ); ?>
+			</a>
+		</p>
+		<label>
+			<input name="login_custom_image_state" type="radio" value="0" <?php checked( 0, $login_custom_image_state ); ?> />
+			<?php _e( 'No custom image: use the <strong>ClassicPress logo</strong>' ); ?>
+		</label>
+		<br />
+		<label>
+			<input name="login_custom_image_state" type="radio" value="1" <?php checked( 1, $login_custom_image_state ); disabled( $login_custom_image_state === 0 && ! $login_custom_image_src ); ?> />
+			<?php _e( 'Use my custom image as a <strong>logo</strong>' ); ?>
+		</label>
+		<br />
+		<label>
+			<input name="login_custom_image_state" type="radio" value="2" <?php checked( 2, $login_custom_image_state ); disabled( $login_custom_image_state === 0 && ! $login_custom_image_src ); ?> />
+			<?php _e( 'Use my custom image as a <strong>banner</strong>' ); ?>
+		</label>
+		<p><img id="login_custom_image-img" src="<?php echo esc_attr( $login_custom_image_src ); ?>" class="<?php echo esc_attr( $login_custom_image_class ); ?>"></p>
+		<p id="login_custom_image-controls" class="hidden">
+			<input type="hidden" id="login_custom_image-input" name="login_custom_image_id" value="<?php form_option( 'login_custom_image_id' ); ?>" />
+			<input type="button" id="login_custom_image-choose" class="button" value="<?php _e( 'Choose Image' ); ?>">
+			<input type="button" id="login_custom_image-clear" class="button" value="<?php _e( 'Clear Image' ); ?>">
+		</p>
+		<noscript>
+			<p class="description">
+				<?php _e( 'Changing the custom login image requires JavaScript to be enabled.' ); ?>
+			</p>
+		</noscript>
+	</fieldset>
 </td>
 </tr>
 

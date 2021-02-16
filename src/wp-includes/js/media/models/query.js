@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Attachments = wp.media.model.Attachments,
 	Query;
 
@@ -305,4 +307,6 @@ Query = Attachments.extend(/** @lends wp.media.model.Query.prototype */{
 	}())
 });
 
-module.exports = Query;
+return Query;
+
+};

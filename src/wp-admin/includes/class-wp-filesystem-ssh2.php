@@ -341,7 +341,10 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			return false;
 		if ( ! function_exists('posix_getpwuid') )
 			return $owneruid;
-		$ownerarray = posix_getpwuid($owneruid);
+		$ownerarray = posix_getpwuid( $owneruid );
+		if ( ! $ownerarray ) {
+			return false;
+		}
 		return $ownerarray['name'];
 	}
 
@@ -365,7 +368,10 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			return false;
 		if ( ! function_exists('posix_getgrgid') )
 			return $gid;
-		$grouparray = posix_getgrgid($gid);
+		$grouparray = posix_getgrgid( $gid );
+		if ( ! $grouparray ) {
+			return false;
+		}
 		return $grouparray['name'];
 	}
 
