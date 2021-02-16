@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	getUserSetting = window.getUserSetting,
 	setUserSetting = window.setUserSetting,
@@ -291,4 +293,6 @@ Library = wp.media.controller.State.extend(/** @lends wp.media.controller.Librar
 // Make selectionSync available on any Media Library state.
 _.extend( Library.prototype, wp.media.selectionSync );
 
-module.exports = Library;
+return Library;
+
+};

@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Library = wp.media.controller.Library,
 	l10n = wp.media.view.l10n,
 	ReplaceImage;
@@ -105,4 +107,6 @@ ReplaceImage = Library.extend(/** @lends wp.media.controller.ReplaceImage.protot
 	}
 });
 
-module.exports = ReplaceImage;
+return ReplaceImage;
+
+};

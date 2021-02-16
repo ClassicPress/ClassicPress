@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var State = wp.media.controller.State,
 	Library = wp.media.controller.Library,
 	l10n = wp.media.view.l10n,
@@ -59,4 +61,6 @@ ImageDetails = State.extend(/** @lends wp.media.controller.ImageDetails.prototyp
 	}
 });
 
-module.exports = ImageDetails;
+return ImageDetails;
+
+};
