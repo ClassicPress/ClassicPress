@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Library = wp.media.controller.Library,
 	l10n = wp.media.view.l10n,
 	GalleryEdit;
@@ -139,4 +141,6 @@ GalleryEdit = Library.extend(/** @lends wp.media.controller.GalleryEdit.prototyp
 	}
 });
 
-module.exports = GalleryEdit;
+return GalleryEdit;
+
+};

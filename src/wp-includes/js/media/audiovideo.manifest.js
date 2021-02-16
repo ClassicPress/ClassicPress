@@ -269,12 +269,12 @@ wp.media.video = {
 	}
 };
 
-media.model.PostMedia = require( './models/post-media.js' );
-media.controller.AudioDetails = require( './controllers/audio-details.js' );
-media.controller.VideoDetails = require( './controllers/video-details.js' );
-media.view.MediaFrame.MediaDetails = require( './views/frame/media-details.js' );
-media.view.MediaFrame.AudioDetails = require( './views/frame/audio-details.js' );
-media.view.MediaFrame.VideoDetails = require( './views/frame/video-details.js' );
-media.view.MediaDetails = require( './views/media-details.js' );
-media.view.AudioDetails = require( './views/audio-details.js' );
-media.view.VideoDetails = require( './views/video-details.js' );
+media.model.PostMedia = require( './models/post-media.js' )();
+media.controller.AudioDetails = require( './controllers/audio-details.js' )();
+media.controller.VideoDetails = require( './controllers/video-details.js' )();
+media.view.MediaFrame.MediaDetails = require( './views/frame/media-details.js' )();
+media.view.MediaFrame.AudioDetails = require( './views/frame/audio-details.js' )();
+media.view.MediaFrame.VideoDetails = require( './views/frame/video-details.js' )();
+media.view.MediaDetails = require( './views/media-details.js' )();
+media.view.AudioDetails = require( './views/audio-details.js' )();
+media.view.VideoDetails = require( './views/video-details.js' )();

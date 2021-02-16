@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.view.RouterItem
  *
@@ -21,4 +23,6 @@ var RouterItem = wp.media.view.MenuItem.extend(/** @lends wp.media.view.RouterIt
 	}
 });
 
-module.exports = RouterItem;
+return RouterItem;
+
+};

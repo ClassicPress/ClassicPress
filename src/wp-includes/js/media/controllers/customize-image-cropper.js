@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Controller = wp.media.controller,
 	CustomizeImageCropper;
 
@@ -40,4 +42,6 @@ CustomizeImageCropper = Controller.Cropper.extend(/** @lends wp.media.controller
 	}
 });
 
-module.exports = CustomizeImageCropper;
+return CustomizeImageCropper;
+
+};

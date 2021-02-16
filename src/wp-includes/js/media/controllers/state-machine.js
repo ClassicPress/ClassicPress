@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.controller.StateMachine
  *
@@ -136,4 +138,6 @@ _.each([ 'on', 'off', 'trigger' ], function( method ) {
 	};
 });
 
-module.exports = StateMachine;
+return StateMachine;
+
+};
