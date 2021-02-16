@@ -60,8 +60,18 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'test-image.jpg',
 			);
 
-		foreach ($files as $file) {
-			$this->assertTrue( file_is_valid_image( DIR_TESTDATA.'/images/'.$file ), "file_is_valid_image($file) should return true" );
+		// IMAGETYPE_ICO is only defined in PHP 5.3+.
+		if ( defined( 'IMAGETYPE_ICO' ) ) {
+			$files[] = 'test-image.ico';
+		}
+
+		// IMAGETYPE_ICO is only defined in PHP 5.3+.
+		if ( defined( 'IMAGETYPE_ICO' ) ) {
+			$files[] = 'test-image.ico';
+		}
+
+		foreach ( $files as $file ) {
+			$this->assertTrue( file_is_valid_image( DIR_TESTDATA . '/images/' . $file ), "file_is_valid_image($file) should return true" );
 		}
 	}
 
@@ -86,8 +96,13 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'test-image.jpg',
 			);
 
-		foreach ($files as $file) {
-			$this->assertTrue( file_is_displayable_image( DIR_TESTDATA.'/images/'.$file ), "file_is_valid_image($file) should return true" );
+		// IMAGETYPE_ICO is only defined in PHP 5.3+.
+		if ( defined( 'IMAGETYPE_ICO' ) ) {
+			$files[] = 'test-image.ico';
+		}
+
+		foreach ( $files as $file ) {
+			$this->assertTrue( file_is_displayable_image( DIR_TESTDATA . '/images/' . $file ), "file_is_valid_image($file) should return true" );
 		}
 	}
 
@@ -368,8 +383,13 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		}
 
 		$orig_file = DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf';
-		$test_file = '/tmp/wordpress-gsoc-flyer.pdf';
+		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
+
+		$editor = wp_get_image_editor( $test_file );
+		if ( is_wp_error( $editor ) ) {
+			$this->markTestSkipped( $editor->get_error_message() );
+		}
 
 		$attachment_id = $this->factory->attachment->create_object( $test_file, 0, array(
 			'post_mime_type' => 'application/pdf',
@@ -379,29 +399,29 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		$expected = array(
 			'sizes' => array(
-				'thumbnail' => array(
-					'file'      => "wordpress-gsoc-flyer-pdf-116x150.jpg",
-					'width'     => 116,
-					'height'    => 150,
-					'mime-type' => "image/jpeg",
-				),
-				'medium'    => array(
-					'file'      => "wordpress-gsoc-flyer-pdf-232x300.jpg",
-					'width'     => 232,
-					'height'    => 300,
-					'mime-type' => "image/jpeg",
-				),
-				'large'     => array(
-					'file'      => "wordpress-gsoc-flyer-pdf-791x1024.jpg",
-					'width'     => 791,
-					'height'    => 1024,
-					'mime-type' => "image/jpeg",
-				),
 				'full'      => array(
-					'file'      => "wordpress-gsoc-flyer-pdf.jpg",
+					'file'      => 'wordpress-gsoc-flyer-pdf.jpg',
 					'width'     => 1088,
 					'height'    => 1408,
-					'mime-type' => "image/jpeg",
+					'mime-type' => 'image/jpeg',
+				),
+				'medium'    => array(
+					'file'      => 'wordpress-gsoc-flyer-pdf-232x300.jpg',
+					'width'     => 232,
+					'height'    => 300,
+					'mime-type' => 'image/jpeg',
+				),
+				'large'     => array(
+					'file'      => 'wordpress-gsoc-flyer-pdf-791x1024.jpg',
+					'width'     => 791,
+					'height'    => 1024,
+					'mime-type' => 'image/jpeg',
+				),
+				'thumbnail' => array(
+					'file'      => 'wordpress-gsoc-flyer-pdf-116x150.jpg',
+					'width'     => 116,
+					'height'    => 150,
+					'mime-type' => 'image/jpeg',
 				),
 			),
 		);
@@ -411,7 +431,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		unlink( $test_file );
 		foreach ( $metadata['sizes'] as $size ) {
-			unlink ( '/tmp/' . $size['file'] );
+			unlink( $temp_dir . $size['file'] );
 		}
 	}
 
@@ -432,6 +452,11 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
 
+		$editor = wp_get_image_editor( $test_file );
+		if ( is_wp_error( $editor ) ) {
+			$this->markTestSkipped( $editor->get_error_message() );
+		}
+
 		$attachment_id = $this->factory->attachment->create_object(
 			$test_file, 0, array(
 				'post_mime_type' => 'application/pdf',
@@ -442,10 +467,10 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		$expected = array(
 			'sizes' => array(
-				'thumbnail' => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-116x150.jpg',
-					'width'     => 116,
-					'height'    => 150,
+				'full'      => array(
+					'file'      => 'wordpress-gsoc-flyer-pdf.jpg',
+					'width'     => 1088,
+					'height'    => 1408,
 					'mime-type' => 'image/jpeg',
 				),
 				'medium'    => array(
@@ -460,10 +485,10 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 					'height'    => 1024,
 					'mime-type' => 'image/jpeg',
 				),
-				'full'      => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf.jpg',
-					'width'     => 1088,
-					'height'    => 1408,
+				'thumbnail' => array(
+					'file'      => 'wordpress-gsoc-flyer-pdf-116x150.jpg',
+					'width'     => 116,
+					'height'    => 150,
 					'mime-type' => 'image/jpeg',
 				),
 			),
@@ -487,12 +512,19 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		}
 
 		$orig_file = DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf';
-		$test_file = '/tmp/wordpress-gsoc-flyer.pdf';
+		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
 
-		$attachment_id = $this->factory->attachment->create_object( $test_file, 0, array(
-			'post_mime_type' => 'application/pdf',
-		) );
+		$editor = wp_get_image_editor( $test_file );
+		if ( is_wp_error( $editor ) ) {
+			$this->markTestSkipped( $editor->get_error_message() );
+		}
+
+		$attachment_id = $this->factory->attachment->create_object(
+			$test_file, 0, array(
+				'post_mime_type' => 'application/pdf',
+			)
+		);
 
 		$this->assertNotEmpty( $attachment_id );
 
@@ -514,8 +546,9 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		remove_filter( 'fallback_intermediate_image_sizes', array( $this, 'filter_fallback_intermediate_image_sizes' ), 10 );
 
 		unlink( $test_file );
+		$temp_dir = get_temp_dir();
 		foreach ( $metadata['sizes'] as $size ) {
-			unlink ( '/tmp/' . $size['file'] );
+			unlink( $temp_dir . $size['file'] );
 		}
 	}
 
@@ -535,22 +568,31 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Rendering PDFs is not supported on this system.' );
 		}
 
+		$temp_dir = get_temp_dir();
+
 		// Dummy JPEGs.
-		$jpg1_path = '/tmp/test.jpg'; // Straight.
+		$jpg1_path = $temp_dir . 'test.jpg'; // Straight.
 		file_put_contents( $jpg1_path, 'asdf' );
-		$jpg2_path = '/tmp/test-pdf.jpg'; // With PDF marker.
+		$jpg2_path = $temp_dir . 'test-pdf.jpg'; // With PDF marker.
 		file_put_contents( $jpg2_path, 'fdsa' );
 
 		// PDF with same name as JPEG.
-		$pdf_path = '/tmp/test.pdf';
+		$pdf_path = $temp_dir . 'test.pdf';
 		copy( DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf', $pdf_path );
 
-		$attachment_id = $this->factory->attachment->create_object( $pdf_path, 0, array(
-			'post_mime_type' => 'application/pdf',
-		) );
+		$editor = wp_get_image_editor( $pdf_path );
+		if ( is_wp_error( $editor ) ) {
+			$this->markTestSkipped( $editor->get_error_message() );
+		}
 
-		$metadata = wp_generate_attachment_metadata( $attachment_id, $pdf_path );
-		$preview_path = '/tmp/' . $metadata['sizes']['full']['file'];
+		$attachment_id = $this->factory->attachment->create_object(
+			$pdf_path, 0, array(
+				'post_mime_type' => 'application/pdf',
+			)
+		);
+
+		$metadata     = wp_generate_attachment_metadata( $attachment_id, $pdf_path );
+		$preview_path = $temp_dir . $metadata['sizes']['full']['file'];
 
 		// PDF preview didn't overwrite PDF.
 		$this->assertNotEquals( $pdf_path, $preview_path );
@@ -566,7 +608,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		unlink( $jpg2_path );
 		unlink( $pdf_path );
 		foreach ( $metadata['sizes'] as $size ) {
-			unlink( '/tmp/' . $size['file'] );
+			unlink( $temp_dir . $size['file'] );
 		}
 	}
 }
