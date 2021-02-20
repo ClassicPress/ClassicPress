@@ -110,8 +110,16 @@ cmd git fetch "$cp_remote"
 commit_hash=""
 # Find the changeset in the WP git log
 # Only need to search after branch points, or after ClassicPress was forked
-# See: https://github.com/ClassicPress/ClassicPress-Bots/blob/755f43e2/app/Http/Controllers/UpstreamCommitsList.php#L12-L45
-for range in 'd7b6719f:4.9' '5d477aa7:5.0' '3ec31001:5.1' 'ff6114f8:master'; do
+# See: https://github.com/ClassicPress/ClassicPress-backports/blob/e8de096b3/app/Http/Controllers/UpstreamCommitsList.php#L23-L74
+for range in \
+	'd7b6719f:4.9' \
+	'5d477aa7:5.0' \
+	'3ec31001:5.1' \
+	'dc512708:5.2' \
+	'c67b47c66:5.3' \
+	'66f510bda:5.4' \
+	'ff6114f8:master'
+do
 	start_commit=$(echo "$range" | cut -d: -f1)
 	search_branch=$(echo "$range" | cut -d: -f2)
 	log_range="$start_commit..$wp_remote/$search_branch"
@@ -185,6 +193,7 @@ perl -w <<PL
 	my \$was_blank_line = 0;
 	while (<MSG_R>) {
 		s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
+		s,\[(\d+)-(\d+)\],https://core.trac.wordpress.org/log/?revs=\$1-\$2,g;
 		s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
 		s,^# Conflicts:,Conflicts:,;
 		s,^#\t,- ,;
@@ -213,12 +222,12 @@ git status --porcelain
 echo
 
 # Add "both modified" or "added by us/them" files
-git status --porcelain | grep -P '^[AU][AU] ' | cut -c4- | while read i; do
+git status --porcelain | grep -E '^[AU][AU] ' | cut -c4- | while read i; do
 	cmd git add "$i"
 done
 
 # Remove "deleted by us" or "deleted by them" files
-git status --porcelain | grep -P '^[DU][DU] ' | cut -c4- | while read i; do
+git status --porcelain | grep -E '^[DU][DU] ' | cut -c4- | while read i; do
 	cmd git rm "$i"
 done
 
@@ -245,7 +254,8 @@ else
 	echo "${color_bold_red}=======${color_reset}"
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
-	git log -n 1 | grep -P '^\s+- \S'
+	git log -n 1 \
+		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"

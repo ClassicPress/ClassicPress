@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = Backbone.$,
 	ButtonGroup;
 
@@ -43,4 +45,6 @@ ButtonGroup = wp.media.View.extend(/** @lends wp.media.view.ButtonGroup.prototyp
 	}
 });
 
-module.exports = ButtonGroup;
+return ButtonGroup;
+
+};

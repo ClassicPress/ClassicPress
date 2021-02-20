@@ -163,8 +163,21 @@ p {
 
 #login {
 	width: 320px;
-	padding: 8% 0 0;
+	padding: 6% 0 0;
 	margin: auto;
+}
+
+.login .custom-login-image-container img {
+	display: block;
+	margin: 10px auto;
+	max-width: 100px;
+	max-height: 100px;
+	width: auto;
+	height: auto;
+}
+.login .custom-login-image-container.banner img {
+	max-width: 320px;
+	max-height: 240px;
 }
 
 .login #nav,

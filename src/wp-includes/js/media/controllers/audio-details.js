@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var State = wp.media.controller.State,
 	l10n = wp.media.view.l10n,
 	AudioDetails;
@@ -30,4 +32,6 @@ AudioDetails = State.extend(/** @lends wp.media.controller.AudioDetails.prototyp
 	}
 });
 
-module.exports = AudioDetails;
+return AudioDetails;
+
+};

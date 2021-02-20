@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var View = wp.media.View,
 	EditImage = wp.media.view.EditImage,
 	Details;
@@ -32,4 +34,6 @@ Details = EditImage.extend(/** @lends wp.media.view.EditImage.Details.prototype 
 	}
 });
 
-module.exports = Details;
+return Details;
+
+};
