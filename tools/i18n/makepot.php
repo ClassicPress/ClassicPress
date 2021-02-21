@@ -9,9 +9,9 @@ if ( !defined( 'STDERR' ) ) {
 
 /**
  * Class to create POT files for
- *  - ClassicPress 1.0.0
- *  - ClassicPress plugins
- *  - ClassicPress themes
+ *  - ClassicPress core
+ *  - ClassicPress plugins (untested)
+ *  - ClassicPress themes (untested)
  *
  * Support for older projects can be found in the legacy branch:
  * https://i18n.trac.wordpress.org/browser/tools/branches/legacy
@@ -20,7 +20,7 @@ class MakePOT {
 	private $max_header_lines = 30;
 
 	public $projects = array(
-		'generic',
+		'cp-core',
 		'cp-plugin',
 		'cp-theme',
 	);
@@ -55,20 +55,20 @@ class MakePOT {
 	public $meta = array(
 		'default' => array(
 			'from-code' => 'utf-8',
-			'msgid-bugs-address' => 'https://make.wordpress.org/polyglots/',
+			'msgid-bugs-address' => 'https://forums.classicpress.net/c/team-discussions/internationalisation/42',
 			'language' => 'php',
 			'add-comments' => 'translators',
 			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
-		'generic' => array(
+		'cp-core' => array(
 			'language' => 'php',
-			'package-version' => 'Dev',
+			'package-version' => '{version}',
 			'package-name' => 'ClassicPress',
 			'comments' => "Copyright (C) {year} {package-name}\nThis file is distributed under the same license as the {package-name} package.",
 		),
 		'cp-plugin' => array(
 			'description' => 'Translation of the ClassicPress plugin {name} {version} by {author}',
-			'msgid-bugs-address' => 'https://wordpress.org/support/plugin/{slug}',
+			'msgid-bugs-address' => 'https://forums.classicpress.net/c/plugins/plugin-support/67',
 			'copyright-holder' => '{author}',
 			'package-name' => '{name}',
 			'package-version' => '{version}',
@@ -114,67 +114,67 @@ class MakePOT {
 		}
 
 		$originals = $this->extractor->extract_from_directory( $dir, $excludes, $includes );
+
+		// Crowdin doesn't like spaces in between different kinds of comment blocks
+		foreach ( $originals->entries as $str => &$entry ) {
+			if ( ! empty( $entry->extracted_comments ) ) {
+				$entry->extracted_comments = trim( $entry->extracted_comments );
+			}
+		}
+
 		$pot = new PO;
 		$pot->entries = $originals->entries;
 
 		$pot->set_header( 'Project-Id-Version', $meta['package-name'].' '.$meta['package-version'] );
 		$pot->set_header( 'Report-Msgid-Bugs-To', $meta['msgid-bugs-address'] );
-		$pot->set_header( 'POT-Creation-Date', gmdate( 'Y-m-d H:i:s+00:00' ) );
+		if ( $project !== 'cp-core' ) {
+			// Do not put unnecessary information in the core .pot files, these
+			// will be managed using git so dates and authors are not needed
+			$pot->set_header( 'POT-Creation-Date', gmdate( 'Y-m-d H:i:s+00:00' ) );
+		}
 		$pot->set_header( 'MIME-Version', '1.0' );
 		$pot->set_header( 'Content-Type', 'text/plain; charset=UTF-8' );
 		$pot->set_header( 'Content-Transfer-Encoding', '8bit' );
-		$pot->set_header( 'PO-Revision-Date', date( 'Y') . '-MO-DA HO:MI+ZONE' );
-		$pot->set_header( 'Last-Translator', 'FULL NAME <EMAIL@ADDRESS>' );
-		$pot->set_header( 'Language-Team', 'LANGUAGE <LL@li.org>' );
+		if ( $project !== 'cp-core' ) {
+			$pot->set_header( 'PO-Revision-Date', date( 'Y') . '-MO-DA HO:MI+ZONE' );
+			$pot->set_header( 'Last-Translator', 'FULL NAME <EMAIL@ADDRESS>' );
+			$pot->set_header( 'Language-Team', 'LANGUAGE <LL@li.org>' );
+		}
 		$pot->set_comment_before_headers( $meta['comments'] );
 		$pot->export_to_file( $output_file );
 		return true;
 	}
 
-	public function wp_generic($dir, $args) {
-		$defaults = array(
-			'project' => 'cp-core',
-			'output' => null,
-			'default_output' => 'wordpress.pot',
-			'includes' => array(),
-			'excludes' => array_merge(
-				array( 'wp-admin/includes/continents-cities\.php', 'wp-content/themes/twenty.*', ),
-				$this->ms_files
-			),
-			'extract_not_gettexted' => false,
-			'not_gettexted_files_filter' => false,
-		);
-		$args = array_merge( $defaults, $args );
-		extract( $args );
-		$placeholders = array();
-		if ( $wp_version = $this->wp_version( $dir ) )
-			$placeholders['version'] = $wp_version;
-		else
-			return false;
-		$output = is_null( $output )? $default_output : $output;
-		$res = $this->xgettext( $project, $dir, $output, $placeholders, $excludes, $includes );
-		if ( !$res ) return false;
-
-		if ( $extract_not_gettexted ) {
-			$old_dir = getcwd();
-			$output = realpath( $output );
-			chdir( $dir );
-			$php_files = NotGettexted::list_php_files('.');
-			$php_files = array_filter( $php_files, $not_gettexted_files_filter );
-			$not_gettexted = new NotGettexted;
-			$res = $not_gettexted->command_extract( $output, $php_files );
-			chdir( $old_dir );
-			/* Adding non-gettexted strings can repeat some phrases */
-			$output_shell = escapeshellarg( $output );
-			system( "msguniq --use-first $output_shell -o $output_shell" );
-		}
-		return $res;
-	}
-
 	private function cp_version( $dir ) {
-		$version_php = $dir.'/wp-includes/version.php';
-		if ( !is_readable( $version_php ) ) return false;
-		return preg_match( '/\$cp_version\s*=\s*\'(.*?)\';/', file_get_contents( $version_php ), $matches )? $matches[1] : false;
+		$version_php = $dir . '/wp-includes/version.php';
+		if ( ! is_readable( $version_php ) ) {
+			fwrite( STDERR, "File not found: $version_php\n" );
+			return false;
+		}
+		# Get the current git development version
+		$git_dir = $dir . '/../.git';
+		if ( ! is_dir( $git_dir ) ) {
+			fwrite( STDERR, "git directory not found: $git_dir\n" );
+			return false;
+		}
+		$old_dir = getcwd();
+		chdir( $git_dir );
+		ob_start();
+		system( 'git describe', $exit_code );
+		$git_version = trim( ob_get_clean() );
+		if ( $exit_code ) {
+			fwrite( STDERR, "git describe exited with code $exit_code: $git_version\n" );
+			return false;
+		}
+		$pot_version = $git_version;
+		// This could be, for example:
+		// '1.0.0+dev' indicating the source for a released version
+		//   -> strip the '+dev' suffix and return '1.0.0'
+		// '1.1.2+dev-6-g077a6862c4' indicating a release plus some changes
+		//   -> return '1.1.2+modified'
+		$pot_version = preg_replace( '#\+dev$#', '', $pot_version );
+		$pot_version = preg_replace( '#\+dev-.*$#', '+modified', $pot_version );
+		return [ 'git' => $git_version, 'pot' => $pot_version ];
 	}
 
 	public function get_first_lines($filename, $lines = 30) {
@@ -222,9 +222,9 @@ class MakePOT {
 		return trim( preg_replace( '/\s*(?:\*\/|\?>).*/', '', $str ) );
 	}
 
-	public function generic($dir, $output = null, $slug = null, $args = array()) {
+	public function cp_core($dir, $output = null, $slug = null, $args = array()) {
 		$defaults = array(
-			'project' => 'generic',
+			'project' => 'cp-core',
 			'default_output' => 'classicpress.pot',
 			'includes' => array(),
 			'excludes' => array_merge(
@@ -236,10 +236,17 @@ class MakePOT {
 		$args = array_merge( $defaults, $args );
 		extract( $args );
 		$placeholders = array();
-		if ( $cp_version = $this->cp_version( $dir ) )
-			$placeholders['version'] = $cp_version;
-		else
+		if ( $cp_version = $this->cp_version( $dir ) ) {
+			$placeholders['version'] = $cp_version['pot'];
+			fprintf(
+				STDERR,
+				"Found ClassicPress version %s -> %s\n",
+				$cp_version['git'],
+				$cp_version['pot']
+			);
+		} else {
 			return false;
+		}
 		$output = is_null( $output )? $default_output : $output;
 		$res = $this->xgettext( $project, $dir, $output, $placeholders, $excludes, $includes );
 		if ( !$res ) return false;
@@ -270,7 +277,7 @@ class MakePOT {
 		return $slug;
 	}
 
-	public function wp_plugin( $dir, $output, $slug = null, $args = array() ) {
+	public function cp_plugin( $dir, $output, $slug = null, $args = array() ) {
 		$defaults = array(
 			'excludes' => array(),
 			'includes' => array(),
@@ -336,7 +343,7 @@ class MakePOT {
 		return $res;
 	}
 
-	public function wp_theme($dir, $output, $slug = null) {
+	public function cp_theme($dir, $output, $slug = null) {
 		$placeholders = array();
 		// guess plugin slug
 		if (is_null($slug)) {
@@ -390,33 +397,39 @@ class MakePOT {
 		system("msguniq $output_shell -o $output_shell");
 		return $res;
 	}
-
-	public function wporg_plugins( $dir, $output ) {
-		$output = is_null( $output ) ? 'wporg-plugins.pot' : $output;
-		return $this->xgettext( 'wporg', $dir, $output, array(), array(
-			'plugins/svn-track/i18n-tools/.*'
-			), array(
-			'.*\.php',
-		) );
-	}
-
 }
 
 // run the CLI only if the file
 // wasn't included
 $included_files = get_included_files();
-if ($included_files[0] == __FILE__) {
+if ( $included_files[0] == __FILE__ ) {
 	$makepot = new MakePOT;
-	if ((3 == count($argv) || 4 == count($argv)) && in_array($method = str_replace('-', '_', $argv[1]), get_class_methods($makepot))) {
-		$res = call_user_func(array($makepot, $method), realpath($argv[2]), isset($argv[3])? $argv[3] : null);
-		if (false === $res) {
-			fwrite(STDERR, "Couldn't generate POT file!\n");
+	if (
+		count( $argv ) >= 3 &&
+		count( $argv ) <= 4 &&
+		in_array(
+			$method = str_replace( '-', '_', $argv[1] ),
+			get_class_methods( $makepot ),
+			true
+		)
+	) {
+		$pot_file = isset( $argv[3] ) ? $argv[3] : null;
+		$res = call_user_func(
+			array( $makepot, $method ),
+			realpath( $argv[2] ),
+			$pot_file
+		);
+		if ( false === $res ) {
+			fwrite( STDERR, "Couldn't generate POT file!\n" );
+			exit( 1 );
+		} else {
+			fwrite( STDERR, "Generated POT file!\n" );
 		}
 	} else {
 		$usage  = "Usage: php makepot.php PROJECT DIRECTORY [OUTPUT]\n\n";
 		$usage .= "Generate POT file from the files in DIRECTORY [OUTPUT]\n";
-		$usage .= "Available projects: ".implode(', ', $makepot->projects)."\n";
-		fwrite(STDERR, $usage);
-		exit(1);
+		$usage .= "Available projects: " . implode( ', ', $makepot->projects ) . "\n";
+		fwrite( STDERR, $usage );
+		exit( 1 );
 	}
 }

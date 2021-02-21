@@ -1,11 +1,9 @@
 /* jshint node:true */
 /* jshint es3:false */
 /* jshint esversion:6 */
+/* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
-const webpackConfig = require( './webpack.config.prod' );
-const webpackDevConfig = require( './webpack.config.dev' );
-const path = require('path');
 
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -16,15 +14,21 @@ module.exports = function(grunt) {
     buildTools.setGruntReference( grunt );
 
     const puppeteerOptions = {};
-    if (process.env.TRAVIS) {
-		// Avoid error: Failed to launch chrome! No usable sandbox!
-		puppeteerOptions.args = [ '--no-sandbox' ];
-	}
 
     // Load tasks.
-    require('matchdep').filterDev(['grunt-*', '!grunt-legacy-util']).forEach( grunt.loadNpmTasks );
-    // Load legacy utils
-    grunt.util = require('grunt-legacy-util');
+	for ( const devDep in require( './package.json' ).devDependencies ) {
+		// Match: grunt-abc, @author/grunt-xyz
+		// Skip: grunt-legacy-util
+		if ( /^(@[^\/]+\/)?grunt-(?!legacy-util$)/.test( devDep ) ) {
+			grunt.loadNpmTasks( devDep );
+		}
+	}
+
+    // Load legacy utils.
+    grunt.util = require( 'grunt-legacy-util' );
+
+	// Load terser task.
+	require( './tools/build/grunt-terser' )( grunt );
 
     // Project configuration.
     grunt.initConfig({
@@ -151,7 +155,6 @@ module.exports = function(grunt) {
 								);
 								grunt.fatal( 'grunt.config dev.git-version not set' );
 							}
-							/* jshint quotmark: true */
 							return `$default_version = 'cp_${hash.substr( 0, 8 )}';`;
 						} );
 					}
@@ -187,7 +190,6 @@ module.exports = function(grunt) {
 								);
 							}
 
-							/* jshint quotmark: true */
 							return `$cp_version = '${version}';`;
 						});
 					}
@@ -351,7 +353,7 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js']
+				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
 			},
 			tests: {
 				src: [
@@ -542,7 +544,7 @@ module.exports = function(grunt) {
 				args: ['--verbose', '-c', 'phpunit.xml.dist', '--filter', 'WP_Test_REST_Schema_Initialization::test_build_wp_api_client_fixtures']
 			}
 		},
-		uglify: {
+		terser: {
 			// Settings for all subtasks
 			options: {
 				output: {
@@ -575,7 +577,7 @@ module.exports = function(grunt) {
 					'!wp-includes/js/swfobject.js',
 					'!wp-includes/js/underscore.*',
 					'!wp-includes/js/zxcvbn.min.js',
-					'!wp-includes/js/wp-embed.js' // We have extra options for this, see uglify:embed
+					'!wp-includes/js/wp-embed.js' // We have extra options for this, see terser:embed
 				]
 			},
 			embed: {
@@ -603,9 +605,9 @@ module.exports = function(grunt) {
 				]
 			},
 			jqueryui: {
-				options: {
+				output: {
 					// Preserve comments that start with a bang.
-					preserveComments: /^!/
+					comments: /^!/
 				},
 				expand: true,
 				cwd: SOURCE_DIR,
@@ -614,9 +616,9 @@ module.exports = function(grunt) {
 				src: ['wp-includes/js/jquery/ui/*.js']
 			},
 			masonry: {
-				options: {
+				output: {
 					// Preserve comments that start with a bang.
-					preserveComments: /^!/
+					comments: /^!/
 				},
 				src: `${SOURCE_DIR}wp-includes/js/jquery/jquery.masonry.js`,
 				dest: `${SOURCE_DIR}wp-includes/js/jquery/jquery.masonry.min.js`
@@ -625,10 +627,6 @@ module.exports = function(grunt) {
 				src: `${SOURCE_DIR}wp-includes/js/imgareaselect/jquery.imgareaselect.js`,
 				dest: `${SOURCE_DIR}wp-includes/js/imgareaselect/jquery.imgareaselect.min.js`
 			}
-		},
-		webpack: {
-			prod: webpackConfig,
-			dev: webpackDevConfig
 		},
 		concat: {
 			tinymce: {
@@ -726,51 +724,6 @@ module.exports = function(grunt) {
 					}
 				]
 			}
-		},
-		_watch: {
-			all: {
-				files: [
-					`${SOURCE_DIR}**`,
-					`!${SOURCE_DIR}wp-includes/js/media/**`,
-					// Ignore version control directories.
-					`!${SOURCE_DIR}**/.{svn,git}/**`
-				],
-				tasks: ['clean:dynamic', 'copy:dynamic'],
-				options: {
-					dot: true,
-					spawn: false,
-					interval: 2000
-				}
-			},
-			config: {
-				files: [
-					'Gruntfile.js',
-					'webpack-dev.config.js',
-					'webpack.config.js'
-				]
-			},
-			colors: {
-				files: [`${SOURCE_DIR}wp-admin/css/colors/**`],
-				tasks: ['sass:colors']
-			},
-			rtl: {
-				files: [
-					`${SOURCE_DIR}wp-admin/css/*.css`,
-					`${SOURCE_DIR}wp-includes/css/*.css`
-				],
-				tasks: ['rtlcss:dynamic'],
-				options: {
-					spawn: false,
-					interval: 2000
-				}
-			},
-			test: {
-				files: [
-					'tests/qunit/**',
-					'!tests/qunit/editor/**'
-				],
-				tasks: ['connect', 'qunit']
-			}
 		}
 	});
 
@@ -782,15 +735,6 @@ module.exports = function(grunt) {
 		grunt.config.set( 'copy.files.files', copyFilesOptions );
 	}
 
-
-    // Register tasks.
-    grunt.loadNpmTasks('@lodder/grunt-postcss');
-
-    // Webpack task.
-    grunt.loadNpmTasks( 'grunt-webpack' );
-
-    // Connect task (local server for QUnit tests).
-    grunt.loadNpmTasks( 'grunt-contrib-connect' );
 
     // RTL task.
     grunt.registerTask('rtl', ['rtlcss:core', 'rtlcss:colors']);
@@ -812,26 +756,15 @@ module.exports = function(grunt) {
 		'qunit:compiled'
 	] );
 
-    grunt.renameTask( 'watch', '_watch' );
-
-    grunt.registerTask( 'watch', function() {
-		if ( ! this.args.length || this.args.includes('webpack') ) {
-
-			grunt.task.run( 'webpack:dev' );
-		}
-
-		grunt.task.run( `_${this.nameArgs}` );
-	} );
-
     grunt.registerTask( 'precommit:image', [
 		'imagemin:core'
 	] );
 
     grunt.registerTask( 'precommit:js', [
-		'webpack:prod',
+		'rollup',
 		'jshint:corejs',
-		'uglify:masonry',
-		'uglify:imgareaselect'
+		'terser:masonry',
+		'terser:imgareaselect'
 	] );
 
     grunt.registerTask( 'precommit:css', [
@@ -851,7 +784,8 @@ module.exports = function(grunt) {
 		'precommit:css',
 		'precommit:image',
 		'precommit:emoji',
-		'precommit:php'
+		'precommit:php',
+		'precommit:git-conflicts'
 	] );
 
     grunt.registerTask(
@@ -881,16 +815,13 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'rev-parse', 'HEAD' ]
-		}, (error, {stdout}, code) => {
-			if ( error ) {
-				throw error;
-			}
+		}, ( error, { stdout, stderr }, code ) => {
 			if ( code !== 0 ) {
-				throw new Error( `git rev-parse failed: code ${code}` );
+				grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
 			}
 			const hash = stdout.trim();
 			if ( ! hash || hash.length !== 40 ) {
-				throw new Error( `git rev-parse returned invalid value: ${hash}` );
+				grunt.fatal( `git rev-parse returned invalid value: ${hash}` );
 			}
 			grunt.config.set( 'dev.git-version', hash );
 			grunt.log.ok(
@@ -908,7 +839,7 @@ module.exports = function(grunt) {
 		grunt.util.spawn( {
 			cmd: 'git',
 			args: [ 'ls-files', '-m' ]
-		}, (error, {stdout}, code) => {
+		}, ( error, { stdout }, code ) => {
 			if ( error ) {
 				throw error;
 			}
@@ -942,6 +873,53 @@ module.exports = function(grunt) {
 		} );
 	} );
 
+    grunt.registerTask( 'precommit:git-conflicts', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'bash',
+			args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+		}, ( error, { stdout, stderr }, code ) => {
+			// Ignore error because it is populated for non-zero exit codes:
+			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
+			// An exit code of 1 from `grep` means "no match" which is fine.
+			// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
+			if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
+				grunt.fatal(
+					`checking for changes failed: code ${code}:\n${stderr + stdout}`
+				);
+			}
+			if ( stdout.trim().length ) {
+				stdout.trim().split( '\n' ).forEach( line => {
+					grunt.log.writeln(
+						/^[^:]+:\d+:/.test( line ) ? line.red : line
+					);
+				} );
+				grunt.fatal(
+					'git conflict markers detected in the above files!'
+				);
+			}
+
+			done();
+		} );
+	} );
+
+	grunt.registerTask( 'rollup', function() {
+		const done = this.async();
+
+		grunt.util.spawn( {
+			cmd: 'node',
+			args: [ './node_modules/.bin/rollup', '--config' ],
+		}, ( error, { stdout, stderr } ) => {
+			if ( error ) {
+				throw error;
+			}
+			console.log( stdout );
+			console.error( stderr );
+			done();
+		} );
+	} );
+
     grunt.registerTask( 'copy:script-loader', [
 		'dev:git-version',
 		'copy:script-loader-impl'
@@ -963,9 +941,9 @@ module.exports = function(grunt) {
 		'rtl',
 		'cssmin:rtl',
 		'cssmin:colors',
-		'uglify:core',
-		'uglify:embed',
-		'uglify:jqueryui',
+		'terser:core',
+		'terser:embed',
+		'terser:jqueryui',
 		'concat:tinymce',
 		'compress:tinymce',
 		'clean:tinymce',
@@ -1000,51 +978,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
-    // Travis CI tasks.
-    grunt.registerTask(
-		'travis:precommit-and-js',
-		'Runs precommit checks and JavaScript tests on Travis CI.',
-		[
-			'precommit:verify', // -> precommit:js -> jshint:corejs
-			'qunit:compiled'
-		]
-	);
-    grunt.registerTask(
-		'travis:phpunit',
-		'Runs PHPUnit tests on Travis CI.',
-		'phpunit'
-	);
-
-    // Patch task.
-    grunt.renameTask('patch_wordpress', 'patch');
-
-    // Add an alias `apply` of the `patch` task name.
-    grunt.registerTask('apply', 'patch');
-
     // Default task.
     grunt.registerTask('default', ['build']);
-
-    /*
-	 * Automatically updates the `:dynamic` configurations
-	 * so that only the changed files are updated.
-	 */
-    grunt.event.on('watch', (action, filepath, target) => {
-		let src;
-
-		if ( ![ 'all', 'rtl', 'webpack' ].includes(target) ) {
-			return;
-		}
-
-		src = [ path.relative( SOURCE_DIR, filepath ) ];
-
-		if ( action === 'deleted' ) {
-			grunt.config( [ 'clean', 'dynamic', 'src' ], src );
-		} else {
-			grunt.config( [ 'copy', 'dynamic', 'src' ], src );
-
-			if ( target === 'rtl' ) {
-				grunt.config( [ 'rtlcss', 'dynamic', 'src' ], src );
-			}
-		}
-	});
 };

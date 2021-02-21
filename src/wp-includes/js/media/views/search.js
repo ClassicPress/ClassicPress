@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var l10n = wp.media.view.l10n,
 	Search;
 
@@ -43,4 +45,6 @@ Search = wp.media.View.extend(/** @lends wp.media.view.Search.prototype */{
 	}, 300 )
 });
 
-module.exports = Search;
+return Search;
+
+};

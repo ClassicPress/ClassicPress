@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = jQuery,
 	Modal;
 
@@ -199,4 +201,6 @@ Modal = wp.media.View.extend(/** @lends wp.media.view.Modal.prototype */{
 	}
 });
 
-module.exports = Modal;
+return Modal;
+
+};

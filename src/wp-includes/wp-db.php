@@ -528,8 +528,14 @@ class wpdb {
 	 * @since WP-3.9.0
 	 * @var array
 	 */
-	protected $incompatible_modes = array( 'NO_ZERO_DATE', 'ONLY_FULL_GROUP_BY',
-		'STRICT_TRANS_TABLES', 'STRICT_ALL_TABLES', 'TRADITIONAL' );
+	protected $incompatible_modes = array(
+		'NO_ZERO_DATE',
+		'ONLY_FULL_GROUP_BY',
+		'STRICT_TRANS_TABLES',
+		'STRICT_ALL_TABLES',
+		'TRADITIONAL',
+		'ANSI',
+	);
 
 	/**
 	 * Whether to use mysqli over mysql.
@@ -2456,8 +2462,10 @@ class wpdb {
 
 		$new_array = array();
 		// Extract the column values
-		for ( $i = 0, $j = count( $this->last_result ); $i < $j; $i++ ) {
-			$new_array[$i] = $this->get_var( null, $x, $i );
+		if ( $this->last_result ) {
+			for ( $i = 0, $j = count( $this->last_result ); $i < $j; $i++ ) {
+				$new_array[ $i ] = $this->get_var( null, $x, $i );
+			}
 		}
 		return $new_array;
 	}
@@ -2497,11 +2505,14 @@ class wpdb {
 		} elseif ( $output == OBJECT_K ) {
 			// Return an array of row objects with keys from column 1
 			// (Duplicates are discarded)
-			foreach ( $this->last_result as $row ) {
-				$var_by_ref = get_object_vars( $row );
-				$key = array_shift( $var_by_ref );
-				if ( ! isset( $new_array[ $key ] ) )
-					$new_array[ $key ] = $row;
+			if ( $this->last_result ) {
+				foreach ( $this->last_result as $row ) {
+					$var_by_ref = get_object_vars( $row );
+					$key = array_shift( $var_by_ref );
+					if ( ! isset( $new_array[ $key ] ) ) {
+						$new_array[ $key ] = $row;
+					}
+				}
 			}
 			return $new_array;
 		} elseif ( $output == ARRAY_A || $output == ARRAY_N ) {
@@ -2964,7 +2975,7 @@ class wpdb {
 			foreach ( $data as $col => $value ) {
 				if ( ! empty( $value['db'] ) ) {
 					// We're going to need to truncate by characters or bytes, depending on the length value we have.
-					if ( 'byte' === $value['length']['type'] ) {
+					if ( isset( $value['length']['type'] ) && 'byte' === $value['length']['type'] ) {
 						// Using binary causes LEFT() to truncate by bytes.
 						$charset = 'binary';
 					} else {

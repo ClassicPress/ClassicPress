@@ -17,6 +17,36 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 	public $wp_customize;
 
 	/**
+	 * Page IDs.
+	 *
+	 * @var int[]
+	 */
+	public static $pages;
+
+	/**
+	 * Post IDs.
+	 *
+	 * @var int[]
+	 */
+	public static $posts;
+
+	/**
+	 * Term IDs.
+	 *
+	 * @var int[]
+	 */
+	public static $terms;
+
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		// Make some post objects.
+		self::$posts = $factory->post->create_many( 5 );
+		self::$pages = $factory->post->create_many( 5, array( 'post_type' => 'page' ) );
+
+		// Some terms too.
+		self::$terms = $factory->term->create_many( 5 );
+	}
+
+	/**
 	 * Set up the test fixture.
 	 */
 	public function setUp() {
@@ -55,6 +85,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 		if ( 'administrator' != $role ) {
 			// If we're not an admin, we should get a wp_die(-1).
 			$this->setExpectedException( 'WPAjaxDieStopException' );
+			$this->expectExceptionMessage( '-1' );
 		}
 
 		wp_set_current_user( self::factory()->user->create( array( 'role' => $role ) ) );
@@ -334,10 +365,12 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 			'url',
 		);
 
-		// Create some terms and pages.
-		self::factory()->term->create_many( 5 );
-		self::factory()->post->create_many( 5, array( 'post_type' => 'page' ) );
-		$auto_draft_post = $this->wp_customize->nav_menus->insert_auto_draft_post( array( 'post_title' => 'Test Auto Draft', 'post_type' => 'post' ) );
+		$auto_draft_post = $this->wp_customize->nav_menus->insert_auto_draft_post(
+			array(
+				'post_title' => 'Test Auto Draft',
+				'post_type'  => 'post',
+			)
+		);
 		$this->wp_customize->set_post_value( 'nav_menus_created_posts', array( $auto_draft_post->ID ) );
 		$this->wp_customize->get_setting( 'nav_menus_created_posts' )->preview();
 
@@ -430,6 +463,7 @@ class Tests_Ajax_CustomizeMenus extends WP_Ajax_UnitTestCase {
 		if ( 'administrator' != $role ) {
 			// If we're not an admin, we should get a wp_die(-1).
 			$this->setExpectedException( 'WPAjaxDieStopException' );
+			$this->expectExceptionMessage( '-1' );
 		}
 
 		wp_set_current_user( self::factory()->user->create( array( 'role' => $role ) ) );

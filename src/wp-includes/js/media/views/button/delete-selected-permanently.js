@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var Button = wp.media.view.Button,
 	DeleteSelected = wp.media.view.DeleteSelectedButton,
 	DeleteSelectedPermanently;
@@ -44,4 +46,6 @@ DeleteSelectedPermanently = DeleteSelected.extend(/** @lends wp.media.view.Delet
 	}
 });
 
-module.exports = DeleteSelectedPermanently;
+return DeleteSelectedPermanently;
+
+};
