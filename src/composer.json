@@ -17,6 +17,6 @@
         "issues": "https://github.com/ClassicPress/ClassicPress/issues"
     },
     "require": {
-        "johnpbloch/wordpress-core-installer": "1.0.2"
+        "johnpbloch/wordpress-core-installer": "2.0.0"
     }
 }

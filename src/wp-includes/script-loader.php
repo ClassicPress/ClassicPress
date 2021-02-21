@@ -940,6 +940,13 @@ function wp_default_scripts( &$scripts ) {
 		$scripts->add( 'media-gallery', "/wp-admin/js/media-gallery$suffix.js", array('jquery'), false, 1 );
 
 		$scripts->add( 'svg-painter', '/wp-admin/js/svg-painter.js', array( 'jquery' ), false, 1 );
+
+		$scripts->add( 'cp-options-general', admin_url( "/js/options-general$suffix.js" ), array( 'jquery' ), false, 1 );
+		did_action( 'init' ) && $scripts->localize( 'cp-options-general', 'cpOptionsGeneralStrings', array(
+			'selectAnImage' => __( 'Select an image' ),
+			'useThisImage'  => __( 'Use this image' ),
+			'chooseAnImage' => __( 'Please choose an image!' ),
+		) );
 	}
 }
 

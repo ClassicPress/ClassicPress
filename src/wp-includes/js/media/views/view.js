@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.View
  *
@@ -63,4 +65,6 @@ var View = wp.Backbone.View.extend(/** @lends wp.media.View.prototype */{
 	}
 });
 
-module.exports = View;
+return View;
+
+};

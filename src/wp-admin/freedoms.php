@@ -37,7 +37,7 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 <div class="wp-badge"></div>
 
 <h2 class="nav-tab-wrapper wp-clearfix">
-	<a href="about.php" class="nav-tab"><?php _e( 'What&#8217;s New' ); ?></a>
+	<a href="about.php" class="nav-tab"><?php _e( 'About' ); ?></a>
 	<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
 	<a href="freedoms.php" class="nav-tab<?php if ( ! $is_privacy_notice ) { echo ' nav-tab-active'; } ?>"><?php _e( 'Freedoms' ); ?></a>
 	<a href="freedoms.php?privacy-notice" class="nav-tab<?php if ( $is_privacy_notice ) { echo ' nav-tab-active'; } ?>"><?php _e( 'Privacy' ); ?></a>
@@ -46,9 +46,9 @@ $is_privacy_notice = isset( $_GET['privacy-notice'] );
 <?php if ( $is_privacy_notice ) : ?>
 
 <div class="about-wrap-content">
-	<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send data to ClassicPress.net &#8212; including, but not limited to &#8212; the version of ClassicPress you are using, and a list of installed plugins and themes.' ); ?></p>
+	<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send anonymous data to ClassicPress.net. Some examples of the kinds of data that may be sent are the version of ClassicPress your site is running and a list of installed plugins and themes.' ); ?></p>
 
-	<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, and how we use it, please visit <a href="%s">ClassicPress Privacy Policy</a>.' ), 'https://www.iubenda.com/privacy-policy/41030260' ); ?></p>
+	<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, how we use it, and what precautions we take to ensure site owners&#8217; privacy, please see the <a href="%s">ClassicPress Privacy Policy</a>.' ), 'https://link.classicpress.net/core-privacy-policy/' ); ?></p>
 </div>
 
 <?php else : ?>

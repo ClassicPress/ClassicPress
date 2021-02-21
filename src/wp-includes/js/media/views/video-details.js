@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var MediaDetails = wp.media.view.MediaDetails,
 	VideoDetails;
 
@@ -40,4 +42,6 @@ VideoDetails = MediaDetails.extend(/** @lends wp.media.view.VideoDetails.prototy
 	}
 });
 
-module.exports = VideoDetails;
+return VideoDetails;
+
+};

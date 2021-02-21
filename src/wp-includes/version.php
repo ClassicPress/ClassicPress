@@ -27,7 +27,7 @@
  *
  * @global string $cp_version
  */
-$cp_version = '1.1.1+dev';
+$cp_version = '1.2.0+dev';
 
 /**
  * The WordPress version string
@@ -40,7 +40,7 @@ $cp_version = '1.1.1+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '4.9.12';
+$wp_version = '4.9.15';
 
 /**
  * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
@@ -97,7 +97,7 @@ if ( ! function_exists( 'classicpress_version' ) ) {
 if ( ! function_exists( 'classicpress_version_short' ) ) {
 	function classicpress_version_short() {
 		global $cp_version;
-		return strtok( $cp_version, '-' );
+		return preg_replace( '#[+-].*$#', '', $cp_version );
 	}
 }
 

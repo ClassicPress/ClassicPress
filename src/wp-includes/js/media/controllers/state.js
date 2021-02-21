@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 /**
  * wp.media.controller.State
  *
@@ -238,4 +240,6 @@ _.each(['toolbar','content'], function( region ) {
 	};
 });
 
-module.exports = State;
+return State;
+
+};

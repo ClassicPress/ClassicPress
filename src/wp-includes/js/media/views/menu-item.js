@@ -1,3 +1,5 @@
+module.exports = function() { // ClassicPress: defer loading via require()
+
 var $ = jQuery,
 	MenuItem;
 
@@ -69,4 +71,6 @@ MenuItem = wp.media.View.extend(/** @lends wp.media.view.MenuItem.prototype */{
 	}
 });
 
-module.exports = MenuItem;
+return MenuItem;
+
+};

@@ -914,6 +914,25 @@ table.form-table td .updated p {
 	vertical-align: middle;
 }
 
+.options-general-php #login_custom_image-description {
+	margin-bottom: 6px;
+}
+
+.options-general-php #login_custom_image-img {
+	max-width: 120px;
+	max-height: 120px;
+}
+
+.options-general-php .wrap .login_custom_image-notice {
+	margin: 3px 0 3px 24px;
+	padding: 3px 6px;
+	/* inside <label> for positioning, but shouldn't advertise as clickable */
+	cursor: default;
+	/* from .description styles */
+	color: #666;
+	font-style: italic;
+}
+
 .form-table.permalink-structure .available-structure-tags li {
 	float: left;
 	margin-right: 5px;

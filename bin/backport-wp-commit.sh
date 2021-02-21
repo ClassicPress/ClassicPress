@@ -40,7 +40,7 @@ fi
 
 # Sanity check: make sure we have a .git directory, and at least one remote
 # pointing to a repository named ClassicPress
-if [ ! -d .git ] || ! git remote -v | grep -q '\b/ClassicPress\b'; then
+if [ ! -d .git ] || ! git remote -v | grep -qi '\b/ClassicPress\b'; then
 	echo "ERROR: Call this script from within your ClassicPress repository"
 	exit 1
 fi
@@ -84,7 +84,7 @@ cmd() {
 	return $retval
 }
 
-wp_remote=$(git remote -v | grep '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
+wp_remote=$(git remote -v | grep -i '\bWordPress/wordpress-develop\b' | awk 'END { print $1 }')
 if [ -z "$wp_remote" ]; then
 	echo "Adding git remote 'wp' for WordPress/wordpress-develop"
 	cmd git remote add wp https://github.com/WordPress/wordpress-develop.git
@@ -93,7 +93,7 @@ else
 	echo "Found git remote '$wp_remote' for WordPress/wordpress-develop"
 fi
 
-cp_remote=$(git remote -v | grep '\bClassicPress/ClassicPress\b' | awk 'END { print $1 }')
+cp_remote=$(git remote -v | grep -i '\bClassicPress/ClassicPress\b' | awk 'END { print $1 }')
 if [ -z "$cp_remote" ]; then
 	echo "Adding git remote 'cp' for ClassicPress/ClassicPress"
 	cmd git remote add cp https://github.com/ClassicPress/ClassicPress.git
@@ -110,8 +110,16 @@ cmd git fetch "$cp_remote"
 commit_hash=""
 # Find the changeset in the WP git log
 # Only need to search after branch points, or after ClassicPress was forked
-# See: https://github.com/ClassicPress/ClassicPress-Bots/blob/755f43e2/app/Http/Controllers/UpstreamCommitsList.php#L12-L45
-for range in 'd7b6719f:4.9' '5d477aa7:5.0' '3ec31001:5.1' 'ff6114f8:master'; do
+# See: https://github.com/ClassicPress/ClassicPress-backports/blob/e8de096b3/app/Http/Controllers/UpstreamCommitsList.php#L23-L74
+for range in \
+	'd7b6719f:4.9' \
+	'5d477aa7:5.0' \
+	'3ec31001:5.1' \
+	'dc512708:5.2' \
+	'c67b47c66:5.3' \
+	'66f510bda:5.4' \
+	'ff6114f8:master'
+do
 	start_commit=$(echo "$range" | cut -d: -f1)
 	search_branch=$(echo "$range" | cut -d: -f2)
 	log_range="$start_commit..$wp_remote/$search_branch"
@@ -167,53 +175,75 @@ cmd __failure_allowed git cherry-pick --no-commit "$commit_short"
 conflict_status=$?
 set -e
 
-edit_merge_msg() {
-	echo 'Modifying commit message'
-	# edit .git/MERGE_MSG which will be the commit message:
-	# - transform [12345] into WP changeset link
-	# - transform #12345 into WP ticket link
-	# - mark Props lines as coming from WP so we can identify them later
-	# - remove 'git-svn-id:' line
-	# - remove duplicate blank lines
-	# - add 'Merges ... to ClassicPress' line for tracking backported commits
-	perl -w <<PL
-		open MSG_R, '<', '.git/MERGE_MSG'
-			or die "Can't open .git/MERGE_MSG: \$!";
-		open MSG_W, '>', '.git/MERGE_MSG.tmp'
-			or die "Can't open .git/MERGE_MSG.tmp: \$!";
-		print MSG_W 'WP-r$wp_changeset: ';
-		my \$was_blank_line = 0;
-		while (<MSG_R>) {
-			s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
-			s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
-			s,^# Conflicts:,Conflicts:,;
-			s,^#\t,  ,;
-			s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
-			if (/\S/) {
-				if (!/^git-svn-id:/) {
-					\$was_blank_line = 0;
-					print MSG_W \$_;
-				}
-			} else {
-				print MSG_W \$_ if !\$was_blank_line;
-				\$was_blank_line = 1;
+echo 'Modifying commit message'
+# edit .git/MERGE_MSG which will be the commit message:
+# - transform [12345] into WP changeset link
+# - transform #12345 into WP ticket link
+# - mark Props lines as coming from WP so we can identify them later
+# - remove 'git-svn-id:' line
+# - remove duplicate blank lines
+# - add 'Merges ... to ClassicPress' line for tracking backported commits
+# - preserve information about conflicting files
+perl -w <<PL
+	open MSG_R, '<', '.git/MERGE_MSG'
+		or die "Can't open .git/MERGE_MSG: \$!";
+	open MSG_W, '>', '.git/MERGE_MSG.tmp'
+		or die "Can't open .git/MERGE_MSG.tmp: \$!";
+	print MSG_W 'WP-r$wp_changeset: ';
+	my \$was_blank_line = 0;
+	while (<MSG_R>) {
+		s,\[(\d+)\],https://core.trac.wordpress.org/changeset/\$1,g;
+		s,\[(\d+)-(\d+)\],https://core.trac.wordpress.org/log/?revs=\$1-\$2,g;
+		s,#(\d+)\b,https://core.trac.wordpress.org/ticket/\$1,g;
+		s,^# Conflicts:,Conflicts:,;
+		s,^#\t,- ,;
+		s,\b(Props|Unprops)(\s*),WP:\$1\$2,g;
+		if (/\S/) {
+			if (!/^git-svn-id:/) {
+				\$was_blank_line = 0;
+				print MSG_W \$_;
 			}
+		} else {
+			print MSG_W \$_ if !\$was_blank_line;
+			\$was_blank_line = 1;
 		}
-		print MSG_W "----\n";
-		print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
-		close MSG_R;
-		close MSG_W;
-		rename '.git/MERGE_MSG.tmp', '.git/MERGE_MSG';
+	}
+	print MSG_W "\n---\n\n";
+	print MSG_W "Merges https://core.trac.wordpress.org/changeset/$wp_changeset / WordPress/wordpress-develop\@$commit_short to ClassicPress.\n";
+	close MSG_R;
+	close MSG_W;
+	rename '.git/MERGE_MSG.tmp', '.git/MERGE_MSG';
 PL
-}
+
+# Debug info in case something goes wrong
+echo
+echo 'git status before:'
+git status --porcelain
+echo
+
+# Add "both modified" or "added by us/them" files
+git status --porcelain | grep -E '^[AU][AU] ' | cut -c4- | while read i; do
+	cmd git add "$i"
+done
+
+# Remove "deleted by us" or "deleted by them" files
+git status --porcelain | grep -E '^[DU][DU] ' | cut -c4- | while read i; do
+	cmd git rm "$i"
+done
+
+# Debug info in case something goes wrong
+echo
+echo 'git status after:'
+git status --porcelain
+echo
+
+# Author information is not preserved because we used
+# `git cherry-pick --no-commit` above.
+author=$(git show -s --format='%an <%ae>' "$commit_short")
+cmd git commit --no-edit --allow-empty --author="$author"
+echo
 
 if [ "$conflict_status" -eq 0 ]; then
-	edit_merge_msg
-	# Author information is preserved when there is a conflict, but not here,
-	# because we used `git cherry-pick --no-commit` above.
-	author=$(git show -s --format='%an <%ae>' "$commit_short")
-	cmd git commit --no-edit --author="$author"
-	echo
 	if [ $current_branch = no ]; then
 		echo "All done!  You can push the changes to GitHub now:"
 		echo "git push origin $branch"
@@ -221,31 +251,20 @@ if [ "$conflict_status" -eq 0 ]; then
 		echo "All done!  1 commit was added to your current branch."
 	fi
 else
-	# Apparently `git cherry-pick --no-commit` doesn't use the git sequencer,
-	# but we should because then `git status` shows you the next steps
-	echo "Redoing cherry-pick now that we know there's a conflict"
-	cmd git reset --hard
-	set +e
-	cmd __failure_allowed git cherry-pick "$commit_short"
-	set -e
-	edit_merge_msg
-	echo
 	echo "${color_bold_red}=======${color_reset}"
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
-	echo "Fix and commit the files marked as '${color_bold_red}both modified${color_reset}' before proceeding:"
+	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
+	git log -n 1 \
+		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
-	git status
+	echo "If you're not sure how to do this, just push your changes to GitHub"
+	echo "and we can take care of it!"
 	echo
 	if [ $current_branch = no ]; then
-		echo "After resolving the conflict(s), commit and push the changes to GitHub:"
-		echo "git add ."
-		echo "git cherry-pick --continue"
 		echo "git push origin $branch"
 	else
-		echo "After resolving the conflict(s), commit your changes:"
-		echo "git add ."
-		echo "git cherry-pick --continue"
+		echo "1 commit was added to your current branch."
 	fi
 	# Use a special exit code to indicate conflict
 	exit 3
