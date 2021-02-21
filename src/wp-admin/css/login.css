@@ -40,10 +40,6 @@ a:focus {
 		0 0 2px 1px rgba(30, 140, 190, .8);
 }
 
-.ie8 a:focus {
-	outline: #5b9dd9 solid 1px;
-}
-
 p {
 	line-height: 1.5;
 }
@@ -78,23 +74,54 @@ p {
 	padding: 0;
 }
 
-.login .password-input-wrapper {
-    display: table;
-}
-
-.login .input.password-input {
-    display: table-cell;
-    margin: 0;
+.login .input::-ms-clear {
+	display: none;
 }
 
 .login .pw-weak {
     margin-bottom: 15px;
 }
 
-.login .button.button-secondary {
-    display: table-cell;
-    border-radius: 0;
-    vertical-align: middle;
+.login .button.wp-hide-pw {
+	background: transparent;
+	border: 1px solid transparent;
+	box-shadow: none;
+	font-size: 14px;
+	line-height: 2;
+	height: auto;
+	margin: 0;
+	padding: 5px 9px;
+	position: absolute;
+	right: 0;
+	top: 3px;
+}
+
+.login .button.wp-hide-pw:hover {
+	background: transparent;
+}
+
+.login .button.wp-hide-pw:focus {
+	background: transparent;
+	border-color: #5b9dd9;
+	box-shadow: 0 0 3px rgba(0, 115, 170, 0.8);
+}
+
+.login .button.wp-hide-pw:active {
+	background: transparent;
+	box-shadow: none;
+	transform: none;
+}
+
+.login .button.wp-hide-pw .dashicons {
+	top: 4px;
+}
+
+.login .wp-pwd {
+	position: relative;
+}
+
+.no-js .hide-if-no-js {
+	display: none;
 }
 
 .login form {
@@ -134,6 +161,12 @@ p {
 .login form .forgetmenot label {
 	font-size: 12px;
 	line-height: 19px;
+}
+
+.login .forgetmenot label,
+.login .pw-weak label {
+	line-height: 1.5;
+	vertical-align: baseline;
 }
 
 .login h1 {
@@ -219,11 +252,18 @@ p {
 }
 
 .login form .input,
-.login input[type="text"] {
+.login input[type="text"],
+.login input[type="password"] {
 	font-size: 24px;
 	width: 100%;
 	padding: 3px;
 	margin: 2px 6px 16px 0;
+}
+
+.js.login input.password-input,
+.js.login-action-rp form .input,
+.js.login-action-rp input[type="text"] {
+	padding-right: 45px;
 }
 
 .login form .input,
@@ -232,14 +272,9 @@ p {
 	background: #fbfbfb;
 }
 
-.ie7 .login form .input,
-.ie8 .login form .input {
-	font-family: sans-serif;
-}
-
-.login-action-rp input[type="text"] {
-	box-shadow: none;
-	margin: 0;
+.js.login-action-rp input[type="text"],
+.js.login-action-rp input[type="password"] {
+	margin-bottom: 0;
 }
 
 .login #pass-strength-result {
