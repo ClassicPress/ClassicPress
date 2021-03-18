@@ -234,13 +234,15 @@ function update_core($from, $to) {
 	$check_is_writable = array();
 
 	// Check to see which files don't really need updating - only available for 3.7 and higher
-	if ( function_exists( 'get_core_checksums' ) ) {
+	if ( function_exists( 'cp_get_core_checksums' ) ) {
 		// Find the local version of the working directory
 		$working_dir_local = WP_CONTENT_DIR . '/upgrade/' . basename( $from ) . $distro;
 
-		$checksums = get_core_checksums( $wp_version, isset( $wp_local_package ) ? $wp_local_package : 'en_US' );
-		if ( is_array( $checksums ) && isset( $checksums[ $wp_version ] ) )
-			$checksums = $checksums[ $wp_version ]; // Compat code for 3.7-beta2
+		$checksums = cp_get_core_checksums( $cp_version );
+
+		if ( is_array( $checksums ) && isset( $checksums[ $cp_version ] ) )
+			$checksums = $checksums[ $cp_version ]; // Compat code for 3.7-beta2
+
 		if ( is_array( $checksums ) ) {
 			foreach ( $checksums as $file => $checksum ) {
 				if ( 'wp-content' == substr( $file, 0, 10 ) )
@@ -494,6 +496,51 @@ function update_core($from, $to) {
 		delete_site_option( 'auto_core_update_failed' );
 
 	return $cp_version;
+}
+
+/**
+ * Gets and caches the checksums for the given version of ClassicPress.
+ * This uses the ClassicPress checksum API, not the WordPress API
+ *
+ * @since CP-1.3.0
+ *
+ * @param string $version Version string to query.
+ * @return bool|array False on failure. An array of checksums on success.
+ */
+function cp_get_core_checksums( $version) {
+	$url = 'https://api-v1-test.classicpress.net/checksums/' . $version . '.json';
+
+	$options = array(
+		'timeout' => wp_doing_cron() ? 30 : 3,
+	);
+
+	$response = wp_remote_get( $url, $options );
+
+	if ( is_wp_error( $response ) ) {
+		trigger_error(
+			sprintf(
+				/* translators: %s: support forums URL */
+				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'https://forums.classicpress.net/c/support' )
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
+			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
+		);
+
+		// Retry request
+		$response = wp_remote_get( $url, $options );
+	}
+
+	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+		return false;
+	}
+
+	$body = trim( wp_remote_retrieve_body( $response ) );
+	$body = json_decode( $body, true );
+
+	if ( ! is_array( $body ) || ! isset( $body['checksums'] ) || ! is_array( $body['checksums'] ) )
+		return false;
+
+	return $body['checksums'];
 }
 
 /**
