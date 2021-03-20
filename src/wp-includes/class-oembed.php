@@ -113,6 +113,7 @@ class WP_oEmbed {
 			'#https?://www\.someecards\.com/.+-cards/.+#i'                        => array( 'https://www.someecards.com/v2/oembed/',                 true  ),
 			'#https?://www\.someecards\.com/usercards/viewcard/.+#i'              => array( 'https://www.someecards.com/v2/oembed/',                 true  ),
 			'#https?://some\.ly\/.+#i'                                            => array( 'https://www.someecards.com/v2/oembed/',                 true  ),
+			'#https?://(www\.)?tiktok\.com/.*/video/.*#i'                         => array( 'https://www.tiktok.com/oembed',                         true  ),
 		);
 
 		if ( ! empty( self::$early_providers['add'] ) ) {
@@ -192,6 +193,7 @@ class WP_oEmbed {
 		 * | Amazon       | z.cn                              |      Yes       | 4.9.0   |
 		 * | Someecards   | someecards.com                    |      Yes       | 4.9.0   |
 		 * | Someecards   | some.ly                           |      Yes       | 4.9.0   |
+		 * | TikTok       | tiktok.com                        |      Yes       | 5.4.0   |
 		 *
 		 * No longer supported providers:
 		 *
