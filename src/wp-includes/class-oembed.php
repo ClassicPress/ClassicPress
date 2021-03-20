@@ -207,7 +207,7 @@ class WP_oEmbed {
 		 * | Photobucket  | photobucket.com      |      No        | 2.9.0     | 5.1.0     |
 		 * | Funny or Die | funnyordie.com       |      Yes       | 3.0.0     | 5.1.0     |
 		 * | CollegeHumor | collegehumor.com     |      Yes       | 4.0.0     | 5.3.1     |
-		 * | Hulu         | hulu.com             |      Yes       | 2.9.0     | 5.4.2     |
+		 * | Hulu         | hulu.com             |      Yes       | 2.9.0     | 5.5.0     |
 		 *
 		 * @see wp_oembed_add_provider()
 		 *
