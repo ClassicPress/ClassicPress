@@ -72,7 +72,6 @@ class WP_oEmbed {
 			'#https?://(www\.)?twitter\.com/i/moments/.*#i'                       => array( 'https://publish.twitter.com/oembed',                    true  ),
 			'#https?://(www\.)?soundcloud\.com/.*#i'                              => array( 'https://soundcloud.com/oembed',                         true  ),
 			'#https?://(.+?\.)?slideshare\.net/.*#i'                              => array( 'https://www.slideshare.net/api/oembed/2',               true  ),
-			'#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'                      => array( 'https://api.instagram.com/oembed',                      true  ),
 			'#https?://(open|play)\.spotify\.com/.*#i'                            => array( 'https://embed.spotify.com/oembed/',                     true  ),
 			'#https?://(.+\.)?imgur\.com/.*#i'                                    => array( 'https://api.imgur.com/oembed',                          true  ),
 			'#https?://(www\.)?meetu(\.ps|p\.com)/.*#i'                           => array( 'https://api.meetup.com/oembed',                         true  ),
@@ -88,16 +87,6 @@ class WP_oEmbed {
 			'#https?://videopress\.com/v/.*#'                                     => array( 'https://public-api.wordpress.com/oembed/?for=' . $host, true  ),
 			'#https?://(www\.)?reddit\.com/r/[^/]+/comments/.*#i'                 => array( 'https://www.reddit.com/oembed',                         true  ),
 			'#https?://(www\.)?speakerdeck\.com/.*#i'                             => array( 'https://speakerdeck.com/oembed.{format}',               true  ),
-			'#https?://www\.facebook\.com/.*/posts/.*#i'                          => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/.*/activity/.*#i'                       => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/.*/photos/.*#i'                         => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/photo(s/|\.php).*#i'                    => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/permalink\.php.*#i'                     => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/media/.*#i'                             => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/questions/.*#i'                         => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/notes/.*#i'                             => array( 'https://www.facebook.com/plugins/post/oembed.json/',    true  ),
-			'#https?://www\.facebook\.com/.*/videos/.*#i'                         => array( 'https://www.facebook.com/plugins/video/oembed.json/',   true  ),
-			'#https?://www\.facebook\.com/video\.php.*#i'                         => array( 'https://www.facebook.com/plugins/video/oembed.json/',   true  ),
 			'#https?://(www\.)?screencast\.com/.*#i'                              => array( 'https://api.screencast.com/external/oembed',            true  ),
 			'#https?://([a-z0-9-]+\.)?amazon\.(com|com\.mx|com\.br|ca)/.*#i'      => array( 'https://read.amazon.com/kp/api/oembed',                 true  ),
 			'#https?://([a-z0-9-]+\.)?amazon\.(co\.uk|de|fr|it|es|in|nl|ru)/.*#i' => array( 'https://read.amazon.co.uk/kp/api/oembed',               true  ),
@@ -150,8 +139,6 @@ class WP_oEmbed {
 		 * | SmugMug      | smugmug.com                       |      Yes       | 3.0.0   |
 		 * | YouTube      | youtu.be                          |      Yes       | 3.0.0   |
 		 * | Twitter      | twitter.com                       |      Yes       | 3.4.0   |
-		 * | Instagram    | instagram.com                     |      Yes       | 3.5.0   |
-		 * | Instagram    | instagr.am                        |      Yes       | 3.5.0   |
 		 * | Slideshare   | slideshare.net                    |      Yes       | 3.5.0   |
 		 * | SoundCloud   | soundcloud.com                    |      Yes       | 3.5.0   |
 		 * | Dailymotion  | dai.ly                            |      Yes       | 3.6.0   |
@@ -177,7 +164,6 @@ class WP_oEmbed {
 		 * | Speaker Deck | speakerdeck.com                   |      Yes       | 4.4.0   |
 		 * | Twitter      | twitter.com/timelines             |      Yes       | 4.5.0   |
 		 * | Twitter      | twitter.com/moments               |      Yes       | 4.5.0   |
-		 * | Facebook     | facebook.com                      |      Yes       | 4.7.0   |
 		 * | Twitter      | twitter.com/user                  |      Yes       | 4.7.0   |
 		 * | Twitter      | twitter.com/likes                 |      Yes       | 4.7.0   |
 		 * | Twitter      | twitter.com/lists                 |      Yes       | 4.7.0   |
@@ -208,6 +194,9 @@ class WP_oEmbed {
 		 * | Funny or Die | funnyordie.com       |      Yes       | 3.0.0     | 5.1.0     |
 		 * | CollegeHumor | collegehumor.com     |      Yes       | 4.0.0     | 5.3.1     |
 		 * | Hulu         | hulu.com             |      Yes       | 2.9.0     | 5.5.0     |
+		 * | Instagram    | instagram.com        |      Yes       | 3.5.0     | 5.5.2     |
+		 * | Instagram    | instagr.am           |      Yes       | 3.5.0     | 5.5.2     |
+		 * | Facebook     | facebook.com         |      Yes       | 4.7.0     | 5.5.2     |
 		 *
 		 * @see wp_oembed_add_provider()
 		 *
