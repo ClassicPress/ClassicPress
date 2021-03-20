@@ -78,7 +78,6 @@ class WP_oEmbed {
 			'#https?://(.+\.)?imgur\.com/.*#i'                                    => array( 'https://api.imgur.com/oembed',                          true  ),
 			'#https?://(www\.)?meetu(\.ps|p\.com)/.*#i'                           => array( 'https://api.meetup.com/oembed',                         true  ),
 			'#https?://(www\.)?issuu\.com/.+/docs/.+#i'                           => array( 'https://issuu.com/oembed_wp',                           true  ),
-			'#https?://(www\.)?collegehumor\.com/video/.*#i'                      => array( 'https://www.collegehumor.com/oembed.{format}',          true  ),
 			'#https?://(www\.)?mixcloud\.com/.*#i'                                => array( 'https://www.mixcloud.com/oembed',                       true  ),
 			'#https?://(www\.|embed\.)?ted\.com/talks/.*#i'                       => array( 'https://www.ted.com/services/v1/oembed.{format}',       true  ),
 			'#https?://(www\.)?(animoto|video214)\.com/play/.*#i'                 => array( 'https://animoto.com/oembeds/create',                    true  ),
@@ -164,7 +163,6 @@ class WP_oEmbed {
 		 * | Meetup.com   | meetu.ps                          |      Yes       | 3.9.0   |
 		 * | Animoto      | animoto.com                       |      Yes       | 4.0.0   |
 		 * | Animoto      | video214.com                      |      Yes       | 4.0.0   |
-		 * | CollegeHumor | collegehumor.com                  |      Yes       | 4.0.0   |
 		 * | Issuu        | issuu.com                         |      Yes       | 4.0.0   |
 		 * | Mixcloud     | mixcloud.com                      |      Yes       | 4.0.0   |
 		 * | Polldaddy    | poll.fm                           |      Yes       | 4.0.0   |
@@ -208,6 +206,7 @@ class WP_oEmbed {
 		 * | Vine         | vine.co              |      Yes       | 4.1.0     | 4.9.0     |
 		 * | Photobucket  | photobucket.com      |      No        | 2.9.0     | 5.1.0     |
 		 * | Funny or Die | funnyordie.com       |      Yes       | 3.0.0     | 5.1.0     |
+		 * | CollegeHumor | collegehumor.com     |      Yes       | 4.0.0     | 5.3.1     |
 		 *
 		 * @see wp_oembed_add_provider()
 		 *
