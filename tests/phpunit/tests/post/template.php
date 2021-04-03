@@ -14,6 +14,7 @@ class Tests_Post_Template extends WP_UnitTestCase {
 
 		setup_postdata( get_post( $post_id ) );
 
+<<<<<<< HEAD
 		$permalink = sprintf( '<a href="%s">', get_permalink() );
 		$page2 = _wp_link_page( 2 );
 		$page3 = _wp_link_page( 3 );
@@ -37,6 +38,51 @@ class Tests_Post_Template extends WP_UnitTestCase {
 		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '',
 			'link_before' => '<em>', 'link_after' => '</em>'
 		) );
+=======
+		$permalink = sprintf( '<a href="%s" class="post-page-numbers">', get_permalink() );
+		$page2     = _wp_link_page( 2 );
+		$page3     = _wp_link_page( 3 );
+
+		$expected = '<p class="post-nav-links">Pages: <span class="post-page-numbers current" aria-current="page">1</span> ' . $page2 . '2</a> ' . $page3 . '3</a></p>';
+		$output   = wp_link_pages( array( 'echo' => 0 ) );
+
+		$this->assertEquals( $expected, $output );
+
+		$before_after = " <span class=\"post-page-numbers current\" aria-current=\"page\">1</span> {$page2}2</a> {$page3}3</a>";
+		$output       = wp_link_pages(
+			array(
+				'echo'   => 0,
+				'before' => '',
+				'after'  => '',
+			)
+		);
+
+		$this->assertEquals( $before_after, $output );
+
+		$separator = " <span class=\"post-page-numbers current\" aria-current=\"page\">1</span>{$page2}2</a>{$page3}3</a>";
+		$output    = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'before'    => '',
+				'after'     => '',
+				'separator' => '',
+			)
+		);
+
+		$this->assertEquals( $separator, $output );
+
+		$link   = " <span class=\"post-page-numbers current\" aria-current=\"page\"><em>1</em></span>{$page2}<em>2</em></a>{$page3}<em>3</em></a>";
+		$output = wp_link_pages(
+			array(
+				'echo'        => 0,
+				'before'      => '',
+				'after'       => '',
+				'separator'   => '',
+				'link_before' => '<em>',
+				'link_after'  => '</em>',
+			)
+		);
+>>>>>>> 1258d1d9d2... Accessibility: use `aria-current` for the paginated post links output by `wp_link_pages()`.
 
 		$this->assertEquals( $link, $output );
 
@@ -63,6 +109,7 @@ class Tests_Post_Template extends WP_UnitTestCase {
 		$this->assertEquals( $next_prev_link, $output );
 
 		$GLOBALS['page'] = 1;
+<<<<<<< HEAD
 		$separator = "<p>Pages: 1 | {$page2}2</a> | {$page3}3</a></p>";
 		$output = wp_link_pages( array( 'echo' => 0, 'separator' => ' | ' ) );
 
@@ -72,6 +119,28 @@ class Tests_Post_Template extends WP_UnitTestCase {
 		$output = wp_link_pages( array( 'echo' => 0, 'separator' => ' | ', 'before' => '', 'after' => '',
 			'pagelink' => 'Page %'
 		) );
+=======
+		$separator       = "<p class=\"post-nav-links\">Pages: <span class=\"post-page-numbers current\" aria-current=\"page\">1</span> | {$page2}2</a> | {$page3}3</a></p>";
+		$output          = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'separator' => ' | ',
+			)
+		);
+
+		$this->assertEquals( $separator, $output );
+
+		$pagelink = " <span class=\"post-page-numbers current\" aria-current=\"page\">Page 1</span> | {$page2}Page 2</a> | {$page3}Page 3</a>";
+		$output   = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'separator' => ' | ',
+				'before'    => '',
+				'after'     => '',
+				'pagelink'  => 'Page %',
+			)
+		);
+>>>>>>> 1258d1d9d2... Accessibility: use `aria-current` for the paginated post links output by `wp_link_pages()`.
 
 		$this->assertEquals( $pagelink, $output );
 	}
