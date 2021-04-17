@@ -242,9 +242,6 @@ function update_core($from, $to) {
 
 		$checksums = cp_get_core_checksums( $cp_version );
 
-		if ( is_array( $checksums ) && isset( $checksums[ $cp_version ] ) )
-			$checksums = $checksums[ $cp_version ]; // Compat code for 3.7-beta2
-
 		if ( is_array( $checksums ) ) {
 			foreach ( $checksums as $file => $checksum ) {
 				if ( 'wp-content' == substr( $file, 0, 10 ) )
