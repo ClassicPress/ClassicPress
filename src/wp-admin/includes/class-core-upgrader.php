@@ -141,37 +141,14 @@ class Core_Upgrader extends WP_Upgrader {
 
 		$wp_dir = trailingslashit($wp_filesystem->abspath());
 
-		$partial = true;
-		if ( $parsed_args['do_rollback'] )
-			$partial = false;
-		elseif ( $parsed_args['pre_check_md5'] && ! $this->check_files() )
-			$partial = false;
-
-		/*
-		 * If partial update is returned from the API, use that, unless we're doing
-		 * a reinstallation. If we cross the new_bundled version number, then use
-		 * the new_bundled zip. Don't though if the constant is set to skip bundled items.
-		 * If the API returns a no_content zip, go with it. Finally, default to the full zip.
-		 */
-		if ( $parsed_args['do_rollback'] && $current->packages->rollback )
-			$to_download = 'rollback';
-		elseif ( $current->packages->partial && 'reinstall' != $current->response && $wp_version == $current->partial_version && $partial )
-			$to_download = 'partial';
-		elseif ( $current->packages->new_bundled && version_compare( $wp_version, $current->new_bundled, '<' )
-			&& ( ! defined( 'CORE_UPGRADE_SKIP_NEW_BUNDLED' ) || ! CORE_UPGRADE_SKIP_NEW_BUNDLED ) )
-			$to_download = 'new_bundled';
-		elseif ( $current->packages->no_content )
-			$to_download = 'no_content';
-		else
-			$to_download = 'full';
-
 		// Lock to prevent multiple Core Updates occurring
 		$lock = WP_Upgrader::create_lock( 'core_updater', 15 * MINUTE_IN_SECONDS );
 		if ( ! $lock ) {
 			return new WP_Error( 'locked', $this->strings['locked'] );
 		}
 
-		$download = $this->download_package( $current->packages->$to_download );
+		// ClassicPress only supports the "full" upgrade package.
+		$download = $this->download_package( $current->packages->full );
 		if ( is_wp_error( $download ) ) {
 			WP_Upgrader::release_lock( 'core_updater' );
 			return $download;
