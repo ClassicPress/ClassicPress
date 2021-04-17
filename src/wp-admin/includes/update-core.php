@@ -233,7 +233,9 @@ function update_core($from, $to) {
 	$skip = array( 'wp-content', 'wp-includes/version.php' );
 	$check_is_writable = array();
 
-	// Check to see which files don't really need updating - only available for 3.7 and higher
+	// Check to see which files don't really need updating.  The
+	// function_exists check is not necessary, but we'll keep it to preserve
+	// the code structure.
 	if ( function_exists( 'cp_get_core_checksums' ) ) {
 		// Find the local version of the working directory
 		$working_dir_local = WP_CONTENT_DIR . '/upgrade/' . basename( $from ) . $distro;
@@ -499,16 +501,18 @@ function update_core($from, $to) {
 }
 
 /**
- * Gets and caches the checksums for the given version of ClassicPress.
- * This uses the ClassicPress checksum API, not the WordPress API
+ * Gets the checksums for the given version of ClassicPress.
  *
- * @since CP-1.3.0
+ * This function is a duplicate copy of `get_core_checksums()` to ensure the
+ * new code is loaded and used when updating from a pre-1.3.0 version.
+ *
+ * @since 1.3.0
  *
  * @param string $version Version string to query.
  * @return bool|array False on failure. An array of checksums on success.
  */
-function cp_get_core_checksums( $version) {
-	$url = 'https://api-v1-test.classicpress.net/checksums/' . $version . '.json';
+function cp_get_core_checksums( $version ) {
+	$url = 'https://api-v1.classicpress.net/checksums/md5/' . $version . '.json';
 
 	$options = array(
 		'timeout' => wp_doing_cron() ? 30 : 3,
@@ -537,8 +541,13 @@ function cp_get_core_checksums( $version) {
 	$body = trim( wp_remote_retrieve_body( $response ) );
 	$body = json_decode( $body, true );
 
-	if ( ! is_array( $body ) || ! isset( $body['checksums'] ) || ! is_array( $body['checksums'] ) )
+	if (
+		! is_array( $body ) ||
+		! isset( $body['checksums'] ) ||
+		! is_array( $body['checksums'] )
+	) {
 		return false;
+	}
 
 	return $body['checksums'];
 }
