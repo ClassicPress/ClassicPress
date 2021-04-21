@@ -33,7 +33,7 @@
 
 	};
 
-	var manage = function() { // ClassicPress: defer loading via require()
+	var manage$1 = function() { // ClassicPress: defer loading via require()
 
 	var MediaFrame = wp.media.view.MediaFrame,
 		Library = wp.media.controller.Library,
@@ -381,7 +381,7 @@
 
 	};
 
-	var manage$1 = function() { // ClassicPress: defer loading via require()
+	var manage = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.MediaFrame.Manage.Router
@@ -949,9 +949,9 @@
 	var media = wp.media;
 
 	media.controller.EditAttachmentMetadata = editAttachmentMetadata();
-	media.view.MediaFrame.Manage = manage();
+	media.view.MediaFrame.Manage = manage$1();
 	media.view.Attachment.Details.TwoColumn = detailsTwoColumn();
-	media.view.MediaFrame.Manage.Router = manage$1();
+	media.view.MediaFrame.Manage.Router = manage();
 	media.view.EditImage.Details = editImageDetails();
 	media.view.MediaFrame.EditAttachments = editAttachments();
 	media.view.SelectModeToggleButton = selectModeToggle();
