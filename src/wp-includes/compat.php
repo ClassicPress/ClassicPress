@@ -435,6 +435,7 @@ if ( ! function_exists( 'random_int' ) ) {
 	require ABSPATH . WPINC . '/random_compat/random.php';
 }
 
+<<<<<<< HEAD
 if ( ! function_exists( 'array_replace_recursive' ) ) :
 	/**
 	 * PHP-agnostic version of {@link array_replace_recursive()}.
@@ -488,6 +489,8 @@ if ( ! function_exists( 'array_replace_recursive' ) ) :
 	}
 endif;
 
+=======
+>>>>>>> f3b826dd74... Code Modernisation: Remove the `array_replace_recursive()` polyfill.
 /**
  * Polyfill for the SPL autoloader. In PHP 5.2 (but not 5.3 and later), SPL can
  * be disabled, and PHP 7.2 raises notices if the compiler finds an __autoload()
