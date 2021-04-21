@@ -9,7 +9,7 @@
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "@lodder/grunt-postcss": "2.0.4",
+    "@lodder/grunt-postcss": "3.0.1",
     "@rollup/plugin-commonjs": "18.0.0",
     "autoprefixer": "9.8.6",
     "grunt": "1.3.0",
