@@ -287,13 +287,9 @@ class Services_JSON
     */
     function encodeUnsafe($var)
     {
-<<<<<<< HEAD
-        // see bug https://core.trac.wordpress.org/ticket/16908 - regarding numeric locale printing
-=======
         _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
 
-        // see bug #16908 - regarding numeric locale printing
->>>>>>> 080e7a609e... Code Modernization: Deprecate the `Services_JSON` and `Services_JSON_Error` classes.
+        // see bug https://core.trac.wordpress.org/ticket/16908 - regarding numeric locale printing
         $lc = setlocale(LC_NUMERIC, 0);
         setlocale(LC_NUMERIC, 'C');
         $ret = $this->_encode($var);
@@ -314,10 +310,7 @@ class Services_JSON
     */
     function _encode($var)
     {
-<<<<<<< HEAD
-=======
         _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
->>>>>>> 080e7a609e... Code Modernization: Deprecate the `Services_JSON` and `Services_JSON_Error` classes.
 
         switch (gettype($var)) {
             case 'boolean':
@@ -383,7 +376,7 @@ class Services_JSON
                                 $ascii .= '?';
                                 break;
                             }
-                            
+
                             $char = pack('C*', $ord_var_c, ord($var[$c + 1]));
                             $c += 1;
                             $utf16 = $this->utf82utf16($char);
