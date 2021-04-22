@@ -3030,7 +3030,7 @@ class WP_Query {
 			if ( is_array( $this->posts ) ) {
 				$this->found_posts = count( $this->posts );
 			} else {
-				if ( null === $this->posts ) {  
+				if ( null === $this->posts ) {
 					$this->found_posts = 0;
 				} else {
 					$this->found_posts = 1;
@@ -3980,20 +3980,17 @@ class WP_Query {
 		$more         = $elements['more'];
 		$numpages     = $elements['numpages'];
 
-<<<<<<< HEAD
-=======
 		/**
 		 * Fires once the post data has been set up.
 		 *
-		 * @since 2.8.0
-		 * @since 4.1.0 Introduced `$this` parameter.
+		 * @since WP-2.8.0
+		 * @since WP-4.1.0 Introduced `$this` parameter.
 		 *
 		 * @param WP_Post  $post The Post object (passed by reference).
 		 * @param WP_Query $this The current Query object (passed by reference).
 		 */
 		do_action_ref_array( 'the_post', array( &$post, &$this ) );
 
->>>>>>> e8176a19e2 (Posts, Post Types: Avoid a PHP warning when `get_the_content()` is called outside of the loop.)
 		return true;
 	}
 
