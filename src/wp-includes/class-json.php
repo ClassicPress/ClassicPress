@@ -927,22 +927,14 @@ class Services_JSON
     }
 
     /**
-<<<<<<< HEAD
-    * Calculates length of string in bytes
-    * @param string
-    * @return integer length
-    */
-    function strlen8( $str )
-=======
      * Calculates length of string in bytes
      *
-     * @deprecated 5.3.0 Use the PHP native JSON extension instead.
+     * @deprecated WP-5.3.0 Use the PHP native JSON extension instead.
      *
      * @param string
      * @return integer length
      */
-    function strlen8( $str ) 
->>>>>>> 80b4dbf0d0... Docs: Add missing `@deprecated` tags.
+    function strlen8( $str )
     {
         _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
 
@@ -953,26 +945,16 @@ class Services_JSON
     }
 
     /**
-<<<<<<< HEAD
-    * Returns part of a string, interpreting $start and $length as number of bytes.
-    * @param string
-    * @param integer start
-    * @param integer length
-    * @return integer length
-    */
-    function substr8( $string, $start, $length=false )
-=======
      * Returns part of a string, interpreting $start and $length as number of bytes.
      *
-     * @deprecated 5.3.0 Use the PHP native JSON extension instead.
+     * @deprecated WP-5.3.0 Use the PHP native JSON extension instead.
      *
      * @param string
      * @param integer start
      * @param integer length
      * @return integer length
      */
-    function substr8( $string, $start, $length=false ) 
->>>>>>> 80b4dbf0d0... Docs: Add missing `@deprecated` tags.
+    function substr8( $string, $start, $length=false )
     {
         _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
 
