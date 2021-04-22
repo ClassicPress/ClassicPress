@@ -5,10 +5,13 @@
  *
  * See https://core.trac.wordpress.org/ticket/41134
  *
+ * @deprecated 5.3.0 No longer needed as the minimum PHP requirement has moved beyond PHP 5.3.
+ *
  * @package PHP
  * @access private
  */
 
+<<<<<<< HEAD
 if ( ! function_exists( 'spl_autoload_register' ) ) {
 	$_wp_spl_autoloaders = array();
 
@@ -98,3 +101,6 @@ if ( ! function_exists( 'spl_autoload_register' ) ) {
 		return $GLOBALS['_wp_spl_autoloaders'];
 	}
 }
+=======
+_deprecated_file( basename( __FILE__ ), '5.3.0', null, 'SPL can no longer be disabled as of PHP 5.3.' );
+>>>>>>> 593c402dc7... Code Modernisation: Remove the SPL autoloader polyfill.
