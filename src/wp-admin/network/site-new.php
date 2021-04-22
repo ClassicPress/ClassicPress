@@ -191,11 +191,8 @@ require( ABSPATH . 'wp-admin/admin-header.php' );
 <h1 id="add-new-site"><?php _e( 'Add New Site' ); ?></h1>
 <?php
 if ( ! empty( $messages ) ) {
-	foreach ( $messages as $msg )
+	foreach ( $messages as $msg ) {
 		echo '<div id="message" class="updated notice is-dismissible"><p>' . $msg . '</p></div>';
-<<<<<<< HEAD
-} ?>
-=======
 	}
 }
 ?>
@@ -206,44 +203,24 @@ printf(
 	'<span class="required">*</span>'
 );
 ?></p>
->>>>>>> 77fbbbdbec... Accessibility: Networks and Sites: mark the New Site required form fields as required.
 <form method="post" action="<?php echo network_admin_url( 'site-new.php?action=add-site' ); ?>" novalidate="novalidate">
 <?php wp_nonce_field( 'add-blog', '_wpnonce_add-blog' ) ?>
 	<table class="form-table">
 		<tr class="form-field form-required">
-<<<<<<< HEAD
-			<th scope="row"><label for="site-address"><?php _e( 'Site Address (URL)' ) ?></label></th>
-			<td>
-			<?php if ( is_subdomain_install() ) { ?>
-				<input name="blog[domain]" type="text" class="regular-text" id="site-address" aria-describedby="site-address-desc" autocapitalize="none" autocorrect="off"/><span class="no-break">.<?php echo preg_replace( '|^www\.|', '', get_network()->domain ); ?></span>
-			<?php } else {
-				echo get_network()->domain . get_network()->path ?><input name="blog[domain]" type="text" class="regular-text" id="site-address" aria-describedby="site-address-desc"  autocapitalize="none" autocorrect="off" />
-			<?php }
-=======
 			<th scope="row"><label for="site-address"><?php _e( 'Site Address (URL)' ); ?> <span class="required">*</span></label></th>
 			<td>
 			<?php if ( is_subdomain_install() ) { ?>
 				<input name="blog[domain]" type="text" class="regular-text" id="site-address" aria-describedby="site-address-desc" autocapitalize="none" autocorrect="off" required /><span class="no-break">.<?php echo preg_replace( '|^www\.|', '', get_network()->domain ); ?></span>
-			<?php
-} else {
-	echo get_network()->domain . get_network()->path
-	?>
-				<input name="blog[domain]" type="text" class="regular-text" id="site-address" aria-describedby="site-address-desc" autocapitalize="none" autocorrect="off" required />
-<?php
-}
->>>>>>> 77fbbbdbec... Accessibility: Networks and Sites: mark the New Site required form fields as required.
+			<?php } else {
+				echo get_network()->domain . get_network()->path ?><input name="blog[domain]" type="text" class="regular-text" id="site-address" aria-describedby="site-address-desc"  autocapitalize="none" autocorrect="off" required />
+			<?php }
 			echo '<p class="description" id="site-address-desc">' . __( 'Only lowercase letters (a-z), numbers, and hyphens are allowed.' ) . '</p>';
 			?>
 			</td>
 		</tr>
 		<tr class="form-field form-required">
-<<<<<<< HEAD
-			<th scope="row"><label for="site-title"><?php _e( 'Site Title' ) ?></label></th>
-			<td><input name="blog[title]" type="text" class="regular-text" id="site-title" /></td>
-=======
 			<th scope="row"><label for="site-title"><?php _e( 'Site Title' ); ?> <span class="required">*</span></label></th>
 			<td><input name="blog[title]" type="text" class="regular-text" id="site-title" required /></td>
->>>>>>> 77fbbbdbec... Accessibility: Networks and Sites: mark the New Site required form fields as required.
 		</tr>
 		<?php
 		$languages    = get_available_languages();
@@ -277,19 +254,11 @@ printf(
 			</tr>
 		<?php endif; // Languages. ?>
 		<tr class="form-field form-required">
-<<<<<<< HEAD
-			<th scope="row"><label for="admin-email"><?php _e( 'Admin Email' ) ?></label></th>
-			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" /></td>
-		</tr>
-		<tr class="form-field">
-			<td colspan="2"><?php _e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and a link to set the password will be mailed to this email address.' ) ?></td>
-=======
 			<th scope="row"><label for="admin-email"><?php _e( 'Admin Email' ); ?> <span class="required">*</span></label></th>
 			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" aria-describedby="site-admin-email" required /></td>
 		</tr>
 		<tr class="form-field">
 			<td colspan="2"><p id="site-admin-email"><?php _e( 'A new user will be created if the above email address is not in the database.' ); ?><br /><?php _e( 'The username and a link to set the password will be mailed to this email address.' ); ?></p></td>
->>>>>>> 77fbbbdbec... Accessibility: Networks and Sites: mark the New Site required form fields as required.
 		</tr>
 	</table>
 
