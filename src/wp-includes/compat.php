@@ -216,6 +216,7 @@ function _mb_strlen( $str, $encoding = null ) {
 	return --$count;
 }
 
+<<<<<<< HEAD
 if ( !function_exists('hash_hmac') ):
 /**
  * Compat function to mimic hash_hmac().
@@ -236,6 +237,35 @@ if ( !function_exists('hash_hmac') ):
 function hash_hmac($algo, $data, $key, $raw_output = false) {
 	return _hash_hmac($algo, $data, $key, $raw_output);
 }
+=======
+if ( ! function_exists( 'hash_hmac' ) ) :
+	/**
+	 * Compat function to mimic hash_hmac().
+	 *
+	 * The Hash extension is bundled with PHP by default since PHP 5.1.2.
+	 * However, the extension may be explicitly disabled on select servers.
+	 * As of PHP 7.4.0, the Hash extension is a core PHP extension and can no
+	 * longer be disabled.
+	 * I.e. when PHP 7.4.0 becomes the minimum requirement, this polyfill
+	 * and the associated `_hash_hmac()` function can be safely removed.
+	 *
+	 * @ignore
+	 * @since 3.2.0
+	 *
+	 * @see _hash_hmac()
+	 *
+	 * @param string $algo       Hash algorithm. Accepts 'md5' or 'sha1'.
+	 * @param string $data       Data to be hashed.
+	 * @param string $key        Secret key to use for generating the hash.
+	 * @param bool   $raw_output Optional. Whether to output raw binary data (true),
+	 *                           or lowercase hexits (false). Default false.
+	 * @return string|false The hash in output determined by `$raw_output`. False if `$algo`
+	 *                      is unknown or invalid.
+	 */
+	function hash_hmac( $algo, $data, $key, $raw_output = false ) {
+		return _hash_hmac( $algo, $data, $key, $raw_output );
+	}
+>>>>>>> e6c750b55c... Code Modernisation: Document when the Hash polyfills can be removed.
 endif;
 
 /**
@@ -321,6 +351,7 @@ if ( !function_exists('json_decode') ) {
 }
 
 if ( ! function_exists( 'hash_equals' ) ) :
+<<<<<<< HEAD
 /**
  * Timing attack safe string comparison
  *
@@ -342,6 +373,39 @@ function hash_equals( $a, $b ) {
 		return false;
 	}
 	$result = 0;
+=======
+	/**
+	 * Timing attack safe string comparison
+	 *
+	 * Compares two strings using the same time whether they're equal or not.
+	 *
+	 * Note: It can leak the length of a string when arguments of differing length are supplied.
+	 *
+	 * This function was added in PHP 5.6.
+	 * However, the Hash extension may be explicitly disabled on select servers.
+	 * As of PHP 7.4.0, the Hash extension is a core PHP extension and can no
+	 * longer be disabled.
+	 * I.e. when PHP 7.4.0 becomes the minimum requirement, this polyfill
+	 * can be safely removed.
+	 *
+	 * @since 3.9.2
+	 *
+	 * @param string $a Expected string.
+	 * @param string $b Actual, user supplied, string.
+	 * @return bool Whether strings are equal.
+	 */
+	function hash_equals( $a, $b ) {
+		$a_length = strlen( $a );
+		if ( $a_length !== strlen( $b ) ) {
+			return false;
+		}
+		$result = 0;
+
+		// Do not attempt to "optimize" this.
+		for ( $i = 0; $i < $a_length; $i++ ) {
+			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
+		}
+>>>>>>> e6c750b55c... Code Modernisation: Document when the Hash polyfills can be removed.
 
 	// Do not attempt to "optimize" this.
 	for ( $i = 0; $i < $a_length; $i++ ) {
