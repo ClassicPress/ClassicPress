@@ -89,9 +89,9 @@ There are some changes that we already know we want to backport because they fit
 - If there are merge conflicts during the backport, check if they have been resolved correctly by comparing the final changes from the full PR against the corresponding WP changeset(s). Remember to fix these **in a separate commit**. If you cannot resolve the conflicts, ask for help in the [Core slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
 
 ### Making a Backport PR.
-When you're ready to backport a code change:
+When you're ready to backport a code change, make a new branch to your ClassicPress fork:
 
-- Identify the WordPress **changeset number** that you'd like to port such as 43123.
+- Identify the WordPress **changeset number** that you'd like to port such as `43123`.
 - Run `bin/backport-wp-commit.sh` script in your terminal/command prompt.
 
 ```
@@ -104,10 +104,12 @@ bin/backport-wp-commit.sh "changeset-number"
 ```
 bin/backport-wp-commit.sh -c "changeset-number"
 ```
-to apply all the changesets to the same branch.
+to apply all the changesets to the same branch. 
+
+Then push your branch for review as a PR.
 
 Using this script for all backports saves time for you and for the maintainers. As it uses a standardized format for commit messages making it possible for us to track which WordPress changes we've already included.
 
-**Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
+**Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comßfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
 
 You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at [backports.classicpress.net](https://backports.classicpress.net).
