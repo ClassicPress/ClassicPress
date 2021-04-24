@@ -458,8 +458,16 @@ class WP_List_Table {
 		if ( isset( $_REQUEST['filter_action'] ) && ! empty( $_REQUEST['filter_action'] ) )
 			return false;
 
+<<<<<<< HEAD
 		if ( isset( $_REQUEST['action'] ) && -1 != $_REQUEST['action'] )
+=======
+		if ( isset( $_REQUEST['action'] ) && -1 != $_REQUEST['action'] ) {
+>>>>>>> 2a9c68872e (Quick/Bulk Edit: Revert [48134] to address the bottom "Bulk actions" dropdown not functioning properly on Posts and Users list tables.)
 			return $_REQUEST['action'];
+
+		if ( isset( $_REQUEST['action2'] ) && -1 != $_REQUEST['action2'] ) {
+			return $_REQUEST['action2'];
+		}
 
 		return false;
 	}
