@@ -454,8 +454,14 @@ class WP_Comment_Query {
 		 */
 		$_comments = apply_filters_ref_array( 'the_comments', array( $_comments, &$this ) );
 
+<<<<<<< HEAD
 		// Convert to WP_Comment instances
 		$comments = array_map( 'get_comment', $_comments );
+=======
+		// Convert to WP_Comment instances.
+		array_walk( $_comments, 'get_comment' );
+		$comments = $_comments;
+>>>>>>> 29bfc56ca2... Code Modernization: Fix PHP 8 "argument must be passed by reference, value given" error in `WP_Comment_Query::get_comments()`.
 
 		if ( $this->query_vars['hierarchical'] ) {
 			$comments = $this->fill_descendants( $comments );
