@@ -2,7 +2,7 @@
 
 ClassicPress is a volunteer-driven open source project that thrives when we have multiple contributors working towards a common goal. 
 
-There may be some delays in reviewing and merging pull requests. This is because we take a lot of care with our platform and ClassicPress is maintained by volunteers in our free time.
+We invite all contributors to not only submit pull requests that are in line with the goals and direction of the project, but also to discuss and review other contributors' issues and pull requests. This will help us make the most of our limited time and review all contributions quickly.
 
 Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [roadmap](https://www.classicpress.net/roadmap/) to see what's already planned for the next couple of releases.
 
