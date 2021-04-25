@@ -935,7 +935,7 @@ module.exports = function(grunt) {
 				);
 			}
 			grunt.log.writeln( 'The above lines may need to be fixed to https:// manually.' );
-			grunt.log.writeln( 'See: https://github.com/npm/cli/issues/1685' );
+			grunt.log.writeln( 'See: https://github.com/ClassicPress/ClassicPress/pull/711' );
 			grunt.fatal( 'package-lock.json contains invalid lines' );
 		}
 	} );
