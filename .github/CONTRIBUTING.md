@@ -84,7 +84,7 @@ There are some changes that we already know we want to backport because they fit
 
 ### Tips for a good Backport PR.
 - Give the PRs a clear title. Explain in a pull request or issue what the specific change is, how it works and why ClassicPress in particular should adopt it. Often there is a lot of good discussion about each change in the relevant WordPress Trac tickets. It makes the maintainers' job much easier to see this discussion summarized and linked.
-- Explain what testing has been done on the PR and what may be left to do. Screenshots, gif, video and text instructions documenting the tests can be very useful. Those tell other contributors looking at the PR how to verify the changes.
+- Explain what testing has been done on the PR and what may be left to do. Screenshots, gif, video and text instructions documenting the tests can be very useful. Those tell other contributors looking at the PR how to verify the changes. "This was tested in WordPress" **is not enough** to meet our review criteria, see [Review Criteria](#review-criteria) above.
 - Look to make sure the backport is done correctly, with attribution to the original WP committer. 
 - If there are merge conflicts during the backport, check if they have been resolved correctly by comparing the final changes from the full PR against the corresponding WP changeset(s). Remember to fix these **in a separate commit**. If you cannot resolve the conflicts, ask for help in the [Core slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
 
