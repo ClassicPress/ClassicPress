@@ -10,6 +10,21 @@ The **petitions process** mentioned in our Democracy document is very important 
 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
+## Quick Links
+- [Contributions](#contributions)
+  - [Quick Links](#quick-links)
+  - [Communication channels](#communication-channels)
+  - [Review criteria](#review-criteria)
+  - [What to work on?](#what-to-work-on)
+  - [Setting up Local Testing and Dev Environment](#setting-up-local-testing-and-dev-environment)
+  - [More information](#more-information)
+    - [Tips for good Pull Requests (PRs)](#tips-for-good-pull-requests-prs)
+    - [Automated tests](#automated-tests)
+    - [Backporting changes from WordPress](#backporting-changes-from-wordpress)
+    - [Tips for a good Backport PR.](#tips-for-a-good-backport-pr)
+    - [Making a Backport PR.](#making-a-backport-pr)
+    - [How to review a PR](#how-to-review-a-pr)
+
 ## Communication channels
 
 We encourage you to join and ask any questions you have about contributing.
@@ -38,6 +53,27 @@ If you're not sure where to start contributing, here are some ideas:
   - Bugfixes, you can find a list of known bugs on our [issues page](https://github.com/ClassicPress/ClassicPress/issues).
   - Issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) or [`good first issue`](https://github.com/ClassicPress/ClassicPress/labels/good%20first%20issue) labels.
   - [Planned Milestones](https://github.com/ClassicPress/ClassicPress/milestones) or exploratory PRs with your own suggested changes. Please remember these will be subject to review to make sure they are in line with the project's direction.
+
+## Setting up Local Testing and Dev Environment
+- Make sure you have [Git](https://git-scm.com/) on your computer set up.
+- For more advanced usage. Installing and setting up `grunt` and `phpunit` makes testing and running builds efficient.
+- Fork ClassicPress if you plan to make any changes to the codebase.
+- Clone your ClassicPress fork to your Computer using the command via your terminal or command prompt using
+
+```
+git clone https://github.com/{your-github-username}/ClassicPress
+```
+or
+
+```
+git clone https://github.com/ClassicPress/ClassicPress
+```
+
+if you did not clone the repo. (You can clone directly into your LAMP/LEMP stack or point a webserver at the resulting directory).
+- Create a database to connect with your CP instance.
+- Configure your MySQL database via the `wp-config.php` file in the root directory or follow the next step below.
+- In your browser, go to the `src` directory on your localhost instance of CP to run the setup.
+- That is it. You can now test the different git branches of your instance.
 
 ## More information
 
@@ -113,3 +149,19 @@ Using this script for all backports saves time for you and for the maintainers. 
 **Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
 
 You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at [backports.classicpress.net](https://backports.classicpress.net).
+
+### How to review a PR
+1. See [how to set up local dev environment above](#setting-up-local-testing-and-dev-environment)
+2. Set up a remote link to the CP main repo as `upstream` in your git instance using
+   ```
+   git remote add upstream https://github.com/ClassicPress/ClassicPress
+   ```
+3. Using the same technique above, you can add any other remote fork.
+3. In your terminal run `git fetch upstream` to get latest updates.
+4. Checkout of the branch with the changes you want to test using
+  ```
+  git checkout -b desired-branch-name <name-of-remote>/desired-branch-name
+  ```
+5. Run tests as PR suggests or stress test the PR.
+6. Submit your feedback in the comment section of the same PR on the CP Github repo. Screenshots, gifs, video and text instructions documenting the tests can be very useful.
+7. Thank you for reviewing the PR.
