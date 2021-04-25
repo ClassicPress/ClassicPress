@@ -155,6 +155,9 @@ to apply all the changesets to the same branch.
 git checkout upstream/develop -B desired-branch-name
 ```
 6. Use the online platform to make a PR to the `develop` branch for review.
+!["Opening a PR to the develop branch"][open_pr_br_develop]
+
+[open_pr_br_develop]: https://github.com/ClassicPress/ClassicPress/blob/develop/.github/images/open-pr-br-develop.png "Opening a PR to the develop branch"
    
 Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
 
