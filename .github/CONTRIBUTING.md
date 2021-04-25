@@ -125,25 +125,37 @@ There are some changes that we already know we want to backport because they fit
 - If there are merge conflicts during the backport, check if they have been resolved correctly by comparing the final changes from the full PR against the corresponding WP changeset(s). Remember to fix these **in a separate commit**. If you cannot resolve the conflicts, ask for help in the [Core slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
 
 ### Making a Backport PR.
-When you're ready to backport a code change, make a new branch to your ClassicPress fork:
+When you're ready to backport a code change, make a new branch to your ClassicPress fork using:
+```
+git checkout upstream/develop -B branch-name
+```
 
-- Identify the WordPress **changeset number** that you'd like to port such as `43123`.
-- Run `bin/backport-wp-commit.sh` script in your terminal/command prompt.
+See [how to set up local environment](#setting-up-local-testing-and-dev-environment).
+
+1. Identify the WordPress **changeset number** that you'd like to port such as `43123`.
+2. Run `bin/backport-wp-commit.sh` script in your terminal/command prompt.
 
 ```
-bin/backport-wp-commit.sh "changeset-number"
+bin/backport-wp-commit.sh CHANGESET_NUMBER
 ```
  to apply the change to the code. 
  
  If you're porting multiple changesets, you can use the `-c` option to this script 
 
 ```
-bin/backport-wp-commit.sh -c "changeset-number"
+bin/backport-wp-commit.sh -c CHANGESET_NUMBER
 ```
 to apply all the changesets to the same branch. 
 
-Then push your branch for review as a PR.
-
+3. Resolve merge conflicts (if any)
+4. Repeat steps 2 and 3
+5. Then push your branch to your fork online using:
+   
+```
+git checkout upstream/develop -B desired-branch-name
+```
+6. Use the online platform to make a PR to the `develop` branch for review.
+   
 Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
 
 **Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
