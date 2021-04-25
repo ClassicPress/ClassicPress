@@ -110,6 +110,6 @@ Then push your branch for review as a PR.
 
 Using this script for all backports saves time for you and for the maintainers. As it uses a standardized format for commit messages making it possible for us to track which WordPress changes we've already included.
 
-**Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comßfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
+**Note:** If there are merge conflicts for your changes, the script will let you know. Please fix the conflicts **in a separate commit** so that we can take a look at the conflicts and their fixes, or if you're not comfortable resolving merge conflicts, just push your branch as-is and we'll take care of it!
 
 You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at [backports.classicpress.net](https://backports.classicpress.net).
