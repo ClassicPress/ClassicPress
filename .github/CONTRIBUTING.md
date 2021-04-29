@@ -11,19 +11,17 @@ The **petitions process** mentioned in our Democracy document is very important 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
 ## Table of Contents
-- [Contributions](#contributions)
-  - [Quick Links](#quick-links)
-  - [Communication channels](#communication-channels)
-  - [Review criteria](#review-criteria)
-  - [What to work on?](#what-to-work-on)
-  - [Setting up Local Testing and Dev Environment](#setting-up-local-testing-and-dev-environment)
-  - [More information](#more-information)
-    - [Tips for good Pull Requests (PRs)](#tips-for-good-pull-requests-prs)
-    - [Automated tests](#automated-tests)
-    - [Backporting changes from WordPress](#backporting-changes-from-wordpress)
-    - [Tips for a good Backport PR.](#tips-for-a-good-backport-pr)
-    - [Making a Backport PR.](#making-a-backport-pr)
-    - [How to review a PR](#how-to-review-a-pr)
+- [Communication channels](#communication-channels)
+- [Review criteria](#review-criteria)
+- [What to work on?](#what-to-work-on)
+- [Setting up Local Testing and Dev Environment](#setting-up-local-testing-and-dev-environment)
+- [More information](#more-information)
+  - [Tips for good Pull Requests (PRs)](#tips-for-good-pull-requests-prs)
+  - [Automated tests](#automated-tests)
+  - [Backporting changes from WordPress](#backporting-changes-from-wordpress)
+  - [Tips for a good Backport PR.](#tips-for-a-good-backport-pr)
+  - [Making a Backport PR.](#making-a-backport-pr)
+  - [How to review a PR](#how-to-review-a-pr)
 
 ## Communication channels
 
