@@ -10,7 +10,7 @@ The **petitions process** mentioned in our Democracy document is very important 
 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
 
-## Quick Links
+## Table of Contents
 - [Contributions](#contributions)
   - [Quick Links](#quick-links)
   - [Communication channels](#communication-channels)
