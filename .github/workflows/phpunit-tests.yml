@@ -31,17 +31,17 @@ jobs:
   # - Set up a Memcached server if needed.
   # - Run PHPUnit Tests.
   test-php:
-    name: PHP Unit Tests - ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }} on ${{ matrix.os }}
+    name: PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}
     runs-on: ${{ matrix.os }}
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       matrix:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-18.04 ]
         memcached: [ false ]
         include:
           - php: '7.2'
-            os: ubuntu-latest
+            os: ubuntu-18.04
             memcached: true
       fail-fast: false
 
