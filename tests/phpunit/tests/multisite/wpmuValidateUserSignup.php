@@ -123,7 +123,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @ticket 43232
+		 * @see https://core.trac.wordpress.org/ticket/43232
 		 */
 		public function test_should_not_fail_for_data_used_by_a_deleted_user() {
 			global $wpdb;
