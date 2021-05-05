@@ -412,7 +412,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	/**
 	 * Test for short-circuiting wp_mail().
 	 *
-	 * @ticket 35069
+	 * @see https://core.trac.wordpress.org/ticket/35069
 	 */
 	public function test_wp_mail_can_be_shortcircuited() {
 		$result1 = wp_mail( WP_TESTS_EMAIL, 'Foo', 'Bar' );
