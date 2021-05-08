@@ -4024,6 +4024,9 @@
 				return this;
 			}
 
+			// Pause current audio/video even after closing the modal
+			$( '.mejs-pause button' ).click();
+
 			// Enable page scrolling.
 			$( 'body' ).removeClass( 'modal-open' );
 
