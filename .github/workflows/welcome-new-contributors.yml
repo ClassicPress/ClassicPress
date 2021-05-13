@@ -8,8 +8,6 @@ jobs:
   # Comments on a pull request when the author is a new contributor.
   post-welcome-message:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'ClassicPress/ClassicPress' }}
-
     steps:
       - uses: bubkoo/welcome-action@8dbbac2540d155744c90e4e37da6b05ffc9c5e2c # v1.0.3
         with:
