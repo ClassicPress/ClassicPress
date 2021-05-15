@@ -14,7 +14,7 @@ For more information, see:
 
 - [The official ClassicPress website](https://www.classicpress.net/)
 - [The ClassicPress Democracy](https://www.classicpress.net/democracy/) (our governance structure)
-- [Suggest features](https://petitions.classicpress.net/)
+- [Suggest features](https://forums.classicpress.net/c/governance/petitions/77)
 
 ## Contributions
 

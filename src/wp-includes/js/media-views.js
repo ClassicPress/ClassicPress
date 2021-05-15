@@ -640,7 +640,7 @@
 
 	};
 
-	var library = function() { // ClassicPress: defer loading via require()
+	var library$1 = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		getUserSetting = window.getUserSetting,
@@ -939,7 +939,7 @@
 
 	};
 
-	var imageDetails = function() { // ClassicPress: defer loading via require()
+	var imageDetails$2 = function() { // ClassicPress: defer loading via require()
 
 	var State = wp.media.controller.State,
 		Library = wp.media.controller.Library,
@@ -1762,7 +1762,7 @@
 
 	};
 
-	var editImage = function() { // ClassicPress: defer loading via require()
+	var editImage$1 = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		EditImage;
@@ -1898,7 +1898,7 @@
 
 	};
 
-	var embed = function() { // ClassicPress: defer loading via require()
+	var embed$2 = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		$ = Backbone.$,
@@ -2039,7 +2039,7 @@
 
 	};
 
-	var cropper = function() { // ClassicPress: defer loading via require()
+	var cropper$1 = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		Cropper;
@@ -2214,7 +2214,7 @@
 
 	};
 
-	var siteIconCropper = function() { // ClassicPress: defer loading via require()
+	var siteIconCropper$1 = function() { // ClassicPress: defer loading via require()
 
 	var Controller = wp.media.controller,
 		SiteIconCropper;
@@ -2794,7 +2794,7 @@
 
 	};
 
-	var select = function() { // ClassicPress: defer loading via require()
+	var select$1 = function() { // ClassicPress: defer loading via require()
 
 	var MediaFrame = wp.media.view.MediaFrame,
 		l10n = wp.media.view.l10n,
@@ -4024,6 +4024,9 @@
 				return this;
 			}
 
+			// Pause current audio/video even after closing the modal
+			$( '.mejs-pause button' ).click();
+
 			// Enable page scrolling.
 			$( 'body' ).removeClass( 'modal-open' );
 
@@ -4970,7 +4973,7 @@
 
 	};
 
-	var select$1 = function() { // ClassicPress: defer loading via require()
+	var select = function() { // ClassicPress: defer loading via require()
 
 	var Toolbar = wp.media.view.Toolbar,
 		l10n = wp.media.view.l10n,
@@ -6204,7 +6207,7 @@
 
 	};
 
-	var library$1 = function() { // ClassicPress: defer loading via require()
+	var library = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Attachment.Library
@@ -7410,7 +7413,7 @@
 
 	};
 
-	var selection = function() { // ClassicPress: defer loading via require()
+	var selection$2 = function() { // ClassicPress: defer loading via require()
 
 	var l10n = wp.media.view.l10n,
 		Selection;
@@ -7525,7 +7528,7 @@
 
 	};
 
-	var selection$2 = function() { // ClassicPress: defer loading via require()
+	var selection = function() { // ClassicPress: defer loading via require()
 
 	var Attachments = wp.media.view.Attachments,
 		Selection;
@@ -8115,7 +8118,7 @@
 
 	};
 
-	var embed$2 = function() { // ClassicPress: defer loading via require()
+	var embed = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.view.Embed
@@ -8439,7 +8442,7 @@
 
 	};
 
-	var imageDetails$2 = function() { // ClassicPress: defer loading via require()
+	var imageDetails = function() { // ClassicPress: defer loading via require()
 
 	var AttachmentDisplay = wp.media.view.Settings.AttachmentDisplay,
 		$ = jQuery,
@@ -8612,7 +8615,7 @@
 
 	};
 
-	var cropper$1 = function() { // ClassicPress: defer loading via require()
+	var cropper = function() { // ClassicPress: defer loading via require()
 
 	var View = wp.media.View,
 		UploaderStatus = wp.media.view.UploaderStatus,
@@ -8712,7 +8715,7 @@
 
 	};
 
-	var siteIconCropper$1 = function() { // ClassicPress: defer loading via require()
+	var siteIconCropper = function() { // ClassicPress: defer loading via require()
 
 	var View = wp.media.view,
 		SiteIconCropper;
@@ -8821,7 +8824,7 @@
 
 	};
 
-	var editImage$1 = function() { // ClassicPress: defer loading via require()
+	var editImage = function() { // ClassicPress: defer loading via require()
 
 	var View = wp.media.View,
 		EditImage;
@@ -9000,25 +9003,25 @@
 	media.controller.State = state();
 
 	media.selectionSync = selectionSync();
-	media.controller.Library = library();
-	media.controller.ImageDetails = imageDetails();
+	media.controller.Library = library$1();
+	media.controller.ImageDetails = imageDetails$2();
 	media.controller.GalleryEdit = galleryEdit();
 	media.controller.GalleryAdd = galleryAdd();
 	media.controller.CollectionEdit = collectionEdit();
 	media.controller.CollectionAdd = collectionAdd();
 	media.controller.FeaturedImage = featuredImage();
 	media.controller.ReplaceImage = replaceImage();
-	media.controller.EditImage = editImage();
+	media.controller.EditImage = editImage$1();
 	media.controller.MediaLibrary = mediaLibrary();
-	media.controller.Embed = embed();
-	media.controller.Cropper = cropper();
+	media.controller.Embed = embed$2();
+	media.controller.Cropper = cropper$1();
 	media.controller.CustomizeImageCropper = customizeImageCropper();
-	media.controller.SiteIconCropper = siteIconCropper();
+	media.controller.SiteIconCropper = siteIconCropper$1();
 
 	media.View = view();
 	media.view.Frame = frame();
 	media.view.MediaFrame = mediaFrame();
-	media.view.MediaFrame.Select = select();
+	media.view.MediaFrame.Select = select$1();
 	media.view.MediaFrame.Post = post();
 	media.view.MediaFrame.ImageDetails = imageDetails$1();
 	media.view.Modal = modal();
@@ -9029,7 +9032,7 @@
 	media.view.UploaderStatus = status();
 	media.view.UploaderStatusError = statusError();
 	media.view.Toolbar = toolbar();
-	media.view.Toolbar.Select = select$1();
+	media.view.Toolbar.Select = select();
 	media.view.Toolbar.Embed = embed$1();
 	media.view.Button = button();
 	media.view.ButtonGroup = buttonGroup();
@@ -9040,7 +9043,7 @@
 	media.view.Router = router();
 	media.view.Sidebar = sidebar();
 	media.view.Attachment = attachment();
-	media.view.Attachment.Library = library$1();
+	media.view.Attachment.Library = library();
 	media.view.Attachment.EditLibrary = editLibrary();
 	media.view.Attachments = attachments();
 	media.view.Search = search();
@@ -9049,9 +9052,9 @@
 	media.view.AttachmentFilters.Uploaded = uploaded();
 	media.view.AttachmentFilters.All = all();
 	media.view.AttachmentsBrowser = browser();
-	media.view.Selection = selection();
+	media.view.Selection = selection$2();
 	media.view.Attachment.Selection = selection$1();
-	media.view.Attachments.Selection = selection$2();
+	media.view.Attachments.Selection = selection();
 	media.view.Attachment.EditSelection = editSelection();
 	media.view.Settings = settings();
 	media.view.Settings.AttachmentDisplay = attachmentDisplay();
@@ -9060,16 +9063,16 @@
 	media.view.Attachment.Details = details();
 	media.view.AttachmentCompat = attachmentCompat();
 	media.view.Iframe = iframe();
-	media.view.Embed = embed$2();
+	media.view.Embed = embed();
 	media.view.Label = label();
 	media.view.EmbedUrl = url();
 	media.view.EmbedLink = link();
 	media.view.EmbedImage = image();
-	media.view.ImageDetails = imageDetails$2();
-	media.view.Cropper = cropper$1();
-	media.view.SiteIconCropper = siteIconCropper$1();
+	media.view.ImageDetails = imageDetails();
+	media.view.Cropper = cropper();
+	media.view.SiteIconCropper = siteIconCropper();
 	media.view.SiteIconPreview = siteIconPreview();
-	media.view.EditImage = editImage$1();
+	media.view.EditImage = editImage();
 	media.view.Spinner = spinner();
 
 }());
