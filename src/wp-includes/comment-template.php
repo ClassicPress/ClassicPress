@@ -1340,12 +1340,8 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 
 	if ( is_user_logged_in() ) {
 		$comment_args['include_unapproved'] = array( get_current_user_id() );
-	} else {
-		$unapproved_email = wp_get_unapproved_comment_author_email();
-
-		if ( $unapproved_email ) {
-			$comment_args['include_unapproved'] = array( $unapproved_email );
-		}
+	} elseif ( ! empty( $comment_author_email ) ) {
+		$comment_args['include_unapproved'] = array( $comment_author_email );
 	}
 
 	$per_page = 0;

@@ -1050,10 +1050,10 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 		if ( is_user_logged_in() ) {
 			$comment_args['include_unapproved'] = array( get_current_user_id() );
 		} else {
-			$unapproved_email = wp_get_unapproved_comment_author_email();
-
-			if ( $unapproved_email ) {
-				$comment_args['include_unapproved'] = array( $unapproved_email );
+			$commenter       = wp_get_current_commenter();
+			$commenter_email = $commenter['comment_author_email'];
+			if ( ! empty( $commenter_email ) ) {
+				$comment_args['include_unapproved'] = array( $commenter_email );
 			}
 		}
 
@@ -1752,40 +1752,6 @@ function wp_get_current_commenter() {
 	 * }
 	 */
 	return apply_filters( 'wp_get_current_commenter', compact('comment_author', 'comment_author_email', 'comment_author_url') );
-}
-
-/**
- * Get unapproved comment author's email.
- *
- * Used to allow the commenter to see their pending comment.
- *
- * @since WP-5.1.0
- *
- * @return string The unapproved comment author's email (when supplied).
- */
-function wp_get_unapproved_comment_author_email() {
-	$commenter_email = '';
-
-	if ( ! empty( $_GET['unapproved'] ) && ! empty( $_GET['moderation-hash'] ) ) {
-		$comment_id = (int) $_GET['unapproved'];
-		$comment    = get_comment( $comment_id );
-
-		if ( $comment && hash_equals( $_GET['moderation-hash'], wp_hash( $comment->comment_date_gmt ) ) ) {
-			// The comment will only be viewable by the comment author for 1 minute.
-			$comment_preview_expires = strtotime( $comment->comment_date_gmt . '+1 minute' );
-
-			if ( time() < $comment_preview_expires ) {
-				$commenter_email = $comment->comment_author_email;
-			}
-		}
-	}
-
-	if ( ! $commenter_email ) {
-		$commenter       = wp_get_current_commenter();
-		$commenter_email = $commenter['comment_author_email'];
-	}
-
-	return $commenter_email;
 }
 
 /**
