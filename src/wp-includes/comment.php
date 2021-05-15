@@ -1060,7 +1060,7 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 		/**
 		 * Filters the arguments used to query comments in get_page_of_comment().
 		 *
-		 * @since 5.5.0
+		 * @since WP-5.5.0
 		 *
 		 * @see WP_Comment_Query::__construct()
 		 *

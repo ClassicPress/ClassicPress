@@ -280,7 +280,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8973
+	 * @see https://core.trac.wordpress.org/ticket/8973
 	 */
 	public function test_page_number_when_unapproved_comments_are_included_for_current_commenter() {
 		$post         = self::factory()->post->create();
@@ -328,7 +328,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 8973
+	 * @see https://core.trac.wordpress.org/ticket/8973
 	 */
 	public function test_page_number_when_unapproved_comments_are_included_for_current_user() {
 		$current_user = get_current_user_id();

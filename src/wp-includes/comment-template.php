@@ -1275,7 +1275,6 @@ function wp_comment_form_unfiltered_html_nonce() {
  * Will not try to get the comments if the post has none.
  *
  * @since WP-1.5.0
- * @since WP-5.5.0 Removed the need to use the $user_ID global.
  *
  * @global WP_Query   $wp_query
  * @global WP_Post    $post
