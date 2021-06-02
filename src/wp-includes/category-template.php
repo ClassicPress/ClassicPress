@@ -1271,7 +1271,7 @@ function get_the_term_list( $id, $taxonomy, $before = '', $sep = '', $after = ''
  *     @type string $separator Separator for between the terms. Default '/'.
  *     @type bool   $link      Whether to format as a link. Default true.
  *     @type bool   $inclusive Include the term to get the parents for. Default true.
- *     @type bool   $inverse   Wether to reverse the hierarchical order of the Terms on output. Default true.
+ *     @type bool   $reverse   Wether to reverse the hierarchical order of the Terms on output. Default true.
  * }
  * @return string|WP_Error A list of term parents on success, WP_Error or empty string on failure.
  */
@@ -1294,12 +1294,12 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 		'separator' => '/',
 		'link'      => true,
 		'inclusive' => true,
-		'inverse'   => true,
+		'reverse'   => true,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
 
-	foreach ( array( 'link', 'inclusive' ) as $bool ) {
+	foreach ( array( 'link', 'inclusive', 'reverse' ) as $bool ) {
 		$args[ $bool ] = wp_validate_boolean( $args[ $bool ] );
 	}
 
@@ -1309,7 +1309,7 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 		array_unshift( $parents, $term_id );
 	}
 	
-	if( $args['inverse'] ){
+	if( $args['reverse'] ){
  		$parents = array_reverse( $parents );
  	}
 
