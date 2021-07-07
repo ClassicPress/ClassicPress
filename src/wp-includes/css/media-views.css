@@ -427,7 +427,8 @@
 .attachment-details .setting input[type="tel"],
 .attachment-details .setting input[type="url"],
 .attachment-details .setting textarea,
-.attachment-details .setting .value {
+.attachment-details .setting .value,
+.attachment-details .setting + .description {
 	box-sizing: border-box;
 	margin: 1px;
 	width: 65%;
@@ -435,9 +436,17 @@
 }
 
 .media-sidebar .setting .value,
-.attachment-details .setting .value {
+.attachment-details .setting .value,
+.attachment-details .setting + .description {
 	margin: 0 1px;
 	text-align: left;
+}
+
+.attachment-details .setting + .description {
+	clear: both;
+	font-size: 12px;
+	font-style: normal;
+	margin-bottom: 0.5em;
 }
 
 .media-sidebar .setting textarea,
@@ -2024,6 +2033,15 @@
 	clear: both;
 }
 
+.media-embed .setting.has-description {
+	margin-bottom: 5px;
+}
+
+.media-embed .description {
+	clear: both;
+	font-style: normal;
+}
+
 .image-details .embed-media-settings .setting {
 	float: none;
 	width: auto;
@@ -2053,9 +2071,15 @@
 
 .image-details .embed-media-settings .setting input.link-to-custom,
 .image-details .embed-media-settings .link-target,
-.image-details .embed-media-settings .custom-size {
+.image-details .embed-media-settings .custom-size,
+.image-details .description {
 	margin-left: 27%;
 	width: 70%;
+}
+
+.image-details .description {
+	font-style: normal;
+	margin-top: 0;
 }
 
 .image-details .embed-media-settings .link-target {
@@ -2347,7 +2371,8 @@
 	.attachment-details .setting input[type="tel"],
 	.attachment-details .setting input[type="url"],
 	.attachment-details .setting textarea,
-	.attachment-details .setting select {
+	.attachment-details .setting select,
+	.attachment-details .setting + .description {
 		float: none;
 		width: 98%;
 		max-width: none;
@@ -2395,6 +2420,15 @@
 	.image-details .embed-media-settings .setting textarea {
 		width: 100%;
 		margin-left: 0;
+	}
+
+	.image-details .embed-media-settings .setting.has-description {
+		margin-bottom: 5px;
+	}
+
+	.image-details .description {
+		width: auto;
+		margin: 0 20px;
 	}
 
 	.image-details .embed-media-settings .custom-size {
