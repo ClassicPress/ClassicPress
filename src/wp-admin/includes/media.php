@@ -2842,21 +2842,12 @@ function edit_form_image_editor( $post ) {
 		);
 	?>
 
-<<<<<<< HEAD
-	<label for="attachment_content"><strong><?php _e( 'Description' ); ?></strong><?php
-	if ( preg_match( '#^(audio|video)/#', $post->post_mime_type ) ) {
-		echo ': ' . __( 'Displayed on attachment pages.' );
-	}
-
-	?>
-=======
 	<label for="attachment_content"><strong><?php _e( 'Description' ); ?></strong>
 		<?php
 		if ( preg_match( '#^(audio|video)/#', $post->post_mime_type ) ) {
 			echo ': ' . __( 'Displayed on attachment pages.' );
 		}
 		?>
->>>>>>> af0242a37b (Accessibility: Improve the image "Alternative Text" field in the Edit Media screen.)
 	</label>
 	<?php wp_editor( format_to_edit( $post->post_content ), 'attachment_content', $editor_args ); ?>
 
