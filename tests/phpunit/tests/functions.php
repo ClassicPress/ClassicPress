@@ -1384,22 +1384,107 @@ class Tests_Functions extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Test the human_readable_duration function.
+=======
+	 * Test stream URL validation.
+	 *
+	 * @dataProvider data_test_wp_is_stream
+	 *
+	 * @param string $path     The resource path or URL.
+	 * @param bool   $expected Expected result.
+	 */
+	public function test_wp_is_stream( $path, $expected ) {
+		if ( ! extension_loaded( 'openssl' ) && false !== strpos( $path, 'https://' ) ) {
+			$this->markTestSkipped( 'The openssl PHP extension is not loaded.' );
+		}
+
+		$this->assertSame( $expected, wp_is_stream( $path ) );
+	}
+
+	/**
+	 * Data provider for stream URL validation.
+	 *
+	 * @return array {
+	 *     @type array $0... {
+	 *         @type string $0 The resource path or URL.
+	 *         @type bool   $1 Expected result.
+	 *     }
+	 * }
+	 */
+	public function data_test_wp_is_stream() {
+		return array(
+			// Legitimate stream examples.
+			array( 'http://example.com', true ),
+			array( 'https://example.com', true ),
+			array( 'ftp://example.com', true ),
+			array( 'file:///path/to/some/file', true ),
+			array( 'php://some/php/file.php', true ),
+
+			// Non-stream examples.
+			array( 'fakestream://foo/bar/baz', false ),
+			array( '../../some/relative/path', false ),
+			array( 'some/other/relative/path', false ),
+			array( '/leading/relative/path', false ),
+		);
+	}
+
+	/**
+	 * Test human_readable_duration().
+>>>>>>> f968e9d52f (Media: improve the `human_readable_duration` function and tests.)
 	 *
 	 * @ticket 39667
-	 * @dataProvider _datahuman_readable_duration()
+	 * @dataProvider data_test_human_readable_duration
 	 *
-	 * @param $input
-	 * @param $expected
+	 * @param string $input    Duration.
+	 * @param string $expected Expected human readable duration.
 	 */
-	public function test_duration_format( $input, $expected ) {
+	public function test_human_readable_duration( $input, $expected ) {
 		$this->assertSame( $expected, human_readable_duration( $input ) );
 	}
 
-	public function _datahuman_readable_duration() {
+	/**
+	 * Dataprovider for test_duration_format().
+	 *
+	 * @return array {
+	 *     @type array {
+	 *         @type string $input  Duration.
+	 *         @type string $expect Expected human readable duration.
+	 *     }
+	 * }
+	 */
+	public function data_test_human_readable_duration() {
 		return array(
-			array( array(), false ),
+			// Valid ii:ss cases.
+			array( '0:0', '0 minutes, 0 seconds' ),
+			array( '00:00', '0 minutes, 0 seconds' ),
+			array( '0:5', '0 minutes, 5 seconds' ),
+			array( '0:05', '0 minutes, 5 seconds' ),
+			array( '01:01', '1 minute, 1 second' ),
 			array( '30:00', '30 minutes, 0 seconds' ),
+			array( ' 30:00 ', '30 minutes, 0 seconds' ),
+			// Valid HH:ii:ss cases.
+			array( '0:0:0', '0 hours, 0 minutes, 0 seconds' ),
+			array( '00:00:00', '0 hours, 0 minutes, 0 seconds' ),
+			array( '00:30:34', '0 hours, 30 minutes, 34 seconds' ),
+			array( '01:01:01', '1 hour, 1 minute, 1 second' ),
+			array( '1:02:00', '1 hour, 2 minutes, 0 seconds' ),
+			array( '10:30:34', '10 hours, 30 minutes, 34 seconds' ),
+			array( '1234567890:59:59', '1234567890 hours, 59 minutes, 59 seconds' ),
+			// Valid ii:ss cases with negative sign.
+			array( '-00:00', '0 minutes, 0 seconds' ),
+			array( '-3:00', '3 minutes, 0 seconds' ),
+			array( '-03:00', '3 minutes, 0 seconds' ),
+			array( '-30:00', '30 minutes, 0 seconds' ),
+			// Valid HH:ii:ss cases with negative sign.
+			array( '-00:00:00', '0 hours, 0 minutes, 0 seconds' ),
+			array( '-1:02:00', '1 hour, 2 minutes, 0 seconds' ),
+			// Invalid cases.
+			array( null, false ),
+			array( '', false ),
+			array( ':', false ),
+			array( '::', false ),
+			array( array(), false ),
 			array( 'Batman Begins !', false ),
 			array( '', false ),
 			array( '-1', false ),
@@ -1407,18 +1492,19 @@ class Tests_Functions extends WP_UnitTestCase {
 			array( 0, false ),
 			array( 1, false ),
 			array( '00', false ),
-			array( '00:00', '0 minutes, 0 seconds' ),
-			array( '00:00:00', '0 hours, 0 minutes, 0 seconds' ),
-			array( '10:30:34', '10 hours, 30 minutes, 34 seconds' ),
-			array( '00:30:34', '0 hours, 30 minutes, 34 seconds' ),
-			array( 'MM:30:00', false ),
-			array( '30:MM', false ),
-			array( 'MM:00', false ),
-			array( 'MM:MM', false ),
-			array( '01:01', '1 minute, 1 second' ),
-			array( '01:01:01', '1 hour, 1 minute, 1 second' ),
-			array( '0:05', '5 seconds' ),
-			array( '1:02:00', '1 hour, 2 minutes, 0 seconds' ),
+			array( '30:-10', false ),
+			array( ':30:00', false ), // Missing HH.
+			array( 'MM:30:00', false ), // Invalid HH.
+			array( '30:MM:00', false ), // Invalid ii.
+			array( '30:30:MM', false ), // Invalid ss.
+			array( '30:MM', false ), // Invalid ss.
+			array( 'MM:00', false ), // Invalid ii.
+			array( 'MM:MM', false ), // Invalid ii and ss.
+			array( '10 :30', false ), // Containing a space.
+			array( '59:61', false ), // Out of bound.
+			array( '61:59', false ), // Out of bound.
+			array( '3:59:61', false ), // Out of bound.
+			array( '03:61:59', false ), // Out of bound.
 		);
 	}
 }
