@@ -809,6 +809,7 @@ function post_password_required( $post = null ) {
  * Displays page links for paginated posts (i.e. includes the <!--nextpage-->.
  * Quicktag one or more times). This tag must be within The Loop.
  *
+ * @since WP-1.2.0
  * @since WP-5.0.0 Added the `aria_current` argument.
  *
  * @global int $page
