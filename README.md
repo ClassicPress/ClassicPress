@@ -1,8 +1,8 @@
 <a href="https://www.classicpress.net"><img src="src/wp-admin/images/classicpress-logo-wordmark-gradient-on-transparent.svg" height="60"></a>
 
-**ClassicPress: The business-focused CMS. Powerful. Versatile. Predictable.**
+**ClassicPress: The CMS for Creators. Stable. Secure. Instantly Familiar.**
 
-ClassicPress is a fork of WordPress that serves the CMS-based business website market. We empower the people who create and support these websites, including plugin and theme developers.
+ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 4.9 that preserves the TinyMCE classic editor as the default option. It is more secure, contains less bloat which improves performance, and has no block editor (Gutenberg).
 
 [![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22Coding+Standards%22+branch%3Adevelop)
 [![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
@@ -13,6 +13,7 @@ ClassicPress is a fork of WordPress that serves the CMS-based business website m
 For more information, see:
 
 - [The official ClassicPress website](https://www.classicpress.net/)
+- [The ClassicPress docs](https://docs.classicpress.net/)
 - [The ClassicPress Democracy](https://www.classicpress.net/democracy/) (our governance structure)
 - [Suggest features](https://forums.classicpress.net/c/governance/petitions/77)
 
@@ -26,4 +27,5 @@ We are working on several ways to recognize people for their contributions to Cl
 
 ## Donate to support ClassicPress
 
-Support the ClassicPress project by making a [donation](https://donate.classicpress.net)! 🙏
+Support the ClassicPress project by making a [donation](https://www.classicpress.net/donate/)! 🙏   
+All donations are tax-deductible in the United States.
