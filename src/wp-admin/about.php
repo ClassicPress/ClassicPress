@@ -26,11 +26,11 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		<p class="about-text">
 			<?php printf(
 				/* translators: link to "business-focused CMS" article */
-				__( 'Thank you for using ClassicPress, the <a href="%s">business-focused CMS</a>.' ),
-				'https://www.classicpress.net/blog/2018/10/29/classicpress-for-business-professional-organization-websites/'
+				__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
+				'https://link.classicpress.net/the-cms-for-creators'
 			); ?>
 			<br />
-			<?php _e( 'Powerful. Versatile. Predictable.' ); ?>
+			<?php _e( 'Stable. Secure. Instantly Familiar.' ); ?>
 		</p>
 		<div class="wp-badge"></div>
 
