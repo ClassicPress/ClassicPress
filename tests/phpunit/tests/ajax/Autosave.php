@@ -31,20 +31,7 @@ class Tests_Ajax_Autosave extends WP_Ajax_UnitTestCase {
 		self::$user_ids[] = self::$admin_id = $factory->user->create( array( 'role' => 'administrator' ) );
 		self::$user_ids[] = self::$editor_id = $factory->user->create( array( 'role' => 'editor' ) );
 
-<<<<<<< HEAD
-		self::$post_id = $factory->post->create( array( 'post_status' => 'draft' ) );
-		self::$post = get_post( self::$post_id );
-	}
-
-	/**
-	 * Set up the test fixture
-	 */
-	public function setUp() {
-		parent::setUp();
-		// Set a user so the $post has 'post_author'
-=======
 		// Set a user so the $post has 'post_author'.
->>>>>>> 570d86da90 (Tests: Correct the test for autosaving a post with Ajax.)
 		wp_set_current_user( self::$admin_id );
 
 		self::$post_id = $factory->post->create( array( 'post_status' => 'draft' ) );
@@ -66,17 +53,10 @@ class Tests_Ajax_Autosave extends WP_Ajax_UnitTestCase {
 			'_nonce' => wp_create_nonce( 'heartbeat-nonce' ),
 			'data' => array(
 				'wp_autosave' => array(
-<<<<<<< HEAD
-				    'post_id'       => self::$post_id,
-				    '_wpnonce'      => wp_create_nonce( 'update-post_' . self::$post->ID ),
-				    'post_content'  => self::$post->post_content . PHP_EOL . $md5,
-					'post_type'     => 'post',
-=======
 					'post_id'      => self::$post_id,
 					'_wpnonce'     => wp_create_nonce( 'update-post_' . self::$post_id ),
 					'post_content' => self::$post->post_content . PHP_EOL . $md5,
 					'post_type'    => 'post',
->>>>>>> 570d86da90 (Tests: Correct the test for autosaving a post with Ajax.)
 				),
 			),
 		);
