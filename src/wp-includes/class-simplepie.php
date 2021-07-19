@@ -1950,14 +1950,8 @@ class SimplePie
 	 * depending on whether auto-discovery was used, and whether there were
 	 * any redirects along the way.
 	 *
-<<<<<<< HEAD
-	 * @since SimplePie Preview Release (previously called `get_feed_url()` since SimplePie 0.8.)
-	 * @todo If we have a perm redirect we should return the new URL
-	 * @todo When we make the above change, let's support <itunes:new-feed-url> as well
-=======
 	 * @since Preview Release (previously called `get_feed_url()` since SimplePie 0.8.)
 	 * @todo Support <itunes:new-feed-url>
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @todo Also, |atom:link|@rel=self
 	 * @param bool $permanent Permanent mode to return only the original URL or the first redirection
 	 * iff it is a 301 redirection
@@ -2259,13 +2253,8 @@ class SimplePie
 	/**
 	 * Get a category for the feed
 	 *
-<<<<<<< HEAD
-	 * @since SimplePie Unknown Version
-	 * @param int $key The category that you want to return.  Remember that arrays begin with 0, not 1
-=======
 	 * @since Unknown
 	 * @param int $key The category that you want to return. Remember that arrays begin with 0, not 1
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @return SimplePie_Category|null
 	 */
 	public function get_category($key = 0)
@@ -2345,13 +2334,8 @@ class SimplePie
 	/**
 	 * Get an author for the feed
 	 *
-<<<<<<< HEAD
-	 * @since SimplePie 1.1
-	 * @param int $key The author that you want to return.  Remember that arrays begin with 0, not 1
-=======
 	 * @since 1.1
 	 * @param int $key The author that you want to return. Remember that arrays begin with 0, not 1
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @return SimplePie_Author|null
 	 */
 	public function get_author($key = 0)
@@ -2444,13 +2428,8 @@ class SimplePie
 	/**
 	 * Get a contributor for the feed
 	 *
-<<<<<<< HEAD
-	 * @since SimplePie 1.1
-	 * @param int $key The contrbutor that you want to return.  Remember that arrays begin with 0, not 1
-=======
 	 * @since 1.1
 	 * @param int $key The contrbutor that you want to return. Remember that arrays begin with 0, not 1
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @return SimplePie_Author|null
 	 */
 	public function get_contributor($key = 0)
@@ -2531,13 +2510,8 @@ class SimplePie
 	/**
 	 * Get a single link for the feed
 	 *
-<<<<<<< HEAD
-	 * @since SimplePie 1.0 (previously called `get_feed_link` since Preview Release, `get_feed_permalink()` since 0.8)
-	 * @param int $key The link that you want to return.  Remember that arrays begin with 0, not 1
-=======
 	 * @since 1.0 (previously called `get_feed_link` since Preview Release, `get_feed_permalink()` since 0.8)
 	 * @param int $key The link that you want to return. Remember that arrays begin with 0, not 1
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @param string $rel The relationship of the link to return
 	 * @return string|null Link URL
 	 */
@@ -3027,13 +3001,8 @@ class SimplePie
 	 * {@link http://php.net/foreach foreach()} loops.
 	 *
 	 * @see get_item_quantity()
-<<<<<<< HEAD
-	 * @since SimplePie Beta 2
-	 * @param int $key The item that you want to return.  Remember that arrays begin with 0, not 1
-=======
 	 * @since Beta 2
 	 * @param int $key The item that you want to return. Remember that arrays begin with 0, not 1
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 * @return SimplePie_Item|null
 	 */
 	public function get_item($key = 0)

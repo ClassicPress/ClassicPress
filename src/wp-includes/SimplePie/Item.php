@@ -454,13 +454,8 @@ class SimplePie_Item
 	 *
 	 * Uses `<atom:category>`, `<category>` or `<dc:subject>`
 	 *
-<<<<<<< HEAD
 	 * @since SimplePie Beta 3
 	 * @return array|null List of {@see SimplePie_Category} objects
-=======
-	 * @since Beta 3
-	 * @return SimplePie_Category[]|null List of {@see SimplePie_Category} objects
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 */
 	public function get_categories()
 	{
@@ -561,13 +556,8 @@ class SimplePie_Item
 	 *
 	 * Uses `<atom:contributor>`
 	 *
-<<<<<<< HEAD
 	 * @since SimplePie 1.1
 	 * @return array|null List of {@see SimplePie_Author} objects
-=======
-	 * @since 1.1
-	 * @return SimplePie_Author[]|null List of {@see SimplePie_Author} objects
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 */
 	public function get_contributors()
 	{
@@ -630,13 +620,8 @@ class SimplePie_Item
 	 *
 	 * Uses `<atom:author>`, `<author>`, `<dc:creator>` or `<itunes:author>`
 	 *
-<<<<<<< HEAD
 	 * @since SimplePie Beta 2
 	 * @return array|null List of {@see SimplePie_Author} objects
-=======
-	 * @since Beta 2
-	 * @return SimplePie_Author[]|null List of {@see SimplePie_Author} objects
->>>>>>> d12ad5050b (External Libraries: Update the SimplePie library to the latest version (1.5.5).)
 	 */
 	public function get_authors()
 	{
