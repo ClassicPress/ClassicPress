@@ -555,7 +555,7 @@ function wp_print_media_templates() {
 					<# } #>
 
 					<# if ( data.can.save && data.sizes ) { #>
-						<a class="edit-attachment" href="{{ data.editLink }}&amp;image-editor" target="_blank"><?php _e( 'Edit Image' ); ?></a>
+						<a class="edit-attachment" href="{{ data.editLink }}&amp;image-editor" target="_blank" rel="noopener noreferrer"><?php _e( 'Edit Image' ); ?></a>
 					<# } #>
 				<# } #>
 

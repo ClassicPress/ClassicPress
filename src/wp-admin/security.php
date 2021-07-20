@@ -63,7 +63,7 @@ switch ( $active_tab ) :
 		<?php
 		printf(
 			/* translators: canonical link to security forum */
-			__( 'Watch this page and the ClassicPress <a href="%s" rel="noopener" target="_blank">Security forum</a> for more news as development continues.' ),
+			__( 'Watch this page and the ClassicPress <a href="%s" target="_blank" rel="noopener noreferrer">Security forum</a> for more news as development continues.' ),
 			'https://link.classicpress.net/forum/security'
 		);
 		?>
@@ -103,7 +103,7 @@ switch ( $active_tab ) :
 		echo '<p>';
 		printf(
 			/* translators: link that describes how to contact plugin authors about the ClassicPress security page */
-			__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" rel="noopener" target="_blank">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
+			__( 'If you have plugins installed and activated with security-related settings that aren&#8217;t appearing here, <a href="%s" target="_blank" rel="noopener noreferrer">contact the authors</a> and ask them to add support for the ClassicPress security page.' ),
 			'https://link.classicpress.net/security-page/contact-plugin-authors'
 		);
 		echo "</p>\n";
@@ -213,8 +213,8 @@ switch ( $active_tab ) :
 						<div class="inside">
 							<p>
 								<ul>
-									<li><a href="https://link.classicpress.net/support/security-page" rel="noopener" target="_blank"><?php _e( 'Security Page forum' ); ?></a></li>
-									<li><a href="https://link.classicpress.net/security-page" rel="noopener" target="_blank"><?php _e( 'Documentation' ); ?></a></li>
+									<li><a href="https://link.classicpress.net/support/security-page" target="_blank" rel="noopener noreferrer"><?php _e( 'Security Page forum' ); ?></a></li>
+									<li><a href="https://link.classicpress.net/security-page" target="_blank" rel="noopener noreferrer"><?php _e( 'Documentation' ); ?></a></li>
 								</ul>
 							</p>
 						</div>

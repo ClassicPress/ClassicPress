@@ -938,7 +938,7 @@ function link_submit_meta_box($link) {
 <div id="minor-publishing-actions">
 <div id="preview-action">
 <?php if ( !empty($link->link_id) ) { ?>
-	<a class="preview button" href="<?php echo $link->link_url; ?>" target="_blank"><?php _e('Visit Link'); ?></a>
+	<a class="preview button" href="<?php echo $link->link_url; ?>" target="_blank" rel="noopener noreferrer"><?php _e('Visit Link'); ?></a>
 <?php } ?>
 </div>
 <div class="clear"></div>

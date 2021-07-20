@@ -679,7 +679,7 @@ function install_plugin_information() {
 				?>
 				<div class="counter-container">
 						<span class="counter-label"><a href="https://wordpress.org/support/plugin/<?php echo $api->slug; ?>/reviews/?filter=<?php echo $key; ?>"
-						                               target="_blank" aria-label="<?php echo $aria_label; ?>"><?php printf( _n( '%d star', '%d stars', $key ), $key ); ?></a></span>
+						                               target="_blank" rel="noopener noreferrer" aria-label="<?php echo $aria_label; ?>"><?php printf( _n( '%d star', '%d stars', $key ), $key ); ?></a></span>
 						<span class="counter-back">
 							<span class="counter-bar" style="width: <?php echo 92 * $_rating; ?>px;"></span>
 						</span>
@@ -709,7 +709,7 @@ function install_plugin_information() {
 				?>
 			</ul>
 			<?php if ( ! empty( $api->donate_link ) ) { ?>
-				<a target="_blank" href="<?php echo esc_url( $api->donate_link ); ?>"><?php _e( 'Donate to this plugin &#187;' ); ?></a>
+				<a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $api->donate_link ); ?>"><?php _e( 'Donate to this plugin &#187;' ); ?></a>
 			<?php } ?>
 		<?php } ?>
 	</div>

@@ -59,7 +59,7 @@ if ( ! $config_file ) {
 	echo '<h1>' . __( 'Sample Config File Missing' ) . '</h1>';
 	echo '<p>' . sprintf(
 		/* translators: 1: wp-config-sample.php, 2: link to the contents of this file */
-		__( 'A %s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%s" target="_blank" rel="noopener">fresh copy</a>?' ),
+		__( 'A %s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%s" target="_blank" rel="noopener noreferrer">fresh copy</a>?' ),
 		'<code>wp-config-sample.php</code>',
 		esc_url( 'https://raw.githubusercontent.com/ClassicPress/ClassicPress-release/master/wp-config-sample.php' )
 	) . '</p>';
@@ -149,7 +149,7 @@ switch ( $step ) {
 		// Description.
 		echo '<p>' .  sprintf(
 			/* translators: link to support forums for more help */
-			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
+			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener noreferrer">help</a>?' ),
 			'https://forums.classicpress.net/c/support'
 		) . '</p>';
 
@@ -175,7 +175,7 @@ switch ( $step ) {
 		echo '		<th scope="row"><label for="prefix">' . __( 'Table Prefix' ) . '</label></th>';
 		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> ' .
 			sprintf(
-				'<a href="%s" target="_blank" rel="noopener">' . __( 'Learn More' ) . '</a>',
+				'<a href="%s" target="_blank" rel="noopener noreferrer">' . __( 'Learn More' ) . '</a>',
 				esc_url('https://docs.classicpress.net/installing-classicpress/#installation-steps')
 			) .
 			'</td>';

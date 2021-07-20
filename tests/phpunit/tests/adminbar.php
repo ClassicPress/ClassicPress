@@ -71,6 +71,55 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @see https://core.trac.wordpress.org/ticket/37941
+	 */
+	public function test_it_adds_rel_to_target_blank_links() {
+		$admin_bar = new WP_Admin_Bar;
+		
+		$admin_bar->add_node(
+			array(
+				'id'   => 'test-node',
+				'meta' => [ 'target' => '_blank' ],
+			)
+		);
+		
+		$test_node = $admin_bar->get_node( 'test-node' );
+		
+		$this->assertEquals(
+			[ 'target' => '_blank', 'rel' => 'noopener noreferrer' ],
+			$test_node->meta
+		);
+		
+		$admin_bar->add_node(
+			array(
+				'id'   => 'test-node-2',
+				'meta' => [ 'target' => '_BLANK' ],
+			)
+		);
+
+		$test_node_2 = $admin_bar->get_node( 'test-node-2' );
+
+		$this->assertEquals(
+			[ 'target' => '_BLANK', 'rel' => 'noopener noreferrer' ],
+			$test_node_2->meta
+		);
+
+		$admin_bar->add_node(
+			array(
+				'id'   => 'test-node-3',
+				'meta' => [ 'target' => '_blank', 'rel' => 'nofollow' ],
+			)
+		);
+
+		$test_node_3 = $admin_bar->get_node( 'test-node-3' );
+
+		$this->assertEquals(
+			[ 'target' => '_blank', 'rel' => 'noopener noreferrer nofollow' ],
+			$test_node_3->meta
+		);
+	}
+
+	/**
 	 * @see https://core.trac.wordpress.org/ticket/25162
 	 * @group ms-excluded
 	 */

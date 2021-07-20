@@ -50,7 +50,7 @@ if ( isset($_REQUEST['attachment_id']) && ($id = intval($_REQUEST['attachment_id
 		case 3 :
 			if ( $thumb_url = wp_get_attachment_image_src( $id, 'thumbnail', true ) )
 				echo '<img class="pinkynail" src="' . esc_url( $thumb_url[0] ) . '" alt="" />';
-			echo '<a class="edit-attachment" href="' . esc_url( get_edit_post_link( $id ) ) . '" target="_blank">' . _x( 'Edit', 'media item' ) . '</a>';
+			echo '<a class="edit-attachment" href="' . esc_url( get_edit_post_link( $id ) ) . '" target="_blank" rel="noopener noreferrer">' . _x( 'Edit', 'media item' ) . '</a>';
 
 			// Title shouldn't ever be empty, but use filename just in case.
 			$file = get_attached_file( $post->ID );

@@ -1454,7 +1454,7 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 
 	?>
 	<div class="sub">
-		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" rel="noopener noreferrer" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
 	</div>
 
 	<ul class="petitions-tabs">
@@ -1503,7 +1503,7 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 						<td class="votes-count"><?php echo esc_html( $petition->votesCount ); ?></td>
 
 						<td class="petition">
-							<a target="_blank" href="<?php echo esc_url( $petition->link ) ?>"><?php echo esc_html( $petition->title )?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span></a>
+							<a target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $petition->link ) ?>"><?php echo esc_html( $petition->title )?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span></a>
 							<?php
 								if ( 'open' === $petition->status ){
 									echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );

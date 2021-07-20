@@ -2855,9 +2855,9 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			array(
 				// Raw values.
 				array(
-					'title'   => '<a href="#" target="_blank" data-unfiltered=true>link</a>',
-					'content' => '<a href="#" target="_blank" data-unfiltered=true>link</a>',
-					'excerpt' => '<a href="#" target="_blank" data-unfiltered=true>link</a>',
+					'title'   => '<a href="#" target="_blank" rel="noopener noreferrer" data-unfiltered=true>link</a>',
+					'content' => '<a href="#" target="_blank" rel="noopener noreferrer" data-unfiltered=true>link</a>',
+					'excerpt' => '<a href="#" target="_blank" rel="noopener noreferrer" data-unfiltered=true>link</a>',
 				),
 				// Expected returned values.
 				array(
@@ -2866,12 +2866,12 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 						'rendered' => '<a href="#">link</a>',
 					),
 					'content' => array(
-						'raw'      => '<a href="#" target="_blank">link</a>',
-						'rendered' => '<p><a href="#" target="_blank">link</a></p>',
+						'raw'      => '<a href="#" target="_blank" rel="noopener noreferrer">link</a>',
+						'rendered' => '<p><a href="#" target="_blank" rel="noopener noreferrer">link</a></p>',
 					),
 					'excerpt' => array(
-						'raw'      => '<a href="#" target="_blank">link</a>',
-						'rendered' => '<p><a href="#" target="_blank">link</a></p>',
+						'raw'      => '<a href="#" target="_blank" rel="noopener noreferrer">link</a>',
+						'rendered' => '<p><a href="#" target="_blank" rel="noopener noreferrer">link</a></p>',
 					),
 				)
 			),

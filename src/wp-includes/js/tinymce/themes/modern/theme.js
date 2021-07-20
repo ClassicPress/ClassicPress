@@ -1201,7 +1201,7 @@ var modern = (function () {
       };
     }
     if (hasStatusbar(editor)) {
-      var linkHtml = '<a href="https://www.tinymce.com/?utm_campaign=editor_referral&amp;utm_medium=poweredby&amp;utm_source=tinymce" rel="noopener" target="_blank" role="presentation" tabindex="-1">tinymce</a>';
+      var linkHtml = '<a href="https://www.tinymce.com/?utm_campaign=editor_referral&amp;utm_medium=poweredby&amp;utm_source=tinymce" target="_blank" rel="noopener noreferrer" role="presentation" tabindex="-1">tinymce</a>';
       var html = global$5.translate([
         'Powered by {0}',
         linkHtml
