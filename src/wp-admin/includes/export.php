@@ -299,7 +299,7 @@ function export_wp( $args = array() ) {
 			/**
 			 * Filters whether to selectively skip term meta used for WXR exports.
 			 *
-			 * Returning a truthy value to the filter will skip the current meta
+			 * Returning a truthy value from the filter will skip the current meta
 			 * object from being exported.
 			 *
 			 * @since WP-4.6.0
@@ -544,25 +544,27 @@ function export_wp( $args = array() ) {
 		<wp:is_sticky><?php echo intval( $is_sticky ); ?></wp:is_sticky>
 <?php	if ( $post->post_type == 'attachment' ) : ?>
 		<wp:attachment_url><?php echo wxr_cdata( wp_get_attachment_url( $post->ID ) ); ?></wp:attachment_url>
-<?php 	endif; ?>
-<?php 	wxr_post_taxonomy(); ?>
-<?php	$postmeta = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d", $post->ID ) );
-		foreach ( $postmeta as $meta ) :
-			/**
-			 * Filters whether to selectively skip post meta used for WXR exports.
-			 *
-			 * Returning a truthy value to the filter will skip the current meta
-			 * object from being exported.
-			 *
-			 * @since WP-3.3.0
-			 *
-			 * @param bool   $skip     Whether to skip the current post meta. Default false.
-			 * @param string $meta_key Current meta key.
-			 * @param object $meta     Current meta object.
-			 */
-			if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) )
-				continue;
-		?>
+	<?php endif; ?>
+				<?php wxr_post_taxonomy(); ?>
+				<?php
+				$postmeta = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d", $post->ID ) );
+				foreach ( $postmeta as $meta ) :
+					/**
+					 * Filters whether to selectively skip post meta used for WXR exports.
+					 *
+					 * Returning a truthy value from the filter will skip the current meta
+					 * object from being exported.
+					 *
+					 * @since 3.3.0
+					 *
+					 * @param bool   $skip     Whether to skip the current post meta. Default false.
+					 * @param string $meta_key Current meta key.
+					 * @param object $meta     Current meta object.
+					 */
+					if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) ) {
+						continue;
+					}
+					?>
 		<wp:postmeta>
 			<wp:meta_key><?php echo wxr_cdata( $meta->meta_key ); ?></wp:meta_key>
 			<wp:meta_value><?php echo wxr_cdata( $meta->meta_value ); ?></wp:meta_value>
@@ -585,27 +587,29 @@ function export_wp( $args = array() ) {
 			<wp:comment_type><?php echo wxr_cdata( $c->comment_type ); ?></wp:comment_type>
 			<wp:comment_parent><?php echo intval( $c->comment_parent ); ?></wp:comment_parent>
 			<wp:comment_user_id><?php echo intval( $c->user_id ); ?></wp:comment_user_id>
-<?php		$c_meta = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->commentmeta WHERE comment_id = %d", $c->comment_ID ) );
-			foreach ( $c_meta as $meta ) :
-				/**
-				 * Filters whether to selectively skip comment meta used for WXR exports.
-				 *
-				 * Returning a truthy value to the filter will skip the current meta
-				 * object from being exported.
-				 *
-				 * @since WP-4.0.0
-				 *
-				 * @param bool   $skip     Whether to skip the current comment meta. Default false.
-				 * @param string $meta_key Current meta key.
-				 * @param object $meta     Current meta object.
-				 */
-				if ( apply_filters( 'wxr_export_skip_commentmeta', false, $meta->meta_key, $meta ) ) {
-					continue;
-				}
-			?>
-			<wp:commentmeta>
-				<wp:meta_key><?php echo wxr_cdata( $meta->meta_key ); ?></wp:meta_key>
-				<wp:meta_value><?php echo wxr_cdata( $meta->meta_value ); ?></wp:meta_value>
+					<?php
+					$c_meta = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->commentmeta WHERE comment_id = %d", $c->comment_ID ) );
+					foreach ( $c_meta as $meta ) :
+						/**
+						 * Filters whether to selectively skip comment meta used for WXR exports.
+						 *
+						 * Returning a truthy value from the filter will skip the current meta
+						 * object from being exported.
+						 *
+						 * @since 4.0.0
+						 *
+						 * @param bool   $skip     Whether to skip the current comment meta. Default false.
+						 * @param string $meta_key Current meta key.
+						 * @param object $meta     Current meta object.
+						 */
+						if ( apply_filters( 'wxr_export_skip_commentmeta', false, $meta->meta_key, $meta ) ) {
+							continue;
+						}
+						?>
+	<wp:commentmeta>
+	<wp:meta_key><?php echo wxr_cdata( $meta->meta_key ); ?></wp:meta_key>
+			<wp:meta_value><?php echo wxr_cdata( $meta->meta_value ); ?></wp:meta_value>
+>>>>>>> 8b67473da6... Docs: Standardize on "Returning a value from the filter" vs. "Passing a value to the filter".
 			</wp:commentmeta>
 <?php		endforeach; ?>
 		</wp:comment>

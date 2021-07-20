@@ -609,15 +609,61 @@ function strip_fragment_from_url( $url ) {
 function redirect_guess_404_permalink() {
 	global $wpdb;
 
-	if ( get_query_var('name') ) {
-		$where = $wpdb->prepare("post_name LIKE %s", $wpdb->esc_like( get_query_var('name') ) . '%');
+	/**
+	 * Filters whether to attempt to guess a redirect URL for a 404 request.
+	 *
+	 * Returning a false value from the filter will disable the URL guessing
+	 * and return early without performing a redirect.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param bool $do_redirect_guess Whether to attempt to guess a redirect URL
+	 *                                for a 404 request. Default true.
+	 */
+	if ( false === apply_filters( 'do_redirect_guess_404_permalink', true ) ) {
+		return false;
+	}
 
-		// if any of post_type, year, monthnum, or day are set, use them to refine the query
-		if ( get_query_var('post_type') )
-			$where .= $wpdb->prepare(" AND post_type = %s", get_query_var('post_type'));
-		else
+	/**
+	 * Short-circuits the redirect URL guessing for 404 requests.
+	 *
+	 * Returning a non-null value from the filter will effectively short-circuit
+	 * the URL guessing, returning the passed value instead.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param null|string|false $pre Whether to short-circuit guessing the redirect for a 404.
+	 *                               Default null to continue with the URL guessing.
+	 */
+	$pre = apply_filters( 'pre_redirect_guess_404_permalink', null );
+	if ( null !== $pre ) {
+		return $pre;
+	}
+
+	if ( get_query_var( 'name' ) ) {
+		/**
+		 * Filters whether to perform a strict guess for a 404 redirect.
+		 *
+		 * Returning a truthy value from the filter will redirect only exact post_name matches.
+		 *
+		 * @since WP-5.5.0
+		 *
+		 * @param bool $strict_guess Whether to perform a strict guess. Default false (loose guess).
+		 */
+		$strict_guess = apply_filters( 'strict_redirect_guess_404_permalink', false );
+
+		if ( $strict_guess ) {
+			$where = $wpdb->prepare( 'post_name = %s', get_query_var( 'name' ) );
+		} else {
+			$where = $wpdb->prepare( 'post_name LIKE %s', $wpdb->esc_like( get_query_var( 'name' ) ) . '%' );
+		}
+
+		// If any of post_type, year, monthnum, or day are set, use them to refine the query.
+		if ( get_query_var( 'post_type' ) ) {
+			$where .= $wpdb->prepare( ' AND post_type = %s', get_query_var( 'post_type' ) );
+		} else {
 			$where .= " AND post_type IN ('" . implode( "', '", get_post_types( array( 'public' => true ) ) ) . "')";
-
+		}
 		if ( get_query_var('year') )
 			$where .= $wpdb->prepare(" AND YEAR(post_date) = %d", get_query_var('year'));
 		if ( get_query_var('monthnum') )

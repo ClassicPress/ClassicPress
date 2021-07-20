@@ -726,7 +726,7 @@ function set_screen_options() {
 					 * The filter can also be used to modify non-standard [items]_per_page
 					 * settings. See the parent function for a full list of standard options.
 					 *
-					 * Returning false to the filter will skip saving the current option.
+					 * Returning false from the filter will skip saving the current option.
 					 *
 					 * @since 2.8.0
 					 * @since WP-4.9.15 Only applied to options ending with '_page',
@@ -747,7 +747,7 @@ function set_screen_options() {
 				 *
 				 * The dynamic portion of the hook, `$option`, refers to the option name.
 				 *
-				 * Returning false to the filter will skip saving the current option.
+				 * Returning false from the filter will skip saving the current option.
 				 *
 				 * @since WP-4.9.15
 				 *

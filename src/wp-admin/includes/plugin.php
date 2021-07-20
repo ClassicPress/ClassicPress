@@ -29,8 +29,10 @@
  *    		must have the first slash. Defaults to the base folder the plugin is
  *    		located in.
  *     Network: Optional. Specify "Network: true" to require that a plugin is activated
- *    		across all sites in an installation. This will prevent a plugin from being
- *    		activated on a single site when Multisite is enabled.
+ *          across all sites in an installation. This will prevent a plugin from being
+ *          activated on a single site when Multisite is enabled.
+ *     Requires at least: Optional. Specify the minimum required WordPress version.
+ *     Requires PHP: Optional. Specify the minimum required PHP version.
  *      * / # Remove the space to close comment
  *
  * Some users have issues with opening large files and manipulating the contents
@@ -46,6 +48,7 @@
  * reading.
  *
  * @since WP-1.5.0
+ * @since WP-5.3.0 Added support for `Requires at least` and `Requires PHP`.
  *
  * @param string $plugin_file Path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
@@ -63,6 +66,8 @@
  *     @type string $TextDomain  Plugin textdomain.
  *     @type string $DomainPath  Plugins relative directory path to .mo files.
  *     @type bool   $Network     Whether the plugin can only be activated network-wide.
+ *     @type string $RequiresWP  Minimum required version of WordPress.
+ *     @type string $RequiresPHP Minimum required version of PHP.
  * }
  */
 function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
@@ -72,11 +77,13 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 		'PluginURI' => 'Plugin URI',
 		'Version' => 'Version',
 		'Description' => 'Description',
-		'Author' => 'Author',
-		'AuthorURI' => 'Author URI',
-		'TextDomain' => 'Text Domain',
-		'DomainPath' => 'Domain Path',
-		'Network' => 'Network',
+		'Author'      => 'Author',
+		'AuthorURI'   => 'Author URI',
+		'TextDomain'  => 'Text Domain',
+		'DomainPath'  => 'Domain Path',
+		'Network'     => 'Network',
+		'RequiresWP'  => 'Requires at least',
+		'RequiresPHP' => 'Requires PHP',
 		// Site Wide Only is deprecated in favor of Network.
 		'_sitewide' => 'Site Wide Only',
 	);
@@ -521,6 +528,7 @@ function is_network_only_plugin( $plugin ) {
  * ensure that the success redirection will update the error redirection.
  *
  * @since WP-2.5.0
+ * @since WP-5.2.0 Test for WordPress version and PHP version compatibility.
  *
  * @param string $plugin       Path to the main plugin file from plugins directory.
  * @param string $redirect     Optional. URL to redirect to.
@@ -543,6 +551,11 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 	$valid = validate_plugin($plugin);
 	if ( is_wp_error($valid) )
 		return $valid;
+
+	$requirements = validate_plugin_requirements( $plugin );
+	if ( is_wp_error( $requirements ) ) {
+		return $requirements;
+	}
 
 	if ( ( $network_wide && ! isset( $current[ $plugin ] ) ) || ( ! $network_wide && ! in_array( $plugin, $current ) ) ) {
 		if ( !empty($redirect) )
@@ -959,6 +972,61 @@ function validate_plugin($plugin) {
 	if ( ! isset($installed_plugins[$plugin]) )
 		return new WP_Error('no_plugin_header', __('The plugin does not have a valid header.'));
 	return 0;
+}
+
+/**
+ * Validate the plugin requirements for WP version and PHP version.
+ *
+ * @since 5.2.0
+ *
+ * @param string $plugin Path to the plugin file relative to the plugins directory.
+ * @return true|WP_Error True if requirements are met, WP_Error on failure.
+ */
+function validate_plugin_requirements( $plugin ) {
+	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
+	$plugin_data = array(
+		'requires'     => '',
+		'requires_php' => '',
+	);
+
+	if ( file_exists( $readme_file ) ) {
+		$plugin_data = get_file_data(
+			$readme_file,
+			array(
+				'requires'     => 'Requires at least',
+				'requires_php' => 'Requires PHP',
+			),
+			'plugin'
+		);
+	}
+
+	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
+
+	// Check for headers in the plugin's PHP file, give precedence to the plugin headers.
+	$plugin_data['requires']     = ! empty( $plugin_data['RequiresWP'] ) ? $plugin_data['RequiresWP'] : $plugin_data['requires'];
+	$plugin_data['requires_php'] = ! empty( $plugin_data['RequiresPHP'] ) ? $plugin_data['RequiresPHP'] : $plugin_data['requires_php'];
+
+	$plugin_data['wp_compatible']  = is_wp_version_compatible( $plugin_data['requires'] );
+	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
+
+	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
+		return new WP_Error( 'plugin_wp_php_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+		);
+	} elseif ( ! $plugin_data['php_compatible'] ) {
+		return new WP_Error( 'plugin_php_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+		);
+	} elseif ( ! $plugin_data['wp_compatible'] ) {
+		return new WP_Error( 'plugin_wp_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+		);
+	}
+
+	return true;
 }
 
 /**

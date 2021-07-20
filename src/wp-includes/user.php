@@ -589,7 +589,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 	/**
 	 * Filters the list of a user's sites before it is populated.
 	 *
-	 * Passing a non-null value to the filter will effectively short circuit
+	 * Returning a non-null value from the filter will effectively short circuit
 	 * get_blogs_of_user(), returning that value instead.
 	 *
 	 * @since WP-4.6.0
