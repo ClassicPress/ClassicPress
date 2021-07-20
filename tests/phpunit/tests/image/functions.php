@@ -520,11 +520,17 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( $editor->get_error_message() );
 		}
 
+<<<<<<< HEAD
 		$attachment_id = $this->factory->attachment->create_object(
 			$test_file, 0, array(
 				'post_mime_type' => 'application/pdf',
 			)
 		);
+=======
+		$attachment_id = $this->factory->attachment->create_object( $test_file, 0, array(
+			'post_mime_type' => 'application/pdf',
+		) );
+>>>>>>> 62bccb1619... Tests: Temporarily skip PDF tests if they fail due to ImageMagick permission errors.
 
 		$this->assertNotEmpty( $attachment_id );
 
@@ -580,16 +586,26 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$pdf_path = $temp_dir . 'test.pdf';
 		copy( DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf', $pdf_path );
 
+<<<<<<< HEAD
 		$editor = wp_get_image_editor( $pdf_path );
+=======
+		$editor = wp_get_image_editor( $test_file );
+>>>>>>> 62bccb1619... Tests: Temporarily skip PDF tests if they fail due to ImageMagick permission errors.
 		if ( is_wp_error( $editor ) ) {
 			$this->markTestSkipped( $editor->get_error_message() );
 		}
 
+<<<<<<< HEAD
 		$attachment_id = $this->factory->attachment->create_object(
 			$pdf_path, 0, array(
 				'post_mime_type' => 'application/pdf',
 			)
 		);
+=======
+		$attachment_id = $this->factory->attachment->create_object( $pdf_path, 0, array(
+			'post_mime_type' => 'application/pdf',
+		) );
+>>>>>>> 62bccb1619... Tests: Temporarily skip PDF tests if they fail due to ImageMagick permission errors.
 
 		$metadata     = wp_generate_attachment_metadata( $attachment_id, $pdf_path );
 		$preview_path = $temp_dir . $metadata['sizes']['full']['file'];
