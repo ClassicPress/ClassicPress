@@ -631,18 +631,11 @@ function wp_extract_urls( $content ) {
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
-<<<<<<< HEAD
- * @param string $content Post Content.
- * @param int    $post_ID Post ID.
- */
-function do_enclose( $content, $post_ID ) {
-=======
  * @param string|null $content Post content. If `null`, the `post_content` field from `$post` is used.
  * @param int|WP_Post $post    Post ID or post object.
  * @return null|bool Returns false if post is not found.
  */
 function do_enclose( $content, $post ) {
->>>>>>> 9c220ffaf7 (Code Modernization: Fix PHP 8 deprecation notices for optional function parameters declared before required parameters.)
 	global $wpdb;
 
 	//TODO: Tidy this ghetto code up and make the debug code optional
