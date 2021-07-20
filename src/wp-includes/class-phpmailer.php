@@ -1475,9 +1475,6 @@ class PHPMailer
      */
     protected static function isPermittedPath($path)
     {
-<<<<<<< HEAD
-        return !preg_match('#^[a-z]+://#i', $path);
-=======
         //Matches scheme definition from https://tools.ietf.org/html/rfc3986#section-3.1
         return !preg_match('#^[a-z][a-z\d+.-]*://#i', $path);
     }
@@ -1500,7 +1497,6 @@ class PHPMailer
             $readable = $readable && is_readable($path);
         }
         return $readable;
->>>>>>> a3e6dff8e9... External libraries: Improve attachment handling in PHPMailer
     }
 
     /**
@@ -1832,11 +1828,7 @@ class PHPMailer
         // There is no English translation file
         if ($langcode != 'en') {
             // Make sure language file path is readable
-<<<<<<< HEAD
-            if (!self::isPermittedPath($lang_file) or !is_readable($lang_file)) {
-=======
             if (!self::fileIsAccessible($lang_file)) {
->>>>>>> a3e6dff8e9... External libraries: Improve attachment handling in PHPMailer
                 $foundlang = false;
             } else {
                 // Overwrite language-specific strings.
@@ -2557,11 +2549,7 @@ class PHPMailer
     public function addAttachment($path, $name = '', $encoding = 'base64', $type = '', $disposition = 'attachment')
     {
         try {
-<<<<<<< HEAD
-            if (!self::isPermittedPath($path) or !@is_file($path)) {
-=======
             if (!self::fileIsAccessible($path)) {
->>>>>>> a3e6dff8e9... External libraries: Improve attachment handling in PHPMailer
                 throw new phpmailerException($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
@@ -2742,11 +2730,7 @@ class PHPMailer
     protected function encodeFile($path, $encoding = 'base64')
     {
         try {
-<<<<<<< HEAD
-            if (!self::isPermittedPath($path) or !file_exists($path)) {
-=======
             if (!self::fileIsAccessible($path)) {
->>>>>>> a3e6dff8e9... External libraries: Improve attachment handling in PHPMailer
                 throw new phpmailerException($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
             $magic_quotes = ( PHP_VERSION_ID < 70400 && get_magic_quotes_runtime() ); // WP: Patched for PHP 7.4.
@@ -3090,11 +3074,7 @@ class PHPMailer
      */
     public function addEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '', $disposition = 'inline')
     {
-<<<<<<< HEAD
-        if (!self::isPermittedPath($path) or !@is_file($path)) {
-=======
         if (!self::fileIsAccessible($path)) {
->>>>>>> a3e6dff8e9... External libraries: Improve attachment handling in PHPMailer
             $this->setError($this->lang('file_access') . $path);
             return false;
         }
