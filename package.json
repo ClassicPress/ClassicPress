@@ -11,7 +11,7 @@
   "devDependencies": {
     "@lodder/grunt-postcss": "3.0.1",
     "@rollup/plugin-commonjs": "19.0.0",
-    "autoprefixer": "10.2.5",
+    "autoprefixer": "10.3.1",
     "grunt": "1.4.0",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.0",
