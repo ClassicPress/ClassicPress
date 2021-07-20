@@ -236,9 +236,12 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 			'install_languages'      => array( 'administrator' ),
 			'update_languages'       => array( 'administrator' ),
 			'deactivate_plugins'     => array( 'administrator' ),
+
 			'export_others_personal_data' => array( 'administrator' ),
 			'erase_others_personal_data'  => array( 'administrator' ),
 			'manage_privacy_options'      => array( 'administrator' ),
+
+			'upgrade_php'            => array( 'administrator' ),
 
 			'edit_categories'        => array( 'administrator', 'editor' ),
 			'delete_categories'      => array( 'administrator', 'editor' ),
@@ -270,9 +273,12 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 			'install_languages'      => array(),
 			'update_languages'       => array(),
 			'deactivate_plugins'     => array(),
+
 			'export_others_personal_data' => array( '' ),
 			'erase_others_personal_data'  => array( '' ),
-			'manage_privacy_options'       => array(),
+			'manage_privacy_options'      => array(),
+
+			'upgrade_php'            => array(),
 
 			'customize'              => array( 'administrator' ),
 			'delete_site'            => array( 'administrator' ),

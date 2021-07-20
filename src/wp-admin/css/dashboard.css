@@ -1088,6 +1088,28 @@ table.cp_petitions span.started {
 	padding: 2px 4px;
 }
 
+/* PHP Nag */
+#dashboard_php_nag .dashicons-warning {
+	color: #ffb900;
+	padding-right: 6px;
+}
+
+#dashboard_php_nag.php-insecure .dashicons-warning {
+	color: #df3232;
+}
+
+#dashboard_php_nag p {
+	margin: 12px 0;
+}
+
+#dashboard_php_nag h3 {
+	font-weight: 600;
+}
+
+#dashboard_php_nag .button .dashicons-external {
+	line-height: 25px;
+}
+
 /* =Media Queries
 -------------------------------------------------------------- */
 

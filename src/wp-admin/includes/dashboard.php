@@ -34,6 +34,13 @@ function wp_dashboard_setup() {
 			wp_add_dashboard_widget( 'dashboard_browser_nag', __( 'Your browser is out of date!' ), 'wp_dashboard_browser_nag' );
 	}
 
+	// PHP Version.
+	$response = wp_check_php_version();
+	if ( $response && isset( $response['is_acceptable'] ) && ! $response['is_acceptable'] && current_user_can( 'upgrade_php' ) ) {
+		add_filter( 'postbox_classes_dashboard_dashboard_php_nag', 'dashboard_php_nag_class' );
+		wp_add_dashboard_widget( 'dashboard_php_nag', __( 'PHP Update Required' ), 'wp_dashboard_php_nag' );
+	}
+
 	// Right Now
 	if ( is_blog_admin() && current_user_can('edit_posts') )
 		wp_add_dashboard_widget( 'dashboard_right_now', __( 'At a Glance' ), 'wp_dashboard_right_now' );
@@ -177,9 +184,11 @@ function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_
 	if ( in_array($widget_id, $side_widgets) )
 		$location = 'side';
 
-	$priority = 'core';
-	if ( 'dashboard_browser_nag' === $widget_id )
+	$high_priority_widgets = array( 'dashboard_browser_nag', 'dashboard_php_nag' );
+
+	if ( in_array( $widget_id, $high_priority_widgets, true ) ) {
 		$priority = 'high';
+	}
 
 	add_meta_box( $widget_id, $widget_name, $callback, $screen, $location, $priority, $callback_args );
 }
@@ -1327,6 +1336,109 @@ function wp_check_browser_version() {
 			return false;
 
 		set_site_transient( 'browser_' . $key, $response, WEEK_IN_SECONDS );
+	}
+
+	return $response;
+}
+
+/**
+ * Displays the PHP update nag.
+ *
+ * @since 5.1.0
+ */
+function wp_dashboard_php_nag() {
+	$response = wp_check_php_version();
+
+	if ( ! $response ) {
+		return;
+	}
+
+	if ( isset( $response['is_secure'] ) && ! $response['is_secure'] ) {
+		$msg = __( 'ClassicPress has detected that your site is running on an insecure version of PHP.' );
+	} else {
+		$msg = __( 'ClassicPress has detected that your site is running on an outdated version of PHP.' );
+	}
+
+	?>
+	<p><?php echo $msg; ?></p>
+
+	<h3><?php _e( 'What is PHP and how does it affect my site?' ); ?></h3>
+	<p><?php _e( 'PHP is the programming language we use to build and maintain ClassicPress. Newer versions of PHP are both faster and more secure, so updating will have a positive effect on your site’s performance.' ); ?></p>
+
+	<p class="button-container">
+		<?php
+		printf(
+			'<a class="button button-primary" href="%1$s" target="_blank" rel="noopener noreferrer">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+			esc_url( wp_get_update_php_url() ),
+			__( 'Learn more about updating PHP' ),
+			/* translators: accessibility text */
+			__( '(opens in a new tab)' )
+		);
+		?>
+	</p>
+	<?php
+
+	wp_update_php_annotation();
+}
+
+/**
+ * Adds an additional class to the PHP nag if the current version is insecure.
+ *
+ * @since 5.1.0
+ *
+ * @param array $classes Metabox classes.
+ * @return array Modified metabox classes.
+ */
+function dashboard_php_nag_class( $classes ) {
+	$response = wp_check_php_version();
+
+	if ( $response && isset( $response['is_secure'] ) && ! $response['is_secure'] ) {
+		$classes[] = 'php-insecure';
+	}
+
+	return $classes;
+}
+
+/**
+ * Checks if the user needs to update PHP.
+ *
+ * @since 5.1.0
+ *
+ * @return array|false $response Array of PHP version data. False on failure.
+ */
+function wp_check_php_version() {
+	$version = phpversion();
+	$key     = md5( $version );
+
+	$response = get_site_transient( 'php_check_' . $key );
+	if ( false === $response ) {
+		$url = 'http://api.wordpress.org/core/serve-happy/1.0/';
+		if ( wp_http_supports( array( 'ssl' ) ) ) {
+			$url = set_url_scheme( $url, 'https' );
+		}
+
+		$url = add_query_arg( 'php_version', $version, $url );
+
+		$response = wp_remote_get( $url );
+
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
+
+		/**
+		 * Response should be an array with:
+		 *  'recommended_version' - string - The PHP version recommended by ClassicPress.
+		 *  'is_supported' - boolean - Whether the PHP version is actively supported.
+		 *  'is_secure' - boolean - Whether the PHP version receives security updates.
+		 *  'is_acceptable' - boolean - Whether the PHP version is still acceptable for ClassicPress.
+		 */
+		$response = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( ! is_array( $response ) ) {
+			return false;
+		}
+
+		set_site_transient( 'php_check_' . $key, $response, WEEK_IN_SECONDS );
 	}
 
 	return $response;

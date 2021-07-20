@@ -717,10 +717,42 @@ function install_plugin_information() {
 	<?php
 	$wp_version = get_bloginfo( 'version' );
 
-	if ( ! empty( $api->tested ) && version_compare( substr( $wp_version, 0, strlen( $api->tested ) ), $api->tested, '>' ) ) {
-		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been tested</strong> with your current version of ClassicPress.' ) . '</p></div>';
-	} elseif ( ! empty( $api->requires ) && version_compare( substr( $wp_version, 0, strlen( $api->requires ) ), $api->requires, '<' ) ) {
-		echo '<div class="notice notice-warning notice-alt"><p>' . __( '<strong>Warning:</strong> This plugin has <strong>not been marked as compatible</strong> with your version of ClassicPress.' ) . '</p></div>';
+	$compatible_php = ( empty( $api->requires_php ) || version_compare( substr( phpversion(), 0, strlen( $api->requires_php ) ), $api->requires_php, '>=' ) );
+	$tested_wp      = ( empty( $api->tested ) || version_compare( substr( $wp_version, 0, strlen( $api->tested ) ), $api->tested, '<=' ) );
+	$compatible_wp  = ( empty( $api->requires ) || version_compare( substr( $wp_version, 0, strlen( $api->requires ) ), $api->requires, '>=' ) );
+
+	if ( ! $compatible_php ) {
+		echo '<div class="notice notice-error notice-alt"><p>';
+		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
+		if ( current_user_can( 'update_php' ) ) {
+			printf(
+				/* translators: %s: "Update PHP" page URL */
+				' ' . __( '<a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
+				esc_url( wp_get_update_php_url() )
+			);
+			echo '</p>';
+			wp_update_php_annotation();
+		} else {
+			echo '</p>';
+		}
+		echo '</div>';
+	}
+
+	if ( ! $tested_wp ) {
+		echo '<div class="notice notice-warning notice-alt"><p>';
+		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
+		echo '</p></div>';
+	} elseif ( ! $compatible_wp ) {
+		echo '<div class="notice notice-error notice-alt"><p>';
+		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
+		if ( current_user_can( 'update_core' ) ) {
+			printf(
+				/* translators: %s: "Update ClassicPress" screen URL */
+				' ' . __( '<a href="%s" target="_parent">Click here to update ClassicPress</a>.' ),
+				self_admin_url( 'update-core.php' )
+			);
+		}
+		echo '</p></div>';
 	}
 
 	foreach ( (array) $api->sections as $section_name => $content ) {
