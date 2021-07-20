@@ -550,11 +550,13 @@ function cp_get_update_directory_root( $working_dir ) {
 }
 
 /**
- * Copies a directory from one location to another via the ClassicPress Filesystem Abstraction.
- * Assumes that WP_Filesystem() has already been called and setup.
+ * Copies a directory from one location to another via the ClassicPress
+ * Filesystem Abstraction. Assumes that WP_Filesystem() has already been called
+ * and set up.
  *
- * This is a temporary function for the 3.1 -> 3.2 upgrade, as well as for those upgrading to
- * 3.7+
+ * This is a standalone copy of this function that is used to upgrade the core
+ * files. It is placed here so that the version of this function from the *new*
+ * ClassicPress version will be called.
  *
  * @ignore
  * @since WP-3.2.0
@@ -586,6 +588,14 @@ function _copy_dir($from, $to, $skip_list = array() ) {
 				$wp_filesystem->chmod( $to . $filename, FS_CHMOD_FILE );
 				if ( ! $wp_filesystem->copy($from . $filename, $to . $filename, true, FS_CHMOD_FILE) )
 					return new WP_Error( 'copy_failed__copy_dir', __( 'Could not copy file.' ), $to . $filename );
+			}
+			if (
+				'.php' === strtolower( substr( $filename, -4 ) ) &&
+				function_exists( 'opcache_invalidate' ) &&
+				/** This filter is documented in wp-admin/includes/file.php */
+				apply_filters( 'wp_opcache_invalidate_file', true, $to . $filename )
+			) {
+				opcache_invalidate( $to . $filename );
 			}
 		} elseif ( 'd' == $fileinfo['type'] ) {
 			if ( !$wp_filesystem->is_dir($to . $filename) ) {
