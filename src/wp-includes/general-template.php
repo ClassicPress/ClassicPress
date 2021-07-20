@@ -2631,6 +2631,22 @@ function wp_footer() {
 }
 
 /**
+ * Fire the wp_body_open action.
+ *
+ * * See {@see 'wp_body_open'}.
+ *
+ * @since 5.2.0
+ */
+function wp_body_open() {
+	/**
+	 * Triggered after the opening <body> tag.
+	 *
+	 * @since 5.2.0
+	 */
+	do_action( 'wp_body_open' );
+}
+
+/**
  * Display the links to the general feeds.
  *
  * @since WP-2.8.0
@@ -3907,7 +3923,7 @@ function register_admin_color_schemes() {
 	wp_admin_css_color( 'fresh', _x( 'Default', 'admin color scheme' ),
 		false,
 		array( '#222', '#333', '#0073aa', '#00a0d2' ),
-		array( 'base' => '#82878c', 'focus' => '#00a0d2', 'current' => '#fff' )
+		array( 'base' => '#a0a5aa', 'focus' => '#00a0d2', 'current' => '#fff' )
 	);
 
 	// Other color schemes are not available when running out of src

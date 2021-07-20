@@ -536,8 +536,8 @@ function file_is_valid_image($path) {
  * @param string $path File path to test.
  * @return bool True if suitable, false if not suitable.
  */
-function file_is_displayable_image($path) {
-	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP );
+function file_is_displayable_image( $path ) {
+	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_ICO );
 
 	$info = @getimagesize( $path );
 	if ( empty( $info ) ) {
