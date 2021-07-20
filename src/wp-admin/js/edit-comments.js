@@ -593,7 +593,7 @@ commentReply = {
 			commentReply.toggle($(this).parent());
 		});
 
-		$('#doaction, #doaction2, #post-query-submit').click(function(){
+		$('#doaction, #post-query-submit').click(function(){
 			if ( $('#the-comment-list #replyrow').length > 0 )
 				commentReply.close();
 		});
