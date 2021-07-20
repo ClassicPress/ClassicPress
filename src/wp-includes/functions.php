@@ -620,13 +620,18 @@ function wp_extract_urls( $content ) {
  * pingbacks and trackbacks.
  *
  * @since WP-1.5.0
+ * @since WP-5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
+ *              updated to accept a post ID or a WP_Post object.
+ * @since WP-5.6.0 The `$content` parameter is no longer optional, but passing `null` to skip it
+ *              is still supported.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
- * @param string $content Post Content.
- * @param int    $post_ID Post ID.
+ * @param string|null $content Post content. If `null`, the `post_content` field from `$post` is used.
+ * @param int|WP_Post $post    Post ID or post object.
+ * @return null|bool Returns false if post is not found.
  */
-function do_enclose( $content, $post_ID ) {
+function do_enclose( $content, $post ) {
 	global $wpdb;
 
 	//TODO: Tidy this ghetto code up and make the debug code optional
