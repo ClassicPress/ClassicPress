@@ -22,7 +22,7 @@
     "grunt-contrib-cssmin": "4.0.0",
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.0.0",
-    "grunt-contrib-qunit": "4.0.0",
+    "grunt-contrib-qunit": "5.0.1",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
     "grunt-jsvalidate": "0.2.2",
