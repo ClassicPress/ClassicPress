@@ -56,7 +56,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		return $meta_value;
 	}
 
-	final private function _getSingleSitePrimitiveCaps() {
+	private function _getSingleSitePrimitiveCaps() {
 		return array(
 
 			'unfiltered_html'        => array( 'administrator', 'editor' ),
@@ -135,7 +135,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 	}
 
-	final private function _getMultiSitePrimitiveCaps() {
+	private function _getMultiSitePrimitiveCaps() {
 		return array(
 
 			'unfiltered_html'        => array(),
@@ -215,7 +215,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 	}
 
-	final private function _getSingleSiteMetaCaps() {
+	private function _getSingleSiteMetaCaps() {
 		return array(
 			'create_sites'           => array(),
 			'delete_sites'           => array(),
@@ -252,7 +252,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		);
 	}
 
-	final private function _getMultiSiteMetaCaps() {
+	private function _getMultiSiteMetaCaps() {
 		return array(
 			'create_sites'           => array(),
 			'delete_sites'           => array(),
