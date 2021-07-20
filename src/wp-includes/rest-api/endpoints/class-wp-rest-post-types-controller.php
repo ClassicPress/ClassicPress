@@ -55,6 +55,7 @@ class WP_REST_Post_Types_Controller extends WP_REST_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
+				'permission_callback' => '__return_true',
 				'args'     => array(
 					'context' => $this->get_context_param( array( 'default' => 'view' ) ),
 				),

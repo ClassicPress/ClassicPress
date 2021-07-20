@@ -35,6 +35,7 @@ final class WP_oEmbed_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
+				'permission_callback' => '__return_true',
 				'args'     => array(
 					'url'      => array(
 						'required'          => true,
