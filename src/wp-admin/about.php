@@ -132,10 +132,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
 					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
 					'4.9.16'
 				);
 				?>
@@ -155,8 +152,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> 2e8c2d9fa5... WordPress 4.9.16.
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
 					'4.9.15'
 				);
 				?>
