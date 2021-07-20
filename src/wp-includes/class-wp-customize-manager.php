@@ -5535,6 +5535,8 @@ final class WP_Customize_Manager {
 				$theme->id           = $theme->slug;
 				$theme->screenshot   = array( $theme->screenshot_url );
 				$theme->authorAndUri = $theme->author;
+				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires );
+				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php );
 				// The .org API can return the full parent theme details if passed the 'parent' arg, or if passed the 'template' option it'll return that in the event it's a child theme.
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
