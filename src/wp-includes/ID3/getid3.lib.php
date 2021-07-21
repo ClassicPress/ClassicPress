@@ -109,7 +109,7 @@ class getid3_lib
 		static $hasINT64 = null;
 		if ($hasINT64 === null) { // 10x faster than is_null()
 			$hasINT64 = is_int(pow(2, 31)); // 32-bit int are limited to (2^31)-1
-			if (!$hasINT64 && !defined('PHP_INT_MIN')) {
+			if (!$hasINT64 && !defined('PHP_INT_MIN')) { // phpcs:ignore PHPCompatibility.Constants.NewConstants.php_int_minFound
 				define('PHP_INT_MIN', ~PHP_INT_MAX);
 			}
 		}
