@@ -458,7 +458,7 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
  *
  * @param string|callable $content_func
  */
-function wp_iframe($content_func /* ... */) {
+function wp_iframe($content_func, ...$args) {
 	_wp_admin_html_begin();
 ?>
 <title><?php bloginfo('name') ?> &rsaquo; <?php _e('Uploads'); ?> &#8212; <?php _e('ClassicPress'); ?></title>
@@ -532,8 +532,6 @@ if ( is_string( $content_func ) ) {
 document.body.className = document.body.className.replace('no-js', 'js');
 </script>
 <?php
-	$args = func_get_args();
-	$args = array_slice($args, 1);
 	call_user_func_array($content_func, $args);
 
 	/** This action is documented in wp-admin/admin-footer.php */

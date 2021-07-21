@@ -1014,7 +1014,7 @@ function the_meta() {
 			}
 
 			$values = array_map( 'trim', get_post_custom_values( $key ) );
-			$value = implode( $values, ', ' );
+			$value  = implode( ', ', $values );
 
 			$html = sprintf( "<li><span class='post-meta-key'>%s</span> %s</li>\n",
 				/* translators: %s: Post custom field name */

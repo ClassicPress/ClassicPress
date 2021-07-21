@@ -193,32 +193,103 @@ function wp_unschedule_event( $timestamp, $hook, $args = array() ) {
 /**
  * Unschedules all events attached to the hook with the specified arguments.
  *
- * @since WP-2.1.0
+ * Warning: This function may return Boolean FALSE, but may also return a non-Boolean
+ * value which evaluates to FALSE. For information about casting to booleans see the
+ * {@link https://www.php.net/manual/en/language.types.boolean.php PHP documentation}. Use
+ * the `===` operator for testing the return value of this function.
  *
- * @param string $hook Action hook, the execution of which will be unscheduled.
- * @param array $args Optional. Arguments that were to be passed to the hook's callback function.
+ * @since WP-2.1.0
+ * @since WP-5.1.0 Return value modified to indicate success or failure,
+ *                 {@see 'pre_clear_scheduled_hook'} filter added to short-circuit the function.
+ * @since WP-5.7.0 The `$wp_error` parameter was added.
+ *
+ * @param string $hook     Action hook, the execution of which will be unscheduled.
+ * @param array  $args     Optional. Array containing each separate argument to pass to the hook's callback function.
+ *                         Although not passed to a callback, these arguments are used to uniquely identify the
+ *                         event, so they should be the same as those used when originally scheduling the event.
+ *                         Default empty array.
+ * @param bool   $wp_error Optional. Whether to return a WP_Error on failure. Default false.
+ * @return int|false|WP_Error On success an integer indicating number of events unscheduled (0 indicates no
+ *                            events were registered with the hook and arguments combination), false or WP_Error
+ *                            if unscheduling one or more events fail.
  */
-function wp_clear_scheduled_hook( $hook, $args = array() ) {
-	// Backward compatibility
-	// Previously this function took the arguments as discrete vars rather than an array like the rest of the API
-	if ( !is_array($args) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0', __('This argument has changed to an array to match the behavior of the other cron functions.') );
-		$args = array_slice( func_get_args(), 1 );
+function wp_clear_scheduled_hook( $hook, $args = array(), $wp_error = false ) {
+	// Backward compatibility.
+	// Previously, this function took the arguments as discrete vars rather than an array like the rest of the API.
+	if ( ! is_array( $args ) ) {
+		_deprecated_argument( __FUNCTION__, '3.0.0', __( 'This argument has changed to an array to match the behavior of the other cron functions.' ) );
+		$args     = array_slice( func_get_args(), 1 ); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		$wp_error = false;
 	}
 
-	// This logic duplicates wp_next_scheduled()
-	// It's required due to a scenario where wp_unschedule_event() fails due to update_option() failing,
-	// and, wp_next_scheduled() returns the same schedule in an infinite loop.
-	$crons = _get_cron_array();
-	if ( empty( $crons ) )
-		return;
+	/**
+	 * Filter to preflight or hijack clearing a scheduled hook.
+	 *
+	 * Returning a non-null value will short-circuit the normal unscheduling
+	 * process, causing the function to return the filtered value instead.
+	 *
+	 * For plugins replacing wp-cron, return the number of events successfully
+	 * unscheduled (zero if no events were registered with the hook) or false
+	 * if unscheduling one or more events fails.
+	 *
+	 * @since 5.1.0
+	 * @since 5.7.0 The `$wp_error` parameter was added, and a `WP_Error` object can now be returned.
+	 *
+	 * @param null|int|false|WP_Error $pre      Value to return instead. Default null to continue unscheduling the event.
+	 * @param string                  $hook     Action hook, the execution of which will be unscheduled.
+	 * @param array                   $args     Arguments to pass to the hook's callback function.
+	 * @param bool                    $wp_error Whether to return a WP_Error on failure.
+	 */
+	$pre = apply_filters( 'pre_clear_scheduled_hook', null, $hook, $args, $wp_error );
 
-	$key = md5( serialize( $args ) );
+	if ( null !== $pre ) {
+		if ( $wp_error && false === $pre ) {
+			return new WP_Error(
+				'pre_clear_scheduled_hook_false',
+				__( 'A plugin prevented the hook from being cleared.' )
+			);
+		}
+
+		if ( ! $wp_error && is_wp_error( $pre ) ) {
+			return false;
+		}
+
+		return $pre;
+	}
+
+	/*
+	 * This logic duplicates wp_next_scheduled().
+	 * It's required due to a scenario where wp_unschedule_event() fails due to update_option() failing,
+	 * and, wp_next_scheduled() returns the same schedule in an infinite loop.
+	 */
+	$crons = _get_cron_array();
+	if ( empty( $crons ) ) {
+		return 0;
+	}
+
+	$results = array();
+	$key     = md5( serialize( $args ) );
+
 	foreach ( $crons as $timestamp => $cron ) {
 		if ( isset( $cron[ $hook ][ $key ] ) ) {
-			wp_unschedule_event( $timestamp, $hook, $args );
+			$results[] = wp_unschedule_event( $timestamp, $hook, $args, true );
 		}
 	}
+
+	$errors = array_filter( $results, 'is_wp_error' );
+	$error  = new WP_Error();
+
+	if ( $errors ) {
+		if ( $wp_error ) {
+			array_walk( $errors, array( $error, 'merge_from' ) );
+
+			return $error;
+		}
+
+		return false;
+	}
+
+	return count( $results );
 }
 
 /**

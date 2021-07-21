@@ -2109,9 +2109,9 @@ function attribute_escape( $text ) {
  * @param string|int $name            Widget ID.
  * @param callable   $output_callback Run when widget is called.
  * @param string     $classname       Optional. Classname widget option. Default empty.
- * @param mixed      $params ,...     Widget parameters.
+ * @param mixed      ...$params       Widget parameters.
  */
-function register_sidebar_widget($name, $output_callback, $classname = '') {
+function register_sidebar_widget($name, $output_callback, $classname = '', ...$params) {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_sidebar_widget()' );
 	// Compat
 	if ( is_array($name) ) {
@@ -2125,12 +2125,8 @@ function register_sidebar_widget($name, $output_callback, $classname = '') {
 	$options = array();
 	if ( !empty($classname) && is_string($classname) )
 		$options['classname'] = $classname;
-	$params = array_slice(func_get_args(), 2);
-	$args = array($id, $name, $output_callback, $options);
-	if ( !empty($params) )
-		$args = array_merge($args, $params);
 
-	call_user_func_array('wp_register_sidebar_widget', $args);
+	wp_register_sidebar_widget( $id, $name, $output_callback, $options, ...$params );
 }
 
 /**

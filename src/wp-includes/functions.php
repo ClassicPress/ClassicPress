@@ -2473,7 +2473,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2482,7 +2482,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
@@ -5019,7 +5019,7 @@ function get_file_data( $file, $default_headers, $context = '' ) {
  *
  * @return true True.
  */
-function __return_true() {
+function __return_true() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return true;
 }
 
@@ -5034,7 +5034,7 @@ function __return_true() {
  *
  * @return false False.
  */
-function __return_false() {
+function __return_false() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return false;
 }
 
@@ -5047,7 +5047,7 @@ function __return_false() {
  *
  * @return int 0.
  */
-function __return_zero() {
+function __return_zero() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return 0;
 }
 
@@ -5060,7 +5060,7 @@ function __return_zero() {
  *
  * @return array Empty array.
  */
-function __return_empty_array() {
+function __return_empty_array() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return array();
 }
 
@@ -5073,7 +5073,7 @@ function __return_empty_array() {
  *
  * @return null Null value.
  */
-function __return_null() {
+function __return_null() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return null;
 }
 
@@ -5088,7 +5088,7 @@ function __return_null() {
  *
  * @return string Empty string.
  */
-function __return_empty_string() {
+function __return_empty_string() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	return '';
 }
 
@@ -5572,8 +5572,15 @@ function mbstring_binary_safe_encoding( $reset = false ) {
 	static $encodings = array();
 	static $overloaded = null;
 
-	if ( is_null( $overloaded ) )
-		$overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 );
+	if ( is_null( $overloaded ) ) {
+		if ( function_exists( 'mb_internal_encoding' )
+			&& ( (int) ini_get( 'mbstring.func_overload' ) & 2 ) // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
+		) {
+			$overloaded = true;
+		} else {
+			$overloaded = false;
+		}
+	}
 
 	if ( false === $overloaded )
 		return;
