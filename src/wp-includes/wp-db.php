@@ -1218,14 +1218,20 @@ class wpdb {
 	 *
 	 * @link https://secure.php.net/sprintf Description of syntax.
 	 * @since WP-2.3.0
+	 * @since WP-5.3.0 Formalized the existing and already documented `...$args` parameter
+	 *                 by updating the function signature. The second parameter was changed
+	 *                 from `$args` to `...$args`.
 	 *
-	 * @param string      $query    Query statement with sprintf()-like placeholders
-	 * @param array|mixed $args     The array of variables to substitute into the query's placeholders if being called with an array of arguments,
-	 *                              or the first variable to substitute into the query's placeholders if being called with individual arguments.
-	 * @param mixed       $args,... further variables to substitute into the query's placeholders if being called wih individual arguments.
+	 * @param string      $query   Query statement with sprintf()-like placeholders.
+	 * @param array|mixed $args    The array of variables to substitute into the query's placeholders
+	 *                             if being called with an array of arguments, or the first variable
+	 *                             to substitute into the query's placeholders if being called with
+	 *                             individual arguments.
+	 * @param mixed       ...$args Further variables to substitute into the query's placeholders
+	 *                             if being called with individual arguments.
 	 * @return string|void Sanitized query string, if there is a query to prepare.
 	 */
-	public function prepare( $query, $args ) {
+	public function prepare( $query, ...$args ) {
 		if ( is_null( $query ) ) {
 			return;
 		}
@@ -1235,9 +1241,6 @@ class wpdb {
 			wp_load_translations_early();
 			_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'The query argument of %s must have a placeholder.' ), 'wpdb::prepare()' ), 'WP-3.9.0' );
 		}
-
-		$args = func_get_args();
-		array_shift( $args );
 
 		// If args were passed as an array (as in vsprintf), move them up.
 		$passed_as_array = false;

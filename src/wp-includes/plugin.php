@@ -165,42 +165,41 @@ function has_filter($tag, $function_to_check = false) {
  *
  * @since WP-0.71
  *
- * @global array $wp_filter         Stores all of the filters.
- * @global array $wp_current_filter Stores the list of current filters with the current one last.
+ * @global WP_Hook[] $wp_filter         Stores all of the filters and actions.
+ * @global string[]  $wp_current_filter Stores the list of current filters with the current one last.
  *
- * @param string $tag     The name of the filter hook.
- * @param mixed  $value   The value on which the filters hooked to `$tag` are applied on.
- * @param mixed  $var,... Additional variables passed to the functions hooked to `$tag`.
+ * @param string $hook_name The name of the filter hook.
+ * @param mixed  $value     The value to filter.
+ * @param mixed  ...$args   Additional parameters to pass to the callback functions.
  * @return mixed The filtered value after all hooked functions are applied to it.
  */
-function apply_filters( $tag, $value ) {
+function apply_filters( $hook_name, $value ) {
 	global $wp_filter, $wp_current_filter;
 
-	$args = array();
+	$args = func_get_args();
 
 	// Do 'all' actions first.
-	if ( isset($wp_filter['all']) ) {
-		$wp_current_filter[] = $tag;
-		$args = func_get_args();
-		_wp_call_all_hook($args);
+	if ( isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+		_wp_call_all_hook( $args );
 	}
 
-	if ( !isset($wp_filter[$tag]) ) {
-		if ( isset($wp_filter['all']) )
-			array_pop($wp_current_filter);
+	if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+		if ( isset( $wp_filter['all'] ) ) {
+			array_pop( $wp_current_filter );
+		}
+
 		return $value;
 	}
 
-	if ( !isset($wp_filter['all']) )
-		$wp_current_filter[] = $tag;
+	if ( ! isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+	}
 
-	if ( empty($args) )
-		$args = func_get_args();
-
-	// don't pass the tag name to WP_Hook
+	// Don't pass the tag name to WP_Hook.
 	array_shift( $args );
 
-	$filtered = $wp_filter[ $tag ]->apply_filters( $value, $args );
+	$filtered = $wp_filter[ $hook_name ]->apply_filters( $value, $args );
 
 	array_pop( $wp_current_filter );
 
@@ -208,40 +207,43 @@ function apply_filters( $tag, $value ) {
 }
 
 /**
- * Execute functions hooked on a specific filter hook, specifying arguments in an array.
+ * Calls the callback functions that have been added to a filter hook, specifying arguments in an array.
  *
  * @since WP-3.0.0
  *
  * @see apply_filters() This function is identical, but the arguments passed to the
- * functions hooked to `$tag` are supplied using an array.
+ *                      functions hooked to `$hook_name` are supplied using an array.
  *
- * @global array $wp_filter         Stores all of the filters
- * @global array $wp_current_filter Stores the list of current filters with the current one last
+ * @global WP_Hook[] $wp_filter         Stores all of the filters and actions.
+ * @global string[]  $wp_current_filter Stores the list of current filters with the current one last.
  *
- * @param string $tag  The name of the filter hook.
- * @param array  $args The arguments supplied to the functions hooked to $tag.
+ * @param string $hook_name The name of the filter hook.
+ * @param array  $args      The arguments supplied to the functions hooked to `$hook_name`.
  * @return mixed The filtered value after all hooked functions are applied to it.
  */
-function apply_filters_ref_array($tag, $args) {
+function apply_filters_ref_array( $hook_name, $args ) {
 	global $wp_filter, $wp_current_filter;
 
-	// Do 'all' actions first
-	if ( isset($wp_filter['all']) ) {
-		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+	// Do 'all' actions first.
+	if ( isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
 	}
 
-	if ( !isset($wp_filter[$tag]) ) {
-		if ( isset($wp_filter['all']) )
-			array_pop($wp_current_filter);
+	if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+		if ( isset( $wp_filter['all'] ) ) {
+			array_pop( $wp_current_filter );
+		}
+
 		return $args[0];
 	}
 
-	if ( !isset($wp_filter['all']) )
-		$wp_current_filter[] = $tag;
+	if ( ! isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+	}
 
-	$filtered = $wp_filter[ $tag ]->apply_filters( $args[0], $args );
+	$filtered = $wp_filter[ $hook_name ]->apply_filters( $args[0], $args );
 
 	array_pop( $wp_current_filter );
 
@@ -400,59 +402,80 @@ function add_action($tag, $function_to_add, $priority = 10, $accepted_args = 1) 
 }
 
 /**
- * Execute functions hooked on a specific action hook.
+ * Calls the callback functions that have been added to an action hook.
  *
- * This function invokes all functions attached to action hook `$tag`. It is
- * possible to create new action hooks by simply calling this function,
- * specifying the name of the new hook using the `$tag` parameter.
+ * This function invokes all functions attached to action hook `$hook_name`.
+ * It is possible to create new action hooks by simply calling this function,
+ * specifying the name of the new hook using the `$hook_name` parameter.
  *
- * You can pass extra arguments to the hooks, much like you can with apply_filters().
+ * You can pass extra arguments to the hooks, much like you can with `apply_filters()`.
+ *
+ * Example usage:
+ *
+ *     // The action callback function.
+ *     function example_callback( $arg1, $arg2 ) {
+ *         // (maybe) do something with the args.
+ *     }
+ *     add_action( 'example_action', 'example_callback', 10, 2 );
+ *
+ *     /*
+ *      * Trigger the actions by calling the 'example_callback()' function
+ *      * that's hooked onto `example_action` above.
+ *      *
+ *      * - 'example_action' is the action hook.
+ *      * - $arg1 and $arg2 are the additional arguments passed to the callback.
+ *     $value = do_action( 'example_action', $arg1, $arg2 );
  *
  * @since WP-1.2.0
+ * @since WP-5.3.0 Formalized the existing and already documented `...$arg` parameter
+ *                 by adding it to the function signature.
  *
- * @global array $wp_filter         Stores all of the filters
- * @global array $wp_actions        Increments the amount of times action was triggered.
- * @global array $wp_current_filter Stores the list of current filters with the current one last
+ * @global WP_Hook[] $wp_filter         Stores all of the filters and actions.
+ * @global int[]     $wp_actions        Stores the number of times each action was triggered.
+ * @global string[]  $wp_current_filter Stores the list of current filters with the current one last.
  *
- * @param string $tag     The name of the action to be executed.
- * @param mixed  $arg,... Optional. Additional arguments which are passed on to the
- *                        functions hooked to the action. Default empty.
+ * @param string $hook_name The name of the action to be executed.
+ * @param mixed  ...$arg    Optional. Additional arguments which are passed on to the
+ *                          functions hooked to the action. Default empty.
  */
-function do_action($tag, $arg = '') {
+function do_action( $hook_name, ...$arg ) {
 	global $wp_filter, $wp_actions, $wp_current_filter;
 
-	if ( ! isset($wp_actions[$tag]) )
-		$wp_actions[$tag] = 1;
-	else
-		++$wp_actions[$tag];
+	if ( ! isset( $wp_actions[ $hook_name ] ) ) {
+		$wp_actions[ $hook_name ] = 1;
+	} else {
+		++$wp_actions[ $hook_name ];
+	}
 
-	$all_args = func_get_args();
-
-	// Do 'all' actions first
-	if ( isset($wp_filter['all']) ) {
-		$wp_current_filter[] = $tag;
+	// Do 'all' actions first.
+	if ( isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 		_wp_call_all_hook( $all_args );
 	}
 
-	if ( !isset($wp_filter[$tag]) ) {
-		if ( isset($wp_filter['all']) )
-			array_pop($wp_current_filter);
+	if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+		if ( isset( $wp_filter['all'] ) ) {
+			array_pop( $wp_current_filter );
+		}
+
 		return;
 	}
 
-	if ( !isset($wp_filter['all']) )
-		$wp_current_filter[] = $tag;
-
-	$args = $all_args;
-	array_shift( $args );
-
-	if ( empty( $args ) ) {
-		$args = array( '' );
+	if ( ! isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
 	}
 
-	$wp_filter[ $tag ]->do_action( $args );
+	if ( empty( $arg ) ) {
+		$arg[] = '';
+	} elseif ( is_array( $arg[0] ) && 1 === count( $arg[0] ) && isset( $arg[0][0] ) && is_object( $arg[0][0] ) ) {
+		// Backward compatibility for PHP4-style passing of `array( &$this )` as action `$arg`.
+		$arg[0] = $arg[0][0];
+	}
 
-	array_pop($wp_current_filter);
+	$wp_filter[ $hook_name ]->do_action( $arg );
+
+	array_pop( $wp_current_filter );
 }
 
 /**
@@ -488,33 +511,37 @@ function did_action($tag) {
  * @param string $tag  The name of the action to be executed.
  * @param array  $args The arguments supplied to the functions hooked to `$tag`.
  */
-function do_action_ref_array($tag, $args) {
+function do_action_ref_array( $hook_name, $args ) {
 	global $wp_filter, $wp_actions, $wp_current_filter;
 
-	if ( ! isset($wp_actions[$tag]) )
-		$wp_actions[$tag] = 1;
-	else
-		++$wp_actions[$tag];
-
-	// Do 'all' actions first
-	if ( isset($wp_filter['all']) ) {
-		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+	if ( ! isset( $wp_actions[ $hook_name ] ) ) {
+		$wp_actions[ $hook_name ] = 1;
+	} else {
+		++$wp_actions[ $hook_name ];
 	}
 
-	if ( !isset($wp_filter[$tag]) ) {
-		if ( isset($wp_filter['all']) )
-			array_pop($wp_current_filter);
+	// Do 'all' actions first.
+	if ( isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
+	}
+
+	if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+		if ( isset( $wp_filter['all'] ) ) {
+			array_pop( $wp_current_filter );
+		}
+
 		return;
 	}
 
-	if ( !isset($wp_filter['all']) )
-		$wp_current_filter[] = $tag;
+	if ( ! isset( $wp_filter['all'] ) ) {
+		$wp_current_filter[] = $hook_name;
+	}
 
-	$wp_filter[ $tag ]->do_action( $args );
+	$wp_filter[ $hook_name ]->do_action( $args );
 
-	array_pop($wp_current_filter);
+	array_pop( $wp_current_filter );
 }
 
 /**
