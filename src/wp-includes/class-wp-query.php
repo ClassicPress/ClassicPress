@@ -715,8 +715,13 @@ class WP_Query {
 		if ( ! empty($qv['robots']) )
 			$this->is_robots = true;
 
+<<<<<<< HEAD
 		if ( ! is_scalar( $qv['p'] ) || $qv['p'] < 0 ) {
 			$qv['p'] = 0;
+=======
+		if ( ! is_scalar( $qv['p'] ) || (int) $qv['p'] < 0 ) {
+			$qv['p']     = 0;
+>>>>>>> f6f117a0a9 (Code Modernization: Correct the check for negative post IDs in `WP_Query::parse_query()` to work as expected on PHP 8.)
 			$qv['error'] = '404';
 		} else {
 			$qv['p'] = intval( $qv['p'] );
