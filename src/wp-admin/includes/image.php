@@ -378,19 +378,7 @@ function wp_read_image_metadata( $file ) {
 		@getimagesize( $file, $info );
 
 		if ( ! empty( $info['APP13'] ) ) {
-<<<<<<< HEAD
 			$iptc = @iptcparse( $info['APP13'] );
-=======
-			// Don't silence errors when in debug mode, unless running unit tests.
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG
-				&& ! defined( 'WP_RUN_CORE_TESTS' )
-			) {
-				$iptc = iptcparse( $info['APP13'] );
-			} else {
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors -- Silencing notice and warning is intentional. See https://core.trac.wordpress.org/ticket/42480
-				$iptc = @iptcparse( $info['APP13'] );
-			}
->>>>>>> bf17cc67ce (Media: Move retrieving WebP image size information into `wp_getimagesize()`.)
 
 			// Headline, "A brief synopsis of the caption."
 			if ( ! empty( $iptc['2#105'][0] ) ) {
@@ -442,23 +430,8 @@ function wp_read_image_metadata( $file ) {
 	 *
 	 * @param array $image_types Image types to check for exif data.
 	 */
-<<<<<<< HEAD
 	if ( is_callable( 'exif_read_data' ) && in_array( $sourceImageType, apply_filters( 'wp_read_image_metadata_types', array( IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM ) ) ) ) {
 		$exif = @exif_read_data( $file );
-=======
-	$exif_image_types = apply_filters( 'wp_read_image_metadata_types', array( IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM ) );
-
-	if ( is_callable( 'exif_read_data' ) && in_array( $image_type, $exif_image_types, true ) ) {
-		// Don't silence errors when in debug mode, unless running unit tests.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG
-			&& ! defined( 'WP_RUN_CORE_TESTS' )
-		) {
-			$exif = exif_read_data( $file );
-		} else {
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors -- Silencing notice and warning is intentional. See https://core.trac.wordpress.org/ticket/42480
-			$exif = @exif_read_data( $file );
-		}
->>>>>>> bf17cc67ce (Media: Move retrieving WebP image size information into `wp_getimagesize()`.)
 
 		if ( ! empty( $exif['ImageDescription'] ) ) {
 			mbstring_binary_safe_encoding();
