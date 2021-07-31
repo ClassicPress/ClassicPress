@@ -58,12 +58,20 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'test-image.psd',
 			'test-image-zip.tiff',
 			'test-image.jpg',
+<<<<<<< HEAD
 			);
 
 		// IMAGETYPE_ICO is only defined in PHP 5.3+.
 		if ( defined( 'IMAGETYPE_ICO' ) ) {
 			$files[] = 'test-image.ico';
 		}
+=======
+			'webp-animated.webp',
+			'webp-lossless.webp',
+			'webp-lossy.webp',
+			'webp-transparent.webp',
+		);
+>>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 
 		// IMAGETYPE_ICO is only defined in PHP 5.3+.
 		if ( defined( 'IMAGETYPE_ICO' ) ) {
@@ -95,6 +103,21 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'test-image.png',
 			'test-image.jpg',
 			);
+
+		// Add WebP images if the image editor supports them.
+		$file   = DIR_TESTDATA . '/images/test-image.webp';
+		$editor = wp_get_image_editor( $file );
+		if ( ( ! is_wp_error( $editor ) ) && $editor->supports_mime_type( 'image/webp' ) ) {
+			$files = array_merge(
+				$files,
+				array(
+					'webp-animated.webp',
+					'webp-lossless.webp',
+					'webp-lossy.webp',
+					'webp-transparent.webp',
+				)
+			);
+		}
 
 		// IMAGETYPE_ICO is only defined in PHP 5.3+.
 		if ( defined( 'IMAGETYPE_ICO' ) ) {
@@ -145,8 +168,17 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'image/png'
 		);
 
+<<<<<<< HEAD
 		// Test each image editor engine
 		$classes = array('WP_Image_Editor_GD', 'WP_Image_Editor_Imagick');
+=======
+		// Include WebP in tests when platform supports it.
+		if ( function_exists( 'imagewebp' ) ) {
+			array_push( $mime_types, 'image/webp' );
+		}
+
+		// Test each image editor engine.
+>>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 		foreach ( $classes as $class ) {
 
 			// If the image editor isn't available, skip it
@@ -233,7 +265,12 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'jpe'  => 'image/jpeg',
 			'gif'  => 'image/gif',
 			'png'  => 'image/png',
+<<<<<<< HEAD
 			'unk'  => 'image/jpeg' // Default, unknown
+=======
+			'webp' => 'image/webp',
+			'unk'  => 'image/jpeg',   // Default, unknown.
+>>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 		);
 
 		// Test each image editor engine

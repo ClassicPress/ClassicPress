@@ -169,12 +169,24 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		} else {
 			$ext = '.jpg';
 			switch ( $metadata['image']['mime'] ) {
+<<<<<<< HEAD
 			case 'image/gif':
 				$ext = '.gif';
 				break;
 			case 'image/png':
 				$ext = '.png';
 				break;
+=======
+				case 'image/gif':
+					$ext = '.gif';
+					break;
+				case 'image/png':
+					$ext = '.png';
+					break;
+				case 'image/webp':
+					$ext = '.webp';
+					break;
+>>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 			}
 			$basename = str_replace( '.', '-', basename( $file ) ) . '-image' . $ext;
 			$uploaded = wp_upload_bits( $basename, '', $metadata['image']['data'] );
@@ -537,7 +549,7 @@ function file_is_valid_image($path) {
  * @return bool True if suitable, false if not suitable.
  */
 function file_is_displayable_image( $path ) {
-	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_ICO );
+	$displayable_image_types = array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_ICO, IMAGETYPE_WEBP ); // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
 
 	$info = @getimagesize( $path );
 	if ( empty( $info ) ) {
@@ -583,6 +595,12 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 			break;
 		case 'image/gif':
 			$image = imagecreatefromgif($filepath);
+			break;
+		case 'image/webp':
+			$image = false;
+			if ( function_exists( 'imagecreatefromwebp' ) ) {
+				$image = imagecreatefromwebp( $filepath );
+			}
 			break;
 		default:
 			$image = false;

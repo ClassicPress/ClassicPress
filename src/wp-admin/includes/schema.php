@@ -981,7 +981,15 @@ We hope you enjoy your new site. Thanks!
 
 	$misc_exts = array(
 		// Images.
+<<<<<<< HEAD
 		'jpg', 'jpeg', 'png', 'gif',
+=======
+		'jpg',
+		'jpeg',
+		'png',
+		'gif',
+		'webp',
+>>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 		// Video.
 		'mov', 'avi', 'mpg', '3gp', '3g2',
 		// "audio".
