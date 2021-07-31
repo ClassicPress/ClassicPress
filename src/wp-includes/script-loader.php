@@ -320,7 +320,6 @@ function wp_default_scripts( &$scripts ) {
 
 	// Error messages for Plupload.
 	$uploader_l10n = array(
-<<<<<<< HEAD
 		'queue_limit_exceeded' => __('You have attempted to queue too many files.'),
 		'file_exceeds_size_limit' => __('%s exceeds the maximum upload size for this site.'),
 		'zero_byte_file' => __('This file is empty. Please try another.'),
@@ -343,37 +342,8 @@ function wp_default_scripts( &$scripts ) {
 		'dismiss' => __('Dismiss'),
 		'crunching' => __('Crunching&hellip;'),
 		'deleted' => __('moved to the trash.'),
-		'error_uploading' => __('&#8220;%s&#8221; has failed to upload.')
-=======
-		'queue_limit_exceeded'      => __( 'You have attempted to queue too many files.' ),
-		/* translators: %s: File name. */
-		'file_exceeds_size_limit'   => __( '%s exceeds the maximum upload size for this site.' ),
-		'zero_byte_file'            => __( 'This file is empty. Please try another.' ),
-		'invalid_filetype'          => __( 'Sorry, this file type is not permitted for security reasons.' ),
-		'not_an_image'              => __( 'This file is not an image. Please try another.' ),
-		'image_memory_exceeded'     => __( 'Memory exceeded. Please try another smaller file.' ),
-		'image_dimensions_exceeded' => __( 'This is larger than the maximum size. Please try another.' ),
-		'default_error'             => __( 'An error occurred in the upload. Please try again later.' ),
-		'missing_upload_url'        => __( 'There was a configuration error. Please contact the server administrator.' ),
-		'upload_limit_exceeded'     => __( 'You may only upload 1 file.' ),
-		'http_error'                => __( 'Unexpected response from the server. The file may have been uploaded successfully. Check in the Media Library or reload the page.' ),
-		'http_error_image'          => __( 'Post-processing of the image failed likely because the server is busy or does not have enough resources. Uploading a smaller image may help. Suggested maximum size is 2500 pixels.' ),
-		'upload_failed'             => __( 'Upload failed.' ),
-		/* translators: 1: Opening link tag, 2: Closing link tag. */
-		'big_upload_failed'         => __( 'Please try uploading this file with the %1$sbrowser uploader%2$s.' ),
-		/* translators: %s: File name. */
-		'big_upload_queued'         => __( '%s exceeds the maximum upload size for the multi-file uploader when used in your browser.' ),
-		'io_error'                  => __( 'IO error.' ),
-		'security_error'            => __( 'Security error.' ),
-		'file_cancelled'            => __( 'File canceled.' ),
-		'upload_stopped'            => __( 'Upload stopped.' ),
-		'dismiss'                   => __( 'Dismiss' ),
-		'crunching'                 => __( 'Crunching&hellip;' ),
-		'deleted'                   => __( 'moved to the Trash.' ),
-		/* translators: %s: File name. */
-		'error_uploading'           => __( '&#8220;%s&#8221; has failed to upload.' ),
-		'unsupported_image'         => __( 'This image cannot be displayed in a web browser. For best results convert it to JPEG before uploading.' ),
->>>>>>> 1285255381 (Media: Show an error message when a `.heic` file is uploaded that this type of files cannot be displayed in a web browser and suggesting to convert to JPEG. The message is shown by using filters, plugins that want to handle uploading of `.heic` files can remove it.)
+		'error_uploading' => __('&#8220;%s&#8221; has failed to upload.'),
+		'unsupported_image' => __( 'This image cannot be displayed in a web browser. For best results convert it to JPEG before uploading.' ),
 	);
 
 	$scripts->add( 'moxiejs', "/wp-includes/js/plupload/moxie$suffix.js", array(), '1.3.5' );
