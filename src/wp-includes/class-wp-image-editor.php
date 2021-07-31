@@ -311,10 +311,7 @@ abstract class WP_Image_Editor {
 		// file extension.  If so, prefer extension from file.
 		if ( ! $mime_type || ( $file_mime == $mime_type ) ) {
 			$mime_type = $file_mime;
-<<<<<<< HEAD
 			$new_ext = $file_ext;
-=======
-			$new_ext   = $file_ext;
 		}
 
 		/**
@@ -338,7 +335,7 @@ abstract class WP_Image_Editor {
 		 *
 		 * @see WP_Image_Editor::get_output_format()
 		 *
-		 * @since 5.8.0
+		 * @since WP-5.8.0
 		 *
 		 * @param string[] $output_format {
 		 *     An array of mime type mappings. Maps a source mime type to a new
@@ -357,7 +354,6 @@ abstract class WP_Image_Editor {
 		) {
 			$mime_type = $output_format[ $mime_type ];
 			$new_ext   = $this->get_extension( $mime_type );
->>>>>>> 025e59a1ef (Media: Document edge cases with the new `image_editor_output_format` filter.)
 		}
 
 		// Double-check that the mime-type selected is supported by the editor.
