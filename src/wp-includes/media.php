@@ -4195,6 +4195,7 @@ function wp_get_webp_info( $filename ) {
 
 	return compact( 'width', 'height', 'type' );
 }
+<<<<<<< HEAD
 
 /**
  * Determines if a passed image is a lossy WebP image.
@@ -4210,3 +4211,5 @@ function _wp_webp_is_lossy( $filename ) {
 
 	return $type && 'lossy' === $type;
 }
+=======
+>>>>>>> 2c9bc14b94 (Media: Remove `_wp_webp_is_lossy()` for now.)
