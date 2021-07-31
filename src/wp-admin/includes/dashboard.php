@@ -1347,7 +1347,7 @@ function wp_welcome_panel() {
 ?>
 <div class="welcome-panel-content">
 	<h2><?php _e( 'Welcome to ClassicPress!' ); ?></h2>
-	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for trying ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
+	<p class="welcome-panel-tagline"><?php printf( __( 'Thank you for using ClassicPress&nbsp;%s!' ), $display_version ); ?></p>
 	<p>
 		<?php _e(
 			'<strong>Join our growing community</strong> and help us build the platform <strong>you</strong> want to see!'
