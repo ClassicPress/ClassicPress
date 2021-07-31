@@ -63,12 +63,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	* @see https://core.trac.wordpress.org/ticket/17626
-	*/
-=======
-	 * @requires function imagejpeg
-	 * @ticket 52867
+	 * @see https://core.trac.wordpress.org/ticket/52867
 	 */
 	function test_image_editor_output_format_filter() {
 		add_filter(
@@ -90,10 +85,8 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 17626
-	 * @requires function imagejpeg
+	 * @see https://core.trac.wordpress.org/ticket/17626
 	 */
->>>>>>> 5a2c3706ee (Media: Introduces `image_editor_output_format` filter for setting default MIME type of sub size image output.)
 	function test_get_intermediate_sizes_by_name() {
 		add_image_size( 'test-size', 330, 220, true );
 
