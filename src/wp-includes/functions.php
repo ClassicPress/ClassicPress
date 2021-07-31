@@ -2514,7 +2514,12 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
  *
  * This depends on exif_imagetype() or getimagesize() to determine real mime types.
  *
+<<<<<<< HEAD
  * @since WP-4.7.1
+=======
+ * @since 4.7.1
+ * @since 5.8.0 Added support for WebP images.
+>>>>>>> ea4707d927 (Media: Avoid an infinite loop between `wp_getimagesize()` and `wp_get_image_mime()`.)
  *
  * @param string $file Full path to the file.
  * @return string|false The actual mime type or false if the type cannot be determined.
@@ -2530,7 +2535,21 @@ function wp_get_image_mime( $file ) {
 			$imagetype = exif_imagetype( $file );
 			$mime = ( $imagetype ) ? image_type_to_mime_type( $imagetype ) : false;
 		} elseif ( function_exists( 'getimagesize' ) ) {
+<<<<<<< HEAD
 			$imagesize = getimagesize( $file );
+=======
+			// Don't silence errors when in debug mode, unless running unit tests.
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG
+				&& ! defined( 'WP_RUN_CORE_TESTS' )
+			) {
+				// Not using wp_getimagesize() here to avoid an infinite loop.
+				$imagesize = getimagesize( $file );
+			} else {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors
+				$imagesize = @getimagesize( $file );
+			}
+
+>>>>>>> ea4707d927 (Media: Avoid an infinite loop between `wp_getimagesize()` and `wp_get_image_mime()`.)
 			$mime = ( isset( $imagesize['mime'] ) ) ? $imagesize['mime'] : false;
 		} else {
 			$mime = false;
