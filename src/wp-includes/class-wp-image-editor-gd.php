@@ -71,13 +71,9 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			case 'image/png':
 				return ($image_types & IMG_PNG) != 0;
 			case 'image/gif':
-<<<<<<< HEAD
-				return ($image_types & IMG_GIF) != 0;
-=======
 				return ( $image_types & IMG_GIF ) != 0;
 			case 'image/webp':
 				return ( $image_types & IMG_WEBP ) != 0; // phpcs:ignore PHPCompatibility.Constants.NewConstants.img_webpFound
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 		}
 
 		return false;
@@ -100,9 +96,6 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 		// Set artificially high because GD uses uncompressed images in memory.
 		wp_raise_memory_limit( 'image' );
 
-<<<<<<< HEAD
-		$this->image = @imagecreatefromstring( file_get_contents( $this->file ) );
-=======
 		$file_contents = @file_get_contents( $this->file );
 
 		if ( ! $file_contents ) {
@@ -118,7 +111,6 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 		} else {
 			$this->image = @imagecreatefromstring( $file_contents );
 		}
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 
 		if ( ! is_resource( $this->image ) )
 			return new WP_Error( 'invalid_image', __('File is not an image.'), $this->file );
@@ -416,17 +408,6 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			if ( function_exists('imageistruecolor') && ! imageistruecolor( $image ) )
 				imagetruecolortopalette( $image, false, imagecolorstotal( $image ) );
 
-<<<<<<< HEAD
-			if ( ! $this->make_image( $filename, 'imagepng', array( $image, $filename ) ) )
-				return new WP_Error( 'image_save_error', __('Image Editor Save Failed') );
-		}
-		elseif ( 'image/jpeg' == $mime_type ) {
-			if ( ! $this->make_image( $filename, 'imagejpeg', array( $image, $filename, $this->get_quality() ) ) )
-				return new WP_Error( 'image_save_error', __('Image Editor Save Failed') );
-		}
-		else {
-			return new WP_Error( 'image_save_error', __('Image Editor Save Failed') );
-=======
 			if ( ! $this->make_image( $filename, 'imagepng', array( $image, $filename ) ) ) {
 				return new WP_Error( 'image_save_error', __( 'Image Editor Save Failed' ) );
 			}
@@ -440,7 +421,6 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			}
 		} else {
 			return new WP_Error( 'image_save_error', __( 'Image Editor Save Failed' ) );
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 		}
 
 		// Set correct file permissions

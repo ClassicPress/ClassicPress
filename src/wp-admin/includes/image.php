@@ -169,14 +169,6 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		} else {
 			$ext = '.jpg';
 			switch ( $metadata['image']['mime'] ) {
-<<<<<<< HEAD
-			case 'image/gif':
-				$ext = '.gif';
-				break;
-			case 'image/png':
-				$ext = '.png';
-				break;
-=======
 				case 'image/gif':
 					$ext = '.gif';
 					break;
@@ -186,7 +178,6 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 				case 'image/webp':
 					$ext = '.webp';
 					break;
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
 			}
 			$basename = str_replace( '.', '-', basename( $file ) ) . '-image' . $ext;
 			$uploaded = wp_upload_bits( $basename, '', $metadata['image']['data'] );

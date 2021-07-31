@@ -5439,24 +5439,17 @@ function wp_attachment_is( $type, $post = null ) {
 	}
 
 	switch ( $type ) {
-<<<<<<< HEAD
-	case 'image':
-		$image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' );
-		return in_array( $ext, $image_exts );
-=======
 		case 'image':
 			$image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' );
-			return in_array( $ext, $image_exts, true );
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
+			return in_array( $ext, $image_exts );
+		case 'audio':
+			return in_array( $ext, wp_get_audio_extensions() );
 
-	case 'audio':
-		return in_array( $ext, wp_get_audio_extensions() );
+		case 'video':
+			return in_array( $ext, wp_get_video_extensions() );
 
-	case 'video':
-		return in_array( $ext, wp_get_video_extensions() );
-
-	default:
-		return $type === $ext;
+		default:
+			return $type === $ext;
 	}
 }
 

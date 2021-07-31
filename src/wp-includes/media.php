@@ -4035,8 +4035,6 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
 		'done' => $done,
 	);
 }
-<<<<<<< HEAD
-=======
 
 /**
  * Add additional default image sub-sizes.
@@ -4048,7 +4046,7 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
  * The sizes can be changed or removed by themes and plugins but that is not recommended.
  * The size "names" reflect the image dimensions, so changing the sizes would be quite misleading.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  * @access private
  */
 function _wp_add_additional_image_sizes() {
@@ -4059,23 +4057,10 @@ function _wp_add_additional_image_sizes() {
 }
 
 /**
- * Callback to enable showing of the user error when uploading .heic images.
- *
- * @since 5.5.0
- *
- * @param array[] $plupload_settings The settings for Plupload.js.
- * @return array[] Modified settings for Plupload.js.
- */
-function wp_show_heic_upload_error( $plupload_settings ) {
-	$plupload_settings['heic_upload_error'] = true;
-	return $plupload_settings;
-}
-
-/**
  * Allows PHP's getimagesize() to be debuggable when necessary.
  *
- * @since 5.7.0
- * @since 5.8.0 Added support for WebP images.
+ * @since WP-5.7.0
+ * @since WP-5.8.0 Added support for WebP images.
  *
  * @param string $filename   The file path.
  * @param array  $image_info Optional. Extended image information (passed by reference).
@@ -4117,7 +4102,7 @@ function wp_getimagesize( $filename, array &$image_info = null ) {
 /**
  * Extracts meta information about a webp file: width, height and type.
  *
- * @since 5.8.0
+ * @since WP-5.8.0
  *
  * @param [type] $filename Path to a WebP file.
  * @return array $webp_info {
@@ -4184,7 +4169,7 @@ function wp_get_webp_info( $filename ) {
 /**
  * Determines if a passed image is a lossy WebP image.
  *
- * @since 5.8.0
+ * @since WP-5.8.0
  *
  * @param string $filename The file path.
  * @return bool Whether the file is a lossy WebP file.
@@ -4198,7 +4183,7 @@ function _wp_webp_is_lossy( $filename ) {
 /**
  * Gets the image size, with support for WebP images.
  *
- * @since 5.8.0
+ * @since WP-5.8.0
  * @access private
  *
  * @param string $filename  The file path.
@@ -4237,4 +4222,3 @@ function _wp_get_image_size( $filename, &$imageinfo = array() ) {
 	// The image could not be parsed.
 	return false;
 }
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)

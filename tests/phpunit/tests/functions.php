@@ -968,10 +968,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/39550
-=======
-	 * @ticket 35725
+	 * @ticket https://core.trac.wordpress.org/ticket/35725
 	 * @dataProvider data_wp_getimagesize
 	 */
 	public function test_wp_getimagesize( $file, $expected ) {
@@ -994,8 +991,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 39550
->>>>>>> 6a5ff5aa03 (Images: enable WebP support.)
+	 * @ticket https://core.trac.wordpress.org/ticket/39550
 	 * @dataProvider _wp_check_filetype_and_ext_data
 	 */
 	function test_wp_check_filetype_and_ext( $file, $filename, $expected ) {
