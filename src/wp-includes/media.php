@@ -3044,7 +3044,13 @@ function wp_plupload_default_settings() {
 	 * @param array $params Default Plupload parameters array.
 	 */
 	$params = apply_filters( 'plupload_default_params', $params );
+<<<<<<< HEAD
 	$params['_wpnonce'] = wp_create_nonce( 'media-form' );
+=======
+
+	$params['_wpnonce'] = wp_create_nonce( 'media-form' );
+
+>>>>>>> 1285255381 (Media: Show an error message when a `.heic` file is uploaded that this type of files cannot be displayed in a web browser and suggesting to convert to JPEG. The message is shown by using filters, plugins that want to handle uploading of `.heic` files can remove it.)
 	$defaults['multipart_params'] = $params;
 
 	$settings = array(
@@ -4035,3 +4041,39 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
 		'done' => $done,
 	);
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Add additional default image sub-sizes.
+ *
+ * These sizes are meant to enhance the way WordPress displays images on the front-end on larger,
+ * high-density devices. They make it possible to generate more suitable `srcset` and `sizes` attributes
+ * when the users upload large images.
+ *
+ * The sizes can be changed or removed by themes and plugins but that is not recommended.
+ * The size "names" reflect the image dimensions, so changing the sizes would be quite misleading.
+ *
+ * @since 5.3.0
+ * @access private
+ */
+function _wp_add_additional_image_sizes() {
+	// 2x medium_large size.
+	add_image_size( '1536x1536', 1536, 1536 );
+	// 2x large size.
+	add_image_size( '2048x2048', 2048, 2048 );
+}
+
+/**
+ * Callback to enable showig of the user error when uploading .heic images.
+ *
+ * @since 5.5.0
+ *
+ * @param array[] $plupload_settings The settings for Plupload.js.
+ * @return array[] Modified settings for Plupload.js.
+ */
+function wp_show_heic_upload_error( $plupload_settings ) {
+	$plupload_settings['heic_upload_error'] = true;
+	return $plupload_settings;
+}
+>>>>>>> 1285255381 (Media: Show an error message when a `.heic` file is uploaded that this type of files cannot be displayed in a web browser and suggesting to convert to JPEG. The message is shown by using filters, plugins that want to handle uploading of `.heic` files can remove it.)
