@@ -63,12 +63,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/52867
-=======
-	 * @ticket 52867
-	 * @requires function imagejpeg
->>>>>>> 655fbb26ab (Media: Some documentation and test improvements for the `image_editor_output_format` filter:)
 	 */
 	function test_image_editor_output_format_filter() {
 		add_filter(
