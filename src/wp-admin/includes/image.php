@@ -346,7 +346,7 @@ function wp_read_image_metadata( $file ) {
 	if ( ! file_exists( $file ) )
 		return false;
 
-	list( , , $sourceImageType ) = @getimagesize( $file );
+	list( , , $image_type ) = wp_getimagesize( $file );
 
 	/*
 	 * EXIF contains a bunch of data we'll probably never need formatted in ways
@@ -370,12 +370,13 @@ function wp_read_image_metadata( $file ) {
 	);
 
 	$iptc = array();
+	$info = array();
 	/*
 	 * Read IPTC first, since it might contain data not available in exif such
 	 * as caption, description etc.
 	 */
 	if ( is_callable( 'iptcparse' ) ) {
-		@getimagesize( $file, $info );
+		wp_getimagesize( $file, $info );
 
 		if ( ! empty( $info['APP13'] ) ) {
 			// Don't silence errors when in debug mode, unless running unit tests.
@@ -388,7 +389,7 @@ function wp_read_image_metadata( $file ) {
 				$iptc = @iptcparse( $info['APP13'] );
 			}
 
-			// Headline, "A brief synopsis of the caption."
+			// Headline, "A brief synopsis of the caption".
 			if ( ! empty( $iptc['2#105'][0] ) ) {
 				$meta['title'] = trim( $iptc['2#105'][0] );
 			/*
@@ -399,7 +400,7 @@ function wp_read_image_metadata( $file ) {
 				$meta['title'] = trim( $iptc['2#005'][0] );
 			}
 
-			if ( ! empty( $iptc['2#120'][0] ) ) { // description / legacy caption
+			if ( ! empty( $iptc['2#120'][0] ) ) { // Description / legacy caption.
 				$caption = trim( $iptc['2#120'][0] );
 
 				mbstring_binary_safe_encoding();
@@ -414,12 +415,13 @@ function wp_read_image_metadata( $file ) {
 				$meta['caption'] = $caption;
 			}
 
-			if ( ! empty( $iptc['2#110'][0] ) ) // credit
+			if ( ! empty( $iptc['2#110'][0] ) ) { // Credit.
 				$meta['credit'] = trim( $iptc['2#110'][0] );
-			elseif ( ! empty( $iptc['2#080'][0] ) ) // creator / legacy byline
+			} elseif ( ! empty( $iptc['2#080'][0] ) ) { // Creator / legacy byline.
 				$meta['credit'] = trim( $iptc['2#080'][0] );
+			}
 
-			if ( ! empty( $iptc['2#055'][0] ) && ! empty( $iptc['2#060'][0] ) ) // created date and time
+			if ( ! empty( $iptc['2#055'][0] ) && ! empty( $iptc['2#060'][0] ) ) // Created date and time
 				$meta['created_timestamp'] = strtotime( $iptc['2#055'][0] . ' ' . $iptc['2#060'][0] );
 
 			if ( ! empty( $iptc['2#116'][0] ) ) // copyright
@@ -428,8 +430,10 @@ function wp_read_image_metadata( $file ) {
 			if ( ! empty( $iptc['2#025'][0] ) ) { // keywords array
 				$meta['keywords'] = array_values( $iptc['2#025'] );
 			}
-		 }
+		}
 	}
+
+	$exif = array();
 
 	/**
 	 * Filters the image types to check for exif data.
@@ -457,7 +461,7 @@ function wp_read_image_metadata( $file ) {
 			reset_mbstring_encoding();
 
 			if ( empty( $meta['title'] ) && $description_length < 80 ) {
-				// Assume the title is stored in ImageDescription
+				// Assume the title is stored in ImageDescription.
 				$meta['title'] = trim( $exif['ImageDescription'] );
 			}
 
@@ -475,7 +479,7 @@ function wp_read_image_metadata( $file ) {
 		if ( empty( $meta['credit'] ) ) {
 			if ( ! empty( $exif['Artist'] ) ) {
 				$meta['credit'] = trim( $exif['Artist'] );
-			} elseif ( ! empty($exif['Author'] ) ) {
+			} elseif ( ! empty( $exif['Author'] ) ) {
 				$meta['credit'] = trim( $exif['Author'] );
 			}
 		}
@@ -526,13 +530,15 @@ function wp_read_image_metadata( $file ) {
 	 *
 	 * @since WP-2.5.0
 	 * @since WP-4.4.0 The `$iptc` parameter was added.
+	 * @since WP-5.0.0 The `$exif` parameter was added.
 	 *
-	 * @param array  $meta            Image meta data.
-	 * @param string $file            Path to image file.
-	 * @param int    $sourceImageType Type of image.
-	 * @param array  $iptc            IPTC data.
+	 * @param array  $meta       Image meta data.
+	 * @param string $file       Path to image file.
+	 * @param int    $image_type Type of image, one of the `IMAGETYPE_XXX` constants.
+	 * @param array  $iptc       IPTC data.
+	 * @param array  $exif       EXIF data.
 	 */
-	return apply_filters( 'wp_read_image_metadata', $meta, $file, $sourceImageType, $iptc );
+	return apply_filters( 'wp_read_image_metadata', $meta, $file, $image_type, $iptc, $exif );
 
 }
 
