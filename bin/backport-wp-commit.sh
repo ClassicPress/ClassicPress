@@ -255,15 +255,11 @@ else
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
 	git log -n 1 \
-		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif ( /^.*(_enqueues).*$/ ) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
+		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"
 	echo "and we can take care of it!"
-	echo
-	echo "There were also changes made from the following upstream locations"
-	git log -n 1 \
-		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif ( /^.*(_enqueues).*$/ ) { print; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { $p = 0; } }'
 	echo
 	if [ $current_branch = no ]; then
 		echo "git push origin $branch"
