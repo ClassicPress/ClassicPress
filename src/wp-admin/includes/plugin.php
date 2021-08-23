@@ -1434,7 +1434,7 @@ function _security_page_action_links( $actions, $plugin_file, $plugin_data, $con
 		array_unshift(
 			$actions,
 			sprintf(
-				'<a href="%s?page=%s" title="%s"><span class="dashicon dashicons-shield"></span></a>',
+				'<a href="%1$s?page=%2$s" title="%3$s">%3$s</a>',
 				$admin_url,
 				$parts[0],
 				__( 'Security' )
