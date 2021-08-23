@@ -63,7 +63,7 @@ switch ( $active_tab ) :
 		<?php
 		printf(
 			/* translators: canonical link to security forum */
-			__( 'Watch this page and the ClassicPress <a href="%s" rel="noopener" target="_blank">Security forum</a> for more news as development continues.' ),
+			__( 'Watch this page and the ClassicPress <a href="%s" rel="noopener" target="_blank">Core Development forum</a> for more news as development continues.' ),
 			'https://link.classicpress.net/forum/security'
 		);
 		?>
