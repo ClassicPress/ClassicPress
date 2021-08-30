@@ -51,22 +51,13 @@ class WP_REST_Post_Types_Controller extends WP_REST_Controller {
 					'description' => __( 'An alphanumeric identifier for the post type.' ),
 					'type'        => 'string',
 				),
-<<<<<<< HEAD
 			),
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
+				'permission_callback' => '__return_true',
 				'args'     => array(
 					'context' => $this->get_context_param( array( 'default' => 'view' ) ),
-=======
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => '__return_true',
-					'args'                => array(
-						'context' => $this->get_context_param( array( 'default' => 'view' ) ),
-					),
->>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 			'schema' => array( $this, 'get_public_item_schema' ),
