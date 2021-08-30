@@ -33,6 +33,7 @@ final class WP_oEmbed_Controller {
 
 		register_rest_route( 'oembed/1.0', '/embed', array(
 			array(
+<<<<<<< HEAD
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_item' ),
 				'args'     => array(
@@ -47,6 +48,27 @@ final class WP_oEmbed_Controller {
 					'maxwidth' => array(
 						'default'           => $maxwidth,
 						'sanitize_callback' => 'absint',
+=======
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_item' ),
+					'permission_callback' => '__return_true',
+					'args'                => array(
+						'url'      => array(
+							'description' => __( 'The URL of the resource for which to fetch oEmbed data.' ),
+							'required'    => true,
+							'type'        => 'string',
+							'format'      => 'uri',
+						),
+						'format'   => array(
+							'default'           => 'json',
+							'sanitize_callback' => 'wp_oembed_ensure_format',
+						),
+						'maxwidth' => array(
+							'default'           => $maxwidth,
+							'sanitize_callback' => 'absint',
+						),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 					),
 				),
 			),

@@ -105,10 +105,26 @@ class WP_REST_Users_Controller extends WP_REST_Controller {
 
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/me', array(
 			array(
+<<<<<<< HEAD
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_current_item' ),
 				'args'                => array(
 					'context' => $this->get_context_param( array( 'default' => 'view' ) ),
+=======
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'permission_callback' => '__return_true',
+					'callback'            => array( $this, 'get_current_item' ),
+					'args'                => array(
+						'context' => $this->get_context_param( array( 'default' => 'view' ) ),
+					),
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_current_item' ),
+					'permission_callback' => array( $this, 'update_current_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 			array(

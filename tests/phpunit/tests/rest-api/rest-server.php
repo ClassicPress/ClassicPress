@@ -62,12 +62,26 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 
 	public function test_default_param() {
 
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
 			'args'     => array(
 				'foo'  => array(
 					'default'  => 'bar',
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'foo' => array(
+						'default' => 'bar',
+					),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 		) );
@@ -80,12 +94,26 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 
 	public function test_default_param_is_overridden() {
 
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
 			'args'     => array(
 				'foo'  => array(
 					'default'  => 'bar',
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'foo' => array(
+						'default' => 'bar',
+					),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 		) );
@@ -98,6 +126,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	}
 
 	public function test_optional_param() {
+<<<<<<< HEAD
 		register_rest_route( 'optional', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
@@ -105,6 +134,20 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'foo'  => array(),
 			),
 		) );
+=======
+		register_rest_route(
+			'optional',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'foo' => array(),
+				),
+			)
+		);
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 
 		$request = new WP_REST_Request( 'GET', '/optional/test' );
 		$request->set_query_params( array() );
@@ -115,12 +158,26 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	}
 
 	public function test_no_zero_param() {
+<<<<<<< HEAD
 		register_rest_route( 'no-zero', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
 			'args'     => array(
 				'foo'  => array(
 					'default'    => 'bar',
+=======
+		register_rest_route(
+			'no-zero',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'foo' => array(
+						'default' => 'bar',
+					),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 		) );
@@ -130,12 +187,26 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	}
 
 	public function test_head_request_handled_by_get() {
+<<<<<<< HEAD
 		register_rest_route( 'head-request', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_true',
 		) );
 		$request = new WP_REST_Request( 'HEAD', '/head-request/test' );
 		$response = $this->server->dispatch( $request );
+=======
+		register_rest_route(
+			'head-request',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_true',
+				'permission_callback' => '__return_true',
+			)
+		);
+		$request  = new WP_REST_Request( 'HEAD', '/head-request/test' );
+		$response = rest_get_server()->dispatch( $request );
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 		$this->assertEquals( 200, $response->get_status() );
 	}
 
@@ -148,6 +219,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	public function test_explicit_head_callback() {
 		register_rest_route( 'head-request', '/test', array(
 			array(
+<<<<<<< HEAD
 				'methods' => array( 'HEAD' ),
 				'callback' => '__return_true',
 			),
@@ -159,6 +231,22 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		));
 		$request = new WP_REST_Request( 'HEAD', '/head-request/test' );
 		$response = $this->server->dispatch( $request );
+=======
+				array(
+					'methods'             => array( 'HEAD' ),
+					'callback'            => '__return_true',
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => array( 'GET' ),
+					'callback'            => '__return_false',
+					'permission_callback' => array( $this, 'permission_denied' ),
+				),
+			)
+		);
+		$request  = new WP_REST_Request( 'HEAD', '/head-request/test' );
+		$response = rest_get_server()->dispatch( $request );
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 		$this->assertEquals( 200, $response->get_status() );
 	}
 
@@ -166,10 +254,20 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 
 		$this->server->register_route( 'test', '/test/(?P<data>.*)', array(
 			array(
+<<<<<<< HEAD
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => '__return_false',
 				'args'     => array(
 					'data' => array(),
+=======
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => '__return_false',
+					'permission_callback' => '__return_true',
+					'args'                => array(
+						'data' => array(),
+					),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 			),
 		) );
@@ -226,11 +324,24 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	 */
 	function test_allow_header_sent() {
 
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'      => 'GET',
 			'callback'     => '__return_null',
 			'should_exist' => false,
 		) );
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => 'GET',
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'should_exist'        => false,
+			)
+		);
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 
 		$request = new WP_REST_Request( 'GET', '/test-ns/test', array() );
 
@@ -249,6 +360,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	 */
 	function test_allow_header_sent_with_multiple_methods() {
 
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'      => 'GET',
 			'callback'     => '__return_null',
@@ -260,6 +372,29 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			'callback'     => '__return_null',
 			'should_exist' => false,
 		) );
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => 'GET',
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'should_exist'        => false,
+			)
+		);
+
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => 'POST',
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'should_exist'        => false,
+			)
+		);
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 
 		$request = new WP_REST_Request( 'GET', '/test-ns/test', array() );
 
@@ -286,11 +421,24 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			'permission_callback' => array( $this, 'permission_denied' ),
 		) );
 
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'      => 'POST',
 			'callback'     => '__return_null',
 			'should_exist' => false,
 		) );
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => 'POST',
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'should_exist'        => false,
+			)
+		);
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 
 		$request = new WP_REST_Request( 'GET', '/test-ns/test', array() );
 
@@ -306,6 +454,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	public function test_allow_header_sent_on_options_request() {
 		register_rest_route( 'test-ns', '/test', array(
 			array(
+<<<<<<< HEAD
 				'methods'  => array( 'GET' ),
 				'callback' => '__return_null',
 			),
@@ -315,6 +464,20 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'permission_callback' => '__return_null',
 			),
 		) );
+=======
+				array(
+					'methods'             => array( 'GET' ),
+					'callback'            => '__return_null',
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => array( 'POST' ),
+					'callback'            => '__return_null',
+					'permission_callback' => '__return_null',
+				),
+			)
+		);
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 
 		$request = new WP_REST_Request( 'OPTIONS', '/test-ns/test' );
 		$response = $this->server->dispatch( $request );
@@ -987,6 +1150,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	 * @see https://core.trac.wordpress.org/ticket/37192
 	 */
 	public function test_rest_validate_before_sanitization() {
+<<<<<<< HEAD
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
@@ -994,6 +1158,24 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'someinteger' => array(
 					'validate_callback' => array( $this, '_validate_as_integer_123' ),
 					'sanitize_callback' => 'absint',
+=======
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => '__return_null',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'someinteger' => array(
+						'validate_callback' => array( $this, '_validate_as_integer_123' ),
+						'sanitize_callback' => 'absint',
+					),
+					'somestring'  => array(
+						'validate_callback' => array( $this, '_validate_as_string_foo' ),
+						'sanitize_callback' => 'absint',
+					),
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 				),
 				'somestring'  => array(
 					'validate_callback' => array( $this, '_validate_as_string_foo' ),
@@ -1009,6 +1191,155 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		$this->assertEquals( 200, $response->get_status() );
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * @ticket 43691
+	 */
+	public function test_does_not_echo_body_for_null_responses() {
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => function () {
+					return new WP_REST_Response();
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		$result = rest_get_server()->serve_request( '/test-ns/test' );
+
+		$this->assertNull( $result );
+		$this->assertEquals( '', rest_get_server()->sent_body );
+	}
+
+	/**
+	 * @ticket 43691
+	 */
+	public function test_does_not_echo_body_for_responses_with_204_status() {
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => function () {
+					return new WP_REST_Response( 'data', 204 );
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		$result = rest_get_server()->serve_request( '/test-ns/test' );
+
+		$this->assertNull( $result );
+		$this->assertEquals( '', rest_get_server()->sent_body );
+	}
+
+	/**
+	 * @ticket 47077
+	 */
+	public function test_http_authorization_header_substitution() {
+		$headers        = array( 'HTTP_AUTHORIZATION' => 'foo' );
+		$parsed_headers = rest_get_server()->get_headers( $headers );
+
+		$this->assertSame(
+			array( 'AUTHORIZATION' => 'foo' ),
+			$parsed_headers
+		);
+	}
+
+	/**
+	 * @ticket 47077
+	 */
+	public function test_redirect_http_authorization_header_substitution() {
+		$headers        = array( 'REDIRECT_HTTP_AUTHORIZATION' => 'foo' );
+		$parsed_headers = rest_get_server()->get_headers( $headers );
+
+		$this->assertSame(
+			array( 'AUTHORIZATION' => 'foo' ),
+			$parsed_headers
+		);
+	}
+
+	/**
+	 * @ticket 47077
+	 */
+	public function test_redirect_http_authorization_with_http_authorization_header_substitution() {
+		$headers        = array(
+			'HTTP_AUTHORIZATION'          => 'foo',
+			'REDIRECT_HTTP_AUTHORIZATION' => 'bar',
+		);
+		$parsed_headers = rest_get_server()->get_headers( $headers );
+
+		$this->assertSame(
+			array( 'AUTHORIZATION' => 'foo' ),
+			$parsed_headers
+		);
+	}
+
+	/**
+	 * @ticket 47077
+	 */
+	public function test_redirect_http_authorization_with_empty_http_authorization_header_substitution() {
+		$headers        = array(
+			'HTTP_AUTHORIZATION'          => '',
+			'REDIRECT_HTTP_AUTHORIZATION' => 'bar',
+		);
+		$parsed_headers = rest_get_server()->get_headers( $headers );
+
+		$this->assertSame(
+			array( 'AUTHORIZATION' => 'bar' ),
+			$parsed_headers
+		);
+	}
+
+	/**
+	 * @ticket 48530
+	 */
+	public function test_get_routes_respects_namespace_parameter() {
+		$routes = rest_get_server()->get_routes( 'oembed/1.0' );
+
+		foreach ( $routes as $route => $handlers ) {
+			$this->assertStringStartsWith( '/oembed/1.0', $route );
+		}
+	}
+
+	/**
+	 * @ticket 48530
+	 */
+	public function test_get_routes_no_namespace_overriding() {
+		register_rest_route(
+			'test-ns',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => function() {
+					return new WP_REST_Response( 'data', 204 );
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
+		register_rest_route(
+			'test-ns/v1',
+			'/test',
+			array(
+				'methods'             => array( 'GET' ),
+				'callback'            => function() {
+					return new WP_REST_Response( 'data', 204 );
+				},
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		$request  = new WP_REST_Request( 'GET', '/test-ns/v1/test' );
+		$response = rest_get_server()->dispatch( $request );
+
+		$this->assertEquals( 204, $response->get_status(), '/test-ns/v1/test' );
+	}
+
+>>>>>>> 74cc64d74e (REST API: Issue a _doing_it_wrong when registering a route without a permission callback.)
 	public function _validate_as_integer_123( $value, $request, $key ) {
 		if ( ! is_int( $value ) ) {
 			return new WP_Error( 'some-error', 'This is not valid!' );
