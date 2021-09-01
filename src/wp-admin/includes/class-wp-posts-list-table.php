@@ -535,6 +535,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 		/* translators: manage posts column name */
 		$posts_columns['title'] = _x( 'Title', 'column name' );
 
+		$posts_columns['ID'] = __( 'ID' );
+
 		if ( post_type_supports( $post_type, 'author' ) ) {
 			$posts_columns['author'] = __( 'Author' );
 		}
@@ -960,6 +962,17 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Handles the ID column output.
+	 *
+	 * @since CP-1.3.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_ID( $post ) {
+		echo $post->ID;
+	}
+
+	/**
 	 * Handles the post date column output.
 	 *
 	 * @since WP-4.3.0
@@ -1238,7 +1251,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				__( 'Edit' )
 			);
 			$actions['inline hide-if-no-js'] = sprintf(
-				'<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>',
+				'<a href="#" class="editinline" aria-label="%s">%s</a>',
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline' ), $title ) ),
 				__( 'Quick&nbsp;Edit' )
