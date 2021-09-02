@@ -964,7 +964,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 	/**
 	 * Handles the ID column output.
 	 *
-	 * @since 1.3.0
+	 * @since 1.4.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
