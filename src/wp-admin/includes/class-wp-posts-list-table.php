@@ -970,7 +970,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 	 * @param WP_Post $post The current WP_Post object.
 	 */
 	public function column_ID( $post ) {
-		echo $post->ID;
+		echo esc_html( $post->ID );
 	}
 
 	/**
