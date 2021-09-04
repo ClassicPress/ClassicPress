@@ -535,6 +535,9 @@ class WP_Posts_List_Table extends WP_List_Table {
 		/* translators: manage posts column name */
 		$posts_columns['title'] = _x( 'Title', 'column name' );
 
+		/* translators: manage posts column name */
+		$posts_columns['ID'] = _x( 'ID', 'column name' );
+
 		if ( post_type_supports( $post_type, 'author' ) ) {
 			$posts_columns['author'] = __( 'Author' );
 		}
@@ -957,6 +960,17 @@ class WP_Posts_List_Table extends WP_List_Table {
 		}
 
 		get_inline_data( $post );
+	}
+
+	/**
+	 * Handles the ID column output.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_ID( $post ) {
+		echo esc_html( $post->ID );
 	}
 
 	/**
