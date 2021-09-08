@@ -79,7 +79,7 @@ get_current_screen()->add_help_tab( array(
 'id'		=> 'overview',
 'title'		=> __('Overview'),
 'content'	=>
-	'<p>' . sprintf( __('Plugins hook into ClassicPress to extend its functionality with custom features. Plugins are developed independently from the core ClassicPress application by thousands of developers all over the world. All plugins in the official <a href="%s">Plugin Directory</a> are compatible with the license ClassicPress uses.' ), __( 'https://wordpress.org/plugins/' ) ) . '</p>' .
+	'<p>' . sprintf( __('Plugins hook into ClassicPress to extend its functionality with custom features. Plugins are developed independently from the core ClassicPress application by thousands of developers all over the world. All plugins in the <a href="%s">WordPress Plugin Directory</a> are compatible with the license ClassicPress uses, but they are not necessarily designed for ClassicPress. Be sure to confirm their compatibility prior to install!' ), __( 'https://wordpress.org/plugins/' ) ) . '</p>' .
 	'<p>' . __( 'You can find new plugins to install by searching or browsing the directory right here in your own Plugins section.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>'
 
 ) );
