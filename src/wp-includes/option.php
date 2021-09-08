@@ -177,12 +177,8 @@ function form_option( $option ) {
 /**
  * Loads and caches all autoloaded options, if available or all options.
  *
-<<<<<<< HEAD
  * @since WP-2.2.0
-=======
- * @since 2.2.0
- * @since 5.3.1 The `$force_cache` parameter was added.
->>>>>>> e0584e95ce... Options, Meta APIs: Avoid a race condition causing the first of two subsequent requests updating different options at the same time to lose changes.
+ * @since WP-5.3.1 The `$force_cache` parameter was added.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -384,13 +380,8 @@ function update_option( $option, $value, $autoload = null ) {
 	}
 
 	if ( ! wp_installing() ) {
-<<<<<<< HEAD
-		$alloptions = wp_load_alloptions();
-		if ( isset( $alloptions[$option] ) ) {
-=======
 		$alloptions = wp_load_alloptions( true );
 		if ( isset( $alloptions[ $option ] ) ) {
->>>>>>> e0584e95ce... Options, Meta APIs: Avoid a race condition causing the first of two subsequent requests updating different options at the same time to lose changes.
 			$alloptions[ $option ] = $serialized_value;
 			wp_cache_set( 'alloptions', $alloptions, 'options' );
 		} else {
@@ -491,11 +482,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 
 	if ( ! wp_installing() ) {
 		if ( 'yes' == $autoload ) {
-<<<<<<< HEAD
-			$alloptions = wp_load_alloptions();
-=======
 			$alloptions            = wp_load_alloptions( true );
->>>>>>> e0584e95ce... Options, Meta APIs: Avoid a race condition causing the first of two subsequent requests updating different options at the same time to lose changes.
 			$alloptions[ $option ] = $serialized_value;
 			wp_cache_set( 'alloptions', $alloptions, 'options' );
 		} else {
@@ -571,15 +558,9 @@ function delete_option( $option ) {
 	$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $option ) );
 	if ( ! wp_installing() ) {
 		if ( 'yes' == $row->autoload ) {
-<<<<<<< HEAD
-			$alloptions = wp_load_alloptions();
-			if ( is_array( $alloptions ) && isset( $alloptions[$option] ) ) {
-				unset( $alloptions[$option] );
-=======
 			$alloptions = wp_load_alloptions( true );
 			if ( is_array( $alloptions ) && isset( $alloptions[ $option ] ) ) {
 				unset( $alloptions[ $option ] );
->>>>>>> e0584e95ce... Options, Meta APIs: Avoid a race condition causing the first of two subsequent requests updating different options at the same time to lose changes.
 				wp_cache_set( 'alloptions', $alloptions, 'options' );
 			}
 		} else {
