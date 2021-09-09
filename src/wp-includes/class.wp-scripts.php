@@ -348,11 +348,6 @@ class WP_Scripts extends WP_Dependencies {
 			return true;
 		}
 
-		$translations = $this->print_translations( $handle, false );
-		if ( $translations ) {
-			$translations = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $translations );
-		}
-
 		if ( ! preg_match( '|^(https?:)?//|', $src ) && ! ( $this->content_url && 0 === strpos( $src, $this->content_url ) ) ) {
 			$src = $this->base_url . $src;
 		}
@@ -366,7 +361,7 @@ class WP_Scripts extends WP_Dependencies {
 		if ( ! $src )
 			return true;
 
-		$tag  = $translations . $cond_before . $before_handle;
+		$tag  = $cond_before . $before_handle;
 		$tag .= sprintf( "<script%s src='%s'></script>\n", $this->type_attr, $src );
 		$tag .= $after_handle . $cond_after;
 		/**
@@ -504,72 +499,6 @@ class WP_Scripts extends WP_Dependencies {
 			$grp = $group;
 
 		return parent::set_group( $handle, $recursion, $grp );
-	}
-
-	/**
-	 * Sets a translation textdomain.
-	 *
-	 * @since 5.0.0
-	 * @since 5.1.0 The `$domain` parameter was made optional.
-	 *
-	 * @param string $handle Name of the script to register a translation domain to.
-	 * @param string $domain Optional. Text domain. Default 'default'.
-	 * @param string $path   Optional. The full file path to the directory containing translation files.
-	 * @return bool True if the text domain was registered, false if not.
-	 */
-	public function set_translations( $handle, $domain = 'default', $path = null ) {
-		if ( ! isset( $this->registered[ $handle ] ) ) {
-			return false;
-		}
-
-		/** @var \_WP_Dependency $obj */
-		$obj = $this->registered[ $handle ];
-
-		if ( ! in_array( 'wp-i18n', $obj->deps, true ) ) {
-			$obj->deps[] = 'wp-i18n';
-		}
-
-		return $obj->set_translations( $domain, $path );
-	}
-
-	/**
-	 * Prints translations set for a specific handle.
-	 *
-	 * @since 5.0.0
-	 *
-	 * @param string $handle Name of the script to add the inline script to. Must be lowercase.
-	 * @param bool   $echo   Optional. Whether to echo the script instead of just returning it.
-	 *                       Default true.
-	 * @return string|false Script on success, false otherwise.
-	 */
-	public function print_translations( $handle, $echo = true ) {
-		if ( ! isset( $this->registered[ $handle ] ) || empty( $this->registered[ $handle ]->textdomain ) ) {
-			return false;
-		}
-
-		$domain = $this->registered[ $handle ]->textdomain;
-		$path   = $this->registered[ $handle ]->translations_path;
-
-		$json_translations = load_script_textdomain( $handle, $domain, $path );
-
-		if ( ! $json_translations ) {
-			// Register empty locale data object to ensure the domain still exists.
-			$json_translations = '{ "locale_data": { "messages": { "": {} } } }';
-		}
-
-		$output = <<<JS
-( function( domain, translations ) {
-	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
-	localeData[""].domain = domain;
-	wp.i18n.setLocaleData( localeData, domain );
-} )( "{$domain}", {$json_translations} );
-JS;
-
-		if ( $echo ) {
-			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
-		}
-
-		return $output;
 	}
 
 	/**
