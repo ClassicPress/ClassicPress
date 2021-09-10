@@ -3724,6 +3724,12 @@ function language_attributes( $doctype = 'html' ) {
  *     @type string $add_fragment       A string to append to each link. Default empty.
  *     @type string $before_page_number A string to appear before the page number. Default empty.
  *     @type string $after_page_number  A string to append after the page number. Default empty.
+ *
+ *     @type string $li_classes         Classes to be added to each LIST element. Default: empty. Accepts: valid HTML classes.
+ *     @type string $ul_classes         Classes to be added to the UL element. Default: empty. Accepts: valid HTML classes.
+ *     @type string $a_classes          Classes to be added to each a href element. Default: empty. Accepts: valid HTML classes.
+ *     @type string $current_classes    Classes to be added to each span (aria current) element. Default: empty. Accepts: valid HTML
+ *                                      classes.
  * }
  * @return array|string|void String of page links or array of page links.
  */
@@ -3746,7 +3752,7 @@ function paginate_links( $args = '' ) {
 	$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( $wp_rewrite->pagination_base . '/%#%', 'paged' ) : '?paged=%#%';
 
 	$defaults = array(
-		'base'               => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below)
+		'base'               => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below).
 		'format'             => $format, // ?page=%#% : %#% is replaced by the page number
 		'total'              => $total,
 		'current'            => $current,
@@ -3758,10 +3764,14 @@ function paginate_links( $args = '' ) {
 		'end_size'           => 1,
 		'mid_size'           => 2,
 		'type'               => 'plain',
-		'add_args'           => array(), // array of query args to add
+		'add_args'           => array(), // array of query args to add.
 		'add_fragment'       => '',
 		'before_page_number' => '',
 		'after_page_number'  => '',
+		'li_classes'         => '',
+		'ul_classes'         => '',
+		'a_classes'          => '',
+		'current_classes'    => '',
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -3788,7 +3798,7 @@ function paginate_links( $args = '' ) {
 		$args['add_args'] = array_merge( $args['add_args'], urlencode_deep( $url_query_args ) );
 	}
 
-	// Who knows what else people pass in $args
+	// Who knows what else people pass in $args.
 	$total = (int) $args['total'];
 	if ( $total < 2 ) {
 		return;
@@ -3810,8 +3820,9 @@ function paginate_links( $args = '' ) {
 	if ( $args['prev_next'] && $current && 1 < $current ) :
 		$link = str_replace( '%_%', 2 == $current ? '' : $args['format'], $args['base'] );
 		$link = str_replace( '%#%', $current - 1, $link );
-		if ( $add_args )
+		if ( $add_args ) {
 			$link = add_query_arg( $add_args, $link );
+		}
 		$link .= $args['add_fragment'];
 
 		/**
@@ -3821,22 +3832,23 @@ function paginate_links( $args = '' ) {
 		 *
 		 * @param string $link The paginated link URL.
 		 */
-		$page_links[] = '<a class="prev page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['prev_text'] . '</a>';
+		$page_links[] = '<a class="prev page-numbers ' . esc_attr( $args['a_classes'] ) . '" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['prev_text'] . '</a>';
 	endif;
 	for ( $n = 1; $n <= $total; $n++ ) :
 		if ( $n == $current ) :
-			$page_links[] = "<span aria-current='" . esc_attr( $args['aria_current'] ) . "' class='page-numbers current'>" . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . "</span>";
+			$page_links[] = "<span aria-current='" . esc_attr( $args['aria_current'] ) . "' class='page-numbers current " . esc_attr( $args['current_classes'] ) . "'> " . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</span>';
 			$dots = true;
 		else :
 			if ( $args['show_all'] || ( $n <= $end_size || ( $current && $n >= $current - $mid_size && $n <= $current + $mid_size ) || $n > $total - $end_size ) ) :
 				$link = str_replace( '%_%', 1 == $n ? '' : $args['format'], $args['base'] );
 				$link = str_replace( '%#%', $n, $link );
-				if ( $add_args )
+				if ( $add_args ) {
 					$link = add_query_arg( $add_args, $link );
+				}
 				$link .= $args['add_fragment'];
 
 				/** This filter is documented in wp-includes/general-template.php */
-				$page_links[] = "<a class='page-numbers' href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>" . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . "</a>";
+				$page_links[] = "<a class='page-numbers " . esc_attr( $args['a_classes'] ) . "' href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>" . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</a>';
 				$dots = true;
 			elseif ( $dots && ! $args['show_all'] ) :
 				$page_links[] = '<span class="page-numbers dots">' . __( '&hellip;' ) . '</span>';
@@ -3847,25 +3859,26 @@ function paginate_links( $args = '' ) {
 	if ( $args['prev_next'] && $current && $current < $total ) :
 		$link = str_replace( '%_%', $args['format'], $args['base'] );
 		$link = str_replace( '%#%', $current + 1, $link );
-		if ( $add_args )
+		if ( $add_args ) {
 			$link = add_query_arg( $add_args, $link );
+		}
 		$link .= $args['add_fragment'];
 
 		/** This filter is documented in wp-includes/general-template.php */
-		$page_links[] = '<a class="next page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['next_text'] . '</a>';
+		$page_links[] = '<a class="next page-numbers ' . esc_attr( $args['a_classes'] ) . '" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['next_text'] . '</a>';
 	endif;
 	switch ( $args['type'] ) {
-		case 'array' :
+		case 'array':
 			return $page_links;
 
-		case 'list' :
-			$r .= "<ul class='page-numbers'>\n\t<li>";
-			$r .= join("</li>\n\t<li>", $page_links);
+		case 'list':
+			$r .= "<ul class='page-numbers " . esc_attr( $args['ul_classes'] ) . "'>\n\t<li class='" . esc_attr( $args['li_classes'] ) . "'>";
+			$r .= join( "</li>\n\t<li class='" . esc_attr( $args['li_classes'] ) . "'>", $page_links );
 			$r .= "</li>\n</ul>\n";
 			break;
 
-		default :
-			$r = join("\n", $page_links);
+		default:
+			$r = join( "\n", $page_links );
 			break;
 	}
 	return $r;
