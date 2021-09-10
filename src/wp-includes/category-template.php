@@ -14,7 +14,6 @@
  * @see get_term_link()
  *
  * @param int|object $category Category ID or object.
- * @return string Link on success, empty string if category does not exist.
  */
 function get_category_link( $category ) {
 	if ( ! is_object( $category ) )
@@ -273,6 +272,7 @@ function category_description( $category = 0 ) {
  * @since WP-2.1.0
  * @since WP-4.2.0 Introduced the `value_field` argument.
  * @since WP-4.6.0 Introduced the `required` argument.
+ * @since CP-1.4.0 Introduced the `multiple` argument.
  *
  * @param string|array $args {
  *     Optional. Array or string of arguments to generate a categories drop-down element. See WP_Term_Query::__construct()
@@ -306,6 +306,8 @@ function category_description( $category = 0 ) {
  *                                           Default false (create select element even if no categories are found).
  *     @type bool         $required          Whether the `<select>` element should have the HTML5 'required' attribute.
  *                                           Default false.
+ *     @type string       $multiple          Whether the `<select>` element should have the HTML5 'multiple' attribute
+ *                                           and an `[]` in the name. Accepts '' or 'multiple'. Default ''.
  * }
  * @return string HTML content only if 'echo' argument is 0.
  */
@@ -332,6 +334,7 @@ function wp_dropdown_categories( $args = '' ) {
 		'option_none_value' => -1,
 		'value_field'       => 'term_id',
 		'required'          => false,
+		'multiple'          => '',
 	);
 
 	$defaults['selected'] = ( is_category() ) ? get_query_var( 'cat' ) : 0;
@@ -371,9 +374,12 @@ function wp_dropdown_categories( $args = '' ) {
 	$class = esc_attr( $r['class'] );
 	$id = $r['id'] ? esc_attr( $r['id'] ) : $name;
 	$required = $r['required'] ? 'required' : '';
-
+	$multiple = esc_attr( $r['multiple'] );
+	if ( 'multiple' === $multiple ) {
+		$name = $name . '[]';
+	}
 	if ( ! $r['hide_if_empty'] || ! empty( $categories ) ) {
-		$output = "<select $required name='$name' id='$id' class='$class' $tab_index_attribute>\n";
+		$output = "<select $required name='$name' id='$id' class='$class' $tab_index_attribute $multiple>\n";
 	} else {
 		$output = '';
 	}
@@ -404,7 +410,7 @@ function wp_dropdown_categories( $args = '' ) {
 
 			/** This filter is documented in wp-includes/category-template.php */
 			$show_option_all = apply_filters( 'list_cats', $r['show_option_all'], null );
-			$selected = ( '0' === strval($r['selected']) ) ? " selected='selected'" : '';
+			$selected = ( '0' === strval( $r['selected'] ) ) ? " selected='selected'" : '';
 			$output .= "\t<option value='0'$selected>$show_option_all</option>\n";
 		}
 
