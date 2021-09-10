@@ -58,7 +58,7 @@ final class _WP_Editors {
 	 *     @type bool       $teeny             Whether to output the minimal editor config. Examples include
 	 *                                         Press This and the Comment editor. Default false.
 	 *     @type bool       $dfw               Deprecated in WP-4.1. Since WP-4.3 used only to enqueue wp-fullscreen-stub.js
- 	 *                                         for backward compatibility.
+	 *                                         for backward compatibility.
 	 *     @type bool|array $tinymce           Whether to load TinyMCE. Can be used to pass settings directly to
 	 *                                         TinyMCE using an array. Default true.
 	 *     @type bool|array $quicktags         Whether to load Quicktags. Can be used to pass settings directly to
