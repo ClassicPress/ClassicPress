@@ -60,7 +60,7 @@ function get_hidden_columns( $screen ) {
 	$use_defaults = ! is_array( $hidden );
 
 	if ( $use_defaults ) {
-		$hidden = array();
+		$hidden = array( 'ID' );
 
 		/**
 		 * Filters the default list of hidden columns.
