@@ -1036,21 +1036,38 @@ function setup_userdata($for_user_id = '') {
  *                                                 these roles. Default empty array.
  *     @type array        $role__not_in            An array of role names to exclude. Users matching one or more of
  *                                                 these roles will not be included in results. Default empty array.
+ *     @type string       $value_field             User `data` object values to use as selection option **value**. 
+ *                                                 Accepts any User `data` object property. Default to user ID.
+ *     @type string       $multiple                Whether the `<select>` element should have the HTML5 'multiple' attribute
+ *                                                 and an `[]` in the name. Accepts '' or 'multiple'. Default ''.
  * }
  * @return string String of HTML content.
  */
 function wp_dropdown_users( $args = '' ) {
 	$defaults = array(
-		'show_option_all' => '', 'show_option_none' => '', 'hide_if_only_one_author' => '',
-		'orderby' => 'display_name', 'order' => 'ASC',
-		'include' => '', 'exclude' => '', 'multi' => 0,
-		'show' => 'display_name', 'echo' => 1,
-		'selected' => 0, 'name' => 'user', 'class' => '', 'id' => '',
-		'blog_id' => get_current_blog_id(), 'who' => '', 'include_selected' => false,
+		'show_option_all' => '',
+		'show_option_none' => '',
+		'hide_if_only_one_author' => '',
+		'orderby' => 'display_name',
+		'order' => 'ASC',
+		'include' => '',
+		'exclude' => '',
+		'multi' => 0,
+		'show' => 'display_name',
+		'echo' => 1,
+		'selected' => 0,
+		'name' => 'user',
+		'class' => '',
+		'id' => '',
+		'blog_id' => get_current_blog_id(),
+		'who' => '',
+		'include_selected' => false,
 		'option_none_value' => -1,
 		'role' => '',
 		'role__in' => array(),
 		'role__not_in' => array(),
+		'value_field' => 'ID',
+		'multiple' => '',
 	);
 
 	$defaults['selected'] = is_author() ? get_query_var( 'author' ) : 0;
@@ -1067,6 +1084,9 @@ function wp_dropdown_users( $args = '' ) {
 	} else {
 		$fields[] = $show;
 	}
+
+	$value_field = ! empty( $r['value_field'] ) ? $r['value_field'] : 'ID';
+	$multiple = esc_attr( $r['multiple'] );
 
 	$query_args['fields'] = $fields;
 
@@ -1089,12 +1109,15 @@ function wp_dropdown_users( $args = '' ) {
 	$output = '';
 	if ( ! empty( $users ) && ( empty( $r['hide_if_only_one_author'] ) || count( $users ) > 1 ) ) {
 		$name = esc_attr( $r['name'] );
+		if ( 'multiple' === $multiple ) {
+			$name = $name . '[]';
+		}
 		if ( $r['multi'] && ! $r['id'] ) {
 			$id = '';
 		} else {
 			$id = $r['id'] ? " id='" . esc_attr( $r['id'] ) . "'" : " id='$name'";
 		}
-		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "'>\n";
+		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "' $multiple>\n";
 
 		if ( $show_option_all ) {
 			$output .= "\t<option value='0'>$show_option_all</option>\n";
@@ -1142,11 +1165,18 @@ function wp_dropdown_users( $args = '' ) {
 				$display = '(' . $user->user_login . ')';
 			}
 
-			$_selected = selected( $user->ID, $r['selected'], false );
-			$output .= "\t<option value='$user->ID'$_selected>" . esc_html( $display ) . "</option>\n";
+			if ( 'ID' === $r['value_field'] ) {
+				$_selected = selected( $user->ID, $r['selected'], false );
+				$output .= "\t<option value='$user->ID'$_selected>" . esc_html( $display ) . "</option>\n";
+			} else {
+				$user_object = get_userdata( $user->ID );
+				$_selected = selected( $user_object->$value_field, $r['selected'], false );
+				$select_value = $user_object->$value_field;
+				$output .= "\t<option value='$select_value'$_selected>" . esc_html( $display ) . "</option>\n";
+			}
 		}
 
-		$output .= "</select>";
+		$output .= '</select>';
 	}
 
 	/**
