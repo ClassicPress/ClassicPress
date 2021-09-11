@@ -16,6 +16,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 	public function setUp() {
 		// Override the normal server with our spying server.
 		$GLOBALS['wp_rest_server'] = new Spy_REST_Server();
+		update_option( 'default_comment_status', 'open' );
 		parent::setUp();
 	}
 
