@@ -3725,8 +3725,8 @@ function language_attributes( $doctype = 'html' ) {
  *     @type string $before_page_number A string to appear before the page number. Default empty.
  *     @type string $after_page_number  A string to append after the page number. Default empty.
  *
- *     @type string $li_classes         Classes to be added to each LIST element. Default: empty. Accepts: valid HTML classes.
  *     @type string $ul_classes         Classes to be added to the UL element. Default: empty. Accepts: valid HTML classes.
+ *     @type string $li_classes         Classes to be added to each LIST element. Default: empty. Accepts: valid HTML classes.
  *     @type string $a_classes          Classes to be added to each a href element. Default: empty. Accepts: valid HTML classes.
  *     @type string $current_classes    Classes to be added to each span (aria current) element. Default: empty. Accepts: valid HTML
  *                                      classes.
@@ -3768,8 +3768,8 @@ function paginate_links( $args = '' ) {
 		'add_fragment'       => '',
 		'before_page_number' => '',
 		'after_page_number'  => '',
-		'li_classes'         => '',
 		'ul_classes'         => '',
+		'li_classes'         => '',
 		'a_classes'          => '',
 		'current_classes'    => '',
 	);
