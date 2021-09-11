@@ -10,6 +10,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 		require_once ABSPATH . WPINC . '/class-phpass.php';
+		update_option( 'default_comment_status', 'open' );
 	}
 
 	public function test_submitting_comment_to_invalid_post_returns_error() {
