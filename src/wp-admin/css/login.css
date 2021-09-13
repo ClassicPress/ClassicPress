@@ -218,6 +218,21 @@ p {
 	margin: 5em 0 2em;
 }
 
+.login .visit-site-link {
+	text-align:center;
+	font-size:110% !important;
+	margin-bottom:25px;
+}
+
+.login .meta-site-link {
+	  text-align:center;
+	  }
+
+.visit-site-link a,
+.login .meta-site-link a {
+	text-decoration:none;
+	}
+
 .login form .input,
 .login input[type="text"] {
 	font-size: 24px;

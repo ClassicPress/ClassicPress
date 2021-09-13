@@ -214,11 +214,14 @@ function login_footer($input_id = '') {
 
 	// Don't allow interim logins to navigate away from the page.
 	if ( ! $interim_login ): ?>
-	<p id="backtoblog"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php
-		/* translators: %s: site title */
-		printf( _x( '&larr; Back to %s', 'site' ), get_bloginfo( 'title', 'display' ) );
-	?></a></p>
-	<?php the_privacy_policy_link( '<div class="privacy-policy-page-link">', '</div>' ); ?>
+	<p id="backtoblog" class="visit-site-link"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php
+			/* translators: %s: site title */
+			printf( _x( 'Visit <strong>%s</strong>', 'site' ), get_bloginfo( 'title', 'display' ) );
+			?></a></p>
+	<p class="meta-site-link">
+		<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Reset Password' ); ?></a> &nbsp;
+		<?php the_privacy_policy_link(); ?>
+	</p>
 	<?php endif; ?>
 
 	</div>
@@ -1031,7 +1034,6 @@ default:
 		echo esc_html( $login_link_separator );
 	endif;
 	?>
-	<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?' ); ?></a>
 <?php endif; ?>
 </p>
 <?php } ?>
