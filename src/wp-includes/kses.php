@@ -607,24 +607,40 @@ function wp_kses_one_attr( $string, $element ) {
  * @global array $allowedtags
  * @global array $allowedentitynames
  *
+<<<<<<< HEAD
  * @param string|array $context The context for which to retrieve tags.
  *                              Allowed values are post, strip, data, entities, or
  *                              the name of a field filter such as pre_user_description.
  * @return array List of allowed tags and their allowed attributes.
+=======
+ * @param string|array $context The context for which to retrieve tags. Allowed values are 'post',
+ *                              'strip', 'data', 'entities', or the name of a field filter such as
+ *                              'pre_user_description', or an array of allowed HTML elements and attributes.
+ * @return array Array of allowed HTML tags and their allowed attributes.
+>>>>>>> f838c86573... Security: Correct the inline docs for the `wp_kses_allowed_html` filter.
  */
 function wp_kses_allowed_html( $context = '' ) {
 	global $allowedposttags, $allowedtags, $allowedentitynames;
 
 	if ( is_array( $context ) ) {
+		// When `$context` is an array it's actually an array of allowed HTML elements and attributes.
+		$html    = $context;
+		$context = 'explicit';
+
 		/**
 		 * Filters HTML elements allowed for a given context.
 		 *
 		 * @since WP-3.5.0
 		 *
+<<<<<<< HEAD
 		 * @param array  $context      Context to judge allowed tags by.
 		 * @param string $context_type Context type (explicit).
+=======
+		 * @param array[] $html    Allowed HTML tags.
+		 * @param string  $context Context name.
+>>>>>>> f838c86573... Security: Correct the inline docs for the `wp_kses_allowed_html` filter.
 		 */
-		return apply_filters( 'wp_kses_allowed_html', $context, 'explicit' );
+		return apply_filters( 'wp_kses_allowed_html', $html, $context );
 	}
 
 	switch ( $context ) {
