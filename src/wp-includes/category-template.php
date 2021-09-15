@@ -1310,7 +1310,7 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 		array_unshift( $parents, $term_id );
 	}
 	
-	if( $args['parents_first'] ){
+	if ( $args['parents_first'] ) {
  		$parents = array_reverse( $parents );
  	}
 
