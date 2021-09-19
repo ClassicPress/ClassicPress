@@ -715,8 +715,8 @@ class WP_Query {
 		if ( ! empty($qv['robots']) )
 			$this->is_robots = true;
 
-		if ( ! is_scalar( $qv['p'] ) || $qv['p'] < 0 ) {
-			$qv['p'] = 0;
+		if ( ! is_scalar( $qv['p'] ) || (int) $qv['p'] < 0 ) {
+			$qv['p']     = 0;
 			$qv['error'] = '404';
 		} else {
 			$qv['p'] = intval( $qv['p'] );
