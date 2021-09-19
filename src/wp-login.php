@@ -580,8 +580,14 @@ endif;
 ?>
 </p>
 
+<<<<<<< HEAD
 <?php
 login_footer('user_login');
+=======
+		if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
+			$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
+			setcookie( $rp_cookie, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+>>>>>>> 924343c8fc... Login and Registration: Check if `$_GET['login']` is set before using it in `wp-login.php`.
 
 if ( $switched_locale ) {
     restore_previous_locale();
