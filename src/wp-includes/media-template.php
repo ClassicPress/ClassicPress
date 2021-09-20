@@ -141,31 +141,17 @@ function wp_print_media_templates() {
 	$class = 'media-modal wp-core-ui';
 	if ( $is_IE && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7') !== false )
 		$class .= ' ie7';
-<<<<<<< HEAD
 
 	$alt_text_description = sprintf(
 		/* translators: 1: link to tutorial, 2: additional link attributes, 3: accessibility text */
 		__( '<a href="%1$s" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative.' ),
 		esc_url( 'https://www.w3.org/WAI/tutorials/images/decision-tree' ),
 		'target="_blank" rel="noopener noreferrer"',
-=======
-	}
-
-	$alt_text_description = sprintf(
-		/* translators: 1: link start tag, 2: accessibility text, 3: link end tag */
-		__( 'Describe %1$sthe purpose of the image%2$s%3$s. Leave empty if the image is purely decorative.' ),
-		'<a href="' . esc_url( 'https://www.w3.org/WAI/tutorials/images/decision-tree' ) . '" target="_blank" rel="noopener noreferrer">',
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 		sprintf(
 			'<span class="screen-reader-text"> %s</span>',
 			/* translators: accessibility text */
 			__( '(opens in a new tab)' )
-<<<<<<< HEAD
 		)
-=======
-		),
-		'</a>'
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 	);
 	?>
 	<!--[if lte IE 8]>
@@ -406,13 +392,6 @@ function wp_print_media_templates() {
 			</div>
 
 			<div class="settings">
-<<<<<<< HEAD
-				<label class="setting" data-setting="url">
-					<span class="name"><?php _e('URL'); ?></span>
-					<input type="text" value="{{ data.url }}" readonly />
-				</label>
-=======
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 				<# if ( 'image' === data.type ) { #>
 					<label class="setting" data-setting="alt">
@@ -603,14 +582,6 @@ function wp_print_media_templates() {
 			</div>
 		</div>
 
-<<<<<<< HEAD
-		<label class="setting" data-setting="url">
-			<span class="name"><?php _e('URL'); ?></span>
-			<input type="text" value="{{ data.url }}" readonly />
-		</label>
-
-=======
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 		<# if ( 'image' === data.type ) { #>
 			<label class="setting" data-setting="alt">
@@ -640,16 +611,6 @@ function wp_print_media_templates() {
 			<span class="name"><?php _e('Caption'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
 		</label>
-<<<<<<< HEAD
-		<# if ( 'image' === data.type ) { #>
-			<label class="setting" data-setting="alt">
-				<span class="name"><?php _e('Alt Text'); ?></span>
-				<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
-			</label>
-		<# } #>
-
-=======
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 		<label class="setting" data-setting="description">
 			<span class="name"><?php _e('Description'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
@@ -914,14 +875,6 @@ function wp_print_media_templates() {
 			</label>
 		<?php endif; ?>
 
-<<<<<<< HEAD
-		<label class="setting alt-text">
-			<span><?php _e('Alt Text'); ?></span>
-			<input type="text" data-setting="alt" />
-		</label>
-
-=======
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 		<div class="setting align">
 			<span><?php _e('Align'); ?></span>
 			<div class="button-group button-large" data-setting="align">
@@ -988,14 +941,6 @@ function wp_print_media_templates() {
 						</label>
 					<?php endif; ?>
 
-<<<<<<< HEAD
-					<label class="setting alt-text">
-						<span><?php _e('Alternative Text'); ?></span>
-						<input type="text" data-setting="alt" value="{{ data.model.alt }}" />
-					</label>
-
-=======
->>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 					<h2><?php _e( 'Display Settings' ); ?></h2>
 					<div class="setting align">
 						<span><?php _e('Align'); ?></span>
