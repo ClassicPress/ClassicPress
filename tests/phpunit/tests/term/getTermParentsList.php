@@ -105,6 +105,24 @@ class Tests_Terms_GetTermsParentsList extends WP_UnitTestCase {
 		$this->assertSame( $expected, $found );
 	}
 
+	public function test_order_parents_first() {
+		$c3 = self::factory()->term->create_and_get( array(
+			'taxonomy' => 'wptests_tax',
+			'parent'   => self::$c2->term_id,
+		) );
+
+		$expected = self::$c3->name . '/' . self::$c2->name . '/' . $c1->name . '/';
+		$found = get_term_parents_list(
+			$c3->term_id,
+			'wptests_tax',
+			array(
+				'link'          => false,
+				'parents_first' => false,
+			)
+		);
+		$this->assertSame( $expected, $found );
+	}
+
 	public function test_should_accept_term_object() {
 		$expected = self::$c1->name . '/' . self::$c2->name . '/';
 		$found = get_term_parents_list( self::$c2, 'wptests_tax', array( 'link' => false ) );
