@@ -956,8 +956,9 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 				continue;
 
 			// If a core box was previously removed, don't add.
-			if ( ( 'core' === $priority || 'sorted' === $priority )
-				&& false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ]
+			if (
+				( 'core' === $priority || 'sorted' === $priority ) &&
+				false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ]
 			) {
 				return;
 			}

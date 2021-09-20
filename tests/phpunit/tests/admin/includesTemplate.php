@@ -109,7 +109,7 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 50019
+	 * @see https://core.trac.wordpress.org/ticket/50019
 	 */
 	public function test_add_meta_box_with_previously_removed_box_and_sorted_priority() {
 		global $wp_meta_boxes;
