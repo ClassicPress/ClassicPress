@@ -443,7 +443,10 @@
 }
 
 .attachment-details .setting + .description {
+<<<<<<< HEAD
 	clear: both;
+=======
+>>>>>>> 026abd4bc6 (Accessibility: improve the "URL" and "Alt text" fields in the media modals.)
 	font-size: 12px;
 	font-style: normal;
 	margin-bottom: 0.5em;
