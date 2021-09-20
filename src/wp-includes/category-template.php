@@ -1260,21 +1260,27 @@ function get_the_term_list( $id, $taxonomy, $before = '', $sep = '', $after = ''
  * Retrieve term parents with separator.
  *
  * @since WP-4.8.0
+ * @since 1.4.0 Added the `$parents_first` parameter.
  *
  * @param int     $term_id  Term ID.
  * @param string  $taxonomy Taxonomy name.
  * @param string|array $args {
  *     Array of optional arguments.
  *
- *     @type string $format          Use term names or slugs for display. Accepts 'name' or 'slug'.
- *                                   Default 'name'.
- *     @type string $separator       Separator for between the terms. Default '/'.
- *     @type bool   $link            Whether to format as a link. Default true.
- *     @type bool   $inclusive       Include the term to get the parents for. Default true.
- *     @type bool   $parents_first   In what order to return the parent terms. If true, the terms returned are ordered from highest to lowest in the hierarchy.
- *                                   If false, the terms returned are ordered from lowest to highest in the hierarchy. Default true. Accepts bool false|true.
+ *     @type string $format        Use term names or slugs for display. Accepts
+ *                                 'name' or 'slug'. Default 'name'.
+ *     @type string $separator     Separator for between the terms. Default '/'.
+ *     @type bool   $link          Whether to format as a link. Default true.
+ *     @type bool   $inclusive     Include the term to get the parents for. Default true.
+ *     @type bool   $parents_first In what order to return the parent terms. If
+ *                                 true, the terms returned are ordered from
+ *                                 highest to lowest in the hierarchy. If
+ *                                 false, the terms returned are ordered from
+ *                                 lowest to highest in the hierarchy. Default
+ *                                 true. Accepts bool false|true.
  * }
- * @return string|WP_Error A list of term parents on success, WP_Error or empty string on failure.
+ * @return string|WP_Error A list of term parents on success, WP_Error or empty
+ * string on failure.
  */
 function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 	$list = '';
@@ -1291,10 +1297,10 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 	$term_id = $term->term_id;
 
 	$defaults = array(
-		'format' => 'name',
-		'separator' => '/',
-		'link' => true,
-		'inclusive' => true,
+		'format'        => 'name',
+		'separator'     => '/',
+		'link'          => true,
+		'inclusive'     => true,
 		'parents_first' => true,
 	);
 
