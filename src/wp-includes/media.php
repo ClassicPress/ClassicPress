@@ -3248,8 +3248,10 @@ function wp_prepare_attachment_for_js( $attachment ) {
 	}
 
 	if ( $meta && ( 'audio' === $type || 'video' === $type ) ) {
-		if ( isset( $meta['length_formatted'] ) )
-			$response['fileLength'] = $meta['length_formatted'];
+		if ( isset( $meta['length_formatted'] ) ) {
+			$response['fileLength']              = $meta['length_formatted'];
+			$response['fileLengthHumanReadable'] = human_readable_duration( $meta['length_formatted'] );
+		}
 
 		$response['meta'] = array();
 		foreach ( wp_get_attachment_id3_keys( $attachment, 'js' ) as $key => $label ) {

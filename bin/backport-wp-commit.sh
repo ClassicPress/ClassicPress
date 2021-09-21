@@ -171,7 +171,7 @@ fi
 
 echo "Backporting commit using git cherry-pick"
 set +e
-cmd __failure_allowed git cherry-pick --no-commit "$commit_short"
+cmd __failure_allowed git cherry-pick --no-commit --find-renames "$commit_short"
 conflict_status=$?
 set -e
 
@@ -255,7 +255,25 @@ else
 	echo "${color_bold_red}WARNING: Conflict detected!${color_reset}"
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
 	git log -n 1 \
-		| perl -we 'my $p = 0; while (<>) { if (/^\s+Conflicts:$/) { $p = 1; } elsif (/^\s+$/) { $p = 0; } elsif ($p) { print; } }'
+		| perl -we '
+			my $p = 0;
+			while (<>) {
+				if (/^\s+Conflicts:$/) {
+					$p = 1;
+				} elsif (/^\s+$/) {
+					$p = 0;
+				} elsif ($p) {
+					# Look for known renames in WP history after fork
+					chomp;
+					s/^[\s-]+//;
+					my $cp_filename = $_;
+					$cp_filename =~ s#^src/js/_enqueues/#src/wp-includes/js/#;
+					print "    - $_\n";
+					if ($cp_filename ne $_) {
+						print "      (probable CP path: $cp_filename)\n";
+					}
+				}
+			}'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"
