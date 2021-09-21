@@ -4963,26 +4963,6 @@ final class WP_Customize_Manager {
 		) );
 
 		$custom_logo_args = get_theme_support( 'custom-logo' );
-<<<<<<< HEAD
-		$this->add_control( new WP_Customize_Cropped_Image_Control( $this, 'custom_logo', array(
-			'label'         => __( 'Logo' ),
-			'section'       => 'title_tagline',
-			'priority'      => 8,
-			'height'        => isset( $custom_logo_args[0]['height'] ) ? $custom_logo_args[0]['height'] : null,
-			'width'         => isset( $custom_logo_args[0]['width'] ) ? $custom_logo_args[0]['width'] : null,
-			'flex_height'   => isset( $custom_logo_args[0]['flex-height'] ) ? $custom_logo_args[0]['flex-height'] : null,
-			'flex_width'    => isset( $custom_logo_args[0]['flex-width'] ) ? $custom_logo_args[0]['flex-width'] : null,
-			'button_labels' => array(
-				'select'       => __( 'Select logo' ),
-				'change'       => __( 'Change logo' ),
-				'remove'       => __( 'Remove' ),
-				'default'      => __( 'Default' ),
-				'placeholder'  => __( 'No logo selected' ),
-				'frame_title'  => __( 'Select logo' ),
-				'frame_button' => __( 'Choose logo' ),
-			),
-		) ) );
-=======
 		$this->add_control(
 			new WP_Customize_Cropped_Image_Control(
 				$this,
@@ -5007,7 +4987,6 @@ final class WP_Customize_Manager {
 				)
 			)
 		);
->>>>>>> 2da7f9f524 (Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.)
 
 		$this->selective_refresh->add_partial( 'custom_logo', array(
 			'settings'            => array( 'custom_logo' ),
