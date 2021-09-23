@@ -132,7 +132,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 			 *
 			 * Additional fields can be rendered here and managed in JavaScript.
 			 *
-			 * @since 5.4.0
+			 * @since WP-5.4.0
 			 */
 			do_action( 'wp_nav_menu_item_custom_fields_customize_template' );
 			?>
