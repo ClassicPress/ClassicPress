@@ -1128,14 +1128,4 @@ class Tests_Comment extends WP_UnitTestCase {
 		// Number of exported comments.
 		$this->assertSame( 0, count( $actual['data'] ) );
 	}
-
-	/**
-	 * @see https://github.com/ClassicPress/ClassicPress/pull/793
-	 */
-	public function test_comments_off_by_default() {
-		$setting = get_option( 'default_comment_status' );
-
-		$this->assertEquals( 'closed', $setting );
-		$this->assertNotEquals( 'open', $setting );
-	}
 }
