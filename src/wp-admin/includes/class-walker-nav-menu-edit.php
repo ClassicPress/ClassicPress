@@ -201,7 +201,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 				/**
 				 * Fires just before the move buttons of a nav menu item in the menu editor.
 				 *
-				 * @since 5.4.0
+				 * @since WP-5.4.0
 				 *
 				 * @param int      $item_id Menu item ID.
 				 * @param WP_Post  $item    Menu item data object.
