@@ -4415,11 +4415,6 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=1",
         "slug": "admin",
-        "avatar_urls": {
-            "24": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=24&d=mm&r=g",
-            "48": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=48&d=mm&r=g",
-            "96": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": "meta_value"
         },
@@ -4443,11 +4438,6 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=2",
         "slug": "restapiclientfixtureuser",
-        "avatar_urls": {
-            "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-            "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-            "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": ""
         },
@@ -4473,11 +4463,6 @@ mockedApiResponse.UserModel = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
-    "avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": ""
     }
@@ -4490,11 +4475,6 @@ mockedApiResponse.me = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
-    "avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": ""
     }
@@ -4516,11 +4496,6 @@ mockedApiResponse.CommentsCollection = [
         "link": "http://example.org/?p=4#comment-2",
         "status": "approved",
         "type": "comment",
-        "author_avatar_urls": {
-            "24": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
-            "48": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
-            "96": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": "meta_value"
         },
@@ -4561,11 +4536,6 @@ mockedApiResponse.CommentModel = {
     "link": "http://example.org/?p=4#comment-2",
     "status": "approved",
     "type": "comment",
-    "author_avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": "meta_value"
     }
