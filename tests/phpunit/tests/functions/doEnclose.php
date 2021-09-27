@@ -4,7 +4,7 @@
  *
  * @package WordPress\UnitTests
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  */
 
 /**
@@ -14,14 +14,14 @@
  * @group post
  * @covers do_enclose
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  */
 class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 
 	/**
 	 * Setup before each test method.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function setUp() {
 		parent::setUp();
@@ -31,7 +31,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Cleanup after each test method.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function tearDown() {
 		parent::tearDown();
@@ -41,7 +41,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Test the function with an explicit content input.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @dataProvider data_test_do_enclose
 	 */
@@ -57,7 +57,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Test the function with an implicit content input.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @dataProvider data_test_do_enclose
 	 */
@@ -78,7 +78,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	 * Dataprovider for `test_function_with_explicit_content_input()`
 	 * and `test_function_with_implicit_content_input()`.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -141,7 +141,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The function should return false when the post ID input is invalid.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function test_function_should_return_false_when_invalid_post_id() {
 		$post_id = null;
@@ -152,7 +152,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The function should delete an enclosed link when it's no longer in the post content.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function test_function_should_delete_enclosed_link_when_no_longer_in_post_content() {
 		$data = $this->data_test_do_enclose();
@@ -186,7 +186,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The function should support a post object input.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function test_function_should_support_post_object_input() {
 		$data = $this->data_test_do_enclose();
@@ -206,7 +206,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The enclosure links should be filterable with the `enclosure_links` filter.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 */
 	public function test_function_enclosure_links_should_be_filterable() {
 		$data = $this->data_test_do_enclose();
@@ -229,7 +229,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * A callback to filter the list of enclosure links.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @param  array $post_links An array of enclosure links.
 	 * @param  int   $post_id    Post ID.
@@ -246,7 +246,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Helper function to get all enclosure data for a given post.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @param  int    $post_id Post ID.
 	 * @return string          All enclosure data for the given post.
@@ -258,7 +258,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Fake the HTTP request response.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @param bool   $false     False.
 	 * @param array  $arguments Request arguments.
