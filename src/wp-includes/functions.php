@@ -619,33 +619,20 @@ function wp_extract_urls( $content ) {
  * remove enclosures that are no longer in the post. This is called as
  * pingbacks and trackbacks.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
  * @since WP-5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
  *              updated to accept a post ID or a WP_Post object.
  * @since WP-5.6.0 The `$content` parameter is no longer optional, but passing `null` to skip it
  *              is still supported.
-=======
- * @since 1.5.0
- * @since 5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
- *              updated to accept a post ID or a WP_Post object.
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
+
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
-<<<<<<< HEAD
- * @param string|null $content Post content. If `null`, the `post_content` field from `$post` is used.
- * @param int|WP_Post $post    Post ID or post object.
- * @return null|bool Returns false if post is not found.
- */
-function do_enclose( $content, $post ) {
-=======
  * @param string         $content Post content. If `null`, the `post_content` field from `$post` is used.
  * @param int|WP_Post    $post    Post ID or post object.
  * @return null|bool Returns false if post is not found.
  */
 function do_enclose( $content = null, $post ) {
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
 	global $wpdb;
 
 	//TODO: Tidy this ghetto code up and make the debug code optional
@@ -668,13 +655,8 @@ function do_enclose( $content = null, $post ) {
 
 	foreach ( $pung as $link_test ) {
 		if ( ! in_array( $link_test, $post_links_temp ) ) { // link no longer in post
-<<<<<<< HEAD
-			$mids = $wpdb->get_col( $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post_ID, $wpdb->esc_like( $link_test ) . '%') );
-			foreach ( $mids as $mid )
-=======
 			$mids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $link_test ) . '%' ) );
 			foreach ( $mids as $mid ) {
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
 				delete_metadata_by_mid( 'post', $mid );
 		}
 	}
@@ -705,11 +687,7 @@ function do_enclose( $content = null, $post ) {
 	$post_links = apply_filters( 'enclosure_links', $post_links, $post->ID );
 
 	foreach ( (array) $post_links as $url ) {
-<<<<<<< HEAD
-		if ( $url != '' && !$wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post_ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
-=======
 		if ( $url != '' && ! $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
 
 			if ( $headers = wp_get_http_headers( $url) ) {
 				$len = isset( $headers['content-length'] ) ? (int) $headers['content-length'] : 0;
@@ -731,13 +709,8 @@ function do_enclose( $content = null, $post ) {
 					}
 				}
 
-<<<<<<< HEAD
-				if ( in_array( substr( $type, 0, strpos( $type, "/" ) ), $allowed_types ) ) {
-					add_post_meta( $post_ID, 'enclosure', "$url\n$len\n$mime\n" );
-=======
 				if ( in_array( substr( $type, 0, strpos( $type, '/' ) ), $allowed_types ) ) {
 					add_post_meta( $post->ID, 'enclosure', "$url\n$len\n$mime\n" );
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
 				}
 			}
 		}
@@ -2515,7 +2488,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2524,7 +2497,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
