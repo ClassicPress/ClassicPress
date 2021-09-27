@@ -658,6 +658,7 @@ function do_enclose( $content = null, $post ) {
 			$mids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $link_test ) . '%' ) );
 			foreach ( $mids as $mid ) {
 				delete_metadata_by_mid( 'post', $mid );
+			}
 		}
 	}
 
