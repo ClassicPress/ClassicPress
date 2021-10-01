@@ -5071,12 +5071,8 @@ function wp_delete_attachment( $post_id, $force_delete = false ) {
 	/**
 	 * Fires before an attachment is deleted, at the start of wp_delete_attachment().
 	 *
-<<<<<<< HEAD
-	 * @since WP-2.0.0
-=======
 	 * @since 2.0.0
 	 * @since 5.5.0 Added the `$post` parameter.
->>>>>>> adcf5cf7a3... Posts, Post Types: Pass the post object to the `delete_attachment` action.
 	 *
 	 * @param int     $post_id Attachment ID.
 	 * @param WP_Post $post    Post object.
