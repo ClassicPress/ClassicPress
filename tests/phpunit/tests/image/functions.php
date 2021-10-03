@@ -20,7 +20,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		include_once( DIR_TESTDATA . '/../includes/mock-image-editor.php' );
 
 		// Ensure no legacy / failed tests detritus.
-		$folder = '/tmp/wordpress-gsoc-flyer*.{jpg,pdf}';
+		$folder = get_temp_dir() . 'wordpress-gsoc-flyer*.{jpg,pdf}';
 
 		foreach ( glob( $folder, GLOB_BRACE ) as $file ) {
 			unlink( $file );
@@ -430,6 +430,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertSame( $expected, $metadata );
 
 		unlink( $test_file );
+		$temp_dir = get_temp_dir();
 		foreach ( $metadata['sizes'] as $size ) {
 			unlink( $temp_dir . $size['file'] );
 		}
