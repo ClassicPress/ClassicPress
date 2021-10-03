@@ -11,7 +11,7 @@ require_once dirname( __FILE__ ) . '/factory.php';
  *
  * All ClassicPress unit tests should inherit from this class.
  */
-abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
+abstract class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
 
 	protected static $forced_tickets   = array();
 	protected $expected_deprecated     = array();
