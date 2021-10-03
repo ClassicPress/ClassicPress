@@ -19,17 +19,11 @@
             <exclude>tests/phpunit/tests/image/editor.php</exclude>
             <exclude>tests/phpunit/tests/image/editorGd.php</exclude>
             <exclude>tests/phpunit/tests/image/editorImagick.php</exclude>
-<<<<<<< HEAD
-            <file phpVersion="5.3.0">tests/phpunit/tests/actions/closures.php</file>
-            <file phpVersion="5.3.0">tests/phpunit/tests/image/editor.php</file>
-            <file phpVersion="5.3.0">tests/phpunit/tests/image/editorGd.php</file>
-            <file phpVersion="5.3.0">tests/phpunit/tests/image/editorImagick.php</file>
-=======
+
             <!-- Path relative to the checkout root, for PHPUnit 3.6.x -->
             <exclude>tests/phpunit/tests/rest-api/rest-autosaves-controller.php</exclude>
             <!-- Same path relative to the configuration file, for PHPUnit 4.0.0+ -->
             <exclude>tests/rest-api/rest-autosaves-controller.php</exclude>
->>>>>>> e4813189c3 (Build/Test Tools: Reorder `<file>` and `<exclude>` rules in `multisite.xml` to avoid warnings in PHPUnit 7.2+.)
         </testsuite>
     </testsuites>
     <groups>
