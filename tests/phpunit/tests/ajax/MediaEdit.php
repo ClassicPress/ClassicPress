@@ -32,13 +32,8 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/canola.jpg';
 		$contents = file_get_contents($filename);
 
-<<<<<<< HEAD
-		$upload = wp_upload_bits(basename($filename), null, $contents);
-		$id = $this->_make_attachment($upload);
-=======
 		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$id     = $this->_make_attachment( $upload );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$_REQUEST['action'] = 'image-editor';
 		$_REQUEST['context'] = 'edit-attachment';

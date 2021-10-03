@@ -5356,11 +5356,7 @@ function wp_get_attachment_thumb_file( $post_id = 0 ) {
 
 	$file = get_attached_file( $post->ID );
 
-<<<<<<< HEAD
-	if ( !empty($imagedata['thumb']) && ($thumbfile = str_replace(basename($file), $imagedata['thumb'], $file)) && file_exists($thumbfile) ) {
-=======
 	if ( ! empty( $imagedata['thumb'] ) && ( $thumbfile = str_replace( wp_basename( $file ), $imagedata['thumb'], $file ) ) && file_exists( $thumbfile ) ) {
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 		/**
 		 * Filters the attachment thumbnail file path.
 		 *
@@ -5396,11 +5392,7 @@ function wp_get_attachment_thumb_url( $post_id = 0 ) {
 	if ( !$thumb = wp_get_attachment_thumb_file( $post->ID ) )
 		return false;
 
-<<<<<<< HEAD
-	$url = str_replace(basename($url), basename($thumb), $url);
-=======
 	$url = str_replace( wp_basename( $url ), wp_basename( $thumb ), $url );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 	/**
 	 * Filters the attachment thumbnail URL.
@@ -5543,20 +5535,13 @@ function wp_mime_type_icon( $mime = 0 ) {
 			while ( $dirs ) {
 				$keys = array_keys( $dirs );
 				$dir = array_shift( $keys );
-<<<<<<< HEAD
-				$uri = array_shift($dirs);
-				if ( $dh = opendir($dir) ) {
-					while ( false !== $file = readdir($dh) ) {
-						$file = basename($file);
-						if ( substr($file, 0, 1) == '.' )
-=======
 				$uri  = array_shift( $dirs );
 				if ( $dh = opendir( $dir ) ) {
 					while ( false !== $file = readdir( $dh ) ) {
 						$file = wp_basename( $file );
 						if ( substr( $file, 0, 1 ) == '.' ) {
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 							continue;
+						}
 						if ( !in_array(strtolower(substr($file, -4)), array('.png', '.gif', '.jpg') ) ) {
 							if ( is_dir("$dir/$file") )
 								$dirs["$dir/$file"] = "$uri/$file";
@@ -5571,16 +5556,10 @@ function wp_mime_type_icon( $mime = 0 ) {
 		}
 
 		$types = array();
-<<<<<<< HEAD
-		// Icon basename - extension = MIME wildcard.
-		foreach ( $icon_files as $file => $uri )
-			$types[ preg_replace('/^([^.]*).*$/', '$1', basename($file)) ] =& $icon_files[$file];
-=======
 		// Icon wp_basename - extension = MIME wildcard.
 		foreach ( $icon_files as $file => $uri ) {
 			$types[ preg_replace( '/^([^.]*).*$/', '$1', wp_basename( $file ) ) ] =& $icon_files[ $file ];
 		}
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		if ( ! empty($mime) ) {
 			$post_mimes[] = substr($mime, 0, strpos($mime, '/'));

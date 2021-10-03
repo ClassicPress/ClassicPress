@@ -2251,16 +2251,11 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 
 	$new_file = $upload['path'] . "/$filename";
 	if ( ! wp_mkdir_p( dirname( $new_file ) ) ) {
-		if ( 0 === strpos( $upload['basedir'], ABSPATH ) )
+		if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) {
 			$error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
-<<<<<<< HEAD
-		else
-			$error_path = basename( $upload['basedir'] ) . $upload['subdir'];
-=======
 		} else {
 			$error_path = wp_basename( $upload['basedir'] ) . $upload['subdir'];
 		}
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$message = sprintf(
 			/* translators: %s: directory path */
@@ -2479,7 +2474,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2488,7 +2483,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 

@@ -44,14 +44,9 @@ function wp_crop_image( $src, $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $s
 	if ( is_wp_error( $src ) )
 		return $src;
 
-<<<<<<< HEAD
-	if ( ! $dst_file )
-		$dst_file = str_replace( basename( $src_file ), 'cropped-' . basename( $src_file ), $src_file );
-=======
 	if ( ! $dst_file ) {
 		$dst_file = str_replace( wp_basename( $src_file ), 'cropped-' . wp_basename( $src_file ), $src_file );
 	}
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 	/*
 	 * The directory containing the original file may no longer exist when

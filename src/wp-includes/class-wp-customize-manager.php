@@ -4529,11 +4529,7 @@ final class WP_Customize_Manager {
 
 		if ( $this->return_url ) {
 			$return_url = $this->return_url;
-<<<<<<< HEAD
-		} else if ( $referer && ! in_array( basename( parse_url( $referer, PHP_URL_PATH ) ), $excluded_referer_basenames, true ) ) {
-=======
 		} elseif ( $referer && ! in_array( wp_basename( parse_url( $referer, PHP_URL_PATH ) ), $excluded_referer_basenames, true ) ) {
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 			$return_url = $referer;
 		} else if ( $this->preview_url ) {
 			$return_url = $this->preview_url;

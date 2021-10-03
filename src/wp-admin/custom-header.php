@@ -778,23 +778,15 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 			return $this->finished();
 		} elseif ( $width > $max_width ) {
 			$oitar = $width / $max_width;
-<<<<<<< HEAD
-			$image = wp_crop_image($attachment_id, 0, 0, $width, $height, $max_width, $height / $oitar, false, str_replace(basename($file), 'midsize-'.basename($file), $file));
-			if ( ! $image || is_wp_error( $image ) )
-=======
 			$image = wp_crop_image( $attachment_id, 0, 0, $width, $height, $max_width, $height / $oitar, false, str_replace( wp_basename( $file ), 'midsize-' . wp_basename( $file ), $file ) );
 			if ( ! $image || is_wp_error( $image ) ) {
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 				wp_die( __( 'Image could not be processed. Please go back and try again.' ), __( 'Image Processing Error' ) );
+			}
 
 			/** This filter is documented in wp-admin/custom-header.php */
 			$image = apply_filters( 'wp_create_file_in_uploads', $image, $attachment_id ); // For replication
 
-<<<<<<< HEAD
-			$url = str_replace(basename($url), basename($image), $url);
-=======
 			$url    = str_replace( wp_basename( $url ), wp_basename( $image ), $url );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 			$width = $width / $oitar;
 			$height = $height / $oitar;
 		} else {
@@ -858,11 +850,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 		$url = $file['url'];
 		$type = $file['type'];
 		$file = $file['file'];
-<<<<<<< HEAD
-		$filename = basename($file);
-=======
 		$filename = wp_basename( $file );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		// Construct the object array
 		$object = array(
@@ -1174,11 +1162,7 @@ wp_nonce_field( 'custom-header-options', '_wpnonce-custom-header-options' ); ?>
 
 		$object = array(
 			'ID' => $parent_attachment_id,
-<<<<<<< HEAD
-			'post_title' => basename($cropped),
-=======
 			'post_title'     => wp_basename( $cropped ),
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 			'post_mime_type' => $image_type,
 			'guid' => $url,
 			'context' => 'custom-header',

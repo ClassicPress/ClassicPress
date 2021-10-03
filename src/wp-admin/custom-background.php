@@ -458,11 +458,7 @@ if ( current_theme_supports( 'custom-background', 'default-color' ) )
 		$url = $file['url'];
 		$type = $file['type'];
 		$file = $file['file'];
-<<<<<<< HEAD
-		$filename = basename($file);
-=======
 		$filename = wp_basename( $file );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		// Construct the object array
 		$object = array(

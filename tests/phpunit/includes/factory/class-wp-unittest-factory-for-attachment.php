@@ -32,13 +32,8 @@ class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
 	}
 
 	function create_upload_object( $file, $parent = 0 ) {
-<<<<<<< HEAD
-		$contents = file_get_contents($file);
-		$upload = wp_upload_bits(basename($file), null, $contents);
-=======
 		$contents = file_get_contents( $file );
 		$upload   = wp_upload_bits( wp_basename( $file ), null, $contents );
->>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		if ( ! empty( $upload['error'] ) ) {
 			throw new ErrorException( $upload['error'] );
