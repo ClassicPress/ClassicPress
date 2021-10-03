@@ -8,13 +8,7 @@ class Tests_File extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-<<<<<<< HEAD
-		$file = tempnam( '/tmp', 'foo') ;
-		$this->dir = dirname( $file );
-		unlink( $file );
-=======
 		$this->dir = untrailingslashit( get_temp_dir() );
->>>>>>> 022ebde54d (Tests: Replace hardcoded `/tmp/` references with `get_temp_dir()`.)
 
 		$this->badchars = '"\'[]*&?$';
 	}
