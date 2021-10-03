@@ -164,9 +164,19 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 
 	/**
 	 * Use this rather than MockAction so we can test callbacks with no args
+	 *
+	 * @param mixed ...$args Optional arguments passed to the action.
 	 */
+<<<<<<< HEAD
 	public function _action_callback() {
 		$args = func_get_args();
 		$this->events[] = array('action' => __FUNCTION__, 'args'=>$args);
+=======
+	public function _action_callback( ...$args ) {
+		$this->events[] = array(
+			'action' => __FUNCTION__,
+			'args'   => $args,
+		);
+>>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 	}
 }
