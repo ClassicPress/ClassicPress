@@ -121,12 +121,6 @@ require dirname( __FILE__ ) . '/utils.php';
 require dirname( __FILE__ ) . '/spy-rest-server.php';
 
 /**
-<<<<<<< HEAD
- * A child class of the PHP test runner.
- *
- * Used to access the protected longOptions property, to parse the arguments
- * passed to the script.
-=======
  * A class to handle additional command line arguments passed to the script.
  *
  * If it is determined that phpunit was called with a --group that corresponds
@@ -135,57 +129,26 @@ require dirname( __FILE__ ) . '/spy-rest-server.php';
  *
  * If WP_TESTS_FORCE_KNOWN_BUGS is already set in wp-tests-config.php, then
  * how you call phpunit has no effect.
->>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
  */
 class WP_PHPUnit_Util_Getopt {
 
 	function __construct( $argv ) {
-<<<<<<< HEAD
-		array_shift( $argv );
-		$options = array();
-		while ( current( $argv ) ) {
-			$arg = current( $argv );
-			next( $argv );
-			try {
-				if ( strlen( $arg ) > 1 && $arg[0] === '-' && $arg[1] === '-' ) {
-					self::parseLongOption( substr( $arg, 2 ), $this->longOptions, $options, $argv );
-				}
-			}
-			catch ( PHPUnit_Framework_Exception $e ) {
-				// Enforcing recognized arguments or correctly formed arguments is
-				// not really the concern here.
-				continue;
-			}
-		}
-
-=======
->>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 		$skipped_groups = array(
 			'ajax' => true,
 			'ms-files' => true,
 			'external-http' => true,
 		);
 
-<<<<<<< HEAD
-		foreach ( $options as $option ) {
-			switch ( $option[0] ) {
-				case '--exclude-group' :
-=======
 		while ( current( $argv ) ) {
 			$option = current( $argv );
 			$value  = next( $argv );
 
 			switch ( $option ) {
 				case '--exclude-group':
->>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						$skipped_groups[ $group_name ] = false;
 					}
 					continue 2;
-<<<<<<< HEAD
-				case '--group' :
-					$groups = explode( ',', $option[1] );
-=======
 				case '--group':
 					$groups = explode( ',', $value );
 					foreach ( $groups as $group ) {
@@ -193,7 +156,6 @@ class WP_PHPUnit_Util_Getopt {
 							WP_UnitTestCase::forceTicket( $group );
 						}
 					}
->>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						if ( in_array( $group_name, $groups ) ) {
