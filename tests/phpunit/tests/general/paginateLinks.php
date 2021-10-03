@@ -25,7 +25,7 @@ class Tests_Paginate_Links extends WP_UnitTestCase {
 EXPECTED;
 
 		$links = paginate_links( array( 'total' => 50 ) );
-		$this->assertEquals( $expected, $links );
+		$this->assertEqualsIgnoreEOL( $expected, $links );
 	}
 
 	function test_format() {
@@ -42,8 +42,18 @@ EXPECTED;
 <a class="next page-numbers" href="$page2">Next &raquo;</a>
 EXPECTED;
 
+<<<<<<< HEAD
 		$links = paginate_links( array( 'total' => 50, 'format' => 'page/%#%/' ) );
 		$this->assertEquals( $expected, $links );
+=======
+		$links = paginate_links(
+			array(
+				'total'  => 50,
+				'format' => 'page/%#%/',
+			)
+		);
+		$this->assertEqualsIgnoreEOL( $expected, $links );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_prev_next_false() {
@@ -61,8 +71,19 @@ EXPECTED;
 <a class='page-numbers' href='$page50'>50</a>
 EXPECTED;
 
+<<<<<<< HEAD
 		$links = paginate_links( array( 'total' => 50, 'prev_next' => false, 'current' => 2 ) );
 		$this->assertEquals( $expected, $links );
+=======
+		$links = paginate_links(
+			array(
+				'total'     => 50,
+				'prev_next' => false,
+				'current'   => 2,
+			)
+		);
+		$this->assertEqualsIgnoreEOL( $expected, $links );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_prev_next_true() {
@@ -82,8 +103,19 @@ EXPECTED;
 <a class="next page-numbers" href="$page3">Next &raquo;</a>
 EXPECTED;
 
+<<<<<<< HEAD
 		$links = paginate_links( array( 'total' => 50, 'prev_next' => true, 'current' => 2 ) );
 		$this->assertEquals( $expected, $links );
+=======
+		$links = paginate_links(
+			array(
+				'total'     => 50,
+				'prev_next' => true,
+				'current'   => 2,
+			)
+		);
+		$this->assertEqualsIgnoreEOL( $expected, $links );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function increment_i18n_count() {

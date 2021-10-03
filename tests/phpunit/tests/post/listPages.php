@@ -70,8 +70,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['default'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_depth() {
@@ -83,8 +88,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['depth'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_show_date() {
@@ -98,8 +108,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a> ' . $date . '</li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '</li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['show_date'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_date_format() {
@@ -131,8 +146,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['date_format'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_child_of() {
@@ -144,8 +164,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['child_of'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_exclude() {
@@ -171,8 +196,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['exclude'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_title_li() {
@@ -185,8 +215,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['title_li'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_echo() {
@@ -198,7 +233,12 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		ob_start();
+=======
+		$expected = str_replace( "\r\n", "\n", $expected );
+		$this->expectOutputString( $expected );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 		wp_list_pages( $args );
 		$actual = ob_get_clean();
 		$this->AssertEquals( $expected['echo'], $actual );
@@ -211,8 +251,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		);
 		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3) . '">Parent 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['authors'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_number() {
@@ -222,8 +267,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		);
 		$expected['number'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['number'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_sort_column() {
@@ -254,8 +304,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['sort_column'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_link_before() {
@@ -285,8 +340,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['link_before'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_link_after() {
@@ -316,8 +376,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['link_after'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 
@@ -329,8 +394,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		$expected['include'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1"><a href="' . get_permalink( 1 ) . '">Parent 1</a></li>
 <li class="page_item page-item-3"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['include'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_exclude_tree() {
@@ -346,8 +416,13 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
+<<<<<<< HEAD
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['exclude'], $actual );
+=======
+
+		$this->assertEqualsIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_list_pages_discarded_whitespace() {
@@ -355,8 +430,15 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 			'item_spacing' => 'discard',
 		);
+<<<<<<< HEAD
 		$expected['default'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a><ul class=\'children\'><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li><li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li><li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a><ul class=\'children\'><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li><li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li><li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a><ul class=\'children\'><li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li><li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li><li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li></ul></li></ul></li>';
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['default'], $actual );
+=======
+
+		$expected = '<li class="pagenav">Pages<ul><li class="page_item page-item-' . self::$parent_1 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_1 ) . '">Parent 1</a><ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_1 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][0] ) . '">Child 1</a></li><li class="page_item page-item-' . self::$children[ self::$parent_1 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][1] ) . '">Child 2</a></li><li class="page_item page-item-' . self::$children[ self::$parent_1 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][2] ) . '">Child 3</a></li></ul></li><li class="page_item page-item-' . self::$parent_2 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_2 ) . '">Parent 2</a><ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_2 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][0] ) . '">Child 1</a></li><li class="page_item page-item-' . self::$children[ self::$parent_2 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][1] ) . '">Child 2</a></li><li class="page_item page-item-' . self::$children[ self::$parent_2 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][2] ) . '">Child 3</a></li></ul></li><li class="page_item page-item-' . self::$parent_3 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_3 ) . '">Parent 3</a><ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_3 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][0] ) . '">Child 1</a></li><li class="page_item page-item-' . self::$children[ self::$parent_3 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][1] ) . '">Child 2</a></li><li class="page_item page-item-' . self::$children[ self::$parent_3 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][2] ) . '">Child 3</a></li></ul></li></ul></li>';
+
+		$this->assertEquals( $expected, wp_list_pages( $args ) );
+>>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 }
