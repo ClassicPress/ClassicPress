@@ -14,12 +14,20 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 		$this->assertNotEmpty( $matches );
 
+<<<<<<< HEAD
 		$response = wp_remote_get(
 			'https://secure.php.net/supported-versions.php'
 		);
+=======
+		$response = wp_remote_get( 'https://secure.php.net/supported-versions.php' );
+
+		$this->skipTestOnTimeout( $response );
+
+>>>>>>> fcf86b80b6 (Tests: Skip `test_readme()` if the HTTP request to `secure.php.net` or `dev.mysql.com` failed on timeout.)
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			$this->fail( 'Could not contact PHP.net to check versions.' );
 		}
+
 		$php = wp_remote_retrieve_body( $response );
 
 		preg_match_all(
@@ -39,6 +47,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 	function test_readme_recommended_mysql_version() {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
+<<<<<<< HEAD
 		preg_match(
 			'#Recommendations.*MySQL</a> version <strong>([0-9.]*)#s',
 			$readme,
@@ -49,9 +58,16 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		$response = wp_remote_get(
 			"https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/"
 		);
+=======
+		$response = wp_remote_get( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
+
+		$this->skipTestOnTimeout( $response );
+
+>>>>>>> fcf86b80b6 (Tests: Skip `test_readme()` if the HTTP request to `secure.php.net` or `dev.mysql.com` failed on timeout.)
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			$this->fail( 'Could not contact dev.mysql.com to check versions.' );
 		}
+
 		$mysql = wp_remote_retrieve_body( $response );
 
 		preg_match(

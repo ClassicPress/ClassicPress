@@ -17,6 +17,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	protected $http_request_args;
 
+<<<<<<< HEAD
 	/**
 	 * Please kill this code ASAP.
 	 */
@@ -57,6 +58,8 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		);
 	}
 
+=======
+>>>>>>> fcf86b80b6 (Tests: Skip `test_readme()` if the HTTP request to `secure.php.net` or `dev.mysql.com` failed on timeout.)
 	function setUp() {
 
 		if ( is_callable( array('WP_Http', '_getTransport') ) ) {
