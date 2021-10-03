@@ -136,6 +136,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Detect post-test failure conditions.
 	 *
 	 * We use this method to detect expectedDeprecated and expectedIncorrectUsage annotations.
@@ -148,6 +149,9 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
+=======
+	 * After a test method runs, reset any state in WordPress the test method might have changed.
+>>>>>>> 4b8e33fbee (Build/Test Tools: Move `WP_UnitTestCase_Base::assertPostConditions()` to a more appropriate place.)
 	 */
 	function tearDown() {
 		global $wpdb, $wp_query, $wp;
@@ -424,6 +428,17 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 			! empty( $this->caught_doing_it_wrong ) ) {
 			$this->assertEmpty( $errors, implode( "\n", $errors ) );
 		}
+	}
+
+	/**
+	 * Detect post-test failure conditions.
+	 *
+	 * We use this method to detect expectedDeprecated and expectedIncorrectUsage annotations.
+	 *
+	 * @since 4.2.0
+	 */
+	protected function assertPostConditions() {
+		$this->expectedDeprecated();
 	}
 
 	/**
