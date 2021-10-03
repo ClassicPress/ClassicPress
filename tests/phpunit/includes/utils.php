@@ -95,24 +95,15 @@ if ($this->debug) dmp(__FUNCTION__, $this->current_filter());
 		return $arg . '_append';
 	}
 
-<<<<<<< HEAD
-	function filterall($tag, $arg=NULL) {
-=======
 	function filterall( $tag, ...$args ) {
->>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 	// this one doesn't return the result, so it's safe to use with the new 'all' filter
-if ($this->debug) dmp(__FUNCTION__, $this->current_filter());
+		if ($this->debug) dmp(__FUNCTION__, $this->current_filter());
 
-<<<<<<< HEAD
-		$args = func_get_args();
-		$this->events[] = array('filter' => __FUNCTION__, 'tag'=>$tag, 'args'=>array_slice($args, 1));
-=======
 		$this->events[] = array(
 			'filter' => __FUNCTION__,
 			'tag'    => $tag,
 			'args'   => $args,
 		);
->>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 	}
 
 	// return a list of all the actions, tags and args
@@ -204,34 +195,13 @@ function xml_to_array($in) {
 	return $p->data;
 }
 
-<<<<<<< HEAD
-function xml_find($tree /*, $el1, $el2, $el3, .. */) {
-	$a = func_get_args();
-	$a = array_slice($a, 1);
-	$n = count($a);
-=======
 function xml_find( $tree, ...$elements ) {
 	$n   = count( $elements );
->>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 	$out = array();
 
 	if ($n < 1)
 		return $out;
 
-<<<<<<< HEAD
-	for ($i=0; $i<count($tree); $i++) {
-#		echo "checking '{$tree[$i][name]}' == '{$a[0]}'\n";
-#		var_dump($tree[$i]['name'], $a[0]);
-		if ($tree[$i]['name'] == $a[0]) {
-#			echo "n == {$n}\n";
-			if ($n == 1)
-				$out[] = $tree[$i];
-			else {
-				$subtree =& $tree[$i]['child'];
-				$call_args = array($subtree);
-				$call_args = array_merge($call_args, array_slice($a, 1));
-				$out = array_merge($out, call_user_func_array('xml_find', $call_args));
-=======
 	for ( $i = 0; $i < count( $tree ); $i++ ) {
 		#       echo "checking '{$tree[$i][name]}' == '{$elements[0]}'\n";
 		#       var_dump( $tree[$i]['name'], $elements[0] );
@@ -242,7 +212,6 @@ function xml_find( $tree, ...$elements ) {
 			} else {
 				$subtree =& $tree[ $i ]['child'];
 				$out     = array_merge( $out, xml_find( $subtree, ...array_slice( $elements, 1 ) ) );
->>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 			}
 		}
 	}
@@ -275,18 +244,10 @@ function xml_array_dumbdown(&$data) {
 	return $out;
 }
 
-<<<<<<< HEAD
-function dmp() {
-	$args = func_get_args();
-
-	foreach ($args as $thing)
-		echo (is_scalar($thing) ? strval($thing) : var_export($thing, true)), "\n";
-=======
 function dmp( ...$args ) {
 	foreach ( $args as $thing ) {
 		echo ( is_scalar( $thing ) ? strval( $thing ) : var_export( $thing, true ) ), "\n";
 	}
->>>>>>> 3ae54e84da (Code Modernisation: Introduce the spread operator in `tests/phpunit/*`.)
 }
 
 function dmp_filter($a) {
@@ -445,7 +406,7 @@ class wpdb_exposed_methods_for_testing extends wpdb {
  */
 function benchmark_pcre_backtracking( $pattern, $subject, $strategy ) {
 	$saved_config = ini_get( 'pcre.backtrack_limit' );
-	
+
 	// Attempt to prevent PHP crashes.  Adjust these lower when needed.
 	if ( version_compare( phpversion(), '5.4.8', '>' ) ) {
 		$limit = 1000000;
@@ -457,7 +418,7 @@ function benchmark_pcre_backtracking( $pattern, $subject, $strategy ) {
 	for( $i = 4; $i <= $limit; $i *= 2 ) {
 
 		ini_set( 'pcre.backtrack_limit', $i );
-		
+
 		switch( $strategy ) {
 		case 'split':
 			preg_split( $pattern, $subject );
