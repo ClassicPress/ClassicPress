@@ -415,7 +415,11 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
 	$url = $file['url'];
 	$type = $file['type'];
 	$file = $file['file'];
+<<<<<<< HEAD
 	$title = preg_replace('/\.[^.]+$/', '', basename($file));
+=======
+	$title   = preg_replace( '/\.[^.]+$/', '', wp_basename( $file ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 	$content = '';
 
 	// Use image exif/iptc data for title and caption defaults if possible.
@@ -773,8 +777,14 @@ function wp_media_upload_handler() {
 
 		if ( isset( $_POST['media_type'] ) && 'image' != $_POST['media_type'] ) {
 			$title = esc_html( wp_unslash( $_POST['title'] ) );
+<<<<<<< HEAD
 			if ( empty( $title ) )
 				$title = esc_html( basename( $src ) );
+=======
+			if ( empty( $title ) ) {
+				$title = esc_html( wp_basename( $src ) );
+			}
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 			if ( $title && $src )
 				$html = "<a href='" . esc_url($src) . "'>$title</a>";
@@ -871,7 +881,7 @@ function media_sideload_image( $file, $post_id, $desc = null, $return = 'html' )
 		}
 
 		$file_array = array();
-		$file_array['name'] = basename( $matches[0] );
+		$file_array['name'] = wp_basename( $matches[0] );
 
 		// Download file to temp location.
 		$file_array['tmp_name'] = download_url( $file );

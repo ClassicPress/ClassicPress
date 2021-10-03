@@ -27,8 +27,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA.'/images/test-image.jpg' );
 		$contents = file_get_contents($filename);
 
+<<<<<<< HEAD
 		$upload = wp_upload_bits(basename($filename), null, $contents);
 		$this->assertTrue( empty($upload['error']) );
+=======
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$id = $this->_make_attachment($upload);
 
@@ -38,6 +43,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertFalse( image_get_intermediate_size($id, 'medium_large') );
 
 		// medium, medium_large, and full size will both point to the original
+<<<<<<< HEAD
 		$downsize = image_downsize($id, 'medium');
 		$this->assertEquals( basename( $upload['file'] ), basename($downsize[0]) );
 		$this->assertEquals( 50, $downsize[1] );
@@ -50,6 +56,20 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 		$downsize = image_downsize($id, 'full');
 		$this->assertEquals( basename( $upload['file'] ), basename($downsize[0]) );
+=======
+		$downsize = image_downsize( $id, 'medium' );
+		$this->assertEquals( wp_basename( $upload['file'] ), wp_basename( $downsize[0] ) );
+		$this->assertEquals( 50, $downsize[1] );
+		$this->assertEquals( 50, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'medium_large' );
+		$this->assertEquals( wp_basename( $upload['file'] ), wp_basename( $downsize[0] ) );
+		$this->assertEquals( 50, $downsize[1] );
+		$this->assertEquals( 50, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'full' );
+		$this->assertEquals( wp_basename( $upload['file'] ), wp_basename( $downsize[0] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 		$this->assertEquals( 50, $downsize[1] );
 		$this->assertEquals( 50, $downsize[2] );
 
@@ -65,8 +85,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA.'/images/a2-small.jpg' );
 		$contents = file_get_contents($filename);
 
+<<<<<<< HEAD
 		$upload = wp_upload_bits(basename($filename), null, $contents);
 		$this->assertTrue( empty($upload['error']) );
+=======
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$id = $this->_make_attachment($upload);
 
@@ -84,12 +109,18 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertEquals( $thumb['url'], wp_get_attachment_thumb_url($id) );
 
 		// image_downsize() should return the correct images and sizes
+<<<<<<< HEAD
 		$downsize = image_downsize($id, 'thumbnail');
 		$this->assertEquals( 'a2-small-150x150.jpg', basename($downsize[0]) );
+=======
+		$downsize = image_downsize( $id, 'thumbnail' );
+		$this->assertEquals( 'a2-small-150x150.jpg', wp_basename( $downsize[0] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 		$this->assertEquals( 150, $downsize[1] );
 		$this->assertEquals( 150, $downsize[2] );
 
 		// medium, medium_large, and full will both point to the original
+<<<<<<< HEAD
 		$downsize = image_downsize($id, 'medium');
 		$this->assertEquals( 'a2-small.jpg', basename($downsize[0]) );
 		$this->assertEquals( 400, $downsize[1] );
@@ -102,6 +133,20 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 		$downsize = image_downsize($id, 'full');
 		$this->assertEquals( 'a2-small.jpg', basename($downsize[0]) );
+=======
+		$downsize = image_downsize( $id, 'medium' );
+		$this->assertEquals( 'a2-small.jpg', wp_basename( $downsize[0] ) );
+		$this->assertEquals( 400, $downsize[1] );
+		$this->assertEquals( 300, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'medium_large' );
+		$this->assertEquals( 'a2-small.jpg', wp_basename( $downsize[0] ) );
+		$this->assertEquals( 400, $downsize[1] );
+		$this->assertEquals( 300, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'full' );
+		$this->assertEquals( 'a2-small.jpg', wp_basename( $downsize[0] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 		$this->assertEquals( 400, $downsize[1] );
 		$this->assertEquals( 300, $downsize[2] );
 
@@ -120,8 +165,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG' );
 		$contents = file_get_contents($filename);
 
+<<<<<<< HEAD
 		$upload = wp_upload_bits(basename($filename), null, $contents);
 		$this->assertTrue( empty($upload['error']) );
+=======
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$id = $this->_make_attachment($upload);
 		$uploads = wp_upload_dir();
@@ -143,6 +193,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertEquals( $thumb['url'], wp_get_attachment_thumb_url($id) );
 
 		// image_downsize() should return the correct images and sizes
+<<<<<<< HEAD
 		$downsize = image_downsize($id, 'thumbnail');
 		$this->assertEquals( '2007-06-17DSC_4173-150x150.jpg', basename($downsize[0]) );
 		$this->assertEquals( 150, $downsize[1] );
@@ -160,6 +211,25 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 		$downsize = image_downsize($id, 'full');
 		$this->assertEquals( '2007-06-17DSC_4173.jpg', basename($downsize[0]) );
+=======
+		$downsize = image_downsize( $id, 'thumbnail' );
+		$this->assertEquals( '2007-06-17DSC_4173-150x150.jpg', wp_basename( $downsize[0] ) );
+		$this->assertEquals( 150, $downsize[1] );
+		$this->assertEquals( 150, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'medium' );
+		$this->assertEquals( '2007-06-17DSC_4173-400x602.jpg', wp_basename( $downsize[0] ) );
+		$this->assertEquals( 400, $downsize[1] );
+		$this->assertEquals( 602, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'medium_large' );
+		$this->assertEquals( '2007-06-17DSC_4173-600x904.jpg', wp_basename( $downsize[0] ) );
+		$this->assertEquals( 600, $downsize[1] );
+		$this->assertEquals( 904, $downsize[2] );
+
+		$downsize = image_downsize( $id, 'full' );
+		$this->assertEquals( '2007-06-17DSC_4173.jpg', wp_basename( $downsize[0] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 		$this->assertEquals( 680, $downsize[1] );
 		$this->assertEquals( 1024, $downsize[2] );
 	}
@@ -178,8 +248,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG' );
 		$contents = file_get_contents($filename);
 
+<<<<<<< HEAD
 		$upload = wp_upload_bits(basename($filename), null, $contents);
 		$this->assertTrue( empty($upload['error']) );
+=======
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$id = $this->_make_attachment($upload);
 		$uploads = wp_upload_dir();
@@ -220,8 +295,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA.'/images/test-image.jpg' );
 		$contents = file_get_contents($filename);
 
+<<<<<<< HEAD
 		$upload = wp_upload_bits(basename($filename), null, $contents);
 		$this->assertTrue( empty($upload['error']) );
+=======
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
+		$this->assertTrue( empty( $upload['error'] ) );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$upload['url'] = '';
 		$id = $this->_make_attachment( $upload );
@@ -237,7 +317,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents($filename);
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		$id = $this->_make_attachment( $upload );
@@ -263,7 +343,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		$attachment_id = $this->_make_attachment( $upload );
@@ -290,7 +370,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID.
@@ -315,7 +395,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID.
@@ -340,7 +420,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID
@@ -368,7 +448,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID.
@@ -396,7 +476,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID
@@ -423,7 +503,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->assertTrue( empty( $upload['error'] ) );
 
 		// Set attachment ID
@@ -445,7 +525,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload        = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$attachment_id = $this->_make_attachment( $upload );
 
 		$this->assertTrue( wp_attachment_is_image( $attachment_id ) );
@@ -463,7 +543,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.psd';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload        = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$attachment_id = $this->_make_attachment( $upload );
 
 		$this->assertFalse( wp_attachment_is_image( $attachment_id ) );
@@ -480,13 +560,13 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 
 		$this->assertFalse( $upload['error'] );
 
 		add_filter( 'upload_mimes', array( $this, 'blacklist_jpg_mime_type' ) );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 
 		remove_filter( 'upload_mimes', array( $this, 'blacklist_jpg_mime_type' ) );
 

@@ -101,8 +101,13 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 	function test_create_attachment_object() {
 		$attachment_id = $this->_insert_attachment();
+<<<<<<< HEAD
 		$parent_url    = $this->attachment_filename;
 		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+=======
+		$parent_url    = get_post( $attachment_id )->guid;
+		$cropped       = str_replace( wp_basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$object = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 
@@ -115,8 +120,13 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 	function test_insert_cropped_attachment() {
 		$attachment_id = $this->_insert_attachment();
+<<<<<<< HEAD
 		$parent_url    = $this->attachment_filename;
 		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+=======
+		$parent_url    = get_post( $attachment_id )->guid;
+		$cropped       = str_replace( wp_basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$object     = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 		$cropped_id = $this->wp_site_icon->insert_attachment( $object, $cropped );
@@ -164,7 +174,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$filename = $this->attachment_filename;
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 
 		$this->attachment_id = $this->_make_attachment( $upload );
 		return $this->attachment_id;

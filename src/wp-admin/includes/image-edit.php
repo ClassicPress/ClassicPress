@@ -29,8 +29,14 @@ function wp_image_editor($post_id, $msg = false) {
 
 	$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
 	$can_restore = false;
+<<<<<<< HEAD
 	if ( ! empty( $backup_sizes ) && isset( $backup_sizes['full-orig'], $meta['file'] ) )
 		$can_restore = $backup_sizes['full-orig']['file'] != basename( $meta['file'] );
+=======
+	if ( ! empty( $backup_sizes ) && isset( $backup_sizes['full-orig'], $meta['file'] ) ) {
+		$can_restore = $backup_sizes['full-orig']['file'] != wp_basename( $meta['file'] );
+	}
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 	if ( $msg ) {
 		if ( isset($msg->error) )

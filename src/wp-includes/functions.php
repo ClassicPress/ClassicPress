@@ -1984,7 +1984,7 @@ function wp_upload_dir( $time = null, $create_dir = true, $refresh_cache = false
 				if ( 0 === strpos( $uploads['basedir'], ABSPATH ) ) {
 					$error_path = str_replace( ABSPATH, '', $uploads['basedir'] ) . $uploads['subdir'];
 				} else {
-					$error_path = basename( $uploads['basedir'] ) . $uploads['subdir'];
+					$error_path = wp_basename( $uploads['basedir'] ) . $uploads['subdir'];
 				}
 
 				$uploads['error'] = sprintf(
@@ -2253,8 +2253,14 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 	if ( ! wp_mkdir_p( dirname( $new_file ) ) ) {
 		if ( 0 === strpos( $upload['basedir'], ABSPATH ) )
 			$error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
+<<<<<<< HEAD
 		else
 			$error_path = basename( $upload['basedir'] ) . $upload['subdir'];
+=======
+		} else {
+			$error_path = wp_basename( $upload['basedir'] ) . $upload['subdir'];
+		}
+>>>>>>> e421f262dc (Replace usages of basename() with wp_basename() in order to support multibyte filenames)
 
 		$message = sprintf(
 			/* translators: %s: directory path */
