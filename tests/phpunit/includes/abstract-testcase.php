@@ -1,16 +1,15 @@
 <?php
 
 require_once dirname( __FILE__ ) . '/factory.php';
-require_once dirname( __FILE__ ) . '/trac.php';
 
 /**
  * Defines a basic fixture to run multiple tests.
  *
- * Resets the state of the WordPress installation before and after every test.
+ * Resets the state of the ClassicPress installation before and after every test.
  *
- * Includes utility functions and assertions useful for testing WordPress.
+ * Includes utility functions and assertions useful for testing ClassicPress.
  *
- * All WordPress unit tests should inherit from this class.
+ * All ClassicPress unit tests should inherit from this class.
  */
 abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 
@@ -34,7 +33,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Fetches the factory object for generating WordPress fixtures.
+	 * Fetches the factory object for generating ClassicPress fixtures.
 	 *
 	 * @return WP_UnitTest_Factory The fixture factory.
 	 */
@@ -141,14 +140,14 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 *
 	 * We use this method to detect expectedDeprecated and expectedIncorrectUsage annotations.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 */
 	protected function assertPostConditions() {
 		$this->expectedDeprecated();
 	}
 
 	/**
-	 * After a test method runs, reset any state in WordPress the test method might have changed.
+	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
 	 */
 	function tearDown() {
 		global $wpdb, $wp_query, $wp;
@@ -180,27 +179,6 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 		$_GET  = array();
 		$_POST = array();
 		self::flush_cache();
-	}
-
-	/**
-	 * Allow tests to be skipped on some automated runs
-	 *
-	 * For test runs on Travis for something other than trunk/master
-	 * we want to skip tests that only need to run for master.
-	 */
-	public function skipOnAutomatedBranches() {
-		// gentenv can be disabled
-		if ( ! function_exists( 'getenv' ) ) {
-			return false;
-		}
-
-		// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-		$travis_branch       = getenv( 'TRAVIS_BRANCH' );
-		$travis_pull_request = getenv( 'TRAVIS_PULL_REQUEST' );
-
-		if ( false !== $travis_pull_request && 'master' !== $travis_branch ) {
-			$this->markTestSkipped( 'For automated test runs, this test is only run on trunk/master' );
-		}
 	}
 
 	/**
@@ -334,7 +312,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Clean up any registered meta keys.
 	 *
-	 * @since 5.1.0
+	 * @since WP-5.1.0
 	 *
 	 * @global array $wp_meta_keys
 	 */
@@ -363,7 +341,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Commit the queries in a transaction.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 */
 	public static function commit_transaction() {
 		global $wpdb;
@@ -451,7 +429,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_deprecated_function()` or `_deprecated_argument()` call from within a test.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, class, or argument that is deprecated. Must match
 	 *                           first parameter of the `_deprecated_function()` or `_deprecated_argument()` call.
@@ -463,7 +441,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_doing_it_wrong()` call from within a test.
 	 *
-	 * @since 4.2.0
+	 * @since WP-4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, or class that appears in the first argument of the
 	 *                           source `_doing_it_wrong()` call.
@@ -542,7 +520,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Asserts that the contents of two un-keyed, single arrays are equal, without accounting for the order of elements.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param array $expected Expected array.
 	 * @param array $actual   Array to check.
@@ -556,7 +534,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Asserts that the contents of two keyed, single arrays are equal, without accounting for the order of elements.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 *
 	 * @param array $expected Expected array.
 	 * @param array $actual   Array to check.
@@ -570,7 +548,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Asserts that the given variable is a multidimensional array, and that all arrays are non-empty.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @param array $array Array to check.
 	 */
@@ -593,7 +571,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 * - The query variables.
 	 * - The main query.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param string $url The URL for the request.
 	 */
@@ -650,7 +628,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 * Contains legacy code for skipping tests that are associated with an open Trac ticket. Core tests no longer
 	 * support this behaviour.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 */
 	protected function checkRequirements() {
 		parent::checkRequirements();
@@ -699,7 +677,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Skips the current test if there is an open Trac ticket associated with it.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int $ticket_id Ticket number.
 	 */
@@ -715,7 +693,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Skips the current test if there is an open Unit Test Trac ticket associated with it.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @deprecated No longer used since the Unit Test Trac was merged into the Core Trac.
 	 *
@@ -728,7 +706,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Skips the current test if there is an open Plugin Trac ticket associated with it.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int $ticket_id Ticket number.
 	 */
@@ -744,7 +722,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Adds a Trac ticket number to the `$forced_tickets` property.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @param int $ticket Ticket number.
 	 */
@@ -773,7 +751,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 *
 	 * The directory in which the file is created depends on the environment configuration.
 	 *
-	 * @since 3.5.0
+	 * @since WP-3.5.0
 	 *
 	 * @return string|bool Path on success, else false.
 	 */
@@ -801,7 +779,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 * and is_feed() must be true and everything else must be false to pass.
 	 *
 	 * @since 2.5.0
-	 * @since 3.8.0 Moved from `Tests_Query_Conditionals` to `WP_UnitTestCase`.
+	 * @since WP-3.8.0 Moved from `Tests_Query_Conditionals` to `WP_UnitTestCase`.
 	 *
 	 * @param string $prop,... Any number of WP_Query properties that are expected to be true for the current request.
 	 */
@@ -865,6 +843,16 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function assertAttachmentMetaHasSizes( $meta ) {
+		if ( ! isset( $meta['sizes'] ) ) {
+			throw new ErrorException(
+				"No 'sizes' attribute for attachment metadata:"
+				. "\n" . json_encode( $meta )
+				. "\n\nTry installing the `imagick` or `gd` extensions for PHP."
+			);
+		}
+	}
+
 	/**
 	 * Selectively deletes a file.
 	 *
@@ -915,7 +903,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Returns a list of all files contained inside a directory.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @param string $dir Path to the directory to scan.
 	 *
@@ -938,7 +926,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Returns a list of all files contained inside the `uploads` directory.
 	 *
-	 * @since 4.0.0
+	 * @since WP-4.0.0
 	 *
 	 * @return array List of file paths.
 	 */
@@ -956,7 +944,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Deletes all directories contained inside a directory.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 *
 	 * @param string $path Path to the directory to scan.
 	 */
@@ -979,7 +967,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 *
 	 * This is a helper for the `delete_folders()` method.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 *
 	 * @param string $dir Path to the directory to scan.
 	 */
@@ -995,7 +983,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Converts a microtime string into a float.
 	 *
-	 * @since 4.1.0
+	 * @since WP-4.1.0
 	 *
 	 * @param string $microtime Time string generated by `microtime()`.
 	 *
@@ -1009,7 +997,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Deletes a user from the database in a Multisite-agnostic way.
 	 *
-	 * @since 4.3.0
+	 * @since WP-4.3.0
 	 *
 	 * @param int $user_id User ID.
 	 *
@@ -1026,7 +1014,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Resets permalinks and flushes rewrites.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @global WP_Rewrite $wp_rewrite
 	 *
@@ -1043,7 +1031,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Creates an attachment post from an uploaded file.
 	 *
-	 * @since 4.4.0
+	 * @since WP-4.4.0
 	 *
 	 * @param array $upload         Array of information about the uploaded file, provided by wp_upload_bits().
 	 * @param int   $parent_post_id Optional. Parent post ID.
@@ -1078,7 +1066,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	/**
 	 * Updates the modified and modified GMT date of a post in the database.
 	 *
-	 * @since 4.8.0
+	 * @since WP-4.8.0
 	 *
 	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *

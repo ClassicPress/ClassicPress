@@ -156,18 +156,11 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 	public function assertCanonical( $test_url, $expected, $expected_doing_it_wrong = array() ) {
 		$this->expected_doing_it_wrong = array_merge( $this->expected_doing_it_wrong, (array) $expected_doing_it_wrong );
 
-<<<<<<< HEAD
-		if ( is_string($expected) )
-			$expected = array('url' => $expected);
-		elseif ( is_array($expected) && !isset($expected['url']) && !isset($expected['qv']) )
-=======
-		$ticket_ref = ( $ticket > 0 ) ? 'Ticket #' . $ticket : '';
-
 		if ( is_string( $expected ) ) {
 			$expected = array( 'url' => $expected );
 		} elseif ( is_array( $expected ) && ! isset( $expected['url'] ) && ! isset( $expected['qv'] ) ) {
->>>>>>> 001c6498e8 (Build/Test Tools: Add support for PHPUnit 7.x.)
 			$expected = array( 'qv' => $expected );
+		}
 
 		if ( !isset($expected['url']) && !isset($expected['qv']) )
 			$this->fail( 'No valid expected output was provided' );
