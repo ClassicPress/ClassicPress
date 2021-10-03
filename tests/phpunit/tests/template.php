@@ -13,6 +13,15 @@ class Tests_Template extends WP_UnitTestCase {
 	protected static $page;
 	protected static $post;
 
+	/**
+	 * Page For Privacy Policy.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @var WP_Post $page_for_privacy_policy
+	 */
+	protected static $page_for_privacy_policy;
+
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$page_on_front = $factory->post->create_and_get( array(
 			'post_type' => 'page',
@@ -37,6 +46,13 @@ class Tests_Template extends WP_UnitTestCase {
 		) );
 		set_post_format( self::$post, 'quote' );
 		add_post_meta( self::$post->ID, '_wp_page_template', 'templates/post.php' );
+
+		self::$page_for_privacy_policy = $factory->post->create_and_get(
+			array(
+				'post_type'  => 'page',
+				'post_title' => 'Privacy Policy',
+			)
+		);
 	}
 
 	public function setUp() {
@@ -205,7 +221,30 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/18375
+=======
+ 	 * @ticket 44005
+	 * @group privacy
+	 */
+	public function test_privacy_template_hierarchy() {
+		update_option( 'wp_page_for_privacy_policy', self::$page_for_privacy_policy->ID );
+
+		$this->assertTemplateHierarchy(
+			get_permalink( self::$page_for_privacy_policy->ID ),
+			array(
+				'privacy-policy.php',
+				'page-privacy-policy.php',
+				'page-' . self::$page_for_privacy_policy->ID . '.php',
+				'page.php',
+				'singular.php',
+			)
+		);
+	}
+
+	/**
+	 * @ticket 18375
+>>>>>>> 65bd3654cc (Privacy: Introduce Privacy Policy page helpers:)
 	 */
 	public function test_single_template_hierarchy_for_post() {
 		$this->assertTemplateHierarchy( get_permalink( self::$post ), array(
@@ -339,6 +378,7 @@ class Tests_Template extends WP_UnitTestCase {
 			'search'            => 'is_search',
 			'front_page'        => 'is_front_page',
 			'home'              => 'is_home',
+			'privacy_policy'    => 'is_privacy_policy',
 			'post_type_archive' => 'is_post_type_archive',
 			'taxonomy'          => 'is_tax',
 			'attachment'        => 'is_attachment',

@@ -273,6 +273,7 @@ class Tests_Theme extends WP_UnitTestCase {
 				//}
 
 				// these are kind of tautologies but at least exercise the code
+<<<<<<< HEAD
 				$this->assertEquals(get_404_template(), get_query_template('404'));
 				$this->assertEquals(get_archive_template(), get_query_template('archive'));
 				$this->assertEquals(get_author_template(), get_query_template('author'));
@@ -283,6 +284,19 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertEquals(get_search_template(), get_query_template('search'));
 				$this->assertEquals(get_single_template(), get_query_template('single'));
 				$this->assertEquals(get_attachment_template(), get_query_template('attachment'));
+=======
+				$this->assertEquals( get_404_template(), get_query_template( '404' ) );
+				$this->assertEquals( get_archive_template(), get_query_template( 'archive' ) );
+				$this->assertEquals( get_author_template(), get_query_template( 'author' ) );
+				$this->assertEquals( get_category_template(), get_query_template( 'category' ) );
+				$this->assertEquals( get_date_template(), get_query_template( 'date' ) );
+				$this->assertEquals( get_home_template(), get_query_template( 'home', array( 'home.php', 'index.php' ) ) );
+				$this->assertEquals( get_privacy_policy_template(), get_query_template( 'privacy_policy', array( 'privacy-policy.php' ) ) );
+				$this->assertEquals( get_page_template(), get_query_template( 'page' ) );
+				$this->assertEquals( get_search_template(), get_query_template( 'search' ) );
+				$this->assertEquals( get_single_template(), get_query_template( 'single' ) );
+				$this->assertEquals( get_attachment_template(), get_query_template( 'attachment' ) );
+>>>>>>> 65bd3654cc (Privacy: Introduce Privacy Policy page helpers:)
 
 				$this->assertEquals(get_tag_template(), get_query_template('tag'));
 

@@ -563,7 +563,15 @@ function get_body_class( $class = '' ) {
 		$classes[] = 'home';
 	if ( is_home() )
 		$classes[] = 'blog';
+<<<<<<< HEAD
 	if ( is_archive() )
+=======
+	}
+	if ( is_privacy_policy() ) {
+		$classes[] = 'privacy-policy';
+	}
+	if ( is_archive() ) {
+>>>>>>> 65bd3654cc (Privacy: Introduce Privacy Policy page helpers:)
 		$classes[] = 'archive';
 	if ( is_date() )
 		$classes[] = 'date';
