@@ -55,9 +55,7 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	<li><a href='$link4'>$title4</a></li>
 	<li><a href='$link5'>$title5</a></li>
 EOF;
-<<<<<<< HEAD
-		$this->assertEquals( $expected['limit'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'postbypost', 'limit' => 5 ) ) ) );
-=======
+
 		$this->assertEqualsIgnoreEOL(
 			$expected['limit'],
 			trim(
@@ -70,7 +68,6 @@ EOF;
 				)
 			)
 		);
->>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	function test_wp_get_archives_format() {
@@ -105,9 +102,7 @@ EOF;
 <li><a href='{$oct_url}'>October 2012</a></li>
 	<li><a href='{$this->month_url}'>$date_full</a></li>
 EOF;
-<<<<<<< HEAD
-		$this->assertEquals( $expected['order_asc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'ASC' ) ) ) );
-=======
+
 		$this->assertEqualsIgnoreEOL(
 			$expected['order_asc'],
 			trim(
@@ -119,15 +114,11 @@ EOF;
 				)
 			)
 		);
->>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 
 		$expected['order_desc'] = <<<EOF
 <li><a href='{$this->month_url}'>$date_full</a></li>
 	<li><a href='{$oct_url}'>October 2012</a></li>
 EOF;
-<<<<<<< HEAD
-		$this->assertEquals( $expected['order_desc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'DESC' ) ) ) );
-=======
 		$this->assertEqualsIgnoreEOL(
 			$expected['order_desc'],
 			trim(
@@ -139,7 +130,6 @@ EOF;
 				)
 			)
 		);
->>>>>>> b0419afba6 (Build/Test Tools: Ignore EOL differences in tests using multiline string assertions.)
 	}
 
 	/**
