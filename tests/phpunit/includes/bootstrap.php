@@ -121,17 +121,26 @@ require dirname( __FILE__ ) . '/utils.php';
 require dirname( __FILE__ ) . '/spy-rest-server.php';
 
 /**
+<<<<<<< HEAD
  * A child class of the PHP test runner.
  *
  * Used to access the protected longOptions property, to parse the arguments
  * passed to the script.
+=======
+ * A class to handle additional command line arguments passed to the script.
+ *
+ * If it is determined that phpunit was called with a --group that corresponds
+ * to an @ticket annotation (such as `phpunit --group 12345` for bugs marked
+ * as #WP12345), then it is assumed that known bugs should not be skipped.
+ *
+ * If WP_TESTS_FORCE_KNOWN_BUGS is already set in wp-tests-config.php, then
+ * how you call phpunit has no effect.
+>>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
  */
 class WP_PHPUnit_Util_Getopt {
-	protected $longOptions = array(
-	  'exclude-group=',
-	  'group=',
-	);
+
 	function __construct( $argv ) {
+<<<<<<< HEAD
 		array_shift( $argv );
 		$options = array();
 		while ( current( $argv ) ) {
@@ -149,21 +158,42 @@ class WP_PHPUnit_Util_Getopt {
 			}
 		}
 
+=======
+>>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 		$skipped_groups = array(
 			'ajax' => true,
 			'ms-files' => true,
 			'external-http' => true,
 		);
 
+<<<<<<< HEAD
 		foreach ( $options as $option ) {
 			switch ( $option[0] ) {
 				case '--exclude-group' :
+=======
+		while ( current( $argv ) ) {
+			$option = current( $argv );
+			$value  = next( $argv );
+
+			switch ( $option ) {
+				case '--exclude-group':
+>>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						$skipped_groups[ $group_name ] = false;
 					}
 					continue 2;
+<<<<<<< HEAD
 				case '--group' :
 					$groups = explode( ',', $option[1] );
+=======
+				case '--group':
+					$groups = explode( ',', $value );
+					foreach ( $groups as $group ) {
+						if ( is_numeric( $group ) || preg_match( '/^(UT|Plugin)\d+$/', $group ) ) {
+							WP_UnitTestCase::forceTicket( $group );
+						}
+					}
+>>>>>>> b9b66b159b (Build/Test Tools: Simplify `WP_PHPUnit_Util_Getopt` and update documentation.)
 
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						if ( in_array( $group_name, $groups ) ) {
@@ -187,65 +217,5 @@ class WP_PHPUnit_Util_Getopt {
 		}
     }
 
-	/**
-	 * Copied from https://raw.githubusercontent.com/sebastianbergmann/phpunit/6.5.7/src/Util/Getopt.php
-	 *
-	 * @param $arg
-	 * @param $long_options
-	 * @param $opts
-	 * @param $args
-	 */
-	protected static function parseLongOption( $arg, $long_options, &$opts, &$args ) {
-		$count   = count( $long_options );
-		$list    = explode( '=', $arg );
-		$opt     = $list[0];
-		$opt_arg = null;
-
-		if ( count( $list ) > 1 ) {
-			$opt_arg = $list[1];
-		}
-
-		$opt_len = strlen( $opt );
-
-		for ( $i = 0; $i < $count; $i++ ) {
-			$long_opt  = $long_options[ $i ];
-			$opt_start = substr( $long_opt, 0, $opt_len );
-
-			if ( $opt_start != $opt ) {
-				continue;
-			}
-
-			$opt_rest = substr( $long_opt, $opt_len );
-
-			if ( $opt_rest != '' && $opt[0] != '=' && $i + 1 < $count &&
-				$opt == substr( $long_options[ $i + 1 ], 0, $opt_len ) ) {
-				throw new Exception(
-					"option --$opt is ambiguous"
-				);
-			}
-
-			if ( substr( $long_opt, -1 ) == '=' ) {
-				if ( substr( $long_opt, -2 ) != '==' ) {
-					if ( ! strlen( $opt_arg ) ) {
-						if ( false === $opt_arg = current( $args ) ) {
-							throw new Exception(
-								"option --$opt requires an argument"
-							);
-						}
-						next( $args );
-					}
-				}
-			} elseif ( $opt_arg ) {
-				throw new Exception(
-					"option --$opt doesn't allow an argument"
-				);
-			}
-
-			$full_option = '--' . preg_replace( '/={1,2}$/', '', $long_opt );
-			$opts[]      = array( $full_option, $opt_arg );
-
-			return;
-		}
-	}
 }
 new WP_PHPUnit_Util_Getopt( $_SERVER['argv'] );
