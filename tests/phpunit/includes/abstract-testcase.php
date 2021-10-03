@@ -179,30 +179,6 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Allow tests to be skipped on some automated runs.
-	 *
-	 * For test runs on Travis for something other than trunk/master
-	 * we want to skip tests that only need to run for master.
-	 */
-	public function skipOnAutomatedBranches() {
-		// gentenv can be disabled
-		if ( ! function_exists( 'getenv' ) ) {
-			return false;
-		}
-
-		// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-		$travis_branch       = getenv( 'TRAVIS_BRANCH' );
-		$travis_pull_request = getenv( 'TRAVIS_PULL_REQUEST' );
-
-		if ( false !== $travis_pull_request && 'master' !== $travis_branch ) {
-			$this->markTestSkipped( 'For automated test runs, this test is only run on trunk/master' );
-		}
-	}
-
-	/**
->>>>>>> fcf86b80b6 (Tests: Skip `test_readme()` if the HTTP request to `secure.php.net` or `dev.mysql.com` failed on timeout.)
 	 * Allow tests to be skipped when Multisite is not in use.
 	 *
 	 * Use in conjunction with the ms-required group.
@@ -476,7 +452,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Handles a deprecated expectation.
-	 * 
+	 *
 	 * The DocBlock should contain `@expectedDeprecated` to trigger this.
 	 */
 	public function expectedDeprecated() {

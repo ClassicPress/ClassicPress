@@ -17,7 +17,6 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	protected $http_request_args;
 
-<<<<<<< HEAD
 	/**
 	 * Please kill this code ASAP.
 	 */
@@ -32,34 +31,6 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		}
 	}
 
-	/**
-	 * Mark test as skipped if the HTTP request fails.
-	 */
-	function skipTestOnFailure( $response ) {
-		if ( ! is_wp_error( $response ) ) {
-			return;
-		}
-
-		$this->checkForFailure(
-			$response,
-			'connect() timed out!'
-		);
-		$this->checkForFailure(
-			$response,
-			'timed out after'
-		);
-		$this->checkForFailure(
-			$response,
-			'unable to connect to tcp://twemoji.classicpress.net:443'
-		);
-		$this->checkForFailure(
-			$response,
-			'gnutls_handshake() failed: Handshake failed'
-		);
-	}
-
-=======
->>>>>>> fcf86b80b6 (Tests: Skip `test_readme()` if the HTTP request to `secure.php.net` or `dev.mysql.com` failed on timeout.)
 	function setUp() {
 
 		if ( is_callable( array('WP_Http', '_getTransport') ) ) {
