@@ -16,5 +16,28 @@ if ( class_exists( 'PHPUnit\Runner\Version' ) && version_compare( PHPUnit\Runner
 	class_alias( 'PHPUnit\Util\GlobalState',                     'PHPUnit_Util_GlobalState' );
 	class_alias( 'PHPUnit\Util\Getopt',                          'PHPUnit_Util_Getopt' );
 
+<<<<<<< HEAD:tests/phpunit/includes/phpunit6-compat.php
 	class_alias( 'PHPUnit\Util\Test',                            'PHPUnit_Util_Test' );
+=======
+	class PHPUnit_Util_Test {
+
+		public static function getTickets( $className, $methodName ) {
+			$annotations = PHPUnit\Util\Test::parseTestMethodAnnotations( $className, $methodName );
+
+			$tickets = array();
+
+			if ( isset( $annotations['class']['ticket'] ) ) {
+				$tickets = $annotations['class']['ticket'];
+			}
+
+			if ( isset( $annotations['method']['ticket'] ) ) {
+				$tickets = array_merge( $tickets, $annotations['method']['ticket'] );
+			}
+
+			return array_unique( $tickets );
+		}
+
+	}
+
+>>>>>>> 001c6498e8 (Build/Test Tools: Add support for PHPUnit 7.x.):tests/phpunit/includes/phpunit6/compat.php
 }

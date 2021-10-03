@@ -1,43 +1,40 @@
 <?php
 
-<<<<<<< HEAD
 require_once dirname( __FILE__ ) . '/factory.php';
-=======
-require_once dirname( __FILE__ ) . '/abstract-testcase.php';
->>>>>>> 001c6498e8 (Build/Test Tools: Add support for PHPUnit 7.x.)
+require_once dirname( __FILE__ ) . '/trac.php';
 
 /**
  * Defines a basic fixture to run multiple tests.
  *
- * Resets the state of the ClassicPress installation before and after every test.
+ * Resets the state of the WordPress installation before and after every test.
  *
- * Includes utility functions and assertions useful for testing ClassicPress.
+ * Includes utility functions and assertions useful for testing WordPress.
  *
- * All ClassicPress unit tests should inherit from this class.
+ * All WordPress unit tests should inherit from this class.
  */
-<<<<<<< HEAD
-class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
+abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 
-	protected $expected_deprecated = array();
-	protected $caught_deprecated = array();
+	protected static $forced_tickets   = array();
+	protected $expected_deprecated     = array();
+	protected $caught_deprecated       = array();
 	protected $expected_doing_it_wrong = array();
-	protected $caught_doing_it_wrong = array();
+	protected $caught_doing_it_wrong   = array();
 
 	protected static $hooks_saved = array();
 	protected static $ignore_files;
 
 	function __isset( $name ) {
 		return 'factory' === $name;
- 	}
+	}
 
 	function __get( $name ) {
 		if ( 'factory' === $name ) {
 			return self::factory();
- 	    }
- 	}
+		}
+	}
 
 	/**
-	 * Fetches the factory object for generating ClassicPress fixtures.
+	 * Fetches the factory object for generating WordPress fixtures.
 	 *
 	 * @return WP_UnitTest_Factory The fixture factory.
 	 */
@@ -58,7 +55,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$backtrace = debug_backtrace();
 		// [0] WP_UnitTestCase::get_called_class()
 		// [1] WP_UnitTestCase::setUpBeforeClass()
-		if ( 'call_user_func' ===  $backtrace[2]['function'] ) {
+		if ( 'call_user_func' === $backtrace[2]['function'] ) {
 			return $backtrace[2]['args'][0][0];
 		}
 		return $backtrace[2]['class'];
@@ -68,9 +65,9 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		global $wpdb;
 
 		$wpdb->suppress_errors = false;
-		$wpdb->show_errors = true;
+		$wpdb->show_errors     = true;
 		$wpdb->db_connect();
-		ini_set('display_errors', 1 );
+		ini_set( 'display_errors', 1 );
 
 		parent::setUpBeforeClass();
 
@@ -103,7 +100,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function setUp() {
-		set_time_limit(0);
+		set_time_limit( 0 );
 
 		if ( ! self::$ignore_files ) {
 			self::$ignore_files = $this->scan_user_uploads();
@@ -144,14 +141,14 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	 *
 	 * We use this method to detect expectedDeprecated and expectedIncorrectUsage annotations.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 */
 	protected function assertPostConditions() {
 		$this->expectedDeprecated();
 	}
 
 	/**
-	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
+	 * After a test method runs, reset any state in WordPress the test method might have changed.
 	 */
 	function tearDown() {
 		global $wpdb, $wp_query, $wp;
@@ -162,7 +159,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 			}
 		}
 		$wp_query = new WP_Query();
-		$wp = new WP();
+		$wp       = new WP();
 
 		// Reset globals related to the post loop and `setup_postdata()`.
 		$post_globals = array( 'post', 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );
@@ -180,9 +177,30 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function clean_up_global_scope() {
-		$_GET = array();
+		$_GET  = array();
 		$_POST = array();
 		self::flush_cache();
+	}
+
+	/**
+	 * Allow tests to be skipped on some automated runs
+	 *
+	 * For test runs on Travis for something other than trunk/master
+	 * we want to skip tests that only need to run for master.
+	 */
+	public function skipOnAutomatedBranches() {
+		// gentenv can be disabled
+		if ( ! function_exists( 'getenv' ) ) {
+			return false;
+		}
+
+		// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+		$travis_branch       = getenv( 'TRAVIS_BRANCH' );
+		$travis_pull_request = getenv( 'TRAVIS_PULL_REQUEST' );
+
+		if ( false !== $travis_pull_request && 'master' !== $travis_branch ) {
+			$this->markTestSkipped( 'For automated test runs, this test is only run on trunk/master' );
+		}
 	}
 
 	/**
@@ -256,10 +274,9 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Saves the action and filter-related globals so they can be restored later.
 	 *
-	 * Stores $merged_filters, $wp_actions, $wp_current_filter, and $wp_filter
-	 * on a class variable so they can be restored on tearDown() using _restore_hooks().
+	 * Stores $wp_actions, $wp_current_filter, and $wp_filter on a class variable
+	 * so they can be restored on tearDown() using _restore_hooks().
 	 *
-	 * @global array $merged_filters
 	 * @global array $wp_actions
 	 * @global array $wp_current_filter
 	 * @global array $wp_filter
@@ -280,7 +297,6 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	 * Restores the hook-related globals to their state at setUp()
 	 * so that future tests aren't affected by hooks set during this last test.
 	 *
-	 * @global array $merged_filters
 	 * @global array $wp_actions
 	 * @global array $wp_current_filter
 	 * @global array $wp_filter
@@ -303,18 +319,25 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 
 	static function flush_cache() {
 		global $wp_object_cache;
-		$wp_object_cache->group_ops = array();
-		$wp_object_cache->stats = array();
+		$wp_object_cache->group_ops      = array();
+		$wp_object_cache->stats          = array();
 		$wp_object_cache->memcache_debug = array();
-		$wp_object_cache->cache = array();
+		$wp_object_cache->cache          = array();
 		if ( method_exists( $wp_object_cache, '__remoteset' ) ) {
 			$wp_object_cache->__remoteset();
 		}
 		wp_cache_flush();
-		wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache', 'networks', 'sites', 'site-details' ) );
+		wp_cache_add_global_groups( array( 'users', 'userlogins', 'usermeta', 'user_meta', 'useremail', 'userslugs', 'site-transient', 'site-options', 'blog-lookup', 'blog-details', 'rss', 'global-posts', 'blog-id-cache', 'networks', 'sites', 'site-details', 'blog_meta' ) );
 		wp_cache_add_non_persistent_groups( array( 'comment', 'counts', 'plugins' ) );
 	}
 
+	/**
+	 * Clean up any registered meta keys.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @global array $wp_meta_keys
+	 */
 	function unregister_all_meta_keys() {
 		global $wp_meta_keys;
 		if ( ! is_array( $wp_meta_keys ) ) {
@@ -340,7 +363,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Commit the queries in a transaction.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 */
 	public static function commit_transaction() {
 		global $wpdb;
@@ -348,14 +371,16 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function _create_temporary_tables( $query ) {
-		if ( 'CREATE TABLE' === substr( trim( $query ), 0, 12 ) )
+		if ( 'CREATE TABLE' === substr( trim( $query ), 0, 12 ) ) {
 			return substr_replace( trim( $query ), 'CREATE TEMPORARY TABLE', 0, 12 );
+		}
 		return $query;
 	}
 
 	function _drop_temporary_tables( $query ) {
-		if ( 'DROP TABLE' === substr( trim( $query ), 0, 10 ) )
+		if ( 'DROP TABLE' === substr( trim( $query ), 0, 10 ) ) {
 			return substr_replace( trim( $query ), 'DROP TEMPORARY TABLE', 0, 10 );
+		}
 		return $query;
 	}
 
@@ -374,10 +399,12 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	function expectDeprecated() {
 		$annotations = $this->getAnnotations();
 		foreach ( array( 'class', 'method' ) as $depth ) {
-			if ( ! empty( $annotations[ $depth ]['expectedDeprecated'] ) )
+			if ( ! empty( $annotations[ $depth ]['expectedDeprecated'] ) ) {
 				$this->expected_deprecated = array_merge( $this->expected_deprecated, $annotations[ $depth ]['expectedDeprecated'] );
-			if ( ! empty( $annotations[ $depth ]['expectedIncorrectUsage'] ) )
+			}
+			if ( ! empty( $annotations[ $depth ]['expectedIncorrectUsage'] ) ) {
 				$this->expected_doing_it_wrong = array_merge( $this->expected_doing_it_wrong, $annotations[ $depth ]['expectedIncorrectUsage'] );
+			}
 		}
 		add_action( 'deprecated_function_run', array( $this, 'deprecated_function_run' ) );
 		add_action( 'deprecated_argument_run', array( $this, 'deprecated_function_run' ) );
@@ -385,8 +412,8 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		add_action( 'doing_it_wrong_run', array( $this, 'doing_it_wrong_run' ) );
 		add_action( 'deprecated_function_trigger_error', '__return_false' );
 		add_action( 'deprecated_argument_trigger_error', '__return_false' );
-		add_action( 'deprecated_hook_trigger_error',     '__return_false' );
-		add_action( 'doing_it_wrong_trigger_error',      '__return_false' );
+		add_action( 'deprecated_hook_trigger_error', '__return_false' );
+		add_action( 'doing_it_wrong_trigger_error', '__return_false' );
 	}
 
 	function expectedDeprecated() {
@@ -424,7 +451,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_deprecated_function()` or `_deprecated_argument()` call from within a test.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, class, or argument that is deprecated. Must match
 	 *                           first parameter of the `_deprecated_function()` or `_deprecated_argument()` call.
@@ -436,7 +463,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Declare an expected `_doing_it_wrong()` call from within a test.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @param string $deprecated Name of the function, method, or class that appears in the first argument of the
 	 *                           source `_doing_it_wrong()` call.
@@ -467,13 +494,15 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function deprecated_function_run( $function ) {
-		if ( ! in_array( $function, $this->caught_deprecated ) )
+		if ( ! in_array( $function, $this->caught_deprecated ) ) {
 			$this->caught_deprecated[] = $function;
+		}
 	}
 
 	function doing_it_wrong_run( $function ) {
-		if ( ! in_array( $function, $this->caught_doing_it_wrong ) )
+		if ( ! in_array( $function, $this->caught_doing_it_wrong ) ) {
 			$this->caught_doing_it_wrong[] = $function;
+		}
 	}
 
 	function assertWPError( $actual, $message = '' ) {
@@ -499,7 +528,7 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	function assertEqualFields( $object, $fields ) {
-		foreach( $fields as $field_name => $field_value ) {
+		foreach ( $fields as $field_name => $field_value ) {
 			if ( $object->$field_name != $field_value ) {
 				$this->fail();
 			}
@@ -510,12 +539,28 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 		$this->assertEquals( preg_replace( '/\s*/', '', $expected ), preg_replace( '/\s*/', '', $actual ) );
 	}
 
+	/**
+	 * Asserts that the contents of two un-keyed, single arrays are equal, without accounting for the order of elements.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param array $expected Expected array.
+	 * @param array $actual   Array to check.
+	 */
 	function assertEqualSets( $expected, $actual ) {
 		sort( $expected );
 		sort( $actual );
 		$this->assertEquals( $expected, $actual );
 	}
 
+	/**
+	 * Asserts that the contents of two keyed, single arrays are equal, without accounting for the order of elements.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param array $expected Expected array.
+	 * @param array $actual   Array to check.
+	 */
 	function assertEqualSetsWithIndex( $expected, $actual ) {
 		ksort( $expected );
 		ksort( $actual );
@@ -525,36 +570,30 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Asserts that the given variable is a multidimensional array, and that all arrays are non-empty.
 	 *
-	 * @param array $array
+	 * @since 4.8.0
+	 *
+	 * @param array $array Array to check.
 	 */
 	function assertNonEmptyMultidimensionalArray( $array ) {
 		$this->assertTrue( is_array( $array ) );
 		$this->assertNotEmpty( $array );
 
-		foreach( $array as $sub_array ) {
+		foreach ( $array as $sub_array ) {
 			$this->assertTrue( is_array( $sub_array ) );
 			$this->assertNotEmpty( $sub_array );
 		}
 	}
-=======
-class WP_UnitTestCase extends WP_UnitTestCase_Base {
->>>>>>> 001c6498e8 (Build/Test Tools: Add support for PHPUnit 7.x.)
 
 	/**
-	 * Asserts that a condition is not false.
+	 * Sets the global state to as if a given URL has been requested.
 	 *
-	 * @param bool   $condition
-	 * @param string $message
+	 * This sets:
+	 * - The super globals.
+	 * - The globals.
+	 * - The query variables.
+	 * - The main query.
 	 *
-	 * @throws PHPUnit_Framework_AssertionFailedError
-	 */
-	public static function assertNotFalse( $condition, $message = '' ) {
-		self::assertThat( $condition, self::logicalNot( self::isFalse() ), $message );
-	}
-<<<<<<< HEAD
-
-	/**
-	 * Modify ClassicPress's query internals as if a given URL has been requested.
+	 * @since 3.5.0
 	 *
 	 * @param string $url The URL for the request.
 	 */
@@ -563,16 +602,18 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		// from all over the place (globals, GET, etc), which makes it tricky
 		// to run them more than once without very carefully clearing everything
 		$_GET = $_POST = array();
-		foreach (array('query_string', 'id', 'postdata', 'authordata', 'day', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages', 'pagenow') as $v) {
-			if ( isset( $GLOBALS[$v] ) ) unset( $GLOBALS[$v] );
+		foreach ( array( 'query_string', 'id', 'postdata', 'authordata', 'day', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages', 'pagenow' ) as $v ) {
+			if ( isset( $GLOBALS[ $v ] ) ) {
+				unset( $GLOBALS[ $v ] );
+			}
 		}
-		$parts = parse_url($url);
-		if (isset($parts['scheme'])) {
+		$parts = parse_url( $url );
+		if ( isset( $parts['scheme'] ) ) {
 			$req = isset( $parts['path'] ) ? $parts['path'] : '';
-			if (isset($parts['query'])) {
+			if ( isset( $parts['query'] ) ) {
 				$req .= '?' . $parts['query'];
 				// parse the url query vars into $_GET
-				parse_str($parts['query'], $_GET);
+				parse_str( $parts['query'], $_GET );
 			}
 		} else {
 			$req = $url;
@@ -582,42 +623,144 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		}
 
 		$_SERVER['REQUEST_URI'] = $req;
-		unset($_SERVER['PATH_INFO']);
+		unset( $_SERVER['PATH_INFO'] );
 
 		self::flush_cache();
-		unset($GLOBALS['wp_query'], $GLOBALS['wp_the_query']);
+		unset( $GLOBALS['wp_query'], $GLOBALS['wp_the_query'] );
 		$GLOBALS['wp_the_query'] = new WP_Query();
-		$GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
+		$GLOBALS['wp_query']     = $GLOBALS['wp_the_query'];
 
 		$public_query_vars  = $GLOBALS['wp']->public_query_vars;
 		$private_query_vars = $GLOBALS['wp']->private_query_vars;
 
-		$GLOBALS['wp'] = new WP();
+		$GLOBALS['wp']                     = new WP();
 		$GLOBALS['wp']->public_query_vars  = $public_query_vars;
 		$GLOBALS['wp']->private_query_vars = $private_query_vars;
 
 		_cleanup_query_vars();
 
-		$GLOBALS['wp']->main($parts['query']);
+		$GLOBALS['wp']->main( $parts['query'] );
 	}
 
+	/**
+	 * Allows tests to be skipped on single or multisite installs by using @group annotations.
+	 *
+	 * This is a custom extension of the PHPUnit requirements handling.
+	 *
+	 * Contains legacy code for skipping tests that are associated with an open Trac ticket. Core tests no longer
+	 * support this behaviour.
+	 *
+	 * @since 3.5.0
+	 */
 	protected function checkRequirements() {
 		parent::checkRequirements();
 
 		$annotations = $this->getAnnotations();
 
-		if ( ! empty( $annotations['group'] ) ) {
-			if ( in_array( 'ms-required', $annotations['group'], true ) ) {
+		$groups = array();
+		if ( ! empty( $annotations['class']['group'] ) ) {
+			$groups = array_merge( $groups, $annotations['class']['group'] );
+		}
+		if ( ! empty( $annotations['method']['group'] ) ) {
+			$groups = array_merge( $groups, $annotations['method']['group'] );
+		}
+
+		if ( ! empty( $groups ) ) {
+			if ( in_array( 'ms-required', $groups, true ) ) {
 				$this->skipWithoutMultisite();
 			}
-			if ( in_array( 'ms-excluded', $annotations['group'], true ) ) {
+
+			if ( in_array( 'ms-excluded', $groups, true ) ) {
 				$this->skipWithMultisite();
+			}
+		}
+
+		// Core tests no longer check against open Trac tickets, but others using WP_UnitTestCase may do so.
+		if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+			return;
+		}
+
+		if ( WP_TESTS_FORCE_KNOWN_BUGS ) {
+			return;
+		}
+		$tickets = PHPUnit_Util_Test::getTickets( get_class( $this ), $this->getName( false ) );
+		foreach ( $tickets as $ticket ) {
+			if ( is_numeric( $ticket ) ) {
+				$this->knownWPBug( $ticket );
+			} elseif ( 'Plugin' == substr( $ticket, 0, 6 ) ) {
+				$ticket = substr( $ticket, 6 );
+				if ( $ticket && is_numeric( $ticket ) ) {
+					$this->knownPluginBug( $ticket );
+				}
 			}
 		}
 	}
 
 	/**
-	 * Define constants after including files.
+	 * Skips the current test if there is an open Trac ticket associated with it.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param int $ticket_id Ticket number.
+	 */
+	function knownWPBug( $ticket_id ) {
+		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( $ticket_id, self::$forced_tickets ) ) {
+			return;
+		}
+		if ( ! TracTickets::isTracTicketClosed( 'https://core.trac.wordpress.org', $ticket_id ) ) {
+			$this->markTestSkipped( sprintf( 'WordPress Ticket #%d is not fixed', $ticket_id ) );
+		}
+	}
+
+	/**
+	 * Skips the current test if there is an open Unit Test Trac ticket associated with it.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @deprecated No longer used since the Unit Test Trac was merged into the Core Trac.
+	 *
+	 * @param int $ticket_id Ticket number.
+	 */
+	function knownUTBug( $ticket_id ) {
+		return;
+	}
+
+	/**
+	 * Skips the current test if there is an open Plugin Trac ticket associated with it.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param int $ticket_id Ticket number.
+	 */
+	function knownPluginBug( $ticket_id ) {
+		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( 'Plugin' . $ticket_id, self::$forced_tickets ) ) {
+			return;
+		}
+		if ( ! TracTickets::isTracTicketClosed( 'https://plugins.trac.wordpress.org', $ticket_id ) ) {
+			$this->markTestSkipped( sprintf( 'WordPress Plugin Ticket #%d is not fixed', $ticket_id ) );
+		}
+	}
+
+	/**
+	 * Adds a Trac ticket number to the `$forced_tickets` property.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param int $ticket Ticket number.
+	 */
+	public static function forceTicket( $ticket ) {
+		self::$forced_tickets[] = $ticket;
+	}
+
+	/**
+	 * Custom preparations for the PHPUnit process isolation template.
+	 *
+	 * When restoring global state between tests, PHPUnit defines all the constants that were already defined, and then
+	 * includes included files. This does not work with WordPress, as the included files define the constants.
+	 *
+	 * This method defines the constants after including files.
+	 *
+	 * @param Text_Template $template
 	 */
 	function prepareTemplate( Text_Template $template ) {
 		$template->setVar( array( 'constants' => '' ) );
@@ -626,16 +769,23 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * Returns the name of a temporary file
+	 * Creates a unique temporary file name.
+	 *
+	 * The directory in which the file is created depends on the environment configuration.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return string|bool Path on success, else false.
 	 */
 	function temp_filename() {
 		$tmp_dir = '';
-		$dirs = array( 'TMP', 'TMPDIR', 'TEMP' );
-		foreach( $dirs as $dir )
-			if ( isset( $_ENV[$dir] ) && !empty( $_ENV[$dir] ) ) {
+		$dirs    = array( 'TMP', 'TMPDIR', 'TEMP' );
+		foreach ( $dirs as $dir ) {
+			if ( isset( $_ENV[ $dir ] ) && ! empty( $_ENV[ $dir ] ) ) {
 				$tmp_dir = $dir;
 				break;
 			}
+		}
 		if ( empty( $tmp_dir ) ) {
 			$tmp_dir = '/tmp';
 		}
@@ -644,17 +794,20 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * Check each of the WP_Query is_* functions/properties against expected boolean value.
+	 * Checks each of the WP_Query is_* functions/properties against expected boolean value.
 	 *
 	 * Any properties that are listed by name as parameters will be expected to be true; all others are
 	 * expected to be false. For example, assertQueryTrue('is_single', 'is_feed') means is_single()
 	 * and is_feed() must be true and everything else must be false to pass.
 	 *
+	 * @since 2.5.0
+	 * @since 3.8.0 Moved from `Tests_Query_Conditionals` to `WP_UnitTestCase`.
+	 *
 	 * @param string $prop,... Any number of WP_Query properties that are expected to be true for the current request.
 	 */
-	function assertQueryTrue(/* ... */) {
+	function assertQueryTrue() {
 		global $wp_query;
-		$all = array(
+		$all  = array(
 			'is_404',
 			'is_admin',
 			'is_archive',
@@ -690,7 +843,7 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 			$this->assertContains( $true_thing, $all, "Unknown conditional: {$true_thing}." );
 		}
 
-		$passed = true;
+		$passed  = true;
 		$message = '';
 
 		foreach ( $all as $query_thing ) {
@@ -699,11 +852,11 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 			if ( in_array( $query_thing, $true ) ) {
 				if ( ! $result ) {
 					$message .= $query_thing . ' is false but is expected to be true. ' . PHP_EOL;
-					$passed = false;
+					$passed   = false;
 				}
-			} else if ( $result ) {
+			} elseif ( $result ) {
 				$message .= $query_thing . ' is true but is expected to be false. ' . PHP_EOL;
-				$passed = false;
+				$passed   = false;
 			}
 		}
 
@@ -712,16 +865,13 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		}
 	}
 
-	public function assertAttachmentMetaHasSizes( $meta ) {
-		if ( ! isset( $meta['sizes'] ) ) {
-			throw new ErrorException(
-				"No 'sizes' attribute for attachment metadata:"
-				. "\n" . json_encode( $meta )
-				. "\n\nTry installing the `imagick` or `gd` extensions for PHP."
-			);
-		}
-	}
-
+	/**
+	 * Selectively deletes a file.
+	 *
+	 * Does not delete a file if its path is set in the `$ignore_files` property.
+	 *
+	 * @param string $file File path.
+	 */
 	function unlink( $file ) {
 		$exists = is_file( $file );
 		if ( $exists && ! in_array( $file, self::$ignore_files ) ) {
@@ -732,6 +882,13 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		}
 	}
 
+	/**
+	 * Selectively deletes files from a directory.
+	 *
+	 * Does not delete files if their paths are set in the `$ignore_files` property.
+	 *
+	 * @param string $path Directory path.
+	 */
 	function rmdir( $path ) {
 		$files = $this->files_in_dir( $path );
 		foreach ( $files as $file ) {
@@ -741,17 +898,34 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		}
 	}
 
+	/**
+	 * Deletes files added to the `uploads` directory during tests.
+	 *
+	 * This method works in tandem with the `setUp()` and `rmdir()` methods:
+	 * - `setUp()` scans the `uploads` directory before every test, and stores its contents inside of the
+	 *   `$ignore_files` property.
+	 * - `rmdir()` and its helper methods only delete files that are not listed in the `$ignore_files` property. If
+	 *   called during `tearDown()` in tests, this will only delete files added during the previously run test.
+	 */
 	function remove_added_uploads() {
-		// Remove all uploads.
 		$uploads = wp_upload_dir();
 		$this->rmdir( $uploads['basedir'] );
 	}
 
+	/**
+	 * Returns a list of all files contained inside a directory.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param string $dir Path to the directory to scan.
+	 *
+	 * @return array List of file paths.
+	 */
 	function files_in_dir( $dir ) {
 		$files = array();
 
 		$iterator = new RecursiveDirectoryIterator( $dir );
-		$objects = new RecursiveIteratorIterator( $iterator );
+		$objects  = new RecursiveIteratorIterator( $iterator );
 		foreach ( $objects as $name => $object ) {
 			if ( is_file( $name ) ) {
 				$files[] = $name;
@@ -761,6 +935,13 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		return $files;
 	}
 
+	/**
+	 * Returns a list of all files contained inside the `uploads` directory.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return array List of file paths.
+	 */
 	function scan_user_uploads() {
 		static $files = array();
 		if ( ! empty( $files ) ) {
@@ -768,10 +949,17 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		}
 
 		$uploads = wp_upload_dir();
-		$files = $this->files_in_dir( $uploads['basedir'] );
+		$files   = $this->files_in_dir( $uploads['basedir'] );
 		return $files;
 	}
 
+	/**
+	 * Deletes all directories contained inside a directory.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $path Path to the directory to scan.
+	 */
 	function delete_folders( $path ) {
 		$this->matched_dirs = array();
 		if ( ! is_dir( $path ) ) {
@@ -785,6 +973,16 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		rmdir( $path );
 	}
 
+	/**
+	 * Retrieves all directories contained inside a directory and stores them in the `$matched_dirs` property. Hidden
+	 * directories are ignored.
+	 *
+	 * This is a helper for the `delete_folders()` method.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $dir Path to the directory to scan.
+	 */
 	function scandir( $dir ) {
 		foreach ( scandir( $dir ) as $path ) {
 			if ( 0 !== strpos( $path, '.' ) && is_dir( $dir . '/' . $path ) ) {
@@ -795,17 +993,27 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * Helper to Convert a microtime string into a float
+	 * Converts a microtime string into a float.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string $microtime Time string generated by `microtime()`.
+	 *
+	 * @return float `microtime()` output as a float.
 	 */
-	protected function _microtime_to_float($microtime ){
+	protected function _microtime_to_float( $microtime ) {
 		$time_array = explode( ' ', $microtime );
 		return array_sum( $time_array );
 	}
 
 	/**
-	 * Multisite-agnostic way to delete a user from the database.
+	 * Deletes a user from the database in a Multisite-agnostic way.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
+	 *
+	 * @param int $user_id User ID.
+	 *
+	 * @return bool True if the user was deleted.
 	 */
 	public static function delete_user( $user_id ) {
 		if ( is_multisite() ) {
@@ -816,9 +1024,9 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	}
 
 	/**
-	 * Utility method that resets permalinks and flushes rewrites.
+	 * Resets permalinks and flushes rewrites.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @global WP_Rewrite $wp_rewrite
 	 *
@@ -832,43 +1040,59 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 		$wp_rewrite->flush_rules();
 	}
 
-	function _make_attachment($upload, $parent_post_id = 0) {
-		if ( ! empty( $upload['error'] ) ) {
-			throw new ErrorException( $upload['error'] );
-		}
+	/**
+	 * Creates an attachment post from an uploaded file.
+	 *
+	 * @since 4.4.0
+	 *
+	 * @param array $upload         Array of information about the uploaded file, provided by wp_upload_bits().
+	 * @param int   $parent_post_id Optional. Parent post ID.
+	 *
+	 * @return int|WP_Error The attachment ID on success. The value 0 or WP_Error on failure.
+	 */
+	function _make_attachment( $upload, $parent_post_id = 0 ) {
 		$type = '';
-		if ( !empty($upload['type']) ) {
+		if ( ! empty( $upload['type'] ) ) {
 			$type = $upload['type'];
 		} else {
 			$mime = wp_check_filetype( $upload['file'] );
-			if ($mime)
+			if ( $mime ) {
 				$type = $mime['type'];
+			}
 		}
 
 		$attachment = array(
-			'post_title' => basename( $upload['file'] ),
-			'post_content' => '',
-			'post_type' => 'attachment',
-			'post_parent' => $parent_post_id,
+			'post_title'     => basename( $upload['file'] ),
+			'post_content'   => '',
+			'post_type'      => 'attachment',
+			'post_parent'    => $parent_post_id,
 			'post_mime_type' => $type,
-			'guid' => $upload[ 'url' ],
+			'guid'           => $upload['url'],
 		);
 
-		// Save the data
-		$id = wp_insert_attachment( $attachment, $upload[ 'file' ], $parent_post_id );
+		$id = wp_insert_attachment( $attachment, $upload['file'], $parent_post_id );
 		wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 		return $id;
 	}
 
 	/**
-	 * There's no way to change post_modified through WP functions.
+	 * Updates the modified and modified GMT date of a post in the database.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $date    Post date, in the format YYYY-MM-DD HH:MM:SS.
+	 *
+	 * @return int|false 1 on success, or false on error.
 	 */
 	protected function update_post_modified( $post_id, $date ) {
 		global $wpdb;
 		return $wpdb->update(
 			$wpdb->posts,
 			array(
-				'post_modified' => $date,
+				'post_modified'     => $date,
 				'post_modified_gmt' => $date,
 			),
 			array(
@@ -883,6 +1107,4 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 			)
 		);
 	}
-=======
->>>>>>> 001c6498e8 (Build/Test Tools: Add support for PHPUnit 7.x.)
 }
