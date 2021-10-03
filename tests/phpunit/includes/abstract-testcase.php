@@ -588,7 +588,6 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 		$this->assertNotInstanceOf( 'WP_Error', $actual, $message );
 	}
 
-
 	/**
 	 * Asserts that the given value is an instance of IXR_Error.
 	 *
