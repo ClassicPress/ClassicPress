@@ -14,6 +14,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		add_action($tag, array(&$a, 'action'));
 		do_action($tag);
 
+<<<<<<< HEAD
 		// only one event occurred for the hook, with empty args
 		$this->assertEquals(1, $a->get_call_count());
 		// only our hook was called
@@ -22,6 +23,16 @@ class Tests_Actions extends WP_UnitTestCase {
 		$argsvar = $a->get_args();
 		$args = array_pop( $argsvar );
 		$this->assertEquals(array(''), $args);
+=======
+		// Only one event occurred for the hook, with empty args.
+		$this->assertSame( 1, $a->get_call_count() );
+		// Only our hook was called.
+		$this->assertSame( array( $tag ), $a->get_tags() );
+
+		$argsvar = $a->get_args();
+		$args    = array_pop( $argsvar );
+		$this->assertSame( array( '' ), $args );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_remove_action() {
@@ -31,6 +42,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		add_action($tag, array(&$a, 'action'));
 		do_action($tag);
 
+<<<<<<< HEAD
 		// make sure our hook was called correctly
 		$this->assertEquals(1, $a->get_call_count());
 		$this->assertEquals(array($tag), $a->get_tags());
@@ -40,6 +52,17 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action($tag);
 		$this->assertEquals(1, $a->get_call_count());
 		$this->assertEquals(array($tag), $a->get_tags());
+=======
+		// Make sure our hook was called correctly.
+		$this->assertSame( 1, $a->get_call_count() );
+		$this->assertSame( array( $tag ), $a->get_tags() );
+
+		// Now remove the action, do it again, and make sure it's not called this time.
+		remove_action( $tag, array( &$a, 'action' ) );
+		do_action( $tag );
+		$this->assertSame( 1, $a->get_call_count() );
+		$this->assertSame( array( $tag ), $a->get_tags() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -47,6 +70,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		$tag = __FUNCTION__;
 		$func = __FUNCTION__ . '_func';
 
+<<<<<<< HEAD
 		$this->assertFalse( has_action($tag, $func) );
 		$this->assertFalse( has_action($tag) );
 		add_action($tag, $func);
@@ -55,6 +79,16 @@ class Tests_Actions extends WP_UnitTestCase {
 		remove_action($tag, $func);
 		$this->assertFalse( has_action($tag, $func) );
 		$this->assertFalse( has_action($tag) );
+=======
+		$this->assertFalse( has_action( $tag, $func ) );
+		$this->assertFalse( has_action( $tag ) );
+		add_action( $tag, $func );
+		$this->assertSame( 10, has_action( $tag, $func ) );
+		$this->assertTrue( has_action( $tag ) );
+		remove_action( $tag, $func );
+		$this->assertFalse( has_action( $tag, $func ) );
+		$this->assertFalse( has_action( $tag ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	// one tag with multiple actions
@@ -69,9 +103,15 @@ class Tests_Actions extends WP_UnitTestCase {
 
 		do_action($tag);
 
+<<<<<<< HEAD
 		// both actions called once each
 		$this->assertEquals(1, $a1->get_call_count());
 		$this->assertEquals(1, $a2->get_call_count());
+=======
+		// Both actions called once each.
+		$this->assertSame( 1, $a1->get_call_count() );
+		$this->assertSame( 1, $a2->get_call_count() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_action_args_1() {
@@ -84,9 +124,13 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action($tag, $val);
 
 		$call_count = $a->get_call_count();
+<<<<<<< HEAD
 		$this->assertEquals(1, $call_count);
+=======
+		$this->assertSame( 1, $call_count );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar = $a->get_args();
-		$this->assertEquals( array( $val ), array_pop( $argsvar ) );
+		$this->assertSame( array( $val ), array_pop( $argsvar ) );
 	}
 
 	function test_action_args_2() {
@@ -103,15 +147,25 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action($tag, $val1, $val2);
 
 		$call_count = $a1->get_call_count();
+<<<<<<< HEAD
 		// a1 should be called with both args
 		$this->assertEquals(1, $call_count);
+=======
+		// $a1 should be called with both args.
+		$this->assertSame( 1, $call_count );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar1 = $a1->get_args();
-		$this->assertEquals( array( $val1, $val2 ), array_pop( $argsvar1 ) );
+		$this->assertSame( array( $val1, $val2 ), array_pop( $argsvar1 ) );
 
+<<<<<<< HEAD
 		// a2 should be called with one only
 		$this->assertEquals(1, $a2->get_call_count());
+=======
+		// $a2 should be called with one only.
+		$this->assertSame( 1, $a2->get_call_count() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar2 = $a2->get_args();
-		$this->assertEquals( array( $val1 ), array_pop( $argsvar2 ) );
+		$this->assertSame( array( $val1 ), array_pop( $argsvar2 ) );
 	}
 
 	/**
@@ -136,20 +190,35 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action( $tag, $val1, $val2 );
 
 		$call_count = $a1->get_call_count();
+<<<<<<< HEAD
 		// a1 should be called with both args
 		$this->assertEquals( 1, $call_count );
+=======
+		// $a1 should be called with both args.
+		$this->assertSame( 1, $call_count );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar1 = $a1->get_args();
-		$this->assertEquals( array( $val1, $val2 ), array_pop( $argsvar1 ) );
+		$this->assertSame( array( $val1, $val2 ), array_pop( $argsvar1 ) );
 
+<<<<<<< HEAD
 		// a2 should be called with one only
 		$this->assertEquals( 1, $a2->get_call_count() );
+=======
+		// $a2 should be called with one only.
+		$this->assertSame( 1, $a2->get_call_count() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar2 = $a2->get_args();
-		$this->assertEquals( array( $val1 ), array_pop( $argsvar2 ) );
+		$this->assertSame( array( $val1 ), array_pop( $argsvar2 ) );
 
+<<<<<<< HEAD
 		// a3 should be called with both args
 		$this->assertEquals( 1, $a3->get_call_count() );
+=======
+		// $a3 should be called with both args.
+		$this->assertSame( 1, $a3->get_call_count() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$argsvar3 = $a3->get_args();
-		$this->assertEquals( array( $val1, $val2 ), array_pop( $argsvar3 ) );
+		$this->assertSame( array( $val1, $val2 ), array_pop( $argsvar3 ) );
 	}
 
 	function test_action_priority() {
@@ -160,8 +229,13 @@ class Tests_Actions extends WP_UnitTestCase {
 		add_action($tag, array(&$a, 'action2'), 9);
 		do_action($tag);
 
+<<<<<<< HEAD
 		// two events, one per action
 		$this->assertEquals(2, $a->get_call_count());
+=======
+		// Two events, one per action.
+		$this->assertSame( 2, $a->get_call_count() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$expected = array (
 			// action2 is called first because it has priority 9
@@ -178,26 +252,43 @@ class Tests_Actions extends WP_UnitTestCase {
 			),
 		);
 
+<<<<<<< HEAD
 		$this->assertEquals($expected, $a->get_events());
+=======
+		$this->assertSame( $expected, $a->get_events() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_did_action() {
 		$tag1 = 'action1';
 		$tag2 = 'action2';
 
+<<<<<<< HEAD
 		// do action tag1 but not tag2
 		do_action($tag1);
 		$this->assertEquals(1, did_action($tag1));
 		$this->assertEquals(0, did_action($tag2));
+=======
+		// Do action $tag1 but not $tag2.
+		do_action( $tag1 );
+		$this->assertSame( 1, did_action( $tag1 ) );
+		$this->assertSame( 0, did_action( $tag2 ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// do action tag2 a random number of times
 		$count = rand(0, 10);
 		for ($i=0; $i<$count; $i++)
 			do_action($tag2);
 
+<<<<<<< HEAD
 		// tag1's count hasn't changed, tag2 should be correct
 		$this->assertEquals(1, did_action($tag1));
 		$this->assertEquals($count, did_action($tag2));
+=======
+		// $tag1's count hasn't changed, $tag2 should be correct.
+		$this->assertSame( 1, did_action( $tag1 ) );
+		$this->assertSame( $count, did_action( $tag2 ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -206,6 +297,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		$tag1 = __FUNCTION__ . '_1';
 		$tag2 = __FUNCTION__ . '_2';
 
+<<<<<<< HEAD
 		// add an 'all' action
 		add_action('all', array(&$a, 'action'));
 		$this->assertEquals(10, has_filter('all', array(&$a, 'action')));
@@ -219,6 +311,21 @@ class Tests_Actions extends WP_UnitTestCase {
 		$this->assertEquals(4, $a->get_call_count());
 		// only our hook was called
 		$this->assertEquals(array($tag1, $tag2, $tag1, $tag1), $a->get_tags());
+=======
+		// Add an 'all' action.
+		add_action( 'all', array( &$a, 'action' ) );
+		$this->assertSame( 10, has_filter( 'all', array( &$a, 'action' ) ) );
+		// Do some actions.
+		do_action( $tag1 );
+		do_action( $tag2 );
+		do_action( $tag1 );
+		do_action( $tag1 );
+
+		// Our action should have been called once for each tag.
+		$this->assertSame( 4, $a->get_call_count() );
+		// Only our hook was called.
+		$this->assertSame( array( $tag1, $tag2, $tag1, $tag1 ), $a->get_tags() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_action('all', array(&$a, 'action'));
 		$this->assertFalse(has_filter('all', array(&$a, 'action')));
@@ -229,6 +336,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		$a = new MockAction();
 		$tag = __FUNCTION__;
 
+<<<<<<< HEAD
 		add_action('all', array(&$a, 'action'));
 		$this->assertEquals(10, has_filter('all', array(&$a, 'action')));
 		do_action($tag);
@@ -243,6 +351,22 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action($tag);
 		$this->assertEquals(1, $a->get_call_count());
 		$this->assertEquals(array($tag), $a->get_tags());
+=======
+		add_action( 'all', array( &$a, 'action' ) );
+		$this->assertSame( 10, has_filter( 'all', array( &$a, 'action' ) ) );
+		do_action( $tag );
+
+		// Make sure our hook was called correctly.
+		$this->assertSame( 1, $a->get_call_count() );
+		$this->assertSame( array( $tag ), $a->get_tags() );
+
+		// Now remove the action, do it again, and make sure it's not called this time.
+		remove_action( 'all', array( &$a, 'action' ) );
+		$this->assertFalse( has_filter( 'all', array( &$a, 'action' ) ) );
+		do_action( $tag );
+		$this->assertSame( 1, $a->get_call_count() );
+		$this->assertSame( array( $tag ), $a->get_tags() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_action_ref_array() {
@@ -288,7 +412,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	function test_action_self_removal() {
 		add_action( 'test_action_self_removal', array( $this, 'action_self_removal' ) );
 		do_action( 'test_action_self_removal' );
-		$this->assertEquals( 1, did_action( 'test_action_self_removal' ) );
+		$this->assertSame( 1, did_action( 'test_action_self_removal' ) );
 	}
 
 	function action_self_removal() {
@@ -308,8 +432,8 @@ class Tests_Actions extends WP_UnitTestCase {
 		add_action( $tag, array( $this, 'action_that_causes_recursion' ), 12, 1 );
 		do_action( $tag, $tag );
 
-		$this->assertEquals( 2, $a->get_call_count(), 'recursive actions should call all callbacks with earlier priority' );
-		$this->assertEquals( 2, $b->get_call_count(), 'recursive actions should call callbacks with later priority' );
+		$this->assertSame( 2, $a->get_call_count(), 'recursive actions should call all callbacks with earlier priority' );
+		$this->assertSame( 2, $b->get_call_count(), 'recursive actions should call callbacks with later priority' );
 	}
 
 	function action_that_causes_recursion( $tag ) {
@@ -340,11 +464,11 @@ class Tests_Actions extends WP_UnitTestCase {
 		do_action( $tag, $tag, array( $a, $b, $c, $d, $e ) );
 		do_action( $tag, $tag, array( $a, $b, $c, $d, $e ) );
 
-		$this->assertEquals( 2, $a->get_call_count(), 'callbacks should run unless otherwise instructed' );
-		$this->assertEquals( 1, $b->get_call_count(), 'callback removed by same priority callback should still get called' );
-		$this->assertEquals( 1, $c->get_call_count(), 'callback added by same priority callback should not get called' );
-		$this->assertEquals( 2, $d->get_call_count(), 'callback added by earlier priority callback should get called' );
-		$this->assertEquals( 1, $e->get_call_count(), 'callback added by later priority callback should not get called' );
+		$this->assertSame( 2, $a->get_call_count(), 'callbacks should run unless otherwise instructed' );
+		$this->assertSame( 1, $b->get_call_count(), 'callback removed by same priority callback should still get called' );
+		$this->assertSame( 1, $c->get_call_count(), 'callback added by same priority callback should not get called' );
+		$this->assertSame( 2, $d->get_call_count(), 'callback added by earlier priority callback should get called' );
+		$this->assertSame( 1, $e->get_call_count(), 'callback added by later priority callback should not get called' );
 	}
 
 	function action_that_manipulates_a_running_hook( $tag, $mocks ) {
@@ -405,8 +529,18 @@ class Tests_Actions extends WP_UnitTestCase {
 		unset( $wp_filter[ $tag ][ 11 ] );
 		$this->assertFalse( has_action( $tag, '__return_null' ) );
 
+<<<<<<< HEAD
 		$wp_filter[ $tag ][ 11 ] = array( '__return_null' => array( 'function' => '__return_null', 'accepted_args' => 1 ) );
 		$this->assertEquals( 11, has_action( $tag, '__return_null' ) );
+=======
+		$wp_filter[ $tag ][11] = array(
+			'__return_null' => array(
+				'function'      => '__return_null',
+				'accepted_args' => 1,
+			),
+		);
+		$this->assertSame( 11, has_action( $tag, '__return_null' ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -419,7 +553,7 @@ class Tests_Actions extends WP_UnitTestCase {
 		$wp_current_filter[] = 'first';
 		$wp_current_filter[] = 'second'; // Let's say a second action was invoked.
 
-		$this->assertEquals( 'second', current_action() );
+		$this->assertSame( 'second', current_action() );
 	}
 
 	/**
@@ -469,7 +603,7 @@ class Tests_Actions extends WP_UnitTestCase {
 
 		add_filter( 'testing', array( $this, 'apply_testing_filter' ) );
 		$this->assertTrue( has_action( 'testing' ) );
-		$this->assertEquals( 10, has_action( 'testing', array( $this, 'apply_testing_filter' ) ) );
+		$this->assertSame( 10, has_action( 'testing', array( $this, 'apply_testing_filter' ) ) );
 
 		apply_filters( 'testing', '' );
 
@@ -490,7 +624,7 @@ class Tests_Actions extends WP_UnitTestCase {
 
 		add_filter( 'testing_nested', array( $this, 'apply_testing_nested_filter' ) );
 		$this->assertTrue( has_action( 'testing_nested' ) );
-		$this->assertEquals( 10, has_action( 'testing_nested', array( $this, 'apply_testing_nested_filter' ) ) );
+		$this->assertSame( 10, has_action( 'testing_nested', array( $this, 'apply_testing_nested_filter' ) ) );
 
 		apply_filters( 'testing_nested', '' );
 

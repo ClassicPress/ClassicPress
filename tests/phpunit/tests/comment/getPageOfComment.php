@@ -28,11 +28,11 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		self::factory()->comment->create_post_comments( $p, 1, array( 'comment_date' => '2013-09-15 00:00:00' ) );
 		$comment_first = self::factory()->comment->create_post_comments( $p, 1, array( 'comment_date' => '2013-09-14 00:00:00' ) );
 
-		$this->assertEquals( 4, get_page_of_comment( $comment_last[0],  array( 'per_page' =>  3 ) ) );
-		$this->assertEquals( 2, get_page_of_comment( $comment_last[0],  array( 'per_page' => 10 ) ) );
+		$this->assertSame( 4, get_page_of_comment( $comment_last[0], array( 'per_page' => 3 ) ) );
+		$this->assertSame( 2, get_page_of_comment( $comment_last[0], array( 'per_page' => 10 ) ) );
 
-		$this->assertEquals( 1, get_page_of_comment( $comment_first[0], array( 'per_page' =>  3 ) ) );
-		$this->assertEquals( 1, get_page_of_comment( $comment_first[0], array( 'per_page' => 10 ) ) );
+		$this->assertSame( 1, get_page_of_comment( $comment_first[0], array( 'per_page' => 3 ) ) );
+		$this->assertSame( 1, get_page_of_comment( $comment_first[0], array( 'per_page' => 10 ) ) );
 	}
 
 	public function test_type_pings() {
@@ -51,9 +51,42 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$now -= 10 * $i;
 		}
 
+<<<<<<< HEAD
 		$this->assertEquals( 2, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'trackback' ) ) );
 		$this->assertEquals( 3, get_page_of_comment( $pingbacks[0], array( 'per_page' => 2, 'type' => 'pingback' ) ) );
 		$this->assertEquals( 5, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'pings' ) ) );
+=======
+		$this->assertSame(
+			2,
+			get_page_of_comment(
+				$trackbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'trackback',
+				)
+			)
+		);
+		$this->assertSame(
+			3,
+			get_page_of_comment(
+				$pingbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'pingback',
+				)
+			)
+		);
+		$this->assertSame(
+			5,
+			get_page_of_comment(
+				$trackbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'pings',
+				)
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -91,12 +124,33 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		}
 
 		// Prime cache for trackbacks.
+<<<<<<< HEAD
 		$page_trackbacks = get_page_of_comment( $trackbacks[1], array( 'per_page' => 3, 'type' => 'trackback' ) );
 		$this->assertEquals( 2, $page_trackbacks );
 
 		$num_queries = $wpdb->num_queries;
 		$page_comments = get_page_of_comment( $comment, array( 'per_page' => 3, 'type' => 'comment' ) );
 		$this->assertEquals( 1, $page_comments );
+=======
+		$page_trackbacks = get_page_of_comment(
+			$trackbacks[1],
+			array(
+				'per_page' => 3,
+				'type'     => 'trackback',
+			)
+		);
+		$this->assertSame( 2, $page_trackbacks );
+
+		$num_queries   = $wpdb->num_queries;
+		$page_comments = get_page_of_comment(
+			$comment,
+			array(
+				'per_page' => 3,
+				'type'     => 'comment',
+			)
+		);
+		$this->assertSame( 1, $page_comments );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertNotEquals( $num_queries, $wpdb->num_queries );
 	}
@@ -160,11 +214,11 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$c2 = self::factory()->comment->create( array( 'comment_post_ID' => $p, 'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 20 ) ) );
 		$c3 = self::factory()->comment->create( array( 'comment_post_ID' => $p, 'comment_approved' => 0, 'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 30 ) ) );
 
-		$this->assertEquals( 1, get_page_of_comment( $c1, array( 'per_page' => 2 ) ) );
+		$this->assertSame( 1, get_page_of_comment( $c1, array( 'per_page' => 2 ) ) );
 
 		wp_set_comment_status( $c3, '1' );
 
-		$this->assertEquals( 2, get_page_of_comment( $c1, array( 'per_page' => 2 ) ) );
+		$this->assertSame( 2, get_page_of_comment( $c1, array( 'per_page' => 2 ) ) );
 	}
 
 	/**
@@ -181,10 +235,10 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		}
 
 		$found_0 = get_page_of_comment( $comments_0[0], array( 'per_page' => 2 ) );
-		$this->assertEquals( 3, $found_0 );
+		$this->assertSame( 3, $found_0 );
 
 		$found_1 = get_page_of_comment( $comments_1[1], array( 'per_page' => 2 ) );
-		$this->assertEquals( 2, $found_1 );
+		$this->assertSame( 2, $found_1 );
 	}
 
 	/**
@@ -236,7 +290,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		update_option( 'page_comments', 1 );
 		update_option( 'comments_per_page', 2 );
 
-		$this->assertEquals( 2, get_page_of_comment( $c1 ) );
+		$this->assertSame( 2, get_page_of_comment( $c1 ) );
 	}
 
 	/**
@@ -256,7 +310,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		update_option( 'page_comments', 1 );
 		update_option( 'comments_per_page', 1 );
 
-		$this->assertEquals( 2, get_page_of_comment( $c3 ) );
+		$this->assertSame( 2, get_page_of_comment( $c3 ) );
 	}
 
 	/**
@@ -276,6 +330,6 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		update_option( 'page_comments', 1 );
 		update_option( 'comments_per_page', 1 );
 
-		$this->assertEquals( 2, get_page_of_comment( $c3 ) );
+		$this->assertSame( 2, get_page_of_comment( $c3 ) );
 	}
 }

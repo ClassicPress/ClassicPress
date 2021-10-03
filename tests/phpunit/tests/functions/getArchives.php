@@ -24,6 +24,7 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	}
 
 	function test_wp_get_archives_default() {
+<<<<<<< HEAD:tests/phpunit/tests/functions/getArchives.php
 		$expected['default'] = "<li><a href='" . $this->month_url . "'>" . date( 'F Y' ) . "</a></li>";
 		$this->assertEquals( $expected['default'], trim( wp_get_archives( array( 'echo' => false ) ) ) );
 	}
@@ -31,6 +32,25 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	function test_wp_get_archives_type() {
 		$expected['type'] = "<li><a href='" . $this->year_url . "'>" . date( 'Y' ) . "</a></li>";
 		$this->assertEquals( $expected['type'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'yearly' ) ) ) );
+=======
+		$expected['default'] = "<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></li>';
+		$this->assertSame( $expected['default'], trim( wp_get_archives( array( 'echo' => false ) ) ) );
+	}
+
+	function test_wp_get_archives_type() {
+		$expected['type'] = "<li><a href='" . $this->year_url . "'>" . gmdate( 'Y' ) . '</a></li>';
+		$this->assertSame(
+			$expected['type'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo' => false,
+						'type' => 'yearly',
+					)
+				)
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/wpGetArchives.php
 	}
 
 	function test_wp_get_archives_limit() {
@@ -55,8 +75,12 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	<li><a href='$link4'>$title4</a></li>
 	<li><a href='$link5'>$title5</a></li>
 EOF;
+<<<<<<< HEAD:tests/phpunit/tests/functions/getArchives.php
 
 		$this->assertEqualsIgnoreEOL(
+=======
+		$this->assertSameIgnoreEOL(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/wpGetArchives.php
 			$expected['limit'],
 			trim(
 				wp_get_archives(
@@ -71,6 +95,7 @@ EOF;
 	}
 
 	function test_wp_get_archives_format() {
+<<<<<<< HEAD:tests/phpunit/tests/functions/getArchives.php
 		$expected['format'] = "<option value='" . $this->month_url . "'> " . date( 'F Y' ) . ' </option>';
 		$this->assertEquals( $expected['format'], trim( wp_get_archives( array( 'echo' => false, 'format' => 'option' ) ) ) );
 	}
@@ -83,6 +108,52 @@ EOF;
 	function test_wp_get_archives_show_post_count() {
 		$expected['show_post_count'] = "<li><a href='" . $this->month_url . "'>" . date( 'F Y' ) . "</a>&nbsp;(8)</li>";
 		$this->assertEquals( $expected['show_post_count'], trim( wp_get_archives( array( 'echo' => false, 'show_post_count' => 1 ) ) ) );
+=======
+		$expected['format'] = "<option value='" . $this->month_url . "'> " . gmdate( 'F Y' ) . ' </option>';
+		$this->assertSame(
+			$expected['format'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'   => false,
+						'format' => 'option',
+					)
+				)
+			)
+		);
+	}
+
+	function test_wp_get_archives_before_and_after() {
+		$expected['before_and_after'] = "<div><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></div>';
+		$this->assertSame(
+			$expected['before_and_after'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'   => false,
+						'format' => 'custom',
+						'before' => '<div>',
+						'after'  => '</div>',
+					)
+				)
+			)
+		);
+	}
+
+	function test_wp_get_archives_show_post_count() {
+		$expected['show_post_count'] = "<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a>&nbsp;(8)</li>';
+		$this->assertSame(
+			$expected['show_post_count'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'            => false,
+						'show_post_count' => 1,
+					)
+				)
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/wpGetArchives.php
 	}
 
 	function test_wp_get_archives_echo() {
@@ -102,8 +173,12 @@ EOF;
 <li><a href='{$oct_url}'>October 2012</a></li>
 	<li><a href='{$this->month_url}'>$date_full</a></li>
 EOF;
+<<<<<<< HEAD:tests/phpunit/tests/functions/getArchives.php
 
 		$this->assertEqualsIgnoreEOL(
+=======
+		$this->assertSameIgnoreEOL(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/wpGetArchives.php
 			$expected['order_asc'],
 			trim(
 				wp_get_archives(
@@ -119,7 +194,7 @@ EOF;
 <li><a href='{$this->month_url}'>$date_full</a></li>
 	<li><a href='{$oct_url}'>October 2012</a></li>
 EOF;
-		$this->assertEqualsIgnoreEOL(
+		$this->assertSameIgnoreEOL(
 			$expected['order_desc'],
 			trim(
 				wp_get_archives(
@@ -146,7 +221,17 @@ EOF;
 
 		$oct_url = esc_url( add_query_arg( 'post_type', 'taco', get_month_link( 2014, 10 ) ) );
 		$expected = "<li><a href='{$oct_url}'>October 2014</a></li>";
+<<<<<<< HEAD:tests/phpunit/tests/functions/getArchives.php
 		$archives = wp_get_archives( array( 'echo' => false, 'post_type' => 'taco' ) );
 		$this->assertEquals( $expected, trim( $archives ) );
+=======
+		$archives = wp_get_archives(
+			array(
+				'echo'      => false,
+				'post_type' => 'taco',
+			)
+		);
+		$this->assertSame( $expected, trim( $archives ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/wpGetArchives.php
 	}
 }

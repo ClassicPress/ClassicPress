@@ -84,11 +84,17 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"{$wpdb->prefix}dbdelta_create_test" => "Created table {$wpdb->prefix}dbdelta_create_test"
 		);
 
-		$this->assertEquals( $expected, $updates );
+		$this->assertSame( $expected, $updates );
 
+<<<<<<< HEAD
 		$this->assertEquals(
 			"{$wpdb->prefix}dbdelta_create_test"
 			, $wpdb->get_var(
+=======
+		$this->assertSame(
+			"{$wpdb->prefix}dbdelta_create_test",
+			$wpdb->get_var(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 				$wpdb->prepare(
 					'SHOW TABLES LIKE %s'
 					, $wpdb->esc_like( "{$wpdb->prefix}dbdelta_create_test" )
@@ -118,7 +124,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 	}
 
 	/**
@@ -141,7 +147,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.id"
 					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint(20) to int(11)"
@@ -170,7 +176,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col"
@@ -203,7 +209,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 
 		$this->assertTableHasColumn( 'column_1', $wpdb->prefix . 'dbdelta_test' );
 	}
@@ -230,7 +236,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			, false // Don't execute.
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col"
@@ -251,9 +257,15 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"INSERT INTO {$wpdb->prefix}dbdelta_test (column_1) VALUES ('wcphilly2015')"
 		);
 
+<<<<<<< HEAD
 		$this->assertEquals(
 			array( )
 			, $insert
+=======
+		$this->assertSame(
+			array(),
+			$insert
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		);
 
 		$this->assertTableRowHasValue( 'column_1', 'wcphilly2015',  $wpdb->prefix . 'dbdelta_test' );

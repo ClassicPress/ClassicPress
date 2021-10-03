@@ -33,9 +33,9 @@ class Tests_Multisite_Update_Blog_Details extends WP_UnitTestCase {
 
 		$blog = get_site( $blog_id );
 
-		$this->assertEquals( 'example.com', $blog->domain );
-		$this->assertEquals( '/my_path/', $blog->path );
-		$this->assertEquals( '0', $blog->spam );
+			$this->assertSame( 'example.com', $blog->domain );
+			$this->assertSame( '/my_path/', $blog->path );
+			$this->assertSame( '0', $blog->spam );
 	}
 
 	/**
@@ -65,16 +65,16 @@ class Tests_Multisite_Update_Blog_Details extends WP_UnitTestCase {
 		update_blog_details( $blog_id, array( $flag => $flag_value ) );
 		$blog = get_site( $blog_id );
 
-		$this->assertEquals( $flag_value, $blog->{$flag} );
+			$this->assertSame( $flag_value, $blog->{$flag} );
 
 		// The hook attached to this flag should have fired once during update_blog_details().
-		$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( 1, $test_action_counter );
 
 		// Update the site to the exact same flag value for this flag.
 		update_blog_details( $blog_id, array( $flag => $flag_value ) );
 
 		// The hook attached to this flag should not have fired again.
-		$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( 1, $test_action_counter );
 
 		remove_action( $hook, array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -110,7 +110,7 @@ class Tests_Multisite_Update_Blog_Details extends WP_UnitTestCase {
 		update_blog_details( 1, array( 'path' => $path ) );
 		$site = get_site( 1 );
 
-		$this->assertEquals( $expected, $site->path );
+			$this->assertSame( $expected, $site->path );
 	}
 
 	public function data_single_directory_path() {

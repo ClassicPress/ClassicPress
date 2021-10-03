@@ -56,7 +56,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'number'   => 3,
 		) );
 
-		$this->assertEquals( 3, count( $found ) );
+			$this->assertSame( 3, count( $found ) );
 	}
 
 	public function test_wp_network_query_by_network__in_with_order() {
@@ -69,7 +69,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'order'       => 'ASC',
 		) );
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 
 		$found = $q->query( array(
 			'fields'      => 'ids',
@@ -77,7 +77,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'order'       => 'DESC',
 		) );
 
-		$this->assertEquals( array_reverse( $expected ), $found );
+			$this->assertSame( array_reverse( $expected ), $found );
 	}
 
 	public function test_wp_network_query_by_network__in_with_single_id() {
@@ -114,7 +114,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'network__in' => $expected,
 		) );
 
-		$this->assertEquals( 2, $found );
+			$this->assertSame( 2, $found );
 	}
 
 	public function test_wp_network_query_by_network__not_in_with_single_id() {
@@ -377,7 +377,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['make.wordpress.org/'],
 		);
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 	}
 
 	/**
@@ -400,7 +400,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'order'      => 'ASC',
 		) );
 
-		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+			$this->assertSame( $number_of_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -424,8 +424,14 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'number'     => 3,
 			'order'      => 'ASC',
 			'count'      => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+=======
+				)
+			);
+			$this->assertSame( $number_of_queries, $wpdb->num_queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -449,9 +455,49 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'number'     => 3,
 			'order'      => 'ASC',
 			'count'      => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries + 1, $wpdb->num_queries );
 	}
 }
+=======
+				)
+			);
+			$this->assertSame( $number_of_queries + 1, $wpdb->num_queries );
+		}
+
+		/**
+		 * @ticket 45749
+		 * @ticket 47599
+		 */
+		public function test_networks_pre_query_filter_should_bypass_database_query() {
+			global $wpdb;
+
+			add_filter( 'networks_pre_query', array( __CLASS__, 'filter_networks_pre_query' ), 10, 2 );
+
+			$num_queries = $wpdb->num_queries;
+
+			$q       = new WP_Network_Query();
+			$results = $q->query( array() );
+
+			remove_filter( 'networks_pre_query', array( __CLASS__, 'filter_networks_pre_query' ), 10, 2 );
+
+			// Make sure no queries were executed.
+			$this->assertSame( $num_queries, $wpdb->num_queries );
+
+			// We manually inserted a non-existing site and overrode the results with it.
+			$this->assertSame( array( 555 ), $results );
+
+			// Make sure manually setting total_users doesn't get overwritten.
+			$this->assertSame( 1, $q->found_networks );
+		}
+
+		public static function filter_networks_pre_query( $networks, $query ) {
+			$query->found_networks = 1;
+
+			return array( 555 );
+		}
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 endif;

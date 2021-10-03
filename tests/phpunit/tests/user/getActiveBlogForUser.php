@@ -54,7 +54,7 @@ class Tests_Multisite_getActiveBlogForUser extends WP_UnitTestCase {
 		wpmu_delete_blog( $site_id_one, true );
 		wpmu_delete_blog( $site_id_two, true );
 
-		$this->assertEquals( $primary_site_id, $result->id );
+			$this->assertSame( $primary_site_id, $result->id );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Tests_Multisite_getActiveBlogForUser extends WP_UnitTestCase {
 
 		wpmu_delete_blog( $primary_site_id, true );
 
-		$this->assertEquals( $primary_site_id, $result->id );
+			$this->assertSame( $primary_site_id, $result->id );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Tests_Multisite_getActiveBlogForUser extends WP_UnitTestCase {
 
 		wpmu_delete_blog( $site_id, true );
 
-		$this->assertEquals( $current_site_id, $result->id );
+			$this->assertSame( $current_site_id, $result->id );
 	}
 }
 

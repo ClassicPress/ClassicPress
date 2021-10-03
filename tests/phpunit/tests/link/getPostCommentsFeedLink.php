@@ -13,7 +13,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 			'p' => $post_id
 		), home_url( '/' ) );
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_post_pretty_link() {
@@ -24,7 +24,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 		$link = get_post_comments_feed_link( $post_id );
 		$expected = get_permalink( $post_id ) . 'feed/';
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_attachment_link() {
@@ -40,7 +40,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 			'p' => $attachment_id
 		), home_url( '/' ) );
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_attachment_pretty_link() {
@@ -60,7 +60,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 		$link = get_post_comments_feed_link( $attachment_id );
 		$expected = get_permalink( $post_id ) . 'burrito/feed/';
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_attachment_no_name_pretty_link() {
@@ -75,7 +75,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 		$link = get_post_comments_feed_link( $attachment_id );
 		$expected = get_permalink( $post_id ) . 'attachment/' . $attachment_id . '/feed/';
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_unattached_link() {
@@ -90,7 +90,7 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 			'attachment_id' => $attachment_id
 		), home_url( '/' ) );
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 
 	public function test_unattached_pretty_link() {
@@ -104,6 +104,6 @@ class Tests_Link_GetPostCommentsFeedLink extends WP_UnitTestCase {
 		$link = get_post_comments_feed_link( $attachment_id );
 		$expected = add_query_arg( 'attachment_id', $attachment_id, home_url( '/feed/' ) );
 
-		$this->assertEquals( $expected, $link );
+		$this->assertSame( $expected, $link );
 	}
 }

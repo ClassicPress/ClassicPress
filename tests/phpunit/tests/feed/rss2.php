@@ -95,15 +95,20 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 
-		$this->assertEquals( '2.0', $rss[0]['attributes']['version'] );
-		$this->assertEquals( 'http://purl.org/rss/1.0/modules/content/', $rss[0]['attributes']['xmlns:content'] );
-		$this->assertEquals( 'http://wellformedweb.org/CommentAPI/', $rss[0]['attributes']['xmlns:wfw'] );
-		$this->assertEquals( 'http://purl.org/dc/elements/1.1/', $rss[0]['attributes']['xmlns:dc'] );
+		$this->assertSame( '2.0', $rss[0]['attributes']['version'] );
+		$this->assertSame( 'http://purl.org/rss/1.0/modules/content/', $rss[0]['attributes']['xmlns:content'] );
+		$this->assertSame( 'http://wellformedweb.org/CommentAPI/', $rss[0]['attributes']['xmlns:wfw'] );
+		$this->assertSame( 'http://purl.org/dc/elements/1.1/', $rss[0]['attributes']['xmlns:dc'] );
 
+<<<<<<< HEAD
 		// rss should have exactly one child element (channel)
 		$this->assertEquals( 1, count( $rss[0]['child'] ) );
+=======
+		// RSS should have exactly one child element (channel).
+		$this->assertSame( 1, count( $rss[0]['child'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -123,16 +128,16 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 
 		// Verify the channel is present and contains a title child element
 		$title = xml_find( $xml, 'rss', 'channel', 'title' );
-		$this->assertEquals( get_option( 'blogname' ), $title[0]['content'] );
+		$this->assertSame( get_option( 'blogname' ), $title[0]['content'] );
 
 		$desc = xml_find( $xml, 'rss', 'channel', 'description' );
-		$this->assertEquals( get_option( 'blogdescription' ), $desc[0]['content'] );
+		$this->assertSame( get_option( 'blogdescription' ), $desc[0]['content'] );
 
 		$link = xml_find( $xml, 'rss', 'channel', 'link' );
-		$this->assertEquals( get_option( 'siteurl' ), $link[0]['content'] );
+		$this->assertSame( get_option( 'siteurl' ), $link[0]['content'] );
 
 		$pubdate = xml_find( $xml, 'rss', 'channel', 'lastBuildDate' );
-		$this->assertEquals( strtotime( get_lastpostmodified() ), strtotime( $pubdate[0]['content'] ) );
+		$this->assertSame( strtotime( get_lastpostmodified() ), strtotime( $pubdate[0]['content'] ) );
 	}
 
 	/**
@@ -184,6 +189,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 			preg_match( '/\?p=(\d+)/', $guid[0]['content'], $matches );
 			$post = get_post( $matches[1] );
 
+<<<<<<< HEAD
 			// Title
 			$title = xml_find( $items[$key]['child'], 'title' );
 			$this->assertEquals( $post->post_title, $title[0]['content'] );
@@ -199,11 +205,28 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 			// Pub date
 			$pubdate = xml_find( $items[$key]['child'], 'pubDate' );
 			$this->assertEquals( strtotime( $post->post_date_gmt ), strtotime( $pubdate[0]['content'] ) );
+=======
+			// Title.
+			$title = xml_find( $items[ $key ]['child'], 'title' );
+			$this->assertSame( $post->post_title, $title[0]['content'] );
+
+			// Link.
+			$link = xml_find( $items[ $key ]['child'], 'link' );
+			$this->assertSame( get_permalink( $post ), $link[0]['content'] );
+
+			// Comment link.
+			$comments_link = xml_find( $items[ $key ]['child'], 'comments' );
+			$this->assertSame( get_permalink( $post ) . '#respond', $comments_link[0]['content'] );
+
+			// Pub date.
+			$pubdate = xml_find( $items[ $key ]['child'], 'pubDate' );
+			$this->assertSame( strtotime( $post->post_date_gmt ), strtotime( $pubdate[0]['content'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// Author
 			$creator = xml_find( $items[$key]['child'], 'dc:creator' );
 			$user = new WP_User( $post->post_author );
-			$this->assertEquals( $user->display_name, $creator[0]['content'] );
+			$this->assertSame( $user->display_name, $creator[0]['content'] );
 
 			// Categories (perhaps multiple)
 			$categories = xml_find( $items[$key]['child'], 'category' );
@@ -219,11 +242,17 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 				}
 			}
 			$cats = array_filter( $cats );
+<<<<<<< HEAD
 			// Should be the same number of categories
 			$this->assertEquals( count( $cats ), count( $categories ) );
+=======
+			// Should be the same number of categories.
+			$this->assertSame( count( $cats ), count( $categories ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// ..with the same names
 			foreach ( $cats as $id => $cat ) {
+<<<<<<< HEAD
 				$this->assertEquals( $cat, $categories[$id]['content'] );
 			}
 
@@ -231,15 +260,30 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 			$guid = xml_find( $items[$key]['child'], 'guid' );
 			$this->assertEquals( 'false', $guid[0]['attributes']['isPermaLink'] );
 			$this->assertEquals( $post->guid, $guid[0]['content'] );
+=======
+				$this->assertSame( $cat, $categories[ $id ]['content'] );
+			}
+
+			// GUID.
+			$guid = xml_find( $items[ $key ]['child'], 'guid' );
+			$this->assertSame( 'false', $guid[0]['attributes']['isPermaLink'] );
+			$this->assertSame( $post->guid, $guid[0]['content'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// Description / Excerpt
 			if ( ! empty( $post->post_excerpt ) ) {
+<<<<<<< HEAD
 				$description = xml_find( $items[$key]['child'], 'description' );
 				$this->assertEquals( trim( $post->post_excerpt ), trim( $description[0]['content'] ) );
+=======
+				$description = xml_find( $items[ $key ]['child'], 'description' );
+				$this->assertSame( trim( $post->post_excerpt ), trim( $description[0]['content'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			}
 
 			// Post content
 			if ( ! $this->excerpt_only ) {
+<<<<<<< HEAD
 				$content = xml_find( $items[$key]['child'], 'content:encoded' );
 				$this->assertEquals( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
 			}
@@ -247,6 +291,15 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 			// Comment rss
 			$comment_rss = xml_find( $items[$key]['child'], 'wfw:commentRss' );
 			$this->assertEquals( html_entity_decode( get_post_comments_feed_link( $post->ID ) ), $comment_rss[0]['content'] );
+=======
+				$content = xml_find( $items[ $key ]['child'], 'content:encoded' );
+				$this->assertSame( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
+			}
+
+			// Comment RSS.
+			$comment_rss = xml_find( $items[ $key ]['child'], 'wfw:commentRss' );
+			$this->assertSame( html_entity_decode( get_post_comments_feed_link( $post->ID ) ), $comment_rss[0]['content'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -307,7 +360,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -335,7 +388,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -368,7 +421,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -396,7 +449,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -424,7 +477,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -452,6 +505,36 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Test <rss> element has correct last build date.
+	 *
+	 * @ticket 4575
+	 *
+	 * @dataProvider data_test_get_feed_build_date
+	 */
+	public function test_get_feed_build_date( $url, $element ) {
+		$this->go_to( $url );
+		$feed = $this->do_rss2();
+		$xml  = xml_to_array( $feed );
+
+		// Get the <rss> child element of <xml>.
+		$rss             = xml_find( $xml, $element );
+		$last_build_date = $rss[0]['child'][0]['child'][4]['content'];
+		$this->assertSame( strtotime( get_feed_build_date( 'r' ) ), strtotime( $last_build_date ) );
+	}
+
+
+	public function data_test_get_feed_build_date() {
+		return array(
+			array( '/?feed=rss2', 'rss' ),
+			array( '/?feed=commentsrss2', 'rss' ),
+		);
+
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

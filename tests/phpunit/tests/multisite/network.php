@@ -59,7 +59,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	 * By default, only one network exists and has a network ID of 1.
 	 */
 	function test_get_main_network_id_default() {
-		$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	function test_get_main_network_id_two_networks() {
 		self::factory()->network->create();
 
-		$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 
 		$current_site->id = (int) $id;
 
-		$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 	}
 
 	/**
@@ -103,12 +103,12 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		$main_network_id = get_main_network_id();
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->site} SET id=1 WHERE id=%d", $temp_id ) );
 
-		$this->assertEquals( self::$different_network_id, $main_network_id );
+			$this->assertSame( self::$different_network_id, $main_network_id );
 	}
 
 	function test_get_main_network_id_filtered() {
 		add_filter( 'get_main_network_id', array( $this, '_get_main_network_id' ) );
-		$this->assertEquals( 3, get_main_network_id() );
+			$this->assertSame( 3, get_main_network_id() );
 		remove_filter( 'get_main_network_id', array( $this, '_get_main_network_id' ) );
 	}
 
@@ -142,7 +142,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		}
 		wp_update_network_counts();
 
-		$this->assertEquals( $site_count_start + 1, $actual );
+			$this->assertSame( $site_count_start + 1, $actual );
 	}
 
 	/**
@@ -229,7 +229,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		// No change, cache not refreshed
 		$count = get_user_count();
 
-		$this->assertEquals( $start_count, $count );
+			$this->assertSame( $start_count, $count );
 
 		wp_update_network_counts();
 		$start_count = get_user_count();
@@ -251,26 +251,44 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		// local activate, should be invisible for the network
 		activate_plugin($path); // $network_wide = false
 		$active_plugins = wp_get_active_network_plugins();
+<<<<<<< HEAD
 		$this->assertEquals( Array(), $active_plugins );
+=======
+			$this->assertSame( array(), $active_plugins );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		add_action( 'deactivated_plugin', array( $this, '_helper_deactivate_hook' ) );
 
 		// activate the plugin sitewide
 		activate_plugin($path, '', $network_wide = true);
 		$active_plugins = wp_get_active_network_plugins();
+<<<<<<< HEAD
 		$this->assertEquals( Array(WP_PLUGIN_DIR . '/hello.php'), $active_plugins );
+=======
+			$this->assertSame( array( WP_PLUGIN_DIR . '/hello.php' ), $active_plugins );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		//deactivate the plugin
 		deactivate_plugins($path);
 		$active_plugins = wp_get_active_network_plugins();
+<<<<<<< HEAD
 		$this->assertEquals( Array(), $active_plugins );
 
 		$this->assertEquals( 1, $this->plugin_hook_count ); // testing actions and silent mode
+=======
+			$this->assertSame( array(), $active_plugins );
+
+			$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		activate_plugin($path, '', $network_wide = true);
 		deactivate_plugins($path, true); // silent
 
+<<<<<<< HEAD
 		$this->assertEquals( 1, $this->plugin_hook_count ); // testing actions and silent mode
+=======
+			$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -285,13 +303,13 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		activate_plugin( $path, '', true );
 		$active_plugins = wp_get_active_network_plugins();
 		$this->assertCount( 1, $active_plugins );
-		$this->assertEquals( 1, $mock->get_call_count() );
+			$this->assertSame( 1, $mock->get_call_count() );
 
 		// should do nothing on the second try
 		activate_plugin( $path, '', true );
 		$active_plugins = wp_get_active_network_plugins();
 		$this->assertCount( 1, $active_plugins );
-		$this->assertEquals( 1, $mock->get_call_count() );
+			$this->assertSame( 1, $mock->get_call_count() );
 
 		remove_action( 'activate_' . $path, array ( $mock, 'action' ) );
 	}
@@ -319,8 +337,13 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		add_filter( 'enable_live_network_counts', '__return_false' );
 		self::factory()->user->create( array( 'role' => 'administrator' ) );
 
+<<<<<<< HEAD
 		$count = get_user_count(); // No change, cache not refreshed
 		$this->assertEquals( $start_count, $count );
+=======
+			$count = get_user_count(); // No change, cache not refreshed.
+			$this->assertSame( $start_count, $count );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		wp_update_network_counts(); // Magic happens here
 
@@ -373,7 +396,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		wp_update_network_site_counts();
 
 		$result = get_blog_count();
-		$this->assertEquals( $expected, $result );
+			$this->assertSame( $expected, $result );
 	}
 
 	/**
@@ -385,7 +408,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		wp_update_network_site_counts( self::$different_network_id );
 
 		$result = get_blog_count( self::$different_network_id );
-		$this->assertEquals( 3, $result );
+			$this->assertSame( 3, $result );
 	}
 
 	/**
@@ -401,7 +424,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		wp_update_network_user_counts();
 
 		$result = get_user_count();
-		$this->assertEquals( $expected, $result );
+			$this->assertSame( $expected, $result );
 	}
 
 	/**
@@ -417,7 +440,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		wp_update_network_user_counts( self::$different_network_id );
 
 		$result = get_user_count( self::$different_network_id );
-		$this->assertEquals( $expected, $result );
+			$this->assertSame( $expected, $result );
 	}
 
 	/**
@@ -581,7 +604,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 
 		wpmu_delete_blog( $site_id, true );
 
-		$this->assertEquals( $original_count + 1, $result );
+			$this->assertSame( $original_count + 1, $result );
 	}
 
 	/**
@@ -592,6 +615,53 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 
 		$this->assertSame( (string) self::$different_site_ids[0], $network->blog_id );
 	}
+<<<<<<< HEAD
 }
+=======
+
+		/**
+		 * @ticket 42251
+		 */
+		public function test_get_network_not_found_cache() {
+			global $wpdb;
+
+			$new_network_id = $this->_get_next_network_id();
+			$this->assertNull( get_network( $new_network_id ) );
+
+			$num_queries = $wpdb->num_queries;
+			$this->assertNull( get_network( $new_network_id ) );
+			$this->assertSame( $num_queries, $wpdb->num_queries );
+		}
+
+		/**
+		 * @ticket 42251
+		 */
+		public function test_get_network_not_found_cache_clear() {
+			$new_network_id = $this->_get_next_network_id();
+			$this->assertNull( get_network( $new_network_id ) );
+
+			$new_network = $this->factory()->network->create_and_get();
+
+			// Double-check we got the ID of the new network correct.
+			$this->assertSame( $new_network_id, $new_network->id );
+
+			// Verify that if we fetch the network now, it's no longer false.
+			$fetched_network = get_network( $new_network_id );
+			$this->assertInstanceOf( 'WP_Network', $fetched_network );
+			$this->assertSame( $new_network_id, $fetched_network->id );
+		}
+
+		/**
+		 * Gets the ID of the site with the highest ID.
+		 * @return int
+		 */
+		protected function _get_next_network_id() {
+			global $wpdb;
+			// Create an extra network, just to make sure we know the ID of the following one.
+			static::factory()->network->create();
+			return (int) $wpdb->get_var( 'SELECT id FROM ' . $wpdb->site . ' ORDER BY id DESC LIMIT 1' ) + 1;
+		}
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 endif;

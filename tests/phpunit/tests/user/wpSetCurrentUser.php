@@ -17,7 +17,7 @@ class Tests_User_WpSetCurrentUser extends WP_UnitTestCase {
 		$user = wp_set_current_user( self::$user_id );
 
 		$this->assertSame( self::$user_id, $user->ID );
-		$this->assertEquals( $user, wp_get_current_user() );
+		$this->assertSame( $user, wp_get_current_user() );
 		$this->assertSame( self::$user_id, get_current_user_id() );
 	}
 
@@ -25,7 +25,7 @@ class Tests_User_WpSetCurrentUser extends WP_UnitTestCase {
 		$user = wp_set_current_user( self::$user_id, 'foo' );
 
 		$this->assertSame( self::$user_id, $user->ID );
-		$this->assertEquals( $user, wp_get_current_user() );
+		$this->assertSame( $user, wp_get_current_user() );
 		$this->assertSame( self::$user_id, get_current_user_id() );
 	}
 
@@ -36,7 +36,7 @@ class Tests_User_WpSetCurrentUser extends WP_UnitTestCase {
 		$user = wp_set_current_user( null, 'foo' );
 
 		$this->assertSame( self::$user_id2, $user->ID );
-		$this->assertEquals( $user, wp_get_current_user() );
+		$this->assertSame( $user, wp_get_current_user() );
 		$this->assertSame( self::$user_id2, get_current_user_id() );
 	}
 
@@ -52,7 +52,7 @@ class Tests_User_WpSetCurrentUser extends WP_UnitTestCase {
 		$user = wp_set_current_user( null, 'foo' );
 
 		$this->assertSame( self::$user_id2, $user->ID );
-		$this->assertEquals( $user, wp_get_current_user() );
+		$this->assertSame( $user, wp_get_current_user() );
 		$this->assertSame( self::$user_id2, get_current_user_id() );
 	}
 }

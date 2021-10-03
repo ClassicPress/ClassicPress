@@ -32,7 +32,11 @@ class Tests_Formatting_SanitizeMimeType extends WP_UnitTestCase {
 		);
 
 		foreach ( $inputs as $input ) {
+<<<<<<< HEAD
 			$this->assertEquals($input, sanitize_mime_type($input));
+=======
+			$this->assertSame( $input, sanitize_mime_type( $input ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 }

@@ -102,7 +102,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			'relation' => 'AND',
 		);
 
-		$this->assertEquals( $expected, $q->queries );
+		$this->assertSame( $expected, $q->queries );
 	}
 
 	public function test_get_compare_empty() {
@@ -992,7 +992,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $p2 ), $q->posts );
+		$this->assertSame( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -1012,7 +1012,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $p2 ), $q->posts );
+		$this->assertSame( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -1034,7 +1034,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		) );
 
 		// MySQL ignores the invalid clause.
-		$this->assertEquals( array( $p1, $p2 ), $q->posts );
+		$this->assertSame( array( $p1, $p2 ), $q->posts );
 	}
 
 	/** Helpers **********************************************************/

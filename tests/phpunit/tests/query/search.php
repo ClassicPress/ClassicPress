@@ -35,14 +35,14 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create( array( 'post_title' => 'About', 'post_type' => $this->post_type ) );
 
 		$posts = $this->get_search_results( 'About' );
-		$this->assertEquals( $post_id, reset( $posts )->ID );
+		$this->assertSame( $post_id, reset( $posts )->ID );
 	}
 
 	function test_search_terms_query_var() {
 		$terms = 'This is a search term';
 		$query = new WP_Query( array( 's' => 'This is a search term' ) );
 		$this->assertNotEquals( explode( ' ', $terms ), $query->get( 'search_terms' ) );
-		$this->assertEquals( array( 'search', 'term' ), $query->get( 'search_terms' ) );
+		$this->assertSame( array( 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
 	function test_filter_stopwords() {
@@ -52,7 +52,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		remove_filter( 'wp_search_stopwords', array( $this, 'filter_wp_search_stopwords' ) );
 
 		$this->assertNotEquals( array( 'search', 'term' ), $query->get( 'search_terms' ) );
-		$this->assertEquals( array( 'This', 'is', 'search', 'term' ), $query->get( 'search_terms' ) );
+		$this->assertSame( array( 'This', 'is', 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
 	function filter_wp_search_stopwords() {
@@ -70,14 +70,19 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			'post_content' => $title, 'post_type' => $this->post_type
 		) );
 
+<<<<<<< HEAD
 		// By default, we can use the hyphen prefix to exclude results
 		$this->assertEquals( array(), $this->get_search_results( $title ) );
+=======
+		// By default, we can use the hyphen prefix to exclude results.
+		$this->assertSame( array(), $this->get_search_results( $title ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// After we disable the feature using the filter, we should get the result
 		add_filter( 'wp_query_search_exclusion_prefix', '__return_false' );
 		$result = $this->get_search_results( $title );
 		$post = array_pop( $result );
-		$this->assertEquals( $post->ID, $post_id );
+		$this->assertSame( $post->ID, $post_id );
 		remove_filter( 'wp_query_search_exclusion_prefix', '__return_false' );
 	}
 
@@ -95,13 +100,13 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		// By default, we should get the result.
 		$result = $this->get_search_results( $title );
 		$post = array_pop( $result );
-		$this->assertEquals( $post->ID, $post_id );
+		$this->assertSame( $post->ID, $post_id );
 
 		// After we change the prefix, the result should be excluded.
 		add_filter( 'wp_query_search_exclusion_prefix', array( $this, 'filter_search_exclusion_prefix_octothorpe' ) );
 		$found = $this->get_search_results( $title );
 		remove_filter( 'wp_query_search_exclusion_prefix', array( $this, 'filter_search_exclusion_prefix_octothorpe' ) );
-		$this->assertEquals( array(), $found );
+		$this->assertSame( array(), $found );
 	}
 
 	function filter_search_exclusion_prefix_octothorpe() {

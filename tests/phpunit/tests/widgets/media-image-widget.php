@@ -66,8 +66,14 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'customize_selective_refresh', $widget->widget_options );
 		$this->assertArrayHasKey( 'description', $widget->widget_options );
 		$this->assertTrue( $widget->widget_options['customize_selective_refresh'] );
+<<<<<<< HEAD
 		$this->assertEquals( 'image', $widget->widget_options['mime_type'] );
 		$this->assertEqualSets( array(
+=======
+		$this->assertSame( 'image', $widget->widget_options['mime_type'] );
+		$this->assertEqualSets(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'add_to_widget',
 			'replace_media',
 			'edit_media',

@@ -71,7 +71,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['default'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_depth() {
@@ -84,7 +88,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['depth'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_show_date() {
@@ -99,7 +107,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '</li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['show_date'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_date_format() {
@@ -132,7 +144,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['date_format'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_child_of() {
@@ -145,7 +161,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['child_of'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_exclude() {
@@ -172,7 +192,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['exclude'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_title_li() {
@@ -186,7 +210,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['title_li'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_echo() {
@@ -212,7 +240,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3) . '">Parent 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['authors'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_number() {
@@ -223,7 +255,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		$expected['number'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['number'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_sort_column() {
@@ -255,7 +291,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['sort_column'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_link_before() {
@@ -286,7 +326,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['link_before'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_link_after() {
@@ -317,7 +361,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['link_after'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 
@@ -330,7 +378,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-3"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['include'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_exclude_tree() {
@@ -347,7 +399,11 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
+<<<<<<< HEAD
 		$this->assertEqualsIgnoreEOL( $expected['exclude'], wp_list_pages( $args ) );
+=======
+		$this->assertSameIgnoreEOL( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_list_pages_discarded_whitespace() {
@@ -355,7 +411,33 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 			'item_spacing' => 'discard',
 		);
+<<<<<<< HEAD
 		$expected['default'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a><ul class=\'children\'><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li><li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li><li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a><ul class=\'children\'><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li><li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li><li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a><ul class=\'children\'><li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li><li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li><li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li></ul></li></ul></li>';
 		$this->AssertEquals( $expected['default'], wp_list_pages( $args ) );
+=======
+
+		$expected = '<li class="pagenav">Pages<ul><li class="page_item page-item-' . self::$parent_1 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_1 ) . '">Parent 1</a>
+<ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_1 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][0] ) . '">Child 1</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_1 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][1] ) . '">Child 2</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_1 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_1 ][2] ) . '">Child 3</a></li>
+</ul>
+</li>
+<li class="page_item page-item-' . self::$parent_2 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_2 ) . '">Parent 2</a>
+<ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_2 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][0] ) . '">Child 1</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_2 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][1] ) . '">Child 2</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_2 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_2 ][2] ) . '">Child 3</a></li>
+</ul>
+</li>
+<li class="page_item page-item-' . self::$parent_3 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_3 ) . '">Parent 3</a>
+<ul class=\'children\'><li class="page_item page-item-' . self::$children[ self::$parent_3 ][0] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][0] ) . '">Child 1</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_3 ][1] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][1] ) . '">Child 2</a></li>
+	<li class="page_item page-item-' . self::$children[ self::$parent_3 ][2] . '"><a href="' . get_permalink( self::$children[ self::$parent_3 ][2] ) . '">Child 3</a></li>
+</ul>
+</li>
+</ul></li>';
+		$expected = str_replace( array( "\r\n", "\n", "\t" ), '', $expected );
+
+		$this->assertSame( $expected, wp_list_pages( $args ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

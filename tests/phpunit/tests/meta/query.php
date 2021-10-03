@@ -10,23 +10,23 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 	public function test_empty_meta_query_param() {
 		$query = new WP_Meta_Query();
-		$this->assertSame( null, $query->relation );
+		$this->assertNull( $query->relation );
 	}
 
 	public function test_default_relation() {
 		$query = new WP_Meta_Query( array( array( 'key' => 'abc' ) ) );
-		$this->assertEquals( 'AND', $query->relation );
+		$this->assertSame( 'AND', $query->relation );
 	}
 
 	public function test_set_relation() {
 
 		$query = new WP_Meta_Query( array( array( 'key' => 'abc' ), 'relation' => 'AND' ) );
 
-		$this->assertEquals( 'AND', $query->relation );
+		$this->assertSame( 'AND', $query->relation );
 
 		$query = new WP_Meta_Query( array( array( 'key' => 'abc' ), 'relation' => 'OR' ) );
 
-		$this->assertEquals( 'OR', $query->relation );
+		$this->assertSame( 'OR', $query->relation );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID' );
 
-		$this->assertEquals( 1, substr_count( $sql['join'], 'INNER JOIN' ) );
+		$this->assertSame( 1, substr_count( $sql['join'], 'INNER JOIN' ) );
 
 		// also check mixing key and key => value
 
@@ -73,7 +73,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID' );
 
-		$this->assertEquals( 1, substr_count( $sql['join'], 'INNER JOIN' ) );
+		$this->assertSame( 1, substr_count( $sql['join'], 'INNER JOIN' ) );
 	}
 
 	/**
@@ -101,17 +101,17 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 			'compare' => 'bar',
 			'value' => 'baz',
 		);
-		$this->assertEquals( $expected0, $query->queries[0] );
+		$this->assertSame( $expected0, $query->queries[0] );
 
 		$expected1 = array(
-			'relation' => 'OR',
 			array(
 				'key' => 'foo1',
 				'compare' => 'baz1',
 				'value' => 'bar1',
 			),
+			'relation' => 'OR',
 		);
-		$this->assertEquals( $expected1, $query->queries[1] );
+		$this->assertSame( $expected1, $query->queries[1] );
 	}
 
 	/**
@@ -157,43 +157,61 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		// just meta_value
 		$expected = array(
-			'relation' => 'OR',
 			array(
 				'key' => 'abc',
 			),
+			'relation' => 'OR',
 		);
 		$query->parse_query_vars( array(
 			'meta_key' => 'abc',
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $expected, $query->queries );
+=======
+			)
+		);
+		$this->assertSame( $expected, $query->queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// meta_key & meta_value
 		$expected = array(
-			'relation' => 'OR',
 			array(
 				'key' => 'abc',
 				'value' => 'def',
 			),
+			'relation' => 'OR',
 		);
 		$query->parse_query_vars( array(
 			'meta_key' => 'abc',
 			'meta_value' => 'def',
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $expected, $query->queries );
+=======
+			)
+		);
+		$this->assertSame( $expected, $query->queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// meta_compare
 		$expected = array(
-			'relation' => 'OR',
 			array(
 				'key' => 'abc',
 				'compare' => '=>',
 			),
+			'relation' => 'OR',
 		);
 		$query->parse_query_vars( array(
 			'meta_key' => 'abc',
 			'meta_compare' => '=>',
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $expected, $query->queries );
+=======
+			)
+		);
+		$this->assertSame( $expected, $query->queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -201,42 +219,42 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	 */
 	public function test_get_cast_for_type() {
 		$query = new WP_Meta_Query();
-		$this->assertEquals( 'BINARY', $query->get_cast_for_type( 'BINARY' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'CHAR' ) );
-		$this->assertEquals( 'DATE', $query->get_cast_for_type( 'DATE' ) );
-		$this->assertEquals( 'DATETIME', $query->get_cast_for_type( 'DATETIME' ) );
-		$this->assertEquals( 'SIGNED', $query->get_cast_for_type( 'SIGNED' ) );
-		$this->assertEquals( 'UNSIGNED', $query->get_cast_for_type( 'UNSIGNED' ) );
-		$this->assertEquals( 'TIME', $query->get_cast_for_type( 'TIME' ) );
-		$this->assertEquals( 'SIGNED', $query->get_cast_for_type( 'NUMERIC' ) );
-		$this->assertEquals( 'NUMERIC(10)', $query->get_cast_for_type( 'NUMERIC(10)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10 )' ) );
-		$this->assertEquals( 'NUMERIC(10, 5)', $query->get_cast_for_type( 'NUMERIC(10, 5)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'NUMERIC(10,  5)' ) );
-		$this->assertEquals( 'NUMERIC(10,5)', $query->get_cast_for_type( 'NUMERIC(10,5)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10, 5 )' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'NUMERIC(10, 5 )' ) );
-		$this->assertEquals( 'DECIMAL', $query->get_cast_for_type( 'DECIMAL' ) );
-		$this->assertEquals( 'DECIMAL(10)', $query->get_cast_for_type( 'DECIMAL(10)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'DECIMAL( 10 )' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'DECIMAL( 10)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'DECIMAL(10 )' ) );
-		$this->assertEquals( 'DECIMAL(10, 5)', $query->get_cast_for_type( 'DECIMAL(10, 5)' ) );
-		$this->assertEquals( 'DECIMAL(10,5)', $query->get_cast_for_type( 'DECIMAL(10,5)' ) );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'DECIMAL(10,  5)' ) );
+		$this->assertSame( 'BINARY', $query->get_cast_for_type( 'BINARY' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'CHAR' ) );
+		$this->assertSame( 'DATE', $query->get_cast_for_type( 'DATE' ) );
+		$this->assertSame( 'DATETIME', $query->get_cast_for_type( 'DATETIME' ) );
+		$this->assertSame( 'SIGNED', $query->get_cast_for_type( 'SIGNED' ) );
+		$this->assertSame( 'UNSIGNED', $query->get_cast_for_type( 'UNSIGNED' ) );
+		$this->assertSame( 'TIME', $query->get_cast_for_type( 'TIME' ) );
+		$this->assertSame( 'SIGNED', $query->get_cast_for_type( 'NUMERIC' ) );
+		$this->assertSame( 'NUMERIC(10)', $query->get_cast_for_type( 'NUMERIC(10)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10 )' ) );
+		$this->assertSame( 'NUMERIC(10, 5)', $query->get_cast_for_type( 'NUMERIC(10, 5)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'NUMERIC(10,  5)' ) );
+		$this->assertSame( 'NUMERIC(10,5)', $query->get_cast_for_type( 'NUMERIC(10,5)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'NUMERIC( 10, 5 )' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'NUMERIC(10, 5 )' ) );
+		$this->assertSame( 'DECIMAL', $query->get_cast_for_type( 'DECIMAL' ) );
+		$this->assertSame( 'DECIMAL(10)', $query->get_cast_for_type( 'DECIMAL(10)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'DECIMAL( 10 )' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'DECIMAL( 10)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'DECIMAL(10 )' ) );
+		$this->assertSame( 'DECIMAL(10, 5)', $query->get_cast_for_type( 'DECIMAL(10, 5)' ) );
+		$this->assertSame( 'DECIMAL(10,5)', $query->get_cast_for_type( 'DECIMAL(10,5)' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'DECIMAL(10,  5)' ) );
 
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type() );
-		$this->assertEquals( 'CHAR', $query->get_cast_for_type( 'ANYTHING ELSE' ) );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type() );
+		$this->assertSame( 'CHAR', $query->get_cast_for_type( 'ANYTHING ELSE' ) );
 	}
 
 	public function test_sanitize_query_single_query() {
 		$expected = array(
-			'relation' => 'OR',
 			array(
-				'key' => 'foo',
+				'key'   => 'foo',
 				'value' => 'bar',
 			),
+			'relation' => 'OR',
 		);
 
 		$q = new WP_Meta_Query();
@@ -247,20 +265,20 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_multiple_first_order_queries_relation_default() {
 		$expected = array(
-			'relation' => 'AND',
 			array(
-				'key' => 'foo',
+				'key'   => 'foo',
 				'value' => 'bar',
 			),
 			array(
-				'key' => 'foo2',
+				'key'   => 'foo2',
 				'value' => 'bar2',
 			),
+			'relation' => 'AND',
 		);
 
 		$q = new WP_Meta_Query();
@@ -275,12 +293,11 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_multiple_first_order_queries_relation_or() {
 		$expected = array(
-			'relation' => 'OR',
 			array(
 				'key' => 'foo',
 				'value' => 'bar',
@@ -289,11 +306,17 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'key' => 'foo2',
 				'value' => 'bar2',
 			),
+			'relation' => 'OR',
 		);
 
 		$q = new WP_Meta_Query();
+<<<<<<< HEAD
 		$found = $q->sanitize_query( array(
 			'relation' => 'OR',
+=======
+		$found = $q->sanitize_query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 				'value' => 'bar',
@@ -302,25 +325,32 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'key' => 'foo2',
 				'value' => 'bar2',
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_multiple_first_order_queries_relation_or_lowercase() {
 		$expected = array(
-			'relation' => 'OR',
 			array(
-				'key' => 'foo',
+				'key'   => 'foo',
 				'value' => 'bar',
 			),
 			array(
-				'key' => 'foo2',
+				'key'   => 'foo2',
 				'value' => 'bar2',
 			),
+			'relation' => 'OR',
 		);
 
 		$q = new WP_Meta_Query();
+<<<<<<< HEAD
 		$found = $q->sanitize_query( array(
 			'relation' => 'or',
 			array(
@@ -332,24 +362,40 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'value' => 'bar2',
 			),
 		) );
+=======
+		$found = $q->sanitize_query(
+			array(
+				array(
+					'key'   => 'foo',
+					'value' => 'bar',
+				),
+				array(
+					'key'   => 'foo2',
+					'value' => 'bar2',
+				),
+				'relation' => 'or',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_multiple_first_order_queries_invalid_relation() {
 		$expected = array(
-			'relation' => 'AND',
 			array(
-				'key' => 'foo',
+				'key'   => 'foo',
 				'value' => 'bar',
 			),
 			array(
-				'key' => 'foo2',
+				'key'   => 'foo2',
 				'value' => 'bar2',
 			),
+			'relation' => 'AND',
 		);
 
 		$q = new WP_Meta_Query();
+<<<<<<< HEAD
 		$found = $q->sanitize_query( array(
 			'relation' => 'FOO',
 			array(
@@ -361,15 +407,38 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'value' => 'bar2',
 			),
 		) );
+=======
+		$found = $q->sanitize_query(
+			array(
+				array(
+					'key'   => 'foo',
+					'value' => 'bar',
+				),
+				array(
+					'key'   => 'foo2',
+					'value' => 'bar2',
+				),
+				'relation' => 'FOO',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_single_query_which_is_a_nested_query() {
 		$expected = array(
-			'relation' => 'OR',
 			array(
+				array(
+					'key'   => 'foo',
+					'value' => 'bar',
+				),
+				array(
+					'key'   => 'foo2',
+					'value' => 'bar2',
+				),
 				'relation' => 'AND',
+<<<<<<< HEAD
 				array(
 					'key' => 'foo',
 					'value' => 'bar',
@@ -379,6 +448,10 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'value' => 'bar2',
 				),
 			)
+=======
+			),
+			'relation' => 'OR',
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		);
 
 		$q = new WP_Meta_Query();
@@ -395,14 +468,12 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	public function test_sanitize_query_multiple_nested_queries() {
 		$expected = array(
-			'relation' => 'OR',
 			array(
-				'relation' => 'AND',
 				array(
 					'key' => 'foo',
 					'value' => 'bar',
@@ -411,9 +482,9 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'key' => 'foo2',
 					'value' => 'bar2',
 				),
+				'relation' => 'AND',
 			),
 			array(
-				'relation' => 'AND',
 				array(
 					'key' => 'foo3',
 					'value' => 'bar3',
@@ -422,12 +493,19 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'key' => 'foo4',
 					'value' => 'bar4',
 				),
+				'relation' => 'AND',
 			),
+			'relation' => 'OR',
 		);
 
 		$q = new WP_Meta_Query();
+<<<<<<< HEAD
 		$found = $q->sanitize_query( array(
 			'relation' => 'OR',
+=======
+		$found = $q->sanitize_query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				array(
 					'key' => 'foo',
@@ -448,9 +526,15 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'value' => 'bar4',
 				),
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$this->assertEquals( $expected, $found );
+		$this->assertSame( $expected, $found );
 	}
 
 	/**
@@ -479,7 +563,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
-		$this->assertEquals( 3, substr_count( $sql['join'], 'JOIN' ) );
+		$this->assertSame( 3, substr_count( $sql['join'], 'JOIN' ) );
 	}
 
 	/**
@@ -493,7 +577,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		) );
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
-		$this->assertEquals( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_value = ''" ) );
+		$this->assertSame( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_value = ''" ) );
 	}
 
 	/**
@@ -503,10 +587,16 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	public function test_get_sql_key_only_queries() {
 		global $wpdb;
 
+<<<<<<< HEAD
 		$query1 = new WP_Meta_Query( array(
 			'relation' => 'OR',
 
 			// Empty 'compare'
+=======
+		$query1 = new WP_Meta_Query(
+			array(
+				// Empty 'compare'.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 			),
@@ -533,7 +623,14 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 			array(
 				'value' => 'bar',
 			),
+<<<<<<< HEAD
 		) );
+=======
+
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$sql = $query1->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
@@ -544,11 +641,18 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		// NOT EXISTS compare queries are not key-only so should not be non-aliased
 		$this->assertSame( 0, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'baz'" ) );
 
+<<<<<<< HEAD
 		// 'AND' queries don't have key-only queries
 		$query2 = new WP_Meta_Query( array(
 			'relation' => 'AND',
 
 			// Empty 'compare'
+=======
+		// 'AND' queries don't have key-only queries.
+		$query2 = new WP_Meta_Query(
+			array(
+				// Empty 'compare'.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 			),
@@ -558,7 +662,14 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'key' => 'bar',
 				'compare' => '<',
 			),
+<<<<<<< HEAD
 		) );
+=======
+
+				'relation' => 'AND',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$sql = $query2->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
@@ -766,8 +877,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	public function test_not_exists() {
 		global $wpdb;
 
+<<<<<<< HEAD
 		$query = new WP_Meta_Query( array(
 			'relation' => 'OR',
+=======
+		$query = new WP_Meta_Query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'exclude',
 				'compare' => 'NOT EXISTS'
@@ -777,7 +893,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'compare' => '!=',
 				'value' => '1'
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 		$this->assertNotContains( "{$wpdb->postmeta}.meta_key = 'exclude'\nOR", $sql['where'] );
@@ -787,8 +909,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	public function test_empty_compare() {
 		global $wpdb;
 
+<<<<<<< HEAD
 		$query = new WP_Meta_Query( array(
 			'relation' => 'OR',
+=======
+		$query = new WP_Meta_Query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'exclude',
 				'compare' => ''
@@ -798,7 +925,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				'compare' => '!=',
 				'value' => '1'
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
@@ -811,8 +944,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_false() {
+<<<<<<< HEAD
 		$q = new WP_Meta_Query( array(
 			'relation' => 'AND',
+=======
+		$q = new WP_Meta_Query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 				'value' => 'bar',
@@ -828,7 +966,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'value' => 'bar',
 				),
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'AND',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertFalse( $q->has_or_relation() );
 	}
@@ -837,8 +981,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_true_for_top_level_or() {
+<<<<<<< HEAD
 		$q = new WP_Meta_Query( array(
 			'relation' => 'OR',
+=======
+		$q = new WP_Meta_Query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 				'value' => 'bar',
@@ -854,7 +1003,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'value' => 'bar',
 				),
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'OR',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertTrue( $q->has_or_relation() );
 	}
@@ -863,8 +1018,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/32592
 	 */
 	public function test_has_or_relation_should_return_true_for_nested_or() {
+<<<<<<< HEAD
 		$q = new WP_Meta_Query( array(
 			'relation' => 'AND',
+=======
+		$q = new WP_Meta_Query(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array(
 				'key' => 'foo',
 				'value' => 'bar',
@@ -880,7 +1040,13 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'value' => 'bar',
 				),
 			),
+<<<<<<< HEAD
 		) );
+=======
+				'relation' => 'AND',
+			)
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertTrue( $q->has_or_relation() );
 	}

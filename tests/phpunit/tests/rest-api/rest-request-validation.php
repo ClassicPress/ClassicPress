@@ -22,13 +22,13 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (inclusive) and 10 (inclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (inclusive) and 10 (inclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 10, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 11, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (inclusive) and 10 (inclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (inclusive) and 10 (inclusive)', $ret->get_error_message() );
 	}
 
 	public function test_validate_within_min_max_range_min_exclusive() {
@@ -43,9 +43,9 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 3, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 9, $request, 'minmaxrange' );
@@ -53,7 +53,7 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 		$ret = rest_validate_request_arg( 10, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 11, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (inclusive)', $ret->get_error_message() );
 	}
 
 	public function test_validate_within_min_max_range_max_exclusive() {
@@ -68,7 +68,7 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 3, $request, 'minmaxrange' );
@@ -76,9 +76,9 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 		$ret = rest_validate_request_arg( 9, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 10, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 11, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (inclusive) and 10 (exclusive)', $ret->get_error_message() );
 	}
 
 	public function test_validate_within_min_max_range_both_exclusive() {
@@ -94,17 +94,17 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 3, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 9, $request, 'minmaxrange' );
 		$this->assertTrue( $ret );
 		$ret = rest_validate_request_arg( 10, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 11, $request, 'minmaxrange' );
-		$this->assertEquals( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
+		$this->assertSame( 'minmaxrange must be between 2 (exclusive) and 10 (exclusive)', $ret->get_error_message() );
 	}
 
 	public function test_validate_greater_than_min_inclusive() {
@@ -117,7 +117,7 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'greaterthanmin' );
-		$this->assertEquals( 'greaterthanmin must be greater than or equal to 2', $ret->get_error_message() );
+		$this->assertSame( 'greaterthanmin must be greater than or equal to 2', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'greaterthanmin' );
 		$this->assertTrue( $ret );
 	}
@@ -133,9 +133,9 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 1, $request, 'greaterthanmin' );
-		$this->assertEquals( 'greaterthanmin must be greater than 2', $ret->get_error_message() );
+		$this->assertSame( 'greaterthanmin must be greater than 2', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 2, $request, 'greaterthanmin' );
-		$this->assertEquals( 'greaterthanmin must be greater than 2', $ret->get_error_message() );
+		$this->assertSame( 'greaterthanmin must be greater than 2', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 3, $request, 'greaterthanmin' );
 		$this->assertTrue( $ret );
 	}
@@ -150,7 +150,7 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 11, $request, 'lessthanmax' );
-		$this->assertEquals( 'lessthanmax must be less than or equal to 10', $ret->get_error_message() );
+		$this->assertSame( 'lessthanmax must be less than or equal to 10', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 10, $request, 'lessthanmax' );
 		$this->assertTrue( $ret );
 	}
@@ -166,9 +166,9 @@ class WP_Test_REST_Request_Validation extends WP_Test_REST_TestCase {
 			),
 		) );
 		$ret = rest_validate_request_arg( 11, $request, 'lessthanmax' );
-		$this->assertEquals( 'lessthanmax must be less than 10', $ret->get_error_message() );
+		$this->assertSame( 'lessthanmax must be less than 10', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 10, $request, 'lessthanmax' );
-		$this->assertEquals( 'lessthanmax must be less than 10', $ret->get_error_message() );
+		$this->assertSame( 'lessthanmax must be less than 10', $ret->get_error_message() );
 		$ret = rest_validate_request_arg( 9, $request, 'lessthanmax' );
 		$this->assertTrue( $ret );
 	}

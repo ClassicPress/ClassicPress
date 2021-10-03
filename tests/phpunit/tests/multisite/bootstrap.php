@@ -72,7 +72,7 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 	 */
 	function test_get_network_by_path( $expected_key, $domain, $path, $message ) {
 		$network = get_network_by_path( $domain, $path );
-		$this->assertEquals( self::$network_ids[ $expected_key ], $network->id, $message );
+			$this->assertSame( self::$network_ids[ $expected_key ], $network->id, $message );
 	}
 
 	public function data_get_network_by_path() {
@@ -108,7 +108,7 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 		remove_filter( 'network_by_path_segments_count', '__return_zero' );
 
-		$this->assertEquals( self::$network_ids[ $expected_key ], $network->id, $message );
+			$this->assertSame( self::$network_ids[ $expected_key ], $network->id, $message );
 	}
 
 	public function data_get_network_by_path_with_zero_path_segments() {
@@ -133,7 +133,11 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 		$network = get_network_by_path( 'wordpress.org', '/one/b/' );
 		remove_filter( 'network_by_path_segments_count', array( $this, 'filter_network_path_segments' ) );
 
+<<<<<<< HEAD
 		$this->assertEquals( self::$network_ids[ 'wordpress.org/one/' ], $network->id );
+=======
+			$this->assertSame( self::$network_ids['wordpress.org/one/'], $network->id );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function filter_network_path_segments() {

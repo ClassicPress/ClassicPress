@@ -46,9 +46,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	function filter_item_types( $items ) {
 		$items[] = array(
 			'title' => 'Custom',
+			'type_label' => 'Custom Type',
 			'type' => 'custom_type',
 			'object' => 'custom_object',
-			'type_label' => 'Custom Type',
 		);
 
 		return $items;
@@ -86,20 +86,20 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		$this->assertInstanceOf( 'WP_Customize_Manager', $menus->manager );
 
-		$this->assertEquals( 10, add_filter( 'customize_refresh_nonces', array( $menus, 'filter_nonces' ) ) );
-		$this->assertEquals( 10, add_action( 'wp_ajax_load-available-menu-items-customizer', array( $menus, 'ajax_load_available_items' ) ) );
-		$this->assertEquals( 10, add_action( 'wp_ajax_search-available-menu-items-customizer', array( $menus, 'ajax_search_available_items' ) ) );
-		$this->assertEquals( 10, add_action( 'wp_ajax_customize-nav-menus-insert-auto-draft', array( $menus, 'ajax_insert_auto_draft_post' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_controls_enqueue_scripts', array( $menus, 'enqueue_scripts' ) ) );
-		$this->assertEquals( 11, add_action( 'customize_register', array( $menus, 'customize_register' ) ) );
-		$this->assertEquals( 10, add_filter( 'customize_dynamic_setting_args', array( $menus, 'filter_dynamic_setting_args' ) ) );
-		$this->assertEquals( 10, add_filter( 'customize_dynamic_setting_class', array( $menus, 'filter_dynamic_setting_class' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_controls_print_footer_scripts', array( $menus, 'print_templates' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_controls_print_footer_scripts', array( $menus, 'available_items_template' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_preview_init', array( $menus, 'customize_preview_init' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_preview_init', array( $menus, 'make_auto_draft_status_previewable' ) ) );
-		$this->assertEquals( 10, add_action( 'customize_save_nav_menus_created_posts', array( $menus, 'save_nav_menus_created_posts' ) ) );
-		$this->assertEquals( 10, add_filter( 'customize_dynamic_partial_args', array( $menus, 'customize_dynamic_partial_args' ) ) );
+		$this->assertTrue( add_filter( 'customize_refresh_nonces', array( $menus, 'filter_nonces' ) ) );
+		$this->assertTrue( add_action( 'wp_ajax_load-available-menu-items-customizer', array( $menus, 'ajax_load_available_items' ) ) );
+		$this->assertTrue( add_action( 'wp_ajax_search-available-menu-items-customizer', array( $menus, 'ajax_search_available_items' ) ) );
+		$this->assertTrue( add_action( 'wp_ajax_customize-nav-menus-insert-auto-draft', array( $menus, 'ajax_insert_auto_draft_post' ) ) );
+		$this->assertTrue( add_action( 'customize_controls_enqueue_scripts', array( $menus, 'enqueue_scripts' ) ) );
+		$this->assertTrue( add_action( 'customize_register', array( $menus, 'customize_register' ) ) );
+		$this->assertTrue( add_filter( 'customize_dynamic_setting_args', array( $menus, 'filter_dynamic_setting_args' ) ) );
+		$this->assertTrue( add_filter( 'customize_dynamic_setting_class', array( $menus, 'filter_dynamic_setting_class' ) ) );
+		$this->assertTrue( add_action( 'customize_controls_print_footer_scripts', array( $menus, 'print_templates' ) ) );
+		$this->assertTrue( add_action( 'customize_controls_print_footer_scripts', array( $menus, 'available_items_template' ) ) );
+		$this->assertTrue( add_action( 'customize_preview_init', array( $menus, 'customize_preview_init' ) ) );
+		$this->assertTrue( add_action( 'customize_preview_init', array( $menus, 'make_auto_draft_status_previewable' ) ) );
+		$this->assertTrue( add_action( 'customize_save_nav_menus_created_posts', array( $menus, 'save_nav_menus_created_posts' ) ) );
+		$this->assertTrue( add_filter( 'customize_dynamic_partial_args', array( $menus, 'customize_dynamic_partial_args' ) ) );
 	}
 
 	/**
@@ -113,12 +113,12 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		// Invalid post type $obj_name.
 		$items = $menus->load_available_items_query( 'post_type', 'invalid' );
 		$this->assertInstanceOf( 'WP_Error', $items );
-		$this->assertEquals( 'nav_menus_invalid_post_type', $items->get_error_code() );
+		$this->assertSame( 'nav_menus_invalid_post_type', $items->get_error_code() );
 
 		// Invalid taxonomy $obj_name.
 		$items = $menus->load_available_items_query( 'taxonomy', 'invalid' );
 		$this->assertInstanceOf( 'WP_Error', $items );
-		$this->assertEquals( 'invalid_taxonomy', $items->get_error_code() );
+		$this->assertSame( 'invalid_taxonomy', $items->get_error_code() );
 	}
 
 	/**
@@ -306,8 +306,18 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		// Test empty results.
 		$expected = array();
+<<<<<<< HEAD
 		$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => 'This Does NOT Exist' ) );
 		$this->assertEquals( $expected, $results );
+=======
+		$results  = $menus->search_available_items_query(
+			array(
+				'pagenum' => 1,
+				's'       => 'This Does NOT Exist',
+			)
+		);
+		$this->assertSame( $expected, $results );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Test posts.
 		foreach ( $post_ids as $post_id ) {
@@ -323,8 +333,18 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			wp_set_object_terms( $post_id, $term_ids, 'category' );
 			$search = $post_id === $post_ids[0] ? 'test & search' : 'other title';
 			$s = sanitize_text_field( wp_unslash( $search ) );
+<<<<<<< HEAD
 			$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => $s ) );
 			$this->assertEquals( $expected, $results[0] );
+=======
+			$results = $menus->search_available_items_query(
+				array(
+					'pagenum' => 1,
+					's'       => $s,
+				)
+			);
+			$this->assertSame( $expected, $results[0] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		// Test terms.
@@ -340,8 +360,18 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'url'        => get_term_link( intval( $term_id ), 'category' ),
 			);
 			$s = sanitize_text_field( wp_unslash( $term->name ) );
+<<<<<<< HEAD
 			$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => $s ) );
 			$this->assertEquals( $expected, $results[0] );
+=======
+			$results  = $menus->search_available_items_query(
+				array(
+					'pagenum' => 1,
+					's'       => $s,
+				)
+			);
+			$this->assertSame( $expected, $results[0] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		// Test filtered results.
@@ -349,8 +379,18 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertEquals( 1, count( $results ) );
 		$count = $this->filter_count_customize_nav_menu_searched_items;
 		add_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10, 2 );
+<<<<<<< HEAD
 		$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => 'cat' ) );
 		$this->assertEquals( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
+=======
+		$results = $menus->search_available_items_query(
+			array(
+				'pagenum' => 1,
+				's'       => 'cat',
+			)
+		);
+		$this->assertSame( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertInternalType( 'array', $results );
 		$this->assertEquals( 2, count( $results ) );
 		remove_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10 );
@@ -364,8 +404,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 		$this->assertCount( 1, $results );
-		$this->assertEquals( 'home', $results[0]['id'] );
-		$this->assertEquals( 'custom', $results[0]['type'] );
+		$this->assertSame( 'home', $results[0]['id'] );
+		$this->assertSame( 'custom', $results[0]['type'] );
 	}
 
 	/**
@@ -432,11 +472,11 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$expected = array( 'type' => 'nav_menu_item' );
 		$results = $menus->filter_dynamic_setting_args( $this->wp_customize, 'nav_menu_item[123]' );
-		$this->assertEquals( $expected['type'], $results['type'] );
+		$this->assertSame( $expected['type'], $results['type'] );
 
 		$expected = array( 'type' => 'nav_menu' );
 		$results = $menus->filter_dynamic_setting_args( $this->wp_customize, 'nav_menu[123]' );
-		$this->assertEquals( $expected['type'], $results['type'] );
+		$this->assertSame( $expected['type'], $results['type'] );
 	}
 
 	/**
@@ -450,11 +490,11 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$expected = 'WP_Customize_Nav_Menu_Item_Setting';
 		$results = $menus->filter_dynamic_setting_class( 'WP_Customize_Setting', 'nav_menu_item[123]', array( 'type' => 'nav_menu_item' ) );
-		$this->assertEquals( $expected, $results );
+		$this->assertSame( $expected, $results );
 
 		$expected = 'WP_Customize_Nav_Menu_Setting';
 		$results = $menus->filter_dynamic_setting_class( 'WP_Customize_Setting', 'nav_menu[123]', array( 'type' => 'nav_menu' ) );
-		$this->assertEquals( $expected, $results );
+		$this->assertSame( $expected, $results );
 	}
 
 	/**
@@ -475,14 +515,14 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		) );
 		do_action( 'customize_register', $this->wp_customize );
 		$this->assertInstanceOf( 'WP_Customize_Nav_Menu_Item_Setting', $this->wp_customize->get_setting( "nav_menu_item[$item_id]" ) );
-		$this->assertEquals( 'Primary', $this->wp_customize->get_section( "nav_menu[$menu_id]" )->title );
-		$this->assertEquals( 'Hello World', $this->wp_customize->get_control( "nav_menu_item[$item_id]" )->label );
+		$this->assertSame( 'Primary', $this->wp_customize->get_section( "nav_menu[$menu_id]" )->title );
+		$this->assertSame( 'Hello World', $this->wp_customize->get_control( "nav_menu_item[$item_id]" )->label );
 
 		$nav_menus_created_posts_setting = $this->wp_customize->get_setting( 'nav_menus_created_posts' );
 		$this->assertInstanceOf( 'WP_Customize_Filter_Setting', $nav_menus_created_posts_setting );
-		$this->assertEquals( 'postMessage', $nav_menus_created_posts_setting->transport );
-		$this->assertEquals( array(), $nav_menus_created_posts_setting->default );
-		$this->assertEquals( array( $this->wp_customize->nav_menus, 'sanitize_nav_menus_created_posts' ), $nav_menus_created_posts_setting->sanitize_callback );
+		$this->assertSame( 'postMessage', $nav_menus_created_posts_setting->transport );
+		$this->assertSame( array(), $nav_menus_created_posts_setting->default );
+		$this->assertSame( array( $this->wp_customize->nav_menus, 'sanitize_nav_menus_created_posts' ), $nav_menus_created_posts_setting->sanitize_callback );
 	}
 
 	/**
@@ -494,14 +534,14 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
-		$this->assertEquals( 2, $menus->intval_base10( 2 ) );
-		$this->assertEquals( 4, $menus->intval_base10( 4.1 ) );
-		$this->assertEquals( 4, $menus->intval_base10( '4' ) );
-		$this->assertEquals( 4, $menus->intval_base10( '04' ) );
-		$this->assertEquals( 42, $menus->intval_base10( +42 ) );
-		$this->assertEquals( -42, $menus->intval_base10( -42 ) );
-		$this->assertEquals( 26, $menus->intval_base10( 0x1A ) );
-		$this->assertEquals( 0, $menus->intval_base10( array() ) );
+		$this->assertSame( 2, $menus->intval_base10( 2 ) );
+		$this->assertSame( 4, $menus->intval_base10( 4.1 ) );
+		$this->assertSame( 4, $menus->intval_base10( '4' ) );
+		$this->assertSame( 4, $menus->intval_base10( '04' ) );
+		$this->assertSame( 42, $menus->intval_base10( +42 ) );
+		$this->assertSame( -42, $menus->intval_base10( -42 ) );
+		$this->assertSame( 26, $menus->intval_base10( 0x1A ) );
+		$this->assertSame( 0, $menus->intval_base10( array() ) );
 	}
 
 	/**
@@ -514,6 +554,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		$expected = array(
+<<<<<<< HEAD
 			array( 'title' => 'Posts', 'type' => 'post_type', 'object' => 'post', 'type_label' => __( 'Post' ) ),
 			array( 'title' => 'Pages', 'type' => 'post_type', 'object' => 'page', 'type_label' => __( 'Page' ) ),
 			array( 'title' => 'Categories', 'type' => 'taxonomy', 'object' => 'category', 'type_label' => __( 'Category' ) ),
@@ -522,19 +563,72 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		if ( current_theme_supports( 'post-formats' ) ) {
 			$expected[] = array( 'title' => 'Format', 'type' => 'taxonomy', 'object' => 'post_format', 'type_label' => __( 'Format' ) );
+=======
+			array(
+				'title'      => 'Posts',
+				'type_label' => __( 'Post' ),
+				'type'       => 'post_type',
+				'object'     => 'post',
+			),
+			array(
+				'title'      => 'Pages',
+				'type_label' => __( 'Page' ),
+				'type'       => 'post_type',
+				'object'     => 'page',
+			),
+			array(
+				'title'      => 'Categories',
+				'type_label' => __( 'Category' ),
+				'type'       => 'taxonomy',
+				'object'     => 'category',
+			),
+			array(
+				'title'      => 'Tags',
+				'type_label' => __( 'Tag' ),
+				'type'       => 'taxonomy',
+				'object'     => 'post_tag',
+			),
+		);
+
+		if ( current_theme_supports( 'post-formats' ) ) {
+			$expected[] = array(
+				'title'      => 'Format',
+				'type_label' => __( 'Format' ),
+				'type'       => 'taxonomy',
+				'object'     => 'post_format',
+			);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
-		$this->assertEquals( $expected, $menus->available_item_types() );
+		$this->assertSame( $expected, $menus->available_item_types() );
 
 		register_taxonomy( 'wptests_tax', array( 'post' ), array( 'labels' => array( 'name' => 'Foo' ) ) );
+<<<<<<< HEAD
 		$expected[] = array( 'title' => 'Foo', 'type' => 'taxonomy', 'object' => 'wptests_tax', 'type_label' => 'Foo' );
+=======
+		$expected[] = array(
+			'title'      => 'Foo',
+			'type_label' => 'Foo',
+			'type'       => 'taxonomy',
+			'object'     => 'wptests_tax',
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$this->assertEquals( $expected, $menus->available_item_types() );
+		$this->assertSame( $expected, $menus->available_item_types() );
 
+<<<<<<< HEAD
 		$expected[] = array( 'title' => 'Custom', 'type' => 'custom_type', 'object' => 'custom_object', 'type_label' => 'Custom Type' );
+=======
+		$expected[] = array(
+			'title'      => 'Custom',
+			'type_label' => 'Custom Type',
+			'type'       => 'custom_type',
+			'object'     => 'custom_object',
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'filter_item_types' ) );
-		$this->assertEquals( $expected, $menus->available_item_types() );
+		$this->assertSame( $expected, $menus->available_item_types() );
 		remove_filter( 'customize_nav_menu_available_item_types', array( $this, 'filter_item_types' ) );
 
 	}
@@ -549,37 +643,37 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$r = $menus->insert_auto_draft_post( array() );
 		$this->assertInstanceOf( 'WP_Error', $r );
-		$this->assertEquals( 'unknown_post_type', $r->get_error_code() );
+		$this->assertSame( 'unknown_post_type', $r->get_error_code() );
 
 		// Non-existent post types allowed as of https://core.trac.wordpress.org/ticket/39610.
 		$r = $menus->insert_auto_draft_post( array( 'post_title' => 'Non-existent', 'post_type' => 'nonexistent' ) );
 		$this->assertInstanceOf( 'WP_Post', $r );
-		$this->assertEquals( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
+		$this->assertSame( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
 
 		$r = $menus->insert_auto_draft_post( array( 'post_type' => 'post' ) );
 		$this->assertInstanceOf( 'WP_Error', $r );
-		$this->assertEquals( 'empty_title', $r->get_error_code() );
+		$this->assertSame( 'empty_title', $r->get_error_code() );
 
 		$r = $menus->insert_auto_draft_post( array( 'post_status' => 'publish', 'post_title' => 'Bad', 'post_type' => 'post' ) );
 		$this->assertInstanceOf( 'WP_Error', $r );
-		$this->assertEquals( 'status_forbidden', $r->get_error_code() );
+		$this->assertSame( 'status_forbidden', $r->get_error_code() );
 
 		$r = $menus->insert_auto_draft_post( array( 'post_title' => 'Hello World', 'post_type' => 'post' ) );
 		$this->assertInstanceOf( 'WP_Post', $r );
-		$this->assertEquals( 'Hello World', $r->post_title );
-		$this->assertEquals( '', $r->post_name );
-		$this->assertEquals( 'hello-world', get_post_meta( $r->ID, '_customize_draft_post_name', true ) );
-		$this->assertEquals( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
-		$this->assertEquals( 'post', $r->post_type );
+		$this->assertSame( 'Hello World', $r->post_title );
+		$this->assertSame( '', $r->post_name );
+		$this->assertSame( 'hello-world', get_post_meta( $r->ID, '_customize_draft_post_name', true ) );
+		$this->assertSame( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
+		$this->assertSame( 'post', $r->post_type );
 
 		$r = $menus->insert_auto_draft_post( array( 'post_title' => 'Hello World', 'post_type' => 'post', 'post_name' => 'greetings-world', 'post_content' => 'Hi World' ) );
 		$this->assertInstanceOf( 'WP_Post', $r );
-		$this->assertEquals( 'Hello World', $r->post_title );
-		$this->assertEquals( 'post', $r->post_type );
-		$this->assertEquals( '', $r->post_name );
-		$this->assertEquals( 'greetings-world', get_post_meta( $r->ID, '_customize_draft_post_name', true ) );
-		$this->assertEquals( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
-		$this->assertEquals( 'Hi World', $r->post_content );
+		$this->assertSame( 'Hello World', $r->post_title );
+		$this->assertSame( 'post', $r->post_type );
+		$this->assertSame( '', $r->post_name );
+		$this->assertSame( 'greetings-world', get_post_meta( $r->ID, '_customize_draft_post_name', true ) );
+		$this->assertSame( $this->wp_customize->changeset_uuid(), get_post_meta( $r->ID, '_customize_changeset_uuid', true ) );
+		$this->assertSame( 'Hi World', $r->post_content );
 	}
 
 	/**
@@ -663,14 +757,14 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$args = apply_filters( 'customize_dynamic_partial_args', false, 'nav_menu_instance[68b329da9893e34099c7d8ad5cb9c940]' );
 		$this->assertInternalType( 'array', $args );
-		$this->assertEquals( 'nav_menu_instance', $args['type'] );
-		$this->assertEquals( array( $this->wp_customize->nav_menus, 'render_nav_menu_partial' ), $args['render_callback'] );
+		$this->assertSame( 'nav_menu_instance', $args['type'] );
+		$this->assertSame( array( $this->wp_customize->nav_menus, 'render_nav_menu_partial' ), $args['render_callback'] );
 		$this->assertTrue( $args['container_inclusive'] );
 
 		$args = apply_filters( 'customize_dynamic_partial_args', array( 'fallback_refresh' => false ), 'nav_menu_instance[4099c7d8ad5cb9c94068b329da9893e3]' );
 		$this->assertInternalType( 'array', $args );
-		$this->assertEquals( 'nav_menu_instance', $args['type'] );
-		$this->assertEquals( array( $this->wp_customize->nav_menus, 'render_nav_menu_partial' ), $args['render_callback'] );
+		$this->assertSame( 'nav_menu_instance', $args['type'] );
+		$this->assertSame( array( $this->wp_customize->nav_menus, 'render_nav_menu_partial' ), $args['render_callback'] );
 		$this->assertTrue( $args['container_inclusive'] );
 		$this->assertFalse( $args['fallback_refresh'] );
 	}
@@ -685,9 +779,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		$menus->customize_preview_init();
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $menus, 'customize_preview_enqueue_deps' ) ) );
-		$this->assertEquals( 1000, has_filter( 'wp_nav_menu_args', array( $menus, 'filter_wp_nav_menu_args' ) ) );
-		$this->assertEquals( 10, has_filter( 'wp_nav_menu', array( $menus, 'filter_wp_nav_menu' ) ) );
+		$this->assertSame( 10, has_action( 'wp_enqueue_scripts', array( $menus, 'customize_preview_enqueue_deps' ) ) );
+		$this->assertSame( 1000, has_filter( 'wp_nav_menu_args', array( $menus, 'filter_wp_nav_menu_args' ) ) );
+		$this->assertSame( 10, has_filter( 'wp_nav_menu', array( $menus, 'filter_wp_nav_menu' ) ) );
 	}
 
 	/**
@@ -755,15 +849,15 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		wp_set_current_user( $contributor_user_id );
 		$sanitized = $menus->sanitize_nav_menus_created_posts( $value );
-		$this->assertEquals( array(), $sanitized );
+		$this->assertSame( array(), $sanitized );
 
 		wp_set_current_user( $author_user_id );
 		$sanitized = $menus->sanitize_nav_menus_created_posts( $value );
-		$this->assertEquals( array( $author_post_id ), $sanitized );
+		$this->assertSame( array( $author_post_id ), $sanitized );
 
 		wp_set_current_user( $administrator_user_id );
 		$sanitized = $menus->sanitize_nav_menus_created_posts( $value );
-		$this->assertEquals( array( $contributor_post_id, $author_post_id, $administrator_post_id, $draft_post_id ), $sanitized );
+		$this->assertSame( array( $contributor_post_id, $author_post_id, $administrator_post_id, $draft_post_id ), $sanitized );
 	}
 
 	/**
@@ -832,13 +926,13 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->wp_customize->set_post_value( $setting_id, array_merge( $post_ids, array( $pre_published_post_id ) ) );
 		$setting = $this->wp_customize->get_setting( $setting_id );
 		$this->assertInstanceOf( 'WP_Customize_Filter_Setting', $setting );
-		$this->assertEquals( array( $menus, 'sanitize_nav_menus_created_posts' ), $setting->sanitize_callback );
-		$this->assertEquals( $drafted_post_ids, $setting->post_value() );
+		$this->assertSame( array( $menus, 'sanitize_nav_menus_created_posts' ), $setting->sanitize_callback );
+		$this->assertSame( $drafted_post_ids, $setting->post_value() );
 		$this->assertArrayNotHasKey( $private_post_id, $post_ids );
 		$this->assertArrayNotHasKey( $trashed_post_id, $post_ids );
 
-		$this->assertEquals( 'auto-draft', get_post_status( $drafted_post_ids[0] ) );
-		$this->assertEquals( 'draft', get_post_status( $drafted_post_ids[1] ) );
+		$this->assertSame( 'auto-draft', get_post_status( $drafted_post_ids[0] ) );
+		$this->assertSame( 'draft', get_post_status( $drafted_post_ids[1] ) );
 		foreach ( $drafted_post_ids as $post_id ) {
 			$this->assertEmpty( get_post( $post_id )->post_name );
 			$this->assertNotEmpty( get_post_meta( $post_id, '_customize_draft_post_name', true ) );
@@ -846,15 +940,15 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		$save_action_count = did_action( 'customize_save_nav_menus_created_posts' );
 		$setting->save();
-		$this->assertEquals( $save_action_count + 1, did_action( 'customize_save_nav_menus_created_posts' ) );
+		$this->assertSame( $save_action_count + 1, did_action( 'customize_save_nav_menus_created_posts' ) );
 		foreach ( $drafted_post_ids as $post_id ) {
-			$this->assertEquals( 'publish', get_post_status( $post_id ) );
+			$this->assertSame( 'publish', get_post_status( $post_id ) );
 			$this->assertRegExp( '/^auto-draft-\d+$/', get_post( $post_id )->post_name );
 			$this->assertEmpty( get_post_meta( $post_id, '_customize_draft_post_name', true ) );
 		}
 
-		$this->assertEquals( 'private', get_post_status( $private_post_id ) );
-		$this->assertEquals( 'trash', get_post_status( $trashed_post_id ) );
+		$this->assertSame( 'private', get_post_status( $private_post_id ) );
+		$this->assertSame( 'trash', get_post_status( $trashed_post_id ) );
 
 		// Ensure that unique slugs were assigned.
 		$posts = array_map( 'get_post', $drafted_post_ids );
@@ -890,7 +984,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		) );
 		$this->assertFalse( $results['can_partial_refresh'] );
 		$this->assertArrayHasKey( 'customize_preview_nav_menus_args', $results );
-		$this->assertEquals( 'wp_page_menu', $results['fallback_cb'] );
+		$this->assertSame( 'wp_page_menu', $results['fallback_cb'] );
 
 		$nav_menu_term = get_term( wp_create_nav_menu( 'Bar' ) );
 		$results = $menus->filter_wp_nav_menu_args( array(
@@ -902,7 +996,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		) );
 		$this->assertTrue( $results['can_partial_refresh'] );
 		$this->assertArrayHasKey( 'customize_preview_nav_menus_args', $results );
-		$this->assertEquals( $nav_menu_term->term_id, $results['customize_preview_nav_menus_args']['menu'] );
+		$this->assertSame( $nav_menu_term->term_id, $results['customize_preview_nav_menus_args']['menu'] );
 
 		$results = $menus->filter_wp_nav_menu_args( array(
 			'echo'            => true,
@@ -968,7 +1062,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertContains( ' data-customize-partial-type="nav_menu_instance"', $result );
 		$this->assertTrue( (bool) preg_match( '/data-customize-partial-placement-context="(.+?)"/', $result, $matches ) );
 		$context = json_decode( html_entity_decode( $matches[1] ), true );
-		$this->assertEquals( $original_args, wp_array_slice_assoc( $context, array_keys( $original_args ) ) ); // Because assertArraySubset is not available in PHP 5.2.
+		$this->assertSame( $original_args, wp_array_slice_assoc( $context, array_keys( $original_args ) ) ); // Because assertArraySubset is not available in PHP 5.2.
 		$this->assertTrue( $context['can_partial_refresh'] );
 	}
 
@@ -1028,7 +1122,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$partials = $this->wp_customize->selective_refresh->add_dynamic_partials( array( $partial_id ) );
 		$this->assertNotEmpty( $partials );
 		$partial = array_shift( $partials );
-		$this->assertEquals( $partial_id, $partial->id );
+		$this->assertSame( $partial_id, $partial->id );
 
 		$missing_args_hmac_args = array_merge(
 			$nav_menu_args['customize_preview_nav_menus_args'],

@@ -20,11 +20,26 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 
 		// set the initial terms
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
+<<<<<<< HEAD
 		$this->assertEquals( 3, count($tt_1) );
 
 		// make sure they're correct
 		$terms = wp_get_object_terms($post_id, $this->taxonomy, array('fields' => 'slugs', 'orderby' => 'term_id'));
 		$this->assertEquals( $terms_1_slugs, $terms );
+=======
+		$this->assertSame( 3, count( $tt_1 ) );
+
+		// Make sure they're correct.
+		$terms = wp_get_object_terms(
+			$post_id,
+			$this->taxonomy,
+			array(
+				'fields'  => 'slugs',
+				'orderby' => 'term_id',
+			)
+		);
+		$this->assertSame( $terms_1_slugs, $terms );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -40,14 +55,14 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 
 		$terms = wp_get_object_terms( array( $post_id1, $post_id2 ), 'category' );
 		$this->assertCount( 2, $terms );
-		$this->assertEquals( array( $cat_id, $cat_id2 ), wp_list_pluck( $terms, 'term_id' ) );
+		$this->assertSame( array( $cat_id, $cat_id2 ), wp_list_pluck( $terms, 'term_id' ) );
 
 		$terms2 = wp_get_object_terms( array( $post_id1, $post_id2 ), 'category', array(
 			'fields' => 'all_with_object_id'
 		) );
 
 		$this->assertCount( 3, $terms2 );
-		$this->assertEquals( array( $cat_id, $cat_id, $cat_id2 ), wp_list_pluck( $terms2, 'term_id' ) );
+		$this->assertSame( array( $cat_id, $cat_id, $cat_id2 ), wp_list_pluck( $terms2, 'term_id' ) );
 	}
 
 	/**
@@ -127,7 +142,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	public function test_orderby_count() {
@@ -155,7 +170,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t2, $t1, $t3 ), $found );
+		$this->assertSame( array( $t2, $t1, $t3 ), $found );
 	}
 
 	public function test_orderby_slug() {
@@ -181,7 +196,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	public function test_orderby_term_group() {
@@ -210,7 +225,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	public function test_orderby_term_order() {
@@ -243,7 +258,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	/**
@@ -278,7 +293,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	/**
@@ -309,7 +324,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	/**
@@ -345,7 +360,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	public function test_order_desc() {
@@ -372,7 +387,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t2, $t3, $t1 ), $found );
+		$this->assertSame( array( $t2, $t3, $t1 ), $found );
 	}
 
 	/**
@@ -407,7 +422,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $t3 ), $found );
+		$this->assertSame( array( $t3 ), $found );
 	}
 
 	/**
@@ -730,7 +745,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 
 		$found = wp_get_object_terms( $p, $this->taxonomy, 'orderby=name&fields=ids' );
 
-		$this->assertEquals( array( $t1, $t3, $t2 ), $found );
+		$this->assertSame( array( $t1, $t3, $t2 ), $found );
 	}
 
 	/**
@@ -749,11 +764,11 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 
 		// Test directly
 		$get_object_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
-		$this->assertEquals( $terms, $get_object_terms );
+		$this->assertSame( $terms, $get_object_terms );
 
 		// Test metabox taxonomy (admin advanced edit)
 		$terms_to_edit = get_terms_to_edit( $post_id, $taxonomy );
-		$this->assertEquals( implode( ',', $terms ), $terms_to_edit );
+		$this->assertSame( implode( ',', $terms ), $terms_to_edit );
 	}
 
 	function filter_wp_get_object_terms_args ( $args, $object_ids, $taxonomies ) {

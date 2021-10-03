@@ -286,7 +286,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	/**
@@ -303,7 +303,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	/**
@@ -356,7 +356,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	/**
@@ -373,7 +373,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	/**
@@ -425,7 +425,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	/**
@@ -441,7 +441,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c1 ), $found );
+		$this->assertSame( array( $c1 ), $found );
 	}
 
 	public function test_status_custom() {
@@ -455,7 +455,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $c2 ), $found );
+		$this->assertSame( array( $c2 ), $found );
 	}
 
 	public function test_status_all() {
@@ -578,40 +578,63 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 
 		$post_id = self::factory()->post->create();
 		self::factory()->comment->create_post_comments( $post_id, $limit );
+
 		$comments = get_comments( array( 'post_id' => $post_id ) );
-		$this->assertEquals( $limit, count( $comments ) );
+		$this->assertSame( $limit, count( $comments ) );
 		foreach ( $comments as $comment ) {
 			$this->assertEquals( $post_id, $comment->comment_post_ID );
 		}
 
 		$post_id2 = self::factory()->post->create();
 		self::factory()->comment->create_post_comments( $post_id2, $limit );
+
 		$comments = get_comments( array( 'post_id' => $post_id2 ) );
-		$this->assertEquals( $limit, count( $comments ) );
+		$this->assertSame( $limit, count( $comments ) );
 		foreach ( $comments as $comment ) {
 			$this->assertEquals( $post_id2, $comment->comment_post_ID );
 		}
 
 		$post_id3 = self::factory()->post->create();
 		self::factory()->comment->create_post_comments( $post_id3, $limit, array( 'comment_approved' => '0' ) );
+
 		$comments = get_comments( array( 'post_id' => $post_id3 ) );
-		$this->assertEquals( $limit, count( $comments ) );
+		$this->assertSame( $limit, count( $comments ) );
 		foreach ( $comments as $comment ) {
 			$this->assertEquals( $post_id3, $comment->comment_post_ID );
 		}
 
+<<<<<<< HEAD
 		$comments = get_comments( array( 'post_id' => $post_id3, 'status' => 'hold' ) );
 		$this->assertEquals( $limit, count( $comments ) );
+=======
+		$comments = get_comments(
+			array(
+				'post_id' => $post_id3,
+				'status'  => 'hold',
+			)
+		);
+		$this->assertSame( $limit, count( $comments ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $comments as $comment ) {
 			$this->assertEquals( $post_id3, $comment->comment_post_ID );
 		}
 
+<<<<<<< HEAD
 		$comments = get_comments( array( 'post_id' => $post_id3, 'status' => 'approve' ) );
 		$this->assertEquals( 0, count( $comments ) );
+=======
+		$comments = get_comments(
+			array(
+				'post_id' => $post_id3,
+				'status'  => 'approve',
+			)
+		);
+		$this->assertSame( 0, count( $comments ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		self::factory()->comment->create_post_comments( $post_id3, $limit, array( 'comment_approved' => '1' ) );
 		$comments = get_comments( array( 'post_id' => $post_id3 ) );
-		$this->assertEquals( $limit * 2, count( $comments ) );
+		$this->assertSame( $limit * 2, count( $comments ) );
 		foreach ( $comments as $comment ) {
 			$this->assertEquals( $post_id3, $comment->comment_post_ID );
 		}
@@ -632,6 +655,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		add_comment_meta( $comment_id2, 'key2', 'value2', true );
 		add_comment_meta( $comment_id3, 'key3', 'value3', true );
 
+<<<<<<< HEAD
 		$comments = get_comments( array( 'meta_key' => 'key', 'orderby' => array( 'key' ) ) );
 		$this->assertEquals( 2, count( $comments ) );
 		$this->assertEquals( $comment_id2, $comments[0]->comment_ID );
@@ -649,6 +673,47 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 
 		$comments = get_comments( array( 'meta_key' => 'key', 'orderby' => array( 'meta_value' ), 'order' => 'ASC' ) );
 		$this->assertEquals( 2, count( $comments ) );
+=======
+		$comments = get_comments(
+			array(
+				'meta_key' => 'key',
+				'orderby'  => array( 'key' ),
+			)
+		);
+		$this->assertSame( 2, count( $comments ) );
+		$this->assertEquals( $comment_id2, $comments[0]->comment_ID );
+		$this->assertEquals( $comment_id, $comments[1]->comment_ID );
+
+		$comments = get_comments(
+			array(
+				'meta_key' => 'key',
+				'orderby'  => array( 'meta_value' ),
+			)
+		);
+		$this->assertSame( 2, count( $comments ) );
+		$this->assertEquals( $comment_id2, $comments[0]->comment_ID );
+		$this->assertEquals( $comment_id, $comments[1]->comment_ID );
+
+		$comments = get_comments(
+			array(
+				'meta_key' => 'key',
+				'orderby'  => array( 'key' ),
+				'order'    => 'ASC',
+			)
+		);
+		$this->assertSame( 2, count( $comments ) );
+		$this->assertEquals( $comment_id, $comments[0]->comment_ID );
+		$this->assertEquals( $comment_id2, $comments[1]->comment_ID );
+
+		$comments = get_comments(
+			array(
+				'meta_key' => 'key',
+				'orderby'  => array( 'meta_value' ),
+				'order'    => 'ASC',
+			)
+		);
+		$this->assertSame( 2, count( $comments ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertEquals( $comment_id, $comments[0]->comment_ID );
 		$this->assertEquals( $comment_id2, $comments[1]->comment_ID );
 
@@ -658,6 +723,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$comments = get_comments( array( 'meta_value' => 'value3', 'orderby' => array( 'meta_value' ) ) );
 		$this->assertEquals( array( $comment_id3, $comment_id ), wp_list_pluck( $comments, 'comment_ID' ) );
 
+<<<<<<< HEAD
 		// value1 is present on two different keys for $comment_id yet we should get only one instance
 		// of that comment in the results
 		$comments = get_comments( array( 'meta_value' => 'value1', 'orderby' => array( 'key' ) ) );
@@ -665,6 +731,25 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 
 		$comments = get_comments( array( 'meta_value' => 'value1', 'orderby' => array( 'meta_value' ) ) );
 		$this->assertEquals( 1, count( $comments ) );
+=======
+		// 'value1' is present on two different keys for $comment_id,
+		// yet we should get only one instance of that comment in the results.
+		$comments = get_comments(
+			array(
+				'meta_value' => 'value1',
+				'orderby'    => array( 'key' ),
+			)
+		);
+		$this->assertSame( 1, count( $comments ) );
+
+		$comments = get_comments(
+			array(
+				'meta_value' => 'value1',
+				'orderby'    => array( 'meta_value' ),
+			)
+		);
+		$this->assertSame( 1, count( $comments ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -689,7 +774,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'order' => 'DESC',
 		) );
 
-		$this->assertEquals( array( $comments[1], $comments[2], $comments[0] ), $found );
+		$this->assertSame( array( $comments[1], $comments[2], $comments[0] ), $found );
 	}
 
 	/**
@@ -725,7 +810,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( array( $c3, $c1, $c2 ), $found );
+		$this->assertSame( array( $c3, $c1, $c2 ), $found );
 	}
 
 	/**
@@ -760,7 +845,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( array( $comments[2], $comments[0], $comments[1] ), $found );
+		$this->assertSame( array( $comments[2], $comments[0], $comments[1] ), $found );
 	}
 
 	/**
@@ -784,7 +869,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $comments[2] ), $q->get_comments() );
+		$this->assertSame( array( $comments[2] ), $q->get_comments() );
 	}
 
 	/**
@@ -808,7 +893,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $comments[0] ), $q->get_comments() );
+		$this->assertSame( array( $comments[0] ), $q->get_comments() );
 	}
 
 	/**
@@ -1536,7 +1621,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'count' => true,
 		) );
 
-		$this->assertEquals( 2, $found );
+		$this->assertSame( 2, $found );
 	}
 
 	/**
@@ -1560,7 +1645,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEquals( 2, $found );
+		$this->assertSame( 2, $found );
 	}
 
 	/**
@@ -2172,7 +2257,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'orderby' => 'comment__in'
 		) );
 
-		$this->assertEquals( array( $c2, $c3 ), $ids->comments );
+		$this->assertSame( array( $c2, $c3 ), $ids->comments );
 
 	}
 
@@ -2187,8 +2272,8 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'number' => 2,
 		) );
 
-		$this->assertEquals( 0, $q->found_comments );
-		$this->assertEquals( 0, $q->max_num_pages );
+		$this->assertSame( 0, $q->found_comments );
+		$this->assertSame( 0, $q->max_num_pages );
 	}
 
 	/**
@@ -2203,8 +2288,8 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'no_found_rows' => true,
 		) );
 
-		$this->assertEquals( 0, $q->found_comments );
-		$this->assertEquals( 0, $q->max_num_pages );
+		$this->assertSame( 0, $q->found_comments );
+		$this->assertSame( 0, $q->max_num_pages );
 	}
 
 	/**
@@ -2219,7 +2304,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'no_found_rows' => false,
 		) );
 
-		$this->assertEquals( 3, $q->found_comments );
+		$this->assertSame( 3, $q->found_comments );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -2276,7 +2361,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( array( $top_level_comments[0], $top_level_comments[1] ), $q->comments );
+		$this->assertSame( array( $top_level_comments[0], $top_level_comments[1] ), $q->comments );
 	}
 
 	/**
@@ -2975,8 +3060,14 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'number' => 3,
 			'order' => 'ASC',
 			'count' => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries + 1, $wpdb->num_queries );
+=======
+			)
+		);
+		$this->assertSame( $number_of_queries + 1, $wpdb->num_queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -3000,8 +3091,14 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'number' => 3,
 			'order' => 'ASC',
 			'count' => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+=======
+			)
+		);
+		$this->assertSame( $number_of_queries, $wpdb->num_queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -3025,7 +3122,7 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 			'order' => 'ASC',
 		) );
 
-		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+		$this->assertSame( $number_of_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -3162,4 +3259,38 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 
 		$this->assertEqualSets( $c1, $found );
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * @ticket 45800
+	 */
+	public function test_comments_pre_query_filter_should_bypass_database_query() {
+		global $wpdb;
+
+		add_filter( 'comments_pre_query', array( __CLASS__, 'filter_comments_pre_query' ), 10, 2 );
+
+		$num_queries = $wpdb->num_queries;
+
+		$q       = new WP_Comment_Query();
+		$results = $q->query( array() );
+
+		remove_filter( 'comments_pre_query', array( __CLASS__, 'filter_comments_pre_query' ), 10, 2 );
+
+		// Make sure no queries were executed.
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+
+		// We manually inserted a non-existing site and overrode the results with it.
+		$this->assertSame( array( 555 ), $results );
+
+		// Make sure manually setting total_users doesn't get overwritten.
+		$this->assertSame( 1, $q->found_comments );
+	}
+
+	public static function filter_comments_pre_query( $comments, $query ) {
+		$query->found_comments = 1;
+
+		return array( 555 );
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

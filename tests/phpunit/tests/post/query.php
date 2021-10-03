@@ -25,7 +25,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$this->assertCount( 1, $q->get( 'category__in' ) );
 
 		$this->assertNotEmpty( $posts );
-		$this->assertEquals( array( $post_id ), wp_list_pluck( $posts, 'ID' ) );
+		$this->assertSame( array( $post_id ), wp_list_pluck( $posts, 'ID' ) );
 
 		$posts2 = $q->query( array( 'category__and' => array( $term_id, $term_id2 ) ) );
 		$this->assertNotEmpty( $q->get( 'category__and' ) );
@@ -82,20 +82,34 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			'posts_per_page' => 3,
 		) );
 
+<<<<<<< HEAD
 		// Fourth post added in filter
 		$this->assertEquals( 4, count( $query->posts ) );
 		$this->assertEquals( 4, $query->post_count );
+=======
+		// Fourth post added in filter.
+		$this->assertSame( 4, count( $query->posts ) );
+		$this->assertSame( 4, $query->post_count );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		foreach ( $query->posts as $post ) {
 
 			// posts are WP_Post objects
 			$this->assertTrue( is_a( $post, 'WP_Post' ) );
 
+<<<<<<< HEAD
 			// filters are raw
 			$this->assertEquals( 'raw', $post->filter );
 
 			// custom data added in the_posts filter is preserved
 			$this->assertEquals( array( $post->ID, 'custom data' ), $post->custom_data );
+=======
+			// Filters are raw.
+			$this->assertSame( 'raw', $post->filter );
+
+			// Custom data added in the_posts filter is preserved.
+			$this->assertSame( array( $post->ID, 'custom data' ), $post->custom_data );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		remove_filter( 'the_posts', array( $this, 'the_posts_filter' ) );
@@ -466,7 +480,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -487,7 +501,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			'fields' => 'id=>parent',
 		) );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -509,7 +523,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		) );
 		remove_filter( 'split_the_query', '__return_true' );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -532,7 +546,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		) );
 		remove_filter( 'split_the_query', '__return_false' );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -565,7 +579,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$methd->setAccessible( true );
 		$methd->invoke( $q, array( 'no_found_rows' => false ), array() );
 
-		$this->assertEquals( $expected, $q->found_posts );
+		$this->assertSame( $expected, $q->found_posts );
 	}
 
 }

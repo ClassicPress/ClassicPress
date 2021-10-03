@@ -36,7 +36,11 @@ class Tests_Multisite_Get_Site extends WP_UnitTestCase {
 		$site = get_site();
 		restore_current_blog();
 
+<<<<<<< HEAD
 		$this->assertEquals( self::$site_ids[ 'wordpress.org/foo/'], $site->id );
+=======
+			$this->assertSame( self::$site_ids['wordpress.org/foo/'], $site->id );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 }

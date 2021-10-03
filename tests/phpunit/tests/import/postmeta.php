@@ -22,7 +22,7 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-no-cdata.xml', array( 'johncoswell' => 'john' ) );
 		$expected['special_post_title'] = 'A special title';
 		$expected['is_calendar'] = '';
-		$this->assertEquals( $expected, get_post_meta( 122, 'post-options', true ) );
+		$this->assertSame( $expected, get_post_meta( 122, 'post-options', true ) );
 	}
 
 	function test_utw_postmeta() {
@@ -77,12 +77,21 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 	function test_serialized_postmeta_with_cdata() {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-with-cdata.xml', array( 'johncoswell' => 'johncoswell' ) );
 
+<<<<<<< HEAD
 		//HTML in the CDATA should work with old WordPress version
 		$this->assertEquals( '<pre>some html</pre>', get_post_meta( 10, 'contains-html', true ) );
 		//Serialised will only work with WP-3.0 onwards.
 		$expected["special_post_title"] = "A special title";
 		$expected["is_calendar"] = "";
 		$this->assertEquals( $expected, get_post_meta( 10, 'post-options', true ) );
+=======
+		// HTML in the CDATA should work with old WordPress version.
+		$this->assertSame( '<pre>some html</pre>', get_post_meta( 10, 'contains-html', true ) );
+		// Serialised will only work with 3.0 onwards.
+		$expected['special_post_title'] = 'A special title';
+		$expected['is_calendar']        = '';
+		$this->assertSame( $expected, get_post_meta( 10, 'post-options', true ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -90,7 +99,12 @@ class Tests_Import_Postmeta extends WP_Import_UnitTestCase {
 	 */
 	function test_serialized_postmeta_with_evil_stuff_in_cdata() {
 		$this->_import_wp( DIR_TESTDATA . '/export/test-serialized-postmeta-with-cdata.xml', array( 'johncoswell' => 'johncoswell' ) );
+<<<<<<< HEAD
 		// evil content in the CDATA
 		$this->assertEquals( '<wp:meta_value>evil</wp:meta_value>', get_post_meta( 10, 'evil', true ) );
+=======
+		// Evil content in the CDATA.
+		$this->assertSame( '<wp:meta_value>evil</wp:meta_value>', get_post_meta( 10, 'evil', true ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

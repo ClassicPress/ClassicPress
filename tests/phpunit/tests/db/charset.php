@@ -311,7 +311,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 			$conv_utf8 = mb_convert_encoding( $big5, 'UTF-8', 'BIG-5' );
 			// Make sure PHP's multibyte conversions are working correctly
 			$this->assertNotEquals( $utf8, $big5 );
-			$this->assertEquals( $utf8, $conv_utf8 );
+			$this->assertSame( $utf8, $conv_utf8 );
 
 			$fields['big5'] = array(
 				'charset'  => 'big5',
@@ -501,7 +501,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		$value = "H€llo\xe0\x80\x80World\xf0\xff\xff\xff¢";
 		$expected = "H€lloWorld¢";
 		$actual = $wpdb->strip_invalid_text_for_column( $wpdb->posts, 'post_content', $value );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	/**
@@ -583,10 +583,10 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		self::$_wpdb->query( $create );
 
 		$charset = self::$_wpdb->get_table_charset( $table );
-		$this->assertEquals( $charset, $expected_charset );
+		$this->assertSame( $charset, $expected_charset );
 
 		$charset = self::$_wpdb->get_table_charset( strtoupper( $table ) );
-		$this->assertEquals( $charset, $expected_charset );
+		$this->assertSame( $charset, $expected_charset );
 
 		self::$_wpdb->query( $drop );
 	}
@@ -623,8 +623,8 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		self::$_wpdb->query( $create );
 
 		foreach ( $expected_charset as $column => $charset ) {
-			$this->assertEquals( $charset, self::$_wpdb->get_col_charset( $table, $column ) );
-			$this->assertEquals( $charset, self::$_wpdb->get_col_charset( strtoupper( $table ), strtoupper( $column ) ) );
+			$this->assertSame( $charset, self::$_wpdb->get_col_charset( $table, $column ) );
+			$this->assertSame( $charset, self::$_wpdb->get_col_charset( strtoupper( $table ), strtoupper( $column ) ) );
 		}
 
 		self::$_wpdb->query( $drop );
@@ -648,7 +648,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		$columns = array_keys( $columns );
 		foreach ( $columns as $column => $charset ) {
-			$this->assertEquals( false, self::$_wpdb->get_col_charset( $table, $column ) );
+			$this->assertFalse( self::$_wpdb->get_col_charset( $table, $column ) );
 		}
 
 		self::$_wpdb->query( $drop );
@@ -674,7 +674,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		$columns = array_keys( $columns );
 		foreach ( $columns as $column => $charset ) {
-			$this->assertEquals( false, self::$_wpdb->get_col_charset( $table, $column ) );
+			$this->assertFalse( self::$_wpdb->get_col_charset( $table, $column ) );
 		}
 
 		self::$_wpdb->query( $drop );
@@ -730,7 +730,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		self::$_wpdb->query( $create );
 
 		$return = self::$_wpdb->strip_invalid_text_from_query( $query );
-		$this->assertEquals( $expected, $return );
+		$this->assertSame( $expected, $return );
 
 		self::$_wpdb->query( $drop );
 	}
@@ -764,7 +764,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	 */
 	function test_dont_strip_text_from_schema_queries( $query ) {
 		$return = self::$_wpdb->strip_invalid_text_from_query( $query );
-		$this->assertEquals( $query, $return );
+		$this->assertSame( $query, $return );
 	}
 
 	/**
@@ -846,7 +846,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		self::$_wpdb->query( $create );
 
 		$return = self::$_wpdb->check_safe_collation( $query );
-		$this->assertEquals( $expected, $return );
+		$this->assertSame( $expected, $return );
 
 		foreach( $always_true as $true_query ) {
 			$return = self::$_wpdb->check_safe_collation( $true_query );
@@ -861,11 +861,11 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		// TEXT column
 		$stripped = $wpdb->strip_invalid_text_for_column( $wpdb->comments, 'comment_content', str_repeat( 'A', 65536 ) );
-		$this->assertEquals( 65535, strlen( $stripped ) );
+		$this->assertSame( 65535, strlen( $stripped ) );
 
 		// VARCHAR column
 		$stripped = $wpdb->strip_invalid_text_for_column( $wpdb->comments, 'comment_agent', str_repeat( 'A', 256 ) );
-		$this->assertEquals( 255, strlen( $stripped ) );
+		$this->assertSame( 255, strlen( $stripped ) );
 	}
 
 	/**
@@ -882,7 +882,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		self::$_wpdb->query( "DROP TABLE $tablename" );
 
-		$this->assertEquals( $safe_query, $stripped_query );
+		$this->assertSame( $safe_query, $stripped_query );
 	}
 
 	/**
@@ -904,7 +904,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		self::$_wpdb->charset = $charset;
 
-		$this->assertEquals( $safe_query, $stripped_query );
+		$this->assertSame( $safe_query, $stripped_query );
 	}
 
 	/**
@@ -913,11 +913,11 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 	function test_set_charset_changes_the_connection_collation() {
 		self::$_wpdb->set_charset( self::$_wpdb->dbh, 'utf8', 'utf8_general_ci' );
 		$results = self::$_wpdb->get_results( "SHOW VARIABLES WHERE Variable_name='collation_connection'" );
-		$this->assertEquals( 'utf8_general_ci', $results[0]->Value );
+		$this->assertSame( 'utf8_general_ci', $results[0]->Value );
 
 		self::$_wpdb->set_charset( self::$_wpdb->dbh, 'utf8mb4', 'utf8mb4_unicode_ci' );
 		$results = self::$_wpdb->get_results( "SHOW VARIABLES WHERE Variable_name='collation_connection'" );
-		$this->assertEquals( 'utf8mb4_unicode_ci', $results[0]->Value );
+		$this->assertSame( 'utf8mb4_unicode_ci', $results[0]->Value );
 
 		self::$_wpdb->set_charset( self::$_wpdb->dbh );
 	}

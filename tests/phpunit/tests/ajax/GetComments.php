@@ -60,10 +60,17 @@ class Tests_Ajax_GetComments extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
+<<<<<<< HEAD
 		// Check the meta data
 		$this->assertEquals( 1, (string) $xml->response[0]->comments['position'] );
 		$this->assertEquals( 0, (string) $xml->response[0]->comments['id'] );
 		$this->assertEquals( 'get-comments_0', (string) $xml->response['action'] );
+=======
+		// Check the meta data.
+		$this->assertSame( '1', (string) $xml->response[0]->comments['position'] );
+		$this->assertSame( '0', (string) $xml->response[0]->comments['id'] );
+		$this->assertSame( 'get-comments_0', (string) $xml->response['action'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Check the payload
 		$this->assertNotEmpty( (string) $xml->response[0]->comments[0]->response_data );

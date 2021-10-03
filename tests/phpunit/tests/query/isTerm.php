@@ -234,7 +234,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$expected = get_term( $this->tax_id, 'testtax' );
 
 		// Only compare term_id because object_id may or may not be part of either value.
-		$this->assertEquals( $expected->term_id, $object->term_id );
+		$this->assertSame( $expected->term_id, $object->term_id );
 	}
 
 	/**
@@ -276,6 +276,6 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$expected = get_term( $this->tax_id, 'testtax' );
 
 		// Only compare term_id because object_id may or may not be part of either value.
-		$this->assertEquals( $expected->term_id, $object->term_id );
+		$this->assertSame( $expected->term_id, $object->term_id );
 	}
 }

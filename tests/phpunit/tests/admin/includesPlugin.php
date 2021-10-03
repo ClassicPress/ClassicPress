@@ -21,9 +21,15 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 
 		$this->assertTrue( is_array($data) );
 
+<<<<<<< HEAD
 		foreach ($default_headers as $name => $value) {
 			$this->assertTrue(isset($data[$name]));
 			$this->assertEquals($value, $data[$name]);
+=======
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -50,8 +56,13 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$expected['With Spaces'] = 'http://example.com/wp-admin/themes.php?page=With%20Spaces';
 		$expected['testpages'] = 'http://example.com/wp-admin/edit.php?post_type=page&#038;page=testpages';
 
+<<<<<<< HEAD
 		foreach ($expected as $name => $value) {
 			$this->assertEquals( $value, menu_page_url( $name, false ) );
+=======
+		foreach ( $expected as $name => $value ) {
+			$this->assertSame( $value, menu_page_url( $name, false ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		wp_set_current_user( $current_user );
@@ -90,7 +101,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 */
 	public function test_get_plugin_files_single() {
 		$name = 'hello.php';
-		$this->assertEquals( array( $name ), get_plugin_files( $name ) );
+		$this->assertSame( array( $name ), get_plugin_files( $name ) );
 	}
 
 	/**
@@ -110,7 +121,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			'list_files_test_plugin/list_files_test_plugin.php',
 			'list_files_test_plugin/subdir/subfile.php',
 		);
-		$this->assertEquals( $expected, $plugin_files );
+		$this->assertSame( $expected, $plugin_files );
 
 		unlink( $sub_dir . '/subfile.php' );
 		unlink( $plugin[1] );
@@ -130,7 +141,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			mkdir( WPMU_PLUGIN_DIR );
 		}
 
-		$this->assertEquals( array(), get_mu_plugins() );
+		$this->assertSame( array(), get_mu_plugins() );
 
 		// Clean up.
 		if ( $exists ) {
@@ -151,7 +162,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			rmdir( WPMU_PLUGIN_DIR );
 		}
 
-		$this->assertEquals( array(), get_mu_plugins() );
+		$this->assertSame( array(), get_mu_plugins() );
 
 		// Clean up.
 		if ( $exists ) {
@@ -173,7 +184,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		}
 
 		$this->_create_plugin( '<?php\n//Silence is golden.', 'index.php', WPMU_PLUGIN_DIR );
-		$this->assertEquals( array(), get_mu_plugins() );
+		$this->assertSame( array(), get_mu_plugins() );
 
 		// Clean up.
 		unlink( WPMU_PLUGIN_DIR . '/index.php' );
@@ -198,7 +209,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 
 		$this->_create_plugin( '<?php\n//Silence is not golden.', 'index.php', WPMU_PLUGIN_DIR );
 		$found = get_mu_plugins();
-		$this->assertEquals( array( 'index.php' ), array_keys( $found ) );
+		$this->assertSame( array( 'index.php' ), array_keys( $found ) );
 
 		// Clean up.
 		unlink( WPMU_PLUGIN_DIR . '/index.php' );
@@ -224,7 +235,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$this->_create_plugin( '<?php\n//Test', 'foo.php', WPMU_PLUGIN_DIR );
 		$this->_create_plugin( '<?php\n//Test 2', 'bar.txt', WPMU_PLUGIN_DIR );
 		$found = get_mu_plugins();
-		$this->assertEquals( array( 'foo.php' ), array_keys( $found ) );
+		$this->assertSame( array( 'foo.php' ), array_keys( $found ) );
 
 		// Clean up.
 		unlink( WPMU_PLUGIN_DIR . '/foo.php' );
@@ -242,7 +253,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test__sort_uname_callback() {
 		$this->assertLessThan( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'b' ) ) );
 		$this->assertGreaterThan( 0, _sort_uname_callback( array( 'Name' => 'c' ), array( 'Name' => 'b' ) ) );
-		$this->assertEquals( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'a' ) ) );
+		$this->assertSame( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'a' ) ) );
 	}
 
 	/**
@@ -251,7 +262,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test_get_dropins_empty() {
 		$this->_back_up_drop_ins();
 
-		$this->assertEquals( array(), get_dropins() );
+		$this->assertSame( array(), get_dropins() );
 
 		// Clean up.
 		$this->_restore_drop_ins();
@@ -267,7 +278,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$p2 = $this->_create_plugin( "<?php\n//Test", 'not-a-dropin.php', WP_CONTENT_DIR );
 
 		$dropins = get_dropins();
-		$this->assertEquals( array( 'advanced-cache.php' ), array_keys( $dropins ) );
+		$this->assertSame( array( 'advanced-cache.php' ), array_keys( $dropins ) );
 
 		unlink( $p1[1] );
 		unlink( $p2[1] );
@@ -331,7 +342,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 * @covers ::validate_active_plugins
 	 */
 	public function test_validate_active_plugins_empty() {
-		$this->assertEquals( array(), validate_active_plugins() );
+		$this->assertSame( array(), validate_active_plugins() );
 	}
 
 	/**

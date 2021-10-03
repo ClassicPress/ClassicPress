@@ -44,8 +44,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 
 		$comment = get_comment($id);
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_7 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_1 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_7 ), $comment->comment_content );
 
 		$data = array(
 			'comment_post_ID' => $post_id,
@@ -59,8 +59,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 
 		$comment = get_comment($id);
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_2 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_4 ), $comment->comment_content );
 	}
 
 	/**
@@ -87,8 +87,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		edit_comment();
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( $this->slash_1, $comment->comment_author );
-		$this->assertEquals( $this->slash_7, $comment->comment_content );
+		$this->assertSame( $this->slash_1, $comment->comment_author );
+		$this->assertSame( $this->slash_7, $comment->comment_content );
 
 		$_POST = array();
 		$_POST['comment_ID'] = $comment_id;
@@ -102,8 +102,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		edit_comment();
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( $this->slash_2, $comment->comment_author );
-		$this->assertEquals( $this->slash_4, $comment->comment_content );
+		$this->assertSame( $this->slash_2, $comment->comment_author );
+		$this->assertSame( $this->slash_4, $comment->comment_content );
 	}
 
 	/**
@@ -120,8 +120,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		));
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_7 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_1 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_7 ), $comment->comment_content );
 
 		$comment_id = wp_insert_comment(array(
 			'comment_post_ID' => $post_id,
@@ -130,8 +130,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		));
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_2 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_4 ), $comment->comment_content );
 	}
 
 	/**
@@ -151,8 +151,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		));
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_7 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_1 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_7 ), $comment->comment_content );
 
 		wp_update_comment(array(
 			'comment_ID' => $comment_id,
@@ -161,8 +161,8 @@ class Tests_Comment_Slashes extends WP_UnitTestCase {
 		));
 		$comment = get_comment( $comment_id );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), $comment->comment_author );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), $comment->comment_content );
+		$this->assertSame( wp_unslash( $this->slash_2 ), $comment->comment_author );
+		$this->assertSame( wp_unslash( $this->slash_4 ), $comment->comment_content );
 	}
 
 }

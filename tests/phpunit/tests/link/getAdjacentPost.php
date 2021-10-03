@@ -50,13 +50,13 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 		// Test category adjacency
 		$this->go_to( get_permalink( $post_one->ID ) );
 
-		$this->assertEquals( '', get_adjacent_post( true, '', true, 'category' ) );
+		$this->assertSame( '', get_adjacent_post( true, '', true, 'category' ) );
 		$this->assertEquals( $post_three, get_adjacent_post( true, '', false, 'category' ) );
 
 		// Test tag adjacency
 		$this->go_to( get_permalink( $post_two->ID ) );
 
-		$this->assertEquals( '', get_adjacent_post( true, '', true, 'post_tag' ) );
+		$this->assertSame( '', get_adjacent_post( true, '', true, 'post_tag' ) );
 		$this->assertEquals( $post_four, get_adjacent_post( true, '', false, 'post_tag' ) );
 
 		// Test normal boundary post
@@ -175,7 +175,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 		}
 
 		// Should skip $p2, which belongs to $t.
-		$this->assertEquals( $p3, $found->ID );
+		$this->assertSame( $p3, $found->ID );
 	}
 
 	/**
@@ -210,7 +210,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 		}
 
 		// Should skip $p2, which belongs to $t.
-		$this->assertEquals( $p3, $found->ID );
+		$this->assertSame( $p3, $found->ID );
 	}
 
 	/**

@@ -7,14 +7,14 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 	function test_get_comments_number() {
 		$post_id = self::factory()->post->create();
 
-		$this->assertEquals( 0, get_comments_number( 0 ) );
-		$this->assertEquals( 0, get_comments_number( $post_id ) );
-		$this->assertEquals( 0, get_comments_number( get_post( $post_id ) ) );
+		$this->assertSame( 0, get_comments_number( 0 ) );
+		$this->assertSame( '0', get_comments_number( $post_id ) );
+		$this->assertSame( '0', get_comments_number( get_post( $post_id ) ) );
 
 		self::factory()->comment->create_post_comments( $post_id, 12 );
 
-		$this->assertEquals( 12, get_comments_number( $post_id ) );
-		$this->assertEquals( 12, get_comments_number( get_post( $post_id ) ) );
+		$this->assertSame( '12', get_comments_number( $post_id ) );
+		$this->assertSame( '12', get_comments_number( get_post( $post_id ) ) );
 	}
 
 	function test_get_comments_number_without_arg() {
@@ -22,33 +22,56 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 		$permalink = get_permalink( $post_id );
 		$this->go_to( $permalink );
 
-		$this->assertEquals( 0, get_comments_number() );
+		$this->assertSame( '0', get_comments_number() );
 
 		self::factory()->comment->create_post_comments( $post_id, 12 );
 		$this->go_to( $permalink );
 
-		$this->assertEquals( 12, get_comments_number() );
+		$this->assertSame( '12', get_comments_number() );
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/13651
+=======
+	 * @ticket 48772
+	 */
+	function test_get_comments_number_text_with_post_id() {
+		$post_id = $this->factory->post->create();
+		$this->factory->comment->create_post_comments( $post_id, 6 );
+
+		$comments_number_text = get_comments_number_text( false, false, false, $post_id );
+
+		$this->assertSame( sprintf( _n( '%s Comment', '%s Comments', 6 ), '6' ), $comments_number_text );
+
+		ob_start();
+		comments_number( false, false, false, $post_id );
+		$comments_number_text = ob_get_clean();
+
+		$this->assertSame( sprintf( _n( '%s Comment', '%s Comments', 6 ), '6' ), $comments_number_text );
+
+	}
+
+	/**
+	 * @ticket 13651
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_get_comments_number_text_declension_with_default_args() {
 		$post_id = $this->factory->post->create();
 		$permalink = get_permalink( $post_id );
 		$this->go_to( $permalink );
 
-		$this->assertEquals( __( 'No Comments' ), get_comments_number_text() );
+		$this->assertSame( __( 'No Comments' ), get_comments_number_text() );
 
 		$this->factory->comment->create_post_comments( $post_id, 1 );
 		$this->go_to( $permalink );
 
-		$this->assertEquals( __( '1 Comment' ), get_comments_number_text() );
+		$this->assertSame( __( '1 Comment' ), get_comments_number_text() );
 
 		$this->factory->comment->create_post_comments( $post_id, 1 );
 		$this->go_to( $permalink );
 
-		$this->assertEquals( sprintf( _n( '%s Comment', '%s Comments', 2 ), '2' ), get_comments_number_text() );
+		$this->assertSame( sprintf( _n( '%s Comment', '%s Comments', 2 ), '2' ), get_comments_number_text() );
 
 	}
 
@@ -65,7 +88,7 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 
 		add_filter( 'gettext_with_context', array( $this, '_enable_comment_number_declension' ), 10, 4 );
 
-		$this->assertEquals( $output, get_comments_number_text( false, false, $input ) );
+		$this->assertSame( $output, get_comments_number_text( false, false, $input ) );
 
 		remove_filter( 'gettext_with_context', array( $this, '_enable_comment_number_declension' ), 10, 4 );
 	}

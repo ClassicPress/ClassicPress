@@ -20,7 +20,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'username', 'password' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_incapable_user() {
@@ -28,7 +28,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'subscriber', 'subscriber' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_postid() {
 		$result = $this->myxmlrpcserver->mw_getPost( array( 9999, 'author', 'author' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 404, $result->code );
+		$this->assertSame( 404, $result->code );
 	}
 
 	function test_valid_post() {
@@ -74,13 +74,17 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 
 		// Check expected values
 		$this->assertStringMatchesFormat( '%d', $result['userid'] );
-		$this->assertEquals( $post_data->post_title, $result['title'] );
-		$this->assertEquals( 'publish', $result['post_status'] );
+		$this->assertSame( $post_data->post_title, $result['title'] );
+		$this->assertSame( 'publish', $result['post_status'] );
 		$this->assertStringMatchesFormat( '%d', $result['wp_author_id'] );
-		$this->assertEquals( $post_data->post_excerpt, $result['mt_excerpt'] );
-		$this->assertEquals( url_to_postid( $result['link'] ), self::$post_id );
+		$this->assertSame( $post_data->post_excerpt, $result['mt_excerpt'] );
+		$this->assertSame( url_to_postid( $result['link'] ), self::$post_id );
 
+<<<<<<< HEAD
 		$this->assertEquals( '', $result['wp_post_thumbnail'] );
+=======
+		$this->assertSame( 0, $result['wp_post_thumbnail'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_theme_support( 'post-thumbnails' );
 	}
@@ -98,9 +102,14 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
 
+<<<<<<< HEAD
 		$this->assertInternalType( 'string', $result['wp_post_thumbnail'] );
 		$this->assertStringMatchesFormat( '%d', $result['wp_post_thumbnail'] );
 		$this->assertEquals( $attachment_id, $result['wp_post_thumbnail'] );
+=======
+		$this->assertInternalType( 'int', $result['wp_post_thumbnail'] );
+		$this->assertSame( $attachment_id, $result['wp_post_thumbnail'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_theme_support( 'post-thumbnails' );
 	}
@@ -117,13 +126,13 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 
 		$post_data = get_post( self::$post_id );
 
-		$this->assertEquals( strtotime( $post_data->post_date ), $result['dateCreated']->getTimestamp() );
-		$this->assertEquals( strtotime( $post_data->post_date ), $result['date_modified']->getTimestamp() );
+		$this->assertSame( strtotime( $post_data->post_date ), $result['dateCreated']->getTimestamp() );
+		$this->assertSame( strtotime( $post_data->post_date ), $result['date_modified']->getTimestamp() );
 
 		$post_date_gmt = strtotime( get_gmt_from_date( mysql2date( 'Y-m-d H:i:s', $post_data->post_date, false ), 'Ymd\TH:i:s' ) );
 		$post_modified_gmt = strtotime( get_gmt_from_date( mysql2date( 'Y-m-d H:i:s', $post_data->post_date, false ), 'Ymd\TH:i:s' ) );
 
-		$this->assertEquals( $post_date_gmt, $result['date_created_gmt']->getTimestamp() );
-		$this->assertEquals( $post_modified_gmt, $result['date_modified_gmt']->getTimestamp() );
+		$this->assertSame( $post_date_gmt, $result['date_created_gmt']->getTimestamp() );
+		$this->assertSame( $post_modified_gmt, $result['date_modified_gmt']->getTimestamp() );
 	}
 }

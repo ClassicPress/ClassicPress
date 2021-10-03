@@ -21,8 +21,8 @@ class Tests_Walker extends WP_UnitTestCase {
 		$items = array( (object) array( 'id' => 1, 'parent' => 0 ) );
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li>', $output );
 
 	}
 
@@ -31,8 +31,8 @@ class Tests_Walker extends WP_UnitTestCase {
 		$items = array( (object) array( 'id' => 1, 'parent' => 0 ) );
 		$output = $this->walker->walk( $items, -1 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li>', $output );
 
 	}
 
@@ -41,8 +41,8 @@ class Tests_Walker extends WP_UnitTestCase {
 		$items = array( (object) array( 'id' => 1, 'parent' => 0 ) );
 		$output = $this->walker->walk( $items, 1 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li>', $output );
 
 	}
 
@@ -52,8 +52,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 2, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li><li>2</li>', $output );
+		$this->assertSame( 2, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li><li>2</li>', $output );
 
 	}
 
@@ -63,8 +63,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1<ul><li>2</li></ul></li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1<ul><li>2</li></ul></li>', $output );
 
 	}
 
@@ -74,8 +74,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, -1 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li><li>2</li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li><li>2</li>', $output );
 
 	}
 
@@ -85,8 +85,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 1 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li>', $output );
 
 	}
 
@@ -96,8 +96,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 2 );
 
-		$this->assertEquals( 1, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1<ul><li>2</li></ul></li>', $output );
+		$this->assertSame( 1, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1<ul><li>2</li></ul></li>', $output );
 
 	}
 
@@ -107,8 +107,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 0, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1<ul><li>2</li></ul></li>', $output );
+		$this->assertSame( 0, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1<ul><li>2</li></ul></li>', $output );
 
 	}
 
@@ -118,8 +118,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 0, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>1</li>', $output );
+		$this->assertSame( 0, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>1</li>', $output );
 
 	}
 
@@ -129,15 +129,23 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 1 );
 
-		$this->assertEquals( 0, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( 0, $this->walker->get_number_of_root_elements( $items ) );
 
 		// It's not clear what the output of this "should" be
 
+<<<<<<< HEAD
 		// Currently the item is simply returned
 		$this->assertEquals( '<li>1</li>', $output );
 
 		// But as we've only asked for the first depth maybe nothing should be returned?
 		//$this->assertEquals( '', $output );
+=======
+		// Currently the item is simply returned.
+		$this->assertSame( '<li>1</li>', $output );
+
+		// But as we've only asked for the first depth maybe nothing should be returned?
+		// $this->assertSame( '', $output );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -147,8 +155,8 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 0 );
 
-		$this->assertEquals( 0, $this->walker->get_number_of_root_elements( $items ) );
-		$this->assertEquals( '<li>4</li><li>5</li><li>6</li>', $output );
+		$this->assertSame( 0, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( '<li>4</li><li>5</li><li>6</li>', $output );
 
 	}
 
@@ -158,10 +166,11 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		$output = $this->walker->walk( $items, 1 );
 
-		$this->assertEquals( 0, $this->walker->get_number_of_root_elements( $items ) );
+		$this->assertSame( 0, $this->walker->get_number_of_root_elements( $items ) );
 
 		// It's not clear what the output of this "should" be
 
+<<<<<<< HEAD
 		// Currently the first item is simply returned
 		$this->assertEquals( '<li>4</li>', $output );
 
@@ -170,6 +179,16 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		// Or maybe all items which are missing parents should simply be treat top level?
 		//$this->assertEquals( '<li>4</li><li>5</li><li>6</li>', $output );
+=======
+		// Currently the first item is simply returned.
+		$this->assertSame( '<li>4</li>', $output );
+
+		// But as we've only asked for the first depth maybe nothing should be returned?
+		// $this->assertSame( '', $output );
+
+		// Or maybe all items which are missing parents should simply be treat top level?
+		// $this->assertSame( '<li>4</li><li>5</li><li>6</li>', $output );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 

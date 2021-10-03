@@ -88,7 +88,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'number' => 3,
 		) );
 
-		$this->assertEquals( 3, count( $found ) );
+			$this->assertSame( 3, count( $found ) );
 	}
 
 	public function test_wp_site_query_by_site__in_with_single_id() {
@@ -128,7 +128,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'site__in' => $expected,
 		) );
 
-		$this->assertEquals( 2, $found );
+			$this->assertSame( 2, $found );
 	}
 
 	public function test_wp_site_query_by_site__not_in_with_single_id() {
@@ -178,7 +178,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			self::$site_ids['wordpress.org/foo/bar/'],
 		);
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 
 		$found = $q->query( array(
 			'fields'     => 'ids',
@@ -187,7 +187,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'order'      => 'DESC',
 		) );
 
-		$this->assertEquals( array_reverse( $expected ), $found );
+			$this->assertSame( array_reverse( $expected ), $found );
 	}
 
 	public function test_wp_site_query_by_network_id_with_existing_sites() {
@@ -581,7 +581,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			self::$site_ids['make.wordpress.org/foo/'],
 		);
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 	}
 
 	public function test_wp_site_query_by_search_with_text_in_path_exclude_domain_from_search() {
@@ -596,7 +596,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			self::$site_ids['www.w.org/make/'],
 		);
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 	}
 
 	public function test_wp_site_query_by_search_with_text_in_domain_exclude_path_from_search() {
@@ -612,7 +612,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			self::$site_ids['make.wordpress.org/foo/'],
 		);
 
-		$this->assertEquals( $expected, $found );
+			$this->assertSame( $expected, $found );
 	}
 
 	public function test_wp_site_query_by_search_with_wildcard_in_text() {
@@ -683,7 +683,7 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'order'      => 'ASC',
 		) );
 
-		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+			$this->assertSame( $number_of_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -708,8 +708,14 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'number'     => 3,
 			'order'      => 'ASC',
 			'count'      => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
+=======
+				)
+			);
+			$this->assertSame( $number_of_queries, $wpdb->num_queries );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -734,9 +740,237 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			'number'     => 3,
 			'order'      => 'ASC',
 			'count'      => true,
+<<<<<<< HEAD
 		) );
 		$this->assertEquals( $number_of_queries + 1, $wpdb->num_queries );
 	}
 }
+=======
+				)
+			);
+			$this->assertSame( $number_of_queries + 1, $wpdb->num_queries );
+		}
+
+		/**
+		 * @ticket 40229
+		 * @dataProvider data_wp_site_query_meta_query
+		 */
+		public function test_wp_site_query_meta_query( $query, $expected, $strict ) {
+			if ( ! is_site_meta_supported() ) {
+				$this->markTestSkipped( 'Tests only runs with the blogmeta database table installed' );
+			}
+
+			add_site_meta( self::$site_ids['wordpress.org/'], 'foo', 'foo' );
+			add_site_meta( self::$site_ids['wordpress.org/foo/'], 'foo', 'bar' );
+			add_site_meta( self::$site_ids['wordpress.org/foo/bar/'], 'foo', 'baz' );
+			add_site_meta( self::$site_ids['make.wordpress.org/'], 'bar', 'baz' );
+			add_site_meta( self::$site_ids['wordpress.org/'], 'numberfoo', 1 );
+			add_site_meta( self::$site_ids['wordpress.org/foo/'], 'numberfoo', 2 );
+
+			$query['fields'] = 'ids';
+
+			$q     = new WP_Site_Query();
+			$found = $q->query( $query );
+
+			foreach ( $expected as $index => $domain_path ) {
+				$expected[ $index ] = self::$site_ids[ $domain_path ];
+			}
+
+			if ( $strict ) {
+				$this->assertSame( $expected, $found );
+			} else {
+				$this->assertEqualSets( $expected, $found );
+			}
+		}
+
+
+		/**
+		 * @ticket 45749
+		 * @ticket 47599
+		 */
+		public function test_sites_pre_query_filter_should_bypass_database_query() {
+			global $wpdb;
+
+			add_filter( 'sites_pre_query', array( __CLASS__, 'filter_sites_pre_query' ), 10, 2 );
+
+			$num_queries = $wpdb->num_queries;
+
+			$q       = new WP_Site_Query();
+			$results = $q->query( array() );
+
+			remove_filter( 'sites_pre_query', array( __CLASS__, 'filter_sites_pre_query' ), 10, 2 );
+
+			// Make sure no queries were executed.
+			$this->assertSame( $num_queries, $wpdb->num_queries );
+
+			// We manually inserted a non-existing site and overrode the results with it.
+			$this->assertSame( array( 555 ), $results );
+
+			// Make sure manually setting total_users doesn't get overwritten.
+			$this->assertSame( 1, $q->found_sites );
+		}
+
+		public static function filter_sites_pre_query( $sites, $query ) {
+			$query->found_sites = 1;
+
+			return array( 555 );
+		}
+
+		public function data_wp_site_query_meta_query() {
+			return array(
+				array(
+					array(
+						'meta_key' => 'foo',
+					),
+					array(
+						'wordpress.org/',
+						'wordpress.org/foo/',
+						'wordpress.org/foo/bar/',
+					),
+					false,
+				),
+				array(
+					array(
+						'meta_key'   => 'foo',
+						'meta_value' => 'bar',
+					),
+					array(
+						'wordpress.org/foo/',
+					),
+					false,
+				),
+				array(
+					array(
+						'meta_key'     => 'foo',
+						'meta_value'   => array( 'bar', 'baz' ),
+						'meta_compare' => 'IN',
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/foo/bar/',
+					),
+					false,
+				),
+				array(
+					array(
+						'meta_query' => array(
+							array(
+								'key'   => 'foo',
+								'value' => 'bar',
+							),
+							array(
+								'key'   => 'numberfoo',
+								'value' => 2,
+								'type'  => 'NUMERIC',
+							),
+						),
+					),
+					array(
+						'wordpress.org/foo/',
+					),
+					false,
+				),
+				array(
+					array(
+						'meta_key' => 'foo',
+						'orderby'  => 'meta_value',
+						'order'    => 'ASC',
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/foo/bar/',
+						'wordpress.org/',
+					),
+					true,
+				),
+				array(
+					array(
+						'meta_key' => 'foo',
+						'orderby'  => 'foo',
+						'order'    => 'ASC',
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/foo/bar/',
+						'wordpress.org/',
+					),
+					true,
+				),
+				array(
+					array(
+						'meta_key' => 'numberfoo',
+						'orderby'  => 'meta_value_num',
+						'order'    => 'DESC',
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/',
+					),
+					true,
+				),
+				array(
+					array(
+						'meta_query' => array(
+							array(
+								'key'     => 'foo',
+								'value'   => array( 'foo', 'bar' ),
+								'compare' => 'IN',
+							),
+							array(
+								'key' => 'numberfoo',
+							),
+						),
+						'orderby'    => array( 'meta_value' => 'ASC' ),
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/',
+					),
+					true,
+				),
+				array(
+					array(
+						'meta_query' => array(
+							array(
+								'key'     => 'foo',
+								'value'   => array( 'foo', 'bar' ),
+								'compare' => 'IN',
+							),
+							array(
+								'key' => 'numberfoo',
+							),
+						),
+						'orderby'    => array( 'foo' => 'ASC' ),
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/',
+					),
+					true,
+				),
+				array(
+					array(
+						'meta_query' => array(
+							array(
+								'key'     => 'foo',
+								'value'   => array( 'foo', 'bar' ),
+								'compare' => 'IN',
+							),
+							'my_subquery' => array(
+								'key' => 'numberfoo',
+							),
+						),
+						'orderby'    => array( 'my_subquery' => 'DESC' ),
+					),
+					array(
+						'wordpress.org/foo/',
+						'wordpress.org/',
+					),
+					true,
+				),
+			);
+		}
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 endif;

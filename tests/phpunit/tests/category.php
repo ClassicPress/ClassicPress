@@ -29,7 +29,11 @@ class Tests_Category extends WP_UnitTestCase {
 
 		// Validate length is 1 + created due to uncategorized
 		$cat_ids = get_all_category_ids();
+<<<<<<< HEAD
 		$this->assertEquals( 3, count($cat_ids));
+=======
+		$this->assertSame( 3, count( $cat_ids ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -53,9 +57,9 @@ class Tests_Category extends WP_UnitTestCase {
 
 		// validate category is returned by slug
 		$ret_testcat = get_category_by_slug( 'testcat' );
-		$this->assertEquals( $testcat->term_id, $ret_testcat->term_id );
+		$this->assertSame( $testcat->term_id, $ret_testcat->term_id );
 		$ret_testcat = get_category_by_slug( 'TeStCaT' );
-		$this->assertEquals( $testcat->term_id, $ret_testcat->term_id );
+		$this->assertSame( $testcat->term_id, $ret_testcat->term_id );
 
 		// validate unknown category returns false
 		$this->assertFalse( get_category_by_slug( 'testcat3' ) );
@@ -106,6 +110,7 @@ class Tests_Category extends WP_UnitTestCase {
 		_make_cat_compat( $testcat_array );
 		_make_cat_compat( $testcat2_array );
 
+<<<<<<< HEAD
 		// Validate Compatibility Object
 		$this->assertEquals( $testcat->cat_ID, $testcat->term_id );
 		$this->assertEquals( $testcat->category_count, $testcat->count );
@@ -137,6 +142,39 @@ class Tests_Category extends WP_UnitTestCase {
 		$this->assertEquals( $testcat_array['cat_name'], $testcat_array['name'] );
 		$this->assertEquals( $testcat_array['category_nicename'], $testcat_array['slug'] );
 		$this->assertEquals( $testcat_array['category_parent'], $testcat_array['parent'] );
+=======
+		// Validate compatibility object.
+		$this->assertSame( $testcat->cat_ID, $testcat->term_id );
+		$this->assertSame( $testcat->category_count, $testcat->count );
+		$this->assertSame( $testcat->category_description, $testcat->description );
+		$this->assertSame( $testcat->cat_name, $testcat->name );
+		$this->assertSame( $testcat->category_nicename, $testcat->slug );
+		$this->assertSame( $testcat->category_parent, $testcat->parent );
+
+		// Validate compatibility object with parent.
+		$this->assertSame( $testcat->cat_ID, $testcat->term_id );
+		$this->assertSame( $testcat->category_count, $testcat->count );
+		$this->assertSame( $testcat->category_description, $testcat->description );
+		$this->assertSame( $testcat->cat_name, $testcat->name );
+		$this->assertSame( $testcat->category_nicename, $testcat->slug );
+		$this->assertSame( $testcat->category_parent, $testcat->parent );
+
+		// Validate compatibility array.
+		$this->assertSame( $testcat_array['cat_ID'], $testcat_array['term_id'] );
+		$this->assertSame( $testcat_array['category_count'], $testcat_array['count'] );
+		$this->assertSame( $testcat_array['category_description'], $testcat_array['description'] );
+		$this->assertSame( $testcat_array['cat_name'], $testcat_array['name'] );
+		$this->assertSame( $testcat_array['category_nicename'], $testcat_array['slug'] );
+		$this->assertSame( $testcat_array['category_parent'], $testcat_array['parent'] );
+
+		// Validate compatibility array with parent.
+		$this->assertSame( $testcat_array['cat_ID'], $testcat_array['term_id'] );
+		$this->assertSame( $testcat_array['category_count'], $testcat_array['count'] );
+		$this->assertSame( $testcat_array['category_description'], $testcat_array['description'] );
+		$this->assertSame( $testcat_array['cat_name'], $testcat_array['name'] );
+		$this->assertSame( $testcat_array['category_nicename'], $testcat_array['slug'] );
+		$this->assertSame( $testcat_array['category_parent'], $testcat_array['parent'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -152,10 +190,17 @@ class Tests_Category extends WP_UnitTestCase {
 			)
 		);
 
+<<<<<<< HEAD
 		// Validate
 		$this->assertEquals( $testcat->name, get_cat_name( $testcat->term_id ) );
 		$this->assertEquals( '', get_cat_name( -1 ) );
 		$this->assertEquals( '', get_cat_name( $testcat->term_id + 100 ) );
+=======
+		// Validate.
+		$this->assertSame( $testcat->name, get_cat_name( $testcat->term_id ) );
+		$this->assertSame( '', get_cat_name( -1 ) );
+		$this->assertSame( '', get_cat_name( $testcat->term_id + 100 ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -172,10 +217,17 @@ class Tests_Category extends WP_UnitTestCase {
 			)
 		);
 
+<<<<<<< HEAD
 		// Validate
 		$this->assertEquals( $testcat->term_id, get_cat_ID( $testcat->name ) );
 		$this->assertEquals( 0, get_cat_ID( "NO CAT" ) );
 		$this->assertEquals( 0, get_cat_ID( 12 ) );
+=======
+		// Validate.
+		$this->assertSame( $testcat->term_id, get_cat_ID( $testcat->name ) );
+		$this->assertSame( 0, get_cat_ID( 'NO CAT' ) );
+		$this->assertSame( 0, get_cat_ID( 12 ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -229,17 +281,22 @@ class Tests_Category extends WP_UnitTestCase {
 
 		// Validate Full Match
 		$ret_cat = get_category_by_path( '/root/level-1', true );
-		$this->assertEquals( $root_level_id, $ret_cat->term_id );
+		$this->assertSame( $root_level_id, $ret_cat->term_id );
 		$this->assertNull( get_category_by_path( 'level-1', true ) );
 		$this->assertNull( get_category_by_path( 'nocat/nocat/', true) );
 
 		// Validate Partial Match
 		$ret_cat = get_category_by_path( 'level-1', false );
-		$this->assertEquals( $root_level_id, $ret_cat->term_id );
+		$this->assertSame( $root_level_id, $ret_cat->term_id );
 		$ret_cat = get_category_by_path( 'root/cat/level-1', false );
-		$this->assertEquals( $root_level_id, $ret_cat->term_id );
+		$this->assertSame( $root_level_id, $ret_cat->term_id );
 		$ret_cat = get_category_by_path( 'root$2Fcat%20%2Flevel-1', false );
+<<<<<<< HEAD
 		$this->assertEquals( $root_level_id, $ret_cat->term_id );
 		$this->assertNull( get_category_by_path( 'nocat/nocat/', false) );
+=======
+		$this->assertSame( $root_level_id, $ret_cat->term_id );
+		$this->assertNull( get_category_by_path( 'nocat/nocat/', false ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

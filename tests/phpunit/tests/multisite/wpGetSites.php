@@ -55,7 +55,7 @@ class Tests_Multisite_WP_Get_Sites extends WP_UnitTestCase {
 
 		$missing_keys = array_diff_key( array_flip( $keys ), $sites[0] );
 
-		$this->assertEquals( array(), $missing_keys, 'Keys are missing from site arrays.' );
+			$this->assertSame( array(), $missing_keys, 'Keys are missing from site arrays.' );
 	}
 
 	/**

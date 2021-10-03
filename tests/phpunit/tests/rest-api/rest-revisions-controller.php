@@ -65,13 +65,13 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/posts/' . self::$post_id . '/revisions' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'view', 'edit', 'embed' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_1->ID );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'view', 'edit', 'embed' ), $data['endpoints'][0]['args']['context']['enum'] );
 	}
 
@@ -80,6 +80,7 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/revisions' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+<<<<<<< HEAD
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertCount( 2, $data );
 
@@ -89,6 +90,20 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 
 		$this->assertEquals( $this->revision_id1, $data[1]['id'] );
 		$this->check_get_revision_response( $data[1], $this->revision_1 );
+=======
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertCount( $this->total_revisions, $data );
+
+		// Reverse chronology.
+		$this->assertSame( $this->revision_id3, $data[0]['id'] );
+		$this->check_get_revision_response( $data[0], $this->revision_3 );
+
+		$this->assertSame( $this->revision_id2, $data[1]['id'] );
+		$this->check_get_revision_response( $data[1], $this->revision_2 );
+
+		$this->assertSame( $this->revision_id1, $data[2]['id'] );
+		$this->check_get_revision_response( $data[2], $this->revision_1 );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_no_permission() {
@@ -119,8 +134,13 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 	public function test_get_item() {
 		wp_set_current_user( self::$editor_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_id1 );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->check_get_revision_response( $response, $this->revision_1 );
 		$fields = array(
 			'author',
@@ -188,8 +208,38 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		wp_set_current_user( self::$editor_id );
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_id1 );
 		$request->set_param( 'force', true );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertErrorResponse( 'rest_cannot_delete', $response, 403 );
+		$this->assertNotNull( get_post( $this->revision_id1 ) );
+	}
+
+	/**
+	 * @ticket 49645
+	 */
+	public function test_delete_item_parent_check() {
+		wp_set_current_user( self::$contributor_id );
+		$request = new WP_REST_Request( 'DELETE', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_id1 );
+		$request->set_param( 'force', true );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertErrorResponse( 'rest_cannot_delete', $response, 403 );
+		$this->assertNotNull( get_post( $this->revision_id1 ) );
+	}
+
+	/**
+	 * @ticket 43709
+	 */
+	public function test_delete_item_remove_do_not_allow() {
+		wp_set_current_user( self::$editor_id );
+		add_filter( 'map_meta_cap', array( $this, '_filter_map_meta_cap_remove_no_allow_revisions' ), 10, 4 );
+		$request = new WP_REST_Request( 'DELETE', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_id1 );
+		$request->set_param( 'force', true );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNull( get_post( $this->revision_id1 ) );
 	}
 
@@ -218,8 +268,13 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 	public function test_prepare_item() {
 		wp_set_current_user( self::$editor_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/revisions/' . $this->revision_id1 );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->check_get_revision_response( $response, $this->revision_1 );
 	}
 
@@ -231,7 +286,12 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$request->set_param( '_fields', 'id,slug' );
 		$revision = get_post( $this->revision_id1 );
 		$response = $endpoint->prepare_item_for_response( $revision, $request );
+<<<<<<< HEAD
 		$this->assertEquals( array(
+=======
+		$this->assertSame(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'id',
 			'slug',
 		), array_keys( $response->get_data() ) );
@@ -242,7 +302,7 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
-		$this->assertEquals( 12, count( $properties ) );
+		$this->assertSame( 12, count( $properties ) );
 		$this->assertArrayHasKey( 'author', $properties );
 		$this->assertArrayHasKey( 'content', $properties );
 		$this->assertArrayHasKey( 'date', $properties );
@@ -290,7 +350,7 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$data = $response->get_data();
 
 		$this->assertArrayHasKey( 'my_custom_int', $data['schema']['properties'] );
-		$this->assertEquals( $schema, $data['schema']['properties']['my_custom_int'] );
+		$this->assertSame( $schema, $data['schema']['properties']['my_custom_int'] );
 
 		wp_set_current_user( 1 );
 
@@ -323,30 +383,30 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$this->assertEquals( $revision->post_author, $response['author'] );
 
 		$rendered_content = apply_filters( 'the_content', $revision->post_content );
-		$this->assertEquals( $rendered_content, $response['content']['rendered'] );
+		$this->assertSame( $rendered_content, $response['content']['rendered'] );
 
-		$this->assertEquals( mysql_to_rfc3339( $revision->post_date ), $response['date'] );
-		$this->assertEquals( mysql_to_rfc3339( $revision->post_date_gmt ), $response['date_gmt'] );
+		$this->assertSame( mysql_to_rfc3339( $revision->post_date ), $response['date'] );
+		$this->assertSame( mysql_to_rfc3339( $revision->post_date_gmt ), $response['date_gmt'] );
 
 		$rendered_excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $revision->post_excerpt, $revision ) );
-		$this->assertEquals( $rendered_excerpt, $response['excerpt']['rendered'] );
+		$this->assertSame( $rendered_excerpt, $response['excerpt']['rendered'] );
 
 		$rendered_guid = apply_filters( 'get_the_guid', $revision->guid, $revision->ID );
-		$this->assertEquals( $rendered_guid, $response['guid']['rendered'] );
+		$this->assertSame( $rendered_guid, $response['guid']['rendered'] );
 
-		$this->assertEquals( $revision->ID, $response['id'] );
-		$this->assertEquals( mysql_to_rfc3339( $revision->post_modified ), $response['modified'] );
-		$this->assertEquals( mysql_to_rfc3339( $revision->post_modified_gmt ), $response['modified_gmt'] );
-		$this->assertEquals( $revision->post_name, $response['slug'] );
+		$this->assertSame( $revision->ID, $response['id'] );
+		$this->assertSame( mysql_to_rfc3339( $revision->post_modified ), $response['modified'] );
+		$this->assertSame( mysql_to_rfc3339( $revision->post_modified_gmt ), $response['modified_gmt'] );
+		$this->assertSame( $revision->post_name, $response['slug'] );
 
 		$rendered_title = get_the_title( $revision->ID );
-		$this->assertEquals( $rendered_title, $response['title']['rendered'] );
+		$this->assertSame( $rendered_title, $response['title']['rendered'] );
 
 		$parent = get_post( $revision->post_parent );
 		$parent_controller = new WP_REST_Posts_Controller( $parent->post_type );
 		$parent_object = get_post_type_object( $parent->post_type );
 		$parent_base = ! empty( $parent_object->rest_base ) ? $parent_object->rest_base : $parent_object->name;
-		$this->assertEquals( rest_url( '/wp/v2/' . $parent_base . '/' . $revision->post_parent ), $links['parent'][0]['href'] );
+		$this->assertSame( rest_url( '/wp/v2/' . $parent_base . '/' . $revision->post_parent ), $links['parent'][0]['href'] );
 	}
 
 	public function test_get_item_sets_up_postdata() {
@@ -357,8 +417,8 @@ class WP_Test_REST_Revisions_Controller extends WP_Test_REST_Controller_Testcase
 		$post = get_post();
 		$parent_post_id = wp_is_post_revision( $post->ID );
 
-		$this->assertEquals( $post->ID, $this->revision_id1 );
-		$this->assertEquals( $parent_post_id, self::$post_id );
+		$this->assertSame( $post->ID, $this->revision_id1 );
+		$this->assertSame( $parent_post_id, self::$post_id );
 	}
 
 }

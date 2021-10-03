@@ -233,7 +233,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'p' => $p,
 		) );
 
-		$this->assertEquals( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSame( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_single_post_with_nonpublic_and_private_status_should_not_be_shown_for_user_who_cannot_edit_others_posts() {
@@ -261,7 +261,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'p' => $p,
 		) );
 
-		$this->assertEquals( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSame( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_single_post_with_nonpublic_and_protected_status_should_not_be_shown_for_any_user() {
@@ -279,7 +279,36 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/29167
+=======
+	 * @ticket 48653
+	 */
+	public function test_single_post_with_nonexisting_status_should_be_shown_for_user_who_can_edit_others_posts() {
+		register_post_type( 'foo_pt' );
+		register_post_status( 'foo_ps', array( 'public' => true ) );
+		$p = self::factory()->post->create(
+			array(
+				'post_status' => 'foo_ps',
+				'post_author' => self::$author_user_id,
+			)
+		);
+		_unregister_post_status( 'foo_ps' );
+
+		wp_set_current_user( self::$editor_user_id );
+
+		$q = new WP_Query(
+			array(
+				'p' => $p,
+			)
+		);
+
+		$this->assertSame( array( $p ), wp_list_pluck( $q->posts, 'ID' ) );
+	}
+
+	/**
+	 * @ticket 29167
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	public function test_specific_post_should_be_returned_if_trash_is_one_of_the_requested_post_statuses() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'trash' ) );

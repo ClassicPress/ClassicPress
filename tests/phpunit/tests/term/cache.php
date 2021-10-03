@@ -19,14 +19,24 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$term_id1_child = self::factory()->category->create( array( 'parent' => $term_id1 ) );
 		$hierarchy = _get_term_hierarchy( 'category' );
 
-		$this->assertEquals( array( $term_id1 => array( $term_id1_child ) ), $hierarchy );
+		$this->assertSame( array( $term_id1 => array( $term_id1_child ) ), $hierarchy );
 
 		// Add another Parent => Child
 		$term_id2 = self::factory()->category->create();
 		$term_id2_child = self::factory()->category->create( array( 'parent' => $term_id2 ) );
 		$hierarchy = _get_term_hierarchy( 'category' );
 
+<<<<<<< HEAD
 		$this->assertEquals( array( $term_id1 => array( $term_id1_child ), $term_id2 => array( $term_id2_child ) ), $hierarchy );
+=======
+		$this->assertSame(
+			array(
+				$term_id1 => array( $term_id1_child ),
+				$term_id2 => array( $term_id2_child ),
+			),
+			$hierarchy
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -39,7 +49,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		$post = get_post( $post_id );
 		$cats1 = get_the_category( $post->ID );
-		$this->assertEquals( $term->name, reset( $cats1 )->name );
+		$this->assertSame( $term->name, reset( $cats1 )->name );
 
 		wp_update_term( $term->term_id, 'category', array( 'name' => 'Bar' ) );
 		$cats2 = get_the_category( $post->ID );
@@ -77,11 +87,11 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 			}
 
 			$terms = get_terms( $tax, array( 'hide_empty' => false ) );
-			$this->assertEquals( $i, count( $terms ) );
+			$this->assertSame( $i, count( $terms ) );
 			if ( $i > 1 ) {
 				$hierarchy = _get_term_hierarchy( $tax );
 				$this->assertNotEmpty( $hierarchy );
-				$this->assertEquals( $children, count( $hierarchy, COUNT_RECURSIVE ) - count( $hierarchy ) );
+				$this->assertSame( $children, count( $hierarchy, COUNT_RECURSIVE ) - count( $hierarchy ) );
 			}
 
 			if ( $i % 3 === 0 ) {
@@ -117,7 +127,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		// No new queries should have fired.
 		$this->assertSame( $num_queries, $wpdb->num_queries );
-		$this->assertEquals( $term_object, $term_object_2 );
+		$this->assertSame( $term_object, $term_object_2 );
 	}
 
 	public function test_get_term_should_update_term_cache_when_passed_a_valid_term_identifier() {
@@ -233,16 +243,16 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( 'Taco', $term->name );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// This should now hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
-		$this->assertEquals( 'Taco', $term->name );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		$this->assertEquals( get_term( $term_id, 'post_tag' ), $term );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -258,13 +268,13 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( 'Taco', $term->name );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// This should now hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
-		$this->assertEquals( 'Taco', $term->name );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Update the tag which invalidates the cache.
 		wp_update_term( $term_id, 'post_tag', array( 'name' => 'No Taco' ) );
@@ -273,8 +283,8 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		// This should not hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( 'No Taco', $term->name );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( 'No Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -290,14 +300,14 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		get_term_by( 'name', 'Burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// This should now hit cache.
 		$term = get_term_by( 'name', 'Burrito', 'post_tag' );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		$this->assertEquals( get_term( $term_id, 'post_tag' ), $term );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -313,11 +323,11 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		get_term_by( 'name', 'Burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// This should now hit cache.
 		get_term_by( 'name', 'Burrito', 'post_tag' );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Update the tag which invalidates the cache.
 		wp_update_term( $term_id, 'post_tag', array( 'slug' => 'taco' ) );
@@ -326,7 +336,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		// This should not hit cache.
 		get_term_by( 'name', 'burrito', 'post_tag' );
 		$num_queries++;
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
 	/**
@@ -346,7 +356,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		// Verify the term is cached.
 		$term2 = get_term_by( 'name', 'Burrito', 'post_tag' );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 		$this->assertEquals( $term1, $term2 );
 
 		$suspend = wp_suspend_cache_invalidation();
@@ -357,7 +367,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		// Verify that the cached term still matches the initial cached term.
 		$term3 = get_term_by( 'name', 'Burrito', 'post_tag' );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 		$this->assertEquals( $term1, $term3 );
 
 		// Verify that last changed has not been updated as part of an invalidation routine.
@@ -383,12 +393,12 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries++;
 		$this->assertTrue( $term instanceof WP_Term );
 		$this->assertSame( $term_id, $term->term_id );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		$term_meta = get_term_meta( $term_id, 'foo', true );
 		$num_queries++;
 		$this->assertSame( $term_meta, 'bar' );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
 	/**

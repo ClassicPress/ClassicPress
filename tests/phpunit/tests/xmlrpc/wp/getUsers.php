@@ -9,7 +9,7 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$results = $this->myxmlrpcserver->wp_getUsers( array( 1, 'username', 'password' ) );
 		$this->assertIXRError( $results );
-		$this->assertEquals( 403, $results->code );
+		$this->assertSame( 403, $results->code );
 	}
 
 	function test_incapable_user() {
@@ -17,7 +17,7 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 
 		$results = $this->myxmlrpcserver->wp_getUsers( array( 1, 'subscriber', 'subscriber' ) );
 		$this->assertIXRError( $results );
-		$this->assertEquals( 401, $results->code );
+		$this->assertSame( 401, $results->code );
 	}
 
 	function test_capable_user() {
@@ -50,7 +50,7 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 		$filter = array( 'role' => 'invalidrole' );
 		$results = $this->myxmlrpcserver->wp_getUsers( array( 1, 'administrator', 'administrator', $filter ) );
 		$this->assertIXRError( $results );
-		$this->assertEquals( 403, $results->code );
+		$this->assertSame( 403, $results->code );
 	}
 
 	function test_role_filter() {
@@ -95,8 +95,13 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 			$filter['offset'] += $page_size;
 		} while ( count( $presults ) > 0 );
 
+<<<<<<< HEAD
 		// verify that $user_ids matches $users_found
 		$this->assertEquals( 0, count( array_diff( $user_ids, $users_found ) ) );
+=======
+		// Verify that $user_ids matches $users_found.
+		$this->assertSame( 0, count( array_diff( $user_ids, $users_found ) ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_order_filters() {

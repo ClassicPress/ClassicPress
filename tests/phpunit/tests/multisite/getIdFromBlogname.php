@@ -71,7 +71,7 @@ class Tests_Multisite_Get_Id_From_Blogname extends WP_UnitTestCase {
 		$result = get_id_from_blogname( 'foo' );
 		$current_site = $original_network;
 
-		$this->assertEquals( $expected, $result );
+			$this->assertSame( $expected, $result );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Tests_Multisite_Get_Id_From_Blogname extends WP_UnitTestCase {
 		$result = get_id_from_blogname( 'foo' );
 		$current_site = $original_network;
 
-		$this->assertEquals( $expected, $result );
+			$this->assertSame( $expected, $result );
 	}
 
 	public function test_get_id_from_blogname_invalid_slug() {
@@ -104,7 +104,7 @@ class Tests_Multisite_Get_Id_From_Blogname extends WP_UnitTestCase {
 		$result = get_id_from_blogname( 'bar' );
 		$current_site = $original_network;
 
-		$this->assertEquals( null, $result );
+			$this->assertNull( $result );
 	}
 
 }

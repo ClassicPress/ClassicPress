@@ -77,9 +77,9 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	 */
 	function test_construct() {
 		$this->assertTrue( post_type_exists( 'custom_css' ) );
-		$this->assertEquals( 'custom_css', $this->setting->type );
-		$this->assertEquals( get_stylesheet(), $this->setting->stylesheet );
-		$this->assertEquals( 'edit_css', $this->setting->capability );
+		$this->assertSame( 'custom_css', $this->setting->type );
+		$this->assertSame( get_stylesheet(), $this->setting->stylesheet );
+		$this->assertSame( 'edit_css', $this->setting->capability );
 
 		$exception = null;
 		try {
@@ -111,7 +111,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	function test_crud() {
 
 		$this->setting->default = '/* Hello World */';
-		$this->assertEquals( $this->setting->default, $this->setting->value() );
+		$this->assertSame( $this->setting->default, $this->setting->value() );
 
 		$this->assertNull( wp_get_custom_css_post() );
 		$this->assertNull( wp_get_custom_css_post( $this->setting->stylesheet ) );
@@ -137,29 +137,29 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 
 		remove_theme_mod( 'custom_css_post_id' );
 
-		$this->assertEquals( $post_id, wp_get_custom_css_post()->ID );
-		$this->assertEquals( $post_id, wp_get_custom_css_post( $this->setting->stylesheet )->ID );
-		$this->assertEquals( $twentyten_post_id, wp_get_custom_css_post( 'twentyten' )->ID );
+		$this->assertSame( $post_id, wp_get_custom_css_post()->ID );
+		$this->assertSame( $post_id, wp_get_custom_css_post( $this->setting->stylesheet )->ID );
+		$this->assertSame( $twentyten_post_id, wp_get_custom_css_post( 'twentyten' )->ID );
 
-		$this->assertEquals( $original_css, wp_get_custom_css( $this->setting->stylesheet ) );
-		$this->assertEquals( $original_css, $this->setting->value() );
-		$this->assertEquals( $twentyten_css, wp_get_custom_css( 'twentyten' ) );
-		$this->assertEquals( $twentyten_css, $twentyten_setting->value() );
+		$this->assertSame( $original_css, wp_get_custom_css( $this->setting->stylesheet ) );
+		$this->assertSame( $original_css, $this->setting->value() );
+		$this->assertSame( $twentyten_css, wp_get_custom_css( 'twentyten' ) );
+		$this->assertSame( $twentyten_css, $twentyten_setting->value() );
 
 		$updated_css = 'body { color: blue; }';
 		$this->wp_customize->set_post_value( $this->setting->id, $updated_css );
 		$saved = $this->setting->save();
 
 		$this->assertNotFalse( $saved );
-		$this->assertEquals( $updated_css, $this->setting->value() );
-		$this->assertEquals( $updated_css, wp_get_custom_css( $this->setting->stylesheet ) );
-		$this->assertEquals( $updated_css, get_post( $post_id )->post_content );
+		$this->assertSame( $updated_css, $this->setting->value() );
+		$this->assertSame( $updated_css, wp_get_custom_css( $this->setting->stylesheet ) );
+		$this->assertSame( $updated_css, get_post( $post_id )->post_content );
 
 		$previewed_css = 'body { color: red; }';
 		$this->wp_customize->set_post_value( $this->setting->id, $previewed_css );
 		$this->setting->preview();
-		$this->assertEquals( $previewed_css, $this->setting->value() );
-		$this->assertEquals( $previewed_css, wp_get_custom_css( $this->setting->stylesheet ) );
+		$this->assertSame( $previewed_css, $this->setting->value() );
+		$this->assertSame( $previewed_css, wp_get_custom_css( $this->setting->stylesheet ) );
 
 		// Make sure that wp_update_custom_css_post() works as expected for updates.
 		$r = wp_update_custom_css_post( 'body { color:red; }', array(
@@ -167,31 +167,31 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 			'preprocessed' => "body\n\tcolor:red;",
 		) );
 		$this->assertInstanceOf( 'WP_Post', $r );
-		$this->assertEquals( $post_id, $r->ID );
-		$this->assertEquals( 'body { color:red; }', get_post( $r )->post_content );
-		$this->assertEquals( "body\n\tcolor:red;", get_post( $r )->post_content_filtered );
+		$this->assertSame( $post_id, $r->ID );
+		$this->assertSame( 'body { color:red; }', get_post( $r )->post_content );
+		$this->assertSame( "body\n\tcolor:red;", get_post( $r )->post_content_filtered );
 		$r = wp_update_custom_css_post( 'body { content: "\o/"; }' );
-		$this->assertEquals( $this->wp_customize->get_stylesheet(), get_post( $r )->post_name );
-		$this->assertEquals( 'body { content: "\o/"; }', get_post( $r )->post_content );
-		$this->assertEquals( '', get_post( $r )->post_content_filtered );
+		$this->assertSame( $this->wp_customize->get_stylesheet(), get_post( $r )->post_name );
+		$this->assertSame( 'body { content: "\o/"; }', get_post( $r )->post_content );
+		$this->assertSame( '', get_post( $r )->post_content_filtered );
 
 		// Make sure that wp_update_custom_css_post() works as expected for insertion.
 		$r = wp_update_custom_css_post( 'body { background:black; }', array(
 			'stylesheet' => 'other',
 		) );
 		$this->assertInstanceOf( 'WP_Post', $r );
-		$this->assertEquals( 'other', get_post( $r )->post_name );
-		$this->assertEquals( 'body { background:black; }', get_post( $r )->post_content );
-		$this->assertEquals( 'publish', get_post( $r )->post_status );
+		$this->assertSame( 'other', get_post( $r )->post_name );
+		$this->assertSame( 'body { background:black; }', get_post( $r )->post_content );
+		$this->assertSame( 'publish', get_post( $r )->post_status );
 
 		// Test deletion.
 		wp_delete_post( $post_id );
 		$this->assertNull( wp_get_custom_css_post() );
 		$this->assertNull( wp_get_custom_css_post( get_stylesheet() ) );
-		$this->assertEquals( $previewed_css, wp_get_custom_css( get_stylesheet() ), 'Previewed value remains in spite of deleted post.' );
+		$this->assertSame( $previewed_css, wp_get_custom_css( get_stylesheet() ), 'Previewed value remains in spite of deleted post.' );
 		wp_delete_post( $twentyten_post_id );
 		$this->assertNull( wp_get_custom_css_post( 'twentyten' ) );
-		$this->assertEquals( '', wp_get_custom_css( 'twentyten' ) );
+		$this->assertSame( '', wp_get_custom_css( 'twentyten' ) );
 	}
 
 	/**
@@ -253,7 +253,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	function test_value_filter() {
 		add_filter( 'customize_value_custom_css', array( $this, 'filter_value' ), 10, 2 );
 		$this->setting->default = '/*default*/';
-		$this->assertEquals( '/*default*//*filtered*/', $this->setting->value() );
+		$this->assertSame( '/*default*//*filtered*/', $this->setting->value() );
 
 		$this->factory()->post->create( array(
 			'post_title' => $this->setting->stylesheet,
@@ -263,11 +263,11 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 			'post_type' => 'custom_css',
 		) );
 		remove_theme_mod( 'custom_css_post_id' );
-		$this->assertEquals( '/*custom*//*filtered*/', $this->setting->value() );
+		$this->assertSame( '/*custom*//*filtered*/', $this->setting->value() );
 
 		$this->wp_customize->set_post_value( $this->setting->id, '/*overridden*/' );
 		$this->setting->preview();
-		$this->assertEquals( '/*overridden*/', $this->setting->value(), 'Expected value to not be filtered since post value is present.' );
+		$this->assertSame( '/*overridden*/', $this->setting->value(), 'Expected value to not be filtered since post value is present.' );
 	}
 
 	/**
@@ -308,7 +308,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 		$this->setting->save();
 
 		$post = get_post( $post_id );
-		$this->assertEquals( $original_title, $post->post_title );
+		$this->assertSame( $original_title, $post->post_title );
 		$this->assertContains( $overridden_css, $post->post_content );
 		$this->assertContains( '/* filtered post_content */', $post->post_content );
 		$this->assertContains( '/* filtered post_content_filtered */', $post->post_content_filtered );
@@ -324,11 +324,11 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	function filter_update_custom_css_data( $data, $args ) {
 		$this->assertInternalType( 'array', $data );
 		$this->assertEqualSets( array( 'css', 'preprocessed' ), array_keys( $data ) );
-		$this->assertEquals( '', $data['preprocessed'] );
+		$this->assertSame( '', $data['preprocessed'] );
 		$this->assertInternalType( 'array', $args );
 		$this->assertEqualSets( array( 'css', 'preprocessed', 'stylesheet' ), array_keys( $args ) );
-		$this->assertEquals( $args['css'], $data['css'] );
-		$this->assertEquals( $args['preprocessed'], $data['preprocessed'] );
+		$this->assertSame( $args['css'], $data['css'] );
+		$this->assertSame( $args['preprocessed'], $data['preprocessed'] );
 
 		$data['css'] .= '/* filtered post_content */';
 		$data['preprocessed'] = '/* filtered post_content_filtered */';

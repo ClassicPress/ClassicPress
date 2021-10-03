@@ -44,6 +44,10 @@ class Tests_Formatting_GetUrlInContent extends WP_UnitTestCase {
 	 * @dataProvider get_input_output
 	 */
 	function test_get_url_in_content( $in_str, $exp_str ) {
+<<<<<<< HEAD
 		$this->assertEquals($exp_str, get_url_in_content( $in_str ) );
+=======
+		$this->assertSame( $exp_str, get_url_in_content( $in_str ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

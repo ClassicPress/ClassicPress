@@ -107,8 +107,8 @@ class Tests_Formatting_SanitizeTextField extends WP_UnitTestCase {
 		} else {
 			$expected_oneline = $expected_multiline = $expected;
 		}
-		$this->assertEquals( $expected_oneline, sanitize_text_field( $string ) );
-		$this->assertEqualsIgnoreEOL( $expected_multiline, sanitize_textarea_field( $string ) );
+		$this->assertSame( $expected_oneline, sanitize_text_field( $string ) );
+		$this->assertSameIgnoreEOL( $expected_multiline, sanitize_textarea_field( $string ) );
 
 	}
 }

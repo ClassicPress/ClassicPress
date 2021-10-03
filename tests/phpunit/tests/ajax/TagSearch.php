@@ -50,8 +50,13 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
+<<<<<<< HEAD
 		// Ensure we found the right match
 		$this->assertEquals( $this->_last_response, 'chattels' );
+=======
+		// Ensure we found the right match.
+		$this->assertSame( $this->_last_response, 'chattels' );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -91,8 +96,13 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
+<<<<<<< HEAD
 		// Ensure we found the right match
 		$this->assertEquals( $this->_last_response, 'chattels' );
+=======
+		// Ensure we found the right match.
+		$this->assertSame( $this->_last_response, 'chattels' );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

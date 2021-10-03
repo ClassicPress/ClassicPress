@@ -22,13 +22,13 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/statuses' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'embed', 'view', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/statuses/publish' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'embed', 'view', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 	}
 
@@ -38,8 +38,8 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 
 		$data = $response->get_data();
 		$statuses = get_post_stati( array( 'public' => true ), 'objects' );
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( 'publish', $data['publish']['slug'] );
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( 'publish', $data['publish']['slug'] );
 	}
 
 	public function test_get_items_logged_in() {
@@ -50,8 +50,14 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$response = $this->server->dispatch( $request );
 
 		$data = $response->get_data();
+<<<<<<< HEAD
 		$this->assertEquals( 6, count( $data ) );
 		$this->assertEqualSets( array(
+=======
+		$this->assertSame( 6, count( $data ) );
+		$this->assertEqualSets(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'publish',
 			'private',
 			'pending',
@@ -102,22 +108,37 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 	public function test_create_item() {
 		/** Post statuses can't be created **/
 		$request = new WP_REST_Request( 'POST', '/wp/v2/statuses' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 404, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 404, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item() {
 		/** Post statuses can't be updated **/
 		$request = new WP_REST_Request( 'POST', '/wp/v2/statuses/draft' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 404, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 404, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_delete_item() {
 		/** Post statuses can't be deleted **/
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/statuses/draft' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 404, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 404, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_prepare_item() {
@@ -136,7 +157,12 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$request->set_param( 'context', 'edit' );
 		$request->set_param( '_fields', 'id,name' );
 		$response = $endpoint->prepare_item_for_response( $obj, $request );
+<<<<<<< HEAD
 		$this->assertEquals( array(
+=======
+		$this->assertSame(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			// 'id' doesn't exist in this context.
 			'name',
 		), array_keys( $response->get_data() ) );
@@ -147,7 +173,11 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
+<<<<<<< HEAD
 		$this->assertEquals( 7, count( $properties ) );
+=======
+		$this->assertSame( 8, count( $properties ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayHasKey( 'name', $properties );
 		$this->assertArrayHasKey( 'private', $properties );
 		$this->assertArrayHasKey( 'protected', $properties );
@@ -178,7 +208,7 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$data = $response->get_data();
 
 		$this->assertArrayHasKey( 'my_custom_int', $data['schema']['properties'] );
-		$this->assertEquals( $schema, $data['schema']['properties']['my_custom_int'] );
+		$this->assertSame( $schema, $data['schema']['properties']['my_custom_int'] );
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/statuses/publish' );
 
@@ -194,6 +224,7 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 	}
 
 	protected function check_post_status_obj( $status_obj, $data, $links ) {
+<<<<<<< HEAD
 		$this->assertEquals( $status_obj->label, $data['name'] );
 		$this->assertEquals( $status_obj->private, $data['private'] );
 		$this->assertEquals( $status_obj->protected, $data['protected'] );
@@ -204,10 +235,26 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$this->assertEqualSets( array(
 			'archives',
 		), array_keys( $links ) );
+=======
+		$this->assertSame( $status_obj->label, $data['name'] );
+		$this->assertSame( $status_obj->private, $data['private'] );
+		$this->assertSame( $status_obj->protected, $data['protected'] );
+		$this->assertSame( $status_obj->public, $data['public'] );
+		$this->assertSame( $status_obj->publicly_queryable, $data['queryable'] );
+		$this->assertSame( $status_obj->show_in_admin_all_list, $data['show_in_list'] );
+		$this->assertSame( $status_obj->name, $data['slug'] );
+		$this->assertEqualSets(
+			array(
+				'archives',
+			),
+			array_keys( $links )
+		);
+		$this->assertSame( $status_obj->date_floating, $data['date_floating'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	protected function check_post_status_object_response( $response ) {
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$obj = get_post_status_object( 'publish' );
 		$this->check_post_status_obj( $obj, $data, $response->get_links() );

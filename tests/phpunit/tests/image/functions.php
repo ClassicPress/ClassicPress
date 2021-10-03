@@ -166,8 +166,13 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_tempnam();
 				$ret = wp_save_image_file( $file, $img, $mime_type, 1 );
 				$this->assertNotEmpty( $ret );
+<<<<<<< HEAD
 				$this->assertNotInstanceOf( 'WP_Error', $ret );
 				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+=======
+				$this->assertNotWPError( $ret );
+				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 				// Clean up
 				unlink( $file );
@@ -207,8 +212,13 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 			// Make assertions
 			$this->assertNotEmpty( $ret );
+<<<<<<< HEAD
 			$this->assertNotInstanceOf( 'WP_Error', $ret );
 			$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+=======
+			$this->assertNotWPError( $ret );
+			$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// Clean up
 			unlink( $file );
@@ -261,8 +271,13 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_unique_filename( $temp, uniqid() . ".$ext" );
 				$ret = $img->save( trailingslashit( $temp ) . $file );
 				$this->assertNotEmpty( $ret );
+<<<<<<< HEAD
 				$this->assertNotInstanceOf( 'WP_Error', $ret );
 				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+=======
+				$this->assertNotWPError( $ret );
+				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 				unlink( $ret['path'] );
 			}
 
@@ -298,7 +313,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$loaded = $editor->load();
 
 			$this->assertInstanceOf( 'WP_Error', $loaded );
-			$this->assertEquals( 'error_loading_image', $loaded->get_error_code() );
+			$this->assertSame( 'error_loading_image', $loaded->get_error_code() );
 		}
 	}
 
@@ -312,8 +327,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertFileExists( $file );
 		$image = wp_get_image_editor( $file );
 		$size = $image->get_size();
-		$this->assertEquals( 100, $size['height'] );
-		$this->assertEquals( 100, $size['width'] );
+		$this->assertSame( 100, $size['height'] );
+		$this->assertSame( 100, $size['width'] );
 
 		unlink( $file );
 	}
@@ -333,8 +348,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertFileExists( $file );
 		$image = wp_get_image_editor( $file );
 		$size = $image->get_size();
-		$this->assertEquals( 100, $size['height'] );
-		$this->assertEquals( 100, $size['width'] );
+		$this->assertSame( 100, $size['height'] );
+		$this->assertSame( 100, $size['width'] );
 
 		unlink( $file );
 	}

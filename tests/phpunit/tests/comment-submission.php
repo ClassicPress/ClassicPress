@@ -724,8 +724,14 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 		remove_filter( 'preprocess_comment', array( $this, 'filter_preprocess_comment' ) );
 
 		$this->assertNotWPError( $comment );
+<<<<<<< HEAD
 		$this->assertEquals( array(
 			'comment_post_ID'      => $post->ID,
+=======
+		$this->assertSame(
+			array(
+				'comment_post_ID'      => self::$post->ID,
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'comment_author'       => $user->display_name,
 			'comment_author_email' => $user->user_email,
 			'comment_author_url'   => $user->user_url,

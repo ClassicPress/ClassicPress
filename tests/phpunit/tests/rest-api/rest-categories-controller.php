@@ -79,14 +79,14 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/categories' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single
 		$category1 = $this->factory->category->create( array( 'name' => 'Season 5' ) );
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/categories/' . $category1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertEqualSets( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 	}
 
@@ -96,7 +96,12 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
+<<<<<<< HEAD
 		$this->assertEquals( array(
+=======
+		$this->assertSame(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'context',
 			'exclude',
 			'hide_empty',
@@ -135,15 +140,19 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'hide_empty', true );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Season 5', $data[0]['name'] );
-		$this->assertEquals( 'The Be Sharps', $data[1]['name'] );
+		$this->assertSame( 2, count( $data ) );
+		$this->assertSame( 'Season 5', $data[0]['name'] );
+		$this->assertSame( 'The Be Sharps', $data[1]['name'] );
 
 		// Confirm the empty category "Uncategorized" category appears.
 		$request->set_param( 'hide_empty', 'false' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+<<<<<<< HEAD
 		$this->assertEquals( 3, count( $data ) );
+=======
+		$this->assertSame( $total_categories, count( $data ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_parent_zero_arg() {
@@ -165,7 +174,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'parent', 0 );
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 
 		$args = array(
@@ -173,7 +182,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 			'parent'     => 0,
 		);
 		$categories = get_terms( 'category', $args );
-		$this->assertEquals( count( $categories ), count( $data ) );
+		$this->assertSame( count( $categories ), count( $data ) );
 	}
 
 	public function test_get_items_parent_zero_arg_string() {
@@ -195,7 +204,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'parent', '0' );
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 
 		$args = array(
@@ -203,7 +212,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 			'parent'     => 0,
 		);
 		$categories = get_terms( 'category', $args );
-		$this->assertEquals( count( $categories ), count( $data ) );
+		$this->assertSame( count( $categories ), count( $data ) );
 	}
 
 	public function test_get_items_by_parent_non_found() {
@@ -213,10 +222,10 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'parent', $parent1 );
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 
-		$this->assertEquals( array(), $data );
+		$this->assertSame( array(), $data );
 	}
 
 	public function test_get_items_invalid_page() {
@@ -238,14 +247,26 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'include', array( $id3, $id1 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+<<<<<<< HEAD
 		$this->assertEquals( 2, count( $data ) );
 		$this->assertEquals( $id1, $data[0]['id'] );
 		// Orderby=>include
+=======
+		$this->assertSame( 2, count( $data ) );
+		$this->assertSame( $id1, $data[0]['id'] );
+
+		// 'orderby' => 'include'.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'include' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+<<<<<<< HEAD
 		$this->assertEquals( 2, count( $data ) );
 		$this->assertEquals( $id3, $data[0]['id'] );
+=======
+		$this->assertSame( 2, count( $data ) );
+		$this->assertSame( $id2, $data[0]['id'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_exclude_query() {
@@ -276,20 +297,34 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'orderby', 'name' );
 		$request->set_param( 'order', 'desc' );
 		$request->set_param( 'per_page', 1 );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 1, count( $data ) );
 		$this->assertEquals( 'Uncategorized', $data[0]['name'] );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( 'Uncategorized', $data[0]['name'] );
+
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'orderby', 'name' );
 		$request->set_param( 'order', 'asc' );
 		$request->set_param( 'per_page', 2 );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Apple', $data[0]['name'] );
+		$this->assertSame( 2, count( $data ) );
+		$this->assertSame( 'Apple', $data[0]['name'] );
 	}
 
 	public function test_get_items_orderby_id() {
@@ -298,6 +333,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->factory->category->create( array( 'name' => 'Banana' ) );
 		// defaults to orderby=name, order=asc
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
@@ -316,15 +352,35 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertEquals( 'Apple', $data[2]['name'] );
 		$this->assertEquals( 'Banana', $data[3]['name'] );
 		// orderby=id, order=desc
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertSame( 'Apple', $data[0]['name'] );
+		$this->assertSame( 'Banana', $data[1]['name'] );
+		$this->assertSame( 'Cantaloupe', $data[2]['name'] );
+
+		// 'orderby' => 'id', with default 'order' => 'asc'.
+		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
+		$request->set_param( 'orderby', 'id' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertSame( 'Category 0', $data[1]['name'] );
+		$this->assertSame( 'Category 1', $data[2]['name'] );
+		$this->assertSame( 'Category 2', $data[3]['name'] );
+
+		// 'orderby' => 'id', 'order' => 'desc'.
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'orderby', 'id' );
 		$request->set_param( 'order', 'desc' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 'Banana', $data[0]['name'] );
-		$this->assertEquals( 'Apple', $data[1]['name'] );
-		$this->assertEquals( 'Cantaloupe', $data[2]['name'] );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'Banana', $data[0]['name'] );
+		$this->assertSame( 'Apple', $data[1]['name'] );
+		$this->assertSame( 'Cantaloupe', $data[2]['name'] );
 	}
 
 	public function test_get_items_orderby_slugs() {
@@ -337,10 +393,10 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'slug', array( 'taco', 'burrito', 'chalupa' ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 'taco', $data[0]['slug'] );
-		$this->assertEquals( 'burrito', $data[1]['slug'] );
-		$this->assertEquals( 'chalupa', $data[2]['slug'] );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'taco', $data[0]['slug'] );
+		$this->assertSame( 'burrito', $data[1]['slug'] );
+		$this->assertSame( 'chalupa', $data[2]['slug'] );
 	}
 
 	protected function post_with_categories() {
@@ -367,15 +423,20 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'post', $post_id );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( 3, count( $data ) );
+		$this->assertSame( 3, count( $data ) );
 
 		// Check ordered by name by default
 		$names = wp_list_pluck( $data, 'name' );
-		$this->assertEquals( array( 'DC', 'Image', 'Marvel' ), $names );
+		$this->assertSame( array( 'DC', 'Image', 'Marvel' ), $names );
 	}
 
 	public function test_get_items_post_ordered_by_description() {
@@ -385,23 +446,33 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'post', $post_id );
 		$request->set_param( 'orderby', 'description' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( 3, count( $data ) );
+		$this->assertSame( 3, count( $data ) );
 		$names = wp_list_pluck( $data, 'name' );
-		$this->assertEquals( array( 'Image', 'Marvel', 'DC' ), $names, 'Terms should be ordered by description' );
+		$this->assertSame( array( 'Image', 'Marvel', 'DC' ), $names, 'Terms should be ordered by description' );
 
 		// Flip the order
 		$request->set_param( 'order', 'desc' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( 3, count( $data ) );
+		$this->assertSame( 3, count( $data ) );
 		$names = wp_list_pluck( $data, 'name' );
-		$this->assertEquals( array( 'DC', 'Marvel', 'Image' ), $names, 'Terms should be reverse-ordered by description' );
+		$this->assertSame( array( 'DC', 'Marvel', 'Image' ), $names, 'Terms should be reverse-ordered by description' );
 	}
 
 	public function test_get_items_post_ordered_by_id() {
@@ -410,13 +481,18 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'post', $post_id );
 		$request->set_param( 'orderby', 'id' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( 3, count( $data ) );
+		$this->assertSame( 3, count( $data ) );
 		$names = wp_list_pluck( $data, 'name' );
-		$this->assertEquals( array( 'DC', 'Marvel', 'Image' ), $names );
+		$this->assertSame( array( 'DC', 'Marvel', 'Image' ), $names );
 	}
 
 	public function test_get_items_custom_tax_post_args() {
@@ -431,12 +507,17 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/batman' );
 		$request->set_param( 'post', $post_id );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Cape', $data[0]['name'] );
+		$this->assertSame( 2, count( $data ) );
+		$this->assertSame( 'Cape', $data[0]['name'] );
 	}
 
 	public function test_get_items_search_args() {
@@ -448,6 +529,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		 */
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'search', 'App' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
@@ -457,8 +539,20 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'search', 'Garbage' );
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertEquals( 0, count( $data ) );
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( 'Apple', $data[0]['name'] );
+
+		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
+		$request->set_param( 'search', 'Garbage' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$data = $response->get_data();
+		$this->assertSame( 0, count( $data ) );
 	}
 
 	public function test_get_items_slug_arg() {
@@ -466,11 +560,16 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->factory->category->create( array( 'name' => 'Banana' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'slug', 'apple' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( 'Apple', $data[0]['name'] );
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( 'Apple', $data[0]['name'] );
 	}
 
 	public function test_get_terms_parent_arg() {
@@ -480,8 +579,8 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'parent', $category1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( 'Child', $data[0]['name'] );
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( 'Child', $data[0]['name'] );
 	}
 
 	public function test_get_terms_invalid_parent_arg() {
@@ -519,8 +618,13 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 50, $headers['X-WP-Total'] );
 		$this->assertEquals( 5, $headers['X-WP-TotalPages'] );
+=======
+		$this->assertSame( $total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertCount( 10, $response->get_data() );
 		$next_link = add_query_arg( array(
 			'page'    => 2,
@@ -535,8 +639,13 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 51, $headers['X-WP-Total'] );
 		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
+=======
+		$this->assertSame( $total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertCount( 10, $response->get_data() );
 		$prev_link = add_query_arg( array(
 			'page'    => 2,
@@ -551,8 +660,13 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 51, $headers['X-WP-Total'] );
 		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
+=======
+		$this->assertSame( $total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertCount( 1, $response->get_data() );
 		$prev_link = add_query_arg( array(
 			'page'    => 5,
@@ -564,8 +678,13 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 51, $headers['X-WP-Total'] );
 		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
+=======
+		$this->assertSame( $total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertCount( 0, $response->get_data() );
 		$prev_link = add_query_arg( array(
 			'page'    => 6,
@@ -586,16 +705,28 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'per_page', 100 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 18, $headers['X-WP-Total'] );
 		$this->assertEquals( 1, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 18, $response->get_data() );
+=======
+		$this->assertSame( self::$total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( 1, $headers['X-WP-TotalPages'] );
+		$this->assertCount( self::$total_categories, $response->get_data() );
+
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 2 );
 		$request->set_param( 'per_page', 100 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
+<<<<<<< HEAD
 		$this->assertEquals( 18, $headers['X-WP-Total'] );
 		$this->assertEquals( 1, $headers['X-WP-TotalPages'] );
+=======
+		$this->assertSame( self::$total_categories, $headers['X-WP-Total'] );
+		$this->assertSame( 1, $headers['X-WP-TotalPages'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertCount( 0, $response->get_data() );
 	}
 
@@ -676,14 +807,19 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'description', 'This term is so awesome.' );
 		$request->set_param( 'slug', 'so-awesome' );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 201, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 201, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$headers = $response->get_headers();
 		$data = $response->get_data();
 		$this->assertContains( '/wp/v2/categories/' . $data['id'], $headers['Location'] );
-		$this->assertEquals( 'My Awesome Term', $data['name'] );
-		$this->assertEquals( 'This term is so awesome.', $data['description'] );
-		$this->assertEquals( 'so-awesome', $data['slug'] );
+		$this->assertSame( 'My Awesome Term', $data['name'] );
+		$this->assertSame( 'This term is so awesome.', $data['description'] );
+		$this->assertSame( 'so-awesome', $data['slug'] );
 	}
 
 	/**
@@ -696,11 +832,16 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'POST', '/wp/v2/categories' );
 		$request->set_param( 'name', 'Existing' );
 
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 409, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 400, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
-		$this->assertEquals( 'term_exists', $data['code'] );
-		$this->assertEquals( $existing_id, (int) $data['data']['term_id'] );
+		$this->assertSame( 'term_exists', $data['code'] );
+		$this->assertSame( $existing_id, (int) $data['data']['term_id'] );
 
 		wp_delete_term( $existing_id, 'category' );
 	}
@@ -742,10 +883,15 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request = new WP_REST_Request( 'POST', '/wp/v2/categories' );
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'parent', $parent['term_id'] );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 201, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 201, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
-		$this->assertEquals( $parent['term_id'], $data['parent'] );
+		$this->assertSame( $parent['term_id'], $data['parent'] );
 	}
 
 	public function test_create_item_invalid_parent() {
@@ -759,6 +905,23 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertErrorResponse( 'rest_term_invalid', $response, 400 );
 	}
 
+<<<<<<< HEAD
+=======
+	public function test_create_item_with_no_parent() {
+		wp_set_current_user( self::$administrator );
+
+		$parent = 0;
+
+		$request = new WP_REST_Request( 'POST', '/wp/v2/categories' );
+		$request->set_param( 'name', 'My Awesome Term' );
+		$request->set_param( 'parent', $parent );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 201, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertSame( $parent, $data['parent'] );
+	}
+
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_update_item() {
 		wp_set_current_user( self::$administrator );
 		$orig_args = array(
@@ -775,15 +938,22 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 			'test_single' => 'just meta',
 			'test_cat_single' => 'category-specific meta',
 			'test_tag_meta' => 'tag-specific meta',
+<<<<<<< HEAD
 		) );
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+			)
+		);
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
-		$this->assertEquals( 'New Name', $data['name'] );
-		$this->assertEquals( 'New Description', $data['description'] );
-		$this->assertEquals( 'new-slug', $data['slug'] );
-		$this->assertEquals( 'just meta', $data['meta']['test_single'] );
-		$this->assertEquals( 'category-specific meta', $data['meta']['test_cat_single'] );
+		$this->assertSame( 'New Name', $data['name'] );
+		$this->assertSame( 'New Description', $data['description'] );
+		$this->assertSame( 'new-slug', $data['slug'] );
+		$this->assertSame( 'just meta', $data['meta']['test_single'] );
+		$this->assertSame( 'category-specific meta', $data['meta']['test_cat_single'] );
 		$this->assertFalse( isset( $data['meta']['test_tag_meta'] ) );
 	}
 
@@ -819,13 +989,48 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		$request = new WP_REST_Request( 'POST', '/wp/v2/categories/' . $term->term_id );
 		$request->set_param( 'parent', $parent->term_id );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
-		$this->assertEquals( $parent->term_id, $data['parent'] );
+		$this->assertSame( $parent->term_id, $data['parent'] );
 	}
 
+<<<<<<< HEAD
+=======
+	public function test_update_item_remove_parent() {
+		wp_set_current_user( self::$administrator );
+
+		$old_parent_term = get_term_by( 'id', $this->factory->category->create(), 'category' );
+		$new_parent_id   = 0;
+
+		$term = get_term_by(
+			'id',
+			$this->factory->category->create(
+				array(
+					'parent' => $old_parent_term->term_id,
+				)
+			),
+			'category'
+		);
+
+		$this->assertSame( $old_parent_term->term_id, $term->parent );
+
+		$request = new WP_REST_Request( 'POST', '/wp/v2/categories/' . $term->term_id );
+		$request->set_param( 'parent', $new_parent_id );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+
+		$data = $response->get_data();
+		$this->assertSame( $new_parent_id, $data['parent'] );
+	}
+
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_update_item_invalid_parent() {
 		wp_set_current_user( self::$administrator );
 		$term = get_term_by( 'id', $this->factory->category->create(), 'category' );
@@ -841,11 +1046,16 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$term = get_term_by( 'id', $this->factory->category->create( array( 'name' => 'Deleted Category' ) ), 'category' );
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/categories/' . $term->term_id );
 		$request->set_param( 'force', true );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertTrue( $data['deleted'] );
-		$this->assertEquals( 'Deleted Category', $data['previous']['name'] );
+		$this->assertSame( 'Deleted Category', $data['previous']['name'] );
 	}
 
 	public function test_delete_item_no_trash() {
@@ -899,7 +1109,12 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( '_fields', 'id,name' );
 		$term     = get_term( 1, 'category' );
 		$response = $endpoint->prepare_item_for_response( $term, $request );
+<<<<<<< HEAD
 		$this->assertEquals( array(
+=======
+		$this->assertSame(
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'id',
 			'name',
 		), array_keys( $response->get_data() ) );
@@ -917,10 +1132,10 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		$this->check_taxonomy_term( $term, $data, $response->get_links() );
 
-		$this->assertEquals( 1, $data['parent'] );
+		$this->assertSame( 1, $data['parent'] );
 
 		$links = $response->get_links();
-		$this->assertEquals( rest_url( 'wp/v2/categories/1' ), $links['up'][0]['href'] );
+		$this->assertSame( rest_url( 'wp/v2/categories/1' ), $links['up'][0]['href'] );
 	}
 
 	public function test_get_item_schema() {
@@ -928,7 +1143,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
-		$this->assertEquals( 9, count( $properties ) );
+		$this->assertSame( 9, count( $properties ) );
 		$this->assertArrayHasKey( 'id', $properties );
 		$this->assertArrayHasKey( 'count', $properties );
 		$this->assertArrayHasKey( 'description', $properties );
@@ -938,7 +1153,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertArrayHasKey( 'parent', $properties );
 		$this->assertArrayHasKey( 'slug', $properties );
 		$this->assertArrayHasKey( 'taxonomy', $properties );
-		$this->assertEquals( array_keys( get_taxonomies() ), $properties['taxonomy']['enum'] );
+		$this->assertSame( array_keys( get_taxonomies() ), $properties['taxonomy']['enum'] );
 	}
 
 	public function test_get_additional_field_registration() {
@@ -960,7 +1175,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$this->assertArrayHasKey( 'my_custom_int', $data['schema']['properties'] );
-		$this->assertEquals( $schema, $data['schema']['properties']['my_custom_int'] );
+		$this->assertSame( $schema, $data['schema']['properties']['my_custom_int'] );
 
 		$category_id = $this->factory->category->create();
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories/' . $category_id );
@@ -983,31 +1198,31 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 	}
 
 	protected function check_get_taxonomy_terms_response( $response ) {
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$args = array(
 			'hide_empty' => false,
 		);
 		$categories = get_terms( 'category', $args );
-		$this->assertEquals( count( $categories ), count( $data ) );
-		$this->assertEquals( $categories[0]->term_id, $data[0]['id'] );
-		$this->assertEquals( $categories[0]->name, $data[0]['name'] );
-		$this->assertEquals( $categories[0]->slug, $data[0]['slug'] );
-		$this->assertEquals( $categories[0]->taxonomy, $data[0]['taxonomy'] );
-		$this->assertEquals( $categories[0]->description, $data[0]['description'] );
-		$this->assertEquals( $categories[0]->count, $data[0]['count'] );
+		$this->assertSame( count( $categories ), count( $data ) );
+		$this->assertSame( $categories[0]->term_id, $data[0]['id'] );
+		$this->assertSame( $categories[0]->name, $data[0]['name'] );
+		$this->assertSame( $categories[0]->slug, $data[0]['slug'] );
+		$this->assertSame( $categories[0]->taxonomy, $data[0]['taxonomy'] );
+		$this->assertSame( $categories[0]->description, $data[0]['description'] );
+		$this->assertSame( $categories[0]->count, $data[0]['count'] );
 	}
 
 	protected function check_taxonomy_term( $term, $data, $links ) {
-		$this->assertEquals( $term->term_id, $data['id'] );
-		$this->assertEquals( $term->name, $data['name'] );
-		$this->assertEquals( $term->slug, $data['slug'] );
-		$this->assertEquals( $term->description, $data['description'] );
-		$this->assertEquals( get_term_link( $term ),  $data['link'] );
-		$this->assertEquals( $term->count, $data['count'] );
+		$this->assertSame( $term->term_id, $data['id'] );
+		$this->assertSame( $term->name, $data['name'] );
+		$this->assertSame( $term->slug, $data['slug'] );
+		$this->assertSame( $term->description, $data['description'] );
+		$this->assertSame( get_term_link( $term ), $data['link'] );
+		$this->assertSame( $term->count, $data['count'] );
 		$taxonomy = get_taxonomy( $term->taxonomy );
 		if ( $taxonomy->hierarchical ) {
-			$this->assertEquals( $term->parent, $data['parent'] );
+			$this->assertSame( $term->parent, $data['parent'] );
 		} else {
 			$this->assertFalse( isset( $term->parent ) );
 		}
@@ -1025,12 +1240,12 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		$this->assertEqualSets( $relations, array_keys( $links ) );
 		$this->assertContains( 'wp/v2/taxonomies/' . $term->taxonomy, $links['about'][0]['href'] );
-		$this->assertEquals( add_query_arg( 'categories', $term->term_id, rest_url( 'wp/v2/posts' ) ), $links['https://api.w.org/post_type'][0]['href'] );
+		$this->assertSame( add_query_arg( 'categories', $term->term_id, rest_url( 'wp/v2/posts' ) ), $links['https://api.w.org/post_type'][0]['href'] );
 	}
 
 	protected function check_get_taxonomy_term_response( $response ) {
 
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 
 		$data = $response->get_data();
 		$category = get_term( 1, 'category' );

@@ -23,7 +23,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'username', 'password', 'category', 1 ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_empty_taxonomy() {
@@ -31,8 +31,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'subscriber', 'subscriber', '', array( 'taxonomy' => '' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
-		$this->assertEquals( __( 'Invalid taxonomy.' ), $result->message );
+		$this->assertSame( 403, $result->code );
+		$this->assertSame( __( 'Invalid taxonomy.' ), $result->message );
 	}
 
 	function test_invalid_taxonomy() {
@@ -40,8 +40,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'subscriber', 'subscriber', self::$parent_term, array( 'taxonomy' => 'not_existing' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
-		$this->assertEquals( __( 'Invalid taxonomy.' ), $result->message );
+		$this->assertSame( 403, $result->code );
+		$this->assertSame( __( 'Invalid taxonomy.' ), $result->message );
 	}
 
 	function test_incapable_user() {
@@ -49,8 +49,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'subscriber', 'subscriber', self::$parent_term, array( 'taxonomy' => 'category' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
-		$this->assertEquals( __( 'Sorry, you are not allowed to edit this term.' ), $result->message );
+		$this->assertSame( 401, $result->code );
+		$this->assertSame( __( 'Sorry, you are not allowed to edit this term.' ), $result->message );
 	}
 
 	function test_term_not_exists() {
@@ -58,8 +58,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', 9999, array( 'taxonomy' => 'category' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 404, $result->code );
-		$this->assertEquals(  __( 'Invalid term ID.' ), $result->message );
+		$this->assertSame( 404, $result->code );
+		$this->assertSame( __( 'Invalid term ID.' ), $result->message );
 	}
 
 	function test_empty_term() {
@@ -67,8 +67,13 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', '', array( 'taxonomy' => 'category' ) ) );
 		$this->assertIXRError( $result );
+<<<<<<< HEAD
 		$this->assertEquals( 500, $result->code );
 		$this->assertEquals( __('Empty Term.'), $result->message );
+=======
+		$this->assertSame( 500, $result->code );
+		$this->assertSame( __( 'Empty Term.' ), $result->message );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_empty_term_name() {
@@ -76,8 +81,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$parent_term, array( 'taxonomy' => 'category', 'name' => '' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
-		$this->assertEquals( __( 'The term name cannot be empty.' ), $result->message );
+		$this->assertSame( 403, $result->code );
+		$this->assertSame( __( 'The term name cannot be empty.' ), $result->message );
 	}
 
 	function test_parent_for_nonhierarchical() {
@@ -85,8 +90,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$post_tag, array( 'taxonomy' => 'post_tag', 'parent' => self::$parent_term ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
-		$this->assertEquals( __( 'Cannot set parent term, taxonomy is not hierarchical.' ), $result->message );
+		$this->assertSame( 403, $result->code );
+		$this->assertSame( __( 'Cannot set parent term, taxonomy is not hierarchical.' ), $result->message );
 	}
 
 	function test_parent_empty() {
@@ -114,7 +119,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, array( 'taxonomy' => 'category', 'parent' => 'dasda', 'name' => 'test' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 500, $result->code );
+		$this->assertSame( 500, $result->code );
 	}
 
 	function test_parent_not_existing() {
@@ -122,8 +127,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, array( 'taxonomy' => 'category', 'parent' => 9999, 'name' => 'test' ) ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
-		$this->assertEquals( __( 'Parent term does not exist.' ), $result->message );
+		$this->assertSame( 403, $result->code );
+		$this->assertSame( __( 'Parent term does not exist.' ), $result->message );
 	}
 
 	function test_parent_duplicate_slug() {
@@ -132,8 +137,13 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 		$parent_term = get_term_by( 'id', self::$parent_term, 'category' );
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, array( 'taxonomy' => 'category', 'slug' => $parent_term->slug ) ) );
 		$this->assertIXRError( $result );
+<<<<<<< HEAD
 		$this->assertEquals( 500, $result->code );
 		$this->assertEquals( htmlspecialchars( sprintf( __('The slug &#8220;%s&#8221; is already in use by another term.'), $parent_term->slug ) ), $result->message );
+=======
+		$this->assertSame( 500, $result->code );
+		$this->assertSame( htmlspecialchars( sprintf( __( 'The slug &#8220;%s&#8221; is already in use by another term.' ), $parent_term->slug ) ), $result->message );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_edit_all_fields() {

@@ -9,6 +9,7 @@ class Tests_Basic extends WP_UnitTestCase {
 
 	function test_license_wp_copyright_years() {
 		$license = file_get_contents( ABSPATH . 'license.txt' );
+<<<<<<< HEAD
 		$this_year = date( 'Y' );
 
 		// Check WordPress copyright years
@@ -23,12 +24,18 @@ class Tests_Basic extends WP_UnitTestCase {
 			trim( $matches[1] ),
 			"license.txt's year needs to be updated to $this_year : \"{$matches[0]}\""
 		);
+=======
+		preg_match( '#Copyright 2011-(\d+) by the contributors#', $license, $matches );
+		$this_year = gmdate( 'Y' );
+		$this->assertSame( $this_year, trim( $matches[1] ), "license.txt's year needs to be updated to $this_year." );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_license_cp_copyright_years() {
 		$license = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
+<<<<<<< HEAD
 		// Check ClassicPress copyright years
 		preg_match(
 			'#Copyright © 2018-(\d+) ClassicPress and contributors#',
@@ -41,6 +48,13 @@ class Tests_Basic extends WP_UnitTestCase {
 			trim( $matches[1] ),
 			"license.txt's year needs to be updated to $this_year : \"{$matches[0]}\""
 		);
+=======
+		$security = file_get_contents( dirname( ABSPATH ) . '/SECURITY.md' );
+		preg_match( '#\d.\d.x#', $security, $matches );
+		$current_version = substr( $GLOBALS['wp_version'], 0, 3 );
+		$latest_stable   = sprintf( '%s.x', (float) $current_version - 0.1 );
+		$this->assertSame( $latest_stable, trim( $matches[0] ), "SECURITY.md's version needs to be updated to $latest_stable." );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_package_json() {
@@ -56,6 +70,10 @@ class Tests_Basic extends WP_UnitTestCase {
 		} else {
 			error_log( 'FIXME after PR https://core.trac.wordpress.org/ticket/32 is merged' );
 		}
+<<<<<<< HEAD
+=======
+		$this->assertSame( $version, $package_json['version'], "package.json's version needs to be updated to $version." );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		return $package_json;
 	}
 
@@ -83,9 +101,15 @@ class Tests_Basic extends WP_UnitTestCase {
 	// test some helper utility functions
 
 	function test_strip_ws() {
+<<<<<<< HEAD
 		$this->assertEquals('', strip_ws(''));
 		$this->assertEquals('foo', strip_ws('foo'));
 		$this->assertEquals('', strip_ws("\r\n\t  \n\r\t"));
+=======
+		$this->assertSame( '', strip_ws( '' ) );
+		$this->assertSame( 'foo', strip_ws( 'foo' ) );
+		$this->assertSame( '', strip_ws( "\r\n\t  \n\r\t" ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$in  = "asdf\n";
 		$in .= "asdf asdf\n";
@@ -105,7 +129,11 @@ class Tests_Basic extends WP_UnitTestCase {
 		$expected .= "foo bar\n";
 		$expected .= "foo";
 
+<<<<<<< HEAD
 		$this->assertEquals($expected, strip_ws($in));
+=======
+		$this->assertSame( $expected, strip_ws( $in ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -123,6 +151,7 @@ EOF;
 <p>If a new user is created by ClassicPress, the password will be set, by default, to "changeme". Quite suggestive, eh? ;)</p>
         <ol id="authors"><form action="?import=wordpress&amp;step=2&amp;id=" method="post"><input type="hidden" name="_wpnonce" value="***" /><input type="hidden" name="_wp_http_referer" value="wp-test.php" /><li>Current author: <strong>Alex Shiels</strong><br />Create user  <input type="text" value="Alex Shiels" name="user[]" maxlength="30"> <br /> or map to existing<select name="userselect[0]">
 EOF;
+<<<<<<< HEAD
 		$this->assertEquals($expected, mask_input_value($in));
 	}
 
@@ -194,5 +223,8 @@ EOF;
 		}
 
 		return $return;
+=======
+		$this->assertSame( $expected, mask_input_value( $in ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

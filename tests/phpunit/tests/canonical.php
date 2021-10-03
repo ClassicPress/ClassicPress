@@ -138,4 +138,72 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 			// Todo: Endpoints (feeds, trackbacks, etc), More fuzzed mixed query variables, comment paging, Home page (Static)
 		);
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * @ticket 16557
+	 */
+	public function test_do_redirect_guess_404_permalink() {
+		// Test disable do_redirect_guess_404_permalink().
+		add_filter( 'do_redirect_guess_404_permalink', '__return_false' );
+		$this->go_to( '/child-page-1' );
+		$this->assertFalse( redirect_guess_404_permalink() );
+	}
+
+	/**
+	 * @ticket 16557
+	 */
+	public function test_pre_redirect_guess_404_permalink() {
+		// Test short-circuit filter.
+		add_filter(
+			'pre_redirect_guess_404_permalink',
+			function() {
+				return 'wp';
+			}
+		);
+		$this->go_to( '/child-page-1' );
+		$this->assertSame( 'wp', redirect_guess_404_permalink() );
+	}
+
+	/**
+	 * @ticket 16557
+	 */
+	public function test_strict_redirect_guess_404_permalink() {
+		$post = self::factory()->post->create(
+			array(
+				'post_title' => 'strict-redirect-guess-404-permalink',
+			)
+		);
+
+		$this->go_to( 'strict-redirect' );
+
+		// Test default 'non-strict' redirect guess.
+		$this->assertSame( get_permalink( $post ), redirect_guess_404_permalink() );
+
+		// Test 'strict' redirect guess.
+		add_filter( 'strict_redirect_guess_404_permalink', '__return_true' );
+		$this->assertFalse( redirect_guess_404_permalink() );
+	}
+
+	/**
+	 * @ticket 43745
+	 */
+	public function test_utf8_query_keys_canonical() {
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', $p );
+
+		$this->go_to( get_permalink( $p ) );
+
+		$url = redirect_canonical( add_query_arg( '%D0%BA%D0%BE%D0%BA%D0%BE%D0%BA%D0%BE', 1, site_url( '/' ) ), false );
+		$this->assertNull( $url );
+
+		delete_option( 'page_on_front' );
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

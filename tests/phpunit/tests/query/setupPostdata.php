@@ -149,7 +149,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 
 		$this->assertSame( 0, $GLOBALS['multipage'] );
 		$this->assertSame( 1, $GLOBALS['numpages']  );
-		$this->assertEquals( array( 'Page 0' ), $GLOBALS['pages'] );
+		$this->assertSame( array( 'Page 0' ), $GLOBALS['pages'] );
 	}
 
 	public function test_multi_page() {
@@ -160,7 +160,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 
 		$this->assertSame( 1, $GLOBALS['multipage'] );
 		$this->assertSame( 4, $GLOBALS['numpages']  );
-		$this->assertEquals( array( 'Page 0', 'Page 1', 'Page 2', 'Page 3' ), $GLOBALS['pages'] );
+		$this->assertSame( array( 'Page 0', 'Page 1', 'Page 2', 'Page 3' ), $GLOBALS['pages'] );
 	}
 
 	/**
@@ -174,7 +174,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 
 		$this->assertSame( 1, $GLOBALS['multipage'] );
 		$this->assertSame( 3, $GLOBALS['numpages'] );
-		$this->assertEquals( array( 'Page 1', 'Page 2', 'Page 3' ), $GLOBALS['pages'] );
+		$this->assertSame( array( 'Page 1', 'Page 2', 'Page 3' ), $GLOBALS['pages'] );
 	}
 
 	public function test_trim_nextpage_linebreaks() {
@@ -183,7 +183,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 		) );
 		setup_postdata( $post );
 
-		$this->assertEquals( array( 'Page 0', "Page 1\nhas a line break", 'Page 2', "\nPage 3" ), $GLOBALS['pages'] );
+		$this->assertSame( array( 'Page 0', "Page 1\nhas a line break", 'Page 2', "\nPage 3" ), $GLOBALS['pages'] );
 	}
 
 	/**
@@ -367,6 +367,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create( array( 'post_content' => 'global post' ) );
 		$GLOBALS['wp_query']->post = $GLOBALS['post'] = get_post( $post_id );
 
+<<<<<<< HEAD
 		$ids = self::factory()->post->create_many(5);
 		foreach ( $ids as $id ) {
 			$page = get_post( $id );
@@ -377,6 +378,30 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 				$this->assertNotEquals( '<p>global post</p>', strip_ws( $content ) );
 				wp_reset_postdata();
 			}
+=======
+		$a_post_id = self::factory()->post->create();
+		$a_post    = get_post( $a_post_id );
+
+		setup_postdata( $a_post );
+		$content = get_echo( 'the_content' );
+		$this->assertSame( $post_id, $GLOBALS['post']->ID );
+		$this->assertNotEquals( '<p>global post</p>', strip_ws( $content ) );
+		wp_reset_postdata();
+	}
+
+	/**
+	 * @ticket 47114
+	 *
+	 * setup_postdata() should set the globals before `the_post` action is fired.
+	 */
+	public function test_the_post_action() {
+		$post = self::factory()->post->create_and_get();
+		add_action( 'the_post', array( $this, 'the_post_action_callback' ) );
+
+		setup_postdata( $post );
+
+		$this->assertSame( $GLOBALS['pages'], $this->pages_global );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 

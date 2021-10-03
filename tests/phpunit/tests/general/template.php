@@ -40,7 +40,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$this->assertEmpty( get_site_icon_url() );
 
 		$this->_set_site_icon();
-		$this->assertEquals( $this->site_icon_url, get_site_icon_url() );
+		$this->assertSame( $this->site_icon_url, get_site_icon_url() );
 
 		$this->_remove_site_icon();
 		$this->assertEmpty( get_site_icon_url() );
@@ -325,8 +325,13 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$image    = wp_get_attachment_image( $this->custom_logo_id, 'full', false, $custom_logo_attr );
 		restore_current_blog();
 
+<<<<<<< HEAD
 		$expected_custom_logo =  '<a href="' . $home_url . '" class="custom-logo-link" rel="home" itemprop="url">' . $image . '</a>';
 		$this->assertEquals( $expected_custom_logo, get_custom_logo( $blog_id ) );
+=======
+		$expected_custom_logo = '<a href="' . $home_url . '" class="custom-logo-link" rel="home">' . $image . '</a>';
+		$this->assertSame( $expected_custom_logo, get_custom_logo( $blog_id ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -782,6 +787,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group login
 	 */
+<<<<<<< HEAD
 	function test_login_html_default_with_filters() {
 		add_filter( 'login_headerurl', function() {
 			return 'https://example.com?"a&b"';
@@ -789,6 +795,12 @@ class Tests_General_Template extends WP_UnitTestCase {
 		add_filter( 'login_headertitle', function() {
 			return 'A <script>"special";</script> title';
 		} );
+=======
+	function test_selected_and_checked_with_equal_values( $selected, $current ) {
+		$this->assertSame( " selected='selected'", selected( $selected, $current, false ) );
+		$this->assertSame( " checked='checked'", checked( $selected, $current, false ) );
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		if ( is_multisite() ) {
 			$expected_login_html = (
@@ -826,9 +838,16 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * @group login
 	 */
+<<<<<<< HEAD
 	function test_login_html_option_enabled_with_custom_logo_and_filters() {
 		update_option( 'login_custom_image_state', '1' );
 		update_option( 'login_custom_image_id', (string) $this->_insert_attachment() );
+=======
+	function test_selected_and_checked_with_non_equal_values( $selected, $current ) {
+		$this->assertSame( '', selected( $selected, $current, false ) );
+		$this->assertSame( '', checked( $selected, $current, false ) );
+	}
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		add_filter( 'login_headerurl', function() {
 			return 'https://example.com?"a&b"';

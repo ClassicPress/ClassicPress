@@ -14,9 +14,9 @@ class Tests_L10n extends WP_UnitTestCase {
 		$nooped_plural = _n_noop( '%s post', '%s posts', $text_domain );
 
 		$this->assertNotEmpty( $nooped_plural['domain'] );
-		$this->assertEquals( '%s posts', translate_nooped_plural( $nooped_plural, 0, $text_domain ) );
-		$this->assertEquals( '%s post', translate_nooped_plural( $nooped_plural, 1, $text_domain ) );
-		$this->assertEquals( '%s posts', translate_nooped_plural( $nooped_plural, 2, $text_domain ) );
+		$this->assertSame( '%s posts', translate_nooped_plural( $nooped_plural, 0, $text_domain ) );
+		$this->assertSame( '%s post', translate_nooped_plural( $nooped_plural, 1, $text_domain ) );
+		$this->assertSame( '%s posts', translate_nooped_plural( $nooped_plural, 2, $text_domain ) );
 	}
 
 	/**
@@ -28,18 +28,18 @@ class Tests_L10n extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $nooped_plural['domain'] );
 		$this->assertNotEmpty( $nooped_plural['context'] );
-		$this->assertEquals( '%s posts', translate_nooped_plural( $nooped_plural, 0, $text_domain ) );
-		$this->assertEquals( '%s post', translate_nooped_plural( $nooped_plural, 1, $text_domain ) );
-		$this->assertEquals( '%s posts', translate_nooped_plural( $nooped_plural, 2, $text_domain ) );
+		$this->assertSame( '%s posts', translate_nooped_plural( $nooped_plural, 0, $text_domain ) );
+		$this->assertSame( '%s post', translate_nooped_plural( $nooped_plural, 1, $text_domain ) );
+		$this->assertSame( '%s posts', translate_nooped_plural( $nooped_plural, 2, $text_domain ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/35073
 	 */
 	function test_before_last_bar() {
-		$this->assertEquals( 'no-bar-at-all', before_last_bar( 'no-bar-at-all' ) );
-		$this->assertEquals( 'before-last-bar', before_last_bar( 'before-last-bar|after-bar' ) );
-		$this->assertEquals( 'first-before-bar|second-before-bar', before_last_bar( 'first-before-bar|second-before-bar|after-last-bar' ) );
+		$this->assertSame( 'no-bar-at-all', before_last_bar( 'no-bar-at-all' ) );
+		$this->assertSame( 'before-last-bar', before_last_bar( 'before-last-bar|after-bar' ) );
+		$this->assertSame( 'first-before-bar|second-before-bar', before_last_bar( 'first-before-bar|second-before-bar|after-last-bar' ) );
 	}
 
 	/**
@@ -53,7 +53,11 @@ class Tests_L10n extends WP_UnitTestCase {
 		$this->assertEmpty( $array );
 
 		$array = get_available_languages( DIR_TESTDATA . '/languages/' );
+<<<<<<< HEAD
 		$this->assertEquals( array( 'de_DE', 'en_GB', 'es_ES' ), $array );
+=======
+		$this->assertSame( array( 'de_DE', 'en_GB', 'es_ES', 'ja_JP' ), $array );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -66,6 +70,7 @@ class Tests_L10n extends WP_UnitTestCase {
 		$this->assertEqualSets( $textdomains_expected, array_keys( $installed_translations ) );
 
 		$this->assertNotEmpty( $installed_translations['default']['en_GB'] );
+<<<<<<< HEAD
 		$data_en_GB = $installed_translations['default']['en_GB'];
 		$this->assertEquals( '2016-10-26 00:01+0200', $data_en_GB['PO-Revision-Date'] );
 		$this->assertEquals( 'Development (4.4.x)', $data_en_GB['Project-Id-Version'] );
@@ -76,6 +81,18 @@ class Tests_L10n extends WP_UnitTestCase {
 		$this->assertEquals( '2016-10-25 18:29+0200', $data_es_ES['PO-Revision-Date'] );
 		$this->assertEquals( 'Administration', $data_es_ES['Project-Id-Version'] );
 		$this->assertEquals( 'Poedit 1.8.10', $data_es_ES['X-Generator'] );
+=======
+		$data_en_gb = $installed_translations['default']['en_GB'];
+		$this->assertSame( '2016-10-26 00:01+0200', $data_en_gb['PO-Revision-Date'] );
+		$this->assertSame( 'Development (4.4.x)', $data_en_gb['Project-Id-Version'] );
+		$this->assertSame( 'Poedit 1.8.10', $data_en_gb['X-Generator'] );
+
+		$this->assertNotEmpty( $installed_translations['admin']['es_ES'] );
+		$data_es_es = $installed_translations['admin']['es_ES'];
+		$this->assertSame( '2016-10-25 18:29+0200', $data_es_es['PO-Revision-Date'] );
+		$this->assertSame( 'Administration', $data_es_es['Project-Id-Version'] );
+		$this->assertSame( 'Poedit 1.8.10', $data_es_es['X-Generator'] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

@@ -8,7 +8,7 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->wp_getPosts( array( 1, 'username', 'password' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	/**
@@ -19,12 +19,12 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getPosts( array( 1, 'subscriber', 'subscriber' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 
 		$filter = array( 'post_type' => 'page' );
 		$result = $this->myxmlrpcserver->wp_getPosts( array( 1, 'subscriber', 'subscriber', $filter ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 	}
 
 	function test_capable_user() {
@@ -63,7 +63,7 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 		$filter = array( 'post_type' => $cpt_name, 'number' => $num_posts + 10 );
 		$results = $this->myxmlrpcserver->wp_getPosts( array( 1, 'editor', 'editor', $filter ) );
 		$this->assertNotIXRError( $results );
-		$this->assertEquals( $num_posts, count( $results ) );
+		$this->assertSame( $num_posts, count( $results ) );
 
 		// page through results
 		$posts_found = array();
@@ -74,8 +74,13 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 			$posts_found = array_merge( $posts_found, wp_list_pluck( $presults, 'post_id' ) );
 			$filter['offset'] += $filter['number'];
 		} while ( count( $presults ) > 0 );
+<<<<<<< HEAD
 		// verify that $post_ids matches $posts_found
 		$this->assertEquals( 0, count( array_diff( $post_ids, $posts_found ) ) );
+=======
+		// Verify that $post_ids matches $posts_found.
+		$this->assertSame( 0, count( array_diff( $post_ids, $posts_found ) ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// add comments to some of the posts
 		foreach ( $post_ids as $key => $post_id ) {
@@ -101,7 +106,7 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 		$filter3 = array( 'post_type' => $cpt_name, 'post_status' => 'draft' );
 		$results3 = $this->myxmlrpcserver->wp_getPosts( array( 1, 'editor', 'editor', $filter3 ) );
 		$this->assertNotIXRError( $results3 );
-		$this->assertEquals( 1, count( $results3 ) );
+		$this->assertSame( 1, count( $results3 ) );
 		$this->assertEquals( $post->ID, $results3[0]['post_id'] );
 
 		_unregister_post_type( $cpt_name );
@@ -143,13 +148,13 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 		$filter = array( 's' => 'Third' );
 		$results = $this->myxmlrpcserver->wp_getPosts( array( 1, 'editor', 'editor', $filter ) );
 		$this->assertNotIXRError( $results );
-		$this->assertEquals( 0, count( $results ) );
+		$this->assertSame( 0, count( $results ) );
 
 		// Search for one of them
 		$filter = array( 's' => 'First:' );
 		$results = $this->myxmlrpcserver->wp_getPosts( array( 1, 'editor', 'editor', $filter ) );
 		$this->assertNotIXRError( $results );
-		$this->assertEquals( 1, count( $results ) );
+		$this->assertSame( 1, count( $results ) );
 	}
 
 }

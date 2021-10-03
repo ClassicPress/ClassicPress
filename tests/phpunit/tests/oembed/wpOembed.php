@@ -37,7 +37,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		remove_filter( 'pre_oembed_result', array( $this, '_filter_pre_oembed_result' ) );
 
 		$this->assertNotFalse( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	public function test_wp_filter_pre_oembed_result_prevents_http_request_when_viewing_the_post() {
@@ -52,7 +52,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		remove_filter( 'pre_oembed_result', array( $this, '_filter_pre_oembed_result' ) );
 
 		$this->assertNotFalse( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	public function test_wp_filter_pre_oembed_result_non_existent_post() {
@@ -84,7 +84,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		remove_filter( 'pre_oembed_result', array( $this, '_filter_pre_oembed_result' ) );
 
 		$this->assertNotNull( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$this->assertNotNull( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$this->assertNotNull( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$this->assertNotNull( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 	}
 
 	/**
@@ -197,7 +197,7 @@ class Tests_WP_oEmbed extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$this->assertNotNull( $this->pre_oembed_result_filtered );
-		$this->assertEquals( $this->pre_oembed_result_filtered, $actual );
+		$this->assertSame( $this->pre_oembed_result_filtered, $actual );
 		$this->assertSame( $expected_stack, $actual_stack );
 	}
 

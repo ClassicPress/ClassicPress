@@ -45,7 +45,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		remove_filter( 'auth_post_meta_flight_number', array( $this, '_old_auth_meta_cb' ) );
 
 		// The filter should have been added with a priority of 10.
-		$this->assertEquals( 10, $has_filter );
+		$this->assertSame( 10, $has_filter );
 	}
 
 	public function test_register_meta_back_compat_with_sanitize_callback_and_no_auth_callback_has_old_style_sanitize_filter() {
@@ -53,7 +53,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		$has_filter = has_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb' ) );
 		remove_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb' ) );
 
-		$this->assertEquals( 10, $has_filter );
+		$this->assertSame( 10, $has_filter );
 	}
 
 	public function test_register_meta_back_compat_with_auth_and_sanitize_callback_has_old_style_filters() {
@@ -64,7 +64,17 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		remove_filter( 'auth_post_meta_flight_number', array( $this, '_old_auth_meta_cb' ) );
 		remove_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb' ) );
 
+<<<<<<< HEAD
 		$this->assertEquals( array( 'auth' => 10, 'sanitize' => 10 ), $has_filters );
+=======
+		$this->assertSame(
+			array(
+				'auth'     => 10,
+				'sanitize' => 10,
+			),
+			$has_filters
+		);
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_register_meta_with_post_object_type_returns_true() {
@@ -96,7 +106,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 			),
 		);
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	public function test_register_meta_with_term_object_type_populates_wp_meta_keys() {
@@ -120,7 +130,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 			),
 		);
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	public function test_register_meta_with_deprecated_sanitize_callback_does_not_populate_wp_meta_keys() {
@@ -131,7 +141,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		remove_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb') );
 		remove_filter( 'auth_post_meta_flight_number', '__return_true');
 
-		$this->assertEquals( array(), $actual );
+		$this->assertSame( array(), $actual );
 	}
 
 	public function test_register_meta_with_deprecated_sanitize_callback_param_returns_false() {
@@ -150,7 +160,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		remove_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb') );
 		remove_filter( 'auth_post_meta_flight_number', '__return_true');
 
-		$this->assertEquals( 'old_sanitized_key old sanitized', $meta );
+		$this->assertSame( 'old_sanitized_key old sanitized', $meta );
 	}
 
 	public function test_register_meta_with_current_sanitize_callback_populates_wp_meta_keys() {
@@ -173,7 +183,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 				),
 			),
 		);
-		$this->assertEquals( $actual, $expected );
+		$this->assertSame( $actual, $expected );
 	}
 
 	public function test_register_meta_with_current_sanitize_callback_returns_true() {
@@ -189,7 +199,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 
 		unregister_meta_key( 'post', 'new_sanitized_key' );
 
-		$this->assertEquals( 'new_sanitized_key new sanitized', $meta );
+		$this->assertSame( 'new_sanitized_key new sanitized', $meta );
 	}
 
 	public function test_register_meta_unregistered_meta_key_removes_sanitize_filter() {
@@ -215,7 +225,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		register_meta( 'post', 'registered_key', array() );
 		unregister_meta_key( 'post', 'registered_key' );
 
-		$this->assertEquals( array(), $wp_meta_keys );
+		$this->assertSame( array(), $wp_meta_keys );
 	}
 
 	public function test_unregister_meta_key_with_invalid_key_returns_false() {
@@ -254,7 +264,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 
 		unregister_meta_key( 'post', 'registered_key1' );
 
-		$this->assertEquals( 'I\'m just a field, take a good look at me', $meta_keys['registered_key1']['description'] );
+		$this->assertSame( 'I\'m just a field, take a good look at me', $meta_keys['registered_key1']['description'] );
 	}
 
 	public function test_get_registered_meta_keys_invalid_arg() {
@@ -275,7 +285,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 
 		unregister_meta_key( 'post', 'flight_number' );
 
-		$this->assertEquals( 'Oceanic 815', $meta['flight_number'][0] );
+		$this->assertSame( 'Oceanic 815', $meta['flight_number'][0] );
 	}
 
 	public function test_get_registered_metadata_by_key() {
@@ -286,7 +296,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 
 		unregister_meta_key( 'post', 'flight_number' );
 
-		$this->assertEquals( 'Oceanic 815', $meta[0] );
+		$this->assertSame( 'Oceanic 815', $meta[0] );
 	}
 
 	public function test_get_registered_metadata_by_key_single() {
@@ -297,7 +307,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 
 		unregister_meta_key( 'post', 'flight_number' );
 
-		$this->assertEquals( 'Oceanic 815', $meta );
+		$this->assertSame( 'Oceanic 815', $meta );
 	}
 
 	public function test_get_registered_metadata_by_invalid_key() {
@@ -346,7 +356,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		// Reset global so subsequent data tests do not get polluted.
 		$wp_meta_keys = array();
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	/**
@@ -399,7 +409,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		// Reset global so subsequent data tests do not get polluted.
 		$wp_meta_keys = array();
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	/**

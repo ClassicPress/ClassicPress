@@ -175,8 +175,15 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	public function test_front_page_template_hierarchy_with_posts_on_front() {
+<<<<<<< HEAD
 		$this->assertEquals( 'posts', get_option( 'show_on_front' ) );
 		$this->assertTemplateHierarchy( home_url(), array(
+=======
+		$this->assertSame( 'posts', get_option( 'show_on_front' ) );
+		$this->assertTemplateHierarchy(
+			home_url(),
+			array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'front-page.php',
 			'home.php',
 			'index.php',
@@ -364,7 +371,7 @@ class Tests_Template extends WP_UnitTestCase {
 		$this->go_to( $url );
 		$hierarchy = $this->get_template_hierarchy();
 
-		$this->assertEquals( $expected, $hierarchy, $message );
+		$this->assertSame( $expected, $hierarchy, $message );
 	}
 
 	protected static function get_query_template_conditions() {

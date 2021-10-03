@@ -32,7 +32,7 @@ class Tests_XMLRPC_wp_getPostType extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->wp_getPostType( array( 1, 'username', 'password', 'post' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_invalid_post_type_name() {
@@ -40,7 +40,7 @@ class Tests_XMLRPC_wp_getPostType extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getPostType( array( 1, 'editor', 'editor', 'foobar' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_valid_post_type_name() {
@@ -55,7 +55,7 @@ class Tests_XMLRPC_wp_getPostType extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getPostType( array( 1, 'subscriber', 'subscriber', 'post' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 	}
 
 	function test_valid_type() {
@@ -123,10 +123,17 @@ class Tests_XMLRPC_wp_getPostType extends WP_XMLRPC_UnitTestCase {
 			$this->assertInternalType( 'bool', $value );
 		}
 
+<<<<<<< HEAD
 		// Check expected values
 		$this->assertEquals( $this->cpt_name, $result['name'] );
 		foreach ( $this->cpt_args as $key => $value ) {
 			$this->assertEquals( $value, $result[$key] );
+=======
+		// Check expected values.
+		$this->assertSame( $this->cpt_name, $result['name'] );
+		foreach ( $this->cpt_args as $key => $value ) {
+			$this->assertSame( $value, $result[ $key ] );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 }

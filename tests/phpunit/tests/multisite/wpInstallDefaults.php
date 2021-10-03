@@ -73,8 +73,8 @@ class Tests_Multisite_Install_Defaults extends WP_UnitTestCase {
 		restore_current_blog();
 		wpmu_delete_blog( $blog_id, true );
 
-		$this->assertEquals( 'Some page content', $first_page->post_content );
-		$this->assertEquals( 'Some comment content', $first_comment[0]->comment_content );
+			$this->assertSame( 'Some page content', $first_page->post_content );
+			$this->assertSame( 'Some comment content', $first_comment[0]->comment_content );
 	}
 }
 

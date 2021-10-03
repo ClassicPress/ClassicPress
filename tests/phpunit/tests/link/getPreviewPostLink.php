@@ -8,7 +8,11 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 	public function test_get_preview_post_link() {
 		$post = self::factory()->post->create();
 
+<<<<<<< HEAD
 		$this->assertEquals( add_query_arg( 'preview', 'true', get_permalink( $post ) ), get_preview_post_link( $post) );
+=======
+		$this->assertSame( add_query_arg( 'preview', 'true', get_permalink( $post ) ), get_preview_post_link( $post ) );
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_preview_post_link_should_add_additional_query_vars() {
@@ -20,7 +24,15 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 			'preview' => 'true',
 		), get_permalink( $post ) );
 
+<<<<<<< HEAD
 		$this->assertEquals( $expected, get_preview_post_link( $post, array(
+=======
+		$this->assertSame(
+			$expected,
+			get_preview_post_link(
+				$post,
+				array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'foo' => 'bar',
 			'bar' => 'baz',
 		) ) );
@@ -31,7 +43,15 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 
 		$expected = 'https://google.com/?foo=bar&bar=baz&preview=true';
 
+<<<<<<< HEAD
 		$this->assertEquals( $expected, get_preview_post_link( $post, array(
+=======
+		$this->assertSame(
+			$expected,
+			get_preview_post_link(
+				$post,
+				array(
+>>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			'foo' => 'bar',
 			'bar' => 'baz',
 		), 'https://google.com/' ) );
@@ -48,7 +68,7 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $post;
 
-		$this->assertEquals( add_query_arg( 'preview', 'true', get_permalink( $post ) ), get_preview_post_link() );
+		$this->assertSame( add_query_arg( 'preview', 'true', get_permalink( $post ) ), get_preview_post_link() );
 	}
 
 	public function test_get_preview_post_link_should_return_empty_string_for_non_viewable_post_type() {
