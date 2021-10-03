@@ -440,9 +440,6 @@ function is_home() {
 }
 
 /**
-<<<<<<< HEAD
- * Is the query for an existing month archive?
-=======
  * Determines whether the query is for the Privacy Policy page.
  *
  * The Privacy Policy page is the page that shows the Privacy Policy content of the site.
@@ -455,7 +452,7 @@ function is_home() {
  * the {@link https://developer.wordpress.org/themes/basics/conditional-tags/
  * Conditional Tags} article in the Theme Developer Handbook.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -474,7 +471,6 @@ function is_privacy_policy() {
 
 /**
  * Determines whether the query is for an existing month archive.
->>>>>>> 65bd3654cc (Privacy: Introduce Privacy Policy page helpers:)
  *
  * @since WP-1.5.0
  *

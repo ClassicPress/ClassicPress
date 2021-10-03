@@ -221,9 +221,6 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/18375
-=======
  	 * @ticket 44005
 	 * @group privacy
 	 */
@@ -243,8 +240,7 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 18375
->>>>>>> 65bd3654cc (Privacy: Introduce Privacy Policy page helpers:)
+	 * @see https://core.trac.wordpress.org/ticket/18375
 	 */
 	public function test_single_template_hierarchy_for_post() {
 		$this->assertTemplateHierarchy( get_permalink( self::$post ), array(
