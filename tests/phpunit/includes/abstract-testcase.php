@@ -497,7 +497,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Framework_TestCase {
 	 *
 	 * @since WP-4.2.0
 	 *
-	 * @param string $deprecated Name of the function, method, or class that appears in the first argument of the
+	 * @param string $doing_it_wrong Name of the function, method, or class that appears in the first argument of the
 	 *                           source `_doing_it_wrong()` call.
 	 */
 	public function setExpectedIncorrectUsage( $doing_it_wrong ) {
