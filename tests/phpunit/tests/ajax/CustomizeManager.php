@@ -164,17 +164,13 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$wp_customize->save_changeset_post( array( 'status' => 'publish' ) );
 		$this->make_ajax_call( 'customize_save' );
 		$this->assertFalse( $this->_last_response_parsed['success'] );
-<<<<<<< HEAD
-		$this->assertEquals( 'changeset_already_published', $this->_last_response_parsed['data']['code'] );
-		wp_update_post( array(
-=======
 		$this->assertSame( 'changeset_already_published', $this->_last_response_parsed['data']['code'] );
 		wp_update_post(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'ID' => $wp_customize->changeset_post_id(),
-			'post_status' => 'auto-draft',
-		) );
+				'ID' => $wp_customize->changeset_post_id(),
+				'post_status' => 'auto-draft',
+			)
+		);
 
 		// User cannot edit.
 		$post_type_obj = get_post_type_object( 'customize_changeset' );
@@ -230,17 +226,13 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$_POST['customize_changeset_date'] = '+10 minutes';
 		$this->make_ajax_call( 'customize_save' );
 		$this->assertTrue( $this->_last_response_parsed['success'] );
-<<<<<<< HEAD
-		$this->assertEquals( 'future', get_post_status( $wp_customize->changeset_post_id() ) );
-		wp_update_post( array(
-=======
 		$this->assertSame( 'future', get_post_status( $wp_customize->changeset_post_id() ) );
 		wp_update_post(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'ID' => $wp_customize->changeset_post_id(),
-			'post_status' => 'auto-draft',
-		) );
+				'ID' => $wp_customize->changeset_post_id(),
+				'post_status' => 'auto-draft',
+			)
+		);
 	}
 
 	/**
@@ -486,25 +478,12 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$this->assertSame( 'changeset_trash_unauthorized', $this->_last_response_parsed['data']['code'] );
 		remove_filter( 'map_meta_cap', array( $this, 'return_do_not_allow' ) );
 
-<<<<<<< HEAD
-		wp_update_post( array(
-=======
-		$lock_user_id  = static::factory()->user->create( array( 'role' => 'administrator' ) );
-		$previous_user = get_current_user_id();
-		wp_set_current_user( $lock_user_id );
-		$wp_customize->set_changeset_lock( $wp_customize->changeset_post_id() );
-		wp_set_current_user( $previous_user );
-		$this->make_ajax_call( 'customize_trash' );
-		$this->assertFalse( $this->_last_response_parsed['success'] );
-		$this->assertSame( 'changeset_locked', $this->_last_response_parsed['data']['code'] );
-		delete_post_meta( $wp_customize->changeset_post_id(), '_edit_lock' );
-
 		wp_update_post(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'ID' => $wp_customize->changeset_post_id(),
-			'post_status' => 'trash',
-		) );
+				'ID' => $wp_customize->changeset_post_id(),
+				'post_status' => 'trash',
+			)
+		);
 		$this->make_ajax_call( 'customize_trash' );
 		$this->assertFalse( $this->_last_response_parsed['success'] );
 		$this->assertSame( 'changeset_already_trashed', $this->_last_response_parsed['data']['code'] );

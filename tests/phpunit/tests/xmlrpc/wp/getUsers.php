@@ -95,13 +95,8 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 			$filter['offset'] += $page_size;
 		} while ( count( $presults ) > 0 );
 
-<<<<<<< HEAD
-		// verify that $user_ids matches $users_found
-		$this->assertEquals( 0, count( array_diff( $user_ids, $users_found ) ) );
-=======
 		// Verify that $user_ids matches $users_found.
 		$this->assertSame( 0, count( array_diff( $user_ids, $users_found ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_order_filters() {

@@ -9,44 +9,16 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/23605
 	 */
 	function test_spaces() {
-<<<<<<< HEAD
-		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr%20%20ClassicPress', esc_url( 'http://example.com/Mr%20%20ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr+ClassicPress',      esc_url( 'http://example.com/Mr+ClassicPress' ) );
-=======
-		$this->assertSame( 'http://example.com/Mr%20WordPress', esc_url( 'http://example.com/Mr WordPress' ) );
-		$this->assertSame( 'http://example.com/Mr%20WordPress', esc_url( 'http://example.com/Mr%20WordPress' ) );
-		$this->assertSame( 'http://example.com/Mr%20%20WordPress', esc_url( 'http://example.com/Mr%20%20WordPress' ) );
-		$this->assertSame( 'http://example.com/Mr+WordPress', esc_url( 'http://example.com/Mr+WordPress' ) );
-		$this->assertSame( 'http://example.com/Mr+WordPress', esc_url( ' http://example.com/Mr+WordPress' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
+		$this->assertSame( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
+		$this->assertSame( 'http://example.com/Mr%20%20ClassicPress', esc_url( 'http://example.com/Mr%20%20ClassicPress' ) );
+		$this->assertSame( 'http://example.com/Mr+ClassicPress',      esc_url( 'http://example.com/Mr+ClassicPress' ) );
 
 		$this->assertSame( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one two three&bar=four' ) );
 		$this->assertSame( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one%20two%20three&bar=four' ) );
 	}
 
 	function test_bad_characters() {
-<<<<<<< HEAD
-		$this->assertEquals('http://example.com/watchthelinefeedgo', esc_url('http://example.com/watchthelinefeed%0Ago'));
-		$this->assertEquals('http://example.com/watchthelinefeedgo', esc_url('http://example.com/watchthelinefeed%0ago'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0Dgo'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0dgo'));
-		//Nesting Checks
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0%0ddgo'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0%0DDgo'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0DAD'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0ADA'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0DAd'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0ADa'));
-	}
-
-	function test_relative() {
-		$this->assertEquals('/example.php', esc_url('/example.php'));
-		$this->assertEquals('example.php', esc_url('example.php'));
-		$this->assertEquals('#fragment', esc_url('#fragment'));
-		$this->assertEquals('?foo=bar', esc_url('?foo=bar'));
-=======
 		$this->assertSame( 'http://example.com/watchthelinefeedgo', esc_url( 'http://example.com/watchthelinefeed%0Ago' ) );
 		$this->assertSame( 'http://example.com/watchthelinefeedgo', esc_url( 'http://example.com/watchthelinefeed%0ago' ) );
 		$this->assertSame( 'http://example.com/watchthecarriagereturngo', esc_url( 'http://example.com/watchthecarriagereturn%0Dgo' ) );
@@ -65,37 +37,26 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 		$this->assertSame( 'example.php', esc_url( 'example.php' ) );
 		$this->assertSame( '#fragment', esc_url( '#fragment' ) );
 		$this->assertSame( '?foo=bar', esc_url( '?foo=bar' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_all_url_parts() {
 		$url = 'https://user:pass@host.example.com:1234/path;p=1?query=2&r[]=3#fragment';
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'scheme'   => 'https',
-			'host'     => 'host.example.com',
-			'port'     => 1234,
-			'user'     => 'user',
-			'pass'     => 'pass',
-			'path'     => '/path;p=1',
-			'query'    => 'query=2&r[]=3',
-			'fragment' => 'fragment',
-<<<<<<< HEAD
-		), parse_url( $url ) );
-		$this->assertEquals( 'https://user:pass@host.example.com:1234/path;p=1?query=2&r%5B%5D=3#fragment', esc_url_raw( $url ) );
-		$this->assertEquals( 'https://user:pass@host.example.com:1234/path;p=1?query=2&#038;r%5B%5D=3#fragment', esc_url( $url ) );
-=======
+				'scheme'   => 'https',
+				'host'     => 'host.example.com',
+				'port'     => 1234,
+				'user'     => 'user',
+				'pass'     => 'pass',
+				'path'     => '/path;p=1',
+				'query'    => 'query=2&r[]=3',
+				'fragment' => 'fragment',
 			),
 			parse_url( $url )
 		);
 		$this->assertSame( 'https://user:pass@host.example.com:1234/path;p=1?query=2&r%5B%5D=3#fragment', esc_url_raw( $url ) );
 		$this->assertSame( 'https://user:pass@host.example.com:1234/path;p=1?query=2&#038;r%5B%5D=3#fragment', esc_url( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_bare() {
@@ -120,23 +81,6 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	function test_protocol() {
-<<<<<<< HEAD
-		$this->assertEquals('http://example.com', esc_url('http://example.com'));
-		$this->assertEquals('', esc_url('nasty://example.com/'));
-		$this->assertEquals( '', esc_url( 'example.com', array(
-			'https',
-		) ) );
-		$this->assertEquals( '', esc_url( 'http://example.com', array(
-			'https',
-		) ) );
-		$this->assertEquals( 'https://example.com', esc_url( 'https://example.com', array(
-			'http', 'https',
-		) ) );
-
-		foreach ( wp_allowed_protocols() as $scheme ) {
-			$this->assertEquals( "{$scheme}://example.com", esc_url( "{$scheme}://example.com" ), $scheme );
-			$this->assertEquals( "{$scheme}://example.com", esc_url( "{$scheme}://example.com", array(
-=======
 		$this->assertSame( 'http://example.com', esc_url( 'http://example.com' ) );
 		$this->assertSame( '', esc_url( 'nasty://example.com/' ) );
 		$this->assertSame(
@@ -175,42 +119,32 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 				esc_url(
 					"{$scheme}://example.com",
 					array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-				$scheme,
-			) ), $scheme );
+						$scheme,
+					)
+				),
+				$scheme
+			);
 		}
 
 		$this->assertTrue( ! in_array( 'data', wp_allowed_protocols(), true ) );
 		$this->assertSame( '', esc_url( 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D' ) );
 
 		$this->assertTrue( ! in_array( 'foo', wp_allowed_protocols(), true ) );
-<<<<<<< HEAD
-		$this->assertEquals( 'foo://example.com', esc_url( 'foo://example.com', array(
-=======
 		$this->assertSame(
 			'foo://example.com',
 			esc_url(
 				'foo://example.com',
 				array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'foo',
-		) ) );
-
+					'foo',
+				)
+			)
+		);
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/23187
 	 */
 	function test_protocol_case() {
-<<<<<<< HEAD
-		$this->assertEquals('http://example.com', esc_url('HTTP://example.com'));
-		$this->assertEquals('http://example.com', esc_url('Http://example.com'));
-	}
-
-	function test_display_extras() {
-		$this->assertEquals('http://example.com/&#039;quoted&#039;', esc_url('http://example.com/\'quoted\''));
-		$this->assertEquals('http://example.com/\'quoted\'', esc_url('http://example.com/\'quoted\'',null,'notdisplay'));
-=======
 		$this->assertSame( 'http://example.com', esc_url( 'HTTP://example.com' ) );
 		$this->assertSame( 'http://example.com', esc_url( 'Http://example.com' ) );
 	}
@@ -218,7 +152,6 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	function test_display_extras() {
 		$this->assertSame( 'http://example.com/&#039;quoted&#039;', esc_url( 'http://example.com/\'quoted\'' ) );
 		$this->assertSame( 'http://example.com/\'quoted\'', esc_url( 'http://example.com/\'quoted\'', null, 'notdisplay' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_non_ascii() {
@@ -313,7 +246,7 @@ EOT;
 		$this->assertEmpty( esc_url_raw('"^<>{}`') );
 	}
 
-	/** 
+	/**
 	 * @see https://core.trac.wordpress.org/ticket/34202
 	 */
 	function test_ipv6_hosts() {

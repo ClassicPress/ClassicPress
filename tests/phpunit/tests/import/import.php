@@ -71,10 +71,6 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$comment_count = wp_count_comments();
 		$this->assertEquals( 1, $comment_count->total_comments );
 
-<<<<<<< HEAD
-		$posts = get_posts( array( 'numberposts' => 20, 'post_type' => 'any', 'post_status' => 'any', 'orderby' => 'ID' ) );
-		$this->assertEquals( 11, count($posts) );
-=======
 		$posts = get_posts(
 			array(
 				'numberposts' => 20,
@@ -84,7 +80,6 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 			)
 		);
 		$this->assertSame( 11, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = $posts[0];
 		$this->assertSame( 'Many Categories', $post->post_title );
@@ -94,11 +89,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'publish', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID );
-<<<<<<< HEAD
-		$this->assertEquals( 27, count($cats) );
-=======
 		$this->assertSame( 27, count( $cats ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = $posts[1];
 		$this->assertSame( 'Non-standard post format', $post->post_title );
@@ -108,11 +99,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'publish', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID );
-<<<<<<< HEAD
-		$this->assertEquals( 1, count($cats) );
-=======
 		$this->assertSame( 1, count( $cats ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertTrue( has_post_format( 'aside', $post->ID ) );
 
 		$post = $posts[2];
@@ -123,13 +110,8 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'publish', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID, array( 'fields' => 'all' ) );
-<<<<<<< HEAD
-		$this->assertEquals( 1, count($cats) );
-		$this->assertEquals( 'foo', $cats[0]->slug );
-=======
 		$this->assertSame( 1, count( $cats ) );
 		$this->assertSame( 'foo', $cats[0]->slug );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = $posts[3];
 		$this->assertSame( 'Foo-child', $post->post_title );
@@ -139,13 +121,8 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'publish', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID, array( 'fields' => 'all' ) );
-<<<<<<< HEAD
-		$this->assertEquals( 1, count($cats) );
-		$this->assertEquals( 'foo-bar', $cats[0]->slug );
-=======
 		$this->assertSame( 1, count( $cats ) );
 		$this->assertSame( 'foo-bar', $cats[0]->slug );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = $posts[4];
 		$this->assertSame( 'Private Post', $post->post_title );
@@ -155,21 +132,12 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'private', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID );
-<<<<<<< HEAD
-		$this->assertEquals( 1, count($cats) );
-		$tags = wp_get_post_tags( $post->ID );
-		$this->assertEquals( 3, count($tags) );
-		$this->assertEquals( 'tag1', $tags[0]->slug );
-		$this->assertEquals( 'tag2', $tags[1]->slug );
-		$this->assertEquals( 'tag3', $tags[2]->slug );
-=======
 		$this->assertSame( 1, count( $cats ) );
 		$tags = wp_get_post_tags( $post->ID );
 		$this->assertSame( 3, count( $tags ) );
 		$this->assertSame( 'tag1', $tags[0]->slug );
 		$this->assertSame( 'tag2', $tags[1]->slug );
 		$this->assertSame( 'tag3', $tags[2]->slug );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = $posts[5];
 		$this->assertSame( '1-col page', $post->post_title );
@@ -224,11 +192,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 'publish', $post->post_status );
 		$this->assertSame( 0, $post->post_parent );
 		$cats = wp_get_post_categories( $post->ID );
-<<<<<<< HEAD
-		$this->assertEquals( 1, count($cats) );
-=======
 		$this->assertSame( 1, count( $cats ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_double_import() {
@@ -278,18 +242,17 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 			'ABC1' => array( 'ABC1' ),
 			'def1' => array( 'def1' ),
 		);
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
+
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'ABC1' => array( 'ABC1' ),
-			'abc2' => array( 'abc2' ),
-			'def1' => array( 'def1' ),
-			'xyz1' => array( 'xyz1' ),
-			'XYZ2' => array( 'XYZ2' ),
-		), get_importers() );
+				'ABC1' => array( 'ABC1' ),
+				'abc2' => array( 'abc2' ),
+				'def1' => array( 'def1' ),
+				'xyz1' => array( 'xyz1' ),
+				'XYZ2' => array( 'XYZ2' ),
+			),
+			get_importers()
+		);
 		$wp_importers = $_wp_importers; // Restore global state
 	}
 

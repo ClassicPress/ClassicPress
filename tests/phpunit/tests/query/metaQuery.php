@@ -1428,11 +1428,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			);
 
 		$query = new WP_Query( $args );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count ( $query->posts ) );
-=======
 		$this->assertSame( 2, count( $query->posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $query->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1448,11 +1444,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			);
 
 		$query = new WP_Query( $args );
-<<<<<<< HEAD
-		$this->assertEquals( 3, count ( $query->posts ) );
-=======
 		$this->assertSame( 3, count( $query->posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $query->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1551,10 +1543,6 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$post_id6 = self::factory()->post->create();
 		add_post_meta( $post_id6, 'baz', 0 );
 
-<<<<<<< HEAD
-		$q = new WP_Query( array( 'meta_key' => 'foo', 'meta_value' => '0' ) );
-		$this->assertEquals( 1, count ( $q->posts ) );
-=======
 		$q = new WP_Query(
 			array(
 				'meta_key'   => 'foo',
@@ -1562,17 +1550,12 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 1, count( $q->posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $q->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
 		}
 		$this->assertSame( $post_id, $q->posts[0]->ID );
 
-<<<<<<< HEAD
-		$posts = get_posts( array( 'meta_key' => 'bar', 'meta_value' => '0' ) );
-		$this->assertEquals( 2, count ( $posts ) );
-=======
 		$posts = get_posts(
 			array(
 				'meta_key'   => 'bar',
@@ -1580,7 +1563,6 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 2, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1588,10 +1570,6 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$posts = wp_list_pluck( $posts, 'ID' );
 		$this->assertEqualSets( array( $post_id, $post_id5 ), $posts );
 
-<<<<<<< HEAD
-		$posts = get_posts( array( 'meta_key' => 'bar', 'meta_value' => 0 ) );
-		$this->assertEquals( 2, count ( $posts ) );
-=======
 		$posts = get_posts(
 			array(
 				'meta_key'   => 'bar',
@@ -1599,7 +1577,6 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 2, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1608,11 +1585,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$this->assertEqualSets( array( $post_id, $post_id5 ), $posts );
 
 		$posts = get_posts( array( 'meta_value' => 0 ) );
-<<<<<<< HEAD
-		$this->assertEquals( 5, count ( $posts ) );
-=======
 		$this->assertSame( 5, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1621,11 +1594,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$this->assertEqualSets( array( $post_id, $post_id3, $post_id4, $post_id5, $post_id6 ), $posts );
 
 		$posts = get_posts( array( 'meta_value' => '0' ) );
-<<<<<<< HEAD
-		$this->assertEquals( 5, count ( $posts ) );
-=======
 		$this->assertSame( 5, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );

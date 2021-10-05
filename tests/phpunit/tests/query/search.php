@@ -70,13 +70,8 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			'post_content' => $title, 'post_type' => $this->post_type
 		) );
 
-<<<<<<< HEAD
-		// By default, we can use the hyphen prefix to exclude results
-		$this->assertEquals( array(), $this->get_search_results( $title ) );
-=======
 		// By default, we can use the hyphen prefix to exclude results.
 		$this->assertSame( array(), $this->get_search_results( $title ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// After we disable the feature using the filter, we should get the result
 		add_filter( 'wp_query_search_exclusion_prefix', '__return_false' );

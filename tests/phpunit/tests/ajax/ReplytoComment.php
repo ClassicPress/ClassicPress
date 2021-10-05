@@ -72,13 +72,8 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-<<<<<<< HEAD
-		// Check the meta data
-		$this->assertEquals( -1, (string) $xml->response[0]->comment['position'] );
-=======
 		// Check the meta data.
 		$this->assertSame( '-1', (string) $xml->response[0]->comment['position'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertGreaterThan( 0, (int) $xml->response[0]->comment['id'] );
 		$this->assertNotEmpty( (string) $xml->response['action'] );
 

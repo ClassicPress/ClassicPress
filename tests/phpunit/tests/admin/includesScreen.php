@@ -65,18 +65,6 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 			$GLOBALS['hook_suffix'] = $hook['path'];
 			set_current_screen();
 
-<<<<<<< HEAD
-			$this->assertEquals( $screen->id, $current_screen->id, $hook_name );
-			$this->assertEquals( $screen->base, $current_screen->base, $hook_name );
-			if ( isset( $screen->action ) )
-				$this->assertEquals( $screen->action, $current_screen->action, $hook_name );
-			if ( isset( $screen->post_type ) )
-				$this->assertEquals( $screen->post_type, $current_screen->post_type, $hook_name );
-			else
-				$this->assertEmpty( $current_screen->post_type, $hook_name );
-			if ( isset( $screen->taxonomy ) )
-				$this->assertEquals( $screen->taxonomy, $current_screen->taxonomy, $hook_name );
-=======
 			$this->assertSame( $screen->id, $current_screen->id, $hook_name );
 			$this->assertSame( $screen->base, $current_screen->base, $hook_name );
 			if ( isset( $screen->action ) ) {
@@ -90,7 +78,6 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 			if ( isset( $screen->taxonomy ) ) {
 				$this->assertSame( $screen->taxonomy, $current_screen->taxonomy, $hook_name );
 			}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			$this->assertTrue( $current_screen->in_admin() );
 			$this->assertTrue( $current_screen->in_admin( 'site' ) );
@@ -110,85 +97,43 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 
 	function test_post_type_as_hookname() {
 		$screen = convert_to_screen( 'page' );
-<<<<<<< HEAD
-		$this->assertEquals( $screen->post_type, 'page' );
-		$this->assertEquals( $screen->base, 'post' );
-		$this->assertEquals( $screen->id, 'page' );
-=======
 		$this->assertSame( $screen->post_type, 'page' );
 		$this->assertSame( $screen->base, 'post' );
 		$this->assertSame( $screen->id, 'page' );
-		$this->assertTrue( $screen->is_block_editor );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_post_type_with_special_suffix_as_hookname() {
 		register_post_type( 'value-add' );
-<<<<<<< HEAD
-		$screen = convert_to_screen( 'value-add' ); // the -add part is key.
-		$this->assertEquals( $screen->post_type, 'value-add' );
-		$this->assertEquals( $screen->base, 'post' );
-		$this->assertEquals( $screen->id, 'value-add' );
-
-		$screen = convert_to_screen( 'edit-value-add' ); // the -add part is key.
-		$this->assertEquals( $screen->post_type, 'value-add' );
-		$this->assertEquals( $screen->base, 'edit' );
-		$this->assertEquals( $screen->id, 'edit-value-add' );
-=======
 		$screen = convert_to_screen( 'value-add' ); // The '-add' part is key.
 		$this->assertSame( $screen->post_type, 'value-add' );
 		$this->assertSame( $screen->base, 'post' );
 		$this->assertSame( $screen->id, 'value-add' );
-		$this->assertFalse( $screen->is_block_editor ); // Post types do not support `show_in_rest` by default.
 
 		$screen = convert_to_screen( 'edit-value-add' ); // The '-add' part is key.
 		$this->assertSame( $screen->post_type, 'value-add' );
 		$this->assertSame( $screen->base, 'edit' );
 		$this->assertSame( $screen->id, 'edit-value-add' );
-		$this->assertFalse( $screen->is_block_editor ); // Post types do not support `show_in_rest` by default.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_taxonomy_with_special_suffix_as_hookname() {
 		register_taxonomy( 'old-or-new', 'post' );
-<<<<<<< HEAD
-		$screen = convert_to_screen( 'edit-old-or-new' ); // the -new part is key.
-		$this->assertEquals( $screen->taxonomy, 'old-or-new' );
-		$this->assertEquals( $screen->base, 'edit-tags' );
-		$this->assertEquals( $screen->id, 'edit-old-or-new' );
-=======
 		$screen = convert_to_screen( 'edit-old-or-new' ); // The '-new' part is key.
 		$this->assertSame( $screen->taxonomy, 'old-or-new' );
 		$this->assertSame( $screen->base, 'edit-tags' );
 		$this->assertSame( $screen->id, 'edit-old-or-new' );
-		$this->assertFalse( $screen->is_block_editor );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_post_type_with_edit_prefix() {
 		register_post_type( 'edit-some-thing' );
 		$screen = convert_to_screen( 'edit-some-thing' );
-<<<<<<< HEAD
-		$this->assertEquals( $screen->post_type, 'edit-some-thing' );
-		$this->assertEquals( $screen->base, 'post' );
-		$this->assertEquals( $screen->id, 'edit-some-thing' );
-
-		$screen = convert_to_screen( 'edit-edit-some-thing' );
-		$this->assertEquals( $screen->post_type, 'edit-some-thing' );
-		$this->assertEquals( $screen->base, 'edit' );
-		$this->assertEquals( $screen->id, 'edit-edit-some-thing' );
-=======
 		$this->assertSame( $screen->post_type, 'edit-some-thing' );
 		$this->assertSame( $screen->base, 'post' );
 		$this->assertSame( $screen->id, 'edit-some-thing' );
-		$this->assertFalse( $screen->is_block_editor ); // Post types do not support `show_in_rest` by default.
 
 		$screen = convert_to_screen( 'edit-edit-some-thing' );
 		$this->assertSame( $screen->post_type, 'edit-some-thing' );
 		$this->assertSame( $screen->base, 'edit' );
 		$this->assertSame( $screen->id, 'edit-edit-some-thing' );
-		$this->assertFalse( $screen->is_block_editor ); // Post types do not support `show_in_rest` by default.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_post_type_edit_collisions() {
@@ -222,20 +167,16 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 
 		$screen = get_current_screen();
 		$screen->add_help_tab( $tab_args );
-<<<<<<< HEAD
-		$this->assertEquals( $screen->get_help_tab( $tab ), array(
-			'id' => $tab,
-=======
 		$this->assertSame(
 			$screen->get_help_tab( $tab ),
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'title' => 'Help!',
-				'id'       => $tab,
-			'content' => 'Some content',
-			'callback' => false,
-			'priority' => 10,
-		) );
+				'title' => 'Help!',
+				'id' => $tab,
+				'content' => 'Some content',
+				'callback' => false,
+				'priority' => 10,
+			)
+		);
 
 		$tabs = $screen->get_help_tabs();
 		$this->assertArrayHasKey( $tab, $tabs );
@@ -299,15 +240,10 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 		$this->assertSame( $screen->get_help_tab( $tab_3 ), $tab_3_args );
 
 		$screen->add_help_tab( $tab_4_args );
-<<<<<<< HEAD
-		// Priority is added with the default for future calls
-		$tab_4_args[ 'priority' ] = 10;
-		$this->assertEquals( $screen->get_help_tab( $tab_4 ), $tab_4_args );
-=======
+
 		// Priority is added with the default for future calls.
 		$tab_4_args['priority'] = 10;
 		$this->assertSame( $screen->get_help_tab( $tab_4 ), $tab_4_args );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$tabs = $screen->get_help_tabs();
 		$this->assertSame( 4, count( $tabs ) );

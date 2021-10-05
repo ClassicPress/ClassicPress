@@ -17,11 +17,7 @@ class Tests_Formatting_URLShorten extends WP_UnitTestCase {
 			$this->assertSame( $v, url_shorten( $k ) );
 		}
 
-<<<<<<< HEAD
-		$this->assertEquals( 'wordpress.org/about/philosophy/#&hellip;', url_shorten( 'http://wordpress.org/about/philosophy/#decisions' ), 31 ); // shorten to 31 if > 34 after cleaning
-=======
 		// Shorten to 31 if > 34 after cleaning.
 		$this->assertSame( 'wordpress.org/about/philosophy/#&hellip;', url_shorten( 'http://wordpress.org/about/philosophy/#decisions' ), 31 );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

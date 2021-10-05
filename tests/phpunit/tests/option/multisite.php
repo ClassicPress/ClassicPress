@@ -35,47 +35,27 @@ class Tests_Multisite_Option extends WP_UnitTestCase {
 
 		$this->assertTrue( add_blog_option( 1, $key, $value ) );
 		// Assert all values of $blog_id that means the current or main blog (the same here).
-<<<<<<< HEAD
-		$this->assertEquals( $value, get_blog_option( 1, $key ) );
-		$this->assertEquals( $value, get_blog_option( null, $key ) );
-		$this->assertEquals( $value, get_blog_option( '1', $key ) );
-		$this->assertEquals( $value, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value, get_blog_option( 1, $key ) );
-			$this->assertSame( $value, get_blog_option( null, $key ) );
-			$this->assertSame( $value, get_blog_option( '1', $key ) );
-			$this->assertSame( $value, get_option( $key ) );            // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value, get_blog_option( 1, $key ) );
+		$this->assertSame( $value, get_blog_option( null, $key ) );
+		$this->assertSame( $value, get_blog_option( '1', $key ) );
+		$this->assertSame( $value, get_option( $key ) ); // check get_option()
 
 		$this->assertFalse( add_blog_option( 1, $key, $value ) );  // Already exists
 		$this->assertFalse( update_blog_option( 1, $key, $value ) );  // Value is the same
 		$this->assertTrue( update_blog_option( 1, $key, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( 1, $key ) );
-		$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
+		$this->assertSame( $value2, get_blog_option( 1, $key ) );
+		$this->assertSame( $value2, get_option( $key ) ); // check get_option()
 		$this->assertFalse( add_blog_option( 1, $key, $value ) );
-		$this->assertEquals( $value2, get_blog_option( 1, $key ) );
-		$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( 1, $key ) );
-			$this->assertSame( $value2, get_option( $key ) );           // Check get_option().
-			$this->assertFalse( add_blog_option( 1, $key, $value ) );
-			$this->assertSame( $value2, get_blog_option( 1, $key ) );
-			$this->assertSame( $value2, get_option( $key ) );           // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( 1, $key ) );
+		$this->assertSame( $value2, get_option( $key ) ); // check get_option()
 
 		$this->assertTrue( delete_blog_option( 1, $key ) );
 		$this->assertFalse( get_blog_option( 1, $key ) );
 		$this->assertFalse( get_option( $key ) ); // check get_option()
 		$this->assertFalse( delete_blog_option( 1, $key ) );
 		$this->assertTrue( update_blog_option( 1, $key2, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( 1, $key2 ) );
-		$this->assertEquals( $value2, get_option( $key2 ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( 1, $key2 ) );
-			$this->assertSame( $value2, get_option( $key2 ) );          // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( 1, $key2 ) );
+		$this->assertSame( $value2, get_option( $key2 ) ); // check get_option()
 		$this->assertTrue( delete_blog_option( 1, $key2 ) );
 		$this->assertFalse( get_blog_option( 1, $key2 ) );
 		$this->assertFalse( get_option( $key2 ) ); // check get_option()
@@ -92,45 +72,26 @@ class Tests_Multisite_Option extends WP_UnitTestCase {
 
 		$this->assertTrue( add_blog_option( null, $key, $value ) );
 		// Assert all values of $blog_id that means the current or main blog (the same here).
-<<<<<<< HEAD
-		$this->assertEquals( $value, get_blog_option( null, $key ) );
-		$this->assertEquals( $value, get_blog_option( null, $key ) );
-		$this->assertEquals( $value, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value, get_blog_option( null, $key ) );
-			$this->assertSame( $value, get_blog_option( null, $key ) );
-			$this->assertSame( $value, get_option( $key ) );               // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value, get_blog_option( null, $key ) );
+		$this->assertSame( $value, get_blog_option( null, $key ) );
+		$this->assertSame( $value, get_option( $key ) ); // check get_option()
 
 		$this->assertFalse( add_blog_option( null, $key, $value ) );  // Already exists
 		$this->assertFalse( update_blog_option( null, $key, $value ) );  // Value is the same
 		$this->assertTrue( update_blog_option( null, $key, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( null, $key ) );
-		$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
+		$this->assertSame( $value2, get_blog_option( null, $key ) );
+		$this->assertSame( $value2, get_option( $key ) ); // check get_option()
 		$this->assertFalse( add_blog_option( null, $key, $value ) );
-		$this->assertEquals( $value2, get_blog_option( null, $key ) );
-		$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( null, $key ) );
-			$this->assertSame( $value2, get_option( $key ) );              // Check get_option().
-			$this->assertFalse( add_blog_option( null, $key, $value ) );
-			$this->assertSame( $value2, get_blog_option( null, $key ) );
-			$this->assertSame( $value2, get_option( $key ) );              // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( null, $key ) );
+		$this->assertSame( $value2, get_option( $key ) ); // check get_option()
 
 		$this->assertTrue( delete_blog_option( null, $key ) );
 		$this->assertFalse( get_blog_option( null, $key ) );
 		$this->assertFalse( get_option( $key ) ); // check get_option()
 		$this->assertFalse( delete_blog_option( null, $key ) );
 		$this->assertTrue( update_blog_option( null, $key2, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( null, $key2 ) );
-		$this->assertEquals( $value2, get_option( $key2 ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( null, $key2 ) );
-			$this->assertSame( $value2, get_option( $key2 ) );             // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( null, $key2 ) );
+		$this->assertSame( $value2, get_option( $key2 ) );             // Check get_option().
 		$this->assertTrue( delete_blog_option( null, $key2 ) );
 		$this->assertFalse( get_blog_option( null, $key2 ) );
 		$this->assertFalse( get_option( $key2 ) ); // check get_option()
@@ -158,45 +119,26 @@ class Tests_Multisite_Option extends WP_UnitTestCase {
 
 		$this->assertTrue( add_blog_option( $blog_id, $key, $value ) );
 		// Assert all values of $blog_id that means the current or main blog (the same here).
-<<<<<<< HEAD
-		$this->assertEquals( $value, get_blog_option( $blog_id, $key ) );
-		$this->assertEquals( $value, get_blog_option( "$blog_id", $key ) );
+		$this->assertSame( $value, get_blog_option( $blog_id, $key ) );
+		$this->assertSame( $value, get_blog_option( "$blog_id", $key ) );
 		//$this->assertEquals( $value, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value, get_blog_option( $blog_id, $key ) );
-			$this->assertSame( $value, get_blog_option( "$blog_id", $key ) );
-			// $this->assertSame( $value, get_option( $key ) );                // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertFalse( add_blog_option( $blog_id, $key, $value ) );  // Already exists
 		$this->assertFalse( update_blog_option( $blog_id, $key, $value ) );  // Value is the same
 		$this->assertTrue( update_blog_option( $blog_id, $key, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( $blog_id, $key ) );
-		//$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
+		$this->assertSame( $value2, get_blog_option( $blog_id, $key ) );
+		// $this->assertSame( $value2, get_option( $key ) );               // Check get_option().
 		$this->assertFalse( add_blog_option( $blog_id, $key, $value ) );
-		$this->assertEquals( $value2, get_blog_option( $blog_id, $key ) );
-		//$this->assertEquals( $value2, get_option( $key ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( $blog_id, $key ) );
-			// $this->assertSame( $value2, get_option( $key ) );               // Check get_option().
-			$this->assertFalse( add_blog_option( $blog_id, $key, $value ) );
-			$this->assertSame( $value2, get_blog_option( $blog_id, $key ) );
-			// $this->assertSame( $value2, get_option( $key ) );               // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( $blog_id, $key ) );
+		// $this->assertSame( $value2, get_option( $key ) );               // Check get_option().
 
 		$this->assertTrue( delete_blog_option( $blog_id, $key ) );
 		$this->assertFalse( get_blog_option( $blog_id, $key ) );
 		//$this->assertFalse( get_option( $key ) ); // check get_option()
 		$this->assertFalse( delete_blog_option( $blog_id, $key ) );
 		$this->assertTrue( update_blog_option( $blog_id, $key2, $value2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value2, get_blog_option( $blog_id, $key2 ) );
-		//$this->assertEquals( $value2, get_option( $key2 ) ); // check get_option()
-=======
-			$this->assertSame( $value2, get_blog_option( $blog_id, $key2 ) );
-			// $this->assertSame( $value2, get_option( $key2 ) );              // Check get_option().
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $value2, get_blog_option( $blog_id, $key2 ) );
+		// $this->assertSame( $value2, get_option( $key2 ) );              // Check get_option().
 		$this->assertTrue( delete_blog_option( $blog_id, $key2 ) );
 		$this->assertFalse( get_blog_option( $blog_id, $key2 ) );
 		//$this->assertFalse( get_option( $key2 ) ); // check get_option()

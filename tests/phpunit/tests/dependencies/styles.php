@@ -73,14 +73,13 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$expected .= "<link rel='stylesheet' id='no-deps-null-version-css'  href='http://example.com' type='text/css' media='all' />\n";
 		$expected .= "<link rel='stylesheet' id='no-deps-null-version-print-media-css'  href='http://example.com' type='text/css' media='print' />\n";
 
-<<<<<<< HEAD
-		$this->assertEquals($expected, get_echo('wp_print_styles'));
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
 		// No styles left to print
-		$this->assertEquals("", get_echo('wp_print_styles'));
+		$this->assertSame( '', get_echo( 'wp_print_styles' ) );
 
 		// 'classicpress_asset_version' filter called as expected
-		$this->assertEquals( array(
+		$this->assertSame( array(
 			array(
 				'version' => $ver,
 				'type'    => 'style',
@@ -106,12 +105,6 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 				'return'  => '',
 			),
 		), $this->classicpress_asset_version_calls );
-=======
-		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
-
-		// No styles left to print.
-		$this->assertSame( '', get_echo( 'wp_print_styles' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_enqueue_style_override_default_version() {
@@ -178,13 +171,12 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		), $this->classicpress_asset_version_calls );
 	}
 
-<<<<<<< HEAD
 	function test_wp_enqueue_style_filter_null_version() {
 		$this->classicpress_asset_version_override = 'oooo';
 		wp_enqueue_style( 'filter-null-version', 'example.com', array(), null );
 		$expected = "<link rel='stylesheet' id='filter-null-version-css'  href='http://example.com?ver=oooo' type='text/css' media='all' />\n";
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
-		$this->assertEquals( array(
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( array(
 			array(
 				'version' => '',
 				'type'    => 'style',
@@ -192,9 +184,6 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 				'return'  => 'oooo',
 			),
 		), $this->classicpress_asset_version_calls );
-=======
-		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -234,13 +223,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
-<<<<<<< HEAD
-		// No styles left to print
-		$this->assertEquals( '', get_echo( 'wp_print_styles' ) );
-=======
 		// No styles left to print.
 		$this->assertSame( '', get_echo( 'wp_print_styles' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Cleanup
 		$wp_styles->base_url = $base_url_backup;
@@ -264,13 +248,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		wp_enqueue_style( 'handle', 'http://example.com', array(), 1 );
 		wp_add_inline_style( 'handle', $style );
 
-<<<<<<< HEAD
-		// No styles left to print
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
-=======
 		// No styles left to print.
 		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -326,13 +305,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		wp_add_inline_style( 'handle', $style1 );
 		wp_add_inline_style( 'handle', $style2 );
 
-<<<<<<< HEAD
-		// No styles left to print
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
-=======
 		// No styles left to print.
 		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 

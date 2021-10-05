@@ -31,30 +31,7 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/13651
-=======
-	 * @ticket 48772
-	 */
-	function test_get_comments_number_text_with_post_id() {
-		$post_id = $this->factory->post->create();
-		$this->factory->comment->create_post_comments( $post_id, 6 );
-
-		$comments_number_text = get_comments_number_text( false, false, false, $post_id );
-
-		$this->assertSame( sprintf( _n( '%s Comment', '%s Comments', 6 ), '6' ), $comments_number_text );
-
-		ob_start();
-		comments_number( false, false, false, $post_id );
-		$comments_number_text = ob_get_clean();
-
-		$this->assertSame( sprintf( _n( '%s Comment', '%s Comments', 6 ), '6' ), $comments_number_text );
-
-	}
-
-	/**
-	 * @ticket 13651
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_get_comments_number_text_declension_with_default_args() {
 		$post_id = $this->factory->post->create();

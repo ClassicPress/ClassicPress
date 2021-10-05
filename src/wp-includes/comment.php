@@ -403,7 +403,7 @@ function get_comment_count( $post_id = 0 ) {
 		}
 	}
 
-	return $comment_count;
+	return array_map( 'intval', $comment_count );
 }
 
 //
@@ -3061,7 +3061,7 @@ function wp_handle_comment_submission( $comment_data ) {
 		 * @param int $comment_post_ID Post ID.
 		 */
 		do_action( 'comment_on_draft', $comment_post_ID );
-		
+
 		if ( current_user_can( 'read_post', $comment_post_ID ) ) {
 			return new WP_Error( 'comment_on_draft', __( 'Sorry, comments are not allowed for this item.' ), 403 );
 		} else {

@@ -69,13 +69,8 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		$editor = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
 		$editor->set_mime_type( "image/jpeg" ); // Ensure mime-specific filters act properly.
 
-<<<<<<< HEAD
-		// Check default value
-		$this->assertEquals( 82, $editor->get_quality() );
-=======
 		// Check default value.
 		$this->assertSame( 82, $editor->get_quality() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Ensure the quality filters do not have precedence if created after editor instantiation.
 		$func_100_percent = array( $this, 'return_integer_100' );
@@ -126,19 +121,6 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 			'width'  => 100
 		));
 
-<<<<<<< HEAD
-		// Test with no parameters
-		$this->assertEquals( 'canola-100x50.jpg', wp_basename( $editor->generate_filename() ) );
-
-		// Test with a suffix only
-		$this->assertEquals( 'canola-new.jpg', wp_basename( $editor->generate_filename( 'new' ) ) );
-
-		// Test with a destination dir only
-		$this->assertEquals(trailingslashit( realpath( get_temp_dir() ) ), trailingslashit( realpath( dirname( $editor->generate_filename( null, get_temp_dir() ) ) ) ) );
-
-		// Test with a suffix only
-		$this->assertEquals( 'canola-100x50.png', wp_basename( $editor->generate_filename( null, null, 'png' ) ) );
-=======
 		// Test with no parameters.
 		$this->assertSame( 'canola-100x50.jpg', wp_basename( $editor->generate_filename() ) );
 
@@ -150,7 +132,6 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 
 		// Test with a suffix only.
 		$this->assertSame( 'canola-100x50.png', wp_basename( $editor->generate_filename( null, null, 'png' ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Combo!
 		$this->assertSame( trailingslashit( realpath( get_temp_dir() ) ) . 'canola-new.png', $editor->generate_filename( 'new', realpath( get_temp_dir() ), 'png' ) );

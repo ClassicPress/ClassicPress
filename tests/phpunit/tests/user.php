@@ -102,13 +102,8 @@ class Tests_User extends WP_UnitTestCase {
 		$key = 'key';
 		$val = 'value1';
 
-<<<<<<< HEAD
-		// get a meta key that doesn't exist
-		$this->assertEquals( '', get_user_meta( self::$author_id, $key, true ) );
-=======
 		// Get a meta key that doesn't exist.
 		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// set and get
 		update_user_meta( self::$author_id, $key, $val );
@@ -127,13 +122,8 @@ class Tests_User extends WP_UnitTestCase {
 		update_user_meta( self::$author_id, $key, $val );
 		// incorrect key: key still exists
 		delete_user_meta( self::$author_id, $key, rand_str() );
-<<<<<<< HEAD
-		$this->assertEquals( $val, get_user_meta( self::$author_id, $key, true ) );
-		// correct key: deleted
-=======
 		$this->assertSame( $val, get_user_meta( self::$author_id, $key, true ) );
 		// Correct key: deleted.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		delete_user_meta( self::$author_id, $key, $val );
 		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
 
@@ -189,13 +179,8 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertFalse( isset( $user->fooooooooo ) );
 
 		$user->$key = 'foo';
-<<<<<<< HEAD
-		$this->assertEquals( 'foo', $user->$key );
-		$this->assertEquals( 'foo', $user->data->$key );  // This will fail with WP < 3.3
-=======
 		$this->assertSame( 'foo', $user->$key );
 		$this->assertSame( 'foo', $user->data->$key );  // This will fail with WP < 3.3.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		foreach ( get_object_vars( $user ) as $key => $value ) {
 			$this->assertSame( $value, $user->$key );
@@ -357,13 +342,8 @@ class Tests_User extends WP_UnitTestCase {
 		$user = new WP_User( self::$author_id );
 		$this->assertSame( 'test user', $user->get( 'display_name' ) );
 
-<<<<<<< HEAD
-		// Make sure there is no collateral damage to fields not in $user_data
-		$this->assertEquals( 'about me', $user->get( 'description' ) );
-=======
 		// Make sure there is no collateral damage to fields not in $user_data.
 		$this->assertSame( 'about me', $user->get( 'description' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Pass as stdClass
 		$user_data = array( 'ID' => self::$author_id, 'display_name' => 'a test user' );
@@ -566,18 +546,14 @@ class Tests_User extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/28315
 	 */
 	function test_user_meta_error() {
-		$id1 = wp_insert_user( array(
-			'user_login' => rand_str(),
-			'user_pass' => 'password',
-			'user_email' => 'taco@burrito.com',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $id1, email_exists( 'taco@burrito.com' ) );
-=======
+		$id1 = wp_insert_user(
+			array(
+				'user_login' => rand_str(),
+				'user_pass' => 'password',
+				'user_email' => 'taco@burrito.com',
 			)
 		);
 		$this->assertSame( $id1, email_exists( 'taco@burrito.com' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$id2 = wp_insert_user( array(
 			'user_login' => rand_str(),
@@ -599,44 +575,32 @@ class Tests_User extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/30647
 	 */
 	function test_user_update_email_error() {
-		$id1 = wp_insert_user( array(
-			'user_login' => 'blackburn',
-			'user_pass'  => 'password',
-			'user_email' => 'blackburn@battlefield4.com',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $id1, email_exists( 'blackburn@battlefield4.com' ) );
-=======
+		$id1 = wp_insert_user(
+			array(
+				'user_login' => 'blackburn',
+				'user_pass'  => 'password',
+				'user_email' => 'blackburn@battlefield4.com',
 			)
 		);
 		$this->assertSame( $id1, email_exists( 'blackburn@battlefield4.com' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$id2 = wp_insert_user( array(
-			'user_login' => 'miller',
-			'user_pass'  => 'password',
-			'user_email' => 'miller@battlefield4.com',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $id2, email_exists( 'miller@battlefield4.com' ) );
-=======
+		$id2 = wp_insert_user(
+			array(
+				'user_login' => 'miller',
+				'user_pass'  => 'password',
+				'user_email' => 'miller@battlefield4.com',
 			)
 		);
 		$this->assertSame( $id2, email_exists( 'miller@battlefield4.com' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		if ( ! is_wp_error( $id2 ) ){
-			wp_update_user( array(
-				'ID'         => $id2,
-				'user_email' => 'david@battlefield4.com',
-<<<<<<< HEAD
-			) );
-			$this->assertEquals( $id2, email_exists( 'david@battlefield4.com' ) );
-=======
+			wp_update_user(
+				array(
+					'ID'         => $id2,
+					'user_email' => 'david@battlefield4.com',
 				)
 			);
 			$this->assertSame( $id2, email_exists( 'david@battlefield4.com' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			$return = wp_update_user( array(
 				'ID'         => $id2,
@@ -1545,251 +1509,4 @@ class Tests_User extends WP_UnitTestCase {
 		// Number of exported user properties.
 		$this->assertSame( 11, count( $actual['data'][0]['data'] ) );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * Testing the `wp_user_personal_data_exporter()` function
-	 * with Community Events Location IP data.
-	 *
-	 * @ticket 43921
-	 */
-	function test_wp_community_events_location_ip_personal_data_exporter() {
-		$test_user = new WP_User( self::$contrib_id );
-
-		$location_data = array( 'ip' => '0.0.0.0' );
-		update_user_option( $test_user->ID, 'community-events-location', $location_data, true );
-
-		$actual = wp_user_personal_data_exporter( $test_user->user_email );
-
-		$this->assertTrue( $actual['done'] );
-
-		// Contains 'Community Events Location'.
-		$this->assertSame( 'Community Events Location', $actual['data'][1]['group_label'] );
-
-		// Contains location IP.
-		$this->assertSame( 'IP', $actual['data'][1]['data'][0]['name'] );
-		$this->assertSame( '0.0.0.0', $actual['data'][1]['data'][0]['value'] );
-	}
-
-	/**
-	 * Testing the `wp_user_personal_data_exporter()` function
-	 * with Community Events Location city data.
-	 *
-	 * @ticket 43921
-	 */
-	function test_wp_community_events_location_city_personal_data_exporter() {
-		$test_user = new WP_User( self::$contrib_id );
-
-		$location_data = array(
-			'description' => 'Cincinnati',
-			'country'     => 'US',
-			'latitude'    => '39.1271100',
-			'longitude'   => '-84.5143900',
-		);
-		update_user_option( $test_user->ID, 'community-events-location', $location_data, true );
-
-		$actual = wp_user_personal_data_exporter( $test_user->user_email );
-
-		$this->assertTrue( $actual['done'] );
-
-		// Contains 'Community Events Location'.
-		$this->assertSame( 'Community Events Location', $actual['data'][1]['group_label'] );
-
-		// Contains location city.
-		$this->assertSame( 'City', $actual['data'][1]['data'][0]['name'] );
-		$this->assertSame( 'Cincinnati', $actual['data'][1]['data'][0]['value'] );
-
-		// Contains location country.
-		$this->assertSame( 'Country', $actual['data'][1]['data'][1]['name'] );
-		$this->assertSame( 'US', $actual['data'][1]['data'][1]['value'] );
-
-		// Contains location latitude.
-		$this->assertSame( 'Latitude', $actual['data'][1]['data'][2]['name'] );
-		$this->assertSame( '39.1271100', $actual['data'][1]['data'][2]['value'] );
-
-		// Contains location longitude.
-		$this->assertSame( 'Longitude', $actual['data'][1]['data'][3]['name'] );
-		$this->assertSame( '-84.5143900', $actual['data'][1]['data'][3]['value'] );
-
-	}
-
-	/**
-	 * Testing the `wp_user_personal_data_exporter()` function
-	 * with Session Tokens data.
-	 *
-	 * @ticket 45889
-	 */
-	function test_wp_session_tokens_personal_data_exporter() {
-		$test_user = new WP_User( self::$contrib_id );
-
-		$session_tokens_data = array(
-			'yft87y56457687sfd897867545fg76ds78iyuhgjyui7865' => array(
-				'expiration' => 1580461981,
-				'ip'         => '0.0.0.0',
-				'ua'         => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36',
-				'login'      => 1580289181,
-			),
-		);
-		update_user_option( $test_user->ID, 'session_tokens', $session_tokens_data, true );
-
-		$actual = wp_user_personal_data_exporter( $test_user->user_email );
-
-		$this->assertTrue( $actual['done'] );
-
-		// Contains Session Tokens.
-		$this->assertSame( 'Session Tokens', $actual['data'][1]['group_label'] );
-
-		// Contains Expiration.
-		$this->assertSame( 'Expiration', $actual['data'][1]['data'][0]['name'] );
-		$this->assertSame( 'January 31, 2020 09:13 AM', $actual['data'][1]['data'][0]['value'] );
-
-		// Contains IP.
-		$this->assertSame( 'IP', $actual['data'][1]['data'][1]['name'] );
-		$this->assertSame( '0.0.0.0', $actual['data'][1]['data'][1]['value'] );
-
-		// Contains IP.
-		$this->assertSame( 'User Agent', $actual['data'][1]['data'][2]['name'] );
-		$this->assertSame( 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36', $actual['data'][1]['data'][2]['value'] );
-
-		// Contains IP.
-		$this->assertSame( 'Last Login', $actual['data'][1]['data'][3]['name'] );
-		$this->assertSame( 'January 29, 2020 09:13 AM', $actual['data'][1]['data'][3]['value'] );
-	}
-
-	/**
-	 * Testing the `wp_privacy_additional_user_profile_data` filter works.
-	 *
-	 * @since 5.4.0
-	 *
-	 * @ticket 47509
-	 */
-	function test_filter_wp_privacy_additional_user_profile_data() {
-		$test_user = new WP_User( self::$contrib_id );
-
-		add_filter( 'wp_privacy_additional_user_profile_data', array( $this, 'export_additional_user_profile_data' ) );
-
-		$actual = wp_user_personal_data_exporter( $test_user->user_email );
-
-		remove_filter( 'wp_privacy_additional_user_profile_data', array( $this, 'export_additional_user_profile_data' ) );
-
-		$this->assertTrue( $actual['done'] );
-
-		// Number of exported users.
-		$this->assertSame( 1, count( $actual['data'] ) );
-
-		// Number of exported user properties (the 11 core properties,
-		// plus 1 additional from the filter).
-		$this->assertSame( 12, count( $actual['data'][0]['data'] ) );
-
-		// Check that the item added by the filter was retained.
-		$this->assertSame(
-			1,
-			count(
-				wp_list_filter(
-					$actual['data'][0]['data'],
-					array(
-						'name'  => 'Test Additional Data Name',
-						'value' => 'Test Additional Data Value',
-					)
-				)
-			)
-		);
-
-		// _doing_wrong() should be called because the filter callback
-		// adds a item with a 'name' that is the same as one generated by core.
-		$this->setExpectedIncorrectUsage( 'wp_user_personal_data_exporter' );
-		add_filter( 'wp_privacy_additional_user_profile_data', array( $this, 'export_additional_user_profile_data_with_dup_name' ) );
-
-		$actual = wp_user_personal_data_exporter( $test_user->user_email );
-
-		remove_filter( 'wp_privacy_additional_user_profile_data', array( $this, 'export_additional_user_profile_data' ) );
-
-		$this->assertTrue( $actual['done'] );
-
-		// Number of exported users.
-		$this->assertSame( 1, count( $actual['data'] ) );
-
-		// Number of exported user properties
-		// (the 11 core properties, plus 1 additional from the filter).
-		$this->assertSame( 12, count( $actual['data'][0]['data'] ) );
-
-		// Check that the duplicate 'name' => 'User ID' was stripped.
-		$this->assertSame(
-			1,
-			count(
-				wp_list_filter(
-					$actual['data'][0]['data'],
-					array(
-						'name' => 'User ID',
-					)
-				)
-			)
-		);
-
-		// Check that the item added by the filter was retained.
-		$this->assertSame(
-			1,
-			count(
-				wp_list_filter(
-					$actual['data'][0]['data'],
-					array(
-						'name'  => 'Test Additional Data Name',
-						'value' => 'Test Additional Data Value',
-					)
-				)
-			)
-		);
-	}
-
-	/**
-	 * Filter callback to add additional profile data to the User Group on Export Requests.
-	 *
-	 * @since 5.4.0
-	 *
-	 * @ticket 47509
-	 *
-	 * @return array The additional user data.
-	 */
-	public function export_additional_user_profile_data() {
-		$additional_profile_data = array(
-			// This item should be retained and included in the export.
-			array(
-				'name'  => 'Test Additional Data Name',
-				'value' => 'Test Additional Data Value',
-			),
-		);
-
-		return $additional_profile_data;
-	}
-
-	/**
-	 * Filter callback to add additional profile data to the User Group on Export Requests.
-	 *
-	 * This callback should generate a `_doing_it_wrong()`.
-	 *
-	 * @since 5.4.0
-	 *
-	 * @ticket 47509
-	 *
-	 * @return array The additional user data.
-	 */
-	public function export_additional_user_profile_data_with_dup_name() {
-		$additional_profile_data = array(
-			// This item should be stripped out by wp_user_personal_data_exporter()
-			// because it's 'name' duplicates one exported by core.
-			array(
-				'name'  => 'User ID',
-				'value' => 'Some User ID',
-			),
-			// This item should be retained and included in the export.
-			array(
-				'name'  => 'Test Additional Data Name',
-				'value' => 'Test Additional Data Value',
-			),
-		);
-
-		return $additional_profile_data;
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

@@ -69,45 +69,41 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com?ver=1.2'></script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
-		$this->assertEquals($expected, get_echo('wp_print_scripts'));
-
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals("", get_echo('wp_print_scripts'));
-
-		// 'classicpress_asset_version' filter called as expected
-		$this->assertEquals( array(
-			array(
-				'version' => $ver,
-				'type'    => 'script',
-				'handle'  => 'no-deps-no-version',
-				'return'  => $ver,
-			),
-			array(
-				'version' => $ver,
-				'type'    => 'script',
-				'handle'  => 'empty-deps-no-version',
-				'return'  => $ver,
-			),
-			array(
-				'version' => 1.2,
-				'type'    => 'script',
-				'handle'  => 'empty-deps-version',
-				'return'  => 1.2,
-			),
-			array(
-				'version' => '',
-				'type'    => 'script',
-				'handle'  => 'empty-deps-null-version',
-				'return'  => '',
-			),
-		), $this->classicpress_asset_version_calls );
-=======
-		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame($expected, get_echo('wp_print_scripts'));
 
 		// No scripts left to print.
-		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( '', get_echo('wp_print_scripts') );
+
+		// 'classicpress_asset_version' filter called as expected
+		$this->assertSame(
+			array(
+				array(
+					'version' => $ver,
+					'type'    => 'script',
+					'handle'  => 'no-deps-no-version',
+					'return'  => $ver,
+				),
+				array(
+					'version' => $ver,
+					'type'    => 'script',
+					'handle'  => 'empty-deps-no-version',
+					'return'  => $ver,
+				),
+				array(
+					'version' => 1.2,
+					'type'    => 'script',
+					'handle'  => 'empty-deps-version',
+					'return'  => 1.2,
+				),
+				array(
+					'version' => '',
+					'type'    => 'script',
+					'handle'  => 'empty-deps-null-version',
+					'return'  => '',
+				),
+			),
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_override_default_version() {
@@ -174,23 +170,22 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		), $this->classicpress_asset_version_calls );
 	}
 
-<<<<<<< HEAD
 	function test_wp_enqueue_script_filter_null_version() {
 		$this->classicpress_asset_version_override = 'oooo';
 		wp_enqueue_script( 'filter-null-version', 'example.com', array(), null );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
-			array(
-				'version' => '',
-				'type'    => 'script',
-				'handle'  => 'filter-null-version',
-				'return'  => 'oooo',
-			),
-		), $this->classicpress_asset_version_calls );
-=======
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame(
+			array(
+				array(
+					'version' => '',
+					'type'    => 'script',
+					'handle'  => 'filter-null-version',
+					'return'  => 'oooo',
+				),
+			),
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	/**
@@ -230,13 +225,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
-=======
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Cleanup
 		$wp_scripts->base_url = $base_url_backup;
@@ -278,13 +268,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
-=======
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -300,13 +285,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
-=======
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -324,13 +304,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
-=======
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -346,13 +321,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-<<<<<<< HEAD
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
-=======
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -577,52 +547,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/14853
-=======
-	 * @ticket 44551
-	 */
-	function test_wp_add_inline_script_before_for_handle_without_source() {
-		wp_register_script( 'test-example', '' );
-		wp_enqueue_script( 'test-example' );
-		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
-
-		$expected = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-
-		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 44551
-	 */
-	function test_wp_add_inline_script_after_for_handle_without_source() {
-		wp_register_script( 'test-example', '' );
-		wp_enqueue_script( 'test-example' );
-		wp_add_inline_script( 'test-example', 'console.log("after");' );
-
-		$expected = "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
-
-		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 44551
-	 */
-	function test_wp_add_inline_script_before_and_after_for_handle_without_source() {
-		wp_register_script( 'test-example', '' );
-		wp_enqueue_script( 'test-example' );
-		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
-		wp_add_inline_script( 'test-example', 'console.log("after");' );
-
-		$expected  = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
-
-		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 14853
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_wp_add_inline_script_multiple() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -867,23 +792,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-<<<<<<< HEAD
-		$this->assertEquals( $expected, $print_scripts );
-=======
-		/*
-		 * We've replaced wp-a11y.js with @wordpress/a11y package (see #45066),
-		 * and `wp-polyfill` is now a dependency of the packaged wp-a11y.
-		 * The packaged scripts contain various version numbers, which are not exposed,
-		 * so we will remove all version args from the output.
-		 */
-		$print_scripts = preg_replace(
-			'~js\?ver=([^"\']*)~', // Matches `js?ver=X.X.X` and everything to single or double quote.
-			'js',                  // The replacement, `js` without the version arg.
-			$print_scripts         // Printed scripts.
-		);
-
 		$this->assertSameIgnoreEOL( $expected, $print_scripts );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -910,13 +819,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-<<<<<<< HEAD
 		$tail = substr( $print_scripts, strrpos( $print_scripts, "<![endif]-->" ) );
-		$this->assertEquals( $expected_tail, $tail );
-=======
-		$tail = substr( $print_scripts, strrpos( $print_scripts, "<script type='text/javascript' src='/customize-dependency.js' id='customize-dependency-js'>" ) );
 		$this->assertSame( $expected_tail, $tail );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -969,218 +873,6 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'test-example', '/wp-includes/js/script.js', array(), null );
-		wp_set_script_translations( 'test-example', 'default', DIR_TESTDATA . '/languages' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'default',
-				'test-example',
-				file_get_contents( DIR_TESTDATA . '/languages/en_US-813e104eb47e13dd4cc5af844c618754.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script.js' id='test-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_for_plugin() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'plugin-example', '/wp-content/plugins/my-plugin/js/script.js', array(), null );
-		wp_set_script_translations( 'plugin-example', 'internationalized-plugin', DIR_TESTDATA . '/languages/plugins' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'internationalized-plugin',
-				'plugin-example',
-				file_get_contents( DIR_TESTDATA . '/languages/plugins/internationalized-plugin-en_US-2f86cb96a0233e7cb3b6f03ad573be0b.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-content/plugins/my-plugin/js/script.js' id='plugin-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_for_theme() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'theme-example', '/wp-content/themes/my-theme/js/script.js', array(), null );
-		wp_set_script_translations( 'theme-example', 'internationalized-theme', DIR_TESTDATA . '/languages/themes' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'internationalized-theme',
-				'theme-example',
-				file_get_contents( DIR_TESTDATA . '/languages/themes/internationalized-theme-en_US-2f86cb96a0233e7cb3b6f03ad573be0b.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-content/themes/my-theme/js/script.js' id='theme-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_with_handle_file() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'script-handle', '/wp-admin/js/script.js', array(), null );
-		wp_set_script_translations( 'script-handle', 'admin', DIR_TESTDATA . '/languages/' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'admin',
-				'script-handle',
-				file_get_contents( DIR_TESTDATA . '/languages/admin-en_US-script-handle.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-admin/js/script.js' id='script-handle-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_i18n_dependency() {
-		global $wp_scripts;
-
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'test-example', '/wp-includes/js/script.js', array(), null );
-		wp_set_script_translations( 'test-example', 'default', DIR_TESTDATA . '/languages/' );
-
-		$script = $wp_scripts->registered['test-example'];
-
-		$this->assertContains( 'wp-i18n', $script->deps );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_when_translation_file_does_not_exist() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_enqueue_script( 'test-example', '/wp-admin/js/script.js', array(), null );
-		wp_set_script_translations( 'test-example', 'admin', DIR_TESTDATA . '/languages/' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'admin',
-				'test-example',
-				'{ "locale_data": { "messages": { "": {} } } }',
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-admin/js/script.js' id='test-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_after_register() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_register_script( 'test-example', '/wp-includes/js/script.js', array(), null );
-		wp_set_script_translations( 'test-example', 'default', DIR_TESTDATA . '/languages' );
-
-		wp_enqueue_script( 'test-example' );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'default',
-				'test-example',
-				file_get_contents( DIR_TESTDATA . '/languages/en_US-813e104eb47e13dd4cc5af844c618754.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script.js' id='test-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * @ticket 45103
-	 */
-	public function test_wp_set_script_translations_dependency() {
-		wp_register_script( 'wp-i18n', '/wp-includes/js/dist/wp-i18n.js', array(), null );
-		wp_register_script( 'test-dependency', '/wp-includes/js/script.js', array(), null );
-		wp_set_script_translations( 'test-dependency', 'default', DIR_TESTDATA . '/languages' );
-
-		wp_enqueue_script( 'test-example', '/wp-includes/js/script2.js', array( 'test-dependency' ), null );
-
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/dist/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= str_replace(
-			array(
-				'__DOMAIN__',
-				'__HANDLE__',
-				'__JSON_TRANSLATIONS__',
-			),
-			array(
-				'default',
-				'test-dependency',
-				file_get_contents( DIR_TESTDATA . '/languages/en_US-813e104eb47e13dd4cc5af844c618754.json' ),
-			),
-			$this->wp_scripts_print_translations_output
-		);
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script.js' id='test-dependency-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script2.js' id='test-example-js'></script>\n";
-
-		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 * Testing `wp_enqueue_code_editor` with file path.
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/41871

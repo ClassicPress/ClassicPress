@@ -81,15 +81,9 @@ class Tests_XMLRPC_wp_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getPost( array( 1, 'author', 'author', $this->post_id, $fields ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// when no fields are requested, only the IDs should be returned
-		$this->assertEquals( 1, count( $result ) );
-		$this->assertEquals( array( 'post_id' ), array_keys( $result ) );
-=======
 		// When no fields are requested, only the IDs should be returned.
 		$this->assertSame( 1, count( $result ) );
 		$this->assertSame( array( 'post_id' ), array_keys( $result ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_default_fields() {

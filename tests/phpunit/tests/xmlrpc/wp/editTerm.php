@@ -67,13 +67,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', '', array( 'taxonomy' => 'category' ) ) );
 		$this->assertIXRError( $result );
-<<<<<<< HEAD
-		$this->assertEquals( 500, $result->code );
-		$this->assertEquals( __('Empty Term.'), $result->message );
-=======
 		$this->assertSame( 500, $result->code );
 		$this->assertSame( __( 'Empty Term.' ), $result->message );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_empty_term_name() {
@@ -137,13 +132,8 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 		$parent_term = get_term_by( 'id', self::$parent_term, 'category' );
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, array( 'taxonomy' => 'category', 'slug' => $parent_term->slug ) ) );
 		$this->assertIXRError( $result );
-<<<<<<< HEAD
-		$this->assertEquals( 500, $result->code );
-		$this->assertEquals( htmlspecialchars( sprintf( __('The slug &#8220;%s&#8221; is already in use by another term.'), $parent_term->slug ) ), $result->message );
-=======
 		$this->assertSame( 500, $result->code );
 		$this->assertSame( htmlspecialchars( sprintf( __( 'The slug &#8220;%s&#8221; is already in use by another term.' ), $parent_term->slug ) ), $result->message );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_edit_all_fields() {

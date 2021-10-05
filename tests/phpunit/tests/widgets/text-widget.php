@@ -671,13 +671,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'visual' => true,
 		);
 		$result = $widget->update( $instance, array() );
-<<<<<<< HEAD
-		$this->assertEquals( $expected, $result );
-		$this->assertTrue( ! empty( $expected['filter'] ), 'Expected filter prop to be truthy, to handle case where WP-4.8 is downgraded to WP-4.7.' );
-=======
 		$this->assertSame( $expected, $result );
 		$this->assertTrue( ! empty( $expected['filter'] ), 'Expected filter prop to be truthy, to handle case where 4.8 is downgraded to 4.7.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		add_filter( 'map_meta_cap', array( $this, 'grant_unfiltered_html_cap' ), 10, 2 );
 		$this->assertTrue( current_user_can( 'unfiltered_html' ) );
@@ -747,16 +742,13 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'visual' => true,
 		) );
 		$result = $widget->update( $instance, $old_instance );
-		$expected = array_merge( $instance, array(
-			'visual' => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $expected, $result, 'Updating a pre-existing visual widget retains visual mode when updated.' );
-=======
+		$expected = array_merge(
+			$instance,
+			array(
+				'visual' => true,
 			)
 		);
 		$this->assertSame( $expected, $result, 'Updating a pre-existing visual widget retains visual mode when updated.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// --
 		$instance = array(
@@ -767,17 +759,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'visual' => true,
 		) );
 		$result = $widget->update( $instance, $old_instance );
-		$expected = array_merge( $instance, array(
-			'visual' => true,
-			'filter' => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $expected, $result, 'Updating a pre-existing visual widget retains visual=true and supplies missing filter=true.' );
-=======
+		$expected = array_merge(
+			$instance,
+			array(
+				'visual' => true,
+				'filter' => true,
 			)
 		);
 		$this->assertSame( $expected, $result, 'Updating a pre-existing visual widget retains visual=true and supplies missing filter=true.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// --
 		$instance = array(
@@ -814,17 +803,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'filter' => true,
 		) );
 		$result = $widget->update( $instance, $old_instance );
-		$expected = array_merge( $instance, array(
-			'visual' => false,
-			'filter' => false,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $expected, $result, 'Updating a widget that previously had legacy form results in filter allowed to be false.' );
-=======
+		$expected = array_merge(
+			$instance,
+			array(
+				'visual' => false,
+				'filter' => false,
 			)
 		);
 		$this->assertSame( $expected, $result, 'Updating a widget that previously had legacy form results in filter allowed to be false.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// --
 		$instance = array(
@@ -833,17 +819,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'filter' => 'content',
 		);
 		$result = $widget->update( $instance, array() );
-		$expected = array_merge( $instance, array(
-			'filter' => true,
-			'visual' => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $expected, $result, 'Updating a widget that had \'content\' as its filter value persists non-legacy mode. This only existed in WP 4.8.0.' );
-=======
+		$expected = array_merge(
+			$instance,
+			array(
+				'filter' => true,
+				'visual' => true,
 			)
 		);
 		$this->assertSame( $expected, $result, 'Updating a widget that had \'content\' as its filter value persists non-legacy mode. This only existed in WP 4.8.0.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// --
 		$instance = array(
@@ -867,17 +850,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 			'filter' => 'content',
 		);
 		$result = $widget->update( $instance, array() );
-		$expected = array_merge( $instance, array(
-			'filter' => true,
-			'visual' => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $expected, $result, 'Updating a widget with filter=content (from WP 4.8.0) upgrades to filter=true&visual=true.' );
-=======
+		$expected = array_merge(
+			$instance,
+			array(
+				'filter' => true,
+				'visual' => true,
 			)
 		);
 		$this->assertSame( $expected, $result, 'Updating a widget with filter=content (from WP 4.8.0) upgrades to filter=true&visual=true.' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

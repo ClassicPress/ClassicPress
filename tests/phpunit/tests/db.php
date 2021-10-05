@@ -140,13 +140,8 @@ class Tests_DB extends WP_UnitTestCase {
 			'howdy\'"[[]*#[^howdy]!+)(*&$#@!~|}{=--`/.,<>?',
 		);
 
-<<<<<<< HEAD
-		foreach ($inputs as $key => $input) {
-			$this->assertEquals($expected[$key], $wpdb->esc_like($input));
-=======
 		foreach ( $inputs as $key => $input ) {
 			$this->assertSame( $expected[ $key ], $wpdb->esc_like( $input ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -165,11 +160,7 @@ class Tests_DB extends WP_UnitTestCase {
 	 */
 	function test_like_query( $data, $like, $result ) {
 		global $wpdb;
-<<<<<<< HEAD
-		return $this->assertEquals( $result, $wpdb->get_var( $wpdb->prepare( "SELECT %s LIKE %s", $data, $wpdb->esc_like( $like ) ) ) );
-=======
 		return $this->assertSame( $result, $wpdb->get_var( $wpdb->prepare( 'SELECT %s LIKE %s', $data, $wpdb->esc_like( $like ) ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function data_like_query() {
@@ -370,13 +361,8 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_sprintf() {
 		global $wpdb;
 
-<<<<<<< HEAD
-		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, "admin" );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
-=======
 		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, 'admin' );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -385,13 +371,6 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_sprintf_invalid_args() {
 		global $wpdb;
 
-<<<<<<< HEAD
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, array( "admin" ) );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
-
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ), "admin" );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
-=======
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, array( 'admin' ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
@@ -399,19 +378,13 @@ class Tests_DB extends WP_UnitTestCase {
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ), 'admin' );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_prepare_vsprintf() {
 		global $wpdb;
 
-<<<<<<< HEAD
-		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, "admin" ) );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
-=======
 		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, 'admin' ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -420,13 +393,6 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_vsprintf_invalid_args() {
 		global $wpdb;
 
-<<<<<<< HEAD
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, array( "admin" ) ) );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
-
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( array( 1 ), "admin" ) );
-		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
-=======
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, array( 'admin' ) ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
@@ -434,7 +400,6 @@ class Tests_DB extends WP_UnitTestCase {
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( array( 1 ), 'admin' ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -695,10 +660,6 @@ class Tests_DB extends WP_UnitTestCase {
 		$this->assertNotEmpty( $wpdb->insert_id );
 		$last = $wpdb->insert_id;
 
-<<<<<<< HEAD
-		$rows2 = $wpdb->replace( $wpdb->users, array( 'ID' => $last, 'display_name' => 'Walter Replace Sobchak' ) );
-		$this->assertEquals( 2, $rows2 );
-=======
 		$rows2 = $wpdb->replace(
 			$wpdb->users,
 			array(
@@ -707,7 +668,6 @@ class Tests_DB extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 2, $rows2 );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNotEmpty( $wpdb->insert_id );
 
 		$this->assertSame( $last, $wpdb->insert_id );
@@ -1341,16 +1301,9 @@ class Tests_DB extends WP_UnitTestCase {
 			$values = array( $values );
 		}
 
-<<<<<<< HEAD
-		array_unshift( $values, $sql );
-
-		$sql = call_user_func_array( array( $wpdb, 'prepare' ), $values );
-		$this->assertEquals( $expected, $sql );
-=======
 		// phpcs:ignore WordPress.DB.PreparedSQL
 		$sql = $wpdb->prepare( $sql, ...$values );
 		$this->assertSame( $expected, $sql );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1367,14 +1320,9 @@ class Tests_DB extends WP_UnitTestCase {
 			$values = array( $values );
 		}
 
-<<<<<<< HEAD
-		$sql = call_user_func_array( array( $wpdb, 'prepare' ), array( $sql, $values ) );
-		$this->assertEquals( $expected, $sql );
-=======
 		// phpcs:ignore WordPress.DB.PreparedSQL
 		$sql = $wpdb->prepare( $sql, $values );
 		$this->assertSame( $expected, $sql );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function data_prepare_with_placeholders() {

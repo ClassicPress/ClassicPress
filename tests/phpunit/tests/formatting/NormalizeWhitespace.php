@@ -47,10 +47,6 @@ class Tests_Formatting_NormalizeWhitespace extends WP_UnitTestCase {
 	 * @dataProvider get_input_output
 	 */
 	function test_normalize_whitespace( $in_str, $exp_str ) {
-<<<<<<< HEAD
-		$this->assertEquals($exp_str, normalize_whitespace( $in_str ) );
-=======
 		$this->assertSame( $exp_str, normalize_whitespace( $in_str ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

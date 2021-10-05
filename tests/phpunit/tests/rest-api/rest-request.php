@@ -554,16 +554,13 @@ class Tests_REST_Request extends WP_UnitTestCase {
 		$this->assertSame( $original_url, $url );
 		$request = WP_REST_Request::from_url( $url );
 		$this->assertInstanceOf( 'WP_REST_Request', $request );
-<<<<<<< HEAD
-		$this->assertEquals( '/wp/v2/posts/1', $request->get_route() );
-		$this->assertEqualSets( array(
-=======
 		$this->assertSame( '/wp/v2/posts/1', $request->get_route() );
 		$this->assertEqualSets(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'foo' => 'bar',
-		), $request->get_query_params() );
+				'foo' => 'bar',
+			),
+			$request->get_query_params()
+		);
 	}
 
 	/**
@@ -590,13 +587,6 @@ class Tests_REST_Request extends WP_UnitTestCase {
 		$request = new WP_REST_Request();
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_method( 'POST' );
-<<<<<<< HEAD
-		$request->set_body( wp_json_encode( array(
-			'param' => 'value'
-		) ) );
-		$this->assertEquals( 'value', $request->get_param( 'param' ) );
-		$this->assertEquals(
-=======
 		$request->set_body(
 			wp_json_encode(
 				array(
@@ -606,7 +596,6 @@ class Tests_REST_Request extends WP_UnitTestCase {
 		);
 		$this->assertSame( 'value', $request->get_param( 'param' ) );
 		$this->assertSame(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			array( 'param' => 'value' ),
 			$request->get_json_params()
 		);
@@ -618,136 +607,4 @@ class Tests_REST_Request extends WP_UnitTestCase {
 			$request->get_json_params()
 		);
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 40838
-	 */
-	public function test_set_param_updates_param_in_json_and_query() {
-		$request = new WP_REST_Request();
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'param' => 'value_body',
-				)
-			)
-		);
-		$request->set_query_params(
-			array(
-				'param' => 'value_query',
-			)
-		);
-		$request->set_param( 'param', 'new_value' );
-
-		$this->assertSame( 'new_value', $request->get_param( 'param' ) );
-		$this->assertSame( array(), $request->get_body_params() );
-		$this->assertSame( array( 'param' => 'new_value' ), $request->get_json_params() );
-		$this->assertSame( array( 'param' => 'new_value' ), $request->get_query_params() );
-	}
-
-	/**
-	 * @ticket 40838
-	 */
-	public function test_set_param_updates_param_if_already_exists_in_query() {
-		$request = new WP_REST_Request();
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'param_body' => 'value_body',
-				)
-			)
-		);
-		$original_defaults = array(
-			'param_query' => 'default_query_value',
-			'param_body'  => 'default_body_value',
-		);
-		$request->set_default_params( $original_defaults );
-		$request->set_query_params(
-			array(
-				'param_query' => 'value_query',
-			)
-		);
-		$request->set_param( 'param_query', 'new_value' );
-
-		$this->assertSame( 'new_value', $request->get_param( 'param_query' ) );
-		$this->assertSame( array(), $request->get_body_params() );
-		$this->assertSame( array( 'param_body' => 'value_body' ), $request->get_json_params() );
-		$this->assertSame( array( 'param_query' => 'new_value' ), $request->get_query_params() );
-		// Verify the default wasn't overwritten.
-		$this->assertSame( $original_defaults, $request->get_default_params() );
-	}
-
-	/**
-	 * @ticket 40838
-	 */
-	public function test_set_param_to_null_updates_param_in_json_and_query() {
-		$request = new WP_REST_Request();
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'param' => 'value_body',
-				)
-			)
-		);
-		$request->set_query_params(
-			array(
-				'param' => 'value_query',
-			)
-		);
-		$request->set_param( 'param', null );
-
-		$this->assertNull( $request->get_param( 'param' ) );
-		$this->assertSame( array(), $request->get_body_params() );
-		$this->assertSame( array( 'param' => null ), $request->get_json_params() );
-		$this->assertSame( array( 'param' => null ), $request->get_query_params() );
-	}
-
-	/**
-	 * @ticket 40838
-	 */
-	public function test_set_param_from_null_updates_param_in_json_and_query_with_null() {
-		$request = new WP_REST_Request();
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'param' => null,
-				)
-			)
-		);
-		$request->set_query_params(
-			array(
-				'param' => null,
-			)
-		);
-		$request->set_param( 'param', 'new_value' );
-
-		$this->assertSame( 'new_value', $request->get_param( 'param' ) );
-		$this->assertSame( array(), $request->get_body_params() );
-		$this->assertSame( array( 'param' => 'new_value' ), $request->get_json_params() );
-		$this->assertSame( array( 'param' => 'new_value' ), $request->get_query_params() );
-	}
-
-	/**
-	 * @ticket 50786
-	 */
-	public function test_set_param_with_invalid_json() {
-		$request = new WP_REST_Request();
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_method( 'POST' );
-		$request->set_body( '' );
-		$request->set_param( 'param', 'value' );
-
-		$this->assertTrue( $request->has_param( 'param' ) );
-		$this->assertSame( 'value', $request->get_param( 'param' ) );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

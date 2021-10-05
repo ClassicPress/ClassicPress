@@ -113,25 +113,23 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'context',
-			'exclude',
-			'hide_empty',
-			'include',
-			'offset',
-			'order',
-			'orderby',
-			'page',
-			'per_page',
-			'post',
-			'search',
-			'slug',
-			), $keys );
+				'context',
+				'exclude',
+				'hide_empty',
+				'include',
+				'offset',
+				'order',
+				'orderby',
+				'page',
+				'per_page',
+				'post',
+				'search',
+				'slug',
+			),
+			$keys
+		);
 	}
 
 	public function test_get_items() {
@@ -158,18 +156,11 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'hide_empty', true );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Season 5', $data[0]['name'] );
-		$this->assertEquals( 'The Be Sharps', $data[1]['name'] );
-		// invalid value should fail
-=======
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( 'Season 5', $data[0]['name'] );
 		$this->assertSame( 'The Be Sharps', $data[1]['name'] );
 
 		// Invalid 'hide_empty' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'hide_empty', 'nothanks' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -184,29 +175,17 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'include', array( $id3, $id1 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// Orderby=>include
-=======
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( $id1, $data[0]['id'] );
 
 		// 'orderby' => 'include'.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'include' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id3, $data[0]['id'] );
-		// Include invalid value shoud fail
-=======
 		$this->assertSame( 2, count( $data ) );
-		$this->assertSame( $id2, $data[0]['id'] );
+		$this->assertSame( $id3, $data[0]['id'] );
 
 		// Invalid 'include' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'include', array( 'myterm' ) );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -268,40 +247,24 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'orderby', 'name' );
 		$request->set_param( 'order', 'desc' );
 		$request->set_param( 'per_page', 1 );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( 'Banana', $data[0]['name'] );
-=======
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 1, count( $data ) );
-		$this->assertSame( 'Zucchini', $data[0]['name'] );
+		$this->assertSame( 'Banana', $data[0]['name'] );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'orderby', 'name' );
 		$request->set_param( 'order', 'asc' );
 		$request->set_param( 'per_page', 2 );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Apple', $data[0]['name'] );
-		// Invalid orderby should fail.
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( 'Apple', $data[0]['name'] );
 
 		// Invalid 'orderby' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'invalid' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -313,25 +276,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$tag2 = $this->factory->tag->create( array( 'name' => 'Banana' ) );
 		// defaults to orderby=name, order=asc
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 'Apple', $data[0]['name'] );
-		$this->assertEquals( 'Banana', $data[1]['name'] );
-		$this->assertEquals( 'Cantaloupe', $data[2]['name'] );
-		// orderby=id, with default order=asc
-		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
-		$request->set_param( 'orderby', 'id' );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 'Cantaloupe', $data[0]['name'] );
-		$this->assertEquals( 'Apple', $data[1]['name'] );
-		$this->assertEquals( 'Banana', $data[2]['name'] );
-		// orderby=id, order=desc
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 'Apple', $data[0]['name'] );
@@ -341,15 +286,14 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		// 'orderby' => 'id', with default 'order' => 'asc'.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'orderby', 'id' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertSame( 'Tag 0', $data[0]['name'] );
-		$this->assertSame( 'Tag 1', $data[1]['name'] );
-		$this->assertSame( 'Tag 2', $data[2]['name'] );
+		$this->assertSame( 'Cantaloupe', $data[0]['name'] );
+		$this->assertSame( 'Apple', $data[1]['name'] );
+		$this->assertSame( 'Banana', $data[2]['name'] );
 
 		// 'orderby' => 'id', 'order' => 'desc'.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'orderby', 'id' );
 		$request->set_param( 'order', 'desc' );
@@ -386,13 +330,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'post', $post_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
@@ -449,13 +388,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'post', $post_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertCount( 0, $data );
@@ -473,13 +407,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/batman' );
 		$request->set_param( 'post', $post_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
@@ -495,18 +424,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		 */
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'search', 'App' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( 'Apple', $data[0]['name'] );
-		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
-		$request->set_param( 'search', 'Garbage' );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 1, count( $data ) );
@@ -514,9 +432,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'search', 'Garbage' );
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 0, count( $data ) );
 	}
@@ -526,13 +443,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$tag2 = $this->factory->tag->create( array( 'name' => 'Banana' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$request->set_param( 'slug', 'apple' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( 'Apple', $data[0]['name'] );
@@ -544,20 +456,16 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$id3 = $this->factory->tag->create( array( 'name' => 'Burrito' ) );
 		$this->factory->tag->create( array( 'name' => 'Pizza' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
-		$request->set_param( 'slug', array(
-			'taco',
-			'burrito',
-			'enchilada',
-<<<<<<< HEAD
-		) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
+		$request->set_param(
+			'slug',
+			array(
+				'taco',
+				'burrito',
+				'enchilada',
 			)
 		);
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$names = wp_list_pluck( $data, 'name' );
 		sort( $names );
@@ -570,15 +478,9 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$id3 = $this->factory->tag->create( array( 'name' => 'Burrito' ) );
 		$this->factory->tag->create( array( 'name' => 'Pizza' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
-<<<<<<< HEAD
 		$request->set_param( 'slug', 'taco,burrito, enchilada');
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$request->set_param( 'slug', 'taco,burrito, enchilada' );
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$names = wp_list_pluck( $data, 'name' );
 		sort( $names );
@@ -605,18 +507,14 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/tags' );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 50, $headers['X-WP-Total'] );
-		$this->assertEquals( 5, $headers['X-WP-TotalPages'] );
-		$next_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_tags, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 50, $headers['X-WP-Total'] );
+		$this->assertSame( 5, $headers['X-WP-TotalPages'] );
 		$next_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( 'wp/v2/tags' ) );
+				'page'    => 2,
+			),
+			rest_url( 'wp/v2/tags' )
+		);
 		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 		// 3rd page
@@ -627,18 +525,13 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_tags, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( 'wp/v2/tags' ) );
+				'page'    => 2,
+			), rest_url( 'wp/v2/tags' )
+		);
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
 			'page'    => 4,
@@ -649,22 +542,14 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 5,
-			), rest_url( 'wp/v2/tags' ) );
-=======
-		$this->assertSame( $total_tags, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages - 1,
+				'page' => 5,
 			),
 			rest_url( 'wp/v2/tags' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 		// Out of bounds
@@ -672,22 +557,14 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 6,
-			), rest_url( 'wp/v2/tags' ) );
-=======
-		$this->assertSame( $total_tags, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages,
+				'page' => 6,
 			),
 			rest_url( 'wp/v2/tags' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 	}
@@ -709,7 +586,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	public function test_get_item_meta() {
 		$id       = $this->factory->tag->create();
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/tags/' . $id );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$this->assertArrayHasKey( 'meta', $data );
 
@@ -727,7 +604,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 	public function test_get_item_meta_registered_for_different_taxonomy() {
 		$id       = $this->factory->tag->create();
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/tags/' . $id );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$this->assertArrayHasKey( 'meta', $data );
 
@@ -773,13 +650,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'description', 'This term is so awesome.' );
 		$request->set_param( 'slug', 'so-awesome' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$headers = $response->get_headers();
 		$data = $response->get_data();
 		$this->assertContains( '/wp/v2/tags/' . $data['id'], $headers['Location'] );
@@ -794,7 +666,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'description', 'This term is so awesome.' );
 		$request->set_param( 'slug', 'so-awesome' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
 		$headers = $response->get_headers();
 		$data    = $response->get_data();
@@ -834,7 +706,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'POST', '/wp/v2/tags' );
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'meta', array( 'test_tag_single' => 'hello' ) );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
 		$headers = $response->get_headers();
 		$data    = $response->get_data();
@@ -850,7 +722,7 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'name', 'My Awesome Term' );
 		$request->set_param( 'meta', array( 'test_tag_single' => 'hello' ) );
 		$request->set_param( 'id', $existing_tag_id );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
 		$headers = $response->get_headers();
 		$data    = $response->get_data();
@@ -872,20 +744,16 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'name', 'New Name' );
 		$request->set_param( 'description', 'New Description' );
 		$request->set_param( 'slug', 'new-slug' );
-		$request->set_param( 'meta', array(
-			'test_single' => 'just meta',
-			'test_tag_single' => 'tag-specific meta',
-			'test_cat_meta' => 'category-specific meta',
-<<<<<<< HEAD
-		) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
+		$request->set_param(
+			'meta',
+			array(
+				'test_single' => 'just meta',
+				'test_tag_single' => 'tag-specific meta',
+				'test_cat_meta' => 'category-specific meta',
 			)
 		);
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 'New Name', $data['name'] );
 		$this->assertSame( 'New Description', $data['description'] );
@@ -900,32 +768,18 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$term = get_term_by( 'id', $this->factory->tag->create(), 'post_tag' );
 
 		$request = new WP_REST_Request( 'PUT', '/wp/v2/tags/' . $term->term_id );
-<<<<<<< HEAD
 
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$request->set_param( 'slug', $term->slug );
-
-		// Run twice to make sure that the update still succeeds even if no DB
-		// rows are updated.
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$request->set_param( 'slug', $term->slug );
 
 		// Run twice to make sure that the update still succeeds
 		// even if no DB rows are updated.
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item_invalid_term() {
@@ -1009,23 +863,13 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		foreach ( $input as $name => $value ) {
 			$request->set_param( $name, $value );
 		}
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-		$actual_output = $response->get_data();
-
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['name'], $actual_output['name'] );
-		$this->assertEquals( $expected_output['description'], $actual_output['description'] );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
 		$actual_output = $response->get_data();
 
 		// Compare expected API output to actual API output.
 		$this->assertSame( $expected_output['name'], $actual_output['name'] );
 		$this->assertSame( $expected_output['description'], $actual_output['description'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$tag = get_term_by( 'id', $actual_output['id'], 'post_tag' );
@@ -1037,23 +881,13 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		foreach ( $input as $name => $value ) {
 			$request->set_param( $name, $value );
 		}
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$actual_output = $response->get_data();
-
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['name'], $actual_output['name'] );
-		$this->assertEquals( $expected_output['description'], $actual_output['description'] );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$actual_output = $response->get_data();
 
 		// Compare expected API output to actual API output.
 		$this->assertSame( $expected_output['name'], $actual_output['name'] );
 		$this->assertSame( $expected_output['description'], $actual_output['description'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$tag = get_term_by( 'id', $actual_output['id'], 'post_tag' );
@@ -1063,21 +897,16 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 
 	public function test_tag_roundtrip_as_editor() {
 		wp_set_current_user( self::$editor );
-<<<<<<< HEAD
-		$this->assertEquals( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
-		$this->verify_tag_roundtrip( array(
-=======
-
 		$this->assertSame( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
 		$this->verify_tag_roundtrip(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'name'        => '\o/ ¯\_(ツ)_/¯',
-			'description' => '\o/ ¯\_(ツ)_/¯',
-		), array(
-			'name'        => '\o/ ¯\_(ツ)_/¯',
-			'description' => '\o/ ¯\_(ツ)_/¯',
-		) );
+				'name'        => '\o/ ¯\_(ツ)_/¯',
+				'description' => '\o/ ¯\_(ツ)_/¯',
+			), array(
+				'name'        => '\o/ ¯\_(ツ)_/¯',
+				'description' => '\o/ ¯\_(ツ)_/¯',
+			)
+		);
 	}
 
 	public function test_tag_roundtrip_as_editor_html() {
@@ -1132,13 +961,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$term = get_term_by( 'id', $this->factory->tag->create( array( 'name' => 'Deleted Tag' ) ), 'post_tag' );
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/tags/' . $term->term_id );
 		$request->set_param( 'force', true );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertTrue( $data['deleted'] );
 		$this->assertSame( 'Deleted Tag', $data['previous']['name'] );
@@ -1236,15 +1060,13 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( '_fields', 'id,name' );
 		$term     = get_term_by( 'id', $this->factory->tag->create(), 'post_tag' );
 		$response = $endpoint->prepare_item_for_response( $term, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'id',
-			'name',
-		), array_keys( $response->get_data() ) );
+				'id',
+				'name',
+			),
+			array_keys( $response->get_data() )
+		);
 	}
 
 	public function test_get_item_schema() {
@@ -1362,53 +1184,6 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 41411
-	 */
-	public function test_editable_response_uses_edit_context() {
-		wp_set_current_user( self::$administrator );
-
-		$view_field = 'view_only_field';
-		$edit_field = 'edit_only_field';
-
-		register_rest_field(
-			'tag',
-			$view_field,
-			array(
-				'context'      => array( 'view' ),
-				'get_callback' => '__return_empty_string',
-			)
-		);
-
-		register_rest_field(
-			'tag',
-			$edit_field,
-			array(
-				'context'      => array( 'edit' ),
-				'get_callback' => '__return_empty_string',
-			)
-		);
-
-		$create = new WP_REST_Request( 'POST', '/wp/v2/tags' );
-		$create->set_param( 'name', 'My New Term' );
-		$response = rest_get_server()->dispatch( $create );
-		$this->assertSame( 201, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertArrayHasKey( $edit_field, $data );
-		$this->assertArrayNotHasKey( $view_field, $data );
-
-		$update = new WP_REST_Request( 'PUT', '/wp/v2/tags/' . $data['id'] );
-		$update->set_param( 'name', 'My Awesome New Term' );
-		$response = rest_get_server()->dispatch( $update );
-		$this->assertSame( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertArrayHasKey( $edit_field, $data );
-		$this->assertArrayNotHasKey( $view_field, $data );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function additional_field_get_callback( $object, $request ) {
 		return 123;
 	}

@@ -378,17 +378,10 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 		$this->assertSame( $this->undefined, $this->custom_type_getter( $name, $this->undefined ) );
 		$this->assertSame( $default, $setting->value() );
 		$this->assertTrue( $setting->preview() );
-<<<<<<< HEAD
-		$this->assertEquals( 1, did_action( "customize_preview_{$setting->id}" ) );
-		$this->assertEquals( 1, did_action( "customize_preview_{$setting->type}" ) );
-		$this->assertEquals( $this->undefined, $this->custom_type_getter( $name, $this->undefined ) ); // Note: for a non-custom type this is $default
-		$this->assertEquals( $default, $setting->value() ); // Should be same as above.
-=======
 		$this->assertSame( 1, did_action( "customize_preview_{$setting->id}" ) );
 		$this->assertSame( 1, did_action( "customize_preview_{$setting->type}" ) );
 		$this->assertSame( $this->undefined, $this->custom_type_getter( $name, $this->undefined ) ); // Note: for a non-custom type this is $default.
 		$this->assertSame( $default, $setting->value() ); // Should be same as above.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Custom type existing and no post value override.
 		$name = "set_{$type}_without_post_value";

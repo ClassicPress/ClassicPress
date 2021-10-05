@@ -50,13 +50,8 @@ class Tests_XMLRPC_wp_deleteTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_deleteTerm( array( 1, 'editor', 'editor', 'category', '' ) );
 		$this->assertIXRError( $result );
-<<<<<<< HEAD
-		$this->assertEquals( 500, $result->code );
-		$this->assertEquals( __('Empty Term.'), $result->message );
-=======
 		$this->assertSame( 500, $result->code );
 		$this->assertSame( __( 'Empty Term.' ), $result->message );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_invalid_term() {

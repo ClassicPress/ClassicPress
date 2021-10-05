@@ -26,9 +26,6 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$term_id2_child = self::factory()->category->create( array( 'parent' => $term_id2 ) );
 		$hierarchy = _get_term_hierarchy( 'category' );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( $term_id1 => array( $term_id1_child ), $term_id2 => array( $term_id2_child ) ), $hierarchy );
-=======
 		$this->assertSame(
 			array(
 				$term_id1 => array( $term_id1_child ),
@@ -36,7 +33,6 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 			),
 			$hierarchy
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

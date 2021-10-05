@@ -86,15 +86,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		$this->assertSame( $expected, $updates );
 
-<<<<<<< HEAD
-		$this->assertEquals(
-			"{$wpdb->prefix}dbdelta_create_test"
-			, $wpdb->get_var(
-=======
 		$this->assertSame(
 			"{$wpdb->prefix}dbdelta_create_test",
 			$wpdb->get_var(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 				$wpdb->prepare(
 					'SHOW TABLES LIKE %s'
 					, $wpdb->esc_like( "{$wpdb->prefix}dbdelta_create_test" )
@@ -257,15 +251,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"INSERT INTO {$wpdb->prefix}dbdelta_test (column_1) VALUES ('wcphilly2015')"
 		);
 
-<<<<<<< HEAD
-		$this->assertEquals(
-			array( )
-			, $insert
-=======
 		$this->assertSame(
 			array(),
 			$insert
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		);
 
 		$this->assertTableRowHasValue( 'column_1', 'wcphilly2015',  $wpdb->prefix . 'dbdelta_test' );

@@ -122,15 +122,9 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/users' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
-=======
 		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/users/' . self::$user );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
@@ -144,25 +138,23 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'context',
-			'exclude',
-			'include',
-			'offset',
-			'order',
-			'orderby',
-			'page',
-			'per_page',
-			'roles',
-			'search',
-			'slug',
-			'who',
-			), $keys );
+				'context',
+				'exclude',
+				'include',
+				'offset',
+				'order',
+				'orderby',
+				'page',
+				'per_page',
+				'roles',
+				'search',
+				'slug',
+				'who',
+			),
+			$keys
+		);
 	}
 
 	public function test_get_items() {
@@ -273,18 +265,15 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 54, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$next_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_users, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+
+		$this->assertSame( 54, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$next_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( 'wp/v2/users' ) );
+				'page'    => 2,
+			),
+			rest_url( 'wp/v2/users' )
+		);
 		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 		// 3rd page
@@ -295,18 +284,15 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 55, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_users, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+
+		$this->assertSame( 55, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( 'wp/v2/users' ) );
+				'page'    => 2,
+			),
+			rest_url( 'wp/v2/users' )
+		);
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
 			'page'    => 4,
@@ -317,22 +303,14 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 55, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 5,
-			), rest_url( 'wp/v2/users' ) );
-=======
-		$this->assertSame( $total_users, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 55, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages - 1,
+				'page' => 5,
 			),
 			rest_url( 'wp/v2/users' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 		// Out of bounds
@@ -340,22 +318,14 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 55, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 6,
-			), rest_url( 'wp/v2/users' ) );
-=======
-		$this->assertSame( $total_users, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 55, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages,
+				'page' => 6,
 			),
 			rest_url( 'wp/v2/users' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 	}
@@ -366,22 +336,13 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			$this->factory->user->create( array( 'display_name' => "User {$i}" ) );
 		}
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 10, count( $response->get_data() ) );
-		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
-		$request->set_param( 'per_page', 5 );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 5, count( $response->get_data() ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 10, count( $response->get_data() ) );
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'per_page', 5 );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 5, count( $response->get_data() ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_page() {
@@ -392,19 +353,15 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'per_page', 5 );
 		$request->set_param( 'page', 2 );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 5, count( $response->get_data() ) );
-		$prev_link = add_query_arg( array(
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 5, count( $response->get_data() ) );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'per_page'  => 5,
-			'page'      => 1,
-			), rest_url( 'wp/v2/users' ) );
+				'per_page'  => 5,
+				'page'      => 1,
+			),
+			rest_url( 'wp/v2/users' )
+		);
 		$headers = $response->get_headers();
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 	}
@@ -420,12 +377,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'per_page', 1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( $high_id, $data[0]['id'] );
-=======
 		$this->assertSame( $high_id, $data[0]['id'] );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'orderby', 'name' );
 		$request->set_param( 'order', 'asc' );
@@ -448,12 +401,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'include', array( $low_id, $high_id ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-
-		$this->assertEquals( $high_id, $data[0]['id'] );
-=======
 		$this->assertSame( $high_id, $data[0]['id'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'orderby', 'url' );
@@ -478,12 +426,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'include', array( $low_id, $high_id ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-
-		$this->assertEquals( $high_id, $data[0]['id'] );
-=======
 		$this->assertSame( $high_id, $data[0]['id'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'orderby', 'slug' );
@@ -600,29 +543,17 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'include', array( $id3, $id1 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// Orderby=>include
-=======
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( $id1, $data[0]['id'] );
 
 		// 'orderby' => 'include'.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'include' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id3, $data[0]['id'] );
-		// Invalid include should fail
-=======
 		$this->assertSame( 2, count( $data ) );
-		$this->assertSame( $id2, $data[0]['id'] );
+		$this->assertSame( $id3, $data[0]['id'] );
 
 		// Invalid 'include' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'include', 'invalid' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -660,32 +591,21 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		wp_set_current_user( self::$user );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'search', 'yololololo' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 0, count( $response->get_data() ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 0, count( $response->get_data() ) );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$yolo_id = $this->factory->user->create( array( 'display_name' => 'yololololo' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'search', 'yololololo' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 1, count( $response->get_data() ) );
-		// default to wildcard search
-		$adam_id = $this->factory->user->create( array(
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 1, count( $response->get_data() ) );
 		// Default to wildcard search.
 		$adam_id = $this->factory->user->create(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'role'          => 'author',
-			'user_nicename' => 'adam',
-		) );
+				'role'          => 'author',
+				'user_nicename' => 'adam',
+			)
+		);
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'search', 'ada' );
 		$response = $this->server->dispatch( $request );
@@ -732,13 +652,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		) );
 		$request->set_param( 'orderby', 'slug' );
 		$request->set_param( 'order', 'asc' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$slugs = wp_list_pluck( $data, 'slug' );
 		$this->assertSame( array( 'burrito', 'enchilada', 'taco' ), $slugs );
@@ -766,13 +681,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'slug', 'taco,burrito , enchilada');
 		$request->set_param( 'orderby', 'slug' );
 		$request->set_param( 'order', 'desc' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$slugs = wp_list_pluck( $data, 'slug' );
 		$this->assertSame( array( 'taco', 'enchilada', 'burrito' ), $slugs );
@@ -787,27 +697,16 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'roles', 'author,subscriber' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 3, count( $data ) );
-		$this->assertEquals( $tango, $data[1]['id'] );
-		$this->assertEquals( $yolo, $data[2]['id'] );
-=======
 		$this->assertSame( 3, count( $data ) );
 		$this->assertSame( $tango, $data[1]['id'] );
 		$this->assertSame( $yolo, $data[2]['id'] );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'roles', 'author' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $yolo, $data[0]['id'] );
-=======
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( $yolo, $data[0]['id'] );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		wp_set_current_user( 0 );
 		$request->set_param( 'roles', 'author' );
 		$response = $this->server->dispatch( $request );
@@ -825,14 +724,9 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( 'roles', 'ilovesteak,author' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $lolz, $data[0]['id'] );
-=======
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( $lolz, $data[0]['id'] );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'roles', 'steakisgood' );
 		$response = $this->server->dispatch( $request );
@@ -846,14 +740,14 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		// First request should include subscriber in the set.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'search', 'subscriber' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertCount( 1, $response->get_data() );
 		// Second request should exclude subscriber.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'who', 'authors' );
 		$request->set_param( 'search', 'subscriber' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertCount( 0, $response->get_data() );
 	}
@@ -862,7 +756,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		wp_set_current_user( self::$user );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'who', 'editor' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -874,7 +768,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		wp_set_current_user( self::$subscriber );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'who', 'authors' );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_forbidden_who', $response, 403 );
 	}
 
@@ -904,15 +798,13 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request->set_param( '_fields', 'id,name' );
 		$user     = get_user_by( 'id', get_current_user_id() );
 		$response = $this->endpoint->prepare_item_for_response( $user, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'id',
-			'name',
-		), array_keys( $response->get_data() ) );
+				'id',
+				'name',
+			),
+			array_keys( $response->get_data() )
+		);
 	}
 
 	public function test_get_user_avatar_urls() {
@@ -928,17 +820,9 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertArrayHasKey( 96,  $data['avatar_urls'] );
 
 		$user = get_user_by( 'id', self::$editor );
-<<<<<<< HEAD
-		/**
-		 * Ignore the subdomain, since 'get_avatar_url randomly sets the Gravatar
-		 * server when building the url string.
-		 */
-		$this->assertEquals( substr( get_avatar_url( $user->user_email ), 9 ), substr( $data['avatar_urls'][96], 9 ) );
-=======
 		// Ignore the subdomain, since get_avatar_url() randomly sets
 		// the Gravatar server when building the URL string.
 		$this->assertSame( substr( get_avatar_url( $user->user_email ), 9 ), substr( $data['avatar_urls'][96], 9 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_user_invalid_id() {
@@ -979,36 +863,21 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 
 	public function test_can_get_item_author_of_rest_true_public_true_unauthenticated() {
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', self::$authors['r_true_p_true'] ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_can_get_item_author_of_rest_true_public_true_authenticated() {
 		wp_set_current_user( self::$editor );
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', self::$authors['r_true_p_true'] ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_can_get_item_author_of_rest_true_public_false() {
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', self::$authors['r_true_p_false'] ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_cannot_get_item_author_of_rest_false_public_true_unauthenticated() {
@@ -1032,13 +901,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 
 	public function test_can_get_item_author_of_post() {
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', self::$editor ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_cannot_get_item_author_of_draft() {
@@ -1066,20 +930,15 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		) );
 		wp_set_current_user( 0 );
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', $this->author_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 401, $response->get_status() );
-		$this->post_id = $this->factory->post->create( array(
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 401, $response->get_status() );
 
 		$this->post_id = $this->factory->post->create(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'post_author' => $this->author_id,
-			'post_type'   => 'page',
-		));
+				'post_author' => $this->author_id,
+				'post_type'   => 'page',
+			)
+		);
 		$response = $this->server->dispatch( $request );
 		$this->check_get_user_response( $response, 'embed' );
 	}
@@ -1113,14 +972,9 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		wp_set_current_user( self::$user );
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users/me' );
-<<<<<<< HEAD
 
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->check_get_user_response( $response, 'view' );
 
 		$headers = $response->get_headers();
@@ -1204,11 +1058,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			$this->assertInternalType( 'array', $data['data']['params'] );
 			$errors = $data['data']['params'];
 			$this->assertInternalType( 'string', $errors['username'] );
-<<<<<<< HEAD
-			$this->assertEquals( 'Username contains invalid characters.', $errors['username'] );
-=======
-			$this->assertSame( 'This username is invalid because it uses illegal characters. Please enter a valid username.', $errors['username'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+			$this->assertSame( 'Username contains invalid characters.', $errors['username'] );
 		}
 	}
 
@@ -1525,23 +1375,13 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/users/%d', self::$editor ) );
 		$request->set_param( 'slug', $user->user_nicename );
 
-<<<<<<< HEAD
-		// Run twice to make sure that the update still succeeds even if no DB
-		// rows are updated.
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
 		// Run twice to make sure that the update still succeeds
 		// even if no DB rows are updated.
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item_existing_email() {
@@ -1557,48 +1397,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertSame( 'rest_user_invalid_email', $response->as_error()->get_error_code() );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 44672
-	 */
-	public function test_update_item_existing_email_case() {
-		wp_set_current_user( self::$editor );
-
-		$user = get_userdata( self::$editor );
-
-		$updated_email_with_case_change = ucwords( $user->user_email );
-
-		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/users/%d', self::$editor ) );
-		$request->set_param( 'email', $updated_email_with_case_change );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( $updated_email_with_case_change, $data['email'] );
-	}
-
-	/**
-	 * @ticket 44672
-	 */
-	public function test_update_item_existing_email_case_not_own() {
-		wp_set_current_user( self::$editor );
-
-		$user       = get_userdata( self::$editor );
-		$subscriber = get_userdata( self::$subscriber );
-
-		$updated_email_with_case_change = ucwords( $subscriber->user_email );
-
-		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/users/%d', self::$editor ) );
-		$request->set_param( 'email', $updated_email_with_case_change );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-
-		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( 'rest_user_invalid_email', $data['code'] );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_update_item_invalid_locale() {
 		$user1 = $this->factory->user->create( array( 'user_login' => 'test_json_user', 'user_email' => 'testjson@example.com' ) );
 		$this->allow_user_to_manage_multisite();
@@ -1930,13 +1728,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		wp_set_current_user( self::$user );
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/users/%d', $user_id ) );
 		$request->set_param( 'roles', array( 'editor' ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$new_data = $response->get_data();
 		$this->assertSame( 'editor', $new_data['roles'][0] );
@@ -1997,21 +1790,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 				$request->set_param( $name, $value );
 			}
 			$request->set_param( 'email', 'cbg@androidsdungeon.com' );
-<<<<<<< HEAD
 			$response = $this->server->dispatch( $request );
-			$this->assertEquals( 201, $response->get_status() );
-			$actual_output = $response->get_data();
-
-			// Compare expected API output to actual API output
-			$this->assertEquals( $expected_output['username']   , $actual_output['username'] );
-			$this->assertEquals( $expected_output['name']       , $actual_output['name'] );
-			$this->assertEquals( $expected_output['first_name'] , $actual_output['first_name'] );
-			$this->assertEquals( $expected_output['last_name']  , $actual_output['last_name'] );
-			$this->assertEquals( $expected_output['url']        , $actual_output['url'] );
-			$this->assertEquals( $expected_output['description'], $actual_output['description'] );
-			$this->assertEquals( $expected_output['nickname']   , $actual_output['nickname'] );
-=======
-			$response = rest_get_server()->dispatch( $request );
 			$this->assertSame( 201, $response->get_status() );
 			$actual_output = $response->get_data();
 
@@ -2023,19 +1802,9 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			$this->assertSame( $expected_output['url'], $actual_output['url'] );
 			$this->assertSame( $expected_output['description'], $actual_output['description'] );
 			$this->assertSame( $expected_output['nickname'], $actual_output['nickname'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// Compare expected API output to WP internal values
 			$user = get_userdata( $actual_output['id'] );
-<<<<<<< HEAD
-			$this->assertEquals( $expected_output['username']   , $user->user_login );
-			$this->assertEquals( $expected_output['name']       , $user->display_name );
-			$this->assertEquals( $expected_output['first_name'] , $user->first_name );
-			$this->assertEquals( $expected_output['last_name']  , $user->last_name );
-			$this->assertEquals( $expected_output['url']        , $user->user_url );
-			$this->assertEquals( $expected_output['description'], $user->description );
-			$this->assertEquals( $expected_output['nickname']   , $user->nickname );
-=======
 			$this->assertSame( $expected_output['username'], $user->user_login );
 			$this->assertSame( $expected_output['name'], $user->display_name );
 			$this->assertSame( $expected_output['first_name'], $user->first_name );
@@ -2043,7 +1812,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			$this->assertSame( $expected_output['url'], $user->user_url );
 			$this->assertSame( $expected_output['description'], $user->description );
 			$this->assertSame( $expected_output['nickname'], $user->nickname );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertTrue( wp_check_password( addslashes( $expected_output['password'] ), $user->user_pass ) );
 
 			$user_id = $actual_output['id'];
@@ -2056,86 +1824,60 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 				$request->set_param( $name, $value );
 			}
 		}
-<<<<<<< HEAD
+
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$actual_output = $response->get_data();
 
 		// Compare expected API output to actual API output
 		if ( isset( $expected_output['username'] ) ) {
 			$this->assertSame( $expected_output['username'], $actual_output['username'] );
 		}
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['name']       , $actual_output['name'] );
-		$this->assertEquals( $expected_output['first_name'] , $actual_output['first_name'] );
-		$this->assertEquals( $expected_output['last_name']  , $actual_output['last_name'] );
-		$this->assertEquals( $expected_output['url']        , $actual_output['url'] );
-		$this->assertEquals( $expected_output['description'], $actual_output['description'] );
-		$this->assertEquals( $expected_output['nickname']   , $actual_output['nickname'] );
-=======
 		$this->assertSame( $expected_output['name'], $actual_output['name'] );
 		$this->assertSame( $expected_output['first_name'], $actual_output['first_name'] );
 		$this->assertSame( $expected_output['last_name'], $actual_output['last_name'] );
 		$this->assertSame( $expected_output['url'], $actual_output['url'] );
 		$this->assertSame( $expected_output['description'], $actual_output['description'] );
 		$this->assertSame( $expected_output['nickname'], $actual_output['nickname'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$user = get_userdata( $actual_output['id'] );
 		if ( isset( $expected_output['username'] ) ) {
 			$this->assertSame( $expected_output['username'], $user->user_login );
 		}
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['name']       , $user->display_name );
-		$this->assertEquals( $expected_output['first_name'] , $user->first_name );
-		$this->assertEquals( $expected_output['last_name']  , $user->last_name );
-		$this->assertEquals( $expected_output['url']        , $user->user_url );
-		$this->assertEquals( $expected_output['description'], $user->description );
-		$this->assertEquals( $expected_output['nickname']   , $user->nickname );
-=======
 		$this->assertSame( $expected_output['name'], $user->display_name );
 		$this->assertSame( $expected_output['first_name'], $user->first_name );
 		$this->assertSame( $expected_output['last_name'], $user->last_name );
 		$this->assertSame( $expected_output['url'], $user->user_url );
 		$this->assertSame( $expected_output['description'], $user->description );
 		$this->assertSame( $expected_output['nickname'], $user->nickname );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertTrue( wp_check_password( addslashes( $expected_output['password'] ), $user->user_pass ) );
 	}
 
 	public function test_user_roundtrip_as_editor() {
 		wp_set_current_user( self::$editor );
-<<<<<<< HEAD
-		$this->assertEquals( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
-		$this->verify_user_roundtrip( array(
-=======
 
 		$this->assertSame( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
 		$this->verify_user_roundtrip(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'id'          => self::$editor,
-			'name'        => '\o/ ¯\_(ツ)_/¯',
-			'first_name'  => '\o/ ¯\_(ツ)_/¯',
-			'last_name'   => '\o/ ¯\_(ツ)_/¯',
-			'url'         => '\o/ ¯\_(ツ)_/¯',
-			'description' => '\o/ ¯\_(ツ)_/¯',
-			'nickname'    => '\o/ ¯\_(ツ)_/¯',
-			'password'    => 'o/ ¯_(ツ)_/¯ \'"',
-		), array(
-			'name'        => '\o/ ¯\_(ツ)_/¯',
-			'first_name'  => '\o/ ¯\_(ツ)_/¯',
-			'last_name'   => '\o/ ¯\_(ツ)_/¯',
-			'url'         => 'http://o/%20¯_(ツ)_/¯',
-			'description' => '\o/ ¯\_(ツ)_/¯',
-			'nickname'    => '\o/ ¯\_(ツ)_/¯',
-			'password'    => 'o/ ¯_(ツ)_/¯ \'"',
-		) );
+				'id'          => self::$editor,
+				'name'        => '\o/ ¯\_(ツ)_/¯',
+				'first_name'  => '\o/ ¯\_(ツ)_/¯',
+				'last_name'   => '\o/ ¯\_(ツ)_/¯',
+				'url'         => '\o/ ¯\_(ツ)_/¯',
+				'description' => '\o/ ¯\_(ツ)_/¯',
+				'nickname'    => '\o/ ¯\_(ツ)_/¯',
+				'password'    => 'o/ ¯_(ツ)_/¯ \'"',
+			), array(
+				'name'        => '\o/ ¯\_(ツ)_/¯',
+				'first_name'  => '\o/ ¯\_(ツ)_/¯',
+				'last_name'   => '\o/ ¯\_(ツ)_/¯',
+				'url'         => 'http://o/%20¯_(ツ)_/¯',
+				'description' => '\o/ ¯\_(ツ)_/¯',
+				'nickname'    => '\o/ ¯\_(ツ)_/¯',
+				'password'    => 'o/ ¯_(ツ)_/¯ \'"',
+			)
+		);
 	}
 
 	public function test_user_roundtrip_as_editor_html() {
@@ -2786,128 +2528,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertErrorResponse( 'rest_user_invalid_id', $response, 404 );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 43941
-	 * @dataProvider data_get_default_data
-	 */
-	public function test_get_default_value( $args, $expected ) {
-		wp_set_current_user( self::$user );
-
-		$object_type = 'user';
-		$meta_key    = 'registered_key1';
-		register_meta(
-			$object_type,
-			$meta_key,
-			$args
-		);
-
-		// Check for default value.
-		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/users/%d', self::$user ) );
-		$response = rest_get_server()->dispatch( $request );
-
-		$this->assertSame( 200, $response->get_status() );
-
-		$data = $response->get_data();
-		$this->assertArrayHasKey( 'meta', $data );
-
-		$meta = (array) $data['meta'];
-		$this->assertArrayHasKey( $meta_key, $meta );
-		$this->assertSame( $expected, $meta[ $meta_key ] );
-	}
-
-	public function data_get_default_data() {
-		return array(
-			array(
-				array(
-					'show_in_rest' => true,
-					'single'       => true,
-					'default'      => 'wibble',
-				),
-				'wibble',
-			),
-			array(
-				array(
-					'show_in_rest' => true,
-					'single'       => false,
-					'default'      => 'wibble',
-				),
-				array( 'wibble' ),
-			),
-			array(
-				array(
-					'single'       => true,
-					'show_in_rest' => array(
-						'schema' => array(
-							'type'       => 'object',
-							'properties' => array(
-								'wibble' => array(
-									'type' => 'string',
-								),
-							),
-						),
-					),
-					'type'         => 'object',
-					'default'      => array( 'wibble' => 'dibble' ),
-				),
-				array( 'wibble' => 'dibble' ),
-			),
-			array(
-				array(
-					'show_in_rest' => array(
-						'schema' => array(
-							'type'       => 'object',
-							'properties' => array(
-								'wibble' => array(
-									'type' => 'string',
-								),
-							),
-						),
-					),
-					'type'         => 'object',
-					'single'       => false,
-					'default'      => array( 'wibble' => 'dibble' ),
-				),
-				array( array( 'wibble' => 'dibble' ) ),
-			),
-
-			array(
-				array(
-					'show_in_rest' => array(
-						'schema' => array(
-							'type'  => 'array',
-							'items' => array(
-								'type' => 'string',
-							),
-						),
-					),
-					'single'       => true,
-					'type'         => 'array',
-					'default'      => array( 'dibble' ),
-				),
-				array( 'dibble' ),
-			),
-			array(
-				array(
-					'show_in_rest' => array(
-						'schema' => array(
-							'type'  => 'array',
-							'items' => array(
-								'type' => 'string',
-							),
-						),
-					),
-					'single'       => false,
-					'type'         => 'array',
-					'default'      => array( 'dibble' ),
-				),
-				array( array( 'dibble' ) ),
-			),
-		);
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function additional_field_get_callback( $object ) {
 		return get_user_meta( $object['id'], 'my_custom_int', true );
 	}
@@ -2939,17 +2559,10 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			$this->assertSame( $user->user_email, $data['email'] );
 			$this->assertEquals( (object) $user->allcaps, $data['capabilities'] );
 			$this->assertEquals( (object) $user->caps, $data['extra_capabilities'] );
-<<<<<<< HEAD
-			$this->assertEquals( date( 'c', strtotime( $user->user_registered ) ), $data['registered_date'] );
-			$this->assertEquals( $user->user_login, $data['username'] );
-			$this->assertEquals( $user->roles, $data['roles'] );
-			$this->assertEquals( get_user_locale( $user ), $data['locale'] );
-=======
 			$this->assertSame( gmdate( 'c', strtotime( $user->user_registered ) ), $data['registered_date'] );
 			$this->assertSame( $user->user_login, $data['username'] );
 			$this->assertSame( $user->roles, $data['roles'] );
 			$this->assertSame( get_user_locale( $user ), $data['locale'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		if ( 'edit' !== $context ) {

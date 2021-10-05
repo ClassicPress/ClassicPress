@@ -39,13 +39,9 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$users = new WP_User_Query();
 
 		$this->assertEquals( '', $users->get( 'fields' ) );
-<<<<<<< HEAD
-		$this->assertEquals( '', @$users->query_vars['fields'] );
-=======
 		if ( isset( $users->query_vars['fields'] ) ) {
 			$this->assertSame( '', $users->query_vars['fields'] );
 		}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$users->set( 'fields', 'all' );
 
@@ -951,13 +947,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$foundCount = count($q->get_results());
 		$expectedCount = 10; // 13 total users minus 3 from query
 
-<<<<<<< HEAD
-		$this->assertContains( "AND user_nicename NOT IN ( 'peter','paul','mary' )", $q->query_where);
-		$this->assertEquals( $expectedCount, $foundCount );
-=======
 		$this->assertContains( "AND user_nicename NOT IN ( 'peter','paul','mary' )", $q->query_where );
-		$this->assertSame( $expected_count, $found_count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $expectedCount, $foundCount );
 	}
 
 	/**
@@ -1043,13 +1034,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$foundCount = count($q->get_results());
 		$expectedCount = 10; // 13 total users minus 3 from query
 
-<<<<<<< HEAD
-		$this->assertContains( "AND user_login NOT IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where);
-		$this->assertEquals( $expectedCount, $foundCount );
-=======
 		$this->assertContains( "AND user_login NOT IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
-		$this->assertSame( $expected_count, $found_count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $expectedCount, $foundCount );
 	}
 
 	/**
@@ -1269,13 +1255,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 			),
 		) );
 
-<<<<<<< HEAD
-		// Check results
-		$this->assertEquals( 1, count( $users ) );
-=======
 		// Check results.
 		$this->assertSame( 1, count( $users ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertSame( self::$editor_ids[0], (int) $users[0]->ID );
 	}
 
@@ -1452,46 +1433,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 
 		$ids = $q->get_results();
 
-<<<<<<< HEAD
-		/* must not include user that has same string in other fields */
-		$this->assertEquals( array(), $ids );
-	}
-=======
 		// Must not include user that has the same string in other fields.
 		$this->assertSame( array(), $ids );
 	}
-
-	/**
-	 * @ticket 44169
-	 */
-	public function test_users_pre_query_filter_should_bypass_database_query() {
-		global $wpdb;
-
-		add_filter( 'users_pre_query', array( __CLASS__, 'filter_users_pre_query' ), 10, 2 );
-
-		$num_queries = $wpdb->num_queries;
-		$q           = new WP_User_Query(
-			array(
-				'fields' => 'ID',
-			)
-		);
-
-		remove_filter( 'users_pre_query', array( __CLASS__, 'filter_users_pre_query' ), 10, 2 );
-
-		// Make sure no queries were executed.
-		$this->assertSame( $num_queries, $wpdb->num_queries );
-
-		// We manually inserted a non-existing user and overrode the results with it.
-		$this->assertSame( array( 555 ), $q->results );
-
-		// Make sure manually setting total_users doesn't get overwritten.
-		$this->assertSame( 1, $q->total_users );
-	}
-
-	public static function filter_users_pre_query( $posts, $query ) {
-		$query->total_users = 1;
-
-		return array( 555 );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

@@ -66,7 +66,7 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 		wp_set_current_user( self::$contributor_id );
 		$request    = new WP_REST_Request( 'GET', '/wp/v2/taxonomies' );
 		$request->set_param( 'context', 'edit' );
-		$response   = rest_get_server()->dispatch( $request );
+		$response   = $this->server->dispatch( $request );
 		$data       = $response->get_data();
 		$taxonomies = $this->get_public_taxonomies( get_taxonomies( '', 'objects' ) );
 		$this->assertSame( count( $taxonomies ), count( $data ) );
@@ -97,13 +97,8 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 	public function test_get_taxonomies_for_invalid_type() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/taxonomies' );
 		$request->set_param( 'type', 'wingding' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( '{}', json_encode( $data ) );
 	}
@@ -157,37 +152,22 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 	public function test_create_item() {
 		/** Taxonomies can't be created **/
 		$request = new WP_REST_Request( 'POST', '/wp/v2/taxonomies' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item() {
 		/** Taxonomies can't be updated **/
 		$request = new WP_REST_Request( 'POST', '/wp/v2/taxonomies/category' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_delete_item() {
 		/** Taxonomies can't be deleted **/
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/taxonomies/category' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_prepare_item() {
@@ -206,12 +186,6 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 		$request->set_param( 'context', 'edit' );
 		$request->set_param( '_fields', 'id,name' );
 		$response = $endpoint->prepare_item_for_response( $tax, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-			// 'id' doesn't exist in this context.
-			'name',
-		), array_keys( $response->get_data() ) );
-=======
 		$this->assertSame(
 			array(
 				// 'id' doesn't exist in this context.
@@ -221,36 +195,12 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 		);
 	}
 
-	/**
-	 * @ticket 42209
-	 */
-	public function test_object_types_is_an_array_if_object_type_is_unregistered() {
-		register_taxonomy_for_object_type( 'category', 'page' );
-		register_taxonomy_for_object_type( 'category', 'attachment' );
-		unregister_taxonomy_for_object_type( 'category', 'page' );
-
-		$request  = new WP_REST_Request( 'GET', '/wp/v2/taxonomies/category' );
-		$response = rest_get_server()->dispatch( $request );
-
-		$types = $response->get_data()['types'];
-		$this->assertArrayHasKey( 0, $types );
-		$this->assertSame( 'post', $types[0] );
-		$this->assertArrayHasKey( 1, $types );
-		$this->assertSame( 'attachment', $types[1] );
-		$this->assertSame( 2, count( $types ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-	}
-
 	public function test_get_item_schema() {
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/taxonomies' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
-<<<<<<< HEAD
-		$this->assertEquals( 9, count( $properties ) );
-=======
-		$this->assertSame( 10, count( $properties ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 9, count( $properties ) );
 		$this->assertArrayHasKey( 'capabilities', $properties );
 		$this->assertArrayHasKey( 'description', $properties );
 		$this->assertArrayHasKey( 'hierarchical', $properties );
@@ -289,22 +239,9 @@ class WP_Test_REST_Taxonomies_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( rest_url( 'wp/v2/taxonomies' ), $links['collection'][0]['href'] );
 		$this->assertArrayHasKey( 'https://api.w.org/items', $links );
 		if ( 'edit' === $context ) {
-<<<<<<< HEAD
-			$this->assertEquals( $tax_obj->cap, $data['capabilities'] );
-			$this->assertEquals( $tax_obj->labels, $data['labels'] );
-			$this->assertEquals( $tax_obj->show_tagcloud, $data['show_cloud'] );
-=======
 			$this->assertSame( $tax_obj->cap, $data['capabilities'] );
 			$this->assertSame( $tax_obj->labels, $data['labels'] );
 			$this->assertSame( $tax_obj->show_tagcloud, $data['show_cloud'] );
-
-			$this->assertSame( $tax_obj->public, $data['visibility']['public'] );
-			$this->assertSame( $tax_obj->publicly_queryable, $data['visibility']['publicly_queryable'] );
-			$this->assertSame( $tax_obj->show_admin_column, $data['visibility']['show_admin_column'] );
-			$this->assertSame( $tax_obj->show_in_nav_menus, $data['visibility']['show_in_nav_menus'] );
-			$this->assertSame( $tax_obj->show_in_quick_edit, $data['visibility']['show_in_quick_edit'] );
-			$this->assertSame( $tax_obj->show_ui, $data['visibility']['show_ui'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		} else {
 			$this->assertFalse( isset( $data['capabilities'] ) );
 			$this->assertFalse( isset( $data['labels'] ) );

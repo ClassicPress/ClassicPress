@@ -57,15 +57,11 @@ class Tests_User_Author_Template extends WP_UnitTestCase {
 		add_user_meta( self::$author_id, 'user_description', 'user description' );
 		$this->assertSame( 'user description', get_user_meta( self::$author_id, 'user_description', true ) );
 		// user_description in meta is ignored. The content of description is returned instead.
-<<<<<<< HEAD
+
 		// See https://core.trac.wordpress.org/ticket/20285
-		$this->assertEquals( 'test_author', get_the_author_meta( 'user_description' ) );
-		$this->assertEquals( 'test_author', trim( get_the_author_meta( 'description' ) ) );
-=======
-		// See #20285.
 		$this->assertSame( 'test_author', get_the_author_meta( 'user_description' ) );
 		$this->assertSame( 'test_author', trim( get_the_author_meta( 'description' ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+
 		update_user_meta( self::$author_id, 'user_description', '' );
 		$this->assertSame( '', get_user_meta( self::$author_id, 'user_description', true ) );
 		$this->assertSame( 'test_author', get_the_author_meta( 'user_description' ) );
@@ -82,13 +78,8 @@ class Tests_User_Author_Template extends WP_UnitTestCase {
 	}
 
 	function test_get_the_author_posts() {
-<<<<<<< HEAD
-		// Test with no global post, result should be 0 because no author is found
-		$this->assertEquals( 0, get_the_author_posts() );
-=======
 		// Test with no global post, result should be 0 because no author is found.
 		$this->assertSame( 0, get_the_author_posts() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$GLOBALS['post'] = self::$post_id;
 		$this->assertEquals( 1, get_the_author_posts() );
 	}

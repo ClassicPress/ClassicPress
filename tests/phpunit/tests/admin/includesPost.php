@@ -32,15 +32,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['saveasdraft'] = true;
 
 		$_results = _wp_translate_postdata( false, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'draft', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Submit Post for Approval
 		$_post_data = array();
@@ -49,15 +43,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['publish'] = true;
 
 		$_results = _wp_translate_postdata( false, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'pending', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'pending', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Create New Draft Post for another user
 		$_post_data = array();
@@ -94,15 +82,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['saveasdraft'] = true;
 
 		$_results = _wp_translate_postdata( false, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'draft', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Publish Post
 		$_post_data = array();
@@ -111,15 +93,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['publish'] = true;
 
 		$_results = _wp_translate_postdata( false, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'publish', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'publish', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Create New Draft Post for another user
 		$_post_data = array();
@@ -128,15 +104,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['saveasdraft'] = true;
 
 		$_results = _wp_translate_postdata( false, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'draft', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Edit Draft Post for another user
 		$_post_data = array();
@@ -147,15 +117,9 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$_post_data['saveasdraft'] = true;
 
 		$_results = _wp_translate_postdata( true, $_post_data );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $_results );
-		$this->assertEquals( $_post_data['post_author'], $_results['post_author'] );
-		$this->assertEquals( 'draft', $_results['post_status'] );
-=======
 		$this->assertNotWPError( $_results );
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -693,120 +657,4 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		$this->assertSame( $p, post_exists( $title, $content, $date ) );
 	}
-
-<<<<<<< HEAD
-=======
-	function test_use_block_editor_for_post() {
-		$this->assertFalse( use_block_editor_for_post( -1 ) );
-		$bogus_post_id = $this->factory()->post->create(
-			array(
-				'post_type' => 'bogus',
-			)
-		);
-		$this->assertFalse( use_block_editor_for_post( $bogus_post_id ) );
-
-		register_post_type(
-			'restless',
-			array(
-				'show_in_rest' => false,
-			)
-		);
-		$restless_post_id = $this->factory()->post->create(
-			array(
-				'post_type' => 'restless',
-			)
-		);
-		$this->assertFalse( use_block_editor_for_post( $restless_post_id ) );
-
-		$generic_post_id = $this->factory()->post->create();
-
-		add_filter( 'use_block_editor_for_post', '__return_false' );
-		$this->assertFalse( use_block_editor_for_post( $generic_post_id ) );
-		remove_filter( 'use_block_editor_for_post', '__return_false' );
-
-		add_filter( 'use_block_editor_for_post', '__return_true' );
-		$this->assertTrue( use_block_editor_for_post( $restless_post_id ) );
-		remove_filter( 'use_block_editor_for_post', '__return_true' );
-	}
-
-	function test_get_block_editor_server_block_settings() {
-		$name     = 'core/test';
-		$settings = array(
-			'icon'            => 'text',
-			'category'        => 'common',
-			'render_callback' => 'foo',
-		);
-
-		register_block_type( $name, $settings );
-
-		$blocks = get_block_editor_server_block_settings();
-
-		unregister_block_type( $name );
-
-		$this->assertArrayHasKey( $name, $blocks );
-		$this->assertSame(
-			array(
-				'title'       => '',
-				'description' => '',
-				'icon'        => 'text',
-				'category'    => 'common',
-				'keywords'    => array(),
-				'usesContext' => array(),
-				'styles'      => array(),
-			),
-			$blocks[ $name ]
-		);
-	}
-
-	/**
-	 * @ticket 43559
-	 */
-	public function test_post_add_meta_empty_is_allowed() {
-		$p = self::factory()->post->create();
-
-		$_POST = array(
-			'metakeyinput' => 'testkey',
-			'metavalue'    => '',
-		);
-
-		wp_set_current_user( self::$admin_id );
-
-		$this->assertNotFalse( add_meta( $p ) );
-		$this->assertSame( '', get_post_meta( $p, 'testkey', true ) );
-	}
-
-	/**
-	 * Test the post type support in post_exists().
-	 *
-	 * @ticket 37406
-	 */
-	public function test_post_exists_should_support_post_type() {
-		$title     = 'Foo Bar';
-		$post_type = 'page';
-		$post_id   = self::factory()->post->create(
-			array(
-				'post_title' => $title,
-				'post_type'  => $post_type,
-			)
-		);
-		$this->assertSame( $post_id, post_exists( $title, null, null, $post_type ) );
-	}
-
-	/**
-	 * Test that post_exists() doesn't find an existing page as a post.
-	 *
-	 * @ticket 37406
-	 */
-	public function test_post_exists_should_not_match_a_page_for_post() {
-		$title     = 'Foo Bar';
-		$post_type = 'page';
-		$post_id   = self::factory()->post->create(
-			array(
-				'post_title' => $title,
-				'post_type'  => $post_type,
-			)
-		);
-		$this->assertSame( 0, post_exists( $title, null, null, 'post' ) );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

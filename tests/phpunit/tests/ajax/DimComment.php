@@ -79,27 +79,16 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-<<<<<<< HEAD
-		// Ensure everything is correct
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
-		$this->assertEquals( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
-=======
 		// Ensure everything is correct.
 		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
 		$this->assertSame( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertGreaterThanOrEqual( time() - 10, (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 		$this->assertLessThanOrEqual( time(), (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 
 		// Check the status
 		$current = wp_get_comment_status( $comment->comment_ID );
-<<<<<<< HEAD
-		if (in_array( $prev_status, array( 'unapproved', 'spam') ) ) {
-			$this->assertEquals( 'approved', $current );
-=======
 		if ( in_array( $prev_status, array( 'unapproved', 'spam' ), true ) ) {
 			$this->assertSame( 'approved', $current );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		} else {
 			$this->assertSame( 'unapproved', $current );
 		}
@@ -199,15 +188,9 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 			// Get the response
 			$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-<<<<<<< HEAD
-			// Ensure everything is correct
-			$this->assertEquals( '0', (string) $xml->response[0]->comment['id'] );
-			$this->assertEquals( 'dim-comment_0', (string) $xml->response['action'] );
-=======
 			// Ensure everything is correct.
 			$this->assertSame( '0', (string) $xml->response[0]->comment['id'] );
 			$this->assertSame( 'dim-comment_0', (string) $xml->response['action'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertContains( 'Comment ' . $_POST['id'] . ' does not exist', $this->_last_response );
 
 		} catch ( Exception $e ) {

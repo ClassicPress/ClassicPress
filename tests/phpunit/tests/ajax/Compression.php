@@ -143,13 +143,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-<<<<<<< HEAD
-		// Check the site option is not changed due to lack of nonce
-		$this->assertEquals( 0, get_site_option( 'can_compress_scripts' ) );
-=======
 		// Check the site option is not changed due to lack of nonce.
 		$this->assertSame( 0, get_site_option( 'can_compress_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Add a nonce
 		$_GET['_ajax_nonce'] = wp_create_nonce( 'update_can_compress_scripts' );
@@ -161,13 +156,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-<<<<<<< HEAD
-		// Check the site option is changed
-		$this->assertEquals( 1, get_site_option( 'can_compress_scripts' ) );
-=======
 		// Check the site option is changed.
 		$this->assertSame( 1, get_site_option( 'can_compress_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -191,13 +181,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-<<<<<<< HEAD
-		// Check the site option is not changed due to lack of nonce
-		$this->assertEquals( 1, get_site_option( 'can_compress_scripts' ) );
-=======
 		// Check the site option is not changed due to lack of nonce.
 		$this->assertSame( 1, get_site_option( 'can_compress_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Add a nonce
 		$_GET['_ajax_nonce'] = wp_create_nonce( 'update_can_compress_scripts' );
@@ -209,13 +194,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-<<<<<<< HEAD
-		// Check the site option is changed
-		$this->assertEquals( 0, get_site_option( 'can_compress_scripts' ) );
-=======
 		// Check the site option is changed.
 		$this->assertSame( 0, get_site_option( 'can_compress_scripts' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

@@ -34,28 +34,17 @@ class Tests_Cache extends WP_UnitTestCase {
 		$key = __FUNCTION__;
 		$val = 'val';
 
-<<<<<<< HEAD
-		$this->cache->add($key, $val);
-		$this->assertEquals($val, $this->cache->get($key));
-=======
 		$this->cache->add( $key, $val );
 		$this->assertSame( $val, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_add_get_0() {
 		$key = __FUNCTION__;
 		$val = 0;
 
-<<<<<<< HEAD
-		// you can store zero in the cache
-		$this->cache->add($key, $val);
-		$this->assertEquals($val, $this->cache->get($key));
-=======
 		// You can store zero in the cache.
 		$this->cache->add( $key, $val );
 		$this->assertSame( $val, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_add_get_null() {
@@ -72,21 +61,12 @@ class Tests_Cache extends WP_UnitTestCase {
 		$val1 = 'val1';
 		$val2 = 'val2';
 
-<<<<<<< HEAD
-		// add $key to the cache
-		$this->assertTrue($this->cache->add($key, $val1));
-		$this->assertEquals($val1, $this->cache->get($key));
-		// $key is in the cache, so reject new calls to add()
-		$this->assertFalse($this->cache->add($key, $val2));
-		$this->assertEquals($val1, $this->cache->get($key));
-=======
 		// Add $key to the cache.
 		$this->assertTrue( $this->cache->add( $key, $val1 ) );
 		$this->assertSame( $val1, $this->cache->get( $key ) );
 		// $key is in the cache, so reject new calls to add().
 		$this->assertFalse( $this->cache->add( $key, $val2 ) );
 		$this->assertSame( $val1, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_replace() {
@@ -94,15 +74,6 @@ class Tests_Cache extends WP_UnitTestCase {
 		$val = 'val1';
 		$val2 = 'val2';
 
-<<<<<<< HEAD
-		// memcached rejects replace() if the key does not exist
-		$this->assertFalse($this->cache->replace($key, $val));
-		$this->assertFalse($this->cache->get($key));
-		$this->assertTrue($this->cache->add($key, $val));
-		$this->assertEquals($val, $this->cache->get($key));
-		$this->assertTrue($this->cache->replace($key, $val2));
-		$this->assertEquals($val2, $this->cache->get($key));
-=======
 		// memcached rejects replace() if the key does not exist.
 		$this->assertFalse( $this->cache->replace( $key, $val ) );
 		$this->assertFalse( $this->cache->get( $key ) );
@@ -110,7 +81,6 @@ class Tests_Cache extends WP_UnitTestCase {
 		$this->assertSame( $val, $this->cache->get( $key ) );
 		$this->assertTrue( $this->cache->replace( $key, $val2 ) );
 		$this->assertSame( $val2, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_set() {
@@ -118,21 +88,12 @@ class Tests_Cache extends WP_UnitTestCase {
 		$val1 = 'val1';
 		$val2 = 'val2';
 
-<<<<<<< HEAD
-		// memcached accepts set() if the key does not exist
-		$this->assertTrue($this->cache->set($key, $val1));
-		$this->assertEquals($val1, $this->cache->get($key));
-		// Second set() with same key should be allowed
-		$this->assertTrue($this->cache->set($key, $val2));
-		$this->assertEquals($val2, $this->cache->get($key));
-=======
 		// memcached accepts set() if the key does not exist.
 		$this->assertTrue( $this->cache->set( $key, $val1 ) );
 		$this->assertSame( $val1, $this->cache->get( $key ) );
 		// Second set() with same key should be allowed.
 		$this->assertTrue( $this->cache->set( $key, $val2 ) );
 		$this->assertSame( $val2, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_flush() {
@@ -144,15 +105,9 @@ class Tests_Cache extends WP_UnitTestCase {
 		$key = __FUNCTION__;
 		$val = 'val';
 
-<<<<<<< HEAD
-		$this->cache->add($key, $val);
-		// item is visible to both cache objects
-		$this->assertEquals($val, $this->cache->get($key));
-=======
 		$this->cache->add( $key, $val );
 		// Item is visible to both cache objects.
 		$this->assertSame( $val, $this->cache->get( $key ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->cache->flush();
 		// If there is no value get returns false.
 		$this->assertFalse($this->cache->get($key));

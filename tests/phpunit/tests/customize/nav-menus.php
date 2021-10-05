@@ -306,10 +306,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 
 		// Test empty results.
 		$expected = array();
-<<<<<<< HEAD
-		$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => 'This Does NOT Exist' ) );
-		$this->assertEquals( $expected, $results );
-=======
 		$results  = $menus->search_available_items_query(
 			array(
 				'pagenum' => 1,
@@ -317,7 +313,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $expected, $results );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Test posts.
 		foreach ( $post_ids as $post_id ) {
@@ -333,10 +328,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			wp_set_object_terms( $post_id, $term_ids, 'category' );
 			$search = $post_id === $post_ids[0] ? 'test & search' : 'other title';
 			$s = sanitize_text_field( wp_unslash( $search ) );
-<<<<<<< HEAD
-			$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => $s ) );
-			$this->assertEquals( $expected, $results[0] );
-=======
+
 			$results = $menus->search_available_items_query(
 				array(
 					'pagenum' => 1,
@@ -344,7 +336,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				)
 			);
 			$this->assertSame( $expected, $results[0] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		// Test terms.
@@ -360,10 +351,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'url'        => get_term_link( intval( $term_id ), 'category' ),
 			);
 			$s = sanitize_text_field( wp_unslash( $term->name ) );
-<<<<<<< HEAD
-			$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => $s ) );
-			$this->assertEquals( $expected, $results[0] );
-=======
+
 			$results  = $menus->search_available_items_query(
 				array(
 					'pagenum' => 1,
@@ -371,7 +359,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				)
 			);
 			$this->assertSame( $expected, $results[0] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		// Test filtered results.
@@ -379,10 +366,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertEquals( 1, count( $results ) );
 		$count = $this->filter_count_customize_nav_menu_searched_items;
 		add_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10, 2 );
-<<<<<<< HEAD
-		$results = $menus->search_available_items_query( array( 'pagenum' => 1, 's' => 'cat' ) );
-		$this->assertEquals( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
-=======
+
 		$results = $menus->search_available_items_query(
 			array(
 				'pagenum' => 1,
@@ -390,7 +374,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertInternalType( 'array', $results );
 		$this->assertEquals( 2, count( $results ) );
 		remove_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10 );
@@ -554,16 +537,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		$expected = array(
-<<<<<<< HEAD
-			array( 'title' => 'Posts', 'type' => 'post_type', 'object' => 'post', 'type_label' => __( 'Post' ) ),
-			array( 'title' => 'Pages', 'type' => 'post_type', 'object' => 'page', 'type_label' => __( 'Page' ) ),
-			array( 'title' => 'Categories', 'type' => 'taxonomy', 'object' => 'category', 'type_label' => __( 'Category' ) ),
-			array( 'title' => 'Tags', 'type' => 'taxonomy', 'object' => 'post_tag', 'type_label' => __( 'Tag' ) ),
-		);
-
-		if ( current_theme_supports( 'post-formats' ) ) {
-			$expected[] = array( 'title' => 'Format', 'type' => 'taxonomy', 'object' => 'post_format', 'type_label' => __( 'Format' ) );
-=======
 			array(
 				'title'      => 'Posts',
 				'type_label' => __( 'Post' ),
@@ -597,35 +570,26 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'type'       => 'taxonomy',
 				'object'     => 'post_format',
 			);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		$this->assertSame( $expected, $menus->available_item_types() );
 
 		register_taxonomy( 'wptests_tax', array( 'post' ), array( 'labels' => array( 'name' => 'Foo' ) ) );
-<<<<<<< HEAD
-		$expected[] = array( 'title' => 'Foo', 'type' => 'taxonomy', 'object' => 'wptests_tax', 'type_label' => 'Foo' );
-=======
 		$expected[] = array(
 			'title'      => 'Foo',
 			'type_label' => 'Foo',
 			'type'       => 'taxonomy',
 			'object'     => 'wptests_tax',
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( $expected, $menus->available_item_types() );
 
-<<<<<<< HEAD
-		$expected[] = array( 'title' => 'Custom', 'type' => 'custom_type', 'object' => 'custom_object', 'type_label' => 'Custom Type' );
-=======
 		$expected[] = array(
 			'title'      => 'Custom',
 			'type_label' => 'Custom Type',
 			'type'       => 'custom_type',
 			'object'     => 'custom_object',
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'filter_item_types' ) );
 		$this->assertSame( $expected, $menus->available_item_types() );

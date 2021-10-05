@@ -48,21 +48,6 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/17738
 	 */
 	public function test_remove_accents_vowels_diacritic() {
-<<<<<<< HEAD
-		// Vowels with diacritic
-		// unmarked
-		$this->assertEquals( 'OoUu', remove_accents( 'ƠơƯư' ) );
-		// grave accent
-		$this->assertEquals( 'AaAaEeOoOoUuYy', remove_accents( 'ẦầẰằỀềỒồỜờỪừỲỳ' ) );
-		// hook
-		$this->assertEquals( 'AaAaAaEeEeIiOoOoOoUuUuYy', remove_accents( 'ẢảẨẩẲẳẺẻỂểỈỉỎỏỔổỞởỦủỬửỶỷ' ) );
-		// tilde
-		$this->assertEquals( 'AaAaEeEeOoOoUuYy', remove_accents( 'ẪẫẴẵẼẽỄễỖỗỠỡỮữỸỹ' ) );
-		// acute accent
-		$this->assertEquals( 'AaAaEeOoOoUu', remove_accents( 'ẤấẮắẾếỐốỚớỨứ' ) );
-		// dot below
-		$this->assertEquals( 'AaAaAaEeEeIiOoOoOoUuUuYy', remove_accents( 'ẠạẬậẶặẸẹỆệỊịỌọỘộỢợỤụỰựỴỵ' ) );
-=======
 		// Vowels with diacritic.
 		// Unmarked.
 		$this->assertSame( 'OoUu', remove_accents( 'ƠơƯư' ) );
@@ -76,26 +61,12 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 		$this->assertSame( 'AaAaEeOoOoUu', remove_accents( 'ẤấẮắẾếỐốỚớỨứ' ) );
 		// Dot below.
 		$this->assertSame( 'AaAaAaEeEeIiOoOoOoUuUuYy', remove_accents( 'ẠạẬậẶặẸẹỆệỊịỌọỘộỢợỤụỰựỴỵ' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/20772
 	 */
 	public function test_remove_accents_hanyu_pinyin() {
-<<<<<<< HEAD
-		// Vowels with diacritic (Chinese, Hanyu Pinyin)
-		// macron
-		$this->assertEquals( 'aeiouuAEIOUU', remove_accents( 'āēīōūǖĀĒĪŌŪǕ' ) );
-		// acute accent
-		$this->assertEquals( 'aeiouuAEIOUU', remove_accents( 'áéíóúǘÁÉÍÓÚǗ' ) );
-		// caron
-		$this->assertEquals( 'aeiouuAEIOUU', remove_accents( 'ǎěǐǒǔǚǍĚǏǑǓǙ' ) );
-		// grave accent
-		$this->assertEquals( 'aeiouuAEIOUU', remove_accents( 'àèìòùǜÀÈÌÒÙǛ' ) );
-		// unmarked
-		$this->assertEquals( 'aaeiouuAEIOUU', remove_accents( 'aɑeiouüAEIOUÜ' ) );
-=======
 		// Vowels with diacritic (Chinese, Hanyu Pinyin).
 		// Macron.
 		$this->assertSame( 'aeiouuAEIOUU', remove_accents( 'āēīōūǖĀĒĪŌŪǕ' ) );
@@ -107,7 +78,6 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 		$this->assertSame( 'aeiouuAEIOUU', remove_accents( 'àèìòùǜÀÈÌÒÙǛ' ) );
 		// Unmarked.
 		$this->assertSame( 'aaeiouuAEIOUU', remove_accents( 'aɑeiouüAEIOUÜ' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function _remove_accents_germanic_umlauts_cb() {
@@ -134,9 +104,9 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	 */
 	public function test_remove_danish_accents() {
 		add_filter( 'locale', array( $this, '_set_locale_to_danish' ) );
-		
+
 		$this->assertSame( 'AeOeAaaeoeaa', remove_accents( 'ÆØÅæøå' ) );
-		
+
 		remove_filter( 'locale', array( $this, '_set_locale_to_danish' ) );
 	}
 
@@ -151,9 +121,9 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 		add_filter( 'locale', array( $this, '_set_locale_to_catalan' ) );
 
 		$this->assertSame( 'allallalla', remove_accents( 'al·lallaŀla' ) );
-		
+
 		remove_filter( 'locale', array( $this, '_set_locale_to_catalan' ) );
-		
+
 		$this->assertSame( 'al·lallalla', remove_accents( 'al·lallaŀla' ) );
 	}
 
@@ -168,9 +138,9 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 		add_filter( 'locale', array( $this, '_set_locale_to_serbian' ) );
 
 		$this->assertSame( 'DJdj', remove_accents( 'Đđ' ) );
-		
+
 		remove_filter( 'locale', array( $this, '_set_locale_to_serbian' ) );
-		
+
 		$this->assertSame( 'Dd', remove_accents( 'Đđ' ) );
 	}
 }

@@ -215,13 +215,8 @@ class Tests_URL extends WP_UnitTestCase {
 		set_current_screen( 'front' );
 		$this->assertSame( $home, home_url() );
 		$_SERVER['HTTPS'] = 'on';
-<<<<<<< HEAD
-		$home = str_replace('http://', 'https://', $home);
-		$this->assertEquals( $home, home_url() );
-=======
 		$home             = str_replace( 'http://', 'https://', $home );
 		$this->assertSame( $home, home_url() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 
 		// Test with https in home
@@ -258,13 +253,8 @@ class Tests_URL extends WP_UnitTestCase {
 		set_current_screen( 'dashboard' );
 		$home = network_home_url();
 
-<<<<<<< HEAD
-		// home_url() should return http when in the admin
-		$this->assertEquals( 0, strpos( $home, 'http://') );
-=======
 		// home_url() should return http when in the admin.
 		$this->assertSame( 0, strpos( $home, 'http://' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$_SERVER['HTTPS'] = 'on';
 		$this->assertSame( $home, network_home_url() );
 
@@ -275,13 +265,8 @@ class Tests_URL extends WP_UnitTestCase {
 		set_current_screen( 'front' );
 		$this->assertSame( $home, network_home_url() );
 		$_SERVER['HTTPS'] = 'on';
-<<<<<<< HEAD
-		$home = str_replace('http://', 'https://', $home);
-		$this->assertEquals( $home, network_home_url() );
-=======
 		$home             = str_replace( 'http://', 'https://', $home );
 		$this->assertSame( $home, network_home_url() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$GLOBALS['current_screen'] = $screen;
 	}
@@ -481,12 +466,6 @@ class Tests_URL extends WP_UnitTestCase {
 		);
 
 		foreach ( $functions as $function ) {
-<<<<<<< HEAD
-			$this->assertEquals( call_user_func( $function, '/' ) . '../',
-				call_user_func( $function, '../' ) );
-			$this->assertEquals( call_user_func( $function, '/' ) . 'something...here',
-				call_user_func( $function, 'something...here' ) );
-=======
 			$this->assertSame(
 				call_user_func( $function, '/' ) . '../',
 				call_user_func( $function, '../' )
@@ -495,17 +474,10 @@ class Tests_URL extends WP_UnitTestCase {
 				call_user_func( $function, '/' ) . 'something...here',
 				call_user_func( $function, 'something...here' )
 			);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		// These functions accept a blog ID argument.
 		foreach ( array( 'get_site_url', 'get_home_url', 'get_admin_url' ) as $function ) {
-<<<<<<< HEAD
-			$this->assertEquals( call_user_func( $function, null, '/' ) . '../',
-				call_user_func( $function, null, '../' ) );
-			$this->assertEquals( call_user_func( $function, null, '/' ) . 'something...here',
-				call_user_func( $function, null, 'something...here' ) );
-=======
 			$this->assertSame(
 				call_user_func( $function, null, '/' ) . '../',
 				call_user_func( $function, null, '../' )
@@ -514,7 +486,6 @@ class Tests_URL extends WP_UnitTestCase {
 				call_user_func( $function, null, '/' ) . 'something...here',
 				call_user_func( $function, null, 'something...here' )
 			);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 }

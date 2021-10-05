@@ -30,34 +30,6 @@ class Tests_Link extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$post_id2 = self::factory()->post->create();
 
-<<<<<<< HEAD
-		// Basic case
-		$this->assertEquals( get_permalink( $post_id ), wp_get_shortlink( $post_id, 'post' ) );
-
-		unset( $GLOBALS['post'] );
-
-		// Global post is not set
-		$this->assertEquals( '', wp_get_shortlink( 0, 'post' ) );
-		$this->assertEquals( '', wp_get_shortlink( 0 ) );
-		$this->assertEquals( '', wp_get_shortlink() );
-
-		$GLOBALS['post'] = get_post( $post_id );
-
-		// Global post is set
-		$this->assertEquals( get_permalink( $post_id ), wp_get_shortlink( 0, 'post' ) );
-		$this->assertEquals( get_permalink( $post_id ), wp_get_shortlink( 0 ) );
-		$this->assertEquals( get_permalink( $post_id ), wp_get_shortlink() );
-
-		// Not the global post
-		$this->assertEquals( get_permalink( $post_id2 ), wp_get_shortlink( $post_id2, 'post' ) );
-
-		unset( $GLOBALS['post'] );
-
-		// Global post is not set, once again
-		$this->assertEquals( '', wp_get_shortlink( 0, 'post' ) );
-		$this->assertEquals( '', wp_get_shortlink( 0 ) );
-		$this->assertEquals( '', wp_get_shortlink() );
-=======
 		// Basic case.
 		$this->assertSame( get_permalink( $post_id ), wp_get_shortlink( $post_id, 'post' ) );
 
@@ -84,7 +56,6 @@ class Tests_Link extends WP_UnitTestCase {
 		$this->assertSame( '', wp_get_shortlink( 0, 'post' ) );
 		$this->assertSame( '', wp_get_shortlink( 0 ) );
 		$this->assertSame( '', wp_get_shortlink() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
 

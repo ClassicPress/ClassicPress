@@ -23,18 +23,10 @@ class Tests_Kses extends WP_UnitTestCase {
 			'title' => 'title',
 		);
 
-<<<<<<< HEAD
 		foreach ( $attributes as $name => $value ) {
 			$string = "<address $name='$value'>1 ClassicPress Avenue, The Internet.</address>";
 			$expect_string = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 ClassicPress Avenue, The Internet.</address>";
-			$this->assertEquals( $expect_string, wp_kses( $string, $allowedposttags ) );
-=======
-		foreach ( $attributes as $name => $values ) {
-			foreach ( (array) $values as $value ) {
-				$string        = "<address $name='$value'>1 WordPress Avenue, The Internet.</address>";
-				$expect_string = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 WordPress Avenue, The Internet.</address>";
-				$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+			$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
 	}
 
@@ -57,22 +49,9 @@ class Tests_Kses extends WP_UnitTestCase {
 		);
 
 		foreach ( $attributes as $name => $value ) {
-<<<<<<< HEAD
 			$string = "<a $name='$value'>I link this</a>";
 			$expect_string = "<a $name='" . trim( $value, ';' ) . "'>I link this</a>";
-			$this->assertEquals( $expect_string, wp_kses( $string, $allowedposttags ) );
-=======
-			if ( $value ) {
-				$attr          = "$name='$value'";
-				$expected_attr = "$name='" . trim( $value, ';' ) . "'";
-			} else {
-				$attr          = $name;
-				$expected_attr = $name;
-			}
-			$string        = "<a $attr>I link this</a>";
-			$expect_string = "<a $expected_attr>I link this</a>";
 			$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -165,13 +144,9 @@ EOF;
 			$result = wp_kses_bad_protocol( wp_kses_normalize_entities( $x ), wp_allowed_protocols() );
 			if ( ! empty( $result ) && $result != 'alert(1);' && $result != 'alert(1)' ) {
 				switch ( $k ) {
-<<<<<<< HEAD
-					case 6: $this->assertEquals( 'javascript&amp;#0000058alert(1);', $result ); break;
-=======
 					case 6:
 						$this->assertSame( 'javascript&amp;#0000058alert(1);', $result );
 						break;
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					case 12:
 						$this->assertSame( str_replace( '&', '&amp;', $x ), $result );
 						break;
@@ -259,40 +234,15 @@ EOF;
 
 			switch ( $attack->name ) {
 				case 'XSS Locator':
-<<<<<<< HEAD
-					$this->assertEquals('\';alert(String.fromCharCode(88,83,83))//\\\';alert(String.fromCharCode(88,83,83))//";alert(String.fromCharCode(88,83,83))//\\";alert(String.fromCharCode(88,83,83))//--&gt;"&gt;\'&gt;alert(String.fromCharCode(88,83,83))=&amp;{}', $result);
-					break;
-				case 'XSS Quick Test':
-					$this->assertEquals('\'\';!--"=&amp;{()}', $result);
-=======
 					$this->assertSame( '\';alert(String.fromCharCode(88,83,83))//\\\';alert(String.fromCharCode(88,83,83))//";alert(String.fromCharCode(88,83,83))//\\";alert(String.fromCharCode(88,83,83))//--&gt;"&gt;\'&gt;alert(String.fromCharCode(88,83,83))=&amp;{}', $result );
 					break;
 				case 'XSS Quick Test':
 					$this->assertSame( '\'\';!--"=&amp;{()}', $result );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					break;
 				case 'SCRIPT w/Alert()':
 					$this->assertSame( "alert('XSS')", $result );
 					break;
 				case 'SCRIPT w/Char Code':
-<<<<<<< HEAD
-					$this->assertEquals('alert(String.fromCharCode(88,83,83))', $result);
-					break;
-				case 'IMG STYLE w/expression':
-					$this->assertEquals('exp/*', $result);
-					break;
-				case 'List-style-image':
-					$this->assertEquals('li {list-style-image: url("javascript:alert(\'XSS\')");}XSS', $result);
-					break;
-				case 'STYLE':
-					$this->assertEquals( "alert('XSS');", $result);
-					break;
-				case 'STYLE w/background-image':
-					$this->assertEquals('.XSS{background-image:url("javascript:alert(\'XSS\')");}<A></A>', $result);
-					break;
-				case 'STYLE w/background':
-					$this->assertEquals('BODY{background:url("javascript:alert(\'XSS\')")}', $result);
-=======
 					$this->assertSame( 'alert(String.fromCharCode(88,83,83))', $result );
 					break;
 				case 'IMG STYLE w/expression':
@@ -309,7 +259,6 @@ EOF;
 					break;
 				case 'STYLE w/background':
 					$this->assertSame( 'BODY{background:url("javascript:alert(\'XSS\')")}', $result );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					break;
 				case 'Remote Stylesheet 2':
 					$this->assertSame( "@import'http://ha.ckers.org/xss.css';", $result );
@@ -318,17 +267,10 @@ EOF;
 					$this->assertSame( '&lt;META HTTP-EQUIV=&quot;Link&quot; Content=&quot;; REL=stylesheet"&gt;', $result );
 					break;
 				case 'Remote Stylesheet 4':
-<<<<<<< HEAD
-					$this->assertEquals('BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}', $result);
-					break;
-				case 'XML data island w/CDATA':
-					$this->assertEquals( "&lt;![CDATA[]]&gt;", $result );
-=======
 					$this->assertSame( 'BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}', $result );
 					break;
 				case 'XML data island w/CDATA':
 					$this->assertSame( '&lt;![CDATA[]]&gt;', $result );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					break;
 				case 'XML data island w/comment':
 					$this->assertSame( "<I><B>&lt;IMG SRC=&quot;javas<!-- -->cript:alert('XSS')\"&gt;</B></I>", $result );
@@ -352,11 +294,7 @@ EOF;
 					$this->assertSame( '+ADw-SCRIPT+AD4-alert(\'XSS\');+ADw-/SCRIPT+AD4-', $result );
 					break;
 				case 'Escaping JavaScript escapes':
-<<<<<<< HEAD
-					$this->assertEquals('\";alert(\'XSS\');//', $result);
-=======
 					$this->assertSame( '\";alert(\'XSS\');//', $result );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					break;
 				case 'STYLE w/broken up JavaScript':
 					$this->assertSame( '@im\port\'\ja\vasc\ript:alert("XSS")\';', $result );
@@ -377,11 +315,7 @@ EOF;
 					$this->assertSame( '&lt;alert("XSS");//&lt;', $result );
 					break;
 				case 'Malformed IMG Tags':
-<<<<<<< HEAD
-					$this->assertEquals('alert("XSS")"&gt;', $result);
-=======
 					$this->assertSame( 'alert("XSS")"&gt;', $result );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 					break;
 				case 'No Quotes/Semicolons':
 					$this->assertSame( "a=/XSS/\nalert(a.source)", $result );
@@ -474,15 +408,9 @@ EOF;
 		);
 		$expect_stripped_string = 'Alot of hyphens.';
 
-<<<<<<< HEAD
-		$expect_valid_string = "<hyphenated-tag attribute=\"value\">Alot of hyphens.</hyphenated-tag>";
-		$this->assertEquals( $expect_stripped_string, wp_kses_post( $string ) );
-		$this->assertEquals( $expect_valid_string, wp_kses( $string, $custom_tags ) );
-=======
 		$expect_valid_string = '<hyphenated-tag attribute="value">Alot of hyphens.</hyphenated-tag>';
 		$this->assertSame( $expect_stripped_string, wp_kses_post( $string ) );
 		$this->assertSame( $expect_valid_string, wp_kses( $string, $custom_tags ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -829,537 +757,4 @@ EOF;
 
 		$this->assertSame( "<{$element}>", wp_kses_attr( $element, $attribute, array( 'foo' => false ), array() ) );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * Testing the safecss_filter_attr() function.
-	 *
-	 * @ticket 37248
-	 * @ticket 42729
-	 * @ticket 48376
-	 * @dataProvider data_test_safecss_filter_attr
-	 *
-	 * @param string $css      A string of CSS rules.
-	 * @param string $expected Expected string of CSS rules.
-	 */
-	public function test_safecss_filter_attr( $css, $expected ) {
-		$this->assertSame( $expected, safecss_filter_attr( $css ) );
-	}
-
-	/**
-	 * Data Provider for test_safecss_filter_attr().
-	 *
-	 * @return array {
-	 *     @type array {
-	 *         @string string $css      A string of CSS rules.
-	 *         @string string $expected Expected string of CSS rules.
-	 *     }
-	 * }
-	 */
-	public function data_test_safecss_filter_attr() {
-		return array(
-			// Empty input, empty output.
-			array(
-				'css'      => '',
-				'expected' => '',
-			),
-			// An arbitrary attribute name isn't allowed.
-			array(
-				'css'      => 'foo:bar',
-				'expected' => '',
-			),
-			// A single attribute name, with a single value.
-			array(
-				'css'      => 'margin-top: 2px',
-				'expected' => 'margin-top: 2px',
-			),
-			// Backslash \ isn't supported.
-			array(
-				'css'      => 'margin-top: \2px',
-				'expected' => '',
-			),
-			// Curly bracket } isn't supported.
-			array(
-				'css'      => 'margin-bottom: 2px}',
-				'expected' => '',
-			),
-			// A single attribute name, with a single text value.
-			array(
-				'css'      => 'text-transform: uppercase',
-				'expected' => 'text-transform: uppercase',
-			),
-			// Only lowercase attribute names are supported.
-			array(
-				'css'      => 'Text-transform: capitalize',
-				'expected' => '',
-			),
-			// Uppercase attribute values goes through.
-			array(
-				'css'      => 'text-transform: None',
-				'expected' => 'text-transform: None',
-			),
-			// A single attribute, with multiple values.
-			array(
-				'css'      => 'font: bold 15px arial, sans-serif',
-				'expected' => 'font: bold 15px arial, sans-serif',
-			),
-			// Multiple attributes, with single values.
-			array(
-				'css'      => 'font-weight: bold;font-size: 15px',
-				'expected' => 'font-weight: bold;font-size: 15px',
-			),
-			// Multiple attributes, separated by a space.
-			array(
-				'css'      => 'font-weight: bold; font-size: 15px',
-				'expected' => 'font-weight: bold;font-size: 15px',
-			),
-			// Multiple attributes, with multiple values.
-			array(
-				'css'      => 'margin: 10px 20px;padding: 5px 10px',
-				'expected' => 'margin: 10px 20px;padding: 5px 10px',
-			),
-			// Parenthesis ( is supported for some attributes.
-			array(
-				'css'      => 'background: green url("foo.jpg") no-repeat fixed center',
-				'expected' => 'background: green url("foo.jpg") no-repeat fixed center',
-			),
-			// Additional background attributes introduced in 5.3.
-			array(
-				'css'      => 'background-size: cover;background-size: 200px 100px;background-attachment: local, scroll;background-blend-mode: hard-light',
-				'expected' => 'background-size: cover;background-size: 200px 100px;background-attachment: local, scroll;background-blend-mode: hard-light',
-			),
-			// `border-radius` attribute introduced in 5.3.
-			array(
-				'css'      => 'border-radius: 10% 30% 50% 70%;border-radius: 30px',
-				'expected' => 'border-radius: 10% 30% 50% 70%;border-radius: 30px',
-			),
-			// `flex` and related attributes introduced in 5.3.
-			array(
-				'css'      => 'flex: 0 1 auto;flex-basis: 75%;flex-direction: row-reverse;flex-flow: row-reverse nowrap;flex-grow: 2;flex-shrink: 1',
-				'expected' => 'flex: 0 1 auto;flex-basis: 75%;flex-direction: row-reverse;flex-flow: row-reverse nowrap;flex-grow: 2;flex-shrink: 1',
-			),
-			// `grid` and related attributes introduced in 5.3.
-			array(
-				'css'      => 'grid-template-columns: 1fr 60px;grid-auto-columns: min-content;grid-column-start: span 2;grid-column-end: -1;grid-column-gap: 10%;grid-gap: 10px 20px',
-				'expected' => 'grid-template-columns: 1fr 60px;grid-auto-columns: min-content;grid-column-start: span 2;grid-column-end: -1;grid-column-gap: 10%;grid-gap: 10px 20px',
-			),
-			array(
-				'css'      => 'grid-template-rows: 40px 4em 40px;grid-auto-rows: min-content;grid-row-start: -1;grid-row-end: 3;grid-row-gap: 1em',
-				'expected' => 'grid-template-rows: 40px 4em 40px;grid-auto-rows: min-content;grid-row-start: -1;grid-row-end: 3;grid-row-gap: 1em',
-			),
-			// `grid` does not yet support functions or `\`.
-			array(
-				'css'      => 'grid-template-columns: repeat(2, 50px 1fr);grid-template: 1em / 20% 20px 1fr',
-				'expected' => '',
-			),
-			// `flex` and `grid` alignments introduced in 5.3.
-			array(
-				'css'      => 'align-content: space-between;align-items: start;align-self: center;justify-items: center;justify-content: space-between;justify-self: end',
-				'expected' => 'align-content: space-between;align-items: start;align-self: center;justify-items: center;justify-content: space-between;justify-self: end',
-			),
-			// `columns` and related attributes introduced in 5.3.
-			array(
-				'css'      => 'columns: 6rem auto;column-count: 4;column-fill: balance;column-gap: 9px;column-rule: thick inset blue;column-span: none;column-width: 120px',
-				'expected' => 'columns: 6rem auto;column-count: 4;column-fill: balance;column-gap: 9px;column-rule: thick inset blue;column-span: none;column-width: 120px',
-			),
-			// Gradients introduced in 5.3.
-			array(
-				'css'      => 'background: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
-				'expected' => 'background: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
-			),
-			array(
-				'css'      => 'background: linear-gradient(135deg,rgba(6,147,227,1) ) (0%,rgb(155,81,224) 100%)',
-				'expected' => '',
-			),
-			array(
-				'css'      => 'background-image: linear-gradient(red,yellow);',
-				'expected' => 'background-image: linear-gradient(red,yellow)',
-			),
-			array(
-				'css'      => 'color: linear-gradient(red,yellow);',
-				'expected' => '',
-			),
-			array(
-				'css'      => 'background-image: linear-gradient(red,yellow); background: prop( red,yellow); width: 100px;',
-				'expected' => 'background-image: linear-gradient(red,yellow);width: 100px',
-			),
-			array(
-				'css'      => 'background: unknown-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
-				'expected' => '',
-			),
-			array(
-				'css'      => 'background: repeating-linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
-				'expected' => 'background: repeating-linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
-			),
-			array(
-				'css'      => 'width: 100px; height: 100px; background: linear-gradient(135deg,rgba(0,208,132,1) 0%,rgba(6,147,227,1) 100%);',
-				'expected' => 'width: 100px;height: 100px;background: linear-gradient(135deg,rgba(0,208,132,1) 0%,rgba(6,147,227,1) 100%)',
-			),
-			array(
-				'css'      => 'background: radial-gradient(#ff0, red, yellow, green, rgba(6,147,227,1), rgb(155,81,224) 90%);',
-				'expected' => 'background: radial-gradient(#ff0, red, yellow, green, rgba(6,147,227,1), rgb(155,81,224) 90%)',
-			),
-			array(
-				'css'      => 'background: radial-gradient(#ff0, red, yellow, green, rgba(6,147,227,1), rgb(155,81,224) 90%);',
-				'expected' => 'background: radial-gradient(#ff0, red, yellow, green, rgba(6,147,227,1), rgb(155,81,224) 90%)',
-			),
-			array(
-				'css'      => 'background: conic-gradient(at 0% 30%, red 10%, yellow 30%, #1e90ff 50%)',
-				'expected' => 'background: conic-gradient(at 0% 30%, red 10%, yellow 30%, #1e90ff 50%)',
-			),
-			// Expressions are not allowed.
-			array(
-				'css'      => 'height: expression( body.scrollTop + 50 + "px" )',
-				'expected' => '',
-			),
-			// RGB color values are not allowed.
-			array(
-				'css'      => 'color: rgb( 100, 100, 100 )',
-				'expected' => '',
-			),
-			// RGBA color values are not allowed.
-			array(
-				'css'      => 'color: rgb( 100, 100, 100, .4 )',
-				'expected' => '',
-			),
-		);
-	}
-
-	/**
-	 * Data attributes are globally accepted.
-	 *
-	 * @ticket 33121
-	 */
-	function test_wp_kses_attr_data_attribute_is_allowed() {
-		$test     = '<div data-foo="foo" data-bar="bar" datainvalid="gone" data--invaild="gone"  data-also-invaild-="gone" data-two-hyphens="remains">Pens and pencils</div>';
-		$expected = '<div data-foo="foo" data-bar="bar" data-two-hyphens="remains">Pens and pencils</div>';
-
-		$this->assertSame( $expected, wp_kses_post( $test ) );
-	}
-
-	/**
-	 * Ensure wildcard attributes block unprefixed wildcard uses.
-	 *
-	 * @ticket 33121
-	 */
-	function test_wildcard_requires_hyphen_after_prefix() {
-		$allowed_html = array(
-			'div' => array(
-				'data-*' => true,
-				'on-*'   => true,
-			),
-		);
-
-		$string   = '<div datamelformed-prefix="gone" data="gone" data-="gone" onclick="alert(1)">Malformed attributes</div>';
-		$expected = '<div>Malformed attributes</div>';
-
-		$actual = wp_kses( $string, $allowed_html );
-
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * Ensure wildcard allows two hyphen.
-	 *
-	 * @ticket 33121
-	 */
-	function test_wildcard_allows_two_hyphens() {
-		$allowed_html = array(
-			'div' => array(
-				'data-*' => true,
-			),
-		);
-
-		$string   = '<div data-wp-id="pens-and-pencils">Well formed attribute</div>';
-		$expected = '<div data-wp-id="pens-and-pencils">Well formed attribute</div>';
-
-		$actual = wp_kses( $string, $allowed_html );
-
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * Ensure wildcard attributes only support valid prefixes.
-	 *
-	 * @dataProvider data_wildcard_attribute_prefixes
-	 *
-	 * @ticket 33121
-	 */
-	function test_wildcard_attribute_prefixes( $wildcard_attribute, $expected ) {
-		$allowed_html = array(
-			'div' => array(
-				$wildcard_attribute => true,
-			),
-		);
-
-		$name  = str_replace( '*', strtolower( __FUNCTION__ ), $wildcard_attribute );
-		$value = __FUNCTION__;
-		$whole = "{$name}=\"{$value}\"";
-
-		$actual = wp_kses_attr_check( $name, $value, $whole, 'n', 'div', $allowed_html );
-
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * @return array Array of arguments for wildcard testing
-	 *               [0] The prefix being tested.
-	 *               [1] The outcome of `wp_kses_attr_check` for the prefix.
-	 */
-	function data_wildcard_attribute_prefixes() {
-		return array(
-			// Ends correctly.
-			array( 'data-*', true ),
-
-			// Does not end with trialing `-`.
-			array( 'data*', false ),
-
-			// Multiple wildcards.
-			array( 'd*ta-*', false ),
-			array( 'data**', false ),
-		);
-	}
-
-	/**
-	 * Test URL sanitization in the style tag.
-	 *
-	 * @dataProvider data_kses_style_attr_with_url
-	 *
-	 * @ticket 45067
-	 *
-	 * @param $input string The style attribute saved in the editor.
-	 * @param $expected string The sanitized style attribute.
-	 */
-	function test_kses_style_attr_with_url( $input, $expected ) {
-		$actual = safecss_filter_attr( $input );
-
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * Data provider testing style attribute sanitization.
-	 *
-	 * @return array Nested array of input, expected pairs.
-	 */
-	function data_kses_style_attr_with_url() {
-		return array(
-			/*
-			 * Valid use cases.
-			 */
-
-			// Double quotes.
-			array(
-				'background-image: url( "http://example.com/valid.gif" );',
-				'background-image: url( "http://example.com/valid.gif" )',
-			),
-
-			// Single quotes.
-			array(
-				"background-image: url( 'http://example.com/valid.gif' );",
-				"background-image: url( 'http://example.com/valid.gif' )",
-			),
-
-			// No quotes.
-			array(
-				'background-image: url( http://example.com/valid.gif );',
-				'background-image: url( http://example.com/valid.gif )',
-			),
-
-			// Single quotes, extra spaces.
-			array(
-				"background-image: url( '  http://example.com/valid.gif ' );",
-				"background-image: url( '  http://example.com/valid.gif ' )",
-			),
-
-			// Line breaks, single quotes.
-			array(
-				"background-image: url(\n'http://example.com/valid.gif' );",
-				"background-image: url('http://example.com/valid.gif' )",
-			),
-
-			// Tabs not spaces, single quotes.
-			array(
-				"background-image: url(\t'http://example.com/valid.gif'\t\t);",
-				"background-image: url('http://example.com/valid.gif')",
-			),
-
-			// Single quotes, absolute path.
-			array(
-				"background: url('/valid.gif');",
-				"background: url('/valid.gif')",
-			),
-
-			// Single quotes, relative path.
-			array(
-				"background: url('../wp-content/uploads/2018/10/valid.gif');",
-				"background: url('../wp-content/uploads/2018/10/valid.gif')",
-			),
-
-			// Error check: valid property not containing a URL.
-			array(
-				'background: red',
-				'background: red',
-			),
-
-			/*
-			 * Invalid use cases.
-			 */
-
-			// Attribute doesn't support URL properties.
-			array(
-				'color: url( "http://example.com/invalid.gif" );',
-				'',
-			),
-
-			// Mismatched quotes.
-			array(
-				'background-image: url( "http://example.com/valid.gif\' );',
-				'',
-			),
-
-			// Bad protocol, double quotes.
-			array(
-				'background-image: url( "bad://example.com/invalid.gif" );',
-				'',
-			),
-
-			// Bad protocol, single quotes.
-			array(
-				"background-image: url( 'bad://example.com/invalid.gif' );",
-				'',
-			),
-
-			// Bad protocol, single quotes.
-			array(
-				"background-image: url( 'bad://example.com/invalid.gif' );",
-				'',
-			),
-
-			// Bad protocol, single quotes, strange spacing.
-			array(
-				"background-image: url( '  \tbad://example.com/invalid.gif ' );",
-				'',
-			),
-
-			// Bad protocol, no quotes.
-			array(
-				'background-image: url( bad://example.com/invalid.gif );',
-				'',
-			),
-
-			// No URL inside url().
-			array(
-				'background-image: url();',
-				'',
-			),
-
-			// Malformed, no closing `)`.
-			array(
-				'background-image: url( "http://example.com" ;',
-				'',
-			),
-
-			// Malformed, no closing `"`.
-			array(
-				'background-image: url( "http://example.com );',
-				'',
-			),
-		);
-	}
-
-	/**
-	 * Testing the safecss_filter_attr() function with the safecss_filter_attr_allow_css filter.
-	 *
-	 * @ticket 37134
-	 *
-	 * @dataProvider data_test_safecss_filter_attr_filtered
-	 *
-	 * @param string $css      A string of CSS rules.
-	 * @param string $expected Expected string of CSS rules.
-	 */
-	public function test_safecss_filter_attr_filtered( $css, $expected ) {
-		add_filter( 'safecss_filter_attr_allow_css', '__return_true' );
-		$this->assertSame( $expected, safecss_filter_attr( $css ) );
-		remove_filter( 'safecss_filter_attr_allow_css', '__return_true' );
-	}
-
-	/**
-	 * Data Provider for test_safecss_filter_attr_filtered().
-	 *
-	 * @return array {
-	 *     @type array {
-	 *         @string string $css      A string of CSS rules.
-	 *         @string string $expected Expected string of CSS rules.
-	 *     }
-	 * }
-	 */
-	public function data_test_safecss_filter_attr_filtered() {
-		return array(
-
-			// A single attribute name, with a single value.
-			array(
-				'css'      => 'margin-top: 2px',
-				'expected' => 'margin-top: 2px',
-			),
-			// Backslash \ can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'margin-top: \2px',
-				'expected' => 'margin-top: \2px',
-			),
-			// Curly bracket } can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'margin-bottom: 2px}',
-				'expected' => 'margin-bottom: 2px}',
-			),
-			// Parenthesis ) can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'margin-bottom: 2px)',
-				'expected' => 'margin-bottom: 2px)',
-			),
-			// Ampersand & can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'margin-bottom: 2px&',
-				'expected' => 'margin-bottom: 2px&',
-			),
-			// Expressions can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'height: expression( body.scrollTop + 50 + "px" )',
-				'expected' => 'height: expression( body.scrollTop + 50 + "px" )',
-			),
-			// RGB color values can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'color: rgb( 100, 100, 100 )',
-				'expected' => 'color: rgb( 100, 100, 100 )',
-			),
-			// RGBA color values can be allowed with the 'safecss_filter_attr_allow_css' filter.
-			array(
-				'css'      => 'color: rgb( 100, 100, 100, .4 )',
-				'expected' => 'color: rgb( 100, 100, 100, .4 )',
-			),
-		);
-	}
-
-	/**
-	 * Test filtering a standard img tag.
-	 *
-	 * @ticket 50731
-	 */
-	function test_wp_kses_img_tag_standard_attributes() {
-		$html = array(
-			'<img',
-			'loading="lazy"',
-			'src="https://example.com/img.jpg"',
-			'width="1000"',
-			'height="1000"',
-			'alt=""',
-			'class="wp-image-1000"',
-			'/>',
-		);
-
-		$html = implode( ' ', $html );
-
-		$this->assertSame( $html, wp_kses_post( $html ) );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

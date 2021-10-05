@@ -55,34 +55,6 @@ class Tests_Functions_canonical_charset extends WP_UnitTestCase {
 		$orig_blog_charset = get_option( 'blog_charset' );
 
 		update_option( 'blog_charset', 'utf8' );
-<<<<<<< HEAD:tests/phpunit/tests/functions/canonical-charset.php
-		$this->assertEquals( 'UTF-8', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'utf-8' );
-		$this->assertEquals( 'UTF-8', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'UTF8' );
-		$this->assertEquals( 'UTF-8', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'UTF-8' );
-		$this->assertEquals( 'UTF-8', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'ISO-8859-1' );
-		$this->assertEquals( 'ISO-8859-1', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'ISO8859-1' );
-		$this->assertEquals( 'ISO-8859-1', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'iso8859-1' );
-		$this->assertEquals( 'ISO-8859-1', get_option( 'blog_charset') );
-
-		update_option( 'blog_charset', 'iso-8859-1' );
-		$this->assertEquals( 'ISO-8859-1', get_option( 'blog_charset') );
-
-		// Arbitrary strings are passed through.
-		update_option( 'blog_charset', 'foobarbaz' );
-		$this->assertEquals( 'foobarbaz', get_option( 'blog_charset') );
-=======
 		$this->assertSame( 'UTF-8', get_option( 'blog_charset' ) );
 
 		update_option( 'blog_charset', 'utf-8' );
@@ -109,7 +81,6 @@ class Tests_Functions_canonical_charset extends WP_UnitTestCase {
 		// Arbitrary strings are passed through.
 		update_option( 'blog_charset', 'foobarbaz' );
 		$this->assertSame( 'foobarbaz', get_option( 'blog_charset' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.):tests/phpunit/tests/functions/canonicalCharset.php
 
 		update_option( 'blog_charset', $orig_blog_charset );
 	}

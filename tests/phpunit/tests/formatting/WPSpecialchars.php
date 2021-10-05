@@ -5,19 +5,11 @@
  */
 class Tests_Formatting_WPSpecialchars extends WP_UnitTestCase {
 	function test_wp_specialchars_basics() {
-<<<<<<< HEAD
-		$html =  "&amp;&lt;hello world&gt;";
-		$this->assertEquals( $html, _wp_specialchars( $html ) );
-
-		$double = "&amp;amp;&amp;lt;hello world&amp;gt;";
-		$this->assertEquals( $double, _wp_specialchars( $html, ENT_NOQUOTES, false, true ) );
-=======
 		$html = '&amp;&lt;hello world&gt;';
 		$this->assertSame( $html, _wp_specialchars( $html ) );
 
 		$double = '&amp;amp;&amp;lt;hello world&amp;gt;';
 		$this->assertSame( $double, _wp_specialchars( $html, ENT_NOQUOTES, false, true ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_allowed_entity_names() {
@@ -46,17 +38,10 @@ class Tests_Formatting_WPSpecialchars extends WP_UnitTestCase {
 
 	function test_optionally_escapes_quotes() {
 		$source = "\"'hello!'\"";
-<<<<<<< HEAD
-		$this->assertEquals( '"&#039;hello!&#039;"', _wp_specialchars($source, 'single') );
-		$this->assertEquals( "&quot;'hello!'&quot;", _wp_specialchars($source, 'double') );
-		$this->assertEquals( '&quot;&#039;hello!&#039;&quot;', _wp_specialchars($source, true) );
-		$this->assertEquals( $source, _wp_specialchars($source) );
-=======
 		$this->assertSame( '"&#039;hello!&#039;"', _wp_specialchars( $source, 'single' ) );
 		$this->assertSame( "&quot;'hello!'&quot;", _wp_specialchars( $source, 'double' ) );
 		$this->assertSame( '&quot;&#039;hello!&#039;&quot;', _wp_specialchars( $source, true ) );
 		$this->assertSame( $source, _wp_specialchars( $source ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

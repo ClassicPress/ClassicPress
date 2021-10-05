@@ -236,31 +236,23 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 
 		$term_id1 = self::factory()->tag->create();
 		$term_id2 = self::factory()->tag->create();
-		$inc_terms = get_terms( 'post_tag', array(
-			'include' => array( $term_id1, $term_id2 ),
-<<<<<<< HEAD
-			'hide_empty' => false
-		) );
-		$this->assertEquals( array( $term_id1, $term_id2 ), wp_list_pluck( $inc_terms, 'term_id' ) );
-=======
+		$inc_terms = get_terms(
+			'post_tag',
+			array(
+				'include' => array( $term_id1, $term_id2 ),
 				'hide_empty' => false,
 			)
 		);
 		$this->assertSame( array( $term_id1, $term_id2 ), wp_list_pluck( $inc_terms, 'term_id' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
-		$exc_terms = get_terms( 'post_tag', array(
-			'exclude' => array( $term_id1, $term_id2 ),
-<<<<<<< HEAD
-			'hide_empty' => false
-		) );
-		$this->assertEquals( array(), wp_list_pluck( $exc_terms, 'term_id' ) );
-=======
-				'hide_empty' => false,
+		$exc_terms = get_terms(
+			'post_tag',
+			array(
+				'exclude' => array( $term_id1, $term_id2 ),
+				'hide_empty' => false
 			)
 		);
 		$this->assertSame( array(), wp_list_pluck( $exc_terms, 'term_id' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// These should not generate query errors.
 		get_terms( 'post_tag', array( 'exclude' => array( 0 ), 'hide_empty' => false ) );
@@ -307,18 +299,15 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$term_id2 = self::factory()->category->create();
 		$term_id22 = self::factory()->category->create( array( 'parent' => $term_id2 ) );
 
-		$terms = get_terms( 'category', array(
-			'exclude' => $term_id_uncategorized,
-			'fields' => 'ids',
-			'hide_empty' => false,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( array( $term_id1, $term_id11, $term_id2, $term_id22 ), $terms );
-=======
+		$terms = get_terms(
+			'category',
+			array(
+				'exclude' => $term_id_uncategorized,
+				'fields' => 'ids',
+				'hide_empty' => false,
 			)
 		);
 		$this->assertSame( array( $term_id1, $term_id11, $term_id2, $term_id22 ), $terms );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$terms = get_terms( 'category', array(
 			'fields' => 'ids',
@@ -419,11 +408,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$fruit = self::factory()->term->create( array( 'name' => 'Fruit', 'taxonomy' => $tax ) );
 		$cranberries = self::factory()->term->create( array( 'name' => 'Cranberries', 'parent' => $fruit, 'taxonomy' => $tax ) );
 
-<<<<<<< HEAD
-		$terms = get_terms( $tax, array( 'parent' => 0, 'cache_domain' => $tax ) );
-		$this->assertEquals( 2, count( $terms ) );
-		$this->assertEquals( wp_list_pluck( $terms, 'name' ), array( 'Cheese', 'Crackers' ) );
-=======
 		$terms = get_terms(
 			$tax,
 			array(
@@ -433,7 +417,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( 2, count( $terms ) );
 		$this->assertSame( wp_list_pluck( $terms, 'name' ), array( 'Cheese', 'Crackers' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -451,11 +434,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$term = get_term( $spread, $tax );
 		$this->assertSame( 1, $term->count );
 
-<<<<<<< HEAD
-		$terms = get_terms( $tax, array( 'parent' => 0, 'cache_domain' => $tax ) );
-		$this->assertEquals( 1, count( $terms ) );
-		$this->assertEquals( array( 'Cheese' ), wp_list_pluck( $terms, 'name' ) );
-=======
 		$terms = get_terms(
 			$tax,
 			array(
@@ -465,7 +443,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( 1, count( $terms ) );
 		$this->assertSame( array( 'Cheese' ), wp_list_pluck( $terms, 'name' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		_unregister_taxonomy( $tax );
 	}
@@ -487,11 +464,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$term = get_term( $t[7], $tax );
 		$this->assertSame( 1, $term->count );
 
-<<<<<<< HEAD
-		$terms = get_terms( $tax, array( 'parent' => 0, 'cache_domain' => $tax ) );
-		$this->assertEquals( 1, count( $terms ) );
-		$this->assertEquals( array( 'term1' ), wp_list_pluck( $terms, 'name' ) );
-=======
 		$terms = get_terms(
 			$tax,
 			array(
@@ -501,7 +473,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( 1, count( $terms ) );
 		$this->assertSame( array( 'term1' ), wp_list_pluck( $terms, 'name' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		_unregister_taxonomy( $tax );
 	}
@@ -513,14 +484,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$parent = self::factory()->category->create();
 		$child = self::factory()->category->create( array( 'parent' => $parent ) );
 
-<<<<<<< HEAD
-		$terms = get_terms( 'category', array( 'child_of' => $parent, 'hide_empty' => false ) );
-		$this->assertEquals( 1, count( $terms ) );
-	}
-
-	/**
-	 * @see https://core.trac.wordpress.org/ticket/31118
-=======
 		$terms = get_terms(
 			'category',
 			array(
@@ -532,85 +495,7 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 46768
-	 */
-	function test_get_terms_child_of_fields_id_name() {
-		$parent = self::factory()->category->create();
-		$child  = self::factory()->category->create(
-			array(
-				'parent' => $parent,
-				'slug'   => 'test-1',
-				'name'   => 'Test 1',
-			)
-		);
-		$child2 = self::factory()->category->create(
-			array(
-				'parent' => $parent,
-				'slug'   => 'test-2',
-				'name'   => 'Test 2',
-			)
-		);
-
-		$terms = get_terms(
-			'category',
-			array(
-				'child_of'   => $parent,
-				'hide_empty' => false,
-				'fields'     => 'id=>name',
-			)
-		);
-
-		$this->assertSame(
-			array(
-				$child  => 'Test 1',
-				$child2 => 'Test 2',
-			),
-			$terms
-		);
-
-	}
-
-	/**
-	 * @ticket 46768
-	 */
-	function test_get_terms_child_of_fields_id_slug() {
-		$parent = self::factory()->category->create();
-		$child  = self::factory()->category->create(
-			array(
-				'parent' => $parent,
-				'slug'   => 'test-1',
-				'name'   => 'Test 1',
-			)
-		);
-		$child2 = self::factory()->category->create(
-			array(
-				'parent' => $parent,
-				'slug'   => 'test-2',
-				'name'   => 'Test 2',
-			)
-		);
-
-		$terms = get_terms(
-			'category',
-			array(
-				'child_of'   => $parent,
-				'hide_empty' => false,
-				'fields'     => 'id=>slug',
-			)
-		);
-
-		$this->assertSame(
-			array(
-				$child  => 'test-1',
-				$child2 => 'test-2',
-			),
-			$terms
-		);
-	}
-
-	/**
-	 * @ticket 31118
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+	 * @see https://core.trac.wordpress.org/ticket/31118
 	 */
 	public function test_child_of_should_skip_query_when_specified_parent_is_not_found_in_hierarchy_cache() {
 		global $wpdb;
@@ -1808,13 +1693,8 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			'parent' => $initial_terms['one_term']['term_id']
 		) );
 
-<<<<<<< HEAD
-		// Verify that there are no children
-		$this->assertEquals( 0, count( $terms ) );
-=======
 		// Verify that there are no children.
 		$this->assertSame( 0, count( $terms ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1870,13 +1750,8 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			'child_of' => $initial_terms['one_term']['term_id']
 		) );
 
-<<<<<<< HEAD
-		// Verify that there are no children
-		$this->assertEquals( 0, count( $terms ) );
-=======
 		// Verify that there are no children.
 		$this->assertSame( 0, count( $terms ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_hierarchical_true_with_child_of_should_return_grandchildren() {
@@ -1968,13 +1843,8 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			'parent' => $initial_terms['one_term']['term_id']
 		) );
 
-<<<<<<< HEAD
-		// hierarchical=false means that descendants are not fetched.
-		$this->assertEquals( 0, count( $terms ) );
-=======
 		// 'hierarchical=false' means that descendants are not fetched.
 		$this->assertSame( 0, count( $terms ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -2089,17 +1959,10 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$this->assertEqualSets( array( $t1, $t2, $t3 ), wp_list_pluck( $found, 'term_id' ) );
 
 		foreach ( $found as $f ) {
-<<<<<<< HEAD
-			if ( $t1 == $f->term_id ) {
-				$this->assertEquals( 1, $f->count );
-			} elseif ( $t2 == $f->term_id ) {
-				$this->assertEquals( 2, $f->count );
-=======
 			if ( $t1 === $f->term_id ) {
 				$this->assertSame( 1, $f->count );
 			} elseif ( $t2 === $f->term_id ) {
 				$this->assertSame( 2, $f->count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			} else {
 				$this->assertSame( 1, $f->count );
 			}

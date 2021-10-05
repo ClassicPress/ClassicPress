@@ -54,20 +54,12 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 
 		smilies_init();
 
-<<<<<<< HEAD
-		$this->assertEquals( $converted_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $converted_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// standard smilies, use_smilies: OFF
 		update_option( 'use_smilies', 0 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $in_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $in_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -120,20 +112,12 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 
 		smilies_init();
 
-<<<<<<< HEAD
-		$this->assertEquals( $converted_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $converted_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// standard smilies, use_smilies: OFF
 		update_option( 'use_smilies', 0 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $in_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $in_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$wpsmiliestrans = $trans_orig; // reset original translations array
 	}
@@ -170,11 +154,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 		update_option( 'use_smilies', 1 );
 		smilies_init();
 
-<<<<<<< HEAD
-		$this->assertEquals( $exp_str, convert_smilies($in_str) );
-=======
 		$this->assertSame( $exp_str, convert_smilies( $in_str ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// standard smilies, use_smilies: OFF
 		update_option( 'use_smilies', 0 );
@@ -227,20 +207,12 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 		update_option( 'use_smilies', 1 );
 		smilies_init();
 
-<<<<<<< HEAD
-		$this->assertEquals( $converted_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $converted_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// custom smilies, use_smilies: OFF
 		update_option( 'use_smilies', 0 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $in_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $in_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -291,20 +263,12 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 
 		smilies_init();
 
-<<<<<<< HEAD
-		$this->assertEquals( $converted_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $converted_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// standard smilies, use_smilies: OFF
 		update_option( 'use_smilies', 0 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $in_txt, convert_smilies($in_txt) );
-=======
 		$this->assertSame( $in_txt, convert_smilies( $in_txt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$wpsmiliestrans = $orig_trans; // reset original translations array
 	}

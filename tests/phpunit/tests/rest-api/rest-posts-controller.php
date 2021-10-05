@@ -110,15 +110,9 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/posts' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
-=======
 		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/posts/' . self::$post_id );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
@@ -132,33 +126,31 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'after',
-			'author',
-			'author_exclude',
-			'before',
-			'categories',
-			'categories_exclude',
-			'context',
-			'exclude',
-			'include',
-			'offset',
-			'order',
-			'orderby',
-			'page',
-			'per_page',
-			'search',
-			'slug',
-			'status',
-			'sticky',
-			'tags',
-			'tags_exclude',
-			), $keys );
+				'after',
+				'author',
+				'author_exclude',
+				'before',
+				'categories',
+				'categories_exclude',
+				'context',
+				'exclude',
+				'include',
+				'offset',
+				'order',
+				'orderby',
+				'page',
+				'per_page',
+				'search',
+				'slug',
+				'status',
+				'sticky',
+				'tags',
+				'tags_exclude',
+			),
+			$keys
+		);
 	}
 
 	public function test_registered_get_item_params() {
@@ -170,32 +162,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( array( 'context', 'id', 'password' ), $keys );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 43701
-	 */
-	public function test_allow_header_sent_on_options_request() {
-		$request  = new WP_REST_Request( 'OPTIONS', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-		$response = rest_get_server()->dispatch( $request );
-		$response = apply_filters( 'rest_post_dispatch', $response, rest_get_server(), $request );
-		$headers  = $response->get_headers();
-
-		$this->assertNotEmpty( $headers['Allow'] );
-		$this->assertSame( $headers['Allow'], 'GET' );
-
-		wp_set_current_user( self::$editor_id );
-
-		$request  = new WP_REST_Request( 'OPTIONS', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-		$response = rest_get_server()->dispatch( $request );
-		$response = apply_filters( 'rest_post_dispatch', $response, rest_get_server(), $request );
-		$headers  = $response->get_headers();
-
-		$this->assertNotEmpty( $headers['Allow'] );
-		$this->assertSame( $headers['Allow'], 'GET, POST, PUT, PATCH, DELETE' );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_get_items() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$response = $this->server->dispatch( $request );
@@ -224,40 +190,23 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_author' => self::$author_id ) );
 		// All 3 posts
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 3, count( $response->get_data() ) );
-		// 2 of 3 posts
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'author', array( self::$editor_id, self::$author_id ) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$request->set_param( 'per_page', self::$per_page );
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( $total_posts, count( $response->get_data() ) );
+		$this->assertSame( 3, count( $response->get_data() ) );
 
 		// Limit to editor and author.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'author', array( self::$editor_id, self::$author_id ) );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$this->assertEqualSets( array( self::$editor_id, self::$author_id ), wp_list_pluck( $data, 'author' ) );
 		// 1 of 3 posts
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'author', self::$editor_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( self::$editor_id, $data[0]['author'] );
@@ -268,48 +217,26 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_author' => self::$author_id ) );
 		// All 3 posts
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 3, count( $response->get_data() ) );
-		// 1 of 3 posts
-=======
-		$request->set_param( 'per_page', self::$per_page );
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( $total_posts, count( $response->get_data() ) );
+		$this->assertSame( 3, count( $response->get_data() ) );
 
 		// Exclude editor and author.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'author_exclude', array( self::$editor_id, self::$author_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertSame( $total_posts - 2, count( $data ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 1, count( $data ) );
 		$this->assertNotEquals( self::$editor_id, $data[0]['author'] );
 		$this->assertNotEquals( self::$author_id, $data[0]['author'] );
 		// 2 of 3 posts
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'author_exclude', self::$editor_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertSame( $total_posts - 1, count( $data ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 2, count( $data ) );
 		$this->assertNotEquals( self::$editor_id, $data[0]['author'] );
 		$this->assertNotEquals( self::$editor_id, $data[1]['author'] );
 		// invalid author_exclude errors
@@ -328,30 +255,18 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'include', array( $id1, $id3 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id3, $data[0]['id'] );
-=======
 		$this->assertSame( 2, count( $data ) );
-		$this->assertSame( $id2, $data[0]['id'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $id3, $data[0]['id'] );
 		$this->assertPostsOrderedBy( '{posts}.post_date DESC' );
 		// Orderby=>include
 		$request->set_param( 'orderby', 'include' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id1, $data[0]['id'] );
-		$this->assertPostsOrderedBy( "FIELD( {posts}.ID, $id1,$id3 )" );
-		// Invalid include should error
-=======
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( $id1, $data[0]['id'] );
-		$this->assertPostsOrderedBy( "FIELD({posts}.ID,$id1,$id2)" );
+		$this->assertPostsOrderedBy( "FIELD( {posts}.ID, $id1,$id3 )" );
 
 		// Invalid 'include' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'include', 'invalid' );
 		$response = $this->server->dispatch( $request );
@@ -456,15 +371,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		}
 		$this->factory->post->create( array( 'post_title' => 'Search Result', 'post_status' => 'publish' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 7, count( $response->get_data() ) );
-=======
-		$request->set_param( 'per_page', self::$per_page );
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( $total_posts, count( $response->get_data() ) );
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 7, count( $response->get_data() ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'search', 'Search Result' );
 		$response = $this->server->dispatch( $request );
@@ -478,13 +386,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_title' => 'Banana', 'post_status' => 'publish' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'slug', 'apple' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( 'Apple', $data[0]['title']['rendered'] );
@@ -496,13 +399,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_title' => 'Peach', 'post_status' => 'publish' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'slug', array( 'banana', 'peach' ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$titles = array(
@@ -519,13 +417,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_title' => 'Peach', 'post_status' => 'publish' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'slug', 'apple,banana' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$titles = array(
@@ -541,16 +434,10 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->factory->post->create( array( 'post_status' => 'draft' ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'status', 'publish' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 1, count( $response->get_data() ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( self::$total_posts, count( $response->get_data() ) );
+		$this->assertSame( 1, count( $response->get_data() ) );
 
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'status', 'draft' );
 		$response = $this->server->dispatch( $request );
@@ -558,15 +445,9 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		wp_set_current_user( self::$editor_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'status', 'draft' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( 1, count( $response->get_data() ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( 1, count( $response->get_data() ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_multiple_statuses_string_query() {
@@ -580,13 +461,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'context', 'edit' );
 		$request->set_param( 'status', 'draft,private' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$statuses = array(
@@ -608,13 +484,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'context', 'edit' );
 		$request->set_param( 'status', array( 'draft', 'pending' ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
 		$statuses = array(
@@ -758,13 +629,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'orderby', 'relevance' );
 		$request->set_param( 'search', 'relevant' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertCount( 2, $data );
 		$this->assertSame( $id1, $data[0]['id'] );
@@ -778,13 +644,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'orderby', 'relevance' );
 		$request->set_param( 'search', 'relevant content' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertCount( 2, $data );
 		$this->assertSame( $id1, $data[0]['id'] );
@@ -852,17 +713,11 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
+
 		$this->assertCount( 3, $data );
-		$this->assertEquals( $id4, $data[0]['id'] );
-		$this->assertEquals( $id3, $data[1]['id'] );
-		$this->assertEquals( $id2, $data[2]['id'] );
-=======
-		$this->assertCount( $total_posts - 1, $data );
 		$this->assertSame( $id4, $data[0]['id'] );
 		$this->assertSame( $id3, $data[1]['id'] );
 		$this->assertSame( $id2, $data[2]['id'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_tags_and_categories_query() {
@@ -889,34 +744,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 44326
-	 */
-	public function test_get_items_tags_or_categories_query() {
-		$id1      = self::$post_id;
-		$id2      = $this->factory->post->create( array( 'post_status' => 'publish' ) );
-		$tag      = wp_insert_term( 'My Tag', 'post_tag' );
-		$category = wp_insert_term( 'My Category', 'category' );
-
-		wp_set_object_terms( $id1, array( $tag['term_id'] ), 'post_tag' );
-		wp_set_object_terms( $id2, array( $category['term_id'] ), 'category' );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'tax_relation', 'OR' );
-		$request->set_param( 'tags', array( $tag['term_id'] ) );
-		$request->set_param( 'categories', array( $category['term_id'] ) );
-		$request->set_param( 'orderby', 'id' );
-
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertCount( 2, $data );
-		$this->assertSame( $id2, $data[0]['id'] );
-		$this->assertSame( $id1, $data[1]['id'] );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_get_items_tags_and_categories_exclude_query() {
 		$id1 = self::$post_id;
 		$id2 = $this->factory->post->create( array( 'post_status' => 'publish' ) );
@@ -943,56 +770,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 44326
-	 */
-	public function test_get_items_tags_or_categories_exclude_query() {
-		$id1      = end( self::$post_ids );
-		$id2      = $this->factory->post->create( array( 'post_status' => 'publish' ) );
-		$id3      = $this->factory->post->create( array( 'post_status' => 'publish' ) );
-		$id4      = $this->factory->post->create( array( 'post_status' => 'publish' ) );
-		$tag      = wp_insert_term( 'My Tag', 'post_tag' );
-		$category = wp_insert_term( 'My Category', 'category' );
-
-		$total_posts = self::$total_posts + 3;
-
-		wp_set_object_terms( $id1, array( $tag['term_id'] ), 'post_tag' );
-		wp_set_object_terms( $id2, array( $tag['term_id'] ), 'post_tag' );
-		wp_set_object_terms( $id2, array( $category['term_id'] ), 'category' );
-		wp_set_object_terms( $id3, array( $category['term_id'] ), 'category' );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'per_page', self::$per_page );
-		$request->set_param( 'tags', array( $tag['term_id'] ) );
-		$request->set_param( 'categories_exclude', array( $category['term_id'] ) );
-		$request->set_param( 'tax_relation', 'OR' );
-		$request->set_param( 'orderby', 'id' );
-
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertCount( $total_posts - 1, $data );
-		$this->assertSame( $id4, $data[0]['id'] );
-		$this->assertSame( $id2, $data[1]['id'] );
-		$this->assertSame( $id1, $data[2]['id'] );
-	}
-
-	/**
-	 * @ticket 44326
-	 */
-	public function test_get_items_relation_with_no_tax_query() {
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'tax_relation', 'OR' );
-		$request->set_param( 'include', self::$post_id );
-
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertCount( 1, $response->get_data() );
-		$this->assertSame( self::$post_id, $response->get_data()[0]['id'] );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_get_items_sticky() {
 		$id1 = self::$post_id;
 		$id2 = $this->factory->post->create( array( 'post_status' => 'publish' ) );
@@ -1160,18 +937,14 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 50, $headers['X-WP-Total'] );
-		$this->assertEquals( 5, $headers['X-WP-TotalPages'] );
-		$next_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_posts, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 50, $headers['X-WP-Total'] );
+		$this->assertSame( 5, $headers['X-WP-TotalPages'] );
 		$next_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( '/wp/v2/posts' ) );
+				'page'    => 2,
+			),
+			rest_url( '/wp/v2/posts' )
+		);
 		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 		// 3rd page
@@ -1182,18 +955,14 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_posts, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( '/wp/v2/posts' ) );
+				'page'    => 2,
+			),
+			rest_url( '/wp/v2/posts' )
+		);
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
 			'page'    => 4,
@@ -1204,22 +973,14 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 5,
-			), rest_url( '/wp/v2/posts' ) );
-=======
-		$this->assertSame( $total_posts, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages - 1,
+				'page' => 5,
 			),
 			rest_url( '/wp/v2/posts' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 
@@ -1235,19 +996,15 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_query_params( array( 'per_page' => 5, 'page' => 2 ) );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 11, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_posts, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 11, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'per_page' => 5,
-			'page'     => 1,
-			), rest_url( '/wp/v2/posts' ) );
+				'per_page' => 5,
+				'page'     => 1,
+			),
+			rest_url( '/wp/v2/posts' )
+		);
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
 			'per_page' => 5,
@@ -1269,41 +1026,10 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		wp_set_current_user( self::$editor_id );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
 		$this->assertCount( 1, $data );
-		$this->assertEquals( $draft_id, $data[0]['id'] );
-	}
-
-=======
 		$this->assertSame( $draft_id, $data[0]['id'] );
 	}
 
-	/**
-	 * @ticket 43701
-	 */
-	public function test_get_items_status_private_permissions() {
-		$private_post_id = $this->factory->post->create( array( 'post_status' => 'private' ) );
-
-		wp_set_current_user( 0 );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'status', 'private' );
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
-
-		wp_set_current_user( self::$private_reader_id );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
-		$request->set_param( 'status', 'private' );
-
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertCount( 1, $data );
-		$this->assertSame( $private_post_id, $data[0]['id'] );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_get_items_invalid_per_page() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_query_params( array( 'per_page' => -1 ) );
@@ -1374,14 +1100,9 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 		$links = $response->get_links();
 
-<<<<<<< HEAD
-		$this->assertEquals( rest_url( '/wp/v2/posts/' . self::$post_id ), $links['self'][0]['href'] );
-		$this->assertEquals( rest_url( '/wp/v2/posts' ), $links['collection'][0]['href'] );
-=======
 		$this->assertSame( rest_url( '/wp/v2/posts/' . self::$post_id ), $links['self'][0]['href'] );
 		$this->assertSame( rest_url( '/wp/v2/posts' ), $links['collection'][0]['href'] );
 		$this->assertArrayNotHasKey( 'embeddable', $links['self'][0]['attributes'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( rest_url( '/wp/v2/types/' . get_post_type( self::$post_id ) ), $links['about'][0]['href'] );
 
@@ -1580,15 +1301,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		// Public status
 		wp_update_post( array( 'ID' => self::$post_id, 'post_status' => 'testpubstatus' ) );
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		// Private status
-		wp_update_post( array( 'ID' => self::$post_id, 'post_status' => 'testprivtatus' ) );
-		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 401, $response->get_status() );
-=======
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
@@ -1601,9 +1314,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		);
 
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 401, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_prepare_item() {
@@ -1624,12 +1336,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( '_fields', 'id,slug' );
 		$obj      = get_post( self::$post_id );
 		$response = $endpoint->prepare_item_for_response( $obj, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-			'id',
-			'slug',
-		), array_keys( $response->get_data() ) );
-=======
 		$this->assertSame(
 			array(
 				'id',
@@ -1637,79 +1343,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			),
 			array_keys( $response->get_data() )
 		);
-	}
-
-	/**
-	 * @ticket 42094
-	 */
-	public function test_prepare_item_filters_content_when_needed() {
-		$filter_count   = 0;
-		$filter_content = function() use ( &$filter_count ) {
-			$filter_count++;
-			return '<p>Filtered content.</p>';
-		};
-		add_filter( 'the_content', $filter_content );
-
-		wp_set_current_user( self::$editor_id );
-
-		$endpoint = new WP_REST_Posts_Controller( 'post' );
-		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-
-		$request->set_param( 'context', 'edit' );
-		$request->set_param( '_fields', 'content.rendered' );
-
-		$post     = get_post( self::$post_id );
-		$response = $endpoint->prepare_item_for_response( $post, $request );
-
-		remove_filter( 'the_content', $filter_content );
-
-		$this->assertSame(
-			array(
-				'id'      => self::$post_id,
-				'content' => array(
-					'rendered' => '<p>Filtered content.</p>',
-				),
-			),
-			$response->get_data()
-		);
-		$this->assertSame( 1, $filter_count );
-	}
-
-	/**
-	 * @ticket 42094
-	 */
-	public function test_prepare_item_skips_content_filter_if_not_needed() {
-		$filter_count   = 0;
-		$filter_content = function() use ( &$filter_count ) {
-			$filter_count++;
-			return '<p>Filtered content.</p>';
-		};
-		add_filter( 'the_content', $filter_content );
-
-		wp_set_current_user( self::$editor_id );
-
-		$endpoint = new WP_REST_Posts_Controller( 'post' );
-		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
-
-		$request->set_param( 'context', 'edit' );
-		$request->set_param( '_fields', 'content.raw' );
-
-		$post     = get_post( self::$post_id );
-		$response = $endpoint->prepare_item_for_response( $post, $request );
-
-		remove_filter( 'the_content', $filter_content );
-
-		$this->assertSame(
-			array(
-				'id'      => $post->ID,
-				'content' => array(
-					'raw' => $post->post_content,
-				),
-			),
-			$response->get_data()
-		);
-		$this->assertSame( 0, $filter_count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_create_item() {
@@ -1931,13 +1564,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		) );
 
 		$request->set_body_params( $params );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$post = get_post( $data['id'] );
@@ -2017,19 +1645,11 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 		$data = $response->get_data();
 		$new_post = get_post( $data['id'] );
-<<<<<<< HEAD
-		$this->assertEquals( 'draft', $data['status'] );
-		$this->assertEquals( 'draft', $new_post->post_status );
-		// Confirm dates are shimmed for gmt_offset
-		$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $new_post->post_modified ) + ( get_option( 'gmt_offset' ) * 3600 ) );
-		$post_date_gmt = date( 'Y-m-d H:i:s', strtotime( $new_post->post_date ) + ( get_option( 'gmt_offset' ) * 3600 ) );
-=======
 		$this->assertSame( 'draft', $data['status'] );
 		$this->assertSame( 'draft', $new_post->post_status );
 		// Confirm dates are shimmed for gmt_offset.
 		$post_modified_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $new_post->post_modified ) + ( get_option( 'gmt_offset' ) * 3600 ) );
 		$post_date_gmt     = gmdate( 'Y-m-d H:i:s', strtotime( $new_post->post_date ) + ( get_option( 'gmt_offset' ) * 3600 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( mysql_to_rfc3339( $post_modified_gmt ), $data['modified_gmt'] );
 		$this->assertSame( mysql_to_rfc3339( $post_date_gmt ), $data['date_gmt'] );
@@ -2159,13 +1779,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			'format' => 'link',
 		) );
 		$request->set_body_params( $params );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 'link', $data['format'] );
@@ -2254,12 +1869,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$response = $this->server->dispatch( $request );
 
 		$data = $response->get_data();
-<<<<<<< HEAD
 
-		$this->assertEquals( '0', $data['password'] );
-=======
 		$this->assertSame( '0', $data['password'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_create_post_with_empty_string_password_and_sticky() {
@@ -2386,16 +1997,10 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			'title' => "Rob O'Rourke's Diary",
 		) );
 		$request->set_body_params( $params );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$new_data = $response->get_data();
-		$this->assertEquals( "Rob O'Rourke's Diary", $new_data['title']['raw'] );
-=======
-		$response = rest_get_server()->dispatch( $request );
 
 		$data = $response->get_data();
 		$this->assertSame( "Rob O'Rourke's Diary", $data['title']['raw'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_create_post_with_categories() {
@@ -2533,71 +2138,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( $params['excerpt'], $post->post_excerpt );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * Verify that updating a post with a `null` date or date_gmt results in a reset post, where all
-	 * date values are equal (date, date_gmt, date_modified and date_modofied_gmt) in the API response.
-	 * In the database, the post_date_gmt field is reset to the default `0000-00-00 00:00:00`.
-	 *
-	 * @ticket 44975
-	 */
-	public function test_rest_update_post_with_empty_date() {
-		// Create a new test post.
-		$post_id = $this->factory->post->create();
-
-		wp_set_current_user( self::$editor_id );
-
-		// Set the post date to the future.
-		$future_date = '2919-07-29T18:00:00';
-
-		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', $post_id ) );
-		$request->add_header( 'content-type', 'application/json' );
-		$params = $this->set_post_data(
-			array(
-				'date_gmt' => $future_date,
-				'date'     => $future_date,
-				'title'    => 'update',
-				'status'   => 'draft',
-			)
-		);
-		$request->set_body( wp_json_encode( $params ) );
-		$response = rest_get_server()->dispatch( $request );
-		$this->check_update_post_response( $response );
-		$new_data = $response->get_data();
-
-		// Verify the post is set to the future date.
-		$this->assertSame( $new_data['date_gmt'], $future_date );
-		$this->assertSame( $new_data['date'], $future_date );
-		$this->assertNotEquals( $new_data['date_gmt'], $new_data['modified_gmt'] );
-		$this->assertNotEquals( $new_data['date'], $new_data['modified'] );
-
-		// Update post with a blank field (date or date_gmt).
-		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', $post_id ) );
-		$request->add_header( 'content-type', 'application/json' );
-		$params = $this->set_post_data(
-			array(
-				'date_gmt' => null,
-				'title'    => 'test',
-				'status'   => 'draft',
-			)
-		);
-		$request->set_body( wp_json_encode( $params ) );
-		$response = rest_get_server()->dispatch( $request );
-
-		// Verify the date field values are reset in the API response.
-		$this->check_update_post_response( $response );
-		$new_data = $response->get_data();
-		$this->assertSame( $new_data['date_gmt'], $new_data['date'] );
-		$this->assertNotEquals( $new_data['date_gmt'], $future_date );
-
-		$post = get_post( $post_id, 'ARRAY_A' );
-		$this->assertSame( $post['post_date_gmt'], '0000-00-00 00:00:00' );
-		$this->assertNotEquals( $new_data['date_gmt'], $future_date );
-		$this->assertNotEquals( $new_data['date'], $future_date );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_rest_update_post_raw() {
 		wp_set_current_user( self::$editor_id );
 
@@ -2740,13 +2280,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			'format' => 'link',
 		) );
 		$request->set_body_params( $params );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 'link', $data['format'] );
@@ -2774,13 +2309,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( $new_content, $new_post->post_content );
 
 		// The modified date should equal the current time.
-<<<<<<< HEAD
-		$this->assertEquals( date( 'Y-m-d', strtotime( mysql_to_rfc3339( $expected_modified ) ) ), date( 'Y-m-d', strtotime( $data['modified'] ) ) );
-		$this->assertEquals( date( 'Y-m-d', strtotime( $expected_modified ) ), date( 'Y-m-d', strtotime( $new_post->post_modified ) ) );
-=======
 		$this->assertSame( gmdate( 'Y-m-d', strtotime( mysql_to_rfc3339( $expected_modified ) ) ), gmdate( 'Y-m-d', strtotime( $data['modified'] ) ) );
 		$this->assertSame( gmdate( 'Y-m-d', strtotime( $expected_modified ) ), gmdate( 'Y-m-d', strtotime( $new_post->post_modified ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -2870,13 +2400,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( $post->post_date_gmt, '0000-00-00 00:00:00' );
 
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', $post_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 
 		$this->assertSame( '2016-02-23T12:00:00', $data['date'] );
@@ -2884,13 +2409,8 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', $post_id ) );
 		$request->set_param( 'date', '2016-02-23T13:00:00' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 
 		$this->assertSame( '2016-02-23T13:00:00', $data['date'] );
@@ -3252,20 +2772,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		foreach ( $input as $name => $value ) {
 			$request->set_param( $name, $value );
 		}
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-		$actual_output = $response->get_data();
-
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['title']['raw']       , $actual_output['title']['raw'] );
-		$this->assertEquals( $expected_output['title']['rendered']  , trim( $actual_output['title']['rendered'] ) );
-		$this->assertEquals( $expected_output['content']['raw']     , $actual_output['content']['raw'] );
-		$this->assertEquals( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
-		$this->assertEquals( $expected_output['excerpt']['raw']     , $actual_output['excerpt']['raw'] );
-		$this->assertEquals( $expected_output['excerpt']['rendered'], trim( $actual_output['excerpt']['rendered'] ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
 		$actual_output = $response->get_data();
 
@@ -3276,39 +2783,19 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
 		$this->assertSame( $expected_output['excerpt']['raw'], $actual_output['excerpt']['raw'] );
 		$this->assertSame( $expected_output['excerpt']['rendered'], trim( $actual_output['excerpt']['rendered'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$post = get_post( $actual_output['id'] );
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['title']['raw']  , $post->post_title );
-		$this->assertEquals( $expected_output['content']['raw'], $post->post_content );
-		$this->assertEquals( $expected_output['excerpt']['raw'], $post->post_excerpt );
-=======
 		$this->assertSame( $expected_output['title']['raw'], $post->post_title );
 		$this->assertSame( $expected_output['content']['raw'], $post->post_content );
 		$this->assertSame( $expected_output['excerpt']['raw'], $post->post_excerpt );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Update the post
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', $actual_output['id'] ) );
 		foreach ( $input as $name => $value ) {
 			$request->set_param( $name, $value );
 		}
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$actual_output = $response->get_data();
-
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['title']['raw']       , $actual_output['title']['raw'] );
-		$this->assertEquals( $expected_output['title']['rendered']  , trim( $actual_output['title']['rendered'] ) );
-		$this->assertEquals( $expected_output['content']['raw']     , $actual_output['content']['raw'] );
-		$this->assertEquals( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
-		$this->assertEquals( $expected_output['excerpt']['raw']     , $actual_output['excerpt']['raw'] );
-		$this->assertEquals( $expected_output['excerpt']['rendered'], trim( $actual_output['excerpt']['rendered'] ) );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$actual_output = $response->get_data();
 
@@ -3319,19 +2806,12 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
 		$this->assertSame( $expected_output['excerpt']['raw'], $actual_output['excerpt']['raw'] );
 		$this->assertSame( $expected_output['excerpt']['rendered'], trim( $actual_output['excerpt']['rendered'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$post = get_post( $actual_output['id'] );
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['title']['raw']  , $post->post_title );
-		$this->assertEquals( $expected_output['content']['raw'], $post->post_content );
-		$this->assertEquals( $expected_output['excerpt']['raw'], $post->post_excerpt );
-=======
 		$this->assertSame( $expected_output['title']['raw'], $post->post_title );
 		$this->assertSame( $expected_output['content']['raw'], $post->post_content );
 		$this->assertSame( $expected_output['excerpt']['raw'], $post->post_excerpt );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public static function post_roundtrip_provider() {
@@ -3540,15 +3020,9 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$post_id = $this->factory->post->create( array( 'post_title' => 'Deleted post' ) );
 		wp_set_current_user( self::$editor_id );
 		$request = new WP_REST_Request( 'DELETE', sprintf( '/wp/v2/posts/%d', $post_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$response = $this->server->dispatch( $request );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
-		$response = rest_get_server()->dispatch( $request );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_already_trashed', $response, 410 );
 	}
 
@@ -3595,11 +3069,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
-<<<<<<< HEAD
-		$this->assertEquals( 24, count( $properties ) );
-=======
-		$this->assertSame( 26, count( $properties ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 24, count( $properties ) );
 		$this->assertArrayHasKey( 'author', $properties );
 		$this->assertArrayHasKey( 'comment_status', $properties );
 		$this->assertArrayHasKey( 'content', $properties );
@@ -3732,38 +3202,28 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$data = $response->get_data();
 		$list_posts_args = $data['routes']['/wp/v2/posts']['endpoints'][0]['args'];
 		$status_arg = $list_posts_args['status'];
-<<<<<<< HEAD
-		$this->assertEquals( 'array', $status_arg['type'] );
-		$this->assertEquals( array(
-			'type' => 'string',
-=======
 		$this->assertSame( 'array', $status_arg['type'] );
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'enum' => array(
-				'publish',
-				'future',
-				'draft',
-				'pending',
-				'private',
-				'trash',
-				'auto-draft',
-				'inherit',
-				'request-pending',
-				'request-confirmed',
-				'request-failed',
-				'request-completed',
-				'any',
-			),
-<<<<<<< HEAD
-		), $status_arg['items'] );
-=======
+				'enum' => array(
+					'publish',
+					'future',
+					'draft',
+					'pending',
+					'private',
+					'trash',
+					'auto-draft',
+					'inherit',
+					'request-pending',
+					'request-confirmed',
+					'request-failed',
+					'request-completed',
+					'any',
+				),
 				'type' => 'string',
 			),
 			$status_arg['items']
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_additional_field_registration() {
@@ -4166,385 +3626,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertArrayHasKey( 'https://api.w.org/action-assign-tags', $links );
 	}
 
-<<<<<<< HEAD
-=======
-	public function test_assign_unfiltered_html_action_superadmin() {
-		$post_id = self::factory()->post->create();
-
-		wp_set_current_user( self::$superadmin_id );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . $post_id );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_do_request( $request );
-		$links    = $response->get_links();
-		$this->assertArrayHasKey( 'https://api.w.org/action-unfiltered-html', $links );
-	}
-
-	public function test_assign_unfiltered_html_action_editor() {
-		$post_id = self::factory()->post->create();
-
-		wp_set_current_user( self::$editor_id );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . $post_id );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_do_request( $request );
-		$links    = $response->get_links();
-		// Editors can only unfiltered html on single site.
-		if ( is_multisite() ) {
-			$this->assertArrayNotHasKey( 'https://api.w.org/action-unfiltered-html', $links );
-		} else {
-			$this->assertArrayHasKey( 'https://api.w.org/action-unfiltered-html', $links );
-		}
-	}
-
-	public function test_assign_unfiltered_html_action_author() {
-		$post_id = self::factory()->post->create();
-
-		wp_set_current_user( self::$author_id );
-
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . $post_id );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_do_request( $request );
-		$links    = $response->get_links();
-		// Authors can't ever unfiltered html.
-		$this->assertArrayNotHasKey( 'https://api.w.org/action-unfiltered-html', $links );
-	}
-
-	public function test_generated_permalink_template_generated_slug_for_non_viewable_posts() {
-		register_post_type(
-			'private-post',
-			array(
-				'label'              => 'Private Posts',
-				'supports'           => array( 'title', 'editor', 'author' ),
-				'show_in_rest'       => true,
-				'publicly_queryable' => false,
-				'public'             => true,
-				'rest_base'          => 'private-post',
-			)
-		);
-		create_initial_rest_routes();
-
-		wp_set_current_user( self::$editor_id );
-
-		$post_id = $this->factory->post->create(
-			array(
-				'post_title'  => 'Permalink Template',
-				'post_type'   => 'private-post',
-				'post_status' => 'draft',
-			)
-		);
-
-		// Neither 'permalink_template' and 'generated_slug' are expected for this post type.
-		$request = new WP_REST_Request( 'GET', '/wp/v2/private-post/' . $post_id );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertArrayNotHasKey( 'permalink_template', $data );
-		$this->assertArrayNotHasKey( 'generated_slug', $data );
-	}
-
-	public function test_generated_permalink_template_generated_slug_for_posts() {
-		$this->set_permalink_structure( '/%postname%/' );
-		$expected_permalink_template = trailingslashit( home_url( '/%postname%/' ) );
-
-		wp_set_current_user( self::$editor_id );
-
-		$post_id = $this->factory->post->create(
-			array(
-				'post_title'  => 'Permalink Template',
-				'post_type'   => 'post',
-				'post_status' => 'draft',
-			)
-		);
-
-		// Both 'permalink_template' and 'generated_slug' are expected for context=edit.
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . $post_id );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( $expected_permalink_template, $data['permalink_template'] );
-		$this->assertSame( 'permalink-template', $data['generated_slug'] );
-
-		// Neither 'permalink_template' and 'generated_slug' are expected for context=view.
-		$request = new WP_REST_Request( 'GET', '/wp/v2/posts/' . $post_id );
-		$request->set_param( 'context', 'view' );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertArrayNotHasKey( 'permalink_template', $data );
-		$this->assertArrayNotHasKey( 'generated_slug', $data );
-
-	}
-
-	/**
-	 * @ticket 39953
-	 */
-	public function test_putting_same_publish_date_does_not_remove_floating_date() {
-		wp_set_current_user( self::$superadmin_id );
-
-		$time = gmdate( 'Y-m-d H:i:s' );
-
-		$post = self::factory()->post->create_and_get(
-			array(
-				'post_status' => 'draft',
-				'post_date'   => $time,
-			)
-		);
-
-		$this->assertSame( '0000-00-00 00:00:00', $post->post_date_gmt );
-
-		$get = new WP_REST_Request( 'GET', "/wp/v2/posts/{$post->ID}" );
-		$get->set_query_params( array( 'context' => 'edit' ) );
-
-		$get      = rest_get_server()->dispatch( $get );
-		$get_body = $get->get_data();
-
-		$put = new WP_REST_Request( 'PUT', "/wp/v2/posts/{$post->ID}" );
-		$put->set_body_params( $get_body );
-
-		$response = rest_get_server()->dispatch( $put );
-		$body     = $response->get_data();
-
-		$this->assertEquals( strtotime( $get_body['date'] ), strtotime( $body['date'] ), 'The dates should be equal', 2 );
-		$this->assertEquals( strtotime( $get_body['date_gmt'] ), strtotime( $body['date_gmt'] ), 'The dates should be equal', 2 );
-
-		$this->assertSame( '0000-00-00 00:00:00', get_post( $post->ID )->post_date_gmt );
-	}
-
-	/**
-	 * @ticket 39953
-	 */
-	public function test_putting_different_publish_date_removes_floating_date() {
-		wp_set_current_user( self::$superadmin_id );
-
-		$time     = gmdate( 'Y-m-d H:i:s' );
-		$new_time = gmdate( 'Y-m-d H:i:s', strtotime( '+1 week' ) );
-
-		$post = self::factory()->post->create_and_get(
-			array(
-				'post_status' => 'draft',
-				'post_date'   => $time,
-			)
-		);
-
-		$this->assertSame( '0000-00-00 00:00:00', $post->post_date_gmt );
-
-		$get = new WP_REST_Request( 'GET', "/wp/v2/posts/{$post->ID}" );
-		$get->set_query_params( array( 'context' => 'edit' ) );
-
-		$get      = rest_get_server()->dispatch( $get );
-		$get_body = $get->get_data();
-
-		$put = new WP_REST_Request( 'PUT', "/wp/v2/posts/{$post->ID}" );
-		$put->set_body_params(
-			array_merge(
-				$get_body,
-				array(
-					'date' => mysql_to_rfc3339( $new_time ),
-				)
-			)
-		);
-
-		$response = rest_get_server()->dispatch( $put );
-		$body     = $response->get_data();
-
-		$this->assertEquals( strtotime( mysql_to_rfc3339( $new_time ) ), strtotime( $body['date'] ), 'The dates should be equal', 2 );
-
-		$this->assertNotEquals( '0000-00-00 00:00:00', get_post( $post->ID )->post_date_gmt );
-	}
-
-	/**
-	 * @ticket 39953
-	 */
-	public function test_publishing_post_with_same_date_removes_floating_date() {
-		wp_set_current_user( self::$superadmin_id );
-
-		$time = gmdate( 'Y-m-d H:i:s' );
-
-		$post = self::factory()->post->create_and_get(
-			array(
-				'post_status' => 'draft',
-				'post_date'   => $time,
-			)
-		);
-
-		$this->assertSame( '0000-00-00 00:00:00', $post->post_date_gmt );
-
-		$get = new WP_REST_Request( 'GET', "/wp/v2/posts/{$post->ID}" );
-		$get->set_query_params( array( 'context' => 'edit' ) );
-
-		$get      = rest_get_server()->dispatch( $get );
-		$get_body = $get->get_data();
-
-		$put = new WP_REST_Request( 'PUT', "/wp/v2/posts/{$post->ID}" );
-		$put->set_body_params(
-			array_merge(
-				$get_body,
-				array(
-					'status' => 'publish',
-				)
-			)
-		);
-
-		$response = rest_get_server()->dispatch( $put );
-		$body     = $response->get_data();
-
-		$this->assertEquals( strtotime( $get_body['date'] ), strtotime( $body['date'] ), 'The dates should be equal', 2 );
-		$this->assertEquals( strtotime( $get_body['date_gmt'] ), strtotime( $body['date_gmt'] ), 'The dates should be equal', 2 );
-
-		$this->assertNotEquals( '0000-00-00 00:00:00', get_post( $post->ID )->post_date_gmt );
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_reuses_same_instance() {
-		$this->assertSame(
-			get_post_type_object( 'post' )->get_rest_controller(),
-			get_post_type_object( 'post' )->get_rest_controller()
-		);
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_null_if_post_type_does_not_show_in_rest() {
-		register_post_type(
-			'not_in_rest',
-			array(
-				'show_in_rest' => false,
-			)
-		);
-
-		$this->assertNull( get_post_type_object( 'not_in_rest' )->get_rest_controller() );
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_null_if_class_does_not_exist() {
-		register_post_type(
-			'class_not_found',
-			array(
-				'show_in_rest'          => true,
-				'rest_controller_class' => 'Class_That_Does_Not_Exist',
-			)
-		);
-
-		$this->assertNull( get_post_type_object( 'class_not_found' )->get_rest_controller() );
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_null_if_class_does_not_subclass_rest_controller() {
-		register_post_type(
-			'invalid_class',
-			array(
-				'show_in_rest'          => true,
-				'rest_controller_class' => 'WP_Post',
-			)
-		);
-
-		$this->assertNull( get_post_type_object( 'invalid_class' )->get_rest_controller() );
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_posts_controller_if_custom_class_not_specified() {
-		register_post_type(
-			'test',
-			array(
-				'show_in_rest' => true,
-			)
-		);
-
-		$this->assertInstanceOf(
-			WP_REST_Posts_Controller::class,
-			get_post_type_object( 'test' )->get_rest_controller()
-		);
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_provided_controller_class() {
-		$this->assertInstanceOf(
-			WP_REST_Blocks_Controller::class,
-			get_post_type_object( 'wp_block' )->get_rest_controller()
-		);
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_null_for_invalid_provided_controller() {
-		register_post_type(
-			'test',
-			array(
-				'show_in_rest'    => true,
-				'rest_controller' => new \stdClass(),
-			)
-		);
-
-		$this->assertNull( get_post_type_object( 'test' )->get_rest_controller() );
-	}
-
-	/**
-	 * @ticket 45677
-	 */
-	public function test_get_for_post_type_returns_null_for_controller_class_mismatch() {
-		register_post_type(
-			'test',
-			array(
-				'show_in_rest'          => true,
-				'rest_controller_class' => WP_REST_Posts_Controller::class,
-				'rest_controller'       => new WP_REST_Terms_Controller( 'category' ),
-			)
-		);
-
-		$this->assertNull( get_post_type_object( 'test' )->get_rest_controller() );
-	}
-
-	/**
-	 * @ticket 47779
-	 */
-	public function test_rest_post_type_item_schema_filter_change_property() {
-		add_filter( 'rest_post_item_schema', array( $this, 'filter_post_item_schema' ) );
-
-		// Re-initialize the controller to cache-bust schemas from prior test runs.
-		$GLOBALS['wp_rest_server']->override_by_default = true;
-		$controller                                     = new WP_REST_Posts_Controller( 'post' );
-		$controller->register_routes();
-		$GLOBALS['wp_rest_server']->override_by_default = false;
-
-		$request    = new WP_REST_Request( 'OPTIONS', '/wp/v2/posts' );
-		$response   = rest_get_server()->dispatch( $request );
-		$data       = $response->get_data();
-		$properties = $data['schema']['properties']['content']['properties'];
-
-		$this->assertArrayHasKey( 'new_prop', $properties );
-		$this->assertSame( array( 'new_context' ), $properties['new_prop']['context'] );
-	}
-
-	/**
-	 * @ticket 47779
-	 */
-	public function test_rest_post_type_item_schema_filter_add_property_triggers_doing_it_wrong() {
-		add_filter( 'rest_post_item_schema', array( $this, 'filter_post_item_schema_add_property' ) );
-		$this->setExpectedIncorrectUsage( 'WP_REST_Posts_Controller::get_item_schema' );
-
-		// Re-initialize the controller to cache-bust schemas from prior test runs.
-		$GLOBALS['wp_rest_server']->override_by_default = true;
-		$controller                                     = new WP_REST_Posts_Controller( 'post' );
-		$controller->register_routes();
-		$GLOBALS['wp_rest_server']->override_by_default = false;
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function tearDown() {
 		_unregister_post_type( 'youseeeme' );
 		if ( isset( $this->attachment_id ) ) {

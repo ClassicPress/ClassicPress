@@ -19,12 +19,9 @@ class Tests_Admin_includesMisc extends WP_UnitTestCase {
 			'http://wordpress.org/about/philosophy/#decisions'
 				=> 'wordpress.org/about/philosophy/#&hellip;', // shorten to 32 if > 35 after cleaning
 		);
-<<<<<<< HEAD
-		foreach ( $tests as $k => $v )
-			$this->assertEquals( $v, url_shorten( $k ) );
-=======
+
 		foreach ( $tests as $k => $v ) {
 			$this->assertSame( $v, url_shorten( $k ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		}
 	}
 }

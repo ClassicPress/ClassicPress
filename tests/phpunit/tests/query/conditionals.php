@@ -345,13 +345,8 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/13961
 	 */
 	function test_search_encoded_chars() {
-<<<<<<< HEAD
-		$this->go_to('/search/F%C3%BCnf%2Bbar/');
-		$this->assertEquals( get_query_var( 's' ), 'Fünf+bar' );
-=======
 		$this->go_to( '/search/F%C3%BCnf%2Bbar/' );
 		$this->assertSame( get_query_var( 's' ), 'Fünf+bar' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	// 'category/(.+?)/feed/(feed|rdf|rss|rss2|atom)/?$' => 'index.php?category_name=$matches[1]&feed=$matches[2]',
@@ -1351,7 +1346,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 		$this->assertTrue( is_single( $p2 ) );
 		$this->assertFalse( is_single( $p1 ) );
 	}
-	
+
 	/**
 	 * @ticket 44005
 	 * @group privacy

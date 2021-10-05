@@ -909,11 +909,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		) );
 
 		$posts = $query->get_posts();
-<<<<<<< HEAD
-		$this->assertEquals( 0 , count( $posts ) );
-=======
 		$this->assertSame( 0, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -946,11 +942,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		) );
 
 		$posts = $query->get_posts();
-<<<<<<< HEAD
-		$this->assertEquals( 0 , count( $posts ) );
-=======
 		$this->assertSame( 0, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_tax_query_include_children() {
@@ -977,11 +969,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 4 , count( $posts ) );
-=======
 		$this->assertSame( 4, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$posts = get_posts( array(
 			'fields' => 'ids',
@@ -997,11 +985,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 1 , count( $posts ) );
-=======
 		$this->assertSame( 1, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$posts = get_posts( array(
 			'fields' => 'ids',
@@ -1016,11 +1000,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 3 , count( $posts ) );
-=======
 		$this->assertSame( 3, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$posts = get_posts( array(
 			'fields' => 'ids',
@@ -1036,11 +1016,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 1 , count( $posts ) );
-=======
 		$this->assertSame( 1, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$posts = get_posts( array(
 			'fields' => 'ids',
@@ -1055,11 +1031,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 1 , count( $posts ) );
-=======
 		$this->assertSame( 1, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$posts = get_posts( array(
 			'fields' => 'ids',
@@ -1075,11 +1047,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( 1 , count( $posts ) );
-=======
 		$this->assertSame( 1, count( $posts ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_tax_query_taxonomy_with_attachments() {

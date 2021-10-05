@@ -21,15 +21,9 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 
 		$this->assertTrue( is_array($data) );
 
-<<<<<<< HEAD
-		foreach ($default_headers as $name => $value) {
-			$this->assertTrue(isset($data[$name]));
-			$this->assertEquals($value, $data[$name]);
-=======
 		foreach ( $default_headers as $name => $value ) {
 			$this->assertTrue( isset( $data[ $name ] ) );
 			$this->assertSame( $value, $data[ $name ] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -56,13 +50,8 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$expected['With Spaces'] = 'http://example.com/wp-admin/themes.php?page=With%20Spaces';
 		$expected['testpages'] = 'http://example.com/wp-admin/edit.php?post_type=page&#038;page=testpages';
 
-<<<<<<< HEAD
-		foreach ($expected as $name => $value) {
-			$this->assertEquals( $value, menu_page_url( $name, false ) );
-=======
 		foreach ( $expected as $name => $value ) {
 			$this->assertSame( $value, menu_page_url( $name, false ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 
 		wp_set_current_user( $current_user );

@@ -22,13 +22,8 @@ class Tests_Term_GetTheTerms extends WP_UnitTestCase {
 
 		// Cache should be empty after a set.
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 3, count($tt_1) );
-		$this->assertFalse( wp_cache_get( $post_id, $this->taxonomy . '_relationships') );
-=======
 		$this->assertSame( 3, count( $tt_1 ) );
 		$this->assertFalse( wp_cache_get( $post_id, $this->taxonomy . '_relationships' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// wp_get_object_terms() does not prime the cache.
 		wp_get_object_terms( $post_id, $this->taxonomy, array('fields' => 'names', 'orderby' => 't.term_id') );
@@ -41,13 +36,8 @@ class Tests_Term_GetTheTerms extends WP_UnitTestCase {
 
 		// Cache should be empty after a set.
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count($tt_2) );
-		$this->assertFalse( wp_cache_get( $post_id, $this->taxonomy . '_relationships') );
-=======
 		$this->assertSame( 2, count( $tt_2 ) );
 		$this->assertFalse( wp_cache_get( $post_id, $this->taxonomy . '_relationships' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

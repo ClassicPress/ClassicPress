@@ -308,15 +308,13 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			'order' => 'asc',
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'child-one',
-			'child-two',
-		), wp_list_pluck( $posts, 'post_title' ) );
+				'child-one',
+				'child-two',
+			),
+			wp_list_pluck( $posts, 'post_title' )
+		);
 
 		// Second parent's children
 		$posts = $this->q->query( array(
@@ -325,15 +323,13 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			'order' => 'asc',
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'child-three',
-			'child-four',
-		), wp_list_pluck( $posts, 'post_title' ) );
+				'child-three',
+				'child-four',
+			),
+			wp_list_pluck( $posts, 'post_title' )
+		);
 
 		// Both first and second parent's children
 		$posts = $this->q->query( array(
@@ -342,17 +338,15 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			'order' => 'asc',
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'child-one',
-			'child-two',
-			'child-three',
-			'child-four',
-		), wp_list_pluck( $posts, 'post_title' ) );
+				'child-one',
+				'child-two',
+				'child-three',
+				'child-four',
+			),
+			wp_list_pluck( $posts, 'post_title' )
+		);
 
 		// Third parent's children
 		$posts = $this->q->query( array(
@@ -372,17 +366,15 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			'order' => 'asc',
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'child-three',
-			'child-four',
-			'child-one',
-			'child-two',
-		), wp_list_pluck( $posts, 'post_title' ) );
+				'child-three',
+				'child-four',
+				'child-one',
+				'child-two',
+			),
+			wp_list_pluck( $posts, 'post_title' )
+		);
 	}
 
 	/**
@@ -398,13 +390,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			'order'           => 'desc',
 		) );
 
-<<<<<<< HEAD
-		// order=desc does not influence the order of returned results (returns same order as order=asc)
-		$this->assertEquals( $expected_returned_array, wp_list_pluck( $posts, 'post_title' ) );
-=======
 		// 'order=desc' does not influence the order of returned results (returns same order as 'order=asc').
 		$this->assertSame( $expected_returned_array, wp_list_pluck( $posts, 'post_title' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

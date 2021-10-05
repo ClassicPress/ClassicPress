@@ -251,44 +251,26 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		// local activate, should be invisible for the network
 		activate_plugin($path); // $network_wide = false
 		$active_plugins = wp_get_active_network_plugins();
-<<<<<<< HEAD
-		$this->assertEquals( Array(), $active_plugins );
-=======
-			$this->assertSame( array(), $active_plugins );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( array(), $active_plugins );
 
 		add_action( 'deactivated_plugin', array( $this, '_helper_deactivate_hook' ) );
 
 		// activate the plugin sitewide
 		activate_plugin($path, '', $network_wide = true);
 		$active_plugins = wp_get_active_network_plugins();
-<<<<<<< HEAD
-		$this->assertEquals( Array(WP_PLUGIN_DIR . '/hello.php'), $active_plugins );
-=======
-			$this->assertSame( array( WP_PLUGIN_DIR . '/hello.php' ), $active_plugins );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( array( WP_PLUGIN_DIR . '/hello.php' ), $active_plugins );
 
 		//deactivate the plugin
 		deactivate_plugins($path);
 		$active_plugins = wp_get_active_network_plugins();
-<<<<<<< HEAD
-		$this->assertEquals( Array(), $active_plugins );
+		$this->assertSame( array(), $active_plugins );
 
-		$this->assertEquals( 1, $this->plugin_hook_count ); // testing actions and silent mode
-=======
-			$this->assertSame( array(), $active_plugins );
-
-			$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
 
 		activate_plugin($path, '', $network_wide = true);
 		deactivate_plugins($path, true); // silent
 
-<<<<<<< HEAD
-		$this->assertEquals( 1, $this->plugin_hook_count ); // testing actions and silent mode
-=======
-			$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 1, $this->plugin_hook_count ); // Testing actions and silent mode.
 	}
 
 	/**
@@ -337,13 +319,8 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		add_filter( 'enable_live_network_counts', '__return_false' );
 		self::factory()->user->create( array( 'role' => 'administrator' ) );
 
-<<<<<<< HEAD
-		$count = get_user_count(); // No change, cache not refreshed
-		$this->assertEquals( $start_count, $count );
-=======
-			$count = get_user_count(); // No change, cache not refreshed.
-			$this->assertSame( $start_count, $count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$count = get_user_count(); // No change, cache not refreshed.
+		$this->assertSame( $start_count, $count );
 
 		wp_update_network_counts(); // Magic happens here
 
@@ -615,53 +592,5 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 
 		$this->assertSame( (string) self::$different_site_ids[0], $network->blog_id );
 	}
-<<<<<<< HEAD
 }
-=======
-
-		/**
-		 * @ticket 42251
-		 */
-		public function test_get_network_not_found_cache() {
-			global $wpdb;
-
-			$new_network_id = $this->_get_next_network_id();
-			$this->assertNull( get_network( $new_network_id ) );
-
-			$num_queries = $wpdb->num_queries;
-			$this->assertNull( get_network( $new_network_id ) );
-			$this->assertSame( $num_queries, $wpdb->num_queries );
-		}
-
-		/**
-		 * @ticket 42251
-		 */
-		public function test_get_network_not_found_cache_clear() {
-			$new_network_id = $this->_get_next_network_id();
-			$this->assertNull( get_network( $new_network_id ) );
-
-			$new_network = $this->factory()->network->create_and_get();
-
-			// Double-check we got the ID of the new network correct.
-			$this->assertSame( $new_network_id, $new_network->id );
-
-			// Verify that if we fetch the network now, it's no longer false.
-			$fetched_network = get_network( $new_network_id );
-			$this->assertInstanceOf( 'WP_Network', $fetched_network );
-			$this->assertSame( $new_network_id, $fetched_network->id );
-		}
-
-		/**
-		 * Gets the ID of the site with the highest ID.
-		 * @return int
-		 */
-		protected function _get_next_network_id() {
-			global $wpdb;
-			// Create an extra network, just to make sure we know the ID of the following one.
-			static::factory()->network->create();
-			return (int) $wpdb->get_var( 'SELECT id FROM ' . $wpdb->site . ' ORDER BY id DESC LIMIT 1' ) + 1;
-		}
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 endif;

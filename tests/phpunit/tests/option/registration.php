@@ -47,11 +47,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 			'default' => 'Fuck Cancer'
 		));
 
-<<<<<<< HEAD
-		$this->assertEquals( 'Fuck Cancer', get_option( 'test_default' ) );
-=======
-		$this->assertSame( 'Got that Viper with them rally stripes', get_option( 'test_default' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'Fuck Cancer', get_option( 'test_default' ) );
 	}
 
 	/**
@@ -62,13 +58,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 			'default' => 'Fuck Cancer'
 		));
 
-<<<<<<< HEAD
-		$this->assertEquals( 'Fuck Leukemia', get_option( 'test_default', 'Fuck Leukemia' ) );
-=======
-		// This set of tests/references (and a previous version) are in support of Viper007Bond.
-		// His Viper doesn't have rally stripes, but for the sake of the Big Tymers, we'll go with it.
-		$this->assertSame( 'We the #1 Stunnas', get_option( 'test_default', 'We the #1 Stunnas' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'Fuck Leukemia', get_option( 'test_default', 'Fuck Leukemia' ) );
 	}
 
 	/**

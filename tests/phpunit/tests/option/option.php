@@ -17,15 +17,9 @@ class Tests_Option_Option extends WP_UnitTestCase {
 
 		$this->assertFalse( get_option( 'doesnotexist' ) );
 		$this->assertTrue( add_option( $key, $value ) );
-<<<<<<< HEAD
-		$this->assertEquals( $value, get_option( $key ) );
-		$this->assertFalse( add_option( $key, $value ) );  // Already exists
-		$this->assertFalse( update_option( $key, $value ) );  // Value is the same
-=======
 		$this->assertSame( $value, get_option( $key ) );
 		$this->assertFalse( add_option( $key, $value ) );    // Already exists.
 		$this->assertFalse( update_option( $key, $value ) ); // Value is the same.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertTrue( update_option( $key, $value2 ) );
 		$this->assertSame( $value2, get_option( $key ) );
 		$this->assertFalse( add_option( $key, $value ) );

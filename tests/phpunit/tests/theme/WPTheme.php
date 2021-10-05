@@ -35,22 +35,6 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	function test_new_WP_Theme_top_level() {
 		$theme = new WP_Theme( 'theme1', $this->theme_root );
 
-<<<<<<< HEAD
-		//Meta
-		$this->assertEquals( 'My Theme', $theme->get('Name') );
-		$this->assertEquals( 'http://example.org/',$theme->get('ThemeURI') );
-		$this->assertEquals( 'An example theme', $theme->get('Description') );
-		$this->assertEquals( 'Minnie Bannister', $theme->get('Author') );
-		$this->assertEquals( 'http://example.com/', $theme->get('AuthorURI') );
-		$this->assertEquals( '1.3', $theme->get('Version') );
-		$this->assertEquals( '', $theme->get('Template') );
-		$this->assertEquals( 'publish', $theme->get('Status') );
-		$this->assertEquals( array(), $theme->get('Tags') );
-
-		//Important
-		$this->assertEquals( 'theme1', $theme->get_stylesheet() );
-		$this->assertEquals( 'theme1', $theme->get_template() );
-=======
 		// Meta.
 		$this->assertSame( 'My Theme', $theme->get( 'Name' ) );
 		$this->assertSame( 'http://example.org/', $theme->get( 'ThemeURI' ) );
@@ -65,34 +49,17 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		// Important.
 		$this->assertSame( 'theme1', $theme->get_stylesheet() );
 		$this->assertSame( 'theme1', $theme->get_template() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_new_WP_Theme_subdir() {
 		$theme = new WP_Theme( 'subdir/theme2', $this->theme_root );
 
-<<<<<<< HEAD
-		//Meta
-		$this->assertEquals( 'My Subdir Theme', $theme->get('Name') );
-		$this->assertEquals( 'http://example.org/',$theme->get('ThemeURI') );
-		$this->assertEquals( 'An example theme in a sub directory', $theme->get('Description') );
-		$this->assertEquals( 'Mr. ClassicPress', $theme->get('Author') );
-		$this->assertEquals( 'https://www.classicpress.net', $theme->get('AuthorURI') );
-		$this->assertEquals( '0.1', $theme->get('Version') );
-		$this->assertEquals( '', $theme->get('Template') );
-		$this->assertEquals( 'publish', $theme->get('Status') );
-		$this->assertEquals( array(), $theme->get('Tags') );
-
-		//Important
-		$this->assertEquals( 'subdir/theme2', $theme->get_stylesheet() );
-		$this->assertEquals( 'subdir/theme2', $theme->get_template() );
-=======
 		// Meta.
 		$this->assertSame( 'My Subdir Theme', $theme->get( 'Name' ) );
 		$this->assertSame( 'http://example.org/', $theme->get( 'ThemeURI' ) );
 		$this->assertSame( 'An example theme in a sub directory', $theme->get( 'Description' ) );
-		$this->assertSame( 'Mr. WordPress', $theme->get( 'Author' ) );
-		$this->assertSame( 'http://wordpress.org/', $theme->get( 'AuthorURI' ) );
+		$this->assertSame( 'Mr. ClassicPress', $theme->get( 'Author' ) );
+		$this->assertSame( 'https://www.classicpress.net', $theme->get( 'AuthorURI' ) );
 		$this->assertSame( '0.1', $theme->get( 'Version' ) );
 		$this->assertSame( '', $theme->get( 'Template' ) );
 		$this->assertSame( 'publish', $theme->get( 'Status' ) );
@@ -101,7 +68,6 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		// Important.
 		$this->assertSame( 'subdir/theme2', $theme->get_stylesheet() );
 		$this->assertSame( 'subdir/theme2', $theme->get_template() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -111,28 +77,12 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		// This is what get_theme_data() does when you pass it a style.css file for a theme in a subdir.
 		$theme = new WP_Theme( 'theme2', $this->theme_root . '/subdir' );
 
-<<<<<<< HEAD
-		//Meta
-		$this->assertEquals( 'My Subdir Theme', $theme->get('Name') );
-		$this->assertEquals( 'http://example.org/',$theme->get('ThemeURI') );
-		$this->assertEquals( 'An example theme in a sub directory', $theme->get('Description') );
-		$this->assertEquals( 'Mr. ClassicPress', $theme->get('Author') );
-		$this->assertEquals( 'https://www.classicpress.net', $theme->get('AuthorURI') );
-		$this->assertEquals( '0.1', $theme->get('Version') );
-		$this->assertEquals( '', $theme->get('Template') );
-		$this->assertEquals( 'publish', $theme->get('Status') );
-		$this->assertEquals( array(), $theme->get('Tags') );
-
-		//Important
-		$this->assertEquals( 'subdir/theme2', $theme->get_stylesheet() );
-		$this->assertEquals( 'subdir/theme2', $theme->get_template() );
-=======
 		// Meta.
 		$this->assertSame( 'My Subdir Theme', $theme->get( 'Name' ) );
 		$this->assertSame( 'http://example.org/', $theme->get( 'ThemeURI' ) );
 		$this->assertSame( 'An example theme in a sub directory', $theme->get( 'Description' ) );
-		$this->assertSame( 'Mr. WordPress', $theme->get( 'Author' ) );
-		$this->assertSame( 'http://wordpress.org/', $theme->get( 'AuthorURI' ) );
+		$this->assertSame( 'Mr. ClassicPress', $theme->get( 'Author' ) );
+		$this->assertSame( 'https://www.classicpress.net', $theme->get( 'AuthorURI' ) );
 		$this->assertSame( '0.1', $theme->get( 'Version' ) );
 		$this->assertSame( '', $theme->get( 'Template' ) );
 		$this->assertSame( 'publish', $theme->get( 'Status' ) );
@@ -141,7 +91,6 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		// Important.
 		$this->assertSame( 'subdir/theme2', $theme->get_stylesheet() );
 		$this->assertSame( 'subdir/theme2', $theme->get_template() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -157,13 +106,8 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		$this->assertSame( 'theme%20with%20spaces', basename( $theme->get_stylesheet_directory_uri() ) );
 		$this->assertSame( 'theme%20with%20spaces', basename( $theme->get_template_directory_uri() ) );
 
-<<<<<<< HEAD
-		// Check that wp_customize_url() uses url encoding, as it is a query arg (spaces become +)
-		$this->assertEquals( admin_url( 'customize.php?theme=theme+with+spaces' ), wp_customize_url( 'theme with spaces' ) );
-=======
 		// Check that wp_customize_url() uses URL encoding, as it is a query arg (spaces become +).
 		$this->assertSame( admin_url( 'customize.php?theme=theme+with+spaces' ), wp_customize_url( 'theme with spaces' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

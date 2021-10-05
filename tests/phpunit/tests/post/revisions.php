@@ -48,15 +48,9 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		$this->assertCount( 2, $revisions );
 
 		$lastrevision = end( $revisions );
-<<<<<<< HEAD
-		$this->assertEquals( 'I cant spel werds.', $lastrevision->post_content );
-		// https://core.trac.wordpress.org/ticket/16215
-		$this->assertEquals( self::$author_user_id , $lastrevision->post_author);
-=======
 		$this->assertSame( 'I cant spel werds.', $lastrevision->post_content );
-		// #16215
-		$this->assertEquals( self::$author_user_id, $lastrevision->post_author );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		// https://core.trac.wordpress.org/ticket/16215
+		$this->assertSame( self::$author_user_id , (int) $lastrevision->post_author);
 
 		wp_restore_post_revision( $lastrevision->ID );
 

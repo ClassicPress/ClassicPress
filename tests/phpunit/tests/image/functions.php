@@ -166,13 +166,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_tempnam();
 				$ret = wp_save_image_file( $file, $img, $mime_type, 1 );
 				$this->assertNotEmpty( $ret );
-<<<<<<< HEAD
-				$this->assertNotInstanceOf( 'WP_Error', $ret );
-				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
-=======
 				$this->assertNotWPError( $ret );
 				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 				// Clean up
 				unlink( $file );
@@ -212,13 +207,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 			// Make assertions
 			$this->assertNotEmpty( $ret );
-<<<<<<< HEAD
-			$this->assertNotInstanceOf( 'WP_Error', $ret );
-			$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
-=======
 			$this->assertNotWPError( $ret );
 			$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// Clean up
 			unlink( $file );
@@ -271,13 +261,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_unique_filename( $temp, uniqid() . ".$ext" );
 				$ret = $img->save( trailingslashit( $temp ) . $file );
 				$this->assertNotEmpty( $ret );
-<<<<<<< HEAD
-				$this->assertNotInstanceOf( 'WP_Error', $ret );
-				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
-=======
 				$this->assertNotWPError( $ret );
 				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 				unlink( $ret['path'] );
 			}
 

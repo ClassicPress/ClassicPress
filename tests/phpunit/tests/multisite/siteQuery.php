@@ -702,20 +702,16 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 		) );
 		$number_of_queries = $wpdb->num_queries;
 
-		$query_2 = $q->query( array(
-			'fields'     => 'ids',
-			'network_id' => self::$network_ids['wordpress.org/'],
-			'number'     => 3,
-			'order'      => 'ASC',
-			'count'      => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $number_of_queries, $wpdb->num_queries );
-=======
+		$query_2 = $q->query(
+			array(
+				'fields'     => 'ids',
+				'network_id' => self::$network_ids['wordpress.org/'],
+				'number'     => 3,
+				'order'      => 'ASC',
+				'count'      => true,
 				)
 			);
 			$this->assertSame( $number_of_queries, $wpdb->num_queries );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -734,18 +730,13 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 
 		$number_of_queries = $wpdb->num_queries;
 
-		$query_2 = $q->query( array(
-			'fields'     => 'ids',
-			'network_id' => self::$network_ids['wordpress.org/'],
-			'number'     => 3,
-			'order'      => 'ASC',
-			'count'      => true,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $number_of_queries + 1, $wpdb->num_queries );
-	}
-}
-=======
+		$query_2 = $q->query(
+			array(
+				'fields'     => 'ids',
+				'network_id' => self::$network_ids['wordpress.org/'],
+				'number'     => 3,
+				'order'      => 'ASC',
+				'count'      => true,
 				)
 			);
 			$this->assertSame( $number_of_queries + 1, $wpdb->num_queries );
@@ -971,6 +962,5 @@ class Tests_Multisite_Site_Query extends WP_UnitTestCase {
 			);
 		}
 	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 endif;

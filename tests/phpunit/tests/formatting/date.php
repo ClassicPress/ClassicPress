@@ -13,14 +13,9 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 */
 	function test_get_date_from_gmt_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
-<<<<<<< HEAD
-		$gmt = $local = '2012-01-01 12:34:56';
-		$this->assertEquals( $local, get_date_from_gmt( $gmt ) );
-=======
 		$local = '2012-01-01 12:34:56';
 		$gmt   = $local;
 		$this->assertSame( $local, get_date_from_gmt( $gmt ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -40,14 +35,9 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 */
 	function test_get_gmt_from_date_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
-<<<<<<< HEAD
-		$local = $gmt = '2012-01-01 12:34:56';
-		$this->assertEquals( $gmt, get_gmt_from_date( $local ) );
-=======
 		$local = '2012-01-01 12:34:56';
 		$gmt   = $local;
 		$this->assertSame( $gmt, get_gmt_from_date( $local ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -64,14 +54,9 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34279
 	 */
 	function test_get_date_and_time_from_gmt_no_timezone() {
-<<<<<<< HEAD
-		$gmt = $local = '2012-01-01 12:34:56';
-		$this->assertEquals( $gmt, get_date_from_gmt( $local ) );
-=======
 		$local = '2012-01-01 12:34:56';
 		$gmt   = $local;
 		$this->assertSame( $gmt, get_date_from_gmt( $local ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -111,117 +96,4 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 		$gmt = gmdate( 'Y-m-d H:i:s' );
 		$this->assertEquals( strtotime( $gmt ), strtotime( get_gmt_from_date( $local ) ), 'The dates should be equal', 2 );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 31809
-	 *
-	 * @dataProvider timezone_provider
-	 */
-	public function test_gmt_from_date_correct_time( $timezone_string, $gmt_offset ) {
-		update_option( 'timezone_string', $timezone_string );
-		update_option( 'gmt_offset', $gmt_offset );
-
-		$local       = new DateTimeImmutable( 'now', wp_timezone() );
-		$utc         = $local->setTimezone( new DateTimeZone( 'UTC' ) );
-		$mysql_local = $local->format( 'Y-m-d H:i:s' );
-
-		$this->assertSame( $utc->format( DATE_RFC3339 ), get_gmt_from_date( $mysql_local, DATE_RFC3339 ) );
-	}
-
-	/**
-	 * @ticket 31809
-	 *
-	 * @dataProvider timezone_provider
-	 */
-	public function test_date_from_gmt_correct_time( $timezone_string, $gmt_offset ) {
-		update_option( 'timezone_string', $timezone_string );
-		update_option( 'gmt_offset', $gmt_offset );
-
-		$local     = new DateTimeImmutable( 'now', wp_timezone() );
-		$utc       = $local->setTimezone( new DateTimeZone( 'UTC' ) );
-		$mysql_utc = $utc->format( 'Y-m-d H:i:s' );
-
-		$this->assertSame( $local->format( DATE_RFC3339 ), get_date_from_gmt( $mysql_utc, DATE_RFC3339 ) );
-	}
-
-	/**
-	 * @ticket 31809
-	 *
-	 * @dataProvider timezone_provider
-	 */
-	public function test_is8601_to_datetime_correct_time( $timezone_string, $gmt_offset ) {
-		update_option( 'timezone_string', $timezone_string );
-		update_option( 'gmt_offset', $gmt_offset );
-
-		$format       = 'Ymd\TH:i:sO';
-		$format_no_tz = 'Ymd\TH:i:s';
-
-		$local = new DateTimeImmutable( 'now', wp_timezone() );
-		$utc   = $local->setTimezone( new DateTimeZone( 'UTC' ) );
-
-		$this->assertSame(
-			$local->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $local->format( $format ) ),
-			'Local time from local time.'
-		);
-		$this->assertSame(
-			$utc->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $local->format( $format ), 'gmt' ),
-			'UTC time from local time.'
-		);
-
-		$this->assertSame(
-			$local->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $local->format( $format_no_tz ) ),
-			'Local time from local time w/o timezone.'
-		);
-		$this->assertSame(
-			$utc->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $local->format( $format_no_tz ), 'gmt' ),
-			'UTC time from local time w/o timezone.'
-		);
-
-		$this->assertSame(
-			$local->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $utc->format( $format ) ),
-			'Local time from UTC time.'
-		);
-		$this->assertSame(
-			$utc->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $utc->format( $format ), 'gmt' ),
-			'UTC time from UTC time.'
-		);
-
-		$this->assertSame(
-			$local->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $utc->format( $format_no_tz ) . 'Z' ),
-			'Local time from UTC w/ Z timezone.'
-		);
-		$this->assertSame(
-			$utc->format( 'Y-m-d H:i:s' ),
-			iso8601_to_datetime( $utc->format( $format_no_tz ) . 'Z', 'gmt' ),
-			'UTC time from UTC w/ Z timezone.'
-		);
-	}
-
-	/**
-	 * Data provider to test different timezone modes.
-	 *
-	 * @return array
-	 */
-	public function timezone_provider() {
-		return array(
-			array(
-				'timezone_string' => 'Europe/Kiev',
-				'gmt_offset'      => 3,
-			),
-			array(
-				'timezone_string' => '',
-				'gmt_offset'      => 3,
-			),
-		);
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

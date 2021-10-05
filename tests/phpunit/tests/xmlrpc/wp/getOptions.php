@@ -16,11 +16,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
 		$this->assertInternalType( 'array', $result );
-<<<<<<< HEAD
-		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
-=======
-		$this->assertSame( 'WordPress', $result['software_name']['value'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
 	}
 
 	function test_option_value() {
@@ -43,13 +39,8 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
 		$this->assertInternalType( 'array', $result );
 
-<<<<<<< HEAD
 		// Read Only options
-		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
-=======
-		// Read-only options.
-		$this->assertSame( 'WordPress', $result['software_name']['value'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
 		$this->assertSame( $wp_version, $result['software_version']['value'] );
@@ -82,13 +73,8 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( current_theme_supports( 'post-thumbnails' ), $result['post_thumbnail']['value'] );
 		$this->assertTrue( $result['post_thumbnail']['readonly'] );
 
-<<<<<<< HEAD
-		// Updatable options
-		$this->assertEquals( get_option( 'gmt_offset' ), $result['time_zone']['value'] );
-=======
 		// Updatable options.
 		$this->assertSame( get_option( 'gmt_offset' ), $result['time_zone']['value'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertTrue( $result['time_zone']['readonly'] );
 
 		$this->assertSame( get_option( 'blogname' ), $result['blog_title']['value'] );
@@ -142,13 +128,8 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'administrator', 'administrator' ) );
 		$this->assertInternalType( 'array', $result );
 
-<<<<<<< HEAD
 		// Read Only options
-		$this->assertEquals( 'ClassicPress', $result['software_name']['value'] );
-=======
-		// Read-only options.
-		$this->assertSame( 'WordPress', $result['software_name']['value'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
 		$this->assertTrue( $result['software_name']['readonly'] );
 
 		$this->assertSame( $wp_version, $result['software_version']['value'] );
@@ -181,13 +162,8 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( current_theme_supports( 'post-thumbnails' ), $result['post_thumbnail']['value'] );
 		$this->assertTrue( $result['post_thumbnail']['readonly'] );
 
-<<<<<<< HEAD
-		// Updatable options
-		$this->assertEquals( get_option( 'gmt_offset' ), $result['time_zone']['value'] );
-=======
 		// Updatable options.
 		$this->assertSame( get_option( 'gmt_offset' ), $result['time_zone']['value'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertFalse( $result['time_zone']['readonly'] );
 
 		$this->assertSame( get_option( 'blogname' ), $result['blog_title']['value'] );

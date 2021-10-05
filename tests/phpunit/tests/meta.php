@@ -137,52 +137,48 @@ class Tests_Meta extends WP_UnitTestCase {
 		// User found is not locally defined author (it's the admin)
 		$this->assertNotEquals( $this->author->user_login, $u[0]->user_login );
 
-<<<<<<< HEAD
-		// Test EXISTS and NOT EXISTS together, no users should be found
-		$this->assertEquals( 0, count( get_users( array(
-=======
 		// Test EXISTS and NOT EXISTS together, no users should be found.
 		$this->assertSame(
 			0,
 			count(
 				get_users(
 					array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'meta_query' => array(
-				array( 'key' => 'meta_key', 'compare' => 'NOT EXISTS' ),
-				array( 'key' => 'delete_meta_key', 'compare' => 'EXISTS' )
+						'meta_query' => array(
+							array( 'key' => 'meta_key', 'compare' => 'NOT EXISTS' ),
+							array( 'key' => 'delete_meta_key', 'compare' => 'EXISTS' )
+						)
+					)
+				)
 			)
-		) ) ) );
+		);
 
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( get_users( array(
-=======
 		$this->assertSame(
 			2,
 			count(
 				get_users(
 					array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'meta_query' => array(
-				array( 'key' => 'non_existing_meta', 'compare' => 'NOT EXISTS' )
+						'meta_query' => array(
+							array( 'key' => 'non_existing_meta', 'compare' => 'NOT EXISTS' )
+						)
+					)
+				)
 			)
-		) ) ) );
+		);
 
 		delete_metadata( 'user', $this->author->ID, 'meta_key' );
 
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( get_users( array(
-=======
 		$this->assertSame(
 			2,
 			count(
 				get_users(
 					array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'meta_query' => array(
-				array( 'key' => 'meta_key', 'compare' => 'NOT EXISTS' )
+						'meta_query' => array(
+							array( 'key' => 'meta_key', 'compare' => 'NOT EXISTS' )
+						)
+					)
+				)
 			)
-		) ) ) );
+		);
 	}
 
 	function test_metadata_slashes() {

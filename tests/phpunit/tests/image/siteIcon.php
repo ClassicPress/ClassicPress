@@ -106,19 +106,11 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 		$object = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 
-<<<<<<< HEAD
-		$this->assertEquals( $object['post_title'],     'cropped-test-image.jpg' );
-		$this->assertEquals( $object['context'],        'site-icon' );
-		$this->assertEquals( $object['post_mime_type'], 'image/jpeg' );
-		$this->assertEquals( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
-		$this->assertEquals( basename( $object['guid'] ),         'cropped-test-image.jpg' );
-=======
-		$this->assertSame( $object['post_title'], 'cropped-test-image.jpg' );
-		$this->assertSame( $object['context'], 'site-icon' );
+		$this->assertSame( $object['post_title'],     'cropped-test-image.jpg' );
+		$this->assertSame( $object['context'],        'site-icon' );
 		$this->assertSame( $object['post_mime_type'], 'image/jpeg' );
-		$this->assertSame( $object['post_content'], $cropped );
-		$this->assertSame( $object['guid'], $cropped );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
+		$this->assertSame( basename( $object['guid'] ),         'cropped-test-image.jpg' );
 	}
 
 	function test_insert_cropped_attachment() {

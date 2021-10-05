@@ -305,11 +305,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( '1970-01-01 00:00:00', $fetched_post->post_date );
-=======
-		$this->assertSame( current_time( 'Y-m-d' ), substr( $fetched_post->post_date, 0, 10 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( '1970-01-01 00:00:00', $fetched_post->post_date );
 	}
 
 	/**
@@ -322,11 +318,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( '1970-01-01 00:00:00', $fetched_post->post_date_gmt );
-=======
-		$this->assertSame( '0000-00-00', substr( $fetched_post->post_date_gmt, 0, 10 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( '1970-01-01 00:00:00', $fetched_post->post_date_gmt );
 	}
 
 	/**
@@ -339,11 +331,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( $date_string , $fetched_post->post_date );
-=======
-		$this->assertSame( $date_string, $fetched_post->post_date );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $date_string , $fetched_post->post_date );
 	}
 
 	/**
@@ -356,11 +344,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( $date_string , $fetched_post->post_date_gmt );
-=======
-		$this->assertSame( $date_string, $fetched_post->post_date_gmt );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $date_string , $fetched_post->post_date_gmt );
 	}
 
 	/**
@@ -373,11 +357,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( $date_string , $fetched_post->post_date );
-=======
 		$this->assertSame( $date_string, $fetched_post->post_date );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -390,11 +370,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
-<<<<<<< HEAD
-		$this->assertEquals( $date_string , $fetched_post->post_date_gmt );
-=======
 		$this->assertSame( $date_string, $fetched_post->post_date_gmt );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 }

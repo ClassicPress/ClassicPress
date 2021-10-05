@@ -52,13 +52,8 @@ class Tests_XMLRPC_wp_getTerm extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getTerm( array( 1, 'editor', 'editor', 'category', '' ) );
 		$this->assertIXRError( $result );
-<<<<<<< HEAD
-		$this->assertEquals( 500, $result->code );
-		$this->assertEquals( __('Empty Term.'), $result->message );
-=======
 		$this->assertSame( 500, $result->code );
 		$this->assertSame( __( 'Empty Term.' ), $result->message );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_invalid_term() {
@@ -94,21 +89,12 @@ class Tests_XMLRPC_wp_getTerm extends WP_XMLRPC_UnitTestCase {
 		$this->assertStringMatchesFormat( '%d', $result['term_taxonomy_id'] );
 		$this->assertStringMatchesFormat( '%d', $result['parent'] );
 
-<<<<<<< HEAD
-		// Check Data
-		$this->assertEquals( 0, $result['count'] );
-		$this->assertEquals( $term['name'], $result['name'] );
-		$this->assertEquals( $term['slug'], $result['slug'] );
-		$this->assertEquals( 'category', $result['taxonomy'] );
-		$this->assertEquals( $term['description'], $result['description'] );
-=======
 		// Check data.
 		$this->assertSame( 0, $result['count'] );
 		$this->assertSame( $term['name'], $result['name'] );
 		$this->assertSame( $term['slug'], $result['slug'] );
 		$this->assertSame( 'category', $result['taxonomy'] );
 		$this->assertSame( $term['description'], $result['description'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

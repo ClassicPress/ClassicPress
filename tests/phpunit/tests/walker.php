@@ -133,19 +133,11 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		// It's not clear what the output of this "should" be
 
-<<<<<<< HEAD
-		// Currently the item is simply returned
-		$this->assertEquals( '<li>1</li>', $output );
-
-		// But as we've only asked for the first depth maybe nothing should be returned?
-		//$this->assertEquals( '', $output );
-=======
 		// Currently the item is simply returned.
 		$this->assertSame( '<li>1</li>', $output );
 
 		// But as we've only asked for the first depth maybe nothing should be returned?
 		// $this->assertSame( '', $output );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -170,16 +162,6 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		// It's not clear what the output of this "should" be
 
-<<<<<<< HEAD
-		// Currently the first item is simply returned
-		$this->assertEquals( '<li>4</li>', $output );
-
-		// But as we've only asked for the first depth maybe nothing should be returned?
-		//$this->assertEquals( '', $output );
-
-		// Or maybe all items which are missing parents should simply be treat top level?
-		//$this->assertEquals( '<li>4</li><li>5</li><li>6</li>', $output );
-=======
 		// Currently the first item is simply returned.
 		$this->assertSame( '<li>4</li>', $output );
 
@@ -188,7 +170,6 @@ class Tests_Walker extends WP_UnitTestCase {
 
 		// Or maybe all items which are missing parents should simply be treat top level?
 		// $this->assertSame( '<li>4</li><li>5</li><li>6</li>', $output );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 

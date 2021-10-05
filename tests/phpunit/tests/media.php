@@ -204,24 +204,6 @@ CAP;
 		$this->assertSame( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 34595
-	 */
-	function test_img_caption_shortcode_has_aria_describedby() {
-		$result = img_caption_shortcode(
-			array(
-				'width' => 20,
-				'id'    => 'myId',
-			),
-			$this->img_content . $this->html_content
-		);
-
-		$this->assertSame( 1, preg_match_all( '/aria-describedby="caption-myId"/', $result, $_r ) );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	function test_add_remove_oembed_provider() {
 		wp_oembed_add_provider( 'http://foo.bar/*', 'http://foo.bar/oembed' );
 		$this->assertTrue( wp_oembed_remove_provider( 'http://foo.bar/*' ) );
@@ -340,19 +322,7 @@ https://w.org</a>'
 
 		$prepped = wp_prepare_attachment_for_js( $post );
 		$this->assertInternalType( 'array', $prepped );
-<<<<<<< HEAD
-		$this->assertEquals( 0, $prepped['uploadedTo'] );
-		$this->assertEquals( '', $prepped['mime'] );
-		$this->assertEquals( '', $prepped['type'] );
-		$this->assertEquals( '', $prepped['subtype'] );
 		// https://core.trac.wordpress.org/ticket/21963, there will be a guid always, so there will be a URL
-=======
-		$this->assertSame( 0, $prepped['uploadedTo'] );
-		$this->assertSame( '', $prepped['mime'] );
-		$this->assertSame( '', $prepped['type'] );
-		$this->assertSame( '', $prepped['subtype'] );
-		// #21963, there will be a GUID always, so there will be a URL.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNotEquals( '', $prepped['url'] );
 		$this->assertSame( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
 
@@ -418,19 +388,11 @@ https://w.org</a>'
 		$gb = $mb * 1024;
 		$tb = $gb * 1024;
 
-<<<<<<< HEAD
-		// test if boundaries are correct
-		$this->assertEquals( '1TB', wp_convert_bytes_to_hr( $tb ) );
-		$this->assertEquals( '1GB', wp_convert_bytes_to_hr( $gb ) );
-		$this->assertEquals( '1MB', wp_convert_bytes_to_hr( $mb ) );
-		$this->assertEquals( '1KB', wp_convert_bytes_to_hr( $kb ) );
-=======
 		// Test if boundaries are correct.
 		$this->assertSame( '1TB', wp_convert_bytes_to_hr( $tb ) );
 		$this->assertSame( '1GB', wp_convert_bytes_to_hr( $gb ) );
 		$this->assertSame( '1MB', wp_convert_bytes_to_hr( $mb ) );
 		$this->assertSame( '1KB', wp_convert_bytes_to_hr( $kb ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( '1 TB', size_format( $tb ) );
 		$this->assertSame( '1 GB', size_format( $gb ) );
@@ -450,15 +412,9 @@ https://w.org</a>'
 		$hr = wp_convert_bytes_to_hr( $gb - $mb - $kb );
 		$this->assertEquals( 1022.99902344, (float) str_replace( ',', '.', $hr ), 'The values should be equal', 0.0001 );
 
-<<<<<<< HEAD
-		// edge
-		$this->assertEquals( '-1B', wp_convert_bytes_to_hr( -1 ) );
-		$this->assertEquals( '0B', wp_convert_bytes_to_hr( 0 ) );
-=======
 		// Edge.
 		$this->assertSame( '-1B', wp_convert_bytes_to_hr( -1 ) );
 		$this->assertSame( '0B', wp_convert_bytes_to_hr( 0 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1019,37 +975,6 @@ VIDEO;
 		$this->assertSame( $attachment_id, attachment_url_to_postid( $image_url ) );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 39768
-	 */
-	function test_attachment_url_to_postid_should_be_case_sensitive() {
-		$image_path_lower_case    = '2014/11/' . $this->img_name;
-		$attachment_id_lower_case = self::factory()->attachment->create_object(
-			$image_path_lower_case,
-			0,
-			array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type'      => 'attachment',
-			)
-		);
-
-		$image_path_upper_case    = '2014/11/' . ucfirst( $this->img_name );
-		$attachment_id_upper_case = self::factory()->attachment->create_object(
-			$image_path_upper_case,
-			0,
-			array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type'      => 'attachment',
-			)
-		);
-
-		$image_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path_upper_case;
-		$this->assertSame( $attachment_id_upper_case, attachment_url_to_postid( $image_url ) );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	function test_attachment_url_to_postid_filtered() {
 		$image_path = '2014/11/' . $this->img_name;
 		$attachment_id = self::factory()->attachment->create_object( $image_path, 0, array(
@@ -2296,26 +2221,7 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/35218
-=======
-	 * Test created timestamp is properly read from an MP4 file.
-	 *
-	 * This MP4 video file has an AAC audio track, so it can be used to test
-	 *`wp_read_audio_metadata()`.
-	 *
-	 * @ticket 42017
-	 */
-	function test_wp_read_audio_metadata_adds_creation_date_with_mp4() {
-		$video    = DIR_TESTDATA . '/uploads/small-video.mp4';
-		$metadata = wp_read_audio_metadata( $video );
-
-		$this->assertSame( 1269120551, $metadata['created_timestamp'] );
-	}
-
-	/**
-	 * @ticket 35218
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_wp_read_video_metadata_adds_creation_date_with_quicktime() {
 		$video    = DIR_TESTDATA . '/uploads/small-video.mov';
@@ -2429,373 +2335,6 @@ EOF;
 
 		$this->assertNotEquals( $expected, $url );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 50367
-	 */
-	function test_wp_filter_content_tags_width_height() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
-
-		$img                 = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$img_no_width_height = str_replace( ' width="' . $size_array[0] . '"', '', $img );
-		$img_no_width_height = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
-		$img_no_width        = str_replace( ' width="' . $size_array[0] . '"', '', $img );
-		$img_no_height       = str_replace( ' height="' . $size_array[1] . '"', '', $img );
-
-		$hwstring = image_hwstring( $size_array[0], $size_array[1] );
-
-		// Manually add width and height to the markup from get_image_tag().
-		$respimg_no_width_height = str_replace( '<img ', '<img ' . $hwstring, $img_no_width_height );
-
-		$content = '
-			<p>Image, with width and height. Should NOT be modified.</p>
-			%1$s
-
-			<p>Image, no width and height attributes. Should have width, height, srcset and sizes (from matching the file name).</p>
-			%2$s
-
-			<p>Image, no width but height attribute. Should NOT be modified.</p>
-			%3$s
-
-			<p>Image, no height but width attribute. Should NOT be modified.</p>
-			%4$s';
-
-		$content_unfiltered = sprintf( $content, $img, $img_no_width_height, $img_no_width, $img_no_height );
-		$content_filtered   = sprintf( $content, $img, $respimg_no_width_height, $img_no_width, $img_no_height );
-
-		// Do not add loading, srcset, and sizes.
-		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-
-		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
-
-		remove_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
-		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50367
-	 */
-	function test_wp_filter_content_tags_loading_lazy() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
-
-		$img                 = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$img_xhtml           = str_replace( ' />', '/>', $img );
-		$img_html5           = str_replace( ' />', '>', $img );
-		$img_no_width_height = str_replace( ' width="' . $size_array[0] . '"', '', $img );
-		$img_no_width_height = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
-		$iframe              = '<iframe src="https://www.example.com"></iframe>';
-
-		$lazy_img       = wp_img_tag_add_loading_attr( $img, 'test' );
-		$lazy_img_xhtml = wp_img_tag_add_loading_attr( $img_xhtml, 'test' );
-		$lazy_img_html5 = wp_img_tag_add_loading_attr( $img_html5, 'test' );
-
-		// The following should not be modified because there already is a 'loading' attribute.
-		$img_eager = str_replace( ' />', ' loading="eager" />', $img );
-
-		$content = '
-			<p>Image, standard.</p>
-			%1$s
-			<p>Image, XHTML 1.0 style (no space before the closing slash).</p>
-			%2$s
-			<p>Image, HTML 5.0 style.</p>
-			%3$s
-			<p>Image, with pre-existing "loading" attribute. Should not be modified.</p>
-			%4$s
-			<p>Image, without dimension attributes. Should not be modified.</p>
-			%5$s
-			<p>Iframe, standard. Should not be modified.</p>
-			%6$s';
-
-		$content_unfiltered = sprintf( $content, $img, $img_xhtml, $img_html5, $img_eager, $img_no_width_height, $iframe );
-		$content_filtered   = sprintf( $content, $lazy_img, $lazy_img_xhtml, $lazy_img_html5, $img_eager, $img_no_width_height, $iframe );
-
-		// Do not add width, height, srcset, and sizes.
-		add_filter( 'wp_img_tag_add_width_and_height_attr', '__return_false' );
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-
-		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
-
-		remove_filter( 'wp_img_tag_add_width_and_height_attr', '__return_false' );
-		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-	}
-
-	/**
-	 * @ticket 44427
-	 */
-	function test_wp_filter_content_tags_loading_lazy_opted_in() {
-		$img      = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$lazy_img = wp_img_tag_add_loading_attr( $img, 'test' );
-
-		$content = '
-			<p>Image, standard.</p>
-			%1$s';
-
-		$content_unfiltered = sprintf( $content, $img );
-		$content_filtered   = sprintf( $content, $lazy_img );
-
-		// Do not add srcset and sizes while testing.
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-
-		// Enable globally for all tags.
-		add_filter( 'wp_lazy_loading_enabled', '__return_true' );
-
-		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
-		remove_filter( 'wp_lazy_loading_enabled', '__return_true' );
-		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-	}
-
-	/**
-	 * @ticket 44427
-	 */
-	function test_wp_filter_content_tags_loading_lazy_opted_out() {
-		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
-
-		$content = '
-			<p>Image, standard.</p>
-			%1$s';
-		$content = sprintf( $content, $img );
-
-		// Do not add srcset and sizes while testing.
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-
-		// Disable globally for all tags.
-		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
-
-		$this->assertSame( $content, wp_filter_content_tags( $content ) );
-		remove_filter( 'wp_lazy_loading_enabled', '__return_false' );
-		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50367
-	 */
-	function test_wp_img_tag_add_loading_attr() {
-		$img = '<img src="example.png" alt=" width="300" height="225" />';
-		$img = wp_img_tag_add_loading_attr( $img, 'test' );
-
-		$this->assertContains( ' loading="lazy"', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50367
-	 */
-	function test_wp_img_tag_add_loading_attr_without_src() {
-		$img = '<img alt=" width="300" height="225" />';
-		$img = wp_img_tag_add_loading_attr( $img, 'test' );
-
-		$this->assertNotContains( ' loading=', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50367
-	 */
-	function test_wp_img_tag_add_loading_attr_with_single_quotes() {
-		$img = "<img src='example.png' alt=' width='300' height='225' />";
-		$img = wp_img_tag_add_loading_attr( $img, 'test' );
-
-		$this->assertNotContains( ' loading=', $img );
-
-		// Test specifically that the attribute is not there with double-quotes,
-		// to avoid regressions.
-		$this->assertNotContains( ' loading="lazy"', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50425
-	 */
-	function test_wp_img_tag_add_loading_attr_opt_out() {
-		$img = '<img src="example.png" alt=" width="300" height="225" />';
-		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
-
-		$this->assertNotContains( ' loading=', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50425
-	 */
-	function test_wp_get_attachment_image_loading() {
-		$img = wp_get_attachment_image( self::$large_id );
-
-		$this->assertContains( ' loading="lazy"', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50425
-	 */
-	function test_wp_get_attachment_image_loading_opt_out() {
-		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
-		$img = wp_get_attachment_image( self::$large_id );
-
-		// There should not be any loading attribute in this case.
-		$this->assertNotContains( ' loading=', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50425
-	 */
-	function test_wp_get_attachment_image_loading_opt_out_individual() {
-		// The default is already tested above, the filter below ensures that
-		// lazy-loading is definitely enabled globally for images.
-		add_filter( 'wp_lazy_loading_enabled', '__return_true' );
-
-		$img = wp_get_attachment_image( self::$large_id, 'thumbnail', false, array( 'loading' => false ) );
-
-		// There should not be any loading attribute in this case.
-		$this->assertNotContains( ' loading=', $img );
-	}
-
-	/**
-	 * @ticket 44427
-	 * @ticket 50425
-	 * @dataProvider data_wp_lazy_loading_enabled_tag_name_defaults
-	 *
-	 * @param string $tag_name Tag name.
-	 * @param bool   $expected Expected return value.
-	 */
-	function test_wp_lazy_loading_enabled_tag_name_defaults( $tag_name, $expected ) {
-		if ( $expected ) {
-			$this->assertTrue( wp_lazy_loading_enabled( $tag_name, 'the_content' ) );
-		} else {
-			$this->assertFalse( wp_lazy_loading_enabled( $tag_name, 'the_content' ) );
-		}
-	}
-
-	function data_wp_lazy_loading_enabled_tag_name_defaults() {
-		return array(
-			'img => true'            => array( 'img', true ),
-			'iframe => false'        => array( 'iframe', false ),
-			'arbitrary tag => false' => array( 'blink', false ),
-		);
-	}
-
-	/**
-	 * @ticket 50425
-	 * @dataProvider data_wp_lazy_loading_enabled_context_defaults
-	 *
-	 * @param string $context  Function context.
-	 * @param bool   $expected Expected return value.
-	 */
-	function test_wp_lazy_loading_enabled_context_defaults( $context, $expected ) {
-		if ( $expected ) {
-			$this->assertTrue( wp_lazy_loading_enabled( 'img', $context ) );
-		} else {
-			$this->assertFalse( wp_lazy_loading_enabled( 'img', $context ) );
-		}
-	}
-
-	function data_wp_lazy_loading_enabled_context_defaults() {
-		return array(
-			'wp_get_attachment_image => true' => array( 'wp_get_attachment_image', true ),
-			'the_content => true'             => array( 'the_content', true ),
-			'the_excerpt => true'             => array( 'the_excerpt', true ),
-			'widget_text_content => true'     => array( 'widget_text_content', true ),
-			'get_avatar => true'              => array( 'get_avatar', true ),
-			'arbitrary context => true'       => array( 'something_completely_arbitrary', true ),
-		);
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	function test_wp_image_file_matches_image_meta() {
-		$image_meta       = wp_get_attachment_metadata( self::$large_id );
-		$image_src_full   = wp_get_attachment_image_url( self::$large_id, 'full' );
-		$image_src_medium = wp_get_attachment_image_url( self::$large_id, 'medium' );
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_full, $image_meta ) );
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_medium, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	function test_wp_image_file_matches_image_meta_no_subsizes() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = wp_get_attachment_image_url( self::$large_id, 'full' );
-
-		$image_meta['sizes'] = array();
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	function test_wp_image_file_matches_image_meta_invalid_meta() {
-		$image_meta = ''; // Attachment is not an image.
-		$image_src  = $this->img_url;
-
-		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	function test_wp_image_file_matches_image_meta_different_meta() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = $this->img_url; // Different image.
-
-		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	function test_wp_image_file_matches_image_meta_original_image() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = wp_get_original_image_url( self::$large_id );
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 22101
-	 */
-	function test_gallery_shortcode_when_is_feed_true() {
-
-		$this->go_to( '/?feed=rss2' );
-
-		// Default: Links to image attachment page URL.
-		$actual = gallery_shortcode(
-			array(
-				'ids' => self::$large_id,
-			)
-		);
-		$this->assertContains( '?attachment_id=', $actual );
-
-		// File: Links to image file URL.
-		$actual = gallery_shortcode(
-			array(
-				'ids'  => self::$large_id,
-				'link' => 'file',
-			)
-		);
-		$this->assertSame( 2, substr_count( $actual, '.jpg' ) );
-
-		// None: Does not link.
-		$actual = gallery_shortcode(
-			array(
-				'ids'  => self::$large_id,
-				'link' => 'none',
-			)
-		);
-		$this->assertNotContains( '<a ', $actual );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }
 
 /**

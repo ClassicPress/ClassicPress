@@ -110,13 +110,8 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 		// Act
 		get_transient( $key );
 
-<<<<<<< HEAD
-		// Make sure delete option was not called for both the transient and the timeout
-		$this->assertEquals( 0, $a->get_call_count() );
-=======
 		// Make sure 'delete_option' was not called for both the transient and the timeout.
 		$this->assertSame( 0, $a->get_call_count() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -142,13 +137,8 @@ class Tests_Option_Transient extends WP_UnitTestCase {
 		// Act
 		get_transient( $key );
 
-<<<<<<< HEAD
-		// Make sure delete option was called for both the transient and the timeout
-		$this->assertEquals( 2, $a->get_call_count() );
-=======
 		// Make sure 'delete_option' was called for both the transient and the timeout.
 		$this->assertSame( 2, $a->get_call_count() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$expected = array(
 			array(

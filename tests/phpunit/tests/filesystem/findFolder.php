@@ -17,13 +17,8 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 			/var/www/classicpress/index.php
 		');
 
-<<<<<<< HEAD
 		$path = $fs->find_folder( '/var/www/classicpress/' );
-		$this->assertEquals( '/var/www/classicpress/', $path );
-=======
-		$path = $fs->find_folder( '/var/www/wordpress/' );
-		$this->assertSame( '/var/www/wordpress/', $path );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( '/var/www/classicpress/', $path );
 
 		$path = $fs->find_folder( '/this/directory/doesnt/exist/' );
 		$this->assertFalse( $path );
@@ -44,19 +39,11 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 			/www/index.php
 		');
 
-<<<<<<< HEAD
 		$path = $fs->find_folder( '/var/www/example.com/classicpress/' );
-		$this->assertEquals( '/www/example.com/classicpress/', $path );
-		
-		$path = $fs->find_folder( '/var/www/cp.example.com/classicpress/wp-content/' );
-		$this->assertEquals( '/www/cp.example.com/classicpress/wp-content/', $path );
-=======
-		$path = $fs->find_folder( '/var/www/example.com/wordpress/' );
-		$this->assertSame( '/www/example.com/wordpress/', $path );
+		$this->assertSame( '/www/example.com/classicpress/', $path );
 
-		$path = $fs->find_folder( '/var/www/wp.example.com/wordpress/wp-content/' );
-		$this->assertSame( '/www/wp.example.com/wordpress/wp-content/', $path );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$path = $fs->find_folder( '/var/www/cp.example.com/classicpress/wp-content/' );
+		$this->assertSame( '/www/cp.example.com/classicpress/wp-content/', $path );
 
 	}
 
@@ -78,14 +65,9 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 			/index.php
 		');
 
-<<<<<<< HEAD
 		$path = $fs->abspath( '/var/www/example.com/cp.example.com/classicpress/' );
-		$this->assertEquals( '/cp.example.com/classicpress/', $path );
-=======
-		$path = $fs->abspath( '/var/www/example.com/wp.example.com/wordpress/' );
-		$this->assertSame( '/wp.example.com/wordpress/', $path );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-		
+		$this->assertSame( '/cp.example.com/classicpress/', $path );
+
 		$path = $fs->abspath( '/var/www/example.com/' );
 		$this->assertSame( '/', $path );
 
@@ -104,7 +86,7 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 			/example.com/www/index.php
 			/example.com/www/wp-includes/
 			/example.com/www/wp-content/plugins/
-			
+
 			# sub.example.com
 			/example.com/sub/index.php
 			/example.com/sub/wp-includes/

@@ -112,22 +112,16 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$uuid = wp_generate_uuid4();
 		$theme = 'twentyfifteen';
 		$messenger_channel = 'preview-123';
-		$wp_customize = new WP_Customize_Manager( array(
-			'changeset_uuid' => $uuid,
-			'theme' => $theme,
-			'messenger_channel' => $messenger_channel,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $uuid, $wp_customize->changeset_uuid() );
-		$this->assertEquals( $theme, $wp_customize->get_stylesheet() );
-		$this->assertEquals( $messenger_channel, $wp_customize->get_messenger_channel() );
-=======
+		$wp_customize = new WP_Customize_Manager(
+			array(
+				'changeset_uuid' => $uuid,
+				'theme' => $theme,
+				'messenger_channel' => $messenger_channel,
 			)
 		);
 		$this->assertSame( $uuid, $wp_customize->changeset_uuid() );
 		$this->assertSame( $theme, $wp_customize->get_stylesheet() );
 		$this->assertSame( $messenger_channel, $wp_customize->get_messenger_channel() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertFalse( $wp_customize->autosaved() );
 		$this->assertTrue( $wp_customize->branching() );
 
@@ -192,19 +186,14 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			'post_date_gmt' => gmdate( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
 		) );
 
-		$wp_customize = new WP_Customize_Manager( array(
-			'changeset_uuid' => false, // Cause UUID to be deferred.
-			'branching' => false, // To cause drafted changeset to be autoloaded.
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $uuid2, $wp_customize->changeset_uuid() );
-		$this->assertEquals( $post_id, $wp_customize->changeset_post_id() );
-=======
+		$wp_customize = new WP_Customize_Manager(
+			array(
+				'changeset_uuid' => false, // Cause UUID to be deferred.
+				'branching' => false, // To cause drafted changeset to be autoloaded.
 			)
 		);
 		$this->assertSame( $uuid2, $wp_customize->changeset_uuid() );
 		$this->assertSame( $post_id, $wp_customize->changeset_post_id() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$wp_customize = new WP_Customize_Manager( array(
 			'changeset_uuid' => false, // Cause UUID to be deferred.
@@ -447,19 +436,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		$uuid = wp_generate_uuid4();
 		$wp_customize = new WP_Customize_Manager( array( 'changeset_uuid' => $uuid ) );
-		$post_id = $this->factory()->post->create( array(
-			'post_name' => $uuid,
-			'post_type' => 'customize_changeset',
-			'post_status' => 'auto-draft',
-			'post_content' => '{}',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $post_id, $wp_customize->changeset_post_id() );
-=======
+		$post_id = $this->factory()->post->create(
+			array(
+				'post_name' => $uuid,
+				'post_type' => 'customize_changeset',
+				'post_status' => 'auto-draft',
+				'post_content' => '{}',
 			)
 		);
 		$this->assertSame( $post_id, $wp_customize->changeset_post_id() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -690,21 +675,13 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			}
 			$posts_by_name[ $post_name ] = $post->ID;
 		}
-<<<<<<< HEAD
-		$this->assertEquals( array( 'waffles', 'canola', 'home', 'about', 'blog', 'custom', 'unknown-cpt' ), array_keys( $posts_by_name ) );
-		$this->assertEquals( 'Custom', get_post( $posts_by_name['custom'] )->post_title );
-		$this->assertEquals( 'sample-page-template.php', get_page_template_slug( $posts_by_name['about'] ) );
-		$this->assertEquals( '', get_page_template_slug( $posts_by_name['blog'] ) );
-		$this->assertEquals( $posts_by_name['waffles'], get_post_thumbnail_id( $posts_by_name['custom'] ) );
-		$this->assertEquals( '', get_post_thumbnail_id( $posts_by_name['blog'] ) );
-=======
 		$this->assertSame( array( 'waffles', 'canola', 'home', 'about', 'blog', 'custom', 'unknown-cpt' ), array_keys( $posts_by_name ) );
 		$this->assertSame( 'Custom', get_post( $posts_by_name['custom'] )->post_title );
 		$this->assertSame( 'sample-page-template.php', get_page_template_slug( $posts_by_name['about'] ) );
 		$this->assertSame( '', get_page_template_slug( $posts_by_name['blog'] ) );
 		$this->assertSame( $posts_by_name['waffles'], get_post_thumbnail_id( $posts_by_name['custom'] ) );
 		$this->assertSame( 0, get_post_thumbnail_id( $posts_by_name['blog'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+
 		$attachment_metadata = wp_get_attachment_metadata( $posts_by_name['waffles'] );
 		$this->assertSame( 'Waffles', get_post( $posts_by_name['waffles'] )->post_title );
 		$this->assertSame( 'waffles', get_post_meta( $posts_by_name['waffles'], '_customize_draft_post_name', true ) );
@@ -845,12 +822,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$headers = $wp_customize->filter_iframe_security_headers( array() );
 		$this->assertArrayHasKey( 'X-Frame-Options', $headers );
 		$this->assertArrayHasKey( 'Content-Security-Policy', $headers );
-<<<<<<< HEAD
-		$this->assertEquals( "ALLOW-FROM $customize_url", $headers['X-Frame-Options'] );
-=======
-		$this->assertSame( 'SAMEORIGIN', $headers['X-Frame-Options'] );
-		$this->assertSame( "frame-ancestors 'self'", $headers['Content-Security-Policy'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( "ALLOW-FROM $customize_url", $headers['X-Frame-Options'] );
 	}
 
 	/**
@@ -1041,21 +1013,17 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		// Ensure the filter applies.
 		$customize_changeset_save_data_call_count = $this->customize_changeset_save_data_call_count;
 		add_filter( 'customize_changeset_save_data', array( $this, 'filter_customize_changeset_save_data' ), 10, 2 );
-		$manager->save_changeset_post( array(
-			'status' => null,
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Filtered',
+		$manager->save_changeset_post(
+			array(
+				'status' => null,
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Filtered',
+					),
 				),
-			),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $customize_changeset_save_data_call_count + 1, $this->customize_changeset_save_data_call_count );
-=======
 			)
 		);
 		$this->assertSame( $customize_changeset_save_data_call_count + 1, $this->customize_changeset_save_data_call_count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Publish the changeset: actions will be doubled since also trashed.
 		$expected_actions = array(
@@ -1704,30 +1672,22 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertSame( 'illegal_autosave_with_date_gmt', $r->get_error_code() );
 
 		// Fail: illegal_autosave_with_status.
-		$r = $wp_customize->save_changeset_post( array(
-			'autosave' => true,
-			'status' => 'pending',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 'illegal_autosave_with_status', $r->get_error_code() );
-=======
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'autosave' => true,
+				'status' => 'pending',
 			)
 		);
 		$this->assertSame( 'illegal_autosave_with_status', $r->get_error_code() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Fail: illegal_autosave_with_non_current_user.
-		$r = $wp_customize->save_changeset_post( array(
-			'autosave' => true,
-			'user_id' => $this->factory()->user->create( array( 'role' => 'administrator' ) ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 'illegal_autosave_with_non_current_user', $r->get_error_code() );
-=======
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'autosave' => true,
+				'user_id' => $this->factory()->user->create( array( 'role' => 'administrator' ) ),
 			)
 		);
 		$this->assertSame( 'illegal_autosave_with_non_current_user', $r->get_error_code() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Try autosave.
 		$this->assertFalse( wp_get_post_autosave( $changeset_post_id, get_current_user_id() ) );
@@ -1933,13 +1893,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		$r = $manager->save_changeset_post( $args );
 		$this->assertInstanceOf( 'WP_Error', $r );
-<<<<<<< HEAD
-		if ( function_exists( 'json_last_error' ) ) {
-			$this->assertEquals( 'json_parse_error', $r->get_error_code() );
-		}
-=======
 		$this->assertSame( 'json_parse_error', $r->get_error_code() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		wp_update_post( array(
 			'ID' => $post_id,
@@ -2256,19 +2210,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	function test_invalid_post_value() {
 		wp_set_current_user( self::$admin_user_id );
 		$default_value = 'foo_default';
-		$setting = $this->manager->add_setting( 'foo', array(
-			'validate_callback' => array( $this, 'filter_customize_validate_foo' ),
-			'sanitize_callback' => array( $this, 'filter_customize_sanitize_foo' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $default_value, $this->manager->post_value( $setting, $default_value ) );
-		$this->assertEquals( $default_value, $setting->post_value( $default_value ) );
-=======
+		$setting = $this->manager->add_setting(
+			'foo',
+			array(
+				'validate_callback' => array( $this, 'filter_customize_validate_foo' ),
+				'sanitize_callback' => array( $this, 'filter_customize_sanitize_foo' ),
 			)
 		);
 		$this->assertSame( $default_value, $this->manager->post_value( $setting, $default_value ) );
 		$this->assertSame( $default_value, $setting->post_value( $default_value ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post_value = 'bar';
 		$this->manager->set_post_value( 'foo', $post_value );
@@ -2329,19 +2279,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	function test_post_value_validation_sanitization_order() {
 		wp_set_current_user( self::$admin_user_id );
 		$default_value = '0';
-		$setting = $this->manager->add_setting( 'numeric', array(
-			'validate_callback' => array( $this, 'filter_customize_validate_numeric' ),
-			'sanitize_callback' => array( $this, 'filter_customize_sanitize_numeric' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $default_value, $this->manager->post_value( $setting, $default_value ) );
-		$this->assertEquals( $default_value, $setting->post_value( $default_value ) );
-=======
+		$setting = $this->manager->add_setting(
+			'numeric',
+			array(
+				'validate_callback' => array( $this, 'filter_customize_validate_numeric' ),
+				'sanitize_callback' => array( $this, 'filter_customize_sanitize_numeric' ),
 			)
 		);
 		$this->assertSame( $default_value, $this->manager->post_value( $setting, $default_value ) );
 		$this->assertSame( $default_value, $setting->post_value( $default_value ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post_value = '42';
 		$this->manager->set_post_value( 'numeric', $post_value );
@@ -2789,17 +2735,6 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 46686
-	 */
-	function test_return_url_with_deactivated_theme() {
-		$this->manager->set_return_url( admin_url( 'themes.php?page=mytheme_documentation' ) );
-		$this->assertSame( admin_url( 'themes.php' ), $this->manager->get_return_url() );
-	}
-
-	/**
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 * Test get_autofocus()/set_autofocus() methods.
 	 *
 	 * @see WP_Customize_Manager::get_autofocus()

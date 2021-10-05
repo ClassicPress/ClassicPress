@@ -222,13 +222,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		) );
 		$post_type_archive_item = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( $post_type_slug , $post_type_archive_item->title );
-		$this->assertEquals( $post_type_description , $post_type_archive_item->description );
-=======
 		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
 		$this->assertSame( $post_type_description, $post_type_archive_item->description );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -251,13 +246,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		) );
 		$post_type_archive_item = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( $post_type_slug , $post_type_archive_item->title );
-		$this->assertEquals( $post_type_description , $post_type_archive_item->description ); //fail!!!
-=======
 		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
 		$this->assertSame( $post_type_description, $post_type_archive_item->description ); // Fail!
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -284,13 +274,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		) );
 		$post_type_archive_item = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( $post_type_slug , $post_type_archive_item->title );
-		$this->assertEquals( $menu_item_description , $post_type_archive_item->description );
-=======
 		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
 		$this->assertSame( $menu_item_description, $post_type_archive_item->description );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -590,20 +575,14 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
 		$wp_customize = new WP_Customize_Manager();
 		do_action( 'customize_register', $wp_customize );
-		$wp_customize->save_changeset_post( array(
-			'data' => $data,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 'auto-draft', get_post_status( $auto_draft_post_id ) );
-		$this->assertEquals( 'draft', get_post_status( $draft_post_id ) );
-		$this->assertEquals( 'private', get_post_status( $private_post_id ) );
-=======
+		$wp_customize->save_changeset_post(
+			array(
+				'data' => $data,
 			)
 		);
 		$this->assertSame( 'auto-draft', get_post_status( $auto_draft_post_id ) );
 		$this->assertSame( 'draft', get_post_status( $draft_post_id ) );
 		$this->assertSame( 'private', get_post_status( $private_post_id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		wp_delete_post( $wp_customize->changeset_post_id(), true );
 		$this->assertFalse( get_post_status( $auto_draft_post_id ) );
 		$this->assertSame( 'trash', get_post_status( $draft_post_id ) );
@@ -732,74 +711,4 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 
 		$this->assertContains( 'menu-item-privacy-policy', $classes );
 	}
-
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 47723
-	 * @dataProvider data_trim_url_for_custom_item
-	 */
-	function test_trim_url_for_custom_item( $custom_url, $correct_url ) {
-		$custom_item_id = wp_update_nav_menu_item(
-			$this->menu_id,
-			0,
-			array(
-				'menu-item-type'   => 'custom',
-				'menu-item-title'  => 'WordPress.org',
-				'menu-item-url'    => $custom_url,
-				'menu-item-status' => 'publish',
-			)
-		);
-
-		$custom_item = wp_setup_nav_menu_item( get_post( $custom_item_id ) );
-		$this->assertSame( $correct_url, $custom_item->url );
-	}
-
-	/**
-	 * Provides data for test_trim_url_for_custom_item().
-	 */
-	function data_trim_url_for_custom_item() {
-		return array(
-			array( 'https://wordpress.org ', 'https://wordpress.org' ),
-			array( ' https://wordpress.org', 'https://wordpress.org' ),
-		);
-	}
-
-	/**
-	 * Tests `wp_update_nav_menu_item()` with special characters in a category name.
-	 *
-	 * When inserting a category as a nav item, the `post_title` property should
-	 * be empty, as the item should get the title from the category object itself.
-	 *
-	 * @ticket 48011
-	 */
-	function test_wp_update_nav_menu_item_with_special_characters_in_category_name() {
-		$category_name = 'Test Cat - \"Pre-Slashed\" Cat Name & >';
-
-		$category = self::factory()->category->create_and_get(
-			array(
-				'name' => $category_name,
-			)
-		);
-
-		$category_item_id = wp_update_nav_menu_item(
-			$this->menu_id,
-			0,
-			array(
-				'menu-item-type'      => 'taxonomy',
-				'menu-item-object'    => 'category',
-				'menu-item-object-id' => $category->term_id,
-				'menu-item-status'    => 'publish',
-				/*
-				 * Interestingly enough, if we use `$cat->name` for the menu item title,
-				 * we won't be able to replicate the bug because it's in htmlentities form.
-				 */
-				'menu-item-title'     => $category_name,
-			)
-		);
-
-		$category_item = get_post( $category_item_id );
-		$this->assertEmpty( $category_item->post_title );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

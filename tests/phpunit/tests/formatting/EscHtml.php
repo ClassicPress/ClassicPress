@@ -5,16 +5,6 @@
  */
 class Tests_Formatting_EscHtml extends WP_UnitTestCase {
 	function test_esc_html_basics() {
-<<<<<<< HEAD
-		// Simple string
-		$html = "The quick brown fox.";
-		$this->assertEquals( $html, esc_html( $html ) );
-
-		// URL with &
-		$html = "http://localhost/trunk/wp-login.php?action=logout&_wpnonce=cd57d75985";
-		$escaped = "http://localhost/trunk/wp-login.php?action=logout&amp;_wpnonce=cd57d75985";
-		$this->assertEquals( $escaped, esc_html( $html ) );
-=======
 		// Simple string.
 		$html = 'The quick brown fox.';
 		$this->assertSame( $html, esc_html( $html ) );
@@ -23,26 +13,9 @@ class Tests_Formatting_EscHtml extends WP_UnitTestCase {
 		$html    = 'http://localhost/trunk/wp-login.php?action=logout&_wpnonce=cd57d75985';
 		$escaped = 'http://localhost/trunk/wp-login.php?action=logout&amp;_wpnonce=cd57d75985';
 		$this->assertSame( $escaped, esc_html( $html ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// SQL query
 		$html = "SELECT meta_key, meta_value FROM wp_trunk_sitemeta WHERE meta_key IN ('site_name', 'siteurl', 'active_sitewide_plugins', '_site_transient_timeout_theme_roots', '_site_transient_theme_roots', 'site_admins', 'can_compress_scripts', 'global_terms_enabled') AND site_id = 1";
-<<<<<<< HEAD
-		$escaped = "SELECT meta_key, meta_value FROM wp_trunk_sitemeta WHERE meta_key IN (&#039;site_name&#039;, &#039;siteurl&#039;, &#039;active_sitewide_plugins&#039;, &#039;_site_transient_timeout_theme_roots&#039;, &#039;_site_transient_theme_roots&#039;, &#039;site_admins&#039;, &#039;can_compress_scripts&#039;, &#039;global_terms_enabled&#039;) AND site_id = 1";
-		$this->assertEquals( $escaped, esc_html( $html ) );
-	}
-
-	function test_escapes_ampersands() {
-		$source = "penn & teller & at&t";
-		$res = "penn &amp; teller &amp; at&amp;t";
-		$this->assertEquals( $res, esc_html($source) );
-	}
-
-	function test_escapes_greater_and_less_than() {
-		$source = "this > that < that <randomhtml />";
-		$res = "this &gt; that &lt; that &lt;randomhtml /&gt;";
-		$this->assertEquals( $res, esc_html($source) );
-=======
 		$escaped = 'SELECT meta_key, meta_value FROM wp_trunk_sitemeta WHERE meta_key IN (&#039;site_name&#039;, &#039;siteurl&#039;, &#039;active_sitewide_plugins&#039;, &#039;_site_transient_timeout_theme_roots&#039;, &#039;_site_transient_theme_roots&#039;, &#039;site_admins&#039;, &#039;can_compress_scripts&#039;, &#039;global_terms_enabled&#039;) AND site_id = 1';
 		$this->assertSame( $escaped, esc_html( $html ) );
 	}
@@ -57,16 +30,11 @@ class Tests_Formatting_EscHtml extends WP_UnitTestCase {
 		$source = 'this > that < that <randomhtml />';
 		$res    = 'this &gt; that &lt; that &lt;randomhtml /&gt;';
 		$this->assertSame( $res, esc_html( $source ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_ignores_existing_entities() {
 		$source = '&#038; &#x00A3; &#x22; &amp;';
 		$res = '&#038; &#xA3; &#x22; &amp;';
-<<<<<<< HEAD
-		$this->assertEquals( $res, esc_html($source) );
-=======
 		$this->assertSame( $res, esc_html( $source ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

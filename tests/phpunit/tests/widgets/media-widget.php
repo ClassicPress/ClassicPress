@@ -62,27 +62,22 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'description', $widget->widget_options );
 		$this->assertTrue( $widget->widget_options['customize_selective_refresh'] );
 		$this->assertEmpty( $widget->widget_options['mime_type'] );
-		$this->assertEqualSets( array(
-			'add_to_widget',
-			'replace_media',
-			'edit_media',
-			'media_library_state_multi',
-			'media_library_state_single',
-			'missing_attachment',
-			'no_media_selected',
-			'add_media',
-			'unsupported_file_type',
-<<<<<<< HEAD
-		), array_keys( $widget->l10n ) );
-		$this->assertEquals( count( $widget->l10n ), count( array_filter( $widget->l10n ) ), 'Expected all translation strings to be defined.' );
-		$this->assertEquals( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
-=======
+		$this->assertEqualSets(
+			array(
+				'add_to_widget',
+				'replace_media',
+				'edit_media',
+				'media_library_state_multi',
+				'media_library_state_single',
+				'missing_attachment',
+				'no_media_selected',
+				'add_media',
+				'unsupported_file_type',
 			),
 			array_keys( $widget->l10n )
 		);
 		$this->assertSame( count( $widget->l10n ), count( array_filter( $widget->l10n ) ), 'Expected all translation strings to be defined.' );
 		$this->assertSame( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertFalse( has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ), 'Did not expect preview scripts to be enqueued when not in customize preview context.' );
 		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( $widget, 'render_control_template_scripts' ) ) );
 

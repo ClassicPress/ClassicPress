@@ -93,11 +93,7 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 			'cpage' => $cpage,
 		), get_permalink( self::$post_id ) . '#comments' );
 
-<<<<<<< HEAD
-		$this->assertEquals( $expected , wp_get_canonical_url( self::$post_id ) );
-=======
 		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -118,11 +114,7 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 
 		$expected = user_trailingslashit( trailingslashit( get_permalink( self::$post_id ) ) . $wp_rewrite->comments_pagination_base . '-' . $cpage, 'commentpaged' ) . '#comments';
 
-<<<<<<< HEAD
-		$this->assertEquals( $expected , wp_get_canonical_url( self::$post_id ) );
-=======
 		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

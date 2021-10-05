@@ -35,19 +35,11 @@ class Tests_Post_getPageUri extends WP_UnitTestCase {
 		$parent_id = self::factory()->post->create( array( 'post_name' => 'parent' ) );
 		$child_id = self::factory()->post->create( array( 'post_name' => 'child', 'post_parent' => $parent_id ) );
 
-<<<<<<< HEAD
-		// check the parent for good measure
-		$this->assertEquals( 'parent', get_page_uri( $parent_id ) );
-
-		// try the child normally
-		$this->assertEquals( 'parent/child', get_page_uri( $child_id ) );
-=======
 		// Check the parent for good measure.
 		$this->assertSame( 'parent', get_page_uri( $parent_id ) );
 
 		// Try the child normally.
 		$this->assertSame( 'parent/child', get_page_uri( $child_id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now delete the parent from the database and check
 		wp_delete_post( $parent_id, true );

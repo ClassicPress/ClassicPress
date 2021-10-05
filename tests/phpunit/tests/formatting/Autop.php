@@ -59,11 +59,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 		// On windows environments, the EOL-style is \r\n
 		$expected = str_replace( "\r\n", "\n", $expected);
 
-<<<<<<< HEAD
-		$this->assertEquals($expected, wpautop($test_data));
-=======
 		$this->assertSame( $expected, wpautop( $test_data ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -564,37 +560,6 @@ line 2<br/>
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 14674
-	 */
-	function test_the_hr_is_not_peed() {
-		$content  = 'paragraph1<hr>paragraph2';
-		$expected = "<p>paragraph1</p>\n<hr>\n<p>paragraph2</p>";
-
-		$this->assertSame( $expected, trim( wpautop( $content ) ) );
-	}
-
-	/**
-	 * wpautop() should ignore inline SVG graphics
-	 *
-	 * @ticket 9437
-	 */
-	function test_that_wpautop_ignores_inline_svgs() {
-		$content =
-			'<svg xmlns="http://www.w3.org/2000/svg">
-				<circle cx="50" cy="50" r="30" fill="blue">
-					<animateTransform attributeName="transform" type="scale" to="1.5" dur="2s" fill="freeze"/>
-				</circle>
-			</svg>';
-
-		$expected = '<p>' . $content . '</p>';
-
-		$this->assertSameIgnoreEOL( $expected, trim( wpautop( $content ) ) );
-	}
-
-	/**
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 * wpautop() should ignore inline scripts
 	 *
 	 * @see https://core.trac.wordpress.org/tciket/9437

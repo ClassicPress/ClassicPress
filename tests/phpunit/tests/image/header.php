@@ -22,20 +22,14 @@ class Tests_Image_Header extends WP_UnitTestCase {
 		$_wp_theme_features['custom-header'][0]['flex-width'] = false;
 		$_wp_theme_features['custom-header'][0]['flex-height'] = false;
 
-		$dimensions = $this->custom_image_header->get_header_dimensions( array(
-			'width' => 1600,
-			'height' => 1200,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 1200, $dimensions['dst_width'] );
-		$this->assertEquals( 230, $dimensions['dst_height'] );
-=======
+		$dimensions = $this->custom_image_header->get_header_dimensions(
+			array(
+				'width' => 1600,
+				'height' => 1200,
 			)
 		);
 		$this->assertSame( 1200, $dimensions['dst_width'] );
 		$this->assertSame( 230, $dimensions['dst_height'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_header_image_has_correct_dimensions_with_fixed() {
@@ -47,20 +41,14 @@ class Tests_Image_Header extends WP_UnitTestCase {
 		$_wp_theme_features['custom-header'][0]['flex-width'] = false;
 		$_wp_theme_features['custom-header'][0]['flex-height'] = false;
 
-		$dimensions = $this->custom_image_header->get_header_dimensions( array(
-			'width' => 1600,
-			'height' => 1200,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 1200, $dimensions['dst_width'] );
-		$this->assertEquals( 230, $dimensions['dst_height'] );
-=======
+		$dimensions = $this->custom_image_header->get_header_dimensions(
+			array(
+				'width' => 1600,
+				'height' => 1200,
 			)
 		);
 		$this->assertSame( 1200, $dimensions['dst_width'] );
 		$this->assertSame( 230, $dimensions['dst_height'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_header_image_has_correct_dimensions_with_flex_height() {
@@ -72,20 +60,14 @@ class Tests_Image_Header extends WP_UnitTestCase {
 		$_wp_theme_features['custom-header'][0]['flex-width'] = false;
 		$_wp_theme_features['custom-header'][0]['flex-height'] = true;
 
-		$dimensions = $this->custom_image_header->get_header_dimensions( array(
-			'width' => 1600,
-			'height' => 1200,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 1200, $dimensions['dst_width'] );
-		$this->assertEquals( 900, $dimensions['dst_height'] );
-=======
+		$dimensions = $this->custom_image_header->get_header_dimensions(
+			array(
+				'width' => 1600,
+				'height' => 1200,
 			)
 		);
 		$this->assertSame( 1200, $dimensions['dst_width'] );
 		$this->assertSame( 900, $dimensions['dst_height'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_header_image_has_correct_dimensions_with_flex_width() {
@@ -97,20 +79,14 @@ class Tests_Image_Header extends WP_UnitTestCase {
 		$_wp_theme_features['custom-header'][0]['flex-width'] = true;
 		$_wp_theme_features['custom-header'][0]['flex-height'] = false;
 
-		$dimensions = $this->custom_image_header->get_header_dimensions( array(
-			'width' => 1600,
-			'height' => 1200,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 1500, $dimensions['dst_width'] ); // max width
-		$this->assertEquals( 230, $dimensions['dst_height'] );
-=======
+		$dimensions = $this->custom_image_header->get_header_dimensions(
+			array(
+				'width' => 1600,
+				'height' => 1200,
 			)
 		);
 		$this->assertSame( 1500, $dimensions['dst_width'] ); // Max width.
 		$this->assertSame( 230, $dimensions['dst_height'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_header_image_has_correct_dimensions_with_flex_width_and_height() {
@@ -122,20 +98,14 @@ class Tests_Image_Header extends WP_UnitTestCase {
 		$_wp_theme_features['custom-header'][0]['flex-width'] = true;
 		$_wp_theme_features['custom-header'][0]['flex-height'] = true;
 
-		$dimensions = $this->custom_image_header->get_header_dimensions( array(
-			'width' => 1600,
-			'height' => 1200,
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( 1600, $dimensions['dst_width'] );
-		$this->assertEquals( 1200, $dimensions['dst_height'] );
-=======
+		$dimensions = $this->custom_image_header->get_header_dimensions(
+			array(
+				'width' => 1600,
+				'height' => 1200,
 			)
 		);
 		$this->assertSame( 1600, $dimensions['dst_width'] );
 		$this->assertSame( 1200, $dimensions['dst_height'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_create_attachment_object() {

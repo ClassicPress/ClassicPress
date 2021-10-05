@@ -110,24 +110,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 			$term_id[$term] = $result['term_id'];
 		}
 
-<<<<<<< HEAD
-		foreach ($ids as $id) {
-			$tt = wp_set_object_terms( $id, array_values($term_id), $this->taxonomy );
-			// should return three term taxonomy ids
-			$this->assertEquals( 3, count($tt) );
-		}
-
-		// each term should be associated with every post
-		foreach ($term_id as $term=>$id) {
-			$actual = get_objects_in_term($id, $this->taxonomy);
-			$this->assertEquals( $ids, array_map('intval', $actual) );
-		}
-
-		// each term should have a count of 5
-		foreach (array_keys($term_id) as $term) {
-			$t = get_term_by('name', $term, $this->taxonomy);
-			$this->assertEquals( 5, $t->count );
-=======
 		foreach ( $ids as $id ) {
 			$tt = wp_set_object_terms( $id, array_values( $term_id ), $this->taxonomy );
 			// Should return three term taxonomy IDs.
@@ -144,7 +126,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		foreach ( array_keys( $term_id ) as $term ) {
 			$t = get_term_by( 'name', $term, $this->taxonomy );
 			$this->assertSame( 5, $t->count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -159,27 +140,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 
 		foreach ($ids as $id) {
 			$tt = wp_set_object_terms( $id, $terms, $this->taxonomy );
-<<<<<<< HEAD
-			// should return three term taxonomy ids
-			$this->assertEquals( 3, count($tt) );
-			// remember which term has which term_id
-			for ($i=0; $i<3; $i++) {
-				$term = get_term_by('name', $terms[$i], $this->taxonomy);
-				$term_id[$terms[$i]] = intval($term->term_id);
-			}
-		}
-
-		// each term should be associated with every post
-		foreach ($term_id as $term=>$id) {
-			$actual = get_objects_in_term($id, $this->taxonomy);
-			$this->assertEquals( $ids, array_map('intval', $actual) );
-		}
-
-		// each term should have a count of 5
-		foreach ($terms as $term) {
-			$t = get_term_by('name', $term, $this->taxonomy);
-			$this->assertEquals( 5, $t->count );
-=======
 			// Should return three term taxonomy IDs.
 			$this->assertSame( 3, count( $tt ) );
 			// Remember which term has which term_id.
@@ -199,7 +159,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		foreach ( $terms as $term ) {
 			$t = get_term_by( 'name', $term, $this->taxonomy );
 			$this->assertSame( 5, $t->count );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -297,13 +256,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 
 		// set the initial terms
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 3, count($tt_1) );
-
-		// make sure they're correct
-		$terms = wp_get_object_terms($post_id, $this->taxonomy, array('fields' => 'ids', 'orderby' => 'term_id'));
-		$this->assertEquals( $terms_1, $terms );
-=======
 		$this->assertSame( 3, count( $tt_1 ) );
 
 		// Make sure they're correct.
@@ -316,20 +268,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $terms_1, $terms );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// change the terms
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count($tt_2) );
-
-		// make sure they're correct
-		$terms = wp_get_object_terms($post_id, $this->taxonomy, array('fields' => 'ids', 'orderby' => 'term_id'));
-		$this->assertEquals( $terms_2, $terms );
-
-		// make sure the tt id for 'bar' matches
-		$this->assertEquals( $tt_1[1], $tt_2[0] );
-=======
 		$this->assertSame( 2, count( $tt_2 ) );
 
 		// Make sure they're correct.
@@ -345,8 +286,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 
 		// Make sure the term taxonomy ID for 'bar' matches.
 		$this->assertSame( $tt_1[1], $tt_2[0] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-
 	}
 
 	function test_change_object_terms_by_name() {
@@ -359,13 +298,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 
 		// set the initial terms
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 3, count($tt_1) );
-
-		// make sure they're correct
-		$terms = wp_get_object_terms($post_id, $this->taxonomy, array('fields' => 'names', 'orderby' => 'term_id'));
-		$this->assertEquals( $terms_1, $terms );
-=======
 		$this->assertSame( 3, count( $tt_1 ) );
 
 		// Make sure they're correct.
@@ -378,17 +310,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $terms_1, $terms );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// change the terms
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count($tt_2) );
-
-		// make sure they're correct
-		$terms = wp_get_object_terms($post_id, $this->taxonomy, array('fields' => 'names', 'orderby' => 'term_id'));
-		$this->assertEquals( $terms_2, $terms );
-=======
 		$this->assertSame( 2, count( $tt_2 ) );
 
 		// Make sure they're correct.
@@ -401,7 +325,6 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $terms_2, $terms );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// make sure the tt id for 'bar' matches
 		$this->assertEquals( $tt_1[1], $tt_2[0] );

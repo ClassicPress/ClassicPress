@@ -79,18 +79,14 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			'Top Level' => 'template-top-level-post-types.php',
 			'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
 		), get_page_templates( null, 'foo' ) );
-		$this->assertEqualSetsWithIndex( array(
-			'Top Level' => 'template-top-level-post-types.php',
-			'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
-<<<<<<< HEAD
-		), get_page_templates( null, 'post' ) );
-		$this->assertEquals( array(), get_page_templates( null, 'bar' ) );
-=======
+		$this->assertEqualSetsWithIndex(
+			array(
+				'Top Level' => 'template-top-level-post-types.php',
+				'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
 			),
 			get_page_templates( null, 'post' )
 		);
 		$this->assertSame( array(), get_page_templates( null, 'bar' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

@@ -257,20 +257,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/14761
-=======
-	 * @ticket 38844
-	 */
-	public function test_get_post_type_object_includes_menu_icon_for_builtin_post_types() {
-		$this->assertSame( 'dashicons-admin-post', get_post_type_object( 'post' )->menu_icon );
-		$this->assertSame( 'dashicons-admin-page', get_post_type_object( 'page' )->menu_icon );
-		$this->assertSame( 'dashicons-admin-media', get_post_type_object( 'attachment' )->menu_icon );
-	}
-
-	/**
-	 * @ticket 14761
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	public function test_unregister_post_type() {
 		register_post_type( 'foo' );

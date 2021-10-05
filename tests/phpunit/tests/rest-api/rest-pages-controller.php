@@ -47,15 +47,9 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/pages' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
-=======
 		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$page_id = $this->factory->post->create( array( 'post_type' => 'page' ) );
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/pages/' . $page_id );
 		$response = $this->server->dispatch( $request );
@@ -70,31 +64,29 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'after',
-			'author',
-			'author_exclude',
-			'before',
-			'context',
-			'exclude',
-			'include',
-			'menu_order',
-			'offset',
-			'order',
-			'orderby',
-			'page',
-			'parent',
-			'parent_exclude',
-			'per_page',
-			'search',
-			'slug',
-			'status',
-			), $keys );
+				'after',
+				'author',
+				'author_exclude',
+				'before',
+				'context',
+				'exclude',
+				'include',
+				'menu_order',
+				'offset',
+				'order',
+				'orderby',
+				'page',
+				'parent',
+				'parent_exclude',
+				'per_page',
+				'search',
+				'slug',
+				'status',
+			),
+			$keys
+		);
 	}
 
 	public function test_get_items() {
@@ -114,27 +106,16 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		// Filter to parent
-=======
 		$this->assertSame( 2, count( $data ) );
 
 		// Filter to parent.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'parent', $id1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $id2, $data[0]['id'] );
-		// Invalid parent should fail
-=======
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( $id2, $data[0]['id'] );
 
 		// Invalid 'parent' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'parent', 'some-slug' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -149,14 +130,9 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 4, count( $data ) );
-		// Filter to parents
-=======
 		$this->assertSame( 4, count( $data ) );
 
 		// Filter to parents.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'parent', array( $id1, $id3 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
@@ -171,27 +147,16 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		// Filter to parent
-=======
 		$this->assertSame( 2, count( $data ) );
 
 		// Filter to parent.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'parent_exclude', $id1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// Invalid parent_exclude should error
-=======
 		$this->assertSame( 1, count( $data ) );
 		$this->assertSame( $id1, $data[0]['id'] );
 
 		// Invalid 'parent_exclude' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'parent_exclude', 'some-slug' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -218,20 +183,12 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( 'orderby', 'menu_order' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( $id1, $data[0]['id'] );
-		$this->assertEquals( $id4, $data[1]['id'] );
-		$this->assertEquals( $id2, $data[2]['id'] );
-		$this->assertEquals( $id3, $data[3]['id'] );
-		// Invalid menu_order should fail
-=======
 		$this->assertSame( $id1, $data[0]['id'] );
 		$this->assertSame( $id4, $data[1]['id'] );
 		$this->assertSame( $id2, $data[2]['id'] );
 		$this->assertSame( $id3, $data[3]['id'] );
 
 		// Invalid 'menu_order' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$request->set_param( 'menu_order', 'top-first' );
 		$response = $this->server->dispatch( $request );
@@ -301,13 +258,8 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	public function test_get_item_invalid_post_type() {
 		$post_id = $this->factory->post->create();
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages/' . $post_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_create_item() {
@@ -406,15 +358,13 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request->set_param( '_fields', 'id,slug' );
 		$obj      = get_post( $page_id );
 		$response = $endpoint->prepare_item_for_response( $obj, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'id',
-			'slug',
-		), array_keys( $response->get_data() ) );
+				'id',
+				'slug',
+			),
+			array_keys( $response->get_data() )
+		);
 	}
 
 	public function test_get_pages_params() {
@@ -587,11 +537,7 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$properties = $data['schema']['properties'];
-<<<<<<< HEAD
-		$this->assertEquals( 22, count( $properties ) );
-=======
-		$this->assertSame( 24, count( $properties ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 22, count( $properties ) );
 		$this->assertArrayHasKey( 'author', $properties );
 		$this->assertArrayHasKey( 'comment_status', $properties );
 		$this->assertArrayHasKey( 'content', $properties );

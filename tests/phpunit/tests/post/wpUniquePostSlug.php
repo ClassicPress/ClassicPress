@@ -35,11 +35,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 			}
 
 			$post = get_post( $id );
-<<<<<<< HEAD
-			$this->assertEquals( $outputs[$k], urldecode( $post->post_name ) );
-=======
 			$this->assertSame( $outputs[ $k ], urldecode( $post->post_name ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -124,13 +120,8 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		$this->assertSame( 'image', get_post( $attachment )->post_name );
 		$this->assertSame( 'image-2', get_post( $two )->post_name );
 
-<<<<<<< HEAD
-		// 'image' can be a child of image-2
-		$this->assertEquals( 'image', wp_unique_post_slug( 'image', 0, 'publish', 'post-type-1', $two ) );
-=======
 		// 'image' can be a child of image-2.
 		$this->assertSame( 'image', wp_unique_post_slug( 'image', 0, 'publish', 'post-type-1', $two ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		_unregister_post_type( 'post-type-1' );
 	}

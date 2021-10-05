@@ -20,18 +20,6 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 22363
-	 */
-	function test_removes_accents() {
-		$in  = 'àáâãäåæçèéêëìíîïñòóôõöøùúûüýÿ';
-		$out = 'aaaaaaaeceeeeiiiinoooooouuuuyy';
-		$this->assertSame( $out, sanitize_file_name( $in ) );
-	}
-
-	/**
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 * Test that spaces are correctly replaced with dashes.
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/16330
@@ -44,29 +32,12 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 			'multi %20 +space.png' => 'multi-20-space.png',
 		);
 
-<<<<<<< HEAD
-		foreach( $urls as $test => $expected ) {
-			$this->assertEquals( $expected, sanitize_file_name( $test ) );
-=======
 		foreach ( $urls as $test => $expected ) {
 			$this->assertSame( $expected, sanitize_file_name( $test ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
 	function test_replaces_any_number_of_hyphens_with_one_hyphen() {
-<<<<<<< HEAD
-		$this->assertEquals("a-t-t", sanitize_file_name("a----t----t"));
-	}
-
-	function test_trims_trailing_hyphens() {
-		$this->assertEquals("a-t-t", sanitize_file_name("a----t----t----"));
-	}
-
-	function test_replaces_any_amount_of_whitespace_with_one_hyphen() {
-		$this->assertEquals("a-t", sanitize_file_name("a          t"));
-		$this->assertEquals("a-t", sanitize_file_name("a    \n\n\nt"));
-=======
 		$this->assertSame( 'a-t-t', sanitize_file_name( 'a----t----t' ) );
 	}
 
@@ -77,7 +48,6 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	function test_replaces_any_amount_of_whitespace_with_one_hyphen() {
 		$this->assertSame( 'a-t', sanitize_file_name( 'a          t' ) );
 		$this->assertSame( 'a-t', sanitize_file_name( "a    \n\n\nt" ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

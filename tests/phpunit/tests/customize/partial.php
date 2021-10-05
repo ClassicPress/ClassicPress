@@ -113,18 +113,15 @@ class Test_WP_Customize_Partial extends WP_UnitTestCase {
 		$this->assertFalse( $partial->fallback_refresh );
 		$this->assertContains( 'Lorem Ipsum', $partial->render() );
 
-		$partial = new WP_Customize_Partial( $this->selective_refresh, $partial_id, array(
-			'settings' => 'blogdescription',
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( array( 'blogdescription' ), $partial->settings );
-		$this->assertEquals( 'blogdescription', $partial->primary_setting );
-=======
+		$partial = new WP_Customize_Partial(
+			$this->selective_refresh,
+			$partial_id,
+			array(
+				'settings' => 'blogdescription',
 			)
 		);
 		$this->assertSame( array( 'blogdescription' ), $partial->settings );
 		$this->assertSame( 'blogdescription', $partial->primary_setting );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

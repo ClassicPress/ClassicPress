@@ -69,11 +69,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals(200, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 200, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_redirect_on_302() {
@@ -82,11 +78,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals(200, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 200, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -98,11 +90,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals(301, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 301, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -114,11 +102,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals(302, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 302, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_redirections_equal() {
@@ -127,11 +111,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals(200, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 200, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_no_head_redirections() {
@@ -140,11 +120,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( 302, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 302, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -156,11 +132,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( 200, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 200, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_redirections_greater() {
@@ -196,11 +168,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( 302, (int)$res['response']['code'] );
-=======
 		$this->assertSame( 302, (int) $res['response']['code'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -214,11 +182,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( 'PASS', $res['body']);
-=======
 		$this->assertSame( 'PASS', $res['body'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -232,15 +196,9 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		// Test 301 - POST to POST
 		$res = wp_remote_request( $url, array( 'method' => 'PUT', 'timeout' => 30 ) );
 
-<<<<<<< HEAD
-		$this->skipTestOnFailure( $res );
-		$this->assertEquals( 'PASS', wp_remote_retrieve_body( $res ) );
-		$this->assertTrue( !empty( $res['headers']['location'] ) );
-=======
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( 'PASS', wp_remote_retrieve_body( $res ) );
 		$this->assertTrue( ! empty( $res['headers']['location'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -283,17 +241,10 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( '', $res['body'] ); // The body should be empty.
-		$this->assertEquals( $size, $res['headers']['content-length'] ); // Check the headers are returned (and the size is the same..)
-		$this->assertEquals( $size, $filesize ); // Check that the file is written to disk correctly without any extra characters
-		$this->assertStringStartsWith( get_temp_dir(), $res['filename'] ); // Check it's saving within the temp dir
-=======
 		$this->assertSame( '', $res['body'] ); // The body should be empty.
 		$this->assertEquals( $size, $res['headers']['content-length'] );   // Check the headers are returned (and the size is the same).
 		$this->assertSame( $size, $filesize ); // Check that the file is written to disk correctly without any extra characters.
 		$this->assertStringStartsWith( get_temp_dir(), $res['filename'] ); // Check it's saving within the temp directory.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -312,11 +263,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnFailure( $res );
 		$this->assertNotWPError( $res );
-<<<<<<< HEAD
-		$this->assertEquals( $size, $filesize ); // Check that the file is written to disk correctly without any extra characters
-=======
 		$this->assertSame( $size, $filesize ); // Check that the file is written to disk correctly without any extra characters.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -348,13 +295,8 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$res = wp_remote_post( add_query_arg( 'response_code', $response_code, $url ), array( 'timeout' => 30 ) );
 
-<<<<<<< HEAD
-		$this->skipTestOnFailure( $res );
-		$this->assertEquals( $method, wp_remote_retrieve_body( $res ) );
-=======
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( $method, wp_remote_retrieve_body( $res ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function data_post_redirect_to_method_300() {
@@ -400,13 +342,8 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$res = wp_remote_get( $url, $args );
 
-<<<<<<< HEAD
-		$this->skipTestOnFailure( $res );
-		$this->assertEquals( 'PASS', wp_remote_retrieve_body( $res ) );
-=======
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( 'PASS', wp_remote_retrieve_body( $res ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -447,13 +384,8 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$res = wp_remote_get( $url, array( 'timeout' => 30 ) );
 
-<<<<<<< HEAD
-		$this->skipTestOnFailure( $res );
-		$this->assertEquals( 'PASS', wp_remote_retrieve_body( $res ) );
-=======
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( 'PASS', wp_remote_retrieve_body( $res ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -467,13 +399,8 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$res = wp_remote_get( $url );
 
-<<<<<<< HEAD
-		$this->skipTestOnFailure( $res );
-		$this->assertEquals( 'PASS', wp_remote_retrieve_body( $res ) );
-=======
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( 'PASS', wp_remote_retrieve_body( $res ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

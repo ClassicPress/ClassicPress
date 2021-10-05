@@ -51,11 +51,6 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$now -= 10 * $i;
 		}
 
-<<<<<<< HEAD
-		$this->assertEquals( 2, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'trackback' ) ) );
-		$this->assertEquals( 3, get_page_of_comment( $pingbacks[0], array( 'per_page' => 2, 'type' => 'pingback' ) ) );
-		$this->assertEquals( 5, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'pings' ) ) );
-=======
 		$this->assertSame(
 			2,
 			get_page_of_comment(
@@ -86,7 +81,6 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				)
 			)
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -124,14 +118,6 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		}
 
 		// Prime cache for trackbacks.
-<<<<<<< HEAD
-		$page_trackbacks = get_page_of_comment( $trackbacks[1], array( 'per_page' => 3, 'type' => 'trackback' ) );
-		$this->assertEquals( 2, $page_trackbacks );
-
-		$num_queries = $wpdb->num_queries;
-		$page_comments = get_page_of_comment( $comment, array( 'per_page' => 3, 'type' => 'comment' ) );
-		$this->assertEquals( 1, $page_comments );
-=======
 		$page_trackbacks = get_page_of_comment(
 			$trackbacks[1],
 			array(
@@ -150,7 +136,6 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 1, $page_comments );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertNotEquals( $num_queries, $wpdb->num_queries );
 	}

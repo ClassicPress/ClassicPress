@@ -144,13 +144,8 @@ class Tests_Rewrite extends WP_UnitTestCase {
 		$this->assertSame( 'http', parse_url( $permalink, PHP_URL_SCHEME ) );
 		$this->assertSame( 'https', parse_url( $network_home, PHP_URL_SCHEME ) );
 
-<<<<<<< HEAD
-		// Test that the url_to_postid() call matched:
-		$this->assertEquals( $post_id, $url_to_postid );
-=======
 		// Test that the url_to_postid() call matched.
 		$this->assertSame( $post_id, $url_to_postid );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -230,13 +225,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 
 		update_option( 'home', home_url( '/example/' ) );
 
-<<<<<<< HEAD
-		$id = self::factory()->post->create( array( 'post_title' => 'Hi', 'post_type' => 'page', 'post_name' => 'examp' ) );
-		$this->assertEquals( $id, url_to_postid( get_permalink( $id ) ) );
-		$this->assertEquals( $id, url_to_postid( site_url('/example/examp' ) ) );
-		$this->assertEquals( $id, url_to_postid( '/example/examp/' ) );
-		$this->assertEquals( $id, url_to_postid( '/example/examp' ) );
-=======
 		$id = self::factory()->post->create(
 			array(
 				'post_title' => 'Hi',
@@ -248,7 +236,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 		$this->assertSame( $id, url_to_postid( site_url( '/example/examp' ) ) );
 		$this->assertSame( $id, url_to_postid( '/example/examp/' ) );
 		$this->assertSame( $id, url_to_postid( '/example/examp' ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( 0, url_to_postid( site_url( '/example/ex' ) ) );
 		$this->assertSame( 0, url_to_postid( '/example/ex' ) );
@@ -268,9 +255,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 		$this->assertSame( array(), $GLOBALS['wp']->query_vars );
 
 		$this->go_to( $home_url . 'page' );
-<<<<<<< HEAD
-		$this->assertEquals( array( 'page' => '', 'pagename' => 'page' ), $GLOBALS['wp']->query_vars );
-=======
 		$this->assertSame(
 			array(
 				'page'     => '',
@@ -278,7 +262,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 			),
 			$GLOBALS['wp']->query_vars
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -293,13 +276,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 		$this->assertSame( array(), $GLOBALS['wp']->query_vars );
 
 		$this->go_to( $home_url . 'page' );
-<<<<<<< HEAD
-		$this->assertEquals( array( 'page' => '', 'pagename' => 'page' ), $GLOBALS['wp']->query_vars );
-
-		$this->go_to( $not_a_home_url . 'page' );
-		$this->assertNotEquals( array( 'page' => '', 'pagename' => 'page' ), $GLOBALS['wp']->query_vars );
-		$this->assertEquals( array( 'page' => '', 'pagename' => 'match/page' ), $GLOBALS['wp']->query_vars );
-=======
 		$this->assertSame(
 			array(
 				'page'     => '',
@@ -323,7 +299,6 @@ class Tests_Rewrite extends WP_UnitTestCase {
 			),
 			$GLOBALS['wp']->query_vars
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

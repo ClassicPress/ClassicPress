@@ -82,11 +82,7 @@ class Tests_Term_Tax_Query extends WP_UnitTestCase {
 			),
 		) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'foo', ), $tq->queries[0]['terms'] );
-=======
 		$this->assertSame( array( 'foo' ), $tq->queries[0]['terms'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**

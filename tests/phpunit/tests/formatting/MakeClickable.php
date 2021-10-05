@@ -6,11 +6,7 @@
 class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	function test_mailto_xss() {
 		$in = 'testzzz@"STYLE="behavior:url(\'#default#time2\')"onBegin="alert(\'refresh-XSS\')"';
-<<<<<<< HEAD
-		$this->assertEquals($in, make_clickable($in));
-=======
 		$this->assertSame( $in, make_clickable( $in ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_valid_mailto() {
@@ -21,13 +17,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'0@example.com',
 			'foo@example-example.com',
 			);
-<<<<<<< HEAD
-		foreach ($valid_emails as $email) {
-			$this->assertEquals('<a href="mailto:'.$email.'">'.$email.'</a>', make_clickable($email));
-=======
 		foreach ( $valid_emails as $email ) {
 			$this->assertSame( '<a href="mailto:' . $email . '">' . $email . '</a>', make_clickable( $email ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -40,13 +31,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'foo @example.com',
 			'foo@example',
 			);
-<<<<<<< HEAD
-		foreach ($invalid_emails as $email) {
-			$this->assertEquals($email, make_clickable($email));
-=======
 		foreach ( $invalid_emails as $email ) {
 			$this->assertSame( $email, make_clickable( $email ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -70,13 +56,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'There was a spoon named (<a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>) said Alice.'
 			);
 
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -102,13 +83,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'There was a spoon named (<a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>)x',
 			);
 
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -132,13 +108,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>) said Alice.'
 			);
 
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -162,13 +133,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>)'
 			);
 
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -184,13 +150,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'<a href="http://bg.wikipedia.org/Баба" rel="nofollow">http://bg.wikipedia.org/Баба</a>',
 			'<a href="http://example.com/?a=баба&#038;b=дядо" rel="nofollow">http://example.com/?a=баба&#038;b=дядо</a>',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -224,13 +185,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			<a href="http://www.cs.virginia.edu/~robins/YouAndYourResearch.html" rel="nofollow">http://www.cs.virginia.edu/~robins/YouAndYourResearch.html</a>)
 			Richard Hamming wrote about people getting more done with their doors closed, but',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -248,13 +204,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'Some text followed by a bracketed link with a trailing elipsis (<a href="http://example.com" rel="nofollow">http://example.com</a>)...',
 			'In his famous speech “You and Your research” (here: <a href="http://www.cs.virginia.edu/~robins/YouAndYourResearch.html" rel="nofollow">http://www.cs.virginia.edu/~robins/YouAndYourResearch.html</a>) Richard Hamming wrote about people getting more done with their doors closed...',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -270,13 +221,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'This is a really good tweet <a href="http://twitter.com/#!/wordpress/status/25907440233" rel="nofollow">http://twitter.com/#!/wordpress/status/25907440233</a> !',
 			'This is a really good tweet <a href="http://twitter.com/#!/wordpress/status/25907440233" rel="nofollow">http://twitter.com/#!/wordpress/status/25907440233</a>!',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -291,13 +237,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'URL wrapped in angle brackets with padding < <a href="http://example.com/" rel="nofollow">http://example.com/</a> >',
 			'mailto wrapped in angle brackets <foo@example.com>',
 		);
-<<<<<<< HEAD
-		foreach ($before as $key => $url) {
-			$this->assertEquals($expected[$key], make_clickable($url));
-=======
 		foreach ( $before as $key => $url ) {
 			$this->assertSame( $expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -318,13 +259,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'Exclamation mark then URL!<a href="http://example.com/" rel="nofollow">http://example.com/</a>',
 			'Question mark then URL?<a href="http://example.com/" rel="nofollow">http://example.com/</a>',
 		);
-<<<<<<< HEAD
-		foreach ($before as $key => $url) {
-			$this->assertEquals($expected[$key], make_clickable($url));
-=======
 		foreach ( $before as $key => $url ) {
 			$this->assertSame( $expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -347,13 +283,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			"<span style='text-align:center; display: block;'><object width='425' height='350'><param name='movie' value='http://www.youtube.com/v/nd_BdvG43rE&rel=1&fs=1&showsearch=0&showinfo=1&iv_load_policy=1' /> <param name='allowfullscreen' value='true' /> <param name='wmode' value='opaque' /> <embed src='http://www.youtube.com/v/nd_BdvG43rE&rel=1&fs=1&showsearch=0&showinfo=1&iv_load_policy=1' type='application/x-shockwave-flash' allowfullscreen='true' width='425' height='350' wmode='opaque'></embed> </object></span>",
 			'<a href="http://example.com/example.gif" title="Image from http://example.com">Look at this image!</a>',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals($urls_expected[$key], make_clickable($url));
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -393,13 +324,9 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'code inside pre <pre>http://wordpress.org <code>http://wordpress.org</code> http://wordpress.org</pre>',
 		);
 
-<<<<<<< HEAD
-		foreach ( $before as $key => $url )
-			$this->assertEquals( $expected[ $key ], make_clickable( $url ) );
-=======
 		foreach ( $before as $key => $url ) {
 			$this->assertSame( $expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		}
 	}
 
 	/**
@@ -414,13 +341,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			'<span><a href="http://example.com" rel="nofollow">http://example.com</a></span>',
 			'<p><a href="http://example.com/" rel="nofollow">http://example.com/</a></p>',
 		);
-<<<<<<< HEAD
-		foreach ($urls_before as $key => $url) {
-			$this->assertEquals( $urls_expected[$key], make_clickable( $url ) );
-=======
 		foreach ( $urls_before as $key => $url ) {
 			$this->assertSame( $urls_expected[ $key ], make_clickable( $url ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 

@@ -49,15 +49,9 @@ class Tests_Auth extends WP_UnitTestCase {
 		$this->assertFalse( wp_validate_auth_cookie( $cookie, 'logged_in' ), 'wrong auth scheme' );
 
 		$cookie = wp_generate_auth_cookie( self::$user_id, time() + 3600, 'auth' );
-<<<<<<< HEAD
-		list($a, $b, $c) = explode('|', $cookie);
-		$cookie = $a . '|' . ($b + 1) . '|' . $c;
-		$this->assertEquals( false, wp_validate_auth_cookie( self::$user_id, 'auth' ), 'altered cookie' );
-=======
 		list($a, $b, $c) = explode( '|', $cookie );
 		$cookie          = $a . '|' . ( $b + 1 ) . '|' . $c;
 		$this->assertFalse( wp_validate_auth_cookie( self::$user_id, 'auth' ), 'altered cookie' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_auth_cookie_scheme() {

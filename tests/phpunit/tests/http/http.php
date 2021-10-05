@@ -138,21 +138,19 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	 */
 	function test_wp_parse_url_with_default_component() {
 		$actual = wp_parse_url( self::FULL_TEST_URL, -1 );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'scheme'   => 'http',
-			'host'     => 'host.name',
-			'port'     => 9090,
-			'user'     => 'username',
-			'pass'     => 'password',
-			'path'     => '/path',
-			'query'    => 'arg1=value1&arg2=value2',
-			'fragment' => 'anchor',
-		), $actual );
+				'scheme'   => 'http',
+				'host'     => 'host.name',
+				'port'     => 9090,
+				'user'     => 'username',
+				'pass'     => 'password',
+				'path'     => '/path',
+				'query'    => 'arg1=value1&arg2=value2',
+				'fragment' => 'anchor',
+			),
+			$actual
+		);
 	}
 
 	/**

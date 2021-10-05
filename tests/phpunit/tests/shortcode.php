@@ -89,22 +89,6 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	function test_noatts() {
-<<<<<<< HEAD
-		do_shortcode('[test-shortcode-tag /]');
-		$this->assertEquals( '', $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_one_att() {
-		do_shortcode('[test-shortcode-tag foo="asdf" /]');
-		$this->assertEquals( array('foo' => 'asdf'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_not_a_tag() {
-		$out = do_shortcode('[not-a-shortcode-tag]');
-		$this->assertEquals( '[not-a-shortcode-tag]', $out );
-=======
 		do_shortcode( '[test-shortcode-tag /]' );
 		$this->assertSame( '', $this->atts );
 		$this->assertSame( 'test-shortcode-tag', $this->tagname );
@@ -119,7 +103,6 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	function test_not_a_tag() {
 		$out = do_shortcode( '[not-a-shortcode-tag]' );
 		$this->assertSame( '[not-a-shortcode-tag]', $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -170,79 +153,6 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	function test_two_atts() {
-<<<<<<< HEAD
-		do_shortcode('[test-shortcode-tag foo="asdf" bar="bing" /]');
-		$this->assertEquals( array('foo' => 'asdf', 'bar' => 'bing'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_noatts_enclosing() {
-		do_shortcode('[test-shortcode-tag]content[/test-shortcode-tag]');
-		$this->assertEquals( '', $this->atts );
-		$this->assertEquals( 'content', $this->content );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_one_att_enclosing() {
-		do_shortcode('[test-shortcode-tag foo="bar"]content[/test-shortcode-tag]');
-		$this->assertEquals( array('foo' => 'bar'), $this->atts );
-		$this->assertEquals( 'content', $this->content );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_two_atts_enclosing() {
-		do_shortcode('[test-shortcode-tag foo="bar" baz="bing"]content[/test-shortcode-tag]');
-		$this->assertEquals( array('foo' => 'bar', 'baz' => 'bing'), $this->atts );
-		$this->assertEquals( 'content', $this->content );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_unclosed() {
-		$out = do_shortcode('[test-shortcode-tag]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( '', $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_positional_atts_num() {
-		$out = do_shortcode('[test-shortcode-tag 123]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array(0=>'123'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_positional_atts_url() {
-		$out = do_shortcode('[test-shortcode-tag http://www.youtube.com/watch?v=eBGIQ7ZuuiU]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array(0=>'http://www.youtube.com/watch?v=eBGIQ7ZuuiU'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_positional_atts_quotes() {
-		$out = do_shortcode('[test-shortcode-tag "something in quotes" "something else"]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array(0=>'something in quotes', 1=>'something else'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_positional_atts_mixed() {
-		$out = do_shortcode('[test-shortcode-tag 123 https://wordpress.org/ 0 "foo" bar]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array(0=>'123', 1=>'https://wordpress.org/', 2=>'0', 3=>'foo', 4=>'bar'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_positional_and_named_atts() {
-		$out = do_shortcode('[test-shortcode-tag 123 url=https://wordpress.org/ foo bar="baz"]');
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array(0=>'123', 'url' => 'https://wordpress.org/', 1=>'foo', 'bar' => 'baz'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-	}
-
-	function test_footag_default() {
-		$out = do_shortcode('[footag]');
-		$this->assertEquals('foo = ', $out);
-=======
 		do_shortcode( '[test-shortcode-tag foo="asdf" bar="bing" /]' );
 		$this->assertSame(
 			array(
@@ -349,66 +259,24 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	function test_footag_default() {
 		$out = do_shortcode( '[footag]' );
 		$this->assertSame( 'foo = ', $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_footag_val() {
 		$val = rand_str();
-<<<<<<< HEAD
-		$out = do_shortcode('[footag foo="'.$val.'"]');
-		$this->assertEquals('foo = '.$val, $out);
-=======
 		$out = do_shortcode( '[footag foo="' . $val . '"]' );
 		$this->assertSame( 'foo = ' . $val, $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_nested_tags() {
 		$out = do_shortcode('[baztag][dumptag abc="foo" def=123 https://wordpress.org/][/baztag]');
 		$expected = "content = abc = foo\ndef = 123\n0 = https://wordpress.org\n";
-<<<<<<< HEAD
-		$this->assertEquals($expected, $out);
-=======
 		$this->assertSame( $expected, $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/6518
 	 */
 	function test_tag_escaped() {
-<<<<<<< HEAD
-		$out = do_shortcode('[[footag]] [[bartag foo="bar"]]');
-		$this->assertEquals('[footag] [bartag foo="bar"]', $out);
-
-		$out = do_shortcode('[[footag /]] [[bartag foo="bar" /]]');
-		$this->assertEquals('[footag /] [bartag foo="bar" /]', $out);
-
-		$out = do_shortcode('[[baztag foo="bar"]the content[/baztag]]');
-		$this->assertEquals('[baztag foo="bar"]the content[/baztag]', $out);
-
-		// double escaped
-		$out = do_shortcode('[[[footag]]] [[[bartag foo="bar"]]]');
-		$this->assertEquals('[[footag]] [[bartag foo="bar"]]', $out);
-	}
-
-	function test_tag_not_escaped() {
-		// these have square brackets on either end but aren't actually escaped
-		$out = do_shortcode('[[footag] [bartag foo="bar"]]');
-		$this->assertEquals('[foo =  foo = bar]', $out);
-
-		$out = do_shortcode('[[footag /] [bartag foo="bar" /]]');
-		$this->assertEquals('[foo =  foo = bar]', $out);
-
-		$out = do_shortcode('[[baztag foo="bar"]the content[/baztag]');
-		$this->assertEquals('[content = the content', $out);
-
-		$out = do_shortcode('[[not-a-tag]]');
-		$this->assertEquals('[[not-a-tag]]', $out);
-
-		$out = do_shortcode('[[[footag] [bartag foo="bar"]]]');
-		$this->assertEquals('[[foo =  foo = bar]]', $out);
-=======
 		$out = do_shortcode( '[[footag]] [[bartag foo="bar"]]' );
 		$this->assertSame( '[footag] [bartag foo="bar"]', $out );
 
@@ -439,7 +307,6 @@ class Tests_Shortcode extends WP_UnitTestCase {
 
 		$out = do_shortcode( '[[[footag] [bartag foo="bar"]]]' );
 		$this->assertSame( '[[foo =  foo = bar]]', $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_mixed_tags() {
@@ -475,25 +342,14 @@ content =
 more content
 
 EOF;
-<<<<<<< HEAD
-		$out = do_shortcode($in);
-		$this->assertEquals(strip_ws($expected), strip_ws($out));
-=======
 		$out      = do_shortcode( $in );
 		$this->assertSame( strip_ws( $expected ), strip_ws( $out ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/6562
 	 */
 	function test_utf8_whitespace_1() {
-<<<<<<< HEAD
-		// NO-BREAK SPACE: U+00A0
-		do_shortcode("[test-shortcode-tag foo=\"bar\" \xC2\xA0baz=\"123\"]");
-		$this->assertEquals( array('foo' => 'bar', 'baz' => '123'), $this->atts );
-		$this->assertEquals( '', $this->content );
-=======
 		// NO-BREAK SPACE: U+00A0.
 		do_shortcode( "[test-shortcode-tag foo=\"bar\" \xC2\xA0baz=\"123\"]" );
 		$this->assertSame(
@@ -504,19 +360,12 @@ EOF;
 			$this->atts
 		);
 		$this->assertSame( '', $this->content );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/6562
 	 */
 	function test_utf8_whitespace_2() {
-<<<<<<< HEAD
-		// ZERO WIDTH SPACE: U+200B
-		do_shortcode("[test-shortcode-tag foo=\"bar\" \xE2\x80\x8Babc=\"def\"]");
-		$this->assertEquals( array('foo' => 'bar', 'abc' => 'def'), $this->atts );
-		$this->assertEquals( '', $this->content );
-=======
 		// ZERO WIDTH SPACE: U+200B.
 		do_shortcode( "[test-shortcode-tag foo=\"bar\" \xE2\x80\x8Babc=\"def\"]" );
 		$this->assertSame(
@@ -527,7 +376,6 @@ EOF;
 			$this->atts
 		);
 		$this->assertSame( '', $this->content );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -604,12 +452,6 @@ EOF;
 	function test_shortcode_atts_filter_passes_original_arguments() {
 		add_filter( 'shortcode_atts_bartag', array( $this, '_filter_atts' ), 10, 3 );
 
-<<<<<<< HEAD
-		do_shortcode('[bartag foo="foo1" /]');
-		$this->assertEquals( array( 'foo' => 'foo1', 'baz' => 'default baz' ), $this->filter_atts_out );
-		$this->assertEquals( array( 'foo' => 'no foo', 'baz' => 'default baz' ), $this->filter_atts_pairs );
-		$this->assertEquals( array( 'foo' => 'foo1' ), $this->filter_atts_atts );
-=======
 		do_shortcode( '[bartag foo="foo1" /]' );
 		$this->assertSame(
 			array(
@@ -626,7 +468,6 @@ EOF;
 			$this->filter_atts_pairs
 		);
 		$this->assertSame( array( 'foo' => 'foo1' ), $this->filter_atts_atts );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_filter( 'shortcode_atts_bartag', array( $this, '_filter_atts' ), 10, 3 );
 	}
@@ -634,21 +475,12 @@ EOF;
 	function test_shortcode_atts_filtering() {
 		add_filter( 'shortcode_atts_bartag', array( $this, '_filter_atts2' ), 10, 3 );
 
-<<<<<<< HEAD
-		$out = do_shortcode('[bartag foo="foo1" baz="baz1" /]');
-		$this->assertEquals( array( 'foo' => 'no foo' ), $this->filter_atts_out );
-		$this->assertEquals( 'foo = no foo', $out );
-
-		$out = do_shortcode('[bartag foo="foo2" /]');
-		$this->assertEquals( 'foo = foo2', $out );
-=======
 		$out = do_shortcode( '[bartag foo="foo1" baz="baz1" /]' );
 		$this->assertSame( array( 'foo' => 'no foo' ), $this->filter_atts_out );
 		$this->assertSame( 'foo = no foo', $out );
 
 		$out = do_shortcode( '[bartag foo="foo2" /]' );
 		$this->assertSame( 'foo = foo2', $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_filter( 'shortcode_atts_bartag', array( $this, '_filter_atts2' ), 10, 3 );
 	}
@@ -670,13 +502,8 @@ EOF;
 
 		$output = "[gallery ids=\"37,15,11\"]";
 
-<<<<<<< HEAD
-		foreach($input as $in) {
-			$this->assertEquals( $output, shortcode_unautop( $in ) );
-=======
 		foreach ( $input as $in ) {
 			$this->assertSame( $output, shortcode_unautop( $in ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -835,15 +662,10 @@ EOF;
 	function sub_registration( $input, $expected ) {
 		add_shortcode( $input, '' );
 		$actual = shortcode_exists( $input );
-<<<<<<< HEAD
-		$test = $this->assertEquals( $expected, $actual );
-		if ( $actual ) remove_shortcode( $input );
-=======
 		$test   = $this->assertSame( $expected, $actual );
 		if ( $actual ) {
 			remove_shortcode( $input );
 		}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		return $test;
 	}
 
@@ -934,11 +756,7 @@ EOF;
 	function test_unnamed_attribute() {
 		$out = do_shortcode('[dumptag=https://wordpress.org/]');
 		$expected = "0 = =https://wordpress.org\n";
-<<<<<<< HEAD
-		$this->assertEquals($expected, $out);
-=======
 		$this->assertSame( $expected, $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1091,9 +909,6 @@ EOF;
 	 */
 	function test_empty_single_quote_attribute() {
 		$out = do_shortcode( '[test-shortcode-tag a="foo" b=\'bar\' c=baz foo \'bar\' "baz" ]test empty atts[/test-shortcode-tag]' );
-<<<<<<< HEAD
-		$this->assertEquals( array( 'a' => 'foo', 'b' => 'bar', 'c' => 'baz', 0 => 'foo', 1 => 'bar', 2 => 'baz' ), $this->atts );
-=======
 		$this->assertSame(
 			array(
 				'a' => 'foo',
@@ -1105,7 +920,6 @@ EOF;
 			),
 			$this->atts
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1113,11 +927,6 @@ EOF;
 	 */
 	function test_positional_atts_single_quotes() {
 		$out = do_shortcode( "[test-shortcode-tag 'something in quotes' 'something else']" );
-<<<<<<< HEAD
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array( 0 => 'something in quotes', 1 => 'something else' ), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-=======
 		$this->assertSame( '', $out );
 		$this->assertSame(
 			array(
@@ -1127,7 +936,6 @@ EOF;
 			$this->atts
 		);
 		$this->assertSame( 'test-shortcode-tag', $this->tagname );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1135,11 +943,6 @@ EOF;
 	 */
 	function test_positional_atts_mixed_quotes() {
 		$out = do_shortcode( "[test-shortcode-tag 'something in quotes' \"something else\" 123 foo bar='baz' example=\"test\" ]" );
-<<<<<<< HEAD
-		$this->assertEquals( '', $out );
-		$this->assertEquals( array( 0 => 'something in quotes', 1 => 'something else', 2 => '123', 3 => 'foo', 'bar' => 'baz', 'example' => 'test'), $this->atts );
-		$this->assertEquals( 'test-shortcode-tag', $this->tagname );
-=======
 		$this->assertSame( '', $out );
 		$this->assertSame(
 			array(
@@ -1153,6 +956,5 @@ EOF;
 			$this->atts
 		);
 		$this->assertSame( 'test-shortcode-tag', $this->tagname );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

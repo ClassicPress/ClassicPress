@@ -64,9 +64,6 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 		remove_filter( 'auth_post_meta_flight_number', array( $this, '_old_auth_meta_cb' ) );
 		remove_filter( 'sanitize_post_meta_flight_number', array( $this, '_old_sanitize_meta_cb' ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'auth' => 10, 'sanitize' => 10 ), $has_filters );
-=======
 		$this->assertSame(
 			array(
 				'auth'     => 10,
@@ -74,7 +71,6 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 			),
 			$has_filters
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_register_meta_with_post_object_type_returns_true() {

@@ -85,13 +85,8 @@ class Tests_XMLRPC_wp_getTerms extends WP_XMLRPC_UnitTestCase {
 		$filter = array( 'number' => 5 );
 		$results2 = $this->myxmlrpcserver->wp_getTerms( array( 1, 'editor', 'editor', $tax_name, $filter ) );
 		$this->assertNotIXRError( $results );
-<<<<<<< HEAD
-		$this->assertEquals( 5, count( $results2 ) );
-		$this->assertEquals( $results[1]['term_id'], $results2[1]['term_id'] ); // check one of the terms
-=======
 		$this->assertSame( 5, count( $results2 ) );
 		$this->assertSame( $results[1]['term_id'], $results2[1]['term_id'] ); // Check one of the terms.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$filter['offset'] = 10;
 		$results3 = $this->myxmlrpcserver->wp_getTerms( array( 1, 'editor', 'editor', $tax_name, $filter ) );

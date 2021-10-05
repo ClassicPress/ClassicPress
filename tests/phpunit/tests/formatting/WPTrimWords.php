@@ -42,40 +42,4 @@ class Tests_Formatting_WPTrimWords extends WP_UnitTestCase {
 		$text = 'This is some short text.';
 		$this->assertSame( $text, wp_trim_words( $text ) );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 44541
-	 */
-	function test_trims_to_20_counted_by_chars() {
-		switch_to_locale( 'ja_JP' );
-		$expected = substr( $this->long_text, 0, 20 ) . '&hellip;';
-		$actual   = wp_trim_words( $this->long_text, 20 );
-		restore_previous_locale();
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * @ticket 44541
-	 */
-	function test_trims_to_20_counted_by_chars_with_double_width_chars() {
-		switch_to_locale( 'ja_JP' );
-		$text     = str_repeat( 'あ', 100 );
-		$expected = str_repeat( 'あ', 19 ) . '&hellip;';
-		$actual   = wp_trim_words( $text, 19 );
-		restore_previous_locale();
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
-	 * @ticket 47867
-	 */
-	function test_works_with_non_numeric_num_words() {
-		$this->assertSame( '', wp_trim_words( $this->long_text, '', '' ) );
-		$this->assertSame( '', wp_trim_words( $this->long_text, 'abc', '' ) );
-		$this->assertSame( '', wp_trim_words( $this->long_text, null, '' ) );
-		$this->assertSame( 'Lorem ipsum dolor', wp_trim_words( $this->long_text, '3', '' ) );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

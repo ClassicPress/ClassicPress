@@ -10,7 +10,7 @@
  * @group restapi
  */
 class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase {
-	
+
 	protected static $administrator;
 	protected static $author;
 
@@ -45,13 +45,8 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		/** Individual settings can't be gotten **/
 		wp_set_current_user( self::$administrator );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings/title' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_context_param() {
@@ -59,25 +54,15 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 
 	public function test_get_item_is_not_public_not_authenticated() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 401, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 401, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_item_is_not_public_no_permission() {
 		wp_set_current_user( self::$author );
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/settings' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 403, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 403, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items() {
@@ -155,13 +140,9 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 'validvalue2', $data['mycustomsettinginrest'] );
+		$this->assertSame( 'validvalue2', $data['mycustomsettinginrest'] );
 
 		unregister_setting( 'somegroup', 'mycustomsetting' );
-=======
-		$this->assertSame( 'validvalue2', $data['mycustomsettinginrest'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_item_with_custom_array_setting() {
@@ -205,13 +186,9 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( null, $data['mycustomsetting'] );
+		$this->assertNull( $data['mycustomsetting'] );
 
 		unregister_setting( 'somegroup', 'mycustomsetting' );
-=======
-		$this->assertNull( $data['mycustomsetting'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_item_with_custom_object_setting() {
@@ -254,13 +231,9 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( null, $data['mycustomsetting'] );
+		$this->assertNull( $data['mycustomsetting'] );
 
 		unregister_setting( 'somegroup', 'mycustomsetting' );
-=======
-		$this->assertNull( $data['mycustomsetting'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function get_setting_custom_callback( $result, $name, $args ) {
@@ -350,12 +323,8 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/settings' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( null, $data['mycustomsettinginrest'] );
-		unregister_setting( 'somegroup', 'mycustomsetting' );
-=======
 		$this->assertNull( $data['mycustomsettinginrest'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		unregister_setting( 'somegroup', 'mycustomsetting' );
 	}
 
 
@@ -591,13 +560,8 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$administrator );
 		$request = new WP_REST_Request( 'PUT', '/wp/v2/settings' );
 		$request->set_param( 'posts_per_page', 11 );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item_with_invalid_float_for_integer() {
@@ -654,13 +618,8 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 	public function test_delete_item() {
 		/** Settings can't be deleted **/
 		$request = new WP_REST_Request( 'DELETE', '/wp/v2/settings/title' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 404, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 404, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_prepare_item() {

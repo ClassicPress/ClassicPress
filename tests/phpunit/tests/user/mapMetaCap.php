@@ -55,22 +55,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$this->assertTrue( $post_type_object->map_meta_cap );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_others_posts', 'edit_private_posts' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_others_posts', 'edit_private_posts' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_others_posts', 'edit_private_posts' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -97,7 +81,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_others_posts', 'delete_private_posts' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_custom_capability_type_with_map_meta_cap() {
@@ -108,22 +91,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_others_books', 'edit_private_books' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_others_books', 'edit_private_books' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_private_books' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_private_books' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_others_books', 'delete_private_books' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_others_books', 'delete_private_books' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_others_books', 'edit_private_books' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -150,7 +117,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_others_books', 'delete_private_books' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_capability_type_post_with_one_renamed_cap() {
@@ -163,22 +129,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$this->assertFalse( $post_type_object->map_meta_cap );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_post' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_post' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_post' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_post' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_post' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_post' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_post' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -205,7 +155,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_post' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_capability_type_post_map_meta_cap_true_with_renamed_cap() {
@@ -222,22 +171,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$this->assertTrue( $post_type_object->map_meta_cap );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_others_books', 'edit_private_posts' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_others_books', 'edit_private_posts' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_others_books', 'edit_private_posts' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -264,7 +197,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_others_posts', 'delete_private_posts' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_capability_type_post_with_all_meta_caps_renamed() {
@@ -281,22 +213,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$this->assertFalse( $post_type_object->map_meta_cap );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_book' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_book' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_book' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_book' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_book' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_book' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_book' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -323,7 +239,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_book' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_capability_type_post_with_all_meta_caps_renamed_mapped() {
@@ -341,22 +256,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 		$this->assertTrue( $post_type_object->map_meta_cap );
 
-<<<<<<< HEAD
-		$this->assertEquals( array( 'edit_others_posts', 'edit_private_posts' ),
-			map_meta_cap( 'edit_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'edit_others_posts', 'edit_private_posts' ),
-			map_meta_cap( $post_type_object->cap->edit_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( 'read_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'read_private_posts' ),
-			map_meta_cap( $post_type_object->cap->read_post, self::$user_id, self::$post_id ) );
-
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( 'delete_post', self::$user_id, self::$post_id ) );
-		$this->assertEquals( array( 'delete_others_posts', 'delete_private_posts' ),
-			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id ) );
-=======
 		$this->assertSame(
 			array( 'edit_others_posts', 'edit_private_posts' ),
 			map_meta_cap( 'edit_post', self::$user_id, self::$post_id )
@@ -383,25 +282,6 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 			array( 'delete_others_posts', 'delete_private_posts' ),
 			map_meta_cap( $post_type_object->cap->delete_post, self::$user_id, self::$post_id )
 		);
-	}
-
-	/**
-	 * @ticket 30991
-	 */
-	function test_delete_posts_cap_without_map_meta_cap() {
-		register_post_type(
-			self::$post_type,
-			array(
-				'capability_type' => 'post',
-				'map_meta_cap'    => false,
-			)
-		);
-
-		$post_type_object = get_post_type_object( self::$post_type );
-
-		$this->assertFalse( $post_type_object->map_meta_cap );
-		$this->assertSame( 'delete_posts', $post_type_object->cap->delete_posts );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_unfiltered_html_cap() {

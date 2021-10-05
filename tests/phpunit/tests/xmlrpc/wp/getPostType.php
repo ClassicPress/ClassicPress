@@ -123,17 +123,10 @@ class Tests_XMLRPC_wp_getPostType extends WP_XMLRPC_UnitTestCase {
 			$this->assertInternalType( 'bool', $value );
 		}
 
-<<<<<<< HEAD
-		// Check expected values
-		$this->assertEquals( $this->cpt_name, $result['name'] );
-		foreach ( $this->cpt_args as $key => $value ) {
-			$this->assertEquals( $value, $result[$key] );
-=======
 		// Check expected values.
 		$this->assertSame( $this->cpt_name, $result['name'] );
 		foreach ( $this->cpt_args as $key => $value ) {
 			$this->assertSame( $value, $result[ $key ] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 }

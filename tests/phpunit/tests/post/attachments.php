@@ -49,16 +49,9 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertSame( 50, $downsize[2] );
 
 		$downsize = image_downsize( $id, 'full' );
-<<<<<<< HEAD
-		$this->assertEquals( wp_basename( $upload['file'] ), wp_basename( $downsize[0] ) );
-		$this->assertEquals( 50, $downsize[1] );
-		$this->assertEquals( 50, $downsize[2] );
-
-=======
 		$this->assertSame( wp_basename( $upload['file'] ), wp_basename( $downsize[0] ) );
 		$this->assertSame( 50, $downsize[1] );
 		$this->assertSame( 50, $downsize[2] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_insert_image_thumb_only() {
@@ -76,15 +69,9 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 		$id = $this->_make_attachment($upload);
 
-<<<<<<< HEAD
-		// intermediate copies should exist: thumbnail only
-		$thumb = image_get_intermediate_size($id, 'thumbnail');
-		$this->assertEquals( 'a2-small-150x150.jpg', $thumb['file'] );
-=======
 		// Intermediate copies should exist: thumbnail only.
 		$thumb = image_get_intermediate_size( $id, 'thumbnail' );
 		$this->assertSame( 'a2-small-150x150.jpg', $thumb['file'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$uploads = wp_upload_dir();
 		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $thumb['path']) );
@@ -92,13 +79,8 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertFalse( image_get_intermediate_size($id, 'medium') );
 		$this->assertFalse( image_get_intermediate_size($id, 'medium_large') );
 
-<<<<<<< HEAD
-		// the thumb url should point to the thumbnail intermediate
-		$this->assertEquals( $thumb['url'], wp_get_attachment_thumb_url($id) );
-=======
 		// The thumb url should point to the thumbnail intermediate.
 		$this->assertSame( $thumb['url'], wp_get_attachment_thumb_url( $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// image_downsize() should return the correct images and sizes
 		$downsize = image_downsize( $id, 'thumbnail' );
@@ -118,16 +100,9 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$this->assertSame( 300, $downsize[2] );
 
 		$downsize = image_downsize( $id, 'full' );
-<<<<<<< HEAD
-		$this->assertEquals( 'a2-small.jpg', wp_basename( $downsize[0] ) );
-		$this->assertEquals( 400, $downsize[1] );
-		$this->assertEquals( 300, $downsize[2] );
-
-=======
 		$this->assertSame( 'a2-small.jpg', wp_basename( $downsize[0] ) );
 		$this->assertSame( 400, $downsize[1] );
 		$this->assertSame( 300, $downsize[2] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_insert_image_medium_sizes() {
@@ -149,23 +124,6 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$id = $this->_make_attachment($upload);
 		$uploads = wp_upload_dir();
 
-<<<<<<< HEAD
-		// intermediate copies should exist: thumbnail and medium
-		$thumb = image_get_intermediate_size($id, 'thumbnail');
-		$this->assertEquals( '2007-06-17DSC_4173-150x150.jpg', $thumb['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $thumb['path']) );
-
-		$medium = image_get_intermediate_size($id, 'medium');
-		$this->assertEquals( '2007-06-17DSC_4173-400x602.jpg', $medium['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $medium['path']) );
-
-		$medium_large = image_get_intermediate_size($id, 'medium_large');
-		$this->assertEquals( '2007-06-17DSC_4173-600x904.jpg', $medium_large['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $medium_large['path']) );
-
-		// the thumb url should point to the thumbnail intermediate
-		$this->assertEquals( $thumb['url'], wp_get_attachment_thumb_url($id) );
-=======
 		// Intermediate copies should exist: thumbnail and medium.
 		$thumb = image_get_intermediate_size( $id, 'thumbnail' );
 		$this->assertSame( '2007-06-17DSC_4173-150x150.jpg', $thumb['file'] );
@@ -181,7 +139,6 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 		// The thumb url should point to the thumbnail intermediate.
 		$this->assertSame( $thumb['url'], wp_get_attachment_thumb_url( $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// image_downsize() should return the correct images and sizes
 		$downsize = image_downsize( $id, 'thumbnail' );
@@ -225,20 +182,6 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$id = $this->_make_attachment($upload);
 		$uploads = wp_upload_dir();
 
-<<<<<<< HEAD
-		// check that the file and intermediates exist
-		$thumb = image_get_intermediate_size($id, 'thumbnail');
-		$this->assertEquals( '2007-06-17DSC_4173-150x150.jpg', $thumb['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $thumb['path']) );
-
-		$medium = image_get_intermediate_size($id, 'medium');
-		$this->assertEquals( '2007-06-17DSC_4173-400x602.jpg', $medium['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $medium['path']) );
-
-		$medium_large = image_get_intermediate_size($id, 'medium_large');
-		$this->assertEquals( '2007-06-17DSC_4173-600x904.jpg', $medium_large['file'] );
-		$this->assertTrue( is_file($uploads['basedir'] . DIRECTORY_SEPARATOR . $medium_large['path']) );
-=======
 		// Check that the file and intermediates exist.
 		$thumb = image_get_intermediate_size( $id, 'thumbnail' );
 		$this->assertSame( '2007-06-17DSC_4173-150x150.jpg', $thumb['file'] );
@@ -251,7 +194,6 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 		$medium_large = image_get_intermediate_size( $id, 'medium_large' );
 		$this->assertSame( '2007-06-17DSC_4173-600x904.jpg', $medium_large['file'] );
 		$this->assertTrue( is_file( $uploads['basedir'] . DIRECTORY_SEPARATOR . $medium_large['path'] ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$meta = wp_get_attachment_metadata($id);
 		$original = $meta['file'];

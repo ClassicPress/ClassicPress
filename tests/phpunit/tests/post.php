@@ -71,17 +71,10 @@ class Tests_Post extends WP_UnitTestCase {
 			// fetch the post and make sure it matches
 			$out = get_post($id);
 
-<<<<<<< HEAD
-			$this->assertEquals($post['post_content'], $out->post_content);
-			$this->assertEquals($post['post_title'], $out->post_title);
-			$this->assertEquals($post['post_status'], $out->post_status);
-			$this->assertEquals($post['post_author'], $out->post_author);
-=======
 			$this->assertSame( $post['post_content'], $out->post_content );
 			$this->assertSame( $post['post_title'], $out->post_title );
 			$this->assertSame( $post['post_status'], $out->post_status );
 			$this->assertEquals( $post['post_author'], $out->post_author );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// test cache state
 			$pcache = wp_cache_get( $id, 'posts' );
@@ -132,16 +125,7 @@ class Tests_Post extends WP_UnitTestCase {
 		// fetch the post and make sure it matches
 		$out = get_post($id);
 
-<<<<<<< HEAD
-		$this->assertEquals($post['post_content'], $out->post_content);
-		$this->assertEquals($post['post_title'], $out->post_title);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_author'], $out->post_author);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
 		// there should be a publish_future_post hook scheduled on the future date
-		$this->assertEquals($future_date, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		$this->assertSame( $post['post_content'], $out->post_content );
 		$this->assertSame( $post['post_title'], $out->post_title );
 		$this->assertSame( 'future', $out->post_status );
@@ -150,7 +134,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// There should be a publish_future_post hook scheduled on the future date.
 		$this->assertSame( $future_date, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_vb_insert_future_over_dst() {
@@ -172,15 +155,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// insert a post and make sure the ID is ok
 		$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-		// fetch the post and make sure has the correct date and status
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// check that there's a publish_future_post job scheduled at the right time
-		$this->assertEquals($future_date_1, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -188,7 +162,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date_1, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now save it again with a date further in the future
 
@@ -197,15 +170,6 @@ class Tests_Post extends WP_UnitTestCase {
 		$post['post_date_gmt'] = NULL;
 		wp_update_post($post);
 
-<<<<<<< HEAD
-		// fetch the post again and make sure it has the new post_date
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// and the correct date on the cron job
-		$this->assertEquals($future_date_2, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post again and make sure it has the new post_date.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -213,7 +177,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// And the correct date on the cron job.
 		$this->assertSame( $future_date_2, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_vb_insert_future_edit_bug() {
@@ -234,15 +197,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// insert a post and make sure the ID is ok
 		$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-		// fetch the post and make sure has the correct date and status
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// check that there's a publish_future_post job scheduled at the right time
-		$this->assertEquals($future_date_1, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -250,7 +204,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date_1, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now save it again with a date further in the future
 
@@ -259,15 +212,6 @@ class Tests_Post extends WP_UnitTestCase {
 		$post['post_date_gmt'] = NULL;
 		wp_update_post($post);
 
-<<<<<<< HEAD
-		// fetch the post again and make sure it has the new post_date
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// and the correct date on the cron job
-		$this->assertEquals($future_date_2, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post again and make sure it has the new post_date.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -275,7 +219,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// And the correct date on the cron job.
 		$this->assertSame( $future_date_2, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_vb_insert_future_draft() {
@@ -300,16 +243,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// fetch the post and make sure it matches
 		$out = get_post($id);
 
-<<<<<<< HEAD
-		$this->assertEquals($post['post_content'], $out->post_content);
-		$this->assertEquals($post['post_title'], $out->post_title);
-		$this->assertEquals('draft', $out->post_status);
-		$this->assertEquals($post['post_author'], $out->post_author);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// there should be a publish_future_post hook scheduled on the future date
-		$this->assertEquals(false, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		$this->assertSame( $post['post_content'], $out->post_content );
 		$this->assertSame( $post['post_title'], $out->post_title );
 		$this->assertSame( 'draft', $out->post_status );
@@ -318,7 +251,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// There should be a publish_future_post hook scheduled on the future date.
 		$this->assertFalse( $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -337,15 +269,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// insert a post and make sure the ID is ok
 		$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-		// fetch the post and make sure has the correct date and status
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// check that there's a publish_future_post job scheduled at the right time
-		$this->assertEquals($future_date_1, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -353,7 +276,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date_1, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now save it again with status set to draft
 
@@ -361,15 +283,6 @@ class Tests_Post extends WP_UnitTestCase {
 		$post['post_status'] = 'draft';
 		wp_update_post($post);
 
-<<<<<<< HEAD
-		// fetch the post again and make sure it has the new post_date
-		$out = get_post($id);
-		$this->assertEquals('draft', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// and the correct date on the cron job
-		$this->assertEquals(false, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post again and make sure it has the new post_date.
 		$out = get_post( $id );
 		$this->assertSame( 'draft', $out->post_status );
@@ -377,7 +290,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// And the correct date on the cron job.
 		$this->assertFalse( $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_vb_insert_future_change_status() {
@@ -398,15 +310,6 @@ class Tests_Post extends WP_UnitTestCase {
 			// insert a post and make sure the ID is ok
 			$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-			// fetch the post and make sure has the correct date and status
-			$out = get_post($id);
-			$this->assertEquals('future', $out->post_status);
-			$this->assertEquals($post['post_date'], $out->post_date);
-
-			// check that there's a publish_future_post job scheduled at the right time
-			$this->assertEquals($future_date_1, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 			// Fetch the post and make sure has the correct date and status.
 			$out = get_post( $id );
 			$this->assertSame( 'future', $out->post_status );
@@ -414,7 +317,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 			// Check that there's a publish_future_post job scheduled at the right time.
 			$this->assertSame( $future_date_1, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			// now save it again with status changed
 
@@ -422,15 +324,6 @@ class Tests_Post extends WP_UnitTestCase {
 			$post['post_status'] = $status;
 			wp_update_post($post);
 
-<<<<<<< HEAD
-			// fetch the post again and make sure it has the new post_date
-			$out = get_post($id);
-			$this->assertEquals($status, $out->post_status);
-			$this->assertEquals($post['post_date'], $out->post_date);
-
-			// and the correct date on the cron job
-			$this->assertEquals(false, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 			// Fetch the post again and make sure it has the new post_date.
 			$out = get_post( $id );
 			$this->assertSame( $status, $out->post_status );
@@ -438,7 +331,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 			// And the correct date on the cron job.
 			$this->assertFalse( $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -464,16 +356,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// fetch the post and make sure it matches
 		$out = get_post($id);
 
-<<<<<<< HEAD
-		$this->assertEquals($post['post_content'], $out->post_content);
-		$this->assertEquals($post['post_title'], $out->post_title);
-		$this->assertEquals('private', $out->post_status);
-		$this->assertEquals($post['post_author'], $out->post_author);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// there should be a publish_future_post hook scheduled on the future date
-		$this->assertEquals(false, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		$this->assertSame( $post['post_content'], $out->post_content );
 		$this->assertSame( $post['post_title'], $out->post_title );
 		$this->assertSame( 'private', $out->post_status );
@@ -482,7 +364,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// There should be a publish_future_post hook scheduled on the future date.
 		$this->assertFalse( $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -523,15 +404,6 @@ class Tests_Post extends WP_UnitTestCase {
 		// insert a post and make sure the ID is ok
 		$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-		// fetch the post and make sure has the correct date and status
-		$out = get_post($id);
-		$this->assertEquals('future', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// check that there's a publish_future_post job scheduled at the right time
-		$this->assertEquals($future_date_1, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
 		$this->assertSame( 'future', $out->post_status );
@@ -539,7 +411,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date_1, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now save it again with status set to draft
 
@@ -547,15 +418,6 @@ class Tests_Post extends WP_UnitTestCase {
 		$post['post_status'] = 'private';
 		wp_update_post($post);
 
-<<<<<<< HEAD
-		// fetch the post again and make sure it has the new post_date
-		$out = get_post($id);
-		$this->assertEquals('private', $out->post_status);
-		$this->assertEquals($post['post_date'], $out->post_date);
-
-		// and the correct date on the cron job
-		$this->assertEquals(false, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Fetch the post again and make sure it has the new post_date.
 		$out = get_post( $id );
 		$this->assertSame( 'private', $out->post_status );
@@ -563,7 +425,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// And the correct date on the cron job.
 		$this->assertFalse( $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -641,13 +502,8 @@ class Tests_Post extends WP_UnitTestCase {
 		// insert a post and make sure the ID is ok
 		$id = $this->post_ids[] = wp_insert_post($post);
 
-<<<<<<< HEAD
-		// check that there's a publish_future_post job scheduled at the right time
-		$this->assertEquals($future_date, $this->_next_schedule_for_post('publish_future_post', $id));
-=======
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// now delete the post and make sure the cron entry is removed
 		wp_delete_post( $id );
@@ -677,10 +533,8 @@ class Tests_Post extends WP_UnitTestCase {
 
 		$plink = get_permalink($id);
 
-<<<<<<< HEAD
-		// permalink should include the post ID at the end
-		$this->assertEquals(get_option('siteurl').'/2007/10/31/'.$id.'/', $plink);
-	}
+		// Permalink should include the post ID at the end.
+		$this->assertSame( get_option( 'siteurl' ) . '/2007/10/31/' . $id . '/', $plink );	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/15665
@@ -705,10 +559,6 @@ class Tests_Post extends WP_UnitTestCase {
 
 		// Make sure get_page_by_path() will still select an attachment when a post of the requested type doesn't exist.
 		$this->assertEquals( $other_att, get_page_by_path( 'some-other-page' ) );
-=======
-		// Permalink should include the post ID at the end.
-		$this->assertSame( get_option( 'siteurl' ) . '/2007/10/31/' . $id . '/', $plink );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_publish_post() {
@@ -745,27 +595,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/22944
-=======
-	 * @ticket 48145
-	 */
-	function test_wp_insert_post_should_default_to_publish_if_post_date_is_within_59_seconds_from_current_time() {
-		$future_date = gmdate( 'Y-m-d H:i:s', time() + 59 );
-		$post_id     = self::factory()->post->create(
-			array(
-				'post_date' => $future_date,
-			)
-		);
-
-		$post = get_post( $post_id );
-		$this->assertSame( 'publish', $post->post_status );
-		$this->assertSame( $future_date, $post->post_date );
-	}
-
-	/**
-	 * @ticket 22944
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_publish_post_with_content_filtering() {
 		kses_remove_filters();
@@ -975,13 +805,8 @@ class Tests_Post extends WP_UnitTestCase {
 		$_post = get_post( $post_ids[$key], ARRAY_A );
 		$_post['post_status'] = 'draft';
 		wp_insert_post( $_post );
-<<<<<<< HEAD
-		$post = get_post( $post_ids[$key] );
-		$this->assertEquals( 'draft', $post->post_status );
-=======
 		$post = get_post( $post_ids[ $key ] );
 		$this->assertSame( 'draft', $post->post_status );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNotEquals( 'publish', $post->post_status );
 
 		$after_draft_counts = wp_count_posts();
@@ -998,13 +823,8 @@ class Tests_Post extends WP_UnitTestCase {
 
 		wp_trash_post( $post_ids[$key] );
 
-<<<<<<< HEAD
-		$post = get_post( $post_ids[$key] );
-		$this->assertEquals( 'trash', $post->post_status );
-=======
 		$post = get_post( $post_ids[ $key ] );
 		$this->assertSame( 'trash', $post->post_status );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNotEquals( 'publish', $post->post_status );
 
 		$after_trash_counts = wp_count_posts();
@@ -1039,7 +859,6 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( '16:35:00', get_the_time( 'H:i:s', $post_id ) );
 	}
 
-<<<<<<< HEAD
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
@@ -1099,11 +918,6 @@ class Tests_Post extends WP_UnitTestCase {
 	function test_mysql2date_returns_gmt_or_unix_timestamp() {
 		$this->assertEquals( '441013392', mysql2date( 'G', '1983-12-23 07:43:12' ) );
 		$this->assertEquals( '441013392', mysql2date( 'U', '1983-12-23 07:43:12' ) );
-=======
-		$counts = wp_count_posts();
-		$this->assertTrue( isset( $counts->test ) );
-		$this->assertSame( 0, $counts->test );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1169,13 +983,8 @@ class Tests_Post extends WP_UnitTestCase {
 
 		$post = get_post( $post_id );
 
-<<<<<<< HEAD
-		foreach( $expected as $field => $value ) {
-			$this->assertEquals( $value, $post->$field );
-=======
 		foreach ( $expected as $field => $value ) {
 			$this->assertSame( $value, $post->$field );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -1375,11 +1184,7 @@ class Tests_Post extends WP_UnitTestCase {
 
 		$updated_post = get_post( $post_id );
 		// Ensure changing the post_title didn't modify the post_name.
-<<<<<<< HEAD
-		$this->assertEquals('stuff', $updated_post->post_name);
-=======
 		$this->assertSame( 'stuff', $updated_post->post_name );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1417,28 +1222,15 @@ class Tests_Post extends WP_UnitTestCase {
 
 		$out = get_post($id);
 
-<<<<<<< HEAD
-		$this->assertEquals($post['post_content'], $out->post_content);
-		$this->assertEquals($post['post_title'], $out->post_title);
-		$this->assertEquals($post['post_author'], $out->post_author);
-		$this->assertEquals(get_date_from_gmt($post['post_date_gmt']), $out->post_date);
-		$this->assertEquals($post['post_date_gmt'], $out->post_date_gmt);
-=======
 		$this->assertSame( $post['post_content'], $out->post_content );
 		$this->assertSame( $post['post_title'], $out->post_title );
 		$this->assertEquals( $post['post_author'], $out->post_author );
 		$this->assertSame( get_date_from_gmt( $post['post_date_gmt'] ), $out->post_date );
 		$this->assertSame( $post['post_date_gmt'], $out->post_date_gmt );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_delete_post_reassign_hierarchical_post_type() {
 		$grandparent_page_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
-<<<<<<< HEAD
-		$parent_page_id = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $grandparent_page_id ) );
-		$page_id = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $parent_page_id ) );
-		$this->assertEquals( $parent_page_id, get_post( $page_id )->post_parent );
-=======
 		$parent_page_id      = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
@@ -1452,7 +1244,6 @@ class Tests_Post extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $parent_page_id, get_post( $page_id )->post_parent );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		wp_delete_post( $parent_page_id, true );
 		$this->assertSame( $grandparent_page_id, get_post( $page_id )->post_parent );
 		wp_delete_post( $grandparent_page_id, true );
@@ -1478,157 +1269,36 @@ class Tests_Post extends WP_UnitTestCase {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'contributor' ) ) );
 
 		$uuid = wp_generate_uuid4();
-		$post_id = wp_insert_post( array(
-			'post_type' => 'customize_changeset',
-			'post_name' => strtoupper( $uuid ),
-			'post_content' => wp_json_encode( $changeset_data ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $uuid, get_post( $post_id )->post_name, 'Expected lower-case UUID4 to be inserted.' );
-		$this->assertEquals( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
-=======
+		$post_id = wp_insert_post(
+			array(
+				'post_type' => 'customize_changeset',
+				'post_name' => strtoupper( $uuid ),
+				'post_content' => wp_json_encode( $changeset_data ),
 			)
 		);
 		$this->assertSame( $uuid, get_post( $post_id )->post_name, 'Expected lower-case UUID4 to be inserted.' );
 		$this->assertSame( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$changeset_data['blogname']['value'] = 'Hola Mundo';
-		wp_update_post( array(
-			'ID' => $post_id,
-			'post_status' => 'draft',
-			'post_content' => wp_json_encode( $changeset_data ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $uuid, get_post( $post_id )->post_name, 'Expected post_name to not have been dropped for drafts.' );
-		$this->assertEquals( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
-=======
+		wp_update_post(
+			array(
+				'ID' => $post_id,
+				'post_status' => 'draft',
+				'post_content' => wp_json_encode( $changeset_data ),
 			)
 		);
 		$this->assertSame( $uuid, get_post( $post_id )->post_name, 'Expected post_name to not have been dropped for drafts.' );
 		$this->assertSame( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$changeset_data['blogname']['value'] = 'Hallo Welt';
-		wp_update_post( array(
-			'ID' => $post_id,
-			'post_status' => 'pending',
-			'post_content' => wp_json_encode( $changeset_data ),
-<<<<<<< HEAD
-		) );
-		$this->assertEquals( $uuid, get_post( $post_id )->post_name, 'Expected post_name to not have been dropped for pending.' );
-		$this->assertEquals( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
-	}
-
-=======
+		wp_update_post(
+			array(
+				'ID' => $post_id,
+				'post_status' => 'pending',
+				'post_content' => wp_json_encode( $changeset_data ),
 			)
 		);
 		$this->assertSame( $uuid, get_post( $post_id )->post_name, 'Expected post_name to not have been dropped for pending.' );
 		$this->assertSame( $changeset_data, json_decode( get_post( $post_id )->post_content, true ) );
 	}
-
-	/**
-	 * Test ensuring that the post_slug can be filtered with a custom value short circuiting the built in
-	 * function that tries to create a unique name based on the post name.
-	 *
-	 * @see wp_unique_post_slug()
-	 * @ticket 21112
-	 */
-	function test_pre_wp_unique_post_slug_filter() {
-		add_filter( 'pre_wp_unique_post_slug', array( $this, 'filter_pre_wp_unique_post_slug' ), 10, 6 );
-
-		$post_id = $this->factory->post->create(
-			array(
-				'title'       => 'An example',
-				'post_status' => 'publish',
-				'post_type'   => 'page',
-			)
-		);
-		$post    = get_post( $post_id );
-		$this->assertSame( 'override-slug-' . $post->post_type, $post->post_name );
-
-		remove_filter( 'pre_wp_unique_post_slug', array( $this, 'filter_pre_wp_unique_post_slug' ), 10, 6 );
-	}
-
-	function filter_pre_wp_unique_post_slug( $default, $slug, $post_ID, $post_status, $post_type, $post_parent ) {
-		return 'override-slug-' . $post_type;
-	}
-
-	/**
-	 * @ticket 48113
-	 */
-	public function test_insert_post_should_respect_date_floating_post_status_arg() {
-		register_post_status( 'floating', array( 'date_floating' => true ) );
-
-		$post_id = self::factory()->post->create(
-			array(
-				'post_status'   => 'floating',
-				'post_date'     => null,
-				'post_date_gmt' => null,
-			)
-		);
-
-		$post = get_post( $post_id );
-		self::assertSame( '0000-00-00 00:00:00', $post->post_date_gmt );
-	}
-
-	/**
-	 * @ticket 48113
-	 */
-	public function test_insert_post_should_respect_date_floating_post_status_arg_not_set() {
-		register_post_status( 'not-floating', array( 'date_floating' => false ) );
-
-		$post_id = self::factory()->post->create(
-			array(
-				'post_status'   => 'floating',
-				'post_date'     => null,
-				'post_date_gmt' => null,
-			)
-		);
-
-		$post = get_post( $post_id );
-		self::assertEquals( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( $post->post_date_gmt ), 'The dates should be equal', 2 );
-	}
-
-	/**
-	 * Test ensuring that wp_update_post() does not unintentionally modify post tags
-	 * if the post has several tags with the same name but different slugs.
-	 *
-	 * Tags should only be modified if 'tags_input' parameter was explicitly provided,
-	 * and is different from the existing tags.
-	 *
-	 * @ticket 45121
-	 */
-	public function test_update_post_should_only_modify_post_tags_if_different_tags_input_was_provided() {
-		$tag_1 = wp_insert_term( 'wp_update_post_tag', 'post_tag', array( 'slug' => 'wp_update_post_tag_1' ) );
-		$tag_2 = wp_insert_term( 'wp_update_post_tag', 'post_tag', array( 'slug' => 'wp_update_post_tag_2' ) );
-		$tag_3 = wp_insert_term( 'wp_update_post_tag', 'post_tag', array( 'slug' => 'wp_update_post_tag_3' ) );
-
-		$post_id = self::factory()->post->create(
-			array(
-				'tags_input' => array( $tag_1['term_id'], $tag_2['term_id'] ),
-			)
-		);
-
-		$post = get_post( $post_id );
-
-		$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $tag_1['term_id'], $tag_2['term_id'] ), $tags );
-
-		wp_update_post( $post );
-
-		$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $tag_1['term_id'], $tag_2['term_id'] ), $tags );
-
-		wp_update_post(
-			array(
-				'ID'         => $post->ID,
-				'tags_input' => array( $tag_2['term_id'], $tag_3['term_id'] ),
-			)
-		);
-
-		$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $tag_2['term_id'], $tag_3['term_id'] ), $tags );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

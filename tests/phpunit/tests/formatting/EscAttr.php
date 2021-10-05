@@ -27,10 +27,6 @@ class Tests_Formatting_EscAttr extends WP_UnitTestCase {
 
 	function test_esc_attr_amp() {
 		$out = esc_attr( 'foo & bar &baz; &nbsp;' );
-<<<<<<< HEAD
-		$this->assertEquals( "foo &amp; bar &amp;baz; &nbsp;", $out );
-=======
 		$this->assertSame( 'foo &amp; bar &amp;baz; &nbsp;', $out );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 }

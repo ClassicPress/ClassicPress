@@ -80,11 +80,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( $post_data->post_excerpt, $result['mt_excerpt'] );
 		$this->assertSame( url_to_postid( $result['link'] ), self::$post_id );
 
-<<<<<<< HEAD
-		$this->assertEquals( '', $result['wp_post_thumbnail'] );
-=======
 		$this->assertSame( 0, $result['wp_post_thumbnail'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_theme_support( 'post-thumbnails' );
 	}
@@ -102,14 +98,8 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		$this->assertInternalType( 'string', $result['wp_post_thumbnail'] );
-		$this->assertStringMatchesFormat( '%d', $result['wp_post_thumbnail'] );
-		$this->assertEquals( $attachment_id, $result['wp_post_thumbnail'] );
-=======
 		$this->assertInternalType( 'int', $result['wp_post_thumbnail'] );
 		$this->assertSame( $attachment_id, $result['wp_post_thumbnail'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		remove_theme_support( 'post-thumbnails' );
 	}

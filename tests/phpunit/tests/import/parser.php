@@ -53,21 +53,19 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 			$result = $parser->parse( $file );
 
 			$this->assertTrue( is_array( $result ), $message );
-<<<<<<< HEAD
-			$this->assertEquals( 'http://localhost/', $result['base_url'], $message );
-			$this->assertEquals( array(
-=======
 			$this->assertSame( 'http://localhost/', $result['base_url'], $message );
 			$this->assertEquals(
 				array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-				'author_id' => 2,
-				'author_login' => 'john',
-				'author_email' => 'johndoe@example.org',
-				'author_display_name' => 'John Doe',
-				'author_first_name' => 'John',
-				'author_last_name' => 'Doe'
-			), $result['authors']['john'], $message );
+					'author_id' => 2,
+					'author_login' => 'john',
+					'author_email' => 'johndoe@example.org',
+					'author_display_name' => 'John Doe',
+					'author_first_name' => 'John',
+					'author_last_name' => 'Doe'
+				),
+				$result['authors']['john'],
+				$message
+			);
 			$this->assertEquals( array(
 				'term_id' => 3,
 				'category_nicename' => 'alpha',
@@ -90,19 +88,6 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 				'term_description' => 'The bieup post_tax'
 			), $result['terms'][0], $message );
 
-<<<<<<< HEAD
-			$this->assertEquals( 2, count($result['posts']), $message );
-			$this->assertEquals( 19, count($result['posts'][0]), $message );
-			$this->assertEquals( 18, count($result['posts'][1]), $message );
-			$this->assertEquals( array(
-				array( 'name' => 'alpha', 'slug' => 'alpha', 'domain' => 'category' ),
-				array( 'name' => 'Clippable', 'slug' => 'clippable', 'domain' => 'post_tag' ),
-				array( 'name' => 'bieup', 'slug' => 'bieup', 'domain' => 'post_tax' )
-			), $result['posts'][0]['terms'], $message );
-			$this->assertEquals( array(
-				array( 'key' => '_wp_page_template', 'value' => 'default' )
-			), $result['posts'][1]['postmeta'], $message );
-=======
 			$this->assertSame( 2, count( $result['posts'] ), $message );
 			$this->assertSame( 19, count( $result['posts'][0] ), $message );
 			$this->assertSame( 18, count( $result['posts'][1] ), $message );
@@ -137,7 +122,6 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 				$result['posts'][1]['postmeta'],
 				$message
 			);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 
@@ -158,15 +142,9 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 			$this->assertSame( $result['tags'][0]['tag_slug'], 'chicken', $message );
 			$this->assertSame( $result['tags'][0]['tag_name'], 'chicken', $message );
 
-<<<<<<< HEAD
-			$this->assertEquals( 6, count($result['posts']), $message );
-			$this->assertEquals( 19, count($result['posts'][0]), $message );
-			$this->assertEquals( 18, count($result['posts'][1]), $message );
-=======
 			$this->assertSame( 6, count( $result['posts'] ), $message );
 			$this->assertSame( 19, count( $result['posts'][0] ), $message );
 			$this->assertSame( 18, count( $result['posts'][1] ), $message );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			$this->assertEquals( array(
 				array( 'name' => 'Uncategorized', 'slug' => 'uncategorized', 'domain' => 'category' )
@@ -182,11 +160,6 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 				array( 'name' => 'face', 'slug' => 'face', 'domain' => 'tag' )
 			), $result['posts'][3]['terms'], $message );
 
-<<<<<<< HEAD
-			$this->assertEquals( array(
-				array( 'key' => '_wp_page_template', 'value' => 'default' )
-			), $result['posts'][1]['postmeta'], $message );
-=======
 			$this->assertSame(
 				array(
 					array(
@@ -197,7 +170,6 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 				$result['posts'][1]['postmeta'],
 				$message
 			);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		}
 	}
 

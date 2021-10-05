@@ -45,51 +45,29 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	 */
 	function test_theme_default() {
 		$themes = get_themes();
-<<<<<<< HEAD
 		$theme = get_theme('ClassicPress Default');
-		$this->assertEquals( $themes['ClassicPress Default'], $theme );
-=======
-		$theme  = get_theme( 'WordPress Default' );
-		$this->assertSame( $themes['WordPress Default'], $theme );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $themes['ClassicPress Default'], $theme );
 
 		$this->assertFalse( empty($theme) );
 
 		#echo gen_tests_array('theme', $theme);
 
-<<<<<<< HEAD
-		$this->assertEquals( 'ClassicPress Default', $theme['Name'] );
-		$this->assertEquals( 'ClassicPress Default', $theme['Title'] );
-		$this->assertEquals( 'The default ClassicPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
-		$this->assertEquals( '<a href="http://binarybonsai.com/">Michael Heilemann</a>', $theme['Author'] );
-		$this->assertEquals( '1.6', $theme['Version'] );
-		$this->assertEquals( 'default', $theme['Template'] );
-		$this->assertEquals( 'default', $theme['Stylesheet'] );
-=======
-		$this->assertSame( 'WordPress Default', $theme['Name'] );
-		$this->assertSame( 'WordPress Default', $theme['Title'] );
-		$this->assertSame( 'The default WordPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
+		$this->assertSame( 'ClassicPress Default', $theme['Name'] );
+		$this->assertSame( 'ClassicPress Default', $theme['Title'] );
+		$this->assertSame( 'The default ClassicPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
 		$this->assertSame( '<a href="http://binarybonsai.com/">Michael Heilemann</a>', $theme['Author'] );
-		$this->assertSame( '1.6', $theme['Version'] );
+		$this->assertEquals( '1.6', $theme['Version'] );
 		$this->assertSame( 'default', $theme['Template'] );
 		$this->assertSame( 'default', $theme['Stylesheet'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertContains( $this->theme_root . '/default/functions.php', $theme['Template Files'] );
 		$this->assertContains( $this->theme_root . '/default/index.php', $theme['Template Files'] );
 		$this->assertContains( $this->theme_root . '/default/style.css', $theme['Stylesheet Files'] );
 
-<<<<<<< HEAD
-		$this->assertEquals( $this->theme_root.'/default', $theme['Template Dir'] );
-		$this->assertEquals( $this->theme_root.'/default', $theme['Stylesheet Dir'] );
-		$this->assertEquals( 'publish', $theme['Status'] );
-		$this->assertEquals( '', $theme['Parent Theme'] );
-=======
 		$this->assertSame( $this->theme_root . '/default', $theme['Template Dir'] );
 		$this->assertSame( $this->theme_root . '/default', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( '', $theme['Parent Theme'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -113,19 +91,6 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		$template_files = $theme['Template Files'];
 
-<<<<<<< HEAD
-		$this->assertEquals( $this->theme_root.'/sandbox/functions.php', reset( $template_files ) );
-		$this->assertEquals( $this->theme_root.'/sandbox/index.php', next( $template_files ) );
-
-		$stylesheet_files = $theme['Stylesheet Files'];
-
-		$this->assertEquals( $this->theme_root.'/sandbox/style.css', reset( $stylesheet_files ) );
-
-		$this->assertEquals( $this->theme_root.'/sandbox', $theme['Template Dir'] );
-		$this->assertEquals( $this->theme_root.'/sandbox', $theme['Stylesheet Dir'] );
-		$this->assertEquals( 'publish', $theme['Status'] );
-		$this->assertEquals( '', $theme['Parent Theme'] );
-=======
 		$this->assertSame( $this->theme_root . '/sandbox/functions.php', reset( $template_files ) );
 		$this->assertSame( $this->theme_root . '/sandbox/index.php', next( $template_files ) );
 
@@ -137,7 +102,6 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( $this->theme_root . '/sandbox', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( '', $theme['Parent Theme'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -154,17 +118,6 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		#echo gen_tests_array('theme', $theme);
 
-<<<<<<< HEAD
-		$this->assertEquals( 'Stylesheet Only', $theme['Name'] );
-		$this->assertEquals( 'Stylesheet Only', $theme['Title'] );
-		$this->assertEquals( 'A three-column widget-ready theme in dark blue.', $theme['Description'] );
-		$this->assertEquals( '<a href="http://www.example.com/">Henry Crun</a>', $theme['Author'] );
-		$this->assertEquals( '1.0', $theme['Version'] );
-		$this->assertEquals( 'sandbox', $theme['Template'] );
-		$this->assertEquals( 'stylesheetonly', $theme['Stylesheet'] );
-		$this->assertContains( $this->theme_root.'/sandbox/functions.php', $theme['Template Files'] );
-		$this->assertContains( $this->theme_root.'/sandbox/index.php', $theme['Template Files'] );
-=======
 		$this->assertSame( 'Stylesheet Only', $theme['Name'] );
 		$this->assertSame( 'Stylesheet Only', $theme['Title'] );
 		$this->assertSame( 'A three-column widget-ready theme in dark blue.', $theme['Description'] );
@@ -174,21 +127,13 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( 'stylesheetonly', $theme['Stylesheet'] );
 		$this->assertContains( $this->theme_root . '/sandbox/functions.php', $theme['Template Files'] );
 		$this->assertContains( $this->theme_root . '/sandbox/index.php', $theme['Template Files'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertContains( $this->theme_root.'/stylesheetonly/style.css', $theme['Stylesheet Files']);
 
-<<<<<<< HEAD
-		$this->assertEquals( $this->theme_root.'/sandbox', $theme['Template Dir'] );
-		$this->assertEquals( $this->theme_root.'/stylesheetonly', $theme['Stylesheet Dir'] );
-		$this->assertEquals( 'publish', $theme['Status'] );
-		$this->assertEquals( 'Sandbox', $theme['Parent Theme'] );
-=======
 		$this->assertSame( $this->theme_root . '/sandbox', $theme['Template Dir'] );
 		$this->assertSame( $this->theme_root . '/stylesheetonly', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( 'Sandbox', $theme['Parent Theme'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -222,11 +167,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		sort($theme_names);
 		sort($expected);
 
-<<<<<<< HEAD
-		$this->assertEquals($expected, $theme_names);
-=======
 		$this->assertSame( $expected, $theme_names );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -249,11 +190,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 			),
 		);
 
-<<<<<<< HEAD
-		$this->assertEquals($expected, get_broken_themes() );
-=======
 		$this->assertSame( $expected, get_broken_themes() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_wp_get_theme_with_non_default_theme_root() {
@@ -299,31 +236,17 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	function test_get_theme_data_subdir() {
 		$theme_data = get_theme_data( $this->theme_root . '/subdir/theme2/style.css' );
 
-<<<<<<< HEAD
-		$this->assertEquals( 'My Subdir Theme', $theme_data['Name'] );
-		$this->assertEquals( 'http://example.org/', $theme_data['URI'] );
-		$this->assertEquals( 'An example theme in a sub directory', $theme_data['Description'] );
-		$this->assertEquals( '<a href="https://www.classicpress.net">Mr. ClassicPress</a>', $theme_data['Author'] );
-		$this->assertEquals( 'https://www.classicpress.net', $theme_data['AuthorURI'] );
-		$this->assertEquals( '0.1', $theme_data['Version'] );
-		$this->assertEquals( '', $theme_data['Template'] );
-		$this->assertEquals( 'publish', $theme_data['Status'] );
-		$this->assertEquals( array(), $theme_data['Tags'] );
-		$this->assertEquals( 'My Subdir Theme', $theme_data['Title'] );
-		$this->assertEquals( 'Mr. ClassicPress', $theme_data['AuthorName'] );
-=======
 		$this->assertSame( 'My Subdir Theme', $theme_data['Name'] );
 		$this->assertSame( 'http://example.org/', $theme_data['URI'] );
 		$this->assertSame( 'An example theme in a sub directory', $theme_data['Description'] );
-		$this->assertSame( '<a href="http://wordpress.org/">Mr. WordPress</a>', $theme_data['Author'] );
-		$this->assertSame( 'http://wordpress.org/', $theme_data['AuthorURI'] );
+		$this->assertSame( '<a href="https://www.classicpress.net">Mr. ClassicPress</a>', $theme_data['Author'] );
+		$this->assertSame( 'https://www.classicpress.net', $theme_data['AuthorURI'] );
 		$this->assertSame( '0.1', $theme_data['Version'] );
 		$this->assertSame( '', $theme_data['Template'] );
 		$this->assertSame( 'publish', $theme_data['Status'] );
 		$this->assertSame( array(), $theme_data['Tags'] );
 		$this->assertSame( 'My Subdir Theme', $theme_data['Title'] );
-		$this->assertSame( 'Mr. WordPress', $theme_data['AuthorName'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( 'Mr. ClassicPress', $theme_data['AuthorName'] );
 	}
 
 	/**

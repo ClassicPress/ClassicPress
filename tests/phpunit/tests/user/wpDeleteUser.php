@@ -97,13 +97,8 @@ class Tests_User_WpDeleteUser extends WP_UnitTestCase {
 			$this->assertFalse( $user->exists() );
 
 		$this->assertNotNull( get_post( $post_id ) );
-<<<<<<< HEAD
-		$this->assertEquals( 'trash', get_post( $post_id )->post_status );
-		// nav_menu_item is delete_with_user = false so the nav post should remain published.
-=======
 		$this->assertSame( 'trash', get_post( $post_id )->post_status );
 		// 'nav_menu_item' is `delete_with_user = false` so the nav post should remain published.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertNotNull( get_post( $nav_id ) );
 		$this->assertSame( 'publish', get_post( $nav_id )->post_status );
 		wp_delete_post( $nav_id, true );

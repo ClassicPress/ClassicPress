@@ -38,21 +38,18 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 		// Test user counts
 		$count = count_users( $strategy );
 
-<<<<<<< HEAD
-		$this->assertEquals( 8, $count['total_users'] );
-		$this->assertEquals( array(
-=======
 		$this->assertSame( 8, $count['total_users'] );
 		$this->assertEquals(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'contributor'   => 1,
-			'subscriber'    => 1,
-			'none'          => 2,
-		), $count['avail_roles'] );
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'contributor'   => 1,
+				'subscriber'    => 1,
+				'none'          => 2,
+			),
+			$count['avail_roles']
+		);
 
 	}
 
@@ -103,57 +100,48 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 		// Test users counts on root site
 		$count = count_users( $strategy );
 
-<<<<<<< HEAD
-		$this->assertEquals( 8, $count['total_users'] );
-		$this->assertEquals( array(
-=======
 		$this->assertSame( 8, $count['total_users'] );
 		$this->assertEquals(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'contributor'   => 1,
-			'subscriber'    => 1,
-			'none'          => 2,
-		), $count['avail_roles'] );
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'contributor'   => 1,
+				'subscriber'    => 1,
+				'none'          => 2,
+			),
+			$count['avail_roles']
+		);
 
 		// Test users counts on blog 1
 		switch_to_blog( $blog_1 );
 		$count = count_users( $strategy );
 		restore_current_blog();
 
-<<<<<<< HEAD
-		$this->assertEquals( 2, $count['total_users'] );
-		$this->assertEquals( array(
-=======
 		$this->assertSame( 2, $count['total_users'] );
 		$this->assertEquals(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'administrator' => 1,
-			'editor'        => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+				'administrator' => 1,
+				'editor'        => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 		// Test users counts on blog 2
 		switch_to_blog( $blog_2 );
 		$count = count_users( $strategy );
 		restore_current_blog();
 
-<<<<<<< HEAD
-		$this->assertEquals( 2, $count['total_users'] );
-		$this->assertEquals( array(
-=======
 		$this->assertSame( 2, $count['total_users'] );
 		$this->assertEquals(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'administrator' => 1,
-			'contributor'   => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+				'administrator' => 1,
+				'contributor'   => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 	}
 
@@ -198,32 +186,27 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 
 		get_userdata( $editor )->add_role( 'author' );
 
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'editor',
-			'author'
-		), get_userdata( $editor )->roles );
+				'editor',
+				'author'
+			),
+			get_userdata( $editor )->roles
+		);
 
 		// Test user counts
 		$count = count_users( $strategy );
 
-<<<<<<< HEAD
-		$this->assertEquals( 3, $count['total_users'] );
-		$this->assertEquals( array(
-=======
 		$this->assertSame( 3, $count['total_users'] );
 		$this->assertEquals(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 	}
 

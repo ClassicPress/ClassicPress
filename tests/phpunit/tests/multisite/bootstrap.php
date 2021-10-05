@@ -133,11 +133,7 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 		$network = get_network_by_path( 'wordpress.org', '/one/b/' );
 		remove_filter( 'network_by_path_segments_count', array( $this, 'filter_network_path_segments' ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( self::$network_ids[ 'wordpress.org/one/' ], $network->id );
-=======
-			$this->assertSame( self::$network_ids['wordpress.org/one/'], $network->id );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( self::$network_ids['wordpress.org/one/'], $network->id );
 	}
 
 	public function filter_network_path_segments() {

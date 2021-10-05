@@ -483,13 +483,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 			// make sure the user is valid
 			$this->assertTrue( $user->exists(), "User with {$role} role does not exist" );
 
-<<<<<<< HEAD
-			// make sure the role name is correct
-			$this->assertEquals( array( $role ), $user->roles, "User should only have the {$role} role" );
-=======
 			// Make sure the role name is correct.
 			$this->assertSame( array( $role ), $user->roles, "User should only have the {$role} role" );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 			foreach ( $caps as $cap => $roles ) {
 				if ( in_array( $role, $roles, true ) ) {
@@ -713,13 +708,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		// make sure the user is valid
 		$this->assertTrue( $user->exists(), "User does not exist" );
 
-<<<<<<< HEAD
-		// make sure the role name is correct
-		$this->assertEquals( array(), $user->roles, "User should not have any roles" );
-=======
 		// Make sure the role name is correct.
 		$this->assertSame( array(), $user->roles, 'User should not have any roles' );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$caps = $this->getAllCapsAndRoles();
 
@@ -738,13 +728,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 		$user->add_role( 'contributor' );
 
-<<<<<<< HEAD
-		// user should have two roles now
-		$this->assertEquals( array( 'subscriber', 'contributor' ), $user->roles );
-=======
 		// User should have two roles now.
 		$this->assertSame( array( 'subscriber', 'contributor' ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$caps = $this->getAllCapsAndRoles();
 
@@ -759,13 +744,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		}
 
 		$user->remove_role( 'contributor' );
-<<<<<<< HEAD
-		// user should have one role now
-		$this->assertEquals( array( 'subscriber' ), $user->roles );
-=======
 		// User should have one role now.
 		$this->assertSame( array( 'subscriber' ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 	}
 
@@ -784,13 +764,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		// make sure the user is valid
 		$this->assertTrue( $user->exists(), "User does not exist" );
 
-<<<<<<< HEAD
-		// make sure the role name is correct
-		$this->assertEquals( array( $role_name ), $user->roles );
-=======
 		// Make sure the role name is correct.
 		$this->assertSame( array( $role_name ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$caps = $this->getAllCapsAndRoles();
 
@@ -826,13 +801,8 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		// make sure the user is valid
 		$this->assertTrue( $user->exists(), "User does not exist" );
 
-<<<<<<< HEAD
-		// make sure the role name is correct
-		$this->assertEquals( array( $role_name ), $user->roles );
-=======
 		// Make sure the role name is correct.
 		$this->assertSame( array( $role_name ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$caps = $this->getPrimitiveCapsAndRoles();
 
@@ -869,15 +839,9 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$wp_roles->add_cap($role_name, 'sweep_floor');
 		$this->_flush_roles();
 
-<<<<<<< HEAD
-		$user = new WP_User($id);
-		$this->assertTrue($user->exists(), "Problem getting user $id");
-		$this->assertEquals(array($role_name), $user->roles);
-=======
 		$user = new WP_User( $id );
 		$this->assertTrue( $user->exists(), "Problem getting user $id" );
 		$this->assertSame( array( $role_name ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// the user should have all the above caps
 		$this->assertTrue($user->has_cap($role_name));
@@ -915,15 +879,9 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$wp_roles->remove_cap($role_name, 'polish_doorknobs');
 		$this->_flush_roles();
 
-<<<<<<< HEAD
-		$user = new WP_User($id);
-		$this->assertTrue($user->exists(), "Problem getting user $id");
-		$this->assertEquals(array($role_name), $user->roles);
-=======
 		$user = new WP_User( $id );
 		$this->assertTrue( $user->exists(), "Problem getting user $id" );
 		$this->assertSame( array( $role_name ), $user->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// the user should have all the above caps
 		$this->assertTrue($user->has_cap($role_name));
@@ -958,15 +916,9 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$user_2 = new WP_User($id_2);
 		$this->assertTrue($user_2->exists(), "Problem getting user $id_2");
 
-<<<<<<< HEAD
-		// make sure they're both still contributors
-		$this->assertEquals(array('contributor'), $user_1->roles);
-		$this->assertEquals(array('contributor'), $user_2->roles);
-=======
 		// Make sure they're both still contributors.
 		$this->assertSame( array( 'contributor' ), $user_1->roles );
 		$this->assertSame( array( 'contributor' ), $user_2->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// check the extra cap on both users
 		$this->assertTrue($user_1->has_cap('publish_posts'));
@@ -1005,15 +957,9 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$user_2 = new WP_User($id_2);
 		$this->assertTrue($user_2->exists(), "Problem getting user $id_2");
 
-<<<<<<< HEAD
-		// make sure they're both still contributors
-		$this->assertEquals(array('contributor'), $user_1->roles);
-		$this->assertEquals(array('contributor'), $user_2->roles);
-=======
 		// Make sure they're both still contributors.
 		$this->assertSame( array( 'contributor' ), $user_1->roles );
 		$this->assertSame( array( 'contributor' ), $user_2->roles );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// check the removed cap on both users
 		$this->assertFalse($user_1->has_cap('publish_posts'));
@@ -1032,20 +978,6 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		// author = user level 2
 		$this->assertEquals( 2, $user->user_level );
 
-<<<<<<< HEAD
-		// they get promoted to editor - level should get bumped to 7
-		$user->set_role('editor');
-		$this->assertEquals( 7, $user->user_level );
-
-		// demoted to contributor - level is reduced to 1
-		$user->set_role('contributor');
-		$this->assertEquals( 1, $user->user_level );
-
-		// if they have two roles, user_level should be the max of the two
-		$user->add_role('editor');
-		$this->assertEquals(array('contributor', 'editor'), $user->roles);
-		$this->assertEquals( 7, $user->user_level );
-=======
 		// They get promoted to editor - level should get bumped to 7.
 		$user->set_role( 'editor' );
 		$this->assertSame( 7, $user->user_level );
@@ -1058,7 +990,6 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$user->add_role( 'editor' );
 		$this->assertSame( array( 'contributor', 'editor' ), $user->roles );
 		$this->assertSame( 7, $user->user_level );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_user_remove_all_caps() {
@@ -1206,11 +1137,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$this->assertFalse( $contributor->has_cap( 'publish_post', $post ) );
 		$this->assertFalse( $contributor->has_cap( 'edit_post', $post ) );
 		$this->assertFalse( $contributor->has_cap( 'delete_post', $post ) );
-<<<<<<< HEAD
-		$this->assertEquals( $status === 'publish', $contributor->has_cap( 'read_post', $post ) );
-=======
 		$this->assertSame( 'publish' === $status, $contributor->has_cap( 'read_post', $post ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -1337,14 +1264,13 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 		foreach ( $expected as $meta_cap => $primitive_cap ) {
 			$caps = map_meta_cap( $tax->cap->$meta_cap, $user->ID );
-<<<<<<< HEAD
-			$this->assertEquals( array(
-=======
 			$this->assertSame(
 				array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-				$primitive_cap,
-			), $caps, "Meta cap: {$meta_cap}" );
+					$primitive_cap,
+				),
+				$caps,
+				"Meta cap: {$meta_cap}"
+			);
 		}
 	}
 
@@ -1439,14 +1365,13 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 		foreach ( $expected as $meta_cap => $primitive_cap ) {
 			$caps = map_meta_cap( $tax->cap->$meta_cap, $user->ID );
-<<<<<<< HEAD
-			$this->assertEquals( array(
-=======
 			$this->assertSame(
 				array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-				$primitive_cap,
-			), $caps, "Meta cap: {$meta_cap}" );
+					$primitive_cap,
+				),
+				$caps,
+				"Meta cap: {$meta_cap}"
+			);
 		}
 	}
 
@@ -1804,23 +1729,6 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		$this->assertFalse( current_user_can( 'do_not_allow' ), "Non-logged-in user should not have the do_not_allow capability" );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 35488
-	 */
-	function test_wp_logout_should_clear_current_user() {
-		$user_id = self::factory()->user->create();
-		wp_set_current_user( $user_id );
-
-		wp_logout();
-
-		$this->assertSame( 0, get_current_user_id() );
-
-	}
-
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	protected $_role_test_wp_roles_role;
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/23016
@@ -2116,79 +2024,4 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 
 		$this->assertSame( 333, $roles->get_site_id() );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @dataProvider data_block_caps
-	 */
-	function test_block_caps( $role, $cap, $use_post, $expected ) {
-		if ( $use_post ) {
-			$this->assertSame( $expected, self::$users[ $role ]->has_cap( $cap, self::$block_id ) );
-		} else {
-			$this->assertSame( $expected, self::$users[ $role ]->has_cap( $cap ) );
-		}
-	}
-
-	function data_block_caps() {
-		$post_caps = array(
-			'edit_block',
-			'read_block',
-			'delete_block',
-		);
-
-		$all_caps = array(
-			'edit_block',
-			'read_block',
-			'delete_block',
-			'edit_blocks',
-			'edit_others_blocks',
-			'publish_blocks',
-			'read_private_blocks',
-			'delete_blocks',
-			'delete_private_blocks',
-			'delete_published_blocks',
-			'delete_others_blocks',
-			'edit_private_blocks',
-			'edit_published_blocks',
-		);
-
-		$roles = array(
-			'administrator' => $all_caps,
-			'editor'        => $all_caps,
-			'author'        => array(
-				'read_block',
-				'edit_blocks',
-				'publish_blocks',
-				'delete_blocks',
-				'delete_published_blocks',
-				'edit_published_blocks',
-			),
-			'contributor'   => array(
-				'read_block',
-				'edit_blocks',
-				'delete_blocks',
-			),
-			'subscriber'    => array(),
-		);
-
-		$data = array();
-
-		foreach ( $roles as $role => $caps ) {
-			foreach ( $caps as $cap ) {
-				$use_post = in_array( $cap, $post_caps, true );
-				$data[]   = array( $role, $cap, $use_post, true );
-			}
-
-			foreach ( $all_caps as $cap ) {
-				if ( ! in_array( $cap, $caps, true ) ) {
-					$use_post = in_array( $cap, $post_caps, true );
-					$data[]   = array( $role, $cap, $use_post, false );
-				}
-			}
-		}
-
-		return $data;
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

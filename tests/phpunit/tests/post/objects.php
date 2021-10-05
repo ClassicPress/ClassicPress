@@ -31,11 +31,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		// Excercise the output argument
 		$post = get_post( $id, ARRAY_A );
 		$this->assertInternalType( 'array', $post );
-<<<<<<< HEAD
-		$this->assertEquals( 'post', $post[ 'post_type' ] );
-=======
 		$this->assertSame( 'post', $post['post_type'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$post = get_post( $id, ARRAY_N );
 		$this->assertInternalType( 'array', $post );
@@ -45,13 +41,8 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post = get_post( $id );
 		$post = get_post( $post, ARRAY_A );
 		$this->assertInternalType( 'array', $post );
-<<<<<<< HEAD
-		$this->assertEquals( 'post', $post[ 'post_type' ] );
-		$this->assertEquals( $id, $post[ 'ID' ] );
-=======
 		$this->assertSame( 'post', $post['post_type'] );
 		$this->assertSame( $id, $post['ID'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Should default to OBJECT when given invalid output argument
 		$post = get_post( $id, 'invalid-output-value' );
@@ -79,12 +70,6 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$parent_id = self::factory()->post->create();
 		$child_id = self::factory()->post->create();
 		$grandchild_id = self::factory()->post->create();
-<<<<<<< HEAD
-		$updated = wp_update_post( array( 'ID' => $child_id, 'post_parent' => $parent_id ) );
-		$this->assertEquals( $updated, $child_id );
-		$updated = wp_update_post( array( 'ID' => $grandchild_id, 'post_parent' => $child_id ) );
-		$this->assertEquals( $updated, $grandchild_id );
-=======
 		$updated       = wp_update_post(
 			array(
 				'ID'          => $child_id,
@@ -99,7 +84,6 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $updated, $grandchild_id );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$this->assertSame( array( $parent_id ), get_post( $child_id )->ancestors );
 		$this->assertSame( array( $parent_id ), get_post_ancestors( $child_id ) );
@@ -135,21 +119,12 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$term2 = wp_insert_term( 'Bar', 'category' );
 		$term3 = wp_insert_term( 'Baz', 'category' );
 		wp_set_post_categories( $post_id, array( $term1['term_id'], $term2['term_id'], $term3['term_id'] ) );
-<<<<<<< HEAD
-		$this->assertEquals( 3, count( $post->post_category ) );
-		$this->assertEquals( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ) , $post->post_category );
-
-		$post = get_post( $post_id, ARRAY_A );
-		$this->assertEquals( 3, count( $post['post_category'] ) );
-		$this->assertEquals( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ) , $post['post_category'] );
-=======
 		$this->assertSame( 3, count( $post->post_category ) );
 		$this->assertSame( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ), $post->post_category );
 
 		$post = get_post( $post_id, ARRAY_A );
 		$this->assertSame( 3, count( $post['post_category'] ) );
 		$this->assertSame( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ), $post['post_category'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_get_tags_input_property() {

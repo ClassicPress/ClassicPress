@@ -113,15 +113,9 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/comments' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
-=======
 		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
 		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/comments/' . self::$approved_id );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
@@ -135,33 +129,31 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$data = $response->get_data();
 		$keys = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'after',
-			'author',
-			'author_email',
-			'author_exclude',
-			'before',
-			'context',
-			'exclude',
-			'include',
-			'offset',
-			'order',
-			'orderby',
-			'page',
-			'parent',
-			'parent_exclude',
-			'password',
-			'per_page',
-			'post',
-			'search',
-			'status',
-			'type',
-			), $keys );
+				'after',
+				'author',
+				'author_email',
+				'author_exclude',
+				'before',
+				'context',
+				'exclude',
+				'include',
+				'offset',
+				'order',
+				'orderby',
+				'page',
+				'parent',
+				'parent_exclude',
+				'password',
+				'per_page',
+				'post',
+				'search',
+				'status',
+				'type',
+			),
+			$keys
+		);
 	}
 
 	public function test_get_items() {
@@ -169,13 +161,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comments = $response->get_data();
 		// We created 6 comments in this method, plus self::$approved_id.
@@ -198,13 +185,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'password', 'toomanysecrets' );
 		$request->set_param( 'post', self::$password_id );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertTrue( in_array( $password_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -224,13 +206,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'password', 'toomanysecrets' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertFalse( in_array( $password_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -266,13 +243,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertFalse( in_array( $password_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -289,13 +261,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertTrue( in_array( $password_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -312,13 +279,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertFalse( in_array( $private_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -335,13 +297,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertTrue( in_array( $private_comment, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -357,13 +314,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertFalse( in_array( $comment_id, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -381,13 +333,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$collection_data = $response->get_data();
 		$this->assertTrue( in_array( $comment_id, wp_list_pluck( $collection_data, 'id' ), true ) );
@@ -408,13 +355,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$admin_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'post', 0 );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$comments = $response->get_data();
 		$this->assertCount( 2, $comments );
 	}
@@ -431,13 +373,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$admin_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'context', 'edit' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_items_for_post() {
@@ -449,13 +386,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			'post' => $second_post_id,
 		) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comments = $response->get_data();
 		$this->assertCount( 2, $comments );
@@ -476,29 +408,17 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'include', array( $id3, $id1 ) );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// Orderby=>include
-=======
 		$this->assertSame( 2, count( $data ) );
 		$this->assertSame( $id1, $data[0]['id'] );
 
 		// 'orderby' => 'include'.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'include' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( $id3, $data[0]['id'] );
-		// Orderby=>invalid should fail.
-=======
 		$this->assertSame( 2, count( $data ) );
-		$this->assertSame( $id2, $data[0]['id'] );
+		$this->assertSame( $id3, $data[0]['id'] );
 
 		// Invalid 'orderby' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'orderby', 'invalid' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -574,25 +494,15 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// order defaults to 'desc'
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( $id3, $data[0]['id'] );
-		// order=>asc
-=======
-		$this->assertSame( $id, $data[0]['id'] );
+		$this->assertSame( $id3, $data[0]['id'] );
 
 		// 'order' => 'asc'.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'order', 'asc' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEquals( self::$approved_id, $data[0]['id'] );
-		// order=>asc,id should fail
-=======
 		$this->assertSame( self::$approved_id, $data[0]['id'] );
 
 		// 'order' => 'asc,id' should error.
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$request->set_param( 'order', 'asc,id' );
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
@@ -624,24 +534,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// 'author' limits result to 1 of 3
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'author', self::$author_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$comments = $response->get_data();
 		$this->assertCount( 1, $comments );
 		// Multiple authors are supported
 		$request->set_param( 'author', array( self::$author_id, self::$subscriber_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$comments = $response->get_data();
 		$this->assertCount( 2, $comments );
 		// Invalid author param errors
@@ -677,25 +577,15 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// 'author_exclude' limits result to 3 of 4
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'author_exclude', self::$author_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$comments = $response->get_data();
 		$this->assertCount( 3, $comments );
 		// 'author_exclude' for both comment authors (2 of 4)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'author_exclude', array( self::$author_id, self::$subscriber_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$comments = $response->get_data();
 		$this->assertCount( 2, $comments );
 		// 'author_exclude' for both invalid author
@@ -790,11 +680,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$this->assertCount( 1, $data );
-<<<<<<< HEAD
-		$this->assertEquals( $id1, $data[0]['id'] );
-=======
-		$this->assertSame( $id, $data[0]['id'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $id1, $data[0]['id'] );
 	}
 
 	public function test_get_comments_pagination_headers() {
@@ -809,18 +695,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 50, $headers['X-WP-Total'] );
-		$this->assertEquals( 5, $headers['X-WP-TotalPages'] );
-		$next_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_comments, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 50, $headers['X-WP-Total'] );
+		$this->assertSame( 5, $headers['X-WP-TotalPages'] );
 		$next_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( '/wp/v2/comments' ) );
+				'page'    => 2,
+			),
+			rest_url( '/wp/v2/comments' )
+		);
 		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 		// 3rd page
@@ -832,18 +714,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-=======
-		$this->assertSame( $total_comments, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'page'    => 2,
-			), rest_url( '/wp/v2/comments' ) );
+				'page'    => 2,
+			),
+			rest_url( '/wp/v2/comments' )
+		);
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
 			'page'    => 4,
@@ -854,22 +732,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
-		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 5,
-			), rest_url( '/wp/v2/comments' ) );
-=======
-		$this->assertSame( $total_comments, $headers['X-WP-Total'] );
-		$this->assertSame( $total_pages, $headers['X-WP-TotalPages'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages - 1,
+				'page' => 5,
 			),
 			rest_url( '/wp/v2/comments' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 		// Out of bounds
@@ -877,22 +747,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
 		$headers = $response->get_headers();
-<<<<<<< HEAD
-		$this->assertEquals( 51, $headers['X-WP-Total'] );
+		$this->assertSame( 51, $headers['X-WP-Total'] );
 		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
-		$prev_link = add_query_arg( array(
-			'page'    => 6,
-			), rest_url( '/wp/v2/comments' ) );
-=======
-		$this->assertSame( $total_comments, $headers['X-WP-Total'] );
-		$this->assertEquals( $total_pages, $headers['X-WP-TotalPages'] );
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages,
+				'page' => 6,
 			),
 			rest_url( '/wp/v2/comments' )
 		);
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 	}
@@ -931,13 +793,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	public function test_get_item() {
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', self::$approved_id ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->check_comment_data( $data, 'view', $response->get_links() );
@@ -950,13 +807,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			'context' => 'edit',
 		) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->check_comment_data( $data, 'edit', $response->get_links() );
@@ -970,15 +822,13 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( '_fields', 'id,status' );
 		$obj      = get_comment( self::$approved_id );
 		$response = $endpoint->prepare_item_for_response( $obj, $request );
-<<<<<<< HEAD
-		$this->assertEquals( array(
-=======
 		$this->assertSame(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'id',
-			'status',
-		), array_keys( $response->get_data() ) );
+				'id',
+				'status',
+			),
+			array_keys( $response->get_data() )
+		);
 	}
 
 	public function test_get_comment_author_avatar_urls() {
@@ -992,17 +842,9 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertArrayHasKey( 96,  $data['author_avatar_urls'] );
 
 		$comment = get_comment( self::$approved_id );
-<<<<<<< HEAD
-		/**
-		 * Ignore the subdomain, since 'get_avatar_url randomly sets the Gravatar
-		 * server when building the url string.
-		 */
-		$this->assertEquals( substr( get_avatar_url( $comment->comment_author_email ), 9 ), substr( $data['author_avatar_urls'][96], 9 ) );
-=======
 		// Ignore the subdomain, since get_avatar_url() randomly sets
 		// the Gravatar server when building the URL string.
 		$this->assertSame( substr( get_avatar_url( $comment->comment_author_email ), 9 ), substr( $data['author_avatar_urls'][96], 9 ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_comment_invalid_id() {
@@ -1057,14 +899,9 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$admin_id );
 
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%d', self::$hold_id ) );
-<<<<<<< HEAD
 
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_get_comment_with_children_link() {
@@ -1082,13 +919,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		) );
 
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayHasKey( 'children', $response->get_links() );
 	}
 
@@ -1100,13 +932,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		) );
 
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayNotHasKey( 'children', $response->get_links() );
 	}
 
@@ -1137,13 +964,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $password_comment ) );
 		$request->set_param( 'password', 'toomanysecrets' );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_create_item() {
@@ -1162,13 +984,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->check_comment_data( $data, 'edit', $response->get_links() );
@@ -1272,13 +1089,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$new_comment = get_comment( $data['id'] );
@@ -1471,13 +1283,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'POST', '/wp/v2/comments' );
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( $subscriber_id, $data['author'] );
@@ -1502,13 +1309,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 'comment', $data['type'] );
@@ -1710,13 +1512,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 'approved', $data['status'] );
@@ -1740,13 +1537,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'user_agent', 'Mozilla/4.0 (compatible; MSIE 5.5; AOL 4.0; Windows 95)' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 
@@ -2017,13 +1809,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		add_filter( 'rest_allow_anonymous_comments', '__return_true' );
 		$request = new WP_REST_Request( 'POST', '/wp/v2/comments' );
 		$request->set_param( 'post', self::$post_id );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 401, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 401, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertSame( 'rest_comment_login_required', $data['code'] );
 	}
@@ -2083,13 +1870,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$params = array(
 			'post'    => self::$post_id,
@@ -2103,13 +1885,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 400, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 400, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function anonymous_comments_callback_null() {
@@ -2265,13 +2042,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_item() {
@@ -2293,13 +2065,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comment = $response->get_data();
 		$updated = get_comment( self::$approved_id );
@@ -2357,13 +2124,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->set_param( 'author_email', 'another@email.com' );
 
 		// Sending a request without content is fine.
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Sending a request with empty comment is not fine.
 		$request->set_param( 'author_email', 'yetanother@email.com' );
@@ -2379,23 +2141,13 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%d', self::$approved_id ) );
 		$request->set_param( 'post', $comment->comment_post_ID );
 
-<<<<<<< HEAD
-		// Run twice to make sure that the update still succeeds even if no DB
-		// rows are updated.
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
 		// Run twice to make sure that the update still succeeds
 		// even if no DB rows are updated.
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_comment_status() {
@@ -2413,13 +2165,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comment = $response->get_data();
 		$updated = get_comment( $comment_id );
@@ -2443,13 +2190,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comment = $response->get_data();
 		$updated = get_comment( $comment_id );
@@ -2469,13 +2211,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$comment = $response->get_data();
 		$updated = get_comment( self::$approved_id );
@@ -2497,13 +2234,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_comment_empty_author_name() {
@@ -2521,13 +2253,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_comment_author_name_only() {
@@ -2544,13 +2271,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_comment_empty_author_email() {
@@ -2568,13 +2290,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request->add_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $params ) );
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_update_comment_author_email_too_short() {
@@ -2702,35 +2419,6 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertErrorResponse( 'rest_cannot_edit', $response, 401 );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 47024
-	 */
-	public function test_update_comment_when_can_moderate_comments() {
-		wp_set_current_user( self::$moderator_id );
-
-		$params = array(
-			'content' => 'Updated comment.',
-			'date'    => '2019-10-07T23:14:25',
-		);
-
-		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%d', self::$approved_id ) );
-		$request->add_header( 'content-type', 'application/json' );
-		$request->set_body( wp_json_encode( $params ) );
-
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 200, $response->get_status() );
-
-		$comment = $response->get_data();
-		$updated = get_comment( self::$approved_id );
-
-		$this->assertSame( $params['content'], $updated->comment_content );
-		$this->assertSame( self::$post_id, $comment['post'] );
-		$this->assertSame( '2019-10-07T23:14:25', $comment['date'] );
-	}
-
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	public function test_update_comment_private_post_invalid_permission() {
 		$private_comment_id = $this->factory->comment->create( array(
 			'comment_approved' => 1,
@@ -2767,36 +2455,21 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		// Check if comment 1 does not have the child link.
 		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayNotHasKey( 'children', $response->get_links() );
 
 		// Change the comment parent.
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%s', $child_comment ) );
 		$request->set_param( 'parent', $comment_id_1 );
 		$request->set_param( 'content', rand_str() );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-
-		// Check if comment 1 now has the child link.
-		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
 		// Check if comment 1 now has the child link.
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-		$response = rest_get_server()->dispatch( $request );
+		$response = $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayHasKey( 'children', $response->get_links() );
 	}
 
@@ -2883,41 +2556,23 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		foreach ( $input as $name => $value ) {
 			$request->set_param( $name, $value );
 		}
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 201, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$actual_output = $response->get_data();
 
 		// Compare expected API output to actual API output
 		$this->assertInternalType( 'array', $actual_output['content'] );
 		$this->assertArrayHasKey( 'raw', $actual_output['content'] );
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['content']['raw']     , $actual_output['content']['raw'] );
-		$this->assertEquals( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
-		$this->assertEquals( $expected_output['author_name']        , $actual_output['author_name'] );
-		$this->assertEquals( $expected_output['author_user_agent']  , $actual_output['author_user_agent'] );
-=======
 		$this->assertSame( $expected_output['content']['raw'], $actual_output['content']['raw'] );
 		$this->assertSame( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
 		$this->assertSame( $expected_output['author_name'], $actual_output['author_name'] );
 		$this->assertSame( $expected_output['author_user_agent'], $actual_output['author_user_agent'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$comment = get_comment( $actual_output['id'] );
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['content']['raw']   , $comment->comment_content );
-		$this->assertEquals( $expected_output['author_name']      , $comment->comment_author );
-		$this->assertEquals( $expected_output['author_user_agent'], $comment->comment_agent );
-=======
 		$this->assertSame( $expected_output['content']['raw'], $comment->comment_content );
 		$this->assertSame( $expected_output['author_name'], $comment->comment_author );
 		$this->assertSame( $expected_output['author_user_agent'], $comment->comment_agent );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Update the comment
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%d', $actual_output['id'] ) );
@@ -2927,18 +2582,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// FIXME at least one value must change, or update fails
 		// See https://core.trac.wordpress.org/ticket/38700
 		$request->set_param( 'author_ip', '127.0.0.2' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-		$actual_output = $response->get_data();
-
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['content']['raw']     , $actual_output['content']['raw'] );
-		$this->assertEquals( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
-		$this->assertEquals( $expected_output['author_name']        , $actual_output['author_name'] );
-		$this->assertEquals( $expected_output['author_user_agent']  , $actual_output['author_user_agent'] );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 		$actual_output = $response->get_data();
 
@@ -2947,43 +2591,31 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertSame( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );
 		$this->assertSame( $expected_output['author_name'], $actual_output['author_name'] );
 		$this->assertSame( $expected_output['author_user_agent'], $actual_output['author_user_agent'] );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Compare expected API output to WP internal values
 		$comment = get_comment( $actual_output['id'] );
-<<<<<<< HEAD
-		$this->assertEquals( $expected_output['content']['raw']   , $comment->comment_content );
-		$this->assertEquals( $expected_output['author_name']      , $comment->comment_author );
-		$this->assertEquals( $expected_output['author_user_agent'], $comment->comment_agent );
-=======
 		$this->assertSame( $expected_output['content']['raw'], $comment->comment_content );
 		$this->assertSame( $expected_output['author_name'], $comment->comment_author );
 		$this->assertSame( $expected_output['author_user_agent'], $comment->comment_agent );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	public function test_comment_roundtrip_as_editor() {
 		wp_set_current_user( self::$editor_id );
-<<<<<<< HEAD
-		$this->assertEquals( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
-		$this->verify_comment_roundtrip( array(
-=======
-
 		$this->assertSame( ! is_multisite(), current_user_can( 'unfiltered_html' ) );
 		$this->verify_comment_roundtrip(
 			array(
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
-			'content'           => '\o/ ¯\_(ツ)_/¯',
-			'author_name'       => '\o/ ¯\_(ツ)_/¯',
-			'author_user_agent' => '\o/ ¯\_(ツ)_/¯',
-		), array(
-			'content' => array(
-				'raw'      => '\o/ ¯\_(ツ)_/¯',
-				'rendered' => '<p>\o/ ¯\_(ツ)_/¯</p>',
-			),
-			'author_name'       => '\o/ ¯\_(ツ)_/¯',
-			'author_user_agent' => '\o/ ¯\_(ツ)_/¯',
-		) );
+				'content'           => '\o/ ¯\_(ツ)_/¯',
+				'author_name'       => '\o/ ¯\_(ツ)_/¯',
+				'author_user_agent' => '\o/ ¯\_(ツ)_/¯',
+			), array(
+				'content' => array(
+					'raw'      => '\o/ ¯\_(ツ)_/¯',
+					'rendered' => '<p>\o/ ¯\_(ツ)_/¯</p>',
+				),
+				'author_name'       => '\o/ ¯\_(ツ)_/¯',
+				'author_user_agent' => '\o/ ¯\_(ツ)_/¯',
+			)
+		);
 	}
 
 	public function test_comment_roundtrip_as_editor_unfiltered_html() {
@@ -3064,13 +2696,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 		$request = new WP_REST_Request( 'DELETE', sprintf( '/wp/v2/comments/%d', $comment_id ) );
 		$request->set_param( 'force', 'false' );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$data = $response->get_data();
 		$this->assertSame( 'trash', $data['status'] );
@@ -3087,13 +2714,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$request = new WP_REST_Request( 'DELETE', sprintf( '/wp/v2/comments/%d', $comment_id ) );
 		$request['force'] = true;
 
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$this->assertTrue( $data['deleted'] );
 		$this->assertNotEmpty( $data['previous']['post'] );
@@ -3108,13 +2730,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			'user_id'          => self::$subscriber_id,
 		));
 		$request = new WP_REST_Request( 'DELETE', sprintf( '/wp/v2/comments/%d', $comment_id ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$data = $response->get_data();
 		$response = $this->server->dispatch( $request );
 		$this->assertErrorResponse( 'rest_already_trashed', $response, 410 );
@@ -3154,23 +2771,13 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		) );
 
 		$request = new WP_REST_Request( 'DELETE', sprintf( '/wp/v2/comments/%s', $child_comment ) );
-<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-
-		// Verify children link is gone.
-		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
-		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
 
 		// Verify children link is gone.
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );
-		$response = rest_get_server()->dispatch( $request );
+		$response =  $this->server->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$this->assertArrayNotHasKey( 'children', $response->get_links() );
 	}
 
@@ -3345,34 +2952,4 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			$this->assertArrayNotHasKey( 'raw', $data['content'] );
 		}
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 42238
-	 */
-	public function test_check_read_post_permission_with_invalid_post_type() {
-		register_post_type(
-			'bug-post',
-			array(
-				'label'        => 'Bug Posts',
-				'supports'     => array( 'title', 'editor', 'author', 'comments' ),
-				'show_in_rest' => true,
-				'public'       => true,
-			)
-		);
-		create_initial_rest_routes();
-
-		$post_id    = self::factory()->post->create( array( 'post_type' => 'bug-post' ) );
-		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
-		_unregister_post_type( 'bug-post' );
-
-		$this->setExpectedIncorrectUsage( 'map_meta_cap' );
-
-		wp_set_current_user( self::$admin_id );
-		$request  = new WP_REST_Request( 'GET', '/wp/v2/comments/' . $comment_id );
-		$response = rest_get_server()->dispatch( $request );
-		$this->assertSame( 403, $response->get_status() );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }

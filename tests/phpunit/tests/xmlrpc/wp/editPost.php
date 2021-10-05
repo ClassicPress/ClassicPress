@@ -275,13 +275,8 @@ class Tests_XMLRPC_wp_editPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_editPost( array( 1, 'editor', 'editor', $post_id, $struct ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Make sure that the post status is still inherit
-		$this->assertEquals( 'inherit', get_post( $post_id )->post_status );
-=======
 		// Make sure that the post status is still inherit.
 		$this->assertSame( 'inherit', get_post( $post_id )->post_status );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	function test_use_invalid_post_status() {
@@ -297,13 +292,8 @@ class Tests_XMLRPC_wp_editPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_editPost( array( 1, 'editor', 'editor', $post_id, $struct ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Make sure that the post status is still inherit
-		$this->assertEquals( 'draft', get_post( $post_id )->post_status );
-=======
 		// Make sure that the post status is still inherit.
 		$this->assertSame( 'draft', get_post( $post_id )->post_status );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -386,24 +376,14 @@ class Tests_XMLRPC_wp_editPost extends WP_XMLRPC_UnitTestCase {
 		$enclosure_string = "{$enclosure['url']}\n{$enclosure['length']}\n{$enclosure['type']}\n";
 		add_post_meta( $post_id, 'enclosure', $enclosure_string );
 
-<<<<<<< HEAD
-		// Verify that the correct data is there
-		$this->assertEquals( $enclosure_string, get_post_meta( $post_id, 'enclosure', true ) );
-=======
 		// Verify that the correct data is there.
 		$this->assertSame( $enclosure_string, get_post_meta( $post_id, 'enclosure', true ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Attempt to add the enclosure a second time
 		$this->myxmlrpcserver->add_enclosure_if_new( $post_id, $enclosure );
 
-<<<<<<< HEAD
-		// Verify that there is only a single value in the array and that a duplicate is not present
-		$this->assertEquals( 1, count( get_post_meta( $post_id, 'enclosure' ) ) );
-=======
 		// Verify that there is only a single value in the array and that a duplicate is not present.
 		$this->assertSame( 1, count( get_post_meta( $post_id, 'enclosure' ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// For good measure, check that the expected value is in the array
 		$this->assertTrue( in_array( $enclosure_string, get_post_meta( $post_id, 'enclosure' ) ) );
@@ -411,13 +391,8 @@ class Tests_XMLRPC_wp_editPost extends WP_XMLRPC_UnitTestCase {
 		// Attempt to add a brand new enclosure via XML-RPC
 		$this->myxmlrpcserver->add_enclosure_if_new( $post_id, $new_enclosure );
 
-<<<<<<< HEAD
-		// Having added the new enclosure, 2 values are expected in the array
-		$this->assertEquals( 2, count( get_post_meta( $post_id, 'enclosure' ) ) );
-=======
 		// Having added the new enclosure, 2 values are expected in the array.
 		$this->assertSame( 2, count( get_post_meta( $post_id, 'enclosure' ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// Check that the new enclosure is in the enclosure meta
 		$new_enclosure_string = "{$new_enclosure['url']}\n{$new_enclosure['length']}\n{$new_enclosure['type']}\n";

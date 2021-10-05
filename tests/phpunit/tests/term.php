@@ -150,19 +150,11 @@ class Tests_Term extends WP_UnitTestCase {
 		$term2 = wp_insert_term( 'Bar', 'category' );
 		$term3 = wp_insert_term( 'Baz', 'category' );
 		wp_set_post_categories( $post_id, array( $term1['term_id'], $term2['term_id'] ) );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $post->post_category ) );
-		$this->assertEquals( array( $term2['term_id'], $term1['term_id'] ) , $post->post_category );
-
-		wp_set_post_categories( $post_id, $term3['term_id'], true );
-		$this->assertEquals( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ) , $post->post_category );
-=======
 		$this->assertSame( 2, count( $post->post_category ) );
 		$this->assertSame( array( $term2['term_id'], $term1['term_id'] ), $post->post_category );
 
 		wp_set_post_categories( $post_id, $term3['term_id'], true );
 		$this->assertSame( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ), $post->post_category );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		$term4 = wp_insert_term( 'Burrito', 'category' );
 		wp_set_post_categories( $post_id, $term4['term_id'] );
@@ -181,40 +173,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/25852
-=======
-	 * @ticket 43516
-	 */
-	function test_wp_set_post_categories_sets_default_category_for_custom_post_types() {
-		add_filter( 'default_category_post_types', array( $this, 'filter_default_category_post_types' ) );
-
-		register_post_type( 'cpt', array( 'taxonomies' => array( 'category' ) ) );
-
-		$post_id = self::factory()->post->create( array( 'post_type' => 'cpt' ) );
-		$post    = get_post( $post_id );
-
-		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
-
-		$term = wp_insert_term( 'Foo', 'category' );
-
-		wp_set_post_categories( $post_id, $term['term_id'] );
-		$this->assertSame( $term['term_id'], $post->post_category[0] );
-
-		wp_set_post_categories( $post_id, array() );
-		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
-
-		remove_filter( 'default_category_post_types', array( $this, 'filter_default_category_post_types' ) );
-	}
-
-	function filter_default_category_post_types( $post_types ) {
-		$post_types[] = 'cpt';
-		return $post_types;
-	}
-
-	/**
-	 * @ticket 25852
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	 */
 	function test_sanitize_term_field() {
 		$term = wp_insert_term( 'foo', $this->taxonomy );

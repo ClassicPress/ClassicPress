@@ -109,11 +109,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'pre_get_avatar_data', array( $this, 'pre_get_avatar_url_filter' ), 10 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $url, $this->fakeURL );
-=======
-		$this->assertSame( $url, $this->fake_url );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $url, $this->fakeURL );
 	}
 	public function pre_get_avatar_url_filter( $args ) {
 		$args['url'] = $this->fakeURL;
@@ -130,11 +126,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'get_avatar_url', array( $this, 'get_avatar_url_filter' ), 10 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $url, $this->fakeURL );
-=======
-		$this->assertSame( $url, $this->fake_url );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $url, $this->fakeURL );
 	}
 	public function get_avatar_url_filter( $url ) {
 		return $this->fakeURL;
@@ -166,11 +158,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 
 	public function test_get_avatar() {
 		$img = get_avatar( 1 );
-<<<<<<< HEAD
-		$this->assertEquals( preg_match( "|^<img alt='[^']*' src='[^']*' srcset='[^']*' class='[^']*' height='[^']*' width='[^']*' />$|", $img ), 1 );
-=======
-		$this->assertSame( preg_match( "|^<img alt='[^']*' src='[^']*' srcset='[^']*' class='[^']*' height='[^']*' width='[^']*' loading='lazy'/>$|", $img ), 1 );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( preg_match( "|^<img alt='[^']*' src='[^']*' srcset='[^']*' class='[^']*' height='[^']*' width='[^']*' />$|", $img ), 1 );
 	}
 
 	public function test_get_avatar_size() {
@@ -219,11 +207,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'pre_get_avatar', array( $this, 'pre_get_avatar_filter' ), 10 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $img, $this->fakeIMG );
-=======
-		$this->assertSame( $img, $this->fake_img );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $img, $this->fakeIMG );
 	}
 	public function pre_get_avatar_filter( $img ) {
 		return $this->fakeIMG;
@@ -239,11 +223,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'get_avatar', array( $this, 'get_avatar_filter' ), 10 );
 
-<<<<<<< HEAD
-		$this->assertEquals( $img, $this->fakeURL );
-=======
-		$this->assertSame( $img, $this->fake_url );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
+		$this->assertSame( $img, $this->fakeURL );
 	}
 	public function get_avatar_filter( $img ) {
 		return $this->fakeURL;

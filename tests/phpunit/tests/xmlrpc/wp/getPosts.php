@@ -74,13 +74,9 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 			$posts_found = array_merge( $posts_found, wp_list_pluck( $presults, 'post_id' ) );
 			$filter['offset'] += $filter['number'];
 		} while ( count( $presults ) > 0 );
-<<<<<<< HEAD
-		// verify that $post_ids matches $posts_found
-		$this->assertEquals( 0, count( array_diff( $post_ids, $posts_found ) ) );
-=======
+
 		// Verify that $post_ids matches $posts_found.
 		$this->assertSame( 0, count( array_diff( $post_ids, $posts_found ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 
 		// add comments to some of the posts
 		foreach ( $post_ids as $key => $post_id ) {

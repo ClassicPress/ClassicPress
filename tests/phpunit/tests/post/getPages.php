@@ -20,80 +20,51 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		$this->assertFalse( wp_cache_get( 'last_changed', 'posts' ) );
 
 		$pages = get_pages();
-<<<<<<< HEAD
-		$this->assertEquals( 3, count( $pages ) );
-		$this->assertNotEmpty( $time1 = wp_cache_get( 'last_changed', 'posts' ) );
-=======
 		$this->assertSame( 3, count( $pages ) );
 		$time1 = wp_cache_get( 'last_changed', 'posts' );
 		$this->assertNotEmpty( $time1 );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 		$num_queries = $wpdb->num_queries;
 		foreach ( $pages as $page )
 			$this->assertInstanceOf( 'WP_Post', $page );
 
 		// Again. num_queries and last_changed should remain the same.
 		$pages = get_pages();
-<<<<<<< HEAD
-		$this->assertEquals( 3, count( $pages ) );
-		$this->assertEquals( $time1, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 3, count( $pages ) );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 
 		// Again with different args. last_changed should not increment because of
 		// different args to get_pages(). num_queries should bump by 1.
 		$pages = get_pages( array( 'number' => 2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $pages ) );
-		$this->assertEquals( $time1, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries + 1, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 2, count( $pages ) );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 
 		$num_queries = $wpdb->num_queries;
 
 		// Again. num_queries and last_changed should remain the same.
 		$pages = get_pages( array( 'number' => 2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $pages ) );
-		$this->assertEquals( $time1, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 2, count( $pages ) );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 
 		// Do the first query again. The interim queries should not affect it.
 		$pages = get_pages();
-<<<<<<< HEAD
-		$this->assertEquals( 3, count( $pages ) );
-		$this->assertEquals( $time1, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 3, count( $pages ) );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 
 		// Force last_changed to increment.
 		clean_post_cache( $pages[0]->ID );
@@ -103,18 +74,12 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// last_changed bumped so num_queries should increment.
 		$pages = get_pages( array( 'number' => 2 ) );
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $pages ) );
-		$this->assertEquals( $time2, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries + 1, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 2, count( $pages ) );
 		$this->assertSame( $time2, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 
 		$last_changed = wp_cache_get( 'last_changed', 'posts' );
 
@@ -129,18 +94,12 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// num_queries should bump after wp_delete_post() bumps last_changed.
 		$pages = get_pages();
-<<<<<<< HEAD
-		$this->assertEquals( 2, count( $pages ) );
-		$this->assertEquals( $last_changed, wp_cache_get( 'last_changed', 'posts' ) );
-		$this->assertEquals( $num_queries + 1, $wpdb->num_queries );
-		foreach ( $pages as $page )
-=======
 		$this->assertSame( 2, count( $pages ) );
 		$this->assertSame( $last_changed, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 			$this->assertInstanceOf( 'WP_Post', $page );
+		}
 	}
 
 	/**
@@ -271,11 +230,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		add_post_meta( $posts[1], 'some-meta-key', '' );
 		add_post_meta( $posts[2], 'some-meta-key', '1' );
 
-<<<<<<< HEAD
-		$this->assertEquals( 1, count( get_pages( array( 'meta_key' => 'some-meta-key', 'meta_value' => '0' ) ) ) );
-		$this->assertEquals( 1, count( get_pages( array( 'meta_key' => 'some-meta-key', 'meta_value' => '1' ) ) ) );
-		$this->assertEquals( 3, count( get_pages( array( 'meta_key' => 'some-meta-key' ) ) ) );
-=======
 		$this->assertSame(
 			1,
 			count(
@@ -299,7 +253,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( 3, count( get_pages( array( 'meta_key' => 'some-meta-key' ) ) ) );
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 	}
 
 	/**
@@ -583,29 +536,4 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		$exclude6 = get_pages( array( 'exclude_tree' => array( $post_id1, $post_id3 ) ) );
 		$this->assertCount( 2, $exclude6 );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 43514
-	 */
-	function test_get_pages_cache_empty() {
-		global $wpdb;
-
-		wp_cache_delete( 'last_changed', 'posts' );
-		$this->assertFalse( wp_cache_get( 'last_changed', 'posts' ) );
-
-		$num_queries = $wpdb->num_queries;
-
-		$pages = get_pages(); // Database gets queried.
-
-		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
-
-		$num_queries = $wpdb->num_queries;
-
-		$pages = get_pages(); // Database should not get queried.
-
-		$this->assertSame( $num_queries, $wpdb->num_queries );
-	}
->>>>>>> 164b22cf6a (Tests: First pass at using `assertSame()` instead of `assertEquals()` in most of the unit tests.)
 }
