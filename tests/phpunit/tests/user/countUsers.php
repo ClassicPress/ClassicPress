@@ -163,15 +163,13 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$count = count_users( $strategy, $site_id );
-<<<<<<< HEAD
-		$this->assertEqualSetsWithIndex( array(
-=======
 		$this->assertSameSetsWithIndex(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'tester' => 1,
-			'none'   => 0,
-		), $count['avail_roles'] );
+				'tester' => 1,
+				'none'   => 0,
+			),
+			$count['avail_roles']
+		);
 	}
 
 	/**

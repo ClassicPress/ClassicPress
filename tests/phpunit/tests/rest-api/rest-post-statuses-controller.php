@@ -23,13 +23,8 @@ class WP_Test_REST_Post_Statuses_Controller extends WP_Test_REST_Controller_Test
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
-<<<<<<< HEAD
-		$this->assertEqualSets( array( 'embed', 'view', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
-=======
 		$this->assertSameSets( array( 'embed', 'view', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 		// Single.
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/statuses/publish' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();

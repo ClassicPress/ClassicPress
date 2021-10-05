@@ -171,25 +171,15 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEqualSets( array( $id1, $id2, $id3, $id4 ), wp_list_pluck( $data, 'id' ) );
-		// Filter to menu_order
-=======
 		$this->assertSameSets( array( $id1, $id2, $id3, $id4 ), wp_list_pluck( $data, 'id' ) );
 
 		// Filter to 'menu_order'.
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$request->set_param( 'menu_order', 1 );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-<<<<<<< HEAD
-		$this->assertEqualSets( array( $id4 ), wp_list_pluck( $data, 'id' ) );
-		// Order by menu order
-=======
 		$this->assertSameSets( array( $id4 ), wp_list_pluck( $data, 'id' ) );
 
 		// Order by 'menu order'.
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
 		$request->set_param( 'order', 'asc' );
 		$request->set_param( 'orderby', 'menu_order' );

@@ -209,13 +209,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			$term_id2 => $term_id1
 		), $terms_id_parent );
 
-<<<<<<< HEAD
-		$terms_ids = get_terms( 'post_tag', array( 'hide_empty' => false, 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms_ids );
-
-		$terms_name = get_terms( 'post_tag', array( 'hide_empty' => false, 'fields' => 'names' ) );
-		$this->assertEqualSets( array( 'WOO!', 'HOO!' ), $terms_name );
-=======
 		$terms_ids = get_terms(
 			'post_tag',
 			array(
@@ -233,7 +226,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( array( 'WOO!', 'HOO!' ), $terms_name );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 
 		$terms_id_name = get_terms( 'post_tag', array( 'hide_empty' => false, 'fields' => 'id=>name' ) );
 		$this->assertEquals( array(
@@ -347,10 +339,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$term_id2 = self::factory()->tag->create( array( 'name' => 'Wilbur' ) );
 		$term_id3 = self::factory()->tag->create( array( 'name' => 'Foo' ) );
 
-<<<<<<< HEAD
-		$terms = get_terms( 'post_tag', array( 'hide_empty' => false, 'search' => 'bur', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms );
-=======
 		$terms = get_terms(
 			'post_tag',
 			array(
@@ -360,7 +348,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( array( $term_id1, $term_id2 ), $terms );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -370,19 +357,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$term_id1 = self::factory()->tag->create( array( 'name' => 'burrito', 'description' => 'This is a burrito.' ) );
 		$term_id2 = self::factory()->tag->create( array( 'name' => 'taco', 'description' => 'Burning man.' ) );
 
-<<<<<<< HEAD
-		$terms = get_terms( 'post_tag', array( 'hide_empty' => false, 'name__like' => 'bur', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1 ), $terms );
-
-		$terms2 = get_terms( 'post_tag', array( 'hide_empty' => false, 'description__like' => 'bur', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms2 );
-
-		$terms3 = get_terms( 'post_tag', array( 'hide_empty' => false, 'name__like' => 'Bur', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1 ), $terms3 );
-
-		$terms4 = get_terms( 'post_tag', array( 'hide_empty' => false, 'description__like' => 'Bur', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms4 );
-=======
 		$terms = get_terms(
 			'post_tag',
 			array(
@@ -422,7 +396,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( array( $term_id1, $term_id2 ), $terms4 );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 
 		$terms5 = get_terms( 'post_tag', array( 'hide_empty' => false, 'name__like' => 'ENCHILADA', 'fields' => 'ids' ) );
 		$this->assertEmpty( $terms5 );
@@ -430,13 +403,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$terms6 = get_terms( 'post_tag', array( 'hide_empty' => false, 'description__like' => 'ENCHILADA', 'fields' => 'ids' ) );
 		$this->assertEmpty( $terms6 );
 
-<<<<<<< HEAD
-		$terms7 = get_terms( 'post_tag', array( 'hide_empty' => false, 'name__like' => 'o', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms7 );
-
-		$terms8 = get_terms( 'post_tag', array( 'hide_empty' => false, 'description__like' => '.', 'fields' => 'ids' ) );
-		$this->assertEqualSets( array( $term_id1, $term_id2 ), $terms8 );
-=======
 		$terms7 = get_terms(
 			'post_tag',
 			array(
@@ -456,7 +422,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( array( $term_id1, $term_id2 ), $terms8 );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -762,32 +727,26 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			'slug' => 'foo-and-bar',
 		) );
 
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'name' => 'Foo & Bar',
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array( $t ), $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields' => 'ids',
+				'name' => 'Foo & Bar',
 			)
 		);
 		$this->assertSameSets( array( $t ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 
 		// array format.
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'name' => array( 'Foo & Bar' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array( $t ), $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields' => 'ids',
+				'name' => array( 'Foo & Bar' ),
 			)
 		);
 		$this->assertSameSets( array( $t ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -2277,19 +2236,16 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 
 		$terms = self::factory()->term->create_many( 2, array( 'taxonomy' => 'wptests_tax' ) );
 
-		$found = get_terms( 'wptests_tax', array(
-			'number'     => 3,
-			'offset'     => 0,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( $terms, $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'number'     => 3,
+				'offset'     => 0,
+				'hide_empty' => false,
+				'fields'     => 'ids',
 			)
 		);
 		$this->assertSameSets( $terms, $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -2300,21 +2256,18 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 
 		$terms = self::factory()->term->create_many( 3, array( 'taxonomy' => 'wptests_tax' ) );
 
-		$found = get_terms( 'wptests_tax', array(
-			'number'     => 1,
-			'offset'     => 1,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-			'orderby'    => 'term_id',
-			'order'      => 'ASC',
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array( $terms[1] ), $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'number'     => 1,
+				'offset'     => 1,
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'orderby'    => 'term_id',
+				'order'      => 'ASC',
 			)
 		);
 		$this->assertSameSets( array( $terms[1] ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -2325,21 +2278,18 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 
 		$terms = self::factory()->term->create_many( 2, array( 'taxonomy' => 'wptests_tax' ) );
 
-		$found = get_terms( 'wptests_tax', array(
-			'number'     => 2,
-			'offset'     => 1,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-			'orderby'    => 'term_id',
-			'order'      => 'ASC',
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array( $terms[1] ), $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'number'     => 2,
+				'offset'     => 1,
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'orderby'    => 'term_id',
+				'order'      => 'ASC',
 			)
 		);
 		$this->assertSameSets( array( $terms[1] ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -2350,21 +2300,18 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 
 		$terms = self::factory()->term->create_many( 2, array( 'taxonomy' => 'wptests_tax' ) );
 
-		$found = get_terms( 'wptests_tax', array(
-			'number'     => 100,
-			'offset'     => 3,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-			'orderby'    => 'term_id',
-			'order'      => 'ASC',
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array(), $found );
-=======
+		$found = get_terms(
+			'wptests_tax',
+			array(
+		'number'     => 100,
+		'offset'     => 3,
+		'hide_empty' => false,
+		'fields'     => 'ids',
+		'orderby'    => 'term_id',
+		'order'      => 'ASC',
 			)
 		);
 		$this->assertSameSets( array(), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**

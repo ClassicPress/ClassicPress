@@ -155,18 +155,12 @@ class Tests_Ajax_Update_Plugin extends WP_Ajax_UnitTestCase {
 			'data'    => array(
 				'update'       => 'plugin',
 				'slug'         => 'hello-dolly',
-				'oldVersion'   => 'Version 1.7.2',
-				'newVersion'   => '',
 				'plugin'       => 'hello.php',
 				'pluginName'   => 'Hello Dolly',
-<<<<<<< HEAD
 				'errorMessage' => 'Plugin update failed.',
 				'oldVersion'   => 'Version 99.0-wp1.7',
 				'newVersion'   => '',
-=======
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 				'debug'        => array( 'The plugin is at the latest version.' ),
-				'errorMessage' => 'The plugin is at the latest version.',
 			),
 		);
 

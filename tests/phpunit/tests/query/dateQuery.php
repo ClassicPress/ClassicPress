@@ -995,12 +995,7 @@ class Tests_Query_DateQuery extends WP_UnitTestCase {
 			'post_status' => 'publish',
 		) );
 
-<<<<<<< HEAD
-		$expected = array( $p1, $p4, $p5, );
-		$this->assertEqualSets( $expected, $q->posts );
-=======
 		$expected = array( $p1, $p4, $p5 );
 		$this->assertSameSets( $expected, $q->posts );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 }

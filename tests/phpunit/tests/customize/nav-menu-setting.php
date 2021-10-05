@@ -245,13 +245,8 @@ class Test_WP_Customize_Nav_Menu_Setting extends WP_UnitTestCase {
 
 		$term = (array) wp_get_nav_menu_object( $menu_id );
 		$this->assertNotEmpty( $term );
-<<<<<<< HEAD
-		$this->assertNotInstanceOf( 'WP_Error', $term );
-		$this->assertEqualSets( $post_value, wp_array_slice_assoc( $term, array_keys( $value ) ) );
-=======
 		$this->assertNotWPError( $term );
 		$this->assertSameSets( $post_value, wp_array_slice_assoc( $term, array_keys( $value ) ) );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$this->assertSame( $menu_id, $term['term_id'] );
 		$this->assertSame( $menu_id, $term['term_taxonomy_id'] );
 

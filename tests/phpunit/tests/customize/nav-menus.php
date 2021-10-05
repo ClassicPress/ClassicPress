@@ -391,56 +391,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertSame( 'custom', $results[0]['type'] );
 	}
 
-<<<<<<< HEAD
-=======
-	/*
-	 * Tests that the search_available_items_query method should return term items
-	 * not assigned to any posts.
-	 *
-	 * @ticket 45298
-	 */
-	public function test_search_available_items_query_should_return_unassigned_term_items() {
-		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
-
-		register_taxonomy(
-			'wptests_tax',
-			'post',
-			array(
-				'labels' => array(
-					'name' => 'Tests Taxonomy',
-				),
-			)
-		);
-
-		$term_id = $this->factory->term->create(
-			array(
-				'taxonomy' => 'wptests_tax',
-				'name'     => 'foobar',
-			)
-		);
-
-		// Expected menu item array.
-		$expected = array(
-			'title'      => 'foobar',
-			'id'         => "term-{$term_id}",
-			'type'       => 'taxonomy',
-			'type_label' => 'Tests Taxonomy',
-			'object'     => 'wptests_tax',
-			'object_id'  => intval( $term_id ),
-			'url'        => get_term_link( intval( $term_id ), '' ),
-		);
-
-		$results = $menus->search_available_items_query(
-			array(
-				'pagenum' => 1,
-				's'       => 'foo',
-			)
-		);
-
-		$this->assertSameSets( $expected, $results[0] );
-	}
-
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	/**
 	 * Count for number of times customize_nav_menu_searched_items filtered.
 	 *

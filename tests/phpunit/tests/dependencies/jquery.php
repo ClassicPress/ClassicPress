@@ -20,18 +20,8 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 
 		$object = $scripts->query( 'jquery', 'registered' );
 		$this->assertInstanceOf( '_WP_Dependency', $object );
-<<<<<<< HEAD
-        $this->assertEqualSets( $object->deps, array_keys( $jquery_scripts ) );
+        $this->assertSameSets( $object->deps, array_keys( $jquery_scripts ) );
         foreach( $object->deps as $dep ) {
-=======
-
-		// As of 5.5 jQuery 1.12.4 is loaded without Migrate 1.4.1.
-		// Disable, but keep the following test for 5.6 when jQuery would be updated to 3.5.1+ and
-		// the latest Migrate will be used.
-		/*
-		$this->assertSameSets( $object->deps, array_keys( $jquery_scripts ) );
-		foreach ( $object->deps as $dep ) {
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
             $o = $scripts->query( $dep, 'registered' );
             $this->assertInstanceOf( '_WP_Dependency', $object );
             $this->assertTrue( isset( $jquery_scripts[ $dep ] ) );

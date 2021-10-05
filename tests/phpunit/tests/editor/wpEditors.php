@@ -29,19 +29,17 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$post   = self::factory()->post->create_and_get( array( 'post_status' => 'publish' ) );
 		$actual = _WP_Editors::wp_link_query( array( 's' => $post->post_title ) );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			array(
-				'ID'        => $post->ID,
-				'title'     => $post->post_title,
-				'permalink' => get_permalink( $post->ID ),
-				'info'      => mysql2date( __( 'Y/m/d' ), $post->post_date ),
+				array(
+					'ID'        => $post->ID,
+					'title'     => $post->post_title,
+					'permalink' => get_permalink( $post->ID ),
+					'info'      => mysql2date( __( 'Y/m/d' ), $post->post_date ),
+				)
 			),
-		), $actual );
+			$actual
+		);
 	}
 
 	/**
@@ -52,19 +50,17 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$actual = _WP_Editors::wp_link_query( array( 's' => 'foobarbaz' ) );
 		remove_filter( 'wp_link_query', array( $this, 'wp_link_query_callback' ) );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			array(
-				'ID'        => 123,
-				'title'     => 'foo',
-				'permalink' => 'bar',
-				'info'      => 'baz',
+				array(
+					'ID'        => 123,
+					'title'     => 'foo',
+					'permalink' => 'bar',
+					'info'      => 'baz',
+				)
 			),
-		), $actual );
+			$actual
+		);
 	}
 
 	public function test_wp_link_query_returns_filtered_search_results() {
@@ -74,24 +70,22 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$actual = _WP_Editors::wp_link_query( array( 's' => $post->post_title ) );
 		remove_filter( 'wp_link_query', array( $this, 'wp_link_query_callback' ) );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			array(
-				'ID'        => $post->ID,
-				'title'     => $post->post_title,
-				'permalink' => get_permalink( $post->ID ),
-				'info'      => mysql2date( __( 'Y/m/d' ), $post->post_date ),
+				array(
+					'ID'        => $post->ID,
+					'title'     => $post->post_title,
+					'permalink' => get_permalink( $post->ID ),
+					'info'      => mysql2date( __( 'Y/m/d' ), $post->post_date ),
+				),
+				array(
+					'ID'        => 123,
+					'title'     => 'foo',
+					'permalink' => 'bar',
+					'info'      => 'baz',
+				)
 			),
-			array(
-				'ID'        => 123,
-				'title'     => 'foo',
-				'permalink' => 'bar',
-				'info'      => 'baz',
-			),
-		), $actual );
+			$actual
+		);
 	}
 }

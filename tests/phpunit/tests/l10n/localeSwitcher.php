@@ -91,11 +91,7 @@ class Tests_Locale_Switcher extends WP_UnitTestCase {
 		// Cleanup.
 		restore_previous_locale();
 
-<<<<<<< HEAD
-		$this->assertEqualSetsWithIndex( $expected, $wp_locale_de_DE->number_format );
-=======
-		$this->assertSameSetsWithIndex( $expected, $wp_locale_de_de->number_format );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
+		$this->assertSameSetsWithIndex( $expected, $wp_locale_de_DE->number_format );
 	}
 
 	public function test_switch_to_locale_en_US() {

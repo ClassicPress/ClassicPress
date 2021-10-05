@@ -15,21 +15,19 @@ class Tests_Rewrite_Permastructs extends WP_UnitTestCase {
 		global $wp_rewrite;
 
 		add_permastruct( 'foo', 'bar/%foo%' );
-<<<<<<< HEAD
-		$this->assertEqualSetsWithIndex( array(
-=======
 		$this->assertSameSetsWithIndex(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'with_front'  => true,
-			'ep_mask'     => EP_NONE,
-			'paged'       => true,
-			'feed'        => true,
-			'walk_dirs'   => true,
-			'endpoints'   => true,
-			'forcomments' => false,
-			'struct'      => '/bar/%foo%',
-		), $wp_rewrite->extra_permastructs['foo'] );
+				'with_front'  => true,
+				'ep_mask'     => EP_NONE,
+				'paged'       => true,
+				'feed'        => true,
+				'walk_dirs'   => true,
+				'endpoints'   => true,
+				'forcomments' => false,
+				'struct'      => '/bar/%foo%',
+			),
+			$wp_rewrite->extra_permastructs['foo']
+		);
 	}
 
 	public function test_remove_permastruct(  ) {

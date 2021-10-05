@@ -1880,17 +1880,13 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$c2 = self::factory()->comment->create_post_comments( $p2, 1 );
 
 		$q = new WP_Comment_Query();
-		$found = $q->query( array(
-			'fields' => 'ids',
-			'post_type' => array( 'any', 'post-type-1' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array_merge( $c1, $c2 ), $found );
-=======
+		$found = $q->query(
+			array(
+				'fields' => 'ids',
+				'post_type' => array( 'any', 'post-type-1' ),
 			)
 		);
 		$this->assertSameSets( array_merge( $c1, $c2 ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -1907,17 +1903,13 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$c2 = self::factory()->comment->create_post_comments( $p2, 1 );
 
 		$q = new WP_Comment_Query();
-		$found = $q->query( array(
-			'fields' => 'ids',
-			'post_type' => array( 'any' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array_merge( $c1, $c2 ), $found );
-=======
+		$found = $q->query(
+			array(
+				'fields' => 'ids',
+				'post_type' => array( 'any' ),
 			)
 		);
 		$this->assertSameSets( array_merge( $c1, $c2 ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -1931,17 +1923,13 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$c2 = self::factory()->comment->create_post_comments( $p2, 1 );
 
 		$q = new WP_Comment_Query();
-		$found = $q->query( array(
-			'fields' => 'ids',
-			'post_status' => array( 'any', 'draft' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array_merge( $c1, $c2 ), $found );
-=======
+		$found = $q->query(
+			array(
+				'fields' => 'ids',
+				'post_status' => array( 'any', 'draft' ),
 			)
 		);
 		$this->assertSameSets( array_merge( $c1, $c2 ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -1955,17 +1943,13 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$c2 = self::factory()->comment->create_post_comments( $p2, 1 );
 
 		$q = new WP_Comment_Query();
-		$found = $q->query( array(
-			'fields' => 'ids',
-			'post_status' => array( 'any' ),
-<<<<<<< HEAD
-		) );
-		$this->assertEqualSets( array_merge( $c1, $c2 ), $found );
-=======
+		$found = $q->query(
+			array(
+				'fields' => 'ids',
+				'post_status' => array( 'any' ),
 			)
 		);
 		$this->assertSameSets( array_merge( $c1, $c2 ), $found );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**

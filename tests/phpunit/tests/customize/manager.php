@@ -711,12 +711,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		// Ensure that re-importing doesn't cause auto-drafts to balloon.
 		$wp_customize->import_theme_starter_content();
 		$changeset_data = $wp_customize->changeset_data();
-<<<<<<< HEAD
-		$this->assertEqualSets( array_values( $posts_by_name ), $changeset_data['nav_menus_created_posts']['value'] ); // Auto-drafts should not get re-created and amended with each import.
-=======
 		// Auto-drafts should not get re-created and amended with each import.
 		$this->assertSameSets( array_values( $posts_by_name ), $changeset_data['nav_menus_created_posts']['value'] );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 
 		// Test that saving non-starter content on top of the changeset clears the starter_content flag.
 		$wp_customize->save_changeset_post( array(
@@ -772,83 +768,6 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Test WP_Customize_Manager::import_theme_starter_content() with nested arrays.
-	 *
-	 * @ticket 45484
-	 * @covers WP_Customize_Manager::import_theme_starter_content
-	 */
-	function test_import_theme_starter_content_with_nested_arrays() {
-		wp_set_current_user( self::$admin_user_id );
-
-		$existing_published_home_page_id = $this->factory()->post->create(
-			array(
-				'post_name'   => 'home',
-				'post_type'   => 'page',
-				'post_status' => 'publish',
-			)
-		);
-
-		global $wp_customize;
-		$wp_customize           = new WP_Customize_Manager();
-		$starter_content_config = array(
-			'posts'      => array(
-				'home',
-			),
-			'options'    => array(
-				'array_option'        => array(
-					0,
-					1,
-					'home_page_id' => '{{home}}',
-				),
-				'nested_array_option' => array(
-					0,
-					1,
-					array(
-						2,
-						'home_page_id' => '{{home}}',
-					),
-				),
-			),
-			'theme_mods' => array(
-				'array_theme_mod'        => array(
-					0,
-					1,
-					'home_page_id' => '{{home}}',
-				),
-				'nested_array_theme_mod' => array(
-					0,
-					1,
-					array(
-						2,
-						'home_page_id' => '{{home}}',
-					),
-				),
-			),
-		);
-
-		add_theme_support( 'starter-content', $starter_content_config );
-		$this->assertEmpty( $wp_customize->unsanitized_post_values() );
-		$wp_customize->import_theme_starter_content();
-		$changeset_values     = $wp_customize->unsanitized_post_values();
-		$expected_setting_ids = array(
-			'array_option',
-			'array_theme_mod',
-			'nav_menus_created_posts',
-			'nested_array_option',
-			'nested_array_theme_mod',
-		);
-		$this->assertSameSets( $expected_setting_ids, array_keys( $changeset_values ) );
-
-		$this->assertSame( $existing_published_home_page_id, $changeset_values['array_option']['home_page_id'] );
-		$this->assertSame( $existing_published_home_page_id, $changeset_values['nested_array_option'][2]['home_page_id'] );
-		$this->assertSame( $existing_published_home_page_id, $changeset_values['array_theme_mod']['home_page_id'] );
-		$this->assertSame( $existing_published_home_page_id, $changeset_values['nested_array_theme_mod'][2]['home_page_id'] );
-	}
-
-	/**
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	 * Test WP_Customize_Manager::customize_preview_init().
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/30937

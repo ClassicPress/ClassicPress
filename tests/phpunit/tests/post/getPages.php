@@ -289,16 +289,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		$page_id3 = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $page_id2 ) );
 		$page_id4 = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $page_id1 ) );
 
-<<<<<<< HEAD
-		$pages = get_pages( array( 'parent' => 0, 'hierarchical' => false ) );
-		$this->assertEqualSets( array( $page_id1 ), wp_list_pluck( $pages, 'ID' ) );
-
-		$pages = get_pages( array( 'parent' => $page_id1, 'hierarchical' => false ) );
-		$this->assertEqualSets( array( $page_id2, $page_id4 ), wp_list_pluck( $pages, 'ID' ) );
-
-		$pages = get_pages( array( 'parent' => array( $page_id1, $page_id2 ), 'hierarchical' => false ) );
-		$this->assertEqualSets( array( $page_id2, $page_id3, $page_id4 ), wp_list_pluck( $pages, 'ID' ) );
-=======
 		$pages = get_pages(
 			array(
 				'parent'       => 0,
@@ -322,7 +312,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( array( $page_id2, $page_id3, $page_id4 ), wp_list_pluck( $pages, 'ID' ) );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 
 		$pages = get_pages( array( 'parent' => 0 ) );
 		$this->assertSameSets( array( $page_id1 ), wp_list_pluck( $pages, 'ID' ) );
@@ -352,10 +341,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$child_ids = self::factory()->post->create_many( 5, array( 'post_parent' => $post_id ) );
 
-<<<<<<< HEAD
-		$post_ids = get_children( array( 'fields' => 'ids', 'post_parent' => $post_id ) );
-		$this->assertEqualSets( $child_ids, $post_ids );
-=======
 		$post_ids = get_children(
 			array(
 				'fields'      => 'ids',
@@ -363,7 +348,6 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSameSets( $child_ids, $post_ids );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**

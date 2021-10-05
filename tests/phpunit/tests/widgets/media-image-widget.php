@@ -35,28 +35,26 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$widget = new WP_Widget_Media_Image();
 		$schema = $widget->get_instance_schema();
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'alt',
-			'attachment_id',
-			'caption',
-			'height',
-			'image_classes',
-			'image_title',
-			'link_classes',
-			'link_rel',
-			'link_target_blank',
-			'link_type',
-			'link_url',
-			'size',
-			'title',
-			'url',
-			'width',
-		), array_keys( $schema ) );
+				'alt',
+				'attachment_id',
+				'caption',
+				'height',
+				'image_classes',
+				'image_title',
+				'link_classes',
+				'link_rel',
+				'link_target_blank',
+				'link_type',
+				'link_url',
+				'size',
+				'title',
+				'url',
+				'width',
+			),
+			array_keys( $schema )
+		);
 	}
 
 	/**

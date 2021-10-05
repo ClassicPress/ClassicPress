@@ -34,15 +34,11 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 				),
 				'foo',
 				'key',
-<<<<<<< HEAD
-				array( 'bar' => 'foo', 'value' => 'baz', 'bar' ),
-=======
 				array(
 					'bar',
 					'bar'   => 'foo',
 					'value' => 'baz',
 				),
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			),
 			'objects'                        => array(
 				array(
@@ -72,15 +68,11 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 				),
 				'foo',
 				'key',
-<<<<<<< HEAD
-				array( 'bar' => 'foo', 'value' => 'baz', 'bar' ),
-=======
 				array(
 					'bar',
 					'bar'   => 'foo',
 					'value' => 'baz',
 				),
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			),
 		);
 	}

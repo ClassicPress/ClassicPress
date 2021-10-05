@@ -27,14 +27,9 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 
 		delete_metadata( 'post', 12345, 'foo', '1' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-<<<<<<< HEAD
-		$expected = array_diff( $vals, array( '1' ) );;
-		$this->assertEqualSets( $expected, $m );
-=======
 		$expected = array_diff( $vals, array( '1' ) );
 
 		$this->assertSameSets( $expected, $m );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -50,14 +45,9 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 
 		delete_metadata( 'post', 12345, 'foo', '0' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-<<<<<<< HEAD
-		$expected = array_diff( $vals, array( '0' ) );;
-		$this->assertEqualSets( $expected, $m );
-=======
 		$expected = array_diff( $vals, array( '0' ) );
 
 		$this->assertSameSets( $expected, $m );
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**

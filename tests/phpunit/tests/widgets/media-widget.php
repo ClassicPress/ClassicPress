@@ -199,16 +199,14 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget = $this->get_mocked_class_instance();
 		$schema = $widget->get_instance_schema();
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'attachment_id',
-			'title',
-			'url',
-		), array_keys( $schema ) );
+				'attachment_id',
+				'title',
+				'url',
+			),
+			array_keys( $schema )
+		);
 
 		// Check filter usage.
 		$this->filter_instance_schema_args = null;

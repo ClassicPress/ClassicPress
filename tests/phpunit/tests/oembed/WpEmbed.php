@@ -53,13 +53,6 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 	}
 
 	public function test_wp_maybe_load_embeds() {
-<<<<<<< HEAD
-		$this->assertEqualSets( array( 10, 9999 ), array_keys( $GLOBALS['wp_embed']->handlers ) );
-		$this->assertEqualSets( array(
-			'youtube_embed_url',
-		), array_keys( $GLOBALS['wp_embed']->handlers[10] ) );
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets( array( 10, 9999 ), array_keys( $GLOBALS['wp_embed']->handlers ) );
 		$this->assertSameSets(
 			array(
@@ -69,10 +62,11 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 		);
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'audio',
-			'video',
-		), array_keys( $GLOBALS['wp_embed']->handlers[9999] ) );
+				'audio',
+				'video',
+			),
+			array_keys( $GLOBALS['wp_embed']->handlers[9999] )
+		);
 	}
 
 	public function test_wp_embed_register_handler() {

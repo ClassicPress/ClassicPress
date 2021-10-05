@@ -15,23 +15,21 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 400 );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'version'       => '1.0',
-			'provider_name' => get_bloginfo( 'name' ),
-			'provider_url'  => get_home_url( '/' ),
-			'author_name'   => get_bloginfo( 'name' ),
-			'author_url'    => get_home_url( '/' ),
-			'title'         => 'Some Post',
-			'type'          => 'rich',
-			'width'         => 400,
-			'height'        => 225,
-			'html'          => get_post_embed_html( 400, 225, $post ),
-		), $data );
+				'version'       => '1.0',
+				'provider_name' => get_bloginfo( 'name' ),
+				'provider_url'  => get_home_url( '/' ),
+				'author_name'   => get_bloginfo( 'name' ),
+				'author_url'    => get_home_url( '/' ),
+				'title'         => 'Some Post',
+				'type'          => 'rich',
+				'width'         => 400,
+				'height'        => 225,
+				'html'          => get_post_embed_html( 400, 225, $post ),
+			),
+			$data
+		);
 	}
 
 	/**
@@ -49,23 +47,21 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 400 );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'version'       => '1.0',
-			'provider_name' => get_bloginfo( 'name' ),
-			'provider_url'  => get_home_url( '/' ),
-			'author_name'   => 'John Doe',
-			'author_url'    => get_author_posts_url( $user_id ),
-			'title'         => 'Some Post',
-			'type'          => 'rich',
-			'width'         => 400,
-			'height'        => 225,
-			'html'          => get_post_embed_html( 400, 225, $post ),
-		), $data );
+				'version'       => '1.0',
+				'provider_name' => get_bloginfo( 'name' ),
+				'provider_url'  => get_home_url( '/' ),
+				'author_name'   => 'John Doe',
+				'author_url'    => get_author_posts_url( $user_id ),
+				'title'         => 'Some Post',
+				'type'          => 'rich',
+				'width'         => 400,
+				'height'        => 225,
+				'html'          => get_post_embed_html( 400, 225, $post ),
+			),
+			$data
+		);
 	}
 
 	function test_get_oembed_response_link() {
@@ -77,20 +73,18 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 600 );
 
-<<<<<<< HEAD
-		$this->assertEqualSets( array(
-=======
 		$this->assertSameSets(
 			array(
->>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
-			'version'       => '1.0',
-			'provider_name' => get_bloginfo( 'name' ),
-			'provider_url'  => get_home_url( '/' ),
-			'author_name'   => get_bloginfo( 'name' ),
-			'author_url'    => get_home_url( '/' ),
-			'title'         => 'Some Post',
-			'type'          => 'link',
-		), $data );
+				'version'       => '1.0',
+				'provider_name' => get_bloginfo( 'name' ),
+				'provider_url'  => get_home_url( '/' ),
+				'author_name'   => get_bloginfo( 'name' ),
+				'author_url'    => get_home_url( '/' ),
+				'title'         => 'Some Post',
+				'type'          => 'link',
+			),
+			$data
+		);
 
 		add_filter( 'oembed_response_data', 'get_oembed_response_data_rich', 10, 4 );
 	}
