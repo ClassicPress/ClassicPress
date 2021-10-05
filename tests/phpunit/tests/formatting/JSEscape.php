@@ -33,17 +33,6 @@ class Tests_Formatting_JSEscape extends WP_UnitTestCase {
 	}
 
 	function test_js_no_carriage_return() {
-<<<<<<< HEAD
-		$out = esc_js("foo\rbar\nbaz\r");
-		// \r is stripped
-		$this->assertequals("foobar\\nbaz", $out);
-	}
-
-	function test_js_escape_rn() {
-		$out = esc_js("foo\r\nbar\nbaz\r\n");
-		// \r is stripped
-		$this->assertequals("foo\\nbar\\nbaz\\n", $out);
-=======
 		$out = esc_js( "foo\rbar\nbaz\r" );
 		// \r is stripped.
 		$this->assertSame( "foobar\\nbaz", $out );
@@ -53,6 +42,5 @@ class Tests_Formatting_JSEscape extends WP_UnitTestCase {
 		$out = esc_js( "foo\r\nbar\nbaz\r\n" );
 		// \r is stripped.
 		$this->assertSame( "foo\\nbar\\nbaz\\n", $out );
->>>>>>> 3e111d9799 (Tests: Replace a few more instances of `assertEquals()` with `assertSame()`.)
 	}
 }
