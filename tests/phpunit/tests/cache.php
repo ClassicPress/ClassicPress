@@ -27,11 +27,7 @@ class Tests_Cache extends WP_UnitTestCase {
 	}
 
 	function test_miss() {
-<<<<<<< HEAD
-		$this->assertEquals( NULL, $this->cache->get( 'test_miss' ) );
-=======
 		$this->assertFalse( $this->cache->get( 'test_miss' ) );
->>>>>>> 6f07ff569b (Tests: Correct assertion in `Tests_Cache::test_miss()`.)
 	}
 
 	function test_add_get() {
