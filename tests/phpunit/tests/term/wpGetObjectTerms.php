@@ -445,7 +445,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEqualSets( array( $t1, $t2 ), $found );
+		$this->assertSameSets( array( $t1, $t2 ), $found );
 	}
 
 	/**
@@ -583,7 +583,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $terms[0], $terms[1] ), wp_list_pluck( $found, 'term_id' ) );
+		$this->assertSameSets( array( $terms[0], $terms[1] ), wp_list_pluck( $found, 'term_id' ) );
 	}
 
 	/**
@@ -686,7 +686,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'all_with_object_id',
 		) );
 
-		$this->assertEqualSets( array( $t1, $t2 ), wp_list_pluck( $found, 'term_id' ) );
+		$this->assertSameSets( array( $t1, $t2 ), wp_list_pluck( $found, 'term_id' ) );
 
 		$num_queries = $wpdb->num_queries;
 		$term1 = get_term( $t1 );
@@ -708,7 +708,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'all_with_object_id',
 		) );
 
-		$this->assertEqualSets( $posts, wp_list_pluck( $found, 'object_id' ) );
+		$this->assertSameSets( $posts, wp_list_pluck( $found, 'object_id' ) );
 	}
 
 	public function filter_get_object_terms( $terms ) {
@@ -801,6 +801,6 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 
-		$this->assertEqualSets( $expected, $actual );
+		$this->assertSameSets( $expected, $actual );
 	}
 }

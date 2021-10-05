@@ -34,7 +34,15 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 				),
 				'foo',
 				'key',
+<<<<<<< HEAD
 				array( 'bar' => 'foo', 'value' => 'baz', 'bar' ),
+=======
+				array(
+					'bar',
+					'bar'   => 'foo',
+					'value' => 'baz',
+				),
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			),
 			'objects'                        => array(
 				array(
@@ -64,7 +72,15 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 				),
 				'foo',
 				'key',
+<<<<<<< HEAD
 				array( 'bar' => 'foo', 'value' => 'baz', 'bar' ),
+=======
+				array(
+					'bar',
+					'bar'   => 'foo',
+					'value' => 'baz',
+				),
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			),
 		);
 	}
@@ -78,7 +94,7 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 	 * @param array      $expected  Expected result.
 	 */
 	public function test_wp_list_pluck( $list, $field, $index_key, $expected ) {
-		$this->assertEqualSetsWithIndex( $expected, wp_list_pluck( $list, $field, $index_key ) );
+		$this->assertSameSetsWithIndex( $expected, wp_list_pluck( $list, $field, $index_key ) );
 	}
 
 	public function data_test_wp_list_filter() {
@@ -437,14 +453,14 @@ class Tests_WP_List_Util extends WP_UnitTestCase {
 		$input = array( 'foo', 'bar' );
 		$util  = new WP_List_Util( $input );
 
-		$this->assertEqualSets( $input, $util->get_input() );
+		$this->assertSameSets( $input, $util->get_input() );
 	}
 
 	public function test_wp_list_util_get_output_immediately() {
 		$input = array( 'foo', 'bar' );
 		$util  = new WP_List_Util( $input );
 
-		$this->assertEqualSets( $input, $util->get_output() );
+		$this->assertSameSets( $input, $util->get_output() );
 	}
 
 	public function test_wp_list_util_get_output() {

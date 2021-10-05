@@ -22,8 +22,19 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$post_type_object->remove_supports();
 		$post_type_supports_after = get_all_post_type_supports( $post_type );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array( 'title' => true, 'editor' => true ), $post_type_supports );
 		$this->assertEqualSets( array(), $post_type_supports_after );
+=======
+		$this->assertSameSets(
+			array(
+				'title'  => true,
+				'editor' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	public function test_add_supports_custom() {
@@ -42,12 +53,65 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$post_type_object->remove_supports();
 		$post_type_supports_after = get_all_post_type_supports( $post_type );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
 			'editor'    => true,
 			'comments'  => true,
 			'revisions' => true,
 		), $post_type_supports );
 		$this->assertEqualSets( array(), $post_type_supports_after );
+=======
+		$this->assertSameSets(
+			array(
+				'editor'    => true,
+				'comments'  => true,
+				'revisions' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
+	}
+
+	/**
+	 * Test that supports can optionally receive nested args.
+	 *
+	 * @ticket 40413
+	 */
+	public function test_add_supports_custom_with_args() {
+		$post_type        = 'cpt';
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'supports' => array(
+					'support_with_args' => array(
+						'arg1',
+						'arg2',
+					),
+					'support_without_args',
+				),
+			)
+		);
+
+		$post_type_object->add_supports();
+		$post_type_supports = get_all_post_type_supports( $post_type );
+
+		$post_type_object->remove_supports();
+		$post_type_supports_after = get_all_post_type_supports( $post_type );
+
+		$this->assertSameSets(
+			array(
+				'support_with_args'    => array(
+					array(
+						'arg1',
+						'arg2',
+					),
+				),
+				'support_without_args' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	public function test_does_not_add_query_var_if_not_public() {
@@ -145,7 +209,7 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 
 		unset( $wp_post_types[ $post_type ] );
 
-		$this->assertEqualSets( array( 'post_tag' ), $taxonomies );
-		$this->assertEqualSets( array(), $taxonomies_after );
+		$this->assertSameSets( array( 'post_tag' ), $taxonomies );
+		$this->assertSameSets( array(), $taxonomies_after );
 	}
 }

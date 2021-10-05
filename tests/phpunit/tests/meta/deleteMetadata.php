@@ -10,11 +10,11 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( array(), $m );
+		$this->assertSameSets( array(), $m );
 	}
 
 	public function test_with_meta_value() {
@@ -23,12 +23,18 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo', '1' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
+<<<<<<< HEAD
 		$expected = array_diff( $vals, array( '1' ) );;
 		$this->assertEqualSets( $expected, $m );
+=======
+		$expected = array_diff( $vals, array( '1' ) );
+
+		$this->assertSameSets( $expected, $m );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -40,12 +46,18 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo', '0' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
+<<<<<<< HEAD
 		$expected = array_diff( $vals, array( '0' ) );;
 		$this->assertEqualSets( $expected, $m );
+=======
+		$expected = array_diff( $vals, array( '0' ) );
+
+		$this->assertSameSets( $expected, $m );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	/**
@@ -59,11 +71,11 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo', '' );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( array(), $m );
+		$this->assertSameSets( array(), $m );
 	}
 
 	/**
@@ -75,11 +87,11 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo', null );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( array(), $m );
+		$this->assertSameSets( array(), $m );
 	}
 
 	/**
@@ -91,11 +103,11 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 			add_metadata( 'post', 12345, 'foo', $val );
 		}
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( $vals, $m );
+		$this->assertSameSets( $vals, $m );
 
 		delete_metadata( 'post', 12345, 'foo', false );
 		$m = get_metadata( 'post', 12345, 'foo', false );
-		$this->assertEqualSets( array(), $m );
+		$this->assertSameSets( array(), $m );
 	}
 
 	/**

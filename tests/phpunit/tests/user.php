@@ -75,8 +75,13 @@ class Tests_User extends WP_UnitTestCase {
 			}
 		}
 
+<<<<<<< HEAD
 		// make sure every user we created was returned
 		$this->assertEqualSets( $nusers, $found );
+=======
+		// Make sure every user we created was returned.
+		$this->assertSameSets( $nusers, $found );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 	}
 
 	// simple get/set tests for user_option functions

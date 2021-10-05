@@ -15,7 +15,12 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 400 );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			'version'       => '1.0',
 			'provider_name' => get_bloginfo( 'name' ),
 			'provider_url'  => get_home_url( '/' ),
@@ -44,7 +49,12 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 400 );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			'version'       => '1.0',
 			'provider_name' => get_bloginfo( 'name' ),
 			'provider_url'  => get_home_url( '/' ),
@@ -67,7 +77,12 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 
 		$data = get_oembed_response_data( $post, 600 );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			'version'       => '1.0',
 			'provider_name' => get_bloginfo( 'name' ),
 			'provider_url'  => get_home_url( '/' ),

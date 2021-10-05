@@ -54,7 +54,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 		$items = wp_list_pluck( $this->table->items, 'blog_id' );
 		$items = array_map( 'intval', $items );
 
-		$this->assertEqualSets( array( 1 ) + self::$site_ids, $items );
+			$this->assertSameSets( array( 1 ) + self::$site_ids, $items );
 	}
 
 	public function test_ms_sites_list_table_subdirectory_path_search_items() {
@@ -80,7 +80,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 			self::$site_ids['www.w.org/foo/bar/'],
 		);
 
-		$this->assertEqualSets( $expected, $items );
+			$this->assertSameSets( $expected, $items );
 	}
 
 	public function test_ms_sites_list_table_subdirectory_multiple_path_search_items() {
@@ -102,7 +102,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 			self::$site_ids['www.w.org/foo/bar/'],
 		);
 
-		$this->assertEqualSets( $expected, $items );
+			$this->assertSameSets( $expected, $items );
 	}
 
 	public function test_ms_sites_list_table_invalid_path_search_items() {
@@ -139,7 +139,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 			self::$site_ids['atest.example.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $items );
+			$this->assertSameSets( $expected, $items );
 	}
 
 	public function test_ms_sites_list_table_subdomain_domain_search_items_with_trailing_wildcard() {
@@ -163,7 +163,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 			self::$site_ids['atest.example.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $items );
+			$this->assertSameSets( $expected, $items );
 	}
 
 	public function test_ms_sites_list_table_subdirectory_path_search_items_with_trailing_wildcard() {
@@ -189,7 +189,7 @@ class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
 			self::$site_ids['www.w.org/foo/bar/'],
 		);
 
-		$this->assertEqualSets( $expected, $items );
+			$this->assertSameSets( $expected, $items );
 	}
 }
 endif;

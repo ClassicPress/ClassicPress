@@ -32,7 +32,11 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 
 		unset( $GLOBALS['_wp_sidebars_widgets'] ); // clear out cache set by wp_get_sidebars_widgets()
 		$sidebars_widgets = wp_get_sidebars_widgets();
+<<<<<<< HEAD
 		$this->assertEqualSets( array( 'wp_inactive_widgets', 'sidebar-1', 'sidebar-2', 'sidebar-3' ), array_keys( wp_get_sidebars_widgets() ) );
+=======
+		$this->assertSameSets( array( 'wp_inactive_widgets', 'sidebar-1', 'sidebar-2' ), array_keys( wp_get_sidebars_widgets() ) );
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$this->assertContains( 'search-2', $sidebars_widgets['sidebar-1'] );
 		$this->assertContains( 'categories-2', $sidebars_widgets['sidebar-1'] );
 		$this->assertArrayHasKey( 2, get_option( 'widget_search' ) );

@@ -259,7 +259,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 	}
 
 	public function test_tax_query_single_query_multiple_terms_operator_not_in() {
@@ -406,7 +406,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p1, $p3 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p3 ), $q->posts );
 	}
 
 	/**
@@ -451,7 +451,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		unregister_taxonomy( 'wptests_tax1' );
 		unregister_taxonomy( 'wptests_tax2' );
 
-		$this->assertEqualSets( array( $p1, $p3, $p4 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p3, $p4 ), $q->posts );
 	}
 
 	/**
@@ -483,7 +483,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -516,7 +516,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -627,7 +627,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 	}
 
 	public function test_tax_query_multiple_queries_different_taxonomies() {
@@ -667,7 +667,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 	}
 
 	/**
@@ -739,7 +739,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		_unregister_taxonomy( 'foo' );
 		_unregister_taxonomy( 'bar' );
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 	}
 
 	/**
@@ -803,7 +803,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		_unregister_taxonomy( 'foo' );
 		_unregister_taxonomy( 'bar' );
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 	}
 
 	/**
@@ -876,7 +876,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		_unregister_taxonomy( 'foo' );
 		_unregister_taxonomy( 'bar' );
 
-		$this->assertEqualSets( array( $p1, $p2, $p3 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2, $p3 ), $q->posts );
 	}
 
 	/**
@@ -1407,6 +1407,6 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			),
 		) );
 
-		$this->assertEqualSets( array( $p ), $q->posts );
+		$this->assertSameSets( array( $p ), $q->posts );
 	}
 }

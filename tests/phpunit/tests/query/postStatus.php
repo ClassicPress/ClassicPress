@@ -56,7 +56,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			self::$author_private_post,
 		);
 
-		$this->assertEqualSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_private_should_not_be_included_for_non_author_if_perm_is_not_false() {
@@ -82,7 +82,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			self::$author_private_post,
 		);
 
-		$this->assertEqualSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_private_should_be_included_for_all_users_if_perm_is_readable_and_user_can_read_others_posts() {
@@ -98,7 +98,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			self::$editor_private_post,
 		);
 
-		$this->assertEqualSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_private_should_be_included_only_for_current_user_if_perm_is_editable_and_user_cannot_read_others_posts() {
@@ -113,7 +113,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			self::$author_private_post,
 		);
 
-		$this->assertEqualSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_private_should_be_included_for_all_users_if_perm_is_editable_and_user_can_read_others_posts() {
@@ -129,7 +129,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			self::$editor_private_post,
 		);
 
-		$this->assertEqualSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $q->posts, 'ID' ) );
 	}
 
 	public function test_all_public_post_stati_should_be_included_when_no_post_status_is_provided() {

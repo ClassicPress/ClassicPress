@@ -378,7 +378,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 		$actual_posts = $q->get_posts();
-		$this->assertEqualSets( $requested, $actual_posts );
+		$this->assertSameSets( $requested, $actual_posts );
 
 		$requested = array( $post_ids[1], $post_ids[2] );
 		$q->query( array(
@@ -386,7 +386,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			'fields' => 'ids',
 		) );
 		$actual_posts = $q->get_posts();
-		$this->assertEqualSets( $requested, $actual_posts );
+		$this->assertSameSets( $requested, $actual_posts );
 	}
 
 	/**

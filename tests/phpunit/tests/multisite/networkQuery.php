@@ -89,7 +89,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'network__in' => $expected,
 		) );
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_network__in_with_multiple_ids() {
@@ -101,7 +101,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'network__in' => $expected,
 		) );
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_network__in_and_count_with_multiple_ids() {
@@ -130,7 +130,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'network__not_in' => $excluded,
 		) );
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_network__not_in_with_multiple_ids() {
@@ -146,7 +146,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			'network__not_in' => $excluded,
 		) );
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain() {
@@ -160,7 +160,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.w.org/foo/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__in_with_single_domain() {
@@ -174,7 +174,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['make.wordpress.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__in_with_multiple_domains() {
@@ -189,7 +189,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['make.wordpress.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__in_with_multiple_domains_and_number() {
@@ -204,7 +204,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['wordpress.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__in_with_multiple_domains_and_number_and_offset() {
@@ -220,7 +220,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['make.wordpress.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__not_in_with_single_domain() {
@@ -237,7 +237,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__not_in_with_multiple_domains() {
@@ -253,7 +253,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__not_in_with_multiple_domains_and_number() {
@@ -269,7 +269,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['make.wordpress.org/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_domain__not_in_with_multiple_domains_and_number_and_offset() {
@@ -286,7 +286,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_path_with_expected_results() {
@@ -303,7 +303,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_path_and_number_and_offset_with_expected_results() {
@@ -320,7 +320,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_path_with_no_expected_results() {
@@ -344,7 +344,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.wordpress.net/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_search_with_text_in_path() {
@@ -358,7 +358,7 @@ class Tests_Multisite_Network_Query extends WP_UnitTestCase {
 			self::$network_ids['www.w.org/foo/'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+			$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_network_query_by_path_order_by_domain_desc() {

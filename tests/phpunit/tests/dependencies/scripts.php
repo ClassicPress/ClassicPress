@@ -883,8 +883,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( array( 'file' => $real_file ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'autoCloseTags',
@@ -906,7 +906,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		);
 		$this->assertEmpty( $wp_enqueue_code_editor['codemirror']['gutters'] );
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -918,7 +918,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -940,7 +940,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -970,8 +970,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( compact( 'file' ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'continueComments',
 				'direction',
@@ -989,7 +989,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		);
 		$this->assertEmpty( $wp_enqueue_code_editor['codemirror']['gutters'] );
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1001,7 +1001,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1023,7 +1023,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -1064,8 +1064,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'continueComments',
@@ -1086,7 +1086,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['codemirror'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1098,7 +1098,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1120,7 +1120,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -1158,8 +1158,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'continueComments',
@@ -1180,7 +1180,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['codemirror'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1192,7 +1192,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1214,7 +1214,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',

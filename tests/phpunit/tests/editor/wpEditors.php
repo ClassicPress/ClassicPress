@@ -29,7 +29,12 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$post   = self::factory()->post->create_and_get( array( 'post_status' => 'publish' ) );
 		$actual = _WP_Editors::wp_link_query( array( 's' => $post->post_title ) );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			array(
 				'ID'        => $post->ID,
 				'title'     => $post->post_title,
@@ -47,7 +52,12 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$actual = _WP_Editors::wp_link_query( array( 's' => 'foobarbaz' ) );
 		remove_filter( 'wp_link_query', array( $this, 'wp_link_query_callback' ) );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			array(
 				'ID'        => 123,
 				'title'     => 'foo',
@@ -64,7 +74,12 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 		$actual = _WP_Editors::wp_link_query( array( 's' => $post->post_title ) );
 		remove_filter( 'wp_link_query', array( $this, 'wp_link_query_callback' ) );
 
+<<<<<<< HEAD
 		$this->assertEqualSets( array(
+=======
+		$this->assertSameSets(
+			array(
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 			array(
 				'ID'        => $post->ID,
 				'title'     => $post->post_title,

@@ -128,7 +128,7 @@ class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
 
 		$result = array_keys( get_object_vars( $site ) );
 
-		$this->assertEqualSets( $this->get_fields( $get_all ), $result );
+			$this->assertSameSets( $this->get_fields( $get_all ), $result );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
 			$result[] = $key;
 		}
 
-		$this->assertEqualSets( $this->get_fields( $get_all ), $result );
+			$this->assertSameSets( $this->get_fields( $get_all ), $result );
 	}
 
 	public function data_get_all() {

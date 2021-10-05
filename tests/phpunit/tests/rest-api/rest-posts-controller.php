@@ -201,8 +201,14 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertSame( 2, count( $data ) );
+<<<<<<< HEAD
 		$this->assertEqualSets( array( self::$editor_id, self::$author_id ), wp_list_pluck( $data, 'author' ) );
 		// 1 of 3 posts
+=======
+		$this->assertSameSets( array( self::$editor_id, self::$author_id ), wp_list_pluck( $data, 'author' ) );
+
+		// Limit to editor.
+>>>>>>> 8be943d06e (Tests: Introduce `assertSameSets()` and `assertSameSetsWithIndex()`, and use them where appropriate.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
 		$request->set_param( 'author', self::$editor_id );
 		$response = $this->server->dispatch( $request );
