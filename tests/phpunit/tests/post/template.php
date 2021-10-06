@@ -282,7 +282,7 @@ NO;
 			'class' => 'bar',
 		) );
 
-		$this->assertRegExp( '/<select[^>]+class=\'bar\'/', $found );
+		$this->assertMatchesRegularExpression( '/<select[^>]+class=\'bar\'/', $found );
 	}
 
 	/**
@@ -357,13 +357,18 @@ NO;
 		$menu = wp_nav_menu( array( 'echo' => false ) );
 
 		// After falling back, the 'before' argument should be set and output as '<ul>'.
-		$this->assertRegExp( '/<div class="menu"><ul>/', $menu );
+		$this->assertMatchesRegularExpression( '/<div class="menu"><ul>/', $menu );
 
 		// After falling back, the 'after' argument should be set and output as '</ul>'.
-		$this->assertRegExp( '/<\/ul><\/div>/', $menu );
+		$this->assertMatchesRegularExpression( '/<\/ul><\/div>/', $menu );
 
+<<<<<<< HEAD
 		// After falling back, the markup should include whitespace around <li>s
 		$this->assertRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
+=======
+		// After falling back, the markup should include whitespace around <li>'s.
+		$this->assertMatchesRegularExpression( '/\s<li.*>|<\/li>\s/U', $menu );
+>>>>>>> 457b7b3a61 (Tests: Replace `assertRegExp()` with `assertMatchesRegularExpression()`.)
 		$this->assertNotRegExp( '/><li.*>|<\/li></U', $menu );
 
 		// No menus + wp_nav_menu() falls back to wp_page_menu(), this time without a container.
@@ -373,7 +378,7 @@ NO;
 		) );
 
 		// After falling back, the empty 'container' argument should still return a container element.
-		$this->assertRegExp( '/<div class="menu">/', $menu );
+		$this->assertMatchesRegularExpression( '/<div class="menu">/', $menu );
 
 		// No menus + wp_nav_menu() falls back to wp_page_menu(), this time without white-space.
 		$menu = wp_nav_menu( array(
@@ -383,7 +388,7 @@ NO;
 
 		// After falling back, the markup should not include whitespace around <li>s
 		$this->assertNotRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
-		$this->assertRegExp( '/><li.*>|<\/li></U', $menu );
+		$this->assertMatchesRegularExpression( '/><li.*>|<\/li></U', $menu );
 
 	}
 }
