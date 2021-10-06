@@ -184,7 +184,13 @@ EOT;
 	 * @expectedException PHPUnit_Framework_Error_Notice
 	 */
 	function test_json_encode_decode() {
+<<<<<<< HEAD
 		require_once( ABSPATH . WPINC . '/class-json.php' );
+=======
+		$this->expectDeprecation();
+
+		require_once ABSPATH . WPINC . '/class-json.php';
+>>>>>>> fe7295b860 (Tests: Replace `expectException()` for PHP native errors with calls to the dedicated PHPUnit 8.4+ methods.)
 		$json = new Services_JSON();
 		// Super basic test to verify Services_JSON is intact and working.
 		$this->assertSame( '["foo"]', $json->encodeUnsafe( array( 'foo' ) ) );
