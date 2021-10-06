@@ -176,7 +176,12 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 
 	public function test_get_endpoint_args_for_item_schema_description() {
 		$controller = new WP_REST_Test_Controller();
+<<<<<<< HEAD
 		$args       = $controller->get_endpoint_args_for_item_schema();
+=======
+		$args       = rest_get_endpoint_args_for_schema( $controller->get_item_schema() );
+
+>>>>>>> 4eee0d2fb7 (Tests: Use `assertSame()` in some newly introduced tests.)
 		$this->assertSame( 'A pretty string.', $args['somestring']['description'] );
 		$this->assertFalse( isset( $args['someinteger']['description'] ) );
 	}

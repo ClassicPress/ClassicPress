@@ -787,7 +787,58 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		) );
 		$request = new WP_REST_Request( 'POST', '/wp/v2/media/' . $attachment_id );
 		$request->set_param( 'post', $attachment_id );
+<<<<<<< HEAD
 		$response = $this->server->dispatch( $request );
+=======
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
+	}
+
+	/**
+	 * @ticket 40399
+	 */
+	public function test_update_item_with_existing_inherit_status() {
+		wp_set_current_user( self::$editor_id );
+		$parent_id     = self::factory()->post->create( array() );
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->test_file,
+			$parent_id,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+				'post_author'    => self::$editor_id,
+			)
+		);
+
+		$request = new WP_REST_Request( 'POST', '/wp/v2/media/' . $attachment_id );
+		$request->set_param( 'status', 'inherit' );
+		$response = rest_get_server()->dispatch( $request );
+
+		$this->assertNotWPError( $response->as_error() );
+		$this->assertSame( 'inherit', $response->get_data()['status'] );
+	}
+
+	/**
+	 * @ticket 40399
+	 */
+	public function test_update_item_with_new_inherit_status() {
+		wp_set_current_user( self::$editor_id );
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->test_file,
+			0,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+				'post_author'    => self::$editor_id,
+				'post_status'    => 'private',
+			)
+		);
+
+		$request = new WP_REST_Request( 'POST', '/wp/v2/media/' . $attachment_id );
+		$request->set_param( 'status', 'inherit' );
+		$response = rest_get_server()->dispatch( $request );
+
+>>>>>>> 4eee0d2fb7 (Tests: Use `assertSame()` in some newly introduced tests.)
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
