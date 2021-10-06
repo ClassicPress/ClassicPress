@@ -2560,13 +2560,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertSame( 201, $response->get_status() );
 		$actual_output = $response->get_data();
 
-<<<<<<< HEAD
-		// Compare expected API output to actual API output
-		$this->assertInternalType( 'array', $actual_output['content'] );
-=======
 		// Compare expected API output to actual API output.
 		$this->assertIsArray( $actual_output['content'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertArrayHasKey( 'raw', $actual_output['content'] );
 		$this->assertSame( $expected_output['content']['raw'], $actual_output['content']['raw'] );
 		$this->assertSame( $expected_output['content']['rendered'], trim( $actual_output['content']['rendered'] ) );

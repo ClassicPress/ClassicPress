@@ -26,13 +26,8 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getUsers( array( 1, 'administrator', 'administrator' ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// check data types
-		$this->assertInternalType( 'string', $result[0]['user_id'] );
-=======
 		// Check data types.
 		$this->assertIsString( $result[0]['user_id'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertStringMatchesFormat( '%d', $result[0]['user_id'] );
 		$this->assertIsString( $result[0]['username'] );
 		$this->assertIsString( $result[0]['first_name'] );

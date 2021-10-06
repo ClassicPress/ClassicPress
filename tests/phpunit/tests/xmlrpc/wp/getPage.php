@@ -41,31 +41,6 @@ class Tests_XMLRPC_wp_getPage extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getPage( array( 1, self::$post_id, 'editor', 'editor' ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Check data types
-		$this->assertInternalType( 'string', $result['userid'] );
-		$this->assertInternalType( 'int',    $result['page_id'] );
-		$this->assertInternalType( 'string', $result['page_status'] );
-		$this->assertInternalType( 'string', $result['description'] );
-		$this->assertInternalType( 'string', $result['title'] );
-		$this->assertInternalType( 'string', $result['link'] );
-		$this->assertInternalType( 'string', $result['permaLink'] );
-		$this->assertInternalType( 'array',  $result['categories'] );
-		$this->assertInternalType( 'string', $result['excerpt'] );
-		$this->assertInternalType( 'string', $result['text_more'] );
-		$this->assertInternalType( 'int',    $result['mt_allow_comments'] );
-		$this->assertInternalType( 'int',    $result['mt_allow_pings'] );
-		$this->assertInternalType( 'string', $result['wp_slug'] );
-		$this->assertInternalType( 'string', $result['wp_password'] );
-		$this->assertInternalType( 'string', $result['wp_author'] );
-		$this->assertInternalType( 'int',    $result['wp_page_parent_id'] );
-		$this->assertInternalType( 'string', $result['wp_page_parent_title'] );
-		$this->assertInternalType( 'int',    $result['wp_page_order'] );
-		$this->assertInternalType( 'string', $result['wp_author_id'] );
-		$this->assertInternalType( 'string', $result['wp_author_display_name'] );
-		$this->assertInternalType( 'array',  $result['custom_fields'] );
-		$this->assertInternalType( 'string', $result['wp_page_template'] );
-=======
 		// Check data types.
 		$this->assertIsString( $result['userid'] );
 		$this->assertIsInt( $result['page_id'] );
@@ -89,7 +64,6 @@ class Tests_XMLRPC_wp_getPage extends WP_XMLRPC_UnitTestCase {
 		$this->assertIsString( $result['wp_author_display_name'] );
 		$this->assertIsArray( $result['custom_fields'] );
 		$this->assertIsString( $result['wp_page_template'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$post_data = get_post( self::$post_id );
 

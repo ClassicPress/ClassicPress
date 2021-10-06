@@ -124,13 +124,10 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 
 		$blog_ids = array();
 
-<<<<<<< HEAD
 		$blog_ids = self::factory()->blog->create_many( 1 );
 		foreach ( $blog_ids as $blog_id ) {
 			$this->assertInternalType( 'int', $blog_id );
-=======
 			$this->assertIsInt( $blog_id );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 			$this->assertTrue( is_blog_user( $blog_id ) );
 			$this->assertTrue( remove_user_from_blog( $user1_id, $blog_id ) );
 			$this->assertFalse( is_blog_user( $blog_id ) );
@@ -161,15 +158,11 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 		$this->assertTrue( is_user_member_of_blog( $user1_id ) );
 		$this->assertTrue( is_user_member_of_blog( $user1_id, $site_id ) );
 
-<<<<<<< HEAD
 		$blog_ids = self::factory()->blog->create_many( 1 );
 		foreach ( $blog_ids as $blog_id ) {
-			$this->assertInternalType( 'int', $blog_id );
-=======
 			$blog_id = self::factory()->blog->create( array( 'user_id' => get_current_user_id() ) );
 
 			$this->assertIsInt( $blog_id );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 			// Current user gets added to new blogs
 			$this->assertTrue( is_user_member_of_blog( $user1_id, $blog_id ) );

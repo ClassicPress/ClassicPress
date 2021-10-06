@@ -188,26 +188,7 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Test the magic __unset method
-=======
-	 * @ticket 53235
-	 */
-	public function test_numeric_properties_should_be_cast_to_ints() {
-		$user     = new WP_User( self::$author_id );
-		$contexts = array( 'raw', 'edit', 'db', 'display', 'attribute', 'js' );
-
-		foreach ( $contexts as $context ) {
-			$user->filter = $context;
-			$user->init( $user->data );
-
-			$this->assertIsInt( $user->ID );
-		}
-	}
-
-	/**
-	 * Test the magic __unset() method.
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
@@ -1363,21 +1344,6 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertIsInt( $user_id );
 		$this->assertSame( 'nickname_updated', $user->nickname );
 
-<<<<<<< HEAD
-=======
-		// Check not to change an old password if a new password contains only spaces. Ticket #42766.
-		$user           = get_user_by( 'ID', $user_id );
-		$old_pass       = $user->user_pass;
-		$_POST['pass2'] = '  ';
-		$_POST['pass1'] = '  ';
-
-		$user_id = edit_user( $user_id );
-		$user    = get_user_by( 'ID', $user_id );
-
-		$this->assertIsInt( $user_id );
-		$this->assertSame( $old_pass, $user->user_pass );
-
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		// Check updating user with missing second password.
 		$_POST['nickname'] = 'nickname_updated2';
 		$_POST['pass1'] = 'blank_pass2';

@@ -53,15 +53,9 @@ class Tests_XMLRPC_wp_getComment extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getComment( array( 1, 'editor', 'editor', self::$parent_comment_id ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Check data types
-		$this->assertInternalType( 'string', $result['user_id'] );
-		$this->assertInternalType( 'string', $result['comment_id'] );
-=======
 		// Check data types.
 		$this->assertIsString( $result['user_id'] );
 		$this->assertIsString( $result['comment_id'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertInstanceOf( 'IXR_Date', $result['date_created_gmt'] );
 		$this->assertIsString( $result['parent'] );
 		$this->assertIsString( $result['status'] );

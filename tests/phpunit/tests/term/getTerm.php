@@ -134,24 +134,12 @@ class Tests_Term_GetTerm extends WP_UnitTestCase {
 
 		$found = get_term( $term_data );
 
-<<<<<<< HEAD
-		$this->assertTrue( $found instanceof WP_Term );
-		$this->assertInternalType( 'int', $found->term_id );
-		$this->assertInternalType( 'int', $found->term_taxonomy_id );
-		$this->assertInternalType( 'int', $found->parent );
-		$this->assertInternalType( 'int', $found->count );
-		$this->assertInternalType( 'int', $found->term_group );
-=======
-		foreach ( $contexts as $context ) {
-			$found = get_term( $term_data, '', OBJECT, $context );
-
-			$this->assertInstanceOf( 'WP_Term', $found );
-			$this->assertIsInt( $found->term_id );
-			$this->assertIsInt( $found->term_taxonomy_id );
-			$this->assertIsInt( $found->parent );
-			$this->assertIsInt( $found->count );
-			$this->assertIsInt( $found->term_group );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertInstanceOf( 'WP_Term', $found );
+		$this->assertIsInt( $found->term_id );
+		$this->assertIsInt( $found->term_taxonomy_id );
+		$this->assertIsInt( $found->parent );
+		$this->assertIsInt( $found->count );
+		$this->assertIsInt( $found->term_group );
 	}
 
 	/**

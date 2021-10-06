@@ -302,11 +302,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			'query_var' => 'bar',
 		) );
 
-<<<<<<< HEAD
-		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars ) );
-=======
 		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 		$this->assertFalse( array_search( 'bar', $wp->public_query_vars ) );
 	}

@@ -101,19 +101,15 @@ class Tests_Multisite_Option extends WP_UnitTestCase {
 		$user_id = self::factory()->user->create();
 			$this->assertIsInt( $user_id );
 
-		$blog_id = self::factory()->blog->create( array(
-			'user_id' => $user_id,
-			'meta'    => array(
-				'public' => 1,
-<<<<<<< HEAD
-			),
-		) );
-		$this->assertInternalType( 'integer', $blog_id );
-=======
+		$blog_id = self::factory()->blog->create(
+			array(
+				'user_id' => $user_id,
+				'meta'    => array(
+					'public' => 1,
 				)
-			);
-			$this->assertIsInt( $blog_id );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+			)
+		);
+		$this->assertIsInt( $blog_id );
 
 		$key    = __FUNCTION__ . '_key1';
 		$key2   = __FUNCTION__ . '_key2';

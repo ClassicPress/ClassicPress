@@ -707,11 +707,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post', array( 'query_var' => 'bar' ) );
 
-<<<<<<< HEAD
-		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars ) );
-=======
 		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
 		$this->assertFalse( array_search( 'bar', $wp->public_query_vars ) );
 	}

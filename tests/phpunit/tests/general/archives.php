@@ -23,10 +23,6 @@ class Tests_General_Archives extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'monthly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'monthly',
@@ -34,7 +30,6 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$time1 = wp_cache_get( 'last_changed', 'posts' );
 		$this->assertNotEmpty( $time1 );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
@@ -42,10 +37,6 @@ class Tests_General_Archives extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'monthly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'monthly',
@@ -53,15 +44,10 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Change args, resulting in a different query string. Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'monthly', 'echo' => false, 'order' => 'ASC' ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type'  => 'monthly',
@@ -70,17 +56,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'monthly', 'echo' => false, 'order' => 'ASC' ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type'  => 'monthly',
@@ -89,17 +70,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Change type. Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'yearly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'yearly',
@@ -107,17 +83,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'yearly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'yearly',
@@ -125,15 +96,10 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Change type. Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'daily', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'daily',
@@ -141,17 +107,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'daily', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'daily',
@@ -159,15 +120,10 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Change type. Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'weekly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'weekly',
@@ -175,17 +131,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'weekly', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'weekly',
@@ -193,15 +144,10 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 
 		// Change type. Cache is not primed, expect 1 query.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'postbypost', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'postbypost',
@@ -209,17 +155,12 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 
 		$num_queries = $wpdb->num_queries;
 
 		// Cache is primed, expect no queries.
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
-		$result = wp_get_archives( array( 'type' => 'postbypost', 'echo' => false ) );
-		$this->assertInternalType( 'string', $result );
-=======
 		$result = wp_get_archives(
 			array(
 				'type' => 'postbypost',
@@ -227,7 +168,6 @@ class Tests_General_Archives extends WP_UnitTestCase {
 			)
 		);
 		$this->assertIsString( $result );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.):tests/phpunit/tests/general/wpGetArchives.php
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}

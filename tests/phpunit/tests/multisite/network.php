@@ -335,11 +335,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		// We can't use wp_schedule_update_network_counts() because WP_INSTALLING is set
 		wp_schedule_event(time(), 'twicedaily', 'update_network_counts');
 
-<<<<<<< HEAD
-		$this->assertInternalType('int', wp_next_scheduled('update_network_counts'));
-=======
-			$this->assertIsInt( wp_next_scheduled( 'update_network_counts' ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( wp_next_scheduled( 'update_network_counts' ) );
 	}
 
 	/**

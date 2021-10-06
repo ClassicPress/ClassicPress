@@ -47,30 +47,6 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Check data types
-		$this->assertInternalType( 'string', $result['userid'] );
-		$this->assertInternalType( 'int', $result['postid'] );
-		$this->assertInternalType( 'string', $result['description'] );
-		$this->assertInternalType( 'string', $result['title'] );
-		$this->assertInternalType( 'string', $result['link'] );
-		$this->assertInternalType( 'string', $result['permaLink'] );
-		$this->assertInternalType( 'array',  $result['categories'] );
-		$this->assertInternalType( 'string', $result['mt_excerpt'] );
-		$this->assertInternalType( 'string', $result['mt_text_more'] );
-		$this->assertInternalType( 'string', $result['wp_more_text'] );
-		$this->assertInternalType( 'int', $result['mt_allow_comments'] );
-		$this->assertInternalType( 'int', $result['mt_allow_pings'] );
-		$this->assertInternalType( 'string', $result['mt_keywords'] );
-		$this->assertInternalType( 'string', $result['wp_slug'] );
-		$this->assertInternalType( 'string', $result['wp_password'] );
-		$this->assertInternalType( 'string', $result['wp_author_id'] );
-		$this->assertInternalType( 'string', $result['wp_author_display_name'] );
-		$this->assertInternalType( 'string', $result['post_status'] );
-		$this->assertInternalType( 'array', $result['custom_fields'] );
-		$this->assertInternalType( 'string', $result['wp_post_format'] );
-		$this->assertInternalType( 'bool',   $result['sticky'] );
-=======
 		// Check data types.
 		$this->assertIsString( $result['userid'] );
 		$this->assertIsInt( $result['postid'] );
@@ -93,7 +69,6 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertIsArray( $result['custom_fields'] );
 		$this->assertIsString( $result['wp_post_format'] );
 		$this->assertIsBool( $result['sticky'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$post_data = get_post( self::$post_id );
 

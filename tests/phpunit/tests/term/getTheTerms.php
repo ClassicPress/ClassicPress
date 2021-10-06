@@ -31,13 +31,8 @@ class Tests_Term_GetTheTerms extends WP_UnitTestCase {
 
 		// get_the_terms() does prime the cache.
 		$terms = get_the_terms( $post_id, $this->taxonomy );
-<<<<<<< HEAD
-		$cache = wp_cache_get( $post_id, $this->taxonomy . '_relationships');
-		$this->assertInternalType( 'array', $cache );
-=======
 		$cache = wp_cache_get( $post_id, $this->taxonomy . '_relationships' );
 		$this->assertIsArray( $cache );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		// Cache should be empty after a set.
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );

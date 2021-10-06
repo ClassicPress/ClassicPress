@@ -40,13 +40,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_unique_postmeta() {
-<<<<<<< HEAD
-		// Add a unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'unique', 'value', true) );
-=======
 		// Add a unique post meta item.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'unique', 'value', true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'unique', 'value', true ) );
 
 		// Check unique is enforced
 		$this->assertFalse(add_post_meta($this->post_id, 'unique', 'another value', true));
@@ -68,15 +63,9 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_nonunique_postmeta() {
-<<<<<<< HEAD
-		// Add two non unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'nonunique', 'value') );
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'nonunique', 'another value'));
-=======
 		// Add two non-unique post meta items.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'nonunique', 'value' ) );
-		$this->assertIsInt( add_post_meta( self::$post_id, 'nonunique', 'another value' ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'nonunique', 'value' ) );
+		$this->assertIsInt( add_post_meta( $this->post_id, 'nonunique', 'another value' ) );
 
 		// Check they exist.
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'nonunique', true ) );
@@ -92,13 +81,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( 'another value', get_post_meta( $this->post_id, 'nonunique', true ) );
 		$this->assertSame( array( 'another value' ), get_post_meta( $this->post_id, 'nonunique', false ) );
 
-<<<<<<< HEAD
-		//Add a third one
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'nonunique', 'someother value') );
-=======
 		// Add a third one.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'nonunique', 'someother value' ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'nonunique', 'someother value' ) );
 
 		//Check they exists
 		$expected = array(
@@ -116,21 +100,12 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_update_post_meta() {
-<<<<<<< HEAD
-		// Add a unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'unique_update', 'value', true) );
-
-		// Add two non unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'nonunique_update', 'value') );
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'nonunique_update', 'another value') );
-=======
 		// Add a unique post meta item.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'unique_update', 'value', true ) );
+		$this->assertIsInt( add_post_meta( $this->post_id, 'unique_update', 'value', true ) );
 
 		// Add two non-unique post meta items.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'nonunique_update', 'value' ) );
-		$this->assertIsInt( add_post_meta( self::$post_id, 'nonunique_update', 'another value' ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'nonunique_update', 'value' ) );
+		$this->assertIsInt( add_post_meta( $this->post_id, 'nonunique_update', 'another value' ) );
 
 		// Check they exist.
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'unique_update', true ) );
@@ -152,15 +127,9 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_delete_post_meta() {
-<<<<<<< HEAD
-		// Add a unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'unique_delete', 'value', true) );
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id_2, 'unique_delete', 'value', true) );
-=======
 		// Add two unique post meta items.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'unique_delete', 'value', true ) );
-		$this->assertIsInt( add_post_meta( self::$post_id_2, 'unique_delete', 'value', true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'unique_delete', 'value', true ) );
+		$this->assertIsInt( add_post_meta( $this->post_id_2, 'unique_delete', 'value', true ) );
 
 		// Check they exist.
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'unique_delete', true ) );
@@ -174,15 +143,9 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_delete_post_meta_by_key() {
-<<<<<<< HEAD
-		// Add a unique post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'unique_delete_by_key', 'value', true) );
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id_2, 'unique_delete_by_key', 'value', true) );
-=======
 		// Add two unique post meta items.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'unique_delete_by_key', 'value', true ) );
-		$this->assertIsInt( add_post_meta( self::$post_id_2, 'unique_delete_by_key', 'value', true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'unique_delete_by_key', 'value', true ) );
+		$this->assertIsInt( add_post_meta( $this->post_id_2, 'unique_delete_by_key', 'value', true ) );
 
 		//Check they exist
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'unique_delete_by_key', true ) );
@@ -197,13 +160,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_get_post_meta_by_id() {
-<<<<<<< HEAD
 		$mid = add_post_meta( $this->post_id, 'get_post_meta_by_key', 'get_post_meta_by_key_value', true );
-		$this->assertInternalType( 'integer', $mid );
-=======
-		$mid = add_post_meta( self::$post_id, 'get_post_meta_by_key', 'get_post_meta_by_key_value', true );
 		$this->assertIsInt( $mid );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$mobj = new stdClass;
 		$mobj->meta_id = $mid;
@@ -213,13 +171,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertEquals( $mobj, get_post_meta_by_id( $mid ) );
 		delete_metadata_by_mid( 'post', $mid );
 
-<<<<<<< HEAD
 		$mid = add_post_meta( $this->post_id, 'get_post_meta_by_key', array( 'foo', 'bar' ), true );
-		$this->assertInternalType( 'integer', $mid );
-=======
-		$mid = add_post_meta( self::$post_id, 'get_post_meta_by_key', array( 'foo', 'bar' ), true );
 		$this->assertIsInt( $mid );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$mobj->meta_id = $mid;
 		$mobj->meta_value = array( 'foo', 'bar' );
 		$this->assertEquals( $mobj, get_post_meta_by_id( $mid ) );
@@ -227,13 +180,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_delete_meta() {
-<<<<<<< HEAD
 		$mid = add_post_meta( $this->post_id, 'delete_meta', 'delete_meta_value', true );
-		$this->assertInternalType( 'integer', $mid );
-=======
-		$mid = add_post_meta( self::$post_id, 'delete_meta', 'delete_meta_value', true );
 		$this->assertIsInt( $mid );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$this->assertTrue( delete_meta( $mid ) );
 		$this->assertFalse( get_metadata_by_mid( 'post', $mid ) );
@@ -242,24 +190,15 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	function test_update_meta() {
-<<<<<<< HEAD
-		// Add a unique post meta item
-		$this->assertInternalType( 'integer', $mid1 = add_post_meta($this->post_id, 'unique_update', 'value', true) );
-
-		// Add two non unique post meta item
-		$this->assertInternalType( 'integer', $mid2 = add_post_meta($this->post_id, 'nonunique_update', 'value') );
-		$this->assertInternalType( 'integer', $mid3 = add_post_meta($this->post_id, 'nonunique_update', 'another value') );
-=======
 		// Add a unique post meta item.
-		$mid1 = add_post_meta( self::$post_id, 'unique_update', 'value', true );
+		$mid1 = add_post_meta( $this->post_id, 'unique_update', 'value', true );
 		$this->assertIsInt( $mid1 );
 
 		// Add two non-unique post meta items.
-		$mid2 = add_post_meta( self::$post_id, 'nonunique_update', 'value' );
+		$mid2 = add_post_meta( $this->post_id, 'nonunique_update', 'value' );
 		$this->assertIsInt( $mid2 );
-		$mid3 = add_post_meta( self::$post_id, 'nonunique_update', 'another value' );
+		$mid3 = add_post_meta( $this->post_id, 'nonunique_update', 'another value' );
 		$this->assertIsInt( $mid3 );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		// Check they exist.
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'unique_update', true ) );
@@ -299,13 +238,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$classy->stringy = "I love slashes\\\\ more";
 		$funky_meta[] = $classy;
 
-<<<<<<< HEAD
-		// Add a post meta item
-		$this->assertInternalType( 'integer', add_post_meta($this->post_id, 'test_funky_post_meta', $funky_meta, true) );
-=======
 		// Add a post meta item.
-		$this->assertIsInt( add_post_meta( self::$post_id, 'test_funky_post_meta', $funky_meta, true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertIsInt( add_post_meta( $this->post_id, 'test_funky_post_meta', $funky_meta, true ) );
 
 		//Check they exists
 		$this->assertEquals($funky_meta, get_post_meta($this->post_id, 'test_funky_post_meta', true));
@@ -372,44 +306,4 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 			array( '', 'registered_key3' ),
 		);
   	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 44467
-	 */
-	public function test_add_metadata_sets_posts_last_changed() {
-		$post_id = self::factory()->post->create();
-
-		wp_cache_delete( 'last_changed', 'posts' );
-
-		$this->assertIsInt( add_metadata( 'post', $post_id, 'foo', 'bar' ) );
-		$this->assertNotFalse( wp_cache_get_last_changed( 'posts' ) );
-	}
-
-	/**
-	 * @ticket 44467
-	 */
-	public function test_update_metadata_sets_posts_last_changed() {
-		$post_id = self::factory()->post->create();
-
-		wp_cache_delete( 'last_changed', 'posts' );
-
-		$this->assertIsInt( update_metadata( 'post', $post_id, 'foo', 'bar' ) );
-		$this->assertNotFalse( wp_cache_get_last_changed( 'posts' ) );
-	}
-
-	/**
-	 * @ticket 44467
-	 */
-	public function test_delete_metadata_sets_posts_last_changed() {
-		$post_id = self::factory()->post->create();
-
-		update_metadata( 'post', $post_id, 'foo', 'bar' );
-		wp_cache_delete( 'last_changed', 'posts' );
-
-		$this->assertTrue( delete_metadata( 'post', $post_id, 'foo' ) );
-		$this->assertNotFalse( wp_cache_get_last_changed( 'posts' ) );
-	}
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 }

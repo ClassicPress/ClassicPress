@@ -531,13 +531,8 @@ class Tests_Widgets extends WP_UnitTestCase {
 		$this->assertSame( 1, $option_value['_multiwidget'] );
 		$this->assertArrayHasKey( 2, $option_value );
 		$instance = $option_value[2];
-<<<<<<< HEAD
-		$this->assertInternalType( 'array', $instance );
-		$this->assertArrayHasKey( 'title', $instance );
-=======
 		$this->assertIsArray( $instance );
-		$this->assertArrayHasKey( 'content', $instance );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertArrayHasKey( 'title', $instance );
 		unset( $option_value['_multiwidget'] );
 
 		// Pretend this widget is new.

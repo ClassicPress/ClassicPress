@@ -15,13 +15,8 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
-<<<<<<< HEAD
-		$this->assertInternalType( 'array', $result );
-		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
-=======
 		$this->assertIsArray( $result );
-		$this->assertSame( 'WordPress', $result['software_name']['value'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
 	}
 
 	function test_option_value() {

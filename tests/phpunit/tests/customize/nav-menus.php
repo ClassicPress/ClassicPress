@@ -374,13 +374,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 		$this->assertSame( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
-<<<<<<< HEAD
-		$this->assertInternalType( 'array', $results );
-		$this->assertEquals( 2, count( $results ) );
-=======
 		$this->assertIsArray( $results );
-		$this->assertCount( 3, $results );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+		$this->assertCount( 2, $results );
 		remove_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10 );
 
 		// Test home.

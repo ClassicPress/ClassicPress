@@ -38,15 +38,9 @@ class Tests_XMLRPC_wp_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getPost( array( 1, 'author', 'author', $this->post_id, $fields ) );
 		$this->assertNotIXRError( $result );
 
-<<<<<<< HEAD
-		// Check data types
-		$this->assertInternalType( 'string', $result['post_id'] );
-		$this->assertInternalType( 'string', $result['post_title'] );
-=======
 		// Check data types.
 		$this->assertIsString( $result['post_id'] );
 		$this->assertIsString( $result['post_title'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertInstanceOf( 'IXR_Date', $result['post_date'] );
 		$this->assertInstanceOf( 'IXR_Date', $result['post_date_gmt'] );
 		$this->assertInstanceOf( 'IXR_Date', $result['post_modified'] );

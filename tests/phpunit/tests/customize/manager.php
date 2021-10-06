@@ -645,13 +645,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		);
 		$this->assertSameSets( $expected_setting_ids, array_keys( $changeset_values ) );
 
-<<<<<<< HEAD
 		foreach ( array( 'widget_text[2]', 'widget_meta[3]' ) as $setting_id ) {
-			$this->assertInternalType( 'array', $changeset_values[ $setting_id ] );
-=======
-		foreach ( array( 'widget_text[2]', 'widget_meta[2]' ) as $setting_id ) {
 			$this->assertIsArray( $changeset_values[ $setting_id ] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 			$instance_data = $wp_customize->widgets->sanitize_widget_instance( $changeset_values[ $setting_id ] );
 			$this->assertIsArray( $instance_data );
 			$this->assertArrayHasKey( 'title', $instance_data );
@@ -918,19 +913,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			),
 		);
 		$date = ( gmdate( 'Y' ) + 1 ) . '-12-01 00:00:00';
-		$r = $manager->save_changeset_post( array(
-			'status' => 'auto-draft',
-			'title' => 'Auto Draft',
-			'date_gmt' => $date,
-			'data' => $pre_saved_data,
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
+		$r = $manager->save_changeset_post(
+			array(
+				'status' => 'auto-draft',
+				'title' => 'Auto Draft',
+				'date_gmt' => $date,
+				'data' => $pre_saved_data,
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$this->assertSame( $did_action['customize_save_validation_before'] + 1, did_action( 'customize_save_validation_before' ) );
 
@@ -1003,24 +994,20 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		) );
 		$wp_customize = $manager;
 		$manager->register_controls(); // That is, register settings.
-		$r = $manager->save_changeset_post( array(
-			'status' => null,
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Non-Transactional \o/ <script>unsanitized</script>',
+		$r = $manager->save_changeset_post(
+			array(
+				'status' => null,
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Non-Transactional \o/ <script>unsanitized</script>',
+					),
+					'bar_unknown' => array(
+						'value' => 'No',
+					),
 				),
-				'bar_unknown' => array(
-					'value' => 'No',
-				),
-			),
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertArrayHasKey( 'setting_validities', $r );
 		$this->assertTrue( $r['setting_validities']['blogname'] );
 		$this->assertInstanceOf( 'WP_Error', $r['setting_validities']['bar_unknown'] );
@@ -1070,24 +1057,20 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$manager->get_setting( 'blogname' )->capability = 'exist';
 		$original_capabilities = wp_list_pluck( $manager->settings(), 'capability' );
 		wp_set_current_user( self::$subscriber_user_id );
-		$r = $manager->save_changeset_post( array(
-			'status' => 'publish',
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Do it live \o/',
+		$r = $manager->save_changeset_post(
+			array(
+				'status' => 'publish',
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Do it live \o/',
+					),
+					'scratchpad' => array(
+						'value' => '<script>console.info( "HELLO" )</script>',
+					),
 				),
-				'scratchpad' => array(
-					'value' => '<script>console.info( "HELLO" )</script>',
-				),
-			),
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame( 'Do it live \o/', get_option( 'blogname' ) );
 		$this->assertSame( 'trash', get_post_status( $post_id ) ); // Auto-trashed.
 		$this->assertSame( $original_capabilities, wp_list_pluck( $manager->settings(), 'capability' ) );
@@ -1385,27 +1368,23 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		$uuid = wp_generate_uuid4();
 		$wp_customize = $this->create_test_manager( $uuid );
-		$r = $wp_customize->save_changeset_post( array(
-			'status' => 'auto-draft',
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Admin 1 Title',
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'status' => 'auto-draft',
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Admin 1 Title',
+					),
+					'scratchpad' => array(
+						'value' => 'Admin 1 Scratch',
+					),
+					'background_color' => array(
+						'value' => '#000000',
+					),
 				),
-				'scratchpad' => array(
-					'value' => 'Admin 1 Scratch',
-				),
-				'background_color' => array(
-					'value' => '#000000',
-				),
-			),
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame(
 			array_fill_keys( array( 'blogname', 'scratchpad', 'background_color' ), true ),
 			$r['setting_validities']
@@ -1419,24 +1398,20 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		// Attempt to save just one setting under a different user.
 		wp_set_current_user( $other_admin_user_id );
 		$wp_customize = $this->create_test_manager( $uuid );
-		$r = $wp_customize->save_changeset_post( array(
-			'status' => 'auto-draft',
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Admin 2 Title',
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'status' => 'auto-draft',
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Admin 2 Title',
+					),
+					'background_color' => array(
+						'value' => '#FFFFFF',
+					),
 				),
-				'background_color' => array(
-					'value' => '#FFFFFF',
-				),
-			),
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame(
 			array_fill_keys( array( 'blogname', 'background_color' ), true ),
 			$r['setting_validities']
@@ -1451,25 +1426,21 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		// Attempt to save now as under-privileged user.
 		$wp_customize = $this->create_test_manager( $uuid );
-		$r = $wp_customize->save_changeset_post( array(
-			'status' => 'auto-draft',
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Admin 2 Title', // Identical to what is already in the changeset so will be skipped.
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'status' => 'auto-draft',
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Admin 2 Title', // Identical to what is already in the changeset so will be skipped.
+					),
+					'scratchpad' => array(
+						'value' => 'Subscriber Scratch',
+					),
 				),
-				'scratchpad' => array(
-					'value' => 'Subscriber Scratch',
-				),
-			),
-			'user_id' => self::$subscriber_user_id,
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
+				'user_id' => self::$subscriber_user_id,
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame(
 			array_fill_keys( array( 'blogname', 'scratchpad' ), true ),
 			$r['setting_validities']
@@ -1733,21 +1704,17 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		// Try autosave.
 		$this->assertFalse( wp_get_post_autosave( $changeset_post_id, get_current_user_id() ) );
-		$r = $wp_customize->save_changeset_post( array(
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Autosave Title',
+		$r = $wp_customize->save_changeset_post(
+			array(
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Autosave Title',
+					),
 				),
-			),
-			'autosave' => true,
-<<<<<<< HEAD
-		) );
-		$this->assertInternalType( 'array', $r );
-=======
+				'autosave' => true,
 			)
 		);
 		$this->assertIsArray( $r );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		// Verify that autosave happened.
 		$autosave_revision = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
@@ -2523,13 +2490,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertIsArray( $validity );
 		foreach ( $error->errors as $code => $messages ) {
 			$this->assertArrayHasKey( $code, $validity );
-<<<<<<< HEAD
-			$this->assertInternalType( 'array', $validity[ $code ] );
-			$this->assertSame( join( ' ', $messages ), $validity[ $code ]['message'] );
-=======
 			$this->assertIsArray( $validity[ $code ] );
 			$this->assertSame( implode( ' ', $messages ), $validity[ $code ]['message'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 			$this->assertArrayHasKey( 'data', $validity[ $code ] );
 			$this->assertSame( $validity[ $code ]['data'], $error->get_error_data( $code ) );
 		}
@@ -2702,13 +2664,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 * @return array
 	 */
 	function filter_customize_dynamic_setting_args_for_test_dynamic_settings( $setting_args, $setting_id ) {
-<<<<<<< HEAD
-		$this->assertInternalType( 'string', $setting_id );
-		if ( in_array( $setting_id, array( 'foo', 'bar' ) ) ) {
-=======
 		$this->assertIsString( $setting_id );
 		if ( in_array( $setting_id, array( 'foo', 'bar' ), true ) ) {
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 			$setting_args = array( 'default' => "dynamic_{$setting_id}_default" );
 		}
 		return $setting_args;

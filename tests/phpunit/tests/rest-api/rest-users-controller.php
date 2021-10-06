@@ -1057,13 +1057,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		} else {
 			$this->assertIsArray( $data['data']['params'] );
 			$errors = $data['data']['params'];
-<<<<<<< HEAD
-			$this->assertInternalType( 'string', $errors['username'] );
-			$this->assertSame( 'Username contains invalid characters.', $errors['username'] );
-=======
 			$this->assertIsString( $errors['username'] );
-			$this->assertSame( 'This username is invalid because it uses illegal characters. Please enter a valid username.', $errors['username'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
+			$this->assertSame( 'Username contains invalid characters.', $errors['username'] );
 		}
 	}
 

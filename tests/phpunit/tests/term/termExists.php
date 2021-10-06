@@ -220,15 +220,9 @@ class Tests_TermExists extends WP_UnitTestCase {
 		// insert a term
 		$term = rand_str();
 		$t = wp_insert_term( $term, 'wptests_tax' );
-<<<<<<< HEAD
-		$this->assertInternalType( 'array', $t );
-		$this->assertEquals( $t['term_id'], term_exists($t['term_id']) );
-		$this->assertEquals( $t['term_id'], term_exists($term) );
-=======
 		$this->assertIsArray( $t );
 		$this->assertEquals( $t['term_id'], term_exists( $t['term_id'] ) );
 		$this->assertEquals( $t['term_id'], term_exists( $term ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		// clean up
 		$this->assertTrue( wp_delete_term( $t['term_id'], 'wptests_tax' ) );

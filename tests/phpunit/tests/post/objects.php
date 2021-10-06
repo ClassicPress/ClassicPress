@@ -34,15 +34,9 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$this->assertSame( 'post', $post['post_type'] );
 
 		$post = get_post( $id, ARRAY_N );
-<<<<<<< HEAD
-		$this->assertInternalType( 'array', $post );
-		$this->assertFalse( isset( $post[ 'post_type' ] ) );
-		$this->assertTrue( in_array( 'post', $post ) );
-=======
 		$this->assertIsArray( $post );
 		$this->assertFalse( isset( $post['post_type'] ) );
 		$this->assertTrue( in_array( 'post', $post, true ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$post = get_post( $id );
 		$post = get_post( $post, ARRAY_A );
@@ -154,12 +148,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$post = get_post( $post_id );
 
-<<<<<<< HEAD
-		$this->assertInternalType( 'string', $post->page_template );
-		$this->assertEmpty( $post->tags_input );
-=======
 		$this->assertIsString( $post->page_template );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$template = get_post_meta( $post->ID, '_wp_page_template', true );
 		$this->assertSame( $template, $post->page_template );
 		update_post_meta( $post_id, '_wp_page_template', 'foo.php' );
@@ -191,25 +180,6 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$this->assertSame( esc_js( "Mary's home" ), $raw_post->post_title );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 53235
-	 */
-	public function test_numeric_properties_should_be_cast_to_ints() {
-		$post_id  = self::factory()->post->create();
-		$contexts = array( 'raw', 'edit', 'db', 'display', 'attribute', 'js' );
-
-		foreach ( $contexts as $context ) {
-			$post = get_post( $post_id, OBJECT, $context );
-
-			$this->assertIsInt( $post->ID );
-			$this->assertIsInt( $post->post_parent );
-			$this->assertIsInt( $post->menu_order );
-		}
-	}
-
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	function test_get_post_identity() {
 		$post = get_post( self::factory()->post->create() );
 

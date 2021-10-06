@@ -53,29 +53,6 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 		foreach( $results as $result ) {
 			$post = get_post( $result['postid'] );
 
-<<<<<<< HEAD
-			// Check data types
-			$this->assertInternalType( 'string', $result['userid'] );
-			$this->assertInternalType( 'string', $result['postid'] );
-			$this->assertInternalType( 'string', $result['description'] );
-			$this->assertInternalType( 'string', $result['title'] );
-			$this->assertInternalType( 'string', $result['link'] );
-			$this->assertInternalType( 'string', $result['permaLink'] );
-			$this->assertInternalType( 'array',  $result['categories'] );
-			$this->assertInternalType( 'string', $result['mt_excerpt'] );
-			$this->assertInternalType( 'string', $result['mt_text_more'] );
-			$this->assertInternalType( 'string', $result['wp_more_text'] );
-			$this->assertInternalType( 'int', $result['mt_allow_comments'] );
-			$this->assertInternalType( 'int', $result['mt_allow_pings'] );
-			$this->assertInternalType( 'string', $result['mt_keywords'] );
-			$this->assertInternalType( 'string', $result['wp_slug'] );
-			$this->assertInternalType( 'string', $result['wp_password'] );
-			$this->assertInternalType( 'string', $result['wp_author_id'] );
-			$this->assertInternalType( 'string', $result['wp_author_display_name'] );
-			$this->assertInternalType( 'string', $result['post_status'] );
-			$this->assertInternalType( 'array', $result['custom_fields'] );
-			$this->assertInternalType( 'string', $result['wp_post_format'] );
-=======
 			// Check data types.
 			$this->assertIsString( $result['userid'] );
 			$this->assertIsString( $result['postid'] );
@@ -97,7 +74,6 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 			$this->assertIsString( $result['post_status'] );
 			$this->assertIsArray( $result['custom_fields'] );
 			$this->assertIsString( $result['wp_post_format'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 			// Check expected values
 			$this->assertStringMatchesFormat( '%d', $result['userid'] );
@@ -125,13 +101,8 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 		$results = $this->myxmlrpcserver->mw_getRecentPosts( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $results );
 
-<<<<<<< HEAD
-		foreach( $results as $result ) {
-			$this->assertInternalType( 'string', $result['wp_post_thumbnail'] );
-=======
 		foreach ( $results as $result ) {
 			$this->assertIsString( $result['wp_post_thumbnail'] );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 			$this->assertStringMatchesFormat( '%d', $result['wp_post_thumbnail'] );
 
 			if( ! empty( $result['wp_post_thumbnail'] ) || $result['postid'] == self::$post_id ) {

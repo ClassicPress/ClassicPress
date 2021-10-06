@@ -202,13 +202,8 @@ class Tests_Meta extends WP_UnitTestCase {
 		$this->assertSame( '', get_metadata( 'user', $this->author->ID, $key, true ) );
 		$this->assertFalse( metadata_exists( 'user', $this->author->ID, $key ) );
 
-<<<<<<< HEAD
-		// Test overslashing
-		$this->assertInternalType( 'int', add_metadata( 'user', $this->author->ID, $key, $value2 ) );
-=======
 		// Test overslashing.
 		$this->assertIsInt( add_metadata( 'user', $this->author->ID, $key, $value2 ) );
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame( $expected2, get_metadata( 'user', $this->author->ID, $key, true ) );
 		$this->assertTrue( delete_metadata( 'user', $this->author->ID, $key ) );
 		$this->assertSame( '', get_metadata( 'user', $this->author->ID, $key, true ) );

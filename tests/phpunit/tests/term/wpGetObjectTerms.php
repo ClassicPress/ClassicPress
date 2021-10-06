@@ -68,14 +68,9 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 		$terms = wp_get_object_terms( $post_id, $this->taxonomy, array( 'fields' => 'all_with_object_id' ) );
 		$term = array_shift( $terms );
 		$int_fields = array( 'parent', 'term_id', 'count', 'term_group', 'term_taxonomy_id', 'object_id' );
-<<<<<<< HEAD
-		foreach ( $int_fields as $field )
-			$this->assertInternalType( 'int', $term->$field, $field );
-=======
 		foreach ( $int_fields as $field ) {
 			$this->assertIsInt( $term->$field, $field );
 		}
->>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$terms = wp_get_object_terms( $post_id, $this->taxonomy, array( 'fields' => 'ids' ) );
 		$term = array_shift( $terms );
