@@ -1051,15 +1051,6 @@ function get_term_to_edit( $id, $taxonomy ) {
  *
  * @internal The `$deprecated` parameter is parsed for backward compatibility only.
  *
-<<<<<<< HEAD
- * @param string|array $args       Optional. Array or string of arguments. See WP_Term_Query::__construct()
- *                                 for information on accepted arguments. Default empty.
- * @param array        $deprecated Argument array, when using the legacy function parameter format. If present, this
- *                                 parameter will be interpreted as `$args`, and the first function parameter will
- *                                 be parsed as a taxonomy or array of taxonomies.
- * @return array|int|WP_Error List of WP_Term instances and their children. Will return WP_Error, if any of $taxonomies
- *                            do not exist.
-=======
  * @param array|string $args       Optional. Array or string of arguments. See WP_Term_Query::__construct()
  *                                 for information on accepted arguments. Default empty array.
  * @param array|string $deprecated Optional. Argument array, when using the legacy function parameter format.
@@ -1069,7 +1060,6 @@ function get_term_to_edit( $id, $taxonomy ) {
  * @return WP_Term[]|int[]|string[]|string|WP_Error Array of terms, a count thereof as a numeric string,
  *                                                  or WP_Error if any of the taxonomies do not exist.
  *                                                  See the function description for more information.
->>>>>>> cf68c90021 (Taxonomy: Correct and clarify documentation for the return types of term query functions.)
  */
 function get_terms( $args = array(), $deprecated = '' ) {
 	$term_query = new WP_Term_Query();
@@ -1641,16 +1631,12 @@ function sanitize_term_field($field, $value, $term_id, $taxonomy, $context) {
  * @param string       $taxonomy Taxonomy name.
  * @param array|string $args     Optional. Array of arguments that get passed to get_terms().
  *                               Default empty array.
-<<<<<<< HEAD
- * @return array|int|WP_Error Number of terms in that taxonomy or WP_Error if the taxonomy does not exist.
-=======
  * @param array|string $deprecated Optional. Argument array, when using the legacy function parameter format.
  *                                 If present, this parameter will be interpreted as `$args`, and the first
  *                                 function parameter will be parsed as a taxonomy or array of taxonomies.
  *                                 Default empty.
  * @return string|WP_Error Numeric string containing the number of terms in that
  *                         taxonomy or WP_Error if the taxonomy does not exist.
->>>>>>> cf68c90021 (Taxonomy: Correct and clarify documentation for the return types of term query functions.)
  */
 function wp_count_terms( $taxonomy, $args = array() ) {
 	$defaults = array('hide_empty' => false);

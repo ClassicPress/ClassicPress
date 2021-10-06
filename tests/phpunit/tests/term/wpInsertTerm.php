@@ -40,15 +40,9 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		add_filter( 'delete_term', array( $this, 'deleted_term_cb' ), 10, 5 );
 		$this->assertTrue( wp_delete_term( $t['term_id'], $taxonomy ) );
 		remove_filter( 'delete_term', array( $this, 'deleted_term_cb' ), 10, 5 );
-<<<<<<< HEAD
-		$this->assertNull( term_exists($term) );
-		$this->assertNull( term_exists($t['term_id']) );
-		$this->assertEquals( $initial_count, wp_count_terms( $taxonomy ) );
-=======
 		$this->assertNull( term_exists( $term ) );
 		$this->assertNull( term_exists( $t['term_id'] ) );
 		$this->assertSame( $initial_count, wp_count_terms( array( 'taxonomy' => $taxonomy ) ) );
->>>>>>> cf68c90021 (Taxonomy: Correct and clarify documentation for the return types of term query functions.)
 	}
 
 	public function test_wp_insert_term_taxonomy_does_not_exist() {
