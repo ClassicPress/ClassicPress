@@ -197,7 +197,7 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 		$dropdown_categories = wp_dropdown_categories( $args );
 
 		// Test to see if it contains the "required" attribute.
-		$this->assertNotRegExp( '/<select[^>]+required/', $dropdown_categories );
+		$this->assertDoesNotMatchRegularExpression( '/<select[^>]+required/', $dropdown_categories );
 	}
 
 	/**
@@ -219,6 +219,6 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 		$dropdown_categories = wp_dropdown_categories( $args );
 
 		// Test to see if it contains the "required" attribute.
-		$this->assertNotRegExp( '/<select[^>]+required/', $dropdown_categories );
+		$this->assertDoesNotMatchRegularExpression( '/<select[^>]+required/', $dropdown_categories );
 	}
 }
