@@ -33,15 +33,12 @@ class Tests_Locale extends WP_UnitTestCase {
 	 * @expectedException PHPUnit_Framework_Error_Notice
 	 */
 	public function test_get_weekday_undefined_index() {
-<<<<<<< HEAD
-=======
 		if ( PHP_VERSION_ID >= 80000 ) {
 			$this->expectWarning();
 		} else {
 			$this->expectNotice();
 		}
 
->>>>>>> fe7295b860 (Tests: Replace `expectException()` for PHP native errors with calls to the dedicated PHPUnit 8.4+ methods.)
 		$this->locale->get_weekday( 7 );
 	}
 
