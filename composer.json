@@ -20,6 +20,7 @@
 =======
 		"dealerdirect/phpcodesniffer-composer-installer": "~0.6.0",
 		"wp-coding-standards/wpcs": "~2.3.0",
+<<<<<<< HEAD
 		"phpcompatibility/phpcompatibility-wp": "^2.1.0",
 		"phpunit/phpunit": "^7.5"
 	},
@@ -36,6 +37,11 @@
 			"vendor/phpunit/phpunit/src/Framework/MockObject/InvocationMocker.php",
 			"vendor/phpunit/phpunit/src/Framework/MockObject/MockMethod.php"
 		]
+=======
+		"phpcompatibility/phpcompatibility-wp": "~2.1.2",
+		"phpunit/phpunit": "^5.7 || ^6.5 || ^7.5",
+		"yoast/phpunit-polyfills": "^1.0"
+>>>>>>> 8ebd8ec0e4 (Build/Test Tools: Add Composer dependency on the PHPUnit Polyfills package.)
 	},
 	"scripts": {
 		"compat": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --standard=phpcompat.xml.dist --report=summary,source",
