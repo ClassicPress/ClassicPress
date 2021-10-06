@@ -362,13 +362,8 @@ NO;
 		// After falling back, the 'after' argument should be set and output as '</ul>'.
 		$this->assertMatchesRegularExpression( '/<\/ul><\/div>/', $menu );
 
-<<<<<<< HEAD
-		// After falling back, the markup should include whitespace around <li>s
-		$this->assertRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
-=======
 		// After falling back, the markup should include whitespace around <li>'s.
 		$this->assertMatchesRegularExpression( '/\s<li.*>|<\/li>\s/U', $menu );
->>>>>>> 457b7b3a61 (Tests: Replace `assertRegExp()` with `assertMatchesRegularExpression()`.)
 		$this->assertNotRegExp( '/><li.*>|<\/li></U', $menu );
 
 		// No menus + wp_nav_menu() falls back to wp_page_menu(), this time without a container.

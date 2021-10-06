@@ -1141,39 +1141,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/40017
-=======
-	 * Tests wp_unique_id().
-	 *
-	 * @covers ::wp_unique_id
-	 * @ticket 44883
-	 */
-	function test_wp_unique_id() {
-
-		// Test without prefix.
-		$ids = array();
-		for ( $i = 0; $i < 20; $i += 1 ) {
-			$id = wp_unique_id();
-			$this->assertIsString( $id );
-			$this->assertIsNumeric( $id );
-			$ids[] = $id;
-		}
-		$this->assertSame( $ids, array_unique( $ids ) );
-
-		// Test with prefix.
-		$ids = array();
-		for ( $i = 0; $i < 20; $i += 1 ) {
-			$id = wp_unique_id( 'foo-' );
-			$this->assertMatchesRegularExpression( '/^foo-\d+$/', $id );
-			$ids[] = $id;
-		}
-		$this->assertSame( $ids, array_unique( $ids ) );
-	}
-
-	/**
-	 * @ticket 40017
->>>>>>> 457b7b3a61 (Tests: Replace `assertRegExp()` with `assertMatchesRegularExpression()`.)
 	 * @dataProvider _wp_get_image_mime
 	 */
 	public function test_wp_get_image_mime( $file, $expected ) {
