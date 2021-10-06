@@ -3,13 +3,6 @@
  * Installs ClassicPress for running the tests and loads ClassicPress and the test libraries
  */
 
-/**
- * Compatibility with PHPUnit 6+
- */
-if ( class_exists( 'PHPUnit\Runner\Version' ) ) {
-	require_once dirname( __FILE__ ) . '/phpunit6/compat.php';
-}
-
 $config_file_path = dirname( dirname( __FILE__ ) );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.
@@ -40,8 +33,6 @@ if ( version_compare( tests_get_phpunit_version(), '5.4', '<' ) || version_compa
 	exit( 1 );
 }
 
-<<<<<<< HEAD
-=======
 // Register a custom autoloader for the PHPUnit 9.x Mockobject classes for compatibility with PHP 8.0.
 require_once __DIR__ . '/class-mockobject-autoload.php';
 spl_autoload_register( 'MockObject_Autoload::load', true, true );
@@ -100,7 +91,6 @@ if ( $missing_constants ) {
 	exit( 1 );
 }
 
->>>>>>> 47303b1f95 (Build/Test Tools: Unify the PHPUnit adapter TestCases.)
 tests_reset__SERVER();
 
 define( 'WP_TESTS_TABLE_PREFIX', $table_prefix );
@@ -174,23 +164,6 @@ require_once ABSPATH . '/wp-settings.php';
 // Delete any default posts & related data
 _delete_all_posts();
 
-<<<<<<< HEAD
-if ( version_compare( tests_get_phpunit_version(), '7.0', '>=' ) ) {
-	require dirname( __FILE__ ) . '/phpunit7/testcase.php';
-} else {
-	require dirname( __FILE__ ) . '/testcase.php';
-}
-
-require dirname( __FILE__ ) . '/testcase-rest-api.php';
-require dirname( __FILE__ ) . '/testcase-rest-controller.php';
-require dirname( __FILE__ ) . '/testcase-rest-post-type-controller.php';
-require dirname( __FILE__ ) . '/testcase-xmlrpc.php';
-require dirname( __FILE__ ) . '/testcase-ajax.php';
-require dirname( __FILE__ ) . '/testcase-canonical.php';
-require dirname( __FILE__ ) . '/exceptions.php';
-require dirname( __FILE__ ) . '/utils.php';
-require dirname( __FILE__ ) . '/spy-rest-server.php';
-=======
 // Load class aliases for compatibility with PHPUnit 6+.
 if ( version_compare( tests_get_phpunit_version(), '6.0', '>=' ) ) {
 	require __DIR__ . '/phpunit6/compat.php';
@@ -208,17 +181,9 @@ require __DIR__ . '/testcase-rest-post-type-controller.php';
 require __DIR__ . '/testcase-xmlrpc.php';
 require __DIR__ . '/testcase-ajax.php';
 require __DIR__ . '/testcase-canonical.php';
-require __DIR__ . '/testcase-xml.php';
 require __DIR__ . '/exceptions.php';
 require __DIR__ . '/utils.php';
 require __DIR__ . '/spy-rest-server.php';
-require __DIR__ . '/class-wp-rest-test-search-handler.php';
-require __DIR__ . '/class-wp-rest-test-configurable-controller.php';
-require __DIR__ . '/class-wp-fake-block-type.php';
-require __DIR__ . '/class-wp-sitemaps-test-provider.php';
-require __DIR__ . '/class-wp-sitemaps-empty-test-provider.php';
-require __DIR__ . '/class-wp-sitemaps-large-test-provider.php';
->>>>>>> 47303b1f95 (Build/Test Tools: Unify the PHPUnit adapter TestCases.)
 
 /**
  * A class to handle additional command line arguments passed to the script.
