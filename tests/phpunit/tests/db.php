@@ -410,17 +410,9 @@ class Tests_DB extends WP_UnitTestCase {
 	public function test_prepare_incorrect_arg_count( $query, $args, $expected ) {
 		global $wpdb;
 
-<<<<<<< HEAD
-		// $query is the first argument to be passed to wpdb::prepare()
-		array_unshift( $args, $query );
-
-		$prepared = @call_user_func_array( array( $wpdb, 'prepare' ), $args );
-		$this->assertEquals( $expected, $prepared );
-=======
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged,WordPress.DB.PreparedSQL
 		$prepared = @$wpdb->prepare( $query, ...$args );
 		$this->assertSame( $expected, $prepared );
->>>>>>> 91feaf04af (Tests: Correct assertion in `Tests_DB::test_prepare_incorrect_arg_count()`.)
 	}
 
 	public function data_prepare_incorrect_arg_count() {
