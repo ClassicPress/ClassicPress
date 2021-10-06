@@ -77,13 +77,13 @@ class Tests_Multisite_MS_Files_Rewriting extends WP_UnitTestCase {
 
 		// The file on the main site should still exist. The file on the deleted site should not.
 		$this->assertFileExists( $file1['file'] );
-		$this->assertFileNotExists( $file2['file'] );
+			$this->assertFileDoesNotExist( $file2['file'] );
 
 		wpmu_delete_blog( $blog_id, true );
 
 		// The file on the main site should still exist. The file on the deleted site should not.
 		$this->assertFileExists( $file1['file'] );
-		$this->assertFileNotExists( $file2['file'] );
+			$this->assertFileDoesNotExist( $file2['file'] );
 	}
 }
 

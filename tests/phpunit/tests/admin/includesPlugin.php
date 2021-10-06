@@ -144,6 +144,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_when_mu_plugins_directory_does_not_exist() {
+<<<<<<< HEAD
 		$exists = false;
 		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
 			$exists = true;
@@ -151,6 +152,9 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			rmdir( WPMU_PLUGIN_DIR );
 		}
 
+=======
+		$this->assertFileDoesNotExist( WPMU_PLUGIN_DIR );
+>>>>>>> 29d678d08b (Tests: Replace `assertFileNotExists()` with `assertFileDoesNotExist()`.)
 		$this->assertSame( array(), get_mu_plugins() );
 
 		// Clean up.
