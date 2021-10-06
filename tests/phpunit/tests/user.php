@@ -1307,15 +1307,10 @@ class Tests_User extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/35715
 	 */
-<<<<<<< HEAD
-	function test_edit_user_blank_pw() {
-		$_POST = $_GET = $_REQUEST = array();
-=======
 	function test_edit_user_blank_password() {
 		$_POST                 = array();
 		$_GET                  = array();
 		$_REQUEST              = array();
->>>>>>> 325024011d (Tests: Use `assertSame()` in `test_edit_user_blank_password()`, for consistency with other assertions.)
 		$_POST['role'] = 'subscriber';
 		$_POST['email'] = 'user1@example.com';
 		$_POST['user_login'] = 'user_login1';
@@ -1349,21 +1344,6 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertInternalType( 'int', $user_id );
 		$this->assertSame( 'nickname_updated', $user->nickname );
 
-<<<<<<< HEAD
-=======
-		// Check not to change an old password if a new password contains only spaces. Ticket #42766.
-		$user           = get_user_by( 'ID', $user_id );
-		$old_pass       = $user->user_pass;
-		$_POST['pass2'] = '  ';
-		$_POST['pass1'] = '  ';
-
-		$user_id = edit_user( $user_id );
-		$user    = get_user_by( 'ID', $user_id );
-
-		$this->assertInternalType( 'int', $user_id );
-		$this->assertSame( $old_pass, $user->user_pass );
-
->>>>>>> 325024011d (Tests: Use `assertSame()` in `test_edit_user_blank_password()`, for consistency with other assertions.)
 		// Check updating user with missing second password.
 		$_POST['nickname'] = 'nickname_updated2';
 		$_POST['pass1'] = 'blank_pass2';
