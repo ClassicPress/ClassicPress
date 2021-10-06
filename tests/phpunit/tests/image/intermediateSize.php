@@ -34,7 +34,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 100, 0, false );
 
-		$this->assertInternalType( 'array', $image );
+		$this->assertIsArray( $image );
 	}
 
 	function test_make_intermediate_size_height() {
@@ -43,7 +43,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 0, 75, false );
 
-		$this->assertInternalType( 'array', $image );
+		$this->assertIsArray( $image );
 	}
 
 	function test_make_intermediate_size_successful() {
@@ -52,7 +52,13 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 100, 75, true );
 
+<<<<<<< HEAD
 		$this->assertInternalType( 'array', $image );
+=======
+		unlink( DIR_TESTDATA . '/images/a2-small-100x75.jpg' );
+
+		$this->assertIsArray( $image );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertSame( 100, $image['width'] );
 		$this->assertSame( 75, $image['height'] );
 		$this->assertSame( 'image/jpeg', $image['mime-type'] );

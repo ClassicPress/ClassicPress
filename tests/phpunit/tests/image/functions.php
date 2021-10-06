@@ -281,7 +281,11 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		// First, test with deprecated wp_load_image function
 		$editor1 = wp_load_image( DIR_TESTDATA );
+<<<<<<< HEAD
 		$this->assertNotInternalType( 'resource', $editor1 );
+=======
+		$this->assertIsString( $editor1 );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$editor2 = wp_get_image_editor( DIR_TESTDATA );
 		$this->assertNotInternalType( 'resource', $editor2 );

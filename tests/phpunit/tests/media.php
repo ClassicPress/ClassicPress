@@ -321,8 +321,17 @@ https://w.org</a>'
 		$post = get_post( $id );
 
 		$prepped = wp_prepare_attachment_for_js( $post );
+<<<<<<< HEAD
 		$this->assertInternalType( 'array', $prepped );
 		// https://core.trac.wordpress.org/ticket/21963, there will be a guid always, so there will be a URL
+=======
+		$this->assertIsArray( $prepped );
+		$this->assertSame( 0, $prepped['uploadedTo'] );
+		$this->assertSame( '', $prepped['mime'] );
+		$this->assertSame( '', $prepped['type'] );
+		$this->assertSame( '', $prepped['subtype'] );
+		// #21963, there will be a GUID always, so there will be a URL.
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertNotEquals( '', $prepped['url'] );
 		$this->assertSame( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
 
@@ -998,7 +1007,7 @@ VIDEO;
 	 */
 	function test_attachment_url_to_postid_with_empty_url() {
 		$post_id = attachment_url_to_postid( '' );
-		$this->assertInternalType( 'int', $post_id );
+		$this->assertIsInt( $post_id );
 		$this->assertSame( 0, $post_id );
 	}
 

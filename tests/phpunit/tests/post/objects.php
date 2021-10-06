@@ -30,17 +30,23 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 
 		// Excercise the output argument
 		$post = get_post( $id, ARRAY_A );
-		$this->assertInternalType( 'array', $post );
+		$this->assertIsArray( $post );
 		$this->assertSame( 'post', $post['post_type'] );
 
 		$post = get_post( $id, ARRAY_N );
+<<<<<<< HEAD
 		$this->assertInternalType( 'array', $post );
 		$this->assertFalse( isset( $post[ 'post_type' ] ) );
 		$this->assertTrue( in_array( 'post', $post ) );
+=======
+		$this->assertIsArray( $post );
+		$this->assertFalse( isset( $post['post_type'] ) );
+		$this->assertTrue( in_array( 'post', $post, true ) );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$post = get_post( $id );
 		$post = get_post( $post, ARRAY_A );
-		$this->assertInternalType( 'array', $post );
+		$this->assertIsArray( $post );
 		$this->assertSame( 'post', $post['post_type'] );
 		$this->assertSame( $id, $post['ID'] );
 
@@ -51,7 +57,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 
 		// Make sure stdClass in $GLOBALS['post'] is handled
 		$post_std = $post->to_array();
-		$this->assertInternalType( 'array', $post_std );
+		$this->assertIsArray( $post_std );
 		$post_std = (object) $post_std;
 		$GLOBALS['post'] = $post_std;
 		$post = get_post( null );
@@ -103,7 +109,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 	 */
 	function test_get_post_ancestors_with_falsey_values() {
 		foreach ( array( null, 0, false, '0', '' ) as $post_id ) {
-			$this->assertInternalType( 'array', get_post_ancestors( $post_id ) );
+			$this->assertIsArray( get_post_ancestors( $post_id ) );
 			$this->assertSame( array(), get_post_ancestors( $post_id ) );
 		}
 	}
@@ -112,7 +118,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$post = get_post( $post_id );
 
-		$this->assertInternalType( 'array', $post->post_category );
+		$this->assertIsArray( $post->post_category );
 		$this->assertSame( 1, count( $post->post_category ) );
 		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
 		$term1 = wp_insert_term( 'Foo', 'category' );
@@ -131,15 +137,15 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$post = get_post( $post_id );
 
-		$this->assertInternalType( 'array', $post->tags_input );
+		$this->assertIsArray( $post->tags_input );
 		$this->assertEmpty( $post->tags_input );
 		wp_set_post_tags( $post_id, 'Foo, Bar, Baz' );
-		$this->assertInternalType( 'array', $post->tags_input );
+		$this->assertIsArray( $post->tags_input );
 		$this->assertSame( 3, count( $post->tags_input ) );
 		$this->assertSame( array( 'Bar', 'Baz', 'Foo' ), $post->tags_input );
 
 		$post = get_post( $post_id, ARRAY_A );
-		$this->assertInternalType( 'array', $post['tags_input'] );
+		$this->assertIsArray( $post['tags_input'] );
 		$this->assertSame( 3, count( $post['tags_input'] ) );
 		$this->assertSame( array( 'Bar', 'Baz', 'Foo' ), $post['tags_input'] );
 	}
@@ -148,8 +154,12 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 		$post = get_post( $post_id );
 
+<<<<<<< HEAD
 		$this->assertInternalType( 'string', $post->page_template );
 		$this->assertEmpty( $post->tags_input );
+=======
+		$this->assertIsString( $post->page_template );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$template = get_post_meta( $post->ID, '_wp_page_template', true );
 		$this->assertSame( $template, $post->page_template );
 		update_post_meta( $post_id, '_wp_page_template', 'foo.php' );
@@ -164,7 +174,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		) ) );
 
 		$this->assertSame( 'raw', $post->filter );
-		$this->assertInternalType( 'int', $post->post_parent );
+		$this->assertIsInt( $post->post_parent );
 
 		$display_post = get_post( $post, OBJECT, 'js' );
 		$this->assertSame( 'js', $display_post->filter );
@@ -181,6 +191,25 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$this->assertSame( esc_js( "Mary's home" ), $raw_post->post_title );
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * @ticket 53235
+	 */
+	public function test_numeric_properties_should_be_cast_to_ints() {
+		$post_id  = self::factory()->post->create();
+		$contexts = array( 'raw', 'edit', 'db', 'display', 'attribute', 'js' );
+
+		foreach ( $contexts as $context ) {
+			$post = get_post( $post_id, OBJECT, $context );
+
+			$this->assertIsInt( $post->ID );
+			$this->assertIsInt( $post->post_parent );
+			$this->assertIsInt( $post->menu_order );
+		}
+	}
+
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	function test_get_post_identity() {
 		$post = get_post( self::factory()->post->create() );
 
@@ -196,7 +225,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		$post = get_post( $id, ARRAY_A );
 
 		$this->assertSame( $id, $post['ID'] );
-		$this->assertInternalType( 'array', $post['ancestors'] );
+		$this->assertIsArray( $post['ancestors'] );
 		$this->assertSame( 'raw', $post['filter'] );
 	}
 

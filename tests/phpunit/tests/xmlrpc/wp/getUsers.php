@@ -26,20 +26,25 @@ class Tests_XMLRPC_wp_getUsers extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_getUsers( array( 1, 'administrator', 'administrator' ) );
 		$this->assertNotIXRError( $result );
 
+<<<<<<< HEAD
 		// check data types
 		$this->assertInternalType( 'string', $result[0]['user_id'] );
+=======
+		// Check data types.
+		$this->assertIsString( $result[0]['user_id'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertStringMatchesFormat( '%d', $result[0]['user_id'] );
-		$this->assertInternalType( 'string', $result[0]['username'] );
-		$this->assertInternalType( 'string', $result[0]['first_name'] );
-		$this->assertInternalType( 'string', $result[0]['last_name'] );
+		$this->assertIsString( $result[0]['username'] );
+		$this->assertIsString( $result[0]['first_name'] );
+		$this->assertIsString( $result[0]['last_name'] );
 		$this->assertInstanceOf( 'IXR_Date', $result[0]['registered'] );
-		$this->assertInternalType( 'string', $result[0]['bio'] );
-		$this->assertInternalType( 'string', $result[0]['email'] );
-		$this->assertInternalType( 'string', $result[0]['nickname'] );
-		$this->assertInternalType( 'string', $result[0]['nicename'] );
-		$this->assertInternalType( 'string', $result[0]['url'] );
-		$this->assertInternalType( 'string', $result[0]['display_name'] );
-		$this->assertInternalType( 'array', $result[0]['roles'] );
+		$this->assertIsString( $result[0]['bio'] );
+		$this->assertIsString( $result[0]['email'] );
+		$this->assertIsString( $result[0]['nickname'] );
+		$this->assertIsString( $result[0]['nicename'] );
+		$this->assertIsString( $result[0]['url'] );
+		$this->assertIsString( $result[0]['display_name'] );
+		$this->assertIsArray( $result[0]['roles'] );
 	}
 
 	function test_invalid_role() {

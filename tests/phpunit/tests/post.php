@@ -82,6 +82,7 @@ class Tests_Post extends WP_UnitTestCase {
 			$this->assertSame( $id, $pcache->ID );
 
 			update_object_term_cache( $id, $post_type );
+<<<<<<< HEAD
 			$tcache = wp_cache_get( $id, "post_tag_relationships" );
 			$this->assertInternalType( 'array', $tcache );
 			$this->assertSame( 2, count( $tcache ) );
@@ -89,6 +90,15 @@ class Tests_Post extends WP_UnitTestCase {
 			$tcache = wp_cache_get( $id, "ctax_relationships" );
 			if ( 'cpt' == $post_type ) {
 				$this->assertInternalType( 'array', $tcache );
+=======
+			$tcache = wp_cache_get( $id, 'post_tag_relationships' );
+			$this->assertIsArray( $tcache );
+			$this->assertSame( 2, count( $tcache ) );
+
+			$tcache = wp_cache_get( $id, 'ctax_relationships' );
+			if ( 'cpt' === $post_type ) {
+				$this->assertIsArray( $tcache );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 				$this->assertSame( 2, count( $tcache ) );
 			} else {
 				$this->assertFalse( $tcache );

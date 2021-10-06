@@ -103,7 +103,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, array( 'taxonomy' => 'category', 'parent' => NULL, 'name' => 'test' ) ) );
 
 		$this->assertNotIXRError( $result );
-		$this->assertInternalType( 'boolean', $result );
+		$this->assertIsBool( $result );
 
 		$term = get_term( self::$child_term, 'category' );
 		$this->assertEquals( '0', $term->parent );
@@ -143,7 +143,7 @@ class Tests_XMLRPC_wp_editTerm extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->wp_editTerm( array( 1, 'editor', 'editor', self::$child_term, $fields ) );
 
 		$this->assertNotIXRError( $result );
-		$this->assertInternalType( 'boolean', $result );
+		$this->assertIsBool( $result );
 	}
 
 	/**

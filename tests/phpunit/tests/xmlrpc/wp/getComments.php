@@ -147,7 +147,7 @@ class Tests_XMLRPC_wp_getComments extends WP_XMLRPC_UnitTestCase {
 			'post_id' => $author_post_id
 		) ) );
 
-		$this->assertInternalType( 'array', $result2 );
+		$this->assertIsArray( $result2 );
 		$this->assertCount( 1, $result2 );
 
 		$result3 = $this->myxmlrpcserver->wp_getComments( array( 1, 'author', 'author', array(
@@ -160,7 +160,7 @@ class Tests_XMLRPC_wp_getComments extends WP_XMLRPC_UnitTestCase {
 			'post_id' => $author_post_id
 		) ) );
 
-		$this->assertInternalType( 'array', $result4 );
+		$this->assertIsArray( $result4 );
 		$this->assertCount( 1, $result4 );
 	}
 
@@ -193,10 +193,24 @@ class Tests_XMLRPC_wp_getComments extends WP_XMLRPC_UnitTestCase {
 			'comment_approved' => 0,
 		));
 
+<<<<<<< HEAD
 		$result = $this->myxmlrpcserver->wp_getComments( array( 1, 'editor', 'editor', array(
 			'post_id' => $author_post_id
 		) ) );
 		$this->assertInternalType( 'array', $result );
+=======
+		$result = $this->myxmlrpcserver->wp_getComments(
+			array(
+				1,
+				'editor',
+				'editor',
+				array(
+					'post_id' => $author_post_id,
+				),
+			)
+		);
+		$this->assertIsArray( $result );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertCount( 1, $result );
 
 		$result2 = $this->myxmlrpcserver->wp_getComments( array( 1, 'editor', 'editor', array(
@@ -204,7 +218,7 @@ class Tests_XMLRPC_wp_getComments extends WP_XMLRPC_UnitTestCase {
 			'post_id' => $author_post_id
 		) ) );
 
-		$this->assertInternalType( 'array', $result2 );
+		$this->assertIsArray( $result2 );
 		$this->assertCount( 1, $result2 );
 	}
 }

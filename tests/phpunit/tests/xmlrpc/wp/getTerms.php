@@ -47,11 +47,19 @@ class Tests_XMLRPC_wp_getTerms extends WP_XMLRPC_UnitTestCase {
 		$results = $this->myxmlrpcserver->wp_getTerms( array( 1, 'editor', 'editor', 'category' ) );
 		$this->assertNotIXRError( $results );
 
+<<<<<<< HEAD
 		foreach( $results as $term ) {
 			$this->assertInternalType( 'int', $term['count'] );
 
 			// Check custom term meta
 			$this->assertInternalType( 'array', $term['custom_fields'] );
+=======
+		foreach ( $results as $term ) {
+			$this->assertIsInt( $term['count'] );
+
+			// Check custom term meta.
+			$this->assertIsArray( $term['custom_fields'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 			// We expect all other IDs to be strings not integers so we don't return something larger than an XMLRPC integer can describe.
 			$this->assertStringMatchesFormat( '%d', $term['term_id'] );

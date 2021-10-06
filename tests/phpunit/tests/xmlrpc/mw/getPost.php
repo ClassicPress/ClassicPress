@@ -47,6 +47,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
 
+<<<<<<< HEAD
 		// Check data types
 		$this->assertInternalType( 'string', $result['userid'] );
 		$this->assertInternalType( 'int', $result['postid'] );
@@ -69,6 +70,30 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertInternalType( 'array', $result['custom_fields'] );
 		$this->assertInternalType( 'string', $result['wp_post_format'] );
 		$this->assertInternalType( 'bool',   $result['sticky'] );
+=======
+		// Check data types.
+		$this->assertIsString( $result['userid'] );
+		$this->assertIsInt( $result['postid'] );
+		$this->assertIsString( $result['description'] );
+		$this->assertIsString( $result['title'] );
+		$this->assertIsString( $result['link'] );
+		$this->assertIsString( $result['permaLink'] );
+		$this->assertIsArray( $result['categories'] );
+		$this->assertIsString( $result['mt_excerpt'] );
+		$this->assertIsString( $result['mt_text_more'] );
+		$this->assertIsString( $result['wp_more_text'] );
+		$this->assertIsInt( $result['mt_allow_comments'] );
+		$this->assertIsInt( $result['mt_allow_pings'] );
+		$this->assertIsString( $result['mt_keywords'] );
+		$this->assertIsString( $result['wp_slug'] );
+		$this->assertIsString( $result['wp_password'] );
+		$this->assertIsString( $result['wp_author_id'] );
+		$this->assertIsString( $result['wp_author_display_name'] );
+		$this->assertIsString( $result['post_status'] );
+		$this->assertIsArray( $result['custom_fields'] );
+		$this->assertIsString( $result['wp_post_format'] );
+		$this->assertIsBool( $result['sticky'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		$post_data = get_post( self::$post_id );
 
@@ -98,7 +123,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
 
-		$this->assertInternalType( 'int', $result['wp_post_thumbnail'] );
+		$this->assertIsInt( $result['wp_post_thumbnail'] );
 		$this->assertSame( $attachment_id, $result['wp_post_thumbnail'] );
 
 		remove_theme_support( 'post-thumbnails' );

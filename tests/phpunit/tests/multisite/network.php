@@ -335,7 +335,11 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 		// We can't use wp_schedule_update_network_counts() because WP_INSTALLING is set
 		wp_schedule_event(time(), 'twicedaily', 'update_network_counts');
 
+<<<<<<< HEAD
 		$this->assertInternalType('int', wp_next_scheduled('update_network_counts'));
+=======
+			$this->assertIsInt( wp_next_scheduled( 'update_network_counts' ) );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	}
 
 	/**
@@ -348,7 +352,7 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 
 		$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		$blog_id = self::factory()->blog->create( array( 'user_id' => $user_id ) );
-		$this->assertInternalType( 'int', $blog_id );
+			$this->assertIsInt( $blog_id );
 
 		// set the dashboard blog to another one
 		update_site_option( 'dashboard_blog', $blog_id );

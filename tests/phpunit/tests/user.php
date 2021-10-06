@@ -188,7 +188,26 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Test the magic __unset method
+=======
+	 * @ticket 53235
+	 */
+	public function test_numeric_properties_should_be_cast_to_ints() {
+		$user     = new WP_User( self::$author_id );
+		$contexts = array( 'raw', 'edit', 'db', 'display', 'attribute', 'js' );
+
+		foreach ( $contexts as $context ) {
+			$user->filter = $context;
+			$user->init( $user->data );
+
+			$this->assertIsInt( $user->ID );
+		}
+	}
+
+	/**
+	 * Test the magic __unset() method.
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
@@ -778,7 +797,7 @@ class Tests_User extends WP_UnitTestCase {
 			'user_nicename' => 'something-short',
 		) );
 
-		$this->assertInternalType( 'int', $u );
+		$this->assertIsInt( $u );
 		$this->assertGreaterThan( 0, $u );
 
 		$user = new WP_User( $u );
@@ -1331,7 +1350,7 @@ class Tests_User extends WP_UnitTestCase {
 		$user_id = edit_user();
 		$user = get_user_by( 'ID', $user_id );
 
-		$this->assertInternalType( 'int', $user_id );
+		$this->assertIsInt( $user_id );
 		$this->assertInstanceOf( 'WP_User', $user );
 		$this->assertSame( 'nickname1', $user->nickname );
 
@@ -1341,9 +1360,24 @@ class Tests_User extends WP_UnitTestCase {
 
 		$user_id = edit_user( $user_id );
 
-		$this->assertInternalType( 'int', $user_id );
+		$this->assertIsInt( $user_id );
 		$this->assertSame( 'nickname_updated', $user->nickname );
 
+<<<<<<< HEAD
+=======
+		// Check not to change an old password if a new password contains only spaces. Ticket #42766.
+		$user           = get_user_by( 'ID', $user_id );
+		$old_pass       = $user->user_pass;
+		$_POST['pass2'] = '  ';
+		$_POST['pass1'] = '  ';
+
+		$user_id = edit_user( $user_id );
+		$user    = get_user_by( 'ID', $user_id );
+
+		$this->assertIsInt( $user_id );
+		$this->assertSame( $old_pass, $user->user_pass );
+
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		// Check updating user with missing second password.
 		$_POST['nickname'] = 'nickname_updated2';
 		$_POST['pass1'] = 'blank_pass2';
@@ -1360,7 +1394,7 @@ class Tests_User extends WP_UnitTestCase {
 		$user_id = edit_user( $user_id );
 		remove_action( 'check_passwords', array( $this, 'action_check_passwords_blank_password' ) );
 
-		$this->assertInternalType( 'int', $user_id );
+		$this->assertIsInt( $user_id );
 		$this->assertSame( 'nickname_updated2', $user->nickname );
 	}
 

@@ -104,6 +104,26 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 				),
 			);
 		}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Filters 'oembed_result' to ensure correct type.
+	 *
+	 * @param string|false $data The returned oEmbed HTML.
+	 * @param string       $url  URL of the content to be embedded.
+	 * @param array        $args Optional arguments, usually passed from a shortcode.
+	 * @return string
+	 */
+	public function filter_oembed_result( $data, $url, $args ) {
+		if ( ! is_string( $data ) && false !== $data ) {
+			$this->fail( 'Unexpected type for $data.' );
+		}
+		$this->assertIsString( $url );
+		$this->assertIsArray( $args );
+		$this->oembed_result_filter_count++;
+		return $data;
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	}
 
 	function test_wp_oembed_ensure_format() {
@@ -222,7 +242,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertInternalType( 'array', $data );
+		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
 	}
 
@@ -242,7 +262,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertInternalType( 'array', $data );
+		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
 
 		$this->assertArrayHasKey( 'version', $data );
@@ -283,7 +303,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertInternalType( 'array', $data );
+		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
 
 		$this->assertArrayHasKey( 'version', $data );
@@ -324,7 +344,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertInternalType( 'array', $data );
+		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
 
 		$this->assertArrayHasKey( 'version', $data );
@@ -365,7 +385,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertInternalType( 'array', $data );
+		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
 
 		restore_current_blog();
@@ -510,13 +530,41 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$data = $response->get_data();
 
 		$this->assertNotEmpty( $data );
-		$this->assertInternalType( 'object', $data );
+		$this->assertIsObject( $data );
 		$this->assertSame( 'YouTube', $data->provider_name );
 		$this->assertSame( 'https://i.ytimg.com/vi/' . self::YOUTUBE_VIDEO_ID . '/hqdefault.jpg', $data->thumbnail_url );
 		$this->assertEquals( $data->width, $request['maxwidth'] );
 		$this->assertEquals( $data->height, $request['maxheight'] );
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * @ticket 45447
+	 *
+	 * @see wp_maybe_load_embeds()
+	 */
+	public function test_proxy_with_classic_embed_provider() {
+		wp_set_current_user( self::$editor );
+		$request = new WP_REST_Request( 'GET', '/oembed/1.0/proxy' );
+		$request->set_param( 'url', 'https://www.youtube.com/embed/' . self::YOUTUBE_VIDEO_ID );
+		$request->set_param( 'maxwidth', 456 );
+		$request->set_param( 'maxheight', 789 );
+		$request->set_param( '_wpnonce', wp_create_nonce( 'wp_rest' ) );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 2, $this->request_count );
+
+		// Test data object.
+		$data = $response->get_data();
+
+		$this->assertNotEmpty( $data );
+		$this->assertIsObject( $data );
+		$this->assertIsString( $data->html );
+		$this->assertIsArray( $data->scripts );
+	}
+
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	public function test_proxy_with_invalid_oembed_provider_no_discovery() {
 		wp_set_current_user( self::$editor );
 
@@ -553,4 +601,150 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$data = $response->get_data();
 		$this->assertSame( $data['code'], 'rest_invalid_param' );
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * @ticket 45142
+	 */
+	function test_proxy_with_internal_url() {
+		wp_set_current_user( self::$editor );
+
+		$user = self::factory()->user->create_and_get(
+			array(
+				'display_name' => 'John Doe',
+			)
+		);
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_author' => $user->ID,
+				'post_title'  => 'Hello World',
+			)
+		);
+
+		$request = new WP_REST_Request( 'GET', '/oembed/1.0/proxy' );
+		$request->set_param( 'url', get_permalink( $post->ID ) );
+		$request->set_param( 'maxwidth', 400 );
+
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+
+		$data = (array) $data;
+
+		$this->assertNotEmpty( $data );
+
+		$this->assertArrayHasKey( 'version', $data );
+		$this->assertArrayHasKey( 'provider_name', $data );
+		$this->assertArrayHasKey( 'provider_url', $data );
+		$this->assertArrayHasKey( 'author_name', $data );
+		$this->assertArrayHasKey( 'author_url', $data );
+		$this->assertArrayHasKey( 'title', $data );
+		$this->assertArrayHasKey( 'type', $data );
+		$this->assertArrayHasKey( 'width', $data );
+
+		$this->assertSame( '1.0', $data['version'] );
+		$this->assertSame( get_bloginfo( 'name' ), $data['provider_name'] );
+		$this->assertSame( home_url(), $data['provider_url'] );
+		$this->assertSame( $user->display_name, $data['author_name'] );
+		$this->assertSame( get_author_posts_url( $user->ID, $user->user_nicename ), $data['author_url'] );
+		$this->assertSame( $post->post_title, $data['title'] );
+		$this->assertSame( 'rich', $data['type'] );
+		$this->assertTrue( $data['width'] <= $request['maxwidth'] );
+	}
+
+	/**
+	 * @ticket 45142
+	 */
+	function test_proxy_with_static_front_page_url() {
+		wp_set_current_user( self::$editor );
+
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_title'  => 'Front page',
+				'post_type'   => 'page',
+				'post_author' => 0,
+			)
+		);
+
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', $post->ID );
+
+		$request = new WP_REST_Request( 'GET', '/oembed/1.0/proxy' );
+		$request->set_param( 'url', home_url() );
+		$request->set_param( 'maxwidth', 400 );
+
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertIsObject( $data );
+
+		$data = (array) $data;
+
+		$this->assertNotEmpty( $data );
+
+		$this->assertArrayHasKey( 'version', $data );
+		$this->assertArrayHasKey( 'provider_name', $data );
+		$this->assertArrayHasKey( 'provider_url', $data );
+		$this->assertArrayHasKey( 'author_name', $data );
+		$this->assertArrayHasKey( 'author_url', $data );
+		$this->assertArrayHasKey( 'title', $data );
+		$this->assertArrayHasKey( 'type', $data );
+		$this->assertArrayHasKey( 'width', $data );
+
+		$this->assertSame( '1.0', $data['version'] );
+		$this->assertSame( get_bloginfo( 'name' ), $data['provider_name'] );
+		$this->assertSame( home_url(), $data['provider_url'] );
+		$this->assertSame( get_bloginfo( 'name' ), $data['author_name'] );
+		$this->assertSame( home_url(), $data['author_url'] );
+		$this->assertSame( $post->post_title, $data['title'] );
+		$this->assertSame( 'rich', $data['type'] );
+		$this->assertTrue( $data['width'] <= $request['maxwidth'] );
+
+		update_option( 'show_on_front', 'posts' );
+	}
+
+	/**
+	 * @ticket 45142
+	 */
+	public function test_proxy_filters_result_of_untrusted_oembed_provider() {
+		wp_set_current_user( self::$editor );
+
+		$request = new WP_REST_Request( 'GET', '/oembed/1.0/proxy' );
+		$request->set_param( 'url', self::UNTRUSTED_PROVIDER_URL );
+		$request->set_param( 'maxwidth', 456 );
+		$request->set_param( 'maxheight', 789 );
+		$request->set_param( '_wpnonce', wp_create_nonce( 'wp_rest' ) );
+
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 1, $this->oembed_result_filter_count );
+		$this->assertIsObject( $data );
+		$this->assertSame( 'Untrusted', $data->provider_name );
+		$this->assertSame( self::UNTRUSTED_PROVIDER_URL, $data->provider_url );
+		$this->assertSame( 'rich', $data->type );
+		$this->assertFalse( $data->html );
+	}
+
+	/**
+	 * @ticket 45142
+	 */
+	public function test_proxy_does_not_filter_result_of_trusted_oembed_provider() {
+		wp_set_current_user( self::$editor );
+
+		$request = new WP_REST_Request( 'GET', '/oembed/1.0/proxy' );
+		$request->set_param( 'url', 'https://www.youtube.com/watch?v=' . self::YOUTUBE_VIDEO_ID );
+		$request->set_param( 'maxwidth', 456 );
+		$request->set_param( 'maxheight', 789 );
+		$request->set_param( '_wpnonce', wp_create_nonce( 'wp_rest' ) );
+
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 1, $this->oembed_result_filter_count );
+		$this->assertIsObject( $data );
+
+		$this->assertStringStartsWith( '<b>Unfiltered</b>', $data->html );
+	}
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 }

@@ -378,8 +378,13 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?multiple-location-headers=1';
 		$res = wp_remote_head( $url, array( 'timeout' => 30 ) );
 
+<<<<<<< HEAD
 		$this->skipTestOnFailure( $res );
 		$this->assertInternalType( 'array', wp_remote_retrieve_header( $res, 'location' ) );
+=======
+		$this->skipTestOnTimeout( $res );
+		$this->assertIsArray( wp_remote_retrieve_header( $res, 'location' ) );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertCount( 2, wp_remote_retrieve_header( $res, 'location' ) );
 
 		$res = wp_remote_get( $url, array( 'timeout' => 30 ) );

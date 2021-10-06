@@ -27,11 +27,16 @@ class Tests_XMLRPC_wp_uploadFile extends WP_XMLRPC_UnitTestCase {
 		$result = $this->myxmlrpcserver->mw_newMediaObject( array( 0, 'editor', 'editor', $data ) );
 		$this->assertNotIXRError( $result );
 
+<<<<<<< HEAD
 		// check data types
 		$this->assertInternalType( 'string', $result['id'] );
+=======
+		// Check data types.
+		$this->assertIsString( $result['id'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertStringMatchesFormat( '%d', $result['id'] );
-		$this->assertInternalType( 'string', $result['file'] );
-		$this->assertInternalType( 'string', $result['url'] );
-		$this->assertInternalType( 'string', $result['type'] );
+		$this->assertIsString( $result['file'] );
+		$this->assertIsString( $result['url'] );
+		$this->assertIsString( $result['type'] );
 	}
 }

@@ -302,7 +302,11 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			'query_var' => 'bar',
 		) );
 
+<<<<<<< HEAD
 		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars ) );
+=======
+		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 		$this->assertFalse( array_search( 'bar', $wp->public_query_vars ) );
 	}
@@ -405,8 +409,8 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			'taxonomies' => array( 'category', 'post_tag' ),
 		) );
 
-		$this->assertInternalType( 'int', array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
-		$this->assertInternalType( 'int', array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
+		$this->assertIsInt( array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
+		$this->assertIsInt( array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 		$this->assertFalse( array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
 		$this->assertFalse( array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
@@ -456,8 +460,8 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			'public' => true,
 		) );
 
-		$this->assertInternalType( 'object', $wp_post_types['foo'] );
-		$this->assertInternalType( 'object', get_post_type_object( 'foo' ) );
+		$this->assertIsObject( $wp_post_types['foo'] );
+		$this->assertIsObject( get_post_type_object( 'foo' ) );
 
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 

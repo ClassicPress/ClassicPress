@@ -568,4 +568,40 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$this->assertSame( $expected, $q->found_posts );
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * @ticket 42469
+	 */
+	public function test_found_posts_should_be_integer_not_string() {
+		$this->post_id = self::factory()->post->create();
+
+		$q = new WP_Query(
+			array(
+				'posts_per_page' => 1,
+			)
+		);
+
+		$this->assertIsInt( $q->found_posts );
+	}
+
+	/**
+	 * @ticket 42469
+	 */
+	public function test_found_posts_should_be_integer_even_if_found_posts_filter_returns_string_value() {
+		$this->post_id = self::factory()->post->create();
+
+		add_filter( 'found_posts', '__return_empty_string' );
+
+		$q = new WP_Query(
+			array(
+				'posts_per_page' => 1,
+			)
+		);
+
+		remove_filter( 'found_posts', '__return_empty_string' );
+
+		$this->assertIsInt( $q->found_posts );
+	}
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 }

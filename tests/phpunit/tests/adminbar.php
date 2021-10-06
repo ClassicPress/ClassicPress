@@ -157,7 +157,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 
 		// get primary blog
 		$primary = get_active_blog_for_user( self::$editor_id );
-		$this->assertInternalType( 'object', $primary );
+		$this->assertIsObject( $primary );
 
 		// No Site menu as the user isn't a member of this blog
 		$this->assertNull( $node_site_name );

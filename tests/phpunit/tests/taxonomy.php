@@ -707,7 +707,11 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post', array( 'query_var' => 'bar' ) );
 
+<<<<<<< HEAD
 		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars ) );
+=======
+		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
 		$this->assertFalse( array_search( 'bar', $wp->public_query_vars ) );
 	}
@@ -722,7 +726,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post', array( 'query_var' => 'bar', 'rewrite' => true ) );
 
-		$this->assertInternalType( 'array', $wp_rewrite->extra_permastructs['foo'] );
+		$this->assertIsArray( $wp_rewrite->extra_permastructs['foo'] );
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
 		$this->assertFalse( isset($wp_rewrite->extra_permastructs['foo'] ) );
 	}
@@ -755,8 +759,8 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post' );
 
-		$this->assertInternalType( 'object', $wp_taxonomies['foo'] );
-		$this->assertInternalType( 'object', get_taxonomy( 'foo' ) );
+		$this->assertIsObject( $wp_taxonomies['foo'] );
+		$this->assertIsObject( get_taxonomy( 'foo' ) );
 
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
 

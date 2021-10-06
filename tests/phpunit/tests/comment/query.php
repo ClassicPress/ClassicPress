@@ -913,9 +913,9 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$comment_3 = self::factory()->comment->create( array( 'comment_post_ID' => self::$post_id, 'user_id' => 1, 'comment_approved' => '1' ) );
 
 		// Ensure we are dealing with integers, and not objects.
-		$this->assertInternalType( 'integer', $comment_1 );
-		$this->assertInternalType( 'integer', $comment_2 );
-		$this->assertInternalType( 'integer', $comment_3 );
+		$this->assertIsInt( $comment_1 );
+		$this->assertIsInt( $comment_2 );
+		$this->assertIsInt( $comment_3 );
 
 		$comment_ids = get_comments( array( 'fields' => 'ids' ) );
 		$this->assertCount( 3, $comment_ids );
@@ -1962,9 +1962,9 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 		$this->assertNull( $query1->query_vars );
 		$this->assertEmpty( $query1->comments );
 		$comments = $query1->query( array( 'status' => 'all' ) );
-		$this->assertInternalType( 'array', $query1->query_vars );
+		$this->assertIsArray( $query1->query_vars );
 		$this->assertNotEmpty( $query1->comments );
-		$this->assertInternalType( 'array', $query1->comments );
+		$this->assertIsArray( $query1->comments );
 
 		$query2 = new WP_Comment_Query( array( 'status' => 'all' ) );
 		$this->assertNotEmpty( $query2->query_vars );

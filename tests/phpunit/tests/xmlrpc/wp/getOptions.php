@@ -15,15 +15,20 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
+<<<<<<< HEAD
 		$this->assertInternalType( 'array', $result );
 		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
+=======
+		$this->assertIsArray( $result );
+		$this->assertSame( 'WordPress', $result['software_name']['value'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 	}
 
 	function test_option_value() {
 		$this->make_user_by_role( 'administrator' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'administrator', 'administrator', 'default_comment_status' ) );
-		$this->assertInternalType( 'array', $result );
+		$this->assertIsArray( $result );
 
 		$this->assertSame( get_option( 'default_comment_status' ), $result['default_comment_status']['value'] );
 		$this->assertFalse( $result['default_comment_status']['readonly'] );
@@ -37,7 +42,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'subscriber', 'subscriber' ) );
-		$this->assertInternalType( 'array', $result );
+		$this->assertIsArray( $result );
 
 		// Read Only options
 		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );
@@ -126,7 +131,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 		$this->make_user_by_role( 'administrator' );
 
 		$result = $this->myxmlrpcserver->wp_getOptions( array( 1, 'administrator', 'administrator' ) );
-		$this->assertInternalType( 'array', $result );
+		$this->assertIsArray( $result );
 
 		// Read Only options
 		$this->assertSame( 'ClassicPress', $result['software_name']['value'] );

@@ -76,12 +76,21 @@ class Tests_XMLRPC_wp_getTerm extends WP_XMLRPC_UnitTestCase {
 		$this->assertNotIXRError( $result );
 		$this->assertEquals( $result, $term );
 
+<<<<<<< HEAD
 		// Check DataTypes
 		$this->assertInternalType( 'string', $result['name'] );
 		$this->assertInternalType( 'string', $result['slug'] );
 		$this->assertInternalType( 'string', $result['taxonomy'] );
 		$this->assertInternalType( 'string', $result['description'] );
 		$this->assertInternalType( 'int', $result['count'] );
+=======
+		// Check data types.
+		$this->assertIsString( $result['name'] );
+		$this->assertIsString( $result['slug'] );
+		$this->assertIsString( $result['taxonomy'] );
+		$this->assertIsString( $result['description'] );
+		$this->assertIsInt( $result['count'] );
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 
 		// We expect all ID's to be strings not integers so we don't return something larger than an XMLRPC integer can describe.
 		$this->assertStringMatchesFormat( '%d', $result['term_id'] );
@@ -117,7 +126,7 @@ class Tests_XMLRPC_wp_getTerm extends WP_XMLRPC_UnitTestCase {
 		) );
 		$this->assertNotIXRError( $result );
 
-		$this->assertInternalType( 'array', $result['custom_fields'] );
+		$this->assertIsArray( $result['custom_fields'] );
 		$term_meta = get_term_meta( self::$term_id, '', true );
 		$this->assertSame( $term_meta['foo'][0], $result['custom_fields'][0]['value'] );
 	}

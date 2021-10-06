@@ -106,8 +106,13 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		for ($i=0; $i<3; $i++ ) {
 			$term = "term_{$i}";
 			$result = wp_insert_term( $term, $this->taxonomy );
+<<<<<<< HEAD
 			$this->assertInternalType( 'array', $result );
 			$term_id[$term] = $result['term_id'];
+=======
+			$this->assertIsArray( $result );
+			$term_id[ $term ] = $result['term_id'];
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		}
 
 		foreach ( $ids as $id ) {
@@ -241,8 +246,13 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		for ($i=0; $i<3; $i++ ) {
 			$term = "term_{$i}";
 			$result = wp_insert_term( $term, $this->taxonomy );
+<<<<<<< HEAD
 			$this->assertInternalType( 'array', $result );
 			$terms_1[$i] = $result['term_id'];
+=======
+			$this->assertIsArray( $result );
+			$terms_1[ $i ] = $result['term_id'];
+>>>>>>> bca693b190 (Build/Test Tools: Replace `assertInternalType()` usage in unit tests.)
 		}
 
 		// second set: one of the original terms, plus one new term
