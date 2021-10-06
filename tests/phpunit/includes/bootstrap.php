@@ -40,6 +40,67 @@ if ( version_compare( tests_get_phpunit_version(), '5.4', '<' ) || version_compa
 	exit( 1 );
 }
 
+<<<<<<< HEAD
+=======
+// Register a custom autoloader for the PHPUnit 9.x Mockobject classes for compatibility with PHP 8.0.
+require_once __DIR__ . '/class-mockobject-autoload.php';
+spl_autoload_register( 'MockObject_Autoload::load', true, true );
+
+// Check that the PHPUnit Polyfills autoloader exists.
+$phpunit_polyfills_autoloader = __DIR__ . '/../../../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+if ( ! file_exists( $phpunit_polyfills_autoloader ) ) {
+	echo "Error: You need to run `composer update` before running the tests.\n";
+	echo "You can still use a PHPUnit phar to run them, but the dependencies do need to be installed.\n";
+	exit( 1 );
+}
+
+// If running core tests, check if all the required PHP extensions are loaded before running the test suite.
+if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+	$required_extensions = array(
+		'gd',
+	);
+	$missing_extensions  = array();
+
+	foreach ( $required_extensions as $extension ) {
+		if ( ! extension_loaded( $extension ) ) {
+			$missing_extensions[] = $extension;
+		}
+	}
+
+	if ( $missing_extensions ) {
+		printf(
+			"Error: The following required PHP extensions are missing from the testing environment: %s.\n",
+			implode( ', ', $missing_extensions )
+		);
+		echo "Please make sure they are installed and enabled.\n",
+		exit( 1 );
+	}
+}
+
+$required_constants = array(
+	'WP_TESTS_DOMAIN',
+	'WP_TESTS_EMAIL',
+	'WP_TESTS_TITLE',
+	'WP_PHP_BINARY',
+);
+$missing_constants  = array();
+
+foreach ( $required_constants as $constant ) {
+	if ( ! defined( $constant ) ) {
+		$missing_constants[] = $constant;
+	}
+}
+
+if ( $missing_constants ) {
+	printf(
+		"Error: The following required constants are not defined: %s.\n",
+		implode( ', ', $missing_constants )
+	);
+	echo "Please check out `wp-tests-config-sample.php` for an example.\n",
+	exit( 1 );
+}
+
+>>>>>>> 47303b1f95 (Build/Test Tools: Unify the PHPUnit adapter TestCases.)
 tests_reset__SERVER();
 
 define( 'WP_TESTS_TABLE_PREFIX', $table_prefix );
@@ -113,6 +174,7 @@ require_once ABSPATH . '/wp-settings.php';
 // Delete any default posts & related data
 _delete_all_posts();
 
+<<<<<<< HEAD
 if ( version_compare( tests_get_phpunit_version(), '7.0', '>=' ) ) {
 	require dirname( __FILE__ ) . '/phpunit7/testcase.php';
 } else {
@@ -128,6 +190,35 @@ require dirname( __FILE__ ) . '/testcase-canonical.php';
 require dirname( __FILE__ ) . '/exceptions.php';
 require dirname( __FILE__ ) . '/utils.php';
 require dirname( __FILE__ ) . '/spy-rest-server.php';
+=======
+// Load class aliases for compatibility with PHPUnit 6+.
+if ( version_compare( tests_get_phpunit_version(), '6.0', '>=' ) ) {
+	require __DIR__ . '/phpunit6/compat.php';
+}
+
+// Load the PHPUnit Polyfills autoloader (check for existence of the file is done earlier in the script).
+require_once $phpunit_polyfills_autoloader;
+unset( $phpunit_polyfills_autoloader );
+
+require __DIR__ . '/abstract-testcase.php';
+require __DIR__ . '/testcase.php';
+require __DIR__ . '/testcase-rest-api.php';
+require __DIR__ . '/testcase-rest-controller.php';
+require __DIR__ . '/testcase-rest-post-type-controller.php';
+require __DIR__ . '/testcase-xmlrpc.php';
+require __DIR__ . '/testcase-ajax.php';
+require __DIR__ . '/testcase-canonical.php';
+require __DIR__ . '/testcase-xml.php';
+require __DIR__ . '/exceptions.php';
+require __DIR__ . '/utils.php';
+require __DIR__ . '/spy-rest-server.php';
+require __DIR__ . '/class-wp-rest-test-search-handler.php';
+require __DIR__ . '/class-wp-rest-test-configurable-controller.php';
+require __DIR__ . '/class-wp-fake-block-type.php';
+require __DIR__ . '/class-wp-sitemaps-test-provider.php';
+require __DIR__ . '/class-wp-sitemaps-empty-test-provider.php';
+require __DIR__ . '/class-wp-sitemaps-large-test-provider.php';
+>>>>>>> 47303b1f95 (Build/Test Tools: Unify the PHPUnit adapter TestCases.)
 
 /**
  * A class to handle additional command line arguments passed to the script.
