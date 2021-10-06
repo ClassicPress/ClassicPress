@@ -384,22 +384,6 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		$this->assertSame( array( 'status' => 403 ), $error->error_data[ $code2 ] );
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 46191
-	 */
-	public function test_error_to_response_with_additional_data() {
-		$error = new WP_Error( 'test', 'test', array( 'status' => 400 ) );
-		$error->add_data( 'more_data' );
-
-		$response = rest_convert_error_to_response( $error );
-		$this->assertSame( 400, $response->get_status() );
-		$this->assertSame( 'more_data', $response->get_data()['data'] );
-		$this->assertSame( array( array( 'status' => 400 ) ), $response->get_data()['additional_data'] );
-	}
-
->>>>>>> 3d259c2b22 (Tests: Use `assertSame()` in some newly introduced tests.)
 	public function test_rest_error() {
 		$data = array(
 			'code'    => 'wp-api-test-error',
