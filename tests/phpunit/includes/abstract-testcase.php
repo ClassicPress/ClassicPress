@@ -527,7 +527,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 *
 	 * This method is only left in place for backward compatibility reasons.
 	 *
-	 * @deprecated 5.9.0 Use the PHPUnit native expectException*() methods directly.
+	 * @deprecated WP-5.9.0 Use the PHPUnit native expectException*() methods directly.
 	 *
 	 * @param mixed      $exception
 	 * @param string     $message
