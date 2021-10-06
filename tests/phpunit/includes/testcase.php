@@ -16,18 +16,13 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	/**
 	 * Asserts that a condition is not false.
 	 *
-<<<<<<< HEAD
-	 * @param bool   $condition
-	 * @param string $message
-=======
 	 * This method has been backported from a more recent PHPUnit version,
 	 * as tests running on PHP 5.2 use PHPUnit 3.6.x.
 	 *
-	 * @since 4.7.4
+	 * @since WP-4.7.4
 	 *
 	 * @param bool   $condition Condition to check.
 	 * @param string $message   Optional. Message to display when the assertion fails.
->>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	 *
 	 * @throws PHPUnit_Framework_AssertionFailedError
 	 */
