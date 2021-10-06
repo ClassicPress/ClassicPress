@@ -19,7 +19,7 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	 * This method has been backported from a more recent PHPUnit version,
 	 * as tests running on PHP 5.6 use PHPUnit 5.7.x.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param mixed  $expected First value to compare.
 	 * @param mixed  $actual   Second value to compare.
@@ -51,7 +51,7 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	 * When the test suite is updated for compatibility with PHPUnit 9.x,
 	 * this override can be removed.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param string $original_class_name
 	 * @param string $mock_class_name
@@ -86,7 +86,7 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	 * When the test suite is updated for compatibility with PHPUnit 9.x,
 	 * this override can be removed.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param string|string[] $class_name
 	 */
