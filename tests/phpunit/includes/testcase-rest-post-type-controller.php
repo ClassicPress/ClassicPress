@@ -5,15 +5,6 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	protected function check_post_data( $post, $data, $context, $links ) {
 		$post_type_obj = get_post_type_object( $post->post_type );
 
-<<<<<<< HEAD
-		// Standard fields
-		$this->assertEquals( $post->ID, $data['id'] );
-		$this->assertEquals( $post->post_name, $data['slug'] );
-		$this->assertEquals( get_permalink( $post->ID ), $data['link'] );
-		if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
-			$post_date_gmt = date( 'Y-m-d H:i:s', strtotime( $post->post_date ) - ( get_option( 'gmt_offset' ) * 3600 ) );
-			$this->assertEquals( mysql_to_rfc3339( $post_date_gmt ), $data['date_gmt'] );
-=======
 		// Standard fields.
 		$this->assertSame( $post->ID, $data['id'] );
 		$this->assertSame( $post->post_name, $data['slug'] );
@@ -21,20 +12,14 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 		if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
 			$post_date_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $post->post_date ) - ( get_option( 'gmt_offset' ) * 3600 ) );
 			$this->assertSame( mysql_to_rfc3339( $post_date_gmt ), $data['date_gmt'] );
->>>>>>> 62d5c54b67 (Tests: Replace most instances of `assertEquals()` in `phpunit/includes/` with `assertSame()`.)
 		} else {
 			$this->assertSame( mysql_to_rfc3339( $post->post_date_gmt ), $data['date_gmt'] );
 		}
 		$this->assertSame( mysql_to_rfc3339( $post->post_date ), $data['date'] );
 
 		if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
-<<<<<<< HEAD
-			$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
-			$this->assertEquals( mysql_to_rfc3339( $post_modified_gmt ), $data['modified_gmt'] );
-=======
 			$post_modified_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
 			$this->assertSame( mysql_to_rfc3339( $post_modified_gmt ), $data['modified_gmt'] );
->>>>>>> 62d5c54b67 (Tests: Replace most instances of `assertEquals()` in `phpunit/includes/` with `assertSame()`.)
 		} else {
 			$this->assertSame( mysql_to_rfc3339( $post->post_modified_gmt ), $data['modified_gmt'] );
 		}
@@ -141,13 +126,8 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 
 		if ( post_type_supports( $post->post_type, 'excerpt' ) ) {
 			if ( empty( $post->post_password ) ) {
-<<<<<<< HEAD
-				// TODO: apply excerpt filter for more accurate testing.
-				$this->assertEquals( wpautop( $post->post_excerpt ), $data['excerpt']['rendered'] );
-=======
 				// TODO: Apply excerpt filter for more accurate testing.
 				$this->assertSame( wpautop( $post->post_excerpt ), $data['excerpt']['rendered'] );
->>>>>>> 62d5c54b67 (Tests: Replace most instances of `assertEquals()` in `phpunit/includes/` with `assertSame()`.)
 			} else {
 				// TODO: better testing for excerpts for password protected posts.
 			}

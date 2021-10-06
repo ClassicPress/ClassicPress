@@ -7,13 +7,8 @@ abstract class WP_Test_REST_TestCase extends WP_UnitTestCase {
 			$response = $response->as_error();
 		}
 
-<<<<<<< HEAD
-		$this->assertInstanceOf( 'WP_Error', $response );
-		$this->assertEquals( $code, $response->get_error_code() );
-=======
 		$this->assertWPError( $response );
 		$this->assertSame( $code, $response->get_error_code() );
->>>>>>> 62d5c54b67 (Tests: Replace most instances of `assertEquals()` in `phpunit/includes/` with `assertSame()`.)
 
 		if ( null !== $status ) {
 			$data = $response->get_error_data();
