@@ -37,6 +37,7 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 
 		static::assertThat( $actual, $constraint, $message );
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Returns a mock object for the specified abstract class with all abstract
@@ -97,4 +98,6 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 
 		return parent::getMockBuilder( $class_name );
 	}
+=======
+>>>>>>> c31a551273 (Tests: Backport two changes from PHPUnit 9.3:)
 }
