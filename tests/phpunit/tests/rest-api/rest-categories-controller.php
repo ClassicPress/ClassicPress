@@ -531,17 +531,9 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 50, $headers['X-WP-Total'] );
 		$this->assertSame( 5, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 10, $response->get_data() );
-		$next_link = add_query_arg( array(
-			'page'    => 2,
-<<<<<<< HEAD
-			), rest_url( 'wp/v2/categories' ) );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// 3rd page
-		$this->factory->category->create( array(
-				'name'   => 'Category 51',
-				) );
-=======
+		$next_link = add_query_arg(
+			array(
+				'page'    => 2,
 			),
 			rest_url( 'wp/v2/categories' )
 		);
@@ -550,9 +542,6 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 
 		// 3rd page.
 		$this->factory->category->create();
-		$total_categories++;
-		$total_pages++;
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
@@ -562,15 +551,6 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertCount( 10, $response->get_data() );
 		$prev_link = add_query_arg( array(
 			'page'    => 2,
-<<<<<<< HEAD
-			), rest_url( 'wp/v2/categories' ) );
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$next_link = add_query_arg( array(
-			'page'    => 4,
-			), rest_url( 'wp/v2/categories' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// Last page
-=======
 			),
 			rest_url( 'wp/v2/categories' )
 		);
@@ -584,7 +564,6 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 
 		// Last page.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
@@ -592,17 +571,9 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 51, $headers['X-WP-Total'] );
 		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 1, $response->get_data() );
-<<<<<<< HEAD
-		$prev_link = add_query_arg( array(
-			'page'    => 5,
-			), rest_url( 'wp/v2/categories' ) );
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-		// Out of bounds
-=======
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages - 1,
+				'page' => 5,
 			),
 			rest_url( 'wp/v2/categories' )
 		);
@@ -610,7 +581,6 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
 
 		// Out of bounds.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
@@ -618,22 +588,14 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 51, $headers['X-WP-Total'] );
 		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 0, $response->get_data() );
-<<<<<<< HEAD
-		$prev_link = add_query_arg( array(
-			'page'    => 6,
-			), rest_url( 'wp/v2/categories' ) );
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-=======
 		$prev_link = add_query_arg(
 			array(
-				'page' => $total_pages,
+				'page' => 6,
 			),
 			rest_url( 'wp/v2/categories' )
 		);
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_get_items_per_page_exceeds_number_of_items() {

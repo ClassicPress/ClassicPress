@@ -274,22 +274,11 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			),
 			rest_url( 'wp/v2/users' )
 		);
-<<<<<<< HEAD
-		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// 3rd page
-		$this->factory->user->create( array(
-				'name'   => 'User 51',
-				) );
-=======
 		$this->assertStringNotContainsString( 'rel="prev"', $headers['Link'] );
 		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 
 		// 3rd page.
 		$this->factory->user->create();
-		$total_users++;
-		$total_pages++;
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
@@ -303,14 +292,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			),
 			rest_url( 'wp/v2/users' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$next_link = add_query_arg( array(
-			'page'    => 4,
-			), rest_url( 'wp/v2/users' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// Last page
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg(
 			array(
@@ -321,7 +302,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 
 		// Last page.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
@@ -334,16 +314,10 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			),
 			rest_url( 'wp/v2/users' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-		// Out of bounds
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
 
 		// Out of bounds.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/users' );
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
@@ -356,13 +330,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 			),
 			rest_url( 'wp/v2/users' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_get_items_per_page() {

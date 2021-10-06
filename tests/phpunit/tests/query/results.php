@@ -183,8 +183,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			5 => 'embedded-video',
 			6 => 'contributor-post-approved',
 			7 => 'one-comment',
-			8 => 'no-comments',
-			9 => 'many-trackbacks',
+			8 => 'many-trackbacks',
+			9 => 'no-comments',
 		);
 
 		$this->assertSame( $expected, wp_list_pluck( $posts, 'post_name' ) );
@@ -267,8 +267,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		$expected = array (
 			0 => 'contributor-post-approved',
 			1 => 'one-comment',
-			2 => 'no-comments',
-			3 => 'many-trackbacks',
+			2 => 'many-trackbacks',
+			3 => 'no-comments',
 			4 => 'one-trackback',
 			5 => 'comment-test',
 			6 => 'lorem-ipsum',
@@ -286,8 +286,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		$posts = $this->q->query('paged=4&posts_per_page=4');
 
 		$expected = array (
-			0 => 'no-comments',
-			1 => 'many-trackbacks',
+			0 => 'many-trackbacks',
+			1 => 'no-comments',
 			2 => 'one-trackback',
 			3 => 'comment-test',
 		);
@@ -713,12 +713,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		global $wpdb;
 		$this->q->query( array( 'perm' => 'readable', 'post_status' => array( 'publish', 'private' ) ) );
 		$this->assertTrue( $this->q->have_posts() );
-<<<<<<< HEAD
-		$this->assertContains( "(({$wpdb->posts}.post_status = 'publish') OR ({$wpdb->posts}.post_author = 0 AND ({$wpdb->posts}.post_status = 'private')))",
-=======
 		$this->assertStringContainsString(
 			"(({$wpdb->posts}.post_status = 'publish') OR ({$wpdb->posts}.post_author = 0 AND ({$wpdb->posts}.post_status = 'private')))",
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			$this->q->request
 		);
 		$this->assertStringNotContainsString( "({$wpdb->posts}.post_status = 'publish') AND", $this->q->request );

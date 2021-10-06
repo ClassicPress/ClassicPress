@@ -108,11 +108,7 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 			'selected' => 'test_category_2',
 		) );
 
-<<<<<<< HEAD
-		$this->assertContains( "value=\"test_category_2\" selected=\"selected\"", $found );
-=======
 		$this->assertStringContainsString( 'value="test_category_2" selected="selected"', $found );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

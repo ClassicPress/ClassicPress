@@ -162,12 +162,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'posts_per_page' => -1, // Or the query will short-circuit.
 		) );
 
-<<<<<<< HEAD
-		$this->assertContains( "post_status = 'foo", $q->request );
-		set_current_screen( 'front' );
-=======
 		$this->assertStringContainsString( "post_status = 'foo", $q->request );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_private_statuses_should_be_included_when_current_user_can_read_private_posts() {

@@ -703,22 +703,15 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			),
 			rest_url( '/wp/v2/comments' )
 		);
-<<<<<<< HEAD
-		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// 3rd page
-		$this->factory->comment->create( array(
-				'comment_content'   => 'Comment 51',
-=======
 		$this->assertStringNotContainsString( 'rel="prev"', $headers['Link'] );
 		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 
 		// 3rd page.
 		$this->factory->comment->create(
 			array(
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
-				'comment_post_ID'   => self::$post_id,
-				) );
+				'comment_post_ID'   => 'Comment 51',
+			)
+		);
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
@@ -731,14 +724,6 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			),
 			rest_url( '/wp/v2/comments' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$next_link = add_query_arg( array(
-			'page'    => 4,
-			), rest_url( '/wp/v2/comments' ) );
-		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
-		// Last page
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg(
 			array(
@@ -749,7 +734,6 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 
 		// Last page.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
@@ -762,16 +746,10 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			),
 			rest_url( '/wp/v2/comments' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-		// Out of bounds
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
 
 		// Out of bounds.
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
@@ -784,13 +762,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			),
 			rest_url( '/wp/v2/comments' )
 		);
-<<<<<<< HEAD
-		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
-		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
-=======
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_get_comments_invalid_date() {

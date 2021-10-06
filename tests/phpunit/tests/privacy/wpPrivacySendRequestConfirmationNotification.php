@@ -204,46 +204,4 @@ class Tests_User_WpPrivacySendRequestConfirmationNotification extends WP_UnitTes
 		$email_text = 'Custom content containing email address:' . $email_data['user_email'];
 		return $email_text;
 	}
-
-<<<<<<< HEAD
-=======
-	/**
-	 * The email headers should be filterable.
-	 *
-	 * @since 5.4.0
-	 *
-	 * @ticket 44501
-	 */
-	public function test_email_headers_should_be_filterable() {
-		$email      = 'export.request.from.unregistered.user@example.com';
-		$request_id = wp_create_user_request( $email, 'export_personal_data' );
-
-		_wp_privacy_account_request_confirmed( $request_id );
-
-		add_filter( 'user_request_confirmed_email_headers', array( $this, 'modify_email_headers' ) );
-		_wp_privacy_send_request_confirmation_notification( $request_id );
-		remove_filter( 'user_request_confirmed_email_headers', array( $this, 'modify_email_headers' ) );
-
-		$mailer = tests_retrieve_phpmailer_instance();
-
-		$this->assertStringContainsString( 'From: Tester <tester@example.com>', $mailer->get_sent()->header );
-	}
-
-	/**
-	 * Filter callback that modifies the headers of the user request confirmation email.
-	 *
-	 * @since 5.4.0
-	 *
-	 * @param string|array $headers The email headers.
-	 * @return array The new email headers.
-	 */
-	public function modify_email_headers( $headers ) {
-		$headers = array(
-			'From: Tester <tester@example.com>',
-		);
-
-		return $headers;
-	}
-
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 }

@@ -100,21 +100,12 @@ class Tests_DB extends WP_UnitTestCase {
 		);
 		$wpdb->suppress_errors( false );
 
-<<<<<<< HEAD
-		// Ensure the float isn't 0,700
-		$this->assertContains( '0.700', array_pop( $this->_queries ) );
-
-		// Try a prepare
-		$sql = $wpdb->prepare( "UPDATE test_table SET float_column = %f AND meta_id = %d", 0.7, 5 );
-		$this->assertContains( '0.700', $sql );
-=======
 		// Ensure the float isn't 0,700.
 		$this->assertStringContainsString( '0.700', array_pop( $this->_queries ) );
 
 		// Try a prepare.
 		$sql = $wpdb->prepare( 'UPDATE test_table SET float_column = %f AND meta_id = %d', 0.7, 5 );
 		$this->assertStringContainsString( '0.700', $sql );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Restore locale settings
 		foreach ( $current_locales as $locale_setting ) {
@@ -1560,12 +1551,8 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$part = $wpdb->prepare( ' AND meta_value = %s', ' %s ' );
-<<<<<<< HEAD
-		$this->assertNotContains( '%s', $part );
-=======
 		$this->assertStringNotContainsString( '%s', $part );
 		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$query = $wpdb->prepare( 'SELECT * FROM {$wpdb->postmeta} WHERE meta_key = %s $part', array( 'foo', 'bar' ) );
 		$this->assertNull( $query );
 	}

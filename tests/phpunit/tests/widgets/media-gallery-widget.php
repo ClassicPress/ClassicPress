@@ -99,13 +99,8 @@ class Test_WP_Widget_Media_Gallery extends WP_UnitTestCase {
 
 		$this->assertTrue( wp_script_is( 'media-gallery-widget' ) );
 
-<<<<<<< HEAD
-		$after = join( '', wp_scripts()->registered['media-gallery-widget']->extra['after'] );
-		$this->assertContains( 'wp.mediaWidgets.modelConstructors[ "media_gallery" ].prototype', $after );
-=======
 		$after = implode( '', wp_scripts()->registered['media-gallery-widget']->extra['after'] );
 		$this->assertStringContainsString( 'wp.mediaWidgets.modelConstructors[ "media_gallery" ].prototype', $after );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

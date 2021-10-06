@@ -1665,22 +1665,18 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Autosaved Auto-draft Title', get_post( $changeset_post_id )->post_content );
 
 		// Update status to draft for subsequent tests.
-		$wp_customize->save_changeset_post( array(
-			'data' => array(
-				'blogname' => array(
-					'value' => 'Draft Title',
+		$wp_customize->save_changeset_post(
+			array(
+				'data' => array(
+					'blogname' => array(
+						'value' => 'Draft Title',
+					),
 				),
-			),
-			'status' => 'draft',
-			'autosave' => false,
-<<<<<<< HEAD
-		) );
-		$this->assertContains( 'Draft Title', get_post( $changeset_post_id )->post_content );
-=======
+				'status' => 'draft',
+				'autosave' => false,
 			)
 		);
 		$this->assertStringContainsString( 'Draft Title', get_post( $changeset_post_id )->post_content );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Fail: illegal_autosave_with_date_gmt.
 		$r = $wp_customize->save_changeset_post( array(

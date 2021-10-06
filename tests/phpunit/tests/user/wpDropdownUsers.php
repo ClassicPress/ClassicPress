@@ -112,27 +112,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/38135
-=======
-	 * @ticket 51370
-	 */
-	public function test_include_selected_with_non_existing_user_id() {
-		$found = wp_dropdown_users(
-			array(
-				'echo'             => false,
-				'selected'         => PHP_INT_MAX,
-				'include_selected' => true,
-				'show'             => 'user_login',
-			)
-		);
-
-		$this->assertStringNotContainsString( (string) PHP_INT_MAX, $found );
-	}
-
-	/**
-	 * @ticket 38135
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	 */
 	public function test_role() {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );

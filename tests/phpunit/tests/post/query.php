@@ -228,18 +228,15 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	function test_orderby_array() {
 		global $wpdb;
 
-		$q1 = new WP_Query( array(
-			'orderby' => array(
-				'type' => 'DESC',
-				'name' => 'ASC'
+		$q1 = new WP_Query(
+			array(
+				'orderby' => array(
+					'type' => 'DESC',
+					'name' => 'ASC'
+				)
 			)
-<<<<<<< HEAD
-		) );
-		$this->assertContains(
-=======
 		);
 		$this->assertStringContainsString(
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			"ORDER BY $wpdb->posts.post_type DESC, $wpdb->posts.post_name ASC",
 			$q1->request
 		);
@@ -268,50 +265,35 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	function test_order() {
 		global $wpdb;
 
-		$q1 = new WP_Query( array(
-			'orderby' => array(
-				'post_type' => 'foo'
+		$q1 = new WP_Query(
+			array(
+				'orderby' => array(
+					'post_type' => 'foo'
+				)
 			)
-<<<<<<< HEAD
-		) );
-		$this->assertContains(
-=======
 		);
 		$this->assertStringContainsString(
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			"ORDER BY $wpdb->posts.post_type DESC",
 			$q1->request
 		);
 
-		$q2 = new WP_Query( array(
-			'orderby' => 'title',
-<<<<<<< HEAD
-			'order'   => 'foo'
-		) );
-		$this->assertContains(
-=======
+		$q2 = new WP_Query(
+			array(
+				'orderby' => 'title',
 				'order'   => 'foo',
 			)
 		);
 		$this->assertStringContainsString(
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			"ORDER BY $wpdb->posts.post_title DESC",
 			$q2->request
 		);
 
-<<<<<<< HEAD
-		$q3 = new WP_Query( array(
-			'order' => 'asc'
-		) );
-		$this->assertContains(
-=======
 		$q3 = new WP_Query(
 			array(
 				'order' => 'asc',
 			)
 		);
 		$this->assertStringContainsString(
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			"ORDER BY $wpdb->posts.post_date ASC",
 			$q3->request
 		);
