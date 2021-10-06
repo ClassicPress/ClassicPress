@@ -199,7 +199,7 @@ NO;
 		) );
 
 		// Should contain page ID by default.
-		$this->assertContains( 'value="' . $p . '"', $found );
+		$this->assertStringContainsString( 'value="' . $p . '"', $found );
 	}
 
 	/**
@@ -215,7 +215,7 @@ NO;
 			'value_field' => 'ID',
 		) );
 
-		$this->assertContains( 'value="' . $p . '"', $found );
+		$this->assertStringContainsString( 'value="' . $p . '"', $found );
 	}
 
 	/**
@@ -232,7 +232,7 @@ NO;
 			'value_field' => 'post_name',
 		) );
 
-		$this->assertContains( 'value="foo"', $found );
+		$this->assertStringContainsString( 'value="foo"', $found );
 	}
 
 	/**
@@ -249,7 +249,7 @@ NO;
 			'value_field' => 'foo',
 		) );
 
-		$this->assertContains( 'value="' . $p . '"', $found );
+		$this->assertStringContainsString( 'value="' . $p . '"', $found );
 	}
 
 	/**

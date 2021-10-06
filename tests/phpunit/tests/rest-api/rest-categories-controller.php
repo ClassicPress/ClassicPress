@@ -229,7 +229,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 		$data = $response->get_data();
 		$first_error = array_shift( $data['data']['params'] );
-		$this->assertContains( 'page must be greater than or equal to 1', $first_error );
+		$this->assertStringContainsString( 'page must be greater than or equal to 1', $first_error );
 	}
 
 	public function test_get_items_include_query() {
@@ -533,6 +533,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertCount( 10, $response->get_data() );
 		$next_link = add_query_arg( array(
 			'page'    => 2,
+<<<<<<< HEAD
 			), rest_url( 'wp/v2/categories' ) );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
@@ -540,6 +541,18 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->factory->category->create( array(
 				'name'   => 'Category 51',
 				) );
+=======
+			),
+			rest_url( 'wp/v2/categories' )
+		);
+		$this->assertStringNotContainsString( 'rel="prev"', $headers['Link'] );
+		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
+
+		// 3rd page.
+		$this->factory->category->create();
+		$total_categories++;
+		$total_pages++;
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 3 );
 		$response = $this->server->dispatch( $request );
@@ -549,6 +562,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertCount( 10, $response->get_data() );
 		$prev_link = add_query_arg( array(
 			'page'    => 2,
+<<<<<<< HEAD
 			), rest_url( 'wp/v2/categories' ) );
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$next_link = add_query_arg( array(
@@ -556,6 +570,21 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 			), rest_url( 'wp/v2/categories' ) );
 		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
 		// Last page
+=======
+			),
+			rest_url( 'wp/v2/categories' )
+		);
+		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$next_link = add_query_arg(
+			array(
+				'page' => 4,
+			),
+			rest_url( 'wp/v2/categories' )
+		);
+		$this->assertStringContainsString( '<' . $next_link . '>; rel="next"', $headers['Link'] );
+
+		// Last page.
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 6 );
 		$response = $this->server->dispatch( $request );
@@ -563,12 +592,25 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 51, $headers['X-WP-Total'] );
 		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 1, $response->get_data() );
+<<<<<<< HEAD
 		$prev_link = add_query_arg( array(
 			'page'    => 5,
 			), rest_url( 'wp/v2/categories' ) );
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
 		// Out of bounds
+=======
+		$prev_link = add_query_arg(
+			array(
+				'page' => $total_pages - 1,
+			),
+			rest_url( 'wp/v2/categories' )
+		);
+		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
+
+		// Out of bounds.
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$request = new WP_REST_Request( 'GET', '/wp/v2/categories' );
 		$request->set_param( 'page', 8 );
 		$response = $this->server->dispatch( $request );
@@ -576,11 +618,22 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 51, $headers['X-WP-Total'] );
 		$this->assertSame( 6, $headers['X-WP-TotalPages'] );
 		$this->assertCount( 0, $response->get_data() );
+<<<<<<< HEAD
 		$prev_link = add_query_arg( array(
 			'page'    => 6,
 			), rest_url( 'wp/v2/categories' ) );
 		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
 		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
+=======
+		$prev_link = add_query_arg(
+			array(
+				'page' => $total_pages,
+			),
+			rest_url( 'wp/v2/categories' )
+		);
+		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$this->assertStringNotContainsString( 'rel="next"', $headers['Link'] );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_get_items_per_page_exceeds_number_of_items() {
@@ -690,7 +743,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		$this->assertSame( 201, $response->get_status() );
 		$headers = $response->get_headers();
 		$data = $response->get_data();
-		$this->assertContains( '/wp/v2/categories/' . $data['id'], $headers['Location'] );
+		$this->assertStringContainsString( '/wp/v2/categories/' . $data['id'], $headers['Location'] );
 		$this->assertSame( 'My Awesome Term', $data['name'] );
 		$this->assertSame( 'This term is so awesome.', $data['description'] );
 		$this->assertSame( 'so-awesome', $data['slug'] );
@@ -1040,7 +1093,7 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		}
 
 		$this->assertSameSets( $relations, array_keys( $links ) );
-		$this->assertContains( 'wp/v2/taxonomies/' . $term->taxonomy, $links['about'][0]['href'] );
+		$this->assertStringContainsString( 'wp/v2/taxonomies/' . $term->taxonomy, $links['about'][0]['href'] );
 		$this->assertSame( add_query_arg( 'categories', $term->term_id, rest_url( 'wp/v2/posts' ) ), $links['https://api.w.org/post_type'][0]['href'] );
 	}
 

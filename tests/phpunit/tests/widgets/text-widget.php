@@ -153,12 +153,12 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		);
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertNotContains( '<p>', $output );
-		$this->assertNotContains( '<br />', $output );
+		$this->assertStringNotContainsString( '<p>', $output );
+		$this->assertStringNotContainsString( '<br />', $output );
 		$this->assertEmpty( $this->widget_text_content_args );
 		$this->assertNotEmpty( $this->widget_text_args );
-		$this->assertContains( '[filter:widget_text]', $output );
-		$this->assertNotContains( '[filter:widget_text_content]', $output );
+		$this->assertStringContainsString( '[filter:widget_text]', $output );
+		$this->assertStringNotContainsString( '[filter:widget_text_content]', $output );
 
 		// Test with filter=true, implicit legacy mode.
 		$this->widget_text_content_args = null;
@@ -170,15 +170,15 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertContains( '<p>', $output );
-		$this->assertContains( '<br />', $output );
+		$this->assertStringContainsString( '<p>', $output );
+		$this->assertStringContainsString( '<br />', $output );
 		$this->assertNotEmpty( $this->widget_text_args );
 		$this->assertSame( $instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $instance, $this->widget_text_args[1] );
 		$this->assertSame( $widget, $this->widget_text_args[2] );
 		$this->assertEmpty( $this->widget_text_content_args );
-		$this->assertContains( '[filter:widget_text]', $output );
-		$this->assertNotContains( '[filter:widget_text_content]', $output );
+		$this->assertStringContainsString( '[filter:widget_text]', $output );
+		$this->assertStringNotContainsString( '[filter:widget_text_content]', $output );
 
 		// Test with filter=content, the upgraded widget, in WP-4.8.0 only.
 		$this->widget_text_content_args = null;
@@ -194,8 +194,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertContains( '<p>', $output );
-		$this->assertContains( '<br />', $output );
+		$this->assertStringContainsString( '<p>', $output );
+		$this->assertStringContainsString( '<br />', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
@@ -204,7 +204,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertSame( $expected_instance['text'] . '[filter:widget_text]', $this->widget_text_content_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_content_args[1] );
 		$this->assertSame( $widget, $this->widget_text_content_args[2] );
-		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
+		$this->assertStringContainsString( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
 
 		// Test with filter=true&visual=true, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
@@ -218,8 +218,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertContains( '<p>', $output );
-		$this->assertContains( '<br />', $output );
+		$this->assertStringContainsString( '<p>', $output );
+		$this->assertStringContainsString( '<br />', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
@@ -228,7 +228,7 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$this->assertSame( $expected_instance['text'] . '[filter:widget_text]', $this->widget_text_content_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_content_args[1] );
 		$this->assertSame( $widget, $this->widget_text_content_args[2] );
-		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
+		$this->assertStringContainsString( wpautop( $expected_instance['text'] . '[filter:widget_text][filter:widget_text_content]' ), $output );
 
 		// Test with filter=true&visual=true, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
@@ -242,14 +242,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertContains( '<p>', $output );
-		$this->assertContains( '<br />', $output );
+		$this->assertStringContainsString( '<p>', $output );
+		$this->assertStringContainsString( '<br />', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
 		$this->assertSame( $widget, $this->widget_text_args[2] );
 		$this->assertNull( $this->widget_text_content_args );
-		$this->assertContains( wpautop( $expected_instance['text'] . '[filter:widget_text]' ), $output );
+		$this->assertStringContainsString( wpautop( $expected_instance['text'] . '[filter:widget_text]' ), $output );
 
 		// Test with filter=false&visual=false, the upgraded widget, in WP-4.8.1 and above.
 		$this->widget_text_content_args = null;
@@ -263,14 +263,14 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertNotContains( '<p>', $output );
-		$this->assertNotContains( '<br />', $output );
+		$this->assertStringNotContainsString( '<p>', $output );
+		$this->assertStringNotContainsString( '<br />', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
 		$this->assertSame( $widget, $this->widget_text_args[2] );
 		$this->assertNull( $this->widget_text_content_args );
-		$this->assertContains( $expected_instance['text'] . '[filter:widget_text]', $output );
+		$this->assertStringContainsString( $expected_instance['text'] . '[filter:widget_text]', $output );
 	}
 
 	/**
@@ -339,9 +339,9 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 1, $this->shortcode_render_count );
-		$this->assertNotContains( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
-		$this->assertContains( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
-		$this->assertNotContains( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
+		$this->assertStringNotContainsString( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
+		$this->assertStringContainsString( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
+		$this->assertStringNotContainsString( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
 		$this->assertNull( $this->post_during_shortcode );
 
 		// Legacy Text Widget with wpautop.
@@ -354,9 +354,9 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 1, $this->shortcode_render_count );
-		$this->assertNotContains( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
-		$this->assertContains( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
-		$this->assertNotContains( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
+		$this->assertStringNotContainsString( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
+		$this->assertStringContainsString( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
+		$this->assertStringNotContainsString( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
 		$this->assertNull( $this->post_during_shortcode );
 
 		// Legacy text widget with plugin adding shortcode support as well.
@@ -366,8 +366,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 1, $this->shortcode_render_count );
-		$this->assertNotContains( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
-		$this->assertContains( wpautop( $this->example_shortcode_content ), $output, 'Shortcode was applied *with* wpautop() applying to shortcode output since plugin used legacy filter.' );
+		$this->assertStringNotContainsString( '[example]', $output, 'Expected shortcode to be processed in legacy widget with plugin adding filter' );
+		$this->assertStringContainsString( wpautop( $this->example_shortcode_content ), $output, 'Shortcode was applied *with* wpautop() applying to shortcode output since plugin used legacy filter.' );
 		$this->assertNull( $this->post_during_shortcode );
 		remove_filter( 'widget_text', 'do_shortcode' );
 
@@ -384,8 +384,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 1, $this->shortcode_render_count );
-		$this->assertContains( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
-		$this->assertNotContains( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
+		$this->assertStringContainsString( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
+		$this->assertStringNotContainsString( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
 		$this->assertFalse( has_filter( 'widget_text', 'do_shortcode' ), 'The widget_text filter still lacks do_shortcode handler.' );
 		$this->assertSame( 11, has_filter( 'widget_text_content', 'do_shortcode' ), 'The widget_text_content filter still has do_shortcode handler.' );
 		$this->assertNull( $this->post_during_shortcode );
@@ -397,8 +397,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 1, $this->shortcode_render_count );
-		$this->assertContains( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
-		$this->assertNotContains( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
+		$this->assertStringContainsString( $this->example_shortcode_content, $output, 'Shortcode was applied without wpautop corrupting it.' );
+		$this->assertStringNotContainsString( '<p>' . $this->example_shortcode_content . '</p>', $output, 'Expected shortcode_unautop() to have run.' );
 		$this->assertSame( 10, has_filter( 'widget_text', 'do_shortcode' ), 'Expected do_shortcode to be restored to widget_text.' );
 		$this->assertNull( $this->post_during_shortcode );
 		$this->assertNull( $this->post_during_shortcode );
@@ -412,8 +412,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertSame( 0, $this->shortcode_render_count );
-		$this->assertContains( '[example]', $output );
-		$this->assertNotContains( $this->example_shortcode_content, $output );
+		$this->assertStringContainsString( '[example]', $output );
+		$this->assertStringNotContainsString( $this->example_shortcode_content, $output );
 		$this->assertFalse( has_filter( 'widget_text', 'do_shortcode' ) );
 		$this->assertFalse( has_filter( 'widget_text_content', 'do_shortcode' ) );
 	}
@@ -589,8 +589,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->form( $instance );
 		$form = ob_get_clean();
-		$this->assertContains( 'class="visual" type="hidden" value=""', $form );
-		$this->assertNotContains( 'class="visual sync-input" type="hidden" value="on"', $form );
+		$this->assertStringContainsString( 'class="visual" type="hidden" value=""', $form );
+		$this->assertStringNotContainsString( 'class="visual sync-input" type="hidden" value="on"', $form );
 
 		$instance = array(
 			'title' => 'Title',
@@ -601,8 +601,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->form( $instance );
 		$form = ob_get_clean();
-		$this->assertContains( 'class="visual sync-input" type="hidden" value="on"', $form );
-		$this->assertNotContains( 'class="visual sync-input" type="hidden" value=""', $form );
+		$this->assertStringContainsString( 'class="visual sync-input" type="hidden" value="on"', $form );
+		$this->assertStringNotContainsString( 'class="visual sync-input" type="hidden" value=""', $form );
 
 		$instance = array(
 			'title' => 'Title',
@@ -613,8 +613,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->form( $instance );
 		$form = ob_get_clean();
-		$this->assertContains( 'class="visual sync-input" type="hidden" value="on"', $form );
-		$this->assertNotContains( 'class="visual sync-input" type="hidden" value=""', $form );
+		$this->assertStringContainsString( 'class="visual sync-input" type="hidden" value="on"', $form );
+		$this->assertStringNotContainsString( 'class="visual sync-input" type="hidden" value=""', $form );
 
 		$instance = array(
 			'title' => 'Title',
@@ -626,9 +626,9 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->form( $instance );
 		$form = ob_get_clean();
-		$this->assertContains( 'class="visual sync-input" type="hidden" value="on"', $form );
-		$this->assertContains( '&lt;code&gt;&amp;lt;strong&amp;gt;BOLD!', $form );
-		$this->assertNotContains( 'class="visual sync-input" type="hidden" value=""', $form );
+		$this->assertStringContainsString( 'class="visual sync-input" type="hidden" value="on"', $form );
+		$this->assertStringContainsString( '&lt;code&gt;&amp;lt;strong&amp;gt;BOLD!', $form );
+		$this->assertStringNotContainsString( 'class="visual sync-input" type="hidden" value=""', $form );
 
 		remove_filter( 'user_can_richedit', '__return_true' );
 		add_filter( 'user_can_richedit', '__return_false' );
@@ -642,8 +642,8 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		ob_start();
 		$widget->form( $instance );
 		$form = ob_get_clean();
-		$this->assertNotContains( 'Evil:</textarea>', $form );
-		$this->assertContains( 'Evil:&lt;/textarea>', $form );
+		$this->assertStringNotContainsString( 'Evil:</textarea>', $form );
+		$this->assertStringContainsString( 'Evil:&lt;/textarea>', $form );
 	}
 
 	/**
@@ -913,6 +913,63 @@ class Test_WP_Widget_Text extends WP_UnitTestCase {
 		WP_Widget_Text::render_control_template_scripts();
 		$output = ob_get_clean();
 
-		$this->assertContains( '<script type="text/html" id="tmpl-widget-text-control-fields">', $output );
+		$this->assertStringContainsString( '<script type="text/html" id="tmpl-widget-text-control-fields">', $output );
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Ensure that rel="noopener" is added to links with a target.
+	 *
+	 * @ticket 46421
+	 */
+	function test_render_links_with_target() {
+		$widget = new WP_Widget_Text();
+
+		$text = 'Test content with an external <a href="https://example.org" target="_blank">link</a>.';
+
+		$args = array(
+			'before_title'  => '<h2>',
+			'after_title'   => '</h2>',
+			'before_widget' => '',
+			'after_widget'  => '',
+		);
+
+		$instance = array(
+			'title' => 'Foo',
+			'text'  => $text,
+		);
+
+		$output = get_echo( array( $widget, 'widget' ), array( $args, $instance ) );
+
+		$this->assertStringContainsString( 'rel="noopener"', $output );
+	}
+
+	/**
+	 * Ensure that rel="noopener" is not added to links without a target.
+	 *
+	 * @ticket 46421
+	 */
+	function test_render_links_without_target() {
+		$widget = new WP_Widget_Text();
+
+		$text = 'Test content with an internal <a href="/">link</a>.';
+
+		$args = array(
+			'before_title'  => '<h2>',
+			'after_title'   => '</h2>',
+			'before_widget' => '',
+			'after_widget'  => '',
+		);
+
+		$instance = array(
+			'title' => 'Foo',
+			'text'  => $text,
+		);
+
+		$output = get_echo( array( $widget, 'widget' ), array( $args, $instance ) );
+
+		$this->assertStringNotContainsString( 'rel="noopener"', $output );
+	}
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 }

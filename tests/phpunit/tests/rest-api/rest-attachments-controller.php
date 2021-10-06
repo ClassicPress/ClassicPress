@@ -717,7 +717,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_body( file_get_contents( $this->test_file ) );
 		$response   = rest_get_server()->dispatch( $request );
 		$attachment = $response->get_data();
-		$this->assertNotContains( ABSPATH, get_post_meta( $attachment['id'], '_wp_attached_file', true ) );
+		$this->assertStringNotContainsString( ABSPATH, get_post_meta( $attachment['id'], '_wp_attached_file', true ) );
 	}
 
 	public function test_update_item() {
@@ -1441,4 +1441,382 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertErrorResponse( 'rest_upload_limited_space', $response, 400 );
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * Ensure the `rest_after_insert_attachment` and `rest_insert_attachment` hooks only fire
+	 * once when attachments are created.
+	 *
+	 * @ticket 45269
+	 * @requires function imagejpeg
+	 */
+	public function test_rest_insert_attachment_hooks_fire_once_on_create() {
+		self::$rest_insert_attachment_count       = 0;
+		self::$rest_after_insert_attachment_count = 0;
+		add_action( 'rest_insert_attachment', array( $this, 'filter_rest_insert_attachment' ) );
+		add_action( 'rest_after_insert_attachment', array( $this, 'filter_rest_after_insert_attachment' ) );
+
+		wp_set_current_user( self::$editor_id );
+		$request = new WP_REST_Request( 'POST', '/wp/v2/media' );
+		$request->set_header( 'Content-Type', 'image/jpeg' );
+		$request->set_header( 'Content-Disposition', 'attachment; filename=canola.jpg' );
+		$request->set_param( 'title', 'My title is very cool' );
+		$request->set_param( 'caption', 'This is a better caption.' );
+		$request->set_param( 'description', 'Without a description, my attachment is descriptionless.' );
+		$request->set_param( 'alt_text', 'Alt text is stored outside post schema.' );
+
+		$request->set_body( file_get_contents( $this->test_file ) );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertSame( 201, $response->get_status() );
+
+		$this->assertSame( 1, self::$rest_insert_attachment_count );
+		$this->assertSame( 1, self::$rest_after_insert_attachment_count );
+	}
+
+	/**
+	 * Ensure the `rest_after_insert_attachment` and `rest_insert_attachment` hooks only fire
+	 * once when attachments are updated.
+	 *
+	 * @ticket 45269
+	 */
+	public function test_rest_insert_attachment_hooks_fire_once_on_update() {
+		self::$rest_insert_attachment_count       = 0;
+		self::$rest_after_insert_attachment_count = 0;
+		add_action( 'rest_insert_attachment', array( $this, 'filter_rest_insert_attachment' ) );
+		add_action( 'rest_after_insert_attachment', array( $this, 'filter_rest_after_insert_attachment' ) );
+
+		wp_set_current_user( self::$editor_id );
+		$attachment_id = $this->factory->attachment->create_object(
+			$this->test_file,
+			0,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+				'post_author'    => self::$editor_id,
+			)
+		);
+		$request       = new WP_REST_Request( 'POST', '/wp/v2/media/' . $attachment_id );
+		$request->set_param( 'title', 'My title is very cool' );
+		$response = rest_get_server()->dispatch( $request );
+
+		$this->assertSame( 1, self::$rest_insert_attachment_count );
+		$this->assertSame( 1, self::$rest_after_insert_attachment_count );
+	}
+
+	/**
+	 * @ticket 44567
+	 * @requires function imagejpeg
+	 */
+	public function test_create_item_with_meta_values() {
+		register_post_meta(
+			'attachment',
+			'best_cannoli',
+			array(
+				'type'         => 'string',
+				'single'       => true,
+				'show_in_rest' => true,
+			)
+		);
+
+		wp_set_current_user( self::$author_id );
+
+		$request = new WP_REST_Request( 'POST', '/wp/v2/media' );
+		$request->set_header( 'Content-Type', 'image/jpeg' );
+		$request->set_header( 'Content-Disposition', 'attachment; filename=cannoli.jpg' );
+		$request->set_param( 'meta', array( 'best_cannoli' => 'Chocolate-dipped, no filling' ) );
+
+		$request->set_body( file_get_contents( $this->test_file ) );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 201, $response->get_status() );
+		$this->assertSame( 'Chocolate-dipped, no filling', get_post_meta( $response->get_data()['id'], 'best_cannoli', true ) );
+	}
+
+	public function filter_rest_insert_attachment( $attachment ) {
+		self::$rest_insert_attachment_count++;
+	}
+
+	public function filter_rest_after_insert_attachment( $attachment ) {
+		self::$rest_after_insert_attachment_count++;
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_logged_out() {
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment, 'full' ) ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_cannot_edit_image', $response, 401 );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_cannot_upload() {
+		$user = self::factory()->user->create_and_get( array( 'role' => 'editor' ) );
+		$user->add_cap( 'upload_files', false );
+
+		wp_set_current_user( $user->ID );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment, 'full' ) ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_cannot_edit_image', $response, 403 );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_cannot_edit() {
+		wp_set_current_user( self::$uploader_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment, 'full' ) ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_cannot_edit', $response, 403 );
+	}
+
+	/**
+	 * @ticket 44405
+	 */
+	public function test_edit_image_returns_error_if_no_attachment() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create();
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => '/wp-content/uploads/2020/07/canola.jpg' ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_unknown_attachment', $response, 404 );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_unsupported_mime_type() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+		wp_update_post(
+			array(
+				'ID'             => $attachment,
+				'post_mime_type' => 'image/invalid',
+			)
+		);
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment, 'full' ) ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_cannot_edit_file_type', $response, 400 );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_no_edits() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment, 'full' ) ) );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_image_not_edited', $response, 400 );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_rotate() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$this->setup_mock_editor();
+		WP_Image_Editor_Mock::$edit_return['rotate'] = new WP_Error();
+
+		$params = array(
+			'rotation' => 60,
+			'src'      => wp_get_attachment_image_url( $attachment, 'full' ),
+		);
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( $params );
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_image_rotation_failed', $response, 500 );
+
+		$this->assertCount( 1, WP_Image_Editor_Mock::$spy['rotate'] );
+		$this->assertSame( array( -60 ), WP_Image_Editor_Mock::$spy['rotate'][0] );
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_crop() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$this->setup_mock_editor();
+		WP_Image_Editor_Mock::$size_return = array(
+			'width'  => 640,
+			'height' => 480,
+		);
+
+		WP_Image_Editor_Mock::$edit_return['crop'] = new WP_Error();
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params(
+			array(
+				'x'      => 50,
+				'y'      => 10,
+				'width'  => 10,
+				'height' => 5,
+				'src'    => wp_get_attachment_image_url( $attachment, 'full' ),
+
+			)
+		);
+		$response = rest_do_request( $request );
+		$this->assertErrorResponse( 'rest_image_crop_failed', $response, 500 );
+
+		$this->assertCount( 1, WP_Image_Editor_Mock::$spy['crop'] );
+		$this->assertSame(
+			array( 320.0, 48.0, 64.0, 24.0 ),
+			WP_Image_Editor_Mock::$spy['crop'][0]
+		);
+	}
+
+	/**
+	 * @ticket 44405
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$params = array(
+			'rotation' => 60,
+			'src'      => wp_get_attachment_image_url( $attachment, 'full' ),
+		);
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( $params );
+		$response = rest_do_request( $request );
+		$item     = $response->get_data();
+
+		$this->assertSame( 201, $response->get_status() );
+		$this->assertSame( rest_url( '/wp/v2/media/' . $item['id'] ), $response->get_headers()['Location'] );
+
+		$this->assertStringEndsWith( '-edited.jpg', $item['media_details']['file'] );
+		$this->assertArrayHasKey( 'parent_image', $item['media_details'] );
+		$this->assertEquals( $attachment, $item['media_details']['parent_image']['attachment_id'] );
+		$this->assertStringContainsString( 'canola', $item['media_details']['parent_image']['file'] );
+	}
+
+	/**
+	 * @ticket 52192
+	 * @requires function imagejpeg
+	 */
+	public function test_batch_edit_image() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment = self::factory()->attachment->create_upload_object( $this->test_file );
+
+		$params = array(
+			'modifiers' => array(
+				array(
+					'type' => 'rotate',
+					'args' => array(
+						'angle' => 60,
+					),
+				),
+				array(
+					'type' => 'crop',
+					'args' => array(
+						'left'   => 50,
+						'top'    => 10,
+						'width'  => 10,
+						'height' => 5,
+					),
+				),
+			),
+			'src'       => wp_get_attachment_image_url( $attachment, 'full' ),
+		);
+
+		$request = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment}/edit" );
+		$request->set_body_params( $params );
+		$response = rest_do_request( $request );
+		$item     = $response->get_data();
+
+		$this->assertSame( 201, $response->get_status() );
+		$this->assertSame( rest_url( '/wp/v2/media/' . $item['id'] ), $response->get_headers()['Location'] );
+
+		$this->assertStringEndsWith( '-edited.jpg', $item['media_details']['file'] );
+		$this->assertArrayHasKey( 'parent_image', $item['media_details'] );
+		$this->assertEquals( $attachment, $item['media_details']['parent_image']['attachment_id'] );
+		$this->assertStringContainsString( 'canola', $item['media_details']['parent_image']['file'] );
+	}
+
+	/**
+	 * @ticket 50565
+	 * @requires function imagejpeg
+	 */
+	public function test_edit_image_returns_error_if_mismatched_src() {
+		wp_set_current_user( self::$superadmin_id );
+		$attachment_id_image1 = self::factory()->attachment->create_upload_object( $this->test_file );
+		$attachment_id_image2 = self::factory()->attachment->create_upload_object( $this->test_file2 );
+		$attachment_id_file   = self::factory()->attachment->create();
+
+		// URL to the first uploaded image.
+		$image_src = wp_get_attachment_image_url( $attachment_id_image1, 'large' );
+
+		// Test: attachment ID points to a different, non-image attachment.
+		$request_1 = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment_id_file}/edit" );
+		$request_1->set_body_params( array( 'src' => $image_src ) );
+
+		$response_1 = rest_do_request( $request_1 );
+		$this->assertErrorResponse( 'rest_unknown_attachment', $response_1, 404 );
+
+		// Test: attachment ID points to a different image attachment.
+		$request_2 = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment_id_image2}/edit" );
+		$request_2->set_body_params( array( 'src' => $image_src ) );
+
+		$response_2 = rest_do_request( $request_2 );
+		$this->assertErrorResponse( 'rest_unknown_attachment', $response_2, 404 );
+
+		// Test: attachment src points to a sub-size of the image.
+		$request_3 = new WP_REST_Request( 'POST', "/wp/v2/media/{$attachment_id_image1}/edit" );
+		$request_3->set_body_params( array( 'src' => wp_get_attachment_image_url( $attachment_id_image1, 'medium' ) ) );
+
+		$response_3 = rest_do_request( $request_3 );
+		// 'rest_image_not_edited' as the file wasn't edited.
+		$this->assertErrorResponse( 'rest_image_not_edited', $response_3, 400 );
+	}
+
+	/**
+	 * Sets up the mock image editor.
+	 *
+	 * @since 5.5.0
+	 */
+	protected function setup_mock_editor() {
+		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
+		require_once DIR_TESTDATA . '/../includes/mock-image-editor.php';
+
+		add_filter(
+			'wp_image_editors',
+			static function () {
+				return array( 'WP_Image_Editor_Mock' );
+			}
+		);
+	}
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 }

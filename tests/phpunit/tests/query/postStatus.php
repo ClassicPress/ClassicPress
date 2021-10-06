@@ -32,7 +32,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'post_status' => array( 'any' ),
 		) );
 
-		$this->assertContains( "post_status <> 'foo'", $q->request );
+		$this->assertStringContainsString( "post_status <> 'foo'", $q->request );
 	}
 
 	public function test_any_should_include_statuses_where_exclude_from_search_is_false() {
@@ -42,7 +42,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'post_status' => array( 'any' ),
 		) );
 
-		$this->assertNotContains( "post_status <> 'foo'", $q->request );
+		$this->assertStringNotContainsString( "post_status <> 'foo'", $q->request );
 	}
 
 	public function test_private_should_be_included_if_perm_is_false() {
@@ -140,7 +140,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 		) );
 
 		foreach ( get_post_stati( array( 'public' => true ) ) as $status ) {
-			$this->assertContains( "post_status = '$status'", $q->request );
+			$this->assertStringContainsString( "post_status = '$status'", $q->request );
 		}
 	}
 
@@ -151,7 +151,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'posts_per_page' => 1, // Or the query will short-circuit.
 		) );
 
-		$this->assertNotContains( "post_status = 'foo", $q->request );
+		$this->assertStringNotContainsString( "post_status = 'foo", $q->request );
 	}
 
 	public function test_protected_should_be_included_when_in_the_admin() {
@@ -162,8 +162,12 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 			'posts_per_page' => -1, // Or the query will short-circuit.
 		) );
 
+<<<<<<< HEAD
 		$this->assertContains( "post_status = 'foo", $q->request );
 		set_current_screen( 'front' );
+=======
+		$this->assertStringContainsString( "post_status = 'foo", $q->request );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_private_statuses_should_be_included_when_current_user_can_read_private_posts() {

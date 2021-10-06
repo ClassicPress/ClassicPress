@@ -145,7 +145,7 @@ class Tests_Query extends WP_UnitTestCase {
 			'order' => 'DESC',
 		) );
 
-		$this->assertContains( "ORDER BY $wpdb->posts.post_title DESC, $wpdb->posts.post_date DESC", $q->request );
+		$this->assertStringContainsString( "ORDER BY $wpdb->posts.post_title DESC, $wpdb->posts.post_date DESC", $q->request );
 	}
 
 	public function test_cat_querystring_single_term() {
@@ -484,7 +484,7 @@ class Tests_Query extends WP_UnitTestCase {
 			'offset' => 0,
 		) );
 
-		$this->assertContains( 'LIMIT 0, 5', $q->request );
+		$this->assertStringContainsString( 'LIMIT 0, 5', $q->request );
 	}
 
 	/**
@@ -496,7 +496,7 @@ class Tests_Query extends WP_UnitTestCase {
 			'posts_per_page' => 5,
 		) );
 
-		$this->assertContains( 'LIMIT 5, 5', $q->request );
+		$this->assertStringContainsString( 'LIMIT 5, 5', $q->request );
 	}
 
 	/**
@@ -509,7 +509,7 @@ class Tests_Query extends WP_UnitTestCase {
 			'offset' => '',
 		) );
 
-		$this->assertContains( 'LIMIT 5, 5', $q->request );
+		$this->assertStringContainsString( 'LIMIT 5, 5', $q->request );
 	}
 
 	/**

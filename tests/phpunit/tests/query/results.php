@@ -713,10 +713,15 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		global $wpdb;
 		$this->q->query( array( 'perm' => 'readable', 'post_status' => array( 'publish', 'private' ) ) );
 		$this->assertTrue( $this->q->have_posts() );
+<<<<<<< HEAD
 		$this->assertContains( "(({$wpdb->posts}.post_status = 'publish') OR ({$wpdb->posts}.post_author = 0 AND ({$wpdb->posts}.post_status = 'private')))",
+=======
+		$this->assertStringContainsString(
+			"(({$wpdb->posts}.post_status = 'publish') OR ({$wpdb->posts}.post_author = 0 AND ({$wpdb->posts}.post_status = 'private')))",
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 			$this->q->request
 		);
-		$this->assertNotContains( "({$wpdb->posts}.post_status = 'publish') AND", $this->q->request );
+		$this->assertStringNotContainsString( "({$wpdb->posts}.post_status = 'publish') AND", $this->q->request );
 	}
 
 	/**
@@ -782,7 +787,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		$post_1 = self::factory()->post->create( array( 'post_title' => 'Contributing to the WordPress Codex', 'post_type' => 'handbook' ) );
 		$post_2 = self::factory()->post->create( array( 'post_title' => 'Getting Started', 'post_parent' => $post_1, 'post_type' => 'handbook' ) );
 
-		$this->assertContains( 'contributing-to-the-wordpress-codex/getting-started', get_permalink( $post_2 ) );
+		$this->assertStringContainsString( 'contributing-to-the-wordpress-codex/getting-started', get_permalink( $post_2 ) );
 
 		$result = $this->q->query( array( 'handbook' => 'contributing-to-the-wordpress-codex/getting-started', 'post_type' => 'handbook' ) );
 		$this->assertCount( 1, $result );

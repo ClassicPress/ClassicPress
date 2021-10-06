@@ -47,8 +47,13 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
+<<<<<<< HEAD
 		// Ensure we found the right match
 		$this->assertContains( 'wpCompressionTest', $this->_last_response );
+=======
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', $this->_last_response );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -74,8 +79,13 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
+<<<<<<< HEAD
 		// Ensure we found the right match
 		$this->assertContains( 'wpCompressionTest', gzinflate( $this->_last_response ) );
+=======
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', gzinflate( $this->_last_response ) );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -101,8 +111,13 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
+<<<<<<< HEAD
 		// Ensure we found the right match
 		$this->assertContains( 'wpCompressionTest', $this->_gzdecode( $this->_last_response ) );
+=======
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', $this->_gzdecode( $this->_last_response ) );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

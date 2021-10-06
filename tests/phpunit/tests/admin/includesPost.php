@@ -330,8 +330,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$p = self::factory()->post->create( array( 'post_status' => 'future', 'post_name' => 'foo', 'post_date' => $future_date ) );
 
 		$found = get_sample_permalink_html( $p );
-		$this->assertContains( 'href="' . get_option( 'home' ) . '/?p=' . $p . '"', $found );
-		$this->assertContains( '>' . get_option( 'home' ) . '/?p=' . $p . '<', $found );
+		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/?p=' . $p . '"', $found );
+		$this->assertStringContainsString( '>' . get_option( 'home' ) . '/?p=' . $p . '<', $found );
 	}
 
 	/**
@@ -348,8 +348,13 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		$found = get_sample_permalink_html( $p );
 		$post = get_post( $p );
+<<<<<<< HEAD
 		$this->assertContains( 'href="' . get_option( 'home' ) . "/" . $post->post_name . '/"', $found );
 		$this->assertContains( '>' . urldecode( $post->post_name ) . '<', $found );
+=======
+		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found );
+		$this->assertStringContainsString( '>' . urldecode( $post->post_name ) . '<', $found );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -369,8 +374,13 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		$found = get_sample_permalink_html( $p );
 		$post = get_post( $p );
+<<<<<<< HEAD
 		$this->assertContains( 'href="' . get_option( 'home' ) . "/" . $post->post_name . '/"', $found );
 		$this->assertContains( '>' . urldecode( get_permalink( $post ) ) . '<', $found );
+=======
+		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found );
+		$this->assertStringContainsString( '>' . urldecode( get_permalink( $post ) ) . '<', $found );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -388,8 +398,13 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$found = get_sample_permalink_html( $p, null, 'new_slug-صورة' );
 		$post = get_post( $p );
 		$message = 'Published post';
+<<<<<<< HEAD
 		$this->assertContains( 'href="' . get_option( 'home' ) . "/" . $post->post_name . '/"', $found, $message );
 		$this->assertContains( '>new_slug-صورة<', $found, $message );
+=======
+		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found, $message );
+		$this->assertStringContainsString( '>new_slug-صورة<', $found, $message );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Scheduled posts should use published permalink
 		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
@@ -398,8 +413,13 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$found = get_sample_permalink_html( $p, null, 'new_slug-صورة' );
 		$post = get_post( $p );
 		$message = 'Scheduled post';
+<<<<<<< HEAD
 		$this->assertContains( 'href="' . get_option( 'home' ) . "/" . $post->post_name . '/"', $found, $message );
 		$this->assertContains( '>new_slug-صورة<', $found, $message );
+=======
+		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found, $message );
+		$this->assertStringContainsString( '>new_slug-صورة<', $found, $message );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Draft posts should use preview link
 		$p = self::factory()->post->create( array( 'post_status' => 'draft', 'post_name' => 'baz-صورة' ) );
@@ -411,8 +431,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$preview_link = get_permalink( $post->ID );
 		$preview_link = add_query_arg( 'preview', 'true', $preview_link );
 
-		$this->assertContains( 'href="' . esc_url( $preview_link ) . '"', $found, $message );
-		$this->assertContains( '>new_slug-صورة<', $found, $message );
+		$this->assertStringContainsString( 'href="' . esc_url( $preview_link ) . '"', $found, $message );
+		$this->assertStringContainsString( '>new_slug-صورة<', $found, $message );
 	}
 
 	/**
@@ -429,7 +449,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		$found = get_sample_permalink_html( $p );
 		$post = get_post( $p );
-		$this->assertContains( 'href="' . esc_url( get_preview_post_link( $post ) ), $found );
+		$this->assertStringContainsString( 'href="' . esc_url( get_preview_post_link( $post ) ), $found );
 	}
 
 	/**

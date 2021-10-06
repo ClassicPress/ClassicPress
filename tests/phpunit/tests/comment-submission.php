@@ -396,7 +396,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -418,7 +418,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -446,7 +446,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -483,7 +483,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertContains( '<script', $comment->comment_content );
+		$this->assertStringContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -512,7 +512,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 

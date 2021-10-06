@@ -9,7 +9,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'post_type' => 'post',
 		) );
 
-		$this->assertContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	public function test_no_found_rows_false() {
@@ -18,7 +18,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'no_found_rows' => false,
 		) );
 
-		$this->assertContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	public function test_no_found_rows_0() {
@@ -27,7 +27,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'no_found_rows' => 0,
 		) );
 
-		$this->assertContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	public function test_no_found_rows_empty_string() {
@@ -36,7 +36,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'no_found_rows' => '',
 		) );
 
-		$this->assertContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	public function test_no_found_rows_true() {
@@ -45,7 +45,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'no_found_rows' => true,
 		) );
 
-		$this->assertNotContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringNotContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	public function test_no_found_rows_non_bool_cast_to_true() {
@@ -54,7 +54,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'no_found_rows' => 'foo',
 		) );
 
-		$this->assertNotContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringNotContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'nopaging' => true,
 		) );
 
-		$this->assertNotContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringNotContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 		$this->assertSame( 1, $q->found_posts );
 	}
 
@@ -83,7 +83,7 @@ class Tests_Query_NoFoundRows extends WP_UnitTestCase {
 			'posts_per_page' => -1,
 		) );
 
-		$this->assertNotContains( 'SQL_CALC_FOUND_ROWS', $q->request );
+		$this->assertStringNotContainsString( 'SQL_CALC_FOUND_ROWS', $q->request );
 		$this->assertSame( 1, $q->found_posts );
 	}
 }

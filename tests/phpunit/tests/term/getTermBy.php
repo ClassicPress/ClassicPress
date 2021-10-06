@@ -178,7 +178,7 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 		$term_id = $this->factory->term->create( array( 'name' => 'burrito', 'taxonomy' => 'post_tag' ) );
 		$found = get_term_by( 'name', 'burrito', 'post_tag' );
 		$this->assertSame( $term_id, $found->term_id );
-		$this->assertNotContains( 'ORDER BY', $wpdb->last_query );
+		$this->assertStringNotContainsString( 'ORDER BY', $wpdb->last_query );
 	}
 
 	/**
@@ -190,7 +190,7 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 		$term_id = $this->factory->term->create( array( 'name' => 'burrito', 'taxonomy' => 'post_tag' ) );
 		$found = get_term_by( 'name', 'burrito', 'post_tag' );
 		$this->assertSame( $term_id, $found->term_id );
-		$this->assertContains( 'LIMIT 1', $wpdb->last_query );
+		$this->assertStringContainsString( 'LIMIT 1', $wpdb->last_query );
 	}
 
 	/**

@@ -716,12 +716,12 @@ VIDEO;
 			'src' => 'https://example.com/foo.mp3',
 		) );
 
-		$this->assertContains( 'src="https://example.com/foo.mp3', $actual );
-		$this->assertNotContains( 'loop', $actual );
-		$this->assertNotContains( 'autoplay', $actual );
-		$this->assertContains( 'preload="none"', $actual );
-		$this->assertContains( 'class="wp-audio-shortcode"', $actual );
-		$this->assertContains( 'style="width: 100%;"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp3', $actual );
+		$this->assertStringNotContainsString( 'loop', $actual );
+		$this->assertStringNotContainsString( 'autoplay', $actual );
+		$this->assertStringContainsString( 'preload="none"', $actual );
+		$this->assertStringContainsString( 'class="wp-audio-shortcode"', $actual );
+		$this->assertStringContainsString( 'style="width: 100%;"', $actual );
 
 		$actual = wp_audio_shortcode( array(
 			'src'      => 'https://example.com/foo.mp3',
@@ -732,12 +732,12 @@ VIDEO;
 			'style'    => 'padding:0;',
 		) );
 
-		$this->assertContains( 'src="https://example.com/foo.mp3', $actual );
-		$this->assertContains( 'loop="1"', $actual );
-		$this->assertContains( 'autoplay="1"', $actual );
-		$this->assertContains( 'preload="1"', $actual );
-		$this->assertContains( 'class="foobar"', $actual );
-		$this->assertContains( 'style="padding:0;"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp3', $actual );
+		$this->assertStringContainsString( 'loop="1"', $actual );
+		$this->assertStringContainsString( 'autoplay="1"', $actual );
+		$this->assertStringContainsString( 'preload="1"', $actual );
+		$this->assertStringContainsString( 'class="foobar"', $actual );
+		$this->assertStringContainsString( 'style="padding:0;"', $actual );
 	}
 
 	/**
@@ -817,13 +817,13 @@ VIDEO;
 			'src' => 'https://example.com/foo.mp4',
 		) );
 
-		$this->assertContains( 'src="https://example.com/foo.mp4', $actual );
-		$this->assertNotContains( 'loop', $actual );
-		$this->assertNotContains( 'autoplay', $actual );
-		$this->assertContains( 'preload="metadata"', $actual );
-		$this->assertContains( 'width="640"', $actual );
-		$this->assertContains( 'height="360"', $actual );
-		$this->assertContains( 'class="wp-video-shortcode"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp4', $actual );
+		$this->assertStringNotContainsString( 'loop', $actual );
+		$this->assertStringNotContainsString( 'autoplay', $actual );
+		$this->assertStringContainsString( 'preload="metadata"', $actual );
+		$this->assertStringContainsString( 'width="640"', $actual );
+		$this->assertStringContainsString( 'height="360"', $actual );
+		$this->assertStringContainsString( 'class="wp-video-shortcode"', $actual );
 
 		$actual = wp_video_shortcode( array(
 			'src'      => 'https://example.com/foo.mp4',
@@ -836,14 +836,14 @@ VIDEO;
 			'class'    => 'foobar',
 		) );
 
-		$this->assertContains( 'src="https://example.com/foo.mp4', $actual );
-		$this->assertContains( 'poster="https://example.com/foo.png', $actual );
-		$this->assertContains( 'loop="1"', $actual );
-		$this->assertContains( 'autoplay="1"', $actual );
-		$this->assertContains( 'preload="1"', $actual );
-		$this->assertContains( 'width="123"', $actual );
-		$this->assertContains( 'height="456"', $actual );
-		$this->assertContains( 'class="foobar"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp4', $actual );
+		$this->assertStringContainsString( 'poster="https://example.com/foo.png', $actual );
+		$this->assertStringContainsString( 'loop="1"', $actual );
+		$this->assertStringContainsString( 'autoplay="1"', $actual );
+		$this->assertStringContainsString( 'preload="1"', $actual );
+		$this->assertStringContainsString( 'width="123"', $actual );
+		$this->assertStringContainsString( 'height="456"', $actual );
+		$this->assertStringContainsString( 'class="foobar"', $actual );
 	}
 
 	/**
@@ -855,7 +855,7 @@ VIDEO;
 			'src' => 'https://www.youtube.com/watch?v=i_cVJgIz_Cs&feature=youtu.be',
 		) );
 
-		$this->assertNotContains( 'feature=youtu.be', $actual );
+		$this->assertStringNotContainsString( 'feature=youtu.be', $actual );
 	}
 
 	/**
@@ -867,7 +867,11 @@ VIDEO;
 			'src' => 'http://www.youtube.com/watch?v=i_cVJgIz_Cs',
 		) );
 
+<<<<<<< HEAD
 		$this->assertContains( 'src="https://www.youtube.com/watch?v=i_cVJgIz_Cs', $actual );
+=======
+		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=72xdCU__XCk', $actual );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -879,8 +883,13 @@ VIDEO;
 			'src' => 'http://vimeo.com/190372437?blah=meh',
 		) );
 
+<<<<<<< HEAD
 		$this->assertContains( 'src="https://vimeo.com/190372437', $actual );
 		$this->assertNotContains( 'blah=meh', $actual );
+=======
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871', $actual );
+		$this->assertStringNotContainsString( 'blah=meh', $actual );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -892,7 +901,11 @@ VIDEO;
 			'src' => 'http://vimeo.com/190372437',
 		) );
 
+<<<<<<< HEAD
 		$this->assertContains( 'src="https://vimeo.com/190372437?loop=0', $actual );
+=======
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871?loop=0', $actual );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -905,7 +918,11 @@ VIDEO;
 			'loop' => true,
 		) );
 
+<<<<<<< HEAD
 		$this->assertContains( 'src="https://vimeo.com/190372437?loop=1', $actual );
+=======
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871?loop=1', $actual );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -2337,7 +2354,503 @@ EOF;
 		wp_delete_attachment( $post_id );
 		wp_delete_post( $parent_id );
 
+<<<<<<< HEAD
 		$this->assertNotEquals( $expected, $url );
+=======
+		$this->assertSame( $expected, $url );
+	}
+
+	/**
+	 * @ticket 50367
+	 * @requires function imagejpeg
+	 */
+	function test_wp_filter_content_tags_width_height() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
+
+		$img                 = get_image_tag( self::$large_id, '', '', '', 'medium' );
+		$img_no_width_height = str_replace( ' width="' . $size_array[0] . '"', '', $img );
+		$img_no_width_height = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
+		$img_no_width        = str_replace( ' width="' . $size_array[0] . '"', '', $img );
+		$img_no_height       = str_replace( ' height="' . $size_array[1] . '"', '', $img );
+
+		$hwstring = image_hwstring( $size_array[0], $size_array[1] );
+
+		// Manually add width and height to the markup from get_image_tag().
+		$respimg_no_width_height = str_replace( '<img ', '<img ' . $hwstring, $img_no_width_height );
+
+		$content = '
+			<p>Image, with width and height. Should NOT be modified.</p>
+			%1$s
+
+			<p>Image, no width and height attributes. Should have width, height, srcset and sizes (from matching the file name).</p>
+			%2$s
+
+			<p>Image, no width but height attribute. Should NOT be modified.</p>
+			%3$s
+
+			<p>Image, no height but width attribute. Should NOT be modified.</p>
+			%4$s';
+
+		$content_unfiltered = sprintf( $content, $img, $img_no_width_height, $img_no_width, $img_no_height );
+		$content_filtered   = sprintf( $content, $img, $respimg_no_width_height, $img_no_width, $img_no_height );
+
+		// Do not add loading, srcset, and sizes.
+		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
+		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+
+		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
+
+		remove_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
+		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50367
+	 * @ticket 50756
+	 * @requires function imagejpeg
+	 */
+	function test_wp_filter_content_tags_loading_lazy() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
+
+		$img                    = get_image_tag( self::$large_id, '', '', '', 'medium' );
+		$img_xhtml              = str_replace( ' />', '/>', $img );
+		$img_html5              = str_replace( ' />', '>', $img );
+		$img_no_width_height    = str_replace( ' width="' . $size_array[0] . '"', '', $img );
+		$img_no_width_height    = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
+		$iframe                 = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+		$iframe_no_width_height = '<iframe src="https://www.example.com"></iframe>';
+
+		$lazy_img       = wp_img_tag_add_loading_attr( $img, 'test' );
+		$lazy_img_xhtml = wp_img_tag_add_loading_attr( $img_xhtml, 'test' );
+		$lazy_img_html5 = wp_img_tag_add_loading_attr( $img_html5, 'test' );
+		$lazy_iframe    = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		// The following should not be modified because there already is a 'loading' attribute.
+		$img_eager    = str_replace( ' />', ' loading="eager" />', $img );
+		$iframe_eager = str_replace( '">', '" loading="eager">', $iframe );
+
+		$content = '
+			<p>Image, standard.</p>
+			%1$s
+			<p>Image, XHTML 1.0 style (no space before the closing slash).</p>
+			%2$s
+			<p>Image, HTML 5.0 style.</p>
+			%3$s
+			<p>Image, with pre-existing "loading" attribute. Should not be modified.</p>
+			%4$s
+			<p>Image, without dimension attributes. Should not be modified.</p>
+			%5$s
+			<p>Iframe, standard.</p>
+			%6$s
+			<p>Iframe, with pre-existing "loading" attribute. Should not be modified.</p>
+			%7$s
+			<p>Iframe, without dimension attributes. Should not be modified.</p>
+			%8$s';
+
+		$content_unfiltered = sprintf( $content, $img, $img_xhtml, $img_html5, $img_eager, $img_no_width_height, $iframe, $iframe_eager, $iframe_no_width_height );
+		$content_filtered   = sprintf( $content, $lazy_img, $lazy_img_xhtml, $lazy_img_html5, $img_eager, $img_no_width_height, $lazy_iframe, $iframe_eager, $iframe_no_width_height );
+
+		// Do not add width, height, srcset, and sizes.
+		add_filter( 'wp_img_tag_add_width_and_height_attr', '__return_false' );
+		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+
+		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
+
+		remove_filter( 'wp_img_tag_add_width_and_height_attr', '__return_false' );
+		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50756
+	 */
+	function test_wp_filter_content_tags_loading_lazy_opted_in() {
+		$img         = get_image_tag( self::$large_id, '', '', '', 'medium' );
+		$lazy_img    = wp_img_tag_add_loading_attr( $img, 'test' );
+		$iframe      = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+		$lazy_iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$content = '
+			<p>Image, standard.</p>
+			%1$s
+			<p>Iframe, standard.</p>
+			%2$s';
+
+		$content_unfiltered = sprintf( $content, $img, $iframe );
+		$content_filtered   = sprintf( $content, $lazy_img, $lazy_iframe );
+
+		// Do not add srcset and sizes while testing.
+		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+
+		// Enable globally for all tags.
+		add_filter( 'wp_lazy_loading_enabled', '__return_true' );
+
+		$this->assertSame( $content_filtered, wp_filter_content_tags( $content_unfiltered ) );
+		remove_filter( 'wp_lazy_loading_enabled', '__return_true' );
+		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50756
+	 */
+	function test_wp_filter_content_tags_loading_lazy_opted_out() {
+		$img    = get_image_tag( self::$large_id, '', '', '', 'medium' );
+		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+
+		$content = '
+			<p>Image, standard.</p>
+			%1$s
+			<p>Iframe, standard.</p>
+			%2$s';
+		$content = sprintf( $content, $img, $iframe );
+
+		// Do not add srcset and sizes while testing.
+		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+
+		// Disable globally for all tags.
+		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
+
+		$this->assertSame( $content, wp_filter_content_tags( $content ) );
+		remove_filter( 'wp_lazy_loading_enabled', '__return_false' );
+		remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50367
+	 */
+	function test_wp_img_tag_add_loading_attr() {
+		$img = '<img src="example.png" alt=" width="300" height="225" />';
+		$img = wp_img_tag_add_loading_attr( $img, 'test' );
+
+		$this->assertStringContainsString( ' loading="lazy"', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50367
+	 */
+	function test_wp_img_tag_add_loading_attr_without_src() {
+		$img = '<img alt=" width="300" height="225" />';
+		$img = wp_img_tag_add_loading_attr( $img, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50367
+	 */
+	function test_wp_img_tag_add_loading_attr_with_single_quotes() {
+		$img = "<img src='example.png' alt=' width='300' height='225' />";
+		$img = wp_img_tag_add_loading_attr( $img, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $img );
+
+		// Test specifically that the attribute is not there with double-quotes,
+		// to avoid regressions.
+		$this->assertStringNotContainsString( ' loading="lazy"', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50425
+	 */
+	function test_wp_img_tag_add_loading_attr_opt_out() {
+		$img = '<img src="example.png" alt=" width="300" height="225" />';
+		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
+
+		$this->assertStringNotContainsString( ' loading=', $img );
+	}
+
+	/**
+	 * @ticket 50756
+	 */
+	function test_wp_iframe_tag_add_loading_attr() {
+		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$this->assertStringContainsString( ' loading="lazy"', $iframe );
+	}
+
+	/**
+	 * @ticket 50756
+	 */
+	function test_wp_iframe_tag_add_loading_attr_without_src() {
+		$iframe = '<iframe width="640" height="360"></iframe>';
+		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $iframe );
+	}
+
+	/**
+	 * @ticket 50756
+	 */
+	function test_wp_iframe_tag_add_loading_attr_with_single_quotes() {
+		$iframe = "<iframe src='https://www.example.com' width='640' height='360'></iframe>";
+		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $iframe );
+
+		// Test specifically that the attribute is not there with double-quotes,
+		// to avoid regressions.
+		$this->assertStringNotContainsString( ' loading="lazy"', $iframe );
+	}
+
+	/**
+	 * @ticket 50756
+	 */
+	function test_wp_iframe_tag_add_loading_attr_opt_out() {
+		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+		add_filter( 'wp_iframe_tag_add_loading_attr', '__return_false' );
+		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $iframe );
+	}
+
+	/**
+	 * @ticket 52768
+	 */
+	function test_wp_iframe_tag_add_loading_attr_skip_wp_embed() {
+		$iframe   = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
+		$fallback = '<blockquote>Fallback content.</blockquote>';
+		$iframe   = wp_filter_oembed_result( $fallback . $iframe, (object) array( 'type' => 'rich' ), 'https://www.example.com' );
+		$iframe   = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
+
+		$this->assertStringNotContainsString( ' loading=', $iframe );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50425
+	 */
+	function test_wp_get_attachment_image_loading() {
+		$img = wp_get_attachment_image( self::$large_id );
+
+		$this->assertStringContainsString( ' loading="lazy"', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50425
+	 */
+	function test_wp_get_attachment_image_loading_opt_out() {
+		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
+		$img = wp_get_attachment_image( self::$large_id );
+
+		// There should not be any loading attribute in this case.
+		$this->assertStringNotContainsString( ' loading=', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50425
+	 */
+	function test_wp_get_attachment_image_loading_opt_out_individual() {
+		// The default is already tested above, the filter below ensures that
+		// lazy-loading is definitely enabled globally for images.
+		add_filter( 'wp_lazy_loading_enabled', '__return_true' );
+
+		$img = wp_get_attachment_image( self::$large_id, 'thumbnail', false, array( 'loading' => false ) );
+
+		// There should not be any loading attribute in this case.
+		$this->assertStringNotContainsString( ' loading=', $img );
+	}
+
+	/**
+	 * @ticket 44427
+	 * @ticket 50425
+	 * @ticket 50756
+	 * @dataProvider data_wp_lazy_loading_enabled_tag_name_defaults
+	 *
+	 * @param string $tag_name Tag name.
+	 * @param bool   $expected Expected return value.
+	 */
+	function test_wp_lazy_loading_enabled_tag_name_defaults( $tag_name, $expected ) {
+		if ( $expected ) {
+			$this->assertTrue( wp_lazy_loading_enabled( $tag_name, 'the_content' ) );
+		} else {
+			$this->assertFalse( wp_lazy_loading_enabled( $tag_name, 'the_content' ) );
+		}
+	}
+
+	function data_wp_lazy_loading_enabled_tag_name_defaults() {
+		return array(
+			'img => true'            => array( 'img', true ),
+			'iframe => true'         => array( 'iframe', true ),
+			'arbitrary tag => false' => array( 'blink', false ),
+		);
+	}
+
+	/**
+	 * @ticket 50425
+	 * @ticket 53463
+	 * @dataProvider data_wp_lazy_loading_enabled_context_defaults
+	 *
+	 * @param string $context  Function context.
+	 * @param bool   $expected Expected return value.
+	 */
+	function test_wp_lazy_loading_enabled_context_defaults( $context, $expected ) {
+		if ( $expected ) {
+			$this->assertTrue( wp_lazy_loading_enabled( 'img', $context ) );
+		} else {
+			$this->assertFalse( wp_lazy_loading_enabled( 'img', $context ) );
+		}
+	}
+
+	function data_wp_lazy_loading_enabled_context_defaults() {
+		return array(
+			'wp_get_attachment_image => true' => array( 'wp_get_attachment_image', true ),
+			'the_content => true'             => array( 'the_content', true ),
+			'the_excerpt => true'             => array( 'the_excerpt', true ),
+			'widget_text_content => true'     => array( 'widget_text_content', true ),
+			'widget_block_content => true'    => array( 'widget_block_content', true ),
+			'get_avatar => true'              => array( 'get_avatar', true ),
+			'arbitrary context => true'       => array( 'something_completely_arbitrary', true ),
+		);
+	}
+
+	/**
+	 * @ticket 50543
+	 */
+	function test_wp_image_file_matches_image_meta() {
+		$image_meta       = wp_get_attachment_metadata( self::$large_id );
+		$image_src_full   = wp_get_attachment_image_url( self::$large_id, 'full' );
+		$image_src_medium = wp_get_attachment_image_url( self::$large_id, 'medium' );
+
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_full, $image_meta ) );
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_medium, $image_meta ) );
+	}
+
+	/**
+	 * @ticket 50543
+	 */
+	function test_wp_image_file_matches_image_meta_no_subsizes() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_src  = wp_get_attachment_image_url( self::$large_id, 'full' );
+
+		$image_meta['sizes'] = array();
+
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
+	}
+
+	/**
+	 * @ticket 50543
+	 */
+	function test_wp_image_file_matches_image_meta_invalid_meta() {
+		$image_meta = ''; // Attachment is not an image.
+		$image_src  = $this->img_url;
+
+		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
+	}
+
+	/**
+	 * @ticket 50543
+	 */
+	function test_wp_image_file_matches_image_meta_different_meta() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_src  = $this->img_url; // Different image.
+
+		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
+	}
+
+	/**
+	 * @ticket 50543
+	 */
+	function test_wp_image_file_matches_image_meta_original_image() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_src  = wp_get_original_image_url( self::$large_id );
+
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
+	}
+
+	/**
+	 * @ticket 22101
+	 */
+	function test_gallery_shortcode_when_is_feed_true() {
+
+		$this->go_to( '/?feed=rss2' );
+
+		// Default: Links to image attachment page URL.
+		$actual = gallery_shortcode(
+			array(
+				'ids' => self::$large_id,
+			)
+		);
+		$this->assertStringContainsString( '?attachment_id=', $actual );
+
+		// File: Links to image file URL.
+		$actual = gallery_shortcode(
+			array(
+				'ids'  => self::$large_id,
+				'link' => 'file',
+			)
+		);
+		$this->assertSame( 2, substr_count( $actual, '.jpg' ) );
+
+		// None: Does not link.
+		$actual = gallery_shortcode(
+			array(
+				'ids'  => self::$large_id,
+				'link' => 'none',
+			)
+		);
+		$this->assertStringNotContainsString( '<a ', $actual );
+	}
+
+	/**
+	 * Test attachment permalinks based on parent post status.
+	 *
+	 * @dataProvider data_attachment_permalinks_based_on_parent_status
+	 * @ticket 51776
+	 *
+	 * @param string $post_key     Post as keyed in the shared fixture array.
+	 * @param string $expected_url Expected permalink.
+	 * @param bool   $expected_404 Whether the page is expected to return a 404 result.
+	 *
+	 */
+	function test_attachment_permalinks_based_on_parent_status( $post_key, $expected_url, $expected_404 ) {
+		$this->set_permalink_structure( '/%postname%' );
+		$post = get_post( self::$post_ids[ $post_key ] );
+
+		/*
+		 * The dataProvider runs before the fixures are set up, therefore the
+		 * post object IDs are placeholders that needs to be replaced.
+		 */
+		$expected_url = home_url( str_replace( '%ID%', $post->ID, $expected_url ) );
+
+		$this->go_to( get_permalink( $post ) );
+		$this->assertSame( $expected_url, get_permalink( $post ) );
+		if ( $expected_404 ) {
+			$this->assertQueryTrue( 'is_404' );
+		} else {
+			$this->assertQueryTrue( 'is_attachment', 'is_single', 'is_singular' );
+		}
+		$this->assertSame( 'attachment', $post->post_type );
+	}
+
+	/**
+	 * Data provider for test_attachment_permalinks_based_on_parent_status().
+	 *
+	 * @return array[] {
+	 *     @type string $post_key     Post as keyed in the shared fixture array.
+	 *     @type string $expected_url Expected permalink.
+	 *     $type bool   $expected_404 Whether the page is expected to return a 404 result.
+	 * }
+	 */
+	function data_attachment_permalinks_based_on_parent_status() {
+		return array(
+			array( 'draft-attachment', '/?attachment_id=%ID%', true ),
+			array( 'publish-attachment', '/publish-post/publish-attachment', false ),
+			array( 'future-attachment', '/future-post/future-attachment', false ),
+			array( 'auto-draft-attachment', '/?attachment_id=%ID%', true ),
+			array( 'trash-attachment', '/?attachment_id=%ID%', false ),
+		);
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 }
 

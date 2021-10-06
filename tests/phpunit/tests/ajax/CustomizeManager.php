@@ -442,8 +442,8 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$autosave_revision = wp_get_post_autosave( $post_id );
 		$this->assertInstanceOf( 'WP_Post', $autosave_revision );
 
-		$this->assertContains( 'New Site Title', get_post( $post_id )->post_content );
-		$this->assertContains( 'Autosaved Site Title', $autosave_revision->post_content );
+		$this->assertStringContainsString( 'New Site Title', get_post( $post_id )->post_content );
+		$this->assertStringContainsString( 'Autosaved Site Title', $autosave_revision->post_content );
 	}
 
 	/**
@@ -615,7 +615,7 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$_POST['dismiss_autosave'] = $_GET['dismiss_autosave'] = $_REQUEST['dismiss_autosave'] = true;
 		$this->assertNotInstanceOf( 'WP_Error', $r );
 		$this->assertFalse( wp_get_post_autosave( $wp_customize->changeset_post_id() ) );
-		$this->assertContains( 'Foo', get_post( $wp_customize->changeset_post_id() )->post_content );
+		$this->assertStringContainsString( 'Foo', get_post( $wp_customize->changeset_post_id() )->post_content );
 
 		// Since no autosave yet, confirm no action.
 		$this->make_ajax_call( 'customize_dismiss_autosave_or_lock' );
@@ -634,8 +634,8 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$this->assertNotInstanceOf( 'WP_Error', $r );
 		$autosave_revision = wp_get_post_autosave( $wp_customize->changeset_post_id() );
 		$this->assertInstanceOf( 'WP_Post', $autosave_revision );
-		$this->assertContains( 'Foo', get_post( $wp_customize->changeset_post_id() )->post_content );
-		$this->assertContains( 'Bar', $autosave_revision->post_content );
+		$this->assertStringContainsString( 'Foo', get_post( $wp_customize->changeset_post_id() )->post_content );
+		$this->assertStringContainsString( 'Bar', $autosave_revision->post_content );
 
 		// Confirm autosave gets deleted.
 		$this->make_ajax_call( 'customize_dismiss_autosave_or_lock' );

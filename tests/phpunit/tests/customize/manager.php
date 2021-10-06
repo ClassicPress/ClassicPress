@@ -232,7 +232,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			$exception = $e;
 		}
 		$this->assertInstanceOf( 'WPDieException', $exception );
-		$this->assertContains( 'you are not allowed to customize this site', $exception->getMessage() );
+		$this->assertStringContainsString( 'you are not allowed to customize this site', $exception->getMessage() );
 
 		// Bad changeset.
 		$exception = null;
@@ -244,7 +244,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			$exception = $e;
 		}
 		$this->assertInstanceOf( 'WPDieException', $exception );
-		$this->assertContains( 'Invalid changeset UUID', $exception->getMessage() );
+		$this->assertStringContainsString( 'Invalid changeset UUID', $exception->getMessage() );
 
 		update_option( 'fresh_site', '0' );
 		$wp_customize = new WP_Customize_Manager();
@@ -301,7 +301,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			$exception = $e;
 		}
 		$this->assertInstanceOf( 'WPDieException', $exception );
-		$this->assertContains( 'Non-existent changeset UUID', $exception->getMessage() );
+		$this->assertStringContainsString( 'Non-existent changeset UUID', $exception->getMessage() );
 
 		wp_set_current_user( self::$admin_user_id );
 		$wp_customize = new WP_Customize_Manager( array( 'messenger_channel' => 'preview-1' ) );
@@ -686,7 +686,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertSame( 'Waffles', get_post( $posts_by_name['waffles'] )->post_title );
 		$this->assertSame( 'waffles', get_post_meta( $posts_by_name['waffles'], '_customize_draft_post_name', true ) );
 		$this->assertArrayHasKey( 'file', $attachment_metadata );
-		$this->assertContains( 'waffles', $attachment_metadata['file'] );
+		$this->assertStringContainsString( 'waffles', $attachment_metadata['file'] );
 
 		$this->assertSame( 'page', $changeset_values['show_on_front'] );
 		$this->assertSame( $posts_by_name['home'], $changeset_values['page_on_front'] );
@@ -760,9 +760,9 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertNotEmpty( get_custom_logo() );
 		$this->assertNotEmpty( get_header_image() );
 		$this->assertNotEmpty( get_background_image() );
-		$this->assertContains( 'canola', get_custom_logo() );
-		$this->assertContains( 'waffles', get_header_image() );
-		$this->assertContains( 'waffles', get_background_image() );
+		$this->assertStringContainsString( 'canola', get_custom_logo() );
+		$this->assertStringContainsString( 'waffles', get_header_image() );
+		$this->assertStringContainsString( 'waffles', get_background_image() );
 		$this->assertSame( 'waffles', get_post( $posts_by_name['waffles'] )->post_name );
 		$this->assertEmpty( get_post_meta( $posts_by_name['waffles'], '_customize_draft_post_name', true ) );
 	}
@@ -808,7 +808,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			$exception = $e;
 		}
 		$this->assertNotNull( $exception );
-		$this->assertContains( 'Unauthorized', $exception->getMessage() );
+		$this->assertStringContainsString( 'Unauthorized', $exception->getMessage() );
 	}
 
 	/**
@@ -1074,7 +1074,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertSame( 'Do it live \o/', get_option( 'blogname' ) );
 		$this->assertSame( 'trash', get_post_status( $post_id ) ); // Auto-trashed.
 		$this->assertSame( $original_capabilities, wp_list_pluck( $manager->settings(), 'capability' ) );
-		$this->assertContains( '<script>', get_post( $post_id )->post_content );
+		$this->assertStringContainsString( '<script>', get_post( $post_id )->post_content );
 		$this->assertSame( $manager->changeset_uuid(), get_post( $post_id )->post_name, 'Expected that the "__trashed" suffix to not be added.' );
 		wp_set_current_user( self::$admin_user_id );
 		$this->assertSame( 'publish', get_post_meta( $post_id, '_wp_trash_meta_status', true ) );
@@ -1211,16 +1211,16 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		);
 
 		// User saved as one who can bypass content_save_pre filter.
-		$this->assertContains( '<script>', get_option( 'custom_html_1' ) );
-		$this->assertContains( 'Wordpress', get_option( 'custom_html_1' ) ); // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
+		$this->assertStringContainsString( '<script>', get_option( 'custom_html_1' ) );
+		$this->assertStringContainsString( 'Wordpress', get_option( 'custom_html_1' ) ); // phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled
 
 		// User saved as one who cannot bypass content_save_pre filter.
-		$this->assertNotContains( '<script>', get_option( 'custom_html_2' ) );
-		$this->assertContains( 'WordPress', get_option( 'custom_html_2' ) );
+		$this->assertStringNotContainsString( '<script>', get_option( 'custom_html_2' ) );
+		$this->assertStringContainsString( 'WordPress', get_option( 'custom_html_2' ) );
 
 		// User saved as one who also cannot bypass content_save_pre filter.
-		$this->assertNotContains( '<script>', get_option( 'custom_html_3' ) );
-		$this->assertContains( 'WordPress', get_option( 'custom_html_3' ) );
+		$this->assertStringNotContainsString( '<script>', get_option( 'custom_html_3' ) );
+		$this->assertStringContainsString( 'WordPress', get_option( 'custom_html_3' ) );
 	}
 
 	/**
@@ -1662,7 +1662,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			'autosave' => true,
 		) );
 		$this->assertFalse( wp_get_post_autosave( $changeset_post_id, get_current_user_id() ) );
-		$this->assertContains( 'Autosaved Auto-draft Title', get_post( $changeset_post_id )->post_content );
+		$this->assertStringContainsString( 'Autosaved Auto-draft Title', get_post( $changeset_post_id )->post_content );
 
 		// Update status to draft for subsequent tests.
 		$wp_customize->save_changeset_post( array(
@@ -1673,8 +1673,14 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			),
 			'status' => 'draft',
 			'autosave' => false,
+<<<<<<< HEAD
 		) );
 		$this->assertContains( 'Draft Title', get_post( $changeset_post_id )->post_content );
+=======
+			)
+		);
+		$this->assertStringContainsString( 'Draft Title', get_post( $changeset_post_id )->post_content );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Fail: illegal_autosave_with_date_gmt.
 		$r = $wp_customize->save_changeset_post( array(
@@ -1719,8 +1725,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		// Verify that autosave happened.
 		$autosave_revision = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
 		$this->assertInstanceOf( 'WP_Post', $autosave_revision );
-		$this->assertContains( 'Draft Title', get_post( $changeset_post_id )->post_content );
-		$this->assertContains( 'Autosave Title', $autosave_revision->post_content );
+		$this->assertStringContainsString( 'Draft Title', get_post( $changeset_post_id )->post_content );
+		$this->assertStringContainsString( 'Autosave Title', $autosave_revision->post_content );
 	}
 
 	/**
@@ -2693,7 +2699,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 */
 	function test_get_document_title_template() {
 		$tpl = $this->manager->get_document_title_template();
-		$this->assertContains( '%s', $tpl );
+		$this->assertStringContainsString( '%s', $tpl );
 	}
 
 	/**
@@ -2824,12 +2830,12 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->manager->customize_pane_settings();
 		$content = ob_get_clean();
 
-		$this->assertContains( 'var _wpCustomizeSettings =', $content );
-		$this->assertContains( '"blogname"', $content );
-		$this->assertContains( '"type":"option"', $content );
-		$this->assertContains( '_wpCustomizeSettings.controls', $content );
-		$this->assertContains( '_wpCustomizeSettings.settings', $content );
-		$this->assertContains( '</script>', $content );
+		$this->assertStringContainsString( 'var _wpCustomizeSettings =', $content );
+		$this->assertStringContainsString( '"blogname"', $content );
+		$this->assertStringContainsString( '"type":"option"', $content );
+		$this->assertStringContainsString( '_wpCustomizeSettings.controls', $content );
+		$this->assertStringContainsString( '_wpCustomizeSettings.settings', $content );
+		$this->assertStringContainsString( '</script>', $content );
 
 		$this->assertNotEmpty( preg_match( '#var _wpCustomizeSettings\s*=\s*({.*?});\s*\n#', $content, $matches ) );
 		$json = $matches[1];
@@ -2876,7 +2882,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		ob_start();
 		$manager->remove_frameless_preview_messenger_channel();
 		$output = ob_get_clean();
-		$this->assertContains( '<script>', $output );
+		$this->assertStringContainsString( '<script>', $output );
 	}
 
 	/**

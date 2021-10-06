@@ -201,12 +201,12 @@ class Test_WP_Widget_Media_Video extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Check default outputs.
-		$this->assertContains( 'preload="metadata"', $output );
-		$this->assertContains( 'class="wp-video"', $output );
-		$this->assertContains( 'width:100%', $output );
-		$this->assertNotContains( 'height=', $output );
-		$this->assertNotContains( 'width="', $output );
-		$this->assertContains( 'small-video.m4v', $output );// Auto parses dimensions.
+		$this->assertStringContainsString( 'preload="metadata"', $output );
+		$this->assertStringContainsString( 'class="wp-video"', $output );
+		$this->assertStringContainsString( 'width:100%', $output );
+		$this->assertStringNotContainsString( 'height=', $output );
+		$this->assertStringNotContainsString( 'width="', $output );
+		$this->assertStringContainsString( 'small-video.m4v', $output );// Auto parses dimensions.
 
 		ob_start();
 		$widget->render_media( array(
@@ -218,8 +218,8 @@ class Test_WP_Widget_Media_Video extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Custom attributes.
-		$this->assertContains( 'preload="metadata"', $output );
-		$this->assertContains( 'loop="1"', $output );
+		$this->assertStringContainsString( 'preload="metadata"', $output );
+		$this->assertStringContainsString( 'loop="1"', $output );
 
 		// Externally hosted video.
 		ob_start();
@@ -233,9 +233,15 @@ class Test_WP_Widget_Media_Video extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Custom attributes.
+<<<<<<< HEAD
 		$this->assertContains( 'preload="metadata"', $output );
 		$this->assertContains( 'src="https://www.youtube.com/watch?v=OQSNhk5ICTI', $output );
 		$this->assertContains( $content, $output );
+=======
+		$this->assertStringContainsString( 'preload="metadata"', $output );
+		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=72xdCU__XCk', $output );
+		$this->assertStringContainsString( $content, $output );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**
@@ -290,6 +296,6 @@ class Test_WP_Widget_Media_Video extends WP_UnitTestCase {
 		$widget->render_control_template_scripts();
 		$output = ob_get_clean();
 
-		$this->assertContains( '<script type="text/html" id="tmpl-wp-media-widget-video-preview">', $output );
+		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-video-preview">', $output );
 	}
 }
