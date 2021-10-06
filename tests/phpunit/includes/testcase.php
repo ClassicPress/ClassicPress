@@ -14,6 +14,7 @@ require_once dirname( __FILE__ ) . '/abstract-testcase.php';
 
 class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	/**
+<<<<<<< HEAD
 	 * Asserts that a condition is not false.
 	 *
 	 * This method has been backported from a more recent PHPUnit version,
@@ -31,6 +32,8 @@ class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	}
 
 	/**
+=======
+>>>>>>> 3a9e78c000 (Tests: Remove the polyfill for `assertNotFalse()`.)
 	 * Asserts that two variables are equal (with delta).
 	 *
 	 * This method has been backported from a more recent PHPUnit version,
