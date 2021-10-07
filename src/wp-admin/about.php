@@ -30,7 +30,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 				'https://link.classicpress.net/the-cms-for-creators'
 			); ?>
 			<br />
-			<?php _e( 'Stable. Secure. Instantly Familiar.' ); ?>
+			<?php _e( 'Stable. Lightweight. Instantly Familiar.' ); ?>
 		</p>
 		<div class="wp-badge"></div>
 
