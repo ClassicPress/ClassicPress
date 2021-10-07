@@ -111,7 +111,7 @@ class Tests_Terms_GetTermsParentsList extends WP_UnitTestCase {
 			'parent'   => self::$c2->term_id,
 		) );
 
-		$expected = self::$c3->name . '/' . self::$c2->name . '/' . $c1->name . '/';
+		$expected = $c3->name . '/' . self::$c2->name . '/' . self::$c1->name . '/';
 		$found = get_term_parents_list(
 			$c3->term_id,
 			'wptests_tax',
