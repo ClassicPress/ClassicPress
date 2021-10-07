@@ -6,7 +6,12 @@
  * @group redirect
  */
 class Tests_Formatting_Redirect extends WP_UnitTestCase {
+<<<<<<< HEAD
 	function setUp() {
+=======
+	function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		add_filter( 'home_url', array( $this, 'home_url' ) );
 	}
 

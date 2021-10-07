@@ -8,8 +8,8 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	private $old_wp_scripts;
 	private $old_wp_styles;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		$this->old_wp_styles = isset( $GLOBALS['wp_styles'] ) ? $GLOBALS['wp_styles'] : null;
 
@@ -22,12 +22,16 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 		$GLOBALS['wp_styles']->default_version = get_bloginfo( 'version' );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
 		$GLOBALS['wp_styles']  = $this->old_wp_styles;
+<<<<<<< HEAD:tests/phpunit/tests/general/resourceHints.php
 		add_action( 'wp_default_scripts', 'wp_default_scripts' );
 		add_action( 'wp_default_styles', 'wp_default_styles' );
 		parent::tearDown();
+=======
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.):tests/phpunit/tests/general/wpResourceHints.php
 	}
 
 	function test_should_have_defaults_on_frontend() {

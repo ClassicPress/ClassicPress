@@ -55,9 +55,17 @@ class Tests_Template extends WP_UnitTestCase {
 		);
 	}
 
+<<<<<<< HEAD
 	public function setUp() {
 		parent::setUp();
 		register_post_type( 'cpt', array(
+=======
+	public function set_up() {
+		parent::set_up();
+		register_post_type(
+			'cpt',
+			array(
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 			'public' => true,
 		) );
 		register_taxonomy( 'taxo', 'post', array(
@@ -67,11 +75,11 @@ class Tests_Template extends WP_UnitTestCase {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		unregister_post_type( 'cpt' );
 		unregister_taxonomy( 'taxo' );
 		$this->set_permalink_structure( '' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 

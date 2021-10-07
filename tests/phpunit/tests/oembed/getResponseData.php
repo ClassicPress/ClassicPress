@@ -4,6 +4,16 @@
  * @group oembed
  */
 class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
+<<<<<<< HEAD
+=======
+	public function set_up() {
+		parent::set_up();
+
+		// `get_post_embed_html()` assumes `wp-includes/js/wp-embed.js` is present:
+		self::touch( ABSPATH . WPINC . '/js/wp-embed.js' );
+	}
+
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	function test_get_oembed_response_data_non_existent_post() {
 		$this->assertFalse( get_oembed_response_data( 0, 100 ) );
 	}

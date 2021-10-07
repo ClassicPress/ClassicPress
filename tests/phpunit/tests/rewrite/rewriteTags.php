@@ -9,9 +9,14 @@ class Tests_Rewrite_Tags extends WP_UnitTestCase {
 	protected $queryreplace;
 	protected $wp_rewrite;
 
-	public function setUp() {
+	public function set_up() {
 		global $wp_rewrite;
+<<<<<<< HEAD
 		$this->wp_rewrite = $wp_rewrite;
+=======
+		parent::set_up();
+
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$wp_rewrite       = new WP_Rewrite();
 		$wp_rewrite->init();
 

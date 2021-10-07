@@ -4,8 +4,8 @@ class Tests_Paginate_Links extends WP_UnitTestCase {
 
 	private $i18n_count = 0;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->go_to( home_url( '/' ) );
 	}

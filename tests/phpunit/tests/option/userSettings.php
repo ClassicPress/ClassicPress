@@ -2,8 +2,8 @@
 class Tests_User_Settings extends WP_UnitTestCase {
 	protected $user_id;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->user_id = self::factory()->user->create( array(
 			'role' => 'administrator'
@@ -12,10 +12,10 @@ class Tests_User_Settings extends WP_UnitTestCase {
 		wp_set_current_user( $this->user_id );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		unset( $GLOBALS['_updated_user_settings'] );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_set_user_setting() {

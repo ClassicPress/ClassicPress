@@ -17,8 +17,8 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 		self::$header_video_id = $factory->attachment->create_upload_object( $file );
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
@@ -27,7 +27,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 		wp_dequeue_script( 'wp-custom-header' );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$this->customize_manager = null;
 		unset( $GLOBALS['wp_customize'] );
 
@@ -37,7 +37,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 		remove_theme_mod( 'header_video' );
 		remove_theme_mod( 'external_header_video' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_add_and_remove_theme_support() {

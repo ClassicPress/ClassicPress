@@ -39,8 +39,13 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	 *
 	 * @since 4.9.6
 	 */
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
+=======
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		reset_phpmailer_instance();
 	}
 
@@ -49,9 +54,16 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	 *
 	 * @since 4.9.6
 	 */
+<<<<<<< HEAD
 	function tearDown() {
 		reset_phpmailer_instance();
 		parent::tearDown();
+=======
+	public function tear_down() {
+		reset_phpmailer_instance();
+		restore_previous_locale();
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

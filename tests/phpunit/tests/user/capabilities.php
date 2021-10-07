@@ -29,9 +29,15 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		grant_super_admin( self::$super_admin->ID );
 	}
 
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		// keep track of users we create
+=======
+	function set_up() {
+		parent::set_up();
+		// Keep track of users we create.
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->_flush_roles();
 
 	}

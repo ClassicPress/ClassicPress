@@ -12,8 +12,8 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	protected $month_url;
 	protected $year_url;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->month_url = get_month_link( date( 'Y' ), date( 'm' ) );
 		$this->year_url = get_year_link( date( 'Y' ) );

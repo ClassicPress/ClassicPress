@@ -91,8 +91,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_delete_post( self::$hold_id, true );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->endpoint = new WP_REST_Comments_Controller;
 		if ( is_multisite() ) {
 			update_site_option( 'site_admins', array( 'superadmin' ) );

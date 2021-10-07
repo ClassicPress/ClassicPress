@@ -50,17 +50,23 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up the test fixture.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
 	}
 
 	/**
 	 * Tear down.
 	 */
+<<<<<<< HEAD
 	public function tearDown() {
 		parent::tearDown();
 		$_REQUEST = array();
+=======
+	public function tear_down() {
+		$_REQUEST = array();
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

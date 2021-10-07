@@ -55,8 +55,8 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 		self::delete_user( self::$subscriber );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		register_meta( 'term', 'test_single', array(
 			'show_in_rest' => true,

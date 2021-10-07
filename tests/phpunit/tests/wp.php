@@ -9,7 +9,12 @@ class Tests_WP extends WP_UnitTestCase {
 	 */
 	protected $wp;
 
+<<<<<<< HEAD
 	public function setUp() {
+=======
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->wp = new WP();
 	}
 

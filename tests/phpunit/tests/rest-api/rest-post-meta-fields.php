@@ -33,8 +33,8 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		unregister_post_type( 'cpt' );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		register_meta( 'post', 'test_single', array(
 			'show_in_rest' => true,

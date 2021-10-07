@@ -22,8 +22,8 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	protected $tag;
 	protected $tax;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		set_current_screen( 'front' );
 

@@ -12,14 +12,24 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 	public $editor_engine = 'WP_Image_Editor_Imagick';
 
+<<<<<<< HEAD
 	public function setUp() {
 		require_once( ABSPATH . WPINC . '/class-wp-image-editor.php' );
 		require_once( ABSPATH . WPINC . '/class-wp-image-editor-imagick.php' );
 
 		parent::setUp();
+=======
+	public function set_up() {
+		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
+		require_once ABSPATH . WPINC . '/class-wp-image-editor-imagick.php';
+		require_once DIR_TESTROOT . '/includes/class-wp-test-stream.php';
+
+		// This needs to come after the mock image editor class is loaded.
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$folder = DIR_TESTDATA . '/images/waffles-*.jpg';
 
 		foreach ( glob( $folder ) as $file ) {
@@ -28,7 +38,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$this->remove_added_uploads();
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

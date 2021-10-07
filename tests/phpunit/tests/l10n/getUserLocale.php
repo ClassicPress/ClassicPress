@@ -7,8 +7,8 @@
 class Tests_Get_User_Locale extends WP_UnitTestCase {
 	protected $user_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->user_id = $this->factory()->user->create( array(
 			'role'   => 'administrator',

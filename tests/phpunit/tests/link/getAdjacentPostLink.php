@@ -8,8 +8,13 @@ class Tests_Link_GetAdjacentPostLink extends WP_UnitTestCase {
 	protected $post_ids;
 	protected $cat_id;
 
+<<<<<<< HEAD
 	public function setUp(){
 		parent::setUp();
+=======
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->cat_id = self::factory()->category->create( array( 'name' => 'other' ) );
 		$this->post_ids = array();
 		$this->post_ids[] = self::factory()->post->create( array( 'post_type' => 'post', 'post_date' => '2014-10-26 05:32:29', 'category_id' => 1 ) );

@@ -4,7 +4,12 @@
  * @group taxonomy
  */
 class Tests_Taxonomy_GetObjectTaxonomies extends WP_UnitTestCase {
+<<<<<<< HEAD
 	public function setUp() {
+=======
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		register_post_type( 'wptests_pt' );
 		register_taxonomy( 'wptests_tax', 'wptests_pt' );
 	}

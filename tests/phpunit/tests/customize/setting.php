@@ -17,18 +17,24 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	 */
 	public $undefined;
 
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
+=======
+	function set_up() {
+		parent::set_up();
+		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
 		$this->manager = $GLOBALS['wp_customize'];
 		$this->undefined = new stdClass();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$this->manager = null;
 		unset( $GLOBALS['wp_customize'] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_constructor_without_args() {

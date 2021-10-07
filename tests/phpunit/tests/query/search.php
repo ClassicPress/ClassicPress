@@ -8,8 +8,8 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	protected $q;
 	protected $post_type;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->post_type = rand_str( 12 );
 		register_post_type( $this->post_type );
@@ -17,11 +17,15 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->q = new WP_Query();
 	}
 
+<<<<<<< HEAD
 	function tearDown() {
 		_unregister_post_type( $this->post_type );
+=======
+	function tear_down() {
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		unset( $this->q );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function get_search_results( $terms ) {

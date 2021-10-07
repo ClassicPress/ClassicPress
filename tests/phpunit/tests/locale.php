@@ -10,7 +10,12 @@ class Tests_Locale extends WP_UnitTestCase {
 	 */
 	protected $locale;
 
+<<<<<<< HEAD
 	public function setUp() {
+=======
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->locale = new WP_Locale();
 	}
 

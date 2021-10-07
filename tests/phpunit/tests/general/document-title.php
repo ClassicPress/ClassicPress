@@ -34,8 +34,8 @@ class Tests_General_DocumentTitle extends WP_UnitTestCase {
 		) );
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		add_action( 'after_setup_theme', array( $this, '_add_title_tag_support' ) );
 

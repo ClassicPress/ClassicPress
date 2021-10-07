@@ -17,9 +17,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * Make sure the upgrade code is loaded before the tests are run.
 	 */
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	}
@@ -27,7 +27,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * Create a custom table to be used in each test.
 	 */
-	public function setUp() {
+	public function set_up() {
 
 		global $wpdb;
 
@@ -47,17 +47,23 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
+<<<<<<< HEAD
 		parent::setUp();
+=======
+		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
+		// causes it to create a temporary table, and a temporary table cannot use a FULLTEXT index.
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**
 	 * Delete the custom table on teardown.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 
 		global $wpdb;
 
-		parent::tearDown();
+		parent::tear_down();
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dbdelta_test" );
 	}

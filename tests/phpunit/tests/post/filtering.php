@@ -8,16 +8,22 @@
  * @group formatting
  */
 class Tests_Post_Filtering extends WP_UnitTestCase {
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		update_option('use_balanceTags', 1);
+=======
+	function set_up() {
+		parent::set_up();
+		update_option( 'use_balanceTags', 1 );
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		kses_init_filters();
 
 	}
 
-	function tearDown() {
+	function tear_down() {
 		kses_remove_filters();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	// a simple test to make sure unclosed tags are fixed

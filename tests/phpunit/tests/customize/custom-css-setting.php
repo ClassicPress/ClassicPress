@@ -27,8 +27,8 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	 *
 	 * @see WP_UnitTestCase::setup()
 	 */
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
 
 		$user_id = self::factory()->user->create( array(
@@ -52,9 +52,15 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	/**
 	 * Tear down the test case.
 	 */
+<<<<<<< HEAD
 	function tearDown() {
 		parent::tearDown();
 		$this->setting = null;
+=======
+	function tear_down() {
+		$this->setting = null;
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

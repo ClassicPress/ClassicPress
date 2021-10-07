@@ -15,17 +15,17 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	protected static $different_network_id;
 	protected static $different_site_ids = array();
 
-	function setUp() {
+		function set_up() {
 		global $wpdb;
-		parent::setUp();
+			parent::set_up();
 		$this->suppress = $wpdb->suppress_errors();
 	}
 
-	function tearDown() {
+		function tear_down() {
 		global $wpdb, $current_site;
 		$wpdb->suppress_errors( $this->suppress );
 		$current_site->id = 1;
-		parent::tearDown();
+			parent::tear_down();
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {

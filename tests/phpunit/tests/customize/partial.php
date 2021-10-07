@@ -29,10 +29,16 @@ class Test_WP_Customize_Partial extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
 		// @codingStandardsIgnoreStart
+=======
+	function set_up() {
+		parent::set_up();
+		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
 		// @codingStandardsIgnoreEnd
 		$this->wp_customize = $GLOBALS['wp_customize'];
@@ -351,9 +357,9 @@ class Test_WP_Customize_Partial extends WP_UnitTestCase {
 	/**
 	 * Tear down.
 	 */
-	function tearDown() {
+	function tear_down() {
 		$this->wp_customize = null;
 		unset( $GLOBALS['wp_customize'] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 }

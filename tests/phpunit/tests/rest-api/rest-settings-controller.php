@@ -31,11 +31,33 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		self::delete_user( self::$author );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->endpoint = new WP_REST_Settings_Controller();
 	}
 
+<<<<<<< HEAD
+=======
+	public function tear_down() {
+		$settings_to_unregister = array(
+			'mycustomsetting',
+			'mycustomsetting1',
+			'mycustomsetting2',
+			'mycustomarraysetting',
+		);
+
+		$registered_settings = get_registered_settings();
+
+		foreach ( $settings_to_unregister as $setting ) {
+			if ( isset( $registered_settings[ $setting ] ) ) {
+				unregister_setting( 'somegroup', $setting );
+			}
+		}
+
+		parent::tear_down();
+	}
+
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();
 		$this->assertArrayHasKey( '/wp/v2/settings', $routes );

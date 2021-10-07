@@ -15,8 +15,8 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 		) );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->locale = '';
 

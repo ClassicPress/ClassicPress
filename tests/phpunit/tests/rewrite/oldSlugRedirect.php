@@ -9,8 +9,8 @@ class Tests_Rewrite_OldSlugRedirect extends WP_UnitTestCase {
 
 	protected $post_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->post_id = self::factory()->post->create( array(
 			'post_title'   => 'Foo Bar',
@@ -27,12 +27,19 @@ class Tests_Rewrite_OldSlugRedirect extends WP_UnitTestCase {
 		flush_rewrite_rules();
 	}
 
+<<<<<<< HEAD
 	public function tearDown() {
 		parent::tearDown();
 
 		$this->old_slug_redirect_url = null;
 
 		remove_filter( 'old_slug_redirect_url', array( $this, 'filter_old_slug_redirect_url' ), 10 );
+=======
+	public function tear_down() {
+		$this->old_slug_redirect_url = null;
+
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public function test_old_slug_redirect() {

@@ -6,16 +6,23 @@
 class Tests_Cache extends WP_UnitTestCase {
 	var $cache = null;
 
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		// create two cache objects with a shared cache dir
 		// this simulates a typical cache situation, two separate requests interacting
+=======
+	function set_up() {
+		parent::set_up();
+		// Create two cache objects with a shared cache directory.
+		// This simulates a typical cache situation, two separate requests interacting.
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->cache =& $this->init_cache();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$this->flush_cache();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function &init_cache() {

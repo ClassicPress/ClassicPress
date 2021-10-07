@@ -12,14 +12,23 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 	public $editor_engine = 'WP_Image_Editor_GD';
 
+<<<<<<< HEAD
 	public function setUp() {
 		require_once( ABSPATH . WPINC . '/class-wp-image-editor.php' );
 		require_once( ABSPATH . WPINC . '/class-wp-image-editor-gd.php' );
 
 		parent::setUp();
+=======
+	public function set_up() {
+		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
+		require_once ABSPATH . WPINC . '/class-wp-image-editor-gd.php';
+
+		// This needs to come after the mock image editor class is loaded.
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$folder = DIR_TESTDATA . '/images/waffles-*.jpg';
 
 		foreach ( glob( $folder ) as $file ) {
@@ -28,7 +37,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$this->remove_added_uploads();
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_supports_mime_type_jpeg() {

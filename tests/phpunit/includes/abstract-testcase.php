@@ -59,7 +59,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Runs the routine before setting up all tests.
 	 */
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 		global $wpdb;
 
 		$wpdb->suppress_errors = false;
@@ -67,7 +67,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 		$wpdb->db_connect();
 		ini_set( 'display_errors', 1 );
 
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 
 		$c = get_called_class();
 		if ( ! method_exists( $c, 'wpSetUpBeforeClass' ) ) {
@@ -83,8 +83,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Runs the routine after all tests have been run.
 	 */
-	public static function tearDownAfterClass() {
-		parent::tearDownAfterClass();
+	public static function tear_down_after_class() {
+		parent::tear_down_after_class();
 
 		_delete_all_data();
 		self::flush_cache();
@@ -103,7 +103,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Runs the routine before each test is executed.
 	 */
-	public function setUp() {
+	public function set_up() {
 		set_time_limit( 0 );
 
 		if ( ! self::$ignore_files ) {
@@ -143,7 +143,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * After a test method runs, reset any state in ClassicPress the test method might have changed.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		global $wpdb, $wp_query, $wp;
 		$wpdb->query( 'ROLLBACK' );
 		if ( is_multisite() ) {
@@ -494,7 +494,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 *
 	 * @since WP-4.2.0
 	 */
-	protected function assertPostConditions() {
+	protected function assert_post_conditions() {
 		$this->expectedDeprecated();
 	}
 

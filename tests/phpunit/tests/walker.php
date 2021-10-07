@@ -8,7 +8,12 @@
  */
 class Tests_Walker extends WP_UnitTestCase {
 
+<<<<<<< HEAD
 	function setUp() {
+=======
+	function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 
 		$this->walker = new Walker_Test();
 

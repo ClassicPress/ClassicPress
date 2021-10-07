@@ -7,8 +7,8 @@ class Tests_Comment extends WP_UnitTestCase {
 	protected static $user_id;
 	protected static $post_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		reset_phpmailer_instance();
 	}
 

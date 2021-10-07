@@ -17,6 +17,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	protected $http_request_args;
 
+<<<<<<< HEAD
 	/**
 	 * Please kill this code ASAP.
 	 */
@@ -32,6 +33,10 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	function setUp() {
+=======
+	function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 
 		if ( is_callable( array('WP_Http', '_getTransport') ) ) {
 			$this->markTestSkipped('The WP_Http tests require a class-http.php file of r17550 or later.');

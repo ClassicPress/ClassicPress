@@ -7,8 +7,8 @@
  */
 class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		update_option( 'show_on_front', 'page' );
 		update_option( 'page_for_posts', self::factory()->post->create( array( 'post_title' => 'blog-page', 'post_type' => 'page' ) ) );

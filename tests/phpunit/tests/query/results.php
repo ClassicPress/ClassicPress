@@ -67,8 +67,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		self::$post_ids[] = self::$child_four = $factory->post->create( array( 'post_title' => 'child-four', 'post_parent' => self::$parent_two, 'post_date' => '2007-01-01 00:00:04' ) );
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		unset( $this->q );
 		$this->q = new WP_Query();

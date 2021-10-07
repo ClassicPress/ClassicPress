@@ -14,8 +14,8 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	protected $page_ids;
 	protected $post_ids;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		set_current_screen( 'front' );
 

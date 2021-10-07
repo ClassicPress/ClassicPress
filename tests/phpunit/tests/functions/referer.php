@@ -6,20 +6,35 @@
  * @group functions.php
  */
 class Tests_Functions_Referer extends WP_UnitTestCase {
+<<<<<<< HEAD
 	public function setUp() {
 		parent::setUp();
+=======
+
+	public function set_up() {
+		parent::set_up();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 
 		$_SERVER['HTTP_REFERER']      = '';
 		$_SERVER['REQUEST_URI']       = '';
 		$_REQUEST['_wp_http_referer'] = '';
 	}
 
+<<<<<<< HEAD
 	public function tearDown() {
 		parent::tearDown();
 
 		$_SERVER['HTTP_REFERER']      = '';
 		$_SERVER['REQUEST_URI']       = '';
 		$_REQUEST['_wp_http_referer'] = '';
+=======
+	public function tear_down() {
+		$_SERVER['HTTP_REFERER']      = '';
+		$_SERVER['REQUEST_URI']       = '';
+		$_REQUEST['_wp_http_referer'] = '';
+
+		parent::tear_down();
+>>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public function _fake_subfolder_install() {
