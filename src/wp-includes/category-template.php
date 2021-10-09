@@ -1272,12 +1272,11 @@ function get_the_term_list( $id, $taxonomy, $before = '', $sep = '', $after = ''
  *     @type string $separator     Separator for between the terms. Default '/'.
  *     @type bool   $link          Whether to format as a link. Default true.
  *     @type bool   $inclusive     Include the term to get the parents for. Default true.
- *     @type bool   $parents_first In what order to return the parent terms. If
- *                                 true, the terms returned are ordered from
- *                                 highest to lowest in the hierarchy. If
- *                                 false, the terms returned are ordered from
- *                                 lowest to highest in the hierarchy. Default
- *                                 true. Accepts bool false|true.
+ *     @type bool   $parents_first Order hierarchy for term names. If true, the terms
+ *                                 returned are ordered from parent to child.
+ *                                 If false, the terms returned are ordered
+ *                                 from child to parent.
+ *                                 Default is true. Accepts bool false|true.
  * }
  * @return string|WP_Error A list of term parents on success, WP_Error or empty
  * string on failure.
