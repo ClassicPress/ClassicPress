@@ -16,6 +16,17 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "0.7.1",
 		"wp-coding-standards/wpcs": "2.3.0",
 		"phpcompatibility/phpcompatibility-wp": "~2.1.2",
+<<<<<<< HEAD
 		"yoast/phpunit-polyfills": "^1.0"
+=======
+		"yoast/phpunit-polyfills": "^1.0.1"
+	},
+	"scripts": {
+		"compat": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --standard=phpcompat.xml.dist --report=summary,source",
+		"format": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf --report=summary,source",
+		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --report=summary,source",
+		"lint:errors": "@lint -n",
+		"test": "@php ./vendor/phpunit/phpunit/phpunit"
+>>>>>>> 9b565f7907 (Build/Test Tools: Make the polyfills loading more flexible.)
 	}
 }
