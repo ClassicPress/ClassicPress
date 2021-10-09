@@ -1302,7 +1302,6 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertArrayNotHasKey( 'https://api.w.org/action-publish', $links );
 	}
 
-<<<<<<< HEAD
 	public function tear_down() {
 		parent::tear_down();
 		if ( file_exists( $this->test_file ) ) {
@@ -1315,10 +1314,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->remove_added_uploads();
 	}
 
-	protected function check_post_data( $attachment, $data, $context = 'view', $links ) {
-=======
 	protected function check_post_data( $attachment, $data, $context = 'view', $links = array() ) {
->>>>>>> 9c220ffaf7 (Code Modernization: Fix PHP 8 deprecation notices for optional function parameters declared before required parameters.)
 		parent::check_post_data( $attachment, $data, $context, $links );
 
 		$this->assertArrayNotHasKey( 'content', $data );
