@@ -5000,14 +5000,9 @@ function get_file_data( $file, $default_headers, $context = '' ) {
 	// We don't need to write to the file, so just open for reading.
 	$fp = fopen( $file, 'r' );
 
-<<<<<<< HEAD
-	// Pull only the first 8kiB of the file in.
-	$file_data = fread( $fp, 8192 );
-=======
 	if ( $fp ) {
 		// Pull only the first 8 KB of the file in.
 		$file_data = fread( $fp, 8 * KB_IN_BYTES );
->>>>>>> 498fae638d (Code Modernization: Check if the file to retrieve metadata from in `get_file_data()` was successfully opened.)
 
 		// PHP will close file handle, but we are good citizens.
 		fclose( $fp );
