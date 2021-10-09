@@ -808,13 +808,21 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 *
 	 * This is a custom extension of the PHPUnit requirements handling.
 	 *
+<<<<<<< HEAD
 	 * Contains legacy code for skipping tests that are associated with an open Trac ticket. Core tests no longer
 	 * support this behaviour.
 	 *
 	 * @since WP-3.5.0
+=======
+	 * @since 3.5.0
+	 * @deprecated 5.9.0 This method has not been functional since PHPUnit 7.0.
+>>>>>>> 2985e902d4 (Build/Test Tools: Hard deprecate `WP_UnitTestCase_Base::checkRequirements()`.)
 	 */
 	protected function checkRequirements() {
+		// For PHPUnit 5/6, as we're overloading a public PHPUnit native method in those versions.
+		if ( is_callable( 'PHPUnit\Framework\TestCase', 'checkRequirements' ) ) {
 		parent::checkRequirements();
+<<<<<<< HEAD
 
 		$annotations = $this->getAnnotations();
 
@@ -854,6 +862,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 					$this->knownPluginBug( $ticket );
 				}
 			}
+=======
+>>>>>>> 2985e902d4 (Build/Test Tools: Hard deprecate `WP_UnitTestCase_Base::checkRequirements()`.)
 		}
 	}
 
@@ -876,8 +886,12 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Skips the current test if there is an open Unit Test Trac ticket associated with it.
 	 *
+<<<<<<< HEAD
 	 * @since WP-3.5.0
 	 *
+=======
+	 * @since 3.5.0
+>>>>>>> 2985e902d4 (Build/Test Tools: Hard deprecate `WP_UnitTestCase_Base::checkRequirements()`.)
 	 * @deprecated No longer used since the Unit Test Trac was merged into the Core Trac.
 	 *
 	 * @param int $ticket_id Ticket number.
