@@ -97,12 +97,8 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/23289
-	 * @expectedException WPDieException
-=======
 	 * @ticket 23289
->>>>>>> d46af0956d (Tests: Consistently use the `expectException()` method instead of the older `@expectedException` annotation.)
 	 */
 	function test_special_option_name_alloption() {
 		$this->expectException( 'WPDieException' );
@@ -110,12 +106,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/23289
-	 * @expectedException WPDieException
-=======
-	 * @ticket 23289
->>>>>>> d46af0956d (Tests: Consistently use the `expectException()` method instead of the older `@expectedException` annotation.)
 	 */
 	function test_special_option_name_notoptions() {
 		$this->expectException( 'WPDieException' );

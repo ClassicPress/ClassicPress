@@ -180,16 +180,8 @@ EOT;
 		$this->assertSame( array( 1 => '993003b95758e0ac2eba451a4c5877eb1bb7b92a' ), unpack( 'H40', _hash_hmac( 'sha1', 'simple', 'key', true ) ) );
 	}
 
-<<<<<<< HEAD
-	/**
-	 * @expectedException PHPUnit_Framework_Error_Notice
-	 */
 	function test_json_encode_decode() {
-		$this->expectNotice();
-=======
-	function test_json_encode_decode() {
-		$this->expectException( 'PHPUnit_Framework_Error_Deprecated' );
->>>>>>> d46af0956d (Tests: Consistently use the `expectException()` method instead of the older `@expectedException` annotation.)
+		$this->expectException( 'PHPUnit\Framework\Error\Notice' );
 
 		require_once ABSPATH . WPINC . '/class-json.php';
 		$json = new Services_JSON();
