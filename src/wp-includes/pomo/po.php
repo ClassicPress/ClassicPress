@@ -183,6 +183,7 @@ class PO extends Gettext_Translations {
 		return implode("\n", $lines) . $append;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Prepare a text as a comment -- wraps the lines and prepends #
 	 * and a special character to each line
@@ -224,6 +225,47 @@ class PO extends Gettext_Translations {
 			foreach($translations as $i => $translation) {
 				$translation = PO::match_begin_and_end_newlines( $translation, $entry->plural );
 				$po[] = "msgstr[$i] ".PO::poify($translation);
+=======
+		/**
+		 * Builds a string from the entry for inclusion in PO file
+		 *
+		 * @param Translation_Entry $entry the entry to convert to po string.
+		 * @return string|false PO-style formatted string for the entry or
+		 *  false if the entry is empty
+		 */
+		public static function export_entry( $entry ) {
+			if ( null === $entry->singular || '' === $entry->singular ) {
+				return false;
+			}
+			$po = array();
+			if ( ! empty( $entry->translator_comments ) ) {
+				$po[] = PO::comment_block( $entry->translator_comments );
+			}
+			if ( ! empty( $entry->extracted_comments ) ) {
+				$po[] = PO::comment_block( $entry->extracted_comments, '.' );
+			}
+			if ( ! empty( $entry->references ) ) {
+				$po[] = PO::comment_block( implode( ' ', $entry->references ), ':' );
+			}
+			if ( ! empty( $entry->flags ) ) {
+				$po[] = PO::comment_block( implode( ', ', $entry->flags ), ',' );
+			}
+			if ( $entry->context ) {
+				$po[] = 'msgctxt ' . PO::poify( $entry->context );
+			}
+			$po[] = 'msgid ' . PO::poify( $entry->singular );
+			if ( ! $entry->is_plural ) {
+				$translation = empty( $entry->translations ) ? '' : $entry->translations[0];
+				$translation = PO::match_begin_and_end_newlines( $translation, $entry->singular );
+				$po[]        = 'msgstr ' . PO::poify( $translation );
+			} else {
+				$po[]         = 'msgid_plural ' . PO::poify( $entry->plural );
+				$translations = empty( $entry->translations ) ? array( '', '' ) : $entry->translations;
+				foreach ( $translations as $i => $translation ) {
+					$translation = PO::match_begin_and_end_newlines( $translation, $entry->plural );
+					$po[]        = "msgstr[$i] " . PO::poify( $translation );
+				}
+>>>>>>> 918bebfe3c (Code Modernization: Remove unnecessary reference sign from `PO::export_entry()` definition.)
 			}
 		}
 		return implode("\n", $po);
