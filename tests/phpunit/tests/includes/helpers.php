@@ -206,14 +206,138 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/36166
 	 * @expectedException WPDieException
+=======
+	 * @ticket 36166
+>>>>>>> d46af0956d (Tests: Consistently use the `expectException()` method instead of the older `@expectedException` annotation.)
 	 */
 	public function test_die_handler_should_handle_wp_error() {
+		$this->expectException( 'WPDieException' );
+
 		wp_die( new WP_Error( 'test', 'test' ) );
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * @ticket 46813
+	 */
+	public function test_die_handler_should_not_cause_doing_it_wrong_notice_without_wp_query_set() {
+		$this->expectException( 'WPDieException' );
+		unset( $GLOBALS['wp_query'] );
+
+		wp_die();
+
+		$this->assertEmpty( $this->caught_doing_it_wrong );
+	}
+
+	/**
+	 * @ticket 45933
+	 * @dataProvider data_die_process_input
+	 */
+	public function test_die_process_input( $input, $expected ) {
+		$defaults = array(
+			'message' => '',
+			'title'   => '',
+			'args'    => array(),
+		);
+
+		$input    = wp_parse_args(
+			$input,
+			$defaults
+		);
+		$expected = wp_parse_args(
+			$expected,
+			$defaults
+		);
+
+		list( $message, $title, $args ) = _wp_die_process_input( $input['message'], $input['title'], $input['args'] );
+
+		$this->assertSame( $expected['message'], $message );
+		$this->assertSame( $expected['title'], $title );
+
+		// Only check arguments that are explicitly asked for.
+		$this->assertSameSets( $expected['args'], array_intersect_key( $args, $expected['args'] ) );
+	}
+
+	public function data_die_process_input() {
+		return array(
+			array(
+				array(
+					'message' => 'Broken.',
+				),
+				array(
+					'message' => 'Broken.',
+					'title'   => 'WordPress &rsaquo; Error',
+					'args'    => array(
+						'response'       => 500,
+						'code'           => 'wp_die',
+						'text_direction' => 'ltr',
+					),
+				),
+			),
+			array(
+				array(
+					'message' => 'Broken.',
+					'title'   => 'Fatal Error',
+					'args'    => array(
+						'response' => null,
+					),
+				),
+				array(
+					'message' => 'Broken.',
+					'title'   => 'Fatal Error',
+					'args'    => array(
+						'response' => 500,
+					),
+				),
+			),
+			array(
+				array(
+					'message' => 'More breakage.',
+					'args'    => array(
+						'response'       => 400,
+						'code'           => 'custom_code',
+						'text_direction' => 'rtl',
+					),
+				),
+				array(
+					'message' => 'More breakage.',
+					'title'   => 'WordPress &rsaquo; Error',
+					'args'    => array(
+						'response'       => 400,
+						'code'           => 'custom_code',
+						'text_direction' => 'rtl',
+					),
+				),
+			),
+			array(
+				array(
+					'message' => new WP_Error(
+						'no_access',
+						'You do not have access.',
+						array(
+							'status' => 403,
+							'title'  => 'Permission Error',
+						)
+					),
+				),
+				array(
+					'message' => 'You do not have access.',
+					'title'   => 'Permission Error',
+					'args'    => array(
+						'response' => 403,
+						'code'     => 'no_access',
+					),
+				),
+			),
+		);
+	}
+
+	/**
+>>>>>>> d46af0956d (Tests: Consistently use the `expectException()` method instead of the older `@expectedException` annotation.)
 	 * This test is just a setup for the one that follows.
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/38196
