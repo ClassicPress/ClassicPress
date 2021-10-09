@@ -284,7 +284,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertIsString( $editor1 );
 
 		$editor2 = wp_get_image_editor( DIR_TESTDATA );
-		$this->assertNotInternalType( 'resource', $editor2 );
+		$this->assertInstanceOf( 'WP_Error', $editor2 );
 
 		// Then, test with editors.
 		$classes = array('WP_Image_Editor_GD', 'WP_Image_Editor_Imagick');

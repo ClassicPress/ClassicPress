@@ -57,15 +57,15 @@ class Tests_Admin_includesDashboard extends WP_UnitTestCase {
 	function test_cp_dashboard_petitions_output() {
 		$output = $this->get_cp_dashboard_petitions_output();
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<div id="trending" class="petitions-pane active">',
 			$output
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<div id="most-wanted" class="petitions-pane">',
 			$output
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<div id="recent" class="petitions-pane">',
 			$output
 		);

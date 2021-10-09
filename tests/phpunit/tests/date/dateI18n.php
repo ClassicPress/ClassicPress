@@ -6,7 +6,7 @@
  */
 class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_should_format_date() {
-		$this->assertEquals( strtotime( date( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 'The dates should be equal', 2 );
+		$this->assertEqualsWithDelta( strtotime( date( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
 	}
 
 	public function test_should_use_custom_timestamp() {

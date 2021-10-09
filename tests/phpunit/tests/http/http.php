@@ -338,7 +338,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 			$ua_full
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'&ver=' . classicpress_version_short() . '&site=',
 			$ua_full
 		);
