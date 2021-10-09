@@ -25,8 +25,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		'post_status'  => 'publish',
 	);
 	*/
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		global $wpdb;
 		$wpdb->query( 'TRUNCATE ' . $wpdb->prefix . 'posts' );
 		$this->time = time();

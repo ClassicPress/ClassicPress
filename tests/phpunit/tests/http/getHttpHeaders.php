@@ -18,8 +18,8 @@ class Tests_HTTP_GetHttpHeaders extends WP_UnitTestCase {
 	/**
 	 * Clean up environment
 	 */
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		// Clear the hook for the fake HTTP request response.
 		remove_filter( 'pre_http_request', array( $this, 'fake_http_request' ) );

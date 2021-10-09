@@ -3,72 +3,7 @@
 /**
  * @group post
  */
-<<<<<<< HEAD
 class Tests_WPInsertPost extends WP_UnitTestCase {
-=======
-class Tests_Post_wpInsertPost extends WP_UnitTestCase {
-
-	protected static $user_ids = array(
-		'administrator' => null,
-		'contributor'   => null,
-	);
-
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$user_ids = array(
-			'administrator' => $factory->user->create(
-				array(
-					'role' => 'administrator',
-				)
-			),
-			'contributor'   => $factory->user->create(
-				array(
-					'role' => 'contributor',
-				)
-			),
-		);
-
-		$role = get_role( 'administrator' );
-		$role->add_cap( 'publish_mapped_meta_caps' );
-		$role->add_cap( 'publish_unmapped_meta_caps' );
-	}
-
-	static function tear_down_after_class() {
-		$role = get_role( 'administrator' );
-		$role->remove_cap( 'publish_mapped_meta_caps' );
-		$role->remove_cap( 'publish_unmapped_meta_caps' );
-
-		parent::tear_down_after_class();
-	}
-
-	function set_up() {
-		parent::set_up();
-
-		register_post_type(
-			'mapped_meta_caps',
-			array(
-				'capability_type' => array( 'mapped_meta_cap', 'mapped_meta_caps' ),
-				'map_meta_cap'    => true,
-			)
-		);
-
-		register_post_type(
-			'unmapped_meta_caps',
-			array(
-				'capability_type' => array( 'unmapped_meta_cap', 'unmapped_meta_caps' ),
-				'map_meta_cap'    => false,
-			)
-		);
-
-		register_post_type(
-			'no_admin_caps',
-			array(
-				'capability_type' => array( 'no_admin_cap', 'no_admin_caps' ),
-				'map_meta_cap'    => false,
-			)
-		);
-	}
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
-
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/11863
 	 */

@@ -58,15 +58,9 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 	/**
 	 * Tear down.
 	 */
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-		$_REQUEST = array();
-=======
 	public function tear_down() {
 		$_REQUEST = array();
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

@@ -6,41 +6,16 @@
  * @group cron
  */
 class Tests_Cron extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		// make sure the schedule is clear
-		_set_cron_array(array());
-	}
-
-	function tearDown() {
-		// make sure the schedule is clear
-		_set_cron_array(array());
-		parent::tearDown();
-=======
-	/**
-	 * @var array Cron array for testing preflight filters.
-	 */
-	private $preflight_cron_array;
-
-	/**
-	 * @var int Timestamp of now() + 30 minutes;
-	 */
-	private $plus_thirty_minutes;
-
 	function set_up() {
 		parent::set_up();
 		// Make sure the schedule is clear.
 		_set_cron_array( array() );
-		$this->preflight_cron_array = array();
-		$this->plus_thirty_minutes  = strtotime( '+30 minutes' );
 	}
 
 	function tear_down() {
 		// Make sure the schedule is clear.
 		_set_cron_array( array() );
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	function test_wp_get_schedule_empty() {

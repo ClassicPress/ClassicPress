@@ -530,7 +530,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	/**
 	 * Serves as a helper to register a post type for tests.
 	 *
-	 * Uses `$this->post_type` initialized in setUp().
+	 * Uses `$this->post_type` initialized in set_up().
 	 *
 	 * @since WP-4.5.0
 	 *

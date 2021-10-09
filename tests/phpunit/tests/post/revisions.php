@@ -20,9 +20,9 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		$this->post_type = rand_str( 20 );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		unset( $GLOBALS['wp_post_types'][ $this->post_type ] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

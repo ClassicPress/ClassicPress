@@ -7,36 +7,8 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 	protected $preprocess_comment_data = array();
 
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-=======
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$post = $factory->post->create_and_get();
-
-		self::$author_id = $factory->user->create(
-			array(
-				'role' => 'author',
-			)
-		);
-
-		self::$editor_id = $factory->user->create(
-			array(
-				'role' => 'editor',
-			)
-		);
-	}
-
-	public static function wpTearDownAfterClass() {
-		wp_delete_post( self::$post->ID, true );
-
-		self::delete_user( self::$author_id );
-		self::delete_user( self::$editor_id );
-	}
-
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		require_once ABSPATH . WPINC . '/class-phpass.php';
 	}
 

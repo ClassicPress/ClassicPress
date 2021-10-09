@@ -49,13 +49,8 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * Tear down the test fixture
 	 * @return void
 	 */
-<<<<<<< HEAD
-	public function teardown() {
-		remove_action( 'deprecated_function_run' , array( $this, 'deprecated_function' ), 10, 3 );
-=======
 	public function tear_down() {
 		remove_action( 'deprecated_function_run', array( $this, 'deprecated_function' ), 10, 3 );
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		remove_action( 'deprecated_function_trigger_error', '__return_false' );
 		remove_action( 'deprecated_argument_run' , array( $this, 'deprecated_argument' ), 10, 3 );
 		remove_action( 'deprecated_argument_trigger_error', '__return_false' );

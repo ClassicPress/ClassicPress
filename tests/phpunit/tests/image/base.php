@@ -21,9 +21,9 @@ abstract class WP_Image_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Undo the image editor override
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'wp_image_editors', array( $this, 'setEngine' ), 10, 2 );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

@@ -6,21 +6,10 @@
  * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Attachment_Slashes extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		$this->author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
-		wp_set_current_user( $this->author_id );
-=======
-	protected static $author_id;
-
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$author_id = $factory->user->create( array( 'role' => 'editor' ) );
-	}
-
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		$this->author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
+		wp_set_current_user( $this->author_id );
 
 		// it is important to test with both even and odd numbered slashes as
 		// kses does a strip-then-add slashes in some of its function calls
@@ -30,7 +19,6 @@ class Tests_Attachment_Slashes extends WP_UnitTestCase {
 		$this->slash_4 = 'String with 4 slashes \\\\\\\\';
 		$this->slash_5 = 'String with 5 slashes \\\\\\\\\\';
 		$this->slash_6 = 'String with 6 slashes \\\\\\\\\\\\';
-		$this->slash_7 = 'String with 7 slashes \\\\\\\\\\\\\\';
 	}
 
 	/**

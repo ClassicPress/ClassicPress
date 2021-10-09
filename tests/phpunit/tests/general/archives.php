@@ -3,15 +3,9 @@
 /**
  * @group general
  */
-<<<<<<< HEAD:tests/phpunit/tests/general/archives.php
 class Tests_General_Archives extends WP_UnitTestCase {
-	function setUp() {
-		parent::setUp();
-=======
-class Tests_General_wpGetArchives extends WP_UnitTestCase {
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.):tests/phpunit/tests/general/wpGetArchives.php
 
 		wp_cache_delete( 'last_changed', 'posts' );
 	}

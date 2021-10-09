@@ -13,22 +13,16 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	protected $manager;
 
 	/**
-	 * Stored global variable in setUp for restoration in tearDown.
+	 * Stored global variable in set_up for restoration in tear_down.
 	 *
 	 * @see $wp_registered_sidebars
 	 * @var array
 	 */
 	protected $backup_registered_sidebars;
 
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
-=======
 	function set_up() {
 		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 
 		add_theme_support( 'customize-selective-refresh-widgets' );
 		$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );

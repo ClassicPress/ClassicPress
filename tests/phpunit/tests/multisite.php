@@ -10,21 +10,16 @@ if ( is_multisite() ) :
 class Tests_Multisite extends WP_UnitTestCase {
 	protected $suppress = false;
 
-		function set_up() {
+	function set_up() {
 		global $wpdb;
-			parent::set_up();
+		parent::set_up();
 		$this->suppress = $wpdb->suppress_errors();
 	}
 
-		function tear_down() {
+	function tear_down() {
 		global $wpdb;
-<<<<<<< HEAD
-		parent::tearDown();
 		$wpdb->suppress_errors( $this->suppress );
-=======
-			$wpdb->suppress_errors( $this->suppress );
-			parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		parent::tear_down();
 	}
 
 	function test_wpmu_log_new_registrations() {

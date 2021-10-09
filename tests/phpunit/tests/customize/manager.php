@@ -53,15 +53,9 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Set up test.
 	 */
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
-=======
 	function set_up() {
 		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->manager = $this->instantiate();
 		$this->undefined = new stdClass();
 

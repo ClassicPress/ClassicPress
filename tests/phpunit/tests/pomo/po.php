@@ -4,12 +4,8 @@
  * @group pomo
  */
 class Tests_POMO_PO extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-=======
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		require_once ABSPATH . '/wp-includes/pomo/po.php';
 		// not so random wordpress.pot string -- multiple lines
 		$this->mail = "Your new ClassicPress blog has been successfully set up at:

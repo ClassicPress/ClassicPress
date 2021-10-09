@@ -39,9 +39,9 @@ class Tests_User_CountUserPosts extends WP_UnitTestCase {
 		register_post_type( 'wptests_pt' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		_unregister_post_type( 'wptests_pt' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_count_user_posts_post_type_should_default_to_post() {

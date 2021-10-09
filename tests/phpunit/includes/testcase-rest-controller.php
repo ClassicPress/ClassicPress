@@ -13,20 +13,12 @@ abstract class WP_Test_REST_Controller_Testcase extends WP_Test_REST_TestCase {
 		do_action( 'rest_api_init' );
 	}
 
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-=======
 	public function tear_down() {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		remove_filter( 'rest_url', array( $this, 'test_rest_url_for_leading_slash' ), 10, 2 );
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$wp_rest_server = null;
-<<<<<<< HEAD
-=======
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	abstract public function test_register_routes();

@@ -36,8 +36,6 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		$this->endpoint = new WP_REST_Settings_Controller();
 	}
 
-<<<<<<< HEAD
-=======
 	public function tear_down() {
 		$settings_to_unregister = array(
 			'mycustomsetting',
@@ -57,7 +55,6 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 		parent::tear_down();
 	}
 
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();
 		$this->assertArrayHasKey( '/wp/v2/settings', $routes );

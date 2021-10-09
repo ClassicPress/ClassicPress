@@ -65,28 +65,6 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		copy( $orig_file2, $this->test_file2 );
 	}
 
-<<<<<<< HEAD
-=======
-	public function tear_down() {
-		if ( file_exists( $this->test_file ) ) {
-			unlink( $this->test_file );
-		}
-		if ( file_exists( $this->test_file2 ) ) {
-			unlink( $this->test_file2 );
-		}
-
-		$this->remove_added_uploads();
-
-		if ( class_exists( WP_Image_Editor_Mock::class ) ) {
-			WP_Image_Editor_Mock::$spy         = array();
-			WP_Image_Editor_Mock::$edit_return = array();
-			WP_Image_Editor_Mock::$size_return = null;
-		}
-
-		parent::tear_down();
-	}
-
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();
 		$this->assertArrayHasKey( '/wp/v2/media', $routes );
@@ -1324,8 +1302,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertArrayNotHasKey( 'https://api.w.org/action-publish', $links );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		if ( file_exists( $this->test_file ) ) {
 			unlink( $this->test_file );
 		}

@@ -16,11 +16,11 @@ class Tests_XMLRPC_wp_getUser extends WP_XMLRPC_UnitTestCase {
 			grant_super_admin( $this->administrator_id );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		if ( is_multisite() ) {
 			revoke_super_admin( $this->administrator_id );
 		}
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_invalid_username_password() {

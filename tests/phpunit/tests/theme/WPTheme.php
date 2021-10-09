@@ -2,16 +2,9 @@
 /**
  * @group themes
  */
-<<<<<<< HEAD:tests/phpunit/tests/theme/WPTheme.php
 class Tests_Theme_WPTheme extends WP_UnitTestCase {
-	function setUp() {
-		parent::setUp();
-=======
-class Tests_Theme_wpTheme extends WP_UnitTestCase {
-
 	public function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.):tests/phpunit/tests/theme/wpTheme.php
 		$this->theme_root = realpath( DIR_TESTDATA . '/themedir1' );
 
 		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
@@ -25,11 +18,7 @@ class Tests_Theme_wpTheme extends WP_UnitTestCase {
 		unset( $GLOBALS['wp_themes'] );
 	}
 
-<<<<<<< HEAD:tests/phpunit/tests/theme/WPTheme.php
-	function tearDown() {
-=======
 	public function tear_down() {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.):tests/phpunit/tests/theme/wpTheme.php
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
 		remove_filter('theme_root', array($this, '_theme_root'));
 		remove_filter( 'stylesheet_root', array($this, '_theme_root') );

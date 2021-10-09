@@ -10,13 +10,11 @@ class Tests_Rewrite_Tags extends WP_UnitTestCase {
 	protected $wp_rewrite;
 
 	public function set_up() {
-		global $wp_rewrite;
-<<<<<<< HEAD
-		$this->wp_rewrite = $wp_rewrite;
-=======
 		parent::set_up();
 
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		global $wp_rewrite;
+		$this->wp_rewrite = $wp_rewrite;
+
 		$wp_rewrite       = new WP_Rewrite();
 		$wp_rewrite->init();
 
@@ -25,7 +23,7 @@ class Tests_Rewrite_Tags extends WP_UnitTestCase {
 		$this->queryreplace   = $wp_rewrite->queryreplace;
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		global $wp_rewrite;
 		$wp_rewrite = $this->wp_rewrite;
 	}

@@ -9,8 +9,8 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	var $object_list = array();
 	var $array_list = array();
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->array_list['foo'] = array( 'name' => 'foo', 'id' => 'f', 'field1' => true, 'field2' => true, 'field3' => true, 'field4' => array( 'red' ) );
 		$this->array_list['bar'] = array( 'name' => 'bar', 'id' => 'b', 'field1' => true, 'field2' => true, 'field3' => false, 'field4' => array( 'green' ) );
 		$this->array_list['baz'] = array( 'name' => 'baz', 'id' => 'z', 'field1' => true, 'field2' => false, 'field3' => false, 'field4' => array( 'blue' ) );

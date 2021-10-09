@@ -39,17 +39,10 @@ class Tests_Rewrite_OldDateRedirect extends WP_UnitTestCase {
 		flush_rewrite_rules();
 	}
 
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-
-		$this->old_date_redirect_url = null;
-=======
 	public function tear_down() {
 		$this->old_date_redirect_url = null;
 
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public function test_old_date_redirect() {

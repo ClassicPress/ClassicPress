@@ -20,13 +20,8 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		remove_filter( 'wp_rest_server_class', array( $this, 'filter_wp_rest_server_class' ) );
 	}
 
-<<<<<<< HEAD
-	public function tearDown() {
-		// Remove our temporary spy server
-=======
 	public function tear_down() {
 		// Remove our temporary spy server.
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$GLOBALS['wp_rest_server'] = null;
 		unset( $_REQUEST['_wpnonce'] );
 

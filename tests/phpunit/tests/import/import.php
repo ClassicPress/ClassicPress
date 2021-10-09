@@ -25,10 +25,10 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 			$wpdb->query("DELETE FROM {$wpdb->$table}");
 	}
 
-	function tearDown() {
+	function tear_down() {
 		remove_filter( 'import_allow_create_users', '__return_true' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_small_import() {

@@ -9,8 +9,8 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 
 	protected $global_data = array();
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		return;
 
 		foreach ( $this->global_keys as $global_key ) {

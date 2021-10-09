@@ -9,22 +9,17 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	public $classicpress_asset_version_calls = array();
 	public $classicpress_asset_version_override = null;
 
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 		self::$asset_version = classicpress_asset_version( 'style' );
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 	}
 
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		if ( empty( $GLOBALS['wp_styles'] ) )
-=======
 	function set_up() {
 		parent::set_up();
 
 		if ( empty( $GLOBALS['wp_styles'] ) ) {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 			$GLOBALS['wp_styles'] = null;
+		}
 		$this->old_wp_styles = $GLOBALS['wp_styles'];
 		remove_action( 'wp_default_styles', 'wp_default_styles' );
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
@@ -42,21 +37,14 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$GLOBALS['wp_styles'] = $this->old_wp_styles;
 		add_action( 'wp_default_styles', 'wp_default_styles' );
 		add_action( 'wp_print_styles', 'print_emoji_styles' );
-<<<<<<< HEAD
+
 		remove_filter(
 			'classicpress_asset_version',
 			array( $this, 'classicpress_asset_version_handler' ),
 			10
 		);
-		parent::tearDown();
-=======
-
-		if ( current_theme_supports( 'wp-block-styles' ) ) {
-			remove_theme_support( 'wp-block-styles' );
-		}
 
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	function classicpress_asset_version_handler( $version, $type, $handle ) {

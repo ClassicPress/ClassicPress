@@ -58,13 +58,9 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 		'install-theme', 'get-post-thumbnail-html',
 	);
 
-<<<<<<< HEAD
-	public static function setUpBeforeClass() {
-=======
 	public static function set_up_before_class() {
 		parent::set_up_before_class();
 
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		remove_action( 'admin_init', '_maybe_update_core' );
 		remove_action( 'admin_init', '_maybe_update_plugins' );
 		remove_action( 'admin_init', '_maybe_update_themes' );
@@ -103,12 +99,7 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 	 * Tear down the test fixture.
 	 * Reset $_POST, remove the wp_die() override, restore error reporting
 	 */
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-=======
 	public function tear_down() {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$_POST = array();
 		$_GET = array();
 		unset( $GLOBALS['post'] );
@@ -117,10 +108,7 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 		remove_action( 'clear_auth_cookie', array( $this, 'logout' ) );
 		error_reporting( $this->_error_level );
 		set_current_screen( 'front' );
-<<<<<<< HEAD
-=======
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

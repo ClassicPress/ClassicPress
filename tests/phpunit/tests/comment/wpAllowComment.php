@@ -7,8 +7,8 @@ class Tests_Comment_WpAllowComment extends WP_UnitTestCase {
 	protected static $post_id;
 	protected static $comment_id;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		self::$post_id = self::factory()->post->create();
 		self::$comment_id = self::factory()->comment->create( array(
@@ -23,7 +23,7 @@ class Tests_Comment_WpAllowComment extends WP_UnitTestCase {
 		update_option( 'comment_whitelist', 0 );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		wp_delete_post( self::$post_id, true );
 		wp_delete_comment( self::$comment_id, true );
 

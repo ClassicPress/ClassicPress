@@ -33,20 +33,14 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 		'options-writing.php' => array( 'base' => 'options-writing', 'id' => 'options-writing' ),
 	);
 
-<<<<<<< HEAD
-	function setUp() {
+	function set_up() {
 		set_current_screen( 'front' );
 	}
 
-	function tearDown() {
-		unset( $GLOBALS['wp_taxonomies']['old-or-new'] );
-		unset( $GLOBALS['screen'] );
-		parent::tearDown();
-=======
 	function tear_down() {
 		unset( $GLOBALS['wp_taxonomies']['old-or-new'] );
+		unset( $GLOBALS['screen'] );
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	function test_set_current_screen_with_hook_suffix() {

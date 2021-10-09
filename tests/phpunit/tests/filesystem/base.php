@@ -4,12 +4,8 @@
  * This class is designed to make use of MockFS, a Virtual in-memory filesystem compatible with WP_Filesystem
  */
 abstract class WP_Filesystem_UnitTestCase extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-=======
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		add_filter( 'filesystem_method_file', array( $this, 'filter_abstraction_file' ) );
 		add_filter( 'filesystem_method', array( $this, 'filter_fs_method' ) );
 		WP_Filesystem();

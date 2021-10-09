@@ -1007,10 +1007,10 @@ class WP_Test_REST_Categories_Controller extends WP_Test_REST_Controller_Testcas
 		return 123;
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		_unregister_taxonomy( 'batman' );
 		_unregister_taxonomy( 'robin' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	protected function check_get_taxonomy_terms_response( $response ) {

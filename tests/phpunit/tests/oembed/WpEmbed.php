@@ -9,12 +9,8 @@ class Tests_WP_Embed extends WP_UnitTestCase {
 	 */
 	protected $wp_embed;
 
-<<<<<<< HEAD
-	public function setUp() {
-=======
 	public function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->wp_embed = new WP_Embed();
 	}
 

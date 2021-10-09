@@ -2543,8 +2543,8 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		update_user_meta( $user->ID, 'my_custom_int', $value );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	protected function check_user_data( $user, $data, $context, $links ) {

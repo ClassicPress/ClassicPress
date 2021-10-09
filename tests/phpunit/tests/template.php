@@ -55,19 +55,14 @@ class Tests_Template extends WP_UnitTestCase {
 		);
 	}
 
-<<<<<<< HEAD
-	public function setUp() {
-		parent::setUp();
-		register_post_type( 'cpt', array(
-=======
 	public function set_up() {
 		parent::set_up();
 		register_post_type(
 			'cpt',
 			array(
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
-			'public' => true,
-		) );
+				'public' => true,
+			)
+		);
 		register_taxonomy( 'taxo', 'post', array(
 			'public' => true,
 			'hierarchical' => true,

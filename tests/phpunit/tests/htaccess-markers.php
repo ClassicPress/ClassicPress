@@ -8,16 +8,16 @@
 class Tests_Htaccess_Markers extends WP_UnitTestCase {
 	var $tmpfile;
 
-	public function setUp() {
+	public function set_up() {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/misc.php';
 		$this->tmpfile = wp_tempnam( 'htaccess' );
-		parent::setUp();
+		parent::set_up();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		@unlink( $this->tmpfile );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function write_test_contents( $contents ) {

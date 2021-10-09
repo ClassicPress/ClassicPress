@@ -6,19 +6,11 @@
  * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Option_Slashes extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		// it is important to test with both even and odd numbered slashes as
-		// kses does a strip-then-add slashes in some of its function calls
-=======
-
 	function set_up() {
 		parent::set_up();
 
 		// It is important to test with both even and odd numbered slashes,
 		// as KSES does a strip-then-add slashes in some of its function calls.
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->slash_1 = 'String with 1 slash \\';
 		$this->slash_2 = 'String with 2 slashes \\\\';
 		$this->slash_3 = 'String with 3 slashes \\\\\\';

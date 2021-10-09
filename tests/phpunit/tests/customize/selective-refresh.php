@@ -29,16 +29,10 @@ class Test_WP_Customize_Selective_Refresh extends WP_UnitTestCase {
 	/**
 	 * Set up the test fixture.
 	 */
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		require_once( ABSPATH . WPINC . '/class-wp-customize-manager.php' );
-		// @codingStandardsIgnoreStart
-=======
 	function set_up() {
 		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		// @codingStandardsIgnoreStart
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
 		// @codingStandardsIgnoreEnd
 		$this->wp_customize = $GLOBALS['wp_customize'];

@@ -3,19 +3,19 @@
  * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
-	function setUp() {
-		// This is not done when loading the login page, but parent::setUp()
+	function set_up() {
+		// This is not done when loading the login page, but parent::set_up()
 		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
 		if ( wp_using_ext_object_cache() ) {
 			wp_cache_init();
 		}
-		parent::setUp();
+		parent::set_up();
 		reset_phpmailer_instance();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		reset_phpmailer_instance();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

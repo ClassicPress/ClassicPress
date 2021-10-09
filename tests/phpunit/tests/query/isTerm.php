@@ -55,7 +55,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts_tax_category_tax_query' ) );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		global $wp_rewrite;
 
 		_unregister_taxonomy( 'testtax' );
@@ -63,7 +63,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$wp_rewrite->init();
 
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts_tax_category_tax_query' ) );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_tag_action_tax() {

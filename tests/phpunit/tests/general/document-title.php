@@ -44,9 +44,9 @@ class Tests_General_DocumentTitle extends WP_UnitTestCase {
 		setup_postdata( get_post( self::$post_id ) );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		wp_reset_postdata();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function _add_title_tag_support() {

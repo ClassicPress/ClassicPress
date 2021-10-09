@@ -27,19 +27,12 @@ class Tests_Rewrite_OldSlugRedirect extends WP_UnitTestCase {
 		flush_rewrite_rules();
 	}
 
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-
-		$this->old_slug_redirect_url = null;
-
-		remove_filter( 'old_slug_redirect_url', array( $this, 'filter_old_slug_redirect_url' ), 10 );
-=======
 	public function tear_down() {
 		$this->old_slug_redirect_url = null;
 
+		remove_filter( 'old_slug_redirect_url', array( $this, 'filter_old_slug_redirect_url' ), 10 );
+
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public function test_old_slug_redirect() {

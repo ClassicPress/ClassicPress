@@ -6,13 +6,13 @@
  * @group upload
  */
 class Tests_Image_Meta extends WP_UnitTestCase {
-	function setUp() {
+	function set_up() {
 		if ( ! extension_loaded( 'gd' ) )
 			$this->markTestSkipped( 'The gd PHP extension is not loaded.' );
 		if ( ! extension_loaded( 'exif' ) )
 			$this->markTestSkipped( 'The exif PHP extension is not loaded.' );
 
-		parent::setUp();
+		parent::set_up();
 	}
 
 	function test_exif_d70() {

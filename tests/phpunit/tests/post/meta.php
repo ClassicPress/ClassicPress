@@ -12,8 +12,8 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		'args'        => array(),
 	);
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->author = new WP_User( $this->factory()->user->create( array( 'role' => 'editor' ) ) );
 

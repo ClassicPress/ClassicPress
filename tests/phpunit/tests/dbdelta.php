@@ -47,13 +47,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-<<<<<<< HEAD
-		parent::setUp();
-=======
 		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
 		// causes it to create a temporary table, and a temporary table cannot use a FULLTEXT index.
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

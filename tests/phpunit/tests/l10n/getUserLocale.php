@@ -18,11 +18,11 @@ class Tests_Get_User_Locale extends WP_UnitTestCase {
 		wp_set_current_user( $this->user_id );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		delete_user_meta( $this->user_id, 'locale' );
 		set_current_screen( 'front' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_user_locale_property() {

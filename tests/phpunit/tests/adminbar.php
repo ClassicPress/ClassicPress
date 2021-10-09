@@ -14,17 +14,10 @@ class Tests_AdminBar extends WP_UnitTestCase {
 
 	protected static $user_ids = array();
 
-<<<<<<< HEAD
-	public static function setUpBeforeClass() {
-		require_once( ABSPATH . WPINC . '/class-wp-admin-bar.php' );
-
-		parent::setUpBeforeClass();
-=======
 	public static function set_up_before_class() {
 		parent::set_up_before_class();
 
 		require_once ABSPATH . WPINC . '/class-wp-admin-bar.php';
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {

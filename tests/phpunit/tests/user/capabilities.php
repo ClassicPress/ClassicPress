@@ -29,15 +29,9 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 		grant_super_admin( self::$super_admin->ID );
 	}
 
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		// keep track of users we create
-=======
 	function set_up() {
 		parent::set_up();
 		// Keep track of users we create.
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->_flush_roles();
 
 	}
@@ -1471,7 +1465,7 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	}
 
 	function _nullify_current_user() {
-		// Prevents fatal errors in ::tearDown()'s and other uses of restore_current_blog()
+		// Prevents fatal errors in ::tear_down()'s and other uses of restore_current_blog()
 		$function_stack = wp_debug_backtrace_summary( null, 0, false );
 		if ( in_array( 'restore_current_blog', $function_stack ) ) {
 			return;

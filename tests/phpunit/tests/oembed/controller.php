@@ -46,19 +46,14 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 		$this->request_count = 0;
 	}
 
-<<<<<<< HEAD
-	public function tearDown() {
-		parent::tearDown();
-
-		remove_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10 );
-=======
 	public function tear_down() {
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$wp_rest_server = null;
 
+		remove_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10 );
+
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	/**

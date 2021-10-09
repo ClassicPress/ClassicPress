@@ -9,9 +9,9 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public $classicpress_asset_version_calls = array();
 	public $classicpress_asset_version_override = null;
 
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 		self::$asset_version = classicpress_asset_version( 'script' );
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 	}
 
 	function set_up() {
@@ -31,16 +31,12 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	function tear_down() {
 		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
 		add_action( 'wp_default_scripts', 'wp_default_scripts' );
-<<<<<<< HEAD
 		remove_filter(
 			'classicpress_asset_version',
 			array( $this, 'classicpress_asset_version_handler' ),
 			10
 		);
-		parent::tearDown();
-=======
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	function classicpress_asset_version_handler( $version, $type, $handle ) {

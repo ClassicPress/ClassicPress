@@ -10,27 +10,23 @@ if ( is_multisite() ) :
 class Tests_Multisite_Get_Space_Allowed extends WP_UnitTestCase {
 	protected $suppress = false;
 
-<<<<<<< HEAD
 	protected static $original_site_blog_upload_space;
 	protected static $original_blog_upload_space;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function set_up_before_class() {
+		parent::set_up_before_class();
 
 		self::$original_site_blog_upload_space = get_site_option( 'blog_upload_space' );
 		self::$original_blog_upload_space = get_option( 'blog_upload_space' );
 	}
 
-	public function setUp() {
-=======
-		public function set_up() {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+	public function set_up() {
 		global $wpdb;
-			parent::set_up();
+		parent::set_up();
 		$this->suppress = $wpdb->suppress_errors();
 	}
 
-		public function tear_down() {
+	public function tear_down() {
 		global $wpdb;
 
 		/**
@@ -41,7 +37,7 @@ class Tests_Multisite_Get_Space_Allowed extends WP_UnitTestCase {
 		update_option( 'blog_upload_space', self::$original_blog_upload_space );
 
 		$wpdb->suppress_errors( $this->suppress );
-			parent::tear_down();
+		parent::tear_down();
 	}
 
 	/**

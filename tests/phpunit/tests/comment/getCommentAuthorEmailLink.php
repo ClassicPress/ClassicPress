@@ -17,13 +17,9 @@ class Tests_Comment_GetCommentAuthorEmailLink extends WP_UnitTestCase {
 
 	public function tear_down() {
 		unset( $GLOBALS['comment'] );
-<<<<<<< HEAD
-		parent::tearDown();
+		parent::tear_down();
 
 		add_filter( 'comment_email', 'antispambot' );
-=======
-		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {

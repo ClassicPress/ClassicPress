@@ -564,8 +564,8 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertArrayHasKey( 'type', $properties );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		remove_filter( 'theme_page_templates', array( $this, 'filter_theme_page_templates' ) );
 	}
 

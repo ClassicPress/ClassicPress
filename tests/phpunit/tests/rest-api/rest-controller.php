@@ -11,60 +11,37 @@
  */
 class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 
-<<<<<<< HEAD
-	public function setUp() {
-		parent::setUp();
-		$this->request = new WP_REST_Request( 'GET', '/wp/v2/testroute', array(
-=======
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		// Load the WP_REST_Test_Controller class if not already loaded.
-		require_once __DIR__ . '/rest-test-controller.php';
-	}
-
 	public function set_up() {
 		parent::set_up();
 		$this->request = new WP_REST_Request(
 			'GET',
 			'/wp/v2/testroute',
 			array(
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
-			'args'     => array(
-				'someinteger'     => array(
-					'type'        => 'integer',
-				),
-				'someboolean'     => array(
-					'type'        => 'boolean',
-				),
-				'somestring'      => array(
-					'type'        => 'string',
-				),
-				'someenum'        => array(
-					'type'        => 'string',
-					'enum'        => array( 'a' ),
-				),
-				'somedate'        => array(
-					'type'        => 'string',
-					'format'      => 'date-time',
-				),
-				'someemail'       => array(
-					'type'        => 'string',
-					'format'      => 'email',
-				),
-			),
-<<<<<<< HEAD
-		));
-=======
+				'args'     => array(
+					'someinteger'     => array(
+						'type'        => 'integer',
+					),
+					'someboolean'     => array(
+						'type'        => 'boolean',
+					),
+					'somestring'      => array(
+						'type'        => 'string',
+					),
+					'someenum'        => array(
+						'type'        => 'string',
+						'enum'        => array( 'a' ),
+					),
+					'somedate'        => array(
+						'type'        => 'string',
+						'format'      => 'date-time',
+					),
+					'someemail'       => array(
+						'type'        => 'string',
+						'format'      => 'email',
+					),
 				),
 			)
 		);
-	}
-
-	public function tear_down() {
-		global $wp_rest_additional_fields;
-		$wp_rest_additional_fields = array();
-
-		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	public function test_validate_schema_type_integer() {

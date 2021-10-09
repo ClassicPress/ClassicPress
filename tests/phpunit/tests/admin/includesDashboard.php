@@ -6,14 +6,14 @@ require_once ABSPATH . 'wp-admin/includes/dashboard.php';
  * @group admin
  */
 class Tests_Admin_includesDashboard extends WP_UnitTestCase {
-	function setUp() {
+	function set_up() {
 		add_filter( 'pre_http_request', [ $this, 'override_features_api_request' ], 10, 3 );
-		parent::setUp();
+		parent::set_up();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		remove_filter( 'pre_http_request', [ $this, 'override_features_api_request' ], 10 );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function override_features_api_request( $preempt, $r, $url ) {

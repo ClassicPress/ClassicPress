@@ -19,15 +19,9 @@ class Tests_DB extends WP_UnitTestCase {
 	 */
 	protected static $_wpdb;
 
-<<<<<<< HEAD
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
-		self::$_wpdb = new wpdb_exposed_methods_for_testing();
-=======
 	public static function set_up_before_class() {
 		parent::set_up_before_class();
-		self::$_wpdb = new WpdbExposedMethodsForTesting();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		self::$_wpdb = new wpdb_exposed_methods_for_testing();
 	}
 
 	/**
@@ -42,9 +36,9 @@ class Tests_DB extends WP_UnitTestCase {
 	/**
 	 * Tear down the test fixture
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'query', array( $this, 'query_filter' ) );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

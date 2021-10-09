@@ -5,12 +5,7 @@
  * @group slashes
  * @see https://core.trac.wordpress.org/ticket/21767
  */
-class Tests_Term_Slashes extends WP_Ajax_UnitTestCase {
-<<<<<<< HEAD
-	function setUp() {
-		parent::setUp();
-		$this->author_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
-=======
+class Tests_Term_Slashes extends WP_UnitTestCase {
 	protected static $author_id;
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
@@ -19,9 +14,8 @@ class Tests_Term_Slashes extends WP_Ajax_UnitTestCase {
 
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 
-		wp_set_current_user( $this->author_id );
+		wp_set_current_user( self::$author_id );
 
 		$this->slash_1 = 'String with 1 slash \\';
 		$this->slash_2 = 'String with 2 slashes \\\\';

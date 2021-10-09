@@ -17,12 +17,8 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->q = new WP_Query();
 	}
 
-<<<<<<< HEAD
-	function tearDown() {
-		_unregister_post_type( $this->post_type );
-=======
 	function tear_down() {
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
+		_unregister_post_type( $this->post_type );
 		unset( $this->q );
 
 		parent::tear_down();

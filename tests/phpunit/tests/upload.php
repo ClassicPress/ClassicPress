@@ -7,14 +7,10 @@ class Tests_Upload extends WP_UnitTestCase {
 
 	var $siteurl;
 
-<<<<<<< HEAD
-	function setUp() {
-=======
 	function set_up() {
 		parent::set_up();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->_reset_options();
-		parent::setUp();
+		parent::set_up();
 	}
 
 	function _reset_options() {

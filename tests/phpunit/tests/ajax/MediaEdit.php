@@ -17,13 +17,8 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 	/**
 	 * Tear down the test fixture.
 	 */
-<<<<<<< HEAD
-	public function tearDown() {
-		// Cleanup
-=======
 	public function tear_down() {
 		// Cleanup.
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 		$this->remove_added_uploads();
 		parent::tear_down();
 	}

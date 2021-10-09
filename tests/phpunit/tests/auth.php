@@ -31,11 +31,6 @@ class Tests_Auth extends WP_UnitTestCase {
 
 		$this->user = clone self::$_user;
 		wp_set_current_user( self::$user_id );
-<<<<<<< HEAD
-=======
-		update_site_option( 'using_application_passwords', 1 );
-
-		unset( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $GLOBALS['wp_rest_application_password_status'], $GLOBALS['wp_rest_application_password_uuid'] );
 	}
 
 	public function tear_down() {
@@ -43,7 +38,6 @@ class Tests_Auth extends WP_UnitTestCase {
 		unset( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $GLOBALS['wp_rest_application_password_status'], $GLOBALS['wp_rest_application_password_uuid'] );
 
 		parent::tear_down();
->>>>>>> ddb409edca (Build/Test Tools: Implement use of the `void` solution.)
 	}
 
 	function test_auth_cookie_valid() {
