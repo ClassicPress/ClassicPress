@@ -96,14 +96,9 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 
 		$this->image = @imagecreatefromstring( file_get_contents( $this->file ) );
 
-<<<<<<< HEAD
-		if ( ! is_resource( $this->image ) )
-			return new WP_Error( 'invalid_image', __('File is not an image.'), $this->file );
-=======
 		if ( ! is_gd_image( $this->image ) ) {
 			return new WP_Error( 'invalid_image', __( 'File is not an image.' ), $this->file );
 		}
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 
 		$size = @getimagesize( $this->file );
 		if ( ! $size )
@@ -325,12 +320,8 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 				return true;
 			}
 		}
-<<<<<<< HEAD
-		return new WP_Error( 'image_rotate_error', __('Image rotate failed.'), $this->file );
-=======
 
 		return new WP_Error( 'image_rotate_error', __( 'Image rotate failed.' ), $this->file );
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 	}
 
 	/**
@@ -347,15 +338,9 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 		$h = $this->size['height'];
 		$dst = wp_imagecreatetruecolor( $w, $h );
 
-<<<<<<< HEAD
-		if ( is_resource( $dst ) ) {
-			$sx = $vert ? ($w - 1) : 0;
-			$sy = $horz ? ($h - 1) : 0;
-=======
 		if ( is_gd_image( $dst ) ) {
 			$sx = $vert ? ( $w - 1 ) : 0;
 			$sy = $horz ? ( $h - 1 ) : 0;
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 			$sw = $vert ? -$w : $w;
 			$sh = $horz ? -$h : $h;
 
@@ -365,12 +350,8 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 				return true;
 			}
 		}
-<<<<<<< HEAD
-		return new WP_Error( 'image_flip_error', __('Image flip failed.'), $this->file );
-=======
 
 		return new WP_Error( 'image_flip_error', __( 'Image flip failed.' ), $this->file );
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 	}
 
 	/**
@@ -394,17 +375,10 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @param resource $image
-	 * @param string|null $filename
-	 * @param string|null $mime_type
-	 * @return WP_Error|array
-=======
 	 * @param resource|GdImage $image
 	 * @param string|null      $filename
 	 * @param string|null      $mime_type
 	 * @return array|WP_Error
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 	 */
 	protected function _save( $image, $filename = null, $mime_type = null ) {
 		list( $filename, $extension, $mime_type ) = $this->get_output_format( $filename, $mime_type );

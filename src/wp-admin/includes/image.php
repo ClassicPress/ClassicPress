@@ -613,12 +613,8 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 			$image = false;
 			break;
 	}
-<<<<<<< HEAD
-	if ( is_resource($image) ) {
-=======
 
 	if ( is_gd_image( $image ) ) {
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 		/**
 		 * Filters the current image being loaded for editing.
 		 *
@@ -629,16 +625,10 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 		 * @param string           $size          Image size.
 		 */
 		$image = apply_filters( 'load_image_to_edit', $image, $attachment_id, $size );
-<<<<<<< HEAD
-		if ( function_exists('imagealphablending') && function_exists('imagesavealpha') ) {
-			imagealphablending($image, false);
-			imagesavealpha($image, true);
-=======
 
 		if ( function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
 			imagealphablending( $image, false );
 			imagesavealpha( $image, true );
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 		}
 	}
 

@@ -388,23 +388,14 @@ function _image_get_preview_ratio($w, $h) {
  * @param float|int         $angle Image rotation angle, in degrees.
  * @return resource|GdImage|false GD image resource or GdImage instance, false otherwise.
  */
-<<<<<<< HEAD
-function _rotate_image_resource($img, $angle) {
-	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::rotate()' );
-	if ( function_exists('imagerotate') ) {
-		$rotated = imagerotate($img, $angle, 0);
-		if ( is_resource($rotated) ) {
-			imagedestroy($img);
-=======
 function _rotate_image_resource( $img, $angle ) {
-	_deprecated_function( __FUNCTION__, '3.5.0', 'WP_Image_Editor::rotate()' );
+	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::rotate()' );
 
 	if ( function_exists( 'imagerotate' ) ) {
 		$rotated = imagerotate( $img, $angle, 0 );
 
 		if ( is_gd_image( $rotated ) ) {
 			imagedestroy( $img );
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 			$img = $rotated;
 		}
 	}
@@ -425,18 +416,8 @@ function _rotate_image_resource( $img, $angle ) {
  * @param bool             $vert Whether to flip vertically.
  * @return resource|GdImage (maybe) flipped image resource or GdImage instance.
  */
-<<<<<<< HEAD
-function _flip_image_resource($img, $horz, $vert) {
-	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::flip()' );
-	$w = imagesx($img);
-	$h = imagesy($img);
-	$dst = wp_imagecreatetruecolor($w, $h);
-	if ( is_resource($dst) ) {
-		$sx = $vert ? ($w - 1) : 0;
-		$sy = $horz ? ($h - 1) : 0;
-=======
 function _flip_image_resource( $img, $horz, $vert ) {
-	_deprecated_function( __FUNCTION__, '3.5.0', 'WP_Image_Editor::flip()' );
+	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::flip()' );
 
 	$w   = imagesx( $img );
 	$h   = imagesy( $img );
@@ -445,7 +426,6 @@ function _flip_image_resource( $img, $horz, $vert ) {
 	if ( is_gd_image( $dst ) ) {
 		$sx = $vert ? ( $w - 1 ) : 0;
 		$sy = $horz ? ( $h - 1 ) : 0;
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 		$sw = $vert ? -$w : $w;
 		$sh = $horz ? -$h : $h;
 
@@ -464,20 +444,6 @@ function _flip_image_resource( $img, $horz, $vert ) {
  * @since WP-2.9.0
  *
  * @ignore
-<<<<<<< HEAD
- * @param resource $img Image resource.
- * @param float    $x   Source point x-coordinate.
- * @param float    $y   Source point y-cooredinate.
- * @param float    $w   Source width.
- * @param float    $h   Source height.
- * @return resource (maybe) cropped image resource.
- */
-function _crop_image_resource($img, $x, $y, $w, $h) {
-	$dst = wp_imagecreatetruecolor($w, $h);
-	if ( is_resource($dst) ) {
-		if ( imagecopy($dst, $img, 0, 0, $x, $y, $w, $h) ) {
-			imagedestroy($img);
-=======
  * @param resource|GdImage $img Image resource or GdImage instance.
  * @param float            $x   Source point x-coordinate.
  * @param float            $y   Source point y-coordinate.
@@ -491,7 +457,6 @@ function _crop_image_resource( $img, $x, $y, $w, $h ) {
 	if ( is_gd_image( $dst ) ) {
 		if ( imagecopy( $dst, $img, 0, 0, $x, $y, $w, $h ) ) {
 			imagedestroy( $img );
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 			$img = $dst;
 		}
 	}
@@ -509,15 +474,10 @@ function _crop_image_resource( $img, $x, $y, $w, $h ) {
  * @return WP_Image_Editor WP_Image_Editor instance with changes applied.
  */
 function image_edit_apply_changes( $image, $changes ) {
-<<<<<<< HEAD
-	if ( is_resource( $image ) )
-		_deprecated_argument( __FUNCTION__, 'WP-3.5.0', __( '$image needs to be an WP_Image_Editor object' ) );
-=======
 	if ( is_gd_image( $image ) ) {
 		/* translators: 1: $image, 2: WP_Image_Editor */
-		_deprecated_argument( __FUNCTION__, '3.5.0', sprintf( __( '%1$s needs to be a %2$s object.' ), '$image', 'WP_Image_Editor' ) );
+		_deprecated_argument( __FUNCTION__, 'WP-3.5.0', sprintf( __( '%1$s needs to be a %2$s object.' ), '$image', 'WP_Image_Editor' ) );
 	}
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 
 	if ( !is_array($changes) )
 		return $image;
@@ -584,13 +544,8 @@ function image_edit_apply_changes( $image, $changes ) {
 		 * @since WP-2.9.0
 		 * @deprecated WP-3.5.0 Use wp_image_editor_before_change instead.
 		 *
-<<<<<<< HEAD
-		 * @param resource $image   GD image resource.
- 		 * @param array    $changes Array of change operations.
-=======
 		 * @param resource|GdImage $image   GD image resource or GdImage instance.
 		 * @param array            $changes Array of change operations.
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 		 */
 		$image = apply_filters( 'image_edit_before_change', $image, $changes );
 	}

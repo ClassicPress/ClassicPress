@@ -3191,13 +3191,8 @@ function wp_load_image( $file ) {
 
 	$image = imagecreatefromstring( file_get_contents( $file ) );
 
-<<<<<<< HEAD
-	if ( ! is_resource( $image ) ) {
-		/* translators: %s: file name */
-=======
 	if ( ! is_gd_image( $image ) ) {
 		/* translators: %s: File name. */
->>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 		return sprintf( __( 'File &#8220;%s&#8221; is not an image.' ), $file );
 	}
 
