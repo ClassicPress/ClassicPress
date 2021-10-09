@@ -870,10 +870,6 @@ function get_theme_mod( $name, $default = false ) {
 		return apply_filters( "theme_mod_{$name}", $mods[$name] );
 	}
 
-<<<<<<< HEAD
-	if ( is_string( $default ) )
-		$default = sprintf( $default, get_template_directory_uri(), get_stylesheet_directory_uri() );
-=======
 	if ( is_string( $default ) ) {
 		// Only run the replacement if an sprintf() string format pattern was found.
 		if ( preg_match( '#(?<!%)%(?:\d+\$?)?s#', $default ) ) {
@@ -882,7 +878,6 @@ function get_theme_mod( $name, $default = false ) {
 			$default = sprintf( $default, get_template_directory_uri(), get_stylesheet_directory_uri() );
 		}
 	}
->>>>>>> bf945a81ec (Code Modernization: Remove a single trailing percent sign before calling `sprintf()` on the `$default` parameter in `get_theme_mod()`.)
 
 	/** This filter is documented in wp-includes/theme.php */
 	return apply_filters( "theme_mod_{$name}", $default );
