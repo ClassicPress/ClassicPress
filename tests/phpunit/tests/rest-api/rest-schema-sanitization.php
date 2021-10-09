@@ -269,4 +269,166 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 		$this->assertSame( 1.10, rest_sanitize_value_from_schema( 1.10, $schema ) );
 		$this->assertSame( 1, rest_sanitize_value_from_schema( 1, $schema ) );
 	}
+<<<<<<< HEAD
+=======
+
+	public function test_nullable_date() {
+		$schema = array(
+			'type'   => array( 'string', 'null' ),
+			'format' => 'date-time',
+		);
+
+		$this->assertNull( rest_sanitize_value_from_schema( null, $schema ) );
+		$this->assertSame( '2019-09-19T18:00:00', rest_sanitize_value_from_schema( '2019-09-19T18:00:00', $schema ) );
+		$this->assertSame( 'lalala', rest_sanitize_value_from_schema( 'lalala', $schema ) );
+	}
+
+	/**
+	 * @ticket 50189
+	 */
+	public function test_format_validation_is_skipped_if_non_string_type() {
+		$schema = array(
+			'type'   => 'array',
+			'format' => 'hex-color',
+		);
+		$this->assertSame( array( '#fff' ), rest_sanitize_value_from_schema( '#fff', $schema ) );
+		$this->assertSame( array( '#qrst' ), rest_sanitize_value_from_schema( '#qrst', $schema ) );
+	}
+
+	/**
+	 * @ticket 50189
+	 */
+	public function test_format_validation_is_applied_if_missing_type() {
+		if ( PHP_VERSION_ID >= 80000 ) {
+			$this->expectException( 'PHPUnit_Framework_Error_Warning' ); // For the undefined index.
+		} else {
+			$this->expectException( 'PHPUnit_Framework_Error_Notice' ); 
+		}
+
+		$this->setExpectedIncorrectUsage( 'rest_sanitize_value_from_schema' );
+
+		$schema = array( 'format' => 'hex-color' );
+		$this->assertSame( '#abc', rest_sanitize_value_from_schema( '#abc', $schema ) );
+		$this->assertSame( '', rest_sanitize_value_from_schema( '#jkl', $schema ) );
+	}
+
+	/**
+	 * @ticket 50189
+	 */
+	public function test_format_validation_is_applied_if_unknown_type() {
+		$this->setExpectedIncorrectUsage( 'rest_sanitize_value_from_schema' );
+
+		$schema = array(
+			'format' => 'hex-color',
+			'type'   => 'str',
+		);
+		$this->assertSame( '#abc', rest_sanitize_value_from_schema( '#abc', $schema ) );
+		$this->assertSame( '', rest_sanitize_value_from_schema( '#jkl', $schema ) );
+	}
+
+	public function test_object_or_string() {
+		$schema = array(
+			'type'       => array( 'object', 'string' ),
+			'properties' => array(
+				'raw' => array(
+					'type' => 'string',
+				),
+			),
+		);
+
+		$this->assertSame( 'My Value', rest_sanitize_value_from_schema( 'My Value', $schema ) );
+		$this->assertSame( array( 'raw' => 'My Value' ), rest_sanitize_value_from_schema( array( 'raw' => 'My Value' ), $schema ) );
+		$this->assertSame( array( 'raw' => '1' ), rest_sanitize_value_from_schema( array( 'raw' => 1 ), $schema ) );
+	}
+
+	public function test_object_or_bool() {
+		$schema = array(
+			'type'       => array( 'object', 'boolean' ),
+			'properties' => array(
+				'raw' => array(
+					'type' => 'boolean',
+				),
+			),
+		);
+
+		$this->assertTrue( rest_sanitize_value_from_schema( true, $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( '1', $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( 1, $schema ) );
+
+		$this->assertFalse( rest_sanitize_value_from_schema( false, $schema ) );
+		$this->assertFalse( rest_sanitize_value_from_schema( '0', $schema ) );
+		$this->assertFalse( rest_sanitize_value_from_schema( 0, $schema ) );
+
+		$this->assertSame( array( 'raw' => true ), rest_sanitize_value_from_schema( array( 'raw' => true ), $schema ) );
+		$this->assertSame( array( 'raw' => true ), rest_sanitize_value_from_schema( array( 'raw' => '1' ), $schema ) );
+		$this->assertSame( array( 'raw' => true ), rest_sanitize_value_from_schema( array( 'raw' => 1 ), $schema ) );
+
+		$this->assertSame( array( 'raw' => false ), rest_sanitize_value_from_schema( array( 'raw' => false ), $schema ) );
+		$this->assertSame( array( 'raw' => false ), rest_sanitize_value_from_schema( array( 'raw' => '0' ), $schema ) );
+		$this->assertSame( array( 'raw' => false ), rest_sanitize_value_from_schema( array( 'raw' => 0 ), $schema ) );
+
+		$this->assertSame( array( 'raw' => true ), rest_sanitize_value_from_schema( array( 'raw' => 'something non boolean' ), $schema ) );
+	}
+
+	/**
+	 * @ticket 50300
+	 */
+	public function test_multi_type_with_no_known_types() {
+		$this->setExpectedIncorrectUsage( 'rest_handle_multi_type_schema' );
+		$this->setExpectedIncorrectUsage( 'rest_sanitize_value_from_schema' );
+
+		$schema = array(
+			'type' => array( 'invalid', 'type' ),
+		);
+
+		$this->assertSame( 'My Value', rest_sanitize_value_from_schema( 'My Value', $schema ) );
+	}
+
+	/**
+	 * @ticket 50300
+	 */
+	public function test_multi_type_with_some_unknown_types() {
+		$this->setExpectedIncorrectUsage( 'rest_handle_multi_type_schema' );
+		$this->setExpectedIncorrectUsage( 'rest_sanitize_value_from_schema' );
+
+		$schema = array(
+			'type' => array( 'object', 'type' ),
+		);
+
+		$this->assertSame( 'My Value', rest_sanitize_value_from_schema( 'My Value', $schema ) );
+	}
+
+	/**
+	 * @ticket 50300
+	 */
+	public function test_multi_type_returns_null_if_no_valid_type() {
+		$schema = array(
+			'type' => array( 'number', 'string' ),
+		);
+
+		$this->assertNull( rest_sanitize_value_from_schema( array( 'Hello!' ), $schema ) );
+	}
+
+	/**
+	 * @ticket 48821
+	 */
+	public function test_unique_items_after_sanitization() {
+		$schema = array(
+			'type'        => 'array',
+			'uniqueItems' => true,
+			'items'       => array(
+				'type'   => 'string',
+				'format' => 'uri',
+			),
+		);
+
+		$data = array(
+			'https://example.org/hello%20world',
+			'https://example.org/hello world',
+		);
+
+		$this->assertTrue( rest_validate_value_from_schema( $data, $schema ) );
+		$this->assertWPError( rest_sanitize_value_from_schema( $data, $schema ) );
+	}
+>>>>>>> cdd15a8f77 (Tests: Fix the failures in REST API `format` keyword validation tests on PHP 8.)
 }
