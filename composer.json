@@ -13,9 +13,16 @@
 		"php": ">=5.6"
 	},
 	"require-dev": {
+<<<<<<< HEAD
 		"dealerdirect/phpcodesniffer-composer-installer": "0.7.1",
 		"wp-coding-standards/wpcs": "2.3.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.1",
+=======
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+		"squizlabs/php_codesniffer": "3.6.0",
+		"wp-coding-standards/wpcs": "~2.3.0",
+		"phpcompatibility/phpcompatibility-wp": "~2.1.2",
+>>>>>>> 8def694fe4 (Build/Test Tools: Loosen the PHPUnit restriction.)
 		"yoast/phpunit-polyfills": "^1.0"
 	}
 }
