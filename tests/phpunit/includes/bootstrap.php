@@ -40,13 +40,6 @@ if ( version_compare( $phpunit_version, '5.7.21', '<' ) ) {
 	exit( 1 );
 }
 
-<<<<<<< HEAD
-// Check that the PHPUnit Polyfills autoloader exists.
-$phpunit_polyfills_autoloader = __DIR__ . '/../../../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
-if ( ! file_exists( $phpunit_polyfills_autoloader ) ) {
-	echo "Error: You need to run `composer update` before running the tests.\n";
-	echo "You can still use a PHPUnit phar to run them, but the dependencies do need to be installed.\n";
-=======
 /*
  * Load the PHPUnit Polyfills autoloader.
  *
@@ -101,7 +94,6 @@ if ( ! class_exists( 'Yoast\PHPUnitPolyfills\Autoload' ) ) {
 			echo 'You need to run `composer update` before running the tests.' . PHP_EOL;
 			echo 'Once the dependencies are installed, you can run the tests using the Composer-installed version of PHPUnit or using a PHPUnit phar file, but the dependencies do need to be installed whichever way the tests are run.' . PHP_EOL;
 		}
->>>>>>> 9b565f7907 (Build/Test Tools: Make the polyfills loading more flexible.)
 	exit( 1 );
 	}
 
