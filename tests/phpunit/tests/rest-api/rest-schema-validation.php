@@ -111,55 +111,6 @@ class WP_Test_REST_Schema_Validation extends WP_UnitTestCase {
 		$this->assertWPError( rest_validate_value_from_schema( 'FF01::101::2', $schema ) ); // Multicast, compressed.
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * @ticket 50189
-	 */
-	public function test_format_validation_is_skipped_if_non_string_type() {
-		$schema = array(
-			'type'   => 'array',
-			'items'  => array(
-				'type' => 'string',
-			),
-			'format' => 'email',
-		);
-		$this->assertTrue( rest_validate_value_from_schema( 'email@example.com', $schema ) );
-		$this->assertTrue( rest_validate_value_from_schema( 'email', $schema ) );
-	}
-
-	/**
-	 * @ticket 50189
-	 */
-	public function test_format_validation_is_applied_if_missing_type() {
-		if ( PHP_VERSION_ID >= 80000 ) {
-			$this->expectException( 'PHPUnit_Framework_Error_Warning' ); // For the undefined index.
-		} else {
-			$this->expectException( 'PHPUnit_Framework_Error_Notice' ); 
-		}
-
-		$this->setExpectedIncorrectUsage( 'rest_validate_value_from_schema' );
-
-		$schema = array( 'format' => 'email' );
-		$this->assertTrue( rest_validate_value_from_schema( 'email@example.com', $schema ) );
-		$this->assertWPError( rest_validate_value_from_schema( 'email', $schema ) );
-	}
-
-	/**
-	 * @ticket 50189
-	 */
-	public function test_format_validation_is_applied_if_unknown_type() {
-		$this->setExpectedIncorrectUsage( 'rest_validate_value_from_schema' );
-
-		$schema = array(
-			'format' => 'email',
-			'type'   => 'str',
-		);
-		$this->assertTrue( rest_validate_value_from_schema( 'email@example.com', $schema ) );
-		$this->assertWPError( rest_validate_value_from_schema( 'email', $schema ) );
-	}
-
->>>>>>> cdd15a8f77 (Tests: Fix the failures in REST API `format` keyword validation tests on PHP 8.)
 	public function test_type_array() {
 		$schema = array(
 			'type' => 'array',
