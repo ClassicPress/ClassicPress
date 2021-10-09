@@ -2829,15 +2829,27 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
  * @since WP-2.9.0
  *
  * @param int $width  Image width in pixels.
- * @param int $height Image height in pixels..
- * @return resource The GD image resource.
+ * @param int $height Image height in pixels.
+ * @return resource|GdImage The GD image resource or GdImage instance.
  */
+<<<<<<< HEAD
 function wp_imagecreatetruecolor($width, $height) {
 	$img = imagecreatetruecolor($width, $height);
 	if ( is_resource($img) && function_exists('imagealphablending') && function_exists('imagesavealpha') ) {
 		imagealphablending($img, false);
 		imagesavealpha($img, true);
+=======
+function wp_imagecreatetruecolor( $width, $height ) {
+	$img = imagecreatetruecolor( $width, $height );
+
+	if ( is_gd_image( $img )
+		&& function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' )
+	) {
+		imagealphablending( $img, false );
+		imagesavealpha( $img, true );
+>>>>>>> cbaa88cb5a (Code Modernization: Introduce `is_gd_image()` to check for PHP 8 `GdImage` object instances.)
 	}
+
 	return $img;
 }
 
