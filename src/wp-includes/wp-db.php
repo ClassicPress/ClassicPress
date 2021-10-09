@@ -1305,14 +1305,9 @@ class wpdb {
 					/* translators: 1: number of placeholders, 2: number of arguments passed */
 					sprintf( __( 'The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d).' ),
 						$placeholders,
-<<<<<<< HEAD
-						count( $args ) ),
-					'WP-4.8.3'
-=======
 						$args_count
 					),
-					'4.8.3'
->>>>>>> 2cc4276746 (Code Modernization: Return an empty string from `wpdb::prepare()` if there are not enough arguments to match the placeholders.)
+					'WP-4.8.3'
 				);
 
 				/*
