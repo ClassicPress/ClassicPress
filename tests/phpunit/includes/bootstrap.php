@@ -24,12 +24,6 @@ if ( ! is_readable( $config_file_path ) ) {
 require_once $config_file_path;
 require_once dirname( __FILE__ ) . '/functions.php';
 
-<<<<<<< HEAD
-if ( version_compare( tests_get_phpunit_version(), '5.4', '<' ) || version_compare( tests_get_phpunit_version(), '8.0', '>=' ) ) {
-	printf(
-		"Error: Looks like you're using PHPUnit %s. WordPress requires at least PHPUnit 5.4 and is currently only compatible with PHPUnit up to 7.x.\n",
-		tests_get_phpunit_version()
-=======
 if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS && ! is_dir( ABSPATH ) ) {
 	echo "Error: The /build/ directory is missing! Please run `npm run build` prior to running PHPUnit.\n";
 	exit( 1 );
@@ -41,7 +35,6 @@ if ( version_compare( $phpunit_version, '5.7.21', '<' ) ) {
 	printf(
 		"Error: Looks like you're using PHPUnit %s. WordPress requires at least PHPUnit 5.7.21.\n",
 		$phpunit_version
->>>>>>> 8def694fe4 (Build/Test Tools: Loosen the PHPUnit restriction.)
 	);
 	echo "Please use the latest PHPUnit version supported for the PHP version you are running the tests on.\n";
 	exit( 1 );
