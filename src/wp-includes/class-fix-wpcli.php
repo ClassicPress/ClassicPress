@@ -14,6 +14,7 @@ class Fix_WPCLI {
 
 		// Check for updates. Bail on error.
 		// When playing with versions, an empty array is returned if it's not on api.
+		wp_version_check( array(), true );
 		$core_updates = get_core_updates();
 		if ( false === $core_updates || array() === $core_updates ) {
 			WP_CLI::error( 'Something went wrong checking for updates.' );
