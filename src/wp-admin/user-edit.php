@@ -238,6 +238,8 @@ if ( ! IS_PROFILE_PAGE ) {
 <input type="hidden" name="checkuser_id" value="<?php echo get_current_user_id(); ?>" />
 </p>
 
+<?php if ( true === apply_filters( 'cp_personal_options', true ) ) : ?>
+
 <h2 class="user-profile-personal-options"><?php _e( 'Personal Options' ); ?></h2>
 
 <table class="form-table">
@@ -348,7 +350,9 @@ do_action( 'personal_options', $profileuser );
 ?>
 
 </table>
-<?php
+
+<?php endif;
+
 	if ( IS_PROFILE_PAGE ) {
 		/**
 		 * Fires after the 'Personal Options' settings table on the 'Your Profile' editing screen.
@@ -481,6 +485,8 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 	</td>
 </tr>
 
+<?php if ( true === apply_filters( 'cp_contact_methods', true ) ) : ?>
+
 <tr class="user-url-wrap">
 	<th><label for="url"><?php _e('Website') ?></label></th>
 	<td><input type="url" name="url" id="url" value="<?php echo esc_attr( $profileuser->user_url ) ?>" class="regular-text code" /></td>
@@ -509,8 +515,11 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 </tr>
 <?php
 	}
+endif;
 ?>
 </table>
+
+<?php if ( true === apply_filters( 'cp_about_yourself', true ) ) : ?>
 
 <h2 class="user-profile-about-yourself"><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
 
@@ -521,7 +530,11 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 	<p class="description"><?php _e('Share a little biographical information to fill out your profile. This may be shown publicly.'); ?></p></td>
 </tr>
 
-<?php if ( get_option( 'show_avatars' ) ) : ?>
+<?php
+
+endif;
+
+if ( get_option( 'show_avatars' ) ) : ?>
 <tr class="user-profile-picture">
 	<th><?php _e( 'Profile Picture' ); ?></th>
 	<td>
