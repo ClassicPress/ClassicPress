@@ -238,7 +238,15 @@ if ( ! IS_PROFILE_PAGE ) {
 <input type="hidden" name="checkuser_id" value="<?php echo get_current_user_id(); ?>" />
 </p>
 
-<?php if ( true === apply_filters( 'cp_personal_options', true ) ) : ?>
+<?php
+/**
+ * Filters the user Personal Options section.
+ * 
+ * @param bool    Whether to show the personal options fields. Default true.
+ *
+ * @since CP-1.x
+ */
+if ( apply_filters( 'user_profile_personal_options', true ) ) : ?>
 
 <h2 class="user-profile-personal-options"><?php _e( 'Personal Options' ); ?></h2>
 
@@ -351,7 +359,7 @@ do_action( 'personal_options', $profileuser );
 
 </table>
 
-<?php endif;
+<?php endif; // end 'user_profile_personal_options' filter
 
 	if ( IS_PROFILE_PAGE ) {
 		/**
@@ -485,7 +493,15 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 	</td>
 </tr>
 
-<?php if ( true === apply_filters( 'cp_contact_methods', true ) ) : ?>
+<?php
+/**
+ * Filters the user Contact Methods section.
+ * 
+ * @param bool    Whether to show the contact methods fields. Default true.
+ *
+ * @since CP-1.x
+ */
+if ( apply_filters( 'user_profile_contact_methods', true ) ) : ?>
 
 <tr class="user-url-wrap">
 	<th><label for="url"><?php _e('Website') ?></label></th>
@@ -515,11 +531,19 @@ if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_c
 </tr>
 <?php
 	}
-endif;
+endif; // end 'user_profile_contact_methods' filter
 ?>
 </table>
 
-<?php if ( true === apply_filters( 'cp_about_yourself', true ) ) : ?>
+<?php
+/**
+ * Filters the user About Yourself section.
+ * 
+ * @param bool    Whether to show the about yourself fields. Default true.
+ *
+ * @since CP-1.x
+ */
+if ( apply_filters( 'user_profile_about_yourself', true ) ) : ?>
 
 <h2 class="user-profile-about-yourself"><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
 
@@ -532,7 +556,7 @@ endif;
 
 <?php
 
-endif;
+endif; // end 'user_profile_about_yourself' filter
 
 if ( get_option( 'show_avatars' ) ) : ?>
 <tr class="user-profile-picture">
