@@ -165,8 +165,9 @@ function list_files( $folder = '', $levels = 100, $exclusions = array() ) {
 				$files[] = $folder . $file;
 			}
 		}
+
+		closedir( $dir );
 	}
-	@closedir( $dir );
 
 	return $files;
 }

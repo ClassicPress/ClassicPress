@@ -37,7 +37,8 @@ class Tests_Shortcode extends WP_UnitTestCase {
 
 	// [footag foo="bar"]
 	function _shortcode_footag( $atts ) {
-		return @"foo = {$atts['foo']}";
+		$foo = isset( $atts['foo'] ) ? $atts['foo'] : '';
+		return "foo = $foo";
 	}
 
 	// [bartag foo="bar"]

@@ -126,7 +126,6 @@ class Tests_Multisite_User extends WP_UnitTestCase {
 
 		$blog_ids = self::factory()->blog->create_many( 1 );
 		foreach ( $blog_ids as $blog_id ) {
-			$this->assertInternalType( 'int', $blog_id );
 			$this->assertIsInt( $blog_id );
 			$this->assertTrue( is_blog_user( $blog_id ) );
 			$this->assertTrue( remove_user_from_blog( $user1_id, $blog_id ) );
