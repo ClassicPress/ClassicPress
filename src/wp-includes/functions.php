@@ -6229,3 +6229,452 @@ function wp_privacy_delete_old_export_files() {
 		}
 	}
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Gets the URL to learn more about updating the PHP version the site is running on.
+ *
+ * This URL can be overridden by specifying an environment variable `WP_UPDATE_PHP_URL` or by using the
+ * {@see 'wp_update_php_url'} filter. Providing an empty string is not allowed and will result in the
+ * default URL being used. Furthermore the page the URL links to should preferably be localized in the
+ * site language.
+ *
+ * @since 5.1.0
+ *
+ * @return string URL to learn more about updating PHP.
+ */
+function wp_get_update_php_url() {
+	$default_url = wp_get_default_update_php_url();
+
+	$update_url = $default_url;
+	if ( false !== getenv( 'WP_UPDATE_PHP_URL' ) ) {
+		$update_url = getenv( 'WP_UPDATE_PHP_URL' );
+	}
+
+	/**
+	 * Filters the URL to learn more about updating the PHP version the site is running on.
+	 *
+	 * Providing an empty string is not allowed and will result in the default URL being used. Furthermore
+	 * the page the URL links to should preferably be localized in the site language.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param string $update_url URL to learn more about updating PHP.
+	 */
+	$update_url = apply_filters( 'wp_update_php_url', $update_url );
+
+	if ( empty( $update_url ) ) {
+		$update_url = $default_url;
+	}
+
+	return $update_url;
+}
+
+/**
+ * Gets the default URL to learn more about updating the PHP version the site is running on.
+ *
+ * Do not use this function to retrieve this URL. Instead, use {@see wp_get_update_php_url()} when relying on the URL.
+ * This function does not allow modifying the returned URL, and is only used to compare the actually used URL with the
+ * default one.
+ *
+ * @since 5.1.0
+ * @access private
+ *
+ * @return string Default URL to learn more about updating PHP.
+ */
+function wp_get_default_update_php_url() {
+	return _x( 'https://wordpress.org/support/update-php/', 'localized PHP upgrade information page' );
+}
+
+/**
+ * Prints the default annotation for the web host altering the "Update PHP" page URL.
+ *
+ * This function is to be used after {@see wp_get_update_php_url()} to display a consistent
+ * annotation if the web host has altered the default "Update PHP" page URL.
+ *
+ * @since 5.1.0
+ * @since 5.2.0 Added the `$before` and `$after` parameters.
+ *
+ * @param string $before Markup to output before the annotation. Default `<p class="description">`.
+ * @param string $after  Markup to output after the annotation. Default `</p>`.
+ */
+function wp_update_php_annotation( $before = '<p class="description">', $after = '</p>' ) {
+	$annotation = wp_get_update_php_annotation();
+
+	if ( $annotation ) {
+		echo $before . $annotation . $after;
+	}
+}
+
+/**
+ * Returns the default annotation for the web hosting altering the "Update PHP" page URL.
+ *
+ * This function is to be used after {@see wp_get_update_php_url()} to return a consistent
+ * annotation if the web host has altered the default "Update PHP" page URL.
+ *
+ * @since 5.2.0
+ *
+ * @return string Update PHP page annotation. An empty string if no custom URLs are provided.
+ */
+function wp_get_update_php_annotation() {
+	$update_url  = wp_get_update_php_url();
+	$default_url = wp_get_default_update_php_url();
+
+	if ( $update_url === $default_url ) {
+		return '';
+	}
+
+	$annotation = sprintf(
+		/* translators: %s: Default Update PHP page URL. */
+		__( 'This resource is provided by your web host, and is specific to your site. For more information, <a href="%s" target="_blank">see the official WordPress documentation</a>.' ),
+		esc_url( $default_url )
+	);
+
+	return $annotation;
+}
+
+/**
+ * Gets the URL for directly updating the PHP version the site is running on.
+ *
+ * A URL will only be returned if the `WP_DIRECT_UPDATE_PHP_URL` environment variable is specified or
+ * by using the {@see 'wp_direct_php_update_url'} filter. This allows hosts to send users directly to
+ * the page where they can update PHP to a newer version.
+ *
+ * @since 5.1.1
+ *
+ * @return string URL for directly updating PHP or empty string.
+ */
+function wp_get_direct_php_update_url() {
+	$direct_update_url = '';
+
+	if ( false !== getenv( 'WP_DIRECT_UPDATE_PHP_URL' ) ) {
+		$direct_update_url = getenv( 'WP_DIRECT_UPDATE_PHP_URL' );
+	}
+
+	/**
+	 * Filters the URL for directly updating the PHP version the site is running on from the host.
+	 *
+	 * @since 5.1.1
+	 *
+	 * @param string $direct_update_url URL for directly updating PHP.
+	 */
+	$direct_update_url = apply_filters( 'wp_direct_php_update_url', $direct_update_url );
+
+	return $direct_update_url;
+}
+
+/**
+ * Display a button directly linking to a PHP update process.
+ *
+ * This provides hosts with a way for users to be sent directly to their PHP update process.
+ *
+ * The button is only displayed if a URL is returned by `wp_get_direct_php_update_url()`.
+ *
+ * @since 5.1.1
+ */
+function wp_direct_php_update_button() {
+	$direct_update_url = wp_get_direct_php_update_url();
+
+	if ( empty( $direct_update_url ) ) {
+		return;
+	}
+
+	echo '<p class="button-container">';
+	printf(
+		'<a class="button button-primary" href="%1$s" target="_blank" rel="noopener">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+		esc_url( $direct_update_url ),
+		__( 'Update PHP' ),
+		/* translators: Accessibility text. */
+		__( '(opens in a new tab)' )
+	);
+	echo '</p>';
+}
+
+/**
+ * Gets the URL to learn more about updating the site to use HTTPS.
+ *
+ * This URL can be overridden by specifying an environment variable `WP_UPDATE_HTTPS_URL` or by using the
+ * {@see 'wp_update_https_url'} filter. Providing an empty string is not allowed and will result in the
+ * default URL being used. Furthermore the page the URL links to should preferably be localized in the
+ * site language.
+ *
+ * @since 5.7.0
+ *
+ * @return string URL to learn more about updating to HTTPS.
+ */
+function wp_get_update_https_url() {
+	$default_url = wp_get_default_update_https_url();
+
+	$update_url = $default_url;
+	if ( false !== getenv( 'WP_UPDATE_HTTPS_URL' ) ) {
+		$update_url = getenv( 'WP_UPDATE_HTTPS_URL' );
+	}
+
+	/**
+	 * Filters the URL to learn more about updating the HTTPS version the site is running on.
+	 *
+	 * Providing an empty string is not allowed and will result in the default URL being used. Furthermore
+	 * the page the URL links to should preferably be localized in the site language.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @param string $update_url URL to learn more about updating HTTPS.
+	 */
+	$update_url = apply_filters( 'wp_update_https_url', $update_url );
+	if ( empty( $update_url ) ) {
+		$update_url = $default_url;
+	}
+
+	return $update_url;
+}
+
+/**
+ * Gets the default URL to learn more about updating the site to use HTTPS.
+ *
+ * Do not use this function to retrieve this URL. Instead, use {@see wp_get_update_https_url()} when relying on the URL.
+ * This function does not allow modifying the returned URL, and is only used to compare the actually used URL with the
+ * default one.
+ *
+ * @since 5.7.0
+ * @access private
+ *
+ * @return string Default URL to learn more about updating to HTTPS.
+ */
+function wp_get_default_update_https_url() {
+	/* translators: Documentation explaining HTTPS and why it should be used. */
+	return __( 'https://wordpress.org/support/article/why-should-i-use-https/' );
+}
+
+/**
+ * Gets the URL for directly updating the site to use HTTPS.
+ *
+ * A URL will only be returned if the `WP_DIRECT_UPDATE_HTTPS_URL` environment variable is specified or
+ * by using the {@see 'wp_direct_update_https_url'} filter. This allows hosts to send users directly to
+ * the page where they can update their site to use HTTPS.
+ *
+ * @since 5.7.0
+ *
+ * @return string URL for directly updating to HTTPS or empty string.
+ */
+function wp_get_direct_update_https_url() {
+	$direct_update_url = '';
+
+	if ( false !== getenv( 'WP_DIRECT_UPDATE_HTTPS_URL' ) ) {
+		$direct_update_url = getenv( 'WP_DIRECT_UPDATE_HTTPS_URL' );
+	}
+
+	/**
+	 * Filters the URL for directly updating the PHP version the site is running on from the host.
+	 *
+	 * @since 5.7.0
+	 *
+	 * @param string $direct_update_url URL for directly updating PHP.
+	 */
+	$direct_update_url = apply_filters( 'wp_direct_update_https_url', $direct_update_url );
+
+	return $direct_update_url;
+}
+
+/**
+ * Get the size of a directory.
+ *
+ * A helper function that is used primarily to check whether
+ * a blog has exceeded its allowed upload space.
+ *
+ * @since MU (3.0.0)
+ * @since 5.2.0 $max_execution_time parameter added.
+ *
+ * @param string $directory Full path of a directory.
+ * @param int    $max_execution_time Maximum time to run before giving up. In seconds.
+ *                                   The timeout is global and is measured from the moment WordPress started to load.
+ * @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
+ */
+function get_dirsize( $directory, $max_execution_time = null ) {
+
+	// Exclude individual site directories from the total when checking the main site of a network,
+	// as they are subdirectories and should not be counted.
+	if ( is_multisite() && is_main_site() ) {
+		$size = recurse_dirsize( $directory, $directory . '/sites', $max_execution_time );
+	} else {
+		$size = recurse_dirsize( $directory, null, $max_execution_time );
+	}
+
+	return $size;
+}
+
+/**
+ * Get the size of a directory recursively.
+ *
+ * Used by get_dirsize() to get a directory size when it contains other directories.
+ *
+ * @since MU (3.0.0)
+ * @since 4.3.0 The `$exclude` parameter was added.
+ * @since 5.2.0 The `$max_execution_time` parameter was added.
+ * @since 5.6.0 The `$directory_cache` parameter was added.
+ *
+ * @param string       $directory          Full path of a directory.
+ * @param string|array $exclude            Optional. Full path of a subdirectory to exclude from the total,
+ *                                         or array of paths. Expected without trailing slash(es).
+ * @param int          $max_execution_time Maximum time to run before giving up. In seconds. The timeout is global
+ *                                         and is measured from the moment WordPress started to load.
+ * @param array        $directory_cache    Optional. Array of cached directory paths.
+ *
+ * @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
+ */
+function recurse_dirsize( $directory, $exclude = null, $max_execution_time = null, &$directory_cache = null ) {
+	$directory  = untrailingslashit( $directory );
+	$save_cache = false;
+
+	if ( ! isset( $directory_cache ) ) {
+		$directory_cache = get_transient( 'dirsize_cache' );
+		$save_cache      = true;
+	}
+
+	if ( isset( $directory_cache[ $directory ] ) && is_int( $directory_cache[ $directory ] ) ) {
+		return $directory_cache[ $directory ];
+	}
+
+	if ( ! file_exists( $directory ) || ! is_dir( $directory ) || ! is_readable( $directory ) ) {
+		return false;
+	}
+
+	if (
+		( is_string( $exclude ) && $directory === $exclude ) ||
+		( is_array( $exclude ) && in_array( $directory, $exclude, true ) )
+	) {
+		return false;
+	}
+
+	if ( null === $max_execution_time ) {
+		// Keep the previous behavior but attempt to prevent fatal errors from timeout if possible.
+		if ( function_exists( 'ini_get' ) ) {
+			$max_execution_time = ini_get( 'max_execution_time' );
+		} else {
+			// Disable...
+			$max_execution_time = 0;
+		}
+
+		// Leave 1 second "buffer" for other operations if $max_execution_time has reasonable value.
+		if ( $max_execution_time > 10 ) {
+			$max_execution_time -= 1;
+		}
+	}
+
+	/**
+	 * Filters the amount of storage space used by one directory and all its children, in megabytes.
+	 *
+	 * Return the actual used space to short-circuit the recursive PHP file size calculation
+	 * and use something else, like a CDN API or native operating system tools for better performance.
+	 *
+	 * @since 5.6.0
+	 *
+	 * @param int|false $space_used The amount of used space, in bytes. Default false.
+	 */
+	$size = apply_filters( 'pre_recurse_dirsize', false, $directory, $exclude, $max_execution_time, $directory_cache );
+
+	if ( false === $size ) {
+		$size = 0;
+
+		$handle = opendir( $directory );
+		if ( $handle ) {
+			while ( ( $file = readdir( $handle ) ) !== false ) {
+				$path = $directory . '/' . $file;
+				if ( '.' !== $file && '..' !== $file ) {
+					if ( is_file( $path ) ) {
+						$size += filesize( $path );
+					} elseif ( is_dir( $path ) ) {
+						$handlesize = recurse_dirsize( $path, $exclude, $max_execution_time, $directory_cache );
+						if ( $handlesize > 0 ) {
+							$size += $handlesize;
+						}
+					}
+
+					if ( $max_execution_time > 0 && microtime( true ) - WP_START_TIMESTAMP > $max_execution_time ) {
+						// Time exceeded. Give up instead of risking a fatal timeout.
+						$size = null;
+						break;
+					}
+				}
+			}
+			closedir( $handle );
+		}
+	}
+
+	$directory_cache[ $directory ] = $size;
+
+	// Only write the transient on the top level call and not on recursive calls.
+	if ( $save_cache ) {
+		set_transient( 'dirsize_cache', $directory_cache );
+	}
+
+	return $size;
+}
+
+/**
+ * Cleans directory size cache used by recurse_dirsize().
+ *
+ * Removes the current directory and all parent directories from the `dirsize_cache` transient.
+ *
+ * @since 5.6.0
+ *
+ * @param string $path Full path of a directory or file.
+ */
+function clean_dirsize_cache( $path ) {
+	$directory_cache = get_transient( 'dirsize_cache' );
+
+	if ( empty( $directory_cache ) ) {
+		return;
+	}
+
+	$path = untrailingslashit( $path );
+	unset( $directory_cache[ $path ] );
+
+	while ( DIRECTORY_SEPARATOR !== $path && '.' !== $path && '..' !== $path ) {
+		$path = dirname( $path );
+		unset( $directory_cache[ $path ] );
+	}
+
+	set_transient( 'dirsize_cache', $directory_cache );
+}
+
+/**
+ * Checks compatibility with the current WordPress version.
+ *
+ * @since 5.2.0
+ *
+ * @param string $required Minimum required WordPress version.
+ * @return bool True if required version is compatible or empty, false if not.
+ */
+function is_wp_version_compatible( $required ) {
+	return empty( $required ) || version_compare( get_bloginfo( 'version' ), $required, '>=' );
+}
+
+/**
+ * Checks compatibility with the current PHP version.
+ *
+ * @since 5.2.0
+ *
+ * @param string $required Minimum required PHP version.
+ * @return bool True if required version is compatible or empty, false if not.
+ */
+function is_php_version_compatible( $required ) {
+	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
+}
+
+/**
+ * Check if two numbers are nearly the same.
+ *
+ * This is similar to using `round()` but the precision is more fine-grained.
+ *
+ * @since 5.3.0
+ *
+ * @param int|float $expected  The expected value.
+ * @param int|float $actual    The actual number.
+ * @param int|float $precision The allowed variation.
+ * @return bool Whether the numbers match whithin the specified precision.
+ */
+function wp_fuzzy_number_match( $expected, $actual, $precision = 1 ) {
+	return abs( (float) $expected - (float) $actual ) <= $precision;
+}
+>>>>>>> 16cbb22700 (Users: Move `retrieve_password()` to `wp-includes/user.php`, for consistency with other user functions.)
