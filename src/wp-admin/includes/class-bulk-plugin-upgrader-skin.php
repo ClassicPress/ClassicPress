@@ -44,9 +44,24 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 	 */
 	public function bulk_footer() {
 		parent::bulk_footer();
+<<<<<<< HEAD
 		$update_actions =  array(
 			'plugins_page' => '<a href="' . self_admin_url( 'plugins.php' ) . '" target="_parent">' . __( 'Return to Plugins page' ) . '</a>',
 			'updates_page' => '<a href="' . self_admin_url( 'update-core.php' ) . '" target="_parent">' . __( 'Return to ClassicPress Updates page' ) . '</a>'
+=======
+
+		$update_actions = array(
+			'plugins_page' => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Plugins page' )
+			),
+			'updates_page' => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'update-core.php' ),
+				__( 'Go to WordPress Updates page' )
+			),
+>>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 		);
 		if ( ! current_user_can( 'activate_plugins' ) )
 			unset( $update_actions['plugins_page'] );

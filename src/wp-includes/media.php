@@ -3506,6 +3506,7 @@ function wp_enqueue_media( $args = array() ) {
 		   If there is not a word you can use in your language to avoid issues with the
 		   lack of plural support here, turn it into "selected: %d" then translate it.
 		 */
+<<<<<<< HEAD
 		'selected'    => __( '%d selected' ),
 		'dragInfo'    => __( 'Drag and drop to reorder media files.' ),
 
@@ -3614,6 +3615,122 @@ function wp_enqueue_media( $args = array() ) {
  		'updateVideoPlaylist'      => __( 'Update video playlist' ),
  		'addToVideoPlaylist'       => __( 'Add to video playlist' ),
  		'addToVideoPlaylistTitle'  => __( 'Add to Video Playlist' ),
+=======
+		'selected'                    => __( '%d selected' ),
+		'dragInfo'                    => __( 'Drag and drop to reorder media files.' ),
+
+		// Upload.
+		'uploadFilesTitle'            => __( 'Upload files' ),
+		'uploadImagesTitle'           => __( 'Upload images' ),
+
+		// Library.
+		'mediaLibraryTitle'           => __( 'Media Library' ),
+		'insertMediaTitle'            => __( 'Add media' ),
+		'createNewGallery'            => __( 'Create a new gallery' ),
+		'createNewPlaylist'           => __( 'Create a new playlist' ),
+		'createNewVideoPlaylist'      => __( 'Create a new video playlist' ),
+		'returnToLibrary'             => __( '&#8592; Go to library' ),
+		'allMediaItems'               => __( 'All media items' ),
+		'allDates'                    => __( 'All dates' ),
+		'noItemsFound'                => __( 'No items found.' ),
+		'insertIntoPost'              => $post_type_object->labels->insert_into_item,
+		'unattached'                  => __( 'Unattached' ),
+		'mine'                        => _x( 'Mine', 'media items' ),
+		'trash'                       => _x( 'Trash', 'noun' ),
+		'uploadedToThisPost'          => $post_type_object->labels->uploaded_to_this_item,
+		'warnDelete'                  => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete." ),
+		'warnBulkDelete'              => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete." ),
+		'warnBulkTrash'               => __( "You are about to trash these items.\n  'Cancel' to stop, 'OK' to delete." ),
+		'bulkSelect'                  => __( 'Bulk select' ),
+		'trashSelected'               => __( 'Move to Trash' ),
+		'restoreSelected'             => __( 'Restore from Trash' ),
+		'deletePermanently'           => __( 'Delete permanently' ),
+		'apply'                       => __( 'Apply' ),
+		'filterByDate'                => __( 'Filter by date' ),
+		'filterByType'                => __( 'Filter by type' ),
+		'searchLabel'                 => __( 'Search' ),
+		'searchMediaLabel'            => __( 'Search media' ),          // Backward compatibility pre-5.3.
+		'searchMediaPlaceholder'      => __( 'Search media items...' ), // Placeholder (no ellipsis), backward compatibility pre-5.3.
+		'mediaFound'                  => __( 'Number of media items found: %d' ),
+		'mediaFoundHasMoreResults'    => __( 'Number of media items displayed: %d. Scroll the page for more results.' ),
+		'noMedia'                     => __( 'No media items found.' ),
+		'noMediaTryNewSearch'         => __( 'No media items found. Try a different search.' ),
+
+		// Library Details.
+		'attachmentDetails'           => __( 'Attachment details' ),
+
+		// From URL.
+		'insertFromUrlTitle'          => __( 'Insert from URL' ),
+
+		// Featured Images.
+		'setFeaturedImageTitle'       => $post_type_object->labels->featured_image,
+		'setFeaturedImage'            => $post_type_object->labels->set_featured_image,
+
+		// Gallery.
+		'createGalleryTitle'          => __( 'Create gallery' ),
+		'editGalleryTitle'            => __( 'Edit gallery' ),
+		'cancelGalleryTitle'          => __( '&#8592; Cancel gallery' ),
+		'insertGallery'               => __( 'Insert gallery' ),
+		'updateGallery'               => __( 'Update gallery' ),
+		'addToGallery'                => __( 'Add to gallery' ),
+		'addToGalleryTitle'           => __( 'Add to gallery' ),
+		'reverseOrder'                => __( 'Reverse order' ),
+
+		// Edit Image.
+		'imageDetailsTitle'           => __( 'Image details' ),
+		'imageReplaceTitle'           => __( 'Replace image' ),
+		'imageDetailsCancel'          => __( 'Cancel edit' ),
+		'editImage'                   => __( 'Edit image' ),
+
+		// Crop Image.
+		'chooseImage'                 => __( 'Choose image' ),
+		'selectAndCrop'               => __( 'Select and crop' ),
+		'skipCropping'                => __( 'Skip cropping' ),
+		'cropImage'                   => __( 'Crop image' ),
+		'cropYourImage'               => __( 'Crop your image' ),
+		'cropping'                    => __( 'Cropping&hellip;' ),
+		/* translators: 1: Suggested width number, 2: Suggested height number. */
+		'suggestedDimensions'         => __( 'Suggested image dimensions: %1$s by %2$s pixels.' ),
+		'cropError'                   => __( 'There has been an error cropping your image.' ),
+
+		// Edit Audio.
+		'audioDetailsTitle'           => __( 'Audio details' ),
+		'audioReplaceTitle'           => __( 'Replace audio' ),
+		'audioAddSourceTitle'         => __( 'Add audio source' ),
+		'audioDetailsCancel'          => __( 'Cancel edit' ),
+
+		// Edit Video.
+		'videoDetailsTitle'           => __( 'Video details' ),
+		'videoReplaceTitle'           => __( 'Replace video' ),
+		'videoAddSourceTitle'         => __( 'Add video source' ),
+		'videoDetailsCancel'          => __( 'Cancel edit' ),
+		'videoSelectPosterImageTitle' => __( 'Select poster image' ),
+		'videoAddTrackTitle'          => __( 'Add subtitles' ),
+
+		// Playlist.
+		'playlistDragInfo'            => __( 'Drag and drop to reorder tracks.' ),
+		'createPlaylistTitle'         => __( 'Create audio playlist' ),
+		'editPlaylistTitle'           => __( 'Edit audio playlist' ),
+		'cancelPlaylistTitle'         => __( '&#8592; Cancel audio playlist' ),
+		'insertPlaylist'              => __( 'Insert audio playlist' ),
+		'updatePlaylist'              => __( 'Update audio playlist' ),
+		'addToPlaylist'               => __( 'Add to audio playlist' ),
+		'addToPlaylistTitle'          => __( 'Add to Audio Playlist' ),
+
+		// Video Playlist.
+		'videoPlaylistDragInfo'       => __( 'Drag and drop to reorder videos.' ),
+		'createVideoPlaylistTitle'    => __( 'Create video playlist' ),
+		'editVideoPlaylistTitle'      => __( 'Edit video playlist' ),
+		'cancelVideoPlaylistTitle'    => __( '&#8592; Cancel video playlist' ),
+		'insertVideoPlaylist'         => __( 'Insert video playlist' ),
+		'updateVideoPlaylist'         => __( 'Update video playlist' ),
+		'addToVideoPlaylist'          => __( 'Add to video playlist' ),
+		'addToVideoPlaylistTitle'     => __( 'Add to video Playlist' ),
+
+		// Headings.
+		'filterAttachments'           => __( 'Filter media' ),
+		'attachmentsList'             => __( 'Media list' ),
+>>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 	);
 
 	/**

@@ -66,8 +66,19 @@ class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
 	 */
 	public function bulk_footer() {
 		$this->decrement_update_count( 'translation' );
+<<<<<<< HEAD
 		$update_actions = array();
 		$update_actions['updates_page'] = '<a href="' . self_admin_url( 'update-core.php' ) . '" target="_parent">' . __( 'Return to ClassicPress Updates page' ) . '</a>';
+=======
+
+		$update_actions = array(
+			'updates_page' => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'update-core.php' ),
+				__( 'Go to WordPress Updates page' )
+			),
+		);
+>>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 
 		/**
 		 * Filters the list of action links available following a translations update.

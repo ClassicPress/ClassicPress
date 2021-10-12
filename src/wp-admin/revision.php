@@ -36,6 +36,7 @@ case 'restore' :
 
 	if ( ! current_user_can( 'edit_post', $revision->post_parent ) )
 		break;
+<<<<<<< HEAD
 
 	if ( ! $post = get_post( $revision->post_parent ) )
 		break;
@@ -43,6 +44,39 @@ case 'restore' :
 	// Restore if revisions are enabled or this is an autosave.
 	if ( ! wp_revisions_enabled( $post ) && ! wp_is_post_autosave( $revision ) ) {
 		$redirect = 'edit.php?post_type=' . $post->post_type;
+=======
+	case 'view':
+	case 'edit':
+	default:
+		$revision = wp_get_post_revision( $revision_id );
+		if ( ! $revision ) {
+			break;
+		}
+
+		$post = get_post( $revision->post_parent );
+		if ( ! $post ) {
+			break;
+		}
+
+		if ( ! current_user_can( 'read_post', $revision->ID ) || ! current_user_can( 'edit_post', $revision->post_parent ) ) {
+			break;
+		}
+
+		// Bail if revisions are disabled and this is not an autosave.
+		if ( ! wp_revisions_enabled( $post ) && ! wp_is_post_autosave( $revision ) ) {
+			$redirect = 'edit.php?post_type=' . $post->post_type;
+			break;
+		}
+
+		$post_edit_link = get_edit_post_link();
+		$post_title     = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
+		/* translators: %s: Post title. */
+		$h1             = sprintf( __( 'Compare Revisions of &#8220;%s&#8221;' ), $post_title );
+		$return_to_post = '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
+		$title          = __( 'Revisions' );
+
+		$redirect = false;
+>>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 		break;
 	}
 

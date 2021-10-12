@@ -44,9 +44,24 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 	 */
 	public function bulk_footer() {
 		parent::bulk_footer();
+<<<<<<< HEAD
 		$update_actions =  array(
 			'themes_page' => '<a href="' . self_admin_url( 'themes.php' ) . '" target="_parent">' . __( 'Return to Themes page' ) . '</a>',
 			'updates_page' => '<a href="' . self_admin_url( 'update-core.php' ) . '" target="_parent">' . __( 'Return to ClassicPress Updates page' ) . '</a>'
+=======
+
+		$update_actions = array(
+			'themes_page'  => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'themes.php' ),
+				__( 'Go to Themes page' )
+			),
+			'updates_page' => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'update-core.php' ),
+				__( 'Go to WordPress Updates page' )
+			),
+>>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 		);
 		if ( ! current_user_can( 'switch_themes' ) && ! current_user_can( 'edit_theme_options' ) )
 			unset( $update_actions['themes_page'] );
