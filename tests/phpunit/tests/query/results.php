@@ -286,8 +286,8 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		$posts = $this->q->query('paged=4&posts_per_page=4');
 
 		$expected = array (
-			0 => 'many-trackbacks',
-			1 => 'no-comments',
+			0 => 'no-comments',
+			1 => 'many-trackbacks',
 			2 => 'one-trackback',
 			3 => 'comment-test',
 		);

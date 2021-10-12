@@ -2307,8 +2307,8 @@ function check_password_reset_key($key, $login) {
 /**
  * Handles sending a password retrieval email to a user.
  *
- * @since 2.5.0
- * @since 5.7.0 Added `$user_login` parameter.
+ * @since WP-2.5.0
+ * @since WP-5.7.0 Added `$user_login` parameter.
  *
  * @global wpdb         $wpdb       WordPress database abstraction object.
  * @global PasswordHash $wp_hasher  Portable PHP password hashing framework.
@@ -2380,7 +2380,7 @@ function retrieve_password( $user_login = null ) {
 	 */
 	$errors = apply_filters( 'lostpassword_errors', $errors, $user_data );
 
-	if ( $errors->has_errors() ) {
+	if ( $errors->get_error_code() ) {
 		return $errors;
 	}
 
@@ -2432,8 +2432,8 @@ function retrieve_password( $user_login = null ) {
 	/**
 	 * Filters the subject of the password reset email.
 	 *
-	 * @since 2.8.0
-	 * @since 4.4.0 Added the `$user_login` and `$user_data` parameters.
+	 * @since WP-2.8.0
+	 * @since WP-4.4.0 Added the `$user_login` and `$user_data` parameters.
 	 *
 	 * @param string  $title      Email subject.
 	 * @param string  $user_login The username for the user.
@@ -2446,8 +2446,8 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * If the filtered message is empty, the password reset email will not be sent.
 	 *
-	 * @since 2.8.0
-	 * @since 4.1.0 Added `$user_login` and `$user_data` parameters.
+	 * @since WP-2.8.0
+	 * @since WP-4.1.0 Added `$user_login` and `$user_data` parameters.
 	 *
 	 * @param string  $message    Email message.
 	 * @param string  $key        The activation key.
