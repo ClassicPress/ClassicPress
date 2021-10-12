@@ -71,8 +71,6 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 				add_action( 'wp_ajax_' . $action, 'wp_ajax_' . str_replace( '-', '_', $action ), 1 );
 			}
 		}
-
-		parent::setUpBeforeClass();
 	}
 
 	/**
