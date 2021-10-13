@@ -83,9 +83,6 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) )
 			$install_actions['themes_page'] = '<a href="' . self_admin_url( 'themes.php' ) . '" target="_parent">' . __( 'Return to Themes page' ) . '</a>';
 
-<<<<<<< HEAD
-		if ( ! $this->result || is_wp_error($this->result) || is_network_admin() || ! current_user_can( 'switch_themes' ) )
-=======
 		if ( 'web' === $this->type ) {
 			$install_actions['themes_page'] = sprintf(
 				'<a href="%s" target="_parent">%s</a>',
@@ -101,7 +98,6 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		}
 
 		if ( ! $this->result || is_wp_error( $this->result ) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 			unset( $install_actions['activate'], $install_actions['preview'] );
 
 		/**

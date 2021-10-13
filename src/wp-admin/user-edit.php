@@ -188,13 +188,8 @@ include(ABSPATH . 'wp-admin/admin-header.php');
 	<?php else: ?>
 	<p><strong><?php _e('User updated.') ?></strong></p>
 	<?php endif; ?>
-<<<<<<< HEAD
-	<?php if ( $wp_http_referer && false === strpos( $wp_http_referer, 'user-new.php' ) && ! IS_PROFILE_PAGE ) : ?>
-	<p><a href="<?php echo esc_url( wp_validate_redirect( esc_url_raw( $wp_http_referer ), self_admin_url( 'users.php' ) ) ); ?>"><?php _e('&larr; Back to Users'); ?></a></p>
-=======
 			<?php if ( $wp_http_referer && false === strpos( $wp_http_referer, 'user-new.php' ) && ! IS_PROFILE_PAGE ) : ?>
 	<p><a href="<?php echo esc_url( wp_validate_redirect( esc_url_raw( $wp_http_referer ), self_admin_url( 'users.php' ) ) ); ?>"><?php _e( '&larr; Go to Users' ); ?></a></p>
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 	<?php endif; ?>
 </div>
 <?php endif; ?>

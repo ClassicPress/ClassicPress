@@ -213,15 +213,6 @@ function login_footer($input_id = '') {
 	global $interim_login;
 
 	// Don't allow interim logins to navigate away from the page.
-<<<<<<< HEAD
-	if ( ! $interim_login ): ?>
-	<p id="backtoblog"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php
-		/* translators: %s: site title */
-		printf( _x( '&larr; Back to %s', 'site' ), get_bloginfo( 'title', 'display' ) );
-	?></a></p>
-	<?php the_privacy_policy_link( '<div class="privacy-policy-page-link">', '</div>' ); ?>
-	<?php endif; ?>
-=======
 	if ( ! $interim_login ) {
 		?>
 		<p id="backtoblog"><a href="<?php echo esc_url( home_url( '/' ) ); ?>">
@@ -229,7 +220,8 @@ function login_footer($input_id = '') {
 
 		/* translators: %s: Site title. */
 		printf( _x( '&larr; Go to %s', 'site' ), get_bloginfo( 'title', 'display' ) );
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
+
+	} ?>
 
 	</div>
 

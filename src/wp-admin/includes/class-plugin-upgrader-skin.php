@@ -47,11 +47,6 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 
 		$this->decrement_update_count( 'plugin' );
 
-<<<<<<< HEAD
-		$update_actions =  array(
-			'activate_plugin' => '<a href="' . wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $this->plugin ), 'activate-plugin_' . $this->plugin) . '" target="_parent">' . __( 'Activate Plugin' ) . '</a>',
-			'plugins_page' => '<a href="' . self_admin_url( 'plugins.php' ) . '" target="_parent">' . __( 'Return to Plugins page' ) . '</a>'
-=======
 		$update_actions = array(
 			'activate_plugin' => sprintf(
 				'<a href="%s" target="_parent">%s</a>',
@@ -63,7 +58,6 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 				self_admin_url( 'plugins.php' ),
 				__( 'Go to Plugins page' )
 			),
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 		);
 		if ( $this->plugin_active || ! $this->result || is_wp_error( $this->result ) || ! current_user_can( 'activate_plugin', $this->plugin ) )
 			unset( $update_actions['activate_plugin'] );

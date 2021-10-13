@@ -633,17 +633,6 @@ function get_taxonomy_labels( $tax ) {
 		'add_new_item' => array( __( 'Add New Tag' ), __( 'Add New Category' ) ),
 		'new_item_name' => array( __( 'New Tag Name' ), __( 'New Category Name' ) ),
 		'separate_items_with_commas' => array( __( 'Separate tags with commas' ), null ),
-<<<<<<< HEAD
-		'add_or_remove_items' => array( __( 'Add or remove tags' ), null ),
-		'choose_from_most_used' => array( __( 'Choose from the most used tags' ), null ),
-		'not_found' => array( __( 'No tags found.' ), __( 'No categories found.' ) ),
-		'no_terms' => array( __( 'No tags' ), __( 'No categories' ) ),
-		'items_list_navigation' => array( __( 'Tags list navigation' ), __( 'Categories list navigation' ) ),
-		'items_list' => array( __( 'Tags list' ), __( 'Categories list' ) ),
-		/* translators: Tab heading when selecting from the most used terms */
-		'most_used' => array( _x( 'Most Used', 'tags' ), _x( 'Most Used', 'categories' ) ),
-		'back_to_items' => array( __( '&larr; Back to Tags' ), __( '&larr; Back to Categories' ) ),
-=======
 		'add_or_remove_items'        => array( __( 'Add or remove tags' ), null ),
 		'choose_from_most_used'      => array( __( 'Choose from the most used tags' ), null ),
 		'not_found'                  => array( __( 'No tags found.' ), __( 'No categories found.' ) ),
@@ -653,7 +642,6 @@ function get_taxonomy_labels( $tax ) {
 		/* translators: Tab heading when selecting from the most used terms. */
 		'most_used'                  => array( _x( 'Most Used', 'tags' ), _x( 'Most Used', 'categories' ) ),
 		'back_to_items'              => array( __( '&larr; Go to Tags' ), __( '&larr; Go to Categories' ) ),
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.)
 	);
 	$nohier_vs_hier_defaults['menu_name'] = $nohier_vs_hier_defaults['name'];
 
