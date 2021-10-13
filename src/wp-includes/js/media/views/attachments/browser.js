@@ -84,11 +84,8 @@ AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.pro
 		this.collection.on( 'add remove reset', this.updateContent, this );
 	},
 
+	// When editing a selection, move focus to the "Go to library" button.
 	editSelection: function( modal ) {
-<<<<<<< HEAD:src/wp-includes/js/media/views/attachments/browser.js
-=======
-		// When editing a selection, move focus to the "Go to library" button.
->>>>>>> aac637dcdc (Text Changes: Unify various "Back to..." vs. "Return to..." vs. "Go to..." strings.):src/js/media/views/attachments/browser.js
 		modal.$( '.media-button-backToLibrary' ).focus();
 	},
 
