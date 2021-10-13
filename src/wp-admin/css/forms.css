@@ -405,7 +405,7 @@ input[type="number"].tiny-text {
 	margin-top: 1px;
 }
 
-/* @since 5.7.0 secondary bulk action controls require JS. */
+/* @since WP-5.7.0 secondary bulk action controls require JS. */
 .no-js label[for="bulk-action-selector-bottom"],
 .no-js select#bulk-action-selector-bottom,
 .no-js input#doaction2,
