@@ -123,12 +123,18 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response, true );
 
 		$theme = wp_get_theme( 'twentyten' );
+		// Hack.
+		$theme_old_version = $theme->get( 'Version' );
+		if ( $theme_old_version === false ) {
+			$theme_old_version = '';
+		}
+
 		$expected = array(
 			'success' => false,
 			'data'    => array(
 				'update'       => 'theme',
 				'slug'         => 'twentyten',
-				'oldVersion'   => $theme->get( 'Version' ),
+				'oldVersion'   => $theme_old_version,
 				'newVersion'   => '',
 				'debug'        => array( 'The theme is at the latest version.' ),
 				'errorMessage' => 'The theme is at the latest version.',
