@@ -675,6 +675,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			}
 			$posts_by_name[ $post_name ] = $post->ID;
 		}
+<<<<<<< HEAD
 		$this->assertSame( array( 'waffles', 'canola', 'home', 'about', 'blog', 'custom', 'unknown-cpt' ), array_keys( $posts_by_name ) );
 		$this->assertSame( 'Custom', get_post( $posts_by_name['custom'] )->post_title );
 		$this->assertSame( 'sample-page-template.php', get_page_template_slug( $posts_by_name['about'] ) );
@@ -682,6 +683,14 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertSame( $posts_by_name['waffles'], get_post_thumbnail_id( $posts_by_name['custom'] ) );
 		$this->assertSame( 0, get_post_thumbnail_id( $posts_by_name['blog'] ) );
 
+=======
+		$this->assertEquals( array( 'waffles', 'canola', 'home', 'about', 'blog', 'custom', 'unknown-cpt' ), array_keys( $posts_by_name ) );
+		$this->assertEquals( 'Custom', get_post( $posts_by_name['custom'] )->post_title );
+		$this->assertEquals( 'sample-page-template.php', get_page_template_slug( $posts_by_name['about'] ) );
+		$this->assertEquals( '', get_page_template_slug( $posts_by_name['blog'] ) );
+		$this->assertEquals( $posts_by_name['waffles'], get_post_thumbnail_id( $posts_by_name['custom'] ) );
+		$this->assertEquals( 0, get_post_thumbnail_id( $posts_by_name['blog'] ) );
+>>>>>>> fd3083e3f5... Post Thumbnails: Make sure `get_post_thumbnail_id()` returns an integer, to match the documented return value.
 		$attachment_metadata = wp_get_attachment_metadata( $posts_by_name['waffles'] );
 		$this->assertSame( 'Waffles', get_post( $posts_by_name['waffles'] )->post_title );
 		$this->assertSame( 'waffles', get_post_meta( $posts_by_name['waffles'], '_customize_draft_post_name', true ) );
