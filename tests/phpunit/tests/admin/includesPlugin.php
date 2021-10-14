@@ -144,11 +144,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_when_mu_plugins_directory_does_not_exist() {
-<<<<<<< HEAD
 		$this->assertFileDoesNotExist( WPMU_PLUGIN_DIR );
-=======
-		$this->assertFileNotExists( WPMU_PLUGIN_DIR );
->>>>>>> 7fa70bcb02... Build/Test Tools: Increase the reliability of backing up the `mu-plugins` directory during tests.
 		$this->assertSame( array(), get_mu_plugins() );
 	}
 
@@ -366,28 +362,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	private static function _back_up_mu_plugins() {
 		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
 			$mu_bu_dir = WP_CONTENT_DIR . '/mu-plugin-backup';
-<<<<<<< HEAD
-			if ( ! is_dir( $mu_bu_dir ) ) {
-				mkdir( $mu_bu_dir );
-			}
-
-			$files_to_move = array();
-			if ( $mu_plugins = opendir( WPMU_PLUGIN_DIR ) ) {
-				while ( false !== $plugin = readdir( $mu_plugins ) ) {
-					if ( 0 !== strpos( $plugin, '.' ) ) {
-						$files_to_move[] = $plugin;
-					}
-				}
-			}
-
-			@closedir( $mu_plugins );
-
-			foreach ( $files_to_move as $file_to_move ) {
-				$f = rename( WPMU_PLUGIN_DIR . '/' . $file_to_move, $mu_bu_dir . '/' . $file_to_move );
-			}
-=======
 			rename( WPMU_PLUGIN_DIR, $mu_bu_dir );
->>>>>>> 7fa70bcb02... Build/Test Tools: Increase the reliability of backing up the `mu-plugins` directory during tests.
 		}
 	}
 
@@ -398,29 +373,11 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 *
 	 * @access private
 	 */
-<<<<<<< HEAD
-	private function _restore_mu_plugins() {
-		$mu_bu_dir = WP_CONTENT_DIR . '/mu-plugin-backup';
-		$files_to_move = array();
-		if ( is_dir( $mu_bu_dir ) && $mu_plugins = opendir( $mu_bu_dir ) ) {
-			while ( false !== $plugin = readdir( $mu_plugins ) ) {
-				if ( 0 !== strpos( $plugin, '.' ) ) {
-					$files_to_move[] = $plugin;
-				}
-			}
-		}
-
-		@closedir( $mu_plugins );
-
-		foreach ( $files_to_move as $file_to_move ) {
-			rename( $mu_bu_dir . '/' . $file_to_move, WPMU_PLUGIN_DIR . '/' . $file_to_move );
-=======
 	private static function _restore_mu_plugins() {
 		$mu_bu_dir = WP_CONTENT_DIR . '/mu-plugin-backup';
 
 		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
 			rmdir( WPMU_PLUGIN_DIR );
->>>>>>> 7fa70bcb02... Build/Test Tools: Increase the reliability of backing up the `mu-plugins` directory during tests.
 		}
 
 		if ( is_dir( $mu_bu_dir ) ) {
