@@ -15,7 +15,7 @@
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "0.7.1",
 		"wp-coding-standards/wpcs": "2.3.0",
-		"phpcompatibility/phpcompatibility-wp": "~2.1.2",
-		"yoast/phpunit-polyfills": "^1.0.1"
+		"phpcompatibility/phpcompatibility-wp": "2.1.2",
+		"yoast/phpunit-polyfills": "1.0.1"
 	}
 }
