@@ -171,7 +171,9 @@ fi
 
 echo "Backporting commit using git cherry-pick"
 set +e
-cmd __failure_allowed git cherry-pick --no-commit --find-renames "$commit_short"
+cmd __failure_allowed git cherry-pick --no-commit --find-renames \
+	--strategy=recursive --strategy-option=patience --strategy-option=ignore-space-change \
+	"$commit_short"
 conflict_status=$?
 set -e
 
