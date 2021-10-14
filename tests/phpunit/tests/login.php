@@ -17,6 +17,11 @@ class Tests_Login extends WP_UnitTestCase {
 	 * @runInSeparateProcess
 	 */
 	public function test_reset_password() {
+		// @runInSeparateProcess requires the object cache to be (re)initialized.
+		if ( wp_using_ext_object_cache() ) {
+			wp_cache_init();
+		}
+
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
 
