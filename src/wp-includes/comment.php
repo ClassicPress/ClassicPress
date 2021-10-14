@@ -1253,13 +1253,9 @@ function wp_blacklist_check($author, $email, $url, $comment, $user_ip, $user_age
  * The comment stats are cached and then retrieved, if they already exist in the
  * cache.
  *
-<<<<<<< HEAD
- * @since WP-2.5.0
-=======
  * @see get_comment_count() Which handles fetching the live comment counts.
  *
- * @since 2.5.0
->>>>>>> 1199a99f73... Docs: Improve the docs for comment counting related functions.
+ * @since WP-2.5.0
  *
  * @param int $post_id Optional. Restrict the comment counts to the given post. Default 0, which indicates that
  *                     comment counts for the whole site will be retrieved.
