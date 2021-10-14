@@ -795,7 +795,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime('%Y/%m'), $info['url'] );
 		$this->assertSame( ABSPATH . 'wp-content/uploads/' . gmstrftime('%Y/%m'), $info['path'] );
 		$this->assertSame( gmstrftime('/%Y/%m'), $info['subdir'] );
-		$this->assertSame( '', $info['error'] );
+		$this->assertFalse( $info['error'] );
 
 		$blog_id = self::factory()->blog->create();
 
@@ -804,14 +804,14 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime('%Y/%m'), $info['url'] );
 		$this->assertSame( ABSPATH . 'wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime('%Y/%m'), $info['path'] );
 		$this->assertSame( gmstrftime('/%Y/%m'), $info['subdir'] );
-		$this->assertSame( '', $info['error'] );
+		$this->assertFalse( $info['error'] );
 		restore_current_blog();
 
 		$info = wp_upload_dir();
 		$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime('%Y/%m'), $info['url'] );
 		$this->assertSame( ABSPATH . 'wp-content/uploads/' . gmstrftime('%Y/%m'), $info['path'] );
 		$this->assertSame( gmstrftime('/%Y/%m'), $info['subdir'] );
-		$this->assertSame( '', $info['error'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	/**
