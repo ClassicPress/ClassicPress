@@ -99,7 +99,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 
 		if ( ! $this->result || is_wp_error( $this->result ) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
 			unset( $install_actions['activate'], $install_actions['preview'] );
-
+		}
 		/**
 		 * Filters the list of action links available following a single theme installation.
 		 *
