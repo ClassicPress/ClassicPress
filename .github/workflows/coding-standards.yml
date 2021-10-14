@@ -110,12 +110,11 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
-      - name: Install PHPUnit and Composer dependencies
+      - name: Install PHPUnit
         run: |
-            composer require phpunit/phpunit:8.5.21 -W --no-progress --no-ansi --no-interaction
-
-      - name: Make Composer packages available globally
-        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
+          wget -O phpunit https://phar.phpunit.de/phpunit-8.phar
+          chmod +x phpunit
+          sudo mv phpunit /usr/bin/
 
       - name: Enable, start and initialise MySQL
         run: |
