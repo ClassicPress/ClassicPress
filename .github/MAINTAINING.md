@@ -99,9 +99,12 @@ GitHub may include `Co-authored-by` lines at the end of the commit body. This
 is the standard way of indicating multiple authors for a commit, and these
 lines should be left alone.
 
-## Examples
+### Examples
 
-These examples are shown in the standard Git format with the subject line first, followed by a blank line, then the commit message body.
+These examples are shown with the first line (subject line) by itself inside of
+a code block. If there is a commit message body then this is shown inside a
+separate code block, to structure the messages similarly to how they appear in
+the GitHub interface's text entry fields.
 
 **Needs improvement**:
 ```
@@ -111,7 +114,9 @@ Update user-edit.php (#123)
 **Better**:
 ```
 Improve stability of user dropdowns (#123)
+```
 
+```
 When the author of one or more posts is an invalid (non-existent) user ID, this
 leads to a PHP warning when showing a user dropdown. This PR fixes the warning
 and causes an appropriate message to be shown in the user dropdown to allow the
@@ -129,7 +134,9 @@ changeset in the commit body:
 **Needs improvement**:
 ```
 WP-r47777: Administration: Avoid a PHP 7.4 notice in `add_meta_box()` ... (#778)
+```
 
+```
 ... when attempting to re-add a previously removed box.
 
 The logic for skipping previously removed meta boxes with the `core` priority should also apply to the `sorted` priority that is used when the boxes were manually reordered.
@@ -158,7 +165,9 @@ Co-authored-by: James Nylen <jnylen@gmail.com>
 **Better**:
 ```
 WP-r47777: Avoid notices when readding removed meta box in PHP 7.4 (#778)
+```
 
+```
 * WP-r47777: Administration: Avoid a PHP 7.4 notice in `add_meta_box()` when attempting to re-add a previously removed box.
 
 The logic for skipping previously removed meta boxes with the `core` priority should also apply to the `sorted` priority that is used when the boxes were manually reordered.
@@ -183,3 +192,23 @@ Merges https://core.trac.wordpress.org/changeset/47777 / WordPress/wordpress-dev
 Co-authored-by: Sergey Biryukov <sergeybiryukov@git.wordpress.org>
 Co-authored-by: James Nylen <jnylen@gmail.com>
 ```
+
+---
+
+Another example of a commit message that is perhaps a bit overdone, but shows
+how to use all of the fields available in the commit message:
+https://github.com/ClassicPress/ClassicPress/commit/c995b8fd13a329ed6bb969226ef0a16dea3024a2
+
+Things to note:
+
+- The title (subject line) is a short summary of the change.
+- The change is explained in more detail at the beginning of the message body.
+- The full, unmodified commit messages for all backported WP changesets are
+  included in the message body.
+- The commit title is "_WP-r49944: Quick/Bulk Edit: Keep top and bottom forms
+  consistent (#588)_". Normally when multiple WP changesets are backported in a
+  single PR, the WP changeset number/prefix is not included and the title might
+  be something like "_Backport WP fixes for ..._" instead. However, since this
+  PR includes WP changesets that effectively cancel each other out (the initial
+  fix for this issue plus its revert), changeset 49944 is the main fix included
+  in this PR so it was included in the commit message title.
