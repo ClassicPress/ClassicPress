@@ -441,7 +441,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$blog = get_site( $blog_id );
 
 		$this->assertSame( '0', $blog->spam );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'make_ham_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -494,7 +494,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$blog = get_site( $blog_id );
 
 		$this->assertSame( '1', $blog->spam );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'make_spam_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -517,7 +517,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$blog = get_site( $blog_id );
 
 		$this->assertSame( '1', $blog->archived );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'archive_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -540,7 +540,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		update_blog_status( $blog_id, 'archived', 0 );
 		$blog = get_site( $blog_id );
 		$this->assertSame( '0', $blog->archived );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'unarchive_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -562,7 +562,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		update_blog_status( $blog_id, 'deleted', 1 );
 		$blog = get_site( $blog_id );
 		$this->assertSame( '1', $blog->deleted );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'make_delete_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -586,7 +586,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$blog = get_site( $blog_id );
 
 		$this->assertSame( '0', $blog->deleted );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'make_undelete_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
@@ -609,7 +609,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		$blog = get_site( $blog_id );
 
 		$this->assertSame( '1', $blog->mature );
-		$this->assertSame( 1, $test_action_counter );
+		$this->assertSame( 2, $test_action_counter );
 
 		remove_action( 'mature_blog', array( $this, '_action_counter_cb' ), 10 );
 	}
