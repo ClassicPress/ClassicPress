@@ -108,7 +108,108 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		) );
 
 		$user1 = get_userdata( $users[1] );
-		$this->assertContains( $user1->user_login, $found );
+		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
+	}
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/572
+	 */
+	public function test_invalid_user() {
+		global $wpdb;
+
+		$users = self::factory()->user->create_many( 2 );
+
+		$invalid_user_id = $wpdb->get_var( "SELECT MAX(ID) + 3 FROM {$wpdb->users}" );
+
+		$found = wp_dropdown_users( array(
+			'echo' => false,
+			'include' => $users,
+			'selected' => $invalid_user_id,
+			'include_selected' => true,
+		) );
+
+		$user0 = get_userdata( $users[0] );
+		$user1 = get_userdata( $users[1] );
+
+		$this->assertContains( "<select name='user' id='user' class=''>", $found );
+		$this->assertContains( "<option value='{$user0->ID}'>{$user0->display_name}</option>", $found );
+		$this->assertContains( "<option value='{$user1->ID}'>{$user1->display_name}</option>", $found );
+		$this->assertContains( "<option value='{$invalid_user_id}' selected='selected'>(Invalid user: ID={$invalid_user_id})</option>", $found );
+	}
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
+	 */
+	public function test_value_field_and_select_multiple() {
+		$users = self::factory()->user->create_many( 2 );
+
+		$found = wp_dropdown_users( array(
+			'name' => 'multiusers',
+			'echo' => false,
+			'include' => $users[0],
+			'selected' => $users[1],
+			'include_selected' => true,
+			'show' => 'user_nicename',
+			'value_field' => 'user_login',
+			'select_multiple' => true,
+		) );
+
+		$user0 = get_userdata( $users[0] );
+		$user1 = get_userdata( $users[1] );
+
+		$this->assertContains( "<select name='multiusers[]' id='multiusers' class='' multiple>", $found );
+		$this->assertContains( "<option value='{$user0->user_login}'>{$user0->user_nicename}</option>", $found );
+		$this->assertContains( "<option value='{$user1->user_login}' selected='selected'>{$user1->user_nicename}</option>", $found );
+	}
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
+	 */
+	public function test_invalid_value_field() {
+		$users = self::factory()->user->create_many( 2 );
+
+		$found = wp_dropdown_users( array(
+			'echo' => false,
+			'include' => $users[0],
+			'selected' => $users[1],
+			'include_selected' => true,
+			'show' => 'user_login',
+			// Querying users by this field is not supported, so the dropdown
+			// should fall back to the default field of 'ID'.
+			'value_field' => 'display_name',
+		) );
+
+		$user1 = get_userdata( $users[1] );
+		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
+	}
+
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/572
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
+	 */
+	public function test_invalid_user_with_value_field() {
+		global $wpdb;
+
+		$users = self::factory()->user->create_many( 2 );
+
+		$invalid_user_id = $wpdb->get_var( "SELECT MAX(ID) + 3 FROM {$wpdb->users}" );
+
+		$found = wp_dropdown_users( array(
+			'echo' => false,
+			'include' => $users,
+			'selected' => $invalid_user_id,
+			'include_selected' => true,
+			'value_field' => 'user_login',
+		) );
+
+		$user0 = get_userdata( $users[0] );
+		$user1 = get_userdata( $users[1] );
+
+		$this->assertContains( "<select name='user' id='user' class=''>", $found );
+		$this->assertContains( "<option value='{$user0->user_login}'>{$user0->display_name}</option>", $found );
+		$this->assertContains( "<option value='{$user1->user_login}'>{$user1->display_name}</option>", $found );
+		$this->assertNotContains( 'Invalid user:', $found );
 	}
 
 	/**
