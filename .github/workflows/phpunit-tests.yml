@@ -49,8 +49,6 @@ jobs:
 
     name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
 
-    continue-on-error: ${{ matrix.experimental }}
-
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
         if: ${{ github.event_name == 'pull_request' }}
@@ -184,33 +182,40 @@ jobs:
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:default
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ajax
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:ajax
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:multisite
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ms-files
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:ms-files
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:external-http
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit restapi-jsclient
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:restapi-jsclient
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit wp-api-client-fixtures
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
         run: grunt phpunit:wp-api-client-fixtures
+        continue-on-error: ${{ matrix.experimental }}
