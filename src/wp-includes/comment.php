@@ -2500,10 +2500,20 @@ function do_all_pings() {
 		pingback( $ping->post_content, $ping->ID );
 	}
 
-	// Do Enclosures
-	while ($enclosure = $wpdb->get_row("SELECT ID, post_content, meta_id FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_encloseme' LIMIT 1")) {
-		delete_metadata_by_mid( 'post', $enclosure->meta_id );
-		do_enclose( $enclosure->post_content, $enclosure->ID );
+	// Do enclosures.
+	$enclosures = get_posts(
+		array(
+			'post_type'        => get_post_types(),
+			'suppress_filters' => false,
+			'nopaging'         => true,
+			'meta_key'         => '_encloseme',
+			'fields'           => 'ids',
+		)
+	);
+
+	foreach ( $enclosure as $enclosure ) {
+		delete_post_meta( $enclosure, '_encloseme' );
+		do_enclose( null, $enclosure->ID );
 	}
 
 	// Do Trackbacks
@@ -3061,7 +3071,7 @@ function wp_handle_comment_submission( $comment_data ) {
 		 * @param int $comment_post_ID Post ID.
 		 */
 		do_action( 'comment_on_draft', $comment_post_ID );
-		
+
 		if ( current_user_can( 'read_post', $comment_post_ID ) ) {
 			return new WP_Error( 'comment_on_draft', __( 'Sorry, comments are not allowed for this item.' ), 403 );
 		} else {
