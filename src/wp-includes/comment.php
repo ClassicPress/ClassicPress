@@ -350,13 +350,13 @@ function get_lastcommentmodified( $timezone = 'server' ) {
  * @return array() {
  *     The number of comments keyed by their status.
  *
- *     @type int|string $approved            The number of approved comments.
- *     @type int|string $awaiting_moderation The number of comments awaiting moderation (a.k.a. pending).
- *     @type int|string $spam                The number of spam comments.
- *     @type int|string $trash               The number of trashed comments.
- *     @type int|string $post-trashed        The number of comments for posts that are in the trash.
- *     @type int        $total_comments      The total number of non-trashed comments, including spam.
- *     @type int        $all                 The total number of pending or approved comments.
+ *     @type int $approved            The number of approved comments.
+ *     @type int $awaiting_moderation The number of comments awaiting moderation (a.k.a. pending).
+ *     @type int $spam                The number of spam comments.
+ *     @type int $trash               The number of trashed comments.
+ *     @type int $post-trashed        The number of comments for posts that are in the trash.
+ *     @type int $total_comments      The total number of non-trashed comments, including spam.
+ *     @type int $all                 The total number of pending or approved comments.
  * }
  */
 function get_comment_count( $post_id = 0 ) {
@@ -1262,13 +1262,13 @@ function wp_blacklist_check($author, $email, $url, $comment, $user_ip, $user_age
  * @return stdClass {
  *     The number of comments keyed by their status.
  *
- *     @type int|string $approved       The number of approved comments.
- *     @type int|string $moderated      The number of comments awaiting moderation (a.k.a. pending).
- *     @type int|string $spam           The number of spam comments.
- *     @type int|string $trash          The number of trashed comments.
- *     @type int|string $post-trashed   The number of comments for posts that are in the trash.
- *     @type int        $total_comments The total number of non-trashed comments, including spam.
- *     @type int        $all            The total number of pending or approved comments.
+ *     @type int $approved       The number of approved comments.
+ *     @type int $moderated      The number of comments awaiting moderation (a.k.a. pending).
+ *     @type int $spam           The number of spam comments.
+ *     @type int $trash          The number of trashed comments.
+ *     @type int $post-trashed   The number of comments for posts that are in the trash.
+ *     @type int $total_comments The total number of non-trashed comments, including spam.
+ *     @type int $all            The total number of pending or approved comments.
  * }
  */
 function wp_count_comments( $post_id = 0 ) {

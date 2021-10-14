@@ -69,7 +69,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertEquals( 4, $page_count->publish );
 		$this->assertEquals( 1, $page_count->draft );
 		$comment_count = wp_count_comments();
-		$this->assertEquals( 1, $comment_count->total_comments );
+		$this->assertSame( 1, $comment_count->total_comments );
 
 		$posts = get_posts(
 			array(
@@ -229,7 +229,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertEquals( 4, $page_count->publish );
 		$this->assertEquals( 1, $page_count->draft );
 		$comment_count = wp_count_comments();
-		$this->assertEquals( 1, $comment_count->total_comments );
+		$this->assertSame( 1, $comment_count->total_comments );
 	}
 
 	function test_ordering_of_importers() {
