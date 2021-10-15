@@ -1105,6 +1105,7 @@ function wp_dropdown_users( $args = '' ) {
 		default:
 			// Another field was specified - fall back to the default of 'ID'.
 			$value_field = 'ID';
+			break;
 	}
 
 	$query_args['fields'] = $fields;
@@ -1191,7 +1192,7 @@ function wp_dropdown_users( $args = '' ) {
 			}
 
 			$_selected = selected( $user->ID, $r['selected'], false );
-			$select_value = $user->$value_field;
+			$select_value = esc_attr( $user->$value_field );
 			$output .= "\t<option value='$select_value'$_selected>" . esc_html( $display ) . "</option>\n";
 		}
 
