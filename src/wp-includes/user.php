@@ -989,6 +989,7 @@ function setup_userdata($for_user_id = '') {
  * @since WP-2.3.0
  * @since WP-4.5.0 Added the 'display_name_with_login' value for 'show'.
  * @since WP-4.7.0 Added the `$role`, `$role__in`, and `$role__not_in` parameters.
+ * @since 1.4.0 Added the `$select_multiple` and `$value_field` parameters.
  *
  * @param array|string $args {
  *     Optional. Array or string of arguments to generate a drop-down of users.
