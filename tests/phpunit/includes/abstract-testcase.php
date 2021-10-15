@@ -650,7 +650,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Asserts that two values have the same type and value, with EOL differences discarded.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param string $expected The expected value.
 	 * @param string $actual   The actual value.
@@ -662,8 +662,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Asserts that two values are equal, with EOL differences discarded.
 	 *
-	 * @since 5.4.0
-	 * @since 5.6.0 Turned into an alias for `::assertSameIgnoreEOL()`.
+	 * @since WP-5.4.0
+	 * @since WP-5.6.0 Turned into an alias for `::assertSameIgnoreEOL()`.
 	 *
 	 * @param string $expected The expected value.
 	 * @param string $actual   The actual value.
@@ -675,7 +675,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Asserts that the contents of two un-keyed, single arrays are the same, without accounting for the order of elements.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param array $expected Expected array.
 	 * @param array $actual   Array to check.
@@ -703,7 +703,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Asserts that the contents of two keyed, single arrays are the same, without accounting for the order of elements.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param array $expected Expected array.
 	 * @param array $actual   Array to check.
@@ -926,7 +926,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 * expected to be false. For example, assertQueryTrue( 'is_single', 'is_feed' ) means is_single()
 	 * and is_feed() must be true and everything else must be false to pass.
 	 *
-	 * @since 2.5.0
+	 * @since WP-2.5.0
 	 * @since WP-3.8.0 Moved from `Tests_Query_Conditionals` to `WP_UnitTestCase`.
 	 *
 	 * @param string $prop,... Any number of WP_Query properties that are expected to be true for the current request.
