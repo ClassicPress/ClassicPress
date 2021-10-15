@@ -87,7 +87,6 @@ function wp_dashboard_setup() {
 	// ClassicPress Petitions
 	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
 
-
 	if ( is_network_admin() ) {
 
 		/**
