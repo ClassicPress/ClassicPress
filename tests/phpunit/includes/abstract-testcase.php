@@ -48,7 +48,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Retrieves the name of the class the static method is called in.
 	 *
-	 * @deprecated 5.3.0 Use the PHP native get_called_class() function instead.
+	 * @deprecated WP-5.3.0 Use the PHP native get_called_class() function instead.
 	 *
 	 * @return string The class name.
 	 */
@@ -816,62 +816,6 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 		if ( is_callable( 'PHPUnit\Framework\TestCase', 'checkRequirements' ) ) {
 			parent::checkRequirements();
 		}
-	}
-
-	/**
-	 * Skips the current test if there is an open Trac ticket associated with it.
-	 *
-	 * @since WP-3.5.0
-	 *
-	 * @param int $ticket_id Ticket number.
-	 */
-	public function knownWPBug( $ticket_id ) {
-		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( $ticket_id, self::$forced_tickets, true ) ) {
-			return;
-		}
-		if ( ! TracTickets::isTracTicketClosed( 'https://core.trac.wordpress.org', $ticket_id ) ) {
-			$this->markTestSkipped( sprintf( 'WordPress Ticket #%d is not fixed', $ticket_id ) );
-		}
-	}
-
-	/**
-	 * Skips the current test if there is an open Unit Test Trac ticket associated with it.
-	 *
-	 * @since WP-3.5.0
-	 *
-	 * @deprecated No longer used since the Unit Test Trac was merged into the Core Trac.
-	 *
-	 * @param int $ticket_id Ticket number.
-	 */
-	public function knownUTBug( $ticket_id ) {
-		return;
-	}
-
-	/**
-	 * Skips the current test if there is an open Plugin Trac ticket associated with it.
-	 *
-	 * @since WP-3.5.0
-	 *
-	 * @param int $ticket_id Ticket number.
-	 */
-	public function knownPluginBug( $ticket_id ) {
-		if ( WP_TESTS_FORCE_KNOWN_BUGS || in_array( 'Plugin' . $ticket_id, self::$forced_tickets, true ) ) {
-			return;
-		}
-		if ( ! TracTickets::isTracTicketClosed( 'https://plugins.trac.wordpress.org', $ticket_id ) ) {
-			$this->markTestSkipped( sprintf( 'WordPress Plugin Ticket #%d is not fixed', $ticket_id ) );
-		}
-	}
-
-	/**
-	 * Adds a Trac ticket number to the `$forced_tickets` property.
-	 *
-	 * @since WP-3.5.0
-	 *
-	 * @param int $ticket Ticket number.
-	 */
-	public static function forceTicket( $ticket ) {
-		self::$forced_tickets[] = $ticket;
 	}
 
 	/**
