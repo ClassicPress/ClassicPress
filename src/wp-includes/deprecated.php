@@ -3053,7 +3053,7 @@ function remove_custom_background() {
  * @return array Theme data.
  */
 function get_theme_data( $theme_file ) {
-	_deprecated_function( __FUNCTION__, '3.4.0', 'wp_get_theme()' );
+	_deprecated_function( __FUNCTION__, 'WP-3.4.0', 'wp_get_theme()' );
 	$theme = new WP_Theme( wp_basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
 
 	$theme_data = array(
