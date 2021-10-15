@@ -2828,7 +2828,7 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
  * This function checks if the passed value is either a resource of type `gd`
  * or a GdImage object instance. Any other type will return false.
  *
- * @since 5.6.0
+ * @since WP-5.6.0
  *
  * @param resource|GdImage|false $image A value to check the type for.
  * @return bool True if $image is either a GD image resource or GdImage instance,

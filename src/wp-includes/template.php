@@ -375,24 +375,6 @@ function get_front_page_template() {
 }
 
 /**
- * Retrieve path of Privacy Policy page template in current or parent template.
- *
- * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
- * and {@see '$type_template'} dynamic hooks, where `$type` is 'privacypolicy'.
- *
- * @since 5.2.0
- *
- * @see get_query_template()
- *
- * @return string Full path to front page template file.
- */
-function get_privacy_policy_template() {
-	$templates = array( 'privacy-policy.php' );
-
-	return get_query_template( 'privacy_policy', $templates );
-}
-
-/**
  * Retrieve path of page template in current or parent template.
  *
  * The hierarchy for this template looks like:

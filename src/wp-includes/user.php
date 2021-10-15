@@ -2342,7 +2342,7 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * Allows, for example, custom validation using data other than username or email address.
 	 *
-	 * @since 5.7.0
+	 * @since WP-5.7.0
 	 *
 	 * @param WP_User|false $user_data WP_User object if found, false if the user does not exist.
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
@@ -2353,9 +2353,9 @@ function retrieve_password( $user_login = null ) {
 	/**
 	 * Fires before errors are returned from a password reset request.
 	 *
-	 * @since 2.1.0
-	 * @since 4.4.0 Added the `$errors` parameter.
-	 * @since 5.4.0 Added the `$user_data` parameter.
+	 * @since WP-2.1.0
+	 * @since WP-4.4.0 Added the `$errors` parameter.
+	 * @since WP-5.4.0 Added the `$user_data` parameter.
 	 *
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
 	 *                                 by using invalid credentials.
@@ -2372,7 +2372,7 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * If any errors are present in $errors, this will abort the password reset request.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
 	 *                                 by using invalid credentials.

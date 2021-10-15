@@ -326,14 +326,6 @@ class WP_Query {
 	public $is_home = false;
 
 	/**
-	 * Signifies whether the current query is for the Privacy Policy page.
-	 *
-	 * @since 5.2.0
-	 * @var bool
-	 */
-	public $is_privacy_policy = false;
-
-	/**
 	 * Signifies whether the current query couldn't find anything.
 	 *
 	 * @since WP-1.5.0
@@ -3047,7 +3039,7 @@ class WP_Query {
 			if ( is_array( $this->posts ) ) {
 				$this->found_posts = count( $this->posts );
 			} else {
-				if ( null === $this->posts ) {  
+				if ( null === $this->posts ) {
 					$this->found_posts = 0;
 				} else {
 					$this->found_posts = 1;
@@ -3707,27 +3699,6 @@ class WP_Query {
 	 */
 	public function is_home() {
 		return (bool) $this->is_home;
-	}
-
-	/**
-	 * Is the query for the Privacy Policy page?
-	 *
-	 * This is the page which shows the Privacy Policy content of your site.
-	 *
-	 * Depends on the site's "Change your Privacy Policy page" Privacy Settings 'wp_page_for_privacy_policy'.
-	 *
-	 * This function will return true only on the page you set as the "Privacy Policy page".
-	 *
-	 * @since 5.2.0
-	 *
-	 * @return bool True, if Privacy Policy page.
-	 */
-	public function is_privacy_policy() {
-		if ( get_option( 'wp_page_for_privacy_policy' ) && $this->is_page( get_option( 'wp_page_for_privacy_policy' ) ) ) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**
