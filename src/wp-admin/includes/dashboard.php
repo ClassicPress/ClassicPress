@@ -1443,7 +1443,7 @@ function cp_dashboard_petitions() {
  * @param array  $feeds     Array of petition feeds (possible sort orders).
  */
 function cp_dashboard_petitions_output( $widget_id, $feeds ) {
-	$api_url = 'https://api-v1-test.classicpress.net/features/1.0/';
+	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
 
 	/**
 	 * Response body should be an object with:
