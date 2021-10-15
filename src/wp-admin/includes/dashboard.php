@@ -34,6 +34,35 @@ function wp_dashboard_setup() {
 			wp_add_dashboard_widget( 'dashboard_browser_nag', __( 'Your browser is out of date!' ), 'wp_dashboard_browser_nag' );
 	}
 
+	/* Run WordPress version check for installed plugins */
+
+	function wp_plugin_version_check() {
+
+		// Get an array of all installed plugins.
+		$all_plugins = get_plugins();
+		foreach ($all_plugins as $path => $value) {
+			$slugs[] = dirname($path);
+		}
+
+		// Run a query to get information
+		include_once (ABSPATH.'wp-admin/includes/plugin-install.php');
+		$query = ['slugs'  => $slugs];
+		if (is_wp_error($plugin_info = plugins_api('plugin_information', $query))) {
+			return false;
+		}
+
+		// Run version check
+		foreach ($plugin_info as $slug => $info) {
+			if (array_key_exists('requires', $info)) {
+				if (version_compare($info['requires'], '5', '>=')) {
+					printf("<div class='notice notice-error is-dismissible'><p><strong>WARNING:</strong> " . $info['name'] . " current version is " . $info['version'] . " and this now requires WP version " . $info['requires'] . "<br /><strong>You will NOT be receiving any further updates for this plugin. These may include critical security updates!</strong></p></div>");
+				}
+			}
+		}
+	}
+
+	add_action( 'admin_notices', 'wp_plugin_version_check' );
+
 	// Right Now
 	if ( is_blog_admin() && current_user_can('edit_posts') )
 		wp_add_dashboard_widget( 'dashboard_right_now', __( 'At a Glance' ), 'wp_dashboard_right_now' );
@@ -57,6 +86,7 @@ function wp_dashboard_setup() {
 
 	// ClassicPress Petitions
 	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+
 
 	if ( is_network_admin() ) {
 
@@ -1413,7 +1443,7 @@ function cp_dashboard_petitions() {
  * @param array  $feeds     Array of petition feeds (possible sort orders).
  */
 function cp_dashboard_petitions_output( $widget_id, $feeds ) {
-	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
+	$api_url = 'https://api-v1-test.classicpress.net/features/1.0/';
 
 	/**
 	 * Response body should be an object with:
