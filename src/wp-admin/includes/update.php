@@ -89,22 +89,25 @@ function find_core_auto_update() {
 }
 
 /**
- * Gets and caches the checksums for the given version of ClassicPress.
+ * Gets the checksums for the given version of ClassicPress.
  *
  * @since WP-3.7.0
+ * @since 1.3.0 Correctly returns checksums for the given ClassicPress version,
+ * not the WordPress version. The $locale parameter is now ignored.
  *
  * @param string $version Version string to query.
  * @param string $locale  Locale to query.
  * @return bool|array False on failure. An array of checksums on success.
  */
 function get_core_checksums( $version, $locale ) {
-	$url = 'https://api.wordpress.org/core/checksums/1.0/?' . http_build_query( compact( 'version', 'locale' ), null, '&' );
+	$url = 'https://api-v1.classicpress.net/checksums/md5/' . $version . '.json';
 
 	$options = array(
 		'timeout' => wp_doing_cron() ? 30 : 3,
 	);
 
 	$response = wp_remote_get( $url, $options );
+
 	if ( is_wp_error( $response ) ) {
 		trigger_error(
 			sprintf(
@@ -119,14 +122,20 @@ function get_core_checksums( $version, $locale ) {
 		$response = wp_remote_get( $url, $options );
 	}
 
-	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) )
+	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 		return false;
+	}
 
 	$body = trim( wp_remote_retrieve_body( $response ) );
 	$body = json_decode( $body, true );
 
-	if ( ! is_array( $body ) || ! isset( $body['checksums'] ) || ! is_array( $body['checksums'] ) )
+	if (
+		! is_array( $body ) ||
+		! isset( $body['checksums'] ) ||
+		! is_array( $body['checksums'] )
+	) {
 		return false;
+	}
 
 	return $body['checksums'];
 }

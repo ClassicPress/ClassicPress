@@ -50,14 +50,14 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 		global $wp_meta_boxes;
 
 		add_meta_box( 'testbox1', 'Test Metabox', '__return_false', 'post' );
-		
+
 		$this->assertArrayHasKey( 'testbox1', $wp_meta_boxes['post']['advanced']['default'] );
 	}
 
 	public function test_remove_meta_box() {
 		global $wp_meta_boxes;
 
-		// Add a meta boxes to remove.
+		// Add a meta box to remove.
 		add_meta_box( 'testbox1', 'Test Metabox', '__return_false', $current_screen = 'post' );
 
 		// Confirm it's there.
@@ -79,7 +79,7 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 		// Add a meta box to three different post types
 		add_meta_box( 'testbox1', 'Test Metabox', '__return_false', array( 'post', 'comment', 'attachment' ) );
 
-		$this->assertArrayHasKey( 'testbox1', $wp_meta_boxes['post']['advanced']['default'] ); 
+		$this->assertArrayHasKey( 'testbox1', $wp_meta_boxes['post']['advanced']['default'] );
 		$this->assertArrayHasKey( 'testbox1', $wp_meta_boxes['comment']['advanced']['default'] );
 		$this->assertArrayHasKey( 'testbox1', $wp_meta_boxes['attachment']['advanced']['default'] );
 	}
@@ -108,4 +108,22 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 		$this->assertFalse( $wp_meta_boxes['attachment']['advanced']['default']['testbox1'] );
 	}
 
+	/**
+	 * @see https://core.trac.wordpress.org/ticket/50019
+	 */
+	public function test_add_meta_box_with_previously_removed_box_and_sorted_priority() {
+		global $wp_meta_boxes;
+
+		// Add a meta box to remove.
+		add_meta_box( 'testbox1', 'Test Metabox', '__return_false', $current_screen = 'post' );
+
+		// Remove the meta box.
+		remove_meta_box( 'testbox1', $current_screen, 'advanced' );
+
+		// Attempt to re-add the meta box with the 'sorted' priority.
+		add_meta_box( 'testbox1', null, null, $current_screen, 'advanced', 'sorted' );
+
+		// Check that the meta box was not re-added.
+		$this->assertFalse( $wp_meta_boxes[ $current_screen ]['advanced']['default']['testbox1'] );
+	}
 }
