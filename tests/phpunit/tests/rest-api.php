@@ -80,6 +80,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		// Check the route was registered correctly.
@@ -112,10 +113,12 @@ class Tests_REST_API extends WP_UnitTestCase {
 			array(
 				'methods'  => array( 'GET' ),
 				'callback' => '__return_null',
+				'permission_callback' => '__return_true',
 			),
 			array(
 				'methods'  => array( 'POST' ),
 				'callback' => '__return_null',
+				'permission_callback' => '__return_true',
 			),
 		) );
 
@@ -148,10 +151,12 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'POST' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		// Check both routes exist.
@@ -167,11 +172,13 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'      => array( 'GET' ),
 			'callback'     => '__return_null',
+			'permission_callback' => '__return_true',
 			'should_exist' => false,
 		) );
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'      => array( 'POST' ),
 			'callback'     => '__return_null',
+			'permission_callback' => '__return_true',
 			'should_exist' => true,
 		), true );
 
@@ -194,7 +201,9 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( '', '/test-empty-namespace', array(
 			'methods'      => array( 'POST' ),
 			'callback'     => '__return_null',
+			'permission_callback' => '__return_true',
 		), true );
+
 		$endpoints = $GLOBALS['wp_rest_server']->get_routes();
 		$this->assertFalse( isset( $endpoints['/test-empty-namespace'] ) );
 	}
@@ -208,7 +217,9 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( '/test-empty-route', '', array(
 			'methods'      => array( 'POST' ),
 			'callback'     => '__return_null',
+			'permission_callback' => '__return_true',
 		), true );
+
 		$endpoints = $GLOBALS['wp_rest_server']->get_routes();
 		$this->assertFalse( isset( $endpoints['/test-empty-route'] ) );
 	}
@@ -225,6 +236,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
@@ -239,6 +251,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => 'GET',
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
@@ -253,6 +266,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET', 'POST' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
@@ -267,6 +281,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => 'GET,POST',
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
@@ -278,6 +293,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => 'GET,POST',
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
 
 		$request = new WP_REST_Request( 'OPTIONS', '/test-ns/test' );
@@ -296,6 +312,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => 'GET,POST',
 			'callback' => '__return_true',
+			'permission_callback' => '__return_true',
 		) );
 
 		$request = new WP_REST_Request( 'GET', '/test-ns/test' );
@@ -588,8 +605,8 @@ class Tests_REST_API extends WP_UnitTestCase {
 		register_rest_route( 'test-ns', '/test', array(
 			'methods'  => array( 'GET' ),
 			'callback' => '__return_null',
+			'permission_callback' => '__return_true',
 		) );
-
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 		$this->assertEquals( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
 	}
