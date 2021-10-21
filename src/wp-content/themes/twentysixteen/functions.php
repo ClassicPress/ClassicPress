@@ -93,20 +93,24 @@ function twentysixteen_setup() {
 	 * Switch default core markup for search form, comment form, and comments
 	 * to output valid HTML5.
 	 */
-	add_theme_support( 'html5', array(
-		'search-form',
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'caption',
-	) );
+	add_theme_support(
+		'html5',
+		array(
+			'search-form',
+			'comment-form',
+			'comment-list',
+			'gallery',
+			'caption',
+			'script',
+			'style',
+		)
+	);
 
 	/*
 	 * Enable support for Post Formats.
 	 *
 	 * See: https://codex.wordpress.org/Post_Formats
 	 */
-<<<<<<< HEAD
 	add_theme_support( 'post-formats', array(
 		'aside',
 		'image',
@@ -128,180 +132,6 @@ function twentysixteen_setup() {
 	// Indicate widget sidebars can use selective refresh in the Customizer.
 	add_theme_support( 'customize-selective-refresh-widgets' );
 }
-=======
-	function twentysixteen_setup() {
-		/*
-		 * Make theme available for translation.
-		 * Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/twentysixteen
-		 * If you're building a theme based on Twenty Sixteen, use a find and replace
-		 * to change 'twentysixteen' to the name of your theme in all the template files
-		 */
-		load_theme_textdomain( 'twentysixteen' );
-
-		// Add default posts and comments RSS feed links to head.
-		add_theme_support( 'automatic-feed-links' );
-
-		/*
-		 * Let WordPress manage the document title.
-		 * By adding theme support, we declare that this theme does not use a
-		 * hard-coded <title> tag in the document head, and expect WordPress to
-		 * provide it for us.
-		 */
-		add_theme_support( 'title-tag' );
-
-		/*
-		 * Enable support for custom logo.
-		 *
-		 *  @since Twenty Sixteen 1.2
-		 */
-		add_theme_support(
-			'custom-logo',
-			array(
-				'height'      => 240,
-				'width'       => 240,
-				'flex-height' => true,
-			)
-		);
-
-		/*
-		 * Enable support for Post Thumbnails on posts and pages.
-		 *
-		 * @link https://developer.wordpress.org/reference/functions/add_theme_support/#post-thumbnails
-		 */
-		add_theme_support( 'post-thumbnails' );
-		set_post_thumbnail_size( 1200, 9999 );
-
-		// This theme uses wp_nav_menu() in two locations.
-		register_nav_menus(
-			array(
-				'primary' => __( 'Primary Menu', 'twentysixteen' ),
-				'social'  => __( 'Social Links Menu', 'twentysixteen' ),
-			)
-		);
-
-		/*
-		 * Switch default core markup for search form, comment form, and comments
-		 * to output valid HTML5.
-		 */
-		add_theme_support(
-			'html5',
-			array(
-				'search-form',
-				'comment-form',
-				'comment-list',
-				'gallery',
-				'caption',
-				'script',
-				'style',
-			)
-		);
-
-		/*
-		 * Enable support for Post Formats.
-		 *
-		 * See: https://wordpress.org/support/article/post-formats/
-		 */
-		add_theme_support(
-			'post-formats',
-			array(
-				'aside',
-				'image',
-				'video',
-				'quote',
-				'link',
-				'gallery',
-				'status',
-				'audio',
-				'chat',
-			)
-		);
-
-		/*
-		 * This theme styles the visual editor to resemble the theme style,
-		 * specifically font, colors, icons, and column width.
-		 */
-		add_editor_style( array( 'css/editor-style.css', twentysixteen_fonts_url() ) );
-
-		// Load regular editor styles into the new block-based editor.
-		add_theme_support( 'editor-styles' );
-
-		// Load default block styles.
-		add_theme_support( 'wp-block-styles' );
-
-		// Add support for responsive embeds.
-		add_theme_support( 'responsive-embeds' );
-
-		// Add support for custom color scheme.
-		add_theme_support(
-			'editor-color-palette',
-			array(
-				array(
-					'name'  => __( 'Dark Gray', 'twentysixteen' ),
-					'slug'  => 'dark-gray',
-					'color' => '#1a1a1a',
-				),
-				array(
-					'name'  => __( 'Medium Gray', 'twentysixteen' ),
-					'slug'  => 'medium-gray',
-					'color' => '#686868',
-				),
-				array(
-					'name'  => __( 'Light Gray', 'twentysixteen' ),
-					'slug'  => 'light-gray',
-					'color' => '#e5e5e5',
-				),
-				array(
-					'name'  => __( 'White', 'twentysixteen' ),
-					'slug'  => 'white',
-					'color' => '#fff',
-				),
-				array(
-					'name'  => __( 'Blue Gray', 'twentysixteen' ),
-					'slug'  => 'blue-gray',
-					'color' => '#4d545c',
-				),
-				array(
-					'name'  => __( 'Bright Blue', 'twentysixteen' ),
-					'slug'  => 'bright-blue',
-					'color' => '#007acc',
-				),
-				array(
-					'name'  => __( 'Light Blue', 'twentysixteen' ),
-					'slug'  => 'light-blue',
-					'color' => '#9adffd',
-				),
-				array(
-					'name'  => __( 'Dark Brown', 'twentysixteen' ),
-					'slug'  => 'dark-brown',
-					'color' => '#402b30',
-				),
-				array(
-					'name'  => __( 'Medium Brown', 'twentysixteen' ),
-					'slug'  => 'medium-brown',
-					'color' => '#774e24',
-				),
-				array(
-					'name'  => __( 'Dark Red', 'twentysixteen' ),
-					'slug'  => 'dark-red',
-					'color' => '#640c1f',
-				),
-				array(
-					'name'  => __( 'Bright Red', 'twentysixteen' ),
-					'slug'  => 'bright-red',
-					'color' => '#ff675f',
-				),
-				array(
-					'name'  => __( 'Yellow', 'twentysixteen' ),
-					'slug'  => 'yellow',
-					'color' => '#ffef8e',
-				),
-			)
-		);
-
-		// Indicate widget sidebars can use selective refresh in the Customizer.
-		add_theme_support( 'customize-selective-refresh-widgets' );
-	}
->>>>>>> baaaef5b63 (Bundled Themes: Declare HTML5 support for scripts and styles.)
 endif; // twentysixteen_setup
 add_action( 'after_setup_theme', 'twentysixteen_setup' );
 
@@ -602,7 +432,7 @@ function twentysixteen_widget_tag_cloud_args( $args ) {
 	$args['largest']  = 1;
 	$args['smallest'] = 1;
 	$args['unit']     = 'em';
-	$args['format']   = 'list'; 
+	$args['format']   = 'list';
 
 	return $args;
 }
