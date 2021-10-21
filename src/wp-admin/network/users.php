@@ -43,10 +43,10 @@ if ( isset( $_GET['action'] ) ) {
 			if ( !current_user_can( 'manage_network_users' ) )
 				wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
 
-			if ( ( isset( $_POST['action']) || isset($_POST['action2'] ) ) && isset( $_POST['allusers'] ) ) {
+			if ( isset( $_POST['action'] ) && isset( $_POST['allusers'] ) ) {
 				check_admin_referer( 'bulk-users-network' );
 
-				$doaction = $_POST['action'] != -1 ? $_POST['action'] : $_POST['action2'];
+				$doaction = $_POST['action'];
 				$userfunction = '';
 
 				foreach ( (array) $_POST['allusers'] as $user_id ) {

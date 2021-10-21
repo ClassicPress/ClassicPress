@@ -279,6 +279,76 @@ function size_format( $bytes, $decimals = 0 ) {
 }
 
 /**
+ * Convert a duration to human readable format.
+ *
+ * @since 5.1.0
+ *
+ * @param string $duration Duration will be in string format (HH:ii:ss) OR (ii:ss),
+ *                         with a possible prepended negative sign (-).
+ * @return string|false A human readable duration string, false on failure.
+ */
+function human_readable_duration( $duration = '' ) {
+	if ( ( empty( $duration ) || ! is_string( $duration ) ) ) {
+		return false;
+	}
+
+	$duration = trim( $duration );
+
+	// Remove prepended negative sign.
+	if ( '-' === substr( $duration, 0, 1 ) ) {
+		$duration = substr( $duration, 1 );
+	}
+
+	// Extract duration parts.
+	$duration_parts = array_reverse( explode( ':', $duration ) );
+	$duration_count = count( $duration_parts );
+
+	$hour   = null;
+	$minute = null;
+	$second = null;
+
+	if ( 3 === $duration_count ) {
+		// Validate HH:ii:ss duration format.
+		if ( ! ( (bool) preg_match( '/^([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])$/', $duration ) ) ) {
+			return false;
+		}
+		// Three parts: hours, minutes & seconds.
+		list( $second, $minute, $hour ) = $duration_parts;
+	} elseif ( 2 === $duration_count ) {
+		// Validate ii:ss duration format.
+		if ( ! ( (bool) preg_match( '/^([0-5]?[0-9]):([0-5]?[0-9])$/', $duration ) ) ) {
+			return false;
+		}
+		// Two parts: minutes & seconds.
+		list( $second, $minute ) = $duration_parts;
+	} else {
+		return false;
+	}
+
+	$human_readable_duration = array();
+
+	// Add the hour part to the string.
+	if ( is_numeric( $hour ) ) {
+		/* translators: Time duration in hour or hours. */
+		$human_readable_duration[] = sprintf( _n( '%s hour', '%s hours', $hour ), (int) $hour );
+	}
+
+	// Add the minute part to the string.
+	if ( is_numeric( $minute ) ) {
+		/* translators: Time duration in minute or minutes. */
+		$human_readable_duration[] = sprintf( _n( '%s minute', '%s minutes', $minute ), (int) $minute );
+	}
+
+	// Add the second part to the string.
+	if ( is_numeric( $second ) ) {
+		/* translators: Time duration in second or seconds. */
+		$human_readable_duration[] = sprintf( _n( '%s second', '%s seconds', $second ), (int) $second );
+	}
+
+	return implode( ', ', $human_readable_duration );
+}
+
+/**
  * Get the week start and end from the datetime or date string from MySQL.
  *
  * @since WP-0.71
@@ -550,29 +620,45 @@ function wp_extract_urls( $content ) {
  * pingbacks and trackbacks.
  *
  * @since WP-1.5.0
+ * @since WP-5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
+ *              updated to accept a post ID or a WP_Post object.
+ * @since WP-5.6.0 The `$content` parameter is no longer optional, but passing `null` to skip it
+ *              is still supported.
+
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
- * @param string $content Post Content.
- * @param int    $post_ID Post ID.
+ * @param string         $content Post content. If `null`, the `post_content` field from `$post` is used.
+ * @param int|WP_Post    $post    Post ID or post object.
+ * @return null|bool Returns false if post is not found.
  */
-function do_enclose( $content, $post_ID ) {
+function do_enclose( $content = null, $post ) {
 	global $wpdb;
 
 	//TODO: Tidy this ghetto code up and make the debug code optional
 	include_once( ABSPATH . WPINC . '/class-IXR.php' );
 
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return false;
+	}
+
+	if ( null === $content ) {
+		$content = $post->post_content;
+	}
+
 	$post_links = array();
 
-	$pung = get_enclosed( $post_ID );
+	$pung = get_enclosed( $post->ID );
 
 	$post_links_temp = wp_extract_urls( $content );
 
 	foreach ( $pung as $link_test ) {
 		if ( ! in_array( $link_test, $post_links_temp ) ) { // link no longer in post
-			$mids = $wpdb->get_col( $wpdb->prepare("SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post_ID, $wpdb->esc_like( $link_test ) . '%') );
-			foreach ( $mids as $mid )
+			$mids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $link_test ) . '%' ) );
+			foreach ( $mids as $mid ) {
 				delete_metadata_by_mid( 'post', $mid );
+			}
 		}
 	}
 
@@ -599,10 +685,10 @@ function do_enclose( $content, $post_ID ) {
 	 * @param array $post_links An array of enclosure links.
 	 * @param int   $post_ID    Post ID.
 	 */
-	$post_links = apply_filters( 'enclosure_links', $post_links, $post_ID );
+	$post_links = apply_filters( 'enclosure_links', $post_links, $post->ID );
 
 	foreach ( (array) $post_links as $url ) {
-		if ( $url != '' && !$wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post_ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
+		if ( $url != '' && ! $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
 
 			if ( $headers = wp_get_http_headers( $url) ) {
 				$len = isset( $headers['content-length'] ) ? (int) $headers['content-length'] : 0;
@@ -624,8 +710,8 @@ function do_enclose( $content, $post_ID ) {
 					}
 				}
 
-				if ( in_array( substr( $type, 0, strpos( $type, "/" ) ), $allowed_types ) ) {
-					add_post_meta( $post_ID, 'enclosure', "$url\n$len\n$mime\n" );
+				if ( in_array( substr( $type, 0, strpos( $type, '/' ) ), $allowed_types ) ) {
+					add_post_meta( $post->ID, 'enclosure', "$url\n$len\n$mime\n" );
 				}
 			}
 		}
@@ -2403,7 +2489,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		} else {
 			if ( $type !== $real_mime ) {
 				/*
-				 * Everything else including image/* and application/*: 
+				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
 				$type = $ext = false;
@@ -2412,7 +2498,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	// The mime type must be allowed 
+	// The mime type must be allowed
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
@@ -2499,6 +2585,7 @@ function wp_get_mime_types() {
 	'bmp' => 'image/bmp',
 	'tiff|tif' => 'image/tiff',
 	'ico' => 'image/x-icon',
+	'heic' => 'image/heic',
 	// Video formats.
 	'asf|asx' => 'video/x-ms-asf',
 	'wmv' => 'video/x-ms-wmv',
@@ -2615,8 +2702,9 @@ function wp_get_ext_types() {
 	 * @param array $ext2type Multi-dimensional array with extensions for a default set
 	 *                        of file types.
 	 */
+
 	return apply_filters( 'ext2type', array(
-		'image'       => array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico' ),
+		'image'       => array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico', 'heic' ),
 		'audio'       => array( 'aac', 'ac3',  'aif',  'aiff', 'flac', 'm3a',  'm4a',   'm4b',  'mka',  'mp1',  'mp2',  'mp3', 'ogg', 'oga', 'ram', 'wav', 'wma' ),
 		'video'       => array( '3g2',  '3gp', '3gpp', 'asf', 'avi',  'divx', 'dv',   'flv',  'm4v',   'mkv',  'mov',  'mp4',  'mpeg', 'mpg', 'mpv', 'ogm', 'ogv', 'qt',  'rm', 'vob', 'wmv' ),
 		'document'    => array( 'doc', 'docx', 'docm', 'dotm', 'odt',  'pages', 'pdf',  'xps',  'oxps', 'rtf',  'wp', 'wpd', 'psd', 'xcf' ),

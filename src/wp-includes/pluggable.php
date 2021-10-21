@@ -178,10 +178,43 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 *
 	 * @since WP-2.2.0
 	 *
-	 * @param array $args A compacted array of wp_mail() arguments, including the "to" email,
-	 *                    subject, message, headers, and attachments values.
+	 * @param array $args {
+	 *     Array of the `wp_mail()` arguments.
+	 *
+	 *     @type string|string[] $to          Array or comma-separated list of email addresses to send message.
+	 *     @type string          $subject     Email subject.
+	 *     @type string          $message     Message contents.
+	 *     @type string|string[] $headers     Additional headers.
+	 *     @type string|string[] $attachments Paths to files to attach.
+	 * }
 	 */
 	$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
+
+	/**
+	 * Filters whether to preempt sending an email.
+	 *
+	 * Returning a non-null value will short-circuit {@see wp_mail()}, returning
+	 * that value instead. A boolean return value should be used to indicate whether
+	 * the email was successfully sent.
+	 *
+	 * @since WP-5.7.0
+	 *
+	 * @param null|bool $return Short-circuit return value.
+	 * @param array     $atts {
+	 *     Array of the `wp_mail()` arguments.
+	 *
+	 *     @type string|string[] $to          Array or comma-separated list of email addresses to send message.
+	 *     @type string          $subject     Email subject.
+	 *     @type string          $message     Message contents.
+	 *     @type string|string[] $headers     Additional headers.
+	 *     @type string|string[] $attachments Paths to files to attach.
+	 * }
+	 */
+	$pre_wp_mail = apply_filters( 'pre_wp_mail', null, $atts );
+
+	if ( null !== $pre_wp_mail ) {
+		return $pre_wp_mail;
+	}
 
 	if ( isset( $atts['to'] ) ) {
 		$to = $atts['to'];
