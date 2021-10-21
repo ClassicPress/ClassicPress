@@ -27,7 +27,7 @@
  *
  * @global string $cp_version
  */
-$cp_version = '1.3.0+dev';
+$cp_version = '1.3.1+dev';
 
 /**
  * The WordPress version string
