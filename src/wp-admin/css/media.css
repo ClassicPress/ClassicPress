@@ -211,8 +211,7 @@
 	padding: 10px 0 10px 14px;
 }
 
-.media-item .error-div a.dismiss {
-	display: block;
+.media-item .error-div button.dismiss {
 	float: right;
 	margin: 0 10px 0 15px;
 }
@@ -810,6 +809,13 @@ border color while dragging a file over the uploader drop area */
 /*------------------------------------------------------------------------------
   14.2 - Image Editor
 ------------------------------------------------------------------------------*/
+.wp_attachment_details .attachment-alt-text {
+	margin-bottom: 5px;
+}
+
+.wp_attachment_details .attachment-alt-text-description {
+	margin-top: 5px;
+}
 
 .wp_attachment_details label[for="content"] {
 	font-size: 13px;

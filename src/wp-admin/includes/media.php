@@ -473,7 +473,7 @@ wp_enqueue_style( 'ie' );
 ?>
 <script type="text/javascript">
 addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
-var ajaxurl = '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>', pagenow = 'media-upload-popup', adminpage = 'media-upload-popup',
+var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?>', pagenow = 'media-upload-popup', adminpage = 'media-upload-popup',
 isRtl = <?php echo (int) is_rtl(); ?>;
 </script>
 <?php
@@ -2804,18 +2804,32 @@ function edit_form_image_editor( $post ) {
 	endif; ?>
 	</div>
 	<div class="wp_attachment_details edit-form-section">
+	<?php if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) : ?>
+		<p class="attachment-alt-text">
+			<label for="attachment_alt"><strong><?php _e( 'Alternative Text' ); ?></strong></label><br />
+			<input type="text" class="widefat" name="_wp_attachment_image_alt" id="attachment_alt" aria-describedby="alt-text-description" value="<?php echo esc_attr( $alt_text ); ?>" />
+		</p>
+		<p class="attachment-alt-text-description" id="alt-text-description">
+			<?php
+			printf(
+				/* translators: 1: link to tutorial, 2: additional link attributes, 3: accessibility text */
+				__( '<a href="%1$s" %2$s>Describe the purpose of the image%3$s</a>. Leave empty if the image is purely decorative.' ),
+				esc_url( 'https://www.w3.org/WAI/tutorials/images/decision-tree' ),
+				'target="_blank" rel="noopener noreferrer"',
+				sprintf(
+					'<span class="screen-reader-text"> %s</span>',
+					/* translators: accessibility text */
+					__( '(opens in a new tab)' )
+				)
+			);
+			?>
+		</p>
+	<?php endif; ?>
+
 		<p>
 			<label for="attachment_caption"><strong><?php _e( 'Caption' ); ?></strong></label><br />
 			<textarea class="widefat" name="excerpt" id="attachment_caption"><?php echo $post->post_excerpt; ?></textarea>
 		</p>
-
-
-	<?php if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) : ?>
-		<p>
-			<label for="attachment_alt"><strong><?php _e( 'Alternative Text' ); ?></strong></label><br />
-			<input type="text" class="widefat" name="_wp_attachment_image_alt" id="attachment_alt" value="<?php echo esc_attr( $alt_text ); ?>" />
-		</p>
-	<?php endif; ?>
 
 	<?php
 		$quicktags_settings = array( 'buttons' => 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' );
@@ -2828,12 +2842,12 @@ function edit_form_image_editor( $post ) {
 		);
 	?>
 
-	<label for="attachment_content"><strong><?php _e( 'Description' ); ?></strong><?php
-	if ( preg_match( '#^(audio|video)/#', $post->post_mime_type ) ) {
-		echo ': ' . __( 'Displayed on attachment pages.' );
-	}
-
-	?>
+	<label for="attachment_content"><strong><?php _e( 'Description' ); ?></strong>
+		<?php
+		if ( preg_match( '#^(audio|video)/#', $post->post_mime_type ) ) {
+			echo ': ' . __( 'Displayed on attachment pages.' );
+		}
+		?>
 	</label>
 	<?php wp_editor( format_to_edit( $post->post_content ), 'attachment_content', $editor_args ); ?>
 

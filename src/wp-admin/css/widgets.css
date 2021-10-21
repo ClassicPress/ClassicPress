@@ -290,16 +290,6 @@
 	outline: none;
 }
 
-#widgets-left .sidebar-name .toggle-indicator {
-	display: none;
-}
-
-#widgets-left .widgets-holder-wrap.closed .sidebar-name .toggle-indicator,
-#widgets-left .sidebar-name:hover .toggle-indicator,
-#widgets-left .sidebar-name .handlediv:focus .toggle-indicator {
-	display: block;
-}
-
 .sidebar-name .toggle-indicator:before {
 	padding: 1px 2px 1px 0;
 	border-radius: 50%;
@@ -490,6 +480,11 @@ div#widgets-right .closed .widgets-sortables {
 }
 
 /* Accessibility Mode */
+.widget-access-link {
+	float: right;
+	margin: -5px 0 10px 10px;
+}
+
 .widgets_access #widgets-left .widget .widget-top {
 	cursor: auto;
 }
@@ -787,6 +782,11 @@ ul.CodeMirror-hints {
 	div.widget {
 		margin: 0 auto !important;
 		max-width: 480px;
+	}
+
+	.widget-access-link {
+		float: none;
+		margin: 15px 0 0 0;
 	}
 }
 
