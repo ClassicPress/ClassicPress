@@ -72,15 +72,10 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		$mysql_version = 'N/A';
 
 	if ( is_multisite() ) {
-		$user_count = get_user_count();
-		$num_blogs = get_blog_count();
 		$wp_install = network_site_url();
 		$multisite_enabled = 1;
 	} else {
-		$user_count = count_users();
-		$user_count = $user_count['total_users'];
 		$multisite_enabled = 0;
-		$num_blogs = 1;
 		$wp_install = home_url( '/' );
 	}
 
@@ -90,8 +85,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'locale'             => $locale,
 		'mysql'              => $mysql_version,
 		'local_package'      => isset( $wp_local_package ) ? $wp_local_package : '',
-		'blogs'              => $num_blogs,
-		'users'              => $user_count,
 		'multisite_enabled'  => $multisite_enabled,
 		'initial_db_version' => get_site_option( 'initial_db_version' ),
 		'extra_stats'        => $extra_stats,
@@ -117,8 +110,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 *     @type string $locale             The locale to retrieve updates for.
 	 *     @type string $mysql              MySQL version number.
 	 *     @type string $local_package      The value of the $wp_local_package global, when set.
-	 *     @type int    $blogs              Number of sites on this ClassicPress installation.
-	 *     @type int    $users              Number of users on this ClassicPress installation.
 	 *     @type int    $multisite_enabled  Whether this ClassicPress installation uses Multisite.
 	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
 	 *     @type array  $extra_stats        Failure data from the current update, if any.
