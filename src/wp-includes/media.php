@@ -3510,12 +3510,12 @@ function wp_enqueue_media( $args = array() ) {
 		'dragInfo'                    => __( 'Drag and drop to reorder media files.' ),
 
 		// Upload.
-		'uploadFilesTitle'            => __( 'Upload files' ),
-		'uploadImagesTitle'           => __( 'Upload images' ),
+		'uploadFilesTitle'            => __( 'Upload Files' ),
+		'uploadImagesTitle'           => __( 'Upload Images' ),
 
 		// Library.
 		'mediaLibraryTitle'           => __( 'Media Library' ),
-		'insertMediaTitle'            => __( 'Add media' ),
+		'insertMediaTitle'            => __( 'Add Media' ),
 		'createNewGallery'            => __( 'Create a new gallery' ),
 		'createNewPlaylist'           => __( 'Create a new playlist' ),
 		'createNewVideoPlaylist'      => __( 'Create a new video playlist' ),
@@ -3557,61 +3557,61 @@ function wp_enqueue_media( $args = array() ) {
 		'setFeaturedImage'            => $post_type_object->labels->set_featured_image,
 
 		// Gallery.
-		'createGalleryTitle'          => __( 'Create gallery' ),
-		'editGalleryTitle'            => __( 'Edit gallery' ),
-		'cancelGalleryTitle'          => __( '&#8592; Cancel gallery' ),
+		'createGalleryTitle'          => __( 'Create Gallery' ),
+		'editGalleryTitle'            => __( 'Edit Gallery' ),
+		'cancelGalleryTitle'          => __( '&#8592; Cancel Gallery' ),
 		'insertGallery'               => __( 'Insert gallery' ),
 		'updateGallery'               => __( 'Update gallery' ),
-		'addToGallery'                => __( 'Add to gallery' ),
+		'addToGallery'                => __( 'Add to Gallery' ),
 		'addToGalleryTitle'           => __( 'Add to gallery' ),
 		'reverseOrder'                => __( 'Reverse order' ),
 
 		// Edit Image.
-		'imageDetailsTitle'           => __( 'Image details' ),
-		'imageReplaceTitle'           => __( 'Replace image' ),
-		'imageDetailsCancel'          => __( 'Cancel edit' ),
-		'editImage'                   => __( 'Edit image' ),
+		'imageDetailsTitle'           => __( 'Image Details' ),
+		'imageReplaceTitle'           => __( 'Replace Image' ),
+		'imageDetailsCancel'          => __( 'Cancel Edit' ),
+		'editImage'                   => __( 'Edit Image' ),
 
 		// Crop Image.
-		'chooseImage'                 => __( 'Choose image' ),
-		'selectAndCrop'               => __( 'Select and crop' ),
-		'skipCropping'                => __( 'Skip cropping' ),
-		'cropImage'                   => __( 'Crop image' ),
+		'chooseImage'                 => __( 'Choose Image' ),
+		'selectAndCrop'               => __( 'Select and Crop' ),
+		'skipCropping'                => __( 'Skip Cropping' ),
+		'cropImage'                   => __( 'Crop Image' ),
 		'cropYourImage'               => __( 'Crop your image' ),
 		'cropping'                    => __( 'Cropping&hellip;' ),
-		/* translators: 1: Suggested width number, 2: Suggested height number. */
+		/* translators: 1: suggested width number, 2: suggested height number. */
 		'suggestedDimensions'         => __( 'Suggested image dimensions: %1$s by %2$s pixels.' ),
 		'cropError'                   => __( 'There has been an error cropping your image.' ),
 
-		// Edit Audio.
-		'audioDetailsTitle'           => __( 'Audio details' ),
-		'audioReplaceTitle'           => __( 'Replace audio' ),
-		'audioAddSourceTitle'         => __( 'Add audio source' ),
-		'audioDetailsCancel'          => __( 'Cancel edit' ),
+		// Edit Audio
+		'audioDetailsTitle'           => __( 'Audio Details' ),
+		'audioReplaceTitle'           => __( 'Replace Audio' ),
+		'audioAddSourceTitle'         => __( 'Add Audio Source' ),
+		'audioDetailsCancel'          => __( 'Cancel Edit' ),
 
 		// Edit Video.
-		'videoDetailsTitle'           => __( 'Video details' ),
-		'videoReplaceTitle'           => __( 'Replace video' ),
-		'videoAddSourceTitle'         => __( 'Add video source' ),
-		'videoDetailsCancel'          => __( 'Cancel edit' ),
-		'videoSelectPosterImageTitle' => __( 'Select poster image' ),
-		'videoAddTrackTitle'          => __( 'Add subtitles' ),
+		'videoDetailsTitle'           => __( 'Video Details' ),
+		'videoReplaceTitle'           => __( 'Replace Video' ),
+		'videoAddSourceTitle'         => __( 'Add Video Source' ),
+		'videoDetailsCancel'          => __( 'Cancel Edit' ),
+		'videoSelectPosterImageTitle' => __( 'Select Poster Image' ),
+		'videoAddTrackTitle'          => __( 'Add Subtitles' ),
 
 		// Playlist.
 		'playlistDragInfo'            => __( 'Drag and drop to reorder tracks.' ),
-		'createPlaylistTitle'         => __( 'Create audio playlist' ),
-		'editPlaylistTitle'           => __( 'Edit audio playlist' ),
-		'cancelPlaylistTitle'         => __( '&#8592; Cancel audio playlist' ),
+		'createPlaylistTitle'         => __( 'Create Audio Playlist' ),
+		'editPlaylistTitle'           => __( 'Edit Audio Playlist' ),
+		'cancelPlaylistTitle'         => __( '&#8592; Cancel Audio Playlist' ),
 		'insertPlaylist'              => __( 'Insert audio playlist' ),
 		'updatePlaylist'              => __( 'Update audio playlist' ),
 		'addToPlaylist'               => __( 'Add to audio playlist' ),
 		'addToPlaylistTitle'          => __( 'Add to Audio Playlist' ),
 
-		// Video Playlist.
+		// Video Playlist
 		'videoPlaylistDragInfo'       => __( 'Drag and drop to reorder videos.' ),
-		'createVideoPlaylistTitle'    => __( 'Create video playlist' ),
-		'editVideoPlaylistTitle'      => __( 'Edit video playlist' ),
-		'cancelVideoPlaylistTitle'    => __( '&#8592; Cancel video playlist' ),
+		'createVideoPlaylistTitle'    => __( 'Create Video Playlist' ),
+		'editVideoPlaylistTitle'      => __( 'Edit Video Playlist' ),
+		'cancelVideoPlaylistTitle'    => __( '&#8592; Cancel Video Playlist' ),
 		'insertVideoPlaylist'         => __( 'Insert video playlist' ),
 		'updateVideoPlaylist'         => __( 'Update video playlist' ),
 		'addToVideoPlaylist'          => __( 'Add to video playlist' ),
