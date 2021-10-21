@@ -3509,11 +3509,11 @@ function wp_enqueue_media( $args = array() ) {
 		'selected'                    => __( '%d selected' ),
 		'dragInfo'                    => __( 'Drag and drop to reorder media files.' ),
 
-		// Upload.
+		// Upload
 		'uploadFilesTitle'            => __( 'Upload Files' ),
 		'uploadImagesTitle'           => __( 'Upload Images' ),
 
-		// Library.
+		// Library
 		'mediaLibraryTitle'           => __( 'Media Library' ),
 		'insertMediaTitle'            => __( 'Add Media' ),
 		'createNewGallery'            => __( 'Create a new gallery' ),
@@ -3531,48 +3531,46 @@ function wp_enqueue_media( $args = array() ) {
 		'warnDelete'                  => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete." ),
 		'warnBulkDelete'              => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete." ),
 		'warnBulkTrash'               => __( "You are about to trash these items.\n  'Cancel' to stop, 'OK' to delete." ),
-		'bulkSelect'                  => __( 'Bulk select' ),
-		'trashSelected'               => __( 'Move to Trash' ),
-		'restoreSelected'             => __( 'Restore from Trash' ),
-		'deletePermanently'           => __( 'Delete permanently' ),
+		'bulkSelect'                  => __( 'Bulk Select' ),
+		'cancelSelection'             => __( 'Cancel Selection' ),
+		'trashSelected'               => __( 'Trash Selected' ),
+		'untrashSelected'             => __( 'Untrash Selected' ),
+		'deleteSelected'              => __( 'Delete Selected' ),
+		'deletePermanently'           => __( 'Delete Permanently' ),
 		'apply'                       => __( 'Apply' ),
 		'filterByDate'                => __( 'Filter by date' ),
 		'filterByType'                => __( 'Filter by type' ),
-		'searchLabel'                 => __( 'Search' ),
-		'searchMediaLabel'            => __( 'Search media' ),          // Backward compatibility pre-5.3.
-		'searchMediaPlaceholder'      => __( 'Search media items...' ), // Placeholder (no ellipsis), backward compatibility pre-5.3.
-		'mediaFound'                  => __( 'Number of media items found: %d' ),
-		'mediaFoundHasMoreResults'    => __( 'Number of media items displayed: %d. Scroll the page for more results.' ),
-		'noMedia'                     => __( 'No media items found.' ),
-		'noMediaTryNewSearch'         => __( 'No media items found. Try a different search.' ),
+		'searchMediaLabel'            => __( 'Search Media' ),
+		'searchMediaPlaceholder'      => __( 'Search media items...' ), // placeholder (no ellipsis)
+		'noMedia'                     => __( 'No media files found.' ),
 
-		// Library Details.
-		'attachmentDetails'           => __( 'Attachment details' ),
+		// Library Details
+		'attachmentDetails'  => __( 'Attachment Details' ),
 
-		// From URL.
+		// From URL
 		'insertFromUrlTitle'          => __( 'Insert from URL' ),
 
-		// Featured Images.
+		// Featured Images
 		'setFeaturedImageTitle'       => $post_type_object->labels->featured_image,
 		'setFeaturedImage'            => $post_type_object->labels->set_featured_image,
 
-		// Gallery.
+		// Gallery
 		'createGalleryTitle'          => __( 'Create Gallery' ),
 		'editGalleryTitle'            => __( 'Edit Gallery' ),
 		'cancelGalleryTitle'          => __( '&#8592; Cancel Gallery' ),
 		'insertGallery'               => __( 'Insert gallery' ),
 		'updateGallery'               => __( 'Update gallery' ),
-		'addToGallery'                => __( 'Add to Gallery' ),
-		'addToGalleryTitle'           => __( 'Add to gallery' ),
+		'addToGallery'                => __( 'Add to gallery' ),
+		'addToGalleryTitle'           => __( 'Add to Gallery' ),
 		'reverseOrder'                => __( 'Reverse order' ),
 
-		// Edit Image.
+		// Edit Image
 		'imageDetailsTitle'           => __( 'Image Details' ),
 		'imageReplaceTitle'           => __( 'Replace Image' ),
 		'imageDetailsCancel'          => __( 'Cancel Edit' ),
 		'editImage'                   => __( 'Edit Image' ),
 
-		// Crop Image.
+		// Crop Image
 		'chooseImage'                 => __( 'Choose Image' ),
 		'selectAndCrop'               => __( 'Select and Crop' ),
 		'skipCropping'                => __( 'Skip Cropping' ),
@@ -3589,7 +3587,7 @@ function wp_enqueue_media( $args = array() ) {
 		'audioAddSourceTitle'         => __( 'Add Audio Source' ),
 		'audioDetailsCancel'          => __( 'Cancel Edit' ),
 
-		// Edit Video.
+		// Edit Video
 		'videoDetailsTitle'           => __( 'Video Details' ),
 		'videoReplaceTitle'           => __( 'Replace Video' ),
 		'videoAddSourceTitle'         => __( 'Add Video Source' ),
@@ -3597,7 +3595,7 @@ function wp_enqueue_media( $args = array() ) {
 		'videoSelectPosterImageTitle' => __( 'Select Poster Image' ),
 		'videoAddTrackTitle'          => __( 'Add Subtitles' ),
 
-		// Playlist.
+ 		// Playlist
 		'playlistDragInfo'            => __( 'Drag and drop to reorder tracks.' ),
 		'createPlaylistTitle'         => __( 'Create Audio Playlist' ),
 		'editPlaylistTitle'           => __( 'Edit Audio Playlist' ),
@@ -3615,7 +3613,7 @@ function wp_enqueue_media( $args = array() ) {
 		'insertVideoPlaylist'         => __( 'Insert video playlist' ),
 		'updateVideoPlaylist'         => __( 'Update video playlist' ),
 		'addToVideoPlaylist'          => __( 'Add to video playlist' ),
-		'addToVideoPlaylistTitle'     => __( 'Add to video Playlist' ),
+ 		'addToVideoPlaylistTitle'     => __( 'Add to Video Playlist' ),
 
 	);
 
