@@ -165,6 +165,28 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	/**
 	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
 	 */
+	public function test_value_field_added_to_query() {
+		$users = self::factory()->user->create_many( 2 );
+
+		$found = wp_dropdown_users( array(
+			'echo' => false,
+			'include' => $users,
+			'selected' => $users[0],
+			'show' => 'user_login',
+			// The user_nicename field is not included in the `get_users()`
+			// query by default.
+			'value_field' => 'user_nicename',
+		) );
+
+		$user0 = get_userdata( $users[0] );
+		$user1 = get_userdata( $users[1] );
+		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_login</option>", $found );
+		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_login</option>", $found );
+	}
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
+	 */
 	public function test_invalid_value_field() {
 		$users = self::factory()->user->create_many( 2 );
 
