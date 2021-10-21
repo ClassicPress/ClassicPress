@@ -1037,11 +1037,10 @@ function setup_userdata($for_user_id = '') {
  *                                                 these roles. Default empty array.
  *     @type array        $role__not_in            An array of role names to exclude. Users matching one or more of
  *                                                 these roles will not be included in results. Default empty array.
- *     @type string       $value_field             The name of the `WP_User` object property to use as the `<select>`
- *                                                 element's `value` attribute which is sent back to the server. Accepts
- *                                                 any `WP_User` object property which uniquely identifies a user (`ID`,
- *                                                 `user_login`, `user_nicename` or `user_email`). Default `ID` to use
- *                                                 the user ID.
+ *     @type string       $value_field             The name of the user property to use as the `<select>` element's
+ *                                                 `value` attribute which is sent back to the server. Accepts only a
+ *                                                 user property which uniquely identifies a user (`ID`, `user_login`,
+ *                                                 `user_nicename` or `user_email`). Default `ID` to use the user ID.
  *     @type bool         $select_multiple         Whether the `<select>` element should allow selecting multiple items.
  *                                                 If true, then the `<select>` will have the HTML5 'multiple' attribute
  *                                                 applied and `[]` will be appended to the `name` attribute. Default
@@ -1139,7 +1138,7 @@ function wp_dropdown_users( $args = '' ) {
 		} else {
 			$id = $r['id'] ? " id='" . esc_attr( $r['id'] ) . "'" : " id='$name'";
 		}
-		if ( $r['select_multiple'] ) {
+		if ( $r['select_multiple'] === true ) {
 			$name .= '[]';
 			$multiple_attr = ' multiple';
 		} else {
