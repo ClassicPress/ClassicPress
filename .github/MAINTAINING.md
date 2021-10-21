@@ -33,10 +33,14 @@ blank line in between them, as follows:
 
 ```
 Subject line
+```
 
+```
 Body paragraph 1
 
 Body paragraph 2
+
+Body paragraph n
 ```
 
 GitHub presents the subject line and the body for editing in two separate
@@ -106,16 +110,19 @@ a code block. If there is a commit message body then this is shown inside a
 separate code block, to structure the messages similarly to how they appear in
 the GitHub interface's text entry fields.
 
-**Needs improvement**:
+##### Needs improvement:
+
+**Commit Title**
 ```
 Update user-edit.php (#123)
 ```
 
-**Better**:
+##### Better:
+**Commit Title**
 ```
 Improve stability of user dropdowns (#123)
 ```
-
+**Commit Body**
 ```
 When the author of one or more posts is an invalid (non-existent) user ID, this
 leads to a PHP warning when showing a user dropdown. This PR fixes the warning
@@ -131,11 +138,12 @@ change backported from WP in the subject line as concisely but specifically as
 possible, and then repeating the entire, unmodified commit message for the backported
 changeset in the commit body:
 
-**Needs improvement**:
+##### Needs improvement:
+**Commit title**
 ```
 WP-r47777: Administration: Avoid a PHP 7.4 notice in `add_meta_box()` ... (#778)
 ```
-
+**Commit body**
 ```
 ... when attempting to re-add a previously removed box.
 
@@ -162,11 +170,12 @@ Co-authored-by: Sergey Biryukov <sergeybiryukov@git.wordpress.org>
 Co-authored-by: James Nylen <jnylen@gmail.com>
 ```
 
-**Better**:
+##### Better:
+**Commit title**
 ```
 WP-r47777: Avoid notices when readding removed meta box in PHP 7.4 (#778)
 ```
-
+**Commit body**
 ```
 * WP-r47777: Administration: Avoid a PHP 7.4 notice in `add_meta_box()` when attempting to re-add a previously removed box.
 
