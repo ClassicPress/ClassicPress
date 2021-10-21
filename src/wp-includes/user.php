@@ -1112,7 +1112,7 @@ function wp_dropdown_users( $args = '' ) {
 			break;
 	}
 
-	$query_args['fields'] = $fields;
+	$query_args['fields'] = array_unique( $fields );
 
 	$show_option_all = $r['show_option_all'];
 	$show_option_none = $r['show_option_none'];

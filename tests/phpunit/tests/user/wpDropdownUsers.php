@@ -6,6 +6,10 @@
  * @group user
  */
 class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
+	public function tearDown() {
+		remove_action( 'pre_get_users', [ $this, 'check_user_query_vars' ] );
+		parent::tearDown();
+	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/31251
@@ -182,6 +186,38 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_login</option>", $found );
 		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_login</option>", $found );
+	}
+
+	public function check_user_query_vars( $user_query ) {
+		$this->assertSame(
+			$user_query->query_vars['fields'],
+			array_unique( $user_query->query_vars['fields'] ),
+			'Each queried user field should be listed only once.'
+		);
+	}
+
+	/**
+	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
+	 */
+	public function test_value_field_added_to_query_only_once() {
+		$users = self::factory()->user->create_many( 2 );
+
+		add_action( 'pre_get_users', [ $this, 'check_user_query_vars' ] );
+
+		$found = wp_dropdown_users( array(
+			'echo' => false,
+			'include' => $users,
+			'selected' => $users[0],
+			// When a field is requested for multiple "purposes" it should
+			// still be passed to `WP_User_Query` only once.
+			'show' => 'user_nicename',
+			'value_field' => 'user_nicename',
+		) );
+
+		$user0 = get_userdata( $users[0] );
+		$user1 = get_userdata( $users[1] );
+		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_nicename</option>", $found );
+		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_nicename</option>", $found );
 	}
 
 	/**
