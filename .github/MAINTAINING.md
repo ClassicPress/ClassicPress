@@ -66,7 +66,8 @@ The first line may include one or more optional _prefixes_:
 
 The rest of the first line should include a short but specific description of
 the change being made in this PR. This description should start with an
-infinitive (unconjugated) verb such as "Fix" or "Improve". This description should not end with any punctuation.
+infinitive (unconjugated) verb such as "Fix" or "Improve". This description
+should not end with any punctuation.
 
 Finally, the first line should end with a reference to the PR being merged in
 the form ` (#123)` as GitHub does by default.
@@ -135,8 +136,8 @@ solved properly.
 
 GitHub will wrap long lines by default. We address this by summarizing the
 change backported from WP in the subject line as concisely but specifically as
-possible, and then repeating the entire, unmodified commit message for the backported
-changeset in the commit body:
+possible, and then repeating the entire, unmodified commit message for the
+backported changeset in the commit body:
 
 ##### Needs improvement:
 **Commit title**
