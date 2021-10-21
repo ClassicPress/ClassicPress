@@ -258,6 +258,8 @@ else
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
 	git log -n 1 \
 		| perl -we '
+			use if "MSWin32" eq $^O, "Win32::Console::ANSI";
+			use Term::ANSIColor qw(:constants);
 			my $p = 0;
 			while (<>) {
 				if (/^\s+Conflicts:$/) {
@@ -270,7 +272,11 @@ else
 					s/^[\s-]+//;
 					my $cp_filename = $_;
 					$cp_filename =~ s#^src/js/_enqueues/#src/wp-includes/js/#;
-					print "    - $_\n";
+					if ( -e $_ ) {
+						print "    - $_\n";
+					} else {
+						print RED, "    - $_", RESET, "\n";
+					}
 					if ($cp_filename ne $_) {
 						print "      (probable CP path: $cp_filename)\n";
 					}
