@@ -1097,15 +1097,11 @@ function wp_dropdown_users( $args = '' ) {
 	switch ( $value_field ) {
 		case 'ID':
 		case 'user_login':
-			// These fields are valid, and are already included in `$fields`.
-			break;
-
 		case 'user_nicename':
 		case 'user_email':
-			// These fields are valid, and need to be included in `$fields`.
+			// These fields are valid, and may need to be queried.
 			$fields[] = $value_field;
 			break;
-
 		default:
 			// Another field was specified - fall back to the default of 'ID'.
 			$value_field = 'ID';
