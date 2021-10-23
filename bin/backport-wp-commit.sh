@@ -261,6 +261,8 @@ else
 			use if "MSWin32" eq $^O, "Win32::Console::ANSI";
 			use Term::ANSIColor qw(:constants);
 			my $p = 0;
+			my $c = "";
+			my $e = "";
 			while (<>) {
 				if (/^\s+Conflicts:$/) {
 					$p = 1;
@@ -273,15 +275,19 @@ else
 					my $cp_filename = $_;
 					$cp_filename =~ s#^src/js/_enqueues/#src/wp-includes/js/#;
 					if ( -e $_ ) {
-						print "    - $_\n";
+						$c = $c .  "    - $_\n";
 					} else {
-						print RED, "    - $_", RESET, "\n";
+						$e = $e . "    - $_\n";
 					}
-					if ($cp_filename ne $_) {
-						print "      (probable CP path: $cp_filename)\n";
+					if ( $cp_filename ne $_ ) {
+						$c = $c . "      (probable CP path: $cp_filename)\n";
 					}
 				}
-			}'
+			}
+			print $c;
+			print "The following files may not exist in ClassicPress:\n";
+			print RED, $e, RESET;
+			'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"
