@@ -47,9 +47,17 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 
 		$this->decrement_update_count( 'plugin' );
 
-		$update_actions =  array(
-			'activate_plugin' => '<a href="' . wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $this->plugin ), 'activate-plugin_' . $this->plugin) . '" target="_parent">' . __( 'Activate Plugin' ) . '</a>',
-			'plugins_page' => '<a href="' . self_admin_url( 'plugins.php' ) . '" target="_parent">' . __( 'Return to Plugins page' ) . '</a>'
+		$update_actions = array(
+			'activate_plugin' => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $this->plugin ), 'activate-plugin_' . $this->plugin ),
+				__( 'Activate Plugin' )
+			),
+			'plugins_page'    => sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Plugins page' )
+			),
 		);
 		if ( $this->plugin_active || ! $this->result || is_wp_error( $this->result ) || ! current_user_can( 'activate_plugin', $this->plugin ) )
 			unset( $update_actions['activate_plugin'] );

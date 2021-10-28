@@ -49,10 +49,18 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 
 		$from = isset($_GET['from']) ? wp_unslash( $_GET['from'] ) : 'plugins';
 
-		if ( 'import' == $from ) {
-			$install_actions['activate_plugin'] = '<a class="button button-primary" href="' . wp_nonce_url( 'plugins.php?action=activate&amp;from=import&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ) . '" target="_parent">' . __( 'Activate Plugin &amp; Run Importer' ) . '</a>';
-		} else if ( 'press-this' == $from ) {
-			$install_actions['activate_plugin'] = '<a class="button button-primary" href="' . wp_nonce_url( 'plugins.php?action=activate&amp;from=press-this&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ) . '" target="_parent">' . __( 'Activate Plugin &amp; Return to Press This' ) . '</a>';
+		if ( 'import' === $from ) {
+			$install_actions['activate_plugin'] = sprintf(
+				'<a class="button button-primary" href="%s" target="_parent">%s</a>',
+				wp_nonce_url( 'plugins.php?action=activate&amp;from=import&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ),
+				__( 'Activate Plugin &amp; Run Importer' )
+			);
+		} elseif ( 'press-this' === $from ) {
+			$install_actions['activate_plugin'] = sprintf(
+				'<a class="button button-primary" href="%s" target="_parent">%s</a>',
+				wp_nonce_url( 'plugins.php?action=activate&amp;from=press-this&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ),
+				__( 'Activate Plugin &amp; Go to Press This' )
+			);
 		} else {
 			$install_actions['activate_plugin'] = '<a class="button button-primary" href="' . wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ) . '" target="_parent">' . __( 'Activate Plugin' ) . '</a>';
 		}
@@ -62,14 +70,30 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 			unset( $install_actions['activate_plugin'] );
 		}
 
-		if ( 'import' == $from ) {
-			$install_actions['importers_page'] = '<a href="' . admin_url( 'import.php' ) . '" target="_parent">' . __( 'Return to Importers' ) . '</a>';
-		} elseif ( $this->type == 'web' ) {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugin-install.php' ) . '" target="_parent">' . __( 'Return to Plugin Installer' ) . '</a>';
-		} elseif ( 'upload' == $this->type && 'plugins' == $from ) {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugin-install.php' ) . '">' . __( 'Return to Plugin Installer' ) . '</a>';
+		if ( 'import' === $from ) {
+			$install_actions['importers_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				admin_url( 'import.php' ),
+				__( 'Go to Importers' )
+			);
+		} elseif ( 'web' === $this->type ) {
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugin-install.php' ),
+				__( 'Go to Plugin Installer' )
+			);
+		} elseif ( 'upload' === $this->type && 'plugins' === $from ) {
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s">%s</a>',
+				self_admin_url( 'plugin-install.php' ),
+				__( 'Go to Plugin Installer' )
+			);
 		} else {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugins.php' ) . '" target="_parent">' . __( 'Return to Plugins page' ) . '</a>';
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Plugins page' )
+			);
 		}
 
 		if ( ! $this->result || is_wp_error($this->result) ) {

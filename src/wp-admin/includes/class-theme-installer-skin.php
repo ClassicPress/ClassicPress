@@ -83,8 +83,23 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) )
 			$install_actions['themes_page'] = '<a href="' . self_admin_url( 'themes.php' ) . '" target="_parent">' . __( 'Return to Themes page' ) . '</a>';
 
-		if ( ! $this->result || is_wp_error($this->result) || is_network_admin() || ! current_user_can( 'switch_themes' ) )
+		if ( 'web' === $this->type ) {
+			$install_actions['themes_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'theme-install.php' ),
+				__( 'Go to Theme Installer' )
+			);
+		} elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) ) {
+			$install_actions['themes_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'themes.php' ),
+				__( 'Go to Themes page' )
+			);
+		}
+
+		if ( ! $this->result || is_wp_error( $this->result ) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
 			unset( $install_actions['activate'], $install_actions['preview'] );
+		}
 
 		/**
 		 * Filters the list of action links available following a single theme installation.
