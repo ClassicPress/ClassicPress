@@ -3344,6 +3344,7 @@ function wp_enqueue_code_editor( $args ) {
 		}
 	}
 
+<<<<<<< HEAD
 	if ( 'text/css' === $type ) {
 		$settings['codemirror'] = array_merge( $settings['codemirror'], array(
 			'mode' => 'css',
@@ -3353,6 +3354,12 @@ function wp_enqueue_code_editor( $args ) {
 		) );
 	} elseif ( 'text/x-scss' === $type || 'text/x-less' === $type || 'text/x-sass' === $type ) {
 		$settings['codemirror'] = array_merge( $settings['codemirror'], array(
+=======
+	if ( in_array( $type, array( 'text/css', 'text/x-scss', 'text/x-less', 'text/x-sass' ), true ) ) {
+		$settings['codemirror'] = array_merge(
+			$settings['codemirror'],
+			array(
+>>>>>>> 6234fd90c2 (Theme Editor: Disable CodeMirror CSS linting.)
 			'mode' => $type,
 			'lint' => false,
 			'autoCloseBrackets' => true,
