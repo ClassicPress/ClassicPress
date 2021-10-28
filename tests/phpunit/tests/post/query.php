@@ -573,7 +573,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42469
+	 * @see https://core.trac.wordpress.org/ticket/42469
 	 */
 	public function test_found_posts_should_be_integer_not_string() {
 		$this->post_id = self::factory()->post->create();
@@ -588,7 +588,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42469
+	 * @see https://core.trac.wordpress.org/ticket/42469
 	 */
 	public function test_found_posts_should_be_integer_even_if_found_posts_filter_returns_string_value() {
 		$this->post_id = self::factory()->post->create();
