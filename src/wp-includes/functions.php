@@ -281,7 +281,7 @@ function size_format( $bytes, $decimals = 0 ) {
 /**
  * Convert a duration to human readable format.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  *
  * @param string $duration Duration will be in string format (HH:ii:ss) OR (ii:ss),
  *                         with a possible prepended negative sign (-).
@@ -6242,7 +6242,7 @@ function wp_get_update_php_url() {
 	 * Providing an empty string is not allowed and will result in the default URL being used. Furthermore
 	 * the page the URL links to should preferably be localized in the site language.
 	 *
-	 * @since 5.1.0
+	 * @since WP-5.1.0
 	 *
 	 * @param string $update_url URL to learn more about updating PHP.
 	 */
@@ -6339,7 +6339,7 @@ function wp_get_direct_php_update_url() {
 	/**
 	 * Filters the URL for directly updating the PHP version the site is running on from the host.
 	 *
-	 * @since 5.1.1
+	 * @since WP-5.1.1
 	 *
 	 * @param string $direct_update_url URL for directly updating PHP.
 	 */

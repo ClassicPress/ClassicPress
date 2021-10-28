@@ -204,7 +204,7 @@ class WP_Upgrader_Skin {
 	/**
 	 * Hides the `process_failed` error message when updating by uploading a zip file.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param $wp_error WP_Error
 	 * @return bool

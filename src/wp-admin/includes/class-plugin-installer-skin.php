@@ -49,7 +49,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Hides the `process_failed` error when updating a plugin by uploading a zip file.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param $wp_error WP_Error.
 	 * @return bool
@@ -130,7 +130,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Check if the plugin can be overwritten and output the HTML for overwriting a plugin on upload.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @return bool Whether the plugin can be overwritten and HTML was outputted.
 	 */
@@ -196,7 +196,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the compare table output for overwrite a plugin package on upload.
 		 *
-		 * @since 5.5.0
+		 * @since WP-5.5.0
 		 *
 		 * @param string   $table                The output table with Name, Version, Author, RequiresWP and RequiresPHP info.
 		 * @param array    $current_plugin_data  Array with current plugin data.
@@ -277,7 +277,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		 * Filters the list of action links available following a single plugin installation
 		 * failure when overwriting is allowed.
 		 *
-		 * @since 5.5.0
+		 * @since WP-5.5.0
 		 *
 		 * @param string[] $install_actions Array of plugin action links.
 		 * @param object   $api             Object containing WordPress.org API plugin data.

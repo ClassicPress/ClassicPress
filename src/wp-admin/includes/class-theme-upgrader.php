@@ -40,7 +40,7 @@ class Theme_Upgrader extends WP_Upgrader {
 	/**
 	 * New theme info.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 * @var array $new_theme_data
 	 *
 	 * @see check_package()
@@ -255,7 +255,7 @@ class Theme_Upgrader extends WP_Upgrader {
 			 * Fires when the upgrader has successfully overwritten a currently installed
 			 * plugin or theme with an uploaded zip package.
 			 *
-			 * @since 5.5.0
+			 * @since WP-5.5.0
 			 *
 			 * @param string  $package        The package file.
 			 * @param array   $new_theme_data The new theme data.

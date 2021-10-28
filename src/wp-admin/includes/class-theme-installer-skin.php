@@ -49,7 +49,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Hides the `process_failed` error when updating a theme by uploading a zip file.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param $wp_error WP_Error.
 	 * @return bool
@@ -136,7 +136,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Check if the theme can be overwritten and output the HTML for overwriting a theme on upload.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @return bool Whether the theme can be overwritten and HTML was outputted.
 	 */
@@ -224,7 +224,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the compare table output for overwrite a theme package on upload.
 		 *
-		 * @since 5.5.0
+		 * @since WP-5.5.0
 		 *
 		 * @param string   $table               The output table with Name, Version, Author, RequiresWP and RequiresPHP info.
 		 * @param array    $current_theme_data  Array with current theme data.
@@ -305,7 +305,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		 * Filters the list of action links available following a single theme installation
 		 * failure when overwriting is allowed.
 		 *
-		 * @since 5.5.0
+		 * @since WP-5.5.0
 		 *
 		 * @param string[] $install_actions Array of theme action links.
 		 * @param object   $api             Object containing WordPress.org API theme data.

@@ -828,7 +828,7 @@ function validate_current_theme() {
  * If the headers are not present in the theme's stylesheet file,
  * `readme.txt` is also checked as a fallback.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @param string $stylesheet Directory name for the theme.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
