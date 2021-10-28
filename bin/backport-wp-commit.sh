@@ -286,7 +286,7 @@ else
 			}
 			print $files_conflicting;
 			if ( "" ne $files_nonexistent ) {
-				print "The following files may not exist in ClassicPress:\n";
+				print "The following files do not exist in the ClassicPress development code:\n";
 				print RED, $files_nonexistent, RESET;
 			}
 			'
