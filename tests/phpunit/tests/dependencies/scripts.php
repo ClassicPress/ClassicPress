@@ -184,7 +184,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42804
+	 * @see https://core.trac.wordpress.org/ticket/42804
 	 */
 	function test_wp_enqueue_script_with_html5_support_does_not_contain_type_attribute() {
 		add_theme_support( 'html5', array( 'script' ) );

@@ -106,7 +106,7 @@ class WP_Styles extends WP_Dependencies {
 	 * If the current theme does not declare HTML5 support for 'style',
 	 * then it initializes as `type='text/css'`.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 * @var string
 	 */
 	private $type_attr = '';

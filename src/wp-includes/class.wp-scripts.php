@@ -128,7 +128,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * If the current theme does not declare HTML5 support for 'script',
 	 * then it initializes as `type='text/javascript'`.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 * @var string
 	 */
 	private $type_attr = '';
