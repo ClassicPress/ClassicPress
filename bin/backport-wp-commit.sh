@@ -261,8 +261,8 @@ else
 			use if "MSWin32" eq $^O, "Win32::Console::ANSI";
 			use Term::ANSIColor qw(:constants);
 			my $p = 0;
-			my $c = "";
-			my $e = "";
+			my $files_conflicting = "";
+			my $files_nonexistent = "";
 			while (<>) {
 				if (/^\s+Conflicts:$/) {
 					$p = 1;
@@ -275,18 +275,20 @@ else
 					my $cp_filename = $_;
 					$cp_filename =~ s#^src/js/_enqueues/#src/wp-includes/js/#;
 					if ( -e $_ ) {
-						$c = $c .  "    - $_\n";
+						$files_conflicting = $files_conflicting .  "    - $_\n";
 					} else {
-						$e = $e . "    - $_\n";
+						$files_nonexistent = $files_nonexistent . "    - $_\n";
 					}
 					if ( $cp_filename ne $_ ) {
-						$c = $c . "      (probable CP path: $cp_filename)\n";
+						$files_conflicting = $files_conflicting . "      (probable CP path: $cp_filename)\n";
 					}
 				}
 			}
-			print $c;
-			print "The following files may not exist in ClassicPress:\n";
-			print RED, $e, RESET;
+			print $files_conflicting;
+			if ( "" ne $files_nonexistent ) {
+				print "The following files may not exist in ClassicPress:\n";
+				print RED, $files_nonexistent, RESET;
+			}
 			'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
