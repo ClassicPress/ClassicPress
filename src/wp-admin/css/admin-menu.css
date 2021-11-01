@@ -146,11 +146,6 @@
 /* side admin menu */
 #adminmenu * {
 	-webkit-user-select: none;
-<<<<<<< HEAD
-	-moz-user-select: none;
-	-ms-user-select: none;
-=======
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	user-select: none;
 }
 
@@ -343,17 +338,7 @@
 }
 
 #adminmenu div.wp-menu-name {
-<<<<<<< HEAD
 	padding: 8px 0;
-=======
-	padding: 8px 8px 8px 36px;
-	overflow-wrap: break-word;
-	word-wrap: break-word;
-	-ms-word-break: break-all;
-	word-break: break-word;
-	-webkit-hyphens: auto;
-	hyphens: auto;
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 }
 
 #adminmenu div.wp-menu-image {

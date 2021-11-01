@@ -661,11 +661,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	border-radius: 2px;
 	margin: 0 0 -10px;
 	-webkit-user-select: none;
-<<<<<<< HEAD
-	-moz-user-select: none;
-	-ms-user-select: none;
-=======
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	user-select: none;
 }
 

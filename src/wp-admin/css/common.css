@@ -2071,11 +2071,6 @@ html.wp-toolbar {
 .postbox .hndle,
 .stuffbox .hndle {
 	-webkit-user-select: none;
-<<<<<<< HEAD
-	-moz-user-select: none;
-	-ms-user-select: none;
-=======
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	user-select: none;
 }
 
@@ -3432,11 +3427,6 @@ img {
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 	-webkit-user-select: none;
-<<<<<<< HEAD
-	-moz-user-select: none;
-	-ms-user-select: none;
-=======
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	user-select: none;
 }
 
@@ -3678,15 +3668,7 @@ img {
 
 }
 
-<<<<<<< HEAD
-@-ms-viewport {
-	width: device-width;
-}
-
 @media screen and ( max-width: 782px ) {
-=======
-@media screen and (max-width: 782px) {
->>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	html.wp-toolbar {
 		padding-top: 46px;
 	}
