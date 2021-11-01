@@ -514,8 +514,11 @@
 	transition: background-color 0.15s;
 	/* Reset the value inherited from the base .accordion-section-title style. See https://core.trac.wordpress.org/ticket/37589. */
 	-webkit-user-select: auto;
+<<<<<<< HEAD
 	-moz-user-select: auto;
 	-ms-user-select: auto;
+=======
+>>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
 	user-select: auto;
 }
 

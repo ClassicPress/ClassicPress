@@ -6,8 +6,28 @@
     "type": "git",
     "url": "https://github.com/ClassicPress/ClassicPress"
   },
+<<<<<<< HEAD
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
+=======
+	"engines": {
+		"node": ">=14.15.0",
+		"npm": ">=6.14.8"
+	},
+	"author": "The WordPress Contributors",
+	"license": "GPL-2.0-or-later",
+	"browserslist": [
+		"> 1%",
+		"last 1 Android versions",
+		"last 1 ChromeAndroid versions",
+		"last 2 Chrome versions",
+		"last 2 Firefox versions",
+		"last 2 Safari versions",
+		"last 2 iOS versions",
+		"last 2 Edge versions",
+		"last 2 Opera versions"
+	],
+>>>>>>> e4bda140d4 (Build/Test Tools: Remove Internet Explorer 11 from the `browserslist`.)
   "devDependencies": {
     "@lodder/grunt-postcss": "3.0.1",
     "@rollup/plugin-commonjs": "19.0.0",
