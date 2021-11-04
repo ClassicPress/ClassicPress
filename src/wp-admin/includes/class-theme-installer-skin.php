@@ -107,12 +107,21 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		if ( is_network_admin() && current_user_can( 'manage_network_themes' ) )
 			$install_actions['network_enable'] = '<a href="' . esc_url( wp_nonce_url( 'themes.php?action=enable&amp;theme=' . urlencode( $stylesheet ), 'enable-theme_' . $stylesheet ) ) . '" target="_parent">' . __( 'Network Enable' ) . '</a>';
 
-		if ( $this->type == 'web' )
-			$install_actions['themes_page'] = '<a href="' . self_admin_url( 'theme-install.php' ) . '" target="_parent">' . __( 'Return to Theme Installer' ) . '</a>';
-		elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) )
-			$install_actions['themes_page'] = '<a href="' . self_admin_url( 'themes.php' ) . '" target="_parent">' . __( 'Return to Themes page' ) . '</a>';
+    if ( 'web' === $this->type ) {
+			$install_actions['themes_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'theme-install.php' ),
+				__( 'Go to Theme Installer' )
+			);
+		} elseif ( current_user_can( 'switch_themes' ) || current_user_can( 'edit_theme_options' ) ) {
+			$install_actions['themes_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'themes.php' ),
+				__( 'Go to Themes page' )
+			);
+		}
 
-		if ( ! $this->result || is_wp_error($this->result) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
+		if ( ! $this->result || is_wp_error( $this->result ) || is_network_admin() || ! current_user_can( 'switch_themes' ) ) {
 			unset( $install_actions['activate'], $install_actions['preview'] );
 		} elseif ( get_option( 'template' ) === $stylesheet ) {
 			unset( $install_actions['activate'] );

@@ -53,101 +53,121 @@ function create_initial_taxonomies() {
 		);
 	}
 
-	register_taxonomy( 'category', 'post', array(
-		'hierarchical' => true,
-		'query_var' => 'category_name',
-		'rewrite' => $rewrite['category'],
-		'public' => true,
-		'show_ui' => true,
-		'show_admin_column' => true,
-		'_builtin' => true,
-		'capabilities' => array(
-			'manage_terms' => 'manage_categories',
-			'edit_terms'   => 'edit_categories',
-			'delete_terms' => 'delete_categories',
-			'assign_terms' => 'assign_categories',
-		),
-		'show_in_rest' => true,
-		'rest_base' => 'categories',
-		'rest_controller_class' => 'WP_REST_Terms_Controller',
-	) );
+	register_taxonomy(
+		'category',
+		'post',
+		array(
+			'hierarchical'          => true,
+			'query_var'             => 'category_name',
+			'rewrite'               => $rewrite['category'],
+			'public'                => true,
+			'show_ui'               => true,
+			'show_admin_column'     => true,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'edit_categories',
+				'delete_terms' => 'delete_categories',
+				'assign_terms' => 'assign_categories',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'categories',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
+		)
+	);
 
-	register_taxonomy( 'post_tag', 'post', array(
-	 	'hierarchical' => false,
-		'query_var' => 'tag',
-		'rewrite' => $rewrite['post_tag'],
-		'public' => true,
-		'show_ui' => true,
-		'show_admin_column' => true,
-		'_builtin' => true,
-		'capabilities' => array(
-			'manage_terms' => 'manage_post_tags',
-			'edit_terms'   => 'edit_post_tags',
-			'delete_terms' => 'delete_post_tags',
-			'assign_terms' => 'assign_post_tags',
-		),
-		'show_in_rest' => true,
-		'rest_base' => 'tags',
-		'rest_controller_class' => 'WP_REST_Terms_Controller',
-	) );
+	register_taxonomy(
+		'post_tag',
+		'post',
+		array(
+			'hierarchical'          => false,
+			'query_var'             => 'tag',
+			'rewrite'               => $rewrite['post_tag'],
+			'public'                => true,
+			'show_ui'               => true,
+			'show_admin_column'     => true,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_post_tags',
+				'edit_terms'   => 'edit_post_tags',
+				'delete_terms' => 'delete_post_tags',
+				'assign_terms' => 'assign_post_tags',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'tags',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
+		)
+	);
 
-	register_taxonomy( 'nav_menu', 'nav_menu_item', array(
-		'public' => false,
-		'hierarchical' => false,
-		'labels' => array(
-			'name' => __( 'Navigation Menus' ),
-			'singular_name' => __( 'Navigation Menu' ),
-		),
-		'query_var' => false,
-		'rewrite' => false,
-		'show_ui' => false,
-		'_builtin' => true,
-		'show_in_nav_menus' => false,
-	) );
+	register_taxonomy(
+		'nav_menu',
+		'nav_menu_item',
+		array(
+			'public'            => false,
+			'hierarchical'      => false,
+			'labels'            => array(
+				'name'          => __( 'Navigation Menus' ),
+				'singular_name' => __( 'Navigation Menu' ),
+			),
+			'query_var'         => false,
+			'rewrite'           => false,
+			'show_ui'           => false,
+			'_builtin'          => true,
+			'show_in_nav_menus' => false,
+		)
+	);
 
-	register_taxonomy( 'link_category', 'link', array(
-		'hierarchical' => false,
-		'labels' => array(
-			'name' => __( 'Link Categories' ),
-			'singular_name' => __( 'Link Category' ),
-			'search_items' => __( 'Search Link Categories' ),
-			'popular_items' => null,
-			'all_items' => __( 'All Link Categories' ),
-			'edit_item' => __( 'Edit Link Category' ),
-			'update_item' => __( 'Update Link Category' ),
-			'add_new_item' => __( 'Add New Link Category' ),
-			'new_item_name' => __( 'New Link Category Name' ),
-			'separate_items_with_commas' => null,
-			'add_or_remove_items' => null,
-			'choose_from_most_used' => null,
-			'back_to_items' => __( '&larr; Back to Link Categories' ),
-		),
-		'capabilities' => array(
-			'manage_terms' => 'manage_links',
-			'edit_terms'   => 'manage_links',
-			'delete_terms' => 'manage_links',
-			'assign_terms' => 'manage_links',
-		),
-		'query_var' => false,
-		'rewrite' => false,
-		'public' => false,
-		'show_ui' => true,
-		'_builtin' => true,
-	) );
+	register_taxonomy(
+		'link_category',
+		'link',
+		array(
+			'hierarchical' => false,
+			'labels'       => array(
+				'name'                       => __( 'Link Categories' ),
+				'singular_name'              => __( 'Link Category' ),
+				'search_items'               => __( 'Search Link Categories' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All Link Categories' ),
+				'edit_item'                  => __( 'Edit Link Category' ),
+				'update_item'                => __( 'Update Link Category' ),
+				'add_new_item'               => __( 'Add New Link Category' ),
+				'new_item_name'              => __( 'New Link Category Name' ),
+				'separate_items_with_commas' => null,
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => null,
+				'back_to_items'              => __( '&larr; Go to Link Categories' ),
+			),
+			'capabilities' => array(
+				'manage_terms' => 'manage_links',
+				'edit_terms'   => 'manage_links',
+				'delete_terms' => 'manage_links',
+				'assign_terms' => 'manage_links',
+			),
+			'query_var'    => false,
+			'rewrite'      => false,
+			'public'       => false,
+			'show_ui'      => true,
+			'_builtin'     => true,
+		)
+	);
 
-	register_taxonomy( 'post_format', 'post', array(
-		'public' => true,
-		'hierarchical' => false,
-		'labels' => array(
-			'name' => _x( 'Format', 'post format' ),
-			'singular_name' => _x( 'Format', 'post format' ),
-		),
-		'query_var' => true,
-		'rewrite' => $rewrite['post_format'],
-		'show_ui' => false,
-		'_builtin' => true,
-		'show_in_nav_menus' => current_theme_supports( 'post-formats' ),
-	) );
+	register_taxonomy(
+		'post_format',
+		'post',
+		array(
+			'public'            => true,
+			'hierarchical'      => false,
+			'labels'            => array(
+				'name'          => _x( 'Format', 'post format' ),
+				'singular_name' => _x( 'Format', 'post format' ),
+			),
+			'query_var'         => true,
+			'rewrite'           => $rewrite['post_format'],
+			'show_ui'           => false,
+			'_builtin'          => true,
+			'show_in_nav_menus' => current_theme_supports( 'post-formats' ),
+		)
+	);
 }
 
 /**
@@ -515,15 +535,15 @@ function get_taxonomy_labels( $tax ) {
 		'add_new_item' => array( __( 'Add New Tag' ), __( 'Add New Category' ) ),
 		'new_item_name' => array( __( 'New Tag Name' ), __( 'New Category Name' ) ),
 		'separate_items_with_commas' => array( __( 'Separate tags with commas' ), null ),
-		'add_or_remove_items' => array( __( 'Add or remove tags' ), null ),
-		'choose_from_most_used' => array( __( 'Choose from the most used tags' ), null ),
-		'not_found' => array( __( 'No tags found.' ), __( 'No categories found.' ) ),
-		'no_terms' => array( __( 'No tags' ), __( 'No categories' ) ),
-		'items_list_navigation' => array( __( 'Tags list navigation' ), __( 'Categories list navigation' ) ),
-		'items_list' => array( __( 'Tags list' ), __( 'Categories list' ) ),
-		/* translators: Tab heading when selecting from the most used terms */
-		'most_used' => array( _x( 'Most Used', 'tags' ), _x( 'Most Used', 'categories' ) ),
-		'back_to_items' => array( __( '&larr; Back to Tags' ), __( '&larr; Back to Categories' ) ),
+		'add_or_remove_items'        => array( __( 'Add or remove tags' ), null ),
+		'choose_from_most_used'      => array( __( 'Choose from the most used tags' ), null ),
+		'not_found'                  => array( __( 'No tags found.' ), __( 'No categories found.' ) ),
+		'no_terms'                   => array( __( 'No tags' ), __( 'No categories' ) ),
+		'items_list_navigation'      => array( __( 'Tags list navigation' ), __( 'Categories list navigation' ) ),
+		'items_list'                 => array( __( 'Tags list' ), __( 'Categories list' ) ),
+		/* translators: Tab heading when selecting from the most used terms. */
+		'most_used'                  => array( _x( 'Most Used', 'tags' ), _x( 'Most Used', 'categories' ) ),
+		'back_to_items'              => array( __( '&larr; Go to Tags' ), __( '&larr; Go to Categories' ) ),
 	);
 	$nohier_vs_hier_defaults['menu_name'] = $nohier_vs_hier_defaults['name'];
 

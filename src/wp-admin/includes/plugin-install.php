@@ -624,7 +624,7 @@ function install_plugin_information() {
 				</li>
 			<?php } if ( ! empty( $api->requires ) ) { ?>
 				<li>
-					<strong><?php _e( 'Requires ClassicPress Version:' ); ?></strong>
+					<strong><?php _e( 'Requires WordPress Version:' ); ?></strong>
 					<?php
 					/* translators: %s: version number */
 					printf( __( '%s or higher' ), $api->requires );

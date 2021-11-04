@@ -2110,8 +2110,15 @@ function maybe_add_existing_user_to_blog() {
 	if ( !empty( $details ) )
 		delete_option( 'new_user_' . $key );
 
-	if ( empty( $details ) || is_wp_error( add_existing_user_to_blog( $details ) ) )
-		wp_die( sprintf(__('An error occurred adding you to this site. Back to the <a href="%s">homepage</a>.'), home_url() ) );
+	if ( empty( $details ) || is_wp_error( add_existing_user_to_blog( $details ) ) ) {
+		wp_die(
+			sprintf(
+				/* translators: %s: Home URL. */
+				__( 'An error occurred adding you to this site. Go to the <a href="%s">homepage</a>.' ),
+				home_url()
+			)
+		);
+	}
 
 	wp_die( sprintf( __( 'You have been added to this site. Please visit the <a href="%s">homepage</a> or <a href="%s">log in</a> using your username and password.' ), home_url(), admin_url() ), __( 'ClassicPress &rsaquo; Success' ), array( 'response' => 200 ) );
 }
