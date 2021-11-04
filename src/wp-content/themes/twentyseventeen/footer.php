@@ -21,8 +21,14 @@
 				<?php
 				get_template_part( 'template-parts/footer/footer', 'widgets' );
 
+<<<<<<< HEAD
 				if ( has_nav_menu( 'social' ) ) : ?>
 					<nav class="social-navigation" role="navigation" aria-label="<?php esc_attr_e( 'Footer Social Links Menu', 'twentyseventeen' ); ?>">
+=======
+				if ( has_nav_menu( 'social' ) ) :
+					?>
+					<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Footer Social Links Menu', 'twentyseventeen' ); ?>">
+>>>>>>> 162fda69c8 (General: Remove role="navigation" from nav elements.)
 						<?php
 							wp_nav_menu( array(
 								'theme_location' => 'social',

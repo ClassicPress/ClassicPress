@@ -2583,7 +2583,11 @@ function _navigation_markup( $links, $class = 'posts-navigation', $screen_reader
 	}
 
 	$template = '
+<<<<<<< HEAD
 	<nav class="navigation %1$s">
+=======
+	<nav class="navigation %1$s" aria-label="%4$s">
+>>>>>>> 162fda69c8 (General: Remove role="navigation" from nav elements.)
 		<h2 class="screen-reader-text">%2$s</h2>
 		<div class="nav-links">%3$s</div>
 	</nav>';
@@ -2595,7 +2599,11 @@ function _navigation_markup( $links, $class = 'posts-navigation', $screen_reader
 	 * class (%1$s), the screen-reader-text value (%2$s), and placement of the
 	 * navigation links (%3$s):
 	 *
+<<<<<<< HEAD
 	 *     <nav class="navigation %1$s" role="navigation">
+=======
+	 *     <nav class="navigation %1$s" aria-label="%4$s">
+>>>>>>> 162fda69c8 (General: Remove role="navigation" from nav elements.)
 	 *         <h2 class="screen-reader-text">%2$s</h2>
 	 *         <div class="nav-links">%3$s</div>
 	 *     </nav>

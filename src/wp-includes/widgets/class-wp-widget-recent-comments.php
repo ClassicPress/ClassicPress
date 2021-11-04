@@ -103,7 +103,26 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			$output .= $args['before_title'] . $title . $args['after_title'];
 		}
 
+<<<<<<< HEAD
 		$output .= '<ul id="recentcomments">';
+=======
+		$recent_comments_id = ( $first_instance ) ? 'recentcomments' : "recentcomments-{$this->number}";
+		$first_instance     = false;
+
+		$format = current_theme_supports( 'html5', 'navigation-widgets' ) ? 'html5' : 'xhtml';
+
+		/** This filter is documented in wp-includes/widgets/class-wp-nav-menu-widget.php */
+		$format = apply_filters( 'navigation_widgets_format', $format );
+
+		if ( 'html5' === $format ) {
+			// The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
+			$title      = trim( strip_tags( $title ) );
+			$aria_label = $title ? $title : $default_title;
+			$output    .= '<nav aria-label="' . esc_attr( $aria_label ) . '">';
+		}
+
+		$output .= '<ul id="' . esc_attr( $recent_comments_id ) . '">';
+>>>>>>> 162fda69c8 (General: Remove role="navigation" from nav elements.)
 		if ( is_array( $comments ) && $comments ) {
 			// Prime cache for associated posts. (Prime post term cache if we need it for permalinks.)
 			$post_ids = array_unique( wp_list_pluck( $comments, 'comment_post_ID' ) );

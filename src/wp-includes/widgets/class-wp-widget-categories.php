@@ -107,7 +107,23 @@ class WP_Widget_Categories extends WP_Widget {
 
 <?php
 		} else {
+<<<<<<< HEAD
 ?>
+=======
+			$format = current_theme_supports( 'html5', 'navigation-widgets' ) ? 'html5' : 'xhtml';
+
+			/** This filter is documented in wp-includes/widgets/class-wp-nav-menu-widget.php */
+			$format = apply_filters( 'navigation_widgets_format', $format );
+
+			if ( 'html5' === $format ) {
+				// The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
+				$title      = trim( strip_tags( $title ) );
+				$aria_label = $title ? $title : $default_title;
+				echo '<nav aria-label="' . esc_attr( $aria_label ) . '">';
+			}
+			?>
+
+>>>>>>> 162fda69c8 (General: Remove role="navigation" from nav elements.)
 		<ul>
 <?php
 		$cat_args['title_li'] = '';
