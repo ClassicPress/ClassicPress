@@ -526,7 +526,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 			 * email successfully. It only means that the `send` method above was able to
 			 * process the request without any errors.
 			 *
-			 * @since 5.9.0
+			 * @since WP-5.9.0
 			 *
 			 * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
 			 */
@@ -544,7 +544,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 		 * @param WP_Error $error A WP_Error object with the phpmailerException message, and an array
 		 *                        containing the mail recipient, subject, message, headers, and attachments.
 		 */
-			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_data ) );
+		do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_data ) );
 
 		return false;
 	}
