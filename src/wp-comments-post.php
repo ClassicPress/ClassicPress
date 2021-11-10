@@ -7,7 +7,11 @@
 
 if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
+<<<<<<< HEAD
 	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+=======
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0', 'HTTP/3' ), true ) ) {
+>>>>>>> d4447c0d76 (Bootstrap/Load: Add `HTTP/3` as a valid HTTP protocol. )
 		$protocol = 'HTTP/1.0';
 	}
 

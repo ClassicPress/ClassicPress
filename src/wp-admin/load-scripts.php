@@ -14,6 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'WPINC', 'wp-includes' );
 
+<<<<<<< HEAD
+=======
+$protocol = $_SERVER['SERVER_PROTOCOL'];
+if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0', 'HTTP/3' ), true ) ) {
+	$protocol = 'HTTP/1.0';
+}
+
+>>>>>>> d4447c0d76 (Bootstrap/Load: Add `HTTP/3` as a valid HTTP protocol. )
 $load = $_GET['load'];
 if ( is_array( $load ) )
 	$load = implode( '', $load );
