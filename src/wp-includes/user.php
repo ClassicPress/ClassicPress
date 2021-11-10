@@ -566,7 +566,7 @@ function get_users( $args = array() ) {
 /**
  * List all the users of the site, with several options available.
  *
- * @since 5.9.0
+ * @since WP-5.9.0
  *
  * @param string|array $args {
  *     Optional. Array or string of default arguments.
