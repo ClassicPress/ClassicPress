@@ -459,7 +459,7 @@ function wp_get_post_revisions( $post_id = 0, $args = null ) {
 /**
  * Returns the url for viewing and potentially restoring revisions of a given post.
  *
- * @since 5.9.0
+ * @since WP-5.9.0
  *
  * @param int|WP_Post $post_id Optional. Post ID or WP_Post object. Default is global `$post`.
  * @return null|string The URL for editing revisions on the given post, otherwise null.

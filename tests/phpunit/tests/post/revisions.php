@@ -386,7 +386,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	/**
 	 * Tests that wp_get_post_revisions_url() returns the revisions URL.
 	 *
-	 * @ticket 39062
+	 * @ticket https://core.trac.wordpress.org/ticket/39062
 	 *
 	 * @dataProvider data_wp_get_post_revisions_url
 	 *
@@ -434,7 +434,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	 * Tests that wp_get_post_revisions_url() returns the revisions URL
 	 * when passed a WP_Post object.
 	 *
-	 * @ticket 39062
+	 * @ticket https://core.trac.wordpress.org/ticket/39062
 	 *
 	 * @dataProvider data_wp_get_post_revisions_url
 	 *
@@ -493,7 +493,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	/**
 	 * Tests that wp_get_post_revisions_url() returns NULL when a post does not exist.
 	 *
-	 * @ticket 39062
+	 * @ticket https://core.trac.wordpress.org/ticket/39062
 	 *
 	 * @covers ::wp_get_post_revisions_url
 	 */
@@ -506,7 +506,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	/**
 	 * Tests that wp_get_post_revisions_url() returns NULL when there are no revisions.
 	 *
-	 * @ticket 39062
+	 * @ticket https://core.trac.wordpress.org/ticket/39062
 	 *
 	 * @covers ::wp_get_post_revisions_url
 	 */
@@ -519,7 +519,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	/**
 	 * Tests that wp_get_post_revisions_url() returns NULL when revisions are disabled.
 	 *
-	 * @ticket 39062
+	 * @ticket https://core.trac.wordpress.org/ticket/39062
 	 *
 	 * @covers ::wp_get_post_revisions_url
 	 */
