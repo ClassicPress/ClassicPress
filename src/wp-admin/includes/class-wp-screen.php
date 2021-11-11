@@ -915,33 +915,14 @@ final class WP_Screen {
 			if ( apply_filters( 'admin-post-navigation', true, $this->post_type ) ) {
 
 				$checked = 'checked="checked"';
-				$nav_display = 'inline';
-				$metaboxhidden_post = get_user_meta( get_current_user_id(), 'metaboxhidden_post', true );
+				$metaboxhidden = get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
 
-				if ( in_array( 'adminpostnav', $metaboxhidden_post ) ) {
-					$checked = '';
-					$nav_display = 'none';
-				}
-
-				/*
-				 * Enable overriding of default choice (made on post
-				 * screen) for other post types.
-				 * 
-				 * @param $nav_display	Must be either 'inline' or 'none'.
-				 * @param $post_type
-				 *
-				 * @since CP-1.x.x 
-				 */
-				$admin_nav = apply_filters( 'admin-post-navigation-buttons', $nav_display, $this->post_type );
-				if ( $admin_nav === 'inline' ) {
-					$checked = 'checked="checked"';
-				}
-				elseif ( $admin_nav === 'none' ) {
+				if ( in_array( 'adminpostnav', $metaboxhidden ) ) {
 					$checked = '';
 				}
 
-				$expand	.= '<label for="admin-post-nav-hide">';
-				$expand	.= '<input id="admin-post-nav-hide" class="hide-postbox-tog" name="admin-post-nav-hide" type="checkbox" value="adminpostnav"' . $checked . ' />';
+				$expand	.= '<label for="adminpostnav-hide">';
+				$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnav"' . $checked . ' />';
 				$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
 				$expand	.= '</label></fieldset>';
 				?>
