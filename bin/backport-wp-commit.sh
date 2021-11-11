@@ -118,12 +118,12 @@ for range in \
 	'dc512708:5.2' \
 	'c67b47c66:5.3' \
 	'66f510bda:5.4' \
-	'ff6114f8:master'
+	'ff6114f8:trunk'
 do
 	start_commit=$(echo "$range" | cut -d: -f1)
 	search_branch=$(echo "$range" | cut -d: -f2)
 	log_range="$start_commit..$wp_remote/$search_branch"
-	if [ "$search_branch" = master ]; then
+	if [ "$search_branch" = trunk ]; then
 		svn_branch=trunk
 	else
 		svn_branch="branches/$search_branch"
