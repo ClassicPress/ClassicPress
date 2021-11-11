@@ -4252,11 +4252,7 @@ function disabled( $disabled, $current = true, $echo = true ) {
  *
  * Compares the first two arguments and if identical marks as readonly
  *
-<<<<<<< HEAD
- * @since WP-4.9.0
-=======
- * @since 5.9.0
->>>>>>> fff4242f1a (Code Modernization: Rename the `readonly()` function to `wp_readonly()`.)
+ * @since WP-5.9.0
  *
  * @param mixed $readonly One of the values to compare
  * @param mixed $current  (true) The other value to compare if not just true
