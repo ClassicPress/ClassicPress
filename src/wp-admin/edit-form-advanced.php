@@ -528,11 +528,11 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 		echo '<span id="adminpostnav" class="postbox" style="background-color: transparent; border: none; box-shadow: none; display: ' . $nav_display . ';">';
 
 		if ( ! empty( $previous_post ) ) {
-			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $previous_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-prev" title="Previous post: ' . esc_attr( $previous_post->post_title ) . ' " class="add-new-h2">← Previous</a>';
+			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $previous_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-prev" title="' . _x( 'Previous post: ', 'Admin Post Navigation' ) . esc_attr( $previous_post->post_title ) . ' " class="add-new-h2">' . _x( '&larr; Previous', 'Admin Post Navigation' ) . '</a>';
 		}
 
 		if ( ! empty( $next_post ) ) {
-			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $next_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-next" title="Next post: ' . esc_attr( $next_post->post_title ) . ' " class="add-new-h2">Next →</a>';
+			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $next_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-next" title="' . _x( 'Next post: ', 'Admin Post Navigation' ) . esc_attr( $next_post->post_title ) . ' " class="add-new-h2">' . _x( 'Next &rarr;', 'Admin Post Navigation' ) . '</a>';
 		}
 
 		echo '</span>';
