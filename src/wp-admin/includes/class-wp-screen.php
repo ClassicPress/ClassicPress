@@ -900,9 +900,70 @@ final class WP_Screen {
 		$this->_screen_settings = '';
 
 		if ( 'post' === $this->base ) {
-			$expand                 = '<fieldset class="editor-expand hidden"><legend>' . __( 'Additional settings' ) . '</legend><label for="editor-expand-toggle">';
-			$expand                .= '<input type="checkbox" id="editor-expand-toggle"' . checked( get_user_setting( 'editor_expand', 'on' ), 'on', false ) . ' />';
-			$expand                .= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label></fieldset>';
+			$expand		= '<fieldset class="editor-expand hidden"><legend>' . __( 'Additional settings' ) . '</legend><label for="editor-expand-toggle">';
+			$expand		.= '<input type="checkbox" id="editor-expand-toggle"' . checked( get_user_setting( 'editor_expand', 'on' ), 'on', false ) . ' />';
+			$expand		.= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label>';
+
+			/**
+			 * Filter for Previous and Next buttons alongside Add New button.
+			 * 
+			 * @param bool Whether to show these buttons. Default true.
+			 * @param $post_type
+			 *
+			 * @since CP-1.x.x
+			 */			
+			if ( apply_filters( 'admin-post-navigation', true, $this->post_type ) ) {
+
+				$checked = 'checked="checked"';
+				$nav_display = 'inline';
+				$metaboxhidden_post = get_user_meta( get_current_user_id(), 'metaboxhidden_post', true );
+
+				if ( in_array( 'adminpostnav', $metaboxhidden_post ) ) {
+					$checked = '';
+					$nav_display = 'none';
+				}
+
+				/*
+				 * Enable overriding of default choice (made on post
+				 * screen) for other post types.
+				 * 
+				 * @param $nav_display	Must be either 'inline' or 'none'.
+				 * @param $post_type
+				 *
+				 * @since CP-1.x.x 
+				 */
+				$admin_nav = apply_filters( 'admin-post-navigation-buttons', $nav_display, $this->post_type );
+				if ( $admin_nav === 'inline' ) {
+					$checked = 'checked="checked"';
+				}
+				elseif ( $admin_nav === 'none' ) {
+					$checked = '';
+				}
+
+				$expand	.= '<label for="admin-post-nav-hide">';
+				$expand	.= '<input id="admin-post-nav-hide" class="hide-postbox-tog" name="admin-post-nav-hide" type="checkbox" value="adminpostnav"' . $checked . ' />';
+				$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
+				$expand	.= '</label></fieldset>';
+				?>
+
+				<script>
+				document.addEventListener('DOMContentLoaded', function() {
+					const checkboxNav = document.getElementById('admin-post-nav-hide');
+					const buttonsNav = document.getElementById('adminpostnav');
+
+					checkboxNav.addEventListener('change', function(event) {
+						if (event.currentTarget.checked) {
+							buttonsNav.removeAttribute('hidden');
+						} else {
+							buttonsNav.setAttribute('hidden', 'hidden');
+						}
+					});
+				});
+				</script>
+
+				<?php
+			}		
+
 			$this->_screen_settings = $expand;
 		}
 

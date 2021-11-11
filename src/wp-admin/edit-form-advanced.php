@@ -491,6 +491,54 @@ echo esc_html( $title );
 <?php
 if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create_posts ) ) {
 	echo ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
+	
+	/**
+	 * Adds Previous and Next buttons alongside Add New button.
+	 * 
+	 * @param bool 	Whether to show Previous and Next buttons. Default true.
+	 * @param $post_type
+	 *
+	 * @since CP-1.x.x
+	 */
+	if ( apply_filters( 'admin-post-navigation', true, $post_type_object->name ) ) {
+
+		// Setting per user
+		$nav_display = 'inline';
+		$metaboxhidden_post = get_user_meta( get_current_user_id(), 'metaboxhidden_post', true );
+
+		if ( in_array( 'adminpostnav', $metaboxhidden_post ) ) {
+			$nav_display = 'none';
+		}
+
+		/*
+		 * Enable overriding of default choice (made on post screen) for
+		 * other post types.
+		 * 
+		 * @param $nav_display	Must be either 'inline' or 'none'.
+		 * @param $post_type
+		 *
+		 * @since CP-1.x.x 
+		 */
+		$admin_nav = apply_filters( 'admin-post-navigation-buttons', $nav_display, $post_type_object->name );
+		$nav_display = ( in_array( $admin_nav, ['inline', 'none'] ) ) ? $admin_nav : $nav_display;
+
+		$previous_post = get_previous_post();
+		$next_post = get_next_post();
+
+		echo '<span id="adminpostnav" class="postbox" style="background-color: transparent; border: none; box-shadow: none; display: ' . $nav_display . ';">';
+
+		if ( ! empty( $previous_post ) ) {
+			echo ' <a href="' . esc_url( admin_url() ) . 'post.php?post=' . $previous_post->ID . '&amp;action=edit" id="adminpostnav-prev" title="Previous post: ' . esc_attr( $previous_post->post_title ) . ' " class="add-new-h2">← Previous</a>';
+		}
+
+		if ( ! empty( $next_post ) ) {
+			echo ' <a href="' . esc_url( admin_url() ) . 'post.php?post=' . $next_post->ID . '&amp;action=edit" id="adminpostnav-next" title="Next post: ' . esc_attr( $next_post->post_title ) . ' " class="add-new-h2">Next →</a>';
+		}
+
+		echo '</span>';
+
+	}
+
 }
 ?>
 
