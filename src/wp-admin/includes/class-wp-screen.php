@@ -929,7 +929,7 @@ final class WP_Screen {
 
 				<script>
 				document.addEventListener('DOMContentLoaded', function() {
-					const checkboxNav = document.getElementById('admin-post-nav-hide');
+					const checkboxNav = document.getElementById('adminpostnav-hide');
 					const buttonsNav = document.getElementById('adminpostnav');
 
 					checkboxNav.addEventListener('change', function(event) {
