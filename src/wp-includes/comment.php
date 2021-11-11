@@ -977,13 +977,14 @@ function get_comment_pages_count( $comments = null, $per_page = null, $threaded 
  * @param int   $comment_ID Comment ID.
  * @param array $args {
  *      Array of optional arguments.
- *      @type string     $type      Limit paginated comments to those matching a given type. Accepts 'comment',
- *                                  'trackback', 'pingback', 'pings' (trackbacks and pingbacks), or 'all'.
- *                                  Default is 'all'.
- *      @type int        $per_page  Per-page count to use when calculating pagination. Defaults to the value of the
- *                                  'comments_per_page' option.
- *      @type int|string $max_depth If greater than 1, comment page will be determined for the top-level parent of
- *                                  `$comment_ID`. Defaults to the value of the 'thread_comments_depth' option.
+ *      @type string     $type      Limit paginated comments to those matching a given type.
+ *                                  Accepts 'comment', 'trackback', 'pingback', 'pings'
+ *                                  (trackbacks and pingbacks), or 'all'. Default 'all'.
+ *      @type int        $per_page  Per-page count to use when calculating pagination.
+ *                                  Defaults to the value of the 'comments_per_page' option.
+ *      @type int|string $max_depth If greater than 1, comment page will be determined
+ *                                  for the top-level parent `$comment_ID`.
+ *                                  Defaults to the value of the 'thread_comments_depth' option.
  * } *
  * @return int|null Comment page number or null on error.
  */
@@ -1045,6 +1046,42 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 				)
 			),
 		);
+
+		if ( is_user_logged_in() ) {
+			$comment_args['include_unapproved'] = array( get_current_user_id() );
+		} else {
+			$commenter       = wp_get_current_commenter();
+			$commenter_email = $commenter['comment_author_email'];
+			if ( ! empty( $commenter_email ) ) {
+				$comment_args['include_unapproved'] = array( $commenter_email );
+			}
+		}
+
+		/**
+		 * Filters the arguments used to query comments in get_page_of_comment().
+		 *
+		 * @since WP-5.5.0
+		 *
+		 * @see WP_Comment_Query::__construct()
+		 *
+		 * @param array $comment_args {
+		 *     Array of WP_Comment_Query arguments.
+		 *
+		 *     @type string $type               Limit paginated comments to those matching a given type.
+		 *                                      Accepts 'comment', 'trackback', 'pingback', 'pings'
+		 *                                      (trackbacks and pingbacks), or 'all'. Default 'all'.
+		 *     @type int    $post_id            ID of the post.
+		 *     @type string $fields             Comment fields to return.
+		 *     @type bool   $count              Whether to return a comment count (true) or array
+		 *                                      of comment objects (false).
+		 *     @type string $status             Comment status.
+		 *     @type int    $parent             Parent ID of comment to retrieve children of.
+		 *     @type array  $date_query         Date query clauses to limit comments by. See WP_Date_Query.
+		 *     @type array  $include_unapproved Array of IDs or email addresses whose unapproved comments
+		 *                                      will be included in paginated comments.
+		 * }
+		 */
+		$comment_args = apply_filters( 'get_page_of_comment_query_args', $comment_args );
 
 		$comment_query = new WP_Comment_Query();
 		$older_comment_count = $comment_query->query( $comment_args );
