@@ -747,6 +747,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @group login
 	 */
 	function test_login_html_option_enabled_with_custom_image_banner() {
@@ -825,6 +826,11 @@ class Tests_General_Template extends WP_UnitTestCase {
 
 	/**
 	 * @group login
+=======
+	 * @ticket 44183
+	 *
+	 * @covers ::get_the_archive_title
+>>>>>>> fff4242f1a (Code Modernization: Rename the `readonly()` function to `wp_readonly()`.)
 	 */
 	function test_login_html_option_enabled_with_custom_logo_and_filters() {
 		update_option( 'login_custom_image_state', '1' );
