@@ -36,22 +36,18 @@ function get_post_thumbnail_id( $post = null ) {
 	if ( ! $post ) {
 		return '';
 	}
-<<<<<<< HEAD
-	return get_post_meta( $post->ID, '_thumbnail_id', true );
-=======
 
 	$thumbnail_id = (int) get_post_meta( $post->ID, '_thumbnail_id', true );
 
 	/**
 	 * Filters post thumbnail ID.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param int|false        $thumbnail_id Post thumbnail ID or false if the post does not exist.
 	 * @param int|WP_Post|null $post         Post ID or WP_Post object. Default is global `$post`.
 	 */
 	return (int) apply_filters( 'post_thumbnail_id', $thumbnail_id, $post );
->>>>>>> cdb15e353a (Media: Add filter for post thumbnail id.)
 }
 
 /**
