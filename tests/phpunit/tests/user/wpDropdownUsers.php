@@ -240,8 +240,6 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
 	}
-
-
 	/**
 	 * @see https://github.com/ClassicPress/ClassicPress/pull/572
 	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
