@@ -10,6 +10,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 	public function setUp() {
 		$this->check_user_query_vars_calls = 0;
+		parent::setUp();
 	}
 
 	public function tearDown() {
@@ -225,7 +226,6 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_nicename</option>", $found );
 		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_nicename</option>", $found );
-
 		$this->assertSame( $this->check_user_query_vars_calls, 1 );
 	}
 
