@@ -6,6 +6,12 @@
  * @group user
  */
 class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
+	private $check_user_query_vars_calls = 0;
+
+	public function setUp() {
+		$this->check_user_query_vars_calls = 0;
+	}
+
 	public function tearDown() {
 		remove_action( 'pre_get_users', [ $this, 'check_user_query_vars' ] );
 		parent::tearDown();
@@ -194,6 +200,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 			array_unique( $user_query->query_vars['fields'] ),
 			'Each queried user field should be listed only once.'
 		);
+		$this->check_user_query_vars_calls++;
 	}
 
 	/**
@@ -218,6 +225,8 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_nicename</option>", $found );
 		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_nicename</option>", $found );
+
+		$this->assertSame( $this->check_user_query_vars_calls, 1 );
 	}
 
 	/**
@@ -240,6 +249,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
 	}
+
 	/**
 	 * @see https://github.com/ClassicPress/ClassicPress/pull/572
 	 * @see https://github.com/ClassicPress/ClassicPress/pull/791
