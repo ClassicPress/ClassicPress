@@ -502,25 +502,37 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 	 */
 	if ( apply_filters( 'admin-post-navigation', true, $post_type_object->name ) ) {
 
-		// Setting per user
-		$hidden = '';
-		$metaboxhidden = get_user_meta( get_current_user_id(), 'metaboxhidden_' . $post_type_object->name, true );
+		// Setting per user per post type
+		$nav_display = 'inline';
+		$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $post_type_object->name, true );
 
-		if ( in_array( 'adminpostnav', $metaboxhidden ) ) {
-			$hidden = 'hidden="hidden"';
+		if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
+			$nav_display = 'none';
 		}
 
-		$previous_post = get_previous_post();
 		$next_post = get_next_post();
+		$previous_post = get_previous_post();
 
-		echo '<span id="adminpostnav" class="postbox" style="background-color: transparent; border: none; box-shadow: none;"' . $hidden . '>';
+		echo '<span id="adminpostnavspan" class="postbox" style="background: transparent; border: none; box-shadow: none; display: ' . $nav_display . ';">';
 
 		if ( ! empty( $previous_post ) ) {
-			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $previous_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-prev" title="' . _x( 'Previous post: ', 'Admin Post Navigation' ) . esc_attr( $previous_post->post_title ) . ' " class="add-new-h2">' . _x( '&larr; Previous', 'Admin Post Navigation' ) . '</a>';
+
+			$previous_link = esc_url( admin_url() . 'post.php?post=' . $previous_post->ID . '&amp;action=edit' );
+
+			$prev_title = _x( 'Previous post: ', 'Admin Post Navigation' ) . esc_attr( $previous_post->post_title );
+
+			echo ' <a href="' . $previous_link . '" id="adminpostnav-prev" title="' . $prev_title . ' " class="add-new-h2">' . _x( '&larr; Previous', 'Admin Post Navigation' ) . '</a>';
+
 		}
 
 		if ( ! empty( $next_post ) ) {
-			echo ' <a href="' . esc_url( admin_url() . 'post.php?post=' . $next_post->ID . '&amp;action=edit' ) . '" id="adminpostnav-next" title="' . _x( 'Next post: ', 'Admin Post Navigation' ) . esc_attr( $next_post->post_title ) . ' " class="add-new-h2">' . _x( 'Next &rarr;', 'Admin Post Navigation' ) . '</a>';
+
+			$next_link = esc_url( admin_url() . 'post.php?post=' . $next_post->ID . '&amp;action=edit' );
+
+			$next_title = _x( 'Next post: ', 'Admin Post Navigation' ) . esc_attr( $next_post->post_title );
+
+			echo ' <a href="' . $next_link . '" id="adminpostnav-next" title="' . $next_title . ' " class="add-new-h2">' . _x( 'Next &rarr;', 'Admin Post Navigation' ) . '</a>';
+
 		}
 
 		echo '</span>';

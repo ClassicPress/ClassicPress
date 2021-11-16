@@ -915,35 +915,17 @@ final class WP_Screen {
 			if ( apply_filters( 'admin-post-navigation', true, $this->post_type ) ) {
 
 				$checked = 'checked="checked"';
-				$metaboxhidden = get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
+				$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
 
-				if ( in_array( 'adminpostnav', $metaboxhidden ) ) {
+				if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
 					$checked = '';
 				}
 
 				$expand	.= '<label for="adminpostnav-hide">';
-				$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnav"' . $checked . ' />';
+				$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . $checked . ' />';
 				$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
 				$expand	.= '</label></fieldset>';
-				?>
-
-				<script>
-				document.addEventListener('DOMContentLoaded', function() {
-					const checkboxNav = document.getElementById('adminpostnav-hide');
-					const buttonsNav = document.getElementById('adminpostnav');
-
-					checkboxNav.addEventListener('change', function(event) {
-						if (event.currentTarget.checked) {
-							buttonsNav.removeAttribute('hidden');
-						} else {
-							buttonsNav.setAttribute('hidden', 'hidden');
-						}
-					});
-				});
-				</script>
-
-				<?php
-			}		
+			}
 
 			$this->_screen_settings = $expand;
 		}
