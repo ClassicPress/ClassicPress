@@ -2222,10 +2222,17 @@ function force_balance_tags( $text ) {
 	$stacksize = 0;
 	$tagqueue = '';
 	$newtext = '';
+<<<<<<< HEAD
 	// Known single-entity/self-closing tags
 	$single_tags = array( 'area', 'base', 'basefont', 'br', 'col', 'command', 'embed', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param', 'source' );
 	// Tags that can be immediately nested within themselves
 	$nestable_tags = array( 'blockquote', 'div', 'object', 'q', 'span' );
+=======
+	// Known single-entity/self-closing tags.
+	$single_tags = array( 'area', 'base', 'basefont', 'br', 'col', 'command', 'embed', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param', 'source', 'track', 'wbr' );
+	// Tags that can be immediately nested within themselves.
+	$nestable_tags = array( 'article', 'aside', 'blockquote', 'details', 'div', 'figure', 'object', 'q', 'section', 'span' );
+>>>>>>> dac57bbf50 (Formatting: Add additional support for single and nestable tags in `force_balance_tags()`.)
 
 	// WP bug fix for comments - in case you REALLY meant to type '< !--'
 	$text = str_replace('< !--', '<    !--', $text);
