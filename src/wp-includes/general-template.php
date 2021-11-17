@@ -2635,13 +2635,13 @@ function wp_footer() {
  *
  * * See {@see 'wp_body_open'}.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  */
 function wp_body_open() {
 	/**
 	 * Triggered after the opening <body> tag.
 	 *
-	 * @since 5.2.0
+	 * @since WP-5.2.0
 	 */
 	do_action( 'wp_body_open' );
 }
