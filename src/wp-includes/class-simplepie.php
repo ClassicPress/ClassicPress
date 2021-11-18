@@ -863,7 +863,7 @@ class SimplePie
 	 *
 	 * This allows you to change default curl options
 	 *
-	 * @since 1.0 Beta 3
+	 * @since SimplePie 1.0 Beta 3
 	 * @param array $curl_options Curl options to add to default settings
 	 */
 	public function set_curl_options(array $curl_options = array())
@@ -1950,7 +1950,7 @@ class SimplePie
 	 * depending on whether auto-discovery was used, and whether there were
 	 * any redirects along the way.
 	 *
-	 * @since Preview Release (previously called `get_feed_url()` since SimplePie 0.8.)
+	 * @since SimplePie Preview Release (previously called `get_feed_url()` since SimplePie 0.8.)
 	 * @todo Support <itunes:new-feed-url>
 	 * @todo Also, |atom:link|@rel=self
 	 * @param bool $permanent Permanent mode to return only the original URL or the first redirection
@@ -2253,7 +2253,7 @@ class SimplePie
 	/**
 	 * Get a category for the feed
 	 *
-	 * @since Unknown
+	 * @since SimplePie Unknown Version
 	 * @param int $key The category that you want to return. Remember that arrays begin with 0, not 1
 	 * @return SimplePie_Category|null
 	 */
@@ -2334,7 +2334,7 @@ class SimplePie
 	/**
 	 * Get an author for the feed
 	 *
-	 * @since 1.1
+	 * @since SimplePie 1.1
 	 * @param int $key The author that you want to return. Remember that arrays begin with 0, not 1
 	 * @return SimplePie_Author|null
 	 */
@@ -2428,7 +2428,7 @@ class SimplePie
 	/**
 	 * Get a contributor for the feed
 	 *
-	 * @since 1.1
+	 * @since SimplePie 1.1
 	 * @param int $key The contrbutor that you want to return. Remember that arrays begin with 0, not 1
 	 * @return SimplePie_Author|null
 	 */
@@ -2510,7 +2510,7 @@ class SimplePie
 	/**
 	 * Get a single link for the feed
 	 *
-	 * @since 1.0 (previously called `get_feed_link` since Preview Release, `get_feed_permalink()` since 0.8)
+	 * @since SimplePie 1.0 (previously called `get_feed_link` since Preview Release, `get_feed_permalink()` since 0.8)
 	 * @param int $key The link that you want to return. Remember that arrays begin with 0, not 1
 	 * @param string $rel The relationship of the link to return
 	 * @return string|null Link URL
@@ -3001,7 +3001,7 @@ class SimplePie
 	 * {@link http://php.net/foreach foreach()} loops.
 	 *
 	 * @see get_item_quantity()
-	 * @since Beta 2
+	 * @since SimplePie Beta 2
 	 * @param int $key The item that you want to return. Remember that arrays begin with 0, not 1
 	 * @return SimplePie_Item|null
 	 */
