@@ -912,20 +912,17 @@ final class WP_Screen {
 			 *
 			 * @since CP-1.x.x
 			 */			
-			if ( apply_filters( 'admin-post-navigation', true, $this->post_type ) ) {
+			$checked = 'checked="checked"';
+			$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
 
-				$checked = 'checked="checked"';
-				$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
-
-				if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
-					$checked = '';
-				}
-
-				$expand	.= '<label for="adminpostnav-hide">';
-				$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . $checked . ' />';
-				$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
-				$expand	.= '</label></fieldset>';
+			if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
+				$checked = '';
 			}
+
+			$expand	.= '<label for="adminpostnav-hide">';
+			$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . $checked . ' />';
+			$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
+			$expand	.= '</label></fieldset>';
 
 			$this->_screen_settings = $expand;
 		}
