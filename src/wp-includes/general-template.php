@@ -206,13 +206,20 @@ function get_search_form( $echo = true ) {
 		require( $search_form_template );
 		$form = ob_get_clean();
 	} else {
+		
+		/**
+		 * Adds enterkeyhint="search"
+		 * 
+		 * @since CP 1.x.x
+		 * 
+		 */
 		if ( 'html5' == $format ) {
 			$form = '<form role="search" method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
 				<label>
 					<span class="screen-reader-text">' . _x( 'Search for:', 'label' ) . '</span>
-					<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" />
+					<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" enterkeyhint="search" />
 				</label>
-				<input type="submit" class="search-submit" value="'. esc_attr_x( 'Search', 'submit button' ) .'" />
+				<input type="submit" class="search-submit" value="'. esc_attr_x( 'Search', 'submit button' ) .'" enterkeyhint="search" />
 			</form>';
 		} else {
 			$form = '<form role="search" method="get" id="searchform" class="searchform" action="' . esc_url( home_url( '/' ) ) . '">
