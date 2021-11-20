@@ -905,10 +905,7 @@ final class WP_Screen {
 			$expand		.= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label>';
 
 			/**
-			 * Filter for Previous and Next buttons alongside Add New button.
-			 * 
-			 * @param bool Whether to show these buttons. Default true.
-			 * @param $post_type
+			 * Adds Previous and Next buttons alongside Add New button.
 			 *
 			 * @since CP-1.x.x
 			 */			
