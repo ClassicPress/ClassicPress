@@ -493,11 +493,8 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 	echo ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
 	
 	/**
-	 * Adds Previous and Next buttons alongside Add New button. Setting
+	 * Adds Previous and Next links alongside Add New link. Setting
 	 * works per user per post type.
-	 * 
-	 * @param bool 	Whether to show Previous and Next buttons. Default true.
-	 * @param $post_type
 	 *
 	 * @since CP-1.x.x
 	 */

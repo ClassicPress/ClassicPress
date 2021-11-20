@@ -905,19 +905,16 @@ final class WP_Screen {
 			$expand		.= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label>';
 
 			/**
-			 * Adds Previous and Next buttons alongside Add New button.
+			 * Adds Previous and Next links alongside Add New link.
 			 *
 			 * @since CP-1.x.x
-			 */			
-			$checked = 'checked="checked"';
+			 */
 			$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
 
-			if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
-				$checked = '';
-			}
+			$checked = checked( ! in_array( 'adminpostnavspan', $metaboxhidden ) );
 
 			$expand	.= '<label for="adminpostnav-hide">';
-			$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . $checked . ' />';
+			$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . esc_attr( $checked ) . ' />';
 			$expand	.= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
 			$expand	.= '</label></fieldset>';
 
