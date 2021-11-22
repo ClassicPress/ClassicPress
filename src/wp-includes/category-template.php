@@ -272,7 +272,7 @@ function category_description( $category = 0 ) {
  * @since WP-2.1.0
  * @since WP-4.2.0 Introduced the `value_field` argument.
  * @since WP-4.6.0 Introduced the `required` argument.
- * @since CP-1.4.0 Introduced the `multiple` argument.
+ * @since 1.4.0 Introduced the `multiple` argument.
  *
  * @param string|array $args {
  *     Optional. Array or string of arguments to generate a categories drop-down element. See WP_Term_Query::__construct()
@@ -307,7 +307,7 @@ function category_description( $category = 0 ) {
  *     @type bool         $required          Whether the `<select>` element should have the HTML5 'required' attribute.
  *                                           Default false.
  *     @type string       $multiple          Whether the `<select>` element should have the HTML5 'multiple' attribute
- *                                           and an `[]` in the name. Accepts '' or 'multiple'. Default ''.
+ *                                           and an `[]` in the name. Accepts bool true or false. Default false.
  * }
  * @return string HTML content only if 'echo' argument is 0.
  */
@@ -334,7 +334,7 @@ function wp_dropdown_categories( $args = '' ) {
 		'option_none_value' => -1,
 		'value_field'       => 'term_id',
 		'required'          => false,
-		'multiple'          => '',
+		'multiple'          => false,
 	);
 
 	$defaults['selected'] = ( is_category() ) ? get_query_var( 'cat' ) : 0;
@@ -350,9 +350,16 @@ function wp_dropdown_categories( $args = '' ) {
 		);
 		$args['taxonomy'] = 'link_category';
 	}
-
+	
 	$r = wp_parse_args( $args, $defaults );
 	$option_none_value = $r['option_none_value'];
+	/**
+	 * Validate Boolean Values of $args.
+	 */
+	foreach ( array( 'hide_if_empty', 'required', 'multiple' ) as $bool ) {
+		$r[ $bool ] = wp_validate_boolean( $r[ $bool ] );
+	}
+
 
 	if ( ! isset( $r['pad_counts'] ) && $r['show_count'] && $r['hierarchical'] ) {
 		$r['pad_counts'] = true;
@@ -374,9 +381,9 @@ function wp_dropdown_categories( $args = '' ) {
 	$class = esc_attr( $r['class'] );
 	$id = $r['id'] ? esc_attr( $r['id'] ) : $name;
 	$required = $r['required'] ? 'required' : '';
-	$multiple = esc_attr( $r['multiple'] );
-	if ( 'multiple' === $multiple ) {
+	if ( $r['multiple'] ) {
 		$name = $name . '[]';
+		$multiple = 'multiple';
 	}
 	if ( ! $r['hide_if_empty'] || ! empty( $categories ) ) {
 		$output = "<select $required name='$name' id='$id' class='$class' $tab_index_attribute $multiple>\n";
