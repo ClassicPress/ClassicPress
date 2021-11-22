@@ -8,8 +8,24 @@
  * @subpackage streams
  */
 
+<<<<<<< HEAD
 if ( ! class_exists( 'POMO_Reader', false ) ):
 class POMO_Reader {
+=======
+if ( ! class_exists( 'POMO_Reader', false ) ) :
+	class POMO_Reader {
+
+		var $endian = 'little';
+		var $_post  = '';
+
+		/**
+		 * PHP5 constructor.
+		 */
+		function __construct() {
+			$this->is_overloaded = ( ( ini_get( 'mbstring.func_overload' ) & 2 ) != 0 ) && function_exists( 'mb_substr' ); // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
+			$this->_pos          = 0;
+		}
+>>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 
 	var $endian = 'little';
 	var $_post = '';

@@ -84,7 +84,11 @@
 		<exclude-pattern>/random_compat/random_bytes_mcrypt\.php$</exclude-pattern>
 	</rule>
 
+<<<<<<< HEAD
 	<!-- Whitelist the DB Class for use of `mysql_` extension in PHP < 7.0. -->
+=======
+	<!-- Whitelist the WP DB Class for use of `mysql_` extension in PHP < 7.0. -->
+>>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 	<rule ref="PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved">
 		<exclude-pattern>/src/wp-includes/wp-db\.php</exclude-pattern>
 	</rule>
