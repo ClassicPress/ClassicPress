@@ -226,11 +226,7 @@ function apply_filters_ref_array( $hook_name, $args ) {
 
 	// Do 'all' actions first.
 	if ( isset( $wp_filter['all'] ) ) {
-<<<<<<< HEAD
 		$wp_current_filter[] = $hook_name;
-=======
-		$wp_current_filter[] = $tag;
->>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 		_wp_call_all_hook( $all_args );
 	}
@@ -453,11 +449,7 @@ function do_action( $hook_name, ...$arg ) {
 
 	// Do 'all' actions first.
 	if ( isset( $wp_filter['all'] ) ) {
-<<<<<<< HEAD
 		$wp_current_filter[] = $hook_name;
-=======
-		$wp_current_filter[] = $tag;
->>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 		_wp_call_all_hook( $all_args );
 	}
@@ -530,11 +522,7 @@ function do_action_ref_array( $hook_name, $args ) {
 
 	// Do 'all' actions first.
 	if ( isset( $wp_filter['all'] ) ) {
-<<<<<<< HEAD
 		$wp_current_filter[] = $hook_name;
-=======
-		$wp_current_filter[] = $tag;
->>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 		_wp_call_all_hook( $all_args );
 	}
