@@ -17,7 +17,11 @@ $_COOKIE = array();
 
 // $HTTP_RAW_POST_DATA was deprecated in PHP 5.6 and removed in PHP 7.0.
 // phpcs:disable PHPCompatibility.Variables.RemovedPredefinedGlobalVariables.http_raw_post_dataDeprecatedRemoved
+<<<<<<< HEAD
 if ( !isset( $HTTP_RAW_POST_DATA ) ) {
+=======
+if ( ! isset( $HTTP_RAW_POST_DATA ) ) {
+>>>>>>> f40f5885e5 (General: Remove or add inline comments to `$HTTP_RAW_POST_DATA` occurrences.)
 	$HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
 }
 
