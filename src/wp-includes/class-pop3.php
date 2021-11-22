@@ -59,7 +59,11 @@ class POP3 {
         if(!empty($timeout)) {
             settype($timeout,"integer");
             $this->TIMEOUT = $timeout;
+<<<<<<< HEAD
         	set_time_limit($timeout);
+=======
+            set_time_limit($timeout);
+>>>>>>> 7e0a63f8c5 (General: More PHP compatibility adjustments.)
         }
         return true;
     }
