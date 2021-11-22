@@ -381,6 +381,7 @@ function wp_dropdown_categories( $args = '' ) {
 	$class = esc_attr( $r['class'] );
 	$id = $r['id'] ? esc_attr( $r['id'] ) : $name;
 	$required = $r['required'] ? 'required' : '';
+	$multiple = '';
 	if ( $r['multiple'] ) {
 		$name = $name . '[]';
 		$multiple = 'multiple';
