@@ -989,6 +989,7 @@ function setup_userdata($for_user_id = '') {
  * @since WP-2.3.0
  * @since WP-4.5.0 Added the 'display_name_with_login' value for 'show'.
  * @since WP-4.7.0 Added the `$role`, `$role__in`, and `$role__not_in` parameters.
+ * @since 1.4.0 Added the `$select_multiple` and `$value_field` parameters.
  *
  * @param array|string $args {
  *     Optional. Array or string of arguments to generate a drop-down of users.
@@ -1036,21 +1037,42 @@ function setup_userdata($for_user_id = '') {
  *                                                 these roles. Default empty array.
  *     @type array        $role__not_in            An array of role names to exclude. Users matching one or more of
  *                                                 these roles will not be included in results. Default empty array.
+ *     @type string       $value_field             The name of the user property to use as the `<select>` element's
+ *                                                 `value` attribute which is sent back to the server. Accepts only a
+ *                                                 user property which uniquely identifies a user (`ID`, `user_login`,
+ *                                                 `user_nicename` or `user_email`). Default `ID` to use the user ID.
+ *     @type bool         $select_multiple         Whether the `<select>` element should allow selecting multiple items.
+ *                                                 If true, then the `<select>` will have the HTML5 'multiple' attribute
+ *                                                 applied and `[]` will be appended to the `name` attribute. Default
+ *                                                 false.
  * }
  * @return string String of HTML content.
  */
 function wp_dropdown_users( $args = '' ) {
 	$defaults = array(
-		'show_option_all' => '', 'show_option_none' => '', 'hide_if_only_one_author' => '',
-		'orderby' => 'display_name', 'order' => 'ASC',
-		'include' => '', 'exclude' => '', 'multi' => 0,
-		'show' => 'display_name', 'echo' => 1,
-		'selected' => 0, 'name' => 'user', 'class' => '', 'id' => '',
-		'blog_id' => get_current_blog_id(), 'who' => '', 'include_selected' => false,
+		'show_option_all' => '',
+		'show_option_none' => '',
+		'hide_if_only_one_author' => '',
+		'orderby' => 'display_name',
+		'order' => 'ASC',
+		'include' => '',
+		'exclude' => '',
+		'multi' => 0,
+		'show' => 'display_name',
+		'echo' => 1,
+		'selected' => 0,
+		'name' => 'user',
+		'class' => '',
+		'id' => '',
+		'blog_id' => get_current_blog_id(),
+		'who' => '',
+		'include_selected' => false,
 		'option_none_value' => -1,
 		'role' => '',
 		'role__in' => array(),
 		'role__not_in' => array(),
+		'value_field' => 'ID',
+		'select_multiple' => false,
 	);
 
 	$defaults['selected'] = is_author() ? get_query_var( 'author' ) : 0;
@@ -1068,7 +1090,25 @@ function wp_dropdown_users( $args = '' ) {
 		$fields[] = $show;
 	}
 
-	$query_args['fields'] = $fields;
+	$value_field = ! empty( $r['value_field'] ) ? $r['value_field'] : 'ID';
+	// Only allow selecting users by fields that should be unique per user.
+	// Otherwise, a user dropdown is not the right data model for the problem
+	// that the developer is attempting to solve.
+	switch ( $value_field ) {
+		case 'ID':
+		case 'user_login':
+		case 'user_nicename':
+		case 'user_email':
+			// These fields are valid, and may need to be queried.
+			$fields[] = $value_field;
+			break;
+		default:
+			// Another field was specified - fall back to the default of 'ID'.
+			$value_field = 'ID';
+			break;
+	}
+
+	$query_args['fields'] = array_unique( $fields );
 
 	$show_option_all = $r['show_option_all'];
 	$show_option_none = $r['show_option_none'];
@@ -1094,7 +1134,13 @@ function wp_dropdown_users( $args = '' ) {
 		} else {
 			$id = $r['id'] ? " id='" . esc_attr( $r['id'] ) . "'" : " id='$name'";
 		}
-		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "'>\n";
+		if ( $r['select_multiple'] === true ) {
+			$name .= '[]';
+			$multiple_attr = ' multiple';
+		} else {
+			$multiple_attr = '';
+		}
+		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "'$multiple_attr>\n";
 
 		if ( $show_option_all ) {
 			$output .= "\t<option value='0'>$show_option_all</option>\n";
@@ -1119,8 +1165,11 @@ function wp_dropdown_users( $args = '' ) {
 				$selected_user = get_userdata( $r['selected'] );
 				if ( $selected_user ) {
 					$users[] = $selected_user;
-				} else {
-					// The selected user ID was not found as a valid user.
+				} else if ( $value_field === 'ID' ) {
+					// The selected user ID was not found as a valid user. Note
+					// that this logic can only be applied if the 'value_field'
+					// parameter is the default 'ID', otherwise we have no way
+					// of knowing what the 'value' should be for this user!
 					$users[] = (object) array(
 						'_invalid' => true,
 						'ID'       => $r['selected'],
@@ -1143,10 +1192,11 @@ function wp_dropdown_users( $args = '' ) {
 			}
 
 			$_selected = selected( $user->ID, $r['selected'], false );
-			$output .= "\t<option value='$user->ID'$_selected>" . esc_html( $display ) . "</option>\n";
+			$select_value = esc_attr( $user->$value_field );
+			$output .= "\t<option value='$select_value'$_selected>" . esc_html( $display ) . "</option>\n";
 		}
 
-		$output .= "</select>";
+		$output .= '</select>';
 	}
 
 	/**
