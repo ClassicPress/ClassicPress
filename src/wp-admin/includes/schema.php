@@ -448,13 +448,8 @@ function populate_options( array $options = array() ) {
 		'db_version' => $wp_db_version,
 
 		// 2.0.1
-<<<<<<< HEAD
-		'uploads_use_yearmonth_folders' => 1,
-		'upload_path' => '',
-=======
 		'uploads_use_yearmonth_folders'   => 1,
 		'upload_path'                     => '',
->>>>>>> 8e2de8212b (General: Fix various issues flagged by the PHPCompatibilityWP PHPCS ruleset.)
 
 		// 2.1
 		'blog_public' => '1',
