@@ -962,6 +962,67 @@ function validate_plugin($plugin) {
 }
 
 /**
+ * Validate the plugin requirements for WP version and PHP version.
+ *
+ * @since WP-5.2.0
+ *
+ * @param string $plugin Path to the plugin file relative to the plugins directory.
+ * @return true|WP_Error True if requirements are met, WP_Error on failure.
+ */
+function validate_plugin_requirements( $plugin ) {
+	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
+
+	if ( file_exists( $readme_file ) ) {
+		$plugin_data = get_file_data(
+			$readme_file,
+			array(
+				'requires'     => 'Requires at least',
+				'requires_php' => 'Requires PHP',
+			),
+			'plugin'
+		);
+	} else {
+		return true;
+	}
+
+	$plugin_data['wp_compatible'] = is_wp_version_compatible( $plugin_data['requires'] );
+	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
+
+	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
+
+	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
+		return new WP_Error(
+			'plugin_wp_php_incompatible',
+			sprintf(
+				/* translators: %s: plugin name */
+				__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
+		);
+	} elseif ( ! $plugin_data['php_compatible'] ) {
+		return new WP_Error(
+			'plugin_php_incompatible',
+			sprintf(
+				/* translators: %s: plugin name */
+				__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
+		);
+	} elseif ( ! $plugin_data['wp_compatible'] ) {
+		return new WP_Error(
+			'plugin_wp_incompatible',
+			sprintf(
+				/* translators: %s: plugin name */
+				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
+		);
+	}
+
+	return true;
+}
+
+/**
  * Whether the plugin can be uninstalled.
  *
  * @since WP-2.7.0
