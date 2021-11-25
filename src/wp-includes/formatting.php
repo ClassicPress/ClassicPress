@@ -5084,7 +5084,6 @@ function _print_emoji_detection_script() {
 		'svgExt' => apply_filters( 'emoji_svg_ext', '.svg' ),
 	);
 
-	$version   = 'ver=' . get_bloginfo( 'version' );
 	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/javascript"';
 
 	if ( SCRIPT_DEBUG ) {
