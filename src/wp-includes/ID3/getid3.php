@@ -257,11 +257,7 @@ class getID3
 	 */
 	protected $startup_warning = '';
 
-<<<<<<< HEAD
-	const VERSION           = '1.9.19-201912131005';
-=======
 	const VERSION           = '1.9.20-202006061653';
->>>>>>> 3acf97a7ce (External Libraries: Update getID3 to version 1.9.20.)
 	const FREAD_BUFFER_SIZE = 32768;
 
 	const ATTACHMENTS_NONE   = false;
@@ -313,20 +309,14 @@ class getID3
 		if (version_compare(PHP_VERSION, '7.4.0', '<')) {
 			// Check for magic_quotes_runtime
 			if (function_exists('get_magic_quotes_runtime')) {
-<<<<<<< HEAD
-=======
 				// phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_runtimeDeprecated
->>>>>>> 3acf97a7ce (External Libraries: Update getID3 to version 1.9.20.)
 				if (get_magic_quotes_runtime()) {
 					$this->startup_error .= 'magic_quotes_runtime must be disabled before running getID3(). Surround getid3 block by set_magic_quotes_runtime(0) and set_magic_quotes_runtime(1).'."\n";
 				}
 			}
 			// Check for magic_quotes_gpc
 			if (function_exists('get_magic_quotes_gpc')) {
-<<<<<<< HEAD
-=======
 				// phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
->>>>>>> 3acf97a7ce (External Libraries: Update getID3 to version 1.9.20.)
 				if (get_magic_quotes_gpc()) {
 					$this->startup_error .= 'magic_quotes_gpc must be disabled before running getID3(). Surround getid3 block by set_magic_quotes_gpc(0) and set_magic_quotes_gpc(1).'."\n";
 				}
@@ -1627,13 +1617,8 @@ class getID3
 			// page sequence numbers likely happens for OggSpeex and OggFLAC as well, but
 			// currently vorbiscomment only works on OggVorbis files.
 
-<<<<<<< HEAD
-			if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) { // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
-=======
 			// phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
 			if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
-
->>>>>>> 3acf97a7ce (External Libraries: Update getID3 to version 1.9.20.)
 				$this->warning('Failed making system call to vorbiscomment.exe - '.$algorithm.'_data is incorrect - error returned: PHP running in Safe Mode (backtick operator not available)');
 				$this->info[$algorithm.'_data'] = false;
 
