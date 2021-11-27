@@ -5590,8 +5590,14 @@ function mbstring_binary_safe_encoding( $reset = false ) {
 	static $encodings = array();
 	static $overloaded = null;
 
+<<<<<<< HEAD
 	if ( is_null( $overloaded ) )
 		$overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 );
+=======
+	if ( is_null( $overloaded ) ) {
+		$overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 ); // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
+	}
+>>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 
 	if ( false === $overloaded )
 		return;
