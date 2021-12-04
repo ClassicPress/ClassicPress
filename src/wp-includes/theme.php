@@ -2210,6 +2210,7 @@ function get_theme_starter_content() {
  * @since WP-4.1.0 The `title-tag` feature was added
  * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
  * @since WP-4.7.0 The `starter-content` feature was added
+ * @since CP-1.x.0 The `body-only` feature was added
  *
  * @global array $_wp_theme_features
  *
@@ -2422,6 +2423,23 @@ function add_theme_support( $feature ) {
 
 				return false;
 			}
+
+			break;
+
+		case 'body-only' :
+			add_theme_support( 'automatic-feed-links' );
+			add_theme_support( 'title-tag' );
+			add_theme_support( 'html5', array(
+				'comment-list',
+				'comment-form',
+				'gallery',
+				'caption',
+				'search-form',
+				'script',
+				'style',
+				'navigation-widgets',
+			) );
+
 	}
 
 	$_wp_theme_features[ $feature ] = $args;
