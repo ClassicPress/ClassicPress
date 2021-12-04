@@ -113,15 +113,6 @@ tinymce.PluginManager.add( 'wordpress', function( editor ) {
 						'alt="" title="' + title + '" data-mce-resize="false" data-mce-placeholder="1" />' );
 			}
 
-			if ( event.load && event.format !== 'raw' ) {
-				if ( hasWpautop ) {
-					event.content = wp.editor.autop( event.content );
-				} else {
-					// Prevent creation of paragraphs out of multiple HTML comments.
-					event.content = event.content.replace( /-->\s+<!--/g, '--><!--' );
-				}
-			}
-
 			if ( event.content.indexOf( '<script' ) !== -1 || event.content.indexOf( '<style' ) !== -1 ) {
 				event.content = event.content.replace( /<(script|style)[^>]*>[\s\S]*?<\/\1>/g, function( match, tag ) {
 					return '<img ' +
@@ -613,9 +604,6 @@ tinymce.PluginManager.add( 'wordpress', function( editor ) {
 
 		if ( hasWpautop ) {
 			event.content = wp.editor.removep( event.content );
-		} else {
-			// Restore formatting of block boundaries.
-			event.content = event.content.replace( /-->\s*<!-- wp:/g, '-->\n\n<!-- wp:' );
 		}
 	});
 

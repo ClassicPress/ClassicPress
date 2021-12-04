@@ -870,8 +870,9 @@ function enqueue_embed_scripts() {
  * @since WP-4.4.0
  */
 function print_embed_styles() {
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
-	<style type="text/css">
+	<style<?php echo $type_attr; ?>>
 	<?php
 		if ( SCRIPT_DEBUG ) {
 			readfile( ABSPATH . WPINC . "/css/wp-embed-template.css" );
@@ -901,8 +902,9 @@ function print_embed_styles() {
  * @since WP-4.4.0
  */
 function print_embed_scripts() {
+	$type_attr = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 	?>
-	<script type="text/javascript">
+	<script<?php echo $type_attr; ?>>
 	<?php
 		if ( SCRIPT_DEBUG ) {
 			readfile( ABSPATH . WPINC . "/js/wp-embed-template.js" );
