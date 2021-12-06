@@ -22,12 +22,23 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		}
 		$php = wp_remote_retrieve_body( $response );
 
+<<<<<<< HEAD
 		preg_match_all(
 			'#<tr class="(security|stable)">\s*<td>\s*<a [^>]*>\s*([0-9.]*)#s',
 			$php,
 			$phpmatches
 		);
 		$this->assertNotEmpty( $phpmatches );
+=======
+		preg_match_all( '#<tr class="stable">\s*<td>\s*<a [^>]*>\s*([0-9.]*)#s', $response_body, $phpmatches );
+
+		// TODO: Enable this check once PHP 8.0 compatibility is achieved.
+		// $this->assertContains( $matches[1], $phpmatches[1], "readme.html's Recommended PHP version is too old. Remember to update the WordPress.org Requirements page, too." );
+
+		preg_match( '#Recommendations.*MySQL</a> version <strong>([0-9.]*)#s', $readme, $matches );
+
+		$response = wp_remote_get( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
+>>>>>>> 8de99e840f (Tests: Temporarily disable the check that the current recommended PHP version is actively supported.)
 
 		$this->assertContains(
 			$matches[1],
