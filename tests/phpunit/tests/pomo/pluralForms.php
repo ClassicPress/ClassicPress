@@ -53,7 +53,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 			if ( is_wp_error( $filename ) ) {
 				return array();
 			}
-			require_once $filename;			
+			require_once $filename;
 		}
 
 		$locales = GP_Locales::locales();
@@ -74,15 +74,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	 * @group external-http
 	 */
 	public function test_regression( $lang, $nplurals, $expression ) {
-<<<<<<< HEAD
-		if ( version_compare( phpversion(), '7.2', '>=' ) ) {
-			$this->markTestSkipped( 'Lambda functions are deprecated in PHP 7.2' );
-		}
-
-		require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/plural-form-function.php';
-=======
 		require_once dirname( dirname( __DIR__ ) ) . '/includes/plural-form-function.php';
->>>>>>> f0733600c9 (Code Modernization: Change `create_function()` in `phpunit/includes/plural-form-function.php` to closure.)
 
 		$parenthesized = self::parenthesize_plural_expression( $expression );
 		$old_style = tests_make_plural_form_function( $nplurals, $parenthesized );
