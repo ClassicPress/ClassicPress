@@ -660,7 +660,14 @@ function locale_stylesheet() {
 	$stylesheet = get_locale_stylesheet_uri();
 	if ( empty($stylesheet) )
 		return;
-	echo '<link rel="stylesheet" href="' . $stylesheet . '" type="text/css" media="screen" />';
+
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
+	printf(
+		'<link rel="stylesheet" href="%s"%s media="screen" />',
+		$stylesheet,
+		$type_attr
+	);
 }
 
 /**
@@ -679,6 +686,11 @@ function locale_stylesheet() {
  */
 function switch_theme( $stylesheet ) {
 	global $wp_theme_directories, $wp_customize, $sidebars_widgets;
+
+	$requirements = validate_theme_requirements( $stylesheet );
+	if ( is_wp_error( $requirements ) ) {
+		wp_die( $requirements );
+	}
 
 	$_sidebars_widgets = null;
 	if ( 'wp_ajax_customize_save' === current_action() ) {
@@ -812,6 +824,78 @@ function validate_current_theme() {
 
 	switch_theme( $default->get_stylesheet() );
 	return false;
+}
+
+/**
+ * Validates the theme requirements for WordPress version and PHP version.
+ *
+ * Uses the information from `Requires at least` and `Requires PHP` headers
+ * defined in the theme's `style.css` file.
+ *
+ * If the headers are not present in the theme's stylesheet file,
+ * `readme.txt` is also checked as a fallback.
+ *
+ * @since WP-5.5.0
+ *
+ * @param string $stylesheet Directory name for the theme.
+ * @return true|WP_Error True if requirements are met, WP_Error on failure.
+ */
+function validate_theme_requirements( $stylesheet ) {
+	$theme = wp_get_theme( $stylesheet );
+
+	$requirements = array(
+		'requires'     => ! empty( $theme->get( 'RequiresWP' ) ) ? $theme->get( 'RequiresWP' ) : '',
+		'requires_php' => ! empty( $theme->get( 'RequiresPHP' ) ) ? $theme->get( 'RequiresPHP' ) : '',
+	);
+
+	$readme_file = $theme->theme_root . '/' . $stylesheet . '/readme.txt';
+
+	if ( file_exists( $readme_file ) ) {
+		$readme_headers = get_file_data(
+			$readme_file,
+			array(
+				'requires'     => 'Requires at least',
+				'requires_php' => 'Requires PHP',
+			),
+			'theme'
+		);
+
+		$requirements = array_merge( $readme_headers, $requirements );
+	}
+
+	$compatible_wp  = is_wp_version_compatible( $requirements['requires'] );
+	$compatible_php = is_php_version_compatible( $requirements['requires_php'] );
+
+	if ( ! $compatible_wp && ! $compatible_php ) {
+		return new WP_Error(
+			'theme_wp_php_incompatible',
+			sprintf(
+				/* translators: %s: Theme name. */
+				_x( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.', 'theme' ),
+				$theme->display( 'Name' )
+			)
+		);
+	} elseif ( ! $compatible_php ) {
+		return new WP_Error(
+			'theme_php_incompatible',
+			sprintf(
+				/* translators: %s: Theme name. */
+				_x( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.', 'theme' ),
+				$theme->display( 'Name' )
+			)
+		);
+	} elseif ( ! $compatible_wp ) {
+		return new WP_Error(
+			'theme_wp_incompatible',
+			sprintf(
+				/* translators: %s: Theme name. */
+				_x( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.', 'theme' ),
+				$theme->display( 'Name' )
+			)
+		);
+	}
+
+	return true;
 }
 
 /**
@@ -1555,7 +1639,8 @@ function _custom_background_cb() {
 
 	if ( ! $background && ! $color ) {
 		if ( is_customize_preview() ) {
-			echo '<style type="text/css" id="custom-background-css"></style>';
+			$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+			printf( '<style%s id="custom-background-css"></style>', $type_attr );
 		}
 		return;
 	}
@@ -1607,9 +1692,11 @@ function _custom_background_cb() {
 		$attachment = " background-attachment: $attachment;";
 
 		$style .= $image . $position . $size . $repeat . $attachment;
+
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	}
-?>
-<style type="text/css" id="custom-background-css">
+	?>
+<style<?php echo $type_attr; ?> id="custom-background-css">
 body.custom-background { <?php echo trim( $style ); ?> }
 </style>
 <?php
@@ -1622,8 +1709,10 @@ body.custom-background { <?php echo trim( $style ); ?> }
  */
 function wp_custom_css_cb() {
 	$styles = wp_get_custom_css();
-	if ( $styles || is_customize_preview() ) : ?>
-		<style type="text/css" id="wp-custom-css">
+	if ( $styles || is_customize_preview() ) :
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+		?>
+		<style<?php echo $type_attr; ?> id="wp-custom-css">
 			<?php echo strip_tags( $styles ); // Note that esc_html() cannot be used because `div &gt; span` is not interpreted properly. ?>
 		</style>
 	<?php endif;
@@ -2210,6 +2299,15 @@ function get_theme_starter_content() {
  * @since WP-4.1.0 The `title-tag` feature was added
  * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
  * @since WP-4.7.0 The `starter-content` feature was added
+
+ * Example usage:
+ *
+ *     add_theme_support( 'title-tag' );
+ *     add_theme_support( 'custom-logo', array(
+ *         'height' => 480,
+ *         'width'  => 720,
+ *     ) );
+ *
  *
  * @global array $_wp_theme_features
  *
@@ -2479,9 +2577,10 @@ function _custom_logo_header_styles() {
 		$classes = array_map( 'sanitize_html_class', $classes );
 		$classes = '.' . implode( ', .', $classes );
 
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 		?>
 		<!-- Custom Logo: hide header text -->
-		<style id="custom-logo-css" type="text/css">
+		<style id="custom-logo-css"<?php echo $type_attr; ?>>
 			<?php echo $classes; ?> {
 				position: absolute;
 				clip: rect(1px, 1px, 1px, 1px);
@@ -3011,16 +3110,16 @@ function wp_customize_url( $stylesheet = null ) {
 function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
-	$cross_domain = ( strtolower( $admin_origin[ 'host' ] ) != strtolower( $home_origin[ 'host' ] ) );
-
+	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
+	$type_attr    = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 	?>
 	<!--[if lte IE 8]>
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			document.body.className = document.body.className.replace( /(^|\s)(no-)?customize-support(?=\s|$)/, '' ) + ' no-customize-support';
 		</script>
 	<![endif]-->
 	<!--[if gte IE 9]><!-->
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			(function() {
 				var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
 

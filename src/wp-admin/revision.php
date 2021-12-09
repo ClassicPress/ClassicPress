@@ -76,7 +76,7 @@ default :
 	$post_title     = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
 	/* translators: 1: Post title */
 	$h1             = sprintf( __( 'Compare Revisions of &#8220;%1$s&#8221;' ), $post_title );
-	$return_to_post = '<a href="' . $post_edit_link . '">' . __( '&larr; Return to editor' ) . '</a>';
+	$return_to_post = '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
 	$title          = __( 'Revisions' );
 
 	$redirect = false;

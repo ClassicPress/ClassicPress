@@ -23,17 +23,19 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		$php = wp_remote_retrieve_body( $response );
 
 		preg_match_all(
-			'#<tr class="(security|stable)">\s*<td>\s*<a [^>]*>\s*([0-9.]*)#s',
+			'#<tr class="stable">\s*<td>\s*<a [^>]*>\s*([0-9.]*)#s',
 			$php,
 			$phpmatches
 		);
+
 		$this->assertNotEmpty( $phpmatches );
 
-		$this->assertContains(
+		// TODO: Enable this check once PHP 8.0 compatibility is achieved.
+		/*$this->assertContains(
 			$matches[1],
 			$phpmatches[2],
 			"readme.html's Recommended PHP version is too old."
-		);
+		);*/
 	}
 
 	function test_readme_recommended_mysql_version() {

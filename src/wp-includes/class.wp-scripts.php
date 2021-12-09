@@ -123,6 +123,17 @@ class WP_Scripts extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
+	 * Holds a string which contains the type attribute for script tag.
+	 *
+	 * If the current theme does not declare HTML5 support for 'script',
+	 * then it initializes as `type='text/javascript'`.
+	 *
+	 * @since WP-5.3.0
+	 * @var string
+	 */
+	private $type_attr = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since WP-2.6.0
@@ -138,6 +149,14 @@ class WP_Scripts extends WP_Dependencies {
 	 * @since WP-3.4.0
 	 */
 	public function init() {
+		if (
+			function_exists( 'is_admin' ) && ! is_admin()
+		&&
+			function_exists( 'current_theme_supports' ) && ! current_theme_supports( 'html5', 'script' )
+		) {
+			$this->type_attr = " type='text/javascript'";
+		}
+
 		/**
 		 * Fires when the WP_Scripts instance is initialized.
 		 *
@@ -202,10 +221,19 @@ class WP_Scripts extends WP_Dependencies {
 		if ( !$echo )
 			return $output;
 
-		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5
-		echo "/* <![CDATA[ */\n";
+		echo "<script{$this->type_attr}>\n";
+
+		// CDATA is not needed for HTML 5.
+		if ( $this->type_attr ) {
+			echo "/* <![CDATA[ */\n";
+		}
+
 		echo "$output\n";
-		echo "/* ]]> */\n";
+
+		if ( $this->type_attr ) {
+			echo "/* ]]> */\n";
+		}
+
 		echo "</script>\n";
 
 		return true;
@@ -262,11 +290,17 @@ class WP_Scripts extends WP_Dependencies {
 		$after_handle = $this->print_inline_script( $handle, 'after', false );
 
 		if ( $before_handle ) {
-			$before_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $before_handle );
+			$before_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $before_handle );
 		}
 
 		if ( $after_handle ) {
-			$after_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $after_handle );
+			$after_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $after_handle );
+		}
+
+		if ( $before_handle || $after_handle ) {
+			$inline_script_tag = $cond_before . $before_handle . $after_handle . $cond_after;
+		} else {
+			$inline_script_tag = '';
 		}
 
 		if ( $this->do_concat ) {
@@ -327,8 +361,9 @@ class WP_Scripts extends WP_Dependencies {
 		if ( ! $src )
 			return true;
 
-		$tag = "{$cond_before}{$before_handle}<script type='text/javascript' src='$src'></script>\n{$after_handle}{$cond_after}";
-
+		$tag  = $cond_before . $before_handle;
+		$tag .= sprintf( "<script%s src='%s'></script>\n", $this->type_attr, $src );
+		$tag .= $after_handle . $cond_after;
 		/**
 		 * Filters the HTML script tag of an enqueued script.
 		 *
@@ -397,7 +432,7 @@ class WP_Scripts extends WP_Dependencies {
 		$output = trim( implode( "\n", $output ), "\n" );
 
 		if ( $echo ) {
-			printf( "<script type='text/javascript'>\n%s\n</script>\n", $output );
+			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
 		}
 
 		return $output;

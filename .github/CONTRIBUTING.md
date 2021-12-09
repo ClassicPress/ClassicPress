@@ -18,6 +18,7 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 - [Setting up a local development environment](#setting-up-a-local-development-environment)
 - [Tips for good PRs](#tips-for-good-prs)
 - [How to review a PR](#how-to-review-a-pr)
+  - [Merging PRs](#merging-prs)
 - [Automated tests](#automated-tests)
 - [Backporting changes from WordPress](#backporting-changes-from-wordpress)
   - [Making a backport PR](#making-a-backport-pr)
@@ -112,6 +113,12 @@ At this point you have a working local development environment. Here are some fu
 5. Run tests as the PR suggests, or stress test the PR trying to confirm whether the change works as intended.
 6. Submit your feedback in the comment section of the same PR on the CP Github repo. Screenshots, gifs, video and text instructions documenting the tests are very useful to document your testing.
 7. Thank you for your time and effort in helping us review PRs.
+
+### Merging PRs
+
+_This section only applies to **core committers** - people who have access to merge changes to ClassicPress._
+
+See [MAINTAINING.md](MAINTAINING.md) for some guidelines for maintaining ClassicPress.
 
 ## Automated tests
 
