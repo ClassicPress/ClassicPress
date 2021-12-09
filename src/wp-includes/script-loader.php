@@ -1340,12 +1340,10 @@ function _print_scripts() {
 	if ( $zip && defined('ENFORCE_GZIP') && ENFORCE_GZIP )
 		$zip = 'gzip';
 
-	$concat    = trim( $wp_scripts->concat, ', ' );
-	$type_attr = current_theme_supports( 'html5', 'script' ) ? '' : " type='text/javascript'";
+	if ( $concat = trim( $wp_scripts->concat, ', ' ) ) {
 
-	if ( $concat ) {
-		if ( ! empty( $wp_scripts->print_code ) ) {
-			echo "\n<script{$type_attr}>\n";
+		if ( !empty($wp_scripts->print_code) ) {
+			echo "\n<script type='text/javascript'>\n";
 			echo "/* <![CDATA[ */\n"; // not needed in HTML 5
 			echo $wp_scripts->print_code;
 			echo "/* ]]> */\n";
@@ -1356,7 +1354,7 @@ function _print_scripts() {
 		$concat = 'load%5B%5D=' . implode( '&load%5B%5D=', $concat );
 
 		$src = $wp_scripts->base_url . "/wp-admin/load-scripts.php?c={$zip}&" . $concat . '&ver=' . $wp_scripts->default_version;
-		echo "<script{$type_attr} src='" . esc_attr( $src ) . "'></script>\n";
+		echo "<script type='text/javascript' src='" . esc_attr($src) . "'></script>\n";
 	}
 
 	if ( !empty($wp_scripts->print_html) )
@@ -1513,12 +1511,8 @@ function _print_styles() {
 	$wp_styles = wp_styles();
 
 	$zip = $compress_css ? 1 : 0;
-	if ( $zip && defined('ENFORCE_GZIP') && ENFORCE_GZIP ) {
+	if ( $zip && defined('ENFORCE_GZIP') && ENFORCE_GZIP )
 		$zip = 'gzip';
-	}
-
-	$concat    = trim( $wp_styles->concat, ', ' );
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 
 	if ( $concat = trim( $wp_styles->concat, ', ' ) ) {
 		$dir = $wp_styles->text_direction;
@@ -1527,15 +1521,11 @@ function _print_styles() {
 		$concat = str_split( $concat, 128 );
 		$concat = 'load%5B%5D=' . implode( '&load%5B%5D=', $concat );
 
-		foreach ( $concat as $key => $chunk ) {
-			$concatenated .= "&load%5Bchunk_{$key}%5D={$chunk}";
-		}
+		$href = $wp_styles->base_url . "/wp-admin/load-styles.php?c={$zip}&dir={$dir}&" . $concat . '&ver=' . $ver;
+		echo "<link rel='stylesheet' href='" . esc_attr($href) . "' type='text/css' media='all' />\n";
 
-		$href = $wp_styles->base_url . "/wp-admin/load-styles.php?c={$zip}&dir={$dir}" . $concatenated . '&ver=' . $ver;
-		echo "<link rel='stylesheet' href='" . esc_attr( $href ) . "'{$type_attr} media='all' />\n";
-
-		if ( ! empty( $wp_styles->print_code ) ) {
-			echo "<style{$type_attr}>\n";
+		if ( !empty($wp_styles->print_code) ) {
+			echo "<style type='text/css'>\n";
 			echo $wp_styles->print_code;
 			echo "\n</style>\n";
 		}
