@@ -191,11 +191,11 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		add_theme_support( 'html5', array( 'script' ) );
 
 		$GLOBALS['wp_scripts']                  = new WP_Scripts();
-		$GLOBALS['wp_scripts']->default_version = get_bloginfo( 'version' );
+		$GLOBALS['wp_scripts']->default_version = classicpress_asset_version( 'script' );
 
 		wp_enqueue_script( 'empty-deps-no-version', 'example.com' );
 
-		$ver      = get_bloginfo( 'version' );
+		$ver      = classicpress_asset_version( 'style' );
 		$expected = "<script src='http://example.com?ver=$ver'></script>\n";
 
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );

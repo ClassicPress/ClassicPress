@@ -195,11 +195,11 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		add_theme_support( 'html5', array( 'style' ) );
 
 		$GLOBALS['wp_styles']                  = new WP_Styles();
-		$GLOBALS['wp_styles']->default_version = get_bloginfo( 'version' );
+		$GLOBALS['wp_styles']->default_version = classicpress_asset_version( 'style' );
 
 		wp_enqueue_style( 'no-deps-no-version', 'example.com' );
 
-		$ver      = get_bloginfo( 'version' );
+		$ver      = classicpress_asset_version( 'style' );
 		$expected = "<link rel='stylesheet' id='no-deps-no-version-css'  href='http://example.com?ver=$ver' media='all' />\n";
 
 		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
