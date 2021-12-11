@@ -130,17 +130,13 @@ class WP_Styles extends WP_Dependencies {
 		if ( !parent::do_item($handle) )
 			return false;
 
-<<<<<<< HEAD
-		$obj = $this->registered[$handle];
-		if ( null === $obj->ver )
-=======
 		$obj = $this->registered[ $handle ];
 
 		if ( null === $obj->ver ) {
->>>>>>> cbf8f438d7 (Script/Style Dependencies: Simplify some logic in `WP_Styles::do_item()`.)
 			$ver = '';
-		else
+		} else {
 			$ver = $obj->ver ? $obj->ver : $this->default_version;
+		}
 
 		if ( isset($this->args[$handle]) )
 			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
@@ -166,11 +162,7 @@ class WP_Styles extends WP_Dependencies {
 		}
 
 		if ( $this->do_concat ) {
-<<<<<<< HEAD
-			if ( $this->in_default_dir($obj->src) && !isset($obj->extra['conditional']) && !isset($obj->extra['alt']) ) {
-=======
 			if ( $this->in_default_dir( $src ) && ! $conditional && ! isset( $obj->extra['alt'] ) ) {
->>>>>>> cbf8f438d7 (Script/Style Dependencies: Simplify some logic in `WP_Styles::do_item()`.)
 				$this->concat .= "$handle,";
 				$this->concat_version .= "$handle$ver";
 
@@ -218,20 +210,12 @@ class WP_Styles extends WP_Dependencies {
 		 * @param string $href   The stylesheet's source URL.
 		 * @param string $media  The stylesheet's media attribute.
 		 */
-<<<<<<< HEAD
-		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media);
-		if ( 'rtl' === $this->text_direction && isset($obj->extra['rtl']) && $obj->extra['rtl'] ) {
-			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
-				$suffix = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
-				$rtl_href = str_replace( "{$suffix}.css", "-rtl{$suffix}.css", $this->_css_href( $obj->src , $ver, "$handle-rtl" ));
-=======
 		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media );
 
 		if ( 'rtl' === $this->text_direction && isset( $obj->extra['rtl'] ) && $obj->extra['rtl'] ) {
 			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
 				$suffix   = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
 				$rtl_href = str_replace( "{$suffix}.css", "-rtl{$suffix}.css", $this->_css_href( $src, $ver, "$handle-rtl" ) );
->>>>>>> cbf8f438d7 (Script/Style Dependencies: Simplify some logic in `WP_Styles::do_item()`.)
 			} else {
 				$rtl_href = $this->_css_href( $obj->extra['rtl'], $ver, "$handle-rtl" );
 			}
