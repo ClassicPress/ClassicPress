@@ -73,7 +73,14 @@ function twentyseventeen_setup() {
 		'comment-list',
 		'gallery',
 		'caption',
+<<<<<<< HEAD
 	) );
+=======
+			'script',
+			'style',
+		)
+	);
+>>>>>>> baaaef5b63 (Bundled Themes: Declare HTML5 support for scripts and styles.)
 
 	/*
 	 * Enable support for Post Formats.
