@@ -123,6 +123,17 @@ class WP_Scripts extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
+	 * Holds a string which contains the type attribute for script tag.
+	 *
+	 * If the current theme does not declare HTML5 support for 'script',
+	 * then it initializes as `type='text/javascript'`.
+	 *
+	 * @since 5.3.0
+	 * @var string
+	 */
+	private $type_attr = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since WP-2.6.0
@@ -130,6 +141,10 @@ class WP_Scripts extends WP_Dependencies {
 	public function __construct() {
 		$this->init();
 		add_action( 'init', array( $this, 'init' ), 0 );
+
+		if ( ! current_theme_supports( 'html5', 'script' ) ) {
+			$this->type_attr = " type='text/javascript'";
+		}
 	}
 
 	/**
@@ -202,7 +217,11 @@ class WP_Scripts extends WP_Dependencies {
 		if ( !$echo )
 			return $output;
 
+<<<<<<< HEAD
 		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5
+=======
+		echo "<script{$this->type_attr}>\n"; // CDATA and type="text/javascript" is not needed for HTML 5.
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 		echo "/* <![CDATA[ */\n";
 		echo "$output\n";
 		echo "/* ]]> */\n";
@@ -262,13 +281,22 @@ class WP_Scripts extends WP_Dependencies {
 		$after_handle = $this->print_inline_script( $handle, 'after', false );
 
 		if ( $before_handle ) {
-			$before_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $before_handle );
+			$before_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $before_handle );
 		}
 
 		if ( $after_handle ) {
-			$after_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $after_handle );
+			$after_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $after_handle );
 		}
 
+<<<<<<< HEAD
+=======
+		if ( $before_handle || $after_handle ) {
+			$inline_script_tag = $cond_before . $before_handle . $after_handle . $cond_after;
+		} else {
+			$inline_script_tag = '';
+		}
+
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 		if ( $this->do_concat ) {
 			/**
 			 * Filters the script loader source.
@@ -314,6 +342,14 @@ class WP_Scripts extends WP_Dependencies {
 			return true;
 		}
 
+<<<<<<< HEAD
+=======
+		$translations = $this->print_translations( $handle, false );
+		if ( $translations ) {
+			$translations = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $translations );
+		}
+
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 		if ( ! preg_match( '|^(https?:)?//|', $src ) && ! ( $this->content_url && 0 === strpos( $src, $this->content_url ) ) ) {
 			$src = $this->base_url . $src;
 		}
@@ -327,7 +363,13 @@ class WP_Scripts extends WP_Dependencies {
 		if ( ! $src )
 			return true;
 
+<<<<<<< HEAD
 		$tag = "{$cond_before}{$before_handle}<script type='text/javascript' src='$src'></script>\n{$after_handle}{$cond_after}";
+=======
+		$tag  = $translations . $cond_before . $before_handle;
+		$tag .= sprintf( "<script%s src='%s'></script>\n", $this->type_attr, $src );
+		$tag .= $after_handle . $cond_after;
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 
 		/**
 		 * Filters the HTML script tag of an enqueued script.
@@ -397,7 +439,7 @@ class WP_Scripts extends WP_Dependencies {
 		$output = trim( implode( "\n", $output ), "\n" );
 
 		if ( $echo ) {
-			printf( "<script type='text/javascript'>\n%s\n</script>\n", $output );
+			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
 		}
 
 		return $output;
@@ -467,6 +509,75 @@ class WP_Scripts extends WP_Dependencies {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Sets a translation textdomain.
+	 *
+	 * @since 5.0.0
+	 * @since 5.1.0 The `$domain` parameter was made optional.
+	 *
+	 * @param string $handle Name of the script to register a translation domain to.
+	 * @param string $domain Optional. Text domain. Default 'default'.
+	 * @param string $path   Optional. The full file path to the directory containing translation files.
+	 * @return bool True if the text domain was registered, false if not.
+	 */
+	public function set_translations( $handle, $domain = 'default', $path = null ) {
+		if ( ! isset( $this->registered[ $handle ] ) ) {
+			return false;
+		}
+
+		/** @var \_WP_Dependency $obj */
+		$obj = $this->registered[ $handle ];
+
+		if ( ! in_array( 'wp-i18n', $obj->deps, true ) ) {
+			$obj->deps[] = 'wp-i18n';
+		}
+
+		return $obj->set_translations( $domain, $path );
+	}
+
+	/**
+	 * Prints translations set for a specific handle.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $handle Name of the script to add the inline script to. Must be lowercase.
+	 * @param bool   $echo   Optional. Whether to echo the script instead of just returning it.
+	 *                       Default true.
+	 * @return string|false Script on success, false otherwise.
+	 */
+	public function print_translations( $handle, $echo = true ) {
+		if ( ! isset( $this->registered[ $handle ] ) || empty( $this->registered[ $handle ]->textdomain ) ) {
+			return false;
+		}
+
+		$domain = $this->registered[ $handle ]->textdomain;
+		$path   = $this->registered[ $handle ]->translations_path;
+
+		$json_translations = load_script_textdomain( $handle, $domain, $path );
+
+		if ( ! $json_translations ) {
+			// Register empty locale data object to ensure the domain still exists.
+			$json_translations = '{ "locale_data": { "messages": { "": {} } } }';
+		}
+
+		$output = <<<JS
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "{$domain}", {$json_translations} );
+JS;
+
+		if ( $echo ) {
+			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
+		}
+
+		return $output;
+	}
+
+	/**
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 	 * Determines script dependencies.
      *
 	 * @since WP-2.1.0

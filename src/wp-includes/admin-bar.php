@@ -942,9 +942,17 @@ function wp_admin_bar_add_secondary_groups( $wp_admin_bar ) {
  *
  * @since WP-3.1.0
  */
+<<<<<<< HEAD
 function wp_admin_bar_header() { ?>
 <style type="text/css" media="print">#wpadminbar { display:none; }</style>
 <?php
+=======
+function wp_admin_bar_header() {
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+	?>
+<style<?php echo $type_attr; ?> media="print">#wpadminbar { display:none; }</style>
+	<?php
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 }
 
 /**
@@ -952,8 +960,15 @@ function wp_admin_bar_header() { ?>
  *
  * @since WP-3.1.0
  */
+<<<<<<< HEAD
 function _admin_bar_bump_cb() { ?>
 <style type="text/css" media="screen">
+=======
+function _admin_bar_bump_cb() {
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+	?>
+<style<?php echo $type_attr; ?> media="screen">
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 	html { margin-top: 32px !important; }
 	* html body { margin-top: 32px !important; }
 	@media screen and ( max-width: 782px ) {

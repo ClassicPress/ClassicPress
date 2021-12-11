@@ -63,11 +63,20 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/11315
 	 */
 	function test_wp_enqueue_style() {
+<<<<<<< HEAD
 		wp_enqueue_style('no-deps-no-version', 'example.com' );
 		wp_enqueue_style('no-deps-version', 'example.com', array(), 1.2);
 		wp_enqueue_style('no-deps-null-version', 'example.com', array(), null);
 		wp_enqueue_style('no-deps-null-version-print-media', 'example.com', array(), null, 'print');
 		$ver = self::$asset_version;
+=======
+		wp_enqueue_style( 'no-deps-no-version', 'example.com' );
+		wp_enqueue_style( 'no-deps-version', 'example.com', array(), 1.2 );
+		wp_enqueue_style( 'no-deps-null-version', 'example.com', array(), null );
+		wp_enqueue_style( 'no-deps-null-version-print-media', 'example.com', array(), null, 'print' );
+
+		$ver       = get_bloginfo( 'version' );
+>>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 		$expected  = "<link rel='stylesheet' id='no-deps-no-version-css'  href='http://example.com?ver=$ver' type='text/css' media='all' />\n";
 		$expected .= "<link rel='stylesheet' id='no-deps-version-css'  href='http://example.com?ver=1.2' type='text/css' media='all' />\n";
 		$expected .= "<link rel='stylesheet' id='no-deps-null-version-css'  href='http://example.com' type='text/css' media='all' />\n";
@@ -184,6 +193,23 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 				'return'  => 'oooo',
 			),
 		), $this->classicpress_asset_version_calls );
+	}
+
+	/**
+	 * @ticket 42804
+	 */
+	function test_wp_enqueue_style_with_html5_support_does_not_contain_type_attribute() {
+		add_theme_support( 'html5', array( 'style' ) );
+
+		$GLOBALS['wp_styles']                  = new WP_Styles();
+		$GLOBALS['wp_styles']->default_version = get_bloginfo( 'version' );
+
+		wp_enqueue_style( 'no-deps-no-version', 'example.com' );
+
+		$ver      = get_bloginfo( 'version' );
+		$expected = "<link rel='stylesheet' id='no-deps-no-version-css'  href='http://example.com?ver=$ver' media='all' />\n";
+
+		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	/**
