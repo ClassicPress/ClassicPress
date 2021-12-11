@@ -5001,15 +5001,10 @@ function print_emoji_styles() {
 	}
 
 	$printed = true;
-<<<<<<< HEAD
-?>
-<style type="text/css">
-=======
 
 	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
 <style<?php echo $type_attr; ?>>
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 img.wp-smiley,
 img.emoji {
 	display: inline !important;
@@ -5090,12 +5085,8 @@ function _print_emoji_detection_script() {
 		'svgExt' => apply_filters( 'emoji_svg_ext', '.svg' ),
 	);
 
-<<<<<<< HEAD
-=======
-	$version   = 'ver=' . get_bloginfo( 'version' );
 	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/javascript"';
 
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 	if ( SCRIPT_DEBUG ) {
 		$version_wpemoji = 'ver=' . classicpress_asset_version( 'script', 'wpemoji' );
 		$version_twemoji = 'ver=' . classicpress_asset_version( 'script', 'twemoji' );

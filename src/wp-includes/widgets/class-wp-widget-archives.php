@@ -102,8 +102,6 @@ class WP_Widget_Archives extends WP_Widget {
 			<?php wp_get_archives( $dropdown_args ); ?>
 
 		</select>
-<<<<<<< HEAD
-=======
 
 <script<?php echo $type_attr; ?>>
 /* <![CDATA[ */
@@ -119,7 +117,6 @@ class WP_Widget_Archives extends WP_Widget {
 /* ]]> */
 </script>
 
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 		<?php } else { ?>
 		<ul>
 		<?php

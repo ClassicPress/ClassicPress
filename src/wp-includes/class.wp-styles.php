@@ -106,7 +106,7 @@ class WP_Styles extends WP_Dependencies {
 	 * If the current theme does not declare HTML5 support for 'style',
 	 * then it initializes as `type='text/css'`.
 	 *
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 * @var string
 	 */
 	private $type_attr = '';
@@ -124,15 +124,11 @@ class WP_Styles extends WP_Dependencies {
 		 *
 		 * @param WP_Styles $this WP_Styles instance (passed by reference).
 		 */
-<<<<<<< HEAD
-		do_action_ref_array( 'wp_default_styles', array(&$this) );
-=======
 		do_action_ref_array( 'wp_default_styles', array( &$this ) );
 
 		if ( ! current_theme_supports( 'html5', 'style' ) ) {
 			$this->type_attr = " type='text/css'";
 		}
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 	}
 
 	/**
@@ -219,10 +215,6 @@ class WP_Styles extends WP_Dependencies {
 			return true;
 		}
 
-<<<<<<< HEAD
-		$rel = isset($obj->extra['alt']) && $obj->extra['alt'] ? 'alternate stylesheet' : 'stylesheet';
-		$title = isset($obj->extra['title']) ? "title='" . esc_attr( $obj->extra['title'] ) . "'" : '';
-=======
 		$rel   = isset( $obj->extra['alt'] ) && $obj->extra['alt'] ? 'alternate stylesheet' : 'stylesheet';
 		$title = isset( $obj->extra['title'] ) ? sprintf( "title='%s'", esc_attr( $obj->extra['title'] ) ) : '';
 
@@ -235,7 +227,6 @@ class WP_Styles extends WP_Dependencies {
 			$this->type_attr,
 			$media
 		);
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
 
 		/**
 		 * Filters the HTML link tag of an enqueued style.
@@ -244,12 +235,12 @@ class WP_Styles extends WP_Dependencies {
 		 * @since WP-4.3.0 Introduced the `$href` parameter.
 		 * @since WP-4.5.0 Introduced the `$media` parameter.
 		 *
-		 * @param string $html   The link tag for the enqueued style.
+		 * @param string $tag   The link tag for the enqueued style.
 		 * @param string $handle The style's registered handle.
 		 * @param string $href   The stylesheet's source URL.
 		 * @param string $media  The stylesheet's media attribute.
 		 */
-		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media );
+		$tag = apply_filters( 'style_loader_tag', $tag, $handle, $href, $media );
 
 		if ( 'rtl' === $this->text_direction && isset( $obj->extra['rtl'] ) && $obj->extra['rtl'] ) {
 			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
@@ -259,8 +250,7 @@ class WP_Styles extends WP_Dependencies {
 				$rtl_href = $this->_css_href( $obj->extra['rtl'], $ver, "$handle-rtl" );
 			}
 
-<<<<<<< HEAD
-=======
+			/** This filter is documented in wp-includes/class.wp-styles.php */
 			$rtl_tag = sprintf(
 				"<link rel='%s' id='%s-rtl-css' %s href='%s'%s media='%s' />\n",
 				$rel,
@@ -270,10 +260,6 @@ class WP_Styles extends WP_Dependencies {
 				$this->type_attr,
 				$media
 			);
-
->>>>>>> 5fdf48c0ec (Script Loader: Introduce HTML5 support for scripts and styles.)
-			/** This filter is documented in wp-includes/class.wp-styles.php */
-			$rtl_tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-rtl-css' $title href='$rtl_href' type='text/css' media='$media' />\n", $handle, $rtl_href, $media );
 
 			if ( $obj->extra['rtl'] === 'replace' ) {
 				$tag = $rtl_tag;
