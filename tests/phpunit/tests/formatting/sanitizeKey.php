@@ -7,7 +7,7 @@
 class Tests_Formatting_SanitizeKey extends WP_UnitTestCase {
 
 	/**
-	 * @ticket       54160
+	 * @see          https://core.trac.wordpress.org/ticket/54160
 	 * @dataProvider data_sanitize_key
 	 *
 	 * @param string $key      The key to sanitize.
@@ -60,7 +60,7 @@ class Tests_Formatting_SanitizeKey extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket       54160
+	 * @see          https://core.trac.wordpress.org/ticket/54160
 	 * @dataProvider data_sanitize_key_nonstring_scalar
 	 *
 	 * @param mixed  $key      The key to sanitize.
@@ -97,7 +97,7 @@ class Tests_Formatting_SanitizeKey extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket       54160
+	 * @see          https://core.trac.wordpress.org/ticket/54160
 	 * @dataProvider data_sanitize_key_with_non_scalars
 	 *
 	 * @param mixed $nonscalar_key A non-scalar data type given as a key.
