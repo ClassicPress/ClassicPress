@@ -47,16 +47,18 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	 * @since WP-4.9.0
 	 */
 	public function enqueue() {
-		$this->editor_settings = wp_enqueue_code_editor( array_merge(
-			array(
-				'type' => $this->code_type,
-				'codemirror' => array(
-					'indentUnit' => 2,
-					'tabSize' => 2,
+		$this->editor_settings = wp_enqueue_code_editor(
+			array_merge(
+				array(
+					'type' => $this->code_type,
+					'codemirror' => array(
+						'indentUnit' => 2,
+						'tabSize' => 2,
+					),
 				),
-			),
-			$this->editor_settings
-		) );
+				$this->editor_settings
+			)
+		);
 	}
 
 	/**
