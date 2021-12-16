@@ -718,6 +718,7 @@ function install_plugin_information() {
 	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
 	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
 
+<<<<<<< HEAD
 	$compatible_php = is_php_version_compatible( $requires_php );
 	$compatible_wp = is_wp_version_compatible( $requires_wp );
 	$tested_wp = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
@@ -737,6 +738,20 @@ function install_plugin_information() {
 			echo '</p>';
 		}
 		echo '</div>';
+=======
+	$compatible_php = ( empty( $api->requires_php ) || version_compare( substr( phpversion(), 0, strlen( $api->requires_php ) ), $api->requires_php, '>=' ) );
+	$tested_wp      = ( empty( $api->tested ) || version_compare( substr( $wp_version, 0, strlen( $api->tested ) ), $api->tested, '<=' ) );
+	$compatible_wp  = ( empty( $api->requires ) || version_compare( substr( $wp_version, 0, strlen( $api->requires ) ), $api->requires, '>=' ) );
+
+	if ( ! $compatible_php ) {
+		echo '<div class="notice notice-error notice-alt"><p>';
+		printf(
+			/* translators: "Updating PHP" page URL */
+			__( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>, so unfortunately you cannot install it. <a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
+			esc_url( __( 'https://wordpress.org/support/upgrade-php/' ) )
+		);
+		echo '</p></div>';
+>>>>>>> 7569772234 (Plugins: Disable "Install Now" button for plugins that require a higher version of PHP or WordPress.)
 	}
 
 	if ( ! $tested_wp ) {
@@ -777,7 +792,14 @@ function install_plugin_information() {
 		switch ( $status['status'] ) {
 			case 'install':
 				if ( $status['url'] ) {
+					if ( $compatible_php && $compatible_wp ) {
 					echo '<a data-slug="' . esc_attr( $api->slug ) . '" id="plugin_install_from_iframe" class="button button-primary right" href="' . $status['url'] . '" target="_parent">' . __( 'Install Now' ) . '</a>';
+					} else {
+						printf(
+							'<button type="button" class="button button-primary button-disabled right" disabled="disabled">%s</button>',
+							_x( 'Cannot Install', 'plugin' )
+						);
+					}
 				}
 				break;
 			case 'update_available':
