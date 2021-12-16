@@ -6397,7 +6397,4 @@ function is_wp_version_compatible( $required ) {
  */
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
-=======
-	echo'</p>';
->>>>>>> 17e5f4ad0b (Plugins: Use centralized API to display information about updating PHP when a plugin requires a higher version.)
 }

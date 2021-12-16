@@ -715,8 +715,7 @@ function install_plugin_information() {
 	</div>
 	<div id="section-holder" class="wrap">
 	<?php
-	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
-	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
+	$wp_version = get_bloginfo( 'version' );
 
 	$compatible_php = ( empty( $api->requires_php ) || version_compare( phpversion(), $api->requires_php, '>=' ) );
 	$tested_wp      = ( empty( $api->tested ) || version_compare( $wp_version, $api->tested, '<=' ) );
@@ -741,18 +740,11 @@ function install_plugin_information() {
 
 	if ( ! $tested_wp ) {
 		echo '<div class="notice notice-warning notice-alt"><p>';
-		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of WordPress.' );
+		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
 		echo '</p></div>';
 	} elseif ( ! $compatible_wp ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.' );
-		if ( current_user_can( 'update_core' ) ) {
-			printf(
-				/* translators: %s: "Update WordPress" screen URL */
-				' ' . __( '<a href="%s" target="_parent">Click here to update WordPress</a>.' ),
-				self_admin_url( 'update-core.php' )
-			);
-		}
+		_e( '<strong>Error:</strong> This plugin is built for a newer version of WordPress and does not support ClassicPress. It cannot be installed on ClassicPress..' );
 		echo '</p></div>';
 	}
 
