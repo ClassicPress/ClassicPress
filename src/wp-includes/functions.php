@@ -6277,6 +6277,7 @@ function wp_get_default_update_php_url() {
  * This function is to be used after {@see wp_get_update_php_url()} to display a consistent
  * annotation if the web host has altered the default "Update PHP" page URL.
  *
+<<<<<<< HEAD
  * @since WP-5.1.0
  * @since WP-5.2.0 Added the `$before` and `$after` parameters.
  *
@@ -6302,18 +6303,32 @@ function wp_update_php_annotation( $before = '<p class="description">', $after =
  * @return string $message Update PHP page annotation. An empty string if no custom URLs are provided.
  */
 function wp_get_update_php_annotation() {
+=======
+ * @since 5.1.0
+ */
+function wp_update_php_annotation() {
+>>>>>>> 17e5f4ad0b (Plugins: Use centralized API to display information about updating PHP when a plugin requires a higher version.)
 	$update_url  = wp_get_update_php_url();
 	$default_url = wp_get_default_update_php_url();
 
 	if ( $update_url === $default_url ) {
+<<<<<<< HEAD
 		return '';
 	}
 
 	$annotation = sprintf(
+=======
+		return;
+	}
+
+	echo '<p class="description">';
+	printf(
+>>>>>>> 17e5f4ad0b (Plugins: Use centralized API to display information about updating PHP when a plugin requires a higher version.)
 		/* translators: %s: default Update PHP page URL */
 		__( 'This resource is provided by your web host, and is specific to your site. For more information, <a href="%s" target="_blank">see the official WordPress documentation</a>.' ),
 		esc_url( $default_url )
 	);
+<<<<<<< HEAD
 
 	return $annotation;
 }
@@ -6397,4 +6412,7 @@ function is_wp_version_compatible( $required ) {
  */
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
+=======
+	echo'</p>';
+>>>>>>> 17e5f4ad0b (Plugins: Use centralized API to display information about updating PHP when a plugin requires a higher version.)
 }
