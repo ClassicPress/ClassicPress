@@ -458,20 +458,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 				$author = ' <cite>' . sprintf( __( 'By %s' ), $author ) . '</cite>';
 			}
 
-<<<<<<< HEAD
-			$requires_php = isset( $plugin['requires_php'] ) ? $plugin['requires_php'] : null;
-			$requires_wp  = isset( $plugin['requires'] ) ? $plugin['requires'] : null;
-
-			$compatible_php = is_php_version_compatible( $requires_php );
-			$compatible_wp  = is_wp_version_compatible( $requires_wp );
-			$tested_wp      = ( empty( $plugin['tested'] ) || version_compare( get_bloginfo( 'version' ), $plugin['tested'], '<=' ) );
-=======
 			$wp_version = get_bloginfo( 'version' );
 
 			$compatible_php = ( empty( $plugin['requires_php'] ) || version_compare( substr( phpversion(), 0, strlen( $plugin['requires_php'] ) ), $plugin['requires_php'], '>=' ) );
 			$tested_wp      = ( empty( $plugin['tested'] ) || version_compare( substr( $wp_version, 0, strlen( $plugin['tested'] ) ), $plugin['tested'], '<=' ) );
 			$compatible_wp  = ( empty( $plugin['requires'] ) || version_compare( substr( $wp_version, 0, strlen( $plugin['requires'] ) ), $plugin['requires'], '>=' ) );
->>>>>>> 7569772234 (Plugins: Disable "Install Now" button for plugins that require a higher version of PHP or WordPress.)
 
 			$action_links = array();
 
@@ -481,10 +472,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 				switch ( $status['status'] ) {
 					case 'install':
 						if ( $status['url'] ) {
-<<<<<<< HEAD
-							/* translators: 1: Plugin name and version. */
-							$action_links[] = '<a class="install-now button" data-slug="' . esc_attr( $plugin['slug'] ) . '" href="' . esc_url( $status['url'] ) . '" aria-label="' . esc_attr( sprintf( __( 'Install %s now' ), $name ) ) . '" data-name="' . esc_attr( $name ) . '">' . __( 'Install Now' ) . '</a>';
-=======
 							if ( $compatible_php && $compatible_wp ) {
 								$action_links[] = sprintf(
 									'<a class="install-now button" data-slug="%s" href="%s" aria-label="%s" data-name="%s">%s</a>',
@@ -501,7 +488,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 									_x( 'Cannot Install', 'plugin' )
 								);
 							}
->>>>>>> 7569772234 (Plugins: Disable "Install Now" button for plugins that require a higher version of PHP or WordPress.)
 						}
 						break;
 
@@ -637,9 +623,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			</div>
 			<div class="plugin-card-bottom">
 				<div class="vers column-rating">
-<<<<<<< HEAD
-					<?php wp_star_rating( array( 'rating' => $plugin['rating'], 'type' => 'percent', 'number' => $plugin['num_ratings'] ) ); ?>
-=======
 					<?php
 					wp_star_rating(
 						array(
@@ -649,7 +632,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 						)
 					);
 					?>
->>>>>>> 7569772234 (Plugins: Disable "Install Now" button for plugins that require a higher version of PHP or WordPress.)
 					<span class="num-ratings" aria-hidden="true">(<?php echo number_format_i18n( $plugin['num_ratings'] ); ?>)</span>
 				</div>
 				<div class="column-updated">
@@ -669,19 +651,10 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 				</div>
 				<div class="column-compatibility">
 					<?php
-<<<<<<< HEAD
-					$wp_version = get_bloginfo( 'version' );
-
-					if ( ! empty( $plugin['tested'] ) && version_compare( substr( $wp_version, 0, strlen( $plugin['tested'] ) ), $plugin['tested'], '>' ) ) {
-						echo '<span class="compatibility-untested">' . __( 'Untested with your version of ClassicPress' ) . '</span>';
-					} elseif ( ! empty( $plugin['requires'] ) && version_compare( substr( $wp_version, 0, strlen( $plugin['requires'] ) ), $plugin['requires'], '<' ) ) {
-						echo '<span class="compatibility-incompatible">' . __( '<strong>Incompatible</strong> with your version of ClassicPress' ) . '</span>';
-=======
 					if ( ! $tested_wp ) {
 						echo '<span class="compatibility-untested">' . __( 'Untested with your version of WordPress' ) . '</span>';
 					} elseif ( ! $compatible_wp ) {
 						echo '<span class="compatibility-incompatible">' . __( '<strong>Incompatible</strong> with your version of WordPress' ) . '</span>';
->>>>>>> 7569772234 (Plugins: Disable "Install Now" button for plugins that require a higher version of PHP or WordPress.)
 					} else {
 						echo '<span class="compatibility-compatible">' . __( '<strong>Compatible</strong> with your version of ClassicPress' ) . '</span>';
 					}
