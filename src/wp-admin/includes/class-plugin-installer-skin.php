@@ -62,14 +62,30 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 			unset( $install_actions['activate_plugin'] );
 		}
 
-		if ( 'import' == $from ) {
-			$install_actions['importers_page'] = '<a href="' . admin_url( 'import.php' ) . '" target="_parent">' . __( 'Return to Importers' ) . '</a>';
-		} elseif ( $this->type == 'web' ) {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugin-install.php' ) . '" target="_parent">' . __( 'Return to Plugin Installer' ) . '</a>';
-		} elseif ( 'upload' == $this->type && 'plugins' == $from ) {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugin-install.php' ) . '">' . __( 'Return to Plugin Installer' ) . '</a>';
+		if ( 'import' === $from ) {
+			$install_actions['importers_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				admin_url( 'import.php' ),
+				__( 'Go to Importers' )
+			);
+		} elseif ( 'web' === $this->type ) {
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Installed Plugins' )
+			);
+		} elseif ( 'upload' === $this->type && 'plugins' === $from ) {
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Installed Plugins' )
+			);
 		} else {
-			$install_actions['plugins_page'] = '<a href="' . self_admin_url( 'plugins.php' ) . '" target="_parent">' . __( 'Return to Plugins page' ) . '</a>';
+			$install_actions['plugins_page'] = sprintf(
+				'<a href="%s" target="_parent">%s</a>',
+				self_admin_url( 'plugins.php' ),
+				__( 'Go to Installed Plugins' )
+			);
 		}
 
 		if ( ! $this->result || is_wp_error($this->result) ) {
