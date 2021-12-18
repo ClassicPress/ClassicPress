@@ -378,10 +378,6 @@ function list_plugin_updates() {
 				);
 
 				echo ' ' . $details . $compat . $upgrade_notice;
-
-				if ( in_array( $plugin_file, $auto_updates, true ) ) {
-					echo $auto_update_notice;
-				}
 				?>
 			</p></td>
 		</tr>
@@ -500,10 +496,6 @@ function list_theme_updates() {
 				);
 
 				echo ' ' . $compat;
-
-				if ( in_array( $stylesheet, $auto_updates, true ) ) {
-					echo $auto_update_notice;
-				}
 				?>
 			</p></td>
 		</tr>

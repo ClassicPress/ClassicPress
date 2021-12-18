@@ -686,9 +686,6 @@ $can_install = current_user_can( 'install_themes' );
 					<# } #>
 				<# } #>
 
-				<# if ( data.actions.autoupdate ) { #>
-					<?php echo wp_theme_auto_update_setting_template(); ?>
-				<# } #>
 				<p class="theme-description">{{{ data.description }}}</p>
 
 				<# if ( data.parent ) { #>
