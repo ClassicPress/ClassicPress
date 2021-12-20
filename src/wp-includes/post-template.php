@@ -810,6 +810,7 @@ function post_password_required( $post = null ) {
  * Quicktag one or more times). This tag must be within The Loop.
  *
  * @since WP-1.2.0
+ * @since WP-5.0.0 Added the `aria_current` argument.
  *
  * @global int $page
  * @global int $numpages
@@ -825,6 +826,8 @@ function post_password_required( $post = null ) {
  *                                          Also prepended to the current item, which is not linked. Default empty.
  *     @type string       $link_after       HTML or text to append to each Pages link inside the `<a>` tag.
  *                                          Also appended to the current item, which is not linked. Default empty.
+ *     @type string       $aria_current     The value for the aria-current attribute. Possible values are 'page',
+ *                                          'step', 'location', 'date', 'time', 'true', 'false'. Default is 'page'.
  *     @type string       $next_or_number   Indicates whether page numbers should be used. Valid values are number
  *                                          and next. Default is 'number'.
  *     @type string       $separator        Text between pagination links. Default is ' '.
@@ -841,10 +844,11 @@ function wp_link_pages( $args = '' ) {
 	global $page, $numpages, $multipage, $more;
 
 	$defaults = array(
-		'before'           => '<p>' . __( 'Pages:' ),
+		'before'           => '<p class="post-nav-links">' . __( 'Pages:' ),
 		'after'            => '</p>',
 		'link_before'      => '',
 		'link_after'       => '',
+		'aria_current'     => 'page',
 		'next_or_number'   => 'number',
 		'separator'        => ' ',
 		'nextpagelink'     => __( 'Next page' ),
@@ -872,6 +876,8 @@ function wp_link_pages( $args = '' ) {
 				$link = $r['link_before'] . str_replace( '%', $i, $r['pagelink'] ) . $r['link_after'];
 				if ( $i != $page || ! $more && 1 == $page ) {
 					$link = _wp_link_page( $i ) . $link . '</a>';
+				} elseif ( $i === $page ) {
+					$link = '<span class="post-page-numbers current" aria-current="' . esc_attr( $r['aria_current'] ) . '">' . $link . '</span>';
 				}
 				/**
 				 * Filters the HTML output of individual page number links.
@@ -964,7 +970,7 @@ function _wp_link_page( $i ) {
 		$url = get_preview_post_link( $post, $query_args, $url );
 	}
 
-	return '<a href="' . esc_url( $url ) . '">';
+	return '<a href="' . esc_url( $url ) . '" class="post-page-numbers">';
 }
 
 //

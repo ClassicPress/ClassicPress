@@ -14,29 +14,49 @@ class Tests_Post_Template extends WP_UnitTestCase {
 
 		setup_postdata( get_post( $post_id ) );
 
-		$permalink = sprintf( '<a href="%s">', get_permalink() );
-		$page2 = _wp_link_page( 2 );
-		$page3 = _wp_link_page( 3 );
+		$permalink = sprintf( '<a href="%s" class="post-page-numbers">', get_permalink() );
+		$page2     = _wp_link_page( 2 );
+		$page3     = _wp_link_page( 3 );
 
-		$expected = "<p>Pages: 1 {$page2}2</a> {$page3}3</a></p>";
-		$output = wp_link_pages( array( 'echo' => 0 ) );
+		$expected = '<p class="post-nav-links">Pages: <span class="post-page-numbers current" aria-current="page">1</span> ' . $page2 . '2</a> ' . $page3 . '3</a></p>';
+		$output   = wp_link_pages( array( 'echo' => 0 ) );
 
 		$this->assertEquals( $expected, $output );
 
-		$before_after = " 1 {$page2}2</a> {$page3}3</a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '' ) );
+		$before_after = " <span class=\"post-page-numbers current\" aria-current=\"page\">1</span> {$page2}2</a> {$page3}3</a>";
+		$output       = wp_link_pages(
+			array(
+				'echo'   => 0,
+				'before' => '',
+				'after'  => '',
+			)
+		);
 
 		$this->assertEquals( $before_after, $output );
 
-		$separator = " 1{$page2}2</a>{$page3}3</a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '' ) );
+		$separator = " <span class=\"post-page-numbers current\" aria-current=\"page\">1</span>{$page2}2</a>{$page3}3</a>";
+		$output    = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'before'    => '',
+				'after'     => '',
+				'separator' => '',
+			)
+		);
 
 		$this->assertEquals( $separator, $output );
 
-		$link = " <em>1</em>{$page2}<em>2</em></a>{$page3}<em>3</em></a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '',
-			'link_before' => '<em>', 'link_after' => '</em>'
-		) );
+		$link   = " <span class=\"post-page-numbers current\" aria-current=\"page\"><em>1</em></span>{$page2}<em>2</em></a>{$page3}<em>3</em></a>";
+		$output = wp_link_pages(
+			array(
+				'echo'        => 0,
+				'before'      => '',
+				'after'       => '',
+				'separator'   => '',
+				'link_before' => '<em>',
+				'link_after'  => '</em>',
+			)
+		);
 
 		$this->assertEquals( $link, $output );
 
@@ -63,15 +83,26 @@ class Tests_Post_Template extends WP_UnitTestCase {
 		$this->assertEquals( $next_prev_link, $output );
 
 		$GLOBALS['page'] = 1;
-		$separator = "<p>Pages: 1 | {$page2}2</a> | {$page3}3</a></p>";
-		$output = wp_link_pages( array( 'echo' => 0, 'separator' => ' | ' ) );
+		$separator       = "<p class=\"post-nav-links\">Pages: <span class=\"post-page-numbers current\" aria-current=\"page\">1</span> | {$page2}2</a> | {$page3}3</a></p>";
+		$output          = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'separator' => ' | ',
+			)
+		);
 
 		$this->assertEquals( $separator, $output );
 
-		$pagelink = " Page 1 | {$page2}Page 2</a> | {$page3}Page 3</a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'separator' => ' | ', 'before' => '', 'after' => '',
-			'pagelink' => 'Page %'
-		) );
+		$pagelink = " <span class=\"post-page-numbers current\" aria-current=\"page\">Page 1</span> | {$page2}Page 2</a> | {$page3}Page 3</a>";
+		$output   = wp_link_pages(
+			array(
+				'echo'      => 0,
+				'separator' => ' | ',
+				'before'    => '',
+				'after'     => '',
+				'pagelink'  => 'Page %',
+			)
+		);
 
 		$this->assertEquals( $pagelink, $output );
 	}
@@ -99,7 +130,7 @@ class Tests_Post_Template extends WP_UnitTestCase {
 LINEAGE;
 
 		$output = wp_dropdown_pages( array( 'echo' => 0 ) );
-		$this->assertEquals( $lineage, $output );
+		$this->assertEqualsIgnoreEOL( $lineage, $output );
 
 		$depth =<<<DEPTH
 <select name='page_id' id='page_id'>
@@ -109,7 +140,7 @@ LINEAGE;
 DEPTH;
 
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1 ) );
-		$this->assertEquals( $depth, $output );
+		$this->assertEqualsIgnoreEOL( $depth, $output );
 
 		$option_none =<<<NONE
 <select name='page_id' id='page_id'>
@@ -122,7 +153,7 @@ NONE;
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo'
 		) );
-		$this->assertEquals( $option_none, $output );
+		$this->assertEqualsIgnoreEOL( $option_none, $output );
 
 		$option_no_change =<<<NO
 <select name='page_id' id='page_id'>
@@ -132,11 +163,12 @@ NONE;
 </select>
 
 NO;
+
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo',
 			'show_option_no_change' => 'Burrito'
 		) );
-		$this->assertEquals( $option_no_change, $output );
+		$this->assertEqualsIgnoreEOL( $option_no_change, $output );
 	}
 
 	/**

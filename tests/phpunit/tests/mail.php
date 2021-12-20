@@ -81,8 +81,8 @@ class Tests_Mail extends WP_UnitTestCase {
 		$mailer = tests_retrieve_phpmailer_instance();
 
 		// We need some better assertions here but these catch the failure for now.
-		$this->assertEquals( $body, $mailer->get_sent()->body );
-		$this->assertTrue( strpos( $mailer->get_sent()->header, 'boundary="----=_Part_4892_25692638.1192452070893"' ) > 0 );
+		$this->assertEqualsIgnoreEOL( $body, $mailer->get_sent()->body );
+		$this->assertTrue( strpos( iconv_mime_decode_headers( ( $mailer->get_sent()->header ) )['Content-Type'][0], 'boundary="----=_Part_4892_25692638.1192452070893"' ) > 0 );
 		$this->assertTrue( strpos( $mailer->get_sent()->header, 'charset=' ) > 0 );
 	}
 
@@ -107,13 +107,13 @@ class Tests_Mail extends WP_UnitTestCase {
 
 		//retrieve the mailer instance
 		$mailer = tests_retrieve_phpmailer_instance();
-		$this->assertEquals( 'address@tld.com',      $mailer->get_recipient( 'to' )->address );
-		$this->assertEquals( 'Name',                 $mailer->get_recipient( 'to' )->name );
-		$this->assertEquals( 'cc@cc.com',            $mailer->get_recipient( 'cc' )->address );
-		$this->assertEquals( 'The Carbon Guy',       $mailer->get_recipient( 'cc' )->name );
-		$this->assertEquals( 'bcc@bcc.com',          $mailer->get_recipient( 'bcc' )->address );
-		$this->assertEquals( 'The Blind Carbon Guy', $mailer->get_recipient( 'bcc' )->name );
-		$this->assertEquals( $message . "\n",        $mailer->get_sent()->body );
+		$this->assertEquals( 'address@tld.com',        $mailer->get_recipient( 'to' )->address );
+		$this->assertEquals( 'Name',                   $mailer->get_recipient( 'to' )->name );
+		$this->assertEquals( 'cc@cc.com',              $mailer->get_recipient( 'cc' )->address );
+		$this->assertEquals( 'The Carbon Guy',         $mailer->get_recipient( 'cc' )->name );
+		$this->assertEquals( 'bcc@bcc.com',            $mailer->get_recipient( 'bcc' )->address );
+		$this->assertEquals( 'The Blind Carbon Guy',   $mailer->get_recipient( 'bcc' )->name );
+		$this->assertEqualsIgnoreEOL( $message . "\n", $mailer->get_sent()->body );
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Tests_Mail extends WP_UnitTestCase {
 		$this->assertEquals( 'Name',                              $mailer->get_recipient( 'to' )->name );
 		$this->assertEquals( 'another_address@different-tld.com', $mailer->get_recipient( 'to', 0, 1 )->address );
 		$this->assertEquals( 'Another Name',                      $mailer->get_recipient( 'to', 0, 1 )->name );
-		$this->assertEquals( $message . "\n",                     $mailer->get_sent()->body );
+		$this->assertEqualsIgnoreEOL( $message . "\n",            $mailer->get_sent()->body );
 	}
 
 	function test_wp_mail_multiple_to_addresses() {
@@ -146,7 +146,7 @@ class Tests_Mail extends WP_UnitTestCase {
 		$mailer = tests_retrieve_phpmailer_instance();
 		$this->assertEquals( 'address@tld.com',                   $mailer->get_recipient( 'to' )->address );
 		$this->assertEquals( 'another_address@different-tld.com', $mailer->get_recipient( 'to', 0, 1 )->address );
-		$this->assertEquals( $message . "\n",                     $mailer->get_sent()->body );
+		$this->assertEqualsIgnoreEOL( $message . "\n",            $mailer->get_sent()->body );
 	}
 
 	/**
@@ -160,8 +160,9 @@ class Tests_Mail extends WP_UnitTestCase {
 		wp_mail( $to, $subject, $message );
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		$this->assertEquals( 'address@tld.com', $mailer->get_recipient( 'to' )->address );
-		$this->assertEquals( $message . "\n",    $mailer->get_sent()->body );
+		$this->assertEquals( 'address@tld.com',        $mailer->get_recipient( 'to' )->address );
+		$this->assertEqualsIgnoreEOL( $message . "\n", $mailer->get_sent()->body );
+
 	}
 
 	/**
@@ -407,5 +408,21 @@ class Tests_Mail extends WP_UnitTestCase {
 
 		$this->assertEquals( 'wp_mail_failed', $call_args[0]->get_error_code() );
 		$this->assertEquals( $expected_error_data, $call_args[0]->get_error_data() );
+	}
+
+	/**
+	 * Test for short-circuiting wp_mail().
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/35069
+	 */
+	public function test_wp_mail_can_be_shortcircuited() {
+		$result1 = wp_mail( WP_TESTS_EMAIL, 'Foo', 'Bar' );
+
+		add_filter( 'pre_wp_mail', '__return_false' );
+		$result2 = wp_mail( WP_TESTS_EMAIL, 'Foo', 'Bar' );
+		remove_filter( 'pre_wp_mail', '__return_false' );
+
+		$this->assertTrue( $result1 );
+		$this->assertFalse( $result2 );
 	}
 }

@@ -728,7 +728,7 @@ function set_screen_options() {
 					 *
 					 * Returning false to the filter will skip saving the current option.
 					 *
-					 * @since 2.8.0
+					 * @since WP-2.8.0
 					 * @since WP-4.9.15 Only applied to options ending with '_page',
 					 *              or the 'layout_columns' option.
 					 *
@@ -1015,7 +1015,7 @@ function wp_color_scheme_settings() {
 		$icon_colors = $_wp_admin_css_colors['fresh']->icon_colors;
 	} else {
 		// Fall back to the default set of icon colors if the default scheme is missing.
-		$icon_colors = array( 'base' => '#82878c', 'focus' => '#00a0d2', 'current' => '#fff' );
+		$icon_colors = array( 'base' => '#a0a5aa', 'focus' => '#00a0d2', 'current' => '#fff' );
 	}
 
 	echo '<script type="text/javascript">var _wpColorScheme = ' . wp_json_encode( array( 'icons' => $icon_colors ) ) . ";</script>\n";

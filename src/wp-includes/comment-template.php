@@ -1282,7 +1282,6 @@ function wp_comment_form_unfiltered_html_nonce() {
  * @global int        $id
  * @global WP_Comment $comment
  * @global string     $user_login
- * @global int        $user_ID
  * @global string     $user_identity
  * @global bool       $overridden_cpage
  * @global bool       $withcomments
@@ -1292,7 +1291,7 @@ function wp_comment_form_unfiltered_html_nonce() {
  *                                  Default false.
  */
 function comments_template( $file = '/comments.php', $separate_comments = false ) {
-	global $wp_query, $withcomments, $post, $wpdb, $id, $comment, $user_login, $user_ID, $user_identity, $overridden_cpage;
+	global $wp_query, $withcomments, $post, $wpdb, $id, $comment, $user_login, $user_identity, $overridden_cpage;
 
 	if ( !(is_single() || is_page() || $withcomments) || empty($post) )
 		return;
@@ -1339,8 +1338,8 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		$comment_args['hierarchical'] = false;
 	}
 
-	if ( $user_ID ) {
-		$comment_args['include_unapproved'] = array( $user_ID );
+	if ( is_user_logged_in() ) {
+		$comment_args['include_unapproved'] = array( get_current_user_id() );
 	} elseif ( ! empty( $comment_author_email ) ) {
 		$comment_args['include_unapproved'] = array( $comment_author_email );
 	}
@@ -1995,7 +1994,7 @@ function wp_list_comments( $args = array(), $comments = null ) {
 				);
 
 				if ( is_user_logged_in() ) {
-					$comment_args['include_unapproved'] = get_current_user_id();
+					$comment_args['include_unapproved'] = array( get_current_user_id() );
 				} else {
 					$commenter = wp_get_current_commenter();
 					if ( $commenter['comment_author_email'] ) {

@@ -454,7 +454,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 ?>
 		<div class="alignleft actions">
 <?php
-		if ( 'top' === $which && !is_singular() ) {
+		if ( 'top' === $which ) {
 			ob_start();
 
 			$this->months_dropdown( $this->screen->post_type );
@@ -534,6 +534,9 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 		/* translators: manage posts column name */
 		$posts_columns['title'] = _x( 'Title', 'column name' );
+
+		/* translators: manage posts column name */
+		$posts_columns['ID'] = _x( 'ID', 'column name' );
 
 		if ( post_type_supports( $post_type, 'author' ) ) {
 			$posts_columns['author'] = __( 'Author' );
@@ -960,6 +963,17 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Handles the ID column output.
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_ID( $post ) {
+		echo esc_html( $post->ID );
+	}
+
+	/**
 	 * Handles the post date column output.
 	 *
 	 * @since WP-4.3.0
@@ -1238,7 +1252,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				__( 'Edit' )
 			);
 			$actions['inline hide-if-no-js'] = sprintf(
-				'<a href="#" class="editinline" aria-label="%s">%s</a>',
+				'<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>',
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline' ), $title ) ),
 				__( 'Quick&nbsp;Edit' )

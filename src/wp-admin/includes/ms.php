@@ -222,10 +222,12 @@ function wpmu_delete_user( $id ) {
 	 * Fires before a user is deleted from the network.
 	 *
 	 * @since WP-MU (3.0.0)
+	 * @since WP-5.5.0 Added the `$user` parameter.
 	 *
-	 * @param int $id ID of the user about to be deleted from the network.
+	 * @param int     $id   ID of the user about to be deleted from the network.
+	 * @param WP_User $user WP_User object of the user about to be deleted from the network.
 	 */
-	do_action( 'wpmu_delete_user', $id );
+	do_action( 'wpmu_delete_user', $id, $user );
 
 	$blogs = get_blogs_of_user( $id );
 
@@ -260,7 +262,7 @@ function wpmu_delete_user( $id ) {
 	clean_user_cache( $user );
 
 	/** This action is documented in wp-admin/includes/user.php */
-	do_action( 'deleted_user', $id, null );
+	do_action( 'deleted_user', $id, null, $user );
 
 	return true;
 }
@@ -745,7 +747,7 @@ function can_edit_network( $network_id ) {
 function _thickbox_path_admin_subfolder() {
 ?>
 <script type="text/javascript">
-var tb_pathToImage = "<?php echo includes_url( 'js/thickbox/loadingAnimation.gif', 'relative' ); ?>";
+var tb_pathToImage = "<?php echo esc_js( includes_url( 'js/thickbox/loadingAnimation.gif', 'relative' ) ); ?>";
 </script>
 <?php
 }
