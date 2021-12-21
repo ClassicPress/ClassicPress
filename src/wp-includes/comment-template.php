@@ -2309,10 +2309,19 @@ function comment_form( $args = array(), $post_id = null ) {
 			 */
 			do_action( 'comment_form_must_log_in_after' );
 		else : ?>
-			<form action="<?php echo esc_url( $args['action'] ); ?>" method="post" id="<?php echo esc_attr( $args['id_form'] ); ?>" class="<?php echo esc_attr( $args['class_form'] ); ?>"<?php echo $html5 ? ' novalidate' : ''; ?>>
+			<form action="<?php echo esc_url( $args['action'] ); ?>" method="post" id="<?php echo esc_attr( $args['id_form'] ); ?>" class="<?php echo esc_attr( $args['class_form'] ); ?>"<?php echo $html5 ? ' novalidate' : ''; ?>
+			<?php
+			/**
+			 * Fires inside the comment form tag.
+			 *
+			 * @since CP-1.x.x
+			 */
+			do_action( 'comment_form_tag', $args );
+			?>
+			>
 				<?php
 				/**
-				 * Fires at the top of the comment form, inside the form tag.
+				 * Fires at the top of the comment form, just after the form tag.
 				 *
 				 * @since WP-3.0.0
 				 */
