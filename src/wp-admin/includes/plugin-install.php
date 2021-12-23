@@ -744,7 +744,7 @@ function install_plugin_information() {
 		echo '</p></div>';
 	} elseif ( ! $compatible_wp ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin is built for a newer version of WordPress and does not support ClassicPress. It cannot be installed on ClassicPress..' );
+		_e( '<strong>Error:</strong> This plugin is built for a newer version of WordPress and does not support ClassicPress. It cannot be installed on ClassicPress.' );
 		echo '</p></div>';
 	}
 
