@@ -259,6 +259,11 @@ function wp_widget_control( $sidebar_args ) {
 	} else {
 		echo "\t\t<p>" . __( 'There are no options for this widget.' ) . "</p>\n";
 	}
+
+	$noform_class = '';
+	if ( 'noform' === $has_form ) {
+		$noform_class = ' widget-control-noform';
+	}
 	?>
 	<?php echo $after_widget_content; ?>
 	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $id_format ); ?>" />
@@ -288,11 +293,7 @@ function wp_widget_control( $sidebar_args ) {
 			</span>
 		</div>
 		<div class="alignright
-		<?php
-		if ( 'noform' === $has_form ) {
-			echo ' widget-control-noform';}
-		?>
-		">
+		<div class="alignright<?php echo $noform_class; ?>">
 			<?php submit_button( __( 'Save' ), 'primary widget-control-save right', 'savewidget', false, array( 'id' => 'widget-' . esc_attr( $id_format ) . '-savewidget' ) ); ?>
 			<span class="spinner"></span>
 		</div>

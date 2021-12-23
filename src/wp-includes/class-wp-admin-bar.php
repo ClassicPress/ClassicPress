@@ -510,14 +510,17 @@ class WP_Admin_Bar {
 			return;
 		}
 
-		$is_parent = ! empty( $node->children );
-		$has_link  = ! empty( $node->href );
+$is_parent             = ! empty( $node->children );
+		$has_link              = ! empty( $node->href );
+		$is_root_top_item      = 'root-default' === $node->parent;
+		$is_top_secondary_item = 'top-secondary' === $node->parent;
 
 		// Allow only numeric values, then casted to integers, and allow a tabindex value of `0` for a11y.
 		$tabindex        = ( isset( $node->meta['tabindex'] ) && is_numeric( $node->meta['tabindex'] ) ) ? (int) $node->meta['tabindex'] : '';
 		$aria_attributes = ( '' !== $tabindex ) ? ' tabindex="' . $tabindex . '"' : '';
 
 		$menuclass = '';
+		$arrow     = '';
 
 		if ( $is_parent ) {
 			$menuclass        = 'menupop ';
@@ -528,107 +531,58 @@ class WP_Admin_Bar {
 			$menuclass .= $node->meta['class'];
 		}
 
+		// Print the arrow icon for the menu children with children.
+		if ( ! $is_root_top_item && ! $is_top_secondary_item && $is_parent ) {
+			$arrow = '<span class="wp-admin-bar-arrow" aria-hidden="true"></span>';
+		}
+
 		if ( $menuclass ) {
 			$menuclass = ' class="' . esc_attr( trim( $menuclass ) ) . '"';
 		}
 
-		?>
+		echo "<li id='" . esc_attr( 'wp-admin-bar-' . $node->id ) . "'$menuclass>";
 
-		<li id="<?php echo esc_attr( 'wp-admin-bar-' . $node->id ); ?>"<?php echo $menuclass; ?>>
-						   <?php
-							if ( $has_link ) :
-								?>
-				<a class="ab-item"<?php echo $aria_attributes; ?> href="<?php echo esc_url( $node->href ); ?>"
-								<?php
-								if ( ! empty( $node->meta['onclick'] ) ) :
-									?>
-						 onclick="<?php echo esc_js( $node->meta['onclick'] ); ?>"
-									<?php
-									endif;
-								if ( ! empty( $node->meta['target'] ) ) :
-									?>
-					 target="<?php echo esc_attr( $node->meta['target'] ); ?>"
-									<?php
-								endif;
-								if ( ! empty( $node->meta['title'] ) ) :
-									?>
-					 title="<?php echo esc_attr( $node->meta['title'] ); ?>"
-									<?php
-								endif;
-								if ( ! empty( $node->meta['rel'] ) ) :
-									?>
-					 rel="<?php echo esc_attr( $node->meta['rel'] ); ?>"
-									<?php
-								endif;
-								if ( ! empty( $node->meta['lang'] ) ) :
-									?>
-					 lang="<?php echo esc_attr( $node->meta['lang'] ); ?>"
-									<?php
-								endif;
-								if ( ! empty( $node->meta['dir'] ) ) :
-									?>
-					 dir="<?php echo esc_attr( $node->meta['dir'] ); ?>"
-									<?php
-								endif;
-								?>
-				>
-								<?php
-			else :
-				?>
-				<div class="ab-item ab-empty-item"
-				<?php
-				echo $aria_attributes;
-				if ( ! empty( $node->meta['title'] ) ) :
-					?>
-					 title="<?php echo esc_attr( $node->meta['title'] ); ?>"
-					<?php
-				endif;
-				if ( ! empty( $node->meta['lang'] ) ) :
-					?>
-					 lang="<?php echo esc_attr( $node->meta['lang'] ); ?>"
-					<?php
-				endif;
-				if ( ! empty( $node->meta['dir'] ) ) :
-					?>
-					 dir="<?php echo esc_attr( $node->meta['dir'] ); ?>"
-					<?php
-				endif;
-				?>
-				>
-				<?php
-			endif;
+		if ( $has_link ) {
+			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
+			echo "<a class='ab-item'$aria_attributes href='" . esc_url( $node->href ) . "'";
+		} else {
+			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
+			echo '<div class="ab-item ab-empty-item"' . $aria_attributes;
+		}
 
-			echo $node->title;
-
-			if ( $has_link ) :
-				?>
-				</a>
-				<?php
-			else :
-				?>
-				</div>
-				<?php
-			endif;
-
-			if ( $is_parent ) :
-				?>
-				<div class="ab-sub-wrapper">
-				<?php
-				foreach ( $node->children as $group ) {
-					$this->_render_group( $group );
-				}
-				?>
-				</div>
-				<?php
-			endif;
-
-			if ( ! empty( $node->meta['html'] ) ) {
-				echo $node->meta['html'];
+		foreach ( $attributes as $attribute ) {
+			if ( empty( $node->meta[ $attribute ] ) ) {
+				continue;
 			}
 
-			?>
-		</li>
-		<?php
+			if ( 'onclick' === $attribute ) {
+				echo " $attribute='" . esc_js( $node->meta[ $attribute ] ) . "'";
+			} else {
+				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . "'";
+			}
+		}
+
+		echo ">{$arrow}{$node->title}";
+
+		if ( $has_link ) {
+			echo '</a>';
+		} else {
+			echo '</div>';
+		}
+
+		if ( $is_parent ) {
+			echo '<div class="ab-sub-wrapper">';
+			foreach ( $node->children as $group ) {
+				$this->_render_group( $group );
+			}
+			echo '</div>';
+		}
+
+		if ( ! empty( $node->meta['html'] ) ) {
+			echo $node->meta['html'];
+		}
+
+		echo '</li>';
 	}
 
 	/**
