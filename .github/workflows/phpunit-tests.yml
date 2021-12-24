@@ -169,6 +169,15 @@ jobs:
         if: ${{ matrix.memcached }}
         uses: niden/actions-memcached@v7
 
+      - name: Clone PHP.net and create local supported versions for PHPUnit tests
+        if: ${{ matrix.memcached }}
+        run: |
+          mkdir php.net
+          git clone https://github.com/php/web-php php.net
+          cd php.net
+          php -d error_reporting=E_ERROR -f ./supported-versions.php > ../supported-versions.html
+          cd ..
+
       - name: Run PHPUnit default
         env:
           WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
