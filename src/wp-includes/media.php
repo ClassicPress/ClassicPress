@@ -1452,9 +1452,10 @@ function wp_lazy_loading_enabled( $tag_name, $context ) {
 }
 
 /**
- * Filters specific tags in post content and modifies their markup.
- *
- * This function adds `srcset`, `sizes`, and `loading` attributes to `img` HTML tags.
+ * Modifies specific HTML tags in post content to include new browser and HTML technologies
+ * that may not have existed at the time of post creation. These modifications currently include
+ * adding `srcset`, `sizes`, and `loading` attributes to `img` HTML tags. Future similar
+ * optimizations should be added/expected here.
  *
  * @since WP-5.5.0
  *
