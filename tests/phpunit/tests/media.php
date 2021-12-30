@@ -1809,12 +1809,7 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/33641
-	 * @see https://core.trac.wordpress.org/ticket/50367
-=======
-	 * @https://core.trac.wordpress.org/ticket/33641
->>>>>>> d8af0369e3 (Media: Introduce `wp_img_tag_add_width_and_height_attr()` to add dimension attributes to images.)
 	 */
 	function test_wp_filter_content_tags_srcset_sizes() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
