@@ -2356,11 +2356,7 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/44427
-	 * @see https://core.trac.wordpress.org/ticket/0367
-=======
-	 * @ticket 50367
+	 * @see https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_filter_content_tags_width_height() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -2404,9 +2400,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50367
->>>>>>> d8af0369e3 (Media: Introduce `wp_img_tag_add_width_and_height_attr()` to add dimension attributes to images.)
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_filter_content_tags_loading_lazy() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -2501,11 +2496,7 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/44427
-=======
-	 * @ticket 50367
->>>>>>> d8af0369e3 (Media: Introduce `wp_img_tag_add_width_and_height_attr()` to add dimension attributes to images.)
+	 * @see https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_img_tag_add_loading_attr_without_src() {
 		$img = '<img alt=" width="300" height="225" />';
