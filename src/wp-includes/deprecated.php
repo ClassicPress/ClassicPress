@@ -3948,8 +3948,8 @@ function wp_ajax_press_this_add_category() {
 /**
  * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
  *
- * @since 4.4.0
- * @deprecated 5.5.0
+ * @since WP-4.4.0
+ * @deprecated WP-5.5.0
  *
  * @see wp_image_add_srcset_and_sizes()
  *
@@ -3957,7 +3957,7 @@ function wp_ajax_press_this_add_category() {
  * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
  */
 function wp_make_content_images_responsive( $content ) {
-	_deprecated_function( __FUNCTION__, '5.5.0', 'wp_filter_content_tags()' );
+	_deprecated_function( __FUNCTION__, 'WP-5.5.0', 'wp_filter_content_tags()' );
 
 	// This will also add the `loading` attribute to `img` tags, if enabled.
 	return wp_filter_content_tags( $content );

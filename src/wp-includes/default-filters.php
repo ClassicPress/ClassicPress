@@ -140,18 +140,13 @@ add_filter( 'the_content', 'shortcode_unautop'                 );
 add_filter( 'the_content', 'prepend_attachment'                );
 add_filter( 'the_content', 'wp_filter_content_tags' );
 
-add_filter( 'the_excerpt',     'wptexturize'      );
-add_filter( 'the_excerpt',     'convert_smilies'  );
-add_filter( 'the_excerpt',     'convert_chars'    );
-add_filter( 'the_excerpt',     'wpautop'          );
-<<<<<<< HEAD
-add_filter( 'the_excerpt',     'shortcode_unautop');
-add_filter( 'get_the_excerpt', 'wp_trim_excerpt'  );
-=======
+add_filter( 'the_excerpt', 'wptexturize' );
+add_filter( 'the_excerpt', 'convert_smilies' );
+add_filter( 'the_excerpt', 'convert_chars' );
+add_filter( 'the_excerpt', 'wpautop' );
 add_filter( 'the_excerpt', 'shortcode_unautop' );
 add_filter( 'the_excerpt', 'wp_filter_content_tags' );
 add_filter( 'get_the_excerpt', 'wp_trim_excerpt', 10, 2 );
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 
 add_filter( 'the_post_thumbnail_caption', 'wptexturize'     );
 add_filter( 'the_post_thumbnail_caption', 'convert_smilies' );

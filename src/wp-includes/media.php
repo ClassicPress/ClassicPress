@@ -869,13 +869,7 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
  * @return string HTML img element or empty string on failure.
  */
 function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
-	$html = '';
-<<<<<<< HEAD
-	$image = wp_get_attachment_image_src($attachment_id, $size, $icon);
-	if ( $image ) {
-		list($src, $width, $height) = $image;
-		$hwstring = image_hwstring($width, $height);
-=======
+	$html  = '';
 	$image = wp_get_attachment_image_src( $attachment_id, $size, $icon );
 
 	if ( $image ) {
@@ -883,17 +877,12 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 
 		$attachment = get_post( $attachment_id );
 		$hwstring   = image_hwstring( $width, $height );
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 		$size_class = $size;
 
 		if ( is_array( $size_class ) ) {
 			$size_class = join( 'x', $size_class );
 		}
-<<<<<<< HEAD
-		$attachment = get_post($attachment_id);
-=======
 
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 		$default_attr = array(
 			'src'	=> $src,
 			'class'	=> "attachment-$size_class size-$size_class",
@@ -931,12 +920,8 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 		 *
 		 * @since WP-2.8.0
 		 *
-<<<<<<< HEAD
-		 * @param array        $attr       Attributes for the image markup.
-=======
 		 * @param array        $attr       Array of attribute values for the image markup, keyed by attribute name.
 		 *                                 See wp_get_attachment_image().
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 		 * @param WP_Post      $attachment Image attachment post.
 		 * @param string|array $size       Requested size. Image size or array of width and height values
 		 *                                 (in that order). Default 'thumbnail'.
@@ -944,12 +929,8 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 		$attr = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment, $size );
 
 		$attr = array_map( 'esc_attr', $attr );
-<<<<<<< HEAD
-		$html = rtrim("<img $hwstring");
-=======
 		$html = rtrim( "<img $hwstring" );
 
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 		foreach ( $attr as $name => $value ) {
 			$html .= " $name=" . '"' . $value . '"';
 		}
@@ -1335,56 +1316,6 @@ function wp_calculate_image_sizes( $size, $image_src = null, $image_meta = null,
 }
 
 /**
-<<<<<<< HEAD
- * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
- *
- * @since WP-4.4.0
- *
- * @see wp_image_add_srcset_and_sizes()
- *
- * @param string $content The raw post content to be filtered.
- * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
- */
-function wp_make_content_images_responsive( $content ) {
-	if ( ! preg_match_all( '/<img [^>]+>/', $content, $matches ) ) {
-		return $content;
-	}
-
-	$selected_images = $attachment_ids = array();
-
-	foreach( $matches[0] as $image ) {
-		if ( false === strpos( $image, ' srcset=' ) && preg_match( '/wp-image-([0-9]+)/i', $image, $class_id ) &&
-			( $attachment_id = absint( $class_id[1] ) ) ) {
-
-			/*
-			 * If exactly the same image tag is used more than once, overwrite it.
-			 * All identical tags will be replaced later with 'str_replace()'.
-			 */
-			$selected_images[ $image ] = $attachment_id;
-			// Overwrite the ID when the same image is included more than once.
-			$attachment_ids[ $attachment_id ] = true;
-		}
-	}
-
-	if ( count( $attachment_ids ) > 1 ) {
-		/*
-		 * Warm the object cache with post and meta information for all found
-		 * images to avoid making individual database calls.
-		 */
-		_prime_post_caches( array_keys( $attachment_ids ), false, true );
-	}
-
-	foreach ( $selected_images as $image => $attachment_id ) {
-		$image_meta = wp_get_attachment_metadata( $attachment_id );
-		$content = str_replace( $image, wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ), $content );
-	}
-
-	return $content;
-}
-
-/**
-=======
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
  * Adds 'srcset' and 'sizes' attributes to an existing 'img' element.
  *
  * @since WP-4.4.0
@@ -1476,7 +1407,7 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 /**
  * Determine whether to add the `loading` attribute to the specified tag in the specified context.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @param string $tag_name The tag name.
  * @param string $context Additional context, like the current filter name or the function name from where this was called.
@@ -1490,7 +1421,7 @@ function wp_lazy_loading_enabled( $tag_name, $context ) {
 	/**
 	 * Filters whether to add the `loading` attribute to the specified tag in the specified context.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param bool   $default Default value.
 	 * @param string $tag_name The tag name.
@@ -1504,7 +1435,7 @@ function wp_lazy_loading_enabled( $tag_name, $context ) {
  *
  * This function adds `srcset`, `sizes`, and `loading` attributes to `img` HTML tags.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @see wp_img_tag_add_loading_attr()
  * @see wp_img_tag_add_srcset_and_sizes_attr()
@@ -1581,7 +1512,7 @@ function wp_filter_content_tags( $content, $context = null ) {
 /**
  * Adds `loading` attribute to an `img` HTML tag.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @param string $image   The HTML `img` tag where the attribute should be added.
  * @param string $context Additional context to pass to the filters.
@@ -1594,7 +1525,7 @@ function wp_img_tag_add_loading_attr( $image, $context ) {
 	 * Returning `false` or an empty string will not add the attribute.
 	 * Returning `true` will add the default value.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param string $value   The `loading` attribute value, defaults to `lazy`.
 	 * @param string $image   The HTML `img` tag to be filtered.
@@ -1630,7 +1561,7 @@ function wp_img_tag_add_loading_attr( $image, $context ) {
 /**
  * Adds `srcset` and `sizes` attributes to an existing `img` HTML tag.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @param string $image         The HTML `img` tag where the attribute should be added.
  * @param string $context       Additional context to pass to the filters.
@@ -1643,7 +1574,7 @@ function wp_img_tag_add_srcset_and_sizes_attr( $image, $context, $attachment_id 
 	 *
 	 * Returning anything else than `true` will not add the attributes.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param bool   $value         The filtered value, defaults to `true`.
 	 * @param string $image         The HTML `img` tag where the attribute should be added.

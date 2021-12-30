@@ -1881,13 +1881,8 @@ EOF;
 		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
-<<<<<<< HEAD
-		// Replace the src URL
-		$image_wrong_src = preg_replace( '|src="[^"]+"|', 'src="http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/foo.jpg"', $image );
-=======
 		// Replace the src URL.
 		$image_wrong_src = preg_replace( '|src="[^"]+"|', 'src="http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/foo.jpg"', $img );
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 
 		$this->assertSame( $image_wrong_src, wp_filter_content_tags( $image_wrong_src ) );
 	}
@@ -1897,14 +1892,9 @@ EOF;
 	 */
 	function test_wp_filter_content_tags_with_preexisting_srcset() {
 		// Generate HTML and add a dummy srcset attribute.
-<<<<<<< HEAD
-		$image_html = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$image_html = preg_replace('|<img ([^>]+) />|', '<img $1 ' . 'srcset="image2x.jpg 2x" />', $image_html );
-=======
 		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 		$img = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . 'srcset="image2x.jpg 2x" />', $img );
->>>>>>> 7b5d78f82f (Media: Enable lazy-loading of images by automatically adding the new `loading="lazy"` attribute to image tags on the front-end.)
 
 		// The content filter should return the image unchanged.
 		$this->assertSame( $img, wp_filter_content_tags( $img ) );
@@ -2355,7 +2345,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
+	 * @see https://core.trac.wordpress.org/ticket/44427
 	 */
 	function test_wp_lazy_load_content_media() {
 		$img       = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -2394,7 +2384,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
+	 * @see https://core.trac.wordpress.org/ticket/44427
 	 */
 	function test_wp_lazy_load_content_media_opted_in() {
 		$img      = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -2419,7 +2409,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
+	 * @see https://core.trac.wordpress.org/ticket/44427
 	 */
 	function test_wp_lazy_load_content_media_opted_out() {
 		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -2441,7 +2431,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
+	 * @see https://core.trac.wordpress.org/ticket/44427
 	 */
 	function test_wp_img_tag_add_loading_attr_single_quote() {
 		$img = "<img src='example.png' alt='' width='300' height='225' />";
