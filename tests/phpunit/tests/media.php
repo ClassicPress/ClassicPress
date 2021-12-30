@@ -2506,7 +2506,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 50367
+	 * @ee https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_img_tag_add_loading_attr_with_single_quotes() {
 		$img = "<img src='example.png' alt=' width='300' height='225' />";
