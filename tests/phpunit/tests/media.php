@@ -1809,12 +1809,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/33641
-=======
-	 * @ticket 33641
-	 * @ticket 50367
->>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
+	 * @see https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_filter_content_tags() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1835,13 +1831,6 @@ EOF;
 		$img_xhtml = str_replace( ' />', '/>', $img );
 		$img_html5 = str_replace( ' />', '>', $img );
 
-<<<<<<< HEAD
-		// Manually add srcset and sizes to the markup from get_image_tag();
-		$respimg = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
-		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
-		$respimg_no_width_height = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
-		$respimg_with_sizes_attr = preg_replace('|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
-=======
 		$hwstring = image_hwstring( $size_array[0], $size_array[1] );
 
 		// Manually add srcset and sizes to the markup from get_image_tag().
@@ -1849,7 +1838,6 @@ EOF;
 		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
 		$respimg_no_width_height  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $hwstring . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
 		$respimg_with_sizes_attr  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
->>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
 		$respimg_xhtml = preg_replace( '|<img ([^>]+)/>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_xhtml );
 		$respimg_html5 = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_html5 );
 
@@ -2360,12 +2348,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/44427
-=======
-	 * @ticket 44427
-	 * @ticket 50367
->>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
+	 * @see https://core.trac.wordpress.org/ticket/0367
 	 */
 	function test_wp_lazy_load_content_media() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );

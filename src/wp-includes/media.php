@@ -1318,12 +1318,8 @@ function wp_calculate_image_sizes( $size, $image_src = null, $image_meta = null,
 /**
  * Adds 'srcset' and 'sizes' attributes to an existing 'img' element.
  *
-<<<<<<< HEAD
  * @since WP-4.4.0
-=======
- * @since 4.4.0
- * @since 5.5.0 `width` and `height` are now added if not already present.
->>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
+ * @since WP-5.5.0 `width` and `height` are now added if not already present.
  *
  * @see wp_calculate_image_srcset()
  * @see wp_calculate_image_sizes()
