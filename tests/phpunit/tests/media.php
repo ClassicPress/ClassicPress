@@ -1813,7 +1813,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/33641
 	 * @see https://core.trac.wordpress.org/ticket/50367
 =======
-	 * @ticket 33641
+	 * @https://core.trac.wordpress.org/ticket/33641
 >>>>>>> d8af0369e3 (Media: Introduce `wp_img_tag_add_width_and_height_attr()` to add dimension attributes to images.)
 	 */
 	function test_wp_filter_content_tags_srcset_sizes() {
@@ -2496,11 +2496,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
+	 * @see https://core.trac.wordpress.org/ticket/44427
 	 * @see https://core.trac.wordpress.org/ticket/50367
-=======
-	 * @ticket 44427
-	 * @ticket 50367
 	 */
 	function test_wp_img_tag_add_loading_attr() {
 		$img = '<img src="example.png" alt=" width="300" height="225" />';
@@ -2510,9 +2507,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50367
->>>>>>> 284b92b122 (Media: Improve support for opting out of lazy-loading for template images.)
+	 * @tsee https://core.trac.wordpress.org/ticket/44427
+	 * @tsee https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_img_tag_add_loading_attr_without_src() {
 		$img = '<img alt=" width="300" height="225" />';
@@ -2522,12 +2518,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @ee https://core.trac.wordpress.org/ticket/50367
-=======
-	 * @ticket 44427
-	 * @ticket 50367
->>>>>>> 284b92b122 (Media: Improve support for opting out of lazy-loading for template images.)
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_img_tag_add_loading_attr_with_single_quotes() {
 		$img = "<img src='example.png' alt=' width='300' height='225' />";
@@ -2541,8 +2533,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_img_tag_add_loading_attr_opt_out() {
 		$img = '<img src="example.png" alt=" width="300" height="225" />';
@@ -2552,8 +2544,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_get_attachment_image_loading() {
 		$img = wp_get_attachment_image( self::$large_id );
@@ -2562,8 +2554,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_get_attachment_image_loading_opt_out() {
 		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
@@ -2574,8 +2566,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_get_attachment_image_loading_opt_out_individual() {
 		// The default is already tested above, the filter below ensures that
@@ -2589,8 +2581,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/44427
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 * @dataProvider data_wp_lazy_loading_enabled_tag_name_defaults
 	 *
 	 * @param string $tag_name  Function context.
@@ -2613,7 +2605,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 50425
+	 * @https://core.trac.wordpress.org/ticket/50425
 	 * @dataProvider data_wp_lazy_loading_enabled_context_defaults
 	 *
 	 * @param string $context  Function context.
