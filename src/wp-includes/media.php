@@ -1318,7 +1318,12 @@ function wp_calculate_image_sizes( $size, $image_src = null, $image_meta = null,
 /**
  * Adds 'srcset' and 'sizes' attributes to an existing 'img' element.
  *
+<<<<<<< HEAD
  * @since WP-4.4.0
+=======
+ * @since 4.4.0
+ * @since 5.5.0 `width` and `height` are now added if not already present.
+>>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
  *
  * @see wp_calculate_image_srcset()
  * @see wp_calculate_image_sizes()
@@ -1349,6 +1354,8 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 		return $image;
 	}
 
+	$attr = '';
+
 	$width  = preg_match( '/ width="([0-9]+)"/',  $image, $match_width  ) ? (int) $match_width[1]  : 0;
 	$height = preg_match( '/ height="([0-9]+)"/', $image, $match_height ) ? (int) $match_height[1] : 0;
 
@@ -1371,10 +1378,13 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 				}
 			}
 		}
-	}
 
 	if ( ! $width || ! $height ) {
 		return $image;
+	}
+
+		// Add width and height if not present.
+		$attr .= ' ' . trim( image_hwstring( $width, $height ) );
 	}
 
 	$size_array = array( $width, $height );
@@ -1391,17 +1401,19 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 
 	if ( $srcset && $sizes ) {
 		// Format the 'srcset' and 'sizes' string and escape attributes.
-		$attr = sprintf( ' srcset="%s"', esc_attr( $srcset ) );
+		$attr .= sprintf( ' srcset="%s"', esc_attr( $srcset ) );
 
 		if ( is_string( $sizes ) ) {
 			$attr .= sprintf( ' sizes="%s"', esc_attr( $sizes ) );
 		}
-
-		// Add 'srcset' and 'sizes' attributes to the image markup.
-		$image = preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
 	}
 
+	if ( empty( $attr ) ) {
 	return $image;
+	}
+
+	// Add extra attributes to the image markup.
+	return preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
 }
 
 /**
@@ -1536,6 +1548,12 @@ function wp_img_tag_add_loading_attr( $image, $context ) {
 	if ( $value ) {
 		if ( ! in_array( $value, array( 'lazy', 'eager' ), true ) ) {
 			$value = 'lazy';
+		}
+
+		// Images should have dimension attributes for the `loading` attribute
+		// to be added.
+		if ( false === strpos( $image, ' width=' ) || false === strpos( $image, ' height=' ) ) {
+			return $image;
 		}
 
 		$quote = null;

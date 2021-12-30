@@ -1809,7 +1809,12 @@ EOF;
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/33641
+=======
+	 * @ticket 33641
+	 * @ticket 50367
+>>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
 	 */
 	function test_wp_filter_content_tags() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -1830,11 +1835,21 @@ EOF;
 		$img_xhtml = str_replace( ' />', '/>', $img );
 		$img_html5 = str_replace( ' />', '>', $img );
 
+<<<<<<< HEAD
 		// Manually add srcset and sizes to the markup from get_image_tag();
 		$respimg = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
 		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
 		$respimg_no_width_height = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
 		$respimg_with_sizes_attr = preg_replace('|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
+=======
+		$hwstring = image_hwstring( $size_array[0], $size_array[1] );
+
+		// Manually add srcset and sizes to the markup from get_image_tag().
+		$respimg                  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
+		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
+		$respimg_no_width_height  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $hwstring . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
+		$respimg_with_sizes_attr  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
+>>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
 		$respimg_xhtml = preg_replace( '|<img ([^>]+)/>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_xhtml );
 		$respimg_html5 = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_html5 );
 
@@ -1845,7 +1860,7 @@ EOF;
 			<p>Image, no size class. Should have srcset and sizes.</p>
 			%2$s
 
-			<p>Image, no width and height attributes. Should have srcset and sizes (from matching the file name).</p>
+			<p>Image, no width and height attributes. Should have width, height, srcset and sizes (from matching the file name).</p>
 			%3$s
 
 			<p>Image, no attachment ID class. Should NOT have srcset and sizes.</p>
@@ -2345,12 +2360,22 @@ EOF;
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/44427
+=======
+	 * @ticket 44427
+	 * @ticket 50367
+>>>>>>> 9568134d7b (Media: Ensure images have dimensions to reduce layout shift and facilitate lazy-loading.)
 	 */
 	function test_wp_lazy_load_content_media() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
+
 		$img       = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img_xhtml = str_replace( ' />', '/>', $img );
 		$img_html5 = str_replace( ' />', '>', $img );
+		$img_no_width_height = str_replace( ' width="' . $size_array[0] . '"', '', $img );
+		$img_no_width_height = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
 		$iframe    = '<iframe src="https://www.example.com"></iframe>';
 
 		$lazy_img       = wp_img_tag_add_loading_attr( $img, 'test' );
@@ -2367,13 +2392,15 @@ EOF;
 			%2$s
 			<p>Image, HTML 5.0 style.</p>
 			%3$s
-			<p>Image, with pre-existing "loading" attribute.</p>
+			<p>Image, with pre-existing "loading" attribute. Should not be modified.</p>
+			%4$s
+			<p>Image, without dimension attributes. Should not be modified.</p>
 			%5$s
 			<p>Iframe, standard. Should not be modified.</p>
-			%4$s';
+			%6$s';
 
-		$content_unfiltered = sprintf( $content, $img, $img_xhtml, $img_html5, $iframe, $img_eager );
-		$content_filtered   = sprintf( $content, $lazy_img, $lazy_img_xhtml, $lazy_img_html5, $iframe, $img_eager );
+		$content_unfiltered = sprintf( $content, $img, $img_xhtml, $img_html5, $img_eager, $img_no_width_height, $iframe );
+		$content_filtered   = sprintf( $content, $lazy_img, $lazy_img_xhtml, $lazy_img_html5, $img_eager, $img_no_width_height, $iframe );
 
 		// Do not add srcset and sizes.
 		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
