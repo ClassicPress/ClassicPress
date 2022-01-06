@@ -14,7 +14,8 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 		$this->assertNotEmpty( $matches );
 
-		$version_info = getcwd() . '/supported-versions.html';
+		$version_info = __DIR__ . '/../../../../supported-versions.html';
+		var_dump( $version_info );
 		if ( file_exists( $version_info ) ) {
 			$php = file_get_contents( $version_info );
 		} else {
