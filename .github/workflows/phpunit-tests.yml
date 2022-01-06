@@ -174,9 +174,7 @@ jobs:
         run: |
           mkdir php.net
           git clone https://github.com/php/web-php php.net
-          cd php.net
-          php -d error_reporting=E_ERROR -f ./supported-versions.php > ../supported-versions.html
-          cd ..
+          php -d error_reporting=E_ERROR -f php.net/supported-versions.php > supported-versions.html
 
       - name: Run PHPUnit default
         env:
