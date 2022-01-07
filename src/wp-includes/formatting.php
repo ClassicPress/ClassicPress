@@ -1083,12 +1083,8 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
 /**
  * Encode the Unicode values to be used in the URI.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
-=======
- * @since 1.5.0
- * @since 5.8.3 Added the `encode_ascii_characters` parameter.
->>>>>>> 25331bc640 (Grouped backports to the 4.9 branch.)
+ * @since WP-5.8.3 Added the `encode_ascii_characters` parameter.
  *
  * @param string $utf8_string             String to encode.
  * @param int    $length Max  length of the string
