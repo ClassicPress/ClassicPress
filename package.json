@@ -38,9 +38,5 @@
   },
   "dependencies": {
     "node-sass": "6.0.1"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/classicpress-294"
   }
 }
