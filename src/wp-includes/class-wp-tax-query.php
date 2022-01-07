@@ -557,7 +557,7 @@ class WP_Tax_Query {
 		}
 
 		if ( 'slug' === $query['field'] || 'name' === $query['field'] ) {
-		$query['terms'] = array_unique( (array) $query['terms'] );
+			$query['terms'] = array_unique( (array) $query['terms'] );
 		} else {
 			$query['terms'] = wp_parse_id_list( $query['terms'] );
 		}
