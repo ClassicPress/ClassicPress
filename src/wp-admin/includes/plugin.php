@@ -47,12 +47,8 @@
  * the file. This is not checked however and the file is only opened for
  * reading.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
-=======
- * @since 1.5.0
- * @since 5.3.0 Added support for `Requires at least` and `Requires PHP`.
->>>>>>> 1f1cf751e5 (Plugins: When validating plugin's WordPress and PHP requirements, check for `Requires at least` and `Requires PHP` headers in the plugin's main PHP file.)
+ * @since WP-5.3.0 Added support for `Requires at least` and `Requires PHP`.
  *
  * @param string $plugin_file Path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
