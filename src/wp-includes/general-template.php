@@ -127,11 +127,16 @@ function get_sidebar( $name = null ) {
  * "special".
  *
  * @since WP-3.0.0
+ * @since WP-5.5.0 A return value was added.
+ * @since WP-5.5.0 The `$args` parameter was added.
  *
  * @param string $slug The slug name for the generic template.
  * @param string $name The name of the specialised template.
+ * @param array  $args Optional. Additional arguments passed to the template.
+ *                     Default empty array.
+ * @return void|false Void on success, false if the template does not exist.
  */
-function get_template_part( $slug, $name = null ) {
+function get_template_part( $slug, $name = null, $args = array() ) {
 	/**
 	 * Fires before the specified template part file is loaded.
 	 *
@@ -139,11 +144,13 @@ function get_template_part( $slug, $name = null ) {
 	 * for the generic template part.
 	 *
 	 * @since WP-3.0.0
+	 * @since WP-5.5.0 The `$args` parameter was added.
 	 *
 	 * @param string      $slug The slug name for the generic template.
 	 * @param string|null $name The name of the specialized template.
+	 * @param array       $args Additional arguments passed to the template.
 	 */
-	do_action( "get_template_part_{$slug}", $slug, $name );
+	do_action( "get_template_part_{$slug}", $slug, $name, $args );
 
 	$templates = array();
 	$name = (string) $name;
@@ -152,7 +159,22 @@ function get_template_part( $slug, $name = null ) {
 
 	$templates[] = "{$slug}.php";
 
-	locate_template($templates, true, false);
+	/**
+	 * Fires before a template part is loaded.
+	 *
+	 * @since WP-5.2.0
+	 * @since WP-5.5.0 The `$args` parameter was added.
+	 *
+	 * @param string   $slug      The slug name for the generic template.
+	 * @param string   $name      The name of the specialized template.
+	 * @param string[] $templates Array of template files to search for, in order.
+	 * @param array    $args      Additional arguments passed to the template.
+	 */
+	do_action( 'get_template_part', $slug, $name, $templates, $args );
+
+	if ( ! locate_template( $templates, true, false, $args ) ) {
+		return false;
+	}
 }
 
 /**
