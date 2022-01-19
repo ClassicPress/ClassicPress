@@ -142,32 +142,14 @@ function wp_timezone() {
  * the timestamp represents. Storing such timestamps or calculating them differently
  * will lead to invalid output.
  *
-<<<<<<< HEAD
  * @since WP-0.71
-=======
- * @since 0.71
- * @since 5.3.0 Converted into a wrapper for wp_date().
->>>>>>> a4723edc50 (Date/Time: Introduce `wp_date()` to retrieve the date in localized format.)
+ * @since WP-5.3.0 Converted into a wrapper for wp_date().
  *
  * @global WP_Locale $wp_locale
  *
  * @param string   $format                Format to display the date.
  * @param int|bool $timestamp_with_offset Optional. A sum of Unix timestamp and timezone offset in seconds.
  *                                        Default false.
-<<<<<<< HEAD
- * @param bool     $gmt              Optional. Whether to use GMT timezone. Default false.
- *
- * @return string The date, translated if locale specifies it.
- */
-function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = false ) {
-	global $wp_locale;
-
-	$i = $timestamp_with_offset;
-
-	if ( false === $i ) {
-		$i = current_time( 'timestamp', $gmt );
-	}
-=======
  * @param bool     $gmt                   Optional. Whether to use GMT timezone. Only applies if timestamp is
  *                                        not provided. Default false.
  * @return string The date, translated if locale specifies it.
@@ -175,7 +157,6 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
 	// If timestamp is omitted it should be current time (summed with offset, unless `$gmt` is true).
 	$timestamp = $timestamp_with_offset ? $timestamp_with_offset : current_time( 'timestamp', $gmt );
->>>>>>> a4723edc50 (Date/Time: Introduce `wp_date()` to retrieve the date in localized format.)
 
 	/*
 	 * This is a legacy implementation quirk that the returned timestamp is also with offset.
@@ -296,22 +277,13 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
 	/**
 	 * Filters the date formatted based on the locale.
 	 *
-<<<<<<< HEAD
-	 * @since WP-2.8.0
-	 *
-	 * @param string $j          Formatted date string.
-	 * @param string $req_format Format to display the date.
-	 * @param int    $i          A sum of Unix timestamp and timezone offset in seconds.
-	 * @param bool   $gmt        Whether to convert to GMT for time. Default false.
-=======
-	 * @since 5.3.0
+	 * @since WP-5.3.0
 	 *
 	 * @param string       $date      Formatted date string.
 	 * @param string       $format    Format to display the date.
 	 * @param int          $timestamp Unix timestamp.
 	 * @param DateTimeZone $timezone  Timezone.
 	 *
->>>>>>> a4723edc50 (Date/Time: Introduce `wp_date()` to retrieve the date in localized format.)
 	 */
 	$date = apply_filters( 'wp_date', $date, $format, $timestamp, $timezone );
 
