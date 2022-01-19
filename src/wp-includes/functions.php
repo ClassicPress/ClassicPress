@@ -785,15 +785,12 @@ function wp_get_http_headers( $url, $deprecated = false ) {
  */
 function is_new_day() {
 	global $currentday, $previousday;
-<<<<<<< HEAD
-	if ( $currentday != $previousday )
-=======
 
 	if ( $currentday !== $previousday ) {
->>>>>>> 6491746559 (Date/Time: Use strict comparison in `is_new_day()`, add a unit test.)
 		return 1;
-	else
+	} else {
 		return 0;
+	}
 }
 
 /**
