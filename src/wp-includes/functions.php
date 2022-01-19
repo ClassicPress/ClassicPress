@@ -126,16 +126,12 @@ function wp_timezone() {
  * take over the format for the date. If it isn't, then the date format string
  * will be used instead.
  *
-<<<<<<< HEAD
- * @since WP-0.71
-=======
  * Note that due to the way WP typically generates a sum of timestamp and offset
  * with `strtotime()`, it implies offset added at a _current_ time, not at the time
  * the timestamp represents. Storing such timestamps or calculating them differently
  * will lead to invalid output.
  *
- * @since 0.71
->>>>>>> 67f7d1f4c7 (Date/Time: Rewrite and simplify `date_i18n()` using `wp_timezone()` to address multiple issues with certain date formats and timezones, while preserving some extra handling for legacy use cases.)
+ * @since WP-0.71
  *
  * @global WP_Locale $wp_locale
  *
@@ -162,13 +158,8 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 	$req_format = $dateformatstring;
 	$new_format = '';
 
-<<<<<<< HEAD
-	$dateformatstring = preg_replace( "/(?<!\\\\)c/", DATE_W3C, $dateformatstring );
-	$dateformatstring = preg_replace( "/(?<!\\\\)r/", DATE_RFC2822, $dateformatstring );
-=======
 	// We need to unpack shorthand `r` format because it has parts that might be localized.
 	$dateformatstring = preg_replace( '/(?<!\\\\)r/', DATE_RFC2822, $dateformatstring );
->>>>>>> 67f7d1f4c7 (Date/Time: Rewrite and simplify `date_i18n()` using `wp_timezone()` to address multiple issues with certain date formats and timezones, while preserving some extra handling for legacy use cases.)
 
 	/*
 	 * Timestamp with offset is typically produced by a UTC `strtotime()` call on an input without timezone.
@@ -179,30 +170,6 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 	$timezone   = $gmt_mode ? new DateTimeZone( 'UTC' ) : wp_timezone();
 	$datetime   = date_create( $local_time, $timezone );
 
-<<<<<<< HEAD
-		$dateformatstring = substr( $dateformatstring, 1, strlen( $dateformatstring ) -1 );
-	}
-	$timezone_formats = array( 'P', 'I', 'O', 'T', 'Z', 'e' );
-	$timezone_formats_re = implode( '|', $timezone_formats );
-	if ( preg_match( "/$timezone_formats_re/", $dateformatstring ) ) {
-		$timezone_string = get_option( 'timezone_string' );
-		if ( $timezone_string ) {
-			$timezone_object = timezone_open( $timezone_string );
-			$date_object = date_create( null, $timezone_object );
-			foreach ( $timezone_formats as $timezone_format ) {
-				if ( false !== strpos( $dateformatstring, $timezone_format ) ) {
-					$formatted = date_format( $date_object, $timezone_format );
-					$dateformatstring = ' '.$dateformatstring;
-					$dateformatstring = preg_replace( "/([^\\\])$timezone_format/", "\\1" . backslashit( $formatted ), $dateformatstring );
-					$dateformatstring = substr( $dateformatstring, 1, strlen( $dateformatstring ) -1 );
-				}
-			}
-		} else {
-			$offset = get_option( 'gmt_offset' );
-			foreach ( $timezone_formats as $timezone_format ) {
-				if ( 'I' === $timezone_format ) {
-					continue;
-=======
 	/*
 	 * This is a legacy implementation quirk that the returned timestamp is also with offset.
 	 * Ideally this function should never be used to produce a timestamp.
@@ -211,8 +178,7 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 
 	if ( $timestamp_mode ) {
 		$new_format = $i;
->>>>>>> 67f7d1f4c7 (Date/Time: Rewrite and simplify `date_i18n()` using `wp_timezone()` to address multiple issues with certain date formats and timezones, while preserving some extra handling for legacy use cases.)
-				}
+	}
 
 	if ( ! $timestamp_mode && ! empty( $wp_locale->month ) && ! empty( $wp_locale->weekday ) ) {
 		$month   = $wp_locale->get_month( $datetime->format( 'm' ) );
@@ -254,12 +220,8 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 			}
 		}
 	}
-<<<<<<< HEAD
-	$j = @gmdate( $dateformatstring, $i );
-=======
 
 	$j = $datetime->format( $new_format );
->>>>>>> 67f7d1f4c7 (Date/Time: Rewrite and simplify `date_i18n()` using `wp_timezone()` to address multiple issues with certain date formats and timezones, while preserving some extra handling for legacy use cases.)
 
 	/**
 	 * Filters the date formatted based on the locale.
@@ -1553,45 +1515,7 @@ function do_robots() {
 }
 
 /**
-<<<<<<< HEAD
  * Test whether ClassicPress is already installed.
-=======
- * Display the robots.txt file content.
- *
- * The echo content should be with usage of the permalinks or for creating the
- * robots.txt file.
- *
- * @since 5.3.0
- */
-function do_favicon() {
-	/**
-	 * Fires when serving the favicon.ico file.
-	 *
-	 * @since 5.3.0
-	 */
-	do_action( 'do_faviconico' );
-
-	wp_safe_redirect( esc_url( get_site_icon_url( 32, admin_url( 'images/w-logo-blue.png' ) ) ) );
-
-}
-
-/**
- * Don't load all of WordPress when handling a favicon.ico request.
- *
- * Instead, send the headers for a zero-length favicon and bail.
- *
- * @since 3.0.0
- */
-function wp_favicon_request() {
-	if ( '/favicon.ico' == $_SERVER['REQUEST_URI'] ) {
-		header( 'Content-Type: image/vnd.microsoft.icon' );
-		exit;
-	}
-}
-
-/**
- * Determines whether WordPress is already installed.
->>>>>>> 67f7d1f4c7 (Date/Time: Rewrite and simplify `date_i18n()` using `wp_timezone()` to address multiple issues with certain date formats and timezones, while preserving some extra handling for legacy use cases.)
  *
  * The cache will be checked first. If you have a cache plugin, which saves
  * the cache values, then this will work. If you use the default ClassicPress
