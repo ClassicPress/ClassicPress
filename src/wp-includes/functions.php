@@ -100,14 +100,10 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 	 */
 	$req_format = $dateformatstring;
 
-<<<<<<< HEAD
-	if ( ( !empty( $wp_locale->month ) ) && ( !empty( $wp_locale->weekday ) ) ) {
-=======
 	$dateformatstring = preg_replace( "/(?<!\\\\)c/", DATE_W3C, $dateformatstring );
 	$dateformatstring = preg_replace( "/(?<!\\\\)r/", DATE_RFC2822, $dateformatstring );
 
 	if ( ( ! empty( $wp_locale->month ) ) && ( ! empty( $wp_locale->weekday ) ) ) {
->>>>>>> f584b5755a (Date/Time: Add support for the `c` and `r` shorthand formats in `date_i18n()`.)
 		$datemonth = $wp_locale->get_month( date( 'm', $i ) );
 		$datemonth_abbrev = $wp_locale->get_month_abbrev( $datemonth );
 		$dateweekday = $wp_locale->get_weekday( date( 'w', $i ) );
