@@ -487,12 +487,6 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	public function test_build_mysql_datetime( $datetime, $expected, $default_to_max = false ) {
 		$q = new WP_Date_Query( array() );
 
-<<<<<<< HEAD
-		$found = $q->build_mysql_datetime( array(
-			'year' => 2011,
-		), true );
-		$this->assertSame( '2011-12-31 23:59:59', $found );
-=======
 		$found = $q->build_mysql_datetime( $datetime, $default_to_max );
 
 		$message = "Expected {$expected}, got {$found}";
@@ -512,7 +506,6 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			array( '2011-02-03 13:30', '2011-02-03 13:30:00' ),
 			array( '2011-02-03 13:30:35', '2011-02-03 13:30:35' ),
 		);
->>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	}
 
 	/**
@@ -529,12 +522,6 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 
 		$q = new WP_Date_Query( array() );
 
-<<<<<<< HEAD
-		$found = $q->build_mysql_datetime( array(
-			'year' => 2011,
-		), false );
-		$this->assertSame( '2011-01-01 00:00:00', $found );
-=======
 		$found = $q->build_mysql_datetime( $datetime, $default_to_max );
 
 		$message = "Expected {$expected}, got {$found}";
@@ -547,7 +534,6 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			array( '2019-06-04T08:18:24+03:00', '2019-06-04 08:18:24' ),
 			array( '2019-06-04T05:18:24+00:00', '2019-06-04 08:18:24' ),
 		);
->>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	}
 
 	/**
@@ -558,19 +544,12 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 
 		$q = new WP_Date_Query( array() );
 
-<<<<<<< HEAD
-		$found = $q->build_mysql_datetime( array(
-			'year' => 2011,
-		), false );
-		$this->assertSame( '2011-01-01 00:00:00', $found );
-=======
 		$yesterday = new DateTimeImmutable( '-1 day', wp_timezone() );
 		$expected  = $yesterday->format( 'Y-m-d H:i:s' );
 		$found     = $q->build_mysql_datetime( '-1 day' );
 
 		$message = "Expected {$expected}, got {$found}";
 		$this->assertEquals( strtotime( $expected ), strtotime( $found ), $message, 10 );
->>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	}
 
 	public function test_build_time_query_insufficient_time_values() {
