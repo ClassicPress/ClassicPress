@@ -438,20 +438,11 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( '0000-00-00 00:00:00' === $post->post_date ) {
 			$h_time = __( 'Unpublished' );
 		} else {
-<<<<<<< HEAD
-			$m_time = $post->post_date;
-			$time = get_post_time( 'G', true, $post, false );
-			if ( ( abs( $t_diff = time() - $time ) ) < DAY_IN_SECONDS ) {
-				if ( $t_diff < 0 ) {
-					$h_time = sprintf( __( '%s from now' ), human_time_diff( $time ) );
-				} else {
-=======
 			$time      = get_post_timestamp( $post );
 			$time_diff = time() - $time;
 
 			if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
 				/* translators: %s: Human-readable time difference. */
->>>>>>> 9a9abc0fb8 (Date/Time: Correct the logic in `WP_Posts_List_Table::column_date()` and `WP_Media_List_Table::column_date()` to check for a valid post timestamp.)
 					$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
 			} else {
 				$h_time = get_the_time( __( 'Y/m/d' ), $post );
