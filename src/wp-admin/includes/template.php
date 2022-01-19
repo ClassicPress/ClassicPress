@@ -742,8 +742,13 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$minute = '<label><span class="screen-reader-text">' . __( 'Minute' ) . '</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" /></label>';
 
 	echo '<div class="timestamp-wrap">';
+<<<<<<< HEAD
 	/* translators: 1: month, 2: day, 3: year, 4: hour, 5: minute */
 	printf( __( '%1$s %2$s, %3$s @ %4$s:%5$s' ), $month, $day, $year, $hour, $minute );
+=======
+	/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
+	printf( __( '%1$s %2$s, %3$s at %4$s:%5$s' ), $month, $day, $year, $hour, $minute );
+>>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 
 	echo '</div><input type="hidden" id="ss" name="ss" value="' . $ss . '" />';
 

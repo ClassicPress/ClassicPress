@@ -176,6 +176,7 @@ echo esc_html( $visibility_trans ); ?></span>
 
 </div><!-- .misc-pub-section -->
 
+<<<<<<< HEAD
 <?php
 /* translators: Publish box date format, see https://secure.php.net/date */
 $datef = __( 'M j, Y @ H:i' );
@@ -186,9 +187,27 @@ if ( 0 != $post->ID ) {
 	} elseif ( 'publish' == $post->post_status || 'private' == $post->post_status ) { // already published
 		/* translators: Post date information. 1: Date on which the post was published */
 		$stamp = __('Published on: <b>%1$s</b>');
+=======
+	<?php
+	/* translators: Publish box date string. 1: Date, 2: Time. See https://secure.php.net/date */
+	$date_string = __( '%1$s at %2$s' );
+	/* translators: Publish box date format, see https://secure.php.net/date */
+	$date_format = _x( 'M j, Y', 'publish box date format' );
+	/* translators: Publish box time format, see https://secure.php.net/date */
+	$time_format = _x( 'H:i', 'publish box time format' );
+
+	if ( 0 != $post->ID ) {
+		if ( 'future' == $post->post_status ) { // scheduled for publishing at a future date
+			/* translators: Post date information. %s: Date on which the post is currently scheduled to be published. */
+			$stamp = __( 'Scheduled for: %s' );
+		} elseif ( 'publish' == $post->post_status || 'private' == $post->post_status ) { // already published
+			/* translators: Post date information. %s: Date on which the post was published. */
+			$stamp = __( 'Published on: %s' );
+>>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 	} elseif ( '0000-00-00 00:00:00' == $post->post_date_gmt ) { // draft, 1 or more saves, no date specified
 		$stamp = __('Publish <b>immediately</b>');
 	} elseif ( time() < strtotime( $post->post_date_gmt . ' +0000' ) ) { // draft, 1 or more saves, future date specified
+<<<<<<< HEAD
 		/* translators: Post date information. 1: Date on which the post is to be published */
 		$stamp = __('Schedule for: <b>%1$s</b>');
 	} else { // draft, 1 or more saves, date specified
@@ -200,6 +219,27 @@ if ( 0 != $post->ID ) {
 	$stamp = __('Publish <b>immediately</b>');
 	$date = date_i18n( $datef, strtotime( current_time('mysql') ) );
 }
+=======
+			/* translators: Post date information. %s: Date on which the post is to be published. */
+			$stamp = __( 'Schedule for: %s' );
+		} else { // draft, 1 or more saves, date specified
+			/* translators: Post date information. %s: Date on which the post is to be published. */
+			$stamp = __( 'Publish on: %s' );
+		}
+		$date = sprintf(
+			$date_string,
+			date_i18n( $date_format, strtotime( $post->post_date ) ),
+			date_i18n( $time_format, strtotime( $post->post_date ) )
+		);
+	} else { // draft (no saves, and thus no date specified)
+		$stamp = __( 'Publish <b>immediately</b>' );
+		$date  = sprintf(
+			$date_string,
+			date_i18n( $date_format, strtotime( current_time( 'mysql' ) ) ),
+			date_i18n( $time_format, strtotime( current_time( 'mysql' ) ) )
+		);
+	}
+>>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 
 if ( ! empty( $args['args']['revisions_count'] ) ) : ?>
 <div class="misc-pub-section misc-pub-revisions">
@@ -214,8 +254,17 @@ if ( ! empty( $args['args']['revisions_count'] ) ) : ?>
 if ( $can_publish ) : // Contributors don't get to choose the date of publish ?>
 <div class="misc-pub-section curtime misc-pub-curtime">
 	<span id="timestamp">
+<<<<<<< HEAD
 	<?php printf($stamp, $date); ?></span>
 	<a href="#edit_timestamp" class="edit-timestamp hide-if-no-js" role="button"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit date and time' ); ?></span></a>
+=======
+		<?php printf( $stamp, '<b>' . $date . '</b>' ); ?>
+	</span>
+	<a href="#edit_timestamp" class="edit-timestamp hide-if-no-js" role="button">
+		<span aria-hidden="true"><?php _e( 'Edit' ); ?></span>
+		<span class="screen-reader-text"><?php _e( 'Edit date and time' ); ?></span>
+	</a>
+>>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 	<fieldset id="timestampdiv" class="hide-if-js">
 	<legend class="screen-reader-text"><?php _e( 'Date and time' ); ?></legend>
 	<?php touch_time( ( $action === 'edit' ), 1 ); ?>

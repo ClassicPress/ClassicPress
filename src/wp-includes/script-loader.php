@@ -723,6 +723,7 @@ function wp_default_scripts( &$scripts ) {
 			'termRemoved'  => __( 'Term removed.' ),
 		) );
 
+<<<<<<< HEAD
 		$scripts->add( 'post', "/wp-admin/js/post$suffix.js", array( 'suggest', 'wp-lists', 'postbox', 'tags-box', 'underscore', 'word-count', 'wp-a11y' ), false, 1 );
 		did_action( 'init' ) && $scripts->localize( 'post', 'postL10n', array(
 			'ok' => __('OK'),
@@ -747,6 +748,35 @@ function wp_default_scripts( &$scripts ) {
 			'published' => __('Published'),
 			'saveAlert' => __('The changes you made will be lost if you navigate away from this page.'),
 			'savingText' => __('Saving Draft&#8230;'),
+=======
+		$scripts->add( 'post', "/wp-admin/js/post$suffix.js", array( 'suggest', 'wp-lists', 'postbox', 'tags-box', 'underscore', 'word-count', 'wp-a11y', 'wp-sanitize' ), false, 1 );
+		did_action( 'init' ) && $scripts->localize(
+			'post',
+			'postL10n',
+			array(
+				'ok'                 => __( 'OK' ),
+				'cancel'             => __( 'Cancel' ),
+				'publishOn'          => __( 'Publish on:' ),
+				'publishOnFuture'    => __( 'Schedule for:' ),
+				'publishOnPast'      => __( 'Published on:' ),
+				/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
+				'dateFormat'         => __( '%1$s %2$s, %3$s at %4$s:%5$s' ),
+				'showcomm'           => __( 'Show more comments' ),
+				'endcomm'            => __( 'No more comments found.' ),
+				'publish'            => __( 'Publish' ),
+				'schedule'           => _x( 'Schedule', 'post action/button label' ),
+				'update'             => __( 'Update' ),
+				'savePending'        => __( 'Save as Pending' ),
+				'saveDraft'          => __( 'Save Draft' ),
+				'private'            => __( 'Private' ),
+				'public'             => __( 'Public' ),
+				'publicSticky'       => __( 'Public, Sticky' ),
+				'password'           => __( 'Password Protected' ),
+				'privatelyPublished' => __( 'Privately Published' ),
+				'published'          => __( 'Published' ),
+				'saveAlert'          => __( 'The changes you made will be lost if you navigate away from this page.' ),
+				'savingText'         => __( 'Saving Draft&#8230;' ),
+>>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 			'permalinkSaved' => __( 'Permalink saved' ),
 		) );
 
