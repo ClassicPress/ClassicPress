@@ -211,15 +211,9 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
  *
  * @param string       $format    PHP date format.
  * @param int          $timestamp Optional. Unix timestamp. Defaults to current time.
-<<<<<<< HEAD
- * @param DateTimeZone $timezone  Optional. Timezone to output result in. Defaults to timezone from site settings.
- *
- * @return string The date, translated if locale specifies it.
-=======
  * @param DateTimeZone $timezone  Optional. Timezone to output result in. Defaults to timezone
  *                                from site settings.
  * @return string|false The date, translated if locale specifies it. False on invalid timestamp input.
->>>>>>> 56d4e7fb86 (Date/Time: Restore the previous behavior of `date_i18n()` where invalid input would result in current time.)
 	 */
 function wp_date( $format, $timestamp = null, $timezone = null ) {
 	global $wp_locale;
