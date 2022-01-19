@@ -1569,24 +1569,9 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	public function test_paged() {
 		$now = time();
 
-		$c1 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 50 ),
-		) );
-		$c2 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 40 ),
-		) );
-		$c3 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 30 ),
-		) );
-		$c4 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 20 ),
-		) );
-=======
+		$c1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => self::$post_id,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 50 ),
 			)
 		);
@@ -1608,7 +1593,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$query = new WP_Comment_Query();
 		$found = $query->query( array(
@@ -1629,24 +1613,9 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 	public function test_offset_should_take_precedence_over_paged() {
 		$now = time();
 
-		$c1 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 50 ),
-		) );
-		$c2 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 40 ),
-		) );
-		$c3 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 30 ),
-		) );
-		$c4 = self::factory()->comment->create( array(
-			'comment_post_ID' => self::$post_id,
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 20 ),
-		) );
-=======
+		$c1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => self::$post_id,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 50 ),
 			)
 		);
@@ -1668,7 +1637,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$query = new WP_Comment_Query();
 		$found = $query->query( array(

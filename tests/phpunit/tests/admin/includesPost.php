@@ -310,10 +310,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$permalink_structure = '%postname%';
 		$this->set_permalink_structure( "/$permalink_structure/" );
 
-<<<<<<< HEAD
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
-		$p = self::factory()->post->create( array( 'post_status' => 'future', 'post_name' => 'foo', 'post_date' => $future_date ) );
-=======
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
@@ -322,7 +318,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 				'post_date'   => $future_date,
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$found = get_sample_permalink( $p );
 		$expected = trailingslashit( home_url( $permalink_structure ) );
@@ -337,10 +332,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	public function test_get_sample_permalink_html_should_use_default_permalink_for_view_post_link_when_pretty_permalinks_are_disabled() {
 		wp_set_current_user( self::$admin_id );
 
-<<<<<<< HEAD
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
-		$p = self::factory()->post->create( array( 'post_status' => 'future', 'post_name' => 'foo', 'post_date' => $future_date ) );
-=======
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
@@ -349,7 +340,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 				'post_date'   => $future_date,
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$found = get_sample_permalink_html( $p );
 		$this->assertContains( 'href="' . get_option( 'home' ) . '/?p=' . $p . '"', $found );
@@ -365,10 +355,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 
-<<<<<<< HEAD
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
-		$p = self::factory()->post->create( array( 'post_status' => 'future', 'post_name' => 'foo-صورة', 'post_date' => $future_date ) );
-=======
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
@@ -377,7 +363,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 				'post_date'   => $future_date,
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$found = get_sample_permalink_html( $p );
 		$post = get_post( $p );
@@ -425,10 +410,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertContains( '>new_slug-صورة<', $found, $message );
 
 		// Scheduled posts should use published permalink
-<<<<<<< HEAD
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
-		$p = self::factory()->post->create( array( 'post_status' => 'future', 'post_name' => 'bar-صورة', 'post_date' => $future_date ) );
-=======
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
@@ -437,7 +418,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 				'post_date'   => $future_date,
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$found = get_sample_permalink_html( $p, null, 'new_slug-صورة' );
 		$post = get_post( $p );
@@ -468,10 +448,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 
-<<<<<<< HEAD
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
-		$p = self::factory()->post->create( array( 'post_status' => 'pending', 'post_name' => '', 'post_date' => $future_date ) );
-=======
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
@@ -480,7 +456,6 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 				'post_date'   => $future_date,
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$found = get_sample_permalink_html( $p );
 		$post = get_post( $p );

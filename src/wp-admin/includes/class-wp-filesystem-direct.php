@@ -471,15 +471,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$struc['perms'] 	= $this->gethchmod($path.'/'.$entry);
 			$struc['permsn']	= $this->getnumchmodfromh($struc['perms']);
 			$struc['number'] 	= false;
-<<<<<<< HEAD
-			$struc['owner']    	= $this->owner($path.'/'.$entry);
-			$struc['group']    	= $this->group($path.'/'.$entry);
-			$struc['size']    	= $this->size($path.'/'.$entry);
-			$struc['lastmodunix']= $this->mtime($path.'/'.$entry);
-			$struc['lastmod']   = date('M j',$struc['lastmodunix']);
-			$struc['time']    	= date('h:i:s',$struc['lastmodunix']);
-			$struc['type']		= $this->is_dir($path.'/'.$entry) ? 'd' : 'f';
-=======
+
 			$struc['owner']       = $this->owner( $path . '/' . $entry );
 			$struc['group']       = $this->group( $path . '/' . $entry );
 			$struc['size']        = $this->size( $path . '/' . $entry );
@@ -487,7 +479,6 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$struc['lastmod']     = gmdate( 'M j', $struc['lastmodunix'] );
 			$struc['time']        = gmdate( 'h:i:s', $struc['lastmodunix'] );
 			$struc['type']        = $this->is_dir( $path . '/' . $entry ) ? 'd' : 'f';
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 			if ( 'd' == $struc['type'] ) {
 				if ( $recursive )

@@ -74,13 +74,8 @@ function export_wp( $args = array() ) {
 	if ( ! empty( $sitename ) ) {
 		$sitename .= '.';
 	}
-<<<<<<< HEAD
-	$date = date( 'Y-m-d' );
-	$wp_filename = $sitename . 'wordpress.' . $date . '.xml';
-=======
 	$date        = gmdate( 'Y-m-d' );
-	$wp_filename = $sitename . 'WordPress.' . $date . '.xml';
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
+	$wp_filename = $sitename . 'wordpress.' . $date . '.xml';
 	/**
 	 * Filters the export filename.
 	 *
@@ -125,13 +120,6 @@ function export_wp( $args = array() ) {
 		if ( $args['author'] )
 			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_author = %d", $args['author'] );
 
-<<<<<<< HEAD
-		if ( $args['start_date'] )
-			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date >= %s", date( 'Y-m-d', strtotime($args['start_date']) ) );
-
-		if ( $args['end_date'] )
-			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date < %s", date( 'Y-m-d', strtotime('+1 month', strtotime($args['end_date'])) ) );
-=======
 		if ( $args['start_date'] ) {
 			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date >= %s", gmdate( 'Y-m-d', strtotime( $args['start_date'] ) ) );
 		}
@@ -139,7 +127,6 @@ function export_wp( $args = array() ) {
 		if ( $args['end_date'] ) {
 			$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_date < %s", gmdate( 'Y-m-d', strtotime( '+1 month', strtotime( $args['end_date'] ) ) ) );
 		}
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 	}
 
 	// Grab a snapshot of post IDs, just in case it changes during the export.

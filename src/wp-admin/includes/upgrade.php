@@ -734,11 +734,8 @@ function upgrade_110() {
 
 	$time_difference = $all_options->time_difference;
 
-<<<<<<< HEAD
-		$server_time = time()+date('Z');
-=======
-		$server_time = time() + gmdate( 'Z' );
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
+	$server_time = time() + gmdate( 'Z' );
+
 	$weblogger_time = $server_time + $time_difference * HOUR_IN_SECONDS;
 	$gmt_time = time();
 

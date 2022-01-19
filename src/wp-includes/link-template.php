@@ -205,11 +205,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 			$author = $authordata->user_nicename;
 		}
 
-<<<<<<< HEAD
-		$date = explode(" ",date('Y m d H i s', $unixtime));
-=======
 		$date           = explode( ' ', gmdate( 'Y m d H i s', $unixtime ) );
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$rewritereplace =
 		array(
 			$date[0],

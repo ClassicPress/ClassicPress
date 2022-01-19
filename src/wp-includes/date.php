@@ -909,14 +909,9 @@ class WP_Date_Query {
 		if ( ! isset( $datetime['month'] ) )
 			$datetime['month'] = ( $default_to_max ) ? 12 : 1;
 
-<<<<<<< HEAD
-		if ( ! isset( $datetime['day'] ) )
-			$datetime['day'] = ( $default_to_max ) ? (int) date( 't', mktime( 0, 0, 0, $datetime['month'], 1, $datetime['year'] ) ) : 1;
-=======
 		if ( ! isset( $datetime['day'] ) ) {
 			$datetime['day'] = ( $default_to_max ) ? (int) gmdate( 't', mktime( 0, 0, 0, $datetime['month'], 1, $datetime['year'] ) ) : 1;
 		}
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		if ( ! isset( $datetime['hour'] ) )
 			$datetime['hour'] = ( $default_to_max ) ? 23 : 0;

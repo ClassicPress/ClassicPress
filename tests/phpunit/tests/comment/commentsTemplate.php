@@ -13,18 +13,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -35,7 +27,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -56,18 +47,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -78,7 +61,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -99,18 +81,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -121,7 +95,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'oldest' );
@@ -142,18 +115,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -164,7 +129,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'oldest' );
@@ -185,38 +149,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest_on_subsequent_pages() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-		$comment_5 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 500 ),
-		) );
-		$comment_6 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 600 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -255,7 +191,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 600 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -282,38 +217,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest_on_subsequent_pages() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-		$comment_5 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 500 ),
-		) );
-		$comment_6 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 600 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -352,7 +259,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 600 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -379,28 +285,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest_on_subsequent_pages() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -425,7 +313,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'oldest' );
@@ -452,28 +339,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest_on_subsequent_pages() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -498,7 +367,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'oldest' );
@@ -527,23 +395,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_last_page_of_comments_should_be_full_when_default_comment_page_is_newest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -561,7 +416,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 300 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'default_comments_page', 'newest' );
 		update_option( 'comment_order', 'desc' );
@@ -590,23 +444,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_first_page_of_comments_should_have_remainder_when_default_comments_page_is_newest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -624,7 +465,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 300 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'default_comments_page', 'newest' );
 		update_option( 'comment_order', 'desc' );
@@ -651,28 +491,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_oldest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -697,7 +519,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'oldest' );
@@ -743,38 +564,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_newest() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-		$comment_5 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 500 ),
-		) );
-		$comment_6 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 600 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -813,7 +606,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 600 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'desc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -876,32 +668,11 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_query_offset_should_not_include_unapproved_comments() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-			'comment_approved' => '0',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_approved' => '0',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_approved' => '0',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_approved' => '1',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
+				'comment_approved' => '0',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -929,7 +700,6 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -954,21 +724,11 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-			'comment_approved' => '0',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_approved' => '0',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
+				'comment_approved' => '0',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -982,13 +742,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_approved' => '0',
-				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 100 ),
-			'comment_author_email' => $comment_author_email,
-		) );
+				'comment_post_ID' => $p,
+				'comment_content' => '3',
+				'comment_approved' => '0',
+					'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+				'comment_author_email' => $comment_author_email,
+			)
+		);
 		$comment_4 = self::factory()->comment->create( array(
 			'comment_post_ID' => $p,
 			'comment_content' => '4',
@@ -1003,18 +763,14 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 300 ),
 			'comment_author_email' => $comment_author_email,
 		) );
-		$comment_6 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '6',
-			'comment_approved' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 400 ),
-		) );
-=======
+		$comment_6 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '6',
+				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'default_comments_page', 'newest' );
@@ -1039,66 +795,16 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/35378
-=======
-	 * @ticket 43857
-	 */
-	public function test_comments_list_should_include_just_posted_unapproved_comment() {
-		$now     = time();
-		$p       = self::factory()->post->create();
-		$c       = self::factory()->comment->create(
-			array(
-				'comment_post_ID'      => $p,
-				'comment_content'      => '1',
-				'comment_approved'     => '0',
-				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now ),
-				'comment_author_email' => 'foo@bar.mail',
-			)
-		);
-		$comment = get_comment( $c );
-
-		$this->go_to(
-			add_query_arg(
-				array(
-					'unapproved'      => $comment->comment_ID,
-					'moderation-hash' => wp_hash( $comment->comment_date_gmt ),
-				),
-				get_comment_link( $comment )
-			)
-		);
-
-		$found = get_echo( 'comments_template' );
-
-		// Find the found comment in the markup.
-		preg_match( '|id="comment-([0-9]+)|', $found, $matches );
-
-		$found_cid = (int) $matches[1];
-		$this->assertSame( $c, $found_cid );
-	}
-
-	/**
-	 * @ticket 35378
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 	 */
 	public function test_hierarchy_should_be_ignored_when_threading_is_disabled() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-			'comment_approved' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_approved' => '1',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
+				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -1112,19 +818,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_approved' => '1',
-			'comment_parent' => $comment_1,
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-=======
+				'comment_post_ID' => $p,
+				'comment_content' => '3',
+				'comment_approved' => '1',
+				'comment_parent' => $comment_1,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'comment_order', 'asc' );
 		update_option( 'thread_comments', 0 );
@@ -1145,21 +845,11 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_pagination_calculation_should_ignore_comment_hierarchy_when_threading_is_disabled() {
 		$now = time();
 		$p = self::factory()->post->create();
-		$comment_1 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '1',
-			'comment_approved' => '1',
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 300 ),
-		) );
-		$comment_2 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '2',
-			'comment_approved' => '1',
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 200 ),
-		) );
-		$comment_3 = self::factory()->comment->create( array(
-=======
+		$comment_1 = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_content' => '1',
+				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 300 ),
 			)
 		);
@@ -1173,19 +863,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
-			'comment_post_ID' => $p,
-			'comment_content' => '3',
-			'comment_approved' => '1',
-			'comment_parent' => $comment_1,
-<<<<<<< HEAD
-			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
-		) );
-=======
+				'comment_post_ID' => $p,
+				'comment_content' => '3',
+				'comment_approved' => '1',
+				'comment_parent' => $comment_1,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		update_option( 'thread_comments', 0 );
 

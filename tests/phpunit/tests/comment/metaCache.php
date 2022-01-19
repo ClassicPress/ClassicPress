@@ -133,16 +133,12 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 		$now = time();
 		$comments = array();
 		for ( $i = 0; $i < 5; $i++ ) {
-			$comments[] = self::factory()->comment->create( array(
-				'comment_post_ID' => $posts[0],
-<<<<<<< HEAD
-				'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - ( 60 * $i ) ),
-			) );
-=======
+			$comments[] = self::factory()->comment->create(
+				array(
+					'comment_post_ID' => $posts[0],
 					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( 60 * $i ) ),
 				)
 			);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		}
 
 		foreach ( $comments as $c ) {
@@ -183,16 +179,12 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 		$now = time();
 		$comments = array();
 		for ( $i = 0; $i < 5; $i++ ) {
-			$comments[] = self::factory()->comment->create( array(
-				'comment_post_ID' => $posts[0],
-<<<<<<< HEAD
-				'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - ( 60 * $i ) ),
-			) );
-=======
+			$comments[] = self::factory()->comment->create(
+				array(
+					'comment_post_ID' => $posts[0],
 					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( 60 * $i ) ),
 				)
 			);
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		}
 
 		foreach ( $comments as $c ) {
