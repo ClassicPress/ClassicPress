@@ -119,11 +119,7 @@ function wp_timezone() {
 }
 
 /**
-<<<<<<< HEAD
- * Retrieves the date in localized format, based on a sum of Unix timestamp and
-=======
  * Retrieve the date in localized format, based on a sum of Unix timestamp and
->>>>>>> efe9a3eb21 (Docs: Improve documentation for `date_i18n()`'s second argument.)
  * timezone offset in seconds.
  *
  * If the locale specifies the locale month and weekday, then the locale will
