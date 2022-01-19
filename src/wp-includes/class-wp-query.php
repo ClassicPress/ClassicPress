@@ -3945,8 +3945,8 @@ class WP_Query {
 	 *
 	 * @global int             $id
 	 * @global WP_User         $authordata
-	 * @global string|int|bool $currentday
-	 * @global string|int|bool $currentmonth
+	 * @global string  $currentday
+	 * @global string  $currentmonth
 	 * @global int             $page
 	 * @global array           $pages
 	 * @global int             $multipage
