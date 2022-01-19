@@ -81,8 +81,6 @@ class Tests_Date_TheDate extends WP_UnitTestCase {
 
 		return $input;
 	}
-<<<<<<< HEAD
-=======
 
 	/**
 	 * @ticket 33750
@@ -151,5 +149,4 @@ class Tests_Date_TheDate extends WP_UnitTestCase {
 		the_weekday_date( 'before ', ' after' );
 		$this->assertEquals( 'before Wednesday after', ob_get_clean() );
 	}
->>>>>>> 2a163fa733 (Date/Time: Return early from `the_weekday()` and `the_weekday_date()` if we're not in the loop.)
 }
