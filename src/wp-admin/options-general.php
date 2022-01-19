@@ -297,6 +297,7 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 <p class="timezone-info">
 <span>
 	<?php
+<<<<<<< HEAD
 	// Set TZ so localtime works.
 	date_default_timezone_set($tzstring);
 	$now = localtime(time(), true);
@@ -304,6 +305,16 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 		_e('This timezone is currently in daylight saving time.');
 	else
 		_e('This timezone is currently in standard time.');
+=======
+	$now = new DateTime( 'now', new DateTimeZone( $tzstring ) );
+	$dst = (bool) $now->format( 'I' );
+
+	if ( $dst ) {
+		_e( 'This timezone is currently in daylight saving time.' );
+	} else {
+		_e( 'This timezone is currently in standard time.' );
+	}
+>>>>>>> e9fc71bbbe (Date/Time: Eliminate use of `date_default_timezone_set()` for determining DST status on General Options screen.)
 	?>
 	<br />
 	<?php
@@ -339,8 +350,11 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 			_e( 'This timezone does not observe daylight saving time.' );
 		}
 	}
+<<<<<<< HEAD
 	// Set back to UTC.
 	date_default_timezone_set('UTC');
+=======
+>>>>>>> e9fc71bbbe (Date/Time: Eliminate use of `date_default_timezone_set()` for determining DST status on General Options screen.)
 	?>
 	</span>
 </p>
