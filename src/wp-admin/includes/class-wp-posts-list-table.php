@@ -1458,6 +1458,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				if ( $bulk )
 					$users_opt['show_option_none'] = __( '&mdash; No Change &mdash;' );
 
+<<<<<<< HEAD
 				/**
 				 * Filters the arguments used to generate the Quick Edit authors drop-down.
 				 *
@@ -1470,6 +1471,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 				 */
 				$users_opt = apply_filters( 'quick_edit_authors_query_args', $users_opt, $bulk );
 
+=======
+>>>>>>> db4e52b923 (Posts, Post Types: Remove unintended change from [46578].)
 				$authors = wp_dropdown_users( $users_opt );
 				if ( $authors ) :
 					$authors_dropdown  = '<label class="inline-edit-author">';
