@@ -71,15 +71,12 @@ function current_time( $type, $gmt = 0 ) {
 }
 
 /**
-<<<<<<< HEAD
- * Retrieve the date in localized format, based on timestamp.
-=======
  * Retrieves the timezone from current settings as a string.
  *
  * Uses the `timezone_string` option to get a proper timezone if available,
  * otherwise falls back to an offset.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @return string PHP timezone string or a ±HH:MM offset.
  */
@@ -107,7 +104,7 @@ function wp_timezone_string() {
  *
  * Timezone can be based on a PHP timezone string or a ±HH:MM offset.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @return DateTimeZone Timezone object.
  */
@@ -118,7 +115,6 @@ function wp_timezone() {
 /**
  * Retrieves the date in localized format, based on a sum of Unix timestamp and
  * timezone offset in seconds.
->>>>>>> 904b41e01c (Date/Time: Introduce `wp_timezone_string()` and `wp_timezone()` for unified timezone retrieval.)
  *
  * If the locale specifies the locale month and weekday, then the locale will
  * take over the format for the date. If it isn't, then the date format string
