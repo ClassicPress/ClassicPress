@@ -2421,14 +2421,6 @@ function get_post_time( $d = 'U', $gmt = false, $post = null, $translate = false
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( $gmt )
-		$time = $post->post_date_gmt;
-	else
-		$time = $post->post_date;
-
-	$time = mysql2date($d, $time, $translate);
-=======
 	$datetime = get_post_datetime( $post );
 
 	if ( false === $datetime ) {
@@ -2451,7 +2443,6 @@ function get_post_time( $d = 'U', $gmt = false, $post = null, $translate = false
 
 		$time = $datetime->format( $d );
 	}
->>>>>>> 5928234d05 (Date/Time: Introduce `get_post_datetime()` to retrieve post published or modified time as a `DateTimeImmutable` object instance.)
 
 	/**
 	 * Filters the localized time a post was written.
@@ -2594,13 +2585,6 @@ function get_post_modified_time( $d = 'U', $gmt = false, $post = null, $translat
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( $gmt )
-		$time = $post->post_modified_gmt;
-	else
-		$time = $post->post_modified;
-	$time = mysql2date($d, $time, $translate);
-=======
 	$datetime = get_post_datetime( $post, 'modified' );
 
 	if ( false === $datetime ) {
@@ -2623,7 +2607,6 @@ function get_post_modified_time( $d = 'U', $gmt = false, $post = null, $translat
 
 		$time = $datetime->format( $d );
 	}
->>>>>>> 5928234d05 (Date/Time: Introduce `get_post_datetime()` to retrieve post published or modified time as a `DateTimeImmutable` object instance.)
 
 	/**
 	 * Filters the localized time a post was last modified.
