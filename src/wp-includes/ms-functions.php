@@ -503,8 +503,13 @@ function wpmu_validate_user_signup($user_name, $user_email) {
 	// Has someone already signed up for this username?
 	$signup = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->signups WHERE user_login = %s", $user_name) );
 	if ( $signup != null ) {
+<<<<<<< HEAD
 		$registered_at =  mysql2date('U', $signup->registered);
 		$now = current_time( 'timestamp', true );
+=======
+		$registered_at = mysql2date( 'U', $signup->registered );
+		$now           = time();
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 		$diff = $now - $registered_at;
 		// If registered more than two days ago, cancel registration and let this signup go through.
 		if ( $diff > 2 * DAY_IN_SECONDS )
@@ -515,7 +520,11 @@ function wpmu_validate_user_signup($user_name, $user_email) {
 
 	$signup = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->signups WHERE user_email = %s", $user_email) );
 	if ( $signup != null ) {
+<<<<<<< HEAD
 		$diff = current_time( 'timestamp', true ) - mysql2date('U', $signup->registered);
+=======
+		$diff = time() - mysql2date( 'U', $signup->registered );
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 		// If registered more than two days ago, cancel registration and let this signup go through.
 		if ( $diff > 2 * DAY_IN_SECONDS )
 			$wpdb->delete( $wpdb->signups, array( 'user_email' => $user_email ) );
@@ -658,9 +667,15 @@ function wpmu_validate_blog_signup( $blogname, $blog_title, $user = '' ) {
 	}
 
 	// Has someone already signed up for this domain?
+<<<<<<< HEAD
 	$signup = $wpdb->get_row( $wpdb->prepare("SELECT * FROM $wpdb->signups WHERE domain = %s AND path = %s", $mydomain, $path) ); // TODO: Check email too?
 	if ( ! empty($signup) ) {
 		$diff = current_time( 'timestamp', true ) - mysql2date('U', $signup->registered);
+=======
+	$signup = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->signups WHERE domain = %s AND path = %s", $mydomain, $path ) ); // TODO: Check email too?
+	if ( ! empty( $signup ) ) {
+		$diff = time() - mysql2date( 'U', $signup->registered );
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 		// If registered more than two days ago, cancel registration and let this signup go through.
 		if ( $diff > 2 * DAY_IN_SECONDS )
 			$wpdb->delete( $wpdb->signups, array( 'domain' => $mydomain , 'path' => $path ) );

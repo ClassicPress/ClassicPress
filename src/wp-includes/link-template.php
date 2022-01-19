@@ -448,8 +448,14 @@ function get_attachment_link( $post = null, $leavename = false ) {
  */
 function get_year_link( $year ) {
 	global $wp_rewrite;
+<<<<<<< HEAD
 	if ( !$year )
 		$year = gmdate('Y', current_time('timestamp'));
+=======
+	if ( ! $year ) {
+		$year = current_time( 'Y' );
+	}
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 	$yearlink = $wp_rewrite->get_year_permastruct();
 	if ( !empty($yearlink) ) {
 		$yearlink = str_replace('%year%', $year, $yearlink);
@@ -482,10 +488,19 @@ function get_year_link( $year ) {
  */
 function get_month_link($year, $month) {
 	global $wp_rewrite;
+<<<<<<< HEAD
 	if ( !$year )
 		$year = gmdate('Y', current_time('timestamp'));
 	if ( !$month )
 		$month = gmdate('m', current_time('timestamp'));
+=======
+	if ( ! $year ) {
+		$year = current_time( 'Y' );
+	}
+	if ( ! $month ) {
+		$month = current_time( 'm' );
+	}
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 	$monthlink = $wp_rewrite->get_month_permastruct();
 	if ( !empty($monthlink) ) {
 		$monthlink = str_replace('%year%', $year, $monthlink);
@@ -521,12 +536,24 @@ function get_month_link($year, $month) {
  */
 function get_day_link($year, $month, $day) {
 	global $wp_rewrite;
+<<<<<<< HEAD
 	if ( !$year )
 		$year = gmdate('Y', current_time('timestamp'));
 	if ( !$month )
 		$month = gmdate('m', current_time('timestamp'));
 	if ( !$day )
 		$day = gmdate('j', current_time('timestamp'));
+=======
+	if ( ! $year ) {
+		$year = current_time( 'Y' );
+	}
+	if ( ! $month ) {
+		$month = current_time( 'm' );
+	}
+	if ( ! $day ) {
+		$day = current_time( 'j' );
+	}
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 
 	$daylink = $wp_rewrite->get_day_permastruct();
 	if ( !empty($daylink) ) {

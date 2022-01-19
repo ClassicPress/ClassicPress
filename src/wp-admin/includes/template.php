@@ -712,6 +712,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	// todo: Remove this?
 	// echo '<label for="timestamp" style="display: block;"><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp"'.$tab_index_attribute.' /> '.__( 'Edit timestamp' ).'</label><br />';
 
+<<<<<<< HEAD
 	$time_adj = current_time('timestamp');
 	$post_date = ($for_post) ? $post->post_date : get_comment()->comment_date;
 	$jj = ($edit) ? mysql2date( 'd', $post_date, false ) : gmdate( 'd', $time_adj );
@@ -720,12 +721,21 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$hh = ($edit) ? mysql2date( 'H', $post_date, false ) : gmdate( 'H', $time_adj );
 	$mn = ($edit) ? mysql2date( 'i', $post_date, false ) : gmdate( 'i', $time_adj );
 	$ss = ($edit) ? mysql2date( 's', $post_date, false ) : gmdate( 's', $time_adj );
+=======
+	$post_date = ( $for_post ) ? $post->post_date : get_comment()->comment_date;
+	$jj        = ( $edit ) ? mysql2date( 'd', $post_date, false ) : current_time( 'd' );
+	$mm        = ( $edit ) ? mysql2date( 'm', $post_date, false ) : current_time( 'm' );
+	$aa        = ( $edit ) ? mysql2date( 'Y', $post_date, false ) : current_time( 'Y' );
+	$hh        = ( $edit ) ? mysql2date( 'H', $post_date, false ) : current_time( 'H' );
+	$mn        = ( $edit ) ? mysql2date( 'i', $post_date, false ) : current_time( 'i' );
+	$ss        = ( $edit ) ? mysql2date( 's', $post_date, false ) : current_time( 's' );
+>>>>>>> 4b10390b7d (Date/Time: Reduce explicit local `current_time( 'timestamp' )` usage in favor of native PHP functions.)
 
-	$cur_jj = gmdate( 'd', $time_adj );
-	$cur_mm = gmdate( 'm', $time_adj );
-	$cur_aa = gmdate( 'Y', $time_adj );
-	$cur_hh = gmdate( 'H', $time_adj );
-	$cur_mn = gmdate( 'i', $time_adj );
+	$cur_jj = current_time( 'd' );
+	$cur_mm = current_time( 'm' );
+	$cur_aa = current_time( 'Y' );
+	$cur_hh = current_time( 'H' );
+	$cur_mn = current_time( 'i' );
 
 	$month = '<label><span class="screen-reader-text">' . __( 'Month' ) . '</span><select ' . ( $multi ? '' : 'id="mm" ' ) . 'name="mm"' . $tab_index_attribute . ">\n";
 	for ( $i = 1; $i < 13; $i = $i +1 ) {
