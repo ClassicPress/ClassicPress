@@ -239,8 +239,14 @@ class Tests_XMLRPC_wp_editPost extends WP_XMLRPC_UnitTestCase {
 			'post_content' => 'Not edited',
 			'post_author'  => $editor_id,
 			'post_status'  => 'publish',
+<<<<<<< HEAD
 			'post_date'    => date( 'Y-m-d H:i:s', $yesterday ),
 		) );
+=======
+				'post_date'    => gmdate( 'Y-m-d H:i:s', $yesterday ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		// Modify the day old post. In this case, we think it was last modified yesterday.
 		$struct = array( 'post_content' => 'First edit', 'if_not_modified_since' => new IXR_Date( $yesterday ) );

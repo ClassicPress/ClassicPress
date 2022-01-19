@@ -123,9 +123,17 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertSame( 0, did_action( $error ) );
 
+<<<<<<< HEAD
 		$post = self::factory()->post->create_and_get( array(
 			'post_date' => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
 		) );
+=======
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_date' => gmdate( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$this->assertSame( 'future', $post->post_status );
 

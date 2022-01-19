@@ -336,8 +336,8 @@ class Tests_URL extends WP_UnitTestCase {
 
 	public function test_get_adjacent_post() {
 		$now = time();
-		$post_id = self::factory()->post->create( array( 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
-		$post_id2 = self::factory()->post->create( array( 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+		$post_id  = self::factory()->post->create( array( 'post_date' => gmdate( 'Y-m-d H:i:s', $now - 1 ) ) );
+		$post_id2 = self::factory()->post->create( array( 'post_date' => gmdate( 'Y-m-d H:i:s', $now ) ) );
 
 		if ( ! isset( $GLOBALS['post'] ) )
 			$GLOBALS['post'] = null;
@@ -374,8 +374,24 @@ class Tests_URL extends WP_UnitTestCase {
 		wp_set_current_user( $u );
 
 		$now = time();
+<<<<<<< HEAD
 		$p1 = self::factory()->post->create( array( 'post_author' => $u, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
 		$p2 = self::factory()->post->create( array( 'post_author' => $u, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+=======
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u,
+				'post_status' => 'private',
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u,
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;
@@ -401,8 +417,24 @@ class Tests_URL extends WP_UnitTestCase {
 		wp_set_current_user( $u2 );
 
 		$now = time();
+<<<<<<< HEAD
 		$p1 = self::factory()->post->create( array( 'post_author' => $u1, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
 		$p2 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+=======
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_status' => 'private',
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;
@@ -428,9 +460,31 @@ class Tests_URL extends WP_UnitTestCase {
 		wp_set_current_user( $u2 );
 
 		$now = time();
+<<<<<<< HEAD
 		$p1 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now - 2 ) ) );
 		$p2 = self::factory()->post->create( array( 'post_author' => $u1, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
 		$p3 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+=======
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 2 ),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_status' => 'private',
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
+			)
+		);
+		$p3  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;

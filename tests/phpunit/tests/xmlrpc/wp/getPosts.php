@@ -56,8 +56,14 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 		foreach ( range( 1, $num_posts ) as $i ) {
 			$post_ids[] = self::factory()->post->create( array(
 				'post_type' => $cpt_name,
+<<<<<<< HEAD
 				'post_date' => date( 'Y-m-d H:i:s', time() + $i )
 			) );
+=======
+					'post_date' => gmdate( 'Y-m-d H:i:s', time() + $i ),
+				)
+			);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		}
 		// get them all
 		$filter = array( 'post_type' => $cpt_name, 'number' => $num_posts + 10 );

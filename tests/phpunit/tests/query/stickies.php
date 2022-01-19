@@ -12,8 +12,14 @@ class Tests_Query_Stickies extends WP_UnitTestCase {
 		// Set post times to get a reliable order.
 		$now = time();
 		for ( $i = 0; $i <= 22; $i++ ) {
+<<<<<<< HEAD
 			$post_date = date( 'Y-m-d H:i:s', $now - ( 10 * $i ) );
 			self::$posts[ $i ] = $factory->post->create( array(
+=======
+			$post_date         = gmdate( 'Y-m-d H:i:s', $now - ( 10 * $i ) );
+			self::$posts[ $i ] = $factory->post->create(
+				array(
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				'post_date' => $post_date,
 			) );
 		}
@@ -24,8 +30,14 @@ class Tests_Query_Stickies extends WP_UnitTestCase {
 	}
 
 	public function test_stickies_should_be_ignored_when_is_home_is_false() {
+<<<<<<< HEAD
 		$q = new WP_Query( array(
 			'year' => date( 'Y' ),
+=======
+		$q = new WP_Query(
+			array(
+				'year'           => gmdate( 'Y' ),
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			'fields' => 'ids',
 			'posts_per_page' => 3,
 		) );

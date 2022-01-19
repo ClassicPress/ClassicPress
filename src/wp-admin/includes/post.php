@@ -149,6 +149,7 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 		$hh = $post_data['hh'];
 		$mn = $post_data['mn'];
 		$ss = $post_data['ss'];
+<<<<<<< HEAD
 		$aa = ($aa <= 0 ) ? date('Y') : $aa;
 		$mm = ($mm <= 0 ) ? date('n') : $mm;
 		$jj = ($jj > 31 ) ? 31 : $jj;
@@ -157,6 +158,16 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 		$mn = ($mn > 59 ) ? $mn -60 : $mn;
 		$ss = ($ss > 59 ) ? $ss -60 : $ss;
 		$post_data['post_date'] = sprintf( "%04d-%02d-%02d %02d:%02d:%02d", $aa, $mm, $jj, $hh, $mn, $ss );
+=======
+		$aa                     = ( $aa <= 0 ) ? gmdate( 'Y' ) : $aa;
+		$mm                     = ( $mm <= 0 ) ? gmdate( 'n' ) : $mm;
+		$jj                     = ( $jj > 31 ) ? 31 : $jj;
+		$jj                     = ( $jj <= 0 ) ? gmdate( 'j' ) : $jj;
+		$hh                     = ( $hh > 23 ) ? $hh - 24 : $hh;
+		$mn                     = ( $mn > 59 ) ? $mn - 60 : $mn;
+		$ss                     = ( $ss > 59 ) ? $ss - 60 : $ss;
+		$post_data['post_date'] = sprintf( '%04d-%02d-%02d %02d:%02d:%02d', $aa, $mm, $jj, $hh, $mn, $ss );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$valid_date = wp_checkdate( $mm, $jj, $aa, $post_data['post_date'] );
 		if ( !$valid_date ) {
 			return new WP_Error( 'invalid_date', __( 'Invalid date.' ) );

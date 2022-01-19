@@ -1986,8 +1986,13 @@ function get_calendar( $initial = true, $echo = true ) {
 		$thismonth = current_time( 'm' );
 	}
 
+<<<<<<< HEAD
 	$unixmonth = mktime( 0, 0 , 0, $thismonth, 1, $thisyear );
 	$last_day = date( 't', $unixmonth );
+=======
+	$unixmonth = mktime( 0, 0, 0, $thismonth, 1, $thisyear );
+	$last_day  = gmdate( 't', $unixmonth );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 	// Get the next and previous month and year with at least one post
 	$previous = $wpdb->get_row("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year
@@ -2009,7 +2014,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	<caption>' . sprintf(
 		$calendar_caption,
 		$wp_locale->get_month( $thismonth ),
-		date( 'Y', $unixmonth )
+		gmdate( 'Y', $unixmonth )
 	) . '</caption>
 	<thead>
 	<tr>';
@@ -2072,13 +2077,13 @@ function get_calendar( $initial = true, $echo = true ) {
 	}
 
 	// See how much we should pad in the beginning
-	$pad = calendar_week_mod( date( 'w', $unixmonth ) - $week_begins );
+	$pad = calendar_week_mod( gmdate( 'w', $unixmonth ) - $week_begins );
 	if ( 0 != $pad ) {
 		$calendar_output .= "\n\t\t".'<td colspan="'. esc_attr( $pad ) .'" class="pad">&nbsp;</td>';
 	}
 
 	$newrow = false;
-	$daysinmonth = (int) date( 't', $unixmonth );
+	$daysinmonth = (int) gmdate( 't', $unixmonth );
 
 	for ( $day = 1; $day <= $daysinmonth; ++$day ) {
 		if ( isset($newrow) && $newrow ) {
@@ -2096,8 +2101,13 @@ function get_calendar( $initial = true, $echo = true ) {
 
 		if ( in_array( $day, $daywithpost ) ) {
 			// any posts today?
+<<<<<<< HEAD
 			$date_format = date( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
 			/* translators: Post calendar label. 1: Date */
+=======
+			$date_format = gmdate( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
+			/* translators: Post calendar label. %s: Date */
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			$label = sprintf( __( 'Posts published on %s' ), $date_format );
 			$calendar_output .= sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
@@ -2110,12 +2120,20 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$calendar_output .= '</td>';
 
+<<<<<<< HEAD
 		if ( 6 == calendar_week_mod( date( 'w', mktime(0, 0 , 0, $thismonth, $day, $thisyear ) ) - $week_begins ) ) {
+=======
+		if ( 6 == calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins ) ) {
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			$newrow = true;
 		}
 	}
 
+<<<<<<< HEAD
 	$pad = 7 - calendar_week_mod( date( 'w', mktime( 0, 0 , 0, $thismonth, $day, $thisyear ) ) - $week_begins );
+=======
+	$pad = 7 - calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 	if ( $pad != 0 && $pad != 7 ) {
 		$calendar_output .= "\n\t\t".'<td class="pad" colspan="'. esc_attr( $pad ) .'">&nbsp;</td>';
 	}
@@ -4195,7 +4213,11 @@ function get_the_generator( $type = '' ) {
 			$gen = "<!-- generator=\"WordPress/$esc_wp_version (compatible; ClassicPress/$esc_cp_version)\" -->";
 			break;
 		case 'export':
+<<<<<<< HEAD
 			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . date( "Y-m-d H:i" ) . "\" -->";
+=======
+			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . gmdate( 'Y-m-d H:i' ) . '" -->';
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			break;
 	}
 

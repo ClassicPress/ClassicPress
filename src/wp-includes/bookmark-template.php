@@ -80,8 +80,13 @@ function _walk_bookmarks( $bookmarks, $args = '' ) {
 			if ( '00' != substr( $bookmark->link_updated_f, 0, 2 ) ) {
 				$title .= ' (';
 				$title .= sprintf(
+<<<<<<< HEAD
 					__('Last updated: %s'),
 					date(
+=======
+					__( 'Last updated: %s' ),
+					gmdate(
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 						get_option( 'links_updated_date_format' ),
 						$bookmark->link_updated_f + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS )
 					)

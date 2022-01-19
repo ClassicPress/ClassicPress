@@ -15,8 +15,8 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-		$this->month_url = get_month_link( date( 'Y' ), date( 'm' ) );
-		$this->year_url = get_year_link( date( 'Y' ) );
+		$this->month_url = get_month_link( gmdate( 'Y' ), gmdate( 'm' ) );
+		$this->year_url  = get_year_link( gmdate( 'Y' ) );
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {
@@ -24,13 +24,32 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	}
 
 	function test_wp_get_archives_default() {
+<<<<<<< HEAD
 		$expected['default'] = "<li><a href='" . $this->month_url . "'>" . date( 'F Y' ) . "</a></li>";
+=======
+		$expected['default'] = "<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></li>';
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$this->assertEquals( $expected['default'], trim( wp_get_archives( array( 'echo' => false ) ) ) );
 	}
 
 	function test_wp_get_archives_type() {
+<<<<<<< HEAD
 		$expected['type'] = "<li><a href='" . $this->year_url . "'>" . date( 'Y' ) . "</a></li>";
 		$this->assertEquals( $expected['type'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'yearly' ) ) ) );
+=======
+		$expected['type'] = "<li><a href='" . $this->year_url . "'>" . gmdate( 'Y' ) . '</a></li>';
+		$this->assertEquals(
+			$expected['type'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo' => false,
+						'type' => 'yearly',
+					)
+				)
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 	}
 
 	function test_wp_get_archives_limit() {
@@ -60,6 +79,7 @@ EOF;
 	}
 
 	function test_wp_get_archives_format() {
+<<<<<<< HEAD
 		$expected['format'] = "<option value='" . $this->month_url . "'> " . date( 'F Y' ) . ' </option>';
 		$this->assertEquals( $expected['format'], trim( wp_get_archives( array( 'echo' => false, 'format' => 'option' ) ) ) );
 	}
@@ -77,6 +97,57 @@ EOF;
 	function test_wp_get_archives_echo() {
 		$expected['echo'] = "<li><a href='" . $this->month_url . "'>" . date( 'F Y' ) . '</a></li>';
 		ob_start();
+=======
+		$expected['format'] = "<option value='" . $this->month_url . "'> " . gmdate( 'F Y' ) . ' </option>';
+		$this->assertEquals(
+			$expected['format'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'   => false,
+						'format' => 'option',
+					)
+				)
+			)
+		);
+	}
+
+	function test_wp_get_archives_before_and_after() {
+		$expected['before_and_after'] = "<div><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></div>';
+		$this->assertEquals(
+			$expected['before_and_after'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'   => false,
+						'format' => 'custom',
+						'before' => '<div>',
+						'after'  => '</div>',
+					)
+				)
+			)
+		);
+	}
+
+	function test_wp_get_archives_show_post_count() {
+		$expected['show_post_count'] = "<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a>&nbsp;(8)</li>';
+		$this->assertEquals(
+			$expected['show_post_count'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'            => false,
+						'show_post_count' => 1,
+					)
+				)
+			)
+		);
+	}
+
+	function test_wp_get_archives_echo() {
+		$expected['echo'] = "\t<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></li>' . "\n";
+		$this->expectOutputString( $expected['echo'] );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		wp_get_archives( array( 'echo' => true ) );
 		$actual = ob_get_clean();
 		$this->assertEquals( $expected['echo'], trim( $actual ) );
@@ -85,7 +156,7 @@ EOF;
 	function test_wp_get_archives_order() {
 		self::factory()->post->create( array( 'post_type' => 'post', 'post_author' => '1', 'post_date' => '2012-10-23 19:34:42' ) );
 
-		$date_full = date( 'F Y' );
+		$date_full             = gmdate( 'F Y' );
 		$oct_url = get_month_link( 2012, 10 );
 		$expected['order_asc'] = <<<EOF
 <li><a href='{$oct_url}'>October 2012</a></li>

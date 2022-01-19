@@ -37,8 +37,14 @@ function mysql2date( $format, $date, $translate = true ) {
 
 	if ( $translate )
 		return date_i18n( $format, $i );
+<<<<<<< HEAD
 	else
 		return date( $format, $i );
+=======
+	} else {
+		return gmdate( $format, $i );
+	}
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 }
 
 /**
@@ -104,10 +110,11 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 	$dateformatstring = preg_replace( "/(?<!\\\\)r/", DATE_RFC2822, $dateformatstring );
 
 	if ( ( ! empty( $wp_locale->month ) ) && ( ! empty( $wp_locale->weekday ) ) ) {
-		$datemonth = $wp_locale->get_month( date( 'm', $i ) );
+		$datemonth            = $wp_locale->get_month( gmdate( 'm', $i ) );
 		$datemonth_abbrev = $wp_locale->get_month_abbrev( $datemonth );
-		$dateweekday = $wp_locale->get_weekday( date( 'w', $i ) );
+		$dateweekday          = $wp_locale->get_weekday( gmdate( 'w', $i ) );
 		$dateweekday_abbrev = $wp_locale->get_weekday_abbrev( $dateweekday );
+<<<<<<< HEAD
 		$datemeridiem = $wp_locale->get_meridiem( date( 'a', $i ) );
 		$datemeridiem_capital = $wp_locale->get_meridiem( date( 'A', $i ) );
 		$dateformatstring = ' '.$dateformatstring;
@@ -117,6 +124,17 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 		$dateformatstring = preg_replace( "/([^\\\])M/", "\\1" . backslashit( $datemonth_abbrev ), $dateformatstring );
 		$dateformatstring = preg_replace( "/([^\\\])a/", "\\1" . backslashit( $datemeridiem ), $dateformatstring );
 		$dateformatstring = preg_replace( "/([^\\\])A/", "\\1" . backslashit( $datemeridiem_capital ), $dateformatstring );
+=======
+		$datemeridiem         = $wp_locale->get_meridiem( gmdate( 'a', $i ) );
+		$datemeridiem_capital = $wp_locale->get_meridiem( gmdate( 'A', $i ) );
+		$dateformatstring     = ' ' . $dateformatstring;
+		$dateformatstring     = preg_replace( '/([^\\\])D/', "\\1" . backslashit( $dateweekday_abbrev ), $dateformatstring );
+		$dateformatstring     = preg_replace( '/([^\\\])F/', "\\1" . backslashit( $datemonth ), $dateformatstring );
+		$dateformatstring     = preg_replace( '/([^\\\])l/', "\\1" . backslashit( $dateweekday ), $dateformatstring );
+		$dateformatstring     = preg_replace( '/([^\\\])M/', "\\1" . backslashit( $datemonth_abbrev ), $dateformatstring );
+		$dateformatstring     = preg_replace( '/([^\\\])a/', "\\1" . backslashit( $datemeridiem ), $dateformatstring );
+		$dateformatstring     = preg_replace( '/([^\\\])A/', "\\1" . backslashit( $datemeridiem_capital ), $dateformatstring );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 		$dateformatstring = substr( $dateformatstring, 1, strlen( $dateformatstring ) -1 );
 	}
@@ -167,7 +185,7 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 			}
 		}
 	}
-	$j = @date( $dateformatstring, $i );
+	$j = @gmdate( $dateformatstring, $i );
 
 	/**
 	 * Filters the date formatted based on the locale.
@@ -404,7 +422,7 @@ function get_weekstartend( $mysqlstring, $start_of_week = '' ) {
 	$day = mktime( 0, 0, 0, $md, $mm, $my );
 
 	// The day of the week from the timestamp.
-	$weekday = date( 'w', $day );
+	$weekday = gmdate( 'w', $day );
 
 	if ( !is_numeric($start_of_week) )
 		$start_of_week = get_option( 'start_of_week' );

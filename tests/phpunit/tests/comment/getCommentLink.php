@@ -14,6 +14,7 @@ class Tests_Comment_GetCommentLink extends WP_UnitTestCase {
 		self::$comments[] = self::factory()->comment->create( array(
 			'comment_post_ID' => self::$p,
 			'comment_content' => '1',
+<<<<<<< HEAD
 			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 100 ),
 		) );
 		self::$comments[] = self::factory()->comment->create( array(
@@ -41,6 +42,46 @@ class Tests_Comment_GetCommentLink extends WP_UnitTestCase {
 			'comment_content' => '4',
 			'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - 600 ),
 		) );
+=======
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+			)
+		);
+		self::$comments[] = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '2',
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
+			)
+		);
+		self::$comments[] = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '3',
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 300 ),
+			)
+		);
+		self::$comments[] = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '4',
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
+			)
+		);
+		self::$comments[] = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '4',
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 500 ),
+			)
+		);
+		self::$comments[] = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '4',
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 600 ),
+			)
+		);
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 	}
 

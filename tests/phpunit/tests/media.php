@@ -1297,7 +1297,11 @@ EOF;
 	function test_wp_calculate_image_srcset() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
+<<<<<<< HEAD
 		$year_month = date('Y/m');
+=======
+		$year_month      = gmdate( 'Y/m' );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
@@ -1422,7 +1426,11 @@ EOF;
 	function test_wp_calculate_image_srcset_with_absolute_path_in_meta() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
+<<<<<<< HEAD
 		$year_month = date('Y/m');
+=======
+		$year_month      = gmdate( 'Y/m' );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
@@ -1705,7 +1713,11 @@ EOF;
 
 		$srcset = wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta );
 
+<<<<<<< HEAD
 		$year_month = date('Y/m');
+=======
+		$year_month  = gmdate( 'Y/m' );
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		$uploads_dir = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
 
 		// Set up test cases for all expected size names.
@@ -2109,8 +2121,8 @@ EOF;
 		remove_all_filters( 'wp_calculate_image_sizes' );
 
 		$actual = wp_get_attachment_image( self::$large_id, 'testsize' );
-		$year = date( 'Y' );
-		$month = date( 'm' );
+		$year   = gmdate( 'Y' );
+		$month  = gmdate( 'm' );
 
 		$expected = '<img width="999" height="999" src="http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $year . '/' . $month . '/test-image-testsize-999x999.png"' .
 			' class="attachment-testsize size-testsize" alt=""' .
