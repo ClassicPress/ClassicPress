@@ -3096,27 +3096,6 @@ function iso8601_timezone_to_offset( $timezone ) {
  * @return string|bool The date and time in MySQL DateTime format - Y-m-d H:i:s, or false on failure.
  */
 function iso8601_to_datetime( $date_string, $timezone = 'user' ) {
-<<<<<<< HEAD
-	$timezone = strtolower($timezone);
-
-	if ($timezone == 'gmt') {
-
-		preg_match('#([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(Z|[\+|\-][0-9]{2,4}){0,1}#', $date_string, $date_bits);
-
-		if (!empty($date_bits[7])) { // we have a timezone, so let's compute an offset
-			$offset = iso8601_timezone_to_offset($date_bits[7]);
-		} else { // we don't have a timezone, so we assume user local timezone (not server's!)
-			$offset = HOUR_IN_SECONDS * get_option('gmt_offset');
-		}
-
-		$timestamp = gmmktime($date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1]);
-		$timestamp -= $offset;
-
-		return gmdate('Y-m-d H:i:s', $timestamp);
-
-	} elseif ($timezone == 'user') {
-		return preg_replace('#([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(Z|[\+|\-][0-9]{2,4}){0,1}#', '$1-$2-$3 $4:$5:$6', $date_string);
-=======
 	$timezone    = strtolower( $timezone );
 	$wp_timezone = wp_timezone();
 	$datetime    = date_create( $date_string, $wp_timezone ); // Timezone is ignored if input has one.
@@ -3131,7 +3110,6 @@ function iso8601_to_datetime( $date_string, $timezone = 'user' ) {
 
 	if ( 'user' === $timezone ) {
 		return $datetime->setTimezone( $wp_timezone )->format( 'Y-m-d H:i:s' );
->>>>>>> ae2b4f9add (Date/Time: Rewrite and simplify `get_gmt_from_date()`, `get_date_from_gmt()`, and `iso8601_to_datetime()` using `wp_timezone()`.)
 	}
 
 	return false;
