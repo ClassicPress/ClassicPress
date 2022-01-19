@@ -162,12 +162,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 	 */
 	$permalink = apply_filters( 'pre_post_link', $permalink, $post, $leavename );
 
-<<<<<<< HEAD
-	if ( '' != $permalink && !in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
-		$unixtime = strtotime($post->post_date);
-=======
 	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
->>>>>>> e720a9ddc7 (Date/Time: Make `get_permalink()` more resilient against PHP timezone changes.)
 
 		$category = '';
 		if ( strpos($permalink, '%category%') !== false ) {
@@ -226,15 +221,10 @@ function get_permalink( $post = 0, $leavename = false ) {
 			$author,
 			$post->post_name,
 		);
-<<<<<<< HEAD
-		$permalink = home_url( str_replace($rewritecode, $rewritereplace, $permalink) );
-		$permalink = user_trailingslashit($permalink, 'single');
-=======
 
 		$permalink = home_url( str_replace( $rewritecode, $rewritereplace, $permalink ) );
 		$permalink = user_trailingslashit( $permalink, 'single' );
 
->>>>>>> e720a9ddc7 (Date/Time: Make `get_permalink()` more resilient against PHP timezone changes.)
 	} else { // if they're not using the fancy permalink option
 		$permalink = home_url('?p=' . $post->ID);
 	}
