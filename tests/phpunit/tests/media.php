@@ -2395,15 +2395,10 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/44427
 	 * @see https://core.trac.wordpress.org/ticket/50367
-=======
-	 * @ticket 44427
-	 * @ticket 50367
-	 * @ticket 50756
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 * @requires function imagejpeg
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
 	 */
 	function test_wp_filter_content_tags_loading_lazy() {
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
@@ -2458,12 +2453,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/44427
-=======
-	 * @ticket 44427
-	 * @ticket 50756
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 */
 	function test_wp_filter_content_tags_loading_lazy_opted_in() {
 		$img      = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -2492,12 +2483,8 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/44427
-=======
-	 * @ticket 44427
-	 * @ticket 50756
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 */
 	function test_wp_filter_content_tags_loading_lazy_opted_out() {
 		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
@@ -2570,11 +2557,7 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @https://core.trac.wordpress.org/ticket/44427
 	 * @https://core.trac.wordpress.org/ticket/50425
-=======
-	 * @ticket 50756
 	 */
 	function test_wp_iframe_tag_add_loading_attr() {
 		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
@@ -2584,7 +2567,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 50756
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 */
 	function test_wp_iframe_tag_add_loading_attr_without_src() {
 		$iframe = '<iframe width="640" height="360"></iframe>';
@@ -2594,7 +2577,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 50756
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 */
 	function test_wp_iframe_tag_add_loading_attr_with_single_quotes() {
 		$iframe = "<iframe src='https://www.example.com' width='640' height='360'></iframe>";
@@ -2608,7 +2591,7 @@ EOF;
 	}
 
 	/**
-	 * @ticket 50756
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 */
 	function test_wp_iframe_tag_add_loading_attr_opt_out() {
 		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
@@ -2618,9 +2601,8 @@ EOF;
 	}
 
 	/**
-	 * @ticket 44427
-	 * @ticket 50425
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/ 50425
 	 */
 	function test_wp_get_attachment_image_loading() {
 		$img = wp_get_attachment_image( self::$large_id );
@@ -2656,14 +2638,9 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @https://core.trac.wordpress.org/ticket/44427
-	 * @https://core.trac.wordpress.org/ticket/50425
-=======
-	 * @ticket 44427
-	 * @ticket 50425
-	 * @ticket 50756
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/50756
 	 * @dataProvider data_wp_lazy_loading_enabled_tag_name_defaults
 	 *
 	 * @param string $tag_name  Function context.

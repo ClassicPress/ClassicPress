@@ -1428,12 +1428,8 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 /**
  * Determine whether to add the `loading` attribute to the specified tag in the specified context.
  *
-<<<<<<< HEAD
  * @since WP-5.5.0
-=======
- * @since 5.5.0
- * @since 5.7.0 Now returns `true` by default for `iframe` tags.
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+ * @since WP-5.7.0 Now returns `true` by default for `iframe` tags.
  *
  * @param string $tag_name The tag name.
  * @param string $context Additional context, like the current filter name or the function name from where this was called.
@@ -1466,12 +1462,8 @@ function wp_lazy_loading_enabled( $tag_name, $context ) {
  * as adding `loading` attributes to `iframe` HTML tags.
  * Future similar optimizations should be added/expected here.
  *
-<<<<<<< HEAD
  * @since WP-5.5.0
-=======
- * @since 5.5.0
- * @since 5.7.0 Now supports adding `loading` attributes to `iframe` tags.
->>>>>>> 8505c99a1b (Media: Enable lazy-loading of iframes by adding the `loading="lazy"` attribute to iframe tags on the front-end.)
+ * @since WP-5.7.0 Now supports adding `loading` attributes to `iframe` tags.
  *
  * @see wp_img_tag_add_width_and_height_attr()
  * @see wp_img_tag_add_srcset_and_sizes_attr()
