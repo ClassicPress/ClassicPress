@@ -35,10 +35,17 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/36790
 	 * @see https://core.trac.wordpress.org/ticket/37411
  	 * @see https://core.trac.wordpress.org/ticket/48606
  	 *
+=======
+	 * @ticket 36790
+	 * @ticket 37411
+	 * @ticket 48606
+	 * @ticket 48934
+>>>>>>> af39b30e28 (Date/Time: In `wp_maybe_decline_date()`, add support for a range of days, e.g. `February 21–23`.)
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
 	public function test_wp_maybe_decline_date( $test_locale, $format, $input, $output ) {
@@ -73,6 +80,7 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 			array( 'ru_RU', 'j F Y', '1 Январь 2016', '1 января 2016' ),
 			array( 'ru_RU', 'F jS Y', 'Январь 1st 2016', '1 января 2016' ),
 			array( 'ru_RU', 'F j Y', 'Январь 1 2016', '1 января 2016' ),
+			array( 'ru_RU', 'F j–j Y', 'Январь 1–2 2016', '1–2 января 2016' ),
 			array( 'ru_RU', 'F j y', 'Январь 1 16', '1 января 16' ),
 			array( 'ru_RU', 'F y', 'Январь 16', 'Январь 16' ),
 			array( 'ru_RU', 'l, d F Y H:i', 'Суббота, 19 Январь 2019 10:50', 'Суббота, 19 января 2019 10:50' ),
