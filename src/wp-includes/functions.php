@@ -302,13 +302,8 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
  * If the locale specifies that month names require a genitive case in certain
  * formats (like 'j F Y'), the month name will be replaced with a correct form.
  *
-<<<<<<< HEAD
  * @since WP-4.4.0
  * @since WP-5.4.0 The `$format` parameter was added.
-=======
- * @since 4.4.0
- * @since 5.4.0 The `$format` parameter was added.
->>>>>>> 5bef137806 (Date/Time: Pass the date format to `wp_maybe_decline_date()`.)
  *
  * @global WP_Locale $wp_locale
  *
