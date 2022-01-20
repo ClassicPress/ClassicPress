@@ -5797,7 +5797,7 @@ function get_posts_by_author_sql( $post_type, $full = true, $post_author = null,
  *                          'gmt' uses the `post_modified_gmt` field.
  *                          Default 'server'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
- * @return string The date of the last post.
+ * @return string The date of the last post, or false on failure.
  */
 function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
 	/**
@@ -5805,7 +5805,7 @@ function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
 	 *
 	 * @since WP-2.3.0
 	 *
-	 * @param string $date     Date the last post was published.
+	 * @param string|false $date     Date the last post was published. False on failure.
 	 * @param string $timezone Location to use for getting the post published date.
 	 *                         See get_lastpostdate() for accepted `$timezone` values.
 	 */
@@ -5826,7 +5826,11 @@ function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
  *                          for information on accepted values.
  *                          Default 'server'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
+<<<<<<< HEAD
  * @return string The timestamp.
+=======
+ * @return string The timestamp in 'Y-m-d H:i:s' format, or false on failure.
+>>>>>>> 9d69e005ea (Docs: Clarify that `get_lastpostdate()` and `get_lastpostmodified()` can return `false` on failure.)
  */
 function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
 	/**
@@ -5857,7 +5861,12 @@ function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
 	 *
 	 * @since WP-2.3.0
 	 *
+<<<<<<< HEAD
 	 * @param string $lastpostmodified Date the last post was modified.
+=======
+	 * @param string|false $lastpostmodified The most recent time that a post was modified, in 'Y-m-d H:i:s' format.
+	 *                                       False on failure.
+>>>>>>> 9d69e005ea (Docs: Clarify that `get_lastpostdate()` and `get_lastpostmodified()` can return `false` on failure.)
 	 * @param string $timezone         Location to use for getting the post modified date.
 	 *                                 See get_lastpostdate() for accepted `$timezone` values.
 	 */
@@ -5877,7 +5886,11 @@ function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
  *                          for information on accepted values.
  * @param string $field     Post field to check. Accepts 'date' or 'modified'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
+<<<<<<< HEAD
  * @return string|false The timestamp.
+=======
+ * @return string|false The timestamp in 'Y-m-d H:i:s' format, or false on failure.
+>>>>>>> 9d69e005ea (Docs: Clarify that `get_lastpostdate()` and `get_lastpostmodified()` can return `false` on failure.)
  */
 function _get_last_post_time( $timezone, $field, $post_type = 'any' ) {
 	global $wpdb;
