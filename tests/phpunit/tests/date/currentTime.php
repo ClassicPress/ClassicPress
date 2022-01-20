@@ -87,7 +87,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$datetime->setTimezone( wp_timezone() );
 		$wp_timestamp = $timestamp + $datetime->getOffset();
 
-<<<<<<< HEAD
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
 		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), 'The dates should be equal', 2 );
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
@@ -99,14 +98,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$this->assertEquals( $wp_timestamp, current_time( 'U' ), 'The dates should be equal', 2 );
 
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-=======
-		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), 'The dates should be equal', 2 );
-		$this->assertEquals( $timestamp, current_time( 'U', true ), 'The dates should be equal', 2 );
-
-		$this->assertEquals( $wp_timestamp, current_time( 'timestamp' ), 'The dates should be equal', 2 );
-		$this->assertEquals( $wp_timestamp, current_time( 'U' ), 'The dates should be equal', 2 );
-
->>>>>>> 051aa3847c (Date/Time: Fix race conditions in `current_time()` tests.)
 		$this->assertInternalType( 'int', current_time( 'timestamp' ) );
 	}
 
