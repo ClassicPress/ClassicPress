@@ -313,17 +313,12 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	 */
 	function test_invalid_post_date_gmt_does_not_fatal() {
 		$this->make_user_by_role( 'author' );
-<<<<<<< HEAD
-		$date_string = 'invalid date';
-		$post = array( 'post_title' => 'test', 'post_content' => 'test', 'post_date_gmt' => $date_string );
-=======
 		$date_string  = 'invalid_date';
 		$post         = array(
 			'post_title'    => 'test',
 			'post_content'  => 'test',
 			'post_date_gmt' => $date_string,
 		);
->>>>>>> 355d93d977 (Date/Time: Update XML-RPC tests for invalid date input to account for a more consistent `mysql2date()` error handling in [45908].)
 		$result = $this->myxmlrpcserver->wp_newPost( array( 1, 'author', 'author', $post ) );
 		$fetched_post = get_post( $result );
 		$this->assertStringMatchesFormat( '%d', $result );
