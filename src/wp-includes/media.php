@@ -1581,8 +1581,6 @@ function wp_filter_content_tags( $content, $context = null ) {
  * @return string Converted `img` tag with `loading` attribute added.
  */
 function wp_img_tag_add_loading_attr( $image, $context ) {
-<<<<<<< HEAD
-=======
 	// Get loading attribute value to use. This must occur before the conditional check below so that even images that
 	// are ineligible for being lazy-loaded are considered.
 	$value = wp_get_loading_attr_default( $context );
@@ -1592,7 +1590,6 @@ function wp_img_tag_add_loading_attr( $image, $context ) {
 		return $image;
 	}
 
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 	/**
 	 * Filters the `loading` attribute value to add to an image. Default `lazy`.
 	 *
@@ -1601,13 +1598,8 @@ function wp_img_tag_add_loading_attr( $image, $context ) {
 	 *
 	 * @since WP-5.5.0
 	 *
-<<<<<<< HEAD
-	 * @param string|bool $value   The `loading` attribute value. Returning a false-y value will result in the
-	 *                             attribute being omitted for the image. Default is `lazy`.
-=======
 	 * @param string|bool $value   The `loading` attribute value. Returning a falsey value will result in
 	 *                             the attribute being omitted for the image.
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 	 * @param string $image   The HTML `img` tag to be filtered.
 	 * @param string $context Additional context about how the function was called or where the img tag is.
 	 */
@@ -1718,8 +1710,6 @@ function wp_img_tag_add_srcset_and_sizes_attr( $image, $context, $attachment_id 
  * @return string Converted `iframe` tag with `loading` attribute added.
  */
 function wp_iframe_tag_add_loading_attr( $iframe, $context ) {
-<<<<<<< HEAD
-=======
 	// Iframes with fallback content (see `wp_filter_oembed_result()`) should not be lazy-loaded because they are
 	// visually hidden initially.
 	if ( false !== strpos( $iframe, ' data-secret="' ) ) {
@@ -1735,7 +1725,6 @@ function wp_iframe_tag_add_loading_attr( $iframe, $context ) {
 		return $iframe;
 	}
 
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 	/**
 	 * Filters the `loading` attribute value to add to an iframe. Default `lazy`.
 	 *
@@ -4378,149 +4367,6 @@ function wp_show_heic_upload_error( $plupload_settings ) {
 	$plupload_settings['heic_upload_error'] = true;
 	return $plupload_settings;
 }
-<<<<<<< HEAD
-=======
-
-/**
- * Allows PHP's getimagesize() to be debuggable when necessary.
- *
- * @since 5.7.0
- * @since 5.8.0 Added support for WebP images.
- *
- * @param string $filename   The file path.
- * @param array  $image_info Optional. Extended image information (passed by reference).
- * @return array|false Array of image information or false on failure.
- */
-function wp_getimagesize( $filename, array &$image_info = null ) {
-	// Don't silence errors when in debug mode, unless running unit tests.
-	if ( defined( 'WP_DEBUG' ) && WP_DEBUG
-		&& ! defined( 'WP_RUN_CORE_TESTS' )
-	) {
-		if ( 2 === func_num_args() ) {
-			$info = getimagesize( $filename, $image_info );
-		} else {
-			$info = getimagesize( $filename );
-		}
-	} else {
-		/*
-		 * Silencing notice and warning is intentional.
-		 *
-		 * getimagesize() has a tendency to generate errors, such as
-		 * "corrupt JPEG data: 7191 extraneous bytes before marker",
-		 * even when it's able to provide image size information.
-		 *
-		 * See https://core.trac.wordpress.org/ticket/42480
-		 */
-		if ( 2 === func_num_args() ) {
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors
-			$info = @getimagesize( $filename, $image_info );
-		} else {
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors
-			$info = @getimagesize( $filename );
-		}
-	}
-
-	if ( false !== $info ) {
-		return $info;
-	}
-
-	// For PHP versions that don't support WebP images,
-	// extract the image size info from the file headers.
-	if ( 'image/webp' === wp_get_image_mime( $filename ) ) {
-		$webp_info = wp_get_webp_info( $filename );
-		$width     = $webp_info['width'];
-		$height    = $webp_info['height'];
-
-		// Mimic the native return format.
-		if ( $width && $height ) {
-			return array(
-				$width,
-				$height,
-				IMAGETYPE_WEBP, // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
-				sprintf(
-					'width="%d" height="%d"',
-					$width,
-					$height
-				),
-				'mime' => 'image/webp',
-			);
-		}
-	}
-
-	// The image could not be parsed.
-	return false;
-}
-
-/**
- * Extracts meta information about a webp file: width, height and type.
- *
- * @since 5.8.0
- *
- * @param string $filename Path to a WebP file.
- * @return array $webp_info {
- *     An array of WebP image information.
- *
- *     @type array $size {
- *         @type int|false    $width  Image width on success, false on failure.
- *         @type int|false    $height Image height on success, false on failure.
- *         @type string|false $type   The WebP type: one of 'lossy', 'lossless' or 'animated-alpha'.
- *                                    False on failure.
- *     }
- */
-function wp_get_webp_info( $filename ) {
-	$width  = false;
-	$height = false;
-	$type   = false;
-
-	if ( 'image/webp' !== wp_get_image_mime( $filename ) ) {
-		return compact( 'width', 'height', 'type' );
-	}
-
-	try {
-		$handle = fopen( $filename, 'rb' );
-		if ( $handle ) {
-			$magic = fread( $handle, 40 );
-			fclose( $handle );
-
-			// Make sure we got enough bytes.
-			if ( strlen( $magic ) < 40 ) {
-				return compact( 'width', 'height', 'type' );
-			}
-
-			// The headers are a little different for each of the three formats.
-			// Header values based on WebP docs, see https://developers.google.com/speed/webp/docs/riff_container.
-			switch ( substr( $magic, 12, 4 ) ) {
-				// Lossy WebP.
-				case 'VP8 ':
-					$parts  = unpack( 'v2', substr( $magic, 26, 4 ) );
-					$width  = (int) ( $parts[1] & 0x3FFF );
-					$height = (int) ( $parts[2] & 0x3FFF );
-					$type   = 'lossy';
-					break;
-				// Lossless WebP.
-				case 'VP8L':
-					$parts  = unpack( 'C4', substr( $magic, 21, 4 ) );
-					$width  = (int) ( $parts[1] | ( ( $parts[2] & 0x3F ) << 8 ) ) + 1;
-					$height = (int) ( ( ( $parts[2] & 0xC0 ) >> 6 ) | ( $parts[3] << 2 ) | ( ( $parts[4] & 0x03 ) << 10 ) ) + 1;
-					$type   = 'lossless';
-					break;
-				// Animated/alpha WebP.
-				case 'VP8X':
-					// Pad 24-bit int.
-					$width = unpack( 'V', substr( $magic, 24, 3 ) . "\x00" );
-					$width = (int) ( $width[1] & 0xFFFFFF ) + 1;
-					// Pad 24-bit int.
-					$height = unpack( 'V', substr( $magic, 27, 3 ) . "\x00" );
-					$height = (int) ( $height[1] & 0xFFFFFF ) + 1;
-					$type   = 'animated-alpha';
-					break;
-			}
-		}
-	} catch ( Exception $e ) {
-	}
-
-	return compact( 'width', 'height', 'type' );
-}
 
 /**
  * Gets the default value to use for a `loading` attribute on an element.
@@ -4537,7 +4383,7 @@ function wp_get_webp_info( $filename ) {
  * This default threshold of 1 content element to omit the `loading` attribute for can be customized using the
  * {@see 'wp_omit_loading_attr_threshold'} filter.
  *
- * @since 5.9.0
+ * @since WP-5.9.0
  *
  * @param string $context Context for the element for which the `loading` attribute value is requested.
  * @return string|bool The default `loading` attribute value. Either 'lazy', 'eager', or a boolean `false`, to indicate
@@ -4572,7 +4418,7 @@ function wp_get_loading_attr_default( $context ) {
  * This function runs the {@see 'wp_omit_loading_attr_threshold'} filter, which uses a default threshold value of 1.
  * The filter is only run once per page load, unless the `$force` parameter is used.
  *
- * @since 5.9.0
+ * @since WP-5.9.0
  *
  * @param bool $force Optional. If set to true, the filter will be (re-)applied even if it already has been before.
  *                    Default false.
@@ -4602,7 +4448,7 @@ function wp_omit_loading_attr_threshold( $force = false ) {
 /**
  * Increases an internal content media count variable.
  *
- * @since 5.9.0
+ * @since WP-5.9.0
  * @access private
  *
  * @param int $amount Optional. Amount to increase by. Default 1.
@@ -4615,4 +4461,3 @@ function wp_increase_content_media_count( $amount = 1 ) {
 
 	return $content_media_count;
 }
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)

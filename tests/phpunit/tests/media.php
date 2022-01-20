@@ -7,6 +7,7 @@
 class Tests_Media extends WP_UnitTestCase {
 	protected static $large_id;
 	protected static $_sizes;
+	protected static $post_ids;
 
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$_sizes = wp_get_additional_image_sizes();
@@ -14,6 +15,35 @@ class Tests_Media extends WP_UnitTestCase {
 
 		$filename = DIR_TESTDATA . '/images/test-image-large.png';
 		self::$large_id = $factory->attachment->create_upload_object( $filename );
+
+		$post_statuses = array( 'publish', 'future', 'draft', 'auto-draft', 'trash' );
+		foreach ( $post_statuses as $post_status ) {
+			$date = '';
+			if ( 'future' === $post_status ) {
+				date_format( date_create( '+1 year' ), 'Y-m-d H:i:s' );
+			}
+
+			self::$post_ids[ $post_status ] = $factory->post->create(
+				array(
+					'post_status' => 'trash' === $post_status ? 'publish' : $post_status,
+					'post_date'   => $date,
+					'post_name'   => "$post_status-post",
+				)
+			);
+
+			// Attachments without media.
+			self::$post_ids[ "$post_status-attachment" ] = $factory->attachment->create_object(
+				array(
+					'post_parent' => self::$post_ids[ $post_status ],
+					'post_status' => 'inherit',
+					'post_name'   => "$post_status-attachment",
+					'post_date'   => $date,
+				)
+			);
+		}
+
+		// Trash the trash post.
+		wp_trash_post( self::$post_ids['trash'] );
 	}
 
 	public static function wpTearDownAfterClass() {
@@ -2663,13 +2693,9 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @https://core.trac.wordpress.org/ticket/50425
-=======
-	 * @ticket 50425
-	 * @ticket 53463
-	 * @ticket 53675
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
+	 * @https://core.trac.wordpress.org/ticket/53463
+	 * @https://core.trac.wordpress.org/ticket/53675
 	 * @dataProvider data_wp_lazy_loading_enabled_context_defaults
 	 *
 	 * @param string $context  Function context.
@@ -2692,146 +2718,6 @@ EOF;
 			'get_avatar => true'              => array( 'get_avatar', true ),
 			'arbitrary context => true'       => array( 'something_completely_arbitrary', true ),
 			'the_post_thumbnail => true'      => array( 'the_post_thumbnail', true ),
-		);
-	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * @ticket 50543
-	 */
-	public function test_wp_image_file_matches_image_meta() {
-		$image_meta       = wp_get_attachment_metadata( self::$large_id );
-		$image_src_full   = wp_get_attachment_image_url( self::$large_id, 'full' );
-		$image_src_medium = wp_get_attachment_image_url( self::$large_id, 'medium' );
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_full, $image_meta ) );
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_medium, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	public function test_wp_image_file_matches_image_meta_no_subsizes() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = wp_get_attachment_image_url( self::$large_id, 'full' );
-
-		$image_meta['sizes'] = array();
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	public function test_wp_image_file_matches_image_meta_invalid_meta() {
-		$image_meta = ''; // Attachment is not an image.
-		$image_src  = $this->img_url;
-
-		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	public function test_wp_image_file_matches_image_meta_different_meta() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = $this->img_url; // Different image.
-
-		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 50543
-	 */
-	public function test_wp_image_file_matches_image_meta_original_image() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$image_src  = wp_get_original_image_url( self::$large_id );
-
-		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
-	}
-
-	/**
-	 * @ticket 22101
-	 */
-	public function test_gallery_shortcode_when_is_feed_true() {
-
-		$this->go_to( '/?feed=rss2' );
-
-		// Default: Links to image attachment page URL.
-		$actual = gallery_shortcode(
-			array(
-				'ids' => self::$large_id,
-			)
-		);
-		$this->assertStringContainsString( '?attachment_id=', $actual );
-
-		// File: Links to image file URL.
-		$actual = gallery_shortcode(
-			array(
-				'ids'  => self::$large_id,
-				'link' => 'file',
-			)
-		);
-		$this->assertSame( 2, substr_count( $actual, '.jpg' ) );
-
-		// None: Does not link.
-		$actual = gallery_shortcode(
-			array(
-				'ids'  => self::$large_id,
-				'link' => 'none',
-			)
-		);
-		$this->assertStringNotContainsString( '<a ', $actual );
-	}
-
-	/**
-	 * Test attachment permalinks based on parent post status.
-	 *
-	 * @dataProvider data_attachment_permalinks_based_on_parent_status
-	 * @ticket 51776
-	 *
-	 * @param string $post_key     Post as keyed in the shared fixture array.
-	 * @param string $expected_url Expected permalink.
-	 * @param bool   $expected_404 Whether the page is expected to return a 404 result.
-	 *
-	 */
-	public function test_attachment_permalinks_based_on_parent_status( $post_key, $expected_url, $expected_404 ) {
-		$this->set_permalink_structure( '/%postname%' );
-		$post = get_post( self::$post_ids[ $post_key ] );
-
-		/*
-		 * The dataProvider runs before the fixures are set up, therefore the
-		 * post object IDs are placeholders that needs to be replaced.
-		 */
-		$expected_url = home_url( str_replace( '%ID%', $post->ID, $expected_url ) );
-
-		$this->go_to( get_permalink( $post ) );
-		$this->assertSame( $expected_url, get_permalink( $post ) );
-		if ( $expected_404 ) {
-			$this->assertQueryTrue( 'is_404' );
-		} else {
-			$this->assertQueryTrue( 'is_attachment', 'is_single', 'is_singular' );
-		}
-		$this->assertSame( 'attachment', $post->post_type );
-	}
-
-	/**
-	 * Data provider for test_attachment_permalinks_based_on_parent_status().
-	 *
-	 * @return array[] {
-	 *     @type string $post_key     Post as keyed in the shared fixture array.
-	 *     @type string $expected_url Expected permalink.
-	 *     $type bool   $expected_404 Whether the page is expected to return a 404 result.
-	 * }
-	 */
-	public function data_attachment_permalinks_based_on_parent_status() {
-		return array(
-			array( 'draft-attachment', '/?attachment_id=%ID%', true ),
-			array( 'publish-attachment', '/publish-post/publish-attachment', false ),
-			array( 'future-attachment', '/future-post/future-attachment', false ),
-			array( 'auto-draft-attachment', '/?attachment_id=%ID%', true ),
-			array( 'trash-attachment', '/?attachment_id=%ID%', false ),
 		);
 	}
 
@@ -3006,7 +2892,6 @@ EOF;
 		// Clean up the above filter.
 		remove_filter( 'wp_omit_loading_attr_threshold', '__return_null', 100 );
 	}
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 }
 
 /**

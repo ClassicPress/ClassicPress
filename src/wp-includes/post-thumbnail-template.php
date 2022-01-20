@@ -145,10 +145,8 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		 *                                        and height values (in that order). Default 'post-thumbnail'.
 		 */
 		do_action( 'begin_fetch_post_thumbnail_html', $post->ID, $post_thumbnail_id, $size );
-		if ( in_the_loop() )
+		if ( in_the_loop() ) {
 			update_post_thumbnail_cache();
-<<<<<<< HEAD
-=======
 		}
 
 		// Get the 'loading' attribute value to use as default, taking precedence over the default from
@@ -164,7 +162,6 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 			$attr .= '&loading=' . $loading;
 		}
 
->>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, $attr );
 
 		/**
