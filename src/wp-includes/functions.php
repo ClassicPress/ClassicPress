@@ -31,15 +31,6 @@ function mysql2date( $format, $date, $translate = true ) {
 	if ( empty( $date ) )
 		return false;
 
-<<<<<<< HEAD
-	if ( 'G' == $format )
-		return strtotime( $date . ' +0000' );
-
-	$i = strtotime( $date );
-
-	if ( 'U' == $format )
-		return $i;
-=======
 	$datetime = date_create( $date, wp_timezone() );
 
 	if ( false === $datetime ) {
@@ -50,7 +41,6 @@ function mysql2date( $format, $date, $translate = true ) {
 	if ( 'G' === $format || 'U' === $format ) {
 		return $datetime->getTimestamp() + $datetime->getOffset();
 	}
->>>>>>> 71697aefc0 (Date/Time: Revamp `mysql2date()` to use `wp_date()` and handle invalid input in a consistent manner.)
 
 	if ( $translate ) {
 		return wp_date( $format, $datetime->getTimestamp() );
@@ -231,11 +221,7 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
  * @param int          $timestamp Optional. Unix timestamp. Defaults to current time.
  * @param DateTimeZone $timezone  Optional. Timezone to output result in. Defaults to timezone
  *                                from site settings.
-<<<<<<< HEAD
  * @return string|false The date, translated if locale specifies it. False on invalid timestamp input.
-=======
- * @return string The date, translated if locale specifies it.
->>>>>>> 71697aefc0 (Date/Time: Revamp `mysql2date()` to use `wp_date()` and handle invalid input in a consistent manner.)
 	 */
 function wp_date( $format, $timestamp = null, $timezone = null ) {
 	global $wp_locale;
