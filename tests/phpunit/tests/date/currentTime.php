@@ -7,8 +7,6 @@
 class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 	/**
-<<<<<<< HEAD
-=======
 	 * @ticket 34378
 	 */
 	public function test_current_time_with_date_format_string() {
@@ -52,7 +50,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
->>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
 	 * @ticket 37440
 	 */
 	public function test_should_work_with_changed_timezone() {
@@ -82,12 +79,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$datetime->setTimezone( wp_timezone() );
 		$wp_timestamp = $timestamp + $datetime->getOffset();
 
-<<<<<<< HEAD
-		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), '', 2 );
-		$this->assertEquals( $timestamp, current_time( 'U', true ), '', 2 );
-		$this->assertEquals( $wp_timestamp, current_time( 'timestamp' ), '', 2 );
-		$this->assertEquals( $wp_timestamp, current_time( 'U' ), '', 2 );
-=======
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
 		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), 'The dates should be equal', 2 );
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
@@ -99,7 +90,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$this->assertEquals( $wp_timestamp, current_time( 'U' ), 'The dates should be equal', 2 );
 
 		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
->>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
 		$this->assertInternalType( 'int', current_time( 'timestamp' ) );
 	}
 
