@@ -17,7 +17,7 @@ class Tests_Date_Get_Permalink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 48623
+	 * @see https://core.trac.wordpress.org/ticket/48623
 	 */
 	public function test_should_return_correct_date_permalink_with_changed_time_zone() {
 		$timezone = 'America/Chicago';

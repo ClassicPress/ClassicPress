@@ -834,7 +834,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25566
+	 * @see https://core.trac.wordpress.org/ticket/25566
 	 */
 	function test_wp_tag_cloud_link_with_post_type() {
 		$post_type = 'new_post_type';

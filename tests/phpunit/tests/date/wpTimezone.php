@@ -7,7 +7,7 @@
 class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 24730
+	 * @see https://core.trac.wordpress.org/ticket/24730
 	 *
 	 * @dataProvider timezone_offset_provider
 	 *
@@ -26,7 +26,7 @@ class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24730
+	 * @see https://core.trac.wordpress.org/ticket/24730
 	 */
 	public function test_should_return_timezone_string() {
 		update_option( 'timezone_string', 'Europe/Kiev' );

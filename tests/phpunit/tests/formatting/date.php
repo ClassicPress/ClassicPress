@@ -95,7 +95,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31809
+	 * @see https://core.trac.wordpress.org/ticket/31809
 	 *
 	 * @dataProvider timezone_provider
 	 */
@@ -111,7 +111,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31809
+	 * @see https://core.trac.wordpress.org/ticket/31809
 	 *
 	 * @dataProvider timezone_provider
 	 */
@@ -127,7 +127,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31809
+	 * @see https://core.trac.wordpress.org/ticket/31809
 	 *
 	 * @dataProvider timezone_provider
 	 */

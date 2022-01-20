@@ -9,7 +9,7 @@
 class Tests_Functions_is_new_date extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 46627
+	 * @see https://core.trac.wordpress.org/ticket/46627
 	 * @dataProvider _data_is_new_date
 	 *
 	 * @param string $currentday_string  The day of the current post in the loop.

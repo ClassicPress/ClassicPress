@@ -26,14 +26,14 @@ class Tests_Date_WP_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28636
+	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_return_false_on_invalid_timestamp() {
 		$this->assertFalse( wp_date( DATE_RFC3339, 'invalid' ) );
 	}
 
 	/**
-	 * @ticket 48319
+	 * @see https://core.trac.wordpress.org/ticket/48319
 	 */
 	public function test_should_not_escape_localized_numbers() {
 		global $wp_locale;
@@ -47,7 +47,7 @@ class Tests_Date_WP_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 48319
+	 * @see https://core.trac.wordpress.org/ticket/48319
 	 */
 	public function test_should_keep_localized_slashes() {
 		global $wp_locale;

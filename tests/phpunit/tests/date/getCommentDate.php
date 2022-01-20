@@ -8,7 +8,7 @@
 class Tests_Date_Get_Comment_Date extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_comment_date_returns_correct_time_with_comment_id() {
 		$c = self::factory()->comment->create( array( 'comment_date' => '2020-08-29 01:51:00' ) );
@@ -17,7 +17,7 @@ class Tests_Date_Get_Comment_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_comment_date_returns_correct_time_with_empty_format() {
 		$c = self::factory()->comment->create( array( 'comment_date' => '2020-08-29 01:51:00' ) );
@@ -27,7 +27,7 @@ class Tests_Date_Get_Comment_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_comment_time_returns_correct_time() {
 		$c = self::factory()->comment->create( array( 'comment_date' => '2020-08-29 01:51:00' ) );
@@ -37,7 +37,7 @@ class Tests_Date_Get_Comment_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_comment_time_returns_correct_time_with_empty_format() {
 		$c = self::factory()->comment->create( array( 'comment_date' => '2020-08-29 01:51:00' ) );

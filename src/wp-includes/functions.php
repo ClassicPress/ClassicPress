@@ -87,7 +87,7 @@ function current_time( $type, $gmt = 0 ) {
 /**
  * Retrieves the current time as an object using the site's timezone.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @return DateTimeImmutable Date and time object.
  */
@@ -225,7 +225,7 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
  * Note that, unlike `date_i18n()`, this function accepts a true Unix timestamp, not summed
  * with timezone offset.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @param string       $format    PHP date format.
  * @param int          $timestamp Optional. Unix timestamp. Defaults to current time.

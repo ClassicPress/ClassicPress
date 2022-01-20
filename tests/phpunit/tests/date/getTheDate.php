@@ -8,7 +8,7 @@
 class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 13771
+	 * @see https://core.trac.wordpress.org/ticket/13771
 	 */
 	public function test_get_the_date_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -17,7 +17,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_the_date_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_date() );
@@ -27,7 +27,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_the_date_returns_correct_time_with_empty_format() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2020-08-29 01:51:00' ) );
@@ -37,7 +37,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_the_time_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -46,7 +46,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_the_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_time() );
@@ -56,7 +56,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_the_time_returns_correct_time_with_empty_format() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2020-08-29 01:51:00' ) );

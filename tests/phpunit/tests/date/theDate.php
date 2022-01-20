@@ -84,7 +84,7 @@ class Tests_Date_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 33750
+	 * @see https://core.trac.wordpress.org/ticket/33750
 	 */
 	function test_the_date() {
 		ob_start();
@@ -124,7 +124,7 @@ class Tests_Date_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 47354
+	 * @see https://core.trac.wordpress.org/ticket/47354
 	 */
 	function test_the_weekday_date() {
 		ob_start();

@@ -2467,7 +2467,7 @@ function get_post_time( $format = 'U', $gmt = false, $post = null, $translate = 
  * typically because of timezone setting changes. The parameter ensures the ability to reproduce backwards
  * compatible behaviors in such cases.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @param int|WP_Post $post  Optional. WP_Post object or ID. Default is global `$post` object.
  * @param string      $field  Optional. Published or modified time to use from database. Accepts 'date' or 'modified'.
@@ -2512,7 +2512,7 @@ function get_post_datetime( $post = null, $field = 'date', $source = 'local' ) {
  * Note that this function returns a true Unix timestamp, not summed with timezone offset
  * like older WP functions.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @param int|WP_Post $post  Optional. WP_Post object or ID. Default is global `$post` object.
  * @param string      $field Optional. Published or modified time to use from database. Accepts 'date' or 'modified'.
