@@ -538,18 +538,11 @@ function get_comment_class( $class = '', $comment_id = null, $post_id = null ) {
  */
 function get_comment_date( $format = '', $comment_ID = 0 ) {
 	$comment = get_comment( $comment_ID );
-<<<<<<< HEAD
-	if ( '' == $d )
-		$date = mysql2date(get_option('date_format'), $comment->comment_date);
-	else
-		$date = mysql2date($d, $comment->comment_date);
-=======
 	if ( '' == $format ) {
 		$date = mysql2date( get_option( 'date_format' ), $comment->comment_date );
 	} else {
 		$date = mysql2date( $format, $comment->comment_date );
 	}
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	/**
 	 * Filters the returned comment date.
 	 *
@@ -1019,18 +1012,11 @@ function get_comment_time( $format = '', $gmt = false, $translate = true ) {
 	$comment = get_comment();
 
 	$comment_date = $gmt ? $comment->comment_date_gmt : $comment->comment_date;
-<<<<<<< HEAD
-	if ( '' == $d )
-		$date = mysql2date(get_option('time_format'), $comment_date, $translate);
-	else
-		$date = mysql2date($d, $comment_date, $translate);
-=======
 	if ( '' == $format ) {
 		$date = mysql2date( get_option( 'time_format' ), $comment_date, $translate );
 	} else {
 		$date = mysql2date( $format, $comment_date, $translate );
 	}
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	/**
 	 * Filters the returned comment time.
@@ -1053,13 +1039,8 @@ function get_comment_time( $format = '', $gmt = false, $translate = true ) {
  *
  * @param string $format Optional. The format of the time. Default user's settings.
  */
-<<<<<<< HEAD
-function comment_time( $d = '' ) {
-	echo get_comment_time($d);
-=======
 function comment_time( $format = '' ) {
 	echo get_comment_time( $format );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 }
 
 /**

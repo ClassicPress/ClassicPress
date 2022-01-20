@@ -301,12 +301,6 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
  * @param string $str
  * @return int|float
  */
-<<<<<<< HEAD
-function wp_exif_frac2dec($str) {
-	@list( $n, $d ) = explode( '/', $str );
-	if ( !empty($d) )
-		return $n / $d;
-=======
 function wp_exif_frac2dec( $str ) {
 	if ( false === strpos( $str, '/' ) ) {
 		return $str;
@@ -316,7 +310,6 @@ function wp_exif_frac2dec( $str ) {
 	if ( ! empty( $denominator ) ) {
 		return $numerator / $denominator;
 	}
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	return $str;
 }
 

@@ -71,18 +71,15 @@ class WP_Widget_Archives extends WP_Widget {
 			 * @param array $args     An array of Archives widget drop-down arguments.
 			 * @param array $instance Settings for the current Archives widget instance.
 			 */
-			$dropdown_args = apply_filters( 'widget_archives_dropdown_args', array(
-				'type'            => 'monthly',
-				'format'          => 'option',
-<<<<<<< HEAD
-				'show_post_count' => $c
-			), $instance );
-=======
+			$dropdown_args = apply_filters(
+				'widget_archives_dropdown_args',
+				array(
+					'type'            => 'monthly',
+					'format'          => 'option',
 					'show_post_count' => $count,
 				),
 				$instance
 			);
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 			switch ( $dropdown_args['type'] ) {
 				case 'yearly':
@@ -121,18 +118,16 @@ class WP_Widget_Archives extends WP_Widget {
 		 * @param array $args     An array of Archives option arguments.
 		 * @param array $instance Array of settings for the current widget.
 		 */
-		wp_get_archives( apply_filters( 'widget_archives_args', array(
-			'type'            => 'monthly',
-<<<<<<< HEAD
-			'show_post_count' => $c
-		), $instance ) );
-=======
-						'show_post_count' => $count,
-					),
-					$instance
-				)
-			);
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
+		wp_get_archives(
+			apply_filters(
+				'widget_archives_args',
+				array(
+					'type'            => 'monthly',
+					'show_post_count' => $count,
+				),
+				$instance
+			)
+		);
 		?>
 		</ul>
 		<?php

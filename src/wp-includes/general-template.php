@@ -2286,13 +2286,8 @@ function get_the_date( $format = '', $post = null ) {
  * @param bool   $echo   Optional, default is display. Whether to echo the date or return it.
  * @return string|void String if retrieving.
  */
-<<<<<<< HEAD
-function the_modified_date( $d = '', $before = '', $after = '', $echo = true ) {
-	$the_modified_date = $before . get_the_modified_date($d) . $after;
-=======
 function the_modified_date( $format = '', $before = '', $after = '', $echo = true ) {
 	$the_modified_date = $before . get_the_modified_date( $format ) . $after;
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	/**
 	 * Filters the date a post was last modified for display.
@@ -2382,30 +2377,18 @@ function the_time( $format = '' ) {
  * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
  *                          False on failure.
  */
-<<<<<<< HEAD
-function get_the_time( $d = '', $post = null ) {
-	$post = get_post($post);
-=======
 function get_the_time( $format = '', $post = null ) {
 	$post = get_post( $post );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	if ( ! $post ) {
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( '' == $d )
-		$the_time = get_post_time(get_option('time_format'), false, $post, true);
-	else
-		$the_time = get_post_time($d, false, $post, true);
-=======
 	if ( '' == $format ) {
 		$the_time = get_post_time( get_option( 'time_format' ), false, $post, true );
 	} else {
 		$the_time = get_post_time( $format, false, $post, true );
 	}
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	/**
 	 * Filters the time a post was written.
@@ -2434,13 +2417,8 @@ function get_the_time( $format = '', $post = null ) {
  * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
  *                          False on failure.
  */
-<<<<<<< HEAD
-function get_post_time( $d = 'U', $gmt = false, $post = null, $translate = false ) {
-	$post = get_post($post);
-=======
 function get_post_time( $format = 'U', $gmt = false, $post = null, $translate = false ) {
 	$post = get_post( $post );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	if ( ! $post ) {
 		return false;
@@ -2563,11 +2541,7 @@ function get_post_timestamp( $post = null, $field = 'date' ) {
  * @param string $format Optional. Either 'G', 'U', or PHP date format defaults
  *                       to the value specified in the time_format option.
  */
-<<<<<<< HEAD
-function the_modified_time($d = '') {
-=======
 function the_modified_time( $format = '' ) {
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	/**
 	 * Filters the localized time a post was last modified, for display.
 	 *
@@ -2578,11 +2552,7 @@ function the_modified_time( $format = '' ) {
 	 *                                      or PHP date format. Defaults to value
 	 *                                      specified in 'time_format' option.
 	 */
-<<<<<<< HEAD
-	echo apply_filters( 'the_modified_time', get_the_modified_time($d), $d );
-=======
 	echo apply_filters( 'the_modified_time', get_the_modified_time( $format ), $format );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 }
 
 /**
@@ -2637,13 +2607,8 @@ function get_the_modified_time( $format = '', $post = null ) {
  * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
  *                          False on failure.
  */
-<<<<<<< HEAD
-function get_post_modified_time( $d = 'U', $gmt = false, $post = null, $translate = false ) {
-	$post = get_post($post);
-=======
 function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $translate = false ) {
 	$post = get_post( $post );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 	if ( ! $post ) {
 		return false;
@@ -2679,14 +2644,9 @@ function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $tra
 	 * @since WP-2.8.0
 	 *
 	 * @param string $time The formatted time.
-<<<<<<< HEAD
-	 * @param string $d    The date format. Accepts 'G', 'U', or php date format. Default 'U'.
-	 * @param bool   $gmt  Whether to return the GMT time. Default false.
-=======
 	 * @param string $format Format to use for retrieving the time the post was modified.
 	 *                       Accepts 'G', 'U', or PHP date format. Default 'U'.
 	 * @param bool   $gmt    Whether to retrieve the GMT time. Default false.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	 */
 	return apply_filters( 'get_post_modified_time', $time, $format, $gmt );
 }
