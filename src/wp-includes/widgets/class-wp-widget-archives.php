@@ -45,8 +45,8 @@ class WP_Widget_Archives extends WP_Widget {
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 
-		$c = ! empty( $instance['count'] ) ? '1' : '0';
-		$d = ! empty( $instance['dropdown'] ) ? '1' : '0';
+		$count    = ! empty( $instance['count'] ) ? '1' : '0';
+		$dropdown = ! empty( $instance['dropdown'] ) ? '1' : '0';
 
 		echo $args['before_widget'];
 
@@ -54,7 +54,7 @@ class WP_Widget_Archives extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		if ( $d ) {
+		if ( $dropdown ) {
 			$dropdown_id = "{$this->id_base}-dropdown-{$this->number}";
 			?>
 		<label class="screen-reader-text" for="<?php echo esc_attr( $dropdown_id ); ?>"><?php echo $title; ?></label>
@@ -74,8 +74,15 @@ class WP_Widget_Archives extends WP_Widget {
 			$dropdown_args = apply_filters( 'widget_archives_dropdown_args', array(
 				'type'            => 'monthly',
 				'format'          => 'option',
+<<<<<<< HEAD
 				'show_post_count' => $c
 			), $instance );
+=======
+					'show_post_count' => $count,
+				),
+				$instance
+			);
+>>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 
 			switch ( $dropdown_args['type'] ) {
 				case 'yearly':
@@ -116,8 +123,16 @@ class WP_Widget_Archives extends WP_Widget {
 		 */
 		wp_get_archives( apply_filters( 'widget_archives_args', array(
 			'type'            => 'monthly',
+<<<<<<< HEAD
 			'show_post_count' => $c
 		), $instance ) );
+=======
+						'show_post_count' => $count,
+					),
+					$instance
+				)
+			);
+>>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 		?>
 		</ul>
 		<?php
