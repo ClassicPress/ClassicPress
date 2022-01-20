@@ -35,17 +35,10 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/36790
 	 * @see https://core.trac.wordpress.org/ticket/37411
  	 * @see https://core.trac.wordpress.org/ticket/48606
- 	 *
-=======
-	 * @ticket 36790
-	 * @ticket 37411
-	 * @ticket 48606
-	 * @ticket 48934
->>>>>>> af39b30e28 (Date/Time: In `wp_maybe_decline_date()`, add support for a range of days, e.g. `February 21–23`.)
+	 * @see https://core.trac.wordpress.org/ticket/48934
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
 	public function test_wp_maybe_decline_date( $test_locale, $format, $input, $output ) {
