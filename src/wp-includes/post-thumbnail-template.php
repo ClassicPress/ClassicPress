@@ -147,6 +147,24 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		do_action( 'begin_fetch_post_thumbnail_html', $post->ID, $post_thumbnail_id, $size );
 		if ( in_the_loop() )
 			update_post_thumbnail_cache();
+<<<<<<< HEAD
+=======
+		}
+
+		// Get the 'loading' attribute value to use as default, taking precedence over the default from
+		// `wp_get_attachment_image()`.
+		$loading = wp_get_loading_attr_default( 'the_post_thumbnail' );
+
+		// Add the default to the given attributes unless they already include a 'loading' directive.
+		if ( empty( $attr ) ) {
+			$attr = array( 'loading' => $loading );
+		} elseif ( is_array( $attr ) && ! array_key_exists( 'loading', $attr ) ) {
+			$attr['loading'] = $loading;
+		} elseif ( is_string( $attr ) && ! preg_match( '/(^|&)loading=', $attr ) ) {
+			$attr .= '&loading=' . $loading;
+		}
+
+>>>>>>> 8649d6d4ff (Media: Refine the heuristics to exclude certain images and iframes from being lazy-loaded to improve performance.)
 		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, $attr );
 
 		/**
