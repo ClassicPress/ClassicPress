@@ -57,18 +57,11 @@ function mysql2date( $format, $date, $translate = true ) {
  * and timezone offset, depending on `$gmt`.
  *  - Other strings will be interpreted as PHP date formats (e.g. 'Y-m-d').
  *
-<<<<<<< HEAD
- * If $gmt is set to either '1' or 'true', then both types will use GMT time.
- * if $gmt is false, the output is adjusted with the GMT offset in the ClassicPress option.
- *
- * @since WP-1.0.0
-=======
  * If `$gmt` is a truthy value then both types will use GMT time, otherwise the
  * output is adjusted with the GMT offset for the site.
  *
- * @since 1.0.0
- * @since 5.3.0 Now returns an integer if `$type` is 'U'. Previously a string was returned.
->>>>>>> c92c8df5d8 (Date/Time: Improve the docblocks for various date and time related functions.)
+ * @since WP-1.0.0
+ * @since WP-5.3.0 Now returns an integer if `$type` is 'U'. Previously a string was returned.
  *
  * @param string   $type Type of time to retrieve. Accepts 'mysql', 'timestamp', 'U',
  *                       or PHP date format string (e.g. 'Y-m-d').
