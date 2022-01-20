@@ -311,33 +311,6 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 	if ( in_array( $tzstring, timezone_identifiers_list() ) ) {
 		$transitions = timezone_transitions_get( timezone_open( $tzstring ), time() );
 
-<<<<<<< HEAD
-	if ( in_array( $tzstring, $allowed_zones) ) {
-		$found = false;
-		$date_time_zone_selected = new DateTimeZone($tzstring);
-		$tz_offset = timezone_offset_get($date_time_zone_selected, date_create());
-		$right_now = time();
-		foreach ( timezone_transitions_get($date_time_zone_selected) as $tr) {
-			if ( $tr['ts'] > $right_now ) {
-			    $found = true;
-				break;
-			}
-		}
-
-		if ( $found ) {
-			echo ' ';
-			$message = $tr['isdst'] ?
-				/* translators: %s: date and time  */
-				__( 'Daylight saving time begins on: %s.')  :
-				/* translators: %s: date and time  */
-				__( 'Standard time begins on: %s.' );
-			// Add the difference between the current offset and the new offset to ts to get the correct transition time from date_i18n().
-			printf( $message,
-				'<code>' . date_i18n(
-					__( 'F j, Y' ) . ' ' . __( 'g:i a' ),
-					$tr['ts'] + ( $tz_offset - $tr['offset'] )
-				) . '</code>'
-=======
 		// 0 index is the state at current time, 1 index is the next transition, if any.
 		if ( ! empty( $transitions[1] ) ) {
 			echo ' ';
@@ -349,17 +322,11 @@ if ( empty($tzstring) ) { // Create a UTC+- zone if no timezone string exists
 			printf(
 				$message,
 				'<code>' . wp_date( __( 'F j, Y' ) . ' ' . __( 'g:i a' ), $transitions[1]['ts'] ) . '</code>'
->>>>>>> cf0a453f08 (Date/Time: Use `wp_date()` to display the correct time of the next DST transition in Timezone setting on General Settings screen.)
 			);
 		} else {
 			_e( 'This timezone does not observe daylight saving time.' );
 		}
 	}
-<<<<<<< HEAD
-	// Set back to UTC.
-	date_default_timezone_set('UTC');
-=======
->>>>>>> e9fc71bbbe (Date/Time: Eliminate use of `date_default_timezone_set()` for determining DST status on General Options screen.)
 	?>
 	</span>
 </p>
