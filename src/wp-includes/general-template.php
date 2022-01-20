@@ -2256,17 +2256,11 @@ function get_the_date( $format = '', $post = null ) {
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( '' == $format ) {
-		$the_date = get_post_time( get_option( 'date_format' ), false, $post, true );
-	} else {
-=======
 	if ( ! is_string( $format ) || '' === $format ) {
 		$format = get_option( 'date_format' );
 	}
 
->>>>>>> 3309309f6b (Date/Time: Make sure `get_the_date()` and related functions return correct time if the format was specified as `false`.)
-		$the_date = get_post_time( $format, false, $post, true );
+	$the_date = get_post_time( $format, false, $post, true );
 
 	/**
 	 * Filters the date a post was published.
@@ -2390,17 +2384,11 @@ function get_the_time( $format = '', $post = null ) {
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( '' == $format ) {
-		$the_time = get_post_time( get_option( 'time_format' ), false, $post, true );
-	} else {
-=======
 	if ( ! is_string( $format ) || '' === $format ) {
 		$format = get_option( 'time_format' );
 	}
 
->>>>>>> 3309309f6b (Date/Time: Make sure `get_the_date()` and related functions return correct time if the format was specified as `false`.)
-		$the_time = get_post_time( $format, false, $post, true );
+	$the_time = get_post_time( $format, false, $post, true );
 
 	/**
 	 * Filters the time a post was written.
