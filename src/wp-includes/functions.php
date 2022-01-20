@@ -277,7 +277,7 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
 		}
 
 		$date = $datetime->format( $new_format );
-		$date = wp_maybe_decline_date( $date );
+		$date = wp_maybe_decline_date( $date, $format );
 	}
 
 	/**
@@ -302,14 +302,20 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
  * If the locale specifies that month names require a genitive case in certain
  * formats (like 'j F Y'), the month name will be replaced with a correct form.
  *
+<<<<<<< HEAD
  * @since WP-4.4.0
+=======
+ * @since 4.4.0
+ * @since 5.4.0 The `$format` parameter was added.
+>>>>>>> 5bef137806 (Date/Time: Pass the date format to `wp_maybe_decline_date()`.)
  *
  * @global WP_Locale $wp_locale
  *
  * @param string $date Formatted date string.
+ * @param string $format Optional. Date format to check. Default empty string.
  * @return string The date, declined if locale specifies it.
  */
-function wp_maybe_decline_date( $date ) {
+function wp_maybe_decline_date( $date, $format = '' ) {
 	global $wp_locale;
 
 	// i18n functions are not available in SHORTINIT mode
@@ -328,7 +334,14 @@ function wp_maybe_decline_date( $date ) {
 		 * Match a format like 'j F Y' or 'j. F' (day of the month, followed by month name)
 		 * and decline the month.
 		 */
-		if ( preg_match( '#\b\d{1,2}\.? [^\d ]+\b#u', $date ) ) {
+		if ( $format ) {
+			$decline = preg_match( '#[dj]\.? F#', $format );
+		} else {
+			// If the format is not passed, try to guess it from the date string.
+			$decline = preg_match( '#\b\d{1,2}\.? [^\d ]+\b#u', $date );
+		}
+
+		if ( $decline ) {
 			foreach ( $months as $key => $month ) {
 				$months[ $key ] = '# ' . preg_quote( $month, '#' ) . '\b#u';
 			}
@@ -344,7 +357,14 @@ function wp_maybe_decline_date( $date ) {
 		 * Match a format like 'F jS' or 'F j' (month name, followed by day with an optional ordinal suffix)
 		 * and change it to declined 'j F'.
 		 */
-		if ( preg_match( '#\b[^\d ]+ \d{1,2}(st|nd|rd|th)?\b#u', trim( $date ) ) ) {
+		if ( $format ) {
+			$decline = preg_match( '#F [dj]#', $format );
+		} else {
+			// If the format is not passed, try to guess it from the date string.
+			$decline = preg_match( '#\b[^\d ]+ \d{1,2}(st|nd|rd|th)?\b#u', trim( $date ) );
+		}
+
+		if ( $decline ) {
 			foreach ( $months as $key => $month ) {
 				$months[ $key ] = '#\b' . preg_quote( $month, '#' ) . ' (\d{1,2})(st|nd|rd|th)?\b#u';
 			}
