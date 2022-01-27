@@ -153,13 +153,17 @@ if ( isset($_GET['action']) ) {
 		$submenu_file = 'plugin-install.php';
 		require_once(ABSPATH . 'wp-admin/admin-header.php');
 
-		$title = sprintf( __('Installing Plugin from uploaded file: %s'), esc_html( basename( $file_upload->filename ) ) );
+		/* translators: %s: File name. */
+		$title = sprintf( __( 'Installing plugin from uploaded file: %s' ), esc_html( basename( $file_upload->filename ) ) );
 		$nonce = 'plugin-upload';
 		$url = add_query_arg(array('package' => $file_upload->id), 'update.php?action=upload-plugin');
 		$type = 'upload'; //Install plugin type, From Web or an Upload.
 
-		$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( compact('type', 'title', 'nonce', 'url') ) );
-		$result = $upgrader->install( $file_upload->package );
+		$overwrite = isset( $_GET['overwrite'] ) ? sanitize_text_field( $_GET['overwrite'] ) : '';
+		$overwrite = in_array( $overwrite, array( 'update-plugin', 'downgrade-plugin' ), true ) ? $overwrite : '';
+
+		$upgrader = new Plugin_Upgrader( new Plugin_Installer_Skin( compact( 'type', 'title', 'nonce', 'url', 'overwrite' ) ) );
+		$result = $upgrader->install( $file_upload->package, array( 'overwrite_package' => $overwrite ) );
 
 		if ( $result || is_wp_error($result) )
 			$file_upload->cleanup();
@@ -257,13 +261,17 @@ if ( isset($_GET['action']) ) {
 
 		require_once(ABSPATH . 'wp-admin/admin-header.php');
 
+		/* translators: %s: File name. */
 		$title = sprintf( __('Installing Theme from uploaded file: %s'), esc_html( basename( $file_upload->filename ) ) );
 		$nonce = 'theme-upload';
 		$url = add_query_arg(array('package' => $file_upload->id), 'update.php?action=upload-theme');
 		$type = 'upload'; //Install plugin type, From Web or an Upload.
 
-		$upgrader = new Theme_Upgrader( new Theme_Installer_Skin( compact('type', 'title', 'nonce', 'url') ) );
-		$result = $upgrader->install( $file_upload->package );
+		$overwrite = isset( $_GET['overwrite'] ) ? sanitize_text_field( $_GET['overwrite'] ) : '';
+		$overwrite = in_array( $overwrite, array( 'update-theme', 'downgrade-theme' ), true ) ? $overwrite : '';
+
+		$upgrader = new Theme_Upgrader( new Theme_Installer_Skin( compact( 'type', 'title', 'nonce', 'url', 'overwrite' ) ) );
+		$result = $upgrader->install( $file_upload->package, array( 'overwrite_package' => $overwrite ) );
 
 		if ( $result || is_wp_error($result) )
 			$file_upload->cleanup();

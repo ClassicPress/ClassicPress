@@ -35,7 +35,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Passwordless post access permitted.
 	 *
-	 * @since 5.7.1
+	 * @since WP-5.7.1
 	 * @var int[]
 	 */
 	protected $password_check_passed = array();
@@ -152,7 +152,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * previously passed a permission check or if they have the `edit_post` capability
 	 * for the post being checked.
 	 *
-	 * @since 5.7.1
+	 * @since WP-5.7.1
 	 *
 	 * @param bool    $required Whether the post requires a password check.
 	 * @param WP_Post $post     The post been password checked.

@@ -960,7 +960,7 @@ function wp_get_associated_nav_menu_items( $object_id = 0, $object_type = 'post_
  * @param int $object_id The ID of the original object being trashed.
  *
  */
-function _wp_delete_post_menu_item( $object_id = 0 ) {
+function _wp_delete_post_menu_item( $object_id ) {
 	$object_id = (int) $object_id;
 
 	$menu_item_ids = wp_get_associated_nav_menu_items( $object_id, 'post_type' );
@@ -976,11 +976,11 @@ function _wp_delete_post_menu_item( $object_id = 0 ) {
  * @since WP-3.0.0
  * @access private
  *
- * @param int    $object_id Optional. The ID of the original object being trashed. Default 0.
+ * @param int    $object_id The ID of the original object being trashed.
  * @param int    $tt_id     Term taxonomy ID. Unused.
  * @param string $taxonomy  Taxonomy slug.
  */
-function _wp_delete_tax_menu_item( $object_id = 0, $tt_id, $taxonomy ) {
+function _wp_delete_tax_menu_item( $object_id, $tt_id, $taxonomy ) {
 	$object_id = (int) $object_id;
 
 	$menu_item_ids = wp_get_associated_nav_menu_items( $object_id, 'taxonomy', $taxonomy );

@@ -392,10 +392,6 @@ function wp_print_media_templates() {
 			</div>
 
 			<div class="settings">
-				<label class="setting" data-setting="url">
-					<span class="name"><?php _e('URL'); ?></span>
-					<input type="text" value="{{ data.url }}" readonly />
-				</label>
 				<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 				<# if ( 'image' === data.type ) { #>
 					<label class="setting" data-setting="alt">
@@ -586,11 +582,6 @@ function wp_print_media_templates() {
 			</div>
 		</div>
 
-		<label class="setting" data-setting="url">
-			<span class="name"><?php _e('URL'); ?></span>
-			<input type="text" value="{{ data.url }}" readonly />
-		</label>
-
 		<# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
 		<# if ( 'image' === data.type ) { #>
 			<label class="setting" data-setting="alt">
@@ -620,13 +611,6 @@ function wp_print_media_templates() {
 			<span class="name"><?php _e('Caption'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
 		</label>
-		<# if ( 'image' === data.type ) { #>
-			<label class="setting" data-setting="alt">
-				<span class="name"><?php _e('Alt Text'); ?></span>
-				<input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
-			</label>
-		<# } #>
-
 		<label class="setting" data-setting="description">
 			<span class="name"><?php _e('Description'); ?></span>
 			<textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
@@ -891,11 +875,6 @@ function wp_print_media_templates() {
 			</label>
 		<?php endif; ?>
 
-		<label class="setting alt-text">
-			<span><?php _e('Alt Text'); ?></span>
-			<input type="text" data-setting="alt" />
-		</label>
-
 		<div class="setting align">
 			<span><?php _e('Align'); ?></span>
 			<div class="button-group button-large" data-setting="align">
@@ -961,11 +940,6 @@ function wp_print_media_templates() {
 							<textarea data-setting="caption">{{ data.model.caption }}</textarea>
 						</label>
 					<?php endif; ?>
-
-					<label class="setting alt-text">
-						<span><?php _e('Alternative Text'); ?></span>
-						<input type="text" data-setting="alt" value="{{ data.model.alt }}" />
-					</label>
 
 					<h2><?php _e( 'Display Settings' ); ?></h2>
 					<div class="setting align">
