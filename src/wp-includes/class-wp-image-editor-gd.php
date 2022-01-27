@@ -112,20 +112,11 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			$this->image = @imagecreatefromstring( $file_contents );
 		}
 
-<<<<<<< HEAD
-		if ( ! is_resource( $this->image ) )
-			return new WP_Error( 'invalid_image', __('File is not an image.'), $this->file );
-
-		$size = @getimagesize( $this->file );
-		if ( ! $size )
-			return new WP_Error( 'invalid_image', __('Could not read image size.'), $this->file );
-=======
 		$size = wp_getimagesize( $this->file );
 
 		if ( ! $size ) {
 			return new WP_Error( 'invalid_image', __( 'Could not read image size.' ), $this->file );
 		}
->>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)
 
 		if ( function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
 			imagealphablending( $this->image, false );
