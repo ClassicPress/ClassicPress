@@ -227,6 +227,16 @@ function image_downsize( $id, $size = 'medium' ) {
 		$width = $intermediate['width'];
 		$height = $intermediate['height'];
 		$is_intermediate = true;
+<<<<<<< HEAD
+=======
+	} elseif ( 'thumbnail' === $size ) {
+		// Fall back to the old thumbnail.
+		$thumb_file = wp_get_attachment_thumb_file( $id );
+		$info       = null;
+
+		if ( $thumb_file ) {
+			$info = wp_getimagesize( $thumb_file );
+>>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)
 	}
 	elseif ( $size == 'thumbnail' ) {
 		// fall back to the old thumbnail
@@ -830,7 +840,12 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
 			$icon_dir = apply_filters( 'icon_dir', ABSPATH . WPINC . '/images/media' );
 
 			$src_file = $icon_dir . '/' . wp_basename( $src );
+<<<<<<< HEAD
 			@list( $width, $height ) = getimagesize( $src_file );
+=======
+				list( $width, $height ) = wp_getimagesize( $src_file );
+			}
+>>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)
 		}
 
 		if ( $src && $width && $height ) {

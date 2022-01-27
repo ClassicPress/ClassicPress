@@ -1923,7 +1923,11 @@ function get_attachment_icon( $id = 0, $fullsize = false, $max_dims = false ) {
 	// Do we need to constrain the image?
 	if ( ($max_dims = apply_filters('attachment_max_dims', $max_dims)) && file_exists($src_file) ) {
 
+<<<<<<< HEAD
 		$imagesize = getimagesize($src_file);
+=======
+		$imagesize = wp_getimagesize($src_file);
+>>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)
 
 		if (($imagesize[0] > $max_dims[0]) || $imagesize[1] > $max_dims[1] ) {
 			$actual_aspect = $imagesize[0] / $imagesize[1];

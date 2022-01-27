@@ -2547,6 +2547,7 @@ function wp_get_image_mime( $file ) {
 			$imagetype = exif_imagetype( $file );
 			$mime = ( $imagetype ) ? image_type_to_mime_type( $imagetype ) : false;
 		} elseif ( function_exists( 'getimagesize' ) ) {
+<<<<<<< HEAD
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG
 				&& ! defined( 'WP_RUN_CORE_TESTS' )
 			) {
@@ -2556,6 +2557,9 @@ function wp_get_image_mime( $file ) {
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors
 				$imagesize = @getimagesize( $file );
 			}
+=======
+			$imagesize = wp_getimagesize( $file );
+>>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)
 			$mime = ( isset( $imagesize['mime'] ) ) ? $imagesize['mime'] : false;
 		} else {
 			$mime = false;
@@ -6441,3 +6445,55 @@ function is_wp_version_compatible( $required ) {
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Check if two numbers are nearly the same.
+ *
+ * This is similar to using `round()` but the precision is more fine-grained.
+ *
+ * @since 5.3.0
+ *
+ * @param int|float $expected  The expected value.
+ * @param int|float $actual    The actual number.
+ * @param int|float $precision The allowed variation.
+ * @return bool Whether the numbers match whithin the specified precision.
+ */
+function wp_fuzzy_number_match( $expected, $actual, $precision = 1 ) {
+	return abs( (float) $expected - (float) $actual ) <= $precision;
+}
+
+/**
+ * Allows PHP's getimagesize() to be debuggable when necessary.
+ *
+ * @since 5.7.0
+ *
+ * @param string $filename The file path.
+ * @param array $imageinfo Extended image information, passed by reference.
+ * @return array|false Array of image information or false on failure.
+ */
+function wp_getimagesize( $filename, &$imageinfo = array() ) {
+	if (
+		// Skip when running unit tests.
+		! defined( 'DIR_TESTDATA' )
+		&&
+		// Return without silencing errors when in debug mode.
+		defined( 'WP_DEBUG' ) && WP_DEBUG
+	) {
+		return getimagesize( $filename, $imageinfo );
+	}
+
+	/**
+	 * Silencing notice and warning is intentional.
+	 *
+	 * getimagesize() has a tendency to generate errors, such as "corrupt JPEG data: 7191 extraneous bytes before
+	 * marker", even when it's able to provide image size information.
+	 *
+	 * See https://core.trac.wordpress.org/ticket/42480
+	 *
+	 * phpcs:ignore WordPress.PHP.NoSilencedErrors
+	 */
+	return @getimagesize( $filename, $imageinfo );
+}
+>>>>>>> 01df5322ef (Media: Avoid suppressing errors when using `getimagesize()`.)

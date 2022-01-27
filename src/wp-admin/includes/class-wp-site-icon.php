@@ -87,7 +87,7 @@ class WP_Site_Icon {
 		$parent_url = wp_get_attachment_url( $parent->ID );
 		$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
 
-		$size       = @getimagesize( $cropped );
+		$size       = wp_getimagesize( $cropped );
 		$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
 		$object = array(
