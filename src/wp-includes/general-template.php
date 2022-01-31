@@ -655,6 +655,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 					'<code>url</code>'
 				)
 			);
+			// Intentional fall-through to be handled by the 'url' case.
 		case 'url':
 			$output = home_url();
 			break;
@@ -919,10 +920,8 @@ function get_custom_logo( $blog_id = 0 ) {
 			esc_url( home_url( '/' ) ),
 			wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
 		);
-	}
-
-	// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
-	elseif ( is_customize_preview() ) {
+	} elseif ( is_customize_preview() ) {
+		// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
 		$html = sprintf(
 			'<a href="%1$s" class="custom-logo-link" style="display:none;"><img class="custom-logo"/></a>',
 			esc_url( home_url( '/' ) )
@@ -1022,7 +1021,8 @@ function wp_get_document_title() {
 		$title['title'] = single_term_title( '', false );
 
 		// If on an author archive, use the author's display name.
-	} elseif ( is_author() && $author = get_queried_object() ) {
+	} elseif ( is_author() && get_queried_object() ) {
+		$author         = get_queried_object();
 		$title['title'] = $author->display_name;
 
 		// If it's a date archive, use the date as the title.
@@ -1802,10 +1802,11 @@ function wp_get_archives( $args = '' ) {
 	$limit = $r['limit'];
 
 	if ( 'monthly' == $r['type'] ) {
-		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date $order $limit";
-		$key   = md5( $query );
-		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$query   = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date $order $limit";
+		$key     = md5( $query );
+		$key     = "wp_get_archives:$key:$last_changed";
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1825,10 +1826,11 @@ function wp_get_archives( $args = '' ) {
 			}
 		}
 	} elseif ( 'yearly' == $r['type'] ) {
-		$query = "SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date) ORDER BY post_date $order $limit";
-		$key   = md5( $query );
-		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$query   = "SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date) ORDER BY post_date $order $limit";
+		$key     = md5( $query );
+		$key     = "wp_get_archives:$key:$last_changed";
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1847,10 +1849,11 @@ function wp_get_archives( $args = '' ) {
 			}
 		}
 	} elseif ( 'daily' == $r['type'] ) {
-		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date $order $limit";
-		$key   = md5( $query );
-		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$query   = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date $order $limit";
+		$key     = md5( $query );
+		$key     = "wp_get_archives:$key:$last_changed";
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1870,11 +1873,12 @@ function wp_get_archives( $args = '' ) {
 			}
 		}
 	} elseif ( 'weekly' == $r['type'] ) {
-		$week  = _wp_mysql_week( '`post_date`' );
-		$query = "SELECT DISTINCT $week AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `$wpdb->posts` $join $where GROUP BY $week, YEAR( `post_date` ) ORDER BY `post_date` $order $limit";
-		$key   = md5( $query );
-		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$week    = _wp_mysql_week( '`post_date`' );
+		$query   = "SELECT DISTINCT $week AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `$wpdb->posts` $join $where GROUP BY $week, YEAR( `post_date` ) ORDER BY `post_date` $order $limit";
+		$key     = md5( $query );
+		$key     = "wp_get_archives:$key:$last_changed";
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1911,7 +1915,8 @@ function wp_get_archives( $args = '' ) {
 		$query   = "SELECT * FROM $wpdb->posts $join $where ORDER BY $orderby $limit";
 		$key     = md5( $query );
 		$key     = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -2031,7 +2036,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	}
 
 	$unixmonth = mktime( 0, 0, 0, $thismonth, 1, $thisyear );
-	$last_day  = date( 't', $unixmonth );
+	$last_day  = gmdate( 't', $unixmonth );
 
 	// Get the next and previous month and year with at least one post
 	$previous = $wpdb->get_row(
@@ -2057,7 +2062,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	<caption>' . sprintf(
 		$calendar_caption,
 		$wp_locale->get_month( $thismonth ),
-		date( 'Y', $unixmonth )
+		gmdate( 'Y', $unixmonth )
 	) . '</caption>
 	<thead>
 	<tr>';
@@ -2123,13 +2128,13 @@ function get_calendar( $initial = true, $echo = true ) {
 	}
 
 	// See how much we should pad in the beginning
-	$pad = calendar_week_mod( date( 'w', $unixmonth ) - $week_begins );
+	$pad = calendar_week_mod( gmdate( 'w', $unixmonth ) - $week_begins );
 	if ( 0 != $pad ) {
 		$calendar_output .= "\n\t\t" . '<td colspan="' . esc_attr( $pad ) . '" class="pad">&nbsp;</td>';
 	}
 
 	$newrow      = false;
-	$daysinmonth = (int) date( 't', $unixmonth );
+	$daysinmonth = (int) gmdate( 't', $unixmonth );
 
 	for ( $day = 1; $day <= $daysinmonth; ++$day ) {
 		if ( isset( $newrow ) && $newrow ) {
@@ -2147,7 +2152,7 @@ function get_calendar( $initial = true, $echo = true ) {
 
 		if ( in_array( $day, $daywithpost ) ) {
 			// any posts today?
-			$date_format = date( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
+			$date_format = gmdate( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
 			/* translators: Post calendar label. 1: Date */
 			$label            = sprintf( __( 'Posts published on %s' ), $date_format );
 			$calendar_output .= sprintf(
@@ -2161,12 +2166,12 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$calendar_output .= '</td>';
 
-		if ( 6 == calendar_week_mod( date( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins ) ) {
+		if ( 6 == calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins ) ) {
 			$newrow = true;
 		}
 	}
 
-	$pad = 7 - calendar_week_mod( date( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
+	$pad = 7 - calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
 	if ( $pad != 0 && $pad != 7 ) {
 		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
 	}
@@ -3715,7 +3720,8 @@ function get_language_attributes( $doctype = 'html' ) {
 		$attributes[] = 'dir="rtl"';
 	}
 
-	if ( $lang = get_bloginfo( 'language' ) ) {
+	$lang = get_bloginfo( 'language' );
+	if ( $lang ) {
 		if ( get_option( 'html_type' ) == 'text/html' || $doctype == 'html' ) {
 			$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
 		}
@@ -4341,7 +4347,7 @@ function get_the_generator( $type = '' ) {
 			$gen = "<!-- generator=\"WordPress/$esc_wp_version (compatible; ClassicPress/$esc_cp_version)\" -->";
 			break;
 		case 'export':
-			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . date( 'Y-m-d H:i' ) . '" -->';
+			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . gmdate( 'Y-m-d H:i' ) . '" -->';
 			break;
 	}
 
@@ -4437,7 +4443,7 @@ function readonly( $readonly, $current = true, $echo = true ) {
  * @param string $type    The type of checked|selected|disabled|readonly we are doing
  * @return string html attribute or empty string
  */
-function __checked_selected_helper( $helper, $current, $echo, $type ) {
+function __checked_selected_helper( $helper, $current, $echo, $type ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	if ( (string) $helper === (string) $current ) {
 		$result = " $type='$type'";
 	} else {

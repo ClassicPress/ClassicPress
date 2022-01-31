@@ -110,7 +110,8 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 		echo '<label for="blogname">' . __( 'Site Domain:' ) . '</label>';
 	}
 
-	if ( $errmsg = $errors->get_error_message( 'blogname' ) ) {
+	$errmsg = $errors->get_error_message( 'blogname' )
+	if ( $errmsg ) {
 		?>
 		<p class="error"><?php echo $errmsg; ?></p>
 		<?php
@@ -119,7 +120,8 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	if ( ! is_subdomain_install() ) {
 		echo '<span class="prefix_address">' . $current_network->domain . $current_network->path . '</span><input name="blogname" type="text" id="blogname" value="' . esc_attr( $blogname ) . '" maxlength="60" /><br />';
 	} else {
-		echo '<input name="blogname" type="text" id="blogname" value="' . esc_attr( $blogname ) . '" maxlength="60" /><span class="suffix_address">.' . ( $site_domain = preg_replace( '|^www\.|', '', $current_network->domain ) ) . '</span><br />';
+		$site_domain = preg_replace( '|^www\.|', '', $current_network->domain );
+		echo '<input name="blogname" type="text" id="blogname" value="' . esc_attr( $blogname ) . '" maxlength="60" /><span class="suffix_address">.' . $site_domain . '</span><br />';
 	}
 
 	if ( ! is_user_logged_in() ) {
@@ -136,7 +138,10 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	// Blog Title
 	?>
 	<label for="blog_title"><?php _e( 'Site Title:' ); ?></label>
-	<?php if ( $errmsg = $errors->get_error_message( 'blog_title' ) ) { ?>
+	<?php
+	$errmsg = $errors->get_error_message( 'blog_title' );
+	if ( $errmsg ) {
+		?>
 		<p class="error"><?php echo $errmsg; ?></p>
 		<?php
 	}
@@ -183,7 +188,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 			<?php _e( 'Allow search engines to index this site.' ); ?>
 			<br style="clear:both" />
 			<label class="checkbox" for="blog_public_on">
-				<input type="radio" id="blog_public_on" name="blog_public" value="1" 
+				<input type="radio" id="blog_public_on" name="blog_public" value="1"
 				<?php
 				if ( ! isset( $_POST['blog_public'] ) || $_POST['blog_public'] == '1' ) {
 					?>
@@ -191,7 +196,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 				<strong><?php _e( 'Yes' ); ?></strong>
 			</label>
 			<label class="checkbox" for="blog_public_off">
-				<input type="radio" id="blog_public_off" name="blog_public" value="0" 
+				<input type="radio" id="blog_public_off" name="blog_public" value="0"
 				<?php
 				if ( isset( $_POST['blog_public'] ) && $_POST['blog_public'] == '0' ) {
 					?>
@@ -244,7 +249,8 @@ function show_user_form( $user_name = '', $user_email = '', $errors = '' ) {
 
 	// User name
 	echo '<label for="user_name">' . __( 'Username:' ) . '</label>';
-	if ( $errmsg = $errors->get_error_message( 'user_name' ) ) {
+	$errmsg = $errors->get_error_message( 'user_name' );
+	if ( $errmsg ) {
 		echo '<p class="error">' . $errmsg . '</p>';
 	}
 	echo '<input name="user_name" type="text" id="user_name" value="' . esc_attr( $user_name ) . '" autocapitalize="none" autocorrect="off" maxlength="60" /><br />';
@@ -252,12 +258,16 @@ function show_user_form( $user_name = '', $user_email = '', $errors = '' ) {
 	?>
 
 	<label for="user_email"><?php _e( 'Email&nbsp;Address:' ); ?></label>
-	<?php if ( $errmsg = $errors->get_error_message( 'user_email' ) ) { ?>
+	<?php
+	$errmsg = $errors->get_error_message( 'user_email' );
+	if ( $errmsg ) {
+		?>
 		<p class="error"><?php echo $errmsg; ?></p>
 	<?php } ?>
 	<input name="user_email" type="email" id="user_email" value="<?php echo esc_attr( $user_email ); ?>" maxlength="200" /><br /><?php _e( 'We send your registration email to this address. (Double-check your email address before continuing.)' ); ?>
 	<?php
-	if ( $errmsg = $errors->get_error_message( 'generic' ) ) {
+	$errmsg = $errors->get_error_message( 'generic' );
+	if ( $errmsg ) {
 		echo '<p class="error">' . $errmsg . '</p>';
 	}
 	/**

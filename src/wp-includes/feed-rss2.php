@@ -45,7 +45,7 @@ do_action( 'rss_tag_pre', 'rss2' );
 	<lastBuildDate>
 	<?php
 		$date = get_lastpostmodified( 'GMT' );
-		echo $date ? mysql2date( 'r', $date, false ) : date( 'r' );
+		echo $date ? mysql2date( 'r', $date, false ) : gmdate( 'r' );
 	?>
 	</lastBuildDate>
 	<language><?php bloginfo_rss( 'language' ); ?></language>

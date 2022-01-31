@@ -15,7 +15,8 @@
  * @return string|false The format if successful. False otherwise.
  */
 function get_post_format( $post = null ) {
-	if ( ! $post = get_post( $post ) ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
 		return false;
 	}
 

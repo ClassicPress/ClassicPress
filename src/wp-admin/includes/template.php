@@ -1118,7 +1118,8 @@ function do_meta_boxes( $screen, $context, $object ) {
 	printf( '<div id="%s-sortables" class="meta-box-sortables">', esc_attr( $context ) );
 
 	// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
-	if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) ) {
+	$sorted = get_user_option( "meta-box-order_$page" );
+	if ( ! $already_sorted && $sorted ) {
 		foreach ( $sorted as $box_context => $ids ) {
 			foreach ( explode( ',', $ids ) as $id ) {
 				if ( $id && 'dashboard_browser_nag' !== $id ) {
@@ -2192,7 +2193,7 @@ function _wp_admin_html_begin() {
 	?>
 <!DOCTYPE html>
 <!--[if IE 8]>
-<html xmlns="http://www.w3.org/1999/xhtml" class="ie8 <?php echo $admin_html_class; ?>" 
+<html xmlns="http://www.w3.org/1999/xhtml" class="ie8 <?php echo $admin_html_class; ?>"
 																 <?php
 																	/**
 																	 * Fires inside the HTML tag in the admin header.
@@ -2204,7 +2205,7 @@ function _wp_admin_html_begin() {
 	<?php language_attributes(); ?>>
 <![endif]-->
 <!--[if !(IE 8) ]><!-->
-<html xmlns="http://www.w3.org/1999/xhtml" class="<?php echo $admin_html_class; ?>" 
+<html xmlns="http://www.w3.org/1999/xhtml" class="<?php echo $admin_html_class; ?>"
 															 <?php
 																/** This action is documented in wp-admin/includes/template.php */
 																do_action( 'admin_xml_ns' );

@@ -213,9 +213,8 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 				update_post_meta( $attachment_id, '_thumbnail_id', $sub_attachment_id );
 			}
 		}
-	}
-	// Try to create image thumbnails for PDFs
-	elseif ( 'application/pdf' === $mime_type ) {
+	} elseif ( 'application/pdf' === $mime_type ) {
+		// Try to create image thumbnails for PDFs
 		$fallback_sizes = array(
 			'thumbnail',
 			'medium',
@@ -641,7 +640,8 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
 	$filepath = get_attached_file( $attachment_id );
 
 	if ( $filepath && file_exists( $filepath ) ) {
-		if ( 'full' != $size && ( $data = image_get_intermediate_size( $attachment_id, $size ) ) ) {
+		$data = image_get_intermediate_size( $attachment_id, $size );
+		if ( 'full' != $size && $data ) {
 			/**
 			 * Filters the path to the current image.
 			 *
@@ -692,7 +692,8 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
  * @return string|false New file path on success, false on failure.
  */
 function _copy_image_file( $attachment_id ) {
-	$dst_file = $src_file = get_attached_file( $attachment_id );
+	$dst_file = get_attached_file( $attachment_id );
+	$src_file = $dst_file;
 	if ( ! file_exists( $src_file ) ) {
 		$src_file = _load_image_to_edit_path( $attachment_id );
 	}

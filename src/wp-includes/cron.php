@@ -410,7 +410,8 @@ function wp_cron() {
 		return;
 	}
 
-	if ( false === $crons = _get_cron_array() ) {
+	$crons = _get_cron_array();
+	if ( false === $crons ) {
 		return;
 	}
 

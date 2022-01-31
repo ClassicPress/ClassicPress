@@ -70,7 +70,8 @@ if ( $theme->errors() && 'theme_no_stylesheet' == $theme->errors()->get_error_co
 	wp_die( __( 'The requested theme does not exist.' ) . ' ' . $theme->errors()->get_error_message() );
 }
 
-$allowed_files = $style_files = array();
+$allowed_files = array();
+$style_files   = array();
 $has_templates = false;
 
 $file_types = wp_get_theme_file_editable_extensions( $theme );
@@ -348,7 +349,7 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) :
 					?>
 				</p>
 				<p><?php _e( 'If you decide to go ahead with direct edits anyway, use a file manager to create a copy with a new name and hang on to the original. That way, you can re-enable a functional version if something goes wrong.' ); ?></p>
-				
+
 			</div>
 			<p>
 				<a class="button file-editor-warning-go-back" href="<?php echo esc_url( $return_url ); ?>"><?php _e( 'Go back' ); ?></a>

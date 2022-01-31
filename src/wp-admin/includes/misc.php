@@ -227,8 +227,11 @@ function insert_with_markers(
 
 	// Split out the existing file into the preceding lines, and those that
 	// appear after the marker.
-	$pre_lines    = $post_lines = $existing_lines = array();
-	$found_marker = $found_end_marker = false;
+	$pre_lines        = array();
+	$post_lines       = array();
+	$existing_lines   = array();
+	$found_marker     = false;
+	$found_end_marker = false;
 	foreach ( $lines as $line ) {
 		if ( ! $found_marker && preg_match( $start_marker_in, $line ) ) {
 			$found_marker = true;
@@ -689,7 +692,8 @@ function set_screen_options() {
 	if ( isset( $_POST['wp_screen_options'] ) && is_array( $_POST['wp_screen_options'] ) ) {
 		check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' );
 
-		if ( ! $user = wp_get_current_user() ) {
+		$user = wp_get_current_user();
+		if ( ! $user ) {
 			return;
 		}
 		$option = $_POST['wp_screen_options']['option'];
@@ -949,7 +953,7 @@ function iis7_add_rewrite_rule( $filename, $rewrite_rule ) {
  * @param DOMDocument $doc
  * @param string $filename
  */
-function saveDomDocument( $doc, $filename ) {
+function saveDomDocument( $doc, $filename ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$config = $doc->saveXML();
 	$config = preg_replace( "/([^\r])\n/", "$1\r\n", $config );
 	$fp     = fopen( $filename, 'w' );
@@ -1082,14 +1086,18 @@ function wp_check_locked_posts( $response, $data, $screen_id ) {
 
 	if ( array_key_exists( 'wp-check-locked-posts', $data ) && is_array( $data['wp-check-locked-posts'] ) ) {
 		foreach ( $data['wp-check-locked-posts'] as $key ) {
-			if ( ! $post_id = absint( substr( $key, 5 ) ) ) {
+			$post_id = absint( substr( $key, 5 ) );
+			if ( ! $post_id ) {
 				continue;
 			}
 
-			if ( ( $user_id = wp_check_post_lock( $post_id ) ) && ( $user = get_userdata( $user_id ) ) && current_user_can( 'edit_post', $post_id ) ) {
+			$user_id = wp_check_post_lock( $post_id );
+			$user = get_userdata( $user_id );
+			if ( $user && current_user_can( 'edit_post', $post_id ) ) {
 				$send = array( 'text' => sprintf( __( '%s is currently editing' ), $user->display_name ) );
 
-				if ( ( $avatar = get_avatar( $user->ID, 18 ) ) && preg_match( "|src='([^']+)'|", $avatar, $matches ) ) {
+				$avatar = get_avatar( $user->ID, 18 );
+				if ( $avatar && preg_match( "|src='([^']+)'|", $avatar, $matches ) ) {
 					$send['avatar_src'] = $matches[1];
 				}
 
@@ -1120,7 +1128,8 @@ function wp_refresh_post_lock( $response, $data, $screen_id ) {
 		$received = $data['wp-refresh-post-lock'];
 		$send     = array();
 
-		if ( ! $post_id = absint( $received['post_id'] ) ) {
+		$post_id = absint( $received['post_id'] );
+		if ( ! $post_id ) {
 			return $response;
 		}
 
@@ -1128,12 +1137,15 @@ function wp_refresh_post_lock( $response, $data, $screen_id ) {
 			return $response;
 		}
 
-		if ( ( $user_id = wp_check_post_lock( $post_id ) ) && ( $user = get_userdata( $user_id ) ) ) {
+		$user_id = wp_check_post_lock( $post_id );
+		$user = get_userdata( $user_id );
+		if ( $user ) {
 			$error = array(
 				'text' => sprintf( __( '%s has taken over and is currently editing.' ), $user->display_name ),
 			);
 
-			if ( $avatar = get_avatar( $user->ID, 64 ) ) {
+			$avatar = get_avatar( $user->ID, 64 );
+			if ( $avatar ) {
 				if ( preg_match( "|src='([^']+)'|", $avatar, $matches ) ) {
 					$error['avatar_src'] = $matches[1];
 				}
@@ -1141,7 +1153,8 @@ function wp_refresh_post_lock( $response, $data, $screen_id ) {
 
 			$send['lock_error'] = $error;
 		} else {
-			if ( $new_lock = wp_set_post_lock( $post_id ) ) {
+			$new_lock = wp_set_post_lock( $post_id );
+			if ( $new_lock ) {
 				$send['new_lock'] = implode( ':', $new_lock );
 			}
 		}
@@ -1167,7 +1180,8 @@ function wp_refresh_post_nonces( $response, $data, $screen_id ) {
 		$received                           = $data['wp-refresh-post-nonces'];
 		$response['wp-refresh-post-nonces'] = array( 'check' => 1 );
 
-		if ( ! $post_id = absint( $received['post_id'] ) ) {
+		$post_id = absint( $received['post_id'] );
+		if ( ! $post_id ) {
 			return $response;
 		}
 
@@ -1659,12 +1673,13 @@ final class WP_Privacy_Policy_Content {
 					$found     = true;
 				} elseif ( $new_data['plugin_name'] === $old_data['plugin_name'] ) {
 					// The info for the policy was updated.
-					$checked[] = array(
+					$checked[]    = array(
 						'plugin_name' => $new_data['plugin_name'],
 						'policy_text' => $new_data['policy_text'],
 						'updated'     => $time,
 					);
-					$found     = $update_cache = true;
+					$found        = true;
+					$update_cache = true;
 				}
 
 				if ( $found ) {
@@ -1772,7 +1787,9 @@ final class WP_Privacy_Policy_Content {
 		$return_to_top = '<a href="#" class="return-to-top">' . __( '&uarr; Return to Top' ) . '</a>';
 
 		foreach ( $content_array as $section ) {
-			$class = $meta = $removed = '';
+			$class   = '';
+			$meta    = '';
+			$removed = '';
 
 			if ( ! empty( $section['removed'] ) ) {
 				$class = ' text-removed';

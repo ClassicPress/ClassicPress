@@ -36,7 +36,7 @@ do_action( 'rss_tag_pre', 'rdf' );
 	<dc:date>
 	<?php
 		$date = get_lastpostmodified( 'GMT' );
-		echo $date ? mysql2date( 'Y-m-d\TH:i:s\Z', $date ) : date( 'Y-m-d\TH:i:s\Z' );
+		echo $date ? mysql2date( 'Y-m-d\TH:i:s\Z', $date ) : gmdate( 'Y-m-d\TH:i:s\Z' );
 	?>
 	</dc:date>
 	<sy:updatePeriod>

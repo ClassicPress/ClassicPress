@@ -89,7 +89,9 @@ function wp_default_scripts( &$scripts ) {
 		define( 'SCRIPT_DEBUG', $develop_src );
 	}
 
-	if ( ! $guessurl = site_url() ) {
+	$guessurl = site_url();
+
+	if ( ! $guessurl ) {
 		$guessed_url = true;
 		$guessurl    = wp_guess_url();
 	}
@@ -1131,7 +1133,9 @@ function wp_default_styles( &$styles ) {
 		define( 'SCRIPT_DEBUG', classicpress_is_dev_install() );
 	}
 
-	if ( ! $guessurl = site_url() ) {
+	$guessurl = site_url();
+
+	if ( ! $guessurl ) {
 		$guessurl = wp_guess_url();
 	}
 
@@ -1285,11 +1289,15 @@ function wp_default_styles( &$styles ) {
  * @return array Reordered array, if needed.
  */
 function wp_prototype_before_jquery( $js_array ) {
-	if ( false === $prototype = array_search( 'prototype', $js_array, true ) ) {
+	$prototype = array_search( 'prototype', $js_array, true );
+
+	if ( false === $prototype ) {
 		return $js_array;
 	}
 
-	if ( false === $jquery = array_search( 'jquery', $js_array, true ) ) {
+	$jquery = array_search( 'jquery', $js_array, true );
+
+	if ( false === $jquery ) {
 		return $js_array;
 	}
 
@@ -1557,8 +1565,9 @@ function _print_scripts() {
 		$zip = 'gzip';
 	}
 
-	if ( $concat = trim( $wp_scripts->concat, ', ' ) ) {
+	$concat    = trim( $wp_scripts->concat, ', ' );
 
+	if ( $concat ) {
 		if ( ! empty( $wp_scripts->print_code ) ) {
 			echo "\n<script type='text/javascript'>\n";
 			echo "/* <![CDATA[ */\n"; // not needed in HTML 5
@@ -1733,7 +1742,9 @@ function _print_styles() {
 		$zip = 'gzip';
 	}
 
-	if ( $concat = trim( $wp_styles->concat, ', ' ) ) {
+	$concat = trim( $wp_styles->concat, ', ' );
+
+	if ( $concat ) {
 		$dir = $wp_styles->text_direction;
 		$ver = $wp_styles->default_version;
 

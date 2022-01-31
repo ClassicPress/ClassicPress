@@ -371,7 +371,8 @@ function populate_options() {
 	}
 
 	// If WP_DEFAULT_THEME doesn't exist, fall back to the latest core default theme.
-	$stylesheet = $template = WP_DEFAULT_THEME;
+	$stylesheet = WP_DEFAULT_THEME;
+	$template   = $stylesheet;
 	$theme      = wp_get_theme( WP_DEFAULT_THEME );
 	if ( ! $theme->exists() ) {
 		$theme = WP_Theme::get_core_default_theme();
@@ -1012,7 +1013,8 @@ function populate_network( $network_id = 1, $domain = '', $email = '', $site_nam
 
 	// If WP_DEFAULT_THEME doesn't exist, also whitelist the latest core default theme.
 	if ( ! wp_get_theme( WP_DEFAULT_THEME )->exists() ) {
-		if ( $core_default = WP_Theme::get_core_default_theme() ) {
+		$core_default = WP_Theme::get_core_default_theme();
+		if ( $core_default ) {
 			$allowed_themes[ $core_default->get_stylesheet() ] = true;
 		}
 	}
@@ -1182,7 +1184,8 @@ We hope you enjoy your new site. Thanks!
 				'registered' => current_time( 'mysql' ),
 			)
 		);
-		$current_site->blog_id = $blog_id = $wpdb->insert_id;
+		$current_site->blog_id = $wpdb->insert_id;
+		$blog_id               = $current_site->blog_id;
 		update_user_meta( $site_user->ID, 'source_domain', $domain );
 		update_user_meta( $site_user->ID, 'primary_blog', $blog_id );
 

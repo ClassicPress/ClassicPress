@@ -1336,7 +1336,8 @@ function wpmu_create_blog( $domain, $path, $title, $user_id, $meta = array(), $n
 		wp_installing( true );
 	}
 
-	if ( ! $blog_id = insert_blog( $domain, $path, $network_id ) ) {
+	$blog_id = insert_blog( $domain, $path, $network_id );
+	if ( ! $blog_id ) {
 		return new WP_Error( 'insert_blog', __( 'Could not create site.' ) );
 	}
 
@@ -1614,7 +1615,8 @@ function install_blog( $blog_id, $blog_title = '' ) {
 	// populate_roles() clears previous role definitions so we start over.
 	$wp_roles = new WP_Roles();
 
-	$siteurl = $home = untrailingslashit( $url );
+	$siteurl = untrailingslashit( $url );
+	$home    = untrailingslashit( $url );
 
 	if ( ! is_subdomain_install() ) {
 
@@ -2002,7 +2004,8 @@ function recurse_dirsize( $directory, $exclude = null ) {
 		return false;
 	}
 
-	if ( $handle = opendir( $directory ) ) {
+	$handle = opendir( $directory );
+	if ( $handle ) {
 		while ( ( $file = readdir( $handle ) ) !== false ) {
 			$path = $directory . '/' . $file;
 			if ( $file != '.' && $file != '..' ) {
@@ -2257,21 +2260,26 @@ function signup_nonce_check( $result ) {
  * @since WP-MU (3.0.0)
  */
 function maybe_redirect_404() {
-	/**
-	 * Filters the redirect URL for 404s on the main site.
-	 *
-	 * The filter is only evaluated if the NOBLOGREDIRECT constant is defined.
-	 *
-	 * @since WP-3.0.0
-	 *
-	 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
-	 */
-	if ( is_main_site() && is_404() && defined( 'NOBLOGREDIRECT' ) && ( $destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT ) ) ) {
-		if ( $destination == '%siteurl%' ) {
-			$destination = network_home_url();
+	if ( is_main_site() && is_404() && defined( 'NOBLOGREDIRECT' ) ) {
+		/**
+		 * Filters the redirect URL for 404s on the main site.
+		 *
+		 * The filter is only evaluated if the NOBLOGREDIRECT constant is defined.
+		 *
+		 * @since WP-3.0.0
+		 *
+		 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
+		 */
+		$destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT );
+
+		if ( $destination ) {
+			if ( '%siteurl%' === $destination ) {
+				$destination = network_home_url();
+			}
+
+			wp_redirect( $destination );
+			exit;
 		}
-		wp_redirect( $destination );
-		exit();
 	}
 }
 
@@ -2491,7 +2499,7 @@ function force_ssl_content( $force = '' ) {
  * @param string $url URL
  * @return string URL with https as the scheme
  */
-function filter_SSL( $url ) {
+function filter_SSL( $url ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	if ( ! is_string( $url ) ) {
 		return get_bloginfo( 'url' ); // Return home blog url with proper scheme
 	}

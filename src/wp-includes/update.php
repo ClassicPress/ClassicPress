@@ -436,7 +436,9 @@ function wp_update_themes( $extra_stats = array() ) {
 		$last_update = new stdClass;
 	}
 
-	$themes = $checked = $request = array();
+	$themes  = array();
+	$checked = array();
+	$request = array();
 
 	// Put slug of current theme into request.
 	$request['active'] = get_option( 'stylesheet' );
@@ -632,21 +634,27 @@ function wp_get_update_data() {
 		'translations' => 0,
 	);
 
-	if ( $plugins = current_user_can( 'update_plugins' ) ) {
+	$plugins = current_user_can( 'update_plugins' );
+
+	if ( $plugins ) {
 		$update_plugins = get_site_transient( 'update_plugins' );
 		if ( ! empty( $update_plugins->response ) ) {
 			$counts['plugins'] = count( $update_plugins->response );
 		}
 	}
 
-	if ( $themes = current_user_can( 'update_themes' ) ) {
+	$themes = current_user_can( 'update_themes' );
+
+	if ( $themes ) {
 		$update_themes = get_site_transient( 'update_themes' );
 		if ( ! empty( $update_themes->response ) ) {
 			$counts['themes'] = count( $update_themes->response );
 		}
 	}
 
-	if ( ( $core = current_user_can( 'update_core' ) ) && function_exists( 'get_core_updates' ) ) {
+	$core = current_user_can( 'update_core' );
+
+	if ( $core && function_exists( 'get_core_updates' ) ) {
 		$update_wordpress = get_core_updates( array( 'dismissed' => false ) );
 		if ( ! empty( $update_wordpress ) && ! in_array( $update_wordpress[0]->response, array( 'development', 'latest' ) ) && current_user_can( 'update_core' ) ) {
 			$counts['wordpress'] = 1;

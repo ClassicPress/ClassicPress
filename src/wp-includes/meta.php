@@ -664,7 +664,8 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
-	if ( $meta = get_metadata_by_mid( $meta_type, $meta_id ) ) {
+	$meta = get_metadata_by_mid( $meta_type, $meta_id );
+	if ( $meta ) {
 		$original_key = $meta->meta_key;
 		$object_id    = $meta->{$column};
 
@@ -759,7 +760,8 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
-	if ( $meta = get_metadata_by_mid( $meta_type, $meta_id ) ) {
+	$meta = get_metadata_by_mid( $meta_type, $meta_id );
+	if ( $meta ) {
 		$object_id = $meta->{$column};
 
 		/** This action is documented in wp-includes/meta.php */

@@ -80,9 +80,10 @@ if ( ! strstr( $cp_version, '+' ) ) {
 
 // Insufficient PHP and/or MySQL? Set a flag with an error message.
 if ( ! $mysql_compat && ! $php_compat ) {
-	/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number */
 	$compat = sprintf(
-		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ),
+		/* translators: 1: ClassicPress download URL, 2: ClassicPress version number, 3: Minimum required PHP version number, 4: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number */
+		__( '<a href="%1$s">ClassicPress %2$s</a> requires PHP version %3$s or higher and MySQL version %4$s or higher. You are running PHP version %5$s and MySQL version %6$s.' ),
+		$cp_download_url,
 		$cp_version,
 		$required_php_version,
 		$requires_mysql_version,
@@ -90,17 +91,19 @@ if ( ! $mysql_compat && ! $php_compat ) {
 		$mysql_version
 	);
 } elseif ( ! $php_compat ) {
-	/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Current PHP version number */
 	$compat = sprintf(
-		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ),
+		/* translators: 1: ClassicPress download URL, 2: ClassicPress version number, 3: Minimum required PHP version number, 4: Current PHP version number */
+		__( '<a href="%1$s">ClassicPress %2$s</a> requires PHP version %3$s or higher. You are running version %4$s.' ),
+		$cp_download_url,
 		$cp_version,
 		$required_php_version,
 		$php_version
 	);
 } elseif ( ! $mysql_compat ) {
-	/* translators: 1: ClassicPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number */
 	$compat = sprintf(
-		__( '<a href="' . $cp_download_url . '">ClassicPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ),
+		/* translators: 1: ClassicPress download URL, 2: ClassicPress version number, 3: Minimum required MySQL version number, 4: Current MySQL version number */
+		__( '<a href="%1$s">ClassicPress %2$s</a> requires MySQL version %3$s or higher. You are running version %4$s.' ),
+		$cp_download_url,
 		$cp_version,
 		$required_mysql_version,
 		$mysql_version
@@ -161,7 +164,8 @@ switch ( $step ) {
 
 	// Just getting started? Display the language picker.
 	case 0:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
+		$languages = wp_get_available_translations();
+		if ( wp_can_install_language_pack() && empty( $language ) && $languages ) {
 			$scripts_to_print[] = 'language-chooser';
 			display_header( 'language-chooser' );
 			echo '<form id="setup" method="post" action="?step=1">';

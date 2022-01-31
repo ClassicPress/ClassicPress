@@ -922,7 +922,7 @@ function upgrade_110() {
 
 	$time_difference = $all_options->time_difference;
 
-		$server_time = time() + date( 'Z' );
+	$server_time     = time() + gmdate( 'Z' );
 	$weblogger_time  = $server_time + $time_difference * HOUR_IN_SECONDS;
 	$gmt_time        = time();
 
@@ -1241,7 +1241,8 @@ function upgrade_230() {
 		$term_group  = 0;
 
 		// Associate terms with the same slug in a term group and make slugs unique.
-		if ( $exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) ) ) {
+		$wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) );
+		if ( $exists ) {
 			$term_group = $exists[0]->term_group;
 			$id         = $exists[0]->term_id;
 			$num        = 2;
@@ -1346,7 +1347,8 @@ function upgrade_230() {
 			$term_group = 0;
 
 			// Associate terms with the same slug in a term group and make slugs unique.
-			if ( $exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) ) ) {
+			$exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) );
+			if ( $exists ) {
 				$term_group = $exists[0]->term_group;
 				$term_id    = $exists[0]->term_id;
 			}
@@ -1730,6 +1732,7 @@ function upgrade_330() {
 			$sidebars_widgets                   = $_sidebars_widgets;
 			unset( $_sidebars_widgets );
 
+			// Intentional fall-through to upgrade to the next version.
 		case 2:
 			$sidebars_widgets                  = retrieve_widgets();
 			$sidebars_widgets['array_version'] = 3;
@@ -1803,8 +1806,11 @@ function upgrade_350() {
 		}
 	}
 
-	if ( $wp_current_db_version < 22422 && $term = get_term_by( 'slug', 'post-format-standard', 'post_format' ) ) {
-		wp_delete_term( $term->term_id, 'post_format' );
+	if ( $wp_current_db_version < 22422 ) {
+		$term = get_term_by( 'slug', 'post-format-standard', 'post_format' );
+		if ( $term ) {
+			wp_delete_term( $term->term_id, 'post_format' );
+		}
 	}
 }
 
@@ -2383,7 +2389,8 @@ function maybe_convert_table_to_utf8mb4( $table ) {
 function get_alloptions_110() {
 	global $wpdb;
 	$all_options = new stdClass;
-	if ( $options = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" ) ) {
+	$options     = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" );
+	if ( $options ) {
 		foreach ( $options as $option ) {
 			if ( 'siteurl' == $option->option_name || 'home' == $option->option_name || 'category_base' == $option->option_name ) {
 				$option->option_value = untrailingslashit( $option->option_value );
@@ -2406,7 +2413,7 @@ function get_alloptions_110() {
  * @param string $setting Option name.
  * @return mixed
  */
-function __get_option( $setting ) {
+function __get_option( $setting ) {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	global $wpdb;
 
 	if ( $setting == 'home' && defined( 'WP_HOME' ) ) {
@@ -2475,7 +2482,7 @@ function deslash( $content ) {
  *                              Default true.
  * @return array Strings containing the results of the various update queries.
  */
-function dbDelta( $queries = '', $execute = true ) {
+function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	global $wpdb;
 
 	if ( in_array( $queries, array( '', 'all', 'blog', 'global', 'ms_global' ), true ) ) {
@@ -2560,7 +2567,9 @@ function dbDelta( $queries = '', $execute = true ) {
 		}
 
 		// Clear the field and index arrays.
-		$cfields = $indices = $indices_without_subparts = array();
+		$cfields                  = array();
+		$indices                  = array();
+		$indices_without_subparts = array();
 
 		// Get all of the field names in the query from between the parentheses.
 		preg_match( '|\((.*)\)|ms', $qry, $match2 );
@@ -2633,7 +2642,8 @@ function dbDelta( $queries = '', $execute = true ) {
 					$index_name = ( 'PRIMARY KEY' === $index_type ) ? '' : '`' . strtolower( $index_matches['index_name'] ) . '`';
 
 					// Parse the columns. Multiple columns are separated by a comma.
-					$index_columns = $index_columns_without_subparts = array_map( 'trim', explode( ',', $index_matches['index_columns'] ) );
+					$index_columns                  = array_map( 'trim', explode( ',', $index_matches['index_columns'] ) );
+					$index_columns_without_subparts = $index_columns;
 
 					// Normalize columns.
 					foreach ( $index_columns as $id => &$index_column ) {
@@ -2803,7 +2813,8 @@ function dbDelta( $queries = '', $execute = true ) {
 				$index_string .= " ($index_columns)";
 
 				// Check if the index definition exists, ignoring subparts.
-				if ( ! ( ( $aindex = array_search( $index_string, $indices_without_subparts ) ) === false ) ) {
+				$aindex = array_search( $index_string, $indices_without_subparts, true );
+				if ( false !== $aindex ) {
 					// If the index already exists (even with different subparts), we don't need to create it.
 					unset( $indices_without_subparts[ $aindex ] );
 					unset( $indices[ $aindex ] );

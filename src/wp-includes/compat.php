@@ -439,22 +439,6 @@ if ( ! function_exists( 'json_last_error_msg' ) ) :
 	}
 endif;
 
-if ( ! interface_exists( 'JsonSerializable' ) ) {
-	define( 'WP_JSON_SERIALIZE_COMPATIBLE', true );
-	/**
-	 * JsonSerializable interface.
-	 *
-	 * Compatibility shim for PHP <5.4
-	 *
-	 * @link https://secure.php.net/jsonserializable
-	 *
-	 * @since WP-4.4.0
-	 */
-	interface JsonSerializable {
-		public function jsonSerialize();
-	}
-}
-
 // random_int was introduced in PHP 7.0
 if ( ! function_exists( 'random_int' ) ) {
 	require ABSPATH . WPINC . '/random_compat/random.php';

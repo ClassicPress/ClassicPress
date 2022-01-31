@@ -173,6 +173,7 @@ switch ( $action ) {
 			exit;
 		}
 
+		// Intentional fall-through to display $errors.
 	default:
 		$profileuser = get_user_to_edit( $user_id );
 
@@ -258,7 +259,7 @@ switch ( $action ) {
 		<?php if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) : ?>
 	<tr class="user-rich-editing-wrap">
 		<th scope="row"><?php _e( 'Visual Editor' ); ?></th>
-		<td><label for="rich_editing"><input name="rich_editing" type="checkbox" id="rich_editing" value="false" 
+		<td><label for="rich_editing"><input name="rich_editing" type="checkbox" id="rich_editing" value="false"
 			<?php
 			if ( ! empty( $profileuser->rich_editing ) ) {
 				checked( 'false', $profileuser->rich_editing );}
@@ -282,7 +283,7 @@ switch ( $action ) {
 	<tr class="user-syntax-highlighting-wrap">
 		<th scope="row"><?php _e( 'Syntax Highlighting' ); ?></th>
 		<td>
-			<label for="syntax_highlighting"><input name="syntax_highlighting" type="checkbox" id="syntax_highlighting" value="false" 
+			<label for="syntax_highlighting"><input name="syntax_highlighting" type="checkbox" id="syntax_highlighting" value="false"
 			<?php
 			if ( ! empty( $profileuser->syntax_highlighting ) ) {
 				checked( 'false', $profileuser->syntax_highlighting );}
@@ -317,7 +318,7 @@ switch ( $action ) {
 			?>
 <tr class="user-comment-shortcuts-wrap">
 <th scope="row"><?php _e( 'Keyboard Shortcuts' ); ?></th>
-<td><label for="comment_shortcuts"><input type="checkbox" name="comment_shortcuts" id="comment_shortcuts" value="true" 
+<td><label for="comment_shortcuts"><input type="checkbox" name="comment_shortcuts" id="comment_shortcuts" value="true"
 			<?php
 			if ( ! empty( $profileuser->comment_shortcuts ) ) {
 				checked( 'true', $profileuser->comment_shortcuts );}
@@ -609,7 +610,8 @@ switch ( $action ) {
 		 * @param bool    $show        Whether to show the password fields. Default true.
 		 * @param WP_User $profileuser User object for the current user to edit.
 		 */
-		if ( $show_password_fields = apply_filters( 'show_password_fields', true, $profileuser ) ) :
+		$show_password_fields = apply_filters( 'show_password_fields', true, $profileuser );
+		if ( $show_password_fields ) :
 			?>
 </table>
 

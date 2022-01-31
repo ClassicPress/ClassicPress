@@ -285,9 +285,10 @@ win.send_to_editor( <?php echo wp_json_encode( $html ); ?> );
  * @return int|WP_Error ID of the attachment or a WP_Error object on failure.
  */
 function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrides = array( 'test_form' => false ) ) {
-
 	$time = current_time( 'mysql' );
-	if ( $post = get_post( $post_id ) ) {
+	$post = get_post( $post_id );
+
+	if ( $post ) {
 		// The post date doesn't usually matter for pages, so don't backdate this upload.
 		if ( 'page' !== $post->post_type && substr( $post->post_date, 0, 4 ) > 0 ) {
 			$time = $post->post_date;
@@ -369,13 +370,17 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		}
 
 		// Use image exif/iptc data for title and caption defaults if possible.
-	} elseif ( 0 === strpos( $type, 'image/' ) && $image_meta = wp_read_image_metadata( $file ) ) {
-		if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
-			$title = $image_meta['title'];
-		}
+	} elseif ( 0 === strpos( $type, 'image/' ) ) {
+		$image_meta = wp_read_image_metadata( $file );
 
-		if ( trim( $image_meta['caption'] ) ) {
-			$excerpt = $image_meta['caption'];
+		if ( $image_meta ) {
+			if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
+				$title = $image_meta['title'];
+			}
+
+			if ( trim( $image_meta['caption'] ) ) {
+				$excerpt = $image_meta['caption'];
+			}
 		}
 	}
 
@@ -420,7 +425,8 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
 	$overrides = array( 'test_form' => false );
 
 	$time = current_time( 'mysql' );
-	if ( $post = get_post( $post_id ) ) {
+	$post = get_post( $post_id );
+	if ( $post ) {
 		if ( substr( $post->post_date, 0, 4 ) > 0 ) {
 			$time = $post->post_date;
 		}
@@ -438,7 +444,8 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
 	$content = '';
 
 	// Use image exif/iptc data for title and caption defaults if possible.
-	if ( $image_meta = wp_read_image_metadata( $file ) ) {
+	$image_meta = wp_read_image_metadata( $file );
+	if ( $image_meta ) {
 		if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
 			$title = $image_meta['title'];
 		}
@@ -692,7 +699,8 @@ function media_upload_form_handler() {
 
 	if ( ! empty( $_POST['attachments'] ) ) {
 		foreach ( $_POST['attachments'] as $attachment_id => $attachment ) {
-			$post = $_post = get_post( $attachment_id, ARRAY_A );
+			$post  = get_post( $attachment_id, ARRAY_A );
+			$_post = $post;
 
 			if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
 				continue;
@@ -835,9 +843,12 @@ function wp_media_upload_handler() {
 			}
 
 			$type = 'file';
-			if ( ( $ext = preg_replace( '/^.+?\.([^.]+)$/', '$1', $src ) ) && ( $ext_type = wp_ext2type( $ext ) )
-				&& ( 'audio' == $ext_type || 'video' == $ext_type ) ) {
+			$ext  = preg_replace( '/^.+?\.([^.]+)$/', '$1', $src );
+			if ( $ext ) {
+				$ext_type = wp_ext2type( $ext );
+				if ( 'audio' === $ext_type || 'video' === $ext_type ) {
 					$type = $ext_type;
+				}
 			}
 
 			/**
@@ -1440,7 +1451,10 @@ function get_media_items( $post_id, $errors ) {
 		if ( $attachment->post_status == 'trash' ) {
 			continue;
 		}
-		if ( $item = get_media_item( $id, array( 'errors' => isset( $errors[ $id ] ) ? $errors[ $id ] : null ) ) ) {
+
+		$item = get_media_item( $id, array( 'errors' => isset( $errors[ $id ] ) ? $errors[ $id ] : null ) );
+
+		if ( $item ) {
 			$output .= "\n<div id='media-item-$id' class='media-item child-of-$attachment->post_parent preloaded'><div class='progress hidden'><div class='bar'></div></div><div id='media-upload-error-$id' class='hidden'></div><div class='filename hidden'></div>$item\n</div>";
 		}
 	}
@@ -1462,7 +1476,9 @@ function get_media_items( $post_id, $errors ) {
 function get_media_item( $attachment_id, $args = null ) {
 	global $redir_tab;
 
-	if ( ( $attachment_id = intval( $attachment_id ) ) && $thumb_url = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true ) ) {
+	$attachment_id = intval( $attachment_id );
+	$thumb_url    = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
+	if ( $attachment_id && $thumb_url ) {
 		$thumb_url = $thumb_url[0];
 	} else {
 		$thumb_url = false;
@@ -2755,7 +2771,8 @@ function wp_media_insert_url_form( $default_view = 'image' ) {
 		$view        = 'image-only';
 		$table_class = '';
 	} else {
-		$view = $table_class = 'not-image';
+		$view        = 'not-image';
+		$table_class = 'not-image';
 	}
 
 	return '
@@ -2838,7 +2855,8 @@ function wp_media_insert_url_form( $default_view = 'image' ) {
 function media_upload_flash_bypass() {
 	$browser_uploader = admin_url( 'media-new.php?browser-uploader' );
 
-	if ( $post = get_post() ) {
+	$post = get_post();
+	if ( $post ) {
 		$browser_uploader .= '&amp;post_id=' . intval( $post->ID );
 	} elseif ( ! empty( $GLOBALS['post_ID'] ) ) {
 		$browser_uploader .= '&amp;post_id=' . intval( $GLOBALS['post_ID'] );
@@ -2878,7 +2896,8 @@ function media_upload_text_after() {}
  */
 function media_upload_max_image_resize() {
 	$checked = get_user_setting( 'upload_resize' ) ? ' checked="true"' : '';
-	$a       = $end = '';
+	$a       = '';
+	$end     = '';
 
 	if ( current_user_can( 'manage_options' ) ) {
 		$a   = '<a href="' . esc_url( admin_url( 'options-media.php' ) ) . '" target="_blank">';
@@ -2917,8 +2936,9 @@ function edit_form_image_editor( $post ) {
 		require_once ABSPATH . 'wp-admin/includes/image-edit.php';
 	}
 
-	$thumb_url = false;
-	if ( $attachment_id = intval( $post->ID ) ) {
+	$thumb_url     = false;
+	$attachment_id = intval( $post->ID );
+	if ( $attachment_id ) {
 		$thumb_url = wp_get_attachment_image_src( $attachment_id, array( 900, 450 ), true );
 	}
 
@@ -3504,7 +3524,8 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
 
 	if ( isset( $result ) ) {
 		$location = 'upload.php';
-		if ( $referer = wp_get_referer() ) {
+		$referer  = wp_get_referer();
+		if ( $referer ) {
 			if ( false !== strpos( $referer, 'upload.php' ) ) {
 				$location = remove_query_arg( array( 'attached', 'detach' ), $referer );
 			}

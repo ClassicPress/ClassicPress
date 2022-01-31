@@ -25,7 +25,8 @@ function get_comment_author( $comment_ID = 0 ) {
 	$comment = get_comment( $comment_ID );
 
 	if ( empty( $comment->comment_author ) ) {
-		if ( $comment->user_id && $user = get_userdata( $comment->user_id ) ) {
+		$user = $comment->user_id ? get_userdata( $comment->user_id ) : false;
+		if ( $user ) {
 			$author = $user->display_name;
 		} else {
 			$author = __( 'Anonymous' );
@@ -148,7 +149,8 @@ function comment_author_email( $comment_ID = 0 ) {
  * @param int|WP_Comment $comment  Optional. Comment ID or WP_Comment object. Default is the current comment.
  */
 function comment_author_email_link( $linktext = '', $before = '', $after = '', $comment = null ) {
-	if ( $link = get_comment_author_email_link( $linktext, $before, $after, $comment ) ) {
+	$link = get_comment_author_email_link( $linktext, $before, $after, $comment );
+	if ( $link ) {
 		echo $link;
 	}
 }
@@ -262,7 +264,7 @@ function comment_author_link( $comment_ID = 0 ) {
  *                                   Default current comment.
  * @return string Comment author's IP address.
  */
-function get_comment_author_IP( $comment_ID = 0 ) {
+function get_comment_author_IP( $comment_ID = 0 ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$comment = get_comment( $comment_ID );
 
 	/**
@@ -275,7 +277,7 @@ function get_comment_author_IP( $comment_ID = 0 ) {
 	 * @param int        $comment_ID        The comment ID.
 	 * @param WP_Comment $comment           The comment object.
 	 */
-	return apply_filters( 'get_comment_author_IP', $comment->comment_author_IP, $comment->comment_ID, $comment );
+	return apply_filters( 'get_comment_author_IP', $comment->comment_author_IP, $comment->comment_ID, $comment ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 }
 
 /**
@@ -287,7 +289,7 @@ function get_comment_author_IP( $comment_ID = 0 ) {
  * @param int|WP_Comment $comment_ID Optional. WP_Comment or the ID of the comment for which to print the author's IP address.
  *                                   Default current comment.
  */
-function comment_author_IP( $comment_ID = 0 ) {
+function comment_author_IP( $comment_ID = 0 ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	echo esc_html( get_comment_author_IP( $comment_ID ) );
 }
 
@@ -466,11 +468,13 @@ function get_comment_class( $class = '', $comment_id = null, $post_id = null ) {
 	$classes[] = ( empty( $comment->comment_type ) ) ? 'comment' : $comment->comment_type;
 
 	// Add classes for comment authors that are registered users.
-	if ( $comment->user_id > 0 && $user = get_userdata( $comment->user_id ) ) {
+	$user = $comment->user_id ? get_userdata( $comment->user_id ) : false;
+	if ( $user ) {
 		$classes[] = 'byuser';
 		$classes[] = 'comment-author-' . sanitize_html_class( $user->user_nicename, $comment->user_id );
 		// For comment authors who are the author of the post
-		if ( $post = get_post( $post_id ) ) {
+		$post = get_post( $post_id );
+		if ( $post ) {
 			if ( $comment->user_id === $post->post_author ) {
 				$classes[] = 'bypostauthor';
 			}
@@ -658,7 +662,7 @@ function comment_excerpt( $comment_ID = 0 ) {
  *
  * @return int The comment ID.
  */
-function get_comment_ID() {
+function get_comment_ID() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$comment = get_comment();
 
 	/**
@@ -670,7 +674,7 @@ function get_comment_ID() {
 	 * @param int        $comment_ID The current comment ID.
 	 * @param WP_Comment $comment    The comment object.
 	 */
-	return apply_filters( 'get_comment_ID', $comment->comment_ID, $comment );
+	return apply_filters( 'get_comment_ID', $comment->comment_ID, $comment ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 }
 
 /**
@@ -678,7 +682,7 @@ function get_comment_ID() {
  *
  * @since WP-0.71
  */
-function comment_ID() {
+function comment_ID() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	echo get_comment_ID();
 }
 
@@ -1971,8 +1975,9 @@ function wp_list_comments( $args = array(), $comments = null ) {
 
 	$in_comment_loop = true;
 
-	$comment_alt   = $comment_thread_alt = 0;
-	$comment_depth = 1;
+	$comment_alt        = 0;
+	$comment_thread_alt = 0;
+	$comment_depth      = 1;
 
 	$defaults = array(
 		'walker'            => null,

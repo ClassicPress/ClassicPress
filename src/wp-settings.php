@@ -48,6 +48,7 @@ wp_check_php_mysql_versions();
 @ini_set( 'magic_quotes_sybase', 0 );
 
 // ClassicPress calculates offsets from UTC.
+// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 date_default_timezone_set( 'UTC' );
 
 // Turn register_globals off.
@@ -201,7 +202,7 @@ require ABSPATH . WPINC . '/canonical.php';
 require ABSPATH . WPINC . '/shortcodes.php';
 require ABSPATH . WPINC . '/embed.php';
 require ABSPATH . WPINC . '/class-wp-embed.php';
-require ABSPATH . WPINC . '/class-oembed.php';
+require ABSPATH . WPINC . '/class-wp-oembed.php';
 require ABSPATH . WPINC . '/class-wp-oembed-controller.php';
 require ABSPATH . WPINC . '/media.php';
 require ABSPATH . WPINC . '/http.php';
@@ -457,7 +458,8 @@ do_action( 'init' );
 
 // Check site status
 if ( is_multisite() ) {
-	if ( true !== ( $file = ms_site_check() ) ) {
+	 $file = ms_site_check();
+	if ( true !== $file ) {
 		require $file;
 		die();
 	}

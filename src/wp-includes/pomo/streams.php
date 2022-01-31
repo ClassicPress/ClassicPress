@@ -34,7 +34,7 @@ if ( ! class_exists( 'POMO_Reader', false ) ) :
 		 *
 		 * @param $endian string 'big' or 'little'
 		 */
-		function setEndian( $endian ) {
+		function setEndian( $endian ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 			$this->endian = $endian;
 		}
 

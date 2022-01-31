@@ -184,16 +184,20 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		foreach ( (array) $plugins['all'] as $plugin_file => $plugin_data ) {
 			// Extra info if known. array_merge() ensures $plugin_data has precedence if keys collide.
 			if ( isset( $plugin_info->response[ $plugin_file ] ) ) {
-				$plugins['all'][ $plugin_file ] = $plugin_data = array_merge( (array) $plugin_info->response[ $plugin_file ], $plugin_data );
+				$plugins['all'][ $plugin_file ] = array_merge( (array) $plugin_info->response[ $plugin_file ], $plugin_data );
+				$plugin_data                    = $plugins['all'][ $plugin_file ];
 				// Make sure that $plugins['upgrade'] also receives the extra info since it is used on ?plugin_status=upgrade
 				if ( isset( $plugins['upgrade'][ $plugin_file ] ) ) {
-					$plugins['upgrade'][ $plugin_file ] = $plugin_data = array_merge( (array) $plugin_info->response[ $plugin_file ], $plugin_data );
+					$plugins['upgrade'][ $plugin_file ] = array_merge( (array) $plugin_info->response[ $plugin_file ], $plugin_data );
+					$plugin_data                        = $plugins['upgrade'][ $plugin_file ];
 				}
 			} elseif ( isset( $plugin_info->no_update[ $plugin_file ] ) ) {
-				$plugins['all'][ $plugin_file ] = $plugin_data = array_merge( (array) $plugin_info->no_update[ $plugin_file ], $plugin_data );
+				$plugins['all'][ $plugin_file ] = array_merge( (array) $plugin_info->no_update[ $plugin_file ], $plugin_data );
+				$plugin_data                    = $plugins['all'][ $plugin_file ];
 				// Make sure that $plugins['upgrade'] also receives the extra info since it is used on ?plugin_status=upgrade
 				if ( isset( $plugins['upgrade'][ $plugin_file ] ) ) {
-					$plugins['upgrade'][ $plugin_file ] = $plugin_data = array_merge( (array) $plugin_info->no_update[ $plugin_file ], $plugin_data );
+					$plugins['upgrade'][ $plugin_file ] = array_merge( (array) $plugin_info->no_update[ $plugin_file ], $plugin_data );
+					$plugin_data                        = $plugins['upgrade'][ $plugin_file ];
 				}
 			}
 

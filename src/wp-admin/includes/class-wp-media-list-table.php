@@ -382,7 +382,8 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$title      = _draft_or_post_title();
 		$thumb      = wp_get_attachment_image( $post->ID, array( 60, 60 ), true, array( 'alt' => '' ) );
-		$link_start = $link_end = '';
+		$link_start = '';
+		$link_end   = '';
 
 		if ( current_user_can( 'edit_post', $post->ID ) && ! $this->is_trash ) {
 			$link_start = sprintf(
@@ -455,16 +456,17 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( '0000-00-00 00:00:00' === $post->post_date ) {
 			$h_time = __( 'Unpublished' );
 		} else {
-			$m_time = $post->post_date;
 			$time   = get_post_time( 'G', true, $post, false );
-			if ( ( abs( $t_diff = time() - $time ) ) < DAY_IN_SECONDS ) {
+			$t_diff = time() - $time;
+
+			if ( $time && $t_diff < DAY_IN_SECONDS ) {
 				if ( $t_diff < 0 ) {
 					$h_time = sprintf( __( '%s from now' ), human_time_diff( $time ) );
 				} else {
 					$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
 				}
 			} else {
-				$h_time = mysql2date( __( 'Y/m/d' ), $m_time );
+				$h_time = mysql2date( __( 'Y/m/d' ), $post->post_date );
 			}
 		}
 

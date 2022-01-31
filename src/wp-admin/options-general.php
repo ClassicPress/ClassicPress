@@ -177,7 +177,7 @@ if ( $login_custom_image_src ) {
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="1" 
+			<input name="login_custom_image_state" type="radio" value="1"
 			<?php
 			checked( 1, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
@@ -187,7 +187,7 @@ if ( $login_custom_image_src ) {
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="2" 
+			<input name="login_custom_image_state" type="radio" value="2"
 			<?php
 			checked( 2, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
@@ -337,6 +337,7 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 <span>
 	<?php
 	// Set TZ so localtime works.
+	// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 	date_default_timezone_set( $tzstring );
 	$now = localtime( time(), true );
 	if ( $now['tm_isdst'] ) {
@@ -381,6 +382,7 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 		}
 	}
 	// Set back to UTC.
+	// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 	date_default_timezone_set( 'UTC' );
 	?>
 	</span>

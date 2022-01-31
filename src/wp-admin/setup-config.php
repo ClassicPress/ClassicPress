@@ -108,7 +108,8 @@ switch ( $step ) {
 
 	// Just getting started? Display the language picker.
 	case -1:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
+		$languages = wp_get_available_translations();
+		if ( wp_can_install_language_pack() && empty( $language ) && $languages ) {
 			setup_config_display_header( 'language-chooser' );
 			echo '<h1 class="screen-reader-text">Select a default language</h1>';
 			echo '<form id="setup" method="post" action="?step=1">';

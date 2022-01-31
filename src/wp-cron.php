@@ -66,7 +66,8 @@ function _get_cron_lock() {
 	return $value;
 }
 
-if ( false === $crons = _get_cron_array() ) {
+$crons = _get_cron_array();
+if ( false === $crons ) {
 	die();
 }
 
@@ -88,7 +89,8 @@ if ( empty( $doing_wp_cron ) ) {
 		if ( $doing_cron_transient && ( $doing_cron_transient + WP_CRON_LOCK_TIMEOUT > $gmt_time ) ) {
 			return;
 		}
-		$doing_cron_transient = $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+		$doing_cron_transient = sprintf( '%.22F', microtime( true ) );
+		$doing_wp_cron        = $doing_cron_transient;
 		set_transient( 'doing_cron', $doing_wp_cron );
 	} else {
 		$doing_wp_cron = $_GET['doing_wp_cron'];

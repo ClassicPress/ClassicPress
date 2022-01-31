@@ -446,7 +446,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</li>
 		</ul><!-- .posttype-tabs -->
 
-		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel 
+		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel
 												<?php
 												echo ( 'most-recent' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 												?>
@@ -485,7 +485,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div class="tabs-panel 
+		<div class="tabs-panel
 		<?php
 			echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 		?>
@@ -527,7 +527,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all 
+		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all
 							<?php
 							echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 							?>
@@ -795,7 +795,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			</li>
 		</ul><!-- .taxonomy-tabs -->
 
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel 
+		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel
 									   <?php
 										echo ( 'most-used' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 										?>
@@ -817,7 +817,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all 
+		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all
 									   <?php
 										echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 										?>
@@ -840,7 +840,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			<?php endif; ?>
 		</div><!-- /.tabs-panel -->
 
-		<div class="tabs-panel 
+		<div class="tabs-panel
 		<?php
 			echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 		?>
@@ -1068,7 +1068,8 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 			);
 		}
 
-		$some_pending_menu_items = $some_invalid_menu_items = false;
+		$some_pending_menu_items = false;
+		$some_invalid_menu_items = false;
 		foreach ( (array) $menu_items as $menu_item ) {
 			if ( isset( $menu_item->post_status ) && 'draft' == $menu_item->post_status ) {
 				$some_pending_menu_items = true;
@@ -1222,7 +1223,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 			$nav_menu_option['auto_add'][] = $nav_menu_selected_id;
 		}
 	} else {
-		if ( false !== ( $key = array_search( $nav_menu_selected_id, $nav_menu_option['auto_add'] ) ) ) {
+		$key = array_search( $nav_menu_selected_id, $nav_menu_option['auto_add'] );
+		if ( false !== $key ) {
 			unset( $nav_menu_option['auto_add'][ $key ] );
 		}
 	}

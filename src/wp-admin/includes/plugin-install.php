@@ -219,8 +219,9 @@ function plugins_api( $action, $args = array() ) {
  * @return array
  */
 function install_popular_tags( $args = array() ) {
-	$key = md5( serialize( $args ) );
-	if ( false !== ( $tags = get_site_transient( 'poptags_' . $key ) ) ) {
+	$key  = md5( serialize( $args ) );
+	$tags = get_site_transient( 'poptags_' . $key );
+	if ( false !== $tags ) {
 		return $tags;
 	}
 
@@ -690,7 +691,7 @@ function install_plugin_information() {
 					?>
 				</li>
 			<?php } if ( isset( $api->active_installs ) ) { ?>
-				<li><strong><?php _e( 'Active Installations:' ); ?></strong> 
+				<li><strong><?php _e( 'Active Installations:' ); ?></strong>
 									  <?php
 										if ( $api->active_installs >= 1000000 ) {
 											_ex( '1+ Million', 'Active plugin installations' );

@@ -25,7 +25,12 @@
 
 	<file>./src/</file>
 
-	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Core">
+		<exclude name="WordPress.PHP.StrictComparisons.LooseComparison"/>
+		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict"/>
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+	</rule>
+
 
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 

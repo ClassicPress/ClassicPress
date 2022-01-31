@@ -57,7 +57,8 @@ $home_path           = get_home_path();
 $iis7_permalinks     = iis7_supports_permalinks();
 $permalink_structure = get_option( 'permalink_structure' );
 
-$prefix = $blog_prefix = '';
+$prefix      = '';
+$blog_prefix = '';
 if ( ! got_url_rewrite() ) {
 	$prefix = '/index.php';
 }
@@ -202,11 +203,11 @@ $structures = array(
 	</tr>
 	<tr>
 		<th><label><input name="selection" type="radio" value="<?php echo esc_attr( $structures[1] ); ?>" <?php checked( $structures[1], $permalink_structure ); ?> /> <?php _e( 'Day and name' ); ?></label></th>
-		<td><code><?php echo get_option( 'home' ) . $blog_prefix . $prefix . '/' . date( 'Y' ) . '/' . date( 'm' ) . '/' . date( 'd' ) . '/' . _x( 'sample-post', 'sample permalink structure' ) . '/'; ?></code></td>
+		<td><code><?php echo get_option( 'home' ) . $blog_prefix . $prefix . '/' . gmdate( 'Y' ) . '/' . gmdate( 'm' ) . '/' . gmdate( 'd' ) . '/' . _x( 'sample-post', 'sample permalink structure' ) . '/'; ?></code></td>
 	</tr>
 	<tr>
 		<th><label><input name="selection" type="radio" value="<?php echo esc_attr( $structures[2] ); ?>" <?php checked( $structures[2], $permalink_structure ); ?> /> <?php _e( 'Month and name' ); ?></label></th>
-		<td><code><?php echo get_option( 'home' ) . $blog_prefix . $prefix . '/' . date( 'Y' ) . '/' . date( 'm' ) . '/' . _x( 'sample-post', 'sample permalink structure' ) . '/'; ?></code></td>
+		<td><code><?php echo get_option( 'home' ) . $blog_prefix . $prefix . '/' . gmdate( 'Y' ) . '/' . gmdate( 'm' ) . '/' . _x( 'sample-post', 'sample permalink structure' ) . '/'; ?></code></td>
 	</tr>
 	<tr>
 		<th><label><input name="selection" type="radio" value="<?php echo esc_attr( $structures[3] ); ?>" <?php checked( $structures[3], $permalink_structure ); ?> /> <?php _e( 'Numeric' ); ?></label></th>
