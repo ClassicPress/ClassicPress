@@ -1667,7 +1667,7 @@ function wp_get_comment_status( $comment_id ) {
 		return false;
 	} elseif ( '1' == $approved ) {
 		return 'approved';
-	} elseif ( 'o' == $approved ) {
+	} elseif ( '0' == $approved ) {
 		return 'unapproved';
 	} elseif ( 'spam' == $approved ) {
 		return 'spam';
