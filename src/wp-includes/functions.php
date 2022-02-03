@@ -6376,15 +6376,22 @@ function wp_direct_php_update_button() {
 }
 
 /**
-* Checks compatibility with the current WordPress version.
-*
-* @since WP-5.2.0
-*
-* @param string $required Minimum required WordPress version.
-* @return bool True if required version is compatible or empty, false if not.
-*/
+ * Checks compatibility with the current WordPress version.
+ *
+ * @since WP-5.2.0
+ *
+ * @global string $wp_version WordPress version.
+ *
+ * @param string $required Minimum required WordPress version.
+ * @return bool True if required version is compatible or empty, false if not.
+ */
 function is_wp_version_compatible( $required ) {
-	return empty( $required ) || version_compare( get_bloginfo( 'version' ), $required, '>=' );
+	global $wp_version;
+
+	// Strip off any -alpha, -RC, -beta, -src suffixes.
+	list( $version ) = explode( '-', $wp_version );
+
+	return empty( $required ) || version_compare( $version, $required, '>=' );
 }
 
 /**

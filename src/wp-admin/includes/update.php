@@ -595,24 +595,10 @@ function wp_theme_update_row( $theme_key, $theme ) {
 		if ( ! $compatible_wp && ! $compatible_php ) {
 			printf(
 				/* translators: %s: Theme name. */
-				__( 'There is a new version of %s available, but it doesn&#8217;t work with your versions of WordPress and PHP.' ),
+				__( 'There is a new version of %s available, but it doesn&#8217;t work with your version of PHP or support ClassicPress.' ),
 				$theme['Name']
 			);
-			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				printf(
-					/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-					' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-					self_admin_url( 'update-core.php' ),
-					esc_url( wp_get_update_php_url() )
-				);
-				wp_update_php_annotation( '</p><p><em>', '</em>' );
-			} elseif ( current_user_can( 'update_core' ) ) {
-				printf(
-					/* translators: %s: URL to WordPress Updates screen. */
-					' ' . __( '<a href="%s">Please update WordPress</a>.' ),
-					self_admin_url( 'update-core.php' )
-				);
-			} elseif ( current_user_can( 'update_php' ) ) {
+			if ( current_user_can( 'update_php' ) ) {
 				printf(
 					/* translators: %s: URL to Update PHP page. */
 					' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
@@ -623,16 +609,9 @@ function wp_theme_update_row( $theme_key, $theme ) {
 		} elseif ( ! $compatible_wp ) {
 			printf(
 				/* translators: %s: Theme name. */
-				__( 'There is a new version of %s available, but it doesn&#8217;t work with your version of WordPress.' ),
+				__( 'There is a new version of %s available, but it doesn&#8217;t support ClassicPress.' ),
 				$theme['Name']
 			);
-			if ( current_user_can( 'update_core' ) ) {
-				printf(
-					/* translators: %s: URL to WordPress Updates screen. */
-					' ' . __( '<a href="%s">Please update WordPress</a>.' ),
-					self_admin_url( 'update-core.php' )
-				);
-			}
 		} elseif ( ! $compatible_php ) {
 			printf(
 				/* translators: %s: Theme name. */
