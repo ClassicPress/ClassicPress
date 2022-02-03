@@ -37,6 +37,6 @@
     "terser": "5.10.0"
   },
   "dependencies": {
-    "node-sass": "6.0.1"
+    "node-sass": "7.0.1"
   }
 }
