@@ -407,7 +407,7 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set
 	}
 
 	$url = dirname( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] ) );
-	if ( $url != get_option( 'siteurl' ) ) {
+	if ( get_option( 'siteurl' ) != $url ) {
 		update_option( 'siteurl', $url );
 	}
 }
@@ -956,7 +956,7 @@ switch ( $action ) {
 				exit;
 			}
 
-			if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
+			if ( ( empty( $redirect_to ) || 'wp-admin/' == $redirect_to || admin_url() == $redirect_to ) ) {
 				// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
 				if ( is_multisite() && ! get_active_blog_for_user( $user->ID ) && ! is_super_admin( $user->ID ) ) {
 					$redirect_to = user_admin_url();

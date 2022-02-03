@@ -215,7 +215,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 				</fieldset>
 
 				<div class="menu-item-actions description-wide submitbox">
-					<?php if ( 'custom' != $item->type && $original_title !== false ) : ?>
+					<?php if ( 'custom' != $item->type && false !== $original_title ) : ?>
 						<p class="link-to-original">
 							<?php printf( __( 'Original: %s' ), '<a href="' . esc_attr( $item->url ) . '">' . esc_html( $original_title ) . '</a>' ); ?>
 						</p>

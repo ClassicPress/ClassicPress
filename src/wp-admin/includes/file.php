@@ -1540,7 +1540,7 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 				$temp_file_owner = @fileowner( $temp_file_name );
 			}
 
-			if ( $wp_file_owner !== false && $wp_file_owner === $temp_file_owner ) {
+			if ( false !== $wp_file_owner && $wp_file_owner === $temp_file_owner ) {
 				// ClassicPress is creating files as the same owner as the ClassicPress files,
 				// this means it's safe to modify & create new files via PHP.
 				$method                                  = 'direct';
@@ -1890,7 +1890,7 @@ function wp_print_request_filesystem_credentials_modal() {
 	ob_start();
 	$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
 	ob_end_clean();
-	$request_filesystem_credentials = ( $filesystem_method != 'direct' && ! $filesystem_credentials_are_stored );
+	$request_filesystem_credentials = ( 'direct' != $filesystem_method && ! $filesystem_credentials_are_stored );
 	if ( ! $request_filesystem_credentials ) {
 		return;
 	}
@@ -2291,7 +2291,7 @@ function wp_privacy_process_personal_data_export_page( $response, $exporter_inde
 	// If we are not yet on the last page of the last exporter, return now.
 	/** This filter is documented in wp-admin/includes/ajax-actions.php */
 	$exporters        = apply_filters( 'wp_privacy_personal_data_exporters', array() );
-	$is_last_exporter = $exporter_index === count( $exporters );
+	$is_last_exporter = count( $exporters ) === $exporter_index;
 	$exporter_done    = $response['done'];
 	if ( ! $is_last_exporter || ! $exporter_done ) {
 		return $response;

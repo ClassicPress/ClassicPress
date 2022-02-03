@@ -794,7 +794,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 function get_site_icon_url( $size = 512, $url = '', $blog_id = 0 ) {
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -862,7 +862,7 @@ function has_site_icon( $blog_id = 0 ) {
 function has_custom_logo( $blog_id = 0 ) {
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -888,7 +888,7 @@ function get_custom_logo( $blog_id = 0 ) {
 	$html          = '';
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -1766,7 +1766,7 @@ function wp_get_archives( $args = '' ) {
 	}
 
 	$order = strtoupper( $r['order'] );
-	if ( $order !== 'ASC' ) {
+	if ( 'ASC' !== $order ) {
 		$order = 'DESC';
 	}
 
@@ -1922,7 +1922,7 @@ function wp_get_archives( $args = '' ) {
 		}
 		if ( $results ) {
 			foreach ( (array) $results as $result ) {
-				if ( $result->post_date != '0000-00-00 00:00:00' ) {
+				if ( '0000-00-00 00:00:00' != $result->post_date ) {
 					$url = get_permalink( $result );
 					if ( $result->post_title ) {
 						/** This filter is documented in wp-includes/post-template.php */
@@ -2142,9 +2142,9 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$newrow = false;
 
-		if ( $day == gmdate( 'j', $ts ) &&
-			$thismonth == gmdate( 'm', $ts ) &&
-			$thisyear == gmdate( 'Y', $ts ) ) {
+		if ( gmdate( 'j', $ts ) == $day &&
+			gmdate( 'm', $ts ) == $thismonth &&
+			gmdate( 'Y', $ts ) == $thisyear ) {
 			$calendar_output .= '<td id="today">';
 		} else {
 			$calendar_output .= '<td>';
@@ -2172,7 +2172,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	}
 
 	$pad = 7 - calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
-	if ( $pad != 0 && $pad != 7 ) {
+	if ( 0 != $pad && 7 != $pad ) {
 		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
 	}
 	$calendar_output .= "\n\t</tr>\n\t</tbody>\n\t</table>";
@@ -3722,11 +3722,11 @@ function get_language_attributes( $doctype = 'html' ) {
 
 	$lang = get_bloginfo( 'language' );
 	if ( $lang ) {
-		if ( get_option( 'html_type' ) == 'text/html' || $doctype == 'html' ) {
+		if ( 'text/html' == get_option( 'html_type' ) || 'html' == $doctype ) {
 			$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
 		}
 
-		if ( get_option( 'html_type' ) != 'text/html' || $doctype == 'xhtml' ) {
+		if ( 'text/html' != get_option( 'html_type' ) || 'xhtml' == $doctype ) {
 			$attributes[] = 'xml:lang="' . esc_attr( $lang ) . '"';
 		}
 	}
@@ -4494,7 +4494,7 @@ function get_login_image_html() {
 	$login_custom_image_id    = null;
 	$login_custom_image_html  = null;
 
-	if ( $login_custom_image_state === 1 || $login_custom_image_state === 2 ) {
+	if ( 1 === $login_custom_image_state || 2 === $login_custom_image_state ) {
 		$login_custom_image_id = (int) get_option( 'login_custom_image_id' );
 		if ( $login_custom_image_id ) {
 			$attrs     = array(
@@ -4550,7 +4550,7 @@ function get_login_image_html() {
 	if ( ! empty( $login_custom_image_html ) ) {
 		// Generate the custom login image HTML.
 		$login_image_class = 'custom-login-image-container';
-		if ( $login_custom_image_state === 2 ) {
+		if ( 2 === $login_custom_image_state ) {
 			$login_image_class .= ' banner';
 		}
 		$login_image_html  = sprintf(

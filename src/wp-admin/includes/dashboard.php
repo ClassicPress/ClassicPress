@@ -490,7 +490,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 	$last_post_id = (int) get_user_option( 'dashboard_quick_press_last_post_id' ); // Get the last post_ID
 	if ( $last_post_id ) {
 		$post = get_post( $last_post_id );
-		if ( empty( $post ) || $post->post_status != 'auto-draft' ) { // auto-draft doesn't exists anymore
+		if ( empty( $post ) || 'auto-draft' != $post->post_status ) { // auto-draft doesn't exists anymore
 			$post = get_default_post_to_edit( 'post', true );
 			update_user_option( get_current_user_id(), 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID
 		} else {
@@ -1540,7 +1540,7 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 
 		$data   = $response->$name->data;
 		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
-		$active = $name === array_shift( $keys ) ? ' active' : '';
+		$active = array_shift( $keys ) === $name ? ' active' : '';
 		?>
 
 		<div id="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>">

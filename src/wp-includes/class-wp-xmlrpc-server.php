@@ -696,7 +696,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		foreach ( $blogs as $blog ) {
 			// Don't include blogs that aren't hosted at this site.
-			if ( $blog->site_id != get_current_network_id() ) {
+			if ( get_current_network_id() != $blog->site_id ) {
 				continue;
 			}
 
@@ -830,7 +830,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * @return IXR_Date IXR_Date object.
 	 */
 	protected function _convert_date( $date ) {
-		if ( $date === '0000-00-00 00:00:00' ) {
+		if ( '0000-00-00 00:00:00' === $date ) {
 			return new IXR_Date( '00000000T00:00:00Z' );
 		}
 		return new IXR_Date( mysql2date( 'Ymd\TH:i:s', $date, false ) );
@@ -845,7 +845,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * @return IXR_Date IXR_Date object.
 	 */
 	protected function _convert_date_gmt( $date_gmt, $date ) {
-		if ( $date !== '0000-00-00 00:00:00' && $date_gmt === '0000-00-00 00:00:00' ) {
+		if ( '0000-00-00 00:00:00' !== $date && '0000-00-00 00:00:00' === $date_gmt ) {
 			return new IXR_Date( get_gmt_from_date( mysql2date( 'Y-m-d H:i:s', $date, false ), 'Ymd\TH:i:s' ) );
 		}
 		return $this->_convert_date( $date_gmt );
@@ -884,7 +884,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			'menu_order'        => intval( $post['menu_order'] ),
 			'comment_status'    => $post['comment_status'],
 			'ping_status'       => $post['ping_status'],
-			'sticky'            => ( $post['post_type'] === 'post' && is_sticky( $post['ID'] ) ),
+			'sticky'            => ( 'post' === $post['post_type'] && is_sticky( $post['ID'] ) ),
 		);
 
 		// Thumbnail.
@@ -896,7 +896,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 
 		// Consider future posts as published.
-		if ( $post_fields['post_status'] === 'future' ) {
+		if ( 'future' === $post_fields['post_status'] ) {
 			$post_fields['post_status'] = 'publish';
 		}
 
@@ -1293,7 +1293,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		// ignore the existing GMT date if it is empty or a non-GMT date was supplied in $content_struct,
 		// since _insert_post will ignore the non-GMT date if the GMT date is set
 		if ( isset( $content_struct['post_date_gmt'] ) && ! ( $content_struct['post_date_gmt'] instanceof IXR_Date ) ) {
-			if ( $content_struct['post_date_gmt'] == '0000-00-00 00:00:00' || isset( $content_struct['post_date'] ) ) {
+			if ( '0000-00-00 00:00:00' == $content_struct['post_date_gmt'] || isset( $content_struct['post_date'] ) ) {
 				unset( $content_struct['post_date_gmt'] );
 			} else {
 				$content_struct['post_date_gmt'] = $this->_convert_date( $content_struct['post_date_gmt'] );
@@ -1408,7 +1408,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			if ( ! current_user_can( 'edit_post', $post_data['ID'] ) ) {
 				return new IXR_Error( 401, __( 'Sorry, you are not allowed to edit this post.' ) );
 			}
-			if ( $post_data['post_type'] != get_post_type( $post_data['ID'] ) ) {
+			if ( get_post_type( $post_data['ID'] ) != $post_data['post_type'] ) {
 				return new IXR_Error( 401, __( 'The post type may not be changed.' ) );
 			}
 		} else {
@@ -1458,11 +1458,11 @@ class wp_xmlrpc_server extends IXR_Server {
 			$post_data['post_author'] = $user->ID;
 		}
 
-		if ( isset( $post_data['comment_status'] ) && $post_data['comment_status'] != 'open' && $post_data['comment_status'] != 'closed' ) {
+		if ( isset( $post_data['comment_status'] ) && 'open' != $post_data['comment_status'] && 'closed' != $post_data['comment_status'] ) {
 			unset( $post_data['comment_status'] );
 		}
 
-		if ( isset( $post_data['ping_status'] ) && $post_data['ping_status'] != 'open' && $post_data['ping_status'] != 'closed' ) {
+		if ( isset( $post_data['ping_status'] ) && 'open' != $post_data['ping_status'] && 'closed' != $post_data['ping_status'] ) {
 			unset( $post_data['ping_status'] );
 		}
 
@@ -1490,7 +1490,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 		$post_ID = $post_data['ID'];
 
-		if ( $post_data['post_type'] == 'post' ) {
+		if ( 'post' == $post_data['post_type'] ) {
 			$error = $this->_toggle_sticky( $post_data, $update );
 			if ( $error ) {
 				return $error;
@@ -1711,7 +1711,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * Ignore the existing GMT date if it is empty or a non-GMT date was supplied in $content_struct,
 		 * since _insert_post() will ignore the non-GMT date if the GMT date is set.
 		 */
-		if ( $post['post_date_gmt'] == '0000-00-00 00:00:00' || isset( $content_struct['post_date'] ) ) {
+		if ( '0000-00-00 00:00:00' == $post['post_date_gmt'] || isset( $content_struct['post_date'] ) ) {
 			unset( $post['post_date_gmt'] );
 		} else {
 			$post['post_date_gmt'] = $this->_convert_date( $post['post_date_gmt'] );
@@ -2932,7 +2932,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		do_action( 'xmlrpc_call', 'wp.getPage' );
 
 		// If we found the page then format the data.
-		if ( $page->ID && ( $page->post_type == 'page' ) ) {
+		if ( $page->ID && ( 'page' == $page->post_type ) ) {
 			return $this->_prepare_page( $page );
 		} else {
 			// If the page doesn't exist indicate that.
@@ -3069,7 +3069,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		// Get the current page based on the page_id and
 		// make sure it is a page and not a post.
 		$actual_page = get_post( $page_id, ARRAY_A );
-		if ( ! $actual_page || ( $actual_page['post_type'] != 'page' ) ) {
+		if ( ! $actual_page || 'page' != $actual_page['post_type'] ) {
 			return new IXR_Error( 404, __( 'Sorry, no such page.' ) );
 		}
 
@@ -3135,7 +3135,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		// Get the page data and make sure it is a page.
 		$actual_page = get_post( $page_id, ARRAY_A );
-		if ( ! $actual_page || ( $actual_page['post_type'] != 'page' ) ) {
+		if ( ! $actual_page || 'page' != $actual_page['post_type'] ) {
 			return new IXR_Error( 404, __( 'Sorry, no such page.' ) );
 		}
 
@@ -4256,7 +4256,7 @@ class wp_xmlrpc_server extends IXR_Server {
 				continue;
 			}
 
-			if ( $this->blog_options[ $o_name ]['readonly'] == true ) {
+			if ( true == $this->blog_options[ $o_name ]['readonly'] ) {
 				continue;
 			}
 
@@ -5131,7 +5131,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$actual_post = get_post( $post_ID, ARRAY_A );
 
-		if ( ! $actual_post || $actual_post['post_type'] != 'post' ) {
+		if ( ! $actual_post || 'post' != $actual_post['post_type'] ) {
 			return new IXR_Error( 404, __( 'Sorry, no such post.' ) );
 		}
 
@@ -5205,7 +5205,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$actual_post = get_post( $post_ID, ARRAY_A );
 
-		if ( ! $actual_post || $actual_post['post_type'] != 'post' ) {
+		if ( ! $actual_post || 'post' != $actual_post['post_type'] ) {
 			return new IXR_Error( 404, __( 'Sorry, no such post.' ) );
 		}
 
@@ -5292,7 +5292,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$page_template = '';
 		if ( ! empty( $content_struct['post_type'] ) ) {
-			if ( $content_struct['post_type'] == 'page' ) {
+			if ( 'page' == $content_struct['post_type'] ) {
 				if ( $publish ) {
 					$cap = 'publish_pages';
 				} elseif ( isset( $content_struct['page_status'] ) && 'publish' == $content_struct['page_status'] ) {
@@ -5305,7 +5305,7 @@ class wp_xmlrpc_server extends IXR_Server {
 				if ( ! empty( $content_struct['wp_page_template'] ) ) {
 					$page_template = $content_struct['wp_page_template'];
 				}
-			} elseif ( $content_struct['post_type'] == 'post' ) {
+			} elseif ( 'post' == $content_struct['post_type'] ) {
 				if ( $publish ) {
 					$cap = 'publish_posts';
 				} elseif ( isset( $content_struct['post_status'] ) && 'publish' == $content_struct['post_status'] ) {
@@ -5529,7 +5529,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$postdata['ID'] = $post_ID;
 
 		// Only posts can be sticky
-		if ( $post_type == 'post' && isset( $content_struct['sticky'] ) ) {
+		if ( 'post' == $post_type && isset( $content_struct['sticky'] ) ) {
 			$data           = $postdata;
 			$data['sticky'] = $content_struct['sticky'];
 			$error          = $this->_toggle_sticky( $data );
@@ -5917,7 +5917,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 
 		// Only posts can be sticky
-		if ( $post_type == 'post' && isset( $content_struct['sticky'] ) ) {
+		if ( 'post' == $post_type && isset( $content_struct['sticky'] ) ) {
 			$data              = $newpost;
 			$data['sticky']    = $content_struct['sticky'];
 			$data['post_type'] = 'post';
@@ -6007,7 +6007,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		/** This action is documented in wp-includes/class-wp-xmlrpc-server.php */
 		do_action( 'xmlrpc_call', 'metaWeblog.getPost' );
 
-		if ( $postdata['post_date'] != '' ) {
+		if ( '' != $postdata['post_date'] ) {
 			$post_date         = $this->_convert_date( $postdata['post_date'] );
 			$post_date_gmt     = $this->_convert_date_gmt( $postdata['post_date_gmt'], $postdata['post_date'] );
 			$post_modified     = $this->_convert_date( $postdata['post_modified'] );
@@ -6040,7 +6040,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			$allow_pings    = ( 'open' == $postdata['ping_status'] ) ? 1 : 0;
 
 			// Consider future posts as published
-			if ( $postdata['post_status'] === 'future' ) {
+			if ( 'future' === $postdata['post_status'] ) {
 				$postdata['post_status'] = 'publish';
 			}
 
@@ -6057,7 +6057,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 			$enclosure = array();
 			foreach ( (array) get_post_custom( $post_ID ) as $key => $val ) {
-				if ( $key == 'enclosure' ) {
+				if ( 'enclosure' == $key ) {
 					foreach ( (array) $val as $enc ) {
 						$encdata             = explode( "\n", $enc );
 						$enclosure['url']    = trim( htmlspecialchars( $encdata[0] ) );
@@ -6192,7 +6192,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			$allow_pings    = ( 'open' == $entry['ping_status'] ) ? 1 : 0;
 
 			// Consider future posts as published
-			if ( $entry['post_status'] === 'future' ) {
+			if ( 'future' === $entry['post_status'] ) {
 				$entry['post_status'] = 'publish';
 			}
 
@@ -6229,7 +6229,7 @@ class wp_xmlrpc_server extends IXR_Server {
 				'wp_post_format'         => $post_format,
 				'date_modified'          => $post_modified,
 				'date_modified_gmt'      => $post_modified_gmt,
-				'sticky'                 => ( $entry['post_type'] === 'post' && is_sticky( $entry['ID'] ) ),
+				'sticky'                 => ( 'post' === $entry['post_type'] && is_sticky( $entry['ID'] ) ),
 				'wp_post_thumbnail'      => get_post_thumbnail_id( $entry['ID'] ),
 			);
 		}
@@ -6845,7 +6845,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			return $this->pingback_error( 33, __( 'The specified target URL cannot be used as a target. It either doesn&#8217;t exist, or it is not a pingback-enabled resource.' ) );
 		}
 
-		if ( $post_ID == url_to_postid( $pagelinkedfrom ) ) {
+		if ( url_to_postid( $pagelinkedfrom ) == $post_ID ) {
 			return $this->pingback_error( 0, __( 'The source URL and the target URL cannot both point to the same resource.' ) );
 		}
 

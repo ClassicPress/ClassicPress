@@ -361,7 +361,7 @@ final class WP_Post {
 			return $this;
 		}
 
-		if ( $filter == 'raw' ) {
+		if ( 'raw' == $filter ) {
 			return self::get_instance( $this->ID );
 		}
 

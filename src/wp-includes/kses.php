@@ -1046,10 +1046,10 @@ function wp_kses_split2( $string, $allowed_html, $allowed_protocols ) {
 
 	if ( '<!--' == substr( $string, 0, 4 ) ) {
 		$string = str_replace( array( '<!--', '-->' ), '', $string );
-		while ( $string != ( $newstring = wp_kses( $string, $allowed_html, $allowed_protocols ) ) ) {
+		while ( ( $newstring = wp_kses( $string, $allowed_html, $allowed_protocols ) ) != $string ) {
 			$string = $newstring;
 		}
-		if ( $string == '' ) {
+		if ( '' == $string ) {
 			return '';
 		}
 		// prevent multiple dashes in comments
@@ -1078,7 +1078,7 @@ function wp_kses_split2( $string, $allowed_html, $allowed_protocols ) {
 	}
 	// They are using a not allowed HTML element
 
-	if ( $slash != '' ) {
+	if ( '' != $slash ) {
 		return "</$elem>";
 	}
 	// No attributes are allowed for closing elements
@@ -1321,13 +1321,13 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 				break;
 		} // switch
 
-		if ( $working == 0 ) { // not well formed, remove and try again
+		if ( 0 == $working ) { // not well formed, remove and try again
 			$attr = wp_kses_html_error( $attr );
 			$mode = 0;
 		}
 	} // while
 
-	if ( $mode == 1 && false === array_key_exists( $attrname, $attrarr ) ) {
+	if ( 1 == $mode && false === array_key_exists( $attrname, $attrarr ) ) {
 		// special case, for when the attribute list ends with a valueless
 		// attribute like "selected"
 		$attrarr[ $attrname ] = array(
@@ -1804,7 +1804,7 @@ function wp_kses_normalize_entities3( $matches ) {
  * @return bool True if the value was a valid Unicode number
  */
 function valid_unicode( $i ) {
-	return ( $i == 0x9 || $i == 0xa || $i == 0xd ||
+	return ( 0x9 == $i || 0xa == $i || 0xd == $i ||
 			( $i >= 0x20 && $i <= 0xd7ff ) ||
 			( $i >= 0xe000 && $i <= 0xfffd ) ||
 			( $i >= 0x10000 && $i <= 0x10ffff ) );
@@ -2121,7 +2121,7 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 
 	$css = '';
 	foreach ( $css_array as $css_item ) {
-		if ( $css_item == '' ) {
+		if ( '' == $css_item ) {
 			continue;
 		}
 		$css_item = trim( $css_item );
@@ -2135,7 +2135,7 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 			}
 		}
 		if ( $found ) {
-			if ( $css != '' ) {
+			if ( '' != $css ) {
 				$css .= ';';
 			}
 			$css .= $css_item;

@@ -74,9 +74,9 @@ class Core_Upgrader extends WP_Upgrader {
 			count( $entries ) === 1 &&
 			(
 				substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
-				$entries[0]['name'] === 'WordPress' // migration build
+				'WordPress' === $entries[0]['name'] // migration build
 			) &&
-			$entries[0]['type'] === 'd'
+			'd' === $entries[0]['type']
 		) {
 			$distro = '/' . $entries[0]['name'] . '/';
 			$root   = $working_dir . $distro;
@@ -131,7 +131,7 @@ class Core_Upgrader extends WP_Upgrader {
 		$this->upgrade_strings();
 
 		// Is an update available?
-		if ( ! isset( $current->response ) || $current->response == 'latest' ) {
+		if ( ! isset( $current->response ) || 'latest' == $current->response ) {
 			return new WP_Error( 'up_to_date', $this->strings['up_to_date'] );
 		}
 
@@ -590,7 +590,7 @@ class Core_Upgrader extends WP_Upgrader {
 			$matches['prerelease'] = false;
 		}
 
-		if ( isset( $matches['build_type'] ) && $matches['build_type'] === 'nightly' ) {
+		if ( isset( $matches['build_type'] ) && 'nightly' === $matches['build_type'] ) {
 			$nightly_build = $matches['build_number'];
 		} else {
 			$nightly_build = false;

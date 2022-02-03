@@ -117,7 +117,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 <p class="description" id="new-admin-email-description"><?php _e( 'This address is used for admin purposes. If you change this we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ); ?></p>
 <?php
 $new_admin_email = get_option( 'new_admin_email' );
-if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) :
+if ( $new_admin_email && get_option( 'admin_email' ) != $new_admin_email ) :
 	?>
 	<div class="updated inline">
 	<p>
@@ -180,7 +180,7 @@ if ( $login_custom_image_src ) {
 			<input name="login_custom_image_state" type="radio" value="1"
 			<?php
 			checked( 1, $login_custom_image_state );
-			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
+			disabled( 0 === $login_custom_image_state && ! $login_custom_image_src );
 			?>
 			 />
 			<?php _e( 'Use my custom image as a <strong>logo</strong>' ); ?>
@@ -190,7 +190,7 @@ if ( $login_custom_image_src ) {
 			<input name="login_custom_image_state" type="radio" value="2"
 			<?php
 			checked( 2, $login_custom_image_state );
-			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
+			disabled( 0 === $login_custom_image_state && ! $login_custom_image_src );
 			?>
 			 />
 			<?php _e( 'Use my custom image as a <strong>banner</strong>' ); ?>
@@ -258,7 +258,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 			);
 
 			// Add note about deprecated WPLANG constant.
-			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && $locale !== WPLANG ) {
+			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && WPLANG !== $locale ) {
 				if ( is_multisite() && current_user_can( 'manage_network_options' )
 					|| ! is_multisite() && current_user_can( 'manage_options' ) ) {
 					?>

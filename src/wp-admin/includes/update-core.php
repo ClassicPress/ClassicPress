@@ -612,9 +612,9 @@ function cp_get_update_directory_root( $working_dir ) {
 		count( $entries ) === 1 &&
 		(
 			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
-			$entries[0]['name'] === 'WordPress' // migration build
+			'WordPress' === $entries[0]['name'] // migration build
 		) &&
-		$entries[0]['type'] === 'd'
+		'd' === $entries[0]['type']
 	) {
 		$distro = '/' . $entries[0]['name'] . '/';
 		$root   = $working_dir . $distro;

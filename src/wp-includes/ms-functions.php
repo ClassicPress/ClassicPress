@@ -66,16 +66,16 @@ function get_active_blog_for_user( $user_id ) {
 		}
 	}
 
-	if ( ( ! is_object( $primary ) ) || ( $primary->archived == 1 || $primary->spam == 1 || $primary->deleted == 1 ) ) {
+	if ( ( ! is_object( $primary ) ) || ( 1 == $primary->archived || 1 == $primary->spam || 1 == $primary->deleted ) ) {
 		$blogs = get_blogs_of_user( $user_id, true ); // if a user's primary blog is shut down, check their other blogs.
 		$ret   = false;
 		if ( is_array( $blogs ) && count( $blogs ) > 0 ) {
 			foreach ( (array) $blogs as $blog_id => $blog ) {
-				if ( $blog->site_id != get_current_network_id() ) {
+				if ( get_current_network_id() != $blog->site_id ) {
 					continue;
 				}
 				$details = get_site( $blog_id );
-				if ( is_object( $details ) && $details->archived == 0 && $details->spam == 0 && $details->deleted == 0 ) {
+				if ( is_object( $details ) && 0 == $details->archived && 0 == $details->spam && 0 == $details->deleted ) {
 					$ret = $blog;
 					if ( get_user_meta( $user_id, 'primary_blog', true ) != $blog_id ) {
 						update_user_meta( $user_id, 'primary_blog', $blog_id );
@@ -279,7 +279,7 @@ function remove_user_from_blog( $user_id, $blog_id = '', $reassign = '' ) {
 		update_user_meta( $user_id, 'source_domain', '' );
 	}
 
-	if ( $reassign != '' ) {
+	if ( '' != $reassign ) {
 		$reassign = (int) $reassign;
 		$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_author = %d", $user_id ) );
 		$link_ids = $wpdb->get_col( $wpdb->prepare( "SELECT link_id FROM $wpdb->links WHERE link_owner = %d", $user_id ) );
@@ -338,7 +338,7 @@ function get_blog_id_from_url( $domain, $path = '/' ) {
 	$path   = strtolower( $path );
 	$id     = wp_cache_get( md5( $domain . $path ), 'blog-id-cache' );
 
-	if ( $id == -1 ) { // blog does not exist
+	if ( -1 == $id ) { // blog does not exist
 		return 0;
 	} elseif ( $id ) {
 		return (int) $id;
@@ -403,7 +403,7 @@ function is_email_address_unsafe( $user_email ) {
 			}
 
 			$dotted_domain = ".$banned_domain";
-			if ( $dotted_domain === substr( $normalized_email, -strlen( $dotted_domain ) ) ) {
+			if ( substr( $normalized_email, -strlen( $dotted_domain ) ) === $dotted_domain ) {
 				$is_email_address_unsafe = true;
 				break;
 			}
@@ -515,7 +515,7 @@ function wpmu_validate_user_signup( $user_name, $user_email ) {
 
 	// Has someone already signed up for this username?
 	$signup = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->signups WHERE user_login = %s", $user_name ) );
-	if ( $signup != null ) {
+	if ( null != $signup ) {
 		$registered_at = mysql2date( 'U', $signup->registered );
 		$now           = time();
 		$diff          = $now - $registered_at;
@@ -528,7 +528,7 @@ function wpmu_validate_user_signup( $user_name, $user_email ) {
 	}
 
 	$signup = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->signups WHERE user_email = %s", $user_email ) );
-	if ( $signup != null ) {
+	if ( null != $signup ) {
 		$diff = time() - mysql2date( 'U', $signup->registered );
 		// If registered more than two days ago, cancel registration and let this signup go through.
 		if ( $diff > 2 * DAY_IN_SECONDS ) {
@@ -599,7 +599,7 @@ function wpmu_validate_blog_signup( $blogname, $blog_title, $user = '' ) {
 
 	$errors        = new WP_Error();
 	$illegal_names = get_site_option( 'illegal_names' );
-	if ( $illegal_names == false ) {
+	if ( false == $illegal_names ) {
 		$illegal_names = array( 'www', 'web', 'root', 'admin', 'main', 'invite', 'administrator' );
 		add_site_option( 'illegal_names', $illegal_names );
 	}
@@ -911,7 +911,7 @@ function wpmu_signup_blog_notification( $domain, $path, $title, $user_login, $us
 
 	$activate_url = esc_url( $activate_url );
 	$admin_email  = get_site_option( 'admin_email' );
-	if ( $admin_email == '' ) {
+	if ( '' == $admin_email ) {
 		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
 	}
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
@@ -1034,7 +1034,7 @@ function wpmu_signup_user_notification( $user_login, $user_email, $key, $meta = 
 
 	// Send email with activation link.
 	$admin_email = get_site_option( 'admin_email' );
-	if ( $admin_email == '' ) {
+	if ( '' == $admin_email ) {
 		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
 	}
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
@@ -1714,7 +1714,7 @@ function wpmu_welcome_notification( $blog_id, $user_id, $password, $title, $meta
 	$switched_locale = switch_to_locale( get_user_locale( $user ) );
 
 	$welcome_email = get_site_option( 'welcome_email' );
-	if ( $welcome_email == false ) {
+	if ( false == $welcome_email ) {
 		/* translators: Do not translate USERNAME, SITE_NAME, BLOG_URL, PASSWORD: those are placeholders. */
 		$welcome_email = __(
 			'Hello USERNAME,
@@ -1759,7 +1759,7 @@ We hope you enjoy your new site. Thanks!
 	$welcome_email = apply_filters( 'update_welcome_email', $welcome_email, $blog_id, $user_id, $password, $title, $meta );
 	$admin_email   = get_site_option( 'admin_email' );
 
-	if ( $admin_email == '' ) {
+	if ( '' == $admin_email ) {
 		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
 	}
 
@@ -1850,7 +1850,7 @@ function wpmu_welcome_user_notification( $user_id, $password, $meta = array() ) 
 
 	$admin_email = get_site_option( 'admin_email' );
 
-	if ( $admin_email == '' ) {
+	if ( '' == $admin_email ) {
 		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
 	}
 
@@ -2008,7 +2008,7 @@ function recurse_dirsize( $directory, $exclude = null ) {
 	if ( $handle ) {
 		while ( ( $file = readdir( $handle ) ) !== false ) {
 			$path = $directory . '/' . $file;
-			if ( $file != '.' && $file != '..' ) {
+			if ( '.' != $file && '..' != $file ) {
 				if ( is_file( $path ) ) {
 					$size += filesize( $path );
 				} elseif ( is_dir( $path ) ) {
@@ -2043,7 +2043,7 @@ function check_upload_mimes( $mimes ) {
 	$site_mimes = array();
 	foreach ( $site_exts as $ext ) {
 		foreach ( $mimes as $ext_pattern => $mime ) {
-			if ( $ext != '' && strpos( $ext_pattern, $ext ) !== false ) {
+			if ( '' != $ext && false !== strpos( $ext_pattern, $ext ) ) {
 				$site_mimes[ $ext_pattern ] = $mime;
 			}
 		}
@@ -2120,7 +2120,7 @@ function global_terms( $term_id, $deprecated = '' ) {
 
 	// prevent a race condition
 	$recurse_start = false;
-	if ( $global_terms_recurse === null ) {
+	if ( null === $global_terms_recurse ) {
 		$recurse_start        = true;
 		$global_terms_recurse = 1;
 	} elseif ( 10 < $global_terms_recurse++ ) {
@@ -2131,7 +2131,7 @@ function global_terms( $term_id, $deprecated = '' ) {
 	$c       = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->terms WHERE term_id = %d", $term_id ) );
 
 	$global_id = $wpdb->get_var( $wpdb->prepare( "SELECT cat_ID FROM $wpdb->sitecategories WHERE category_nicename = %s", $c->slug ) );
-	if ( $global_id == null ) {
+	if ( null == $global_id ) {
 		$used_global_id = $wpdb->get_var( $wpdb->prepare( "SELECT cat_ID FROM $wpdb->sitecategories WHERE cat_ID = %d", $c->term_id ) );
 		if ( null == $used_global_id ) {
 			$wpdb->insert(
@@ -2300,7 +2300,7 @@ function maybe_add_existing_user_to_blog() {
 	$parts = explode( '/', $_SERVER['REQUEST_URI'] );
 	$key   = array_pop( $parts );
 
-	if ( $key == '' ) {
+	if ( '' == $key ) {
 		$key = array_pop( $parts );
 	}
 
@@ -2432,7 +2432,7 @@ function update_blog_public( $old_value, $value ) {
  */
 function users_can_register_signup_filter() {
 	$registration = get_site_option( 'registration' );
-	return ( $registration == 'all' || $registration == 'user' );
+	return ( 'all' == $registration || 'user' == $registration );
 }
 
 /**
@@ -2829,7 +2829,7 @@ function get_subdirectory_reserved_names() {
  * @param string $value     The proposed new network admin email address.
  */
 function update_network_option_new_admin_email( $old_value, $value ) {
-	if ( $value == get_site_option( 'admin_email' ) || ! is_email( $value ) ) {
+	if ( get_site_option( 'admin_email' ) == $value || ! is_email( $value ) ) {
 		return;
 	}
 

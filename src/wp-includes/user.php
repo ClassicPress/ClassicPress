@@ -776,7 +776,7 @@ function is_user_member_of_blog( $user_id = 0, $blog_id = 0 ) {
 	$base_capabilities_key = $wpdb->base_prefix . 'capabilities';
 	$site_capabilities_key = $wpdb->base_prefix . $blog_id . '_capabilities';
 
-	if ( isset( $keys[ $base_capabilities_key ] ) && $blog_id == 1 ) {
+	if ( isset( $keys[ $base_capabilities_key ] ) && 1 == $blog_id ) {
 		return true;
 	}
 
@@ -887,7 +887,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
 	$result      = array();
 
 	if ( 'time' == $strategy ) {
-		if ( is_multisite() && $site_id != get_current_blog_id() ) {
+		if ( is_multisite() && get_current_blog_id() != $site_id ) {
 			switch_to_blog( $site_id );
 			$avail_roles = wp_roles()->get_names();
 			restore_current_blog();
@@ -1176,7 +1176,7 @@ function wp_dropdown_users( $args = '' ) {
 		} else {
 			$id = $r['id'] ? " id='" . esc_attr( $r['id'] ) . "'" : " id='$name'";
 		}
-		if ( $r['select_multiple'] === true ) {
+		if ( true === $r['select_multiple'] ) {
 			$name         .= '[]';
 			$multiple_attr = ' multiple';
 		} else {
@@ -1207,7 +1207,7 @@ function wp_dropdown_users( $args = '' ) {
 				$selected_user = get_userdata( $r['selected'] );
 				if ( $selected_user ) {
 					$users[] = $selected_user;
-				} elseif ( $value_field === 'ID' ) {
+				} elseif ( 'ID' === $value_field ) {
 					// The selected user ID was not found as a valid user. Note
 					// that this logic can only be applied if the 'value_field'
 					// parameter is the default 'ID', otherwise we have no way
@@ -2468,7 +2468,7 @@ function register_new_user( $user_login, $user_email ) {
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
 	// Check the username
-	if ( $sanitized_user_login == '' ) {
+	if ( '' == $sanitized_user_login ) {
 		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	} elseif ( ! validate_username( $user_login ) ) {
 		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
@@ -2485,7 +2485,7 @@ function register_new_user( $user_login, $user_email ) {
 	}
 
 	// Check the email address
-	if ( $user_email == '' ) {
+	if ( '' == $user_email ) {
 		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your email address.' ) );
 	} elseif ( ! is_email( $user_email ) ) {
 		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
@@ -2645,7 +2645,7 @@ function wp_get_users_with_no_role( $site_id = null ) {
 
 	$prefix = $wpdb->get_blog_prefix( $site_id );
 
-	if ( is_multisite() && $site_id != get_current_blog_id() ) {
+	if ( is_multisite() && get_current_blog_id() != $site_id ) {
 		switch_to_blog( $site_id );
 		$role_names = wp_roles()->get_names();
 		restore_current_blog();

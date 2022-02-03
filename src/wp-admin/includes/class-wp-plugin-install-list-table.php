@@ -253,7 +253,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			<div class="inline error"><p><?php echo $this->error->get_error_message(); ?></p>
 				<p class="hide-if-no-js"><button class="button try-again"><?php _e( 'Try Again' ); ?></button></p>
 			</div>
-		<?php } elseif ( $tab !== 'categories' ) { ?>
+		<?php } elseif ( 'categories' !== $tab ) { ?>
 			<div class="no-plugin-results"><?php _e( 'No plugins found. Try a different search.' ); ?></div>
 			<?php
 		}
@@ -342,7 +342,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 * @param string $which
 	 */
 	protected function display_tablenav( $which ) {
-		if ( $GLOBALS['tab'] === 'featured' ) {
+		if ( 'featured' === $GLOBALS['tab'] ) {
 			return;
 		}
 

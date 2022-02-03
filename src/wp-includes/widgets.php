@@ -919,7 +919,7 @@ function is_active_sidebar( $index ) {
  * @return array Upgraded list of widgets to version 3 array format when called from the admin.
  */
 function wp_get_sidebars_widgets( $deprecated = true ) {
-	if ( $deprecated !== true ) {
+	if ( true !== $deprecated ) {
 		_deprecated_argument( __FUNCTION__, 'WP-2.8.1' );
 	}
 
@@ -1509,7 +1509,7 @@ function wp_widget_rss_output( $rss, $args = array() ) {
 			}
 		}
 
-		if ( $link == '' ) {
+		if ( '' == $link ) {
 			echo "<li>$title{$date}{$summary}{$author}</li>";
 		} elseif ( $show_summary ) {
 			echo "<li><a class='rsswidget' href='$link'>$title</a>{$date}{$summary}{$author}</li>";

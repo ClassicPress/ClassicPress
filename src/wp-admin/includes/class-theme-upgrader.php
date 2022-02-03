@@ -403,7 +403,7 @@ class Theme_Upgrader extends WP_Upgrader {
 		// @TODO: For multisite, maintenance mode should only kick in for individual sites if at all possible.
 		$maintenance = ( is_multisite() && ! empty( $themes ) );
 		foreach ( $themes as $theme ) {
-			$maintenance = $maintenance || $theme == get_stylesheet() || $theme == get_template();
+			$maintenance = $maintenance || get_stylesheet() == $theme || get_template() == $theme;
 		}
 		if ( $maintenance ) {
 			$this->maintenance_mode( true );
@@ -608,7 +608,7 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$theme = isset( $theme['theme'] ) ? $theme['theme'] : '';
 
-		if ( $theme != get_stylesheet() ) { //If not current
+		if ( get_stylesheet() != $theme ) { //If not current
 			return $return;
 		}
 		//Change to maintenance mode now.
@@ -638,12 +638,12 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$theme = isset( $theme['theme'] ) ? $theme['theme'] : '';
 
-		if ( $theme != get_stylesheet() ) { // If not current
+		if ( get_stylesheet() != $theme ) { // If not current
 			return $return;
 		}
 
 		// Ensure stylesheet name hasn't changed after the upgrade:
-		if ( $theme == get_stylesheet() && $theme != $this->result['destination_name'] ) {
+		if ( get_stylesheet() == $theme && $theme != $this->result['destination_name'] ) {
 			wp_clean_themes_cache();
 			$stylesheet = $this->result['destination_name'];
 			switch_theme( $stylesheet );

@@ -357,16 +357,16 @@ if ( isset( $plugin_page ) ) {
 	 * The following hooks are fired to ensure backward compatibility.
 	 * In all other cases, 'load-' . $pagenow should be used instead.
 	 */
-	if ( $typenow == 'page' ) {
-		if ( $pagenow == 'post-new.php' ) {
+	if ( 'page' == $typenow ) {
+		if ( 'post-new.php' == $pagenow ) {
 			do_action( 'load-page-new.php' );
-		} elseif ( $pagenow == 'post.php' ) {
+		} elseif ( 'post.php' == $pagenow ) {
 			do_action( 'load-page.php' );
 		}
-	} elseif ( $pagenow == 'edit-tags.php' ) {
-		if ( $taxnow == 'category' ) {
+	} elseif ( 'edit-tags.php' == $pagenow ) {
+		if ( 'category' == $taxnow ) {
 			do_action( 'load-categories.php' );
-		} elseif ( $taxnow == 'link_category' ) {
+		} elseif ( 'link_category' == $taxnow ) {
 			do_action( 'load-edit-link-categories.php' );
 		}
 	} elseif ( 'term.php' === $pagenow ) {

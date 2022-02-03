@@ -229,7 +229,7 @@ switch ( $step ) {
 		// Validate input; toggle error flag if any problems validating.
 		if ( empty( $user_name ) ) {
 			$error = __( 'Please provide a valid username.' );
-		} elseif ( $user_name !== sanitize_user( $user_name, true ) ) {
+		} elseif ( sanitize_user( $user_name, true ) !== $user_name ) {
 			$error = __( 'The username you provided has invalid characters.' );
 		} elseif ( $admin_password !== $admin_password_check ) {
 			$error = __( 'Your passwords do not match. Please try again.' );
@@ -245,7 +245,7 @@ switch ( $step ) {
 		 * No validation errors? Great. Inform user of success; show username;
 		 * include password note; link to login page.
 		 */
-		if ( $error === false ) {
+		if ( false === $error ) {
 			$wpdb->show_errors();
 			$result = wp_install( $weblog_title, $user_name, $admin_email, $public, '', wp_slash( $admin_password ), $loaded_language );
 			echo '<h1>' . __( 'Installation Complete' ) . '</h1>' . "\n";

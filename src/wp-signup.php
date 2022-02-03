@@ -190,7 +190,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 			<label class="checkbox" for="blog_public_on">
 				<input type="radio" id="blog_public_on" name="blog_public" value="1"
 				<?php
-				if ( ! isset( $_POST['blog_public'] ) || $_POST['blog_public'] == '1' ) {
+				if ( ! isset( $_POST['blog_public'] ) || '1' == $_POST['blog_public'] ) {
 					?>
 					checked="checked"<?php } ?> />
 				<strong><?php _e( 'Yes' ); ?></strong>
@@ -198,7 +198,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 			<label class="checkbox" for="blog_public_off">
 				<input type="radio" id="blog_public_off" name="blog_public" value="0"
 				<?php
-				if ( isset( $_POST['blog_public'] ) && $_POST['blog_public'] == '0' ) {
+				if ( isset( $_POST['blog_public'] ) && '0' == $_POST['blog_public'] ) {
 					?>
 					checked="checked"<?php } ?> />
 				<strong><?php _e( 'No' ); ?></strong>
@@ -584,9 +584,9 @@ function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
 		<?php show_user_form( $user_name, $user_email, $errors ); ?>
 
 		<p>
-		<?php if ( $active_signup == 'blog' ) { ?>
+		<?php if ( 'blog' == $active_signup ) { ?>
 			<input id="signupblog" type="hidden" name="signup_for" value="blog" />
-		<?php } elseif ( $active_signup == 'user' ) { ?>
+		<?php } elseif ( 'user' == $active_signup ) { ?>
 			<input id="signupblog" type="hidden" name="signup_for" value="user" />
 		<?php } else { ?>
 			<input id="signupblog" type="radio" name="signup_for" value="blog" <?php checked( $signup_for, 'blog' ); ?> />
@@ -909,9 +909,9 @@ if ( current_user_can( 'manage_network' ) ) {
 $newblogname = isset( $_GET['new'] ) ? strtolower( preg_replace( '/^-|-$|[^-a-zA-Z0-9]/', '', $_GET['new'] ) ) : null;
 
 $current_user = wp_get_current_user();
-if ( $active_signup == 'none' ) {
+if ( 'none' == $active_signup ) {
 	_e( 'Registration has been disabled.' );
-} elseif ( $active_signup == 'blog' && ! is_user_logged_in() ) {
+} elseif ( 'blog' == $active_signup && ! is_user_logged_in() ) {
 	$login_url = wp_login_url( network_site_url( 'wp-signup.php' ) );
 	/* translators: %s: login URL */
 	printf( __( 'You must first <a href="%s">log in</a>, and then you can create a new site.' ), $login_url );
@@ -919,14 +919,14 @@ if ( $active_signup == 'none' ) {
 	$stage = isset( $_POST['stage'] ) ? $_POST['stage'] : 'default';
 	switch ( $stage ) {
 		case 'validate-user-signup':
-			if ( $active_signup == 'all' || $_POST['signup_for'] == 'blog' && $active_signup == 'blog' || $_POST['signup_for'] == 'user' && $active_signup == 'user' ) {
+			if ( 'all' == $active_signup || 'blog' == $_POST['signup_for'] && 'blog' == $active_signup || 'user' == $_POST['signup_for'] && 'user' == $active_signup ) {
 				validate_user_signup();
 			} else {
 				_e( 'User registration has been disabled.' );
 			}
 			break;
 		case 'validate-blog-signup':
-			if ( $active_signup == 'all' || $active_signup == 'blog' ) {
+			if ( 'all' == $active_signup || 'blog' == $active_signup ) {
 				validate_blog_signup();
 			} else {
 				_e( 'Site registration has been disabled.' );
@@ -944,11 +944,11 @@ if ( $active_signup == 'none' ) {
 			 * @since WP-3.0.0
 			 */
 			do_action( 'preprocess_signup_form' );
-			if ( is_user_logged_in() && ( $active_signup == 'all' || $active_signup == 'blog' ) ) {
+			if ( is_user_logged_in() && ( 'all' == $active_signup || 'blog' == $active_signup ) ) {
 				signup_another_blog( $newblogname );
-			} elseif ( ! is_user_logged_in() && ( $active_signup == 'all' || $active_signup == 'user' ) ) {
+			} elseif ( ! is_user_logged_in() && ( 'all' == $active_signup || 'user' == $active_signup ) ) {
 				signup_user( $newblogname, $user_email );
-			} elseif ( ! is_user_logged_in() && ( $active_signup == 'blog' ) ) {
+			} elseif ( ! is_user_logged_in() && ( 'blog' == $active_signup ) ) {
 				_e( 'Sorry, new registrations are not allowed at this time.' );
 			} else {
 				_e( 'You are logged in already. No need to register again!' );
@@ -957,7 +957,7 @@ if ( $active_signup == 'none' ) {
 			if ( $newblogname ) {
 				$newblog = get_blogaddress_by_name( $newblogname );
 
-				if ( $active_signup == 'blog' || $active_signup == 'all' ) {
+				if ( 'blog' == $active_signup || 'all' == $active_signup ) {
 					/* translators: %s: site address */
 					printf(
 						'<p><em>' . __( 'The site you were looking for, %s, does not exist, but you can create it now!' ) . '</em></p>',

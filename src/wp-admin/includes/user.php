@@ -57,7 +57,7 @@ function edit_user( $user_id = 0 ) {
 		$potential_role = isset( $wp_roles->role_objects[ $new_role ] ) ? $wp_roles->role_objects[ $new_role ] : false;
 		// Don't let anyone with 'edit_users' (admins) edit their own role to something without it.
 		// Multisite super admins can freely edit their blog roles -- they possess all caps.
-		if ( ( is_multisite() && current_user_can( 'manage_sites' ) ) || $user_id != get_current_user_id() || ( $potential_role && $potential_role->has_cap( 'edit_users' ) ) ) {
+		if ( ( is_multisite() && current_user_can( 'manage_sites' ) ) || get_current_user_id() != $user_id || ( $potential_role && $potential_role->has_cap( 'edit_users' ) ) ) {
 			$user->role = $new_role;
 		}
 
@@ -72,7 +72,7 @@ function edit_user( $user_id = 0 ) {
 		$user->user_email = sanitize_text_field( wp_unslash( $_POST['email'] ) );
 	}
 	if ( isset( $_POST['url'] ) ) {
-		if ( empty( $_POST['url'] ) || $_POST['url'] == 'http://' ) {
+		if ( empty( $_POST['url'] ) || 'http://' == $_POST['url'] ) {
 			$user->user_url = '';
 		} else {
 			$user->user_url = esc_url_raw( $_POST['url'] );
@@ -134,7 +134,7 @@ function edit_user( $user_id = 0 ) {
 	$errors = new WP_Error();
 
 	/* checking that username has been typed */
-	if ( $user->user_login == '' ) {
+	if ( '' == $user->user_login ) {
 		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	}
 

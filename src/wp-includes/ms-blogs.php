@@ -58,7 +58,7 @@ function get_blogaddress_by_id( $blog_id ) {
  */
 function get_blogaddress_by_name( $blogname ) {
 	if ( is_subdomain_install() ) {
-		if ( $blogname == 'main' ) {
+		if ( 'main' == $blogname ) {
 			$blogname = 'www';
 		}
 		$url = rtrim( network_home_url(), '/' );
@@ -178,12 +178,12 @@ function get_blog_details( $fields = null, $get_all = true ) {
 
 	$blog_id = (int) $blog_id;
 
-	$all     = $get_all == true ? '' : 'short';
+	$all     = true == $get_all ? '' : 'short';
 	$details = wp_cache_get( $blog_id . $all, 'blog-details' );
 
 	if ( $details ) {
 		if ( ! is_object( $details ) ) {
-			if ( $details == -1 ) {
+			if ( -1 == $details ) {
 				return false;
 			} else {
 				// Clear old pre-serialized objects. Cache clients do better with that.
@@ -203,7 +203,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 		// If short was requested and full cache is set, we can return.
 		if ( $details ) {
 			if ( ! is_object( $details ) ) {
-				if ( $details == -1 ) {
+				if ( -1 == $details ) {
 					return false;
 				} else {
 					// Clear old pre-serialized objects. Cache clients do better with that.
@@ -325,7 +325,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 
 	// If spam status changed, issue actions.
 	if ( $details['spam'] != $current_details['spam'] ) {
-		if ( $details['spam'] == 1 ) {
+		if ( 1 == $details['spam'] ) {
 			/**
 			 * Fires when the 'spam' status is added to a blog.
 			 *
@@ -348,7 +348,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 
 	// If mature status changed, issue actions.
 	if ( $details['mature'] != $current_details['mature'] ) {
-		if ( $details['mature'] == 1 ) {
+		if ( 1 == $details['mature'] ) {
 			/**
 			 * Fires when the 'mature' status is added to a blog.
 			 *
@@ -371,7 +371,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 
 	// If archived status changed, issue actions.
 	if ( $details['archived'] != $current_details['archived'] ) {
-		if ( $details['archived'] == 1 ) {
+		if ( 1 == $details['archived'] ) {
 			/**
 			 * Fires when the 'archived' status is added to a blog.
 			 *
@@ -394,7 +394,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 
 	// If deleted status changed, issue actions.
 	if ( $details['deleted'] != $current_details['deleted'] ) {
-		if ( $details['deleted'] == 1 ) {
+		if ( 1 == $details['deleted'] ) {
 			/**
 			 * Fires when the 'deleted' status is added to a blog.
 			 *
@@ -1055,7 +1055,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 	clean_blog_cache( $blog_id );
 
 	if ( 'spam' == $pref ) {
-		if ( $value == 1 ) {
+		if ( 1 == $value ) {
 			/** This filter is documented in wp-includes/ms-blogs.php */
 			do_action( 'make_spam_blog', $blog_id );
 		} else {
@@ -1063,7 +1063,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 			do_action( 'make_ham_blog', $blog_id );
 		}
 	} elseif ( 'mature' == $pref ) {
-		if ( $value == 1 ) {
+		if ( 1 == $value ) {
 			/** This filter is documented in wp-includes/ms-blogs.php */
 			do_action( 'mature_blog', $blog_id );
 		} else {
@@ -1071,7 +1071,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 			do_action( 'unmature_blog', $blog_id );
 		}
 	} elseif ( 'archived' == $pref ) {
-		if ( $value == 1 ) {
+		if ( 1 == $value ) {
 			/** This filter is documented in wp-includes/ms-blogs.php */
 			do_action( 'archive_blog', $blog_id );
 		} else {
@@ -1079,7 +1079,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 			do_action( 'unarchive_blog', $blog_id );
 		}
 	} elseif ( 'deleted' == $pref ) {
-		if ( $value == 1 ) {
+		if ( 1 == $value ) {
 			/** This filter is documented in wp-includes/ms-blogs.php */
 			do_action( 'make_delete_blog', $blog_id );
 		} else {
