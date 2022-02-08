@@ -1330,7 +1330,7 @@ function postbox_classes( $id, $page ) {
 		if ( ! is_array( $closed ) ) {
 			$classes = array( '' );
 		} else {
-			$classes = in_array( $box_id, $closed, true ) ? array( 'closed' ) : array( '' );
+			$classes = in_array( $id, $closed, true ) ? array( 'closed' ) : array( '' );
 		}
 	} else {
 		$classes = array( '' );
