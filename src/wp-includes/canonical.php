@@ -240,13 +240,13 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			$month = get_query_var( 'monthnum' );
 			$day   = get_query_var( 'day' );
 
-			if ( is_day() && get_query_var( 'year' ) && get_query_var( 'monthnum' ) && ! empty( $_GET['day'] ) ) {
+			if ( is_day() && $year && $month && ! empty( $_GET['day'] ) ) {
 				$redirect_url = get_day_link( $year, $month, $day );
 
 				if ( $redirect_url ) {
 					$redirect['query'] = remove_query_arg( array( 'year', 'monthnum', 'day' ), $redirect['query'] );
 				}
-			} elseif ( is_month() && get_query_var( 'year' ) && ! empty( $_GET['monthnum'] ) ) {
+			} elseif ( is_month() && $year && ! empty( $_GET['monthnum'] ) ) {
 				$redirect_url = get_month_link( $year, $month );
 
 				if ( $redirect_url ) {
@@ -328,7 +328,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 					}
 				}
 			}
-		} elseif ( is_single() && strpos( $wp_rewrite->permalink_structure, '%category%' ) !== false ) {
+		} elseif ( is_single() && false !== strpos( $wp_rewrite->permalink_structure, '%category%' ) ) {
 			$category_name = get_query_var( 'category_name' );
 
 			if ( $category_name ) {
