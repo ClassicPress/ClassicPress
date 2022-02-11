@@ -750,7 +750,7 @@ class PHPMailer
      *
      * @var string
      */
-    const VERSION = '6.5.1';
+    const VERSION = '6.5.3';
 
     /**
      * Error severity: message only, continue processing.
@@ -858,7 +858,7 @@ class PHPMailer
     private function mailPassthru($to, $subject, $body, $header, $params)
     {
         //Check overloading of mail function to avoid double-encoding
-        if (ini_get('mbstring.func_overload') & 1) { // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
+        if (ini_get('mbstring.func_overload') & 1) {
             $subject = $this->secureHeader($subject);
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
@@ -1451,14 +1451,17 @@ class PHPMailer
                 $errorcode = 0;
                 if (defined('INTL_IDNA_VARIANT_UTS46')) {
                     //Use the current punycode standard (appeared in PHP 7.2)
-                    $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_UTS46);
+                    $punycode = idn_to_ascii(
+                        $domain,
+                        \IDNA_DEFAULT | \IDNA_USE_STD3_RULES | \IDNA_CHECK_BIDI |
+                            \IDNA_CHECK_CONTEXTJ | \IDNA_NONTRANSITIONAL_TO_ASCII,
+                        \INTL_IDNA_VARIANT_UTS46
+                    );
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
                     //Fall back to this old, deprecated/removed encoding
-                    // phpcs:ignore PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003Deprecated
                     $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_2003);
                 } else {
                     //Fall back to a default we don't know about
-                    // phpcs:ignore PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet
                     $punycode = idn_to_ascii($domain, $errorcode);
                 }
                 if (false !== $punycode) {
@@ -1699,7 +1702,10 @@ class PHPMailer
         //Sendmail docs: http://www.sendmail.org/~ca/email/man/sendmail.html
         //Qmail docs: http://www.qmail.org/man/man8/qmail-inject.html
         //Example problem: https://www.drupal.org/node/1057954
-        if (empty($this->Sender) && !empty(ini_get('sendmail_from'))) {
+
+        //PHP 5.6 workaround
+        $sendmail_from_value = ini_get('sendmail_from');
+        if (empty($this->Sender) && !empty($sendmail_from_value)) {
             //PHP config has a sender address we can use
             $this->Sender = ini_get('sendmail_from');
         }
@@ -1881,7 +1887,10 @@ class PHPMailer
         //Qmail docs: http://www.qmail.org/man/man8/qmail-inject.html
         //Example problem: https://www.drupal.org/node/1057954
         //CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-        if (empty($this->Sender) && !empty(ini_get('sendmail_from'))) {
+
+        //PHP 5.6 workaround
+        $sendmail_from_value = ini_get('sendmail_from');
+        if (empty($this->Sender) && !empty($sendmail_from_value)) {
             //PHP config has a sender address we can use
             $this->Sender = ini_get('sendmail_from');
         }
@@ -2198,7 +2207,7 @@ class PHPMailer
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
      *                          Optionally, the language code can be enhanced with a 4-character
      *                          script annotation and/or a 2-character country annotation.
-     * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
+     * @param string $lang_path Path to the language file directory, with trailing separator (slash)
      *                          Do not set this from user input!
      *
      * @return bool Returns true if the requested language was loaded, false otherwise.
