@@ -619,18 +619,12 @@ function wp_extract_urls( $content ) {
  * remove enclosures that are no longer in the post. This is called as
  * pingbacks and trackbacks.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
  * @since WP-5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
  *              updated to accept a post ID or a WP_Post object.
  * @since WP-5.6.0 The `$content` parameter is no longer optional, but passing `null` to skip it
  *              is still supported.
 
-=======
- * @since 1.5.0
- * @since 5.3.0 The `$content` parameter was made optional, and the `$post` parameter was
- *              updated to accept a post ID or a WP_Post object.
->>>>>>> 48e280db32 (Improve `do_enclose()` logic on post publish.)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
