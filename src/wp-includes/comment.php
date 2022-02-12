@@ -2531,12 +2531,6 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 function do_all_pings() {
 	global $wpdb;
 
-<<<<<<< HEAD
-	// Do pingbacks
-	while ($ping = $wpdb->get_row("SELECT ID, post_content, meta_id FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_pingme' LIMIT 1")) {
-		delete_metadata_by_mid( 'post', $ping->meta_id );
-		pingback( $ping->post_content, $ping->ID );
-=======
 	// Do pingbacks.
 	$pings = get_posts(
 		array(
@@ -2551,7 +2545,6 @@ function do_all_pings() {
 	foreach ( $pings as $ping ) {
 		delete_post_meta( $ping, '_pingme' );
 		pingback( null, $ping );
->>>>>>> 3419633de4 (Use `WP_Query` when sending pingbacks.)
 	}
 
 	// Do enclosures.
