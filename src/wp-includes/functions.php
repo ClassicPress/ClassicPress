@@ -664,23 +664,16 @@ function do_enclose( $content = null, $post ) {
 	}
 
 	foreach ( (array) $post_links_temp as $link_test ) {
-<<<<<<< HEAD
-		if ( !in_array( $link_test, $pung ) ) { // If we haven't pung it already
-=======
 		// If we haven't pung it already.
 		if ( ! in_array( $link_test, $pung, true ) ) {
->>>>>>> daa1da924d (PHPCS: Fix coding standards violations in `do_enclose()`.)
 			$test = @parse_url( $link_test );
 			if ( false === $test )
 				continue;
-			if ( isset( $test['query'] ) )
+			if ( isset( $test['query'] ) ) {
 				$post_links[] = $link_test;
-<<<<<<< HEAD
-			elseif ( isset($test['path']) && ( $test['path'] != '/' ) &&  ($test['path'] != '' ) )
-=======
 			} elseif ( isset( $test['path'] ) && ( '/' !== $test['path'] ) && ( '' !== $test['path'] ) ) {
->>>>>>> daa1da924d (PHPCS: Fix coding standards violations in `do_enclose()`.)
 				$post_links[] = $link_test;
+			}
 		}
 	}
 
