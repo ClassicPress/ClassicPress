@@ -635,7 +635,7 @@ function wp_extract_urls( $content ) {
 function do_enclose( $content = null, $post ) {
 	global $wpdb;
 
-	//TODO: Tidy this ghetto code up and make the debug code optional
+	// @todo Tidy this code and make the debug code optional.
 	include_once( ABSPATH . WPINC . '/class-IXR.php' );
 
 	$post = get_post( $post );
@@ -654,7 +654,8 @@ function do_enclose( $content = null, $post ) {
 	$post_links_temp = wp_extract_urls( $content );
 
 	foreach ( $pung as $link_test ) {
-		if ( ! in_array( $link_test, $post_links_temp ) ) { // link no longer in post
+		// Link is no longer in post.
+		if ( ! in_array( $link_test, $post_links_temp, true ) ) {
 			$mids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $link_test ) . '%' ) );
 			foreach ( $mids as $mid ) {
 				delete_metadata_by_mid( 'post', $mid );
@@ -663,13 +664,22 @@ function do_enclose( $content = null, $post ) {
 	}
 
 	foreach ( (array) $post_links_temp as $link_test ) {
+<<<<<<< HEAD
 		if ( !in_array( $link_test, $pung ) ) { // If we haven't pung it already
+=======
+		// If we haven't pung it already.
+		if ( ! in_array( $link_test, $pung, true ) ) {
+>>>>>>> daa1da924d (PHPCS: Fix coding standards violations in `do_enclose()`.)
 			$test = @parse_url( $link_test );
 			if ( false === $test )
 				continue;
 			if ( isset( $test['query'] ) )
 				$post_links[] = $link_test;
+<<<<<<< HEAD
 			elseif ( isset($test['path']) && ( $test['path'] != '/' ) &&  ($test['path'] != '' ) )
+=======
+			} elseif ( isset( $test['path'] ) && ( '/' !== $test['path'] ) && ( '' !== $test['path'] ) ) {
+>>>>>>> daa1da924d (PHPCS: Fix coding standards violations in `do_enclose()`.)
 				$post_links[] = $link_test;
 		}
 	}
@@ -688,7 +698,7 @@ function do_enclose( $content = null, $post ) {
 	$post_links = apply_filters( 'enclosure_links', $post_links, $post->ID );
 
 	foreach ( (array) $post_links as $url ) {
-		if ( $url != '' && ! $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
+		if ( '' !== $url && ! $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
 
 			if ( $headers = wp_get_http_headers( $url) ) {
 				$len = isset( $headers['content-length'] ) ? (int) $headers['content-length'] : 0;
@@ -710,7 +720,7 @@ function do_enclose( $content = null, $post ) {
 					}
 				}
 
-				if ( in_array( substr( $type, 0, strpos( $type, '/' ) ), $allowed_types ) ) {
+				if ( in_array( substr( $type, 0, strpos( $type, '/' ) ), $allowed_types, true ) ) {
 					add_post_meta( $post->ID, 'enclosure', "$url\n$len\n$mime\n" );
 				}
 			}
