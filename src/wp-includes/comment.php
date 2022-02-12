@@ -2563,13 +2563,6 @@ function do_all_pings() {
 		do_enclose( null, $enclosure->ID );
 	}
 
-<<<<<<< HEAD
-	// Do Trackbacks
-	$trackbacks = $wpdb->get_col("SELECT ID FROM $wpdb->posts WHERE to_ping <> '' AND post_status = 'publish'");
-	if ( is_array($trackbacks) )
-		foreach ( $trackbacks as $trackback )
-			do_trackbacks($trackback);
-=======
 	// Do trackbacks.
 	$trackbacks = get_posts(
 		array(
@@ -2585,7 +2578,6 @@ function do_all_pings() {
 		delete_post_meta( $trackback, '_trackbackme' );
 		do_trackbacks( $trackback );
 	}
->>>>>>> 754056e218 (Improve performance of trackback query in `do_all_pings()`.)
 
 	// Do Update Services/Generic Pings.
 	generic_ping();
