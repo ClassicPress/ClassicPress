@@ -1545,11 +1545,15 @@ function the_attachment_link( $id = 0, $fullsize = false, $deprecated = false, $
 function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = false, $icon = false, $text = false, $attr = '' ) {
 	$_post = get_post( $id );
 
-	if ( empty( $_post ) || ( 'attachment' !== $_post->post_type ) || ! wp_get_attachment_url( $_post->ID ) ) {
+	if ( empty( $_post ) || 'attachment' !== $_post->post_type ) {
 		return __( 'Missing Attachment' );
 	}
 
 	$url = wp_get_attachment_url( $_post->ID );
+
+	if ( ! $url ) {
+		return __( 'Missing Attachment' );
+	}
 
 	if ( $permalink ) {
 		$url = get_attachment_link( $_post->ID );

@@ -193,7 +193,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 				$category_object = get_term( $category_object, 'category' );
 				$category        = $category_object->slug;
 				if ( $category_object->parent ) {
-					$category = get_category_parents( $parent, false, '/', true ) . $category;
+					$category = get_category_parents( $category_object->parent, false, '/', true ) . $category;
 				}
 			}
 			// show default category in permalinks, without
