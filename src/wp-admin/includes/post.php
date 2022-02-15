@@ -1318,11 +1318,11 @@ function wp_edit_attachments_query( $q = false ) {
  *
  * @since WP-2.5.0
  *
- * @param string $id
+ * @param string $screen_id
  * @param string $page
  * @return string
  */
-function postbox_classes( $id, $page ) {
+function postbox_classes( $screen_id, $page ) {
 	if ( isset( $_GET['edit'] ) && $_GET['edit'] == $id ) {
 		$classes = array( '' );
 	} elseif ( get_user_option( 'closedpostboxes_' . $screen_id ) ) {
@@ -1330,7 +1330,7 @@ function postbox_classes( $id, $page ) {
 		if ( ! is_array( $closed ) ) {
 			$classes = array( '' );
 		} else {
-			$classes = in_array( $id, $closed, true ) ? array( 'closed' ) : array( '' );
+			$classes = in_array( $screen_id, $closed, true ) ? array( 'closed' ) : array( '' );
 		}
 	} else {
 		$classes = array( '' );
@@ -1346,7 +1346,7 @@ function postbox_classes( $id, $page ) {
 	 *
 	 * @param array $classes An array of postbox classes.
 	 */
-	$classes = apply_filters( "postbox_classes_{$page}_{$id}", $classes );
+	$classes = apply_filters( "postbox_classes_{$page}_{$screen_id}", $classes );
 	return implode( ' ', $classes );
 }
 

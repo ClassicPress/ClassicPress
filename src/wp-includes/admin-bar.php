@@ -676,7 +676,7 @@ function wp_admin_bar_shortlink_menu( $wp_admin_bar ) {
  * @param WP_Admin_Bar $wp_admin_bar
  */
 function wp_admin_bar_edit_menu( $wp_admin_bar ) {
-	global $tag, $wp_the_query, $user_id;
+	global $tag, $wp_the_query, $user_id, $post_id;
 
 	if ( is_admin() ) {
 		$current_screen   = get_current_screen();

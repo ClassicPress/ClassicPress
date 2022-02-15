@@ -169,7 +169,7 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 			$menu_file = $item[2];
 
 			$pos = strpos( $menu_file, '?' );
-			if ( false !== $pos; ) {
+			if ( false !== $pos ) {
 				$menu_file = substr( $menu_file, 0, $pos );
 			}
 			if ( ! empty( $menu_hook ) || ( ( 'index.php' != $item[2] ) && file_exists( WP_PLUGIN_DIR . "/$menu_file" ) && ! file_exists( ABSPATH . "/wp-admin/$menu_file" ) ) ) {
@@ -233,8 +233,8 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 				$menu_hook = get_plugin_page_hook( $sub_item[2], $item[2] );
 				$sub_file  = $sub_item[2];
 
-				$pos = strpos( $sub_file, '?' ) );
-				if ( false !== ( $pos ) {
+				$pos = strpos( $sub_file, '?' );
+				if ( false !== $pos ) {
 					$sub_file = substr( $sub_file, 0, $pos );
 				}
 
