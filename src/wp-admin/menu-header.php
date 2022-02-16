@@ -205,7 +205,8 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 				// If plugin_page is set the parent must either match the current page or not physically exist.
 				// This allows plugin pages with the same hook to exist under different parents.
 				} elseif (
-					( ! isset( $plugin_page ) && $self == $sub_item[2] ) ||
+					( ! isset( $plugin_page ) && $self == $sub_item[2] && ! isset( $_GET['tab'] ) ) ||
+					( true === ( $tab = isset( $_GET['tab'] ) ) && 'upload' === $_GET['tab'] && 'plugin-install.php?tab=upload' === $sub_item[2] ) ||
 					( isset( $plugin_page ) && $plugin_page == $sub_item[2] && ( $item[2] == $self_type || $item[2] == $self || file_exists($menu_file) === false ) )
 				) {
 					$class[] = 'current';
