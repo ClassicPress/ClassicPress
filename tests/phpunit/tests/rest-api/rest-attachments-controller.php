@@ -1291,18 +1291,18 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	public function tearDown() {
- 		parent::tearDown();
- 		if ( file_exists( $this->test_file ) ) {
- 			unlink( $this->test_file );
- 		}
- 		if ( file_exists( $this->test_file2 ) ) {
- 			unlink( $this->test_file2 );
- 		}
+		parent::tearDown();
+		if ( file_exists( $this->test_file ) ) {
+			unlink( $this->test_file );
+		}
+		if ( file_exists( $this->test_file2 ) ) {
+			unlink( $this->test_file2 );
+		}
 
- 		$this->remove_added_uploads();
- 	}
+		$this->remove_added_uploads();
+	}
 
- 	protected function check_post_data( $attachment, $data, $context = 'view', $links = array() ) {
+	protected function check_post_data( $attachment, $data, $context = 'view', $links = array() ) {
 		parent::check_post_data( $attachment, $data, $context, $links );
 
 		$this->assertArrayNotHasKey( 'content', $data );
