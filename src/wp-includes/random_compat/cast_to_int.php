@@ -5,7 +5,11 @@
  *
  * The MIT License (MIT)
  *
+<<<<<<< HEAD
  * Copyright (c) 2015 Paragon Initiative Enterprises
+=======
+ * Copyright (c) 2015 - 2018 Paragon Initiative Enterprises
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,9 +50,17 @@ if (!function_exists('RandomCompat_intval')) {
      */
     function RandomCompat_intval($number, $fail_open = false)
     {
+<<<<<<< HEAD
         if (is_numeric($number)) {
+=======
+        if (is_int($number) || is_float($number)) {
+            $number += 0;
+        } elseif (is_numeric($number)) {
+            /** @psalm-suppress InvalidOperand */
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
             $number += 0;
         }
+        /** @var int|float $number */
 
         if (
             is_float($number)

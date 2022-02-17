@@ -3,12 +3,21 @@
  * Random_* Compatibility Library
  * for using the new PHP 7 random_* API in PHP 5 projects
  *
+<<<<<<< HEAD
  * @version 1.2.1
  * @released 2016-02-29
  *
  * The MIT License (MIT)
  *
  * Copyright (c) 2015 Paragon Initiative Enterprises
+=======
+ * @version 2.0.17
+ * @released 2018-07-04
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 - 2018 Paragon Initiative Enterprises
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,9 +58,15 @@ if (PHP_VERSION_ID < 70000) {
 
     $RandomCompatDIR = dirname(__FILE__);
 
+<<<<<<< HEAD
     require_once $RandomCompatDIR.'/byte_safe_strings.php';
     require_once $RandomCompatDIR.'/cast_to_int.php';
     require_once $RandomCompatDIR.'/error_polyfill.php';
+=======
+require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'byte_safe_strings.php';
+require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'cast_to_int.php';
+require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'error_polyfill.php';
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
 
     if (!function_exists('random_bytes')) {
         /**
@@ -71,10 +86,17 @@ if (PHP_VERSION_ID < 70000) {
          */
         if (extension_loaded('libsodium')) {
             // See random_bytes_libsodium.php
+<<<<<<< HEAD
             if (PHP_VERSION_ID >= 50300 && function_exists('\\Sodium\\randombytes_buf')) {
                 require_once $RandomCompatDIR.'/random_bytes_libsodium.php';
             } elseif (method_exists('Sodium', 'randombytes_buf')) {
                 require_once $RandomCompatDIR.'/random_bytes_libsodium_legacy.php';
+=======
+        if (PHP_VERSION_ID >= 50300 && is_callable('\\Sodium\\randombytes_buf')) {
+            require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_bytes_libsodium.php';
+        } elseif (method_exists('Sodium', 'randombytes_buf')) {
+            require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_bytes_libsodium_legacy.php';
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
             }
         }
 
@@ -113,7 +135,11 @@ if (PHP_VERSION_ID < 70000) {
                 // place, that is not helpful to us here.
 
                 // See random_bytes_dev_urandom.php
+<<<<<<< HEAD
                 require_once $RandomCompatDIR.'/random_bytes_dev_urandom.php';
+=======
+            require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_bytes_dev_urandom.php';
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
             }
             // Unset variables after use
             $RandomCompat_basedir = null;
@@ -137,8 +163,12 @@ if (PHP_VERSION_ID < 70000) {
                 (PHP_VERSION_ID <= 50609 || PHP_VERSION_ID >= 50613)
             ) {
                 // See random_bytes_mcrypt.php
+<<<<<<< HEAD
                 require_once $RandomCompatDIR.'/random_bytes_mcrypt.php';
             }
+=======
+        require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_bytes_mcrypt.php';
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
         }
 
         if (
@@ -156,9 +186,14 @@ if (PHP_VERSION_ID < 70000) {
             if (!in_array('com', $RandomCompat_disabled_classes)) {
                 try {
                     $RandomCompatCOMtest = new COM('CAPICOM.Utilities.1');
-                    if (method_exists($RandomCompatCOMtest, 'GetRandom')) {
+                /** @psalm-suppress TypeDoesNotContainType */
+                if (is_callable(array($RandomCompatCOMtest, 'GetRandom'))) {
                         // See random_bytes_com_dotnet.php
+<<<<<<< HEAD
                         require_once $RandomCompatDIR.'/random_bytes_com_dotnet.php';
+=======
+                    require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_bytes_com_dotnet.php';
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
                     }
                 } catch (com_exception $e) {
                     // Don't try to use it.
@@ -199,19 +234,34 @@ if (PHP_VERSION_ID < 70000) {
             /**
              * We don't have any more options, so let's throw an exception right now
              * and hope the developer won't let it fail silently.
+<<<<<<< HEAD
+=======
+         *
+         * @param mixed $length
+         * @psalm-suppress InvalidReturnType
+         * @throws Exception
+         * @return string
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
              */
             function random_bytes($length)
             {
                 throw new Exception(
                     'There is no suitable CSPRNG installed on your system'
                 );
+            return '';
             }
         }
     }
 
+<<<<<<< HEAD
     if (!function_exists('random_int')) {
         require_once $RandomCompatDIR.'/random_int.php';
     }
+=======
+if (!is_callable('random_int')) {
+    require_once $RandomCompatDIR.DIRECTORY_SEPARATOR.'random_int.php';
+}
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
 
     $RandomCompatDIR = null;
 }

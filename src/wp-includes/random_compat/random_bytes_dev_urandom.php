@@ -5,7 +5,11 @@
  * 
  * The MIT License (MIT)
  * 
+<<<<<<< HEAD
  * Copyright (c) 2015 Paragon Initiative Enterprises
+=======
+ * Copyright (c) 2015 - 2018 Paragon Initiative Enterprises
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +40,7 @@ if ( ! is_callable( 'random_bytes' ) ):
  * random numbers in accordance with best practices
  * 
  * Why we use /dev/urandom and not /dev/random
+     * @ref https://www.2uo.de/myths-about-urandom
  * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
  * 
  * @param int $bytes
@@ -44,27 +49,54 @@ if ( ! is_callable( 'random_bytes' ) ):
  * 
  * @return string
  */
+<<<<<<< HEAD
 function random_bytes($bytes)
 {
+=======
+    function random_bytes($bytes)
+    {
+        /** @var resource $fp */
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
     static $fp = null;
+
     /**
      * This block should only be run once
      */
     if (empty($fp)) {
         /**
+             * We don't want to ever read C:\dev\random, only /dev/urandom on
+             * Unix-like operating systems. While we guard against this
+             * condition in random.php, it doesn't hurt to be defensive in depth
+             * here.
+             *
+             * To that end, we only try to open /dev/urandom if we're on a Unix-
+             * like operating system (which means the directory separator is set
+             * to "/" not "\".
+             */
+            if (DIRECTORY_SEPARATOR === '/') {
+                if (!is_readable('/dev/urandom')) {
+                    throw new Exception(
+                        'Environment misconfiguration: ' .
+                        '/dev/urandom cannot be read.'
+                    );
+                }
+                /**
          * We use /dev/urandom if it is a char device.
          * We never fall back to /dev/random
          */
+                /** @var resource|bool $fp */
         $fp = fopen('/dev/urandom', 'rb');
-        if (!empty($fp)) {
+                if (is_resource($fp)) {
+                    /** @var array<string, int> $st */
             $st = fstat($fp);
             if (($st['mode'] & 0170000) !== 020000) {
                 fclose($fp);
                 $fp = false;
             }
         }
+            }
 
-        if (!empty($fp)) {
+            if (is_resource($fp)) {
             /**
              * stream_set_read_buffer() does not exist in HHVM
              * 
@@ -83,6 +115,7 @@ function random_bytes($bytes)
     }
 
     try {
+            /** @var int $bytes */
         $bytes = RandomCompat_intval($bytes);
     } catch (TypeError $ex) {
         throw new TypeError(
@@ -103,7 +136,14 @@ function random_bytes($bytes)
      * if (empty($fp)) line is logic that should only be run once per
      * page load.
      */
+<<<<<<< HEAD
     if (!empty($fp)) {
+=======
+        if (is_resource($fp)) {
+            /**
+             * @var int
+             */
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
         $remaining = $bytes;
         $buf = '';
 
@@ -112,7 +152,11 @@ function random_bytes($bytes)
          */
         do {
             $read = fread($fp, $remaining); 
+<<<<<<< HEAD
             if ($read === false) {
+=======
+                if (!is_string($read)) {
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
                 /**
                  * We cannot safely read from the file. Exit the
                  * do-while loop and trigger the exception condition
@@ -124,11 +168,18 @@ function random_bytes($bytes)
              * Decrease the number of bytes returned from remaining
              */
             $remaining -= RandomCompat_strlen($read);
+<<<<<<< HEAD
+=======
+                /**
+                 * @var string $buf
+                 */
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
             $buf .= $read;
         } while ($remaining > 0);
         
         /**
          * Is our result valid?
+             * @var string|bool $buf
          */
         if ($buf !== false) {
             if (RandomCompat_strlen($buf) === $bytes) {

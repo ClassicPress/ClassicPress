@@ -5,7 +5,11 @@
  *
  * The MIT License (MIT)
  *
+<<<<<<< HEAD
  * Copyright (c) 2015 Paragon Initiative Enterprises
+=======
+ * Copyright (c) 2015 - 2018 Paragon Initiative Enterprises
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +32,9 @@
 
 if (!function_exists('RandomCompat_strlen')) {
     if (
-        defined('MB_OVERLOAD_STRING') &&
-        ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING
+        defined('MB_OVERLOAD_STRING')
+            &&
+        ((int) ini_get('mbstring.func_overload')) & MB_OVERLOAD_STRING
     ) {
         /**
          * strlen() implementation that isn't brittle to mbstring.func_overload
@@ -83,7 +88,7 @@ if (!function_exists('RandomCompat_substr')) {
     if (
         defined('MB_OVERLOAD_STRING')
         &&
-        ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING
+        ((int) ini_get('mbstring.func_overload')) & MB_OVERLOAD_STRING
     ) {
         /**
          * substr() implementation that isn't brittle to mbstring.func_overload
@@ -93,7 +98,7 @@ if (!function_exists('RandomCompat_substr')) {
          *
          * @param string $binary_string
          * @param int $start
-         * @param int $length (optional)
+         * @param int|null $length (optional)
          *
          * @throws TypeError
          *
@@ -118,14 +123,36 @@ if (!function_exists('RandomCompat_substr')) {
                  * mb_substr($str, 0, NULL, '8bit') returns an empty string on
                  * PHP 5.3, so we have to find the length ourselves.
                  */
+<<<<<<< HEAD
                 $length = RandomCompat_strlen($length) - $start;
+=======
+                /** @var int $length */
+                $length = RandomCompat_strlen($binary_string) - $start;
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
             } elseif (!is_int($length)) {
                 throw new TypeError(
                     'RandomCompat_substr(): Third argument should be an integer, or omitted'
                 );
             }
 
+<<<<<<< HEAD
             return mb_substr($binary_string, $start, $length, '8bit');
+=======
+            // Consistency with PHP's behavior
+            if ($start === RandomCompat_strlen($binary_string) && $length === 0) {
+                return '';
+            }
+            if ($start > RandomCompat_strlen($binary_string)) {
+                return '';
+            }
+
+            return (string) mb_substr(
+                (string) $binary_string,
+                (int) $start,
+                (int) $length,
+                '8bit'
+            );
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
         }
 
     } else {
@@ -137,7 +164,7 @@ if (!function_exists('RandomCompat_substr')) {
          *
          * @param string $binary_string
          * @param int $start
-         * @param int $length (optional)
+         * @param int|null $length (optional)
          *
          * @throws TypeError
          *
@@ -164,10 +191,24 @@ if (!function_exists('RandomCompat_substr')) {
                     );
                 }
 
+<<<<<<< HEAD
                 return substr($binary_string, $start, $length);
             }
 
             return substr($binary_string, $start);
+=======
+                return (string) substr(
+                    (string )$binary_string,
+                    (int) $start,
+                    (int) $length
+                );
+            }
+
+            return (string) substr(
+                (string) $binary_string,
+                (int) $start
+            );
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
         }
     }
 }

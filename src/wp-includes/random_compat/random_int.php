@@ -5,7 +5,11 @@
  * 
  * The MIT License (MIT)
  * 
+<<<<<<< HEAD
  * Copyright (c) 2015 Paragon Initiative Enterprises
+=======
+     * Copyright (c) 2015 - 2018 Paragon Initiative Enterprises
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,6 +54,7 @@ function random_int($min, $max)
      */
     
     try {
+            /** @var int $min */
         $min = RandomCompat_intval($min);
     } catch (TypeError $ex) {
         throw new TypeError(
@@ -58,6 +63,7 @@ function random_int($min, $max)
     }
 
     try {
+            /** @var int $max */
         $max = RandomCompat_intval($max);
     } catch (TypeError $ex) {
         throw new TypeError(
@@ -89,11 +95,18 @@ function random_int($min, $max)
      *          so we can minimize the number of discards
      */
     $attempts = $bits = $bytes = $mask = $valueShift = 0;
+        /** @var int $attempts */
+        /** @var int $bits */
+        /** @var int $bytes */
+        /** @var int $mask */
+        /** @var int $valueShift */
 
     /**
      * At this point, $range is a positive number greater than 0. It might
      * overflow, however, if $max - $min > PHP_INT_MAX. PHP will cast it to
      * a float and we will lose some precision.
+         *
+         * @var int|float $range
      */
     $range = $max - $min;
 
@@ -114,6 +127,7 @@ function random_int($min, $max)
          * @ref http://3v4l.org/XX9r5  (64-bit)
          */
         $bytes = PHP_INT_SIZE;
+            /** @var int $mask */
         $mask = ~0;
 
     } else {
@@ -128,15 +142,22 @@ function random_int($min, $max)
             }
             ++$bits;
             $range >>= 1;
+                /** @var int $mask */
             $mask = $mask << 1 | 1;
         }
         $valueShift = $min;
     }
 
+<<<<<<< HEAD
+=======
+        /** @var int $val */
+        $val = 0;
+>>>>>>> 249b59b40b (External Libraries: Update random_compat to version 2.0.21.)
     /**
      * Now that we have our parameters set up, let's begin generating
      * random integers until one falls between $min and $max
      */
+        /** @psalm-suppress RedundantCondition */
     do {
         /**
          * The rejection probability is at most 0.5, so this corresponds
@@ -172,6 +193,7 @@ function random_int($min, $max)
         for ($i = 0; $i < $bytes; ++$i) {
             $val |= ord($randomByteString[$i]) << ($i * 8);
         }
+            /** @var int $val */
 
         /**
          * Apply mask
