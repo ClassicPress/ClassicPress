@@ -86,7 +86,11 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$this->options['public_key'] = $opt['public_key'];
 			$this->options['private_key'] = $opt['private_key'];
 
+<<<<<<< HEAD
 			$this->options['hostkey'] = array('hostkey' => 'ssh-rsa');
+=======
+			$this->options['hostkey'] = array( 'hostkey' => 'ssh-rsa,ssh-ed25519' );
+>>>>>>> 33048b9333 (Filesystem API: Include the `ssh-ed25519` public key signature algorithm as an alternative to `ssh-rsa`.)
 
 			$this->keys = true;
 		} elseif ( empty ($opt['username']) ) {
