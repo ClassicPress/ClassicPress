@@ -750,11 +750,7 @@ class PHPMailer
      *
      * @var string
      */
-<<<<<<< HEAD
-    const VERSION = '6.5.3';
-=======
     const VERSION = '6.6.0';
->>>>>>> 44122bf7df (External Libraries: Upgrade PHPMailer to version 6.6.0.)
 
     /**
      * Error severity: message only, continue processing.
