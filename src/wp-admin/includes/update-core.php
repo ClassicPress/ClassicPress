@@ -56,7 +56,6 @@ $_old_files = array(
 	'wp-includes/class-wp-recovery-mode-link-service.php',
 	'wp-includes/class-wp-recovery-mode.php',
 	'wp-includes/error-protection.php',
-	'wp-includes/fonts/dashicons.woff2',
 	'wp-includes/js/backbone.js',
 	'wp-includes/js/clipboard.js',
 	'wp-includes/js/clipboard.min.js',
