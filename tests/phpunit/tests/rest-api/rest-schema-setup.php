@@ -176,22 +176,19 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			'description' => 'REST API Client Fixture: Tag',
 		) );
 
-<<<<<<< HEAD
-		$media_id = $this->factory->attachment->create_object( '/tmp/canola.jpg', 0, array(
-=======
 		$media_id = $this->factory->attachment->create_object(
 			get_temp_dir() . 'canola.jpg',
 			0,
 			array(
->>>>>>> 022ebde54d (Tests: Replace hardcoded `/tmp/` references with `get_temp_dir()`.)
-			'post_mime_type' => 'image/jpeg',
-			'post_excerpt'   => 'A sample caption',
-			'post_name'      => 'restapi-client-fixture-attachment',
-			'post_title'     => 'REST API Client Fixture: Attachment',
-			'post_date'      => '2017-02-14 00:00:00',
-			'post_date_gmt'  => '2017-02-14 00:00:00',
-			'post_author'    => 0,
-		) );
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+				'post_name'      => 'restapi-client-fixture-attachment',
+				'post_title'     => 'REST API Client Fixture: Attachment',
+				'post_date'      => '2017-02-14 00:00:00',
+				'post_date_gmt'  => '2017-02-14 00:00:00',
+				'post_author'    => 0,
+			)
+		);
 
 		$comment_id = $this->factory->comment->create( array(
 			'comment_approved'     => 1,
