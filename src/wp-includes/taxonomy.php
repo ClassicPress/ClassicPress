@@ -1336,15 +1336,9 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
  * Formerly is_term(), introduced in WP-2.3.0.
  *
  * @since WP-3.0.0
- *
-<<<<<<< HEAD
- * @global wpdb $wpdb ClassicPress database abstraction object.
-=======
- * @since 3.0.0
- * @since 6.0.0 Converted to use `get_terms()`.
+ * @since WP-6.0.0 Converted to use `get_terms()`.
  *
  * @global bool $_wp_suspend_cache_invalidation
->>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
  *
  * @param int|string $term     The term to check. Accepts term ID, slug, or name.
  * @param string     $taxonomy The taxonomy name to use
@@ -1357,10 +1351,6 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
 function term_exists( $term, $taxonomy = '', $parent = null ) {
 	global $_wp_suspend_cache_invalidation;
 
-<<<<<<< HEAD
-	$select = "SELECT term_id FROM $wpdb->terms as t WHERE ";
-	$tax_select = "SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE ";
-=======
 	if ( null === $term ) {
 		return null;
 	}
@@ -1385,51 +1375,10 @@ function term_exists( $term, $taxonomy = '', $parent = null ) {
 		$defaults['taxonomy'] = $taxonomy;
 		$defaults['fields']   = 'all';
 	}
->>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
 
-	if ( is_int($term) ) {
-		if ( 0 == $term )
+	if ( is_int( $term ) ) {
+		if ( 0 == $term ) {
 			return 0;
-<<<<<<< HEAD
-		$where = 't.term_id = %d';
-		if ( !empty($taxonomy) )
-			return $wpdb->get_row( $wpdb->prepare( $tax_select . $where . " AND tt.taxonomy = %s", $term, $taxonomy ), ARRAY_A );
-		else
-			return $wpdb->get_var( $wpdb->prepare( $select . $where, $term ) );
-	}
-
-	$term = trim( wp_unslash( $term ) );
-	$slug = sanitize_title( $term );
-
-	$where = 't.slug = %s';
-	$else_where = 't.name = %s';
-	$where_fields = array($slug);
-	$else_where_fields = array($term);
-	$orderby = 'ORDER BY t.term_id ASC';
-	$limit = 'LIMIT 1';
-	if ( !empty($taxonomy) ) {
-		if ( is_numeric( $parent ) ) {
-			$parent = (int) $parent;
-			$where_fields[] = $parent;
-			$else_where_fields[] = $parent;
-			$where .= ' AND tt.parent = %d';
-			$else_where .= ' AND tt.parent = %d';
-		}
-
-		$where_fields[] = $taxonomy;
-		$else_where_fields[] = $taxonomy;
-
-		if ( $result = $wpdb->get_row( $wpdb->prepare("SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE $where AND tt.taxonomy = %s $orderby $limit", $where_fields), ARRAY_A) )
-			return $result;
-
-		return $wpdb->get_row( $wpdb->prepare("SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE $else_where AND tt.taxonomy = %s $orderby $limit", $else_where_fields), ARRAY_A);
-	}
-
-	if ( $result = $wpdb->get_var( $wpdb->prepare("SELECT term_id FROM $wpdb->terms as t WHERE $where $orderby $limit", $where_fields) ) )
-		return $result;
-
-	return $wpdb->get_var( $wpdb->prepare("SELECT term_id FROM $wpdb->terms as t WHERE $else_where $orderby $limit", $else_where_fields) );
-=======
 		}
 		$args  = wp_parse_args( array( 'include' => array( $term ) ), $defaults );
 		$terms = get_terms( $args );
@@ -1465,7 +1414,6 @@ function term_exists( $term, $taxonomy = '', $parent = null ) {
 	}
 
 	return (string) $_term;
->>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
 }
 
 /**

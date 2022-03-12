@@ -229,15 +229,8 @@ class Tests_TermExists extends WP_UnitTestCase {
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
-<<<<<<< HEAD
-	function test_term_exists_unknown() {
-		$this->assertNull( term_exists(rand_str()) );
-		$this->assertEquals( 0, term_exists(0) );
-		$this->assertEquals( 0, term_exists('') );
-		$this->assertEquals( 0, term_exists(NULL) );
-=======
 	/**
-	 * @ticket 36949
+	 * @ticket https://core.trac.wordpress.org/ticket/36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_lookup_by_id_and_update() {
@@ -259,7 +252,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36949
+	 * @ticket https://core.trac.wordpress.org/ticket/36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_lookup_by_slug_and_update() {
@@ -281,7 +274,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36949
+	 * @ticket https://core.trac.wordpress.org/ticket/36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching() {
@@ -310,7 +303,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36949
+	 * @ticket https://core.trac.wordpress.org/ticket/36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching_suspend_cache_invalidation() {
@@ -337,7 +330,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 36949
+	 * @ticket https://core.trac.wordpress.org/ticket/36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching_by_int_suspend_cache_invalidation() {
@@ -367,6 +360,5 @@ class Tests_TermExists extends WP_UnitTestCase {
 		$this->assertSame( 0, term_exists( 0 ) );
 		$this->assertNull( term_exists( '' ) );
 		$this->assertNull( term_exists( null ) );
->>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
 	}
 }
