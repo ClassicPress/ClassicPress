@@ -5187,9 +5187,6 @@ function wp_delete_attachment_files( $post_id, $meta, $backup_sizes, $file ) {
  *
  * @param int  $attachment_id Attachment post ID. Defaults to global $post.
  * @param bool $unfiltered    Optional. If true, filters are not run. Default false.
-<<<<<<< HEAD
- * @return mixed Attachment meta field. False on failure.
-=======
  * @return array|false {
  *     Attachment metadata. False on failure.
  *
@@ -5201,7 +5198,6 @@ function wp_delete_attachment_files( $post_id, $meta, $backup_sizes, $file ) {
  *     @type array  $image_meta Image metadata.
  *     @type int    $filesize   File size of the attachment.
  * }
->>>>>>> 7fc225aa87 (Media: Store attachment’s file size in metadata. )
  */
 function wp_get_attachment_metadata( $attachment_id = 0, $unfiltered = false ) {
 	$attachment_id = (int) $attachment_id;

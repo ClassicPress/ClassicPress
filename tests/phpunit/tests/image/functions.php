@@ -559,17 +559,11 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-77x100.jpg' ),
 		);
 
-<<<<<<< HEAD
-		$metadata = wp_generate_attachment_metadata( $attachment_id, $test_file );
-		$this->assertTrue( isset( $metadata['sizes']['test-size'] ), 'The `test-size` was not added to the metadata.' );
-		$this->assertSame( $metadata['sizes']['test-size'], $expected );
-=======
 		// Different environments produce slightly different filesize results.
 		$this->assertSame( $metadata['sizes']['test-size'], $expected );
 
 		$this->assertArrayHasKey( 'test-size', $metadata['sizes'], 'The `test-size` was not added to the metadata.' );
 		$this->assertSame( $expected, $metadata['sizes']['test-size'] );
->>>>>>> 7fc225aa87 (Media: Store attachment’s file size in metadata. )
 
 		remove_image_size( 'test-size' );
 		remove_filter( 'fallback_intermediate_image_sizes', array( $this, 'filter_fallback_intermediate_image_sizes' ), 10 );
