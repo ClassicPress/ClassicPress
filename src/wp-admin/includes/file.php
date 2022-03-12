@@ -2252,7 +2252,7 @@ function wp_privacy_process_personal_data_export_page( $response, $exporter_inde
 /**
  * Wrapper for PHP filesize with filters and casting the result as an integer.
  *
- * @since 6.0.0
+ * @since WP-6.0.0
  *
  * @link https://www.php.net/manual/en/function.filesize.php
  *
@@ -2263,7 +2263,7 @@ function wp_filesize( $path ) {
 	/**
 	 * Filters the result of wp_filesize before the PHP function is run.
 	 *
-	 * @since 6.0.0
+	 * @since WP-6.0.0
 	 *
 	 * @param null|int $size The unfiltered value. Returning an int from the callback bypasses the filesize call.
 	 * @param string   $path Path to the file.
@@ -2279,7 +2279,7 @@ function wp_filesize( $path ) {
 	/**
 	 * Filters the size of the file.
 	 *
-	 * @since 6.0.0
+	 * @since WP-6.0.0
 	 *
 	 * @param int    $size The result of PHP filesize on the file.
 	 * @param string $path Path to the file.
