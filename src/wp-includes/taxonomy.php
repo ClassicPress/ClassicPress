@@ -1337,7 +1337,14 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
  *
  * @since WP-3.0.0
  *
+<<<<<<< HEAD
  * @global wpdb $wpdb ClassicPress database abstraction object.
+=======
+ * @since 3.0.0
+ * @since 6.0.0 Converted to use `get_terms()`.
+ *
+ * @global bool $_wp_suspend_cache_invalidation
+>>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
  *
  * @param int|string $term     The term to check. Accepts term ID, slug, or name.
  * @param string     $taxonomy The taxonomy name to use
@@ -1348,14 +1355,42 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
  *               is specified and the pairing exists.
  */
 function term_exists( $term, $taxonomy = '', $parent = null ) {
-	global $wpdb;
+	global $_wp_suspend_cache_invalidation;
 
+<<<<<<< HEAD
 	$select = "SELECT term_id FROM $wpdb->terms as t WHERE ";
 	$tax_select = "SELECT tt.term_id, tt.term_taxonomy_id FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_id = t.term_id WHERE ";
+=======
+	if ( null === $term ) {
+		return null;
+	}
+
+	$defaults = array(
+		'get'                    => 'all',
+		'fields'                 => 'ids',
+		'number'                 => 1,
+		'update_term_meta_cache' => false,
+		'order'                  => 'ASC',
+		'orderby'                => 'term_id',
+		'suppress_filter'        => true,
+	);
+
+	// Ensure that while importing, queries are not cached.
+	if ( ! empty( $_wp_suspend_cache_invalidation ) ) {
+		// @todo Disable caching once #52710 is merged.
+		$defaults['cache_domain'] = microtime();
+	}
+
+	if ( ! empty( $taxonomy ) ) {
+		$defaults['taxonomy'] = $taxonomy;
+		$defaults['fields']   = 'all';
+	}
+>>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
 
 	if ( is_int($term) ) {
 		if ( 0 == $term )
 			return 0;
+<<<<<<< HEAD
 		$where = 't.term_id = %d';
 		if ( !empty($taxonomy) )
 			return $wpdb->get_row( $wpdb->prepare( $tax_select . $where . " AND tt.taxonomy = %s", $term, $taxonomy ), ARRAY_A );
@@ -1394,6 +1429,43 @@ function term_exists( $term, $taxonomy = '', $parent = null ) {
 		return $result;
 
 	return $wpdb->get_var( $wpdb->prepare("SELECT term_id FROM $wpdb->terms as t WHERE $else_where $orderby $limit", $else_where_fields) );
+=======
+		}
+		$args  = wp_parse_args( array( 'include' => array( $term ) ), $defaults );
+		$terms = get_terms( $args );
+	} else {
+		$term = trim( wp_unslash( $term ) );
+		if ( '' === $term ) {
+			return null;
+		}
+
+		if ( ! empty( $taxonomy ) && is_numeric( $parent ) ) {
+			$defaults['parent'] = (int) $parent;
+		}
+
+		$args  = wp_parse_args( array( 'slug' => sanitize_title( $term ) ), $defaults );
+		$terms = get_terms( $args );
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			$args  = wp_parse_args( array( 'name' => $term ), $defaults );
+			$terms = get_terms( $args );
+		}
+	}
+
+	if ( empty( $terms ) || is_wp_error( $terms ) ) {
+		return null;
+	}
+
+	$_term = array_shift( $terms );
+
+	if ( ! empty( $taxonomy ) ) {
+		return array(
+			'term_id'          => (string) $_term->term_id,
+			'term_taxonomy_id' => (string) $_term->term_taxonomy_id,
+		);
+	}
+
+	return (string) $_term;
+>>>>>>> 34d46cd501 (Taxonomy: Use `get_terms` instead of a database lookup in `term_exists()`. )
 }
 
 /**
