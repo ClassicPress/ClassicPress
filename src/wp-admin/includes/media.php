@@ -2906,8 +2906,14 @@ function attachment_submitbox_metadata() {
 
 		if ( isset( $meta['filesize'] ) )
 			$file_size = $meta['filesize'];
+<<<<<<< HEAD
 		elseif ( file_exists( $file ) )
 			$file_size = filesize( $file );
+=======
+	} elseif ( file_exists( $file ) ) {
+		$file_size = wp_filesize( $file );
+	}
+>>>>>>> 7fc225aa87 (Media: Store attachment’s file size in metadata. )
 
 		if ( ! empty( $file_size ) ) : ?>
 			<div class="misc-pub-section misc-pub-filesize">
