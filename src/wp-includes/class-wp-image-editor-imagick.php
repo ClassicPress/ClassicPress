@@ -644,7 +644,6 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 			'width'     => $this->size['width'],
 			'height'    => $this->size['height'],
 			'mime-type' => $mime_type,
-			'filesize'  => wp_filesize( $filename ),
 		);
 	}
 
