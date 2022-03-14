@@ -2904,10 +2904,11 @@ function attachment_submitbox_metadata() {
 	<?php
 		$file_size = false;
 
-		if ( isset( $meta['filesize'] ) )
+		if ( isset( $meta['filesize'] ) ) {
 			$file_size = $meta['filesize'];
-		elseif ( file_exists( $file ) )
-			$file_size = filesize( $file );
+		} elseif ( file_exists( $file ) ) {
+			$file_size = wp_filesize( $file );
+		}
 
 		if ( ! empty( $file_size ) ) : ?>
 			<div class="misc-pub-section misc-pub-filesize">
