@@ -1460,48 +1460,9 @@ class Tests_Functions extends WP_UnitTestCase {
 			array( '03:61:59', false ), // Out of bound.
 		);
 	}
-<<<<<<< HEAD
-=======
 
 	/**
-	 * @ticket 49404
-	 * @dataProvider data_test_wp_is_json_media_type
-	 */
-	public function test_wp_is_json_media_type( $input, $expected ) {
-		$this->assertSame( $expected, wp_is_json_media_type( $input ) );
-	}
-
-
-	public function data_test_wp_is_json_media_type() {
-		return array(
-			array( 'application/ld+json', true ),
-			array( 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"', true ),
-			array( 'application/activity+json', true ),
-			array( 'application/json+oembed', true ),
-			array( 'application/json', true ),
-			array( 'application/nojson', false ),
-			array( 'application/no.json', false ),
-			array( 'text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8', false ),
-			array( 'application/activity+json, application/nojson', true ),
-		);
-	}
-
-	/**
-	 * @ticket 53668
-	 */
-	public function test_wp_get_default_extension_for_mime_type() {
-		$this->assertEquals( 'jpg', wp_get_default_extension_for_mime_type( 'image/jpeg' ), 'jpg not returned as default extension for "image/jpeg"' );
-		$this->assertNotEquals( 'jpeg', wp_get_default_extension_for_mime_type( 'image/jpeg' ), 'jpeg should not be returned as default extension for "image/jpeg"' );
-		$this->assertEquals( 'png', wp_get_default_extension_for_mime_type( 'image/png' ), 'png not returned as default extension for "image/png"' );
-		$this->assertFalse( wp_get_default_extension_for_mime_type( 'wibble/wobble' ), 'false not returned for unrecognized mime type' );
-		$this->assertFalse( wp_get_default_extension_for_mime_type( '' ), 'false not returned when empty string as mime type supplied' );
-		$this->assertFalse( wp_get_default_extension_for_mime_type( '   ' ), 'false not returned when empty string as mime type supplied' );
-		$this->assertFalse( wp_get_default_extension_for_mime_type( 123 ), 'false not returned when int as mime type supplied' );
-		$this->assertFalse( wp_get_default_extension_for_mime_type( null ), 'false not returned when null as mime type supplied' );
-	}
-
-	/**
-	 * @ticket 49412
+	 * @ticket https://core.trac.wordpress.org/ticket/
 	 * @covers ::wp_filesize
 	 */
 	function test_wp_filesize_with_nonexistent_file() {
@@ -1510,7 +1471,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49412
+	 * @ticket https://core.trac.wordpress.org/ticket/
 	 * @covers ::wp_filesize
 	 */
 	function test_wp_filesize() {
@@ -1534,5 +1495,4 @@ class Tests_Functions extends WP_UnitTestCase {
 
 		$this->assertEquals( 111, wp_filesize( $file ) );
 	}
->>>>>>> f6b39a9d66 (Media: Relocate `wp_filesize()` function for use in frontend and backend. )
 }
