@@ -2248,6 +2248,7 @@ function wp_privacy_process_personal_data_export_page( $response, $exporter_inde
 
 	return $response;
 }
+<<<<<<< HEAD
 
 /**
  * Wrapper for PHP filesize with filters and casting the result as an integer.
@@ -2286,3 +2287,5 @@ function wp_filesize( $path ) {
 	 */
 	return (int) apply_filters( 'wp_filesize', $size, $path );
 }
+=======
+>>>>>>> f6b39a9d66 (Media: Relocate `wp_filesize()` function for use in frontend and backend. )
