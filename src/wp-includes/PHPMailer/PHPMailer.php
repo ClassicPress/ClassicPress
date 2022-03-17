@@ -1450,6 +1450,7 @@ class PHPMailer
                 //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 $errorcode = 0;
                 if (defined('INTL_IDNA_VARIANT_UTS46')) {
+<<<<<<< HEAD
                     //Use the current punycode standard (appeared in PHP 7.2)
                     $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_UTS46);
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
@@ -1458,6 +1459,14 @@ class PHPMailer
                     $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_2003);
                 } else {
                     //Fall back to a default we don't know about
+=======
+                    // phpcs:ignore PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet
+                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_UTS46);
+                } elseif (defined('INTL_IDNA_VARIANT_2003')) {
+                    // phpcs:ignore PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003Deprecated
+                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_2003);
+                } else {
+>>>>>>> 6d10290267 (General: Continuing to work towards a passing PHP Compatibility scan.)
                     // phpcs:ignore PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet
                     $punycode = idn_to_ascii($domain, $errorcode);
                 }
