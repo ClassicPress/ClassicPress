@@ -305,13 +305,8 @@ class getID3
 		}
 
 		// Check for magic_quotes_gpc
-<<<<<<< HEAD
-		if (function_exists('magic_quotes_gpc')) {
-			if (get_magic_quotes_gpc()) {
-=======
-			if (function_exists('get_magic_quotes_gpc')) {
-				if (get_magic_quotes_gpc()) { // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
->>>>>>> 8e2de8212b (General: Fix various issues flagged by the PHPCompatibilityWP PHPCS ruleset.)
+		if (function_exists('get_magic_quotes_gpc')) {
+			if (get_magic_quotes_gpc()) { // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated
 				$this->startup_error .= 'magic_quotes_gpc must be disabled before running getID3(). Surround getid3 block by set_magic_quotes_gpc(0) and set_magic_quotes_gpc(1).'."\n";
 			}
 		}
