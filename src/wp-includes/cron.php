@@ -199,19 +199,11 @@ function wp_unschedule_event( $timestamp, $hook, $args = array() ) {
  * @param array $args Optional. Arguments that were to be passed to the hook's callback function.
  */
 function wp_clear_scheduled_hook( $hook, $args = array() ) {
-<<<<<<< HEAD
-	// Backward compatibility
-	// Previously this function took the arguments as discrete vars rather than an array like the rest of the API
-	if ( !is_array($args) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0', __('This argument has changed to an array to match the behavior of the other cron functions.') );
-		$args = array_slice( func_get_args(), 1 );
-=======
 	// Backward compatibility.
 	// Previously, this function took the arguments as discrete vars rather than an array like the rest of the API.
 	if ( ! is_array( $args ) ) {
-		_deprecated_argument( __FUNCTION__, '3.0.0', __( 'This argument has changed to an array to match the behavior of the other cron functions.' ) );
+		_deprecated_argument( __FUNCTION__, 'WP-3.0.0', __( 'This argument has changed to an array to match the behavior of the other cron functions.' ) );
 		$args = array_slice( func_get_args(), 1 ); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
->>>>>>> dfccba8d55 (General: Continuing to work towards a passing PHP Compatibility scan.)
 	}
 
 	// This logic duplicates wp_next_scheduled()
