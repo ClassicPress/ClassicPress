@@ -6,8 +6,13 @@
  * @subpackage Administration
  */
 
+<<<<<<< HEAD
 @header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 if ( ! defined( 'WP_ADMIN' ) )
+=======
+header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+if ( ! defined( 'WP_ADMIN' ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	require_once( dirname( __FILE__ ) . '/admin.php' );
 
 /**

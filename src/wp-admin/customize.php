@@ -123,7 +123,11 @@ wp_enqueue_style( 'customize-controls' );
 do_action( 'customize_controls_enqueue_scripts' );
 
 // Let's roll.
+<<<<<<< HEAD
 @header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
+=======
+header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 wp_user_settings();
 _wp_admin_html_begin();

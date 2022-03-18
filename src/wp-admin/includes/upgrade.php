@@ -441,8 +441,13 @@ We hope you enjoy your new site. Thanks!
 https://www.classicpress.net/
 "), $blog_url, $name, $password, $login_url );
 
+<<<<<<< HEAD
 	@wp_mail($email, __('New ClassicPress Site'), $message);
 }
+=======
+		wp_mail( $email, __( 'New WordPress Site' ), $message );
+	}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 endif;
 
 if ( !function_exists('wp_upgrade') ) :
@@ -2590,10 +2595,17 @@ function make_site_theme_from_oldschool($theme_name, $template) {
 			$oldpath = ABSPATH;
 
 		// Check to make sure it's not a new index.
+<<<<<<< HEAD
 		if ($oldfile == 'index.php') {
 			$index = implode('', file("$oldpath/$oldfile"));
 			if (strpos($index, 'WP_USE_THEMES') !== false) {
 				if (! @copy(WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile"))
+=======
+		if ( $oldfile == 'index.php' ) {
+			$index = implode( '', file( "$oldpath/$oldfile" ) );
+			if ( strpos( $index, 'WP_USE_THEMES' ) !== false ) {
+				if ( ! copy( WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile" ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 					return false;
 
 				// Don't copy anything.
@@ -2601,7 +2613,11 @@ function make_site_theme_from_oldschool($theme_name, $template) {
 			}
 		}
 
+<<<<<<< HEAD
 		if (! @copy("$oldpath/$oldfile", "$site_dir/$newfile"))
+=======
+		if ( ! copy( "$oldpath/$oldfile", "$site_dir/$newfile" ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			return false;
 
 		chmod("$site_dir/$newfile", 0777);
@@ -2660,17 +2676,33 @@ function make_site_theme_from_default($theme_name, $template) {
 	// Copy files from the default theme to the site theme.
 	//$files = array('index.php', 'comments.php', 'comments-popup.php', 'footer.php', 'header.php', 'sidebar.php', 'style.css');
 
+<<<<<<< HEAD
 	$theme_dir = @ opendir($default_dir);
 	if ($theme_dir) {
 		while(($theme_file = readdir( $theme_dir )) !== false) {
 			if (is_dir("$default_dir/$theme_file"))
 				continue;
 			if (! @copy("$default_dir/$theme_file", "$site_dir/$theme_file"))
+=======
+	$theme_dir = @opendir( $default_dir );
+	if ( $theme_dir ) {
+		while ( ( $theme_file = readdir( $theme_dir ) ) !== false ) {
+			if ( is_dir( "$default_dir/$theme_file" ) ) {
+				continue;
+			}
+			if ( ! copy( "$default_dir/$theme_file", "$site_dir/$theme_file" ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 				return;
 			chmod("$site_dir/$theme_file", 0777);
 		}
 	}
+<<<<<<< HEAD
 	@closedir($theme_dir);
+=======
+
+		closedir( $theme_dir );
+	}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 	// Rewrite the theme header.
 	$stylelines = explode("\n", implode('', file("$site_dir/style.css")));
@@ -2694,17 +2726,33 @@ function make_site_theme_from_default($theme_name, $template) {
 		return false;
 	}
 
+<<<<<<< HEAD
 	$images_dir = @ opendir("$default_dir/images");
 	if ($images_dir) {
 		while(($image = readdir($images_dir)) !== false) {
 			if (is_dir("$default_dir/images/$image"))
 				continue;
 			if (! @copy("$default_dir/images/$image", "$site_dir/images/$image"))
+=======
+	$images_dir = @opendir( "$default_dir/images" );
+	if ( $images_dir ) {
+		while ( ( $image = readdir( $images_dir ) ) !== false ) {
+			if ( is_dir( "$default_dir/images/$image" ) ) {
+				continue;
+			}
+			if ( ! copy( "$default_dir/images/$image", "$site_dir/images/$image" ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 				return;
 			chmod("$site_dir/images/$image", 0777);
 		}
 	}
+<<<<<<< HEAD
 	@closedir($images_dir);
+=======
+
+		closedir( $images_dir );
+	}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 }
 
 /**

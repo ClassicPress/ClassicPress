@@ -292,6 +292,7 @@
 		</properties>
 	</rule>
 
+<<<<<<< HEAD
 	<!-- Enforce no parenthesis for language constructs, and only one space immediately after.
 		 Including this rule is temporary until it is moved from the WordPress-Extra ruleset to
 		 the WordPress-Core ruleset upstream.
@@ -308,6 +309,9 @@
 	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Assignments in while conditions are a valid method of looping over iterables. -->
+=======
+	<!-- Assignments in while conditions are a valid method of looping over iterables -->
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition">
 		<exclude-pattern>*</exclude-pattern>
 	</rule>

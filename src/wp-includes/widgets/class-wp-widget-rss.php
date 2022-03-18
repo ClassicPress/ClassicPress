@@ -59,9 +59,15 @@ class WP_Widget_RSS extends WP_Widget {
 		$desc = '';
 		$link = '';
 
+<<<<<<< HEAD
 		if ( ! is_wp_error($rss) ) {
 			$desc = esc_attr(strip_tags(@html_entity_decode($rss->get_description(), ENT_QUOTES, get_option('blog_charset'))));
 			if ( empty($title) )
+=======
+		if ( ! is_wp_error( $rss ) ) {
+			$desc = esc_attr( strip_tags( html_entity_decode( $rss->get_description(), ENT_QUOTES, get_option( 'blog_charset' ) ) ) );
+			if ( empty( $title ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 				$title = strip_tags( $rss->get_title() );
 			$link = strip_tags( $rss->get_permalink() );
 			while ( stristr($link, 'http') != $link )
