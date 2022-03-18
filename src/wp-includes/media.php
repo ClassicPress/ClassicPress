@@ -230,10 +230,6 @@ function image_downsize( $id, $size = 'medium' ) {
 	}
 	elseif ( $size == 'thumbnail' ) {
 		// fall back to the old thumbnail
-<<<<<<< HEAD
-		if ( ($thumb_file = wp_get_attachment_thumb_file($id)) && $info = getimagesize($thumb_file) ) {
-			$img_url = str_replace($img_url_basename, wp_basename($thumb_file), $img_url);
-=======
 		$thumb_file = wp_get_attachment_thumb_file( $id );
 		$info       = null;
 
@@ -243,7 +239,6 @@ function image_downsize( $id, $size = 'medium' ) {
 
 		if ( $thumb_file && $info ) {
 			$img_url         = str_replace( $img_url_basename, wp_basename( $thumb_file ), $img_url );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			$width = $info[0];
 			$height = $info[1];
 			$is_intermediate = true;

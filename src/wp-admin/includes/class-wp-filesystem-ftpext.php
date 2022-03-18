@@ -92,16 +92,10 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 		}
 
 		// Set the Connection to use Passive FTP
-<<<<<<< HEAD
-		@ftp_pasv( $this->link, true );
-		if ( @ftp_get_option($this->link, FTP_TIMEOUT_SEC) < FS_TIMEOUT )
-			@ftp_set_option($this->link, FTP_TIMEOUT_SEC, FS_TIMEOUT);
-=======
 		ftp_pasv( $this->link, true );
 		if ( @ftp_get_option( $this->link, FTP_TIMEOUT_SEC ) < FS_TIMEOUT ) {
 			@ftp_set_option( $this->link, FTP_TIMEOUT_SEC, FS_TIMEOUT );
 		}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 		return true;
 	}
@@ -196,16 +190,10 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 	 * @return string
 	 */
 	public function cwd() {
-<<<<<<< HEAD
-		$cwd = @ftp_pwd($this->link);
-		if ( $cwd )
-			$cwd = trailingslashit($cwd);
-=======
 		$cwd = ftp_pwd( $this->link );
 		if ( $cwd ) {
 			$cwd = trailingslashit( $cwd );
 		}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		return $cwd;
 	}
 
@@ -243,16 +231,10 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 		}
 
 		// chmod the file or directory
-<<<<<<< HEAD
-		if ( ! function_exists('ftp_chmod') )
-			return (bool)@ftp_site($this->link, sprintf('CHMOD %o %s', $mode, $file));
-		return (bool)@ftp_chmod($this->link, $mode, $file);
-=======
 		if ( ! function_exists( 'ftp_chmod' ) ) {
 			return (bool) ftp_site( $this->link, sprintf( 'CHMOD %o %s', $mode, $file ) );
 		}
 		return (bool) ftp_chmod( $this->link, $mode, $file );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	/**
@@ -320,20 +302,8 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 	 * @return bool
 	 */
 	public function delete($file, $recursive = false, $type = false) {
-		if ( empty($file) )
+		if ( empty($file) ) {
 			return false;
-<<<<<<< HEAD
-		if ( 'f' == $type || $this->is_file($file) )
-			return @ftp_delete($this->link, $file);
-		if ( !$recursive )
-			return @ftp_rmdir($this->link, $file);
-
-		$filelist = $this->dirlist( trailingslashit($file) );
-		if ( !empty($filelist) )
-			foreach ( $filelist as $delete_file )
-				$this->delete( trailingslashit($file) . $delete_file['name'], $recursive, $delete_file['type'] );
-		return @ftp_rmdir($this->link, $file);
-=======
 		}
 		if ( 'f' == $type || $this->is_file( $file ) ) {
 			return ftp_delete( $this->link, $file );
@@ -349,7 +319,6 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 			}
 		}
 		return ftp_rmdir( $this->link, $file );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	/**
@@ -357,13 +326,8 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 	 * @param string $file
 	 * @return bool
 	 */
-<<<<<<< HEAD
-	public function exists($file) {
-		$list = @ftp_nlist($this->link, $file);
-=======
 	public function exists( $file ) {
 		$list = ftp_nlist( $this->link, $file );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 		if ( empty( $list ) && $this->is_dir( $file ) ) {
 			return true; // File is an empty directory.
@@ -463,12 +427,9 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 		if ( empty($path) )
 			return false;
 
-<<<<<<< HEAD
-		if ( !@ftp_mkdir($this->link, $path) )
-=======
 		if ( ! ftp_mkdir( $this->link, $path ) ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			return false;
+		}
 		$this->chmod($path, $chmod);
 		return true;
 	}
@@ -576,20 +537,12 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 			$limit_file = false;
 		}
 
-<<<<<<< HEAD
-		$pwd = @ftp_pwd($this->link);
-		if ( ! @ftp_chdir($this->link, $path) ) // Cant change to folder = folder doesn't exist
-			return false;
-		$list = @ftp_rawlist($this->link, '-a', false);
-		@ftp_chdir($this->link, $pwd);
-=======
 		$pwd = ftp_pwd( $this->link );
 		if ( ! @ftp_chdir( $this->link, $path ) ) { // Can't change to folder = folder doesn't exist.
 			return false;
 		}
 		$list = ftp_rawlist( $this->link, '-a', false );
 		@ftp_chdir( $this->link, $pwd );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 		if ( empty($list) ) // Empty array = non-existent folder (real folder will show . at least)
 			return false;

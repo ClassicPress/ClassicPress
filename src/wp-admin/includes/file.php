@@ -776,15 +776,12 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $upload_error_strings[ $file['error'] ] ) );
 	}
 
-<<<<<<< HEAD
-=======
 	// A properly uploaded file will pass this test. There should be no reason to override this one.
 	$test_uploaded_file = 'wp_handle_upload' === $action ? is_uploaded_file( $file['tmp_name'] ) : @is_readable( $file['tmp_name'] );
 	if ( ! $test_uploaded_file ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, __( 'Specified file failed upload test.' ) ) );
 	}
 
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	$test_file_size = 'wp_handle_upload' === $action ? $file['size'] : filesize( $file['tmp_name'] );
 	// A non-empty file will pass this test.
 	if ( $test_size && ! ( $test_file_size > 0 ) ) {
@@ -1501,13 +1498,8 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 				$GLOBALS['_wp_filesystem_direct_method'] = 'relaxed_ownership';
 			}
 
-<<<<<<< HEAD
-			@fclose($temp_handle);
-			@unlink($temp_file_name);
-=======
 			fclose( $temp_handle );
 			@unlink( $temp_file_name );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		}
  	}
 

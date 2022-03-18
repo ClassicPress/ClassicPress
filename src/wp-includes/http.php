@@ -471,16 +471,11 @@ function send_origin_headers() {
 	$origin = get_http_origin();
 
 	if ( is_allowed_http_origin( $origin ) ) {
-<<<<<<< HEAD
-		@header( 'Access-Control-Allow-Origin: ' .  $origin );
-		@header( 'Access-Control-Allow-Credentials: true' );
-		if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] )
-=======
 		header( 'Access-Control-Allow-Origin: ' . $origin );
 		header( 'Access-Control-Allow-Credentials: true' );
 		if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			exit;
+		}
 		return $origin;
 	}
 

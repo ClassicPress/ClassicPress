@@ -167,11 +167,7 @@ if ( $action ) {
 				error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 			}
 
-<<<<<<< HEAD
-			@ini_set('display_errors', true); //Ensure that Fatal errors are displayed.
-=======
 			ini_set( 'display_errors', true ); //Ensure that Fatal errors are displayed.
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			// Go back to "sandbox" scope so we get the same errors as before
 			plugin_sandbox_scrape( $plugin );
 			/** This action is documented in wp-admin/includes/plugin.php */

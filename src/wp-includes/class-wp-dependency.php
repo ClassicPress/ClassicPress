@@ -73,14 +73,10 @@ class _WP_Dependency {
 	 * @since WP-2.6.0
 	 */
 	public function __construct() {
-<<<<<<< HEAD
-		@list( $this->handle, $this->src, $this->deps, $this->ver, $this->args ) = func_get_args();
-		if ( ! is_array($this->deps) )
-=======
 		list( $this->handle, $this->src, $this->deps, $this->ver, $this->args ) = func_get_args();
 		if ( ! is_array( $this->deps ) ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			$this->deps = array();
+		}
 	}
 
 	/**

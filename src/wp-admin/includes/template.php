@@ -2053,14 +2053,9 @@ function _wp_admin_html_begin() {
 
 	$admin_html_class = ( is_admin_bar_showing() ) ? 'wp-toolbar' : '';
 
-<<<<<<< HEAD
-	if ( $is_IE )
-		@header('X-UA-Compatible: IE=edge');
-=======
 	if ( $is_IE ) {
 		header( 'X-UA-Compatible: IE=edge' );
 	}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 ?>
 <!DOCTYPE html>
