@@ -844,7 +844,7 @@ function upgrade_130() {
 			$dupe_ids = $wpdb->get_col( $wpdb->prepare("SELECT option_id FROM $wpdb->options WHERE option_name = %s LIMIT %d", $option->option_name, $limit) );
 			if ( $dupe_ids ) {
 				$dupe_ids = join( ',', $dupe_ids );
-				$wpdb->query("DELETE FROM $wpdb->options WHERE option_id IN ($dupe_ids)");
+				$wpdb->query( "DELETE FROM $wpdb->options WHERE option_id IN ($dupe_ids)" );
 			}
 		}
 	}
