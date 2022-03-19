@@ -176,13 +176,17 @@ function has_filter($tag, $function_to_check = false) {
 function apply_filters( $tag, $value ) {
 	global $wp_filter, $wp_current_filter;
 
-	$args = array();
+	$args = func_get_args();
 
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
+<<<<<<< HEAD
 		$args = func_get_args();
 		_wp_call_all_hook($args);
+=======
+		_wp_call_all_hook( $args );
+>>>>>>> 209666d332 (Code Modernisation: Simplify some logic in `apply_filters()`.)
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
@@ -194,10 +198,14 @@ function apply_filters( $tag, $value ) {
 	if ( !isset($wp_filter['all']) )
 		$wp_current_filter[] = $tag;
 
+<<<<<<< HEAD
 	if ( empty($args) )
 		$args = func_get_args();
 
 	// don't pass the tag name to WP_Hook
+=======
+	// Don't pass the tag name to WP_Hook.
+>>>>>>> 209666d332 (Code Modernisation: Simplify some logic in `apply_filters()`.)
 	array_shift( $args );
 
 	$filtered = $wp_filter[ $tag ]->apply_filters( $value, $args );
