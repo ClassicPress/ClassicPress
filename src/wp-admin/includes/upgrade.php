@@ -2107,7 +2107,11 @@ function get_alloptions_110() {
  * @param string $setting Option name.
  * @return mixed
  */
+<<<<<<< HEAD
 function __get_option($setting) {
+=======
+function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
+>>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 	global $wpdb;
 
 	if ( $setting == 'home' && defined( 'WP_HOME' ) )

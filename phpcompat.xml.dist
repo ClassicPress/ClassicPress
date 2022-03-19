@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<<<<<<< HEAD
 <ruleset name="ClassicPress PHP Compatibility">
 	<description>Apply PHP compatibility checks to all ClassicPress Core files</description>
 
@@ -6,6 +7,14 @@
 	<rule ref="PHPCompatibilityWP"/>
 
 	<!-- ClassicPress Core currently supports PHP 5.6+. -->
+=======
+<ruleset name="WordPress PHP Compatibility">
+	<description>Apply PHP compatibility checks to all WordPress Core files</description>
+
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- WordPress Core currently supports PHP 5.6+ -->
+>>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 	<config name="testVersion" value="5.6-"/>
 
 	<!-- Only scan PHP files. -->
@@ -26,7 +35,11 @@
 	<!-- Check up to 20 files simultaneously. -->
 	<arg name="parallel" value="20"/>
 
+<<<<<<< HEAD
 	<!-- Show sniff codes in all reports. -->
+=======
+	<!-- Show sniff codes in all reports -->
+>>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 	<arg value="ps"/>
 
 	<!-- For now, only the files in src are scanned. -->
@@ -36,6 +49,7 @@
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 
 	<!--
+<<<<<<< HEAD
 		PHPCompatibilityParagonieSodiumCompat prevents false positives in `sodium_compat`.
 		However, because these files are included in a non-standard path, false positives are triggered in ClassicPress Core.
 	-->
@@ -70,6 +84,16 @@
 	<!--
 		PHPCompatibilityParagonieRandomCompat prevents false positives in `random_compat`.
 		However, because these files are included in a non-standard path, false positives are triggered in ClassicPress Core.
+=======
+		Currently, there are no dependencies managed by Composer.
+		This will need to be modified when that changes to ensure external packages meet compatibility requirements.
+	-->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+
+	<!--
+		PHPCompatibilityParagonieRandomCompat prevents false positives in `random_compat`.
+		However, because these files are included in a non-standard path, false positives are triggered in WordPress Core.
+>>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 	-->
 	<rule ref="PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated">
 		<exclude-pattern>/random_compat/byte_safe_strings\.php$</exclude-pattern>
@@ -84,8 +108,13 @@
 		<exclude-pattern>/random_compat/random_bytes_mcrypt\.php$</exclude-pattern>
 	</rule>
 
+<<<<<<< HEAD
 	<!-- Whitelist the DB Class for use of `mysql_` extension in PHP < 7.0. -->
 	<rule ref="PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved">
+=======
+	<!-- Whitelist the WP DB Class for use of `mysql_` extension in PHP < 7.0. -->
+	<rule ref="PHPCompatibility.Extensions.RemovedExtensions">
+>>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 		<exclude-pattern>/src/wp-includes/wp-db\.php</exclude-pattern>
 	</rule>
 </ruleset>
