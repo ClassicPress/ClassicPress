@@ -21,6 +21,7 @@ function wp_get_server_protocol() {
 }
 
 /**
+<<<<<<< HEAD
  * Turn register globals off.
  *
  * @since WP-2.1.0
@@ -44,6 +45,8 @@ function wp_unregister_GLOBALS() {
 }
 
 /**
+=======
+>>>>>>> 2b5b39931c (Bootstrap/Load: Deprecate `wp_unregister_GLOBALS()`.)
  * Fix `$_SERVER` variables for various setups.
  *
  * @since WP-3.0.0

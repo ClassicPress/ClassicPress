@@ -3944,3 +3944,51 @@ function wp_ajax_press_this_add_category() {
 		wp_send_json_error( array( 'errorMessage' => __( 'The Press This plugin is required.' ) ) );
 	}
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Return the user request object for the specified request ID.
+ *
+ * @since 4.9.6
+ * @deprecated 5.4.0 Use wp_get_user_request()
+ * @see wp_get_user_request()
+ *
+ * @param int $request_id The ID of the user request.
+ * @return WP_User_Request|false
+ */
+function wp_get_user_request_data( $request_id ) {
+	_deprecated_function( __FUNCTION__, '5.4.0', 'wp_get_user_request()' );
+	return wp_get_user_request( $request_id );
+}
+
+/**
+ * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
+ *
+ * @since 4.4.0
+ * @deprecated 5.5.0
+ *
+ * @see wp_image_add_srcset_and_sizes()
+ *
+ * @param string $content The raw post content to be filtered.
+ * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
+ */
+function wp_make_content_images_responsive( $content ) {
+	_deprecated_function( __FUNCTION__, '5.5.0', 'wp_filter_content_tags()' );
+
+	// This will also add the `loading` attribute to `img` tags, if enabled.
+	return wp_filter_content_tags( $content );
+}
+
+/**
+ * Turn register globals off.
+ *
+ * @since 2.1.0
+ * @access private
+ * @deprecated 5.5.0
+ */
+function wp_unregister_GLOBALS() {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+	// register_globals was deprecated in PHP 5.3 and removed entirely in PHP 5.4.
+	_deprecated_function( __FUNCTION__, '5.5.0' );
+}
+>>>>>>> 2b5b39931c (Bootstrap/Load: Deprecate `wp_unregister_GLOBALS()`.)
