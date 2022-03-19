@@ -64,9 +64,5 @@ jobs:
       - name: Log PHPCS debug information
         run: phpcs -i
 
-      - name: Run PHP compatibility tests for Errors
-        run: phpcs --standard=phpcompat.xml.dist -q -n --report=checkstyle | cs2pr
-
-      - name: Run PHP compatibility tests for Warnings
-        continue-on-error: true
+      - name: Run PHP compatibility tests
         run: phpcs --standard=phpcompat.xml.dist -q --report=checkstyle | cs2pr
