@@ -51,22 +51,12 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 	 * @param string $string
 	 * @param mixed  ...$args Optional text replacements.
 	 */
-<<<<<<< HEAD
-	public function feedback($string) {
-		if ( isset( $this->upgrader->strings[$string] ) )
-			$string = $this->upgrader->strings[$string];
-
-		if ( strpos($string, '%') !== false ) {
-			$args = func_get_args();
-			$args = array_splice($args, 1);
-=======
 	public function feedback( $string, ...$args ) {
 		if ( isset( $this->upgrader->strings[ $string ] ) ) {
 			$string = $this->upgrader->strings[ $string ];
 		}
 
 		if ( strpos( $string, '%' ) !== false ) {
->>>>>>> af246a6797 (Code Modernisation: Introduce the spread operator in `wp-admin/includes/class-*-upgrader-skin.php`.)
 			if ( $args ) {
 				$args = array_map( 'strip_tags', $args );
 				$args = array_map( 'esc_html', $args );
