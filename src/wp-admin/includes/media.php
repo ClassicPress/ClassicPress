@@ -458,11 +458,7 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
  *
  * @param string|callable $content_func
  */
-<<<<<<< HEAD
-function wp_iframe($content_func /* ... */) {
-=======
 function wp_iframe( $content_func, ...$args ) {
->>>>>>> 49de2b7312 (Code Modernisation: Introduce the spread operator in `wp-admin/includes/media.php`.)
 	_wp_admin_html_begin();
 ?>
 <title><?php bloginfo('name') ?> &rsaquo; <?php _e('Uploads'); ?> &#8212; <?php _e('ClassicPress'); ?></title>
@@ -515,32 +511,19 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_head' );
 
-if ( is_string( $content_func ) ) {
-	/**
-	 * Fires in the admin header for each specific form tab in the legacy
-	 * (pre-3.5.0) media upload popup.
-	 *
-	 * The dynamic portion of the hook, `$content_func`, refers to the form
-	 * callback for the media upload type. Possible values include
-	 * 'media_upload_type_form', 'media_upload_type_url_form', and
-	 * 'media_upload_library_form'.
-	 *
-	 * @since WP-2.5.0
-	 */
-	do_action( "admin_head_{$content_func}" );
-<<<<<<< HEAD
-}
-?>
-</head>
-<body<?php if ( isset($GLOBALS['body_id']) ) echo ' id="' . $GLOBALS['body_id'] . '"'; ?> class="wp-core-ui no-js">
-<script type="text/javascript">
-document.body.className = document.body.className.replace('no-js', 'js');
-</script>
-<?php
-	$args = func_get_args();
-	$args = array_slice($args, 1);
-	call_user_func_array($content_func, $args);
-=======
+	if ( is_string( $content_func ) ) {
+		/**
+		 * Fires in the admin header for each specific form tab in the legacy
+		 * (pre-3.5.0) media upload popup.
+		 *
+		 * The dynamic portion of the hook, `$content_func`, refers to the form
+		 * callback for the media upload type. Possible values include
+		 * 'media_upload_type_form', 'media_upload_type_url_form', and
+		 * 'media_upload_library_form'.
+		 *
+		 * @since WP-2.5.0
+		 */
+		do_action( "admin_head_{$content_func}" );
 	}
 
 	$body_id_attr = '';
@@ -558,7 +541,6 @@ document.body.className = document.body.className.replace('no-js', 'js');
 	<?php
 
 	call_user_func_array( $content_func, $args );
->>>>>>> 49de2b7312 (Code Modernisation: Introduce the spread operator in `wp-admin/includes/media.php`.)
 
 	/** This action is documented in wp-admin/admin-footer.php */
 	do_action( 'admin_print_footer_scripts' );
