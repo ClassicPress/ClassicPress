@@ -1792,8 +1792,13 @@ function _nc( $single, $plural, $number, $domain = 'default' ) {
  * @deprecated WP-2.8.0 Use _n()
  * @see _n()
  */
+<<<<<<< HEAD
 function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n()' );
+=======
+function __ngettext( ...$args ) {
+	_deprecated_function( __FUNCTION__, '2.8.0', '_n()' );
+>>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	return _n( ...$args );
 }
 
@@ -1804,8 +1809,13 @@ function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameR
  * @deprecated WP-2.8.0 Use _n_noop()
  * @see _n_noop()
  */
+<<<<<<< HEAD
 function __ngettext_noop( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n_noop()' );
+=======
+function __ngettext_noop( ...$args ) {
+	_deprecated_function( __FUNCTION__, '2.8.0', '_n_noop()' );
+>>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	return _n_noop( ...$args );
 
 }
@@ -2068,8 +2078,7 @@ function js_escape( $text ) {
 function wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = false, $double_encode = false ) {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'esc_html()' );
 	if ( func_num_args() > 1 ) { // Maintain back-compat for people passing additional arguments.
-		$args = func_get_args();
-		return call_user_func_array( '_wp_specialchars', $args );
+		return _wp_specialchars( $string, $quote_style, $charset, $double_encode );
 	} else {
 		return esc_html( $string );
 	}
@@ -2109,26 +2118,29 @@ function attribute_escape( $text ) {
  * @param string     $classname       Optional. Classname widget option. Default empty.
  * @param mixed      $params ,...     Widget parameters.
  */
+<<<<<<< HEAD
 function register_sidebar_widget($name, $output_callback, $classname = '') {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_sidebar_widget()' );
+=======
+function register_sidebar_widget($name, $output_callback, $classname = '', ...$params) {
+	_deprecated_function( __FUNCTION__, '2.8.0', 'wp_register_sidebar_widget()' );
+>>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	// Compat
-	if ( is_array($name) ) {
-		if ( count($name) == 3 )
-			$name = sprintf($name[0], $name[2]);
-		else
+	if ( is_array( $name ) ) {
+		if ( count( $name ) === 3 ) {
+			$name = sprintf( $name[0], $name[2] );
+		} else {
 			$name = $name[0];
 	}
+	}
 
-	$id = sanitize_title($name);
+	$id      = sanitize_title( $name );
 	$options = array();
-	if ( !empty($classname) && is_string($classname) )
+	if ( ! empty( $classname ) && is_string( $classname ) ) {
 		$options['classname'] = $classname;
-	$params = array_slice(func_get_args(), 2);
-	$args = array($id, $name, $output_callback, $options);
-	if ( !empty($params) )
-		$args = array_merge($args, $params);
+	}
 
-	call_user_func_array('wp_register_sidebar_widget', $args);
+	wp_register_sidebar_widget( $id, $name, $output_callback, $options, ...$params );
 }
 
 /**
@@ -2163,29 +2175,34 @@ function unregister_sidebar_widget($id) {
  * @param callable $control_callback Widget control callback to display and process form.
  * @param int $width Widget width.
  * @param int $height Widget height.
+ * @param mixed      ...$params        Widget parameters.
  */
+<<<<<<< HEAD
 function register_widget_control($name, $control_callback, $width = '', $height = '') {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_widget_control()' );
+=======
+function register_widget_control($name, $control_callback, $width = '', $height = '', ...$params) {
+	_deprecated_function( __FUNCTION__, '2.8.0', 'wp_register_widget_control()' );
+>>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	// Compat
-	if ( is_array($name) ) {
-		if ( count($name) == 3 )
-			$name = sprintf($name[0], $name[2]);
-		else
+	if ( is_array( $name ) ) {
+		if ( count( $name ) === 3 ) {
+			$name = sprintf( $name[0], $name[2] );
+		} else {
 			$name = $name[0];
 	}
+	}
 
-	$id = sanitize_title($name);
+	$id      = sanitize_title( $name );
 	$options = array();
-	if ( !empty($width) )
+	if ( ! empty( $width ) ) {
 		$options['width'] = $width;
-	if ( !empty($height) )
+	}
+	if ( ! empty( $height ) ) {
 		$options['height'] = $height;
-	$params = array_slice(func_get_args(), 4);
-	$args = array($id, $name, $control_callback, $options);
-	if ( !empty($params) )
-		$args = array_merge($args, $params);
+	}
 
-	call_user_func_array('wp_register_widget_control', $args);
+	wp_register_widget_control( $id, $name, $control_callback, $options, ...$params );
 }
 
 /**
