@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<<<<<<< HEAD
 <ruleset name="ClassicPress PHP Compatibility">
 	<description>Apply PHP compatibility checks to all ClassicPress Core files</description>
 
@@ -7,14 +6,6 @@
 	<rule ref="PHPCompatibilityWP"/>
 
 	<!-- ClassicPress Core currently supports PHP 5.6+. -->
-=======
-<ruleset name="WordPress PHP Compatibility">
-	<description>Apply PHP compatibility checks to all WordPress Core files</description>
-
-	<rule ref="PHPCompatibilityWP"/>
-
-	<!-- WordPress Core currently supports PHP 5.6+ -->
->>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 	<config name="testVersion" value="5.6-"/>
 
 	<!-- Only scan PHP files. -->
