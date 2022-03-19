@@ -1792,16 +1792,9 @@ function _nc( $single, $plural, $number, $domain = 'default' ) {
  * @deprecated WP-2.8.0 Use _n()
  * @see _n()
  */
-<<<<<<< HEAD
-function __ngettext() {
-	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n()' );
-	$args = func_get_args();
-	return call_user_func_array('_n', $args);
-=======
 function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-	_deprecated_function( __FUNCTION__, '2.8.0', '_n()' );
+	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n()' );
 	return _n( ...$args );
->>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 }
 
 /**
@@ -1811,16 +1804,9 @@ function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameR
  * @deprecated WP-2.8.0 Use _n_noop()
  * @see _n_noop()
  */
-<<<<<<< HEAD
-function __ngettext_noop() {
-	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n_noop()' );
-	$args = func_get_args();
-	return call_user_func_array('_n_noop', $args);
-=======
 function __ngettext_noop( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-	_deprecated_function( __FUNCTION__, '2.8.0', '_n_noop()' );
+	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n_noop()' );
 	return _n_noop( ...$args );
->>>>>>> 336960897d (Build/Test Tools: Introduce automated PHP compatibility checking.)
 
 }
 
