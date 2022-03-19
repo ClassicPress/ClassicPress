@@ -1792,13 +1792,8 @@ function _nc( $single, $plural, $number, $domain = 'default' ) {
  * @deprecated WP-2.8.0 Use _n()
  * @see _n()
  */
-<<<<<<< HEAD
 function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n()' );
-=======
-function __ngettext( ...$args ) {
-	_deprecated_function( __FUNCTION__, '2.8.0', '_n()' );
->>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	return _n( ...$args );
 }
 
@@ -1809,13 +1804,8 @@ function __ngettext( ...$args ) {
  * @deprecated WP-2.8.0 Use _n_noop()
  * @see _n_noop()
  */
-<<<<<<< HEAD
 function __ngettext_noop( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n_noop()' );
-=======
-function __ngettext_noop( ...$args ) {
-	_deprecated_function( __FUNCTION__, '2.8.0', '_n_noop()' );
->>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
 	return _n_noop( ...$args );
 
 }
@@ -2118,13 +2108,8 @@ function attribute_escape( $text ) {
  * @param string     $classname       Optional. Classname widget option. Default empty.
  * @param mixed      $params ,...     Widget parameters.
  */
-<<<<<<< HEAD
-function register_sidebar_widget($name, $output_callback, $classname = '') {
-	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_sidebar_widget()' );
-=======
 function register_sidebar_widget($name, $output_callback, $classname = '', ...$params) {
-	_deprecated_function( __FUNCTION__, '2.8.0', 'wp_register_sidebar_widget()' );
->>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
+	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_sidebar_widget()' );
 	// Compat
 	if ( is_array( $name ) ) {
 		if ( count( $name ) === 3 ) {
@@ -2177,13 +2162,8 @@ function unregister_sidebar_widget($id) {
  * @param int $height Widget height.
  * @param mixed      ...$params        Widget parameters.
  */
-<<<<<<< HEAD
-function register_widget_control($name, $control_callback, $width = '', $height = '') {
-	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_widget_control()' );
-=======
 function register_widget_control($name, $control_callback, $width = '', $height = '', ...$params) {
-	_deprecated_function( __FUNCTION__, '2.8.0', 'wp_register_widget_control()' );
->>>>>>> 24a586b97f (Code Modernisation: Introduce the spread operator in `wp-includes/deprecated.php`.)
+	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_widget_control()' );
 	// Compat
 	if ( is_array( $name ) ) {
 		if ( count( $name ) === 3 ) {
