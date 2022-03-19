@@ -1222,18 +1222,12 @@ class wpdb {
 	 * @since WP-2.3.0
 	 *
 	 * @param string      $query    Query statement with sprintf()-like placeholders
-<<<<<<< HEAD
-	 * @param array|mixed $args     The array of variables to substitute into the query's placeholders if being called with an array of arguments,
-	 *                              or the first variable to substitute into the query's placeholders if being called with individual arguments.
-	 * @param mixed       $args,... further variables to substitute into the query's placeholders if being called wih individual arguments.
-=======
 	 * @param array|mixed $args    The array of variables to substitute into the query's placeholders
 	 *                             if being called with an array of arguments, or the first variable
 	 *                             to substitute into the query's placeholders if being called with
 	 *                             individual arguments.
 	 * @param mixed       ...$args Further variables to substitute into the query's placeholders
 	 *                             if being called with individual arguments.
->>>>>>> 1f8d74409b (Code Modernisation: Introduce the spread operator in `wpdb::prepare()`.)
 	 * @return string|void Sanitized query string, if there is a query to prepare.
 	 */
 	public function prepare( $query, ...$args ) {
