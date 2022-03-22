@@ -5,13 +5,9 @@
  */
 class Tests_Term_GetTermBy extends WP_UnitTestCase {
 
-<<<<<<< HEAD
-	function test_get_term_by_slug() {
-=======
 	protected $query = '';
 
 	public function test_get_term_by_slug() {
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 		$term1 = wp_insert_term( 'Foo', 'category', array( 'slug' => 'foo' ) );
 		$term2 = get_term_by( 'slug', 'foo', 'category' );
 		$this->assertEquals( get_term( $term1['term_id'], 'category' ), $term2 );

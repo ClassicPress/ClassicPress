@@ -578,43 +578,16 @@ class WP_Term_Query {
 
 		$selects = array();
 		switch ( $args['fields'] ) {
-<<<<<<< HEAD
-			case 'all':
-			case 'all_with_object_id' :
-			case 'tt_ids' :
-			case 'slugs' :
-				$selects = array( 't.*', 'tt.*' );
-				if ( 'all_with_object_id' === $args['fields'] && ! empty( $args['object_ids'] ) ) {
-					$selects[] = 'tr.object_id';
-				}
-				break;
-			case 'ids':
-			case 'id=>parent':
-				$selects = array( 't.term_id', 'tt.parent', 'tt.count', 'tt.taxonomy' );
-				break;
-			case 'names':
-				$selects = array( 't.term_id', 'tt.parent', 'tt.count', 't.name', 'tt.taxonomy' );
-				break;
-=======
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 			case 'count':
 				$orderby = '';
 				$order = '';
 				$selects = array( 'COUNT(*)' );
 				break;
-<<<<<<< HEAD
-			case 'id=>name':
-				$selects = array( 't.term_id', 't.name', 'tt.count', 'tt.taxonomy' );
-				break;
-			case 'id=>slug':
-				$selects = array( 't.term_id', 't.slug', 'tt.count', 'tt.taxonomy' );
-=======
 			default:
 				$selects = array( 't.term_id' );
 				if ( 'all_with_object_id' === $args['fields'] && ! empty( $args['object_ids'] ) ) {
 					$selects[] = 'tr.object_id';
 				}
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 				break;
 		}
 
@@ -697,31 +670,13 @@ class WP_Term_Query {
 			return $this->terms;
 		}
 
-<<<<<<< HEAD
-		if ( 'count' == $_fields ) {
-			$count = $wpdb->get_var( $this->request );
-=======
 		if ( 'count' === $_fields ) {
 			$count = $wpdb->get_var( $this->request ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 			wp_cache_set( $cache_key, $count, 'terms' );
 			return $count;
 		}
 
-<<<<<<< HEAD
-		$terms = $wpdb->get_results( $this->request );
-		if ( 'all' == $_fields || 'all_with_object_id' === $_fields ) {
-			update_term_cache( $terms );
-		}
-
-		// Prime termmeta cache.
-		if ( $args['update_term_meta_cache'] ) {
-			$term_ids = wp_list_pluck( $terms, 'term_id' );
-			update_termmeta_cache( $term_ids );
-		}
-=======
 		$terms = $wpdb->get_results( $this->request ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		if ( empty( $terms ) ) {
 			wp_cache_add( $cache_key, array(), 'terms', DAY_IN_SECONDS );
@@ -788,44 +743,6 @@ class WP_Term_Query {
 			$terms = $_terms;
 		}
 
-<<<<<<< HEAD
-		$_terms = array();
-		if ( 'id=>parent' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[ $term->term_id ] = $term->parent;
-			}
-		} elseif ( 'ids' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[] = (int) $term->term_id;
-			}
-		} elseif ( 'tt_ids' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[] = (int) $term->term_taxonomy_id;
-			}
-		} elseif ( 'names' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[] = $term->name;
-			}
-		} elseif ( 'slugs' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[] = $term->slug;
-			}
-		} elseif ( 'id=>name' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[ $term->term_id ] = $term->name;
-			}
-		} elseif ( 'id=>slug' == $_fields ) {
-			foreach ( $terms as $term ) {
-				$_terms[ $term->term_id ] = $term->slug;
-			}
-		}
-
-		if ( ! empty( $_terms ) ) {
-			$terms = $_terms;
-		}
-
-=======
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 		// Hierarchical queries are not limited, so 'offset' and 'number' must be handled now.
 		if ( $hierarchical && $number && is_array( $terms ) ) {
 			if ( $offset >= count( $terms ) ) {
@@ -837,13 +754,6 @@ class WP_Term_Query {
 			}
 		}
 
-<<<<<<< HEAD
-		wp_cache_add( $cache_key, $terms, 'terms', DAY_IN_SECONDS );
-
-		if ( 'all' === $_fields || 'all_with_object_id' === $_fields ) {
-			$terms = $this->populate_terms( $terms );
-		}
-=======
 		// Prime termmeta cache.
 		if ( $args['update_term_meta_cache'] ) {
 			$term_ids = wp_list_pluck( $term_objects, 'term_id' );
@@ -852,7 +762,6 @@ class WP_Term_Query {
 
 		wp_cache_add( $cache_key, $terms, 'terms' );
 		$terms = $this->format_terms( $term_objects, $_fields );
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		$this->terms = $terms;
 		return $this->terms;
