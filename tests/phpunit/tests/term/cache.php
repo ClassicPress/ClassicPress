@@ -232,9 +232,15 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( 'Taco', $term->name );
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		// This should now hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
@@ -257,9 +263,15 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( 'Taco', $term->name );
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( 'Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		// This should now hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
@@ -272,9 +284,15 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		// This should not hit cache.
 		$term = get_term_by( 'slug', 'burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( 'No Taco', $term->name );
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( 'No Taco', $term->name );
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 	}
 
 	/**
@@ -289,8 +307,13 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		get_term_by( 'name', 'Burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		// This should now hit cache.
 		$term = get_term_by( 'name', 'Burrito', 'post_tag' );
@@ -312,8 +335,13 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		get_term_by( 'name', 'Burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 
 		// This should now hit cache.
 		get_term_by( 'name', 'Burrito', 'post_tag' );
@@ -325,8 +353,13 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 
 		// This should not hit cache.
 		get_term_by( 'name', 'burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 	}
 
 	/**
@@ -342,7 +375,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$last_changed = wp_cache_get( 'last_changed', 'terms' );
 
 		$term1 = get_term_by( 'name', 'Burrito', 'post_tag' );
-		$num_queries++;
+		$num_queries = $num_queries + 2;
 
 		// Verify the term is cached.
 		$term2 = get_term_by( 'name', 'Burrito', 'post_tag' );
@@ -380,8 +413,13 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 
 		$term = get_term_by( 'name', 'Burrito', 'post_tag' );
+<<<<<<< HEAD
 		$num_queries++;
 		$this->assertTrue( $term instanceof WP_Term );
+=======
+		$num_queries = $num_queries + 2;
+		$this->assertInstanceOf( 'WP_Term', $term );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 		$this->assertSame( $term_id, $term->term_id );
 		$this->assertEquals( $num_queries, $wpdb->num_queries );
 

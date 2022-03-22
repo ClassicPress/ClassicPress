@@ -5,7 +5,13 @@
  */
 class Tests_Term_GetTermBy extends WP_UnitTestCase {
 
+<<<<<<< HEAD
 	function test_get_term_by_slug() {
+=======
+	protected $query = '';
+
+	public function test_get_term_by_slug() {
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 		$term1 = wp_insert_term( 'Foo', 'category', array( 'slug' => 'foo' ) );
 		$term2 = get_term_by( 'slug', 'foo', 'category' );
 		$this->assertEquals( get_term( $term1['term_id'], 'category' ), $term2 );
@@ -110,7 +116,7 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 
 		$num_queries = $wpdb->num_queries;
 		$found = get_term_by( 'slug', 'foo', 'wptests_tax' );
-		$num_queries++;
+		$num_queries = $num_queries + 2;
 
 		$this->assertTrue( $found instanceof WP_Term );
 		$this->assertSame( $t, $found->term_id );
@@ -185,12 +191,25 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21760
 	 */
 	public function test_query_should_contain_limit_clause() {
+<<<<<<< HEAD
 		global $wpdb;
 
 		$term_id = $this->factory->term->create( array( 'name' => 'burrito', 'taxonomy' => 'post_tag' ) );
 		$found = get_term_by( 'name', 'burrito', 'post_tag' );
 		$this->assertSame( $term_id, $found->term_id );
 		$this->assertContains( 'LIMIT 1', $wpdb->last_query );
+=======
+		$term_id = $this->factory->term->create(
+			array(
+				'name'     => 'burrito',
+				'taxonomy' => 'post_tag',
+			)
+		);
+		add_filter( 'terms_pre_query', array( $this, 'get_query_from_filter' ), 10, 2 );
+		$found = get_term_by( 'name', 'burrito', 'post_tag' );
+		$this->assertSame( $term_id, $found->term_id );
+		$this->assertStringContainsString( 'LIMIT 1', $this->query );
+>>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 	}
 
 	/**
@@ -248,5 +267,11 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 
 		$this->assertFalse( $found_by_slug );
 		$this->assertFalse( $found_by_name );
+	}
+
+	public function get_query_from_filter( $terms, $wp_term_query ) {
+		$this->query = $wp_term_query->request;
+
+		return $terms;
 	}
 }
