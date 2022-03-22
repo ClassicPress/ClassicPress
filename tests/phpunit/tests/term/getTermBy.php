@@ -187,14 +187,6 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21760
 	 */
 	public function test_query_should_contain_limit_clause() {
-<<<<<<< HEAD
-		global $wpdb;
-
-		$term_id = $this->factory->term->create( array( 'name' => 'burrito', 'taxonomy' => 'post_tag' ) );
-		$found = get_term_by( 'name', 'burrito', 'post_tag' );
-		$this->assertSame( $term_id, $found->term_id );
-		$this->assertContains( 'LIMIT 1', $wpdb->last_query );
-=======
 		$term_id = $this->factory->term->create(
 			array(
 				'name'     => 'burrito',
@@ -205,7 +197,6 @@ class Tests_Term_GetTermBy extends WP_UnitTestCase {
 		$found = get_term_by( 'name', 'burrito', 'post_tag' );
 		$this->assertSame( $term_id, $found->term_id );
 		$this->assertStringContainsString( 'LIMIT 1', $this->query );
->>>>>>> 4a9f5fe3be (Taxonomy: Only store term_ids and object_ids in `WP_Term_Query` query caches.)
 	}
 
 	/**
