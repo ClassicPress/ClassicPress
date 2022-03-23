@@ -1825,12 +1825,8 @@ function adjacent_posts_rel_link( $title = '%title', $in_same_term = false, $exc
  * This is meant to be attached to actions like 'wp_head'. Do not call this directly in plugins
  * or theme templates.
  *
-<<<<<<< HEAD
  * @since WP-3.0.0
-=======
- * @since 3.0.0
- * @since 5.6.0 No longer used in core.
->>>>>>> f78acee893 (Docs: Add a `@since` note about `adjacent_posts_rel_link_wp_head()` no longer being used in core.)
+ * @since WP-5.6.0 No longer used in core.
  *
  * @see adjacent_posts_rel_link()
  */
