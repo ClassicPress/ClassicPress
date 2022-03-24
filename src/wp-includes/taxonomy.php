@@ -1379,7 +1379,7 @@ function term_exists( $term, $taxonomy = '', $parent = null ) {
 	/**
 	 * Filters default arguments for checking if term exists.
 	 *
-	 * @since 6.0.0
+	 * @since WP-6.0.0
 	 *
 	 * @param array      $defaults An array of arguments for term_exists.
 	 * @param int|string $term     The term to check. Accepts term ID, slug, or name.
