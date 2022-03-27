@@ -7,8 +7,8 @@ class Tests_Post_Template extends WP_UnitTestCase {
 
 	function test_wp_link_pages() {
 		$contents = array( 'One', 'Two', 'Three' );
-		$content = join( '<!--nextpage-->', $contents );
-		$post_id = self::factory()->post->create( array( 'post_content' => $content ) );
+		$content  = join( '<!--nextpage-->', $contents );
+		$post_id  = self::factory()->post->create( array( 'post_content' => $content ) );
 
 		$this->go_to( '?p=' . $post_id );
 
@@ -60,25 +60,49 @@ class Tests_Post_Template extends WP_UnitTestCase {
 
 		$this->assertEquals( $link, $output );
 
-		$next = "{$page2}<em>Next page</em></a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '',
-			'link_before' => '<em>', 'link_after' => '</em>', 'next_or_number' => 'next'
-		) );
+		$next   = "{$page2}<em>Next page</em></a>";
+		$output = wp_link_pages(
+			array(
+				'echo'           => 0,
+				'before'         => '',
+				'after'          => '',
+				'separator'      => '',
+				'link_before'    => '<em>',
+				'link_after'     => '</em>',
+				'next_or_number' => 'next',
+			)
+		);
 
 		$this->assertEquals( $next, $output );
 
 		$GLOBALS['page'] = 2;
-		$next_prev = "{$permalink}<em>Previous page</em></a>{$page3}<em>Next page</em></a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '',
-			'link_before' => '<em>', 'link_after' => '</em>', 'next_or_number' => 'next'
-		) );
+		$next_prev       = "{$permalink}<em>Previous page</em></a>{$page3}<em>Next page</em></a>";
+		$output          = wp_link_pages(
+			array(
+				'echo'           => 0,
+				'before'         => '',
+				'after'          => '',
+				'separator'      => '',
+				'link_before'    => '<em>',
+				'link_after'     => '</em>',
+				'next_or_number' => 'next',
+			)
+		);
 
 		$this->assertEquals( $next_prev, $output );
 
 		$next_prev_link = "{$permalink}Woo page</a>{$page3}Hoo page</a>";
-		$output = wp_link_pages( array( 'echo' => 0, 'before' => '', 'after' => '', 'separator' => '',
-			'next_or_number' => 'next', 'nextpagelink' => 'Hoo page', 'previouspagelink' => 'Woo page'
-		) );
+		$output         = wp_link_pages(
+			array(
+				'echo'             => 0,
+				'before'           => '',
+				'after'            => '',
+				'separator'        => '',
+				'next_or_number'   => 'next',
+				'nextpagelink'     => 'Hoo page',
+				'previouspagelink' => 'Woo page',
+			)
+		);
 
 		$this->assertEquals( $next_prev_link, $output );
 
@@ -111,16 +135,26 @@ class Tests_Post_Template extends WP_UnitTestCase {
 		$none = wp_dropdown_pages( array( 'echo' => 0 ) );
 		$this->assertEmpty( $none );
 
-		$bump = '&nbsp;&nbsp;&nbsp;';
-		$page_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
-		$child_id = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $page_id ) );
-		$grandchild_id = self::factory()->post->create( array( 'post_type' => 'page', 'post_parent' => $child_id ) );
+		$bump          = '&nbsp;&nbsp;&nbsp;';
+		$page_id       = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		$child_id      = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_parent' => $page_id,
+			)
+		);
+		$grandchild_id = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_parent' => $child_id,
+			)
+		);
 
 		$title1 = get_post( $page_id )->post_title;
 		$title2 = get_post( $child_id )->post_title;
 		$title3 = get_post( $grandchild_id )->post_title;
 
-		$lineage =<<<LINEAGE
+		$lineage = <<<LINEAGE
 <select name='page_id' id='page_id'>
 	<option class="level-0" value="$page_id">$title1</option>
 	<option class="level-1" value="$child_id">{$bump}$title2</option>
@@ -132,17 +166,22 @@ LINEAGE;
 		$output = wp_dropdown_pages( array( 'echo' => 0 ) );
 		$this->assertEqualsIgnoreEOL( $lineage, $output );
 
-		$depth =<<<DEPTH
+		$depth = <<<DEPTH
 <select name='page_id' id='page_id'>
 	<option class="level-0" value="$page_id">$title1</option>
 </select>
 
 DEPTH;
 
-		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1 ) );
+		$output = wp_dropdown_pages(
+			array(
+				'echo'  => 0,
+				'depth' => 1,
+			)
+		);
 		$this->assertEqualsIgnoreEOL( $depth, $output );
 
-		$option_none =<<<NONE
+		$option_none = <<<NONE
 <select name='page_id' id='page_id'>
 	<option value="Woo">Hoo</option>
 	<option class="level-0" value="$page_id">$title1</option>
@@ -150,12 +189,17 @@ DEPTH;
 
 NONE;
 
-		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
-			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo'
-		) );
+		$output = wp_dropdown_pages(
+			array(
+				'echo'              => 0,
+				'depth'             => 1,
+				'show_option_none'  => 'Hoo',
+				'option_none_value' => 'Woo',
+			)
+		);
 		$this->assertEqualsIgnoreEOL( $option_none, $output );
 
-		$option_no_change =<<<NO
+		$option_no_change = <<<NO
 <select name='page_id' id='page_id'>
 	<option value="-1">Burrito</option>
 	<option value="Woo">Hoo</option>
@@ -164,10 +208,15 @@ NONE;
 
 NO;
 
-		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
-			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo',
-			'show_option_no_change' => 'Burrito'
-		) );
+		$output = wp_dropdown_pages(
+			array(
+				'echo'                  => 0,
+				'depth'                 => 1,
+				'show_option_none'      => 'Hoo',
+				'option_none_value'     => 'Woo',
+				'show_option_no_change' => 'Burrito',
+			)
+		);
 		$this->assertEqualsIgnoreEOL( $option_no_change, $output );
 	}
 
@@ -175,13 +224,17 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_should_default_to_ID() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo' => 0,
+			)
+		);
 
 		// Should contain page ID by default.
 		$this->assertContains( 'value="' . $p . '"', $found );
@@ -191,14 +244,18 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_ID() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-			'value_field' => 'ID',
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo'        => 0,
+				'value_field' => 'ID',
+			)
+		);
 
 		$this->assertContains( 'value="' . $p . '"', $found );
 	}
@@ -207,15 +264,19 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_post_name() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-			'post_name' => 'foo',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'foo',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-			'value_field' => 'post_name',
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo'        => 0,
+				'value_field' => 'post_name',
+			)
+		);
 
 		$this->assertContains( 'value="foo"', $found );
 	}
@@ -224,15 +285,19 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/12494
 	 */
 	public function test_wp_dropdown_pages_value_field_should_fall_back_on_ID_when_an_invalid_value_is_provided() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-			'post_name' => 'foo',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'foo',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-			'value_field' => 'foo',
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo'        => 0,
+				'value_field' => 'foo',
+			)
+		);
 
 		$this->assertContains( 'value="' . $p . '"', $found );
 	}
@@ -241,14 +306,18 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/30082
 	 */
 	public function test_wp_dropdown_pages_should_not_contain_class_attribute_when_no_class_is_passed() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-			'post_name' => 'foo',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'foo',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo' => 0,
+			)
+		);
 
 		$this->assertNotRegExp( '/<select[^>]+class=\'/', $found );
 	}
@@ -257,15 +326,19 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/30082
 	 */
 	public function test_wp_dropdown_pages_should_obey_class_parameter() {
-		$p = self::factory()->post->create( array(
-			'post_type' => 'page',
-			'post_name' => 'foo',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'foo',
+			)
+		);
 
-		$found = wp_dropdown_pages( array(
-			'echo' => 0,
-			'class' => 'bar',
-		) );
+		$found = wp_dropdown_pages(
+			array(
+				'echo'  => 0,
+				'class' => 'bar',
+			)
+		);
 
 		$this->assertRegExp( '/<select[^>]+class=\'bar\'/', $found );
 	}
@@ -274,9 +347,11 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/31389
 	 */
 	public function test_get_page_template_slug_by_id() {
-		$page_id = self::factory()->post->create( array(
-			'post_type' => 'page',
-		) );
+		$page_id = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
 
 		$this->assertEquals( '', get_page_template_slug( $page_id ) );
 
@@ -291,9 +366,11 @@ NO;
 	 * @see https://core.trac.wordpress.org/ticket/31389
 	 */
 	public function test_get_page_template_slug_from_loop() {
-		$page_id = self::factory()->post->create( array(
-			'post_type' => 'page',
-		) );
+		$page_id = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+			)
+		);
 
 		update_post_meta( $page_id, '_wp_page_template', 'example.php' );
 		$this->go_to( get_permalink( $page_id ) );
@@ -352,19 +429,23 @@ NO;
 		$this->assertNotRegExp( '/><li.*>|<\/li></U', $menu );
 
 		// No menus + wp_nav_menu() falls back to wp_page_menu(), this time without a container.
-		$menu = wp_nav_menu( array(
-			'echo'      => false,
-			'container' => false,
-		) );
+		$menu = wp_nav_menu(
+			array(
+				'echo'      => false,
+				'container' => false,
+			)
+		);
 
 		// After falling back, the empty 'container' argument should still return a container element.
 		$this->assertRegExp( '/<div class="menu">/', $menu );
 
 		// No menus + wp_nav_menu() falls back to wp_page_menu(), this time without white-space.
-		$menu = wp_nav_menu( array(
-			'echo'         => false,
-			'item_spacing' => 'discard',
-		) );
+		$menu = wp_nav_menu(
+			array(
+				'echo'         => false,
+				'item_spacing' => 'discard',
+			)
+		);
 
 		// After falling back, the markup should not include whitespace around <li>s
 		$this->assertNotRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
