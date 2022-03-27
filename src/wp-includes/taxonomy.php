@@ -310,27 +310,13 @@ function is_taxonomy_hierarchical($taxonomy) {
  * that the `$object_type` value from the original registration will be
  * overwritten.
  *
-<<<<<<< HEAD
  * @since WP-2.3.0
  * @since WP-4.2.0 Introduced `show_in_quick_edit` argument.
  * @since WP-4.4.0 The `show_ui` argument is now enforced on the term editing screen.
  * @since WP-4.4.0 The `public` argument now controls whether the taxonomy can be queried on the front end.
  * @since WP-4.5.0 Introduced `publicly_queryable` argument.
  * @since WP-4.7.0 Introduced `show_in_rest`, 'rest_base' and 'rest_controller_class'
- *              arguments to register the Taxonomy in REST API.
-=======
- * @since 2.3.0
- * @since 4.2.0 Introduced `show_in_quick_edit` argument.
- * @since 4.4.0 The `show_ui` argument is now enforced on the term editing screen.
- * @since 4.4.0 The `public` argument now controls whether the taxonomy can be queried on the front end.
- * @since 4.5.0 Introduced `publicly_queryable` argument.
- * @since 4.7.0 Introduced `show_in_rest`, 'rest_base' and 'rest_controller_class'
- *              arguments to register the taxonomy in REST API.
- * @since 5.1.0 Introduced `meta_box_sanitize_cb` argument.
- * @since 5.4.0 Added the registered taxonomy object as a return value.
- * @since 5.5.0 Introduced `default_term` argument.
- * @since 5.9.0 Introduced `rest_namespace` argument.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
+ *                 arguments to register the Taxonomy in REST API.
  *
  * @global array $wp_taxonomies Registered taxonomies.
  *
@@ -648,11 +634,7 @@ function unregister_taxonomy_for_object_type( $taxonomy, $object_type ) {
 //
 
 /**
-<<<<<<< HEAD
- * Retrieve object_ids of valid taxonomy and term.
-=======
  * Retrieves object IDs of valid taxonomy and term.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  *
  * The strings of $taxonomies must exist before this function will continue. On
  * failure of finding a valid taxonomy, it will return an WP_Error class, kind
@@ -960,15 +942,9 @@ function get_term_by( $field, $value, $taxonomy = '', $output = OBJECT, $filter 
  *
  * @since WP-2.3.0
  *
-<<<<<<< HEAD
- * @param int    $term_id  ID of Term to get children.
- * @param string $taxonomy Taxonomy Name.
- * @return array|WP_Error List of Term IDs. WP_Error returned if `$taxonomy` does not exist.
-=======
  * @param int    $term_id  ID of term to get children.
  * @param string $taxonomy Taxonomy name.
  * @return array|WP_Error List of term IDs. WP_Error returned if `$taxonomy` does not exist.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  */
 function get_term_children( $term_id, $taxonomy ) {
 	if ( ! taxonomy_exists( $taxonomy ) ) {
@@ -1481,11 +1457,7 @@ function term_is_ancestor_of( $term1, $term2, $taxonomy ) {
 }
 
 /**
-<<<<<<< HEAD
- * Sanitize Term all fields.
-=======
  * Sanitizes all term fields.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  *
  * Relies on sanitize_term_field() to sanitize the term. The difference is that
  * this function will sanitize <strong>all</strong> fields. The context is based
@@ -2275,30 +2247,8 @@ function wp_insert_term( $term, $taxonomy, $args = array() ) {
 	 * and term_taxonomy_id of the older term instead. Then return out of the function so that the "create" hooks
 	 * are not fired.
 	 */
-<<<<<<< HEAD
 	$duplicate_term = $wpdb->get_row( $wpdb->prepare( "SELECT t.term_id, tt.term_taxonomy_id FROM $wpdb->terms t INNER JOIN $wpdb->term_taxonomy tt ON ( tt.term_id = t.term_id ) WHERE t.slug = %s AND tt.parent = %d AND tt.taxonomy = %s AND t.term_id < %d AND tt.term_taxonomy_id != %d", $slug, $parent, $taxonomy, $term_id, $tt_id ) );
-=======
-	$duplicate_term = $wpdb->get_row( $wpdb->prepare( "SELECT t.term_id, t.slug, tt.term_taxonomy_id, tt.taxonomy FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON ( tt.term_id = t.term_id ) WHERE t.slug = %s AND tt.parent = %d AND tt.taxonomy = %s AND t.term_id < %d AND tt.term_taxonomy_id != %d", $slug, $parent, $taxonomy, $term_id, $tt_id ) );
 
-	/**
-	 * Filters the duplicate term check that takes place during term creation.
-	 *
-	 * Term parent + taxonomy + slug combinations are meant to be unique, and wp_insert_term()
-	 * performs a last-minute confirmation of this uniqueness before allowing a new term
-	 * to be created. Plugins with different uniqueness requirements may use this filter
-	 * to bypass or modify the duplicate-term check.
-	 *
-	 * @since 5.1.0
-	 *
-	 * @param object $duplicate_term Duplicate term row from terms table, if found.
-	 * @param string $term           Term being inserted.
-	 * @param string $taxonomy       Taxonomy name.
-	 * @param array  $args           Term arguments passed to the function.
-	 * @param int    $tt_id          term_taxonomy_id for the newly created term.
-	 */
-	$duplicate_term = apply_filters( 'wp_insert_term_duplicate_term_check', $duplicate_term, $term, $taxonomy, $args, $tt_id );
-
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
 	if ( $duplicate_term ) {
 		$wpdb->delete( $wpdb->terms, array( 'term_id' => $term_id ) );
 		$wpdb->delete( $wpdb->term_taxonomy, array( 'term_taxonomy_id' => $tt_id ) );
@@ -3128,11 +3078,7 @@ function clean_object_term_cache($object_ids, $object_type) {
 }
 
 /**
-<<<<<<< HEAD
- * Will remove all of the term ids from the cache.
-=======
  * Removes all of the term IDs from the cache.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  *
  * @since WP-2.3.0
  *
@@ -3570,13 +3516,8 @@ function _prime_term_caches( $term_ids, $update_meta_cache = true ) {
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
-<<<<<<< HEAD
- * @param array  $terms    List of Term taxonomy IDs.
- * @param object $taxonomy Current taxonomy object of terms.
-=======
  * @param int[]       $terms    List of term taxonomy IDs.
  * @param WP_Taxonomy $taxonomy Current taxonomy object of terms.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  */
 function _update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
@@ -4252,11 +4193,7 @@ function get_the_taxonomies( $post = 0, $args = array() ) {
 }
 
 /**
-<<<<<<< HEAD
- * Retrieve all taxonomies of a post with just the names.
-=======
  * Retrieves all taxonomy names for the given post.
->>>>>>> 31a155c91f (Docs: Use third-person singular verbs for function descriptions in `wp-includes/taxonomy.php`, per the documentation standards.)
  *
  * @since WP-2.5.0
  *
