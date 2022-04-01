@@ -874,29 +874,4 @@ class WP_UnitTestCase extends PHPUnit_Framework_TestCase {
 			)
 		);
 	}
-
-	/**
-	 * Asserts that two values have the same type and value, with EOL differences discarded.
-	 *
-	 * @since WP-5.6.0
-	 *
-	 * @param string $expected The expected value.
-	 * @param string $actual   The actual value.
-	 */
-	public function assertSameIgnoreEOL( $expected, $actual ) {
-		$this->assertSame( str_replace( "\r\n", "\n", $expected ), str_replace( "\r\n", "\n", $actual ) );
-	}
-
-	/**
-	 * Asserts that two values are equal, with EOL differences discarded.
-	 *
-	 * @since WP-5.4.0
-	 * @since WP-5.6.0 Turned into an alias for `::assertSameIgnoreEOL()`.
-	 *
-	 * @param string $expected The expected value.
-	 * @param string $actual   The actual value.
-	 */
-	public function assertEqualsIgnoreEOL( $expected, $actual ) {
-		$this->assertSameIgnoreEOL( $expected, $actual );
-	}
 }

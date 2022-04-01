@@ -70,9 +70,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['default'], $actual );
+		$this->AssertEquals( $expected['default'], $actual );
 	}
 
 	function test_wp_list_pages_depth() {
@@ -84,9 +83,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['depth'], $actual );
+		$this->AssertEquals( $expected['depth'], $actual );
 	}
 
 	function test_wp_list_pages_show_date() {
@@ -100,9 +98,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a> ' . $date . '</li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '</li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['show_date'], $actual );
+		$this->AssertEquals( $expected['show_date'], $actual );
 	}
 
 	function test_wp_list_pages_date_format() {
@@ -134,9 +131,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['date_format'], $actual );
+		$this->AssertEquals( $expected['date_format'], $actual );
 	}
 
 	function test_wp_list_pages_child_of() {
@@ -148,9 +144,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['child_of'], $actual );
+		$this->AssertEquals( $expected['child_of'], $actual );
 	}
 
 	function test_wp_list_pages_exclude() {
@@ -176,9 +171,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 <li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['exclude'], $actual );
+		$this->AssertEquals( $expected['exclude'], $actual );
 	}
 
 	function test_wp_list_pages_title_li() {
@@ -191,9 +185,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['title_li'], $actual );
+		$this->AssertEquals( $expected['title_li'], $actual );
 	}
 
 	function test_wp_list_pages_echo() {
@@ -205,7 +198,6 @@ class Tests_List_Pages extends WP_UnitTestCase {
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a></li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
-
 		ob_start();
 		wp_list_pages( $args );
 		$actual = ob_get_clean();
@@ -217,9 +209,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 			'authors' => '2',
 		);
-		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
+		$expected['authors'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3"><a href="' . get_permalink( 3) . '">Parent 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
 		$this->AssertEquals( $expected['authors'], $actual );
 	}
@@ -231,9 +222,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		);
 		$expected['number'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['number'], $actual );
+		$this->AssertEquals( $expected['number'], $actual );
 	}
 
 	function test_wp_list_pages_sort_column() {
@@ -264,9 +254,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['sort_column'], $actual );
+		$this->AssertEquals( $expected['sort_column'], $actual );
 	}
 
 	function test_wp_list_pages_link_before() {
@@ -296,9 +285,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['link_before'], $actual );
+		$this->AssertEquals( $expected['link_before'], $actual );
 	}
 
 	function test_wp_list_pages_link_after() {
@@ -328,9 +316,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['link_after'], $actual );
+		$this->AssertEquals( $expected['link_after'], $actual );
 	}
 
 
@@ -342,9 +329,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		$expected['include'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1"><a href="' . get_permalink( 1 ) . '">Parent 1</a></li>
 <li class="page_item page-item-3"><a href="' . get_permalink( 3 ) . '">Parent 3</a></li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['include'], $actual );
+		$this->AssertEquals( $expected['include'], $actual );
 	}
 
 	function test_wp_list_pages_exclude_tree() {
@@ -360,9 +346,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul>
 </li>
 </ul></li>';
-
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['exclude'], $actual );
+		$this->AssertEquals( $expected['exclude'], $actual );
 	}
 
 	function test_wp_list_pages_discarded_whitespace() {
@@ -370,9 +355,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 			'item_spacing' => 'discard',
 		);
-
 		$expected['default'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a><ul class=\'children\'><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li><li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li><li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a><ul class=\'children\'><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li><li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li><li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a><ul class=\'children\'><li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li><li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li><li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li></ul></li></ul></li>';
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['default'], $actual );
+		$this->AssertEquals( $expected['default'], $actual );
 	}
 }
