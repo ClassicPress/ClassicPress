@@ -1,8 +1,7 @@
 <?php
-require_once ABSPATH . 'wp-includes/PHPMailer/PHPMailer.php';
-require_once ABSPATH . 'wp-includes/PHPMailer/Exception.php';
+require_once( ABSPATH . '/wp-includes/class-phpmailer.php' );
 
-class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
+class MockPHPMailer extends PHPMailer {
 	var $mock_sent = array();
 
 	function preSend() {

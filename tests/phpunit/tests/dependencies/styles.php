@@ -367,7 +367,7 @@ CSS;
 		wp_style_add_data( 'handle', 'conditional', 'IE' );
 		wp_add_inline_style( 'handle', 'a { color: blue; }' );
 
-		$this->assertEqualsIgnoreEOL( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	/**

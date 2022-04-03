@@ -448,6 +448,8 @@ $can_install = current_user_can( 'install_themes' );
 					<div class="update-message notice inline notice-warning notice-alt"><p><?php _e( 'New version available.' ); ?></p></div>
 				<# } #>
 			<# } #>
+		</div>
+	<# } #>
 
 	<# if ( data.hasUpdate ) { #>
 		<# if ( data.updateResponse.compatibleWP && data.updateResponse.compatiblePHP ) { #>
