@@ -35,7 +35,7 @@ window.wp = window.wp || {};
 			try {
 				compiled = compiled || _.template( $( '#tmpl-' + id ).html(), options );
 				return compiled( data );
-			} catch (originalError) {
+			} catch ( originalError ) {
 				var err = new Error(
 					'"' + originalError.message + '" '
 					+ "when compiling wp.template( '" + id + "' ). "
