@@ -33,7 +33,7 @@ window.wp = window.wp || {};
 
 		return function ( data ) {
 			try {
-				compiled = compiled || _.template( $( '#tmpl-' + id ).html(),  options );
+				compiled = compiled || _.template( $( '#tmpl-' + id ).html(), options );
 				return compiled( data );
 			} catch (originalError) {
 				var err = new Error(
