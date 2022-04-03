@@ -55,8 +55,7 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	<li><a href='$link4'>$title4</a></li>
 	<li><a href='$link5'>$title5</a></li>
 EOF;
-
-		$this->assertEqualsIgnoreEOL( $expected['limit'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'postbypost', 'limit' => 5 ) ) ) );
+		$this->assertEquals( $expected['limit'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'postbypost', 'limit' => 5 ) ) ) );
 	}
 
 	function test_wp_get_archives_format() {
@@ -91,15 +90,13 @@ EOF;
 <li><a href='{$oct_url}'>October 2012</a></li>
 	<li><a href='{$this->month_url}'>$date_full</a></li>
 EOF;
-
-		$this->assertEqualsIgnoreEOL( $expected['order_asc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'ASC' ) ) ) );
+		$this->assertEquals( $expected['order_asc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'ASC' ) ) ) );
 
 		$expected['order_desc'] = <<<EOF
 <li><a href='{$this->month_url}'>$date_full</a></li>
 	<li><a href='{$oct_url}'>October 2012</a></li>
 EOF;
-
-		$this->assertEqualsIgnoreEOL( $expected['order_desc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'DESC' ) ) ) );
+		$this->assertEquals( $expected['order_desc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'DESC' ) ) ) );
 	}
 
 	/**
