@@ -37,9 +37,9 @@ window.wp = window.wp || {};
 				return compiled( data );
 			} catch ( originalError ) {
 				var err = new Error(
-					'"' + originalError.message + '" '
-					+ "when compiling wp.template( '" + id + "' ). "
-					+ 'See wp.template.errorData for more information.'
+					'"' + originalError.message + '" ' +
+					'when compiling wp.template( \'' + id + '\' ). ' +
+					'See wp.template.errorData for more information.'
 				);
 				wp.template.errorData.push( {
 					errorMessage: err.message,
