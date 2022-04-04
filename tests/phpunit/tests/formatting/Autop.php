@@ -502,7 +502,7 @@ line 3<br />
 line 4<br />
 line 5</p>';
 
-		$this->assertEqualsIgnoreEOL( $expected, trim( wpautop( $content ) ) );
+		$this->assertEquals( $expected, trim( wpautop( $content ) ) );
 	}
 
 	/**
@@ -521,7 +521,7 @@ line 2<br/>
 		$expected = '<p>line 1</p>
 <p>line 2</p>';
 
-		$this->assertEqualsIgnoreEOL( $expected, trim( wpautop( $content ) ) );
+		$this->assertEquals( $expected, trim( wpautop( $content ) ) );
 	}
 
 
@@ -555,6 +555,7 @@ line 2<br/>
 <img src="example.jpg" /><figcaption>Caption</figcaption></figure>';
 
 		$this->assertEquals( $expected1, trim( wpautop( $content1 ) ) );
-		$this->assertEqualsIgnoreEOL( $expected2, trim( wpautop( $content2 ) ) );
+		$this->assertEquals( $expected2, trim( wpautop( $content2 ) ) );
 	}
+
 }

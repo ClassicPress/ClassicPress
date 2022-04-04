@@ -1132,7 +1132,7 @@ Stop.</p>
 EOF;
 
 		$result = apply_filters( 'the_content', $content );
-		$this->assertEqualsIgnoreEOL( $expected, $result );
+		$this->assertEquals( $expected, $result );
 	}
 
 	/**

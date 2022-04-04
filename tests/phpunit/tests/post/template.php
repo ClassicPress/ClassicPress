@@ -130,7 +130,7 @@ class Tests_Post_Template extends WP_UnitTestCase {
 LINEAGE;
 
 		$output = wp_dropdown_pages( array( 'echo' => 0 ) );
-		$this->assertEqualsIgnoreEOL( $lineage, $output );
+		$this->assertEquals( $lineage, $output );
 
 		$depth =<<<DEPTH
 <select name='page_id' id='page_id'>
@@ -140,7 +140,7 @@ LINEAGE;
 DEPTH;
 
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1 ) );
-		$this->assertEqualsIgnoreEOL( $depth, $output );
+		$this->assertEquals( $depth, $output );
 
 		$option_none =<<<NONE
 <select name='page_id' id='page_id'>
@@ -153,7 +153,7 @@ NONE;
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo'
 		) );
-		$this->assertEqualsIgnoreEOL( $option_none, $output );
+		$this->assertEquals( $option_none, $output );
 
 		$option_no_change =<<<NO
 <select name='page_id' id='page_id'>
@@ -163,12 +163,11 @@ NONE;
 </select>
 
 NO;
-
 		$output = wp_dropdown_pages( array( 'echo' => 0, 'depth' => 1,
 			'show_option_none' => 'Hoo', 'option_none_value' => 'Woo',
 			'show_option_no_change' => 'Burrito'
 		) );
-		$this->assertEqualsIgnoreEOL( $option_no_change, $output );
+		$this->assertEquals( $option_no_change, $output );
 	}
 
 	/**
