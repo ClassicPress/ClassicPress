@@ -378,10 +378,6 @@ function list_plugin_updates() {
 				);
 
 				echo ' ' . $details . $compat . $upgrade_notice;
-
-				if ( in_array( $plugin_file, $auto_updates, true ) ) {
-					echo $auto_update_notice;
-				}
 				?>
 			</p></td>
 		</tr>
@@ -441,27 +437,8 @@ function list_theme_updates() {
 		$compat = '';
 
 		if ( ! $compatible_wp && ! $compatible_php ) {
-			$compat .= '<br>' . __( 'This update doesn&#8217;t work with your versions of WordPress and PHP.' ) . '&nbsp;';
-			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				$compat .= sprintf(
-					/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-					__( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-					self_admin_url( 'update-core.php' ),
-					esc_url( wp_get_update_php_url() )
-				);
-
-				$annotation = wp_get_update_php_annotation();
-
-				if ( $annotation ) {
-					$compat .= '</p><p><em>' . $annotation . '</em>';
-				}
-			} elseif ( current_user_can( 'update_core' ) ) {
-				$compat .= sprintf(
-					/* translators: %s: URL to WordPress Updates screen. */
-					__( '<a href="%s">Please update WordPress</a>.' ),
-					self_admin_url( 'update-core.php' )
-				);
-			} elseif ( current_user_can( 'update_php' ) ) {
+			$compat .= '<br>' . __( 'This update doesn&#8217;t work with your version of PHP or support ClassicPress.' ) . '&nbsp;';
+			if ( current_user_can( 'update_php' ) ) {
 				$compat .= sprintf(
 					/* translators: %s: URL to Update PHP page. */
 					__( '<a href="%s">Learn more about updating PHP</a>.' ),
@@ -475,14 +452,7 @@ function list_theme_updates() {
 				}
 			}
 		} elseif ( ! $compatible_wp ) {
-			$compat .= '<br>' . __( 'This update doesn&#8217;t work with your version of WordPress.' ) . '&nbsp;';
-			if ( current_user_can( 'update_core' ) ) {
-				$compat .= sprintf(
-					/* translators: %s: URL to WordPress Updates screen. */
-					__( '<a href="%s">Please update WordPress</a>.' ),
-					self_admin_url( 'update-core.php' )
-				);
-			}
+			$compat .= '<br>' . __( 'This update doesn&#8217;t support ClassicPress.' ) . '&nbsp;';
 		} elseif ( ! $compatible_php ) {
 			$compat .= '<br>' . __( 'This update doesn&#8217;t work with your version of PHP.' ) . '&nbsp;';
 			if ( current_user_can( 'update_php' ) ) {
@@ -526,10 +496,6 @@ function list_theme_updates() {
 				);
 
 				echo ' ' . $compat;
-
-				if ( in_array( $stylesheet, $auto_updates, true ) ) {
-					echo $auto_update_notice;
-				}
 				?>
 			</p></td>
 		</tr>

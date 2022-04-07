@@ -844,7 +844,7 @@ function upgrade_130() {
 			$dupe_ids = $wpdb->get_col( $wpdb->prepare("SELECT option_id FROM $wpdb->options WHERE option_name = %s LIMIT %d", $option->option_name, $limit) );
 			if ( $dupe_ids ) {
 				$dupe_ids = join( ',', $dupe_ids );
-				$wpdb->query("DELETE FROM $wpdb->options WHERE option_id IN ($dupe_ids)");
+				$wpdb->query( "DELETE FROM $wpdb->options WHERE option_id IN ($dupe_ids)" );
 			}
 		}
 	}
@@ -1297,8 +1297,8 @@ function upgrade_280() {
 		$start = 0;
 		while( $rows = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options ORDER BY option_id LIMIT $start, 20" ) ) {
 			foreach ( $rows as $row ) {
-				$value = $row->option_value;
-				if ( !@unserialize( $value ) )
+				$value = maybe_unserialize( $row->option_value );
+				if ( $value === $row->option_value )
 					$value = stripslashes( $value );
 				if ( $value !== $row->option_value ) {
 					update_option( $row->option_name, $value );

@@ -1736,10 +1736,8 @@ function gallery_shortcode( $attr ) {
 	 *                    Otherwise, defaults to true.
 	 */
 	if ( apply_filters( 'use_default_gallery_style', ! $html5 ) ) {
-		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
-
 		$gallery_style = "
-		<style{$type_attr}>
+		<style type='text/css'>
 			#{$selector} {
 				margin: auto;
 			}
