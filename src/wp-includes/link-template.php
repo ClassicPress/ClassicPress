@@ -1826,6 +1826,7 @@ function adjacent_posts_rel_link( $title = '%title', $in_same_term = false, $exc
  * or theme templates.
  *
  * @since WP-3.0.0
+ * @since WP-5.6.0 No longer used in core.
  *
  * @see adjacent_posts_rel_link()
  */
