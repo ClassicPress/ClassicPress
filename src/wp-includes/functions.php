@@ -5592,8 +5592,9 @@ function mbstring_binary_safe_encoding( $reset = false ) {
 	static $encodings = array();
 	static $overloaded = null;
 
-	if ( is_null( $overloaded ) )
-		$overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 );
+	if ( is_null( $overloaded ) ) {
+		$overloaded = function_exists( 'mb_internal_encoding' ) && ( ini_get( 'mbstring.func_overload' ) & 2 ); // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated
+	}
 
 	if ( false === $overloaded )
 		return;

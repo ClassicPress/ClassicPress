@@ -228,8 +228,8 @@ function apply_filters_ref_array($tag, $args) {
 	// Do 'all' actions first
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
@@ -426,10 +426,10 @@ function do_action($tag, $arg = '') {
 	else
 		++$wp_actions[$tag];
 
-	$all_args = func_get_args();
+	$all_args = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 
-	// Do 'all' actions first
-	if ( isset($wp_filter['all']) ) {
+	// Do 'all' actions first.
+	if ( isset( $wp_filter['all'] ) ) {
 		$wp_current_filter[] = $tag;
 		_wp_call_all_hook( $all_args );
 	}
@@ -499,8 +499,8 @@ function do_action_ref_array($tag, $args) {
 	// Do 'all' actions first
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
