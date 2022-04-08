@@ -50,11 +50,16 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 		 * @param string $id_base The widget ID.
 		 */
 		if ( ! current_theme_supports( 'widgets' ) // Temp hack https://core.trac.wordpress.org/ticket/14876
-			|| ! apply_filters( 'show_recent_comments_widget_style', true, $this->id_base ) )
+			|| ! apply_filters( 'show_recent_comments_widget_style', true, $this->id_base ) ) {
 			return;
-		?>
-		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
-		<?php
+		}
+
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
+		printf(
+			'<style%s>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>',
+			$type_attr
+		);
 	}
 
 	/**

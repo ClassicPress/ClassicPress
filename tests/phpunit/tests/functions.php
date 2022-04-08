@@ -1386,7 +1386,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	/**
 	 * Test human_readable_duration().
 	 *
-	 * @ticket https://core.trac.wordpress.org/ticket/39667
+	 * @see https://core.trac.wordpress.org/ticket/39667
 	 * @dataProvider data_test_human_readable_duration
 	 *
 	 * @param string $input    Duration.

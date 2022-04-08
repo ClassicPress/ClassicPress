@@ -73,7 +73,10 @@ function twentyseventeen_setup() {
 		'comment-list',
 		'gallery',
 		'caption',
-	) );
+		'script',
+		'style',
+		)
+	);
 
 	/*
 	 * Enable support for Post Formats.
