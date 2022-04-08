@@ -3344,20 +3344,16 @@ function wp_enqueue_code_editor( $args ) {
 		}
 	}
 
-	if ( 'text/css' === $type ) {
-		$settings['codemirror'] = array_merge( $settings['codemirror'], array(
-			'mode' => 'css',
-			'lint' => true,
-			'autoCloseBrackets' => true,
-			'matchBrackets' => true,
-		) );
-	} elseif ( 'text/x-scss' === $type || 'text/x-less' === $type || 'text/x-sass' === $type ) {
-		$settings['codemirror'] = array_merge( $settings['codemirror'], array(
-			'mode' => $type,
-			'lint' => false,
-			'autoCloseBrackets' => true,
-			'matchBrackets' => true,
-		) );
+	if ( in_array( $type, array( 'text/css', 'text/x-scss', 'text/x-less', 'text/x-sass' ), true ) ) {
+		$settings['codemirror'] = array_merge(
+			$settings['codemirror'],
+			array(
+				'mode' => $type,
+				'lint' => false,
+				'autoCloseBrackets' => true,
+				'matchBrackets' => true,
+			)
+		);
 	} elseif ( 'text/x-diff' === $type ) {
 		$settings['codemirror'] = array_merge( $settings['codemirror'], array(
 			'mode' => 'diff',
