@@ -362,6 +362,7 @@ function wp_edit_theme_plugin_file( $args ) {
 		return new WP_Error( 'missing_content' );
 	}
 	$content = $args['newcontent'];
+	$content = preg_replace( "/\r\n|\r/m", "\n", $content );
 
 	if ( ! isset( $args['nonce'] ) ) {
 		return new WP_Error( 'missing_nonce' );

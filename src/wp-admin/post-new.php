@@ -67,7 +67,17 @@ if ( ! wp_next_scheduled( 'wp_scheduled_auto_draft_delete' ) ) {
 	wp_schedule_event( time(), 'daily', 'wp_scheduled_auto_draft_delete' );
 }
 
-$post = get_default_post_to_edit( $post_type, true );
+// Show post form.
+$posts = get_posts( array( 'numberposts' => 1, 'post_status' => 'auto-draft' ) );
+$attachments = array();
+if ( ! empty( $posts ) ) {
+	$attachments = get_posts( array( 'post_type' => 'attachment', 'numberposts' => -1, 'post_status' => null, 'post_parent' => $posts[0]->ID ) );
+}
+if ( empty( $posts ) || ! empty( $attachments ) || (int) $posts[0]->post_author !== get_current_user_id() ) {
+	$post = get_default_post_to_edit( $post_type, true );
+} else {
+	$post = $posts[0];
+}
 $post_ID = $post->ID;
 
 /** This filter is documented in wp-admin/post.php */
