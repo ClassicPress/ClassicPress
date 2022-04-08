@@ -7,16 +7,40 @@ class Tests_Formatting_BalanceTags extends WP_UnitTestCase {
 
 	function nestable_tags() {
 		return array(
-			array( 'blockquote' ), array( 'div' ), array( 'object' ), array( 'q' ), array( 'span' ),
+			array( 'article' ),
+			array( 'aside' ),
+			array( 'blockquote' ),
+			array( 'details' ),
+			array( 'div' ),
+			array( 'figure' ),
+			array( 'object' ),
+			array( 'q' ),
+			array( 'section' ),
+			array( 'span' ),
 		);
 	}
 
 	// This is a complete(?) listing of valid single/self-closing tags.
 	function single_tags() {
 		return array(
-			array( 'area' ), array( 'base' ), array( 'basefont' ), array( 'br' ), array( 'col' ), array( 'command' ),
-			array( 'embed' ), array( 'frame' ), array( 'hr' ), array( 'img' ), array( 'input' ), array( 'isindex' ),
-			array( 'link' ), array( 'meta' ), array( 'param' ), array( 'source' ),
+			array( 'area' ),
+			array( 'base' ),
+			array( 'basefont' ),
+			array( 'br' ),
+			array( 'col' ),
+			array( 'command' ),
+			array( 'embed' ),
+			array( 'frame' ),
+			array( 'hr' ),
+			array( 'img' ),
+			array( 'input' ),
+			array( 'isindex' ),
+			array( 'link' ),
+			array( 'meta' ),
+			array( 'param' ),
+			array( 'source' ),
+			array( 'track' ),
+			array( 'wbr' ),
 		);
 	}
 
