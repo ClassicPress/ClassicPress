@@ -301,13 +301,6 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
  * @param string $str Fraction string.
  * @return int|float Returns calculated fraction or integer 0 on invalid input.
  */
-<<<<<<< HEAD
-function wp_exif_frac2dec($str) {
-	@list( $n, $d ) = explode( '/', $str );
-	if ( !empty($d) )
-		return $n / $d;
-	return $str;
-=======
 function wp_exif_frac2dec( $str ) {
 	if ( ! is_scalar( $str ) || is_bool( $str ) ) {
 		return 0;
@@ -339,7 +332,6 @@ function wp_exif_frac2dec( $str ) {
 	}
 
 	return $numerator / $denominator;
->>>>>>> 8aa625b795 (Media: Fix `TypeError` and improve `wp_exif_frac2dec()` to only return `int` or `float`.)
 }
 
 /**
