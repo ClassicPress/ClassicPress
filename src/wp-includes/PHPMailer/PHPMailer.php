@@ -1950,9 +1950,12 @@ class PHPMailer
     public function getSMTPInstance()
     {
         if (!is_object($this->smtp)) {
-            // Ensure SMTP class exists, avoids errors when this file is directly accessed
+            // PHPMailer makes use of an autoloader that is not included in ClassicPress
+            // An upstream decision has been made to include PHPMailer unedited
+            // ClassicPress ensures that SMTP class exists when needed
+            // This avoids errors when PHPMailer is directly required or included
             if ( ! class_exists( 'PHPMailer\PHPMailer\SMTP' ) ) {
-                require_once( 'SMTP.php' );
+                require_once 'SMTP.php';
             }
             $this->smtp = new SMTP();
         }

@@ -16,7 +16,7 @@ class Tests_Mail extends WP_UnitTestCase {
 
 	function test_for_phpmailer_edit() {
 		$phpmailer_file = trim( file_get_contents( ABSPATH . WPINC . '/PHPMailer/PHPMailer.php' ) );
-		$edit = false !== strstr( $phpmailer_file, "require_once( 'SMTP.php' );" );
+		$edit = false !== strstr( $phpmailer_file, "require_once 'SMTP.php';" );
 		$this->assertTrue( $edit );
 	}
 
