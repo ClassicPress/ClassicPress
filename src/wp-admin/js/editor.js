@@ -184,7 +184,11 @@ window.wp = window.wp || {};
 		}
 
 		/**
+<<<<<<< HEAD:src/wp-admin/js/editor.js
 		 * @summary Checks if a cursor is inside an HTML tag.
+=======
+		 * Checks if a cursor is inside an HTML tag or comment.
+>>>>>>> b3a658edbc (TinyMCE: treat HTML comments same as tags when keeping cursor position. Fixes breaking the More and Nextpage tags when switching from Text to Visual.):src/js/_enqueues/wp/editor/base.js
 		 *
 		 * In order to prevent breaking HTML tags when selecting text, the cursor
 		 * must be moved to either the start or end of the tag.
@@ -207,7 +211,7 @@ window.wp = window.wp || {};
 			if ( lastLtPos > lastGtPos || content.substr( cursorPosition, 1 ) === '>' ) {
 				// find what the tag is
 				var tagContent = content.substr( lastLtPos ),
-					tagMatch = tagContent.match( /<\s*(\/)?(\w+)/ );
+					tagMatch = tagContent.match( /<\s*(\/)?(\w+|\!-{2}.*-{2})/ );
 
 				if ( ! tagMatch ) {
 					return null;
@@ -378,7 +382,11 @@ window.wp = window.wp || {};
 		}
 
 		/**
+<<<<<<< HEAD:src/wp-admin/js/editor.js
 		 * @summary Get adjusted selection cursor positions according to HTML tags/shortcodes
+=======
+		 * Gets adjusted selection cursor positions according to HTML tags, comments, and shortcodes.
+>>>>>>> b3a658edbc (TinyMCE: treat HTML comments same as tags when keeping cursor position. Fixes breaking the More and Nextpage tags when switching from Text to Visual.):src/js/_enqueues/wp/editor/base.js
 		 *
 		 * Shortcodes and HTML codes are a bit of a special case when selecting, since they may render
 		 * content in Visual mode. If we insert selection markers somewhere inside them, it's really possible
