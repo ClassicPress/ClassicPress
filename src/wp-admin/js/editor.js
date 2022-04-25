@@ -184,7 +184,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Checks if a cursor is inside an HTML tag.
+		 * @summary Checks if a cursor is inside an HTML tag or comment.
 		 *
 		 * In order to prevent breaking HTML tags when selecting text, the cursor
 		 * must be moved to either the start or end of the tag.
@@ -207,7 +207,7 @@ window.wp = window.wp || {};
 			if ( lastLtPos > lastGtPos || content.substr( cursorPosition, 1 ) === '>' ) {
 				// find what the tag is
 				var tagContent = content.substr( lastLtPos ),
-					tagMatch = tagContent.match( /<\s*(\/)?(\w+)/ );
+					tagMatch = tagContent.match( /<\s*(\/)?(\w+|\!-{2}[\s\S]*-{2})/ );
 
 				if ( ! tagMatch ) {
 					return null;
@@ -527,26 +527,26 @@ window.wp = window.wp || {};
 			if ( startNode.length ) {
 				editor.focus();
 
-				if ( ! endNode.length ) {
-					editor.selection.select( startNode[0] );
-				} else {
+				if ( endNode.length ) {
 					var selection = editor.getDoc().createRange();
 
 					selection.setStartAfter( startNode[0] );
 					selection.setEndBefore( endNode[0] );
 
 					editor.selection.setRng( selection );
+				} else {
+					editor.selection.select( startNode[0] );
 				}
+
+				if ( editor.getParam( 'wp_keep_scroll_position' ) ) {
+					scrollVisualModeToStartElement( editor, startNode );
+				}
+
+				removeSelectionMarker( startNode );
+				removeSelectionMarker( endNode );
+
+				editor.save();
 			}
-
-			if ( editor.getParam( 'wp_keep_scroll_position' ) ) {
-				scrollVisualModeToStartElement( editor, startNode );
-			}
-
-			removeSelectionMarker( startNode );
-			removeSelectionMarker( endNode );
-
-			editor.save();
 		}
 
 		/**
@@ -558,13 +558,15 @@ window.wp = window.wp || {};
 		 * @param {object} $marker The marker to be removed from the editor DOM, wrapped in an instnce of `editor.$`
 		 */
 		function removeSelectionMarker( $marker ) {
-			var $markerParent = $marker.parent();
+			if ( $marker.length ) {
+				var $markerParent = $marker.parent();
 
-			$marker.remove();
+				$marker.remove();
 
-			//Remove empty paragraph left over after removing the marker.
-			if ( $markerParent.is( 'p' ) && ! $markerParent.children().length && ! $markerParent.text() ) {
-				$markerParent.remove();
+				//Remove empty paragraph left over after removing the marker.
+				if ( $markerParent.is( 'p' ) && ! $markerParent.children().length && ! $markerParent.text() ) {
+	//				$markerParent.remove();
+				}
 			}
 		}
 
@@ -869,31 +871,25 @@ window.wp = window.wp || {};
 			var blocklist = 'blockquote|ul|ol|li|dl|dt|dd|table|thead|tbody|tfoot|tr|th|td|h[1-6]|fieldset|figure',
 				blocklist1 = blocklist + '|div|p',
 				blocklist2 = blocklist + '|pre',
-				preserve_linebreaks = false,
 				preserve_br = false,
+				comment = [],
 				preserve = [];
 
 			if ( ! html ) {
 				return '';
 			}
 
-			// Protect script and style tags.
-			if ( html.indexOf( '<script' ) !== -1 || html.indexOf( '<style' ) !== -1 ) {
-				html = html.replace( /<(script|style)[^>]*>[\s\S]*?<\/\1>/g, function( match ) {
-					preserve.push( match );
-					return '<wp-preserve>';
-				} );
-			}
+			// Protect pre, script and style tags.
+			html = html.replace( /<(pre|script|style)[^>]*>[\s\S]*?<\/\1>/g, function( match ) {
+				preserve.push( match );
+				return '<wp-preserve>';
+			} );
 
-			// Protect pre tags.
-			if ( html.indexOf( '<pre' ) !== -1 ) {
-				preserve_linebreaks = true;
-				html = html.replace( /<pre[^>]*>[\s\S]+?<\/pre>/g, function( a ) {
-					a = a.replace( /<br ?\/?>(\r\n|\n)?/g, '<wp-line-break>' );
-					a = a.replace( /<\/?p( [^>]*)?>(\r\n|\n)?/g, '<wp-line-break>' );
-					return a.replace( /\r?\n/g, '<wp-line-break>' );
-				});
-			}
+			// Protect comments.
+			html = html.replace( /<!--[\s\S]*?-->/g, function( match ) {
+				comment.push( match );
+				return '<wp-comment>';
+			} );
 
 			// Remove line breaks but keep <br> tags inside image captions.
 			if ( html.indexOf( '[caption' ) !== -1 ) {
@@ -965,21 +961,23 @@ window.wp = window.wp || {};
 			// Unmark special paragraph closing tags.
 			html = html.replace( /<\/p#>/g, '</p>\n' );
 
-			// Pad remaining <p> tags whit a line break.
+			// Pad remaining <p> tags with a line break.
 			html = html.replace( /\s*(<p [^>]+>[\s\S]*?<\/p>)/g, '\n$1' );
 
 			// Trim.
 			html = html.replace( /^\s+/, '' );
 			html = html.replace( /[\s\u00a0]+$/, '' );
 
-			if ( preserve_linebreaks ) {
-				html = html.replace( /<wp-line-break>/g, '\n' );
-			}
-
 			if ( preserve_br ) {
 				html = html.replace( /<wp-temp-br([^>]*)>/g, '<br$1>' );
 			}
 
+			// Restore comments.
+			if ( comment.length ) {
+				html = html.replace( /<wp-comment>/g, function() {
+					return comment.shift() + '\n';
+				} );
+			}
 			// Restore preserved tags.
 			if ( preserve.length ) {
 				html = html.replace( /<wp-preserve>/g, function() {
@@ -1003,7 +1001,8 @@ window.wp = window.wp || {};
 		 * @returns {string} The formatted text.
 		 */
 		function autop( text ) {
-			var preserve_linebreaks = false,
+			var preserve = [],
+				comment = [],
 				preserve_br = false,
 				blocklist = 'table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre' +
 					'|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section' +
@@ -1011,6 +1010,18 @@ window.wp = window.wp || {};
 
 			// Normalize line breaks.
 			text = text.replace( /\r\n|\r/g, '\n' );
+
+			// Preserve <pre> and <script> tags.
+			text = text.replace( /<(pre|script)[^>]*>[\s\S]*?<\/\1>/g, function( match ) {
+				preserve.push( match );
+				return '<wp-preserve>';
+			});
+
+			// Protect comments.
+			text = text.replace( /<!--[\s\S]*?-->\n?/g, function( match ) {
+				comment.push( match );
+				return '<wp-comment>';
+			} );
 
 			// Remove line breaks from <object>.
 			if ( text.indexOf( '<object' ) !== -1 ) {
@@ -1023,14 +1034,6 @@ window.wp = window.wp || {};
 			text = text.replace( /<[^<>]+>/g, function( a ) {
 				return a.replace( /[\n\t ]+/g, ' ' );
 			});
-
-			// Preserve line breaks in <pre> and <script> tags.
-			if ( text.indexOf( '<pre' ) !== -1 || text.indexOf( '<script' ) !== -1 ) {
-				preserve_linebreaks = true;
-				text = text.replace( /<(pre|script)[^>]*>[\s\S]*?<\/\1>/g, function( a ) {
-					return a.replace( /\n/g, '<wp-line-break>' );
-				});
-			}
 
 			if ( text.indexOf( '<figcaption' ) !== -1 ) {
 				text = text.replace( /\s*(<figcaption[^>]*>)/g, '$1' );
@@ -1106,16 +1109,28 @@ window.wp = window.wp || {};
 				return b + '<p>' + c + '</p>';
 			});
 
-			// Restore the line breaks in <pre> and <script> tags.
-			if ( preserve_linebreaks ) {
-				text = text.replace( /<wp-line-break>/g, '\n' );
-			}
-
 			// Restore the <br> tags in captions.
 			if ( preserve_br ) {
 				text = text.replace( /<wp-temp-br([^>]*)>/g, '<br$1>' );
 			}
 
+			// Restore comments.
+			if ( comment.length ) {
+				text = text.replace( /<p><wp-comment><\/p>/g, '\n<wp-comment>' );
+				text = text.replace( /<wp-comment>/g, function() {
+					return comment.shift();
+				} );
+			}
+
+			// Restore the <pre> and <script> tags.
+			if ( preserve.length ) {
+				text = text.replace( /<p><wp-preserve>/g, '\n<wp-preserve>' );
+				text = text.replace( /<wp-preserve><\/p>/g, '<wp-preserve>\n' );
+				text = text.replace( /<wp-preserve>/g, function() { 
+					return preserve.shift();
+				}	);	
+			}
+				
 			return text;
 		}
 
