@@ -134,22 +134,7 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 			}
 		}
 	}
-<<<<<<< HEAD
-	$j = @date( $dateformatstring, $i );
-=======
-
-						$formatted = sprintf( '%s%+03d%s%02d', $prefix, $hours, $separator, $minutes );
-					}
-
-					$dateformatstring = ' ' . $dateformatstring;
-					$dateformatstring = preg_replace( "/([^\\\])$timezone_format/", "\\1" . backslashit( $formatted ), $dateformatstring );
-					$dateformatstring = substr( $dateformatstring, 1 );
-				}
-			}
-		}
-	}
-	$j = gmdate( $dateformatstring, $i );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
+	$j = date( $dateformatstring, $i );
 
 	/**
 	 * Filters the date formatted based on the locale.
@@ -191,13 +176,9 @@ function wp_maybe_decline_date( $date ) {
 	 */
 	if ( 'on' === _x( 'off', 'decline months names: on or off' ) ) {
 		// Match a format like 'j F Y' or 'j. F'
-<<<<<<< HEAD
-		if ( @preg_match( '#^\d{1,2}\.? [^\d ]+#u', $date ) ) {
+		if ( preg_match( '#^\d{1,2}\.? [^\d ]+#u', $date ) ) {
 			$months          = $wp_locale->month;
 			$months_genitive = $wp_locale->month_genitive;
-=======
-		if ( preg_match( '#^\d{1,2}\.? [^\d ]+#u', $date ) ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 			foreach ( $months as $key => $month ) {
 				$months[ $key ] = '# ' . $month . '( |$)#u';
@@ -209,22 +190,6 @@ function wp_maybe_decline_date( $date ) {
 
 			$date = preg_replace( $months, $months_genitive, $date );
 		}
-<<<<<<< HEAD
-=======
-
-		// Match a format like 'F jS' or 'F j' and change it to 'j F'
-		if ( preg_match( '#^[^\d ]+ \d{1,2}(st|nd|rd|th)? #u', trim( $date ) ) ) {
-			foreach ( $months as $key => $month ) {
-				$months[ $key ] = '#' . $month . ' (\d{1,2})(st|nd|rd|th)?#u';
-			}
-
-			foreach ( $months_genitive as $key => $month ) {
-				$months_genitive[ $key ] = '$1 ' . $month;
-			}
-
-			$date = preg_replace( $months, $months_genitive, $date );
-		}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	// Used for locale-specific rules
@@ -1275,14 +1240,9 @@ function nocache_headers() {
 
 	header_remove( 'Last-Modified' );
 
-<<<<<<< HEAD
-	foreach ( $headers as $name => $field_value )
-		@header("{$name}: {$field_value}");
-=======
 	foreach ( $headers as $name => $field_value ) {
 		header( "{$name}: {$field_value}" );
 	}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 }
 
 /**
@@ -2317,14 +2277,10 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 		return array( 'error' => $message );
 	}
 
-<<<<<<< HEAD
-	$ifp = @ fopen( $new_file, 'wb' );
-	if ( ! $ifp )
-=======
 	$ifp = @fopen( $new_file, 'wb' );
 	if ( ! $ifp ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		return array( 'error' => sprintf( __( 'Could not write file %s' ), $new_file ) );
+	}
 
 	fwrite( $ifp, $bits );
 	fclose( $ifp );
@@ -6431,114 +6387,6 @@ function wp_direct_php_update_button() {
  * @param string $required Minimum required WordPress version.
  * @return bool True if required version is compatible or empty, false if not.
  */
-<<<<<<< HEAD
-=======
-function get_dirsize( $directory, $max_execution_time = null ) {
-	$dirsize = get_transient( 'dirsize_cache' );
-
-	if ( is_array( $dirsize ) && isset( $dirsize[ $directory ]['size'] ) ) {
-		return $dirsize[ $directory ]['size'];
-	}
-
-	if ( ! is_array( $dirsize ) ) {
-		$dirsize = array();
-	}
-
-	// Exclude individual site directories from the total when checking the main site of a network
-	// as they are subdirectories and should not be counted.
-	if ( is_multisite() && is_main_site() ) {
-		$dirsize[ $directory ]['size'] = recurse_dirsize( $directory, $directory . '/sites', $max_execution_time );
-	} else {
-		$dirsize[ $directory ]['size'] = recurse_dirsize( $directory, null, $max_execution_time );
-	}
-
-	set_transient( 'dirsize_cache', $dirsize, HOUR_IN_SECONDS );
-	return $dirsize[ $directory ]['size'];
-}
-
-/**
- * Get the size of a directory recursively.
- *
- * Used by get_dirsize() to get a directory's size when it contains
- * other directories.
- *
- * @since MU (3.0.0)
- * @since 4.3.0 $exclude parameter added.
- * @since 5.2.0 $max_execution_time parameter added.
- *
- * @param string $directory       Full path of a directory.
- * @param string|array $exclude   Optional. Full path of a subdirectory to exclude from the total, or array of paths.
- *                                Expected without trailing slash(es).
- * @param int $max_execution_time Maximum time to run before giving up. In seconds.
- *                                The timeout is global and is measured from the moment WordPress started to load.
- * @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
- */
-function recurse_dirsize( $directory, $exclude = null, $max_execution_time = null ) {
-	$size = 0;
-
-	$directory = untrailingslashit( $directory );
-
-	if ( ! file_exists( $directory ) || ! is_dir( $directory ) || ! is_readable( $directory ) ) {
-		return false;
-	}
-
-	if (
-		( is_string( $exclude ) && $directory === $exclude ) ||
-		( is_array( $exclude ) && in_array( $directory, $exclude, true ) )
-	) {
-		return false;
-	}
-
-	if ( $max_execution_time === null ) {
-		// Keep the previous behavior but attempt to prevent fatal errors from timeout if possible.
-		if ( function_exists( 'ini_get' ) ) {
-			$max_execution_time = ini_get( 'max_execution_time' );
-		} else {
-			// Disable...
-			$max_execution_time = 0;
-		}
-
-		// Leave 1 second "buffer" for other operations if $max_execution_time has reasonable value.
-		if ( $max_execution_time > 10 ) {
-			$max_execution_time -= 1;
-		}
-	}
-
-	$handle = opendir( $directory );
-	if ( $handle ) {
-		while ( ( $file = readdir( $handle ) ) !== false ) {
-			$path = $directory . '/' . $file;
-			if ( $file != '.' && $file != '..' ) {
-				if ( is_file( $path ) ) {
-					$size += filesize( $path );
-				} elseif ( is_dir( $path ) ) {
-					$handlesize = recurse_dirsize( $path, $exclude, $max_execution_time );
-					if ( $handlesize > 0 ) {
-						$size += $handlesize;
-					}
-				}
-
-				if ( $max_execution_time > 0 && microtime( true ) - WP_START_TIMESTAMP > $max_execution_time ) {
-					// Time exceeded. Give up instead of risking a fatal timeout.
-					$size = null;
-					break;
-				}
-			}
-		}
-		closedir( $handle );
-	}
-	return $size;
-}
-
-/**
- * Checks compatibility with the current WordPress version.
- *
- * @since 5.2.0
- *
- * @param string $required Minimum required WordPress version.
- * @return bool True if required version is compatible or empty, false if not.
- */
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 function is_wp_version_compatible( $required ) {
 	global $wp_version;
 

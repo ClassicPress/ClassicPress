@@ -230,20 +230,8 @@ function image_downsize( $id, $size = 'medium' ) {
 	}
 	elseif ( $size == 'thumbnail' ) {
 		// fall back to the old thumbnail
-<<<<<<< HEAD
 		if ( ($thumb_file = wp_get_attachment_thumb_file($id)) && $info = getimagesize($thumb_file) ) {
 			$img_url = str_replace($img_url_basename, wp_basename($thumb_file), $img_url);
-=======
-		$thumb_file = wp_get_attachment_thumb_file( $id );
-		$info       = null;
-
-		if ( $thumb_file ) {
-			$info = @getimagesize( $thumb_file );
-		}
-
-		if ( $thumb_file && $info ) {
-			$img_url         = str_replace( $img_url_basename, wp_basename( $thumb_file ), $img_url );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			$width = $info[0];
 			$height = $info[1];
 			$is_intermediate = true;
@@ -842,7 +830,7 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
 			$icon_dir = apply_filters( 'icon_dir', ABSPATH . WPINC . '/images/media' );
 
 			$src_file = $icon_dir . '/' . wp_basename( $src );
-				list( $width, $height ) = @getimagesize( $src_file );
+			list( $width, $height ) = @getimagesize( $src_file );
 		}
 
 		if ( $src && $width && $height ) {

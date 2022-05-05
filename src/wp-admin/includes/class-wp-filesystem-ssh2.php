@@ -399,10 +399,6 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 * @param bool   $overwrite
 	 * @return bool
 	 */
-<<<<<<< HEAD
-	public function move($source, $destination, $overwrite = false) {
-		return @ssh2_sftp_rename( $this->sftp_link, $source, $destination );
-=======
 	public function move( $source, $destination, $overwrite = false ) {
 		if ( $this->exists( $destination ) ) {
 			if ( $overwrite ) {
@@ -415,7 +411,6 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		}
 
 		return ssh2_sftp_rename( $this->sftp_link, $source, $destination );
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	/**
@@ -571,12 +566,10 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$limit_file = false;
 		}
 
-<<<<<<< HEAD
-		if ( ! $this->is_dir($path) )
-=======
 		if ( ! $this->is_dir( $path ) || ! $this->is_readable( $path ) ) {
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			return false;
+
+		}
 
 		$ret = array();
 		$dir = dir( $this->sftp_path( $path ) );

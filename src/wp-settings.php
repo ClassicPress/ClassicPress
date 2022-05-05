@@ -43,15 +43,7 @@ wp_initial_constants();
 // Check for the required PHP version and for the MySQL extension or a database drop-in.
 wp_check_php_mysql_versions();
 
-<<<<<<< HEAD
-// Disable magic quotes at runtime. Magic quotes are added using wpdb later in wp-settings.php.
-@ini_set( 'magic_quotes_runtime', 0 );
-@ini_set( 'magic_quotes_sybase',  0 );
-
 // ClassicPress calculates offsets from UTC.
-=======
-// WordPress calculates offsets from UTC.
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 date_default_timezone_set( 'UTC' );
 
 // Turn register_globals off.

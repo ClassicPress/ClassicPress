@@ -480,16 +480,11 @@ class WP {
 			}
 		}
 
-<<<<<<< HEAD
-		foreach ( (array) $headers as $name => $field_value )
-			@header("{$name}: {$field_value}");
-=======
 		if ( ! headers_sent() ) {
 			foreach ( (array) $headers as $name => $field_value ) {
 				header( "{$name}: {$field_value}" );
 			}
 		}
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 
 		if ( $exit_required )
 			exit();

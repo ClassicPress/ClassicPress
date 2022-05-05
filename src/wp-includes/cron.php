@@ -317,19 +317,11 @@ function spawn_cron( $gmt_time = 0 ) {
 		echo ' ';
 
 		// flush any buffers and send the headers
-<<<<<<< HEAD
-		while ( @ob_end_flush() );
-		flush();
-
-		WP_DEBUG ? include_once( ABSPATH . 'wp-cron.php' ) : @include_once( ABSPATH . 'wp-cron.php' );
-		return;
-=======
 		wp_ob_end_flush_all();
 		flush();
 
 		include_once( ABSPATH . 'wp-cron.php' );
 		return true;
->>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	// Set the cron lock with the current unix timestamp, when the cron is being spawned.
