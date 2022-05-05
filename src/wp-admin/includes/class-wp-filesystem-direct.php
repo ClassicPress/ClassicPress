@@ -88,7 +88,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 * @return string|bool the current working directory on success, or false on failure.
 	 */
 	public function cwd() {
-		return @getcwd();
+		return getcwd();
 	}
 
 	/**
@@ -114,10 +114,20 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	public function chgrp($file, $group, $recursive = false) {
 		if ( ! $this->exists($file) )
 			return false;
+<<<<<<< HEAD
 		if ( ! $recursive )
 			return @chgrp($file, $group);
 		if ( ! $this->is_dir($file) )
 			return @chgrp($file, $group);
+=======
+		}
+		if ( ! $recursive ) {
+			return chgrp( $file, $group );
+		}
+		if ( ! $this->is_dir( $file ) ) {
+			return chgrp( $file, $group );
+		}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		// Is a directory, and we want recursive
 		$file = trailingslashit($file);
 		$filelist = $this->dirlist($file);
@@ -147,8 +157,14 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 				return false;
 		}
 
+<<<<<<< HEAD
 		if ( ! $recursive || ! $this->is_dir($file) )
 			return @chmod($file, $mode);
+=======
+		if ( ! $recursive || ! $this->is_dir( $file ) ) {
+			return chmod( $file, $mode );
+		}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		// Is a directory, and we want recursive
 		$file = trailingslashit($file);
 		$filelist = $this->dirlist($file);
@@ -171,10 +187,20 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	public function chown($file, $owner, $recursive = false) {
 		if ( ! $this->exists($file) )
 			return false;
+<<<<<<< HEAD
 		if ( ! $recursive )
 			return @chown($file, $owner);
 		if ( ! $this->is_dir($file) )
 			return @chown($file, $owner);
+=======
+		}
+		if ( ! $recursive ) {
+			return chown( $file, $owner );
+		}
+		if ( ! $this->is_dir( $file ) ) {
+			return chown( $file, $owner );
+		}
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 		// Is a directory, and we want recursive
 		$filelist = $this->dirlist($file);
 		foreach ($filelist as $filename) {
@@ -391,7 +417,12 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$time = time();
 		if ($atime == 0)
 			$atime = time();
+<<<<<<< HEAD
 		return @touch($file, $time, $atime);
+=======
+		}
+		return touch( $file, $time, $atime );
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 
 	/**
@@ -446,11 +477,20 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$limit_file = false;
 		}
 
+<<<<<<< HEAD
 		if ( ! $this->is_dir($path) )
+=======
+		if ( ! $this->is_dir( $path ) || ! $this->is_readable( $dir ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			return false;
 
+<<<<<<< HEAD
 		$dir = @dir($path);
 		if ( ! $dir )
+=======
+		$dir = dir( $path );
+		if ( ! $dir ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			return false;
 
 		$ret = array();

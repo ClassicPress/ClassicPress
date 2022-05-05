@@ -332,8 +332,13 @@ function wp_debug_mode() {
 		error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 	}
 
+<<<<<<< HEAD
 	if ( defined( 'XMLRPC_REQUEST' ) || defined( 'REST_REQUEST' ) || ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) || wp_doing_ajax() ) {
 		@ini_set( 'display_errors', 0 );
+=======
+	if ( defined( 'XMLRPC_REQUEST' ) || defined( 'REST_REQUEST' ) || ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) || wp_doing_ajax() || wp_is_json_request() ) {
+		ini_set( 'display_errors', 0 );
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 	}
 }
 
@@ -636,7 +641,12 @@ function wp_get_active_and_valid_plugins() {
 function wp_set_internal_encoding() {
 	if ( function_exists( 'mb_internal_encoding' ) ) {
 		$charset = get_option( 'blog_charset' );
+<<<<<<< HEAD
 		if ( ! $charset || ! @mb_internal_encoding( $charset ) )
+=======
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! $charset || ! @mb_internal_encoding( $charset ) ) {
+>>>>>>> d36eda33f7 (Coding Standards: Fix instances of `WordPress.PHP.NoSilencedErrors.Discouraged`.)
 			mb_internal_encoding( 'UTF-8' );
 	}
 }

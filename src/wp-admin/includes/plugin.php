@@ -328,7 +328,7 @@ function get_mu_plugins() {
 		return $wp_plugins;
 	}
 
-	@closedir( $plugins_dir );
+	closedir( $plugins_dir );
 
 	if ( empty($plugin_files) )
 		return $wp_plugins;
@@ -385,7 +385,7 @@ function get_dropins() {
 		return $dropins;
 	}
 
-	@closedir( $plugins_dir );
+	closedir( $plugins_dir );
 
 	if ( empty($plugin_files) )
 		return $dropins;
