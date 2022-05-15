@@ -793,12 +793,6 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $error_msg ) );
 	}
 
-	// A properly uploaded file will pass this test. There should be no reason to override this one.
-	$test_uploaded_file = 'wp_handle_upload' === $action ? @ is_uploaded_file( $file['tmp_name'] ) : @ is_file( $file['tmp_name'] );
-	if ( ! $test_uploaded_file ) {
-		return call_user_func_array( $upload_error_handler, array( &$file, __( 'Specified file failed upload test.' ) ) );
-	}
-
 	// A correct MIME type will pass this test. Override $mimes or use the upload_mimes filter.
 	if ( $test_type ) {
 		$wp_filetype = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], $mimes );

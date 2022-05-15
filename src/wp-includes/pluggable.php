@@ -1780,7 +1780,7 @@ function wp_notify_moderator($comment_id) {
 	$message_headers = apply_filters( 'comment_moderation_headers', $message_headers, $comment_id );
 
 	foreach ( $emails as $email ) {
-			wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
+		wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
 	}
 
 	if ( $switched_locale ) {
@@ -1912,7 +1912,7 @@ function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) 
 		 */
 		$wp_new_user_notification_email_admin = apply_filters( 'wp_new_user_notification_email_admin', $wp_new_user_notification_email_admin, $user, $blogname );
 
-			wp_mail(
+		wp_mail(
 			$wp_new_user_notification_email_admin['to'],
 			wp_specialchars_decode( sprintf( $wp_new_user_notification_email_admin['subject'], $blogname ) ),
 			$wp_new_user_notification_email_admin['message'],

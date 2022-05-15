@@ -837,7 +837,7 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
 			$icon_dir = apply_filters( 'icon_dir', ABSPATH . WPINC . '/images/media' );
 
 			$src_file = $icon_dir . '/' . wp_basename( $src );
-				list( $width, $height ) = @getimagesize( $src_file );
+			list( $width, $height ) = @getimagesize( $src_file );
 		}
 
 		if ( $src && $width && $height ) {
