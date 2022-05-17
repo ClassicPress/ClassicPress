@@ -911,7 +911,7 @@ final class WP_Screen {
 			 */
 			$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
 
-			$checked = checked( ! in_array( 'adminpostnavspan', $metaboxhidden ) );
+			$checked = checked( ! in_array( 'adminpostnavspan', $metaboxhidden ), true, false );
 
 			$expand	.= '<label for="adminpostnav-hide">';
 			$expand	.= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . esc_attr( $checked ) . ' />';
