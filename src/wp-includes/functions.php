@@ -134,7 +134,7 @@ function date_i18n( $dateformatstring, $unixtimestamp = false, $gmt = false ) {
 			}
 		}
 	}
-	$j = gmdate( $dateformatstring, $i );
+	$j = date( $dateformatstring, $i );
 
 	/**
 	 * Filters the date formatted based on the locale.
@@ -175,12 +175,10 @@ function wp_maybe_decline_date( $date ) {
 	 * translate this to 'on'. Do not translate into your own language.
 	 */
 	if ( 'on' === _x( 'off', 'decline months names: on or off' ) ) {
-
-		$months          = $wp_locale->month;
-		$months_genitive = $wp_locale->month_genitive;
-
 		// Match a format like 'j F Y' or 'j. F'
 		if ( preg_match( '#^\d{1,2}\.? [^\d ]+#u', $date ) ) {
+			$months          = $wp_locale->month;
+			$months_genitive = $wp_locale->month_genitive;
 
 			foreach ( $months as $key => $month ) {
 				$months[ $key ] = '# ' . $month . '( |$)#u';
@@ -188,19 +186,6 @@ function wp_maybe_decline_date( $date ) {
 
 			foreach ( $months_genitive as $key => $month ) {
 				$months_genitive[ $key ] = ' ' . $month . '$1';
-			}
-
-			$date = preg_replace( $months, $months_genitive, $date );
-		}
-
-		// Match a format like 'F jS' or 'F j' and change it to 'j F'
-		if ( preg_match( '#^[^\d ]+ \d{1,2}(st|nd|rd|th)? #u', trim( $date ) ) ) {
-			foreach ( $months as $key => $month ) {
-				$months[ $key ] = '#' . $month . ' (\d{1,2})(st|nd|rd|th)?#u';
-			}
-
-			foreach ( $months_genitive as $key => $month ) {
-				$months_genitive[ $key ] = '$1 ' . $month;
 			}
 
 			$date = preg_replace( $months, $months_genitive, $date );
@@ -3336,9 +3321,9 @@ function _wp_json_prepare_data( $data ) {
 function wp_send_json( $response, $status_code = null ) {
 	if ( ! headers_sent() ) {
 		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
-	if ( null !== $status_code ) {
-		status_header( $status_code );
-	}
+		if ( null !== $status_code ) {
+			status_header( $status_code );
+		}
 	}
 
 	echo wp_json_encode( $response );
