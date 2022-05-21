@@ -513,26 +513,27 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 */
 	do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
-		$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+	$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
 
 	// Send!
 	try {
-			$send = $phpmailer->send();
+		$send = $phpmailer->send();
 
-			/**
-			 * Fires after PHPMailer has successfully sent a mail.
-			 *
-			 * The firing of this action does not necessarily mean that the recipient received the
-			 * email successfully. It only means that the `send` method above was able to
-			 * process the request without any errors.
-			 *
-			 * @since 5.9.0
-			 *
-			 * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
-			 */
-			do_action( 'wp_mail_succeeded', $mail_data );
+		/**
+		 * Fires after PHPMailer has successfully sent a mail.
+		 *
+		 * The firing of this action does not necessarily mean that the recipient received the
+		 * email successfully. It only means that the `send` method above was able to
+		 * process the request without any errors.
+		 *
+		 * @since WP-5.9.0
+		 * @since CP-1.5.0
+		 *
+		 * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
+		 */
+		do_action( 'wp_mail_succeeded', $mail_data );
 
-			return $send;
+		return $send;
 	} catch ( PHPMailer\PHPMailer\Exception $e ) {
 			$mail_data['phpmailer_exception_code'] = $e->getCode();
 
