@@ -1200,17 +1200,19 @@ class wpdb {
 	 *   %f (float)
 	 *   %s (string)
 	 *
-	 * All placeholders MUST be left unquoted in the query string. A corresponding argument MUST be passed for each placeholder.
+	 * All placeholders MUST be left unquoted in the query string. A corresponding argument
+	 * MUST be passed for each placeholder.
 	 *
-	 * For compatibility with old behavior, numbered or formatted string placeholders (eg, %1$s, %5s) will not have quotes
-	 * added by this function, so should be passed with appropriate quotes around them for your usage.
+	 * For compatibility with old behavior, numbered or formatted string placeholders (eg, %1$s, %5s)
+	 * will not have quotes added by this function, so should be passed with appropriate quotes around
+	 * them for your usage.
 	 *
 	 * Literal percentage signs (%) in the query string must be written as %%. Percentage wildcards (for example,
 	 * to use in LIKE syntax) must be passed via a substitution argument containing the complete LIKE string, these
 	 * cannot be inserted directly in the query string. Also see {@see esc_like()}.
 	 *
-	 * Arguments may be passed as individual arguments to the method, or as a single array containing all arguments. A combination
-	 * of the two is not supported.
+	 * Arguments may be passed as individual arguments to the method, or as a single array containing
+	 * all arguments. A combination of the two is not supported.
 	 *
 	 * Examples:
 	 *     $wpdb->prepare( "SELECT * FROM `table` WHERE `column` = %s AND `field` = %d OR `other_field` LIKE %s", array( 'foo', 1337, '%bar' ) );
@@ -1220,12 +1222,15 @@ class wpdb {
 	 * @since WP-2.3.0
 	 *
 	 * @param string      $query    Query statement with sprintf()-like placeholders
-	 * @param array|mixed $args     The array of variables to substitute into the query's placeholders if being called with an array of arguments,
-	 *                              or the first variable to substitute into the query's placeholders if being called with individual arguments.
-	 * @param mixed       $args,... further variables to substitute into the query's placeholders if being called wih individual arguments.
+	 * @param array|mixed $args    The array of variables to substitute into the query's placeholders
+	 *                             if being called with an array of arguments, or the first variable
+	 *                             to substitute into the query's placeholders if being called with
+	 *                             individual arguments.
+	 * @param mixed       ...$args Further variables to substitute into the query's placeholders
+	 *                             if being called with individual arguments.
 	 * @return string|void Sanitized query string, if there is a query to prepare.
 	 */
-	public function prepare( $query, $args ) {
+	public function prepare( $query, ...$args ) {
 		if ( is_null( $query ) ) {
 			return;
 		}
@@ -1235,9 +1240,6 @@ class wpdb {
 			wp_load_translations_early();
 			_doing_it_wrong( 'wpdb::prepare', sprintf( __( 'The query argument of %s must have a placeholder.' ), 'wpdb::prepare()' ), 'WP-3.9.0' );
 		}
-
-		$args = func_get_args();
-		array_shift( $args );
 
 		// If args were passed as an array (as in vsprintf), move them up.
 		$passed_as_array = false;
@@ -1306,7 +1308,7 @@ class wpdb {
 		}
 
 		array_walk( $args, array( $this, 'escape_by_ref' ) );
-		$query = @vsprintf( $query, $args );
+		$query = vsprintf( $query, $args );
 
 		return $this->add_placeholder_escape( $query );
 	}
@@ -1536,6 +1538,7 @@ class wpdb {
 			if ( WP_DEBUG ) {
 				mysqli_real_connect( $this->dbh, $host, $this->dbuser, $this->dbpassword, null, $port, $socket, $client_flags );
 			} else {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				@mysqli_real_connect( $this->dbh, $host, $this->dbuser, $this->dbpassword, null, $port, $socket, $client_flags );
 			}
 
@@ -1567,6 +1570,7 @@ class wpdb {
 			if ( WP_DEBUG ) {
 				$this->dbh = mysql_connect( $this->dbhost, $this->dbuser, $this->dbpassword, $new_link, $client_flags );
 			} else {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$this->dbh = @mysql_connect( $this->dbhost, $this->dbuser, $this->dbpassword, $new_link, $client_flags );
 			}
 		}

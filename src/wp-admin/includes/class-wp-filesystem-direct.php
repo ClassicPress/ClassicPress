@@ -88,7 +88,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 * @return string|bool the current working directory on success, or false on failure.
 	 */
 	public function cwd() {
-		return @getcwd();
+		return getcwd();
 	}
 
 	/**
@@ -112,12 +112,15 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 * @return bool Returns true on success or false on failure.
 	 */
 	public function chgrp($file, $group, $recursive = false) {
-		if ( ! $this->exists($file) )
+		if ( ! $this->exists($file) ) {
 			return false;
-		if ( ! $recursive )
-			return @chgrp($file, $group);
-		if ( ! $this->is_dir($file) )
-			return @chgrp($file, $group);
+		}
+		if ( ! $recursive ) {
+			return chgrp( $file, $group );
+		}
+		if ( ! $this->is_dir( $file ) ) {
+			return chgrp( $file, $group );
+		}
 		// Is a directory, and we want recursive
 		$file = trailingslashit($file);
 		$filelist = $this->dirlist($file);
@@ -147,8 +150,9 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 				return false;
 		}
 
-		if ( ! $recursive || ! $this->is_dir($file) )
-			return @chmod($file, $mode);
+		if ( ! $recursive || ! $this->is_dir( $file ) ) {
+			return chmod( $file, $mode );
+		}
 		// Is a directory, and we want recursive
 		$file = trailingslashit($file);
 		$filelist = $this->dirlist($file);
@@ -169,12 +173,15 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 * @return bool Returns true on success or false on failure.
 	 */
 	public function chown($file, $owner, $recursive = false) {
-		if ( ! $this->exists($file) )
+		if ( ! $this->exists($file) ) {
 			return false;
-		if ( ! $recursive )
-			return @chown($file, $owner);
-		if ( ! $this->is_dir($file) )
-			return @chown($file, $owner);
+		}
+		if ( ! $recursive ) {
+			return chown( $file, $owner );
+		}
+		if ( ! $this->is_dir( $file ) ) {
+			return chown( $file, $owner );
+		}
 		// Is a directory, and we want recursive
 		$filelist = $this->dirlist($file);
 		foreach ($filelist as $filename) {
@@ -389,9 +396,10 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	public function touch($file, $time = 0, $atime = 0) {
 		if ($time == 0)
 			$time = time();
-		if ($atime == 0)
+		if ($atime == 0) {
 			$atime = time();
-		return @touch($file, $time, $atime);
+		}
+		return touch( $file, $time, $atime );
 	}
 
 	/**
@@ -446,12 +454,14 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$limit_file = false;
 		}
 
-		if ( ! $this->is_dir($path) )
+		if ( ! $this->is_dir( $path ) || ! $this->is_readable( $dir ) ) {
 			return false;
+		}
 
-		$dir = @dir($path);
-		if ( ! $dir )
+		$dir = dir( $path );
+		if ( ! $dir ) {
 			return false;
+		}
 
 		$ret = array();
 
