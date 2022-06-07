@@ -1198,7 +1198,7 @@ function add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $func
  * that the user has the required capability as well.
  *
  * @since 1.5.0
- * @since 5.3.0 Added the `$position` parameter. 
+ * @since 5.3.0 Added the `$position` parameter.
  *
  * @global array $submenu
  * @global array $menu
@@ -1221,95 +1221,95 @@ function add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $func
  * @return false|string The resulting page's hook_suffix, or false if the user does not have the capability required.
  */
 function add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '', $position = null ) {
-    global $submenu, $menu, $_wp_real_parent_file, $_wp_submenu_nopriv,
-        $_registered_pages, $_parent_pages;
- 
-    $menu_slug   = plugin_basename( $menu_slug );
-    $parent_slug = plugin_basename( $parent_slug );
- 
-    if ( isset( $_wp_real_parent_file[ $parent_slug ] ) ) {
-        $parent_slug = $_wp_real_parent_file[ $parent_slug ];
-    }
- 
-    if ( ! current_user_can( $capability ) ) {
-        $_wp_submenu_nopriv[ $parent_slug ][ $menu_slug ] = true;
-        return false;
-    }
- 
-    /*
-     * If the parent doesn't already have a submenu, add a link to the parent
-     * as the first item in the submenu. If the submenu file is the same as the
-     * parent file someone is trying to link back to the parent manually. In
-     * this case, don't automatically add a link back to avoid duplication.
-     */
-    if ( ! isset( $submenu[ $parent_slug ] ) && $menu_slug !== $parent_slug ) {
-        foreach ( (array) $menu as $parent_menu ) {
-            if ( $parent_menu[2] === $parent_slug && current_user_can( $parent_menu[1] ) ) {
-                $submenu[ $parent_slug ][] = array_slice( $parent_menu, 0, 4 );
-            }
-        }
-    }
- 
-    $new_sub_menu = array( $menu_title, $capability, $menu_slug, $page_title );
- 
-    if ( null !== $position && ! is_numeric( $position ) ) {
-        _doing_it_wrong(
-            __FUNCTION__,
-            sprintf(
-                /* translators: %s: add_submenu_page() */
-                __( 'The seventh parameter passed to %s should be numeric representing menu position.' ),
-                '<code>add_submenu_page()</code>'
-            ),
-            '5.3.0'
-        );
-        $position = null;
-    }
- 
-    if (
-        null === $position ||
-        ( ! isset( $submenu[ $parent_slug ] ) || $position >= count( $submenu[ $parent_slug ] ) )
-    ) {
-        $submenu[ $parent_slug ][] = $new_sub_menu;
-    } else {
-        // Test for a negative position.
-        $position = max( $position, 0 );
-        if ( 0 === $position ) {
-            // For negative or `0` positions, prepend the submenu.
-            array_unshift( $submenu[ $parent_slug ], $new_sub_menu );
-        } else {
-            // Grab all of the items before the insertion point.
-            $before_items = array_slice( $submenu[ $parent_slug ], 0, $position, true );
-            // Grab all of the items after the insertion point.
-            $after_items = array_slice( $submenu[ $parent_slug ], $position, null, true );
-            // Add the new item.
-            $before_items[] = $new_sub_menu;
-            // Merge the items.
-            $submenu[ $parent_slug ] = array_merge( $before_items, $after_items );
-        }
-    }
- 
-    // Sort the parent array.
-    ksort( $submenu[ $parent_slug ] );
- 
-    $hookname = get_plugin_page_hookname( $menu_slug, $parent_slug );
-    if ( ! empty( $callback ) && ! empty( $hookname ) ) {
-        add_action( $hookname, $callback );
-    }
- 
-    $_registered_pages[ $hookname ] = true;
- 
-    /*
-     * Backward-compatibility for plugins using add_management_page().
-     * See wp-admin/admin.php for redirect from edit.php to tools.php.
-     */
-    if ( 'tools.php' === $parent_slug ) {
-        $_registered_pages[ get_plugin_page_hookname( $menu_slug, 'edit.php' ) ] = true;
-    }
- 
-    // No parent as top level.
-    $_parent_pages[ $menu_slug ] = $parent_slug;
- 
-    return $hookname;
+	global $submenu, $menu, $_wp_real_parent_file, $_wp_submenu_nopriv,
+		$_registered_pages, $_parent_pages;
+
+	$menu_slug   = plugin_basename( $menu_slug );
+	$parent_slug = plugin_basename( $parent_slug );
+
+	if ( isset( $_wp_real_parent_file[ $parent_slug ] ) ) {
+		$parent_slug = $_wp_real_parent_file[ $parent_slug ];
+	}
+
+	if ( ! current_user_can( $capability ) ) {
+		$_wp_submenu_nopriv[ $parent_slug ][ $menu_slug ] = true;
+		return false;
+	}
+
+	/*
+	 * If the parent doesn't already have a submenu, add a link to the parent
+	 * as the first item in the submenu. If the submenu file is the same as the
+	 * parent file someone is trying to link back to the parent manually. In
+	 * this case, don't automatically add a link back to avoid duplication.
+	 */
+	if ( ! isset( $submenu[ $parent_slug ] ) && $menu_slug !== $parent_slug ) {
+		foreach ( (array) $menu as $parent_menu ) {
+			if ( $parent_menu[2] === $parent_slug && current_user_can( $parent_menu[1] ) ) {
+				$submenu[ $parent_slug ][] = array_slice( $parent_menu, 0, 4 );
+			}
+		}
+	}
+
+	$new_sub_menu = array( $menu_title, $capability, $menu_slug, $page_title );
+
+	if ( null !== $position && ! is_numeric( $position ) ) {
+		_doing_it_wrong(
+			__FUNCTION__,
+			sprintf(
+				/* translators: %s: add_submenu_page() */
+				__( 'The seventh parameter passed to %s should be numeric representing menu position.' ),
+				'<code>add_submenu_page()</code>'
+			),
+			'5.3.0'
+		);
+		$position = null;
+	}
+
+	if (
+		null === $position ||
+		( ! isset( $submenu[ $parent_slug ] ) || $position >= count( $submenu[ $parent_slug ] ) )
+	) {
+		$submenu[ $parent_slug ][] = $new_sub_menu;
+	} else {
+		// Test for a negative position.
+		$position = max( $position, 0 );
+		if ( 0 === $position ) {
+			// For negative or `0` positions, prepend the submenu.
+			array_unshift( $submenu[ $parent_slug ], $new_sub_menu );
+		} else {
+			// Grab all of the items before the insertion point.
+			$before_items = array_slice( $submenu[ $parent_slug ], 0, $position, true );
+			// Grab all of the items after the insertion point.
+			$after_items = array_slice( $submenu[ $parent_slug ], $position, null, true );
+			// Add the new item.
+			$before_items[] = $new_sub_menu;
+			// Merge the items.
+			$submenu[ $parent_slug ] = array_merge( $before_items, $after_items );
+		}
+	}
+
+	// Sort the parent array.
+	ksort( $submenu[ $parent_slug ] );
+
+	$hookname = get_plugin_page_hookname( $menu_slug, $parent_slug );
+	if ( ! empty( $callback ) && ! empty( $hookname ) ) {
+		add_action( $hookname, $callback );
+	}
+
+	$_registered_pages[ $hookname ] = true;
+
+	/*
+	 * Backward-compatibility for plugins using add_management_page().
+	 * See wp-admin/admin.php for redirect from edit.php to tools.php.
+	 */
+	if ( 'tools.php' === $parent_slug ) {
+		$_registered_pages[ get_plugin_page_hookname( $menu_slug, 'edit.php' ) ] = true;
+	}
+
+	// No parent as top level.
+	$_parent_pages[ $menu_slug ] = $parent_slug;
+
+	return $hookname;
 }
 
 /**
