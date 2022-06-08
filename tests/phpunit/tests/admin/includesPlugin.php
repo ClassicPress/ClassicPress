@@ -491,4 +491,29 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			rmdir( $di_bu_dir );
 		}
 	}
+
+	/**
+	 * Test securty page is only visible if used by a plugin
+	 */
+	function test_add_security_menu() {
+		global $_parent_pages;
+		$current_user = get_current_user_id();
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		update_option( 'siteurl', 'http://example.com' );
+
+		// add_security_page() requires a menu_slug that matches an active plugin
+		activate_plugin( 'hello.php' );
+		$expected = 'http://example.com/wp-admin/security.php?page=hello.php';
+
+		$this->assertNotContains( 'security.php', $_parent_pages );
+		$this->assertNotEquals( $expected, menu_page_url( 'hello.php', false ) );
+
+		add_security_page( 'Security Page Test', 'Security Page Test', 'hello.php', null );
+
+		$this->assertContains( 'security.php', $_parent_pages );
+		$this->assertEquals( $expected, menu_page_url( 'hello.php', false ) );
+
+		wp_set_current_user( $current_user );
+		deactivate_plugins( 'hello.php' );
+	}
 }
