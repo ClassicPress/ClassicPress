@@ -343,3 +343,16 @@ if ( !user_can_access_admin_page() ) {
 }
 
 $menu = add_menu_classes($menu);
+
+/**
+ * Remove the ClassicPress Security Page Menu when it is not used.
+ * The page itself is still accessible if calling the direct URL, or,
+ * if a plugin uses add_security_page()
+ *
+ * @since CP-1.5.0
+ */
+if ( isset( $menu[85] )
+	&& isset( $menu[85][2] )
+	&& 'security.php' === $menu[85][2] ) {
+	unset( $menu[85] );
+}
