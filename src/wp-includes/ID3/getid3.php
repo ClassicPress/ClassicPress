@@ -1771,6 +1771,7 @@ class getID3
 
 			// phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
 			if (preg_match('#(1|ON)#i', ini_get('safe_mode'))) {
+
 				$this->warning('Failed making system call to vorbiscomment.exe - '.$algorithm.'_data is incorrect - error returned: PHP running in Safe Mode (backtick operator not available)');
 				$this->info[$algorithm.'_data'] = false;
 

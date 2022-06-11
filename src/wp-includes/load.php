@@ -21,29 +21,6 @@ function wp_get_server_protocol() {
 }
 
 /**
- * Turn register globals off.
- *
- * @since WP-2.1.0
- * @access private
- */
-function wp_unregister_GLOBALS() {
-	if ( !ini_get( 'register_globals' ) )
-		return;
-
-	if ( isset( $_REQUEST['GLOBALS'] ) )
-		die( 'GLOBALS overwrite attempt detected' );
-
-	// Variables that shouldn't be unset
-	$no_unset = array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES', 'table_prefix' );
-
-	$input = array_merge( $_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset( $_SESSION ) && is_array( $_SESSION ) ? $_SESSION : array() );
-	foreach ( $input as $k => $v )
-		if ( !in_array( $k, $no_unset ) && isset( $GLOBALS[$k] ) ) {
-			unset( $GLOBALS[$k] );
-		}
-}
-
-/**
  * Fix `$_SERVER` variables for various setups.
  *
  * @since WP-3.0.0
@@ -333,7 +310,7 @@ function wp_debug_mode() {
 	}
 
 	if ( defined( 'XMLRPC_REQUEST' ) || defined( 'REST_REQUEST' ) || ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) || wp_doing_ajax() ) {
-		@ini_set( 'display_errors', 0 );
+		ini_set( 'display_errors', 0 );
 	}
 }
 
@@ -636,8 +613,10 @@ function wp_get_active_and_valid_plugins() {
 function wp_set_internal_encoding() {
 	if ( function_exists( 'mb_internal_encoding' ) ) {
 		$charset = get_option( 'blog_charset' );
-		if ( ! $charset || ! @mb_internal_encoding( $charset ) )
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! $charset || ! @mb_internal_encoding( $charset ) ) {
 			mb_internal_encoding( 'UTF-8' );
+		}
 	}
 }
 

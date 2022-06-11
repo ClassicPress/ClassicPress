@@ -56,14 +56,11 @@ $_old_files = array(
 	'wp-includes/class-wp-recovery-mode-link-service.php',
 	'wp-includes/class-wp-recovery-mode.php',
 	'wp-includes/error-protection.php',
-	'wp-includes/fonts/dashicons.woff2',
-	'wp-includes/js/backbone.js',
 	'wp-includes/js/clipboard.js',
 	'wp-includes/js/clipboard.min.js',
 	'wp-includes/js/codemirror/esprima.js',
 	'wp-includes/js/codemirror/fakejshint.js',
 	'wp-includes/js/tinymce/wp-tinymce.js',
-	'wp-includes/js/underscore.js',
 	'wp-includes/ms-network.php',
 	'wp-includes/ms-site.php',
 	'wp-includes/sodium_compat',
@@ -161,7 +158,7 @@ $_new_bundled_files = array(
 function update_core($from, $to) {
 	global $wp_filesystem, $_old_files, $_new_bundled_files, $wpdb;
 
-	@set_time_limit( 300 );
+	set_time_limit( 300 );
 
 	/**
 	 * Filters feedback messages displayed during the core update process.

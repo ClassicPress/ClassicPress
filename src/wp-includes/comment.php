@@ -2504,11 +2504,11 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	$pingback_link_offset_dquote = strpos($contents, $pingback_str_dquote);
 	$pingback_link_offset_squote = strpos($contents, $pingback_str_squote);
 	if ( $pingback_link_offset_dquote || $pingback_link_offset_squote ) {
-		$quote = ($pingback_link_offset_dquote) ? '"' : '\'';
-		$pingback_link_offset = ($quote=='"') ? $pingback_link_offset_dquote : $pingback_link_offset_squote;
-		$pingback_href_pos = @strpos($contents, 'href=', $pingback_link_offset);
-		$pingback_href_start = $pingback_href_pos+6;
-		$pingback_href_end = @strpos($contents, $quote, $pingback_href_start);
+		$quote                   = ( $pingback_link_offset_dquote ) ? '"' : '\'';
+		$pingback_link_offset    = ( $quote == '"' ) ? $pingback_link_offset_dquote : $pingback_link_offset_squote;
+		$pingback_href_pos       = strpos( $contents, 'href=', $pingback_link_offset );
+		$pingback_href_start     = $pingback_href_pos + 6;
+		$pingback_href_end       = strpos( $contents, $quote, $pingback_href_start );
 		$pingback_server_url_len = $pingback_href_end - $pingback_href_start;
 		$pingback_server_url = substr($contents, $pingback_href_start, $pingback_server_url_len);
 
@@ -2531,10 +2531,20 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 function do_all_pings() {
 	global $wpdb;
 
-	// Do pingbacks
-	while ($ping = $wpdb->get_row("SELECT ID, post_content, meta_id FROM {$wpdb->posts}, {$wpdb->postmeta} WHERE {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_pingme' LIMIT 1")) {
-		delete_metadata_by_mid( 'post', $ping->meta_id );
-		pingback( $ping->post_content, $ping->ID );
+	// Do pingbacks.
+	$pings = get_posts(
+		array(
+			'post_type'        => get_post_types(),
+			'suppress_filters' => false,
+			'nopaging'         => true,
+			'meta_key'         => '_pingme',
+			'fields'           => 'ids',
+		)
+	);
+
+	foreach ( $pings as $ping ) {
+		delete_post_meta( $ping, '_pingme' );
+		pingback( null, $ping );
 	}
 
 	// Do enclosures.
@@ -2548,18 +2558,28 @@ function do_all_pings() {
 		)
 	);
 
-	foreach ( $enclosure as $enclosure ) {
+	foreach ( $enclosures as $enclosure ) {
 		delete_post_meta( $enclosure, '_encloseme' );
-		do_enclose( null, $enclosure->ID );
+		do_enclose( null, $enclosure );
 	}
 
-	// Do Trackbacks
-	$trackbacks = $wpdb->get_col("SELECT ID FROM $wpdb->posts WHERE to_ping <> '' AND post_status = 'publish'");
-	if ( is_array($trackbacks) )
-		foreach ( $trackbacks as $trackback )
-			do_trackbacks($trackback);
+	// Do trackbacks.
+	$trackbacks = get_posts(
+		array(
+			'post_type'        => get_post_types(),
+			'suppress_filters' => false,
+			'nopaging'         => true,
+			'meta_key'         => '_trackbackme',
+			'fields'           => 'ids',
+		)
+	);
 
-	//Do Update Services/Generic Pings
+	foreach ( $trackbacks as $trackback ) {
+		delete_post_meta( $trackback, '_trackbackme' );
+		do_trackbacks( $trackback );
+	}
+
+	// Do Update Services/Generic Pings.
 	generic_ping();
 }
 
@@ -2705,7 +2725,7 @@ function pingback( $content, $post_id ) {
 		$pingback_server_url = discover_pingback_server_uri( $pagelinkedto );
 
 		if ( $pingback_server_url ) {
-			@ set_time_limit( 60 );
+			set_time_limit( 60 );
 			// Now, the RPC call
 			$pagelinkedfrom = get_permalink( $post );
 

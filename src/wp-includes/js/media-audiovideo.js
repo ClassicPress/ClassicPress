@@ -1024,4 +1024,4 @@
 	media.view.AudioDetails = audioDetails();
 	media.view.VideoDetails = videoDetails();
 
-}());
+})();

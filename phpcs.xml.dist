@@ -132,7 +132,6 @@
 	<exclude-pattern>/src/wp-includes/random_compat/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/Requests/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/SimplePie/*</exclude-pattern>
-	<exclude-pattern>/src/wp-includes/sodium_compat/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/Text/*</exclude-pattern>
 
 	<exclude-pattern>/tests/phpunit/includes/phpunit7/MockObject/*</exclude-pattern>

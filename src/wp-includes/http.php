@@ -471,10 +471,11 @@ function send_origin_headers() {
 	$origin = get_http_origin();
 
 	if ( is_allowed_http_origin( $origin ) ) {
-		@header( 'Access-Control-Allow-Origin: ' .  $origin );
-		@header( 'Access-Control-Allow-Credentials: true' );
-		if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] )
+		header( 'Access-Control-Allow-Origin: ' . $origin );
+		header( 'Access-Control-Allow-Credentials: true' );
+		if ( 'OPTIONS' === $_SERVER['REQUEST_METHOD'] ) {
 			exit;
+		}
 		return $origin;
 	}
 

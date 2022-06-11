@@ -1638,7 +1638,7 @@ function iframe_header( $title = '', $deprecated = false ) {
 
 	$current_screen = get_current_screen();
 
-	@header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+	header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
 	_wp_admin_html_begin();
 ?>
 <title><?php bloginfo('name') ?> &rsaquo; <?php echo $title ?> &#8212; <?php _e('ClassicPress'); ?></title>
@@ -2053,8 +2053,9 @@ function _wp_admin_html_begin() {
 
 	$admin_html_class = ( is_admin_bar_showing() ) ? 'wp-toolbar' : '';
 
-	if ( $is_IE )
-		@header('X-UA-Compatible: IE=edge');
+	if ( $is_IE ) {
+		header( 'X-UA-Compatible: IE=edge' );
+	}
 
 ?>
 <!DOCTYPE html>

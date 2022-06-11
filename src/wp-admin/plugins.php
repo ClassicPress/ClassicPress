@@ -167,7 +167,7 @@ if ( $action ) {
 				error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
 			}
 
-			@ini_set('display_errors', true); //Ensure that Fatal errors are displayed.
+			ini_set( 'display_errors', true ); //Ensure that Fatal errors are displayed.
 			// Go back to "sandbox" scope so we get the same errors as before
 			plugin_sandbox_scrape( $plugin );
 			/** This action is documented in wp-admin/includes/plugin.php */
@@ -413,8 +413,8 @@ get_current_screen()->add_help_tab( array(
 	'<p>' . __('Plugins extend and expand the functionality of ClassicPress. Once a plugin is installed, you may activate it or deactivate it here.') . '</p>' .
 	'<p>' . __( 'The search for installed plugins will search for terms in their name, description, or author.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
 	'<p>' . sprintf(
-		/* translators: %s: ClassicPress Plugin Directory URL */
-		__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license ClassicPress uses, but they are not necessarily designed for ClassicPress. Be sure to confirm their compatibility prior to install!' ),
+		/* translators: %s: WordPress Plugin Directory URL */
+		__( 'If you would like to see more plugins to choose from, click on the &#8220;Add WP Plugin&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license ClassicPress uses, but they are not necessarily designed for ClassicPress. Be sure to confirm their compatibility prior to install!' ),
 		__( 'https://wordpress.org/plugins/' )
 	) . '</p>'
 ) );
@@ -525,7 +525,7 @@ echo esc_html( $title );
 if ( ( ! is_multisite() || is_network_admin() ) && current_user_can( 'install_plugins' ) ) {
 ?>
 	<a href="<?php echo self_admin_url( 'plugin-install.php?tab=upload' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Upload', 'plugin' ); ?></a>
-	<a href="<?php echo self_admin_url( 'plugin-install.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'plugin' ); ?></a>
+	<a href="<?php echo self_admin_url( 'plugin-install.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add WP Plugin', 'plugin' ); ?></a>
 <?php
 }
 

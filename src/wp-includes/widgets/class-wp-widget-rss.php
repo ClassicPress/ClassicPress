@@ -59,10 +59,11 @@ class WP_Widget_RSS extends WP_Widget {
 		$desc = '';
 		$link = '';
 
-		if ( ! is_wp_error($rss) ) {
-			$desc = esc_attr(strip_tags(@html_entity_decode($rss->get_description(), ENT_QUOTES, get_option('blog_charset'))));
-			if ( empty($title) )
+		if ( ! is_wp_error( $rss ) ) {
+			$desc = esc_attr( strip_tags( html_entity_decode( $rss->get_description(), ENT_QUOTES, get_option( 'blog_charset' ) ) ) );
+			if ( empty( $title ) ) {
 				$title = strip_tags( $rss->get_title() );
+			}
 			$link = strip_tags( $rss->get_permalink() );
 			while ( stristr($link, 'http') != $link )
 				$link = substr($link, 1);

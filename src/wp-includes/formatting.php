@@ -952,7 +952,7 @@ function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = fals
 		$string = wp_kses_normalize_entities( $string );
 	}
 
-	$string = @htmlspecialchars( $string, $quote_style, $charset, $double_encode );
+	$string = htmlspecialchars( $string, $quote_style, $charset, $double_encode );
 
 	// Back-compat.
 	if ( 'single' === $_quote_style )
@@ -1060,6 +1060,7 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
 	// Check for support for utf8 in the installed PCRE library once and store the result in a static
 	static $utf8_pcre = null;
 	if ( ! isset( $utf8_pcre ) ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$utf8_pcre = @preg_match( '/^./u', 'a' );
 	}
 	// We can't demand utf8 in the PCRE installation, so just return the string in those cases
@@ -1067,7 +1068,7 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
 		return $string;
 	}
 
-	// preg_match fails when it encounters invalid UTF8 in $string
+	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- preg_match fails when it encounters invalid UTF8 in $string
 	if ( 1 === @preg_match( '/^./us', $string ) ) {
 		return $string;
 	}
@@ -1084,12 +1085,14 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
  * Encode the Unicode values to be used in the URI.
  *
  * @since WP-1.5.0
+ * @since WP-5.8.3 Added the `encode_ascii_characters` parameter.
  *
- * @param string $utf8_string
+ * @param string $utf8_string             String to encode.
  * @param int    $length Max  length of the string
+ * @param bool   $encode_ascii_characters Whether to encode ascii characters such as < " '
  * @return string String with Unicode encoded for URI.
  */
-function utf8_uri_encode( $utf8_string, $length = 0 ) {
+function utf8_uri_encode( $utf8_string, $length = 0, $encode_ascii_characters = false ) {
 	$unicode        = '';
 	$values         = array();
 	$num_octets     = 1;
@@ -1104,11 +1107,14 @@ function utf8_uri_encode( $utf8_string, $length = 0 ) {
 		$value = ord( $utf8_string[ $i ] );
 
 		if ( $value < 128 ) {
-			if ( $length && ( $unicode_length >= $length ) ) {
+			$char                = chr( $value );
+			$encoded_char        = $encode_ascii_characters ? rawurlencode( $char ) : $char;
+			$encoded_char_length = strlen( $encoded_char );
+			if ( $length && ( $unicode_length + $encoded_char_length ) > $length ) {
 				break;
 			}
-			$unicode .= chr( $value );
-			$unicode_length++;
+			$unicode        .= $encoded_char;
+			$unicode_length += $encoded_char_length;
 		} else {
 			if ( count( $values ) == 0 ) {
 				if ( $value < 224 ) {
