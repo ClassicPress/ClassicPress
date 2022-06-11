@@ -164,8 +164,9 @@ function list_files( $folder = '', $levels = 100, $exclusions = array() ) {
 				$files[] = $folder . $file;
 			}
 		}
+
+		closedir( $dir );
 	}
-	@closedir( $dir );
 
 	return $files;
 }
@@ -511,7 +512,7 @@ function wp_edit_theme_plugin_file( $args ) {
 		}
 
 		// Make sure PHP process doesn't die before loopback requests complete.
-		@set_time_limit( 300 );
+		set_time_limit( 300 );
 
 		// Time to wait for loopback requests to finish.
 		$timeout = 100;
@@ -775,6 +776,12 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $upload_error_strings[ $file['error'] ] ) );
 	}
 
+	// A properly uploaded file will pass this test. There should be no reason to override this one.
+	$test_uploaded_file = 'wp_handle_upload' === $action ? is_uploaded_file( $file['tmp_name'] ) : @is_readable( $file['tmp_name'] );
+	if ( ! $test_uploaded_file ) {
+		return call_user_func_array( $upload_error_handler, array( &$file, __( 'Specified file failed upload test.' ) ) );
+	}
+
 	$test_file_size = 'wp_handle_upload' === $action ? $file['size'] : filesize( $file['tmp_name'] );
 	// A non-empty file will pass this test.
 	if ( $test_size && ! ( $test_file_size > 0 ) ) {
@@ -784,12 +791,6 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 			$error_msg = __( 'File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini or by post_max_size being defined as smaller than upload_max_filesize in php.ini.' );
 		}
 		return call_user_func_array( $upload_error_handler, array( &$file, $error_msg ) );
-	}
-
-	// A properly uploaded file will pass this test. There should be no reason to override this one.
-	$test_uploaded_file = 'wp_handle_upload' === $action ? @ is_uploaded_file( $file['tmp_name'] ) : @ is_file( $file['tmp_name'] );
-	if ( ! $test_uploaded_file ) {
-		return call_user_func_array( $upload_error_handler, array( &$file, __( 'Specified file failed upload test.' ) ) );
 	}
 
 	// A correct MIME type will pass this test. Override $mimes or use the upload_mimes filter.
@@ -843,10 +844,11 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 
 	if ( null === $move_new_file ) {
 		if ( 'wp_handle_upload' === $action ) {
-			$move_new_file = @ move_uploaded_file( $file['tmp_name'], $new_file );
+			$move_new_file = @move_uploaded_file( $file['tmp_name'], $new_file );
 		} else {
 			// use copy and unlink because rename breaks streams.
-			$move_new_file = @ copy( $file['tmp_name'], $new_file );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$move_new_file = @copy( $file['tmp_name'], $new_file );
 			unlink( $file['tmp_name'] );
 		}
 
@@ -863,7 +865,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	// Set correct file permissions.
 	$stat = stat( dirname( $new_file ));
 	$perms = $stat['mode'] & 0000666;
-	@ chmod( $new_file, $perms );
+	chmod( $new_file, $perms );
 
 	// Compute the URL.
 	$url = $uploads['url'] . "/$filename";
@@ -1490,8 +1492,8 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 				$GLOBALS['_wp_filesystem_direct_method'] = 'relaxed_ownership';
 			}
 
-			@fclose($temp_handle);
-			@unlink($temp_file_name);
+			fclose( $temp_handle );
+			@unlink( $temp_file_name );
 		}
  	}
 
