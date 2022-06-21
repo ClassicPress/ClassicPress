@@ -35,7 +35,7 @@ class SMTP
      *
      * @var string
      */
-    const VERSION = '6.6.2';
+    const VERSION = '6.6.0';
 
     /**
      * SMTP line break constant.
@@ -1037,10 +1037,7 @@ class SMTP
             return false;
         }
 
-	    //Don't clear the error store when using keepalive
-	    if ($command !== 'RSET') {
-		    $this->setError('');
-	    }
+        $this->setError('');
 
         return true;
     }
