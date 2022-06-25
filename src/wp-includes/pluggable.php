@@ -361,8 +361,13 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 */
 	 if ( !isset( $from_email ) ) {
 		// Get the site domain and get rid of www.
+<<<<<<< HEAD
 		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
 		if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+=======
+			$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+>>>>>>> 75048987d8 (Mail: Ensure that a server hostname can be set by using `network_home_url()`.)
 			$sitename = substr( $sitename, 4 );
 		}
 
@@ -1563,7 +1568,11 @@ function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 		$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "\r\n";
 	}
 
+<<<<<<< HEAD
 	$wp_email = 'classicpress@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME']));
+=======
+		$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
+>>>>>>> 75048987d8 (Mail: Ensure that a server hostname can be set by using `network_home_url()`.)
 
 	if ( '' == $comment->comment_author ) {
 		$from = "From: \"$blogname\" <$wp_email>";
