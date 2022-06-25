@@ -512,14 +512,9 @@ function wp_read_image_metadata( $file ) {
 	/**
 	 * Filters the array of meta data read from an image's exif data.
 	 *
-<<<<<<< HEAD
-	 * @since WP-2.5.0
-	 * @since WP-4.4.0 The `$iptc` parameter was added.
-=======
 	 * @since 2.5.0
 	 * @since 4.4.0 The `$iptc` parameter was added.
 	 * @since 5.0.0 The `$exif` parameter was added.
->>>>>>> 56b7476d7a (Media: Pass EXIF data to the `wp_read_image_metadata` filter.)
 	 *
 	 * @param array  $meta            Image meta data.
 	 * @param string $file            Path to image file.
