@@ -425,6 +425,8 @@ function wp_read_image_metadata( $file ) {
 		 }
 	}
 
+	$exif = array(); 
+
 	/**
 	 * Filters the image types to check for exif data.
 	 *
@@ -510,15 +512,22 @@ function wp_read_image_metadata( $file ) {
 	/**
 	 * Filters the array of meta data read from an image's exif data.
 	 *
+<<<<<<< HEAD
 	 * @since WP-2.5.0
 	 * @since WP-4.4.0 The `$iptc` parameter was added.
+=======
+	 * @since 2.5.0
+	 * @since 4.4.0 The `$iptc` parameter was added.
+	 * @since 5.0.0 The `$exif` parameter was added.
+>>>>>>> 56b7476d7a (Media: Pass EXIF data to the `wp_read_image_metadata` filter.)
 	 *
 	 * @param array  $meta            Image meta data.
 	 * @param string $file            Path to image file.
 	 * @param int    $image_type Type of image, one of the `IMAGETYPE_XXX` constants.
 	 * @param array  $iptc            IPTC data.
+	 * @param array  $exif       EXIF data.
 	 */
-	return apply_filters( 'wp_read_image_metadata', $meta, $file, $image_type, $iptc );
+	return apply_filters( 'wp_read_image_metadata', $meta, $file, $image_type, $iptc, $exif );
 
 }
 
