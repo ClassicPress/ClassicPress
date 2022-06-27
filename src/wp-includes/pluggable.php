@@ -1563,7 +1563,7 @@ function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 		$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "\r\n";
 	}
 
-	$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
+	$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
 	if ( '' == $comment->comment_author ) {
 		$from = "From: \"$blogname\" <$wp_email>";

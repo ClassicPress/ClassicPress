@@ -868,7 +868,7 @@ function wpmu_signup_blog_notification( $domain, $path, $title, $user_login, $us
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
-	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 
 	$user = get_user_by( 'login', $user_login );
@@ -978,7 +978,7 @@ function wpmu_signup_user_notification( $user_login, $user_email, $key, $meta = 
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
-	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 	$message = sprintf(
 		/**
