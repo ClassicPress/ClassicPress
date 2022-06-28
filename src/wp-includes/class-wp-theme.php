@@ -651,12 +651,8 @@ final class WP_Theme implements ArrayAccess {
 	/**
 	 * Sanitize a theme header.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.4.0
-=======
-	 * @since 3.4.0
-	 * @since 5.4.0 Added support for `Requires at least` and `Requires PHP` headers.
->>>>>>> 13a9ab716e (Site Health: Add support for required WordPress and PHP versions to themes.)
+	 * @since WP-5.4.0 Added support for `Requires at least` and `Requires PHP` headers.
 	 *
 	 * @staticvar array $header_tags
 	 * @staticvar array $header_tags_with_a
@@ -704,13 +700,9 @@ final class WP_Theme implements ArrayAccess {
 			case 'Tags' :
 				$value = array_filter( array_map( 'trim', explode( ',', strip_tags( $value ) ) ) );
 				break;
-<<<<<<< HEAD
-			case 'Version' :
-=======
 			case 'Version':
 			case 'RequiresWP':
 			case 'RequiresPHP':
->>>>>>> 13a9ab716e (Site Health: Add support for required WordPress and PHP versions to themes.)
 				$value = strip_tags( $value );
 				break;
 		}
