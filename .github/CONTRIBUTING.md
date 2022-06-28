@@ -159,7 +159,14 @@ When you're ready to backport a code change:
    bin/backport-wp-commit.sh -c CHANGESET_NUMBER
    ```
 
+	 Or if you have composer installed globally, run
+
+	 ```
+	 composer run backport CHANGESET_NUMBER
+	 ```
+
    Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
+
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
 3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
