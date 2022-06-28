@@ -21,5 +21,8 @@
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
+	},
+	"scripts": {
+		"backport":  "bin/backport-wp-commit.sh -c"
 	}
 }
