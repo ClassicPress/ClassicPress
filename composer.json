@@ -23,6 +23,6 @@
 		}
 	},
 	"scripts": {
-		"backport":  "bin/backport-wp-commit.sh -c"
+		"backport": "bin/backport-wp-commit.sh -c"
 	}
 }
