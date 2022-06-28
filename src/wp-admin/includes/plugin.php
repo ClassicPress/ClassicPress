@@ -47,8 +47,13 @@
  * the file. This is not checked however and the file is only opened for
  * reading.
  *
+<<<<<<< HEAD
  * @since WP-1.5.0
  * @since WP-5.3.0 Added support for `Requires at least` and `Requires PHP`.
+=======
+ * @since 1.5.0
+ * @since 5.3.0 Added support for `Requires at least` and `Requires PHP`.
+>>>>>>> 1f1cf751e5 (Plugins: When validating plugin's WordPress and PHP requirements, check for `Requires at least` and `Requires PHP` headers in the plugin's main PHP file.)
  *
  * @param string $plugin_file Path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
@@ -984,6 +989,10 @@ function validate_plugin($plugin) {
  */
 function validate_plugin_requirements( $plugin ) {
 	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
+	$plugin_data = array(
+		'requires'     => '',
+		'requires_php' => '',
+	);
 
 	if ( file_exists( $readme_file ) ) {
 		$plugin_data = get_file_data(
@@ -1005,6 +1014,7 @@ function validate_plugin_requirements( $plugin ) {
 	$plugin_data['wp_compatible'] = is_wp_version_compatible( $plugin_data['requires'] );
 	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
 
+<<<<<<< HEAD
 	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
 		return new WP_Error(
 			'plugin_wp_php_incompatible',
@@ -1041,6 +1051,8 @@ function validate_plugin_requirements( $plugin ) {
 
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
 
+=======
+>>>>>>> 1f1cf751e5 (Plugins: When validating plugin's WordPress and PHP requirements, check for `Requires at least` and `Requires PHP` headers in the plugin's main PHP file.)
 	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
 		return new WP_Error(
 			'plugin_wp_php_incompatible',
