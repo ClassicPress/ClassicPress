@@ -6377,6 +6377,7 @@ function wp_direct_php_update_button() {
 	);
 	echo '</p>';
 }
+<<<<<<< HEAD
 
 /**
  * Checks compatibility with the current WordPress version.
@@ -6406,3 +6407,5 @@ function is_wp_version_compatible( $required ) {
 function wp_is_php_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }
+=======
+>>>>>>> 96922900c5 (Plugins: Remove `wp_is_wp_compatible()` and `wp_is_php_compatible()` functions added in [44978] for now, to discuss use cases and better naming.)
