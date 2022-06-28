@@ -975,22 +975,37 @@ function validate_plugin($plugin) {
 }
 
 /**
- * Validate the plugin requirements for WP version and PHP version.
+ * Validates the plugin requirements for WordPress version and PHP version.
  *
+ * Uses the information from `Requires at least` and `Requires PHP` headers
+ * defined in the plugin's main PHP file.
+ *
+ * If the headers are not present in the plugin's main PHP file,
+ * `readme.txt` is also checked as a fallback.
+ *
+<<<<<<< HEAD
  * @since WP-5.2.0
+=======
+ * @since 5.2.0
+ * @since 5.3.0 Added support for reading the headers from the plugin's
+ *              main PHP file, with `readme.txt` as a fallback.
+>>>>>>> d419b1b6d6 (Plugins: Simplify the logic of `validate_plugin_requirements()`, update documentation.)
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
  */
 function validate_plugin_requirements( $plugin ) {
-	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
-	$plugin_data = array(
-		'requires'     => '',
-		'requires_php' => '',
+	$plugin_headers = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+
+	$requirements = array(
+		'requires'     => ! empty( $plugin_headers['RequiresWP'] ) ? $plugin_headers['RequiresWP'] : '',
+		'requires_php' => ! empty( $plugin_headers['RequiresPHP'] ) ? $plugin_headers['RequiresPHP'] : '',
 	);
 
+	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
+
 	if ( file_exists( $readme_file ) ) {
-		$plugin_data = get_file_data(
+		$readme_headers = get_file_data(
 			$readme_file,
 			array(
 				'requires'     => 'Requires at least',
@@ -998,45 +1013,63 @@ function validate_plugin_requirements( $plugin ) {
 			),
 			'plugin'
 		);
+
+		$requirements = array_merge( $readme_headers, $requirements );
 	}
 
+<<<<<<< HEAD
 	$plugin_data['wp_compatible']  = is_wp_version_compatible( $plugin_data['requires'] );
 	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
 
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
+=======
+	$compatible_wp  = is_wp_version_compatible( $requirements['requires'] );
+	$compatible_php = is_php_version_compatible( $requirements['requires_php'] );
+>>>>>>> d419b1b6d6 (Plugins: Simplify the logic of `validate_plugin_requirements()`, update documentation.)
 
-	// Check for headers in the plugin's PHP file, give precedence to the plugin headers.
-	$plugin_data['requires']     = ! empty( $plugin_data['RequiresWP'] ) ? $plugin_data['RequiresWP'] : $plugin_data['requires'];
-	$plugin_data['requires_php'] = ! empty( $plugin_data['RequiresPHP'] ) ? $plugin_data['RequiresPHP'] : $plugin_data['requires_php'];
-
-	$plugin_data['wp_compatible'] = is_wp_version_compatible( $plugin_data['requires'] );
-	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
-
-	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
+	if ( ! $compatible_wp && ! $compatible_php ) {
 		return new WP_Error(
 			'plugin_wp_php_incompatible',
 			sprintf(
+<<<<<<< HEAD
 			/* translators: %s: plugin name */
 				__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
+=======
+				/* translators: %s: Plugin name. */
+				_x( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.', 'plugin' ),
+				$plugin_headers['Name']
+>>>>>>> d419b1b6d6 (Plugins: Simplify the logic of `validate_plugin_requirements()`, update documentation.)
 			)
 		);
-	} elseif ( ! $plugin_data['php_compatible'] ) {
+	} elseif ( ! $compatible_php ) {
 		return new WP_Error(
 			'plugin_php_incompatible',
 			sprintf(
+<<<<<<< HEAD
 			/* translators: %s: plugin name */
 				__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
+=======
+				/* translators: %s: Plugin name. */
+				_x( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.', 'plugin' ),
+				$plugin_headers['Name']
+>>>>>>> d419b1b6d6 (Plugins: Simplify the logic of `validate_plugin_requirements()`, update documentation.)
 			)
 		);
-	} elseif ( ! $plugin_data['wp_compatible'] ) {
+	} elseif ( ! $compatible_wp ) {
 		return new WP_Error(
 			'plugin_wp_incompatible',
 			sprintf(
+<<<<<<< HEAD
 			/* translators: %s: plugin name */
 				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
+=======
+				/* translators: %s: Plugin name. */
+				_x( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.', 'plugin' ),
+				$plugin_headers['Name']
+>>>>>>> d419b1b6d6 (Plugins: Simplify the logic of `validate_plugin_requirements()`, update documentation.)
 			)
 		);
 	}
