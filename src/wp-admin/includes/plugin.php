@@ -1031,7 +1031,7 @@ function validate_plugin_requirements( $plugin ) {
 				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
 			)
-=======
+		);
 	} else {
 		return true;
 	}

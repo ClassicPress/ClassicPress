@@ -6377,35 +6377,3 @@ function wp_direct_php_update_button() {
 	);
 	echo '</p>';
 }
-<<<<<<< HEAD
-
-/**
- * Checks compatibility with the current WordPress version.
- *
- * @since WP-5.2.0
- *
- * @param string $required Minimum required WordPress version.
- * @return bool True if required version is compatible or empty, false if not.
- */
-function is_wp_version_compatible( $required ) {
-	global $wp_version;
-
-	// Strip off any -alpha, -RC, -beta, -src suffixes.
-	list( $version ) = explode( '-', $wp_version );
-
-	return empty( $required ) || version_compare( $version, $required, '>=' );
-}
-
-/**
- * Checks compatibility with the current PHP version.
- *
- * @since WP-5.2.0
- *
- * @param string $required Minimum required PHP version.
- * @return bool True if required version is compatible or empty, false if not.
- */
-function wp_is_php_compatible( $required ) {
-	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
-}
-=======
->>>>>>> 96922900c5 (Plugins: Remove `wp_is_wp_compatible()` and `wp_is_php_compatible()` functions added in [44978] for now, to discuss use cases and better naming.)
