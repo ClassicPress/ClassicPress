@@ -6385,7 +6385,7 @@ function wp_direct_php_update_button() {
  * a blog has exceeded its allowed upload space.
  *
  * @since MU (3.0.0)
- * @since 5.2.0 $max_execution_time parameter added.
+ * @since WP-5.2.0 $max_execution_time parameter added.
  *
  * @param string $directory Full path of a directory.
  * @param int    $max_execution_time Maximum time to run before giving up. In seconds.
@@ -6422,8 +6422,8 @@ function get_dirsize( $directory, $max_execution_time = null ) {
  * other directories.
  *
  * @since MU (3.0.0)
- * @since 4.3.0 $exclude parameter added.
- * @since 5.2.0 $max_execution_time parameter added.
+ * @since WP-4.3.0 $exclude parameter added.
+ * @since WP-5.2.0 $max_execution_time parameter added.
  *
  * @param string $directory Full path of a directory.
  * @param string $exclude   Optional. Full path of a subdirectory to exclude from the total.
