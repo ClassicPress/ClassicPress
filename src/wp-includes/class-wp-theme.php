@@ -21,12 +21,8 @@ final class WP_Theme implements ArrayAccess {
 	/**
 	 * Headers for style.css files.
 	 *
-<<<<<<< HEAD
-	 * @static
-=======
-	 * @since 3.4.0
-	 * @since 5.4.0 Added `Requires at least` and `Requires PHP` headers.
->>>>>>> 13a9ab716e (Site Health: Add support for required WordPress and PHP versions to themes.)
+	 * @since WP-3.4.0
+	 * @since WP-5.4.0 Added `Requires at least` and `Requires PHP` headers.
 	 * @var array
 	 */
 	private static $file_headers = array(
