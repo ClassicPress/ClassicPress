@@ -828,7 +828,11 @@ function validate_current_theme() {
  * If the headers are not present in the theme's stylesheet file,
  * `readme.txt` is also checked as a fallback.
  *
+<<<<<<< HEAD
  * @since WP-5.5.0
+=======
+ * @since 5.5.0
+>>>>>>> 286d672389 (Themes: Block theme activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $stylesheet Directory name for the theme.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
