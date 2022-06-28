@@ -527,12 +527,8 @@ function is_network_only_plugin( $plugin ) {
  * If any errors are found or text is outputted, then it will be captured to
  * ensure that the success redirection will update the error redirection.
  *
-<<<<<<< HEAD
  * @since WP-2.5.0
-=======
- * @since 2.5.0
- * @since 5.2.0 Test for WordPress version and PHP version compatibility.
->>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
+ * @since WP-5.2.0 Test for WordPress version and PHP version compatibility.
  *
  * @param string $plugin       Path to the main plugin file from plugins directory.
  * @param string $redirect     Optional. URL to redirect to.
@@ -981,24 +977,13 @@ function validate_plugin($plugin) {
 /**
  * Validate the plugin requirements for WP version and PHP version.
  *
-<<<<<<< HEAD
  * @since WP-5.2.0
-=======
- * @since 5.2.0
->>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
  */
 function validate_plugin_requirements( $plugin ) {
 	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
-<<<<<<< HEAD
-	$plugin_data = array(
-		'requires'     => '',
-		'requires_php' => '',
-	);
-=======
->>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
 
 	if ( file_exists( $readme_file ) ) {
 		$plugin_data = get_file_data(
@@ -1009,7 +994,6 @@ function validate_plugin_requirements( $plugin ) {
 			),
 			'plugin'
 		);
-<<<<<<< HEAD
 	}
 
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
@@ -1080,14 +1064,9 @@ function validate_plugin_requirements( $plugin ) {
 			'plugin_wp_incompatible',
 			sprintf(
 			/* translators: %s: plugin name */
-<<<<<<< HEAD
-			__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
->>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
-=======
 				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
 			)
->>>>>>> 0e1d2b42ef (PHPCS: Fix WPCS violations in [44978].)
 		);
 	}
 
