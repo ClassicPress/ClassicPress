@@ -1000,12 +1000,9 @@ function validate_plugin_requirements( $plugin ) {
 		);
 	}
 
-<<<<<<< HEAD
-=======
 	$plugin_data['wp_compatible']  = is_wp_version_compatible( $plugin_data['requires'] );
 	$plugin_data['php_compatible'] = is_php_version_compatible( $plugin_data['requires_php'] );
 
->>>>>>> 78e868e4c7 (Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.)
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
 
 	// Check for headers in the plugin's PHP file, give precedence to the plugin headers.

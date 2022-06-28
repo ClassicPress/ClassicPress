@@ -6377,8 +6377,6 @@ function wp_direct_php_update_button() {
 	);
 	echo '</p>';
 }
-<<<<<<< HEAD
-=======
 
 /**
  * Get the size of a directory.
@@ -6505,4 +6503,3 @@ function is_wp_version_compatible( $required ) {
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }
->>>>>>> 78e868e4c7 (Plugins: Introduce `is_wp_version_compatible()` and `is_php_version_compatible()` for checking compatibility with the current WordPress or PHP version.)
