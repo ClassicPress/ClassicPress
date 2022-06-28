@@ -31,7 +31,7 @@
  *     Network: Optional. Specify "Network: true" to require that a plugin is activated
  *    		across all sites in an installation. This will prevent a plugin from being
  *    		activated on a single site when Multisite is enabled.
- *     Requires at least: Optional. Specify the minimum required WordPress version.
+ *     Requires at least: Optional. Specify the minimum required ClassicPress version.
  *     Requires PHP: Optional. Specify the minimum required PHP version.
  *      * / # Remove the space to close comment
  *
@@ -66,7 +66,7 @@
  *     @type string $TextDomain  Plugin textdomain.
  *     @type string $DomainPath  Plugins relative directory path to .mo files.
  *     @type bool   $Network     Whether the plugin can only be activated network-wide.
- *     @type string $RequiresWP  Minimum required version of WordPress.
+ *     @type string $RequiresWP  Minimum required version of ClassicPress.
  *     @type string $RequiresPHP Minimum required version of PHP.
  * }
  */
@@ -528,7 +528,7 @@ function is_network_only_plugin( $plugin ) {
  * ensure that the success redirection will update the error redirection.
  *
  * @since WP-2.5.0
- * @since WP-5.2.0 Test for WordPress version and PHP version compatibility.
+ * @since WP-5.2.0 Test for ClassicPress version and PHP version compatibility.
  *
  * @param string $plugin       Path to the main plugin file from plugins directory.
  * @param string $redirect     Optional. URL to redirect to.
@@ -975,7 +975,7 @@ function validate_plugin($plugin) {
 }
 
 /**
- * Validates the plugin requirements for WordPress version and PHP version.
+ * Validates the plugin requirements ClassicPress version and PHP version.
  *
  * Uses the information from `Requires at least` and `Requires PHP` headers
  * defined in the plugin's main PHP file.
@@ -1021,7 +1021,7 @@ function validate_plugin_requirements( $plugin ) {
 			'plugin_wp_php_incompatible',
 			sprintf(
 				/* translators: %s: Plugin name. */
-				_x( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.', 'plugin' ),
+				_x( '<strong>Error:</strong> Current ClassicPress and PHP versions do not meet minimum requirements for %s.', 'plugin' ),
 				$plugin_headers['Name']
 			)
 		);
@@ -1039,7 +1039,7 @@ function validate_plugin_requirements( $plugin ) {
 			'plugin_wp_incompatible',
 			sprintf(
 				/* translators: %s: Plugin name. */
-				_x( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.', 'plugin' ),
+				_x( '<strong>Error:</strong> Current ClassicPress version does not meet minimum requirements for %s.', 'plugin' ),
 				$plugin_headers['Name']
 			)
 		);

@@ -6389,7 +6389,7 @@ function wp_direct_php_update_button() {
  *
  * @param string $directory Full path of a directory.
  * @param int    $max_execution_time Maximum time to run before giving up. In seconds.
- *                                   The timeout is global and is measured from the moment WordPress started to load.
+ *                                   The timeout is global and is measured from the moment ClassicPress started to load.
  * @return int|false|null Size in MB if a valid directory. False if not. Null if timeout.
  */
 function get_dirsize( $directory, $max_execution_time = null ) {
@@ -6495,7 +6495,7 @@ function is_wp_version_compatible( $required ) {
 /**
  * Checks compatibility with the current PHP version.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @param string $required Minimum required PHP version.
  * @return bool True if required version is compatible or empty, false if not.
