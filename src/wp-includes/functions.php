@@ -6381,13 +6381,18 @@ function wp_direct_php_update_button() {
 /**
  * Checks compatibility with the current WordPress version.
  *
+<<<<<<< HEAD
  * @since WP-5.2.0
  *
  * @global string $wp_version WordPress version.
+=======
+ * @since 5.2.0
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $required Minimum required WordPress version.
  * @return bool True if required version is compatible or empty, false if not.
  */
+<<<<<<< HEAD
 function is_wp_version_compatible( $required ) {
 	global $wp_version;
 
@@ -6395,16 +6400,30 @@ function is_wp_version_compatible( $required ) {
 	list( $version ) = explode( '-', $wp_version );
 
 	return empty( $required ) || version_compare( $version, $required, '>=' );
+=======
+function wp_is_wp_compatible( $required ) {
+	$wp_version = get_bloginfo( 'version' );
+
+	return empty( $required ) || version_compare( $wp_version, $required, '>=' );
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
 }
 
 /**
  * Checks compatibility with the current PHP version.
  *
+<<<<<<< HEAD
  * @since WP-5.2.0
+=======
+ * @since 5.2.0
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $required Minimum required PHP version.
  * @return bool True if required version is compatible or empty, false if not.
  */
+<<<<<<< HEAD
 function is_php_version_compatible( $required ) {
+=======
+function wp_is_php_compatible( $required ) {
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }

@@ -527,7 +527,12 @@ function is_network_only_plugin( $plugin ) {
  * If any errors are found or text is outputted, then it will be captured to
  * ensure that the success redirection will update the error redirection.
  *
+<<<<<<< HEAD
  * @since WP-2.5.0
+=======
+ * @since 2.5.0
+ * @since 5.2.0 Test for WordPress version and PHP version compatibility.
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $plugin       Path to the main plugin file from plugins directory.
  * @param string $redirect     Optional. URL to redirect to.
@@ -550,6 +555,11 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 	$valid = validate_plugin($plugin);
 	if ( is_wp_error($valid) )
 		return $valid;
+
+	$requirements = validate_plugin_requirements( $plugin );
+	if ( is_wp_error( $requirements ) ) {
+		return $requirements;
+	}
 
 	if ( ( $network_wide && ! isset( $current[ $plugin ] ) ) || ( ! $network_wide && ! in_array( $plugin, $current ) ) ) {
 		if ( !empty($redirect) )
@@ -971,17 +981,24 @@ function validate_plugin($plugin) {
 /**
  * Validate the plugin requirements for WP version and PHP version.
  *
+<<<<<<< HEAD
  * @since WP-5.2.0
+=======
+ * @since 5.2.0
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
  */
 function validate_plugin_requirements( $plugin ) {
 	$readme_file = WP_PLUGIN_DIR . '/' . dirname( $plugin ) . '/readme.txt';
+<<<<<<< HEAD
 	$plugin_data = array(
 		'requires'     => '',
 		'requires_php' => '',
 	);
+=======
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
 
 	if ( file_exists( $readme_file ) ) {
 		$plugin_data = get_file_data(
@@ -992,6 +1009,7 @@ function validate_plugin_requirements( $plugin ) {
 			),
 			'plugin'
 		);
+<<<<<<< HEAD
 	}
 
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
@@ -1029,6 +1047,31 @@ function validate_plugin_requirements( $plugin ) {
 				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
 				$plugin_data['Name']
 			)
+=======
+	} else {
+		return true;
+	}
+
+	$plugin_data['wp_compatible']  = wp_is_wp_compatible( $plugin_data['requires'] );
+	$plugin_data['php_compatible'] = wp_is_php_compatible( $plugin_data['requires_php'] );
+
+	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
+
+	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
+		return new WP_Error( 'plugin_wp_php_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+		);
+	} elseif ( ! $plugin_data['php_compatible'] ) {
+		return new WP_Error( 'plugin_php_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+		);
+	} elseif ( ! $plugin_data['wp_compatible'] ) {
+		return new WP_Error( 'plugin_wp_incompatible', sprintf(
+			/* translators: %s: plugin name */
+			__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+>>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
 		);
 	}
 
