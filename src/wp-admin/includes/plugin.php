@@ -1058,20 +1058,36 @@ function validate_plugin_requirements( $plugin ) {
 	$plugin_data = array_merge( $plugin_data, get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) );
 
 	if ( ! $plugin_data['wp_compatible'] && ! $plugin_data['php_compatible'] ) {
-		return new WP_Error( 'plugin_wp_php_incompatible', sprintf(
+		return new WP_Error(
+			'plugin_wp_php_incompatible',
+			sprintf(
 			/* translators: %s: plugin name */
-			__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+				__( '<strong>Error:</strong> Current WordPress and PHP versions do not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
 		);
 	} elseif ( ! $plugin_data['php_compatible'] ) {
-		return new WP_Error( 'plugin_php_incompatible', sprintf(
+		return new WP_Error(
+			'plugin_php_incompatible',
+			sprintf(
 			/* translators: %s: plugin name */
-			__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
+				__( '<strong>Error:</strong> Current PHP version does not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
 		);
 	} elseif ( ! $plugin_data['wp_compatible'] ) {
-		return new WP_Error( 'plugin_wp_incompatible', sprintf(
+		return new WP_Error(
+			'plugin_wp_incompatible',
+			sprintf(
 			/* translators: %s: plugin name */
+<<<<<<< HEAD
 			__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ), $plugin_data['Name'] )
 >>>>>>> 1586c43c8d (Plugins: Block plugin activation if it requires a higher version of PHP or WordPress.)
+=======
+				__( '<strong>Error:</strong> Current WordPress version does not meet minimum requirements for %s.' ),
+				$plugin_data['Name']
+			)
+>>>>>>> 0e1d2b42ef (PHPCS: Fix WPCS violations in [44978].)
 		);
 	}
 
