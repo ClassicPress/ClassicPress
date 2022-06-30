@@ -166,6 +166,7 @@
 	border-top: 1px solid #eee;
 	cursor: pointer;
 	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 }
 
