@@ -2743,7 +2743,7 @@ function wp_filesize( $path ) {
 		return $size;
 	}
 
-	$size = (int) @filesize( $path );
+	$size = file_exists( $path ) ? (int) filesize( $path ) : 0;
 
 	/**
 	 * Filters the size of the file.
