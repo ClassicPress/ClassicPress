@@ -153,16 +153,22 @@ When you're ready to backport a code change:
    bin/backport-wp-commit.sh CHANGESET_NUMBER
    ```
 
+	 or use composer:
+
+	 ```
+	 composer run backport CHANGESET_NUMBER
+	 ```
+
    This will create a new branch and apply the WordPress changeset to it. If you're porting multiple changesets, you can create a new `git` branch first and use the `-c` option to this script to apply each changeset to your current branch instead:
 
    ```
    bin/backport-wp-commit.sh -c CHANGESET_NUMBER
    ```
 
-	 Or if you have composer installed globally, run
+	 or use composer:
 
 	 ```
-	 composer run backport CHANGESET_NUMBER
+	 composer run backport -c CHANGESET_NUMBER
 	 ```
 
    Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
