@@ -176,13 +176,12 @@ function has_filter($tag, $function_to_check = false) {
 function apply_filters( $tag, $value ) {
 	global $wp_filter, $wp_current_filter;
 
-	$args = array();
+	$args = func_get_args();
 
 	// Do 'all' actions first.
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
-		$args = func_get_args();
-		_wp_call_all_hook($args);
+		_wp_call_all_hook( $args );
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
@@ -194,10 +193,7 @@ function apply_filters( $tag, $value ) {
 	if ( !isset($wp_filter['all']) )
 		$wp_current_filter[] = $tag;
 
-	if ( empty($args) )
-		$args = func_get_args();
-
-	// don't pass the tag name to WP_Hook
+	// Don't pass the tag name to WP_Hook.
 	array_shift( $args );
 
 	$filtered = $wp_filter[ $tag ]->apply_filters( $value, $args );
@@ -228,8 +224,8 @@ function apply_filters_ref_array($tag, $args) {
 	// Do 'all' actions first
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {
@@ -426,10 +422,10 @@ function do_action($tag, $arg = '') {
 	else
 		++$wp_actions[$tag];
 
-	$all_args = func_get_args();
+	$all_args = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 
-	// Do 'all' actions first
-	if ( isset($wp_filter['all']) ) {
+	// Do 'all' actions first.
+	if ( isset( $wp_filter['all'] ) ) {
 		$wp_current_filter[] = $tag;
 		_wp_call_all_hook( $all_args );
 	}
@@ -499,8 +495,8 @@ function do_action_ref_array($tag, $args) {
 	// Do 'all' actions first
 	if ( isset($wp_filter['all']) ) {
 		$wp_current_filter[] = $tag;
-		$all_args = func_get_args();
-		_wp_call_all_hook($all_args);
+		$all_args            = func_get_args(); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		_wp_call_all_hook( $all_args );
 	}
 
 	if ( !isset($wp_filter[$tag]) ) {

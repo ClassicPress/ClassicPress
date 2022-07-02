@@ -1269,19 +1269,7 @@ class WP_REST_Server {
 	 * @param string $key Header key.
 	 */
 	public function remove_header( $key ) {
-		if ( function_exists( 'header_remove' ) ) {
-			// In PHP 5.3+ there is a way to remove an already set header.
 			header_remove( $key );
-		} else {
-			// In PHP 5.2, send an empty header, but only as a last resort to
-			// override a header already sent.
-			foreach ( headers_list() as $header ) {
-				if ( 0 === stripos( $header, "$key:" ) ) {
-					$this->send_header( $key, '' );
-					break;
-				}
-			}
-		}
 	}
 
 	/**
@@ -1294,17 +1282,16 @@ class WP_REST_Server {
 	 * @return string Raw request data.
 	 */
 	public static function get_raw_data() {
+		// phpcs:disable PHPCompatibility.Variables.RemovedPredefinedGlobalVariables.http_raw_post_dataDeprecatedRemoved
 		global $HTTP_RAW_POST_DATA;
 
-		/*
-		 * A bug in PHP < 5.2.2 makes $HTTP_RAW_POST_DATA not set by default,
-		 * but we can do it ourself.
-		 */
+		// $HTTP_RAW_POST_DATA was deprecated in PHP 5.6 and removed in PHP 7.0.
 		if ( ! isset( $HTTP_RAW_POST_DATA ) ) {
 			$HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
 		}
 
 		return $HTTP_RAW_POST_DATA;
+		// phpcs:enable
 	}
 
 	/**

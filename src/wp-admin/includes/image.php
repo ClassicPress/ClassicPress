@@ -301,10 +301,15 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
  * @param string $str
  * @return int|float
  */
-function wp_exif_frac2dec($str) {
-	@list( $n, $d ) = explode( '/', $str );
-	if ( !empty($d) )
+function wp_exif_frac2dec( $str ) {
+	if ( false === strpos( $str, '/' ) ) {
+		return $str;
+	}
+
+	list( $n, $d ) = explode( '/', $str );
+	if ( ! empty( $d ) ) {
 		return $n / $d;
+	}
 	return $str;
 }
 
@@ -316,9 +321,9 @@ function wp_exif_frac2dec($str) {
  * @param string $str
  * @return int
  */
-function wp_exif_date2ts($str) {
-	@list( $date, $time ) = explode( ' ', trim($str) );
-	@list( $y, $m, $d ) = explode( ':', $date );
+function wp_exif_date2ts( $str ) {
+	list( $date, $time ) = explode( ' ', trim( $str ) );
+	list( $y, $m, $d )   = explode( ':', $date );
 
 	return strtotime( "{$y}-{$m}-{$d} {$time}" );
 }
@@ -689,8 +694,9 @@ function _copy_image_file( $attachment_id ) {
 		 */
 		wp_mkdir_p( dirname( $dst_file ) );
 
-		if ( ! @copy( $src_file, $dst_file ) )
+		if ( ! copy( $src_file, $dst_file ) ) {
 			$dst_file = false;
+		}
 	} else {
 		$dst_file = false;
 	}

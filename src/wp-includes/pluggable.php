@@ -245,11 +245,12 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	}
 	global $phpmailer;
 
-	// (Re)create it, if it's gone missing
-	if ( ! ( $phpmailer instanceof PHPMailer ) ) {
-		require_once ABSPATH . WPINC . '/class-phpmailer.php';
-		require_once ABSPATH . WPINC . '/class-smtp.php';
-		$phpmailer = new PHPMailer( true );
+	// (Re)create it, if it's gone missing.
+	if ( ! ( $phpmailer instanceof PHPMailer\PHPMailer\PHPMailer ) ) {
+		require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+		require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+		$phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
 	}
 
 	// Headers
@@ -347,6 +348,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	$phpmailer->clearReplyTos();
 
 	// From email and name
+
 	// If we don't have a name from the input headers
 	if ( !isset( $from_name ) )
 		$from_name = 'ClassicPress';
@@ -357,8 +359,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	 * option but some hosts may refuse to relay mail from an unknown domain. See
 	 * https://core.trac.wordpress.org/ticket/5007.
 	 */
-
-	if ( !isset( $from_email ) ) {
+	 if ( !isset( $from_email ) ) {
 		// Get the site domain and get rid of www.
 		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
 		if ( substr( $sitename, 0, 4 ) == 'www.' ) {
@@ -388,7 +389,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 
 	try {
 		$phpmailer->setFrom( $from_email, $from_name, false );
-	} catch ( phpmailerException $e ) {
+	} catch ( PHPMailer\PHPMailer\Exception $e ) {
 		$mail_error_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
 		$mail_error_data['phpmailer_exception_code'] = $e->getCode();
 
@@ -400,7 +401,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 
 	// Set mail's subject and body
 	$phpmailer->Subject = $subject;
-	$phpmailer->Body    = $message;
+	$phpmailer->Body = $message;
 
 	// Set destination addresses, using appropriate methods for handling addresses
 	$address_headers = compact( 'to', 'cc', 'bcc', 'reply_to' );
@@ -436,7 +437,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 						$phpmailer->addReplyTo( $address, $recipient_name );
 						break;
 				}
-			} catch ( phpmailerException $e ) {
+			} catch ( PHPMailer\PHPMailer\Exception $e ) {
 				continue;
 			}
 		}
@@ -490,14 +491,14 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 		}
 
 		if ( false !== stripos( $content_type, 'multipart' ) && ! empty($boundary) )
-			$phpmailer->addCustomHeader( sprintf( "Content-Type: %s;\n\t boundary=\"%s\"", $content_type, $boundary ) );
+			$phpmailer->addCustomHeader( sprintf( "Content-Type: %s; boundary=\"%s\"", $content_type, $boundary ) );
 	}
 
 	if ( !empty( $attachments ) ) {
 		foreach ( $attachments as $attachment ) {
 			try {
 				$phpmailer->addAttachment($attachment);
-			} catch ( phpmailerException $e ) {
+			} catch ( PHPMailer\PHPMailer\Exception $e ) {
 				continue;
 			}
 		}
@@ -515,13 +516,13 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	// Send!
 	try {
 		return $phpmailer->send();
-	} catch ( phpmailerException $e ) {
+	} catch ( PHPMailer\PHPMailer\Exception $e ) {
 
 		$mail_error_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
 		$mail_error_data['phpmailer_exception_code'] = $e->getCode();
 
 		/**
-		 * Fires after a phpmailerException is caught.
+		 * Fires after a PHPMailer\PHPMailer\Exception is caught.
 		 *
 		 * @since WP-4.4.0
 		 *
@@ -1505,7 +1506,10 @@ function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 
 	$switched_locale = switch_to_locale( get_locale() );
 
-	$comment_author_domain = @gethostbyaddr($comment->comment_author_IP);
+	$comment_author_domain = '';
+	if ( WP_Http::is_ip_address( $comment->comment_author_IP ) ) {
+		$comment_author_domain = gethostbyaddr( $comment->comment_author_IP );
+	}
 
 	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 	// we want to reverse this for the plain text arena of emails.
@@ -1608,7 +1612,7 @@ function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 	$message_headers = apply_filters( 'comment_notification_headers', $message_headers, $comment->comment_ID );
 
 	foreach ( $emails as $email ) {
-		@wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
+			wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
 	}
 
 	if ( $switched_locale ) {
@@ -1664,8 +1668,12 @@ function wp_notify_moderator($comment_id) {
 
 	$switched_locale = switch_to_locale( get_locale() );
 
-	$comment_author_domain = @gethostbyaddr($comment->comment_author_IP);
-	$comments_waiting = $wpdb->get_var("SELECT count(comment_ID) FROM $wpdb->comments WHERE comment_approved = '0'");
+	$comment_author_domain = '';
+	if ( WP_Http::is_ip_address( $comment->comment_author_IP ) ) {
+		$comment_author_domain = gethostbyaddr( $comment->comment_author_IP );
+	}
+
+	$comments_waiting = $wpdb->get_var( "SELECT count(comment_ID) FROM $wpdb->comments WHERE comment_approved = '0'" );
 
 	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 	// we want to reverse this for the plain text arena of emails.
@@ -1772,7 +1780,7 @@ function wp_notify_moderator($comment_id) {
 	$message_headers = apply_filters( 'comment_moderation_headers', $message_headers, $comment_id );
 
 	foreach ( $emails as $email ) {
-		@wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
+		wp_mail( $email, wp_specialchars_decode( $subject ), $notify_message, $message_headers );
 	}
 
 	if ( $switched_locale ) {
@@ -1904,7 +1912,7 @@ function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) 
 		 */
 		$wp_new_user_notification_email_admin = apply_filters( 'wp_new_user_notification_email_admin', $wp_new_user_notification_email_admin, $user, $blogname );
 
-		@wp_mail(
+		wp_mail(
 			$wp_new_user_notification_email_admin['to'],
 			wp_specialchars_decode( sprintf( $wp_new_user_notification_email_admin['subject'], $blogname ) ),
 			$wp_new_user_notification_email_admin['message'],
