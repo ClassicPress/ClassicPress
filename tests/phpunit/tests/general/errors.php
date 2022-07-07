@@ -55,7 +55,7 @@ class Tests_General_Errors extends WP_UnitTestCase {
 		// Check the error has been removed.
 		$this->assertEmpty( $error->get_error_data( 'foo' ) );
 		$this->assertEmpty( $error->get_error_messages( 'foo' ) );
-		
+
 		// The 'bar' error should now be the 'first' error retrieved.
 		$this->assertEquals( 'bar', $error->get_error_code() );
 		$this->assertEmpty( $error->get_error_data() );
