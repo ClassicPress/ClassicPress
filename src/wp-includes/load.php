@@ -194,6 +194,7 @@ function wp_maintenance() {
 	header( "$protocol 503 Service Unavailable", true, 503 );
 	header( 'Content-Type: text/html; charset=utf-8' );
 	header( 'Retry-After: 600' );
+<<<<<<< HEAD
 	?>
 	<!DOCTYPE html>
 	<html xmlns="http://www.w3.org/1999/xhtml"
@@ -202,6 +203,16 @@ function wp_maintenance() {
 		echo ' dir="rtl"';}
 	?>
 	>
+=======
+
+	$dir_attr = '';
+	if ( is_rtl() ) {
+		$dir_attr = ' dir="rtl"';
+	}
+?>
+	<!DOCTYPE html>
+	<html xmlns="http://www.w3.org/1999/xhtml"<?php echo $dir_attr; ?>>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title><?php _e( 'Maintenance' ); ?></title>

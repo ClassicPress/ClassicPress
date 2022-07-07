@@ -258,12 +258,16 @@ switch ( $action ) {
 		<?php if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) : ?>
 	<tr class="user-rich-editing-wrap">
 		<th scope="row"><?php _e( 'Visual Editor' ); ?></th>
+<<<<<<< HEAD
 		<td><label for="rich_editing"><input name="rich_editing" type="checkbox" id="rich_editing" value="false" 
 			<?php
 			if ( ! empty( $profileuser->rich_editing ) ) {
 				checked( 'false', $profileuser->rich_editing );}
 			?>
 		 /> <?php _e( 'Disable the visual editor when writing' ); ?></label></td>
+=======
+		<td><label for="rich_editing"><input name="rich_editing" type="checkbox" id="rich_editing" value="false" <?php checked( 'false', $profileuser->rich_editing ); ?> /> <?php _e( 'Disable the visual editor when writing' ); ?></label></td>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 	</tr>
 <?php endif; ?>
 		<?php
@@ -282,12 +286,16 @@ switch ( $action ) {
 	<tr class="user-syntax-highlighting-wrap">
 		<th scope="row"><?php _e( 'Syntax Highlighting' ); ?></th>
 		<td>
+<<<<<<< HEAD
 			<label for="syntax_highlighting"><input name="syntax_highlighting" type="checkbox" id="syntax_highlighting" value="false" 
 			<?php
 			if ( ! empty( $profileuser->syntax_highlighting ) ) {
 				checked( 'false', $profileuser->syntax_highlighting );}
 			?>
 			 /> <?php _e( 'Disable syntax highlighting when editing code' ); ?></label>
+=======
+			<label for="syntax_highlighting"><input name="syntax_highlighting" type="checkbox" id="syntax_highlighting" value="false" <?php checked( 'false', $profileuser->syntax_highlighting ); ?> /> <?php _e( 'Disable syntax highlighting when editing code' ); ?></label>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 		</td>
 	</tr>
 <?php endif; ?>
@@ -317,12 +325,16 @@ switch ( $action ) {
 			?>
 <tr class="user-comment-shortcuts-wrap">
 <th scope="row"><?php _e( 'Keyboard Shortcuts' ); ?></th>
+<<<<<<< HEAD
 <td><label for="comment_shortcuts"><input type="checkbox" name="comment_shortcuts" id="comment_shortcuts" value="true" 
 			<?php
 			if ( ! empty( $profileuser->comment_shortcuts ) ) {
 				checked( 'true', $profileuser->comment_shortcuts );}
 			?>
  /> <?php _e( 'Enable keyboard shortcuts for comment moderation.' ); ?></label> <?php _e( '<a href="https://codex.wordpress.org/Keyboard_Shortcuts" target="_blank">More information</a>' ); ?></td>
+=======
+<td><label for="comment_shortcuts"><input type="checkbox" name="comment_shortcuts" id="comment_shortcuts" value="true" <?php checked( 'true', $profileuser->comment_shortcuts ); ?> /> <?php _e('Enable keyboard shortcuts for comment moderation.'); ?></label> <?php _e('<a href="https://codex.wordpress.org/Keyboard_Shortcuts" target="_blank">More information</a>'); ?></td>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 </tr>
 	<?php endif; ?>
 <tr class="show-admin-bar user-admin-bar-front-wrap">

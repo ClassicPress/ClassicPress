@@ -551,6 +551,7 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 		 * @since WP-2.5.0
 		 */
 		do_action( "admin_head_{$content_func}" );
+<<<<<<< HEAD
 	}
 
 	$body_id_attr = '';
@@ -568,6 +569,24 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 	<?php
 
 	call_user_func_array( $content_func, $args );
+=======
+}
+
+$body_id_attr = '';
+if ( isset( $GLOBALS['body_id'] ) ) {
+	$body_id_attr = ' id="' . $GLOBALS['body_id'] . '"';
+}
+?>
+</head>
+<body<?php echo $body_id_attr; ?> class="wp-core-ui no-js">
+<script type="text/javascript">
+document.body.className = document.body.className.replace('no-js', 'js');
+</script>
+<?php
+	$args = func_get_args();
+	$args = array_slice($args, 1);
+	call_user_func_array($content_func, $args);
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 	/** This action is documented in wp-admin/admin-footer.php */
 	do_action( 'admin_print_footer_scripts' );
@@ -2935,10 +2954,18 @@ function edit_form_image_editor( $post ) {
 			$nonce             = wp_create_nonce( "image_editor-$post->ID" );
 			$image_edit_button = "<input type='button' id='imgedit-open-btn-$post->ID' onclick='imageEdit.open( $post->ID, \"$nonce\" )' class='button' value='" . esc_attr__( 'Edit Image' ) . "' /> <span class='spinner'></span>";
 		}
+
+		$open_style = $not_open_style = '';
+		if ( $open ) {
+			$open_style = ' style="display:none"';
+		} else {
+			$not_open_style = ' style="display:none"';
+		}
 		?>
 
 		<div class="imgedit-response" id="imgedit-response-<?php echo $attachment_id; ?>"></div>
 
+<<<<<<< HEAD
 		<div
 		<?php
 		if ( $open ) {
@@ -2958,6 +2985,14 @@ function edit_form_image_editor( $post ) {
 			if ( $open ) {
 				wp_image_editor( $attachment_id );}
 			?>
+=======
+		<div<?php echo $open_style; ?> class="wp_attachment_image wp-clearfix" id="media-head-<?php echo $attachment_id; ?>">
+			<p id="thumbnail-head-<?php echo $attachment_id; ?>"><img class="thumbnail" src="<?php echo set_url_scheme( $thumb_url[0] ); ?>" style="max-width:100%" alt="" /></p>
+			<p><?php echo $image_edit_button; ?></p>
+		</div>
+		<div<?php echo $not_open_style; ?> class="image-editor" id="image-editor-<?php echo $attachment_id; ?>">
+			<?php if ( $open ) wp_image_editor( $attachment_id ); ?>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 		</div>
 		<?php
 	elseif ( $attachment_id && wp_attachment_is( 'audio', $post ) ) :

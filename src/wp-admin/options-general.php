@@ -75,6 +75,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 <p class="description" id="tagline-description"><?php _e( 'In a few words, explain what this site is about.' ); ?></p></td>
 </tr>
 
+<<<<<<< HEAD
 <?php if ( ! is_multisite() ) { ?>
 
 <tr>
@@ -98,6 +99,29 @@ require ABSPATH . 'wp-admin/admin-header.php';
 	<?php if ( ! defined( 'WP_HOME' ) ) : ?>
 <p class="description" id="home-description">
 		<?php
+=======
+<?php
+	if ( !is_multisite() ) {
+		$wp_site_url_class = $wp_home_class = '';
+		if ( defined( 'WP_SITEURL' ) ) {
+			$wp_site_url_class = ' disabled';
+		}
+		if ( defined( 'WP_HOME' ) ) {
+			$wp_home_class = ' disabled';
+		}
+?>
+
+<tr>
+<th scope="row"><label for="siteurl"><?php _e('WordPress Address (URL)') ?></label></th>
+<td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php echo $wp_site_url_class; ?>" /></td>
+</tr>
+
+<tr>
+<th scope="row"><label for="home"><?php _e('Site Address (URL)') ?></label></th>
+<td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code<?php echo $wp_home_class; ?>" />
+<?php if ( ! defined( 'WP_HOME' ) ) : ?>
+<p class="description" id="home-description"><?php
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 		printf(
 		/* translators: %s: Codex URL */
 			__( 'Enter the address here if you <a href="%s">want your site home page to be different from your ClassicPress installation directory</a>.' ),

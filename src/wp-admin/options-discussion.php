@@ -212,6 +212,10 @@ printf( __( 'Comments should be displayed with the %s comments at the top of eac
 // the above would be a good place to link to codex documentation on the gravatar functions, for putting it in themes. anything like that?
 
 $show_avatars = get_option( 'show_avatars' );
+$show_avatars_class = '';
+if ( ! $show_avatars ) {
+	$show_avatars_class = ' hide-if-js';
+}
 ?>
 
 <table class="form-table">
@@ -224,6 +228,7 @@ $show_avatars = get_option( 'show_avatars' );
 	</label>
 </fieldset></td>
 </tr>
+<<<<<<< HEAD
 <tr class="avatar-settings
 <?php
 if ( ! $show_avatars ) {
@@ -232,6 +237,11 @@ if ( ! $show_avatars ) {
 ">
 <th scope="row"><?php _e( 'Maximum Rating' ); ?></th>
 <td><fieldset><legend class="screen-reader-text"><span><?php _e( 'Maximum Rating' ); ?></span></legend>
+=======
+<tr class="avatar-settings<?php echo $show_avatars_class; ?>">
+<th scope="row"><?php _e('Maximum Rating'); ?></th>
+<td><fieldset><legend class="screen-reader-text"><span><?php _e('Maximum Rating'); ?></span></legend>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 <?php
 $ratings = array(
@@ -252,6 +262,7 @@ endforeach;
 
 </fieldset></td>
 </tr>
+<<<<<<< HEAD
 <tr class="avatar-settings
 <?php
 if ( ! $show_avatars ) {
@@ -260,6 +271,11 @@ if ( ! $show_avatars ) {
 ">
 <th scope="row"><?php _e( 'Default Avatar' ); ?></th>
 <td class="defaultavatarpicker"><fieldset><legend class="screen-reader-text"><span><?php _e( 'Default Avatar' ); ?></span></legend>
+=======
+<tr class="avatar-settings<?php echo $show_avatars_class; ?>">
+<th scope="row"><?php _e('Default Avatar'); ?></th>
+<td class="defaultavatarpicker"><fieldset><legend class="screen-reader-text"><span><?php _e('Default Avatar'); ?></span></legend>
+>>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 <?php _e( 'For users without a custom avatar of their own, you can either display a generic logo or a generated one based on their email address.' ); ?><br />
 
