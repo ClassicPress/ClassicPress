@@ -462,6 +462,7 @@ class WP_Admin_Bar {
 			return;
 		}
 
+<<<<<<< HEAD
 		?>
 		<div id="<?php echo esc_attr( 'wp-admin-bar-' . $node->id ); ?>" class="ab-group-container">
 		<?php
@@ -471,6 +472,13 @@ class WP_Admin_Bar {
 		?>
 		</div>
 		<?php
+=======
+		echo '<div id="' . esc_attr( 'wp-admin-bar-' . $node->id ) . '" class="ab-group-container">';
+		foreach ( $node->children as $group ) {
+			$this->_render_group( $group );
+		}
+		echo '</div>';
+>>>>>>> e9282049e8 (Admin Bar: Reformat the render methods.)
 	}
 
 	/**
@@ -491,6 +499,7 @@ class WP_Admin_Bar {
 			$class = '';
 		}
 
+<<<<<<< HEAD
 		?>
 		<ul id="<?php echo esc_attr( 'wp-admin-bar-' . $node->id ); ?>"<?php echo $class; ?>>
 		<?php
@@ -500,6 +509,13 @@ class WP_Admin_Bar {
 		?>
 		</ul>
 		<?php
+=======
+		echo "<ul id='" . esc_attr( 'wp-admin-bar-' . $node->id ) . "'$class>";
+		foreach ( $node->children as $item ) {
+			$this->_render_item( $item );
+		}
+		echo '</ul>';
+>>>>>>> e9282049e8 (Admin Bar: Reformat the render methods.)
 	}
 
 	/**
@@ -532,8 +548,9 @@ class WP_Admin_Bar {
 			$menuclass = ' class="' . esc_attr( trim( $menuclass ) ) . '"';
 		}
 
-		?>
+		echo "<li id='" . esc_attr( 'wp-admin-bar-' . $node->id ) . "'$menuclass>";
 
+<<<<<<< HEAD
 		<li id="<?php echo esc_attr( 'wp-admin-bar-' . $node->id ); ?>"<?php echo $menuclass; ?>>
 						   <?php
 							if ( $has_link ) :
@@ -597,9 +614,26 @@ class WP_Admin_Bar {
 				>
 				<?php
 			endif;
+=======
+		if ( $has_link ) {
+			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
+			echo "<a class='ab-item'$aria_attributes href='" . esc_url( $node->href ) . "'>";
+			if ( ! empty( $node->meta['onclick'] ) ) {
+				echo ' onclick="' . esc_js( $node->meta['onclick'] ) . '"';
+			}
+		} else {
+			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
+			echo '<div class="ab-item ab-empty-item"' . $aria_attributes;
+		}
+>>>>>>> e9282049e8 (Admin Bar: Reformat the render methods.)
 
-			echo $node->title;
+		foreach ( $attributes as $attribute ) {
+			if ( ! empty( $node->meta[ $attribute ] ) ) {
+				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . '"';
+			}
+		}
 
+<<<<<<< HEAD
 			if ( $has_link ) :
 				?>
 				</a>
@@ -621,14 +655,35 @@ class WP_Admin_Bar {
 				</div>
 				<?php
 			endif;
+=======
+		echo ">{$node->title}";
+
+		if ( $has_link ) {
+			echo '</a>';
+		} else {
+			echo '</div>';
+		}
+
+		if ( $is_parent ) {
+			echo '<div class="ab-sub-wrapper">';
+			foreach ( $node->children as $group ) {
+				$this->_render_group( $group );
+			}
+			echo '</div>';
+		}
+>>>>>>> e9282049e8 (Admin Bar: Reformat the render methods.)
 
 			if ( ! empty( $node->meta['html'] ) ) {
 				echo $node->meta['html'];
 			}
 
+<<<<<<< HEAD
 			?>
 		</li>
 		<?php
+=======
+		echo '</li>';
+>>>>>>> e9282049e8 (Admin Bar: Reformat the render methods.)
 	}
 
 	/**
