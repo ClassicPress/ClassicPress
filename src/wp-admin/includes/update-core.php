@@ -581,7 +581,7 @@ function cp_get_core_checksums( $version ) {
  * directory where it was unpacked) will contain a single directory entry whose
  * name starts with 'ClassicPress-'.
  *
- * We also need to allow the root directory to be called 'WordPress', since
+ * We also need to allow the root directory to be called 'wordpress', since
  * this is used when migrating from WordPress to ClassicPress.  If the
  * directory is named otherwise, the WordPress updater will reject the update
  * package for the migration.
@@ -609,7 +609,7 @@ function cp_get_update_directory_root( $working_dir ) {
 		count( $entries ) === 1 &&
 		(
 			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
-			$entries[0]['name'] === 'WordPress' // migration build
+			$entries[0]['name'] === 'wordpress' // migration build
 		) &&
 		$entries[0]['type'] === 'd'
 	) {

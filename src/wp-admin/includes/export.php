@@ -80,7 +80,7 @@ function export_wp( $args = array() ) {
 		$sitename .= '.';
 	}
 	$date        = date( 'Y-m-d' );
-	$wp_filename = $sitename . 'WordPress.' . $date . '.xml';
+	$wp_filename = $sitename . 'wordpress.' . $date . '.xml';
 	/**
 	 * Filters the export filename.
 	 *

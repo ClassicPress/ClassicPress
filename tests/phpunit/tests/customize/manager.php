@@ -1165,7 +1165,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 * code below.
 	 */
 	public function wp_capital_P_dangit( $text ) {
-		return str_replace( 'WordPress', 'WordPress', $text );
+		return str_replace( 'Wordpress', 'WordPress', $text );
 	}
 
 	/**
