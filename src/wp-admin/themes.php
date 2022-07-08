@@ -274,16 +274,7 @@ foreach ( $themes as $theme ) :
 		$active_class = ' active';
 	}
 	?>
-<<<<<<< HEAD
-<div class="theme
-	<?php
-	if ( $theme['active'] ) {
-		echo ' active';}
-	?>
-" tabindex="0" aria-describedby="<?php echo $aria_action . ' ' . $aria_name; ?>">
-=======
 <div class="theme<?php echo $active_class; ?>" tabindex="0" aria-describedby="<?php echo $aria_action . ' ' . $aria_name; ?>">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 	<?php if ( ! empty( $theme['screenshot'][0] ) ) { ?>
 		<div class="theme-screenshot">
 			<img src="<?php echo $theme['screenshot'][0]; ?>" alt="" />

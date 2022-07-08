@@ -413,59 +413,31 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 
 	$most_recent_url = $view_all_url = $search_url = '';
 	if ( $nav_menu_selected_id ) {
-		$most_recent_url = esc_url(add_query_arg($post_type_name . '-tab', 'most-recent', remove_query_arg($removed_args)));
-		$view_all_url    = esc_url(add_query_arg($post_type_name . '-tab', 'all', remove_query_arg($removed_args)));
-		$search_url      = esc_url(add_query_arg($post_type_name . '-tab', 'search', remove_query_arg($removed_args)));
+		$most_recent_url = esc_url( add_query_arg( $post_type_name . '-tab', 'most-recent', remove_query_arg( $removed_args ) ) );
+		$view_all_url    = esc_url( add_query_arg( $post_type_name . '-tab', 'all', remove_query_arg( $removed_args ) ) );
+		$search_url      = esc_url( add_query_arg( $post_type_name . '-tab', 'search', remove_query_arg( $removed_args ) ) );
 	}
 	?>
 	<div id="posttype-<?php echo $post_type_name; ?>" class="posttypediv">
 		<ul id="posttype-<?php echo $post_type_name; ?>-tabs" class="posttype-tabs add-menu-item-tabs">
 			<li <?php echo ( 'most-recent' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-most-recent" href="
-																				  <?php
-																					if ( $nav_menu_selected_id ) {
-																						echo esc_url( add_query_arg( $post_type_name . '-tab', 'most-recent', remove_query_arg( $removed_args ) ) );}
-																					?>
-				#tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent">
-=======
 				<a class="nav-tab-link" data-type="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-most-recent" href="<?php echo $most_recent_url; ?>#tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 					<?php _e( 'Most Recent' ); ?>
 				</a>
 			</li>
 			<li <?php echo ( 'all' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="<?php echo esc_attr( $post_type_name ); ?>-all" href="
-															  <?php
-																if ( $nav_menu_selected_id ) {
-																	echo esc_url( add_query_arg( $post_type_name . '-tab', 'all', remove_query_arg( $removed_args ) ) );}
-																?>
-				#<?php echo $post_type_name; ?>-all">
-=======
 				<a class="nav-tab-link" data-type="<?php echo esc_attr( $post_type_name ); ?>-all" href="<?php echo $view_all_url; ?>#<?php echo $post_type_name; ?>-all">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 					<?php _e( 'View All' ); ?>
 				</a>
 			</li>
 			<li <?php echo ( 'search' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-search" href="
-																				  <?php
-																					if ( $nav_menu_selected_id ) {
-																						echo esc_url( add_query_arg( $post_type_name . '-tab', 'search', remove_query_arg( $removed_args ) ) );}
-																					?>
-				#tabs-panel-posttype-<?php echo $post_type_name; ?>-search">
-					<?php _e( 'Search' ); ?>
-=======
 				<a class="nav-tab-link" data-type="tabs-panel-posttype-<?php echo esc_attr( $post_type_name ); ?>-search" href="<?php echo $search_url; ?>#tabs-panel-posttype-<?php echo $post_type_name; ?>-search">
-					<?php _e( 'Search'); ?>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
+					<?php _e( 'Search' ); ?>
 				</a>
 			</li>
 		</ul><!-- .posttype-tabs -->
 
-		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel 
+		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel
 												<?php
 												echo ( 'most-recent' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 												?>
@@ -504,7 +476,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div class="tabs-panel 
+		<div class="tabs-panel
 		<?php
 			echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 		?>
@@ -546,7 +518,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all 
+		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all
 							<?php
 							echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 							?>
@@ -781,58 +753,31 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 
 	$most_used_url = $view_all_url = $search_url = '';
 	if ( $nav_menu_selected_id ) {
-		$most_used_url = esc_url(add_query_arg($taxonomy_name . '-tab', 'most-used', remove_query_arg($removed_args)));
-		$view_all_url  = esc_url(add_query_arg($taxonomy_name . '-tab', 'all', remove_query_arg($removed_args)));
-		$search_url    = esc_url(add_query_arg($taxonomy_name . '-tab', 'search', remove_query_arg($removed_args)));
+		$most_used_url = esc_url( add_query_arg( $taxonomy_name . '-tab', 'most-used', remove_query_arg( $removed_args ) ) );
+		$view_all_url  = esc_url( add_query_arg( $taxonomy_name . '-tab', 'all', remove_query_arg( $removed_args ) ) );
+		$search_url    = esc_url( add_query_arg( $taxonomy_name . '-tab', 'search', remove_query_arg( $removed_args ) ) );
 	}
 	?>
 	<div id="taxonomy-<?php echo $taxonomy_name; ?>" class="taxonomydiv">
 		<ul id="taxonomy-<?php echo $taxonomy_name; ?>-tabs" class="taxonomy-tabs add-menu-item-tabs">
 			<li <?php echo ( 'most-used' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="tabs-panel-<?php echo esc_attr( $taxonomy_name ); ?>-pop" href="
-																		 <?php
-																			if ( $nav_menu_selected_id ) {
-																				echo esc_url( add_query_arg( $taxonomy_name . '-tab', 'most-used', remove_query_arg( $removed_args ) ) );}
-																			?>
-				#tabs-panel-<?php echo $taxonomy_name; ?>-pop">
-=======
 				<a class="nav-tab-link" data-type="tabs-panel-<?php echo esc_attr( $taxonomy_name ); ?>-pop" href="<?php echo $most_used_url; ?>#tabs-panel-<?php echo $taxonomy_name; ?>-pop">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 					<?php echo esc_html( $taxonomy->labels->most_used ); ?>
 				</a>
 			</li>
 			<li <?php echo ( 'all' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="tabs-panel-<?php echo esc_attr( $taxonomy_name ); ?>-all" href="
-																		 <?php
-																			if ( $nav_menu_selected_id ) {
-																				echo esc_url( add_query_arg( $taxonomy_name . '-tab', 'all', remove_query_arg( $removed_args ) ) );}
-																			?>
-				#tabs-panel-<?php echo $taxonomy_name; ?>-all">
-=======
 				<a class="nav-tab-link" data-type="tabs-panel-<?php echo esc_attr( $taxonomy_name ); ?>-all" href="<?php echo $view_all_url; ?>#tabs-panel-<?php echo $taxonomy_name; ?>-all">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 					<?php _e( 'View All' ); ?>
 				</a>
 			</li>
 			<li <?php echo ( 'search' == $current_tab ? ' class="tabs"' : '' ); ?>>
-<<<<<<< HEAD
-				<a class="nav-tab-link" data-type="tabs-panel-search-taxonomy-<?php echo esc_attr( $taxonomy_name ); ?>" href="
-																						 <?php
-																							if ( $nav_menu_selected_id ) {
-																								echo esc_url( add_query_arg( $taxonomy_name . '-tab', 'search', remove_query_arg( $removed_args ) ) );}
-																							?>
-				#tabs-panel-search-taxonomy-<?php echo $taxonomy_name; ?>">
-=======
 				<a class="nav-tab-link" data-type="tabs-panel-search-taxonomy-<?php echo esc_attr( $taxonomy_name ); ?>" href="<?php echo $search_url; ?>#tabs-panel-search-taxonomy-<?php echo $taxonomy_name; ?>">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 					<?php _e( 'Search' ); ?>
 				</a>
 			</li>
 		</ul><!-- .taxonomy-tabs -->
 
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel 
+		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel
 									   <?php
 										echo ( 'most-used' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 										?>
@@ -854,7 +799,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all 
+		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all
 									   <?php
 										echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 										?>
@@ -877,7 +822,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			<?php endif; ?>
 		</div><!-- /.tabs-panel -->
 
-		<div class="tabs-panel 
+		<div class="tabs-panel
 		<?php
 			echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
 		?>

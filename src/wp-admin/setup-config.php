@@ -92,48 +92,7 @@ if ( @file_exists( ABSPATH . '../wp-config.php' ) && ! @file_exists( ABSPATH . '
 	setup_config_display_footer();
 }
 
-<<<<<<< HEAD
 // Determine which language pack to use.
-=======
-$step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
-
-/**
- * Display setup wp-config.php file header.
- *
- * @ignore
- * @since 2.3.0
- *
- * @global string    $wp_local_package
- * @global WP_Locale $wp_locale
- *
- * @param string|array $body_classes
- */
-function setup_config_display_header( $body_classes = array() ) {
-	$body_classes = (array) $body_classes;
-	$body_classes[] = 'wp-core-ui';
-	$dir_attr = '';
-	if ( is_rtl() ) {
-		$body_classes[] = 'rtl';
-		$dir_attr = ' dir="rtl"';
-	}
-
-	header( 'Content-Type: text/html; charset=utf-8' );
-?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"<?php echo $dir_attr; ?>>
-<head>
-	<meta name="viewport" content="width=device-width" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="robots" content="noindex,nofollow" />
-	<title><?php _e( 'WordPress &rsaquo; Setup Configuration File' ); ?></title>
-	<?php wp_admin_css( 'install', true ); ?>
-</head>
-<body class="<?php echo implode( ' ', $body_classes ); ?>">
-<p id="logo"><a href="<?php echo esc_url( __( 'https://wordpress.org/' ) ); ?>" tabindex="-1"><?php _e( 'WordPress' ); ?></a></p>
-<?php
-} // end function setup_config_display_header();
-
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 $language = '';
 if ( ! empty( $_REQUEST['language'] ) ) {
 	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_REQUEST['language'] );
@@ -488,15 +447,17 @@ function setup_config_display_header( $body_classes = array() ) {
 	// Add core ui class.
 	$body_classes[] = 'cp-installation';
 	$body_classes[] = 'wp-core-ui';
+	$dir_attr       = '';
 	// Add rtl class, if needed.
 	if ( is_rtl() ) {
 		$body_classes[] = 'rtl';
+		$dir_attr      = ' dir="rtl" ';
 	}
 	// Set the content type.
 	header( 'Content-Type: text/html; charset=utf-8' );
 	// Print out the page header.
 	echo '<!DOCTYPE html>' . "\n";
-	echo '<html xmlns="http://www.w3.org/1999/xhtml" ' . get_language_attributes() . '>' . "\n";
+	echo '<html xmlns="http://www.w3.org/1999/xhtml"' . $dir_attr . get_language_attributes() . '>' . "\n";
 	echo '<head>' . "\n";
 	echo '<meta name="viewport" content="width=device-width" />' . "\n";
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";

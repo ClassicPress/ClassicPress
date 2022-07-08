@@ -192,19 +192,12 @@ function wp_widget_control( $sidebar_args ) {
 	$widget     = $wp_registered_widgets[ $widget_id ];
 
 	$id_format     = $widget['id'];
-<<<<<<< HEAD
 	$widget_number = isset( $control['params'][0]['number'] ) ? $control['params'][0]['number'] : '';
 	$id_base       = isset( $control['id_base'] ) ? $control['id_base'] : $widget_id;
+	$width         = isset( $control['width'] ) ? $control['width'] : '';
+	$height        = isset( $control['height'] ) ? $control['height'] : '';
 	$multi_number  = isset( $sidebar_args['_multi_num'] ) ? $sidebar_args['_multi_num'] : '';
 	$add_new       = isset( $sidebar_args['_add'] ) ? $sidebar_args['_add'] : '';
-=======
-	$widget_number = isset($control['params'][0]['number']) ? $control['params'][0]['number'] : '';
-	$id_base = isset($control['id_base']) ? $control['id_base'] : $widget_id;
-	$width = isset($control['width']) ? $control['width'] : '';
-	$height = isset($control['height']) ? $control['height'] : '';
-	$multi_number = isset($sidebar_args['_multi_num']) ? $sidebar_args['_multi_num'] : '';
-	$add_new = isset($sidebar_args['_add']) ? $sidebar_args['_add'] : '';
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 	$before_form           = isset( $sidebar_args['before_form'] ) ? $sidebar_args['before_form'] : '<form method="post">';
 	$after_form            = isset( $sidebar_args['after_form'] ) ? $sidebar_args['after_form'] : '</form>';
@@ -275,33 +268,13 @@ function wp_widget_control( $sidebar_args ) {
 	}
 	?>
 	<?php echo $after_widget_content; ?>
-<<<<<<< HEAD
 	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $id_format ); ?>" />
 	<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>" />
-	<input type="hidden" name="widget-width" class="widget-width" value="
-	<?php
-	if ( isset( $control['width'] ) ) {
-		echo esc_attr( $control['width'] );}
-	?>
-	" />
-	<input type="hidden" name="widget-height" class="widget-height" value="
-	<?php
-	if ( isset( $control['height'] ) ) {
-		echo esc_attr( $control['height'] );}
-	?>
-	" />
+	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr( $width ); ?>" />
+	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo esc_attr( $height ); ?>" />
 	<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>" />
 	<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>" />
 	<input type="hidden" name="add_new" class="add_new" value="<?php echo esc_attr( $add_new ); ?>" />
-=======
-	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr($id_format); ?>" />
-	<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr($id_base); ?>" />
-	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr($width); ?>" />
-	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo esc_attr($height); ?>" />
-	<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr($widget_number); ?>" />
-	<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr($multi_number); ?>" />
-	<input type="hidden" name="add_new" class="add_new" value="<?php echo esc_attr($add_new); ?>" />
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 	<div class="widget-control-actions">
 		<div class="alignleft">
@@ -311,16 +284,7 @@ function wp_widget_control( $sidebar_args ) {
 				<button type="button" class="button-link widget-control-close"><?php _e( 'Done' ); ?></button>
 			</span>
 		</div>
-<<<<<<< HEAD
-		<div class="alignright
-		<?php
-		if ( 'noform' === $has_form ) {
-			echo ' widget-control-noform';}
-		?>
-		">
-=======
 		<div class="alignright<?php echo $noform_class; ?>">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 			<?php submit_button( __( 'Save' ), 'primary widget-control-save right', 'savewidget', false, array( 'id' => 'widget-' . esc_attr( $id_format ) . '-savewidget' ) ); ?>
 			<span class="spinner"></span>
 		</div>

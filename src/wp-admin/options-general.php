@@ -75,53 +75,28 @@ require ABSPATH . 'wp-admin/admin-header.php';
 <p class="description" id="tagline-description"><?php _e( 'In a few words, explain what this site is about.' ); ?></p></td>
 </tr>
 
-<<<<<<< HEAD
-<?php if ( ! is_multisite() ) { ?>
-
-<tr>
-<th scope="row"><label for="siteurl"><?php _e( 'ClassicPress Address (URL)' ); ?></label></th>
-<td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code
-																			<?php
-																			if ( defined( 'WP_SITEURL' ) ) {
-																				echo ' disabled';}
-																			?>
-" /></td>
-</tr>
-
-<tr>
-<th scope="row"><label for="home"><?php _e( 'Site Address (URL)' ); ?></label></th>
-<td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code
-																										  <?php
-																											if ( defined( 'WP_HOME' ) ) {
-																												echo ' disabled';}
-																											?>
-" />
-	<?php if ( ! defined( 'WP_HOME' ) ) : ?>
-<p class="description" id="home-description">
-		<?php
-=======
 <?php
-	if ( !is_multisite() ) {
-		$wp_site_url_class = $wp_home_class = '';
-		if ( defined( 'WP_SITEURL' ) ) {
-			$wp_site_url_class = ' disabled';
-		}
-		if ( defined( 'WP_HOME' ) ) {
-			$wp_home_class = ' disabled';
-		}
-?>
+if ( ! is_multisite() ) {
+	$wp_site_url_class = $wp_home_class = '';
+	if ( defined( 'WP_SITEURL' ) ) {
+		$wp_site_url_class = ' disabled';
+	}
+	if ( defined( 'WP_HOME' ) ) {
+		$wp_home_class = ' disabled';
+	}
+	?>
 
 <tr>
-<th scope="row"><label for="siteurl"><?php _e('WordPress Address (URL)') ?></label></th>
+<th scope="row"><label for="siteurl"><?php _e( 'WordPress Address (URL)' ); ?></label></th>
 <td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php echo $wp_site_url_class; ?>" /></td>
 </tr>
 
 <tr>
-<th scope="row"><label for="home"><?php _e('Site Address (URL)') ?></label></th>
+<th scope="row"><label for="home"><?php _e( 'Site Address (URL)' ); ?></label></th>
 <td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code<?php echo $wp_home_class; ?>" />
-<?php if ( ! defined( 'WP_HOME' ) ) : ?>
-<p class="description" id="home-description"><?php
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
+	<?php if ( ! defined( 'WP_HOME' ) ) : ?>
+<p class="description" id="home-description">
+		<?php
 		printf(
 		/* translators: %s: Codex URL */
 			__( 'Enter the address here if you <a href="%s">want your site home page to be different from your ClassicPress installation directory</a>.' ),
@@ -201,7 +176,7 @@ if ( $login_custom_image_src ) {
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="1" 
+			<input name="login_custom_image_state" type="radio" value="1"
 			<?php
 			checked( 1, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
@@ -211,7 +186,7 @@ if ( $login_custom_image_src ) {
 		</label>
 		<br />
 		<label>
-			<input name="login_custom_image_state" type="radio" value="2" 
+			<input name="login_custom_image_state" type="radio" value="2"
 			<?php
 			checked( 2, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );

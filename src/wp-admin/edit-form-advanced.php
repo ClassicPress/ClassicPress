@@ -683,24 +683,13 @@ endif;
  */
 do_action( 'edit_form_after_title', $post );
 
-<<<<<<< HEAD
 if ( post_type_supports( $post_type, 'editor' ) ) {
-	?>
-<div id="postdivrich" class="postarea
-	<?php
-	if ( $_wp_editor_expand ) {
-		echo ' wp-editor-expand'; }
-	?>
-">
-=======
-if ( post_type_supports($post_type, 'editor') ) {
 	$_wp_editor_expand_class = '';
 	if ( $_wp_editor_expand ) {
 		$_wp_editor_expand_class = ' wp-editor-expand';
 	}
-?>
+	?>
 <div id="postdivrich" class="postarea<?php echo $_wp_editor_expand_class; ?>">
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 
 	<?php
 	wp_editor(

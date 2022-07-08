@@ -1781,19 +1781,14 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 		}
 		echo ' ';
 	}
-<<<<<<< HEAD
 	_e( 'If you do not remember your credentials, you should contact your web host.' );
-	?>
-</p>
-=======
-	_e('If you do not remember your credentials, you should contact your web host.');
 
 	$password_value = '';
-	if ( defined('FTP_PASS') ) {
+	if ( defined( 'FTP_PASS' ) ) {
 		$password_value = '*****';
 	}
-?></p>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
+	?>
+</p>
 <label for="hostname">
 	<span class="field-title"><?php _e( 'Hostname' ); ?></span>
 	<input name="hostname" type="text" id="hostname" aria-describedby="request-filesystem-credentials-desc" class="code" placeholder="<?php esc_attr_e( 'example: www.wordpress.org' ); ?>" value="
@@ -1813,23 +1808,14 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 <div class="ftp-password">
 	<label for="password">
 		<span class="field-title"><?php echo $label_pass; ?></span>
-<<<<<<< HEAD
-		<input name="password" type="password" id="password" value="
-		<?php
-		if ( defined( 'FTP_PASS' ) ) {
-			echo '*****';}
-		?>
-		"<?php disabled( defined( 'FTP_PASS' ) ); ?> />
+		<input name="password" type="password" id="password" value="<?php echo $password_value; ?>"<?php disabled( defined( 'FTP_PASS' ) ); ?> />
 		<em>
 		<?php
 		if ( ! defined( 'FTP_PASS' ) ) {
-			_e( 'This password will not be stored on the server.' );}
+			_e( 'This password will not be stored on the server.' );
+		}
 		?>
 		</em>
-=======
-		<input name="password" type="password" id="password" value="<?php echo $password_value; ?>"<?php disabled( defined('FTP_PASS') ); ?> />
-		<em><?php if ( ! defined('FTP_PASS') ) _e( 'This password will not be stored on the server.' ); ?></em>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 	</label>
 </div>
 <fieldset>

@@ -126,18 +126,8 @@ if ( isset( $tag->name ) ) {
 	<table class="form-table">
 		<tr class="form-field form-required term-name-wrap">
 			<th scope="row"><label for="name"><?php _ex( 'Name', 'term name' ); ?></label></th>
-<<<<<<< HEAD
-			<td><input name="name" id="name" type="text" value="
-			<?php
-			if ( isset( $tag->name ) ) {
-				echo esc_attr( $tag->name );}
-			?>
-			" size="40" aria-required="true" />
-			<p class="description"><?php _e( 'The name is how it appears on your site.' ); ?></p></td>
-=======
 			<td><input name="name" id="name" type="text" value="<?php echo $tag_name_value; ?>" size="40" aria-required="true" />
-			<p class="description"><?php _e('The name is how it appears on your site.'); ?></p></td>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
+			<p class="description"><?php _e( 'The name is how it appears on your site.' ); ?></p></td>
 		</tr>
 <?php if ( ! global_terms_enabled() ) { ?>
 		<tr class="form-field term-slug-wrap">

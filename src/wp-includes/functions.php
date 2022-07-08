@@ -3022,30 +3022,16 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 			$text_direction = 'rtl';
 		} elseif ( function_exists( 'is_rtl' ) && is_rtl() ) {
 			$text_direction = 'rtl';
-<<<<<<< HEAD
 		}
-		?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-		<?php
-		if ( function_exists( 'language_attributes' ) && function_exists( 'is_rtl' ) ) {
-			language_attributes();
-		} else {
-			echo "dir='$text_direction'";
-		}
-		?>
->
-=======
 
-			if ( function_exists( 'language_attributes' ) && function_exists( 'is_rtl' ) ) {
-				$dir_attr = get_language_attributes();
-			} else {
-				$dir_attr = "dir='$text_direction'";
-			}
-?>
+		if ( function_exists( 'language_attributes' ) && function_exists( 'is_rtl' ) ) {
+			$dir_attr = get_language_attributes();
+		} else {
+			$dir_attr = "dir='$text_direction'";
+		}
+		?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" <?php echo $dir_attr; ?>>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width">
@@ -4068,25 +4054,14 @@ function dead_db() {
 	status_header( 500 );
 	nocache_headers();
 	header( 'Content-Type: text/html; charset=utf-8' );
-<<<<<<< HEAD
-	?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	<?php
-	if ( is_rtl() ) {
-		echo ' dir="rtl"';}
-	?>
->
-=======
 
 	$dir_attr = '';
 	if ( is_rtl() ) {
 		$dir_attr = ' dir="rtl"';
 	}
-?>
+	?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"<?php echo $dir_attr; ?>>
->>>>>>> f797c252d9 (General: Reformat inline `if ()` statements inside HTML tags.)
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php _e( 'Database Error' ); ?></title>
