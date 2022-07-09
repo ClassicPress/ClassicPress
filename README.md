@@ -8,23 +8,36 @@ ClassicPress is a community-led open source content management system for creato
 [![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
 [![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/workflows/JavaScript%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22JavaScript+Tests%22+branch%3Adevelop)
 [![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/workflows/PHP%20Compatibility/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHP+Compatibility%22+branch%3Adevelop)
-[![Financial Contributors](https://opencollective.com/classicpress/tiers/badge.svg)](https://opencollective.com/classicpress)
+[![Financial Contributors](https://opencollective.com/classicpress/tiers/badge.svg?label=Financial+Contributors)](https://opencollective.com/classicpress)
 
 For more information, see:
 
-- [The official ClassicPress website](https://www.classicpress.net/)
-- [The ClassicPress docs](https://docs.classicpress.net/)
-- [The ClassicPress Democracy](https://www.classicpress.net/democracy/) (our governance structure)
-- [Suggest features](https://forums.classicpress.net/c/governance/petitions/77)
+- [The official ClassicPress website ›](https://www.classicpress.net/)
+- [The ClassicPress documentation ›](https://docs.classicpress.net/)
+- [The ClassicPress governance ›](https://www.classicpress.net/governance/)
+- [Suggest features ›](https://github.com/ClassicPress/ClassicPress/issues/)
 
 ## Contributions
 
 This project exists thanks to all the people who contribute and who have contributed in the past, whether as part of the long history of thousands of contributions to WordPress from many different people, or as contributions to ClassicPress itself.
 
-Would you like to help? [Here is how you can start](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md).
+Would you like to help? [Here is how you can start ›](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md)
 
-## Financial Contributors
-Support the ClassicPress project by making a [donation](https://opencollective.com/classicpress)! 🙏   
+
+## Sponsors
+Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/babel#sponsor)   
 All donations are tax-deductible in the United States.
 
+[![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkhost-webhosting-domeinregistratie-webdesign-logo.png)](https://www.brinkhost.nl)
+
+## Financial Contributors
+
+Support the ClassicPress project by making a [donation ›](https://opencollective.com/classicpress)   
+All donations are tax-deductible in the United States.
+
+### Individuals
+
 [![Financial contributors](https://opencollective.com/classicpress/individuals.svg?width=890)](https://opencollective.com/classicpress)
+
+### Organizations
+[![Financial contributors](https://opencollective.com/classicpress/organizations.svg?width=890)](https://opencollective.com/classicpress)
