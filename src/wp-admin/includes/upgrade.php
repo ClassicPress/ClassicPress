@@ -441,7 +441,7 @@ We hope you enjoy your new site. Thanks!
 https://www.classicpress.net/
 "), $blog_url, $name, $password, $login_url );
 
-	@wp_mail($email, __('New ClassicPress Site'), $message);
+	wp_mail($email, __('New ClassicPress Site'), $message);
 }
 endif;
 
@@ -2107,7 +2107,7 @@ function get_alloptions_110() {
  * @param string $setting Option name.
  * @return mixed
  */
-function __get_option($setting) {
+function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	global $wpdb;
 
 	if ( $setting == 'home' && defined( 'WP_HOME' ) )
@@ -2590,19 +2590,21 @@ function make_site_theme_from_oldschool($theme_name, $template) {
 			$oldpath = ABSPATH;
 
 		// Check to make sure it's not a new index.
-		if ($oldfile == 'index.php') {
-			$index = implode('', file("$oldpath/$oldfile"));
-			if (strpos($index, 'WP_USE_THEMES') !== false) {
-				if (! @copy(WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile"))
+		if ( $oldfile == 'index.php' ) {
+			$index = implode( '', file( "$oldpath/$oldfile" ) );
+			if ( strpos( $index, 'WP_USE_THEMES' ) !== false ) {
+				if ( ! copy( WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile" ) ) {
 					return false;
+				}
 
 				// Don't copy anything.
 				continue;
 			}
 		}
 
-		if (! @copy("$oldpath/$oldfile", "$site_dir/$newfile"))
+		if ( ! copy( "$oldpath/$oldfile", "$site_dir/$newfile" ) ) {
 			return false;
+		}
 
 		chmod("$site_dir/$newfile", 0777);
 
@@ -2660,17 +2662,19 @@ function make_site_theme_from_default($theme_name, $template) {
 	// Copy files from the default theme to the site theme.
 	//$files = array('index.php', 'comments.php', 'comments-popup.php', 'footer.php', 'header.php', 'sidebar.php', 'style.css');
 
-	$theme_dir = @ opendir($default_dir);
-	if ($theme_dir) {
-		while(($theme_file = readdir( $theme_dir )) !== false) {
-			if (is_dir("$default_dir/$theme_file"))
+	$theme_dir = @opendir( $default_dir );
+	if ( $theme_dir ) {
+		while ( ( $theme_file = readdir( $theme_dir ) ) !== false ) {
+			if ( is_dir( "$default_dir/$theme_file" ) ) {
 				continue;
-			if (! @copy("$default_dir/$theme_file", "$site_dir/$theme_file"))
+			}
+			if ( ! copy( "$default_dir/$theme_file", "$site_dir/$theme_file" ) ) {
 				return;
+			}
 			chmod("$site_dir/$theme_file", 0777);
 		}
+		closedir( $theme_dir );
 	}
-	@closedir($theme_dir);
 
 	// Rewrite the theme header.
 	$stylelines = explode("\n", implode('', file("$site_dir/style.css")));
@@ -2694,17 +2698,19 @@ function make_site_theme_from_default($theme_name, $template) {
 		return false;
 	}
 
-	$images_dir = @ opendir("$default_dir/images");
-	if ($images_dir) {
-		while(($image = readdir($images_dir)) !== false) {
-			if (is_dir("$default_dir/images/$image"))
+	$images_dir = @opendir( "$default_dir/images" );
+	if ( $images_dir ) {
+		while ( ( $image = readdir( $images_dir ) ) !== false ) {
+			if ( is_dir( "$default_dir/images/$image" ) ) {
 				continue;
-			if (! @copy("$default_dir/images/$image", "$site_dir/images/$image"))
+			}
+			if ( ! copy( "$default_dir/images/$image", "$site_dir/images/$image" ) ) {
 				return;
+			}
 			chmod("$site_dir/images/$image", 0777);
 		}
+		closedir( $images_dir );
 	}
-	@closedir($images_dir);
 }
 
 /**
