@@ -202,9 +202,24 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 						$class[] = 'current';
 						$aria_attributes .= ' aria-current="page"';
 					}
-				// If plugin_page is set the parent must either match the current page or not physically exist.
-				// This allows plugin pages with the same hook to exist under different parents.
-				} elseif (
+				} else if (
+					'plugin-install.php' === $self &&
+					'plugin-install.php' === strtok( $sub_item[2], '?' )
+				) {
+					// Special case: plugin-install.php now has 2 sub-pages in
+					// the menu.  Pick out the correct one based on whether the
+					// 'tab' parameter is used to select the Upload page.
+					$menu_item_is_upload = ( 'plugin-install.php?tab=upload' === $sub_item[2] );
+					$page_is_upload = ( isset( $_GET['tab'] ) && 'upload' === $_GET['tab'] );
+					if ( $menu_item_is_upload === $page_is_upload ) {
+						$class[] = 'current';
+						$aria_attributes .= ' aria-current="page"';
+					}
+				} else if (
+					// If plugin_page is set the parent must either match the
+					// current page or not physically exist.  This allows
+					// plugin pages with the same hook to exist under different
+					// parents.
 					( ! isset( $plugin_page ) && $self == $sub_item[2] ) ||
 					( isset( $plugin_page ) && $plugin_page == $sub_item[2] && ( $item[2] == $self_type || $item[2] == $self || file_exists($menu_file) === false ) )
 				) {

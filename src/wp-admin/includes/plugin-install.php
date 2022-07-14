@@ -715,24 +715,23 @@ function install_plugin_information() {
 	</div>
 	<div id="section-holder" class="wrap">
 	<?php
-	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
-	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
+	$wp_version = get_bloginfo( 'version' );
 
-	$compatible_php = is_php_version_compatible( $requires_php );
-	$compatible_wp = is_wp_version_compatible( $requires_wp );
-	$tested_wp = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
+	$compatible_php = ( empty( $api->requires_php ) || version_compare( phpversion(), $api->requires_php, '>=' ) );
+	$tested_wp      = ( empty( $api->tested ) || version_compare( $wp_version, $api->tested, '<=' ) );
+	$compatible_wp  = ( empty( $api->requires ) || version_compare( $wp_version, $api->requires, '>=' ) );
 
 	if ( ! $compatible_php ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
 		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
 		if ( current_user_can( 'update_php' ) ) {
-			printf(
+		printf(
 				/* translators: %s: "Update PHP" page URL */
 				' ' . __( '<a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
 				esc_url( wp_get_update_php_url() )
-			);
-
-			wp_update_php_annotation( '</p><p><em>', '</em>' );
+		);
+			echo '</p>';
+			wp_update_php_annotation();
 		} else {
 			echo '</p>';
 		}
@@ -741,18 +740,11 @@ function install_plugin_information() {
 
 	if ( ! $tested_wp ) {
 		echo '<div class="notice notice-warning notice-alt"><p>';
-		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of WordPress.' );
+		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
 		echo '</p></div>';
 	} elseif ( ! $compatible_wp ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.' );
-		if ( current_user_can( 'update_core' ) ) {
-			printf(
-				/* translators: %s: "Update WordPress" screen URL */
-				' ' . __( '<a href="%s" target="_parent">Click here to update WordPress</a>.' ),
-				self_admin_url( 'update-core.php' )
-			);
-		}
+		_e( '<strong>Error:</strong> This plugin requires a newer version of WordPress and may not be compatible with ClassicPress.' );
 		echo '</p></div>';
 	}
 
@@ -777,7 +769,14 @@ function install_plugin_information() {
 		switch ( $status['status'] ) {
 			case 'install':
 				if ( $status['url'] ) {
+					if ( $compatible_php && $compatible_wp ) {
 					echo '<a data-slug="' . esc_attr( $api->slug ) . '" id="plugin_install_from_iframe" class="button button-primary right" href="' . $status['url'] . '" target="_parent">' . __( 'Install Now' ) . '</a>';
+					} else {
+						printf(
+							'<button type="button" class="button button-primary button-disabled right" disabled="disabled">%s</button>',
+							_x( 'Cannot Install', 'plugin' )
+						);
+					}
 				}
 				break;
 			case 'update_available':

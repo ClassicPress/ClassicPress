@@ -399,8 +399,18 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 * @param bool   $overwrite
 	 * @return bool
 	 */
-	public function move($source, $destination, $overwrite = false) {
-		return @ssh2_sftp_rename( $this->sftp_link, $source, $destination );
+	public function move( $source, $destination, $overwrite = false ) {
+		if ( $this->exists( $destination ) ) {
+			if ( $overwrite ) {
+				// We need to remove the destination file before we can rename the source.
+				$this->delete( $destination, false, 'f' );
+			} else {
+				// If we're not overwriting, the rename will fail, so return early.
+				return false;
+			}
+		}
+
+		return ssh2_sftp_rename( $this->sftp_link, $source, $destination );
 	}
 
 	/**
@@ -556,11 +566,12 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$limit_file = false;
 		}
 
-		if ( ! $this->is_dir($path) )
+		if ( ! $this->is_dir( $path ) || ! $this->is_readable( $path ) ) {
 			return false;
+		}
 
 		$ret = array();
-		$dir = @dir( $this->sftp_path( $path ) );
+		$dir = dir( $this->sftp_path( $path ) );
 
 		if ( ! $dir )
 			return false;
