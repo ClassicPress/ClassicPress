@@ -25,7 +25,7 @@ Would you like to help? [Here is how you can start ›](https://github.com/Class
 
 
 ## Sponsors
-Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/babel#sponsor)   
+Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/classicpress)   
 All donations are tax-deductible in the United States.
 
 [![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkhost-webhosting-domeinregistratie-webdesign-logo.png)](https://www.brinkhost.nl)
