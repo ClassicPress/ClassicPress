@@ -102,7 +102,7 @@ else :
 		)
 	);
 	?>
-									</label></li>
+	</label></li>
 	<li><label for="page_for_posts">
 	<?php
 	printf(
@@ -118,7 +118,7 @@ else :
 		)
 	);
 	?>
-									</label></li>
+	</label></li>
 </ul>
 	<?php if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) == get_option( 'page_on_front' ) ) : ?>
 <div id="front-page-warning" class="error inline"><p><?php _e( '<strong>Warning:</strong> these pages should not be the same!' ); ?></p></div>

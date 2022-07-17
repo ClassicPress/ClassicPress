@@ -1440,7 +1440,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 		?>
 
-	<form method="get"><table style="display: none"><tbody id="inlineedit">
+		<form method="get">
+		<table style="display: none"><tbody id="inlineedit">
 		<?php
 		$hclass              = count( $hierarchical_taxonomies ) ? 'post' : 'page';
 		$inline_edit_classes = "inline-edit-row inline-edit-row-$hclass";
@@ -1449,53 +1450,47 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 		$bulk = 0;
 		while ( $bulk < 2 ) {
+			$classes  = $inline_edit_classes . ' ';
+			$classes .= $bulk ? $bulk_edit_classes : $quick_edit_classes;
 			?>
 
-		<tr id="<?php echo $bulk ? 'bulk-edit' : 'inline-edit'; ?>" class="
-						   <?php
-							echo $inline_edit_classes . ' ';
-							echo $bulk ? $bulk_edit_classes : $quick_edit_classes;
-							?>
-		" style="display: none"><td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
+			<tr id="<?php echo $bulk ? 'bulk-edit' : 'inline-edit'; ?>" class="<?php echo $classes; ?>" style="display: none">
+			<td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
 
-		<fieldset class="inline-edit-col-left">
-			<legend class="inline-edit-legend"><?php echo $bulk ? __( 'Bulk Edit' ) : __( 'Quick Edit' ); ?></legend>
-			<div class="inline-edit-col">
+			<fieldset class="inline-edit-col-left">
+				<legend class="inline-edit-legend"><?php echo $bulk ? __( 'Bulk Edit' ) : __( 'Quick Edit' ); ?></legend>
+				<div class="inline-edit-col">
+
+				<?php if ( post_type_supports( $screen->post_type, 'title' ) ) : ?>
+					<?php if ( $bulk ) : ?>
+						<div id="bulk-title-div">
+							<div id="bulk-titles"></div>
+						</div>
+
+				<?php else : // $bulk ?>
+
+					<label>
+						<span class="title"><?php _e( 'Title' ); ?></span>
+						<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
+					</label>
+
+					<label>
+						<span class="title"><?php _e( 'Slug' ); ?></span>
+						<span class="input-text-wrap"><input type="text" name="post_name" value="" /></span>
+					</label>
+
+					<?php endif; // $bulk ?>
+				<?php endif; // post_type_supports title ?>
+
+				<?php if ( ! $bulk ) : ?>
+					<fieldset class="inline-edit-date">
+						<legend><span class="title"><?php _e( 'Date' ); ?></span></legend>
+						<?php touch_time( 1, 1, 0, 1 ); ?>
+					</fieldset>
+					<br class="clear" />
+				<?php endif; // $bulk ?>
+
 			<?php
-
-			if ( post_type_supports( $screen->post_type, 'title' ) ) :
-				if ( $bulk ) :
-					?>
-			<div id="bulk-title-div">
-				<div id="bulk-titles"></div>
-			</div>
-
-			<?php else : // $bulk ?>
-
-			<label>
-				<span class="title"><?php _e( 'Title' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="post_title" class="ptitle" value="" /></span>
-			</label>
-
-			<label>
-				<span class="title"><?php _e( 'Slug' ); ?></span>
-				<span class="input-text-wrap"><input type="text" name="post_name" value="" /></span>
-			</label>
-
-				<?php
-	endif; // $bulk
-	endif; // post_type_supports title
-			?>
-
-			<?php if ( ! $bulk ) : ?>
-			<fieldset class="inline-edit-date">
-			<legend><span class="title"><?php _e( 'Date' ); ?></span></legend>
-				<?php touch_time( 1, 1, 0, 1 ); ?>
-			</fieldset>
-			<br class="clear" />
-				<?php
-	endif; // $bulk
-
 			if ( post_type_supports( $screen->post_type, 'author' ) ) :
 				$authors_dropdown = '';
 
@@ -1524,8 +1519,9 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 				<?php
 				if ( ! $bulk ) {
-					echo $authors_dropdown;}
-	endif; // post_type_supports author
+					echo $authors_dropdown;
+				}
+			endif; // post_type_supports author
 
 			if ( ! $bulk && $can_publish ) :
 				?>

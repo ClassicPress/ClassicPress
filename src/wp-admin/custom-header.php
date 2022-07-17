@@ -472,10 +472,10 @@ class Custom_Image_Header {
 <div class="notice notice-info hide-if-no-customize">
 	<p>
 			<?php
-				printf(
-					__( 'You can now manage and live-preview Custom Header in the <a href="%1$s">Customizer</a>.' ),
-					admin_url( 'customize.php?autofocus[control]=header_image' )
-				);
+			printf(
+				__( 'You can now manage and live-preview Custom Header in the <a href="%1$s">Customizer</a>.' ),
+				admin_url( 'customize.php?autofocus[control]=header_image' )
+			);
 			?>
 	</p>
 </div>
@@ -543,10 +543,10 @@ class Custom_Image_Header {
 			} elseif ( current_theme_supports( 'custom-header', 'flex-height' ) ) {
 				if ( ! current_theme_supports( 'custom-header', 'flex-width' ) ) {
 					printf(
-					/* translators: %s: size in pixels */
+						/* translators: %s: size in pixels */
 						__( 'Images should be at least %s wide.' ) . ' ',
 						sprintf(
-						/* translators: %d: custom header width */
+							/* translators: %d: custom header width */
 							'<strong>' . __( '%d pixels' ) . '</strong>',
 							get_theme_support( 'custom-header', 'width' )
 						)
@@ -555,10 +555,10 @@ class Custom_Image_Header {
 			} elseif ( current_theme_supports( 'custom-header', 'flex-width' ) ) {
 				if ( ! current_theme_supports( 'custom-header', 'flex-height' ) ) {
 					printf(
-					/* translators: %s: size in pixels */
+						/* translators: %s: size in pixels */
 						__( 'Images should be at least %s tall.' ) . ' ',
 						sprintf(
-						/* translators: %d: custom header height */
+							/* translators: %d: custom header height */
 							'<strong>' . __( '%d pixels' ) . '</strong>',
 							get_theme_support( 'custom-header', 'height' )
 						)
@@ -571,7 +571,7 @@ class Custom_Image_Header {
 					/* translators: %s: size in pixels */
 						__( 'Suggested width is %s.' ) . ' ',
 						sprintf(
-						/* translators: %d: custom header width */
+							/* translators: %d: custom header width */
 							'<strong>' . __( '%d pixels' ) . '</strong>',
 							get_theme_support( 'custom-header', 'width' )
 						)
@@ -648,9 +648,9 @@ class Custom_Image_Header {
 <td>
 			<?php if ( current_theme_supports( 'custom-header', 'uploads' ) ) : ?>
 	<p><?php _e( 'If you don&lsquo;t want to upload your own image, you can use one of these cool headers, or show a random one.' ); ?></p>
-		<?php else : ?>
+	<?php else : ?>
 	<p><?php _e( 'You can use one of these cool headers or show a random one on each page.' ); ?></p>
-		<?php endif; ?>
+	<?php endif; ?>
 			<?php
 			$this->show_header_selector( 'default' );
 			?>
@@ -670,7 +670,12 @@ class Custom_Image_Header {
 			<?php
 	endif;
 
-		$default_image = sprintf( get_theme_support( 'custom-header', 'default-image' ), get_template_directory_uri(), get_stylesheet_directory_uri() );
+		$default_image = sprintf(
+			get_theme_support( 'custom-header', 'default-image' ),
+			get_template_directory_uri(),
+			get_stylesheet_directory_uri()
+		);
+
 		if ( $default_image && get_header_image() != $default_image ) :
 			?>
 <tr>
@@ -680,7 +685,7 @@ class Custom_Image_Header {
 			<?php submit_button( __( 'Restore Original Header Image' ), '', 'resetheader', false ); ?>
 </td>
 </tr>
-		<?php endif; ?>
+	<?php endif; ?>
 </tbody>
 </table>
 
@@ -819,7 +824,19 @@ class Custom_Image_Header {
 			return $this->finished();
 		} elseif ( $width > $max_width ) {
 			$oitar = $width / $max_width;
-			$image = wp_crop_image( $attachment_id, 0, 0, $width, $height, $max_width, $height / $oitar, false, str_replace( basename( $file ), 'midsize-' . basename( $file ), $file ) );
+
+			$image = wp_crop_image(
+				$attachment_id,
+				0,
+				0,
+				$width,
+				$height,
+				$max_width,
+				$height / $oitar,
+				false,
+				str_replace( basename( $file ), 'midsize-' . basename( $file ), $file )
+			);
+
 			if ( ! $image || is_wp_error( $image ) ) {
 				wp_die( __( 'Image could not be processed. Please go back and try again.' ), __( 'Image Processing Error' ) );
 			}
@@ -956,7 +973,15 @@ class Custom_Image_Header {
 		$width      = $dimensions['dst_width'];
 
 		if ( empty( $_POST['skip-cropping'] ) ) {
-			$cropped = wp_crop_image( $attachment_id, (int) $_POST['x1'], (int) $_POST['y1'], (int) $_POST['width'], (int) $_POST['height'], $width, $height );
+			$cropped = wp_crop_image(
+				$attachment_id,
+				(int) $_POST['x1'],
+				(int) $_POST['y1'],
+				(int) $_POST['width'],
+				(int) $_POST['height'],
+				$width,
+				$height
+			);
 		} elseif ( ! empty( $_POST['create-new-attachment'] ) ) {
 			$cropped = _copy_image_file( $attachment_id );
 		} else {

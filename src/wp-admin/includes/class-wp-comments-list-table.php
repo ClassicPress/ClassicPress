@@ -352,22 +352,22 @@ class WP_Comments_List_Table extends WP_List_Table {
 			?>
 			<label class="screen-reader-text" for="filter-by-comment-type"><?php _e( 'Filter by comment type' ); ?></label>
 			<select id="filter-by-comment-type" name="comment_type">
-				<option value=""><?php _e( 'All comment types' ); ?></option>
+			<option value=""><?php _e( 'All comment types' ); ?></option>
 			<?php
-				/**
-				 * Filters the comment types dropdown menu.
-				 *
-				 * @since WP-2.7.0
-				 *
-				 * @param array $comment_types An array of comment types. Accepts 'Comments', 'Pings'.
-				 */
-				$comment_types = apply_filters(
-					'admin_comment_types_dropdown',
-					array(
-						'comment' => __( 'Comments' ),
-						'pings'   => __( 'Pings' ),
-					)
-				);
+			/**
+			 * Filters the comment types dropdown menu.
+			 *
+			 * @since WP-2.7.0
+			 *
+			 * @param array $comment_types An array of comment types. Accepts 'Comments', 'Pings'.
+			 */
+			$comment_types = apply_filters(
+				'admin_comment_types_dropdown',
+				array(
+					'comment' => __( 'Comments' ),
+					'pings'   => __( 'Pings' ),
+				)
+			);
 
 			foreach ( $comment_types as $type => $label ) {
 				echo "\t" . '<option value="' . esc_attr( $type ) . '"' . selected( $comment_type, $type, false ) . ">$label</option>\n";
