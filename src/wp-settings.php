@@ -240,7 +240,10 @@ require( ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-comment-meta-fields.p
 require( ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-post-meta-fields.php' );
 require( ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-term-meta-fields.php' );
 require( ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-user-meta-fields.php' );
-require( ABSPATH . WPINC . '/class-fix-wpcli.php' );
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require ABSPATH . WPINC . '/class-fix-wpcli.php';
+}
+
 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
