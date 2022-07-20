@@ -529,17 +529,25 @@ class WP_Admin_Bar {
 		if ( $has_link ) {
 			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
 			echo "<a class='ab-item'$aria_attributes href='" . esc_url( $node->href ) . "'";
-			if ( ! empty( $node->meta['onclick'] ) ) {
-				echo ' onclick="' . esc_js( $node->meta['onclick'] ) . '"';
-			}
 		} else {
 			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
 			echo '<div class="ab-item ab-empty-item"' . $aria_attributes;
 		}
 
 		foreach ( $attributes as $attribute ) {
+<<<<<<< HEAD
 			if ( ! empty( $node->meta[ $attribute ] ) ) {
 				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . '"';
+=======
+			if ( empty( $node->meta[ $attribute ] ) ) {
+				continue;
+			}
+
+			if ( 'onclick' === $attribute ) {
+				echo " $attribute='" . esc_js( $node->meta[ $attribute ] ) . "'";
+			} else {
+				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . "'";
+>>>>>>> 90ad63f2ce (Toolbar: Properly escape the onclick attribute.)
 			}
 		}
 
