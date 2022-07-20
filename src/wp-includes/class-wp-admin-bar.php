@@ -535,10 +535,6 @@ class WP_Admin_Bar {
 		}
 
 		foreach ( $attributes as $attribute ) {
-<<<<<<< HEAD
-			if ( ! empty( $node->meta[ $attribute ] ) ) {
-				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . '"';
-=======
 			if ( empty( $node->meta[ $attribute ] ) ) {
 				continue;
 			}
@@ -547,7 +543,6 @@ class WP_Admin_Bar {
 				echo " $attribute='" . esc_js( $node->meta[ $attribute ] ) . "'";
 			} else {
 				echo " $attribute='" . esc_attr( $node->meta[ $attribute ] ) . "'";
->>>>>>> 90ad63f2ce (Toolbar: Properly escape the onclick attribute.)
 			}
 		}
 
