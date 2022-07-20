@@ -1,10 +1,32 @@
 <?php
+/**
+ * API used to fix WP-CLI compatibility issues.
+ *
+ * @package ClassicPress
+ * @subpackage Fix_WPCLI
+ */
+
+/**
+ * Core class used to fix WP-CLI compatibility issues.
+ *
+ * @since CP-1.5.0
+ */
 class Fix_WPCLI {
 
+	/**
+	 * Constructor.
+	 *
+	 * @since CP-1.5.0
+	 */
 	public function __construct() {
 		WP_CLI::add_hook( 'before_invoke:core check-update', array( __CLASS__, 'correct_core_check_update' ) );
 	}
 
+	/**
+	 * Fix wp core check-update command.
+	 *
+	 * @since CP-1.5.0
+	 */
 	public static function correct_core_check_update() {
 
 		// Check for updates. Bail on error.
