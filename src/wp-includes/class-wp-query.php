@@ -827,7 +827,7 @@ class WP_Query {
 				}
 			}
 
-			if ( '' != $qv['w'] ) {
+			if ( $qv['w'] ) {
 				$this->is_date = true;
 			}
 
@@ -3032,7 +3032,7 @@ class WP_Query {
 			if ( is_array( $this->posts ) ) {
 				$this->found_posts = count( $this->posts );
 			} else {
-				if ( null === $this->posts ) {  
+				if ( null === $this->posts ) {
 					$this->found_posts = 0;
 				} else {
 					$this->found_posts = 1;
