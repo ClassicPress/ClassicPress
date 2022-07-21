@@ -240,6 +240,8 @@ if ( isset( $_GET['action'] ) ) {
 		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php'; //for themes_api..
 
 		check_admin_referer( 'install-theme_' . $theme );
+
+		//Save on a bit of bandwidth.
 		$api = themes_api(
 			'theme_information',
 			array(
@@ -249,7 +251,7 @@ if ( isset( $_GET['action'] ) ) {
 					'tags'     => false,
 				),
 			)
-		); //Save on a bit of bandwidth.
+		);
 
 		if ( is_wp_error( $api ) ) {
 			wp_die( $api );

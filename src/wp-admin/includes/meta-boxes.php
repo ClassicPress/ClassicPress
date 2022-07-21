@@ -920,7 +920,7 @@ function page_attributes_meta_box( $post ) {
 		$pages         = wp_dropdown_pages( $dropdown_args );
 		if ( ! empty( $pages ) ) :
 			?>
-<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="parent_id"><?php _e( 'Parent' ); ?></label></p>
+			<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="parent_id"><?php _e( 'Parent' ); ?></label></p>
 			<?php echo $pages; ?>
 			<?php
 		endif; // end empty pages check
@@ -929,21 +929,21 @@ function page_attributes_meta_box( $post ) {
 	if ( count( get_page_templates( $post ) ) > 0 && get_option( 'page_for_posts' ) != $post->ID ) :
 		$template = ! empty( $post->page_template ) ? $post->page_template : false;
 		?>
-<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="page_template"><?php _e( 'Template' ); ?></label>
-																											<?php
-																											/**
-																											 * Fires immediately after the label inside the 'Template' section
-																											 * of the 'Page Attributes' meta box.
-																											 *
-																											 * @since WP-4.4.0
-																											 *
-																											 * @param string  $template The template used for the current post.
-																											 * @param WP_Post $post     The current post.
-																											 */
-																											do_action( 'page_attributes_meta_box_template', $template, $post );
-																											?>
-</p>
-<select name="page_template" id="page_template">
+		<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="page_template"><?php _e( 'Template' ); ?></label>
+		<?php
+			/**
+			 * Fires immediately after the label inside the 'Template' section
+			 * of the 'Page Attributes' meta box.
+			 *
+			 * @since WP-4.4.0
+			 *
+			 * @param string  $template The template used for the current post.
+			 * @param WP_Post $post     The current post.
+			 */
+			do_action( 'page_attributes_meta_box_template', $template, $post );
+		?>
+		</p>
+		<select name="page_template" id="page_template">
 		<?php
 		/**
 		 * Filters the title of the default page template displayed in the drop-down.
@@ -956,27 +956,27 @@ function page_attributes_meta_box( $post ) {
 		 */
 		$default_title = apply_filters( 'default_page_template_title', __( 'Default Template' ), 'meta-box' );
 		?>
-<option value="default"><?php echo esc_html( $default_title ); ?></option>
+		<option value="default"><?php echo esc_html( $default_title ); ?></option>
 		<?php page_template_dropdown( $template, $post->post_type ); ?>
-</select>
-<?php endif; ?>
+		</select>
+	<?php endif; ?>
 	<?php if ( post_type_supports( $post->post_type, 'page-attributes' ) ) : ?>
-<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="menu_order"><?php _e( 'Order' ); ?></label></p>
-<input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr( $post->menu_order ); ?>" />
+		<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="menu_order"><?php _e( 'Order' ); ?></label></p>
+		<input name="menu_order" type="text" size="4" id="menu_order" value="<?php echo esc_attr( $post->menu_order ); ?>" />
 		<?php
-		/**
-		 * Fires before the help hint text in the 'Page Attributes' meta box.
-		 *
-		 * @since WP-4.9.0
-		 *
-		 * @param WP_Post $post The current post.
-		 */
-		do_action( 'page_attributes_misc_attributes', $post );
+			/**
+			 * Fires before the help hint text in the 'Page Attributes' meta box.
+			 *
+			 * @since WP-4.9.0
+			 *
+			 * @param WP_Post $post The current post.
+			 */
+			do_action( 'page_attributes_misc_attributes', $post );
 		?>
 		<?php if ( 'page' == $post->post_type && get_current_screen()->get_help_tabs() ) : ?>
-<p><?php _e( 'Need help? Use the Help tab above the screen title.' ); ?></p>
-			<?php
-endif;
+			<p><?php _e( 'Need help? Use the Help tab above the screen title.' ); ?></p>
+		<?php endif; ?>
+		<?php
 	endif;
 }
 
@@ -1353,11 +1353,11 @@ function attachment_id3_data_meta_box( $post ) {
 	<p>
 		<label for="title"><?php echo $label; ?></label><br />
 		<input type="text" name="id3_<?php echo esc_attr( $key ); ?>" id="id3_<?php echo esc_attr( $key ); ?>" class="large-text" value="
-												<?php
-												if ( ! empty( $meta[ $key ] ) ) {
-													echo esc_attr( $meta[ $key ] );
-												}
-												?>
+			<?php
+			if ( ! empty( $meta[ $key ] ) ) {
+				echo esc_attr( $meta[ $key ] );
+			}
+			?>
 		" />
 	</p>
 		<?php

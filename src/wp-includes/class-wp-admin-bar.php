@@ -530,7 +530,7 @@ class WP_Admin_Bar {
 			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
 			echo "<a class='ab-item'$aria_attributes href='" . esc_url( $node->href ) . "'";
 		} else {
-			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
+			$attributes = array( 'title', 'lang', 'dir' );
 			echo '<div class="ab-item ab-empty-item"' . $aria_attributes;
 		}
 

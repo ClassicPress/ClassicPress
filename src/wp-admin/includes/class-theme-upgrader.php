@@ -136,6 +136,7 @@ class Theme_Upgrader extends WP_Upgrader {
 		}
 
 		// We don't have the parent theme, let's install it.
+		// And save on a bit of bandwidth.
 		$api = themes_api(
 			'theme_information',
 			array(
@@ -145,7 +146,7 @@ class Theme_Upgrader extends WP_Upgrader {
 					'tags'     => false,
 				),
 			)
-		); //Save on a bit of bandwidth.
+		);
 
 		if ( ! $api || is_wp_error( $api ) ) {
 			$this->skin->feedback( 'parent_theme_not_found', $theme_info->get( 'Template' ) );

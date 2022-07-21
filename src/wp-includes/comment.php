@@ -1298,7 +1298,8 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 
 		// Skip empty lines
 		if ( empty( $word ) ) {
-			continue; }
+			continue;
+		}
 
 		// Do some escaping magic so that '#' chars in the
 		// spam words don't break things:

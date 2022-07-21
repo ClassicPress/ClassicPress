@@ -438,9 +438,9 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 		</ul><!-- .posttype-tabs -->
 
 		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel
-												<?php
-												echo ( 'most-recent' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-												?>
+			<?php
+			echo ( 'most-recent' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
+			?>
 		">
 			<ul id="<?php echo $post_type_name; ?>checklist-most-recent" class="categorychecklist form-no-clear">
 				<?php
@@ -519,9 +519,9 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 		</div><!-- /.tabs-panel -->
 
 		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all
-							<?php
-							echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-							?>
+			<?php
+			echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
+			?>
 		">
 			<?php if ( ! empty( $page_links ) ) : ?>
 				<div class="add-menu-item-pagelinks">
@@ -762,9 +762,9 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 		</ul><!-- .taxonomy-tabs -->
 
 		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel
-									   <?php
-										echo ( 'most-used' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-										?>
+			<?php
+			echo ( 'most-used' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
+			?>
 		">
 			<ul id="<?php echo $taxonomy_name; ?>checklist-pop" class="categorychecklist form-no-clear" >
 				<?php
@@ -784,9 +784,9 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 		</div><!-- /.tabs-panel -->
 
 		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all
-									   <?php
-										echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
-										?>
+			<?php
+			echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' );
+			?>
 		">
 			<?php if ( ! empty( $page_links ) ) : ?>
 				<div class="add-menu-item-pagelinks">

@@ -87,7 +87,7 @@ if ( ! is_multisite() ) {
 	?>
 
 <tr>
-<th scope="row"><label for="siteurl"><?php _e( 'WordPress Address (URL)' ); ?></label></th>
+<th scope="row"><label for="siteurl"><?php _e( 'ClassicPress Address (URL)' ); ?></label></th>
 <td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php echo $wp_site_url_class; ?>" /></td>
 </tr>
 
