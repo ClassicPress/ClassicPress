@@ -99,12 +99,7 @@ function permalink_anchor( $mode = 'id' ) {
  *
  * @param int|WP_Post $post      Optional. Post ID or post object. Default is the global `$post`.
  * @param bool        $leavename Optional. Whether to keep post name or page name. Default false.
-<<<<<<< HEAD
- *
- * @return string|false The permalink URL or false if post does not exist.
-=======
  * @return string|false The permalink URL. False if the post does not exist.
->>>>>>> b698f8f475 (Posts, Post Types: Correct the check for non-existing post in `get_post_permalink()`.)
  */
 function get_the_permalink( $post = 0, $leavename = false ) {
 	return get_permalink( $post, $leavename );
@@ -251,31 +246,19 @@ function get_permalink( $post = 0, $leavename = false ) {
  *
  * @global WP_Rewrite $wp_rewrite
  *
-<<<<<<< HEAD
- * @param int|WP_Post $id        Optional. Post ID or post object. Default is the global `$post`.
- * @param bool        $leavename Optional, defaults to false. Whether to keep post name. Default false.
- * @param bool        $sample    Optional, defaults to false. Is it a sample permalink. Default false.
- * @return string|WP_Error The post permalink.
-=======
  * @param int|WP_Post $post      Optional. Post ID or post object. Default is the global `$post`.
  * @param bool        $leavename Optional. Whether to keep post name. Default false.
  * @param bool        $sample    Optional. Is it a sample permalink. Default false.
  * @return string|false The post permalink URL. False if the post does not exist.
->>>>>>> b698f8f475 (Posts, Post Types: Correct the check for non-existing post in `get_post_permalink()`.)
  */
 function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
 	global $wp_rewrite;
 
 	$post = get_post($id);
 
-<<<<<<< HEAD
-	if ( is_wp_error( $post ) )
-		return $post;
-=======
 	if ( ! $post ) {
 		return false;
 	}
->>>>>>> b698f8f475 (Posts, Post Types: Correct the check for non-existing post in `get_post_permalink()`.)
 
 	$post_link = $wp_rewrite->get_extra_permastruct($post->post_type);
 
