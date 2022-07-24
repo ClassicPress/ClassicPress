@@ -630,21 +630,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 	<h2 class="nav-tab-wrapper wp-clearfix">
 		<a href="<?php echo admin_url( 'nav-menus.php' ); ?>" class="nav-tab<?php echo $nav_tab_active_class; ?>"><?php esc_html_e( 'Edit Menus' ); ?></a>
-				<?php
+		<?php
 		if ( $num_locations && $menu_count ) {
 			$active_tab_class = '';
-				if ( $locations_screen ) {
-<<<<<<< HEAD
-					echo ' nav-tab-active';
-				}
-				?>
-			"><?php esc_html_e( 'Manage Locations' ); ?></a>
-=======
+			if ( $locations_screen ) {
 				$active_tab_class = ' nav-tab-active';
 			}
 			?>
 			<a href="<?php echo esc_url( add_query_arg( array( 'action' => 'locations' ), admin_url( 'nav-menus.php' ) ) ); ?>" class="nav-tab<?php echo $active_tab_class; ?>"><?php esc_html_e( 'Manage Locations' ); ?></a>
->>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 			<?php
 		}
 		?>

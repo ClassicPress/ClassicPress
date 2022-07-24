@@ -49,23 +49,8 @@ if ( $is_privacy_notice ) {
 <h2 class="nav-tab-wrapper wp-clearfix">
 	<a href="about.php" class="nav-tab"><?php _e( 'About' ); ?></a>
 	<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
-<<<<<<< HEAD
-	<a href="freedoms.php" class="nav-tab
-	<?php
-	if ( ! $is_privacy_notice ) {
-		echo ' nav-tab-active'; }
-	?>
-	"><?php _e( 'Freedoms' ); ?></a>
-	<a href="freedoms.php?privacy-notice" class="nav-tab
-	<?php
-	if ( $is_privacy_notice ) {
-		echo ' nav-tab-active'; }
-	?>
-	"><?php _e( 'Privacy' ); ?></a>
-=======
 	<a href="freedoms.php" class="nav-tab<?php echo $freedoms_class; ?>"><?php _e( 'Freedoms' ); ?></a>
 	<a href="freedoms.php?privacy-notice" class="nav-tab<?php echo $privacy_class; ?>"><?php _e( 'Privacy' ); ?></a>
->>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 </h2>
 
 <?php if ( $is_privacy_notice ) : ?>

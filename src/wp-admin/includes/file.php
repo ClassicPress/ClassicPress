@@ -1792,25 +1792,11 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	if ( defined( 'FTP_PASS' ) ) {
 		$password_value = '*****';
 	}
-<<<<<<< HEAD
 	?>
 </p>
 <label for="hostname">
 	<span class="field-title"><?php _e( 'Hostname' ); ?></span>
-	<input name="hostname" type="text" id="hostname" aria-describedby="request-filesystem-credentials-desc" class="code" placeholder="<?php esc_attr_e( 'example: www.wordpress.org' ); ?>" value="
-		<?php
-		echo esc_attr( $hostname );
-		if ( ! empty( $port ) ) {
-			echo ":$port";}
-		?>
-	"<?php disabled( defined( 'FTP_HOST' ) ); ?> />
-=======
-?>
-</p>
-<label for="hostname">
-	<span class="field-title"><?php _e( 'Hostname' ); ?></span>
 	<input name="hostname" type="text" id="hostname" aria-describedby="request-filesystem-credentials-desc" class="code" placeholder="<?php esc_attr_e( 'example: www.wordpress.org' ); ?>" value="<?php echo $hostname_value; ?>"<?php disabled( defined( 'FTP_HOST' ) ); ?> />
->>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 </label>
 <div class="ftp-username">
 	<label for="username">
@@ -1838,16 +1824,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	foreach ( $types as $name => $text ) :
 		?>
 	<label for="<?php echo esc_attr( $name ); ?>">
-<<<<<<< HEAD
-		<input type="radio" name="connection_type" id="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $name ); ?>"
-																  <?php
-																	checked( $name, $connection_type );
-																	echo $disabled;
-																	?>
-		 />
-=======
 		<input type="radio" name="connection_type" id="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $name ); ?>" <?php checked( $name, $connection_type ); ?> <?php echo $disabled; ?> />
->>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 		<?php echo $text; ?>
 	</label>
 		<?php

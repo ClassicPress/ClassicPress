@@ -1350,10 +1350,10 @@ function attachment_id3_data_meta_box( $post ) {
 
 	foreach ( wp_get_attachment_id3_keys( $post, 'edit' ) as $key => $label ) :
 		$value = '';
-			if ( ! empty( $meta[ $key ] ) ) {
+		if ( ! empty( $meta[ $key ] ) ) {
 			$value = $meta[ $key ];
-			}
-			?>
+		}
+		?>
 	<p>
 		<label for="title"><?php echo $label; ?></label><br />
 		<input type="text" name="id3_<?php echo esc_attr( $key ); ?>" id="id3_<?php echo esc_attr( $key ); ?>" class="large-text" value="<?php echo esc_attr( $value ); ?>" />

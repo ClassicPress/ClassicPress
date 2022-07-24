@@ -32,13 +32,8 @@ require dirname( __FILE__ ) . '/wp-load.php';
 
 if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
 	header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
-<<<<<<< HEAD
-	?>
-	<?php echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>'; ?>
-=======
 	echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>';
 	?>
->>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 <rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">
   <service>
 	<engineName>ClassicPress</engineName>
