@@ -194,12 +194,16 @@ if ( ! empty( $messages ) ) {
 			<fieldset>
 			<legend class="screen-reader-text"><?php _e( 'Set site attributes' ); ?></legend>
 			<?php foreach ( $attribute_fields as $field_key => $field_label ) : ?>
+<<<<<<< HEAD
 				<label><input type="checkbox" name="blog[<?php echo $field_key; ?>]" value="1" 
 																	<?php
 																	checked( (bool) $details->$field_key, true );
 																	disabled( ! in_array( $details->$field_key, array( 0, 1 ) ) );
 																	?>
 				 />
+=======
+				<label><input type="checkbox" name="blog[<?php echo $field_key; ?>]" value="1" <?php checked( (bool) $details->$field_key, true ); ?> <?php disabled( ! in_array( $details->$field_key, array( 0, 1 ) ) ); ?> />
+>>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 				<?php echo $field_label; ?></label><br/>
 			<?php endforeach; ?>
 			<fieldset>

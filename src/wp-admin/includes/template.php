@@ -2200,16 +2200,30 @@ function _wp_admin_html_begin() {
 																	 * @since WP-2.2.0
 																	 */
 																	do_action( 'admin_xml_ns' );
+<<<<<<< HEAD
 																	?>
 	<?php language_attributes(); ?>>
+=======
+
+	language_attributes();
+	?>
+	>
+>>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 <![endif]-->
 <!--[if !(IE 8) ]><!-->
 <html xmlns="http://www.w3.org/1999/xhtml" class="<?php echo $admin_html_class; ?>" 
 															 <?php
 																/** This action is documented in wp-admin/includes/template.php */
 																do_action( 'admin_xml_ns' );
+<<<<<<< HEAD
 																?>
 	<?php language_attributes(); ?>>
+=======
+
+	language_attributes();
+	?>
+	>
+>>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 <!--<![endif]-->
 <head>
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php echo get_option( 'blog_charset' ); ?>" />

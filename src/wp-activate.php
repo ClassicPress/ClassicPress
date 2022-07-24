@@ -121,7 +121,13 @@ get_header( 'wp-activate' );
 
 <div id="signup-content" class="widecolumn">
 	<div class="wp-activate-container">
+<<<<<<< HEAD
 	<?php if ( ! $key ) { ?>
+=======
+	<?php
+	if ( empty( $_GET['key'] ) && empty( $_POST['key'] ) ) {
+		?>
+>>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 
 		<h2><?php _e( 'Activation Key Required' ); ?></h2>
 		<form name="activateform" id="activateform" method="post" action="<?php echo network_site_url( 'wp-activate.php' ); ?>">
@@ -136,7 +142,15 @@ get_header( 'wp-activate' );
 
 		<?php
 	} else {
+<<<<<<< HEAD
 		if ( is_wp_error( $result ) && in_array( $result->get_error_code(), $valid_error_codes ) ) {
+=======
+
+		$key    = ! empty( $_GET['key'] ) ? $_GET['key'] : $_POST['key'];
+		$result = wpmu_activate_signup( $key );
+		if ( is_wp_error( $result ) ) {
+			if ( 'already_active' == $result->get_error_code() || 'blog_taken' == $result->get_error_code() ) {
+>>>>>>> cb3d1777b1 (Coding Standards: Prepare for upgrading WPCS to 1.0.0.)
 			$signup = $result->get_error_data();
 			?>
 			<h2><?php _e( 'Your account is now active!' ); ?></h2>
