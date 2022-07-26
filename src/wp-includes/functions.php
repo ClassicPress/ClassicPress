@@ -4460,7 +4460,7 @@ function _doing_it_wrong( $function, $message, $version ) {
 			}
 			/* translators: %s: Codex URL */
 			$message .= ' ' . sprintf(
-				__( 'Please see <a href="%s">Debugging in ClassicPress</a> for more information.' ),
+				__( 'Please see <a href="%s">Debugging in WordPress</a> for more information.' ),
 				__( 'https://codex.wordpress.org/Debugging_in_WordPress' )
 			);
 			/* translators: Developer debugging message. 1: PHP function name, 2: Explanatory message, 3: Version information message */
@@ -4472,7 +4472,7 @@ function _doing_it_wrong( $function, $message, $version ) {
 				$version = sprintf( '(This message was added in version %s.)', $version );
 			}
 			$message .= sprintf(
-				' Please see <a href="%s">Debugging in ClassicPress</a> for more information.',
+				' Please see <a href="%s">Debugging in WordPress</a> for more information.',
 				'https://codex.wordpress.org/Debugging_in_WordPress'
 			);
 			trigger_error( sprintf( '%1$s was called <strong>incorrectly</strong>. %2$s %3$s', $function, $message, $version ) );
