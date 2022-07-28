@@ -194,8 +194,6 @@ function wp_widget_control( $sidebar_args ) {
 	$id_format     = $widget['id'];
 	$widget_number = isset( $control['params'][0]['number'] ) ? $control['params'][0]['number'] : '';
 	$id_base       = isset( $control['id_base'] ) ? $control['id_base'] : $widget_id;
-	$width         = isset( $control['width'] ) ? $control['width'] : '';
-	$height        = isset( $control['height'] ) ? $control['height'] : '';
 	$multi_number  = isset( $sidebar_args['_multi_num'] ) ? $sidebar_args['_multi_num'] : '';
 	$add_new       = isset( $sidebar_args['_add'] ) ? $sidebar_args['_add'] : '';
 
@@ -270,8 +268,8 @@ function wp_widget_control( $sidebar_args ) {
 	<?php echo $after_widget_content; ?>
 	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $id_format ); ?>" />
 	<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>" />
-	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr( $width ); ?>" />
-	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo esc_attr( $height ); ?>" />
+	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo isset( $control['width'] ) ? esc_attr( $control['width'] ) : ''; ?>" />
+	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo isset( $control['height'] ) ? esc_attr( $control['height'] ) : ''; ?>" />
 	<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>" />
 	<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>" />
 	<input type="hidden" name="add_new" class="add_new" value="<?php echo esc_attr( $add_new ); ?>" />

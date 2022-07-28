@@ -674,7 +674,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 								<?php
 								foreach ( $nav_menus as $menu ) :
 									$data_orig = '';
-									$selected = isset( $menu_locations[ $_location ] ) && $menu_locations[ $_location ] == $menu->term_id;
+									$selected  = isset( $menu_locations[ $_location ] ) && $menu_locations[ $_location ] == $menu->term_id;
 									if ( $selected ) {
 										$data_orig = 'data-orig="true"';
 									}
@@ -699,7 +699,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 										)
 									);
 									?>
-												">
+									">
 										<span aria-hidden="true"><?php _ex( 'Edit', 'menu' ); ?></span><span class="screen-reader-text"><?php _e( 'Edit selected menu' ); ?></span>
 									</a>
 								</span>
@@ -718,7 +718,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 										)
 									);
 									?>
-												">
+									">
 										<?php _ex( 'Use new menu', 'menu' ); ?>
 									</a>
 								</span>
@@ -987,7 +987,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 									)
 								);
 								?>
-																					"><?php _e( 'Delete Menu' ); ?></a>
+								"><?php _e( 'Delete Menu' ); ?></a>
 							</span><!-- END .delete-action -->
 							<?php endif; ?>
 							<div class="publishing-action">

@@ -122,19 +122,19 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 
 		$empty_menus_style = $not_empty_menus_style = '';
 		if ( empty( $menus ) ) {
-			$empty_menus_style = ' style="display:none" ';
+			$empty_menus_style = ' style="display:none"';
 		} else {
-			$not_empty_menus_style = ' style="display:none" ';
+			$not_empty_menus_style = ' style="display:none"';
 		}
 
 		$nav_menu_style = '';
 		if ( ! $nav_menu ) {
-			$nav_menu_style = 'display: none;';
+			$nav_menu_style = ' style="display: none;"';
 		}
 
 		// If no menus exists, direct the user to go and create some.
 		?>
-		<p class="nav-menu-widget-no-menus-message" <?php echo $not_empty_menus_style; ?>>
+		<p class="nav-menu-widget-no-menus-message"<?php echo $not_empty_menus_style; ?>>
 			<?php
 			if ( $wp_customize instanceof WP_Customize_Manager ) {
 				$url = 'javascript: wp.customize.panel( "nav_menus" ).focus();';
@@ -144,7 +144,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 			?>
 			<?php echo sprintf( __( 'No menus have been created yet. <a href="%s">Create some</a>.' ), esc_attr( $url ) ); ?>
 		</p>
-		<div class="nav-menu-widget-form-controls" <?php echo $empty_menus_style; ?>>
+		<div class="nav-menu-widget-form-controls"<?php echo $empty_menus_style; ?>>
 			<p>
 				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
 				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
@@ -161,7 +161,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 				</select>
 			</p>
 			<?php if ( $wp_customize instanceof WP_Customize_Manager ) : ?>
-				<p class="edit-selected-nav-menu" style="<?php echo $nav_menu_style; ?>">
+				<p class="edit-selected-nav-menu"<?php echo $nav_menu_style; ?>>
 					<button type="button" class="button"><?php _e( 'Edit Menu' ); ?></button>
 				</p>
 			<?php endif; ?>

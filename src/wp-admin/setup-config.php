@@ -447,17 +447,15 @@ function setup_config_display_header( $body_classes = array() ) {
 	// Add core ui class.
 	$body_classes[] = 'cp-installation';
 	$body_classes[] = 'wp-core-ui';
-	$dir_attr       = '';
 	// Add rtl class, if needed.
 	if ( is_rtl() ) {
 		$body_classes[] = 'rtl';
-		$dir_attr      = ' dir="rtl" ';
 	}
 	// Set the content type.
 	header( 'Content-Type: text/html; charset=utf-8' );
 	// Print out the page header.
 	echo '<!DOCTYPE html>' . "\n";
-	echo '<html xmlns="http://www.w3.org/1999/xhtml"' . $dir_attr . get_language_attributes() . '>' . "\n";
+	echo '<html xmlns="http://www.w3.org/1999/xhtml" ' . get_language_attributes() . '>' . "\n";
 	echo '<head>' . "\n";
 	echo '<meta name="viewport" content="width=device-width" />' . "\n";
 	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
