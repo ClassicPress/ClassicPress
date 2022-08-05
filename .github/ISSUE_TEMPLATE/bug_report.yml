@@ -1,6 +1,6 @@
 name: Bug Report
 description: File a bug report for ClassicPress core.
-title: "🐞Bug: "
+title: "🐞 "
 labels: ["type: bug", "status: needs triage"]
 
 body:
@@ -8,18 +8,12 @@ body:
     attributes:
       value: |
         Provide a general summary of the bug in the Title above.
-  - type: markdown
-    attrbiutes:
-      value: |
         We welcome issues and pull requests for bugs, but please note that major changes must be approved and planned.
-  - type: markdown
-    attrbiutes:
-      value: |
         Please read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md) for more information.
   - type: textarea
     id: expected-behavior
     attributes:
-      label: Expected Behavior
+      label: Expected behavior
       description: If something is broken or not working as expected, tell us what should happen. How should it behave if it wasn't broken? 
       placeholder: Describe in as much detail as possible.
     validations:
@@ -27,7 +21,7 @@ body:
   - type: textarea
     id: current-behavior
     attributes:
-      label: Current Behavior
+      label: Current behavior
       description: |
         Now, tell us what happens instead of the expected behavior. Describe the bug. 
         Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
@@ -37,7 +31,7 @@ body:
   - type: textarea
     id: possible-solution
     attributes:
-      label: Possible Solution
+      label: Possible solution
       description: |
         This is optional, but suggest a fix for the bug if you know/have it. 
         Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
@@ -47,7 +41,7 @@ body:
   - type: textarea
     id: steps-reproduce
     attributes:
-      label: Steps to Reproduce Bug
+      label: Steps to reproduce bug
       description: |
         Provide a link to a live example, or an unambiguous set of steps to reproduce this bug. Include code to reproduce, if relevant. 
         Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
@@ -69,7 +63,7 @@ body:
   - type: input
     id: prevalence
     attributes:
-      label: ClassicPress Version
+      label: ClassicPress version
       description: |
         What version of ClassicPress are you using?
       placeholder: 1.5.0
@@ -77,7 +71,7 @@ body:
         required: false
   - type: dropdown
     attributes:
-      label: PHP Version
+      label: PHP version
       description: What PHP version are you using?
       multiple: false
       options:
@@ -89,5 +83,16 @@ body:
         - 7.4
         - 8.0
         - 8.1
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Can you help?
+      description: Can you help fix this bug or test a solution when it's available?
+      multiple: false
+      options:
+        - Yes, I will submit a PR
+        - I can help test a solution
+        - No, I can't help
     validations:
       required: true

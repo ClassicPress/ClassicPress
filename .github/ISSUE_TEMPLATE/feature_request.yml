@@ -1,0 +1,51 @@
+name: Feature Request
+description: Suggest or request a new feature. This does not include WordPress backports.
+title: "💡 "
+labels: ["type: feature request", "status: needs triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before requesting a new feature, [search through existing feature requests](https://github.com/ClassicPress/ClassicPress/labels/type%3A%20feature%20request) so you don't create duplicates.
+        If there are no similar requests, provide a general summary in the Title above.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: |
+        What are you trying to accomplish? Why would it be useful in ClassicPress?
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Describe in as much detail as possible.
+    validations:
+      required: true
+  - type: textarea
+    id: possible-implementation
+    attributes:
+      label: Possible implemantion
+      description: |
+        This is optional, but suggest a way to implement your request.
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Describe the bug in as much detail as possible. Include screenshots.
+    validations:
+      required: false
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: Possible Solution
+      description: |
+        This is optional, but suggest a fix for the bug if you know/have it. 
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Describe solution in as much detail as possible. Include screenshots.
+    validations:
+      required: false
+  - type: textarea
+    id: can-you-help
+    attributes:
+      label: Will you be able to help with the implementation?
+      description: |
+        Not required, but are you willing to help implement this feature request? Feature requests with help already "signed up" have a much higher chance of being planned and worked on. 
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Tell us how you can help.
+    validations:
+      required: true
