@@ -1,5 +1,5 @@
 name: Feature Request
-description: Suggest or request a new feature. This does not include WordPress backports.
+description: Suggest or request a new feature.
 title: "💡 "
 labels: ["type: feature request", "status: needs triage"]
 
