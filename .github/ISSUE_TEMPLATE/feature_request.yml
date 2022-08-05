@@ -1,5 +1,5 @@
 name: 💡 Feature Request
-description: Suggest or request a new feature.
+description: Suggest or request a new core feature.
 title: "💡 "
 labels: ["type: feature request", "status: needs triage"]
 
@@ -8,7 +8,9 @@ body:
     attributes:
       value: |
         Before requesting a new feature, [search through existing feature requests](https://github.com/ClassicPress/ClassicPress/labels/type%3A%20feature%20request) so you don't create duplicates.
-        If there are no similar requests, provide a general summary in the Title above.
+        If there are **no similar requests**, provide a general summary in the title above.
+        
+        *Do you want to submit a feature request not related to the core? [Submit it in our support forum](https://forums.classicpress.net/c/governance/petitions/77)*
   - type: textarea
     id: context
     attributes:

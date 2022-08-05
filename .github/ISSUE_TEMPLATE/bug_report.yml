@@ -1,5 +1,5 @@
 name: 🐞 Bug Report
-description: When something isn't working as expected.
+description: When something isn't working as expected in the core.
 title: "🐞 "
 labels: ["type: bug", "status: needs triage"]
 
@@ -7,9 +7,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Provide a general summary of the bug in the Title above.
-        We welcome issues and pull requests for bugs, but please note that major changes must be approved and planned.
-        Please read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md) for more information.
+        We welcome bug reports, but please **only submit bug reports if you're sure it's a bug in the core**. Most of the time, it might be a theme/plugin issue and you can get help in our [support forum](https://forums.classicpress.net/c/support/5).
+        If you're ready to submit bug report, provide a general summary of the bug in the title above.
+
+        *Got an issue with documentation? Submit an issue in the [ClassicPress Documentation Issue Tracker repository](https://github.com/ClassicPress/Documentation-Issue-Tracker/issues/new).*
   - type: textarea
     id: expected-behavior
     attributes:
@@ -90,7 +91,9 @@ body:
   - type: dropdown
     attributes:
       label: Can you help?
-      description: Can you help fix this bug or test a solution when it's available?
+      description: |
+        Can you help fix this bug or test a solution when it's available?
+        *Planning to submit a PR? Read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md#tips-for-good-prs) for details.*
       multiple: false
       options:
         - Yes, I will submit a PR

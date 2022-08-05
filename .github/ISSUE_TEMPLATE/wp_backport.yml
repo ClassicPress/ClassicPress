@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Provide a general summary of the backport in the Title above.
+        Provide a general summary of the backport in the title above.
   - type: textarea
     id: trac-tickets
     attributes:
@@ -42,7 +42,9 @@ body:
   - type: dropdown
     attributes:
       label: Can you help?
-      description: Can you help backport changeset(s)?
+      description: |
+        Can you help backport changeset(s)?
+        *Planning to submit a PR? Read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md#tips-for-good-prs) for details.*
       multiple: false
       options:
         - Yes, I will submit a PR
