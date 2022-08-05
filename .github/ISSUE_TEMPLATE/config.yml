@@ -1,14 +1,14 @@
 blank_issues_enabled: false
 contact_links:
   - name: 🛠️ Migration Issues?
-    url: https://github.com/ClassicPress/ClassicPress-Migration-Plugin
+    url: https://forums.classicpress.net/c/support/migration-plugin/6
     about: Are you having trouble migrating from WordPress? Get help here.
   - name: 📃 Documentation
     url: https://docs.classicpress.net
     about: ClassicPress documentation and code reference.
   - name: 🤔 Questions and Help
     url: https://forums.classicpress.net
-    about: Not a developer and need help? Start a discussion in community forum.
+    about: Not a developer and need help? Start a discussion in the community forum.
   - name: 🙏🏻 Support ClassicPress
     url: https://opencollective.com/classicpress
     about: Please consider supporting ClassicPress via Open Collective. Donations are tax-deductible in the US.
