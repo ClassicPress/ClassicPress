@@ -1,6 +1,93 @@
 name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
+description: File a bug report for ClassicPress core.
+title: "🐞Bug: "
+labels: ["type: bug", "status: needs triage"]
 
-https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#creating-issue-forms
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a general summary of the bug in the Title above.
+  - type: markdown
+    attrbiutes:
+      value: |
+        We welcome issues and pull requests for bugs, but please note that major changes must be approved and planned.
+  - type: markdown
+    attrbiutes:
+      value: |
+        Please read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md) for more information.
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: If something is broken or not working as expected, tell us what should happen. How should it behave if it wasn't broken? 
+      placeholder: Describe in as much detail as possible.
+    validations:
+      required: true
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Behavior
+      description: |
+        Now, tell us what happens instead of the expected behavior. Describe the bug. 
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Describe the bug in as much detail as possible. Include screenshots.
+    validations:
+      required: true
+  - type: textarea
+    id: possible-solution
+    attributes:
+      label: Possible Solution
+      description: |
+        This is optional, but suggest a fix for the bug if you know/have it. 
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Describe solution in as much detail as possible. Include screenshots.
+    validations:
+      required: false
+  - type: textarea
+    id: steps-reproduce
+    attributes:
+      label: Steps to Reproduce Bug
+      description: |
+        Provide a link to a live example, or an unambiguous set of steps to reproduce this bug. Include code to reproduce, if relevant. 
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: |
+        1.
+        2.
+        3.
+        4.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: |
+        How has this issue affected you? What are you trying to accomplish? Providing context helps us come up with a solution that is most useful to our real-world users.
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Provide additional information. Include screenshots.
+    validations:
+      required: false
+  - type: input
+    id: prevalence
+    attributes:
+      label: ClassicPress Version
+      description: |
+        What version of ClassicPress are you using?
+      placeholder: 1.5.0
+      validations:
+        required: false
+  - type: dropdown
+    attributes:
+      label: PHP Version
+      description: What PHP version are you using?
+      multiple: false
+      options:
+        - I don't know
+        - 5.6
+        - 7.1
+        - 7.2
+        - 7.3
+        - 7.4
+        - 8.0
+        - 8.1
+    validations:
+      required: true
