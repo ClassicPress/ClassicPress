@@ -1,4 +1,4 @@
-name: Bug Report
+name: 🐞 Bug Report
 description: When something isn't working as expected.
 title: "🐞 "
 labels: ["type: bug", "status: needs triage"]
@@ -50,6 +50,8 @@ body:
         2.
         3.
         4.
+    validations:
+      required: true
   - type: textarea
     id: context
     attributes:
@@ -67,8 +69,8 @@ body:
       description: |
         What version of ClassicPress are you using?
       placeholder: 1.5.0
-      validations:
-        required: false
+    validations:
+      required: false
   - type: dropdown
     attributes:
       label: PHP version

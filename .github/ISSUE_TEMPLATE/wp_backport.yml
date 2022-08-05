@@ -1,4 +1,4 @@
-name: WP Backport
+name: 📋 WP Backport
 description: Request a feature from WordPress to be backported to ClassicPress.
 title: "📋 "
 labels: ["type: wp backport", "status: needs triage"]
