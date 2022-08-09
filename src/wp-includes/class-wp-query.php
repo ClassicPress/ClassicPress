@@ -3032,7 +3032,7 @@ class WP_Query {
 			if ( is_array( $this->posts ) ) {
 				$this->found_posts = count( $this->posts );
 			} else {
-				if ( null === $this->posts ) {  
+				if ( null === $this->posts ) {
 					$this->found_posts = 0;
 				} else {
 					$this->found_posts = 1;
@@ -3940,18 +3940,18 @@ class WP_Query {
 	/**
 	 * Set up global post data.
 	 *
-	 * @since WP-4.1.0
-	 * @since WP-4.4.0 Added the ability to pass a post ID to `$post`.
+	 * @since 4.1.0
+	 * @since 4.4.0 Added the ability to pass a post ID to `$post`.
 	 *
-	 * @global int             $id
-	 * @global WP_User         $authordata
-	 * @global string|int|bool $currentday
-	 * @global string|int|bool $currentmonth
-	 * @global int             $page
-	 * @global array           $pages
-	 * @global int             $multipage
-	 * @global int             $more
-	 * @global int             $numpages
+	 * @global int     $id
+	 * @global WP_User $authordata
+	 * @global string  $currentday
+	 * @global string  $currentmonth
+	 * @global int     $page
+	 * @global array   $pages
+	 * @global int     $multipage
+	 * @global int     $more
+	 * @global int     $numpages
 	 *
 	 * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
 	 * @return true True when finished.
@@ -3967,23 +3967,71 @@ class WP_Query {
 			return;
 		}
 
+		$elements = $this->generate_postdata( $post );
+		if ( false === $elements ) {
+			return;
+		}
+
+		$id           = $elements['id'];
+		$authordata   = $elements['authordata'];
+		$currentday   = $elements['currentday'];
+		$currentmonth = $elements['currentmonth'];
+		$page         = $elements['page'];
+		$pages        = $elements['pages'];
+		$multipage    = $elements['multipage'];
+		$more         = $elements['more'];
+		$numpages     = $elements['numpages'];
+
+		/**
+		 * Fires once the post data has been set up.
+		 *
+		 * @since 2.8.0
+		 * @since 4.1.0 Introduced `$query` parameter.
+		 *
+		 * @param WP_Post  $post  The Post object (passed by reference).
+		 * @param WP_Query $query The current Query object (passed by reference).
+		 */
+		do_action_ref_array( 'the_post', array( &$post, &$this ) );
+
+		return true;
+	}
+
+	/**
+	 * Generate post data.
+	 *
+	 * @since WP 5.2.0
+	 *
+	 * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
+	 * @return array|false Elements of post or false on failure.
+	 */
+	public function generate_postdata( $post ) {
+
+		if ( ! ( $post instanceof WP_Post ) ) {
+			$post = get_post( $post );
+		}
+
+		if ( ! $post ) {
+			return false;
+		}
+
 		$id = (int) $post->ID;
 
-		$authordata = get_userdata($post->post_author);
+		$authordata   = get_userdata( $post->post_author );
+		$currentday   = mysql2date( 'd.m.y', $post->post_date, false );
+		$currentmonth = mysql2date( 'm', $post->post_date, false );
+		$numpages     = 1;
+		$multipage    = 0;
+		$page         = $this->get( 'page' );
 
-		$currentday = mysql2date('d.m.y', $post->post_date, false);
-		$currentmonth = mysql2date('m', $post->post_date, false);
-		$numpages = 1;
-		$multipage = 0;
-		$page = $this->get( 'page' );
-		if ( ! $page )
+		if ( ! $page ) {
 			$page = 1;
+		}
 
 		/*
 		 * Force full post content when viewing the permalink for the $post,
 		 * or when on an RSS feed. Otherwise respect the 'more' tag.
 		 */
-		if ( $post->ID === get_queried_object_id() && ( $this->is_page() || $this->is_single() ) ) {
+		if ( get_queried_object_id() === $post->ID && ( $this->is_page() || $this->is_single() ) ) {
 			$more = 1;
 		} elseif ( $this->is_feed() ) {
 			$more = 1;
@@ -3997,11 +4045,16 @@ class WP_Query {
 			$content = str_replace( "\n<!--nextpage-->", '<!--nextpage-->', $content );
 			$content = str_replace( "<!--nextpage-->\n", '<!--nextpage-->', $content );
 
-			// Ignore nextpage at the beginning of the content.
-			if ( 0 === strpos( $content, '<!--nextpage-->' ) )
-				$content = substr( $content, 15 );
+			// Remove the nextpage block delimiters, to avoid invalid block structures in the split content.
+			$content = str_replace( '<!-- wp:nextpage -->', '', $content );
+			$content = str_replace( '<!-- /wp:nextpage -->', '', $content );
 
-			$pages = explode('<!--nextpage-->', $content);
+			// Ignore nextpage at the beginning of the content.
+			if ( 0 === strpos( $content, '<!--nextpage-->' ) ) {
+				$content = substr( $content, 15 );
+			}
+
+			$pages = explode( '<!--nextpage-->', $content );
 		} else {
 			$pages = array( $post->post_content );
 		}
@@ -4012,11 +4065,10 @@ class WP_Query {
 		 * "Pages" are determined by splitting the post content based on the presence
 		 * of `<!-- nextpage -->` tags.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
-		 * @param array   $pages Array of "pages" derived from the post content.
-		 *                       of `<!-- nextpage -->` tags..
-		 * @param WP_Post $post  Current post object.
+		 * @param string[] $pages Array of "pages" from the post content split by `<!-- nextpage -->` tags.
+		 * @param WP_Post  $post  Current post object.
 		 */
 		$pages = apply_filters( 'content_pagination', $pages, $post );
 
@@ -4028,22 +4080,14 @@ class WP_Query {
 			}
 			$multipage = 1;
 		} else {
-	 		$multipage = 0;
-	 	}
+			$multipage = 0;
+		}
 
-		/**
-		 * Fires once the post data has been setup.
-		 *
-		 * @since WP-2.8.0
-		 * @since WP-4.1.0 Introduced `$this` parameter.
-		 *
-		 * @param WP_Post  $post The Post object (passed by reference).
-		 * @param WP_Query $this The current Query object (passed by reference).
-		 */
-		do_action_ref_array( 'the_post', array( &$post, &$this ) );
+		$elements = compact( 'id', 'authordata', 'currentday', 'currentmonth', 'page', 'pages', 'multipage', 'more', 'numpages' );
 
-		return true;
+		return $elements;
 	}
+
 	/**
 	 * After looping through a nested query, this function
 	 * restores the $post global to the current post in this query.
@@ -4058,7 +4102,6 @@ class WP_Query {
 			$this->setup_postdata( $this->post );
 		}
 	}
-
 	/**
 	 * Lazyload term meta for posts in the loop.
 	 *

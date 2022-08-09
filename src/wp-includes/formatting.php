@@ -3318,51 +3318,59 @@ function human_time_diff( $from, $to = '' ) {
 /**
  * Generates an excerpt from the content, if needed.
  *
- * The excerpt word amount will be 55 words and if the amount is greater than
- * that, then the string ' [&hellip;]' will be appended to the excerpt. If the string
- * is less than 55 words, then the content will be returned as is.
+ * Returns a maximum of 55 words with an ellipsis appended if necessary.
  *
  * The 55 word limit can be modified by plugins/themes using the {@see 'excerpt_length'} filter
  * The ' [&hellip;]' string can be modified by plugins/themes using the {@see 'excerpt_more'} filter
  *
- * @since WP-1.5.0
+ * @since 1.5.0
+ * @since 5.2.0 Added the `$post` parameter.
  *
- * @param string $text Optional. The excerpt. If set to empty, an excerpt is generated.
+ * @param string             $text Optional. The excerpt. If set to empty, an excerpt is generated.
+ * @param WP_Post|object|int $post Optional. WP_Post instance or Post ID/object. Default null.
  * @return string The excerpt.
  */
-function wp_trim_excerpt( $text = '' ) {
+function wp_trim_excerpt( $text = '', $post = null ) {
 	$raw_excerpt = $text;
-	if ( '' == $text ) {
-		$text = get_the_content('');
+
+	if ( '' === trim( $text ) ) {
+		$post = get_post( $post );
+		$text = get_the_content( '', false, $post );
 
 		$text = strip_shortcodes( $text );
+		$text = excerpt_remove_blocks( $text );
 
 		/** This filter is documented in wp-includes/post-template.php */
 		$text = apply_filters( 'the_content', $text );
-		$text = str_replace(']]>', ']]&gt;', $text);
+		$text = str_replace( ']]>', ']]&gt;', $text );
+
+		/* translators: Maximum number of words used in a post excerpt. */
+		$excerpt_length = (int) _x( '55', 'excerpt_length' );
 
 		/**
-		 * Filters the number of words in an excerpt.
+		 * Filters the maximum number of words in a post excerpt.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 *
-		 * @param int $number The number of words. Default 55.
+		 * @param int $number The maximum number of words. Default 55.
 		 */
-		$excerpt_length = apply_filters( 'excerpt_length', 55 );
+		$excerpt_length = (int) apply_filters( 'excerpt_length', $excerpt_length );
+
 		/**
 		 * Filters the string in the "more" link displayed after a trimmed excerpt.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param string $more_string The string shown within the more link.
 		 */
 		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '[&hellip;]' );
-		$text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+		$text         = wp_trim_words( $text, $excerpt_length, $excerpt_more );
 	}
+
 	/**
 	 * Filters the trimmed excerpt string.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param string $text        The trimmed text.
 	 * @param string $raw_excerpt The text prior to trimming.
