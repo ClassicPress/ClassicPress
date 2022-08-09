@@ -3940,8 +3940,8 @@ class WP_Query {
 	/**
 	 * Set up global post data.
 	 *
-	 * @since 4.1.0
-	 * @since 4.4.0 Added the ability to pass a post ID to `$post`.
+	 * @since WP-4.1.0
+	 * @since WP-4.4.0 Added the ability to pass a post ID to `$post`.
 	 *
 	 * @global int     $id
 	 * @global WP_User $authordata
@@ -3985,8 +3985,8 @@ class WP_Query {
 		/**
 		 * Fires once the post data has been set up.
 		 *
-		 * @since 2.8.0
-		 * @since 4.1.0 Introduced `$query` parameter.
+		 * @since WP-2.8.0
+		 * @since WP-4.1.0 Introduced `$query` parameter.
 		 *
 		 * @param WP_Post  $post  The Post object (passed by reference).
 		 * @param WP_Query $query The current Query object (passed by reference).

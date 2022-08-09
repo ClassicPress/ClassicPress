@@ -245,8 +245,8 @@ function the_content( $more_link_text = null, $strip_teaser = false) {
 /**
  * Retrieves the post content.
  *
- * @since 0.71
- * @since 5.2.0 Added the `$post` parameter.
+ * @since WP-0.71
+ * @since WP-5.2.0 Added the `$post` parameter.
  *
  * @global int   $page      Page number of a single post/page.
  * @global int   $more      Boolean indicator for whether single post/page is being viewed.

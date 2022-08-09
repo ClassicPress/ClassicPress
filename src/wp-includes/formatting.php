@@ -3323,8 +3323,8 @@ function human_time_diff( $from, $to = '' ) {
  * The 55 word limit can be modified by plugins/themes using the {@see 'excerpt_length'} filter
  * The ' [&hellip;]' string can be modified by plugins/themes using the {@see 'excerpt_more'} filter
  *
- * @since 1.5.0
- * @since 5.2.0 Added the `$post` parameter.
+ * @since WP-1.5.0
+ * @since WP-5.2.0 Added the `$post` parameter.
  *
  * @param string             $text Optional. The excerpt. If set to empty, an excerpt is generated.
  * @param WP_Post|object|int $post Optional. WP_Post instance or Post ID/object. Default null.
@@ -3370,7 +3370,7 @@ function wp_trim_excerpt( $text = '', $post = null ) {
 	/**
 	 * Filters the trimmed excerpt string.
 	 *
-	 * @since 2.8.0
+	 * @since WP-2.8.0
 	 *
 	 * @param string $text        The trimmed text.
 	 * @param string $raw_excerpt The text prior to trimming.
