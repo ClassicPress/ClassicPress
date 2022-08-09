@@ -54,7 +54,7 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 42814
+	 * @ticket 42814.
 	 */
 	public function test_should_fall_back_on_post_content_if_excerpt_is_empty_and_post_is_inferred_from_context() {
 		$post_id = self::factory()->post->create(
