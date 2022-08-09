@@ -3999,7 +3999,7 @@ class WP_Query {
 	/**
 	 * Generate post data.
 	 *
-	 * @since WP 5.2.0
+	 * @since WP-5.2.0
 	 *
 	 * @param WP_Post|object|int $post WP_Post instance or Post ID/object.
 	 * @return array|false Elements of post or false on failure.
@@ -4065,7 +4065,7 @@ class WP_Query {
 		 * "Pages" are determined by splitting the post content based on the presence
 		 * of `<!-- nextpage -->` tags.
 		 *
-		 * @since 4.4.0
+		 * @since WP-4.4.0
 		 *
 		 * @param string[] $pages Array of "pages" from the post content split by `<!-- nextpage -->` tags.
 		 * @param WP_Post  $post  Current post object.

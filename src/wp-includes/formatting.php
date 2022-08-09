@@ -3350,7 +3350,7 @@ function wp_trim_excerpt( $text = '', $post = null ) {
 		/**
 		 * Filters the maximum number of words in a post excerpt.
 		 *
-		 * @since 2.7.0
+		 * @since WP-2.7.0
 		 *
 		 * @param int $number The maximum number of words. Default 55.
 		 */
@@ -3359,7 +3359,7 @@ function wp_trim_excerpt( $text = '', $post = null ) {
 		/**
 		 * Filters the string in the "more" link displayed after a trimmed excerpt.
 		 *
-		 * @since 2.9.0
+		 * @since WP-2.9.0
 		 *
 		 * @param string $more_string The string shown within the more link.
 		 */
