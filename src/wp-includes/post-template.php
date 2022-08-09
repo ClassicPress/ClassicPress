@@ -311,11 +311,6 @@ function get_the_content( $more_link_text = null, $strip_teaser = false, $post =
 	$page_no = $elements['page'];
 	$content = $elements['pages'][ $page_no - 1 ];
 	if ( preg_match( '/<!--more(.*?)?-->/', $content, $matches ) ) {
-		if ( has_block( 'more', $content ) ) {
-			// Remove the core/more block delimiters. They will be left over after $content is split up.
-			$content = preg_replace( '/<!-- \/?wp:more(.*?) -->/', '', $content );
-		}
-
 		$content = explode( $matches[0], $content, 2 );
 
 		if ( ! empty( $matches[1] ) && ! empty( $more_link_text ) ) {
