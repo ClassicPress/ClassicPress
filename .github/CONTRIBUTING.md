@@ -58,11 +58,9 @@ If you're not sure where to start contributing, here are some ideas:
 1. Make sure you have [git](https://git-scm.com/), [Apache](http://httpd.apache.org/) and [MySQL](https://www.mysql.com/)/MariaDB installed and working on your computer.
 2. Fork ClassicPress to your GitHub account using the GitHub website.
 3. Clone your ClassicPress fork to your computer using the following command:
-
    ```
    git clone https://github.com/YOUR_GITHUB_USERNAME/ClassicPress
    ```
-
    Run this `git clone` command from within the webroot directory of your Apache webserver, or otherwise point your webserver at the resulting directory.
 4. Change to the ClassicPress repository: `cd ClassicPress`
 5. Add the main ClassicPress repository so that you can pull changes from it: `git remote add upstream https://github.com/ClassicPress/ClassicPress`
@@ -106,13 +104,20 @@ At this point you have a working local development environment. Here are some fu
    git fetch bahiirwa
    ```
 3. Look at the PR on the GitHub web interface and note the _branch name_ that was used to submit it. For example: `bahiirwas-cool-pr`
-4. Checkout of the branch with the changes you want to test using
+4. Checkout this branch with the changes you want to test, this step will create a local branch in your repository called _bahiirwas-cool-pr_
    ```
-   git checkout -b bahiirwas-cool-pr <name-of-remote>/bahiirwas-cool-pr
+   git checkout -b bahiirwas-cool-pr bahiirwa/bahiirwas-cool-pr
    ```
 5. Run tests as the PR suggests, or stress test the PR trying to confirm whether the change works as intended.
-6. Submit your feedback in the comment section of the same PR on the CP Github repo. Screenshots, gifs, video and text instructions documenting the tests are very useful to document your testing.
-7. Thank you for your time and effort in helping us review PRs.
+6. Submit your feedback in the comment section of the same PR on the ClassicPress Github repository. Screenshots, gifs, video and text instructions documenting what you have tested are very useful to document. Hopefully, you can leave a comment saying every thing is working as expected, but if that is not the case please provide as much detail as you can about what it not working.
+7. To _tidy up_ afterwards use some or all of the following commands:
+   ```
+   git checkout develop
+   git branch -D bahiirwas-cool-pr
+   git remote remove bahiirwa
+   ```
+   The commands will return you to the `develop` branch, delete the locally created branch made from the PR and remove the remote link prevuiosly added.
+8. Thank you for your time and effort in helping us review PRs.
 
 ### Merging PRs
 
