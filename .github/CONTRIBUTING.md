@@ -83,6 +83,7 @@ At this point you have a working local development environment. Here are some fu
 
 - A good pull request (PR) should be for a single, specific change. The change should be explained using the template provided on GitHub.
 - Any new or modified code should have automated tests, especially if the way it works is at all complicated.
+- It is good `git` practice to create a new branch when starting work on a potential change.
 - It is always a good idea to look at the "Files" view on GitHub after submitting your PR to verify that the changes look as expected. Generally, there should be no "extra" changes that are not related to the purpose of your PR like reformatting or re-aligning files. Such changes are best done in a separate PR just for that purpose. If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
 - Generally it is best to only use one pull request for each change, even if the initial code needs revision after review and feedback. Closing the initial pull request and opening a new one makes it more difficult to follow the history of the change, and it is much better to just update the existing PR in response to any feedback received.
 - To be accepted, a PR **must** pass the automated tests which are run using GitHub Actions. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Usually, when this happens we start a separate PR to resolve the failure, and once that is merged, your PR will need to be updated as per the next bullet point.
@@ -109,15 +110,20 @@ At this point you have a working local development environment. Here are some fu
    git checkout -b bahiirwas-cool-pr bahiirwa/bahiirwas-cool-pr
    ```
 5. Run tests as the PR suggests, or stress test the PR trying to confirm whether the change works as intended.
-6. Submit your feedback in the comment section of the same PR on the ClassicPress Github repository. Screenshots, gifs, video and text instructions documenting what you have tested are very useful to document. Hopefully, you can leave a comment saying every thing is working as expected, but if that is not the case please provide as much detail as you can about what it not working.
-7. To _tidy up_ afterwards use some or all of the following commands:
+6. There may be occasions when you need to test more than one PR on the same occasion. To accomplish this you will need to checkout each PR need for the test as described in steps 2-4 above and then:
+   ```
+   git checkout bahiirwas-cool-pr
+   git merge bahiirwas-additional-cool-pr --no-edit
+   ```
+7. Submit your feedback in the comment section of the same PR on the ClassicPress Github repository. Screenshots, gifs, video and text instructions documenting what you have tested are very useful to document. Hopefully, you can leave a comment saying every thing is working as expected, but if that is not the case please provide as much detail as you can about what it not working.
+8. To _tidy up_ afterwards use some or all of the following commands:
    ```
    git checkout develop
    git branch -D bahiirwas-cool-pr
    git remote remove bahiirwa
    ```
    The commands will return you to the `develop` branch, delete the locally created branch made from the PR and remove the remote link prevuiosly added.
-8. Thank you for your time and effort in helping us review PRs.
+9. Thank you for your time and effort in helping us review PRs.
 
 ### Merging PRs
 
