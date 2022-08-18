@@ -60,9 +60,9 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		add_term_meta( $t, 'foo', 'bar' );
 		add_term_meta( $t, 'foo1', 'baz' );
 
-		$found = get_term_meta( $t );
+		$found    = get_term_meta( $t );
 		$expected = array(
-			'foo' => array( 'bar' ),
+			'foo'  => array( 'bar' ),
 			'foo1' => array( 'baz' ),
 		);
 
@@ -75,7 +75,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		add_term_meta( $t, 'foo', 'baz' );
 		add_term_meta( $t, 'foo1', 'baz' );
 
-		$found = get_term_meta( $t, 'foo' );
+		$found    = get_term_meta( $t, 'foo' );
 		$expected = array( 'bar', 'baz' );
 
 		$this->assertEqualSets( $expected, $found );
@@ -161,15 +161,19 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/36593
 	 */
 	public function test_lazy_load_term_meta_should_fall_back_on_update_post_term_cache() {
-		$q = new WP_Query( array(
-			'update_post_term_cache' => true,
-		) );
+		$q = new WP_Query(
+			array(
+				'update_post_term_cache' => true,
+			)
+		);
 
 		$this->assertTrue( $q->get( 'lazy_load_term_meta' ) );
 
-		$q = new WP_Query( array(
-			'update_post_term_cache' => false,
-		) );
+		$q = new WP_Query(
+			array(
+				'update_post_term_cache' => false,
+			)
+		);
 
 		$this->assertFalse( $q->get( 'lazy_load_term_meta' ) );
 	}
@@ -189,11 +193,13 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 			add_term_meta( $t, 'foo', 'bar' );
 		}
 
-		$q = new WP_Query( array(
-			'cache_results' => true,
-			'update_post_term_cache' => true,
-			'lazy_load_term_meta' => false,
-		) );
+		$q = new WP_Query(
+			array(
+				'cache_results'          => true,
+				'update_post_term_cache' => true,
+				'lazy_load_term_meta'    => false,
+			)
+		);
 
 		if ( $q->have_posts() ) {
 			while ( $q->have_posts() ) {
@@ -218,31 +224,37 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		add_term_meta( $terms[0], 'foo', 'bar' );
 
 		// Prime cache.
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0] ), $found );
 
 		add_term_meta( $terms[1], 'foo', 'bar' );
 
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0], $terms[1] ), $found );
 	}
@@ -254,31 +266,37 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		add_term_meta( $terms[1], 'foo', 'baz' );
 
 		// Prime cache.
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0] ), $found );
 
 		update_term_meta( $terms[1], 'foo', 'bar' );
 
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0], $terms[1] ), $found );
 	}
@@ -290,31 +308,37 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		add_term_meta( $terms[1], 'foo', 'bar' );
 
 		// Prime cache.
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0], $terms[1] ), $found );
 
 		delete_term_meta( $terms[1], 'foo', 'bar' );
 
-		$found = get_terms( 'wptests_tax', array(
-			'hide_empty' => false,
-			'fields' => 'ids',
-			'meta_query' => array(
-				array(
-					'key' => 'foo',
-					'value' => 'bar',
+		$found = get_terms(
+			'wptests_tax',
+			array(
+				'hide_empty' => false,
+				'fields'     => 'ids',
+				'meta_query' => array(
+					array(
+						'key'   => 'foo',
+						'value' => 'bar',
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$this->assertEqualSets( array( $terms[0] ), $found );
 	}
@@ -336,14 +360,16 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		$t3 = wp_insert_term( 'Foo', 'wptests_tax_3' );
 
 		// Manually modify because shared terms shouldn't naturally occur.
-		$wpdb->update( $wpdb->term_taxonomy,
+		$wpdb->update(
+			$wpdb->term_taxonomy,
 			array( 'term_id' => $t1['term_id'] ),
 			array( 'term_taxonomy_id' => $t2['term_taxonomy_id'] ),
 			array( '%d' ),
 			array( '%d' )
 		);
 
-		$wpdb->update( $wpdb->term_taxonomy,
+		$wpdb->update(
+			$wpdb->term_taxonomy,
 			array( 'term_id' => $t1['term_id'] ),
 			array( 'term_taxonomy_id' => $t3['term_taxonomy_id'] ),
 			array( '%d' ),
@@ -374,14 +400,16 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		$t3 = wp_insert_term( 'Foo', 'wptests_tax_3' );
 
 		// Manually modify because shared terms shouldn't naturally occur.
-		$wpdb->update( $wpdb->term_taxonomy,
+		$wpdb->update(
+			$wpdb->term_taxonomy,
 			array( 'term_id' => $t1['term_id'] ),
 			array( 'term_taxonomy_id' => $t2['term_taxonomy_id'] ),
 			array( '%d' ),
 			array( '%d' )
 		);
 
-		$wpdb->update( $wpdb->term_taxonomy,
+		$wpdb->update(
+			$wpdb->term_taxonomy,
 			array( 'term_id' => $t1['term_id'] ),
 			array( 'term_taxonomy_id' => $t3['term_taxonomy_id'] ),
 			array( '%d' ),
@@ -418,15 +446,15 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		$t = self::factory()->term->create( array( 'taxonomy' => 'wptests_tax' ) );
 
 		$term_meta_id = add_term_meta( $t, 'foo', 'bar' );
-		$meta = has_term_meta( $t );
+		$meta         = has_term_meta( $t );
 
 		$this->assertSame( 1, count( $meta ) );
 
 		$expected = array(
-			'meta_key' => 'foo',
+			'meta_key'   => 'foo',
 			'meta_value' => 'bar',
-			'meta_id' => $term_meta_id,
-			'term_id' => $t,
+			'meta_id'    => $term_meta_id,
+			'term_id'    => $t,
 		);
 
 		$found = $meta[0];

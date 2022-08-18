@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax comment functionality
@@ -42,10 +42,12 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Get a comment
-		$comments = get_comments( array(
-			'post_id' => $this->_comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => $this->_comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( 'replyto-comment' );
@@ -84,10 +86,12 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'editor' );
 
 		// Get a comment
-		$comments = get_comments( array(
-			'post_id' => $this->_comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => $this->_comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Manually update the comment_post_ID, because wp_update_comment() will prevent it.
 		$wpdb->query( "UPDATE {$wpdb->comments} SET comment_post_ID=0 WHERE comment_ID={$comment->comment_ID}" );
@@ -131,10 +135,12 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'subscriber' );
 
 		// Get a comment
-		$comments = get_comments( array(
-			'post_id' => $this->_comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => $this->_comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( 'replyto-comment' );
@@ -157,10 +163,12 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Get a comment
-		$comments = get_comments( array(
-			'post_id' => $this->_comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => $this->_comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( uniqid() );
