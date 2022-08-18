@@ -42,7 +42,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		global $wpdb;
 
-		parent::set_up_before_class();
+		parent::setUpBeforeClass();
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
