@@ -89,9 +89,10 @@ class _WP_Dependency {
 	 * @return bool False if not scalar, true otherwise.
 	 */
 	public function add_data( $name, $data ) {
-		if ( !is_scalar($name) )
+		if ( ! is_scalar( $name ) ) {
 			return false;
-		$this->extra[$name] = $data;
+		}
+		$this->extra[ $name ] = $data;
 		return true;
 	}
 

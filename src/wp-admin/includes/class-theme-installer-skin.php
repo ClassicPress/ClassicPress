@@ -27,23 +27,31 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	 *
 	 * @param array $args
 	 */
-	public function __construct($args = array()) {
-		$defaults = array( 'type' => 'web', 'url' => '', 'theme' => '', 'nonce' => '', 'title' => '', 'overwrite' => '' );
-		$args = wp_parse_args($args, $defaults);
+	public function __construct( $args = array() ) {
+		$defaults = array(
+			'type'      => 'web',
+			'url'       => '',
+			'theme'     => '',
+			'nonce'     => '',
+			'title'     => '',
+			'overwrite' => '',
+		);
+		$args     = wp_parse_args( $args, $defaults );
 
-		$this->type = $args['type'];
-		$this->url = $args['url'];
-		$this->api = isset($args['api']) ? $args['api'] : array();
+		$this->type      = $args['type'];
+		$this->url       = $args['url'];
+		$this->api       = isset( $args['api'] ) ? $args['api'] : array();
 		$this->overwrite = $args['overwrite'];
 
-		parent::__construct($args);
+		parent::__construct( $args );
 	}
 
 	/**
 	 */
 	public function before() {
-		if ( !empty($this->api) )
-			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version);
+		if ( ! empty( $this->api ) ) {
+			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version );
+		}
 	}
 
 	/**
@@ -69,33 +77,39 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 */
 	public function after() {
-		if ( $this->do_overwrite() )
+		if ( $this->do_overwrite() ) {
 			return;
+		}
 
-		if ( empty( $this->upgrader->result['destination_name'] ) )
+		if ( empty( $this->upgrader->result['destination_name'] ) ) {
 			return;
+		}
 
 		$theme_info = $this->upgrader->theme_info();
-		if ( empty( $theme_info ) )
+		if ( empty( $theme_info ) ) {
 			return;
+		}
 
-		$name       = $theme_info->display('Name');
+		$name       = $theme_info->display( 'Name' );
 		$stylesheet = $this->upgrader->result['destination_name'];
 		$template   = $theme_info->get_template();
 
-		$activate_link = add_query_arg( array(
-			'action'     => 'activate',
-			'template'   => urlencode( $template ),
-			'stylesheet' => urlencode( $stylesheet ),
-		), admin_url('themes.php') );
+		$activate_link = add_query_arg(
+			array(
+				'action'     => 'activate',
+				'template'   => urlencode( $template ),
+				'stylesheet' => urlencode( $stylesheet ),
+			),
+			admin_url( 'themes.php' )
+		);
 		$activate_link = wp_nonce_url( $activate_link, 'switch-theme_' . $stylesheet );
 
 		$install_actions = array();
 
 		if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
-			$customize_url = add_query_arg(
+			$customize_url              = add_query_arg(
 				array(
-					'theme' => urlencode( $stylesheet ),
+					'theme'  => urlencode( $stylesheet ),
 					'return' => urlencode( admin_url( 'web' === $this->type ? 'theme-install.php' : 'themes.php' ) ),
 				),
 				admin_url( 'customize.php' )
@@ -104,10 +118,11 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		}
 		$install_actions['activate'] = '<a href="' . esc_url( $activate_link ) . '" class="activatelink"><span aria-hidden="true">' . __( 'Activate' ) . '</span><span class="screen-reader-text">' . sprintf( __( 'Activate &#8220;%s&#8221;' ), $name ) . '</span></a>';
 
-		if ( is_network_admin() && current_user_can( 'manage_network_themes' ) )
+		if ( is_network_admin() && current_user_can( 'manage_network_themes' ) ) {
 			$install_actions['network_enable'] = '<a href="' . esc_url( wp_nonce_url( 'themes.php?action=enable&amp;theme=' . urlencode( $stylesheet ), 'enable-theme_' . $stylesheet ) ) . '" target="_parent">' . __( 'Network Enable' ) . '</a>';
+		}
 
-    if ( 'web' === $this->type ) {
+		if ( 'web' === $this->type ) {
 			$install_actions['themes_page'] = sprintf(
 				'<a href="%s" target="_parent">%s</a>',
 				self_admin_url( 'theme-install.php' ),
@@ -138,8 +153,9 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		 * @param WP_Theme $theme_info      Theme object.
 		 */
 		$install_actions = apply_filters( 'install_theme_complete_actions', $install_actions, $this->api, $stylesheet, $theme_info );
-		if ( ! empty($install_actions) )
-			$this->feedback(implode(' | ', (array)$install_actions));
+		if ( ! empty( $install_actions ) ) {
+			$this->feedback( implode( ' | ', (array) $install_actions ) );
+		}
 	}
 
 	/**
