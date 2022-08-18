@@ -7,22 +7,22 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php';
 
 $title = __( 'Security' );
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
-$tabs = [
-	'users'      => [
+$tabs = array(
+	'users'      => array(
 		'title'   => __( 'For Users' ),
-		'classes' => [ 'nav-tab' ],
-	],
-	'developers' => [
+		'classes' => array( 'nav-tab' ),
+	),
+	'developers' => array(
 		'title'   => __( 'For Developers' ),
-		'classes' => [ 'nav-tab' ],
-	],
-];
+		'classes' => array( 'nav-tab' ),
+	),
+);
 
 $active_tab = 'users'; // default
 if ( isset( $_GET['tab'] ) && isset( $tabs[ $_GET['tab'] ] ) ) {
@@ -73,7 +73,7 @@ switch ( $active_tab ) :
 	<div class="card">
 		<?php
 		$security_pages = empty( $submenu['security.php'] )
-			? []
+			? array()
 			: array_slice( $submenu['security.php'], 1 );
 		echo '<h3>';
 		esc_html_e( 'Plugin Security Settings' );
@@ -231,5 +231,5 @@ endswitch;
 ?>
 </div>
 <?php
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';
 

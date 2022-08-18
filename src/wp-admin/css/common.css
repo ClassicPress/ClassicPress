@@ -1565,6 +1565,15 @@ ul#dismissed-updates {
 	display: none;
 }
 
+#dismissed-updates li > p {
+	margin-top: 0;
+}
+
+#dismiss,
+#undismiss {
+	margin-left: 0.5em;
+}
+
 form.upgrade {
 	margin-top: 8px;
 }
@@ -3056,6 +3065,7 @@ img {
 	font-size: 13px;
 	background: #f9f9f9;
 	-moz-tab-size: 4;
+	-o-tab-size: 4;
 	tab-size: 4;
 }
 

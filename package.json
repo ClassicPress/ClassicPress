@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "1.3.0+dev",
+  "version": "1.4.2+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -9,20 +9,20 @@
   "author": "The ClassicPress Contributors",
   "license": "GPL-2.0+",
   "devDependencies": {
-    "@lodder/grunt-postcss": "3.0.1",
-    "@rollup/plugin-commonjs": "19.0.0",
-    "autoprefixer": "10.2.5",
-    "grunt": "1.4.0",
+    "@lodder/grunt-postcss": "3.1.1",
+    "@rollup/plugin-commonjs": "22.0.2",
+    "autoprefixer": "10.4.7",
+    "grunt": "1.5.3",
     "grunt-banner": "0.6.0",
-    "grunt-contrib-clean": "2.0.0",
+    "grunt-contrib-clean": "2.0.1",
     "grunt-contrib-compress": "2.0.0",
-    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-concat": "2.1.0",
     "grunt-contrib-connect": "3.0.0",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-cssmin": "4.0.0",
     "grunt-contrib-imagemin": "4.0.0",
-    "grunt-contrib-jshint": "3.0.0",
-    "grunt-contrib-qunit": "4.0.0",
+    "grunt-contrib-jshint": "3.2.0",
+    "grunt-contrib-qunit": "6.0.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
     "grunt-jsvalidate": "0.2.2",
@@ -31,16 +31,16 @@
     "grunt-rtlcss": "2.0.2",
     "grunt-sass": "3.1.0",
     "ink-docstrap": "1.3.2",
-    "postcss": "8.2.15",
-    "rollup": "2.47.0",
+    "postcss": "8.4.16",
+    "rollup": "2.78.0",
     "sync-request": "6.1.0",
-    "terser": "5.7.0"
+    "terser": "5.14.2"
   },
   "dependencies": {
-    "node-sass": "6.0.0"
+    "node-sass": "7.0.1"
   },
   "collective": {
     "type": "opencollective",
-    "url": "https://opencollective.com/classicpress-294"
+    "url": "https://opencollective.com/classicpress"
   }
 }

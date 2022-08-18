@@ -443,7 +443,6 @@
 }
 
 .attachment-details .setting + .description {
-	clear: both;
 	font-size: 12px;
 	font-style: normal;
 	margin-bottom: 0.5em;

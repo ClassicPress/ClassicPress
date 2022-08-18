@@ -18,6 +18,7 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 - [Setting up a local development environment](#setting-up-a-local-development-environment)
 - [Tips for good PRs](#tips-for-good-prs)
 - [How to review a PR](#how-to-review-a-pr)
+  - [Merging PRs](#merging-prs)
 - [Automated tests](#automated-tests)
 - [Backporting changes from WordPress](#backporting-changes-from-wordpress)
   - [Making a backport PR](#making-a-backport-pr)
@@ -113,6 +114,12 @@ At this point you have a working local development environment. Here are some fu
 6. Submit your feedback in the comment section of the same PR on the CP Github repo. Screenshots, gifs, video and text instructions documenting the tests are very useful to document your testing.
 7. Thank you for your time and effort in helping us review PRs.
 
+### Merging PRs
+
+_This section only applies to **core committers** - people who have access to merge changes to ClassicPress._
+
+See [MAINTAINING.md](MAINTAINING.md) for some guidelines for maintaining ClassicPress.
+
 ## Automated tests
 
 Any change that introduces new code or changes behavior should have automated tests. These tests mostly use [PHPUnit](https://phpunit.de/) to verify the behavior of the many thousands of lines of PHP code in ClassicPress.
@@ -146,13 +153,26 @@ When you're ready to backport a code change:
    bin/backport-wp-commit.sh CHANGESET_NUMBER
    ```
 
+	 or use composer:
+
+	 ```
+	 composer run backport CHANGESET_NUMBER
+	 ```
+
    This will create a new branch and apply the WordPress changeset to it. If you're porting multiple changesets, you can create a new `git` branch first and use the `-c` option to this script to apply each changeset to your current branch instead:
 
    ```
    bin/backport-wp-commit.sh -c CHANGESET_NUMBER
    ```
 
+	 or use composer:
+
+	 ```
+	 composer run backport -c CHANGESET_NUMBER
+	 ```
+
    Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
+
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
 3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!

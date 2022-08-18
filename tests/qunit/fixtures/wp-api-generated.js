@@ -78,7 +78,8 @@ mockedApiResponse.Schema = {
                     ],
                     "args": {
                         "url": {
-                            "required": true
+                            "required": true,
+                            "description": "The URL of the resource for which to fetch oEmbed data."
                         },
                         "format": {
                             "required": false,
@@ -3444,7 +3445,8 @@ mockedApiResponse.oembed = {
                     ],
                     "args": {
                         "url": {
-                            "required": true
+                            "required": true,
+                            "description": "The URL of the resource for which to fetch oEmbed data."
                         },
                         "format": {
                             "required": false,

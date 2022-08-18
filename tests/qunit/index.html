@@ -1595,7 +1595,6 @@
 			<input type="text" data-setting="alt" aria-describedby="alt-text-description" />
 		</label>
 		<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener noreferrer">Describe the purpose of the image<span class="screen-reader-text"> (opens in a new tab)</span></a>. Leave empty if the image is purely decorative.</p>
-
 					<label class="setting caption">
 				<span>Caption</span>
 				<textarea data-setting="caption" />
@@ -1650,7 +1649,6 @@
 						<input type="text" data-setting="alt" value="{{ data.model.alt }}" aria-describedby="alt-text-description" />
 					</label>
 					<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener noreferrer">Describe the purpose of the image<span class="screen-reader-text"> (opens in a new tab)</span></a>. Leave empty if the image is purely decorative.</p>
-
 											<label class="setting caption">
 							<span>Caption</span>
 							<textarea data-setting="caption">{{ data.model.caption }}</textarea>
@@ -2267,10 +2265,17 @@
 				</span>
 					</li>
 					<li class="wp-first-item">
-						<a href="plugins.php" class="wp-first-item">Installed Plugins</a></li><li><a href="plugin-install.php">Add New</a>
-				</li><li>
-					<a href="plugin-editor.php">Editor</a>
-				</li>
+						<a href="plugins.php" class="wp-first-item">Installed Plugins</a>
+					</li>
+					<li>
+						<a href="plugin-install.php?tab=upload">Upload</a>
+					</li>
+					<li>
+						<a href="plugin-install.php">Add WP Plugin</a>
+					</li>
+					<li>
+						<a href="plugin-editor.php">Editor</a>
+					</li>
 				</ul>
 			</li>
 		</div>
