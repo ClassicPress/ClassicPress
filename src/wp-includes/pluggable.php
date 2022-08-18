@@ -293,7 +293,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 						if ( $bracket_pos !== false ) {
 							// Text before the bracketed email is the "From" name.
 							if ( $bracket_pos > 0 ) {
-								$from_name = substr( $content, 0, $bracket_pos - 1 );
+									$from_name = substr( $content, 0, $bracket_pos );
 								$from_name = str_replace( '"', '', $from_name );
 								$from_name = trim( $from_name );
 							}
