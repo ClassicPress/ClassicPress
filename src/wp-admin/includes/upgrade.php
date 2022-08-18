@@ -2161,13 +2161,9 @@ function deslash($content) {
  *
  * Useful for creating new tables and updating existing tables to a new structure.
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
-=======
- * @since 1.5.0
- * @since 6.1.0 Ignores display width for integer data types on MySQL 8.0.17 or later,
+ * @since WP-6.1.0 Ignores display width for integer data types on MySQL 8.0.17 or later,
  *              to match MySQL behavior. Note: This does not affect MariaDB.
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
  *
  * @global wpdb  $wpdb
  *
@@ -2395,12 +2391,8 @@ function dbDelta( $queries = '', $execute = true ) {
 
 		// For every field in the table.
 		foreach ( $tablefields as $tablefield ) {
-			$tablefield_field_lowercased = strtolower( $tablefield->Field );
-			$tablefield_type_lowercased = strtolower( $tablefield->Type );
-
-<<<<<<< HEAD
-			// If the table field exists in the field array ...
-=======
+			$tablefield_field_lowercased         = strtolower( $tablefield->Field );
+			$tablefield_type_lowercased          = strtolower( $tablefield->Type );
 			$tablefield_type_without_parentheses = preg_replace(
 				'/'
 				. '(.+)'       // Field type, e.g. `int`.
@@ -2415,7 +2407,6 @@ function dbDelta( $queries = '', $execute = true ) {
 			$tablefield_type_base = strtok( $tablefield_type_without_parentheses, ' ' );
 
 			// If the table field exists in the field array...
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 			if ( array_key_exists( $tablefield_field_lowercased, $cfields ) ) {
 
 				// Get the field type from the query.
