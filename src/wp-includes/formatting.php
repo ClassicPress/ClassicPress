@@ -4327,7 +4327,7 @@ function tag_escape( $tag_name ) {
  * Provide a way to filter and escape the HTML attributes being output.
  * To preserve spaces, quotes, ampersands, pass an array instead of string.
  *
- * @since CP-1.x.0
+ * @since CP-1.5.0
  * @param string       $element The HTML tag the attributes are for.
  * @param array|string $attrs   Optional. Array of attributes for the element.
  *                              Default empty.
@@ -4352,7 +4352,7 @@ function cp_attributes( $element, $attrs = array(), $context = '' ) {
 	/**
 	 * Filters the attribute array.
 	 *
-	 * @since CP-1.x.0
+	 * @since CP-1.5.0
 	 *
 	 * @param string[] $attrs   Key is attribute name, value is attribute value.
 	 * @param string   $element The HTML element the attributes are for.
@@ -4363,7 +4363,7 @@ function cp_attributes( $element, $attrs = array(), $context = '' ) {
 	 * Filters the attribute array, specifically using context.
 	 * The dynamic portion of the hook name, `$context`, refers to the context.
 	 *
-	 * @since CP-1.x.0
+	 * @since CP-1.5.0
 	 *
 	 * @param string[] $attrs   Key is attribute name, value is attribute value.
 	 * @param string   $element The HTML element the attributes are for.

@@ -2379,14 +2379,6 @@ function get_theme_starter_content() {
  * If attached to a hook, it must be {@see 'after_setup_theme'}.
  * The {@see 'init'} hook may be too late for some features.
  *
- * @since WP-2.9.0
- * @since WP-3.6.0 The `html5` feature was added
- * @since WP-3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'
- * @since WP-4.1.0 The `title-tag` feature was added
- * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
- * @since WP-4.7.0 The `starter-content` feature was added
- * @since CP-1.x.0 The `body-only` feature was added
- *
  * Example usage:
  *
  *     add_theme_support( 'title-tag' );
@@ -2395,12 +2387,20 @@ function get_theme_starter_content() {
  *         'width'  => 720,
  *     ) );
  *
+ * @since WP-2.9.0
+ * @since WP-3.6.0 The `html5` feature was added
+ * @since WP-3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'
+ * @since WP-4.1.0 The `title-tag` feature was added
+ * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
+ * @since WP-4.7.0 The `starter-content` feature was added
+ * @since CP-1.5.0 The `body-only` feature was added
  *
  * @global array $_wp_theme_features
  *
  * @param string $feature  The feature being added. Likely core values include 'post-formats',
  *                         'post-thumbnails', 'html5', 'custom-logo', 'custom-header-uploads',
- *                         'custom-header', 'custom-background', 'title-tag', 'starter-content', etc.
+ *                         'custom-header', 'custom-background', 'title-tag', 'starter-content', 
+ *                         'body-only', etc.
  * @param mixed  $args,... Optional extra arguments to pass along with certain features.
  * @return void|bool False on failure, void otherwise.
  */
@@ -2633,19 +2633,21 @@ function add_theme_support( $feature ) {
 
 			break;
 
-		case 'body-only' :
+		case 'body-only':
 			add_theme_support( 'automatic-feed-links' );
 			add_theme_support( 'title-tag' );
-			add_theme_support( 'html5', array(
-				'comment-list',
-				'comment-form',
-				'gallery',
-				'caption',
-				'search-form',
-				'script',
-				'style',
-				'navigation-widgets',
-			) );
+			add_theme_support( 'html5', 
+				array(
+					'comment-list',
+					'comment-form',
+					'gallery',
+					'caption',
+					'search-form',
+					'script',
+					'style',
+					'navigation-widgets',
+				) 
+			);
 
 	}
 
