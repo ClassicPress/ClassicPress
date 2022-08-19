@@ -1463,9 +1463,12 @@ function do_robots() {
  */
 function do_html5_header() {
 	if ( did_action( 'wp_body_open' ) ) {
-		/* translators: 1: Theme support 2: hook name */
-		_doing_it_wrong( "add_theme_support( 'body-only' )", sprintf( __( 'Theme support for %1$s should not invoke the %2$s hook.' ),
-			'<code>body-only</code>', '<code>wp_body_open</code>' ), 'CP-1.5.0' );
+		_doing_it_wrong(
+			"add_theme_support( 'body-only' )",
+			/* translators: 1: Theme support 2: hook name */
+			sprintf( __( 'Theme support for %1$s should not invoke the %2$s hook.' ), '<code>body-only</code>', '<code>wp_body_open</code>' ),
+			'CP-1.5.0'
+		);
 		return;
 	}
 

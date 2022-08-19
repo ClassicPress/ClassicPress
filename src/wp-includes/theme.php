@@ -2399,7 +2399,7 @@ function get_theme_starter_content() {
  *
  * @param string $feature  The feature being added. Likely core values include 'post-formats',
  *                         'post-thumbnails', 'html5', 'custom-logo', 'custom-header-uploads',
- *                         'custom-header', 'custom-background', 'title-tag', 'starter-content', 
+ *                         'custom-header', 'custom-background', 'title-tag', 'starter-content',
  *                         'body-only', etc.
  * @param mixed  $args,... Optional extra arguments to pass along with certain features.
  * @return void|bool False on failure, void otherwise.
@@ -2636,7 +2636,8 @@ function add_theme_support( $feature ) {
 		case 'body-only':
 			add_theme_support( 'automatic-feed-links' );
 			add_theme_support( 'title-tag' );
-			add_theme_support( 'html5', 
+			add_theme_support(
+				'html5',
 				array(
 					'comment-list',
 					'comment-form',
@@ -2646,7 +2647,7 @@ function add_theme_support( $feature ) {
 					'script',
 					'style',
 					'navigation-widgets',
-				) 
+				)
 			);
 
 	}

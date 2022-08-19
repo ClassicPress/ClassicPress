@@ -4338,8 +4338,11 @@ function tag_escape( $tag_name ) {
 function cp_attributes( $element, $attrs = array(), $context = '' ) {
 	if ( ! is_array( $attrs ) ) {
 		// This can mess up nested quotes, but wp_parse_args will mess up all quotes.
-		$attrs = str_replace( array( '="', "='", '" ', "' " ),
-			array( '=', '=', '&', '&' ), trim( $attrs, "' \"" ) );
+		$attrs = str_replace(
+			array( '="', "='", '" ', "' " ),
+			array( '=', '=', '&', '&' ),
+			trim( $attrs, "' \"" )
+		);
 	}
 	$attrs = wp_parse_args( $attrs );
 	if ( empty( $context ) ) {
