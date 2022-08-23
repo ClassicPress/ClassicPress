@@ -77,7 +77,7 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 					'category_description' => 'The alpha category',
 				),
 				$result['categories'][0],
-				$message,
+				$message
 			);
 			$this->assertEquals(
 				array(
@@ -87,7 +87,7 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 					'tag_description' => 'The Clippable post_tag',
 				),
 				$result['tags'][0],
-				$message,
+				$message
 			);
 			$this->assertEquals(
 				array(
@@ -99,7 +99,7 @@ class Tests_Import_Parser extends WP_Import_UnitTestCase {
 					'term_description' => 'The bieup post_tax',
 				),
 				$result['terms'][0],
-				$message,
+				$message
 			);
 
 			$this->assertSame( 2, count( $result['posts'] ), $message );
