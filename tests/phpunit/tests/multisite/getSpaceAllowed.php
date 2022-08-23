@@ -37,7 +37,7 @@ if ( is_multisite() ) :
 			update_option( 'blog_upload_space', self::$original_blog_upload_space );
 
 			$wpdb->suppress_errors( $this->suppress );
-			parent::tearDown();
+			parent::tear_down();
 		}
 
 		/**
