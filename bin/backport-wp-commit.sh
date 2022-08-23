@@ -118,12 +118,12 @@ for range in \
 	'dc512708:5.2' \
 	'c67b47c66:5.3' \
 	'66f510bda:5.4' \
-	'ff6114f8:master'
+	'ff6114f8:trunk'
 do
 	start_commit=$(echo "$range" | cut -d: -f1)
 	search_branch=$(echo "$range" | cut -d: -f2)
 	log_range="$start_commit..$wp_remote/$search_branch"
-	if [ "$search_branch" = master ]; then
+	if [ "$search_branch" = trunk ]; then
 		svn_branch=trunk
 	else
 		svn_branch="branches/$search_branch"
@@ -171,7 +171,9 @@ fi
 
 echo "Backporting commit using git cherry-pick"
 set +e
-cmd __failure_allowed git cherry-pick --no-commit --find-renames "$commit_short"
+cmd __failure_allowed git cherry-pick --no-commit --find-renames \
+	--strategy=recursive --strategy-option=patience --strategy-option=ignore-space-change \
+	"$commit_short"
 conflict_status=$?
 set -e
 
@@ -256,7 +258,11 @@ else
 	echo "Fix and commit the files that contain <<""<< or >>"">> conflict markers:"
 	git log -n 1 \
 		| perl -we '
+			use if "MSWin32" eq $^O, "Win32::Console::ANSI";
+			use Term::ANSIColor qw(:constants);
 			my $p = 0;
+			my $files_conflicting = "";
+			my $files_nonexistent = "";
 			while (<>) {
 				if (/^\s+Conflicts:$/) {
 					$p = 1;
@@ -268,12 +274,22 @@ else
 					s/^[\s-]+//;
 					my $cp_filename = $_;
 					$cp_filename =~ s#^src/js/_enqueues/#src/wp-includes/js/#;
-					print "    - $_\n";
-					if ($cp_filename ne $_) {
-						print "      (probable CP path: $cp_filename)\n";
+					if ( -e $_ ) {
+						$files_conflicting = $files_conflicting .  "    - $_\n";
+					} else {
+						$files_nonexistent = $files_nonexistent . "    - $_\n";
+					}
+					if ( $cp_filename ne $_ ) {
+						$files_conflicting = $files_conflicting . "      (probable CP path: $cp_filename)\n";
 					}
 				}
-			}'
+			}
+			print $files_conflicting;
+			if ( "" ne $files_nonexistent ) {
+				print "The following files do not exist in the ClassicPress development code:\n";
+				print RED, $files_nonexistent, RESET;
+			}
+			'
 	echo "${color_bold_red}=======${color_reset}"
 	echo
 	echo "If you're not sure how to do this, just push your changes to GitHub"

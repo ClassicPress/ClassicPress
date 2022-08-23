@@ -31,7 +31,7 @@ class Tests_Formatting_WPSpecialchars extends WP_UnitTestCase {
 
 		foreach ( $ents as $ent ) {
 			$escaped = '&amp;' . $ent . ';';
-			$ent = '&' . $ent . ';';
+			$ent     = '&' . $ent . ';';
 			$this->assertSame( $escaped, _wp_specialchars( $ent ) );
 		}
 	}

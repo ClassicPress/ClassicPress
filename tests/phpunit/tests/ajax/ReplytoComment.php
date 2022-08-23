@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax comment functionality
@@ -31,8 +31,8 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$comment_post = $factory->post->create_and_get();
-		self::$comment_ids = $factory->comment->create_post_comments( self::$comment_post->ID, 5 );
-		self::$draft_post = $factory->post->create_and_get( array( 'post_status' => 'draft' ) );
+		self::$comment_ids  = $factory->comment->create_post_comments( self::$comment_post->ID, 5 );
+		self::$draft_post   = $factory->post->create_and_get( array( 'post_status' => 'draft' ) );
 	}
 
 	public function tear_down() {
@@ -51,10 +51,12 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Get a comment
-		$comments = get_comments( array(
-		    'post_id' => self::$comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => self::$comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( 'replyto-comment' );
@@ -95,10 +97,12 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'subscriber' );
 
 		// Get a comment
-		$comments = get_comments( array(
-		'post_id' => self::$comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => self::$comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( 'replyto-comment' );
@@ -122,10 +126,12 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Get a comment
-		$comments = get_comments( array(
-		    'post_id' => self::$comment_post->ID
-		) );
-		$comment = array_pop( $comments );
+		$comments = get_comments(
+			array(
+				'post_id' => self::$comment_post->ID,
+			)
+		);
+		$comment  = array_pop( $comments );
 
 		// Set up a default request
 		$_POST['_ajax_nonce-replyto-comment'] = wp_create_nonce( uniqid() );
@@ -204,7 +210,7 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'replyto-comment' );
 			$wpdb->suppress_errors( false );
 			$this->fail();
-		} catch ( WPAjaxDieStopException $e )  {
+		} catch ( WPAjaxDieStopException $e ) {
 			$wpdb->suppress_errors( false );
 			$this->assertStringContainsString( '1', $e->getMessage() );
 		}
@@ -217,7 +223,7 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 	 */
 	public function _block_comments( $sql ) {
 		global $wpdb;
-		if ( false !== strpos( $sql, $wpdb->comments ) && 0 === stripos( trim ( $sql ), 'INSERT INTO') ) {
+		if ( false !== strpos( $sql, $wpdb->comments ) && 0 === stripos( trim( $sql ), 'INSERT INTO' ) ) {
 			return '';
 		}
 		return $sql;

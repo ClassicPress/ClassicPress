@@ -9,11 +9,13 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 	function set_up() {
 		parent::set_up();
 
-		if ( ! defined( 'WP_IMPORTING' ) )
+		if ( ! defined( 'WP_IMPORTING' ) ) {
 			define( 'WP_IMPORTING', true );
+		}
 
-		if ( ! defined( 'WP_LOAD_IMPORTERS' ) )
+		if ( ! defined( 'WP_LOAD_IMPORTERS' ) ) {
 			define( 'WP_LOAD_IMPORTERS', true );
+		}
 
 		add_filter( 'import_allow_create_users', '__return_true' );
 
@@ -21,8 +23,9 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 
 		global $wpdb;
 		// crude but effective: make sure there's no residual data in the main tables
-		foreach ( array('posts', 'postmeta', 'comments', 'terms', 'term_taxonomy', 'term_relationships', 'users', 'usermeta') as $table)
-			$wpdb->query("DELETE FROM {$wpdb->$table}");
+		foreach ( array( 'posts', 'postmeta', 'comments', 'terms', 'term_taxonomy', 'term_relationships', 'users', 'usermeta' ) as $table ) {
+			$wpdb->query( "DELETE FROM {$wpdb->$table}" );
+		}
 	}
 
 	function tear_down() {
@@ -34,7 +37,11 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 	function test_small_import() {
 		global $wpdb;
 
-		$authors = array( 'admin' => false, 'editor' => false, 'author' => false );
+		$authors = array(
+			'admin'  => false,
+			'editor' => false,
+			'author' => false,
+		);
 		$this->_import_wp( DIR_TESTDATA . '/export/small-export.xml', $authors );
 
 		// ensure that authors were imported correctly
@@ -57,7 +64,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertEquals( 3, wp_count_terms( 'post_tag' ) );
 		$foo = get_term_by( 'slug', 'foo', 'category' );
 		$this->assertSame( 0, $foo->parent );
-		$bar = get_term_by( 'slug', 'bar', 'category' );
+		$bar     = get_term_by( 'slug', 'bar', 'category' );
 		$foo_bar = get_term_by( 'slug', 'foo-bar', 'category' );
 		$this->assertSame( $bar->term_id, $foo_bar->parent );
 
@@ -196,7 +203,11 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 	}
 
 	function test_double_import() {
-		$authors = array( 'admin' => false, 'editor' => false, 'author' => false );
+		$authors = array(
+			'admin'  => false,
+			'editor' => false,
+			'author' => false,
+		);
 		$this->_import_wp( DIR_TESTDATA . '/export/small-export.xml', $authors );
 		$this->_import_wp( DIR_TESTDATA . '/export/small-export.xml', $authors );
 
@@ -218,7 +229,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertEquals( 3, wp_count_terms( 'post_tag' ) );
 		$foo = get_term_by( 'slug', 'foo', 'category' );
 		$this->assertSame( 0, $foo->parent );
-		$bar = get_term_by( 'slug', 'bar', 'category' );
+		$bar     = get_term_by( 'slug', 'bar', 'category' );
 		$foo_bar = get_term_by( 'slug', 'foo-bar', 'category' );
 		$this->assertSame( $bar->term_id, $foo_bar->parent );
 
@@ -235,7 +246,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 	function test_ordering_of_importers() {
 		global $wp_importers;
 		$_wp_importers = $wp_importers; // Preserve global state
-		$wp_importers = array(
+		$wp_importers  = array(
 			'xyz1' => array( 'xyz1' ),
 			'XYZ2' => array( 'XYZ2' ),
 			'abc2' => array( 'abc2' ),
@@ -271,7 +282,12 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$tag1 = get_term_by( 'slug', 'tag1', 'post_tag' );
 		$this->assertSame( "foo\'bar", $tag1->name );
 
-		$posts = get_posts( array( 'post_type' => 'any', 'post_status' => 'any' ) );
+		$posts = get_posts(
+			array(
+				'post_type'   => 'any',
+				'post_status' => 'any',
+			)
+		);
 		$this->assertSame( 'Slashes aren\\\'t \"cool\"', $posts[0]->post_content );
 	}
 

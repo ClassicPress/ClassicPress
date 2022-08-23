@@ -34,13 +34,16 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 
 	public function test_add_supports_custom() {
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array(
-			'supports' => array(
-				'editor',
-				'comments',
-				'revisions',
-			),
-		) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'supports' => array(
+					'editor',
+					'comments',
+					'revisions',
+				),
+			)
+		);
 
 		$post_type_object->add_supports();
 		$post_type_supports = get_all_post_type_supports( $post_type );
@@ -66,7 +69,13 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array( 'rewrite' => false, 'query_var' => 'foobar' ) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'rewrite'   => false,
+				'query_var' => 'foobar',
+			)
+		);
 		$post_type_object->add_rewrite_rules();
 
 		$this->assertFalse( in_array( 'foobar', $wp->public_query_vars ) );
@@ -79,11 +88,14 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array(
-			'public'    => true,
-			'rewrite'   => false,
-			'query_var' => 'foobar',
-		) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'public'    => true,
+				'rewrite'   => false,
+				'query_var' => 'foobar',
+			)
+		);
 
 		$post_type_object->add_rewrite_rules();
 		$in_array = in_array( 'foobar', $wp->public_query_vars );
@@ -102,7 +114,13 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp_rewrite;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array( 'public' => true, 'rewrite' => true ) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'public'  => true,
+				'rewrite' => true,
+			)
+		);
 
 		$post_type_object->add_rewrite_rules();
 		$rewrite_tags = $wp_rewrite->rewritecode;

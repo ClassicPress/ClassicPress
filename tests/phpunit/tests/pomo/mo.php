@@ -75,8 +75,8 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 
 	function test_translations_merge() {
 		$host = new Translations();
-		$host->add_entry(new Translation_Entry(array('singular' => 'pink',)));
-		$host->add_entry(new Translation_Entry(array('singular' => 'green',)));
+		$host->add_entry( new Translation_Entry( array( 'singular' => 'pink' ) ) );
+		$host->add_entry( new Translation_Entry( array( 'singular' => 'green' ) ) );
 		$guest = new Translations();
 		$guest->add_entry( new Translation_Entry( array( 'singular' => 'green' ) ) );
 		$guest->add_entry( new Translation_Entry( array( 'singular' => 'red' ) ) );
@@ -86,31 +86,62 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 	}
 
 	function test_export_mo_file() {
-		$entries = array();
-		$entries[] = new Translation_Entry(array('singular' => 'pink',
-			'translations' => array('розов')));
-		$no_translation_entry = new Translation_Entry(array('singular' => 'grey'));
-		$entries[] = new Translation_Entry(array('singular' => 'green', 'plural' => 'greens',
-			'translations' => array('зелен', 'зелени')));
-		$entries[] = new Translation_Entry(array('singular' => 'red', 'context' => 'color',
-			'translations' => array('червен')));
-		$entries[] = new Translation_Entry(array('singular' => 'red', 'context' => 'bull',
-			'translations' => array('бик')));
-		$entries[] = new Translation_Entry(array('singular' => 'maroon', 'plural' => 'maroons', 'context' => 'context',
-			'translations' => array('пурпурен', 'пурпурни')));
+		$entries              = array();
+		$entries[]            = new Translation_Entry(
+			array(
+				'singular'     => 'pink',
+				'translations' => array( 'розов' ),
+			)
+		);
+		$no_translation_entry = new Translation_Entry( array( 'singular' => 'grey' ) );
+		$entries[]            = new Translation_Entry(
+			array(
+				'singular'     => 'green',
+				'plural'       => 'greens',
+				'translations' => array(
+					'зелен',
+					'зелени',
+				),
+			)
+		);
+		$entries[]            = new Translation_Entry(
+			array(
+				'singular'     => 'red',
+				'context'      => 'color',
+				'translations' => array( 'червен' ),
+			)
+		);
+		$entries[]            = new Translation_Entry(
+			array(
+				'singular'     => 'red',
+				'context'      => 'bull',
+				'translations' => array( 'бик' ),
+			)
+		);
+		$entries[]            = new Translation_Entry(
+			array(
+				'singular'     => 'maroon',
+				'plural'       => 'maroons',
+				'context'      => 'context',
+				'translations' => array(
+					'пурпурен',
+					'пурпурни',
+				),
+			)
+		);
 
 		$mo = new MO();
-		$mo->set_header('Project-Id-Version', 'Baba Project 1.0');
-		foreach($entries as $entry) {
-			$mo->add_entry($entry);
+		$mo->set_header( 'Project-Id-Version', 'Baba Project 1.0' );
+		foreach ( $entries as $entry ) {
+			$mo->add_entry( $entry );
 		}
-		$mo->add_entry($no_translation_entry);
+		$mo->add_entry( $no_translation_entry );
 
 		$temp_fn = $this->temp_filename();
-		$mo->export_to_file($temp_fn);
+		$mo->export_to_file( $temp_fn );
 
 		$again = new MO();
-		$again->import_from_file($temp_fn);
+		$again->import_from_file( $temp_fn );
 
 		$this->assertSame( count( $entries ), count( $again->entries ) );
 		foreach ( $entries as $entry ) {
@@ -119,15 +150,23 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 	}
 
 	function test_export_should_not_include_empty_translations() {
-		$entries = array(  );
-		$mo = new MO;
-		$mo->add_entry( array( 'singular' => 'baba', 'translations' => array( '', '' ) ) );
+		$entries = array();
+		$mo      = new MO;
+		$mo->add_entry(
+			array(
+				'singular'     => 'baba',
+				'translations' => array(
+					'',
+					'',
+				),
+			)
+		);
 
 		$temp_fn = $this->temp_filename();
 		$mo->export_to_file( $temp_fn );
 
 		$again = new MO();
-		$again->import_from_file($temp_fn);
+		$again->import_from_file( $temp_fn );
 
 		$this->assertSame( 0, count( $again->entries ) );
 	}
@@ -141,14 +180,14 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 	}
 
 	function disabled_test_performance() {
-		$start = microtime(true);
-		$mo = new MO();
-		$mo->import_from_file(DIR_TESTDATA . '/pomo/de_DE-2.8.mo');
+		$start = microtime( true );
+		$mo    = new MO();
+		$mo->import_from_file( DIR_TESTDATA . '/pomo/de_DE-2.8.mo' );
 		// echo "\nPerformance: ".(microtime(true) - $start)."\n";
 	}
 
 	function test_overloaded_mb_functions() {
-		if ((ini_get("mbstring.func_overload") & 2) == 0) {
+		if ( ( ini_get( 'mbstring.func_overload' ) & 2 ) == 0 ) {
 			$this->markTestSkipped( __METHOD__ . ' only runs when mbstring.func_overload is enabled.' );
 		}
 

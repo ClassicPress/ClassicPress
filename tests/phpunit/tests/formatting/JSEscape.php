@@ -16,8 +16,8 @@ class Tests_Formatting_JSEscape extends WP_UnitTestCase {
 	}
 
 	function test_js_escape_backslash() {
-		$bs = '\\';
-		$out = esc_js('foo '.$bs.'t bar '.$bs.$bs.' baz');
+		$bs  = '\\';
+		$out = esc_js( 'foo ' . $bs . 't bar ' . $bs . $bs . ' baz' );
 		// \t becomes t - bug?
 		$this->assertSame( 'foo t bar ' . $bs . $bs . ' baz', $out );
 	}

@@ -6,7 +6,7 @@
  * @group upload
  * @group resize
  */
-require_once( dirname( __FILE__ ) . '/base.php' );
+require_once dirname( __FILE__ ) . '/base.php';
 
 abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase {
 
@@ -27,7 +27,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_jpg() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/test-image.jpg', 25, 25 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-image.jpg', 25, 25 );
 
 		$this->assertSame( 'test-image-25x25.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -39,7 +39,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_png() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/test-image.png', 25, 25 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-image.png', 25, 25 );
 
 		if ( ! is_string( $image ) ) {  // WP_Error, stop GLib-GObject-CRITICAL assertion
 			$this->fail( sprintf( 'No PNG support in the editor engine %s on this system', $this->editor_engine ) );
@@ -55,7 +55,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_gif() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/test-image.gif', 25, 25 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-image.gif', 25, 25 );
 
 		if ( ! is_string( $image ) ) {  // WP_Error, stop GLib-GObject-CRITICAL assertion
 			$this->fail( sprintf( 'No GIF support in the editor engine %s on this system', $this->editor_engine ) );
@@ -72,14 +72,14 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 
 	function test_resize_larger() {
 		// image_resize() should refuse to make an image larger
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/test-image.jpg', 100, 100 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-image.jpg', 100, 100 );
 
 		$this->assertInstanceOf( 'WP_Error', $image );
 		$this->assertSame( 'error_getting_dimensions', $image->get_error_code() );
 	}
 
 	function test_resize_thumb_128x96() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 128, 96 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 128, 96 );
 
 		$this->assertSame( '2007-06-17DSC_4173-64x96.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -91,7 +91,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_thumb_128x0() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 128, 0 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 128, 0 );
 
 		$this->assertSame( '2007-06-17DSC_4173-128x193.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -103,7 +103,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_thumb_0x96() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 0, 96 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 0, 96 );
 
 		$this->assertSame( '2007-06-17DSC_4173-64x96.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -115,7 +115,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_thumb_150x150_crop() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 150, 150, true );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 150, 150, true );
 
 		$this->assertSame( '2007-06-17DSC_4173-150x150.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -127,7 +127,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_thumb_150x100_crop() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 150, 100, true );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 150, 100, true );
 
 		$this->assertSame( '2007-06-17DSC_4173-150x100.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -139,7 +139,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	}
 
 	function test_resize_thumb_50x150_crop() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/2007-06-17DSC_4173.JPG', 50, 150, true );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/2007-06-17DSC_4173.JPG', 50, 150, true );
 
 		$this->assertSame( '2007-06-17DSC_4173-50x150.jpg', wp_basename( $image ) );
 		list($w, $h, $type) = getimagesize( $image );
@@ -155,7 +155,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	 * @see https://core.trac.wordpress.org/ticket/6821
 	 */
 	public function test_resize_non_existent_image() {
-		$image = $this->resize_helper( DIR_TESTDATA.'/images/test-non-existent-image.jpg', 25, 25 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-non-existent-image.jpg', 25, 25 );
 
 		$this->assertInstanceOf( 'WP_Error', $image );
 		$this->assertSame( 'error_loading_image', $image->get_error_code() );
@@ -167,18 +167,21 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 	protected function resize_helper( $file, $width, $height, $crop = false ) {
 		$editor = wp_get_image_editor( $file );
 
-		if ( is_wp_error( $editor ) )
+		if ( is_wp_error( $editor ) ) {
 			return $editor;
+		}
 
 		$resized = $editor->resize( $width, $height, $crop );
-		 if ( is_wp_error( $resized ) )
+		if ( is_wp_error( $resized ) ) {
 			return $resized;
+		}
 
 		$dest_file = $editor->generate_filename();
-		$saved = $editor->save( $dest_file );
+		$saved     = $editor->save( $dest_file );
 
-		if ( is_wp_error( $saved ) )
+		if ( is_wp_error( $saved ) ) {
 			return $saved;
+		}
 
 		return $dest_file;
 	}

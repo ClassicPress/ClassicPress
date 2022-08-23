@@ -9,11 +9,10 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/23605
 	 */
 	function test_spaces() {
-		$this->assertSame( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
-		$this->assertSame( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
+		$this->assertSame( 'http://example.com/Mr%20ClassicPress', esc_url( 'http://example.com/Mr ClassicPress' ) );
+		$this->assertSame( 'http://example.com/Mr%20ClassicPress', esc_url( 'http://example.com/Mr%20ClassicPress' ) );
 		$this->assertSame( 'http://example.com/Mr%20%20ClassicPress', esc_url( 'http://example.com/Mr%20%20ClassicPress' ) );
-		$this->assertSame( 'http://example.com/Mr+ClassicPress',      esc_url( 'http://example.com/Mr+ClassicPress' ) );
-
+		$this->assertSame( 'http://example.com/Mr+ClassicPress', esc_url( 'http://example.com/Mr+ClassicPress' ) );
 		$this->assertSame( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one two three&bar=four' ) );
 		$this->assertSame( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one%20two%20three&bar=four' ) );
 	}
@@ -71,7 +70,6 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 		$this->assertSame( 'http://example.com?foo=1&bar=2', esc_url_raw( 'http://example.com?foo=1&bar=2' ) );
 		$this->assertSame( 'http://example.com?foo=1&amp;bar=2', esc_url_raw( 'http://example.com?foo=1&amp;bar=2' ) );
 		$this->assertSame( 'http://example.com?foo=1&#038;bar=2', esc_url_raw( 'http://example.com?foo=1&#038;bar=2' ) );
-
 		$this->assertSame( 'http://example.com?foo=1&#038;bar=2', esc_url( 'http://example.com?foo=1&bar=2' ) );
 		$this->assertSame( 'http://example.com?foo=1&#038;bar=2', esc_url( 'http://example.com?foo=1&amp;bar=2' ) );
 		$this->assertSame( 'http://example.com?foo=1&#038;bar=2', esc_url( 'http://example.com?foo=1&#038;bar=2' ) );
@@ -202,7 +200,7 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_with_newline() {
-		$body = <<<EOT
+		$body       = <<<EOT
 Hi there,
 
 I thought you might want to sign up for this newsletter
@@ -217,7 +215,7 @@ EOT;
 	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_in_http_url_with_newline() {
-		$body = <<<EOT
+		$body       = <<<EOT
 Hi there,
 
 I thought you might want to sign up for this newsletter
@@ -243,7 +241,7 @@ EOT;
 	 * @see https://core.trac.wordpress.org/ticket/28015
 	 */
 	function test_invalid_charaters() {
-		$this->assertEmpty( esc_url_raw('"^<>{}`') );
+		$this->assertEmpty( esc_url_raw( '"^<>{}`' ) );
 	}
 
 	/**

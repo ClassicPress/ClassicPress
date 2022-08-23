@@ -2,7 +2,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing Ajax handler for deleting a plugin.
@@ -144,10 +144,10 @@ class Tests_Ajax_Delete_Plugin extends WP_Ajax_UnitTestCase {
 		$expected = array(
 			'success' => true,
 			'data'    => array(
-				'delete'       => 'plugin',
-				'slug'         => 'foo',
-				'plugin'       => 'foo.php',
-				'pluginName'   => '',
+				'delete'     => 'plugin',
+				'slug'       => 'foo',
+				'plugin'     => 'foo.php',
+				'pluginName' => '',
 			),
 		);
 

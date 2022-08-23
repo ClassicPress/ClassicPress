@@ -23,7 +23,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		global $wp_scripts, $wp_styles;
 		parent::clean_up_global_scope();
 		$wp_scripts = null;
-		$wp_styles = null;
+		$wp_styles  = null;
 	}
 
 	/**
@@ -36,13 +36,13 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 * @return PHPUnit_Framework_MockObject_MockObject|WP_Widget_Media Mocked instance.
 	 */
 	function get_mocked_class_instance( $id_base = 'mocked', $name = 'Mocked', $widget_options = array(), $control_options = array() ) {
-		$original_class_name = 'WP_Widget_Media';
-		$arguments = array( $id_base, $name, $widget_options, $control_options );
-		$mock_class_name = '';
+		$original_class_name       = 'WP_Widget_Media';
+		$arguments                 = array( $id_base, $name, $widget_options, $control_options );
+		$mock_class_name           = '';
 		$call_original_constructor = true;
-		$call_original_clone = true;
-		$call_autoload = true;
-		$mocked_methods = array( 'render_media' );
+		$call_original_clone       = true;
+		$call_autoload             = true;
+		$mocked_methods            = array( 'render_media' );
 
 		return $this->getMockForAbstractClass( $original_class_name, $arguments, $mock_class_name, $call_original_constructor, $call_original_clone, $call_autoload, $mocked_methods );
 	}
@@ -82,16 +82,16 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( $widget, 'render_control_template_scripts' ) ) );
 
 		// With non-default args.
-		$id_base = 'media_pdf';
-		$name = 'PDF';
-		$widget_options = array(
+		$id_base         = 'media_pdf';
+		$name            = 'PDF';
+		$widget_options  = array(
 			'mime_type' => 'application/pdf',
 		);
 		$control_options = array(
-			'width' => 850,
+			'width'  => 850,
 			'height' => 1100,
 		);
-		$widget = $this->get_mocked_class_instance( $id_base, $name, $widget_options, $control_options );
+		$widget          = $this->get_mocked_class_instance( $id_base, $name, $widget_options, $control_options );
 		$this->assertSame( $id_base, $widget->id_base );
 		$this->assertSame( $name, $widget->name );
 
@@ -115,13 +115,19 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 */
 	function test_constructor_in_customize_preview() {
 		global $wp_customize;
-		wp_set_current_user( $this->factory()->user->create( array(
-			'role' => 'administrator',
-		) ) );
+		wp_set_current_user(
+			$this->factory()->user->create(
+				array(
+					'role' => 'administrator',
+				)
+			)
+		);
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
-		$wp_customize = new WP_Customize_Manager( array(
-			'changeset_uuid' => wp_generate_uuid4(),
-		) );
+		$wp_customize = new WP_Customize_Manager(
+			array(
+				'changeset_uuid' => wp_generate_uuid4(),
+			)
+		);
 		$wp_customize->start_previewing_theme();
 
 		$widget = $this->get_mocked_class_instance();
@@ -138,12 +144,14 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 
 		$test_image = get_temp_dir() . 'canola.jpg';
 		copy( DIR_TESTDATA . '/images/canola.jpg', $test_image );
-		$attachment_id = self::factory()->attachment->create_object( array(
-			'file' => $test_image,
-			'post_parent' => 0,
-			'post_mime_type' => 'image/jpeg',
-			'post_title' => 'Canola',
-		) );
+		$attachment_id = self::factory()->attachment->create_object(
+			array(
+				'file'           => $test_image,
+				'post_parent'    => 0,
+				'post_mime_type' => 'image/jpeg',
+				'post_title'     => 'Canola',
+			)
+		);
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $test_image ) );
 		$widget = $this->get_mocked_class_instance();
 
@@ -188,7 +196,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 */
 	public function filter_instance_schema( $schema, $widget ) {
 		$this->filter_instance_schema_args = compact( 'schema', 'widget' );
-		$schema['injected'] = array(
+		$schema['injected']                = array(
 			'type' => 'boolean',
 		);
 		return $schema;
@@ -228,14 +236,14 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 * @covers WP_Widget_Media::update()
 	 */
 	function test_update() {
-		$widget = $this->get_mocked_class_instance();
+		$widget   = $this->get_mocked_class_instance();
 		$instance = array();
 
 		// Should return valid attachment ID.
 		$expected = array(
 			'attachment_id' => 1,
 		);
-		$result = $widget->update( $expected, $instance );
+		$result   = $widget->update( $expected, $instance );
 		$this->assertSame( $result, $expected );
 
 		// Should filter invalid attachment ID.
@@ -251,7 +259,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$expected = array(
 			'url' => 'https://example.org',
 		);
-		$result = $widget->update( $expected, $instance );
+		$result   = $widget->update( $expected, $instance );
 		$this->assertSame( $result, $expected );
 
 		// Should filter invalid attachment url.
@@ -267,7 +275,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$expected = array(
 			'title' => 'What a title',
 		);
-		$result = $widget->update( $expected, $instance );
+		$result   = $widget->update( $expected, $instance );
 		$this->assertSame( $result, $expected );
 
 		// Should filter invalid attachment title.
@@ -315,15 +323,15 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 * @covers WP_Widget_Media::render_media()
 	 */
 	function test_widget() {
-		$args = array(
-			'before_title' => '<h2>',
-			'after_title' => "</h2>\n",
+		$args     = array(
+			'before_title'  => '<h2>',
+			'after_title'   => "</h2>\n",
 			'before_widget' => '<section>',
-			'after_widget' => "</section>\n",
+			'after_widget'  => "</section>\n",
 		);
 		$instance = array(
-			'title' => 'Foo',
-			'url' => 'http://example.com/image.jpg',
+			'title'         => 'Foo',
+			'url'           => 'http://example.com/image.jpg',
 			'attachment_id' => 0,
 		);
 
@@ -346,7 +354,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 
 		// No title.
 		ob_start();
-		$widget = $this->get_mocked_class_instance();
+		$widget            = $this->get_mocked_class_instance();
 		$instance['title'] = '';
 		$widget->expects( $this->atLeastOnce() )->method( 'render_media' )->with( $instance );
 		$widget->widget( $args, $instance );
@@ -354,7 +362,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( '<h2>Foo</h2>', $output );
 
 		// No attachment_id nor url.
-		$instance['url'] = '';
+		$instance['url']           = '';
 		$instance['attachment_id'] = 0;
 		ob_start();
 		$widget = $this->get_mocked_class_instance();
@@ -406,32 +414,38 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 * @covers WP_Widget_Media::display_media_state()
 	 */
 	function test_display_media_state() {
-		$widget = $this->get_mocked_class_instance();
-		$attachment_id = self::factory()->attachment->create_object( array(
-			'file' => DIR_TESTDATA . '/images/canola.jpg',
-			'post_parent' => 0,
-			'post_mime_type' => 'image/jpeg',
-		) );
+		$widget        = $this->get_mocked_class_instance();
+		$attachment_id = self::factory()->attachment->create_object(
+			array(
+				'file'           => DIR_TESTDATA . '/images/canola.jpg',
+				'post_parent'    => 0,
+				'post_mime_type' => 'image/jpeg',
+			)
+		);
 
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
 		$this->assertSameSets( array(), $result );
 
-		$widget->save_settings( array(
+		$widget->save_settings(
 			array(
-				'attachment_id' => $attachment_id,
-			),
-		) );
+				array(
+					'attachment_id' => $attachment_id,
+				),
+			)
+		);
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
 		$this->assertSameSets( array( $widget->l10n['media_library_state_single'] ), $result );
 
-		$widget->save_settings( array(
+		$widget->save_settings(
 			array(
-				'attachment_id' => $attachment_id,
-			),
-			array(
-				'attachment_id' => $attachment_id,
-			),
-		) );
+				array(
+					'attachment_id' => $attachment_id,
+				),
+				array(
+					'attachment_id' => $attachment_id,
+				),
+			)
+		);
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
 		$this->assertSameSets( array( sprintf( $widget->l10n['media_library_state_multi']['singular'], 2 ) ), $result );
 	}
@@ -470,38 +484,49 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 * @covers WP_Widget_Media::has_content()
 	 */
 	function test_has_content() {
-		$attachment_id = self::factory()->attachment->create_object( array(
-			'file' => DIR_TESTDATA . '/images/canola.jpg',
-			'post_parent' => 0,
-			'post_mime_type' => 'image/jpeg',
-		) );
+		$attachment_id = self::factory()->attachment->create_object(
+			array(
+				'file'           => DIR_TESTDATA . '/images/canola.jpg',
+				'post_parent'    => 0,
+				'post_mime_type' => 'image/jpeg',
+			)
+		);
 
 		$wp_widget_media = new ReflectionClass( 'WP_Widget_Media' );
-		$has_content = $wp_widget_media->getMethod( 'has_content' );
+		$has_content     = $wp_widget_media->getMethod( 'has_content' );
 		$has_content->setAccessible( true );
 
-		$result = $has_content->invokeArgs( $this->get_mocked_class_instance(), array(
+		$result = $has_content->invokeArgs(
+			$this->get_mocked_class_instance(),
 			array(
-				'attachment_id' => 0,
-				'url' => '',
-			),
-		) );
+				array(
+					'attachment_id' => 0,
+					'url'           => '',
+				),
+			)
+		);
 		$this->assertFalse( $result );
 
-		$result = $has_content->invokeArgs( $this->get_mocked_class_instance(), array(
+		$result = $has_content->invokeArgs(
+			$this->get_mocked_class_instance(),
 			array(
-				'attachment_id' => $attachment_id,
-				'url' => '',
-			),
-		) );
+				array(
+					'attachment_id' => $attachment_id,
+					'url'           => '',
+				),
+			)
+		);
 		$this->assertTrue( $result );
 
-		$result = $has_content->invokeArgs( $this->get_mocked_class_instance(), array(
+		$result = $has_content->invokeArgs(
+			$this->get_mocked_class_instance(),
 			array(
-				'attachment_id' => 0,
-				'url' => 'http://example.com/image.jpg',
-			),
-		) );
+				array(
+					'attachment_id' => 0,
+					'url'           => 'http://example.com/image.jpg',
+				),
+			)
+		);
 		$this->assertTrue( $result );
 	}
 }

@@ -21,17 +21,16 @@ class Tests_Formatting_WpReplaceInTags extends WP_UnitTestCase {
 			),
 			array(
 				"<Hello \n World>",
-				"<Hello   World>",
+				'<Hello   World>',
 			),
 			array(
 				"<!-- Hello \n World -->",
-				"<!-- Hello   World -->",
+				'<!-- Hello   World -->',
 			),
 			array(
 				"<!-- Hello <\n> World -->",
-				"<!-- Hello < > World -->",
+				'<!-- Hello < > World -->',
 			),
 		);
 	}
 }
-?>

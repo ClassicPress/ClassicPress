@@ -5,12 +5,12 @@
  * @group site_icon
  */
 
-require_once( ABSPATH . 'wp-admin/includes/class-wp-site-icon.php' );
+require_once ABSPATH . 'wp-admin/includes/class-wp-site-icon.php';
 
 class Tests_WP_Site_Icon extends WP_UnitTestCase {
 	protected $wp_site_icon;
 
-	public $attachment_id = 0;
+	public $attachment_id       = 0;
 	public $attachment_filename = DIR_TESTDATA . '/images/test-image.jpg';
 
 	function set_up() {
@@ -106,11 +106,11 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 		$object = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 
-		$this->assertSame( $object['post_title'],     'cropped-test-image.jpg' );
-		$this->assertSame( $object['context'],        'site-icon' );
+		$this->assertSame( $object['post_title'], 'cropped-test-image.jpg' );
+		$this->assertSame( $object['context'], 'site-icon' );
 		$this->assertSame( $object['post_mime_type'], 'image/jpeg' );
 		$this->assertSame( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
-		$this->assertSame( basename( $object['guid'] ),         'cropped-test-image.jpg' );
+		$this->assertSame( basename( $object['guid'] ), 'cropped-test-image.jpg' );
 	}
 
 	function test_insert_cropped_attachment() {
@@ -145,7 +145,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$this->assertFalse( has_filter( 'intermediate_image_sizes', array( $this->wp_site_icon, 'intermediate_image_sizes' ) ) );
 
 		$this->wp_site_icon->get_post_metadata( '', $attachment_id, '_wp_attachment_backup_sizes', true );
-		$this->assertSame( 10,  has_filter( 'intermediate_image_sizes', array( $this->wp_site_icon, 'intermediate_image_sizes' ) ) );
+		$this->assertSame( 10, has_filter( 'intermediate_image_sizes', array( $this->wp_site_icon, 'intermediate_image_sizes' ) ) );
 
 		wp_delete_attachment( $attachment_id, true );
 	}

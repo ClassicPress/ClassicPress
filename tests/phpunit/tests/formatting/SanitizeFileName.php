@@ -11,10 +11,11 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	}
 
 	function test_removes_special_chars() {
-		$special_chars = array("?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(", ")", "|", "~", "`", "!", "{", "}", "%", "+", chr(0));
-		$string = 'test';
-		foreach ( $special_chars as $char )
+		$special_chars = array( '?', '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', "'", '"', '&', '$', '#', '*', '(', ')', '|', '~', '`', '!', '{', '}', '%', '+', chr( 0 ) );
+		$string        = 'test';
+		foreach ( $special_chars as $char ) {
 			$string .= $char;
+		}
 		$string .= 'test';
 		$this->assertSame( 'testtest', sanitize_file_name( $string ) );
 	}
@@ -26,9 +27,9 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	 */
 	function test_replace_spaces() {
 		$urls = array(
-			'unencoded space.png' => 'unencoded-space.png',
-			'encoded-space.jpg' => 'encoded-space.jpg',
-			'plus+space.jpg' => 'plusspace.jpg',
+			'unencoded space.png'  => 'unencoded-space.png',
+			'encoded-space.jpg'    => 'encoded-space.jpg',
+			'plus+space.jpg'       => 'plusspace.jpg',
 			'multi %20 +space.png' => 'multi-20-space.png',
 		);
 

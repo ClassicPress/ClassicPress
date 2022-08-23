@@ -19,16 +19,18 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 		if ( isset( $GLOBALS['super_admins'] ) ) {
 			self::$super_admins = $GLOBALS['super_admins'];
 		}
-		$user = new WP_User( self::$user_id );
+		$user                    = new WP_User( self::$user_id );
 		$GLOBALS['super_admins'] = array( $user->user_login );
 
 		register_post_type( self::$post_type );
 
-		self::$post_id = $factory->post->create( array(
-			'post_type'   => self::$post_type,
-			'post_status' => 'private',
-			'post_author' => self::$author_id,
-		) );
+		self::$post_id = $factory->post->create(
+			array(
+				'post_type'   => self::$post_type,
+				'post_status' => 'private',
+				'post_author' => self::$author_id,
+			)
+		);
 	}
 
 	public static function wpTearDownAfterClass() {
@@ -48,9 +50,12 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 
 	function test_capability_type_post_with_no_extra_caps() {
 
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'post',
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'post',
+			)
+		);
 		$post_type_object = get_post_type_object( self::$post_type );
 
 		$this->assertTrue( $post_type_object->map_meta_cap );
@@ -84,10 +89,13 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	function test_custom_capability_type_with_map_meta_cap() {
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'book',
-			'map_meta_cap' => true,
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'book',
+				'map_meta_cap'    => true,
+			)
+		);
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
@@ -120,10 +128,13 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	function test_capability_type_post_with_one_renamed_cap() {
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'post',
-			'capabilities' => array( 'edit_posts' => 'edit_books' ),
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'post',
+				'capabilities'    => array( 'edit_posts' => 'edit_books' ),
+			)
+		);
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
@@ -158,14 +169,17 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	function test_capability_type_post_map_meta_cap_true_with_renamed_cap() {
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'post',
-			'map_meta_cap' => true,
-			'capabilities' => array(
-				'edit_post' => 'edit_book', // maps back to itself.
-				'edit_others_posts' => 'edit_others_books',
-			),
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'post',
+				'map_meta_cap'    => true,
+				'capabilities'    => array(
+					'edit_post'         => 'edit_book', // maps back to itself.
+					'edit_others_posts' => 'edit_others_books',
+				),
+			)
+		);
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
@@ -200,14 +214,17 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	function test_capability_type_post_with_all_meta_caps_renamed() {
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'post',
-			'capabilities' => array(
-				'edit_post' => 'edit_book',
-				'read_post' => 'read_book',
-				'delete_post' => 'delete_book',
-			),
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'post',
+				'capabilities'    => array(
+					'edit_post'   => 'edit_book',
+					'read_post'   => 'read_book',
+					'delete_post' => 'delete_book',
+				),
+			)
+		);
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
@@ -242,15 +259,18 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	}
 
 	function test_capability_type_post_with_all_meta_caps_renamed_mapped() {
-		register_post_type( self::$post_type, array(
-			'capability_type' => 'post',
-			'map_meta_cap' => true,
-			'capabilities' => array(
-				'edit_post'   => 'edit_book',
-				'read_post'   => 'read_book',
-				'delete_post' => 'delete_book',
-			),
-		) );
+		register_post_type(
+			self::$post_type,
+			array(
+				'capability_type' => 'post',
+				'map_meta_cap'    => true,
+				'capabilities'    => array(
+					'edit_post'   => 'edit_book',
+					'read_post'   => 'read_book',
+					'delete_post' => 'delete_book',
+				),
+			)
+		);
 
 		$post_type_object = get_post_type_object( self::$post_type );
 
@@ -319,8 +339,14 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/27020
 	 */
 	function test_authorless_posts_capabilties() {
-		$post_id = self::factory()->post->create( array( 'post_author' => 0, 'post_type' => 'post', 'post_status' => 'publish' ) );
-		$editor = self::factory()->user->create( array( 'role' => 'editor' ) );
+		$post_id = self::factory()->post->create(
+			array(
+				'post_author' => 0,
+				'post_type'   => 'post',
+				'post_status' => 'publish',
+			)
+		);
+		$editor  = self::factory()->user->create( array( 'role' => 'editor' ) );
 
 		$this->assertSame( array( 'edit_others_posts', 'edit_published_posts' ), map_meta_cap( 'edit_post', $editor, $post_id ) );
 		$this->assertSame( array( 'delete_others_posts', 'delete_published_posts' ), map_meta_cap( 'delete_post', $editor, $post_id ) );
@@ -333,10 +359,12 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/37580
 	 */
 	function test_only_users_who_can_manage_options_can_delete_page_on_front() {
-		$post_id = self::factory()->post->create( array(
-			'post_type'   => 'page',
-			'post_status' => 'publish',
-		) );
+		$post_id = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+			)
+		);
 
 		update_option( 'page_on_front', $post_id );
 		$caps = map_meta_cap( 'delete_page', self::$user_id, $post_id );
@@ -351,10 +379,12 @@ class Tests_User_MapMetaCap extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/37580
 	 */
 	function test_only_users_who_can_manage_options_can_delete_page_for_posts() {
-		$post_id = self::factory()->post->create( array(
-			'post_type'   => 'page',
-			'post_status' => 'publish',
-		) );
+		$post_id = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+			)
+		);
 
 		update_option( 'page_for_posts', $post_id );
 		$caps = map_meta_cap( 'delete_page', self::$user_id, $post_id );

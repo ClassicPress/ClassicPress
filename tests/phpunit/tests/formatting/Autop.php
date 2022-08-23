@@ -6,7 +6,7 @@
 class Tests_Formatting_Autop extends WP_UnitTestCase {
 	//From https://core.trac.wordpress.org/ticket/11008
 	function test_first_post() {
-		$expected = '<p>Welcome to WordPress!  This post contains important information.  After you read it, you can make it private to hide it from visitors but still have the information handy for future reference.</p>
+		$expected  = '<p>Welcome to WordPress!  This post contains important information.  After you read it, you can make it private to hide it from visitors but still have the information handy for future reference.</p>
 <p>First things first:</p>
 <ul>
 <li><a href="%1$s" title="Subscribe to the WordPress mailing list for Release Notifications">Subscribe to the WordPress mailing list for release notifications</a></li>
@@ -57,7 +57,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 ';
 
 		// On windows environments, the EOL-style is \r\n
-		$expected = str_replace( "\r\n", "\n", $expected);
+		$expected = str_replace( "\r\n", "\n", $expected );
 
 		$this->assertSame( $expected, wpautop( $test_data ) );
 	}
@@ -84,7 +84,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 		$this->assertSame( $expected, trim( wpautop( $str ) ) );
 
 		// Make sure HTML breaks are maintained if manually inserted
-		$str = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
+		$str      = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
 		$expected = "<p>Look at this code</p>\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
 		$this->assertSame( $expected, trim( wpautop( $str ) ) );
 	}
@@ -336,11 +336,11 @@ Paragraph two.';
 		}
 
 		$expected = join( "\n", $content );
-		$input = join( "\n\n", $content ); // WS difference
+		$input    = join( "\n\n", $content ); // WS difference
 
 		$this->assertSame( $expected, trim( wpautop( $input ) ) );
 
-		$input = join( "", $content ); // WS difference
+		$input = join( '', $content ); // WS difference
 
 		$this->assertSame( $expected, trim( wpautop( $input ) ) );
 
@@ -352,7 +352,7 @@ Paragraph two.';
 		}
 
 		$expected = join( "\n", $content );
-		$input = join( "", $content );
+		$input    = join( '', $content );
 
 		$this->assertSame( $expected, trim( wpautop( $input ) ) );
 
@@ -364,7 +364,7 @@ Paragraph two.';
 		}
 
 		$expected = join( "\n", $content );
-		$input = join( "", $content );
+		$input    = join( '', $content );
 
 		$this->assertSame( $expected, trim( wpautop( $input ) ) );
 	}
@@ -375,8 +375,8 @@ Paragraph two.';
 	 * @see https://core.trac.wordpress.org/ticket/27268
 	 */
 	function test_that_wpautop_does_not_wrap_blockquotes_but_does_autop_their_contents() {
-		$content  = "<blockquote>foo</blockquote>";
-		$expected = "<blockquote><p>foo</p></blockquote>";
+		$content  = '<blockquote>foo</blockquote>';
+		$expected = '<blockquote><p>foo</p></blockquote>';
 
 		$this->assertSame( $expected, trim( wpautop( $content ) ) );
 	}
@@ -419,11 +419,11 @@ Paragraph two.';
 		$content = $expected = array();
 
 		foreach ( $inlines as $inline ) {
-			$content[] = "<$inline>foo</$inline>";
+			$content[]  = "<$inline>foo</$inline>";
 			$expected[] = "<p><$inline>foo</$inline></p>";
 		}
 
-		$content = join( "\n\n", $content );
+		$content  = join( "\n\n", $content );
 		$expected = join( "\n", $expected );
 
 		$this->assertSame( $expected, trim( wpautop( $content ) ) );
@@ -457,20 +457,20 @@ Paragraph two.';
 				"Hello <!-- <object>\n<param/>\n<param/>\n<embed>\n</embed>\n</object>\n -->",
 				"<p>Hello <!-- <object>\n<param/>\n<param/>\n<embed>\n</embed>\n</object>\n --></p>\n",
 			),
-/* Block elements inside comments will fail this test in all versions, it's not a regression.
-			array(
-				"Hello <!-- <hr> a\nhref='world' -->",
-				"<p>Hello <!-- <hr> a\nhref='world' --></p>\n",
-			),
-			array(
-				"Hello <![CDATA[ <hr> a\nhttps://youtu.be/jgz0uSaOZbE\n ]]>",
-				"<p>Hello <![CDATA[ <hr> a\nhttps://youtu.be/jgz0uSaOZbE\n ]]></p>\n",
-			),
-*/
-			array(
-				"Hello <![CDATA[ a\nhttps://youtu.be/jgz0uSaOZbE\n ]]>",
-				"<p>Hello <![CDATA[ a\nhttps://youtu.be/jgz0uSaOZbE\n ]]></p>\n",
-			),
+			/* Block elements inside comments will fail this test in all versions, it's not a regression.
+				array(
+					"Hello <!-- <hr> a\nhref='world' -->",
+					"<p>Hello <!-- <hr> a\nhref='world' --></p>\n",
+				),
+				array(
+					"Hello <![CDATA[ <hr> a\nhttps://youtu.be/jgz0uSaOZbE\n ]]>",
+					"<p>Hello <![CDATA[ <hr> a\nhttps://youtu.be/jgz0uSaOZbE\n ]]></p>\n",
+				),
+			*/
+				array(
+					"Hello <![CDATA[ a\nhttps://youtu.be/jgz0uSaOZbE\n ]]>",
+					"<p>Hello <![CDATA[ a\nhttps://youtu.be/jgz0uSaOZbE\n ]]></p>\n",
+				),
 			array(
 				"Hello <![CDATA[ <!-- a\nhttps://youtu.be/jgz0uSaOZbE\n a\n9 ]]> -->",
 				"<p>Hello <![CDATA[ <!-- a\nhttps://youtu.be/jgz0uSaOZbE\n a\n9 ]]> --></p>\n",
@@ -529,7 +529,7 @@ line 2<br/>
 	 * @see https://core.trac.wordpress.org/ticket/4857
 	 */
 	function test_that_text_before_blocks_is_peed() {
-		$content = 'a<div>b</div>';
+		$content  = 'a<div>b</div>';
 		$expected = "<p>a</p>\n<div>b</div>";
 
 		$this->assertSame( $expected, trim( wpautop( $content ) ) );
@@ -555,14 +555,14 @@ line 2<br/>
 		$expected2 = '<figure>
 <img src="example.jpg" /><figcaption>Caption</figcaption></figure>';
 
-		$this->assertSame( $expected1, trim( wpautop( $content1 ) ) );
-		$this->assertSameIgnoreEOL( $expected2, trim( wpautop( $content2 ) ) );
+		$this->assertEquals( $expected1, trim( wpautop( $content1 ) ) );
+		$this->assertEqualsIgnoreEOL( $expected2, trim( wpautop( $content2 ) ) );
 	}
 
 	/**
 	 * wpautop() should ignore inline scripts
 	 *
-	 * @see https://core.trac.wordpress.org/tciket/9437
+	 * @see https://core.trac.wordpress.org/ticket/9437
 	 */
 	function test_that_wpautop_ignores_inline_scripts() {
 		$content =

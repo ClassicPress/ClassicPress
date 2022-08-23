@@ -84,19 +84,19 @@ class Tests_URL extends WP_UnitTestCase {
 		return array(
 			array(
 				null,
-				'/wp-admin/'
+				'/wp-admin/',
 			),
 			array(
 				0,
-				'/wp-admin/'
+				'/wp-admin/',
 			),
 			array(
 				-1,
-				'/wp-admin/'
+				'/wp-admin/',
 			),
 			array(
 				'///',
-				'/wp-admin/'
+				'/wp-admin/',
 			),
 			array(
 				'',
@@ -152,47 +152,47 @@ class Tests_URL extends WP_UnitTestCase {
 		return array(
 			array(
 				null,
-				"",
+				'',
 			),
 			array(
 				0,
-				"",
+				'',
 			),
 			array(
 				-1,
-				"",
+				'',
 			),
 			array(
 				'///',
-				"/",
+				'/',
 			),
 			array(
 				'',
-				"",
+				'',
 			),
 			array(
 				'foo',
-				"/foo",
+				'/foo',
 			),
 			array(
 				'/foo',
-				"/foo",
+				'/foo',
 			),
 			array(
 				'/foo/',
-				"/foo/",
+				'/foo/',
 			),
 			array(
 				'foo.php',
-				"/foo.php",
+				'/foo.php',
 			),
 			array(
 				'/foo.php',
-				"/foo.php",
+				'/foo.php',
 			),
 			array(
 				'/foo.php?bar=1',
-				"/foo.php?bar=1",
+				'/foo.php?bar=1',
 			),
 		);
 	}
@@ -202,7 +202,7 @@ class Tests_URL extends WP_UnitTestCase {
 
 		// Pretend to be in the site admin
 		set_current_screen( 'dashboard' );
-		$home = get_option('home');
+		$home = get_option( 'home' );
 
 		// home_url() should return http when in the admin
 		$_SERVER['HTTPS'] = 'on';
@@ -218,13 +218,12 @@ class Tests_URL extends WP_UnitTestCase {
 		$home             = str_replace( 'http://', 'https://', $home );
 		$this->assertSame( $home, home_url() );
 
-
 		// Test with https in home
 		update_option( 'home', set_url_scheme( $home, 'https' ) );
 
 		// Pretend to be in the site admin
 		set_current_screen( 'dashboard' );
-		$home = get_option('home');
+		$home = get_option( 'home' );
 
 		// home_url() should return whatever scheme is set in the home option when in the admin
 		$_SERVER['HTTPS'] = 'on';
@@ -272,8 +271,9 @@ class Tests_URL extends WP_UnitTestCase {
 	}
 
 	function test_set_url_scheme() {
-		if ( ! function_exists( 'set_url_scheme' ) )
+		if ( ! function_exists( 'set_url_scheme' ) ) {
 			return;
+		}
 
 		$links = array(
 			'http://wordpress.org/',
@@ -300,11 +300,11 @@ class Tests_URL extends WP_UnitTestCase {
 			'/',
 			'/',
 			'/news/',
-			''
+			'',
 		);
 
 		$forced_admin = force_ssl_admin();
-		$i = 0;
+		$i            = 0;
 		foreach ( $links as $link ) {
 			$this->assertSame( $https_links[ $i ], set_url_scheme( $link, 'https' ) );
 			$this->assertSame( $http_links[ $i ], set_url_scheme( $link, 'http' ) );
@@ -335,13 +335,14 @@ class Tests_URL extends WP_UnitTestCase {
 	}
 
 	public function test_get_adjacent_post() {
-		$now = time();
-		$post_id = self::factory()->post->create( array( 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
+		$now      = time();
+		$post_id  = self::factory()->post->create( array( 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
 		$post_id2 = self::factory()->post->create( array( 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
 
-		if ( ! isset( $GLOBALS['post'] ) )
+		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;
-		$orig_post = $GLOBALS['post'];
+		}
+		$orig_post       = $GLOBALS['post'];
 		$GLOBALS['post'] = get_post( $post_id2 );
 
 		$p = get_adjacent_post();
@@ -369,13 +370,30 @@ class Tests_URL extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_return_private_posts_belonging_to_the_current_user() {
-		$u = self::factory()->user->create( array( 'role' => 'author' ) );
+		$u       = self::factory()->user->create( array( 'role' => 'author' ) );
 		$old_uid = get_current_user_id();
 		wp_set_current_user( $u );
 
 		$now = time();
-		$p1 = self::factory()->post->create( array( 'post_author' => $u, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
-		$p2 = self::factory()->post->create( array( 'post_author' => $u, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u,
+				'post_status' => 'private',
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now - 1
+				),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u,
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now
+				),
+			)
+		);
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;
@@ -395,14 +413,31 @@ class Tests_URL extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_return_private_posts_belonging_to_other_users_if_the_current_user_can_read_private_posts() {
-		$u1 = self::factory()->user->create( array( 'role' => 'author' ) );
-		$u2 = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$u1      = self::factory()->user->create( array( 'role' => 'author' ) );
+		$u2      = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		$old_uid = get_current_user_id();
 		wp_set_current_user( $u2 );
 
 		$now = time();
-		$p1 = self::factory()->post->create( array( 'post_author' => $u1, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
-		$p2 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_status' => 'private',
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now - 1
+				),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now
+				),
+			)
+		);
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;
@@ -422,15 +457,40 @@ class Tests_URL extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/30287
 	 */
 	public function test_get_adjacent_post_should_not_return_private_posts_belonging_to_other_users_if_the_current_user_cannot_read_private_posts() {
-		$u1 = self::factory()->user->create( array( 'role' => 'author' ) );
-		$u2 = self::factory()->user->create( array( 'role' => 'author' ) );
+		$u1      = self::factory()->user->create( array( 'role' => 'author' ) );
+		$u2      = self::factory()->user->create( array( 'role' => 'author' ) );
 		$old_uid = get_current_user_id();
 		wp_set_current_user( $u2 );
 
 		$now = time();
-		$p1 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now - 2 ) ) );
-		$p2 = self::factory()->post->create( array( 'post_author' => $u1, 'post_status' => 'private', 'post_date' => date( 'Y-m-d H:i:s', $now - 1 ) ) );
-		$p3 = self::factory()->post->create( array( 'post_author' => $u1, 'post_date' => date( 'Y-m-d H:i:s', $now ) ) );
+		$p1  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now - 2
+				),
+			)
+		);
+		$p2  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_status' => 'private',
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now - 1
+				),
+			)
+		);
+		$p3  = self::factory()->post->create(
+			array(
+				'post_author' => $u1,
+				'post_date'   => date(
+					'Y-m-d H:i:s',
+					$now
+				),
+			)
+		);
 
 		if ( ! isset( $GLOBALS['post'] ) ) {
 			$GLOBALS['post'] = null;

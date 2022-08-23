@@ -7,12 +7,12 @@ require_once ABSPATH . 'wp-admin/includes/dashboard.php';
  */
 class Tests_Admin_includesDashboard extends WP_UnitTestCase {
 	function set_up() {
-		add_filter( 'pre_http_request', [ $this, 'override_features_api_request' ], 10, 3 );
+		add_filter( 'pre_http_request', array( $this, 'override_features_api_request' ), 10, 3 );
 		parent::set_up();
 	}
 
 	function tear_down() {
-		remove_filter( 'pre_http_request', [ $this, 'override_features_api_request' ], 10 );
+		remove_filter( 'pre_http_request', array( $this, 'override_features_api_request' ), 10 );
 		parent::tear_down();
 	}
 
@@ -22,33 +22,33 @@ class Tests_Admin_includesDashboard extends WP_UnitTestCase {
 			return $preempt;
 		}
 
-		return [
-			'headers'       => [],
+		return array(
+			'headers'       => array(),
 			'body'          => file_get_contents(
 				dirname( dirname( __DIR__ ) ) . '/data/admin/features.json'
 			),
-			'response'      => [
+			'response'      => array(
 				'code'    => 200,
 				'message' => 'OK',
-			],
-			'cookies'       => [],
+			),
+			'cookies'       => array(),
 			'http_response' => null,
-		];
+		);
 	}
 
 	function get_cp_dashboard_petitions_output() {
 		// TODO copied from cp_dashboard_petitions()
-		$feeds = [
-			'trending' => [
+		$feeds = array(
+			'trending'    => array(
 				'title' => __( 'Trending' ),
-			],
-			'most-wanted' => [
+			),
+			'most-wanted' => array(
 				'title' => __( 'Most Wanted' ),
-			],
-			'recent' => [
+			),
+			'recent'      => array(
 				'title' => __( 'Recent' ),
-			],
-		];
+			),
+		);
 		ob_start();
 		cp_dashboard_petitions_output( 0, $feeds );
 		return ob_get_clean();

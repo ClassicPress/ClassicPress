@@ -5,7 +5,7 @@
  */
 class Tests_Functions extends WP_UnitTestCase {
 	function test_wp_parse_args_object() {
-		$x = new MockClass;
+		$x        = new MockClass;
 		$x->_baba = 5;
 		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$x->a     = array( 5, 111, 'x' );
@@ -13,7 +13,11 @@ class Tests_Functions extends WP_UnitTestCase {
 			array(
 				'_baba' => 5,
 				'yZ'    => 'baba',
-				'a'     => array( 5, 111, 'x' ),
+				'a'     => array(
+					5,
+					111,
+					'x',
+				),
 			),
 			wp_parse_args( $x )
 		);
@@ -21,27 +25,35 @@ class Tests_Functions extends WP_UnitTestCase {
 		$this->assertSame( array(), wp_parse_args( $y ) );
 	}
 
-	function test_wp_parse_args_array()  {
+	function test_wp_parse_args_array() {
 		// arrays
 		$a = array();
 		$this->assertSame( array(), wp_parse_args( $a ) );
 		$b = array(
 			'_baba' => 5,
 			'yZ'    => 'baba',
-			'a'     => array( 5, 111, 'x' ),
+			'a'     => array(
+				5,
+				111,
+				'x',
+			),
 		);
 		$this->assertSame(
 			array(
 				'_baba' => 5,
 				'yZ'    => 'baba',
-				'a'     => array( 5, 111, 'x' ),
+				'a'     => array(
+					5,
+					111,
+					'x',
+				),
 			),
 			wp_parse_args( $b )
 		);
 	}
 
 	function test_wp_parse_args_defaults() {
-		$x = new MockClass;
+		$x        = new MockClass;
 		$x->_baba = 5;
 		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$x->a     = array( 5, 111, 'x' );
@@ -51,7 +63,11 @@ class Tests_Functions extends WP_UnitTestCase {
 				'pu'    => 'bu',
 				'_baba' => 5,
 				'yZ'    => 'baba',
-				'a'     => array( 5, 111, 'x' ),
+				'a'     => array(
+					5,
+					111,
+					'x',
+				),
 			),
 			wp_parse_args( $x, $d )
 		);
@@ -60,7 +76,11 @@ class Tests_Functions extends WP_UnitTestCase {
 			array(
 				'_baba' => 5,
 				'yZ'    => 'baba',
-				'a'     => array( 5, 111, 'x' ),
+				'a'     => array(
+					5,
+					111,
+					'x',
+				),
 			),
 			wp_parse_args( $x, $e )
 		);
@@ -105,9 +125,10 @@ class Tests_Functions extends WP_UnitTestCase {
 			'C:\\',
 			'C:\\WINDOWS',
 			'\\\\sambashare\\foo',
-			);
-		foreach ($absolute_paths as $path)
-			$this->assertTrue( path_is_absolute($path), "path_is_absolute('$path') should return true" );
+		);
+		foreach ( $absolute_paths as $path ) {
+			$this->assertTrue( path_is_absolute( $path ), "path_is_absolute('$path') should return true" );
+		}
 	}
 
 	function test_path_is_not_absolute() {
@@ -122,9 +143,10 @@ class Tests_Functions extends WP_UnitTestCase {
 			'foo',
 			'FOO',
 			'..\\WINDOWS',
-			);
-		foreach ($relative_paths as $path)
-			$this->assertFalse( path_is_absolute($path), "path_is_absolute('$path') should return false" );
+		);
+		foreach ( $relative_paths as $path ) {
+			$this->assertFalse( path_is_absolute( $path ), "path_is_absolute('$path') should return false" );
+		}
 	}
 
 	/**
@@ -246,16 +268,6 @@ class Tests_Functions extends WP_UnitTestCase {
 			array( 'garbage:a:0:garbage;', false ),
 			array( 's:4:test;', false ),
 		);
-		foreach ( $cases as $case )
-			$this->assertTrue( is_serialized($case), "Serialized data: $case" );
-
-		$not_serialized = array(
-			'a string',
-			'garbage:a:0:garbage;',
-			's:4:test;'
-		);
-		foreach ( $not_serialized as $case )
-			$this->assertFalse( is_serialized($case), "Test data: $case" );
 	}
 
 	/**
@@ -378,7 +390,7 @@ class Tests_Functions extends WP_UnitTestCase {
 
 		foreach ( $frag_urls as $frag_url ) {
 			$_SERVER['REQUEST_URI'] = 'nothing';
-			$url = str_replace( '#frag', '', $frag_url );
+			$url                    = str_replace( '#frag', '', $frag_url );
 
 			$this->assertSame( "$url?foo=1#frag", add_query_arg( 'foo', '1', $frag_url ) );
 			$this->assertSame( "$url?foo=1#frag", add_query_arg( array( 'foo' => '1' ), $frag_url ) );
@@ -641,7 +653,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	 */
 	function test_device_can_upload( $user_agent, $expected ) {
 		$_SERVER['HTTP_USER_AGENT'] = $user_agent;
-		$actual = _device_can_upload();
+		$actual                     = _device_can_upload();
 		unset( $_SERVER['HTTP_USER_AGENT'] );
 		$this->assertSame( $expected, $actual );
 	}
@@ -756,10 +768,10 @@ class Tests_Functions extends WP_UnitTestCase {
 			'http://việtnam.icom.museum',
 			'ftp://127.0.0.1/',
 			'http://www.woo.com/video?v=exvUH2qKLTU',
-			'http://taco.com?burrito=enchilada#guac'
+			'http://taco.com?burrito=enchilada#guac',
 		);
 
-		$blob ="
+		$blob = '
 			http://woo.com/1,2,3,4,5,6/-1-2-3-4-/woo.html
 
 			http://this.com
@@ -819,7 +831,7 @@ class Tests_Functions extends WP_UnitTestCase {
 			http://www.woo.com/video?v=exvUH2qKLTU
 
 			http://taco.com?burrito=enchilada#guac
-		";
+		';
 
 		$urls = wp_extract_urls( $blob );
 		$this->assertNotEmpty( $urls );
@@ -834,13 +846,13 @@ class Tests_Functions extends WP_UnitTestCase {
 		$this->assertSame( $decoded, $urls );
 		$this->assertSame( $original_urls, $decoded );
 
-		$blob ="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+		$blob = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 			incididunt ut labore http://woo.com/1,2,3,4,5,6/-1-2-3-4-/woo.html et dolore magna aliqua.
 			Ut http://this.com enim ad minim veniam, quis nostrud exercitation 16.06. to 18.06.2014 ullamco http://127.0.0.1
 			laboris nisi ut aliquip ex http://www111.urwyeoweytwutreyytqytwetowteuiiu.com/?346236346326&amp;2134362574863.437 ea
 			commodo consequat. http://wordpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html Duis aute irure dolor in reprehenderit in voluptate
-			velit esse http://wordpress-core.com:8080/ cillum dolore eu fugiat nulla <A href=\"http://www.website.com:5000\">http://www.website.com:5000</B> pariatur. Excepteur sint occaecat cupidatat non proident,
-			sunt in culpa qui officia deserunt mollit http://wordpress-core/?346236346326&amp;2134362574863.437 anim id est laborum.";
+			velit esse http://wordpress-core.com:8080/ cillum dolore eu fugiat nulla <A href="http://www.website.com:5000">http://www.website.com:5000</B> pariatur. Excepteur sint occaecat cupidatat non proident,
+			sunt in culpa qui officia deserunt mollit http://wordpress-core/?346236346326&amp;2134362574863.437 anim id est laborum.';
 
 		$urls = wp_extract_urls( $blob );
 		$this->assertNotEmpty( $urls );
@@ -892,7 +904,7 @@ class Tests_Functions extends WP_UnitTestCase {
 		}
 
 		$eucjp = mb_convert_encoding( 'aあb', 'EUC-JP', 'UTF-8' );
-		$utf8 = mb_convert_encoding( $eucjp, 'UTF-8', 'EUC-JP' );
+		$utf8  = mb_convert_encoding( $eucjp, 'UTF-8', 'EUC-JP' );
 
 		$this->assertSame( 'aあb', $utf8 );
 
@@ -916,7 +928,7 @@ class Tests_Functions extends WP_UnitTestCase {
 		}
 
 		$eucjp = mb_convert_encoding( 'aあb', 'EUC-JP', 'UTF-8' );
-		$utf8 = mb_convert_encoding( $eucjp, 'UTF-8', 'EUC-JP' );
+		$utf8  = mb_convert_encoding( $eucjp, 'UTF-8', 'EUC-JP' );
 
 		$this->assertSame( 'aあb', $utf8 );
 
@@ -936,7 +948,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/28786
 	 */
 	function test_wp_json_encode_object() {
-		$object = new stdClass;
+		$object    = new stdClass;
 		$object->a = 'b';
 		$this->assertSame( wp_json_encode( $object ), '{"a":"b"}' );
 	}
@@ -963,9 +975,11 @@ class Tests_Functions extends WP_UnitTestCase {
 		$actual = ob_get_clean();
 		$this->assertEquals( '', $actual );
 
-		$GLOBALS['post']        = self::factory()->post->create_and_get( array(
-			'post_date' => '2015-09-16 08:00:00'
-		) );
+		$GLOBALS['post'] = self::factory()->post->create_and_get(
+			array(
+				'post_date' => '2015-09-16 08:00:00',
+			)
+		);
 
 		ob_start();
 		$GLOBALS['currentday']  = '18.09.15';
@@ -1011,7 +1025,7 @@ class Tests_Functions extends WP_UnitTestCase {
 			array( '2016-03-02T19:13:25', '2016-03-02 19:13:25' ),
 			array( '2016-03-02T19:13:00', '2016-03-02 19:13' ),
 			array( '2016-03-02T19:13:00', '16-03-02 19:13' ),
-			array( '2016-03-02T19:13:00', '16-03-02 19:13' )
+			array( '2016-03-02T19:13:00', '16-03-02 19:13' ),
 		);
 	}
 
@@ -1064,8 +1078,8 @@ class Tests_Functions extends WP_UnitTestCase {
 		}
 
 		$ini_limit_before = ini_get( 'memory_limit' );
-		$raised_limit = wp_raise_memory_limit();
-		$ini_limit_after = ini_get( 'memory_limit' );
+		$raised_limit     = wp_raise_memory_limit();
+		$ini_limit_after  = ini_get( 'memory_limit' );
 
 		$this->assertSame( $ini_limit_before, $ini_limit_after );
 		$this->assertFalse( $raised_limit );
@@ -1173,12 +1187,12 @@ class Tests_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'The fileinfo PHP extension is not loaded.' );
 		}
 
-		$file = DIR_TESTDATA . '/uploads/video-play.svg';
+		$file     = DIR_TESTDATA . '/uploads/video-play.svg';
 		$filename = 'video-play.svg';
 
 		$expected = array(
-			'ext' => 'svg',
-			'type' => 'image/svg+xml',
+			'ext'             => 'svg',
+			'type'            => 'image/svg+xml',
 			'proper_filename' => false,
 		);
 
@@ -1198,12 +1212,12 @@ class Tests_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'The fileinfo PHP extension is not loaded.' );
 		}
 
-		$file = DIR_TESTDATA . '/uploads/dashicons.woff';
+		$file     = DIR_TESTDATA . '/uploads/dashicons.woff';
 		$filename = 'dashicons.woff';
 
 		$expected = array(
-			'ext' => 'woff',
-			'type' => 'application/font-woff',
+			'ext'             => 'woff',
+			'type'            => 'application/font-woff',
 			'proper_filename' => false,
 		);
 
@@ -1266,8 +1280,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/images/canola.jpg',
 				'canola.jpg',
 				array(
-					'ext' => 'jpg',
-					'type' => 'image/jpeg',
+					'ext'             => 'jpg',
+					'type'            => 'image/jpeg',
 					'proper_filename' => false,
 				),
 			),
@@ -1276,8 +1290,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/images/test-image-mime-jpg.png',
 				'test-image-mime-jpg.png',
 				array(
-					'ext' => 'jpg',
-					'type' => 'image/jpeg',
+					'ext'             => 'jpg',
+					'type'            => 'image/jpeg',
 					'proper_filename' => 'test-image-mime-jpg.jpg',
 				),
 			),
@@ -1286,8 +1300,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/images/test-image-no-extension',
 				'test-image-no-extension',
 				array(
-					'ext' => false,
-					'type' => false,
+					'ext'             => false,
+					'type'            => false,
 					'proper_filename' => false,
 				),
 			),
@@ -1296,8 +1310,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/formatting/big5.txt',
 				'big5.jpg',
 				array(
-					'ext' => false,
-					'type' => false,
+					'ext'             => false,
+					'type'            => false,
 					'proper_filename' => false,
 				),
 			),
@@ -1306,8 +1320,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/export/crazy-cdata.xml',
 				'crazy-cdata.xml',
 				array(
-					'ext' => false,
-					'type' => false,
+					'ext'             => false,
+					'type'            => false,
 					'proper_filename' => false,
 				),
 			),
@@ -1316,8 +1330,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/export/crazy-cdata.xml',
 				'crazy-cdata.jpg',
 				array(
-					'ext' => false,
-					'type' => false,
+					'ext'             => false,
+					'type'            => false,
 					'proper_filename' => false,
 				),
 			),
@@ -1326,8 +1340,8 @@ class Tests_Functions extends WP_UnitTestCase {
 				DIR_TESTDATA . '/export/crazy-cdata.xml',
 				'crazy-cdata.doc',
 				array(
-					'ext' => false,
-					'type' => false,
+					'ext'             => false,
+					'type'            => false,
 					'proper_filename' => false,
 				),
 			),
@@ -1363,8 +1377,8 @@ class Tests_Functions extends WP_UnitTestCase {
 						DIR_TESTDATA . '/formatting/big5.txt',
 						'big5.txt',
 						array(
-							'ext' => 'txt',
-							'type' => 'text/plain',
+							'ext'             => 'txt',
+							'type'            => 'text/plain',
 							'proper_filename' => false,
 						),
 					),
@@ -1373,8 +1387,8 @@ class Tests_Functions extends WP_UnitTestCase {
 						DIR_TESTDATA . '/uploads/pages-to-word.docx',
 						'pages-to-word.docx',
 						array(
-							'ext' => 'docx',
-							'type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+							'ext'             => 'docx',
+							'type'            => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 							'proper_filename' => false,
 						),
 					),
@@ -1383,8 +1397,8 @@ class Tests_Functions extends WP_UnitTestCase {
 						DIR_TESTDATA . '/uploads/small-audio.flac',
 						'small-audio.flac',
 						array(
-							'ext' => 'flac',
-							'type' => 'audio/flac',
+							'ext'             => 'flac',
+							'type'            => 'audio/flac',
 							'proper_filename' => false,
 						),
 					),
@@ -1571,7 +1585,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	/**
 	 * Test human_readable_duration().
 	 *
-	 * @ticket 39667
+	 * @ticket https://core.trac.wordpress.org/ticket/39667
 	 * @dataProvider data_test_human_readable_duration
 	 *
 	 * @param string $input    Duration.

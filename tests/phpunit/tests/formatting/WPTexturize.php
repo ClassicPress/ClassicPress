@@ -29,7 +29,6 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 
 		$invalid_nest = '<pre></code>"baba"</pre>';
 		$this->assertSame( $invalid_nest, wptexturize( $invalid_nest ) );
-
 	}
 
 	// https://core.trac.wordpress.org/ticket/1418
@@ -71,7 +70,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	function test_full_sentences_with_unmatched_single_quotes() {
 		$this->assertSame(
 			'That means every moment you&#8217;re working on something without it being in the public it&#8217;s actually dying.',
-			wptexturize("That means every moment you're working on something without it being in the public it's actually dying.")
+			wptexturize( "That means every moment you're working on something without it being in the public it's actually dying." )
 		);
 	}
 
@@ -285,20 +284,20 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 				"stop.$nbsp$nbsp&#8216;A quote after 2 spaces.&#8217;",
 			),
 			array(
-				"stop. &nbsp;\"A quote after 2 spaces.\"",
-				"stop. &nbsp;&#8220;A quote after 2 spaces.&#8221;",
+				'stop. &nbsp;"A quote after 2 spaces."',
+				'stop. &nbsp;&#8220;A quote after 2 spaces.&#8221;',
 			),
 			array(
-				"stop.&nbsp;&nbsp;\"A quote after 2 spaces.\"",
-				"stop.&nbsp;&nbsp;&#8220;A quote after 2 spaces.&#8221;",
+				'stop.&nbsp;&nbsp;"A quote after 2 spaces."',
+				'stop.&nbsp;&nbsp;&#8220;A quote after 2 spaces.&#8221;',
 			),
 			array(
 				"stop. &nbsp;'A quote after 2 spaces.'",
-				"stop. &nbsp;&#8216;A quote after 2 spaces.&#8217;",
+				'stop. &nbsp;&#8216;A quote after 2 spaces.&#8217;',
 			),
 			array(
 				"stop.&nbsp;&nbsp;'A quote after 2 spaces.'",
-				"stop.&nbsp;&nbsp;&#8216;A quote after 2 spaces.&#8217;",
+				'stop.&nbsp;&nbsp;&#8216;A quote after 2 spaces.&#8217;',
 			),
 			array(
 				"Contraction: $pi's",
@@ -323,27 +322,27 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word '99 word",
-				"word &#8217;99 word",
+				'word &#8217;99 word',
 			),
 			array(
 				"word'99 word",
-				"word&#8217;99 word",
+				'word&#8217;99 word',
 			),
 			array(
 				"word '99word",
-				"word &#8217;99word",
+				'word &#8217;99word',
 			),
 			array(
 				"word'99word",
-				"word&#8217;99word",
+				'word&#8217;99word',
 			),
 			array(
 				"word '99&#8217;s word", // Appears as a separate but logically superfluous pattern in WP-3.8.
-				"word &#8217;99&#8217;s word",
+				'word &#8217;99&#8217;s word',
 			),
 			array(
 				"according to our source, '33 students scored less than 50' on the test.", // Apostrophes and primes have priority over quotes
-				"according to our source, &#8217;33 students scored less than 50&#8242; on the test.",
+				'according to our source, &#8217;33 students scored less than 50&#8242; on the test.',
 			),
 		);
 	}
@@ -364,15 +363,15 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word 'word word",
-				"word &#8216;word word",
+				'word &#8216;word word',
 			),
 			array(
 				"word ('word word",
-				"word (&#8216;word word",
+				'word (&#8216;word word',
 			),
 			array(
 				"word ['word word",
-				"word [&#8216;word word",
+				'word [&#8216;word word',
 			),
 			array(
 				"word <'word word", // Invalid HTML
@@ -380,27 +379,27 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word &lt;'word word", // Valid HTML input makes curly quotes.
-				"word &lt;&#8216;word word",
+				'word &lt;&#8216;word word',
 			),
 			array(
 				"word {'word word",
-				"word {&#8216;word word",
+				'word {&#8216;word word',
 			),
 			array(
 				"word \"'word word",
-				"word &#8220;&#8216;word word", // Two opening quotes
+				'word &#8220;&#8216;word word', // Two opening quotes
 			),
 			array(
 				"'word word",
-				"&#8216;word word",
+				'&#8216;word word',
 			),
 			array(
 				"word('word word",
-				"word(&#8216;word word",
+				'word(&#8216;word word',
 			),
 			array(
 				"word['word word",
-				"word[&#8216;word word",
+				'word[&#8216;word word',
 			),
 			array(
 				"word<'word word",
@@ -408,27 +407,27 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word&lt;'word word",
-				"word&lt;&#8216;word word",
+				'word&lt;&#8216;word word',
 			),
 			array(
 				"word{'word word",
-				"word{&#8216;word word",
+				'word{&#8216;word word',
 			),
 			array(
 				"word\"'word word",
-				"word&#8221;&#8216;word word", // Closing quote, then opening quote
+				'word&#8221;&#8216;word word', // Closing quote, then opening quote
 			),
 			array(
 				"word ' word word",
-				"word &#8216; word word",
+				'word &#8216; word word',
 			),
 			array(
 				"word (' word word",
-				"word (&#8216; word word",
+				'word (&#8216; word word',
 			),
 			array(
 				"word [' word word",
-				"word [&#8216; word word",
+				'word [&#8216; word word',
 			),
 			array(
 				"word <' word word",
@@ -436,27 +435,27 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word &lt;' word word",
-				"word &lt;&#8216; word word",
+				'word &lt;&#8216; word word',
 			),
 			array(
 				"word {' word word",
-				"word {&#8216; word word",
+				'word {&#8216; word word',
 			),
 			array(
 				"word \"' word word",
-				"word &#8220;&#8216; word word", // Two opening quotes
+				'word &#8220;&#8216; word word', // Two opening quotes
 			),
 			array(
 				"' word word",
-				"&#8216; word word",
+				'&#8216; word word',
 			),
 			array(
 				"word(' word word",
-				"word(&#8216; word word",
+				'word(&#8216; word word',
 			),
 			array(
 				"word[' word word",
-				"word[&#8216; word word",
+				'word[&#8216; word word',
 			),
 			array(
 				"word<' word word",
@@ -464,15 +463,15 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word&lt;' word word",
-				"word&lt;&#8216; word word",
+				'word&lt;&#8216; word word',
 			),
 			array(
 				"word{' word word",
-				"word{&#8216; word word",
+				'word{&#8216; word word',
 			),
 			array(
 				"word\"' word word",
-				"word&#8221;&#8216; word word", // Closing quote, then opening quote
+				'word&#8221;&#8216; word word', // Closing quote, then opening quote
 			),
 		);
 	}
@@ -526,19 +525,19 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word 99' word",
-				"word 99&#8242; word",
+				'word 99&#8242; word',
 			),
 			array(
 				"word 99'word", // Not a prime anymore. Apostrophes get priority.
-				"word 99&#8217;word",
+				'word 99&#8217;word',
 			),
 			array(
 				"word99' word",
-				"word99&#8242; word",
+				'word99&#8242; word',
 			),
 			array(
 				"word99'word", // Not a prime anymore.
-				"word99&#8217;word",
+				'word99&#8217;word',
 			),
 		);
 	}
@@ -559,7 +558,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word word's word",
-				"word word&#8217;s word",
+				'word word&#8217;s word',
 			),
 			array(
 				"word'[ word", // Apostrophes are never followed by opening punctuation.
@@ -579,7 +578,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word'< word", // Invalid HTML input does trigger the apos pattern.
-				"word&#8217;< word",
+				'word&#8217;< word',
 			),
 		);
 	}
@@ -766,75 +765,75 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word word' word",
-				"word word&#8217; word",
+				'word word&#8217; word',
 			),
 			array(
 				"word word'. word",
-				"word word&#8217;. word",
+				'word word&#8217;. word',
 			),
 			array(
 				"word word'.word",
-				"word word&#8217;.word",
+				'word word&#8217;.word',
 			),
 			array(
 				"word word', she said",
-				"word word&#8217;, she said",
+				'word word&#8217;, she said',
 			),
 			array(
 				"word word': word",
-				"word word&#8217;: word",
+				'word word&#8217;: word',
 			),
 			array(
 				"word word'; word",
-				"word word&#8217;; word",
+				'word word&#8217;; word',
 			),
 			array(
 				"word word'! word",
-				"word word&#8217;! word",
+				'word word&#8217;! word',
 			),
 			array(
 				"word word'? word",
-				"word word&#8217;? word",
+				'word word&#8217;? word',
 			),
 			array(
 				"word word'- word",
-				"word word&#8217;- word",
+				'word word&#8217;- word',
 			),
 			array(
 				"word word') word",
-				"word word&#8217;) word",
+				'word word&#8217;) word',
 			),
 			array(
 				"word word'} word",
-				"word word&#8217;} word",
+				'word word&#8217;} word',
 			),
 			array(
 				"word word'] word",
-				"word word&#8217;] word",
+				'word word&#8217;] word',
 			),
 			array(
 				"word word'&gt; word",
-				"word word&#8217;&gt; word",
+				'word word&#8217;&gt; word',
 			),
 			array(
 				"word word'",
-				"word word&#8217;",
+				'word word&#8217;',
 			),
 			array(
 				"test sentence'.",
-				"test sentence&#8217;.",
+				'test sentence&#8217;.',
 			),
 			array(
 				"test sentence.'",
-				"test sentence.&#8217;",
+				'test sentence.&#8217;',
 			),
 			array(
 				"test sentence'. word",
-				"test sentence&#8217;. word",
+				'test sentence&#8217;. word',
 			),
 			array(
 				"test sentence.' word",
-				"test sentence.&#8217; word",
+				'test sentence.&#8217; word',
 			),
 		);
 	}
@@ -854,37 +853,37 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	function data_multiplication() {
 		return array(
 			array(
-				"9x9",
-				"9&#215;9",
+				'9x9',
+				'9&#215;9',
 			),
 			array(
-				"12x34",
-				"12&#215;34",
+				'12x34',
+				'12&#215;34',
 			),
 			array(
-				"-123x1=-123",
-				"-123&#215;1=-123",
+				'-123x1=-123',
+				'-123&#215;1=-123',
 			),
 			// @see https://core.trac.wordpress.org/ticket/30445
 			array(
-				"-123x-1",
-				"-123x-1",
+				'-123x-1',
+				'-123x-1',
 			),
 			array(
-				"0.675x1=0.675",
-				"0.675&#215;1=0.675",
+				'0.675x1=0.675',
+				'0.675&#215;1=0.675',
 			),
 			array(
-				"9 x 9",
-				"9 x 9",
+				'9 x 9',
+				'9 x 9',
 			),
 			array(
-				"0x70",
-				"0x70",
+				'0x70',
+				'0x70',
 			),
 			array(
-				"3x2x1x0",
-				"3x2x1x0",
+				'3x2x1x0',
+				'3x2x1x0',
 			),
 		);
 	}
@@ -904,52 +903,52 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	function data_ampersand() {
 		return array(
 			array(
-				"word & word",
-				"word &#038; word",
+				'word & word',
+				'word &#038; word',
 			),
 			array(
-				"word&word",
-				"word&#038;word",
+				'word&word',
+				'word&#038;word',
 			),
 			array(
-				"word &nbsp; word",
-				"word &nbsp; word",
+				'word &nbsp; word',
+				'word &nbsp; word',
 			),
 			array(
-				"word &#038; word",
-				"word &#038; word",
+				'word &#038; word',
+				'word &#038; word',
 			),
 			array(
-				"word &#xabc; word",
-				"word &#xabc; word",
+				'word &#xabc; word',
+				'word &#xabc; word',
 			),
 			array(
-				"word &#X394; word",
-				"word &#X394; word",
+				'word &#X394; word',
+				'word &#X394; word',
 			),
 			array(
-				"word &# word",
-				"word &#038;# word",
+				'word &# word',
+				'word &#038;# word',
 			),
 			array(
-				"word &44; word",
-				"word &44; word",
+				'word &44; word',
+				'word &44; word',
 			),
 			array(
-				"word &&amp; word",
-				"word &#038;&amp; word",
+				'word &&amp; word',
+				'word &#038;&amp; word',
 			),
 			array(
-				"word &!amp; word",
-				"word &#038;!amp; word",
+				'word &!amp; word',
+				'word &#038;!amp; word',
 			),
 			array(
-				"word &#",
-				"word &#038;#",
+				'word &#',
+				'word &#038;#',
 			),
 			array(
-				"word &",
-				"word &#038;",
+				'word &',
+				'word &#038;',
 			),
 		);
 	}
@@ -970,47 +969,47 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word 'tain't word",
-				"word &#8217;tain&#8217;t word",
+				'word &#8217;tain&#8217;t word',
 			),
 			array(
 				"word 'twere word",
-				"word &#8217;twere word",
+				'word &#8217;twere word',
 			),
 			array(
 				"word 'twas word",
-				"word &#8217;twas word",
+				'word &#8217;twas word',
 			),
 			array(
 				"word 'tis word",
-				"word &#8217;tis word",
+				'word &#8217;tis word',
 			),
 			array(
 				"word 'twill word",
-				"word &#8217;twill word",
+				'word &#8217;twill word',
 			),
 			array(
 				"word 'til word",
-				"word &#8217;til word",
+				'word &#8217;til word',
 			),
 			array(
 				"word 'bout word",
-				"word &#8217;bout word",
+				'word &#8217;bout word',
 			),
 			array(
 				"word 'nuff word",
-				"word &#8217;nuff word",
+				'word &#8217;nuff word',
 			),
 			array(
 				"word 'round word",
-				"word &#8217;round word",
+				'word &#8217;round word',
 			),
 			array(
 				"word 'cause word",
-				"word &#8217;cause word",
+				'word &#8217;cause word',
 			),
 			array(
 				"word 'em word",
-				"word &#8217;em word",
+				'word &#8217;em word',
 			),
 		);
 	}
@@ -1030,40 +1029,40 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	function data_smart_dashes() {
 		return array(
 			array(
-				"word --- word",
-				"word &#8212; word",
+				'word --- word',
+				'word &#8212; word',
 			),
 			array(
-				"word---word",
-				"word&#8212;word",
+				'word---word',
+				'word&#8212;word',
 			),
 			array(
-				"word -- word",
-				"word &#8212; word",
+				'word -- word',
+				'word &#8212; word',
 			),
 			array(
-				"word--word",
-				"word&#8211;word",
+				'word--word',
+				'word&#8211;word',
 			),
 			array(
-				"word - word",
-				"word &#8211; word",
+				'word - word',
+				'word &#8211; word',
 			),
 			array(
-				"word-word",
-				"word-word",
+				'word-word',
+				'word-word',
 			),
 			array(
-				"word xn&#8211; word",
-				"word xn&#8211; word",
+				'word xn&#8211; word',
+				'word xn&#8211; word',
 			),
 			array(
-				"wordxn&#8211;word",
-				"wordxn&#8211;word",
+				'wordxn&#8211;word',
+				'wordxn&#8211;word',
 			),
 			array(
-				"wordxn--word",
-				"wordxn--word",
+				'wordxn--word',
+				'wordxn--word',
 			),
 		);
 	}
@@ -1083,44 +1082,44 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	function data_misc_static_replacements() {
 		return array(
 			array(
-				"word ... word",
-				"word &#8230; word",
+				'word ... word',
+				'word &#8230; word',
 			),
 			array(
-				"word...word",
-				"word&#8230;word",
+				'word...word',
+				'word&#8230;word',
 			),
 			array(
-				"word `` word",
-				"word &#8220; word",
+				'word `` word',
+				'word &#8220; word',
 			),
 			array(
-				"word``word",
-				"word&#8220;word",
+				'word``word',
+				'word&#8220;word',
 			),
 			array(
 				"word '' word",
-				"word &#8221; word",
+				'word &#8221; word',
 			),
 			array(
 				"word''word",
-				"word&#8221;word",
+				'word&#8221;word',
 			),
 			array(
-				"word (tm) word",
-				"word &#8482; word",
+				'word (tm) word',
+				'word &#8482; word',
 			),
 			array(
-				"word (tm)word",
-				"word &#8482;word",
+				'word (tm)word',
+				'word &#8482;word',
 			),
 			array(
-				"word(tm) word",
-				"word(tm) word",
+				'word(tm) word',
+				'word(tm) word',
 			),
 			array(
-				"word(tm)word",
-				"word(tm)word",
+				'word(tm)word',
+				'word(tm)word',
 			),
 		);
 	}
@@ -1147,11 +1146,11 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word '42.00' word",
-				"word &#8216;42.00&#8217; word",
+				'word &#8216;42.00&#8217; word',
 			),
 			array(
 				"word '42.00'word",
-				"word &#8216;42.00&#8217;word",
+				'word &#8216;42.00&#8217;word',
 			),
 			array(
 				'word "42" word',
@@ -1167,11 +1166,11 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word '99's word",
-				"word &#8217;99&#8217;s word",
+				'word &#8217;99&#8217;s word',
 			),
 			array(
 				"word '99'samsonite",
-				"word &#8217;99&#8217;samsonite",
+				'word &#8217;99&#8217;samsonite',
 			),
 		);
 	}
@@ -1202,15 +1201,15 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word---'quote'",
-				"word&#8212;&#8216;quote&#8217;",
+				'word&#8212;&#8216;quote&#8217;',
 			),
 			array(
 				"word--'quote'",
-				"word&#8211;&#8216;quote&#8217;",
+				'word&#8211;&#8216;quote&#8217;',
 			),
 			array(
 				"word-'quote'",
-				"word-&#8216;quote&#8217;",
+				'word-&#8216;quote&#8217;',
 			),
 			array(
 				'"quote"---word',
@@ -1226,15 +1225,15 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"'quote'---word",
-				"&#8216;quote&#8217;&#8212;word",
+				'&#8216;quote&#8217;&#8212;word',
 			),
 			array(
 				"'quote'--word",
-				"&#8216;quote&#8217;&#8211;word",
+				'&#8216;quote&#8217;&#8211;word',
 			),
 			array(
 				"'quote'-word",
-				"&#8216;quote&#8217;-word",
+				'&#8216;quote&#8217;-word',
 			),
 		);
 	}
@@ -1277,7 +1276,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				'& <script>&&</script>',
-				'&#038; <script>&&</script>'
+				'&#038; <script>&&</script>',
 			),
 			array(
 				'[gallery ...]',
@@ -1476,75 +1475,75 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word '99 word",
-				"word &#8217;99 word",
+				'word &#8217;99 word',
 			),
 			array(
 				"word '99. word",
-				"word &#8217;99. word",
+				'word &#8217;99. word',
 			),
 			array(
 				"word '99, word",
-				"word &#8217;99, word",
+				'word &#8217;99, word',
 			),
 			array(
 				"word '99; word",
-				"word &#8217;99; word",
+				'word &#8217;99; word',
 			),
 			array(
 				"word '99' word", // For this pattern, prime doesn't make sense.  Should get apos and a closing quote.
-				"word &#8217;99&#8217; word",
+				'word &#8217;99&#8217; word',
 			),
 			array(
 				"word '99'. word",
-				"word &#8217;99&#8217;. word",
+				'word &#8217;99&#8217;. word',
 			),
 			array(
 				"word '99', word",
-				"word &#8217;99&#8217;, word",
+				'word &#8217;99&#8217;, word',
 			),
 			array(
 				"word '99.' word",
-				"word &#8217;99.&#8217; word",
+				'word &#8217;99.&#8217; word',
 			),
 			array(
 				"word '99",
-				"word &#8217;99",
+				'word &#8217;99',
 			),
 			array(
 				"'99 word",
-				"&#8217;99 word",
+				'&#8217;99 word',
 			),
 			array(
 				"word '999 word", // Does not match the apos pattern, should be opening quote.
-				"word &#8216;999 word",
+				'word &#8216;999 word',
 			),
 			array(
 				"word '99% word",
-				"word &#8216;99% word",
+				'word &#8216;99% word',
 			),
 			array(
 				"word '9 word",
-				"word &#8216;9 word",
+				'word &#8216;9 word',
 			),
 			array(
 				"word '99.9 word",
-				"word &#8216;99.9 word",
+				'word &#8216;99.9 word',
 			),
 			array(
 				"word '999",
-				"word &#8216;999",
+				'word &#8216;999',
 			),
 			array(
 				"word '9",
-				"word &#8216;9",
+				'word &#8216;9',
 			),
 			array(
 				"in '4 years, 3 months,' Obama cut the deficit",
-				"in &#8216;4 years, 3 months,&#8217; Obama cut the deficit",
+				'in &#8216;4 years, 3 months,&#8217; Obama cut the deficit',
 			),
 			array(
 				"testing's '4' through 'quotes'",
-				"testing&#8217;s &#8216;4&#8217; through &#8216;quotes&#8217;",
+				'testing&#8217;s &#8216;4&#8217; through &#8216;quotes&#8217;',
 			),
 		);
 	}
@@ -1569,23 +1568,31 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	function filter_translate( $translations, $text, $context, $domain ) {
-		switch ($text) {
-			case '&#8211;' : return '!endash!';
-			case '&#8212;' : return '!emdash!';
-			case '&#8216;' : return '!openq1!';
-			case '&#8217;' :
+		switch ( $text ) {
+			case '&#8211;':
+				return '!endash!';
+			case '&#8212;':
+				return '!emdash!';
+			case '&#8216;':
+				return '!openq1!';
+			case '&#8217;':
 				if ( 'apostrophe' == $context ) {
 					return '!apos!';
 				} else {
 					return '!closeq1!';
 				}
-			case '&#8220;' : return '!openq2!';
-			case '&#8221;' : return '!closeq2!';
-			case '&#8242;' : return '!prime1!';
-			case '&#8243;' : return '!prime2!';
-			case '&#8217;tain&#8217;t,&#8217;twere,&#8217;twas,&#8217;tis,&#8217;twill,&#8217;til,&#8217;bout,&#8217;nuff,&#8217;round,&#8217;cause,&#8217;em' :
+			case '&#8220;':
+				return '!openq2!';
+			case '&#8221;':
+				return '!closeq2!';
+			case '&#8242;':
+				return '!prime1!';
+			case '&#8243;':
+				return '!prime2!';
+			case '&#8217;tain&#8217;t,&#8217;twere,&#8217;twas,&#8217;tis,&#8217;twill,&#8217;til,&#8217;bout,&#8217;nuff,&#8217;round,&#8217;cause,&#8217;em':
 				return '!apos!tain!apos!t,!apos!twere,!apos!twas,!apos!tis,!apos!twill,!apos!til,!apos!bout,!apos!nuff,!apos!round,!apos!cause,!apos!em';
-			default : return $translations;
+			default:
+				return $translations;
 		}
 	}
 
@@ -1593,19 +1600,19 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"word '99 word",
-				"word !apos!99 word",
+				'word !apos!99 word',
 			),
 			array(
 				"word'99 word",
-				"word!apos!99 word",
+				'word!apos!99 word',
 			),
 			array(
 				"word 'test sentence' word",
-				"word !openq1!test sentence!closeq1! word",
+				'word !openq1!test sentence!closeq1! word',
 			),
 			array(
 				"'test sentence'",
-				"!openq1!test sentence!closeq1!",
+				'!openq1!test sentence!closeq1!',
 			),
 			array(
 				'word "test sentence" word',
@@ -1617,15 +1624,15 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word 'word word",
-				"word !openq1!word word",
+				'word !openq1!word word',
 			),
 			array(
 				"word ('word word",
-				"word (!openq1!word word",
+				'word (!openq1!word word',
 			),
 			array(
 				"word ['word word",
-				"word [!openq1!word word",
+				'word [!openq1!word word',
 			),
 			array(
 				'word 99" word',
@@ -1645,23 +1652,23 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word 99' word",
-				"word 99!prime1! word",
+				'word 99!prime1! word',
 			),
 			array(
 				"word99' word",
-				"word99!prime1! word",
+				'word99!prime1! word',
 			),
 			array(
 				"word word's word",
-				"word word!apos!s word",
+				'word word!apos!s word',
 			),
 			array(
 				"word word'. word",
-				"word word!closeq1!. word",
+				'word word!closeq1!. word',
 			),
 			array(
 				"word ]'. word",
-				"word ]!closeq1!. word",
+				'word ]!closeq1!. word',
 			),
 			array(
 				'word "word word',
@@ -1709,43 +1716,43 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word word' word",
-				"word word!closeq1! word",
+				'word word!closeq1! word',
 			),
 			array(
 				"word word'. word",
-				"word word!closeq1!. word",
+				'word word!closeq1!. word',
 			),
 			array(
 				"word word'.word",
-				"word word!closeq1!.word",
+				'word word!closeq1!.word',
 			),
 			array(
 				"word word'",
-				"word word!closeq1!",
+				'word word!closeq1!',
 			),
 			array(
 				"test sentence'.",
-				"test sentence!closeq1!.",
+				'test sentence!closeq1!.',
 			),
 			array(
 				"test sentence.'",
-				"test sentence.!closeq1!",
+				'test sentence.!closeq1!',
 			),
 			array(
 				"test sentence'. word",
-				"test sentence!closeq1!. word",
+				'test sentence!closeq1!. word',
 			),
 			array(
 				"test sentence.' word",
-				"test sentence.!closeq1! word",
+				'test sentence.!closeq1! word',
 			),
 			array(
 				"word 'tain't word",
-				"word !apos!tain!apos!t word",
+				'word !apos!tain!apos!t word',
 			),
 			array(
 				"word 'twere word",
-				"word !apos!twere word",
+				'word !apos!twere word',
 			),
 			array(
 				'word "42.00" word',
@@ -1753,19 +1760,19 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"word '42.00' word",
-				"word !openq1!42.00!closeq1! word",
+				'word !openq1!42.00!closeq1! word',
 			),
 			array(
 				"word word'. word",
-				"word word!closeq1!. word",
+				'word word!closeq1!. word',
 			),
 			array(
 				"word word'.word",
-				"word word!closeq1!.word",
+				'word word!closeq1!.word',
 			),
 			array(
 				"word word', she said",
-				"word word!closeq1!, she said",
+				'word word!closeq1!, she said',
 			),
 		);
 	}
@@ -1920,7 +1927,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 		return array(
 			array(
 				"George's porch is 99' long.",
-				"George&#8217;s porch is 99&#8242; long.",
+				'George&#8217;s porch is 99&#8242; long.',
 			),
 			array(
 				'The best year "was that time in 2012" when everyone partied, he said.',
@@ -1928,7 +1935,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"I need 4 x 20' = 80' of trim.", // Works only with a space before the = char.
-				"I need 4 x 20&#8242; = 80&#8242; of trim.",
+				'I need 4 x 20&#8242; = 80&#8242; of trim.',
 			),
 			array(
 				'"Lorem ipsum dolor sit amet 1234"',
@@ -1936,7 +1943,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"'Etiam eu egestas dui 1234'",
-				"&#8216;Etiam eu egestas dui 1234&#8217;",
+				'&#8216;Etiam eu egestas dui 1234&#8217;',
 			),
 			array(
 				'according to our source, "33% of all students scored less than 50" on the test.',
@@ -1944,7 +1951,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 			),
 			array(
 				"The doctor said, 'An average height is between 5' and 6' in study group 7'.  He then produced a 6' chart of averages.  A man of 7', incredibly, is very possible.",
-				"The doctor said, &#8216;An average height is between 5&#8242; and 6&#8242; in study group 7&#8217;.  He then produced a 6&#8242; chart of averages.  A man of 7&#8242;, incredibly, is very possible.",
+				'The doctor said, &#8216;An average height is between 5&#8242; and 6&#8242; in study group 7&#8217;.  He then produced a 6&#8242; chart of averages.  A man of 7&#8242;, incredibly, is very possible.',
 			),
 			array(
 				'Pirates have voted on "The Expendables 3" with their clicks -- and it turns out the Sylvester Stallone-starrer hasn\'t been astoundingly popular among digital thieves, relatively speaking.
@@ -1986,21 +1993,29 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 	}
 
 	function filter_translate2( $translations, $text, $context, $domain ) {
-		switch ($text) {
-			case '&#8211;' : return '!endash!';
-			case '&#8212;' : return '!emdash!';
-			case '&#8216;' : return '!q1!';
-			case '&#8217;' :
+		switch ( $text ) {
+			case '&#8211;':
+				return '!endash!';
+			case '&#8212;':
+				return '!emdash!';
+			case '&#8216;':
+				return '!q1!';
+			case '&#8217;':
 				if ( 'apostrophe' == $context ) {
 					return '!apos!';
 				} else {
 					return '!q1!';
 				}
-			case '&#8220;' : return '!q2!';
-			case '&#8221;' : return '!q2!';
-			case '&#8242;' : return '!prime1!';
-			case '&#8243;' : return '!prime2!';
-			default : return $translations;
+			case '&#8220;':
+				return '!q2!';
+			case '&#8221;':
+				return '!q2!';
+			case '&#8242;':
+				return '!prime1!';
+			case '&#8243;':
+				return '!prime2!';
+			default:
+				return $translations;
 		}
 	}
 
@@ -2008,7 +2023,7 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 		return array(
 			array(
 				"George's porch is 99' long.",
-				"George!apos!s porch is 99!prime1! long.",
+				'George!apos!s porch is 99!prime1! long.',
 			),
 			array(
 				'The best year "was that time in 2012" when everyone partied, he said.',
@@ -2016,7 +2031,7 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 			),
 			array(
 				"I need 4 x 20' = 80' of trim.", // Works only with a space before the = char.
-				"I need 4 x 20!prime1! = 80!prime1! of trim.",
+				'I need 4 x 20!prime1! = 80!prime1! of trim.',
 			),
 			array(
 				'"Lorem ipsum dolor sit amet 1234"',
@@ -2024,7 +2039,7 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 			),
 			array(
 				"'Etiam eu egestas dui 1234'",
-				"!q1!Etiam eu egestas dui 1234!q1!",
+				'!q1!Etiam eu egestas dui 1234!q1!',
 			),
 			array(
 				'according to our source, "33% of all students scored less than 50" on the test.',
@@ -2032,7 +2047,7 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 			),
 			array(
 				"The doctor said, 'An average height is between 5' and 6' in study group 7'.  He then produced a 6' chart of averages.  A man of 7', incredibly, is very possible.",
-				"The doctor said, !q1!An average height is between 5!prime1! and 6!prime1! in study group 7!q1!.  He then produced a 6!prime1! chart of averages.  A man of 7!prime1!, incredibly, is very possible.",
+				'The doctor said, !q1!An average height is between 5!prime1! and 6!prime1! in study group 7!q1!.  He then produced a 6!prime1! chart of averages.  A man of 7!prime1!, incredibly, is very possible.',
 			),
 			array(
 				'Pirates have voted on "The Expendables 3" with their clicks -- and it turns out the Sylvester Stallone-starrer hasn\'t been astoundingly popular among digital thieves, relatively speaking.
@@ -2063,14 +2078,14 @@ String with a number followed by a single quote !q1!Expendables 3!q1! vestibulum
 		global $shortcode_tags;
 
 		// With Shortcodes Disabled
-		$regex = _get_wptexturize_split_regex( );
+		$regex  = _get_wptexturize_split_regex();
 		$result = benchmark_pcre_backtracking( $regex, $input, 'split' );
 		$this->assertLessThan( 200, $result );
 
 		// With Shortcodes Enabled
 		$shortcode_regex = _get_wptexturize_shortcode_regex( array_keys( $shortcode_tags ) );
-		$regex = _get_wptexturize_split_regex( $shortcode_regex );
-		$result = benchmark_pcre_backtracking( $regex, $input, 'split' );
+		$regex           = _get_wptexturize_split_regex( $shortcode_regex );
+		$result          = benchmark_pcre_backtracking( $regex, $input, 'split' );
 		return $this->assertLessThan( 200, $result );
 	}
 
@@ -2084,7 +2099,7 @@ String with a number followed by a single quote !q1!Expendables 3!q1! vestibulum
 	}
 
 	function data_whole_posts() {
-		require_once( DIR_TESTDATA . '/formatting/whole-posts.php' );
+		require_once DIR_TESTDATA . '/formatting/whole-posts.php';
 		return data_whole_posts();
 	}
 }

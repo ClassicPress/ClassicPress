@@ -18,25 +18,24 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->author = new WP_User( $this->factory()->user->create( array( 'role' => 'editor' ) ) );
 
 		$post = array(
-			'post_author' => $this->author->ID,
-			'post_status' => 'publish',
+			'post_author'  => $this->author->ID,
+			'post_status'  => 'publish',
 			'post_content' => rand_str(),
-			'post_title' => rand_str(),
+			'post_title'   => rand_str(),
 		);
 
 		// insert a post
-		$this->post_id = wp_insert_post($post);
-
+		$this->post_id = wp_insert_post( $post );
 
 		$post = array(
-			'post_author' => $this->author->ID,
-			'post_status' => 'publish',
+			'post_author'  => $this->author->ID,
+			'post_status'  => 'publish',
 			'post_content' => rand_str(),
-			'post_title' => rand_str(),
+			'post_title'   => rand_str(),
 		);
 
 		// insert a post
-		$this->post_id_2 = wp_insert_post($post);
+		$this->post_id_2 = wp_insert_post( $post );
 	}
 
 	function test_unique_postmeta() {
@@ -44,17 +43,17 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertIsInt( add_post_meta( $this->post_id, 'unique', 'value', true ) );
 
 		// Check unique is enforced
-		$this->assertFalse(add_post_meta($this->post_id, 'unique', 'another value', true));
+		$this->assertFalse( add_post_meta( $this->post_id, 'unique', 'another value', true ) );
 
 		// Check it exists.
 		$this->assertSame( 'value', get_post_meta( $this->post_id, 'unique', true ) );
 		$this->assertSame( array( 'value' ), get_post_meta( $this->post_id, 'unique', false ) );
 
 		//Fail to delete the wrong value
-		$this->assertFalse(delete_post_meta($this->post_id, 'unique', 'wrong value'));
+		$this->assertFalse( delete_post_meta( $this->post_id, 'unique', 'wrong value' ) );
 
 		//Delete it
-		$this->assertTrue(delete_post_meta($this->post_id, 'unique', 'value'));
+		$this->assertTrue( delete_post_meta( $this->post_id, 'unique', 'value' ) );
 
 		// Check it is deleted.
 		$this->assertSame( '', get_post_meta( $this->post_id, 'unique', true ) );
@@ -72,10 +71,10 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( array( 'value', 'another value' ), get_post_meta( $this->post_id, 'nonunique', false ) );
 
 		//Fail to delete the wrong value
-		$this->assertFalse(delete_post_meta($this->post_id, 'nonunique', 'wrong value'));
+		$this->assertFalse( delete_post_meta( $this->post_id, 'nonunique', 'wrong value' ) );
 
 		//Delete the first one
-		$this->assertTrue(delete_post_meta($this->post_id, 'nonunique', 'value'));
+		$this->assertTrue( delete_post_meta( $this->post_id, 'nonunique', 'value' ) );
 
 		// Check the remainder exists.
 		$this->assertSame( 'another value', get_post_meta( $this->post_id, 'nonunique', true ) );
@@ -87,7 +86,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		//Check they exists
 		$expected = array(
 			'someother value',
-			'another value'
+			'another value',
 		);
 		sort( $expected );
 		$this->assertTrue( in_array( get_post_meta( $this->post_id, 'nonunique', true ), $expected ) );
@@ -96,7 +95,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( $expected, $actual );
 
 		//Delete the lot
-		$this->assertTrue(delete_post_meta_by_key('nonunique'));
+		$this->assertTrue( delete_post_meta_by_key( 'nonunique' ) );
 	}
 
 	function test_update_post_meta() {
@@ -114,9 +113,9 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( array( 'value', 'another value' ), get_post_meta( $this->post_id, 'nonunique_update', false ) );
 
 		// Update them
-		$this->assertTrue(update_post_meta($this->post_id, 'unique_update', 'new', 'value'));
-		$this->assertTrue(update_post_meta($this->post_id, 'nonunique_update', 'new', 'value'));
-		$this->assertTrue(update_post_meta($this->post_id, 'nonunique_update', 'another new', 'another value'));
+		$this->assertTrue( update_post_meta( $this->post_id, 'unique_update', 'new', 'value' ) );
+		$this->assertTrue( update_post_meta( $this->post_id, 'nonunique_update', 'new', 'value' ) );
+		$this->assertTrue( update_post_meta( $this->post_id, 'nonunique_update', 'another new', 'another value' ) );
 
 		// Check they updated.
 		$this->assertSame( 'new', get_post_meta( $this->post_id, 'unique_update', true ) );
@@ -136,7 +135,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( 'value', get_post_meta( $this->post_id_2, 'unique_delete', true ) );
 
 		//Delete one of them
-		$this->assertTrue(delete_post_meta($this->post_id, 'unique_delete', 'value'));
+		$this->assertTrue( delete_post_meta( $this->post_id, 'unique_delete', 'value' ) );
 
 		// Check the other still exists.
 		$this->assertSame( 'value', get_post_meta( $this->post_id_2, 'unique_delete', true ) );
@@ -152,7 +151,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$this->assertSame( 'value', get_post_meta( $this->post_id_2, 'unique_delete_by_key', true ) );
 
 		//Delete one of them
-		$this->assertTrue(delete_post_meta_by_key('unique_delete_by_key'));
+		$this->assertTrue( delete_post_meta_by_key( 'unique_delete_by_key' ) );
 
 		//Check the other still exists
 		$this->assertSame( '', get_post_meta( $this->post_id_2, 'unique_delete_by_key', true ) );
@@ -163,10 +162,10 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$mid = add_post_meta( $this->post_id, 'get_post_meta_by_key', 'get_post_meta_by_key_value', true );
 		$this->assertIsInt( $mid );
 
-		$mobj = new stdClass;
-		$mobj->meta_id = $mid;
-		$mobj->post_id = $this->post_id;
-		$mobj->meta_key = 'get_post_meta_by_key';
+		$mobj             = new stdClass;
+		$mobj->meta_id    = $mid;
+		$mobj->post_id    = $this->post_id;
+		$mobj->meta_key   = 'get_post_meta_by_key';
 		$mobj->meta_value = 'get_post_meta_by_key_value';
 		$this->assertEquals( $mobj, get_post_meta_by_id( $mid ) );
 		delete_metadata_by_mid( 'post', $mid );
@@ -228,21 +227,21 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/12860
 	 */
 	function test_funky_post_meta() {
-		$classy = new StdClass();
-		$classy->ID = 1;
-		$classy->stringy = "I love slashes\\\\";
-		$funky_meta[] = $classy;
+		$classy          = new StdClass();
+		$classy->ID      = 1;
+		$classy->stringy = 'I love slashes\\\\';
+		$funky_meta[]    = $classy;
 
-		$classy = new StdClass();
-		$classy->ID = 2;
-		$classy->stringy = "I love slashes\\\\ more";
-		$funky_meta[] = $classy;
+		$classy          = new StdClass();
+		$classy->ID      = 2;
+		$classy->stringy = 'I love slashes\\\\ more';
+		$funky_meta[]    = $classy;
 
 		// Add a post meta item.
 		$this->assertIsInt( add_post_meta( $this->post_id, 'test_funky_post_meta', $funky_meta, true ) );
 
 		//Check they exists
-		$this->assertEquals($funky_meta, get_post_meta($this->post_id, 'test_funky_post_meta', true));
+		$this->assertEquals( $funky_meta, get_post_meta( $this->post_id, 'test_funky_post_meta', true ) );
 
 	}
 
@@ -305,5 +304,5 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 			array( 'page', 'registered_key2' ),
 			array( '', 'registered_key3' ),
 		);
-  	}
+	}
 }

@@ -6,7 +6,7 @@
  * @group upload
  * @group resize
  */
-require_once( dirname( __FILE__ ) . '/resize.php' );
+require_once dirname( __FILE__ ) . '/resize.php';
 
 class Test_Image_Resize_Imagick extends WP_Tests_Image_Resize_UnitTestCase {
 

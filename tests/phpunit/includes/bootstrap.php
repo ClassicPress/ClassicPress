@@ -6,8 +6,9 @@
 $config_file_path = dirname( dirname( __FILE__ ) );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.
-	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' )
+	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' ) {
 		$config_file_path = dirname( dirname( $config_file_path ) );
+	}
 }
 $config_file_path .= '/wp-tests-config.php';
 
@@ -75,14 +76,14 @@ if ( ! class_exists( 'Yoast\PHPUnitPolyfills\Autoload' ) ) {
 		) {
 			// Be tolerant to the path being provided including the filename.
 			if ( substr( $phpunit_polyfills_path, -29 ) !== 'phpunitpolyfills-autoload.php' ) {
-			$phpunit_polyfills_path = rtrim( $phpunit_polyfills_path, '/\\' );
+				$phpunit_polyfills_path = rtrim( $phpunit_polyfills_path, '/\\' );
 				$phpunit_polyfills_path = $phpunit_polyfills_path . '/phpunitpolyfills-autoload.php';
 			}
 
-				$phpunit_polyfills_autoloader = $phpunit_polyfills_path;
-			} else {
-				$phpunit_polyfills_error = true;
-			}
+			$phpunit_polyfills_autoloader = $phpunit_polyfills_path;
+		} else {
+			$phpunit_polyfills_error = true;
+		}
 	}
 
 	if ( $phpunit_polyfills_error || ! file_exists( $phpunit_polyfills_autoloader ) ) {
@@ -112,7 +113,7 @@ if ( ! class_exists( 'Yoast\PHPUnitPolyfills\Autoload' ) ) {
 				. ' version of PHPUnit or using a PHPUnit phar file, but the dependencies do need to be'
 				. ' installed whichever way the tests are run.' . PHP_EOL;
 		}
-	exit( 1 );
+		exit( 1 );
 	}
 
 	require_once $phpunit_polyfills_autoloader;
@@ -138,8 +139,8 @@ if ( class_exists( '\Yoast\PHPUnitPolyfills\Autoload' )
 		printf(
 			'Please ensure that the PHPUnit Polyfill installation in "%s" is updated to version %s or higher.' . PHP_EOL,
 			WP_TESTS_PHPUNIT_POLYFILLS_PATH,
-		$phpunit_polyfills_minimum_version
-	);
+			$phpunit_polyfills_minimum_version
+		);
 	} elseif ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
 		echo 'Please run `composer update -W` to install the latest version.' . PHP_EOL;
 	}
@@ -212,11 +213,11 @@ $PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
 
 // Should we run in multisite mode?
 $multisite = '1' == getenv( 'WP_MULTISITE' );
-$multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE') && WP_TESTS_MULTISITE );
+$multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE' ) && WP_TESTS_MULTISITE );
 $multisite = $multisite || ( defined( 'MULTISITE' ) && MULTISITE );
 
 // Override the PHPMailer
-require_once( dirname( __FILE__ ) . '/mock-mailer.php' );
+require_once dirname( __FILE__ ) . '/mock-mailer.php';
 $phpmailer = new MockPHPMailer( true );
 
 if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
@@ -234,12 +235,12 @@ if ( 0 !== $retval ) {
 }
 
 if ( $multisite ) {
-	echo "Running as multisite..." . PHP_EOL;
+	echo 'Running as multisite...' . PHP_EOL;
 	defined( 'MULTISITE' ) or define( 'MULTISITE', true );
 	defined( 'SUBDOMAIN_INSTALL' ) or define( 'SUBDOMAIN_INSTALL', false );
 	$GLOBALS['base'] = '/';
 } else {
-	echo "Running as single site... To run multisite, use -c tests/phpunit/multisite.xml" . PHP_EOL;
+	echo 'Running as single site... To run multisite, use -c tests/phpunit/multisite.xml' . PHP_EOL;
 }
 unset( $multisite );
 
@@ -249,14 +250,14 @@ tests_add_filter( 'wp_die_handler', '_wp_die_handler_filter' );
 
 // Preset ClassicPress options defined in bootstrap file.
 // Used to activate themes, plugins, as well as  other settings.
-if(isset($GLOBALS['wp_tests_options'])) {
+if ( isset( $GLOBALS['wp_tests_options'] ) ) {
 	function wp_tests_options( $value ) {
 		$key = substr( current_filter(), strlen( 'pre_option_' ) );
-		return $GLOBALS['wp_tests_options'][$key];
+		return $GLOBALS['wp_tests_options'][ $key ];
 	}
 
 	foreach ( array_keys( $GLOBALS['wp_tests_options'] ) as $key ) {
-		tests_add_filter( 'pre_option_'.$key, 'wp_tests_options' );
+		tests_add_filter( 'pre_option_' . $key, 'wp_tests_options' );
 	}
 }
 
@@ -295,11 +296,10 @@ require __DIR__ . '/spy-rest-server.php';
  * how you call phpunit has no effect.
  */
 class WP_PHPUnit_Util_Getopt {
-
 	function __construct( $argv ) {
 		$skipped_groups = array(
-			'ajax' => true,
-			'ms-files' => true,
+			'ajax'          => true,
+			'ms-files'      => true,
 			'external-http' => true,
 		);
 
@@ -314,12 +314,7 @@ class WP_PHPUnit_Util_Getopt {
 					}
 					continue 2;
 				case '--group':
-					$groups = explode( ',', $value );
-					foreach ( $groups as $group ) {
-						if ( is_numeric( $group ) || preg_match( '/^(UT|Plugin)\d+$/', $group ) ) {
-							WP_UnitTestCase::forceTicket( $group );
-						}
-					}
+					$groups = explode( ',', $option[1] );
 
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						if ( in_array( $group_name, $groups ) ) {
@@ -341,7 +336,6 @@ class WP_PHPUnit_Util_Getopt {
 			echo 'If this changeset includes changes to HTTP, make sure there are no timeouts.' . PHP_EOL;
 			echo PHP_EOL;
 		}
-    }
-
+	}
 }
 new WP_PHPUnit_Util_Getopt( $_SERVER['argv'] );

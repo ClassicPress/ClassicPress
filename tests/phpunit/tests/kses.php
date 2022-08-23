@@ -15,7 +15,7 @@ class Tests_Kses extends WP_UnitTestCase {
 
 		$attributes = array(
 			'class' => 'classname',
-			'id' => 'id',
+			'id'    => 'id',
 			'style' => 'color: red;',
 			'style' => 'color: red',
 			'style' => 'color: red; text-align:center',
@@ -24,7 +24,7 @@ class Tests_Kses extends WP_UnitTestCase {
 		);
 
 		foreach ( $attributes as $name => $value ) {
-			$string = "<address $name='$value'>1 ClassicPress Avenue, The Internet.</address>";
+			$string        = "<address $name='$value'>1 ClassicPress Avenue, The Internet.</address>";
 			$expect_string = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 ClassicPress Avenue, The Internet.</address>";
 			$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
@@ -37,19 +37,19 @@ class Tests_Kses extends WP_UnitTestCase {
 		global $allowedposttags;
 
 		$attributes = array(
-			'class' => 'classname',
-			'id' => 'id',
-			'style' => 'color: red;',
-			'title' => 'title',
-			'href' => 'http://example.com',
-			'rel' => 'related',
-			'rev' => 'revision',
-			'name' => 'name',
+			'class'  => 'classname',
+			'id'     => 'id',
+			'style'  => 'color: red;',
+			'title'  => 'title',
+			'href'   => 'http://example.com',
+			'rel'    => 'related',
+			'rev'    => 'revision',
+			'name'   => 'name',
 			'target' => '_blank',
 		);
 
 		foreach ( $attributes as $name => $value ) {
-			$string = "<a $name='$value'>I link this</a>";
+			$string        = "<a $name='$value'>I link this</a>";
 			$expect_string = "<a $name='" . trim( $value, ';' ) . "'>I link this</a>";
 			$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
@@ -63,13 +63,13 @@ class Tests_Kses extends WP_UnitTestCase {
 
 		$attributes = array(
 			'class' => 'classname',
-			'id' => 'id',
+			'id'    => 'id',
 			'style' => 'color: red;',
 			'title' => 'title',
 		);
 
 		foreach ( $attributes as $name => $value ) {
-			$string = "<abbr $name='$value'>WP</abbr>";
+			$string        = "<abbr $name='$value'>WP</abbr>";
 			$expect_string = "<abbr $name='" . trim( $value, ';' ) . "'>WP</abbr>";
 			$this->assertSame( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
@@ -205,32 +205,36 @@ EOF;
 		);
 		foreach ( $safe as $x ) {
 			$result = wp_kses_bad_protocol( wp_kses_normalize_entities( $x ), array( 'http', 'https', 'dummy' ) );
-			if ( $result != $x && $result != 'http://example.org/' )
+			if ( $result != $x && $result != 'http://example.org/' ) {
 				$this->fail( "wp_kses_bad_protocol incorrectly blocked $x" );
+			}
 		}
 	}
 
 	public function test_hackers_attacks() {
 		$xss = simplexml_load_file( DIR_TESTDATA . '/formatting/xssAttacks.xml' );
 		foreach ( $xss->attack as $attack ) {
-			if ( in_array( $attack->name, array( 'IMG Embedded commands 2', 'US-ASCII encoding', 'OBJECT w/Flash 2', 'Character Encoding Example' ) ) )
+			if ( in_array( $attack->name, array( 'IMG Embedded commands 2', 'US-ASCII encoding', 'OBJECT w/Flash 2', 'Character Encoding Example' ) ) ) {
 				continue;
+			}
 
 			$code = (string) $attack->code;
 
-			if ( $code == 'See Below' )
+			if ( $code == 'See Below' ) {
 				continue;
+			}
 
 			if ( substr( $code, 0, 4 ) == 'perl' ) {
-				$pos = strpos( $code, '"' ) + 1;
-				$code = substr( $code, $pos, strrpos($code, '"') - $pos );
+				$pos  = strpos( $code, '"' ) + 1;
+				$code = substr( $code, $pos, strrpos( $code, '"' ) - $pos );
 				$code = str_replace( '\0', "\0", $code );
 			}
 
 			$result = trim( wp_kses_data( $code ) );
 
-			if ( $result == '' || $result == 'XSS' || $result == 'alert("XSS");' || $result == "alert('XSS');" )
+			if ( $result == '' || $result == 'XSS' || $result == 'alert("XSS");' || $result == "alert('XSS');" ) {
 				continue;
+			}
 
 			switch ( $attack->name ) {
 				case 'XSS Locator':
@@ -342,10 +346,11 @@ EOF;
 	}
 
 	function _wp_kses_allowed_html_filter( $html, $context ) {
-		if ( 'post' == $context )
+		if ( 'post' == $context ) {
 			return array( 'a' => array( 'href' => true ) );
-		else
+		} else {
 			return array( 'a' => array( 'href' => false ) );
+		}
 	}
 
 	/**
@@ -356,7 +361,7 @@ EOF;
 
 		$this->assertSame( $allowedposttags, wp_kses_allowed_html( 'post' ) );
 
-		$tags = wp_kses_allowed_html( 'post' ) ;
+		$tags = wp_kses_allowed_html( 'post' );
 
 		foreach ( $tags as $tag ) {
 			$this->assertTrue( $tag['class'] );
@@ -379,10 +384,10 @@ EOF;
 
 		$custom_tags = array(
 			'a' => array(
-				'href' => true,
-				'rel' => true,
-				'rev' => true,
-				'name' => true,
+				'href'   => true,
+				'rel'    => true,
+				'rev'    => true,
+				'name'   => true,
 				'target' => true,
 			),
 		);
@@ -400,8 +405,8 @@ EOF;
 	}
 
 	function test_hyphenated_tag() {
-		$string = "<hyphenated-tag attribute=\"value\" otherattribute=\"value2\">Alot of hyphens.</hyphenated-tag>";
-		$custom_tags = array(
+		$string                 = '<hyphenated-tag attribute="value" otherattribute="value2">Alot of hyphens.</hyphenated-tag>';
+		$custom_tags            = array(
 			'hyphenated-tag' => array(
 				'attribute' => true,
 			),
@@ -601,7 +606,7 @@ EOF;
 			),
 			array(
 				'<a title="hello"disabled href=# id=\'my_id\'>',
-				array( '<a ', 'title="hello"', 'disabled ', 'href=# ', "id='my_id'", ">" ),
+				array( '<a ', 'title="hello"', 'disabled ', 'href=# ', "id='my_id'", '>' ),
 			),
 			array(
 				'<a     >',
@@ -722,7 +727,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_no_attributes_allowed_with_empty_array() {
-		$element = 'foo';
+		$element   = 'foo';
 		$attribute = 'title="foo" class="bar"';
 
 		$this->assertSame( "<{$element}>", wp_kses_attr( $element, $attribute, array( 'foo' => array() ), array() ) );
@@ -732,7 +737,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_no_attributes_allowed_with_true() {
-		$element = 'foo';
+		$element   = 'foo';
 		$attribute = 'title="foo" class="bar"';
 
 		$this->assertSame( "<{$element}>", wp_kses_attr( $element, $attribute, array( 'foo' => true ), array() ) );
@@ -742,7 +747,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/40680
 	 */
 	function test_wp_kses_attr_single_attribute_is_allowed() {
-		$element = 'foo';
+		$element   = 'foo';
 		$attribute = 'title="foo" class="bar"';
 
 		$this->assertSame( "<{$element} title=\"foo\">", wp_kses_attr( $element, $attribute, array( 'foo' => array( 'title' => true ) ), array() ) );

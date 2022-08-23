@@ -5,7 +5,7 @@
  */
 class Tests_Formatting_SanitizeUser extends WP_UnitTestCase {
 	function test_strips_html() {
-		$input = "Captain <strong>Awesome</strong>";
+		$input    = 'Captain <strong>Awesome</strong>';
 		$expected = is_multisite() ? 'captain awesome' : 'Captain Awesome';
 		$this->assertSame( $expected, sanitize_user( $input ) );
 	}

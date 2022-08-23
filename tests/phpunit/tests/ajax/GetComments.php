@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax comment functionality
@@ -30,8 +30,8 @@ class Tests_Ajax_GetComments extends WP_Ajax_UnitTestCase {
 	protected static $comment_ids = array();
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$comment_post = $factory->post->create_and_get();
-		self::$comment_ids = $factory->comment->create_post_comments( self::$comment_post->ID, 5 );
+		self::$comment_post    = $factory->post->create_and_get();
+		self::$comment_ids     = $factory->comment->create_post_comments( self::$comment_post->ID, 5 );
 		self::$no_comment_post = $factory->post->create_and_get();
 	}
 

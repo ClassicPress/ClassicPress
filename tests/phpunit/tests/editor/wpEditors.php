@@ -9,14 +9,17 @@ if ( ! class_exists( '_WP_Editors', false ) ) {
  */
 class Tests_WP_Editors extends WP_UnitTestCase {
 	public function wp_link_query_callback( $results ) {
-		return array_merge( $results, array(
+		return array_merge(
+			$results,
 			array(
-				'ID'        => 123,
-				'title'     => 'foo',
-				'permalink' => 'bar',
-				'info'      => 'baz',
-			),
-		) );
+				array(
+					'ID'        => 123,
+					'title'     => 'foo',
+					'permalink' => 'bar',
+					'info'      => 'baz',
+				),
+			)
+		);
 	}
 
 	public function test_wp_link_query_returns_false_when_nothing_found() {
@@ -36,7 +39,7 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 					'title'     => $post->post_title,
 					'permalink' => get_permalink( $post->ID ),
 					'info'      => mysql2date( __( 'Y/m/d' ), $post->post_date ),
-				)
+				),
 			),
 			$actual
 		);
@@ -57,7 +60,7 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 					'title'     => 'foo',
 					'permalink' => 'bar',
 					'info'      => 'baz',
-				)
+				),
 			),
 			$actual
 		);
@@ -83,7 +86,7 @@ class Tests_WP_Editors extends WP_UnitTestCase {
 					'title'     => 'foo',
 					'permalink' => 'bar',
 					'info'      => 'baz',
-				)
+				),
 			),
 			$actual
 		);

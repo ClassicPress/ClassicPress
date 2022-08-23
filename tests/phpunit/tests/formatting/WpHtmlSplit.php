@@ -41,13 +41,13 @@ class Tests_Formatting_WpHtmlSplit extends WP_UnitTestCase {
 	 * @dataProvider data_whole_posts
 	 */
 	function test_pcre_performance( $input ) {
-		$regex = get_html_split_regex();
+		$regex  = get_html_split_regex();
 		$result = benchmark_pcre_backtracking( $regex, $input, 'split' );
 		return $this->assertLessThan( 200, $result );
 	}
 
 	function data_whole_posts() {
-		require_once( DIR_TESTDATA . '/formatting/whole-posts.php' );
+		require_once DIR_TESTDATA . '/formatting/whole-posts.php';
 		return data_whole_posts();
 	}
 }

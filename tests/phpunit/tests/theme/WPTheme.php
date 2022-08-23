@@ -7,12 +7,12 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 		parent::set_up();
 		$this->theme_root = realpath( DIR_TESTDATA . '/themedir1' );
 
-		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
+		$this->orig_theme_dir            = $GLOBALS['wp_theme_directories'];
 		$GLOBALS['wp_theme_directories'] = array( $this->theme_root );
 
-		add_filter('theme_root', array($this, '_theme_root'));
-		add_filter( 'stylesheet_root', array($this, '_theme_root') );
-		add_filter( 'template_root', array($this, '_theme_root') );
+		add_filter( 'theme_root', array( $this, '_theme_root' ) );
+		add_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
+		add_filter( 'template_root', array( $this, '_theme_root' ) );
 		// clear caches
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
@@ -20,16 +20,16 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 
 	public function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
-		remove_filter('theme_root', array($this, '_theme_root'));
-		remove_filter( 'stylesheet_root', array($this, '_theme_root') );
-		remove_filter( 'template_root', array($this, '_theme_root') );
+		remove_filter( 'theme_root', array( $this, '_theme_root' ) );
+		remove_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
+		remove_filter( 'template_root', array( $this, '_theme_root' ) );
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
 		parent::tear_down();
 	}
 
 	// replace the normal theme root dir with our premade test dir
-	function _theme_root($dir) {
+	function _theme_root( $dir ) {
 		return $this->theme_root;
 	}
 	function test_new_WP_Theme_top_level() {
@@ -144,7 +144,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/40820
 	 */
 	function test_child_theme_with_itself_as_parent_should_appear_as_broken() {
-		$theme = new WP_Theme( 'child-parent-itself', $this->theme_root );
+		$theme  = new WP_Theme( 'child-parent-itself', $this->theme_root );
 		$errors = $theme->errors();
 		$this->assertWPError( $errors );
 		$this->assertSame( 'theme_child_invalid', $errors->get_error_code() );
@@ -158,7 +158,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	 * @group ms-required
 	 */
 	function test_wp_theme_network_enable_single_theme() {
-		$theme = 'testtheme-1';
+		$theme                  = 'testtheme-1';
 		$current_allowed_themes = get_site_option( 'allowedthemes' );
 		WP_Theme::network_enable_theme( $theme );
 		$new_allowed_themes = get_site_option( 'allowedthemes' );
@@ -175,12 +175,18 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	 * @group ms-required
 	 */
 	function test_wp_theme_network_enable_multiple_themes() {
-		$themes = array( 'testtheme-2', 'testtheme-3' );
+		$themes                 = array( 'testtheme-2', 'testtheme-3' );
 		$current_allowed_themes = get_site_option( 'allowedthemes' );
 		WP_Theme::network_enable_theme( $themes );
 		$new_allowed_themes = get_site_option( 'allowedthemes' );
 		update_site_option( 'allowedthemes', $current_allowed_themes ); // reset previous value.
-		$current_allowed_themes = array_merge( $current_allowed_themes, array( 'testtheme-2' => true, 'testtheme-3' => true ) );
+		$current_allowed_themes = array_merge(
+			$current_allowed_themes,
+			array(
+				'testtheme-2' => true,
+				'testtheme-3' => true,
+			)
+		);
 
 		$this->assertSameSetsWithIndex( $current_allowed_themes, $new_allowed_themes );
 	}
@@ -194,7 +200,11 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	function test_network_disable_single_theme() {
 		$current_allowed_themes = get_site_option( 'allowedthemes' );
 
-		$allowed_themes = array( 'existing-1' => true, 'existing-2' => true, 'existing-3' => true );
+		$allowed_themes = array(
+			'existing-1' => true,
+			'existing-2' => true,
+			'existing-3' => true,
+		);
 		update_site_option( 'allowedthemes', $allowed_themes );
 
 		$disable_theme = 'existing-2';
@@ -215,7 +225,11 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	function test_network_disable_multiple_themes() {
 		$current_allowed_themes = get_site_option( 'allowedthemes' );
 
-		$allowed_themes = array( 'existing-4' => true, 'existing-5' => true, 'existing-6' => true );
+		$allowed_themes = array(
+			'existing-4' => true,
+			'existing-5' => true,
+			'existing-6' => true,
+		);
 		update_site_option( 'allowedthemes', $allowed_themes );
 
 		$disable_themes = array( 'existing-4', 'existing-5' );

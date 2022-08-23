@@ -16,7 +16,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 	public function set_up() {
 		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
 
-		include_once( DIR_TESTDATA . '/../includes/mock-image-editor.php' );
+		include_once DIR_TESTDATA . '/../includes/mock-image-editor.php';
 
 		// This needs to come after the mock image editor class is loaded.
 		parent::set_up();
@@ -68,7 +68,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 
 		// Get an editor
 		$editor = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
-		$editor->set_mime_type( "image/jpeg" ); // Ensure mime-specific filters act properly.
+		$editor->set_mime_type( 'image/jpeg' ); // Ensure mime-specific filters act properly.
 
 		// Check default value.
 		$this->assertSame( 82, $editor->get_quality() );
@@ -89,7 +89,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		// Get a new editor to clear default quality state
 		unset( $editor );
 		$editor = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
-		$editor->set_mime_type( "image/jpeg" ); // Ensure mime-specific filters act properly.
+		$editor->set_mime_type( 'image/jpeg' ); // Ensure mime-specific filters act properly.
 
 		// Ensure jpeg_quality filter applies if it exists before editor instantiation.
 		$this->assertSame( 95, $editor->get_quality() );
@@ -117,10 +117,13 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 
 		$property = new ReflectionProperty( $editor, 'size' );
 		$property->setAccessible( true );
-		$property->setValue( $editor, array(
-			'height' => 50,
-			'width'  => 100
-		));
+		$property->setValue(
+			$editor,
+			array(
+				'height' => 50,
+				'width'  => 100,
+			)
+		);
 
 		// Test with no parameters.
 		$this->assertSame( 'canola-100x50.jpg', wp_basename( $editor->generate_filename() ) );
@@ -150,9 +153,9 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		$this->assertNull( $editor->get_size() );
 
 		// Set a size
-		$size = array(
+		$size     = array(
 			'height' => 50,
-			'width'  => 100
+			'width'  => 100,
 		);
 		$property = new ReflectionProperty( $editor, 'size' );
 		$property->setAccessible( true );
@@ -172,9 +175,9 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		$this->assertFalse( $editor->get_suffix() );
 
 		// Set a size
-		$size = array(
+		$size     = array(
 			'height' => 50,
-			'width'  => 100
+			'width'  => 100,
 		);
 		$property = new ReflectionProperty( $editor, 'size' );
 		$property->setAccessible( true );

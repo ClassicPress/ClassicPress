@@ -42,6 +42,48 @@
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<type>warning</type>
 	</rule>
+	<rule ref="WordPress.PHP.YodaConditions">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.WP.I18n">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.Arrays.ArrayIndentation">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.DateTime.RestrictedFunctions">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidFunctionName">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQLPlaceholders">
+		<type>warning</type>
+	</rule>
+	<rule ref="WordPress.PHP.DontExtract">
+		<type>warning</type>
+	</rule>
+	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace">
+		<type>warning</type>
+	</rule>
+	<rule ref="Squiz.PHP.DisallowMultipleAssignments">
+		<type>warning</type>
+	</rule>
+	<rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
+		<type>warning</type>
+	</rule>
+	<rule ref="PEAR.NamingConventions.ValidClassName">
+		<type>warning</type>
+	</rule>
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment">
+		<type>warning</type>
+	</rule>
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
@@ -132,7 +174,6 @@
 	<exclude-pattern>/src/wp-includes/random_compat/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/Requests/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/SimplePie/*</exclude-pattern>
-	<exclude-pattern>/src/wp-includes/sodium_compat/*</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/Text/*</exclude-pattern>
 
 	<!-- Test data and fixtures. -->

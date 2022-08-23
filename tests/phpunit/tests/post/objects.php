@@ -52,9 +52,9 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 		// Make sure stdClass in $GLOBALS['post'] is handled
 		$post_std = $post->to_array();
 		$this->assertIsArray( $post_std );
-		$post_std = (object) $post_std;
+		$post_std        = (object) $post_std;
 		$GLOBALS['post'] = $post_std;
-		$post = get_post( null );
+		$post            = get_post( null );
 		$this->assertInstanceOf( 'WP_Post', $post );
 		$this->assertSame( $id, $post->ID );
 		unset( $GLOBALS['post'] );
@@ -67,8 +67,8 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 	}
 
 	function test_get_post_ancestors() {
-		$parent_id = self::factory()->post->create();
-		$child_id = self::factory()->post->create();
+		$parent_id     = self::factory()->post->create();
+		$child_id      = self::factory()->post->create();
 		$grandchild_id = self::factory()->post->create();
 		$updated       = wp_update_post(
 			array(
@@ -110,7 +110,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 
 	function test_get_post_category_property() {
 		$post_id = self::factory()->post->create();
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$this->assertIsArray( $post->post_category );
 		$this->assertSame( 1, count( $post->post_category ) );
@@ -129,7 +129,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 
 	function test_get_tags_input_property() {
 		$post_id = self::factory()->post->create();
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$this->assertIsArray( $post->tags_input );
 		$this->assertEmpty( $post->tags_input );
@@ -146,7 +146,7 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 
 	function test_get_page_template_property() {
 		$post_id = self::factory()->post->create();
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 
 		$this->assertIsString( $post->page_template );
 		$template = get_post_meta( $post->ID, '_wp_page_template', true );
@@ -158,9 +158,13 @@ class Tests_Post_Objects extends WP_UnitTestCase {
 	}
 
 	function test_get_post_filter() {
-		$post = get_post( self::factory()->post->create( array(
-			'post_title' => "Mary's home"
-		) ) );
+		$post = get_post(
+			self::factory()->post->create(
+				array(
+					'post_title' => "Mary's home",
+				)
+			)
+		);
 
 		$this->assertSame( 'raw', $post->filter );
 		$this->assertIsInt( $post->post_parent );

@@ -17,27 +17,27 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 			'GET',
 			'/wp/v2/testroute',
 			array(
-				'args'     => array(
-					'someinteger'     => array(
-						'type'        => 'integer',
+				'args' => array(
+					'someinteger' => array(
+						'type' => 'integer',
 					),
-					'someboolean'     => array(
-						'type'        => 'boolean',
+					'someboolean' => array(
+						'type' => 'boolean',
 					),
-					'somestring'      => array(
-						'type'        => 'string',
+					'somestring'  => array(
+						'type' => 'string',
 					),
-					'someenum'        => array(
-						'type'        => 'string',
-						'enum'        => array( 'a' ),
+					'someenum'    => array(
+						'type' => 'string',
+						'enum' => array( 'a' ),
 					),
-					'somedate'        => array(
-						'type'        => 'string',
-						'format'      => 'date-time',
+					'somedate'    => array(
+						'type'   => 'string',
+						'format' => 'date-time',
 					),
-					'someemail'       => array(
-						'type'        => 'string',
-						'format'      => 'email',
+					'someemail'   => array(
+						'type'   => 'string',
+						'format' => 'email',
 					),
 				),
 			)

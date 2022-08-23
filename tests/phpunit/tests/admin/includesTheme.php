@@ -8,12 +8,12 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 		parent::set_up();
 		$this->theme_root = DIR_TESTDATA . '/themedir1';
 
-		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
+		$this->orig_theme_dir            = $GLOBALS['wp_theme_directories'];
 		$GLOBALS['wp_theme_directories'] = array( WP_CONTENT_DIR . '/themes', $this->theme_root );
 
-		add_filter('theme_root', array($this, '_theme_root'));
-		add_filter( 'stylesheet_root', array($this, '_theme_root') );
-		add_filter( 'template_root', array($this, '_theme_root') );
+		add_filter( 'theme_root', array( $this, '_theme_root' ) );
+		add_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
+		add_filter( 'template_root', array( $this, '_theme_root' ) );
 
 		// clear caches
 		wp_clean_themes_cache();
@@ -22,9 +22,9 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 	function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
-		remove_filter('theme_root', array($this, '_theme_root'));
-		remove_filter( 'stylesheet_root', array($this, '_theme_root') );
-		remove_filter( 'template_root', array($this, '_theme_root') );
+		remove_filter( 'theme_root', array( $this, '_theme_root' ) );
+		remove_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
+		remove_filter( 'template_root', array( $this, '_theme_root' ) );
 
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
@@ -32,7 +32,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 	}
 
 	// replace the normal theme root dir with our premade test dir
-	function _theme_root($dir) {
+	function _theme_root( $dir ) {
 		return $this->theme_root;
 	}
 
@@ -109,21 +109,20 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		$this->assertSameSetsWithIndex(
 			array(
-				'No Trailing Period' => '38766/no-trailing-period-post-types.php',
-				'Trailing Period.' => '38766/trailing-period-post-types.php',
-				'Trailing Comma,' => '38766/trailing-comma-post-types.php',
+				'No Trailing Period'            => '38766/no-trailing-period-post-types.php',
+				'Trailing Period.'              => '38766/trailing-period-post-types.php',
+				'Trailing Comma,'               => '38766/trailing-comma-post-types.php',
 				'Trailing Period, White Space.' => '38766/trailing-period-whitespace-post-types.php',
 				'Trailing White Space, Period.' => '38766/trailing-whitespace-period-post-types.php',
-				'Tilde in Post Type.' => '38766/tilde-post-types.php',
+				'Tilde in Post Type.'           => '38766/tilde-post-types.php',
 			),
 			get_page_templates( null, 'period' )
 		);
-
 		$this->assertSameSetsWithIndex(
 			array(
-				'No Trailing Period' => '38766/no-trailing-period-post-types.php',
-				'Trailing Period.' => '38766/trailing-period-post-types.php',
-				'Trailing Comma,' => '38766/trailing-comma-post-types.php',
+				'No Trailing Period'            => '38766/no-trailing-period-post-types.php',
+				'Trailing Period.'              => '38766/trailing-period-post-types.php',
+				'Trailing Comma,'               => '38766/trailing-comma-post-types.php',
 				'Trailing Period, White Space.' => '38766/trailing-period-whitespace-post-types.php',
 				'Trailing White Space, Period.' => '38766/trailing-whitespace-period-post-types.php',
 			),
@@ -181,7 +180,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		$post_templates = $theme->get_post_templates();
 
-		$this->assertSameSetsWithIndex(
+		$this->assertEqualSetsWithIndex(
 			array(
 				'template-top-level-post-types.php'            => 'Top Level',
 				'subdir/template-sub-dir-post-types.php'       => 'Sub Dir',

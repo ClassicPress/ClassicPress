@@ -6,7 +6,7 @@
  * @group upload
  * @group resize
  */
-require_once( dirname( __FILE__ ) . '/resize.php' );
+require_once dirname( __FILE__ ) . '/resize.php';
 
 class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 
@@ -30,7 +30,7 @@ class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 	 */
 	public function test_resize_bad_image() {
 
-		$image = $this->resize_helper( DIR_TESTDATA.'/export/crazy-cdata.xml', 25, 25 );
+		$image = $this->resize_helper( DIR_TESTDATA . '/export/crazy-cdata.xml', 25, 25 );
 		$this->assertInstanceOf( 'WP_Error', $image );
 		$this->assertSame( 'invalid_image', $image->get_error_code() );
 	}

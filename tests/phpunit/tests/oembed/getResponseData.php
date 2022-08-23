@@ -13,9 +13,11 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	}
 
 	function test_get_oembed_response_data() {
-		$post = self::factory()->post->create_and_get( array(
-			'post_title' => 'Some Post',
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_title' => 'Some Post',
+			)
+		);
 
 		$data = get_oembed_response_data( $post, 400 );
 
@@ -40,14 +42,18 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	 * Test get_oembed_response_data with an author.
 	 */
 	function test_get_oembed_response_data_author() {
-		$user_id = self::factory()->user->create( array(
-			'display_name' => 'John Doe',
-		) );
+		$user_id = self::factory()->user->create(
+			array(
+				'display_name' => 'John Doe',
+			)
+		);
 
-		$post = self::factory()->post->create_and_get( array(
-			'post_title'  => 'Some Post',
-			'post_author' => $user_id,
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_title'  => 'Some Post',
+				'post_author' => $user_id,
+			)
+		);
 
 		$data = get_oembed_response_data( $post, 400 );
 
@@ -71,9 +77,11 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	function test_get_oembed_response_link() {
 		remove_filter( 'oembed_response_data', 'get_oembed_response_data_rich' );
 
-		$post = self::factory()->post->create_and_get( array(
-			'post_title' => 'Some Post',
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_title' => 'Some Post',
+			)
+		);
 
 		$data = get_oembed_response_data( $post, 600 );
 
@@ -94,26 +102,32 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	}
 
 	function test_get_oembed_response_data_with_draft_post() {
-		$post = self::factory()->post->create_and_get( array(
-			'post_status' => 'draft',
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'draft',
+			)
+		);
 
 		$this->assertFalse( get_oembed_response_data( $post, 100 ) );
 	}
 
 	function test_get_oembed_response_data_with_scheduled_post() {
-		$post = self::factory()->post->create_and_get( array(
-			'post_status' => 'future',
-			'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'future',
+				'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
+			)
+		);
 
 		$this->assertFalse( get_oembed_response_data( $post, 100 ) );
 	}
 
 	function test_get_oembed_response_data_with_private_post() {
-		$post = self::factory()->post->create_and_get( array(
-			'post_status' => 'private',
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'private',
+			)
+		);
 
 		$this->assertFalse( get_oembed_response_data( $post, 100 ) );
 	}
@@ -153,9 +167,13 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	function test_get_oembed_response_data_with_thumbnail() {
 		$post          = self::factory()->post->create_and_get();
 		$file          = DIR_TESTDATA . '/images/canola.jpg';
-		$attachment_id = self::factory()->attachment->create_object( $file, $post->ID, array(
-			'post_mime_type' => 'image/jpeg',
-		) );
+		$attachment_id = self::factory()->attachment->create_object(
+			$file,
+			$post->ID,
+			array(
+				'post_mime_type' => 'image/jpeg',
+			)
+		);
 		set_post_thumbnail( $post, $attachment_id );
 
 		$data = get_oembed_response_data( $post, 400 );
@@ -169,9 +187,13 @@ class Tests_oEmbed_Response_Data extends WP_UnitTestCase {
 	function test_get_oembed_response_data_for_attachment() {
 		$parent = self::factory()->post->create();
 		$file   = DIR_TESTDATA . '/images/canola.jpg';
-		$post   = self::factory()->attachment->create_object( $file, $parent, array(
-			'post_mime_type' => 'image/jpeg',
-		) );
+		$post   = self::factory()->attachment->create_object(
+			$file,
+			$parent,
+			array(
+				'post_mime_type' => 'image/jpeg',
+			)
+		);
 
 		$data = get_oembed_response_data( $post, 400 );
 

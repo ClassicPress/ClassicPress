@@ -14,11 +14,14 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 	public function test_get_preview_post_link_should_add_additional_query_vars() {
 		$post = self::factory()->post->create();
 
-		$expected = add_query_arg( array(
-			'foo'     => 'bar',
-			'bar'     => 'baz',
-			'preview' => 'true',
-		), get_permalink( $post ) );
+		$expected = add_query_arg(
+			array(
+				'foo'     => 'bar',
+				'bar'     => 'baz',
+				'preview' => 'true',
+			),
+			get_permalink( $post )
+		);
 
 		$this->assertSame(
 			$expected,
@@ -65,13 +68,18 @@ class Tests_Link_GetPreviewPostLink extends WP_UnitTestCase {
 	}
 
 	public function test_get_preview_post_link_should_return_empty_string_for_non_viewable_post_type() {
-		$post_type = register_post_type( 'non_viewable_cpt', array(
-			'public' => false,
-		) );
+		$post_type = register_post_type(
+			'non_viewable_cpt',
+			array(
+				'public' => false,
+			)
+		);
 
-		$post = self::factory()->post->create( array(
-			'post_type' => $post_type->name
-		) );
+		$post = self::factory()->post->create(
+			array(
+				'post_type' => $post_type->name,
+			)
+		);
 
 		$this->assertSame( '', get_preview_post_link( $post ) );
 	}

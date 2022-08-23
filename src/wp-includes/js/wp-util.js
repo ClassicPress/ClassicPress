@@ -32,10 +32,27 @@ window.wp = window.wp || {};
 			};
 
 		return function ( data ) {
-			compiled = compiled || _.template( $( '#tmpl-' + id ).html(),  options );
-			return compiled( data );
+			try {
+				compiled = compiled || _.template( $( '#tmpl-' + id ).html(), options );
+				return compiled( data );
+			} catch ( originalError ) {
+				var err = new Error(
+					'"' + originalError.message + '" ' +
+					'when compiling wp.template( \'' + id + '\' ). ' +
+					'See wp.template.errorData for more information.'
+				);
+				wp.template.errorData.push( {
+					errorMessage: err.message,
+					originalError: originalError,
+					themeId: id,
+					elementId: '#tmpl-' + id,
+					templateHTML: $( '#tmpl-' + id ).html()
+				} );
+				throw err;
+			}
 		};
 	});
+	wp.template.errorData = [];
 
 	// wp.ajax
 	// ------

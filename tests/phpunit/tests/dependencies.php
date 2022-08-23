@@ -7,70 +7,70 @@ class Tests_Dependencies extends WP_UnitTestCase {
 	function test_add() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
-		$this->assertInstanceOf('_WP_Dependency', $dep->query( 'one' ));
-		$this->assertInstanceOf('_WP_Dependency', $dep->query( 'two' ));
+		$this->assertInstanceOf( '_WP_Dependency', $dep->query( 'one' ) );
+		$this->assertInstanceOf( '_WP_Dependency', $dep->query( 'two' ) );
 
 		//Cannot reuse names
-		$this->assertFalse($dep->add( 'one', '' ));
+		$this->assertFalse( $dep->add( 'one', '' ) );
 	}
 
 	function test_remove() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
 		$dep->remove( 'one' );
 
-		$this->assertFalse($dep->query( 'one'));
-		$this->assertInstanceOf('_WP_Dependency', $dep->query( 'two' ));
+		$this->assertFalse( $dep->query( 'one' ) );
+		$this->assertInstanceOf( '_WP_Dependency', $dep->query( 'two' ) );
 
 	}
 
 	function test_enqueue() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
-		$this->assertFalse($dep->query( 'one', 'queue' ));
-		$dep->enqueue('one');
-		$this->assertTrue($dep->query( 'one', 'queue' ));
-		$this->assertFalse($dep->query( 'two', 'queue' ));
+		$this->assertFalse( $dep->query( 'one', 'queue' ) );
+		$dep->enqueue( 'one' );
+		$this->assertTrue( $dep->query( 'one', 'queue' ) );
+		$this->assertFalse( $dep->query( 'two', 'queue' ) );
 
-		$dep->enqueue('two');
-		$this->assertTrue($dep->query( 'one', 'queue' ));
-		$this->assertTrue($dep->query( 'two', 'queue' ));
+		$dep->enqueue( 'two' );
+		$this->assertTrue( $dep->query( 'one', 'queue' ) );
+		$this->assertTrue( $dep->query( 'two', 'queue' ) );
 	}
 
 	function test_dequeue() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
-		$dep->enqueue('one');
-		$dep->enqueue('two');
-		$this->assertTrue($dep->query( 'one', 'queue' ));
-		$this->assertTrue($dep->query( 'two', 'queue' ));
+		$dep->enqueue( 'one' );
+		$dep->enqueue( 'two' );
+		$this->assertTrue( $dep->query( 'one', 'queue' ) );
+		$this->assertTrue( $dep->query( 'two', 'queue' ) );
 
-		$dep->dequeue('one');
-		$this->assertFalse($dep->query( 'one', 'queue' ));
-		$this->assertTrue($dep->query( 'two', 'queue' ));
+		$dep->dequeue( 'one' );
+		$this->assertFalse( $dep->query( 'one', 'queue' ) );
+		$this->assertTrue( $dep->query( 'two', 'queue' ) );
 
-		$dep->dequeue('two');
-		$this->assertFalse($dep->query( 'one', 'queue' ));
-		$this->assertFalse($dep->query( 'two', 'queue' ));
+		$dep->dequeue( 'two' );
+		$this->assertFalse( $dep->query( 'one', 'queue' ) );
+		$this->assertFalse( $dep->query( 'two', 'queue' ) );
 	}
 
 	function test_enqueue_args() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
 		$this->assertFalse( $dep->query( 'one', 'queue' ) );
 		$dep->enqueue( 'one?arg' );
@@ -87,8 +87,8 @@ class Tests_Dependencies extends WP_UnitTestCase {
 	function test_dequeue_args() {
 		$dep = new WP_Dependencies;
 
-		$this->assertTrue($dep->add( 'one', '' ));
-		$this->assertTrue($dep->add( 'two', '' ));
+		$this->assertTrue( $dep->add( 'one', '' ) );
+		$this->assertTrue( $dep->add( 'two', '' ) );
 
 		$dep->enqueue( 'one?arg' );
 		$dep->enqueue( 'two?arg' );
@@ -97,15 +97,15 @@ class Tests_Dependencies extends WP_UnitTestCase {
 		$this->assertSame( 'arg', $dep->args['one'] );
 		$this->assertSame( 'arg', $dep->args['two'] );
 
-		$dep->dequeue('one');
-		$this->assertFalse($dep->query( 'one', 'queue' ));
-		$this->assertTrue($dep->query( 'two', 'queue' ));
-		$this->assertFalse(isset($dep->args['one']));
+		$dep->dequeue( 'one' );
+		$this->assertFalse( $dep->query( 'one', 'queue' ) );
+		$this->assertTrue( $dep->query( 'two', 'queue' ) );
+		$this->assertFalse( isset( $dep->args['one'] ) );
 
-		$dep->dequeue('two');
-		$this->assertFalse($dep->query( 'one', 'queue' ));
-		$this->assertFalse($dep->query( 'two', 'queue' ));
-		$this->assertFalse(isset($dep->args['two']));
+		$dep->dequeue( 'two' );
+		$this->assertFalse( $dep->query( 'one', 'queue' ) );
+		$this->assertFalse( $dep->query( 'two', 'queue' ) );
+		$this->assertFalse( isset( $dep->args['two'] ) );
 	}
 
 	/**

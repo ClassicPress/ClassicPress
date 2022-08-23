@@ -8,27 +8,27 @@ class Tests_Compat extends WP_UnitTestCase {
 	function utf8_string_lengths() {
 		return array(
 			//                     string, character_length, byte_length
-			array(                 'баба',                4,           8 ),
-			array(                  'баб',                3,           6 ),
-			array(          'I am your б',               11,          12 ),
-			array(           '1111111111',               10,          10 ),
-			array(           '²²²²²²²²²²',               10,          20 ),
-			array( '３３３３３３３３３３',               10,          30 ),
-			array(           '𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜',               10,          40 ),
-			array(      '1²３𝟜1²３𝟜1²３𝟜',               12,          30 ),
+			array( 'баба', 4, 8 ),
+			array( 'баб', 3, 6 ),
+			array( 'I am your б', 11, 12 ),
+			array( '1111111111', 10, 10 ),
+			array( '²²²²²²²²²²', 10, 20 ),
+			array( '３３３３３３３３３３', 10, 30 ),
+			array( '𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜𝟜', 10, 40 ),
+			array( '1²３𝟜1²３𝟜1²３𝟜', 12, 30 ),
 		);
 	}
 
 	function utf8_substrings() {
 		return array(
 			//               string, start, length, character_substring,   byte_substring
-			array(           'баба',     0,      3,               'баб',          "б\xD0" ),
-			array(           'баба',     0,     -1,               'баб',        "баб\xD0" ),
-			array(           'баба',     1,   null,               'аба',        "\xB1аба" ),
-			array(           'баба',    -3,   null,               'аба',          "\xB1а" ),
-			array(           'баба',    -3,      2,                'аб',       "\xB1\xD0" ),
-			array(           'баба',    -1,      2,                 'а',           "\xB0" ),
-			array( 'I am your баба',     0,     11,       'I am your б', "I am your \xD0" ),
+			array( 'баба', 0, 3, 'баб', "б\xD0" ),
+			array( 'баба', 0, -1, 'баб', "баб\xD0" ),
+			array( 'баба', 1, null, 'аба', "\xB1аба" ),
+			array( 'баба', -3, null, 'аба', "\xB1а" ),
+			array( 'баба', -3, 2, 'аб', "\xB1\xD0" ),
+			array( 'баба', -1, 2, 'а', "\xB0" ),
+			array( 'I am your баба', 0, 11, 'I am your б', "I am your \xD0" ),
 		);
 	}
 
@@ -78,10 +78,10 @@ class Tests_Compat extends WP_UnitTestCase {
 		$this->assertSame( $expected_byte_substring, _mb_substr( $string, $start, $length, '8bit' ) );
 	}
 
-	function test_mb_substr_phpcore(){
+	function test_mb_substr_phpcore() {
 		/* https://github.com/php/php-src/blob/php-5.6.8/ext/mbstring/tests/mb_substr_basic.phpt */
 		$string_ascii = 'ABCDEF';
-		$string_mb = base64_decode('5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=');
+		$string_mb    = base64_decode( '5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=' );
 
 		$this->assertSame( 'DEF', _mb_substr( $string_ascii, 3 ) );
 		$this->assertSame( 'DEF', _mb_substr( $string_ascii, 3, 5, 'ISO-8859-1' ) );
@@ -91,70 +91,70 @@ class Tests_Compat extends WP_UnitTestCase {
 		$this->assertSame( '6Kqe44OG44Kt44K544OI44Gn44GZ', base64_encode( _mb_substr( $string_mb, 2, 7, 'utf-8' ) ) );
 
 		/* https://github.com/php/php-src/blob/php-5.6.8/ext/mbstring/tests/mb_substr_variation1.phpt */
-		$start = 0;
-		$length = 5;
+		$start     = 0;
+		$length    = 5;
 		$unset_var = 10;
-		unset ($unset_var);
-		$heredoc = <<<EOT
+		unset( $unset_var );
+		$heredoc  = <<<EOT
 hello world
 EOT;
-		$inputs = array(
-		/*1*/  0,
-			   1,
-			   12345,
-			   -2345,
-			   // float data
-		/*5*/  10.5,
-			   -10.5,
-			   12.3456789000e10,
-			   12.3456789000E-10,
-			   .5,
-			   // null data
-		/*10*/ NULL,
-			   null,
-			   // boolean data
-		/*12*/ true,
-			   false,
-			   TRUE,
-			   FALSE,
-			   // empty data
-		/*16*/ "",
-			   '',
-			   // string data
-		/*18*/ "string",
-			   'string',
-			   $heredoc,
-			   // object data
-		/*21*/ new classA(),
-			   // undefined data
-		/*22*/ @$undefined_var,
-			   // unset data
-		/*23*/ @$unset_var,
+		$inputs   = array(
+			/*1*/  0,
+			1,
+			12345,
+			-2345,
+			// float data
+			/*5*/  10.5,
+			-10.5,
+			12.3456789000e10,
+			12.3456789000E-10,
+			.5,
+			// null data
+			/*10*/ null,
+			null,
+			// boolean data
+			/*12*/ true,
+			false,
+			true,
+			false,
+			// empty data
+			/*16*/ '',
+			'',
+			// string data
+			/*18*/ 'string',
+			'string',
+			$heredoc,
+			// object data
+			/*21*/ new classA(),
+			// undefined data
+			/*22*/ @$undefined_var,
+			// unset data
+			/*23*/ @$unset_var,
 		);
-		$outputs = array(
-			"0",
-			"1",
-			"12345",
-			"-2345",
-			"10.5",
-			"-10.5",
-			"12345",
-			"1.234",
-			"0.5",
-			"",
-			"",
-			"1",
-			"",
-			"1",
-			"",
-			"",
-			"",
-			"strin",
-			"strin",
-			"hello",
-			"Class",
-			"",
-			"",
+		$outputs  = array(
+			'0',
+			'1',
+			'12345',
+			'-2345',
+			'10.5',
+			'-10.5',
+			'12345',
+			'1.234',
+			'0.5',
+			'',
+			'',
+			'1',
+			'',
+			'1',
+			'',
+			'',
+			'',
+			'strin',
+			'strin',
+			'hello',
+			'Class',
+			'',
+			'',
 		);
 		$iterator = 0;
 
@@ -315,7 +315,7 @@ EOT;
 /* used in test_mb_substr_phpcore */
 class classA {
 	public function __toString() {
-		return "Class A object";
+		return 'Class A object';
 	}
 }
 

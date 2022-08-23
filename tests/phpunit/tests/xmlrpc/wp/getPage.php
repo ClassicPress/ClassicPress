@@ -7,15 +7,19 @@ class Tests_XMLRPC_wp_getPage extends WP_XMLRPC_UnitTestCase {
 	protected static $post_id;
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$post_id = $factory->post->create( array(
-			'post_type'   => 'page',
-			'post_author' => $factory->user->create( array(
-				'user_login' => 'author',
-				'user_pass'  => 'author',
-				'role'       => 'author'
-			) ),
-			'post_date'   => strftime( "%Y-%m-%d %H:%M:%S", strtotime( '+1 day' ) ),
-		) );
+		self::$post_id = $factory->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_author' => $factory->user->create(
+					array(
+						'user_login' => 'author',
+						'user_pass'  => 'author',
+						'role'       => 'author',
+					)
+				),
+				'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
+			)
+		);
 	}
 
 	function test_invalid_username_password() {

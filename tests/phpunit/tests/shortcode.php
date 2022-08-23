@@ -9,10 +9,11 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	function set_up() {
 		parent::set_up();
 
-		foreach ( $this->shortcodes as $shortcode )
+		foreach ( $this->shortcodes as $shortcode ) {
 			add_shortcode( $shortcode, array( $this, '_shortcode_' . str_replace( '-', '_', $shortcode ) ) );
+		}
 
-		$this->atts = null;
+		$this->atts    = null;
 		$this->content = null;
 		$this->tagname = null;
 
@@ -27,12 +28,12 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	function _shortcode_test_shortcode_tag( $atts, $content = null, $tagname = null ) {
-		$this->atts = $atts;
-		$this->content = $content;
-		$this->tagname = $tagname;
-		$this->filter_atts_out = null;
+		$this->atts              = $atts;
+		$this->content           = $content;
+		$this->tagname           = $tagname;
+		$this->filter_atts_out   = null;
 		$this->filter_atts_pairs = null;
-		$this->filter_atts_atts = null;
+		$this->filter_atts_atts  = null;
 	}
 
 	// [footag foo="bar"]
@@ -43,23 +44,30 @@ class Tests_Shortcode extends WP_UnitTestCase {
 
 	// [bartag foo="bar"]
 	function _shortcode_bartag( $atts ) {
-		extract(shortcode_atts(array(
-			'foo' => 'no foo',
-			'baz' => 'default baz',
-		), $atts, 'bartag'));
+		extract(
+			shortcode_atts(
+				array(
+					'foo' => 'no foo',
+					'baz' => 'default baz',
+				),
+				$atts,
+				'bartag'
+			)
+		);
 
 		return "foo = {$foo}";
 	}
 
 	// [baztag]content[/baztag]
 	function _shortcode_baztag( $atts, $content = '' ) {
-		return 'content = '.do_shortcode($content);
+		return 'content = ' . do_shortcode( $content );
 	}
 
 	function _shortcode_dumptag( $atts ) {
 		$out = '';
-		foreach ($atts as $k=>$v)
+		foreach ( $atts as $k => $v ) {
 			$out .= "$k = $v\n";
+		}
 		return $out;
 	}
 
@@ -139,16 +147,16 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/9405
 	 */
 	function test_attr_hyphen() {
-		do_shortcode('[test-shortcode-tag foo="foo" foo-bar="foo-bar" foo-bar-="foo-bar-" -foo-bar="-foo-bar" -foo-bar-="-foo-bar-" foo-bar-baz="foo-bar-baz" -foo-bar-baz="-foo-bar-baz" foo--bar="foo--bar" /]');
+		do_shortcode( '[test-shortcode-tag foo="foo" foo-bar="foo-bar" foo-bar-="foo-bar-" -foo-bar="-foo-bar" -foo-bar-="-foo-bar-" foo-bar-baz="foo-bar-baz" -foo-bar-baz="-foo-bar-baz" foo--bar="foo--bar" /]' );
 		$expected_attrs = array(
-			'foo' => 'foo',
-			'foo-bar' => 'foo-bar',
-			'foo-bar-' => 'foo-bar-',
-			'-foo-bar' => '-foo-bar',
-			'-foo-bar-' => '-foo-bar-',
-			'foo-bar-baz' => 'foo-bar-baz',
+			'foo'          => 'foo',
+			'foo-bar'      => 'foo-bar',
+			'foo-bar-'     => 'foo-bar-',
+			'-foo-bar'     => '-foo-bar',
+			'-foo-bar-'    => '-foo-bar-',
+			'foo-bar-baz'  => 'foo-bar-baz',
 			'-foo-bar-baz' => '-foo-bar-baz',
-			'foo--bar' => 'foo--bar',
+			'foo--bar'     => 'foo--bar',
 		);
 		$this->assertSame( $expected_attrs, $this->atts );
 	}
@@ -269,7 +277,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	function test_nested_tags() {
-		$out = do_shortcode('[baztag][dumptag abc="foo" def=123 https://wordpress.org/][/baztag]');
+		$out      = do_shortcode( '[baztag][dumptag abc="foo" def=123 https://wordpress.org/][/baztag]' );
 		$expected = "content = abc = foo\ndef = 123\n0 = https://wordpress.org\n";
 		$this->assertSame( $expected, $out );
 	}
@@ -311,7 +319,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	function test_mixed_tags() {
-		$in = <<<EOF
+		$in       = <<<EOF
 So this is a post with [footag foo="some stuff"] and a bunch of tags.
 
 [bartag]
@@ -430,21 +438,23 @@ EOF;
 
 	// Store passed in shortcode_atts_{$shortcode} args
 	function _filter_atts( $out, $pairs, $atts ) {
-		$this->filter_atts_out = $out;
+		$this->filter_atts_out   = $out;
 		$this->filter_atts_pairs = $pairs;
-		$this->filter_atts_atts = $atts;
+		$this->filter_atts_atts  = $atts;
 		return $out;
 	}
 
 	// Filter shortcode atts in various ways
 	function _filter_atts2( $out, $pairs, $atts ) {
 		// If foo attribute equals "foo1", change it to be default value
-		if ( isset( $out['foo'] ) && 'foo1' == $out['foo'] )
+		if ( isset( $out['foo'] ) && 'foo1' == $out['foo'] ) {
 			$out['foo'] = $pairs['foo'];
+		}
 
 		// If baz attribute is set, remove it
-		if ( isset( $out['baz'] ) )
+		if ( isset( $out['baz'] ) ) {
 			unset( $out['baz'] );
+		}
 
 		$this->filter_atts_out = $out;
 		return $out;
@@ -494,14 +504,14 @@ EOF;
 	function test_spaces_around_shortcodes() {
 		$nbsp = "\xC2\xA0";
 
-		$input  = array();
+		$input = array();
 
-		$input[] = "<p>[gallery ids=\"37,15,11\"]</p>";
-		$input[] = "<p> [gallery ids=\"37,15,11\"] </p>";
+		$input[] = '<p>[gallery ids="37,15,11"]</p>';
+		$input[] = '<p> [gallery ids="37,15,11"] </p>';
 		$input[] = "<p> {$nbsp}[gallery ids=\"37,15,11\"] {$nbsp}</p>";
-		$input[] = "<p> &nbsp;[gallery ids=\"37,15,11\"] &nbsp;</p>";
+		$input[] = '<p> &nbsp;[gallery ids="37,15,11"] &nbsp;</p>';
 
-		$output = "[gallery ids=\"37,15,11\"]";
+		$output = '[gallery ids="37,15,11"]';
 
 		foreach ( $input as $in ) {
 			$this->assertSame( $output, shortcode_unautop( $in ) );
@@ -726,21 +736,21 @@ EOF;
 	 * @dataProvider data_whole_posts
 	 */
 	function test_pcre_performance( $input ) {
-		$regex = '/' . get_shortcode_regex() . '/';
+		$regex  = '/' . get_shortcode_regex() . '/';
 		$result = benchmark_pcre_backtracking( $regex, $input, 'match_all' );
 		return $this->assertLessThan( 200, $result );
 	}
 
 	function data_whole_posts() {
-		require_once( DIR_TESTDATA . '/formatting/whole-posts.php' );
+		require_once DIR_TESTDATA . '/formatting/whole-posts.php';
 		return data_whole_posts();
 	}
 
 	function test_php_and_js_shortcode_attribute_regexes_match() {
 
-		$file = file_get_contents( ABSPATH . WPINC . '/js/shortcode.js' );
+		$file    = file_get_contents( ABSPATH . WPINC . '/js/shortcode.js' );
 		$matched = preg_match( '|\s+pattern = (\/.+\/)g;|', $file, $matches );
-		$php = get_shortcode_atts_regex();
+		$php     = get_shortcode_atts_regex();
 
 		$this->assertSame( 1, $matched );
 
@@ -755,7 +765,7 @@ EOF;
 	 * Test the (not recommended) [shortcode=XXX] format
 	 */
 	function test_unnamed_attribute() {
-		$out = do_shortcode('[dumptag=https://wordpress.org/]');
+		$out      = do_shortcode( '[dumptag=https://wordpress.org/]' );
 		$expected = "0 = =https://wordpress.org\n";
 		$this->assertSame( $expected, $out );
 	}
@@ -764,7 +774,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/36306
 	 */
 	function test_smilies_arent_converted() {
-		$out = apply_filters( 'the_content', '[img alt="Hello :-) World"]' );
+		$out      = apply_filters( 'the_content', '[img alt="Hello :-) World"]' );
 		$expected = "<img alt=\"Hello :-) World\" />\n";
 		$this->assertSame( $expected, $out );
 	}
@@ -791,17 +801,20 @@ EOF;
 
 		// pass arguments
 		$arr = array(
-			'return'	=> 'p11',
-			'key'			=> $str,
-			'atts' 		=> array( 'a'=>'b', 'c'=>'d' ),
-			'm'				=> array(
+			'return' => 'p11',
+			'key'    => $str,
+			'atts'   => array(
+				'a' => 'b',
+				'c' => 'd',
+			),
+			'm'      => array(
 				"[{$str} a='b' c='d']",
-				"",
+				'',
 				$str,
 				" a='b' c='d'",
-				"",
-				"",
-				"",
+				'',
+				'',
+				'',
 			),
 		);
 		add_filter( 'pre_do_shortcode_tag', array( $this, '_filter_pre_do_shortcode_tag_attr' ), 12, 4 );
@@ -826,7 +839,7 @@ EOF;
 		return 'p11';
 	}
 
-	public function _filter_pre_do_shortcode_tag_attr( $return, $key, $atts, $m ){
+	public function _filter_pre_do_shortcode_tag_attr( $return, $key, $atts, $m ) {
 		$arr = array(
 			'return' => $return,
 			'key'    => $key,
@@ -860,15 +873,18 @@ EOF;
 		$arr = array(
 			'return' => 'foobar',
 			'key'    => $str,
-			'atts'   => array( 'a' => 'b', 'c' => 'd' ),
+			'atts'   => array(
+				'a' => 'b',
+				'c' => 'd',
+			),
 			'm'      => array(
 				"[{$str} a='b' c='d']",
-				"",
+				'',
 				$str,
 				" a='b' c='d'",
-				"",
-				"",
-				"",
+				'',
+				'',
+				'',
 			),
 		);
 		add_filter( 'do_shortcode_tag', array( $this, '_filter_do_shortcode_tag_attr' ), 12, 4 );
@@ -893,7 +909,7 @@ EOF;
 		return 'foobar';
 	}
 
-	public function _filter_do_shortcode_tag_attr( $return, $key, $atts, $m ){
+	public function _filter_do_shortcode_tag_attr( $return, $key, $atts, $m ) {
 		$arr = array(
 			'return' => $return,
 			'key'    => $key,

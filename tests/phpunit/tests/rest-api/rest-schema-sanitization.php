@@ -13,7 +13,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_number() {
 		$schema = array(
-			'type'    => 'number',
+			'type' => 'number',
 		);
 		$this->assertEquals( 1, rest_sanitize_value_from_schema( 1, $schema ) );
 		$this->assertSame( 1.10, rest_sanitize_value_from_schema( '1.10', $schema ) );
@@ -58,7 +58,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_format_email() {
 		$schema = array(
-			'type'  => 'string',
+			'type'   => 'string',
 			'format' => 'email',
 		);
 		$this->assertSame( 'email@example.com', rest_sanitize_value_from_schema( 'email@example.com', $schema ) );
@@ -68,7 +68,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_format_ip() {
 		$schema = array(
-			'type'  => 'string',
+			'type'   => 'string',
 			'format' => 'ip',
 		);
 
@@ -79,7 +79,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'number',
 			),
@@ -90,9 +90,9 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array_nested() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
-				'type' => 'array',
+				'type'  => 'array',
 				'items' => array(
 					'type' => 'number',
 				),
@@ -104,7 +104,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array_as_csv() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'number',
 			),
@@ -139,7 +139,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array_is_associative() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'string',
 			),
@@ -161,19 +161,31 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type' => 'number'
+					'type' => 'number',
 				),
 			),
 		);
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => 1 ), $schema ) );
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1' ), $schema ) );
-		$this->assertEquals( array( 'a' => 1, 'b' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1', 'b' => 1 ), $schema ) );
+		$this->assertEquals(
+			array(
+				'a' => 1,
+				'b' => 1,
+			),
+			rest_sanitize_value_from_schema(
+				array(
+					'a' => '1',
+					'b' => 1,
+				),
+				$schema
+			)
+		);
 	}
 
 	public function test_type_object_strips_additional_properties() {
 		$schema = array(
-			'type'       => 'object',
-			'properties' => array(
+			'type'                 => 'object',
+			'properties'           => array(
 				'a' => array(
 					'type' => 'number',
 				),
@@ -182,20 +194,29 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 		);
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => 1 ), $schema ) );
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1' ), $schema ) );
-		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1', 'b' => 1 ), $schema ) );
+		$this->assertEquals(
+			array( 'a' => 1 ),
+			rest_sanitize_value_from_schema(
+				array(
+					'a' => '1',
+					'b' => 1,
+				),
+				$schema
+			)
+		);
 	}
 
 	public function test_type_object_nested() {
 		$schema = array(
-			'type' => 'object',
+			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type'  => 'object',
+					'type'       => 'object',
 					'properties' => array(
 						'b' => array( 'type' => 'number' ),
 						'c' => array( 'type' => 'number' ),
-					)
-				)
+					),
+				),
 			),
 		);
 
@@ -245,7 +266,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type' => 'number'
+					'type' => 'number',
 				),
 			),
 		);
