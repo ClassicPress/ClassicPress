@@ -28,18 +28,18 @@ if ( is_multisite() ) :
 
 		public static function wpSetUpBeforeClass( $factory ) {
 			self::$network_ids = array(
-				'wordpress.org/'         => array(
+				'wordpress.org/'      => array(
 					'domain' => 'wordpress.org',
-					'path' => '/',
+					'path'   => '/',
 				),
-				'make.wordpress.org/'    => array(
+				'make.wordpress.org/' => array(
 					'domain' => 'make.wordpress.org',
 					'path' => '/',
 				),
-				'www.wordpress.net/'     => array(
+				'www.wordpress.net/'  => array(
 					'domain' => 'www.wordpress.net',
 					'path' => '/',
-					),
+				),
 			);
 
 			foreach ( self::$network_ids as &$id ) {
@@ -49,29 +49,29 @@ if ( is_multisite() ) :
 
 			self::$site_ids = array(
 				'wordpress.org/'          => array(
-					'domain'     => 'wordpress.org',
-					'path'       => '/',
-					'network_id' => self::$network_ids['wordpress.org/'],
+					'domain'  => 'wordpress.org',
+					'path'    => '/',
+					'site_id' => self::$network_ids['wordpress.org/'],
 				),
 				'wordpress.org/foo/'      => array(
-					'domain'     => 'wordpress.org',
-					'path'       => '/foo/',
-					'network_id' => self::$network_ids['wordpress.org/'],
+					'domain'  => 'wordpress.org',
+					'path'    => '/foo/',
+					'site_id' => self::$network_ids['wordpress.org/'],
 				),
 				'wordpress.org/foo/bar/'  => array(
-					'domain'     => 'wordpress.org',
-					'path'       => '/foo/bar/',
-					'network_id' => self::$network_ids['wordpress.org/'],
+					'domain'  => 'wordpress.org',
+					'path'    => '/foo/bar/',
+					'site_id' => self::$network_ids['wordpress.org/'],
 				),
 				'make.wordpress.org/'     => array(
-					'domain'     => 'make.wordpress.org',
-					'path'       => '/',
-					'network_id' => self::$network_ids['make.wordpress.org/'],
+					'domain'  => 'make.wordpress.org',
+					'path'    => '/',
+					'site_id' => self::$network_ids['make.wordpress.org/'],
 				),
 				'make.wordpress.org/foo/' => array(
-					'domain'     => 'make.wordpress.org',
-					'path'       => '/foo/',
-					'network_id' => self::$network_ids['make.wordpress.org/'],
+					'domain'  => 'make.wordpress.org',
+					'path'    => '/foo/',
+					'site_id' => self::$network_ids['make.wordpress.org/'],
 				),
 				'www.w.org/'              => array(
 					'domain' => 'www.w.org',
@@ -86,10 +86,12 @@ if ( is_multisite() ) :
 					'path'   => '/foo/bar/',
 				),
 				'www.w.org/make/'         => array(
-					'domain'  => 'www.w.org',
-					'path'    => '/make/',
-					'public'  => 1,
-					'lang_id' => 1,
+					'domain' => 'www.w.org',
+					'path'   => '/make/',
+					'meta'   => array(
+						'public'  => 1,
+						'lang_id' => 1,
+					),
 				),
 			);
 
@@ -135,11 +137,33 @@ if ( is_multisite() ) :
 				)
 			);
 
-			$this->assertCount( 3, count( $found ) );
+			$this->assertCount( 3, $found );
 		}
 
 		public function test_wp_site_query_by_site__in_with_single_id() {
 			$expected = array( self::$site_ids['wordpress.org/foo/'] );
+
+			$q     = new WP_Site_Query();
+			$found = $q->query(
+				array(
+					'fields'   => 'ids',
+					'site__in' => $expected,
+				)
+			);
+
+			$this->assertSameSets( $expected, $found );
+		}
+
+		public function test_wp_site_query_by_site__in_with_multiple_ids() {
+			$expected = array( self::$site_ids['wordpress.org/'], self::$site_ids['wordpress.org/foo/'] );
+
+			$q = new WP_Site_Query();
+			$found = $q->query(
+				array(
+					'fields'   => 'ids',
+					'site__in' => $expected,
+				)
+			);
 
 			$this->assertSameSets( $expected, $found );
 		}
@@ -195,7 +219,7 @@ if ( is_multisite() ) :
 				)
 			);
 
-			$this->assertSameSets( array_values( self::$site_ids ), $found );
+			$this->assertSameSets( $expected, $found );
 		}
 
 		public function test_wp_site_query_by_network_id_with_order() {
@@ -511,7 +535,7 @@ if ( is_multisite() ) :
 					'fields'       => 'ids',
 					// Exclude main site since we don't have control over it here.
 					'site__not_in' => array( 1 ),
-					'lang_id'      => 0,
+					'lang_id'      => 0, //issue seems to be here
 				)
 			);
 
@@ -551,7 +575,7 @@ if ( is_multisite() ) :
 			$found = $q->query(
 				array(
 					'fields'   => 'ids',
-					'lang__in' => array( 1 ),
+					'lang__in' => 1,
 				)
 			);
 
