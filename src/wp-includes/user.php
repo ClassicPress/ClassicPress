@@ -2559,7 +2559,7 @@ function retrieve_password( $user_login = null ) {
 	$message = apply_filters( 'retrieve_password_message', $message, $key, $user_login, $user_data );
 
 	if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message ) ) {
-		wp_die( __('The email could not be sent.') . "<br />\n" . __('Possible reason: your host may have disabled the mail() function.') );
+		wp_die( __( 'The email could not be sent.' ) . "<br />\n" . __( 'Possible reason: your host may have disabled the mail() function.' ) );
 	}
 
 	return true;

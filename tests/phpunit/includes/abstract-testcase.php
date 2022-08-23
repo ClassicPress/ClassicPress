@@ -53,8 +53,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 * @return string The class name.
 	 */
 	public static function get_called_class() {
-			return get_called_class();
-		}
+		return get_called_class();
+	}
 
 	/**
 	 * Runs the routine before setting up all tests.
@@ -433,7 +433,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	public function expectDeprecated() {
 		if ( method_exists( $this, 'getAnnotations' ) ) {
 			// PHPUnit < 9.5.0.
-		$annotations = $this->getAnnotations();
+			$annotations = $this->getAnnotations();
 		} else {
 			// PHPUnit >= 9.5.0.
 			$annotations = \PHPUnit\Util\Test::parseTestMethodAnnotations(
@@ -544,16 +544,16 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 * @param int|string $code
 	 */
 	public function setExpectedException( $exception, $message = '', $code = null ) {
-			$this->expectException( $exception );
+		$this->expectException( $exception );
 
-			if ( '' !== $message ) {
-				$this->expectExceptionMessage( $message );
-			}
-
-			if ( null !== $code ) {
-				$this->expectExceptionCode( $code );
-			}
+		if ( '' !== $message ) {
+			$this->expectExceptionMessage( $message );
 		}
+
+		if ( null !== $code ) {
+			$this->expectExceptionCode( $code );
+		}
+	}
 
 	/**
 	 * Adds a deprecated function to the list of caught deprecated calls.
@@ -1098,8 +1098,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 			return wpmu_delete_user( $user_id );
 		}
 
-			return wp_delete_user( $user_id );
-		}
+		return wp_delete_user( $user_id );
+	}
 
 	/**
 	 * Resets permalinks and flushes rewrites.

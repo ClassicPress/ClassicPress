@@ -179,6 +179,7 @@
 	<!-- Test data and fixtures. -->
 	<exclude-pattern>/tests/phpunit/build*</exclude-pattern>
 	<exclude-pattern>/tests/phpunit/data/*</exclude-pattern>
+	<exclude-pattern>tests/phpunit/includes/phpunit7/MockObject/*</exclude-pattern>
 
 	<exclude-pattern>/tools/*</exclude-pattern>
 
