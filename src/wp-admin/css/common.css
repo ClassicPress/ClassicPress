@@ -2072,7 +2072,6 @@ html.wp-toolbar {
 .stuffbox .hndle {
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -3065,6 +3064,7 @@ img {
 	font-size: 13px;
 	background: #f9f9f9;
 	-moz-tab-size: 4;
+	-o-tab-size: 4;
 	tab-size: 4;
 }
 
@@ -3430,7 +3430,6 @@ img {
 	border-right: 1px solid #ddd;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -3670,10 +3669,6 @@ img {
 		background: none !important;
 	}
 
-}
-
-@-ms-viewport {
-	width: device-width;
 }
 
 @media screen and ( max-width: 782px ) {
