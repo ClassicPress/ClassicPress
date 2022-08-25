@@ -68,7 +68,7 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 	 */
 	public function test_response_charset_in_header() {
 
-		if ( !function_exists( 'xdebug_get_headers' ) ) {
+		if ( ! function_exists( 'xdebug_get_headers' ) ) {
 			$this->markTestSkipped( 'xdebug is required for this test' );
 		}
 

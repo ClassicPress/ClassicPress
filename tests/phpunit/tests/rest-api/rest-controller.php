@@ -13,31 +13,35 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$this->request = new WP_REST_Request( 'GET', '/wp/v2/testroute', array(
-			'args'     => array(
-				'someinteger'     => array(
-					'type'        => 'integer',
+		$this->request = new WP_REST_Request(
+			'GET',
+			'/wp/v2/testroute',
+			array(
+				'args' => array(
+					'someinteger' => array(
+						'type' => 'integer',
+					),
+					'someboolean' => array(
+						'type' => 'boolean',
+					),
+					'somestring'  => array(
+						'type' => 'string',
+					),
+					'someenum'    => array(
+						'type' => 'string',
+						'enum' => array( 'a' ),
+					),
+					'somedate'    => array(
+						'type'   => 'string',
+						'format' => 'date-time',
+					),
+					'someemail'   => array(
+						'type'   => 'string',
+						'format' => 'email',
+					),
 				),
-				'someboolean'     => array(
-					'type'        => 'boolean',
-				),
-				'somestring'      => array(
-					'type'        => 'string',
-				),
-				'someenum'        => array(
-					'type'        => 'string',
-					'enum'        => array( 'a' ),
-				),
-				'somedate'        => array(
-					'type'        => 'string',
-					'format'      => 'date-time',
-				),
-				'someemail'       => array(
-					'type'        => 'string',
-					'format'      => 'email',
-				),
-			),
-		));
+			)
+		);
 	}
 
 	public function test_validate_schema_type_integer() {
@@ -87,28 +91,36 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 		);
 
 		// Check sanitize testing.
-		$this->assertEquals( false,
+		$this->assertEquals(
+			false,
 			rest_sanitize_request_arg( 'false', $this->request, 'someboolean' )
 		);
-		$this->assertEquals( false,
+		$this->assertEquals(
+			false,
 			rest_sanitize_request_arg( '0', $this->request, 'someboolean' )
 		);
-		$this->assertEquals( false,
+		$this->assertEquals(
+			false,
 			rest_sanitize_request_arg( 0, $this->request, 'someboolean' )
 		);
-		$this->assertEquals( false,
+		$this->assertEquals(
+			false,
 			rest_sanitize_request_arg( 'FALSE', $this->request, 'someboolean' )
 		);
-		$this->assertEquals( true,
+		$this->assertEquals(
+			true,
 			rest_sanitize_request_arg( 'true', $this->request, 'someboolean' )
 		);
-		$this->assertEquals( true,
+		$this->assertEquals(
+			true,
 			rest_sanitize_request_arg( '1', $this->request, 'someboolean' )
 		);
-		$this->assertEquals( true,
+		$this->assertEquals(
+			true,
 			rest_sanitize_request_arg( 1, $this->request, 'someboolean' )
 		);
-		$this->assertEquals( true,
+		$this->assertEquals(
+			true,
 			rest_sanitize_request_arg( 'TRUE', $this->request, 'someboolean' )
 		);
 
@@ -195,22 +207,28 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 		$controller = new WP_REST_Test_Controller();
 		$request    = new WP_REST_Request( 'GET', '/wp/v2/testroute' );
 		$fields     = $controller->get_fields_for_response( $request );
-		$this->assertEquals( array(
-			'somestring',
-			'someinteger',
-			'someboolean',
-			'someurl',
-			'somedate',
-			'someemail',
-			'someenum',
-			'someargoptions',
-			'somedefault',
-		), $fields );
+		$this->assertEquals(
+			array(
+				'somestring',
+				'someinteger',
+				'someboolean',
+				'someurl',
+				'somedate',
+				'someemail',
+				'someenum',
+				'someargoptions',
+				'somedefault',
+			),
+			$fields
+		);
 		$request->set_param( '_fields', 'somestring,someinteger' );
 		$fields = $controller->get_fields_for_response( $request );
-		$this->assertEquals( array(
-			'somestring',
-			'someinteger',
-		), $fields );
+		$this->assertEquals(
+			array(
+				'somestring',
+				'someinteger',
+			),
+			$fields
+		);
 	}
 }
