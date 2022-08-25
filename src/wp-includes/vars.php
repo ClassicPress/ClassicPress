@@ -56,7 +56,7 @@ $is_lynx = $is_gecko = $is_winIE = $is_macIE = $is_opera = $is_NS4 = $is_safari 
 if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 	if ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Lynx' ) !== false ) {
 		$is_lynx = true;
-	} elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Edge' ) !== false ) {
+	} elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Edg' ) !== false ) {
 		$is_edge = true;
 	} elseif ( stripos( $_SERVER['HTTP_USER_AGENT'], 'chrome' ) !== false ) {
 		if ( stripos( $_SERVER['HTTP_USER_AGENT'], 'chromeframe' ) !== false ) {
