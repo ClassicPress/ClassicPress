@@ -35,21 +35,25 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	 */
 	public function register_routes() {
 
-		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base,
 			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => array( $this, 'get_item' ),
-				'args'                => array(),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			array(
-				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => array( $this, 'update_item' ),
-				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-			),
-			'schema' => array( $this, 'get_public_item_schema' ),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_item' ),
+					'args'                => array(),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+				'schema' => array( $this, 'get_public_item_schema' ),
+			)
+		);
 
 	}
 
@@ -139,7 +143,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	public function update_item( $request ) {
 		$options = $this->get_registered_options();
 
-		$params  = $request->get_params();
+		$params = $request->get_params();
 
 		foreach ( $options as $name => $args ) {
 			if ( ! array_key_exists( $name, $params ) ) {
@@ -185,7 +189,9 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 				 */
 				if ( is_wp_error( rest_validate_value_from_schema( get_option( $args['option_name'], false ), $args['schema'] ) ) ) {
 					return new WP_Error(
-						'rest_invalid_stored_value', sprintf( __( 'The %s property has an invalid stored value, and cannot be updated to null.' ), $name ), array( 'status' => 500 )
+						'rest_invalid_stored_value',
+						sprintf( __( 'The %s property has an invalid stored value, and cannot be updated to null.' ), $name ),
+						array( 'status' => 500 )
 					);
 				}
 
@@ -232,7 +238,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 				'default'     => isset( $args['default'] ) ? $args['default'] : null,
 			);
 
-			$rest_args['schema'] = array_merge( $default_schema, $rest_args['schema'] );
+			$rest_args['schema']      = array_merge( $default_schema, $rest_args['schema'] );
 			$rest_args['option_name'] = $name;
 
 			// Skip over settings that don't have a defined type in the schema.
@@ -274,7 +280,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 		);
 
 		foreach ( $options as $option_name => $option ) {
-			$schema['properties'][ $option_name ] = $option['schema'];
+			$schema['properties'][ $option_name ]                = $option['schema'];
 			$schema['properties'][ $option_name ]['arg_options'] = array(
 				'sanitize_callback' => array( $this, 'sanitize_callback' ),
 			);
