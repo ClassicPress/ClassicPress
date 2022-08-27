@@ -65,5 +65,4 @@ jobs:
         run: phpcs -i
 
       - name: Run PHP compatibility tests
-        continue-on-error: true
         run: phpcs --standard=phpcompat.xml.dist -q --report=checkstyle | cs2pr

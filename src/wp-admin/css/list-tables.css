@@ -305,6 +305,12 @@ table.fixed {
 	width: 74px;
 }
 
+.fixed .column-role,
+.fixed .column-posts {
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
 .fixed .column-comment .comment-author {
 	display: none;
 }
@@ -1568,6 +1574,10 @@ div.action-links,
 	content: "\f147";
 }
 
+.plugin-card .notice {
+	margin: 20px 20px 0 20px;
+}
+
 .plugin-icon {
 	position: absolute;
 	top: 20px;
@@ -2086,7 +2096,7 @@ div.action-links,
 		line-height: 1.5;
 	}
 
-	/* Add New plugins page */
+	/* Add WP Plugin page */
 	table.plugin-install .column-name,
 	table.plugin-install .column-version,
 	table.plugin-install .column-rating,
