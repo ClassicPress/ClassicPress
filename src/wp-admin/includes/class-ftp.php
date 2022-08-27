@@ -524,7 +524,7 @@ class ftp_base {
 		return $exists;
 	}
 
-	function fget($fp, $remotefile,$rest=0) {
+	function fget($fp, $remotefile, $rest=0) {
 		if($this->_can_restore and $rest!=0) fseek($fp, $rest);
 		$pi=pathinfo($remotefile);
 		if($this->_type==FTP_ASCII or ($this->_type==FTP_AUTOASCII and in_array(strtoupper($pi["extension"]), $this->AutoAsciiExt))) $mode=FTP_ASCII;
@@ -583,7 +583,7 @@ class ftp_base {
 		return $out;
 	}
 
-	function fput($remotefile, $fp) {
+	function fput($remotefile, $fp, $rest=0) {
 		if($this->_can_restore and $rest!=0) fseek($fp, $rest);
 		$pi=pathinfo($remotefile);
 		if($this->_type==FTP_ASCII or ($this->_type==FTP_AUTOASCII and in_array(strtoupper($pi["extension"]), $this->AutoAsciiExt))) $mode=FTP_ASCII;
@@ -775,7 +775,7 @@ class ftp_base {
 			$pattern=substr($pattern,$lastpos);
 		} else $path=getcwd();
 		if(is_array($handle) and !empty($handle)) {
-			while($dir=each($handle)) {
+			foreach($handle as $dir) {
 				if($this->glob_pattern_match($pattern,$dir))
 				$output[]=$dir;
 			}
@@ -899,7 +899,7 @@ class ftp_base {
 $mod_sockets = extension_loaded( 'sockets' );
 if ( ! $mod_sockets && function_exists( 'dl' ) && is_callable( 'dl' ) ) {
 	$prefix = ( PHP_SHLIB_SUFFIX == 'dll' ) ? 'php_' : '';
-	@dl( $prefix . 'sockets.' . PHP_SHLIB_SUFFIX );
+	@dl( $prefix . 'sockets.' . PHP_SHLIB_SUFFIX ); // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.dlDeprecated
 	$mod_sockets = extension_loaded( 'sockets' );
 }
 
