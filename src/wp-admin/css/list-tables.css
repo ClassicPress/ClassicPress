@@ -305,6 +305,12 @@ table.fixed {
 	width: 74px;
 }
 
+.fixed .column-role,
+.fixed .column-posts {
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
 .fixed .column-comment .comment-author {
 	display: none;
 }

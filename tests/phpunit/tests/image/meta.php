@@ -7,28 +7,30 @@
  */
 class Tests_Image_Meta extends WP_UnitTestCase {
 	function setUp() {
-		if ( ! extension_loaded( 'gd' ) )
+		if ( ! extension_loaded( 'gd' ) ) {
 			$this->markTestSkipped( 'The gd PHP extension is not loaded.' );
-		if ( ! extension_loaded( 'exif' ) )
+		}
+		if ( ! extension_loaded( 'exif' ) ) {
 			$this->markTestSkipped( 'The exif PHP extension is not loaded.' );
+		}
 
 		parent::setUp();
 	}
 
 	function test_exif_d70() {
 		// exif from a Nikon D70
-		$out = wp_read_image_metadata(DIR_TESTDATA.'/images/2004-07-22-DSC_0008.jpg');
+		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/2004-07-22-DSC_0008.jpg' );
 
-		$this->assertEquals(6.3, $out['aperture']);
-		$this->assertEquals('', $out['credit']);
-		$this->assertEquals('NIKON D70', $out['camera']);
-		$this->assertEquals('', $out['caption']);
-		$this->assertEquals(strtotime('2004-07-22 17:14:59'), $out['created_timestamp']);
-		$this->assertEquals('', $out['copyright']);
-		$this->assertEquals(27, $out['focal_length']);
-		$this->assertEquals(400, $out['iso']);
-		$this->assertEquals(1/40, $out['shutter_speed']);
-		$this->assertEquals('', $out['title']);
+		$this->assertEquals( 6.3, $out['aperture'] );
+		$this->assertEquals( '', $out['credit'] );
+		$this->assertEquals( 'NIKON D70', $out['camera'] );
+		$this->assertEquals( '', $out['caption'] );
+		$this->assertEquals( strtotime( '2004-07-22 17:14:59' ), $out['created_timestamp'] );
+		$this->assertEquals( '', $out['copyright'] );
+		$this->assertEquals( 27, $out['focal_length'] );
+		$this->assertEquals( 400, $out['iso'] );
+		$this->assertEquals( 1 / 40, $out['shutter_speed'] );
+		$this->assertEquals( '', $out['title'] );
 	}
 
 	function test_exif_d70_mf() {
@@ -123,9 +125,9 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 	function test_utf8_iptc_tags() {
 
 		// trilingual UTF-8 text in the ITPC caption-abstract field
-		$out = wp_read_image_metadata(DIR_TESTDATA.'/images/test-image-iptc.jpg');
+		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/test-image-iptc.jpg' );
 
-		$this->assertEquals('This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $out['caption']);
+		$this->assertEquals( 'This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $out['caption'] );
 	}
 
 	/**
@@ -133,8 +135,8 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_missing_image_file() {
-		$out = wp_read_image_metadata(DIR_TESTDATA.'/images/404_image.png');
-		$this->assertFalse($out);
+		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/404_image.png' );
+		$this->assertFalse( $out );
 	}
 
 
@@ -142,7 +144,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/33772
 	 */
 	public function test_exif_keywords() {
-		$out = wp_read_image_metadata(DIR_TESTDATA.'/images/33772.jpg');
+		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/33772.jpg' );
 
 		$this->assertSame( '8', $out['aperture'], 'Aperture value not the same' );
 		$this->assertSame( 'Photoshop Author', $out['credit'], 'Credit value not the same' );

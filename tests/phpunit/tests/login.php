@@ -23,7 +23,7 @@ class Tests_Login extends WP_UnitTestCase {
 	 */
 	public function test_reset_password() {
 		ob_start();
-		include_once( ABSPATH . '/wp-login.php' );
+		include_once ABSPATH . '/wp-login.php';
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
 
