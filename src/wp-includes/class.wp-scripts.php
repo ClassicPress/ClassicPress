@@ -227,13 +227,13 @@ class WP_Scripts extends WP_Dependencies {
 
 		// CDATA is not needed for HTML 5.
 		if ( $this->type_attr ) {
-		echo "/* <![CDATA[ */\n";
+			echo "/* <![CDATA[ */\n";
 		}
 
 		echo "$output\n";
 
 		if ( $this->type_attr ) {
-		echo "/* ]]> */\n";
+			echo "/* ]]> */\n";
 		}
 
 		echo "</script>\n";
