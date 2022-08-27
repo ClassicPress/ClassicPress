@@ -11,12 +11,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -45,12 +45,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -79,12 +79,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -113,12 +113,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -147,12 +147,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest_on_subsequent_pages() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -196,10 +196,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'newest' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -215,12 +218,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest_on_subsequent_pages() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -264,10 +267,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'newest' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -283,12 +289,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest_on_subsequent_pages() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -318,10 +324,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'oldest' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -337,12 +346,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest_on_subsequent_pages() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -372,10 +381,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'oldest' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -393,12 +405,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/29462
 	 */
 	public function test_last_page_of_comments_should_be_full_when_default_comment_page_is_newest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -421,10 +433,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'comment_order', 'desc' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 1,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 1,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -442,12 +457,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/29462
 	 */
 	public function test_first_page_of_comments_should_have_remainder_when_default_comments_page_is_newest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -470,10 +485,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'comment_order', 'desc' );
 		update_option( 'page_comments', '1' );
 
-		$link = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link );
 		$found = get_echo( 'comments_template' );
@@ -489,12 +507,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34073
 	 */
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_oldest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -524,9 +542,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'oldest' );
 		update_option( 'page_comments', '1' );
 
-		$link_p1 = add_query_arg( array(
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link_p1 = add_query_arg(
+			array(
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link_p1 );
 
@@ -540,10 +561,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 			$this->assertNotContains( 'cpage', $m );
 		}
 
-		$link_p2 = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link_p2 = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link_p2 );
 
@@ -562,12 +586,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34073
 	 */
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_newest() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);
@@ -611,9 +635,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		update_option( 'default_comments_page', 'newest' );
 		update_option( 'page_comments', '1' );
 
-		$link_p0 = add_query_arg( array(
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link_p0 = add_query_arg(
+			array(
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link_p0 );
 
@@ -626,10 +653,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 			$this->assertContains( 'cpage=3', $m );
 		}
 
-		$link_p2 = add_query_arg( array(
-			'cpage' => 2,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link_p2 = add_query_arg(
+			array(
+				'cpage'             => 2,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link_p2 );
 
@@ -644,10 +674,13 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		}
 
 		// p1 is the last page (neat!).
-		$link_p1 = add_query_arg( array(
-			'cpage' => 1,
-			'comments_per_page' => 2,
-		), get_permalink( $p ) );
+		$link_p1 = add_query_arg(
+			array(
+				'cpage'             => 1,
+				'comments_per_page' => 2,
+			),
+			get_permalink( $p )
+		);
 
 		$this->go_to( $link_p1 );
 
@@ -666,12 +699,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/35068
 	 */
 	public function test_query_offset_should_not_include_unapproved_comments() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_approved' => '0',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
@@ -722,12 +755,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	public function test_query_offset_should_include_unapproved_comments() {
 		$comment_author_email = 'foo@example.com';
 
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_approved' => '0',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
@@ -742,31 +775,35 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '3',
-				'comment_approved' => '0',
-					'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+				'comment_post_ID'      => $p,
+				'comment_content'      => '3',
+				'comment_approved'     => '0',
+				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 				'comment_author_email' => $comment_author_email,
 			)
 		);
-		$comment_4 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '4',
-			'comment_approved' => '0',
+		$comment_4 = self::factory()->comment->create(
+			array(
+				'comment_post_ID'      => $p,
+				'comment_content'      => '4',
+				'comment_approved'     => '0',
 				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 200 ),
-			'comment_author_email' => $comment_author_email,
-		) );
-		$comment_5 = self::factory()->comment->create( array(
-			'comment_post_ID' => $p,
-			'comment_content' => '5',
-			'comment_approved' => '0',
+				'comment_author_email' => $comment_author_email,
+			)
+		);
+		$comment_5 = self::factory()->comment->create(
+			array(
+				'comment_post_ID'      => $p,
+				'comment_content'      => '5',
+				'comment_approved'     => '0',
 				'comment_date_gmt'     => gmdate( 'Y-m-d H:i:s', $now - 300 ),
-			'comment_author_email' => $comment_author_email,
-		) );
+				'comment_author_email' => $comment_author_email,
+			)
+		);
 		$comment_6 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '6',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '6',
 				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 400 ),
 			)
@@ -798,12 +835,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/35378
 	 */
 	public function test_hierarchy_should_be_ignored_when_threading_is_disabled() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
@@ -818,10 +855,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '3',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '3',
 				'comment_approved' => '1',
-				'comment_parent' => $comment_1,
+				'comment_parent'   => $comment_1,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 200 ),
 			)
 		);
@@ -843,12 +880,12 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/35419
 	 */
 	public function test_pagination_calculation_should_ignore_comment_hierarchy_when_threading_is_disabled() {
-		$now = time();
-		$p = self::factory()->post->create();
+		$now       = time();
+		$p         = self::factory()->post->create();
 		$comment_1 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '1',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '1',
 				'comment_approved' => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 300 ),
 			)
@@ -863,10 +900,10 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 		);
 		$comment_3 = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => $p,
-				'comment_content' => '3',
+				'comment_post_ID'  => $p,
+				'comment_content'  => '3',
 				'comment_approved' => '1',
-				'comment_parent' => $comment_1,
+				'comment_parent'   => $comment_1,
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);

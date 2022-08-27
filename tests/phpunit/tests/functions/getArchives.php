@@ -20,7 +20,13 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$post_ids = $factory->post->create_many( 8, array( 'post_type' => 'post', 'post_author' => '1' ) );
+		self::$post_ids = $factory->post->create_many(
+			8,
+			array(
+				'post_type'   => 'post',
+				'post_author' => '1',
+			)
+		);
 	}
 
 	function test_wp_get_archives_default() {
@@ -66,7 +72,18 @@ class Tests_Get_Archives extends WP_UnitTestCase {
 	<li><a href='$link5'>$title5</a></li>
 EOF;
 
-		$this->assertEqualsIgnoreEOL( $expected['limit'], trim( wp_get_archives( array( 'echo' => false, 'type' => 'postbypost', 'limit' => 5 ) ) ) );
+		$this->assertEqualsIgnoreEOL(
+			$expected['limit'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'  => false,
+						'type'  => 'postbypost',
+						'limit' => 5,
+					)
+				)
+			)
+		);
 	}
 
 	function test_wp_get_archives_format() {
@@ -123,23 +140,49 @@ EOF;
 	}
 
 	function test_wp_get_archives_order() {
-		self::factory()->post->create( array( 'post_type' => 'post', 'post_author' => '1', 'post_date' => '2012-10-23 19:34:42' ) );
+		self::factory()->post->create(
+			array(
+				'post_type'   => 'post',
+				'post_author' => '1',
+				'post_date'   => '2012-10-23 19:34:42',
+			)
+		);
 
 		$date_full             = gmdate( 'F Y' );
-		$oct_url = get_month_link( 2012, 10 );
+		$oct_url               = get_month_link( 2012, 10 );
 		$expected['order_asc'] = <<<EOF
 <li><a href='{$oct_url}'>October 2012</a></li>
 	<li><a href='{$this->month_url}'>$date_full</a></li>
 EOF;
 
-		$this->assertEqualsIgnoreEOL( $expected['order_asc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'ASC' ) ) ) );
+		$this->assertEqualsIgnoreEOL(
+			$expected['order_asc'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'  => false,
+						'order' => 'ASC',
+					)
+				)
+			)
+		);
 
 		$expected['order_desc'] = <<<EOF
 <li><a href='{$this->month_url}'>$date_full</a></li>
 	<li><a href='{$oct_url}'>October 2012</a></li>
 EOF;
 
-		$this->assertEqualsIgnoreEOL( $expected['order_desc'], trim( wp_get_archives( array( 'echo' => false, 'order' => 'DESC' ) ) ) );
+		$this->assertEqualsIgnoreEOL(
+			$expected['order_desc'],
+			trim(
+				wp_get_archives(
+					array(
+						'echo'  => false,
+						'order' => 'DESC',
+					)
+				)
+			)
+		);
 	}
 
 	/**
@@ -148,15 +191,22 @@ EOF;
 	function test_wp_get_archives_post_type() {
 		register_post_type( 'taco', array( 'public' => true ) );
 
-		self::factory()->post->create( array(
-			'post_type' => 'taco',
-			'post_author' => '1',
-			'post_date' => '2014-10-23 19:34:42'
-		) );
+		self::factory()->post->create(
+			array(
+				'post_type'   => 'taco',
+				'post_author' => '1',
+				'post_date'   => '2014-10-23 19:34:42',
+			)
+		);
 
-		$oct_url = esc_url( add_query_arg( 'post_type', 'taco', get_month_link( 2014, 10 ) ) );
+		$oct_url  = esc_url( add_query_arg( 'post_type', 'taco', get_month_link( 2014, 10 ) ) );
 		$expected = "<li><a href='{$oct_url}'>October 2014</a></li>";
-		$archives = wp_get_archives( array( 'echo' => false, 'post_type' => 'taco' ) );
+		$archives = wp_get_archives(
+			array(
+				'echo'      => false,
+				'post_type' => 'taco',
+			)
+		);
 		$this->assertEquals( $expected, trim( $archives ) );
 	}
 }

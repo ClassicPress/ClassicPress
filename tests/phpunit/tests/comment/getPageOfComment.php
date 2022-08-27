@@ -28,15 +28,15 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		self::factory()->comment->create_post_comments( $p, 1, array( 'comment_date' => '2013-09-15 00:00:00' ) );
 		$comment_first = self::factory()->comment->create_post_comments( $p, 1, array( 'comment_date' => '2013-09-14 00:00:00' ) );
 
-		$this->assertEquals( 4, get_page_of_comment( $comment_last[0],  array( 'per_page' =>  3 ) ) );
-		$this->assertEquals( 2, get_page_of_comment( $comment_last[0],  array( 'per_page' => 10 ) ) );
+		$this->assertEquals( 4, get_page_of_comment( $comment_last[0], array( 'per_page' => 3 ) ) );
+		$this->assertEquals( 2, get_page_of_comment( $comment_last[0], array( 'per_page' => 10 ) ) );
 
-		$this->assertEquals( 1, get_page_of_comment( $comment_first[0], array( 'per_page' =>  3 ) ) );
+		$this->assertEquals( 1, get_page_of_comment( $comment_first[0], array( 'per_page' => 3 ) ) );
 		$this->assertEquals( 1, get_page_of_comment( $comment_first[0], array( 'per_page' => 10 ) ) );
 	}
 
 	public function test_type_pings() {
-		$p = self::factory()->post->create();
+		$p   = self::factory()->post->create();
 		$now = time();
 
 		$trackbacks = array();
@@ -48,7 +48,8 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 				)
 			);
-			$now -= 10 * $i;
+
+			$now              -= 10 * $i;
 		}
 
 		$pingbacks = array();
@@ -60,12 +61,39 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 				)
 			);
-			$now -= 10 * $i;
+			$now            -= 10 * $i;
 		}
 
-		$this->assertEquals( 2, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'trackback' ) ) );
-		$this->assertEquals( 3, get_page_of_comment( $pingbacks[0], array( 'per_page' => 2, 'type' => 'pingback' ) ) );
-		$this->assertEquals( 5, get_page_of_comment( $trackbacks[0], array( 'per_page' => 2, 'type' => 'pings' ) ) );
+		$this->assertEquals(
+			2,
+			get_page_of_comment(
+				$trackbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'trackback',
+				)
+			)
+		);
+		$this->assertEquals(
+			3,
+			get_page_of_comment(
+				$pingbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'pingback',
+				)
+			)
+		);
+		$this->assertEquals(
+			5,
+			get_page_of_comment(
+				$trackbacks[0],
+				array(
+					'per_page' => 2,
+					'type'     => 'pings',
+				)
+			)
+		);
 	}
 
 	/**
@@ -81,7 +109,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$page_1 = get_page_of_comment( $c, array( 'per_page' => 3 ) );
 
 		$num_queries = $wpdb->num_queries;
-		$page_2 = get_page_of_comment( $c, array( 'per_page' => 3 ) );
+		$page_2      = get_page_of_comment( $c, array( 'per_page' => 3 ) );
 
 		$this->assertSame( $page_1, $page_2 );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
@@ -93,10 +121,15 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_cache_hits_should_be_sensitive_to_comment_type() {
 		global $wpdb;
 
-		$p = self::factory()->post->create();
-		$comment = self::factory()->comment->create( array( 'comment_post_ID' => $p, 'comment_type' => 'comment' ) );
+		$p       = self::factory()->post->create();
+		$comment = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => $p,
+				'comment_type'    => 'comment',
+			)
+		);
 
-		$now = time();
+		$now        = time();
 		$trackbacks = array();
 		for ( $i = 0; $i <= 5; $i++ ) {
 			$trackbacks[ $i ] = self::factory()->comment->create(
@@ -109,11 +142,23 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		}
 
 		// Prime cache for trackbacks.
-		$page_trackbacks = get_page_of_comment( $trackbacks[1], array( 'per_page' => 3, 'type' => 'trackback' ) );
+		$page_trackbacks = get_page_of_comment(
+			$trackbacks[1],
+			array(
+				'per_page' => 3,
+				'type'     => 'trackback',
+			)
+		);
 		$this->assertEquals( 2, $page_trackbacks );
 
-		$num_queries = $wpdb->num_queries;
-		$page_comments = get_page_of_comment( $comment, array( 'per_page' => 3, 'type' => 'comment' ) );
+		$num_queries   = $wpdb->num_queries;
+		$page_comments = get_page_of_comment(
+			$comment,
+			array(
+				'per_page' => 3,
+				'type'     => 'comment',
+			)
+		);
 		$this->assertEquals( 1, $page_comments );
 
 		$this->assertNotEquals( $num_queries, $wpdb->num_queries );
@@ -124,7 +169,12 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	 */
 	public function test_cache_should_be_invalidated_when_comment_is_approved() {
 		$p = self::factory()->post->create();
-		$c = self::factory()->comment->create( array( 'comment_post_ID' => $p, 'comment_approved' => 0 ) );
+		$c = self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => $p,
+				'comment_approved' => 0,
+			)
+		);
 
 		// Prime cache.
 		$page_1 = get_page_of_comment( $c, array( 'per_page' => 3 ) );
@@ -208,7 +258,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_query_should_be_limited_to_comments_on_the_proper_post() {
 		$posts = self::factory()->post->create_many( 2 );
 
-		$now = time();
+		$now        = time();
 		$comments_0 = $comments_1 = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$comments_0[] = self::factory()->comment->create(
@@ -238,7 +288,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_only_top_level_comments_should_be_included_in_older_count() {
 		$post = self::factory()->post->create();
 
-		$now = time();
+		$now             = time();
 		$comment_parents = $comment_children = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$parent                = self::factory()->comment->create(
@@ -263,7 +313,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$page_2_indicies = array( 0, 1 );
 
 		$args = array(
-			'per_page' => 3,
+			'per_page'  => 3,
 			'max_depth' => 2,
 		);
 

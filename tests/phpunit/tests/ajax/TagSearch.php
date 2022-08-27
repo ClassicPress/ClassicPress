@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax tag search functionality
@@ -20,7 +20,12 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 	 * @var array
 	 */
 	private static $terms = array(
-		'chattels', 'depo', 'energumen', 'figuriste', 'habergeon', 'impropriation'
+		'chattels',
+		'depo',
+		'energumen',
+		'figuriste',
+		'habergeon',
+		'impropriation',
 	);
 
 	private static $term_ids = array();
@@ -64,7 +69,7 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 
 		// Set up a default request
 		$_GET['tax'] = 'post_tag';
-		$_GET['q']   = md5(uniqid());
+		$_GET['q']   = md5( uniqid() );
 
 		// Make the request
 		// No output, so we get a stop exception

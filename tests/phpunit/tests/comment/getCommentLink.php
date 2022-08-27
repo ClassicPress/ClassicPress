@@ -8,13 +8,13 @@ class Tests_Comment_GetCommentLink extends WP_UnitTestCase {
 	protected static $comments = array();
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		$now = time();
+		$now     = time();
 		self::$p = self::factory()->post->create();
 
 		self::$comments[] = self::factory()->comment->create(
 			array(
-				'comment_post_ID' => self::$p,
-				'comment_content' => '1',
+				'comment_post_ID'  => self::$p,
+				'comment_content'  => '1',
 				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 100 ),
 			)
 		);

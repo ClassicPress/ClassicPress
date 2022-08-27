@@ -64,31 +64,31 @@ function wp_initial_constants() {
 		ini_set( 'memory_limit', WP_MEMORY_LIMIT );
 	}
 
-	if ( ! isset($blog_id) ) {
+	if ( ! isset( $blog_id ) ) {
 		$blog_id = 1;
 	}
 
-	if ( ! defined( 'WP_CONTENT_DIR') ) {
+	if ( ! defined( 'WP_CONTENT_DIR' ) ) {
 		define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' ); // no trailing slash, full paths only - WP_CONTENT_URL is defined further down
 	}
 
 	// Add define('WP_DEBUG', true); to wp-config.php to enable display of notices during development.
-	if ( ! defined( 'WP_DEBUG') ) {
+	if ( ! defined( 'WP_DEBUG' ) ) {
 		define( 'WP_DEBUG', false );
 	}
 
 	// Add define('WP_DEBUG_DISPLAY', null); to wp-config.php use the globally configured setting for
 	// display_errors and not force errors to be displayed. Use false to force display_errors off.
-	if ( ! defined( 'WP_DEBUG_DISPLAY') ) {
+	if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
 		define( 'WP_DEBUG_DISPLAY', true );
 	}
 
 	// Add define('WP_DEBUG_LOG', true); to enable error logging to wp-content/debug.log.
-	if ( ! defined( 'WP_DEBUG_LOG') ) {
+	if ( ! defined( 'WP_DEBUG_LOG' ) ) {
 		define( 'WP_DEBUG_LOG', false );
 	}
 
-	if ( ! defined( 'WP_CACHE') ) {
+	if ( ! defined( 'WP_CACHE' ) ) {
 		define( 'WP_CACHE', false );
 	}
 
@@ -107,11 +107,11 @@ function wp_initial_constants() {
 	/**
 	 * Private
 	 */
-	if ( ! defined( 'MEDIA_TRASH') ) {
+	if ( ! defined( 'MEDIA_TRASH' ) ) {
 		define( 'MEDIA_TRASH', false );
 	}
 
-	if ( ! defined( 'SHORTINIT') ) {
+	if ( ! defined( 'SHORTINIT' ) ) {
 		define( 'SHORTINIT', false );
 	}
 
@@ -132,11 +132,11 @@ function wp_initial_constants() {
 	 * @since WP-4.4.0 Introduced `MONTH_IN_SECONDS`.
 	 */
 	define( 'MINUTE_IN_SECONDS', 60 );
-	define( 'HOUR_IN_SECONDS',   60 * MINUTE_IN_SECONDS );
-	define( 'DAY_IN_SECONDS',    24 * HOUR_IN_SECONDS   );
-	define( 'WEEK_IN_SECONDS',    7 * DAY_IN_SECONDS    );
-	define( 'MONTH_IN_SECONDS',  30 * DAY_IN_SECONDS    );
-	define( 'YEAR_IN_SECONDS',  365 * DAY_IN_SECONDS    );
+	define( 'HOUR_IN_SECONDS', 60 * MINUTE_IN_SECONDS );
+	define( 'DAY_IN_SECONDS', 24 * HOUR_IN_SECONDS );
+	define( 'WEEK_IN_SECONDS', 7 * DAY_IN_SECONDS );
+	define( 'MONTH_IN_SECONDS', 30 * DAY_IN_SECONDS );
+	define( 'YEAR_IN_SECONDS', 365 * DAY_IN_SECONDS );
 	/**#@-*/
 }
 
@@ -148,8 +148,8 @@ function wp_initial_constants() {
  * @since WP-3.0.0
  */
 function wp_plugin_directory_constants() {
-	if ( !defined('WP_CONTENT_URL') ) {
-		define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content'); // full url - WP_CONTENT_DIR is defined further up
+	if ( ! defined( 'WP_CONTENT_URL' ) ) {
+		define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' ); // full url - WP_CONTENT_DIR is defined further up
 	}
 
 	/**
@@ -157,7 +157,7 @@ function wp_plugin_directory_constants() {
 	 *
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'WP_PLUGIN_DIR') ) {
+	if ( ! defined( 'WP_PLUGIN_DIR' ) ) {
 		define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' ); // full path, no trailing slash
 	}
 
@@ -166,7 +166,7 @@ function wp_plugin_directory_constants() {
 	 *
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'WP_PLUGIN_URL') ) {
+	if ( ! defined( 'WP_PLUGIN_URL' ) ) {
 		define( 'WP_PLUGIN_URL', WP_CONTENT_URL . '/plugins' ); // full url, no trailing slash
 	}
 
@@ -176,7 +176,7 @@ function wp_plugin_directory_constants() {
 	 * @since WP-2.1.0
 	 * @deprecated
 	 */
-	if ( ! defined( 'PLUGINDIR') ) {
+	if ( ! defined( 'PLUGINDIR' ) ) {
 		define( 'PLUGINDIR', 'wp-content/plugins' ); // Relative to ABSPATH. For back compat.
 	}
 
@@ -185,7 +185,7 @@ function wp_plugin_directory_constants() {
 	 *
 	 * @since WP-2.8.0
 	 */
-	if ( ! defined( 'WPMU_PLUGIN_DIR') ) {
+	if ( ! defined( 'WPMU_PLUGIN_DIR' ) ) {
 		define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/mu-plugins' ); // full path, no trailing slash
 	}
 
@@ -194,7 +194,7 @@ function wp_plugin_directory_constants() {
 	 *
 	 * @since WP-2.8.0
 	 */
-	if ( ! defined( 'WPMU_PLUGIN_URL') ) {
+	if ( ! defined( 'WPMU_PLUGIN_URL' ) ) {
 		define( 'WPMU_PLUGIN_URL', WP_CONTENT_URL . '/mu-plugins' ); // full url, no trailing slash
 	}
 
@@ -223,85 +223,87 @@ function wp_cookie_constants() {
 	 */
 	if ( ! defined( 'COOKIEHASH' ) ) {
 		$siteurl = get_site_option( 'siteurl' );
-		if ( $siteurl )
+		if ( $siteurl ) {
 			define( 'COOKIEHASH', md5( $siteurl ) );
-		else
+		} else {
 			define( 'COOKIEHASH', '' );
+		}
 	}
 
 	/**
 	 * @since WP-2.0.0
 	 */
-	if ( ! defined( 'USER_COOKIE') ) {
+	if ( ! defined( 'USER_COOKIE' ) ) {
 		define( 'USER_COOKIE', 'wordpressuser_' . COOKIEHASH );
 	}
 
 	/**
 	 * @since WP-2.0.0
 	 */
-	if ( ! defined( 'PASS_COOKIE') ) {
+	if ( ! defined( 'PASS_COOKIE' ) ) {
 		define( 'PASS_COOKIE', 'wordpresspass_' . COOKIEHASH );
 	}
 
 	/**
 	 * @since WP-2.5.0
 	 */
-	if ( ! defined( 'AUTH_COOKIE') ) {
+	if ( ! defined( 'AUTH_COOKIE' ) ) {
 		define( 'AUTH_COOKIE', 'wordpress_' . COOKIEHASH );
 	}
 
 	/**
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'SECURE_AUTH_COOKIE') )
-		define('SECURE_AUTH_COOKIE', 'wordpress_sec_' . COOKIEHASH);
+	if ( ! defined( 'SECURE_AUTH_COOKIE' ) ) {
+		define( 'SECURE_AUTH_COOKIE', 'wordpress_sec_' . COOKIEHASH );
+	}
 
 	/**
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'LOGGED_IN_COOKIE') ) {
+	if ( ! defined( 'LOGGED_IN_COOKIE' ) ) {
 		define( 'LOGGED_IN_COOKIE', 'wordpress_logged_in_' . COOKIEHASH );
 	}
 
 	/**
 	 * @since WP-2.3.0
 	 */
-	if ( ! defined( 'TEST_COOKIE') ) {
+	if ( ! defined( 'TEST_COOKIE' ) ) {
 		define( 'TEST_COOKIE', 'wordpress_test_cookie' );
 	}
 
 	/**
 	 * @since WP-1.2.0
 	 */
-	if ( ! defined( 'COOKIEPATH') ) {
+	if ( ! defined( 'COOKIEPATH' ) ) {
 		define( 'COOKIEPATH', preg_replace( '|https?://[^/]+|i', '', get_option( 'home' ) . '/' ) );
 	}
 
 	/**
 	 * @since WP-1.5.0
 	 */
-	if ( ! defined( 'SITECOOKIEPATH') ) {
+	if ( ! defined( 'SITECOOKIEPATH' ) ) {
 		define( 'SITECOOKIEPATH', preg_replace( '|https?://[^/]+|i', '', get_option( 'siteurl' ) . '/' ) );
 	}
 
 	/**
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'ADMIN_COOKIE_PATH') ) {
+	if ( ! defined( 'ADMIN_COOKIE_PATH' ) ) {
 		define( 'ADMIN_COOKIE_PATH', SITECOOKIEPATH . 'wp-admin' );
 	}
 
 	/**
 	 * @since WP-2.6.0
 	 */
-	if ( ! defined( 'PLUGINS_COOKIE_PATH') ) {
+	if ( ! defined( 'PLUGINS_COOKIE_PATH' ) ) {
 		define( 'PLUGINS_COOKIE_PATH', preg_replace( '|https?://[^/]+|i', '', WP_PLUGIN_URL ) );
 	}
 
 	/**
 	 * @since WP-2.0.0
 	 */
-	if ( ! defined( 'COOKIE_DOMAIN') ) {
+	if ( ! defined( 'COOKIE_DOMAIN' ) ) {
 		define( 'COOKIE_DOMAIN', false );
 	}
 }
@@ -353,7 +355,7 @@ function wp_functionality_constants() {
 		define( 'EMPTY_TRASH_DAYS', 30 );
 	}
 
-	if ( ! defined( 'WP_POST_REVISIONS') ) {
+	if ( ! defined( 'WP_POST_REVISIONS' ) ) {
 		define( 'WP_POST_REVISIONS', true );
 	}
 
@@ -391,7 +393,7 @@ function wp_templating_constants() {
 	 * @since WP-3.0.0
 	 * @see WP_Theme::get_core_default_theme()
 	 */
-	if ( ! defined( 'WP_DEFAULT_THEME') ) {
+	if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
 		define( 'WP_DEFAULT_THEME', 'classicpress-twentyseventeen' );
 	}
 
