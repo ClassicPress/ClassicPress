@@ -27,14 +27,14 @@ class Core_Upgrader extends WP_Upgrader {
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __( 'ClassicPress is at the latest version.' );
-		$this->strings['locked'] = __( 'Another update was started but has not completed yet.' );
+		$this->strings['locked']     = __( 'Another update was started but has not completed yet.' );
 		$this->strings['no_package'] = __( 'Update package not available.' );
 		/* translators: %s: package URL */
-		$this->strings['downloading_package'] = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
-		$this->strings['unpack_package'] = __( 'Unpacking the update&#8230;' );
-		$this->strings['copy_failed'] = __( 'Could not copy files.' );
-		$this->strings['copy_failed_space'] = __( 'Could not copy files. You may have run out of disk space.'  );
-		$this->strings['start_rollback'] = __( 'Attempting to roll back to previous version.' );
+		$this->strings['downloading_package']   = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
+		$this->strings['unpack_package']        = __( 'Unpacking the update&#8230;' );
+		$this->strings['copy_failed']           = __( 'Could not copy files.' );
+		$this->strings['copy_failed_space']     = __( 'Could not copy files. You may have run out of disk space.' );
+		$this->strings['start_rollback']        = __( 'Attempting to roll back to previous version.' );
 		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, ClassicPress has rolled back to your previous version.' );
 	}
 
@@ -67,7 +67,7 @@ class Core_Upgrader extends WP_Upgrader {
 	public static function get_update_directory_root( $working_dir ) {
 		global $wp_filesystem;
 
-		$distro = null;
+		$distro  = null;
 		$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
 
 		if (
@@ -79,7 +79,7 @@ class Core_Upgrader extends WP_Upgrader {
 			$entries[0]['type'] === 'd'
 		) {
 			$distro = '/' . $entries[0]['name'] . '/';
-			$root = $working_dir . $distro;
+			$root   = $working_dir . $distro;
 			if (
 				! $wp_filesystem->exists( $root . 'readme.html' ) ||
 				! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
@@ -115,14 +115,14 @@ class Core_Upgrader extends WP_Upgrader {
 	public function upgrade( $current, $args = array() ) {
 		global $wp_filesystem;
 
-		include( ABSPATH . WPINC . '/version.php' ); // $wp_version;
+		include ABSPATH . WPINC . '/version.php'; // $wp_version;
 
 		$start_time = time();
 
-		$defaults = array(
-			'pre_check_md5'    => true,
-			'attempt_rollback' => false,
-			'do_rollback'      => false,
+		$defaults    = array(
+			'pre_check_md5'                => true,
+			'attempt_rollback'             => false,
+			'do_rollback'                  => false,
 			'allow_relaxed_file_ownership' => false,
 		);
 		$parsed_args = wp_parse_args( $args, $defaults );
@@ -131,39 +131,16 @@ class Core_Upgrader extends WP_Upgrader {
 		$this->upgrade_strings();
 
 		// Is an update available?
-		if ( !isset( $current->response ) || $current->response == 'latest' )
-			return new WP_Error('up_to_date', $this->strings['up_to_date']);
+		if ( ! isset( $current->response ) || $current->response == 'latest' ) {
+			return new WP_Error( 'up_to_date', $this->strings['up_to_date'] );
+		}
 
 		$res = $this->fs_connect( array( ABSPATH, WP_CONTENT_DIR ), $parsed_args['allow_relaxed_file_ownership'] );
 		if ( ! $res || is_wp_error( $res ) ) {
 			return $res;
 		}
 
-		$wp_dir = trailingslashit($wp_filesystem->abspath());
-
-		$partial = true;
-		if ( $parsed_args['do_rollback'] )
-			$partial = false;
-		elseif ( $parsed_args['pre_check_md5'] && ! $this->check_files() )
-			$partial = false;
-
-		/*
-		 * If partial update is returned from the API, use that, unless we're doing
-		 * a reinstallation. If we cross the new_bundled version number, then use
-		 * the new_bundled zip. Don't though if the constant is set to skip bundled items.
-		 * If the API returns a no_content zip, go with it. Finally, default to the full zip.
-		 */
-		if ( $parsed_args['do_rollback'] && $current->packages->rollback )
-			$to_download = 'rollback';
-		elseif ( $current->packages->partial && 'reinstall' != $current->response && $wp_version == $current->partial_version && $partial )
-			$to_download = 'partial';
-		elseif ( $current->packages->new_bundled && version_compare( $wp_version, $current->new_bundled, '<' )
-			&& ( ! defined( 'CORE_UPGRADE_SKIP_NEW_BUNDLED' ) || ! CORE_UPGRADE_SKIP_NEW_BUNDLED ) )
-			$to_download = 'new_bundled';
-		elseif ( $current->packages->no_content )
-			$to_download = 'no_content';
-		else
-			$to_download = 'full';
+		$wp_dir = trailingslashit( $wp_filesystem->abspath() );
 
 		// Lock to prevent multiple Core Updates occurring
 		$lock = WP_Upgrader::create_lock( 'core_updater', 15 * MINUTE_IN_SECONDS );
@@ -171,7 +148,8 @@ class Core_Upgrader extends WP_Upgrader {
 			return new WP_Error( 'locked', $this->strings['locked'] );
 		}
 
-		$download = $this->download_package( $current->packages->$to_download );
+		// ClassicPress only supports the "full" upgrade package.
+		$download = $this->download_package( $current->packages->full );
 		if ( is_wp_error( $download ) ) {
 			WP_Upgrader::release_lock( 'core_updater' );
 			return $download;
@@ -190,13 +168,13 @@ class Core_Upgrader extends WP_Upgrader {
 			$wp_dir . 'wp-admin/includes/update-core.php',
 			true
 		) ) {
-			$wp_filesystem->delete($working_dir, true);
+			$wp_filesystem->delete( $working_dir, true );
 			WP_Upgrader::release_lock( 'core_updater' );
 			return new WP_Error( 'copy_failed_for_update_core_file', __( 'The update cannot be installed because we will be unable to copy some files. This is usually due to inconsistent file permissions.' ), 'wp-admin/includes/update-core.php' );
 		}
-		$wp_filesystem->chmod($wp_dir . 'wp-admin/includes/update-core.php', FS_CHMOD_FILE);
+		$wp_filesystem->chmod( $wp_dir . 'wp-admin/includes/update-core.php', FS_CHMOD_FILE );
 
-		require_once( ABSPATH . 'wp-admin/includes/update-core.php' );
+		require_once ABSPATH . 'wp-admin/includes/update-core.php';
 
 		if ( ! function_exists( 'update_core' ) ) {
 			WP_Upgrader::release_lock( 'core_updater' );
@@ -215,12 +193,13 @@ class Core_Upgrader extends WP_Upgrader {
 				 * mkdir_failed__copy_dir, copy_failed__copy_dir_retry, and disk_full.
 				 * do_rollback allows for update_core() to trigger a rollback if needed.
 				 */
-				if ( false !== strpos( $error_code, 'do_rollback' ) )
+				if ( false !== strpos( $error_code, 'do_rollback' ) ) {
 					$try_rollback = true;
-				elseif ( false !== strpos( $error_code, '__copy_dir' ) )
+				} elseif ( false !== strpos( $error_code, '__copy_dir' ) ) {
 					$try_rollback = true;
-				elseif ( 'disk_full' === $error_code )
+				} elseif ( 'disk_full' === $error_code ) {
 					$try_rollback = true;
+				}
 			}
 
 			if ( $try_rollback ) {
@@ -233,12 +212,26 @@ class Core_Upgrader extends WP_Upgrader {
 				$rollback_result = $this->upgrade( $current, array_merge( $parsed_args, array( 'do_rollback' => true ) ) );
 
 				$original_result = $result;
-				$result = new WP_Error( 'rollback_was_required', $this->strings['rollback_was_required'], (object) array( 'update' => $original_result, 'rollback' => $rollback_result ) );
+				$result          = new WP_Error(
+					'rollback_was_required',
+					$this->strings['rollback_was_required'],
+					(object) array(
+						'update'   => $original_result,
+						'rollback' => $rollback_result,
+					)
+				);
 			}
 		}
 
 		/** This action is documented in wp-admin/includes/class-wp-upgrader.php */
-		do_action( 'upgrader_process_complete', $this, array( 'action' => 'update', 'type' => 'core' ) );
+		do_action(
+			'upgrader_process_complete',
+			$this,
+			array(
+				'action' => 'update',
+				'type'   => 'core',
+			)
+		);
 
 		// Clear the current updates
 		delete_site_transient( 'update_core' );
@@ -249,7 +242,7 @@ class Core_Upgrader extends WP_Upgrader {
 				'success'          => true,
 				'fs_method'        => $wp_filesystem->method,
 				'fs_method_forced' => defined( 'FS_METHOD' ) || has_filter( 'filesystem_method' ),
-				'fs_method_direct' => !empty( $GLOBALS['_wp_filesystem_direct_method'] ) ? $GLOBALS['_wp_filesystem_direct_method'] : '',
+				'fs_method_direct' => ! empty( $GLOBALS['_wp_filesystem_direct_method'] ) ? $GLOBALS['_wp_filesystem_direct_method'] : '',
 				'time_taken'       => time() - $start_time,
 				'reported'         => $wp_version,
 				'attempted'        => $current->version,
@@ -291,7 +284,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @return bool True if we should update to the offered version, otherwise false.
 	 */
 	public static function should_update_to_version( $offered_ver ) {
-		include( ABSPATH . WPINC . '/version.php' ); // $cp_version; // x.y.z
+		include ABSPATH . WPINC . '/version.php'; // $cp_version; // x.y.z
 
 		return self::_auto_update_enabled_for_versions(
 			$cp_version,
@@ -426,7 +419,6 @@ class Core_Upgrader extends WP_Upgrader {
 			} elseif ( ! $upgrade_nightly ) {
 				return false;
 			}
-
 		} elseif ( $current['nightly'] || $offered['nightly'] ) {
 			// Never auto-update from a nightly build to a non-nightly build,
 			// or vice versa.
@@ -604,39 +596,51 @@ class Core_Upgrader extends WP_Upgrader {
 			$nightly_build = false;
 		}
 
-		return [
+		return array(
 			'major'      => intval( $matches['major'] ),
 			'minor'      => intval( $matches['minor'] ),
 			'patch'      => intval( $matches['patch'] ),
 			'prerelease' => $matches['prerelease'],
 			'nightly'    => $nightly_build,
-		];
+		);
 	}
 
 	/**
 	 * Compare the disk file checksums against the expected checksums.
 	 *
 	 * @since WP-3.7.0
+	 * @since 1.3.0 Correctly uses the checksums for the current ClassicPress
+	 * version, not the equivalent WordPress version. This function is no
+	 * longer used during the core update process.
 	 *
-	 * @global string $wp_version
-	 * @global string $wp_local_package
+	 * @global string $cp_version
 	 *
 	 * @return bool True if the checksums match, otherwise false.
 	 */
 	public function check_files() {
-		global $wp_version, $wp_local_package;
+		global $cp_version;
 
-		$checksums = get_core_checksums( $wp_version, isset( $wp_local_package ) ? $wp_local_package : 'en_US' );
-
-		if ( ! is_array( $checksums ) )
+		if ( version_compare( $cp_version, '1.3.0-rc1', '<' ) ) {
+			// This version of ClassicPress has a `get_core_checksums()`
+			// function which incorrectly expects a WordPress version, so there
+			// is no point in continuing.
 			return false;
+		}
+
+		$checksums = get_core_checksums( $cp_version, 'en_US' );
+
+		if ( ! is_array( $checksums ) ) {
+			return false;
+		}
 
 		foreach ( $checksums as $file => $checksum ) {
 			// Skip files which get updated
-			if ( 'wp-content' == substr( $file, 0, 10 ) )
+			if ( 'wp-content' == substr( $file, 0, 10 ) ) {
 				continue;
-			if ( ! file_exists( ABSPATH . $file ) || md5_file( ABSPATH . $file ) !== $checksum )
+			}
+			if ( ! file_exists( ABSPATH . $file ) || md5_file( ABSPATH . $file ) !== $checksum ) {
 				return false;
+			}
 		}
 
 		return true;

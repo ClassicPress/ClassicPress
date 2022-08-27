@@ -202,7 +202,8 @@ var wpNavMenu;
 						// Add the items
 						api.addItemToMenu(menuItems, processMethod, function(){
 							// Deselect the items and hide the ajax spinner
-							checkboxes.removeAttr('checked');
+							checkboxes.prop( 'checked', false );
+							t.find( '.button-controls .select-all' ).prop( 'checked', false );
 							t.find( '.button-controls .spinner' ).removeClass( 'is-active' );
 						});
 					});
@@ -1053,7 +1054,7 @@ var wpNavMenu;
 
 		attachTabsPanelListeners : function() {
 			$('#menu-settings-column').bind('click', function(e) {
-				var selectAreaMatch, panelId, wrapper, items,
+				var selectAreaMatch, selectAll, panelId, wrapper, items,
 					target = $(e.target);
 
 				if ( target.hasClass('nav-tab-link') ) {
@@ -1063,7 +1064,7 @@ var wpNavMenu;
 					wrapper = target.parents('.accordion-section-content').first();
 
 					// upon changing tabs, we want to uncheck all checkboxes
-					$('input', wrapper).removeAttr('checked');
+					$( 'input', wrapper ).prop( 'checked', false );
 
 					$('.tabs-panel-active', wrapper).removeClass('tabs-panel-active').addClass('tabs-panel-inactive');
 					$('#' + panelId, wrapper).removeClass('tabs-panel-inactive').addClass('tabs-panel-active');
@@ -1082,15 +1083,28 @@ var wpNavMenu;
 					}
 
 					e.preventDefault();
-				} else if ( target.hasClass('select-all') ) {
-					selectAreaMatch = /#(.*)$/.exec(e.target.href);
-					if ( selectAreaMatch && selectAreaMatch[1] ) {
-						items = $('#' + selectAreaMatch[1] + ' .tabs-panel-active .menu-item-title input');
-						if( items.length === items.filter(':checked').length )
-							items.removeAttr('checked');
-						else
-							items.prop('checked', true);
-						return false;
+				} else if ( target.hasClass( 'select-all' ) ) {
+					selectAreaMatch = target.closest( '.button-controls' ).data( 'items-type' );
+					if ( selectAreaMatch ) {
+						items = $( '#' + selectAreaMatch + ' .tabs-panel-active .menu-item-title input' );
+
+						if ( items.length === items.filter( ':checked' ).length && ! target.is( ':checked' ) ) {
+							items.prop( 'checked', false );
+						} else if ( target.is( ':checked' ) ) {
+							items.prop( 'checked', true );
+						}
+					}
+				} else if ( target.hasClass( 'menu-item-checkbox' ) ) {
+					selectAreaMatch = target.closest( '.tabs-panel-active' ).parent().attr( 'id' );
+					if ( selectAreaMatch ) {
+						items     = $( '#' + selectAreaMatch + ' .tabs-panel-active .menu-item-title input' );
+						selectAll = $( '.button-controls[data-items-type="' + selectAreaMatch + '"] .select-all' );
+
+						if ( items.length === items.filter( ':checked' ).length && ! selectAll.is( ':checked' ) ) {
+							selectAll.prop( 'checked', true );
+						} else if ( selectAll.is( ':checked' ) ) {
+							selectAll.prop( 'checked', false );
+						}
 					}
 				} else if ( target.hasClass('submit-add-to-menu') ) {
 					api.registerChange();
@@ -1218,6 +1232,7 @@ var wpNavMenu;
 			pattern = /menu-item[(\[^]\]*/,
 			$items = $('<div>').html(resp).find('li'),
 			wrapper = panel.closest( '.accordion-section-content' ),
+			selectAll = wrapper.find( '.button-controls .select-all' ),
 			$item;
 
 			if( ! $items.length ) {
@@ -1252,6 +1267,10 @@ var wpNavMenu;
 			$('.categorychecklist', panel).html( $items );
 			$( '.spinner', panel ).removeClass( 'is-active' );
 			wrapper.removeClass( 'has-no-menu-item' );
+
+			if ( selectAll.is( ':checked' ) ) {
+				selectAll.prop( 'checked', false );
+			}
 		},
 
 		/**

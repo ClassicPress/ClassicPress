@@ -84,6 +84,7 @@ AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.pro
 		this.collection.on( 'add remove reset', this.updateContent, this );
 	},
 
+	// When editing a selection, move focus to the "Go to library" button.
 	editSelection: function( modal ) {
 		modal.$( '.media-button-backToLibrary' ).focus();
 	},

@@ -9,49 +9,52 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/23605
 	 */
 	function test_spaces() {
-		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr%20ClassicPress',    esc_url( 'http://example.com/Mr%20ClassicPress' ) );
+		$this->assertEquals( 'http://example.com/Mr%20ClassicPress', esc_url( 'http://example.com/Mr ClassicPress' ) );
+		$this->assertEquals( 'http://example.com/Mr%20ClassicPress', esc_url( 'http://example.com/Mr%20ClassicPress' ) );
 		$this->assertEquals( 'http://example.com/Mr%20%20ClassicPress', esc_url( 'http://example.com/Mr%20%20ClassicPress' ) );
-		$this->assertEquals( 'http://example.com/Mr+ClassicPress',      esc_url( 'http://example.com/Mr+ClassicPress' ) );
+		$this->assertEquals( 'http://example.com/Mr+ClassicPress', esc_url( 'http://example.com/Mr+ClassicPress' ) );
 
 		$this->assertEquals( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one two three&bar=four' ) );
 		$this->assertEquals( 'http://example.com/?foo=one%20two%20three&#038;bar=four', esc_url( 'http://example.com/?foo=one%20two%20three&bar=four' ) );
 	}
 
 	function test_bad_characters() {
-		$this->assertEquals('http://example.com/watchthelinefeedgo', esc_url('http://example.com/watchthelinefeed%0Ago'));
-		$this->assertEquals('http://example.com/watchthelinefeedgo', esc_url('http://example.com/watchthelinefeed%0ago'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0Dgo'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0dgo'));
+		$this->assertEquals( 'http://example.com/watchthelinefeedgo', esc_url( 'http://example.com/watchthelinefeed%0Ago' ) );
+		$this->assertEquals( 'http://example.com/watchthelinefeedgo', esc_url( 'http://example.com/watchthelinefeed%0ago' ) );
+		$this->assertEquals( 'http://example.com/watchthecarriagereturngo', esc_url( 'http://example.com/watchthecarriagereturn%0Dgo' ) );
+		$this->assertEquals( 'http://example.com/watchthecarriagereturngo', esc_url( 'http://example.com/watchthecarriagereturn%0dgo' ) );
 		//Nesting Checks
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0%0ddgo'));
-		$this->assertEquals('http://example.com/watchthecarriagereturngo', esc_url('http://example.com/watchthecarriagereturn%0%0DDgo'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0DAD'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0ADA'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0DAd'));
-		$this->assertEquals('http://example.com/', esc_url('http://example.com/%0%0%0ADa'));
+		$this->assertEquals( 'http://example.com/watchthecarriagereturngo', esc_url( 'http://example.com/watchthecarriagereturn%0%0ddgo' ) );
+		$this->assertEquals( 'http://example.com/watchthecarriagereturngo', esc_url( 'http://example.com/watchthecarriagereturn%0%0DDgo' ) );
+		$this->assertEquals( 'http://example.com/', esc_url( 'http://example.com/%0%0%0DAD' ) );
+		$this->assertEquals( 'http://example.com/', esc_url( 'http://example.com/%0%0%0ADA' ) );
+		$this->assertEquals( 'http://example.com/', esc_url( 'http://example.com/%0%0%0DAd' ) );
+		$this->assertEquals( 'http://example.com/', esc_url( 'http://example.com/%0%0%0ADa' ) );
 	}
 
 	function test_relative() {
-		$this->assertEquals('/example.php', esc_url('/example.php'));
-		$this->assertEquals('example.php', esc_url('example.php'));
-		$this->assertEquals('#fragment', esc_url('#fragment'));
-		$this->assertEquals('?foo=bar', esc_url('?foo=bar'));
+		$this->assertEquals( '/example.php', esc_url( '/example.php' ) );
+		$this->assertEquals( 'example.php', esc_url( 'example.php' ) );
+		$this->assertEquals( '#fragment', esc_url( '#fragment' ) );
+		$this->assertEquals( '?foo=bar', esc_url( '?foo=bar' ) );
 	}
 
 	function test_all_url_parts() {
 		$url = 'https://user:pass@host.example.com:1234/path;p=1?query=2&r[]=3#fragment';
 
-		$this->assertEquals( array(
-			'scheme'   => 'https',
-			'host'     => 'host.example.com',
-			'port'     => 1234,
-			'user'     => 'user',
-			'pass'     => 'pass',
-			'path'     => '/path;p=1',
-			'query'    => 'query=2&r[]=3',
-			'fragment' => 'fragment',
-		), parse_url( $url ) );
+		$this->assertEquals(
+			array(
+				'scheme'   => 'https',
+				'host'     => 'host.example.com',
+				'port'     => 1234,
+				'user'     => 'user',
+				'pass'     => 'pass',
+				'path'     => '/path;p=1',
+				'query'    => 'query=2&r[]=3',
+				'fragment' => 'fragment',
+			),
+			parse_url( $url )
+		);
 		$this->assertEquals( 'https://user:pass@host.example.com:1234/path;p=1?query=2&r%5B%5D=3#fragment', esc_url_raw( $url ) );
 		$this->assertEquals( 'https://user:pass@host.example.com:1234/path;p=1?query=2&#038;r%5B%5D=3#fragment', esc_url( $url ) );
 	}
@@ -65,8 +68,8 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	function test_encoding() {
-		$this->assertEquals( 'http://example.com?foo=1&bar=2',      esc_url_raw( 'http://example.com?foo=1&bar=2' ) );
-		$this->assertEquals( 'http://example.com?foo=1&amp;bar=2',  esc_url_raw( 'http://example.com?foo=1&amp;bar=2' ) );
+		$this->assertEquals( 'http://example.com?foo=1&bar=2', esc_url_raw( 'http://example.com?foo=1&bar=2' ) );
+		$this->assertEquals( 'http://example.com?foo=1&amp;bar=2', esc_url_raw( 'http://example.com?foo=1&amp;bar=2' ) );
 		$this->assertEquals( 'http://example.com?foo=1&#038;bar=2', esc_url_raw( 'http://example.com?foo=1&#038;bar=2' ) );
 
 		$this->assertEquals( 'http://example.com?foo=1&#038;bar=2', esc_url( 'http://example.com?foo=1&bar=2' ) );
@@ -78,32 +81,64 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	}
 
 	function test_protocol() {
-		$this->assertEquals('http://example.com', esc_url('http://example.com'));
-		$this->assertEquals('', esc_url('nasty://example.com/'));
-		$this->assertEquals( '', esc_url( 'example.com', array(
-			'https',
-		) ) );
-		$this->assertEquals( '', esc_url( 'http://example.com', array(
-			'https',
-		) ) );
-		$this->assertEquals( 'https://example.com', esc_url( 'https://example.com', array(
-			'http', 'https',
-		) ) );
+		$this->assertEquals( 'http://example.com', esc_url( 'http://example.com' ) );
+		$this->assertEquals( '', esc_url( 'nasty://example.com/' ) );
+		$this->assertEquals(
+			'',
+			esc_url(
+				'example.com',
+				array(
+					'https',
+				)
+			)
+		);
+		$this->assertEquals(
+			'',
+			esc_url(
+				'http://example.com',
+				array(
+					'https',
+				)
+			)
+		);
+		$this->assertEquals(
+			'https://example.com',
+			esc_url(
+				'https://example.com',
+				array(
+					'http',
+					'https',
+				)
+			)
+		);
 
 		foreach ( wp_allowed_protocols() as $scheme ) {
 			$this->assertEquals( "{$scheme}://example.com", esc_url( "{$scheme}://example.com" ), $scheme );
-			$this->assertEquals( "{$scheme}://example.com", esc_url( "{$scheme}://example.com", array(
-				$scheme,
-			) ), $scheme );
+			$this->assertEquals(
+				"{$scheme}://example.com",
+				esc_url(
+					"{$scheme}://example.com",
+					array(
+						$scheme,
+					)
+				),
+				$scheme
+			);
 		}
 
 		$this->assertTrue( ! in_array( 'data', wp_allowed_protocols(), true ) );
 		$this->assertEquals( '', esc_url( 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ%3D%3D' ) );
 
 		$this->assertTrue( ! in_array( 'foo', wp_allowed_protocols(), true ) );
-		$this->assertEquals( 'foo://example.com', esc_url( 'foo://example.com', array(
-			'foo',
-		) ) );
+		$this->assertEquals(
+			'foo://example.com',
+			esc_url(
+				'foo://example.com',
+				array(
+					'foo',
+				)
+			)
+		);
 
 	}
 
@@ -111,13 +146,13 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/23187
 	 */
 	function test_protocol_case() {
-		$this->assertEquals('http://example.com', esc_url('HTTP://example.com'));
-		$this->assertEquals('http://example.com', esc_url('Http://example.com'));
+		$this->assertEquals( 'http://example.com', esc_url( 'HTTP://example.com' ) );
+		$this->assertEquals( 'http://example.com', esc_url( 'Http://example.com' ) );
 	}
 
 	function test_display_extras() {
-		$this->assertEquals('http://example.com/&#039;quoted&#039;', esc_url('http://example.com/\'quoted\''));
-		$this->assertEquals('http://example.com/\'quoted\'', esc_url('http://example.com/\'quoted\'',null,'notdisplay'));
+		$this->assertEquals( 'http://example.com/&#039;quoted&#039;', esc_url( 'http://example.com/\'quoted\'' ) );
+		$this->assertEquals( 'http://example.com/\'quoted\'', esc_url( 'http://example.com/\'quoted\'', null, 'notdisplay' ) );
 	}
 
 	function test_non_ascii() {
@@ -168,11 +203,12 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_with_newline() {
-		$body = <<<EOT
+		$body       = <<<EOT
 Hi there,
 
 I thought you might want to sign up for this newsletter
 EOT;
+		$body       = str_replace( "\r\n", "\n", $body );
 		$email_link = 'mailto:?body=' . rawurlencode( $body );
 		$email_link = esc_url( $email_link );
 		$this->assertEquals( 'mailto:?body=Hi%20there%2C%0A%0AI%20thought%20you%20might%20want%20to%20sign%20up%20for%20this%20newsletter', $email_link );
@@ -182,11 +218,12 @@ EOT;
 	 * @see https://core.trac.wordpress.org/ticket/31632
 	 */
 	function test_mailto_in_http_url_with_newline() {
-		$body = <<<EOT
+		$body       = <<<EOT
 Hi there,
 
 I thought you might want to sign up for this newsletter
 EOT;
+		$body       = str_replace( "\r\n", "\n", $body );
 		$email_link = 'http://example.com/mailto:?body=' . rawurlencode( $body );
 		$email_link = esc_url( $email_link );
 		$this->assertEquals( 'http://example.com/mailto:?body=Hi%20there%2CI%20thought%20you%20might%20want%20to%20sign%20up%20for%20this%20newsletter', $email_link );
@@ -207,10 +244,10 @@ EOT;
 	 * @see https://core.trac.wordpress.org/ticket/28015
 	 */
 	function test_invalid_charaters() {
-		$this->assertEmpty( esc_url_raw('"^<>{}`') );
+		$this->assertEmpty( esc_url_raw( '"^<>{}`' ) );
 	}
 
-	/** 
+	/**
 	 * @see https://core.trac.wordpress.org/ticket/34202
 	 */
 	function test_ipv6_hosts() {

@@ -47,7 +47,7 @@
 
 	};
 
-	var audioDetails = function() { // ClassicPress: defer loading via require()
+	var audioDetails$2 = function() { // ClassicPress: defer loading via require()
 
 	var State = wp.media.controller.State,
 		l10n = wp.media.view.l10n,
@@ -85,7 +85,7 @@
 
 	};
 
-	var videoDetails = function() { // ClassicPress: defer loading via require()
+	var videoDetails$2 = function() { // ClassicPress: defer loading via require()
 
 	/**
 	 * wp.media.controller.VideoDetails
@@ -123,7 +123,7 @@
 
 	};
 
-	var mediaDetails = function() { // ClassicPress: defer loading via require()
+	var mediaDetails$1 = function() { // ClassicPress: defer loading via require()
 
 	var Select = wp.media.view.MediaFrame.Select,
 		l10n = wp.media.view.l10n,
@@ -479,7 +479,7 @@
 
 	};
 
-	var mediaDetails$1 = function() { // ClassicPress: defer loading via require()
+	var mediaDetails = function() { // ClassicPress: defer loading via require()
 
 	/* global MediaElementPlayer */
 	var AttachmentDisplay = wp.media.view.Settings.AttachmentDisplay,
@@ -652,7 +652,7 @@
 
 	};
 
-	var audioDetails$2 = function() { // ClassicPress: defer loading via require()
+	var audioDetails = function() { // ClassicPress: defer loading via require()
 
 	var MediaDetails = wp.media.view.MediaDetails,
 		AudioDetails;
@@ -695,7 +695,7 @@
 
 	};
 
-	var videoDetails$2 = function() { // ClassicPress: defer loading via require()
+	var videoDetails = function() { // ClassicPress: defer loading via require()
 
 	var MediaDetails = wp.media.view.MediaDetails,
 		VideoDetails;
@@ -1015,13 +1015,13 @@
 	};
 
 	media.model.PostMedia = postMedia();
-	media.controller.AudioDetails = audioDetails();
-	media.controller.VideoDetails = videoDetails();
-	media.view.MediaFrame.MediaDetails = mediaDetails();
+	media.controller.AudioDetails = audioDetails$2();
+	media.controller.VideoDetails = videoDetails$2();
+	media.view.MediaFrame.MediaDetails = mediaDetails$1();
 	media.view.MediaFrame.AudioDetails = audioDetails$1();
 	media.view.MediaFrame.VideoDetails = videoDetails$1();
-	media.view.MediaDetails = mediaDetails$1();
-	media.view.AudioDetails = audioDetails$2();
-	media.view.VideoDetails = videoDetails$2();
+	media.view.MediaDetails = mediaDetails();
+	media.view.AudioDetails = audioDetails();
+	media.view.VideoDetails = videoDetails();
 
-}());
+})();

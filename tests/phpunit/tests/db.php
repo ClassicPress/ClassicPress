@@ -86,8 +86,9 @@ class Tests_DB extends WP_UnitTestCase {
 
 		// Switch to Russian
 		$flag = setlocale( LC_ALL, 'ru_RU.utf8', 'rus', 'fr_FR.utf8', 'fr_FR', 'de_DE.utf8', 'de_DE', 'es_ES.utf8', 'es_ES' );
-		if ( false === $flag )
+		if ( false === $flag ) {
 			$this->markTestSkipped( 'No European languages available for testing' );
+		}
 
 		// Try an update query
 		$wpdb->suppress_errors( true );
@@ -104,15 +105,16 @@ class Tests_DB extends WP_UnitTestCase {
 		$this->assertContains( '0.700', array_pop( $this->_queries ) );
 
 		// Try a prepare
-		$sql = $wpdb->prepare( "UPDATE test_table SET float_column = %f AND meta_id = %d", 0.7, 5 );
+		$sql = $wpdb->prepare( 'UPDATE test_table SET float_column = %f AND meta_id = %d', 0.7, 5 );
 		$this->assertContains( '0.700', $sql );
 
 		// Restore locale settings
 		foreach ( $current_locales as $locale_setting ) {
 			if ( false !== strpos( $locale_setting, '=' ) ) {
 				list( $category, $locale ) = explode( '=', $locale_setting );
-				if ( defined( $category ) )
+				if ( defined( $category ) ) {
 					setlocale( constant( $category ), $locale );
+				}
 			} else {
 				setlocale( LC_ALL, $locale_setting );
 			}
@@ -125,7 +127,7 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_esc_like() {
 		global $wpdb;
 
-		$inputs = array(
+		$inputs   = array(
 			'howdy%', //Single Percent
 			'howdy_', //Single Underscore
 			'howdy\\', //Single slash
@@ -140,8 +142,8 @@ class Tests_DB extends WP_UnitTestCase {
 			'howdy\'"[[]*#[^howdy]!+)(*&$#@!~|}{=--`/.,<>?',
 		);
 
-		foreach ($inputs as $key => $input) {
-			$this->assertEquals($expected[$key], $wpdb->esc_like($input));
+		foreach ( $inputs as $key => $input ) {
+			$this->assertEquals( $expected[ $key ], $wpdb->esc_like( $input ) );
 		}
 	}
 
@@ -156,11 +158,11 @@ class Tests_DB extends WP_UnitTestCase {
 	 * @dataProvider data_like_query
 	 * @param $data string The haystack, raw.
 	 * @param $like string The like phrase, raw.
-         * @param $result string The expected comparison result; '1' = true, '0' = false
+		 * @param $result string The expected comparison result; '1' = true, '0' = false
 	 */
 	function test_like_query( $data, $like, $result ) {
 		global $wpdb;
-		return $this->assertEquals( $result, $wpdb->get_var( $wpdb->prepare( "SELECT %s LIKE %s", $data, $wpdb->esc_like( $like ) ) ) );
+		return $this->assertEquals( $result, $wpdb->get_var( $wpdb->prepare( 'SELECT %s LIKE %s', $data, $wpdb->esc_like( $like ) ) ) );
 	}
 
 	function data_like_query() {
@@ -242,7 +244,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$new_meta = "HAHA I HOPE THIS DOESN'T WORK";
 
-		$col_meta = $wpdb->col_meta;
+		$col_meta       = $wpdb->col_meta;
 		$wpdb->col_meta = $new_meta;
 
 		$this->assertNotEquals( $col_meta, $new_meta );
@@ -338,7 +340,7 @@ class Tests_DB extends WP_UnitTestCase {
 		$pos = array_search( 'ONLY_FULL_GROUP_BY', $modes );
 		$this->assertGreaterThanOrEqual( 0, $pos );
 
-		if ( FALSE === $pos ) {
+		if ( false === $pos ) {
 			return $modes;
 		}
 
@@ -361,7 +363,7 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_sprintf() {
 		global $wpdb;
 
-		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, "admin" );
+		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, 'admin' );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
 	}
 
@@ -371,17 +373,17 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_sprintf_invalid_args() {
 		global $wpdb;
 
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, array( "admin" ) );
+		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, array( 'admin' ) );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
 
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ), "admin" );
+		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ), 'admin' );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
 	}
 
 	function test_prepare_vsprintf() {
 		global $wpdb;
 
-		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, "admin" ) );
+		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, 'admin' ) );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", $prepared );
 	}
 
@@ -391,10 +393,10 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_prepare_vsprintf_invalid_args() {
 		global $wpdb;
 
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, array( "admin" ) ) );
+		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, array( 'admin' ) ) );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
 
-		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( array( 1 ), "admin" ) );
+		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( array( 1 ), 'admin' ) );
 		$this->assertEquals( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
 	}
 
@@ -419,7 +421,7 @@ class Tests_DB extends WP_UnitTestCase {
 		return array(
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s",     // Query
-				array( 1, "admin", "extra-arg" ),                                   // ::prepare() args, to be passed via call_user_func_array
+				array( 1, 'admin', 'extra-arg' ),                                   // ::prepare() args, to be passed via call_user_func_array
 				"SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'", // Expected output
 			),
 			array(
@@ -429,37 +431,37 @@ class Tests_DB extends WP_UnitTestCase {
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s",
-				array( array( 1, "admin", "extra-arg" ) ),
+				array( array( 1, 'admin', 'extra-arg' ) ),
 				"SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = 'admin'",
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d AND %% AND user_login = %s",
-				array( 1, "admin", "extra-arg" ),
+				array( 1, 'admin', 'extra-arg' ),
 				"SELECT * FROM $wpdb->users WHERE id = 1 AND {$wpdb->placeholder_escape()} AND user_login = 'admin'",
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %%%d AND %F AND %f AND user_login = %s",
-				array( 1, 2.3, "4.5", "admin", "extra-arg" ),
+				array( 1, 2.3, '4.5', 'admin', 'extra-arg' ),
 				"SELECT * FROM $wpdb->users WHERE id = {$wpdb->placeholder_escape()}1 AND 2.300000 AND 4.500000 AND user_login = 'admin'",
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s",
-				array( array( 1 ), "admin", "extra-arg" ),
+				array( array( 1 ), 'admin', 'extra-arg' ),
 				"SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'",
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d and user_nicename = %s and user_status = %d and user_login = %s",
-				array( 1, "admin", 0 ),
+				array( 1, 'admin', 0 ),
 				'',
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d and user_nicename = %s and user_status = %d and user_login = %s",
-				array( array( 1, "admin", 0 ) ),
+				array( array( 1, 'admin', 0 ) ),
 				'',
 			),
 			array(
 				"SELECT * FROM $wpdb->users WHERE id = %d and %% and user_login = %s and user_status = %d and user_login = %s",
-				array( 1, "admin", "extra-arg" ),
+				array( 1, 'admin', 'extra-arg' ),
 				'',
 			),
 		);
@@ -473,8 +475,8 @@ class Tests_DB extends WP_UnitTestCase {
 
 	function test_get_caller() {
 		global $wpdb;
-		$str = $wpdb->get_caller();
-		$calls = explode( ', ', $str );
+		$str    = $wpdb->get_caller();
+		$calls  = explode( ', ', $str );
 		$called = join( '->', array( __CLASS__, __FUNCTION__ ) );
 		$this->assertEquals( $called, end( $calls ) );
 	}
@@ -559,6 +561,96 @@ class Tests_DB extends WP_UnitTestCase {
 		$this->assertEquals( 'Walter Sobchak', $row->display_name );
 	}
 
+	/**
+	 * Test the `get_col()` method.
+	 *
+	 * @param string|null        $query       The query to run.
+	 * @param string|array       $expected    The expected resulting value.
+	 * @param arrray|string|null $last_result The value to assign to `$wpdb->last_result`.
+	 * @param int|string         $column      The column index to retrieve.
+	 *
+	 * @dataProvider data_test_get_col
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/45299
+	 */
+	function test_get_col( $query, $expected, $last_result, $column ) {
+		global $wpdb;
+
+		$wpdb->last_result = $last_result;
+
+		$result = $wpdb->get_col( $query, $column );
+
+		if ( $query ) {
+			$this->assertSame( $query, $wpdb->last_query );
+		}
+
+		if ( is_array( $expected ) ) {
+			$this->assertSame( $expected, $result );
+		} else {
+			$this->assertContains( $expected, $result );
+		}
+	}
+
+	/**
+	 * Data provider for testing `get_col()`.
+	 *
+	 * @return array {
+	 *     Arguments for testing `get_col()`.
+	 *
+	 *     @type string|null        $query       The query to run.
+	 *     @type string|array       $expected    The resulting expected value.
+	 *     @type arrray|string|null $last_result The value to assign to `$wpdb->last_result`.
+	 *     @type int|string         $column      The column index to retrieve.
+	 */
+	function data_test_get_col() {
+		global $wpdb;
+
+		return array(
+			array(
+				"SELECT display_name FROM $wpdb->users",
+				'admin',
+				array(),
+				0,
+			),
+			array(
+				"SELECT user_login, user_email FROM $wpdb->users",
+				'admin',
+				array(),
+				0,
+			),
+			array(
+				"SELECT user_login, user_email FROM $wpdb->users",
+				'admin@example.org',
+				array(),
+				1,
+			),
+			array(
+				"SELECT user_login, user_email FROM $wpdb->users",
+				'admin@example.org',
+				array(),
+				'1',
+			),
+			array(
+				"SELECT user_login, user_email FROM $wpdb->users",
+				array( null ),
+				array(),
+				3,
+			),
+			array(
+				'',
+				array(),
+				null,
+				0,
+			),
+			array(
+				null,
+				array(),
+				'',
+				0,
+			),
+		);
+	}
+
 	function test_replace() {
 		global $wpdb;
 		$rows1 = $wpdb->insert( $wpdb->users, array( 'display_name' => 'Walter Sobchak' ) );
@@ -566,7 +658,13 @@ class Tests_DB extends WP_UnitTestCase {
 		$this->assertNotEmpty( $wpdb->insert_id );
 		$last = $wpdb->insert_id;
 
-		$rows2 = $wpdb->replace( $wpdb->users, array( 'ID' => $last, 'display_name' => 'Walter Replace Sobchak' ) );
+		$rows2 = $wpdb->replace(
+			$wpdb->users,
+			array(
+				'ID'           => $last,
+				'display_name' => 'Walter Replace Sobchak',
+			)
+		);
 		$this->assertEquals( 2, $rows2 );
 		$this->assertNotEmpty( $wpdb->insert_id );
 
@@ -612,9 +710,11 @@ class Tests_DB extends WP_UnitTestCase {
 		$suppress = $wpdb->suppress_errors( true );
 
 		$wpdb->query( 'DROP PROCEDURE IF EXISTS `test_mysqli_flush_sync_procedure`' );
-		$wpdb->query( 'CREATE PROCEDURE `test_mysqli_flush_sync_procedure`() BEGIN
+		$wpdb->query(
+			'CREATE PROCEDURE `test_mysqli_flush_sync_procedure`() BEGIN
 			SELECT ID FROM `' . $wpdb->posts . '` LIMIT 1;
-		END' );
+		END'
+		);
 
 		if ( count( $wpdb->get_results( 'SHOW CREATE PROCEDURE `test_mysqli_flush_sync_procedure`' ) ) < 1 ) {
 			$wpdb->suppress_errors( $suppress );
@@ -637,7 +737,7 @@ class Tests_DB extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
 	function data_get_table_from_query() {
-		$table = 'a_test_table_name';
+		$table       = 'a_test_table_name';
 		$more_tables = array(
 			// table_name => expected_value
 			'`a_test_db`.`another_test_table`' => 'a_test_db.another_test_table',
@@ -741,7 +841,7 @@ class Tests_DB extends WP_UnitTestCase {
 			"SHOW INDEX FROM $table",
 
 			// @see https://core.trac.wordpress.org/ticket/32763
-			"SELECT " . str_repeat( 'a', 10000 ) . " FROM (SELECT * FROM $table) as subquery",
+			'SELECT ' . str_repeat( 'a', 10000 ) . " FROM (SELECT * FROM $table) as subquery",
 		);
 
 		$querycount = count( $queries );
@@ -786,15 +886,15 @@ class Tests_DB extends WP_UnitTestCase {
 		return array(
 			// Equality
 			array( "SHOW TABLE STATUS WHERE Name = 'test_name'", 'test_name' ),
-			array( "SHOW TABLE STATUS WHERE NAME=\"test_name\"", 'test_name' ),
-			array( "SHOW TABLES WHERE Name = \"test_name\"",     'test_name' ),
-			array( "SHOW FULL TABLES WHERE Name='test_name'",    'test_name' ),
+			array( 'SHOW TABLE STATUS WHERE NAME="test_name"', 'test_name' ),
+			array( 'SHOW TABLES WHERE Name = "test_name"', 'test_name' ),
+			array( "SHOW FULL TABLES WHERE Name='test_name'", 'test_name' ),
 
 			// LIKE
-			array( "SHOW TABLE STATUS LIKE 'test\_prefix\_%'",   'test_prefix_' ),
-			array( "SHOW TABLE STATUS LIKE \"test\_prefix\_%\"", 'test_prefix_' ),
-			array( "SHOW TABLES LIKE 'test\_prefix\_%'",         'test_prefix_' ),
-			array( "SHOW FULL TABLES LIKE \"test\_prefix\_%\"",  'test_prefix_' ),
+			array( "SHOW TABLE STATUS LIKE 'test\_prefix\_%'", 'test_prefix_' ),
+			array( 'SHOW TABLE STATUS LIKE "test\_prefix\_%"', 'test_prefix_' ),
+			array( "SHOW TABLES LIKE 'test\_prefix\_%'", 'test_prefix_' ),
+			array( 'SHOW FULL TABLES LIKE "test\_prefix\_%"', 'test_prefix_' ),
 		);
 	}
 
@@ -811,49 +911,98 @@ class Tests_DB extends WP_UnitTestCase {
 	 */
 	function data_process_field_formats() {
 		$core_db_fields_no_format_specified = array(
-			array( 'post_content' => 'foo', 'post_parent' => 0 ),
+			array(
+				'post_content' => 'foo',
+				'post_parent'  => 0,
+			),
 			null,
 			array(
-				'post_content' => array( 'value' => 'foo', 'format' => '%s' ),
-				'post_parent' => array( 'value' => 0, 'format' => '%d' ),
-			)
+				'post_content' => array(
+					'value'  => 'foo',
+					'format' => '%s',
+				),
+				'post_parent'  => array(
+					'value'  => 0,
+					'format' => '%d',
+				),
+			),
 		);
 
 		$core_db_fields_formats_specified = array(
-			array( 'post_content' => 'foo', 'post_parent' => 0 ),
+			array(
+				'post_content' => 'foo',
+				'post_parent'  => 0,
+			),
 			array( '%d', '%s' ), // These override core field_types
 			array(
-				'post_content' => array( 'value' => 'foo', 'format' => '%d' ),
-				'post_parent' => array( 'value' => 0, 'format' => '%s' ),
-			)
+				'post_content' => array(
+					'value'  => 'foo',
+					'format' => '%d',
+				),
+				'post_parent'  => array(
+					'value'  => 0,
+					'format' => '%s',
+				),
+			),
 		);
 
 		$misc_fields_no_format_specified = array(
-			array( 'this_is_not_a_core_field' => 'foo', 'this_is_not_either' => 0 ),
+			array(
+				'this_is_not_a_core_field' => 'foo',
+				'this_is_not_either'       => 0,
+			),
 			null,
 			array(
-				'this_is_not_a_core_field' => array( 'value' => 'foo', 'format' => '%s' ),
-				'this_is_not_either' => array( 'value' => 0, 'format' => '%s' ),
-			)
+				'this_is_not_a_core_field' => array(
+					'value'  => 'foo',
+					'format' => '%s',
+				),
+				'this_is_not_either'       => array(
+					'value'  => 0,
+					'format' => '%s',
+				),
+			),
 		);
 
 		$misc_fields_formats_specified = array(
-			array( 'this_is_not_a_core_field' => 0, 'this_is_not_either' => 1.2 ),
+			array(
+				'this_is_not_a_core_field' => 0,
+				'this_is_not_either'       => 1.2,
+			),
 			array( '%d', '%f' ),
 			array(
-				'this_is_not_a_core_field' => array( 'value' => 0, 'format' => '%d' ),
-				'this_is_not_either' => array( 'value' => 1.2, 'format' => '%f' ),
-			)
+				'this_is_not_a_core_field' => array(
+					'value'  => 0,
+					'format' => '%d',
+				),
+				'this_is_not_either'       => array(
+					'value'  => 1.2,
+					'format' => '%f',
+				),
+			),
 		);
 
 		$misc_fields_insufficient_formats_specified = array(
-			array( 'this_is_not_a_core_field' => 0, 'this_is_not_either' => 's', 'nor_this' => 1 ),
+			array(
+				'this_is_not_a_core_field' => 0,
+				'this_is_not_either'       => 's',
+				'nor_this'                 => 1,
+			),
 			array( '%d', '%s' ), // The first format is used for the third
 			array(
-				'this_is_not_a_core_field' => array( 'value' => 0, 'format' => '%d' ),
-				'this_is_not_either' => array( 'value' => 's', 'format' => '%s' ),
-				'nor_this' => array( 'value' => 1, 'format' => '%d' ),
-			)
+				'this_is_not_a_core_field' => array(
+					'value'  => 0,
+					'format' => '%d',
+				),
+				'this_is_not_either'       => array(
+					'value'  => 's',
+					'format' => '%s',
+				),
+				'nor_this'                 => array(
+					'value'  => 1,
+					'format' => '%d',
+				),
+			),
 		);
 
 		$vars = get_defined_vars();
@@ -886,17 +1035,17 @@ class Tests_DB extends WP_UnitTestCase {
 		}
 
 		if ( ! in_array( $expected_charset, array( 'utf8', 'utf8mb4', 'latin1' ) ) ) {
-			$this->markTestSkipped( "This test only works with utf8, utf8mb4 or latin1 character sets" );
+			$this->markTestSkipped( 'This test only works with utf8, utf8mb4 or latin1 character sets' );
 		}
 
-		$data = array( 'post_content' => '¡foo foo foo!' );
+		$data     = array( 'post_content' => '¡foo foo foo!' );
 		$expected = array(
 			'post_content' => array(
-				'value' => '¡foo foo foo!',
-				'format' => '%s',
+				'value'   => '¡foo foo foo!',
+				'format'  => '%s',
 				'charset' => $expected_charset,
-				'length' => $wpdb->get_col_length( $wpdb->posts, 'post_content' ),
-			)
+				'length'  => $wpdb->get_col_length( $wpdb->posts, 'post_content' ),
+			),
 		);
 
 		$this->assertSame( $expected, self::$_wpdb->process_fields( $wpdb->posts, $data, null ) );
@@ -952,8 +1101,8 @@ class Tests_DB extends WP_UnitTestCase {
 		$wpdb->insert(
 			$wpdb->postmeta,
 			array(
-				'meta_key' => $key,
-				'meta_value' => NULL
+				'meta_key'   => $key,
+				'meta_value' => null,
 			),
 			array( '%s', '%s' )
 		);
@@ -969,14 +1118,14 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_null_update_value() {
 		global $wpdb;
 
-		$key = 'null_update_value_key';
+		$key   = 'null_update_value_key';
 		$value = 'null_update_value_key';
 
 		$wpdb->insert(
 			$wpdb->postmeta,
 			array(
-				'meta_key' => $key,
-				'meta_value' => $value
+				'meta_key'   => $key,
+				'meta_value' => $value,
 			),
 			array( '%s', '%s' )
 		);
@@ -987,10 +1136,10 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$wpdb->update(
 			$wpdb->postmeta,
-			array( 'meta_value' => NULL ),
+			array( 'meta_value' => null ),
 			array(
-				'meta_key' => $key,
-				'meta_value' => $value
+				'meta_key'   => $key,
+				'meta_value' => $value,
 			),
 			array( '%s' ),
 			array( '%s', '%s' )
@@ -1007,14 +1156,14 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_null_update_where() {
 		global $wpdb;
 
-		$key = 'null_update_where_key';
+		$key   = 'null_update_where_key';
 		$value = 'null_update_where_key';
 
 		$wpdb->insert(
 			$wpdb->postmeta,
 			array(
-				'meta_key' => $key,
-				'meta_value' => NULL
+				'meta_key'   => $key,
+				'meta_value' => null,
 			),
 			array( '%s', '%s' )
 		);
@@ -1027,8 +1176,8 @@ class Tests_DB extends WP_UnitTestCase {
 			$wpdb->postmeta,
 			array( 'meta_value' => $value ),
 			array(
-				'meta_key' => $key,
-				'meta_value' => NULL
+				'meta_key'   => $key,
+				'meta_value' => null,
 			),
 			array( '%s' ),
 			array( '%s', '%s' )
@@ -1045,14 +1194,14 @@ class Tests_DB extends WP_UnitTestCase {
 	function test_null_delete() {
 		global $wpdb;
 
-		$key = 'null_update_where_key';
+		$key   = 'null_update_where_key';
 		$value = 'null_update_where_key';
 
 		$wpdb->insert(
 			$wpdb->postmeta,
 			array(
-				'meta_key' => $key,
-				'meta_value' => NULL
+				'meta_key'   => $key,
+				'meta_value' => null,
 			),
 			array( '%s', '%s' )
 		);
@@ -1064,8 +1213,8 @@ class Tests_DB extends WP_UnitTestCase {
 		$wpdb->delete(
 			$wpdb->postmeta,
 			array(
-				'meta_key' => $key,
-				'meta_value' => NULL
+				'meta_key'   => $key,
+				'meta_value' => null,
 			),
 			array( '%s', '%s' )
 		);
@@ -1190,7 +1339,7 @@ class Tests_DB extends WP_UnitTestCase {
 	/**
 	 * @dataProvider data_prepare_with_placeholders
 	 */
-	function test_prepare_with_placeholders_and_individual_args( $sql, $values, $incorrect_usage, $expected) {
+	function test_prepare_with_placeholders_and_individual_args( $sql, $values, $incorrect_usage, $expected ) {
 		global $wpdb;
 
 		if ( $incorrect_usage ) {
@@ -1210,7 +1359,7 @@ class Tests_DB extends WP_UnitTestCase {
 	/**
 	 * @dataProvider data_prepare_with_placeholders
 	 */
-	function test_prepare_with_placeholders_and_array_args( $sql, $values, $incorrect_usage, $expected) {
+	function test_prepare_with_placeholders_and_array_args( $sql, $values, $incorrect_usage, $expected ) {
 		global $wpdb;
 
 		if ( $incorrect_usage ) {
@@ -1305,7 +1454,7 @@ class Tests_DB extends WP_UnitTestCase {
 				'%d %2$s',
 				array( 1, 'hello' ),
 				false,
-				"1 hello",
+				'1 hello',
 			),
 			array(
 				"'%s'",
@@ -1371,7 +1520,7 @@ class Tests_DB extends WP_UnitTestCase {
 				'WHERE second=%2$d AND first=%1$d',
 				array( 1, 2 ),
 				false,
-				"WHERE second=2 AND first=1",
+				'WHERE second=2 AND first=1',
 			),
 			array(
 				"'%'%%s",

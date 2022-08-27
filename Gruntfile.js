@@ -4,6 +4,8 @@
 /* jshint quotmark:false */
 
 const buildTools = require( './tools/build' );
+const fs = require( 'fs' );
+const path = require( 'path' );
 
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -14,10 +16,6 @@ module.exports = function(grunt) {
     buildTools.setGruntReference( grunt );
 
     const puppeteerOptions = {};
-    if (process.env.TRAVIS) {
-		// Avoid error: Failed to launch chrome! No usable sandbox!
-		puppeteerOptions.args = [ '--no-sandbox' ];
-	}
 
     // Load tasks.
 	for ( const devDep in require( './package.json' ).devDependencies ) {
@@ -789,7 +787,8 @@ module.exports = function(grunt) {
 		'precommit:image',
 		'precommit:emoji',
 		'precommit:php',
-		'precommit:git-conflicts'
+		'precommit:git-conflicts',
+		'precommit:npm-bug'
 	] );
 
     grunt.registerTask(
@@ -860,7 +859,7 @@ module.exports = function(grunt) {
 					.red
 				);
 				grunt.log.writeln();
-				files.forEach( ({yellow}) => grunt.log.writeln( yellow ) );
+				files.forEach( ( { yellow } ) => grunt.log.writeln( yellow ) );
 				grunt.log.writeln();
 				grunt.log.writeln(
 					'Please run `grunt precommit` and commit the results.'
@@ -906,6 +905,39 @@ module.exports = function(grunt) {
 
 			done();
 		} );
+	} );
+
+    grunt.registerTask( 'precommit:npm-bug', function() {
+		// Check for and prevent https://github.com/npm/cli/issues/1685
+		// This just adds needless noise to the npm files which already have a
+		// very large commit history.
+		const lockfileLines = fs.readFileSync(
+			path.join( __dirname, 'package-lock.json' ),
+			'utf8'
+		).split( '\n' );
+		const maxLinesToPrint = 9;
+		let badLines = 0;
+		lockfileLines.forEach( ( line, i ) => {
+			const lineNumber = i + 1;
+			if ( /"http:\/\//.test( line ) ) {
+				if ( badLines < maxLinesToPrint ) {
+					grunt.log.writeln(
+						`package-lock.json line ${lineNumber}: ${line}`.yellow
+					);
+				}
+				badLines++;
+			}
+		} );
+		if ( badLines > 0 ) {
+			if ( badLines > maxLinesToPrint ) {
+				grunt.log.writeln(
+					`... and ${badLines - maxLinesToPrint} more lines`.yellow
+				);
+			}
+			grunt.log.writeln( 'The above lines may need to be fixed to https:// manually.' );
+			grunt.log.writeln( 'See: https://github.com/ClassicPress/ClassicPress/pull/711' );
+			grunt.fatal( 'package-lock.json contains invalid lines' );
+		}
 	} );
 
 	grunt.registerTask( 'rollup', function() {
@@ -981,21 +1013,6 @@ module.exports = function(grunt) {
 		['build', 'copy:qunit', 'qunit:local']);
 
     grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
-
-    // Travis CI tasks.
-    grunt.registerTask(
-		'travis:precommit-and-js',
-		'Runs precommit checks and JavaScript tests on Travis CI.',
-		[
-			'precommit:verify', // -> precommit:js -> jshint:corejs
-			'qunit:compiled'
-		]
-	);
-    grunt.registerTask(
-		'travis:phpunit',
-		'Runs PHPUnit tests on Travis CI.',
-		'phpunit'
-	);
 
     // Default task.
     grunt.registerTask('default', ['build']);

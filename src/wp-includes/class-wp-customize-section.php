@@ -163,7 +163,7 @@ class WP_Customize_Section {
 		}
 
 		$this->manager = $manager;
-		$this->id = $id;
+		$this->id      = $id;
 		if ( empty( $this->active_callback ) ) {
 			$this->active_callback = array( $this, 'active_callback' );
 		}
@@ -182,7 +182,7 @@ class WP_Customize_Section {
 	 */
 	final public function active() {
 		$section = $this;
-		$active = call_user_func( $this->active_callback, $this );
+		$active  = call_user_func( $this->active_callback, $this );
 
 		/**
 		 * Filters response of WP_Customize_Section::active().
@@ -219,10 +219,10 @@ class WP_Customize_Section {
 	 * @return array The array to be exported to the client as JSON.
 	 */
 	public function json() {
-		$array = wp_array_slice_assoc( (array) $this, array( 'id', 'description', 'priority', 'panel', 'type', 'description_hidden' ) );
-		$array['title'] = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );
-		$array['content'] = $this->get_content();
-		$array['active'] = $this->active();
+		$array                   = wp_array_slice_assoc( (array) $this, array( 'id', 'description', 'priority', 'panel', 'type', 'description_hidden' ) );
+		$array['title']          = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );
+		$array['content']        = $this->get_content();
+		$array['active']         = $this->active();
 		$array['instanceNumber'] = $this->instance_number;
 
 		if ( $this->panel ) {
@@ -378,13 +378,13 @@ class WP_Customize_Section {
 }
 
 /** WP_Customize_Themes_Section class */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 
 /** WP_Customize_Sidebar_Section class */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
 
 /** WP_Customize_Nav_Menu_Section class */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php';
 
 /**
  * WP_Customize_New_Menu_Section class
@@ -395,4 +395,4 @@ require_once( ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.
  *
  * @deprecated WP-4.9.0 This file is no longer used due to new menu creation UX.
  */
-require_once( ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php' );
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php';
