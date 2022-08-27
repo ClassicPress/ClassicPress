@@ -6,7 +6,7 @@
 class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public $old_wp_scripts;
 	public static $asset_version;
-	public $classicpress_asset_version_calls = array();
+	public $classicpress_asset_version_calls    = array();
 	public $classicpress_asset_version_override = null;
 
 	public static function setUpBeforeClass() {
@@ -21,10 +21,11 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		add_filter(
 			'classicpress_asset_version',
 			array( $this, 'classicpress_asset_version_handler' ),
-			10, 4
+			10,
+			4
 		);
 		$this->classicpress_asset_version_calls = array();
-		$GLOBALS['wp_scripts'] = new WP_Scripts();
+		$GLOBALS['wp_scripts']                  = new WP_Scripts();
 		$GLOBALS['wp_scripts']->default_version = self::$asset_version;
 	}
 
@@ -45,12 +46,15 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		} else {
 			$return = $this->classicpress_asset_version_override;
 		}
-		array_push( $this->classicpress_asset_version_calls, array(
-			'version' => $version,
-			'type'    => $type,
-			'handle'  => $handle,
-			'return'  => $return,
-		) );
+		array_push(
+			$this->classicpress_asset_version_calls,
+			array(
+				'version' => $version,
+				'type'    => $type,
+				'handle'  => $handle,
+				'return'  => $return,
+			)
+		);
 		return $return;
 	}
 
@@ -71,87 +75,99 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com?ver=1.2'></script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
-		$this->assertEquals($expected, get_echo('wp_print_scripts'));
+		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
 
 		// No scripts left to print
-		$this->assertEquals("", get_echo('wp_print_scripts'));
+		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
 
 		// 'classicpress_asset_version' filter called as expected
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => $ver,
-				'type'    => 'script',
-				'handle'  => 'no-deps-no-version',
-				'return'  => $ver,
+				array(
+					'version' => $ver,
+					'type'    => 'script',
+					'handle'  => 'no-deps-no-version',
+					'return'  => $ver,
+				),
+				array(
+					'version' => $ver,
+					'type'    => 'script',
+					'handle'  => 'empty-deps-no-version',
+					'return'  => $ver,
+				),
+				array(
+					'version' => 1.2,
+					'type'    => 'script',
+					'handle'  => 'empty-deps-version',
+					'return'  => 1.2,
+				),
+				array(
+					'version' => '',
+					'type'    => 'script',
+					'handle'  => 'empty-deps-null-version',
+					'return'  => '',
+				),
 			),
-			array(
-				'version' => $ver,
-				'type'    => 'script',
-				'handle'  => 'empty-deps-no-version',
-				'return'  => $ver,
-			),
-			array(
-				'version' => 1.2,
-				'type'    => 'script',
-				'handle'  => 'empty-deps-version',
-				'return'  => 1.2,
-			),
-			array(
-				'version' => '',
-				'type'    => 'script',
-				'handle'  => 'empty-deps-null-version',
-				'return'  => '',
-			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_override_default_version() {
-		$ver = 'aaaa';
+		$ver                                    = 'aaaa';
 		$GLOBALS['wp_scripts']->default_version = $ver;
 		wp_enqueue_script( 'override-default-version', 'example.com' );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => $ver,
-				'type'    => 'script',
-				'handle'  => 'override-default-version',
-				'return'  => $ver,
+				array(
+					'version' => $ver,
+					'type'    => 'script',
+					'handle'  => 'override-default-version',
+					'return'  => $ver,
+				),
 			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_override_default_version_and_filter() {
-		$ver = 'bbbb';
-		$GLOBALS['wp_scripts']->default_version = 'aaaa';
+		$ver                                       = 'bbbb';
+		$GLOBALS['wp_scripts']->default_version    = 'aaaa';
 		$this->classicpress_asset_version_override = $ver;
 		wp_enqueue_script( 'override-default-version-and-filter', 'example.com' );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => $GLOBALS['wp_scripts']->default_version,
-				'type'    => 'script',
-				'handle'  => 'override-default-version-and-filter',
-				'return'  => $ver,
+				array(
+					'version' => $GLOBALS['wp_scripts']->default_version,
+					'type'    => 'script',
+					'handle'  => 'override-default-version-and-filter',
+					'return'  => $ver,
+				),
 			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_filter_default_version() {
-		$ver = 'cccc';
+		$ver                                       = 'cccc';
 		$this->classicpress_asset_version_override = $ver;
 		wp_enqueue_script( 'filter-default-version', 'example.com' );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=$ver'></script>\n";
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => $GLOBALS['wp_scripts']->default_version,
-				'type'    => 'script',
-				'handle'  => 'filter-default-version',
-				'return'  => $ver,
+				array(
+					'version' => $GLOBALS['wp_scripts']->default_version,
+					'type'    => 'script',
+					'handle'  => 'filter-default-version',
+					'return'  => $ver,
+				),
 			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_filter_declared_version() {
@@ -159,14 +175,17 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_enqueue_script( 'filter-declared-version', 'example.com', array(), 'dddd' );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => 'dddd',
-				'type'    => 'script',
-				'handle'  => 'filter-declared-version',
-				'return'  => 'oooo',
+				array(
+					'version' => 'dddd',
+					'type'    => 'script',
+					'handle'  => 'filter-declared-version',
+					'return'  => 'oooo',
+				),
 			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	function test_wp_enqueue_script_filter_null_version() {
@@ -174,14 +193,17 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_enqueue_script( 'filter-null-version', 'example.com', array(), null );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( array(
+		$this->assertEquals(
 			array(
-				'version' => '',
-				'type'    => 'script',
-				'handle'  => 'filter-null-version',
-				'return'  => 'oooo',
+				array(
+					'version' => '',
+					'type'    => 'script',
+					'handle'  => 'filter-null-version',
+					'return'  => 'oooo',
+				),
 			),
-		), $this->classicpress_asset_version_calls );
+			$this->classicpress_asset_version_calls
+		);
 	}
 
 	/**
@@ -209,31 +231,31 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_protocols() {
 		// Init
 		global $wp_scripts;
-		$base_url_backup = $wp_scripts->base_url;
+		$base_url_backup      = $wp_scripts->base_url;
 		$wp_scripts->base_url = 'http://example.com/wordpress';
-		$expected = '';
-		$ver = self::$asset_version;
+		$expected             = '';
+		$ver                  = self::$asset_version;
 
 		// Try with an HTTP reference
 		wp_enqueue_script( 'jquery-http', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected  .= "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
+		$expected .= "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
 
 		// Try with an HTTPS reference
 		wp_enqueue_script( 'jquery-https', 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected  .= "<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
+		$expected .= "<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
 
 		// Try with an automatic protocol reference (//)
 		wp_enqueue_script( 'jquery-doubleslash', '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected  .= "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
+		$expected .= "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
 
 		// Try with a local resource and an automatic protocol reference (//)
 		$url = '//my_plugin/script.js';
 		wp_enqueue_script( 'plugin-script', $url );
-		$expected  .= "<script type='text/javascript' src='$url?ver=$ver'></script>\n";
+		$expected .= "<script type='text/javascript' src='$url?ver=$ver'></script>\n";
 
 		// Try with a bad protocol
 		wp_enqueue_script( 'jquery-ftp', 'ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected  .= "<script type='text/javascript' src='{$wp_scripts->base_url}ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
+		$expected .= "<script type='text/javascript' src='{$wp_scripts->base_url}ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
 
 		// Go!
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
@@ -251,7 +273,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_script_concatenation() {
 		global $wp_scripts;
 
-		$wp_scripts->do_concat = true;
+		$wp_scripts->do_concat    = true;
 		$wp_scripts->default_dirs = array( '/directory/' );
 
 		wp_enqueue_script( 'one', '/directory/script.js' );
@@ -261,7 +283,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$ver = self::$asset_version;
+		$ver      = self::$asset_version;
 		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=one,two,three&amp;ver={$ver}'></script>\n";
 
 		$this->assertEquals( $expected, $print_scripts );
@@ -275,8 +297,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		// Enqueue & add data
 		wp_enqueue_script( 'test-only-data', 'example.com', array(), null );
 		wp_script_add_data( 'test-only-data', 'data', 'testing' );
-		$expected = "<script type='text/javascript'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n";
-		$expected.= "<script type='text/javascript' src='http://example.com'></script>\n";
+		$expected  = "<script type='text/javascript'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n";
+		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
 		// Go!
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
@@ -311,8 +333,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_enqueue_script( 'test-conditional-with-data', 'example.com', array(), null );
 		wp_script_add_data( 'test-conditional-with-data', 'data', 'testing' );
 		wp_script_add_data( 'test-conditional-with-data', 'conditional', 'lt IE 9' );
-		$expected = "<!--[if lt IE 9]>\n<script type='text/javascript'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n<![endif]-->\n";
-		$expected.= "<!--[if lt IE 9]>\n<script type='text/javascript' src='http://example.com'></script>\n<![endif]-->\n";
+		$expected  = "<!--[if lt IE 9]>\n<script type='text/javascript'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n<![endif]-->\n";
+		$expected .= "<!--[if lt IE 9]>\n<script type='text/javascript' src='http://example.com'></script>\n<![endif]-->\n";
 
 		// Go!
 		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
@@ -599,7 +621,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_wp_add_inline_script_before_with_concat() {
 		global $wp_scripts;
 
-		$wp_scripts->do_concat = true;
+		$wp_scripts->do_concat    = true;
 		$wp_scripts->default_dirs = array( '/directory/' );
 
 		wp_enqueue_script( 'one', '/directory/one.js' );
@@ -609,8 +631,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_add_inline_script( 'one', 'console.log("before one");', 'before' );
 		wp_add_inline_script( 'two', 'console.log("before two");', 'before' );
 
-		$ver = self::$asset_version;
-		$expected = "<script type='text/javascript'>\nconsole.log(\"before one\");\n</script>\n";
+		$ver       = self::$asset_version;
+		$expected  = "<script type='text/javascript'>\nconsole.log(\"before one\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/one.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"before two\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}'></script>\n";
@@ -625,7 +647,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_wp_add_inline_script_before_with_concat2() {
 		global $wp_scripts;
 
-		$wp_scripts->do_concat = true;
+		$wp_scripts->do_concat    = true;
 		$wp_scripts->default_dirs = array( '/directory/' );
 
 		wp_enqueue_script( 'one', '/directory/one.js' );
@@ -634,8 +656,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		wp_add_inline_script( 'one', 'console.log("before one");', 'before' );
 
-		$ver = self::$asset_version;
-		$expected = "<script type='text/javascript'>\nconsole.log(\"before one\");\n</script>\n";
+		$ver       = self::$asset_version;
+		$expected  = "<script type='text/javascript'>\nconsole.log(\"before one\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/one.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}'></script>\n";
@@ -649,7 +671,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_wp_add_inline_script_after_with_concat() {
 		global $wp_scripts;
 
-		$wp_scripts->do_concat = true;
+		$wp_scripts->do_concat    = true;
 		$wp_scripts->default_dirs = array( '/directory/' );
 
 		wp_enqueue_script( 'one', '/directory/one.js' );
@@ -660,7 +682,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_add_inline_script( 'two', 'console.log("after two");' );
 		wp_add_inline_script( 'three', 'console.log("after three");' );
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=one&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after two\");\n</script>\n";
@@ -677,10 +699,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_wp_add_inline_script_after_and_before_with_concat_and_conditional() {
 		global $wp_scripts;
 
-		$wp_scripts->do_concat = true;
-		$wp_scripts->default_dirs = array('/wp-admin/js/', '/wp-includes/js/'); // Default dirs as in wp-includes/script-loader.php
+		$wp_scripts->do_concat    = true;
+		$wp_scripts->default_dirs = array( '/wp-admin/js/', '/wp-includes/js/' ); // Default dirs as in wp-includes/script-loader.php
 
-		$expected_localized = "<!--[if gte IE 9]>\n";
+		$expected_localized  = "<!--[if gte IE 9]>\n";
 		$expected_localized .= "<script type='text/javascript'>\n/* <![CDATA[ */\nvar testExample = {\"foo\":\"bar\"};\n/* ]]> */\n</script>\n";
 		$expected_localized .= "<![endif]-->\n";
 
@@ -712,7 +734,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\n</script>\n";
@@ -737,7 +759,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
 		$expected .= "<!--[if gte IE 9]>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
@@ -765,7 +787,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"before\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
@@ -790,7 +812,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate,wp-a11y&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"before\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
@@ -819,7 +841,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$expected_tail = "<![endif]-->\n";
+		$expected_tail  = "<![endif]-->\n";
 		$expected_tail .= "<script type='text/javascript' src='/customize-dependency.js'></script>\n";
 		$expected_tail .= "<script type='text/javascript'>\n";
 		$expected_tail .= "tryCustomizeDependency()\n";
@@ -832,7 +854,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$tail = substr( $print_scripts, strrpos( $print_scripts, "<![endif]-->" ) );
+		$tail = substr( $print_scripts, strrpos( $print_scripts, '<![endif]-->' ) );
 		$this->assertEquals( $expected_tail, $tail );
 	}
 
@@ -851,7 +873,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_enqueue_script( 'three', '/wp-includes/js/script3.js' );
 		wp_enqueue_script( 'four', '/wp-includes/js/script4.js' );
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-includes/js/script.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after one\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script2.js?ver={$ver}'></script>\n";
@@ -876,7 +898,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_add_inline_script( 'three', 'console.log("before three");', 'before' );
 		wp_enqueue_script( 'four', '/wp-includes/js/script4.js' );
 
-		$ver = self::$asset_version;
+		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=one,two&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"before three\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script3.js?ver={$ver}'></script>\n";
@@ -892,7 +914,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_php_file_will_be_passed() {
-		$real_file = WP_PLUGIN_DIR . '/hello.php';
+		$real_file              = WP_PLUGIN_DIR . '/hello.php';
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( array( 'file' => $real_file ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
@@ -1065,10 +1087,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor(
 			array_merge(
 				array(
-					'type' => 'text/css',
+					'type'       => 'text/css',
 					'codemirror' => array(
 						'indentUnit' => 2,
-						'tabSize' => 2,
+						'tabSize'    => 2,
 					),
 				),
 				array()
@@ -1161,10 +1183,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public function test_wp_enqueue_code_editor_when_simple_array_will_be_passed() {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor(
 			array(
-				'type' => 'text/css',
+				'type'       => 'text/css',
 				'codemirror' => array(
 					'indentUnit' => 2,
-					'tabSize' => 2,
+					'tabSize'    => 2,
 				),
 			)
 		);

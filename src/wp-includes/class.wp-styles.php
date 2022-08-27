@@ -146,8 +146,9 @@ class WP_Styles extends WP_Dependencies {
 	 * @return bool True on success, false on failure.
 	 */
 	public function do_item( $handle ) {
-		if ( !parent::do_item($handle) )
+		if ( ! parent::do_item( $handle ) ) {
 			return false;
+		}
 
 		$obj = $this->registered[ $handle ];
 
@@ -157,8 +158,9 @@ class WP_Styles extends WP_Dependencies {
 			$ver = $obj->ver ? $obj->ver : $this->default_version;
 		}
 
-		if ( isset($this->args[$handle]) )
-			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
+		if ( isset( $this->args[ $handle ] ) ) {
+			$ver = $ver ? $ver . '&amp;' . $this->args[ $handle ] : $this->args[ $handle ];
+		}
 
 		/** This filter is documented in wp-includes/script-loader.php */
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'style', $handle );
@@ -187,7 +189,7 @@ class WP_Styles extends WP_Dependencies {
 
 		if ( $this->do_concat ) {
 			if ( $this->in_default_dir( $src ) && ! $conditional && ! isset( $obj->extra['alt'] ) ) {
-				$this->concat .= "$handle,";
+				$this->concat         .= "$handle,";
 				$this->concat_version .= "$handle$ver";
 
 				$this->print_code .= $inline_style;
@@ -196,10 +198,11 @@ class WP_Styles extends WP_Dependencies {
 			}
 		}
 
-		if ( isset($obj->args) )
+		if ( isset( $obj->args ) ) {
 			$media = esc_attr( $obj->args );
-		else
+		} else {
 			$media = 'all';
+		}
 
 		// A single item may alias a set of items, by having dependencies, but no source.
 		if ( ! $src ) {
@@ -384,12 +387,13 @@ class WP_Styles extends WP_Dependencies {
 	 * @return string Style's fully-qualified URL.
 	 */
 	public function _css_href( $src, $ver, $handle ) {
-		if ( !is_bool($src) && !preg_match('|^(https?:)?//|', $src) && ! ( $this->content_url && 0 === strpos($src, $this->content_url) ) ) {
+		if ( ! is_bool( $src ) && ! preg_match( '|^(https?:)?//|', $src ) && ! ( $this->content_url && 0 === strpos( $src, $this->content_url ) ) ) {
 			$src = $this->base_url . $src;
 		}
 
-		if ( !empty($ver) )
-			$src = add_query_arg('ver', $ver, $src);
+		if ( ! empty( $ver ) ) {
+			$src = add_query_arg( 'ver', $ver, $src );
+		}
 
 		/**
 		 * Filters an enqueued style's fully-qualified URL.
@@ -412,12 +416,14 @@ class WP_Styles extends WP_Dependencies {
 	 * @return bool True if found, false if not.
 	 */
 	public function in_default_dir( $src ) {
-		if ( ! $this->default_dirs )
+		if ( ! $this->default_dirs ) {
 			return true;
+		}
 
 		foreach ( (array) $this->default_dirs as $test ) {
-			if ( 0 === strpos($src, $test) )
+			if ( 0 === strpos( $src, $test ) ) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -434,7 +440,7 @@ class WP_Styles extends WP_Dependencies {
 	 * @return array Handles of items that have been processed.
 	 */
 	public function do_footer_items() {
-		$this->do_items(false, 1);
+		$this->do_items( false, 1 );
 		return $this->done;
 	}
 
@@ -444,9 +450,9 @@ class WP_Styles extends WP_Dependencies {
 	 * @since WP-3.3.0
 	 */
 	public function reset() {
-		$this->do_concat = false;
-		$this->concat = '';
+		$this->do_concat      = false;
+		$this->concat         = '';
 		$this->concat_version = '';
-		$this->print_html = '';
+		$this->print_html     = '';
 	}
 }

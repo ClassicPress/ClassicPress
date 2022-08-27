@@ -7,7 +7,7 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php';
 
 if ( ! current_user_can( 'manage_privacy_options' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to manage privacy on this site.' ) );
@@ -54,11 +54,11 @@ if ( ! empty( $action ) ) {
 	} elseif ( 'create-privacy-page' === $action ) {
 
 		if ( ! class_exists( 'WP_Privacy_Policy_Content' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/misc.php' );
+			require_once ABSPATH . 'wp-admin/includes/misc.php';
 		}
 
 		$privacy_policy_page_content = WP_Privacy_Policy_Content::get_default_content();
-		$privacy_policy_page_id = wp_insert_post(
+		$privacy_policy_page_id      = wp_insert_post(
 			array(
 				'post_title'   => __( 'Privacy Policy' ),
 				'post_status'  => 'draft',
@@ -120,7 +120,7 @@ if ( ! empty( $privacy_policy_page_id ) ) {
 $title       = __( 'Privacy Settings' );
 $parent_file = 'options-general.php';
 
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 <div class="wrap">
@@ -195,16 +195,19 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 			</th>
 			<td>
 				<?php
-				$has_pages = (bool) get_posts( array(
-					'post_type' => 'page',
-					'posts_per_page' => 1,
-					'post_status' => array(
-						'publish',
-						'draft',
-					),
-				) );
+				$has_pages = (bool) get_posts(
+					array(
+						'post_type'      => 'page',
+						'posts_per_page' => 1,
+						'post_status'    => array(
+							'publish',
+							'draft',
+						),
+					)
+				);
 
-				if ( $has_pages ) : ?>
+				if ( $has_pages ) :
+					?>
 					<form method="post" action="">
 						<label for="page_for_privacy_policy">
 							<?php _e( 'Select an existing page:' ); ?>
@@ -251,4 +254,4 @@ require_once( ABSPATH . 'wp-admin/admin-header.php' );
 </div>
 <?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require ABSPATH . 'wp-admin/admin-footer.php';

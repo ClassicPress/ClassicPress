@@ -14,7 +14,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	}
 
 	public function tearDown() {
-		remove_action( 'pre_get_users', [ $this, 'check_user_query_vars' ] );
+		remove_action( 'pre_get_users', array( $this, 'check_user_query_vars' ) );
 		parent::tearDown();
 	}
 
@@ -24,14 +24,18 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_default_value_of_show_should_be_display_name() {
 
 		// create a user with a different display_name
-		$u = $this->factory->user->create( array(
-			'user_login'   => 'foo',
-			'display_name' => 'Foo Person'
-		) );
+		$u = $this->factory->user->create(
+			array(
+				'user_login'   => 'foo',
+				'display_name' => 'Foo Person',
+			)
+		);
 
-		$found = wp_dropdown_users( array(
-			'echo' => false
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo' => false,
+			)
+		);
 
 		$expected = "<option value='$u'>Foo Person</option>";
 
@@ -44,16 +48,20 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_show_should_display_display_name_show_is_specified_as_empty() {
 
 		// create a user with a different display_name
-		$u = $this->factory->user->create( array(
-			'user_login'   => 'foo',
-			'display_name' => 'Foo Person'
-		) );
+		$u = $this->factory->user->create(
+			array(
+				'user_login'   => 'foo',
+				'display_name' => 'Foo Person',
+			)
+		);
 
 		// Get the result of a non-default, but acceptable input for 'show' parameter to wp_dropdown_users().
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'show' => ''
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo' => false,
+				'show' => '',
+			)
+		);
 
 		$expected = "<option value='$u'>Foo Person</option>";
 
@@ -66,16 +74,20 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_show_should_display_user_property_when_the_value_of_show_is_a_valid_user_property() {
 
 		// create a user with a different display_name
-		$u = $this->factory->user->create( array(
-			'user_login'   => 'foo',
-			'display_name' => 'Foo Person'
-		) );
+		$u = $this->factory->user->create(
+			array(
+				'user_login'   => 'foo',
+				'display_name' => 'Foo Person',
+			)
+		);
 
 		// Get the result of a non-default, but acceptable input for 'show' parameter to wp_dropdown_users().
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'show' => 'user_login'
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo' => false,
+				'show' => 'user_login',
+			)
+		);
 
 		$expected = "<option value='$u'>foo</option>";
 
@@ -88,16 +100,20 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_show_display_name_with_login() {
 
 		// create a user with a different display_name
-		$u = $this->factory->user->create( array(
-			'user_login'   => 'foo',
-			'display_name' => 'Foo Person'
-		) );
+		$u = $this->factory->user->create(
+			array(
+				'user_login'   => 'foo',
+				'display_name' => 'Foo Person',
+			)
+		);
 
 		// Get the result of a non-default, but acceptable input for 'show' parameter to wp_dropdown_users().
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'show' => 'display_name_with_login'
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo' => false,
+				'show' => 'display_name_with_login',
+			)
+		);
 
 		$expected = "<option value='$u'>Foo Person (foo)</option>";
 
@@ -110,13 +126,15 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_include_selected() {
 		$users = self::factory()->user->create_many( 2 );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users[0],
-			'selected' => $users[1],
-			'include_selected' => true,
-			'show' => 'user_login',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'             => false,
+				'include'          => $users[0],
+				'selected'         => $users[1],
+				'include_selected' => true,
+				'show'             => 'user_login',
+			)
+		);
 
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
@@ -132,12 +150,14 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$invalid_user_id = $wpdb->get_var( "SELECT MAX(ID) + 3 FROM {$wpdb->users}" );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users,
-			'selected' => $invalid_user_id,
-			'include_selected' => true,
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'             => false,
+				'include'          => $users,
+				'selected'         => $invalid_user_id,
+				'include_selected' => true,
+			)
+		);
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
@@ -154,16 +174,18 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_value_field_and_select_multiple() {
 		$users = self::factory()->user->create_many( 2 );
 
-		$found = wp_dropdown_users( array(
-			'name' => 'multiusers',
-			'echo' => false,
-			'include' => $users[0],
-			'selected' => $users[1],
-			'include_selected' => true,
-			'show' => 'user_nicename',
-			'value_field' => 'user_login',
-			'select_multiple' => true,
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'name'             => 'multiusers',
+				'echo'             => false,
+				'include'          => $users[0],
+				'selected'         => $users[1],
+				'include_selected' => true,
+				'show'             => 'user_nicename',
+				'value_field'      => 'user_login',
+				'select_multiple'  => true,
+			)
+		);
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
@@ -179,15 +201,17 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_value_field_added_to_query() {
 		$users = self::factory()->user->create_many( 2 );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users,
-			'selected' => $users[0],
-			'show' => 'user_login',
-			// The user_nicename field is not included in the `get_users()`
-			// query by default.
-			'value_field' => 'user_nicename',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'        => false,
+				'include'     => $users,
+				'selected'    => $users[0],
+				'show'        => 'user_login',
+				// The user_nicename field is not included in the `get_users()`
+				// query by default.
+				'value_field' => 'user_nicename',
+			)
+		);
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
@@ -210,17 +234,19 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_value_field_added_to_query_only_once() {
 		$users = self::factory()->user->create_many( 2 );
 
-		add_action( 'pre_get_users', [ $this, 'check_user_query_vars' ] );
+		add_action( 'pre_get_users', array( $this, 'check_user_query_vars' ) );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users,
-			'selected' => $users[0],
-			// When a field is requested for multiple "purposes" it should
-			// still be passed to `WP_User_Query` only once.
-			'show' => 'user_nicename',
-			'value_field' => 'user_nicename',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'        => false,
+				'include'     => $users,
+				'selected'    => $users[0],
+				// When a field is requested for multiple "purposes" it should
+				// still be passed to `WP_User_Query` only once.
+				'show'        => 'user_nicename',
+				'value_field' => 'user_nicename',
+			)
+		);
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
@@ -235,16 +261,18 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	public function test_invalid_value_field() {
 		$users = self::factory()->user->create_many( 2 );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users[0],
-			'selected' => $users[1],
-			'include_selected' => true,
-			'show' => 'user_login',
-			// Querying users by this field is not supported, so the dropdown
-			// should fall back to the default field of 'ID'.
-			'value_field' => 'display_name',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'             => false,
+				'include'          => $users[0],
+				'selected'         => $users[1],
+				'include_selected' => true,
+				'show'             => 'user_login',
+				// Querying users by this field is not supported, so the dropdown
+				// should fall back to the default field of 'ID'.
+				'value_field'      => 'display_name',
+			)
+		);
 
 		$user1 = get_userdata( $users[1] );
 		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
@@ -261,13 +289,15 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$invalid_user_id = $wpdb->get_var( "SELECT MAX(ID) + 3 FROM {$wpdb->users}" );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'include' => $users,
-			'selected' => $invalid_user_id,
-			'include_selected' => true,
-			'value_field' => 'user_login',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'             => false,
+				'include'          => $users,
+				'selected'         => $invalid_user_id,
+				'include_selected' => true,
+				'value_field'      => 'user_login',
+			)
+		);
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
@@ -285,11 +315,13 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
 		$u2 = self::factory()->user->create_and_get( array( 'role' => 'author' ) );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'role' => 'author',
-			'show' => 'user_login',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo' => false,
+				'role' => 'author',
+				'show' => 'user_login',
+			)
+		);
 
 		$this->assertNotContains( $u1->user_login, $found );
 		$this->assertContains( $u2->user_login, $found );
@@ -302,11 +334,13 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
 		$u2 = self::factory()->user->create_and_get( array( 'role' => 'author' ) );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'role__in' => array( 'author', 'editor' ),
-			'show' => 'user_login',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'     => false,
+				'role__in' => array( 'author', 'editor' ),
+				'show'     => 'user_login',
+			)
+		);
 
 		$this->assertNotContains( $u1->user_login, $found );
 		$this->assertContains( $u2->user_login, $found );
@@ -319,11 +353,13 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$u1 = self::factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
 		$u2 = self::factory()->user->create_and_get( array( 'role' => 'author' ) );
 
-		$found = wp_dropdown_users( array(
-			'echo' => false,
-			'role__not_in' => array( 'subscriber', 'editor' ),
-			'show' => 'user_login',
-		) );
+		$found = wp_dropdown_users(
+			array(
+				'echo'         => false,
+				'role__not_in' => array( 'subscriber', 'editor' ),
+				'show'         => 'user_login',
+			)
+		);
 
 		$this->assertNotContains( $u1->user_login, $found );
 		$this->assertContains( $u2->user_login, $found );
