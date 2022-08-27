@@ -37,7 +37,7 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/36790
 	 * @see https://core.trac.wordpress.org/ticket/37411
- 	 * @see https://core.trac.wordpress.org/ticket/48606
+	 * @see https://core.trac.wordpress.org/ticket/48606
 	 * @see https://core.trac.wordpress.org/ticket/48934
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
