@@ -8,6 +8,6 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php';
 
-require( ABSPATH . 'wp-admin/privacy.php' );
+require ABSPATH . 'wp-admin/privacy.php';

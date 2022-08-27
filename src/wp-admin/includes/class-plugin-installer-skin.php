@@ -27,23 +27,31 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	 *
 	 * @param array $args
 	 */
-	public function __construct($args = array()) {
-		$defaults = array( 'type' => 'web', 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => '', 'overwrite' => '' );
-		$args = wp_parse_args($args, $defaults);
+	public function __construct( $args = array() ) {
+		$defaults = array(
+			'type'      => 'web',
+			'url'       => '',
+			'plugin'    => '',
+			'nonce'     => '',
+			'title'     => '',
+			'overwrite' => '',
+		);
+		$args     = wp_parse_args( $args, $defaults );
 
-		$this->type = $args['type'];
-		$this->url = $args['url'];
-		$this->api = isset($args['api']) ? $args['api'] : array();
+		$this->type      = $args['type'];
+		$this->url       = $args['url'];
+		$this->api       = isset( $args['api'] ) ? $args['api'] : array();
 		$this->overwrite = $args['overwrite'];
 
-		parent::__construct($args);
+		parent::__construct( $args );
 	}
 
 	/**
 	 */
 	public function before() {
-		if ( !empty($this->api) )
-			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version);
+		if ( ! empty( $this->api ) ) {
+			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version );
+		}
 	}
 
 	/**
@@ -78,7 +86,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 
 		$install_actions = array();
 
-		$from = isset($_GET['from']) ? wp_unslash( $_GET['from'] ) : 'plugins';
+		$from = isset( $_GET['from'] ) ? wp_unslash( $_GET['from'] ) : 'plugins';
 
 		if ( 'import' === $from ) {
 			$install_actions['activate_plugin'] = sprintf(
@@ -127,7 +135,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 			);
 		}
 
-		if ( ! $this->result || is_wp_error($this->result) ) {
+		if ( ! $this->result || is_wp_error( $this->result ) ) {
 			unset( $install_actions['activate_plugin'], $install_actions['network_activate'] );
 		} elseif ( ! current_user_can( 'activate_plugin', $plugin_file ) || is_plugin_active( $plugin_file ) ) {
 			unset( $install_actions['activate_plugin'] );
