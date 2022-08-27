@@ -958,4 +958,4 @@
 	media.view.DeleteSelectedButton = deleteSelected();
 	media.view.DeleteSelectedPermanentlyButton = deleteSelectedPermanently();
 
-}());
+})();
