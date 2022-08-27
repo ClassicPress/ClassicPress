@@ -9063,4 +9063,4 @@
 	media.view.EditImage = editImage();
 	media.view.Spinner = spinner();
 
-}());
+})();
