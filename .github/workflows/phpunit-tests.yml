@@ -141,7 +141,7 @@ jobs:
           elif [ ${{ matrix.php }} == '7.1' ]; then
             composer require phpunit/phpunit "7.*" -W --no-progress --no-ansi --no-interaction
           else
-            composer require phpunit/phpunit:8.*" -W --no-progress --no-ansi --no-interaction
+            composer require phpunit/phpunit "8.*" -W --no-progress --no-ansi --no-interaction
           fi
 
       - name: Make Composer packages available globally
