@@ -392,7 +392,6 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
 		$this->assertSame( $post2, $data[0]['id'] );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	public function test_get_item() {

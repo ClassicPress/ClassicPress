@@ -557,7 +557,6 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
 		$this->assertSame( $id2, $data[0]['id'] );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	public function test_get_item() {
