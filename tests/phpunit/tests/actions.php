@@ -190,8 +190,13 @@ class Tests_Actions extends WP_UnitTestCase {
 		$this->assertEquals( 1, did_action( $tag1 ) );
 		$this->assertEquals( 0, did_action( $tag2 ) );
 
+<<<<<<< HEAD
 		// do action tag2 a random number of times
 		$count = rand( 0, 10 );
+=======
+		// Do action $tag2 10 times.
+		$count = 10;
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		for ( $i = 0; $i < $count; $i++ ) {
 			do_action( $tag2 );
 		}

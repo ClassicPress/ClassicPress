@@ -792,9 +792,15 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 	public function test_get_comments_invalid_date() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
+<<<<<<< HEAD
 		$request->set_param( 'after', rand_str() );
 		$request->set_param( 'before', rand_str() );
 		$response = $this->server->dispatch( $request );
+=======
+		$request->set_param( 'after', 'foo' );
+		$request->set_param( 'before', 'bar' );
+		$response = rest_get_server()->dispatch( $request );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -1303,7 +1309,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 			'author_email' => 'lovejoy@example.com',
 			'author_url'   => 'http://timothylovejoy.jr',
 			'content'      => 'It\'s all over\, people! We don\'t have a prayer!',
-			'date'         => rand_str(),
+			'date'         => 'foo-bar',
 		);
 
 		$request = new WP_REST_Request( 'POST', '/wp/v2/comments' );
@@ -2414,8 +2420,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$admin_id );
 
 		$params = array(
-			'content' => rand_str(),
-			'date'    => rand_str(),
+			'content' => 'content',
+			'date'    => 'foo',
 		);
 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%d', self::$approved_id ) );
@@ -2430,8 +2436,8 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_set_current_user( self::$admin_id );
 
 		$params = array(
-			'content'  => rand_str(),
-			'date_gmt' => rand_str(),
+			'content'  => 'content',
+			'date_gmt' => 'foo',
 		);
 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%d', self::$approved_id ) );
@@ -2529,9 +2535,15 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// Change the comment parent.
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%s', $child_comment ) );
 		$request->set_param( 'parent', $comment_id_1 );
+<<<<<<< HEAD
 		$request->set_param( 'content', rand_str() );
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
+=======
+		$request->set_param( 'content', 'foo bar' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertSame( 200, $response->get_status() );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 
 		// Check if comment 1 now has the child link.
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );

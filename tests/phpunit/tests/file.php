@@ -76,8 +76,13 @@ class Tests_File extends WP_UnitTestCase {
 			return false;
 		}
 
+<<<<<<< HEAD
 		// write some random contents
 		$c = rand_str();
+=======
+		// Write some contents.
+		$c = 'foo';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		fwrite( $fp, $c );
 		fclose( $fp );
 

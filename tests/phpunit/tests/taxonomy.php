@@ -15,12 +15,21 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5417
 	 */
+<<<<<<< HEAD
 	function test_get_unknown_taxonomies() {
 		// taxonomies for an unknown object type
 		$this->assertEquals( array(), get_object_taxonomies( rand_str() ) );
 		$this->assertEquals( array(), get_object_taxonomies( '' ) );
 		$this->assertEquals( array(), get_object_taxonomies( 0 ) );
 		$this->assertEquals( array(), get_object_taxonomies( null ) );
+=======
+	public function test_get_unknown_taxonomies() {
+		// Taxonomies for an unknown object type.
+		$this->assertSame( array(), get_object_taxonomies( 'unknown' ) );
+		$this->assertSame( array(), get_object_taxonomies( '' ) );
+		$this->assertSame( array(), get_object_taxonomies( 0 ) );
+		$this->assertSame( array(), get_object_taxonomies( null ) );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	function test_get_post_taxonomy() {
@@ -143,8 +152,13 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 	function test_register_taxonomy() {
 
+<<<<<<< HEAD
 		// make up a new taxonomy name, and ensure it's unused
 		$tax = rand_str();
+=======
+		// Make up a new taxonomy name, and ensure it's unused.
+		$tax = 'tax_new';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertFalse( taxonomy_exists( $tax ) );
 
 		register_taxonomy( $tax, 'post' );
@@ -157,8 +171,13 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 	function test_register_hierarchical_taxonomy() {
 
+<<<<<<< HEAD
 		// make up a new taxonomy name, and ensure it's unused
 		$tax = rand_str();
+=======
+		// Make up a new taxonomy name, and ensure it's unused.
+		$tax = 'tax_new';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertFalse( taxonomy_exists( $tax ) );
 
 		register_taxonomy( $tax, 'post', array( 'hierarchical' => true ) );

@@ -21,7 +21,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	function setUp() {
 		parent::setUp();
 
-		$this->post_type = rand_str( 20 );
+		$this->post_type = 'foo1';
 	}
 
 	function test_register_post_type() {

@@ -459,9 +459,15 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 
 	public function test_get_items_invalid_date() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
+<<<<<<< HEAD
 		$request->set_param( 'after', rand_str() );
 		$request->set_param( 'before', rand_str() );
 		$response = $this->server->dispatch( $request );
+=======
+		$request->set_param( 'after', 'foo' );
+		$request->set_param( 'before', 'bar' );
+		$response = rest_get_server()->dispatch( $request );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -499,7 +505,65 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
+<<<<<<< HEAD
 		$this->assertEquals( $id2, $data[0]['id'] );
+=======
+		$this->assertSame( $id2, $data[0]['id'] );
+	}
+
+	/**
+	 * @ticket 50617
+	 */
+	public function test_get_items_invalid_modified_date() {
+		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
+		$request->set_param( 'modified_after', 'foo' );
+		$request->set_param( 'modified_before', 'bar' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
+	}
+
+	/**
+	 * @ticket 50617
+	 */
+	public function test_get_items_valid_modified_date() {
+		$id1 = $this->factory->attachment->create_object(
+			$this->test_file,
+			0,
+			array(
+				'post_date'      => '2016-01-01 00:00:00',
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+			)
+		);
+		$id2 = $this->factory->attachment->create_object(
+			$this->test_file,
+			0,
+			array(
+				'post_date'      => '2016-01-02 00:00:00',
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+			)
+		);
+		$id3 = $this->factory->attachment->create_object(
+			$this->test_file,
+			0,
+			array(
+				'post_date'      => '2016-01-03 00:00:00',
+				'post_mime_type' => 'image/jpeg',
+				'post_excerpt'   => 'A sample caption',
+			)
+		);
+		$this->update_post_modified( $id1, '2016-01-15 00:00:00' );
+		$this->update_post_modified( $id2, '2016-01-16 00:00:00' );
+		$this->update_post_modified( $id3, '2016-01-17 00:00:00' );
+		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
+		$request->set_param( 'modified_after', '2016-01-15T00:00:00Z' );
+		$request->set_param( 'modified_before', '2016-01-17T00:00:00Z' );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertCount( 1, $data );
+		$this->assertSame( $id2, $data[0]['id'] );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	public function test_get_item() {

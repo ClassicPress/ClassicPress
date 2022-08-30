@@ -15,9 +15,15 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		self::$author_user_id = $factory->user->create( array( 'role' => 'author' ) );
 	}
 
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		$this->post_type = rand_str( 20 );
+=======
+	public function set_up() {
+		parent::set_up();
+		$this->post_type = 'test-revision';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	function tearDown() {
@@ -443,7 +449,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 			array(
 				'post_status'  => 'publish',
 				'ID'           => $post_id,
-				'post_content' => rand_str(),
+				'post_content' => 'content',
 			)
 		);
 

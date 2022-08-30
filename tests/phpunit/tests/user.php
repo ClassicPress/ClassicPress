@@ -97,8 +97,13 @@ class Tests_User extends WP_UnitTestCase {
 		update_user_option( self::$author_id, $key, $val );
 		$this->assertEquals( $val, get_user_option( $key, self::$author_id ) );
 
+<<<<<<< HEAD
 		// change and get again
 		$val2 = rand_str();
+=======
+		// Change and get again.
+		$val2 = 'baz';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		update_user_option( self::$author_id, $key, $val2 );
 		$this->assertEquals( $val2, get_user_option( $key, self::$author_id ) );
 	}
@@ -126,10 +131,17 @@ class Tests_User extends WP_UnitTestCase {
 
 		// delete by key AND value
 		update_user_meta( self::$author_id, $key, $val );
+<<<<<<< HEAD
 		// incorrect key: key still exists
 		delete_user_meta( self::$author_id, $key, rand_str() );
 		$this->assertEquals( $val, get_user_meta( self::$author_id, $key, true ) );
 		// correct key: deleted
+=======
+		// Incorrect key: key still exists.
+		delete_user_meta( self::$author_id, $key, 'foo' );
+		$this->assertSame( $val, get_user_meta( self::$author_id, $key, true ) );
+		// Correct key: deleted.
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		delete_user_meta( self::$author_id, $key, $val );
 		$this->assertEquals( '', get_user_meta( self::$author_id, $key, true ) );
 
@@ -139,9 +151,9 @@ class Tests_User extends WP_UnitTestCase {
 	function test_usermeta_array() {
 		// some values to set
 		$vals = array(
-			rand_str() => 'val-' . rand_str(),
-			rand_str() => 'val-' . rand_str(),
-			rand_str() => 'val-' . rand_str(),
+			'key0' => 'val0',
+			'key1' => 'val1',
+			'key2' => 'val2',
 		);
 
 		// there is already some stuff in the array
@@ -440,8 +452,8 @@ class Tests_User extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$author_id,
 			'post_status'  => 'publish',
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
+			'post_content' => 'content',
+			'post_title'   => 'title',
 			'post_type'    => 'post',
 		);
 
@@ -573,7 +585,7 @@ class Tests_User extends WP_UnitTestCase {
 	function test_user_meta_error() {
 		$id1 = wp_insert_user(
 			array(
-				'user_login' => rand_str(),
+				'user_login' => 'taco_burrito',
 				'user_pass'  => 'password',
 				'user_email' => 'taco@burrito.com',
 			)
@@ -582,7 +594,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$id2 = wp_insert_user(
 			array(
-				'user_login' => rand_str(),
+				'user_login' => 'taco_burrito2',
 				'user_pass'  => 'password',
 				'user_email' => 'taco@burrito.com',
 			)
@@ -763,9 +775,9 @@ class Tests_User extends WP_UnitTestCase {
 	 */
 	public function test_wp_insert_user_should_not_wipe_existing_password() {
 		$user_details = array(
-			'user_login' => rand_str(),
+			'user_login' => 'jonsnow',
 			'user_pass'  => 'password',
-			'user_email' => rand_str() . '@example.com',
+			'user_email' => 'jonsnow@example.com',
 		);
 
 		$user_id = wp_insert_user( $user_details );

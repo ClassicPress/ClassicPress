@@ -20,8 +20,8 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback      = array( $a, 'action' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
-		$accepted_args = rand( 1, 100 );
+		$priority      = 1;
+		$accepted_args = 2;
 		$arg           = __FUNCTION__ . '_arg';
 
 		$hook->add_filter( $tag, $callback, $priority, $accepted_args );
@@ -35,8 +35,8 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback      = array( $a, 'filter' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
-		$accepted_args = rand( 1, 100 );
+		$priority      = 1;
+		$accepted_args = 2;
 		$arg           = __FUNCTION__ . '_arg';
 
 		$hook->add_filter( $tag, $callback, $priority, $accepted_args );
@@ -53,8 +53,8 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback_two  = array( $b, 'filter' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
-		$accepted_args = rand( 1, 100 );
+		$priority      = 1;
+		$accepted_args = 2;
 		$arg           = __FUNCTION__ . '_arg';
 
 		$hook->add_filter( $tag, $callback_one, $priority, $accepted_args );
@@ -72,8 +72,8 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback_two  = array( $b, 'filter' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
-		$accepted_args = rand( 1, 100 );
+		$priority      = 1;
+		$accepted_args = 2;
 		$arg           = __FUNCTION__ . '_arg';
 
 		$hook->add_filter( $tag, $callback_one, $priority, $accepted_args );
@@ -88,7 +88,7 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback      = array( $this, '_action_callback' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
+		$priority      = 1;
 		$accepted_args = 0;
 		$arg           = __FUNCTION__ . '_arg';
 
@@ -102,7 +102,7 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback      = array( $this, '_action_callback' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
+		$priority      = 1;
 		$accepted_args = 1;
 		$arg           = __FUNCTION__ . '_arg';
 
@@ -116,7 +116,7 @@ class Tests_WP_Hook_Do_Action extends WP_UnitTestCase {
 		$callback      = array( $this, '_action_callback' );
 		$hook          = new WP_Hook();
 		$tag           = __FUNCTION__;
-		$priority      = rand( 1, 100 );
+		$priority      = 100;
 		$accepted_args = 1000;
 		$arg           = __FUNCTION__ . '_arg';
 

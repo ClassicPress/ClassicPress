@@ -256,6 +256,7 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertTrue( is_dir( $root_fs ) );
 
 				$root_uri = get_theme_root_uri();
+<<<<<<< HEAD
 				$this->assertTrue( ! empty( $root_uri ) );
 
 				$this->assertEquals( $root_fs . '/' . get_stylesheet(), get_stylesheet_directory() );
@@ -293,15 +294,64 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertEquals( get_tag_template(), get_query_template( 'tag' ) );
 
 				// nb: this probably doesn't run because WP_INSTALLING is defined
+=======
+				$this->assertNotEmpty( $root_uri );
+
+				$this->assertSame( $root_fs . '/' . get_stylesheet(), get_stylesheet_directory() );
+				$this->assertSame( $root_uri . '/' . get_stylesheet(), get_stylesheet_directory_uri() );
+				$this->assertSame( $root_uri . '/' . get_stylesheet() . '/style.css', get_stylesheet_uri() );
+				// $this->assertSame( $root_uri . '/' . get_stylesheet(), get_locale_stylesheet_uri() );
+
+				$this->assertSame( $root_fs . '/' . get_template(), get_template_directory() );
+				$this->assertSame( $root_uri . '/' . get_template(), get_template_directory_uri() );
+
+				// get_query_template()
+
+				// Template file that doesn't exist.
+				$this->assertSame( '', get_query_template( 'nonexistant' ) );
+
+				// Template files that do exist.
+				/*
+				foreach ( $theme['Template Files'] as $path ) {
+					$file = basename($path, '.php');
+					FIXME: untestable because get_query_template() uses TEMPLATEPATH.
+					$this->assertSame('', get_query_template($file));
+				}
+				*/
+
+				// These are kind of tautologies but at least exercise the code.
+				$this->assertSame( get_404_template(), get_query_template( '404' ) );
+				$this->assertSame( get_archive_template(), get_query_template( 'archive' ) );
+				$this->assertSame( get_author_template(), get_query_template( 'author' ) );
+				$this->assertSame( get_category_template(), get_query_template( 'category' ) );
+				$this->assertSame( get_date_template(), get_query_template( 'date' ) );
+				$this->assertSame( get_home_template(), get_query_template( 'home', array( 'home.php', 'index.php' ) ) );
+				$this->assertSame( get_privacy_policy_template(), get_query_template( 'privacy_policy', array( 'privacy-policy.php' ) ) );
+				$this->assertSame( get_page_template(), get_query_template( 'page' ) );
+				$this->assertSame( get_search_template(), get_query_template( 'search' ) );
+				$this->assertSame( get_single_template(), get_query_template( 'single' ) );
+				$this->assertSame( get_attachment_template(), get_query_template( 'attachment' ) );
+
+				$this->assertSame( get_tag_template(), get_query_template( 'tag' ) );
+
+				// nb: This probably doesn't run because WP_INSTALLING is defined.
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 				$this->assertTrue( validate_current_theme() );
 			}
 		}
 	}
 
+<<<<<<< HEAD
 	function test_switch_theme_bogus() {
 		// try switching to a theme that doesn't exist
 		$template = rand_str();
 		$style    = rand_str();
+=======
+	public function test_switch_theme_bogus() {
+		// Try switching to a theme that doesn't exist.
+		$template = 'some_template';
+		$style    = 'some_style';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		update_option( 'template', $template );
 		update_option( 'stylesheet', $style );
 

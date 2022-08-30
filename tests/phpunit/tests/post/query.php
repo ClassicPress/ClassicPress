@@ -132,42 +132,54 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$post_id1 = self::factory()->post->create(
 			array(
 				'post_type'  => 'page',
+<<<<<<< HEAD
 				'menu_order' => rand(
 					1,
 					100
 				),
+=======
+				'menu_order' => 1,
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			)
 		);
 		$post_id2 = self::factory()->post->create(
 			array(
 				'post_type'  => 'page',
+<<<<<<< HEAD
 				'menu_order' => rand(
 					1,
 					100
 				),
+=======
+				'menu_order' => 2,
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			)
 		);
 		$post_id3 = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_parent' => $post_id2,
-				'menu_order'  => rand( 1, 100 ),
+				'menu_order'  => 3,
 			)
 		);
 		$post_id4 = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_parent' => $post_id2,
-				'menu_order'  => rand( 1, 100 ),
+				'menu_order'  => 4,
 			)
 		);
 		$post_id5 = self::factory()->post->create(
 			array(
 				'post_type'  => 'page',
+<<<<<<< HEAD
 				'menu_order' => rand(
 					1,
 					100
 				),
+=======
+				'menu_order' => 5,
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			)
 		);
 
@@ -192,7 +204,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			$post_id,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 1,
 			)
 		);
 		$att_ids[2] = self::factory()->attachment->create_object(
@@ -200,7 +212,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			$post_id,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 2,
 			)
 		);
 		$att_ids[3] = self::factory()->attachment->create_object(
@@ -208,7 +220,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			$post_id,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 3,
 			)
 		);
 		$att_ids[4] = self::factory()->attachment->create_object(
@@ -216,7 +228,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			$post_id,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 4,
 			)
 		);
 		$att_ids[5] = self::factory()->attachment->create_object(
@@ -224,7 +236,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			$post_id,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 5,
 			)
 		);
 

@@ -193,7 +193,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 */
 	function test_unschedule_hook() {
 		$hook = __FUNCTION__;
-		$args = array( rand_str() );
+		$args = array( 'foo' );
 
 		// schedule several events with and without arguments.
 		wp_schedule_single_event( strtotime( '+1 hour' ), $hook );

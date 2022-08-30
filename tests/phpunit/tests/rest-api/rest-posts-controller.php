@@ -1238,9 +1238,15 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 	public function test_get_items_invalid_date() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
+<<<<<<< HEAD
 		$request->set_param( 'after', rand_str() );
 		$request->set_param( 'before', rand_str() );
 		$response = $this->server->dispatch( $request );
+=======
+		$request->set_param( 'after', 'foo' );
+		$request->set_param( 'before', 'bar' );
+		$response = rest_get_server()->dispatch( $request );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -1255,7 +1261,41 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
+<<<<<<< HEAD
 		$this->assertEquals( $post2, $data[0]['id'] );
+=======
+		$this->assertSame( $post2, $data[0]['id'] );
+	}
+
+	/**
+	 * @ticket 50617
+	 */
+	public function test_get_items_invalid_modified_date() {
+		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
+		$request->set_param( 'modified_after', 'foo' );
+		$request->set_param( 'modified_before', 'bar' );
+		$response = rest_get_server()->dispatch( $request );
+		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
+	}
+
+	/**
+	 * @ticket 50617
+	 */
+	public function test_get_items_valid_modified_date() {
+		$post1 = $this->factory->post->create( array( 'post_date' => '2016-01-01 00:00:00' ) );
+		$post2 = $this->factory->post->create( array( 'post_date' => '2016-01-02 00:00:00' ) );
+		$post3 = $this->factory->post->create( array( 'post_date' => '2016-01-03 00:00:00' ) );
+		$this->update_post_modified( $post1, '2016-01-15 00:00:00' );
+		$this->update_post_modified( $post2, '2016-01-16 00:00:00' );
+		$this->update_post_modified( $post3, '2016-01-17 00:00:00' );
+		$request = new WP_REST_Request( 'GET', '/wp/v2/posts' );
+		$request->set_param( 'modified_after', '2016-01-15T00:00:00Z' );
+		$request->set_param( 'modified_before', '2016-01-17T00:00:00Z' );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertCount( 1, $data );
+		$this->assertSame( $post2, $data[0]['id'] );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	public function test_get_items_all_post_formats() {
@@ -2033,7 +2073,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 			0,
 			array(
 				'post_mime_type' => 'image/jpeg',
-				'menu_order'     => rand( 1, 100 ),
+				'menu_order'     => 1,
 			)
 		);
 
@@ -2576,7 +2616,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	public function test_update_post_ignore_readonly() {
 		wp_set_current_user( self::$editor_id );
 
-		$new_content       = rand_str();
+		$new_content       = 'foo bar baz';
 		$expected_modified = current_time( 'mysql' );
 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
@@ -2640,7 +2680,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
 		$params  = $this->set_post_data(
 			array(
-				'date' => rand_str(),
+				'date' => 'foo',
 			)
 		);
 		$request->set_body_params( $params );
@@ -2655,7 +2695,7 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
 		$params  = $this->set_post_data(
 			array(
-				'date_gmt' => rand_str(),
+				'date_gmt' => 'foo',
 			)
 		);
 		$request->set_body_params( $params );

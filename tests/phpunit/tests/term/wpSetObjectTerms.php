@@ -133,9 +133,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		$ids = self::$post_ids;
 
 		$terms = array(
-			rand_str(),
-			rand_str(),
-			rand_str(),
+			'term0',
+			'term1',
+			'term2',
 		);
 
 		foreach ( $ids as $id ) {
@@ -162,9 +162,15 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		}
 	}
 
+<<<<<<< HEAD
 	function test_set_object_terms_invalid() {
 		// bogus taxonomy
 		$result = wp_set_object_terms( self::$post_ids[0], array( rand_str() ), rand_str() );
+=======
+	public function test_set_object_terms_invalid() {
+		// Bogus taxonomy.
+		$result = wp_set_object_terms( self::$post_ids[0], array( 'foo' ), 'invalid-taxonomy' );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertWPError( $result );
 	}
 

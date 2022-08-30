@@ -20,8 +20,14 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => $this->author->ID,
 			'post_status'  => 'publish',
+<<<<<<< HEAD
 			'post_content' => rand_str(),
 			'post_title'   => rand_str(),
+=======
+				'post_content' => 'content',
+				'post_title'   => 'title',
+			)
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post
@@ -30,8 +36,14 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => $this->author->ID,
 			'post_status'  => 'publish',
+<<<<<<< HEAD
 			'post_content' => rand_str(),
 			'post_title'   => rand_str(),
+=======
+				'post_content' => 'content',
+				'post_title'   => 'title',
+			)
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post

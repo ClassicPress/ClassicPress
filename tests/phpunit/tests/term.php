@@ -49,16 +49,30 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5381
 	 */
+<<<<<<< HEAD
 	function test_is_term_type() {
 		// insert a term
 		$term = rand_str();
+=======
+	public function test_is_term_type() {
+		// Insert a term.
+		$term = 'term_new';
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$t    = wp_insert_term( $term, $this->taxonomy );
 		$this->assertInternalType( 'array', $t );
 		$term_obj = get_term_by( 'name', $term, $this->taxonomy );
-		$this->assertEquals( $t['term_id'], term_exists( $term_obj->slug ) );
 
+<<<<<<< HEAD
 		// clean up
 		$this->assertTrue( wp_delete_term( $t['term_id'], $this->taxonomy ) );
+=======
+		$exists = term_exists( $term_obj->slug );
+		// Clean up.
+		$deleted = wp_delete_term( $t['term_id'], $this->taxonomy );
+
+		$this->assertEquals( $t['term_id'], $exists );
+		$this->assertTrue( $deleted );
+>>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	/**
