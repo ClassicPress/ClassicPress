@@ -315,15 +315,9 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 
 	public function test_get_items_invalid_date() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/pages' );
-<<<<<<< HEAD
-		$request->set_param( 'after', rand_str() );
-		$request->set_param( 'before', rand_str() );
-		$response = $this->server->dispatch( $request );
-=======
 		$request->set_param( 'after', 'foo' );
 		$request->set_param( 'before', 'bar' );
 		$response = rest_get_server()->dispatch( $request );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -352,9 +346,6 @@ class WP_Test_REST_Pages_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
-<<<<<<< HEAD
-		$this->assertEquals( $post2, $data[0]['id'] );
-=======
 		$this->assertSame( $post2, $data[0]['id'] );
 	}
 

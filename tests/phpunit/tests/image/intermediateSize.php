@@ -22,13 +22,13 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 		return parent::_make_attachment( $upload, $parent_post_id );
 	}
 
-	function test_make_intermediate_size_no_size() {
+	public function test_make_intermediate_size_no_size() {
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 0, 0, false );
 
 		$this->assertFalse( $image );
 	}
 
-	function test_make_intermediate_size_width() {
+	public function test_make_intermediate_size_width() {
 		if ( ! function_exists( 'imagejpeg' ) ) {
 			$this->fail( 'jpeg support unavailable' );
 		}
@@ -38,7 +38,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 		$this->assertInternalType( 'array', $image );
 	}
 
-	function test_make_intermediate_size_height() {
+	public function test_make_intermediate_size_height() {
 		if ( ! function_exists( 'imagejpeg' ) ) {
 			$this->fail( 'jpeg support unavailable' );
 		}
@@ -48,7 +48,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 		$this->assertInternalType( 'array', $image );
 	}
 
-	function test_make_intermediate_size_successful() {
+	public function test_make_intermediate_size_successful() {
 		if ( ! function_exists( 'imagejpeg' ) ) {
 			$this->fail( 'jpeg support unavailable' );
 		}
@@ -68,7 +68,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	/**
 	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
-	function test_get_intermediate_sizes_by_name() {
+	public function test_get_intermediate_sizes_by_name() {
 		add_image_size( 'test-size', 330, 220, true );
 
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -88,7 +88,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	/**
 	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
-	function test_get_intermediate_sizes_by_array_exact() {
+	public function test_get_intermediate_sizes_by_array_exact() {
 		// Only one dimention match shouldn't return false positive (see: 17626)
 		add_image_size( 'test-size', 330, 220, true );
 		add_image_size( 'false-height', 330, 400, true );
@@ -109,7 +109,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	/**
 	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
-	function test_get_intermediate_sizes_by_array_nearest() {
+	public function test_get_intermediate_sizes_by_array_nearest() {
 		// If an exact size is not found, it should be returned
 		// If not, find nearest size that is larger (see: 17626)
 		add_image_size( 'test-size', 450, 300, true );
@@ -131,7 +131,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	/**
 	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
-	function test_get_intermediate_sizes_by_array_nearest_false() {
+	public function test_get_intermediate_sizes_by_array_nearest_false() {
 		// If an exact size is not found, it should be returned
 		// If not, find nearest size that is larger, otherwise return false (see: 17626)
 		add_image_size( 'false-height', 330, 100, true );
@@ -152,15 +152,6 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	/**
 	* @see https://core.trac.wordpress.org/ticket/17626
 	*/
-<<<<<<< HEAD
-	function test_get_intermediate_sizes_by_array_zero_height() {
-		// Generate random width
-		$random_w = rand( 300, 400 );
-
-		// Only one dimention match shouldn't return false positive (see: 17626)
-		add_image_size( 'test-size', $random_w, 0, false );
-		add_image_size( 'false-height', $random_w, 100, true );
-=======
 	public function test_get_intermediate_sizes_by_array_zero_height() {
 		// Use this width.
 		$width = 300;
@@ -168,7 +159,6 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 		// Only one dimention match shouldn't return false positive (see: #17626).
 		add_image_size( 'test-size', $width, 0, false );
 		add_image_size( 'false-height', $width, 100, true );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
 		$id   = $this->_make_attachment( $file, 0 );
@@ -177,15 +167,9 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 		$image_w  = $width;
 		$image_h  = round( ( $image_w / $original['width'] ) * $original['height'] );
 
-<<<<<<< HEAD
-		// look for a size by array that exists
-		// note: staying larger than 300px to miss default medium crop
-		$image = image_get_intermediate_size( $id, array( $random_w, 0 ) );
-=======
 		// Look for a size by array that exists.
 		// Note: Staying larger than 300px to miss default medium crop.
 		$image = image_get_intermediate_size( $id, array( $width, 0 ) );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 
 		// test for the expected string because the array will by definition
 		// return with the correct height and width attributes
@@ -196,7 +180,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/17626
 	 * @see https://core.trac.wordpress.org/ticket/34087
 	 */
-	function test_get_intermediate_sizes_by_array_zero_width() {
+	public function test_get_intermediate_sizes_by_array_zero_width() {
 		// 202 is the smallest height that will trigger a miss for 'false-height'.
 		$height = 202;
 

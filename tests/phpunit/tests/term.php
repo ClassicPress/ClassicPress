@@ -49,36 +49,25 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5381
 	 */
-<<<<<<< HEAD
-	function test_is_term_type() {
-		// insert a term
-		$term = rand_str();
-=======
 	public function test_is_term_type() {
 		// Insert a term.
 		$term = 'term_new';
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$t    = wp_insert_term( $term, $this->taxonomy );
 		$this->assertInternalType( 'array', $t );
 		$term_obj = get_term_by( 'name', $term, $this->taxonomy );
 
-<<<<<<< HEAD
-		// clean up
-		$this->assertTrue( wp_delete_term( $t['term_id'], $this->taxonomy ) );
-=======
 		$exists = term_exists( $term_obj->slug );
 		// Clean up.
 		$deleted = wp_delete_term( $t['term_id'], $this->taxonomy );
 
 		$this->assertEquals( $t['term_id'], $exists );
 		$this->assertTrue( $deleted );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/15919
 	 */
-	function test_wp_count_terms() {
+	public function test_wp_count_terms() {
 		$count = wp_count_terms( 'category', array( 'hide_empty' => true ) );
 		// there are 5 posts, all Uncategorized
 		$this->assertEquals( 1, $count );
@@ -87,7 +76,7 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/15475
 	 */
-	function test_wp_add_remove_object_terms() {
+	public function test_wp_add_remove_object_terms() {
 		$posts = self::$post_ids;
 		$tags  = self::factory()->tag->create_many( 5 );
 
@@ -118,7 +107,7 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @group category.php
 	 */
-	function test_term_is_ancestor_of() {
+	public function test_term_is_ancestor_of() {
 		$term  = rand_str();
 		$term2 = rand_str();
 
@@ -137,7 +126,7 @@ class Tests_Term extends WP_UnitTestCase {
 		wp_delete_term( $t2['term_id'], 'category' );
 	}
 
-	function test_wp_insert_delete_category() {
+	public function test_wp_insert_delete_category() {
 		$term = rand_str();
 		$this->assertNull( category_exists( $term ) );
 
@@ -163,7 +152,7 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/16550
 	 */
-	function test_wp_set_post_categories() {
+	public function test_wp_set_post_categories() {
 		$post_id = self::$post_ids[0];
 		$post    = get_post( $post_id );
 
@@ -199,7 +188,7 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/25852
 	 */
-	function test_sanitize_term_field() {
+	public function test_sanitize_term_field() {
 		$term = wp_insert_term( 'foo', $this->taxonomy );
 
 		$this->assertEquals( 0, sanitize_term_field( 'parent', 0, $term['term_id'], $this->taxonomy, 'raw' ) );
@@ -211,7 +200,7 @@ class Tests_Term extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/19205
 	 */
-	function test_orphan_category() {
+	public function test_orphan_category() {
 		$cat_id1 = self::factory()->category->create();
 
 		wp_delete_category( $cat_id1 );

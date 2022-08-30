@@ -256,16 +256,11 @@ class Tests_TermExists extends WP_UnitTestCase {
 		$this->assertEquals( $t, $found );
 	}
 
-	function test_term_exists_known() {
+	public function test_term_exists_known() {
 		register_taxonomy( 'wptests_tax', 'post' );
 
-<<<<<<< HEAD
-		// insert a term
-		$term = rand_str();
-=======
 		// Insert a term.
 		$term = __FUNCTION__;
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		$t    = wp_insert_term( $term, 'wptests_tax' );
 		$this->assertInternalType( 'array', $t );
 		$this->assertEquals( $t['term_id'], term_exists( $t['term_id'] ) );
@@ -276,7 +271,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
-	function test_term_exists_unknown() {
+	public function test_term_exists_unknown() {
 		$this->assertNull( term_exists( rand_str() ) );
 		$this->assertEquals( 0, term_exists( 0 ) );
 		$this->assertEquals( 0, term_exists( '' ) );

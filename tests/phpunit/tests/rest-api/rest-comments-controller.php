@@ -792,15 +792,11 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 
 	public function test_get_comments_invalid_date() {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/comments' );
-<<<<<<< HEAD
-		$request->set_param( 'after', rand_str() );
-		$request->set_param( 'before', rand_str() );
-		$response = $this->server->dispatch( $request );
-=======
+
 		$request->set_param( 'after', 'foo' );
 		$request->set_param( 'before', 'bar' );
 		$response = rest_get_server()->dispatch( $request );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
+
 		$this->assertErrorResponse( 'rest_invalid_param', $response, 400 );
 	}
 
@@ -2535,15 +2531,10 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		// Change the comment parent.
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/comments/%s', $child_comment ) );
 		$request->set_param( 'parent', $comment_id_1 );
-<<<<<<< HEAD
-		$request->set_param( 'content', rand_str() );
-		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
-=======
+
 		$request->set_param( 'content', 'foo bar' );
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertSame( 200, $response->get_status() );
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 
 		// Check if comment 1 now has the child link.
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/comments/%s', $comment_id_1 ) );

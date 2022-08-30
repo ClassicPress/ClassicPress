@@ -42,7 +42,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		parent::tearDown();
 	}
 
-	function test_wp_get_themes_default() {
+	public function test_wp_get_themes_default() {
 		$themes = wp_get_themes();
 		$this->assertInstanceOf( 'WP_Theme', $themes[ $this->theme_slug ] );
 		$this->assertEquals( $this->theme_name, $themes[ $this->theme_slug ]->get( 'Name' ) );
@@ -56,7 +56,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 * @expectedDeprecated get_theme
 	 * @expectedDeprecated get_themes
 	 */
-	function test_get_themes_default() {
+	public function test_get_themes_default() {
 		$themes = get_themes();
 		$this->assertInstanceOf( 'WP_Theme', $themes[ $this->theme_name ] );
 		$this->assertEquals( $themes[ $this->theme_name ], get_theme( $this->theme_name ) );
@@ -70,7 +70,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 * @expectedDeprecated get_theme
 	 * @expectedDeprecated get_themes
 	 */
-	function test_get_theme() {
+	public function test_get_theme() {
 		$themes = get_themes();
 		foreach ( array_keys( $themes ) as $name ) {
 			$theme = get_theme( $name );
@@ -81,7 +81,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		}
 	}
 
-	function test_wp_get_theme() {
+	public function test_wp_get_theme() {
 		$themes = wp_get_themes();
 		foreach ( $themes as $theme ) {
 			$this->assertInstanceOf( 'WP_Theme', $theme );
@@ -96,7 +96,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	/**
 	 * @expectedDeprecated get_themes
 	 */
-	function test_get_themes_contents() {
+	public function test_get_themes_contents() {
 		$themes = get_themes();
 		// Generic tests that should hold true for any theme
 		foreach ( $themes as $k => $theme ) {
@@ -165,7 +165,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		}
 	}
 
-	function test_wp_get_theme_contents() {
+	public function test_wp_get_theme_contents() {
 		$theme = wp_get_theme( $this->theme_slug );
 
 		$this->assertEquals( $this->theme_name, $theme->get( 'Name' ) );
@@ -190,7 +190,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/29925
 	 */
-	function test_default_theme_in_default_theme_list() {
+	public function test_default_theme_in_default_theme_list() {
 		$latest_default_theme = WP_Theme::get_core_default_theme();
 		if ( ! $latest_default_theme->exists() || 'twenty' !== substr( $latest_default_theme->get_stylesheet(), 0, 6 ) ) {
 			$this->fail( 'No Twenty* series default themes are installed' );
@@ -198,7 +198,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		$this->assertContains( $latest_default_theme->get_stylesheet(), $this->default_themes );
 	}
 
-	function test_default_themes_have_textdomain() {
+	public function test_default_themes_have_textdomain() {
 		foreach ( $this->default_themes as $theme ) {
 			if ( wp_get_theme( $theme )->exists() ) {
 				$this->assertEquals( $theme, wp_get_theme( $theme )->get( 'TextDomain' ) );
@@ -210,7 +210,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/20897
 	 * @expectedDeprecated get_theme_data
 	 */
-	function test_extra_theme_headers() {
+	public function test_extra_theme_headers() {
 		$wp_theme = wp_get_theme( $this->theme_slug );
 		$this->assertNotEmpty( $wp_theme->get( 'License' ) );
 		$path_to_style_css = $wp_theme->get_theme_root() . '/' . $wp_theme->get_stylesheet() . '/style.css';
@@ -230,7 +230,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 * @expectedDeprecated get_themes
 	 * @expectedDeprecated get_current_theme
 	 */
-	function test_switch_theme() {
+	public function test_switch_theme() {
 		$themes = get_themes();
 
 		// Switch to each theme in sequence.
@@ -256,45 +256,6 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertTrue( is_dir( $root_fs ) );
 
 				$root_uri = get_theme_root_uri();
-<<<<<<< HEAD
-				$this->assertTrue( ! empty( $root_uri ) );
-
-				$this->assertEquals( $root_fs . '/' . get_stylesheet(), get_stylesheet_directory() );
-				$this->assertEquals( $root_uri . '/' . get_stylesheet(), get_stylesheet_directory_uri() );
-				$this->assertEquals( $root_uri . '/' . get_stylesheet() . '/style.css', get_stylesheet_uri() );
-				#               $this->assertEquals($root_uri . '/' . get_stylesheet(), get_locale_stylesheet_uri());
-
-				$this->assertEquals( $root_fs . '/' . get_template(), get_template_directory() );
-				$this->assertEquals( $root_uri . '/' . get_template(), get_template_directory_uri() );
-
-				//get_query_template
-
-				// template file that doesn't exist
-				$this->assertEquals( '', get_query_template( rand_str() ) );
-
-				// template files that do exist
-				//foreach ($theme['Template Files'] as $path) {
-				//$file = basename($path, '.php');
-				// FIXME: untestable because get_query_template uses TEMPLATEPATH
-				//$this->assertEquals('', get_query_template($file));
-				//}
-
-				// these are kind of tautologies but at least exercise the code
-				$this->assertEquals( get_404_template(), get_query_template( '404' ) );
-				$this->assertEquals( get_archive_template(), get_query_template( 'archive' ) );
-				$this->assertEquals( get_author_template(), get_query_template( 'author' ) );
-				$this->assertEquals( get_category_template(), get_query_template( 'category' ) );
-				$this->assertEquals( get_date_template(), get_query_template( 'date' ) );
-				$this->assertEquals( get_home_template(), get_query_template( 'home', array( 'home.php', 'index.php' ) ) );
-				$this->assertEquals( get_page_template(), get_query_template( 'page' ) );
-				$this->assertEquals( get_search_template(), get_query_template( 'search' ) );
-				$this->assertEquals( get_single_template(), get_query_template( 'single' ) );
-				$this->assertEquals( get_attachment_template(), get_query_template( 'attachment' ) );
-
-				$this->assertEquals( get_tag_template(), get_query_template( 'tag' ) );
-
-				// nb: this probably doesn't run because WP_INSTALLING is defined
-=======
 				$this->assertNotEmpty( $root_uri );
 
 				$this->assertSame( $root_fs . '/' . get_stylesheet(), get_stylesheet_directory() );
@@ -335,23 +296,16 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertSame( get_tag_template(), get_query_template( 'tag' ) );
 
 				// nb: This probably doesn't run because WP_INSTALLING is defined.
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 				$this->assertTrue( validate_current_theme() );
 			}
 		}
 	}
 
-<<<<<<< HEAD
-	function test_switch_theme_bogus() {
-		// try switching to a theme that doesn't exist
-		$template = rand_str();
-		$style    = rand_str();
-=======
 	public function test_switch_theme_bogus() {
 		// Try switching to a theme that doesn't exist.
 		$template = 'some_template';
 		$style    = 'some_style';
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
+
 		update_option( 'template', $template );
 		update_option( 'stylesheet', $style );
 
@@ -370,7 +324,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	 *
 	 * @covers _wp_keep_alive_customize_changeset_dependent_auto_drafts()
 	 */
-	function test_wp_keep_alive_customize_changeset_dependent_auto_drafts() {
+	public function test_wp_keep_alive_customize_changeset_dependent_auto_drafts() {
 		$nav_created_post_ids = $this->factory()->post->create_many(
 			2,
 			array(

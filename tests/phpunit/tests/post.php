@@ -52,7 +52,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	// test simple valid behavior: insert and get a post
-	function test_vb_insert_get_delete() {
+	public function test_vb_insert_get_delete() {
 		register_post_type( 'cpt', array( 'taxonomies' => array( 'post_tag', 'ctax' ) ) );
 		register_taxonomy( 'ctax', 'cpt' );
 		$post_types = array( 'post', 'cpt' );
@@ -110,7 +110,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$GLOBALS['wp_taxonomies']['post_tag']->object_type = array( 'post' );
 	}
 
-	function test_vb_insert_future() {
+	public function test_vb_insert_future() {
 		// insert a post with a future date, and make sure the status and cron schedule are correct
 
 		$future_date = strtotime( '+1 day' );
@@ -118,15 +118,9 @@ class Tests_Post extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -148,7 +142,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( $future_date, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
 	}
 
-	function test_vb_insert_future_over_dst() {
+	public function test_vb_insert_future_over_dst() {
 		// insert a post with a future date, and make sure the status and cron schedule are correct
 
 		// Some magic days - one dst one not
@@ -158,15 +152,9 @@ class Tests_Post extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date_1 ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date_1}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -196,7 +184,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( $future_date_2, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
 	}
 
-	function test_vb_insert_future_edit_bug() {
+	public function test_vb_insert_future_edit_bug() {
 		// future post bug: posts get published at the wrong time if you edit the timestamp
 		// https://core.trac.wordpress.org/ticket/4710
 
@@ -206,15 +194,9 @@ class Tests_Post extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date_1 ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date_1}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -244,7 +226,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( $future_date_2, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
 	}
 
-	function test_vb_insert_future_draft() {
+	public function test_vb_insert_future_draft() {
 		// insert a draft post with a future date, and make sure no cron schedule is set
 
 		$future_date = strtotime( '+1 day' );
@@ -252,15 +234,9 @@ class Tests_Post extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'draft',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -283,22 +259,16 @@ class Tests_Post extends WP_UnitTestCase {
 
 	}
 
-	function test_vb_insert_future_change_to_draft() {
+	public function test_vb_insert_future_change_to_draft() {
 		// insert a future post, then edit and change it to draft, and make sure cron gets it right
 		$future_date_1 = strtotime( '+1 day' );
 
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date_1 ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date_1}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -327,7 +297,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( false, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
 	}
 
-	function test_vb_insert_future_change_status() {
+	public function test_vb_insert_future_change_status() {
 		// insert a future post, then edit and change the status, and make sure cron gets it right
 		$future_date_1 = strtotime( '+1 day' );
 
@@ -337,15 +307,9 @@ class Tests_Post extends WP_UnitTestCase {
 			$post = array(
 				'post_author'  => self::$editor_id,
 				'post_status'  => 'publish',
-<<<<<<< HEAD
-				'post_content' => rand_str(),
-				'post_title'   => rand_str(),
-				'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date_1 ),
-=======
 				'post_content' => "{$status}_content",
 				'post_title'   => "{$status}_title",
 				'post_date'    => date_format( date_create( "@{$future_date_1}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			);
 
 			// insert a post and make sure the ID is ok
@@ -375,7 +339,7 @@ class Tests_Post extends WP_UnitTestCase {
 		}
 	}
 
-	function test_vb_insert_future_private() {
+	public function test_vb_insert_future_private() {
 		// insert a draft post with a future date, and make sure no cron schedule is set
 
 		$future_date = strtotime( '+1 day' );
@@ -383,15 +347,9 @@ class Tests_Post extends WP_UnitTestCase {
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'private',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -416,20 +374,14 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/17180
 	 */
-	function test_vb_insert_invalid_date() {
+	public function test_vb_insert_invalid_date() {
 		// insert a post with an invalid date, make sure it fails
 
 		$post = array(
 			'post_author'  => self::$editor_id,
-<<<<<<< HEAD
-			'post_status'  => 'public',
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-=======
 			'post_status'  => 'publish',
 			'post_content' => 'content',
 			'post_title'   => 'title',
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			'post_date'    => '2012-02-30 00:00:00',
 		);
 
@@ -442,22 +394,16 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( 0, $insert_post );
 	}
 
-	function test_vb_insert_future_change_to_private() {
+	public function test_vb_insert_future_change_to_private() {
 		// insert a future post, then edit and change it to private, and make sure cron gets it right
 		$future_date_1 = strtotime( '+1 day' );
 
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date_1 ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date_1}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -552,22 +498,16 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5364
 	 */
-	function test_delete_future_post_cron() {
+	public function test_delete_future_post_cron() {
 		// "When I delete a future post using wp_delete_post($post->ID) it does not update the cron correctly."
 		$future_date = strtotime( '+1 day' );
 
 		$post = array(
 			'post_author'  => self::$editor_id,
 			'post_status'  => 'publish',
-<<<<<<< HEAD
-			'post_content' => rand_str(),
-			'post_title'   => rand_str(),
-			'post_date'    => strftime( '%Y-%m-%d %H:%M:%S', $future_date ),
-=======
 			'post_content' => 'content',
 			'post_title'   => 'title',
 			'post_date'    => date_format( date_create( "@{$future_date}" ), 'Y-m-d H:i:s' ),
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 		);
 
 		// insert a post and make sure the ID is ok
@@ -585,7 +525,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5305
 	 */
-	function test_permalink_without_title() {
+	public function test_permalink_without_title() {
 		// bug: permalink doesn't work if post title is empty
 		// might only fail if the post ID is greater than four characters
 
@@ -611,7 +551,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/15665
 	 */
-	function test_get_page_by_path_priority() {
+	public function test_get_page_by_path_priority() {
 		global $wpdb;
 
 		$attachment = self::factory()->post->create_and_get(
@@ -648,7 +588,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( $other_att, get_page_by_path( 'some-other-page' ) );
 	}
 
-	function test_wp_publish_post() {
+	public function test_wp_publish_post() {
 		$draft_id = self::factory()->post->create( array( 'post_status' => 'draft' ) );
 
 		$post = get_post( $draft_id );
@@ -663,7 +603,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/22944
 	 */
-	function test_wp_insert_post_and_wp_publish_post_with_future_date() {
+	public function test_wp_insert_post_and_wp_publish_post_with_future_date() {
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 10000000 );
 		$post_id     = self::factory()->post->create(
 			array(
@@ -686,7 +626,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/22944
 	 */
-	function test_publish_post_with_content_filtering() {
+	public function test_publish_post_with_content_filtering() {
 		kses_remove_filters();
 
 		$post_id = wp_insert_post( array( 'post_title' => '<script>Test</script>' ) );
@@ -711,7 +651,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/22944
 	 */
-	function test_wp_publish_post_and_avoid_content_filtering() {
+	public function test_wp_publish_post_and_avoid_content_filtering() {
 		kses_remove_filters();
 
 		$post_id = wp_insert_post( array( 'post_title' => '<script>Test</script>' ) );
@@ -731,7 +671,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/23708
 	 */
-	function test_get_post_ancestors_within_loop() {
+	public function test_get_post_ancestors_within_loop() {
 		global $post;
 		$parent_id = self::factory()->post->create();
 		$post      = self::factory()->post->create_and_get( array( 'post_parent' => $parent_id ) );
@@ -741,7 +681,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/23474
 	 */
-	function test_update_invalid_post_id() {
+	public function test_update_invalid_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_name' => 'get-page-uri-post-name' ) );
 		$post    = get_post( $post_id, ARRAY_A );
 
@@ -755,7 +695,7 @@ class Tests_Post extends WP_UnitTestCase {
 
 	}
 
-	function test_parse_post_content_single_page() {
+	public function test_parse_post_content_single_page() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => 'Page 0' ) );
 		$post    = get_post( $post_id );
@@ -766,7 +706,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( array( 'Page 0' ), $pages );
 	}
 
-	function test_parse_post_content_multi_page() {
+	public function test_parse_post_content_multi_page() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => 'Page 0<!--nextpage-->Page 1<!--nextpage-->Page 2<!--nextpage-->Page 3' ) );
 		$post    = get_post( $post_id );
@@ -777,7 +717,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( array( 'Page 0', 'Page 1', 'Page 2', 'Page 3' ), $pages );
 	}
 
-	function test_parse_post_content_remaining_single_page() {
+	public function test_parse_post_content_remaining_single_page() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => 'Page 0' ) );
 		$post    = get_post( $post_id );
@@ -788,7 +728,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( array( 'Page 0' ), $pages );
 	}
 
-	function test_parse_post_content_remaining_multi_page() {
+	public function test_parse_post_content_remaining_multi_page() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => 'Page 0<!--nextpage-->Page 1<!--nextpage-->Page 2<!--nextpage-->Page 3' ) );
 		$post    = get_post( $post_id );
@@ -802,7 +742,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/16746
 	 */
-	function test_parse_post_content_starting_with_nextpage() {
+	public function test_parse_post_content_starting_with_nextpage() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => '<!--nextpage-->Page 0<!--nextpage-->Page 1<!--nextpage-->Page 2<!--nextpage-->Page 3' ) );
 		$post    = get_post( $post_id );
@@ -816,7 +756,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/16746
 	 */
-	function test_parse_post_content_starting_with_nextpage_multi() {
+	public function test_parse_post_content_starting_with_nextpage_multi() {
 		global $multipage, $pages, $numpages;
 		$post_id = self::factory()->post->create( array( 'post_content' => '<!--nextpage-->Page 0' ) );
 		$post    = get_post( $post_id );
@@ -830,7 +770,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/19373
 	 */
-	function test_insert_programmatic_sanitized() {
+	public function test_insert_programmatic_sanitized() {
 		$this->_unset_current_user();
 
 		register_taxonomy( 'test_tax', 'post' );
@@ -838,13 +778,8 @@ class Tests_Post extends WP_UnitTestCase {
 		$title          = 'title';
 		$post_data      = array(
 			'post_author'  => self::$editor_id,
-<<<<<<< HEAD
-			'post_status'  => 'public',
-			'post_content' => rand_str(),
-=======
 			'post_status'  => 'publish',
 			'post_content' => 'content',
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			'post_title'   => $title,
 			'tax_input'    => array(
 				'test_tax' => array( 'term', 'term2', 'term3' ),
@@ -861,7 +796,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/24803
 	 */
-	function test_wp_count_posts() {
+	public function test_wp_count_posts() {
 		$post_type = rand_str( 20 );
 		register_post_type( $post_type );
 		self::factory()->post->create(
@@ -876,7 +811,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( new stdClass, wp_count_posts( $post_type, 'readable' ) );
 	}
 
-	function test_wp_count_posts_filtered() {
+	public function test_wp_count_posts_filtered() {
 		$post_type = rand_str( 20 );
 		register_post_type( $post_type );
 		self::factory()->post->create_many(
@@ -901,7 +836,7 @@ class Tests_Post extends WP_UnitTestCase {
 		return $counts;
 	}
 
-	function test_wp_count_posts_insert_invalidation() {
+	public function test_wp_count_posts_insert_invalidation() {
 		$post_ids       = self::factory()->post->create_many( 3 );
 		$initial_counts = wp_count_posts();
 
@@ -919,7 +854,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertNotEquals( $initial_counts->publish, $after_draft_counts->publish );
 	}
 
-	function test_wp_count_posts_trash_invalidation() {
+	public function test_wp_count_posts_trash_invalidation() {
 		$post_ids       = self::factory()->post->create_many( 3 );
 		$initial_counts = wp_count_posts();
 
@@ -940,7 +875,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/13771
 	 */
-	function test_get_the_date_with_id_returns_correct_time() {
+	public function test_get_the_date_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
 		$this->assertEquals( 'March 1, 2014', get_the_date( 'F j, Y', $post_id ) );
 	}
@@ -948,7 +883,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_the_date_returns_false_with_null_or_non_existing_post() {
+	public function test_get_the_date_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_date() );
 		$this->assertFalse( get_the_date( 'F j, Y h:i:s' ) );
 		$this->assertFalse( get_the_date( '', 9 ) );
@@ -958,7 +893,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_the_time_with_id_returns_correct_time() {
+	public function test_get_the_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
 		$this->assertEquals( '16:35:00', get_the_time( 'H:i:s', $post_id ) );
 	}
@@ -966,7 +901,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_the_time_returns_false_with_null_or_non_existing_post() {
+	public function test_get_the_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_time() );
 		$this->assertFalse( get_the_time( 'h:i:s' ) );
 		$this->assertFalse( get_the_time( '', 9 ) );
@@ -976,7 +911,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_post_time_with_id_returns_correct_time() {
+	public function test_get_post_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
 		$this->assertEquals( '16:35:00', get_post_time( 'H:i:s', false, $post_id ) );
 	}
@@ -984,7 +919,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_post_time_returns_false_with_null_or_non_existing_post() {
+	public function test_get_post_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_time() );
 		$this->assertFalse( get_post_time( 'h:i:s' ) );
 		$this->assertFalse( get_post_time( '', false, 9 ) );
@@ -994,7 +929,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_post_modified_time_with_id_returns_correct_time() {
+	public function test_get_post_modified_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
 		$this->assertEquals( '16:35:00', get_post_modified_time( 'H:i:s', false, $post_id ) );
 	}
@@ -1002,7 +937,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_get_post_modified_time_returns_false_with_null_or_non_existing_post() {
+	public function test_get_post_modified_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_modified_time() );
 		$this->assertFalse( get_post_modified_time( 'h:i:s' ) );
 		$this->assertFalse( get_post_modified_time( '', false, 9 ) );
@@ -1012,14 +947,14 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_mysql2date_returns_false_with_no_date() {
+	public function test_mysql2date_returns_false_with_no_date() {
 		$this->assertFalse( mysql2date( 'F j, Y H:i:s', '' ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
-	function test_mysql2date_returns_gmt_or_unix_timestamp() {
+	public function test_mysql2date_returns_gmt_or_unix_timestamp() {
 		$this->assertEquals( '441013392', mysql2date( 'G', '1983-12-23 07:43:12' ) );
 		$this->assertEquals( '441013392', mysql2date( 'U', '1983-12-23 07:43:12' ) );
 	}
@@ -1027,7 +962,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/25566
 	 */
-	function test_wp_tag_cloud_link_with_post_type() {
+	public function test_wp_tag_cloud_link_with_post_type() {
 		$post_type = 'new_post_type';
 		$tax       = 'new_tag';
 		register_post_type( $post_type, array( 'taxonomies' => array( 'post_tag', $tax ) ) );
@@ -1060,7 +995,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21212
 	 */
-	function test_utf8mb3_post_saves_with_emoji() {
+	public function test_utf8mb3_post_saves_with_emoji() {
 		global $wpdb;
 		$_wpdb = new wpdb_exposed_methods_for_testing();
 
@@ -1097,19 +1032,13 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/31168
 	 */
-	function test_wp_insert_post_default_comment_ping_status_open() {
+	public function test_wp_insert_post_default_comment_ping_status_open() {
 		$post_id = self::factory()->post->create(
 			array(
 				'post_author'  => self::$editor_id,
-<<<<<<< HEAD
-				'post_status'  => 'public',
-				'post_content' => rand_str(),
-				'post_title'   => rand_str(),
-=======
 				'post_status'  => 'publish',
 				'post_content' => 'content',
 				'post_title'   => 'title',
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 			)
 		);
 		$post    = get_post( $post_id );
@@ -1121,19 +1050,13 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/31168
 	 */
-	function test_wp_insert_post_page_default_comment_ping_status_closed() {
+	public function test_wp_insert_post_page_default_comment_ping_status_closed() {
 		$post_id = self::factory()->post->create(
 			array(
 				'post_author'  => self::$editor_id,
-<<<<<<< HEAD
-				'post_status'  => 'public',
-				'post_content' => rand_str(),
-				'post_title'   => rand_str(),
-=======
 				'post_status'  => 'publish',
 				'post_content' => 'content',
 				'post_title'   => 'title',
->>>>>>> 029bea45b0 (Build/Test Tools: Reduce the use of unnecessary randomness in tests.)
 				'post_type'    => 'page',
 			)
 		);
@@ -1146,7 +1069,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/31168
 	 */
-	function test_wp_insert_post_cpt_default_comment_ping_status_open() {
+	public function test_wp_insert_post_cpt_default_comment_ping_status_open() {
 		$post_type = rand_str( 20 );
 		register_post_type( $post_type, array( 'supports' => array( 'comments', 'trackbacks' ) ) );
 		$post_id = self::factory()->post->create(
@@ -1168,7 +1091,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/31168
 	 */
-	function test_wp_insert_post_cpt_default_comment_ping_status_closed() {
+	public function test_wp_insert_post_cpt_default_comment_ping_status_closed() {
 		$post_type = rand_str( 20 );
 		register_post_type( $post_type );
 		$post_id = self::factory()->post->create(
@@ -1193,7 +1116,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/24153
 	 */
-	function test_user_without_publish_cannot_affect_sticky() {
+	public function test_user_without_publish_cannot_affect_sticky() {
 		wp_set_current_user( self::$grammarian_id );
 
 		// Sanity Check.
@@ -1231,7 +1154,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/24153
 	 */
-	function test_user_without_publish_cannot_affect_sticky_with_edit_post() {
+	public function test_user_without_publish_cannot_affect_sticky_with_edit_post() {
 		// Create a sticky post.
 		$post = self::factory()->post->create_and_get(
 			array(
@@ -1271,7 +1194,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/35600
 	 */
-	function test_hooks_fire_when_post_gets_stuck_and_unstuck() {
+	public function test_hooks_fire_when_post_gets_stuck_and_unstuck() {
 		$post_id = self::factory()->post->create();
 		$a1      = new MockAction();
 		$a2      = new MockAction();
@@ -1299,7 +1222,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/34865
 	 */
-	function test_post_updates_without_slug_provided() {
+	public function test_post_updates_without_slug_provided() {
 		$post_id = self::factory()->post->create(
 			array(
 				'post_title'  => 'Stuff',
@@ -1340,7 +1263,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/15946
 	 */
-	function test_wp_insert_post_should_respect_post_date_gmt() {
+	public function test_wp_insert_post_should_respect_post_date_gmt() {
 		$post = array(
 			'post_author'   => self::$editor_id,
 			'post_status'   => 'publish',
@@ -1361,7 +1284,7 @@ class Tests_Post extends WP_UnitTestCase {
 		$this->assertEquals( $post['post_date_gmt'], $out->post_date_gmt );
 	}
 
-	function test_wp_delete_post_reassign_hierarchical_post_type() {
+	public function test_wp_delete_post_reassign_hierarchical_post_type() {
 		$grandparent_page_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
 		$parent_page_id      = self::factory()->post->create(
 			array(
@@ -1388,7 +1311,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * @see _wp_customize_changeset_filter_insert_post_data()
 	 * @see https://core.trac.wordpress.org/ticket/30937
 	 */
-	function test_wp_insert_post_for_customize_changeset_should_not_drop_post_name() {
+	public function test_wp_insert_post_for_customize_changeset_should_not_drop_post_name() {
 
 		$this->assertEquals( 10, has_filter( 'wp_insert_post_data', '_wp_customize_changeset_filter_insert_post_data' ) );
 
