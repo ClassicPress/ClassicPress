@@ -272,10 +272,6 @@ body.interim-login {
 	margin: 0;
 }
 
-@-ms-viewport {
-	width: device-width;
-}
-
 @media screen and ( max-height: 550px ) {
 	#login {
 		padding: 20px 0;
