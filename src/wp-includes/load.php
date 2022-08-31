@@ -45,14 +45,8 @@ function wp_fix_server_vars() {
 		if ( isset( $_SERVER['HTTP_X_ORIGINAL_URL'] ) ) {
 			// IIS Mod-Rewrite
 			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
-<<<<<<< HEAD
-		}
-		// IIS Isapi_Rewrite
-		elseif ( isset( $_SERVER['HTTP_X_REWRITE_URL'] ) ) {
-=======
 		} elseif ( isset( $_SERVER['HTTP_X_REWRITE_URL'] ) ) {
 			// IIS Isapi_Rewrite
->>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
 		} else {
 			// Use ORIG_PATH_INFO if there is no PATH_INFO

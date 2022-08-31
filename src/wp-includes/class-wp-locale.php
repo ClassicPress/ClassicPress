@@ -219,15 +219,8 @@ class WP_Locale {
 		// Set text direction.
 		if ( isset( $GLOBALS['text_direction'] ) ) {
 			$this->text_direction = $GLOBALS['text_direction'];
-<<<<<<< HEAD
-		}
-		/* translators: 'rtl' or 'ltr'. This sets the text direction for ClassicPress. */
-		elseif ( 'rtl' == _x( 'ltr', 'text direction' ) ) {
-=======
-
 			/* translators: 'rtl' or 'ltr'. This sets the text direction for WordPress. */
 		} elseif ( 'rtl' == _x( 'ltr', 'text direction' ) ) {
->>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 			$this->text_direction = 'rtl';
 		}
 
