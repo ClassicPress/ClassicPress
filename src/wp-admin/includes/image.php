@@ -213,9 +213,15 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 				update_post_meta( $attachment_id, '_thumbnail_id', $sub_attachment_id );
 			}
 		}
+<<<<<<< HEAD
 	}
 	// Try to create image thumbnails for PDFs
 	elseif ( 'application/pdf' === $mime_type ) {
+=======
+	} elseif ( 'application/pdf' === $mime_type ) {
+		// Try to create image thumbnails for PDFs.
+
+>>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 		$fallback_sizes = array(
 			'thumbnail',
 			'medium',

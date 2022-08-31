@@ -2493,9 +2493,15 @@ function force_balance_tags( $text ) {
 			if ( $stacksize <= 0 ) {
 				$tag = '';
 				// or close to be safe $tag = '/' . $tag;
+<<<<<<< HEAD
 			}
 			// if stacktop value = tag close value then pop
 			elseif ( $tagstack[ $stacksize - 1 ] == $tag ) { // found closing tag
+=======
+
+				// if stacktop value = tag close value then pop
+			} elseif ( $tagstack[ $stacksize - 1 ] == $tag ) { // found closing tag
+>>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 				$tag = '</' . $tag . '>'; // Close Tag
 				// Pop
 				array_pop( $tagstack );
@@ -2521,14 +2527,19 @@ function force_balance_tags( $text ) {
 			// If it's an empty tag "< >", do nothing
 			if ( '' == $tag ) {
 				// do nothing
+<<<<<<< HEAD
 			}
 			// ElseIf it presents itself as a self-closing tag...
 			elseif ( substr( $regex[2], -1 ) == '/' ) {
+=======
+			} elseif ( substr( $regex[2], -1 ) == '/' ) { // ElseIf it presents itself as a self-closing tag...
+>>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 				// ...but it isn't a known single-entity self-closing tag, then don't let it be treated as such and
 				// immediately close it with a closing tag (the tag will encapsulate no text as a result)
 				if ( ! in_array( $tag, $single_tags ) ) {
 					$regex[2] = trim( substr( $regex[2], 0, -1 ) ) . "></$tag";
 				}
+<<<<<<< HEAD
 			}
 			// ElseIf it's a known single-entity tag but it doesn't close itself, do so
 			elseif ( in_array( $tag, $single_tags ) ) {
@@ -2536,6 +2547,11 @@ function force_balance_tags( $text ) {
 			}
 			// Else it's not a single-entity tag
 			else {
+=======
+			} elseif ( in_array( $tag, $single_tags ) ) { // ElseIf it's a known single-entity tag but it doesn't close itself, do so
+				$regex[2] .= '/';
+			} else { // Else it's not a single-entity tag
+>>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 				// If the top of the stack is the same as the tag we want to push, close previous tag
 				if ( $stacksize > 0 && ! in_array( $tag, $nestable_tags ) && $tagstack[ $stacksize - 1 ] == $tag ) {
 					$tagqueue = '</' . array_pop( $tagstack ) . '>';

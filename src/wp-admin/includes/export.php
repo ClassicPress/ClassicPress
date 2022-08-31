@@ -203,12 +203,17 @@ function export_wp( $args = array() ) {
 	 * @return string Site URL.
 	 */
 	function wxr_site_url() {
-		// Multisite: the base URL.
 		if ( is_multisite() ) {
+			// Multisite: the base URL.
 			return network_home_url();
+<<<<<<< HEAD
 		}
 		// ClassicPress (single site): the blog URL.
 		else {
+=======
+		} else {
+			// WordPress (single site): the blog URL.
+>>>>>>> 33caf61b8b (Coding Standards: Fix the `Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace` violations.)
 			return get_bloginfo_rss( 'url' );
 		}
 	}
