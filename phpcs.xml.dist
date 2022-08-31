@@ -236,14 +236,11 @@
 		<exclude-pattern>/src/wp-includes/l10n\.php</exclude-pattern>
 		<exclude-pattern>/tests/phpunit/tests/l10n\.php</exclude-pattern>
 		<exclude-pattern>/tests/phpunit/tests/l10n/loadTextdomainJustInTime\.php</exclude-pattern>
-<<<<<<< HEAD
 	</rule>
 
 	<!-- Translator comments aren't needed in unit tests. -->
 	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
 		<exclude-pattern>/tests/*</exclude-pattern>
-=======
->>>>>>> 8cc49330a4 (Coding Standards: Fix the minor `WordPress.WP.I18n` violations.)
 	</rule>
 
 	<rule ref="Generic.Functions.FunctionCallArgumentSpacing">

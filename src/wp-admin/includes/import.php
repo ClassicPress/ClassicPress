@@ -165,12 +165,8 @@ function wp_get_popular_importers() {
 		foreach ( $popular_importers['importers'] as &$importer ) {
 			// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
 			$importer['description'] = translate( $importer['description'] );
-<<<<<<< HEAD
 			if ( $importer['name'] != 'ClassicPress' ) {
-=======
-			if ( $importer['name'] != 'WordPress' ) {
 				// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
->>>>>>> 8cc49330a4 (Coding Standards: Fix the minor `WordPress.WP.I18n` violations.)
 				$importer['name'] = translate( $importer['name'] );
 			}
 		}
