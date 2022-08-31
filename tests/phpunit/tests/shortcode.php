@@ -44,12 +44,12 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	// [bartag foo="bar"]
 	function _shortcode_bartag( $atts ) {
 		$processed_atts = shortcode_atts(
-				array(
-					'foo' => 'no foo',
-					'baz' => 'default baz',
-				),
-				$atts,
-				'bartag'
+			array(
+				'foo' => 'no foo',
+				'baz' => 'default baz',
+			),
+			$atts,
+			'bartag'
 		);
 
 		return "foo = {$processed_atts['foo']}";
