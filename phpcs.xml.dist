@@ -2,17 +2,8 @@
 <ruleset name="ClassicPress Coding Standards">
 	<description>Apply WordPress Coding Standards to all Core files</description>
 
-<<<<<<< HEAD
 	<!-- Only scan PHP files. -->
-=======
-	<rule ref="WordPress-Core"/>
-	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
-
-	<rule ref="PEAR.Functions.FunctionCallSignature">
-		<properties>
-			<property name="allowMultipleArguments" value="false"/>
-		</properties>
-	</rule>
+	<arg name="extensions" value="php"/>
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
@@ -67,9 +58,6 @@
 			</property>
 		</properties>
 	</rule>
-
->>>>>>> a139c8cbf7 (Coding Standards: Fix and whitelist variable names.)
-	<arg name="extensions" value="php"/>
 
 	<!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
 	<arg name="cache"/>
