@@ -757,7 +757,6 @@ function set_screen_options() {
 					 * @param string $option        The option name.
 					 * @param int    $value         The option value.
 					 */
-<<<<<<< HEAD
 					$screen_option = apply_filters( 'set-screen-option', $screen_option, $option, $value ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 				}
 
@@ -778,9 +777,6 @@ function set_screen_options() {
 				 * @param int     $value         The option value.
 				 */
 				$value = apply_filters( "set_screen_option_{$option}", $screen_option, $option, $value );
-=======
-				$value = apply_filters( 'set-screen-option', false, $option, $value );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
->>>>>>> 6b61c34ded (Coding Standards: Mark the handful of hook names with uppercase characters or hyphens as ignored.)
 
 				if ( false === $value ) {
 					return;

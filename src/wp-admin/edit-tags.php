@@ -610,12 +610,8 @@ endif;
  *
  * @param string $taxonomy The taxonomy name.
  */
-<<<<<<< HEAD
-do_action( "after-{$taxonomy}-table", $taxonomy );
-?>
-=======
 do_action( "after-{$taxonomy}-table", $taxonomy );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
->>>>>>> 6b61c34ded (Coding Standards: Mark the handful of hook names with uppercase characters or hyphens as ignored.)
+?>
 
 </div>
 </div><!-- /col-right -->
