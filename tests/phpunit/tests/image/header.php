@@ -1,5 +1,9 @@
 <?php
+<<<<<<< HEAD
 require_once ABSPATH . 'wp-admin/custom-header.php';
+=======
+require_once( ABSPATH . 'wp-admin/includes/class-custom-image-header.php' );
+>>>>>>> 8416a2b410 (Coding Standards: Move `wp-admin/custom-header.php` to `wp-admin/includes/class-custom-image-header.php`)
 
 /**
  * @group image
