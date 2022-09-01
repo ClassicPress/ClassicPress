@@ -1417,7 +1417,8 @@ class wpdb {
 
 		wp_load_translations_early();
 
-		if ( $caller = $this->get_caller() ) {
+		$caller = $this->get_caller();
+		if ( $caller ) {
 			/* translators: 1: Database error message, 2: SQL query, 3: Name of the calling function */
 			$error_str = sprintf( __( 'ClassicPress database error %1$s for query %2$s made by %3$s' ), $str, $this->last_query, $caller );
 		} else {
@@ -1522,7 +1523,8 @@ class wpdb {
 		$this->last_result   = array();
 		$this->col_info      = null;
 		$this->last_query    = null;
-		$this->rows_affected = $this->num_rows = 0;
+		$this->rows_affected = 0;
+		$this->num_rows      = 0;
 		$this->last_error    = '';
 
 		if ( $this->use_mysqli && $this->result instanceof mysqli_result ) {
@@ -1573,7 +1575,8 @@ class wpdb {
 			$socket  = null;
 			$is_ipv6 = false;
 
-			if ( $host_data = $this->parse_db_host( $this->dbhost ) ) {
+			$host_data = $this->parse_db_host( $this->dbhost );
+			if ( $host_data ) {
 				list( $host, $port, $socket, $is_ipv6 ) = $host_data;
 			}
 
@@ -2136,7 +2139,8 @@ class wpdb {
 			return false;
 		}
 
-		$formats = $values = array();
+		$formats = array();
+		$values  = array();
 		foreach ( $data as $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$formats[] = 'NULL';
@@ -2200,7 +2204,9 @@ class wpdb {
 			return false;
 		}
 
-		$fields = $conditions = $values = array();
+		$fields     = array();
+		$conditions = array();
+		$values     = array();
 		foreach ( $data as $field => $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$fields[] = "`$field` = NULL";
@@ -2261,7 +2267,8 @@ class wpdb {
 			return false;
 		}
 
-		$conditions = $values = array();
+		$conditions = array();
+		$values     = array();
 		foreach ( $where as $field => $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$conditions[] = "`$field` IS NULL";
@@ -2333,7 +2340,8 @@ class wpdb {
 	 *               of 'value' and 'format' keys.
 	 */
 	protected function process_field_formats( $data, $format ) {
-		$formats = $original_formats = (array) $format;
+		$formats          = (array) $format;
+		$original_formats = $formats;
 
 		foreach ( $data as $field => $value ) {
 			$value = array(
@@ -2625,7 +2633,8 @@ class wpdb {
 			return $this->table_charset[ $tablekey ];
 		}
 
-		$charsets = $columns = array();
+		$charsets = array();
+		$columns  = array();
 
 		$table_parts = explode( '.', $table );
 		$table       = '`' . implode( '`.`', $table_parts ) . '`';
@@ -3023,7 +3032,8 @@ class wpdb {
 			}
 
 			// We couldn't use any local conversions, send it to the DB.
-			$value['db'] = $db_check_string = true;
+			$value['db']     = true;
+			$db_check_string = true;
 		}
 		unset( $value ); // Remove by reference.
 

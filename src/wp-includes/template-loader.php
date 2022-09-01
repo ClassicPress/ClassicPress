@@ -27,7 +27,7 @@ if ( 'HEAD' === $_SERVER['REQUEST_METHOD'] && apply_filters( 'exit_on_http_head'
 }
 
 // Process feeds and trackbacks even if not using themes.
-if ( is_robots() ) :
+if ( is_robots() ) {
 	/**
 	 * Fired when the template loader determines a robots.txt request.
 	 *
@@ -35,14 +35,20 @@ if ( is_robots() ) :
 	 */
 	do_action( 'do_robots' );
 	return;
-elseif ( is_feed() ) :
+} elseif ( is_feed() ) {
 	do_feed();
 	return;
+<<<<<<< HEAD
 elseif ( is_trackback() ) :
 	include ABSPATH . 'wp-trackback.php';
+=======
+} elseif ( is_trackback() ) {
+	include( ABSPATH . 'wp-trackback.php' );
+>>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 	return;
-endif;
+}
 
+<<<<<<< HEAD
 if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) :
 	$template = false;
 	if ( is_embed() && $template = get_embed_template() ) :
@@ -53,18 +59,50 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) :
 	elseif ( is_post_type_archive() && $template = get_post_type_archive_template() ) :
 	elseif ( is_tax() && $template = get_taxonomy_template() ) :
 	elseif ( is_attachment() && $template = get_attachment_template() ) :
+=======
+if ( wp_using_themes() ) {
+
+	$tag_templates = array(
+		'is_embed'             => 'get_embed_template',
+		'is_404'               => 'get_404_template',
+		'is_search'            => 'get_search_template',
+		'is_front_page'        => 'get_front_page_template',
+		'is_home'              => 'get_home_template',
+		'is_privacy_policy'    => 'get_privacy_policy_template',
+		'is_post_type_archive' => 'get_post_type_archive_template',
+		'is_tax'               => 'get_taxonomy_template',
+		'is_attachment'        => 'get_attachment_template',
+		'is_single'            => 'get_single_template',
+		'is_page'              => 'get_page_template',
+		'is_singular'          => 'get_singular_template',
+		'is_category'          => 'get_category_template',
+		'is_tag'               => 'get_tag_template',
+		'is_author'            => 'get_author_template',
+		'is_date'              => 'get_date_template',
+		'is_archive'           => 'get_archive_template',
+	);
+	$template      = false;
+
+	// Loop through each of the template conditionals, and find the appropriate template file.
+	foreach ( $tag_templates as $tag => $template_getter ) {
+		if ( call_user_func( $tag ) ) {
+			$template = call_user_func( $template_getter );
+		}
+
+		if ( $template ) {
+			if ( 'is_attachment' === $tag ) {
+>>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 		remove_filter( 'the_content', 'prepend_attachment' );
-	elseif ( is_single() && $template = get_single_template() ) :
-	elseif ( is_page() && $template = get_page_template() ) :
-	elseif ( is_singular() && $template = get_singular_template() ) :
-	elseif ( is_category() && $template = get_category_template() ) :
-	elseif ( is_tag() && $template = get_tag_template() ) :
-	elseif ( is_author() && $template = get_author_template() ) :
-	elseif ( is_date() && $template = get_date_template() ) :
-	elseif ( is_archive() && $template = get_archive_template() ) :
-	else :
+			}
+
+			break;
+		}
+	}
+
+	if ( ! $template ) {
 		$template = get_index_template();
-	endif;
+	}
+
 	/**
 	 * Filters the path of the current template before including it.
 	 *
@@ -72,8 +110,14 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) :
 	 *
 	 * @param string $template The path of the template to include.
 	 */
+<<<<<<< HEAD
 	if ( $template = apply_filters( 'template_include', $template ) ) {
 		include $template;
+=======
+	$template = apply_filters( 'template_include', $template );
+	if ( $template ) {
+		include( $template );
+>>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 	} elseif ( current_user_can( 'switch_themes' ) ) {
 		$theme = wp_get_theme();
 		if ( $theme->errors() ) {
@@ -81,4 +125,4 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) :
 		}
 	}
 	return;
-endif;
+}

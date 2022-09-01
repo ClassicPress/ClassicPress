@@ -681,10 +681,15 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 	if ( is_admin() ) {
 		$current_screen = get_current_screen();
 		$post           = get_post();
+		if ( 'post' == $current_screen->base ) {
+			$post_type_object = get_post_type_object( $post->post_type );
+		} elseif ( 'edit' == $current_screen->base ) {
+			$post_type_object = get_post_type_object( $current_screen->post_type );
+		}
 
 		if ( 'post' == $current_screen->base
 			&& 'add' != $current_screen->action
-			&& ( $post_type_object = get_post_type_object( $post->post_type ) )
+			&& ( $post_type_object )
 			&& current_user_can( 'read_post', $post->ID )
 			&& ( $post_type_object->public )
 			&& ( $post_type_object->show_in_admin_bar ) ) {
@@ -708,7 +713,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 				);
 			}
 		} elseif ( 'edit' == $current_screen->base
-			&& ( $post_type_object = get_post_type_object( $current_screen->post_type ) )
+			&& ( $post_type_object )
 			&& ( $post_type_object->public )
 			&& ( $post_type_object->show_in_admin_bar )
 			&& ( get_post_type_archive_link( $post_type_object->name ) )
@@ -720,10 +725,16 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					'href'  => get_post_type_archive_link( $current_screen->post_type ),
 				)
 			);
+<<<<<<< HEAD
 		} elseif ( 'term' == $current_screen->base
 			&& isset( $tag ) && is_object( $tag ) && ! is_wp_error( $tag )
 			&& ( $tax = get_taxonomy( $tag->taxonomy ) )
 			&& $tax->public ) {
+=======
+		} elseif ( 'term' == $current_screen->base && isset( $tag ) && is_object( $tag ) && ! is_wp_error( $tag ) ) {
+			$tax = get_taxonomy( $tag->taxonomy );
+			if ( is_taxonomy_viewable( $tax ) ) {
+>>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'view',
@@ -731,11 +742,11 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					'href'  => get_term_link( $tag ),
 				)
 			);
-		} elseif ( 'user-edit' == $current_screen->base
-			&& isset( $user_id )
-			&& ( $user_object = get_userdata( $user_id ) )
-			&& $user_object->exists()
-			&& $view_link = get_author_posts_url( $user_object->ID ) ) {
+			}
+		} elseif ( 'user-edit' == $current_screen->base && isset( $user_id ) ) {
+			$user_object = get_userdata( $user_id );
+			$view_link   = get_author_posts_url( $user_object->ID );
+			if ( $user_object->exists() && $view_link ) {
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'view',
@@ -744,6 +755,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 				)
 			);
 		}
+		}
 	} else {
 		$current_object = $wp_the_query->get_queried_object();
 
@@ -751,11 +763,13 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 			return;
 		}
 
-		if ( ! empty( $current_object->post_type )
-			&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+		if ( ! empty( $current_object->post_type ) ) {
+			$post_type_object = get_post_type_object( $current_object->post_type );
+			$edit_post_link   = get_edit_post_link( $current_object->ID );
+			if ( $post_type_object
+				&& $edit_post_link
 			&& current_user_can( 'edit_post', $current_object->ID )
-			&& $post_type_object->show_in_admin_bar
-			&& $edit_post_link = get_edit_post_link( $current_object->ID ) ) {
+				&& $post_type_object->show_in_admin_bar ) {
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'edit',
@@ -763,10 +777,11 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					'href'  => $edit_post_link,
 				)
 			);
-		} elseif ( ! empty( $current_object->taxonomy )
-			&& ( $tax = get_taxonomy( $current_object->taxonomy ) )
-			&& current_user_can( 'edit_term', $current_object->term_id )
-			&& $edit_term_link = get_edit_term_link( $current_object->term_id, $current_object->taxonomy ) ) {
+			}
+		} elseif ( ! empty( $current_object->taxonomy ) ) {
+			$tax            = get_taxonomy( $current_object->taxonomy );
+			$edit_term_link = get_edit_term_link( $current_object->term_id, $current_object->taxonomy );
+			if ( $tax && $edit_term_link && current_user_can( 'edit_term', $current_object->term_id ) ) {
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'edit',
@@ -774,9 +789,10 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					'href'  => $edit_term_link,
 				)
 			);
-		} elseif ( is_a( $current_object, 'WP_User' )
-			&& current_user_can( 'edit_user', $current_object->ID )
-			&& $edit_user_link = get_edit_user_link( $current_object->ID ) ) {
+			}
+		} elseif ( is_a( $current_object, 'WP_User' ) && current_user_can( 'edit_user', $current_object->ID ) ) {
+			$edit_user_link = get_edit_user_link( $current_object->ID );
+			if ( $edit_user_link ) {
 			$wp_admin_bar->add_menu(
 				array(
 					'id'    => 'edit',
@@ -785,6 +801,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 				)
 			);
 		}
+	}
 	}
 }
 
