@@ -416,7 +416,8 @@ Paragraph two.';
 			'select',
 		);
 
-		$content = $expected = array();
+		$content  = array();
+		$expected = array();
 
 		foreach ( $inlines as $inline ) {
 			$content[]  = "<$inline>foo</$inline>";
@@ -544,7 +545,8 @@ line 2<br/>
 	 * @see https://core.trac.wordpress.org/ticket/39307
 	 */
 	function test_that_wpautop_doses_not_add_extra_closing_p_in_figure() {
-		$content1 = $expected1 = '<figure><img src="example.jpg" /><figcaption>Caption</figcaption></figure>';
+		$content1  = '<figure><img src="example.jpg" /><figcaption>Caption</figcaption></figure>';
+		$expected1 = $content1;
 
 		$content2 = '<figure>
 <img src="example.jpg" />

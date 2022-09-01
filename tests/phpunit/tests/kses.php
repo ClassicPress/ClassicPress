@@ -49,8 +49,20 @@ class Tests_Kses extends WP_UnitTestCase {
 		);
 
 		foreach ( $attributes as $name => $value ) {
+<<<<<<< HEAD
 			$string        = "<a $name='$value'>I link this</a>";
 			$expect_string = "<a $name='" . trim( $value, ';' ) . "'>I link this</a>";
+=======
+			if ( $value ) {
+				$attr          = "$name='$value'";
+				$expected_attr = "$name='" . trim( $value, ';' ) . "'";
+			} else {
+				$attr          = $name;
+				$expected_attr = $name;
+			}
+			$string        = "<a $attr>I link this</a>";
+			$expect_string = "<a $expected_attr>I link this</a>";
+>>>>>>> fe28df65e3 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `tests`.)
 			$this->assertEquals( $expect_string, wp_kses( $string, $allowedposttags ) );
 		}
 	}

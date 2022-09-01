@@ -18,7 +18,7 @@ class Tests_User extends WP_UnitTestCase {
 	protected $user_data;
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$user_ids[] = self::$contrib_id = $factory->user->create(
+		self::$contrib_id = $factory->user->create(
 			array(
 				'user_login'    => 'user1',
 				'user_nicename' => 'userone',
@@ -33,23 +33,28 @@ class Tests_User extends WP_UnitTestCase {
 				'description'   => 'I am a WordPress user that cares about privacy.',
 			)
 		);
+		self::$user_ids[] = self::$contrib_id;
 
-		self::$user_ids[] = self::$author_id = $factory->user->create(
+		self::$author_id  = $factory->user->create(
 			array(
 				'user_login' => 'author_login',
 				'user_email' => 'author@email.com',
 				'role'       => 'author',
 			)
 		);
+		self::$user_ids[] = self::$author_id;
 
-		self::$user_ids[] = self::$admin_id = $factory->user->create( array( 'role' => 'administrator' ) );
-		self::$user_ids[] = self::$editor_id = $factory->user->create(
+		self::$admin_id   = $factory->user->create( array( 'role' => 'administrator' ) );
+		self::$user_ids[] = self::$admin_id;
+		self::$editor_id  = $factory->user->create(
 			array(
 				'role'       => 'editor',
 				'user_email' => 'test@test.com',
 			)
 		);
-		self::$user_ids[] = self::$sub_id = $factory->user->create( array( 'role' => 'subscriber' ) );
+		self::$user_ids[] = self::$editor_id;
+		self::$sub_id     = $factory->user->create( array( 'role' => 'subscriber' ) );
+		self::$user_ids[] = self::$sub_id;
 
 		self::$_author = get_user_by( 'ID', self::$author_id );
 	}
@@ -1386,7 +1391,9 @@ class Tests_User extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/35715
 	 */
 	function test_edit_user_blank_pw() {
-		$_POST                 = $_GET = $_REQUEST = array();
+		$_POST                 = array();
+		$_GET                  = array();
+		$_REQUEST              = array();
 		$_POST['role']         = 'subscriber';
 		$_POST['email']        = 'user1@example.com';
 		$_POST['user_login']   = 'user_login1';
@@ -1402,7 +1409,8 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertEquals( 'pass', $response->get_error_code() );
 
 		// Check new user with password set.
-		$_POST['pass1'] = $_POST['pass2'] = 'password';
+		$_POST['pass1'] = 'password';
+		$_POST['pass2'] = 'password';
 
 		$user_id = edit_user();
 		$user    = get_user_by( 'ID', $user_id );
@@ -1413,7 +1421,8 @@ class Tests_User extends WP_UnitTestCase {
 
 		// Check updating user with empty password.
 		$_POST['nickname'] = 'nickname_updated';
-		$_POST['pass1']    = $_POST['pass2'] = '';
+		$_POST['pass1']    = '';
+		$_POST['pass2']    = '';
 
 		$user_id = edit_user( $user_id );
 
@@ -1559,6 +1568,50 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * @ticket 42564
+	 */
+	function test_edit_user_role_update() {
+		$_POST    = array();
+		$_GET     = array();
+		$_REQUEST = array();
+
+		$administrator = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+
+		wp_set_current_user( $administrator );
+
+		// Don't let anyone with 'promote_users' (administrator) edit their own role to something without it (subscriber).
+		$_POST['role']     = 'subscriber';
+		$_POST['email']    = 'subscriber@subscriber.test';
+		$_POST['nickname'] = 'subscriber';
+		$this->assertSame( $administrator, edit_user( $administrator ) );
+
+		// Should still have the old role.
+		$this->assertSame( array( 'administrator' ), get_userdata( $administrator )->roles );
+
+		// Promote an editor to an administrator.
+		$editor = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+
+		$_POST['role']     = 'administrator';
+		$_POST['email']    = 'administrator@administrator.test';
+		$_POST['nickname'] = 'administrator';
+		$this->assertSame( $editor, edit_user( $editor ) );
+
+		// Should have the new role.
+		$this->assertSame( array( 'administrator' ), get_userdata( $editor )->roles );
+	}
+
+	/**
+>>>>>>> fe28df65e3 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `tests`.)
 	 * Testing the `wp_user_personal_data_exporter_no_user` function when no user exists.
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/43547

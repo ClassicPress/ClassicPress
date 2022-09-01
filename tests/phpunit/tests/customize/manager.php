@@ -935,7 +935,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		);
 		$uuid       = wp_generate_uuid4();
 
-		$wp_customize = $manager = new WP_Customize_Manager(
+		$manager      = new WP_Customize_Manager(
 			array(
 				'changeset_uuid' => $uuid,
 			)
@@ -1038,7 +1038,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertEquals( $previous_saved_data, json_decode( get_post( $post_id )->post_content, true ) );
 
 		// Attempt a non-transactional/incremental update.
-		$wp_customize = $manager = new WP_Customize_Manager(
+		$manager      = new WP_Customize_Manager(
 			array(
 				'changeset_uuid' => $uuid,
 			)
@@ -1099,7 +1099,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 			$action_counts[ $action_name ] = did_action( $action_name );
 		}
 
-		$wp_customize = $manager = new WP_Customize_Manager( array( 'changeset_uuid' => $uuid ) );
+		$manager      = new WP_Customize_Manager( array( 'changeset_uuid' => $uuid ) );
+		$wp_customize = $manager;
 		do_action( 'customize_register', $wp_customize );
 		$manager->add_setting(
 			'scratchpad',
@@ -1141,7 +1142,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		// Test revisions.
 		add_post_type_support( 'customize_changeset', 'revisions' );
 		$uuid         = wp_generate_uuid4();
-		$wp_customize = $manager = new WP_Customize_Manager( array( 'changeset_uuid' => $uuid ) );
+		$manager      = new WP_Customize_Manager( array( 'changeset_uuid' => $uuid ) );
+		$wp_customize = $manager;
 		do_action( 'customize_register', $manager );
 
 		$manager->set_post_value( 'blogname', 'Hello Surface' );
