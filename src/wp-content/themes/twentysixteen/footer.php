@@ -57,8 +57,16 @@
 					the_privacy_policy_link( '', '<span role="separator" aria-hidden="true"></span>' );
 				}
 				?>
+<<<<<<< HEAD
 				<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentysixteen' ) ); ?>" class="imprint">
 					<?php printf( __( 'Proudly powered by %s', 'twentysixteen' ), 'ClassicPress' ); ?>
+=======
+				<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentysixteen' ) ); ?>" class="imprint">
+					<?php
+					/* translators: %s: WordPress */
+					printf( __( 'Proudly powered by %s', 'twentysixteen' ), 'WordPress' );
+					?>
+>>>>>>> 272e5bb4e5 (Coding Standards: Add missing translator comments.)
 				</a>
 			</div><!-- .site-info -->
 		</footer><!-- .site-footer -->
