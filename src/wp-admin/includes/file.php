@@ -1420,7 +1420,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
  * @param bool         $allow_relaxed_file_ownership Optional. Whether to allow Group/World writable. Default false.
  * @return null|bool false on failure, true on success.
  */
-function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) {
+function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	global $wp_filesystem;
 
 	require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
