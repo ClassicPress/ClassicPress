@@ -811,8 +811,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 		if ( 'attachment' === $post->post_type ) {
 			$thumb = wp_get_attachment_image( $post->ID, array( 80, 60 ), true );
 			if ( $thumb ) {
-			echo $thumb;
-		}
+				echo $thumb;
+			}
 		}
 		echo $post_link;
 		$post_type_object = get_post_type_object( $post->post_type );

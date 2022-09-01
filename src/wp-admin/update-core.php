@@ -41,16 +41,11 @@ function list_core_update( $update ) {
 
 	if ( 'en_US' == $update->locale && 'en_US' == get_locale() ) {
 		$version_string = $update->current;
-<<<<<<< HEAD
-	}
-=======
 	} elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version ) {
 		$updates = get_core_updates();
 		if ( $updates && 1 == count( $updates ) ) {
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
-	// If the only available update is a partial builds, it doesn't need a language-specific version string.
-	elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version && ( $updates = get_core_updates() ) && 1 == count( $updates ) ) {
-		$version_string = $update->current;
+			// If the only available update is a partial builds, it doesn't need a language-specific version string.
+			$version_string = $update->current;
 		}
 	}
 

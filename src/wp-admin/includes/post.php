@@ -1325,12 +1325,8 @@ function wp_edit_attachments_query( $q = false ) {
 function postbox_classes( $id, $page ) {
 	if ( isset( $_GET['edit'] ) && $_GET['edit'] == $id ) {
 		$classes = array( '' );
-<<<<<<< HEAD
-	} elseif ( $closed = get_user_option( 'closedpostboxes_' . $page ) ) {
-=======
 	} elseif ( get_user_option( 'closedpostboxes_' . $screen_id ) ) {
 		$closed = get_user_option( 'closedpostboxes_' . $screen_id );
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 		if ( ! is_array( $closed ) ) {
 			$classes = array( '' );
 		} else {

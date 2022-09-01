@@ -591,12 +591,8 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 		/* translators: %s: post title */
 		echo '<div class="draft-title"><a href="' . esc_url( $url ) . '" aria-label="' . esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;' ), $title ) ) . '">' . esc_html( $title ) . '</a>';
 		echo '<time datetime="' . get_the_time( 'c', $draft ) . '">' . get_the_time( __( 'F j, Y' ), $draft ) . '</time></div>';
-<<<<<<< HEAD
-		if ( $the_content = wp_trim_words( $draft->post_content, 10 ) ) {
-=======
 		$the_content = wp_trim_words( $draft->post_content, $draft_length );
 		if ( $the_content ) {
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 			echo '<p>' . $the_content . '</p>';
 		}
 		echo "</li>\n";

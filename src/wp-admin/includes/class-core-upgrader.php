@@ -286,41 +286,11 @@ class Core_Upgrader extends WP_Upgrader {
 	public static function should_update_to_version( $offered_ver ) {
 		include ABSPATH . WPINC . '/version.php'; // $cp_version; // x.y.z
 
-<<<<<<< HEAD
 		return self::_auto_update_enabled_for_versions(
 			$cp_version,
 			$offered_ver,
 			defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : null
 		);
-=======
-		$current_branch                 = implode( '.', array_slice( preg_split( '/[.-]/', $wp_version ), 0, 2 ) ); // x.y
-		$new_branch                     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) ); // x.y
-		$current_is_development_version = (bool) strpos( $wp_version, '-' );
-
-		// Defaults:
-		$upgrade_dev   = true;
-		$upgrade_minor = true;
-		$upgrade_major = false;
-
-		// WP_AUTO_UPDATE_CORE = true (all), 'minor', false.
-		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
-			if ( false === WP_AUTO_UPDATE_CORE ) {
-				// Defaults to turned off, unless a filter allows it
-				$upgrade_dev   = false;
-				$upgrade_minor = false;
-				$upgrade_major = false;
-			} elseif ( true === WP_AUTO_UPDATE_CORE ) {
-				// ALL updates for core
-				$upgrade_dev   = true;
-				$upgrade_minor = true;
-				$upgrade_major = true;
-			} elseif ( 'minor' === WP_AUTO_UPDATE_CORE ) {
-				// Only minor updates for core
-				$upgrade_dev   = false;
-				$upgrade_minor = true;
-				$upgrade_major = false;
-			}
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 	}
 
 	/**

@@ -470,15 +470,7 @@ function themes_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include ABSPATH . WPINC . '/version.php';
 
-<<<<<<< HEAD
 		$url = 'https://api.wordpress.org/themes/info/1.0/';
-=======
-		$http_url = $url;
-		$ssl      = wp_http_supports( array( 'ssl' ) );
-		if ( $ssl ) {
-			$url = set_url_scheme( $url, 'https' );
-		}
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 
 		$http_args = array(
 			'user-agent' => classicpress_user_agent(),

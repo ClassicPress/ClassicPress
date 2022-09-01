@@ -84,9 +84,9 @@ function wp_create_categories( $categories, $post_id = '' ) {
 		} else {
 			$id = wp_create_category( $category );
 			if ( $id ) {
-			$cat_ids[] = $id;
+				$cat_ids[] = $id;
+			}
 		}
-	}
 	}
 
 	if ( $post_id ) {

@@ -225,19 +225,12 @@ function insert_with_markers(
 		$lines[] = rtrim( fgets( $fp ), "\r\n" );
 	}
 
-<<<<<<< HEAD
-	// Split out the existing file into the preceding lines, and those that
-	// appear after the marker.
-	$pre_lines    = $post_lines = $existing_lines = array();
-	$found_marker = $found_end_marker = false;
-=======
 	// Split out the existing file into the preceding lines, and those that appear after the marker
 	$pre_lines        = array();
 	$post_lines       = array();
 	$existing_lines   = array();
 	$found_marker     = false;
 	$found_end_marker = false;
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 	foreach ( $lines as $line ) {
 		if ( ! $found_marker && preg_match( $start_marker_in, $line ) ) {
 			$found_marker = true;
@@ -1101,17 +1094,17 @@ function wp_check_locked_posts( $response, $data, $screen_id ) {
 			if ( $user_id ) {
 				$user = get_userdata( $user_id );
 				if ( $user && current_user_can( 'edit_post', $post_id ) ) {
-				$send = array( 'text' => sprintf( __( '%s is currently editing' ), $user->display_name ) );
+					$send = array( 'text' => sprintf( __( '%s is currently editing' ), $user->display_name ) );
 
 					$avatar = get_avatar( $user->ID, 18 );
 					if ( $avatar && preg_match( "|src='([^']+)'|", $avatar, $matches ) ) {
-					$send['avatar_src'] = $matches[1];
-				}
+						$send['avatar_src'] = $matches[1];
+					}
 
-				$checked[ $key ] = $send;
+					$checked[ $key ] = $send;
+				}
 			}
 		}
-	}
 	}
 
 	if ( ! empty( $checked ) ) {

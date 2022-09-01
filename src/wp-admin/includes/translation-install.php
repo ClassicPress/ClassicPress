@@ -35,21 +35,7 @@ function translations_api( $type, $args = null ) {
 	$res = apply_filters( 'translations_api', false, $type, $args );
 
 	if ( false === $res ) {
-<<<<<<< HEAD
 		$stats   = array(
-=======
-		$url      = 'http://api.wordpress.org/translations/' . $type . '/1.0/';
-		$http_url = $url;
-		$ssl      = wp_http_supports( array( 'ssl' ) );
-		if ( $ssl ) {
-			$url = set_url_scheme( $url, 'https' );
-		}
-
-		$options = array(
-			'timeout' => 3,
-			'body'    => array(
-				'wp_version' => $wp_version,
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 			'locale'  => get_locale(),
 			'version' => $args['version'], // Version of plugin, theme or core
 		);
@@ -141,8 +127,8 @@ function wp_get_available_translations() {
 	if ( ! wp_installing() ) {
 		$translations = get_site_transient( 'available_translations' );
 		if ( false !== $translations ) {
-		return $translations;
-	}
+			return $translations;
+		}
 	}
 
 	include ABSPATH . WPINC . '/version.php'; // include an unmodified $wp_version

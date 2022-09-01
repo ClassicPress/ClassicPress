@@ -1442,8 +1442,8 @@ function wp_ajax_add_meta() {
 		} else {
 			$mid = add_meta( $pid );
 			if ( ! $mid ) {
-			wp_die( __( 'Please provide a custom field value.' ) );
-		}
+				wp_die( __( 'Please provide a custom field value.' ) );
+			}
 		}
 
 		$meta = get_metadata_by_mid( 'post', $mid );
@@ -1465,15 +1465,11 @@ function wp_ajax_add_meta() {
 		if ( '' == trim( $key ) ) {
 			wp_die( __( 'Please provide a custom field name.' ) );
 		}
-<<<<<<< HEAD
 		if ( '' == trim( $value ) ) {
 			wp_die( __( 'Please provide a custom field value.' ) );
 		}
-		if ( ! $meta = get_metadata_by_mid( 'post', $mid ) ) {
-=======
 		$meta = get_metadata_by_mid( 'post', $mid );
 		if ( ! $meta ) {
->>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 			wp_die( 0 ); // if meta doesn't exist
 		}
 		if ( is_protected_meta( $meta->meta_key, 'post' ) || is_protected_meta( $key, 'post' ) ||
@@ -3063,7 +3059,7 @@ function wp_ajax_send_link_to_editor() {
 		$ext_type = wp_ext2type( $ext );
 		if ( 'audio' == $ext_type || 'video' == $ext_type ) {
 			$type = $ext_type;
-	}
+		}
 	}
 
 	/** This filter is documented in wp-admin/includes/media.php */

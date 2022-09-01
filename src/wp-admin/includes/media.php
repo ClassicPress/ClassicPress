@@ -373,14 +373,14 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 	} elseif ( 0 === strpos( $type, 'image/' ) ) {
 		$image_meta = wp_read_image_metadata( $file );
 		if ( $image_meta ) {
-		if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
-			$title = $image_meta['title'];
-		}
+			if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
+				$title = $image_meta['title'];
+			}
 
-		if ( trim( $image_meta['caption'] ) ) {
-			$excerpt = $image_meta['caption'];
+			if ( trim( $image_meta['caption'] ) ) {
+				$excerpt = $image_meta['caption'];
+			}
 		}
-	}
 	}
 
 	// Construct the attachment array
@@ -848,7 +848,7 @@ function wp_media_upload_handler() {
 				$ext_type = wp_ext2type( $ext );
 				if ( 'audio' == $ext_type || 'video' == $ext_type ) {
 					$type = $ext_type;
-			}
+				}
 			}
 
 			/**
@@ -1480,7 +1480,7 @@ function get_media_item( $attachment_id, $args = null ) {
 	if ( $attachment_id ) {
 		$thumb_url = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
 		if ( $thumb_url ) {
-		$thumb_url = $thumb_url[0];
+			$thumb_url = $thumb_url[0];
 		}
 	}
 
