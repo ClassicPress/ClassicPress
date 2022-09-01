@@ -81,7 +81,7 @@ class Tests_User extends WP_UnitTestCase {
 		$found = array();
 		foreach ( $user_list as $user ) {
 			// only include the users we just created - there might be some others that existed previously
-			if ( in_array( $user->ID, $nusers ) ) {
+			if ( in_array( $user->ID, $nusers, true ) ) {
 				$found[] = $user->ID;
 			}
 		}
@@ -161,7 +161,7 @@ class Tests_User extends WP_UnitTestCase {
 		// for reasons unclear, the resulting array is indexed numerically; meta keys are not included anywhere.
 		// so we'll just check to make sure our values are included somewhere.
 		foreach ( $vals as $k => $v ) {
-			$this->assertTrue( isset( $out[ $k ] ) && $out[ $k ][0] == $v );
+			$this->assertTrue( isset( $out[ $k ] ) && $out[ $k ][0] === $v );
 		}
 		// delete one key and check again
 		$keys          = array_keys( $vals );
@@ -170,10 +170,10 @@ class Tests_User extends WP_UnitTestCase {
 		$out = get_user_meta( self::$author_id );
 		// make sure that key is excluded from the results
 		foreach ( $vals as $k => $v ) {
-			if ( $k == $key_to_delete ) {
+			if ( $k === $key_to_delete ) {
 				$this->assertFalse( isset( $out[ $k ] ) );
 			} else {
-				$this->assertTrue( isset( $out[ $k ] ) && $out[ $k ][0] == $v );
+				$this->assertTrue( isset( $out[ $k ] ) && $out[ $k ][0] === $v );
 			}
 		}
 	}
@@ -597,7 +597,7 @@ class Tests_User extends WP_UnitTestCase {
 			$this->assertWPError( $id2 );
 		}
 
-		@update_user_meta( $id2, 'key', 'value' );
+		update_user_meta( $id2, 'key', 'value' );
 
 		$metas = array_keys( get_user_meta( 1 ) );
 		$this->assertNotContains( 'key', $metas );
@@ -1040,7 +1040,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertTrue( in_array( self::$contrib_id, $users ) );
+		$this->assertTrue( in_array( (string) self::$contrib_id, $users, true ) );
 	}
 
 	public function test_search_users_url() {
@@ -1051,7 +1051,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertTrue( in_array( self::$contrib_id, $users ) );
+		$this->assertTrue( in_array( (string) self::$contrib_id, $users, true ) );
 	}
 
 	public function test_search_users_email() {
@@ -1062,7 +1062,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertTrue( in_array( self::$contrib_id, $users ) );
+		$this->assertTrue( in_array( (string) self::$contrib_id, $users, true ) );
 	}
 
 	public function test_search_users_nicename() {
@@ -1073,7 +1073,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertTrue( in_array( self::$contrib_id, $users ) );
+		$this->assertTrue( in_array( (string) self::$contrib_id, $users, true ) );
 	}
 
 	public function test_search_users_display_name() {
@@ -1084,7 +1084,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertTrue( in_array( self::$contrib_id, $users ) );
+		$this->assertTrue( in_array( (string) self::$contrib_id, $users, true ) );
 	}
 
 	/**
@@ -1214,8 +1214,8 @@ class Tests_User extends WP_UnitTestCase {
 		 * post author `blackburn@battlefield3.com` and and site admin `admin@example.org`.
 		 */
 		if ( ! empty( $GLOBALS['phpmailer']->mock_sent ) ) {
-			$was_admin_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && WP_TESTS_EMAIL == $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
-			$was_user_email_sent  = ( isset( $GLOBALS['phpmailer']->mock_sent[1] ) && 'blackburn@battlefield3.com' == $GLOBALS['phpmailer']->mock_sent[1]['to'][0][0] );
+			$was_admin_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && WP_TESTS_EMAIL === $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$was_user_email_sent  = ( isset( $GLOBALS['phpmailer']->mock_sent[1] ) && 'blackburn@battlefield3.com' === $GLOBALS['phpmailer']->mock_sent[1]['to'][0][0] );
 		}
 
 		$this->assertTrue( $was_admin_email_sent );
@@ -1239,8 +1239,8 @@ class Tests_User extends WP_UnitTestCase {
 		 * post author `blackburn@battlefield3.com` and and site admin `admin@example.org`.
 		 */
 		if ( ! empty( $GLOBALS['phpmailer']->mock_sent ) ) {
-			$was_admin_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && WP_TESTS_EMAIL == $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
-			$was_user_email_sent  = ( isset( $GLOBALS['phpmailer']->mock_sent[1] ) && 'blackburn@battlefield3.com' == $GLOBALS['phpmailer']->mock_sent[1]['to'][0][0] );
+			$was_admin_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && WP_TESTS_EMAIL === $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$was_user_email_sent  = ( isset( $GLOBALS['phpmailer']->mock_sent[1] ) && 'blackburn@battlefield3.com' === $GLOBALS['phpmailer']->mock_sent[1]['to'][0][0] );
 		}
 
 		$this->assertTrue( $was_admin_email_sent );
@@ -1477,7 +1477,7 @@ class Tests_User extends WP_UnitTestCase {
 		do_action( 'personal_options_update' );
 
 		if ( ! empty( $GLOBALS['phpmailer']->mock_sent ) ) {
-			$was_confirmation_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && 'after@example.com' == $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$was_confirmation_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && 'after@example.com' === $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
 		}
 
 		// A confirmation email is sent.
@@ -1514,7 +1514,7 @@ class Tests_User extends WP_UnitTestCase {
 		do_action( 'personal_options_update' );
 
 		if ( ! empty( $GLOBALS['phpmailer']->mock_sent ) ) {
-			$was_confirmation_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && 'after@example.com' == $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
+			$was_confirmation_email_sent = ( isset( $GLOBALS['phpmailer']->mock_sent[0] ) && 'after@example.com' === $GLOBALS['phpmailer']->mock_sent[0]['to'][0][0] );
 		}
 
 		// No confirmation email is sent.

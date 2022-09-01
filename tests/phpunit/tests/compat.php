@@ -125,11 +125,19 @@ EOT;
 			'string',
 			$heredoc,
 			// object data
+<<<<<<< HEAD
 			/*21*/ new classA(),
 			// undefined data
 			/*22*/ @$undefined_var,
 			// unset data
 			/*23*/ @$unset_var,
+=======
+			new ClassA(),
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentionally undefined data
+			@$undefined_var,
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentionally unset data
+			@$unset_var,
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 		);
 		$outputs  = array(
 			'0',
@@ -313,7 +321,7 @@ EOT;
 }
 
 /* used in test_mb_substr_phpcore */
-class classA {
+class ClassA {
 	public function __toString() {
 		return 'Class A object';
 	}

@@ -47,6 +47,7 @@ class Tests_Basic extends WP_UnitTestCase {
 		global $cp_version;
 		$package_json = file_get_contents( dirname( ABSPATH ) . '/package.json' );
 		$package_json = json_decode( $package_json, true );
+<<<<<<< HEAD
 		if ( isset( $cp_version ) ) {
 			$this->assertEquals(
 				$cp_version,
@@ -55,6 +56,12 @@ class Tests_Basic extends WP_UnitTestCase {
 			);
 		} else {
 			error_log( 'FIXME after PR https://core.trac.wordpress.org/ticket/32 is merged' );
+=======
+		list( $version ) = explode( '-', $GLOBALS['wp_version'] );
+		// package.json uses x.y.z, so fill cleaned $wp_version for .0 releases
+		if ( 1 === substr_count( $version, '.' ) ) {
+			$version .= '.0';
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 		}
 		return $package_json;
 	}

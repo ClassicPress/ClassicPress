@@ -89,8 +89,13 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 			'another value',
 		);
 		sort( $expected );
+<<<<<<< HEAD
 		$this->assertTrue( in_array( get_post_meta( $this->post_id, 'nonunique', true ), $expected ) );
 		$actual = get_post_meta( $this->post_id, 'nonunique', false );
+=======
+		$this->assertTrue( in_array( get_post_meta( self::$post_id, 'nonunique', true ), $expected, true ) );
+		$actual = get_post_meta( self::$post_id, 'nonunique', false );
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 		sort( $actual );
 		$this->assertEquals( $expected, $actual );
 

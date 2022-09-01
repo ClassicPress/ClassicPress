@@ -1243,7 +1243,7 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/33016
 	 */
 	function filter_wp_embed_shortcode_custom( $content, $url ) {
-		if ( 'https://www.example.com/?video=1' == $url ) {
+		if ( 'https://www.example.com/?video=1' === $url ) {
 			$content = '@embed URL was replaced@';
 		}
 		return $content;
@@ -1431,8 +1431,13 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
+<<<<<<< HEAD
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
+=======
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			if ( in_array( $name, $intermediates, true ) ) {
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
 		}
@@ -1477,8 +1482,13 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
+<<<<<<< HEAD
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
+=======
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			if ( in_array( $name, $intermediates, true ) ) {
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				$expected .= $uploads_dir_url . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
 		}
@@ -1556,8 +1566,13 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
+<<<<<<< HEAD
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
+=======
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			if ( in_array( $name, $intermediates, true ) ) {
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
 		}
@@ -1836,8 +1851,13 @@ EOF;
 		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
+<<<<<<< HEAD
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
+=======
+			// Whitelist the sizes that should be included so we pick up 'medium_large' in 4.4.
+			if ( in_array( $name, $intermediates, true ) ) {
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				$expected .= $uploads_dir . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
 			}
 		}

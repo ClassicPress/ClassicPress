@@ -80,7 +80,12 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		// Nasty hack! In the future it would better to leverage do_feed( 'rss2' ).
 		global $post;
 		try {
+<<<<<<< HEAD
 			@require ABSPATH . 'wp-includes/feed-rss2.php';
+=======
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			@require( ABSPATH . 'wp-includes/feed-rss2.php' );
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 			$out = ob_get_clean();
 		} catch ( Exception $e ) {
 			$out = ob_get_clean();

@@ -276,7 +276,11 @@
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="custom_test_class_whitelist" type="array">
+<<<<<<< HEAD
 				<!-- Test case parent classes. -->
+=======
+				<!-- Test case parent classes -->
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				<element value="WP_UnitTestCase"/>
 				<element value="WP_Ajax_UnitTestCase"/>
 				<element value="WP_Canonical_UnitTestCase"/>
@@ -290,9 +294,14 @@
 				<element value="WP_Tests_Image_Resize_UnitTestCase"/>
 				<element value="WP_Import_UnitTestCase"/>
 				<element value="Tests_Query_Conditionals"/>
+<<<<<<< HEAD
 				<element value="WP_Test_XML_TestCase"/>
 
 				<!-- Mock classes. -->
+=======
+
+				<!-- Mock classes -->
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				<element value="Spy_REST_Server"/>
 				<element value="WP_REST_Test_Controller"/>
 				<element value="WP_Image_Editor_Mock"/>
@@ -301,7 +310,11 @@
 				<element value="MockAction"/>
 				<element value="WP_Object_Cache"/>
 
+<<<<<<< HEAD
 				<!-- PHPUnit helpers. -->
+=======
+				<!-- PHPUnit helpers -->
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 				<element value="TracTickets"/>
 				<element value="WP_PHPUnit_Util_Getopt"/>
 				<element value="PHPUnit_Util_Test"/>
@@ -309,6 +322,7 @@
 				<element value="SpeedTrapListener"/>
 				<element value="PHPUnit_Framework_Exception"/>
 			</property>
+<<<<<<< HEAD
 		</properties>
 	</rule>
 
@@ -330,6 +344,8 @@
 				<element value="gzuncompress"/>
 				<element value="gzdecode"/>
 			</property>
+=======
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 		</properties>
 	</rule>
 

@@ -1014,6 +1014,59 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
+<<<<<<< HEAD
+=======
+	grunt.registerTask( 'format:php', 'Runs the code formatter on changed files.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var args = changedFiles.php;
+		args.unshift( 'format' );
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				done( true );
+			}
+		} );
+	} );
+
+	grunt.registerTask( 'lint:php', 'Runs the code linter on changed files.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var args = changedFiles.php;
+		if ( flags.travis ) {
+			args = [ 'tests' ];
+		}
+		args.unshift( 'lint' );
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				done( true );
+			}
+		} );
+	} );
+
+	// Travis CI tasks.
+	grunt.registerTask('travis:js', 'Runs Javascript Travis CI tasks.', [ 'jshint:corejs', 'qunit:compiled' ]);
+	grunt.registerTask('travis:phpunit', 'Runs PHPUnit Travis CI tasks.', [ 'build', 'phpunit' ]);
+	grunt.registerTask('travis:phpcs', 'Runs PHP Coding Standards Travis CI tasks.', [ 'format:php:error', 'lint:php:travis:error' ]);
+
+	// Patch task.
+	grunt.renameTask('patch_wordpress', 'patch');
+
+	// Add an alias `apply` of the `patch` task name.
+	grunt.registerTask('apply', 'patch');
+
+>>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
     // Default task.
     grunt.registerTask('default', ['build']);
 };
