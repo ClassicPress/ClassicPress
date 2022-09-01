@@ -835,10 +835,7 @@ function shortcode_unautop( $pee ) {
 	$tagregexp = join( '|', array_map( 'preg_quote', array_keys( $shortcode_tags ) ) );
 	$spaces    = wp_spaces_regexp();
 
-<<<<<<< HEAD
-=======
 	// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound,WordPress.WhiteSpace.PrecisionAlignment.Found -- don't remove regex indentation
->>>>>>> 6acb0c6402 (Coding Standards: Fix all `WordPress.WhiteSpace.PrecisionAlignment` issues.)
 	$pattern =
 		  '/'
 		. '<p>'                              // Opening paragraph
