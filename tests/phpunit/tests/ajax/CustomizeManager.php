@@ -664,15 +664,10 @@ class Tests_Ajax_CustomizeManager extends WP_Ajax_UnitTestCase {
 		$this->assertTrue( $this->_last_response_parsed['success'] );
 		$this->assertEquals( 'changeset_lock_dismissed', $this->_last_response_parsed['data'] );
 
-<<<<<<< HEAD
-		$_POST['dismiss_autosave'] = $_GET['dismiss_autosave'] = $_REQUEST['dismiss_autosave'] = true;
-		$this->assertNotInstanceOf( 'WP_Error', $r );
-=======
 		$_POST['dismiss_autosave']    = true;
 		$_GET['dismiss_autosave']     = true;
 		$_REQUEST['dismiss_autosave'] = true;
 		$this->assertNotWPError( $r );
->>>>>>> fe28df65e3 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `tests`.)
 		$this->assertFalse( wp_get_post_autosave( $wp_customize->changeset_post_id() ) );
 		$this->assertContains( 'Foo', get_post( $wp_customize->changeset_post_id() )->post_content );
 

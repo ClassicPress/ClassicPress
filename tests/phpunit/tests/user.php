@@ -1568,50 +1568,6 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 42564
-	 */
-	function test_edit_user_role_update() {
-		$_POST    = array();
-		$_GET     = array();
-		$_REQUEST = array();
-
-		$administrator = self::factory()->user->create(
-			array(
-				'role' => 'administrator',
-			)
-		);
-
-		wp_set_current_user( $administrator );
-
-		// Don't let anyone with 'promote_users' (administrator) edit their own role to something without it (subscriber).
-		$_POST['role']     = 'subscriber';
-		$_POST['email']    = 'subscriber@subscriber.test';
-		$_POST['nickname'] = 'subscriber';
-		$this->assertSame( $administrator, edit_user( $administrator ) );
-
-		// Should still have the old role.
-		$this->assertSame( array( 'administrator' ), get_userdata( $administrator )->roles );
-
-		// Promote an editor to an administrator.
-		$editor = self::factory()->user->create(
-			array(
-				'role' => 'editor',
-			)
-		);
-
-		$_POST['role']     = 'administrator';
-		$_POST['email']    = 'administrator@administrator.test';
-		$_POST['nickname'] = 'administrator';
-		$this->assertSame( $editor, edit_user( $editor ) );
-
-		// Should have the new role.
-		$this->assertSame( array( 'administrator' ), get_userdata( $editor )->roles );
-	}
-
-	/**
->>>>>>> fe28df65e3 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `tests`.)
 	 * Testing the `wp_user_personal_data_exporter_no_user` function when no user exists.
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/43547
