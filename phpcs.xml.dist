@@ -382,11 +382,5 @@
 		<exclude-pattern>/src/wp-admin/includes/class-wp-list-table-compat\.php</exclude-pattern>
 		<exclude-pattern>/src/wp-includes/class-wp-dependency\.php</exclude-pattern>
 		<exclude-pattern>/src/wp-includes/class-wp-editor\.php</exclude-pattern>
-<<<<<<< HEAD
-=======
-		<exclude-pattern>/src/wp-content/themes/twentyeleven/inc/widgets\.php</exclude-pattern>
-		<exclude-pattern>/src/wp-content/themes/twentyfourteen/inc/widgets\.php</exclude-pattern>
-		<exclude-pattern>/src/wp-content/themes/twentyfourteen/inc/featured-content\.php</exclude-pattern>
->>>>>>> 968254f4f4 (Coding Standards: Exclude a handful of incorrectly named files that won't be renamed.)
 	</rule>
 </ruleset>
