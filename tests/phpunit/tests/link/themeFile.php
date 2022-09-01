@@ -5,10 +5,6 @@
 class Test_Theme_File extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-<<<<<<< HEAD
-		symlink( DIR_TESTDATA . '/theme-file-parent', WP_CONTENT_DIR . '/themes/theme-file-parent' );
-		symlink( DIR_TESTDATA . '/theme-file-child', WP_CONTENT_DIR . '/themes/theme-file-child' );
-=======
 		if ( ! function_exists( 'symlink' ) ) {
 			self::markTestSkipped( 'symlink() is not available.' );
 		}
@@ -20,7 +16,6 @@ class Test_Theme_File extends WP_UnitTestCase {
 		if ( ! @symlink( DIR_TESTDATA . '/theme-file-child', WP_CONTENT_DIR . '/themes/theme-file-child' ) ) {
 			self::markTestSkipped( 'Could not create child symlink.' );
 		}
->>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 	}
 
 	public static function wpTearDownAfterClass() {

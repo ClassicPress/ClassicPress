@@ -14,17 +14,11 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 		$this->assertNotEmpty( $matches );
 
-<<<<<<< HEAD
 		$version_info = __DIR__ . '/../../../../supported-versions.html';
 		if ( file_exists( $version_info ) ) {
 			$php = file_get_contents( $version_info );
 		} else {
 			$this->markTestSkipped( 'Could not locate PHP.net clone.' );
-=======
-		$response = wp_remote_get( 'https://secure.php.net/supported-versions.php' );
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$this->fail( 'Could not contact PHP.net to check versions.' );
->>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 		}
 
 		preg_match_all(
@@ -53,17 +47,9 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 		$this->assertNotEmpty( $matches );
 
-<<<<<<< HEAD
-		$response = wp_remote_get(
-			"https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/"
-		);
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$this->fail( 'Could not contact dev.mysql.com to check versions.' );
-=======
 		$response = wp_remote_get( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$this->fail( 'Could not contact dev.MySQL.com to check versions.' );
->>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
+			$this->fail( 'Could not contact dev.mysql.com to check versions.' );
 		}
 		$mysql = wp_remote_retrieve_body( $response );
 

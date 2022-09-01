@@ -103,40 +103,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 					)
 				),
 			);
-<<<<<<< HEAD
 		} else {
-=======
-		}
-
-		if ( self::UNTRUSTED_PROVIDER_URL === $url ) {
-			return array(
-				'response' => array(
-					'code' => 200,
-				),
-				'body'     => '<html><head><link rel="alternate" type="application/json+oembed" href="' . self::UNTRUSTED_PROVIDER_URL . '" /></head><body></body></html>',
-			);
-		}
-
-		if ( ! empty( $query_params['url'] ) && false !== strpos( $query_params['url'], self::UNTRUSTED_PROVIDER_URL ) ) {
-			return array(
-				'response' => array(
-					'code' => 200,
-				),
-				'body'     => wp_json_encode(
-					array(
-						'version'       => '1.0',
-						'type'          => 'rich',
-						'provider_name' => 'Untrusted',
-						'provider_url'  => self::UNTRUSTED_PROVIDER_URL,
-						'html'          => '<b>Filtered</b><a href="">Unfiltered</a>',
-						'author_name'   => 'Untrusted Embed Author',
-						'title'         => 'Untrusted Embed',
-					)
-				),
-			);
-		}
-
->>>>>>> c6c78490e2 (Coding Standards: Fix the remaining issues in `/tests`.)
 			return array(
 				'response' => array(
 					'code' => 404,
