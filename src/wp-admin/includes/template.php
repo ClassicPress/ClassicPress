@@ -1807,9 +1807,15 @@ var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?
 	?>
 </head>
 	<?php
+	/**
+	 * @global string $body_id
+	 */
+	$admin_body_id = isset( $GLOBALS['body_id'] ) ? 'id="' . $GLOBALS['body_id'] . '" ' : '';
+
 	/** This filter is documented in wp-admin/admin-header.php */
 	$admin_body_classes = apply_filters( 'admin_body_class', '' );
 	?>
+<<<<<<< HEAD
 <body
 	<?php
 	/**
@@ -1820,6 +1826,9 @@ var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?
 	}
 	?>
 	 class="wp-admin wp-core-ui no-js iframe <?php echo $admin_body_classes . ' ' . $admin_body_class; ?>">
+=======
+<body <?php echo $admin_body_id; ?>class="wp-admin wp-core-ui no-js iframe <?php echo $admin_body_classes; ?>">
+>>>>>>> 6acb0c6402 (Coding Standards: Fix all `WordPress.WhiteSpace.PrecisionAlignment` issues.)
 <script type="text/javascript">
 (function(){
 var c = document.body.className;

@@ -835,6 +835,10 @@ function shortcode_unautop( $pee ) {
 	$tagregexp = join( '|', array_map( 'preg_quote', array_keys( $shortcode_tags ) ) );
 	$spaces    = wp_spaces_regexp();
 
+<<<<<<< HEAD
+=======
+	// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound,WordPress.WhiteSpace.PrecisionAlignment.Found -- don't remove regex indentation
+>>>>>>> 6acb0c6402 (Coding Standards: Fix all `WordPress.WhiteSpace.PrecisionAlignment` issues.)
 	$pattern =
 		  '/'
 		. '<p>'                              // Opening paragraph
@@ -2916,7 +2920,8 @@ function make_clickable( $text ) {
 					)*
 				)
 				(\)?)                                                  # 3: Trailing closing parenthesis (for parethesis balancing post processing)
-			~xS'; // The regex is a non-anchored pattern and does not have a single fixed starting character.
+			~xS';
+			// The regex is a non-anchored pattern and does not have a single fixed starting character.
 				  // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
 
 			$ret = preg_replace_callback( $url_clickable, '_make_url_clickable_cb', $ret );
