@@ -2657,11 +2657,7 @@ function _custom_header_background_just_in_time() {
 		}
 
 		if ( is_admin() ) {
-<<<<<<< HEAD
-			require_once ABSPATH . 'wp-admin/custom-header.php';
-=======
-			require_once( ABSPATH . 'wp-admin/includes/class-custom-image-header.php' );
->>>>>>> 8416a2b410 (Coding Standards: Move `wp-admin/custom-header.php` to `wp-admin/includes/class-custom-image-header.php`)
+			require_once ABSPATH . 'wp-admin/includes/class-custom-image-header.php';
 			$custom_image_header = new Custom_Image_Header( $args[0]['admin-head-callback'], $args[0]['admin-preview-callback'] );
 		}
 	}
