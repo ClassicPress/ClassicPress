@@ -1603,6 +1603,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$part = $wpdb->prepare( ' AND meta_value = %s', ' %s ' );
 		$this->assertNotContains( '%s', $part );
+		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 		$query = $wpdb->prepare( 'SELECT * FROM {$wpdb->postmeta} WHERE meta_key = %s $part', array( 'foo', 'bar' ) );
 		$this->assertNull( $query );
 	}
@@ -1611,6 +1612,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			1.1,
 			2.2
@@ -1625,6 +1627,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			array( 1.1, 2.2 )
 		);
