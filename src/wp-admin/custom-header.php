@@ -5,7 +5,7 @@
  * This file is deprecated, use 'wp-admin/includes/class-custom-image-header.php' instead.
  *
  * @deprecated WP-5.3.0
- * @package WordPress
+ * @package ClassicPress
  * @subpackage Administration
  */
 

@@ -2670,11 +2670,7 @@ function _custom_header_background_just_in_time() {
 		add_action( 'wp_head', $args[0]['wp-head-callback'] );
 
 		if ( is_admin() ) {
-<<<<<<< HEAD
-			require_once ABSPATH . 'wp-admin/custom-background.php';
-=======
-			require_once( ABSPATH . 'wp-admin/includes/class-custom-background.php' );
->>>>>>> e0d8dbe350 (Coding Standards: Move wp-admin/custom-background.php to wp-admin/includes/class-custom-background.php)
+			require_once ABSPATH . 'wp-admin/includes/class-custom-background.php';
 			$custom_background = new Custom_Background( $args[0]['admin-head-callback'], $args[0]['admin-preview-callback'] );
 		}
 	}
