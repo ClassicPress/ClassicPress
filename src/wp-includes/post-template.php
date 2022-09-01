@@ -1042,14 +1042,9 @@ function post_custom( $key = '' ) {
  *
  */
 function the_meta() {
-<<<<<<< HEAD
-	if ( $keys = get_post_custom_keys() ) {
-		echo "<ul class='post-meta'>\n";
-=======
 	$keys = get_post_custom_keys();
 	if ( $keys ) {
-		$li_html = '';
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
+		echo "<ul class='post-meta'>\n";
 		foreach ( (array) $keys as $key ) {
 			$keyt = trim( $key );
 			if ( is_protected_meta( $keyt, 'post' ) ) {

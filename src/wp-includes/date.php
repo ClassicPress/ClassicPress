@@ -757,19 +757,18 @@ class WP_Date_Query {
 					if ( $value ) {
 						switch ( $sql_part ) {
 							case '_wp_mysql_week':
-			$where_parts[] = _wp_mysql_week( $column ) . " $compare $value";
+								$where_parts[] = _wp_mysql_week( $column ) . " $compare $value";
 								break;
 							case 'WEEKDAY':
 								$where_parts[] = "$sql_part( $column ) + 1 $compare $value";
 								break;
 							default:
 								$where_parts[] = "$sql_part( $column ) $compare $value";
-		}
-
+						}
 						break;
 					}
-		}
-		}
+				}
+			}
 		}
 
 		if ( isset( $query['hour'] ) || isset( $query['minute'] ) || isset( $query['second'] ) ) {
@@ -995,18 +994,18 @@ class WP_Date_Query {
 		if ( isset( $hour ) && ! isset( $minute ) && ! isset( $second ) ) {
 			$value = $this->build_value( $compare, $hour );
 			if ( false !== $value ) {
-			return "HOUR( $column ) $compare $value";
+				return "HOUR( $column ) $compare $value";
 			}
 		} elseif ( ! isset( $hour ) && isset( $minute ) && ! isset( $second ) ) {
 			$value = $this->build_value( $compare, $minute );
 			if ( false !== $value ) {
-			return "MINUTE( $column ) $compare $value";
+				return "MINUTE( $column ) $compare $value";
 			}
 		} elseif ( ! isset( $hour ) && ! isset( $minute ) && isset( $second ) ) {
 			$value = $this->build_value( $compare, $second );
 			if ( false !== $value ) {
-			return "SECOND( $column ) $compare $value";
-		}
+				return "SECOND( $column ) $compare $value";
+			}
 		}
 
 		// Single units were already handled. Since hour & second isn't allowed, minute must to be set.

@@ -364,8 +364,8 @@ abstract class WP_Image_Editor {
 		if ( ! is_null( $dest_path ) ) {
 			$_dest_path = realpath( $dest_path );
 			if ( $_dest_path ) {
-			$dir = $_dest_path;
-		}
+				$dir = $_dest_path;
+			}
 		}
 
 		return trailingslashit( $dir ) . "{$name}-{$suffix}.{$new_ext}";

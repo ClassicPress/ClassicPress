@@ -142,28 +142,8 @@ class WP_Styles extends WP_Dependencies {
 			$ver = $ver ? $ver . '&amp;' . $this->args[ $handle ] : $this->args[ $handle ];
 		}
 
-<<<<<<< HEAD
 		/** This filter is documented in wp-includes/script-loader.php */
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'style', $handle );
-=======
-		$src         = $obj->src;
-		$cond_before = '';
-		$cond_after  = '';
-		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
-
-		if ( $conditional ) {
-			$cond_before = "<!--[if {$conditional}]>\n";
-			$cond_after  = "<![endif]-->\n";
-		}
-
-		$inline_style = $this->print_inline_style( $handle, false );
-
-		if ( $inline_style ) {
-			$inline_style_tag = sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
-		} else {
-			$inline_style_tag = '';
-		}
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 
 		if ( $this->do_concat ) {
 			if ( $this->in_default_dir( $obj->src ) && ! isset( $obj->extra['conditional'] ) && ! isset( $obj->extra['alt'] ) ) {

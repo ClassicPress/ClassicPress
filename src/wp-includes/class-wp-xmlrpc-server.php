@@ -4311,11 +4311,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		do_action( 'xmlrpc_call', 'wp.getMediaItem' );
 
 		$attachment = get_post( $attachment_id );
-<<<<<<< HEAD
 		if ( ! $attachment || 'attachment' !== $attachment->post_type ) {
-=======
-		if ( ! $attachment ) {
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 			return new IXR_Error( 404, __( 'Invalid attachment ID.' ) );
 		}
 

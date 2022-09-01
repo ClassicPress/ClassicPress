@@ -574,11 +574,11 @@ function get_theme_root( $stylesheet_or_template = false ) {
 	if ( $stylesheet_or_template ) {
 		$theme_root = get_raw_theme_root( $stylesheet_or_template );
 		if ( $theme_root ) {
-		// Always prepend WP_CONTENT_DIR unless the root currently registered as a theme directory.
-		// This gives relative theme roots the benefit of the doubt when things go haywire.
-		if ( ! in_array( $theme_root, (array) $wp_theme_directories ) ) {
-			$theme_root = WP_CONTENT_DIR . $theme_root;
-		}
+			// Always prepend WP_CONTENT_DIR unless the root currently registered as a theme directory.
+			// This gives relative theme roots the benefit of the doubt when things go haywire.
+			if ( ! in_array( $theme_root, (array) $wp_theme_directories ) ) {
+				$theme_root = WP_CONTENT_DIR . $theme_root;
+			}
 		}
 	}
 

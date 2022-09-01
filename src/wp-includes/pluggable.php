@@ -1384,14 +1384,9 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 			$location = 'http:' . $location;
 		}
 
-<<<<<<< HEAD
-		// In php 5 parse_url may fail if the URL query part contains http://, bug https://core.trac.wordpress.org/ticket/38143
-		$test = ( $cut = strpos( $location, '?' ) ) ? substr( $location, 0, $cut ) : $location;
-=======
 		// In php 5 parse_url may fail if the URL query part contains http://, bug #38143
 		$cut  = strpos( $location, '?' );
 		$test = $cut ? substr( $location, 0, $cut ) : $location;
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 
 		// @-operator is used to prevent possible warnings in PHP < 5.3.3.
 		$lp = @parse_url( $test );

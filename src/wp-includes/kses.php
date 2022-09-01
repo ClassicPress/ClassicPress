@@ -1156,31 +1156,10 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 
 	$name_low = strtolower( $name );
 	if ( ! isset( $allowed_attr[ $name_low ] ) || '' == $allowed_attr[ $name_low ] ) {
-<<<<<<< HEAD
-		$name = $value = $whole = '';
-=======
-		/*
-		 * Allow `data-*` attributes.
-		 *
-		 * When specifying `$allowed_html`, the attribute name should be set as
-		 * `data-*` (not to be mixed with the HTML 4.0 `data` attribute, see
-		 * https://www.w3.org/TR/html40/struct/objects.html#adef-data).
-		 *
-		 * Note: the attribute name should only contain `A-Za-z0-9_-` chars,
-		 * double hyphens `--` are not accepted by WordPress.
-		 */
-		if ( strpos( $name_low, 'data-' ) === 0 && ! empty( $allowed_attr['data-*'] ) && preg_match( '/^data(?:-[a-z0-9_]+)+$/', $name_low, $match ) ) {
-			/*
-			 * Add the whole attribute name to the allowed attributes and set any restrictions
-			 * for the `data-*` attribute values for the current element.
-			 */
-			$allowed_attr[ $match[0] ] = $allowed_attr['data-*'];
-		} else {
 			$name  = '';
 			$value = '';
 			$whole = '';
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
-		return false;
+			return false;
 	}
 
 	if ( 'style' == $name_low ) {

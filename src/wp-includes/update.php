@@ -128,22 +128,9 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	// for an upgrade from the base version, in this case `1.0.0-alpha1`.
 	$cp_base_version = preg_replace( '#\+migration\.\d+$#', '', $cp_version );
 
-<<<<<<< HEAD
 	$url = 'https://api-v1.classicpress.net/upgrade/'
 		. $cp_base_version . '.json'
 		. '?' . http_build_query( $query, null, '&' );
-=======
-	if ( is_array( $extra_stats ) ) {
-		$post_body = array_merge( $post_body, $extra_stats );
-	}
-
-	$url      = 'http://api.wordpress.org/core/version-check/1.7/?' . http_build_query( $query, null, '&' );
-	$http_url = $url;
-	$ssl      = wp_http_supports( array( 'ssl' ) );
-	if ( $ssl ) {
-		$url = set_url_scheme( $url, 'https' );
-	}
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 
 	$doing_cron = wp_doing_cron();
 
@@ -371,16 +358,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-<<<<<<< HEAD
 	$url = 'https://api.wordpress.org/plugins/update-check/1.1/';
-=======
-	$url      = 'http://api.wordpress.org/plugins/update-check/1.1/';
-	$http_url = $url;
-	$ssl      = wp_http_supports( array( 'ssl' ) );
-	if ( $ssl ) {
-		$url = set_url_scheme( $url, 'https' );
-	}
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 
 	$raw_response = wp_remote_post( $url, $options );
 	if ( is_wp_error( $raw_response ) ) {
@@ -566,16 +544,7 @@ function wp_update_themes( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-<<<<<<< HEAD
 	$url = 'https://api.wordpress.org/themes/update-check/1.1/';
-=======
-	$url      = 'http://api.wordpress.org/themes/update-check/1.1/';
-	$http_url = $url;
-	$ssl      = wp_http_supports( array( 'ssl' ) );
-	if ( $ssl ) {
-		$url = set_url_scheme( $url, 'https' );
-	}
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 
 	$raw_response = wp_remote_post( $url, $options );
 	if ( is_wp_error( $raw_response ) ) {

@@ -38,28 +38,11 @@ if ( is_robots() ) {
 } elseif ( is_feed() ) {
 	do_feed();
 	return;
-<<<<<<< HEAD
-elseif ( is_trackback() ) :
-	include ABSPATH . 'wp-trackback.php';
-=======
 } elseif ( is_trackback() ) {
 	include( ABSPATH . 'wp-trackback.php' );
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 	return;
 }
 
-<<<<<<< HEAD
-if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) :
-	$template = false;
-	if ( is_embed() && $template = get_embed_template() ) :
-	elseif ( is_404() && $template = get_404_template() ) :
-	elseif ( is_search() && $template = get_search_template() ) :
-	elseif ( is_front_page() && $template = get_front_page_template() ) :
-	elseif ( is_home() && $template = get_home_template() ) :
-	elseif ( is_post_type_archive() && $template = get_post_type_archive_template() ) :
-	elseif ( is_tax() && $template = get_taxonomy_template() ) :
-	elseif ( is_attachment() && $template = get_attachment_template() ) :
-=======
 if ( wp_using_themes() ) {
 
 	$tag_templates = array(
@@ -91,8 +74,7 @@ if ( wp_using_themes() ) {
 
 		if ( $template ) {
 			if ( 'is_attachment' === $tag ) {
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
-		remove_filter( 'the_content', 'prepend_attachment' );
+				remove_filter( 'the_content', 'prepend_attachment' );
 			}
 
 			break;
@@ -110,14 +92,9 @@ if ( wp_using_themes() ) {
 	 *
 	 * @param string $template The path of the template to include.
 	 */
-<<<<<<< HEAD
-	if ( $template = apply_filters( 'template_include', $template ) ) {
-		include $template;
-=======
 	$template = apply_filters( 'template_include', $template );
 	if ( $template ) {
 		include( $template );
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
 	} elseif ( current_user_can( 'switch_themes' ) ) {
 		$theme = wp_get_theme();
 		if ( $theme->errors() ) {

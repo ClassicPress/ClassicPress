@@ -247,53 +247,53 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			if ( $term_count <= 1 && ! empty( $obj->term_id ) ) {
 				$tax_url = get_term_link( (int) $obj->term_id, $obj->taxonomy );
 				if ( $tax_url && ! is_wp_error( $tax_url ) ) {
-				if ( ! empty( $redirect['query'] ) ) {
-					// Strip taxonomy query vars off the url.
-					$qv_remove = array( 'term', 'taxonomy' );
-					if ( is_category() ) {
-						$qv_remove[] = 'category_name';
-						$qv_remove[] = 'cat';
-					} elseif ( is_tag() ) {
-						$qv_remove[] = 'tag';
-						$qv_remove[] = 'tag_id';
-					} else { // Custom taxonomies will have a custom query var, remove those too:
-						$tax_obj = get_taxonomy( $obj->taxonomy );
-						if ( false !== $tax_obj->query_var ) {
-							$qv_remove[] = $tax_obj->query_var;
+					if ( ! empty( $redirect['query'] ) ) {
+						// Strip taxonomy query vars off the url.
+						$qv_remove = array( 'term', 'taxonomy' );
+						if ( is_category() ) {
+							$qv_remove[] = 'category_name';
+							$qv_remove[] = 'cat';
+						} elseif ( is_tag() ) {
+							$qv_remove[] = 'tag';
+							$qv_remove[] = 'tag_id';
+						} else { // Custom taxonomies will have a custom query var, remove those too:
+							$tax_obj = get_taxonomy( $obj->taxonomy );
+							if ( false !== $tax_obj->query_var ) {
+								$qv_remove[] = $tax_obj->query_var;
+							}
 						}
-					}
 
-					$rewrite_vars = array_diff( array_keys( $wp_query->query ), array_keys( $_GET ) );
+						$rewrite_vars = array_diff( array_keys( $wp_query->query ), array_keys( $_GET ) );
 
-					if ( ! array_diff( $rewrite_vars, array_keys( $_GET ) ) ) { // Check to see if all the Query vars are coming from the rewrite, none are set via $_GET
-						$redirect['query'] = remove_query_arg( $qv_remove, $redirect['query'] ); //Remove all of the per-tax qv's
+						if ( ! array_diff( $rewrite_vars, array_keys( $_GET ) ) ) { // Check to see if all the Query vars are coming from the rewrite, none are set via $_GET
+							$redirect['query'] = remove_query_arg( $qv_remove, $redirect['query'] ); //Remove all of the per-tax qv's
 
-						// Create the destination url for this taxonomy
-						$tax_url = parse_url( $tax_url );
-						if ( ! empty( $tax_url['query'] ) ) { // Taxonomy accessible via ?taxonomy=..&term=.. or any custom qv..
-							parse_str( $tax_url['query'], $query_vars );
-							$redirect['query'] = add_query_arg( $query_vars, $redirect['query'] );
-						} else { // Taxonomy is accessible via a "pretty-URL"
-							$redirect['path'] = $tax_url['path'];
-						}
-					} else { // Some query vars are set via $_GET. Unset those from $_GET that exist via the rewrite
-						foreach ( $qv_remove as $_qv ) {
-							if ( isset( $rewrite_vars[ $_qv ] ) ) {
-								$redirect['query'] = remove_query_arg( $_qv, $redirect['query'] );
+							// Create the destination url for this taxonomy
+							$tax_url = parse_url( $tax_url );
+							if ( ! empty( $tax_url['query'] ) ) { // Taxonomy accessible via ?taxonomy=..&term=.. or any custom qv..
+								parse_str( $tax_url['query'], $query_vars );
+								$redirect['query'] = add_query_arg( $query_vars, $redirect['query'] );
+							} else { // Taxonomy is accessible via a "pretty-URL"
+								$redirect['path'] = $tax_url['path'];
+							}
+						} else { // Some query vars are set via $_GET. Unset those from $_GET that exist via the rewrite
+							foreach ( $qv_remove as $_qv ) {
+								if ( isset( $rewrite_vars[ $_qv ] ) ) {
+									$redirect['query'] = remove_query_arg( $_qv, $redirect['query'] );
+								}
 							}
 						}
 					}
 				}
 			}
-			}
 		} elseif ( is_single() && strpos( $wp_rewrite->permalink_structure, '%category%' ) !== false ) {
 			$cat = get_query_var( 'category_name' );
 			if ( $cat ) {
-			$category = get_category_by_path( $cat );
-			if ( ( ! $category || is_wp_error( $category ) ) || ! has_term( $category->term_id, 'category', $wp_query->get_queried_object_id() ) ) {
-				$redirect_url = get_permalink( $wp_query->get_queried_object_id() );
+				$category = get_category_by_path( $cat );
+				if ( ( ! $category || is_wp_error( $category ) ) || ! has_term( $category->term_id, 'category', $wp_query->get_queried_object_id() ) ) {
+					$redirect_url = get_permalink( $wp_query->get_queried_object_id() );
+				}
 			}
-		}
 		}
 
 		// Post Paging

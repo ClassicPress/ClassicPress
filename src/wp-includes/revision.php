@@ -625,8 +625,8 @@ function _wp_preview_terms_filter( $terms, $post_id, $taxonomy ) {
 	} else {
 		$term = get_term_by( 'slug', 'post-format-' . sanitize_key( $_REQUEST['post_format'] ), 'post_format' );
 		if ( $term ) {
-		$terms = array( $term ); // Can only have one post format
-	}
+			$terms = array( $term ); // Can only have one post format
+		}
 	}
 
 	return $terms;

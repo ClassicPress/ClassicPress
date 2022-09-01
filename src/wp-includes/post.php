@@ -398,8 +398,8 @@ function get_attached_file( $attachment_id, $unfiltered = false ) {
 	if ( $file && 0 !== strpos( $file, '/' ) && ! preg_match( '|^.:\\\|', $file ) ) {
 		$uploads = wp_get_upload_dir();
 		if ( false === $uploads['error'] ) {
-		$file = $uploads['basedir'] . "/$file";
-	}
+			$file = $uploads['basedir'] . "/$file";
+		}
 	}
 
 	if ( $unfiltered ) {
@@ -4119,23 +4119,23 @@ function wp_unique_post_slug( $slug, $post_ID, $post_status, $post_type, $post_p
 			$slug_num = intval( $slug );
 
 			if ( $slug_num ) {
-			$permastructs   = array_values( array_filter( explode( '/', get_option( 'permalink_structure' ) ) ) );
-			$postname_index = array_search( '%postname%', $permastructs );
+				$permastructs   = array_values( array_filter( explode( '/', get_option( 'permalink_structure' ) ) ) );
+				$postname_index = array_search( '%postname%', $permastructs );
 
-			/*
-			 * Potential date clashes are as follows:
-			 *
-			 * - Any integer in the first permastruct position could be a year.
-			 * - An integer between 1 and 12 that follows 'year' conflicts with 'monthnum'.
-			 * - An integer between 1 and 31 that follows 'monthnum' conflicts with 'day'.
-			 */
-			if ( 0 === $postname_index ||
-				( $postname_index && '%year%' === $permastructs[ $postname_index - 1 ] && 13 > $slug_num ) ||
-				( $postname_index && '%monthnum%' === $permastructs[ $postname_index - 1 ] && 32 > $slug_num )
-			) {
-				$conflicts_with_date_archive = true;
+				/*
+				 * Potential date clashes are as follows:
+				 *
+				 * - Any integer in the first permastruct position could be a year.
+				 * - An integer between 1 and 12 that follows 'year' conflicts with 'monthnum'.
+				 * - An integer between 1 and 31 that follows 'monthnum' conflicts with 'day'.
+				 */
+				if ( 0 === $postname_index ||
+					( $postname_index && '%year%' === $permastructs[ $postname_index - 1 ] && 13 > $slug_num ) ||
+					( $postname_index && '%monthnum%' === $permastructs[ $postname_index - 1 ] && 32 > $slug_num )
+				) {
+					$conflicts_with_date_archive = true;
+				}
 			}
-		}
 		}
 
 		/**
@@ -5609,23 +5609,19 @@ function wp_get_attachment_thumb_file( $post_id = 0 ) {
 
 	$file = get_attached_file( $post->ID );
 
-<<<<<<< HEAD
-	if ( ! empty( $imagedata['thumb'] ) && ( $thumbfile = str_replace( basename( $file ), $imagedata['thumb'], $file ) ) && file_exists( $thumbfile ) ) {
-=======
 	if ( ! empty( $imagedata['thumb'] ) ) {
 		$thumbfile = str_replace( wp_basename( $file ), $imagedata['thumb'], $file );
 		if ( file_exists( $thumbfile ) ) {
->>>>>>> 4503f93961 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-includes`.)
-		/**
-		 * Filters the attachment thumbnail file path.
-		 *
-		 * @since WP-2.1.0
-		 *
-		 * @param string $thumbfile File path to the attachment thumbnail.
-		 * @param int    $post_id   Attachment ID.
-		 */
-		return apply_filters( 'wp_get_attachment_thumb_file', $thumbfile, $post->ID );
-	}
+			/**
+			 * Filters the attachment thumbnail file path.
+			 *
+			 * @since WP-2.1.0
+			 *
+			 * @param string $thumbfile File path to the attachment thumbnail.
+			 * @param int    $post_id   Attachment ID.
+			 */
+			return apply_filters( 'wp_get_attachment_thumb_file', $thumbfile, $post->ID );
+		}
 	}
 	return false;
 }
