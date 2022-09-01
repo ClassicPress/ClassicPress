@@ -450,8 +450,14 @@ do_action( 'init' );
 
 // Check site status
 if ( is_multisite() ) {
+<<<<<<< HEAD
 	if ( true !== ( $file = ms_site_check() ) ) {
 		require $file;
+=======
+	$file = ms_site_check();
+	if ( true !== $file ) {
+		require( $file );
+>>>>>>> 5fe76184f2 (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in the base directory.)
 		die();
 	}
 	unset( $file );
