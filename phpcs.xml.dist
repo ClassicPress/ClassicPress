@@ -30,12 +30,7 @@
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- These rules are being set as warnings instead of errors, so we can error check the entire codebase. -->
-<<<<<<< HEAD
-=======
-	<rule ref="WordPress.PHP.YodaConditions.NotYoda">
-		<type>warning</type>
-	</rule>
->>>>>>> 3d1714de71 (Coding Standards: Move the remaining PHPCS errors to report as warnings, and add Travis tests.)
+
 	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
 		<type>warning</type>
 	</rule>
@@ -48,7 +43,6 @@
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<type>warning</type>
 	</rule>
-<<<<<<< HEAD
 	<rule ref="WordPress.PHP.YodaConditions">
 		<type>warning</type>
 	</rule>
@@ -91,8 +85,6 @@
 	<rule ref="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment">
 		<type>warning</type>
 	</rule>
-=======
->>>>>>> 3d1714de71 (Coding Standards: Move the remaining PHPCS errors to report as warnings, and add Travis tests.)
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>

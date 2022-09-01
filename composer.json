@@ -23,12 +23,6 @@
 		}
 	},
 	"scripts": {
-<<<<<<< HEAD
 		"backport": "bin/backport-wp-commit.sh"
-=======
-		"format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source --cache -d memory_limit=256M",
-		"lint": "phpcs --standard=phpcs.xml.dist --report-summary --report-source --cache -d memory_limit=256M",
-		"lint:errors": "phpcs --standard=phpcs.xml.dist --report-summary --report-source --cache -d memory_limit=256M -n"
->>>>>>> 3d1714de71 (Coding Standards: Move the remaining PHPCS errors to report as warnings, and add Travis tests.)
 	}
 }
