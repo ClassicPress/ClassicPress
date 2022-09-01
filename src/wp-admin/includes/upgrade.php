@@ -2406,11 +2406,7 @@ function get_alloptions_110() {
  * @param string $setting Option name.
  * @return mixed
  */
-<<<<<<< HEAD
 function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-=======
-function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore
->>>>>>> ef5a9dfda6 (Coding Standards: Fix/ignore the `WordPress.NamingConventions.ValidFunctionName` violations.)
 	global $wpdb;
 
 	if ( $setting == 'home' && defined( 'WP_HOME' ) ) {
