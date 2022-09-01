@@ -1014,6 +1014,64 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
 
+<<<<<<< HEAD
+=======
+	grunt.registerTask( 'format:php', 'Runs the code formatter on changed files.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var args = changedFiles.php;
+		args.unshift( 'format' );
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				done( true );
+			}
+		} );
+	} );
+
+	grunt.registerTask( 'lint:php', 'Runs the code linter on changed files.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var args = changedFiles.php;
+		if ( flags.travisErrors ) {
+			// We can check the entire codebase for coding standards errors.
+			args = [ 'lint:errors' ];
+		} else if ( flags.travisWarnings ) {
+			// We can check the tests directory for errors and warnings.
+			args = [ 'lint', 'tests' ];
+		} else {
+			args.unshift( 'lint' );
+		}
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				done( true );
+			}
+		} );
+	} );
+
+	// Travis CI tasks.
+	grunt.registerTask('travis:js', 'Runs Javascript Travis CI tasks.', [ 'jshint:corejs', 'qunit:compiled' ]);
+	grunt.registerTask('travis:phpunit', 'Runs PHPUnit Travis CI tasks.', [ 'build', 'phpunit' ]);
+	grunt.registerTask('travis:phpcs', 'Runs PHP Coding Standards Travis CI tasks.', [ 'format:php:error', 'lint:php:travisErrors:error', 'lint:php:travisWarnings:error' ]);
+
+	// Patch task.
+	grunt.renameTask('patch_wordpress', 'patch');
+
+	// Add an alias `apply` of the `patch` task name.
+	grunt.registerTask('apply', 'patch');
+
+>>>>>>> 3d1714de71 (Coding Standards: Move the remaining PHPCS errors to report as warnings, and add Travis tests.)
     // Default task.
     grunt.registerTask('default', ['build']);
 };
