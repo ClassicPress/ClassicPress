@@ -312,6 +312,7 @@
 		</properties>
 	</rule>
 
+<<<<<<< HEAD
 	<rule ref="WordPress.PHP.NoSilencedErrors">
 		<properties>
 			<property name="custom_whitelist" type="array">
@@ -349,6 +350,9 @@
 	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Assignments in while conditions are a valid method of looping over iterables. -->
+=======
+	<!-- Assignments in while conditions are a valid method of looping over iterables -->
+>>>>>>> 027c9dae90 (Coding Standards: Fix all `WordPress.CodeAnalysis.AssignmentInCondition` issues.)
 	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition">
 		<exclude-pattern>*</exclude-pattern>
 	</rule>
