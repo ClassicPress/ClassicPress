@@ -450,7 +450,7 @@ class WP_List_Table {
 			 *
 			 * @param array $actions An array of the available bulk actions.
 			 */
-			$this->_actions = apply_filters( "bulk_actions-{$this->screen->id}", $this->_actions );
+			$this->_actions = apply_filters( "bulk_actions-{$this->screen->id}", $this->_actions );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			$two            = '';
 		} else {
 			$two = '2';

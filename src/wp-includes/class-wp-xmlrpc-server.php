@@ -3093,7 +3093,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $page_id ID of the deleted page.
 		 * @param array $args    An array of arguments to delete the page.
 		 */
-		do_action( 'xmlrpc_call_success_wp_deletePage', $page_id, $args );
+		do_action( 'xmlrpc_call_success_wp_deletePage', $page_id, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return true;
 	}
@@ -3400,7 +3400,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $cat_id ID of the new category.
 		 * @param array $args   An array of new category arguments.
 		 */
-		do_action( 'xmlrpc_call_success_wp_newCategory', $cat_id, $args );
+		do_action( 'xmlrpc_call_success_wp_newCategory', $cat_id, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return $cat_id;
 	}
@@ -3450,7 +3450,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			 * @param int   $category_id ID of the deleted category.
 			 * @param array $args        An array of arguments to delete the category.
 			 */
-			do_action( 'xmlrpc_call_success_wp_deleteCategory', $category_id, $args );
+			do_action( 'xmlrpc_call_success_wp_deleteCategory', $category_id, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 		}
 
 		return $status;
@@ -3697,7 +3697,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			 * @param int   $comment_ID ID of the deleted comment.
 			 * @param array $args       An array of arguments to delete the comment.
 			 */
-			do_action( 'xmlrpc_call_success_wp_deleteComment', $comment_ID, $args );
+			do_action( 'xmlrpc_call_success_wp_deleteComment', $comment_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 		}
 
 		return $status;
@@ -3809,7 +3809,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $comment_ID ID of the updated comment.
 		 * @param array $args       An array of arguments to update the comment.
 		 */
-		do_action( 'xmlrpc_call_success_wp_editComment', $comment_ID, $args );
+		do_action( 'xmlrpc_call_success_wp_editComment', $comment_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return true;
 	}
@@ -3961,7 +3961,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $comment_ID ID of the new comment.
 		 * @param array $args       An array of new comment arguments.
 		 */
-		do_action( 'xmlrpc_call_success_wp_newComment', $comment_ID, $args );
+		do_action( 'xmlrpc_call_success_wp_newComment', $comment_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return $comment_ID;
 	}
@@ -5090,7 +5090,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $post_ID ID of the new post.
 		 * @param array $args    An array of new post arguments.
 		 */
-		do_action( 'xmlrpc_call_success_blogger_newPost', $post_ID, $args );
+		do_action( 'xmlrpc_call_success_blogger_newPost', $post_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return $post_ID;
 	}
@@ -5169,7 +5169,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $post_ID ID of the updated post.
 		 * @param array $args    An array of arguments for the post to edit.
 		 */
-		do_action( 'xmlrpc_call_success_blogger_editPost', $post_ID, $args );
+		do_action( 'xmlrpc_call_success_blogger_editPost', $post_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return true;
 	}
@@ -5228,7 +5228,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $post_ID ID of the deleted post.
 		 * @param array $args    An array of arguments to delete the post.
 		 */
-		do_action( 'xmlrpc_call_success_blogger_deletePost', $post_ID, $args );
+		do_action( 'xmlrpc_call_success_blogger_deletePost', $post_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return true;
 	}
@@ -5580,7 +5580,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $post_ID ID of the new post.
 		 * @param array $args    An array of arguments to create the new post.
 		 */
-		do_action( 'xmlrpc_call_success_mw_newPost', $post_ID, $args );
+		do_action( 'xmlrpc_call_success_mw_newPost', $post_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return strval( $post_ID );
 	}
@@ -5964,7 +5964,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $post_ID ID of the updated post.
 		 * @param array $args    An array of arguments to update the post.
 		 */
-		do_action( 'xmlrpc_call_success_mw_editPost', $post_ID, $args );
+		do_action( 'xmlrpc_call_success_mw_editPost', $post_ID, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		return true;
 	}
@@ -6392,7 +6392,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * @param int   $id   ID of the new attachment.
 		 * @param array $args An array of arguments to add the attachment.
 		 */
-		do_action( 'xmlrpc_call_success_mw_newMediaObject', $id, $args );
+		do_action( 'xmlrpc_call_success_mw_newMediaObject', $id, $args ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.NotLowercase
 
 		$struct = $this->_prepare_media_item( get_post( $id ) );
 

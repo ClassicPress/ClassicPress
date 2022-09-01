@@ -201,7 +201,7 @@ switch ( $wp_list_table->current_action() ) {
 		check_admin_referer( 'bulk-tags' );
 		$tags = (array) $_REQUEST['delete_tags'];
 		/** This action is documented in wp-admin/edit-comments.php */
-		$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $wp_list_table->current_action(), $tags );
+		$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $wp_list_table->current_action(), $tags );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		break;
 }
 
@@ -610,8 +610,12 @@ endif;
  *
  * @param string $taxonomy The taxonomy name.
  */
+<<<<<<< HEAD
 do_action( "after-{$taxonomy}-table", $taxonomy );
 ?>
+=======
+do_action( "after-{$taxonomy}-table", $taxonomy );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+>>>>>>> 6b61c34ded (Coding Standards: Mark the handful of hook names with uppercase characters or hyphens as ignored.)
 
 </div>
 </div><!-- /col-right -->

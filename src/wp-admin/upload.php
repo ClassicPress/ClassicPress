@@ -202,7 +202,7 @@ if ( $doaction ) {
 			break;
 		default:
 			/** This action is documented in wp-admin/edit-comments.php */
-			$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $doaction, $post_ids );
+			$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $doaction, $post_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	}
 
 	wp_redirect( $location );

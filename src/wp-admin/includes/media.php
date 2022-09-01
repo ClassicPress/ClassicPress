@@ -518,7 +518,7 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 	 *
 	 * @since WP-2.9.0
 	 */
-	do_action( 'admin_print_styles-media-upload-popup' );
+	do_action( 'admin_print_styles-media-upload-popup' );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_print_styles' );
@@ -528,7 +528,7 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 	 *
 	 * @since WP-2.9.0
 	 */
-	do_action( 'admin_print_scripts-media-upload-popup' );
+	do_action( 'admin_print_scripts-media-upload-popup' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_print_scripts' );
@@ -539,7 +539,7 @@ isRtl = <?php echo (int) is_rtl(); ?>;
 	 *
 	 * @since WP-2.9.0
 	 */
-	do_action( 'admin_head-media-upload-popup' );
+	do_action( 'admin_head-media-upload-popup' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_head' );
@@ -2007,7 +2007,7 @@ function media_upload_form( $errors = null ) {
 	 *
 	 * @since WP-2.6.0
 	 */
-	do_action( 'pre-upload-ui' );
+	do_action( 'pre-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	$post_params = array(
 		'post_id'  => $post_id,
@@ -2086,7 +2086,7 @@ wpUploaderInit = <?php echo wp_json_encode( $plupload_init ); ?>;
 	 * @since WP-2.6.0 As 'pre-flash-upload-ui'
 	 * @since WP-3.3.0
 	 */
-	do_action( 'pre-plupload-upload-ui' );
+	do_action( 'pre-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	?>
 <div id="drag-drop-area">
 	<div class="drag-drop-inside">
@@ -2102,7 +2102,7 @@ wpUploaderInit = <?php echo wp_json_encode( $plupload_init ); ?>;
 	 * @since WP-2.6.0 As 'post-flash-upload-ui'
 	 * @since WP-3.3.0
 	 */
-	do_action( 'post-plupload-upload-ui' );
+	do_action( 'post-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	?>
 </div>
 
@@ -2113,7 +2113,7 @@ wpUploaderInit = <?php echo wp_json_encode( $plupload_init ); ?>;
 	 *
 	 * @since WP-2.6.0
 	 */
-	do_action( 'pre-html-upload-ui' );
+	do_action( 'pre-html-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	?>
 	<p id="async-upload-wrap">
 		<label class="screen-reader-text" for="async-upload"><?php _e( 'Upload' ); ?></label>
@@ -2128,7 +2128,7 @@ wpUploaderInit = <?php echo wp_json_encode( $plupload_init ); ?>;
 	 *
 	 * @since WP-2.6.0
 	 */
-	do_action( 'post-html-upload-ui' );
+	do_action( 'post-html-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	?>
 </div>
 
@@ -2142,7 +2142,7 @@ wpUploaderInit = <?php echo wp_json_encode( $plupload_init ); ?>;
 	 *
 	 * @since WP-2.6.0
 	 */
-	do_action( 'post-upload-ui' );
+	do_action( 'post-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }
 
 /**
