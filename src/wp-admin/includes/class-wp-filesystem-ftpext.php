@@ -533,6 +533,7 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 				$b['name'] = $lucifer[8];
 			}
 		}
+		}
 
 		// Replace symlinks formatted as "source -> target" with just the source name
 		if ( isset( $b['islink'] ) && $b['islink'] ) {

@@ -819,7 +819,8 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	 * A writable uploads dir will pass this test. Again, there's no point
 	 * overriding this one.
 	 */
-	if ( ! ( ( $uploads = wp_upload_dir( $time ) ) && false === $uploads['error'] ) ) {
+	$uploads = wp_upload_dir( $time );
+	if ( ! ( $uploads && false === $uploads['error'] ) ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $uploads['error'] ) );
 	}
 
@@ -1049,7 +1050,159 @@ function verify_file_md5( $filename, $expected_md5 ) {
  *
  * @since WP-2.5.0
  *
+<<<<<<< HEAD
  * @global WP_Filesystem_Base $wp_filesystem Subclass
+=======
+ * @return bool|WP_Error true on success, false if verification not attempted, or WP_Error describing an error condition.
+ */
+function verify_file_signature( $filename, $signatures, $filename_for_errors = false ) {
+	if ( ! $filename_for_errors ) {
+		$filename_for_errors = wp_basename( $filename );
+	}
+
+	// Check we can process signatures.
+	if ( ! function_exists( 'sodium_crypto_sign_verify_detached' ) || ! in_array( 'sha384', array_map( 'strtolower', hash_algos() ) ) ) {
+		return new WP_Error(
+			'signature_verification_unsupported',
+			sprintf(
+				/* translators: %s: The filename of the package. */
+				__( 'The authenticity of %s could not be verified as signature verification is unavailable on this system.' ),
+				'<span class="code">' . esc_html( $filename_for_errors ) . '</span>'
+			),
+			( ! function_exists( 'sodium_crypto_sign_verify_detached' ) ? 'sodium_crypto_sign_verify_detached' : 'sha384' )
+		);
+	}
+
+	// Check for a edge-case affecting PHP Maths abilities
+	if (
+		! extension_loaded( 'sodium' ) &&
+		in_array( PHP_VERSION_ID, [ 70200, 70201, 70202 ], true ) &&
+		extension_loaded( 'opcache' )
+	) {
+		// Sodium_Compat isn't compatible with PHP 7.2.0~7.2.2 due to a bug in the PHP Opcache extension, bail early as it'll fail.
+		// https://bugs.php.net/bug.php?id=75938
+
+		return new WP_Error(
+			'signature_verification_unsupported',
+			sprintf(
+				/* translators: %s: The filename of the package. */
+				__( 'The authenticity of %s could not be verified as signature verification is unavailable on this system.' ),
+				'<span class="code">' . esc_html( $filename_for_errors ) . '</span>'
+			),
+			array(
+				'php'    => phpversion(),
+				'sodium' => defined( 'SODIUM_LIBRARY_VERSION' ) ? SODIUM_LIBRARY_VERSION : ( defined( 'ParagonIE_Sodium_Compat::VERSION_STRING' ) ? ParagonIE_Sodium_Compat::VERSION_STRING : false ),
+			)
+		);
+
+	}
+
+	// Verify runtime speed of Sodium_Compat is acceptable.
+	if ( ! extension_loaded( 'sodium' ) && ! ParagonIE_Sodium_Compat::polyfill_is_fast() ) {
+		$sodium_compat_is_fast = false;
+
+		// Allow for an old version of Sodium_Compat being loaded before the bundled WordPress one.
+		if ( method_exists( 'ParagonIE_Sodium_Compat', 'runtime_speed_test' ) ) {
+			// Run `ParagonIE_Sodium_Compat::runtime_speed_test()` in optimized integer mode, as that's what WordPress utilises during signing verifications.
+			$old_fastMult                      = ParagonIE_Sodium_Compat::$fastMult;
+			ParagonIE_Sodium_Compat::$fastMult = true;
+			$sodium_compat_is_fast             = ParagonIE_Sodium_Compat::runtime_speed_test( 100, 10 );
+			ParagonIE_Sodium_Compat::$fastMult = $old_fastMult;
+		}
+
+		// This cannot be performed in a reasonable amount of time
+		// https://github.com/paragonie/sodium_compat#help-sodium_compat-is-slow-how-can-i-make-it-fast
+		if ( ! $sodium_compat_is_fast ) {
+			return new WP_Error(
+				'signature_verification_unsupported',
+				sprintf(
+					/* translators: %s: The filename of the package. */
+					__( 'The authenticity of %s could not be verified as signature verification is unavailable on this system.' ),
+					'<span class="code">' . esc_html( $filename_for_errors ) . '</span>'
+				),
+				array(
+					'php'                => phpversion(),
+					'sodium'             => defined( 'SODIUM_LIBRARY_VERSION' ) ? SODIUM_LIBRARY_VERSION : ( defined( 'ParagonIE_Sodium_Compat::VERSION_STRING' ) ? ParagonIE_Sodium_Compat::VERSION_STRING : false ),
+					'polyfill_is_fast'   => false,
+					'max_execution_time' => ini_get( 'max_execution_time' ),
+				)
+			);
+		}
+	}
+
+	if ( ! $signatures ) {
+		return new WP_Error(
+			'signature_verification_no_signature',
+			sprintf(
+				/* translators: %s: The filename of the package. */
+				__( 'The authenticity of %s could not be verified as no signature was found.' ),
+				'<span class="code">' . esc_html( $filename_for_errors ) . '</span>'
+			),
+			array(
+				'filename' => $filename_for_errors,
+			)
+		);
+	}
+
+	$trusted_keys = wp_trusted_keys();
+	$file_hash    = hash_file( 'sha384', $filename, true );
+
+	mbstring_binary_safe_encoding();
+
+	$skipped_key       = 0;
+	$skipped_signature = 0;
+
+	foreach ( (array) $signatures as $signature ) {
+		$signature_raw = base64_decode( $signature );
+
+		// Ensure only valid-length signatures are considered.
+		if ( SODIUM_CRYPTO_SIGN_BYTES !== strlen( $signature_raw ) ) {
+			$skipped_signature++;
+			continue;
+		}
+
+		foreach ( (array) $trusted_keys as $key ) {
+			$key_raw = base64_decode( $key );
+
+			// Only pass valid public keys through.
+			if ( SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES !== strlen( $key_raw ) ) {
+				$skipped_key++;
+				continue;
+			}
+
+			if ( sodium_crypto_sign_verify_detached( $signature_raw, $file_hash, $key_raw ) ) {
+				reset_mbstring_encoding();
+				return true;
+			}
+		}
+	}
+
+	reset_mbstring_encoding();
+
+	return new WP_Error(
+		'signature_verification_failed',
+		sprintf(
+			/* translators: %s: The filename of the package. */
+			__( 'The authenticity of %s could not be verified.' ),
+			'<span class="code">' . esc_html( $filename_for_errors ) . '</span>'
+		),
+		// Error data helpful for debugging:
+		array(
+			'filename'    => $filename_for_errors,
+			'keys'        => $trusted_keys,
+			'signatures'  => $signatures,
+			'hash'        => bin2hex( $file_hash ),
+			'skipped_key' => $skipped_key,
+			'skipped_sig' => $skipped_signature,
+			'php'         => phpversion(),
+			'sodium'      => defined( 'SODIUM_LIBRARY_VERSION' ) ? SODIUM_LIBRARY_VERSION : ( defined( 'ParagonIE_Sodium_Compat::VERSION_STRING' ) ? ParagonIE_Sodium_Compat::VERSION_STRING : false ),
+		)
+	);
+}
+
+/**
+ * Retrieve the list of signing keys trusted by WordPress.
+>>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
  *
  * @param string $file Full path and filename of zip archive
  * @param string $to Full path on the filesystem to extract archive to
@@ -1138,7 +1291,8 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	$uncompressed_size = 0;
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
@@ -1153,10 +1307,12 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 
 		$uncompressed_size += $info['size'];
 
+		$dirname = dirname( $info['name'] );
+
 		if ( '/' === substr( $info['name'], -1 ) ) {
 			// Directory.
 			$needed_dirs[] = $to . untrailingslashit( $info['name'] );
-		} elseif ( '.' !== $dirname = dirname( $info['name'] ) ) {
+		} elseif ( '.' !== $dirname ) {
 			// Path to a file.
 			$needed_dirs[] = $to . untrailingslashit( $dirname );
 		}
@@ -1202,7 +1358,8 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	unset( $needed_dirs );
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
@@ -1528,8 +1685,14 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 		$temp_handle    = @fopen( $temp_file_name, 'w' );
 		if ( $temp_handle ) {
 
+<<<<<<< HEAD
 			// Attempt to determine the file owner of the ClassicPress files, and that of newly created files
 			$wp_file_owner = $temp_file_owner = false;
+=======
+			// Attempt to determine the file owner of the WordPress files, and that of newly created files
+			$wp_file_owner   = false;
+			$temp_file_owner = false;
+>>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 			if ( function_exists( 'fileowner' ) ) {
 				$wp_file_owner   = @fileowner( __FILE__ );
 				$temp_file_owner = @fileowner( $temp_file_name );

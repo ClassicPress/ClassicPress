@@ -466,10 +466,19 @@ switch ( $wp_list_table->current_action() ) {
 					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . sprintf( $message, number_format_i18n( $delete_count ) ) . '</p></div>';
 					break;
 				case 'add':
+<<<<<<< HEAD
 					if ( isset( $_GET['id'] ) && ( $user_id = $_GET['id'] ) && current_user_can( 'edit_user', $user_id ) ) {
 						/* translators: %s: edit page url */
 						$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . sprintf(
 							__( 'New user created. <a href="%s">Edit user</a>' ),
+=======
+					$message = __( 'New user created.' );
+
+					$user_id = isset( $_GET['id'] ) ? $_GET['id'] : false;
+					if ( $user_id && current_user_can( 'edit_user', $user_id ) ) {
+						$message .= sprintf(
+							' <a href="%s">%s</a>',
+>>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 							esc_url(
 								add_query_arg(
 									'wp_http_referer',

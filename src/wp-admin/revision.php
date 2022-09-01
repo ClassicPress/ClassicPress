@@ -32,7 +32,8 @@ $redirect = 'edit.php';
 
 switch ( $action ) {
 	case 'restore':
-		if ( ! $revision = wp_get_post_revision( $revision_id ) ) {
+		$revision = wp_get_post_revision( $revision_id );
+		if ( ! $revision ) {
 			break;
 		}
 
@@ -40,7 +41,8 @@ switch ( $action ) {
 			break;
 		}
 
-		if ( ! $post = get_post( $revision->post_parent ) ) {
+		$post = get_post( $revision->post_parent );
+		if ( ! $post ) {
 			break;
 		}
 
@@ -69,10 +71,13 @@ switch ( $action ) {
 	case 'view':
 	case 'edit':
 	default:
-		if ( ! $revision = wp_get_post_revision( $revision_id ) ) {
+		$revision = wp_get_post_revision( $revision_id );
+		if ( ! $revision ) {
 			break;
 		}
-		if ( ! $post = get_post( $revision->post_parent ) ) {
+
+		$post = get_post( $revision->post_parent );
+		if ( ! $post ) {
 			break;
 		}
 
@@ -109,10 +114,11 @@ if ( ! empty( $redirect ) ) {
 
 // This is so that the correct "Edit" menu item is selected.
 if ( ! empty( $post->post_type ) && 'post' != $post->post_type ) {
-	$parent_file = $submenu_file = 'edit.php?post_type=' . $post->post_type;
+	$parent_file = 'edit.php?post_type=' . $post->post_type;
 } else {
-	$parent_file = $submenu_file = 'edit.php';
+	$parent_file = 'edit.php';
 }
+$submenu_file = $parent_file;
 
 wp_enqueue_script( 'revisions' );
 wp_localize_script( 'revisions', '_wpRevisionsSettings', wp_prepare_revisions_for_js( $post, $revision_id, $from ) );

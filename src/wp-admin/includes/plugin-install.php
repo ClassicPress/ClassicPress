@@ -144,7 +144,24 @@ function plugins_api( $action, $args = array() ) {
 		// include an unmodified $wp_version
 		include ABSPATH . WPINC . '/version.php';
 
+<<<<<<< HEAD
 		$url = 'https://api.wordpress.org/plugins/info/1.0/';
+=======
+		$url = 'http://api.wordpress.org/plugins/info/1.2/';
+		$url = add_query_arg(
+			array(
+				'action'  => $action,
+				'request' => $args,
+			),
+			$url
+		);
+
+		$http_url = $url;
+		$ssl      = wp_http_supports( array( 'ssl' ) );
+		if ( $ssl ) {
+			$url = set_url_scheme( $url, 'https' );
+		}
+>>>>>>> 9a1549767e (Coding Standards: Fix the `Squiz.PHP.DisallowMultipleAssignments` violations in `wp-admin`.)
 
 		$http_args = array(
 			'timeout'    => 15,
@@ -220,7 +237,8 @@ function plugins_api( $action, $args = array() ) {
  */
 function install_popular_tags( $args = array() ) {
 	$key = md5( serialize( $args ) );
-	if ( false !== ( $tags = get_site_transient( 'poptags_' . $key ) ) ) {
+	$tags = get_site_transient( 'poptags_' . $key );
+	if ( false !== $tags ) {
 		return $tags;
 	}
 
