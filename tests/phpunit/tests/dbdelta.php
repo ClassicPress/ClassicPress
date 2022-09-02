@@ -34,17 +34,17 @@ class Tests_dbDelta extends WP_UnitTestCase {
 		// Forcing MyISAM, because InnoDB only started supporting FULLTEXT indexes in MySQL 5.7.
 		$wpdb->query(
 			$wpdb->prepare(
-			"
-			CREATE TABLE {$wpdb->prefix}dbdelta_test (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				column_1 varchar(255) NOT NULL,
-				column_2 text,
-				column_3 blob,
-				PRIMARY KEY  (id),
+				"
+				CREATE TABLE {$wpdb->prefix}dbdelta_test (
+					id bigint(20) NOT NULL AUTO_INCREMENT,
+					column_1 varchar(255) NOT NULL,
+					column_2 text,
+					column_3 blob,
+					PRIMARY KEY  (id),
 					KEY key_1 (column_1(%d)),
 					KEY compound_key (id,column_1(%d)),
-				FULLTEXT KEY fulltext_key (column_1)
-			) ENGINE=MyISAM
+					FULLTEXT KEY fulltext_key (column_1)
+				) ENGINE=MyISAM
 				",
 				$this->max_index_length,
 				$this->max_index_length

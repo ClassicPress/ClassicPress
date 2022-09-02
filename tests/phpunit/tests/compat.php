@@ -130,7 +130,7 @@ EOT;
 			@$undefined_var,
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentionally unset data
 			@$unset_var,
- 		);
+		);
 		$outputs  = array(
 			'0',
 			'1',
