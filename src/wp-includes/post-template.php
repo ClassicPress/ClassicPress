@@ -1001,12 +1001,22 @@ function post_custom( $key = '' ) {
  *
  * @since WP-1.2.0
  *
+<<<<<<< HEAD
  * @internal This will probably change at some point...
  *
  */
 function the_meta() {
 	if ( $keys = get_post_custom_keys() ) {
 		echo "<ul class='post-meta'>\n";
+=======
+ * @deprecated 6.0.2 Use get_post_meta() to retrieve post meta and render manually.
+ */
+function the_meta() {
+	_deprecated_function( __FUNCTION__, '6.0.2', 'get_post_meta()' );
+	$keys = get_post_custom_keys();
+	if ( $keys ) {
+		$li_html = '';
+>>>>>>> 6fa43a1d5b (Posts, Post Types: Escape output within `the_meta()`.)
 		foreach ( (array) $keys as $key ) {
 			$keyt = trim( $key );
 			if ( is_protected_meta( $keyt, 'post' ) ) {
@@ -1016,10 +1026,18 @@ function the_meta() {
 			$values = array_map( 'trim', get_post_custom_values( $key ) );
 			$value  = implode( ', ', $values );
 
+<<<<<<< HEAD
 			$html = sprintf( "<li><span class='post-meta-key'>%s</span> %s</li>\n",
 				/* translators: %s: Post custom field name */
 				sprintf( _x( '%s:', 'Post custom field name' ), $key ),
 				$value
+=======
+			$html = sprintf(
+				"<li><span class='post-meta-key'>%s</span> %s</li>\n",
+				/* translators: %s: Post custom field name. */
+				esc_html( sprintf( _x( '%s:', 'Post custom field name' ), $key ) ),
+				esc_html( $value )
+>>>>>>> 6fa43a1d5b (Posts, Post Types: Escape output within `the_meta()`.)
 			);
 
 			/**
