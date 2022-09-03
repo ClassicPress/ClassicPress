@@ -281,8 +281,13 @@ function get_bookmarks( $args = '' ) {
 	$query = "SELECT * $length $recently_updated_test $get_updated FROM $wpdb->links $join WHERE 1=1 $visible $category_query";
 	$query .= " $exclusions $inclusions $search";
 	$query .= " ORDER BY $orderby $order";
+<<<<<<< HEAD
 	if ( $r['limit'] != -1 ) {
 		$query .= ' LIMIT ' . $r['limit'];
+=======
+	if ( -1 != $parsed_args['limit'] ) {
+		$query .= ' LIMIT ' . absint( $parsed_args['limit'] );
+>>>>>>> dc874c5cd2 (General: Ensure bookmark query limits are numeric.)
 	}
 
 	$results = $wpdb->get_results( $query );
