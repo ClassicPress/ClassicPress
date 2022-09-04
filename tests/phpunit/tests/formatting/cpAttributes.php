@@ -24,7 +24,7 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 	}
 
 	function test_attributes_empty_value() {
-		$this->assertEquals( 'disabled=""', cp_attributes( 'input', array('disabled'=>'') ) );
+		$this->assertEquals( 'disabled=""', cp_attributes( 'input', array( 'disabled' => '' ) ) );
 		$this->assertEquals( 'disabled=""', cp_attributes( 'input', 'disabled' ) );
 	}
 
@@ -35,37 +35,37 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 	}
 
 	function test_attributes_empty_context_finds_caller_name() {
-		add_filter('cp_attributes', array( $this, 'context_getter' ), 10, 3 );
+		add_filter( 'cp_attributes', array( $this, 'context_getter' ), 10, 3 );
 		$this->assertEquals( 'context="passed context"', cp_attributes( 'p', '', 'passed context' ) );
 		$this->assertEquals( 'context="test_attributes_empty_context_finds_caller_name"', cp_attributes( 'p', '' ) );
-		remove_filter('cp_attributes', array( $this, 'context_getter' ), 10 );
+		remove_filter( 'cp_attributes', array( $this, 'context_getter' ), 10 );
 	}
 
 	function test_attributes_escape_src_url() {
-		$this->assertEquals( 
+		$this->assertEquals(
 			'id="main" src="http://example.org/one?z=5&#038;x=3" data-s="example.org/one?z=5&amp;x=3"',
-			cp_attributes( 
-				'iframe', 
+			cp_attributes(
+				'iframe',
 				array(
-					'id'     => "main",
+					'id'     => 'main',
 					'src'    => 'example.org/one?z=5&x=3',
 					'data-s' => 'example.org/one?z=5&x=3',
-				) 
-			) 
+				)
+			)
 		);
 	}
 
 	function test_attributes_escape_href_url() {
-		$this->assertEquals( 
+		$this->assertEquals(
 			'title="0.25&quot; in height" href="http://example.org/one?z=5&#038;x=3" data-h="example.org/one?x=5&amp;y=3"',
-			cp_attributes( 
-				'a', 
+			cp_attributes(
+				'a',
 				array(
 					'title'  => '0.25" in height',
 					'href'   => 'example.org/one?z=5&x=3',
 					'data-h' => 'example.org/one?x=5&y=3',
-				) 
-			) 
+				)
+			)
 		);
 	}
 
@@ -73,22 +73,22 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 		$this->assertEquals( 
 			'font="latin latin2" class="one two"',
 			cp_attributes( 
-				'section', 
+				'section',
 				array(
-					'font'  => array("latin", 'latin2'),
-					'class' => array('one', 'two', 'one'),
-				) 
-			) 
+					'font'  => array( 'latin', 'latin2' ),
+					'class' => array( 'one', 'two', 'one' ),
+				)
+			)
 		);
 	}
 
 	function test_attributes_escape_special_characters() {
-		$this->assertEquals( 
+		$this->assertEquals(
 			'title="2 &lt; 3" data="John &amp; Sons"',
-			cp_attributes( 
-				'nav', 
-				array( 'title' => "2 < 3", 'data' => 'John & Sons' ) 
-			) 
+			cp_attributes(
+				'nav',
+				array( 'title' => '2 < 3', 'data' => 'John & Sons' )
+			)
 		);
 	}
 
