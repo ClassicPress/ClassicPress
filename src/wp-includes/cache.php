@@ -8,6 +8,9 @@
  * @subpackage Cache
  */
 
+/** WP_Object_Cache class */
+require_once ABSPATH . WPINC . '/class-wp-object-cache.php';
+
 /**
  * Adds data to the cache, if the cache key doesn't already exist.
  *
@@ -270,6 +273,7 @@ function wp_cache_reset() {
 
 	$wp_object_cache->reset();
 }
+<<<<<<< HEAD
 
 /**
  * Core class that implements an object cache.
@@ -756,3 +760,5 @@ class WP_Object_Cache {
 		return true;
 	}
 }
+=======
+>>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
