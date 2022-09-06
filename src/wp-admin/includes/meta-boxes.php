@@ -929,9 +929,15 @@ function page_attributes_meta_box( $post ) {
 	if ( count( get_page_templates( $post ) ) > 0 && get_option( 'page_for_posts' ) != $post->ID ) :
 		$template = ! empty( $post->page_template ) ? $post->page_template : false;
 		?>
+<<<<<<< HEAD
 		<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="page_template"><?php _e( 'Template' ); ?></label>
 		<?php
 			/**
+=======
+<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="page_template"><?php _e( 'Template' ); ?></label>
+<?php
+/**
+>>>>>>> 31816ccec2 (Posts, Post Types: Remove extra tabs around `page_attributes_meta_box_template` action in `page_attributes_meta_box()`.)
 			 * Fires immediately after the label inside the 'Template' section
 			 * of the 'Page Attributes' meta box.
 			 *
@@ -940,12 +946,21 @@ function page_attributes_meta_box( $post ) {
 			 * @param string  $template The template used for the current post.
 			 * @param WP_Post $post     The current post.
 			 */
+<<<<<<< HEAD
 			do_action( 'page_attributes_meta_box_template', $template, $post );
 		?>
 		</p>
 		<select name="page_template" id="page_template">
 		<?php
 		/**
+=======
+do_action( 'page_attributes_meta_box_template', $template, $post );
+?>
+</p>
+<select name="page_template" id="page_template">
+<?php
+/**
+>>>>>>> 31816ccec2 (Posts, Post Types: Remove extra tabs around `page_attributes_meta_box_template` action in `page_attributes_meta_box()`.)
 		 * Filters the title of the default page template displayed in the drop-down.
 		 *
 		 * @since WP-4.1.0
