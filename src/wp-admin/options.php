@@ -353,15 +353,7 @@ foreach ( (array) $options as $option ) :
 	<th scope="row"><label for="<?php echo $name; ?>"><?php echo esc_html( $option->option_name ); ?></label></th>
 <td>
 	<?php if ( strpos( $value, "\n" ) !== false ) : ?>
-<<<<<<< HEAD
-	<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5">
-								<?php
-								echo esc_textarea( $value );
-								?>
-	</textarea>
-=======
 		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
->>>>>>> 0859c8c968 (Options: Avoid extra tabs in a textarea in `wp-admin/options.php`.)
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?> />
 	<?php endif ?></td>
