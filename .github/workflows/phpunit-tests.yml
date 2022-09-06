@@ -80,10 +80,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Enable, start and initialise MySQL
+      - name: Enable MySQL
+        uses: samin/mysql-action@v1
+        with:
+          mysql version: '5.7'
+          mysql user: 'root'
+          mysql password: 'root'
+
+      - name: Initialise MySQL
         run: |
-          sudo systemctl enable mysql.service
-          sudo systemctl start mysql.service
           mysql -u root -proot < tools/local-env/mysql-init.sql
           mysql -u root -proot -e "SHOW DATABASES"
 
