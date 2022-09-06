@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
-        os: [ ubuntu-18.04 ]
+        os: [ ubuntu-latest ]
         memcached: [ false ]
         include:
           - php: '7.2'
