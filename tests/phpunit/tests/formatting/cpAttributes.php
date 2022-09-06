@@ -70,9 +70,9 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 	}
 
 	function test_attributes_remove_duplicate() {
-		$this->assertEquals( 
+		$this->assertEquals(
 			'font="latin latin2" class="one two"',
-			cp_attributes( 
+			cp_attributes(
 				'section',
 				array(
 					'font'  => array( 'latin', 'latin2' ),
@@ -87,7 +87,10 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 			'title="2 &lt; 3" data="John &amp; Sons"',
 			cp_attributes(
 				'nav',
-				array( 'title' => '2 < 3', 'data' => 'John & Sons' )
+				array(
+					'title' => '2 < 3',
+					'data' => 'John & Sons',
+				)
 			)
 		);
 	}
