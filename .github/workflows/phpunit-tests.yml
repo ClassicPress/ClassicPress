@@ -87,6 +87,7 @@ jobs:
 
       - name: Enable MySQL
         uses: shogo82148/actions-setup-mysql@v1
+        id: setup-mysql
         with:
           mysql-version: '5.7'
           root-password: 'root'
