@@ -34,6 +34,14 @@ jobs:
     name: PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}
     runs-on: ${{ matrix.os }}
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+        - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
     strategy:
       matrix:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
@@ -85,18 +93,12 @@ jobs:
           sudo systemctl stop mysql.service
           sudo systemctl disable mysql.service
 
-      - name: Enable MySQL
-        uses: shogo82148/actions-setup-mysql@v1
-        id: setup-mysql
-        with:
-          mysql-version: '5.7'
-          root-password: 'root'
-
-      - name: Initialise MySQL
+      - name: Enable, start and initialise MySQL
         run: |
-          mysql -u root -proot -h 127.0.0.1 < tools/local-env/mysql-init.sql
-          mysql -u root -proot -h 127.0.0.1 -e "SHOW DATABASES"
-          mysql -u root -proot -h 127.0.0.1 -e "show variables like 'socket'"
+          sudo systemctl enable mysql.service
+          sudo systemctl start mysql.service
+          mysql -u root -proot < tools/local-env/mysql-init.sql
+          mysql -u root -proot -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
@@ -108,7 +110,7 @@ jobs:
           ini-values: >-
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
-            mysql.default_socket=${{ steps.setup-mysql.outputs.base-dir }}/tmp/mysql.sock
+            mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: >-
             bcmath,
             curl,
