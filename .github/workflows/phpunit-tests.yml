@@ -89,6 +89,12 @@ jobs:
           mysql version: '5.7'
           mysql root password: 'root'
 
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping --host=127.0.0.1 --password=root --silent; do
+            sleep 1
+          done
+
       - name: Initialise MySQL
         run: |
           mysql -u root -proot -h 127.0.0.1 < tools/local-env/mysql-init.sql
