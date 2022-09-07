@@ -99,6 +99,7 @@ jobs:
         run: |
           mysql -u root -proot -h 127.0.0.1 < tools/local-env/mysql-init.sql
           mysql -u root -proot -h 127.0.0.1 -e "SHOW DATABASES"
+          mysql -u root -proot -h 127.0.0.1 -e "show variables like 'socket'"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
@@ -110,7 +111,7 @@ jobs:
           ini-values: >-
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
-            mysql.default_socket=/var/run/mysqld/mysqld.sock
+            mysql.default_socket=/tmp/mysql.sock
           extensions: >-
             bcmath,
             curl,
