@@ -91,8 +91,8 @@ jobs:
 
       - name: Initialise MySQL
         run: |
-          mysql -u root -proot < tools/local-env/mysql-init.sql
-          mysql -u root -proot -e "SHOW DATABASES"
+          mysql -u root -proot -h 127.0.0.1 < tools/local-env/mysql-init.sql
+          mysql -u root -proot -h 127.0.0.1 -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
