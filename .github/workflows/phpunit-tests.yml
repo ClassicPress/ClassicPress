@@ -80,12 +80,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Shutdown OS MySQL
+        run: sudo service mysql stop
+
       - name: Enable MySQL
-        uses: samin/mysql-action@v1
+        uses: mirromutth/mysql-action@v1.1
         with:
           mysql version: '5.7'
-          mysql user: 'root'
-          mysql password: 'root'
+          mysql root password: 'root'
 
       - name: Initialise MySQL
         run: |
