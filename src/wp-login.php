@@ -610,7 +610,7 @@ switch ( $action ) {
 	case 'rp':
 		list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$rp_cookie       = 'wp-resetpass-' . COOKIEHASH;
-		if ( isset( $_GET['key'] ) ) {
+		if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
 			$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
 			setcookie( $rp_cookie, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 			wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
