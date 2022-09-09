@@ -6,6 +6,11 @@
  * @group avatar
  */
 class Tests_Avatar extends WP_UnitTestCase {
+	public function setUp() {
+		parent::setUp();
+		update_option( 'show_avatars', '1' );
+	}
+
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
