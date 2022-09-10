@@ -305,6 +305,12 @@ table.fixed {
 	width: 74px;
 }
 
+.fixed .column-role,
+.fixed .column-posts {
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
 .fixed .column-comment .comment-author {
 	display: none;
 }
@@ -1566,6 +1572,10 @@ div.action-links,
 
 .plugin-card .compatibility-compatible:before {
 	content: "\f147";
+}
+
+.plugin-card .notice {
+	margin: 20px 20px 0 20px;
 }
 
 .plugin-icon {
