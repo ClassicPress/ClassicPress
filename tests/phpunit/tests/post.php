@@ -1070,7 +1070,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/31168
 	 */
 	function test_wp_insert_post_cpt_default_comment_ping_status() {
-		$post_type = rand_str(20);
+		$post_type = rand_str( 20 );
 		register_post_type( $post_type, array( 'supports' => array( 'comments', 'trackbacks' ) ) );
 		$post_id = self::factory()->post->create(
 			array(
