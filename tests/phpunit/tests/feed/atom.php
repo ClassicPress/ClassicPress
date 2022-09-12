@@ -96,9 +96,8 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 		$this->assertCount( 1, $atom );
 
 		// Verify attributes.
-		$this->assertEquals( 'http://www.w3.org/2005/Atom', $atom[0]['attributes']['xmlns'] );
-		$this->assertEquals( 'http://purl.org/syndication/thread/1.0', $atom[0]['attributes']['xmlns:thr'] );
-		$this->assertEquals( site_url( '/wp-atom.php' ), $atom[0]['attributes']['xml:base'] );
+		$this->assertSame( 'http://www.w3.org/2005/Atom', $atom[0]['attributes']['xmlns'] );
+		$this->assertSame( 'http://purl.org/syndication/thread/1.0', $atom[0]['attributes']['xmlns:thr'] );
 
 		// Verify the <feed> element is present and contains a <title> child element.
 		$title = xml_find( $xml, 'feed', 'title' );
