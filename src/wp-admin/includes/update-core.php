@@ -298,12 +298,8 @@ function update_core( $from, $to ) {
 	/** This filter is documented in wp-admin/includes/update-core.php */
 	apply_filters( 'update_feedback', __( 'Copying the required files&#8230;' ) );
 	// Copy new versions of WP files into place.
-<<<<<<< HEAD
-	$result = _copy_dir( $from . $distro, $to, $skip );
-=======
 	$result = copy_dir( $from . $distro, $to, $skip );
 
->>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
 	if ( is_wp_error( $result ) ) {
 		$result = new WP_Error( $result->get_error_code(), $result->get_error_message(), substr( $result->get_error_data(), strlen( $to ) ) );
 	}
@@ -355,12 +351,8 @@ function update_core( $from, $to ) {
 		if ( $available_space && $total_size >= $available_space ) {
 			$result = new WP_Error( 'disk_full', __( 'There is not enough free disk space to complete the update.' ) );
 		} else {
-<<<<<<< HEAD
-			$result = _copy_dir( $from . $distro, $to, $skip );
-=======
 			$result = copy_dir( $from . $distro, $to, $skip );
 
->>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
 			if ( is_wp_error( $result ) ) {
 				$result = new WP_Error( $result->get_error_code() . '_retry', $result->get_error_message(), substr( $result->get_error_data(), strlen( $to ) ) );
 			}
@@ -532,7 +524,6 @@ function update_core( $from, $to ) {
 }
 
 /**
-<<<<<<< HEAD
  * Gets the checksums for the given version of ClassicPress.
  *
  * This function is a duplicate copy of `get_core_checksums()` to ensure the
@@ -638,77 +629,7 @@ function cp_get_update_directory_root( $working_dir ) {
 }
 
 /**
- * Copies a directory from one location to another via the ClassicPress Filesystem Abstraction.
- * Assumes that WP_Filesystem() has already been called and setup.
- *
- * This is a temporary function for the 3.1 -> 3.2 upgrade, as well as for those upgrading to
- * 3.7+
- *
- * @ignore
- * @since WP-3.2.0
- * @since WP-3.7.0 Updated not to use a regular expression for the skip list
- * @see copy_dir()
- *
- * @global WP_Filesystem_Base $wp_filesystem
- *
- * @param string $from     source directory
- * @param string $to       destination directory
- * @param array $skip_list a list of files/folders to skip copying
- * @return mixed WP_Error on failure, True on success.
- */
-function _copy_dir( $from, $to, $skip_list = array() ) {
-	global $wp_filesystem;
-
-	$dirlist = $wp_filesystem->dirlist( $from );
-
-	$from = trailingslashit( $from );
-	$to   = trailingslashit( $to );
-
-	foreach ( (array) $dirlist as $filename => $fileinfo ) {
-		if ( in_array( $filename, $skip_list ) ) {
-			continue;
-		}
-
-		if ( 'f' == $fileinfo['type'] ) {
-			if ( ! $wp_filesystem->copy( $from . $filename, $to . $filename, true, FS_CHMOD_FILE ) ) {
-				// If copy failed, chmod file to 0644 and try again.
-				$wp_filesystem->chmod( $to . $filename, FS_CHMOD_FILE );
-				if ( ! $wp_filesystem->copy( $from . $filename, $to . $filename, true, FS_CHMOD_FILE ) ) {
-					return new WP_Error( 'copy_failed__copy_dir', __( 'Could not copy file.' ), $to . $filename );
-				}
-			}
-		} elseif ( 'd' == $fileinfo['type'] ) {
-			if ( ! $wp_filesystem->is_dir( $to . $filename ) ) {
-				if ( ! $wp_filesystem->mkdir( $to . $filename, FS_CHMOD_DIR ) ) {
-					return new WP_Error( 'mkdir_failed__copy_dir', __( 'Could not create directory.' ), $to . $filename );
-				}
-			}
-
-			/*
-			 * Generate the $sub_skip_list for the subdirectory as a sub-set
-			 * of the existing $skip_list.
-			 */
-			$sub_skip_list = array();
-			foreach ( $skip_list as $skip_item ) {
-				if ( 0 === strpos( $skip_item, $filename . '/' ) ) {
-					$sub_skip_list[] = preg_replace( '!^' . preg_quote( $filename, '!' ) . '/!i', '', $skip_item );
-				}
-			}
-
-			$result = _copy_dir( $from . $filename, $to . $filename, $sub_skip_list );
-			if ( is_wp_error( $result ) ) {
-				return $result;
-			}
-		}
-	}
-	return true;
-}
-
-/**
  * Redirect to the About ClassicPress page after a successful upgrade.
-=======
- * Redirect to the About WordPress page after a successful upgrade.
->>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
  *
  * This function is only needed when the existing installation is older than 3.4.0.
  *
