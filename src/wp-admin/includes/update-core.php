@@ -298,7 +298,12 @@ function update_core( $from, $to ) {
 	/** This filter is documented in wp-admin/includes/update-core.php */
 	apply_filters( 'update_feedback', __( 'Copying the required files&#8230;' ) );
 	// Copy new versions of WP files into place.
+<<<<<<< HEAD
 	$result = _copy_dir( $from . $distro, $to, $skip );
+=======
+	$result = copy_dir( $from . $distro, $to, $skip );
+
+>>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
 	if ( is_wp_error( $result ) ) {
 		$result = new WP_Error( $result->get_error_code(), $result->get_error_message(), substr( $result->get_error_data(), strlen( $to ) ) );
 	}
@@ -350,7 +355,12 @@ function update_core( $from, $to ) {
 		if ( $available_space && $total_size >= $available_space ) {
 			$result = new WP_Error( 'disk_full', __( 'There is not enough free disk space to complete the update.' ) );
 		} else {
+<<<<<<< HEAD
 			$result = _copy_dir( $from . $distro, $to, $skip );
+=======
+			$result = copy_dir( $from . $distro, $to, $skip );
+
+>>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
 			if ( is_wp_error( $result ) ) {
 				$result = new WP_Error( $result->get_error_code() . '_retry', $result->get_error_message(), substr( $result->get_error_data(), strlen( $to ) ) );
 			}
@@ -522,6 +532,7 @@ function update_core( $from, $to ) {
 }
 
 /**
+<<<<<<< HEAD
  * Gets the checksums for the given version of ClassicPress.
  *
  * This function is a duplicate copy of `get_core_checksums()` to ensure the
@@ -695,6 +706,9 @@ function _copy_dir( $from, $to, $skip_list = array() ) {
 
 /**
  * Redirect to the About ClassicPress page after a successful upgrade.
+=======
+ * Redirect to the About WordPress page after a successful upgrade.
+>>>>>>> d8b262968a (Upgrade/Install: Remove `_copy_dir()` function as originally intended.)
  *
  * This function is only needed when the existing installation is older than 3.4.0.
  *
