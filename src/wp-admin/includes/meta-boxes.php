@@ -260,7 +260,8 @@ function post_submit_meta_box( $post, $args = array() ) {
 		<?php
 	endif;
 
-	if ( 'draft' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) : ?>
+	if ( 'draft' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) :
+		?>
 	<div class="notice notice-info notice-alt inline">
 		<p>
 				<?php
