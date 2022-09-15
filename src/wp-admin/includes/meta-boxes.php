@@ -257,7 +257,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 			<?php touch_time( ( $action === 'edit' ), 1 ); ?>
 		</fieldset>
 		</div>
-		<?php // /misc-pub-section ?>
+		<?php
 	endif;
 
 	if ( 'draft' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) : ?>
