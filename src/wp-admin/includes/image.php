@@ -293,6 +293,11 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		unset( $metadata['image']['data'] );
 	}
 
+	// Capture file size for cases where it has not been captured yet, such as PDFs.
+	if ( ! isset( $metadata['filesize'] ) && file_exists( $file ) ) {
+		$metadata['filesize'] = wp_filesize( $file );
+	}
+
 	/**
 	 * Filters the generated attachment meta data.
 	 *
@@ -309,19 +314,40 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
  *
  * @since WP-2.5.0
  *
- * @param string $str
- * @return int|float
+ * @param string $str Fraction string.
+ * @return int|float Returns calculated fraction or integer 0 on invalid input.
  */
 function wp_exif_frac2dec( $str ) {
-	if ( false === strpos( $str, '/' ) ) {
-		return $str;
+	if ( ! is_scalar( $str ) || is_bool( $str ) ) {
+		return 0;
 	}
 
-	list( $n, $d ) = explode( '/', $str );
-	if ( ! empty( $d ) ) {
-		return $n / $d;
+	if ( ! is_string( $str ) ) {
+		return $str; // This can only be an integer or float, so this is fine.
 	}
-	return $str;
+
+	// Fractions passed as a string must contain a single `/`.
+	if ( substr_count( $str, '/' ) !== 1 ) {
+		if ( is_numeric( $str ) ) {
+			return (float) $str;
+		}
+
+		return 0;
+	}
+
+	list( $numerator, $denominator ) = explode( '/', $str );
+
+	// Both the numerator and the denominator must be numbers.
+	if ( ! is_numeric( $numerator ) || ! is_numeric( $denominator ) ) {
+		return 0;
+	}
+
+	// The denominator must not be zero.
+	if ( 0 == $denominator ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison -- Deliberate loose comparison.
+		return 0;
+	}
+
+	return $numerator / $denominator;
 }
 
 /**
@@ -360,7 +386,7 @@ function wp_read_image_metadata( $file ) {
 		return false;
 	}
 
-	list( , , $sourceImageType ) = @getimagesize( $file );
+	list( , , $image_type ) = @getimagesize( $file );
 
 	/*
 	 * EXIF contains a bunch of data we'll probably never need formatted in ways
@@ -440,6 +466,8 @@ function wp_read_image_metadata( $file ) {
 		}
 	}
 
+	$exif = array();
+
 	/**
 	 * Filters the image types to check for exif data.
 	 *
@@ -447,7 +475,9 @@ function wp_read_image_metadata( $file ) {
 	 *
 	 * @param array $image_types Image types to check for exif data.
 	 */
-	if ( is_callable( 'exif_read_data' ) && in_array( $sourceImageType, apply_filters( 'wp_read_image_metadata_types', array( IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM ) ) ) ) {
+	$exif_image_types = apply_filters( 'wp_read_image_metadata_types', array( IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM ) );
+
+	if ( is_callable( 'exif_read_data' ) && in_array( $image_type, $exif_image_types ) ) {
 		$exif = @exif_read_data( $file );
 
 		if ( ! empty( $exif['ImageDescription'] ) ) {
@@ -482,7 +512,7 @@ function wp_read_image_metadata( $file ) {
 		if ( empty( $meta['copyright'] ) && ! empty( $exif['Copyright'] ) ) {
 			$meta['copyright'] = trim( $exif['Copyright'] );
 		}
-		if ( ! empty( $exif['FNumber'] ) ) {
+		if ( ! empty( $exif['FNumber'] ) && is_scalar( $exif['FNumber'] ) ) {
 			$meta['aperture'] = round( wp_exif_frac2dec( $exif['FNumber'] ), 2 );
 		}
 		if ( ! empty( $exif['Model'] ) ) {
@@ -492,14 +522,20 @@ function wp_read_image_metadata( $file ) {
 			$meta['created_timestamp'] = wp_exif_date2ts( $exif['DateTimeDigitized'] );
 		}
 		if ( ! empty( $exif['FocalLength'] ) ) {
-			$meta['focal_length'] = (string) wp_exif_frac2dec( $exif['FocalLength'] );
+			$meta['focal_length'] = (string) $exif['FocalLength'];
+			if ( is_scalar( $exif['FocalLength'] ) ) {
+				$meta['focal_length'] = (string) wp_exif_frac2dec( $exif['FocalLength'] );
+			}
 		}
 		if ( ! empty( $exif['ISOSpeedRatings'] ) ) {
 			$meta['iso'] = is_array( $exif['ISOSpeedRatings'] ) ? reset( $exif['ISOSpeedRatings'] ) : $exif['ISOSpeedRatings'];
 			$meta['iso'] = trim( $meta['iso'] );
 		}
 		if ( ! empty( $exif['ExposureTime'] ) ) {
-			$meta['shutter_speed'] = (string) wp_exif_frac2dec( $exif['ExposureTime'] );
+			$meta['shutter_speed'] = (string) $exif['ExposureTime'];
+			if ( is_scalar( $exif['ExposureTime'] ) ) {
+				$meta['shutter_speed'] = (string) wp_exif_frac2dec( $exif['ExposureTime'] );
+			}
 		}
 		if ( ! empty( $exif['Orientation'] ) ) {
 			$meta['orientation'] = $exif['Orientation'];
@@ -525,13 +561,15 @@ function wp_read_image_metadata( $file ) {
 	 *
 	 * @since WP-2.5.0
 	 * @since WP-4.4.0 The `$iptc` parameter was added.
+	 * @since WP-5.0.0 The `$exif` parameter was added.
 	 *
 	 * @param array  $meta            Image meta data.
 	 * @param string $file            Path to image file.
-	 * @param int    $sourceImageType Type of image.
+	 * @param int    $image_type Type of image, one of the `IMAGETYPE_XXX` constants.
 	 * @param array  $iptc            IPTC data.
+	 * @param array  $exif       EXIF data.
 	 */
-	return apply_filters( 'wp_read_image_metadata', $meta, $file, $sourceImageType, $iptc );
+	return apply_filters( 'wp_read_image_metadata', $meta, $file, $image_type, $iptc, $exif );
 
 }
 

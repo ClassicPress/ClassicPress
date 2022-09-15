@@ -466,7 +466,7 @@ if ( ! empty( $invalid ) ) {
 			/* translators: 1: plugin file 2: error message */
 			__( 'The plugin %1$s has been <strong>deactivated</strong> due to an error: %2$s' ),
 			'<code>' . esc_html( $plugin_file ) . '</code>',
-			$error->get_error_message()
+			esc_html( $error->get_error_message() )
 		);
 		echo '</p></div>';
 	}
@@ -503,14 +503,24 @@ if ( isset( $_GET['error'] ) ) :
 	</div>
 	<?php
 elseif ( isset( $_GET['deleted'] ) ) :
-		$delete_result = get_transient( 'plugins_delete_result_' . $user_ID );
-		// Delete it once we're done.
-		delete_transient( 'plugins_delete_result_' . $user_ID );
+	$delete_result = get_transient( 'plugins_delete_result_' . $user_ID );
+	// Delete it once we're done.
+	delete_transient( 'plugins_delete_result_' . $user_ID );
 
 	if ( is_wp_error( $delete_result ) ) :
 		?>
-		<div id="message" class="error notice is-dismissible"><p><?php printf( __( 'Plugin could not be deleted due to an error: %s' ), $delete_result->get_error_message() ); ?></p></div>
-		<?php else : ?>
+		<div id="message" class="error notice is-dismissible">
+			<p>
+				<?php
+				printf(
+					/* translators: %s: Error message. */
+					__( 'Plugin could not be deleted due to an error: %s' ),
+					esc_html( $delete_result->get_error_message() )
+				);
+				?>
+			</p>
+		</div>
+	<?php else : ?>
 		<div id="message" class="updated notice is-dismissible">
 			<p>
 				<?php
@@ -522,7 +532,7 @@ elseif ( isset( $_GET['deleted'] ) ) :
 				?>
 			</p>
 		</div>
-		<?php endif; ?>
+	<?php endif; ?>
 <?php elseif ( isset( $_GET['activate'] ) ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Plugin <strong>activated</strong>.' ); ?></p></div>
 <?php elseif ( isset( $_GET['activate-multi'] ) ) : ?>

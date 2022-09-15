@@ -3405,17 +3405,7 @@ function wp_enqueue_code_editor( $args ) {
 		}
 	}
 
-	if ( 'text/css' === $type ) {
-		$settings['codemirror'] = array_merge(
-			$settings['codemirror'],
-			array(
-				'mode'              => 'css',
-				'lint'              => true,
-				'autoCloseBrackets' => true,
-				'matchBrackets'     => true,
-			)
-		);
-	} elseif ( 'text/x-scss' === $type || 'text/x-less' === $type || 'text/x-sass' === $type ) {
+	if ( in_array( $type, array( 'text/css', 'text/x-scss', 'text/x-less', 'text/x-sass' ), true ) ) {
 		$settings['codemirror'] = array_merge(
 			$settings['codemirror'],
 			array(
@@ -4412,15 +4402,25 @@ function disabled( $disabled, $current = true, $echo = true ) {
  *
  * Compares the first two arguments and if identical marks as readonly
  *
- * @since WP-4.9.0
+ * @since WP-5.9.0
  *
  * @param mixed $readonly One of the values to compare
  * @param mixed $current  (true) The other value to compare if not just true
  * @param bool  $echo     Whether to echo or just return the string
  * @return string html attribute or empty string
  */
-function readonly( $readonly, $current = true, $echo = true ) {
+function wp_readonly( $readonly, $current = true, $echo = true ) {
 	return __checked_selected_helper( $readonly, $current, $echo, 'readonly' );
+}
+
+/*
+ * Include a compat `readonly()` function on PHP < 8.1. Since PHP 8.1,
+ * `readonly` is a reserved keyword and cannot be used as a function name.
+ * In order to avoid PHP parser errors, this function was extracted
+ * to a separate file and is only included conditionally on PHP < 8.1.
+ */
+if ( PHP_VERSION_ID < 80100 ) {
+	require_once __DIR__ . '/php-compat/readonly.php';
 }
 
 /**
