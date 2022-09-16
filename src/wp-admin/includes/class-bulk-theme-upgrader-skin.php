@@ -20,23 +20,23 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 
 	public function add_strings() {
 		parent::add_strings();
-		$this->upgrader->strings['skin_before_update_header'] = __('Updating Theme %1$s (%2$d/%3$d)');
+		$this->upgrader->strings['skin_before_update_header'] = __( 'Updating Theme %1$s (%2$d/%3$d)' );
 	}
 
 	/**
 	 *
 	 * @param string $title
 	 */
-	public function before($title = '') {
-		parent::before( $this->theme_info->display('Name') );
+	public function before( $title = '' ) {
+		parent::before( $this->theme_info->display( 'Name' ) );
 	}
 
 	/**
 	 *
 	 * @param string $title
 	 */
-	public function after($title = '') {
-		parent::after( $this->theme_info->display('Name') );
+	public function after( $title = '' ) {
+		parent::after( $this->theme_info->display( 'Name' ) );
 		$this->decrement_update_count( 'theme' );
 	}
 
@@ -57,8 +57,9 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 				__( 'Go to ClassicPress Updates page' )
 			),
 		);
-		if ( ! current_user_can( 'switch_themes' ) && ! current_user_can( 'edit_theme_options' ) )
+		if ( ! current_user_can( 'switch_themes' ) && ! current_user_can( 'edit_theme_options' ) ) {
 			unset( $update_actions['themes_page'] );
+		}
 
 		/**
 		 * Filters the list of action links available following bulk theme updates.
@@ -70,7 +71,8 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 		 */
 		$update_actions = apply_filters( 'update_bulk_theme_complete_actions', $update_actions, $this->theme_info );
 
-		if ( ! empty($update_actions) )
-			$this->feedback(implode(' | ', (array)$update_actions));
+		if ( ! empty( $update_actions ) ) {
+			$this->feedback( implode( ' | ', (array) $update_actions ) );
+		}
 	}
 }
