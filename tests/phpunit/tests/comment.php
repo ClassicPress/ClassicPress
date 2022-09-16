@@ -13,6 +13,11 @@ class Tests_Comment extends WP_UnitTestCase {
 		update_option( 'default_comment_status', 'open' );
 	}
 
+	public function tearDown() {
+		update_option( 'default_comment_status', 'closed' );
+		parent::tearDown();
+	}
+
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$user_id = $factory->user->create(
 			array(

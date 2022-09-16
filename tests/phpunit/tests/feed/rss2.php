@@ -59,6 +59,10 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		}
 	}
 
+	public static function wpTearDownAfterClass() {
+		update_option( 'default_comment_status', 'closed' );
+	}
+
 	/**
 	 * Setup.
 	 */

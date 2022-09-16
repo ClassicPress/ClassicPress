@@ -18,6 +18,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 	public function setUp() {
 		parent::setUp();
 
+		update_option( 'default_comment_status', 'open' );
+
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new Spy_REST_Server;
@@ -28,6 +30,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 
 	public function tearDown() {
 		parent::tearDown();
+
+		update_option( 'default_comment_status', 'closed' );
 
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
