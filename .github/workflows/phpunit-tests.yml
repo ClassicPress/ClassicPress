@@ -88,6 +88,7 @@ jobs:
 
       - name: Initialise MySQL
         run: |
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot -e "SELECT @@VERSION"
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot < tools/local-env/mysql-init.sql
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot -e "SHOW DATABASES"
 
@@ -100,7 +101,7 @@ jobs:
           php-version: "${{ matrix.php }}"
           ini-values: >-
             mysql.default_host=127.0.0.1,
-            mysql.default_port=3306,
+            mysql.default_port=${{ job.services.mysql.ports['3306'] }},
             mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: >-
             bcmath,
