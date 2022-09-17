@@ -22,6 +22,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 	public function tearDown() {
 		remove_filter( 'wp_rest_server_class', array( $this, 'filter_wp_rest_server_class' ) );
+		update_option( 'default_comment_status', 'closed' );
 		parent::tearDown();
 	}
 

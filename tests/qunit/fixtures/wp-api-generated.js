@@ -3571,7 +3571,7 @@ mockedApiResponse.PostsCollection = [
         },
         "author": 0,
         "featured_media": 0,
-        "comment_status": "closed",
+        "comment_status": "open",
         "ping_status": "open",
         "sticky": false,
         "template": "",
@@ -3671,7 +3671,7 @@ mockedApiResponse.PostModel = {
     },
     "author": 0,
     "featured_media": 0,
-    "comment_status": "closed",
+    "comment_status": "open",
     "ping_status": "open",
     "sticky": false,
     "template": "",
@@ -3934,7 +3934,7 @@ mockedApiResponse.MediaCollection = [
             "rendered": "REST API Client Fixture: Attachment"
         },
         "author": 0,
-        "comment_status": "closed",
+        "comment_status": "open",
         "ping_status": "closed",
         "template": "",
         "meta": {
@@ -4000,7 +4000,7 @@ mockedApiResponse.MediaModel = {
         "rendered": "REST API Client Fixture: Attachment"
     },
     "author": 0,
-    "comment_status": "closed",
+    "comment_status": "open",
     "ping_status": "closed",
     "template": "",
     "meta": {
@@ -4560,5 +4560,5 @@ mockedApiResponse.settings = {
     "default_post_format": "0",
     "posts_per_page": 10,
     "default_ping_status": "open",
-    "default_comment_status": "closed"
+    "default_comment_status": "open"
 };
