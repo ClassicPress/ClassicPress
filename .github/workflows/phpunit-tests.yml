@@ -86,15 +86,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Shutdown OS MySQL
+      - name: Initialise MySQL
         run: |
-          sudo systemctl stop mysql.service
-          sudo systemctl disable mysql.service
-
-      - name: Enable, start and initialise MySQL
-        run: |
-          sudo systemctl enable mysql.service
-          sudo systemctl start mysql.service
           mysql -u root -proot < tools/local-env/mysql-init.sql
           mysql -u root -proot -e "SHOW DATABASES"
 
