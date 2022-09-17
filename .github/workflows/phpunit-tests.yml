@@ -164,6 +164,7 @@ jobs:
           sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
           sed -i 's/yourusernamehere/root/g' wp-tests-config.php
           sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+          sed -1 's/localhost/127.0.0.1/g' wp-tests-config.php
 
       - name: Set up object cache
         if: ${{ matrix.memcached }}
