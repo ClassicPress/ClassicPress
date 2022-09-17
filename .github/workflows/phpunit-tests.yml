@@ -88,8 +88,8 @@ jobs:
 
       - name: Initialise MySQL
         run: |
-          mysql -u root -proot < tools/local-env/mysql-init.sql
-          mysql -u root -proot -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot < tools/local-env/mysql-init.sql
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
