@@ -84,20 +84,20 @@ jobs:
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql user: 'classicpress'
-          mysql password: "${{ secrets.MYSQL_PASSWORD }}"
+          mysql password: "password"
           mysql version: "${{ matrix.mysql }}"
 
       - name: Wait for MySQL
         run: |
-          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u classicpress -p${{ secrets.MYSQL_PASSWORD }} --silent; do
+          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u classicpress -ppassword --silent; do
             sleep 1
           done
 
       - name: Initialise MySQL
         run: |
-          mysql --host 127.0.0.1 --port 3306 -u classicpress -p${{ secrets.MYSQL_PASSWORD }} -e "SELECT @@VERSION"
-          mysql --host 127.0.0.1 --port 3306 -u classicpress -p${{ secrets.MYSQL_PASSWORD }} < tools/local-env/mysql-init.sql
-          mysql --host 127.0.0.1 --port 3306 -u classicpress -p${{ secrets.MYSQL_PASSWORD }} -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port 3306 -u classicpress -ppassword -e "SELECT @@VERSION"
+          mysql --host 127.0.0.1 --port 3306 -u classicpress -ppassword < tools/local-env/mysql-init.sql
+          mysql --host 127.0.0.1 --port 3306 -u classicpress -ppassword -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
@@ -169,7 +169,7 @@ jobs:
           cp wp-tests-config-sample.php wp-tests-config.php
           sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
           sed -i 's/yourusernamehere/classicpress/g' wp-tests-config.php
-          sed -i 's/yourpasswordhere/${{ secrets.MYSQL_PASSWORD }}/g' wp-tests-config.php
+          sed -i 's/yourpasswordhere/password/g' wp-tests-config.php
           sed -i 's/localhost/127.0.0.1/g' wp-tests-config.php
 
       - name: Set up object cache
