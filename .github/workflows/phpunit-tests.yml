@@ -20,7 +20,7 @@ jobs:
   # - Installs NodeJS.
   # - Sets up caching for NPM.
   # - Checkout ClassicPress.
-  # - Enable and start MySQL.
+  # - Setup, wait for and initialise MySQL.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
   # - Set up locale.
@@ -29,22 +29,16 @@ jobs:
   # - Create config file.
   # - Set up object cache if needed for memcached tests.
   # - Set up a Memcached server if needed.
+  # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
     name: PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-        - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
     strategy:
       matrix:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
+        mysql: [ '5.7' ]
         memcached: [ false ]
         include:
           - php: '7.2'
@@ -86,11 +80,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql root password: root
+          mysql version: "${{ matrix.mysql }}"
+
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u root -proot --silent; do
+            sleep 1
+          done
+
       - name: Initialise MySQL
         run: |
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot -e "SELECT @@VERSION"
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot < tools/local-env/mysql-init.sql
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -u root -proot -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port 3306 -u root -proot -e "SELECT @@VERSION"
+          mysql --host 127.0.0.1 --port 3306 -u root -proot < tools/local-env/mysql-init.sql
+          mysql --host 127.0.0.1 --port 3306 -u root -proot -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
@@ -101,7 +107,7 @@ jobs:
           php-version: "${{ matrix.php }}"
           ini-values: >-
             mysql.default_host=127.0.0.1,
-            mysql.default_port=${{ job.services.mysql.ports['3306'] }},
+            mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: >-
             bcmath,
@@ -154,7 +160,6 @@ jobs:
           phpunit --version
           composer --version
           grunt --version
-          mysql --version
           lsb_release -a
           localectl list-locales
 
@@ -184,35 +189,35 @@ jobs:
 
       - name: Run PHPUnit default
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
 
       - name: Run PHPUnit ajax
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ajax
 
       - name: Run PHPUnit multisite
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite
 
       - name: Run PHPUnit ms-files
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ms-files
 
       - name: Run PHPUnit external-http
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http
 
       - name: Run PHPUnit restapi-jsclient
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:restapi-jsclient
 
       - name: Run PHPUnit wp-api-client-fixtures
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:wp-api-client-fixtures
