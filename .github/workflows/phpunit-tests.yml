@@ -88,7 +88,7 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u root --ppassword --silent; do
+          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u root -ppassword --silent; do
             sleep 1
           done
 
