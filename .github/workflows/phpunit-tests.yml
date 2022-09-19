@@ -42,6 +42,7 @@ jobs:
         memcached: [ false ]
         include:
           - php: '7.2'
+            mysql: '5.7'
             memcached: true
       fail-fast: false
 
