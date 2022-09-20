@@ -438,7 +438,6 @@ class Tests_Template extends WP_UnitTestCase {
 			'search'            => 'is_search',
 			'front_page'        => 'is_front_page',
 			'home'              => 'is_home',
-			'privacy_policy'    => 'is_privacy_policy',
 			'post_type_archive' => 'is_post_type_archive',
 			'taxonomy'          => 'is_tax',
 			'attachment'        => 'is_attachment',

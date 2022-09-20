@@ -221,5 +221,15 @@ class WP_Test_REST_Controller extends WP_Test_REST_TestCase {
 			),
 			$fields
 		);
+
+		$request->set_param( '_fields', 'somestring,someinteger' );
+		$fields = $controller->get_fields_for_response( $request );
+		$this->assertSame(
+			array(
+				'somestring',
+				'someinteger',
+			),
+			$fields
+		);
 	}
 }

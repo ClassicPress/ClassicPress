@@ -76,7 +76,7 @@ if ( is_multisite() ) :
 		 * By default, only one network exists and has a network ID of 1.
 		 */
 		function test_get_main_network_id_default() {
-				$this->assertSame( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 		}
 
 		/**
@@ -86,7 +86,7 @@ if ( is_multisite() ) :
 		function test_get_main_network_id_two_networks() {
 			self::factory()->network->create();
 
-				$this->assertSame( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 		}
 
 		/**

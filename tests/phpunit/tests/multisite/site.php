@@ -76,7 +76,7 @@ if ( is_multisite() ) :
 			$this->assertSame( array(), $_wp_switched_stack );
 			$this->assertFalse( ms_is_switched() );
 			$current_blog_id = get_current_blog_id();
-				$this->assertIsInt( $current_blog_id );
+			$this->assertIsInt( $current_blog_id );
 
 			wp_cache_set( 'switch-test', $current_blog_id, 'switch-test' );
 			$this->assertSame( $current_blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );

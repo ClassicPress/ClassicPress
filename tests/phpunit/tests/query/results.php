@@ -521,7 +521,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 
 		$this->assertCount( 4, $posts );
 		$this->assertTrue( $this->q->is_paged() );
-		$this->assertSame( $expected, wp_list_pluck( $posts, 'post_name' ) );
+		$this->assertSameSets( $expected, wp_list_pluck( $posts, 'post_name' ) );
 	}
 
 	/**

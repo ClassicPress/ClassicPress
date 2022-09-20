@@ -558,20 +558,4 @@ line 2<br/>
 		$this->assertEquals( $expected1, trim( wpautop( $content1 ) ) );
 		$this->assertEqualsIgnoreEOL( $expected2, trim( wpautop( $content2 ) ) );
 	}
-
-	/**
-	 * wpautop() should ignore inline scripts
-	 *
-	 * @see https://core.trac.wordpress.org/ticket/9437
-	 */
-	function test_that_wpautop_ignores_inline_scripts() {
-		$content =
-			'<script type="text/javascript">
-				var dummy = 1;
-			</script>';
-
-		$expected = '<p>' . $content . '</p>';
-
-		$this->assertSameIgnoreEOL( $expected, trim( wpautop( $content ) ) );
-	}
 }

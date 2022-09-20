@@ -105,7 +105,7 @@ if ( is_multisite() ) :
 
 			// Passing false (the default) as the second parameter should retrieve only good sites.
 			$blog_ids_of_user = array_keys( get_blogs_of_user( $user1_id, false ) );
-				$this->assertSame( $blog_ids, $blog_ids_of_user );
+			$this->assertSame( $blog_ids, $blog_ids_of_user );
 		}
 
 		/**

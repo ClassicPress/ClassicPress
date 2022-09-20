@@ -116,7 +116,7 @@ if ( is_multisite() ) :
 			update_blog_details( 1, array( 'path' => $path ) );
 			$site = get_site( 1 );
 
-				$this->assertSame( $expected, $site->path );
+			$this->assertSame( $expected, $site->path );
 		}
 
 		public function data_single_directory_path() {

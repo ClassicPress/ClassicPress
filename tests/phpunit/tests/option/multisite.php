@@ -99,7 +99,7 @@ if ( is_multisite() ) :
 
 		function test_with_another_site() {
 			$user_id = self::factory()->user->create();
-				$this->assertIsInt( $user_id );
+			$this->assertIsInt( $user_id );
 
 			$blog_id = self::factory()->blog->create(
 				array(

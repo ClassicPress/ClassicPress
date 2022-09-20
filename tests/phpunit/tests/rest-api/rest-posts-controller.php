@@ -4017,9 +4017,12 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	 * will trigger a wpdb error for testing purposes.
 	 */
 	public function error_insert_query( $query ) {
+		_unregister_post_type( 'youseeeme' );
 		if ( strpos( $query, 'INSERT' ) === 0 ) {
 			$query = '],';
 		}
+		remove_filter( 'rest_pre_dispatch', array( $this, 'wpSetUpBeforeRequest' ), 10, 3 );
+		remove_filter( 'posts_clauses', array( $this, 'save_posts_clauses' ), 10, 2 );
 		return $query;
 	}
 
