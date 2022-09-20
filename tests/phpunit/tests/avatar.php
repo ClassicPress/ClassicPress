@@ -6,8 +6,8 @@
  * @group avatar
  */
 class Tests_Avatar extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		update_option( 'show_avatars', '1' );
 	}
 
