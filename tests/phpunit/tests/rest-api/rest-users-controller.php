@@ -129,6 +129,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	public function set_up() {
 		parent::set_up();
 		$this->endpoint = new WP_REST_Users_Controller();
+		update_option( 'show_avatars', '1' );
 	}
 
 	public function test_register_routes() {
