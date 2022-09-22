@@ -854,19 +854,18 @@ function wp_dashboard_recent_posts( $args ) {
 
 		echo '<ul>';
 
-		$today    = current_time( 'Y-m-d' );
-		$tomorrow = current_datetime()->modify( '+1 day' )->format( 'Y-m-d' );
-		$year     = current_time( 'Y' );
+		$today    = date( 'Y-m-d', current_time( 'timestamp' ) );
+		$tomorrow = date( 'Y-m-d', strtotime( '+1 day', current_time( 'timestamp' ) ) );
 
 		while ( $posts->have_posts() ) {
 			$posts->the_post();
 
 			$time = get_the_time( 'U' );
-			if ( gmdate( 'Y-m-d', $time ) == $today ) {
+			if ( date( 'Y-m-d', $time ) == $today ) {
 				$relative = __( 'Today' );
-			} elseif ( gmdate( 'Y-m-d', $time ) == $tomorrow ) {
+			} elseif ( date( 'Y-m-d', $time ) == $tomorrow ) {
 				$relative = __( 'Tomorrow' );
-			} elseif ( gmdate( 'Y', $time ) !== $year ) {
+			} elseif ( date( 'Y', $time ) !== date( 'Y', current_time( 'timestamp' ) ) ) {
 				/* translators: date and time format for recent posts on the dashboard, from a different calendar year, see https://secure.php.net/date */
 				$relative = date_i18n( __( 'M jS Y' ), $time );
 			} else {

@@ -166,6 +166,8 @@ function get_permalink( $post = 0, $leavename = false ) {
 	$permalink = apply_filters( 'pre_post_link', $permalink, $post, $leavename );
 
 	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+		$unixtime = strtotime( $post->post_date );
+
 		$category = '';
 		if ( strpos( $permalink, '%category%' ) !== false ) {
 			$cats = get_the_category( $post->ID );
@@ -210,11 +212,9 @@ function get_permalink( $post = 0, $leavename = false ) {
 			$author     = $authordata->user_nicename;
 		}
 
-		// This is not an API call because the permalink is based on the stored post_date value,
-		// which should be parsed as local time regardless of the default PHP timezone.
-		$date = explode( ' ', str_replace( array( '-', ':' ), ' ', $post->post_date ) );
-
-		$rewritereplace = array(
+		$date           = explode( ' ', date( 'Y m d H i s', $unixtime ) );
+		$rewritereplace =
+		array(
 			$date[0],
 			$date[1],
 			$date[2],
@@ -227,10 +227,8 @@ function get_permalink( $post = 0, $leavename = false ) {
 			$author,
 			$post->post_name,
 		);
-
-		$permalink = home_url( str_replace( $rewritecode, $rewritereplace, $permalink ) );
-		$permalink = user_trailingslashit( $permalink, 'single' );
-
+		$permalink      = home_url( str_replace( $rewritecode, $rewritereplace, $permalink ) );
+		$permalink      = user_trailingslashit( $permalink, 'single' );
 	} else { // if they're not using the fancy permalink option
 		$permalink = home_url( '?p=' . $post->ID );
 	}
@@ -472,7 +470,7 @@ function get_attachment_link( $post = null, $leavename = false ) {
 function get_year_link( $year ) {
 	global $wp_rewrite;
 	if ( ! $year ) {
-		$year = current_time( 'Y' );
+		$year = gmdate( 'Y', current_time( 'timestamp' ) );
 	}
 	$yearlink = $wp_rewrite->get_year_permastruct();
 	if ( ! empty( $yearlink ) ) {
@@ -507,10 +505,10 @@ function get_year_link( $year ) {
 function get_month_link( $year, $month ) {
 	global $wp_rewrite;
 	if ( ! $year ) {
-		$year = current_time( 'Y' );
+		$year = gmdate( 'Y', current_time( 'timestamp' ) );
 	}
 	if ( ! $month ) {
-		$month = current_time( 'm' );
+		$month = gmdate( 'm', current_time( 'timestamp' ) );
 	}
 	$monthlink = $wp_rewrite->get_month_permastruct();
 	if ( ! empty( $monthlink ) ) {
@@ -548,13 +546,13 @@ function get_month_link( $year, $month ) {
 function get_day_link( $year, $month, $day ) {
 	global $wp_rewrite;
 	if ( ! $year ) {
-		$year = current_time( 'Y' );
+		$year = gmdate( 'Y', current_time( 'timestamp' ) );
 	}
 	if ( ! $month ) {
-		$month = current_time( 'm' );
+		$month = gmdate( 'm', current_time( 'timestamp' ) );
 	}
 	if ( ! $day ) {
-		$day = current_time( 'j' );
+		$day = gmdate( 'j', current_time( 'timestamp' ) );
 	}
 
 	$daylink = $wp_rewrite->get_day_permastruct();

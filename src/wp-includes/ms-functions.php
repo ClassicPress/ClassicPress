@@ -519,7 +519,6 @@ function wpmu_validate_user_signup( $user_name, $user_email ) {
 		$registered_at = mysql2date( 'U', $signup->registered );
 		$now           = time();
 		$diff          = $now - $registered_at;
-
 		// If registered more than two days ago, cancel registration and let this signup go through.
 		if ( $diff > 2 * DAY_IN_SECONDS ) {
 			$wpdb->delete( $wpdb->signups, array( 'user_login' => $user_name ) );

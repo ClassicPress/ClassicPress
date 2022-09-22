@@ -74,8 +74,8 @@ class WP_Date_Query {
 	 *
 	 *     @type array {
 	 *         @type string $column   Optional. The column to query against. If undefined, inherits the value of
-	 *                                the `$default_column` parameter. See WP_Date_Query::validate_column() and
-	 *                                the {@see 'date_query_valid_columns'} filter for the list of accepted values.
+	 *                                the `$default_column` parameter. Accepts 'post_date', 'post_date_gmt',
+	 *                                'post_modified','post_modified_gmt', 'comment_date', 'comment_date_gmt'.
 	 *                                Default 'post_date'.
 	 *         @type string $compare  Optional. The comparison operator. Accepts '=', '!=', '>', '>=', '<', '<=',
 	 *                                'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN'. Default '='.
@@ -104,11 +104,11 @@ class WP_Date_Query {
 	 *                 @type string $day   Optional when passing array.The day of the month. Accepts numbers 1-31.
 	 *                                     Default (string:empty)|(array:last day of month).
 	 *             }
-	 *             @type string       $column        Optional. Used to add a clause comparing a column other than
-	 *                                               the column specified in the top-level `$column` parameter.
-	 *                                               See WP_Date_Query::validate_column() and
-	 *                                               the {@see 'date_query_valid_columns'} filter for the list
-	 *                                                of accepted values. Default is the value of top-level `$column`.
+	 *             @type string       $column        Optional. Used to add a clause comparing a column other than the
+	 *                                               column specified in the top-level `$column` parameter. Accepts
+	 *                                               'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt',
+	 *                                               'comment_date', 'comment_date_gmt'. Default is the value of
+	 *                                               top-level `$column`.
 	 *             @type string       $compare       Optional. The comparison operator. Accepts '=', '!=', '>', '>=',
 	 *                                               '<', '<=', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN'. 'IN',
 	 *                                               'NOT IN', 'BETWEEN', and 'NOT BETWEEN'. Comparisons support
@@ -140,24 +140,28 @@ class WP_Date_Query {
 	 *         }
 	 *     }
 	 * }
-	 * @param array $default_column Optional. Default column to query against. See WP_Date_Query::validate_column()
-	 *                              and the {@see 'date_query_valid_columns'} filter for the list of accepted values.
-	 *                              Default 'post_date'.
+	 * @param array $default_column Optional. Default column to query against. Default 'post_date'.
+	 *                              Accepts 'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt',
+	 *                              'comment_date', 'comment_date_gmt'.
 	 */
 	public function __construct( $date_query, $default_column = 'post_date' ) {
-		if ( empty( $date_query ) || ! is_array( $date_query ) ) {
-			return;
-		}
-
 		if ( isset( $date_query['relation'] ) && 'OR' === strtoupper( $date_query['relation'] ) ) {
 			$this->relation = 'OR';
 		} else {
 			$this->relation = 'AND';
 		}
 
+		if ( ! is_array( $date_query ) ) {
+			return;
+		}
+
 		// Support for passing time-based keys in the top level of the $date_query array.
-		if ( ! isset( $date_query[0] ) ) {
+		if ( ! isset( $date_query[0] ) && ! empty( $date_query ) ) {
 			$date_query = array( $date_query );
+		}
+
+		if ( empty( $date_query ) ) {
+			return;
 		}
 
 		if ( ! empty( $date_query['column'] ) ) {
@@ -313,7 +317,7 @@ class WP_Date_Query {
 				$_year = $date_query['year'];
 			}
 
-			$max_days_of_year = gmdate( 'z', mktime( 0, 0, 0, 12, 31, $_year ) ) + 1;
+			$max_days_of_year = date( 'z', mktime( 0, 0, 0, 12, 31, $_year ) ) + 1;
 		} else {
 			// otherwise we use the max of 366 (leap-year)
 			$max_days_of_year = 366;
@@ -348,7 +352,7 @@ class WP_Date_Query {
 			 * If we have a specific year, use it to calculate number of weeks.
 			 * Note: the number of weeks in a year is the date in which Dec 28 appears.
 			 */
-			$week_count = gmdate( 'W', mktime( 0, 0, 0, 12, 28, $_year ) );
+			$week_count = date( 'W', mktime( 0, 0, 0, 12, 28, $_year ) );
 
 		} else {
 			// Otherwise set the week-count to a maximum of 53.
@@ -494,12 +498,11 @@ class WP_Date_Query {
 			 *
 			 * @since WP-3.7.0
 			 * @since WP-4.1.0 Added 'user_registered' to the default recognized columns.
-			 * @since WP-4.6.0 Added 'registered' and 'last_updated' to the default recognized columns.
 			 *
 			 * @param array $valid_columns An array of valid date query columns. Defaults
 			 *                             are 'post_date', 'post_date_gmt', 'post_modified',
 			 *                             'post_modified_gmt', 'comment_date', 'comment_date_gmt',
-			 *                             'user_registered', 'registered', 'last_updated'.
+			 *                             'user_registered'
 			 */
 			if ( ! in_array( $column, apply_filters( 'date_query_valid_columns', $valid_columns ) ) ) {
 				$column = 'post_date';
@@ -850,7 +853,7 @@ class WP_Date_Query {
 	 *
 	 * You can pass an array of values (year, month, etc.) with missing parameter values being defaulted to
 	 * either the maximum or minimum values (controlled by the $default_to parameter). Alternatively you can
-	 * pass a string that will be passed to date_create().
+	 * pass a string that will be run through strtotime().
 	 *
 	 * @since WP-3.7.0
 	 *
@@ -862,6 +865,8 @@ class WP_Date_Query {
 	 * @return string|false A MySQL format date/time or false on failure
 	 */
 	public function build_mysql_datetime( $datetime, $default_to_max = false ) {
+		$now = current_time( 'timestamp' );
+
 		if ( ! is_array( $datetime ) ) {
 
 			/*
@@ -902,23 +907,15 @@ class WP_Date_Query {
 
 			// If no match is found, we don't support default_to_max.
 			if ( ! is_array( $datetime ) ) {
-				$wp_timezone = wp_timezone();
-
-				// Assume local timezone if not provided.
-				$dt = date_create( $datetime, $wp_timezone );
-
-				if ( false === $dt ) {
-					return gmdate( 'Y-m-d H:i:s', false );
-				}
-
-				return $dt->setTimezone( $wp_timezone )->format( 'Y-m-d H:i:s' );
+				// @todo Timezone issues here possibly
+				return gmdate( 'Y-m-d H:i:s', strtotime( $datetime, $now ) );
 			}
 		}
 
 		$datetime = array_map( 'absint', $datetime );
 
 		if ( ! isset( $datetime['year'] ) ) {
-			$datetime['year'] = current_time( 'Y' );
+			$datetime['year'] = gmdate( 'Y', $now );
 		}
 
 		if ( ! isset( $datetime['month'] ) ) {
@@ -926,7 +923,7 @@ class WP_Date_Query {
 		}
 
 		if ( ! isset( $datetime['day'] ) ) {
-			$datetime['day'] = ( $default_to_max ) ? (int) gmdate( 't', mktime( 0, 0, 0, $datetime['month'], 1, $datetime['year'] ) ) : 1;
+			$datetime['day'] = ( $default_to_max ) ? (int) date( 't', mktime( 0, 0, 0, $datetime['month'], 1, $datetime['year'] ) ) : 1;
 		}
 
 		if ( ! isset( $datetime['hour'] ) ) {
