@@ -45,13 +45,11 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'trackback',
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 				)
 			);
-			$now             -= 10 * $i;
+
+			$now              -= 10 * $i;
 		}
 
 		$pingbacks = array();
@@ -60,10 +58,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'pingback',
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 				)
 			);
 			$now            -= 10 * $i;
@@ -141,10 +136,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'trackback',
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now - ( 10 * $i )
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( 10 * $i ) ),
 				)
 			);
 		}
@@ -231,33 +223,25 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_cache_should_be_invalidated_when_older_comment_is_published() {
 		$now = time();
 
-		$p  = self::factory()->post->create();
+		$p = self::factory()->post->create();
+
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 20
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
 				'comment_approved' => 0,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 30
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
 			)
 		);
 
@@ -280,19 +264,13 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$comments_0[] = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $posts[0],
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now - ( $i * 60 )
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
 				)
 			);
 			$comments_1[] = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $posts[1],
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now - ( $i * 60 )
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
 				)
 			);
 		}
@@ -316,10 +294,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$parent                = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $post,
-					'comment_date_gmt' => date(
-						'Y-m-d H:i:s',
-						$now - ( $i * 60 )
-					),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
 				)
 			);
 			$comment_parents[ $i ] = $parent;
@@ -327,7 +302,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$child                  = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $post,
-					'comment_date_gmt' => date( 'Y-m-d H:i:s', $now - ( $i * 59 ) ),
+					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 59 ) ),
 					'comment_parent'   => $parent,
 				)
 			);
@@ -359,32 +334,24 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_comments_per_page_option_should_be_fallback_when_query_var_is_not_available() {
 		$now = time();
 
-		$p  = self::factory()->post->create();
+		$p = self::factory()->post->create();
+
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 20
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 30
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
 			)
 		);
 
@@ -401,41 +368,30 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_should_ignore_comment_order() {
 		$now = time();
 
-		$p  = self::factory()->post->create();
+		$p = self::factory()->post->create();
+
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 20
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 30
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
 			)
 		);
 		$c4 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 40
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 40 ),
 			)
 		);
 
@@ -453,41 +409,30 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	public function test_should_ignore_default_comment_page() {
 		$now = time();
 
-		$p  = self::factory()->post->create();
+		$p = self::factory()->post->create();
+
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 20
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 30
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
 			)
 		);
 		$c4 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-				'comment_date_gmt' => date(
-					'Y-m-d H:i:s',
-					$now - 40
-				),
+				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 40 ),
 			)
 		);
 

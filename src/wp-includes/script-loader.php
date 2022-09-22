@@ -835,8 +835,8 @@ function wp_default_scripts( &$scripts ) {
 				'publishOn'          => __( 'Publish on:' ),
 				'publishOnFuture'    => __( 'Schedule for:' ),
 				'publishOnPast'      => __( 'Published on:' ),
-				/* translators: 1: month, 2: day, 3: year, 4: hour, 5: minute */
-				'dateFormat'         => __( '%1$s %2$s, %3$s @ %4$s:%5$s' ),
+				/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
+				'dateFormat'         => __( '%1$s %2$s, %3$s at %4$s:%5$s' ),
 				'showcomm'           => __( 'Show more comments' ),
 				'endcomm'            => __( 'No more comments found.' ),
 				'publish'            => __( 'Publish' ),

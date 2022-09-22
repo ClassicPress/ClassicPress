@@ -27,7 +27,7 @@ class Tests_Basic extends WP_UnitTestCase {
 
 	function test_license_cp_copyright_years() {
 		$license   = file_get_contents( ABSPATH . 'license.txt' );
-		$this_year = date( 'Y' );
+		$this_year = gmdate( 'Y' );
 
 		// Check ClassicPress copyright years
 		preg_match(

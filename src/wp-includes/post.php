@@ -5906,8 +5906,9 @@ function wp_check_for_changed_slugs( $post_id, $post, $post_before ) {
  * @param WP_Post $post_before The Previous Post Object
  */
 function wp_check_for_changed_dates( $post_id, $post, $post_before ) {
-	$previous_date = date( 'Y-m-d', strtotime( $post_before->post_date ) );
-	$new_date      = date( 'Y-m-d', strtotime( $post->post_date ) );
+	$previous_date = gmdate( 'Y-m-d', strtotime( $post_before->post_date ) );
+	$new_date      = gmdate( 'Y-m-d', strtotime( $post->post_date ) );
+
 	// Don't bother if it hasn't changed.
 	if ( $new_date == $previous_date ) {
 		return;
@@ -6044,7 +6045,7 @@ function get_posts_by_author_sql( $post_type, $full = true, $post_author = null,
  *                          'gmt' uses the `post_modified_gmt` field.
  *                          Default 'server'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
- * @return string The date of the last post.
+ * @return string The date of the last post, or false on failure.
  */
 function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
 	/**
@@ -6052,7 +6053,7 @@ function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
 	 *
 	 * @since WP-2.3.0
 	 *
-	 * @param string $date     Date the last post was published.
+	 * @param string|false $date     Date the last post was published. False on failure.
 	 * @param string $timezone Location to use for getting the post published date.
 	 *                         See get_lastpostdate() for accepted `$timezone` values.
 	 */
@@ -6073,7 +6074,7 @@ function get_lastpostdate( $timezone = 'server', $post_type = 'any' ) {
  *                          for information on accepted values.
  *                          Default 'server'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
- * @return string The timestamp.
+ * @return string The timestamp in 'Y-m-d H:i:s' format, or false on failure.
  */
 function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
 	/**
@@ -6104,7 +6105,8 @@ function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
 	 *
 	 * @since WP-2.3.0
 	 *
-	 * @param string $lastpostmodified Date the last post was modified.
+	 * @param string|false $lastpostmodified The most recent time that a post was modified, in 'Y-m-d H:i:s' format.
+	 *                                       False on failure.
 	 * @param string $timezone         Location to use for getting the post modified date.
 	 *                                 See get_lastpostdate() for accepted `$timezone` values.
 	 */
@@ -6124,7 +6126,7 @@ function get_lastpostmodified( $timezone = 'server', $post_type = 'any' ) {
  *                          for information on accepted values.
  * @param string $field     Post field to check. Accepts 'date' or 'modified'.
  * @param string $post_type Optional. The post type to check. Default 'any'.
- * @return string|false The timestamp.
+ * @return string|false The timestamp in 'Y-m-d H:i:s' format, or false on failure.
  */
 function _get_last_post_time( $timezone, $field, $post_type = 'any' ) {
 	global $wpdb;
@@ -6161,7 +6163,7 @@ function _get_last_post_time( $timezone, $field, $post_type = 'any' ) {
 			$date = $wpdb->get_var( "SELECT post_{$field} FROM $wpdb->posts WHERE post_status = 'publish' AND post_type IN ({$post_types}) ORDER BY post_{$field}_gmt DESC LIMIT 1" );
 			break;
 		case 'server':
-			$add_seconds_server = date( 'Z' );
+			$add_seconds_server = gmdate( 'Z' );
 			$date               = $wpdb->get_var( "SELECT DATE_ADD(post_{$field}_gmt, INTERVAL '$add_seconds_server' SECOND) FROM $wpdb->posts WHERE post_status = 'publish' AND post_type IN ({$post_types}) ORDER BY post_{$field}_gmt DESC LIMIT 1" );
 			break;
 	}
