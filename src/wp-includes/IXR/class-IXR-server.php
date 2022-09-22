@@ -145,7 +145,7 @@ EOD;
             header('Content-Type: text/xml; charset='.$charset);
         else
             header('Content-Type: text/xml');
-        header('Date: '.gmdate('r'));
+        header('Date: '.date('r'));
         echo $xml;
         exit;
     }
