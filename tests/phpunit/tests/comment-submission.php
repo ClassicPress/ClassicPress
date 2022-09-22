@@ -7,9 +7,15 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 	protected $preprocess_comment_data = array();
 
-	function setUp() {
+	public function setUp() {
 		parent::setUp();
 		require_once ABSPATH . WPINC . '/class-phpass.php';
+		update_option( 'default_comment_status', 'open' );
+	}
+
+	public function tearDown() {
+		update_option( 'default_comment_status', 'closed' );
+		parent::tearDown();
 	}
 
 	public function test_submitting_comment_to_invalid_post_returns_error() {
