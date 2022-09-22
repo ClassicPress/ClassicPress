@@ -213,9 +213,9 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 				update_post_meta( $attachment_id, '_thumbnail_id', $sub_attachment_id );
 			}
 		}
-	}
-	// Try to create image thumbnails for PDFs
-	elseif ( 'application/pdf' === $mime_type ) {
+	} elseif ( 'application/pdf' === $mime_type ) {
+		// Try to create image thumbnails for PDFs.
+
 		$fallback_sizes = array(
 			'thumbnail',
 			'medium',
@@ -291,6 +291,11 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 	// Remove the blob of binary data from the array.
 	if ( $metadata ) {
 		unset( $metadata['image']['data'] );
+	}
+
+	// Capture file size for cases where it has not been captured yet, such as PDFs.
+	if ( ! isset( $metadata['filesize'] ) && file_exists( $file ) ) {
+		$metadata['filesize'] = wp_filesize( $file );
 	}
 
 	/**

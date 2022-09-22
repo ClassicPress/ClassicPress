@@ -104,9 +104,7 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 		if ( intval( $content_width ) > 0 && 'edit' === $context ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	}
-	// $size == 'full' has no constraint
-	else {
+	} else { // $size == 'full' has no constraint
 		$max_width  = $width;
 		$max_height = $height;
 	}
@@ -3241,7 +3239,7 @@ function wp_prepare_attachment_for_js( $attachment ) {
 	if ( isset( $meta['filesize'] ) ) {
 		$bytes = $meta['filesize'];
 	} elseif ( file_exists( $attached_file ) ) {
-		$bytes = filesize( $attached_file );
+		$bytes = wp_filesize( $attached_file );
 	} else {
 		$bytes = '';
 	}

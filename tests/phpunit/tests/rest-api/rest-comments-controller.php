@@ -27,6 +27,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	protected $endpoint;
 
 	public static function wpSetUpBeforeClass( $factory ) {
+		update_option( 'default_comment_status', 'open' );
 		self::$superadmin_id = $factory->user->create(
 			array(
 				'role'       => 'administrator',
@@ -111,11 +112,14 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		wp_delete_post( self::$trash_id, true );
 		wp_delete_post( self::$approved_id, true );
 		wp_delete_post( self::$hold_id, true );
+
+		update_option( 'default_comment_status', 'closed' );
 	}
 
 	public function setUp() {
 		parent::setUp();
 		$this->endpoint = new WP_REST_Comments_Controller;
+		update_option( 'show_avatars', '1' );
 		if ( is_multisite() ) {
 			update_site_option( 'site_admins', array( 'superadmin' ) );
 		}
