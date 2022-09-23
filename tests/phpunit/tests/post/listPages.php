@@ -30,7 +30,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		global $wpdb;
 		$wpdb->query( 'TRUNCATE ' . $wpdb->prefix . 'posts' );
 		$this->time = time();
-		$post_date  = date( 'Y-m-d H:i:s', $this->time );
+		$post_date = gmdate( 'Y-m-d H:i:s', $this->time );
 		$pages      = array();
 		self::factory()->user->create();
 		$pages[] = self::factory()->post->create(
@@ -135,7 +135,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'depth'     => 1,
 			'show_date' => true,
 		);
-		$date                  = date( get_option( 'date_format' ), $this->time );
+		$date                  = gmdate( get_option( 'date_format' ), $this->time );
 		$expected['show_date'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a> ' . $date . '</li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a> ' . $date . '</li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '</li>
@@ -151,7 +151,8 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'show_date'   => true,
 			'date_format' => 'l, F j, Y',
 		);
-		$date                    = date( $args['date_format'], $this->time );
+
+		$date                    = gmdate( $args['date_format'], $this->time );
 		$expected['date_format'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a> ' . $date . '
 <ul class=\'children\'>
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a> ' . $date . '</li>
