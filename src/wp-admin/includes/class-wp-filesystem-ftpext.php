@@ -525,20 +525,12 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 					$b['time'] = mktime( $b['hour'], $b['minute'], 0, $b['month'], $b['day'], $b['year'] );
 					$b['name'] = $lucifer[7];
 				} else {
-					$b['month'] = $lucifer[5];
-					$b['day']   = $lucifer[6];
-					if ( preg_match( '/([0-9]{2}):([0-9]{2})/', $lucifer[7], $l2 ) ) {
-						$b['year']   = gmdate( 'Y' );
-						$b['hour']   = $l2[1];
-						$b['minute'] = $l2[2];
-					} else {
-						$b['year'] = $lucifer[7];
-						$b['hour'] = 0;
-						$b['minute'] = 0;
-					}
-					$b['time'] = strtotime( sprintf( '%d %s %d %02d:%02d', $b['day'], $b['month'], $b['year'], $b['hour'], $b['minute'] ) );
-					$b['name'] = $lucifer[8];
+					$b['year']   = $lucifer[7];
+					$b['hour']   = 0;
+					$b['minute'] = 0;
 				}
+				$b['time'] = strtotime( sprintf( '%d %s %d %02d:%02d', $b['day'], $b['month'], $b['year'], $b['hour'], $b['minute'] ) );
+				$b['name'] = $lucifer[8];
 			}
 		}
 
