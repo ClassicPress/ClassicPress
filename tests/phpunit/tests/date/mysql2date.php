@@ -34,8 +34,13 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28992
 	 */
+<<<<<<< HEAD
 	function test_mysql2date_should_format_time() {
 		$timezone = 'Europe/Kiev';
+=======
+	public function test_mysql2date_should_format_time() {
+		$timezone = 'Europe/Helsinki';
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		update_option( 'timezone_string', $timezone );
 		$datetime = new DateTime( 'now', new DateTimeZone( $timezone ) );
 		$rfc3339  = $datetime->format( DATE_RFC3339 );
@@ -48,8 +53,13 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28992
 	 */
+<<<<<<< HEAD
 	function test_mysql2date_should_format_time_with_changed_time_zone() {
 		$timezone = 'Europe/Kiev';
+=======
+	public function test_mysql2date_should_format_time_with_changed_time_zone() {
+		$timezone = 'Europe/Helsinki';
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( $timezone );
 		update_option( 'timezone_string', $timezone );
@@ -64,8 +74,13 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28992
 	 */
+<<<<<<< HEAD
 	function test_mysql2date_should_return_wp_timestamp() {
 		$timezone = 'Europe/Kiev';
+=======
+	public function test_mysql2date_should_return_wp_timestamp() {
+		$timezone = 'Europe/Helsinki';
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		update_option( 'timezone_string', $timezone );
 		$datetime     = new DateTime( 'now', new DateTimeZone( $timezone ) );
 		$wp_timestamp = $datetime->getTimestamp() + $datetime->getOffset();
@@ -78,8 +93,13 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/28992
 	 */
+<<<<<<< HEAD
 	function test_mysql2date_should_return_unix_timestamp_for_gmt_time() {
 		$timezone = 'Europe/Kiev';
+=======
+	public function test_mysql2date_should_return_unix_timestamp_for_gmt_time() {
+		$timezone = 'Europe/Helsinki';
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		update_option( 'timezone_string', $timezone );
 		$datetime  = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
 		$timestamp = $datetime->getTimestamp();
