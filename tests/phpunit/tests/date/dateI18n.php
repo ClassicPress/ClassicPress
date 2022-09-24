@@ -27,29 +27,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$datetime     = new DateTime( 'now', new DateTimeZone( $timezone ) );
 		$wp_timestamp = $datetime->getTimestamp() + $datetime->getOffset();
 
-<<<<<<< HEAD
 		$this->assertSame( $wp_timestamp, date_i18n( 'U', 'invalid' ), '', 5 );
-=======
-		$this->assertEqualsWithDelta( $wp_timestamp, date_i18n( 'U', 'invalid' ), 5, 'The dates should be equal' );
-	}
-
-	/**
-	 * @ticket 28636
-	 */
-	public function test_should_handle_zero_timestamp() {
-		$timezone = 'Europe/Helsinki';
-		update_option( 'timezone_string', $timezone );
-
-		$datetime = DateTimeImmutable::createFromFormat(
-			'Y-m-d H:i:s',
-			'1970-01-01 00:00:00',
-			new DateTimeZone( $timezone )
-		);
-		$rfc3339  = $datetime->format( DATE_RFC3339 );
-
-		$this->assertSame( 0, date_i18n( 'U', 0 ) );
-		$this->assertSame( $rfc3339, date_i18n( DATE_RFC3339, 0 ) );
->>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 	}
 
 	public function test_should_format_date() {
