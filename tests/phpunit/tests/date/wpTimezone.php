@@ -7,9 +7,6 @@
 class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/24730
-=======
 	 * Cleans up.
 	 */
 	public function tear_down() {
@@ -21,8 +18,7 @@ class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 24730
->>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
+	 * @see https://core.trac.wordpress.org/ticket/24730
 	 *
 	 * @dataProvider timezone_offset_provider
 	 *

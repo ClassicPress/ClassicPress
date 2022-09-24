@@ -6,18 +6,14 @@
  */
 class Tests_Date_mysql2date extends WP_UnitTestCase {
 
-	function tearDown() {
+	function tear_down() {
 		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( 'UTC' );
 
-<<<<<<< HEAD
-		parent::tearDown();
-=======
 		// Reset the timezone option to the default value.
 		update_option( 'timezone_string', '' );
 
 		parent::tear_down();
->>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
 	}
 
 	/**

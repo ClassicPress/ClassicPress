@@ -7,9 +7,6 @@
 class Tests_Date_I18n extends WP_UnitTestCase {
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/28636
-=======
 	 * Cleans up.
 	 */
 	public function tear_down() {
@@ -21,8 +18,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28636
->>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
+	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_return_current_time_on_invalid_timestamp() {
 		$timezone = 'Europe/Kiev';

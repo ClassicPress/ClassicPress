@@ -7,9 +7,6 @@
 class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/34378
-=======
 	 * Cleans up.
 	 */
 	public function tear_down() {
@@ -21,8 +18,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34378
->>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
+	 * @see https://core.trac.wordpress.org/ticket/34378
 	 */
 	public function test_current_time_with_date_format_string() {
 		update_option( 'gmt_offset', 6 );
