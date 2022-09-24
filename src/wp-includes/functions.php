@@ -5205,8 +5205,10 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$mo_loaded = true;
 	}
 
+	$tz_identifiers = timezone_identifiers_list();
 	$zonen = array();
-	foreach ( timezone_identifiers_list() as $zone ) {
+
+	foreach ( $tz_identifiers as $zone ) {
 		$zone = explode( '/', $zone );
 		if ( ! in_array( $zone[0], $continents ) ) {
 			continue;
@@ -5239,6 +5241,13 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 
 	if ( empty( $selected_zone ) ) {
 		$structure[] = '<option selected="selected" value="">' . __( 'Select a city' ) . '</option>';
+	}
+
+	// If this is a deprecated, but valid, timezone string, display it at the top of the list as-is.
+	if ( in_array( $selected_zone, $tz_identifiers, true ) === false
+		&& in_array( $selected_zone, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ), true )
+	) {
+		$structure[] = '<option selected="selected" value="' . esc_attr( $selected_zone ) . '">' . esc_html( $selected_zone ) . '</option>';
 	}
 
 	foreach ( $zonen as $key => $zone ) {
