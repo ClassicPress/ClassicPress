@@ -16,37 +16,37 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$datetime     = new DateTime( 'now', new DateTimeZone( $timezone ) );
 		$wp_timestamp = $datetime->getTimestamp() + $datetime->getOffset();
 
-		$this->assertEquals( $wp_timestamp, date_i18n( 'U', 'invalid' ), '', 5 );
+		$this->assertSame( $wp_timestamp, date_i18n( 'U', 'invalid' ), '', 5 );
 	}
 
 	public function test_should_format_date() {
-		$this->assertEquals( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 'The dates should be equal', 2 );
+		$this->assertSame( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 'The dates should be equal', 2 );
 	}
 
 	public function test_should_use_custom_timestamp() {
-		$this->assertEquals( '2012-12-01 00:00:00', date_i18n( 'Y-m-d H:i:s', strtotime( '2012-12-01 00:00:00' ) ) );
+		$this->assertSame( '2012-12-01 00:00:00', date_i18n( 'Y-m-d H:i:s', strtotime( '2012-12-01 00:00:00' ) ) );
 	}
 
 	public function test_date_should_be_in_gmt() {
-		$this->assertEquals( strtotime( gmdate( DATE_RFC3339 ) ), strtotime( date_i18n( DATE_RFC3339, false, true ) ), 'The dates should be equal', 2 );
+		$this->assertSame( strtotime( gmdate( DATE_RFC3339 ) ), strtotime( date_i18n( DATE_RFC3339, false, true ) ), 'The dates should be equal', 2 );
 	}
 
 	public function test_custom_timezone_setting() {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( strtotime( gmdate( 'Y-m-d H:i:s', time() + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 'The dates should be equal', 2 );
+		$this->assertSame( strtotime( gmdate( 'Y-m-d H:i:s', time() + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 'The dates should be equal', 2 );
 	}
 
 	public function test_date_should_be_in_gmt_with_custom_timezone_setting() {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s', false, true ) ), 'The dates should be equal', 2 );
+		$this->assertSame( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s', false, true ) ), 'The dates should be equal', 2 );
 	}
 
 	public function test_date_should_be_in_gmt_with_custom_timezone_setting_and_timestamp() {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( '2012-12-01 00:00:00', date_i18n( 'Y-m-d H:i:s', strtotime( '2012-12-01 00:00:00' ) ) );
+		$this->assertSame( '2012-12-01 00:00:00', date_i18n( 'Y-m-d H:i:s', strtotime( '2012-12-01 00:00:00' ) ) );
 	}
 
 	public function test_adjusts_format_based_on_locale() {
@@ -69,13 +69,13 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		// Restore original locale.
 		$GLOBALS['wp_locale'] = $original_locale;
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	public function test_adjusts_format_based_on_timezone_string() {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( '2012-12-01 00:00:00 CST -06:00 America/Regina', date_i18n( 'Y-m-d H:i:s T P e', strtotime( '2012-12-01 00:00:00' ) ) );
+		$this->assertSame( '2012-12-01 00:00:00 CST -06:00 America/Regina', date_i18n( 'Y-m-d H:i:s T P e', strtotime( '2012-12-01 00:00:00' ) ) );
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$datetime = new DateTime( 'now', $datetimezone );
 		$datetime = new DateTime( $datetime->format( 'P' ) );
 
-		$this->assertEquals( $datetime->format( $timezone_formats ), date_i18n( $timezone_formats ) );
+		$this->assertSame( $datetime->format( $timezone_formats ), date_i18n( $timezone_formats ) );
 	}
 
 	/**
@@ -103,8 +103,8 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_date_i18n_handles_shorthand_formats( $short, $full ) {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( strtotime( date_i18n( $full ) ), strtotime( date_i18n( $short ) ), 'The dates should be equal', 2 );
-		$this->assertEquals( $short, date_i18n( '\\' . $short ) );
+		$this->assertSame( strtotime( date_i18n( $full ) ), strtotime( date_i18n( $short ) ), 'The dates should be equal', 2 );
+		$this->assertSame( $short, date_i18n( '\\' . $short ) );
 	}
 
 	public function data_formats() {
@@ -130,9 +130,9 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$timestamp    = $datetime->getTimestamp();
 		$wp_timestamp = $timestamp + $datetime->getOffset();
 
-		$this->assertEquals( $wp_timestamp, date_i18n( 'U' ), 'The dates should be equal', 2 );
-		$this->assertEquals( $timestamp, date_i18n( 'U', false, true ), 'The dates should be equal', 2 );
-		$this->assertEquals( $wp_timestamp, date_i18n( 'U', $wp_timestamp ) );
+		$this->assertSame( $wp_timestamp, date_i18n( 'U' ), 'The dates should be equal', 2 );
+		$this->assertSame( $timestamp, date_i18n( 'U', false, true ), 'The dates should be equal', 2 );
+		$this->assertSame( $wp_timestamp, date_i18n( 'U', $wp_timestamp ) );
 	}
 
 	/**
@@ -141,7 +141,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_swatch_internet_time_with_wp_timestamp() {
 		update_option( 'timezone_string', 'America/Regina' );
 
-		$this->assertEquals( gmdate( 'B' ), date_i18n( 'B' ) );
+		$this->assertSame( gmdate( 'B' ), date_i18n( 'B' ) );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_should_handle_escaped_formats() {
 		$format = 'D | \D | \\D | \\\D | \\\\D | \\\\\D | \\\\\\D';
 
-		$this->assertEquals( gmdate( $format ), date_i18n( $format ) );
+		$this->assertSame( gmdate( $format ), date_i18n( $format ) );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$wp_timestamp = strtotime( $time );
 		$format       = 'I ' . DATE_RFC3339;
 
-		$this->assertEquals( $datetime->format( $format ), date_i18n( $format, $wp_timestamp ) );
+		$this->assertSame( $datetime->format( $format ), date_i18n( $format, $wp_timestamp ) );
 	}
 
 	public function dst_times() {
