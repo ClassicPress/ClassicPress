@@ -7,7 +7,22 @@
 class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/24730
+=======
+	 * Cleans up.
+	 */
+	public function tear_down() {
+		// Reset changed options to their default value.
+		update_option( 'gmt_offset', 0 );
+		update_option( 'timezone_string', '' );
+
+		parent::tear_down();
+	}
+
+	/**
+	 * @ticket 24730
+>>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
 	 *
 	 * @dataProvider timezone_offset_provider
 	 *

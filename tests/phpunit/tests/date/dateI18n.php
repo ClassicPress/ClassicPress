@@ -7,7 +7,22 @@
 class Tests_Date_I18n extends WP_UnitTestCase {
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/28636
+=======
+	 * Cleans up.
+	 */
+	public function tear_down() {
+		// Reset changed options to their default value.
+		update_option( 'gmt_offset', 0 );
+		update_option( 'timezone_string', '' );
+
+		parent::tear_down();
+	}
+
+	/**
+	 * @ticket 28636
+>>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
 	 */
 	public function test_should_return_current_time_on_invalid_timestamp() {
 		$timezone = 'Europe/Kiev';

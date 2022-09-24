@@ -8,7 +8,21 @@
 class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/28310
+=======
+	 * Cleans up.
+	 */
+	public function tear_down() {
+		// Reset the timezone option to the default value.
+		update_option( 'timezone_string', '' );
+
+		parent::tear_down();
+	}
+
+	/**
+	 * @ticket 28310
+>>>>>>> c73c0916dd (Tests: Reset timezone-related options if the tests change them.)
 	 */
 	public function test_get_post_time_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
