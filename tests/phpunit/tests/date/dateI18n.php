@@ -90,12 +90,9 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/34835
-=======
 	 * Ensures that deprecated timezone strings are handled correctly.
 	 *
-	 * @ticket 56468
+	 * @see https://core.trac.wordpress.org/ticket/56468
 	 */
 	public function test_adjusts_format_based_on_deprecated_timezone_string() {
 		update_option( 'timezone_string', 'America/Buenos_Aires' ); // This timezone was deprecated pre-PHP 5.6.
@@ -110,8 +107,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34835
->>>>>>> a2faa0c897 (Tests: Add tests with deprecated timezone strings.)
+	 * @see https://core.trac.wordpress.org/ticket/34835
 	 */
 	public function test_gmt_offset_should_output_correct_timezone() {
 		$timezone_formats = 'P I O T Z e';

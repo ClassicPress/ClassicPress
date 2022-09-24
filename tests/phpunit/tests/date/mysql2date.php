@@ -62,12 +62,9 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/28992
-=======
 	 * Ensures that deprecated timezone strings are handled correctly.
 	 *
-	 * @ticket 56468
+	 * @see https://core.trac.wordpress.org/ticket/56468
 	 */
 	public function test_mysql2date_should_format_time_with_deprecated_time_zone() {
 		$timezone = 'America/Buenos_Aires'; // This timezone was deprecated pre-PHP 5.6.
@@ -81,8 +78,7 @@ class Tests_Date_mysql2date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28992
->>>>>>> a2faa0c897 (Tests: Add tests with deprecated timezone strings.)
+	 * @see https://core.trac.wordpress.org/ticket/28992
 	 */
 	public function test_mysql2date_should_return_wp_timestamp() {
 		$timezone = 'Europe/Helsinki';
