@@ -346,7 +346,11 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 	?>
 	<br />
 	<?php
+<<<<<<< HEAD
 	if ( in_array( $tzstring, timezone_identifiers_list() ) ) {
+=======
+	if ( in_array( $tzstring, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ), true ) ) {
+>>>>>>> 3beda5b203 (Date/Time: Minor tweak to support deprecated timezones on General Settings screen.)
 		$transitions = timezone_transitions_get( timezone_open( $tzstring ), time() );
 
 		// 0 index is the state at current time, 1 index is the next transition, if any.
