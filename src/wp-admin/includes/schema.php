@@ -378,14 +378,35 @@ function populate_options() {
 
 	$timezone_string = '';
 	$gmt_offset      = 0;
+<<<<<<< HEAD
 	/* translators: default GMT offset or timezone string. Must be either a valid offset (-12 to 14)
 	   or a valid timezone string (America/New_York). See https://secure.php.net/manual/en/timezones.php
 	   for all timezone strings supported by PHP.
+=======
+	/*
+	 * translators: default GMT offset or timezone string. Must be either a valid offset (-12 to 14)
+	 * or a valid timezone string (America/New_York). See https://www.php.net/manual/en/timezones.php
+	 * for all timezone strings currently supported by PHP.
+	 *
+	 * Important: When a previous timezone string, like `Europe/Kiev`, has been superseded by an
+	 * updated one, like `Europe/Kyiv`, as a rule of thumb, the **old** timezone name should be used
+	 * in the "translation" to allow for the default timezone setting to be PHP cross-version compatible,
+	 * as old timezone names will be recognized in new PHP versions, while new timezone names cannot
+	 * be recognized in old PHP versions.
+	 *
+	 * To verify which timezone strings are available in the _oldest_ PHP version supported, you can
+	 * use https://3v4l.org/6YQAt#v5.6.20 and replace the "BR" (Brazil) in the code line with the
+	 * country code for which you want to look up the supported timezone names.
+>>>>>>> 09e619c648 (Date/Time: Correct sanitization of localized default `timezone_string` in `populate_options()`.)
 	*/
 	$offset_or_tz = _x( '0', 'default GMT offset or timezone string' );
 	if ( is_numeric( $offset_or_tz ) ) {
 		$gmt_offset = $offset_or_tz;
+<<<<<<< HEAD
 	} elseif ( $offset_or_tz && in_array( $offset_or_tz, timezone_identifiers_list() ) ) {
+=======
+	} elseif ( $offset_or_tz && in_array( $offset_or_tz, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ), true ) ) {
+>>>>>>> 09e619c648 (Date/Time: Correct sanitization of localized default `timezone_string` in `populate_options()`.)
 			$timezone_string = $offset_or_tz;
 	}
 
