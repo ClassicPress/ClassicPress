@@ -4517,13 +4517,8 @@ function sanitize_option( $option, $value ) {
 			break;
 
 		case 'timezone_string':
-<<<<<<< HEAD
-			$allowed_zones = timezone_identifiers_list();
-			if ( ! in_array( $value, $allowed_zones ) && ! empty( $value ) ) {
-=======
 			$allowed_zones = timezone_identifiers_list( DateTimeZone::ALL_WITH_BC );
 			if ( ! in_array( $value, $allowed_zones, true ) && ! empty( $value ) ) {
->>>>>>> 0b9f8c8f7b (Date/Time: Correct sanitization of `timezone_string` in `sanitize_option()`.)
 				$error = __( 'The timezone you have entered is not valid. Please select a valid timezone.' );
 			}
 			break;
