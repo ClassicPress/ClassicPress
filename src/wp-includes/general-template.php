@@ -2637,10 +2637,6 @@ function the_weekday() {
  */
 function the_weekday_date( $before = '', $after = '' ) {
 	global $wp_locale, $currentday, $previousweekday;
-<<<<<<< HEAD
-	$the_weekday_date = '';
-	if ( $currentday != $previousweekday ) {
-=======
 
 	$post = get_post();
 
@@ -2651,7 +2647,6 @@ function the_weekday_date( $before = '', $after = '' ) {
 	$the_weekday_date = '';
 
 	if ( $currentday !== $previousweekday ) {
->>>>>>> 2a163fa733 (Date/Time: Return early from `the_weekday()` and `the_weekday_date()` if we're not in the loop.)
 		$the_weekday_date .= $before;
 		$the_weekday_date .= $wp_locale->get_weekday( get_post_time( 'w', false, $post ) );
 		$the_weekday_date .= $after;
