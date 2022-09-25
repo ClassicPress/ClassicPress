@@ -65,7 +65,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34835
+	 * @see https://core.trac.wordpress.org/ticket/34835
 	 */
 	public function test_gmt_offset_should_output_correct_timezone() {
 		$timezone_formats = 'P I O T Z e';
@@ -81,7 +81,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20973
+	 * @see https://core.trac.wordpress.org/ticket/20973
 	 *
 	 * @dataProvider data_formats
 	 */
@@ -106,7 +106,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25768
+	 * @see https://core.trac.wordpress.org/ticket/25768
 	 */
 	public function test_should_return_wp_timestamp() {
 		update_option( 'timezone_string', 'Europe/Kiev' );
@@ -121,7 +121,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 43530
+	 * @see https://core.trac.wordpress.org/ticket/43530
 	 */
 	public function test_swatch_internet_time_with_wp_timestamp() {
 		update_option( 'timezone_string', 'America/Regina' );
@@ -130,7 +130,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25768
+	 * @see https://core.trac.wordpress.org/ticket/25768
 	 */
 	public function test_should_handle_escaped_formats() {
 		$format = 'D | \D | \\D | \\\D | \\\\D | \\\\\D | \\\\\\D';
@@ -139,7 +139,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25768
+	 * @see https://core.trac.wordpress.org/ticket/25768
 	 *
 	 * @dataProvider dst_times
 	 *
