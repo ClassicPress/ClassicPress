@@ -873,6 +873,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/13771
 	 */
 	function test_get_the_date_with_id_returns_correct_time() {
@@ -961,6 +962,25 @@ class Tests_Post extends WP_UnitTestCase {
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/25566
+=======
+	 * @ticket 49685
+	 */
+	function test_wp_count_posts_status_changes_visible() {
+		self::factory()->post->create_many( 3 );
+
+		// Trigger a cache.
+		wp_count_posts();
+
+		register_post_status( 'test' );
+
+		$counts = wp_count_posts();
+		$this->assertTrue( isset( $counts->test ) );
+		$this->assertEquals( 0, $counts->test );
+	}
+
+	/**
+	 * @ticket 25566
+>>>>>>> 34dc1cc2c9 (Tests: Bring some consistency to Date/Time tests:)
 	 */
 	function test_wp_tag_cloud_link_with_post_type() {
 		$post_type = 'new_post_type';
