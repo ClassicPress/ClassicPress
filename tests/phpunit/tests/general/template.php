@@ -420,6 +420,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Test get_the_modified_time
 	 *
 	 * @see https://core.trac.wordpress.org/ticket/37059
@@ -563,6 +564,9 @@ class Tests_General_Template extends WP_UnitTestCase {
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/38253
+=======
+	 * @ticket 38253
+>>>>>>> 699e44cc76 (Tests: Move the tests for `get_the_modified_time()` to a more appropriate place.)
 	 * @group ms-required
 	 */
 	function test_get_site_icon_url_preserves_switched_state() {
