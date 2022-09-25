@@ -2515,16 +2515,12 @@ function get_post_time( $d = 'U', $gmt = false, $post = null, $translate = false
  *
  * The object will be set to the timezone from WordPress settings.
  *
-<<<<<<< HEAD
- * @since WP-5.3.0
-=======
  * For legacy reasons, this function allows to choose to instantiate from local or UTC time in database.
  * Normally this should make no difference to the result. However, the values might get out of sync in database,
  * typically because of timezone setting changes. The parameter ensures the ability to reproduce backwards
  * compatible behaviors in such cases.
  *
- * @since 5.3.0
->>>>>>> c67b47c66e (Date/Time: Make sure `get_post_time()` keeps UTC time on timezone change.)
+ * @since WP-5.3.0
  *
  * @param int|WP_Post $post  Optional. WP_Post object or ID. Default is global `$post` object.
  * @param string      $field  Optional. Published or modified time to use from database. Accepts 'date' or 'modified'.
