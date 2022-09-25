@@ -352,13 +352,8 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 		// 0 index is the state at current time, 1 index is the next transition, if any.
 		if ( ! empty( $transitions[1] ) ) {
 			echo ' ';
-<<<<<<< HEAD
-			$message = $tr['isdst'] ?
-				/* translators: %s: date and time  */
-=======
 			$message = $transitions[1]['isdst'] ?
 				/* translators: %s: Date and time. */
->>>>>>> cf0a453f08 (Date/Time: Use `wp_date()` to display the correct time of the next DST transition in Timezone setting on General Settings screen.)
 				__( 'Daylight saving time begins on: %s.' ) :
 				/* translators: %s: date and time  */
 				__( 'Standard time begins on: %s.' );
