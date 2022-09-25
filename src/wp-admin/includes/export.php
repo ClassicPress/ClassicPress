@@ -79,13 +79,10 @@ function export_wp( $args = array() ) {
 	if ( ! empty( $sitename ) ) {
 		$sitename .= '.';
 	}
-<<<<<<< HEAD
-	$date        = date( 'Y-m-d' );
-	$wp_filename = $sitename . 'wordpress.' . $date . '.xml';
-=======
+
 	$date        = gmdate( 'Y-m-d' );
-	$wp_filename = $sitename . 'WordPress.' . $date . '.xml';
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
+	$wp_filename = $sitename . 'wordpress.' . $date . '.xml';
+
 	/**
 	 * Filters the export filename.
 	 *

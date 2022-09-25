@@ -173,11 +173,8 @@ function date_i18n( $dateformatstring, $timestamp_with_offset = false, $gmt = fa
 			}
 		}
 	}
-<<<<<<< HEAD
-	$j = date( $dateformatstring, $i );
-=======
+
 	$j = @gmdate( $dateformatstring, $i );
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 
 	/**
 	 * Filters the date formatted based on the locale.

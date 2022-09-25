@@ -379,27 +379,19 @@ class Tests_URL extends WP_UnitTestCase {
 			array(
 				'post_author' => $u,
 				'post_status' => 'private',
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now - 1
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$p2  = self::factory()->post->create(
 			array(
 				'post_author' => $u,
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 
@@ -431,27 +423,19 @@ class Tests_URL extends WP_UnitTestCase {
 			array(
 				'post_author' => $u1,
 				'post_status' => 'private',
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now - 1
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$p2  = self::factory()->post->create(
 			array(
 				'post_author' => $u1,
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 
@@ -482,41 +466,29 @@ class Tests_URL extends WP_UnitTestCase {
 		$p1  = self::factory()->post->create(
 			array(
 				'post_author' => $u1,
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now - 2
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 2 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$p2  = self::factory()->post->create(
 			array(
 				'post_author' => $u1,
 				'post_status' => 'private',
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now - 1
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now - 1 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$p3  = self::factory()->post->create(
 			array(
 				'post_author' => $u1,
-<<<<<<< HEAD
-				'post_date'   => date(
+				'post_date'   => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'post_date'   => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 

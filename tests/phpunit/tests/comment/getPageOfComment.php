@@ -45,14 +45,10 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'trackback',
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 			$now             -= 10 * $i;
@@ -64,14 +60,10 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'pingback',
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 			$now            -= 10 * $i;
@@ -149,14 +141,10 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 				array(
 					'comment_post_ID'  => $p,
 					'comment_type'     => 'trackback',
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now - ( 10 * $i )
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( 10 * $i ) ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 		}
@@ -247,41 +235,29 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 20
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
 				'comment_approved' => 0,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 30
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 
@@ -304,27 +280,19 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$comments_0[] = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $posts[0],
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now - ( $i * 60 )
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 			$comments_1[] = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $posts[1],
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now - ( $i * 60 )
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 		}
@@ -348,14 +316,10 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 			$parent                = self::factory()->comment->create(
 				array(
 					'comment_post_ID'  => $post,
-<<<<<<< HEAD
-					'comment_date_gmt' => date(
+					'comment_date_gmt' => gmdate(
 						'Y-m-d H:i:s',
 						$now - ( $i * 60 )
 					),
-=======
-					'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - ( $i * 60 ) ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 				)
 			);
 			$comment_parents[ $i ] = $parent;
@@ -399,40 +363,28 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 20
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 30
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 
@@ -453,53 +405,37 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 20
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 30
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c4 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 40
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 40 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 
@@ -521,53 +457,37 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$c1 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c2 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 20
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 20 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c3 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 30
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 30 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 		$c4 = self::factory()->comment->create(
 			array(
 				'comment_post_ID'  => $p,
-<<<<<<< HEAD
-				'comment_date_gmt' => date(
+				'comment_date_gmt' => gmdate(
 					'Y-m-d H:i:s',
 					$now - 40
 				),
-=======
-				'comment_date_gmt' => gmdate( 'Y-m-d H:i:s', $now - 40 ),
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			)
 		);
 

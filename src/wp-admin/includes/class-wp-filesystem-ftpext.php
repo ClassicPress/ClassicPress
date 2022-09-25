@@ -525,8 +525,6 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 					$b['time'] = mktime( $b['hour'], $b['minute'], 0, $b['month'], $b['day'], $b['year'] );
 					$b['name'] = $lucifer[7];
 				} else {
-<<<<<<< HEAD
-=======
 				$b['month'] = $lucifer[5];
 				$b['day']   = $lucifer[6];
 				if ( preg_match( '/([0-9]{2}):([0-9]{2})/', $lucifer[7], $l2 ) ) {
@@ -534,7 +532,6 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 					$b['hour']   = $l2[1];
 					$b['minute'] = $l2[2];
 				} else {
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 					$b['year']   = $lucifer[7];
 					$b['hour']   = 0;
 					$b['minute'] = 0;

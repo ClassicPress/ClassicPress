@@ -27,8 +27,8 @@ class Tests_Basic extends WP_UnitTestCase {
 
 	function test_license_cp_copyright_years() {
 		$license   = file_get_contents( ABSPATH . 'license.txt' );
-<<<<<<< HEAD
-		$this_year = date( 'Y' );
+
+		$this_year = gmdate( 'Y' );
 
 		// Check ClassicPress copyright years
 		preg_match(
@@ -42,11 +42,6 @@ class Tests_Basic extends WP_UnitTestCase {
 			trim( $matches[1] ),
 			"license.txt's year needs to be updated to $this_year : \"{$matches[0]}\""
 		);
-=======
-		preg_match( '#Copyright 2011-(\d+) by the contributors#', $license, $matches );
-		$this_year = gmdate( 'Y' );
-		$this->assertEquals( $this_year, trim( $matches[1] ), "license.txt's year needs to be updated to $this_year." );
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 	}
 
 	function test_package_json() {

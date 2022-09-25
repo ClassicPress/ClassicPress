@@ -2145,13 +2145,8 @@ function get_calendar( $initial = true, $echo = true ) {
 
 		if ( in_array( $day, $daywithpost ) ) {
 			// any posts today?
-<<<<<<< HEAD
-			$date_format = date( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
-			/* translators: Post calendar label. 1: Date */
-=======
 			$date_format = gmdate( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
 			/* translators: Post calendar label. %s: Date */
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			$label            = sprintf( __( 'Posts published on %s' ), $date_format );
 			$calendar_output .= sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
@@ -4349,11 +4344,7 @@ function get_the_generator( $type = '' ) {
 			$gen = "<!-- generator=\"WordPress/$esc_wp_version (compatible; ClassicPress/$esc_cp_version)\" -->";
 			break;
 		case 'export':
-<<<<<<< HEAD
-			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . date( 'Y-m-d H:i' ) . '" -->';
-=======
-			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . gmdate( 'Y-m-d H:i' ) . '" -->';
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
+			$gen = "<!-- generator=\"ClassicPress/$esc_cp_version\" created=\"" . gmdate( 'Y-m-d H:i' ) . '" -->';
 			break;
 	}
 

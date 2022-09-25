@@ -134,13 +134,8 @@ EOF;
 	}
 
 	function test_wp_get_archives_echo() {
-<<<<<<< HEAD
-		$expected['echo'] = "<li><a href='" . $this->month_url . "'>" . date( 'F Y' ) . '</a></li>';
+		$expected['echo'] = "<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></li>';
 		ob_start();
-=======
-		$expected['echo'] = "\t<li><a href='" . $this->month_url . "'>" . gmdate( 'F Y' ) . '</a></li>' . "\n";
-		$this->expectOutputString( $expected['echo'] );
->>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 		wp_get_archives( array( 'echo' => true ) );
 		$actual = ob_get_clean();
 		$this->assertEquals( $expected['echo'], trim( $actual ) );
