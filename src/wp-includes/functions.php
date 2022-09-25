@@ -330,14 +330,6 @@ function wp_maybe_decline_date( $date ) {
 	 * translate this to 'on'. Do not translate into your own language.
 	 */
 	if ( 'on' === _x( 'off', 'decline months names: on or off' ) ) {
-<<<<<<< HEAD
-		// Match a format like 'j F Y' or 'j. F'
-		if ( preg_match( '#^\d{1,2}\.? [^\d ]+#u', $date ) ) {
-			$months          = $wp_locale->month;
-			$months_genitive = $wp_locale->month_genitive;
-
-=======
-
 		$months          = $wp_locale->month;
 		$months_genitive = $wp_locale->month_genitive;
 
@@ -346,7 +338,6 @@ function wp_maybe_decline_date( $date ) {
 		 * and decline the month.
 		 */
 		if ( preg_match( '#\b\d{1,2}\.? [^\d ]+\b#u', $date ) ) {
->>>>>>> 50f01f47e3 (Date/Time: When determining whether to decline the month name in `wp_maybe_decline_date()`, take word boundaries into account.)
 			foreach ( $months as $key => $month ) {
 				$months[ $key ] = '# ' . preg_quote( $month, '#' ) . '\b#u';
 			}
@@ -357,8 +348,6 @@ function wp_maybe_decline_date( $date ) {
 
 			$date = preg_replace( $months, $months_genitive, $date );
 		}
-<<<<<<< HEAD
-=======
 
 		/*
 		 * Match a format like 'F jS' or 'F j' (month name, followed by day with an optional ordinal suffix)
@@ -375,7 +364,6 @@ function wp_maybe_decline_date( $date ) {
 
 			$date = preg_replace( $months, $months_genitive, $date );
 		}
->>>>>>> 50f01f47e3 (Date/Time: When determining whether to decline the month name in `wp_maybe_decline_date()`, take word boundaries into account.)
 	}
 
 	// Used for locale-specific rules

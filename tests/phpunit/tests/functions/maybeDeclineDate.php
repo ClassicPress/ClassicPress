@@ -35,13 +35,9 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/36790
-=======
-	 * @ticket 36790
-	 * @ticket 37411
-	 * @ticket 48606
->>>>>>> 50f01f47e3 (Date/Time: When determining whether to decline the month name in `wp_maybe_decline_date()`, take word boundaries into account.)
+	 * @see https://core.trac.wordpress.org/ticket/37411
+	 * @see https://core.trac.wordpress.org/ticket/48606
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
 	public function test_wp_maybe_decline_date( $test_locale, $input, $output ) {
@@ -74,13 +70,10 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 		return array(
 			array( 'ru_RU', '21 Июнь', '21 июня' ),
 			array( 'ru_RU', '1 Январь 2016', '1 января 2016' ),
-<<<<<<< HEAD
-=======
 			array( 'ru_RU', 'Январь 1st 2016', '1 января 2016' ),
 			array( 'ru_RU', 'Январь 1 2016', '1 января 2016' ),
 			array( 'ru_RU', 'Январь 1 16', '1 января 16' ),
 			array( 'ru_RU', 'Суббота, 19 Январь 2019 10:50', 'Суббота, 19 января 2019 10:50' ),
->>>>>>> 50f01f47e3 (Date/Time: When determining whether to decline the month name in `wp_maybe_decline_date()`, take word boundaries into account.)
 			array( 'pl_PL', '1 Styczeń', '1 stycznia' ),
 			array( 'hr', '1. Siječanj', '1. siječnja' ),
 			array( 'ca', '1 de abril', "1 d'abril" ),
