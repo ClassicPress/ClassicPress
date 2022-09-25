@@ -7,6 +7,52 @@
 class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 	/**
+<<<<<<< HEAD
+=======
+	 * @ticket 34378
+	 */
+	public function test_current_time_with_date_format_string() {
+		update_option( 'gmt_offset', 6 );
+
+		$format       = 'F j, Y, g:i a';
+		$timestamp    = time();
+		$wp_timestamp = $timestamp + 6 * HOUR_IN_SECONDS;
+
+		$this->assertEquals( strtotime( gmdate( $format ) ), strtotime( current_time( $format, true ) ), 'The dates should be equal', 2 );
+		$this->assertEquals( strtotime( gmdate( $format, $wp_timestamp ) ), strtotime( current_time( $format ) ), 'The dates should be equal', 2 );
+	}
+
+	/**
+	 * @ticket 34378
+	 */
+	public function test_current_time_with_mysql_format() {
+		update_option( 'gmt_offset', 6 );
+
+		$format       = 'Y-m-d H:i:s';
+		$timestamp    = time();
+		$wp_timestamp = $timestamp + 6 * HOUR_IN_SECONDS;
+
+		$this->assertEquals( strtotime( gmdate( $format ) ), strtotime( current_time( 'mysql', true ) ), 'The dates should be equal', 2 );
+		$this->assertEquals( strtotime( gmdate( $format, $wp_timestamp ) ), strtotime( current_time( 'mysql' ) ), 'The dates should be equal', 2 );
+	}
+
+	/**
+	 * @ticket 34378
+	 */
+	public function test_current_time_with_timestamp() {
+		update_option( 'gmt_offset', 6 );
+
+		$timestamp    = time();
+		$wp_timestamp = $timestamp + 6 * HOUR_IN_SECONDS;
+
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
+		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), 'The dates should be equal', 2 );
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$this->assertEquals( $wp_timestamp, current_time( 'timestamp' ), 'The dates should be equal', 2 );
+	}
+
+	/**
+>>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
 	 * @ticket 37440
 	 */
 	public function test_should_work_with_changed_timezone() {
@@ -15,10 +61,12 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		update_option( 'timezone_string', $timezone_string );
 		$datetime = new DateTime( 'now', new DateTimeZone( $timezone_string ) );
 
+		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( $timezone_string );
 		$this->assertEquals( gmdate( $format ), current_time( $format, true ) );
 		$this->assertEquals( $datetime->format( $format ), current_time( $format ) );
 
+		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( 'UTC' );
 		$this->assertEquals( gmdate( $format ), current_time( $format, true ) );
 		$this->assertEquals( $datetime->format( $format ), current_time( $format ) );
@@ -34,10 +82,24 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$datetime->setTimezone( wp_timezone() );
 		$wp_timestamp = $timestamp + $datetime->getOffset();
 
+<<<<<<< HEAD
 		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), '', 2 );
 		$this->assertEquals( $timestamp, current_time( 'U', true ), '', 2 );
 		$this->assertEquals( $wp_timestamp, current_time( 'timestamp' ), '', 2 );
 		$this->assertEquals( $wp_timestamp, current_time( 'U' ), '', 2 );
+=======
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
+		$this->assertEquals( $timestamp, current_time( 'timestamp', true ), 'The dates should be equal', 2 );
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.RequestedUTC
+		$this->assertEquals( $timestamp, current_time( 'U', true ), 'The dates should be equal', 2 );
+
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$this->assertEquals( $wp_timestamp, current_time( 'timestamp' ), 'The dates should be equal', 2 );
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$this->assertEquals( $wp_timestamp, current_time( 'U' ), 'The dates should be equal', 2 );
+
+		// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+>>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
 		$this->assertInternalType( 'int', current_time( 'timestamp' ) );
 	}
 
