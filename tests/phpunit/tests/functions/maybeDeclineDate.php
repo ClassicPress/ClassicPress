@@ -35,9 +35,15 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/36790
 	 * @see https://core.trac.wordpress.org/ticket/37411
 	 * @see https://core.trac.wordpress.org/ticket/48606
+=======
+	 * @ticket 36790
+	 * @ticket 37411
+	 * @ticket 48606
+>>>>>>> a626f2e763 (Date/Time: When determining whether to decline the month name in `wp_maybe_decline_date()`, take word boundaries into account.)
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
 	public function test_wp_maybe_decline_date( $test_locale, $input, $output ) {
