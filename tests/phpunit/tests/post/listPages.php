@@ -25,6 +25,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		'post_status'  => 'publish',
 	);
 	*/
+<<<<<<< HEAD
 	function setUp() {
 		parent::setUp();
 		global $wpdb;
@@ -34,6 +35,51 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		$pages      = array();
 		self::factory()->user->create();
 		$pages[] = self::factory()->post->create(
+=======
+	public static $author;
+
+	/**
+	 * Parent page id.
+	 *
+	 * @var int
+	 */
+	public static $parent_1;
+
+	/**
+	 * Parent page id.
+	 *
+	 * @var int
+	 */
+	public static $parent_2;
+
+	/**
+	 * Parent page id.
+	 *
+	 * @var int
+	 */
+	public static $parent_3;
+
+	/**
+	 * Child page ids.
+	 *
+	 * @var array
+	 */
+	public static $children = array();
+
+	/**
+	 * Current timestamp cache, so that it is consistent across posts.
+	 *
+	 * @var int
+	 */
+	public static $time;
+
+	public static function wpSetupBeforeClass() {
+		self::$time = time();
+
+		$post_date = gmdate( 'Y-m-d H:i:s', self::$time );
+
+		self::$parent_1 = self::factory()->post->create(
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 			array(
 				'post_type'  => 'page',
 				'post_title' => 'Parent 1',
@@ -135,10 +181,18 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'depth'     => 1,
 			'show_date' => true,
 		);
+<<<<<<< HEAD
 		$date                  = date( get_option( 'date_format' ), $this->time );
 		$expected['show_date'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a> ' . $date . '</li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a> ' . $date . '</li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '</li>
+=======
+		$date = gmdate( get_option( 'date_format' ), self::$time );
+
+		$expected = '<li class="pagenav">Pages<ul><li class="page_item page-item-' . self::$parent_1 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_1 ) . '">Parent 1</a> ' . $date . '</li>
+<li class="page_item page-item-' . self::$parent_2 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_2 ) . '">Parent 2</a> ' . $date . '</li>
+<li class="page_item page-item-' . self::$parent_3 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_3 ) . '">Parent 3</a> ' . $date . '</li>
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
@@ -151,8 +205,14 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'show_date'   => true,
 			'date_format' => 'l, F j, Y',
 		);
+<<<<<<< HEAD
 		$date                    = date( $args['date_format'], $this->time );
 		$expected['date_format'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a> ' . $date . '
+=======
+		$date = gmdate( $args['date_format'], self::$time );
+
+		$expected = '<li class="pagenav">Pages<ul><li class="page_item page-item-' . self::$parent_1 . ' page_item_has_children"><a href="' . get_permalink( self::$parent_1 ) . '">Parent 1</a> ' . $date . '
+>>>>>>> 10855438ea (Date/Time: Replace all instances of `date()` with `gmdate()`.)
 <ul class=\'children\'>
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a> ' . $date . '</li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a> ' . $date . '</li>
