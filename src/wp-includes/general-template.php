@@ -2514,7 +2514,7 @@ function get_post_time( $d = 'U', $gmt = false, $post = null, $translate = false
  *
  * The object will be set to the timezone from WordPress settings.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @param int|WP_Post $post  Optional. WP_Post object or ID. Default is global `$post` object.
  * @param string      $field Optional. Post field to use. Accepts 'date' or 'modified'.
@@ -2542,7 +2542,7 @@ function get_post_datetime( $post = null, $field = 'date' ) {
  * Note that this function returns a true Unix timestamp, not summed with timezone offset
  * like older WP functions.
  *
- * @since 5.3.0
+ * @since WP-5.3.0
  *
  * @param int|WP_Post $post  Optional. WP_Post object or ID. Default is global `$post` object.
  * @param string      $field Optional. Post field to use. Accepts 'date' or 'modified'.
@@ -2655,14 +2655,10 @@ function get_post_modified_time( $d = 'U', $gmt = false, $post = null, $translat
 	} else {
 		if ( $gmt ) {
 			$datetime = $datetime->setTimezone( new DateTimeZone( 'UTC' ) );
-	}
-<<<<<<< HEAD
-	$time = mysql2date( $d, $time, $translate );
-=======
+		}
 
 		$time = $datetime->format( $d );
 	}
->>>>>>> 5928234d05 (Date/Time: Introduce `get_post_datetime()` to retrieve post published or modified time as a `DateTimeImmutable` object instance.)
 
 	/**
 	 * Filters the localized time a post was last modified.
