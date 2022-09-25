@@ -2306,11 +2306,9 @@ function get_the_date( $format = '', $post = null ) {
 		return false;
 	}
 
-	if ( ! is_string( $format ) || '' === $format ) {
-		$format = get_option( 'date_format' );
-	}
+	$_format = ! empty( $format ) ? $format : get_option( 'date_format' );
 
-	$the_date = get_post_time( $format, false, $post, true );
+	$the_date = get_post_time( $_format, false, $post, true );
 
 	/**
 	 * Filters the date a post was published.
@@ -2376,10 +2374,10 @@ function get_the_modified_date( $format = '', $post = null ) {
 	if ( ! $post ) {
 		// For backward compatibility, failures go through the filter below.
 		$the_time = false;
-	} elseif ( empty( $format ) ) {
-		$the_time = get_post_modified_time( get_option( 'date_format' ), false, $post, true );
 	} else {
-		$the_time = get_post_modified_time( $format, false, $post, true );
+		$_format = ! empty( $format ) ? $format : get_option( 'date_format' );
+
+		$the_time = get_post_modified_time( $_format, false, $post, true );
 	}
 
 	/**
@@ -2435,11 +2433,9 @@ function get_the_time( $format = '', $post = null ) {
 		return false;
 	}
 
-	if ( ! is_string( $format ) || '' === $format ) {
-		$format = get_option( 'time_format' );
-	}
+	$_format = ! empty( $format ) ? $format : get_option( 'time_format' );
 
-	$the_time = get_post_time( $format, false, $post, true );
+	$the_time = get_post_time( $_format, false, $post, true );
 
 	/**
 	 * Filters the time a post was written.
@@ -2624,10 +2620,10 @@ function get_the_modified_time( $format = '', $post = null ) {
 	if ( ! $post ) {
 		// For backward compatibility, failures go through the filter below.
 		$the_time = false;
-	} elseif ( empty( $format ) ) {
-		$the_time = get_post_modified_time( get_option( 'time_format' ), false, $post, true );
 	} else {
-		$the_time = get_post_modified_time( $format, false, $post, true );
+		$_format = ! empty( $format ) ? $format : get_option( 'time_format' );
+
+		$the_time = get_post_modified_time( $_format, false, $post, true );
 	}
 
 	/**
