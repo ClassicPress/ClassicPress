@@ -27,10 +27,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/28310
-=======
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	function test_get_the_date_returns_correct_time_with_empty_format() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2020-08-29 01:51:00' ) );
@@ -40,8 +37,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
->>>>>>> 3309309f6b (Date/Time: Make sure `get_the_date()` and related functions return correct time if the format was specified as `false`.)
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	function test_get_the_time_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
