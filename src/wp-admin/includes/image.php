@@ -322,14 +322,8 @@ function wp_exif_frac2dec( $str ) {
 		return 0;
 	}
 
-<<<<<<< HEAD
 	if ( ! is_string( $str ) ) {
 		return $str; // This can only be an integer or float, so this is fine.
-=======
-	list( $numerator, $denominator ) = explode( '/', $str );
-	if ( ! empty( $denominator ) ) {
-		return $numerator / $denominator;
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	}
 
 	// Fractions passed as a string must contain a single `/`.

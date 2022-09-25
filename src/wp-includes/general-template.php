@@ -2695,14 +2695,9 @@ function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $tra
 	 * @since WP-2.8.0
 	 *
 	 * @param string $time The formatted time.
-<<<<<<< HEAD
-	 * @param string $d    The date format. Accepts 'G', 'U', or php date format. Default 'U'.
-	 * @param bool   $gmt  Whether to return the GMT time. Default false.
-=======
 	 * @param string $format Format to use for retrieving the time the post was modified.
 	 *                       Accepts 'G', 'U', or PHP date format. Default 'U'.
 	 * @param bool   $gmt    Whether to retrieve the GMT time. Default false.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	 */
 	return apply_filters( 'get_post_modified_time', $time, $format, $gmt );
 }
