@@ -202,21 +202,6 @@ function post_submit_meta_box( $post, $args = array() ) {
 
 	if ( 0 != $post->ID ) {
 		if ( 'future' == $post->post_status ) { // scheduled for publishing at a future date
-<<<<<<< HEAD
-			/* translators: Post date information. 1: Date on which the post is currently scheduled to be published */
-			$stamp = __( 'Scheduled for: <b>%1$s</b>' );
-		} elseif ( 'publish' == $post->post_status || 'private' == $post->post_status ) { // already published
-			/* translators: Post date information. 1: Date on which the post was published */
-			$stamp = __( 'Published on: <b>%1$s</b>' );
-		} elseif ( '0000-00-00 00:00:00' == $post->post_date_gmt ) { // draft, 1 or more saves, no date specified
-			$stamp = __( 'Publish <b>immediately</b>' );
-		} elseif ( time() < strtotime( $post->post_date_gmt . ' +0000' ) ) { // draft, 1 or more saves, future date specified
-			/* translators: Post date information. 1: Date on which the post is to be published */
-			$stamp = __( 'Schedule for: <b>%1$s</b>' );
-		} else { // draft, 1 or more saves, date specified
-			/* translators: Post date information. 1: Date on which the post is to be published */
-			$stamp = __( 'Publish on: <b>%1$s</b>' );
-=======
 			/* translators: Post date information. %s: Date on which the post is currently scheduled to be published. */
 			$stamp = __( 'Scheduled for: %s' );
 		} elseif ( 'publish' == $post->post_status || 'private' == $post->post_status ) { // already published
@@ -230,7 +215,6 @@ function post_submit_meta_box( $post, $args = array() ) {
 		} else { // draft, 1 or more saves, date specified
 			/* translators: Post date information. %s: Date on which the post is to be published. */
 			$stamp = __( 'Publish on: %s' );
->>>>>>> acadc5cfdd (Accessibility: Posts, Post Types: Replace `@` with `at` in the displayed date format.)
 		}
 		$date = sprintf(
 			$date_string,
