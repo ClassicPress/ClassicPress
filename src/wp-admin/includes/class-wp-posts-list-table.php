@@ -1029,12 +1029,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 			$time      = get_post_timestamp( $post );
 			$time_diff = time() - $time;
 
-<<<<<<< HEAD
-			if ( $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
-=======
 			if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
 				/* translators: %s: Human-readable time difference. */
->>>>>>> 9a9abc0fb8 (Date/Time: Correct the logic in `WP_Posts_List_Table::column_date()` and `WP_Media_List_Table::column_date()` to check for a valid post timestamp.)
 				$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
 			} else {
 				$h_time = get_the_time( __( 'Y/m/d' ), $post );
@@ -1511,13 +1507,10 @@ class WP_Posts_List_Table extends WP_List_Table {
 						$users_opt['show_option_none'] = __( '&mdash; No Change &mdash;' );
 					}
 
-<<<<<<< HEAD
-					if ( $authors = wp_dropdown_users( $users_opt ) ) :
-=======
 					/**
 					 * Filters the arguments used to generate the Quick Edit authors drop-down.
 					 *
-					 * @since 5.3.0
+					 * @since WP-5.3.0
 					 *
 					 * @see wp_dropdown_users()
 					 *
@@ -1528,7 +1521,6 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 					$authors = wp_dropdown_users( $users_opt );
 					if ( $authors ) :
->>>>>>> 9a9abc0fb8 (Date/Time: Correct the logic in `WP_Posts_List_Table::column_date()` and `WP_Media_List_Table::column_date()` to check for a valid post timestamp.)
 						$authors_dropdown  = '<label class="inline-edit-author">';
 						$authors_dropdown .= '<span class="title">' . __( 'Author' ) . '</span>';
 						$authors_dropdown .= $authors;
