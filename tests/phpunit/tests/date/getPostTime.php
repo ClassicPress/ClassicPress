@@ -8,7 +8,7 @@
 class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_post_time_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -17,7 +17,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_post_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_time() );
@@ -27,7 +27,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_post_modified_time_returns_correct_time_with_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -36,7 +36,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 28310
+	 * @see https://core.trac.wordpress.org/ticket/28310
 	 */
 	public function test_get_post_modified_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_modified_time() );
@@ -46,7 +46,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25002
+	 * @see https://core.trac.wordpress.org/ticket/25002
 	 */
 	public function test_should_return_wp_timestamp() {
 		$timezone = 'Europe/Kiev';
@@ -75,7 +75,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 25002
+	 * @see https://core.trac.wordpress.org/ticket/25002
 	 */
 	public function test_should_return_time() {
 		$timezone = 'Europe/Kiev';
@@ -103,7 +103,7 @@ class Tests_Date_Get_Post_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 48384
+	 * @see https://core.trac.wordpress.org/ticket/48384
 	 */
 	public function test_should_keep_utc_time_on_timezone_change() {
 		$timezone = 'UTC';

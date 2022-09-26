@@ -3283,9 +3283,9 @@ function _wp_iso_convert( $match ) {
 function get_gmt_from_date( $string, $format = 'Y-m-d H:i:s' ) {
 	$datetime = date_create( $string, wp_timezone() );
 
-			if ( false === $datetime ) {
-				return gmdate( $format, 0 );
-			}
+	if ( false === $datetime ) {
+		return gmdate( $format, 0 );
+	}
 
 	return $datetime->setTimezone( new DateTimeZone( 'UTC' ) )->format( $format );
 }
@@ -3303,11 +3303,11 @@ function get_gmt_from_date( $string, $format = 'Y-m-d H:i:s' ) {
  * @return string Formatted version of the date, in the site's timezone.
  */
 function get_date_from_gmt( $string, $format = 'Y-m-d H:i:s' ) {
-		$datetime = date_create( $string, new DateTimeZone( 'UTC' ) );
+	$datetime = date_create( $string, new DateTimeZone( 'UTC' ) );
 
 	if ( false === $datetime ) {
-			return gmdate( $format, 0 );
-		}
+		return gmdate( $format, 0 );
+	}
 
 	return $datetime->setTimezone( wp_timezone() )->format( $format );
 }
@@ -3349,7 +3349,7 @@ function iso8601_to_datetime( $date_string, $timezone = 'user' ) {
 
 	if ( false === $datetime ) {
 		return false;
-		}
+	}
 
 	if ( 'gmt' === $timezone ) {
 		return $datetime->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );

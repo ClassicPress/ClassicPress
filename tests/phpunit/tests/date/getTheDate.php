@@ -56,7 +56,7 @@ class Tests_Date_Get_The_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 51184
+	 * @see https://core.trac.wordpress.org/ticket/51184
 	 */
 	public function test_get_the_time_returns_correct_time_with_empty_format() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2020-08-29 01:51:00' ) );

@@ -191,13 +191,13 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
 	} elseif ( ! $timestamp_with_offset ) { // Current time in site's timezone.
 		$date = wp_date( $format );
 	} else {
-	/*
-	 * Timestamp with offset is typically produced by a UTC `strtotime()` call on an input without timezone.
-	 * This is the best attempt to reverse that operation into a local time to use.
-	 */
+		/*
+		 * Timestamp with offset is typically produced by a UTC `strtotime()` call on an input without timezone.
+		 * This is the best attempt to reverse that operation into a local time to use.
+		 */
 		$local_time = gmdate( 'Y-m-d H:i:s', $timestamp );
 		$timezone   = wp_timezone();
-	$datetime   = date_create( $local_time, $timezone );
+		$datetime   = date_create( $local_time, $timezone );
 		$date       = wp_date( $format, $datetime->getTimestamp(), $timezone );
 	}
 
@@ -287,7 +287,7 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
 					// If character follows a slash, we add it without translating.
 					if ( $i < $format_length ) {
 						$new_format .= $format[ ++$i ];
-				}
+					}
 					break;
 				default:
 					$new_format .= $format[ $i ];

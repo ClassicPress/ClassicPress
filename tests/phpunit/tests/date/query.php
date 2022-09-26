@@ -510,7 +510,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41782
+	 * @see https://core.trac.wordpress.org/ticket/41782
 	 *
 	 * @dataProvider mysql_datetime_input_provider
 	 *
@@ -543,7 +543,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41782
+	 * @see https://core.trac.wordpress.org/ticket/41782
 	 *
 	 * @dataProvider mysql_datetime_input_provider_custom_timezone
 	 *
@@ -571,7 +571,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 41782
+	 * @see https://core.trac.wordpress.org/ticket/41782
 	 */
 	public function test_build_mysql_datetime_with_relative_date() {
 		update_option( 'timezone_string', 'Europe/Kiev' );

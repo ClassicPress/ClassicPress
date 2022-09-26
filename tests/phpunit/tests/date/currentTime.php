@@ -7,9 +7,7 @@
 class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 	/**
-<<<<<<< HEAD
-=======
-	 * @ticket 34378
+	 * @see https://core.trac.wordpress.org/ticket/34378
 	 */
 	public function test_current_time_with_date_format_string() {
 		update_option( 'gmt_offset', 6 );
@@ -23,7 +21,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34378
+	 * @see https://core.trac.wordpress.org/ticket/34378
 	 */
 	public function test_current_time_with_mysql_format() {
 		update_option( 'gmt_offset', 6 );
@@ -37,7 +35,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 34378
+	 * @see https://core.trac.wordpress.org/ticket/34378
 	 */
 	public function test_current_time_with_timestamp() {
 		update_option( 'gmt_offset', 6 );
@@ -53,7 +51,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 	/**
 >>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
-	 * @ticket 37440
+	 * @see https://core.trac.wordpress.org/ticket/37440
 	 */
 	public function test_should_work_with_changed_timezone() {
 		$format          = 'Y-m-d H:i:s';
@@ -73,7 +71,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40653
+	 * @see https://core.trac.wordpress.org/ticket/40653
 	 */
 	public function test_should_return_wp_timestamp() {
 		update_option( 'timezone_string', 'Europe/Kiev' );
@@ -97,7 +95,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 40653
+	 * @see https://core.trac.wordpress.org/ticket/40653
 	 */
 	public function test_should_return_correct_local_time() {
 		update_option( 'timezone_string', 'Europe/Kiev' );

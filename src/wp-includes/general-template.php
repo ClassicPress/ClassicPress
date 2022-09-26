@@ -2272,12 +2272,12 @@ function the_date( $format = '', $before = '', $after = '', $echo = true ) {
 		 * @since WP-0.71
 		 *
 		 * @param string $the_date The formatted date string.
-	 * @param string $format   PHP date format. Defaults to 'date_format' option
+		 * @param string $format   PHP date format. Defaults to 'date_format' option
 		 *                         if not specified.
 		 * @param string $before   HTML output before the date.
 		 * @param string $after    HTML output after the date.
 		 */
-	$the_date = apply_filters( 'the_date', $the_date, $format, $before, $after );
+		$the_date = apply_filters( 'the_date', $the_date, $format, $before, $after );
 
 		if ( $echo ) {
 			echo $the_date;
@@ -2490,7 +2490,7 @@ function get_post_time( $format = 'U', $gmt = false, $post = null, $translate = 
 	} else {
 		if ( $gmt ) {
 			$datetime = $datetime->setTimezone( new DateTimeZone( 'UTC' ) );
-	}
+		}
 
 		$time = $datetime->format( $format );
 	}
@@ -2540,7 +2540,7 @@ function get_post_datetime( $post = null, $field = 'date', $source = 'local' ) {
 		$time     = ( 'modified' === $field ) ? $post->post_modified_gmt : $post->post_date_gmt;
 		$timezone = new DateTimeZone( 'UTC' );
 	} else {
-	$time = ( 'modified' === $field ) ? $post->post_modified : $post->post_date;
+		$time = ( 'modified' === $field ) ? $post->post_modified : $post->post_date;
 		$timezone = $wp_timezone;
 	}
 
