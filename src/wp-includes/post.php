@@ -3935,13 +3935,8 @@ function wp_update_post( $postarr = array(), $wp_error = false ) {
 		$postarr['post_date_gmt'] = '';
 	}
 
-<<<<<<< HEAD
-	if ( $postarr['post_type'] == 'attachment' ) {
-		return wp_insert_attachment( $postarr );
-=======
 	if ( 'attachment' === $postarr['post_type'] ) {
-		return wp_insert_attachment( $postarr, false, 0, $wp_error );
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+		return wp_insert_attachment( $postarr );
 	}
 
 	return wp_insert_post( $postarr, $wp_error );

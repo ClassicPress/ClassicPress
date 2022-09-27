@@ -66,13 +66,8 @@ function get_active_blog_for_user( $user_id ) {
 		}
 	}
 
-<<<<<<< HEAD
-	if ( ( ! is_object( $primary ) ) || ( $primary->archived == 1 || $primary->spam == 1 || $primary->deleted == 1 ) ) {
-		$blogs = get_blogs_of_user( $user_id, true ); // if a user's primary blog is shut down, check their other blogs.
-=======
 	if ( ( ! is_object( $primary ) ) || ( 1 == $primary->archived || 1 == $primary->spam || 1 == $primary->deleted ) ) {
 		$blogs = get_blogs_of_user( $user_id, true ); // If a user's primary blog is shut down, check their other blogs.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$ret   = false;
 		if ( is_array( $blogs ) && count( $blogs ) > 0 ) {
 			foreach ( (array) $blogs as $blog_id => $blog ) {
@@ -80,13 +75,8 @@ function get_active_blog_for_user( $user_id ) {
 					continue;
 				}
 				$details = get_site( $blog_id );
-<<<<<<< HEAD
-				if ( is_object( $details ) && $details->archived == 0 && $details->spam == 0 && $details->deleted == 0 ) {
-					$ret = $blog;
-=======
 				if ( is_object( $details ) && 0 == $details->archived && 0 == $details->spam && 0 == $details->deleted ) {
-					$ret = $details;
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+					$ret = $blog;
 					if ( get_user_meta( $user_id, 'primary_blog', true ) != $blog_id ) {
 						update_user_meta( $user_id, 'primary_blog', $blog_id );
 					}
@@ -348,11 +338,7 @@ function get_blog_id_from_url( $domain, $path = '/' ) {
 	$path   = strtolower( $path );
 	$id     = wp_cache_get( md5( $domain . $path ), 'blog-id-cache' );
 
-<<<<<<< HEAD
-	if ( $id == -1 ) { // blog does not exist
-=======
 	if ( -1 == $id ) { // Blog does not exist.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return 0;
 	} elseif ( $id ) {
 		return (int) $id;
@@ -925,14 +911,9 @@ function wpmu_signup_blog_notification( $domain, $path, $title, $user_login, $us
 
 	$activate_url = esc_url( $activate_url );
 	$admin_email = get_site_option( 'admin_email' );
-<<<<<<< HEAD
 
 	if ( '' === $admin_email ) {
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
-=======
-	if ( '' == $admin_email ) {
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
@@ -1055,14 +1036,9 @@ function wpmu_signup_user_notification( $user_login, $user_email, $key, $meta = 
 
 	// Send email with activation link.
 	$admin_email = get_site_option( 'admin_email' );
-<<<<<<< HEAD
 
 	if ( '' === $admin_email ) {
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
-=======
-	if ( '' == $admin_email ) {
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
@@ -1785,13 +1761,8 @@ We hope you enjoy your new site. Thanks!
 	$welcome_email = apply_filters( 'update_welcome_email', $welcome_email, $blog_id, $user_id, $password, $title, $meta );
 	$admin_email   = get_site_option( 'admin_email' );
 
-<<<<<<< HEAD
 	if ( '' === $admin_email ) {
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
-=======
-	if ( '' == $admin_email ) {
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
@@ -1881,13 +1852,8 @@ function wpmu_welcome_user_notification( $user_id, $password, $meta = array() ) 
 
 	$admin_email = get_site_option( 'admin_email' );
 
-<<<<<<< HEAD
 	if ( '' === $admin_email ) {
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
-=======
-	if ( '' == $admin_email ) {
-		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
@@ -2304,14 +2270,8 @@ function maybe_redirect_404() {
 	 *
 	 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
 	 */
-<<<<<<< HEAD
 	if ( is_main_site() && is_404() && defined( 'NOBLOGREDIRECT' ) && ( $destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT ) ) ) {
-		if ( $destination == '%siteurl%' ) {
-=======
-		$destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT );
-		if ( $destination ) {
-			if ( '%siteurl%' === $destination ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+		if ( '%siteurl%' === $destination ) {
 			$destination = network_home_url();
 		}
 		wp_redirect( $destination );

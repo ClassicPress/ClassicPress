@@ -1078,12 +1078,8 @@ function wp_kses_split2( $string, $allowed_html, $allowed_protocols ) {
 	}
 	// They are using a not allowed HTML element
 
-<<<<<<< HEAD
-	if ( $slash != '' ) {
-=======
 	// No attributes are allowed for closing elements.
 	if ( '' != $slash ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return "</$elem>";
 	}
 	// No attributes are allowed for closing elements
@@ -1319,25 +1315,15 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 				break;
 		} // switch
 
-<<<<<<< HEAD
-		if ( $working == 0 ) { // not well formed, remove and try again
-=======
 		if ( 0 == $working ) { // Not well-formed, remove and try again.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$attr = wp_kses_html_error( $attr );
 			$mode = 0;
 		}
 	} // while
 
-<<<<<<< HEAD
-	if ( $mode == 1 && false === array_key_exists( $attrname, $attrarr ) ) {
-		// special case, for when the attribute list ends with a valueless
-		// attribute like "selected"
-=======
 	if ( 1 == $mode && false === array_key_exists( $attrname, $attrarr ) ) {
 		// Special case, for when the attribute list ends with a valueless
 		// attribute like "selected".
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$attrarr[ $attrname ] = array(
 			'name'  => $attrname,
 			'value' => '',
@@ -2142,48 +2128,9 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 				$found = true;
 			}
 		}
-<<<<<<< HEAD
+
 		if ( $found ) {
-			if ( $css != '' ) {
-=======
-
-		if ( $found && $url_attr ) {
-			// Simplified: matches the sequence `url(*)`.
-			preg_match_all( '/url\([^)]+\)/', $parts[1], $url_matches );
-
-			foreach ( $url_matches[0] as $url_match ) {
-				// Clean up the URL from each of the matches above.
-				preg_match( '/^url\(\s*([\'\"]?)(.*)(\g1)\s*\)$/', $url_match, $url_pieces );
-
-				if ( empty( $url_pieces[2] ) ) {
-					$found = false;
-					break;
-				}
-
-				$url = trim( $url_pieces[2] );
-
-				if ( empty( $url ) || wp_kses_bad_protocol( $url, $allowed_protocols ) !== $url ) {
-					$found = false;
-					break;
-				} else {
-					// Remove the whole `url(*)` bit that was matched above from the CSS.
-					$css_test_string = str_replace( $url_match, '', $css_test_string );
-				}
-			}
-		}
-
-		if ( $found && $gradient_attr ) {
-			$css_value = trim( $parts[1] );
-			if ( preg_match( '/^(repeating-)?(linear|radial|conic)-gradient\(([^()]|rgb[a]?\([^()]*\))*\)$/', $css_value ) ) {
-				// Remove the whole `gradient` bit that was matched above from the CSS.
-				$css_test_string = str_replace( $css_value, '', $css_test_string );
-			}
-		}
-
-		// Remove any CSS containing containing \ ( & } = or comments, except for url() useage checked above.
-		if ( $found && ! preg_match( '%[\\\(&=}]|/\*%', $css_test_string ) ) {
 			if ( '' != $css ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$css .= ';';
 			}
 			$css .= $css_item;

@@ -43,13 +43,8 @@ if ( isset( $_REQUEST['action'] ) && 'update-site' == $_REQUEST['action'] && is_
 	foreach ( (array) $_POST['option'] as $key => $val ) {
 		$key = wp_unslash( $key );
 		$val = wp_unslash( $val );
-<<<<<<< HEAD
-		if ( $key === 0 || is_array( $val ) || in_array( $key, $skip_options ) ) {
-			continue; // Avoids "0 is a protected WP option and may not be modified" error when edit blog options
-=======
 		if ( 0 === $key || is_array( $val ) || in_array( $key, $skip_options ) ) {
 			continue; // Avoids "0 is a protected WP option and may not be modified" error when edit blog options.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		}
 		update_option( $key, $val );
 	}

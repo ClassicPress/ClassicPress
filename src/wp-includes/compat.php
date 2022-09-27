@@ -369,16 +369,12 @@ if ( ! function_exists( 'hash_equals' ) ) :
 			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
 		}
 
-<<<<<<< HEAD
 		// Do not attempt to "optimize" this.
 		for ( $i = 0; $i < $a_length; $i++ ) {
 			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
 		}
 
-		return $result === 0;
-=======
 		return 0 === $result;
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 endif;
 

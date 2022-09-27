@@ -590,13 +590,8 @@ if ( ! function_exists( 'wp_authenticate' ) ) :
 		 */
 		$user = apply_filters( 'authenticate', null, $username, $password );
 
-<<<<<<< HEAD
-		if ( $user == null ) {
-			// TODO what should the error message be? (Or would these even happen?)
-=======
 		if ( null == $user ) {
 			// TODO: What should the error message be? (Or would these even happen?)
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			// Only needed if all authentication handlers fail to return anything.
 			$user = new WP_Error( 'authentication_failed', __( '<strong>ERROR</strong>: Invalid username, email address or incorrect password.' ) );
 		}
@@ -1525,13 +1520,8 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 			unset( $emails[ $author->user_email ] );
 		}
 
-<<<<<<< HEAD
-		// The author moderated a comment on their own post
-		if ( $author && ! $notify_author && $post->post_author == get_current_user_id() ) {
-=======
 		// The author moderated a comment on their own post.
 		if ( $author && ! $notify_author && get_current_user_id() == $post->post_author ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			unset( $emails[ $author->user_email ] );
 		}
 
@@ -1918,18 +1908,8 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 	 *                           string (admin only), 'user', or 'both' (admin and user). Default empty.
 	 */
 	function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) {
-<<<<<<< HEAD
-		if ( $deprecated !== null ) {
-			_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
-=======
 		if ( null !== $deprecated ) {
-			_deprecated_argument( __FUNCTION__, '4.3.1' );
-		}
-
-		// Accepts only 'user', 'admin' , 'both' or default '' as $notify.
-		if ( ! in_array( $notify, array( 'user', 'admin', 'both', '' ), true ) ) {
-			return;
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+			_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
 		}
 
 		global $wpdb, $wp_hasher;
@@ -2494,13 +2474,8 @@ if ( ! function_exists( 'wp_rand' ) ) :
 
 		$value = abs( hexdec( $value ) );
 
-<<<<<<< HEAD
-		// Reduce the value to be within the min - max range
-		if ( $max != 0 ) {
-=======
 		// Reduce the value to be within the min - max range.
 		if ( 0 != $max ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$value = $min + ( $max - $min + 1 ) * $value / ( $max_random_number + 1 );
 		}
 

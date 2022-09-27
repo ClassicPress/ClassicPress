@@ -1960,15 +1960,6 @@ function _media_states( $post ) {
 		} else {
 			$header_image = get_header_image();
 
-<<<<<<< HEAD
-			// Display "Header Image" if the image was ever used as a header image
-			if ( ! empty( $meta_header ) && $meta_header == $stylesheet && $header_image !== wp_get_attachment_url( $post->ID ) ) {
-				$media_states[] = __( 'Header Image' );
-			}
-
-			// Display "Current Header Image" if the image is currently the header image
-			if ( $header_image && $header_image == wp_get_attachment_url( $post->ID ) ) {
-=======
 			// Display "Header Image" if the image was ever used as a header image.
 			if ( ! empty( $meta_header ) && $meta_header === $stylesheet && wp_get_attachment_url( $post->ID ) !== $header_image ) {
 				$media_states[] = __( 'Header Image' );
@@ -1976,7 +1967,6 @@ function _media_states( $post ) {
 
 			// Display "Current Header Image" if the image is currently the header image.
 			if ( $header_image && wp_get_attachment_url( $post->ID ) === $header_image ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$media_states[] = __( 'Current Header Image' );
 			}
 		}

@@ -223,11 +223,7 @@ function get_object_taxonomies( $object, $output = 'names' ) {
 	global $wp_taxonomies;
 
 	if ( is_object( $object ) ) {
-<<<<<<< HEAD
-		if ( $object->post_type == 'attachment' ) {
-=======
 		if ( 'attachment' === $object->post_type ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			return get_attachment_taxonomies( $object, $output );
 		}
 		$object = $object->post_type;
@@ -844,15 +840,9 @@ function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
 	// Sanitize term, according to the specified filter.
 	$_term->filter( $filter );
 
-<<<<<<< HEAD
-	if ( $output == ARRAY_A ) {
-		return $_term->to_array();
-	} elseif ( $output == ARRAY_N ) {
-=======
 	if ( ARRAY_A === $output ) {
 		return $_term->to_array();
 	} elseif ( ARRAY_N === $output ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return array_values( $_term->to_array() );
 	}
 
@@ -3115,13 +3105,8 @@ function wp_update_term_count_now( $terms, $taxonomy ) {
 			}
 		}
 
-<<<<<<< HEAD
-		if ( $object_types == array_filter( $object_types, 'post_type_exists' ) ) {
-			// Only post types are attached to this taxonomy
-=======
 		if ( array_filter( $object_types, 'post_type_exists' ) == $object_types ) {
 			// Only post types are attached to this taxonomy.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			_update_post_term_count( $terms, $taxonomy );
 		} else {
 			// Default count updater
@@ -3999,11 +3984,7 @@ function _wp_check_split_default_terms( $term_id, $new_term_id, $term_taxonomy_i
 	}
 
 	foreach ( array( 'default_category', 'default_link_category', 'default_email_category' ) as $option ) {
-<<<<<<< HEAD
-		if ( $term_id == get_option( $option, -1 ) ) {
-=======
 		if ( (int) get_option( $option, -1 ) === $term_id ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			update_option( $option, $new_term_id );
 		}
 	}

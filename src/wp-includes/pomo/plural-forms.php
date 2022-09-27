@@ -161,13 +161,8 @@ class Plural_Forms {
 					while ( ! empty( $stack ) ) {
 						$o2 = $stack[ count( $stack ) - 1 ];
 
-<<<<<<< HEAD
-						// Ternary is right-associative in C
-						if ( $operator === '?:' || $operator === '?' ) {
-=======
 						// Ternary is right-associative in C.
 						if ( '?:' === $operator || '?' === $operator ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 							if ( self::$op_precedence[ $operator ] >= self::$op_precedence[ $o2 ] ) {
 								break;
 							}

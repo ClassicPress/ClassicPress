@@ -65,23 +65,6 @@ function edit_user( $user_id = 0 ) {
 		if ( ! empty( $new_role ) && empty( $editable_roles[ $new_role ] ) ) {
 			wp_die( __( 'Sorry, you are not allowed to give users that role.' ), 403 );
 		}
-<<<<<<< HEAD
-=======
-
-		$potential_role = isset( $wp_roles->role_objects[ $new_role ] ) ? $wp_roles->role_objects[ $new_role ] : false;
-
-		/*
-		 * Don't let anyone with 'promote_users' edit their own role to something without it.
-		 * Multisite super admins can freely edit their roles, they possess all caps.
-		 */
-		if (
-			( is_multisite() && current_user_can( 'manage_network_users' ) ) ||
-			get_current_user_id() !== $user_id ||
-			( $potential_role && $potential_role->has_cap( 'promote_users' ) )
-		) {
-			$user->role = $new_role;
-		}
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	if ( isset( $_POST['email'] ) ) {
@@ -150,13 +133,8 @@ function edit_user( $user_id = 0 ) {
 	$errors = new WP_Error();
 
 	/* checking that username has been typed */
-<<<<<<< HEAD
-	if ( $user->user_login == '' ) {
-		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
-=======
 	if ( '' == $user->user_login ) {
-		$errors->add( 'user_login', __( '<strong>Error</strong>: Please enter a username.' ) );
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	}
 
 	/* checking that nickname has been typed */

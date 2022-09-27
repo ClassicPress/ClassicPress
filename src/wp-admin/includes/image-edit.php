@@ -31,11 +31,7 @@ function wp_image_editor( $post_id, $msg = false ) {
 	$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
 	$can_restore  = false;
 	if ( ! empty( $backup_sizes ) && isset( $backup_sizes['full-orig'], $meta['file'] ) ) {
-<<<<<<< HEAD
-		$can_restore = $backup_sizes['full-orig']['file'] != basename( $meta['file'] );
-=======
 		$can_restore = wp_basename( $meta['file'] ) !== $backup_sizes['full-orig']['file'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	if ( $msg ) {
@@ -934,13 +930,8 @@ function wp_save_image( $post_id ) {
 		wp_update_attachment_metadata( $post_id, $meta );
 		update_post_meta( $post_id, '_wp_attachment_backup_sizes', $backup_sizes );
 
-<<<<<<< HEAD
-		if ( $target == 'thumbnail' || $target == 'all' || $target == 'full' ) {
-			// Check if it's an image edit from attachment edit screen
-=======
 		if ( 'thumbnail' === $target || 'all' === $target || 'full' === $target ) {
 			// Check if it's an image edit from attachment edit screen.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			if ( ! empty( $_REQUEST['context'] ) && 'edit-attachment' == $_REQUEST['context'] ) {
 				$thumb_url         = wp_get_attachment_image_src( $post_id, array( 900, 600 ), true );
 				$return->thumbnail = $thumb_url[0];

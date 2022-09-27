@@ -305,11 +305,7 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 		$content = array( $content );
 	}
 
-<<<<<<< HEAD
-	if ( false !== strpos( $post->post_content, '<!--noteaser-->' ) && ( ! $multipage || $page == 1 ) ) {
-=======
-	if ( false !== strpos( $_post->post_content, '<!--noteaser-->' ) && ( ! $elements['multipage'] || 1 == $elements['page'] ) ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+	if ( false !== strpos( $post->post_content, '<!--noteaser-->' ) && ( ! $multipage || 1 == $page ) ) {
 		$strip_teaser = true;
 	}
 

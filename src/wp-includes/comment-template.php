@@ -2089,13 +2089,8 @@ function wp_list_comments( $args = array(), $comments = null ) {
 					* When first page shows oldest comments, post permalink is the same as
 					* the comment permalink.
 					*/
-<<<<<<< HEAD
-				} elseif ( $cpage == 1 ) {
-					$r['cpage'] = '';
-=======
 				} elseif ( 1 == $cpage ) {
-					$parsed_args['cpage'] = '';
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+					$r['cpage'] = '';
 				} else {
 					$r['cpage'] = $cpage;
 				}

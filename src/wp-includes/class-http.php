@@ -460,13 +460,8 @@ class WP_Http {
 	 * @param Requests_Response $original Response object.
 	 */
 	public static function browser_redirect_compatibility( $location, $headers, $data, &$options, $original ) {
-<<<<<<< HEAD
-		// Browser compat
-		if ( $original->status_code === 302 ) {
-=======
 		// Browser compatibility.
 		if ( 302 === $original->status_code ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$options['type'] = Requests::GET;
 		}
 	}

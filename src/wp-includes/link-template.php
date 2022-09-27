@@ -419,13 +419,8 @@ function get_attachment_link( $post = null, $leavename = false ) {
 	}
 
 	if ( $wp_rewrite->using_permalinks() && $parent ) {
-<<<<<<< HEAD
-		if ( 'page' == $parent->post_type ) {
-			$parentlink = _get_page_link( $post->post_parent ); // Ignores page_on_front
-=======
 		if ( 'page' === $parent->post_type ) {
 			$parentlink = _get_page_link( $post->post_parent ); // Ignores page_on_front.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		} else {
 			$parentlink = get_permalink( $post->post_parent );
 		}

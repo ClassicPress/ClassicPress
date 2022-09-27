@@ -308,10 +308,6 @@ function update_right_now_message() {
 	if ( current_user_can( 'update_core' ) ) {
 		$cur = get_preferred_from_update_core();
 
-<<<<<<< HEAD
-		if ( isset( $cur->response ) && $cur->response == 'upgrade' ) {
-			$msg .= '<a href="' . network_admin_url( 'update-core.php' ) . '" class="button" aria-describedby="wp-version">' . sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) ) . '</a> ';
-=======
 		if ( isset( $cur->response ) && 'upgrade' === $cur->response ) {
 			$msg .= sprintf(
 				'<a href="%s" class="button" aria-describedby="wp-version">%s</a> ',
@@ -319,7 +315,6 @@ function update_right_now_message() {
 				/* translators: %s: WordPress version number, or 'Latest' string. */
 				sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) )
 			);
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		}
 	}
 

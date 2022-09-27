@@ -606,12 +606,8 @@ function media_buttons( $editor_id = 'content' ) {
 
 	$img = '<span class="wp-media-buttons-icon"></span> ';
 
-<<<<<<< HEAD
-	$id_attribute = $instance === 1 ? ' id="insert-media-button"' : '';
-=======
 	$id_attribute = 1 === $instance ? ' id="insert-media-button"' : '';
 
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	printf(
 		'<button type="button"%s class="button insert-media add_media" data-editor="%s">%s</button>',
 		$id_attribute,
@@ -737,12 +733,8 @@ function media_upload_form_handler() {
 
 			if ( isset( $attachment['image_alt'] ) ) {
 				$image_alt = wp_unslash( $attachment['image_alt'] );
-<<<<<<< HEAD
-				if ( $image_alt != get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) {
-=======
 
 				if ( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) !== $image_alt ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 					$image_alt = wp_strip_all_tags( $image_alt, true );
 
 					// Update_meta expects slashed.
@@ -1160,12 +1152,8 @@ function image_link_input_fields( $post, $url_type = '' ) {
 	}
 
 	$url = '';
-<<<<<<< HEAD
-	if ( $url_type == 'file' ) {
-=======
 
 	if ( 'file' === $url_type ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$url = $file;
 	} elseif ( 'post' === $url_type ) {
 		$url = $link;
@@ -1431,12 +1419,8 @@ function get_media_items( $post_id, $errors ) {
 	$attachments = array();
 	if ( $post_id ) {
 		$post = get_post( $post_id );
-<<<<<<< HEAD
-		if ( $post && $post->post_type == 'attachment' ) {
-=======
 
 		if ( $post && 'attachment' === $post->post_type ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$attachments = array( $post->ID => $post );
 		} else {
 			$attachments = get_children(
@@ -2605,7 +2589,7 @@ function media_upload_library_form( $errors ) {
 		$_GET['post_mime_type']                        = $type;
 		list($post_mime_types, $avail_post_mime_types) = wp_edit_attachments_query();
 	}
-		if ( empty( $_GET['post_mime_type'] ) || 'all' === $_GET['post_mime_type'] ) {
+	if ( empty( $_GET['post_mime_type'] ) || 'all' === $_GET['post_mime_type'] ) {
 		$class = ' class="current"';
 	} else {
 		$class = '';
@@ -2688,7 +2672,7 @@ function media_upload_library_form( $errors ) {
 <option<?php selected( $selected_month, 0 ); ?> value='0'><?php _e( 'All dates' ); ?></option>
 		<?php
 		foreach ( $arc_result as $arc_row ) {
-				if ( 0 == $arc_row->yyear ) {
+			if ( 0 == $arc_row->yyear ) {
 				continue;
 			}
 			$arc_row->mmonth = zeroise( $arc_row->mmonth, 2 );
@@ -3116,20 +3100,21 @@ function attachment_submitbox_metadata() {
 		<?php _e( 'File name:' ); ?> <strong><?php echo $filename; ?></strong>
 	</div>
 	<div class="misc-pub-section misc-pub-filetype">
-		<?php _e( 'File type:' ); ?> <strong>
-				  <?php
-					if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $post->ID ), $matches ) ) {
-						echo esc_html( strtoupper( $matches[1] ) );
-						list( $mime_type ) = explode( '/', $post->post_mime_type );
-			if ( 'image' !== $mime_type && ! empty( $meta['mime_type'] ) ) {
-				if ( "$mime_type/" . strtolower( $matches[1] ) !== $meta['mime_type'] ) {
-								echo ' (' . $meta['mime_type'] . ')';
-							}
-						}
-					} else {
-						echo strtoupper( str_replace( 'image/', '', $post->post_mime_type ) );
+		<?php _e( 'File type:' ); ?>
+		<strong>
+			<?php
+			if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $post->ID ), $matches ) ) {
+				echo esc_html( strtoupper( $matches[1] ) );
+				list( $mime_type ) = explode( '/', $post->post_mime_type );
+				if ( 'image' !== $mime_type && ! empty( $meta['mime_type'] ) ) {
+					if ( "$mime_type/" . strtolower( $matches[1] ) !== $meta['mime_type'] ) {
+						echo ' (' . $meta['mime_type'] . ')';
 					}
-					?>
+				}
+			} else {
+				echo strtoupper( str_replace( 'image/', '', $post->post_mime_type ) );
+			}
+			?>
 		</strong>
 	</div>
 

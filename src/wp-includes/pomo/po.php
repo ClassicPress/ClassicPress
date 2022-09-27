@@ -359,13 +359,8 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-<<<<<<< HEAD
-					// comments have to be at the beginning
-					if ( $context && $context != 'comment' ) {
-=======
 					// Comments have to be at the beginning.
 					if ( $context && 'comment' !== $context ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 						return false;
 					}
 					// add comment

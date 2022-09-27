@@ -460,14 +460,9 @@ As a new ClassicPress user, you should go to <a href=\"%s\">your dashboard</a> t
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'user_level' ) );
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'capabilities' ) );
 
-<<<<<<< HEAD
-			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.) TODO: Get previous_blog_id.
-			if ( ! is_super_admin( $user_id ) && $user_id != 1 ) {
-=======
 			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.)
 			// TODO: Get previous_blog_id.
 			if ( ! is_super_admin( $user_id ) && 1 != $user_id ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$wpdb->delete(
 					$wpdb->usermeta,
 					array(

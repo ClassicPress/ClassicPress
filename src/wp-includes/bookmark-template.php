@@ -112,11 +112,7 @@ function _walk_bookmarks( $bookmarks, $args = '' ) {
 
 		$output .= $r['link_before'];
 
-<<<<<<< HEAD
-		if ( $bookmark->link_image != null && $r['show_images'] ) {
-=======
-		if ( null != $bookmark->link_image && $parsed_args['show_images'] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+		if ( null != $bookmark->link_image && $r['show_images'] ) {
 			if ( strpos( $bookmark->link_image, 'http' ) === 0 ) {
 				$output .= "<img src=\"$bookmark->link_image\" $alt $title />";
 			} else { // If it's a relative path

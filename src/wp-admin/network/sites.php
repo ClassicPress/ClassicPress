@@ -161,13 +161,8 @@ if ( isset( $_GET['action'] ) ) {
 			break;
 
 		case 'allblogs':
-<<<<<<< HEAD
 			if ( isset( $_POST['action'] ) && isset( $_POST['allblogs'] ) ) {
 				$doaction = $_POST['action'];
-=======
-			if ( ( isset( $_POST['action'] ) || isset( $_POST['action2'] ) ) && isset( $_POST['allblogs'] ) ) {
-				$doaction = -1 != $_POST['action'] ? $_POST['action'] : $_POST['action2'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 
 				foreach ( (array) $_POST['allblogs'] as $key => $val ) {
 					if ( '0' != $val && get_network()->site_id != $val ) {

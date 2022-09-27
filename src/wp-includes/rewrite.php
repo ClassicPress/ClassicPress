@@ -157,13 +157,8 @@ function add_rewrite_rule( $regex, $query, $after = 'bottom' ) {
  * @param string $query Optional. String to append to the rewritten query. Must end in '='. Default empty.
  */
 function add_rewrite_tag( $tag, $regex, $query = '' ) {
-<<<<<<< HEAD
-	// validate the tag's name
-	if ( strlen( $tag ) < 3 || $tag[0] != '%' || $tag[ strlen( $tag ) - 1 ] != '%' ) {
-=======
 	// Validate the tag's name.
 	if ( strlen( $tag ) < 3 || '%' !== $tag[0] || '%' !== $tag[ strlen( $tag ) - 1 ] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return;
 	}
 

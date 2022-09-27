@@ -572,14 +572,9 @@ function post_categories_meta_box( $post, $box ) {
 
 		<div id="<?php echo $tax_name; ?>-all" class="tabs-panel">
 			<?php
-<<<<<<< HEAD
-			$name = ( $tax_name == 'category' ) ? 'post_category' : 'tax_input[' . $tax_name . ']';
-			echo "<input type='hidden' name='{$name}[]' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.
-=======
 			$name = ( 'category' === $tax_name ) ? 'post_category' : 'tax_input[' . $tax_name . ']';
 			// Allows for an empty term set to be sent. 0 is an invalid term ID and will be ignored by empty() checks.
 			echo "<input type='hidden' name='{$name}[]' value='0' />";
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			?>
 			<ul id="<?php echo $tax_name; ?>checklist" data-wp-lists="list:<?php echo $tax_name; ?>" class="categorychecklist form-no-clear">
 				<?php

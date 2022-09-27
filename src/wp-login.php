@@ -407,12 +407,8 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set
 	}
 
 	$url = dirname( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] ) );
-<<<<<<< HEAD
-	if ( $url != get_option( 'siteurl' ) ) {
-=======
 
 	if ( get_option( 'siteurl' ) !== $url ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		update_option( 'siteurl', $url );
 	}
 }
@@ -960,31 +956,8 @@ switch ( $action ) {
 				exit;
 			}
 
-<<<<<<< HEAD
-			if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
-=======
-			// Check if it is time to add a redirect to the admin email confirmation screen.
-			if ( is_a( $user, 'WP_User' ) && $user->exists() && $user->has_cap( 'manage_options' ) ) {
-				$admin_email_lifespan = (int) get_option( 'admin_email_lifespan' );
-
-				// If `0` (or anything "falsey" as it is cast to int) is returned, the user will not be redirected
-				// to the admin email confirmation screen.
-				/** This filter is documented in wp-login.php */
-				$admin_email_check_interval = (int) apply_filters( 'admin_email_check_interval', 6 * MONTH_IN_SECONDS );
-
-				if ( $admin_email_check_interval > 0 && time() > $admin_email_lifespan ) {
-					$redirect_to = add_query_arg(
-						array(
-							'action'  => 'confirm_admin_email',
-							'wp_lang' => get_user_locale( $user ),
-						),
-						wp_login_url( $redirect_to )
-					);
-				}
-			}
 
 			if ( ( empty( $redirect_to ) || 'wp-admin/' === $redirect_to || admin_url() === $redirect_to ) ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
 				if ( is_multisite() && ! get_active_blog_for_user( $user->ID ) && ! is_super_admin( $user->ID ) ) {
 					$redirect_to = user_admin_url();

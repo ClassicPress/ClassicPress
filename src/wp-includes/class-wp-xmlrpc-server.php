@@ -5468,13 +5468,8 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$post_ID = $postdata['ID'] = get_default_post_to_edit( $post_type, true )->ID;
 
-<<<<<<< HEAD
-		// Only posts can be sticky
-		if ( $post_type == 'post' && isset( $content_struct['sticky'] ) ) {
-=======
 		// Only posts can be sticky.
 		if ( 'post' === $post_type && isset( $content_struct['sticky'] ) ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$data           = $postdata;
 			$data['sticky'] = $content_struct['sticky'];
 			$error          = $this->_toggle_sticky( $data );
@@ -5859,13 +5854,8 @@ class wp_xmlrpc_server extends IXR_Server {
 			return new IXR_Error( 500, __( 'Sorry, your entry could not be edited.' ) );
 		}
 
-<<<<<<< HEAD
-		// Only posts can be sticky
-		if ( $post_type == 'post' && isset( $content_struct['sticky'] ) ) {
-=======
 		// Only posts can be sticky.
 		if ( 'post' === $post_type && isset( $content_struct['sticky'] ) ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$data              = $newpost;
 			$data['sticky']    = $content_struct['sticky'];
 			$data['post_type'] = 'post';
@@ -5986,13 +5976,8 @@ class wp_xmlrpc_server extends IXR_Server {
 			$allow_comments = ( 'open' == $postdata['comment_status'] ) ? 1 : 0;
 			$allow_pings    = ( 'open' == $postdata['ping_status'] ) ? 1 : 0;
 
-<<<<<<< HEAD
-			// Consider future posts as published
-			if ( $postdata['post_status'] === 'future' ) {
-=======
 			// Consider future posts as published.
 			if ( 'future' === $postdata['post_status'] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$postdata['post_status'] = 'publish';
 			}
 
@@ -6142,13 +6127,8 @@ class wp_xmlrpc_server extends IXR_Server {
 			$allow_comments = ( 'open' == $entry['comment_status'] ) ? 1 : 0;
 			$allow_pings    = ( 'open' == $entry['ping_status'] ) ? 1 : 0;
 
-<<<<<<< HEAD
-			// Consider future posts as published
-			if ( $entry['post_status'] === 'future' ) {
-=======
 			// Consider future posts as published.
 			if ( 'future' === $entry['post_status'] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$entry['post_status'] = 'publish';
 			}
 

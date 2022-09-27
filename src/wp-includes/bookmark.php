@@ -291,13 +291,8 @@ function get_bookmarks( $args = '' ) {
 	$query  = "SELECT * $length $recently_updated_test $get_updated FROM $wpdb->links $join WHERE 1=1 $visible $category_query";
 	$query .= " $exclusions $inclusions $search";
 	$query .= " ORDER BY $orderby $order";
-<<<<<<< HEAD
-	if ( $r['limit'] != -1 ) {
-		$query .= ' LIMIT ' . absint( $r['limit'] );
-=======
-	if ( -1 != $parsed_args['limit'] ) {
-		$query .= ' LIMIT ' . $parsed_args['limit'];
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+	if ( -1 != $r['limit'] ) {
+		$query .= ' LIMIT ' . $r['limit'];
 	}
 
 	$results = $wpdb->get_results( $query );

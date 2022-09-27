@@ -103,13 +103,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		if ( 'search' === $tab ) {
 			$tabs['search'] = __( 'Search Results' );
 		}
-<<<<<<< HEAD
-=======
-		if ( 'beta' === $tab || false !== strpos( get_bloginfo( 'version' ), '-' ) ) {
-			$tabs['beta'] = _x( 'Beta Testing', 'Plugin Installer' );
-		}
-		$tabs['featured']    = _x( 'Featured', 'Plugin Installer' );
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$tabs['popular']    = _x( 'Popular', 'Plugin Installer' );
 		$tabs['categories'] = _x( 'Categories', 'Plugin Installer' );
 		if ( current_user_can( 'upload_plugins' ) ) {

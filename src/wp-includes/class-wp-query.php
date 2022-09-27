@@ -991,13 +991,6 @@ class WP_Query {
 				$this->is_home       = true;
 				$this->is_posts_page = true;
 			}
-<<<<<<< HEAD
-=======
-
-			if ( isset( $this->queried_object_id ) && get_option( 'wp_page_for_privacy_policy' ) == $this->queried_object_id ) {
-				$this->is_privacy_policy = true;
-			}
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		}
 
 		if ( $qv['page_id'] ) {
@@ -1006,13 +999,6 @@ class WP_Query {
 				$this->is_home       = true;
 				$this->is_posts_page = true;
 			}
-<<<<<<< HEAD
-=======
-
-			if ( get_option( 'wp_page_for_privacy_policy' ) == $qv['page_id'] ) {
-				$this->is_privacy_policy = true;
-			}
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		}
 
 		if ( ! empty( $qv['post_type'] ) ) {
@@ -3230,11 +3216,7 @@ class WP_Query {
 		global $post;
 		$this->in_the_loop = true;
 
-<<<<<<< HEAD
-		if ( $this->current_post == -1 ) { // loop has just started
-=======
 		if ( -1 == $this->current_post ) { // Loop has just started.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			/**
 			 * Fires once the loop is started.
 			 *

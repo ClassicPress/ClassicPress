@@ -144,13 +144,8 @@ class Walker {
 		$cb_args = array_merge( array( &$output, $element, $depth ), $args );
 		call_user_func_array( array( $this, 'start_el' ), $cb_args );
 
-<<<<<<< HEAD
-		// descend only when the depth is right and there are childrens for this element
-		if ( ( $max_depth == 0 || $max_depth > $depth + 1 ) && isset( $children_elements[ $id ] ) ) {
-=======
 		// Descend only when the depth is right and there are childrens for this element.
 		if ( ( 0 == $max_depth || $max_depth > $depth + 1 ) && isset( $children_elements[ $id ] ) ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 
 			foreach ( $children_elements[ $id ] as $child ) {
 

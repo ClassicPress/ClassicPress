@@ -257,8 +257,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 			);
 
 			// Add note about deprecated WPLANG constant.
-<<<<<<< HEAD
-			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && $locale !== WPLANG ) {
+			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && WPLANG !== $locale ) {
 				if ( is_multisite() && current_user_can( 'manage_network_options' )
 					|| ! is_multisite() && current_user_can( 'manage_options' ) ) {
 					?>
@@ -268,15 +267,6 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 					<?php
 				}
 				_deprecated_argument( 'define()', 'WP-4.0.0', sprintf( __( 'The %1$s constant in your %2$s file is no longer needed.' ), 'WPLANG', 'wp-config.php' ) );
-=======
-			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && WPLANG !== $locale ) {
-				_deprecated_argument(
-					'define()',
-					'4.0.0',
-					/* translators: 1: WPLANG, 2: wp-config.php */
-					sprintf( __( 'The %1$s constant in your %2$s file is no longer needed.' ), 'WPLANG', 'wp-config.php' )
-				);
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			}
 			?>
 		</td>

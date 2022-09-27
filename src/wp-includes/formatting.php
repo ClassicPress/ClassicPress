@@ -474,13 +474,8 @@ function wpautop( $pee, $br = true ) {
 		foreach ( $pee_parts as $pee_part ) {
 			$start = strpos( $pee_part, '<pre' );
 
-<<<<<<< HEAD
-			// Malformed html?
-			if ( $start === false ) {
-=======
 			// Malformed HTML?
 			if ( false === $start ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$pee .= $pee_part;
 				continue;
 			}
@@ -3352,13 +3347,8 @@ function get_date_from_gmt( $string, $format = 'Y-m-d H:i:s' ) {
  * @return int|float The offset in seconds.
  */
 function iso8601_timezone_to_offset( $timezone ) {
-<<<<<<< HEAD
-	// $timezone is either 'Z' or '[+|-]hhmm'
-	if ( $timezone == 'Z' ) {
-=======
 	// $timezone is either 'Z' or '[+|-]hhmm'.
 	if ( 'Z' === $timezone ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$offset = 0;
 	} else {
 		$sign    = ( substr( $timezone, 0, 1 ) == '+' ) ? 1 : -1;
@@ -4419,13 +4409,8 @@ function sanitize_option( $option, $value ) {
 
 		case 'default_ping_status':
 		case 'default_comment_status':
-<<<<<<< HEAD
-			// Options that if not there have 0 value but need to be something like "closed"
-			if ( $value == '0' || $value == '' ) {
-=======
 			// Options that if not there have 0 value but need to be something like "closed".
 			if ( '0' == $value || '' == $value ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				$value = 'closed';
 			}
 			break;
@@ -4742,15 +4727,9 @@ function wp_sprintf( $pattern ) {
 		}
 		$fragment = substr( $pattern, $start, $end - $start );
 
-<<<<<<< HEAD
-		// Fragment has a specifier
-		if ( $pattern[ $start ] == '%' ) {
-			// Find numbered arguments or take the next one in order
-=======
 		// Fragment has a specifier.
 		if ( '%' === $pattern[ $start ] ) {
 			// Find numbered arguments or take the next one in order.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			if ( preg_match( '/^%(\d+)\$/', $fragment, $matches ) ) {
 				$arg      = isset( $args[ $matches[1] ] ) ? $args[ $matches[1] ] : '';
 				$fragment = str_replace( "%{$matches[1]}$", '%', $fragment );

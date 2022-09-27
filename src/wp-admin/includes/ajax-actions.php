@@ -295,12 +295,8 @@ function wp_ajax_autocomplete_user() {
 			'fields'  => 'ID',
 		)
 	) : array() );
-<<<<<<< HEAD
-	$exclude_blog_users = ( $type == 'add' ? get_users(
-=======
 
 	$exclude_blog_users = ( 'add' === $type ? get_users(
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		array(
 			'blog_id' => $id,
 			'fields'  => 'ID',
@@ -505,12 +501,8 @@ function _wp_ajax_add_hierarchical_term() {
 	if ( 0 > $parent ) {
 		$parent = 0;
 	}
-<<<<<<< HEAD
-	if ( $taxonomy->name == 'category' ) {
-=======
 
 	if ( 'category' === $taxonomy->name ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$post_category = isset( $_POST['post_category'] ) ? (array) $_POST['post_category'] : array();
 	} else {
 		$post_category = ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ $taxonomy->name ] ) ) ? (array) $_POST['tax_input'][ $taxonomy->name ] : array();
@@ -642,13 +634,9 @@ function wp_ajax_delete_comment() {
 			wp_die( time() );
 		}
 		$r = wp_untrash_comment( $comment );
-<<<<<<< HEAD
-		if ( ! isset( $_POST['comment_status'] ) || $_POST['comment_status'] != 'trash' ) { // undo trash, not in trash
-=======
 
 		// Undo trash, not in trash.
 		if ( ! isset( $_POST['comment_status'] ) || 'trash' !== $_POST['comment_status'] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$delta = 1;
 		}
 	} elseif ( isset( $_POST['spam'] ) && 1 == $_POST['spam'] ) {
@@ -661,13 +649,9 @@ function wp_ajax_delete_comment() {
 			wp_die( time() );
 		}
 		$r = wp_unspam_comment( $comment );
-<<<<<<< HEAD
-		if ( ! isset( $_POST['comment_status'] ) || $_POST['comment_status'] != 'spam' ) { // undo spam, not in spam
-=======
 
 		// Undo spam, not in spam.
 		if ( ! isset( $_POST['comment_status'] ) || 'spam' !== $_POST['comment_status'] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$delta = 1;
 		}
 	} elseif ( isset( $_POST['delete'] ) && 1 == $_POST['delete'] ) {
@@ -1852,9 +1836,6 @@ function wp_ajax_inline_save() {
 	if ( $last = wp_check_post_lock( $post_ID ) ) {
 		$last_user      = get_userdata( $last );
 		$last_user_name = $last_user ? $last_user->display_name : __( 'Someone' );
-<<<<<<< HEAD
-		printf( $_POST['post_type'] == 'page' ? __( 'Saving is disabled: %s is currently editing this page.' ) : __( 'Saving is disabled: %s is currently editing this post.' ), esc_html( $last_user_name ) );
-=======
 
 		/* translators: %s: User's display name. */
 		$msg_template = __( 'Saving is disabled: %s is currently editing this post.' );
@@ -1865,7 +1846,6 @@ function wp_ajax_inline_save() {
 		}
 
 		printf( $msg_template, esc_html( $last_user_name ) );
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		wp_die();
 	}
 
@@ -2594,12 +2574,8 @@ function wp_ajax_wp_remove_post_lock() {
 	}
 
 	$active_lock = array_map( 'absint', explode( ':', $_POST['active_post_lock'] ) );
-<<<<<<< HEAD
-	if ( $active_lock[1] != get_current_user_id() ) {
-=======
 
 	if ( get_current_user_id() != $active_lock[1] ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		wp_die( 0 );
 	}
 
@@ -2623,12 +2599,8 @@ function wp_ajax_wp_remove_post_lock() {
  */
 function wp_ajax_dismiss_wp_pointer() {
 	$pointer = $_POST['pointer'];
-<<<<<<< HEAD
-	if ( $pointer != sanitize_key( $pointer ) ) {
-=======
 
 	if ( sanitize_key( $pointer ) != $pointer ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		wp_die( 0 );
 	}
 

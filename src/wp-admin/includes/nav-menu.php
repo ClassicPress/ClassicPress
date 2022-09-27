@@ -1208,13 +1208,8 @@ function _wp_expand_nav_menu_post_data() {
 			$new_post_data = array();
 
 			// Build the new array value from leaf to trunk.
-<<<<<<< HEAD
-			for ( $i = count( $array_bits ) - 1; $i >= 0; $i -- ) {
-				if ( $i == count( $array_bits ) - 1 ) {
-=======
 			for ( $i = count( $array_bits ) - 1; $i >= 0; $i-- ) {
 				if ( count( $array_bits ) - 1 == $i ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 					$new_post_data[ $array_bits[ $i ] ] = wp_slash( $post_input_data->value );
 				} else {
 					$new_post_data = array( $array_bits[ $i ] => $new_post_data );

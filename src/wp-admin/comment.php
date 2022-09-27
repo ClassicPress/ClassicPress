@@ -135,11 +135,7 @@ switch ( $action ) {
 				break;
 		}
 
-<<<<<<< HEAD
-		if ( $comment->comment_approved != '0' ) { // if not unapproved
-=======
 		if ( '0' != $comment->comment_approved ) { // If not unapproved.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$message = '';
 			switch ( $comment->comment_approved ) {
 				case '1':

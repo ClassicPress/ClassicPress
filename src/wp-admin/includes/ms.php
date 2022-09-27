@@ -20,11 +20,7 @@ function check_upload_size( $file ) {
 		return $file;
 	}
 
-<<<<<<< HEAD
-	if ( $file['error'] != '0' ) { // there's already an error
-=======
 	if ( '0' != $file['error'] ) { // There's already an error.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return $file;
 	}
 
@@ -769,19 +765,11 @@ function mu_dropdown_languages( $lang_files = array(), $current = '' ) {
 	foreach ( (array) $lang_files as $val ) {
 		$code_lang = basename( $val, '.mo' );
 
-<<<<<<< HEAD
-		if ( $code_lang == 'en_US' ) { // American English
-			$flag          = true;
-			$ae            = __( 'American English' );
-			$output[ $ae ] = '<option value="' . esc_attr( $code_lang ) . '"' . selected( $current, $code_lang, false ) . '> ' . $ae . '</option>';
-		} elseif ( $code_lang == 'en_GB' ) { // British English
-=======
 		if ( 'en_US' === $code_lang ) { // American English.
 			$flag          = true;
 			$ae            = __( 'American English' );
 			$output[ $ae ] = '<option value="' . esc_attr( $code_lang ) . '"' . selected( $current, $code_lang, false ) . '> ' . $ae . '</option>';
 		} elseif ( 'en_GB' === $code_lang ) { // British English.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$flag          = true;
 			$be            = __( 'British English' );
 			$output[ $be ] = '<option value="' . esc_attr( $code_lang ) . '"' . selected( $current, $code_lang, false ) . '> ' . $be . '</option>';
@@ -791,11 +779,7 @@ function mu_dropdown_languages( $lang_files = array(), $current = '' ) {
 		}
 	}
 
-<<<<<<< HEAD
-	if ( $flag === false ) { // ClassicPress english
-=======
-	if ( false === $flag ) { // WordPress English.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+	if ( false === $flag ) { // ClassicPress english
 		$output[] = '<option value=""' . selected( $current, '', false ) . '>' . __( 'English' ) . '</option>';
 	}
 
@@ -1005,14 +989,9 @@ function confirm_delete_users( $users ) {
 	?>
 	<table class="form-table">
 	<?php
-<<<<<<< HEAD
-	foreach ( ( $allusers = (array) $_POST['allusers'] ) as $user_id ) {
-		if ( $user_id != '' && $user_id != '0' ) {
-=======
 	$allusers = (array) $_POST['allusers'];
 	foreach ( $allusers as $user_id ) {
 		if ( '' != $user_id && '0' != $user_id ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$delete_user = get_userdata( $user_id );
 
 			if ( ! current_user_can( 'delete_user', $delete_user->ID ) ) {

@@ -2456,13 +2456,8 @@ class wpdb {
 			$values = array_values( get_object_vars( $this->last_result[ $y ] ) );
 		}
 
-<<<<<<< HEAD
-		// If there is a value return it else return null
-		return ( isset( $values[ $x ] ) && $values[ $x ] !== '' ) ? $values[ $x ] : null;
-=======
 		// If there is a value return it else return null.
 		return ( isset( $values[ $x ] ) && '' !== $values[ $x ] ) ? $values[ $x ] : null;
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	/**
@@ -2501,13 +2496,8 @@ class wpdb {
 			return $this->last_result[ $y ] ? get_object_vars( $this->last_result[ $y ] ) : null;
 		} elseif ( ARRAY_N == $output ) {
 			return $this->last_result[ $y ] ? array_values( get_object_vars( $this->last_result[ $y ] ) ) : null;
-<<<<<<< HEAD
-		} elseif ( strtoupper( $output ) === OBJECT ) {
-			// Back compat for OBJECT being previously case insensitive.
-=======
 		} elseif ( OBJECT === strtoupper( $output ) ) {
 			// Back compat for OBJECT being previously case-insensitive.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			return $this->last_result[ $y ] ? $this->last_result[ $y ] : null;
 		} else {
 			$this->print_error( ' $db->get_row(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N' );
@@ -2575,21 +2565,12 @@ class wpdb {
 		}
 
 		$new_array = array();
-<<<<<<< HEAD
-		if ( $output == OBJECT ) {
-			// Return an integer-keyed array of row objects
-			return $this->last_result;
-		} elseif ( $output == OBJECT_K ) {
-			// Return an array of row objects with keys from column 1
-			// (Duplicates are discarded)
-=======
 		if ( OBJECT == $output ) {
 			// Return an integer-keyed array of row objects.
 			return $this->last_result;
 		} elseif ( OBJECT_K == $output ) {
 			// Return an array of row objects with keys from column 1.
 			// (Duplicates are discarded.)
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			if ( $this->last_result ) {
 				foreach ( $this->last_result as $row ) {
 					$var_by_ref = get_object_vars( $row );
@@ -2604,13 +2585,8 @@ class wpdb {
 			// Return an integer-keyed array of...
 			if ( $this->last_result ) {
 				foreach ( (array) $this->last_result as $row ) {
-<<<<<<< HEAD
-					if ( $output == ARRAY_N ) {
-						// ...integer-keyed row arrays
-=======
 					if ( ARRAY_N == $output ) {
 						// ...integer-keyed row arrays.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 						$new_array[] = array_values( get_object_vars( $row ) );
 					} else {
 						// ...column name-keyed row arrays

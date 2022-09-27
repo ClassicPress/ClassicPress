@@ -609,11 +609,7 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$theme = isset( $theme['theme'] ) ? $theme['theme'] : '';
 
-<<<<<<< HEAD
-		if ( $theme != get_stylesheet() ) { //If not current
-=======
 		if ( get_stylesheet() !== $theme ) { // If not current.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			return $return;
 		}
 		//Change to maintenance mode now.
@@ -643,11 +639,7 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$theme = isset( $theme['theme'] ) ? $theme['theme'] : '';
 
-<<<<<<< HEAD
-		if ( $theme != get_stylesheet() ) { // If not current
-=======
 		if ( get_stylesheet() !== $theme ) { // If not current.
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			return $return;
 		}
 

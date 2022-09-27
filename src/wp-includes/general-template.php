@@ -1764,13 +1764,8 @@ function wp_get_archives( $args = '' ) {
 		$r['limit'] = ' LIMIT ' . $r['limit'];
 	}
 
-<<<<<<< HEAD
 	$order = strtoupper( $r['order'] );
-	if ( $order !== 'ASC' ) {
-=======
-	$order = strtoupper( $parsed_args['order'] );
 	if ( 'ASC' !== $order ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$order = 'DESC';
 	}
 
@@ -1929,12 +1924,8 @@ function wp_get_archives( $args = '' ) {
 					} else {
 						$text = $result->ID;
 					}
-<<<<<<< HEAD
+
 					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-					$selected = get_the_ID() === $result->ID;
-					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				}
 			}
 		}
@@ -2146,15 +2137,9 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$newrow = false;
 
-<<<<<<< HEAD
-		if ( $day == gmdate( 'j', $ts ) &&
-			$thismonth == gmdate( 'm', $ts ) &&
-			$thisyear == gmdate( 'Y', $ts ) ) {
-=======
-		if ( current_time( 'j' ) == $day &&
-			current_time( 'm' ) == $thismonth &&
-			current_time( 'Y' ) == $thisyear ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
+		if ( gmdate( 'j', $ts ) == $day &&
+			gmdate( 'm', $ts ) == $thismonth &&
+			gmdate( 'Y', $ts ) == $thisyear ) {
 			$calendar_output .= '<td id="today">';
 		} else {
 			$calendar_output .= '<td>';
@@ -2181,13 +2166,8 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 	}
 
-<<<<<<< HEAD
 	$pad = 7 - calendar_week_mod( date( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
-	if ( $pad != 0 && $pad != 7 ) {
-=======
-	$pad = 7 - calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
 	if ( 0 != $pad && 7 != $pad ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
 	}
 	$calendar_output .= "\n\t</tr>\n\t</tbody>\n\t</table>";
@@ -3725,14 +3705,9 @@ function get_language_attributes( $doctype = 'html' ) {
 		$attributes[] = 'dir="rtl"';
 	}
 
-<<<<<<< HEAD
-	if ( $lang = get_bloginfo( 'language' ) ) {
-		if ( get_option( 'html_type' ) == 'text/html' || $doctype == 'html' ) {
-=======
 	$lang = get_bloginfo( 'language' );
 	if ( $lang ) {
 		if ( 'text/html' === get_option( 'html_type' ) || 'html' === $doctype ) {
->>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
 		}
 
