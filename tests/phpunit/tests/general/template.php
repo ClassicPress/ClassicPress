@@ -437,8 +437,8 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$GLOBALS['post'] = $post;
 
 		$expected = '1453390476';
-		$d        = 'G';
-		$actual   = get_the_modified_time( $d );
+		$format   = 'G';
+		$actual   = get_the_modified_time( $format );
 		$this->assertEquals( $expected, $actual );
 	}
 
@@ -484,9 +484,9 @@ class Tests_General_Template extends WP_UnitTestCase {
 			'post_date_gmt' => '2016-01-21 15:34:36',
 		);
 		$post_id  = $this->factory->post->create( $details );
-		$d        = 'Y-m-d';
+		$format   = 'Y-m-d';
 		$expected = '2016-01-21';
-		$actual   = get_the_modified_date( $d, $post_id );
+		$actual   = get_the_modified_date( $format, $post_id );
 		$this->assertEquals( $expected, $actual );
 	}
 
@@ -508,8 +508,8 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$GLOBALS['post'] = $post;
 
 		$expected = '2016-01-21';
-		$d        = 'Y-m-d';
-		$actual   = get_the_modified_date( $d );
+		$format   = 'Y-m-d';
+		$actual   = get_the_modified_date( $format );
 		$this->assertEquals( $expected, $actual );
 	}
 
@@ -555,9 +555,9 @@ class Tests_General_Template extends WP_UnitTestCase {
 			'post_date_gmt' => '2016-01-21 15:34:36',
 		);
 		$post_id  = $this->factory->post->create( $details );
-		$d        = 'G';
+		$format   = 'G';
 		$expected = '1453390476';
-		$actual   = get_the_modified_time( $d, $post_id );
+		$actual   = get_the_modified_time( $format, $post_id );
 		$this->assertEquals( $expected, $actual );
 	}
 
