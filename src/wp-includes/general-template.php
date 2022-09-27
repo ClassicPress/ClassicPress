@@ -2278,12 +2278,12 @@ function the_date( $format = '', $before = '', $after = '', $echo = true ) {
 		 * @since WP-0.71
 		 *
 		 * @param string $the_date The formatted date string.
-	 * @param string $format   PHP date format. Defaults to 'date_format' option
+		 * @param string $format   PHP date format. Defaults to 'date_format' option
 		 *                         if not specified.
 		 * @param string $before   HTML output before the date.
 		 * @param string $after    HTML output after the date.
 		 */
-	$the_date = apply_filters( 'the_date', $the_date, $format, $before, $after );
+		$the_date = apply_filters( 'the_date', $the_date, $format, $before, $after );
 
 		if ( $echo ) {
 			echo $the_date;
@@ -2312,17 +2312,10 @@ function get_the_date( $format = '', $post = null ) {
 		return false;
 	}
 
-<<<<<<< HEAD
-	if ( '' == $d ) {
-		$the_date = mysql2date( get_option( 'date_format' ), $post->post_date );
-	} else {
-		$the_date = mysql2date( $d, $post->post_date );
-=======
 	if ( '' == $format ) {
 		$the_date = get_post_time( get_option( 'date_format' ), false, $post, true );
 	} else {
 		$the_date = get_post_time( $format, false, $post, true );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	}
 
 	/**
@@ -2437,14 +2430,9 @@ function the_time( $format = '' ) {
  * @param string      $format Optional. Format to use for retrieving the time the post
  *                            was written. Either 'G', 'U', or PHP date format defaults
  *                          to the value specified in the time_format option. Default empty.
-<<<<<<< HEAD
- * @param int|WP_Post $post WP_Post object or ID. Default is global $post object.
- * @return string|int|false Formatted date string or Unix timestamp if `$id` is 'U' or 'G'. False on failure.
-=======
  * @param int|WP_Post $post   WP_Post object or ID. Default is global `$post` object.
  * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
  *                          False on failure.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
  */
 function get_the_time( $format = '', $post = null ) {
 	$post = get_post( $post );
@@ -2483,12 +2471,8 @@ function get_the_time( $format = '', $post = null ) {
  * @param bool        $gmt       Optional. Whether to retrieve the GMT time. Default false.
  * @param int|WP_Post $post      WP_Post object or ID. Default is global $post object.
  * @param bool        $translate Whether to translate the time string. Default false.
-<<<<<<< HEAD
- * @return string|int|false Formatted date string or Unix timestamp if `$id` is 'U' or 'G'. False on failure.
-=======
  * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
  *                          False on failure.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
  */
 function get_post_time( $format = 'U', $gmt = false, $post = null, $translate = false ) {
 	$post = get_post( $post );
@@ -2497,38 +2481,13 @@ function get_post_time( $format = 'U', $gmt = false, $post = null, $translate = 
 		return false;
 	}
 
-<<<<<<< HEAD
-=======
-	$source   = ( $gmt ) ? 'gmt' : 'local';
-	$datetime = get_post_datetime( $post, 'date', $source );
-
-	if ( false === $datetime ) {
-		return false;
-	}
-
-	if ( 'U' === $format || 'G' === $format ) {
-		$time = $datetime->getTimestamp();
-
-		// Returns a sum of timestamp with timezone offset. Ideally should never be used.
-		if ( ! $gmt ) {
-			$time += $datetime->getOffset();
-		}
-	} elseif ( $translate ) {
-		$time = wp_date( $format, $datetime->getTimestamp(), $gmt ? new DateTimeZone( 'UTC' ) : null );
-	} else {
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	if ( $gmt ) {
 		$time = $post->post_date_gmt;
 	} else {
 		$time = $post->post_date;
 	}
 
-<<<<<<< HEAD
-	$time = mysql2date( $d, $time, $translate );
-=======
-		$time = $datetime->format( $format );
-	}
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
+	$time = mysql2date( $format, $time, $translate );
 
 	/**
 	 * Filters the localized time a post was written.
@@ -2614,12 +2573,7 @@ function get_the_modified_time( $format = '', $post = null ) {
  * @param bool        $gmt       Optional. Whether to retrieve the GMT time. Default false.
  * @param int|WP_Post $post      WP_Post object or ID. Default is global $post object.
  * @param bool        $translate Whether to translate the time string. Default false.
-<<<<<<< HEAD
  * @return string|int|false Formatted date string or Unix timestamp if `$id` is 'U' or 'G'. False on failure.
-=======
- * @return string|int|false Formatted date string or Unix timestamp if `$format` is 'U' or 'G'.
- *                          False on failure.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
  */
 function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $translate = false ) {
 	$post = get_post( $post );
@@ -2628,37 +2582,12 @@ function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $tra
 		return false;
 	}
 
-<<<<<<< HEAD
 	if ( $gmt ) {
 		$time = $post->post_modified_gmt;
 	} else {
 		$time = $post->post_modified;
-=======
-	$source   = ( $gmt ) ? 'gmt' : 'local';
-	$datetime = get_post_datetime( $post, 'modified', $source );
-
-	if ( false === $datetime ) {
-		return false;
 	}
-
-	if ( 'U' === $format || 'G' === $format ) {
-		$time = $datetime->getTimestamp();
-
-		// Returns a sum of timestamp with timezone offset. Ideally should never be used.
-		if ( ! $gmt ) {
-			$time += $datetime->getOffset();
-		}
-	} elseif ( $translate ) {
-		$time = wp_date( $format, $datetime->getTimestamp(), $gmt ? new DateTimeZone( 'UTC' ) : null );
-	} else {
-		if ( $gmt ) {
-			$datetime = $datetime->setTimezone( new DateTimeZone( 'UTC' ) );
-		}
-
-		$time = $datetime->format( $format );
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
-	}
-	$time = mysql2date( $d, $time, $translate );
+	$time = mysql2date( $format, $time, $translate );
 
 	/**
 	 * Filters the localized time a post was last modified.
@@ -2666,14 +2595,9 @@ function get_post_modified_time( $format = 'U', $gmt = false, $post = null, $tra
 	 * @since WP-2.8.0
 	 *
 	 * @param string $time The formatted time.
-<<<<<<< HEAD
-	 * @param string $d    The date format. Accepts 'G', 'U', or php date format. Default 'U'.
-	 * @param bool   $gmt  Whether to return the GMT time. Default false.
-=======
 	 * @param string $format Format to use for retrieving the time the post was modified.
 	 *                       Accepts 'G', 'U', or PHP date format. Default 'U'.
 	 * @param bool   $gmt    Whether to retrieve the GMT time. Default false.
->>>>>>> 543944257c (Coding Standards: Rename `$d` parameter in various date/time functions to `$format` for clarity.)
 	 */
 	return apply_filters( 'get_post_modified_time', $time, $format, $gmt );
 }
