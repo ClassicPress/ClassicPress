@@ -7,7 +7,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	function test_wp_parse_args_object() {
 		$x        = new MockClass;
 		$x->_baba = 5;
-		$x->yZ    = 'baba';
+		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
 		$x->a     = array( 5, 111, 'x' );
 		$this->assertEquals(
 			array(
@@ -51,7 +51,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	function test_wp_parse_args_defaults() {
 		$x        = new MockClass;
 		$x->_baba = 5;
-		$x->yZ    = 'baba';
+		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
 		$x->a     = array( 5, 111, 'x' );
 		$d        = array( 'pu' => 'bu' );
 		$this->assertEquals(
@@ -1630,5 +1630,40 @@ class Tests_Functions extends WP_UnitTestCase {
 			array( '3:59:61', false ), // Out of bound.
 			array( '03:61:59', false ), // Out of bound.
 		);
+	}
+
+	/**
+	 * @ticket https://core.trac.wordpress.org/ticket/
+	 * @covers ::wp_filesize
+	 */
+	function test_wp_filesize_with_nonexistent_file() {
+		$file = 'nonexistent/file.jpg';
+		$this->assertEquals( 0, wp_filesize( $file ) );
+	}
+
+	/**
+	 * @ticket https://core.trac.wordpress.org/ticket/
+	 * @covers ::wp_filesize
+	 */
+	function test_wp_filesize() {
+		$file = DIR_TESTDATA . '/images/test-image-upside-down.jpg';
+
+		$this->assertEquals( filesize( $file ), wp_filesize( $file ) );
+
+		$filter = function() {
+			return 999;
+		};
+
+		add_filter( 'wp_filesize', $filter );
+
+		$this->assertEquals( 999, wp_filesize( $file ) );
+
+		$pre_filter = function() {
+			return 111;
+		};
+
+		add_filter( 'pre_wp_filesize', $pre_filter );
+
+		$this->assertEquals( 111, wp_filesize( $file ) );
 	}
 }

@@ -3134,12 +3134,13 @@ function attachment_submitbox_metadata() {
 	</div>
 
 	<?php
-		$file_size = false;
+
+	$file_size = false;
 
 	if ( isset( $meta['filesize'] ) ) {
 		$file_size = $meta['filesize'];
 	} elseif ( file_exists( $file ) ) {
-		$file_size = filesize( $file );
+		$file_size = wp_filesize( $file );
 	}
 
 	if ( ! empty( $file_size ) ) :
@@ -3302,7 +3303,11 @@ function wp_read_video_metadata( $file ) {
 	if ( ! class_exists( 'getID3', false ) ) {
 		require ABSPATH . WPINC . '/ID3/getid3.php';
 	}
-	$id3  = new getID3();
+
+	$id3 = new getID3();
+	// Required to get the `created_timestamp` value.
+	$id3->options_audiovideo_quicktime_ReturnAtomData = true; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 	$data = $id3->analyze( $file );
 
 	if ( isset( $data['video']['lossless'] ) ) {
@@ -3399,7 +3404,11 @@ function wp_read_audio_metadata( $file ) {
 	if ( ! class_exists( 'getID3', false ) ) {
 		require ABSPATH . WPINC . '/ID3/getid3.php';
 	}
-	$id3  = new getID3();
+
+	$id3 = new getID3();
+	// Required to get the `created_timestamp` value.
+	$id3->options_audiovideo_quicktime_ReturnAtomData = true; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 	$data = $id3->analyze( $file );
 
 	if ( ! empty( $data['audio'] ) ) {

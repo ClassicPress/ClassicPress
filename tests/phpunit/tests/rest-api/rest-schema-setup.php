@@ -22,6 +22,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new Spy_REST_Server;
 		do_action( 'rest_api_init' );
+		update_option( 'default_comment_status', 'open' );
 
 		add_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10, 3 );
 	}
@@ -32,6 +33,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$wp_rest_server = null;
+
+		update_option( 'default_comment_status', 'closed' );
 
 		remove_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10, 3 );
 	}

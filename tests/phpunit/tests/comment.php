@@ -10,6 +10,12 @@ class Tests_Comment extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		reset_phpmailer_instance();
+		update_option( 'default_comment_status', 'open' );
+	}
+
+	public function tearDown() {
+		update_option( 'default_comment_status', 'closed' );
+		parent::tearDown();
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {
