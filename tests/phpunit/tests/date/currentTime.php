@@ -50,7 +50,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	}
 
 	/**
->>>>>>> 48110faf25 (Coding Standards: Disable WPCS warnings for `date_default_timezone_set()` and `current_time( 'timestamp' )` calls in Date/Time tests.)
 	 * @see https://core.trac.wordpress.org/ticket/37440
 	 */
 	public function test_should_work_with_changed_timezone() {

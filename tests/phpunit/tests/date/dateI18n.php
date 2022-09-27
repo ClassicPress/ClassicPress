@@ -7,7 +7,7 @@
 class Tests_Date_I18n extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 28636
+	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_return_current_time_on_invalid_timestamp() {
 		$timezone = 'Europe/Kiev';
