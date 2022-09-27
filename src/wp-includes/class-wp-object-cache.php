@@ -2,25 +2,15 @@
 /**
  * Object Cache API: WP_Object_Cache class
  *
-<<<<<<< HEAD
  * @package ClassicPress
  * @subpackage Cache
  * @since WP-5.4.0
-=======
- * @package WordPress
- * @subpackage Cache
- * @since 5.4.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
  */
 
 /**
  * Core class that implements an object cache.
  *
-<<<<<<< HEAD
  * The ClassicPress Object Cache is used to save on trips to the database. The
-=======
- * The WordPress Object Cache is used to save on trips to the database. The
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
  * Object Cache stores all of the cache data to memory and makes the cache
  * contents available by using a key, which is used to name and later retrieve
  * the cache contents.
@@ -29,22 +19,14 @@
  * in the wp-content folder which is looked at in wp-settings. If that file
  * exists, then this file will not be included.
  *
-<<<<<<< HEAD
  * @since WP-2.0.0
-=======
- * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
  */
 class WP_Object_Cache {
 
 	/**
 	 * Holds the cached objects.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var array
 	 */
 	private $cache = array();
@@ -52,11 +34,7 @@ class WP_Object_Cache {
 	/**
 	 * The amount of times the cache data was already stored in the cache.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.5.0
-=======
-	 * @since 2.5.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var int
 	 */
 	public $cache_hits = 0;
@@ -64,11 +42,7 @@ class WP_Object_Cache {
 	/**
 	 * Amount of times the cache did not have the request in cache.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var int
 	 */
 	public $cache_misses = 0;
@@ -76,11 +50,7 @@ class WP_Object_Cache {
 	/**
 	 * List of global cache groups.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.0.0
-=======
-	 * @since 3.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var array
 	 */
 	protected $global_groups = array();
@@ -88,11 +58,7 @@ class WP_Object_Cache {
 	/**
 	 * The blog prefix to prepend to keys in non-global groups.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.5.0
-=======
-	 * @since 3.5.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var string
 	 */
 	private $blog_prefix;
@@ -100,11 +66,7 @@ class WP_Object_Cache {
 	/**
 	 * Holds the value of is_multisite().
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.5.0
-=======
-	 * @since 3.5.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 * @var bool
 	 */
 	private $multisite;
@@ -112,11 +74,7 @@ class WP_Object_Cache {
 	/**
 	 * Sets up object properties; PHP 5 style constructor.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.8
-=======
-	 * @since 2.0.8
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 */
 	public function __construct() {
 		$this->multisite   = is_multisite();
@@ -126,11 +84,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties readable for backward compatibility.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.0.0
-=======
-	 * @since 4.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param string $name Property to get.
 	 * @return mixed Property.
@@ -142,11 +96,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties settable for backward compatibility.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.0.0
-=======
-	 * @since 4.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param string $name  Property to set.
 	 * @param mixed  $value Property value.
@@ -159,11 +109,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties checkable for backward compatibility.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.0.0
-=======
-	 * @since 4.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param string $name Property to check if set.
 	 * @return bool Whether the property is set.
@@ -175,11 +121,7 @@ class WP_Object_Cache {
 	/**
 	 * Makes private properties un-settable for backward compatibility.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.0.0
-=======
-	 * @since 4.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param string $name Property to unset.
 	 */
@@ -190,11 +132,7 @@ class WP_Object_Cache {
 	/**
 	 * Adds data to the cache if it doesn't already exist.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @uses WP_Object_Cache::_exists() Checks to see if the cache already has data.
 	 * @uses WP_Object_Cache::set()     Sets the data after the checking the cache
@@ -230,11 +168,7 @@ class WP_Object_Cache {
 	/**
 	 * Sets the list of global cache groups.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.0.0
-=======
-	 * @since 3.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param array $groups List of groups that are global.
 	 */
@@ -248,11 +182,7 @@ class WP_Object_Cache {
 	/**
 	 * Decrements numeric cache item's value.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.3.0
-=======
-	 * @since 3.3.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key    The cache key to decrement.
 	 * @param int        $offset Optional. The amount by which to decrement the item's value. Default 1.
@@ -292,11 +222,7 @@ class WP_Object_Cache {
 	 *
 	 * If the cache key does not exist in the group, then nothing will happen.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key        What the contents in the cache are called.
 	 * @param string     $group      Optional. Where the cache contents are grouped. Default 'default'.
@@ -323,11 +249,7 @@ class WP_Object_Cache {
 	/**
 	 * Clears the object cache of all data.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @return true Always returns true.
 	 */
@@ -346,11 +268,7 @@ class WP_Object_Cache {
 	 *
 	 * On failure, the number of cache misses will be incremented.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key    What the contents in the cache are called.
 	 * @param string     $group  Optional. Where the cache contents are grouped. Default 'default'.
@@ -387,11 +305,7 @@ class WP_Object_Cache {
 	/**
 	 * Increments numeric cache item's value.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.3.0
-=======
-	 * @since 3.3.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key    The cache key to increment
 	 * @param int        $offset Optional. The amount by which to increment the item's value. Default 1.
@@ -429,11 +343,7 @@ class WP_Object_Cache {
 	/**
 	 * Replaces the contents in the cache, if contents already exist.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @see WP_Object_Cache::set()
 	 *
@@ -463,11 +373,7 @@ class WP_Object_Cache {
 	/**
 	 * Resets cache keys.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.0.0
-=======
-	 * @since 3.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @deprecated 3.5.0 Use switch_to_blog()
 	 * @see switch_to_blog()
@@ -475,11 +381,7 @@ class WP_Object_Cache {
 	public function reset() {
 		_deprecated_function( __FUNCTION__, '3.5.0', 'switch_to_blog()' );
 
-<<<<<<< HEAD
-		// Clear out non-global caches since WP-the blog ID has changed.
-=======
 		// Clear out non-global caches since the blog ID has changed.
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 		foreach ( array_keys( $this->cache ) as $group ) {
 			if ( ! isset( $this->global_groups[ $group ] ) ) {
 				unset( $this->cache[ $group ] );
@@ -493,21 +395,13 @@ class WP_Object_Cache {
 	 * The cache contents are grouped by the $group parameter followed by the
 	 * $key. This allows for duplicate ids in unique groups. Therefore, naming of
 	 * the group should be used with care and should follow normal function
-<<<<<<< HEAD
 	 * naming guidelines outside of core ClassicPress usage.
-=======
-	 * naming guidelines outside of core WordPress usage.
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * The $expire parameter is not used, because the cache will automatically
 	 * expire for each time a page is accessed and PHP finishes. The method is
 	 * more for cache plugins which use files.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key    What to call the contents in the cache.
 	 * @param mixed      $data   The contents to store in the cache.
@@ -538,11 +432,7 @@ class WP_Object_Cache {
 	 * Gives the cache hits, and cache misses. Also prints every cached group,
 	 * key and the data.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.0.0
-=======
-	 * @since 2.0.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 */
 	public function stats() {
 		echo '<p>';
@@ -561,11 +451,7 @@ class WP_Object_Cache {
 	 *
 	 * This changes the blog ID used to create keys in blog specific groups.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.5.0
-=======
-	 * @since 3.5.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int $blog_id Blog ID.
 	 */
@@ -577,11 +463,7 @@ class WP_Object_Cache {
 	/**
 	 * Serves as a utility function to determine whether a key exists in the cache.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.4.0
-=======
-	 * @since 3.4.0
->>>>>>> b02e49c2e8 (Coding Standards: Move `WP_Object_Cache` to `wp-includes/class-wp-object-cache.php`.)
 	 *
 	 * @param int|string $key   Cache key to check for existence.
 	 * @param string     $group Cache group for the key existence check.
