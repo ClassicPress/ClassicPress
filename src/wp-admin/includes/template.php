@@ -2315,17 +2315,10 @@ function wp_star_rating( $args = array() ) {
 	$half_stars  = ceil( $rating - $full_stars );
 	$empty_stars = 5 - $full_stars - $half_stars;
 
-<<<<<<< HEAD
-	if ( $r['number'] ) {
-		/* translators: 1: The rating, 2: The number of ratings */
-		$format = _n( '%1$s rating based on %2$s rating', '%1$s rating based on %2$s ratings', $r['number'] );
-		$title  = sprintf( $format, number_format_i18n( $rating, 1 ), number_format_i18n( $r['number'] ) );
-=======
 	if ( $parsed_args['number'] ) {
 		/* translators: 1: the rating, 2: the number of ratings */
 		$format = _n( '%1$s rating based on %2$s rating', '%1$s rating based on %2$s ratings', $parsed_args['number'] );
 		$title  = sprintf( $format, number_format_i18n( $rating, 1 ), number_format_i18n( $parsed_args['number'] ) );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 	} else {
 		/* translators: 1: The rating */
 		$title = sprintf( __( '%s rating' ), number_format_i18n( $rating, 1 ) );

@@ -211,11 +211,7 @@ class WP_Http_Curl {
 			curl_setopt( $handle, CURLOPT_HTTPHEADER, $headers );
 		}
 
-<<<<<<< HEAD
-		if ( '1.0' === $r['httpversion'] ) {
-=======
-		if ( $parsed_args['httpversion'] == '1.0' ) {
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+		if ( '1.0' === $parsed_args['httpversion'] ) {
 			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0 );
 		} else {
 			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1 );
@@ -311,12 +307,8 @@ class WP_Http_Curl {
 		);
 
 		// Handle redirects.
-<<<<<<< HEAD
-		if ( false !== ( $redirect_response = WP_HTTP::handle_redirects( $url, $r, $response ) ) ) {
-=======
 		$redirect_response = WP_HTTP::handle_redirects( $url, $parsed_args, $response );
 		if ( false !== $redirect_response ) {
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			return $redirect_response;
 		}
 

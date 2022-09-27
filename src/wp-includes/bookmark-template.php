@@ -112,11 +112,7 @@ function _walk_bookmarks( $bookmarks, $args = '' ) {
 
 		$output .= $parsed_args['link_before'];
 
-<<<<<<< HEAD
-		if ( null != $bookmark->link_image && $r['show_images'] ) {
-=======
-		if ( $bookmark->link_image != null && $parsed_args['show_images'] ) {
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+		if ( null != $bookmark->link_image && $parsed_args['show_images'] ) {
 			if ( strpos( $bookmark->link_image, 'http' ) === 0 ) {
 				$output .= "<img src=\"$bookmark->link_image\" $alt $title />";
 			} else { // If it's a relative path

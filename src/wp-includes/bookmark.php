@@ -138,16 +138,10 @@ function get_bookmarks( $args = '' ) {
 
 	$parsed_args = wp_parse_args( $args, $defaults );
 
-<<<<<<< HEAD
-	$key   = md5( serialize( $r ) );
-	$cache = false;
-	if ( 'rand' !== $r['orderby'] && $cache = wp_cache_get( 'get_bookmarks', 'bookmark' ) ) {
-=======
 	$key   = md5( serialize( $parsed_args ) );
 	$cache = wp_cache_get( 'get_bookmarks', 'bookmark' );
 
 	if ( 'rand' !== $parsed_args['orderby'] && $cache ) {
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		if ( is_array( $cache ) && isset( $cache[ $key ] ) ) {
 			$bookmarks = $cache[ $key ];
 			/**
@@ -174,20 +168,13 @@ function get_bookmarks( $args = '' ) {
 	}
 
 	$inclusions = '';
-<<<<<<< HEAD
-	if ( ! empty( $r['include'] ) ) {
-		$r['exclude']       = '';  //ignore exclude, category, and category_name params if using include
-		$r['category']      = '';
-		$r['category_name'] = '';
-		$inclinks           = preg_split( '/[\s,]+/', $r['include'] );
-=======
+
 	if ( ! empty( $parsed_args['include'] ) ) {
 		$parsed_args['exclude']       = '';  //ignore exclude, category, and category_name params if using include
 		$parsed_args['category']      = '';
 		$parsed_args['category_name'] = '';
+		$inclinks           = preg_split( '/[\s,]+/', $r['include'] );
 
-		$inclinks = wp_parse_id_list( $parsed_args['include'] );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		if ( count( $inclinks ) ) {
 			foreach ( $inclinks as $inclink ) {
 				if ( empty( $inclusions ) ) {
@@ -203,13 +190,8 @@ function get_bookmarks( $args = '' ) {
 	}
 
 	$exclusions = '';
-<<<<<<< HEAD
-	if ( ! empty( $r['exclude'] ) ) {
-		$exlinks = preg_split( '/[\s,]+/', $r['exclude'] );
-=======
 	if ( ! empty( $parsed_args['exclude'] ) ) {
-		$exlinks = wp_parse_id_list( $parsed_args['exclude'] );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+		$exlinks = preg_split( '/[\s,]+/', $r['exclude'] );
 		if ( count( $exlinks ) ) {
 			foreach ( $exlinks as $exlink ) {
 				if ( empty( $exclusions ) ) {
@@ -224,16 +206,10 @@ function get_bookmarks( $args = '' ) {
 		$exclusions .= ')';
 	}
 
-<<<<<<< HEAD
-	if ( ! empty( $r['category_name'] ) ) {
-		if ( $r['category'] = get_term_by( 'name', $r['category_name'], 'link_category' ) ) {
-			$r['category'] = $r['category']->term_id;
-=======
 	if ( ! empty( $parsed_args['category_name'] ) ) {
 		$parsed_args['category'] = get_term_by( 'name', $parsed_args['category_name'], 'link_category' );
 		if ( $parsed_args['category'] ) {
 			$parsed_args['category'] = $parsed_args['category']->term_id;
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		} else {
 			$cache[ $key ] = array();
 			wp_cache_set( 'get_bookmarks', $cache, 'bookmark' );
@@ -250,13 +226,9 @@ function get_bookmarks( $args = '' ) {
 
 	$category_query = '';
 	$join           = '';
-<<<<<<< HEAD
-	if ( ! empty( $r['category'] ) ) {
-		$incategories = preg_split( '/[\s,]+/', $r['category'] );
-=======
+
 	if ( ! empty( $parsed_args['category'] ) ) {
-		$incategories = wp_parse_id_list( $parsed_args['category'] );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+		$incategories = preg_split( '/[\s,]+/', $r['category'] );
 		if ( count( $incategories ) ) {
 			foreach ( $incategories as $incat ) {
 				if ( empty( $category_query ) ) {
@@ -324,13 +296,9 @@ function get_bookmarks( $args = '' ) {
 	$query  = "SELECT * $length $recently_updated_test $get_updated FROM $wpdb->links $join WHERE 1=1 $visible $category_query";
 	$query .= " $exclusions $inclusions $search";
 	$query .= " ORDER BY $orderby $order";
-<<<<<<< HEAD
-	if ( -1 != $r['limit'] ) {
+
+	if ( -1 != $parsed_args['limit'] ) {
 		$query .= ' LIMIT ' . $r['limit'];
-=======
-	if ( $parsed_args['limit'] != -1 ) {
-		$query .= ' LIMIT ' . $parsed_args['limit'];
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 	}
 
 	$results = $wpdb->get_results( $query );

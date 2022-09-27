@@ -1152,13 +1152,8 @@ function wp_dropdown_pages( $args = '' ) {
 	/**
 	 * Filters the HTML output of a list of pages as a drop down.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.1.0
-	 * @since WP-4.4.0 `$r` and `$pages` added as arguments.
-=======
-	 * @since 2.1.0
-	 * @since 4.4.0 `$parsed_args` and `$pages` added as arguments.
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+	 * @since WP-4.4.0 `$parsed_args` and `$pages` added as arguments.
 	 *
 	 * @param string $output HTML output for drop down list of pages.
 	 * @param array  $parsed_args The parsed arguments array.

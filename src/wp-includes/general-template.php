@@ -1764,13 +1764,8 @@ function wp_get_archives( $args = '' ) {
 		$parsed_args['limit'] = ' LIMIT ' . $parsed_args['limit'];
 	}
 
-<<<<<<< HEAD
-	$order = strtoupper( $r['order'] );
-	if ( 'ASC' !== $order ) {
-=======
 	$order = strtoupper( $parsed_args['order'] );
-	if ( $order !== 'ASC' ) {
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+	if ( 'ASC' !== $order ) {
 		$order = 'DESC';
 	}
 
@@ -1825,12 +1820,8 @@ function wp_get_archives( $args = '' ) {
 				if ( $parsed_args['show_post_count'] ) {
 					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
-<<<<<<< HEAD
-				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-				$selected = is_archive() && (string) $parsed_args['year'] === $result->year && (string) $parsed_args['monthnum'] === $result->month;
-				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+
+				$output .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'] );
 			}
 		}
 	} elseif ( 'yearly' == $parsed_args['type'] ) {
@@ -1852,12 +1843,8 @@ function wp_get_archives( $args = '' ) {
 				if ( $parsed_args['show_post_count'] ) {
 					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
-<<<<<<< HEAD
-				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-				$selected = is_archive() && (string) $parsed_args['year'] === $result->year;
-				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+
+				$output .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'] );
 			}
 		}
 	} elseif ( 'daily' == $parsed_args['type'] ) {
@@ -1880,12 +1867,8 @@ function wp_get_archives( $args = '' ) {
 				if ( $parsed_args['show_post_count'] ) {
 					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
-<<<<<<< HEAD
-				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-				$selected = is_archive() && (string) $parsed_args['year'] === $result->year && (string) $parsed_args['monthnum'] === $result->month && (string) $parsed_args['day'] === $result->dayofmonth;
-				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+
+				$output .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'] );
 			}
 		}
 	} elseif ( 'weekly' == $parsed_args['type'] ) {
@@ -1921,12 +1904,8 @@ function wp_get_archives( $args = '' ) {
 					if ( $parsed_args['show_post_count'] ) {
 						$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 					}
-<<<<<<< HEAD
-					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-					$selected = is_archive() && (string) $parsed_args['year'] === $result->yr && (string) $parsed_args['w'] === $result->week;
-					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+
+					$output .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'] );
 				}
 			}
 		}
@@ -1949,13 +1928,8 @@ function wp_get_archives( $args = '' ) {
 					} else {
 						$text = $result->ID;
 					}
-<<<<<<< HEAD
 
-					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
-=======
-					$selected = $result->ID === get_the_ID();
-					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+					$output .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'] );
 				}
 			}
 		}

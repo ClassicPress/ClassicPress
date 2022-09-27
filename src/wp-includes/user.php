@@ -81,7 +81,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 	 *
 	 *     @type string $user_login    Username.
 	 *     @type string $user_password Password entered.
-	 *     @type bool   $remember      Whether to 'remember' the user. Increases the time
+	 *     @type bool   $parsed_argsemember      Whether to 'remember' the user. Increases the time
 	 *                                 that the cookie will be kept. Default false.
 	 * }
 	 */
@@ -421,9 +421,9 @@ function count_many_users_posts( $users, $post_type = 'post', $public_only = fal
 	$userlist = implode( ',', array_map( 'absint', $users ) );
 	$where    = get_posts_by_author_sql( $post_type, true, null, $public_only );
 
-	$result = $wpdb->get_results( "SELECT post_author, COUNT(*) FROM $wpdb->posts $where AND post_author IN ($userlist) GROUP BY post_author", ARRAY_N );
-	foreach ( $result as $row ) {
-		$count[ $row[0] ] = $row[1];
+	$parsed_argsesult = $wpdb->get_results( "SELECT post_author, COUNT(*) FROM $wpdb->posts $where AND post_author IN ($userlist) GROUP BY post_author", ARRAY_N );
+	foreach ( $parsed_argsesult as $parsed_argsow ) {
+		$count[ $parsed_argsow[0] ] = $parsed_argsow[1];
 	}
 
 	foreach ( $users as $id ) {
@@ -490,11 +490,11 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
 
 	$prefix = $wpdb->get_blog_prefix();
 	if ( $user->has_prop( $prefix . $option ) ) { // Blog specific
-		$result = $user->get( $prefix . $option );
+		$parsed_argsesult = $user->get( $prefix . $option );
 	} elseif ( $user->has_prop( $option ) ) { // User specific and cross-blog
-		$result = $user->get( $option );
+		$parsed_argsesult = $user->get( $option );
 	} else {
-		$result = false;
+		$parsed_argsesult = false;
 	}
 
 	/**
@@ -504,11 +504,11 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
 	 *
 	 * @since WP-2.5.0
 	 *
-	 * @param mixed   $result Value for the user's option.
+	 * @param mixed   $parsed_argsesult Value for the user's option.
 	 * @param string  $option Name of the option being retrieved.
 	 * @param WP_User $user   WP_User object of the user whose option is being retrieved.
 	 */
-	return apply_filters( "get_user_option_{$option}", $result, $option, $user );
+	return apply_filters( "get_user_option_{$option}", $parsed_argsesult, $option, $user );
 }
 
 /**
@@ -883,7 +883,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
 		$site_id = get_current_blog_id();
 	}
 	$blog_prefix = $wpdb->get_blog_prefix( $site_id );
-	$result      = array();
+	$parsed_argsesult      = array();
 
 	if ( 'time' == $strategy ) {
 		if ( is_multisite() && get_current_blog_id() != $site_id ) {
@@ -903,7 +903,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
 		$select_count   = implode( ', ', $select_count );
 
 		// Add the meta_value index to the selection list, then run the query.
-		$row = $wpdb->get_row(
+		$parsed_argsow = $wpdb->get_row(
 			"
 			SELECT {$select_count}, COUNT(*)
 			FROM {$wpdb->usermeta}
@@ -915,21 +915,21 @@ function count_users( $strategy = 'time', $site_id = null ) {
 
 		// Run the previous loop again to associate results with role names.
 		$col         = 0;
-		$role_counts = array();
+		$parsed_argsole_counts = array();
 		foreach ( $avail_roles as $this_role => $name ) {
-			$count = (int) $row[ $col++ ];
+			$count = (int) $parsed_argsow[ $col++ ];
 			if ( $count > 0 ) {
-				$role_counts[ $this_role ] = $count;
+				$parsed_argsole_counts[ $this_role ] = $count;
 			}
 		}
 
-		$role_counts['none'] = (int) $row[ $col++ ];
+		$parsed_argsole_counts['none'] = (int) $parsed_argsow[ $col++ ];
 
 		// Get the meta_value index from the end of the result set.
-		$total_users = (int) $row[ $col ];
+		$total_users = (int) $parsed_argsow[ $col ];
 
-		$result['total_users'] = $total_users;
-		$result['avail_roles'] =& $role_counts;
+		$parsed_argsesult['total_users'] = $total_users;
+		$parsed_argsesult['avail_roles'] =& $parsed_argsole_counts;
 	} else {
 		$avail_roles = array(
 			'none' => 0,
@@ -961,11 +961,11 @@ function count_users( $strategy = 'time', $site_id = null ) {
 			}
 		}
 
-		$result['total_users'] = count( $users_of_blog );
-		$result['avail_roles'] =& $avail_roles;
+		$parsed_argsesult['total_users'] = count( $users_of_blog );
+		$parsed_argsesult['avail_roles'] =& $avail_roles;
 	}
 
-	return $result;
+	return $parsed_argsesult;
 }
 
 //
@@ -1026,7 +1026,7 @@ function setup_userdata( $for_user_id = '' ) {
  *
  * @since WP-2.3.0
  * @since WP-4.5.0 Added the 'display_name_with_login' value for 'show'.
- * @since WP-4.7.0 Added the `$role`, `$role__in`, and `$role__not_in` parameters.
+ * @since WP-4.7.0 Added the `$parsed_argsole`, `$parsed_argsole__in`, and `$parsed_argsole__not_in` parameters.
  * @since 1.4.0 Added the `$select_multiple` and `$value_field` parameters.
  *
  * @param array|string $args {
@@ -1068,12 +1068,12 @@ function setup_userdata( $for_user_id = '' ) {
  *     @type int          $blog_id                 ID of blog (Multisite only). Default is ID of the current blog.
  *     @type string       $who                     Which type of users to query. Accepts only an empty string or
  *                                                 'authors'. Default empty.
- *     @type string|array $role                    An array or a comma-separated list of role names that users must
+ *     @type string|array $parsed_argsole                    An array or a comma-separated list of role names that users must
  *                                                 match to be included in results. Note that this is an inclusive
  *                                                 list: users must match *each* role. Default empty.
- *     @type array        $role__in                An array of role names. Matched users must have at least one of
+ *     @type array        $parsed_argsole__in                An array of role names. Matched users must have at least one of
  *                                                 these roles. Default empty array.
- *     @type array        $role__not_in            An array of role names to exclude. Users matching one or more of
+ *     @type array        $parsed_argsole__not_in            An array of role names to exclude. Users matching one or more of
  *                                                 these roles will not be included in results. Default empty array.
  *     @type string       $value_field             The name of the user property to use as the `<select>` element's
  *                                                 `value` attribute which is sent back to the server. Accepts only a
@@ -1128,7 +1128,7 @@ function wp_dropdown_users( $args = '' ) {
 		$fields[] = $show;
 	}
 
-	$value_field = ! empty( $r['value_field'] ) ? $r['value_field'] : 'ID';
+	$value_field = ! empty( $parsed_args['value_field'] ) ? $parsed_args['value_field'] : 'ID';
 	// Only allow selecting users by fields that should be unique per user.
 	// Otherwise, a user dropdown is not the right data model for the problem
 	// that the developer is attempting to solve.
@@ -1172,17 +1172,13 @@ function wp_dropdown_users( $args = '' ) {
 		} else {
 			$id = $parsed_args['id'] ? " id='" . esc_attr( $parsed_args['id'] ) . "'" : " id='$name'";
 		}
-<<<<<<< HEAD
-		if ( $r['select_multiple'] === true ) {
+		if ( $parsed_args['select_multiple'] === true ) {
 			$name         .= '[]';
 			$multiple_attr = ' multiple';
 		} else {
 			$multiple_attr = '';
 		}
-		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "'$multiple_attr>\n";
-=======
-		$output = "<select name='{$name}'{$id} class='" . $parsed_args['class'] . "'>\n";
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+		$output = "<select name='{$name}'{$id} class='" . $parsed_args['class'] . "'$multiple_attr>\n";
 
 		if ( $show_option_all ) {
 			$output .= "\t<option value='0'>$show_option_all</option>\n";
@@ -1195,7 +1191,7 @@ function wp_dropdown_users( $args = '' ) {
 
 		if ( $parsed_args['include_selected'] && ( $parsed_args['selected'] > 0 ) ) {
 			$found_selected = false;
-			$parsed_args['selected'] = (int) $parsed_args['selected'];
+			$parsed_args['selected']  = (int) $parsed_args['selected'];
 			foreach ( (array) $users as $user ) {
 				$user->ID = (int) $user->ID;
 				if ( $user->ID === $parsed_args['selected'] ) {
@@ -1204,8 +1200,7 @@ function wp_dropdown_users( $args = '' ) {
 			}
 
 			if ( ! $found_selected ) {
-<<<<<<< HEAD
-				$selected_user = get_userdata( $r['selected'] );
+				$selected_user = get_userdata( $parsed_args['selected'] );
 				if ( $selected_user ) {
 					$users[] = $selected_user;
 				} elseif ( $value_field === 'ID' ) {
@@ -1215,12 +1210,9 @@ function wp_dropdown_users( $args = '' ) {
 					// of knowing what the 'value' should be for this user!
 					$users[] = (object) array(
 						'_invalid' => true,
-						'ID'       => $r['selected'],
+						'ID'       => $parsed_args['selected'],
 					);
 				}
-=======
-				$users[] = get_userdata( $parsed_args['selected'] );
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			}
 		}
 
@@ -1237,14 +1229,9 @@ function wp_dropdown_users( $args = '' ) {
 				$display = '(' . $user->user_login . ')';
 			}
 
-<<<<<<< HEAD
-			$_selected    = selected( $user->ID, $r['selected'], false );
+			$_selected    = selected( $user->ID, $parsed_args['selected'], false );
 			$select_value = esc_attr( $user->$value_field );
 			$output      .= "\t<option value='$select_value'$_selected>" . esc_html( $display ) . "</option>\n";
-=======
-			$_selected = selected( $user->ID, $parsed_args['selected'], false );
-			$output   .= "\t<option value='$user->ID'$_selected>" . esc_html( $display ) . "</option>\n";
->>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		}
 
 		$output .= '</select>';
@@ -1534,7 +1521,7 @@ function validate_username( $username ) {
  *                                             to build the second part of the user's display name
  *                                             if `$display_name` is not specified.
  *     @type string      $description          The user's biographical description.
- *     @type string|bool $rich_editing         Whether to enable the rich-editor for the user.
+ *     @type string|bool $parsed_argsich_editing         Whether to enable the rich-editor for the user.
  *                                             False if not empty.
  *     @type string|bool $syntax_highlighting  Whether to enable the rich code editor for the user.
  *                                             False if not empty.
@@ -1546,7 +1533,7 @@ function validate_username( $username ) {
  *     @type string      $user_registered      Date the user registered. Format is 'Y-m-d H:i:s'.
  *     @type string|bool $show_admin_bar_front Whether to display the Admin Bar for the user on the
  *                                             site's front end. Default true.
- *     @type string      $role                 User's role.
+ *     @type string      $parsed_argsole                 User's role.
  *     @type string      $locale               User's locale. Default empty.
  * }
  * @return int|WP_Error The newly created user's ID or a WP_Error object if the user could not
@@ -1646,27 +1633,27 @@ function wp_insert_user( $userdata ) {
 	 */
 	$user_nicename = apply_filters( 'pre_user_nicename', $user_nicename );
 
-	$raw_user_url = empty( $userdata['user_url'] ) ? '' : $userdata['user_url'];
+	$parsed_argsaw_user_url = empty( $userdata['user_url'] ) ? '' : $userdata['user_url'];
 
 	/**
 	 * Filters a user's URL before the user is created or updated.
 	 *
 	 * @since WP-2.0.3
 	 *
-	 * @param string $raw_user_url The user's URL.
+	 * @param string $parsed_argsaw_user_url The user's URL.
 	 */
-	$user_url = apply_filters( 'pre_user_url', $raw_user_url );
+	$user_url = apply_filters( 'pre_user_url', $parsed_argsaw_user_url );
 
-	$raw_user_email = empty( $userdata['user_email'] ) ? '' : $userdata['user_email'];
+	$parsed_argsaw_user_email = empty( $userdata['user_email'] ) ? '' : $userdata['user_email'];
 
 	/**
 	 * Filters a user's email before the user is created or updated.
 	 *
 	 * @since WP-2.0.3
 	 *
-	 * @param string $raw_user_email The user's email.
+	 * @param string $parsed_argsaw_user_email The user's email.
 	 */
-	$user_email = apply_filters( 'pre_user_email', $raw_user_email );
+	$user_email = apply_filters( 'pre_user_email', $parsed_argsaw_user_email );
 
 	/*
 	 * If there is no update, just check for `email_exists`. If there is an update,
@@ -1839,7 +1826,7 @@ function wp_insert_user( $userdata ) {
 	 *     @type string   $first_name           The user's first name.
 	 *     @type string   $last_name            The user's last name.
 	 *     @type string   $description          The user's description.
-	 *     @type bool     $rich_editing         Whether to enable the rich-editor for the user. False if not empty.
+	 *     @type bool     $parsed_argsich_editing         Whether to enable the rich-editor for the user. False if not empty.
 	 *     @type bool     $syntax_highlighting  Whether to enable the rich code editor for the user. False if not empty.
 	 *     @type bool     $comment_shortcuts    Whether to enable keyboard shortcuts for the user. Default false.
 	 *     @type string   $admin_color          The color scheme for a user's admin screen. Default 'fresh'.
@@ -2125,12 +2112,12 @@ All at ###SITENAME###
 			$logged_in_cookie = wp_parse_auth_cookie( '', 'logged_in' );
 			/** This filter is documented in wp-includes/pluggable.php */
 			$default_cookie_life = apply_filters( 'auth_cookie_expiration', ( 2 * DAY_IN_SECONDS ), $ID, false );
-			$remember            = false;
+			$parsed_argsemember            = false;
 			if ( false !== $logged_in_cookie && ( $logged_in_cookie['expiration'] - time() ) > $default_cookie_life ) {
-				$remember = true;
+				$parsed_argsemember = true;
 			}
 
-			wp_set_auth_cookie( $ID, $remember );
+			wp_set_auth_cookie( $ID, $parsed_argsemember );
 		}
 	}
 
@@ -2358,8 +2345,8 @@ function check_password_reset_key( $key, $login ) {
 		return new WP_Error( 'invalid_key', __( 'Invalid key' ) );
 	}
 
-	$row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, user_activation_key FROM $wpdb->users WHERE user_login = %s", $login ) );
-	if ( ! $row ) {
+	$parsed_argsow = $wpdb->get_row( $wpdb->prepare( "SELECT ID, user_activation_key FROM $wpdb->users WHERE user_login = %s", $login ) );
+	if ( ! $parsed_argsow ) {
 		return new WP_Error( 'invalid_key', __( 'Invalid key' ) );
 	}
 
@@ -2377,11 +2364,11 @@ function check_password_reset_key( $key, $login ) {
 	 */
 	$expiration_duration = apply_filters( 'password_reset_expiration', DAY_IN_SECONDS );
 
-	if ( false !== strpos( $row->user_activation_key, ':' ) ) {
-		list( $pass_request_time, $pass_key ) = explode( ':', $row->user_activation_key, 2 );
+	if ( false !== strpos( $parsed_argsow->user_activation_key, ':' ) ) {
+		list( $pass_request_time, $pass_key ) = explode( ':', $parsed_argsow->user_activation_key, 2 );
 		$expiration_time                      = $pass_request_time + $expiration_duration;
 	} else {
-		$pass_key        = $row->user_activation_key;
+		$pass_key        = $parsed_argsow->user_activation_key;
 		$expiration_time = false;
 	}
 
@@ -2392,15 +2379,15 @@ function check_password_reset_key( $key, $login ) {
 	$hash_is_correct = $wp_hasher->CheckPassword( $key, $pass_key );
 
 	if ( $hash_is_correct && $expiration_time && time() < $expiration_time ) {
-		return get_userdata( $row->ID );
+		return get_userdata( $parsed_argsow->ID );
 	} elseif ( $hash_is_correct && $expiration_time ) {
 		// Key has an expiration time that's passed
 		return new WP_Error( 'expired_key', __( 'Invalid key' ) );
 	}
 
-	if ( hash_equals( $row->user_activation_key, $key ) || ( $hash_is_correct && ! $expiration_time ) ) {
-		$return  = new WP_Error( 'expired_key', __( 'Invalid key' ) );
-		$user_id = $row->ID;
+	if ( hash_equals( $parsed_argsow->user_activation_key, $key ) || ( $hash_is_correct && ! $expiration_time ) ) {
+		$parsed_argseturn  = new WP_Error( 'expired_key', __( 'Invalid key' ) );
+		$user_id = $parsed_argsow->ID;
 
 		/**
 		 * Filters the return value of check_password_reset_key() when an
@@ -2409,11 +2396,11 @@ function check_password_reset_key( $key, $login ) {
 		 * @since WP-3.7.0 Previously plain-text keys were stored in the database.
 		 * @since WP-4.3.0 Previously key hashes were stored without an expiration time.
 		 *
-		 * @param WP_Error $return  A WP_Error object denoting an expired key.
+		 * @param WP_Error $parsed_argseturn  A WP_Error object denoting an expired key.
 		 *                          Return a WP_User object to validate the key.
 		 * @param int      $user_id The matched user ID.
 		 */
-		return apply_filters( 'password_reset_key_expired', $return, $user_id );
+		return apply_filters( 'password_reset_key_expired', $parsed_argseturn, $user_id );
 	}
 
 	return new WP_Error( 'invalid_key', __( 'Invalid key' ) );
@@ -2654,14 +2641,14 @@ function wp_get_users_with_no_role( $site_id = null ) {
 
 	if ( is_multisite() && get_current_blog_id() != $site_id ) {
 		switch_to_blog( $site_id );
-		$role_names = wp_roles()->get_names();
+		$parsed_argsole_names = wp_roles()->get_names();
 		restore_current_blog();
 	} else {
-		$role_names = wp_roles()->get_names();
+		$parsed_argsole_names = wp_roles()->get_names();
 	}
 
-	$regex = implode( '|', array_keys( $role_names ) );
-	$regex = preg_replace( '/[^a-zA-Z_\|-]/', '', $regex );
+	$parsed_argsegex = implode( '|', array_keys( $parsed_argsole_names ) );
+	$parsed_argsegex = preg_replace( '/[^a-zA-Z_\|-]/', '', $parsed_argsegex );
 	$users = $wpdb->get_col(
 		$wpdb->prepare(
 			"
@@ -2670,7 +2657,7 @@ function wp_get_users_with_no_role( $site_id = null ) {
 		WHERE meta_key = '{$prefix}capabilities'
 		AND meta_value NOT REGEXP %s
 	",
-			$regex
+			$parsed_argsegex
 		)
 	);
 
@@ -2994,23 +2981,23 @@ function wp_user_personal_data_exporter( $email_address ) {
  * @since WP-4.9.6
  * @access private
  *
- * @param int $request_id ID of the request.
+ * @param int $parsed_argsequest_id ID of the request.
  */
-function _wp_privacy_account_request_confirmed( $request_id ) {
-	$request_data = wp_get_user_request_data( $request_id );
+function _wp_privacy_account_request_confirmed( $parsed_argsequest_id ) {
+	$parsed_argsequest_data = wp_get_user_request_data( $parsed_argsequest_id );
 
-	if ( ! $request_data ) {
+	if ( ! $parsed_argsequest_data ) {
 		return;
 	}
 
-	if ( ! in_array( $request_data->status, array( 'request-pending', 'request-failed' ), true ) ) {
+	if ( ! in_array( $parsed_argsequest_data->status, array( 'request-pending', 'request-failed' ), true ) ) {
 		return;
 	}
 
-	update_post_meta( $request_id, '_wp_user_request_confirmed_timestamp', time() );
+	update_post_meta( $parsed_argsequest_id, '_wp_user_request_confirmed_timestamp', time() );
 	wp_update_post(
 		array(
-			'ID'          => $request_id,
+			'ID'          => $parsed_argsequest_id,
 			'post_status' => 'request-confirmed',
 		)
 	);
@@ -3024,23 +3011,23 @@ function _wp_privacy_account_request_confirmed( $request_id ) {
  *
  * @since WP-4.9.6
  *
- * @param int $request_id The ID of the request.
+ * @param int $parsed_argsequest_id The ID of the request.
  */
-function _wp_privacy_send_request_confirmation_notification( $request_id ) {
-	$request_data = wp_get_user_request_data( $request_id );
+function _wp_privacy_send_request_confirmation_notification( $parsed_argsequest_id ) {
+	$parsed_argsequest_data = wp_get_user_request_data( $parsed_argsequest_id );
 
-	if ( ! is_a( $request_data, 'WP_User_Request' ) || 'request-confirmed' !== $request_data->status ) {
+	if ( ! is_a( $parsed_argsequest_data, 'WP_User_Request' ) || 'request-confirmed' !== $parsed_argsequest_data->status ) {
 		return;
 	}
 
-	$already_notified = (bool) get_post_meta( $request_id, '_wp_admin_notified', true );
+	$already_notified = (bool) get_post_meta( $parsed_argsequest_id, '_wp_admin_notified', true );
 
 	if ( $already_notified ) {
 		return;
 	}
 
-	$manage_url         = add_query_arg( 'page', $request_data->action_name, admin_url( 'tools.php' ) );
-	$action_description = wp_user_request_action_description( $request_data->action_name );
+	$manage_url         = add_query_arg( 'page', $parsed_argsequest_data->action_name, admin_url( 'tools.php' ) );
+	$action_description = wp_user_request_action_description( $parsed_argsequest_data->action_name );
 
 	/**
 	 * Filters the recipient of the data request confirmation notification.
@@ -3054,13 +3041,13 @@ function _wp_privacy_send_request_confirmation_notification( $request_id ) {
 	 * @since WP-4.9.6
 	 *
 	 * @param string          $admin_email  The email address of the notification recipient.
-	 * @param WP_User_Request $request_data The request that is initiating the notification.
+	 * @param WP_User_Request $parsed_argsequest_data The request that is initiating the notification.
 	 */
-	$admin_email = apply_filters( 'user_request_confirmed_email_to', get_site_option( 'admin_email' ), $request_data );
+	$admin_email = apply_filters( 'user_request_confirmed_email_to', get_site_option( 'admin_email' ), $parsed_argsequest_data );
 
 	$email_data = array(
-		'request'     => $request_data,
-		'user_email'  => $request_data->email,
+		'request'     => $parsed_argsequest_data,
+		'user_email'  => $parsed_argsequest_data->email,
 		'description' => $action_description,
 		'manage_url'  => $manage_url,
 		'sitename'    => wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ),
@@ -3104,7 +3091,7 @@ All at ###SITENAME###
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request     User request object.
+	 *     @type WP_User_Request $parsed_argsequest     User request object.
 	 *     @type string          $user_email  The email address confirming a request
 	 *     @type string          $description Description of the action being performed so the user knows what the email is for.
 	 *     @type string          $manage_url  The link to click manage privacy requests of this type.
@@ -3138,7 +3125,7 @@ All at ###SITENAME###
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request     User request object.
+	 *     @type WP_User_Request $parsed_argsequest     User request object.
 	 *     @type string          $user_email  The email address confirming a request
 	 *     @type string          $description Description of the action being performed so the user knows what the email is for.
 	 *     @type string          $manage_url  The link to click manage privacy requests of this type.
@@ -3152,7 +3139,7 @@ All at ###SITENAME###
 	$email_sent = wp_mail( $email_data['admin_email'], $subject, $content );
 
 	if ( $email_sent ) {
-		update_post_meta( $request_id, '_wp_admin_notified', true );
+		update_post_meta( $parsed_argsequest_id, '_wp_admin_notified', true );
 	}
 }
 
@@ -3163,16 +3150,16 @@ All at ###SITENAME###
  *
  * @since WP-4.9.6
  *
- * @param int $request_id The privacy request post ID associated with this request.
+ * @param int $parsed_argsequest_id The privacy request post ID associated with this request.
  */
-function _wp_privacy_send_erasure_fulfillment_notification( $request_id ) {
-	$request_data = wp_get_user_request_data( $request_id );
+function _wp_privacy_send_erasure_fulfillment_notification( $parsed_argsequest_id ) {
+	$parsed_argsequest_data = wp_get_user_request_data( $parsed_argsequest_id );
 
-	if ( ! is_a( $request_data, 'WP_User_Request' ) || 'request-completed' !== $request_data->status ) {
+	if ( ! is_a( $parsed_argsequest_data, 'WP_User_Request' ) || 'request-completed' !== $parsed_argsequest_data->status ) {
 		return;
 	}
 
-	$already_notified = (bool) get_post_meta( $request_id, '_wp_user_notified', true );
+	$already_notified = (bool) get_post_meta( $parsed_argsequest_id, '_wp_user_notified', true );
 
 	if ( $already_notified ) {
 		return;
@@ -3184,12 +3171,12 @@ function _wp_privacy_send_erasure_fulfillment_notification( $request_id ) {
 	 * @since WP-4.9.6
 	 *
 	 * @param string          $user_email   The email address of the notification recipient.
-	 * @param WP_User_Request $request_data The request that is initiating the notification.
+	 * @param WP_User_Request $parsed_argsequest_data The request that is initiating the notification.
 	 */
-	$user_email = apply_filters( 'user_erasure_fulfillment_email_to', $request_data->email, $request_data );
+	$user_email = apply_filters( 'user_erasure_fulfillment_email_to', $parsed_argsequest_data->email, $parsed_argsequest_data );
 
 	$email_data = array(
-		'request'            => $request_data,
+		'request'            => $parsed_argsequest_data,
 		'message_recipient'  => $user_email,
 		'privacy_policy_url' => get_privacy_policy_url(),
 		'sitename'           => wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ),
@@ -3212,9 +3199,9 @@ function _wp_privacy_send_erasure_fulfillment_notification( $request_id ) {
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request            User request object.
+	 *     @type WP_User_Request $parsed_argsequest            User request object.
 	 *     @type string          $message_recipient  The address that the email will be sent to. Defaults
-	 *                                               to the value of `$request->email`, but can be changed
+	 *                                               to the value of `$parsed_argsequest->email`, but can be changed
 	 *                                               by the `user_erasure_fulfillment_email_to` filter.
 	 *     @type string          $privacy_policy_url Privacy policy URL.
 	 *     @type string          $sitename           The site name sending the mail.
@@ -3271,9 +3258,9 @@ All at ###SITENAME###
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request            User request object.
+	 *     @type WP_User_Request $parsed_argsequest            User request object.
 	 *     @type string          $message_recipient  The address that the email will be sent to. Defaults
-	 *                                               to the value of `$request->email`, but can be changed
+	 *                                               to the value of `$parsed_argsequest->email`, but can be changed
 	 *                                               by the `user_erasure_fulfillment_email_to` filter.
 	 *     @type string          $privacy_policy_url Privacy policy URL.
 	 *     @type string          $sitename           The site name sending the mail.
@@ -3289,7 +3276,7 @@ All at ###SITENAME###
 	$email_sent = wp_mail( $user_email, $subject, $content );
 
 	if ( $email_sent ) {
-		update_post_meta( $request_id, '_wp_user_notified', true );
+		update_post_meta( $parsed_argsequest_id, '_wp_user_notified', true );
 	}
 }
 
@@ -3299,20 +3286,20 @@ All at ###SITENAME###
  * @since WP-4.9.6
  * @access private
  *
- * @param int $request_id The request ID being confirmed.
+ * @param int $parsed_argsequest_id The request ID being confirmed.
  * @return string $message The confirmation message.
  */
-function _wp_privacy_account_request_confirmed_message( $request_id ) {
-	$request = wp_get_user_request_data( $request_id );
+function _wp_privacy_account_request_confirmed_message( $parsed_argsequest_id ) {
+	$parsed_argsequest = wp_get_user_request_data( $parsed_argsequest_id );
 
 	$message  = '<p class="success">' . __( 'Action has been confirmed.' ) . '</p>';
 	$message .= '<p>' . __( 'The site administrator has been notified and will fulfill your request as soon as possible.' ) . '</p>';
 
-	if ( $request && in_array( $request->action_name, _wp_privacy_action_request_types(), true ) ) {
-		if ( 'export_personal_data' === $request->action_name ) {
+	if ( $parsed_argsequest && in_array( $parsed_argsequest->action_name, _wp_privacy_action_request_types(), true ) ) {
+		if ( 'export_personal_data' === $parsed_argsequest->action_name ) {
 			$message  = '<p class="success">' . __( 'Thanks for confirming your export request.' ) . '</p>';
 			$message .= '<p>' . __( 'The site administrator has been notified. You will receive a link to download your export via email when they fulfill your request.' ) . '</p>';
-		} elseif ( 'remove_personal_data' === $request->action_name ) {
+		} elseif ( 'remove_personal_data' === $parsed_argsequest->action_name ) {
 			$message  = '<p class="success">' . __( 'Thanks for confirming your erasure request.' ) . '</p>';
 			$message .= '<p>' . __( 'The site administrator has been notified. You will receive an email confirmation when they erase your data.' ) . '</p>';
 		}
@@ -3324,9 +3311,9 @@ function _wp_privacy_account_request_confirmed_message( $request_id ) {
 	 * @since WP-4.9.6
 	 *
 	 * @param string $message    The message to the user.
-	 * @param int    $request_id The ID of the request being confirmed.
+	 * @param int    $parsed_argsequest_id The ID of the request being confirmed.
 	 */
-	$message = apply_filters( 'user_request_action_confirmed_message', $message, $request_id );
+	$message = apply_filters( 'user_request_action_confirmed_message', $message, $parsed_argsequest_id );
 
 	return $message;
 }
@@ -3341,10 +3328,10 @@ function _wp_privacy_account_request_confirmed_message( $request_id ) {
  *
  * @param string $email_address User email address. This can be the address of a registered or non-registered user.
  * @param string $action_name   Name of the action that is being confirmed. Required.
- * @param array  $request_data  Misc data you want to send with the verification request and pass to the actions once the request is confirmed.
+ * @param array  $parsed_argsequest_data  Misc data you want to send with the verification request and pass to the actions once the request is confirmed.
  * @return int|WP_Error Returns the request ID if successful, or a WP_Error object on failure.
  */
-function wp_create_user_request( $email_address = '', $action_name = '', $request_data = array() ) {
+function wp_create_user_request( $email_address = '', $action_name = '', $parsed_argsequest_data = array() ) {
 	$email_address = sanitize_email( $email_address );
 	$action_name   = sanitize_key( $action_name );
 
@@ -3360,7 +3347,7 @@ function wp_create_user_request( $email_address = '', $action_name = '', $reques
 	$user_id = $user && ! is_wp_error( $user ) ? $user->ID : 0;
 
 	// Check for duplicates.
-	$requests_query = new WP_Query(
+	$parsed_argsequests_query = new WP_Query(
 		array(
 			'post_type'     => 'user_request',
 			'post_name__in' => array( $action_name ),  // Action name stored in post_name column.
@@ -3370,16 +3357,16 @@ function wp_create_user_request( $email_address = '', $action_name = '', $reques
 		)
 	);
 
-	if ( $requests_query->found_posts ) {
+	if ( $parsed_argsequests_query->found_posts ) {
 		return new WP_Error( 'duplicate_request', __( 'A request for this email address already exists.' ) );
 	}
 
-	$request_id = wp_insert_post(
+	$parsed_argsequest_id = wp_insert_post(
 		array(
 			'post_author'   => $user_id,
 			'post_name'     => $action_name,
 			'post_title'    => $email_address,
-			'post_content'  => wp_json_encode( $request_data ),
+			'post_content'  => wp_json_encode( $parsed_argsequest_data ),
 			'post_status'   => 'request-pending',
 			'post_type'     => 'user_request',
 			'post_date'     => current_time( 'mysql', false ),
@@ -3388,7 +3375,7 @@ function wp_create_user_request( $email_address = '', $action_name = '', $reques
 		true
 	);
 
-	return $request_id;
+	return $parsed_argsequest_id;
 }
 
 /**
@@ -3431,26 +3418,26 @@ function wp_user_request_action_description( $action_name ) {
  *
  * @since WP-4.9.6
  *
- * @param string $request_id ID of the request created via wp_create_user_request().
+ * @param string $parsed_argsequest_id ID of the request created via wp_create_user_request().
  * @return WP_Error|bool Will return true/false based on the success of sending the email, or a WP_Error object.
  */
-function wp_send_user_request( $request_id ) {
-	$request_id = absint( $request_id );
-	$request    = wp_get_user_request_data( $request_id );
+function wp_send_user_request( $parsed_argsequest_id ) {
+	$parsed_argsequest_id = absint( $parsed_argsequest_id );
+	$parsed_argsequest    = wp_get_user_request_data( $parsed_argsequest_id );
 
-	if ( ! $request ) {
+	if ( ! $parsed_argsequest ) {
 		return new WP_Error( 'user_request_error', __( 'Invalid request.' ) );
 	}
 
 	$email_data = array(
-		'request'     => $request,
-		'email'       => $request->email,
-		'description' => wp_user_request_action_description( $request->action_name ),
+		'request'     => $parsed_argsequest,
+		'email'       => $parsed_argsequest->email,
+		'description' => wp_user_request_action_description( $parsed_argsequest->action_name ),
 		'confirm_url' => add_query_arg(
 			array(
 				'action'      => 'confirmaction',
-				'request_id'  => $request_id,
-				'confirm_key' => wp_generate_user_request_key( $request_id ),
+				'request_id'  => $parsed_argsequest_id,
+				'confirm_key' => wp_generate_user_request_key( $parsed_argsequest_id ),
 			),
 			wp_login_url()
 		),
@@ -3493,7 +3480,7 @@ All at ###SITENAME###
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request     User request object.
+	 *     @type WP_User_Request $parsed_argsequest     User request object.
 	 *     @type string          $email       The email address this is being sent to.
 	 *     @type string          $description Description of the action being performed so the user knows what the email is for.
 	 *     @type string          $confirm_url The link to click on to confirm the account action.
@@ -3522,7 +3509,7 @@ All at ###SITENAME###
 	 * @param array  $email_data {
 	 *     Data relating to the account action email.
 	 *
-	 *     @type WP_User_Request $request     User request object.
+	 *     @type WP_User_Request $parsed_argsequest     User request object.
 	 *     @type string          $email       The email address this is being sent to.
 	 *     @type string          $description Description of the action being performed so the user knows what the email is for.
 	 *     @type string          $confirm_url The link to click on to confirm the account action.
@@ -3540,10 +3527,10 @@ All at ###SITENAME###
  *
  * @since WP-4.9.6
  *
- * @param int $request_id Request ID.
+ * @param int $parsed_argsequest_id Request ID.
  * @return string Confirmation key.
  */
-function wp_generate_user_request_key( $request_id ) {
+function wp_generate_user_request_key( $parsed_argsequest_id ) {
 	global $wp_hasher;
 
 	// Generate something random for a confirmation key.
@@ -3557,7 +3544,7 @@ function wp_generate_user_request_key( $request_id ) {
 
 	wp_update_post(
 		array(
-			'ID'                => $request_id,
+			'ID'                => $parsed_argsequest_id,
 			'post_status'       => 'request-pending',
 			'post_password'     => $wp_hasher->HashPassword( $key ),
 			'post_modified'     => current_time( 'mysql', false ),
@@ -3573,21 +3560,21 @@ function wp_generate_user_request_key( $request_id ) {
  *
  * @since WP-4.9.6
  *
- * @param string $request_id ID of the request being confirmed.
+ * @param string $parsed_argsequest_id ID of the request being confirmed.
  * @param string $key        Provided key to validate.
  * @return bool|WP_Error WP_Error on failure, true on success.
  */
-function wp_validate_user_request_key( $request_id, $key ) {
+function wp_validate_user_request_key( $parsed_argsequest_id, $key ) {
 	global $wp_hasher;
 
-	$request_id = absint( $request_id );
-	$request    = wp_get_user_request_data( $request_id );
+	$parsed_argsequest_id = absint( $parsed_argsequest_id );
+	$parsed_argsequest    = wp_get_user_request_data( $parsed_argsequest_id );
 
-	if ( ! $request ) {
+	if ( ! $parsed_argsequest ) {
 		return new WP_Error( 'user_request_error', __( 'Invalid request.' ) );
 	}
 
-	if ( ! in_array( $request->status, array( 'request-pending', 'request-failed' ), true ) ) {
+	if ( ! in_array( $parsed_argsequest->status, array( 'request-pending', 'request-failed' ), true ) ) {
 		return __( 'This link has expired.' );
 	}
 
@@ -3600,8 +3587,8 @@ function wp_validate_user_request_key( $request_id, $key ) {
 		$wp_hasher = new PasswordHash( 8, true );
 	}
 
-	$key_request_time = $request->modified_timestamp;
-	$saved_key        = $request->confirm_key;
+	$key_request_time = $parsed_argsequest->modified_timestamp;
+	$saved_key        = $parsed_argsequest->confirm_key;
 
 	if ( ! $saved_key ) {
 		return new WP_Error( 'invalid_key', __( 'Invalid key' ) );
@@ -3637,12 +3624,12 @@ function wp_validate_user_request_key( $request_id, $key ) {
  *
  * @since WP-4.9.6
  *
- * @param int $request_id Request ID to get data about.
+ * @param int $parsed_argsequest_id Request ID to get data about.
  * @return WP_User_Request|false
  */
-function wp_get_user_request_data( $request_id ) {
-	$request_id = absint( $request_id );
-	$post       = get_post( $request_id );
+function wp_get_user_request_data( $parsed_argsequest_id ) {
+	$parsed_argsequest_id = absint( $parsed_argsequest_id );
+	$post       = get_post( $parsed_argsequest_id );
 
 	if ( ! $post || 'user_request' !== $post->post_type ) {
 		return false;
@@ -3728,7 +3715,7 @@ final class WP_User_Request {
 	 *
 	 * @var array
 	 */
-	public $request_data = array();
+	public $parsed_argsequest_data = array();
 
 	/**
 	 * Key used to confirm this request.
