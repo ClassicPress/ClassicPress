@@ -2812,6 +2812,44 @@ function wp_get_ext_types() {
 }
 
 /**
+ * Wrapper for PHP filesize with filters and casting the result as an integer.
+ *
+ * @since WP-6.0.0
+ *
+ * @link https://www.php.net/manual/en/function.filesize.php
+ *
+ * @param string $path Path to the file.
+ * @return int The size of the file in bytes, or 0 in the event of an error.
+ */
+function wp_filesize( $path ) {
+	/**
+	 * Filters the result of wp_filesize before the PHP function is run.
+	 *
+	 * @since WP-6.0.0
+	 *
+	 * @param null|int $size The unfiltered value. Returning an int from the callback bypasses the filesize call.
+	 * @param string   $path Path to the file.
+	 */
+	$size = apply_filters( 'pre_wp_filesize', null, $path );
+
+	if ( is_int( $size ) ) {
+		return $size;
+	}
+
+	$size = file_exists( $path ) ? (int) filesize( $path ) : 0;
+
+	/**
+	 * Filters the size of the file.
+	 *
+	 * @since WP-6.0.0
+	 *
+	 * @param int    $size The result of PHP filesize on the file.
+	 * @param string $path Path to the file.
+	 */
+	return (int) apply_filters( 'wp_filesize', $size, $path );
+}
+
+/**
  * Retrieve list of allowed mime types and file extensions.
  *
  * @since WP-2.8.6
@@ -4987,6 +5025,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$exists[4] = ( $exists[1] && $exists[3] );
 		$exists[5] = ( $exists[2] && $exists[3] );
 
+		// phpcs:disable WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
 		$zonen[] = array(
 			'continent'   => ( $exists[0] ? $zone[0] : '' ),
 			'city'        => ( $exists[1] ? $zone[1] : '' ),
@@ -4995,6 +5034,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 			't_city'      => ( $exists[4] ? translate( str_replace( '_', ' ', $zone[1] ), 'continents-cities' ) : '' ),
 			't_subcity'   => ( $exists[5] ? translate( str_replace( '_', ' ', $zone[2] ), 'continents-cities' ) : '' ),
 		);
+		// phpcs:enable
 	}
 	usort( $zonen, '_wp_timezone_choice_usort_callback' );
 

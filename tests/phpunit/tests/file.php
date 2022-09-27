@@ -182,5 +182,4 @@ class Tests_File extends WP_UnitTestCase {
 			array( 'directory/0/0.zip' ),
 		);
 	}
-
 }

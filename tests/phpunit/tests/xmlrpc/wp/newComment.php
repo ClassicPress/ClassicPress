@@ -4,6 +4,15 @@
  * @group xmlrpc
  */
 class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
+	public function setUp() {
+		parent::setUp();
+		update_option( 'default_comment_status', 'open' );
+	}
+
+	public function tearDown() {
+		update_option( 'default_comment_status', 'closed' );
+		parent::tearDown();
+	}
 
 	function test_valid_comment() {
 		$this->make_user_by_role( 'administrator' );
