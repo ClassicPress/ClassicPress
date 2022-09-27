@@ -108,12 +108,12 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$this->assertEquals( $url, $url2 );
 	}
 
-	protected $fakeURL;
+	protected $fake_url;
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
 	public function test_pre_get_avatar_url_filter() {
-		$this->fakeURL = 'haha wat';
+		$this->fake_url = 'haha wat';
 
 		add_filter( 'pre_get_avatar_data', array( $this, 'pre_get_avatar_url_filter' ), 10, 1 );
 		$url = get_avatar_url( 1 );
@@ -122,7 +122,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$this->assertSame( $url, $this->fakeURL );
 	}
 	public function pre_get_avatar_url_filter( $args ) {
-		$args['url'] = $this->fakeURL;
+		$args['url'] = $this->fake_url;
 		return $args;
 	}
 
@@ -130,7 +130,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
 	public function test_get_avatar_url_filter() {
-		$this->fakeURL = 'omg lol';
+		$this->fake_url = 'omg lol';
 
 		add_filter( 'get_avatar_url', array( $this, 'get_avatar_url_filter' ), 10, 1 );
 		$url = get_avatar_url( 1 );
@@ -139,7 +139,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$this->assertSame( $url, $this->fakeURL );
 	}
 	public function get_avatar_url_filter( $url ) {
-		return $this->fakeURL;
+		return $this->fake_url;
 	}
 
 	/**
@@ -212,12 +212,12 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 
-	protected $fakeIMG;
+	protected $fake_img;
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
 	public function test_pre_get_avatar_filter() {
-		$this->fakeIMG = 'YOU TOO?!';
+		$this->fake_img = 'YOU TOO?!';
 
 		add_filter( 'pre_get_avatar', array( $this, 'pre_get_avatar_filter' ), 10, 1 );
 		$img = get_avatar( 1 );
@@ -226,14 +226,14 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$this->assertSame( $img, $this->fakeIMG );
 	}
 	public function pre_get_avatar_filter( $img ) {
-		return $this->fakeIMG;
+		return $this->fake_img;
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
 	public function test_get_avatar_filter() {
-		$this->fakeURL = 'YA RLY';
+		$this->fake_url = 'YA RLY';
 
 		add_filter( 'get_avatar', array( $this, 'get_avatar_filter' ), 10, 1 );
 		$img = get_avatar( 1 );
@@ -243,8 +243,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	public function get_avatar_filter( $img ) {
-		return $this->fakeURL;
-
+		return $this->fake_url;
 	}
 
 }

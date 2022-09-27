@@ -18,10 +18,12 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 		// Override the normal server with our spying server.
 		$GLOBALS['wp_rest_server'] = new Spy_REST_Server();
+		update_option( 'default_comment_status', 'open' );
 	}
 
 	public function tear_down() {
 		remove_filter( 'wp_rest_server_class', array( $this, 'filter_wp_rest_server_class' ) );
+		update_option( 'default_comment_status', 'closed' );
 		parent::tear_down();
 	}
 

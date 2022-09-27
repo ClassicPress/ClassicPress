@@ -412,7 +412,7 @@ function populate_options() {
 		'mailserver_pass'                 => 'password',
 		'mailserver_port'                 => 110,
 		'default_category'                => 1,
-		'default_comment_status'          => 'open',
+		'default_comment_status'          => 'closed',
 		'default_ping_status'             => 'open',
 		'default_pingback_flag'           => 1,
 		'posts_per_page'                  => 10,

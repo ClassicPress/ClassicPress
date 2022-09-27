@@ -4,6 +4,16 @@
  * @group comment
  */
 class Tests_Comment_CommentForm extends WP_UnitTestCase {
+	public function setUp() {
+		parent::setUp();
+		update_option( 'default_comment_status', 'open' );
+	}
+
+	public function tearDown() {
+		update_option( 'default_comment_status', 'closed' );
+		parent::tearDown();
+	}
+
 	public function test_default_markup_for_submit_button_and_wrapper() {
 		$p = self::factory()->post->create();
 
