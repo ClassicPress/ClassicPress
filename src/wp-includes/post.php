@@ -568,15 +568,15 @@ function get_children( $args = '', $output = OBJECT ) {
 		$kids[ $child->ID ] = $children[ $key ];
 	}
 
-	if ( $output == OBJECT ) {
+	if ( OBJECT == $output ) {
 		return $kids;
-	} elseif ( $output == ARRAY_A ) {
+	} elseif ( ARRAY_A == $output ) {
 		$weeuns = array();
 		foreach ( (array) $kids as $kid ) {
 			$weeuns[ $kid->ID ] = get_object_vars( $kids[ $kid->ID ] );
 		}
 		return $weeuns;
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		$babes = array();
 		foreach ( (array) $kids as $kid ) {
 			$babes[ $kid->ID ] = array_values( get_object_vars( $kids[ $kid->ID ] ) );
@@ -670,9 +670,9 @@ function get_post( $post = null, $output = OBJECT, $filter = 'raw' ) {
 
 	$_post = $_post->filter( $filter );
 
-	if ( $output == ARRAY_A ) {
+	if ( ARRAY_A == $output ) {
 		return $_post->to_array();
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		return array_values( $_post->to_array() );
 	}
 
@@ -1655,7 +1655,7 @@ function _add_post_type_submenus() {
 	foreach ( get_post_types( array( 'show_ui' => true ) ) as $ptype ) {
 		$ptype_obj = get_post_type_object( $ptype );
 		// Sub-menus only.
-		if ( ! $ptype_obj->show_in_menu || $ptype_obj->show_in_menu === true ) {
+		if ( ! $ptype_obj->show_in_menu || true === $ptype_obj->show_in_menu ) {
 			continue;
 		}
 		add_submenu_page( $ptype_obj->show_in_menu, $ptype_obj->labels->name, $ptype_obj->labels->all_items, $ptype_obj->cap->edit_posts, "edit.php?post_type=$ptype" );
@@ -3935,8 +3935,13 @@ function wp_update_post( $postarr = array(), $wp_error = false ) {
 		$postarr['post_date_gmt'] = '';
 	}
 
+<<<<<<< HEAD
 	if ( $postarr['post_type'] == 'attachment' ) {
 		return wp_insert_attachment( $postarr );
+=======
+	if ( 'attachment' === $postarr['post_type'] ) {
+		return wp_insert_attachment( $postarr, false, 0, $wp_error );
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	return wp_insert_post( $postarr, $wp_error );
@@ -4651,7 +4656,7 @@ function get_page_by_path( $page_path, $output = OBJECT, $post_type = 'page' ) {
 			 * Loop through the given path parts from right to left,
 			 * ensuring each matches the post ancestry.
 			 */
-			while ( $p->post_parent != 0 && isset( $pages[ $p->post_parent ] ) ) {
+			while ( 0 != $p->post_parent && isset( $pages[ $p->post_parent ] ) ) {
 				$count++;
 				$parent = $pages[ $p->post_parent ];
 				if ( ! isset( $revparts[ $count ] ) || $parent->post_name != $revparts[ $count ] ) {
@@ -4660,7 +4665,7 @@ function get_page_by_path( $page_path, $output = OBJECT, $post_type = 'page' ) {
 				$p = $parent;
 			}
 
-			if ( $p->post_parent == 0 && $count + 1 == count( $revparts ) && $p->post_name == $revparts[ $count ] ) {
+			if ( 0 == $p->post_parent && count( $revparts ) == $count + 1 && $p->post_name == $revparts[ $count ] ) {
 				$foundid = $page->ID;
 				if ( $page->post_type == $post_type ) {
 					break;
@@ -6382,7 +6387,7 @@ function clean_attachment_cache( $id, $clean_terms = false ) {
 function _transition_post_status( $new_status, $old_status, $post ) {
 	global $wpdb;
 
-	if ( $old_status != 'publish' && $new_status == 'publish' ) {
+	if ( 'publish' !== $old_status && 'publish' === $new_status ) {
 		// Reset GUID if transitioning to publish and it is empty.
 		if ( '' == get_the_guid( $post->ID ) ) {
 			$wpdb->update( $wpdb->posts, array( 'guid' => get_permalink( $post->ID ) ), array( 'ID' => $post->ID ) );

@@ -282,8 +282,13 @@ function get_shortcode_regex( $tagnames = null ) {
 function do_shortcode_tag( $m ) {
 	global $shortcode_tags;
 
+<<<<<<< HEAD
 	// allow [[foo]] syntax for escaping a tag
 	if ( $m[1] == '[' && $m[6] == ']' ) {
+=======
+	// Allow [[foo]] syntax for escaping a tag.
+	if ( '[' === $m[1] && ']' === $m[6] ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return substr( $m[0], 1, -1 );
 	}
 
@@ -634,8 +639,13 @@ function strip_shortcodes( $content ) {
  * @return string|false The content stripped of the tag, otherwise false.
  */
 function strip_shortcode_tag( $m ) {
+<<<<<<< HEAD
 	// allow [[foo]] syntax for escaping a tag
 	if ( $m[1] == '[' && $m[6] == ']' ) {
+=======
+	// Allow [[foo]] syntax for escaping a tag.
+	if ( '[' === $m[1] && ']' === $m[6] ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return substr( $m[0], 1, -1 );
 	}
 

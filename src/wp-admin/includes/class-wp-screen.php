@@ -346,7 +346,7 @@ final class WP_Screen {
 
 		if ( isset( self::$_registry[ $id ] ) ) {
 			$screen = self::$_registry[ $id ];
-			if ( $screen === get_current_screen() ) {
+			if ( get_current_screen() === $screen ) {
 				return $screen;
 			}
 		} else {
@@ -418,6 +418,25 @@ final class WP_Screen {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Sets or returns whether the block editor is loading on the current screen.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param bool $set Optional. Sets whether the block editor is loading on the current screen or not.
+	 * @return bool True if the block editor is being loaded, false otherwise.
+	 */
+	public function is_block_editor( $set = null ) {
+		if ( null !== $set ) {
+			$this->is_block_editor = (bool) $set;
+		}
+
+		return $this->is_block_editor;
+	}
+
+	/**
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	 * Sets the old string-based contextual help for the screen for backward compatibility.
 	 *
 	 * @since WP-3.3.0

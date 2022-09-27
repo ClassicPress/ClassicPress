@@ -111,9 +111,14 @@ if ( have_comments() ) :
 		<?php else : // post pass ?>
 		<content type="html" xml:base="<?php comment_link(); ?>"><![CDATA[<?php comment_text(); ?>]]></content>
 			<?php
+<<<<<<< HEAD
 		endif; // post pass
 		// Return comment threading information (https://www.ietf.org/rfc/rfc4685.txt)
 		if ( $comment->comment_parent == 0 ) : // This comment is top level
+=======
+		// Return comment threading information (https://www.ietf.org/rfc/rfc4685.txt).
+		if ( 0 == $comment->comment_parent ) : // This comment is top-level.
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			?>
 		<thr:in-reply-to ref="<?php the_guid(); ?>" href="<?php the_permalink_rss(); ?>" type="<?php bloginfo_rss( 'html_type' ); ?>" />
 			<?php

@@ -279,9 +279,15 @@ final class WP_Hook implements Iterator, ArrayAccess {
 					$args[0] = $value;
 				}
 
+<<<<<<< HEAD
 				// Avoid the array_slice if possible.
 				if ( $the_['accepted_args'] == 0 ) {
 					$value = call_user_func_array( $the_['function'], array() );
+=======
+				// Avoid the array_slice() if possible.
+				if ( 0 == $the_['accepted_args'] ) {
+					$value = call_user_func( $the_['function'] );
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				} elseif ( $the_['accepted_args'] >= $num_args ) {
 					$value = call_user_func_array( $the_['function'], $args );
 				} else {

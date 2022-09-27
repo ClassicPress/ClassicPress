@@ -49,11 +49,11 @@ function get_bookmark( $bookmark, $output = OBJECT, $filter = 'raw' ) {
 
 	$_bookmark = sanitize_bookmark( $_bookmark, $filter );
 
-	if ( $output == OBJECT ) {
+	if ( OBJECT == $output ) {
 		return $_bookmark;
-	} elseif ( $output == ARRAY_A ) {
+	} elseif ( ARRAY_A == $output ) {
 		return get_object_vars( $_bookmark );
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		return array_values( get_object_vars( $_bookmark ) );
 	} else {
 		return $_bookmark;
@@ -291,8 +291,13 @@ function get_bookmarks( $args = '' ) {
 	$query  = "SELECT * $length $recently_updated_test $get_updated FROM $wpdb->links $join WHERE 1=1 $visible $category_query";
 	$query .= " $exclusions $inclusions $search";
 	$query .= " ORDER BY $orderby $order";
+<<<<<<< HEAD
 	if ( $r['limit'] != -1 ) {
 		$query .= ' LIMIT ' . absint( $r['limit'] );
+=======
+	if ( -1 != $parsed_args['limit'] ) {
+		$query .= ' LIMIT ' . $parsed_args['limit'];
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	}
 
 	$results = $wpdb->get_results( $query );

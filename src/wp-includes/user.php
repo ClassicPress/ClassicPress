@@ -775,7 +775,7 @@ function is_user_member_of_blog( $user_id = 0, $blog_id = 0 ) {
 	$base_capabilities_key = $wpdb->base_prefix . 'capabilities';
 	$site_capabilities_key = $wpdb->base_prefix . $blog_id . '_capabilities';
 
-	if ( isset( $keys[ $base_capabilities_key ] ) && $blog_id == 1 ) {
+	if ( isset( $keys[ $base_capabilities_key ] ) && 1 == $blog_id ) {
 		return true;
 	}
 
@@ -886,7 +886,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
 	$result      = array();
 
 	if ( 'time' == $strategy ) {
-		if ( is_multisite() && $site_id != get_current_blog_id() ) {
+		if ( is_multisite() && get_current_blog_id() != $site_id ) {
 			switch_to_blog( $site_id );
 			$avail_roles = wp_roles()->get_names();
 			restore_current_blog();
@@ -1869,6 +1869,31 @@ function wp_insert_user( $userdata ) {
 		 * @param WP_User $old_user_data Object containing user's data prior to update.
 		 */
 		do_action( 'profile_update', $user_id, $old_user_data );
+<<<<<<< HEAD
+=======
+
+		if ( isset( $userdata['spam'] ) && $userdata['spam'] != $old_user_data->spam ) {
+			if ( 1 == $userdata['spam'] ) {
+				/**
+				 * Fires after the user is marked as a SPAM user.
+				 *
+				 * @since 3.0.0
+				 *
+				 * @param int $user_id ID of the user marked as SPAM.
+				 */
+				do_action( 'make_spam_user', $user_id );
+			} else {
+				/**
+				 * Fires after the user is marked as a HAM user. Opposite of SPAM.
+				 *
+				 * @since 3.0.0
+				 *
+				 * @param int $user_id ID of the user marked as HAM.
+				 */
+				do_action( 'make_ham_user', $user_id );
+			}
+		}
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	} else {
 		/**
 		 * Fires immediately after a new user is registered.
@@ -2461,9 +2486,15 @@ function register_new_user( $user_login, $user_email ) {
 	 */
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
+<<<<<<< HEAD
 	// Check the username
 	if ( $sanitized_user_login == '' ) {
 		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
+=======
+	// Check the username.
+	if ( '' == $sanitized_user_login ) {
+		$errors->add( 'empty_username', __( '<strong>Error</strong>: Please enter a username.' ) );
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	} elseif ( ! validate_username( $user_login ) ) {
 		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
 		$sanitized_user_login = '';
@@ -2478,9 +2509,15 @@ function register_new_user( $user_login, $user_email ) {
 		}
 	}
 
+<<<<<<< HEAD
 	// Check the email address
 	if ( $user_email == '' ) {
 		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your email address.' ) );
+=======
+	// Check the email address.
+	if ( '' == $user_email ) {
+		$errors->add( 'empty_email', __( '<strong>Error</strong>: Please type your email address.' ) );
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 	} elseif ( ! is_email( $user_email ) ) {
 		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
 		$user_email = '';
@@ -2639,7 +2676,7 @@ function wp_get_users_with_no_role( $site_id = null ) {
 
 	$prefix = $wpdb->get_blog_prefix( $site_id );
 
-	if ( is_multisite() && $site_id != get_current_blog_id() ) {
+	if ( is_multisite() && get_current_blog_id() != $site_id ) {
 		switch_to_blog( $site_id );
 		$role_names = wp_roles()->get_names();
 		restore_current_blog();

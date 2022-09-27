@@ -129,7 +129,7 @@ class WP_Http_Curl {
 
 		curl_setopt( $handle, CURLOPT_URL, $url );
 		curl_setopt( $handle, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $handle, CURLOPT_SSL_VERIFYHOST, ( $ssl_verify === true ) ? 2 : false );
+		curl_setopt( $handle, CURLOPT_SSL_VERIFYHOST, ( true === $ssl_verify ) ? 2 : false );
 		curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify );
 
 		if ( $ssl_verify ) {
@@ -211,7 +211,11 @@ class WP_Http_Curl {
 			curl_setopt( $handle, CURLOPT_HTTPHEADER, $headers );
 		}
 
+<<<<<<< HEAD
 		if ( $r['httpversion'] == '1.0' ) {
+=======
+		if ( '1.0' === $parsed_args['httpversion'] ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0 );
 		} else {
 			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1 );

@@ -66,7 +66,11 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 	if ( is_array( $size ) ) {
 		$max_width  = $size[0];
 		$max_height = $size[1];
+<<<<<<< HEAD
 	} elseif ( $size == 'thumb' || $size == 'thumbnail' ) {
+=======
+	} elseif ( 'thumb' === $size || 'thumbnail' === $size ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$max_width  = intval( get_option( 'thumbnail_size_w' ) );
 		$max_height = intval( get_option( 'thumbnail_size_h' ) );
 		// last chance thumbnail size defaults
@@ -74,18 +78,30 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 			$max_width  = 128;
 			$max_height = 96;
 		}
+<<<<<<< HEAD
 	} elseif ( $size == 'medium' ) {
 		$max_width  = intval( get_option( 'medium_size_w' ) );
 		$max_height = intval( get_option( 'medium_size_h' ) );
 
 	} elseif ( $size == 'medium_large' ) {
+=======
+	} elseif ( 'medium' === $size ) {
+		$max_width  = intval( get_option( 'medium_size_w' ) );
+		$max_height = intval( get_option( 'medium_size_h' ) );
+
+	} elseif ( 'medium_large' === $size ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$max_width  = intval( get_option( 'medium_large_size_w' ) );
 		$max_height = intval( get_option( 'medium_large_size_h' ) );
 
 		if ( intval( $content_width ) > 0 ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
+<<<<<<< HEAD
 	} elseif ( $size == 'large' ) {
+=======
+	} elseif ( 'large' === $size ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		/*
 		 * We're inserting a large size image into the editor. If it's a really
 		 * big image we'll scale it down to fit reasonably within the editor
@@ -224,8 +240,13 @@ function image_downsize( $id, $size = 'medium' ) {
 		$width           = $intermediate['width'];
 		$height          = $intermediate['height'];
 		$is_intermediate = true;
+<<<<<<< HEAD
 	} elseif ( $size == 'thumbnail' ) {
 		// fall back to the old thumbnail
+=======
+	} elseif ( 'thumbnail' === $size ) {
+		// Fall back to the old thumbnail.
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$thumb_file = wp_get_attachment_thumb_file( $id );
 		$info       = null;
 
@@ -991,7 +1012,7 @@ function _wp_get_attachment_relative_path( $file ) {
  *                    or false if the size doesn't exist.
  */
 function _wp_get_image_size_from_meta( $size_name, $image_meta ) {
-	if ( $size_name === 'full' ) {
+	if ( 'full' === $size_name ) {
 		return array(
 			absint( $image_meta['width'] ),
 			absint( $image_meta['height'] ),
@@ -1401,7 +1422,7 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 		 */
 		$image_filename = wp_basename( $image_src );
 
-		if ( $image_filename === wp_basename( $image_meta['file'] ) ) {
+		if ( wp_basename( $image_meta['file'] ) === $image_filename ) {
 			$width  = (int) $image_meta['width'];
 			$height = (int) $image_meta['height'];
 		} else {
@@ -1846,12 +1867,17 @@ function gallery_shortcode( $attr ) {
 				</{$captiontag}>";
 		}
 		$output .= "</{$itemtag}>";
+<<<<<<< HEAD
 		if ( ! $html5 && $columns > 0 && ++$i % $columns == 0 ) {
+=======
+
+		if ( ! $html5 && $columns > 0 && 0 === ++$i % $columns ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$output .= '<br style="clear: both" />';
 		}
 	}
 
-	if ( ! $html5 && $columns > 0 && $i % $columns !== 0 ) {
+	if ( ! $html5 && $columns > 0 && 0 !== $i % $columns ) {
 		$output .= "
 			<br style='clear: both' />";
 	}
@@ -2017,7 +2043,7 @@ function wp_playlist_shortcode( $attr ) {
 
 	$id = intval( $atts['id'] );
 
-	if ( $atts['type'] !== 'audio' ) {
+	if ( 'audio' !== $atts['type'] ) {
 		$atts['type'] = 'video';
 	}
 

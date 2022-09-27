@@ -794,7 +794,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 function get_site_icon_url( $size = 512, $url = '', $blog_id = 0 ) {
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -862,7 +862,7 @@ function has_site_icon( $blog_id = 0 ) {
 function has_custom_logo( $blog_id = 0 ) {
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -888,7 +888,7 @@ function get_custom_logo( $blog_id = 0 ) {
 	$html          = '';
 	$switched_blog = false;
 
-	if ( is_multisite() && ! empty( $blog_id ) && (int) $blog_id !== get_current_blog_id() ) {
+	if ( is_multisite() && ! empty( $blog_id ) && get_current_blog_id() !== (int) $blog_id ) {
 		switch_to_blog( $blog_id );
 		$switched_blog = true;
 	}
@@ -1764,8 +1764,13 @@ function wp_get_archives( $args = '' ) {
 		$r['limit'] = ' LIMIT ' . $r['limit'];
 	}
 
+<<<<<<< HEAD
 	$order = strtoupper( $r['order'] );
 	if ( $order !== 'ASC' ) {
+=======
+	$order = strtoupper( $parsed_args['order'] );
+	if ( 'ASC' !== $order ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$order = 'DESC';
 	}
 
@@ -1916,7 +1921,7 @@ function wp_get_archives( $args = '' ) {
 		}
 		if ( $results ) {
 			foreach ( (array) $results as $result ) {
-				if ( $result->post_date != '0000-00-00 00:00:00' ) {
+				if ( '0000-00-00 00:00:00' !== $result->post_date ) {
 					$url = get_permalink( $result );
 					if ( $result->post_title ) {
 						/** This filter is documented in wp-includes/post-template.php */
@@ -1924,7 +1929,12 @@ function wp_get_archives( $args = '' ) {
 					} else {
 						$text = $result->ID;
 					}
+<<<<<<< HEAD
 					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+					$selected = get_the_ID() === $result->ID;
+					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 				}
 			}
 		}
@@ -2136,9 +2146,15 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 		$newrow = false;
 
+<<<<<<< HEAD
 		if ( $day == gmdate( 'j', $ts ) &&
 			$thismonth == gmdate( 'm', $ts ) &&
 			$thisyear == gmdate( 'Y', $ts ) ) {
+=======
+		if ( current_time( 'j' ) == $day &&
+			current_time( 'm' ) == $thismonth &&
+			current_time( 'Y' ) == $thisyear ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$calendar_output .= '<td id="today">';
 		} else {
 			$calendar_output .= '<td>';
@@ -2165,8 +2181,13 @@ function get_calendar( $initial = true, $echo = true ) {
 		}
 	}
 
+<<<<<<< HEAD
 	$pad = 7 - calendar_week_mod( date( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
 	if ( $pad != 0 && $pad != 7 ) {
+=======
+	$pad = 7 - calendar_week_mod( gmdate( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
+	if ( 0 != $pad && 7 != $pad ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
 	}
 	$calendar_output .= "\n\t</tr>\n\t</tbody>\n\t</table>";
@@ -3704,12 +3725,18 @@ function get_language_attributes( $doctype = 'html' ) {
 		$attributes[] = 'dir="rtl"';
 	}
 
+<<<<<<< HEAD
 	if ( $lang = get_bloginfo( 'language' ) ) {
 		if ( get_option( 'html_type' ) == 'text/html' || $doctype == 'html' ) {
+=======
+	$lang = get_bloginfo( 'language' );
+	if ( $lang ) {
+		if ( 'text/html' === get_option( 'html_type' ) || 'html' === $doctype ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
 		}
 
-		if ( get_option( 'html_type' ) != 'text/html' || $doctype == 'xhtml' ) {
+		if ( 'text/html' !== get_option( 'html_type' ) || 'xhtml' === $doctype ) {
 			$attributes[] = 'xml:lang="' . esc_attr( $lang ) . '"';
 		}
 	}

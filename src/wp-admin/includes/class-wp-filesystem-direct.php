@@ -412,10 +412,10 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 * @return bool
 	 */
 	public function touch( $file, $time = 0, $atime = 0 ) {
-		if ( $time == 0 ) {
+		if ( 0 == $time ) {
 			$time = time();
 		}
-		if ( $atime == 0 ) {
+		if ( 0 == $atime ) {
 			$atime = time();
 		}
 		return touch( $file, $time, $atime );

@@ -498,7 +498,7 @@ function is_serialized_string( $data ) {
 		return false;
 	} elseif ( ';' !== substr( $data, -1 ) ) {
 		return false;
-	} elseif ( $data[0] !== 's' ) {
+	} elseif ( 's' !== $data[0] ) {
 		return false;
 	} elseif ( '"' !== substr( $data, -2, 1 ) ) {
 		return false;
@@ -820,15 +820,15 @@ function _http_build_query( $data, $prefix = null, $sep = null, $key = '', $urle
 		if ( $urlencode ) {
 			$k = urlencode( $k );
 		}
-		if ( is_int( $k ) && $prefix != null ) {
+		if ( is_int( $k ) && null != $prefix ) {
 			$k = $prefix . $k;
 		}
 		if ( ! empty( $key ) ) {
 			$k = $key . '%5B' . $k . '%5D';
 		}
-		if ( $v === null ) {
+		if ( null === $v ) {
 			continue;
-		} elseif ( $v === false ) {
+		} elseif ( false === $v ) {
 			$v = '0';
 		}
 
@@ -937,7 +937,7 @@ function add_query_arg() {
 	}
 
 	foreach ( $qs as $k => $v ) {
-		if ( $v === false ) {
+		if ( false === $v ) {
 			unset( $qs[ $k ] );
 		}
 	}
@@ -1338,7 +1338,7 @@ function do_feed() {
 	// Remove the pad, if present.
 	$feed = preg_replace( '/^_+/', '', $feed );
 
-	if ( $feed == '' || $feed == 'feed' ) {
+	if ( '' == $feed || 'feed' === $feed ) {
 		$feed = get_default_feed();
 	}
 
@@ -1665,7 +1665,7 @@ function wp_get_referer() {
 
 	$ref = wp_get_raw_referer();
 
-	if ( $ref && $ref !== wp_unslash( $_SERVER['REQUEST_URI'] ) && $ref !== home_url() . wp_unslash( $_SERVER['REQUEST_URI'] ) ) {
+	if ( $ref && wp_unslash( $_SERVER['REQUEST_URI'] ) !== $ref && home_url() . wp_unslash( $_SERVER['REQUEST_URI'] ) !== $ref ) {
 		return wp_validate_redirect( $ref, false );
 	}
 
@@ -1727,7 +1727,7 @@ function wp_mkdir_p( $target ) {
 	$target = str_replace( '//', '/', $target );
 
 	// Put the wrapper back on the target.
-	if ( $wrapper !== null ) {
+	if ( null !== $wrapper ) {
 		$target = $wrapper . '://' . $target;
 	}
 
@@ -1768,7 +1768,7 @@ function wp_mkdir_p( $target ) {
 		 * If a umask is set that modifies $dir_perms, we'll have to re-set
 		 * the $dir_perms correctly with chmod()
 		 */
-		if ( $dir_perms != ( $dir_perms & ~umask() ) ) {
+		if ( ( $dir_perms & ~umask() ) != $dir_perms ) {
 			$folder_parts = explode( '/', substr( $target, strlen( $target_parent ) + 1 ) );
 			for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i++ ) {
 				chmod( $target_parent . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
@@ -1800,7 +1800,7 @@ function path_is_absolute( $path ) {
 		return true;
 	}
 
-	if ( strlen( $path ) == 0 || $path[0] == '.' ) {
+	if ( strlen( $path ) == 0 || '.' === $path[0] ) {
 		return false;
 	}
 
@@ -1810,7 +1810,7 @@ function path_is_absolute( $path ) {
 	}
 
 	// A path starting with / or \ is absolute; anything else is relative.
-	return ( $path[0] == '/' || $path[0] == '\\' );
+	return ( '/' === $path[0] || '\\' === $path[0] );
 }
 
 /**
@@ -1954,8 +1954,13 @@ function wp_is_writable( $path ) {
  * @return bool Whether the path is writable.
  */
 function win_is_writable( $path ) {
+<<<<<<< HEAD
 
 	if ( $path[ strlen( $path ) - 1 ] == '/' ) { // if it looks like a directory, check a random file within the directory
+=======
+	if ( '/' === $path[ strlen( $path ) - 1 ] ) {
+		// If it looks like a directory, check a random file within the directory.
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		return win_is_writable( $path . uniqid( mt_rand() ) . '.tmp' );
 	} elseif ( is_dir( $path ) ) { // If it's a directory (and not a file) check a random file within the directory
 		return win_is_writable( $path . '/' . uniqid( mt_rand() ) . '.tmp' );
@@ -1963,7 +1968,7 @@ function win_is_writable( $path ) {
 	// check tmp file for read/write capabilities
 	$should_delete_tmp_file = ! file_exists( $path );
 	$f                      = @fopen( $path, 'a' );
-	if ( $f === false ) {
+	if ( false === $f ) {
 		return false;
 	}
 	fclose( $f );
@@ -2309,7 +2314,7 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 
 	$upload = wp_upload_dir( $time );
 
-	if ( $upload['error'] !== false ) {
+	if ( false !== $upload['error'] ) {
 		return $upload;
 	}
 
@@ -3773,9 +3778,15 @@ function smilies_init() {
 
 		// new subpattern?
 		if ( $firstchar != $subchar ) {
+<<<<<<< HEAD
 			if ( $subchar != '' ) {
 				$wp_smiliessearch .= ')(?=' . $spaces . '|$)';  // End previous "subpattern"
 				$wp_smiliessearch .= '|(?<=' . $spaces . '|^)'; // Begin another "subpattern"
+=======
+			if ( '' != $subchar ) {
+				$wp_smiliessearch .= ')(?=' . $spaces . '|$)';  // End previous "subpattern".
+				$wp_smiliessearch .= '|(?<=' . $spaces . '|^)'; // Begin another "subpattern".
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 			}
 			$subchar           = $firstchar;
 			$wp_smiliessearch .= preg_quote( $firstchar, '/' ) . '(?:';
@@ -4788,7 +4799,7 @@ function is_main_site( $site_id = null, $network_id = null ) {
 
 	$site_id = (int) $site_id;
 
-	return $site_id === get_main_site_id( $network_id );
+	return get_main_site_id( $network_id ) === $site_id;
 }
 
 /**
@@ -4832,7 +4843,7 @@ function is_main_network( $network_id = null ) {
 
 	$network_id = (int) $network_id;
 
-	return ( $network_id === get_main_network_id() );
+	return ( get_main_network_id() === $network_id );
 }
 
 /**
@@ -6679,6 +6690,120 @@ function wp_direct_php_update_button() {
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Get the size of a directory.
+ *
+ * A helper function that is used primarily to check whether
+ * a blog has exceeded its allowed upload space.
+ *
+ * @since MU (3.0.0)
+ * @since 5.2.0 $max_execution_time parameter added.
+ *
+ * @param string $directory Full path of a directory.
+ * @param int    $max_execution_time Maximum time to run before giving up. In seconds.
+ *                                   The timeout is global and is measured from the moment WordPress started to load.
+ * @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
+ */
+function get_dirsize( $directory, $max_execution_time = null ) {
+	$dirsize = get_transient( 'dirsize_cache' );
+
+	if ( is_array( $dirsize ) && isset( $dirsize[ $directory ]['size'] ) ) {
+		return $dirsize[ $directory ]['size'];
+	}
+
+	if ( ! is_array( $dirsize ) ) {
+		$dirsize = array();
+	}
+
+	// Exclude individual site directories from the total when checking the main site of a network,
+	// as they are subdirectories and should not be counted.
+	if ( is_multisite() && is_main_site() ) {
+		$dirsize[ $directory ]['size'] = recurse_dirsize( $directory, $directory . '/sites', $max_execution_time );
+	} else {
+		$dirsize[ $directory ]['size'] = recurse_dirsize( $directory, null, $max_execution_time );
+	}
+
+	set_transient( 'dirsize_cache', $dirsize, HOUR_IN_SECONDS );
+	return $dirsize[ $directory ]['size'];
+}
+
+/**
+ * Get the size of a directory recursively.
+ *
+ * Used by get_dirsize() to get a directory's size when it contains
+ * other directories.
+ *
+ * @since MU (3.0.0)
+ * @since 4.3.0 $exclude parameter added.
+ * @since 5.2.0 $max_execution_time parameter added.
+ *
+ * @param string $directory       Full path of a directory.
+ * @param string|array $exclude   Optional. Full path of a subdirectory to exclude from the total, or array of paths.
+ *                                Expected without trailing slash(es).
+ * @param int $max_execution_time Maximum time to run before giving up. In seconds.
+ *                                The timeout is global and is measured from the moment WordPress started to load.
+ * @return int|false|null Size in bytes if a valid directory. False if not. Null if timeout.
+ */
+function recurse_dirsize( $directory, $exclude = null, $max_execution_time = null ) {
+	$size = 0;
+
+	$directory = untrailingslashit( $directory );
+
+	if ( ! file_exists( $directory ) || ! is_dir( $directory ) || ! is_readable( $directory ) ) {
+		return false;
+	}
+
+	if (
+		( is_string( $exclude ) && $directory === $exclude ) ||
+		( is_array( $exclude ) && in_array( $directory, $exclude, true ) )
+	) {
+		return false;
+	}
+
+	if ( null === $max_execution_time ) {
+		// Keep the previous behavior but attempt to prevent fatal errors from timeout if possible.
+		if ( function_exists( 'ini_get' ) ) {
+			$max_execution_time = ini_get( 'max_execution_time' );
+		} else {
+			// Disable...
+			$max_execution_time = 0;
+		}
+
+		// Leave 1 second "buffer" for other operations if $max_execution_time has reasonable value.
+		if ( $max_execution_time > 10 ) {
+			$max_execution_time -= 1;
+		}
+	}
+
+	$handle = opendir( $directory );
+	if ( $handle ) {
+		while ( ( $file = readdir( $handle ) ) !== false ) {
+			$path = $directory . '/' . $file;
+			if ( '.' !== $file && '..' !== $file ) {
+				if ( is_file( $path ) ) {
+					$size += filesize( $path );
+				} elseif ( is_dir( $path ) ) {
+					$handlesize = recurse_dirsize( $path, $exclude, $max_execution_time );
+					if ( $handlesize > 0 ) {
+						$size += $handlesize;
+					}
+				}
+
+				if ( $max_execution_time > 0 && microtime( true ) - WP_START_TIMESTAMP > $max_execution_time ) {
+					// Time exceeded. Give up instead of risking a fatal timeout.
+					$size = null;
+					break;
+				}
+			}
+		}
+		closedir( $handle );
+	}
+	return $size;
+}
+
+/**
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
  * Checks compatibility with the current WordPress version.
  *
  * @since WP-5.2.0

@@ -305,7 +305,11 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 		$content = array( $content );
 	}
 
+<<<<<<< HEAD
 	if ( false !== strpos( $post->post_content, '<!--noteaser-->' ) && ( ! $multipage || $page == 1 ) ) {
+=======
+	if ( false !== strpos( $_post->post_content, '<!--noteaser-->' ) && ( ! $elements['multipage'] || 1 == $elements['page'] ) ) {
+>>>>>>> 130751cda3 (Coding Standards: Use Yoda conditions where appropriate.)
 		$strip_teaser = true;
 	}
 
@@ -1595,7 +1599,7 @@ function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = fals
 function prepend_attachment( $content ) {
 	$post = get_post();
 
-	if ( empty( $post->post_type ) || $post->post_type != 'attachment' ) {
+	if ( empty( $post->post_type ) || 'attachment' !== $post->post_type ) {
 		return $content;
 	}
 
