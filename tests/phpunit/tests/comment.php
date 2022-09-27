@@ -13,9 +13,9 @@ class Tests_Comment extends WP_UnitTestCase {
 		update_option( 'default_comment_status', 'open' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		update_option( 'default_comment_status', 'closed' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {

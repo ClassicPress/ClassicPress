@@ -4,14 +4,14 @@
  * @group xmlrpc
  */
 class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		update_option( 'default_comment_status', 'open' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		update_option( 'default_comment_status', 'closed' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_valid_comment() {

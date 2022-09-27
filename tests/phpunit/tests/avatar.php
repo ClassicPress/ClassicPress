@@ -11,6 +11,11 @@ class Tests_Avatar extends WP_UnitTestCase {
 		update_option( 'show_avatars', '1' );
 	}
 
+	public function tear_down() {
+		update_option( 'show_avatars', '0' );
+		parent::tear_down();
+	}
+
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/21195
 	 */
@@ -119,7 +124,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'pre_get_avatar_data', array( $this, 'pre_get_avatar_url_filter' ), 10 );
 
-		$this->assertSame( $url, $this->fakeURL );
+		$this->assertSame( $url, $this->fake_url );
 	}
 	public function pre_get_avatar_url_filter( $args ) {
 		$args['url'] = $this->fake_url;
@@ -136,7 +141,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'get_avatar_url', array( $this, 'get_avatar_url_filter' ), 10 );
 
-		$this->assertSame( $url, $this->fakeURL );
+		$this->assertSame( $url, $this->fake_url );
 	}
 	public function get_avatar_url_filter( $url ) {
 		return $this->fake_url;
@@ -223,7 +228,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'pre_get_avatar', array( $this, 'pre_get_avatar_filter' ), 10 );
 
-		$this->assertSame( $img, $this->fakeIMG );
+		$this->assertSame( $img, $this->fake_img );
 	}
 	public function pre_get_avatar_filter( $img ) {
 		return $this->fake_img;
@@ -239,7 +244,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'get_avatar', array( $this, 'get_avatar_filter' ), 10 );
 
-		$this->assertSame( $img, $this->fakeURL );
+		$this->assertSame( $img, $this->fake_url );
 	}
 
 	public function get_avatar_filter( $img ) {
