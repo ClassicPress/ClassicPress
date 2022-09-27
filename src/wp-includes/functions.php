@@ -3011,6 +3011,7 @@ function wp_die( $message = '', $title = '', $args = array() ) {
  * @param string|array    $args    Optional. Arguments to control behavior. Default empty array.
  */
 function _default_wp_die_handler( $message, $title = '', $args = array() ) {
+<<<<<<< HEAD
 	$defaults = array( 'response' => 500 );
 	$r        = wp_parse_args( $args, $defaults );
 
@@ -3038,15 +3039,46 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 	} elseif ( is_string( $message ) ) {
 		$message = "<p>$message</p>";
 	}
+=======
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
 
-	if ( isset( $r['back_link'] ) && $r['back_link'] ) {
+	if ( is_string( $message ) ) {
+		if ( ! empty( $parsed_args['additional_errors'] ) ) {
+			$message = array_merge(
+				array( $message ),
+				wp_list_pluck( $parsed_args['additional_errors'], 'message' )
+			);
+			$message = "<ul>\n\t\t<li>" . join( "</li>\n\t\t<li>", $message ) . "</li>\n\t</ul>";
+		} else {
+			$message = "<p>$message</p>";
+		}
+	}
+
+	$have_gettext = function_exists( '__' );
+
+	if ( ! empty( $parsed_args['link_url'] ) && ! empty( $parsed_args['link_text'] ) ) {
+		$link_url = $parsed_args['link_url'];
+		if ( function_exists( 'esc_url' ) ) {
+			$link_url = esc_url( $link_url );
+		}
+		$link_text = $parsed_args['link_text'];
+		$message  .= "\n<p><a href='{$link_url}'>{$link_text}</a></p>";
+	}
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
+
+	if ( isset( $parsed_args['back_link'] ) && $parsed_args['back_link'] ) {
 		$back_text = $have_gettext ? __( '&laquo; Back' ) : '&laquo; Back';
 		$message  .= "\n<p><a href='javascript:history.back()'>$back_text</a></p>";
 	}
 
 	if ( ! did_action( 'admin_head' ) ) :
 		if ( ! headers_sent() ) {
+<<<<<<< HEAD
 			status_header( $r['response'] );
+=======
+			header( 'Content-Type: text/html; charset=utf-8' );
+			status_header( $parsed_args['response'] );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			nocache_headers();
 			header( 'Content-Type: text/html; charset=utf-8' );
 		}
@@ -3062,6 +3094,10 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 			$text_direction = 'rtl';
 		}
 
+<<<<<<< HEAD
+=======
+		$text_direction = $parsed_args['text_direction'];
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		if ( function_exists( 'language_attributes' ) && function_exists( 'is_rtl' ) ) {
 			$dir_attr = get_language_attributes();
 		} else {
@@ -3202,6 +3238,10 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 </body>
 </html>
 	<?php
+<<<<<<< HEAD
+=======
+	if ( $parsed_args['exit'] ) {
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 	die();
 }
 
@@ -3210,7 +3250,133 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
  *
  * This is the handler for wp_die when processing XMLRPC requests.
  *
+<<<<<<< HEAD
  * @since WP-3.2.0
+=======
+ * @since 3.4.0
+ * @access private
+ *
+ * @param string       $message Error message.
+ * @param string       $title   Optional. Error title (unused). Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ */
+function _ajax_wp_die_handler( $message, $title = '', $args = array() ) {
+	// Set default 'response' to 200 for AJAX requests.
+	$args = wp_parse_args(
+		$args,
+		array( 'response' => 200 )
+	);
+
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	if ( ! headers_sent() ) {
+		// This is intentional. For backward-compatibility, support passing null here.
+		if ( null !== $args['response'] ) {
+			status_header( $parsed_args['response'] );
+		}
+		nocache_headers();
+	}
+
+	if ( is_scalar( $message ) ) {
+		$message = (string) $message;
+	} else {
+		$message = '0';
+	}
+
+	if ( $parsed_args['exit'] ) {
+		die( $message );
+	}
+
+	echo $message;
+}
+
+/**
+ * Kills WordPress execution and displays JSON response with an error message.
+ *
+ * This is the handler for wp_die() when processing JSON requests.
+ *
+ * @since 5.1.0
+ * @access private
+ *
+ * @param string       $message Error message.
+ * @param string       $title   Optional. Error title. Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ */
+function _json_wp_die_handler( $message, $title = '', $args = array() ) {
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	$data = array(
+		'code'              => $parsed_args['code'],
+		'message'           => $message,
+		'data'              => array(
+			'status' => $parsed_args['response'],
+		),
+		'additional_errors' => $parsed_args['additional_errors'],
+	);
+
+	if ( ! headers_sent() ) {
+		header( 'Content-Type: application/json; charset=utf-8' );
+		if ( null !== $parsed_args['response'] ) {
+			status_header( $parsed_args['response'] );
+		}
+		nocache_headers();
+	}
+
+	echo wp_json_encode( $data );
+	if ( $parsed_args['exit'] ) {
+		die();
+	}
+}
+
+/**
+ * Kills WordPress execution and displays JSONP response with an error message.
+ *
+ * This is the handler for wp_die() when processing JSONP requests.
+ *
+ * @since 5.2.0
+ * @access private
+ *
+ * @param string       $message Error message.
+ * @param string       $title   Optional. Error title. Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ */
+function _jsonp_wp_die_handler( $message, $title = '', $args = array() ) {
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	$data = array(
+		'code'              => $parsed_args['code'],
+		'message'           => $message,
+		'data'              => array(
+			'status' => $parsed_args['response'],
+		),
+		'additional_errors' => $parsed_args['additional_errors'],
+	);
+
+	if ( ! headers_sent() ) {
+		header( 'Content-Type: application/javascript; charset=utf-8' );
+		header( 'X-Content-Type-Options: nosniff' );
+		header( 'X-Robots-Tag: noindex' );
+		if ( null !== $parsed_args['response'] ) {
+			status_header( $parsed_args['response'] );
+		}
+		nocache_headers();
+	}
+
+	$result         = wp_json_encode( $data );
+	$jsonp_callback = $_GET['_jsonp'];
+	echo '/**/' . $jsonp_callback . '(' . $result . ')';
+	if ( $parsed_args['exit'] ) {
+		die();
+	}
+}
+
+/**
+ * Kills WordPress execution and displays XML response with an error message.
+ *
+ * This is the handler for wp_die() when processing XMLRPC requests.
+ *
+ * @since 3.2.0
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
  * @access private
  *
  * @global wp_xmlrpc_server $wp_xmlrpc_server
@@ -3223,12 +3389,24 @@ function _xmlrpc_wp_die_handler( $message, $title = '', $args = array() ) {
 	global $wp_xmlrpc_server;
 	$defaults = array( 'response' => 500 );
 
+<<<<<<< HEAD
 	$r = wp_parse_args( $args, $defaults );
+=======
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	if ( ! headers_sent() ) {
+		nocache_headers();
+	}
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 
 	if ( $wp_xmlrpc_server ) {
-		$error = new IXR_Error( $r['response'], $message );
+		$error = new IXR_Error( $parsed_args['response'], $message );
 		$wp_xmlrpc_server->output( $error->getXml() );
 	}
+<<<<<<< HEAD
+=======
+	if ( $parsed_args['exit'] ) {
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 	die();
 }
 
@@ -3241,10 +3419,88 @@ function _xmlrpc_wp_die_handler( $message, $title = '', $args = array() ) {
  * @access private
  *
  * @param string       $message Error message.
+<<<<<<< HEAD
  * @param string       $title   Optional. Error title (unused). Default empty.
  * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
  */
 function _ajax_wp_die_handler( $message, $title = '', $args = array() ) {
+=======
+ * @param string       $title   Optional. Error title. Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ */
+function _xml_wp_die_handler( $message, $title = '', $args = array() ) {
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	$message = htmlspecialchars( $message );
+	$title   = htmlspecialchars( $title );
+
+	$xml = <<<EOD
+<error>
+    <code>{$parsed_args['code']}</code>
+    <title><![CDATA[{$title}]]></title>
+    <message><![CDATA[{$message}]]></message>
+    <data>
+        <status>{$parsed_args['response']}</status>
+    </data>
+</error>
+
+EOD;
+
+	if ( ! headers_sent() ) {
+		header( 'Content-Type: text/xml; charset=utf-8' );
+		if ( null !== $parsed_args['response'] ) {
+			status_header( $parsed_args['response'] );
+		}
+		nocache_headers();
+	}
+
+	echo $xml;
+	if ( $parsed_args['exit'] ) {
+		die();
+	}
+}
+
+/**
+ * Kills WordPress execution and displays an error message.
+ *
+ * This is the handler for wp_die() when processing APP requests.
+ *
+ * @since 3.4.0
+ * @since 5.1.0 Added the $title and $args parameters.
+ * @access private
+ *
+ * @param string       $message Optional. Response to print. Default empty.
+ * @param string       $title   Optional. Error title (unused). Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ */
+function _scalar_wp_die_handler( $message = '', $title = '', $args = array() ) {
+	list( $message, $title, $parsed_args ) = _wp_die_process_input( $message, $title, $args );
+
+	if ( $parsed_args['exit'] ) {
+		if ( is_scalar( $message ) ) {
+			die( (string) $message );
+		}
+		die();
+	}
+
+	if ( is_scalar( $message ) ) {
+		echo (string) $message;
+	}
+}
+
+/**
+ * Processes arguments passed to wp_die() consistently for its handlers.
+ *
+ * @since 5.1.0
+ * @access private
+ *
+ * @param string       $message Error message.
+ * @param string       $title   Optional. Error title. Default empty.
+ * @param string|array $args    Optional. Arguments to control behavior. Default empty array.
+ * @return array List of processed $message string, $title string, and $args array.
+ */
+function _wp_die_process_input( $message, $title = '', $args = array() ) {
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 	$defaults = array(
 		'response' => 200,
 	);
@@ -3804,17 +4060,17 @@ function smilies_init() {
  */
 function wp_parse_args( $args, $defaults = '' ) {
 	if ( is_object( $args ) ) {
-		$r = get_object_vars( $args );
+		$parsed_args = get_object_vars( $args );
 	} elseif ( is_array( $args ) ) {
-		$r =& $args;
+		$parsed_args =& $args;
 	} else {
-		wp_parse_str( $args, $r );
+		wp_parse_str( $args, $parsed_args );
 	}
 
 	if ( is_array( $defaults ) ) {
-		return array_merge( $defaults, $r );
+		return array_merge( $defaults, $parsed_args );
 	}
-	return $r;
+	return $parsed_args;
 }
 
 /**

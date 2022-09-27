@@ -1747,32 +1747,37 @@ function wp_get_archives( $args = '' ) {
 		'post_type'       => 'post',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	$post_type_object = get_post_type_object( $r['post_type'] );
+	$post_type_object = get_post_type_object( $parsed_args['post_type'] );
 	if ( ! is_post_type_viewable( $post_type_object ) ) {
 		return;
 	}
-	$r['post_type'] = $post_type_object->name;
+	$parsed_args['post_type'] = $post_type_object->name;
 
-	if ( '' == $r['type'] ) {
-		$r['type'] = 'monthly';
+	if ( '' == $parsed_args['type'] ) {
+		$parsed_args['type'] = 'monthly';
 	}
 
-	if ( ! empty( $r['limit'] ) ) {
-		$r['limit'] = absint( $r['limit'] );
-		$r['limit'] = ' LIMIT ' . $r['limit'];
+	if ( ! empty( $parsed_args['limit'] ) ) {
+		$parsed_args['limit'] = absint( $parsed_args['limit'] );
+		$parsed_args['limit'] = ' LIMIT ' . $parsed_args['limit'];
 	}
 
+<<<<<<< HEAD
 	$order = strtoupper( $r['order'] );
 	if ( 'ASC' !== $order ) {
+=======
+	$order = strtoupper( $parsed_args['order'] );
+	if ( $order !== 'ASC' ) {
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 		$order = 'DESC';
 	}
 
 	// this is what will separate dates on weekly archive links
 	$archive_week_separator = '&#8211;';
 
-	$sql_where = $wpdb->prepare( "WHERE post_type = %s AND post_status = 'publish'", $r['post_type'] );
+	$sql_where = $wpdb->prepare( "WHERE post_type = %s AND post_status = 'publish'", $parsed_args['post_type'] );
 
 	/**
 	 * Filters the SQL WHERE clause for retrieving archives.
@@ -1780,9 +1785,9 @@ function wp_get_archives( $args = '' ) {
 	 * @since WP-2.2.0
 	 *
 	 * @param string $sql_where Portion of SQL query containing the WHERE clause.
-	 * @param array  $r         An array of default arguments.
+	 * @param array  $parsed_args         An array of default arguments.
 	 */
-	$where = apply_filters( 'getarchives_where', $sql_where, $r );
+	$where = apply_filters( 'getarchives_where', $sql_where, $parsed_args );
 
 	/**
 	 * Filters the SQL JOIN clause for retrieving archives.
@@ -1790,17 +1795,17 @@ function wp_get_archives( $args = '' ) {
 	 * @since WP-2.2.0
 	 *
 	 * @param string $sql_join Portion of SQL query containing JOIN clause.
-	 * @param array  $r        An array of default arguments.
+	 * @param array  $parsed_args An array of default arguments.
 	 */
-	$join = apply_filters( 'getarchives_join', '', $r );
+	$join = apply_filters( 'getarchives_join', '', $parsed_args );
 
 	$output = '';
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
 
-	$limit = $r['limit'];
+	$limit = $parsed_args['limit'];
 
-	if ( 'monthly' == $r['type'] ) {
+	if ( 'monthly' == $parsed_args['type'] ) {
 		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
@@ -1809,21 +1814,26 @@ function wp_get_archives( $args = '' ) {
 			wp_cache_set( $key, $results, 'posts' );
 		}
 		if ( $results ) {
-			$after = $r['after'];
+			$after = $parsed_args['after'];
 			foreach ( (array) $results as $result ) {
 				$url = get_month_link( $result->year, $result->month );
-				if ( 'post' !== $r['post_type'] ) {
-					$url = add_query_arg( 'post_type', $r['post_type'], $url );
+				if ( 'post' !== $parsed_args['post_type'] ) {
+					$url = add_query_arg( 'post_type', $parsed_args['post_type'], $url );
 				}
 				/* translators: 1: month name, 2: 4-digit year */
 				$text = sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $result->month ), $result->year );
-				if ( $r['show_post_count'] ) {
-					$r['after'] = '&nbsp;(' . $result->posts . ')' . $after;
+				if ( $parsed_args['show_post_count'] ) {
+					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
+<<<<<<< HEAD
 				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+				$selected = is_archive() && (string) $parsed_args['year'] === $result->year && (string) $parsed_args['monthnum'] === $result->month;
+				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			}
 		}
-	} elseif ( 'yearly' == $r['type'] ) {
+	} elseif ( 'yearly' == $parsed_args['type'] ) {
 		$query = "SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
@@ -1832,20 +1842,25 @@ function wp_get_archives( $args = '' ) {
 			wp_cache_set( $key, $results, 'posts' );
 		}
 		if ( $results ) {
-			$after = $r['after'];
+			$after = $parsed_args['after'];
 			foreach ( (array) $results as $result ) {
 				$url = get_year_link( $result->year );
-				if ( 'post' !== $r['post_type'] ) {
-					$url = add_query_arg( 'post_type', $r['post_type'], $url );
+				if ( 'post' !== $parsed_args['post_type'] ) {
+					$url = add_query_arg( 'post_type', $parsed_args['post_type'], $url );
 				}
 				$text = sprintf( '%d', $result->year );
-				if ( $r['show_post_count'] ) {
-					$r['after'] = '&nbsp;(' . $result->posts . ')' . $after;
+				if ( $parsed_args['show_post_count'] ) {
+					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
+<<<<<<< HEAD
 				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+				$selected = is_archive() && (string) $parsed_args['year'] === $result->year;
+				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			}
 		}
-	} elseif ( 'daily' == $r['type'] ) {
+	} elseif ( 'daily' == $parsed_args['type'] ) {
 		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
@@ -1854,21 +1869,26 @@ function wp_get_archives( $args = '' ) {
 			wp_cache_set( $key, $results, 'posts' );
 		}
 		if ( $results ) {
-			$after = $r['after'];
+			$after = $parsed_args['after'];
 			foreach ( (array) $results as $result ) {
 				$url = get_day_link( $result->year, $result->month, $result->dayofmonth );
-				if ( 'post' !== $r['post_type'] ) {
-					$url = add_query_arg( 'post_type', $r['post_type'], $url );
+				if ( 'post' !== $parsed_args['post_type'] ) {
+					$url = add_query_arg( 'post_type', $parsed_args['post_type'], $url );
 				}
 				$date = sprintf( '%1$d-%2$02d-%3$02d 00:00:00', $result->year, $result->month, $result->dayofmonth );
 				$text = mysql2date( get_option( 'date_format' ), $date );
-				if ( $r['show_post_count'] ) {
-					$r['after'] = '&nbsp;(' . $result->posts . ')' . $after;
+				if ( $parsed_args['show_post_count'] ) {
+					$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 				}
+<<<<<<< HEAD
 				$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+				$selected = is_archive() && (string) $parsed_args['year'] === $result->year && (string) $parsed_args['monthnum'] === $result->month && (string) $parsed_args['day'] === $result->dayofmonth;
+				$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 			}
 		}
-	} elseif ( 'weekly' == $r['type'] ) {
+	} elseif ( 'weekly' == $parsed_args['type'] ) {
 		$week  = _wp_mysql_week( '`post_date`' );
 		$query = "SELECT DISTINCT $week AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `$wpdb->posts` $join $where GROUP BY $week, YEAR( `post_date` ) ORDER BY `post_date` $order $limit";
 		$key   = md5( $query );
@@ -1879,7 +1899,7 @@ function wp_get_archives( $args = '' ) {
 		}
 		$arc_w_last = '';
 		if ( $results ) {
-			$after = $r['after'];
+			$after = $parsed_args['after'];
 			foreach ( (array) $results as $result ) {
 				if ( $result->week != $arc_w_last ) {
 					$arc_year       = $result->yr;
@@ -1894,19 +1914,24 @@ function wp_get_archives( $args = '' ) {
 						),
 						home_url( '/' )
 					);
-					if ( 'post' !== $r['post_type'] ) {
-						$url = add_query_arg( 'post_type', $r['post_type'], $url );
+					if ( 'post' !== $parsed_args['post_type'] ) {
+						$url = add_query_arg( 'post_type', $parsed_args['post_type'], $url );
 					}
 					$text = $arc_week_start . $archive_week_separator . $arc_week_end;
-					if ( $r['show_post_count'] ) {
-						$r['after'] = '&nbsp;(' . $result->posts . ')' . $after;
+					if ( $parsed_args['show_post_count'] ) {
+						$parsed_args['after'] = '&nbsp;(' . $result->posts . ')' . $after;
 					}
+<<<<<<< HEAD
 					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+					$selected = is_archive() && (string) $parsed_args['year'] === $result->yr && (string) $parsed_args['w'] === $result->week;
+					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 				}
 			}
 		}
-	} elseif ( ( 'postbypost' == $r['type'] ) || ( 'alpha' == $r['type'] ) ) {
-		$orderby = ( 'alpha' == $r['type'] ) ? 'post_title ASC ' : 'post_date DESC, ID DESC ';
+	} elseif ( ( 'postbypost' == $parsed_args['type'] ) || ( 'alpha' == $parsed_args['type'] ) ) {
+		$orderby = ( 'alpha' == $parsed_args['type'] ) ? 'post_title ASC ' : 'post_date DESC, ID DESC ';
 		$query   = "SELECT * FROM $wpdb->posts $join $where ORDER BY $orderby $limit";
 		$key     = md5( $query );
 		$key     = "wp_get_archives:$key:$last_changed";
@@ -1924,13 +1949,18 @@ function wp_get_archives( $args = '' ) {
 					} else {
 						$text = $result->ID;
 					}
+<<<<<<< HEAD
 
 					$output .= get_archives_link( $url, $text, $r['format'], $r['before'], $r['after'] );
+=======
+					$selected = $result->ID === get_the_ID();
+					$output  .= get_archives_link( $url, $text, $parsed_args['format'], $parsed_args['before'], $parsed_args['after'], $selected );
+>>>>>>> e5a0610d53 (Coding Standards: Rename `$r` variable used with `wp_parse_args()` to `$parsed_args` for clarity.)
 				}
 			}
 		}
 	}
-	if ( $r['echo'] ) {
+	if ( $parsed_args['echo'] ) {
 		echo $output;
 	} else {
 		return $output;
