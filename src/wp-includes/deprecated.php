@@ -3949,7 +3949,7 @@ function wp_ajax_press_this_add_category() {
  * will need to have it at the end.
  *
  * @since WP-0.71
- * @deprecated 1.5.0
+ * @deprecated CP-1.5.0
  *
  * @global WP_Locale $wp_locale
  *
