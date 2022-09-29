@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 
 /**
@@ -13,13 +13,13 @@
  * @group privacy
  * @covers wp_privacy_delete_old_export_files
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to the index file that blocks directory listing on poorly-configured servers.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var string $index_path
 	 */
@@ -28,7 +28,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to an export file that is past the expiration date.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var string $expired_export_file
 	 */
@@ -37,7 +37,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to an export file that is active.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var string $expired_export_file
 	 */
@@ -63,8 +63,8 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Perform setup operations that are shared across all tests.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		touch( self::$index_path, time() - 30 * WEEK_IN_SECONDS );
 		touch( self::$expired_export_file, time() - 5 * DAY_IN_SECONDS );
@@ -82,7 +82,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should not throw notices when the exports directory doesn't exist.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_non_existent_folders_should_not_cause_errors() {
 		add_filter( 'wp_privacy_exports_dir', array( $this, 'filter_bad_exports_dir' ) );
@@ -99,7 +99,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Return the path to a non-existent folder.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param string $exports_dir The default personal data export directory.
 	 *
@@ -114,7 +114,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should delete files that are past the expiration date.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_expired_files_should_be_deleted() {
 		wp_privacy_delete_old_export_files();
@@ -125,7 +125,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should not delete files that are not past the expiration date.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_unexpired_files_should_not_be_deleted() {
 		wp_privacy_delete_old_export_files();
@@ -136,7 +136,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should never delete the index file, even if it's past the expiration date.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_index_file_should_never_be_deleted() {
 		wp_privacy_delete_old_export_files();

@@ -17,10 +17,10 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 	/**
 	 * Tear down the test fixture.
 	 */
-	public function tearDown() {
-		// Cleanup
+	public function tear_down() {
+		// Cleanup.
 		$this->remove_added_uploads();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/canola.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$id     = $this->_make_attachment( $upload );
 
 		$_REQUEST['action']  = 'image-editor';
@@ -63,7 +63,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/canola.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$id     = $this->_make_attachment( $upload );
 
 		$_REQUEST['action']  = 'image-editor';
@@ -96,7 +96,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 		}
 
 		foreach ( $files_that_shouldnt_exist as $file ) {
-			$this->assertFileNotExists( $file, 'IMAGE_EDIT_OVERWRITE is leaving garbage image files behind.' );
+			$this->assertFileDoesNotExist( $file, 'IMAGE_EDIT_OVERWRITE is leaving garbage image files behind.' );
 		}
 	}
 }

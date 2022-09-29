@@ -13,23 +13,23 @@ if ( is_multisite() ) :
 		protected static $network_ids;
 		protected static $site_ids;
 
-		function setUp() {
+		function set_up() {
 			global $wpdb;
-			parent::setUp();
+			parent::set_up();
 			$this->suppress = $wpdb->suppress_errors();
 		}
 
-		function tearDown() {
+		function tear_down() {
 			global $wpdb;
 			$wpdb->suppress_errors( $this->suppress );
-			parent::tearDown();
+			parent::tear_down();
 		}
 
 		public static function wpSetUpBeforeClass( $factory ) {
 			self::$network_ids = array(
 				'make.wordpress.org/' => array(
 					'domain' => 'make.wordpress.org',
-					'path'   => '/',
+					'path' => '/',
 				),
 			);
 
@@ -40,13 +40,13 @@ if ( is_multisite() ) :
 
 			self::$site_ids = array(
 				'make.wordpress.org/'     => array(
-					'domain'  => 'make.wordpress.org',
-					'path'    => '/',
+					'domain' => 'make.wordpress.org',
+					'path' => '/',
 					'site_id' => self::$network_ids['make.wordpress.org/'],
 				),
 				'make.wordpress.org/foo/' => array(
-					'domain'  => 'make.wordpress.org',
-					'path'    => '/foo/',
+					'domain' => 'make.wordpress.org',
+					'path' => '/foo/',
 					'site_id' => self::$network_ids['make.wordpress.org/'],
 				),
 			);
@@ -73,44 +73,44 @@ if ( is_multisite() ) :
 		function test_switch_restore_blog() {
 			global $_wp_switched_stack, $wpdb;
 
-			$this->assertEquals( array(), $_wp_switched_stack );
+			$this->assertSame( array(), $_wp_switched_stack );
 			$this->assertFalse( ms_is_switched() );
 			$current_blog_id = get_current_blog_id();
-			$this->assertInternalType( 'integer', $current_blog_id );
+			$this->assertIsInt( $current_blog_id );
 
 			wp_cache_set( 'switch-test', $current_blog_id, 'switch-test' );
-			$this->assertEquals( $current_blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
+			$this->assertSame( $current_blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
 
 			$blog_id = self::factory()->blog->create();
 
 			$cap_key = wp_get_current_user()->cap_key;
 			switch_to_blog( $blog_id );
 			$this->assertNotEquals( $cap_key, wp_get_current_user()->cap_key );
-			$this->assertEquals( array( $current_blog_id ), $_wp_switched_stack );
+			$this->assertSame( array( $current_blog_id ), $_wp_switched_stack );
 			$this->assertTrue( ms_is_switched() );
-			$this->assertEquals( $blog_id, $wpdb->blogid );
+			$this->assertSame( $blog_id, $wpdb->blogid );
 			$this->assertFalse( wp_cache_get( 'switch-test', 'switch-test' ) );
 			wp_cache_set( 'switch-test', $blog_id, 'switch-test' );
-			$this->assertEquals( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
+			$this->assertSame( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
 
 			switch_to_blog( $blog_id );
-			$this->assertEquals( array( $current_blog_id, $blog_id ), $_wp_switched_stack );
+			$this->assertSame( array( $current_blog_id, $blog_id ), $_wp_switched_stack );
 			$this->assertTrue( ms_is_switched() );
-			$this->assertEquals( $blog_id, $wpdb->blogid );
-			$this->assertEquals( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
+			$this->assertSame( $blog_id, $wpdb->blogid );
+			$this->assertSame( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
 
 			restore_current_blog();
-			$this->assertEquals( array( $current_blog_id ), $_wp_switched_stack );
+			$this->assertSame( array( $current_blog_id ), $_wp_switched_stack );
 			$this->assertTrue( ms_is_switched() );
-			$this->assertEquals( $blog_id, $wpdb->blogid );
-			$this->assertEquals( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
+			$this->assertSame( $blog_id, $wpdb->blogid );
+			$this->assertSame( $blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
 
 			restore_current_blog();
-			$this->assertEquals( $cap_key, wp_get_current_user()->cap_key );
-			$this->assertEquals( $current_blog_id, get_current_blog_id() );
-			$this->assertEquals( array(), $_wp_switched_stack );
+			$this->assertSame( $cap_key, wp_get_current_user()->cap_key );
+			$this->assertSame( $current_blog_id, get_current_blog_id() );
+			$this->assertSame( array(), $_wp_switched_stack );
 			$this->assertFalse( ms_is_switched() );
-			$this->assertEquals( $current_blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
+			$this->assertSame( $current_blog_id, wp_cache_get( 'switch-test', 'switch-test' ) );
 
 			$this->assertFalse( restore_current_blog() );
 		}
@@ -123,7 +123,7 @@ if ( is_multisite() ) :
 
 			$blog_id = self::factory()->blog->create();
 
-			$this->assertInternalType( 'int', $blog_id );
+			$this->assertIsInt( $blog_id );
 			$prefix = $wpdb->get_blog_prefix( $blog_id );
 
 			// $get_all = false, only retrieve details from the blogs table
@@ -135,11 +135,11 @@ if ( is_multisite() ) :
 			$this->assertEquals( $details, wp_cache_get( $blog_id . 'short', 'blog-details' ) );
 
 			// get_blogaddress_by_name()
-			$this->assertEquals( 'http://' . $details->domain . $details->path, get_blogaddress_by_name( trim( $details->path, '/' ) ) );
+			$this->assertSame( 'http://' . $details->domain . $details->path, get_blogaddress_by_name( trim( $details->path, '/' ) ) );
 
 			// These are empty until get_blog_details() is called with $get_all = true
-			$this->assertEquals( false, wp_cache_get( $blog_id, 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-lookup' ) );
+			$this->assertFalse( wp_cache_get( $blog_id, 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-lookup' ) );
 
 			// $get_all = true, populate the full blog-details cache and the blog slug lookup cache
 			$details = get_blog_details( $blog_id, true );
@@ -166,7 +166,7 @@ if ( is_multisite() ) :
 
 			// update the blog count cache to use get_blog_count()
 			wp_update_network_counts();
-			$this->assertEquals( 2, (int) get_blog_count() );
+			$this->assertSame( 2, (int) get_blog_count() );
 		}
 
 		public function test_site_caches_should_invalidate_when_invalidation_is_not_suspended() {
@@ -192,7 +192,7 @@ if ( is_multisite() ) :
 			$new_details = get_site( $site_id );
 			wp_suspend_cache_invalidation( $suspend );
 
-			$this->assertEquals( $details->path, $new_details->path );
+			$this->assertSame( $details->path, $new_details->path );
 		}
 
 		/**
@@ -207,10 +207,10 @@ if ( is_multisite() ) :
 			// Delete the site without forcing a table drop.
 			wpmu_delete_blog( $blog_id, false );
 
-			$this->assertEquals( false, wp_cache_get( $blog_id, 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $blog_id . 'short', 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-lookup' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertFalse( wp_cache_get( $blog_id, 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $blog_id . 'short', 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-lookup' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -245,10 +245,10 @@ if ( is_multisite() ) :
 			// Delete the site and force a table drop.
 			wpmu_delete_blog( $blog_id, true );
 
-			$this->assertEquals( false, wp_cache_get( $blog_id, 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $blog_id . 'short', 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-lookup' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertFalse( wp_cache_get( $blog_id, 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $blog_id . 'short', 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-lookup' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -283,10 +283,10 @@ if ( is_multisite() ) :
 			// Delete the site and force a table drop.
 			wpmu_delete_blog( $blog_id, true );
 
-			$this->assertEquals( false, wp_cache_get( $blog_id, 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $blog_id . 'short', 'blog-details' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-lookup' ) );
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertFalse( wp_cache_get( $blog_id, 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $blog_id . 'short', 'blog-details' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-lookup' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -320,7 +320,7 @@ if ( is_multisite() ) :
 
 			// update the blog count cache to use get_blog_count()
 			wp_update_network_counts();
-			$this->assertEquals( 1, get_blog_count() );
+			$this->assertSame( 1, get_blog_count() );
 		}
 
 		/**
@@ -334,7 +334,7 @@ if ( is_multisite() ) :
 
 			// update the blog count cache to use get_blog_count()
 			wp_update_network_counts();
-			$this->assertEquals( 1, get_blog_count() );
+			$this->assertSame( 1, get_blog_count() );
 		}
 
 		/**
@@ -402,7 +402,7 @@ if ( is_multisite() ) :
 			get_blog_details( $blog_id );
 
 			// When the cache is primed with an invalid site, the value is set to -1.
-			$this->assertEquals( -1, wp_cache_get( $blog_id, 'blog-details' ) );
+			$this->assertSame( -1, wp_cache_get( $blog_id, 'blog-details' ) );
 
 			// Create a site in the invalid site's place.
 			self::factory()->blog->create();
@@ -421,7 +421,7 @@ if ( is_multisite() ) :
 		 */
 		function test_update_blog_status() {
 			$result = update_blog_status( 1, 'spam', 0 );
-			$this->assertEquals( 0, $result );
+			$this->assertSame( 0, $result );
 		}
 
 		/**
@@ -429,7 +429,7 @@ if ( is_multisite() ) :
 		 */
 		function test_update_blog_status_invalid_status() {
 			$result = update_blog_status( 1, 'doesnotexist', 'invalid' );
-			$this->assertEquals( 'invalid', $result );
+			$this->assertSame( 'invalid', $result );
 		}
 
 		function test_update_blog_status_make_ham_blog_action() {
@@ -443,15 +443,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'spam', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->spam );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '0', $blog->spam );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'spam' stays the same.
 			update_blog_status( $blog_id, 'spam', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->spam );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '0', $blog->spam );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'make_ham_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -470,7 +470,7 @@ if ( is_multisite() ) :
 
 			restore_current_blog();
 			$this->assertNotEmpty( $spam_permalink );
-			$this->assertEquals( $post_data['post_title'], $post->post_title );
+			$this->assertSame( $post_data['post_title'], $post->post_title );
 
 			update_blog_status( $spam_blog_id, 'spam', 1 );
 
@@ -482,8 +482,8 @@ if ( is_multisite() ) :
 			$post    = get_post( $post_id );
 			$content = apply_filters( 'the_content', $post->post_content );
 
-			$this->assertNotContains( $post_data['post_title'], $content );
-			$this->assertNotContains( "src=\"{$spam_embed_url}#?", $content );
+			$this->assertStringNotContainsString( $post_data['post_title'], $content );
+			$this->assertStringNotContainsString( "src=\"{$spam_embed_url}#?", $content );
 		}
 
 		function test_update_blog_status_make_spam_blog_action() {
@@ -496,15 +496,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'spam', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->spam );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '1', $blog->spam );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'spam' stays the same.
 			update_blog_status( $blog_id, 'spam', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->spam );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '1', $blog->spam );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'make_spam_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -519,15 +519,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'archived', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->archived );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '1', $blog->archived );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'archived' stays the same.
 			update_blog_status( $blog_id, 'archived', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->archived );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '1', $blog->archived );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'archive_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -543,14 +543,14 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'archived', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->archived );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '0', $blog->archived );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'archived' stays the same.
 			update_blog_status( $blog_id, 'archived', 0 );
 			$blog = get_site( $blog_id );
-			$this->assertEquals( '0', $blog->archived );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '0', $blog->archived );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'unarchive_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -565,15 +565,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'deleted', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->deleted );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '1', $blog->deleted );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'deleted' stays the same.
 			update_blog_status( $blog_id, 'deleted', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->deleted );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '1', $blog->deleted );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'make_delete_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -589,15 +589,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'deleted', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->deleted );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '0', $blog->deleted );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'deleted' stays the same.
 			update_blog_status( $blog_id, 'deleted', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->deleted );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '0', $blog->deleted );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'make_undelete_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -612,15 +612,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'mature', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->mature );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '1', $blog->mature );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'mature' stays the same.
 			update_blog_status( $blog_id, 'mature', 1 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '1', $blog->mature );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '1', $blog->mature );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'mature_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -636,15 +636,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'mature', 0 );
 
 			$blog = get_site( $blog_id );
-			$this->assertEquals( '0', $blog->mature );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '0', $blog->mature );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'mature' stays the same.
 			update_blog_status( $blog_id, 'mature', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->mature );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '0', $blog->mature );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'unmature_blog', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -659,15 +659,15 @@ if ( is_multisite() ) :
 			update_blog_status( $blog_id, 'public', 0 );
 
 			$blog = get_site( $blog_id );
-			$this->assertEquals( '0', $blog->public );
-			$this->assertEquals( 1, $test_action_counter );
+			$this->assertSame( '0', $blog->public );
+			$this->assertSame( 1, $test_action_counter );
 
 			// The action should fire if the status of 'mature' stays the same.
 			update_blog_status( $blog_id, 'public', 0 );
 			$blog = get_site( $blog_id );
 
-			$this->assertEquals( '0', $blog->public );
-			$this->assertEquals( 2, $test_action_counter );
+			$this->assertSame( '0', $blog->public );
+			$this->assertSame( 2, $test_action_counter );
 
 			remove_action( 'update_blog_public', array( $this, '_action_counter_cb' ), 10 );
 		}
@@ -690,11 +690,11 @@ if ( is_multisite() ) :
 		function test_blog_details_cache_invalidation() {
 			update_option( 'blogname', 'foo' );
 			$details = get_site( get_current_blog_id() );
-			$this->assertEquals( 'foo', $details->blogname );
+			$this->assertSame( 'foo', $details->blogname );
 
 			update_option( 'blogname', 'bar' );
 			$details = get_site( get_current_blog_id() );
-			$this->assertEquals( 'bar', $details->blogname );
+			$this->assertSame( 'bar', $details->blogname );
 		}
 
 		/**
@@ -707,8 +707,8 @@ if ( is_multisite() ) :
 			$key     = md5( $details->domain . $details->path );
 
 			// Test the original response and cached response for the newly created site.
-			$this->assertEquals( $blog_id, get_blog_id_from_url( $details->domain, $details->path ) );
-			$this->assertEquals( $blog_id, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertSame( $blog_id, get_blog_id_from_url( $details->domain, $details->path ) );
+			$this->assertSame( $blog_id, wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -723,7 +723,7 @@ if ( is_multisite() ) :
 			);
 			$details = get_site( $blog_id );
 
-			$this->assertEquals( $blog_id, get_blog_id_from_url( strtoupper( $details->domain ), strtoupper( $details->path ) ) );
+			$this->assertSame( $blog_id, get_blog_id_from_url( strtoupper( $details->domain ), strtoupper( $details->path ) ) );
 		}
 
 		/**
@@ -733,8 +733,8 @@ if ( is_multisite() ) :
 			$blog_id = self::factory()->blog->create( array( 'path' => '/xyz' ) );
 			$details = get_site( $blog_id );
 
-			$this->assertEquals( 0, get_blog_id_from_url( $details->domain, 'foo' ) );
-			$this->assertEquals( -1, wp_cache_get( md5( $details->domain . 'foo' ), 'blog-id-cache' ) );
+			$this->assertSame( 0, get_blog_id_from_url( $details->domain, 'foo' ) );
+			$this->assertSame( -1, wp_cache_get( md5( $details->domain . 'foo' ), 'blog-id-cache' ) );
 		}
 
 		/**
@@ -747,8 +747,8 @@ if ( is_multisite() ) :
 			$key     = md5( $details->domain . $details->path );
 			wpmu_delete_blog( $blog_id );
 
-			$this->assertEquals( $blog_id, get_blog_id_from_url( $details->domain, $details->path ) );
-			$this->assertEquals( $blog_id, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertSame( $blog_id, get_blog_id_from_url( $details->domain, $details->path ) );
+			$this->assertSame( $blog_id, wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -761,9 +761,9 @@ if ( is_multisite() ) :
 			$key     = md5( $details->domain . $details->path );
 			wpmu_delete_blog( $blog_id, true );
 
-			$this->assertEquals( false, wp_cache_get( $key, 'blog-id-cache' ) );
-			$this->assertEquals( 0, get_blog_id_from_url( $details->domain, $details->path ) );
-			$this->assertEquals( -1, wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertFalse( wp_cache_get( $key, 'blog-id-cache' ) );
+			$this->assertSame( 0, get_blog_id_from_url( $details->domain, $details->path ) );
+			$this->assertSame( -1, wp_cache_get( $key, 'blog-id-cache' ) );
 		}
 
 		/**
@@ -808,26 +808,26 @@ if ( is_multisite() ) :
 			$site = get_current_site();
 
 			$info = wp_upload_dir();
-			$this->assertEquals( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['url'] );
-			$this->assertEquals( ABSPATH . 'wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['path'] );
-			$this->assertEquals( gmstrftime( '/%Y/%m' ), $info['subdir'] );
-			$this->assertEquals( '', $info['error'] );
+			$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['url'] );
+			$this->assertSame( ABSPATH . 'wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['path'] );
+			$this->assertSame( gmstrftime( '/%Y/%m' ), $info['subdir'] );
+			$this->assertFalse( $info['error'] );
 
 			$blog_id = self::factory()->blog->create();
 
 			switch_to_blog( $blog_id );
 			$info = wp_upload_dir();
-			$this->assertEquals( 'http://' . $site->domain . '/wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime( '%Y/%m' ), $info['url'] );
-			$this->assertEquals( ABSPATH . 'wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime( '%Y/%m' ), $info['path'] );
-			$this->assertEquals( gmstrftime( '/%Y/%m' ), $info['subdir'] );
-			$this->assertEquals( '', $info['error'] );
+			$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime( '%Y/%m' ), $info['url'] );
+			$this->assertSame( ABSPATH . 'wp-content/uploads/sites/' . get_current_blog_id() . '/' . gmstrftime( '%Y/%m' ), $info['path'] );
+			$this->assertSame( gmstrftime( '/%Y/%m' ), $info['subdir'] );
+			$this->assertFalse( $info['error'] );
 			restore_current_blog();
 
 			$info = wp_upload_dir();
-			$this->assertEquals( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['url'] );
-			$this->assertEquals( ABSPATH . 'wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['path'] );
-			$this->assertEquals( gmstrftime( '/%Y/%m' ), $info['subdir'] );
-			$this->assertEquals( '', $info['error'] );
+			$this->assertSame( 'http://' . $site->domain . '/wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['url'] );
+			$this->assertSame( ABSPATH . 'wp-content/uploads/' . gmstrftime( '%Y/%m' ), $info['path'] );
+			$this->assertSame( gmstrftime( '/%Y/%m' ), $info['subdir'] );
+			$this->assertFalse( $info['error'] );
 		}
 
 		/**
@@ -877,13 +877,13 @@ if ( is_multisite() ) :
 		function test_domain_exists_with_default_site_id() {
 			$details = get_site( 1 );
 
-			$this->assertEquals( 1, domain_exists( $details->domain, $details->path ) );
+			$this->assertSame( 1, domain_exists( $details->domain, $details->path ) );
 		}
 
 		function test_domain_exists_with_specified_site_id() {
 			$details = get_site( 1 );
 
-			$this->assertEquals( 1, domain_exists( $details->domain, $details->path, $details->site_id ) );
+			$this->assertSame( 1, domain_exists( $details->domain, $details->path, $details->site_id ) );
 		}
 
 		/**
@@ -893,18 +893,18 @@ if ( is_multisite() ) :
 		function test_domain_does_not_exist_with_invalid_site_id() {
 			$details = get_site( 1 );
 
-			$this->assertEquals( null, domain_exists( $details->domain, $details->path, 999 ) );
+			$this->assertNull( domain_exists( $details->domain, $details->path, 999 ) );
 		}
 
 		function test_invalid_domain_does_not_exist_with_default_site_id() {
-			$this->assertEquals( null, domain_exists( 'foo', 'bar' ) );
+			$this->assertNull( domain_exists( 'foo', 'bar' ) );
 		}
 
 		function test_domain_filtered_to_exist() {
 			add_filter( 'domain_exists', array( $this, '_domain_exists_cb' ), 10, 4 );
 			$exists = domain_exists( 'foo', 'bar' );
 			remove_filter( 'domain_exists', array( $this, '_domain_exists_cb' ), 10, 4 );
-			$this->assertEquals( 1234, $exists );
+			$this->assertSame( 1234, $exists );
 		}
 
 		/**
@@ -918,7 +918,7 @@ if ( is_multisite() ) :
 			remove_filter( 'domain_exists', array( $this, '_domain_exists_cb' ), 10, 4 );
 
 			// Make sure the same result is returned with or without a trailing slash
-			$this->assertEquals( $exists1, $exists2 );
+			$this->assertSame( $exists1, $exists2 );
 		}
 
 		/**
@@ -926,7 +926,7 @@ if ( is_multisite() ) :
 		 */
 		function test_get_blogaddress_by_id_with_valid_id() {
 			$blogaddress = get_blogaddress_by_id( 1 );
-			$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/', $blogaddress );
+			$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/', $blogaddress );
 		}
 
 		/**
@@ -934,7 +934,7 @@ if ( is_multisite() ) :
 		 */
 		function test_get_blogaddress_by_id_with_invalid_id() {
 			$blogaddress = get_blogaddress_by_id( 42 );
-			$this->assertEquals( '', $blogaddress );
+			$this->assertSame( '', $blogaddress );
 		}
 
 		/**
@@ -1178,7 +1178,7 @@ if ( is_multisite() ) :
 			$old_count = did_action( 'clean_site_cache' );
 
 			clean_blog_cache( $site );
-			$this->assertEquals( $old_count + 1, did_action( 'clean_site_cache' ) );
+			$this->assertSame( $old_count + 1, did_action( 'clean_site_cache' ) );
 		}
 
 		/**
@@ -1192,7 +1192,7 @@ if ( is_multisite() ) :
 			$suspend = wp_suspend_cache_invalidation();
 			clean_blog_cache( $site );
 			wp_suspend_cache_invalidation( $suspend );
-			$this->assertEquals( $old_count, did_action( 'clean_site_cache' ) );
+			$this->assertSame( $old_count, did_action( 'clean_site_cache' ) );
 		}
 
 		/**
@@ -1202,7 +1202,7 @@ if ( is_multisite() ) :
 			$old_count = did_action( 'clean_site_cache' );
 
 			clean_blog_cache( null );
-			$this->assertEquals( $old_count, did_action( 'clean_site_cache' ) );
+			$this->assertSame( $old_count, did_action( 'clean_site_cache' ) );
 		}
 
 		/**
@@ -1212,7 +1212,7 @@ if ( is_multisite() ) :
 			$old_count = did_action( 'clean_site_cache' );
 
 			clean_blog_cache( 'something' );
-			$this->assertEquals( $old_count, did_action( 'clean_site_cache' ) );
+			$this->assertSame( $old_count, did_action( 'clean_site_cache' ) );
 		}
 
 		/**

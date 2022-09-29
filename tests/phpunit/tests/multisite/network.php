@@ -10,29 +10,29 @@ if ( is_multisite() ) :
 	 */
 	class Tests_Multisite_Network extends WP_UnitTestCase {
 		protected $plugin_hook_count = 0;
-		protected $suppress          = false;
+		protected $suppress = false;
 
 		protected static $different_network_id;
 		protected static $different_site_ids = array();
 
-		function setUp() {
+		function set_up() {
 			global $wpdb;
-			parent::setUp();
+			parent::set_up();
 			$this->suppress = $wpdb->suppress_errors();
 		}
 
-		function tearDown() {
+		function tear_down() {
 			global $wpdb, $current_site;
 			$wpdb->suppress_errors( $this->suppress );
 			$current_site->id = 1;
-			parent::tearDown();
+			parent::tear_down();
 		}
 
 		public static function wpSetUpBeforeClass( $factory ) {
 			self::$different_network_id = $factory->network->create(
 				array(
 					'domain' => 'wordpress.org',
-					'path'   => '/',
+					'path' => '/',
 				)
 			);
 
@@ -76,7 +76,7 @@ if ( is_multisite() ) :
 		 * By default, only one network exists and has a network ID of 1.
 		 */
 		function test_get_main_network_id_default() {
-			$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 		}
 
 		/**
@@ -86,7 +86,7 @@ if ( is_multisite() ) :
 		function test_get_main_network_id_two_networks() {
 			self::factory()->network->create();
 
-			$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 		}
 
 		/**
@@ -100,7 +100,7 @@ if ( is_multisite() ) :
 
 			$current_site->id = (int) $id;
 
-			$this->assertEquals( 1, get_main_network_id() );
+			$this->assertSame( 1, get_main_network_id() );
 		}
 
 		/**
@@ -120,12 +120,12 @@ if ( is_multisite() ) :
 			$main_network_id = get_main_network_id();
 			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->site} SET id=1 WHERE id=%d", $temp_id ) );
 
-			$this->assertEquals( self::$different_network_id, $main_network_id );
+			$this->assertSame( self::$different_network_id, $main_network_id );
 		}
 
 		function test_get_main_network_id_filtered() {
 			add_filter( 'get_main_network_id', array( $this, '_get_main_network_id' ) );
-			$this->assertEquals( 3, get_main_network_id() );
+			$this->assertSame( 3, get_main_network_id() );
 			remove_filter( 'get_main_network_id', array( $this, '_get_main_network_id' ) );
 		}
 
@@ -159,7 +159,7 @@ if ( is_multisite() ) :
 			}
 			wp_update_network_counts();
 
-			$this->assertEquals( $site_count_start + 1, $actual );
+			$this->assertSame( $site_count_start + 1, $actual );
 		}
 
 		/**
@@ -352,7 +352,7 @@ if ( is_multisite() ) :
 			// We can't use wp_schedule_update_network_counts() because WP_INSTALLING is set
 			wp_schedule_event( time(), 'twicedaily', 'update_network_counts' );
 
-			$this->assertInternalType( 'int', wp_next_scheduled( 'update_network_counts' ) );
+			$this->assertIsInt( wp_next_scheduled( 'update_network_counts' ) );
 		}
 
 		/**
@@ -365,7 +365,7 @@ if ( is_multisite() ) :
 
 			$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 			$blog_id = self::factory()->blog->create( array( 'user_id' => $user_id ) );
-			$this->assertInternalType( 'int', $blog_id );
+			$this->assertIsInt( $blog_id );
 
 			// set the dashboard blog to another one
 			update_site_option( 'dashboard_blog', $blog_id );
@@ -602,7 +602,7 @@ if ( is_multisite() ) :
 
 			wpmu_delete_blog( $site_id, true );
 
-			$this->assertEquals( $original_count + 1, $result );
+			$this->assertSame( $original_count + 1, $result );
 		}
 
 		/**

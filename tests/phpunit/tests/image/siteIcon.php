@@ -13,16 +13,16 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 	public $attachment_id       = 0;
 	public $attachment_filename = DIR_TESTDATA . '/images/test-image.jpg';
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->wp_site_icon = new WP_Site_Icon();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$this->_remove_custom_logo();
 		$this->remove_added_uploads();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function _remove_custom_logo() {
@@ -37,7 +37,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 			$sizes[] = 'site_icon-' . $size;
 		}
 
-		$this->assertEquals( $sizes, $image_sizes );
+		$this->assertSame( $sizes, $image_sizes );
 	}
 
 	function test_intermediate_image_sizes_with_filter() {
@@ -53,7 +53,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$this->assertContains( 'site_icon-321', $image_sizes );
 
 		// All icon sizes should be part of the array, including sizes added through the filter.
-		$this->assertEquals( $sizes, $image_sizes );
+		$this->assertSame( $sizes, $image_sizes );
 
 		// Remove custom size.
 		unset( $this->wp_site_icon->site_icon_sizes[ array_search( 321, $this->wp_site_icon->site_icon_sizes ) ] );
@@ -73,7 +73,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 			);
 		}
 
-		$this->assertEquals( $sizes, $image_sizes );
+		$this->assertSame( $sizes, $image_sizes );
 	}
 
 	function test_additional_sizes_with_filter() {
@@ -93,7 +93,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'site_icon-321', $image_sizes );
 
 		// All icon sizes should be part of the array, including sizes added through the filter.
-		$this->assertEquals( $sizes, $image_sizes );
+		$this->assertSame( $sizes, $image_sizes );
 
 		// Remove custom size.
 		unset( $this->wp_site_icon->site_icon_sizes[ array_search( 321, $this->wp_site_icon->site_icon_sizes ) ] );
@@ -101,27 +101,27 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 
 	function test_create_attachment_object() {
 		$attachment_id = $this->_insert_attachment();
-		$parent_url    = $this->attachment_filename;
-		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+		$parent_url    = get_post( $attachment_id )->guid;
+		$cropped       = str_replace( wp_basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
 
 		$object = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 
-		$this->assertEquals( $object['post_title'], 'cropped-test-image.jpg' );
-		$this->assertEquals( $object['context'], 'site-icon' );
-		$this->assertEquals( $object['post_mime_type'], 'image/jpeg' );
-		$this->assertEquals( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
-		$this->assertEquals( basename( $object['guid'] ), 'cropped-test-image.jpg' );
+		$this->assertSame( $object['post_title'], 'cropped-test-image.jpg' );
+		$this->assertSame( $object['context'], 'site-icon' );
+		$this->assertSame( $object['post_mime_type'], 'image/jpeg' );
+		$this->assertSame( basename( $object['post_content'] ), 'cropped-test-image.jpg' );
+		$this->assertSame( basename( $object['guid'] ), 'cropped-test-image.jpg' );
 	}
 
 	function test_insert_cropped_attachment() {
 		$attachment_id = $this->_insert_attachment();
-		$parent_url    = $this->attachment_filename;
-		$cropped       = str_replace( basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
+		$parent_url    = get_post( $attachment_id )->guid;
+		$cropped       = str_replace( wp_basename( $parent_url ), 'cropped-test-image.jpg', $parent_url );
 
 		$object     = $this->wp_site_icon->create_attachment_object( $cropped, $attachment_id );
 		$cropped_id = $this->wp_site_icon->insert_attachment( $object, $cropped );
 
-		$this->assertInternalType( 'int', $cropped_id );
+		$this->assertIsInt( $cropped_id );
 		$this->assertGreaterThan( 0, $cropped_id );
 	}
 
@@ -164,7 +164,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 		$filename = $this->attachment_filename;
 		$contents = file_get_contents( $filename );
 
-		$upload = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload = wp_upload_bits( wp_basename( $filename ), null, $contents );
 
 		$this->attachment_id = $this->_make_attachment( $upload );
 		return $this->attachment_id;

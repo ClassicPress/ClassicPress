@@ -364,8 +364,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		if ( ! isset( $from_email ) ) {
 			// Get the site domain and get rid of www.
-			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+			$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 				$sitename = substr( $sitename, 4 );
 			}
 
@@ -520,13 +520,28 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
+		$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+
 		// Send!
 		try {
-			return $phpmailer->send();
-		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$send = $phpmailer->send();
 
-			$mail_error_data                             = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
-			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
+			/**
+			 * Fires after PHPMailer has successfully sent a mail.
+			 *
+			 * The firing of this action does not necessarily mean that the recipient received the
+			 * email successfully. It only means that the `send` method above was able to
+			 * process the request without any errors.
+			 *
+			 * @since WP-5.9.0
+			 *
+			 * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
+			 */
+			do_action( 'wp_mail_succeeded', $mail_data );
+
+			return $send;
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$mail_data['phpmailer_exception_code'] = $e->getCode();
 
 			/**
 			 * Fires after a PHPMailer\PHPMailer\Exception is caught.
@@ -536,7 +551,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			 * @param WP_Error $error A WP_Error object with the phpmailerException message, and an array
 			 *                        containing the mail recipient, subject, message, headers, and attachments.
 			 */
-			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_data ) );
 
 			return false;
 		}
@@ -1581,7 +1596,7 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 			$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "\r\n";
 		}
 
-		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', strtolower( $_SERVER['SERVER_NAME'] ) );
+		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
 		if ( '' == $comment->comment_author ) {
 			$from = "From: \"$blogname\" <$wp_email>";
