@@ -1325,8 +1325,8 @@ function wp_edit_attachments_query( $q = false ) {
 function postbox_classes( $id, $page ) {
 	if ( isset( $_GET['edit'] ) && $_GET['edit'] == $id ) {
 		$classes = array( '' );
-	} elseif ( get_user_option( 'closedpostboxes_' . $screen_id ) ) {
-		$closed = get_user_option( 'closedpostboxes_' . $screen_id );
+	} elseif ( get_user_option( 'closedpostboxes_' . $id ) ) {
+		$closed = get_user_option( 'closedpostboxes_' . $id );
 		if ( ! is_array( $closed ) ) {
 			$classes = array( '' );
 		} else {

@@ -43,7 +43,7 @@ if ( is_robots() ) {
 	return;
 }
 
-if ( wp_using_themes() ) {
+if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
 
 	$tag_templates = array(
 		'is_embed'             => 'get_embed_template',
