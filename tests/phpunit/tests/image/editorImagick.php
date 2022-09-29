@@ -12,14 +12,15 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 	public $editor_engine = 'WP_Image_Editor_Imagick';
 
-	public function setUp() {
+	public function set_up() {
 		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
 		require_once ABSPATH . WPINC . '/class-wp-image-editor-imagick.php';
 
-		parent::setUp();
+		// This needs to come after the mock image editor class is loaded.
+		parent::set_up();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$folder = DIR_TESTDATA . '/images/waffles-*.jpg';
 
 		foreach ( glob( $folder ) as $file ) {
@@ -28,7 +29,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$this->remove_added_uploads();
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -53,7 +54,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$imagick_image_editor->resize( 100, 50 );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'width'  => 75,
 				'height' => 50,
@@ -87,10 +88,11 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 50,
 				'height'    => 33,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-50x33.jpg' ),
 			),
 		);
 
-		$this->assertEquals( $expected_array, $resized );
+		$this->assertSame( $expected_array, $resized );
 
 		// Now, verify real dimensions are as expected
 		$image_path = DIR_TESTDATA . '/images/' . $resized[0]['file'];
@@ -286,6 +288,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 10,
 				'height'    => 7,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-10x7.jpg' ),
 			),
 
 			// #1
@@ -294,6 +297,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 75,
 				'height'    => 50,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-75x50.jpg' ),
 			),
 
 			// #2
@@ -302,6 +306,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 30,
 				'height'    => 20,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-30x20.jpg' ),
 			),
 
 			// #3
@@ -310,6 +315,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 45,
 				'height'    => 400,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-45x400.jpg' ),
 			),
 
 			// #4
@@ -318,6 +324,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 50,
 				'height'    => 33,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-50x33.jpg' ),
 			),
 
 			// #5
@@ -326,6 +333,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 55,
 				'height'    => 37,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-55x37.jpg' ),
 			),
 
 			// #6
@@ -334,6 +342,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 83,
 				'height'    => 55,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-83x55.jpg' ),
 			),
 
 			// #7
@@ -342,6 +351,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 90,
 				'height'    => 60,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-90x60.jpg' ),
 			),
 
 			// #8
@@ -350,6 +360,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 105,
 				'height'    => 70,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-105x70.jpg' ),
 			),
 
 			// #9
@@ -358,11 +369,12 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 				'width'     => 200,
 				'height'    => 133,
 				'mime-type' => 'image/jpeg',
+				'filesize'  => wp_filesize( dirname( $file ) . '/waffles-200x133.jpg' ),
 			),
 		);
 
 		$this->assertNotNull( $resized );
-		$this->assertEquals( $expected_array, $resized );
+		$this->assertSame( $expected_array, $resized );
 
 		foreach ( $resized as $key => $image_data ) {
 			$image_path = DIR_TESTDATA . '/images/' . $image_data['file'];
@@ -387,7 +399,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$imagick_image_editor->resize( 100, 50, true );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'width'  => 100,
 				'height' => 50,
@@ -407,7 +419,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$imagick_image_editor->crop( 0, 0, 50, 50 );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'width'  => 50,
 				'height' => 50,
@@ -432,7 +444,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$imagick_image_editor->rotate( 180 );
 
-		$this->assertEquals( $color_top_left, $property->getValue( $imagick_image_editor )->getImagePixelColor( 99, 99 )->getColor() );
+		$this->assertSame( $color_top_left, $property->getValue( $imagick_image_editor )->getImagePixelColor( 99, 99 )->getColor() );
 	}
 
 	/**
@@ -451,7 +463,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 
 		$imagick_image_editor->flip( true, false );
 
-		$this->assertEquals( $color_top_left, $property->getValue( $imagick_image_editor )->getImagePixelColor( 0, 99 )->getColor() );
+		$this->assertSame( $color_top_left, $property->getValue( $imagick_image_editor )->getImagePixelColor( 0, 99 )->getColor() );
 	}
 
 	/**
@@ -553,7 +565,7 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 		$data = wp_read_image_metadata( $file );
 
 		// The orientation value 3 is equivalent to rotated upside down (180 degrees).
-		$this->assertEquals( 3, intval( $data['orientation'] ), 'Orientation value read from does not match image file Exif data: ' . $file );
+		$this->assertSame( 3, intval( $data['orientation'] ), 'Orientation value read from does not match image file Exif data: ' . $file );
 
 		$temp_file = wp_tempnam( $file );
 		$image     = wp_get_image_editor( $file );
@@ -565,11 +577,10 @@ class Tests_Image_Editor_Imagick extends WP_Image_UnitTestCase {
 		$data = wp_read_image_metadata( $ret['path'] );
 
 		// Make sure the image is no longer in The Upside Down Exif orientation.
-		$this->assertEquals( 1, intval( $data['orientation'] ), 'Orientation Exif data was not updated after rotating image: ' . $file );
+		$this->assertSame( 1, intval( $data['orientation'] ), 'Orientation Exif data was not updated after rotating image: ' . $file );
 
 		// Remove both the generated file ending in .tmp and tmp.jpg due to wp_tempnam().
 		unlink( $temp_file );
 		unlink( $ret['path'] );
 	}
-
 }

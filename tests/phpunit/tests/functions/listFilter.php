@@ -9,8 +9,8 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 	var $object_list = array();
 	var $array_list  = array();
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->array_list['foo'] = array(
 			'name'   => 'foo',
 			'id'     => 'f',
@@ -35,6 +35,7 @@ class Tests_Functions_ListFilter extends WP_UnitTestCase {
 			'field3' => false,
 			'field4' => array( 'blue' ),
 		);
+
 		foreach ( $this->array_list as $key => $value ) {
 			$this->object_list[ $key ] = (object) $value;
 		}

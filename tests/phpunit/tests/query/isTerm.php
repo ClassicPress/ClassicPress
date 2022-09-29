@@ -22,8 +22,8 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 	protected $tag;
 	protected $tax;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		set_current_screen( 'front' );
 
@@ -65,7 +65,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts_tax_category_tax_query' ) );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		global $wp_rewrite;
 
 		_unregister_taxonomy( 'testtax' );
@@ -73,7 +73,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$wp_rewrite->init();
 
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts_tax_category_tax_query' ) );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_tag_action_tax() {
@@ -251,7 +251,7 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$expected = get_term( $this->tax_id, 'testtax' );
 
 		// Only compare term_id because object_id may or may not be part of either value.
-		$this->assertEquals( $expected->term_id, $object->term_id );
+		$this->assertSame( $expected->term_id, $object->term_id );
 	}
 
 	/**
@@ -295,6 +295,6 @@ class Tests_Query_IsTerm extends WP_UnitTestCase {
 		$expected = get_term( $this->tax_id, 'testtax' );
 
 		// Only compare term_id because object_id may or may not be part of either value.
-		$this->assertEquals( $expected->term_id, $object->term_id );
+		$this->assertSame( $expected->term_id, $object->term_id );
 	}
 }

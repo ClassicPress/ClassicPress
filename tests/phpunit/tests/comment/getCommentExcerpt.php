@@ -3,8 +3,8 @@
 class Tests_Get_Comment_Excerpt extends WP_UnitTestCase {
 	protected static $bacon_comment;
 
-	public static function setUpBeforeClass() {
-		parent::setUpBeforeClass();
+	public static function set_up_before_class() {
+		parent::set_up_before_class();
 
 		self::$bacon_comment = 'Bacon ipsum dolor amet porchetta capicola sirloin prosciutto brisket shankle jerky. Ham hock filet mignon boudin ground round, prosciutto alcatra spare ribs meatball turducken pork beef ribs ham beef. Bacon pastrami short loin, venison tri-tip ham short ribs doner swine. Tenderloin pig tongue pork jowl doner. Pork loin rump t-bone, beef strip steak flank drumstick tri-tip short loin capicola jowl. Cow filet mignon hamburger doner rump. Short loin jowl drumstick, tongue tail beef ribs pancetta flank brisket landjaeger chuck venison frankfurter turkey.
 
@@ -22,7 +22,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 
 		$excerpt = get_comment_excerpt( $comment_id );
 
-		$this->assertEquals( 20, count( explode( ' ', $excerpt ) ) );
+		$this->assertSame( 20, count( explode( ' ', $excerpt ) ) );
 	}
 
 	public function test_get_comment_excerpt_filtered() {
@@ -36,7 +36,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 
 		$excerpt = get_comment_excerpt( $comment_id );
 
-		$this->assertEquals( 10, count( explode( ' ', $excerpt ) ) );
+		$this->assertSame( 10, count( explode( ' ', $excerpt ) ) );
 	}
 
 	public function _filter_comment_excerpt_length() {

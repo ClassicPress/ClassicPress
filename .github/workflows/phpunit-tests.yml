@@ -24,7 +24,8 @@ jobs:
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
   # - Set up locale.
-  # - Install PHPUnit.
+  # - Install PHPUnit and Composer dependencies.
+  # - Make Composer packages available globally.
   # - Log debug information.
   # - Create config file.
   # - Set up object cache if needed for memcached tests.
@@ -36,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
+      fail-fast: false
       matrix:
         php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
         mysql: [ '5.7' ]
@@ -44,7 +46,17 @@ jobs:
           - php: '7.2'
             mysql: '5.7'
             memcached: true
-      fail-fast: false
+            experimental: false
+          - php: '8.0'
+            mysql: '5.7'
+            memcached: false
+            experimental: true
+          - php: '8.1'
+            mysql: '5.7'
+            memcached: false
+            experimental: true
+
+    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
@@ -138,15 +150,20 @@ jobs:
           sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8
           sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
 
-      - name: Install PHPUnit
+      - name: Install PHPUnit and Composer dependencies
         run: |
           if [ ${{ matrix.php }} == '5.6.20' ]; then
-            wget -O phpunit https://phar.phpunit.de/phpunit-5.phar
+            composer require phpunit/phpunit "5.*" -W --no-progress --no-ansi --no-interaction
+          elif [ ${{ matrix.php }} == '7.0' ]; then
+            composer require phpunit/phpunit "6.*" -W --no-progress --no-ansi --no-interaction
+          elif [ ${{ matrix.php }} == '7.1' ]; then
+            composer require phpunit/phpunit "7.*" -W --no-progress --no-ansi --no-interaction
           else
-            wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+            composer require phpunit/phpunit "8.*" -W --no-progress --no-ansi --no-interaction
           fi
-          chmod +x phpunit
-          sudo mv phpunit /usr/bin/
+
+      - name: Make Composer packages available globally
+        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
       - name: Show debug information
         run: |
@@ -192,33 +209,40 @@ jobs:
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ajax
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ajax
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ms-files
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ms-files
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit restapi-jsclient
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:restapi-jsclient
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit wp-api-client-fixtures
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:wp-api-client-fixtures
+        continue-on-error: ${{ matrix.experimental }}

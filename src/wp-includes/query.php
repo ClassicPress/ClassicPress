@@ -440,7 +440,7 @@ function is_home() {
 }
 
 /**
- * Is the query for an existing month archive?
+ * Determines whether the query is for an existing month archive.
  *
  * @since WP-1.5.0
  *
