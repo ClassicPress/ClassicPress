@@ -10,8 +10,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	/**
 	 * Setup test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
 		require_once ABSPATH . WPINC . '/class-wp-image-editor-gd.php';
@@ -20,7 +20,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		include_once DIR_TESTDATA . '/../includes/mock-image-editor.php';
 
 		// Ensure no legacy / failed tests detritus.
-		$folder = '/tmp/wordpress-gsoc-flyer*.{jpg,pdf}';
+		$folder = get_temp_dir() . 'wordpress-gsoc-flyer*.{jpg,pdf}';
 
 		foreach ( glob( $folder, GLOB_BRACE ) as $file ) {
 			unlink( $file );
@@ -127,6 +127,28 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		}
 	}
 
+
+	/**
+	 * @ticket 50833
+	 */
+	function test_is_gd_image_invalid_types() {
+		$this->assertFalse( is_gd_image( new stdClass() ) );
+		$this->assertFalse( is_gd_image( array() ) );
+		$this->assertFalse( is_gd_image( null ) );
+
+		$handle = fopen( __FILE__, 'r' );
+		$this->assertFalse( is_gd_image( $handle ) );
+		fclose( $handle );
+	}
+
+	/**
+	 * @ticket 50833
+	 * @requires extension gd
+	 */
+	function test_is_gd_image_valid_types() {
+		$this->assertTrue( is_gd_image( imagecreate( 5, 5 ) ) );
+	}
+
 	/**
 	 * Test save image file and mime_types
 	 * @see https://core.trac.wordpress.org/ticket/6821
@@ -166,8 +188,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_tempnam();
 				$ret  = wp_save_image_file( $file, $img, $mime_type, 1 );
 				$this->assertNotEmpty( $ret );
-				$this->assertNotInstanceOf( 'WP_Error', $ret );
-				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+				$this->assertNotWPError( $ret );
+				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
 
 				// Clean up
 				unlink( $file );
@@ -207,8 +229,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 			// Make assertions
 			$this->assertNotEmpty( $ret );
-			$this->assertNotInstanceOf( 'WP_Error', $ret );
-			$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+			$this->assertNotWPError( $ret );
+			$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
 
 			// Clean up
 			unlink( $file );
@@ -261,8 +283,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 				$file = wp_unique_filename( $temp, uniqid() . ".$ext" );
 				$ret  = $img->save( trailingslashit( $temp ) . $file );
 				$this->assertNotEmpty( $ret );
-				$this->assertNotInstanceOf( 'WP_Error', $ret );
-				$this->assertEquals( $mime_type, $this->get_mime_type( $ret['path'] ) );
+				$this->assertNotWPError( $ret );
+				$this->assertSame( $mime_type, $this->get_mime_type( $ret['path'] ) );
 				unlink( $ret['path'] );
 			}
 
@@ -281,10 +303,11 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		// First, test with deprecated wp_load_image function
 		$editor1 = wp_load_image( DIR_TESTDATA );
-		$this->assertNotInternalType( 'resource', $editor1 );
+
+		$this->assertIsString( $editor1 );
 
 		$editor2 = wp_get_image_editor( DIR_TESTDATA );
-		$this->assertNotInternalType( 'resource', $editor2 );
+		$this->assertInstanceOf( 'WP_Error', $editor2 );
 
 		// Then, test with editors.
 		$classes = array( 'WP_Image_Editor_GD', 'WP_Image_Editor_Imagick' );
@@ -298,7 +321,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$loaded = $editor->load();
 
 			$this->assertInstanceOf( 'WP_Error', $loaded );
-			$this->assertEquals( 'error_loading_image', $loaded->get_error_code() );
+			$this->assertSame( 'error_loading_image', $loaded->get_error_code() );
 		}
 	}
 
@@ -320,8 +343,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertFileExists( $file );
 		$image = wp_get_image_editor( $file );
 		$size  = $image->get_size();
-		$this->assertEquals( 100, $size['height'] );
-		$this->assertEquals( 100, $size['width'] );
+		$this->assertSame( 100, $size['height'] );
+		$this->assertSame( 100, $size['width'] );
 
 		unlink( $file );
 	}
@@ -350,8 +373,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertFileExists( $file );
 		$image = wp_get_image_editor( $file );
 		$size  = $image->get_size();
-		$this->assertEquals( 100, $size['height'] );
-		$this->assertEquals( 100, $size['width'] );
+		$this->assertSame( 100, $size['height'] );
+		$this->assertSame( 100, $size['width'] );
 
 		unlink( $file );
 	}
@@ -480,6 +503,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$this->assertSame( $expected, $metadata );
 
 		unlink( $test_file );
+		$temp_dir = get_temp_dir();
 		foreach ( $metadata['sizes'] as $size ) {
 			unlink( $temp_dir . $size['file'] );
 		}

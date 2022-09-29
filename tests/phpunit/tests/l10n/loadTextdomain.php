@@ -17,8 +17,8 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 		);
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->locale = '';
 
@@ -26,11 +26,11 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 		add_filter( 'theme_locale', array( $this, 'store_locale' ) );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'plugin_locale', array( $this, 'store_locale' ) );
 		remove_filter( 'theme_locale', array( $this, 'store_locale' ) );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function store_locale( $locale ) {

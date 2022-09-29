@@ -2058,7 +2058,7 @@ function wp_upload_dir( $time = null, $create_dir = true, $refresh_cache = false
 				if ( 0 === strpos( $uploads['basedir'], ABSPATH ) ) {
 					$error_path = str_replace( ABSPATH, '', $uploads['basedir'] ) . $uploads['subdir'];
 				} else {
-					$error_path = basename( $uploads['basedir'] ) . $uploads['subdir'];
+					$error_path = wp_basename( $uploads['basedir'] ) . $uploads['subdir'];
 				}
 
 				$uploads['error'] = sprintf(
@@ -2343,7 +2343,7 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 		if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) {
 			$error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
 		} else {
-			$error_path = basename( $upload['basedir'] ) . $upload['subdir'];
+			$error_path = wp_basename( $upload['basedir'] ) . $upload['subdir'];
 		}
 
 		$message = sprintf(
@@ -2555,6 +2555,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				array(
 					'text/plain',
 					'text/csv',
+					'application/csv',
 					'text/richtext',
 					'text/tsv',
 					'text/vtt',
@@ -2562,6 +2563,21 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 			)
 			) {
 				$type = $ext = false;
+			}
+		} elseif ( 'application/csv' === $real_mime ) {
+			// Special casing for CSV files.
+			if ( ! in_array(
+				$type,
+				array(
+					'text/csv',
+					'text/plain',
+					'application/csv',
+				),
+				true
+			)
+			) {
+				$type = false;
+				$ext  = false;
 			}
 		} elseif ( 'text/rtf' === $real_mime ) {
 			// Special casing for RTF files.
@@ -5267,11 +5283,15 @@ function get_file_data( $file, $default_headers, $context = '' ) {
 	// We don't need to write to the file, so just open for reading.
 	$fp = fopen( $file, 'r' );
 
-	// Pull only the first 8kiB of the file in.
-	$file_data = fread( $fp, 8192 );
+	if ( $fp ) {
+		// Pull only the first 8 KB of the file in.
+		$file_data = fread( $fp, 8 * KB_IN_BYTES );
 
-	// PHP will close file handle, but we are good citizens.
-	fclose( $fp );
+		// PHP will close file handle, but we are good citizens.
+		fclose( $fp );
+	} else {
+		$file_data = '';
+	}
 
 	// Make sure we catch CR-only line endings.
 	$file_data = str_replace( "\r", "\n", $file_data );
