@@ -33,7 +33,7 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}
+    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
@@ -55,8 +55,6 @@ jobs:
             mysql: '5.7'
             memcached: false
             experimental: true
-
-    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
