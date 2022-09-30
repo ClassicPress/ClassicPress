@@ -62,7 +62,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'description', $widget->widget_options );
 		$this->assertTrue( $widget->widget_options['customize_selective_refresh'] );
 		$this->assertEmpty( $widget->widget_options['mime_type'] );
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'add_to_widget',
 				'replace_media',
@@ -76,10 +76,10 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 			),
 			array_keys( $widget->l10n )
 		);
-		$this->assertEquals( count( $widget->l10n ), count( array_filter( $widget->l10n ) ), 'Expected all translation strings to be defined.' );
-		$this->assertEquals( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
+		$this->assertSame( count( $widget->l10n ), count( array_filter( $widget->l10n ) ), 'Expected all translation strings to be defined.' );
+		$this->assertSame( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
 		$this->assertFalse( has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ), 'Did not expect preview scripts to be enqueued when not in customize preview context.' );
-		$this->assertEquals( 10, has_action( 'admin_footer-widgets.php', array( $widget, 'render_control_template_scripts' ) ) );
+		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( $widget, 'render_control_template_scripts' ) ) );
 
 		// With non-default args.
 		$id_base         = 'media_pdf';
@@ -92,13 +92,17 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 			'height' => 1100,
 		);
 		$widget          = $this->get_mocked_class_instance( $id_base, $name, $widget_options, $control_options );
-		$this->assertEquals( $id_base, $widget->id_base );
-		$this->assertEquals( $name, $widget->name );
+		$this->assertSame( $id_base, $widget->id_base );
+		$this->assertSame( $name, $widget->name );
 
-		// Method assertArraySubset doesn't exist in phpunit versions compatible with PHP 5.2.
-		if ( method_exists( $this, 'assertArraySubset' ) ) {
-			$this->assertArraySubset( $widget_options, $widget->widget_options );
-			$this->assertArraySubset( $control_options, $widget->control_options );
+		foreach ( $widget_options as $key => $value ) {
+			$this->assertArrayHasKey( $key, $widget->widget_options );
+			$this->assertSame( $value, $widget->widget_options[ $key ] );
+		}
+
+		foreach ( $control_options as $key => $value ) {
+			$this->assertArrayHasKey( $key, $widget->control_options );
+			$this->assertSame( $value, $widget->control_options[ $key ] );
 		}
 	}
 
@@ -128,7 +132,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 
 		$widget = $this->get_mocked_class_instance();
 		$widget->_register();
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ) );
+		$this->assertSame( 10, has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ) );
 	}
 
 	/**
@@ -138,7 +142,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 	 */
 	function test_is_attachment_with_mime_type() {
 
-		$test_image = '/tmp/canola.jpg';
+		$test_image = get_temp_dir() . 'canola.jpg';
 		copy( DIR_TESTDATA . '/images/canola.jpg', $test_image );
 		$attachment_id = self::factory()->attachment->create_object(
 			array(
@@ -169,10 +173,10 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget = $this->get_mocked_class_instance();
 
 		$result = $widget->sanitize_token_list( 'What A false class with-token <a href="#">and link</a>' );
-		$this->assertEquals( 'What A false class with-token a hrefand linka', $result );
+		$this->assertSame( 'What A false class with-token a hrefand linka', $result );
 
 		$result = $widget->sanitize_token_list( array( 'foo', '<i>bar', '">NO' ) );
-		$this->assertEquals( $result, 'foo ibar NO' );
+		$this->assertSame( $result, 'foo ibar NO' );
 	}
 
 	/**
@@ -207,7 +211,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget = $this->get_mocked_class_instance();
 		$schema = $widget->get_instance_schema();
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'attachment_id',
 				'title',
@@ -220,9 +224,9 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$this->filter_instance_schema_args = null;
 		add_filter( 'widget_mocked_instance_schema', array( $this, 'filter_instance_schema' ), 10, 2 );
 		$schema = $widget->get_instance_schema();
-		$this->assertInternalType( 'array', $this->filter_instance_schema_args );
+		$this->assertIsArray( $this->filter_instance_schema_args );
 		$this->assertSame( $widget, $this->filter_instance_schema_args['widget'] );
-		$this->assertEqualSets( array( 'attachment_id', 'title', 'url' ), array_keys( $this->filter_instance_schema_args['schema'] ) );
+		$this->assertSameSets( array( 'attachment_id', 'title', 'url' ), array_keys( $this->filter_instance_schema_args['schema'] ) );
 		$this->assertArrayHasKey( 'injected', $schema );
 	}
 
@@ -340,13 +344,13 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$this->assertCount( 3, $this->widget_instance_filter_args );
 		$this->assertEquals( $instance, $this->widget_instance_filter_args[0] );
-		$this->assertEquals( $args, $this->widget_instance_filter_args[1] );
-		$this->assertEquals( $widget, $this->widget_instance_filter_args[2] );
+		$this->assertSame( $args, $this->widget_instance_filter_args[1] );
+		$this->assertSame( $widget, $this->widget_instance_filter_args[2] );
 		$output = ob_get_clean();
 
-		$this->assertContains( '<h2>Foo</h2>', $output );
-		$this->assertContains( '<section>', $output );
-		$this->assertContains( '</section>', $output );
+		$this->assertStringContainsString( '<h2>Foo</h2>', $output );
+		$this->assertStringContainsString( '<section>', $output );
+		$this->assertStringContainsString( '</section>', $output );
 
 		// No title.
 		ob_start();
@@ -355,7 +359,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget->expects( $this->atLeastOnce() )->method( 'render_media' )->with( $instance );
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
-		$this->assertNotContains( '<h2>Foo</h2>', $output );
+		$this->assertStringNotContainsString( '<h2>Foo</h2>', $output );
 
 		// No attachment_id nor url.
 		$instance['url']           = '';
@@ -399,9 +403,9 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget->form( array() );
 		$output = ob_get_clean();
 
-		$this->assertContains( 'name="widget-mocked[][attachment_id]"', $output );
-		$this->assertContains( 'name="widget-mocked[][title]"', $output );
-		$this->assertContains( 'name="widget-mocked[][url]"', $output );
+		$this->assertStringContainsString( 'name="widget-mocked[][attachment_id]"', $output );
+		$this->assertStringContainsString( 'name="widget-mocked[][title]"', $output );
+		$this->assertStringContainsString( 'name="widget-mocked[][url]"', $output );
 	}
 
 	/**
@@ -420,7 +424,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		);
 
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
-		$this->assertEqualSets( array(), $result );
+		$this->assertSameSets( array(), $result );
 
 		$widget->save_settings(
 			array(
@@ -430,7 +434,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 			)
 		);
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
-		$this->assertEqualSets( array( $widget->l10n['media_library_state_single'] ), $result );
+		$this->assertSameSets( array( $widget->l10n['media_library_state_single'] ), $result );
 
 		$widget->save_settings(
 			array(
@@ -443,7 +447,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 			)
 		);
 		$result = $widget->display_media_state( array(), get_post( $attachment_id ) );
-		$this->assertEqualSets( array( sprintf( $widget->l10n['media_library_state_multi']['singular'], 2 ) ), $result );
+		$this->assertSameSets( array( sprintf( $widget->l10n['media_library_state_multi']['singular'], 2 ) ), $result );
 	}
 
 	/**
@@ -471,7 +475,7 @@ class Test_WP_Widget_Media extends WP_UnitTestCase {
 		$widget->render_control_template_scripts();
 		$output = ob_get_clean();
 
-		$this->assertContains( '<script type="text/html" id="tmpl-widget-media-mocked-control">', $output );
+		$this->assertStringContainsString( '<script type="text/html" id="tmpl-widget-media-mocked-control">', $output );
 	}
 
 	/**

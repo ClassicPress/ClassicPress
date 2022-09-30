@@ -8,16 +8,16 @@
  */
 class Tests_Post_Output extends WP_UnitTestCase {
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		add_shortcode( 'dumptag', array( $this, '_shortcode_dumptag' ) );
 		add_shortcode( 'paragraph', array( $this, '_shortcode_paragraph' ) );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		global $shortcode_tags;
 		unset( $shortcode_tags['dumptag'], $shortcode_tags['paragraph'] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function _shortcode_dumptag( $atts ) {
@@ -59,7 +59,7 @@ EOF;
 		$this->assertTrue( have_posts() );
 		$this->assertNull( the_post() );
 
-		$this->assertEquals( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
+		$this->assertSame( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
 	}
 
 	function test_the_content_shortcode() {
@@ -87,7 +87,7 @@ EOF;
 		$this->assertTrue( have_posts() );
 		$this->assertNull( the_post() );
 
-		$this->assertEquals( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
+		$this->assertSame( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
 	}
 
 	function test_the_content_shortcode_paragraph() {
@@ -125,7 +125,7 @@ EOF;
 		$this->assertTrue( have_posts() );
 		$this->assertNull( the_post() );
 
-		$this->assertEquals( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
+		$this->assertSame( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
 	}
 
 	function test_the_content_attribute_filtering() {
@@ -147,7 +147,7 @@ EOF;
 		$this->assertTrue( have_posts() );
 		$this->assertNull( the_post() );
 
-		$this->assertEquals( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
+		$this->assertSame( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
 
 		kses_remove_filters();
 	}
@@ -171,7 +171,7 @@ EOF;
 		$this->assertTrue( have_posts() );
 		$this->assertNull( the_post() );
 
-		$this->assertEquals( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
+		$this->assertSame( strip_ws( $expected ), strip_ws( get_echo( 'the_content' ) ) );
 
 		kses_remove_filters();
 	}

@@ -53,16 +53,18 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$users = new WP_User_Query();
 
 		$this->assertEquals( '', $users->get( 'fields' ) );
-		$this->assertEquals( '', @$users->query_vars['fields'] );
+		if ( isset( $users->query_vars['fields'] ) ) {
+			$this->assertSame( '', $users->query_vars['fields'] );
+		}
 
 		$users->set( 'fields', 'all' );
 
-		$this->assertEquals( 'all', $users->get( 'fields' ) );
-		$this->assertEquals( 'all', $users->query_vars['fields'] );
+		$this->assertSame( 'all', $users->get( 'fields' ) );
+		$this->assertSame( 'all', $users->query_vars['fields'] );
 
 		$users->set( 'fields', '' );
-		$this->assertEquals( '', $users->get( 'fields' ) );
-		$this->assertEquals( '', $users->query_vars['fields'] );
+		$this->assertSame( '', $users->get( 'fields' ) );
+		$this->assertSame( '', $users->query_vars['fields'] );
 
 		$this->assertNull( $users->get( 'does-not-exist' ) );
 	}
@@ -76,7 +78,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 		$ids = $q->get_results();
 
-		$this->assertEquals( array( self::$author_ids[0] ), $ids );
+		$this->assertEqualSets( array( self::$author_ids[0] ), $ids );
 	}
 
 	public function test_include_comma_separated() {
@@ -135,7 +137,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$users = $users->get_results();
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 13, count( $users ) );
+		$this->assertSame( 13, count( $users ) );
 		foreach ( $users as $user ) {
 			$this->assertInstanceOf( 'WP_User', $user );
 		}
@@ -147,7 +149,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 		$users = $users->get_results();
-		$this->assertEquals( 13, count( $users ) );
+		$this->assertSame( 13, count( $users ) );
 		foreach ( $users as $user ) {
 			$this->assertInstanceOf( 'WP_User', $user );
 		}
@@ -173,7 +175,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( "ORDER BY $full_key", $q->query_orderby );
+		$this->assertStringContainsString( "ORDER BY $full_key", $q->query_orderby );
 	}
 
 	public function orderby_should_convert_non_prefixed_keys_data() {
@@ -361,7 +363,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login', $q->query_orderby );
 	}
 
 	/**
@@ -379,7 +381,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		$expected_orderby = 'ORDER BY FIELD( ' . $wpdb->users . '.ID, ' . self::$author_ids[1] . ',' . self::$author_ids[0] . ',' . self::$author_ids[3] . ' )';
-		$this->assertContains( $expected_orderby, $q->query_orderby );
+		$this->assertStringContainsString( $expected_orderby, $q->query_orderby );
 
 		// assertEquals() respects order but ignores type (get_results() returns numeric strings).
 		$this->assertEquals( array( self::$author_ids[1], self::$author_ids[0], self::$author_ids[3] ), $q->get_results() );
@@ -400,7 +402,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		$expected_orderby = 'ORDER BY FIELD( ' . $wpdb->users . '.ID, ' . self::$author_ids[1] . ',' . self::$author_ids[0] . ',' . self::$author_ids[3] . ' )';
-		$this->assertContains( $expected_orderby, $q->query_orderby );
+		$this->assertStringContainsString( $expected_orderby, $q->query_orderby );
 
 		// assertEquals() respects order but ignores type (get_results() returns numeric strings).
 		$this->assertEquals( array( self::$author_ids[1], self::$author_ids[0], self::$author_ids[3] ), $q->get_results() );
@@ -417,7 +419,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
 	}
 
 	/**
@@ -430,7 +432,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
 	}
 
 	/**
@@ -443,7 +445,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login ASC, user_nicename ASC', $q->query_orderby );
 	}
 
 	/**
@@ -456,7 +458,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login', $q->query_orderby );
 	}
 
 	/**
@@ -473,7 +475,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login DESC, user_nicename ASC, user_email DESC', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login DESC, user_nicename ASC, user_email DESC', $q->query_orderby );
 	}
 
 	/**
@@ -490,7 +492,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY user_login DESC, user_email ASC', $q->query_orderby );
+		$this->assertStringContainsString( 'ORDER BY user_login DESC, user_email ASC', $q->query_orderby );
 	}
 
 	/**
@@ -500,7 +502,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		// +1 for the default user created by the test suite.
 		$users = new WP_User_Query( array( 'blog_id' => get_current_blog_id() ) );
 		$users = $users->get_results();
-		$this->assertEquals( 13, count( $users ) );
+		$this->assertSame( 13, count( $users ) );
 
 		$users = new WP_User_Query(
 			array(
@@ -509,7 +511,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 		$users = $users->get_results();
-		$this->assertEquals( 10, count( $users ) );
+		$this->assertSame( 10, count( $users ) );
 
 		$users = new WP_User_Query(
 			array(
@@ -518,7 +520,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 		$users = $users->get_results();
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 
 		$users = new WP_User_Query(
 			array(
@@ -527,7 +529,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 		$users = $users->get_results();
-		$this->assertEquals( 13, count( $users ) );
+		$this->assertSame( 13, count( $users ) );
 	}
 
 	/**
@@ -555,7 +557,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		// All values get reset
 		$query->prepare_query( array( 'number' => 8 ) );
 		$this->assertNotEmpty( $query->query_limit );
-		$this->assertEquals( 'LIMIT 0, 8', $query->query_limit );
+		$this->assertSame( 'LIMIT 0, 8', $query->query_limit );
 
 		// All values get reset
 		$query->prepare_query( array( 'fields' => 'all' ) );
@@ -564,7 +566,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$_query_vars = $query->query_vars;
 
 		$query->prepare_query();
-		$this->assertEquals( $_query_vars, $query->query_vars );
+		$this->assertSame( $_query_vars, $query->query_vars );
 
 		$query->prepare_query( array( 'number' => -1 ) );
 		$this->assertNotEquals( 'LIMIT -1', $query->query_limit );
@@ -845,7 +847,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -886,7 +888,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[1], self::$author_ids[2] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -927,7 +929,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[2] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -972,7 +974,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[1] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1002,7 +1004,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0], self::$author_ids[1] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1040,7 +1042,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0], self::$author_ids[1] );
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1063,8 +1065,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0] );
 
-		$this->assertContains( "AND user_nicename = 'peter'", $q->query_where );
-		$this->assertEqualSets( $expected, $found );
+		$this->assertStringContainsString( "AND user_nicename = 'peter'", $q->query_where );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1101,8 +1103,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0], self::$author_ids[1], self::$author_ids[2] );
 
-		$this->assertContains( "AND user_nicename IN ( 'peter','paul','mary' )", $q->query_where );
-		$this->assertEqualSets( $expected, $found );
+		$this->assertStringContainsString( "AND user_nicename IN ( 'peter','paul','mary' )", $q->query_where );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1139,8 +1141,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$foundCount    = count( $q->get_results() );
 		$expectedCount = 10; // 13 total users minus 3 from query
 
-		$this->assertContains( "AND user_nicename NOT IN ( 'peter','paul','mary' )", $q->query_where );
-		$this->assertEquals( $expectedCount, $foundCount );
+		$this->assertStringContainsString( "AND user_nicename NOT IN ( 'peter','paul','mary' )", $q->query_where );
+		$this->assertSame( $expectedCount, $foundCount );
 	}
 
 	/**
@@ -1178,7 +1180,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[2], self::$author_ids[0], self::$author_ids[1] );
 
-		$this->assertContains( "FIELD( user_nicename, 'mary','peter','paul' )", $q->query_orderby );
+		$this->assertStringContainsString( "FIELD( user_nicename, 'mary','peter','paul' )", $q->query_orderby );
 		$this->assertSame( $expected, $found );
 	}
 
@@ -1198,8 +1200,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0] );
 
-		$this->assertContains( "AND user_login = '$user_login'", $q->query_where );
-		$this->assertEqualSets( $expected, $found );
+		$this->assertStringContainsString( "AND user_login = '$user_login'", $q->query_where );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1219,8 +1221,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[0], self::$author_ids[1], self::$author_ids[2] );
 
-		$this->assertContains( "AND user_login IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
-		$this->assertEqualSets( $expected, $found );
+		$this->assertStringContainsString( "AND user_login IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	/**
@@ -1240,8 +1242,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$foundCount    = count( $q->get_results() );
 		$expectedCount = 10; // 13 total users minus 3 from query
 
-		$this->assertContains( "AND user_login NOT IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
-		$this->assertEquals( $expectedCount, $foundCount );
+		$this->assertStringContainsString( "AND user_login NOT IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
+		$this->assertSame( $expectedCount, $foundCount );
 	}
 
 	/**
@@ -1262,7 +1264,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$found    = wp_list_pluck( $q->get_results(), 'ID' );
 		$expected = array( self::$author_ids[1], self::$author_ids[2], self::$author_ids[0] );
 
-		$this->assertContains( "FIELD( user_login, '$user_login2','$user_login3','$user_login1' )", $q->query_orderby );
+		$this->assertStringContainsString( "FIELD( user_login, '$user_login2','$user_login3','$user_login1' )", $q->query_orderby );
 		$this->assertSame( $expected, $found );
 	}
 
@@ -1312,7 +1314,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$wp_user_search = new WP_User_Query( array( 'role' => 'subscriber' ) );
 		$users          = $wp_user_search->get_results();
 
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 	}
 
 	/**
@@ -1321,7 +1323,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 	public function test_get_multiple_roles_by_user_query() {
 		$wp_user_search = new WP_User_Query( array( 'role__in' => array( 'subscriber', 'editor' ) ) );
 		$users          = $wp_user_search->get_results();
-		$this->assertEquals( 5, count( $users ) );
+		$this->assertSame( 5, count( $users ) );
 	}
 
 	/**
@@ -1334,7 +1336,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 	}
 
 	/**
@@ -1370,7 +1372,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 	}
 
 	/**
@@ -1390,7 +1392,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$users = new WP_User_Query( array( 'role' => array( 'subscriber', 'editor' ) ) );
 		$users = $users->get_results();
 
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 
 		foreach ( $users as $user ) {
 			$this->assertInstanceOf( 'WP_User', $user );
@@ -1405,7 +1407,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		$users = $users->get_results();
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 8, count( $users ) );
+		$this->assertSame( 8, count( $users ) );
 		foreach ( $users as $user ) {
 			$this->assertInstanceOf( 'WP_User', $user );
 		}
@@ -1434,7 +1436,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 2, count( $users ) );
+		$this->assertSame( 2, count( $users ) );
 	}
 
 	/**
@@ -1479,8 +1481,8 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		// Check results
-		$this->assertEquals( 1, count( $users ) );
+		// Check results.
+		$this->assertSame( 1, count( $users ) );
 		$this->assertSame( self::$editor_ids[0], (int) $users[0]->ID );
 	}
 
@@ -1495,7 +1497,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 11, count( $users ) );
+		$this->assertSame( 11, count( $users ) );
 
 		$users = get_users(
 			array(
@@ -1504,7 +1506,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 10, count( $users ) );
+		$this->assertSame( 10, count( $users ) );
 	}
 
 	/**
@@ -1522,7 +1524,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 5, count( $users ) );
+		$this->assertSame( 5, count( $users ) );
 
 		$users = get_users(
 			array(
@@ -1531,7 +1533,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 3, count( $users ) );
+		$this->assertSame( 3, count( $users ) );
 	}
 
 	/**
@@ -1548,7 +1550,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 1, count( $users ) );
+		$this->assertSame( 1, count( $users ) );
 	}
 
 	/**
@@ -1566,7 +1568,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 12, count( $users ) );
+		$this->assertSame( 12, count( $users ) );
 
 		$users = get_users(
 			array(
@@ -1575,7 +1577,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 		);
 
 		// +1 for the default user created during installation.
-		$this->assertEquals( 10, count( $users ) );
+		$this->assertSame( 10, count( $users ) );
 	}
 
 	/**
@@ -1687,7 +1689,7 @@ class Tests_User_Query extends WP_UnitTestCase {
 
 		$ids = $q->get_results();
 
-		/* must not include user that has same string in other fields */
-		$this->assertEquals( array(), $ids );
+		// Must not include user that has the same string in other fields.
+		$this->assertSame( array(), $ids );
 	}
 }

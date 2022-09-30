@@ -8,14 +8,14 @@
 class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 	private $check_user_query_vars_calls = 0;
 
-	public function setUp() {
+	public function set_up() {
 		$this->check_user_query_vars_calls = 0;
-		parent::setUp();
+		parent::set_up();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		remove_action( 'pre_get_users', array( $this, 'check_user_query_vars' ) );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$expected = "<option value='$u'>Foo Person</option>";
 
-		$this->assertContains( $expected, $found );
+		$this->assertStringContainsString( $expected, $found );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$expected = "<option value='$u'>Foo Person</option>";
 
-		$this->assertContains( $expected, $found );
+		$this->assertStringContainsString( $expected, $found );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$expected = "<option value='$u'>foo</option>";
 
-		$this->assertContains( $expected, $found );
+		$this->assertStringContainsString( $expected, $found );
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$expected = "<option value='$u'>Foo Person (foo)</option>";
 
-		$this->assertContains( $expected, $found );
+		$this->assertStringContainsString( $expected, $found );
 	}
 
 	/**
@@ -137,7 +137,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		);
 
 		$user1 = get_userdata( $users[1] );
-		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
+		$this->assertStringContainsString( $user1->user_login, $found );
 	}
 
 	/**
@@ -162,10 +162,10 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
 
-		$this->assertContains( "<select name='user' id='user' class=''>", $found );
-		$this->assertContains( "<option value='{$user0->ID}'>{$user0->display_name}</option>", $found );
-		$this->assertContains( "<option value='{$user1->ID}'>{$user1->display_name}</option>", $found );
-		$this->assertContains( "<option value='{$invalid_user_id}' selected='selected'>(Invalid user: ID={$invalid_user_id})</option>", $found );
+		$this->assertStringContainsString( "<select name='user' id='user' class=''>", $found );
+		$this->assertStringContainsString( "<option value='{$user0->ID}'>{$user0->display_name}</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->ID}'>{$user1->display_name}</option>", $found );
+		$this->assertStringContainsString( "<option value='{$invalid_user_id}' selected='selected'>(Invalid user: ID={$invalid_user_id})</option>", $found );
 	}
 
 	/**
@@ -190,9 +190,9 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
 
-		$this->assertContains( "<select name='multiusers[]' id='multiusers' class='' multiple>", $found );
-		$this->assertContains( "<option value='{$user0->user_login}'>{$user0->user_nicename}</option>", $found );
-		$this->assertContains( "<option value='{$user1->user_login}' selected='selected'>{$user1->user_nicename}</option>", $found );
+		$this->assertStringContainsString( "<select name='multiusers[]' id='multiusers' class='' multiple>", $found );
+		$this->assertStringContainsString( "<option value='{$user0->user_login}'>{$user0->user_nicename}</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->user_login}' selected='selected'>{$user1->user_nicename}</option>", $found );
 	}
 
 	/**
@@ -215,8 +215,8 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
-		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_login</option>", $found );
-		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_login</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_login</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->user_nicename}'>$user1->user_login</option>", $found );
 	}
 
 	public function check_user_query_vars( $user_query ) {
@@ -250,8 +250,8 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
-		$this->assertContains( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_nicename</option>", $found );
-		$this->assertContains( "<option value='{$user1->user_nicename}'>$user1->user_nicename</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_nicename</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->user_nicename}'>$user1->user_nicename</option>", $found );
 		$this->assertSame( $this->check_user_query_vars_calls, 1 );
 	}
 
@@ -275,7 +275,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		);
 
 		$user1 = get_userdata( $users[1] );
-		$this->assertContains( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->ID}' selected='selected'>$user1->user_login</option>", $found );
 	}
 
 	/**
@@ -302,10 +302,10 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
 
-		$this->assertContains( "<select name='user' id='user' class=''>", $found );
-		$this->assertContains( "<option value='{$user0->user_login}'>{$user0->display_name}</option>", $found );
-		$this->assertContains( "<option value='{$user1->user_login}'>{$user1->display_name}</option>", $found );
-		$this->assertNotContains( 'Invalid user:', $found );
+		$this->assertStringContainsString( "<select name='user' id='user' class=''>", $found );
+		$this->assertStringContainsString( "<option value='{$user0->user_login}'>{$user0->display_name}</option>", $found );
+		$this->assertStringContainsString( "<option value='{$user1->user_login}'>{$user1->display_name}</option>", $found );
+		$this->assertStringNotContainsString( 'Invalid user:', $found );
 	}
 
 	/**
@@ -323,8 +323,8 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNotContains( $u1->user_login, $found );
-		$this->assertContains( $u2->user_login, $found );
+		$this->assertStringNotContainsString( $u1->user_login, $found );
+		$this->assertStringContainsString( $u2->user_login, $found );
 	}
 
 	/**
@@ -342,8 +342,8 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNotContains( $u1->user_login, $found );
-		$this->assertContains( $u2->user_login, $found );
+		$this->assertStringNotContainsString( $u1->user_login, $found );
+		$this->assertStringContainsString( $u2->user_login, $found );
 	}
 
 	/**
@@ -361,7 +361,7 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNotContains( $u1->user_login, $found );
-		$this->assertContains( $u2->user_login, $found );
+		$this->assertStringNotContainsString( $u1->user_login, $found );
+		$this->assertStringContainsString( $u2->user_login, $found );
 	}
 }

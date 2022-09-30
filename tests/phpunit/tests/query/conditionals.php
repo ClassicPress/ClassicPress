@@ -14,8 +14,8 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	protected $page_ids;
 	protected $post_ids;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		set_current_screen( 'front' );
 
@@ -190,7 +190,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 			// make sure the correct page was fetched
 			global $wp_query;
-			$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+			$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 		}
 	}
 
@@ -227,7 +227,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 			// make sure the correct page was fetched
 			global $wp_query;
-			$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+			$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 		}
 	}
 
@@ -262,7 +262,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 			// make sure the correct page was fetched
 			global $wp_query;
-			$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+			$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 		}
 	}
 
@@ -300,7 +300,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 			// make sure the correct page was fetched
 			global $wp_query;
-			$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+			$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 		}
 	}
 
@@ -320,7 +320,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 		// make sure the correct page was fetched
 		global $wp_query;
-		$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+		$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 	}
 
 	// '(about)/page/?([0-9]{1,})/?$' => 'index.php?pagename=$matches[1]&paged=$matches[2]'
@@ -339,7 +339,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 		// make sure the correct page was fetched
 		global $wp_query;
-		$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+		$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 	}
 
 	// '(about)(/[0-9]+)?/?$' => 'index.php?pagename=$matches[1]&page=$matches[2]'
@@ -360,7 +360,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 		// make sure the correct page was fetched
 		global $wp_query;
-		$this->assertEquals( $page_id, $wp_query->get_queried_object()->ID );
+		$this->assertSame( $page_id, $wp_query->get_queried_object()->ID );
 
 		update_option( 'show_on_front', 'posts' );
 		delete_option( 'page_for_posts' );
@@ -474,7 +474,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	 */
 	function test_search_encoded_chars() {
 		$this->go_to( '/search/F%C3%BCnf%2Bbar/' );
-		$this->assertEquals( get_query_var( 's' ), 'Fünf+bar' );
+		$this->assertSame( get_query_var( 's' ), 'Fünf+bar' );
 	}
 
 	// 'category/(.+?)/feed/(feed|rdf|rss|rss2|atom)/?$' => 'index.php?category_name=$matches[1]&feed=$matches[2]',
@@ -815,13 +815,13 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 		$this->go_to( '/ptawtq/' );
 		$this->assertQueryTrue( 'is_post_type_archive', 'is_archive' );
-		$this->assertEquals( get_queried_object(), get_post_type_object( $cpt_name ) );
+		$this->assertSame( get_queried_object(), get_post_type_object( $cpt_name ) );
 
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts_with_tax_query' ) );
 
 		$this->go_to( '/ptawtq/' );
 		$this->assertQueryTrue( 'is_post_type_archive', 'is_archive' );
-		$this->assertEquals( get_queried_object(), get_post_type_object( $cpt_name ) );
+		$this->assertSame( get_queried_object(), get_post_type_object( $cpt_name ) );
 
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts_with_tax_query' ) );
 	}
@@ -857,13 +857,13 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 
 		$this->go_to( "/$cpt_name/" );
 		$this->assertQueryTrue( 'is_post_type_archive', 'is_archive' );
-		$this->assertEquals( get_queried_object(), get_post_type_object( $cpt_name ) );
+		$this->assertSame( get_queried_object(), get_post_type_object( $cpt_name ) );
 
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts_with_type_array' ) );
 
 		$this->go_to( "/$cpt_name/" );
 		$this->assertQueryTrue( 'is_post_type_archive', 'is_archive' );
-		$this->assertEquals( get_queried_object(), get_post_type_object( 'post' ) );
+		$this->assertSame( get_queried_object(), get_post_type_object( 'post' ) );
 
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts_with_type_array' ) );
 	}

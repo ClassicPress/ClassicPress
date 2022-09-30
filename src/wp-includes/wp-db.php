@@ -1145,6 +1145,10 @@ class wpdb {
 	 * @return string escaped
 	 */
 	function _real_escape( $string ) {
+		if ( ! is_scalar( $string ) && ! is_null( $string ) ) {
+			return '';
+		}
+
 		if ( $this->dbh ) {
 			if ( $this->use_mysqli ) {
 				$escaped = mysqli_real_escape_string( $this->dbh, $string );
@@ -1329,7 +1333,9 @@ class wpdb {
 		// Count the number of valid placeholders in the query.
 		$placeholders = preg_match_all( "/(^|[^%]|(%%)+)%($allowed_format)?[sdF]/", $query, $matches );
 
-		if ( count( $args ) !== $placeholders ) {
+		$args_count = count( $args );
+
+		if ( $args_count !== $placeholders ) {
 			if ( 1 === $placeholders && $passed_as_array ) {
 				// If the passed query only expected one argument, but the wrong number of arguments were sent as an array, bail.
 				wp_load_translations_early();
@@ -1348,10 +1354,22 @@ class wpdb {
 					sprintf(
 						__( 'The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d).' ),
 						$placeholders,
-						count( $args )
+						$args_count
 					),
 					'WP-4.8.3'
 				);
+
+				/*
+				 * If we don't have enough arguments to match the placeholders,
+				 * return an empty string to avoid a fatal error on PHP 8.
+				 */
+				if ( $args_count < $placeholders ) {
+					$max_numbered_placeholder = ! empty( $matches[3] ) ? max( array_map( 'intval', $matches[3] ) ) : 0;
+
+					if ( ! $max_numbered_placeholder || $args_count < $max_numbered_placeholder ) {
+						return '';
+					}
+				}
 			}
 		}
 
@@ -1857,6 +1875,11 @@ class wpdb {
 		 * @param string $query Database query.
 		 */
 		$query = apply_filters( 'query', $query );
+
+		if ( ! $query ) {
+			$this->insert_id = 0;
+			return false;
+		}
 
 		$this->flush();
 

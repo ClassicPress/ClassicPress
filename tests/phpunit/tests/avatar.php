@@ -6,9 +6,14 @@
  * @group avatar
  */
 class Tests_Avatar extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		update_option( 'show_avatars', '1' );
+	}
+
+	public function tear_down() {
+		update_option( 'show_avatars', '0' );
+		parent::tear_down();
 	}
 
 	/**
@@ -16,7 +21,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 */
 	public function test_get_avatar_url_gravatar_url() {
 		$url = get_avatar_url( 1 );
-		$this->assertEquals( preg_match( '|^http?://[0-9]+.gravatar.com/avatar/[0-9a-f]{32}\?|', $url ), 1 );
+		$this->assertSame( preg_match( '|^http?://[0-9]+.gravatar.com/avatar/[0-9a-f]{32}\?|', $url ), 1 );
 	}
 
 	/**
@@ -24,11 +29,11 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 */
 	public function test_get_avatar_url_size() {
 		$url = get_avatar_url( 1 );
-		$this->assertEquals( preg_match( '|\?.*s=96|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*s=96|', $url ), 1 );
 
 		$args = array( 'size' => 100 );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|\?.*s=100|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*s=100|', $url ), 1 );
 	}
 
 	/**
@@ -36,16 +41,16 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 */
 	public function test_get_avatar_url_default() {
 		$url = get_avatar_url( 1 );
-		$this->assertEquals( preg_match( '|\?.*d=mm|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*d=mm|', $url ), 1 );
 
 		$args = array( 'default' => 'wavatar' );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|\?.*d=wavatar|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*d=wavatar|', $url ), 1 );
 
-		$this->assertEquals( preg_match( '|\?.*f=y|', $url ), 0 );
+		$this->assertSame( preg_match( '|\?.*f=y|', $url ), 0 );
 		$args = array( 'force_default' => true );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|\?.*f=y|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*f=y|', $url ), 1 );
 	}
 
 	/**
@@ -53,11 +58,11 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 */
 	public function test_get_avatar_url_rating() {
 		$url = get_avatar_url( 1 );
-		$this->assertEquals( preg_match( '|\?.*r=g|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*r=g|', $url ), 1 );
 
 		$args = array( 'rating' => 'M' );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|\?.*r=m|', $url ), 1 );
+		$this->assertSame( preg_match( '|\?.*r=m|', $url ), 1 );
 	}
 
 	/**
@@ -65,15 +70,15 @@ class Tests_Avatar extends WP_UnitTestCase {
 	 */
 	public function test_get_avatar_url_scheme() {
 		$url = get_avatar_url( 1 );
-		$this->assertEquals( preg_match( '|^http://|', $url ), 1 );
+		$this->assertSame( preg_match( '|^http://|', $url ), 1 );
 
 		$args = array( 'scheme' => 'https' );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|^https://|', $url ), 1 );
+		$this->assertSame( preg_match( '|^https://|', $url ), 1 );
 
 		$args = array( 'scheme' => 'lolcat' );
 		$url  = get_avatar_url( 1, $args );
-		$this->assertEquals( preg_match( '|^lolcat://|', $url ), 0 );
+		$this->assertSame( preg_match( '|^lolcat://|', $url ), 0 );
 	}
 
 	/**
@@ -83,19 +88,19 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 
 		$url2 = get_avatar_url( WP_TESTS_EMAIL );
-		$this->assertEquals( $url, $url2 );
+		$this->assertSame( $url, $url2 );
 
 		$url2 = get_avatar_url( md5( WP_TESTS_EMAIL ) . '@md5.gravatar.com' );
-		$this->assertEquals( $url, $url2 );
+		$this->assertSame( $url, $url2 );
 
 		$user = get_user_by( 'id', 1 );
 		$url2 = get_avatar_url( $user );
-		$this->assertEquals( $url, $url2 );
+		$this->assertSame( $url, $url2 );
 
 		$post_id = self::factory()->post->create( array( 'post_author' => 1 ) );
 		$post    = get_post( $post_id );
 		$url2    = get_avatar_url( $post );
-		$this->assertEquals( $url, $url2 );
+		$this->assertSame( $url, $url2 );
 
 		$comment_id = self::factory()->comment->create(
 			array(
@@ -119,7 +124,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'pre_get_avatar_data', array( $this, 'pre_get_avatar_url_filter' ), 10 );
 
-		$this->assertEquals( $url, $this->fake_url );
+		$this->assertSame( $url, $this->fake_url );
 	}
 	public function pre_get_avatar_url_filter( $args ) {
 		$args['url'] = $this->fake_url;
@@ -136,7 +141,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url = get_avatar_url( 1 );
 		remove_filter( 'get_avatar_url', array( $this, 'get_avatar_url_filter' ), 10 );
 
-		$this->assertEquals( $url, $this->fake_url );
+		$this->assertSame( $url, $this->fake_url );
 	}
 	public function get_avatar_url_filter( $url ) {
 		return $this->fake_url;
@@ -165,7 +170,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$url2 = get_avatar_url( $comment );
 		remove_filter( 'get_avatar_comment_types', array( $this, 'get_avatar_comment_types_filter' ), 10 );
 
-		$this->assertEquals( $url, $url2 );
+		$this->assertSame( $url, $url2 );
 	}
 	public function get_avatar_comment_types_filter( $comment_types ) {
 		$comment_types[] = 'pingback';
@@ -174,30 +179,30 @@ class Tests_Avatar extends WP_UnitTestCase {
 
 	public function test_get_avatar() {
 		$img = get_avatar( 1 );
-		$this->assertEquals( preg_match( "|^<img alt='[^']*' src='[^']*' srcset='[^']*' class='[^']*' height='[^']*' width='[^']*' />$|", $img ), 1 );
+		$this->assertSame( preg_match( "|^<img alt='[^']*' src='[^']*' srcset='[^']*' class='[^']*' height='[^']*' width='[^']*' />$|", $img ), 1 );
 	}
 
 	public function test_get_avatar_size() {
 		$size = '100';
 		$img  = get_avatar( 1, $size );
-		$this->assertEquals( preg_match( "|^<img .*height='$size'.*width='$size'|", $img ), 1 );
+		$this->assertSame( preg_match( "|^<img .*height='$size'.*width='$size'|", $img ), 1 );
 	}
 
 	public function test_get_avatar_alt() {
 		$alt = 'Mr Hyde';
 		$img = get_avatar( 1, 96, '', $alt );
-		$this->assertEquals( preg_match( "|^<img alt='$alt'|", $img ), 1 );
+		$this->assertSame( preg_match( "|^<img alt='$alt'|", $img ), 1 );
 	}
 
 	public function test_get_avatar_class() {
 		$class = 'first';
 		$img   = get_avatar( 1, 96, '', '', array( 'class' => $class ) );
-		$this->assertEquals( preg_match( "|^<img .*class='[^']*{$class}[^']*'|", $img ), 1 );
+		$this->assertSame( preg_match( "|^<img .*class='[^']*{$class}[^']*'|", $img ), 1 );
 	}
 
 	public function test_get_avatar_default_class() {
 		$img = get_avatar( 1, 96, '', '', array( 'force_default' => true ) );
-		$this->assertEquals( preg_match( "|^<img .*class='[^']*avatar-default[^']*'|", $img ), 1 );
+		$this->assertSame( preg_match( "|^<img .*class='[^']*avatar-default[^']*'|", $img ), 1 );
 	}
 
 	public function test_get_avatar_force_display() {
@@ -223,7 +228,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'pre_get_avatar', array( $this, 'pre_get_avatar_filter' ), 10 );
 
-		$this->assertEquals( $img, $this->fake_img );
+		$this->assertSame( $img, $this->fake_img );
 	}
 	public function pre_get_avatar_filter( $img ) {
 		return $this->fake_img;
@@ -239,8 +244,9 @@ class Tests_Avatar extends WP_UnitTestCase {
 		$img = get_avatar( 1 );
 		remove_filter( 'get_avatar', array( $this, 'get_avatar_filter' ), 10 );
 
-		$this->assertEquals( $img, $this->fake_url );
+		$this->assertSame( $img, $this->fake_url );
 	}
+
 	public function get_avatar_filter( $img ) {
 		return $this->fake_url;
 	}
