@@ -13,15 +13,18 @@ require_once ABSPATH . WPINC . '/rest-api.php';
  * @group restapi
  */
 class Tests_REST_API extends WP_UnitTestCase {
-	public function setUp() {
+	public function set_up() {
+		parent::set_up();
+
 		// Override the normal server with our spying server.
 		$GLOBALS['wp_rest_server'] = new Spy_REST_Server();
-		parent::setUp();
+		update_option( 'default_comment_status', 'open' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'wp_rest_server_class', array( $this, 'filter_wp_rest_server_class' ) );
-		parent::tearDown();
+		update_option( 'default_comment_status', 'closed' );
+		parent::tear_down();
 	}
 
 	/**
@@ -39,36 +42,36 @@ class Tests_REST_API extends WP_UnitTestCase {
 	 * have a default priority of 10.
 	 */
 	function test_init_action_added() {
-		$this->assertEquals( 10, has_action( 'init', 'rest_api_init' ) );
+		$this->assertSame( 10, has_action( 'init', 'rest_api_init' ) );
 	}
 
 	public function test_add_extra_api_taxonomy_arguments() {
 		$taxonomy = get_taxonomy( 'category' );
 		$this->assertTrue( $taxonomy->show_in_rest );
-		$this->assertEquals( 'categories', $taxonomy->rest_base );
-		$this->assertEquals( 'WP_REST_Terms_Controller', $taxonomy->rest_controller_class );
+		$this->assertSame( 'categories', $taxonomy->rest_base );
+		$this->assertSame( 'WP_REST_Terms_Controller', $taxonomy->rest_controller_class );
 
 		$taxonomy = get_taxonomy( 'post_tag' );
 		$this->assertTrue( $taxonomy->show_in_rest );
-		$this->assertEquals( 'tags', $taxonomy->rest_base );
-		$this->assertEquals( 'WP_REST_Terms_Controller', $taxonomy->rest_controller_class );
+		$this->assertSame( 'tags', $taxonomy->rest_base );
+		$this->assertSame( 'WP_REST_Terms_Controller', $taxonomy->rest_controller_class );
 	}
 
 	public function test_add_extra_api_post_type_arguments() {
 		$post_type = get_post_type_object( 'post' );
 		$this->assertTrue( $post_type->show_in_rest );
-		$this->assertEquals( 'posts', $post_type->rest_base );
-		$this->assertEquals( 'WP_REST_Posts_Controller', $post_type->rest_controller_class );
+		$this->assertSame( 'posts', $post_type->rest_base );
+		$this->assertSame( 'WP_REST_Posts_Controller', $post_type->rest_controller_class );
 
 		$post_type = get_post_type_object( 'page' );
 		$this->assertTrue( $post_type->show_in_rest );
-		$this->assertEquals( 'pages', $post_type->rest_base );
-		$this->assertEquals( 'WP_REST_Posts_Controller', $post_type->rest_controller_class );
+		$this->assertSame( 'pages', $post_type->rest_base );
+		$this->assertSame( 'WP_REST_Posts_Controller', $post_type->rest_controller_class );
 
 		$post_type = get_post_type_object( 'attachment' );
 		$this->assertTrue( $post_type->show_in_rest );
-		$this->assertEquals( 'media', $post_type->rest_base );
-		$this->assertEquals( 'WP_REST_Attachments_Controller', $post_type->rest_controller_class );
+		$this->assertSame( 'media', $post_type->rest_base );
+		$this->assertSame( 'WP_REST_Attachments_Controller', $post_type->rest_controller_class );
 	}
 
 	/**
@@ -95,7 +98,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		$endpoint = $endpoints['/test-ns/test'];
 		$this->assertArrayNotHasKey( 'callback', $endpoint );
 		$this->assertArrayHasKey( 'namespace', $endpoint );
-		$this->assertEquals( 'test-ns', $endpoint['namespace'] );
+		$this->assertSame( 'test-ns', $endpoint['namespace'] );
 
 		// Grab the filtered data.
 		$filtered_endpoints = $GLOBALS['wp_rest_server']->get_routes();
@@ -138,7 +141,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		$endpoint = $endpoints['/test-ns/test'];
 		$this->assertArrayNotHasKey( 'callback', $endpoint );
 		$this->assertArrayHasKey( 'namespace', $endpoint );
-		$this->assertEquals( 'test-ns', $endpoint['namespace'] );
+		$this->assertSame( 'test-ns', $endpoint['namespace'] );
 
 		$filtered_endpoints = $GLOBALS['wp_rest_server']->get_routes();
 		$endpoint           = $filtered_endpoints['/test-ns/test'];
@@ -280,7 +283,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 
-		$this->assertEquals( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
+		$this->assertSame( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
 	}
 
 	/**
@@ -299,7 +302,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 
-		$this->assertEquals( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
+		$this->assertSame( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
 	}
 
 	/**
@@ -318,7 +321,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 
-		$this->assertEquals(
+		$this->assertSame(
 			$routes['/test-ns/test'][0]['methods'],
 			array(
 				'GET'  => true,
@@ -343,7 +346,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 
-		$this->assertEquals(
+		$this->assertSame(
 			$routes['/test-ns/test'][0]['methods'],
 			array(
 				'GET'  => true,
@@ -369,7 +372,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		$headers  = $response->get_headers();
 		$this->assertArrayHasKey( 'Allow', $headers );
 
-		$this->assertEquals( 'GET, POST', $headers['Allow'] );
+		$this->assertSame( 'GET, POST', $headers['Allow'] );
 	}
 
 	/**
@@ -401,7 +404,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		$request = array();
 
 		$response = rest_filter_response_fields( $response, null, $request );
-		$this->assertEquals( array( 'a' => true ), $response->get_data() );
+		$this->assertSame( array( 'a' => true ), $response->get_data() );
 	}
 
 	/**
@@ -421,7 +424,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		);
 
 		$response = rest_filter_response_fields( $response, null, $request );
-		$this->assertEquals( array( 'b' => 1 ), $response->get_data() );
+		$this->assertSame( array( 'b' => 1 ), $response->get_data() );
 	}
 
 	/**
@@ -444,7 +447,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		);
 
 		$response = rest_filter_response_fields( $response, null, $request );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'b' => 1,
 				'c' => 2,
@@ -476,7 +479,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		);
 
 		$response = rest_filter_response_fields( $response, null, $request );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'b' => 1,
 				'c' => 2,
@@ -515,7 +518,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 		);
 
 		$response = rest_filter_response_fields( $response, null, $request );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				array(
 					'b' => 1,
@@ -541,15 +544,15 @@ class Tests_REST_API extends WP_UnitTestCase {
 	public function test_rest_url_generation() {
 		// In pretty permalinks case, we expect a path of wp-json/ with no query.
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/wp-json/', get_rest_url() );
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/wp-json/', get_rest_url() );
 
 		// In index permalinks case, we expect a path of index.php/wp-json/ with no query.
 		$this->set_permalink_structure( '/index.php/%year%/%monthnum%/%day%/%postname%/' );
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/index.php/wp-json/', get_rest_url() );
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/index.php/wp-json/', get_rest_url() );
 
 		// In non-pretty case, we get a query string to invoke the rest router.
 		$this->set_permalink_structure( '' );
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/index.php?rest_route=/', get_rest_url() );
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/index.php?rest_route=/', get_rest_url() );
 	}
 
 	/**
@@ -615,7 +618,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 	 * @dataProvider jsonp_callback_provider
 	 */
 	public function test_jsonp_callback_check( $callback, $valid ) {
-		$this->assertEquals( $valid, wp_check_jsonp_callback( $callback ) );
+		$this->assertSame( $valid, wp_check_jsonp_callback( $callback ) );
 	}
 
 	public function rest_date_provider() {
@@ -679,7 +682,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 	 * @dataProvider rest_date_force_utc_provider
 	 */
 	public function test_rest_parse_date_force_utc( $string, $value ) {
-		$this->assertEquals( $value, rest_parse_date( $string, true ) );
+		$this->assertSame( $value, rest_parse_date( $string, true ) );
 	}
 
 	public function filter_wp_rest_server_class( $class_name ) {
@@ -700,6 +703,6 @@ class Tests_REST_API extends WP_UnitTestCase {
 			)
 		);
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
-		$this->assertEquals( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
+		$this->assertSame( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
 	}
 }

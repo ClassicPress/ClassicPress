@@ -35,7 +35,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$this->assertCount( 1, $q->get( 'category__in' ) );
 
 		$this->assertNotEmpty( $posts );
-		$this->assertEquals( array( $post_id ), wp_list_pluck( $posts, 'ID' ) );
+		$this->assertSame( array( $post_id ), wp_list_pluck( $posts, 'ID' ) );
 
 		$posts2 = $q->query( array( 'category__and' => array( $term_id, $term_id2 ) ) );
 		$this->assertNotEmpty( $q->get( 'category__and' ) );
@@ -95,20 +95,20 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		// Fourth post added in filter
-		$this->assertEquals( 4, count( $query->posts ) );
-		$this->assertEquals( 4, $query->post_count );
+		// Fourth post added in filter.
+		$this->assertSame( 4, count( $query->posts ) );
+		$this->assertSame( 4, $query->post_count );
 
 		foreach ( $query->posts as $post ) {
 
 			// posts are WP_Post objects
 			$this->assertTrue( is_a( $post, 'WP_Post' ) );
 
-			// filters are raw
-			$this->assertEquals( 'raw', $post->filter );
+			// Filters are raw.
+			$this->assertSame( 'raw', $post->filter );
 
-			// custom data added in the_posts filter is preserved
-			$this->assertEquals( array( $post->ID, 'custom data' ), $post->custom_data );
+			// Custom data added in the_posts filter is preserved.
+			$this->assertSame( array( $post->ID, 'custom data' ), $post->custom_data );
 		}
 
 		remove_filter( 'the_posts', array( $this, 'the_posts_filter' ) );
@@ -283,13 +283,13 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$this->assertNotContains( 'auto-draft', $statuses3 );
 
 		$q1 = new WP_Query( array( 'post_status' => 'any' ) );
-		$this->assertContains( "post_status <> 'auto-draft'", $q1->request );
+		$this->assertStringContainsString( "post_status <> 'auto-draft'", $q1->request );
 
 		$q2 = new WP_Query( array( 'post_status' => 'any, auto-draft' ) );
-		$this->assertNotContains( "post_status <> 'auto-draft'", $q2->request );
+		$this->assertStringNotContainsString( "post_status <> 'auto-draft'", $q2->request );
 
 		$q3 = new WP_Query( array( 'post_status' => array( 'any', 'auto-draft' ) ) );
-		$this->assertNotContains( "post_status <> 'auto-draft'", $q3->request );
+		$this->assertStringNotContainsString( "post_status <> 'auto-draft'", $q3->request );
 	}
 
 	/**
@@ -307,23 +307,23 @@ class Tests_Post_Query extends WP_UnitTestCase {
 				),
 			)
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_type DESC, $wpdb->posts.post_name ASC",
 			$q1->request
 		);
 
 		$q2 = new WP_Query( array( 'orderby' => array() ) );
-		$this->assertNotContains( 'ORDER BY', $q2->request );
-		$this->assertNotContains( 'ORDER', $q2->request );
+		$this->assertStringNotContainsString( 'ORDER BY', $q2->request );
+		$this->assertStringNotContainsString( 'ORDER', $q2->request );
 
 		$q3 = new WP_Query( array( 'post_type' => 'post' ) );
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_date DESC",
 			$q3->request
 		);
 
 		$q4 = new WP_Query( array( 'post_type' => 'post' ) );
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_date DESC",
 			$q4->request
 		);
@@ -343,7 +343,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 				),
 			)
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_type DESC",
 			$q1->request
 		);
@@ -354,7 +354,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 				'order'   => 'foo',
 			)
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_title DESC",
 			$q2->request
 		);
@@ -364,7 +364,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 				'order' => 'asc',
 			)
 		);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			"ORDER BY $wpdb->posts.post_date ASC",
 			$q3->request
 		);
@@ -376,33 +376,33 @@ class Tests_Post_Query extends WP_UnitTestCase {
 	public function test_orderby() {
 		// 'rand' is a valid value
 		$q = new WP_Query( array( 'orderby' => 'rand' ) );
-		$this->assertContains( 'ORDER BY RAND()', $q->request );
-		$this->assertNotContains( 'ASC', $q->request );
-		$this->assertNotContains( 'DESC', $q->request );
+		$this->assertStringContainsString( 'ORDER BY RAND()', $q->request );
+		$this->assertStringNotContainsString( 'ASC', $q->request );
+		$this->assertStringNotContainsString( 'DESC', $q->request );
 
 		// This isn't allowed
 		$q2 = new WP_Query( array( 'order' => 'rand' ) );
-		$this->assertContains( 'ORDER BY', $q2->request );
-		$this->assertNotContains( 'RAND()', $q2->request );
-		$this->assertContains( 'DESC', $q2->request );
+		$this->assertStringContainsString( 'ORDER BY', $q2->request );
+		$this->assertStringNotContainsString( 'RAND()', $q2->request );
+		$this->assertStringContainsString( 'DESC', $q2->request );
 
 		// 'none' is a valid value
 		$q3 = new WP_Query( array( 'orderby' => 'none' ) );
-		$this->assertNotContains( 'ORDER BY', $q3->request );
-		$this->assertNotContains( 'DESC', $q3->request );
-		$this->assertNotContains( 'ASC', $q3->request );
+		$this->assertStringNotContainsString( 'ORDER BY', $q3->request );
+		$this->assertStringNotContainsString( 'DESC', $q3->request );
+		$this->assertStringNotContainsString( 'ASC', $q3->request );
 
 		// false is a valid value
 		$q4 = new WP_Query( array( 'orderby' => false ) );
-		$this->assertNotContains( 'ORDER BY', $q4->request );
-		$this->assertNotContains( 'DESC', $q4->request );
-		$this->assertNotContains( 'ASC', $q4->request );
+		$this->assertStringNotContainsString( 'ORDER BY', $q4->request );
+		$this->assertStringNotContainsString( 'DESC', $q4->request );
+		$this->assertStringNotContainsString( 'ASC', $q4->request );
 
 		// empty array() is a valid value
 		$q5 = new WP_Query( array( 'orderby' => array() ) );
-		$this->assertNotContains( 'ORDER BY', $q5->request );
-		$this->assertNotContains( 'DESC', $q5->request );
-		$this->assertNotContains( 'ASC', $q5->request );
+		$this->assertStringNotContainsString( 'ORDER BY', $q5->request );
+		$this->assertStringNotContainsString( 'DESC', $q5->request );
+		$this->assertStringNotContainsString( 'ASC', $q5->request );
 	}
 
 	/**
@@ -415,7 +415,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY RAND(5)', $q->request );
+		$this->assertStringContainsString( 'ORDER BY RAND(5)', $q->request );
 	}
 
 	/**
@@ -428,7 +428,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNotContains( 'ORDER BY RAND', $q->request );
+		$this->assertStringNotContainsString( 'ORDER BY RAND', $q->request );
 	}
 
 	/**
@@ -441,7 +441,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertContains( 'ORDER BY RAND(5)', $q->request );
+		$this->assertStringContainsString( 'ORDER BY RAND(5)', $q->request );
 	}
 
 	/**
@@ -485,7 +485,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 		$actual_posts = $q->get_posts();
-		$this->assertEqualSets( $requested, $actual_posts );
+		$this->assertSameSets( $requested, $actual_posts );
 
 		$requested = array( $post_ids[1], $post_ids[2] );
 		$q->query(
@@ -495,7 +495,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 		$actual_posts = $q->get_posts();
-		$this->assertEqualSets( $requested, $actual_posts );
+		$this->assertSameSets( $requested, $actual_posts );
 	}
 
 	/**
@@ -579,7 +579,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -602,7 +602,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -628,7 +628,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 		remove_filter( 'split_the_query', '__return_true' );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -655,7 +655,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 		remove_filter( 'split_the_query', '__return_false' );
 
-		$this->assertEquals( 2, $q->found_posts );
+		$this->assertSame( 2, $q->found_posts );
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
@@ -684,11 +684,11 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 		$q->posts = $posts;
 
-		$methd = new \ReflectionMethod( 'WP_Query', 'set_found_posts' );
+		$methd = new ReflectionMethod( 'WP_Query', 'set_found_posts' );
 		$methd->setAccessible( true );
 		$methd->invoke( $q, array( 'no_found_rows' => false ), array() );
 
-		$this->assertEquals( $expected, $q->found_posts );
+		$this->assertSame( $expected, $q->found_posts );
 	}
 
 	/**
@@ -703,7 +703,7 @@ class Tests_Post_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertInternalType( 'int', $q->found_posts );
+		$this->assertIsInt( $q->found_posts );
 	}
 
 	/**
@@ -722,6 +722,6 @@ class Tests_Post_Query extends WP_UnitTestCase {
 
 		remove_filter( 'found_posts', '__return_empty_string' );
 
-		$this->assertInternalType( 'int', $q->found_posts );
+		$this->assertIsInt( $q->found_posts );
 	}
 }

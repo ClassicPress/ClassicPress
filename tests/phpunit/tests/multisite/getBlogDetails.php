@@ -3,10 +3,10 @@
 if ( is_multisite() ) :
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29845
-	 * @group ms-site
-	 * @group multisite
-	 */
+	* @see https://core.trac.wordpress.org/ticket/29845
+	* @group ms-site
+	* @group multisite
+	*/
 	class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
 		protected static $network_ids;
 		protected static $site_ids;
@@ -15,15 +15,15 @@ if ( is_multisite() ) :
 			self::$site_ids = array(
 				WP_TESTS_DOMAIN . '/foo/'      => array(
 					'domain' => WP_TESTS_DOMAIN,
-					'path'   => '/foo/',
+					'path' => '/foo/',
 				),
 				'foo.' . WP_TESTS_DOMAIN . '/' => array(
 					'domain' => 'foo.' . WP_TESTS_DOMAIN,
-					'path'   => '/',
+					'path' => '/',
 				),
 				'wordpress.org/'               => array(
 					'domain' => 'wordpress.org',
-					'path'   => '/',
+					'path' => '/',
 				),
 			);
 
@@ -93,7 +93,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'wordpress.org',
-					'path'   => '/',
+					'path' => '/',
 				)
 			);
 			$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
@@ -103,7 +103,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'wordpress.org',
-					'path'   => '/zxy/',
+					'path' => '/zxy/',
 				)
 			);
 			$this->assertFalse( $site );
@@ -113,7 +113,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'invalid.org',
-					'path'   => '/foo/',
+					'path' => '/foo/',
 				)
 			);
 			$this->assertFalse( $site );
@@ -125,7 +125,7 @@ if ( is_multisite() ) :
 			}
 
 			$site = get_blog_details( array( 'domain' => 'wordpress.org' ) );
-			$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
+				$this->assertSame( self::$site_ids['wordpress.org/'], $site->blog_id );
 		}
 
 		public function test_get_blog_details_with_only_domain_in_fields_subdirectory() {

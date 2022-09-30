@@ -15,14 +15,14 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		self::$author_user_id = $factory->user->create( array( 'role' => 'author' ) );
 	}
 
-	public function set_up() {
+	function set_up() {
 		parent::set_up();
-		$this->post_type = 'test-revision';
+		$this->post_type = rand_str( 20 );
 	}
 
-	public function tearDown() {
+	function tear_down() {
 		unset( $GLOBALS['wp_post_types'][ $this->post_type ] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -59,9 +59,9 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		$this->assertCount( 2, $revisions );
 
 		$lastrevision = end( $revisions );
-		$this->assertEquals( 'I cant spel werds.', $lastrevision->post_content );
+		$this->assertSame( 'I cant spel werds.', $lastrevision->post_content );
 		// https://core.trac.wordpress.org/ticket/16215
-		$this->assertEquals( self::$author_user_id, $lastrevision->post_author );
+		$this->assertSame( self::$author_user_id, (int) $lastrevision->post_author );
 
 		wp_restore_post_revision( $lastrevision->ID );
 
@@ -535,7 +535,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$revisions = wp_get_post_revisions( $post['ID'] );
 
-		$this->assertEquals( $revision_ids, array_values( wp_list_pluck( $revisions, 'ID' ) ) );
+		$this->assertSame( $revision_ids, array_values( wp_list_pluck( $revisions, 'ID' ) ) );
 	}
 
 	/**
@@ -570,6 +570,6 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$revisions = wp_get_post_revisions( $post['ID'] );
 
-		$this->assertEquals( $revision_ids, array_values( wp_list_pluck( $revisions, 'ID' ) ) );
+		$this->assertSame( $revision_ids, array_values( wp_list_pluck( $revisions, 'ID' ) ) );
 	}
 }

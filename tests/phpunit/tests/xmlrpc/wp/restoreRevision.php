@@ -7,8 +7,8 @@ class Tests_XMLRPC_wp_restoreRevision extends WP_XMLRPC_UnitTestCase {
 	var $post_id;
 	var $revision_id;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->post_id = self::factory()->post->create( array( 'post_content' => 'edit1' ) ); // Not saved as a revision
 		// First saved revision on update, see https://core.trac.wordpress.org/changeset/24650
@@ -29,7 +29,7 @@ class Tests_XMLRPC_wp_restoreRevision extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->wp_restoreRevision( array( 1, 'username', 'password', $this->revision_id ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_incapable_user() {
@@ -37,7 +37,7 @@ class Tests_XMLRPC_wp_restoreRevision extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_restoreRevision( array( 1, 'subscriber', 'subscriber', $this->revision_id ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 	}
 
 	function test_capable_user() {
@@ -52,6 +52,6 @@ class Tests_XMLRPC_wp_restoreRevision extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_restoreRevision( array( 1, 'editor', 'editor', $this->revision_id ) );
 		$this->assertTrue( $result );
-		$this->assertEquals( 'edit2', get_post( $this->post_id )->post_content );
+		$this->assertSame( 'edit2', get_post( $this->post_id )->post_content );
 	}
 }

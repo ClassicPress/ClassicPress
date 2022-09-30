@@ -53,7 +53,7 @@ class Tests_Term extends WP_UnitTestCase {
 		// Insert a term.
 		$term = 'term_new';
 		$t    = wp_insert_term( $term, $this->taxonomy );
-		$this->assertInternalType( 'array', $t );
+		$this->assertIsArray( $t );
 		$term_obj = get_term_by( 'name', $term, $this->taxonomy );
 
 		$exists = term_exists( $term_obj->slug );
@@ -81,19 +81,19 @@ class Tests_Term extends WP_UnitTestCase {
 		$tags  = self::factory()->tag->create_many( 5 );
 
 		$tt = wp_add_object_terms( $posts[0], $tags[1], 'post_tag' );
-		$this->assertEquals( 1, count( $tt ) );
-		$this->assertEquals( array( $tags[1] ), wp_get_object_terms( $posts[0], 'post_tag', array( 'fields' => 'ids' ) ) );
+		$this->assertSame( 1, count( $tt ) );
+		$this->assertSame( array( $tags[1] ), wp_get_object_terms( $posts[0], 'post_tag', array( 'fields' => 'ids' ) ) );
 
 		$three_tags = array( $tags[0], $tags[1], $tags[2] );
 		$tt         = wp_add_object_terms( $posts[1], $three_tags, 'post_tag' );
-		$this->assertEquals( 3, count( $tt ) );
-		$this->assertEquals( $three_tags, wp_get_object_terms( $posts[1], 'post_tag', array( 'fields' => 'ids' ) ) );
+		$this->assertSame( 3, count( $tt ) );
+		$this->assertSame( $three_tags, wp_get_object_terms( $posts[1], 'post_tag', array( 'fields' => 'ids' ) ) );
 
 		$this->assertTrue( wp_remove_object_terms( $posts[0], $tags[1], 'post_tag' ) );
 		$this->assertFalse( wp_remove_object_terms( $posts[0], $tags[0], 'post_tag' ) );
 		$this->assertInstanceOf( 'WP_Error', wp_remove_object_terms( $posts[0], $tags[1], 'non_existing_taxonomy' ) );
 		$this->assertTrue( wp_remove_object_terms( $posts[1], $three_tags, 'post_tag' ) );
-		$this->assertEquals( 0, count( wp_get_object_terms( $posts[1], 'post_tag' ) ) );
+		$this->assertSame( 0, count( wp_get_object_terms( $posts[1], 'post_tag' ) ) );
 
 		foreach ( $tags as $term_id ) {
 			$this->assertTrue( wp_delete_term( $term_id, 'post_tag' ) );
@@ -112,9 +112,9 @@ class Tests_Term extends WP_UnitTestCase {
 		$term2 = rand_str();
 
 		$t = wp_insert_term( $term, 'category' );
-		$this->assertInternalType( 'array', $t );
+		$this->assertIsArray( $t );
 		$t2 = wp_insert_term( $term, 'category', array( 'parent' => $t['term_id'] ) );
-		$this->assertInternalType( 'array', $t2 );
+		$this->assertIsArray( $t2 );
 		if ( function_exists( 'term_is_ancestor_of' ) ) {
 			$this->assertTrue( term_is_ancestor_of( $t['term_id'], $t2['term_id'], 'category' ) );
 			$this->assertFalse( term_is_ancestor_of( $t2['term_id'], $t['term_id'], 'category' ) );
@@ -156,32 +156,32 @@ class Tests_Term extends WP_UnitTestCase {
 		$post_id = self::$post_ids[0];
 		$post    = get_post( $post_id );
 
-		$this->assertInternalType( 'array', $post->post_category );
-		$this->assertEquals( 1, count( $post->post_category ) );
+		$this->assertIsArray( $post->post_category );
+		$this->assertSame( 1, count( $post->post_category ) );
 		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
 		$term1 = wp_insert_term( 'Foo', 'category' );
 		$term2 = wp_insert_term( 'Bar', 'category' );
 		$term3 = wp_insert_term( 'Baz', 'category' );
 		wp_set_post_categories( $post_id, array( $term1['term_id'], $term2['term_id'] ) );
-		$this->assertEquals( 2, count( $post->post_category ) );
-		$this->assertEquals( array( $term2['term_id'], $term1['term_id'] ), $post->post_category );
+		$this->assertSame( 2, count( $post->post_category ) );
+		$this->assertSame( array( $term2['term_id'], $term1['term_id'] ), $post->post_category );
 
 		wp_set_post_categories( $post_id, $term3['term_id'], true );
-		$this->assertEquals( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ), $post->post_category );
+		$this->assertSame( array( $term2['term_id'], $term3['term_id'], $term1['term_id'] ), $post->post_category );
 
 		$term4 = wp_insert_term( 'Burrito', 'category' );
 		wp_set_post_categories( $post_id, $term4['term_id'] );
-		$this->assertEquals( array( $term4['term_id'] ), $post->post_category );
+		$this->assertSame( array( $term4['term_id'] ), $post->post_category );
 
 		wp_set_post_categories( $post_id, array( $term1['term_id'], $term2['term_id'] ), true );
-		$this->assertEquals( array( $term2['term_id'], $term4['term_id'], $term1['term_id'] ), $post->post_category );
+		$this->assertSame( array( $term2['term_id'], $term4['term_id'], $term1['term_id'] ), $post->post_category );
 
 		wp_set_post_categories( $post_id, array(), true );
-		$this->assertEquals( 1, count( $post->post_category ) );
+		$this->assertSame( 1, count( $post->post_category ) );
 		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
 
 		wp_set_post_categories( $post_id, array() );
-		$this->assertEquals( 1, count( $post->post_category ) );
+		$this->assertSame( 1, count( $post->post_category ) );
 		$this->assertEquals( get_option( 'default_category' ), $post->post_category[0] );
 	}
 
@@ -191,10 +191,10 @@ class Tests_Term extends WP_UnitTestCase {
 	public function test_sanitize_term_field() {
 		$term = wp_insert_term( 'foo', $this->taxonomy );
 
-		$this->assertEquals( 0, sanitize_term_field( 'parent', 0, $term['term_id'], $this->taxonomy, 'raw' ) );
-		$this->assertEquals( 1, sanitize_term_field( 'parent', 1, $term['term_id'], $this->taxonomy, 'raw' ) );
-		$this->assertEquals( 0, sanitize_term_field( 'parent', -1, $term['term_id'], $this->taxonomy, 'raw' ) );
-		$this->assertEquals( 0, sanitize_term_field( 'parent', '', $term['term_id'], $this->taxonomy, 'raw' ) );
+		$this->assertSame( 0, sanitize_term_field( 'parent', 0, $term['term_id'], $this->taxonomy, 'raw' ) );
+		$this->assertSame( 1, sanitize_term_field( 'parent', 1, $term['term_id'], $this->taxonomy, 'raw' ) );
+		$this->assertSame( 0, sanitize_term_field( 'parent', -1, $term['term_id'], $this->taxonomy, 'raw' ) );
+		$this->assertSame( 0, sanitize_term_field( 'parent', '', $term['term_id'], $this->taxonomy, 'raw' ) );
 	}
 
 	/**

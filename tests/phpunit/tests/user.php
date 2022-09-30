@@ -54,8 +54,8 @@ class Tests_User extends WP_UnitTestCase {
 		self::$_author = get_user_by( 'ID', self::$author_id );
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->author = clone self::$_author;
 	}
@@ -81,8 +81,8 @@ class Tests_User extends WP_UnitTestCase {
 			}
 		}
 
-		// make sure every user we created was returned
-		$this->assertEqualSets( $nusers, $found );
+		// Make sure every user we created was returned.
+		$this->assertSameSets( $nusers, $found );
 	}
 
 	// simple get/set tests for user_option functions
@@ -95,12 +95,12 @@ class Tests_User extends WP_UnitTestCase {
 
 		// set and get
 		update_user_option( self::$author_id, $key, $val );
-		$this->assertEquals( $val, get_user_option( $key, self::$author_id ) );
+		$this->assertSame( $val, get_user_option( $key, self::$author_id ) );
 
 		// Change and get again.
 		$val2 = 'baz';
 		update_user_option( self::$author_id, $key, $val2 );
-		$this->assertEquals( $val2, get_user_option( $key, self::$author_id ) );
+		$this->assertSame( $val2, get_user_option( $key, self::$author_id ) );
 	}
 
 	// simple tests for usermeta functions
@@ -108,32 +108,30 @@ class Tests_User extends WP_UnitTestCase {
 		$key = 'key';
 		$val = 'value1';
 
-		// get a meta key that doesn't exist
-		$this->assertEquals( '', get_user_meta( self::$author_id, $key, true ) );
+		// Get a meta key that doesn't exist.
+		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
 
 		// set and get
 		update_user_meta( self::$author_id, $key, $val );
-		$this->assertEquals( $val, get_user_meta( self::$author_id, $key, true ) );
+		$this->assertSame( $val, get_user_meta( self::$author_id, $key, true ) );
 
 		// change and get again
 		$val2 = 'value2';
 		update_user_meta( self::$author_id, $key, $val2 );
-		$this->assertEquals( $val2, get_user_meta( self::$author_id, $key, true ) );
+		$this->assertSame( $val2, get_user_meta( self::$author_id, $key, true ) );
 
 		// delete and get
 		delete_user_meta( self::$author_id, $key );
-		$this->assertEquals( '', get_user_meta( self::$author_id, $key, true ) );
+		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
 
 		// delete by key AND value
 		update_user_meta( self::$author_id, $key, $val );
-
-		// Incorrect key: key still exists.
-		delete_user_meta( self::$author_id, $key, 'foo' );
+		// incorrect key: key still exists
+		delete_user_meta( self::$author_id, $key, rand_str() );
 		$this->assertSame( $val, get_user_meta( self::$author_id, $key, true ) );
-
 		// Correct key: deleted.
 		delete_user_meta( self::$author_id, $key, $val );
-		$this->assertEquals( '', get_user_meta( self::$author_id, $key, true ) );
+		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
 
 	}
 
@@ -187,11 +185,11 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertFalse( isset( $user->fooooooooo ) );
 
 		$user->$key = 'foo';
-		$this->assertEquals( 'foo', $user->$key );
-		$this->assertEquals( 'foo', $user->data->$key );  // This will fail with WP < 3.3
+		$this->assertSame( 'foo', $user->$key );
+		$this->assertSame( 'foo', $user->data->$key );  // This will fail with WP < 3.3.
 
 		foreach ( get_object_vars( $user ) as $key => $value ) {
-			$this->assertEquals( $value, $user->$key );
+			$this->assertSame( $value, $user->$key );
 		}
 	}
 
@@ -201,14 +199,16 @@ class Tests_User extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/20043
 	 */
 	public function test_user_unset() {
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
 		$user = new WP_User( self::$author_id );
 
 		// Test custom fields
 		$user->customField = 123;
-		$this->assertEquals( $user->customField, 123 );
+		$this->assertSame( $user->customField, 123 );
 		unset( $user->customField );
 		$this->assertFalse( isset( $user->customField ) );
 		return $user;
+		// phpcs:enable
 	}
 
 	/**
@@ -243,7 +243,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$this->assertTrue( isset( $user->foo ) );
 
-		$this->assertEquals( 'foo', $user->foo );
+		$this->assertSame( 'foo', $user->foo );
 	}
 
 	/**
@@ -253,9 +253,9 @@ class Tests_User extends WP_UnitTestCase {
 		$user = new WP_User( self::$author_id );
 
 		$this->assertTrue( isset( $user->id ) );
-		$this->assertEquals( $user->ID, $user->id );
+		$this->assertSame( $user->ID, $user->id );
 		$user->id = 1234;
-		$this->assertEquals( $user->ID, $user->id );
+		$this->assertSame( $user->ID, $user->id );
 	}
 
 	/**
@@ -281,51 +281,51 @@ class Tests_User extends WP_UnitTestCase {
 	public function test_construction() {
 		$user = new WP_User( self::$author_id );
 		$this->assertInstanceOf( 'WP_User', $user );
-		$this->assertEquals( self::$author_id, $user->ID );
+		$this->assertSame( self::$author_id, $user->ID );
 
 		$user2 = new WP_User( 0, $user->user_login );
 		$this->assertInstanceOf( 'WP_User', $user2 );
-		$this->assertEquals( self::$author_id, $user2->ID );
-		$this->assertEquals( $user->user_login, $user2->user_login );
+		$this->assertSame( self::$author_id, $user2->ID );
+		$this->assertSame( $user->user_login, $user2->user_login );
 
 		$user3 = new WP_User();
 		$this->assertInstanceOf( 'WP_User', $user3 );
-		$this->assertEquals( 0, $user3->ID );
+		$this->assertSame( 0, $user3->ID );
 		$this->assertFalse( isset( $user3->user_login ) );
 
 		$user3->init( $user->data );
-		$this->assertEquals( self::$author_id, $user3->ID );
+		$this->assertSame( self::$author_id, $user3->ID );
 
 		$user4 = new WP_User( $user->user_login );
 		$this->assertInstanceOf( 'WP_User', $user4 );
-		$this->assertEquals( self::$author_id, $user4->ID );
-		$this->assertEquals( $user->user_login, $user4->user_login );
+		$this->assertSame( self::$author_id, $user4->ID );
+		$this->assertSame( $user->user_login, $user4->user_login );
 
 		$user5 = new WP_User( null, $user->user_login );
 		$this->assertInstanceOf( 'WP_User', $user5 );
-		$this->assertEquals( self::$author_id, $user5->ID );
-		$this->assertEquals( $user->user_login, $user5->user_login );
+		$this->assertSame( self::$author_id, $user5->ID );
+		$this->assertSame( $user->user_login, $user5->user_login );
 
 		$user6 = new WP_User( $user );
 		$this->assertInstanceOf( 'WP_User', $user6 );
-		$this->assertEquals( self::$author_id, $user6->ID );
-		$this->assertEquals( $user->user_login, $user6->user_login );
+		$this->assertSame( self::$author_id, $user6->ID );
+		$this->assertSame( $user->user_login, $user6->user_login );
 
 		$user7 = new WP_User( $user->data );
 		$this->assertInstanceOf( 'WP_User', $user7 );
-		$this->assertEquals( self::$author_id, $user7->ID );
-		$this->assertEquals( $user->user_login, $user7->user_login );
+		$this->assertSame( self::$author_id, $user7->ID );
+		$this->assertSame( $user->user_login, $user7->user_login );
 	}
 
 	public function test_get() {
 		$user = new WP_User( self::$author_id );
-		$this->assertEquals( 'author_login', $user->get( 'user_login' ) );
-		$this->assertEquals( 'author@email.com', $user->get( 'user_email' ) );
+		$this->assertSame( 'author_login', $user->get( 'user_login' ) );
+		$this->assertSame( 'author@email.com', $user->get( 'user_email' ) );
 		$this->assertEquals( 0, $user->get( 'use_ssl' ) );
-		$this->assertEquals( '', $user->get( 'field_that_does_not_exist' ) );
+		$this->assertSame( '', $user->get( 'field_that_does_not_exist' ) );
 
 		update_user_meta( self::$author_id, 'dashed-key', 'abcdefg' );
-		$this->assertEquals( 'abcdefg', $user->get( 'dashed-key' ) );
+		$this->assertSame( 'abcdefg', $user->get( 'dashed-key' ) );
 	}
 
 	public function test_has_prop() {
@@ -342,7 +342,7 @@ class Tests_User extends WP_UnitTestCase {
 		$user = new WP_User( self::$author_id );
 
 		update_user_meta( self::$author_id, 'description', 'about me' );
-		$this->assertEquals( 'about me', $user->get( 'description' ) );
+		$this->assertSame( 'about me', $user->get( 'description' ) );
 
 		$user_data = array(
 			'ID'           => self::$author_id,
@@ -351,10 +351,10 @@ class Tests_User extends WP_UnitTestCase {
 		wp_update_user( $user_data );
 
 		$user = new WP_User( self::$author_id );
-		$this->assertEquals( 'test user', $user->get( 'display_name' ) );
+		$this->assertSame( 'test user', $user->get( 'display_name' ) );
 
-		// Make sure there is no collateral damage to fields not in $user_data
-		$this->assertEquals( 'about me', $user->get( 'description' ) );
+		// Make sure there is no collateral damage to fields not in $user_data.
+		$this->assertSame( 'about me', $user->get( 'description' ) );
 
 		// Pass as stdClass
 		$user_data = array(
@@ -364,12 +364,12 @@ class Tests_User extends WP_UnitTestCase {
 		wp_update_user( (object) $user_data );
 
 		$user = new WP_User( self::$author_id );
-		$this->assertEquals( 'a test user', $user->get( 'display_name' ) );
+		$this->assertSame( 'a test user', $user->get( 'display_name' ) );
 
 		$user->display_name = 'some test user';
 		wp_update_user( $user );
 
-		$this->assertEquals( 'some test user', $user->get( 'display_name' ) );
+		$this->assertSame( 'some test user', $user->get( 'display_name' ) );
 
 		// Test update of fields in _get_additional_user_keys()
 		$user_data = array(
@@ -403,7 +403,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $userdata );
 		$this->assertInstanceOf( 'WP_User', $userdata );
-		$this->assertEquals( $userdata->ID, self::$sub_id );
+		$this->assertSame( $userdata->ID, self::$sub_id );
 		$prefix  = $wpdb->get_blog_prefix();
 		$cap_key = $prefix . 'capabilities';
 		$this->assertTrue( isset( $userdata->$cap_key ) );
@@ -455,7 +455,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $authordata );
 		$this->assertInstanceOf( 'WP_User', $authordata );
-		$this->assertEquals( $authordata->ID, self::$author_id );
+		$this->assertSame( $authordata->ID, self::$author_id );
 
 		if ( $old_post_id ) {
 			setup_postdata( get_post( $old_post_id ) );
@@ -479,25 +479,25 @@ class Tests_User extends WP_UnitTestCase {
 
 		// @see https://core.trac.wordpress.org/ticket/23480
 		$user1 = WP_User::get_data_by( 'id', -1 );
-		$this->assertEquals( false, $user1 );
+		$this->assertFalse( $user1 );
 
 		$user2 = WP_User::get_data_by( 'id', 0 );
-		$this->assertEquals( false, $user2 );
+		$this->assertFalse( $user2 );
 
 		$user3 = WP_User::get_data_by( 'id', null );
-		$this->assertEquals( false, $user3 );
+		$this->assertFalse( $user3 );
 
 		$user4 = WP_User::get_data_by( 'id', '' );
-		$this->assertEquals( false, $user4 );
+		$this->assertFalse( $user4 );
 
 		$user5 = WP_User::get_data_by( 'id', false );
-		$this->assertEquals( false, $user5 );
+		$this->assertFalse( $user5 );
 
 		$user6 = WP_User::get_data_by( 'id', $user->user_nicename );
-		$this->assertEquals( false, $user6 );
+		$this->assertFalse( $user6 );
 
 		$user7 = WP_User::get_data_by( 'id', 99999 );
-		$this->assertEquals( false, $user7 );
+		$this->assertFalse( $user7 );
 	}
 
 	/**
@@ -566,7 +566,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		// Reload the data
 		$pwd_after = get_userdata( $testuserid )->user_pass;
-		$this->assertEquals( $pwd_before, $pwd_after );
+		$this->assertSame( $pwd_before, $pwd_after );
 	}
 
 	/**
@@ -580,7 +580,7 @@ class Tests_User extends WP_UnitTestCase {
 				'user_email' => 'taco@burrito.com',
 			)
 		);
-		$this->assertEquals( $id1, email_exists( 'taco@burrito.com' ) );
+		$this->assertSame( $id1, email_exists( 'taco@burrito.com' ) );
 
 		$id2 = wp_insert_user(
 			array(
@@ -611,7 +611,7 @@ class Tests_User extends WP_UnitTestCase {
 				'user_email' => 'blackburn@battlefield4.com',
 			)
 		);
-		$this->assertEquals( $id1, email_exists( 'blackburn@battlefield4.com' ) );
+		$this->assertSame( $id1, email_exists( 'blackburn@battlefield4.com' ) );
 
 		$id2 = wp_insert_user(
 			array(
@@ -620,7 +620,7 @@ class Tests_User extends WP_UnitTestCase {
 				'user_email' => 'miller@battlefield4.com',
 			)
 		);
-		$this->assertEquals( $id2, email_exists( 'miller@battlefield4.com' ) );
+		$this->assertSame( $id2, email_exists( 'miller@battlefield4.com' ) );
 
 		if ( ! is_wp_error( $id2 ) ) {
 			wp_update_user(
@@ -629,7 +629,7 @@ class Tests_User extends WP_UnitTestCase {
 					'user_email' => 'david@battlefield4.com',
 				)
 			);
-			$this->assertEquals( $id2, email_exists( 'david@battlefield4.com' ) );
+			$this->assertSame( $id2, email_exists( 'david@battlefield4.com' ) );
 
 			$return = wp_update_user(
 				array(
@@ -659,7 +659,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$response = wp_insert_user( $user_data );
 		$this->assertInstanceOf( 'WP_Error', $response );
-		$this->assertEquals( 'invalid_username', $response->get_error_code() );
+		$this->assertSame( 'invalid_username', $response->get_error_code() );
 
 		remove_filter( 'illegal_user_logins', array( $this, '_illegal_user_logins' ) );
 
@@ -679,7 +679,7 @@ class Tests_User extends WP_UnitTestCase {
 
 		$response = register_new_user( $user_login, $user_email );
 		$this->assertInstanceOf( 'WP_Error', $response );
-		$this->assertEquals( 'invalid_username', $response->get_error_code() );
+		$this->assertSame( 'invalid_username', $response->get_error_code() );
 
 		remove_filter( 'illegal_user_logins', array( $this, '_illegal_user_logins' ) );
 
@@ -702,13 +702,13 @@ class Tests_User extends WP_UnitTestCase {
 
 		$response = wpmu_validate_user_signup( $user_data['user_login'], $user_data['user_email'] );
 		$this->assertInstanceOf( 'WP_Error', $response['errors'] );
-		$this->assertEquals( 'user_name', $response['errors']->get_error_code() );
+		$this->assertSame( 'user_name', $response['errors']->get_error_code() );
 
 		remove_filter( 'illegal_user_logins', array( $this, '_illegal_user_logins' ) );
 
 		$response = wpmu_validate_user_signup( $user_data['user_login'], $user_data['user_email'] );
 		$this->assertInstanceOf( 'WP_Error', $response['errors'] );
-		$this->assertEquals( 0, count( $response['errors']->get_error_codes() ) );
+		$this->assertSame( 0, count( $response['errors']->get_error_codes() ) );
 	}
 
 	function _illegal_user_logins_data() {
@@ -771,7 +771,7 @@ class Tests_User extends WP_UnitTestCase {
 		);
 
 		$user_id = wp_insert_user( $user_details );
-		$this->assertEquals( $user_id, email_exists( $user_details['user_email'] ) );
+		$this->assertSame( $user_id, email_exists( $user_details['user_email'] ) );
 
 		// Check that providing an empty password doesn't remove a user's password.
 		$user_details['ID']        = $user_id;
@@ -811,7 +811,7 @@ class Tests_User extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertInternalType( 'int', $u );
+		$this->assertIsInt( $u );
 		$this->assertGreaterThan( 0, $u );
 
 		$user = new WP_User( $u );
@@ -985,7 +985,7 @@ class Tests_User extends WP_UnitTestCase {
 		clean_user_cache( $user );
 
 		$user = get_userdata( $user->ID );
-		$this->assertEquals( 'key', $user->user_activation_key );
+		$this->assertSame( 'key', $user->user_activation_key );
 
 		// Check that changing something other than the email doesn't remove the key.
 		$userdata = array(
@@ -995,7 +995,7 @@ class Tests_User extends WP_UnitTestCase {
 		wp_update_user( $userdata );
 
 		$user = get_userdata( $user->ID );
-		$this->assertEquals( 'key', $user->user_activation_key );
+		$this->assertSame( 'key', $user->user_activation_key );
 
 		// Now check that changing the email does remove it.
 		$userdata = array(
@@ -1017,7 +1017,7 @@ class Tests_User extends WP_UnitTestCase {
 		clean_user_cache( $user );
 
 		$user = get_userdata( $user->ID );
-		$this->assertEquals( 'key', $user->user_activation_key );
+		$this->assertSame( 'key', $user->user_activation_key );
 
 		$userdata = array(
 			'ID'        => $user->ID,
@@ -1095,7 +1095,7 @@ class Tests_User extends WP_UnitTestCase {
 		);
 		$update   = wp_update_user( $userdata );
 
-		$this->assertEquals( self::$editor_id, $update );
+		$this->assertSame( self::$editor_id, $update );
 	}
 
 	/**
@@ -1110,11 +1110,11 @@ class Tests_User extends WP_UnitTestCase {
 		$update   = wp_update_user( $userdata );
 
 		// Was this successful?
-		$this->assertEquals( self::$editor_id, $update );
+		$this->assertSame( self::$editor_id, $update );
 
 		// Verify that the email address has been updated.
 		$user = get_userdata( self::$editor_id );
-		$this->assertEquals( $user->user_email, 'test2@test.com' );
+		$this->assertSame( $user->user_email, 'test2@test.com' );
 	}
 
 	/**
@@ -1269,9 +1269,9 @@ class Tests_User extends WP_UnitTestCase {
 		// Assert reciepient is correct
 		$this->assertSame( $new_email, $recipient->address, 'Admin email change notification recipient not as expected' );
 
-		// Assert that HTML entites have been decode in body and subject
-		$this->assertContains( '\'Test\' blog\'s "name" has <html entities> &', $email->subject, 'Email subject does not contain the decoded HTML entities' );
-		$this->assertNotContains( '&#039;Test&#039; blog&#039;s &quot;name&quot; has &lt;html entities&gt; &amp;', $email->subject, $email->subject, 'Email subject does contains HTML entities' );
+		// Assert that HTML entites have been decode in body and subject.
+		$this->assertStringContainsString( '\'Test\' blog\'s "name" has <html entities> &', $email->subject, 'Email subject does not contain the decoded HTML entities' );
+		$this->assertStringNotContainsString( '&#039;Test&#039; blog&#039;s &quot;name&quot; has &lt;html entities&gt; &amp;', $email->subject, $email->subject, 'Email subject does contains HTML entities' );
 	}
 
 	/**
@@ -1401,7 +1401,7 @@ class Tests_User extends WP_UnitTestCase {
 		$response = edit_user();
 
 		$this->assertInstanceOf( 'WP_Error', $response );
-		$this->assertEquals( 'pass', $response->get_error_code() );
+		$this->assertSame( 'pass', $response->get_error_code() );
 
 		// Check new user with password set.
 		$_POST['pass1'] = $_POST['pass2'] = 'password';
@@ -1409,9 +1409,9 @@ class Tests_User extends WP_UnitTestCase {
 		$user_id = edit_user();
 		$user    = get_user_by( 'ID', $user_id );
 
-		$this->assertInternalType( 'int', $user_id );
+		$this->assertIsInt( $user_id );
 		$this->assertInstanceOf( 'WP_User', $user );
-		$this->assertEquals( 'nickname1', $user->nickname );
+		$this->assertSame( 'nickname1', $user->nickname );
 
 		// Check updating user with empty password.
 		$_POST['nickname'] = 'nickname_updated';
@@ -1419,8 +1419,8 @@ class Tests_User extends WP_UnitTestCase {
 
 		$user_id = edit_user( $user_id );
 
-		$this->assertInternalType( 'int', $user_id );
-		$this->assertEquals( 'nickname_updated', $user->nickname );
+		$this->assertIsInt( $user_id );
+		$this->assertSame( 'nickname_updated', $user->nickname );
 
 		// Check updating user with missing second password.
 		$_POST['nickname'] = 'nickname_updated2';
@@ -1430,22 +1430,22 @@ class Tests_User extends WP_UnitTestCase {
 		$response = edit_user( $user_id );
 
 		$this->assertInstanceOf( 'WP_Error', $response );
-		$this->assertEquals( 'pass', $response->get_error_code() );
-		$this->assertEquals( 'nickname_updated', $user->nickname );
+		$this->assertSame( 'pass', $response->get_error_code() );
+		$this->assertSame( 'nickname_updated', $user->nickname );
 
 		// Check updating user with empty password via `check_passwords` action.
-		add_action( 'check_passwords', array( $this, 'action_check_passwords_blank_pw' ), 10, 2 );
+		add_action( 'check_passwords', array( $this, 'action_check_passwords_blank_password' ), 10, 2 );
 		$user_id = edit_user( $user_id );
-		remove_action( 'check_passwords', array( $this, 'action_check_passwords_blank_pw' ) );
+		remove_action( 'check_passwords', array( $this, 'action_check_passwords_blank_password' ) );
 
-		$this->assertInternalType( 'int', $user_id );
-		$this->assertEquals( 'nickname_updated2', $user->nickname );
+		$this->assertIsInt( $user_id );
+		$this->assertSame( 'nickname_updated2', $user->nickname );
 	}
 
 	/**
-	 * Check passwords action for test_edit_user_blank_pw().
+	 * Check passwords action for test_edit_user_blank_password().
 	 */
-	function action_check_passwords_blank_pw( $user_login, &$pass1 ) {
+	function action_check_passwords_blank_password( $user_login, &$pass1 ) {
 		$pass1 = '';
 	}
 
@@ -1478,10 +1478,10 @@ class Tests_User extends WP_UnitTestCase {
 
 		// The new email address gets put into user_meta.
 		$new_email_meta = get_user_meta( $user->ID, '_new_email', true );
-		$this->assertEquals( 'after@example.com', $new_email_meta['newemail'] );
+		$this->assertSame( 'after@example.com', $new_email_meta['newemail'] );
 
 		// The email address of the user doesn't change. $_POST['email'] should be the email address pre-update.
-		$this->assertEquals( $_POST['email'], $user->user_email );
+		$this->assertSame( $_POST['email'], $user->user_email );
 	}
 
 	/**
@@ -1518,7 +1518,7 @@ class Tests_User extends WP_UnitTestCase {
 		$this->assertEmpty( $new_email_meta );
 
 		// $_POST['email'] should be the email address posted from the form.
-		$this->assertEquals( $_POST['email'], 'after@example.com' );
+		$this->assertSame( $_POST['email'], 'after@example.com' );
 	}
 
 	/**
@@ -1555,9 +1555,9 @@ class Tests_User extends WP_UnitTestCase {
 		// Assert recipient is correct
 		$this->assertSame( 'new-email@test.dev', $recipient->address, 'User email change confirmation recipient not as expected' );
 
-		// Assert that HTML entites have been decoded in body and subject
-		$this->assertContains( '\'Test\' blog\'s "name" has <html entities> &', $email->subject, 'Email subject does not contain the decoded HTML entities' );
-		$this->assertNotContains( '&#039;Test&#039; blog&#039;s &quot;name&quot; has &lt;html entities&gt; &amp;', $email->subject, 'Email subject does contains HTML entities' );
+		// Assert that HTML entites have been decoded in body and subject.
+		$this->assertStringContainsString( '\'Test\' blog\'s "name" has <html entities> &', $email->subject, 'Email subject does not contain the decoded HTML entities' );
+		$this->assertStringNotContainsString( '&#039;Test&#039; blog&#039;s &quot;name&quot; has &lt;html entities&gt; &amp;', $email->subject, 'Email subject does contains HTML entities' );
 	}
 
 	/**

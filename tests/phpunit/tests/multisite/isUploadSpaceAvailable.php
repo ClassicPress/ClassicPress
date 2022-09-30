@@ -16,22 +16,22 @@ if ( is_multisite() ) :
 		protected static $original_site_blog_upload_space;
 		protected static $original_blog_upload_space;
 
-		public static function setUpBeforeClass() {
-			parent::setUpBeforeClass();
+		public static function set_up_before_class() {
+			parent::set_up_before_class();
 
 			self::$original_site_blog_upload_space = get_site_option( 'blog_upload_space' );
 			self::$original_blog_upload_space      = get_option( 'blog_upload_space' );
 		}
 
-		public function setUp() {
+		public function set_up() {
 			global $wpdb;
-			parent::setUp();
+			parent::set_up();
 			$this->suppress = $wpdb->suppress_errors();
 
 			update_site_option( 'upload_space_check_disabled', false );
 		}
 
-		public function tearDown() {
+		public function tear_down() {
 			global $wpdb;
 
 			/**
@@ -42,7 +42,7 @@ if ( is_multisite() ) :
 			update_option( 'blog_upload_space', self::$original_blog_upload_space );
 
 			$wpdb->suppress_errors( $this->suppress );
-			parent::tearDown();
+			parent::tear_down();
 		}
 
 		/**

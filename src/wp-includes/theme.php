@@ -986,7 +986,12 @@ function get_theme_mod( $name, $default = false ) {
 	}
 
 	if ( is_string( $default ) ) {
-		$default = sprintf( $default, get_template_directory_uri(), get_stylesheet_directory_uri() );
+		// Only run the replacement if an sprintf() string format pattern was found.
+		if ( preg_match( '#(?<!%)%(?:\d+\$?)?s#', $default ) ) {
+			// Remove a single trailing percent sign.
+			$default = preg_replace( '#(?<!%)%$#', '', $default );
+			$default = sprintf( $default, get_template_directory_uri(), get_stylesheet_directory_uri() );
+		}
 	}
 
 	/** This filter is documented in wp-includes/theme.php */

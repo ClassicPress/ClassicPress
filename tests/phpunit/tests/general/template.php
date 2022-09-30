@@ -16,13 +16,13 @@ class Tests_General_Template extends WP_UnitTestCase {
 	public $custom_logo_id;
 	public $custom_logo_url;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->wp_site_icon = new WP_Site_Icon();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		global $wp_customize;
 		$this->_remove_custom_logo();
 		$this->_remove_site_icon();
@@ -30,7 +30,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		remove_all_filters( 'login_headerurl' );
 		remove_all_filters( 'login_headertitle' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$this->assertEmpty( get_site_icon_url() );
 
 		$this->_set_site_icon();
-		$this->assertEquals( $this->site_icon_url, get_site_icon_url() );
+		$this->assertSame( $this->site_icon_url, get_site_icon_url() );
 
 		$this->_remove_site_icon();
 		$this->assertEmpty( get_site_icon_url() );
@@ -233,7 +233,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
 
-		$upload              = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload              = wp_upload_bits( wp_basename( $filename ), null, $contents );
 		$this->site_icon_url = $upload['url'];
 
 		// Save the data
@@ -292,7 +292,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		$this->_set_custom_logo();
 		$custom_logo = get_custom_logo();
 		$this->assertNotEmpty( $custom_logo );
-		$this->assertInternalType( 'string', $custom_logo );
+		$this->assertIsString( $custom_logo );
 
 		$this->_remove_custom_logo();
 		$this->assertEmpty( get_custom_logo() );
@@ -325,7 +325,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 		restore_current_blog();
 
 		$expected_custom_logo = '<a href="' . $home_url . '" class="custom-logo-link" rel="home" itemprop="url">' . $image . '</a>';
-		$this->assertEquals( $expected_custom_logo, get_custom_logo( $blog_id ) );
+		$this->assertSame( $expected_custom_logo, get_custom_logo( $blog_id ) );
 	}
 
 	/**
@@ -411,7 +411,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	function _insert_custom_logo() {
 		$filename = DIR_TESTDATA . '/images/test-image.jpg';
 		$contents = file_get_contents( $filename );
-		$upload   = wp_upload_bits( basename( $filename ), null, $contents );
+		$upload   = wp_upload_bits( wp_basename( $filename ), null, $contents );
 
 		// Save the data.
 		$this->custom_logo_url = $upload['url'];
