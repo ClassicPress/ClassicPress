@@ -17,9 +17,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * Make sure the upgrade code is loaded before the tests are run.
 	 */
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	}
@@ -27,7 +27,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * Create a custom table to be used in each test.
 	 */
-	public function setUp() {
+	public function set_up() {
 
 		global $wpdb;
 
@@ -47,17 +47,19 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		parent::setUp();
+		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
+		// causes it to create a temporary table, and a temporary table cannot use a FULLTEXT index.
+		parent::set_up();
 	}
 
 	/**
 	 * Delete the custom table on teardown.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 
 		global $wpdb;
 
-		parent::tearDown();
+		parent::tear_down();
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dbdelta_test" );
 	}
@@ -84,9 +86,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"{$wpdb->prefix}dbdelta_create_test" => "Created table {$wpdb->prefix}dbdelta_create_test",
 		);
 
-		$this->assertEquals( $expected, $updates );
+		$this->assertSame( $expected, $updates );
 
-		$this->assertEquals(
+		$this->assertSame(
 			"{$wpdb->prefix}dbdelta_create_test",
 			$wpdb->get_var(
 				$wpdb->prepare(
@@ -118,7 +120,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 	}
 
 	/**
@@ -141,7 +143,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.id"
 					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint(20) to int(11)",
@@ -170,7 +172,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
@@ -203,7 +205,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 
 		$this->assertTableHasColumn( 'column_1', $wpdb->prefix . 'dbdelta_test' );
 	}
@@ -230,7 +232,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			false // Don't execute.
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
@@ -251,7 +253,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"INSERT INTO {$wpdb->prefix}dbdelta_test (column_1) VALUES ('wcphilly2015')"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(),
 			$insert
 		);

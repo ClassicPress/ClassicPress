@@ -23,8 +23,8 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	 *
 	 * @since WP-5.3.0
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		add_filter( 'pre_http_request', array( $this, 'fake_http_request' ), 10, 3 );
 	}
 
@@ -33,9 +33,9 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	 *
 	 * @since WP-5.3.0
 	 */
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		remove_filter( 'pre_http_request', array( $this, 'fake_http_request' ) );
+		parent::tear_down();
 	}
 
 	/**

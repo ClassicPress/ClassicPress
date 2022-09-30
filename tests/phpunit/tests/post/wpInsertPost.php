@@ -4,7 +4,6 @@
  * @group post
  */
 class Tests_WPInsertPost extends WP_UnitTestCase {
-
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/11863
 	 */
@@ -17,7 +16,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 			)
 		);
 		wp_trash_post( $trashed_about_page_id );
-		$this->assertEquals( 'about__trashed', get_post( $trashed_about_page_id )->post_name );
+		$this->assertSame( 'about__trashed', get_post( $trashed_about_page_id )->post_name );
 	}
 
 	/**
@@ -33,7 +32,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 			)
 		);
 		wp_trash_post( $trashed_about_page_id );
-		$this->assertEquals( 'foo__trashed__foo__trashed', get_post( $trashed_about_page_id )->post_name );
+		$this->assertSame( 'foo__trashed__foo__trashed', get_post( $trashed_about_page_id )->post_name );
 	}
 
 	/**
@@ -50,7 +49,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 		wp_trash_post( $about_page_id );
 
 		wp_untrash_post( $about_page_id );
-		$this->assertEquals( 'about', get_post( $about_page_id )->post_name );
+		$this->assertSame( 'about', get_post( $about_page_id )->post_name );
 	}
 
 	/**
@@ -73,8 +72,8 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 'about__trashed', get_post( $trashed_about_page_id )->post_name );
-		$this->assertEquals( 'about', get_post( $about_page_id )->post_name );
+		$this->assertSame( 'about__trashed', get_post( $trashed_about_page_id )->post_name );
+		$this->assertSame( 'about', get_post( $about_page_id )->post_name );
 	}
 
 	/**
@@ -100,7 +99,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 
 		wp_untrash_post( $about_page_id );
 
-		$this->assertEquals( 'about', get_post( $another_about_page_id )->post_name );
-		$this->assertEquals( 'about-2', get_post( $about_page_id )->post_name );
+		$this->assertSame( 'about', get_post( $another_about_page_id )->post_name );
+		$this->assertSame( 'about-2', get_post( $about_page_id )->post_name );
 	}
 }

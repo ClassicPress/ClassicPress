@@ -117,7 +117,9 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 		'get-post-thumbnail-html',
 	);
 
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
+		parent::set_up_before_class();
+
 		remove_action( 'admin_init', '_maybe_update_core' );
 		remove_action( 'admin_init', '_maybe_update_plugins' );
 		remove_action( 'admin_init', '_maybe_update_themes' );
@@ -128,16 +130,14 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 				add_action( 'wp_ajax_' . $action, 'wp_ajax_' . str_replace( '-', '_', $action ), 1 );
 			}
 		}
-
-		parent::setUpBeforeClass();
 	}
 
 	/**
 	 * Set up the test fixture.
 	 * Override wp_die(), pretend to be ajax, and suppress E_WARNINGs
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'wp_doing_ajax', '__return_true' );
 		add_filter( 'wp_die_ajax_handler', array( $this, 'getDieHandler' ), 1, 1 );
@@ -156,8 +156,7 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 	 * Tear down the test fixture.
 	 * Reset $_POST, remove the wp_die() override, restore error reporting
 	 */
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		$_POST = array();
 		$_GET  = array();
 		unset( $GLOBALS['post'] );
@@ -166,6 +165,7 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 		remove_action( 'clear_auth_cookie', array( $this, 'logout' ) );
 		error_reporting( $this->_error_level );
 		set_current_screen( 'front' );
+		parent::tear_down();
 	}
 
 	/**

@@ -11,19 +11,19 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'test_option', $registered );
 
 		$args = $registered['test_option'];
-		$this->assertEquals( 'test_group', $args['group'] );
+		$this->assertSame( 'test_group', $args['group'] );
 
 		// Check defaults.
-		$this->assertEquals( 'string', $args['type'] );
-		$this->assertEquals( false, $args['show_in_rest'] );
-		$this->assertEquals( '', $args['description'] );
+		$this->assertSame( 'string', $args['type'] );
+		$this->assertFalse( $args['show_in_rest'] );
+		$this->assertSame( '', $args['description'] );
 	}
 
 	public function test_register_with_callback() {
 		register_setting( 'test_group', 'test_option', array( $this, 'filter_registered_setting' ) );
 
 		$filtered = apply_filters( 'sanitize_option_test_option', 'smart', 'test_option', 'smart' );
-		$this->assertEquals( 'S-M-R-T', $filtered );
+		$this->assertSame( 'S-M-R-T', $filtered );
 	}
 
 	public function test_register_with_array() {
@@ -36,7 +36,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 		);
 
 		$filtered = apply_filters( 'sanitize_option_test_option', 'smart', 'test_option', 'smart' );
-		$this->assertEquals( 'S-M-R-T', $filtered );
+		$this->assertSame( 'S-M-R-T', $filtered );
 	}
 
 	public function filter_registered_setting() {
@@ -55,7 +55,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 'Fuck Cancer', get_option( 'test_default' ) );
+		$this->assertSame( 'Fuck Cancer', get_option( 'test_default' ) );
 	}
 
 	/**
@@ -70,7 +70,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 'Fuck Leukemia', get_option( 'test_default', 'Fuck Leukemia' ) );
+		$this->assertSame( 'Fuck Leukemia', get_option( 'test_default', 'Fuck Leukemia' ) );
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Tests_Option_Registration extends WP_UnitTestCase {
 		);
 		wp_cache_delete( 'notoptions', 'options' );
 		$this->assertTrue( add_option( 'test_default', 'hello' ) );
-		$this->assertEquals( 'hello', get_option( 'test_default' ) );
+		$this->assertSame( 'hello', get_option( 'test_default' ) );
 	}
 
 	/**

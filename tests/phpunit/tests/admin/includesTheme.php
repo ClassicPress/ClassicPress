@@ -4,8 +4,8 @@
  */
 class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->theme_root = DIR_TESTDATA . '/themedir1';
 
 		$this->orig_theme_dir            = $GLOBALS['wp_theme_directories'];
@@ -20,7 +20,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 		unset( $GLOBALS['wp_themes'] );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
 		remove_filter( 'theme_root', array( $this, '_theme_root' ) );
 		remove_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
@@ -28,7 +28,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	// replace the normal theme root dir with our premade test dir
@@ -48,7 +48,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		switch_theme( $theme['Template'], $theme['Stylesheet'] );
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level'                           => 'template-top-level.php',
 				'Sub Dir'                             => 'subdir/template-sub-dir.php',
@@ -62,7 +62,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		switch_theme( $theme['Template'], $theme['Stylesheet'] );
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level'                           => 'template-top-level.php',
 				'Sub Dir'                             => 'subdir/template-sub-dir.php',
@@ -81,21 +81,21 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		switch_theme( $theme['Template'], $theme['Stylesheet'] );
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level' => 'template-top-level-post-types.php',
 				'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
 			),
 			get_page_templates( null, 'foo' )
 		);
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level' => 'template-top-level-post-types.php',
 				'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
 			),
 			get_page_templates( null, 'post' )
 		);
-		$this->assertEquals( array(), get_page_templates( null, 'bar' ) );
+		$this->assertSame( array(), get_page_templates( null, 'bar' ) );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		switch_theme( $theme['Template'], $theme['Stylesheet'] );
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'No Trailing Period'            => '38766/no-trailing-period-post-types.php',
 				'Trailing Period.'              => '38766/trailing-period-post-types.php',
@@ -118,7 +118,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			),
 			get_page_templates( null, 'period' )
 		);
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'No Trailing Period'            => '38766/no-trailing-period-post-types.php',
 				'Trailing Period.'              => '38766/trailing-period-post-types.php',
@@ -139,7 +139,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		switch_theme( $theme['Template'], $theme['Stylesheet'] );
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level'                  => 'template-top-level-post-types.php',
 				'Sub Dir'                    => 'subdir/template-sub-dir-post-types.php',
@@ -149,7 +149,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			get_page_templates( null, 'foo' )
 		);
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level' => 'template-top-level-post-types.php',
 				'Sub Dir'   => 'subdir/template-sub-dir-post-types.php',
@@ -157,7 +157,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			get_page_templates( null, 'post' )
 		);
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'Top Level'                           => 'template-top-level.php',
 				'Sub Dir'                             => 'subdir/template-sub-dir.php',
@@ -166,7 +166,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			get_page_templates()
 		);
 
-		$this->assertEquals( array(), get_page_templates( null, 'bar' ) );
+		$this->assertSame( array(), get_page_templates( null, 'bar' ) );
 	}
 
 	/**
@@ -182,15 +182,15 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 
 		$this->assertEqualSetsWithIndex(
 			array(
-				'template-top-level-post-types.php'       => 'Top Level',
-				'subdir/template-sub-dir-post-types.php'  => 'Sub Dir',
-				'template-top-level-post-types-child.php' => 'Top Level In A Child Theme',
+				'template-top-level-post-types.php'            => 'Top Level',
+				'subdir/template-sub-dir-post-types.php'       => 'Sub Dir',
+				'template-top-level-post-types-child.php'      => 'Top Level In A Child Theme',
 				'subdir/template-sub-dir-post-types-child.php' => 'Sub Dir In A Child Theme',
 			),
 			$post_templates['foo']
 		);
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'template-top-level-post-types.php'      => 'Top Level',
 				'subdir/template-sub-dir-post-types.php' => 'Sub Dir',
@@ -198,7 +198,7 @@ class Tests_Admin_includesTheme extends WP_UnitTestCase {
 			$post_templates['post']
 		);
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'template-top-level.php'      => 'Top Level',
 				'subdir/template-sub-dir.php' => 'Sub Dir',

@@ -35,7 +35,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 			}
 
 			$post = get_post( $id );
-			$this->assertEquals( $outputs[ $k ], urldecode( $post->post_name ) );
+			$this->assertSame( $outputs[ $k ], urldecode( $post->post_name ) );
 		}
 	}
 
@@ -55,11 +55,11 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		$args['post_type'] = 'post-type-2';
 		$two               = self::factory()->post->create( $args );
 
-		$this->assertEquals( 'some-slug', get_post( $one )->post_name );
-		$this->assertEquals( 'some-slug', get_post( $two )->post_name );
+		$this->assertSame( 'some-slug', get_post( $one )->post_name );
+		$this->assertSame( 'some-slug', get_post( $two )->post_name );
 
-		$this->assertEquals( 'some-other-slug', wp_unique_post_slug( 'some-other-slug', $one, 'publish', 'post-type-1', 0 ) );
-		$this->assertEquals( 'some-other-slug', wp_unique_post_slug( 'some-other-slug', $one, 'publish', 'post-type-2', 0 ) );
+		$this->assertSame( 'some-other-slug', wp_unique_post_slug( 'some-other-slug', $one, 'publish', 'post-type-1', 0 ) );
+		$this->assertSame( 'some-other-slug', wp_unique_post_slug( 'some-other-slug', $one, 'publish', 'post-type-2', 0 ) );
 
 		_unregister_post_type( 'post-type-1' );
 		_unregister_post_type( 'post-type-2' );
@@ -80,10 +80,10 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		$args['post_name'] = 'some-slug-2';
 		$two               = self::factory()->post->create( $args );
 
-		$this->assertEquals( 'some-slug', get_post( $one )->post_name );
-		$this->assertEquals( 'some-slug-2', get_post( $two )->post_name );
+		$this->assertSame( 'some-slug', get_post( $one )->post_name );
+		$this->assertSame( 'some-slug-2', get_post( $two )->post_name );
 
-		$this->assertEquals( 'some-slug-3', wp_unique_post_slug( 'some-slug', 0, 'publish', 'post-type-1', 0 ) );
+		$this->assertSame( 'some-slug-3', wp_unique_post_slug( 'some-slug', 0, 'publish', 'post-type-1', 0 ) );
 
 		_unregister_post_type( 'post-type-1' );
 	}
@@ -116,12 +116,12 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 		$two  = self::factory()->post->create( $args );
 
-		$this->assertEquals( 'some-slug', get_post( $one )->post_name );
-		$this->assertEquals( 'image', get_post( $attachment )->post_name );
-		$this->assertEquals( 'image-2', get_post( $two )->post_name );
+		$this->assertSame( 'some-slug', get_post( $one )->post_name );
+		$this->assertSame( 'image', get_post( $attachment )->post_name );
+		$this->assertSame( 'image-2', get_post( $two )->post_name );
 
-		// 'image' can be a child of image-2
-		$this->assertEquals( 'image', wp_unique_post_slug( 'image', 0, 'publish', 'post-type-1', $two ) );
+		// 'image' can be a child of image-2.
+		$this->assertSame( 'image', wp_unique_post_slug( 'image', 0, 'publish', 'post-type-1', $two ) );
 
 		_unregister_post_type( 'post-type-1' );
 	}
@@ -189,7 +189,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '2015', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '2015-2', $found );
+		$this->assertSame( '2015-2', $found );
 	}
 
 	/**
@@ -207,7 +207,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '2015', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '2015-2', $found );
+		$this->assertSame( '2015-2', $found );
 	}
 
 	/**
@@ -224,7 +224,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '2015', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '2015', $found );
+		$this->assertSame( '2015', $found );
 	}
 
 	/**
@@ -241,7 +241,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '11', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '11-2', $found );
+		$this->assertSame( '11-2', $found );
 	}
 
 	/**
@@ -258,7 +258,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '11', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '11', $found );
+		$this->assertSame( '11', $found );
 	}
 
 	/**
@@ -275,7 +275,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '13', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '13', $found );
+		$this->assertSame( '13', $found );
 	}
 
 	/**
@@ -292,7 +292,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '30', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '30-2', $found );
+		$this->assertSame( '30-2', $found );
 	}
 
 	/**
@@ -309,7 +309,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '30', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '30', $found );
+		$this->assertSame( '30', $found );
 	}
 
 	/**
@@ -326,7 +326,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 		);
 
 		$found = wp_unique_post_slug( '32', $p, 'publish', 'post', 0 );
-		$this->assertEquals( '32', $found );
+		$this->assertSame( '32', $found );
 	}
 
 	/**

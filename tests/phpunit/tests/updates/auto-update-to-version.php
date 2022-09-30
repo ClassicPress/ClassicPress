@@ -14,13 +14,13 @@ require_once ABSPATH . 'wp-admin/includes/class-core-upgrader.php';
  * Test the logic for whether automatic updates should be enabled.
  */
 class Tests_Auto_Update_To_Version extends WP_UnitTestCase {
-	public function tearDown() {
+	public function tear_down() {
 		remove_all_filters( 'allow_nightly_auto_core_updates' );
 		remove_all_filters( 'allow_dev_auto_core_updates' );
 		remove_all_filters( 'allow_major_auto_core_updates' );
 		remove_all_filters( 'allow_minor_auto_core_updates' );
 		remove_all_filters( 'allow_patch_auto_core_updates' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_parse_valid_versions() {
