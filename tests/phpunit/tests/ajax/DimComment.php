@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax comment functionality
@@ -24,9 +24,9 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
-		$post_id = self::factory()->post->create();
+	public function set_up() {
+		parent::set_up();
+		$post_id         = self::factory()->post->create();
 		$this->_comments = self::factory()->comment->create_post_comments( $post_id, 15 );
 		$this->_comments = array_map( 'get_comment', $this->_comments );
 	}
@@ -35,8 +35,8 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 	 * Clear the POST actions in between requests
 	 */
 	protected function _clear_post_action() {
-		unset($_POST['id']);
-		unset($_POST['new']);
+		unset( $_POST['id'] );
+		unset( $_POST['new'] );
 		$this->_last_response = '';
 	}
 
@@ -67,7 +67,7 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 		$_POST['_url']        = admin_url( 'edit-comments.php' );
 
 		// Save the comment status
-		$prev_status          = wp_get_comment_status( $comment->comment_ID );
+		$prev_status = wp_get_comment_status( $comment->comment_ID );
 
 		// Make the request
 		try {
@@ -79,29 +79,29 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Ensure everything is correct
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
-		$this->assertEquals( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
+		// Ensure everything is correct.
+		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
+		$this->assertSame( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
 		$this->assertGreaterThanOrEqual( time() - 10, (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 		$this->assertLessThanOrEqual( time(), (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 
 		// Check the status
 		$current = wp_get_comment_status( $comment->comment_ID );
-		if (in_array( $prev_status, array( 'unapproved', 'spam') ) ) {
-			$this->assertEquals( 'approved', $current );
+		if ( in_array( $prev_status, array( 'unapproved', 'spam' ), true ) ) {
+			$this->assertSame( 'approved', $current );
 		} else {
-			$this->assertEquals( 'unapproved', $current );
+			$this->assertSame( 'unapproved', $current );
 		}
 
 		// The total is calculated based on a page break -OR- a random number.  Let's look for both possible outcomes
 		$comment_count = wp_count_comments( 0 );
-		$recalc_total = $comment_count->total_comments;
+		$recalc_total  = $comment_count->total_comments;
 
 		// Delta is not specified, it will always be 1 lower than the request
 		$total = $_POST['_total'] - 1;
 
 		// Check for either possible total
-		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0] , array( $total, $recalc_total ) ) );
+		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], array( $total, $recalc_total ) ) );
 	}
 
 	/**
@@ -188,10 +188,10 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 			// Get the response
 			$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-			// Ensure everything is correct
-			$this->assertEquals( '0', (string) $xml->response[0]->comment['id'] );
-			$this->assertEquals( 'dim-comment_0', (string) $xml->response['action'] );
-			$this->assertContains( 'Comment ' . $_POST['id'] . ' does not exist', $this->_last_response );
+			// Ensure everything is correct.
+			$this->assertSame( '0', (string) $xml->response[0]->comment['id'] );
+			$this->assertSame( 'dim-comment_0', (string) $xml->response['action'] );
+			$this->assertStringContainsString( 'Comment ' . $_POST['id'] . ' does not exist', $this->_last_response );
 
 		} catch ( Exception $e ) {
 			$this->fail( 'Unexpected exception type: ' . get_class( $e ) );

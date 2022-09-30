@@ -77,8 +77,9 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	 * @since WP-4.6.0
 	 *
 	 * @param string|WP_Error $errors Errors.
+	 * @param mixed           ...$args Optional text replacements.
 	 */
-	public function error( $errors ) {
+	public function error( $errors, ...$args ) {
 		if ( is_string( $errors ) ) {
 			$string = $errors;
 			if ( ! empty( $this->upgrader->strings[ $string ] ) ) {
@@ -86,8 +87,6 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 			}
 
 			if ( false !== strpos( $string, '%' ) ) {
-				$args = func_get_args();
-				$args = array_splice( $args, 1 );
 				if ( ! empty( $args ) ) {
 					$string = vsprintf( $string, $args );
 				}
@@ -103,8 +102,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 			}
 		}
 
-		$args = func_get_args();
-		call_user_func_array( array( $this, 'parent::error' ), $args );
+		parent::error( $errors, ...$args );
 	}
 
 	/**
@@ -113,15 +111,15 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	 * @since WP-4.6.0
 	 *
 	 * @param string|array|WP_Error $data Log entry data.
+	 * @param mixed                 ...$args Optional text replacements.
 	 */
-	public function feedback( $data ) {
+	public function feedback( $data, ...$args ) {
 		if ( is_wp_error( $data ) ) {
 			foreach ( $data->get_error_codes() as $error_code ) {
 				$this->errors->add( $error_code, $data->get_error_message( $error_code ), $data->get_error_data( $error_code ) );
 			}
 		}
 
-		$args = func_get_args();
-		call_user_func_array( array( $this, 'parent::feedback' ), $args );
+		parent::feedback( $data, ...$args );
 	}
 }

@@ -22,7 +22,7 @@ class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/39065
 	 */
 	public function test_get_dashboard_url_for_current_site_user() {
-		$this->assertEquals( admin_url(), get_dashboard_url( self::$user_id ) );
+		$this->assertSame( admin_url(), get_dashboard_url( self::$user_id ) );
 	}
 
 	/**
@@ -33,7 +33,7 @@ class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
 
 		$expected = is_multisite() ? user_admin_url() : admin_url();
 
-		$this->assertEquals( $expected, get_dashboard_url( self::$user_id ) );
+		$this->assertSame( $expected, get_dashboard_url( self::$user_id ) );
 	}
 
 	/**
@@ -46,11 +46,11 @@ class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
 		add_filter( 'get_blogs_of_user', '__return_empty_array' );
 
 		$expected = admin_url();
-		$result = get_dashboard_url( self::$user_id );
+		$result   = get_dashboard_url( self::$user_id );
 
 		revoke_super_admin( self::$user_id );
 
-		$this->assertEquals( $expected, $result );
+		$this->assertSame( $expected, $result );
 	}
 
 	/**
@@ -63,13 +63,13 @@ class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
 		remove_user_from_blog( self::$user_id, get_current_blog_id() );
 
 		$expected = get_admin_url( $site_id );
-		$result = get_dashboard_url( self::$user_id );
+		$result   = get_dashboard_url( self::$user_id );
 
 		remove_user_from_blog( self::$user_id, $site_id );
-		add_user_to_blog( get_current_blog_id(), self::$user_id, 'administrator');
+		add_user_to_blog( get_current_blog_id(), self::$user_id, 'administrator' );
 
 		wpmu_delete_blog( $site_id, true );
 
-		$this->assertEquals( $expected, $result );
+		$this->assertSame( $expected, $result );
 	}
 }

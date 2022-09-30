@@ -24,7 +24,7 @@ _deprecated_file(
 		printf(
 			/* translators: 1: blog name, 2: ClassicPress */
 			__( '%1$s is proudly powered by %2$s' ),
-			get_bloginfo('name'),
+			get_bloginfo( 'name' ),
 			'<a href="https://www.classicpress.net/">ClassicPress</a>'
 		);
 		?>
