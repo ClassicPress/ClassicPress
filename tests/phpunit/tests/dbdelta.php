@@ -71,9 +71,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 					FULLTEXT KEY fulltext_key (column_1)' .
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				") {$this->db_engine}
-				",
-				$this->max_index_length,
-				$this->max_index_length
+			",
+			$this->max_index_length,
+			$this->max_index_length
 		);
 
 		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
