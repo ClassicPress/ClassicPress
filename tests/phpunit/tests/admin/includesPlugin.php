@@ -4,26 +4,34 @@
  * @group admin
  */
 class Tests_Admin_includesPlugin extends WP_UnitTestCase {
+	public static function wpSetUpBeforeClass( $factory ) {
+		self::_back_up_mu_plugins();
+	}
+
+	public static function wpTearDownAfterClass() {
+		self::_restore_mu_plugins();
+	}
+
 	function test_get_plugin_data() {
 		$data = get_plugin_data( DIR_TESTDATA . '/plugins/hello.php' );
 
 		$default_headers = array(
-			'Name' => 'Hello Dolly',
-			'Title' => '<a href="http://wordpress.org/#">Hello Dolly</a>',
-			'PluginURI' => 'http://wordpress.org/#',
+			'Name'        => 'Hello Dolly',
+			'Title'       => '<a href="http://wordpress.org/#">Hello Dolly</a>',
+			'PluginURI'   => 'http://wordpress.org/#',
 			'Description' => 'This is not just a plugin, it symbolizes the hope and enthusiasm of an entire generation summed up in two words sung most famously by Louis Armstrong: Hello, Dolly. When activated you will randomly see a lyric from Hello, Dolly in the upper right of your admin screen on every page. <cite>By <a href="http://ma.tt/">Matt Mullenweg</a>.</cite>',
-			'Author' => '<a href="http://ma.tt/">Matt Mullenweg</a>',
-			'AuthorURI' => 'http://ma.tt/',
-			'Version' => '1.5.1',
-			'TextDomain' => 'hello-dolly',
-			'DomainPath' => ''
+			'Author'      => '<a href="http://ma.tt/">Matt Mullenweg</a>',
+			'AuthorURI'   => 'http://ma.tt/',
+			'Version'     => '1.5.1',
+			'TextDomain'  => 'hello-dolly',
+			'DomainPath'  => '',
 		);
 
-		$this->assertTrue( is_array($data) );
+		$this->assertTrue( is_array( $data ) );
 
-		foreach ($default_headers as $name => $value) {
-			$this->assertTrue(isset($data[$name]));
-			$this->assertEquals($value, $data[$name]);
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
 		}
 	}
 
@@ -41,17 +49,17 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		add_theme_page( 'With Spaces', 'With Spaces', 'manage_options', 'With Spaces', 'mt_tools_page' );
 		add_pages_page( 'Appending Query Arg', 'Test Pages', 'edit_pages', 'testpages', 'mt_pages_page' );
 
-		$expected['testsettings'] = 'http://example.com/wp-admin/options-general.php?page=testsettings';
-		$expected['testtools'] = 'http://example.com/wp-admin/tools.php?page=testtools';
+		$expected['testsettings']        = 'http://example.com/wp-admin/options-general.php?page=testsettings';
+		$expected['testtools']           = 'http://example.com/wp-admin/tools.php?page=testtools';
 		$expected['mt-top-level-handle'] = 'http://example.com/wp-admin/admin.php?page=mt-top-level-handle';
-		$expected['sub-page'] = 'http://example.com/wp-admin/admin.php?page=sub-page';
-		$expected['sub-page2'] = 'http://example.com/wp-admin/admin.php?page=sub-page2';
-		$expected['not_registered'] = '';
-		$expected['With Spaces'] = 'http://example.com/wp-admin/themes.php?page=With%20Spaces';
-		$expected['testpages'] = 'http://example.com/wp-admin/edit.php?post_type=page&#038;page=testpages';
+		$expected['sub-page']            = 'http://example.com/wp-admin/admin.php?page=sub-page';
+		$expected['sub-page2']           = 'http://example.com/wp-admin/admin.php?page=sub-page2';
+		$expected['not_registered']      = '';
+		$expected['With Spaces']         = 'http://example.com/wp-admin/themes.php?page=With%20Spaces';
+		$expected['testpages']           = 'http://example.com/wp-admin/edit.php?post_type=page&#038;page=testpages';
 
-		foreach ($expected as $name => $value) {
-			$this->assertEquals( $value, menu_page_url( $name, false ) );
+		foreach ( $expected as $name => $value ) {
+			$this->assertSame( $value, menu_page_url( $name, false ) );
 		}
 
 		wp_set_current_user( $current_user );
@@ -90,7 +98,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 */
 	public function test_get_plugin_files_single() {
 		$name = 'hello.php';
-		$this->assertEquals( array( $name ), get_plugin_files( $name ) );
+		$this->assertSame( array( $name ), get_plugin_files( $name ) );
 	}
 
 	/**
@@ -99,141 +107,94 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test_get_plugin_files_folder() {
 		$plugin_dir = WP_PLUGIN_DIR . '/list_files_test_plugin';
 		@mkdir( $plugin_dir );
-		$plugin = $this->_create_plugin(null, 'list_files_test_plugin.php', $plugin_dir );
+		$plugin = $this->_create_plugin( null, 'list_files_test_plugin.php', $plugin_dir );
 
 		$sub_dir = trailingslashit( dirname( $plugin[1] ) ) . 'subdir';
 		@mkdir( $sub_dir );
 		@file_put_contents( $sub_dir . '/subfile.php', '<?php // Silence.' );
 
 		$plugin_files = get_plugin_files( plugin_basename( $plugin[1] ) );
-		$expected = array(
+		$expected     = array(
 			'list_files_test_plugin/list_files_test_plugin.php',
 			'list_files_test_plugin/subdir/subfile.php',
 		);
-		$this->assertEquals( $expected, $plugin_files );
 
 		unlink( $sub_dir . '/subfile.php' );
 		unlink( $plugin[1] );
 		rmdir( $sub_dir );
 		rmdir( $plugin_dir );
+
+		$this->assertSame( $expected, $plugin_files );
 	}
 
 	/**
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_when_mu_plugins_exists_but_is_empty() {
-		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
-			$exists = true;
-			$this->_back_up_mu_plugins();
-		} else {
-			$exists = false;
-			mkdir( WPMU_PLUGIN_DIR );
-		}
+		mkdir( WPMU_PLUGIN_DIR );
 
-		$this->assertEquals( array(), get_mu_plugins() );
+		$mu_plugins = get_mu_plugins();
 
-		// Clean up.
-		if ( $exists ) {
-			$this->_restore_mu_plugins();
-		} else {
-			rmdir( WPMU_PLUGIN_DIR );
-		}
+		rmdir( WPMU_PLUGIN_DIR );
+
+		$this->assertSame( array(), $mu_plugins );
 	}
 
 	/**
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_when_mu_plugins_directory_does_not_exist() {
-		$exists = false;
-		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
-			$exists = true;
-			$this->_back_up_mu_plugins();
-			rmdir( WPMU_PLUGIN_DIR );
-		}
-
-		$this->assertEquals( array(), get_mu_plugins() );
-
-		// Clean up.
-		if ( $exists ) {
-			mkdir( WPMU_PLUGIN_DIR );
-			$this->_restore_mu_plugins();
-		}
+		$this->assertFileDoesNotExist( WPMU_PLUGIN_DIR );
+		$this->assertSame( array(), get_mu_plugins() );
 	}
 
 	/**
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_should_ignore_index_php_containing_silence_is_golden() {
-		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
-			$exists = true;
-			$this->_back_up_mu_plugins();
-		} else {
-			$exists = false;
-			mkdir( WPMU_PLUGIN_DIR );
-		}
+		mkdir( WPMU_PLUGIN_DIR );
 
 		$this->_create_plugin( '<?php\n//Silence is golden.', 'index.php', WPMU_PLUGIN_DIR );
-		$this->assertEquals( array(), get_mu_plugins() );
 
-		// Clean up.
+		$mu_plugins = get_mu_plugins();
+
 		unlink( WPMU_PLUGIN_DIR . '/index.php' );
-		if ( $exists ) {
-			$this->_restore_mu_plugins();
-		} else {
-			rmdir( WPMU_PLUGIN_DIR );
-		}
+		rmdir( WPMU_PLUGIN_DIR );
+
+		$this->assertSame( array(), $mu_plugins );
 	}
 
 	/**
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_should_not_ignore_index_php_containing_something_other_than_silence_is_golden() {
-		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
-			$exists = true;
-			$this->_back_up_mu_plugins();
-		} else {
-			$exists = false;
-			mkdir( WPMU_PLUGIN_DIR );
-		}
+		mkdir( WPMU_PLUGIN_DIR );
 
 		$this->_create_plugin( '<?php\n//Silence is not golden.', 'index.php', WPMU_PLUGIN_DIR );
 		$found = get_mu_plugins();
-		$this->assertEquals( array( 'index.php' ), array_keys( $found ) );
 
 		// Clean up.
 		unlink( WPMU_PLUGIN_DIR . '/index.php' );
-		if ( $exists ) {
-			$this->_restore_mu_plugins();
-		} else {
-			rmdir( WPMU_PLUGIN_DIR );
-		}
+		rmdir( WPMU_PLUGIN_DIR );
+
+		$this->assertSame( array( 'index.php' ), array_keys( $found ) );
 	}
 
 	/**
 	 * @covers ::get_mu_plugins
 	 */
 	public function test_get_mu_plugins_should_ignore_files_without_php_extensions() {
-		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
-			$exists = true;
-			$this->_back_up_mu_plugins();
-		} else {
-			$exists = false;
-			mkdir( WPMU_PLUGIN_DIR );
-		}
+		mkdir( WPMU_PLUGIN_DIR );
 
 		$this->_create_plugin( '<?php\n//Test', 'foo.php', WPMU_PLUGIN_DIR );
 		$this->_create_plugin( '<?php\n//Test 2', 'bar.txt', WPMU_PLUGIN_DIR );
 		$found = get_mu_plugins();
-		$this->assertEquals( array( 'foo.php' ), array_keys( $found ) );
 
 		// Clean up.
 		unlink( WPMU_PLUGIN_DIR . '/foo.php' );
 		unlink( WPMU_PLUGIN_DIR . '/bar.txt' );
-		if ( $exists ) {
-			$this->_restore_mu_plugins();
-		} else {
-			rmdir( WPMU_PLUGIN_DIR );
-		}
+
+		$this->assertSame( array( 'foo.php' ), array_keys( $found ) );
 	}
 
 	/**
@@ -242,7 +203,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test__sort_uname_callback() {
 		$this->assertLessThan( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'b' ) ) );
 		$this->assertGreaterThan( 0, _sort_uname_callback( array( 'Name' => 'c' ), array( 'Name' => 'b' ) ) );
-		$this->assertEquals( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'a' ) ) );
+		$this->assertSame( 0, _sort_uname_callback( array( 'Name' => 'a' ), array( 'Name' => 'a' ) ) );
 	}
 
 	/**
@@ -251,7 +212,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test_get_dropins_empty() {
 		$this->_back_up_drop_ins();
 
-		$this->assertEquals( array(), get_dropins() );
+		$this->assertSame( array(), get_dropins() );
 
 		// Clean up.
 		$this->_restore_drop_ins();
@@ -267,7 +228,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$p2 = $this->_create_plugin( "<?php\n//Test", 'not-a-dropin.php', WP_CONTENT_DIR );
 
 		$dropins = get_dropins();
-		$this->assertEquals( array( 'advanced-cache.php' ), array_keys( $dropins ) );
+		$this->assertSame( array( 'advanced-cache.php' ), array_keys( $dropins ) );
 
 		unlink( $p1[1] );
 		unlink( $p2[1] );
@@ -320,18 +281,18 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test_validate_active_plugins_remove_invalid() {
 		$plugin = $this->_create_plugin();
 
-		activate_plugin( $plugin[ 0 ] );
-		unlink( $plugin[ 1 ] );
+		activate_plugin( $plugin[0] );
+		unlink( $plugin[1] );
 
 		$result = validate_active_plugins();
-		$this->assertTrue( isset( $result[ $plugin[ 0 ] ] ) );
+		$this->assertTrue( isset( $result[ $plugin[0] ] ) );
 	}
 
 	/**
 	 * @covers ::validate_active_plugins
 	 */
 	public function test_validate_active_plugins_empty() {
-		$this->assertEquals( array(), validate_active_plugins() );
+		$this->assertSame( array(), validate_active_plugins() );
 	}
 
 	/**
@@ -347,7 +308,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	public function test_is_uninstallable_plugin_true() {
 		$plugin = $this->_create_plugin();
 
-		$uninstallable_plugins = (array) get_option( 'uninstall_plugins' );
+		$uninstallable_plugins               = (array) get_option( 'uninstall_plugins' );
 		$uninstallable_plugins[ $plugin[0] ] = true;
 		update_option( 'uninstall_plugins', $uninstallable_plugins );
 
@@ -392,33 +353,16 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Move existing mu-plugins to wp-content/mu-plugin/backup.
+	 * Move existing mu-plugins to wp-content/mu-plugin-backup.
 	 *
 	 * @since WP-4.2.0
 	 *
 	 * @access private
 	 */
-	private function _back_up_mu_plugins() {
+	private static function _back_up_mu_plugins() {
 		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
 			$mu_bu_dir = WP_CONTENT_DIR . '/mu-plugin-backup';
-			if ( ! is_dir( $mu_bu_dir ) ) {
-				mkdir( $mu_bu_dir );
-			}
-
-			$files_to_move = array();
-			if ( $mu_plugins = opendir( WPMU_PLUGIN_DIR ) ) {
-				while ( false !== $plugin = readdir( $mu_plugins ) ) {
-					if ( 0 !== strpos( $plugin, '.' ) ) {
-						$files_to_move[] = $plugin;
-					}
-				}
-			}
-
-			@closedir( $mu_plugins );
-
-			foreach ( $files_to_move as $file_to_move ) {
-				$f = rename( WPMU_PLUGIN_DIR . '/' . $file_to_move, $mu_bu_dir . '/' . $file_to_move );
-			}
+			rename( WPMU_PLUGIN_DIR, $mu_bu_dir );
 		}
 	}
 
@@ -429,25 +373,15 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	 *
 	 * @access private
 	 */
-	private function _restore_mu_plugins() {
+	private static function _restore_mu_plugins() {
 		$mu_bu_dir = WP_CONTENT_DIR . '/mu-plugin-backup';
-		$files_to_move = array();
-		if ( is_dir( $mu_bu_dir ) && $mu_plugins = opendir( $mu_bu_dir ) ) {
-			while ( false !== $plugin = readdir( $mu_plugins ) ) {
-				if ( 0 !== strpos( $plugin, '.' ) ) {
-					$files_to_move[] = $plugin;
-				}
-			}
-		}
 
-		@closedir( $mu_plugins );
-
-		foreach ( $files_to_move as $file_to_move ) {
-			rename( $mu_bu_dir . '/' . $file_to_move, WPMU_PLUGIN_DIR . '/' . $file_to_move );
+		if ( is_dir( WPMU_PLUGIN_DIR ) ) {
+			rmdir( WPMU_PLUGIN_DIR );
 		}
 
 		if ( is_dir( $mu_bu_dir ) ) {
-			rmdir( $mu_bu_dir );
+			rename( $mu_bu_dir, WPMU_PLUGIN_DIR );
 		}
 	}
 
@@ -464,7 +398,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			mkdir( $di_bu_dir );
 		}
 
-		foreach( _get_dropins() as $file_to_move => $v ) {
+		foreach ( _get_dropins() as $file_to_move => $v ) {
 			if ( file_exists( WP_CONTENT_DIR . '/' . $file_to_move ) ) {
 				rename( WP_CONTENT_DIR . '/' . $file_to_move, $di_bu_dir . '/' . $file_to_move );
 			}
@@ -481,7 +415,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	private function _restore_drop_ins() {
 		$di_bu_dir = WP_CONTENT_DIR . '/drop-ins-backup';
 
-		foreach( _get_dropins() as $file_to_move => $v ) {
+		foreach ( _get_dropins() as $file_to_move => $v ) {
 			if ( file_exists( $di_bu_dir . '/' . $file_to_move ) ) {
 				rename( $di_bu_dir . '/' . $file_to_move, WP_CONTENT_DIR . '/' . $file_to_move );
 			}

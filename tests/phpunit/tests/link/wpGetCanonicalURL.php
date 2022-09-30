@@ -9,9 +9,11 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 	public static $post_id;
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$post_id = $factory->post->create( array(
-			'post_status' => 'publish',
-		) );
+		self::$post_id = $factory->post->create(
+			array(
+				'post_status' => 'publish',
+			)
+		);
 	}
 
 	/**
@@ -25,9 +27,11 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 	 * Test for a post that is not published.
 	 */
 	public function test_post_status() {
-		$post_id = self::factory()->post->create( array(
-			'post_status' => 'draft',
-		) );
+		$post_id = self::factory()->post->create(
+			array(
+				'post_status' => 'draft',
+			)
+		);
 
 		$this->assertFalse( wp_get_canonical_url( $post_id ) );
 	}
@@ -36,25 +40,31 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 	 * Test for a page that is not the queried object.
 	 */
 	public function test_non_current_page() {
-		$this->assertEquals( get_permalink( self::$post_id ), wp_get_canonical_url( self::$post_id ) );
+		$this->assertSame( get_permalink( self::$post_id ), wp_get_canonical_url( self::$post_id ) );
 	}
 
 	/**
 	 * Test non permalink structure page usage.
 	 */
 	public function test_paged_with_plain_permalink_structure() {
-		$link = add_query_arg( array(
-			'page' => 2,
-			'foo'  => 'bar',
-		), get_permalink( self::$post_id ) );
+		$link = add_query_arg(
+			array(
+				'page' => 2,
+				'foo'  => 'bar',
+			),
+			get_permalink( self::$post_id )
+		);
 
 		$this->go_to( $link );
 
-		$expected = add_query_arg( array(
-			'page' => 2,
-		), get_permalink( self::$post_id ) );
+		$expected = add_query_arg(
+			array(
+				'page' => 2,
+			),
+			get_permalink( self::$post_id )
+		);
 
-		$this->assertEquals( $expected, wp_get_canonical_url( self::$post_id ) );
+		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
 	}
 
 	/**
@@ -64,16 +74,19 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 		$this->set_permalink_structure( '/%postname%/' );
 		$page = 2;
 
-		$link = add_query_arg( array(
-			'page' => $page,
-			'foo'  => 'bar',
-		), get_permalink( self::$post_id ) );
+		$link = add_query_arg(
+			array(
+				'page' => $page,
+				'foo'  => 'bar',
+			),
+			get_permalink( self::$post_id )
+		);
 
 		$this->go_to( $link );
 
 		$expected = trailingslashit( get_permalink( self::$post_id ) ) . user_trailingslashit( $page, 'single_paged' );
 
-		$this->assertEquals( $expected, wp_get_canonical_url( self::$post_id ) );
+		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
 	}
 
 	/**
@@ -82,18 +95,24 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 	public function test_comments_paged_with_plain_permalink_structure() {
 		$cpage = 2;
 
-		$link = add_query_arg( array(
-			'cpage' => $cpage,
-			'foo'   => 'bar',
-		), get_permalink( self::$post_id ) );
+		$link = add_query_arg(
+			array(
+				'cpage' => $cpage,
+				'foo'   => 'bar',
+			),
+			get_permalink( self::$post_id )
+		);
 
 		$this->go_to( $link );
 
-		$expected = add_query_arg( array(
-			'cpage' => $cpage,
-		), get_permalink( self::$post_id ) . '#comments' );
+		$expected = add_query_arg(
+			array(
+				'cpage' => $cpage,
+			),
+			get_permalink( self::$post_id ) . '#comments'
+		);
 
-		$this->assertEquals( $expected , wp_get_canonical_url( self::$post_id ) );
+		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
 	}
 
 	/**
@@ -105,16 +124,19 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 		$this->set_permalink_structure( '/%postname%/' );
 		$cpage = 2;
 
-		$link = add_query_arg( array(
-			'cpage' => $cpage,
-			'foo'   => 'bar',
-		), get_permalink( self::$post_id ) );
+		$link = add_query_arg(
+			array(
+				'cpage' => $cpage,
+				'foo'   => 'bar',
+			),
+			get_permalink( self::$post_id )
+		);
 
 		$this->go_to( $link );
 
 		$expected = user_trailingslashit( trailingslashit( get_permalink( self::$post_id ) ) . $wp_rewrite->comments_pagination_base . '-' . $cpage, 'commentpaged' ) . '#comments';
 
-		$this->assertEquals( $expected , wp_get_canonical_url( self::$post_id ) );
+		$this->assertSame( $expected, wp_get_canonical_url( self::$post_id ) );
 	}
 
 	/**
@@ -125,7 +147,7 @@ class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
 		$canonical_url = wp_get_canonical_url( self::$post_id );
 		remove_filter( 'get_canonical_url', array( $this, 'canonical_url_filter' ) );
 
-		$this->assertEquals( $this->canonical_url_filter(), $canonical_url );
+		$this->assertSame( $this->canonical_url_filter(), $canonical_url );
 	}
 
 	/**

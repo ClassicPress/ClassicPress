@@ -8,26 +8,32 @@ class Tests_XMLRPC_wp_getPages extends WP_XMLRPC_UnitTestCase {
 	protected static $editor_id;
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$post_id = $factory->post->create( array(
-			'post_type'   => 'page',
-			'post_author' => $factory->user->create( array(
-				'user_login' => 'administrator',
-				'user_pass'  => 'administrator',
-				'role'       => 'administrator'
-			) ),
-			'post_date'   => strftime( "%Y-%m-%d %H:%M:%S", strtotime( '+1 day' ) ),
-		) );
-		self::$editor_id = $factory->user->create( array(
-			'user_login' => 'editor',
-			'user_pass'  => 'editor',
-			'role'       => 'editor'
-		) );
+		self::$post_id   = $factory->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_author' => $factory->user->create(
+					array(
+						'user_login' => 'administrator',
+						'user_pass'  => 'administrator',
+						'role'       => 'administrator',
+					)
+				),
+				'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
+			)
+		);
+		self::$editor_id = $factory->user->create(
+			array(
+				'user_login' => 'editor',
+				'user_pass'  => 'editor',
+				'role'       => 'editor',
+			)
+		);
 	}
 
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->wp_getPages( array( 1, 'username', 'password' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_incapable_user() {
@@ -35,16 +41,16 @@ class Tests_XMLRPC_wp_getPages extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->wp_getPages( array( 1, 'contributor', 'contributor' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 401, $result->code );
+		$this->assertSame( 401, $result->code );
 	}
 
 	function test_capable_user() {
 		$results = $this->myxmlrpcserver->wp_getPages( array( 1, 'administrator', 'administrator' ) );
 		$this->assertNotIXRError( $results );
 
-		foreach( $results as $result ) {
+		foreach ( $results as $result ) {
 			$page = get_post( $result['page_id'] );
-			$this->assertEquals( $page->post_type, 'page' );
+			$this->assertSame( $page->post_type, 'page' );
 		}
 	}
 
@@ -62,13 +68,13 @@ class Tests_XMLRPC_wp_getPages extends WP_XMLRPC_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/20629
 	 */
 	function test_semi_capable_user() {
-		add_filter( 'map_meta_cap', array( $this, 'remove_editor_edit_page_cap') , 10, 4 );
+		add_filter( 'map_meta_cap', array( $this, 'remove_editor_edit_page_cap' ), 10, 4 );
 
 		$results = $this->myxmlrpcserver->wp_getPages( array( 1, 'editor', 'editor' ) );
 		$this->assertNotIXRError( $results );
 
 		$found_incapable = false;
-		foreach( $results as $result ) {
+		foreach ( $results as $result ) {
 			// WP#20629
 			$this->assertNotIXRError( $result );
 

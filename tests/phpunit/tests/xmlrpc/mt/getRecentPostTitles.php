@@ -8,7 +8,7 @@ class Tests_XMLRPC_mt_getRecentPostTitles extends WP_XMLRPC_UnitTestCase {
 	function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->mt_getRecentPostTitles( array( 1, 'username', 'password' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 403, $result->code );
+		$this->assertSame( 403, $result->code );
 	}
 
 	function test_no_posts() {
@@ -16,7 +16,7 @@ class Tests_XMLRPC_mt_getRecentPostTitles extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->mt_getRecentPostTitles( array( 1, 'author', 'author' ) );
 		$this->assertIXRError( $result );
-		$this->assertEquals( 500, $result->code );
+		$this->assertSame( 500, $result->code );
 	}
 
 	function test_no_editable_posts() {
@@ -26,7 +26,7 @@ class Tests_XMLRPC_mt_getRecentPostTitles extends WP_XMLRPC_UnitTestCase {
 
 		$result = $this->myxmlrpcserver->mt_getRecentPostTitles( array( 1, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
-		$this->assertEquals( 0, count( $result ) );
+		$this->assertSame( 0, count( $result ) );
 	}
 
 	function test_date() {
@@ -37,15 +37,15 @@ class Tests_XMLRPC_mt_getRecentPostTitles extends WP_XMLRPC_UnitTestCase {
 		$results = $this->myxmlrpcserver->mt_getRecentPostTitles( array( 1, 'author', 'author' ) );
 		$this->assertNotIXRError( $results );
 
-		foreach( $results as $result ) {
-			$post = get_post( $result['postid'] );
+		foreach ( $results as $result ) {
+			$post     = get_post( $result['postid'] );
 			$date_gmt = strtotime( get_gmt_from_date( mysql2date( 'Y-m-d H:i:s', $post->post_date, false ), 'Ymd\TH:i:s' ) );
 
 			$this->assertInstanceOf( 'IXR_Date', $result['dateCreated'] );
 			$this->assertInstanceOf( 'IXR_Date', $result['date_created_gmt'] );
 
-			$this->assertEquals( strtotime( $post->post_date ), $result['dateCreated']->getTimestamp() );
-			$this->assertEquals( $date_gmt, $result['date_created_gmt']->getTimestamp() );
+			$this->assertSame( strtotime( $post->post_date ), $result['dateCreated']->getTimestamp() );
+			$this->assertSame( $date_gmt, $result['date_created_gmt']->getTimestamp() );
 		}
 	}
 }

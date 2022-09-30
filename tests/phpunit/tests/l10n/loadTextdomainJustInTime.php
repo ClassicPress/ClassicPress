@@ -11,18 +11,20 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	private $locale_count;
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$user_id = $factory->user->create( array(
-			'role'   => 'administrator',
-			'locale' => 'de_DE',
-		) );
+		self::$user_id = $factory->user->create(
+			array(
+				'role'   => 'administrator',
+				'locale' => 'de_DE',
+			)
+		);
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
-		$this->theme_root = DIR_TESTDATA . '/themedir1';
+		$this->theme_root     = DIR_TESTDATA . '/themedir1';
 		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
-		$this->locale_count = 0;
+		$this->locale_count   = 0;
 
 		// /themes is necessary as theme.php functions assume /themes is the root if there is only one root.
 		$GLOBALS['wp_theme_directories'] = array( WP_CONTENT_DIR . '/themes', $this->theme_root );
@@ -36,7 +38,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		_get_path_to_translation( null, true );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
 		remove_filter( 'theme_root', array( $this, 'filter_theme_root' ) );
 		remove_filter( 'stylesheet_root', array( $this, 'filter_theme_root' ) );
@@ -47,7 +49,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		unset( $GLOBALS['l10n_unloaded'] );
 		_get_path_to_translation( null, true );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**

@@ -11,14 +11,16 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	function test_ftp_has_root_access() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
-		$fs->init('
+		$fs->init(
+			'
 			/var/www/classicpress/
 			/var/www/classicpress/wp-includes/
 			/var/www/classicpress/index.php
-		');
+		'
+		);
 
 		$path = $fs->find_folder( '/var/www/classicpress/' );
-		$this->assertEquals( '/var/www/classicpress/', $path );
+		$this->assertSame( '/var/www/classicpress/', $path );
 
 		$path = $fs->find_folder( '/this/directory/doesnt/exist/' );
 		$this->assertFalse( $path );
@@ -28,7 +30,8 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	function test_sibling_classicpress_in_subdir() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
-		$fs->init('
+		$fs->init(
+			'
 			/www/example.com/classicpress/
 			/www/example.com/classicpress/wp-includes/
 			/www/example.com/classicpress/index.php
@@ -37,13 +40,14 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 			/www/cp.example.com/classicpress/wp-content/
 			/www/cp.example.com/classicpress/index.php
 			/www/index.php
-		');
+		'
+		);
 
 		$path = $fs->find_folder( '/var/www/example.com/classicpress/' );
-		$this->assertEquals( '/www/example.com/classicpress/', $path );
-		
+		$this->assertSame( '/www/example.com/classicpress/', $path );
+
 		$path = $fs->find_folder( '/var/www/cp.example.com/classicpress/wp-content/' );
-		$this->assertEquals( '/www/cp.example.com/classicpress/wp-content/', $path );
+		$this->assertSame( '/www/cp.example.com/classicpress/wp-content/', $path );
 
 	}
 
@@ -56,20 +60,22 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	function test_subdir_of_another() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
-		$fs->init('
+		$fs->init(
+			'
 			/cp.example.com/index.php
 			/cp.example.com/classicpress/
 			/cp.example.com/classicpress/wp-includes/
 			/cp.example.com/classicpress/index.php
 			/wp-includes/
 			/index.php
-		');
+		'
+		);
 
 		$path = $fs->abspath( '/var/www/example.com/cp.example.com/classicpress/' );
-		$this->assertEquals( '/cp.example.com/classicpress/', $path );
-		
+		$this->assertSame( '/cp.example.com/classicpress/', $path );
+
 		$path = $fs->abspath( '/var/www/example.com/' );
-		$this->assertEquals( '/', $path );
+		$this->assertSame( '/', $path );
 
 	}
 
@@ -81,29 +87,31 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	function test_multiple_tokens_in_path1() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
-		$fs->init('
+		$fs->init(
+			'
 			# www.example.com
 			/example.com/www/index.php
 			/example.com/www/wp-includes/
 			/example.com/www/wp-content/plugins/
-			
+
 			# sub.example.com
 			/example.com/sub/index.php
 			/example.com/sub/wp-includes/
 			/example.com/sub/wp-content/plugins/
-		');
+		'
+		);
 
 		// www.example.com
 		$path = $fs->abspath( '/var/www/example.com/www/' );
-		$this->assertEquals( '/example.com/www/', $path );
+		$this->assertSame( '/example.com/www/', $path );
 
 		// sub.example.com
 		$path = $fs->abspath( '/var/www/example.com/sub/' );
-		$this->assertEquals( '/example.com/sub/', $path );
+		$this->assertSame( '/example.com/sub/', $path );
 
 		// sub.example.com - Plugins
 		$path = $fs->find_folder( '/var/www/example.com/sub/wp-content/plugins/' );
-		$this->assertEquals( '/example.com/sub/wp-content/plugins/', $path );
+		$this->assertSame( '/example.com/sub/wp-content/plugins/', $path );
 	}
 
 }
