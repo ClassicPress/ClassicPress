@@ -7,22 +7,24 @@
 class Tests_Get_User_Locale extends WP_UnitTestCase {
 	protected $user_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
-		$this->user_id = $this->factory()->user->create( array(
-			'role'   => 'administrator',
-			'locale' => 'de_DE',
-		) );
+		$this->user_id = $this->factory()->user->create(
+			array(
+				'role'   => 'administrator',
+				'locale' => 'de_DE',
+			)
+		);
 
 		wp_set_current_user( $this->user_id );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		delete_user_meta( $this->user_id, 'locale' );
 		set_current_screen( 'front' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_user_locale_property() {
@@ -85,9 +87,11 @@ class Tests_Get_User_Locale extends WP_UnitTestCase {
 	}
 
 	public function test_user_id_argument_with_id() {
-		$user_id = $this->factory()->user->create( array(
-			'locale' => 'es_ES',
-		) );
+		$user_id = $this->factory()->user->create(
+			array(
+				'locale' => 'es_ES',
+			)
+		);
 
 		$user_locale1 = get_user_locale( $user_id );
 
@@ -100,9 +104,11 @@ class Tests_Get_User_Locale extends WP_UnitTestCase {
 	}
 
 	public function test_user_id_argument_with_wp_user_object() {
-		$user_id = $this->factory()->user->create( array(
-			'locale' => 'es_ES',
-		) );
+		$user_id = $this->factory()->user->create(
+			array(
+				'locale' => 'es_ES',
+			)
+		);
 
 		$user = get_user_by( 'id', $user_id );
 

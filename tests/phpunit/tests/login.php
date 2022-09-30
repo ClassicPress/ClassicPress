@@ -3,32 +3,29 @@
  * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
-	function setUp() {
-		// This is not done when loading the login page, but parent::setUp()
-		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
+	function set_up() {
+		// Something about these tests (@runInSeparateProcess maybe?) requires
+		// the object cache to be (re)initialized.
 		if ( wp_using_ext_object_cache() ) {
 			wp_cache_init();
 		}
-		parent::setUp();
+		parent::set_up();
 		reset_phpmailer_instance();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		reset_phpmailer_instance();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
 	public function test_reset_password() {
-		ob_start();
-		include_once( ABSPATH . '/wp-login.php' );
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		ob_end_clean();
 
 		$regex = (
 			'/^http:\/\/'

@@ -3,18 +3,12 @@
  * Installs ClassicPress for running the tests and loads ClassicPress and the test libraries
  */
 
-/**
- * Compatibility with PHPUnit 6+
- */
-if ( class_exists( 'PHPUnit\Runner\Version' ) ) {
-	require_once dirname( __FILE__ ) . '/phpunit6-compat.php';
-}
-
 $config_file_path = dirname( dirname( __FILE__ ) );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.
-	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' )
+	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' ) {
 		$config_file_path = dirname( dirname( $config_file_path ) );
+	}
 }
 $config_file_path .= '/wp-tests-config.php';
 
@@ -30,6 +24,175 @@ if ( ! is_readable( $config_file_path ) ) {
 }
 require_once $config_file_path;
 require_once dirname( __FILE__ ) . '/functions.php';
+
+if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS && ! is_dir( ABSPATH ) ) {
+	echo "Error: The /build/ directory is missing! Please run `npm run build` prior to running PHPUnit.\n";
+	exit( 1 );
+}
+
+$phpunit_version = tests_get_phpunit_version();
+
+if ( version_compare( $phpunit_version, '5.7.21', '<' ) ) {
+	printf(
+		"Error: Looks like you're using PHPUnit %s. WordPress requires at least PHPUnit 5.7.21.\n",
+		$phpunit_version
+	);
+	echo "Please use the latest PHPUnit version supported for the PHP version you are running the tests on.\n";
+	exit( 1 );
+}
+
+/*
+ * Load the PHPUnit Polyfills autoloader.
+ *
+ * The PHPUnit Polyfills are a requirement for the WP test suite.
+ *
+ * For running the Core tests, the Make WordPress Core handbook contains step-by-step instructions
+ * on how to get up and running for a variety of supported workflows:
+ * {@link https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/#test-running-workflow-options}
+ *
+ * Plugin/theme integration tests can handle this in any of the following ways:
+ * - When using a full WP install: run `composer update -W` for the WP install prior to running the tests.
+ * - When using a partial WP test suite install:
+ *   - Add a `yoast/phpunit-polyfills` (dev) requirement to the plugin/theme's own `composer.json` file.
+ *   - And then:
+ *     - Either load the PHPUnit Polyfills autoload file prior to running the WP core bootstrap file.
+ *     - Or declare a `WP_TESTS_PHPUNIT_POLYFILLS_PATH` constant containing the absolute path to the
+ *       root directory of the PHPUnit Polyfills installation.
+ *       If the constant is used, it is strongly recommended to declare this constant in the plugin/theme's
+ *       own test bootstrap file.
+ *       The constant MUST be declared prior to calling this file.
+ */
+if ( ! class_exists( 'Yoast\PHPUnitPolyfills\Autoload' ) ) {
+	// Default location of the autoloader for WP core test runs.
+	$phpunit_polyfills_autoloader = dirname( dirname( dirname( __DIR__ ) ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+	$phpunit_polyfills_error      = false;
+
+	// Allow for a custom installation location to be provided for plugin/theme integration tests.
+	if ( defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
+		$phpunit_polyfills_path = WP_TESTS_PHPUNIT_POLYFILLS_PATH;
+
+		if ( is_string( WP_TESTS_PHPUNIT_POLYFILLS_PATH )
+			&& '' !== WP_TESTS_PHPUNIT_POLYFILLS_PATH
+		) {
+			// Be tolerant to the path being provided including the filename.
+			if ( substr( $phpunit_polyfills_path, -29 ) !== 'phpunitpolyfills-autoload.php' ) {
+				$phpunit_polyfills_path = rtrim( $phpunit_polyfills_path, '/\\' );
+				$phpunit_polyfills_path = $phpunit_polyfills_path . '/phpunitpolyfills-autoload.php';
+			}
+
+			$phpunit_polyfills_autoloader = $phpunit_polyfills_path;
+		} else {
+			$phpunit_polyfills_error = true;
+		}
+	}
+
+	if ( $phpunit_polyfills_error || ! file_exists( $phpunit_polyfills_autoloader ) ) {
+		echo 'Error: The PHPUnit Polyfills library is a requirement for running the WP test suite.' . PHP_EOL;
+		if ( defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
+			printf(
+				'The PHPUnit Polyfills autoload file was not found in "%s"' . PHP_EOL,
+				WP_TESTS_PHPUNIT_POLYFILLS_PATH
+			);
+			echo 'Please verify that the file path provided in the WP_TESTS_PHPUNIT_POLYFILLS_PATH constant is correct.' . PHP_EOL;
+			echo 'The WP_TESTS_PHPUNIT_POLYFILLS_PATH constant should contain an absolute path to the root directory'
+				. ' of the PHPUnit Polyfills library.' . PHP_EOL;
+		} elseif ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+			echo 'You need to run `composer update -W` before running the tests.' . PHP_EOL;
+			echo 'Once the dependencies are installed, you can run the tests using the Composer-installed version'
+				. ' of PHPUnit or using a PHPUnit phar file, but the dependencies do need to be installed'
+				. ' whichever way the tests are run.' . PHP_EOL;
+		} else {
+			echo 'If you are trying to run plugin/theme integration tests, make sure the PHPUnit Polyfills library'
+				. ' (https://github.com/Yoast/PHPUnit-Polyfills) is available and either load the autoload file'
+				. ' of this library in your own test bootstrap before calling the WP Core test bootstrap file;'
+				. ' or set the absolute path to the PHPUnit Polyfills library in a "WP_TESTS_PHPUNIT_POLYFILLS_PATH"'
+				. ' constant to allow the WP Core bootstrap to load the Polyfills.' . PHP_EOL . PHP_EOL;
+			echo 'If you are trying to run the WP Core tests, make sure to set the "WP_RUN_CORE_TESTS" constant'
+				. ' to 1 and run `composer update -W` before running the tests.' . PHP_EOL;
+			echo 'Once the dependencies are installed, you can run the tests using the Composer-installed'
+				. ' version of PHPUnit or using a PHPUnit phar file, but the dependencies do need to be'
+				. ' installed whichever way the tests are run.' . PHP_EOL;
+		}
+		exit( 1 );
+	}
+
+	require_once $phpunit_polyfills_autoloader;
+}
+unset( $phpunit_polyfills_autoloader, $phpunit_polyfills_error, $phpunit_polyfills_path );
+
+/*
+ * Minimum version of the PHPUnit Polyfills package as declared in `composer.json`.
+ * Only needs updating when new polyfill features start being used in the test suite.
+ */
+$phpunit_polyfills_minimum_version = '1.0.1';
+if ( class_exists( '\Yoast\PHPUnitPolyfills\Autoload' )
+	&& ( defined( '\Yoast\PHPUnitPolyfills\Autoload::VERSION' ) === false
+	|| version_compare( Yoast\PHPUnitPolyfills\Autoload::VERSION, $phpunit_polyfills_minimum_version, '<' ) )
+) {
+	printf(
+		'Error: Version mismatch detected for the PHPUnit Polyfills.'
+		. ' Please ensure that PHPUnit Polyfills %s or higher is loaded. Found version: %s' . PHP_EOL,
+		$phpunit_polyfills_minimum_version,
+		defined( '\Yoast\PHPUnitPolyfills\Autoload::VERSION' ) ? Yoast\PHPUnitPolyfills\Autoload::VERSION : '1.0.0 or lower'
+	);
+	if ( defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
+		printf(
+			'Please ensure that the PHPUnit Polyfill installation in "%s" is updated to version %s or higher.' . PHP_EOL,
+			WP_TESTS_PHPUNIT_POLYFILLS_PATH,
+			$phpunit_polyfills_minimum_version
+		);
+	} elseif ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+		echo 'Please run `composer update -W` to install the latest version.' . PHP_EOL;
+	}
+	exit( 1 );
+}
+unset( $phpunit_polyfills_minimum_version );
+
+// If running core tests, check if all the required PHP extensions are loaded before running the test suite.
+if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
+	$required_extensions = array(
+		'gd',
+	);
+	$missing_extensions  = array();
+
+	foreach ( $required_extensions as $extension ) {
+		if ( ! extension_loaded( $extension ) ) {
+			$missing_extensions[] = $extension;
+		}
+	}
+
+	if ( $missing_extensions ) {
+		printf(
+			"Error: The following required PHP extensions are missing from the testing environment: %s.\n",
+			implode( ', ', $missing_extensions )
+		);
+		echo "Please make sure they are installed and enabled.\n",
+		exit( 1 );
+	}
+}
+
+$required_constants = array(
+	'WP_TESTS_DOMAIN',
+	'WP_TESTS_EMAIL',
+	'WP_TESTS_TITLE',
+	'WP_PHP_BINARY',
+);
+$missing_constants  = array();
+
+foreach ( $required_constants as $constant ) {
+	if ( ! defined( $constant ) ) {
+		$missing_constants[] = $constant;
+	}
+}
+
+if ( $missing_constants ) {
+	printf(
+		"Error: The following required constants are not defined: %s.\n",
+		implode( ', ', $missing_constants )
+	);
+	echo "Please check out `wp-tests-config-sample.php` for an example.\n",
+	exit( 1 );
+}
 
 tests_reset__SERVER();
 
@@ -50,11 +213,11 @@ $PHP_SELF = $GLOBALS['PHP_SELF'] = $_SERVER['PHP_SELF'] = '/index.php';
 
 // Should we run in multisite mode?
 $multisite = '1' == getenv( 'WP_MULTISITE' );
-$multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE') && WP_TESTS_MULTISITE );
+$multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE' ) && WP_TESTS_MULTISITE );
 $multisite = $multisite || ( defined( 'MULTISITE' ) && MULTISITE );
 
 // Override the PHPMailer
-require_once( dirname( __FILE__ ) . '/mock-mailer.php' );
+require_once dirname( __FILE__ ) . '/mock-mailer.php';
 $phpmailer = new MockPHPMailer( true );
 
 if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
@@ -72,12 +235,12 @@ if ( 0 !== $retval ) {
 }
 
 if ( $multisite ) {
-	echo "Running as multisite..." . PHP_EOL;
+	echo 'Running as multisite...' . PHP_EOL;
 	defined( 'MULTISITE' ) or define( 'MULTISITE', true );
 	defined( 'SUBDOMAIN_INSTALL' ) or define( 'SUBDOMAIN_INSTALL', false );
 	$GLOBALS['base'] = '/';
 } else {
-	echo "Running as single site... To run multisite, use -c tests/phpunit/multisite.xml" . PHP_EOL;
+	echo 'Running as single site... To run multisite, use -c tests/phpunit/multisite.xml' . PHP_EOL;
 }
 unset( $multisite );
 
@@ -87,14 +250,14 @@ tests_add_filter( 'wp_die_handler', '_wp_die_handler_filter' );
 
 // Preset ClassicPress options defined in bootstrap file.
 // Used to activate themes, plugins, as well as  other settings.
-if(isset($GLOBALS['wp_tests_options'])) {
+if ( isset( $GLOBALS['wp_tests_options'] ) ) {
 	function wp_tests_options( $value ) {
 		$key = substr( current_filter(), strlen( 'pre_option_' ) );
-		return $GLOBALS['wp_tests_options'][$key];
+		return $GLOBALS['wp_tests_options'][ $key ];
 	}
 
 	foreach ( array_keys( $GLOBALS['wp_tests_options'] ) as $key ) {
-		tests_add_filter( 'pre_option_'.$key, 'wp_tests_options' );
+		tests_add_filter( 'pre_option_' . $key, 'wp_tests_options' );
 	}
 }
 
@@ -104,60 +267,53 @@ require_once ABSPATH . '/wp-settings.php';
 // Delete any default posts & related data
 _delete_all_posts();
 
-require dirname( __FILE__ ) . '/testcase.php';
-require dirname( __FILE__ ) . '/testcase-rest-api.php';
-require dirname( __FILE__ ) . '/testcase-rest-controller.php';
-require dirname( __FILE__ ) . '/testcase-rest-post-type-controller.php';
-require dirname( __FILE__ ) . '/testcase-xmlrpc.php';
-require dirname( __FILE__ ) . '/testcase-ajax.php';
-require dirname( __FILE__ ) . '/testcase-canonical.php';
-require dirname( __FILE__ ) . '/exceptions.php';
-require dirname( __FILE__ ) . '/utils.php';
-require dirname( __FILE__ ) . '/spy-rest-server.php';
+// Load class aliases for compatibility with PHPUnit 6+.
+if ( version_compare( tests_get_phpunit_version(), '6.0', '>=' ) ) {
+	require __DIR__ . '/phpunit6/compat.php';
+}
+
+require __DIR__ . '/phpunit-adapter-testcase.php';
+require __DIR__ . '/abstract-testcase.php';
+require __DIR__ . '/testcase.php';
+require __DIR__ . '/testcase-rest-api.php';
+require __DIR__ . '/testcase-rest-controller.php';
+require __DIR__ . '/testcase-rest-post-type-controller.php';
+require __DIR__ . '/testcase-xmlrpc.php';
+require __DIR__ . '/testcase-ajax.php';
+require __DIR__ . '/testcase-canonical.php';
+require __DIR__ . '/exceptions.php';
+require __DIR__ . '/utils.php';
+require __DIR__ . '/spy-rest-server.php';
 
 /**
- * A child class of the PHP test runner.
+ * A class to handle additional command line arguments passed to the script.
  *
- * Used to access the protected longOptions property, to parse the arguments
- * passed to the script.
+ * If it is determined that phpunit was called with a --group that corresponds
+ * to an @ticket annotation (such as `phpunit --group 12345` for bugs marked
+ * as #WP12345), then it is assumed that known bugs should not be skipped.
+ *
+ * If WP_TESTS_FORCE_KNOWN_BUGS is already set in wp-tests-config.php, then
+ * how you call phpunit has no effect.
  */
-class WP_PHPUnit_Util_Getopt extends PHPUnit_Util_Getopt {
-	protected $longOptions = array(
-	  'exclude-group=',
-	  'group=',
-	);
+class WP_PHPUnit_Util_Getopt {
 	function __construct( $argv ) {
-		array_shift( $argv );
-		$options = array();
-		while ( current( $argv ) ) {
-			$arg = current( $argv );
-			next( $argv );
-			try {
-				if ( strlen( $arg ) > 1 && $arg[0] === '-' && $arg[1] === '-' ) {
-					PHPUnit_Util_Getopt::parseLongOption( substr( $arg, 2 ), $this->longOptions, $options, $argv );
-				}
-			}
-			catch ( PHPUnit_Framework_Exception $e ) {
-				// Enforcing recognized arguments or correctly formed arguments is
-				// not really the concern here.
-				continue;
-			}
-		}
-
 		$skipped_groups = array(
-			'ajax' => true,
-			'ms-files' => true,
+			'ajax'          => true,
+			'ms-files'      => true,
 			'external-http' => true,
 		);
 
-		foreach ( $options as $option ) {
-			switch ( $option[0] ) {
-				case '--exclude-group' :
+		while ( current( $argv ) ) {
+			$option = current( $argv );
+			$value  = next( $argv );
+
+			switch ( $option ) {
+				case '--exclude-group':
 					foreach ( $skipped_groups as $group_name => $skipped ) {
 						$skipped_groups[ $group_name ] = false;
 					}
 					continue 2;
-				case '--group' :
+				case '--group':
 					$groups = explode( ',', $option[1] );
 
 					foreach ( $skipped_groups as $group_name => $skipped ) {
@@ -180,6 +336,6 @@ class WP_PHPUnit_Util_Getopt extends PHPUnit_Util_Getopt {
 			echo 'If this changeset includes changes to HTTP, make sure there are no timeouts.' . PHP_EOL;
 			echo PHP_EOL;
 		}
-    }
+	}
 }
 new WP_PHPUnit_Util_Getopt( $_SERVER['argv'] );

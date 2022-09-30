@@ -54,12 +54,10 @@ jobs:
         run: phpcs -i
 
       - name: Run PHPCS on all Core files
-        continue-on-error: true
         run: phpcs -q -n --report=checkstyle | cs2pr
 
       - name: Check test suite files for warnings
-        continue-on-error: true
-        run: phpcs tests -q --report=checkstyle | cs2pr
+        run: phpcs tests -q -n --report=checkstyle | cs2pr
 
   # Runs the pre-commit checks.
   #
@@ -102,7 +100,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: 7.4
@@ -110,9 +108,14 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: "--no-progress --no-ansi --no-interaction"
+
       - name: Install PHPUnit
         run: |
-          wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+          wget -O phpunit https://phar.phpunit.de/phpunit-8.phar
           chmod +x phpunit
           sudo mv phpunit /usr/bin/
 
