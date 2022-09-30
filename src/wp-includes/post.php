@@ -2581,8 +2581,8 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	/**
 	 * Fires before a post is deleted, at the start of wp_delete_post().
 	 *
-	 * @since 3.2.0
-	 * @since 5.5.0 Added the `$post` parameter.
+	 * @since WP-3.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @see wp_delete_post()
 	 *
@@ -2633,8 +2633,8 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	/**
 	 * Fires immediately before a post is deleted from the database.
 	 *
-	 * @since 1.2.0
-	 * @since 5.5.0 Added the `$post` parameter.
+	 * @since WP-1.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @param int     $postid Post ID.
 	 * @param WP_Post $post   Post object.
@@ -2648,8 +2648,8 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	/**
 	 * Fires immediately after a post is deleted from the database.
 	 *
-	 * @since 2.2.0
-	 * @since 5.5.0 Added the `$post` parameter.
+	 * @since WP-2.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @param int     $postid Post ID.
 	 * @param WP_Post $post   Post object.
@@ -2668,8 +2668,8 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	/**
 	 * Fires after a post is deleted, at the conclusion of wp_delete_post().
 	 *
-	 * @since 3.2.0
-	 * @since 5.5.0 Added the `$post` parameter.
+	 * @since WP-3.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @see wp_delete_post()
 	 *
