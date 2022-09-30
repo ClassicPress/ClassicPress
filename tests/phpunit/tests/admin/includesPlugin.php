@@ -4,9 +4,6 @@
  * @group admin
  */
 class Tests_Admin_includesPlugin extends WP_UnitTestCase {
-<<<<<<< HEAD
-	public function test_get_plugin_data() {
-=======
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::_back_up_mu_plugins();
 	}
@@ -16,7 +13,6 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 	}
 
 	function test_get_plugin_data() {
->>>>>>> develop
 		$data = get_plugin_data( DIR_TESTDATA . '/plugins/hello.php' );
 
 		$default_headers = array(
@@ -232,10 +228,7 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$p2 = $this->_create_plugin( "<?php\n//Test", 'not-a-dropin.php', WP_CONTENT_DIR );
 
 		$dropins = get_dropins();
-<<<<<<< HEAD
-=======
 		$this->assertSame( array( 'advanced-cache.php' ), array_keys( $dropins ) );
->>>>>>> develop
 
 		unlink( $p1[1] );
 		unlink( $p2[1] );
