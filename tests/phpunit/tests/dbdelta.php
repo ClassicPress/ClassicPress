@@ -15,8 +15,6 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	protected $max_index_length = 191;
 
 	/**
-<<<<<<< HEAD
-=======
 	 * Database engine used for creating tables.
 	 *
 	 * Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
@@ -38,7 +36,6 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	private static $db_server_info;
 
 	/**
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 	 * Make sure the upgrade code is loaded before the tests are run.
 	 */
 	public static function set_up_before_class() {
@@ -60,36 +57,21 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		global $wpdb;
 
-<<<<<<< HEAD
-		// Forcing MyISAM, because InnoDB only started supporting FULLTEXT indexes in MySQL 5.7.
-=======
 		if ( version_compare( self::$db_version, '5.7', '<' ) ) {
 			// Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
 			$this->db_engine = 'ENGINE=MyISAM';
 		}
 
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 		$wpdb->query(
-			"
-<<<<<<< HEAD
-			CREATE TABLE {$wpdb->prefix}dbdelta_test (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-=======
+			$wpdb->prepare(
+				"
 				CREATE TABLE {$wpdb->prefix}dbdelta_test (" .
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					'id bigint(20) NOT NULL AUTO_INCREMENT,
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
-				column_1 varchar(255) NOT NULL,
-				column_2 text,
-				column_3 blob,
-				PRIMARY KEY  (id),
-<<<<<<< HEAD
-				KEY key_1 (column_1($this->max_index_length)),
-				KEY compound_key (id,column_1($this->max_index_length)),
-				FULLTEXT KEY fulltext_key (column_1)
-			) ENGINE=MyISAM
-			"
-=======
+					column_1 varchar(255) NOT NULL,
+					column_2 text,
+					column_3 blob,
+					PRIMARY KEY  (id),
 					KEY key_1 (column_1(%d)),
 					KEY compound_key (id,column_1(%d)),
 					FULLTEXT KEY fulltext_key (column_1)' .
@@ -99,7 +81,6 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				$this->max_index_length,
 				$this->max_index_length
 			)
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 		);
 
 		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
@@ -214,11 +195,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.id"
-<<<<<<< HEAD
-					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint(20) to int(11)",
-=======
 					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint{$bigint_display_width} to int(11)",
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 			),
 			$updates
 		);
@@ -615,12 +592,6 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	function test_spatial_indices() {
 		global $wpdb;
 
-<<<<<<< HEAD
-		if ( version_compare( $wpdb->db_version(), '5.4', '<' ) ) {
-			$this->markTestSkipped( 'Spatial indices require MySQL 5.4 and above.' );
-		}
-
-=======
 		if ( version_compare( self::$db_version, '5.4', '<' ) ) {
 			$this->markTestSkipped( 'Spatial indices require MySQL 5.4 and above.' );
 		}
@@ -638,16 +609,11 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			$geometrycollection_name = 'geomcollection';
 		}
 
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 		$schema =
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-<<<<<<< HEAD
-				spatial_value geometrycollection NOT NULL,
-=======
 				spatial_value {$geometrycollection_name} NOT NULL,
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 			) ENGINE=MyISAM;
@@ -663,13 +629,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-<<<<<<< HEAD
-				spatial_value geometrycollection NOT NULL,
-				spatial_value2 geometrycollection NOT NULL,
-=======
 				spatial_value {$geometrycollection_name} NOT NULL,
 				spatial_value2 {$geometrycollection_name} NOT NULL,
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 				SPATIAL KEY spatial_key2 (spatial_value2)
@@ -756,11 +717,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/20263
 	 */
-<<<<<<< HEAD
-	function test_wp_get_db_schema_does_no_alter_queries_on_existing_install() {
-=======
 	public function test_wp_get_db_schema_does_not_alter_queries_on_existing_install() {
->>>>>>> 37368555a5 (Database: Ignore display width for integer data types in `dbDelta()` on MySQL 8.0.17 or later.)
 		$updates = dbDelta( wp_get_db_schema() );
 
 		$this->assertEmpty( $updates );
