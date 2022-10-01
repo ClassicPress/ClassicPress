@@ -150,7 +150,11 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
+<<<<<<< HEAD
 		$this->assertNull( $found );
+=======
+		$this->assertSame( null, $found );
+>>>>>>> 2da7f9f524 (Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.)
 	}
 
 	public function test_term_exists_taxonomy_nonempty_parent_nonempty_match_name() {
