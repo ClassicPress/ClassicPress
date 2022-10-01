@@ -3580,12 +3580,8 @@ function human_time_diff( $from, $to = '' ) {
  * The 55 word limit can be modified by plugins/themes using the {@see 'excerpt_length'} filter
  * The ' [&hellip;]' string can be modified by plugins/themes using the {@see 'excerpt_more'} filter
  *
-<<<<<<< HEAD
  * @since WP-1.5.0
-=======
- * @since 1.5.0
- * @since 5.2.0 Added the `$post` parameter.
->>>>>>> 30c21d2031 (Posts: Avoid the use of globals in `get_the_content()` and related functions.)
+ * @since WP-5.2.0 Added the `$post` parameter.
  *
  * @param string $text Optional. The excerpt. If set to empty, an excerpt is generated.
  * @param WP_Post|object|int $post Optional. WP_Post instance or Post ID/object. Default is null.
