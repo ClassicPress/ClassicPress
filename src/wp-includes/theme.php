@@ -2440,11 +2440,7 @@ function add_theme_support( $feature ) {
 				// Build an array of types for back-compat.
 				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
 			} elseif ( ! isset( $args[0] ) || ! is_array( $args[0] ) ) {
-<<<<<<< HEAD
 				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), 'WP-3.6.1' );
-=======
-				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), '3.6.1' );
->>>>>>> 2da7f9f524 (Code Modernisation: Fix known instances of array access on data types that can't be accessed as arrays.)
 				return false;
 			}
 
