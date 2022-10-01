@@ -434,7 +434,7 @@ function media_handle_sideload( $file_array, $post_id, $desc = null, $post_data 
 	$url     = $file['url'];
 	$type    = $file['type'];
 	$file    = $file['file'];
-	$title   = preg_replace( '/\.[^.]+$/', '', basename( $file ) );
+	$title   = preg_replace( '/\.[^.]+$/', '', wp_basename( $file ) );
 	$content = '';
 
 	// Use image exif/iptc data for title and caption defaults if possible.
@@ -828,7 +828,7 @@ function wp_media_upload_handler() {
 		if ( isset( $_POST['media_type'] ) && 'image' != $_POST['media_type'] ) {
 			$title = esc_html( wp_unslash( $_POST['title'] ) );
 			if ( empty( $title ) ) {
-				$title = esc_html( basename( $src ) );
+				$title = esc_html( wp_basename( $src ) );
 			}
 
 			if ( $title && $src ) {
@@ -932,7 +932,7 @@ function media_sideload_image( $file, $post_id, $desc = null, $return = 'html' )
 		}
 
 		$file_array         = array();
-		$file_array['name'] = basename( $matches[0] );
+		$file_array['name'] = wp_basename( $matches[0] );
 
 		// Download file to temp location.
 		$file_array['tmp_name'] = download_url( $file );
@@ -3114,12 +3114,13 @@ function attachment_submitbox_metadata() {
 	</div>
 
 	<?php
-		$file_size = false;
+
+	$file_size = false;
 
 	if ( isset( $meta['filesize'] ) ) {
 		$file_size = $meta['filesize'];
 	} elseif ( file_exists( $file ) ) {
-		$file_size = filesize( $file );
+		$file_size = wp_filesize( $file );
 	}
 
 	if ( ! empty( $file_size ) ) :
@@ -3282,7 +3283,11 @@ function wp_read_video_metadata( $file ) {
 	if ( ! class_exists( 'getID3', false ) ) {
 		require ABSPATH . WPINC . '/ID3/getid3.php';
 	}
-	$id3  = new getID3();
+
+	$id3 = new getID3();
+	// Required to get the `created_timestamp` value.
+	$id3->options_audiovideo_quicktime_ReturnAtomData = true; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 	$data = $id3->analyze( $file );
 
 	if ( isset( $data['video']['lossless'] ) ) {
@@ -3379,7 +3384,11 @@ function wp_read_audio_metadata( $file ) {
 	if ( ! class_exists( 'getID3', false ) ) {
 		require ABSPATH . WPINC . '/ID3/getid3.php';
 	}
-	$id3  = new getID3();
+
+	$id3 = new getID3();
+	// Required to get the `created_timestamp` value.
+	$id3->options_audiovideo_quicktime_ReturnAtomData = true; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 	$data = $id3->analyze( $file );
 
 	if ( ! empty( $data['audio'] ) ) {

@@ -16,11 +16,12 @@ class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 	 */
 	public $editor_engine = 'WP_Image_Editor_GD';
 
-	public function setUp() {
+	public function set_up() {
 		require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
 		require_once ABSPATH . WPINC . '/class-wp-image-editor-gd.php';
 
-		parent::setUp();
+		// This needs to come after the mock image editor class is loaded.
+		parent::set_up();
 	}
 
 	/**
@@ -31,7 +32,7 @@ class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 
 		$image = $this->resize_helper( DIR_TESTDATA . '/export/crazy-cdata.xml', 25, 25 );
 		$this->assertInstanceOf( 'WP_Error', $image );
-		$this->assertEquals( 'invalid_image', $image->get_error_code() );
+		$this->assertSame( 'invalid_image', $image->get_error_code() );
 	}
 
 }

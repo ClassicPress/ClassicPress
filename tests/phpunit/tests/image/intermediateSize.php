@@ -5,19 +5,19 @@
  * @group upload
  */
 class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
-	function tearDown() {
+	function tear_down() {
 		$this->remove_added_uploads();
 
 		remove_image_size( 'test-size' );
 		remove_image_size( 'false-height' );
 		remove_image_size( 'false-width' );
 		remove_image_size( 'off-by-one' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function _make_attachment( $file, $parent_post_id = 0 ) {
 		$contents = file_get_contents( $file );
-		$upload   = wp_upload_bits( basename( $file ), null, $contents );
+		$upload   = wp_upload_bits( wp_basename( $file ), null, $contents );
 
 		return parent::_make_attachment( $upload, $parent_post_id );
 	}
@@ -35,7 +35,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 100, 0, false );
 
-		$this->assertInternalType( 'array', $image );
+		$this->assertIsArray( $image );
 	}
 
 	function test_make_intermediate_size_height() {
@@ -45,7 +45,7 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 0, 75, false );
 
-		$this->assertInternalType( 'array', $image );
+		$this->assertIsArray( $image );
 	}
 
 	function test_make_intermediate_size_successful() {
@@ -55,10 +55,10 @@ class Tests_Image_Intermediate_Size extends WP_UnitTestCase {
 
 		$image = image_make_intermediate_size( DIR_TESTDATA . '/images/a2-small.jpg', 100, 75, true );
 
-		$this->assertInternalType( 'array', $image );
-		$this->assertEquals( 100, $image['width'] );
-		$this->assertEquals( 75, $image['height'] );
-		$this->assertEquals( 'image/jpeg', $image['mime-type'] );
+		$this->assertIsArray( $image );
+		$this->assertSame( 100, $image['width'] );
+		$this->assertSame( 75, $image['height'] );
+		$this->assertSame( 'image/jpeg', $image['mime-type'] );
 
 		$this->assertFalse( isset( $image['path'] ) );
 

@@ -15,25 +15,27 @@
 class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 	const YOUTUBE_VIDEO_ID = 'i_cVJgIz_Cs';
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new Spy_REST_Server;
 		do_action( 'rest_api_init' );
+		update_option( 'default_comment_status', 'open' );
 
 		add_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10, 3 );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
+	public function tear_down() {
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
 		$wp_rest_server = null;
 
+		update_option( 'default_comment_status', 'closed' );
+
 		remove_filter( 'pre_http_request', array( $this, 'mock_embed_request' ), 10, 3 );
+		parent::tear_down();
 	}
 
 	public function mock_embed_request( $preempt, $r, $url ) {
@@ -113,7 +115,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			'/wp/v2/settings',
 		);
 
-		$this->assertEquals( $expected_routes, $routes );
+		$this->assertSame( $expected_routes, $routes );
 	}
 
 	private function is_builtin_route( $route ) {
@@ -189,7 +191,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 		);
 
 		$media_id = $this->factory->attachment->create_object(
-			'/tmp/canola.jpg',
+			get_temp_dir() . 'canola.jpg',
 			0,
 			array(
 				'post_mime_type' => 'image/jpeg',
@@ -387,7 +389,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			$status   = $response->get_status();
 			$data     = $response->get_data();
 
-			$this->assertEquals(
+			$this->assertSame(
 				200,
 				$response->get_status(),
 				"HTTP $status from $route[route]: " . json_encode( $data )
