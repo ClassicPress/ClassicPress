@@ -201,7 +201,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 19847
+	 * @see https://core.trac.wordpress.org/ticket/19847
 	 */
 	public function test_wp_mail_with_from_header_missing_space() {
 		$to        = 'address@tld.com';
@@ -223,7 +223,7 @@ class Tests_Mail extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 30266
+	 * @see https://core.trac.wordpress.org/ticket/30266
 	 */
 	public function test_wp_mail_with_empty_from_header() {
 		$to       = 'address@tld.com';
