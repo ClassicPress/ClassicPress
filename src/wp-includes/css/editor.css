@@ -259,7 +259,6 @@ div.mce-inline-toolbar-grp {
 	position: absolute;
 	-moz-user-select: none;
 	-webkit-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	max-width: 98%;
 	z-index: 100100; /* Same as the other TinyMCE "panels" */

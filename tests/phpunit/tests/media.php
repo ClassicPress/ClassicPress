@@ -9,10 +9,10 @@ class Tests_Media extends WP_UnitTestCase {
 	protected static $_sizes;
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		self::$_sizes = wp_get_additional_image_sizes();
+		self::$_sizes                          = wp_get_additional_image_sizes();
 		$GLOBALS['_wp_additional_image_sizes'] = array();
 
-		$filename = DIR_TESTDATA . '/images/test-image-large.png';
+		$filename       = DIR_TESTDATA . '/images/test-image-large.png';
 		self::$large_id = $factory->attachment->create_upload_object( $filename );
 	}
 
@@ -20,31 +20,35 @@ class Tests_Media extends WP_UnitTestCase {
 		$GLOBALS['_wp_additional_image_sizes'] = self::$_sizes;
 	}
 
-	public static function tearDownAfterClass() {
+	public static function tear_down_after_class() {
 		wp_delete_post( self::$large_id, true );
-		parent::tearDownAfterClass();
+		parent::tear_down_after_class();
 	}
 
-	function setUp() {
-		parent::setUp();
-		$this->caption = 'A simple caption.';
+	function set_up() {
+		parent::set_up();
+		$this->caption           = 'A simple caption.';
 		$this->alternate_caption = 'Alternate caption.';
-		$this->html_content = <<<CAP
+		$this->html_content      = <<<CAP
 A <strong class='classy'>bolded</strong> <em>caption</em> with a <a href="#">link</a>.
 CAP;
-		$this->img_content = <<<CAP
+		$this->img_content       = <<<CAP
 <img src="pic.jpg" id='anId' alt="pic"/>
 CAP;
-		$this->img_name = 'image.jpg';
-		$this->img_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $this->img_name;
-		$this->img_html = '<img src="' . $this->img_url . '"/>';
-		$this->img_meta = array( 'width' => 100, 'height' => 100, 'sizes' => '' );
+		$this->img_name          = 'image.jpg';
+		$this->img_url           = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $this->img_name;
+		$this->img_html          = '<img src="' . $this->img_url . '"/>';
+		$this->img_meta          = array(
+			'width'  => 100,
+			'height' => 100,
+			'sizes'  => '',
+		);
 	}
 
 	function test_img_caption_shortcode_added() {
 		global $shortcode_tags;
-		$this->assertEquals( 'img_caption_shortcode', $shortcode_tags['caption'] );
-		$this->assertEquals( 'img_caption_shortcode', $shortcode_tags['wp_caption'] );
+		$this->assertSame( 'img_caption_shortcode', $shortcode_tags['caption'] );
+		$this->assertSame( 'img_caption_shortcode', $shortcode_tags['wp_caption'] );
 	}
 
 	function test_img_caption_shortcode_with_empty_params() {
@@ -57,7 +61,7 @@ CAP;
 	 */
 	function test_img_caption_shortcode_with_empty_params_but_content() {
 		$result = img_caption_shortcode( array(), $this->caption );
-		$this->assertEquals( $this->caption, $result );
+		$this->assertSame( $this->caption, $result );
 	}
 
 	/**
@@ -67,7 +71,7 @@ CAP;
 		add_filter( 'img_caption_shortcode', array( $this, '_return_alt_caption' ) );
 
 		$result = img_caption_shortcode( array(), $this->caption );
-		$this->assertEquals( $this->alternate_caption, $result );
+		$this->assertSame( $this->alternate_caption, $result );
 	}
 
 	/**
@@ -87,7 +91,7 @@ CAP;
 			),
 			$this->caption
 		);
-		$this->assertEquals( $this->caption, $result );
+		$this->assertSame( $this->caption, $result );
 	}
 
 	/**
@@ -112,96 +116,102 @@ CAP;
 			),
 			$this->caption
 		);
-		$this->assertEquals( $this->caption, $result );
+		$this->assertSame( $this->caption, $result );
 	}
 
 	function test_img_caption_shortcode_with_old_format() {
 		$result = img_caption_shortcode(
-			array( 'width' => 20, 'caption' => $this->caption )
+			array(
+				'width'   => 20,
+				'caption' => $this->caption,
+			)
 		);
 
-		$this->assertEquals( 2, preg_match_all( '/wp-caption/', $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( '/alignnone/', $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( "/{$this->caption}/", $result, $_r ) );
+		$this->assertSame( 2, preg_match_all( '/wp-caption/', $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( '/alignnone/', $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "/{$this->caption}/", $result, $_r ) );
 
 		if ( current_theme_supports( 'html5', 'caption' ) ) {
-			$this->assertEquals( 1, preg_match_all( '/width: 20/', $result, $_r ) );
+			$this->assertSame( 1, preg_match_all( '/width: 20/', $result, $_r ) );
 		} else {
-			$this->assertEquals( 1, preg_match_all( '/width: 30/', $result, $_r ) );
+			$this->assertSame( 1, preg_match_all( '/width: 30/', $result, $_r ) );
 		}
 	}
 
 	function test_img_caption_shortcode_with_old_format_id_and_align() {
 		$result = img_caption_shortcode(
 			array(
-				'width' => 20,
+				'width'   => 20,
 				'caption' => $this->caption,
-				'id' => '"myId',
-				'align' => '&myAlignment'
+				'id'      => '"myId',
+				'align'   => '&myAlignment',
 			)
 		);
-		$this->assertEquals( 1, preg_match_all( '/wp-caption &amp;myAlignment/', $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( '/id="myId"/', $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( "/{$this->caption}/", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( '/wp-caption &amp;myAlignment/', $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( '/id="myId"/', $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "/{$this->caption}/", $result, $_r ) );
 	}
 
 	function test_img_caption_shortcode_with_old_format_and_class() {
 		$result = img_caption_shortcode(
 			array(
-				'width' => 20,
-				'class' => 'some-class another-class',
+				'width'   => 20,
+				'class'   => 'some-class another-class',
 				'caption' => $this->caption,
 			)
 		);
-		$this->assertEquals( 1, preg_match_all( '/wp-caption alignnone some-class another-class/', $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( '/wp-caption alignnone some-class another-class/', $result, $_r ) );
 
 	}
 
 	function test_new_img_caption_shortcode_with_html_caption() {
-		$result = img_caption_shortcode(
-			array( 'width' => 20, 'caption' => $this->html_content )
+		$result   = img_caption_shortcode(
+			array(
+				'width'   => 20,
+				'caption' => $this->html_content,
+			)
 		);
 		$our_preg = preg_quote( $this->html_content );
 
-		$this->assertEquals( 1, preg_match_all( "~{$our_preg}~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~{$our_preg}~", $result, $_r ) );
 	}
 
 	function test_new_img_caption_shortcode_new_format() {
-		$result = img_caption_shortcode(
+		$result       = img_caption_shortcode(
 			array( 'width' => 20 ),
 			$this->img_content . $this->html_content
 		);
-		$img_preg = preg_quote( $this->img_content );
+		$img_preg     = preg_quote( $this->img_content );
 		$content_preg = preg_quote( $this->html_content );
 
-		$this->assertEquals( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
 	}
 
 	function test_new_img_caption_shortcode_new_format_and_linked_image() {
 		$linked_image = "<a href='#'>{$this->img_content}</a>";
-		$result = img_caption_shortcode(
+		$result       = img_caption_shortcode(
 			array( 'width' => 20 ),
 			$linked_image . $this->html_content
 		);
-		$img_preg = preg_quote( $linked_image );
+		$img_preg     = preg_quote( $linked_image );
 		$content_preg = preg_quote( $this->html_content );
 
-		$this->assertEquals( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
 	}
 
 	function test_new_img_caption_shortcode_new_format_and_linked_image_with_newline() {
 		$linked_image = "<a href='#'>{$this->img_content}</a>";
-		$result = img_caption_shortcode(
+		$result       = img_caption_shortcode(
 			array( 'width' => 20 ),
 			$linked_image . "\n\n" . $this->html_content
 		);
-		$img_preg = preg_quote( $linked_image );
+		$img_preg     = preg_quote( $linked_image );
 		$content_preg = preg_quote( $this->html_content );
 
-		$this->assertEquals( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
-		$this->assertEquals( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~{$img_preg}.*wp-caption-text~", $result, $_r ) );
+		$this->assertSame( 1, preg_match_all( "~wp-caption-text.*{$content_preg}~", $result, $_r ) );
 	}
 
 	function test_add_remove_oembed_provider() {
@@ -219,7 +229,7 @@ CAP;
 		$content = '';
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $content, $result );
+		$this->assertSame( $content, $result );
 	}
 
 	/**
@@ -241,7 +251,7 @@ http://some.other.link/</pre>
 EOF;
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $content, $result );
+		$this->assertSame( $content, $result );
 	}
 
 	function data_autoembed() {
@@ -249,54 +259,54 @@ EOF;
 
 			// Should embed
 			array(
-'https://w.org',
-'[embed]'
+				'https://w.org',
+				'[embed]',
 			),
 			array(
-'test
+				'test
  https://w.org
 test',
-'test
+				'test
  [embed]
-test'
+test',
 			),
 			array(
-'<p class="test">https://w.org</p>',
-'<p class="test">[embed]</p>'
+				'<p class="test">https://w.org</p>',
+				'<p class="test">[embed]</p>',
 			),
 			array(
-'<p> https://w.org </p>',
-'<p> [embed] </p>'
+				'<p> https://w.org </p>',
+				'<p> [embed] </p>',
 			),
 			array(
-'<p>test
+				'<p>test
 https://w.org
 test</p>',
-'<p>test
+				'<p>test
 [embed]
-test</p>'
+test</p>',
 			),
 			array(
-'<p>https://w.org
+				'<p>https://w.org
 </p>',
-'<p>[embed]
-</p>'
+				'<p>[embed]
+</p>',
 			),
 
 			// Should NOT embed
 			array(
-'test https://w.org</p>'
+				'test https://w.org</p>',
 			),
 			array(
-'<span>https://w.org</a>'
+				'<span>https://w.org</a>',
 			),
 			array(
-'<pre>https://w.org
-</p>'
+				'<pre>https://w.org
+</p>',
 			),
 			array(
-'<a href="https://w.org">
-https://w.org</a>'
+				'<a href="https://w.org">
+https://w.org</a>',
 			),
 		);
 	}
@@ -307,54 +317,58 @@ https://w.org</a>'
 	function test_autoembed( $content, $result = null ) {
 		$wp_embed = new Test_Autoembed;
 
-		$this->assertEquals( $wp_embed->autoembed( $content ), $result ? $result : $content );
+		$this->assertSame( $wp_embed->autoembed( $content ), $result ? $result : $content );
 	}
 
 	function test_wp_prepare_attachment_for_js() {
 		// Attachment without media
-		$id = wp_insert_attachment(array(
-			'post_status' => 'publish',
-			'post_title' => 'Prepare',
-			'post_content_filtered' => 'Prepare',
-			'post_type' => 'post'
-		));
+		$id   = wp_insert_attachment(
+			array(
+				'post_status'           => 'publish',
+				'post_title'            => 'Prepare',
+				'post_content_filtered' => 'Prepare',
+				'post_type'             => 'post',
+			)
+		);
 		$post = get_post( $id );
 
 		$prepped = wp_prepare_attachment_for_js( $post );
-		$this->assertInternalType( 'array', $prepped );
-		$this->assertEquals( 0, $prepped['uploadedTo'] );
-		$this->assertEquals( '', $prepped['mime'] );
-		$this->assertEquals( '', $prepped['type'] );
-		$this->assertEquals( '', $prepped['subtype'] );
+		$this->assertIsArray( $prepped );
+		$this->assertSame( 0, $prepped['uploadedTo'] );
+		$this->assertSame( '', $prepped['mime'] );
+		$this->assertSame( '', $prepped['type'] );
+		$this->assertSame( '', $prepped['subtype'] );
 		// https://core.trac.wordpress.org/ticket/21963, there will be a guid always, so there will be a URL
 		$this->assertNotEquals( '', $prepped['url'] );
-		$this->assertEquals( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
+		$this->assertSame( site_url( 'wp-includes/images/media/default.png' ), $prepped['icon'] );
 
 		// Fake a mime
 		$post->post_mime_type = 'image/jpeg';
-		$prepped = wp_prepare_attachment_for_js( $post );
-		$this->assertEquals( 'image/jpeg', $prepped['mime'] );
-		$this->assertEquals( 'image', $prepped['type'] );
-		$this->assertEquals( 'jpeg', $prepped['subtype'] );
+		$prepped              = wp_prepare_attachment_for_js( $post );
+		$this->assertSame( 'image/jpeg', $prepped['mime'] );
+		$this->assertSame( 'image', $prepped['type'] );
+		$this->assertSame( 'jpeg', $prepped['subtype'] );
 
 		// Fake a mime without a slash. See #WP22532
 		$post->post_mime_type = 'image';
-		$prepped = wp_prepare_attachment_for_js( $post );
-		$this->assertEquals( 'image', $prepped['mime'] );
-		$this->assertEquals( 'image', $prepped['type'] );
-		$this->assertEquals( '', $prepped['subtype'] );
+		$prepped              = wp_prepare_attachment_for_js( $post );
+		$this->assertSame( 'image', $prepped['mime'] );
+		$this->assertSame( 'image', $prepped['type'] );
+		$this->assertSame( '', $prepped['subtype'] );
 
 		// Test that if author is not found, we return "(no author)" as `display_name`.
 		// The previously used test post contains no author, so we can reuse it.
-		$this->assertEquals( '(no author)', $prepped['authorName'] );
+		$this->assertSame( '(no author)', $prepped['authorName'] );
 
 		// Test that if author has HTML entities in display_name, they're decoded correctly.
-		$html_entity_author = self::factory()->user->create( array(
-			'display_name' => 'You &amp; Me',
-		) );
-		$post->post_author = $html_entity_author;
-		$prepped = wp_prepare_attachment_for_js( $post );
-		$this->assertEquals( 'You & Me', $prepped['authorName'] );
+		$html_entity_author = self::factory()->user->create(
+			array(
+				'display_name' => 'You &amp; Me',
+			)
+		);
+		$post->post_author  = $html_entity_author;
+		$prepped            = wp_prepare_attachment_for_js( $post );
+		$this->assertSame( 'You & Me', $prepped['authorName'] );
 	}
 
 	/**
@@ -362,20 +376,25 @@ https://w.org</a>'
 	 */
 	function test_wp_prepare_attachment_for_js_without_image_sizes() {
 		// Create the attachement post.
-		$id = wp_insert_attachment( array(
-			'post_title' => 'Attachment Title',
-			'post_type' => 'attachment',
-			'post_parent' => 0,
-			'post_mime_type' => 'image/jpeg',
-			'guid' => 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test-image.jpg',
-		) );
+		$id = wp_insert_attachment(
+			array(
+				'post_title'     => 'Attachment Title',
+				'post_type'      => 'attachment',
+				'post_parent'    => 0,
+				'post_mime_type' => 'image/jpeg',
+				'guid'           => 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test-image.jpg',
+			)
+		);
 
 		// Add attachment metadata without sizes.
-		wp_update_attachment_metadata( $id, array(
-			'width' => 50,
-			'height' => 50,
-			'file' => 'test-image.jpg',
-		) );
+		wp_update_attachment_metadata(
+			$id,
+			array(
+				'width'  => 50,
+				'height' => 50,
+				'file'   => 'test-image.jpg',
+			)
+		);
 
 		$prepped = wp_prepare_attachment_for_js( get_post( $id ) );
 
@@ -392,44 +411,48 @@ https://w.org</a>'
 		$gb = $mb * 1024;
 		$tb = $gb * 1024;
 
-		// test if boundaries are correct
-		$this->assertEquals( '1TB', wp_convert_bytes_to_hr( $tb ) );
-		$this->assertEquals( '1GB', wp_convert_bytes_to_hr( $gb ) );
-		$this->assertEquals( '1MB', wp_convert_bytes_to_hr( $mb ) );
-		$this->assertEquals( '1KB', wp_convert_bytes_to_hr( $kb ) );
+		// Test if boundaries are correct.
+		$this->assertSame( '1TB', wp_convert_bytes_to_hr( $tb ) );
+		$this->assertSame( '1GB', wp_convert_bytes_to_hr( $gb ) );
+		$this->assertSame( '1MB', wp_convert_bytes_to_hr( $mb ) );
+		$this->assertSame( '1KB', wp_convert_bytes_to_hr( $kb ) );
 
-		$this->assertEquals( '1 TB', size_format( $tb ) );
-		$this->assertEquals( '1 GB', size_format( $gb ) );
-		$this->assertEquals( '1 MB', size_format( $mb ) );
-		$this->assertEquals( '1 KB', size_format( $kb ) );
+		$this->assertSame( '1 TB', size_format( $tb ) );
+		$this->assertSame( '1 GB', size_format( $gb ) );
+		$this->assertSame( '1 MB', size_format( $mb ) );
+		$this->assertSame( '1 KB', size_format( $kb ) );
 
 		// now some values around
 		$hr = wp_convert_bytes_to_hr( $tb + $tb / 2 + $mb );
-		$this->assertEquals( 1.50000095367, (float) str_replace( ',', '.', $hr ), 'The values should be equal', 0.0001 );
+		$this->assertEqualsWithDelta( 1.50000095367, (float) str_replace( ',', '.', $hr ), 0.0001, 'The values should be equal' );
 
 		$hr = wp_convert_bytes_to_hr( $tb - $mb - $kb );
-		$this->assertEquals( 1023.99902248, (float) str_replace( ',', '.', $hr ), 'The values should be equal', 0.0001 );
+		$this->assertEqualsWithDelta( 1023.99902248, (float) str_replace( ',', '.', $hr ), 0.0001, 'The values should be equal' );
 
 		$hr = wp_convert_bytes_to_hr( $gb + $gb / 2 + $mb );
-		$this->assertEquals( 1.5009765625, (float) str_replace( ',', '.', $hr ), 'The values should be equal', 0.0001 );
+		$this->assertEqualsWithDelta( 1.5009765625, (float) str_replace( ',', '.', $hr ), 0.0001, 'The values should be equal' );
 
 		$hr = wp_convert_bytes_to_hr( $gb - $mb - $kb );
-		$this->assertEquals( 1022.99902344, (float) str_replace( ',', '.', $hr ), 'The values should be equal', 0.0001 );
+		$this->assertEqualsWithDelta( 1022.99902344, (float) str_replace( ',', '.', $hr ), 0.0001, 'The values should be equal' );
 
-		// edge
-		$this->assertEquals( '-1B', wp_convert_bytes_to_hr( -1 ) );
-		$this->assertEquals( '0B', wp_convert_bytes_to_hr( 0 ) );
+		// Edge.
+		$this->assertSame( '-1B', wp_convert_bytes_to_hr( -1 ) );
+		$this->assertSame( '0B', wp_convert_bytes_to_hr( 0 ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_get_attached_images() {
-		$post_id = self::factory()->post->create();
-		$attachment_id = self::factory()->attachment->create_object( $this->img_name, $post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
+		$post_id       = self::factory()->post->create();
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->img_name,
+			$post_id,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
 		$images = get_attached_media( 'image', $post_id );
 		$this->assertEquals( $images, array( $attachment_id => get_post( $attachment_id ) ) );
@@ -439,43 +462,51 @@ https://w.org</a>'
 	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_post_galleries_images() {
-		$ids1 = array();
+		$ids1      = array();
 		$ids1_srcs = array();
 		foreach ( range( 1, 3 ) as $i ) {
-			$attachment_id = self::factory()->attachment->create_object( "image$i.jpg", 0, array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type' => 'attachment'
-			) );
-			$metadata = array_merge( array( "file" => "image$i.jpg" ), $this->img_meta );
+			$attachment_id = self::factory()->attachment->create_object(
+				"image$i.jpg",
+				0,
+				array(
+					'post_mime_type' => 'image/jpeg',
+					'post_type'      => 'attachment',
+				)
+			);
+			$metadata      = array_merge( array( 'file' => "image$i.jpg" ), $this->img_meta );
 			wp_update_attachment_metadata( $attachment_id, $metadata );
-			$ids1[] = $attachment_id;
+			$ids1[]      = $attachment_id;
 			$ids1_srcs[] = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . "image$i.jpg";
 		}
 
-		$ids2 = array();
+		$ids2      = array();
 		$ids2_srcs = array();
 		foreach ( range( 4, 6 ) as $i ) {
-			$attachment_id = self::factory()->attachment->create_object( "image$i.jpg", 0, array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type' => 'attachment'
-			) );
-			$metadata = array_merge( array( "file" => "image$i.jpg" ), $this->img_meta );
+			$attachment_id = self::factory()->attachment->create_object(
+				"image$i.jpg",
+				0,
+				array(
+					'post_mime_type' => 'image/jpeg',
+					'post_type'      => 'attachment',
+				)
+			);
+			$metadata      = array_merge( array( 'file' => "image$i.jpg" ), $this->img_meta );
 			wp_update_attachment_metadata( $attachment_id, $metadata );
-			$ids2[] = $attachment_id;
+			$ids2[]      = $attachment_id;
 			$ids2_srcs[] = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . "image$i.jpg";
 		}
 
 		$ids1_joined = join( ',', $ids1 );
 		$ids2_joined = join( ',', $ids2 );
 
-		$blob =<<<BLOB
+		$blob    = <<<BLOB
 [gallery ids="$ids1_joined"]
 
 [gallery ids="$ids2_joined"]
 BLOB;
 		$post_id = self::factory()->post->create( array( 'post_content' => $blob ) );
-		$srcs = get_post_galleries_images( $post_id );
-		$this->assertEquals( $srcs, array( $ids1_srcs, $ids2_srcs ) );
+		$srcs    = get_post_galleries_images( $post_id );
+		$this->assertSame( $srcs, array( $ids1_srcs, $ids2_srcs ) );
 	}
 
 	/**
@@ -483,16 +514,20 @@ BLOB;
 	 */
 	function test_post_galleries_images_without_global_post() {
 		// Set up an unattached image.
-		$this->factory->attachment->create_object( array(
-			'file' => 'test.jpg',
-			'post_parent' => 0,
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
+		$this->factory->attachment->create_object(
+			array(
+				'file'           => 'test.jpg',
+				'post_parent'    => 0,
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
-		$post_id = $this->factory->post->create( array(
-			'post_content' => '[gallery]',
-		) );
+		$post_id = $this->factory->post->create(
+			array(
+				'post_content' => '[gallery]',
+			)
+		);
 
 		$galleries = get_post_galleries( $post_id, false );
 
@@ -503,20 +538,26 @@ BLOB;
 	 * @see https://core.trac.wordpress.org/ticket/39304
 	 */
 	function test_post_galleries_ignores_global_post() {
-		$global_post_id = $this->factory->post->create( array(
-			'post_content' => 'Global Post',
-		) );
-		$post_id = $this->factory->post->create( array(
-			'post_content' => '[gallery]',
-		) );
-		$this->factory->attachment->create_object( array(
-			'file' => 'test.jpg',
-			'post_parent' => $post_id,
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
+		$global_post_id = $this->factory->post->create(
+			array(
+				'post_content' => 'Global Post',
+			)
+		);
+		$post_id        = $this->factory->post->create(
+			array(
+				'post_content' => '[gallery]',
+			)
+		);
+		$this->factory->attachment->create_object(
+			array(
+				'file'           => 'test.jpg',
+				'post_parent'    => $post_id,
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 		$expected_srcs = array(
-			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg'
+			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg',
 		);
 
 		// Set the global $post context to the other post.
@@ -532,26 +573,32 @@ BLOB;
 	 * @see https://core.trac.wordpress.org/ticket/39304
 	 */
 	function test_post_galleries_respects_id_attrs() {
-		$post_id = $this->factory->post->create( array(
-			'post_content' => 'No gallery defined',
-		) );
-		$post_id_two = $this->factory->post->create( array(
-			'post_content' => "[gallery id='$post_id']",
-		) );
-		$this->factory->attachment->create_object( array(
-			'file' => 'test.jpg',
-			'post_parent' => $post_id,
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment'
-		) );
+		$post_id     = $this->factory->post->create(
+			array(
+				'post_content' => 'No gallery defined',
+			)
+		);
+		$post_id_two = $this->factory->post->create(
+			array(
+				'post_content' => "[gallery id='$post_id']",
+			)
+		);
+		$this->factory->attachment->create_object(
+			array(
+				'file'           => 'test.jpg',
+				'post_parent'    => $post_id,
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 		$expected_srcs = array(
-			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg'
+			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg',
 		);
 
 		$galleries = get_post_galleries( $post_id_two, false );
 
 		// Set the global $post context
-		$GLOBALS['post'] = get_post( $post_id_two );
+		$GLOBALS['post']               = get_post( $post_id_two );
 		$galleries_with_global_context = get_post_galleries( $post_id_two, false );
 
 		// Check that the global post state doesn't affect the results
@@ -565,69 +612,77 @@ BLOB;
 	 * @see https://core.trac.wordpress.org/ticket/22960
 	 */
 	function test_post_gallery_images() {
-		$ids1 = array();
+		$ids1      = array();
 		$ids1_srcs = array();
 		foreach ( range( 1, 3 ) as $i ) {
-			$attachment_id = self::factory()->attachment->create_object( "image$i.jpg", 0, array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type' => 'attachment'
-			) );
-			$metadata = array_merge( array( "file" => "image$i.jpg" ), $this->img_meta );
+			$attachment_id = self::factory()->attachment->create_object(
+				"image$i.jpg",
+				0,
+				array(
+					'post_mime_type' => 'image/jpeg',
+					'post_type'      => 'attachment',
+				)
+			);
+			$metadata      = array_merge( array( 'file' => "image$i.jpg" ), $this->img_meta );
 			wp_update_attachment_metadata( $attachment_id, $metadata );
-			$ids1[] = $attachment_id;
+			$ids1[]      = $attachment_id;
 			$ids1_srcs[] = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . "image$i.jpg";
 		}
 
-		$ids2 = array();
+		$ids2      = array();
 		$ids2_srcs = array();
 		foreach ( range( 4, 6 ) as $i ) {
-			$attachment_id = self::factory()->attachment->create_object( "image$i.jpg", 0, array(
-				'post_mime_type' => 'image/jpeg',
-				'post_type' => 'attachment'
-			) );
-			$metadata = array_merge( array( "file" => "image$i.jpg" ), $this->img_meta );
+			$attachment_id = self::factory()->attachment->create_object(
+				"image$i.jpg",
+				0,
+				array(
+					'post_mime_type' => 'image/jpeg',
+					'post_type'      => 'attachment',
+				)
+			);
+			$metadata      = array_merge( array( 'file' => "image$i.jpg" ), $this->img_meta );
 			wp_update_attachment_metadata( $attachment_id, $metadata );
-			$ids2[] = $attachment_id;
+			$ids2[]      = $attachment_id;
 			$ids2_srcs[] = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . "image$i.jpg";
 		}
 
 		$ids1_joined = join( ',', $ids1 );
 		$ids2_joined = join( ',', $ids2 );
 
-		$blob =<<<BLOB
+		$blob    = <<<BLOB
 [gallery ids="$ids1_joined"]
 
 [gallery ids="$ids2_joined"]
 BLOB;
 		$post_id = self::factory()->post->create( array( 'post_content' => $blob ) );
-		$srcs = get_post_gallery_images( $post_id );
-		$this->assertEquals( $srcs, $ids1_srcs );
+		$srcs    = get_post_gallery_images( $post_id );
+		$this->assertSame( $srcs, $ids1_srcs );
 	}
 
 	function test_get_media_embedded_in_content() {
-		$object =<<<OBJ
+		$object = <<<OBJ
 <object src="this" data="that">
 	<param name="value"/>
 </object>
 OBJ;
-		$embed =<<<EMBED
+		$embed  = <<<EMBED
 <embed src="something.mp4"/>
 EMBED;
-		$iframe =<<<IFRAME
+		$iframe = <<<IFRAME
 <iframe src="youtube.com" width="7000" />
 IFRAME;
-		$audio =<<<AUDIO
+		$audio  = <<<AUDIO
 <audio preload="none">
 	<source />
 </audio>
 AUDIO;
-		$video =<<<VIDEO
+		$video  = <<<VIDEO
 <video preload="none">
 	<source />
 </video>
 VIDEO;
 
-		$content =<<<CONTENT
+		$content = <<<CONTENT
 This is a comment
 $object
 
@@ -646,35 +701,35 @@ $video
 This is a comment
 CONTENT;
 
-		$types = array( 'object', 'embed', 'iframe', 'audio', 'video' );
+		$types    = array( 'object', 'embed', 'iframe', 'audio', 'video' );
 		$contents = array_values( compact( $types ) );
 
 		$matches = get_media_embedded_in_content( $content, 'audio' );
-		$this->assertEquals( array( $audio ), $matches );
+		$this->assertSame( array( $audio ), $matches );
 
 		$matches = get_media_embedded_in_content( $content, 'video' );
-		$this->assertEquals( array( $video ), $matches );
+		$this->assertSame( array( $video ), $matches );
 
 		$matches = get_media_embedded_in_content( $content, 'object' );
-		$this->assertEquals( array( $object ), $matches );
+		$this->assertSame( array( $object ), $matches );
 
 		$matches = get_media_embedded_in_content( $content, 'embed' );
-		$this->assertEquals( array( $embed ), $matches );
+		$this->assertSame( array( $embed ), $matches );
 
 		$matches = get_media_embedded_in_content( $content, 'iframe' );
-		$this->assertEquals( array( $iframe ), $matches );
+		$this->assertSame( array( $iframe ), $matches );
 
 		$matches = get_media_embedded_in_content( $content, $types );
-		$this->assertEquals( $contents, $matches );
+		$this->assertSame( $contents, $matches );
 	}
 
 	function test_get_media_embedded_in_content_order() {
-		$audio =<<<AUDIO
+		$audio   = <<<AUDIO
 <audio preload="none">
 	<source />
 </audio>
 AUDIO;
-		$video =<<<VIDEO
+		$video   = <<<VIDEO
 <video preload="none">
 	<source />
 </video>
@@ -682,11 +737,11 @@ VIDEO;
 		$content = $audio . $video;
 
 		$matches1 = get_media_embedded_in_content( $content, array( 'audio', 'video' ) );
-		$this->assertEquals( array( $audio, $video ), $matches1 );
+		$this->assertSame( array( $audio, $video ), $matches1 );
 
 		$reversed = $video . $audio;
 		$matches2 = get_media_embedded_in_content( $reversed, array( 'audio', 'video' ) );
-		$this->assertEquals( array( $video, $audio ), $matches2 );
+		$this->assertSame( array( $video, $audio ), $matches2 );
 	}
 
 	/**
@@ -702,9 +757,11 @@ VIDEO;
 	function test_wp_audio_shortcode_with_bad_attr() {
 		$this->assertSame(
 			'<a class="wp-embedded-audio" href="https://example.com/foo.php">https://example.com/foo.php</a>',
-			wp_audio_shortcode( array(
-				'src' => 'https://example.com/foo.php',
-			) )
+			wp_audio_shortcode(
+				array(
+					'src' => 'https://example.com/foo.php',
+				)
+			)
 		);
 	}
 
@@ -712,32 +769,36 @@ VIDEO;
 	 * @see https://core.trac.wordpress.org/ticket/35367
 	 */
 	function test_wp_audio_shortcode_attributes() {
-		$actual = wp_audio_shortcode( array(
-			'src' => 'https://example.com/foo.mp3',
-		) );
+		$actual = wp_audio_shortcode(
+			array(
+				'src' => 'https://example.com/foo.mp3',
+			)
+		);
 
-		$this->assertContains( 'src="https://example.com/foo.mp3', $actual );
-		$this->assertNotContains( 'loop', $actual );
-		$this->assertNotContains( 'autoplay', $actual );
-		$this->assertContains( 'preload="none"', $actual );
-		$this->assertContains( 'class="wp-audio-shortcode"', $actual );
-		$this->assertContains( 'style="width: 100%;"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp3', $actual );
+		$this->assertStringNotContainsString( 'loop', $actual );
+		$this->assertStringNotContainsString( 'autoplay', $actual );
+		$this->assertStringContainsString( 'preload="none"', $actual );
+		$this->assertStringContainsString( 'class="wp-audio-shortcode"', $actual );
+		$this->assertStringContainsString( 'style="width: 100%;"', $actual );
 
-		$actual = wp_audio_shortcode( array(
-			'src'      => 'https://example.com/foo.mp3',
-			'loop'     => true,
-			'autoplay' => true,
-			'preload'  => true,
-			'class'    => 'foobar',
-			'style'    => 'padding:0;',
-		) );
+		$actual = wp_audio_shortcode(
+			array(
+				'src'      => 'https://example.com/foo.mp3',
+				'loop'     => true,
+				'autoplay' => true,
+				'preload'  => true,
+				'class'    => 'foobar',
+				'style'    => 'padding:0;',
+			)
+		);
 
-		$this->assertContains( 'src="https://example.com/foo.mp3', $actual );
-		$this->assertContains( 'loop="1"', $actual );
-		$this->assertContains( 'autoplay="1"', $actual );
-		$this->assertContains( 'preload="1"', $actual );
-		$this->assertContains( 'class="foobar"', $actual );
-		$this->assertContains( 'style="padding:0;"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp3', $actual );
+		$this->assertStringContainsString( 'loop="1"', $actual );
+		$this->assertStringContainsString( 'autoplay="1"', $actual );
+		$this->assertStringContainsString( 'preload="1"', $actual );
+		$this->assertStringContainsString( 'class="foobar"', $actual );
+		$this->assertStringContainsString( 'style="padding:0;"', $actual );
 	}
 
 	/**
@@ -745,7 +806,7 @@ VIDEO;
 	 *
 	 */
 	function test_video_shortcode_body() {
-		$width = 720;
+		$width  = 720;
 		$height = 480;
 
 		$w = empty( $GLOBALS['content_width'] ) ? 640 : $GLOBALS['content_width'];
@@ -755,7 +816,7 @@ VIDEO;
 
 		$post_id = get_post() ? get_the_ID() : 0;
 
-		$video =<<<VIDEO
+		$video = <<<VIDEO
 [video width="$width" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]
 <!-- WebM/VP8 for Firefox4, Opera, and Chrome -->
 <source type="video/webm" src="myvideo.webm" />
@@ -767,7 +828,6 @@ VIDEO;
 <track kind="chapters" src="chapters.srt" srclang="en" />
 [/video]
 VIDEO;
-
 
 		$h = ceil( ( $height * $width ) / $width );
 
@@ -784,7 +844,7 @@ VIDEO;
 			'<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">' .
 			"http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a></video></div>\n";
 
-		$this->assertEquals( $expected, $content );
+		$this->assertSame( $expected, $content );
 	}
 
 	/**
@@ -802,9 +862,11 @@ VIDEO;
 	function test_wp_video_shortcode_with_bad_attr() {
 		$this->assertSame(
 			'<a class="wp-embedded-video" href="https://example.com/foo.php">https://example.com/foo.php</a>',
-			wp_video_shortcode( array(
-				'src' => 'https://example.com/foo.php',
-			) )
+			wp_video_shortcode(
+				array(
+					'src' => 'https://example.com/foo.php',
+				)
+			)
 		);
 	}
 
@@ -813,37 +875,41 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_attributes() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'https://example.com/foo.mp4',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src' => 'https://example.com/foo.mp4',
+			)
+		);
 
-		$this->assertContains( 'src="https://example.com/foo.mp4', $actual );
-		$this->assertNotContains( 'loop', $actual );
-		$this->assertNotContains( 'autoplay', $actual );
-		$this->assertContains( 'preload="metadata"', $actual );
-		$this->assertContains( 'width="640"', $actual );
-		$this->assertContains( 'height="360"', $actual );
-		$this->assertContains( 'class="wp-video-shortcode"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp4', $actual );
+		$this->assertStringNotContainsString( 'loop', $actual );
+		$this->assertStringNotContainsString( 'autoplay', $actual );
+		$this->assertStringContainsString( 'preload="metadata"', $actual );
+		$this->assertStringContainsString( 'width="640"', $actual );
+		$this->assertStringContainsString( 'height="360"', $actual );
+		$this->assertStringContainsString( 'class="wp-video-shortcode"', $actual );
 
-		$actual = wp_video_shortcode( array(
-			'src'      => 'https://example.com/foo.mp4',
-			'poster'   => 'https://example.com/foo.png',
-			'loop'     => true,
-			'autoplay' => true,
-			'preload'  => true,
-			'width'    => 123,
-			'height'   => 456,
-			'class'    => 'foobar',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src'      => 'https://example.com/foo.mp4',
+				'poster'   => 'https://example.com/foo.png',
+				'loop'     => true,
+				'autoplay' => true,
+				'preload'  => true,
+				'width'    => 123,
+				'height'   => 456,
+				'class'    => 'foobar',
+			)
+		);
 
-		$this->assertContains( 'src="https://example.com/foo.mp4', $actual );
-		$this->assertContains( 'poster="https://example.com/foo.png', $actual );
-		$this->assertContains( 'loop="1"', $actual );
-		$this->assertContains( 'autoplay="1"', $actual );
-		$this->assertContains( 'preload="1"', $actual );
-		$this->assertContains( 'width="123"', $actual );
-		$this->assertContains( 'height="456"', $actual );
-		$this->assertContains( 'class="foobar"', $actual );
+		$this->assertStringContainsString( 'src="https://example.com/foo.mp4', $actual );
+		$this->assertStringContainsString( 'poster="https://example.com/foo.png', $actual );
+		$this->assertStringContainsString( 'loop="1"', $actual );
+		$this->assertStringContainsString( 'autoplay="1"', $actual );
+		$this->assertStringContainsString( 'preload="1"', $actual );
+		$this->assertStringContainsString( 'width="123"', $actual );
+		$this->assertStringContainsString( 'height="456"', $actual );
+		$this->assertStringContainsString( 'class="foobar"', $actual );
 	}
 
 	/**
@@ -851,11 +917,13 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_youtube_remove_feature() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'https://www.youtube.com/watch?v=i_cVJgIz_Cs&feature=youtu.be',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src' => 'https://www.youtube.com/watch?v=i_cVJgIz_Cs&feature=youtu.be',
+			)
+		);
 
-		$this->assertNotContains( 'feature=youtu.be', $actual );
+		$this->assertStringNotContainsString( 'feature=youtu.be', $actual );
 	}
 
 	/**
@@ -863,11 +931,13 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_youtube_force_ssl() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'http://www.youtube.com/watch?v=i_cVJgIz_Cs',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src' => 'http://www.youtube.com/watch?v=i_cVJgIz_Cs',
+			)
+		);
 
-		$this->assertContains( 'src="https://www.youtube.com/watch?v=i_cVJgIz_Cs', $actual );
+		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=i_cVJgIz_Cs', $actual );
 	}
 
 	/**
@@ -875,12 +945,14 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_force_ssl_remove_query_args() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'http://vimeo.com/190372437?blah=meh',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src' => 'http://vimeo.com/190372437?blah=meh',
+			)
+		);
 
-		$this->assertContains( 'src="https://vimeo.com/190372437', $actual );
-		$this->assertNotContains( 'blah=meh', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/190372437', $actual );
+		$this->assertStringNotContainsString( 'blah=meh', $actual );
 	}
 
 	/**
@@ -888,11 +960,13 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_adds_loop() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'http://vimeo.com/190372437',
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src' => 'http://vimeo.com/190372437',
+			)
+		);
 
-		$this->assertContains( 'src="https://vimeo.com/190372437?loop=0', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/190372437?loop=0', $actual );
 	}
 
 	/**
@@ -900,12 +974,14 @@ VIDEO;
 	 * @depends test_video_shortcode_body
 	 */
 	function test_wp_video_shortcode_vimeo_force_adds_loop_true() {
-		$actual = wp_video_shortcode( array(
-			'src' => 'http://vimeo.com/190372437',
-			'loop' => true,
-		) );
+		$actual = wp_video_shortcode(
+			array(
+				'src'  => 'http://vimeo.com/190372437',
+				'loop' => true,
+			)
+		);
 
-		$this->assertContains( 'src="https://vimeo.com/190372437?loop=1', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/190372437?loop=1', $actual );
 	}
 
 	/**
@@ -925,8 +1001,8 @@ VIDEO;
 		remove_image_size( 'test-size' );
 
 		$this->assertArrayHasKey( 'test-size', $sizes );
-		$this->assertEquals( 200, $sizes['test-size']['width'] );
-		$this->assertEquals( 600, $sizes['test-size']['height'] );
+		$this->assertSame( 200, $sizes['test-size']['width'] );
+		$this->assertSame( 600, $sizes['test-size']['height'] );
 	}
 
 	/**
@@ -954,41 +1030,53 @@ VIDEO;
 	 * @see https://core.trac.wordpress.org/ticket/30346
 	 */
 	function test_attachment_url_to_postid() {
-		$image_path = '2014/11/' . $this->img_name;
-		$attachment_id = self::factory()->attachment->create_object( $image_path, 0, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type'      => 'attachment',
-		) );
+		$image_path    = '2014/11/' . $this->img_name;
+		$attachment_id = self::factory()->attachment->create_object(
+			$image_path,
+			0,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
-		$image_url  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path;
-		$this->assertEquals( $attachment_id, attachment_url_to_postid( $image_url ) );
+		$image_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path;
+		$this->assertSame( $attachment_id, attachment_url_to_postid( $image_url ) );
 	}
 
 	function test_attachment_url_to_postid_schemes() {
-		$image_path = '2014/11/' . $this->img_name;
-		$attachment_id = self::factory()->attachment->create_object( $image_path, 0, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type'      => 'attachment',
-		) );
+		$image_path    = '2014/11/' . $this->img_name;
+		$attachment_id = self::factory()->attachment->create_object(
+			$image_path,
+			0,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
 		/**
 		 * @see https://core.trac.wordpress.org/ticket/33109
 		 * Testing protocols not matching
 		 */
-		$image_url  = 'https://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path;
-		$this->assertEquals( $attachment_id, attachment_url_to_postid( $image_url ) );
+		$image_url = 'https://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_path;
+		$this->assertSame( $attachment_id, attachment_url_to_postid( $image_url ) );
 	}
 
 	function test_attachment_url_to_postid_filtered() {
-		$image_path = '2014/11/' . $this->img_name;
-		$attachment_id = self::factory()->attachment->create_object( $image_path, 0, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type'      => 'attachment',
-		) );
+		$image_path    = '2014/11/' . $this->img_name;
+		$attachment_id = self::factory()->attachment->create_object(
+			$image_path,
+			0,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
 		add_filter( 'upload_dir', array( $this, '_upload_dir' ) );
 		$image_url = 'http://192.168.1.20.com/wp-content/uploads/' . $image_path;
-		$this->assertEquals( $attachment_id, attachment_url_to_postid( $image_url ) );
+		$this->assertSame( $attachment_id, attachment_url_to_postid( $image_url ) );
 		remove_filter( 'upload_dir', array( $this, '_upload_dir' ) );
 	}
 
@@ -1002,8 +1090,8 @@ VIDEO;
 	 */
 	function test_attachment_url_to_postid_with_empty_url() {
 		$post_id = attachment_url_to_postid( '' );
-		$this->assertInternalType( 'int', $post_id );
-		$this->assertEquals( 0, $post_id );
+		$this->assertIsInt( $post_id );
+		$this->assertSame( 0, $post_id );
 	}
 
 	/**
@@ -1022,10 +1110,18 @@ VIDEO;
 			'name'     => 'test-image-iptc.jpg',
 			'type'     => 'image/jpeg',
 			'error'    => 0,
-			'size'     => filesize( $iptc_file )
+			'size'     => filesize( $iptc_file ),
 		);
 
-		$post_id = media_handle_upload( 'upload', 0, array(), array( 'action' => 'test_iptc_upload', 'test_form' => false ) );
+		$post_id = media_handle_upload(
+			'upload',
+			0,
+			array(),
+			array(
+				'action'    => 'test_iptc_upload',
+				'test_form' => false,
+			)
+		);
 
 		unset( $_FILES['upload'] );
 
@@ -1034,7 +1130,7 @@ VIDEO;
 		// Clean up.
 		wp_delete_attachment( $post_id );
 
-		$this->assertEquals( 'This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $post->post_excerpt );
+		$this->assertSame( 'This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $post->post_excerpt );
 	}
 
 	/**
@@ -1056,7 +1152,15 @@ VIDEO;
 			'size'     => filesize( $test_file ),
 		);
 
-		$post_id = media_handle_upload( 'upload', 0, array(), array( 'action' => 'test_upload_titles', 'test_form' => false ) );
+		$post_id = media_handle_upload(
+			'upload',
+			0,
+			array(),
+			array(
+				'action'    => 'test_upload_titles',
+				'test_form' => false,
+			)
+		);
 
 		unset( $_FILES['upload'] );
 
@@ -1065,7 +1169,7 @@ VIDEO;
 		// Clean up.
 		wp_delete_attachment( $post_id );
 
-		$this->assertEquals( 'This is a test', $post->post_title );
+		$this->assertSame( 'This is a test', $post->post_title );
 	}
 
 	/**
@@ -1082,7 +1186,7 @@ _my_function('data');
 EOF;
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $content, $result );
+		$this->assertSame( $content, $result );
 	}
 
 	/**
@@ -1098,7 +1202,7 @@ my_function();
 EOF;
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $content, $result );
+		$this->assertSame( $content, $result );
 	}
 
 
@@ -1132,7 +1236,7 @@ Stop.</p>
 EOF;
 
 		$result = apply_filters( 'the_content', $content );
-		$this->assertEqualsIgnoreEOL( $expected, $result );
+		$this->assertSameIgnoreEOL( $expected, $result );
 	}
 
 	/**
@@ -1161,7 +1265,7 @@ EOF;
 EOF;
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $expected, $result );
+		$this->assertSame( $expected, $result );
 
 		$content = <<<EOF
 <a href="https://www.example.com/?video=1">https://www.example.com/?video=1</a>
@@ -1175,7 +1279,7 @@ do not break this';
 EOF;
 
 		$result = $wp_embed->autoembed( $content );
-		$this->assertEquals( $content, $result );
+		$this->assertSame( $content, $result );
 
 		remove_filter( 'embed_maybe_make_link', array( $this, 'filter_wp_embed_shortcode_custom' ), 10 );
 	}
@@ -1185,10 +1289,10 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/34635
 	 */
 	function test_wp_get_attachment_image_defaults() {
-		$image = image_downsize( self::$large_id, 'thumbnail' );
+		$image    = image_downsize( self::$large_id, 'thumbnail' );
 		$expected = sprintf( '<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="" />', $image[1], $image[2], $image[0] );
 
-		$this->assertEquals( $expected, wp_get_attachment_image( self::$large_id ) );
+		$this->assertSame( $expected, wp_get_attachment_image( self::$large_id ) );
 	}
 
 	/**
@@ -1199,10 +1303,10 @@ EOF;
 		// Add test alt metadata.
 		update_post_meta( self::$large_id, '_wp_attachment_image_alt', 'Some very clever alt text', true );
 
-		$image = image_downsize( self::$large_id, 'thumbnail' );
+		$image    = image_downsize( self::$large_id, 'thumbnail' );
 		$expected = sprintf( '<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="Some very clever alt text" />', $image[1], $image[2], $image[0] );
 
-		$this->assertEquals( $expected, wp_get_attachment_image( self::$large_id ) );
+		$this->assertSame( $expected, wp_get_attachment_image( self::$large_id ) );
 
 		// Cleanup.
 		update_post_meta( self::$large_id, '_wp_attachment_image_alt', '', true );
@@ -1214,15 +1318,19 @@ EOF;
 	function test_wp_get_attachment_image_url() {
 		$this->assertFalse( wp_get_attachment_image_url( 0 ) );
 
-		$post_id = self::factory()->post->create();
-		$attachment_id = self::factory()->attachment->create_object( $this->img_name, $post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type' => 'attachment',
-		) );
+		$post_id       = self::factory()->post->create();
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->img_name,
+			$post_id,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+			)
+		);
 
 		$image = wp_get_attachment_image_src( $attachment_id, 'thumbnail', false );
 
-		$this->assertEquals( $image[0], wp_get_attachment_image_url( $attachment_id ) );
+		$this->assertSame( $image[0], wp_get_attachment_image_url( $attachment_id ) );
 	}
 
 	/**
@@ -1233,34 +1341,42 @@ EOF;
 
 		$caption = 'This is a caption.';
 
-		$post_id = self::factory()->post->create();
-		$attachment_id = self::factory()->attachment->create_object( $this->img_name, $post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type'      => 'attachment',
-			'post_excerpt'   => $caption,
-		) );
+		$post_id       = self::factory()->post->create();
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->img_name,
+			$post_id,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+				'post_excerpt'   => $caption,
+			)
+		);
 
 		$this->assertFalse( wp_get_attachment_caption( $post_id ) );
 
-		$this->assertEquals( $caption, wp_get_attachment_caption( $attachment_id ) );
+		$this->assertSame( $caption, wp_get_attachment_caption( $attachment_id ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/12235
 	 */
 	function test_wp_get_attachment_caption_empty() {
-		$post_id = self::factory()->post->create();
-		$attachment_id = self::factory()->attachment->create_object( $this->img_name, $post_id, array(
-			'post_mime_type' => 'image/jpeg',
-			'post_type'      => 'attachment',
-			'post_excerpt'   => '',
-		) );
+		$post_id       = self::factory()->post->create();
+		$attachment_id = self::factory()->attachment->create_object(
+			$this->img_name,
+			$post_id,
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'post_type'      => 'attachment',
+				'post_excerpt'   => '',
+			)
+		);
 
-		$this->assertEquals( '', wp_get_attachment_caption( $attachment_id ) );
+		$this->assertSame( '', wp_get_attachment_caption( $attachment_id ) );
 	}
 
 	/**
-	 * Helper function to get image size array from size "name"
+	 * Helper function to get image size array from size "name".
 	 */
 	function _get_image_size_array_from_meta( $image_meta, $size_name ) {
 		$array = false;
@@ -1273,6 +1389,10 @@ EOF;
 			}
 		}
 
+		if ( ! $array ) {
+			$this->fail( sprintf( "Could not retrieve image metadata for size '%s'.", $size_name ) );
+		}
+
 		return $array;
 	}
 
@@ -1280,7 +1400,7 @@ EOF;
 	 * Helper function to move the src image to the first position in the expected srcset string.
 	 */
 	function _src_first( $srcset, $src_url, $src_width ) {
-		$src_string = $src_url . ' ' . $src_width . 'w';
+		$src_string    = $src_url . ' ' . $src_width . 'w';
 		$src_not_first = ', ' . $src_string;
 
 		if ( strpos( $srcset, $src_not_first ) ) {
@@ -1297,7 +1417,7 @@ EOF;
 	function test_wp_calculate_image_srcset() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
-		$year_month = date('Y/m');
+		$year_month = date( 'Y/m' );
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
@@ -1307,7 +1427,7 @@ EOF;
 
 		// Add any soft crop intermediate sizes.
 		foreach ( $_wp_additional_image_sizes as $name => $additional_size ) {
-			if ( ! $_wp_additional_image_sizes[$name]['crop'] || 0 === $_wp_additional_image_sizes[$name]['height'] ) {
+			if ( ! $_wp_additional_image_sizes[ $name ]['crop'] || 0 === $_wp_additional_image_sizes[ $name ]['height'] ) {
 				$intermediates[] = $name;
 			}
 		}
@@ -1322,11 +1442,11 @@ EOF;
 		}
 
 		// Add the full size width at the end.
-		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] .'w';
+		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] . 'w';
 
 		foreach ( $intermediates as $int ) {
-			$image_url = wp_get_attachment_image_url( self::$large_id, $int );
-			$size_array = $this->_get_image_size_array_from_meta( $image_meta, $int );
+			$image_url       = wp_get_attachment_image_url( self::$large_id, $int );
+			$size_array      = $this->_get_image_size_array_from_meta( $image_meta, $int );
 			$expected_srcset = $this->_src_first( $expected, $image_url, $size_array[0] );
 			$this->assertSame( $expected_srcset, wp_calculate_image_srcset( $size_array, $image_url, $image_meta ) );
 		}
@@ -1343,7 +1463,7 @@ EOF;
 
 		// Make an image.
 		$filename = DIR_TESTDATA . '/images/test-image-large.png';
-		$id = self::factory()->attachment->create_upload_object( $filename );
+		$id       = self::factory()->attachment->create_upload_object( $filename );
 
 		$image_meta = wp_get_attachment_metadata( $id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
@@ -1353,7 +1473,7 @@ EOF;
 		$intermediates = array( 'medium', 'medium_large', 'large', 'full' );
 
 		foreach ( $_wp_additional_image_sizes as $name => $additional_size ) {
-			if ( ! $_wp_additional_image_sizes[$name]['crop'] || 0 === $_wp_additional_image_sizes[$name]['height'] ) {
+			if ( ! $_wp_additional_image_sizes[ $name ]['crop'] || 0 === $_wp_additional_image_sizes[ $name ]['height'] ) {
 				$intermediates[] = $name;
 			}
 		}
@@ -1368,11 +1488,11 @@ EOF;
 		}
 
 		// Add the full size width at the end.
-		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] .'w';
+		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] . 'w';
 
 		foreach ( $intermediates as $int ) {
-			$size_array = $this->_get_image_size_array_from_meta( $image_meta, $int );
-			$image_url = wp_get_attachment_image_url( $id, $int );
+			$size_array      = $this->_get_image_size_array_from_meta( $image_meta, $int );
+			$image_url       = wp_get_attachment_image_url( $id, $int );
 			$expected_srcset = $this->_src_first( $expected, $image_url, $size_array[0] );
 			$this->assertSame( $expected_srcset, wp_calculate_image_srcset( $size_array, $image_url, $image_meta ) );
 		}
@@ -1390,22 +1510,22 @@ EOF;
 		// Start by getting the attachment metadata.
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
-		$image_url = wp_get_attachment_image_url( self::$large_id, 'medium' );
+		$image_url  = wp_get_attachment_image_url( self::$large_id, 'medium' );
 		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
 
 		// Copy hash generation method used in wp_save_image().
-		$hash = 'e' . time() . rand(100, 999);
+		$hash = 'e' . time() . rand( 100, 999 );
 
-		$filename_base = basename( $image_meta['file'], '.png' );
+		$filename_base = wp_basename( $image_meta['file'], '.png' );
 
 		// Add the hash to the image URL
 		$image_url = str_replace( $filename_base, $filename_base . '-' . $hash, $image_url );
 
 		// Replace file paths for full and medium sizes with hashed versions.
-		$image_meta['file'] = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['file'] );
-		$image_meta['sizes']['medium']['file'] = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['sizes']['medium']['file'] );
+		$image_meta['file']                          = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['file'] );
+		$image_meta['sizes']['medium']['file']       = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['sizes']['medium']['file'] );
 		$image_meta['sizes']['medium_large']['file'] = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['sizes']['medium_large']['file'] );
-		$image_meta['sizes']['large']['file'] = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['sizes']['large']['file'] );
+		$image_meta['sizes']['large']['file']        = str_replace( $filename_base, $filename_base . '-' . $hash, $image_meta['sizes']['large']['file'] );
 
 		// Calculate a srcset array.
 		$sizes = explode( ', ', wp_calculate_image_srcset( $size_array, $image_url, $image_meta ) );
@@ -1422,7 +1542,7 @@ EOF;
 	function test_wp_calculate_image_srcset_with_absolute_path_in_meta() {
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
-		$year_month = date('Y/m');
+		$year_month = date( 'Y/m' );
 		$image_meta = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
 		$uploads_dir_url = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
@@ -1432,14 +1552,14 @@ EOF;
 
 		// Add any soft crop intermediate sizes.
 		foreach ( $_wp_additional_image_sizes as $name => $additional_size ) {
-			if ( ! $_wp_additional_image_sizes[$name]['crop'] || 0 === $_wp_additional_image_sizes[$name]['height'] ) {
+			if ( ! $_wp_additional_image_sizes[ $name ]['crop'] || 0 === $_wp_additional_image_sizes[ $name ]['height'] ) {
 				$intermediates[] = $name;
 			}
 		}
 
 		$expected = '';
 
-		foreach( $image_meta['sizes'] as $name => $size ) {
+		foreach ( $image_meta['sizes'] as $name => $size ) {
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
 			if ( in_array( $name, $intermediates ) ) {
 				$expected .= $uploads_dir_url . $year_month . '/' . $size['file'] . ' ' . $size['width'] . 'w, ';
@@ -1447,14 +1567,14 @@ EOF;
 		}
 
 		// Add the full size width at the end.
-		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] .'w';
+		$expected .= $uploads_dir_url . $image_meta['file'] . ' ' . $image_meta['width'] . 'w';
 
 		// Prepend an absolute path to simulate a pre-2.7 upload
 		$image_meta['file'] = 'H:\home\wordpress\trunk/wp-content/uploads/' . $image_meta['file'];
 
 		foreach ( $intermediates as $int ) {
-			$image_url = wp_get_attachment_image_url( self::$large_id, $int );
-			$size_array = $this->_get_image_size_array_from_meta( $image_meta, $int );
+			$image_url       = wp_get_attachment_image_url( self::$large_id, $int );
+			$size_array      = $this->_get_image_size_array_from_meta( $image_meta, $int );
 			$expected_srcset = $this->_src_first( $expected, $image_url, $size_array[0] );
 			$this->assertSame( $expected_srcset, wp_calculate_image_srcset( $size_array, $image_url, $image_meta ) );
 		}
@@ -1474,11 +1594,11 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_calculate_image_srcset_no_width() {
-		$file = get_attached_file( self::$large_id );
-		$image_url = wp_get_attachment_image_url( self::$large_id, 'medium' );
+		$file       = get_attached_file( self::$large_id );
+		$image_url  = wp_get_attachment_image_url( self::$large_id, 'medium' );
 		$image_meta = wp_generate_attachment_metadata( self::$large_id, $file );
 
-		$size_array = array(0, 0);
+		$size_array = array( 0, 0 );
 
 		$srcset = wp_calculate_image_srcset( $size_array, $image_url, $image_meta );
 
@@ -1493,34 +1613,34 @@ EOF;
 	function test_wp_calculate_image_srcset_ratio_variance() {
 		// Mock data for this test.
 		$size_array = array( 218, 300 );
-		$image_src = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test-768x1055-218x300.png';
+		$image_src  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test-768x1055-218x300.png';
 		$image_meta = array(
-			'width' => 768,
+			'width'  => 768,
 			'height' => 1055,
-			'file' => '2015/12/test-768x1055.png',
-			'sizes' => array(
-				'thumbnail' => array(
-					'file' => 'test-768x1055-150x150.png',
-					'width' => 150,
-					'height' => 150,
+			'file'   => '2015/12/test-768x1055.png',
+			'sizes'  => array(
+				'thumbnail'      => array(
+					'file'      => 'test-768x1055-150x150.png',
+					'width'     => 150,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
-				'medium' => array(
-					'file' => 'test-768x1055-218x300.png',
-					'width' => 218,
-					'height' => 300,
+				'medium'         => array(
+					'file'      => 'test-768x1055-218x300.png',
+					'width'     => 218,
+					'height'    => 300,
 					'mime-type' => 'image/png',
 				),
-				'custom-600' => array(
-					'file' => 'test-768x1055-600x824.png',
-					'width' => 600,
-					'height' => 824,
+				'custom-600'     => array(
+					'file'      => 'test-768x1055-600x824.png',
+					'width'     => 600,
+					'height'    => 824,
 					'mime-type' => 'image/png',
 				),
 				'post-thumbnail' => array(
-					'file' => 'test-768x1055-768x510.png',
-					'width' => 768,
-					'height' => 510,
+					'file'      => 'test-768x1055-768x510.png',
+					'width'     => 768,
+					'height'    => 510,
 					'mime-type' => 'image/png',
 				),
 			),
@@ -1538,34 +1658,34 @@ EOF;
 	function test_wp_calculate_image_srcset_include_src() {
 		// Mock data for this test.
 		$size_array = array( 2000, 1000 );
-		$image_src = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test.png';
+		$image_src  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test.png';
 		$image_meta = array(
-			'width' => 2000,
+			'width'  => 2000,
 			'height' => 1000,
-			'file' => '2015/12/test.png',
-			'sizes' => array(
-				'thumbnail' => array(
-					'file' => 'test-150x150.png',
-					'width' => 150,
-					'height' => 150,
+			'file'   => '2015/12/test.png',
+			'sizes'  => array(
+				'thumbnail'    => array(
+					'file'      => 'test-150x150.png',
+					'width'     => 150,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
-				'medium' => array(
-					'file' => 'test-300x150.png',
-					'width' => 300,
-					'height' => 150,
+				'medium'       => array(
+					'file'      => 'test-300x150.png',
+					'width'     => 300,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
 				'medium_large' => array(
-					'file' => 'test-768x384.png',
-					'width' => 768,
-					'height' => 384,
+					'file'      => 'test-768x384.png',
+					'width'     => 768,
+					'height'    => 384,
 					'mime-type' => 'image/png',
 				),
-				'large' => array(
-					'file' => 'test-1024x512.png',
-					'width' => 1024,
-					'height' => 512,
+				'large'        => array(
+					'file'      => 'test-1024x512.png',
+					'width'     => 1024,
+					'height'    => 512,
 					'mime-type' => 'image/png',
 				),
 			),
@@ -1581,34 +1701,34 @@ EOF;
 	 */
 	function test_wp_calculate_image_srcset_corrupted_image_meta() {
 		$size_array = array( 300, 150 );
-		$image_src = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test-300x150.png';
+		$image_src  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test-300x150.png';
 		$image_meta = array(
-			'width' => 1600,
+			'width'  => 1600,
 			'height' => 800,
-			'file' => '2015/12/test.png',
-			'sizes' => array(
-				'thumbnail' => array(
-					'file' => 'test-150x150.png',
-					'width' => 150,
-					'height' => 150,
+			'file'   => '2015/12/test.png',
+			'sizes'  => array(
+				'thumbnail'    => array(
+					'file'      => 'test-150x150.png',
+					'width'     => 150,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
-				'medium' => array(
-					'file' => 'test-300x150.png',
-					'width' => 300,
-					'height' => 150,
+				'medium'       => array(
+					'file'      => 'test-300x150.png',
+					'width'     => 300,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
 				'medium_large' => array(
-					'file' => 'test-768x384.png',
-					'width' => 768,
-					'height' => 384,
+					'file'      => 'test-768x384.png',
+					'width'     => 768,
+					'height'    => 384,
 					'mime-type' => 'image/png',
 				),
-				'large' => array(
-					'file' => 'test-1024x512.png',
-					'width' => 1024,
-					'height' => 512,
+				'large'        => array(
+					'file'      => 'test-1024x512.png',
+					'width'     => 1024,
+					'height'    => 512,
 					'mime-type' => 'image/png',
 				),
 			),
@@ -1627,12 +1747,12 @@ EOF;
 		$this->assertFalse( wp_calculate_image_srcset( $size_array, $image_src, $image_meta1 ) );
 
 		// Sizes is string instead of array; only full size available means no srcset.
-		$image_meta2 = $image_meta;
+		$image_meta2          = $image_meta;
 		$image_meta2['sizes'] = '';
 		$this->assertFalse( wp_calculate_image_srcset( $size_array, $image_src, $image_meta2 ) );
 
 		// File name is incorrect
-		$image_meta3 = $image_meta;
+		$image_meta3         = $image_meta;
 		$image_meta3['file'] = '/';
 		$this->assertFalse( wp_calculate_image_srcset( $size_array, $image_src, $image_meta3 ) );
 
@@ -1642,7 +1762,7 @@ EOF;
 		$this->assertFalse( wp_calculate_image_srcset( $size_array, $image_src, $image_meta4 ) );
 
 		// Intermediate size is string instead of array.
-		$image_meta5 = $image_meta;
+		$image_meta5                          = $image_meta;
 		$image_meta5['sizes']['medium_large'] = '';
 		unset( $srcset[768] );
 		$expected_srcset = implode( ', ', $srcset );
@@ -1655,34 +1775,34 @@ EOF;
 	 */
 	function test_wp_calculate_image_srcset_with_spaces_in_filenames() {
 		// Mock data for this test.
-		$image_src = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test image-300x150.png';
+		$image_src  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/2015/12/test image-300x150.png';
 		$image_meta = array(
-			'width' => 2000,
+			'width'  => 2000,
 			'height' => 1000,
-			'file' => '2015/12/test image.png',
-			'sizes' => array(
-				'thumbnail' => array(
-					'file' => 'test image-150x150.png',
-					'width' => 150,
-					'height' => 150,
+			'file'   => '2015/12/test image.png',
+			'sizes'  => array(
+				'thumbnail'    => array(
+					'file'      => 'test image-150x150.png',
+					'width'     => 150,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
-				'medium' => array(
-					'file' => 'test image-300x150.png',
-					'width' => 300,
-					'height' => 150,
+				'medium'       => array(
+					'file'      => 'test image-300x150.png',
+					'width'     => 300,
+					'height'    => 150,
 					'mime-type' => 'image/png',
 				),
 				'medium_large' => array(
-					'file' => 'test image-768x384.png',
-					'width' => 768,
-					'height' => 384,
+					'file'      => 'test image-768x384.png',
+					'width'     => 768,
+					'height'    => 384,
 					'mime-type' => 'image/png',
 				),
-				'large' => array(
-					'file' => 'test image-1024x512.png',
-					'width' => 1024,
-					'height' => 512,
+				'large'        => array(
+					'file'      => 'test image-1024x512.png',
+					'width'     => 1024,
+					'height'    => 512,
 					'mime-type' => 'image/png',
 				),
 			),
@@ -1705,19 +1825,19 @@ EOF;
 
 		$srcset = wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta );
 
-		$year_month = date('Y/m');
+		$year_month  = date( 'Y/m' );
 		$uploads_dir = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/';
 
 		// Set up test cases for all expected size names.
 		$intermediates = array( 'medium', 'medium_large', 'large', 'full' );
 
 		foreach ( $_wp_additional_image_sizes as $name => $additional_size ) {
-			if ( ! $_wp_additional_image_sizes[$name]['crop'] || 0 === $_wp_additional_image_sizes[$name]['height'] ) {
+			if ( ! $_wp_additional_image_sizes[ $name ]['crop'] || 0 === $_wp_additional_image_sizes[ $name ]['height'] ) {
 				$intermediates[] = $name;
 			}
 		}
 
-		$expected = "";
+		$expected = '';
 
 		foreach ( $image_meta['sizes'] as $name => $size ) {
 			// Whitelist the sizes that should be included so we pick up 'medium_large' in WP-4.4.
@@ -1726,7 +1846,7 @@ EOF;
 			}
 		}
 
-		$expected .= $uploads_dir . $image_meta['file'] . ' ' . $image_meta['width'] .'w';
+		$expected .= $uploads_dir . $image_meta['file'] . ' ' . $image_meta['width'] . 'w';
 
 		$expected_srcset = $this->_src_first( $expected, $uploads_dir . $image_meta['file'], $size_array[0] );
 
@@ -1752,8 +1872,8 @@ EOF;
 	 * @see https://core.trac.wordpress.org/ticket/33641
 	 */
 	function test_wp_get_attachment_image_srcset_invalidsize() {
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
-		$invalid_size = 'nailthumb';
+		$image_meta    = wp_get_attachment_metadata( self::$large_id );
+		$invalid_size  = 'nailthumb';
 		$original_size = array( 1600, 1200 );
 
 		$srcset = wp_get_attachment_image_srcset( self::$large_id, $invalid_size, $image_meta );
@@ -1769,16 +1889,16 @@ EOF;
 	 */
 	function test_wp_get_attachment_image_sizes() {
 		// Test sizes against the default WP sizes.
-		$intermediates = array('thumbnail', 'medium', 'medium_large', 'large');
+		$intermediates = array( 'thumbnail', 'medium', 'medium_large', 'large' );
 
 		// Make sure themes aren't filtering the sizes array.
 		remove_all_filters( 'wp_calculate_image_sizes' );
 
-		foreach( $intermediates as $int_size ) {
+		foreach ( $intermediates as $int_size ) {
 			$image = wp_get_attachment_image_src( self::$large_id, $int_size );
 
 			$expected = '(max-width: ' . $image[1] . 'px) 100vw, ' . $image[1] . 'px';
-			$sizes = wp_get_attachment_image_sizes( self::$large_id, $int_size );
+			$sizes    = wp_get_attachment_image_sizes( self::$large_id, $int_size );
 
 			$this->assertSame( $expected, $sizes );
 		}
@@ -1790,19 +1910,19 @@ EOF;
 	function test_wp_calculate_image_sizes() {
 		// Test sizes against the default WP sizes.
 		$intermediates = array( 'thumbnail', 'medium', 'medium_large', 'large' );
-		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_meta    = wp_get_attachment_metadata( self::$large_id );
 		$this->assertAttachmentMetaHasSizes( $image_meta );
 
 		// Make sure themes aren't filtering the sizes array.
 		remove_all_filters( 'wp_calculate_image_sizes' );
 
 		foreach ( $intermediates as $int_size ) {
-			$size_array = $this->_get_image_size_array_from_meta( $image_meta, $int_size );
-			$image_src = $image_meta['sizes'][ $int_size ]['file'];
+			$size_array             = $this->_get_image_size_array_from_meta( $image_meta, $int_size );
+			$image_src              = $image_meta['sizes'][ $int_size ]['file'];
 			list( $width, $height ) = $size_array;
 
 			$expected = '(max-width: ' . $width . 'px) 100vw, ' . $width . 'px';
-			$sizes = wp_calculate_image_sizes( $size_array, $image_src, $image_meta );
+			$sizes    = wp_calculate_image_sizes( $size_array, $image_src, $image_meta );
 
 			$this->assertSame( $expected, $sizes );
 		}
@@ -1817,25 +1937,25 @@ EOF;
 		$size_array = $this->_get_image_size_array_from_meta( $image_meta, 'medium' );
 
 		$srcset = sprintf( 'srcset="%s"', wp_get_attachment_image_srcset( self::$large_id, $size_array, $image_meta ) );
-		$sizes = sprintf( 'sizes="%s"', wp_get_attachment_image_sizes( self::$large_id, $size_array, $image_meta ) );
+		$sizes  = sprintf( 'sizes="%s"', wp_get_attachment_image_sizes( self::$large_id, $size_array, $image_meta ) );
 
 		// Function used to build HTML for the editor.
-		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
+		$img                  = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img_no_size_in_class = str_replace( 'size-', '', $img );
-		$img_no_width_height = str_replace( ' width="' . $size_array[0] . '"', '', $img );
-		$img_no_width_height = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
-		$img_no_size_id = str_replace( 'wp-image-', 'id-', $img );
-		$img_with_sizes_attr = str_replace( '<img ', '<img sizes="99vw" ', $img );
-		$img_xhtml = str_replace( ' />', '/>', $img );
-		$img_html5 = str_replace( ' />', '>', $img );
+		$img_no_width_height  = str_replace( ' width="' . $size_array[0] . '"', '', $img );
+		$img_no_width_height  = str_replace( ' height="' . $size_array[1] . '"', '', $img_no_width_height );
+		$img_no_size_id       = str_replace( 'wp-image-', 'id-', $img );
+		$img_with_sizes_attr  = str_replace( '<img ', '<img sizes="99vw" ', $img );
+		$img_xhtml            = str_replace( ' />', '/>', $img );
+		$img_html5            = str_replace( ' />', '>', $img );
 
 		// Manually add srcset and sizes to the markup from get_image_tag();
-		$respimg = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
+		$respimg                  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
 		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
-		$respimg_no_width_height = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
-		$respimg_with_sizes_attr = preg_replace('|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
-		$respimg_xhtml = preg_replace( '|<img ([^>]+)/>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_xhtml );
-		$respimg_html5 = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_html5 );
+		$respimg_no_width_height  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
+		$respimg_with_sizes_attr  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
+		$respimg_xhtml            = preg_replace( '|<img ([^>]+)/>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_xhtml );
+		$respimg_html5            = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_html5 );
 
 		$content = '
 			<p>Image, standard. Should have srcset and sizes.</p>
@@ -1860,7 +1980,7 @@ EOF;
 			%7$s';
 
 		$content_unfiltered = sprintf( $content, $img, $img_no_size_in_class, $img_no_width_height, $img_no_size_id, $img_with_sizes_attr, $img_xhtml, $img_html5 );
-		$content_filtered = sprintf( $content, $respimg, $respimg_no_size_in_class, $respimg_no_width_height, $img_no_size_id, $respimg_with_sizes_attr, $respimg_xhtml, $respimg_html5 );
+		$content_filtered   = sprintf( $content, $respimg, $respimg_no_size_in_class, $respimg_no_width_height, $img_no_size_id, $respimg_with_sizes_attr, $respimg_xhtml, $respimg_html5 );
 
 		$this->assertSame( $content_filtered, wp_make_content_images_responsive( $content_unfiltered ) );
 	}
@@ -1891,7 +2011,7 @@ EOF;
 	function test_wp_make_content_images_responsive_with_preexisting_srcset() {
 		// Generate HTML and add a dummy srcset attribute.
 		$image_html = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$image_html = preg_replace('|<img ([^>]+) />|', '<img $1 ' . 'srcset="image2x.jpg 2x" />', $image_html );
+		$image_html = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . 'srcset="image2x.jpg 2x" />', $image_html );
 
 		// The content filter should return the image unchanged.
 		$this->assertSame( $image_html, wp_make_content_images_responsive( $image_html ) );
@@ -1904,36 +2024,36 @@ EOF;
 	function test_wp_calculate_image_srcset_animated_gifs() {
 		// Mock meta for an animated gif.
 		$image_meta = array(
-			'width' => 1200,
+			'width'  => 1200,
 			'height' => 600,
-			'file' => 'animated.gif',
-			'sizes' => array(
+			'file'   => 'animated.gif',
+			'sizes'  => array(
 				'thumbnail' => array(
-					'file' => 'animated-150x150.gif',
-					'width' => 150,
-					'height' => 150,
-					'mime-type' => 'image/gif'
+					'file'      => 'animated-150x150.gif',
+					'width'     => 150,
+					'height'    => 150,
+					'mime-type' => 'image/gif',
 				),
-				'medium' => array(
-					'file' => 'animated-300x150.gif',
-					'width' => 300,
-					'height' => 150,
-					'mime-type' => 'image/gif'
+				'medium'    => array(
+					'file'      => 'animated-300x150.gif',
+					'width'     => 300,
+					'height'    => 150,
+					'mime-type' => 'image/gif',
 				),
-				'large' => array(
-					'file' => 'animated-1024x512.gif',
-					'width' => 1024,
-					'height' => 512,
-					'mime-type' => 'image/gif'
+				'large'     => array(
+					'file'      => 'animated-1024x512.gif',
+					'width'     => 1024,
+					'height'    => 512,
+					'mime-type' => 'image/gif',
 				),
-			)
+			),
 		);
 
 		$full_src  = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_meta['file'];
 		$large_src = 'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $image_meta['sizes']['large']['file'];
 
 		// Test with soft resized size array.
-		$size_array = array(900, 450);
+		$size_array = array( 900, 450 );
 
 		// Full size GIFs should not return a srcset.
 		$this->assertFalse( wp_calculate_image_srcset( $size_array, $full_src, $image_meta ) );
@@ -2006,7 +2126,7 @@ EOF;
 					'width'  => 1024,
 					'height' => 512,
 				),
-			)
+			),
 		);
 
 		// Test using the large file size.
@@ -2033,7 +2153,7 @@ EOF;
 		// Calculate attachment data (default is medium).
 		$attachment = wp_get_attachment_image_src( $id, 'medium' );
 
-		$html = '<img src="%1$s" alt="" width="%2$d" height="%3$d" class="align%4$s size-medium wp-image-%5$d" />';
+		$html     = '<img src="%1$s" alt="" width="%2$d" height="%3$d" class="align%4$s size-medium wp-image-%5$d" />';
 		$expected = sprintf( $html, $attachment[0], $attachment[1], $attachment[2], $align, $id );
 
 		$this->assertSame( $expected, get_image_send_to_editor( $id, $caption, $title, $align ) );
@@ -2109,8 +2229,8 @@ EOF;
 		remove_all_filters( 'wp_calculate_image_sizes' );
 
 		$actual = wp_get_attachment_image( self::$large_id, 'testsize' );
-		$year = date( 'Y' );
-		$month = date( 'm' );
+		$year   = date( 'Y' );
+		$month  = date( 'm' );
 
 		$expected = '<img width="999" height="999" src="http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/' . $year . '/' . $month . '/test-image-testsize-999x999.png"' .
 			' class="attachment-testsize size-testsize" alt=""' .
@@ -2125,9 +2245,9 @@ EOF;
 
 	function _filter_36246( $data, $attachment_id ) {
 		$data['sizes']['testsize'] = array(
-			'file' => 'test-image-testsize-999x999.png',
-			'width' => 999,
-			'height' => 999,
+			'file'      => 'test-image-testsize-999x999.png',
+			'width'     => 999,
+			'height'    => 999,
 			'mime-type' => 'image/png',
 		);
 		return $data;
@@ -2146,7 +2266,7 @@ EOF;
 
 		$attachment_id = wp_insert_attachment( $data, '', 0, true );
 		$this->assertWPError( $attachment_id );
-		$this->assertEquals( 'invalid_date', $attachment_id->get_error_code() );
+		$this->assertSame( 'invalid_date', $attachment_id->get_error_code() );
 
 		$attachment_id = wp_insert_attachment( $data, '', 0 );
 		$this->assertSame( 0, $attachment_id );
@@ -2165,7 +2285,7 @@ EOF;
 			),
 		);
 
-		$this->assertEquals( 123, wp_get_media_creation_timestamp( $metadata ) );
+		$this->assertSame( 123, wp_get_media_creation_timestamp( $metadata ) );
 	}
 
 	/**
@@ -2177,13 +2297,13 @@ EOF;
 			'matroska'   => array(
 				'comments' => array(
 					'creation_time' => array(
-						'2015-12-24T17:40:09Z'
+						'2015-12-24T17:40:09Z',
 					),
 				),
 			),
 		);
 
-		$this->assertEquals( 1450978809, wp_get_media_creation_timestamp( $metadata ) );
+		$this->assertSame( 1450978809, wp_get_media_creation_timestamp( $metadata ) );
 	}
 
 	/**
@@ -2203,7 +2323,7 @@ EOF;
 			),
 		);
 
-		$this->assertEquals( 1450978805, wp_get_media_creation_timestamp( $metadata ) );
+		$this->assertSame( 1450978805, wp_get_media_creation_timestamp( $metadata ) );
 	}
 
 	/**
@@ -2221,7 +2341,7 @@ EOF;
 			),
 		);
 
-		$this->assertEquals( 1265680539, wp_get_media_creation_timestamp( $metadata ) );
+		$this->assertSame( 1265680539, wp_get_media_creation_timestamp( $metadata ) );
 	}
 
 	/**
@@ -2231,7 +2351,7 @@ EOF;
 		$video    = DIR_TESTDATA . '/uploads/small-video.mov';
 		$metadata = wp_read_video_metadata( $video );
 
-		$this->assertEquals( 1269120551, $metadata['created_timestamp'] );
+		$this->assertSame( 1269120551, $metadata['created_timestamp'] );
 	}
 
 	/**
@@ -2241,7 +2361,7 @@ EOF;
 		$video    = DIR_TESTDATA . '/uploads/small-video.mp4';
 		$metadata = wp_read_video_metadata( $video );
 
-		$this->assertEquals( 1269120551, $metadata['created_timestamp'] );
+		$this->assertSame( 1269120551, $metadata['created_timestamp'] );
 	}
 
 	/**
@@ -2251,7 +2371,7 @@ EOF;
 		$video    = DIR_TESTDATA . '/uploads/small-video.mkv';
 		$metadata = wp_read_video_metadata( $video );
 
-		$this->assertEquals( 1269120551, $metadata['created_timestamp'] );
+		$this->assertSame( 1269120551, $metadata['created_timestamp'] );
 	}
 
 	/**
@@ -2261,7 +2381,7 @@ EOF;
 		$video    = DIR_TESTDATA . '/uploads/small-video.webm';
 		$metadata = wp_read_video_metadata( $video );
 
-		$this->assertEquals( 1269120551, $metadata['created_timestamp'] );
+		$this->assertSame( 1269120551, $metadata['created_timestamp'] );
 	}
 
 	/**
@@ -2280,12 +2400,20 @@ EOF;
 			'name'     => 'test-image-iptc.jpg',
 			'type'     => 'image/jpeg',
 			'error'    => 0,
-			'size'     => filesize( $iptc_file )
+			'size'     => filesize( $iptc_file ),
 		);
 
 		$parent_id = self::factory()->post->create( array( 'post_date' => '2010-01-01' ) );
 
-		$post_id = media_handle_upload( 'upload', $parent_id, array(), array( 'action' => 'test_iptc_upload', 'test_form' => false ) );
+		$post_id = media_handle_upload(
+			'upload',
+			$parent_id,
+			array(),
+			array(
+				'action'    => 'test_iptc_upload',
+				'test_form' => false,
+			)
+		);
 
 		unset( $_FILES['upload'] );
 
@@ -2317,13 +2445,26 @@ EOF;
 			'name'     => 'test-image-iptc.jpg',
 			'type'     => 'image/jpeg',
 			'error'    => 0,
-			'size'     => filesize( $iptc_file )
+			'size'     => filesize( $iptc_file ),
 		);
 
-		$parent_id = self::factory()->post->create( array( 'post_date' => '2010-01-01', 'post_type' => 'page' ) );
-		$parent = get_post( $parent_id );
+		$parent_id = self::factory()->post->create(
+			array(
+				'post_date' => '2010-01-01',
+				'post_type' => 'page',
+			)
+		);
+		$parent    = get_post( $parent_id );
 
-		$post_id = media_handle_upload( 'upload', $parent_id, array(), array( 'action' => 'test_iptc_upload', 'test_form' => false ) );
+		$post_id = media_handle_upload(
+			'upload',
+			$parent_id,
+			array(),
+			array(
+				'action'    => 'test_iptc_upload',
+				'test_form' => false,
+			)
+		);
 
 		unset( $_FILES['upload'] );
 
@@ -2331,13 +2472,13 @@ EOF;
 
 		$uploads_dir = wp_upload_dir( current_time( 'mysql' ) );
 
-		$expected = $uploads_dir['url'] . 'test-image-iptc.jpg';
+		$expected = $uploads_dir['url'] . '/test-image-iptc.jpg';
 
 		// Clean up.
 		wp_delete_attachment( $post_id );
 		wp_delete_post( $parent_id );
 
-		$this->assertNotEquals( $expected, $url );
+		$this->assertSame( $expected, $url );
 	}
 }
 

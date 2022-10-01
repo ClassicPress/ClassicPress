@@ -28,7 +28,8 @@ Would you like to help? [Here is how you can start ›](https://github.com/Class
 Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/classicpress)   
 All donations are tax-deductible in the United States.
 
-[![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkhost-webhosting-domeinregistratie-webdesign-logo.png)](https://www.brinkhost.nl)
+[![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkman-it-sponsor.png)](https://www.brinkhost.nl)
+[![Tukutoi](https://www.classicpress.net/wp-content/uploads/2022/07/tukutoi-sponsor.png)](https://www.tukutoi.com)
 
 ## Financial Contributors
 

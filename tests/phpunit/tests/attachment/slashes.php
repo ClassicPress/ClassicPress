@@ -6,8 +6,8 @@
  * @see https://core.trac.wordpress.org/ticket/21767
  */
 class Tests_Attachment_Slashes extends WP_UnitTestCase {
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
 		wp_set_current_user( $this->author_id );
 
@@ -19,7 +19,6 @@ class Tests_Attachment_Slashes extends WP_UnitTestCase {
 		$this->slash_4 = 'String with 4 slashes \\\\\\\\';
 		$this->slash_5 = 'String with 5 slashes \\\\\\\\\\';
 		$this->slash_6 = 'String with 6 slashes \\\\\\\\\\\\';
-		$this->slash_7 = 'String with 7 slashes \\\\\\\\\\\\\\';
 	}
 
 	/**
@@ -27,31 +26,35 @@ class Tests_Attachment_Slashes extends WP_UnitTestCase {
 	 *
 	 */
 	function test_wp_insert_attachment() {
-		$id = wp_insert_attachment(array(
-			'post_status' => 'publish',
-			'post_title' => $this->slash_1,
-			'post_content_filtered' => $this->slash_3,
-			'post_excerpt' => $this->slash_5,
-			'post_type' => 'post'
-		));
+		$id   = wp_insert_attachment(
+			array(
+				'post_status'           => 'publish',
+				'post_title'            => $this->slash_1,
+				'post_content_filtered' => $this->slash_3,
+				'post_excerpt'          => $this->slash_5,
+				'post_type'             => 'post',
+			)
+		);
 		$post = get_post( $id );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), $post->post_title );
-		$this->assertEquals( wp_unslash( $this->slash_3 ), $post->post_content_filtered );
-		$this->assertEquals( wp_unslash( $this->slash_5 ), $post->post_excerpt );
+		$this->assertSame( wp_unslash( $this->slash_1 ), $post->post_title );
+		$this->assertSame( wp_unslash( $this->slash_3 ), $post->post_content_filtered );
+		$this->assertSame( wp_unslash( $this->slash_5 ), $post->post_excerpt );
 
-		$id = wp_insert_attachment(array(
-			'post_status' => 'publish',
-			'post_title' => $this->slash_2,
-			'post_content_filtered' => $this->slash_4,
-			'post_excerpt' => $this->slash_6,
-			'post_type' => 'post'
-		));
+		$id   = wp_insert_attachment(
+			array(
+				'post_status'           => 'publish',
+				'post_title'            => $this->slash_2,
+				'post_content_filtered' => $this->slash_4,
+				'post_excerpt'          => $this->slash_6,
+				'post_type'             => 'post',
+			)
+		);
 		$post = get_post( $id );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), $post->post_title );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), $post->post_content_filtered );
-		$this->assertEquals( wp_unslash( $this->slash_6 ), $post->post_excerpt );
+		$this->assertSame( wp_unslash( $this->slash_2 ), $post->post_title );
+		$this->assertSame( wp_unslash( $this->slash_4 ), $post->post_content_filtered );
+		$this->assertSame( wp_unslash( $this->slash_6 ), $post->post_excerpt );
 	}
 
 }

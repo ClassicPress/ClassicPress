@@ -11,7 +11,7 @@ class Tests_Functions_RemoveQueryArg extends WP_UnitTestCase {
 		$actual = remove_query_arg( $keys_to_remove, $url );
 
 		$this->assertNotEmpty( $actual );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	public function remove_query_arg_provider() {
@@ -25,7 +25,7 @@ class Tests_Functions_RemoveQueryArg extends WP_UnitTestCase {
 	}
 
 	public function test_should_fall_back_on_current_url() {
-		$old_request_uri = $_SERVER['REQUEST_URI'];
+		$old_request_uri        = $_SERVER['REQUEST_URI'];
 		$_SERVER['REQUEST_URI'] = 'edit.php?foo=bar&baz=quz';
 
 		$actual = remove_query_arg( 'foo' );

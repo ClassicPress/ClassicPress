@@ -6,8 +6,8 @@
 class Tests_Term_WpTerm extends WP_UnitTestCase {
 	protected static $term_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		register_taxonomy( 'wptests_tax', 'post' );
 	}
 
@@ -18,14 +18,20 @@ class Tests_Term_WpTerm extends WP_UnitTestCase {
 
 		// Ensure that there is a term with ID 1.
 		if ( ! get_term( 1 ) ) {
-			$wpdb->insert( $wpdb->terms, array(
-				'term_id' => 1,
-			) );
+			$wpdb->insert(
+				$wpdb->terms,
+				array(
+					'term_id' => 1,
+				)
+			);
 
-			$wpdb->insert( $wpdb->term_taxonomy, array(
-				'term_id' => 1,
-				'taxonomy' => 'wptests_tax',
-			) );
+			$wpdb->insert(
+				$wpdb->term_taxonomy,
+				array(
+					'term_id'  => 1,
+					'taxonomy' => 'wptests_tax',
+				)
+			);
 
 			clean_term_cache( 1, 'wptests_tax' );
 		}

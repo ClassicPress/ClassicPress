@@ -13,10 +13,10 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_number() {
 		$schema = array(
-			'type'    => 'number',
+			'type' => 'number',
 		);
 		$this->assertEquals( 1, rest_sanitize_value_from_schema( 1, $schema ) );
-		$this->assertEquals( 1.10, rest_sanitize_value_from_schema( '1.10', $schema ) );
+		$this->assertSame( 1.10, rest_sanitize_value_from_schema( '1.10', $schema ) );
 		$this->assertEquals( 1, rest_sanitize_value_from_schema( '1abc', $schema ) );
 		$this->assertEquals( 0, rest_sanitize_value_from_schema( 'abc', $schema ) );
 		$this->assertEquals( 0, rest_sanitize_value_from_schema( array(), $schema ) );
@@ -26,59 +26,60 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 		$schema = array(
 			'type' => 'integer',
 		);
-		$this->assertEquals( 1, rest_sanitize_value_from_schema( 1, $schema ) );
-		$this->assertEquals( 1, rest_sanitize_value_from_schema( '1.10', $schema ) );
-		$this->assertEquals( 1, rest_sanitize_value_from_schema( '1abc', $schema ) );
-		$this->assertEquals( 0, rest_sanitize_value_from_schema( 'abc', $schema ) );
-		$this->assertEquals( 0, rest_sanitize_value_from_schema( array(), $schema ) );
+		$this->assertSame( 1, rest_sanitize_value_from_schema( 1, $schema ) );
+		$this->assertSame( 1, rest_sanitize_value_from_schema( '1.10', $schema ) );
+		$this->assertSame( 1, rest_sanitize_value_from_schema( '1abc', $schema ) );
+		$this->assertSame( 0, rest_sanitize_value_from_schema( 'abc', $schema ) );
+		$this->assertSame( 0, rest_sanitize_value_from_schema( array(), $schema ) );
 	}
 
 	public function test_type_string() {
 		$schema = array(
 			'type' => 'string',
 		);
-		$this->assertEquals( 'Hello', rest_sanitize_value_from_schema( 'Hello', $schema ) );
-		$this->assertEquals( '1.10', rest_sanitize_value_from_schema( 1.10, $schema ) );
-		$this->assertEquals( '1', rest_sanitize_value_from_schema( 1, $schema ) );
+		$this->assertSame( 'Hello', rest_sanitize_value_from_schema( 'Hello', $schema ) );
+		$this->assertSame( '1.10', rest_sanitize_value_from_schema( '1.10', $schema ) );
+		$this->assertSame( '1.1', rest_sanitize_value_from_schema( 1.1, $schema ) );
+		$this->assertSame( '1', rest_sanitize_value_from_schema( 1, $schema ) );
 	}
 
 	public function test_type_boolean() {
 		$schema = array(
 			'type' => 'boolean',
 		);
-		$this->assertEquals( true, rest_sanitize_value_from_schema( '1', $schema ) );
-		$this->assertEquals( true, rest_sanitize_value_from_schema( 'true', $schema ) );
-		$this->assertEquals( true, rest_sanitize_value_from_schema( '100', $schema ) );
-		$this->assertEquals( true, rest_sanitize_value_from_schema( 1, $schema ) );
-		$this->assertEquals( false, rest_sanitize_value_from_schema( '0', $schema ) );
-		$this->assertEquals( false, rest_sanitize_value_from_schema( 'false', $schema ) );
-		$this->assertEquals( false, rest_sanitize_value_from_schema( 0, $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( '1', $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( 'true', $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( '100', $schema ) );
+		$this->assertTrue( rest_sanitize_value_from_schema( 1, $schema ) );
+		$this->assertFalse( rest_sanitize_value_from_schema( '0', $schema ) );
+		$this->assertFalse( rest_sanitize_value_from_schema( 'false', $schema ) );
+		$this->assertFalse( rest_sanitize_value_from_schema( 0, $schema ) );
 	}
 
 	public function test_format_email() {
 		$schema = array(
-			'type'  => 'string',
+			'type'   => 'string',
 			'format' => 'email',
 		);
-		$this->assertEquals( 'email@example.com', rest_sanitize_value_from_schema( 'email@example.com', $schema ) );
-		$this->assertEquals( 'a@b.c', rest_sanitize_value_from_schema( 'a@b.c', $schema ) );
-		$this->assertEquals( 'invalid', rest_sanitize_value_from_schema( 'invalid', $schema ) );
+		$this->assertSame( 'email@example.com', rest_sanitize_value_from_schema( 'email@example.com', $schema ) );
+		$this->assertSame( 'a@b.c', rest_sanitize_value_from_schema( 'a@b.c', $schema ) );
+		$this->assertSame( 'invalid', rest_sanitize_value_from_schema( 'invalid', $schema ) );
 	}
 
 	public function test_format_ip() {
 		$schema = array(
-			'type'  => 'string',
+			'type'   => 'string',
 			'format' => 'ip',
 		);
 
-		$this->assertEquals( '127.0.0.1', rest_sanitize_value_from_schema( '127.0.0.1', $schema ) );
-		$this->assertEquals( 'hello', rest_sanitize_value_from_schema( 'hello', $schema ) );
-		$this->assertEquals( '2001:DB8:0:0:8:800:200C:417A', rest_sanitize_value_from_schema( '2001:DB8:0:0:8:800:200C:417A', $schema ) );
+		$this->assertSame( '127.0.0.1', rest_sanitize_value_from_schema( '127.0.0.1', $schema ) );
+		$this->assertSame( 'hello', rest_sanitize_value_from_schema( 'hello', $schema ) );
+		$this->assertSame( '2001:DB8:0:0:8:800:200C:417A', rest_sanitize_value_from_schema( '2001:DB8:0:0:8:800:200C:417A', $schema ) );
 	}
 
 	public function test_type_array() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'number',
 			),
@@ -89,9 +90,9 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array_nested() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
-				'type' => 'array',
+				'type'  => 'array',
 				'items' => array(
 					'type' => 'number',
 				),
@@ -103,7 +104,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 
 	public function test_type_array_as_csv() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'number',
 			),
@@ -120,8 +121,8 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 				'type' => 'string',
 			),
 		);
-		$this->assertEquals( array( 'ribs', 'brisket' ), rest_sanitize_value_from_schema( array( 'ribs', 'brisket' ), $schema ) );
-		$this->assertEquals( array( 'coleslaw' ), rest_sanitize_value_from_schema( array( 'coleslaw' ), $schema ) );
+		$this->assertSame( array( 'ribs', 'brisket' ), rest_sanitize_value_from_schema( array( 'ribs', 'brisket' ), $schema ) );
+		$this->assertSame( array( 'coleslaw' ), rest_sanitize_value_from_schema( array( 'coleslaw' ), $schema ) );
 	}
 
 	public function test_type_array_with_enum_as_csv() {
@@ -132,18 +133,27 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 				'type' => 'string',
 			),
 		);
-		$this->assertEquals( array( 'ribs', 'chicken' ), rest_sanitize_value_from_schema( 'ribs,chicken', $schema ) );
-		$this->assertEquals( array( 'chicken', 'coleslaw' ), rest_sanitize_value_from_schema( 'chicken,coleslaw', $schema ) );
+		$this->assertSame( array( 'ribs', 'chicken' ), rest_sanitize_value_from_schema( 'ribs,chicken', $schema ) );
+		$this->assertSame( array( 'chicken', 'coleslaw' ), rest_sanitize_value_from_schema( 'chicken,coleslaw', $schema ) );
 	}
 
 	public function test_type_array_is_associative() {
 		$schema = array(
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => array(
 				'type' => 'string',
 			),
 		);
-		$this->assertEquals( array( '1', '2' ), rest_sanitize_value_from_schema( array( 'first' => '1', 'second' => '2' ), $schema ) );
+		$this->assertSame(
+			array( '1', '2' ),
+			rest_sanitize_value_from_schema(
+				array(
+					'first'  => '1',
+					'second' => '2',
+				),
+				$schema
+			)
+		);
 	}
 
 	public function test_type_object() {
@@ -151,19 +161,31 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type' => 'number'
+					'type' => 'number',
 				),
 			),
 		);
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => 1 ), $schema ) );
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1' ), $schema ) );
-		$this->assertEquals( array( 'a' => 1, 'b' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1', 'b' => 1 ), $schema ) );
+		$this->assertEquals(
+			array(
+				'a' => 1,
+				'b' => 1,
+			),
+			rest_sanitize_value_from_schema(
+				array(
+					'a' => '1',
+					'b' => 1,
+				),
+				$schema
+			)
+		);
 	}
 
 	public function test_type_object_strips_additional_properties() {
 		$schema = array(
-			'type'       => 'object',
-			'properties' => array(
+			'type'                 => 'object',
+			'properties'           => array(
 				'a' => array(
 					'type' => 'number',
 				),
@@ -172,20 +194,29 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 		);
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => 1 ), $schema ) );
 		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1' ), $schema ) );
-		$this->assertEquals( array( 'a' => 1 ), rest_sanitize_value_from_schema( array( 'a' => '1', 'b' => 1 ), $schema ) );
+		$this->assertEquals(
+			array( 'a' => 1 ),
+			rest_sanitize_value_from_schema(
+				array(
+					'a' => '1',
+					'b' => 1,
+				),
+				$schema
+			)
+		);
 	}
 
 	public function test_type_object_nested() {
 		$schema = array(
-			'type' => 'object',
+			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type'  => 'object',
+					'type'       => 'object',
 					'properties' => array(
 						'b' => array( 'type' => 'number' ),
 						'c' => array( 'type' => 'number' ),
-					)
-				)
+					),
+				),
 			),
 		);
 
@@ -227,7 +258,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 				$schema
 			)
 		);
-		$this->assertEquals( array( 'a' => array() ), rest_sanitize_value_from_schema( array( 'a' => null ), $schema ) );
+		$this->assertSame( array( 'a' => array() ), rest_sanitize_value_from_schema( array( 'a' => null ), $schema ) );
 	}
 
 	public function test_type_object_stdclass() {
@@ -235,7 +266,7 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 			'type'       => 'object',
 			'properties' => array(
 				'a' => array(
-					'type' => 'number'
+					'type' => 'number',
 				),
 			),
 		);
@@ -246,17 +277,17 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 		$schema = array(
 			'type' => 'lalala',
 		);
-		$this->assertEquals( 'Best lyrics', rest_sanitize_value_from_schema( 'Best lyrics', $schema ) );
-		$this->assertEquals( 1.10, rest_sanitize_value_from_schema( 1.10, $schema ) );
-		$this->assertEquals( 1, rest_sanitize_value_from_schema( 1, $schema ) );
+		$this->assertSame( 'Best lyrics', rest_sanitize_value_from_schema( 'Best lyrics', $schema ) );
+		$this->assertSame( 1.10, rest_sanitize_value_from_schema( 1.10, $schema ) );
+		$this->assertSame( 1, rest_sanitize_value_from_schema( 1, $schema ) );
 	}
 
 	public function test_no_type() {
 		$schema = array(
 			'type' => null,
 		);
-		$this->assertEquals( 'Nothing', rest_sanitize_value_from_schema( 'Nothing', $schema ) );
-		$this->assertEquals( 1.10, rest_sanitize_value_from_schema( 1.10, $schema ) );
-		$this->assertEquals( 1, rest_sanitize_value_from_schema( 1, $schema ) );
+		$this->assertSame( 'Nothing', rest_sanitize_value_from_schema( 'Nothing', $schema ) );
+		$this->assertSame( 1.10, rest_sanitize_value_from_schema( 1.10, $schema ) );
+		$this->assertSame( 1, rest_sanitize_value_from_schema( 1, $schema ) );
 	}
 }

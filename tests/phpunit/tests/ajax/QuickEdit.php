@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing Quick Edit AJAX functionality.
@@ -16,40 +16,54 @@ class Tests_Ajax_QuickEdit extends WP_Ajax_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/26948
 	 */
 	public function test_dont_process_terms_if_taxonomy_does_not_allow_show_on_quick_edit() {
-		register_taxonomy( 'wptests_tax_1', 'post', array(
-			'show_in_quick_edit' => false,
-			'hierarchical' => true,
-		) );
-		register_taxonomy( 'wptests_tax_2', 'post', array(
-			'show_in_quick_edit' => true,
-			'hierarchical' => true,
-		) );
+		register_taxonomy(
+			'wptests_tax_1',
+			'post',
+			array(
+				'show_in_quick_edit' => false,
+				'hierarchical'       => true,
+			)
+		);
+		register_taxonomy(
+			'wptests_tax_2',
+			'post',
+			array(
+				'show_in_quick_edit' => true,
+				'hierarchical'       => true,
+			)
+		);
 
-		$t1 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax_1',
-		) );
-		$t2 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax_2',
-		) );
+		$t1 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax_1',
+			)
+		);
+		$t2 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax_2',
+			)
+		);
 
 		// Become an administrator.
 		$this->_setRole( 'administrator' );
 
-		$post = self::factory()->post->create_and_get( array(
-			'post_author' => get_current_user_id(),
-		) );
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_author' => get_current_user_id(),
+			)
+		);
 
 		// Set up a request.
 		$_POST['_inline_edit'] = wp_create_nonce( 'inlineeditnonce' );
-		$_POST['post_ID'] = $post->ID;
-		$_POST['post_type'] = $post->post_type;
-		$_POST['content'] = $post->post_content;
-		$_POST['excerpt'] = $post->post_excerpt;
-		$_POST['_status'] = $post->post_status;
-		$_POST['post_status'] = $post->post_status;
-		$_POST['screen'] = 'post';
-		$_POST['post_view'] = 'excerpt';
-		$_POST['tax_input'] = array(
+		$_POST['post_ID']      = $post->ID;
+		$_POST['post_type']    = $post->post_type;
+		$_POST['content']      = $post->post_content;
+		$_POST['excerpt']      = $post->post_excerpt;
+		$_POST['_status']      = $post->post_status;
+		$_POST['post_status']  = $post->post_status;
+		$_POST['screen']       = 'post';
+		$_POST['post_view']    = 'excerpt';
+		$_POST['tax_input']    = array(
 			'wptests_tax_1' => array( $t1 ),
 			'wptests_tax_2' => array( $t2 ),
 		);
@@ -67,6 +81,6 @@ class Tests_Ajax_QuickEdit extends WP_Ajax_UnitTestCase {
 
 		// wptests_tax_2 terms should have been added successfully.
 		$post_terms_2 = wp_get_object_terms( $post->ID, 'wptests_tax_2' );
-		$this->assertEqualSets( array( $t2 ), wp_list_pluck( $post_terms_2, 'term_id' ) );
+		$this->assertSameSets( array( $t2 ), wp_list_pluck( $post_terms_2, 'term_id' ) );
 	}
 }
