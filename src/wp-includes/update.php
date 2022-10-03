@@ -457,7 +457,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		// WordPress needs the version field specified as 'new_version'.
 		if ( ! isset( $update->new_version ) ) {
 			$update->new_version = $update->version;
-	}
+		}
 
 		// Handle any translation updates.
 		if ( ! empty( $update->translations ) ) {
@@ -475,9 +475,9 @@ function wp_update_plugins( $extra_stats = array() ) {
 
 		if ( version_compare( $update->new_version, $plugin_data['Version'], '>' ) ) {
 			$updates->response[ $plugin_file ] = $update;
-	} else {
+		} else {
 			$updates->no_update[ $plugin_file ] = $update;
-	}
+		}
 	}
 
 	$sanitize_plugin_update_payload = function( &$item ) {
