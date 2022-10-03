@@ -383,14 +383,6 @@ function wp_update_plugins( $extra_stats = array() ) {
 	}
 
 	$response = json_decode( wp_remote_retrieve_body( $raw_response ), true );
-<<<<<<< HEAD
-	foreach ( $response['plugins'] as &$plugin ) {
-		$plugin = (object) $plugin;
-		if ( isset( $plugin->compatibility ) ) {
-			$plugin->compatibility = (object) $plugin->compatibility;
-			foreach ( $plugin->compatibility as &$data ) {
-				$data = (object) $data;
-=======
 
 	if ( $response && is_array( $response ) ) {
 		$updates->response     = $response['plugins'];
@@ -412,7 +404,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		 * The dynamic portion of the hook name, `$hostname`, refers to the hostname
 		 * of the URI specified in the `Update URI` header field.
 		 *
-		 * @since 5.8.0
+		 * @since WP-5.8.0
 		 *
 		 * @param array|false $update {
 		 *     The plugin update data with the latest details. Default false.
@@ -449,8 +441,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 
 		if ( ! $update ) {
 			continue;
->>>>>>> 0f45b89ffd (Plugins: Add support for `Update URI` header.)
-			}
+		}
 
 		$update = (object) $update;
 
@@ -467,13 +458,6 @@ function wp_update_plugins( $extra_stats = array() ) {
 		if ( ! isset( $update->new_version ) ) {
 			$update->new_version = $update->version;
 	}
-<<<<<<< HEAD
-	unset( $plugin, $data );
-	foreach ( $response['no_update'] as &$plugin ) {
-		$plugin = (object) $plugin;
-	}
-	unset( $plugin );
-=======
 
 		// Handle any translation updates.
 		if ( ! empty( $update->translations ) ) {
@@ -488,7 +472,6 @@ function wp_update_plugins( $extra_stats = array() ) {
 		}
 
 		unset( $updates->no_update[ $plugin_file ], $updates->response[ $plugin_file ] );
->>>>>>> 0f45b89ffd (Plugins: Add support for `Update URI` header.)
 
 		if ( version_compare( $update->new_version, $plugin_data['Version'], '>' ) ) {
 			$updates->response[ $plugin_file ] = $update;

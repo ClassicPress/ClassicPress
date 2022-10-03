@@ -429,9 +429,6 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		$compatible_php = is_php_version_compatible( $requires_php );
 		$notice_type    = $compatible_php ? 'notice-warning' : 'notice-error';
 
-<<<<<<< HEAD
-		echo '<tr class="plugin-update-tr' . $active_class . '" id="' . esc_attr( $response->slug . '-update' ) . '" data-slug="' . esc_attr( $response->slug ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice inline ' . $notice_type . ' notice-alt"><p>';
-=======
 		printf(
 			'<tr class="plugin-update-tr%s" id="%s" data-slug="%s" data-plugin="%s">' .
 			'<td colspan="%s" class="plugin-update colspanchange">' .
@@ -443,7 +440,6 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 			esc_attr( $wp_list_table->get_column_count() ),
 			$notice_type
 		);
->>>>>>> 0f45b89ffd (Plugins: Add support for `Update URI` header.)
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number */
