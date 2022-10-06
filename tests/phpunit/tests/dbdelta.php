@@ -15,53 +15,87 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	protected $max_index_length = 191;
 
 	/**
+	 * Database engine used for creating tables.
+	 *
+	 * Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
+	 */
+	protected $db_engine = '';
+
+	/**
+	 * The database server version.
+	 *
+	 * @var string
+	 */
+	private static $db_version;
+
+	/**
+	 * Full database server information.
+	 *
+	 * @var string
+	 */
+	private static $db_server_info;
+
+	/**
 	 * Make sure the upgrade code is loaded before the tests are run.
 	 */
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 
-		parent::setUpBeforeClass();
+		global $wpdb;
+
+		parent::set_up_before_class();
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		self::$db_version     = $wpdb->db_version();
+		self::$db_server_info = $wpdb->db_server_info();
 	}
 
 	/**
 	 * Create a custom table to be used in each test.
 	 */
-	public function setUp() {
+	public function set_up() {
 
 		global $wpdb;
 
-		// Forcing MyISAM, because InnoDB only started supporting FULLTEXT indexes in MySQL 5.7.
+		if ( version_compare( self::$db_version, '5.7', '<' ) ) {
+			// Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
+			$this->db_engine = 'ENGINE=MyISAM';
+		}
+
 		$wpdb->query(
 			$wpdb->prepare(
 				"
-				CREATE TABLE {$wpdb->prefix}dbdelta_test (
-					id bigint(20) NOT NULL AUTO_INCREMENT,
+				CREATE TABLE {$wpdb->prefix}dbdelta_test (" .
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					'id bigint(20) NOT NULL AUTO_INCREMENT,
 					column_1 varchar(255) NOT NULL,
 					column_2 text,
 					column_3 blob,
 					PRIMARY KEY  (id),
 					KEY key_1 (column_1(%d)),
 					KEY compound_key (id,column_1(%d)),
-					FULLTEXT KEY fulltext_key (column_1)
-				) ENGINE=MyISAM
+					FULLTEXT KEY fulltext_key (column_1)' .
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				") {$this->db_engine}
 				",
 				$this->max_index_length,
 				$this->max_index_length
 			)
 		);
 
-		parent::setUp();
+		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
+		// causes it to create a temporary table, and a temporary table cannot use a FULLTEXT index.
+		parent::set_up();
 	}
 
 	/**
 	 * Delete the custom table on teardown.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 
 		global $wpdb;
 
-		parent::tearDown();
+		parent::tear_down();
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dbdelta_test" );
 	}
@@ -88,9 +122,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"{$wpdb->prefix}dbdelta_create_test" => "Created table {$wpdb->prefix}dbdelta_create_test",
 		);
 
-		$this->assertEquals( $expected, $updates );
+		$this->assertSame( $expected, $updates );
 
-		$this->assertEquals(
+		$this->assertSame(
 			"{$wpdb->prefix}dbdelta_create_test",
 			$wpdb->get_var(
 				$wpdb->prepare(
@@ -122,7 +156,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 	}
 
 	/**
@@ -145,10 +179,23 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$bigint_display_width = '(20)';
+
+		/*
+		 * MySQL 8.0.17 or later does not support display width for integer data types,
+		 * so if display width is the only difference, it can be safely ignored.
+		 * Note: This is specific to MySQL and does not affect MariaDB.
+		 */
+		if ( version_compare( self::$db_version, '8.0.17', '>=' )
+			&& ! str_contains( self::$db_server_info, 'MariaDB' )
+		) {
+			$bigint_display_width = '';
+		}
+
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.id"
-					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint(20) to int(11)",
+					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint{$bigint_display_width} to int(11)",
 			),
 			$updates
 		);
@@ -174,7 +221,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
@@ -207,7 +254,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 
 		$this->assertTableHasColumn( 'column_1', $wpdb->prefix . 'dbdelta_test' );
 	}
@@ -234,7 +281,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			false // Don't execute.
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
 					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
@@ -255,7 +302,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"INSERT INTO {$wpdb->prefix}dbdelta_test (column_1) VALUES ('wcphilly2015')"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(),
 			$insert
 		);
@@ -553,15 +600,28 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	function test_spatial_indices() {
 		global $wpdb;
 
-		if ( version_compare( $wpdb->db_version(), '5.4', '<' ) ) {
+		if ( version_compare( self::$db_version, '5.4', '<' ) ) {
 			$this->markTestSkipped( 'Spatial indices require MySQL 5.4 and above.' );
+		}
+
+		$geometrycollection_name = 'geometrycollection';
+
+		if ( version_compare( self::$db_version, '8.0.11', '>=' )
+			&& ! str_contains( self::$db_server_info, 'MariaDB' )
+		) {
+			/*
+			 * MySQL 8.0.11 or later uses GeomCollection data type name
+			 * as the preferred synonym for GeometryCollection.
+			 * Note: This is specific to MySQL and does not affect MariaDB.
+			 */
+			$geometrycollection_name = 'geomcollection';
 		}
 
 		$schema =
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-				spatial_value geometrycollection NOT NULL,
+				spatial_value {$geometrycollection_name} NOT NULL,
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 			) ENGINE=MyISAM;
@@ -578,8 +638,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-				spatial_value geometrycollection NOT NULL,
-				spatial_value2 geometrycollection NOT NULL,
+				spatial_value {$geometrycollection_name} NOT NULL,
+				spatial_value2 {$geometrycollection_name} NOT NULL,
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 				SPATIAL KEY spatial_key2 (spatial_value2)
@@ -667,7 +727,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/20263
 	 */
-	function test_wp_get_db_schema_does_no_alter_queries_on_existing_install() {
+	public function test_wp_get_db_schema_does_not_alter_queries_on_existing_install() {
 		$updates = dbDelta( wp_get_db_schema() );
 
 		$this->assertEmpty( $updates );

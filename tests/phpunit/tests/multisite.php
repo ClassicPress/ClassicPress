@@ -10,16 +10,16 @@ if ( is_multisite() ) :
 	class Tests_Multisite extends WP_UnitTestCase {
 		protected $suppress = false;
 
-		function setUp() {
+		function set_up() {
 			global $wpdb;
-			parent::setUp();
+			parent::set_up();
 			$this->suppress = $wpdb->suppress_errors();
 		}
 
-		function tearDown() {
+		function tear_down() {
 			global $wpdb;
-			parent::tearDown();
 			$wpdb->suppress_errors( $this->suppress );
+			parent::tear_down();
 		}
 
 		function test_wpmu_log_new_registrations() {
@@ -30,9 +30,9 @@ if ( is_multisite() ) :
 
 			wpmu_log_new_registrations( 1, 1 );
 
-			// currently there is no wrapper function for the registration_log
+			// Currently there is no wrapper function for the registration_log.
 			$reg_blog = $wpdb->get_col( $wpdb->prepare( "SELECT email FROM {$wpdb->registration_log} WHERE {$wpdb->registration_log}.blog_id = 1 AND IP LIKE %s", $ip ) );
-			$this->assertEquals( $user->user_email, $reg_blog[ count( $reg_blog ) - 1 ] );
+			$this->assertSame( $user->user_email, $reg_blog[ count( $reg_blog ) - 1 ] );
 		}
 	}
 

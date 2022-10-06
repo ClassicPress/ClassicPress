@@ -47,7 +47,7 @@ function wp_crop_image( $src, $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $s
 	}
 
 	if ( ! $dst_file ) {
-		$dst_file = str_replace( basename( $src_file ), 'cropped-' . basename( $src_file ), $src_file );
+		$dst_file = str_replace( wp_basename( $src_file ), 'cropped-' . wp_basename( $src_file ), $src_file );
 	}
 
 	/*
@@ -56,7 +56,7 @@ function wp_crop_image( $src, $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $s
 	 */
 	wp_mkdir_p( dirname( $dst_file ) );
 
-	$dst_file = dirname( $dst_file ) . '/' . wp_unique_filename( dirname( $dst_file ), basename( $dst_file ) );
+	$dst_file = dirname( $dst_file ) . '/' . wp_unique_filename( dirname( $dst_file ), wp_basename( $dst_file ) );
 
 	$result = $editor->save( $dst_file );
 	if ( is_wp_error( $result ) ) {
@@ -187,7 +187,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 					$ext = '.png';
 					break;
 			}
-			$basename = str_replace( '.', '-', basename( $file ) ) . '-image' . $ext;
+			$basename = str_replace( '.', '-', wp_basename( $file ) ) . '-image' . $ext;
 			$uploaded = wp_upload_bits( $basename, '', $metadata['image']['data'] );
 			if ( false === $uploaded['error'] ) {
 				$image_attachment = array(
@@ -623,9 +623,10 @@ function file_is_displayable_image( $path ) {
  * @since WP-2.9.0
  *
  * @param string $attachment_id Attachment ID.
- * @param string $mime_type Image mime type.
- * @param string $size Optional. Image size, defaults to 'full'.
- * @return resource|false The resulting image resource on success, false on failure.
+ * @param string $mime_type     Image mime type.
+ * @param string $size          Optional. Image size. Default 'full'.
+ * @return resource|GdImage|false The resulting image resource or GdImage instance on success,
+ *                                false on failure.
  */
 function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 	$filepath = _load_image_to_edit_path( $attachment_id, $size );
@@ -647,22 +648,25 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 			$image = false;
 			break;
 	}
-	if ( is_resource( $image ) ) {
+
+	if ( is_gd_image( $image ) ) {
 		/**
 		 * Filters the current image being loaded for editing.
 		 *
 		 * @since WP-2.9.0
 		 *
-		 * @param resource $image         Current image.
-		 * @param string   $attachment_id Attachment ID.
-		 * @param string   $size          Image size.
+		 * @param resource|GdImage $image         Current image.
+		 * @param string           $attachment_id Attachment ID.
+		 * @param string           $size          Image size.
 		 */
 		$image = apply_filters( 'load_image_to_edit', $image, $attachment_id, $size );
+
 		if ( function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
 			imagealphablending( $image, false );
 			imagesavealpha( $image, true );
 		}
 	}
+
 	return $image;
 }
 
@@ -676,7 +680,7 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
  * @access private
  *
  * @param string $attachment_id Attachment ID.
- * @param string $size Optional. Image size, defaults to 'full'.
+ * @param string $size          Optional. Image size. Default 'full'.
  * @return string|false File path or url on success, false on failure.
  */
 function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
@@ -740,8 +744,8 @@ function _copy_image_file( $attachment_id ) {
 	}
 
 	if ( $src_file ) {
-		$dst_file = str_replace( basename( $dst_file ), 'copy-' . basename( $dst_file ), $dst_file );
-		$dst_file = dirname( $dst_file ) . '/' . wp_unique_filename( dirname( $dst_file ), basename( $dst_file ) );
+		$dst_file = str_replace( wp_basename( $dst_file ), 'copy-' . wp_basename( $dst_file ), $dst_file );
+		$dst_file = dirname( $dst_file ) . '/' . wp_unique_filename( dirname( $dst_file ), wp_basename( $dst_file ) );
 
 		/*
 		 * The directory containing the original file may no longer

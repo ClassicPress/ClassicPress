@@ -18,8 +18,8 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	 *
 	 * @since WP-4.5.0
 	 */
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->post_type = rand_str( 20 );
 	}
@@ -30,11 +30,11 @@ class Tests_Post_Types extends WP_UnitTestCase {
 
 		$pobj = get_post_type_object( 'foo' );
 		$this->assertInstanceOf( 'WP_Post_Type', $pobj );
-		$this->assertEquals( 'foo', $pobj->name );
+		$this->assertSame( 'foo', $pobj->name );
 
 		// Test some defaults
 		$this->assertFalse( is_post_type_hierarchical( 'foo' ) );
-		$this->assertEquals( array(), get_object_taxonomies( 'foo' ) );
+		$this->assertSame( array(), get_object_taxonomies( 'foo' ) );
 
 		_unregister_post_type( 'foo' );
 	}
@@ -161,9 +161,9 @@ class Tests_Post_Types extends WP_UnitTestCase {
 
 		register_post_type( 'bar' );
 		register_taxonomy_for_object_type( 'post_tag', 'bar' );
-		$this->assertEquals( array( 'post_tag' ), get_object_taxonomies( 'bar' ) );
+		$this->assertSame( array( 'post_tag' ), get_object_taxonomies( 'bar' ) );
 		register_taxonomy_for_object_type( 'category', 'bar' );
-		$this->assertEquals( array( 'category', 'post_tag' ), get_object_taxonomies( 'bar' ) );
+		$this->assertSame( array( 'category', 'post_tag' ), get_object_taxonomies( 'bar' ) );
 
 		$this->assertTrue( is_object_in_taxonomy( 'bar', 'post_tag' ) );
 		$this->assertTrue( is_object_in_taxonomy( 'bar', 'post_tag' ) );
@@ -305,7 +305,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars, true ) );
+		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 		$this->assertFalse( array_search( 'bar', $wp->public_query_vars, true ) );
 	}
@@ -397,7 +397,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSetsWithIndex(
+		$this->assertSameSetsWithIndex(
 			array(
 				'editor' => true,
 				'author' => true,
@@ -423,8 +423,8 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertInternalType( 'int', array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
-		$this->assertInternalType( 'int', array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
+		$this->assertIsInt( array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
+		$this->assertIsInt( array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 		$this->assertFalse( array_search( 'foo', $wp_taxonomies['category']->object_type, true ) );
 		$this->assertFalse( array_search( 'foo', $wp_taxonomies['post_tag']->object_type, true ) );
@@ -483,8 +483,8 @@ class Tests_Post_Types extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertInternalType( 'object', $wp_post_types['foo'] );
-		$this->assertInternalType( 'object', get_post_type_object( 'foo' ) );
+		$this->assertIsObject( $wp_post_types['foo'] );
+		$this->assertIsObject( get_post_type_object( 'foo' ) );
 
 		$this->assertTrue( unregister_post_type( 'foo' ) );
 
@@ -547,20 +547,20 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34010
 	 */
 	public function test_get_post_types_by_support_excluding_features() {
-		$this->assertEqualSets( array(), get_post_types_by_support( array( 'post-formats', 'page-attributes' ) ) );
+		$this->assertSameSets( array(), get_post_types_by_support( array( 'post-formats', 'page-attributes' ) ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/34010
 	 */
 	public function test_get_post_types_by_support_non_existant_feature() {
-		$this->assertEqualSets( array(), get_post_types_by_support( 'somefeature' ) );
+		$this->assertSameSets( array(), get_post_types_by_support( 'somefeature' ) );
 	}
 
 	/**
 	 * Serves as a helper to register a post type for tests.
 	 *
-	 * Uses `$this->post_type` initialized in setUp().
+	 * Uses `$this->post_type` initialized in set_up().
 	 *
 	 * @since WP-4.5.0
 	 *

@@ -66,8 +66,8 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	/**
 	 * Setup.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->post_count   = (int) get_option( 'posts_per_rss' );
 		$this->excerpt_only = get_option( 'rss_use_excerpt' );
@@ -109,15 +109,15 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 
-		$this->assertEquals( '2.0', $rss[0]['attributes']['version'] );
-		$this->assertEquals( 'http://purl.org/rss/1.0/modules/content/', $rss[0]['attributes']['xmlns:content'] );
-		$this->assertEquals( 'http://wellformedweb.org/CommentAPI/', $rss[0]['attributes']['xmlns:wfw'] );
-		$this->assertEquals( 'http://purl.org/dc/elements/1.1/', $rss[0]['attributes']['xmlns:dc'] );
+		$this->assertSame( '2.0', $rss[0]['attributes']['version'] );
+		$this->assertSame( 'http://purl.org/rss/1.0/modules/content/', $rss[0]['attributes']['xmlns:content'] );
+		$this->assertSame( 'http://wellformedweb.org/CommentAPI/', $rss[0]['attributes']['xmlns:wfw'] );
+		$this->assertSame( 'http://purl.org/dc/elements/1.1/', $rss[0]['attributes']['xmlns:dc'] );
 
-		// rss should have exactly one child element (channel)
-		$this->assertEquals( 1, count( $rss[0]['child'] ) );
+		// RSS should have exactly one child element (channel).
+		$this->assertSame( 1, count( $rss[0]['child'] ) );
 	}
 
 	/**
@@ -137,16 +137,16 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 
 		// Verify the channel is present and contains a title child element
 		$title = xml_find( $xml, 'rss', 'channel', 'title' );
-		$this->assertEquals( get_option( 'blogname' ), $title[0]['content'] );
+		$this->assertSame( get_option( 'blogname' ), $title[0]['content'] );
 
 		$desc = xml_find( $xml, 'rss', 'channel', 'description' );
-		$this->assertEquals( get_option( 'blogdescription' ), $desc[0]['content'] );
+		$this->assertSame( get_option( 'blogdescription' ), $desc[0]['content'] );
 
 		$link = xml_find( $xml, 'rss', 'channel', 'link' );
-		$this->assertEquals( get_option( 'siteurl' ), $link[0]['content'] );
+		$this->assertSame( get_option( 'siteurl' ), $link[0]['content'] );
 
 		$pubdate = xml_find( $xml, 'rss', 'channel', 'lastBuildDate' );
-		$this->assertEquals( strtotime( get_lastpostmodified() ), strtotime( $pubdate[0]['content'] ) );
+		$this->assertSame( strtotime( get_lastpostmodified() ), strtotime( $pubdate[0]['content'] ) );
 	}
 
 	/**
@@ -173,7 +173,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 
 		// Verify the date is untranslated.
 		$pubdate = xml_find( $xml, 'rss', 'channel', 'lastBuildDate' );
-		$this->assertNotContains( 'Tue_Translated', $pubdate[0]['content'] );
+		$this->assertStringNotContainsString( 'Tue_Translated', $pubdate[0]['content'] );
 	}
 
 	function test_item_elements() {
@@ -198,26 +198,26 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 			preg_match( '/\?p=(\d+)/', $guid[0]['content'], $matches );
 			$post = get_post( $matches[1] );
 
-			// Title
+			// Title.
 			$title = xml_find( $items[ $key ]['child'], 'title' );
-			$this->assertEquals( $post->post_title, $title[0]['content'] );
+			$this->assertSame( $post->post_title, $title[0]['content'] );
 
-			// Link
+			// Link.
 			$link = xml_find( $items[ $key ]['child'], 'link' );
-			$this->assertEquals( get_permalink( $post ), $link[0]['content'] );
+			$this->assertSame( get_permalink( $post ), $link[0]['content'] );
 
-			// Comment link
+			// Comment link.
 			$comments_link = xml_find( $items[ $key ]['child'], 'comments' );
-			$this->assertEquals( get_permalink( $post ) . '#respond', $comments_link[0]['content'] );
+			$this->assertSame( get_permalink( $post ) . '#respond', $comments_link[0]['content'] );
 
-			// Pub date
+			// Pub date.
 			$pubdate = xml_find( $items[ $key ]['child'], 'pubDate' );
-			$this->assertEquals( strtotime( $post->post_date_gmt ), strtotime( $pubdate[0]['content'] ) );
+			$this->assertSame( strtotime( $post->post_date_gmt ), strtotime( $pubdate[0]['content'] ) );
 
 			// Author
 			$creator = xml_find( $items[ $key ]['child'], 'dc:creator' );
 			$user    = new WP_User( $post->post_author );
-			$this->assertEquals( $user->display_name, $creator[0]['content'] );
+			$this->assertSame( $user->display_name, $creator[0]['content'] );
 
 			// Categories (perhaps multiple)
 			$categories = xml_find( $items[ $key ]['child'], 'category' );
@@ -233,34 +233,35 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 				}
 			}
 			$cats = array_filter( $cats );
-			// Should be the same number of categories
-			$this->assertEquals( count( $cats ), count( $categories ) );
+
+			// Should be the same number of categories.
+			$this->assertSame( count( $cats ), count( $categories ) );
 
 			// ..with the same names
 			foreach ( $cats as $id => $cat ) {
-				$this->assertEquals( $cat, $categories[ $id ]['content'] );
+				$this->assertSame( $cat, $categories[ $id ]['content'] );
 			}
 
-			// GUID
+			// GUID.
 			$guid = xml_find( $items[ $key ]['child'], 'guid' );
-			$this->assertEquals( 'false', $guid[0]['attributes']['isPermaLink'] );
-			$this->assertEquals( $post->guid, $guid[0]['content'] );
+			$this->assertSame( 'false', $guid[0]['attributes']['isPermaLink'] );
+			$this->assertSame( $post->guid, $guid[0]['content'] );
 
 			// Description / Excerpt
 			if ( ! empty( $post->post_excerpt ) ) {
 				$description = xml_find( $items[ $key ]['child'], 'description' );
-				$this->assertEquals( trim( $post->post_excerpt ), trim( $description[0]['content'] ) );
+				$this->assertSame( trim( $post->post_excerpt ), trim( $description[0]['content'] ) );
 			}
 
 			// Post content
 			if ( ! $this->excerpt_only ) {
 				$content = xml_find( $items[ $key ]['child'], 'content:encoded' );
-				$this->assertEquals( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
+				$this->assertSame( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
 			}
 
-			// Comment rss
+			// Comment RSS.
 			$comment_rss = xml_find( $items[ $key ]['child'], 'wfw:commentRss' );
-			$this->assertEquals( html_entity_decode( get_post_comments_feed_link( $post->ID ) ), $comment_rss[0]['content'] );
+			$this->assertSame( html_entity_decode( get_post_comments_feed_link( $post->ID ) ), $comment_rss[0]['content'] );
 		}
 	}
 
@@ -321,7 +322,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -349,7 +350,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -382,7 +383,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -410,7 +411,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -438,7 +439,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 
 	/*
@@ -466,6 +467,6 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 		$rss = xml_find( $xml, 'rss' );
 
 		// There should only be one <rss> child element.
-		$this->assertEquals( 1, count( $rss ) );
+		$this->assertSame( 1, count( $rss ) );
 	}
 }

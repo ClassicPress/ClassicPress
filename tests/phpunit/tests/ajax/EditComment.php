@@ -24,8 +24,8 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$post_id = self::factory()->post->create();
 		self::factory()->comment->create_post_comments( $post_id, 5 );
 		$this->_comment_post = get_post( $post_id );
@@ -64,10 +64,10 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Check the meta data
-		$this->assertEquals( -1, (string) $xml->response[0]->edit_comment['position'] );
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->edit_comment['id'] );
-		$this->assertEquals( 'edit-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
+		// Check the meta data.
+		$this->assertSame( '-1', (string) $xml->response[0]->edit_comment['position'] );
+		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->edit_comment['id'] );
+		$this->assertSame( 'edit-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
 
 		// Check the payload
 		$this->assertNotEmpty( (string) $xml->response[0]->edit_comment[0]->response_data );
@@ -112,10 +112,10 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Check the meta data
-		$this->assertEquals( -1, (string) $xml->response[0]->edit_comment['position'] );
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->edit_comment['id'] );
-		$this->assertEquals( 'edit-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
+		// Check the meta data.
+		$this->assertSame( '-1', (string) $xml->response[0]->edit_comment['position'] );
+		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->edit_comment['id'] );
+		$this->assertSame( 'edit-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
 
 		// Check the payload
 		$this->assertNotEmpty( (string) $xml->response[0]->edit_comment[0]->response_data );

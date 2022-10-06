@@ -1172,9 +1172,14 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	 * Require we have enough space to unzip the file and copy its contents, with a 10% buffer.
 	 */
 	if ( wp_doing_cron() ) {
-		$available_space = @disk_free_space( WP_CONTENT_DIR );
+		$available_space = function_exists( 'disk_free_space' ) ? @disk_free_space( WP_CONTENT_DIR ) : false;
+
 		if ( $available_space && ( $uncompressed_size * 2.1 ) > $available_space ) {
-			return new WP_Error( 'disk_full_unzip_file', __( 'Could not copy files. You may have run out of disk space.' ), compact( 'uncompressed_size', 'available_space' ) );
+			return new WP_Error(
+				'disk_full_unzip_file',
+				__( 'Could not copy files. You may have run out of disk space.' ),
+				compact( 'uncompressed_size', 'available_space' )
+			);
 		}
 	}
 
@@ -1295,9 +1300,14 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 	 * Require we have enough space to unzip the file and copy its contents, with a 10% buffer.
 	 */
 	if ( wp_doing_cron() ) {
-		$available_space = @disk_free_space( WP_CONTENT_DIR );
+		$available_space = function_exists( 'disk_free_space' ) ? @disk_free_space( WP_CONTENT_DIR ) : false;
+
 		if ( $available_space && ( $uncompressed_size * 2.1 ) > $available_space ) {
-			return new WP_Error( 'disk_full_unzip_file', __( 'Could not copy files. You may have run out of disk space.' ), compact( 'uncompressed_size', 'available_space' ) );
+			return new WP_Error(
+				'disk_full_unzip_file',
+				__( 'Could not copy files. You may have run out of disk space.' ),
+				compact( 'uncompressed_size', 'available_space' )
+			);
 		}
 	}
 

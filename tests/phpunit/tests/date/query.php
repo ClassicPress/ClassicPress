@@ -11,8 +11,8 @@
 class Tests_WP_Date_Query extends WP_UnitTestCase {
 	public $q;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		unset( $this->q );
 		$this->q = new WP_Date_Query( array( 'm' => 2 ) );
 	}
@@ -110,7 +110,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			'relation' => 'AND',
 		);
 
-		$this->assertEquals( $expected, $q->queries );
+		$this->assertSame( $expected, $q->queries );
 	}
 
 	public function test_get_compare_empty() {
@@ -560,7 +560,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 
 		$found = $q->build_time_query( 'post_date', '=', 0, 10 );
 
-		$this->assertContains( '%H', $wpdb->remove_placeholder_escape( $found ) );
+		$this->assertStringContainsString( '%H', $wpdb->remove_placeholder_escape( $found ) );
 	}
 
 	public function test_build_time_query_compare_in() {
@@ -662,8 +662,8 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found = $q->build_time_query( 'post_date', '=', 5, 15 );
 
 		// $compare value is floating point - use regex to account for
-		// varying precision on different PHP installations
-		$this->assertRegExp( "/DATE_FORMAT\( post_date, '%H\.%i' \) = 5\.150*/", $wpdb->remove_placeholder_escape( $found ) );
+		// varying precision on different PHP installations.
+		$this->assertMatchesRegularExpression( "/DATE_FORMAT\( post_date, '%H\.%i' \) = 5\.150*/", $wpdb->remove_placeholder_escape( $found ) );
 	}
 
 	public function test_build_time_query_hour_minute_second() {
@@ -673,8 +673,8 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found = $q->build_time_query( 'post_date', '=', 5, 15, 35 );
 
 		// $compare value is floating point - use regex to account for
-		// varying precision on different PHP installations
-		$this->assertRegExp( "/DATE_FORMAT\( post_date, '%H\.%i%s' \) = 5\.15350*/", $wpdb->remove_placeholder_escape( $found ) );
+		// varying precision on different PHP installations.
+		$this->assertMatchesRegularExpression( "/DATE_FORMAT\( post_date, '%H\.%i%s' \) = 5\.15350*/", $wpdb->remove_placeholder_escape( $found ) );
 	}
 
 	public function test_build_time_query_minute_second() {
@@ -684,8 +684,8 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found = $q->build_time_query( 'post_date', '=', null, 15, 35 );
 
 		// $compare value is floating point - use regex to account for
-		// varying precision on different PHP installations
-		$this->assertRegExp( "/DATE_FORMAT\( post_date, '0\.%i%s' \) = 0\.15350*/", $wpdb->remove_placeholder_escape( $found ) );
+		// varying precision on different PHP installations.
+		$this->assertMatchesRegularExpression( "/DATE_FORMAT\( post_date, '0\.%i%s' \) = 0\.15350*/", $wpdb->remove_placeholder_escape( $found ) );
 	}
 
 	/**
@@ -1037,7 +1037,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( array( $p2 ), $q->posts );
+		$this->assertSame( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -1059,7 +1059,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( array( $p2 ), $q->posts );
+		$this->assertSame( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -1083,7 +1083,7 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		);
 
 		// MySQL ignores the invalid clause.
-		$this->assertEquals( array( $p1, $p2 ), $q->posts );
+		$this->assertSame( array( $p1, $p2 ), $q->posts );
 	}
 
 	/** Helpers **********************************************************/
