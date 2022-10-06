@@ -3958,6 +3958,7 @@ function wp_ajax_press_this_add_category() {
  * @return string|void Title when retrieving.
  */
 function single_month_title( $prefix = '', $display = true ) {
+	_deprecated_function( __FUNCTION__, 'CP-1.5.0' );
 	global $wp_locale;
 
 	$m        = get_query_var( 'm' );
