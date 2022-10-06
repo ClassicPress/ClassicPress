@@ -2733,12 +2733,14 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * Fires before a post is deleted, at the start of wp_delete_post().
 	 *
 	 * @since WP-3.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @see wp_delete_post()
 	 *
-	 * @param int $postid Post ID.
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
 	 */
-	do_action( 'before_delete_post', $postid );
+	do_action( 'before_delete_post', $postid, $post );
 
 	delete_post_meta( $postid, '_wp_trash_meta_status' );
 	delete_post_meta( $postid, '_wp_trash_meta_time' );
@@ -2785,10 +2787,12 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * Fires immediately before a post is deleted from the database.
 	 *
 	 * @since WP-1.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
-	 * @param int $postid Post ID.
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
 	 */
-	do_action( 'delete_post', $postid );
+	do_action( 'delete_post', $postid, $post );
 	$result = $wpdb->delete( $wpdb->posts, array( 'ID' => $postid ) );
 	if ( ! $result ) {
 		return false;
@@ -2798,10 +2802,12 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * Fires immediately after a post is deleted from the database.
 	 *
 	 * @since WP-2.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
-	 * @param int $postid Post ID.
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
 	 */
-	do_action( 'deleted_post', $postid );
+	do_action( 'deleted_post', $postid, $post );
 
 	clean_post_cache( $post );
 
@@ -2817,12 +2823,14 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * Fires after a post is deleted, at the conclusion of wp_delete_post().
 	 *
 	 * @since WP-3.2.0
+	 * @since WP-5.5.0 Added the `$post` parameter.
 	 *
 	 * @see wp_delete_post()
 	 *
-	 * @param int $postid Post ID.
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
 	 */
-	do_action( 'after_delete_post', $postid );
+	do_action( 'after_delete_post', $postid, $post );
 
 	return $post;
 }
