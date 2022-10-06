@@ -687,15 +687,13 @@ class WP_Comments_List_Table extends WP_List_Table {
 		}
 
 		comment_text( $comment );
+
 		if ( $this->user_can ) {
+			/** This filter is documented in wp-admin/includes/comment.php */
+			$comment_content = apply_filters( 'comment_edit_pre', $comment->comment_content );
 			?>
 		<div id="inline-<?php echo $comment->comment_ID; ?>" class="hidden">
-		<textarea class="comment" rows="1" cols="1">
-			<?php
-			/** This filter is documented in wp-admin/includes/comment.php */
-			echo esc_textarea( apply_filters( 'comment_edit_pre', $comment->comment_content ) );
-			?>
-		</textarea>
+			<textarea class="comment" rows="1" cols="1"><?php echo esc_textarea( $comment_content ); ?></textarea>
 		<div class="author-email"><?php echo esc_attr( $comment->comment_author_email ); ?></div>
 		<div class="author"><?php echo esc_attr( $comment->comment_author ); ?></div>
 		<div class="author-url"><?php echo esc_attr( $comment->comment_author_url ); ?></div>
