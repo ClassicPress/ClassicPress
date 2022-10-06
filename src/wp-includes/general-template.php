@@ -1426,49 +1426,6 @@ function single_term_title( $prefix = '', $display = true ) {
 }
 
 /**
- * Display or retrieve page title for post archive based on date.
- *
- * Useful for when the template only needs to display the month and year,
- * if either are available. The prefix does not automatically place a space
- * between the prefix, so if there should be a space, the parameter value
- * will need to have it at the end.
- *
- * @since WP-0.71
- *
- * @global WP_Locale $wp_locale
- *
- * @param string $prefix  Optional. What to display before the title.
- * @param bool   $display Optional, default is true. Whether to display or retrieve title.
- * @return string|void Title when retrieving.
- */
-function single_month_title( $prefix = '', $display = true ) {
-	global $wp_locale;
-
-	$m        = get_query_var( 'm' );
-	$year     = get_query_var( 'year' );
-	$monthnum = get_query_var( 'monthnum' );
-
-	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
-		$my_year  = $year;
-		$my_month = $wp_locale->get_month( $monthnum );
-	} elseif ( ! empty( $m ) ) {
-		$my_year  = substr( $m, 0, 4 );
-		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
-	}
-
-	if ( empty( $my_month ) ) {
-		return false;
-	}
-
-	$result = $prefix . $my_month . $prefix . $my_year;
-
-	if ( ! $display ) {
-		return $result;
-	}
-	echo $result;
-}
-
-/**
  * Display the archive title based on the queried object.
  *
  * @since WP-4.1.0
