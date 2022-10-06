@@ -26,7 +26,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		require_once dirname( dirname( __FILE__ ) ) . '/db.php';
 
-		self::$_wpdb = new WpdbExposedMethodsForTesting();
+		self::$_wpdb = new wpdb_exposed_methods_for_testing();
 
 		self::$server_info = self::$_wpdb->db_server_info();
 	}
