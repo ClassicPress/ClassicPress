@@ -47,14 +47,15 @@ class Tests_Template extends WP_UnitTestCase {
 		add_post_meta( self::$post->ID, '_wp_page_template', 'templates/post.php' );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		register_post_type(
 			'cpt',
 			array(
 				'public' => true,
 			)
 		);
+
 		register_taxonomy(
 			'taxo',
 			'post',
@@ -63,14 +64,15 @@ class Tests_Template extends WP_UnitTestCase {
 				'hierarchical' => true,
 			)
 		);
+
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		unregister_post_type( 'cpt' );
 		unregister_taxonomy( 'taxo' );
 		$this->set_permalink_structure( '' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 
@@ -215,7 +217,7 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	public function test_front_page_template_hierarchy_with_posts_on_front() {
-		$this->assertEquals( 'posts', get_option( 'show_on_front' ) );
+		$this->assertSame( 'posts', get_option( 'show_on_front' ) );
 		$this->assertTemplateHierarchy(
 			home_url(),
 			array(
@@ -426,7 +428,7 @@ class Tests_Template extends WP_UnitTestCase {
 		$this->go_to( $url );
 		$hierarchy = $this->get_template_hierarchy();
 
-		$this->assertEquals( $expected, $hierarchy, $message );
+		$this->assertSame( $expected, $hierarchy, $message );
 	}
 
 	protected static function get_query_template_conditions() {

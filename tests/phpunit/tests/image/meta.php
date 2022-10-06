@@ -6,7 +6,7 @@
  * @group upload
  */
 class Tests_Image_Meta extends WP_UnitTestCase {
-	function setUp() {
+	function set_up() {
 		if ( ! extension_loaded( 'gd' ) ) {
 			$this->markTestSkipped( 'The gd PHP extension is not loaded.' );
 		}
@@ -14,7 +14,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 			$this->markTestSkipped( 'The exif PHP extension is not loaded.' );
 		}
 
-		parent::setUp();
+		parent::set_up();
 	}
 
 	function test_exif_d70() {
@@ -22,15 +22,15 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/2004-07-22-DSC_0008.jpg' );
 
 		$this->assertEquals( 6.3, $out['aperture'] );
-		$this->assertEquals( '', $out['credit'] );
-		$this->assertEquals( 'NIKON D70', $out['camera'] );
-		$this->assertEquals( '', $out['caption'] );
+		$this->assertSame( '', $out['credit'] );
+		$this->assertSame( 'NIKON D70', $out['camera'] );
+		$this->assertSame( '', $out['caption'] );
 		$this->assertEquals( strtotime( '2004-07-22 17:14:59' ), $out['created_timestamp'] );
-		$this->assertEquals( '', $out['copyright'] );
+		$this->assertSame( '', $out['copyright'] );
 		$this->assertEquals( 27, $out['focal_length'] );
 		$this->assertEquals( 400, $out['iso'] );
 		$this->assertEquals( 1 / 40, $out['shutter_speed'] );
-		$this->assertEquals( '', $out['title'] );
+		$this->assertSame( '', $out['title'] );
 	}
 
 	function test_exif_d70_mf() {
@@ -127,7 +127,7 @@ class Tests_Image_Meta extends WP_UnitTestCase {
 		// trilingual UTF-8 text in the ITPC caption-abstract field
 		$out = wp_read_image_metadata( DIR_TESTDATA . '/images/test-image-iptc.jpg' );
 
-		$this->assertEquals( 'This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $out['caption'] );
+		$this->assertSame( 'This is a comment. / Это комментарий. / Βλέπετε ένα σχόλιο.', $out['caption'] );
 	}
 
 	/**

@@ -16,8 +16,8 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		self::$comment_id = $factory->comment->create( array( 'comment_post_ID' => self::$post_id ) );
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		wp_set_current_user( self::$editor_id );
 
@@ -71,10 +71,10 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		edit_post();
 		$post = get_post( $id );
 
-		$this->assertEquals( $this->slash_6, get_post_meta( $id, 'slash_test_0', true ) );
-		$this->assertEquals( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( $this->slash_6, get_post_meta( $id, 'slash_test_0', true ) );
+		$this->assertSame( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
 
 		$_POST                  = array();
 		$_POST['post_ID']       = $id;
@@ -100,9 +100,9 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		edit_post();
 		$post = get_post( $id );
 
-		$this->assertEquals( $this->slash_2, get_post_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( $this->slash_4, get_post_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( $this->slash_5, get_post_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( $this->slash_2, get_post_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( $this->slash_4, get_post_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( $this->slash_5, get_post_meta( $id, 'slash_test_3', true ) );
 	}
 
 	/**
@@ -115,9 +115,9 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		add_post_meta( $id, 'slash_test_2', addslashes( $this->slash_3 ) );
 		add_post_meta( $id, 'slash_test_3', addslashes( $this->slash_4 ) );
 
-		$this->assertEquals( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
 	}
 
 	/**
@@ -130,9 +130,9 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		update_post_meta( $id, 'slash_test_2', addslashes( $this->slash_3 ) );
 		update_post_meta( $id, 'slash_test_3', addslashes( $this->slash_4 ) );
 
-		$this->assertEquals( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( $this->slash_1, get_post_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( $this->slash_3, get_post_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( $this->slash_4, get_post_meta( $id, 'slash_test_3', true ) );
 	}
 
 	/**
@@ -146,17 +146,17 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		add_comment_meta( $id, 'slash_test_2', $this->slash_3 );
 		add_comment_meta( $id, 'slash_test_3', $this->slash_5 );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), get_comment_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_3 ), get_comment_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_5 ), get_comment_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_1 ), get_comment_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_3 ), get_comment_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_5 ), get_comment_meta( $id, 'slash_test_3', true ) );
 
 		add_comment_meta( $id, 'slash_test_4', $this->slash_2 );
 		add_comment_meta( $id, 'slash_test_5', $this->slash_4 );
 		add_comment_meta( $id, 'slash_test_6', $this->slash_6 );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), get_comment_meta( $id, 'slash_test_4', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), get_comment_meta( $id, 'slash_test_5', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_6 ), get_comment_meta( $id, 'slash_test_6', true ) );
+		$this->assertSame( wp_unslash( $this->slash_2 ), get_comment_meta( $id, 'slash_test_4', true ) );
+		$this->assertSame( wp_unslash( $this->slash_4 ), get_comment_meta( $id, 'slash_test_5', true ) );
+		$this->assertSame( wp_unslash( $this->slash_6 ), get_comment_meta( $id, 'slash_test_6', true ) );
 	}
 
 	/**
@@ -174,17 +174,17 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		update_comment_meta( $id, 'slash_test_2', $this->slash_3 );
 		update_comment_meta( $id, 'slash_test_3', $this->slash_5 );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), get_comment_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_3 ), get_comment_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_5 ), get_comment_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_1 ), get_comment_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_3 ), get_comment_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_5 ), get_comment_meta( $id, 'slash_test_3', true ) );
 
 		update_comment_meta( $id, 'slash_test_1', $this->slash_2 );
 		update_comment_meta( $id, 'slash_test_2', $this->slash_4 );
 		update_comment_meta( $id, 'slash_test_3', $this->slash_6 );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), get_comment_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), get_comment_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_6 ), get_comment_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_2 ), get_comment_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_4 ), get_comment_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_6 ), get_comment_meta( $id, 'slash_test_3', true ) );
 	}
 
 	/**
@@ -198,17 +198,17 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		add_user_meta( $id, 'slash_test_2', $this->slash_3 );
 		add_user_meta( $id, 'slash_test_3', $this->slash_5 );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), get_user_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_3 ), get_user_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_5 ), get_user_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_1 ), get_user_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_3 ), get_user_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_5 ), get_user_meta( $id, 'slash_test_3', true ) );
 
 		add_user_meta( $id, 'slash_test_4', $this->slash_2 );
 		add_user_meta( $id, 'slash_test_5', $this->slash_4 );
 		add_user_meta( $id, 'slash_test_6', $this->slash_6 );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), get_user_meta( $id, 'slash_test_4', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), get_user_meta( $id, 'slash_test_5', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_6 ), get_user_meta( $id, 'slash_test_6', true ) );
+		$this->assertSame( wp_unslash( $this->slash_2 ), get_user_meta( $id, 'slash_test_4', true ) );
+		$this->assertSame( wp_unslash( $this->slash_4 ), get_user_meta( $id, 'slash_test_5', true ) );
+		$this->assertSame( wp_unslash( $this->slash_6 ), get_user_meta( $id, 'slash_test_6', true ) );
 	}
 
 	/**
@@ -226,16 +226,16 @@ class Tests_Meta_Slashes extends WP_UnitTestCase {
 		update_user_meta( $id, 'slash_test_2', $this->slash_3 );
 		update_user_meta( $id, 'slash_test_3', $this->slash_5 );
 
-		$this->assertEquals( wp_unslash( $this->slash_1 ), get_user_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_3 ), get_user_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_5 ), get_user_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_1 ), get_user_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_3 ), get_user_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_5 ), get_user_meta( $id, 'slash_test_3', true ) );
 
 		update_user_meta( $id, 'slash_test_1', $this->slash_2 );
 		update_user_meta( $id, 'slash_test_2', $this->slash_4 );
 		update_user_meta( $id, 'slash_test_3', $this->slash_6 );
 
-		$this->assertEquals( wp_unslash( $this->slash_2 ), get_user_meta( $id, 'slash_test_1', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_4 ), get_user_meta( $id, 'slash_test_2', true ) );
-		$this->assertEquals( wp_unslash( $this->slash_6 ), get_user_meta( $id, 'slash_test_3', true ) );
+		$this->assertSame( wp_unslash( $this->slash_2 ), get_user_meta( $id, 'slash_test_1', true ) );
+		$this->assertSame( wp_unslash( $this->slash_4 ), get_user_meta( $id, 'slash_test_2', true ) );
+		$this->assertSame( wp_unslash( $this->slash_6 ), get_user_meta( $id, 'slash_test_3', true ) );
 	}
 }
