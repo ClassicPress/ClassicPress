@@ -1876,7 +1876,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 	if ( !$fullsize && $src = wp_get_attachment_thumb_url( $post->ID ) ) {
 		// We have a thumbnail desired, specified and existing
 
-		$src_file = basename($src);
+		$src_file = wp_basename($src);
 	} elseif ( wp_attachment_is_image( $post->ID ) ) {
 		// We have an image without a thumbnail
 
@@ -1886,7 +1886,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 		// No thumb, no image. We'll look for a mime-related icon instead.
 
 		$icon_dir = apply_filters( 'icon_dir', get_template_directory() . '/images' );
-		$src_file = $icon_dir . '/' . basename($src);
+		$src_file = $icon_dir . '/' . wp_basename($src);
 	}
 
 	if ( !isset($src) || !$src )
@@ -3049,7 +3049,7 @@ function remove_custom_background() {
  */
 function get_theme_data( $theme_file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.4.0', 'wp_get_theme()' );
-	$theme = new WP_Theme( basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
+	$theme = new WP_Theme( wp_basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
 
 	$theme_data = array(
 		'Name' => $theme->get('Name'),
@@ -3164,7 +3164,8 @@ function _get_post_ancestors( &$post ) {
  * @see wp_get_image_editor()
  *
  * @param string $file Filename of the image to load.
- * @return resource The resulting image resource on success, Error string on failure.
+ * @return resource|GdImage|string The resulting image resource or GdImage instance on success,
+ *                                 error string on failure.
  */
 function wp_load_image( $file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'wp_get_image_editor()' );
@@ -3185,8 +3186,8 @@ function wp_load_image( $file ) {
 
 	$image = imagecreatefromstring( file_get_contents( $file ) );
 
-	if ( ! is_resource( $image ) ) {
-		/* translators: %s: file name */
+	if ( ! is_gd_image( $image ) ) {
+		/* translators: %s: File name. */
 		return sprintf( __( 'File &#8220;%s&#8221; is not an image.' ), $file );
 	}
 

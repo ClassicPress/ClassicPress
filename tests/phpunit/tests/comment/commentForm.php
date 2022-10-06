@@ -4,14 +4,14 @@
  * @group comment
  */
 class Tests_Comment_CommentForm extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		update_option( 'default_comment_status', 'open' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		update_option( 'default_comment_status', 'closed' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_default_markup_for_submit_button_and_wrapper() {
@@ -27,7 +27,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
 		$hidden = get_comment_id_fields( $p );
-		$this->assertRegExp( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
+		$this->assertMatchesRegularExpression( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}
 
 	public function test_custom_submit_button() {
@@ -43,7 +43,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
 		$button = '<input name="custom-foo-name" type="submit" id="custom-foo-id" class="custom-foo-class" value="custom-foo-label" />';
-		$this->assertContains( $button, $form );
+		$this->assertStringContainsString( $button, $form );
 	}
 
 	public function test_custom_submit_field() {
@@ -60,7 +60,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
 		$hidden = get_comment_id_fields( $p );
-		$this->assertRegExp( '|<p class="my\-custom\-submit\-field">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
+		$this->assertMatchesRegularExpression( '|<p class="my\-custom\-submit\-field">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
 		$hidden = get_comment_id_fields( $p );
-		$this->assertRegExp( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
+		$this->assertMatchesRegularExpression( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}
 
 	public function filter_comment_form_defaults( $defaults ) {
@@ -108,6 +108,6 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		remove_filter( 'option_show_comments_cookies_opt_in', '__return_true' );
 
-		$this->assertRegExp( '|<p class="comment\-form\-cookies\-consent">.*?</p>|', $form );
+		$this->assertMatchesRegularExpression( '|<p class="comment\-form\-cookies\-consent">.*?</p>|', $form );
 	}
 }

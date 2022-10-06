@@ -7,15 +7,15 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 	protected $preprocess_comment_data = array();
 
-	public function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-phpass.php';
 		update_option( 'default_comment_status', 'open' );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		update_option( 'default_comment_status', 'closed' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_submitting_comment_to_invalid_post_returns_error() {
@@ -440,7 +440,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -464,7 +464,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -494,7 +494,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -533,7 +533,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertContains( '<script', $comment->comment_content );
+		$this->assertStringContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -564,7 +564,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-		$this->assertNotContains( '<script', $comment->comment_content );
+		$this->assertStringNotContainsString( '<script', $comment->comment_content );
 
 	}
 
@@ -778,9 +778,9 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 		remove_filter( 'preprocess_comment', array( $this, 'filter_preprocess_comment' ) );
 
 		$this->assertNotWPError( $comment );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
-				'comment_post_ID'      => $post->ID,
+				'comment_post_ID'      => (string) $post->ID,
 				'comment_author'       => $user->display_name,
 				'comment_author_email' => $user->user_email,
 				'comment_author_url'   => $user->user_url,

@@ -7,8 +7,8 @@
 class Tests_Get_User_Locale extends WP_UnitTestCase {
 	protected $user_id;
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->user_id = $this->factory()->user->create(
 			array(
@@ -20,11 +20,11 @@ class Tests_Get_User_Locale extends WP_UnitTestCase {
 		wp_set_current_user( $this->user_id );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		delete_user_meta( $this->user_id, 'locale' );
 		set_current_screen( 'front' );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function test_user_locale_property() {

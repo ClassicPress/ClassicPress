@@ -23,8 +23,8 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 		self::delete_shared_fixtures();
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		update_option( 'page_comments', true );
 		update_option( 'comments_per_page', 5 );
@@ -251,9 +251,9 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 		$can_url        = $this->get_canonical( $test_url );
 		$parsed_can_url = parse_url( $can_url );
 
-		// Just test the Path and Query if present
+		// Just test the path and query if present.
 		if ( isset( $expected['url'] ) ) {
-			$this->assertEquals( $expected['url'], $parsed_can_url['path'] . ( ! empty( $parsed_can_url['query'] ) ? '?' . $parsed_can_url['query'] : '' ) );
+			$this->assertSame( $expected['url'], $parsed_can_url['path'] . ( ! empty( $parsed_can_url['query'] ) ? '?' . $parsed_can_url['query'] : '' ) );
 		}
 
 		// If the test data doesn't include expected query vars, then we're done here
@@ -271,8 +271,9 @@ class WP_Canonical_UnitTestCase extends WP_UnitTestCase {
 		if ( ! empty( $parsed_can_url['query'] ) ) {
 			parse_str( $parsed_can_url['query'], $_qv );
 
-			// $_qv should not contain any elements which are set in $query_vars already (ie. $_GET vars should not be present in the Rewrite)
-			$this->assertEquals( array(), array_intersect( $query_vars, $_qv ), 'Query vars are duplicated from the Rewrite into $_GET' );
+			// $_qv should not contain any elements which are set in $query_vars already
+			// (i.e. $_GET vars should not be present in the Rewrite).
+			$this->assertSame( array(), array_intersect( $query_vars, $_qv ), 'Query vars are duplicated from the Rewrite into $_GET' );
 
 			$query_vars = array_merge( $query_vars, $_qv );
 		}

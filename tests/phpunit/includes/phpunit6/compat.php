@@ -15,6 +15,5 @@ if ( class_exists( 'PHPUnit\Runner\Version' ) && version_compare( PHPUnit\Runner
 	class_alias( 'PHPUnit\Framework\TestListener', 'PHPUnit_Framework_TestListener' );
 	class_alias( 'PHPUnit\Util\GlobalState', 'PHPUnit_Util_GlobalState' );
 	class_alias( 'PHPUnit\Util\Getopt', 'PHPUnit_Util_Getopt' );
-
 	class_alias( 'PHPUnit\Util\Test', 'PHPUnit_Util_Test' );
 }

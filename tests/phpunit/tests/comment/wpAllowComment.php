@@ -7,8 +7,8 @@ class Tests_Comment_WpAllowComment extends WP_UnitTestCase {
 	protected static $post_id;
 	protected static $comment_id;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		self::$post_id    = self::factory()->post->create();
 		self::$comment_id = self::factory()->comment->create(
@@ -25,7 +25,7 @@ class Tests_Comment_WpAllowComment extends WP_UnitTestCase {
 		update_option( 'comment_whitelist', 0 );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		wp_delete_post( self::$post_id, true );
 		wp_delete_comment( self::$comment_id, true );
 
@@ -52,10 +52,9 @@ class Tests_Comment_WpAllowComment extends WP_UnitTestCase {
 		$this->assertSame( 1, $result );
 	}
 
-	/**
-	 * @expectedException WPDieException
-	 */
 	public function test_die_as_duplicate_if_comment_author_name_and_emails_match() {
+		$this->expectException( 'WPDieException' );
+
 		$now          = time();
 		$comment_data = array(
 			'comment_post_ID'      => self::$post_id,

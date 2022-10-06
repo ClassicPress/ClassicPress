@@ -25,9 +25,9 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		'post_status'  => 'publish',
 	);
 	*/
+	function set_up() {
+		parent::set_up();
 
-	function setUp() {
-		parent::setUp();
 		global $wpdb;
 		$wpdb->query( 'TRUNCATE ' . $wpdb->prefix . 'posts' );
 		$this->time = time();
@@ -112,8 +112,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </li>
 </ul></li>';
 
-		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['default'], $actual );
+		$this->assertSameIgnoreEOL( $expected['default'], wp_list_pages( $args ) );
 	}
 
 	function test_wp_list_pages_depth() {
@@ -127,7 +126,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['depth'], $actual );
+		$this->assertSameIgnoreEOL( $expected['depth'], $actual );
 	}
 
 	function test_wp_list_pages_show_date() {
@@ -143,7 +142,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['show_date'], $actual );
+		$this->assertSameIgnoreEOL( $expected['show_date'], $actual );
 	}
 
 	function test_wp_list_pages_date_format() {
@@ -177,7 +176,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['date_format'], $actual );
+		$this->assertSameIgnoreEOL( $expected['date_format'], $actual );
 	}
 
 	function test_wp_list_pages_child_of() {
@@ -191,7 +190,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['child_of'], $actual );
+		$this->assertSameIgnoreEOL( $expected['child_of'], $actual );
 	}
 
 	function test_wp_list_pages_exclude() {
@@ -219,7 +218,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['exclude'], $actual );
+		$this->assertSameIgnoreEOL( $expected['exclude'], $actual );
 	}
 
 	function test_wp_list_pages_title_li() {
@@ -234,7 +233,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['title_li'], $actual );
+		$this->assertSameIgnoreEOL( $expected['title_li'], $actual );
 	}
 
 	function test_wp_list_pages_echo() {
@@ -250,7 +249,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		ob_start();
 		wp_list_pages( $args );
 		$actual = ob_get_clean();
-		$this->AssertEquals( $expected['echo'], $actual );
+		$this->assertSameIgnoreEOL( $expected['echo'], $actual );
 	}
 
 	function test_wp_list_pages_authors() {
@@ -262,7 +261,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->AssertEquals( $expected['authors'], $actual );
+		$this->assertSameIgnoreEOL( $expected['authors'], $actual );
 	}
 
 	function test_wp_list_pages_number() {
@@ -274,7 +273,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['number'], $actual );
+		$this->assertSameIgnoreEOL( $expected['number'], $actual );
 	}
 
 	function test_wp_list_pages_sort_column() {
@@ -307,7 +306,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['sort_column'], $actual );
+		$this->assertSameIgnoreEOL( $expected['sort_column'], $actual );
 	}
 
 	function test_wp_list_pages_link_before() {
@@ -339,7 +338,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['link_before'], $actual );
+		$this->assertSameIgnoreEOL( $expected['link_before'], $actual );
 	}
 
 	function test_wp_list_pages_link_after() {
@@ -371,7 +370,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['link_after'], $actual );
+		$this->assertSameIgnoreEOL( $expected['link_after'], $actual );
 	}
 
 
@@ -385,7 +384,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['include'], $actual );
+		$this->assertSameIgnoreEOL( $expected['include'], $actual );
 	}
 
 	function test_wp_list_pages_exclude_tree() {
@@ -403,7 +402,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 </ul></li>';
 
 		$actual = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['exclude'], $actual );
+		$this->assertSameIgnoreEOL( $expected['exclude'], $actual );
 	}
 
 	function test_wp_list_pages_discarded_whitespace() {
@@ -414,6 +413,6 @@ class Tests_List_Pages extends WP_UnitTestCase {
 
 		$expected['default'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a><ul class=\'children\'><li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li><li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li><li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a><ul class=\'children\'><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li><li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li><li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li></ul></li><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a><ul class=\'children\'><li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li><li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li><li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li></ul></li></ul></li>';
 		$actual              = wp_list_pages( $args );
-		$this->assertEqualsIgnoreEOL( $expected['default'], $actual );
+		$this->assertSameIgnoreEOL( $expected['default'], $actual );
 	}
 }
