@@ -8,16 +8,16 @@
 class Tests_Htaccess_Markers extends WP_UnitTestCase {
 	var $tmpfile;
 
-	public function setUp() {
+	public function set_up() {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/misc.php';
 		$this->tmpfile = wp_tempnam( 'htaccess' );
-		parent::setUp();
+		parent::set_up();
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		@unlink( $this->tmpfile );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	public function write_test_contents( $contents ) {
@@ -26,7 +26,7 @@ class Tests_Htaccess_Markers extends WP_UnitTestCase {
 
 	public function assertTestFileLines( $lines ) {
 		$expected = implode( "\n", $lines );
-		$actual = file_get_contents( $this->tmpfile );
+		$actual   = file_get_contents( $this->tmpfile );
 		if ( $expected !== $actual ) {
 			// Debug helper.
 			error_log( json_encode( compact( 'expected', 'actual' ) ) );
@@ -35,7 +35,8 @@ class Tests_Htaccess_Markers extends WP_UnitTestCase {
 	}
 
 	public function test_extract_wp_markers() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN WordPress
@@ -44,21 +45,23 @@ WP rule 2
 # END WordPress
 
 suffix lines
-		' );
+		'
+		);
 
 		$this->assertEquals(
-			[ 'WP rule 1', 'WP rule 2' ],
+			array( 'WP rule 1', 'WP rule 2' ),
 			extract_from_markers( $this->tmpfile, 'WordPress' )
 		);
 
 		$this->assertEquals(
-			[ 'WP rule 1', 'WP rule 2' ],
+			array( 'WP rule 1', 'WP rule 2' ),
 			extract_from_markers( $this->tmpfile, '(Word|Classic)Press', true )
 		);
 	}
 
 	public function test_extract_cp_markers() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN ClassicPress
@@ -67,26 +70,28 @@ CP rule 2
 # END ClassicPress
 
 suffix lines
-		' );
+		'
+		);
 
 		$this->assertEquals(
-			[],
+			array(),
 			extract_from_markers( $this->tmpfile, 'WordPress' )
 		);
 
 		$this->assertEquals(
-			[ 'CP rule 1', 'CP rule 2' ],
+			array( 'CP rule 1', 'CP rule 2' ),
 			extract_from_markers( $this->tmpfile, 'ClassicPress' )
 		);
 
 		$this->assertEquals(
-			[ 'CP rule 1', 'CP rule 2' ],
+			array( 'CP rule 1', 'CP rule 2' ),
 			extract_from_markers( $this->tmpfile, '(Word|Classic)Press', true )
 		);
 	}
 
 	public function test_extract_marker_with_slash() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN test/marker
@@ -95,15 +100,16 @@ test rule 2
 # END test/marker
 
 suffix lines
-		' );
+		'
+		);
 
 		$this->assertEquals(
-			[ 'test rule 1', 'test rule 2' ],
+			array( 'test rule 1', 'test rule 2' ),
 			extract_from_markers( $this->tmpfile, 'test/marker' )
 		);
 
 		$this->assertEquals(
-			[ 'test rule 1', 'test rule 2' ],
+			array( 'test rule 1', 'test rule 2' ),
 			extract_from_markers( $this->tmpfile, 'test\\/marker', true )
 		);
 	}
@@ -118,7 +124,8 @@ suffix lines
 	}
 
 	public function test_update_existing_rules_string_marker() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN WordPress
@@ -127,30 +134,36 @@ WP rule 2
 # END WordPress
 
 suffix lines
-		' );
+		'
+		);
 
-		$this->assertTrue( insert_with_markers(
-			$this->tmpfile,
-			'WordPress',
-			[ 'WP rule 1', 'WP rule 2', 'WP rule 3' ]
-		) );
+		$this->assertTrue(
+			insert_with_markers(
+				$this->tmpfile,
+				'WordPress',
+				array( 'WP rule 1', 'WP rule 2', 'WP rule 3' )
+			)
+		);
 
-		$this->assertTestFileLines( [
-			'prefix lines',
-			'',
-			'# BEGIN WordPress',
-			'WP rule 1',
-			'WP rule 2',
-			'WP rule 3',
-			'# END WordPress',
-			'',
-			'suffix lines',
-			'',
-		] );
+		$this->assertTestFileLines(
+			array(
+				'prefix lines',
+				'',
+				'# BEGIN WordPress',
+				'WP rule 1',
+				'WP rule 2',
+				'WP rule 3',
+				'# END WordPress',
+				'',
+				'suffix lines',
+				'',
+			)
+		);
 	}
 
 	public function test_update_existing_rules_regex_marker_1() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN WordPress
@@ -158,31 +171,37 @@ WP rule 1
 # END WordPress
 
 suffix lines
-		' );
+		'
+		);
 
-		$this->assertTrue( insert_with_markers(
-			$this->tmpfile,
-			'(Word|Classic)Press',
-			[ 'CP rule 1', 'CP rule 2' ],
-			true,
-			'ClassicPress'
-		) );
+		$this->assertTrue(
+			insert_with_markers(
+				$this->tmpfile,
+				'(Word|Classic)Press',
+				array( 'CP rule 1', 'CP rule 2' ),
+				true,
+				'ClassicPress'
+			)
+		);
 
-		$this->assertTestFileLines( [
-			'prefix lines',
-			'',
-			'# BEGIN ClassicPress',
-			'CP rule 1',
-			'CP rule 2',
-			'# END ClassicPress',
-			'',
-			'suffix lines',
-			'',
-		] );
+		$this->assertTestFileLines(
+			array(
+				'prefix lines',
+				'',
+				'# BEGIN ClassicPress',
+				'CP rule 1',
+				'CP rule 2',
+				'# END ClassicPress',
+				'',
+				'suffix lines',
+				'',
+			)
+		);
 	}
 
 	public function test_update_existing_rules_regex_marker_2() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN ClassicPress
@@ -190,27 +209,32 @@ CP rule 1
 # END ClassicPress
 
 suffix lines
-		' );
+		'
+		);
 
-		$this->assertTrue( insert_with_markers(
-			$this->tmpfile,
-			'(Word|Classic)Press',
-			[ 'CP rule 1', 'CP rule 2' ],
-			true,
-			'ClassicPress'
-		) );
+		$this->assertTrue(
+			insert_with_markers(
+				$this->tmpfile,
+				'(Word|Classic)Press',
+				array( 'CP rule 1', 'CP rule 2' ),
+				true,
+				'ClassicPress'
+			)
+		);
 
-		$this->assertTestFileLines( [
-			'prefix lines',
-			'',
-			'# BEGIN ClassicPress',
-			'CP rule 1',
-			'CP rule 2',
-			'# END ClassicPress',
-			'',
-			'suffix lines',
-			'',
-		] );
+		$this->assertTestFileLines(
+			array(
+				'prefix lines',
+				'',
+				'# BEGIN ClassicPress',
+				'CP rule 1',
+				'CP rule 2',
+				'# END ClassicPress',
+				'',
+				'suffix lines',
+				'',
+			)
+		);
 	}
 
 	public function test_update_existing_rules_regex_marker_3() {
@@ -219,7 +243,8 @@ suffix lines
 		// behavior is not ideal, but attempting to remove duplicate rules
 		// would probably cause other issues.
 
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 prefix lines
 
 # BEGIN WordPress
@@ -231,86 +256,105 @@ other lines
 # BEGIN ClassicPress
 CP rule 1
 # END ClassicPress
-		' );
+		'
+		);
 
 		for ( $i = 0; $i < 2; $i++ ) {
-			$this->assertTrue( insert_with_markers(
-				$this->tmpfile,
-				'(Word|Classic)Press',
-				[ 'CP rule 1', 'CP rule 2' ],
-				true,
-				'ClassicPress'
-			) );
+			$this->assertTrue(
+				insert_with_markers(
+					$this->tmpfile,
+					'(Word|Classic)Press',
+					array( 'CP rule 1', 'CP rule 2' ),
+					true,
+					'ClassicPress'
+				)
+			);
 
-			$this->assertTestFileLines( [
-				'prefix lines',
-				'',
-				'# BEGIN ClassicPress',
-				'CP rule 1',
-				'CP rule 2',
-				'# END ClassicPress',
-				'',
-				'other lines',
-				'',
-				'# BEGIN ClassicPress',
-				'CP rule 1',
-				'# END ClassicPress',
-				'',
-			] );
+			$this->assertTestFileLines(
+				array(
+					'prefix lines',
+					'',
+					'# BEGIN ClassicPress',
+					'CP rule 1',
+					'CP rule 2',
+					'# END ClassicPress',
+					'',
+					'other lines',
+					'',
+					'# BEGIN ClassicPress',
+					'CP rule 1',
+					'# END ClassicPress',
+					'',
+				)
+			);
 		}
 	}
 
 	public function test_add_new_rules_string_marker() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 existing line
-		' );
+		'
+		);
 
-		$this->assertTrue( insert_with_markers(
-			$this->tmpfile,
-			'testmarker',
-			[ 'rule 1', 'rule 2' ]
-		) );
+		$this->assertTrue(
+			insert_with_markers(
+				$this->tmpfile,
+				'testmarker',
+				array( 'rule 1', 'rule 2' )
+			)
+		);
 
-		$this->assertTestFileLines( [
-			'existing line',
-			'',
-			'# BEGIN testmarker',
-			'rule 1',
-			'rule 2',
-			'# END testmarker',
-		] );
+		$this->assertTestFileLines(
+			array(
+				'existing line',
+				'',
+				'# BEGIN testmarker',
+				'rule 1',
+				'rule 2',
+				'# END testmarker',
+			)
+		);
 	}
 
 	public function test_add_new_rules_regex_marker() {
-		$this->write_test_contents( '
+		$this->write_test_contents(
+			'
 existing line
-		' );
+		'
+		);
 
-		$this->assertTrue( insert_with_markers(
-			$this->tmpfile,
-			'(Word|Classic)Press',
-			[ 'rule 1', 'rule 2' ],
-			true,
-			'ClassicPress'
-		) );
+		$this->assertTrue(
+			insert_with_markers(
+				$this->tmpfile,
+				'(Word|Classic)Press',
+				array( 'rule 1', 'rule 2' ),
+				true,
+				'ClassicPress'
+			)
+		);
 
-		$this->assertTestFileLines( [
-			'existing line',
-			'',
-			'# BEGIN ClassicPress',
-			'rule 1',
-			'rule 2',
-			'# END ClassicPress',
-		] );
+		$this->assertTestFileLines(
+			array(
+				'existing line',
+				'',
+				'# BEGIN ClassicPress',
+				'rule 1',
+				'rule 2',
+				'# END ClassicPress',
+			)
+		);
 	}
 
 	public function test_update_invalid_params() {
-		$this->assertFalse( insert_with_markers(
-			$this->tmpfile,
-			'testmarker',
-			[],
-			true
-			// missing '$marker_out' string
-		) );
+		$this->assertFalse(
+			insert_with_markers(
+				$this->tmpfile,
+				'testmarker',
+				array(),
+				true
+				// missing '$marker_out' string
+			)
+		);
 	}
 }

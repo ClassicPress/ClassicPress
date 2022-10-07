@@ -99,7 +99,7 @@ At this point you have a working local development environment. Here are some fu
 
 ## How to review a PR
 
-1. See the instructions on [setting up a local development environment](#setting-up-local-testing-and-dev-environment) above.
+1. See the instructions on [setting up a local development environment](#setting-up-a-local-development-environment) above.
 2. Set up a remote link to the user who submitted the PR. For example, if GitHub user `bahiirwa` submitted the PR:
    ```
    git remote add bahiirwa https://github.com/bahiirwa/ClassicPress
@@ -153,13 +153,26 @@ When you're ready to backport a code change:
    bin/backport-wp-commit.sh CHANGESET_NUMBER
    ```
 
+	 or use composer:
+
+	 ```
+	 composer run backport CHANGESET_NUMBER
+	 ```
+
    This will create a new branch and apply the WordPress changeset to it. If you're porting multiple changesets, you can create a new `git` branch first and use the `-c` option to this script to apply each changeset to your current branch instead:
 
    ```
    bin/backport-wp-commit.sh -c CHANGESET_NUMBER
    ```
 
+	 or use composer:
+
+	 ```
+	 composer run backport -c CHANGESET_NUMBER
+	 ```
+
    Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
+
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
 3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!

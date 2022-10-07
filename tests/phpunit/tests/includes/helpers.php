@@ -7,156 +7,217 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
-	function data_assertEqualSets() {
+	function data_assertSameSets() {
 		return array(
 			array(
 				array( 1, 2, 3 ), // test expected
 				array( 1, 2, 3 ), // test actual
-				false             // exception expected
+				false,             // exception expected
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 2, 3, 1 ),
-				false
+				false,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 1, 2, 3, 4 ),
-				true
+				true,
 			),
 			array(
 				array( 1, 2, 3, 4 ),
 				array( 1, 2, 3 ),
-				true
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 3, 4, 2, 1 ),
-				true
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 1, 2, 3, 3 ),
-				true
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 2, 3, 1, 3 ),
-				true
+				true,
 			),
 		);
 	}
 
 	/**
-	 * @dataProvider data_assertEqualSets
+	 * @dataProvider data_assertSameSets
 	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
-	function test_assertEqualSets( $expected, $actual, $exception ) {
+	function test_assertSameSets( $expected, $actual, $exception ) {
 		if ( $exception ) {
 			try {
-				$this->assertEqualSets( $expected, $actual );
+				$this->assertSameSets( $expected, $actual );
 			} catch ( PHPUnit_Framework_ExpectationFailedException $ex ) {
 				return;
 			}
 
 			$this->fail();
 		} else {
-			$this->assertEqualSets( $expected, $actual );
+			$this->assertSameSets( $expected, $actual );
 		}
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
-	function data_assertEqualSetsWithIndex() {
+	function data_assertSameSetsWithIndex() {
 		return array(
 			array(
 				array( 1, 2, 3 ), // test expected
 				array( 1, 2, 3 ), // test actual
-				false             // exception expected
+				false,             // exception expected
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				false
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				false,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 2, 3, 1 ),
-				true
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'b' => 2, 'c' => 3, 'a' => 1 ),
-				false
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'b' => 2,
+					'c' => 3,
+					'a' => 1,
+				),
+				false,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 1, 2, 3, 4 ),
-				true
+				true,
 			),
 			array(
 				array( 1, 2, 3, 4 ),
 				array( 1, 2, 3 ),
-				true
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'a' => 1, 'b' => 2, 'c' => 3, 'd' => 4 ),
-				true
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+					'd' => 4,
+				),
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3, 'd' => 4 ),
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				true
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+					'd' => 4,
+				),
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 3, 4, 2, 1 ),
-				true
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'c' => 3, 'b' => 2, 'd' => 4, 'a' => 1 ),
-				true
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'c' => 3,
+					'b' => 2,
+					'd' => 4,
+					'a' => 1,
+				),
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 1, 2, 3, 3 ),
-				true
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'a' => 1, 'b' => 2, 'c' => 3, 'd' => 3 ),
-				true
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+					'd' => 3,
+				),
+				true,
 			),
 			array(
 				array( 1, 2, 3 ),
 				array( 2, 3, 1, 3 ),
-				true
+				true,
 			),
 			array(
-				array( 'a' => 1, 'b' => 2, 'c' => 3 ),
-				array( 'c' => 3, 'b' => 2, 'd' => 3, 'a' => 1 ),
-				true
+				array(
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+				),
+				array(
+					'c' => 3,
+					'b' => 2,
+					'd' => 3,
+					'a' => 1,
+				),
+				true,
 			),
 		);
 	}
 	/**
-	 * @dataProvider data_assertEqualSetsWithIndex
+	 * @dataProvider data_assertSameSetsWithIndex
 	 * @see https://core.trac.wordpress.org/ticket/30522
 	 */
-	function test_assertEqualSetsWithIndex( $expected, $actual, $exception ) {
+	function test_assertSameSetsWithIndex( $expected, $actual, $exception ) {
 		if ( $exception ) {
 			try {
-				$this->assertEqualSetsWithIndex( $expected, $actual );
+				$this->assertSameSetsWithIndex( $expected, $actual );
 			} catch ( PHPUnit_Framework_ExpectationFailedException $ex ) {
 				return;
 			}
 
 			$this->fail();
 		} else {
-			$this->assertEqualSetsWithIndex( $expected, $actual );
+			$this->assertSameSetsWithIndex( $expected, $actual );
 		}
 	}
 
@@ -207,9 +268,10 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/36166
-	 * @expectedException WPDieException
 	 */
 	public function test_die_handler_should_handle_wp_error() {
+		$this->expectException( 'WPDieException' );
+
 		wp_die( new WP_Error( 'test', 'test' ) );
 	}
 
@@ -219,7 +281,7 @@ class Tests_TestHelpers extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/38196
 	 */
 	public function test_setup_postdata_globals_should_be_reset_on_teardown__setup() {
-		$post = self::factory()->post->create_and_get();
+		$post                = self::factory()->post->create_and_get();
 		$GLOBALS['wp_query'] = new WP_Query();
 		$GLOBALS['wp_query']->setup_postdata( $post );
 		$this->assertNotEmpty( $post );

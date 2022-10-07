@@ -7,9 +7,9 @@
 class Tests_Option_WP_Load_Alloptions extends WP_UnitTestCase {
 	protected $alloptions = null;
 
-	function tearDown() {
+	function tear_down() {
 		$this->alloptions = null;
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_if_alloptions_is_cached() {
@@ -33,7 +33,7 @@ class Tests_Option_WP_Load_Alloptions extends WP_UnitTestCase {
 		$after = $wpdb->num_queries;
 
 		// Database has not been hit.
-		$this->assertEquals( $before, $after );
+		$this->assertSame( $before, $after );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Tests_Option_WP_Load_Alloptions extends WP_UnitTestCase {
 		$after = $wpdb->num_queries;
 
 		// Database has been hit.
-		$this->assertEquals( $before + 1, $after );
+		$this->assertSame( $before + 1, $after );
 	}
 
 	/**
@@ -73,10 +73,10 @@ class Tests_Option_WP_Load_Alloptions extends WP_UnitTestCase {
 		$all_options = wp_load_alloptions();
 
 		// Value could leak to other tests if not reset.
-		wp_installing( $temp  );
+		wp_installing( $temp );
 
 		// Filter was called.
-		$this->assertEquals( $this->alloptions, $all_options );
+		$this->assertSame( $this->alloptions, $all_options );
 	}
 
 	/**
