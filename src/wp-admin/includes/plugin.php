@@ -1248,8 +1248,8 @@ function add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $func
  * The function which is hooked in to handle the output of the page must check
  * that the user has the required capability as well.
  *
- * @since 1.5.0
- * @since 5.3.0 Added the `$position` parameter.
+ * @since WP-1.5.0
+ * @since WP-5.3.0 Added the `$position` parameter.
  *
  * @global array $submenu
  * @global array $menu
