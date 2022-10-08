@@ -912,18 +912,12 @@ function wp_media_upload_handler() {
 /**
  * Downloads an image from the specified URL and attaches it to a post.
  *
-<<<<<<< HEAD
- * @since WP-2.6.0
- * @since WP-4.2.0 Introduced the `$return` parameter.
- * @since WP-4.8.0 Introduced the 'id' option within the `$return` parameter.
-=======
  * @since 2.6.0
  * @since 4.2.0 Introduced the `$return` parameter.
  * @since 4.8.0 Introduced the 'id' option within the `$return` parameter.
  * @since 5.3.0 The `$post_id` parameter was made optional.
  * @since 5.4.0 The original URL of the attachment is stored in the `_source_url`
  *              post meta value.
->>>>>>> 45cb25d4f2 (Media: In `media_sideload_image()`, store the original attachment URL in the `_source_url` post meta value.)
  *
  * @param string $file    The URL of the image to download.
  * @param int    $post_id The post ID the media is to be associated with.
@@ -959,10 +953,6 @@ function media_sideload_image( $file, $post_id, $desc = null, $return = 'html' )
 		if ( is_wp_error( $id ) ) {
 			@unlink( $file_array['tmp_name'] );
 			return $id;
-<<<<<<< HEAD
-			// If attachment id was requested, return it early.
-		} elseif ( $return === 'id' ) {
-=======
 		}
 
 		// Store the original attachment source in meta.
@@ -970,7 +960,6 @@ function media_sideload_image( $file, $post_id, $desc = null, $return = 'html' )
 
 		// If attachment id was requested, return it.
 		if ( 'id' === $return ) {
->>>>>>> 45cb25d4f2 (Media: In `media_sideload_image()`, store the original attachment URL in the `_source_url` post meta value.)
 			return $id;
 		}
 
