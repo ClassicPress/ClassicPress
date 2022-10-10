@@ -9,7 +9,7 @@ jobs:
   post-welcome-message:
     runs-on: ubuntu-latest
     steps:
-      - uses: bubkoo/welcome-action@5fe398dce1fa3d29df6fa704993294103081bab2 # v1.0.3
+      - uses: wow-actions/welcome@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FIRST_PR_COMMENT: >
@@ -18,7 +18,7 @@ jobs:
             Thank you for your contribution to ClassicPress! 💖
 
             It looks like this is your first pull request. We appreciate and value your contribution!
-            
+
             Please read our [contribution guide](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md) to find out how you can be more involved.
 
             Thank you,
