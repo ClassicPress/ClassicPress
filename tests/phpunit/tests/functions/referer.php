@@ -6,20 +6,20 @@
  * @group functions.php
  */
 class Tests_Functions_Referer extends WP_UnitTestCase {
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$_SERVER['HTTP_REFERER']      = '';
 		$_SERVER['REQUEST_URI']       = '';
 		$_REQUEST['_wp_http_referer'] = '';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
+	public function tear_down() {
 		$_SERVER['HTTP_REFERER']      = '';
 		$_SERVER['REQUEST_URI']       = '';
 		$_REQUEST['_wp_http_referer'] = '';
+
+		parent::tear_down();
 	}
 
 	public function _fake_subfolder_install() {
@@ -125,14 +125,14 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/27152
 	 */
-	public function test_raw_referer_empty(  ) {
+	public function test_raw_referer_empty() {
 		$this->assertFalse( wp_get_raw_referer() );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/27152
 	 */
-	public function test_raw_referer(  ) {
+	public function test_raw_referer() {
 		$_SERVER['HTTP_REFERER'] = addslashes( 'http://example.com/foo?bar' );
 		$this->assertSame( 'http://example.com/foo?bar', wp_get_raw_referer() );
 	}
@@ -140,7 +140,7 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/27152
 	 */
-	public function test_raw_referer_from_request(  ) {
+	public function test_raw_referer_from_request() {
 		$_REQUEST['_wp_http_referer'] = addslashes( 'http://foo.bar/baz' );
 		$this->assertSame( 'http://foo.bar/baz', wp_get_raw_referer() );
 	}
@@ -148,8 +148,8 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/27152
 	 */
-	public function test_raw_referer_both(  ) {
-		$_SERVER['HTTP_REFERER'] = addslashes( 'http://example.com/foo?bar' );
+	public function test_raw_referer_both() {
+		$_SERVER['HTTP_REFERER']      = addslashes( 'http://example.com/foo?bar' );
 		$_REQUEST['_wp_http_referer'] = addslashes( 'http://foo.bar/baz' );
 		$this->assertSame( 'http://foo.bar/baz', wp_get_raw_referer() );
 	}

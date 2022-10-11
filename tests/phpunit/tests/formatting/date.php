@@ -13,8 +13,9 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 */
 	function test_get_date_from_gmt_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
-		$gmt = $local = '2012-01-01 12:34:56';
-		$this->assertEquals( $local, get_date_from_gmt( $gmt ) );
+		$local = '2012-01-01 12:34:56';
+		$gmt   = $local;
+		$this->assertSame( $local, get_date_from_gmt( $gmt ) );
 	}
 
 	/**
@@ -26,7 +27,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 		update_option( 'timezone_string', 'Europe/London' );
 		$gmt   = '2012-06-01 12:34:56';
 		$local = '2012-06-01 13:34:56';
-		$this->assertEquals( $local, get_date_from_gmt( $gmt ) );
+		$this->assertSame( $local, get_date_from_gmt( $gmt ) );
 	}
 
 	/**
@@ -34,8 +35,9 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 */
 	function test_get_gmt_from_date_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
-		$local = $gmt = '2012-01-01 12:34:56';
-		$this->assertEquals( $gmt, get_gmt_from_date( $local ) );
+		$local = '2012-01-01 12:34:56';
+		$gmt   = $local;
+		$this->assertSame( $gmt, get_gmt_from_date( $local ) );
 	}
 
 	/**
@@ -44,25 +46,26 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	function test_get_gmt_from_date_during_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
 		$local = '2012-06-01 12:34:56';
-		$gmt = '2012-06-01 11:34:56';
-		$this->assertEquals( $gmt, get_gmt_from_date( $local ) );
+		$gmt   = '2012-06-01 11:34:56';
+		$this->assertSame( $gmt, get_gmt_from_date( $local ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/34279
 	 */
 	function test_get_date_and_time_from_gmt_no_timezone() {
-		$gmt = $local = '2012-01-01 12:34:56';
-		$this->assertEquals( $gmt, get_date_from_gmt( $local ) );
+		$local = '2012-01-01 12:34:56';
+		$gmt   = $local;
+		$this->assertSame( $gmt, get_date_from_gmt( $local ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/34279
 	 */
 	function test_get_gmt_from_date_no_timezone() {
-		$gmt = '2012-12-01 00:00:00';
+		$gmt  = '2012-12-01 00:00:00';
 		$date = '2012-12-01';
-		$this->assertEquals( $gmt, get_gmt_from_date( $date ) );
+		$this->assertSame( $gmt, get_gmt_from_date( $date ) );
 	}
 
 	/**
@@ -71,8 +74,8 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	function test_get_gmt_from_date_short_date() {
 		update_option( 'timezone_string', 'Europe/London' );
 		$local = '2012-12-01';
-		$gmt = '2012-12-01 00:00:00';
-		$this->assertEquals( $gmt, get_gmt_from_date( $local ) );
+		$gmt   = '2012-12-01 00:00:00';
+		$this->assertSame( $gmt, get_gmt_from_date( $local ) );
 	}
 
 	/**
@@ -81,8 +84,8 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	function test_get_gmt_from_date_string_date() {
 		update_option( 'timezone_string', 'Europe/London' );
 		$local = 'now';
-		$gmt = gmdate( 'Y-m-d H:i:s' );
-		$this->assertEquals( strtotime( $gmt ), strtotime( get_gmt_from_date( $local ) ), 'The dates should be equal', 2 );
+		$gmt   = gmdate( 'Y-m-d H:i:s' );
+		$this->assertEqualsWithDelta( strtotime( $gmt ), strtotime( get_gmt_from_date( $local ) ), 2, 'The dates should be equal' );
 	}
 
 	/**
@@ -90,7 +93,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	 */
 	function test_get_gmt_from_date_string_date_no_timezone() {
 		$local = 'now';
-		$gmt = gmdate( 'Y-m-d H:i:s' );
-		$this->assertEquals( strtotime( $gmt ), strtotime( get_gmt_from_date( $local ) ), 'The dates should be equal', 2 );
+		$gmt   = gmdate( 'Y-m-d H:i:s' );
+		$this->assertEqualsWithDelta( strtotime( $gmt ), strtotime( get_gmt_from_date( $local ) ), 2, 'The dates should be equal' );
 	}
 }
