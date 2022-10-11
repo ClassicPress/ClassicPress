@@ -655,6 +655,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 					'<code>url</code>'
 				)
 			);
+			// Intentional fall-through to be handled by the 'url' case.
 		case 'url':
 			$output = home_url();
 			break;
@@ -919,10 +920,8 @@ function get_custom_logo( $blog_id = 0 ) {
 			esc_url( home_url( '/' ) ),
 			wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
 		);
-	}
-
-	// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
-	elseif ( is_customize_preview() ) {
+	} elseif ( is_customize_preview() ) {
+		// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
 		$html = sprintf(
 			'<a href="%1$s" class="custom-logo-link" style="display:none;"><img class="custom-logo"/></a>',
 			esc_url( home_url( '/' ) )
@@ -1424,49 +1423,6 @@ function single_term_title( $prefix = '', $display = true ) {
 	} else {
 		return $prefix . $term_name;
 	}
-}
-
-/**
- * Display or retrieve page title for post archive based on date.
- *
- * Useful for when the template only needs to display the month and year,
- * if either are available. The prefix does not automatically place a space
- * between the prefix, so if there should be a space, the parameter value
- * will need to have it at the end.
- *
- * @since WP-0.71
- *
- * @global WP_Locale $wp_locale
- *
- * @param string $prefix  Optional. What to display before the title.
- * @param bool   $display Optional, default is true. Whether to display or retrieve title.
- * @return string|void Title when retrieving.
- */
-function single_month_title( $prefix = '', $display = true ) {
-	global $wp_locale;
-
-	$m        = get_query_var( 'm' );
-	$year     = get_query_var( 'year' );
-	$monthnum = get_query_var( 'monthnum' );
-
-	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
-		$my_year  = $year;
-		$my_month = $wp_locale->get_month( $monthnum );
-	} elseif ( ! empty( $m ) ) {
-		$my_year  = substr( $m, 0, 4 );
-		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
-	}
-
-	if ( empty( $my_month ) ) {
-		return false;
-	}
-
-	$result = $prefix . $my_month . $prefix . $my_year;
-
-	if ( ! $display ) {
-		return $result;
-	}
-	echo $result;
 }
 
 /**
@@ -3405,17 +3361,7 @@ function wp_enqueue_code_editor( $args ) {
 		}
 	}
 
-	if ( 'text/css' === $type ) {
-		$settings['codemirror'] = array_merge(
-			$settings['codemirror'],
-			array(
-				'mode'              => 'css',
-				'lint'              => true,
-				'autoCloseBrackets' => true,
-				'matchBrackets'     => true,
-			)
-		);
-	} elseif ( 'text/x-scss' === $type || 'text/x-less' === $type || 'text/x-sass' === $type ) {
+	if ( in_array( $type, array( 'text/css', 'text/x-scss', 'text/x-less', 'text/x-sass' ), true ) ) {
 		$settings['codemirror'] = array_merge(
 			$settings['codemirror'],
 			array(
@@ -4412,15 +4358,25 @@ function disabled( $disabled, $current = true, $echo = true ) {
  *
  * Compares the first two arguments and if identical marks as readonly
  *
- * @since WP-4.9.0
+ * @since WP-5.9.0
  *
  * @param mixed $readonly One of the values to compare
  * @param mixed $current  (true) The other value to compare if not just true
  * @param bool  $echo     Whether to echo or just return the string
  * @return string html attribute or empty string
  */
-function readonly( $readonly, $current = true, $echo = true ) {
+function wp_readonly( $readonly, $current = true, $echo = true ) {
 	return __checked_selected_helper( $readonly, $current, $echo, 'readonly' );
+}
+
+/*
+ * Include a compat `readonly()` function on PHP < 8.1. Since PHP 8.1,
+ * `readonly` is a reserved keyword and cannot be used as a function name.
+ * In order to avoid PHP parser errors, this function was extracted
+ * to a separate file and is only included conditionally on PHP < 8.1.
+ */
+if ( PHP_VERSION_ID < 80100 ) {
+	require_once __DIR__ . '/php-compat/readonly.php';
 }
 
 /**

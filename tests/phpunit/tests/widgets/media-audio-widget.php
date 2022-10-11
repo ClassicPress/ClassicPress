@@ -35,7 +35,7 @@ class Test_WP_Widget_Media_Audio extends WP_UnitTestCase {
 		$wp_widget_audio = new WP_Widget_Media_Audio();
 		$schema          = $wp_widget_audio->get_instance_schema();
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array_merge(
 				array(
 					'attachment_id',
@@ -62,8 +62,8 @@ class Test_WP_Widget_Media_Audio extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'customize_selective_refresh', $widget->widget_options );
 		$this->assertArrayHasKey( 'description', $widget->widget_options );
 		$this->assertTrue( $widget->widget_options['customize_selective_refresh'] );
-		$this->assertEquals( 'audio', $widget->widget_options['mime_type'] );
-		$this->assertEqualSets(
+		$this->assertSame( 'audio', $widget->widget_options['mime_type'] );
+		$this->assertSameSets(
 			array(
 				'add_to_widget',
 				'replace_media',
@@ -223,9 +223,9 @@ class Test_WP_Widget_Media_Audio extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Check default outputs.
-		$this->assertContains( 'preload="none"', $output );
-		$this->assertContains( 'class="wp-audio-shortcode"', $output );
-		$this->assertContains( 'small-audio.mp3', $output );
+		$this->assertStringContainsString( 'preload="none"', $output );
+		$this->assertStringContainsString( 'class="wp-audio-shortcode"', $output );
+		$this->assertStringContainsString( 'small-audio.mp3', $output );
 
 		ob_start();
 		$widget->render_media(
@@ -239,8 +239,8 @@ class Test_WP_Widget_Media_Audio extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Custom attributes.
-		$this->assertContains( 'preload="auto"', $output );
-		$this->assertContains( 'loop="1"', $output );
+		$this->assertStringContainsString( 'preload="auto"', $output );
+		$this->assertStringContainsString( 'loop="1"', $output );
 	}
 
 	/**
@@ -290,6 +290,6 @@ class Test_WP_Widget_Media_Audio extends WP_UnitTestCase {
 		$widget->render_control_template_scripts();
 		$output = ob_get_clean();
 
-		$this->assertContains( '<script type="text/html" id="tmpl-wp-media-widget-audio-preview">', $output );
+		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-audio-preview">', $output );
 	}
 }

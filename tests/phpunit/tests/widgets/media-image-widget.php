@@ -35,7 +35,7 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$widget = new WP_Widget_Media_Image();
 		$schema = $widget->get_instance_schema();
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'alt',
 				'attachment_id',
@@ -69,8 +69,8 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'customize_selective_refresh', $widget->widget_options );
 		$this->assertArrayHasKey( 'description', $widget->widget_options );
 		$this->assertTrue( $widget->widget_options['customize_selective_refresh'] );
-		$this->assertEquals( 'image', $widget->widget_options['mime_type'] );
-		$this->assertEqualSets(
+		$this->assertSame( 'image', $widget->widget_options['mime_type'] );
+		$this->assertSameSets(
 			array(
 				'add_to_widget',
 				'replace_media',
@@ -380,7 +380,7 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 	function test_render_media() {
 		$widget = new WP_Widget_Media_Image();
 
-		$test_image = '/tmp/canola.jpg';
+		$test_image = get_temp_dir() . 'canola.jpg';
 		copy( DIR_TESTDATA . '/images/canola.jpg', $test_image );
 		$attachment_id = self::factory()->attachment->create_object(
 			array(
@@ -417,11 +417,11 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// No default title.
-		$this->assertNotContains( 'title="', $output );
+		$this->assertStringNotContainsString( 'title="', $output );
 		// Default image classes.
-		$this->assertContains( 'class="image wp-image-' . $attachment_id, $output );
-		$this->assertContains( 'style="max-width: 100%; height: auto;"', $output );
-		$this->assertContains( 'alt=""', $output );
+		$this->assertStringContainsString( 'class="image wp-image-' . $attachment_id, $output );
+		$this->assertStringContainsString( 'style="max-width: 100%; height: auto;"', $output );
+		$this->assertStringContainsString( 'alt=""', $output );
 
 		ob_start();
 		$widget->render_media(
@@ -438,12 +438,12 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Custom image title.
-		$this->assertContains( 'title="Custom Title"', $output );
+		$this->assertStringContainsString( 'title="Custom Title"', $output );
 		// Custom image class.
-		$this->assertContains( 'class="image wp-image-' . $attachment_id . ' custom-class', $output );
-		$this->assertContains( 'alt="A flower"', $output );
-		$this->assertContains( 'width="100"', $output );
-		$this->assertContains( 'height="100"', $output );
+		$this->assertStringContainsString( 'class="image wp-image-' . $attachment_id . ' custom-class', $output );
+		$this->assertStringContainsString( 'alt="A flower"', $output );
+		$this->assertStringContainsString( 'width="100"', $output );
+		$this->assertStringContainsString( 'height="100"', $output );
 
 		// Embeded images.
 		ob_start();
@@ -460,7 +460,7 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		// Custom image class.
-		$this->assertContains( 'src="http://example.org/url/to/image.jpg"', $output );
+		$this->assertStringContainsString( 'src="http://example.org/url/to/image.jpg"', $output );
 
 		// Link settings.
 		ob_start();
@@ -473,11 +473,11 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		$link = '<a href="' . wp_get_attachment_url( $attachment_id ) . '"';
-		$this->assertContains( $link, $output );
+		$this->assertStringContainsString( $link, $output );
 		$this->assertTrue( (bool) preg_match( '#<a href.*?>#', $output, $matches ) );
-		$this->assertNotContains( ' class="', $matches[0] );
-		$this->assertNotContains( ' rel="', $matches[0] );
-		$this->assertNotContains( ' target="', $matches[0] );
+		$this->assertStringNotContainsString( ' class="', $matches[0] );
+		$this->assertStringNotContainsString( ' rel="', $matches[0] );
+		$this->assertStringNotContainsString( ' target="', $matches[0] );
 
 		ob_start();
 		$widget->render_media(
@@ -491,10 +491,10 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 
-		$this->assertContains( '<a href="' . get_attachment_link( $attachment_id ) . '"', $output );
-		$this->assertContains( 'class="custom-link-class"', $output );
-		$this->assertContains( 'rel="attachment"', $output );
-		$this->assertNotContains( 'target=""', $output );
+		$this->assertStringContainsString( '<a href="' . get_attachment_link( $attachment_id ) . '"', $output );
+		$this->assertStringContainsString( 'class="custom-link-class"', $output );
+		$this->assertStringContainsString( 'rel="attachment"', $output );
+		$this->assertStringNotContainsString( 'target=""', $output );
 
 		ob_start();
 		$widget->render_media(
@@ -507,8 +507,8 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 
-		$this->assertContains( '<a href="https://example.org"', $output );
-		$this->assertContains( 'target="_blank"', $output );
+		$this->assertStringContainsString( '<a href="https://example.org"', $output );
+		$this->assertStringContainsString( 'target="_blank"', $output );
 
 		// Populate caption in attachment.
 		wp_update_post(
@@ -526,8 +526,8 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertNotContains( 'wp-caption', $output );
-		$this->assertNotContains( '<p class="wp-caption-text">', $output );
+		$this->assertStringNotContainsString( 'wp-caption', $output );
+		$this->assertStringNotContainsString( '<p class="wp-caption-text">', $output );
 
 		// If the caption is explicitly null, then the caption of the underlying attachment will be displayed.
 		ob_start();
@@ -538,8 +538,8 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertContains( 'class="wp-caption alignnone"', $output );
-		$this->assertContains( '<p class="wp-caption-text">Default caption</p>', $output );
+		$this->assertStringContainsString( 'class="wp-caption alignnone"', $output );
+		$this->assertStringContainsString( '<p class="wp-caption-text">Default caption</p>', $output );
 
 		// If caption is provided, then it will be displayed.
 		ob_start();
@@ -550,8 +550,8 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertContains( 'class="wp-caption alignnone"', $output );
-		$this->assertContains( '<p class="wp-caption-text">Custom caption</p>', $output );
+		$this->assertStringContainsString( 'class="wp-caption alignnone"', $output );
+		$this->assertStringContainsString( '<p class="wp-caption-text">Custom caption</p>', $output );
 	}
 
 	/**
@@ -579,6 +579,6 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$widget->render_control_template_scripts();
 		$output = ob_get_clean();
 
-		$this->assertContains( '<script type="text/html" id="tmpl-wp-media-widget-image-preview">', $output );
+		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-image-preview">', $output );
 	}
 }

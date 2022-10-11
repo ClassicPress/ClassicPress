@@ -2058,7 +2058,7 @@ function wp_upload_dir( $time = null, $create_dir = true, $refresh_cache = false
 				if ( 0 === strpos( $uploads['basedir'], ABSPATH ) ) {
 					$error_path = str_replace( ABSPATH, '', $uploads['basedir'] ) . $uploads['subdir'];
 				} else {
-					$error_path = basename( $uploads['basedir'] ) . $uploads['subdir'];
+					$error_path = wp_basename( $uploads['basedir'] ) . $uploads['subdir'];
 				}
 
 				$uploads['error'] = sprintf(
@@ -2343,7 +2343,7 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 		if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) {
 			$error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
 		} else {
-			$error_path = basename( $upload['basedir'] ) . $upload['subdir'];
+			$error_path = wp_basename( $upload['basedir'] ) . $upload['subdir'];
 		}
 
 		$message = sprintf(
@@ -2555,6 +2555,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				array(
 					'text/plain',
 					'text/csv',
+					'application/csv',
 					'text/richtext',
 					'text/tsv',
 					'text/vtt',
@@ -2562,6 +2563,21 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 			)
 			) {
 				$type = $ext = false;
+			}
+		} elseif ( 'application/csv' === $real_mime ) {
+			// Special casing for CSV files.
+			if ( ! in_array(
+				$type,
+				array(
+					'text/csv',
+					'text/plain',
+					'application/csv',
+				),
+				true
+			)
+			) {
+				$type = false;
+				$ext  = false;
 			}
 		} elseif ( 'text/rtf' === $real_mime ) {
 			// Special casing for RTF files.
@@ -2809,6 +2825,44 @@ function wp_get_ext_types() {
 			'code'        => array( 'css', 'htm', 'html', 'php', 'js' ),
 		)
 	);
+}
+
+/**
+ * Wrapper for PHP filesize with filters and casting the result as an integer.
+ *
+ * @since WP-6.0.0
+ *
+ * @link https://www.php.net/manual/en/function.filesize.php
+ *
+ * @param string $path Path to the file.
+ * @return int The size of the file in bytes, or 0 in the event of an error.
+ */
+function wp_filesize( $path ) {
+	/**
+	 * Filters the result of wp_filesize before the PHP function is run.
+	 *
+	 * @since WP-6.0.0
+	 *
+	 * @param null|int $size The unfiltered value. Returning an int from the callback bypasses the filesize call.
+	 * @param string   $path Path to the file.
+	 */
+	$size = apply_filters( 'pre_wp_filesize', null, $path );
+
+	if ( is_int( $size ) ) {
+		return $size;
+	}
+
+	$size = file_exists( $path ) ? (int) filesize( $path ) : 0;
+
+	/**
+	 * Filters the size of the file.
+	 *
+	 * @since WP-6.0.0
+	 *
+	 * @param int    $size The result of PHP filesize on the file.
+	 * @param string $path Path to the file.
+	 */
+	return (int) apply_filters( 'wp_filesize', $size, $path );
 }
 
 /**
@@ -4987,6 +5041,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$exists[4] = ( $exists[1] && $exists[3] );
 		$exists[5] = ( $exists[2] && $exists[3] );
 
+		// phpcs:disable WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
 		$zonen[] = array(
 			'continent'   => ( $exists[0] ? $zone[0] : '' ),
 			'city'        => ( $exists[1] ? $zone[1] : '' ),
@@ -4995,6 +5050,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 			't_city'      => ( $exists[4] ? translate( str_replace( '_', ' ', $zone[1] ), 'continents-cities' ) : '' ),
 			't_subcity'   => ( $exists[5] ? translate( str_replace( '_', ' ', $zone[2] ), 'continents-cities' ) : '' ),
 		);
+		// phpcs:enable
 	}
 	usort( $zonen, '_wp_timezone_choice_usort_callback' );
 
@@ -5227,11 +5283,15 @@ function get_file_data( $file, $default_headers, $context = '' ) {
 	// We don't need to write to the file, so just open for reading.
 	$fp = fopen( $file, 'r' );
 
-	// Pull only the first 8kiB of the file in.
-	$file_data = fread( $fp, 8192 );
+	if ( $fp ) {
+		// Pull only the first 8 KB of the file in.
+		$file_data = fread( $fp, 8 * KB_IN_BYTES );
 
-	// PHP will close file handle, but we are good citizens.
-	fclose( $fp );
+		// PHP will close file handle, but we are good citizens.
+		fclose( $fp );
+	} else {
+		$file_data = '';
+	}
 
 	// Make sure we catch CR-only line endings.
 	$file_data = str_replace( "\r", "\n", $file_data );
