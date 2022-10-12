@@ -854,7 +854,7 @@ class WP_Query {
 				}
 			}
 
-			if ( '' != $qv['w'] ) {
+			if ( $qv['w'] ) {
 				$this->is_date = true;
 			}
 
