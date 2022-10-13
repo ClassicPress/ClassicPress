@@ -443,8 +443,15 @@ final class WP_Post_Type {
 			$args['exclude_from_search'] = ! $args['public'];
 		}
 
+<<<<<<< HEAD
 		// Back compat with quirky handling in version 3.0. https://core.trac.wordpress.org/ticket/14122.
 		if ( empty( $args['capabilities'] ) && null === $args['map_meta_cap'] && in_array( $args['capability_type'], array( 'post', 'page' ) ) ) {
+=======
+		// Back compat with quirky handling in version 3.0. #14122.
+		if ( empty( $args['capabilities'] )
+			&& null === $args['map_meta_cap'] && in_array( $args['capability_type'], array( 'post', 'page' ), true )
+		) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$args['map_meta_cap'] = true;
 		}
 

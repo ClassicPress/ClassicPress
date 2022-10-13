@@ -146,7 +146,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 		return get_page_link( $post, $leavename, $sample );
 	} elseif ( 'attachment' === $post->post_type ) {
 		return get_attachment_link( $post, $leavename );
-	} elseif ( in_array( $post->post_type, get_post_types( array( '_builtin' => false ) ) ) ) {
+	} elseif ( in_array( $post->post_type, get_post_types( array( '_builtin' => false ) ), true ) ) {
 		return get_post_permalink( $post, $leavename, $sample );
 	}
 
@@ -165,8 +165,12 @@ function get_permalink( $post = 0, $leavename = false ) {
 	 */
 	$permalink = apply_filters( 'pre_post_link', $permalink, $post, $leavename );
 
+<<<<<<< HEAD
 	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
 		$unixtime = strtotime( $post->post_date );
+=======
+	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ), true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 
 		$category = '';
 		if ( strpos( $permalink, '%category%' ) !== false ) {
@@ -272,7 +276,7 @@ function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
 
 	$slug = $post->post_name;
 
-	$draft_or_pending = get_post_status( $post ) && in_array( get_post_status( $post ), array( 'draft', 'pending', 'auto-draft', 'future' ) );
+	$draft_or_pending = get_post_status( $post ) && in_array( get_post_status( $post ), array( 'draft', 'pending', 'auto-draft', 'future' ), true );
 
 	$post_type = get_post_type_object( $post->post_type );
 
@@ -368,7 +372,7 @@ function _get_page_link( $post = false, $leavename = false, $sample = false ) {
 
 	$post = get_post( $post );
 
-	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) );
+	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 
 	$link = $wp_rewrite->get_page_permastruct();
 
@@ -414,7 +418,7 @@ function get_attachment_link( $post = null, $leavename = false ) {
 
 	$post   = get_post( $post );
 	$parent = ( $post->post_parent > 0 && $post->post_parent != $post->ID ) ? get_post( $post->post_parent ) : false;
-	if ( $parent && ! in_array( $parent->post_type, get_post_types() ) ) {
+	if ( $parent && ! in_array( $parent->post_type, get_post_types(), true ) ) {
 		$parent = false;
 	}
 
@@ -3104,7 +3108,7 @@ function get_home_url( $blog_id = null, $path = '', $scheme = null ) {
 		restore_current_blog();
 	}
 
-	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ) ) ) {
+	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ), true ) ) {
 		if ( is_ssl() && ! is_admin() && 'wp-login.php' !== $pagenow ) {
 			$scheme = 'https';
 		} else {
@@ -3419,7 +3423,7 @@ function network_home_url( $path = '', $scheme = null ) {
 	$current_network = get_network();
 	$orig_scheme     = $scheme;
 
-	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ) ) ) {
+	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ), true ) ) {
 		$scheme = is_ssl() && ! is_admin() ? 'https' : 'http';
 	}
 

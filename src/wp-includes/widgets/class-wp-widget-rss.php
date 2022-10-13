@@ -56,8 +56,13 @@ class WP_Widget_RSS extends WP_Widget {
 			return;
 		}
 
+<<<<<<< HEAD
 		// self-url destruction sequence
 		if ( in_array( untrailingslashit( $url ), array( site_url(), home_url() ) ) ) {
+=======
+		// Self-URL destruction sequence.
+		if ( in_array( untrailingslashit( $url ), array( site_url(), home_url() ), true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			return;
 		}
 

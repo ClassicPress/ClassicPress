@@ -2404,7 +2404,7 @@ function wp_ext2type( $ext ) {
 
 	$ext2type = wp_get_ext_types();
 	foreach ( $ext2type as $type => $exts ) {
-		if ( in_array( $ext, $exts ) ) {
+		if ( in_array( $ext, $exts, true ) ) {
 			return $type;
 		}
 	}
@@ -2541,7 +2541,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		 */
 		if ( in_array( $real_mime, $nonspecific_types, true ) ) {
 			// File is a non-specific binary type. That's ok if it's a type that generally tends to be binary.
-			if ( ! in_array( substr( $type, 0, strcspn( $type, '/' ) ), array( 'application', 'video', 'audio' ) ) ) {
+			if ( ! in_array( substr( $type, 0, strcspn( $type, '/' ) ), array( 'application', 'video', 'audio' ), true ) ) {
 				$type = false;
 				$ext  = false;
 			}
@@ -2566,7 +2566,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 					'text/richtext',
 					'text/tsv',
 					'text/vtt',
-				)
+				),
+				true
 			)
 			) {
 				$type = false;
@@ -2595,7 +2596,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 					'text/rtf',
 					'text/plain',
 					'application/rtf',
-				)
+				),
+				true
 			)
 			) {
 				$type = false;
@@ -2617,7 +2619,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
 
-		if ( ! in_array( $type, $allowed ) ) {
+		if ( ! in_array( $type, $allowed, true ) ) {
 			$type = false;
 			$ext  = false;
 		}
@@ -4580,7 +4582,7 @@ function apache_mod_loaded( $mod, $default = false ) {
 
 	if ( function_exists( 'apache_get_modules' ) ) {
 		$mods = apache_get_modules();
-		if ( in_array( $mod, $mods ) ) {
+		if ( in_array( $mod, $mods, true ) ) {
 			return true;
 		}
 	} elseif ( function_exists( 'phpinfo' ) && false === strpos( ini_get( 'disable_functions' ), 'phpinfo' ) ) {
@@ -4662,7 +4664,7 @@ function validate_file( $file, $allowed_files = array() ) {
 	}
 
 	// Files not in the allowed file list are not allowed:
-	if ( ! empty( $allowed_files ) && ! in_array( $file, $allowed_files ) ) {
+	if ( ! empty( $allowed_files ) && ! in_array( $file, $allowed_files, true ) ) {
 		return 3;
 	}
 
@@ -5041,7 +5043,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 	$zonen = array();
 	foreach ( timezone_identifiers_list() as $zone ) {
 		$zone = explode( '/', $zone );
-		if ( ! in_array( $zone[0], $continents ) ) {
+		if ( ! in_array( $zone[0], $continents, true ) ) {
 			continue;
 		}
 
@@ -5620,10 +5622,18 @@ function wp_debug_backtrace_summary( $ignore_class = null, $skip_frames = 0, $pr
 
 			$caller[] = "{$call['class']}{$call['type']}{$call['function']}";
 		} else {
+<<<<<<< HEAD
 			if ( in_array( $call['function'], array( 'do_action', 'apply_filters' ) ) ) {
 				$caller[] = "{$call['function']}('{$call['args'][0]}')";
 			} elseif ( in_array( $call['function'], array( 'include', 'include_once', 'require', 'require_once' ) ) ) {
 				$caller[] = $call['function'] . "('" . str_replace( array( WP_CONTENT_DIR, ABSPATH ), '', $call['args'][0] ) . "')";
+=======
+			if ( in_array( $call['function'], array( 'do_action', 'apply_filters', 'do_action_ref_array', 'apply_filters_ref_array' ), true ) ) {
+				$caller[] = "{$call['function']}('{$call['args'][0]}')";
+			} elseif ( in_array( $call['function'], array( 'include', 'include_once', 'require', 'require_once' ), true ) ) {
+				$filename = isset( $call['args'][0] ) ? $call['args'][0] : '';
+				$caller[] = $call['function'] . "('" . str_replace( $truncate_paths, '', wp_normalize_path( $filename ) ) . "')";
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			} else {
 				$caller[] = $call['function'];
 			}
@@ -5751,7 +5761,7 @@ function wp_auth_check_load() {
 
 	$screen = get_current_screen();
 	$hidden = array( 'update', 'update-network', 'update-core', 'update-core-network', 'upgrade', 'upgrade-network', 'network' );
-	$show   = ! in_array( $screen->id, $hidden );
+	$show   = ! in_array( $screen->id, $hidden, true );
 
 	/**
 	 * Filters whether to load the authentication check.

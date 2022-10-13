@@ -385,7 +385,7 @@ function populate_options() {
 	$offset_or_tz = _x( '0', 'default GMT offset or timezone string' );
 	if ( is_numeric( $offset_or_tz ) ) {
 		$gmt_offset = $offset_or_tz;
-	} elseif ( $offset_or_tz && in_array( $offset_or_tz, timezone_identifiers_list() ) ) {
+	} elseif ( $offset_or_tz && in_array( $offset_or_tz, timezone_identifiers_list(), true ) ) {
 			$timezone_string = $offset_or_tz;
 	}
 
@@ -545,11 +545,13 @@ function populate_options() {
 	$existing_options = $wpdb->get_col( "SELECT option_name FROM $wpdb->options WHERE option_name in ( $keys )" );
 
 	$insert = '';
+
 	foreach ( $options as $option => $value ) {
-		if ( in_array( $option, $existing_options ) ) {
+		if ( in_array( $option, $existing_options, true ) ) {
 			continue;
 		}
-		if ( in_array( $option, $fat_options ) ) {
+
+		if ( in_array( $option, $fat_options, true ) ) {
 			$autoload = 'no';
 		} else {
 			$autoload = 'yes';
@@ -558,9 +560,11 @@ function populate_options() {
 		if ( is_array( $value ) ) {
 			$value = serialize( $value );
 		}
+
 		if ( ! empty( $insert ) ) {
 			$insert .= ', ';
 		}
+
 		$insert .= $wpdb->prepare( '(%s, %s, %s)', $option, $value, $autoload );
 	}
 

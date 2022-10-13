@@ -277,7 +277,13 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		?>
 		<strong><a href="<?php echo $edit_link; ?>" class="edit"><?php echo $user->user_login; ?></a>
 		<?php
+<<<<<<< HEAD
 		if ( in_array( $user->user_login, $super_admins ) ) {
+=======
+			echo $edit;
+
+			if ( in_array( $user->user_login, $super_admins, true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			echo ' &mdash; ' . __( 'Super Admin' );
 		}
 		?>

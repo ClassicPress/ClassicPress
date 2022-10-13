@@ -13,14 +13,48 @@
  * @return string The HTTP protocol. Default: HTTP/1.0.
  */
 function wp_get_server_protocol() {
+<<<<<<< HEAD
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
 	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+=======
+	$protocol = isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : '';
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ), true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$protocol = 'HTTP/1.0';
 	}
 	return $protocol;
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Turn register globals off.
+ *
+ * @since 2.1.0
+ * @access private
+ */
+function wp_unregister_GLOBALS() {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+	if ( ! ini_get( 'register_globals' ) ) {
+		return;
+	}
+
+	if ( isset( $_REQUEST['GLOBALS'] ) ) {
+		die( 'GLOBALS overwrite attempt detected' );
+	}
+
+	// Variables that shouldn't be unset.
+	$no_unset = array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES', 'table_prefix' );
+
+	$input = array_merge( $_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset( $_SESSION ) && is_array( $_SESSION ) ? $_SESSION : array() );
+	foreach ( $input as $k => $v ) {
+		if ( ! in_array( $k, $no_unset, true ) && isset( $GLOBALS[ $k ] ) ) {
+			unset( $GLOBALS[ $k ] );
+		}
+	}
+}
+
+/**
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
  * Fix `$_SERVER` variables for various setups.
  *
  * @since WP-3.0.0
@@ -648,11 +682,19 @@ function wp_get_active_and_valid_plugins() {
 	$network_plugins = is_multisite() ? wp_get_active_network_plugins() : false;
 
 	foreach ( $active_plugins as $plugin ) {
+<<<<<<< HEAD
 		if ( ! validate_file( $plugin ) // $plugin must validate as file
 			&& '.php' == substr( $plugin, -4 ) // $plugin must end with '.php'
 			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist
 			// not already included as a network plugin
 			&& ( ! $network_plugins || ! in_array( WP_PLUGIN_DIR . '/' . $plugin, $network_plugins ) )
+=======
+		if ( ! validate_file( $plugin )                     // $plugin must validate as file.
+			&& '.php' == substr( $plugin, -4 )              // $plugin must end with '.php'.
+			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist.
+			// Not already included as a network plugin.
+			&& ( ! $network_plugins || ! in_array( WP_PLUGIN_DIR . '/' . $plugin, $network_plugins, true ) )
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			) {
 			$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
 		}

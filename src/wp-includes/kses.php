@@ -791,7 +791,7 @@ function wp_kses_one_attr( $string, $element ) {
 		$value = esc_attr( $value );
 
 		// Sanitize URI values.
-		if ( in_array( strtolower( $name ), $uris ) ) {
+		if ( in_array( strtolower( $name ), $uris, true ) ) {
 			$value = wp_kses_bad_protocol( $value, $allowed_protocols );
 		}
 
@@ -1259,7 +1259,7 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 				if ( preg_match( '%^"([^"]*)"(\s+|/?$)%', $attr, $match ) ) {
 					// "value"
 					$thisval = $match[1];
-					if ( in_array( strtolower( $attrname ), $uris ) ) {
+					if ( in_array( strtolower( $attrname ), $uris, true ) ) {
 						$thisval = wp_kses_bad_protocol( $thisval, $allowed_protocols );
 					}
 
@@ -1280,7 +1280,7 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 				if ( preg_match( "%^'([^']*)'(\s+|/?$)%", $attr, $match ) ) {
 					// 'value'
 					$thisval = $match[1];
-					if ( in_array( strtolower( $attrname ), $uris ) ) {
+					if ( in_array( strtolower( $attrname ), $uris, true ) ) {
 						$thisval = wp_kses_bad_protocol( $thisval, $allowed_protocols );
 					}
 
@@ -1301,7 +1301,7 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 				if ( preg_match( "%^([^\s\"']+)(\s+|/?$)%", $attr, $match ) ) {
 					// value
 					$thisval = $match[1];
-					if ( in_array( strtolower( $attrname ), $uris ) ) {
+					if ( in_array( strtolower( $attrname ), $uris, true ) ) {
 						$thisval = wp_kses_bad_protocol( $thisval, $allowed_protocols );
 					}
 
@@ -1744,7 +1744,7 @@ function wp_kses_named_entities( $matches ) {
 	}
 
 	$i = $matches[1];
-	return ( ! in_array( $i, $allowedentitynames ) ) ? "&amp;$i;" : "&$i;";
+	return ( ! in_array( $i, $allowedentitynames, true ) ) ? "&amp;$i;" : "&$i;";
 }
 
 /**

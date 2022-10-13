@@ -1412,7 +1412,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 		return false;
 	}
 
-	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ) ) ) {
+	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ), true ) ) {
 		return wp_trash_comment( $comment_id );
 	}
 
@@ -2739,7 +2739,7 @@ function do_trackbacks( $post_id ) {
 	if ( $to_ping ) {
 		foreach ( (array) $to_ping as $tb_ping ) {
 			$tb_ping = trim( $tb_ping );
-			if ( ! in_array( $tb_ping, $pinged ) ) {
+			if ( ! in_array( $tb_ping, $pinged, true ) ) {
 				trackback( $tb_ping, $post_title, $excerpt, $post->ID );
 				$pinged[] = $tb_ping;
 			} else {
@@ -2809,6 +2809,7 @@ function pingback( $content, $post_id ) {
 	// Parsing the post, external links (if any) are stored in the $post_links array
 	$post_links_temp = wp_extract_urls( $content );
 
+<<<<<<< HEAD
 	// Step 2.
 	// Walking thru the links array
 	// first we get rid of links pointing to sites, not to specific files
@@ -2821,6 +2822,23 @@ function pingback( $content, $post_id ) {
 	foreach ( (array) $post_links_temp as $link_test ) :
 		if ( ! in_array( $link_test, $pung ) && ( url_to_postid( $link_test ) != $post->ID ) // If we haven't pung it already and it isn't a link to itself
 				&& ! is_local_attachment( $link_test ) ) : // Also, let's never ping local attachments.
+=======
+	/*
+	 * Step 2.
+	 * Walking through the links array.
+	 * First we get rid of links pointing to sites, not to specific files.
+	 * Example:
+	 * http://dummy-weblog.org
+	 * http://dummy-weblog.org/
+	 * http://dummy-weblog.org/post.php
+	 * We don't wanna ping first and second types, even if they have a valid <link/>.
+	 */
+	foreach ( (array) $post_links_temp as $link_test ) {
+		// If we haven't pung it already and it isn't a link to itself.
+		if ( ! in_array( $link_test, $pung, true ) && ( url_to_postid( $link_test ) != $post->ID )
+				// Also, let's never ping local attachments.
+				&& ! is_local_attachment( $link_test ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$test = @parse_url( $link_test );
 			if ( $test ) {
 				if ( isset( $test['query'] ) ) {
@@ -3098,7 +3116,7 @@ function _close_comments_for_old_posts( $posts, $query ) {
 	 * @param array $post_types An array of registered post types. Default array with 'post'.
 	 */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $posts[0]->post_type, $post_types ) ) {
+	if ( ! in_array( $posts[0]->post_type, $post_types, true ) ) {
 		return $posts;
 	}
 
@@ -3143,7 +3161,7 @@ function _close_comments_for_old_post( $open, $post_id ) {
 
 	/** This filter is documented in wp-includes/comment.php */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $post->post_type, $post_types ) ) {
+	if ( ! in_array( $post->post_type, $post_types, true ) ) {
 		return $open;
 	}
 

@@ -588,7 +588,7 @@ class WP_Meta_Query {
 		if ( array_key_exists( 'value', $clause ) ) {
 			$meta_value = $clause['value'];
 
-			if ( in_array( $meta_compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
+			if ( in_array( $meta_compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true ) ) {
 				if ( ! is_array( $meta_value ) ) {
 					$meta_value = preg_split( '/[,\s]+/', $meta_value );
 				}
@@ -712,8 +712,13 @@ class WP_Meta_Query {
 
 			$clause_compare  = strtoupper( $clause['compare'] );
 			$sibling_compare = strtoupper( $sibling['compare'] );
+<<<<<<< HEAD
 			if ( in_array( $clause_compare, $compatible_compares ) && in_array( $sibling_compare, $compatible_compares ) ) {
 				$alias = preg_replace( '/\W/', '_', $sibling['alias'] );
+=======
+			if ( in_array( $clause_compare, $compatible_compares, true ) && in_array( $sibling_compare, $compatible_compares, true ) ) {
+				$alias = $sibling['alias'];
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				break;
 			}
 		}

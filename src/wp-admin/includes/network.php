@@ -135,8 +135,13 @@ function network_step1( $errors = false ) {
 
 	$hostname  = get_clean_basedomain();
 	$has_ports = strstr( $hostname, ':' );
+<<<<<<< HEAD
 	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ) ) ) ) {
 		echo '<div class="error"><p><strong>' . __( 'ERROR:' ) . '</strong> ' . __( 'You cannot install a network of sites with your server address.' ) . '</p></div>';
+=======
+	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ), true ) ) ) {
+		echo '<div class="error"><p><strong>' . __( 'Error:' ) . '</strong> ' . __( 'You cannot install a network of sites with your server address.' ) . '</p></div>';
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		echo '<p>' . sprintf(
 			/* translators: %s: port number */
 			__( 'You cannot use port numbers such as %s.' ),
@@ -162,14 +167,14 @@ function network_step1( $errors = false ) {
 		$error_codes = $errors->get_error_codes();
 	}
 
-	if ( ! empty( $_POST['sitename'] ) && ! in_array( 'empty_sitename', $error_codes ) ) {
+	if ( ! empty( $_POST['sitename'] ) && ! in_array( 'empty_sitename', $error_codes, true ) ) {
 		$site_name = $_POST['sitename'];
 	} else {
 		/* translators: %s: Default network name */
 		$site_name = sprintf( __( '%s Sites' ), get_option( 'blogname' ) );
 	}
 
-	if ( ! empty( $_POST['email'] ) && ! in_array( 'invalid_email', $error_codes ) ) {
+	if ( ! empty( $_POST['email'] ) && ! in_array( 'invalid_email', $error_codes, true ) ) {
 		$admin_email = $_POST['email'];
 	} else {
 		$admin_email = get_option( 'admin_email' );

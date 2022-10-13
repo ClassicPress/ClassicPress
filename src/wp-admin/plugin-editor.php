@@ -110,8 +110,13 @@ if ( ! is_file( $real_file ) ) {
 	// Get the extension of the file
 	if ( preg_match( '/\.([^.]+)$/', $real_file, $matches ) ) {
 		$ext = strtolower( $matches[1] );
+<<<<<<< HEAD
 		// If extension is not in the acceptable list, skip it
 		if ( ! in_array( $ext, $editable_extensions ) ) {
+=======
+		// If extension is not in the acceptable list, skip it.
+		if ( ! in_array( $ext, $editable_extensions, true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			wp_die( sprintf( '<p>%s</p>', __( 'Files of this type are not editable.' ) ) );
 		}
 	}
@@ -243,7 +248,7 @@ foreach ( $plugins as $plugin_key => $a_plugin ) {
 	<?php
 	$plugin_editable_files = array();
 	foreach ( $plugin_files as $plugin_file ) {
-		if ( preg_match( '/\.([^.]+)$/', $plugin_file, $matches ) && in_array( $matches[1], $editable_extensions ) ) {
+		if ( preg_match( '/\.([^.]+)$/', $plugin_file, $matches ) && in_array( $matches[1], $editable_extensions, true ) ) {
 			$plugin_editable_files[] = $plugin_file;
 		}
 	}
@@ -269,7 +274,7 @@ foreach ( $plugins as $plugin_key => $a_plugin ) {
 		<?php endif; ?>
 <?php if ( is_writeable( $real_file ) ) : ?>
 	<div class="editor-notices">
-		<?php if ( in_array( $plugin, (array) get_option( 'active_plugins', array() ) ) ) { ?>
+		<?php if ( in_array( $plugin, (array) get_option( 'active_plugins', array() ), true ) ) { ?>
 			<div class="notice notice-warning inline active-plugin-edit-warning">
 			<p><?php _e( '<strong>Warning:</strong> Making changes to active plugins is not recommended.' ); ?></p>
 		</div>

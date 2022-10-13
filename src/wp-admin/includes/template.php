@@ -768,7 +768,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$post = get_post();
 
 	if ( $for_post ) {
-		$edit = ! ( in_array( $post->post_status, array( 'draft', 'pending' ) ) && ( ! $post->post_date_gmt || '0000-00-00 00:00:00' == $post->post_date_gmt ) );
+		$edit = ! ( in_array( $post->post_status, array( 'draft', 'pending' ), true ) && ( ! $post->post_date_gmt || '0000-00-00 00:00:00' == $post->post_date_gmt ) );
 	}
 
 	$tab_index_attribute = '';
@@ -1145,7 +1145,12 @@ function do_meta_boxes( $screen, $context, $object ) {
 						continue;
 					}
 					$i++;
+<<<<<<< HEAD
 					$hidden_class = in_array( $box['id'], $hidden ) ? ' hide-if-js' : '';
+=======
+					// get_hidden_meta_boxes() doesn't apply in the block editor.
+					$hidden_class = ( ! $screen->is_block_editor() && in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 					echo '<div id="' . $box['id'] . '" class="postbox ' . postbox_classes( $box['id'], $page ) . $hidden_class . '" ' . '>' . "\n";
 					if ( 'dashboard_browser_nag' != $box['id'] ) {
 						$widget_title = $box['title'];
@@ -1274,7 +1279,7 @@ function do_accordion_sections( $screen, $context, $object ) {
 						continue;
 					}
 					$i++;
-					$hidden_class = in_array( $box['id'], $hidden ) ? 'hide-if-js' : '';
+					$hidden_class = in_array( $box['id'], $hidden, true ) ? 'hide-if-js' : '';
 
 					$open_class = '';
 					if ( ! $first_open && empty( $hidden_class ) ) {
@@ -1652,8 +1657,28 @@ function settings_errors( $setting = '', $sanitize = false, $hide_on_update = fa
 
 	$output = '';
 	foreach ( $settings_errors as $key => $details ) {
+<<<<<<< HEAD
 		$css_id    = 'setting-error-' . $details['code'];
 		$css_class = $details['type'] . ' settings-error notice is-dismissible';
+=======
+		if ( 'updated' === $details['type'] ) {
+			$details['type'] = 'success';
+		}
+
+		if ( in_array( $details['type'], array( 'error', 'success', 'warning', 'info' ), true ) ) {
+			$details['type'] = 'notice-' . $details['type'];
+		}
+
+		$css_id    = sprintf(
+			'setting-error-%s',
+			esc_attr( $details['code'] )
+		);
+		$css_class = sprintf(
+			'notice %s settings-error is-dismissible',
+			esc_attr( $details['type'] )
+		);
+
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$output   .= "<div id='$css_id' class='$css_class'> \n";
 		$output   .= "<p><strong>{$details['message']}</strong></p>";
 		$output   .= "</div> \n";
@@ -2140,7 +2165,7 @@ function get_submit_button( $text = '', $type = 'primary large', $name = 'submit
 		if ( 'secondary' === $t || 'button-secondary' === $t ) {
 			continue;
 		}
-		$classes[] = in_array( $t, $button_shorthand ) ? 'button-' . $t : $t;
+		$classes[] = in_array( $t, $button_shorthand, true ) ? 'button-' . $t : $t;
 	}
 	// Remove empty items, remove duplicate items, and finally build a string.
 	$class = implode( ' ', array_unique( array_filter( $classes ) ) );

@@ -39,8 +39,14 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			)
 		);
 
+		$status_whitelist = array( 'active', 'inactive', 'recently_activated', 'upgrade', 'mustuse', 'dropins', 'search', 'paused' );
+
 		$status = 'all';
+<<<<<<< HEAD
 		if ( isset( $_REQUEST['plugin_status'] ) && in_array( $_REQUEST['plugin_status'], array( 'active', 'inactive', 'recently_activated', 'upgrade', 'mustuse', 'dropins', 'search' ) ) ) {
+=======
+		if ( isset( $_REQUEST['plugin_status'] ) && in_array( $_REQUEST['plugin_status'], $status_whitelist, true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$status = $_REQUEST['plugin_status'];
 		}
 
@@ -239,7 +245,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			$totals[ $type ] = count( $list );
 		}
 
-		if ( empty( $plugins[ $status ] ) && ! in_array( $status, array( 'all', 'search' ) ) ) {
+		if ( empty( $plugins[ $status ] ) && ! in_array( $status, array( 'all', 'search' ), true ) ) {
 			$status = 'all';
 		}
 
@@ -395,7 +401,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		global $status;
 
 		return array(
-			'cb'          => ! in_array( $status, array( 'mustuse', 'dropins' ) ) ? '<input type="checkbox" />' : '',
+			'cb'          => ! in_array( $status, array( 'mustuse', 'dropins' ), true ) ? '<input type="checkbox" />' : '',
 			'name'        => __( 'Plugin' ),
 			'description' => __( 'Description' ),
 		);
@@ -497,7 +503,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	public function bulk_actions( $which = '' ) {
 		global $status;
 
-		if ( in_array( $status, array( 'mustuse', 'dropins' ) ) ) {
+		if ( in_array( $status, array( 'mustuse', 'dropins' ), true ) ) {
 			return;
 		}
 
@@ -511,7 +517,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	protected function extra_tablenav( $which ) {
 		global $status;
 
-		if ( ! in_array( $status, array( 'recently_activated', 'mustuse', 'dropins' ) ) ) {
+		if ( ! in_array( $status, array( 'recently_activated', 'mustuse', 'dropins' ), true ) ) {
 			return;
 		}
 
@@ -553,7 +559,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	public function display_rows() {
 		global $status;
 
-		if ( is_multisite() && ! $this->screen->in_admin( 'network' ) && in_array( $status, array( 'mustuse', 'dropins' ) ) ) {
+		if ( is_multisite() && ! $this->screen->in_admin( 'network' ) && in_array( $status, array( 'mustuse', 'dropins' ), true ) ) {
 			return;
 		}
 
@@ -748,7 +754,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		$compatible_php = is_php_version_compatible( $requires_php );
 		$class          = $is_active ? 'active' : 'inactive';
 		$checkbox_id    = 'checkbox_' . md5( $plugin_data['Name'] );
-		if ( $restrict_network_active || $restrict_network_only || in_array( $status, array( 'mustuse', 'dropins' ) ) || ! $compatible_php ) {
+		if ( $restrict_network_active || $restrict_network_only || in_array( $status, array( 'mustuse', 'dropins' ), true ) || ! $compatible_php ) {
 			$checkbox = '';
 		} else {
 			$checkbox = "<label class='screen-reader-text' for='" . $checkbox_id . "' >" . sprintf( __( 'Select %s' ), $plugin_data['Name'] ) . '</label>'
@@ -775,7 +781,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$extra_classes = '';
-			if ( in_array( $column_name, $hidden ) ) {
+			if ( in_array( $column_name, $hidden, true ) ) {
 				$extra_classes = ' hidden';
 			}
 

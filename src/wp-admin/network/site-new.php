@@ -50,7 +50,7 @@ if ( isset( $_REQUEST['action'] ) && 'add-site' == $_REQUEST['action'] ) {
 	if ( ! is_subdomain_install() ) {
 		$subdirectory_reserved_names = get_subdirectory_reserved_names();
 
-		if ( in_array( $domain, $subdirectory_reserved_names ) ) {
+		if ( in_array( $domain, $subdirectory_reserved_names, true ) ) {
 			wp_die(
 				/* translators: %s: reserved names list */
 				sprintf(
@@ -71,7 +71,7 @@ if ( isset( $_REQUEST['action'] ) && 'add-site' == $_REQUEST['action'] ) {
 	if ( isset( $_POST['WPLANG'] ) ) {
 		if ( '' === $_POST['WPLANG'] ) {
 			$meta['WPLANG'] = ''; // en_US
-		} elseif ( in_array( $_POST['WPLANG'], get_available_languages() ) ) {
+		} elseif ( in_array( $_POST['WPLANG'], get_available_languages(), true ) ) {
 			$meta['WPLANG'] = $_POST['WPLANG'];
 		} elseif ( current_user_can( 'install_languages' ) && wp_can_install_language_pack() ) {
 			$language = wp_download_language_pack( wp_unslash( $_POST['WPLANG'] ) );
@@ -258,7 +258,7 @@ printf(
 					$lang = get_site_option( 'WPLANG' );
 
 					// Use English if the default isn't available.
-					if ( ! in_array( $lang, $languages ) ) {
+					if ( ! in_array( $lang, $languages, true ) ) {
 						$lang = '';
 					}
 

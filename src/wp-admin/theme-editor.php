@@ -172,10 +172,17 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		$content = esc_textarea( $content );
 	}
 
+<<<<<<< HEAD
 	$file_description = get_file_description( $relative_file );
 	$file_show        = array_search( $file, array_filter( $allowed_files ) );
 	$description      = esc_html( $file_description );
 	if ( $file_description != $file_show ) {
+=======
+$file_description = get_file_description( $relative_file );
+$file_show        = array_search( $file, array_filter( $allowed_files ), true );
+$description      = esc_html( $file_description );
+if ( $file_description != $file_show ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$description .= ' <span>(' . esc_html( $file_show ) . ')</span>';
 	}
 	?>

@@ -408,7 +408,7 @@ if ( isset( $_GET['updated'] ) ) {
 					<td>
 						<?php
 						$lang = get_site_option( 'WPLANG' );
-						if ( ! in_array( $lang, $languages ) ) {
+						if ( ! in_array( $lang, $languages, true ) ) {
 							$lang = '';
 						}
 

@@ -1274,7 +1274,7 @@ function wp_dropdown_users( $args = '' ) {
  */
 function sanitize_user_field( $field, $value, $user_id, $context ) {
 	$int_fields = array( 'ID' );
-	if ( in_array( $field, $int_fields ) ) {
+	if ( in_array( $field, $int_fields, true ) ) {
 		$value = (int) $value;
 	}
 
@@ -3132,6 +3132,76 @@ function wp_user_personal_data_exporter( $email_address ) {
 		'data'        => $user_data_to_export,
 	);
 
+<<<<<<< HEAD
+=======
+	if ( isset( $user_meta['community-events-location'] ) ) {
+		$location = maybe_unserialize( $user_meta['community-events-location'][0] );
+
+		$location_props_to_export = array(
+			'description' => __( 'City' ),
+			'country'     => __( 'Country' ),
+			'latitude'    => __( 'Latitude' ),
+			'longitude'   => __( 'Longitude' ),
+			'ip'          => __( 'IP' ),
+		);
+
+		$location_data_to_export = array();
+
+		foreach ( $location_props_to_export as $key => $name ) {
+			if ( ! empty( $location[ $key ] ) ) {
+				$location_data_to_export[] = array(
+					'name'  => $name,
+					'value' => $location[ $key ],
+				);
+			}
+		}
+
+		$data_to_export[] = array(
+			'group_id'          => 'community-events-location',
+			'group_label'       => __( 'Community Events Location' ),
+			'group_description' => __( 'User&#8217;s location data used for the Community Events in the WordPress Events and News dashboard widget.' ),
+			'item_id'           => "community-events-location-{$user->ID}",
+			'data'              => $location_data_to_export,
+		);
+	}
+
+	if ( isset( $user_meta['session_tokens'] ) ) {
+		$session_tokens = maybe_unserialize( $user_meta['session_tokens'][0] );
+
+		$session_tokens_props_to_export = array(
+			'expiration' => __( 'Expiration' ),
+			'ip'         => __( 'IP' ),
+			'ua'         => __( 'User Agent' ),
+			'login'      => __( 'Last Login' ),
+		);
+
+		foreach ( $session_tokens as $token_key => $session_token ) {
+			$session_tokens_data_to_export = array();
+
+			foreach ( $session_tokens_props_to_export as $key => $name ) {
+				if ( ! empty( $session_token[ $key ] ) ) {
+					$value = $session_token[ $key ];
+					if ( in_array( $key, array( 'expiration', 'login' ), true ) ) {
+						$value = date_i18n( 'F d, Y H:i A', $value );
+					}
+					$session_tokens_data_to_export[] = array(
+						'name'  => $name,
+						'value' => $value,
+					);
+				}
+			}
+
+			$data_to_export[] = array(
+				'group_id'          => 'session-tokens',
+				'group_label'       => __( 'Session Tokens' ),
+				'group_description' => __( 'User&#8217;s Session Tokens data.' ),
+				'item_id'           => "session-tokens-{$user->ID}-{$token_key}",
+				'data'              => $session_tokens_data_to_export,
+			);
+		}
+	}
+
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 	return array(
 		'data' => $data_to_export,
 		'done' => true,

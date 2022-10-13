@@ -420,7 +420,7 @@ function _wptexturize_pushpop_element( $text, &$stack, $disabled_elements ) {
 	$tag = substr( $text, $name_offset, $space );
 
 	// Handle disabled tags.
-	if ( in_array( $tag, $disabled_elements ) ) {
+	if ( in_array( $tag, $disabled_elements, true ) ) {
 		if ( $opening_tag ) {
 			/*
 			 * This disables texturize until we find a closing tag of our type
@@ -965,7 +965,7 @@ function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = fals
 		$charset = $_charset;
 	}
 
-	if ( in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ) ) ) {
+	if ( in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ), true ) ) {
 		$charset = 'UTF-8';
 	}
 
@@ -1110,7 +1110,7 @@ function wp_check_invalid_utf8( $string, $strip = false ) {
 	// Store the site charset as a static to avoid multiple calls to get_option()
 	static $is_utf8 = null;
 	if ( ! isset( $is_utf8 ) ) {
-		$is_utf8 = in_array( get_option( 'blog_charset' ), array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) );
+		$is_utf8 = in_array( get_option( 'blog_charset' ), array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true );
 	}
 	if ( ! $is_utf8 ) {
 		return $string;
@@ -2831,9 +2831,16 @@ function _make_web_ftp_clickable_cb( $matches ) {
 	$dest = $matches[2];
 	$dest = 'http://' . $dest;
 
+<<<<<<< HEAD
 	// removed trailing [.,;:)] from URL
 	if ( in_array( substr( $dest, -1 ), array( '.', ',', ';', ':', ')' ) ) === true ) {
 		$ret  = substr( $dest, -1 );
+=======
+	// Removed trailing [.,;:)] from URL.
+	$last_char = substr( $dest, -1 );
+	if ( in_array( $last_char, array( '.', ',', ';', ':', ')' ), true ) === true ) {
+		$ret  = $last_char;
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$dest = substr( $dest, 0, strlen( $dest ) - 1 );
 	}
 
@@ -3078,7 +3085,7 @@ function translate_smiley( $matches ) {
 	$image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' );
 
 	// Don't convert smilies that aren't images - they're probably emoji.
-	if ( ! in_array( $ext, $image_exts ) ) {
+	if ( ! in_array( $ext, $image_exts, true ) ) {
 		return $img;
 	}
 
@@ -4096,7 +4103,7 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
 	 * presume it needs http:// prepended (unless a relative
 	 * link starting with /, # or ? or a php file).
 	 */
-	if ( strpos( $url, ':' ) === false && ! in_array( $url[0], array( '/', '#', '?' ) ) &&
+	if ( strpos( $url, ':' ) === false && ! in_array( $url[0], array( '/', '#', '?' ), true ) &&
 		! preg_match( '/^[a-z0-9-]+?\.php/i', $url ) ) {
 		$url = 'http://' . $url;
 	}
@@ -4502,7 +4509,7 @@ function sanitize_option( $option, $value ) {
 			if ( ! is_multisite() && defined( 'WPLANG' ) && '' !== WPLANG && 'en_US' !== WPLANG ) {
 				$allowed[] = WPLANG;
 			}
-			if ( ! in_array( $value, $allowed ) && ! empty( $value ) ) {
+			if ( ! in_array( $value, $allowed, true ) && ! empty( $value ) ) {
 				$value = get_option( $option );
 			}
 			break;
@@ -4550,7 +4557,7 @@ function sanitize_option( $option, $value ) {
 
 		case 'timezone_string':
 			$allowed_zones = timezone_identifiers_list();
-			if ( ! in_array( $value, $allowed_zones ) && ! empty( $value ) ) {
+			if ( ! in_array( $value, $allowed_zones, true ) && ! empty( $value ) ) {
 				$error = __( 'The timezone you have entered is not valid. Please select a valid timezone.' );
 			}
 			break;
@@ -4897,7 +4904,7 @@ function _links_add_base( $m ) {
 	global $_links_add_base;
 	//1 = attribute name  2 = quotation mark  3 = URL
 	return $m[1] . '=' . $m[2] .
-		( preg_match( '#^(\w{1,20}):#', $m[3], $protocol ) && in_array( $protocol[1], wp_allowed_protocols() ) ?
+		( preg_match( '#^(\w{1,20}):#', $m[3], $protocol ) && in_array( $protocol[1], wp_allowed_protocols(), true ) ?
 			$m[3] :
 			WP_Http::make_absolute_url( $m[3], $_links_add_base )
 		)

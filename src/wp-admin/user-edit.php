@@ -463,7 +463,11 @@ switch ( $action ) {
 			$public_display['display_lastfirst'] = $profileuser->last_name . ' ' . $profileuser->first_name;
 		}
 
+<<<<<<< HEAD
 		if ( ! in_array( $profileuser->display_name, $public_display ) ) { // Only add this if it isn't duplicated elsewhere
+=======
+		if ( ! in_array( $profileuser->display_name, $public_display, true ) ) { // Only add this if it isn't duplicated elsewhere.
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$public_display = array( 'display_displayname' => $profileuser->display_name ) + $public_display;
 		}
 

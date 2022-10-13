@@ -2992,7 +2992,7 @@ function wp_resource_hints() {
 				continue;
 			}
 
-			if ( in_array( $relation_type, array( 'preconnect', 'dns-prefetch' ) ) ) {
+			if ( in_array( $relation_type, array( 'preconnect', 'dns-prefetch' ), true ) ) {
 				$parsed = wp_parse_url( $url );
 
 				if ( empty( $parsed['host'] ) ) {
@@ -3017,9 +3017,16 @@ function wp_resource_hints() {
 			$html = '';
 
 			foreach ( $atts as $attr => $value ) {
+<<<<<<< HEAD
 				if ( ! is_scalar( $value ) ||
 					 ( ! in_array( $attr, array( 'as', 'crossorigin', 'href', 'pr', 'rel', 'type' ), true ) && ! is_numeric( $attr ) )
 				) {
+=======
+				if ( ! is_scalar( $value )
+					|| ( ! in_array( $attr, array( 'as', 'crossorigin', 'href', 'pr', 'rel', 'type' ), true ) && ! is_numeric( $attr ) )
+				) {
+
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 					continue;
 				}
 
@@ -3062,7 +3069,9 @@ function wp_dependencies_unique_hosts() {
 				$dependency = $dependencies->registered[ $handle ];
 				$parsed     = wp_parse_url( $dependency->src );
 
-				if ( ! empty( $parsed['host'] ) && ! in_array( $parsed['host'], $unique_hosts ) && $parsed['host'] !== $_SERVER['SERVER_NAME'] ) {
+				if ( ! empty( $parsed['host'] )
+					&& ! in_array( $parsed['host'], $unique_hosts, true ) && $parsed['host'] !== $_SERVER['SERVER_NAME']
+				) {
 					$unique_hosts[] = $parsed['host'];
 				}
 			}
@@ -3130,7 +3139,7 @@ function wp_default_editor() {
 	$r = user_can_richedit() ? 'tinymce' : 'html'; // defaults
 	if ( wp_get_current_user() ) { // look for cookie
 		$ed = get_user_setting( 'editor', 'tinymce' );
-		$r  = ( in_array( $ed, array( 'tinymce', 'html', 'test' ) ) ) ? $ed : $r;
+		$r  = ( in_array( $ed, array( 'tinymce', 'html', 'test' ), true ) ) ? $ed : $r;
 	}
 
 	/**

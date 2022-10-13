@@ -1094,8 +1094,13 @@ final class WP_Screen {
 		$special = array( '_title', 'cb', 'comment', 'media', 'name', 'title', 'username', 'blogname' );
 
 		foreach ( $columns as $column => $title ) {
+<<<<<<< HEAD
 			// Can't hide these for they are special
 			if ( in_array( $column, $special ) ) {
+=======
+			// Can't hide these for they are special.
+			if ( in_array( $column, $special, true ) ) {
+>>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				continue;
 			}
 
@@ -1112,7 +1117,7 @@ final class WP_Screen {
 
 			$id = "$column-hide";
 			echo '<label>';
-			echo '<input class="hide-column-tog" name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $column . '"' . checked( ! in_array( $column, $hidden ), true, false ) . ' />';
+			echo '<input class="hide-column-tog" name="' . $id . '" type="checkbox" id="' . $id . '" value="' . $column . '"' . checked( ! in_array( $column, $hidden, true ), true, false ) . ' />';
 			echo "$title</label>\n";
 		}
 		?>
@@ -1247,7 +1252,7 @@ final class WP_Screen {
 		 */
 		$view_mode_post_types = apply_filters( 'view_mode_post_types', $view_mode_post_types );
 
-		if ( ! in_array( $this->post_type, $view_mode_post_types ) ) {
+		if ( ! in_array( $this->post_type, $view_mode_post_types, true ) ) {
 			return;
 		}
 
