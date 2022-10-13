@@ -1214,8 +1214,8 @@ function _wp_expand_nav_menu_post_data() {
 			$new_post_data = array();
 
 			// Build the new array value from leaf to trunk.
-			for ( $i = count( $array_bits ) - 1; $i >= 0; $i -- ) {
-				if ( $i == count( $array_bits ) - 1 ) {
+			for ( $i = count( $array_bits ) - 1; $i >= 0; $i-- ) {
+				if ( count( $array_bits ) - 1 == $i ) {
 					$new_post_data[ $array_bits[ $i ] ] = wp_slash( $post_input_data->value );
 				} else {
 					$new_post_data = array( $array_bits[ $i ] => $new_post_data );

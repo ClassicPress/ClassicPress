@@ -310,7 +310,7 @@ class WP_Admin_Bar {
 		}
 
 		foreach ( $this->_get_nodes() as $node ) {
-			if ( 'root' == $node->id ) {
+			if ( 'root' === $node->id ) {
 				continue;
 			}
 
@@ -321,9 +321,9 @@ class WP_Admin_Bar {
 			}
 
 			// Generate the group class (we distinguish between top level and other level groups).
-			$group_class = ( $node->parent == 'root' ) ? 'ab-top-menu' : 'ab-submenu';
+			$group_class = ( 'root' === $node->parent ) ? 'ab-top-menu' : 'ab-submenu';
 
-			if ( $node->type == 'group' ) {
+			if ( 'group' === $node->type ) {
 				if ( empty( $node->meta['class'] ) ) {
 					$node->meta['class'] = $group_class;
 				} else {
@@ -332,7 +332,7 @@ class WP_Admin_Bar {
 			}
 
 			// Items in items aren't allowed. Wrap nested items in 'default' groups.
-			if ( $parent->type == 'item' && $node->type == 'item' ) {
+			if ( 'item' === $parent->type && 'item' === $node->type ) {
 				$default_id = $parent->id . '-default';
 				$default    = $this->_get_node( $default_id );
 
@@ -361,7 +361,7 @@ class WP_Admin_Bar {
 
 				// Groups in groups aren't allowed. Add a special 'container' node.
 				// The container will invisibly wrap both groups.
-			} elseif ( $parent->type == 'group' && $node->type == 'group' ) {
+			} elseif ( 'group' === $parent->type && 'group' === $node->type ) {
 				$container_id = $parent->id . '-container';
 				$container    = $this->_get_node( $container_id );
 
@@ -390,7 +390,7 @@ class WP_Admin_Bar {
 						$container->parent = $grandparent->id;
 
 						$index = array_search( $parent, $grandparent->children, true );
-						if ( $index === false ) {
+						if ( false === $index ) {
 							$grandparent->children[] = $container;
 						} else {
 							array_splice( $grandparent->children, $index, 1, array( $container ) );
@@ -462,7 +462,7 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_container( $node ) {
-		if ( $node->type != 'container' || empty( $node->children ) ) {
+		if ( 'container' !== $node->type || empty( $node->children ) ) {
 			return;
 		}
 
@@ -477,11 +477,11 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_group( $node ) {
-		if ( $node->type == 'container' ) {
+		if ( 'container' === $node->type ) {
 			$this->_render_container( $node );
 			return;
 		}
-		if ( $node->type != 'group' || empty( $node->children ) ) {
+		if ( 'group' !== $node->type || empty( $node->children ) ) {
 			return;
 		}
 
@@ -502,7 +502,7 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_item( $node ) {
-		if ( $node->type != 'item' ) {
+		if ( 'item' !== $node->type ) {
 			return;
 		}
 

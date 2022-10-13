@@ -223,7 +223,7 @@ function get_object_taxonomies( $object, $output = 'names' ) {
 	global $wp_taxonomies;
 
 	if ( is_object( $object ) ) {
-		if ( $object->post_type == 'attachment' ) {
+		if ( 'attachment' === $object->post_type ) {
 			return get_attachment_taxonomies( $object, $output );
 		}
 		$object = $object->post_type;
@@ -840,9 +840,9 @@ function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
 	// Sanitize term, according to the specified filter.
 	$_term->filter( $filter );
 
-	if ( $output == ARRAY_A ) {
+	if ( ARRAY_A === $output ) {
 		return $_term->to_array();
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N === $output ) {
 		return array_values( $_term->to_array() );
 	}
 
@@ -2019,7 +2019,7 @@ function wp_get_object_terms( $object_ids, $taxonomies, $args = array() ) {
 	if ( count( $taxonomies ) > 1 ) {
 		foreach ( $taxonomies as $index => $taxonomy ) {
 			$t = get_taxonomy( $taxonomy );
-			if ( isset( $t->args ) && is_array( $t->args ) && $args != array_merge( $args, $t->args ) ) {
+			if ( isset( $t->args ) && is_array( $t->args ) && array_merge( $args, $t->args ) != $args ) {
 				unset( $taxonomies[ $index ] );
 				$terms = array_merge( $terms, wp_get_object_terms( $object_ids, $taxonomy, array_merge( $args, $t->args ) ) );
 			}
@@ -3124,8 +3124,8 @@ function wp_update_term_count_now( $terms, $taxonomy ) {
 			}
 		}
 
-		if ( $object_types == array_filter( $object_types, 'post_type_exists' ) ) {
-			// Only post types are attached to this taxonomy
+		if ( array_filter( $object_types, 'post_type_exists' ) == $object_types ) {
+			// Only post types are attached to this taxonomy.
 			_update_post_term_count( $terms, $taxonomy );
 		} else {
 			// Default count updater
@@ -4007,7 +4007,7 @@ function _wp_check_split_default_terms( $term_id, $new_term_id, $term_taxonomy_i
 	}
 
 	foreach ( array( 'default_category', 'default_link_category', 'default_email_category' ) as $option ) {
-		if ( $term_id == get_option( $option, -1 ) ) {
+		if ( (int) get_option( $option, -1 ) === $term_id ) {
 			update_option( $option, $new_term_id );
 		}
 	}
@@ -4278,9 +4278,9 @@ function the_taxonomies( $args = array() ) {
 		'after'  => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	echo $r['before'] . join( $r['sep'], get_the_taxonomies( $r['post'], $r ) ) . $r['after'];
+	echo $parsed_args['before'] . join( $parsed_args['sep'], get_the_taxonomies( $parsed_args['post'], $parsed_args ) ) . $parsed_args['after'];
 }
 
 /**

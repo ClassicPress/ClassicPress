@@ -148,14 +148,14 @@ function post_submit_meta_box( $post, $args = array() ) {
 	<?php _e( 'Visibility:' ); ?> <span id="post-visibility-display">
 						 <?php
 
-							if ( 'private' == $post->post_status ) {
+							if ( 'private' === $post->post_status ) {
 								$post->post_password = '';
 								$visibility          = 'private';
 								$visibility_trans    = __( 'Private' );
 							} elseif ( ! empty( $post->post_password ) ) {
 								$visibility       = 'password';
 								$visibility_trans = __( 'Password protected' );
-							} elseif ( $post_type == 'post' && is_sticky( $post->ID ) ) {
+							} elseif ( 'post' === $post_type && is_sticky( $post->ID ) ) {
 								$visibility       = 'public';
 								$visibility_trans = __( 'Public, Sticky' );
 							} else {
@@ -171,12 +171,12 @@ function post_submit_meta_box( $post, $args = array() ) {
 
 <div id="post-visibility-select" class="hide-if-js">
 <input type="hidden" name="hidden_post_password" id="hidden-post-password" value="<?php echo esc_attr( $post->post_password ); ?>" />
-		<?php if ( $post_type == 'post' ) : ?>
+		<?php if ( 'post' === $post_type ) : ?>
 <input type="checkbox" style="display:none" name="hidden_post_sticky" id="hidden-post-sticky" value="sticky" <?php checked( is_sticky( $post->ID ) ); ?> />
 	<?php endif; ?>
 <input type="hidden" name="hidden_post_visibility" id="hidden-post-visibility" value="<?php echo esc_attr( $visibility ); ?>" />
 <input type="radio" name="visibility" id="visibility-radio-public" value="public" <?php checked( $visibility, 'public' ); ?> /> <label for="visibility-radio-public" class="selectit"><?php _e( 'Public' ); ?></label><br />
-		<?php if ( $post_type == 'post' && current_user_can( 'edit_others_posts' ) ) : ?>
+		<?php if ( 'post' === $post_type && current_user_can( 'edit_others_posts' ) ) : ?>
 <span id="sticky-span"><input id="sticky" name="sticky" type="checkbox" value="sticky" <?php checked( is_sticky( $post->ID ) ); ?> /> <label for="sticky" class="selectit"><?php _e( 'Stick this post to the front page' ); ?></label><br /></span>
 	<?php endif; ?>
 <input type="radio" name="visibility" id="visibility-radio-password" value="password" <?php checked( $visibility, 'password' ); ?> /> <label for="visibility-radio-password" class="selectit"><?php _e( 'Password protected' ); ?></label><br />
@@ -237,7 +237,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 	<a href="#edit_timestamp" class="edit-timestamp hide-if-no-js" role="button"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit date and time' ); ?></span></a>
 	<fieldset id="timestampdiv" class="hide-if-js">
 	<legend class="screen-reader-text"><?php _e( 'Date and time' ); ?></legend>
-		<?php touch_time( ( $action === 'edit' ), 1 ); ?>
+		<?php touch_time( ( 'edit' === $action ), 1 ); ?>
 	</fieldset>
 </div><?php // /misc-pub-section ?>
 	<?php endif; ?>
@@ -491,9 +491,9 @@ function post_tags_meta_box( $post, $box ) {
 	} else {
 		$args = $box['args'];
 	}
-	$r                     = wp_parse_args( $args, $defaults );
-	$tax_name              = esc_attr( $r['taxonomy'] );
-	$taxonomy              = get_taxonomy( $r['taxonomy'] );
+	$parsed_args           = wp_parse_args( $args, $defaults );
+	$tax_name              = esc_attr( $parsed_args['taxonomy'] );
+	$taxonomy              = get_taxonomy( $parsed_args['taxonomy'] );
 	$user_can_assign_terms = current_user_can( $taxonomy->cap->assign_terms );
 	$comma                 = _x( ',', 'tag delimiter' );
 	$terms_to_edit         = get_terms_to_edit( $post->ID, $tax_name );
@@ -554,9 +554,9 @@ function post_categories_meta_box( $post, $box ) {
 	} else {
 		$args = $box['args'];
 	}
-	$r        = wp_parse_args( $args, $defaults );
-	$tax_name = esc_attr( $r['taxonomy'] );
-	$taxonomy = get_taxonomy( $r['taxonomy'] );
+	$parsed_args = wp_parse_args( $args, $defaults );
+	$tax_name    = esc_attr( $parsed_args['taxonomy'] );
+	$taxonomy    = get_taxonomy( $parsed_args['taxonomy'] );
 	?>
 	<div id="taxonomy-<?php echo $tax_name; ?>" class="categorydiv">
 		<ul id="<?php echo $tax_name; ?>-tabs" class="category-tabs">
@@ -572,8 +572,9 @@ function post_categories_meta_box( $post, $box ) {
 
 		<div id="<?php echo $tax_name; ?>-all" class="tabs-panel">
 			<?php
-			$name = ( $tax_name == 'category' ) ? 'post_category' : 'tax_input[' . $tax_name . ']';
-			echo "<input type='hidden' name='{$name}[]' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.
+			$name = ( 'category' === $tax_name ) ? 'post_category' : 'tax_input[' . $tax_name . ']';
+			// Allows for an empty term set to be sent. 0 is an invalid term ID and will be ignored by empty() checks.
+			echo "<input type='hidden' name='{$name}[]' value='0' />";
 			?>
 			<ul id="<?php echo $tax_name; ?>checklist" data-wp-lists="list:<?php echo $tax_name; ?>" class="categorychecklist form-no-clear">
 				<?php
@@ -1110,13 +1111,13 @@ function link_target_meta_box( $link ) {
 	?>
 <fieldset><legend class="screen-reader-text"><span><?php _e( 'Target' ); ?></span></legend>
 <p><label for="link_target_blank" class="selectit">
-<input id="link_target_blank" type="radio" name="link_target" value="_blank" <?php echo ( isset( $link->link_target ) && ( $link->link_target == '_blank' ) ? 'checked="checked"' : '' ); ?> />
+<input id="link_target_blank" type="radio" name="link_target" value="_blank" <?php echo ( isset( $link->link_target ) && ( '_blank' === $link->link_target ) ? 'checked="checked"' : '' ); ?> />
 	<?php _e( '<code>_blank</code> &mdash; new window or tab.' ); ?></label></p>
 <p><label for="link_target_top" class="selectit">
-<input id="link_target_top" type="radio" name="link_target" value="_top" <?php echo ( isset( $link->link_target ) && ( $link->link_target == '_top' ) ? 'checked="checked"' : '' ); ?> />
+<input id="link_target_top" type="radio" name="link_target" value="_top" <?php echo ( isset( $link->link_target ) && ( '_top' === $link->link_target ) ? 'checked="checked"' : '' ); ?> />
 	<?php _e( '<code>_top</code> &mdash; current window or tab, with no frames.' ); ?></label></p>
 <p><label for="link_target_none" class="selectit">
-<input id="link_target_none" type="radio" name="link_target" value="" <?php echo ( isset( $link->link_target ) && ( $link->link_target == '' ) ? 'checked="checked"' : '' ); ?> />
+<input id="link_target_none" type="radio" name="link_target" value="" <?php echo ( isset( $link->link_target ) && ( '' === $link->link_target ) ? 'checked="checked"' : '' ); ?> />
 	<?php _e( '<code>_none</code> &mdash; same window or tab.' ); ?></label></p>
 </fieldset>
 <p><?php _e( 'Choose the target frame for your link.' ); ?></p>
@@ -1308,12 +1309,12 @@ function link_advanced_meta_box( $link ) {
 		<th scope="row"><label for="link_rating"><?php _e( 'Rating' ); ?></label></th>
 		<td><select name="link_rating" id="link_rating" size="1">
 		<?php
-		for ( $r = 0; $r <= 10; $r++ ) {
-			echo '<option value="' . $r . '"';
-			if ( isset( $link->link_rating ) && $link->link_rating == $r ) {
+		for ( $parsed_args = 0; $parsed_args <= 10; $parsed_args++ ) {
+			echo '<option value="' . $parsed_args . '"';
+			if ( isset( $link->link_rating ) && $link->link_rating == $parsed_args ) {
 				echo ' selected="selected"';
 			}
-			echo( '>' . $r . '</option>' );
+			echo( '>' . $parsed_args . '</option>' );
 		}
 		?>
 		</select>&nbsp;<?php _e( '(Leave at 0 for no rating.)' ); ?>

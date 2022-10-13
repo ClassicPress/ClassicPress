@@ -232,8 +232,8 @@ if ( ! class_exists( 'MO', false ) ) :
 				return false;
 			}
 
-			// support revision 0 of MO format specs, only
-			if ( $header['revision'] != 0 ) {
+			// Support revision 0 of MO format specs, only.
+			if ( 0 != $header['revision'] ) {
 				return false;
 			}
 

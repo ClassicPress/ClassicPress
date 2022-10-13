@@ -72,7 +72,7 @@ function edit_user( $user_id = 0 ) {
 		$user->user_email = sanitize_text_field( wp_unslash( $_POST['email'] ) );
 	}
 	if ( isset( $_POST['url'] ) ) {
-		if ( empty( $_POST['url'] ) || $_POST['url'] == 'http://' ) {
+		if ( empty( $_POST['url'] ) || 'http://' === $_POST['url'] ) {
 			$user->user_url = '';
 		} else {
 			$user->user_url = esc_url_raw( $_POST['url'] );
@@ -134,7 +134,7 @@ function edit_user( $user_id = 0 ) {
 	$errors = new WP_Error();
 
 	/* checking that username has been typed */
-	if ( $user->user_login == '' ) {
+	if ( '' == $user->user_login ) {
 		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	}
 

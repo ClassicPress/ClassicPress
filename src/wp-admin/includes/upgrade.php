@@ -145,7 +145,7 @@ if ( ! function_exists( 'wp_install_defaults' ) ) :
 
 		if ( global_terms_enabled() ) {
 			$cat_id = $wpdb->get_var( $wpdb->prepare( "SELECT cat_ID FROM {$wpdb->sitecategories} WHERE category_nicename = %s", $cat_slug ) );
-			if ( $cat_id == null ) {
+			if ( null == $cat_id ) {
 				$wpdb->insert(
 					$wpdb->sitecategories,
 					array(
@@ -460,8 +460,9 @@ As a new ClassicPress user, you should go to <a href=\"%s\">your dashboard</a> t
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'user_level' ) );
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'capabilities' ) );
 
-			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.) TODO: Get previous_blog_id.
-			if ( ! is_super_admin( $user_id ) && $user_id != 1 ) {
+			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.)
+			// TODO: Get previous_blog_id.
+			if ( ! is_super_admin( $user_id ) && 1 != $user_id ) {
 				$wpdb->delete(
 					$wpdb->usermeta,
 					array(
@@ -532,7 +533,7 @@ function wp_install_maybe_enable_pretty_permalinks() {
 		  */
 		$response          = wp_remote_get( $test_url, array( 'timeout' => 5 ) );
 		$x_pingback_header = wp_remote_retrieve_header( $response, 'x-pingback' );
-		$pretty_permalinks = $x_pingback_header && $x_pingback_header === get_bloginfo( 'pingback_url' );
+		$pretty_permalinks = $x_pingback_header && get_bloginfo( 'pingback_url' ) === $x_pingback_header;
 
 		if ( $pretty_permalinks ) {
 			return true;
@@ -1087,22 +1088,22 @@ function upgrade_160() {
 
 		if ( isset( $user->user_idmode ) ) :
 			$idmode = $user->user_idmode;
-			if ( $idmode == 'nickname' ) {
+			if ( 'nickname' === $idmode ) {
 				$id = $user->user_nickname;
 			}
-			if ( $idmode == 'login' ) {
+			if ( 'login' === $idmode ) {
 				$id = $user->user_login;
 			}
-			if ( $idmode == 'firstname' ) {
+			if ( 'firstname' === $idmode ) {
 				$id = $user->user_firstname;
 			}
-			if ( $idmode == 'lastname' ) {
+			if ( 'lastname' === $idmode ) {
 				$id = $user->user_lastname;
 			}
-			if ( $idmode == 'namefl' ) {
+			if ( 'namefl' === $idmode ) {
 				$id = $user->user_firstname . ' ' . $user->user_lastname;
 			}
-			if ( $idmode == 'namelf' ) {
+			if ( 'namelf' === $idmode ) {
 				$id = $user->user_lastname . ' ' . $user->user_firstname;
 			}
 			if ( ! $idmode ) {
@@ -2173,7 +2174,7 @@ function upgrade_network() {
 	}
 
 	// 4.2
-	if ( $wp_current_db_version < 31351 && $wpdb->charset === 'utf8mb4' ) {
+	if ( $wp_current_db_version < 31351 && 'utf8mb4' === $wpdb->charset ) {
 		if ( wp_should_upgrade_global_tables() ) {
 			$wpdb->query( "ALTER TABLE $wpdb->usermeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))" );
 			$wpdb->query( "ALTER TABLE $wpdb->site DROP INDEX domain, ADD INDEX domain(domain(140),path(51))" );
@@ -2416,21 +2417,21 @@ function get_alloptions_110() {
 function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	global $wpdb;
 
-	if ( $setting == 'home' && defined( 'WP_HOME' ) ) {
+	if ( 'home' === $setting && defined( 'WP_HOME' ) ) {
 		return untrailingslashit( WP_HOME );
 	}
 
-	if ( $setting == 'siteurl' && defined( 'WP_SITEURL' ) ) {
+	if ( 'siteurl' === $setting && defined( 'WP_SITEURL' ) ) {
 		return untrailingslashit( WP_SITEURL );
 	}
 
 	$option = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s", $setting ) );
 
-	if ( 'home' == $setting && '' == $option ) {
+	if ( 'home' === $setting && '' == $option ) {
 		return __get_option( 'siteurl' );
 	}
 
-	if ( 'siteurl' == $setting || 'home' == $setting || 'category_base' == $setting || 'tag_base' == $setting ) {
+	if ( 'siteurl' === $setting || 'home' === $setting || 'category_base' === $setting || 'tag_base' === $setting ) {
 		$option = untrailingslashit( $option );
 	}
 
@@ -2820,7 +2821,7 @@ function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.N
 					'fieldname' => $tableindex->Column_name,
 					'subpart'   => $tableindex->Sub_part,
 				);
-				$index_ary[ $keyname ]['unique']     = ( $tableindex->Non_unique == 0 ) ? true : false;
+				$index_ary[ $keyname ]['unique']     = ( 0 == $tableindex->Non_unique ) ? true : false;
 				$index_ary[ $keyname ]['index_type'] = $tableindex->Index_type;
 			}
 
@@ -2829,7 +2830,7 @@ function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.N
 
 				// Build a create string to compare to the query.
 				$index_string = '';
-				if ( $index_name == 'primary' ) {
+				if ( 'primary' === $index_name ) {
 					$index_string .= 'PRIMARY ';
 				} elseif ( $index_data['unique'] ) {
 					$index_string .= 'UNIQUE ';
@@ -2848,7 +2849,7 @@ function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.N
 
 				// For each column in the index.
 				foreach ( $index_data['columns'] as $column_data ) {
-					if ( $index_columns != '' ) {
+					if ( '' != $index_columns ) {
 						$index_columns .= ',';
 					}
 
@@ -2958,14 +2959,14 @@ function make_site_theme_from_oldschool( $theme_name, $template ) {
 	);
 
 	foreach ( $files as $oldfile => $newfile ) {
-		if ( $oldfile == 'index.php' ) {
+		if ( 'index.php' === $oldfile ) {
 			$oldpath = $home_path;
 		} else {
 			$oldpath = ABSPATH;
 		}
 
 		// Check to make sure it's not a new index.
-		if ( $oldfile == 'index.php' ) {
+		if ( 'index.php' === $oldfile ) {
 			$index = implode( '', file( "$oldpath/$oldfile" ) );
 			if ( strpos( $index, 'WP_USE_THEMES' ) !== false ) {
 				if ( ! copy( WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile" ) ) {
@@ -3139,7 +3140,7 @@ function make_site_theme() {
 
 	// Make the new site theme active.
 	$current_template = __get_option( 'template' );
-	if ( $current_template == WP_DEFAULT_THEME ) {
+	if ( WP_DEFAULT_THEME == $current_template ) {
 		update_option( 'template', $template );
 		update_option( 'stylesheet', $template );
 	}

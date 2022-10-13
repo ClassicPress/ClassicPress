@@ -346,7 +346,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 * @param string $which
 	 */
 	protected function display_tablenav( $which ) {
-		if ( $GLOBALS['tab'] === 'featured' ) {
+		if ( 'featured' === $GLOBALS['tab'] ) {
 			return;
 		}
 
