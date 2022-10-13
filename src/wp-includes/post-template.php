@@ -13,7 +13,7 @@
  *
  * @since WP-0.71
  */
-function the_ID() {
+function the_ID() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	echo get_the_ID();
 }
 
@@ -24,7 +24,7 @@ function the_ID() {
  *
  * @return int|false The ID of the current item in the ClassicPress Loop. False if $post is not set.
  */
-function get_the_ID() {
+function get_the_ID() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$post = get_post();
 	return ! empty( $post ) ? $post->ID : false;
 }
@@ -1043,7 +1043,8 @@ function post_custom( $key = '' ) {
  */
 function the_meta() {
 	_deprecated_function( __FUNCTION__, 'WP-6.0.2', 'get_post_meta()' );
-	if ( $keys = get_post_custom_keys() ) {
+	$keys = get_post_custom_keys();
+	if ( $keys ) {
 		echo "<ul class='post-meta'>\n";
 		foreach ( (array) $keys as $key ) {
 			$keyt = trim( $key );
@@ -1545,9 +1546,11 @@ function the_attachment_link( $id = 0, $fullsize = false, $deprecated = false, $
 function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = false, $icon = false, $text = false, $attr = '' ) {
 	$_post = get_post( $id );
 
-	if ( empty( $_post ) || ( 'attachment' !== $_post->post_type ) || ! $url = wp_get_attachment_url( $_post->ID ) ) {
+	if ( empty( $_post ) || ( 'attachment' !== $_post->post_type ) || ! wp_get_attachment_url( $_post->ID ) ) {
 		return __( 'Missing Attachment' );
 	}
+
+	$url = wp_get_attachment_url( $_post->ID );
 
 	if ( $permalink ) {
 		$url = get_attachment_link( $_post->ID );
@@ -1743,7 +1746,8 @@ function get_page_template_slug( $post = null ) {
  * @return string|false i18n formatted datetimestamp or localized 'Current Revision'.
  */
 function wp_post_revision_title( $revision, $link = true ) {
-	if ( ! $revision = get_post( $revision ) ) {
+	$revision = get_post( $revision );
+	if ( ! $revision ) {
 		return $revision;
 	}
 
@@ -1759,8 +1763,9 @@ function wp_post_revision_title( $revision, $link = true ) {
 	$currentf = __( '%s [Current Revision]' );
 
 	$date = date_i18n( $datef, strtotime( $revision->post_modified ) );
-	if ( $link && current_user_can( 'edit_post', $revision->ID ) && $link = get_edit_post_link( $revision->ID ) ) {
-		$date = "<a href='$link'>$date</a>";
+	$edit_link = get_edit_post_link( $revision->ID );
+	if ( $link && current_user_can( 'edit_post', $revision->ID ) && $edit_link ) {
+		$date = "<a href='$edit_link'>$date</a>";
 	}
 
 	if ( ! wp_is_post_revision( $revision ) ) {
@@ -1782,7 +1787,8 @@ function wp_post_revision_title( $revision, $link = true ) {
  * @return string|false gravatar, user, i18n formatted datetimestamp or localized 'Current Revision'.
  */
 function wp_post_revision_title_expanded( $revision, $link = true ) {
-	if ( ! $revision = get_post( $revision ) ) {
+	$revision = get_post( $revision );
+	if ( ! $revision ) {
 		return $revision;
 	}
 
@@ -1797,8 +1803,9 @@ function wp_post_revision_title_expanded( $revision, $link = true ) {
 	$gravatar = get_avatar( $revision->post_author, 24 );
 
 	$date = date_i18n( $datef, strtotime( $revision->post_modified ) );
-	if ( $link && current_user_can( 'edit_post', $revision->ID ) && $link = get_edit_post_link( $revision->ID ) ) {
-		$date = "<a href='$link'>$date</a>";
+	$edit_link = get_edit_post_link( $revision->ID );
+	if ( $link && current_user_can( 'edit_post', $revision->ID ) && $edit_link ) {
+		$date = "<a href='$edit_link'>$date</a>";
 	}
 
 	$revision_date_author = sprintf(
@@ -1846,7 +1853,8 @@ function wp_post_revision_title_expanded( $revision, $link = true ) {
  * @param string      $type    'all' (default), 'revision' or 'autosave'
  */
 function wp_list_post_revisions( $post_id = 0, $type = 'all' ) {
-	if ( ! $post = get_post( $post_id ) ) {
+	$post = get_post( $post_id );
+	if ( ! $post ) {
 		return;
 	}
 
@@ -1856,7 +1864,8 @@ function wp_list_post_revisions( $post_id = 0, $type = 'all' ) {
 		_deprecated_argument( __FUNCTION__, 'WP-3.6.0' );
 	}
 
-	if ( ! $revisions = wp_get_post_revisions( $post->ID ) ) {
+	$revisions = wp_get_post_revisions( $post->ID );
+	if ( ! $revisions ) {
 		return;
 	}
 

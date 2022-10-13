@@ -110,8 +110,8 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 		$plugin = $this->_create_plugin( null, 'list_files_test_plugin.php', $plugin_dir );
 
 		$sub_dir = trailingslashit( dirname( $plugin[1] ) ) . 'subdir';
-		@mkdir( $sub_dir );
-		@file_put_contents( $sub_dir . '/subfile.php', '<?php // Silence.' );
+		mkdir( $sub_dir );
+		file_put_contents( $sub_dir . '/subfile.php', '<?php // Silence.' );
 
 		$plugin_files = get_plugin_files( plugin_basename( $plugin[1] ) );
 		$expected     = array(

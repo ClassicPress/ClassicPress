@@ -77,7 +77,8 @@ require ABSPATH . 'wp-admin/admin-header.php';
 
 <?php
 if ( ! is_multisite() ) {
-	$wp_site_url_class = $wp_home_class = '';
+	$wp_site_url_class = '';
+	$wp_home_class     = '';
 	if ( defined( 'WP_SITEURL' ) ) {
 		$wp_site_url_class = ' disabled';
 	}

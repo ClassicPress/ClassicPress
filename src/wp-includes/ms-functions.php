@@ -2261,21 +2261,24 @@ function signup_nonce_check( $result ) {
  * @since WP-MU (3.0.0)
  */
 function maybe_redirect_404() {
-	/**
-	 * Filters the redirect URL for 404s on the main site.
-	 *
-	 * The filter is only evaluated if the NOBLOGREDIRECT constant is defined.
-	 *
-	 * @since WP-3.0.0
-	 *
-	 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
-	 */
-	if ( is_main_site() && is_404() && defined( 'NOBLOGREDIRECT' ) && ( $destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT ) ) ) {
-		if ( $destination == '%siteurl%' ) {
-			$destination = network_home_url();
+	if ( is_main_site() && is_404() && defined( 'NOBLOGREDIRECT' ) ) {
+		/**
+		 * Filters the redirect URL for 404s on the main site.
+		 *
+		 * The filter is only evaluated if the NOBLOGREDIRECT constant is defined.
+		 *
+		 * @since WP-3.0.0
+		 *
+		 * @param string $no_blog_redirect The redirect URL defined in NOBLOGREDIRECT.
+		 */
+		$destination = apply_filters( 'blog_redirect_404', NOBLOGREDIRECT );
+		if ( $destination ) {
+			if ( $destination == '%siteurl%' ) {
+				$destination = network_home_url();
+			}
+			wp_redirect( $destination );
+			exit();
 		}
-		wp_redirect( $destination );
-		exit();
 	}
 }
 
@@ -2495,7 +2498,7 @@ function force_ssl_content( $force = '' ) {
  * @param string $url URL
  * @return string URL with https as the scheme
  */
-function filter_SSL( $url ) {
+function filter_SSL( $url ) {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	if ( ! is_string( $url ) ) {
 		return get_bloginfo( 'url' ); // Return home blog url with proper scheme
 	}

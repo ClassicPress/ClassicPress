@@ -1156,15 +1156,19 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 
 	$name_low = strtolower( $name );
 	if ( ! isset( $allowed_attr[ $name_low ] ) || '' == $allowed_attr[ $name_low ] ) {
-		$name = $value = $whole = '';
-		return false;
+			$name  = '';
+			$value = '';
+			$whole = '';
+			return false;
 	}
 
 	if ( 'style' == $name_low ) {
 		$new_value = safecss_filter_attr( $value );
 
 		if ( empty( $new_value ) ) {
-			$name = $value = $whole = '';
+			$name  = '';
+			$value = '';
+			$whole = '';
 			return false;
 		}
 
@@ -1176,7 +1180,9 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 		// there are some checks
 		foreach ( $allowed_attr[ $name_low ] as $currkey => $currval ) {
 			if ( ! wp_kses_check_attr_val( $value, $vless, $currkey, $currval ) ) {
-				$name = $value = $whole = '';
+				$name  = '';
+				$value = '';
+				$whole = '';
 				return false;
 			}
 		}
@@ -1217,7 +1223,8 @@ function wp_kses_hair( $attr, $allowed_protocols ) {
 			case 0: // attribute name, href for instance
 				if ( preg_match( '/^([-a-zA-Z:]+)/', $attr, $match ) ) {
 					$attrname = $match[1];
-					$working  = $mode = 1;
+					$working  = 1;
+					$mode     = 1;
 					$attr     = preg_replace( '/^[-a-zA-Z:]+/', '', $attr );
 				}
 

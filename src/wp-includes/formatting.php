@@ -835,6 +835,7 @@ function shortcode_unautop( $pee ) {
 	$tagregexp = join( '|', array_map( 'preg_quote', array_keys( $shortcode_tags ) ) );
 	$spaces    = wp_spaces_regexp();
 
+	// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound,WordPress.WhiteSpace.PrecisionAlignment.Found -- don't remove regex indentation
 	$pattern =
 		  '/'
 		. '<p>'                              // Opening paragraph
@@ -2440,7 +2441,7 @@ function convert_invalid_entities( $content ) {
  * @param bool   $force If true, forces balancing, ignoring the value of the option. Default false.
  * @return string Balanced text
  */
-function balanceTags( $text, $force = false ) {
+function balanceTags( $text, $force = false ) {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	if ( $force || get_option( 'use_balanceTags' ) == 1 ) {
 		return force_balance_tags( $text );
 	} else {
@@ -2913,7 +2914,8 @@ function make_clickable( $text ) {
 					)*
 				)
 				(\)?)                                                  # 3: Trailing closing parenthesis (for parethesis balancing post processing)
-			~xS'; // The regex is a non-anchored pattern and does not have a single fixed starting character.
+			~xS';
+			// The regex is a non-anchored pattern and does not have a single fixed starting character.
 				  // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
 
 			$ret = preg_replace_callback( $url_clickable, '_make_url_clickable_cb', $ret );
@@ -5717,7 +5719,8 @@ function sanitize_hex_color_no_hash( $color ) {
  * @return string
  */
 function maybe_hash_hex_color( $color ) {
-	if ( $unhashed = sanitize_hex_color_no_hash( $color ) ) {
+	$unhashed = sanitize_hex_color_no_hash( $color );
+	if ( $unhashed ) {
 		return '#' . $unhashed;
 	}
 

@@ -819,7 +819,8 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	 * A writable uploads dir will pass this test. Again, there's no point
 	 * overriding this one.
 	 */
-	if ( ! ( ( $uploads = wp_upload_dir( $time ) ) && false === $uploads['error'] ) ) {
+	$uploads = wp_upload_dir( $time );
+	if ( ! ( $uploads && false === $uploads['error'] ) ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $uploads['error'] ) );
 	}
 
@@ -1138,7 +1139,8 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	$uncompressed_size = 0;
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
@@ -1153,10 +1155,12 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 
 		$uncompressed_size += $info['size'];
 
+		$dirname = dirname( $info['name'] );
+
 		if ( '/' === substr( $info['name'], -1 ) ) {
 			// Directory.
 			$needed_dirs[] = $to . untrailingslashit( $info['name'] );
-		} elseif ( '.' !== $dirname = dirname( $info['name'] ) ) {
+		} elseif ( '.' !== $dirname ) {
 			// Path to a file.
 			$needed_dirs[] = $to . untrailingslashit( $dirname );
 		}
@@ -1207,7 +1211,8 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	unset( $needed_dirs );
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
@@ -1430,7 +1435,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
  * @param bool         $allow_relaxed_file_ownership Optional. Whether to allow Group/World writable. Default false.
  * @return null|bool false on failure, true on success.
  */
-function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) {
+function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	global $wp_filesystem;
 
 	require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
@@ -1538,8 +1543,9 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 		$temp_handle    = @fopen( $temp_file_name, 'w' );
 		if ( $temp_handle ) {
 
-			// Attempt to determine the file owner of the ClassicPress files, and that of newly created files
-			$wp_file_owner = $temp_file_owner = false;
+			// Attempt to determine the file owner of the WordPress files, and that of newly created files
+			$wp_file_owner   = false;
+			$temp_file_owner = false;
 			if ( function_exists( 'fileowner' ) ) {
 				$wp_file_owner   = @fileowner( __FILE__ );
 				$temp_file_owner = @fileowner( $temp_file_name );

@@ -138,20 +138,32 @@ class Tests_Admin_includesScreen extends WP_UnitTestCase {
 		global $current_screen;
 
 		foreach ( $this->core_screens as $hook_name => $screen ) {
-			$_GET              = $_POST = $_REQUEST = array();
-			$GLOBALS['taxnow'] = $GLOBALS['typenow'] = '';
+			$_GET               = array();
+			$_POST              = array();
+			$_REQUEST           = array();
+			$GLOBALS['taxnow']  = '';
+			$GLOBALS['typenow'] = '';
 			$screen            = (object) $screen;
 			$hook              = parse_url( $hook_name );
 
 			if ( ! empty( $hook['query'] ) ) {
 				$args = wp_parse_args( $hook['query'] );
 				if ( isset( $args['taxonomy'] ) ) {
-					$GLOBALS['taxnow'] = $_GET['taxonomy'] = $_POST['taxonomy'] = $_REQUEST['taxonomy'] = $args['taxonomy'];
+					$GLOBALS['taxnow']    = $args['taxonomy'];
+					$_GET['taxonomy']     = $args['taxonomy'];
+					$_POST['taxonomy']    = $args['taxonomy'];
+					$_REQUEST['taxonomy'] = $args['taxonomy'];
 				}
 				if ( isset( $args['post_type'] ) ) {
-					$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $args['post_type'];
+					$GLOBALS['typenow']    = $args['post_type'];
+					$_GET['post_type']     = $args['post_type'];
+					$_POST['post_type']    = $args['post_type'];
+					$_REQUEST['post_type'] = $args['post_type'];
 				} elseif ( isset( $screen->post_type ) ) {
-					$GLOBALS['typenow'] = $_GET['post_type'] = $_POST['post_type'] = $_REQUEST['post_type'] = $screen->post_type;
+					$GLOBALS['typenow']    = $screen->post_type;
+					$_GET['post_type']     = $screen->post_type;
+					$_POST['post_type']    = $screen->post_type;
+					$_REQUEST['post_type'] = $screen->post_type;
 				}
 			}
 

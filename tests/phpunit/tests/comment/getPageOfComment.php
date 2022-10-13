@@ -275,7 +275,8 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$posts = self::factory()->post->create_many( 2 );
 
 		$now        = time();
-		$comments_0 = $comments_1 = array();
+		$comments_0 = array();
+		$comments_1 = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$comments_0[] = self::factory()->comment->create(
 				array(
@@ -311,7 +312,8 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 		$post = self::factory()->post->create();
 
 		$now             = time();
-		$comment_parents = $comment_children = array();
+		$comment_parents  = array();
+		$comment_children = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$parent                = self::factory()->comment->create(
 				array(
