@@ -396,7 +396,24 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 	);
 
 	$plugin_name = wp_kses( $plugin_data['Name'], $plugins_allowedtags );
-	$details_url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $response->slug . '&section=changelog&TB_iframe=true&width=600&height=800' );
+	$plugin_slug = isset( $response->slug ) ? $response->slug : $response->id;
+
+	if ( isset( $response->slug ) ) {
+		$details_url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&section=changelog' );
+	} elseif ( isset( $response->url ) ) {
+		$details_url = $response->url;
+	} else {
+		$details_url = $plugin_data['PluginURI'];
+	}
+
+	$details_url = add_query_arg(
+		array(
+			'TB_iframe' => 'true',
+			'width'     => 600,
+			'height'    => 800,
+		),
+		$details_url
+	);
 
 	/** @var WP_Plugins_List_Table $wp_list_table */
 	$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
@@ -412,7 +429,17 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		$compatible_php = is_php_version_compatible( $requires_php );
 		$notice_type    = $compatible_php ? 'notice-warning' : 'notice-error';
 
-		echo '<tr class="plugin-update-tr' . $active_class . '" id="' . esc_attr( $response->slug . '-update' ) . '" data-slug="' . esc_attr( $response->slug ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice inline ' . $notice_type . ' notice-alt"><p>';
+		printf(
+			'<tr class="plugin-update-tr%s" id="%s" data-slug="%s" data-plugin="%s">' .
+			'<td colspan="%s" class="plugin-update colspanchange">' .
+			'<div class="update-message notice inline %s notice-alt"><p>',
+			$active_class,
+			esc_attr( $plugin_slug . '-update' ),
+			esc_attr( $plugin_slug ),
+			esc_attr( $file ),
+			esc_attr( $wp_list_table->get_column_count() ),
+			$notice_type
+		);
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number */
