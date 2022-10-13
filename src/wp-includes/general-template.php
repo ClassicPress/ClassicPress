@@ -1021,7 +1021,8 @@ function wp_get_document_title() {
 		$title['title'] = single_term_title( '', false );
 
 		// If on an author archive, use the author's display name.
-	} elseif ( is_author() && $author = get_queried_object() ) {
+	} elseif ( is_author() && get_queried_object() ) {
+		$author         = get_queried_object();
 		$title['title'] = $author->display_name;
 
 		// If it's a date archive, use the date as the title.
@@ -1426,49 +1427,6 @@ function single_term_title( $prefix = '', $display = true ) {
 }
 
 /**
- * Display or retrieve page title for post archive based on date.
- *
- * Useful for when the template only needs to display the month and year,
- * if either are available. The prefix does not automatically place a space
- * between the prefix, so if there should be a space, the parameter value
- * will need to have it at the end.
- *
- * @since WP-0.71
- *
- * @global WP_Locale $wp_locale
- *
- * @param string $prefix  Optional. What to display before the title.
- * @param bool   $display Optional, default is true. Whether to display or retrieve title.
- * @return string|void Title when retrieving.
- */
-function single_month_title( $prefix = '', $display = true ) {
-	global $wp_locale;
-
-	$m        = get_query_var( 'm' );
-	$year     = get_query_var( 'year' );
-	$monthnum = get_query_var( 'monthnum' );
-
-	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
-		$my_year  = $year;
-		$my_month = $wp_locale->get_month( $monthnum );
-	} elseif ( ! empty( $m ) ) {
-		$my_year  = substr( $m, 0, 4 );
-		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
-	}
-
-	if ( empty( $my_month ) ) {
-		return false;
-	}
-
-	$result = $prefix . $my_month . $prefix . $my_year;
-
-	if ( ! $display ) {
-		return $result;
-	}
-	echo $result;
-}
-
-/**
  * Display the archive title based on the queried object.
  *
  * @since WP-4.1.0
@@ -1804,7 +1762,8 @@ function wp_get_archives( $args = '' ) {
 		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1828,7 +1787,8 @@ function wp_get_archives( $args = '' ) {
 		$query = "SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1851,7 +1811,8 @@ function wp_get_archives( $args = '' ) {
 		$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, DAYOFMONTH(post_date) AS `dayofmonth`, count(ID) as posts FROM $wpdb->posts $join $where GROUP BY YEAR(post_date), MONTH(post_date), DAYOFMONTH(post_date) ORDER BY post_date $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1876,7 +1837,8 @@ function wp_get_archives( $args = '' ) {
 		$query = "SELECT DISTINCT $week AS `week`, YEAR( `post_date` ) AS `yr`, DATE_FORMAT( `post_date`, '%Y-%m-%d' ) AS `yyyymmdd`, count( `ID` ) AS `posts` FROM `$wpdb->posts` $join $where GROUP BY $week, YEAR( `post_date` ) ORDER BY `post_date` $order $limit";
 		$key   = md5( $query );
 		$key   = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -1914,7 +1876,8 @@ function wp_get_archives( $args = '' ) {
 		$query   = "SELECT * FROM $wpdb->posts $join $where ORDER BY $orderby $limit";
 		$key     = md5( $query );
 		$key     = "wp_get_archives:$key:$last_changed";
-		if ( ! $results = wp_cache_get( $key, 'posts' ) ) {
+		$results = wp_cache_get( $key, 'posts' );
+		if ( ! $results ) {
 			$results = $wpdb->get_results( $query );
 			wp_cache_set( $key, $results, 'posts' );
 		}
@@ -2858,8 +2821,7 @@ function rsd_link() {
  * @since WP-2.3.1
  */
 function wlwmanifest_link() {
-	echo '<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="',
-		includes_url( 'wlwmanifest.xml' ), '" /> ', "\n";
+	echo '<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="' . includes_url( 'wlwmanifest.xml' ) . '" /> ' . "\n";
 }
 
 /**

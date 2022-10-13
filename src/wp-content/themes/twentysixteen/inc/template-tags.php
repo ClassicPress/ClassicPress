@@ -49,6 +49,7 @@ if ( ! function_exists( 'twentysixteen_entry_meta' ) ) :
 
 		if ( ! is_singular() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
 			echo '<span class="comments-link">';
+			/* translators: %s: Name of current post */
 			comments_popup_link( sprintf( __( 'Leave a comment<span class="screen-reader-text"> on %s</span>', 'twentysixteen' ), get_the_title() ) );
 			echo '</span>';
 		}
@@ -209,7 +210,8 @@ if ( ! function_exists( 'twentysixteen_categorized_blog' ) ) :
 	 * @return bool True if there is more than one category, false otherwise.
 	 */
 	function twentysixteen_categorized_blog() {
-		if ( false === ( $all_the_cool_cats = get_transient( 'twentysixteen_categories' ) ) ) {
+		$all_the_cool_cats = get_transient( 'twentysixteen_categories' );
+		if ( false === $all_the_cool_cats ) {
 			// Create an array of all the categories that are attached to posts.
 			$all_the_cool_cats = get_categories(
 				array(

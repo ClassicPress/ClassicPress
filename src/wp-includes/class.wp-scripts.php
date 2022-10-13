@@ -196,7 +196,8 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool|string|void Void if no data exists, extra scripts if `$echo` is true, true otherwise.
 	 */
 	public function print_extra_script( $handle, $echo = true ) {
-		if ( ! $output = $this->get_data( $handle, 'data' ) ) {
+		$output = $this->get_data( $handle, 'data' );
+		if ( ! $output ) {
 			return;
 		}
 
@@ -255,7 +256,8 @@ class WP_Scripts extends WP_Dependencies {
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'script', $handle );
 
 		$src         = $obj->src;
-		$cond_before = $cond_after = '';
+		$cond_before = '';
+		$cond_after  = '';
 		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
 
 		if ( $conditional ) {

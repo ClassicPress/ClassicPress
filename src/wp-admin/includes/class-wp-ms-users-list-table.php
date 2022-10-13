@@ -69,10 +69,12 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		 */
 		if ( ! $usersearch && wp_is_large_network( 'users' ) ) {
 			if ( ! isset( $_REQUEST['orderby'] ) ) {
-				$_GET['orderby'] = $_REQUEST['orderby'] = 'id';
+				$_GET['orderby']     = 'id';
+				$_REQUEST['orderby'] = 'id';
 			}
 			if ( ! isset( $_REQUEST['order'] ) ) {
-				$_GET['order'] = $_REQUEST['order'] = 'DESC';
+				$_GET['order']     = 'DESC';
+				$_REQUEST['order'] = 'DESC';
 			}
 			$args['count_total'] = false;
 		}
@@ -240,7 +242,9 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 			return;
 		}
 		?>
-		<label class="screen-reader-text" for="blog_<?php echo $user->ID; ?>"><?php echo sprintf( __( 'Select %s' ), $user->user_login ); ?></label>
+		<label class="screen-reader-text" for="blog_<?php echo $user->ID; ?>">
+			<?php printf( __( 'Select %s' ), $user->user_login ); ?>
+		</label>
 		<input type="checkbox" id="blog_<?php echo $user->ID; ?>" name="allusers[]" value="<?php echo esc_attr( $user->ID ); ?>" />
 		<?php
 	}
@@ -478,7 +482,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		$actions['edit'] = '<a href="' . $edit_link . '">' . __( 'Edit' ) . '</a>';
 
 		if ( current_user_can( 'delete_user', $user->ID ) && ! in_array( $user->user_login, $super_admins ) ) {
-			$actions['delete'] = '<a href="' . $delete = esc_url( network_admin_url( add_query_arg( '_wp_http_referer', urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ), wp_nonce_url( 'users.php', 'deleteuser' ) . '&amp;action=deleteuser&amp;id=' . $user->ID ) ) ) . '" class="delete">' . __( 'Delete' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( network_admin_url( add_query_arg( '_wp_http_referer', urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ), wp_nonce_url( 'users.php', 'deleteuser' ) . '&amp;action=deleteuser&amp;id=' . $user->ID ) ) ) . '" class="delete">' . __( 'Delete' ) . '</a>';
 		}
 
 		/**

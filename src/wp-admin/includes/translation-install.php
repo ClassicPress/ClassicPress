@@ -124,8 +124,11 @@ function translations_api( $type, $args = null ) {
  *               in an error, an empty array will be returned.
  */
 function wp_get_available_translations() {
-	if ( ! wp_installing() && false !== ( $translations = get_site_transient( 'available_translations' ) ) ) {
-		return $translations;
+	if ( ! wp_installing() ) {
+		$translations = get_site_transient( 'available_translations' );
+		if ( false !== $translations ) {
+			return $translations;
+		}
 	}
 
 	include ABSPATH . WPINC . '/version.php'; // include an unmodified $wp_version

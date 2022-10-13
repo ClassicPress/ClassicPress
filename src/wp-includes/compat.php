@@ -452,6 +452,7 @@ if ( ! interface_exists( 'JsonSerializable' ) ) {
 	 * @since WP-4.4.0
 	 */
 	interface JsonSerializable {
+		// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		public function jsonSerialize();
 	}
 }

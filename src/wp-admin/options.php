@@ -148,7 +148,9 @@ $whitelist_options         = array(
 		'default_post_format',
 	),
 );
-$whitelist_options['misc'] = $whitelist_options['options'] = $whitelist_options['privacy'] = array();
+$whitelist_options['misc']    = array();
+$whitelist_options['options'] = array();
+$whitelist_options['privacy'] = array();
 
 $mail_options = array( 'mailserver_url', 'mailserver_port', 'mailserver_login', 'mailserver_pass' );
 
@@ -353,11 +355,7 @@ foreach ( (array) $options as $option ) :
 	<th scope="row"><label for="<?php echo $name; ?>"><?php echo esc_html( $option->option_name ); ?></label></th>
 <td>
 	<?php if ( strpos( $value, "\n" ) !== false ) : ?>
-	<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5">
-								<?php
-								echo esc_textarea( $value );
-								?>
-	</textarea>
+		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?> />
 	<?php endif ?></td>

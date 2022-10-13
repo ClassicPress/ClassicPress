@@ -447,7 +447,8 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 function refresh_user_details( $id ) {
 	$id = (int) $id;
 
-	if ( ! $user = get_userdata( $id ) ) {
+	$user = get_userdata( $id );
+	if ( ! $user ) {
 		return false;
 	}
 

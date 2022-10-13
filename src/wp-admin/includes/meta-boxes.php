@@ -775,7 +775,7 @@ function post_comment_status_meta_box( $post ) {
 	 *
 	 * @param WP_Post $post WP_Post object of the current post.
 	 */
-	do_action( 'post_comment_status_meta_box-options', $post );
+	do_action( 'post_comment_status_meta_box-options', $post );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	?>
 </p>
 	<?php
@@ -932,16 +932,16 @@ function page_attributes_meta_box( $post ) {
 		?>
 		<p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="page_template"><?php _e( 'Template' ); ?></label>
 		<?php
-			/**
-			 * Fires immediately after the label inside the 'Template' section
-			 * of the 'Page Attributes' meta box.
-			 *
-			 * @since WP-4.4.0
-			 *
-			 * @param string  $template The template used for the current post.
-			 * @param WP_Post $post     The current post.
-			 */
-			do_action( 'page_attributes_meta_box_template', $template, $post );
+		/**
+		 * Fires immediately after the label inside the 'Template' section
+		 * of the 'Page Attributes' meta box.
+		 *
+		 * @since WP-4.4.0
+		 *
+		 * @param string  $template The template used for the current post.
+		 * @param WP_Post $post     The current post.
+		 */
+		do_action( 'page_attributes_meta_box_template', $template, $post );
 		?>
 		</p>
 		<select name="page_template" id="page_template">

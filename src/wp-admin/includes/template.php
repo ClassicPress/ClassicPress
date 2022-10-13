@@ -1118,7 +1118,8 @@ function do_meta_boxes( $screen, $context, $object ) {
 	printf( '<div id="%s-sortables" class="meta-box-sortables">', esc_attr( $context ) );
 
 	// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
-	if ( ! $already_sorted && $sorted = get_user_option( "meta-box-order_$page" ) ) {
+	$sorted = get_user_option( "meta-box-order_$page" );
+	if ( ! $already_sorted && $sorted ) {
 		foreach ( $sorted as $box_context => $ids ) {
 			foreach ( explode( ',', $ids ) as $id ) {
 				if ( $id && 'dashboard_browser_nag' !== $id ) {
@@ -1780,19 +1781,19 @@ var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?
 	do_action( 'admin_enqueue_scripts', $hook_suffix );
 
 	/** This action is documented in wp-admin/admin-header.php */
-	do_action( "admin_print_styles-$hook_suffix" );
+	do_action( "admin_print_styles-$hook_suffix" );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_print_styles' );
 
 	/** This action is documented in wp-admin/admin-header.php */
-	do_action( "admin_print_scripts-$hook_suffix" );
+	do_action( "admin_print_scripts-$hook_suffix" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_print_scripts' );
 
 	/** This action is documented in wp-admin/admin-header.php */
-	do_action( "admin_head-$hook_suffix" );
+	do_action( "admin_head-$hook_suffix" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_head' );
@@ -1806,19 +1807,15 @@ var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?
 	?>
 </head>
 	<?php
-	/** This filter is documented in wp-admin/admin-header.php */
-	$admin_body_classes = apply_filters( 'admin_body_class', '' );
-	?>
-<body
-	<?php
 	/**
 	 * @global string $body_id
 	 */
-	if ( isset( $GLOBALS['body_id'] ) ) {
-		echo ' id="' . $GLOBALS['body_id'] . '"';
-	}
+	$admin_body_id = isset( $GLOBALS['body_id'] ) ? 'id="' . $GLOBALS['body_id'] . '" ' : '';
+
+	/** This filter is documented in wp-admin/admin-header.php */
+	$admin_body_classes = apply_filters( 'admin_body_class', '' );
 	?>
-	 class="wp-admin wp-core-ui no-js iframe <?php echo $admin_body_classes . ' ' . $admin_body_class; ?>">
+<body <?php echo $admin_body_id; ?>class="wp-admin wp-core-ui no-js iframe <?php echo $admin_body_classes; ?>">
 <script type="text/javascript">
 (function(){
 var c = document.body.className;
@@ -1852,7 +1849,7 @@ function iframe_footer() {
 	do_action( 'admin_footer', $hook_suffix );
 
 	/** This action is documented in wp-admin/admin-footer.php */
-	do_action( "admin_print_footer_scripts-$hook_suffix" );
+	do_action( "admin_print_footer_scripts-$hook_suffix" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	/** This action is documented in wp-admin/admin-footer.php */
 	do_action( 'admin_print_footer_scripts' );

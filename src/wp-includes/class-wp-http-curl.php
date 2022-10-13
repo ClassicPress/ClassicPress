@@ -235,7 +235,8 @@ class WP_Http_Curl {
 		if ( ! $parsed_args['blocking'] ) {
 			curl_exec( $handle );
 
-			if ( $curl_error = curl_error( $handle ) ) {
+			$curl_error = curl_error( $handle );
+			if ( $curl_error ) {
 				curl_close( $handle );
 				return new WP_Error( 'http_request_failed', $curl_error );
 			}
@@ -281,7 +282,8 @@ class WP_Http_Curl {
 					}
 				}
 			} else {
-				if ( $curl_error = curl_error( $handle ) ) {
+				$curl_error = curl_error( $handle );
+				if ( $curl_error ) {
 					curl_close( $handle );
 					return new WP_Error( 'http_request_failed', $curl_error );
 				}

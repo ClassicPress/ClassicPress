@@ -51,7 +51,8 @@ function get_categories( $args = '' ) {
 				'<code>taxonomy => link_category</code>'
 			)
 		);
-		$taxonomy = $args['taxonomy'] = 'link_category';
+		$taxonomy         = 'link_category';
+		$args['taxonomy'] = $taxonomy;
 	}
 
 	$categories = get_terms( $taxonomy, $args );
@@ -197,7 +198,7 @@ function get_category_by_slug( $slug ) {
  * @param string $cat_name Category name.
  * @return int 0, if failure and ID of category on success.
  */
-function get_cat_ID( $cat_name ) {
+function get_cat_ID( $cat_name ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$cat = get_term_by( 'name', $cat_name, 'category' );
 	if ( $cat ) {
 		return $cat->term_id;
