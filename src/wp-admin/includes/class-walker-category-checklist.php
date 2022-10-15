@@ -85,7 +85,7 @@ class Walker_Category_Checklist extends Walker {
 
 		$args['popular_cats'] = empty( $args['popular_cats'] ) ? array() : $args['popular_cats'];
 
-		$class                = in_array( $category->term_id, $args['popular_cats'] ) ? ' class="popular-category"' : '';
+		$class = in_array( $category->term_id, $args['popular_cats'], true ) ? ' class="popular-category"' : '';
 
 		$args['selected_cats'] = empty( $args['selected_cats'] ) ? array() : $args['selected_cats'];
 
@@ -93,7 +93,7 @@ class Walker_Category_Checklist extends Walker {
 			$aria_checked = 'false';
 			$inner_class  = 'category';
 
-			if ( in_array( $category->term_id, $args['selected_cats'] ) ) {
+			if ( in_array( $category->term_id, $args['selected_cats'], true ) ) {
 				$inner_class .= ' selected';
 				$aria_checked = 'true';
 			}
@@ -104,11 +104,22 @@ class Walker_Category_Checklist extends Walker {
 				' tabindex="0" role="checkbox" aria-checked="' . $aria_checked . '">' .
 				esc_html( apply_filters( 'the_category', $category->name, '', '' ) ) . '</div>';
 		} else {
+<<<<<<< HEAD
 			/** This filter is documented in wp-includes/category-template.php */
 			$output .= "\n<li id='{$taxonomy}-{$category->term_id}'$class>" .
 				'<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="' . $name . '[]" id="in-' . $taxonomy . '-' . $category->term_id . '"' .
 				checked( in_array( $category->term_id, $args['selected_cats'] ), true, false ) .
 				disabled( empty( $args['disabled'] ), false, false ) . ' /> ' .
+=======
+			$is_selected = in_array( $category->term_id, $args['selected_cats'], true );
+			$is_disabled = ! empty( $args['disabled'] );
+
+			$output .= "\n<li id='{$taxonomy}-{$category->term_id}'$class>" .
+				'<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="' . $name . '[]" id="in-' . $taxonomy . '-' . $category->term_id . '"' .
+				checked( $is_selected, true, false ) .
+				disabled( $is_disabled, true, false ) . ' /> ' .
+				/** This filter is documented in wp-includes/category-template.php */
+>>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 				esc_html( apply_filters( 'the_category', $category->name, '', '' ) ) . '</label>';
 		}
 	}

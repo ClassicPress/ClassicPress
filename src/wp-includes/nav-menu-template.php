@@ -384,8 +384,20 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 			$classes[] = 'menu-item-home';
 		}
 
+<<<<<<< HEAD
 		// if the menu item corresponds to a taxonomy term for the currently-queried non-hierarchical post object
 		if ( $wp_query->is_singular && 'taxonomy' == $menu_item->type && in_array( $menu_item->object_id, $possible_object_parents ) ) {
+=======
+		// This menu item is set as the 'Privacy Policy Page'.
+		if ( 'post_type' === $menu_item->type && $privacy_policy_page_id === (int) $menu_item->object_id ) {
+			$classes[] = 'menu-item-privacy-policy';
+		}
+
+		// If the menu item corresponds to a taxonomy term for the currently queried non-hierarchical post object.
+		if ( $wp_query->is_singular && 'taxonomy' == $menu_item->type
+			&& in_array( (int) $menu_item->object_id, $possible_object_parents, true )
+		) {
+>>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 			$active_parent_object_ids[] = (int) $menu_item->object_id;
 			$active_parent_item_ids[]   = (int) $menu_item->db_id;
 			$active_object              = $queried_object->post_type;
@@ -397,7 +409,8 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 				( ! empty( $home_page_id ) && 'post_type' == $menu_item->type && $wp_query->is_home && $home_page_id == $menu_item->object_id )
 				|| ( 'post_type' == $menu_item->type && $wp_query->is_singular )
 				|| ( 'taxonomy' == $menu_item->type
-					&& ( $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax ) && $queried_object->taxonomy == $menu_item->object )
+					&& ( $wp_query->is_category || $wp_query->is_tag || $wp_query->is_tax )
+					&& $queried_object->taxonomy == $menu_item->object )
 			)
 		) {
 			$classes[]                   = 'current-menu-item';
@@ -517,7 +530,7 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 					'post_type' == $parent_item->type
 					&& ! empty( $queried_object->post_type )
 					&& is_post_type_hierarchical( $queried_object->post_type )
-					&& in_array( $parent_item->object_id, $queried_object->ancestors )
+					&& in_array( (int) $parent_item->object_id, $queried_object->ancestors, true )
 					&& $parent_item->object != $queried_object->ID
 				) ||
 
@@ -525,7 +538,7 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 				(
 					'taxonomy' == $parent_item->type
 					&& isset( $possible_taxonomy_ancestors[ $parent_item->object ] )
-					&& in_array( $parent_item->object_id, $possible_taxonomy_ancestors[ $parent_item->object ] )
+					&& in_array( (int) $parent_item->object_id, $possible_taxonomy_ancestors[ $parent_item->object ], true )
 					&& (
 						! isset( $queried_object->term_id ) ||
 						$parent_item->object_id != $queried_object->term_id

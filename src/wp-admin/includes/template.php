@@ -162,7 +162,7 @@ function wp_terms_checklist( $post_id = 0, $args = array() ) {
 		$keys               = array_keys( $categories );
 
 		foreach ( $keys as $k ) {
-			if ( in_array( $categories[ $k ]->term_id, $args['selected_cats'] ) ) {
+			if ( in_array( $categories[ $k ]->term_id, $args['selected_cats'], true ) ) {
 				$checked_categories[] = $categories[ $k ];
 				unset( $categories[ $k ] );
 			}
@@ -219,13 +219,14 @@ function wp_popular_terms_checklist( $taxonomy, $default = 0, $number = 10, $ech
 	$tax = get_taxonomy( $taxonomy );
 
 	$popular_ids = array();
+
 	foreach ( (array) $terms as $term ) {
 		$popular_ids[] = $term->term_id;
 		if ( ! $echo ) { // Hack for Ajax use.
 			continue;
 		}
 		$id      = "popular-$taxonomy-$term->term_id";
-		$checked = in_array( $term->term_id, $checked_terms ) ? 'checked="checked"' : '';
+		$checked = in_array( $term->term_id, $checked_terms, true ) ? 'checked="checked"' : '';
 		?>
 
 		<li id="<?php echo $id; ?>" class="popular-category">
@@ -282,7 +283,7 @@ function wp_link_category_checklist( $link_id = 0 ) {
 
 		/** This filter is documented in wp-includes/category-template.php */
 		$name    = esc_html( apply_filters( 'the_category', $category->name, '', '' ) );
-		$checked = in_array( $cat_id, $checked_categories ) ? ' checked="checked"' : '';
+		$checked = in_array( $cat_id, $checked_categories, true ) ? ' checked="checked"' : '';
 		echo '<li id="link-category-', $cat_id, '"><label for="in-link-category-', $cat_id, '" class="selectit"><input value="', $cat_id, '" type="checkbox" name="link_category[]" id="in-link-category-', $cat_id, '"', $checked, '/> ', $name, '</label></li>';
 	}
 }
@@ -331,6 +332,7 @@ function get_inline_data( $post ) {
 	}
 
 	$taxonomy_names = get_object_taxonomies( $post->post_type );
+
 	foreach ( $taxonomy_names as $taxonomy_name ) {
 		$taxonomy = get_taxonomy( $taxonomy_name );
 
@@ -706,7 +708,6 @@ function meta_form( $post = null ) {
 <select id="metakeyselect" name="metakeyselect">
 <option value="#NONE#"><?php _e( '&mdash; Select &mdash;' ); ?></option>
 		<?php
-
 		foreach ( $keys as $key ) {
 			if ( is_protected_meta( $key, 'post' ) || ! current_user_can( 'add_post_meta', $post->ID, $key ) ) {
 				continue;
@@ -820,6 +821,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	}
 
 	echo "\n\n";
+
 	$map = array(
 		'mm' => array( $mm, $cur_mm ),
 		'jj' => array( $jj, $cur_jj ),
@@ -827,6 +829,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 		'hh' => array( $hh, $cur_hh ),
 		'mn' => array( $mn, $cur_mn ),
 	);
+
 	foreach ( $map as $timeunit => $value ) {
 		list( $unit, $curr ) = $value;
 
@@ -854,7 +857,9 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
  */
 function page_template_dropdown( $default = '', $post_type = 'page' ) {
 	$templates = get_page_templates( null, $post_type );
+
 	ksort( $templates );
+
 	foreach ( array_keys( $templates ) as $template ) {
 		$selected = selected( $default, $templates[ $template ], false );
 		echo "\n\t<option value='" . esc_attr( $templates[ $template ] ) . "' $selected>" . esc_html( $template ) . '</option>';
@@ -1091,7 +1096,119 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 /**
  * Meta-Box template function
  *
+<<<<<<< HEAD
  * @since WP-2.5.0
+=======
+ * @since 5.0.0
+ *
+ * @param mixed $object The data object being rendered on this screen.
+ * @param array $box    {
+ *     Custom formats meta box arguments.
+ *
+ *     @type string   $id           Meta box 'id' attribute.
+ *     @type string   $title        Meta box title.
+ *     @type callable $old_callback The original callback for this meta box.
+ *     @type array    $args         Extra meta box arguments.
+ * }
+ */
+function do_block_editor_incompatible_meta_box( $object, $box ) {
+	$plugin  = _get_plugin_from_callback( $box['old_callback'] );
+	$plugins = get_plugins();
+	echo '<p>';
+	if ( $plugin ) {
+		/* translators: %s: The name of the plugin that generated this meta box. */
+		printf( __( "This meta box, from the %s plugin, isn't compatible with the block editor." ), "<strong>{$plugin['Name']}</strong>" );
+	} else {
+		_e( "This meta box isn't compatible with the block editor." );
+	}
+	echo '</p>';
+
+	if ( empty( $plugins['classic-editor/classic-editor.php'] ) ) {
+		if ( current_user_can( 'install_plugins' ) ) {
+			echo '<p>';
+			printf(
+				/* translators: %s: A link to install the Classic Editor plugin. */
+				__( 'Please install the <a href="%s">Classic Editor plugin</a> to use this meta box.' ),
+				esc_url( wp_nonce_url( self_admin_url( 'plugin-install.php?tab=favorites&user=wordpressdotorg&save=0' ), 'save_wporg_username_' . get_current_user_id() ) )
+			);
+			echo '</p>';
+		}
+	} elseif ( is_plugin_inactive( 'classic-editor/classic-editor.php' ) ) {
+		if ( current_user_can( 'activate_plugins' ) ) {
+			$activate_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=classic-editor/classic-editor.php' ), 'activate-plugin_classic-editor/classic-editor.php' );
+			echo '<p>';
+			/* translators: %s: A link to activate the Classic Editor plugin. */
+			printf( __( 'Please activate the <a href="%s">Classic Editor plugin</a> to use this meta box.' ), esc_url( $activate_url ) );
+			echo '</p>';
+		}
+	} elseif ( $object instanceof WP_Post ) {
+		$edit_url = add_query_arg(
+			array(
+				'classic-editor'         => '',
+				'classic-editor__forget' => '',
+			),
+			get_edit_post_link( $object )
+		);
+		echo '<p>';
+		/* translators: %s: A link to use the Classic Editor plugin. */
+		printf( __( 'Please open the <a href="%s">classic editor</a> to use this meta box.' ), esc_url( $edit_url ) );
+		echo '</p>';
+	}
+}
+
+/**
+ * Internal helper function to find the plugin from a meta box callback.
+ *
+ * @since 5.0.0
+ *
+ * @access private
+ *
+ * @param callable $callback The callback function to check.
+ * @return array|null The plugin that the callback belongs to, or null if it doesn't belong to a plugin.
+ */
+function _get_plugin_from_callback( $callback ) {
+	try {
+		if ( is_array( $callback ) ) {
+			$reflection = new ReflectionMethod( $callback[0], $callback[1] );
+		} elseif ( is_string( $callback ) && false !== strpos( $callback, '::' ) ) {
+			$reflection = new ReflectionMethod( $callback );
+		} else {
+			$reflection = new ReflectionFunction( $callback );
+		}
+	} catch ( ReflectionException $exception ) {
+		// We could not properly reflect on the callable, so we abort here.
+		return null;
+	}
+
+	// Don't show an error if it's an internal PHP function.
+	if ( ! $reflection->isInternal() ) {
+
+		// Only show errors if the meta box was registered by a plugin.
+		$filename   = wp_normalize_path( $reflection->getFileName() );
+		$plugin_dir = wp_normalize_path( WP_PLUGIN_DIR );
+
+		if ( strpos( $filename, $plugin_dir ) === 0 ) {
+			$filename = str_replace( $plugin_dir, '', $filename );
+			$filename = preg_replace( '|^/([^/]*/).*$|', '\\1', $filename );
+
+			$plugins = get_plugins();
+
+			foreach ( $plugins as $name => $plugin ) {
+				if ( strpos( $name, $filename ) === 0 ) {
+					return $plugin;
+				}
+			}
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Meta-Box template function.
+ *
+ * @since 2.5.0
+>>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
  *
  * @global array $wp_meta_boxes
  *
@@ -1123,6 +1240,7 @@ function do_meta_boxes( $screen, $context, $object ) {
 
 	// Grab the ones the user has manually sorted. Pull them out of their previous context/priority and into the one the user chose
 	$sorted = get_user_option( "meta-box-order_$page" );
+
 	if ( ! $already_sorted && $sorted ) {
 		foreach ( $sorted as $box_context => $ids ) {
 			foreach ( explode( ',', $ids ) as $id ) {
@@ -1600,11 +1718,13 @@ function get_settings_errors( $setting = '', $sanitize = false ) {
 	// Filter the results to those of a specific setting if one was set.
 	if ( $setting ) {
 		$setting_errors = array();
+
 		foreach ( (array) $wp_settings_errors as $key => $details ) {
 			if ( $setting == $details['setting'] ) {
 				$setting_errors[] = $wp_settings_errors[ $key ];
 			}
 		}
+
 		return $setting_errors;
 	}
 
@@ -1651,6 +1771,7 @@ function settings_errors( $setting = '', $sanitize = false, $hide_on_update = fa
 	}
 
 	$output = '';
+
 	foreach ( $settings_errors as $key => $details ) {
 		$css_id    = 'setting-error-' . $details['code'];
 		$css_class = $details['type'] . ' settings-error notice is-dismissible';
@@ -1658,6 +1779,7 @@ function settings_errors( $setting = '', $sanitize = false, $hide_on_update = fa
 		$output   .= "<p><strong>{$details['message']}</strong></p>";
 		$output   .= "</div> \n";
 	}
+
 	echo $output;
 }
 
@@ -1867,7 +1989,50 @@ function iframe_footer() {
 
 /**
  *
+<<<<<<< HEAD
  * @param WP_Post $post
+=======
+ * @since 2.7.0
+ * @since 5.3.0 Added the `$echo` parameter and a return value.
+ *
+ * @see get_post_states()
+ *
+ * @param WP_Post $post The post to retrieve states for.
+ * @param bool    $echo Optional. Whether to echo the post states as an HTML string. Default true.
+ * @return string Post states string.
+ */
+function _post_states( $post, $echo = true ) {
+	$post_states        = get_post_states( $post );
+	$post_states_string = '';
+
+	if ( ! empty( $post_states ) ) {
+		$state_count = count( $post_states );
+		$i           = 0;
+
+		$post_states_string .= ' &mdash; ';
+
+		foreach ( $post_states as $state ) {
+			++$i;
+			( $i == $state_count ) ? $sep = '' : $sep = ', ';
+			$post_states_string          .= "<span class='post-state'>$state$sep</span>";
+		}
+	}
+
+	if ( $echo ) {
+		echo $post_states_string;
+	}
+
+	return $post_states_string;
+}
+
+/**
+ * Retrieves an array of post states from a post.
+ *
+ * @since 5.3.0
+ *
+ * @param WP_Post $post The post to retrieve states for.
+ * @return string[] Array of post state labels keyed by their state.
+>>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
  */
 function _post_states( $post ) {
 	$post_states = array();
@@ -1955,7 +2120,7 @@ function _media_states( $post ) {
 		if ( is_random_header_image() ) {
 			$header_images = wp_list_pluck( get_uploaded_header_images(), 'attachment_id' );
 
-			if ( $meta_header == $stylesheet && in_array( $post->ID, $header_images ) ) {
+			if ( $meta_header == $stylesheet && in_array( $post->ID, $header_images, true ) ) {
 				$media_states[] = __( 'Header Image' );
 			}
 		} else {
@@ -2009,7 +2174,9 @@ function _media_states( $post ) {
 	if ( ! empty( $media_states ) ) {
 		$state_count = count( $media_states );
 		$i           = 0;
+
 		echo ' &mdash; ';
+
 		foreach ( $media_states as $state ) {
 			++$i;
 			( $i == $state_count ) ? $sep = '' : $sep = ', ';
@@ -2136,12 +2303,15 @@ function get_submit_button( $text = '', $type = 'primary large', $name = 'submit
 
 	$button_shorthand = array( 'primary', 'small', 'large' );
 	$classes          = array( 'button' );
+
 	foreach ( $type as $t ) {
 		if ( 'secondary' === $t || 'button-secondary' === $t ) {
 			continue;
 		}
+
 		$classes[] = in_array( $t, $button_shorthand, true ) ? 'button-' . $t : $t;
 	}
+
 	// Remove empty items, remove duplicate items, and finally build a string.
 	$class = implode( ' ', array_unique( array_filter( $classes ) ) );
 
