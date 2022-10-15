@@ -47,13 +47,8 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 	}
 
 	// If we're not in wp-admin and the post has been published and preview nonce
-<<<<<<< HEAD
-	// is non-existent or invalid then no need for preview in query
-	if ( is_preview() && get_query_var( 'p' ) && 'publish' == get_post_status( get_query_var( 'p' ) ) ) {
-=======
 	// is non-existent or invalid then no need for preview in query.
 	if ( is_preview() && get_query_var( 'p' ) && 'publish' === get_post_status( get_query_var( 'p' ) ) ) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		if ( ! isset( $_GET['preview_id'] )
 			|| ! isset( $_GET['preview_nonce'] )
 			|| ! wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . (int) $_GET['preview_id'] )
@@ -62,14 +57,9 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		}
 	}
 
-<<<<<<< HEAD
-	if ( is_trackback() || is_search() || is_admin() || is_preview() || is_robots() || ( $is_IIS && ! iis7_supports_permalinks() ) ) {
-=======
-	if ( is_admin() || is_search() || is_preview() || is_trackback()
-		|| is_robots() || is_favicon()
+	if ( is_admin() || is_search() || is_preview() || is_trackback() || is_robots()
 		|| ( $is_IIS && ! iis7_supports_permalinks() )
 	) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		return;
 	}
 
@@ -148,17 +138,11 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 	// These tests give us a WP-generated permalink
 	if ( is_404() ) {
 
-<<<<<<< HEAD
-		// Redirect ?page_id, ?p=, ?attachment_id= to their respective url's
-		$id = max( get_query_var( 'p' ), get_query_var( 'page_id' ), get_query_var( 'attachment_id' ) );
-		$redirect_post = $id ? get_post( $id ) : false;
-=======
 		// Redirect ?page_id, ?p=, ?attachment_id= to their respective URLs.
 		$post_id = max( get_query_var( 'p' ), get_query_var( 'page_id' ), get_query_var( 'attachment_id' ) );
 
 		$redirect_post = $post_id ? get_post( $post_id ) : false;
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		if ( $redirect_post ) {
 			$post_type_obj = get_post_type_object( $redirect_post->post_type );
 
@@ -211,32 +195,19 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			}
 		}
 
-<<<<<<< HEAD
-		if ( get_query_var( 'page' ) && $wp_query->post &&
-			false !== strpos( $wp_query->post->post_content, '<!--nextpage-->' ) ) {
-=======
 		// Strip off non-existing page links from single posts or pages.
 		if ( get_query_var( 'page' ) && $wp_query->post ) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 			$redirect['path']  = rtrim( $redirect['path'], (int) get_query_var( 'page' ) . '/' );
 			$redirect['query'] = remove_query_arg( 'page', $redirect['query'] );
 
 			$redirect_url      = get_permalink( $wp_query->post->ID );
 		}
 	} elseif ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) {
-<<<<<<< HEAD
-		// rewriting of old ?p=X, ?m=2004, ?m=200401, ?m=20040101
-		if ( is_attachment() &&
-			! array_diff( array_keys( $wp->query_vars ), array( 'attachment', 'attachment_id' ) ) &&
-			! $redirect_url ) {
-=======
-
 		// Rewriting of old ?p=X, ?m=2004, ?m=200401, ?m=20040101.
 		if ( is_attachment()
 			&& ! array_diff( array_keys( $wp->query_vars ), array( 'attachment', 'attachment_id' ) )
 			&& ! $redirect_url
 		) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 			if ( ! empty( $_GET['attachment_id'] ) ) {
 				$redirect_url = get_attachment_link( get_query_var( 'attachment_id' ) );
 
@@ -294,11 +265,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			if ( $redirect_url ) {
 				$redirect['query'] = remove_query_arg( 'm', $redirect['query'] );
 			}
-<<<<<<< HEAD
-			// now moving on to non ?m=X year/month/day links
-		} elseif ( is_day() && get_query_var( 'year' ) && get_query_var( 'monthnum' ) && ! empty( $_GET['day'] ) ) {
-			$redirect_url = get_day_link( get_query_var( 'year' ), get_query_var( 'monthnum' ), get_query_var( 'day' ) );
-=======
 			// Now moving on to non ?m=X year/month/day links.
 		} elseif ( is_date() ) {
 			$year  = get_query_var( 'year' );
@@ -308,22 +274,27 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			if ( is_day() && $year && $month && ! empty( $_GET['day'] ) ) {
 				$redirect_url = get_day_link( $year, $month, $day );
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
-			if ( $redirect_url ) {
-				$redirect['query'] = remove_query_arg( array( 'year', 'monthnum', 'day' ), $redirect['query'] );
-			}
+				if ( $redirect_url ) {
+					$redirect['query'] = remove_query_arg( array( 'year', 'monthnum', 'day' ), $redirect['query'] );
+				}
 			} elseif ( is_month() && $year && ! empty( $_GET['monthnum'] ) ) {
 				$redirect_url = get_month_link( $year, $month );
 
-			if ( $redirect_url ) {
-				$redirect['query'] = remove_query_arg( array( 'year', 'monthnum' ), $redirect['query'] );
+				if ( $redirect_url ) {
+					$redirect['query'] = remove_query_arg( array( 'year', 'monthnum' ), $redirect['query'] );
+				}
+			} elseif ( is_year() && ! empty( $_GET['year'] ) ) {
+				$redirect_url = get_year_link( $year );
+
+				if ( $redirect_url ) {
+					$redirect['query'] = remove_query_arg( 'year', $redirect['query'] );
+				}
 			}
 		} elseif ( is_year() && ! empty( $_GET['year'] ) ) {
 				$redirect_url = get_year_link( $year );
 
 			if ( $redirect_url ) {
 				$redirect['query'] = remove_query_arg( 'year', $redirect['query'] );
-			}
 			}
 		} elseif ( is_author() && ! empty( $_GET['author'] ) && preg_match( '|^[0-9]+$|', $_GET['author'] ) ) {
 			$author = get_userdata( get_query_var( 'author' ) );
@@ -337,12 +308,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 						$redirect['query'] = remove_query_arg( 'author', $redirect['query'] );
 				}
 			}
-<<<<<<< HEAD
-		} elseif ( is_category() || is_tag() || is_tax() ) { // Terms (Tags/categories)
-
-=======
 		} elseif ( is_category() || is_tag() || is_tax() ) { // Terms (tags/categories).
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 			$term_count = 0;
 
 			foreach ( $wp_query->tax_query->queried_terms as $tax_query ) {
@@ -379,13 +345,9 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 
 							// Create the destination url for this taxonomy
 							$tax_url = parse_url( $tax_url );
-<<<<<<< HEAD
-							if ( ! empty( $tax_url['query'] ) ) { // Taxonomy accessible via ?taxonomy=..&term=.. or any custom qv..
-=======
 
 							if ( ! empty( $tax_url['query'] ) ) {
 								// Taxonomy accessible via ?taxonomy=...&term=... or any custom query var.
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 								parse_str( $tax_url['query'], $query_vars );
 								$redirect['query'] = add_query_arg( $query_vars, $redirect['query'] );
 							} else { // Taxonomy is accessible via a "pretty-URL"
@@ -438,13 +400,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 
 		// paging and feeds
 		if ( get_query_var( 'paged' ) || is_feed() || get_query_var( 'cpage' ) ) {
-<<<<<<< HEAD
-			while ( preg_match( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", $redirect['path'] ) || preg_match( '#/(comments/?)?(feed|rss|rdf|atom|rss2)(/+)?$#', $redirect['path'] ) || preg_match( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+(/+)?$#", $redirect['path'] ) ) {
-				// Strip off paging and feed
-				$redirect['path'] = preg_replace( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", '/', $redirect['path'] ); // strip off any existing paging
-				$redirect['path'] = preg_replace( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+|$)#', '/', $redirect['path'] ); // strip off feed endings
-				$redirect['path'] = preg_replace( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+?(/+)?$#", '/', $redirect['path'] ); // strip off any existing comment paging
-=======
 			$paged = get_query_var( 'paged' );
 			$feed  = get_query_var( 'feed' );
 			$cpage = get_query_var( 'cpage' );
@@ -459,7 +414,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 				$redirect['path'] = preg_replace( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+|$)#', '/', $redirect['path'] );
 				// Strip off any existing comment paging.
 				$redirect['path'] = preg_replace( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+?(/+)?$#", '/', $redirect['path'] );
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 			}
 
 			$addl_path = '';
@@ -527,10 +481,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 				$redirect['query'] = remove_query_arg( 'cpage', $redirect['query'] );
 			}
 
-<<<<<<< HEAD
-			$redirect['path'] = user_trailingslashit( preg_replace( '|/' . preg_quote( $wp_rewrite->index, '|' ) . '/?$|', '/', $redirect['path'] ) ); // strip off trailing /index.php/
-			if ( ! empty( $addl_path ) && $wp_rewrite->using_index_permalinks() && strpos( $redirect['path'], '/' . $wp_rewrite->index . '/' ) === false ) {
-=======
 			// Strip off trailing /index.php/.
 			$redirect['path'] = preg_replace( '|/' . preg_quote( $wp_rewrite->index, '|' ) . '/?$|', '/', $redirect['path'] );
 			$redirect['path'] = user_trailingslashit( $redirect['path'] );
@@ -539,7 +489,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 				&& $wp_rewrite->using_index_permalinks()
 				&& strpos( $redirect['path'], '/' . $wp_rewrite->index . '/' ) === false
 			) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 				$redirect['path'] = trailingslashit( $redirect['path'] ) . $wp_rewrite->index . '/';
 			}
 
@@ -563,14 +512,9 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		}
 	}
 
-<<<<<<< HEAD
-	// tack on any additional query vars
-	$redirect['query'] = preg_replace( '#^\??&*?#', '', $redirect['query'] );
-=======
 	$redirect['query'] = preg_replace( '#^\??&*?#', '', $redirect['query'] );
 
 	// Tack on any additional query vars.
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 	if ( $redirect_url && ! empty( $redirect['query'] ) ) {
 		parse_str( $redirect['query'], $_parsed_query );
 		$redirect = @parse_url( $redirect_url );
@@ -583,15 +527,11 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			}
 		}
 
-<<<<<<< HEAD
-		$_parsed_query = rawurlencode_deep( $_parsed_query );
-=======
 		$_parsed_query = array_combine(
 			rawurlencode_deep( array_keys( $_parsed_query ) ),
 			rawurlencode_deep( array_values( $_parsed_query ) )
 		);
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		$redirect_url  = add_query_arg( $_parsed_query, $redirect_url );
 	}
 
@@ -599,14 +539,9 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		$redirect = @parse_url( $redirect_url );
 	}
 
-<<<<<<< HEAD
-	// www.example.com vs example.com
-	$user_home = @parse_url( home_url() );
-=======
 	// www.example.com vs. example.com
 	$user_home = parse_url( home_url() );
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 	if ( ! empty( $user_home['host'] ) ) {
 		$redirect['host'] = $user_home['host'];
 	}
@@ -680,15 +615,10 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		$redirect['path'] = str_replace( '/' . $wp_rewrite->index . '/', '/', $redirect['path'] );
 	}
 
-<<<<<<< HEAD
-	// trailing slashes
-	if ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() && ! is_404() && ( ! is_front_page() || ( is_front_page() && ( get_query_var( 'paged' ) > 1 ) ) ) ) {
-=======
 	// Trailing slashes.
 	if ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks()
 		&& ! is_404() && ( ! is_front_page() || is_front_page() && get_query_var( 'paged' ) > 1 )
 	) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		$user_ts_type = '';
 
 		if ( get_query_var( 'paged' ) > 0 ) {
@@ -713,17 +643,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		$redirect['path'] = preg_replace( '|/+|', '/', $redirect['path'] );
 	}
 
-<<<<<<< HEAD
-	// Always trailing slash the Front Page URL
-	if ( trailingslashit( $redirect['path'] ) == trailingslashit( $user_home['path'] ) ) {
-		$redirect['path'] = trailingslashit( $redirect['path'] );
-	}
-
-	// Ignore differences in host capitalization, as this can lead to infinite redirects
-	// Only redirect no-www <=> yes-www
-	if ( strtolower( $original['host'] ) == strtolower( $redirect['host'] ) ||
-		( strtolower( $original['host'] ) != 'www.' . strtolower( $redirect['host'] ) && 'www.' . strtolower( $original['host'] ) != strtolower( $redirect['host'] ) ) ) {
-=======
 	// Always trailing slash the Front Page URL.
 	if ( trailingslashit( $redirect['path'] ) === trailingslashit( $user_home['path'] ) ) {
 		$redirect['path'] = trailingslashit( $redirect['path'] );
@@ -738,7 +657,6 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		|| ( 'www.' . $original_host_low !== $redirect_host_low
 			&& 'www.' . $redirect_host_low !== $original_host_low )
 	) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		$redirect['host'] = $original['host'];
 	}
 
@@ -812,13 +730,8 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 	 */
 	$redirect_url = apply_filters( 'redirect_canonical', $redirect_url, $requested_url );
 
-<<<<<<< HEAD
-	// yes, again -- in case the filter aborted the request
-	if ( ! $redirect_url || strip_fragment_from_url( $redirect_url ) == strip_fragment_from_url( $requested_url ) ) {
-=======
 	// Yes, again -- in case the filter aborted the request.
 	if ( ! $redirect_url || strip_fragment_from_url( $redirect_url ) === strip_fragment_from_url( $requested_url ) ) {
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 		return;
 	}
 
@@ -850,12 +763,8 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
  * @return string The altered query string
  */
 function _remove_qs_args_if_not_in_url( $query_string, array $args_to_check, $url ) {
-<<<<<<< HEAD
-	$parsed_url = @parse_url( $url );
-=======
 	$parsed_url = parse_url( $url );
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 	if ( ! empty( $parsed_url['query'] ) ) {
 		parse_str( $parsed_url['query'], $parsed_query );
 
@@ -880,12 +789,8 @@ function _remove_qs_args_if_not_in_url( $query_string, array $args_to_check, $ur
  * @return string The altered URL.
  */
 function strip_fragment_from_url( $url ) {
-<<<<<<< HEAD
-	$parsed_url = @parse_url( $url );
-=======
 	$parsed_url = parse_url( $url );
 
->>>>>>> 54c8470bd6 (Coding Standards: Fix WPCS issues in `wp-includes/canonical.php`.)
 	if ( ! empty( $parsed_url['host'] ) ) {
 		// This mirrors code in redirect_canonical(). It does not handle every case.
 		$url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
