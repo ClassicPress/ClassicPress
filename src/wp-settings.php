@@ -43,7 +43,12 @@ wp_initial_constants();
 // Check for the required PHP version and for the MySQL extension or a database drop-in.
 wp_check_php_mysql_versions();
 
+<<<<<<< HEAD
 // ClassicPress calculates offsets from UTC.
+=======
+// WordPress calculates offsets from UTC.
+// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
+>>>>>>> b195a159e1 (Coding Standards: Whitelist `date_default_timezone_set()` usage in `wp-settings.php`.)
 date_default_timezone_set( 'UTC' );
 
 // Standardize $_SERVER variables across setups.
