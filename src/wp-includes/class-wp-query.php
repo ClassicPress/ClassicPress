@@ -3065,13 +3065,8 @@ class WP_Query {
 					array_splice( $this->posts, $sticky_offset, 0, array( $sticky_post ) );
 					// Increment the sticky offset. The next sticky will be placed at this offset.
 					$sticky_offset++;
-<<<<<<< HEAD
-					// Remove post from sticky posts array
-					$offset = array_search( $sticky_post->ID, $sticky_posts );
-=======
 					// Remove post from sticky posts array.
 					$offset = array_search( $sticky_post->ID, $sticky_posts, true );
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 					unset( $sticky_posts[ $offset ] );
 				}
 			}

@@ -2530,20 +2530,15 @@ function wp_set_object_terms( $object_id, $terms, $taxonomy, $append = false ) {
 	if ( ! $append && isset( $t->sort ) && $t->sort ) {
 		$values       = array();
 		$term_order   = 0;
-<<<<<<< HEAD
-		$final_tt_ids = wp_get_object_terms( $object_id, $taxonomy, array( 'fields' => 'tt_ids' ) );
-=======
 
 		$final_tt_ids = wp_get_object_terms(
 			$object_id,
 			$taxonomy,
 			array(
-				'fields'                 => 'tt_ids',
-				'update_term_meta_cache' => false,
+				'fields' => 'tt_ids',
 			)
 		);
 
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 		foreach ( $tt_ids as $tt_id ) {
 			if ( in_array( (int) $tt_id, $final_tt_ids, true ) ) {
 				$values[] = $wpdb->prepare( '(%d, %d, %d)', $object_id, $tt_id, ++$term_order );

@@ -2130,16 +2130,8 @@ function is_sticky( $post_id = 0 ) {
 
 	$stickies = get_option( 'sticky_posts' );
 
-<<<<<<< HEAD
 	if ( ! is_array( $stickies ) ) {
 		return false;
-=======
-	if ( is_array( $stickies ) ) {
-		$stickies  = array_map( 'intval', $stickies );
-		$is_sticky = in_array( $post_id, $stickies, true );
-	} else {
-		$is_sticky = false;
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 	}
 
 	if ( in_array( $post_id, $stickies ) ) {

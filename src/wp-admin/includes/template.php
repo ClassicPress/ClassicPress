@@ -1096,119 +1096,7 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 /**
  * Meta-Box template function
  *
-<<<<<<< HEAD
  * @since WP-2.5.0
-=======
- * @since 5.0.0
- *
- * @param mixed $object The data object being rendered on this screen.
- * @param array $box    {
- *     Custom formats meta box arguments.
- *
- *     @type string   $id           Meta box 'id' attribute.
- *     @type string   $title        Meta box title.
- *     @type callable $old_callback The original callback for this meta box.
- *     @type array    $args         Extra meta box arguments.
- * }
- */
-function do_block_editor_incompatible_meta_box( $object, $box ) {
-	$plugin  = _get_plugin_from_callback( $box['old_callback'] );
-	$plugins = get_plugins();
-	echo '<p>';
-	if ( $plugin ) {
-		/* translators: %s: The name of the plugin that generated this meta box. */
-		printf( __( "This meta box, from the %s plugin, isn't compatible with the block editor." ), "<strong>{$plugin['Name']}</strong>" );
-	} else {
-		_e( "This meta box isn't compatible with the block editor." );
-	}
-	echo '</p>';
-
-	if ( empty( $plugins['classic-editor/classic-editor.php'] ) ) {
-		if ( current_user_can( 'install_plugins' ) ) {
-			echo '<p>';
-			printf(
-				/* translators: %s: A link to install the Classic Editor plugin. */
-				__( 'Please install the <a href="%s">Classic Editor plugin</a> to use this meta box.' ),
-				esc_url( wp_nonce_url( self_admin_url( 'plugin-install.php?tab=favorites&user=wordpressdotorg&save=0' ), 'save_wporg_username_' . get_current_user_id() ) )
-			);
-			echo '</p>';
-		}
-	} elseif ( is_plugin_inactive( 'classic-editor/classic-editor.php' ) ) {
-		if ( current_user_can( 'activate_plugins' ) ) {
-			$activate_url = wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=classic-editor/classic-editor.php' ), 'activate-plugin_classic-editor/classic-editor.php' );
-			echo '<p>';
-			/* translators: %s: A link to activate the Classic Editor plugin. */
-			printf( __( 'Please activate the <a href="%s">Classic Editor plugin</a> to use this meta box.' ), esc_url( $activate_url ) );
-			echo '</p>';
-		}
-	} elseif ( $object instanceof WP_Post ) {
-		$edit_url = add_query_arg(
-			array(
-				'classic-editor'         => '',
-				'classic-editor__forget' => '',
-			),
-			get_edit_post_link( $object )
-		);
-		echo '<p>';
-		/* translators: %s: A link to use the Classic Editor plugin. */
-		printf( __( 'Please open the <a href="%s">classic editor</a> to use this meta box.' ), esc_url( $edit_url ) );
-		echo '</p>';
-	}
-}
-
-/**
- * Internal helper function to find the plugin from a meta box callback.
- *
- * @since 5.0.0
- *
- * @access private
- *
- * @param callable $callback The callback function to check.
- * @return array|null The plugin that the callback belongs to, or null if it doesn't belong to a plugin.
- */
-function _get_plugin_from_callback( $callback ) {
-	try {
-		if ( is_array( $callback ) ) {
-			$reflection = new ReflectionMethod( $callback[0], $callback[1] );
-		} elseif ( is_string( $callback ) && false !== strpos( $callback, '::' ) ) {
-			$reflection = new ReflectionMethod( $callback );
-		} else {
-			$reflection = new ReflectionFunction( $callback );
-		}
-	} catch ( ReflectionException $exception ) {
-		// We could not properly reflect on the callable, so we abort here.
-		return null;
-	}
-
-	// Don't show an error if it's an internal PHP function.
-	if ( ! $reflection->isInternal() ) {
-
-		// Only show errors if the meta box was registered by a plugin.
-		$filename   = wp_normalize_path( $reflection->getFileName() );
-		$plugin_dir = wp_normalize_path( WP_PLUGIN_DIR );
-
-		if ( strpos( $filename, $plugin_dir ) === 0 ) {
-			$filename = str_replace( $plugin_dir, '', $filename );
-			$filename = preg_replace( '|^/([^/]*/).*$|', '\\1', $filename );
-
-			$plugins = get_plugins();
-
-			foreach ( $plugins as $name => $plugin ) {
-				if ( strpos( $name, $filename ) === 0 ) {
-					return $plugin;
-				}
-			}
-		}
-	}
-
-	return null;
-}
-
-/**
- * Meta-Box template function.
- *
- * @since 2.5.0
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
  *
  * @global array $wp_meta_boxes
  *
@@ -1989,50 +1877,12 @@ function iframe_footer() {
 
 /**
  *
-<<<<<<< HEAD
- * @param WP_Post $post
-=======
- * @since 2.7.0
- * @since 5.3.0 Added the `$echo` parameter and a return value.
+ * @since WP-2.7.0
  *
  * @see get_post_states()
  *
  * @param WP_Post $post The post to retrieve states for.
- * @param bool    $echo Optional. Whether to echo the post states as an HTML string. Default true.
  * @return string Post states string.
- */
-function _post_states( $post, $echo = true ) {
-	$post_states        = get_post_states( $post );
-	$post_states_string = '';
-
-	if ( ! empty( $post_states ) ) {
-		$state_count = count( $post_states );
-		$i           = 0;
-
-		$post_states_string .= ' &mdash; ';
-
-		foreach ( $post_states as $state ) {
-			++$i;
-			( $i == $state_count ) ? $sep = '' : $sep = ', ';
-			$post_states_string          .= "<span class='post-state'>$state$sep</span>";
-		}
-	}
-
-	if ( $echo ) {
-		echo $post_states_string;
-	}
-
-	return $post_states_string;
-}
-
-/**
- * Retrieves an array of post states from a post.
- *
- * @since 5.3.0
- *
- * @param WP_Post $post The post to retrieve states for.
- * @return string[] Array of post state labels keyed by their state.
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
  */
 function _post_states( $post ) {
 	$post_states = array();

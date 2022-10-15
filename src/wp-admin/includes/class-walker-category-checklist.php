@@ -104,13 +104,6 @@ class Walker_Category_Checklist extends Walker {
 				' tabindex="0" role="checkbox" aria-checked="' . $aria_checked . '">' .
 				esc_html( apply_filters( 'the_category', $category->name, '', '' ) ) . '</div>';
 		} else {
-<<<<<<< HEAD
-			/** This filter is documented in wp-includes/category-template.php */
-			$output .= "\n<li id='{$taxonomy}-{$category->term_id}'$class>" .
-				'<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="' . $name . '[]" id="in-' . $taxonomy . '-' . $category->term_id . '"' .
-				checked( in_array( $category->term_id, $args['selected_cats'] ), true, false ) .
-				disabled( empty( $args['disabled'] ), false, false ) . ' /> ' .
-=======
 			$is_selected = in_array( $category->term_id, $args['selected_cats'], true );
 			$is_disabled = ! empty( $args['disabled'] );
 
@@ -119,7 +112,6 @@ class Walker_Category_Checklist extends Walker {
 				checked( $is_selected, true, false ) .
 				disabled( $is_disabled, true, false ) . ' /> ' .
 				/** This filter is documented in wp-includes/category-template.php */
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 				esc_html( apply_filters( 'the_category', $category->name, '', '' ) ) . '</label>';
 		}
 	}

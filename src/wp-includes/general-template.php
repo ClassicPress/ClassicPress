@@ -2113,17 +2113,10 @@ function get_calendar( $initial = true, $echo = true ) {
 			$calendar_output .= '<td>';
 		}
 
-<<<<<<< HEAD
-		if ( in_array( $day, $daywithpost ) ) {
-			// any posts today?
-			$date_format = date( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
-			/* translators: Post calendar label. 1: Date */
-=======
 		if ( in_array( $day, $daywithpost, true ) ) {
 			// Any posts today?
 			$date_format = gmdate( _x( 'F j, Y', 'daily archives date format' ), strtotime( "{$thisyear}-{$thismonth}-{$day}" ) );
 			/* translators: Post calendar label. %s: Date. */
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 			$label            = sprintf( __( 'Posts published on %s' ), $date_format );
 			$calendar_output .= sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
@@ -2146,37 +2139,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	if ( 0 != $pad && 7 != $pad ) {
 		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
 	}
-<<<<<<< HEAD
 	$calendar_output .= "\n\t</tr>\n\t</tbody>\n\t</table>";
-=======
-
-	$calendar_output .= "\n\t</tr>\n\t</tbody>";
-
-	$calendar_output .= "\n\t</table>";
-
-	$calendar_output .= '<nav aria-label="' . __( 'Previous and next months' ) . '" class="wp-calendar-nav">';
-
-	if ( $previous ) {
-		$calendar_output .= "\n\t\t" . '<span class="wp-calendar-nav-prev"><a href="' . get_month_link( $previous->year, $previous->month ) . '">&laquo; ' .
-			$wp_locale->get_month_abbrev( $wp_locale->get_month( $previous->month ) ) .
-		'</a></span>';
-	} else {
-		$calendar_output .= "\n\t\t" . '<span class="wp-calendar-nav-prev">&nbsp;</span>';
-	}
-
-	$calendar_output .= "\n\t\t" . '<span class="pad">&nbsp;</span>';
-
-	if ( $next ) {
-		$calendar_output .= "\n\t\t" . '<span class="wp-calendar-nav-next"><a href="' . get_month_link( $next->year, $next->month ) . '">' .
-			$wp_locale->get_month_abbrev( $wp_locale->get_month( $next->month ) ) .
-		' &raquo;</a></span>';
-	} else {
-		$calendar_output .= "\n\t\t" . '<span class="wp-calendar-nav-next">&nbsp;</span>';
-	}
-
-	$calendar_output .= '
-	</nav>';
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 
 	$cache[ $key ] = $calendar_output;
 	wp_cache_set( 'get_calendar', $cache, 'calendar' );

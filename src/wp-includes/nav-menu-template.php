@@ -384,20 +384,10 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 			$classes[] = 'menu-item-home';
 		}
 
-<<<<<<< HEAD
-		// if the menu item corresponds to a taxonomy term for the currently-queried non-hierarchical post object
-		if ( $wp_query->is_singular && 'taxonomy' == $menu_item->type && in_array( $menu_item->object_id, $possible_object_parents ) ) {
-=======
-		// This menu item is set as the 'Privacy Policy Page'.
-		if ( 'post_type' === $menu_item->type && $privacy_policy_page_id === (int) $menu_item->object_id ) {
-			$classes[] = 'menu-item-privacy-policy';
-		}
-
 		// If the menu item corresponds to a taxonomy term for the currently queried non-hierarchical post object.
 		if ( $wp_query->is_singular && 'taxonomy' == $menu_item->type
 			&& in_array( (int) $menu_item->object_id, $possible_object_parents, true )
 		) {
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 			$active_parent_object_ids[] = (int) $menu_item->object_id;
 			$active_parent_item_ids[]   = (int) $menu_item->db_id;
 			$active_object              = $queried_object->post_type;

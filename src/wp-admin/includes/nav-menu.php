@@ -1101,12 +1101,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 
 	$messages            = array();
 	$menu_items          = array();
-<<<<<<< HEAD
-	// Index menu items by db ID
-=======
 
 	// Index menu items by DB ID.
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 	foreach ( $unsorted_menu_items as $_item ) {
 		$menu_items[ $_item->db_id ] = $_item;
 	}
@@ -1128,12 +1124,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 	);
 
 	wp_defer_term_counting( true );
-<<<<<<< HEAD
-	// Loop through all the menu items' POST variables
-=======
 
 	// Loop through all the menu items' POST variables.
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 	if ( ! empty( $_POST['menu-item-db-id'] ) ) {
 		foreach ( (array) $_POST['menu-item-db-id'] as $_key => $k ) {
 
@@ -1184,12 +1176,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 			unset( $nav_menu_option['auto_add'][ $key ] );
 		}
 	}
-<<<<<<< HEAD
-	// Remove nonexistent/deleted menus
-=======
 
 	// Remove non-existent/deleted menus.
->>>>>>> d8c502e966 (Coding Standards: Use strict type check for `in_array()` and `array_search()`.)
 	$nav_menu_option['auto_add'] = array_intersect( $nav_menu_option['auto_add'], wp_get_nav_menus( array( 'fields' => 'ids' ) ) );
 	update_option( 'nav_menu_options', $nav_menu_option );
 
