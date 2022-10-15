@@ -74,18 +74,6 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 		$this->assertFalse( current_theme_supports( 'post-thumbnails' ) );
 	}
 
-<<<<<<< HEAD
-	public function test_post_thumbnails_types_true() {
-		// array of arguments, with the key of 'types' holding the post types.
-		add_theme_support( 'post-thumbnails', array( 'types' => true ) );
-		$this->assertTrue( current_theme_supports( 'post-thumbnails' ) );
-		$this->assertTrue( current_theme_supports( 'post-thumbnails', rand_str() ) ); // any type
-		remove_theme_support( 'post-thumbnails' );
-		$this->assertFalse( current_theme_supports( 'post-thumbnails' ) );
-	}
-
-=======
->>>>>>> d8f5ce0ae5 (Tests: Remove `test_post_thumbnails_types_true()`.)
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/24932
 	 */
