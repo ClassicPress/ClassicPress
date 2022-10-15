@@ -170,7 +170,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 					</select>
 				</p>
 				<?php
-				}
+		}
 
 		if ( count( $taxonomies ) > 0 ) {
 			?>
