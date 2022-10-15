@@ -110,13 +110,8 @@ if ( ! is_file( $real_file ) ) {
 	// Get the extension of the file
 	if ( preg_match( '/\.([^.]+)$/', $real_file, $matches ) ) {
 		$ext = strtolower( $matches[1] );
-<<<<<<< HEAD
-		// If extension is not in the acceptable list, skip it
-		if ( ! in_array( $ext, $editable_extensions ) ) {
-=======
 		// If extension is not in the acceptable list, skip it.
 		if ( ! in_array( $ext, $editable_extensions, true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			wp_die( sprintf( '<p>%s</p>', __( 'Files of this type are not editable.' ) ) );
 		}
 	}

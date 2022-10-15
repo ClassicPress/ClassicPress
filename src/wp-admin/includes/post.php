@@ -1339,11 +1339,7 @@ function postbox_classes( $id, $page ) {
 		if ( ! is_array( $closed ) ) {
 			$classes = array( '' );
 		} else {
-<<<<<<< HEAD
-			$classes = in_array( $id, $closed ) ? array( 'closed' ) : array( '' );
-=======
 			$classes = in_array( $box_id, $closed, true ) ? array( 'closed' ) : array( '' );
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		}
 	} else {
 		$classes = array( '' );

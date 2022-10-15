@@ -347,12 +347,7 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
 	?>
 	<br />
 	<?php
-<<<<<<< HEAD
 	$allowed_zones = timezone_identifiers_list();
-=======
-	if ( in_array( $tzstring, timezone_identifiers_list(), true ) ) {
-		$transitions = timezone_transitions_get( timezone_open( $tzstring ), time() );
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 
 	if ( in_array( $tzstring, $allowed_zones ) ) {
 		$found                   = false;

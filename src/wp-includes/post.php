@@ -2565,37 +2565,6 @@ function get_post_mime_types() {
 		'video' => array( __( 'Video' ), __( 'Manage Video' ), _n_noop( 'Video <span class="count">(%s)</span>', 'Video <span class="count">(%s)</span>' ) ),
 	);
 
-<<<<<<< HEAD
-=======
-	$ext_types  = wp_get_ext_types();
-	$mime_types = wp_get_mime_types();
-
-	foreach ( $post_mime_types as $group => $labels ) {
-		if ( in_array( $group, array( 'image', 'audio', 'video' ), true ) ) {
-			continue;
-		}
-
-		if ( ! isset( $ext_types[ $group ] ) ) {
-			unset( $post_mime_types[ $group ] );
-			continue;
-		}
-
-		$group_mime_types = array();
-		foreach ( $ext_types[ $group ] as $extension ) {
-			foreach ( $mime_types as $exts => $mime ) {
-				if ( preg_match( '!^(' . $exts . ')$!i', $extension ) ) {
-					$group_mime_types[] = $mime;
-					break;
-				}
-			}
-		}
-		$group_mime_types = implode( ',', array_unique( $group_mime_types ) );
-
-		$post_mime_types[ $group_mime_types ] = $labels;
-		unset( $post_mime_types[ $group ] );
-	}
-
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 	/**
 	 * Filters the default list of post mime types.
 	 *
@@ -6008,14 +5977,9 @@ function wp_check_for_changed_slugs( $post_id, $post, $post_before ) {
  * @param WP_Post $post_before The Previous Post Object
  */
 function wp_check_for_changed_dates( $post_id, $post, $post_before ) {
-<<<<<<< HEAD
-	$previous_date = date( 'Y-m-d', strtotime( $post_before->post_date ) );
-	$new_date      = date( 'Y-m-d', strtotime( $post->post_date ) );
-=======
 	$previous_date = gmdate( 'Y-m-d', strtotime( $post_before->post_date ) );
 	$new_date      = gmdate( 'Y-m-d', strtotime( $post->post_date ) );
 
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 	// Don't bother if it hasn't changed.
 	if ( $new_date == $previous_date ) {
 		return;

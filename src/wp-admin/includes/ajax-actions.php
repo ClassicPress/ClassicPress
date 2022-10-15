@@ -875,12 +875,8 @@ function wp_ajax_dim_comment() {
 	}
 
 	check_ajax_referer( "approve-comment_$id" );
-<<<<<<< HEAD
-	if ( in_array( $current, array( 'unapproved', 'spam' ) ) ) {
-=======
 
 	if ( in_array( $current, array( 'unapproved', 'spam' ), true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$result = wp_set_comment_status( $comment, 'approve', true );
 	} else {
 		$result = wp_set_comment_status( $comment, 'hold', true );
@@ -1157,13 +1153,8 @@ function wp_ajax_replyto_comment( $action ) {
 
 	if ( empty( $post->post_status ) ) {
 		wp_die( 1 );
-<<<<<<< HEAD
-	} elseif ( in_array( $post->post_status, array( 'draft', 'pending', 'trash' ) ) ) {
-		wp_die( __( 'ERROR: you are replying to a comment on a draft post.' ) );
-=======
 	} elseif ( in_array( $post->post_status, array( 'draft', 'pending', 'trash' ), true ) ) {
-		wp_die( __( 'Error: You are replying to a comment on a draft post.' ) );
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
+		wp_die( __( 'ERROR: you are replying to a comment on a draft post.' ) );
 	}
 
 	$user = wp_get_current_user();

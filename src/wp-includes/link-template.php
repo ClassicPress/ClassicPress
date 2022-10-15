@@ -165,12 +165,8 @@ function get_permalink( $post = 0, $leavename = false ) {
 	 */
 	$permalink = apply_filters( 'pre_post_link', $permalink, $post, $leavename );
 
-<<<<<<< HEAD
-	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
-		$unixtime = strtotime( $post->post_date );
-=======
 	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ), true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
+		$unixtime = strtotime( $post->post_date );
 
 		$category = '';
 		if ( strpos( $permalink, '%category%' ) !== false ) {

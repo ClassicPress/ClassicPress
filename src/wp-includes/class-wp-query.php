@@ -3007,16 +3007,11 @@ class WP_Query {
 				$this->is_single     = true;
 				$this->is_attachment = true;
 			}
-<<<<<<< HEAD
-=======
 
-			// If the post_status was specifically requested, let it pass through.
-			if ( ! in_array( $status, $q_status, true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$post_status_obj = get_post_status_object( $status );
 
 			// If the post_status was specifically requested, let it pass through.
-			if ( ! $post_status_obj->public && ! in_array( $status, $q_status ) ) {
+			if ( ! $post_status_obj->public && ! in_array( $status, $q_status, true ) ) {
 
 				if ( ! is_user_logged_in() ) {
 					// User must be logged in to view unpublished posts.
@@ -3520,13 +3515,8 @@ class WP_Query {
 	 * @return mixed|false Return value of the callback, false otherwise.
 	 */
 	public function __call( $name, $arguments ) {
-<<<<<<< HEAD
-		if ( in_array( $name, $this->compat_methods ) ) {
-			return call_user_func_array( array( $this, $name ), $arguments );
-=======
 		if ( in_array( $name, $this->compat_methods, true ) ) {
-			return $this->$name( ...$arguments );
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
+			return call_user_func_array( array( $this, $name ), $arguments );
 		}
 		return false;
 	}

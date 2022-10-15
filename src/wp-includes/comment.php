@@ -2809,20 +2809,6 @@ function pingback( $content, $post_id ) {
 	// Parsing the post, external links (if any) are stored in the $post_links array
 	$post_links_temp = wp_extract_urls( $content );
 
-<<<<<<< HEAD
-	// Step 2.
-	// Walking thru the links array
-	// first we get rid of links pointing to sites, not to specific files
-	// Example:
-	// http://dummy-weblog.org
-	// http://dummy-weblog.org/
-	// http://dummy-weblog.org/post.php
-	// We don't wanna ping first and second types, even if they have a valid <link/>
-
-	foreach ( (array) $post_links_temp as $link_test ) :
-		if ( ! in_array( $link_test, $pung ) && ( url_to_postid( $link_test ) != $post->ID ) // If we haven't pung it already and it isn't a link to itself
-				&& ! is_local_attachment( $link_test ) ) : // Also, let's never ping local attachments.
-=======
 	/*
 	 * Step 2.
 	 * Walking through the links array.
@@ -2836,9 +2822,9 @@ function pingback( $content, $post_id ) {
 	foreach ( (array) $post_links_temp as $link_test ) {
 		// If we haven't pung it already and it isn't a link to itself.
 		if ( ! in_array( $link_test, $pung, true ) && ( url_to_postid( $link_test ) != $post->ID )
-				// Also, let's never ping local attachments.
-				&& ! is_local_attachment( $link_test ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
+			// Also, let's never ping local attachments.
+			&& ! is_local_attachment( $link_test )
+		) {
 			$test = @parse_url( $link_test );
 			if ( $test ) {
 				if ( isset( $test['query'] ) ) {
@@ -2847,8 +2833,8 @@ function pingback( $content, $post_id ) {
 					$post_links[] = $link_test;
 				}
 			}
-		endif;
-	endforeach;
+		}
+	}
 
 	$post_links = array_unique( $post_links );
 	/**

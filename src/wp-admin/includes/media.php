@@ -912,12 +912,8 @@ function wp_media_upload_handler() {
 
 	if ( isset( $_GET['tab'] ) && 'type_url' === $_GET['tab'] ) {
 		$type = 'image';
-<<<<<<< HEAD
-		if ( isset( $_GET['type'] ) && in_array( $_GET['type'], array( 'video', 'audio', 'file' ) ) ) {
-=======
 
 		if ( isset( $_GET['type'] ) && in_array( $_GET['type'], array( 'video', 'audio', 'file' ), true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$type = $_GET['type'];
 		}
 		return wp_iframe( 'media_upload_type_url_form', $type, $errors, $id );

@@ -2831,16 +2831,10 @@ function _make_web_ftp_clickable_cb( $matches ) {
 	$dest = $matches[2];
 	$dest = 'http://' . $dest;
 
-<<<<<<< HEAD
-	// removed trailing [.,;:)] from URL
-	if ( in_array( substr( $dest, -1 ), array( '.', ',', ';', ':', ')' ) ) === true ) {
-		$ret  = substr( $dest, -1 );
-=======
-	// Removed trailing [.,;:)] from URL.
+	// removed trailing [.,;:)] from URL.
 	$last_char = substr( $dest, -1 );
 	if ( in_array( $last_char, array( '.', ',', ';', ':', ')' ), true ) === true ) {
 		$ret  = $last_char;
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$dest = substr( $dest, 0, strlen( $dest ) - 1 );
 	}
 

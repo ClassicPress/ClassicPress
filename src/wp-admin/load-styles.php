@@ -18,14 +18,6 @@ require ABSPATH . 'wp-admin/includes/noop.php';
 require ABSPATH . WPINC . '/script-loader.php';
 require ABSPATH . WPINC . '/version.php';
 
-<<<<<<< HEAD
-=======
-$protocol = $_SERVER['SERVER_PROTOCOL'];
-if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ), true ) ) {
-	$protocol = 'HTTP/1.0';
-}
-
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 $load = $_GET['load'];
 if ( is_array( $load ) ) {
 	$load = implode( '', $load );
@@ -46,7 +38,7 @@ wp_default_styles( $wp_styles );
 
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) === $wp_version ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
-	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ), true ) ) {
 		$protocol = 'HTTP/1.0';
 	}
 	header( "$protocol 304 Not Modified" );

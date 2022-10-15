@@ -1344,13 +1344,8 @@ function wp_page_menu( $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-<<<<<<< HEAD
-	if ( ! in_array( $args['item_spacing'], array( 'preserve', 'discard' ) ) ) {
-		// invalid value, fall back to default.
-=======
 	if ( ! in_array( $args['item_spacing'], array( 'preserve', 'discard' ), true ) ) {
 		// Invalid value, fall back to default.
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		$args['item_spacing'] = $defaults['item_spacing'];
 	}
 

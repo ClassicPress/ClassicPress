@@ -1094,13 +1094,8 @@ final class WP_Screen {
 		$special = array( '_title', 'cb', 'comment', 'media', 'name', 'title', 'username', 'blogname' );
 
 		foreach ( $columns as $column => $title ) {
-<<<<<<< HEAD
-			// Can't hide these for they are special
-			if ( in_array( $column, $special ) ) {
-=======
 			// Can't hide these for they are special.
 			if ( in_array( $column, $special, true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				continue;
 			}
 

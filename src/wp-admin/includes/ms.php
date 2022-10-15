@@ -999,10 +999,6 @@ function confirm_delete_users( $users ) {
 				wp_die( sprintf( __( 'Warning! User %s cannot be deleted.' ), $delete_user->user_login ) );
 			}
 
-<<<<<<< HEAD
-			if ( in_array( $delete_user->user_login, $site_admins ) ) {
-				wp_die( sprintf( __( 'Warning! User cannot be deleted. The user %s is a network administrator.' ), '<em>' . $delete_user->user_login . '</em>' ) );
-=======
 			if ( in_array( $delete_user->user_login, $site_admins, true ) ) {
 				wp_die(
 					sprintf(
@@ -1011,7 +1007,6 @@ function confirm_delete_users( $users ) {
 						'<em>' . $delete_user->user_login . '</em>'
 					)
 				);
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			}
 			?>
 			<tr>

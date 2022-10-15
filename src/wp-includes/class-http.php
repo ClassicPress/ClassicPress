@@ -879,11 +879,7 @@ class WP_Http {
 		if ( ! empty( $wildcard_regex ) ) {
 			return ! preg_match( $wildcard_regex, $check['host'] );
 		} else {
-<<<<<<< HEAD
-			return ! in_array( $check['host'], $accessible_hosts ); //Inverse logic, If it's in the array, then we can't access it.
-=======
 			return ! in_array( $check['host'], $accessible_hosts, true ); // Inverse logic, if it's in the array, then don't block it.
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		}
 
 	}

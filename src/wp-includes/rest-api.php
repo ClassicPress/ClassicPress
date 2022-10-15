@@ -1140,13 +1140,8 @@ function rest_validate_value_from_schema( $value, $args, $param = '' ) {
 		}
 	}
 
-<<<<<<< HEAD
-	if ( in_array( $args['type'], array( 'integer', 'number' ) ) && ! is_numeric( $value ) ) {
-		/* translators: 1: parameter, 2: type name */
-=======
 	if ( in_array( $args['type'], array( 'integer', 'number' ), true ) && ! is_numeric( $value ) ) {
 		/* translators: 1: Parameter, 2: Type name. */
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		return new WP_Error( 'rest_invalid_param', sprintf( __( '%1$s is not of type %2$s.' ), $param, $args['type'] ) );
 	}
 

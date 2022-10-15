@@ -971,13 +971,8 @@ class WP_Date_Query {
 			return false;
 		}
 
-<<<<<<< HEAD
-		// Complex combined queries aren't supported for multi-value queries
-		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
-=======
 		// Complex combined queries aren't supported for multi-value queries.
 		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 			$return = array();
 
 			$value = $this->build_value( $compare, $hour );

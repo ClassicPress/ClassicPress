@@ -589,16 +589,7 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 		return $valid;
 	}
 
-<<<<<<< HEAD
-	if ( ( $network_wide && ! isset( $current[ $plugin ] ) ) || ( ! $network_wide && ! in_array( $plugin, $current ) ) ) {
-=======
-	$requirements = validate_plugin_requirements( $plugin );
-	if ( is_wp_error( $requirements ) ) {
-		return $requirements;
-	}
-
 	if ( ( $network_wide && ! isset( $current[ $plugin ] ) ) || ( ! $network_wide && ! in_array( $plugin, $current, true ) ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 		if ( ! empty( $redirect ) ) {
 			wp_redirect( add_query_arg( '_error_nonce', wp_create_nonce( 'plugin-activation-error_' . $plugin ), $redirect ) ); // we'll override this later if the plugin can be included without fatal error
 		}

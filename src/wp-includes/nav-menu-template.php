@@ -453,9 +453,6 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 			$item_url           = set_url_scheme( untrailingslashit( $raw_item_url ) );
 			$_indexless_current = untrailingslashit( preg_replace( '/' . preg_quote( $wp_rewrite->index, '/' ) . '$/', '', $current_url ) );
 
-<<<<<<< HEAD
-			if ( $raw_item_url && in_array( $item_url, array( $current_url, $_indexless_current, $_root_relative_current ) ) ) {
-=======
 			$matches = array(
 				$current_url,
 				urldecode( $current_url ),
@@ -466,7 +463,6 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 			);
 
 			if ( $raw_item_url && in_array( $item_url, $matches, true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				$classes[]                   = 'current-menu-item';
 				$menu_items[ $key ]->current = true;
 				$_anc_id                     = (int) $menu_item->db_id;
@@ -478,13 +474,8 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 					$active_ancestor_item_ids[] = $_anc_id;
 				}
 
-<<<<<<< HEAD
-				if ( in_array( home_url(), array( untrailingslashit( $current_url ), untrailingslashit( $_indexless_current ) ) ) ) {
-					// Back compat for home link to match wp_page_menu()
-=======
 				if ( in_array( home_url(), array( untrailingslashit( $current_url ), untrailingslashit( $_indexless_current ) ), true ) ) {
 					// Back compat for home link to match wp_page_menu().
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 					$classes[] = 'current_page_item';
 				}
 				$active_parent_item_ids[]   = (int) $menu_item->menu_item_parent;
@@ -519,15 +510,9 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 		$menu_items[ $key ]->current_item_parent   = false;
 
 		if (
-<<<<<<< HEAD
-			isset( $parent_item->type ) &&
-			(
-				// ancestral post object
-=======
 			isset( $parent_item->type )
 			&& (
 				// Ancestral post object.
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				(
 					'post_type' == $parent_item->type
 					&& ! empty( $queried_object->post_type )
@@ -570,13 +555,8 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
 		}
 
 		if ( 'post_type' == $parent_item->type && 'page' == $parent_item->object ) {
-<<<<<<< HEAD
-			// Back compat classes for pages to match wp_page_menu()
-			if ( in_array( 'current-menu-parent', $classes ) ) {
-=======
 			// Back compat classes for pages to match wp_page_menu().
 			if ( in_array( 'current-menu-parent', $classes, true ) ) {
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				$classes[] = 'current_page_parent';
 			}
 			if ( in_array( 'current-menu-ancestor', $classes, true ) ) {

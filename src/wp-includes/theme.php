@@ -2848,19 +2848,12 @@ function current_theme_supports( $feature ) {
 
 	switch ( $feature ) {
 		case 'post-thumbnails':
-<<<<<<< HEAD
-			// post-thumbnails can be registered for only certain content/post types by passing
-			// an array of types to add_theme_support(). If no array was passed, then
-			// any type is accepted
-			if ( true === $_wp_theme_features[ $feature ] ) {  // Registered for all types
-=======
 			/*
 			 * post-thumbnails can be registered for only certain content/post types
 			 * by passing an array of types to add_theme_support().
 			 * If no array was passed, then any type is accepted.
 			 */
 			if ( true === $_wp_theme_features[ $feature ] ) {  // Registered for all types.
->>>>>>> 0b4e2c4604 (Coding Standards: Use strict type check for `in_array()` and `array_search()` where strings are involved.)
 				return true;
 			}
 			$content_type = $args[0];
