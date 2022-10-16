@@ -36,17 +36,10 @@ function get_category_link( $category ) {
  * @since WP-1.2.0
  * @since WP-4.8.0 The `$visited` parameter was deprecated and renamed to `$deprecated`.
  *
-<<<<<<< HEAD
- * @param int $id Category ID.
- * @param bool $link Optional, default is false. Whether to format with link.
- * @param string $separator Optional, default is '/'. How to separate categories.
- * @param bool $nicename Optional, default is false. Whether to use nice name for display.
-=======
  * @param int    $category_id Category ID.
  * @param bool   $link        Optional. Whether to format with link. Default false.
  * @param string $separator   Optional. How to separate categories. Default '/'.
  * @param bool   $nicename    Optional. Whether to use nice name for display. Default false.
->>>>>>> 5ca5435aa9 (Coding Standards: Rename the `$id` parameter in various category functions for clarity.)
  * @param array $deprecated Not used.
  * @return string|WP_Error A list of category parents on success, WP_Error on failure.
  */
@@ -77,13 +70,8 @@ function get_category_parents( $category_id, $link = false, $separator = '/', $n
  *
  * @since WP-0.71
  *
-<<<<<<< HEAD
- * @param int $id Optional, default to current post ID. The post ID.
- * @return array Array of WP_Term objects, one for each category assigned to the post.
-=======
  * @param int $post_id Optional. The post ID. Defaults to current post ID.
  * @return WP_Term[] Array of WP_Term objects, one for each category assigned to the post.
->>>>>>> 5ca5435aa9 (Coding Standards: Rename the `$id` parameter in various category functions for clarity.)
  */
 function get_the_category( $post_id = false ) {
 	$categories = get_the_terms( $post_id, 'category' );
@@ -100,19 +88,11 @@ function get_the_category( $post_id = false ) {
 	/**
 	 * Filters the array of categories to return for a post.
 	 *
-<<<<<<< HEAD
 	 * @since WP-3.1.0
-	 * @since WP-4.4.0 Added `$id` parameter.
-	 *
-	 * @param array $categories An array of categories to return for the post.
-	 * @param int   $id         ID of the post.
-=======
-	 * @since 3.1.0
-	 * @since 4.4.0 Added `$post_id` parameter.
+	 * @since WP-4.4.0 Added `$post_id` parameter.
 	 *
 	 * @param WP_Term[] $categories An array of categories to return for the post.
 	 * @param int|false $post_id    ID of the post.
->>>>>>> 5ca5435aa9 (Coding Standards: Rename the `$id` parameter in various category functions for clarity.)
 	 */
 	return apply_filters( 'get_the_categories', $categories, $post_id );
 }
@@ -1175,17 +1155,10 @@ function get_the_tags( $post_id = 0 ) {
  *
  * @since WP-2.3.0
  *
-<<<<<<< HEAD
- * @param string $before Optional. Before tags.
- * @param string $sep Optional. Between tags.
- * @param string $after Optional. After tags.
- * @param int $id Optional. Post ID. Defaults to the current post.
-=======
  * @param string $before  Optional. String to use before tags.
  * @param string $sep     Optional. String to use between the tags.
  * @param string $after   Optional. String to use after tags.
  * @param int    $post_id Optional. Post ID. Defaults to the current post.
->>>>>>> 5ca5435aa9 (Coding Standards: Rename the `$id` parameter in various category functions for clarity.)
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
 function get_the_tag_list( $before = '', $sep = '', $after = '', $post_id = 0 ) {
