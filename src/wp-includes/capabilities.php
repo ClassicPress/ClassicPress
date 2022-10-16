@@ -358,16 +358,12 @@ function map_meta_cap( $cap, $user_id ) {
 					 * @param string   $cap       Capability name.
 					 * @param string[] $caps      Array of the user's capabilities.
 					 */
-<<<<<<< HEAD
-					$allowed = apply_filters_deprecated( "auth_{$object_type}_{$object_subtype}_meta_{$meta_key}", array( $allowed, $meta_key, $object_id, $user_id, $cap, $caps ), 'WP-4.9.8', "auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}" );
-=======
 					$allowed = apply_filters_deprecated(
 						"auth_{$object_type}_{$object_subtype}_meta_{$meta_key}",
 						array( $allowed, $meta_key, $object_id, $user_id, $cap, $caps ),
-						'4.9.8',
+						'WP-4.9.8',
 						"auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}"
 					);
->>>>>>> e65d19b9ed (Coding Standards: Reformat some long `apply_filters_deprecated()` and `do_action_deprecated()` calls for better readability.)
 				}
 
 				if ( ! $allowed ) {
