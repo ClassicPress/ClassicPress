@@ -112,8 +112,13 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 				/* translators: %s: Table name. */
 				printf( __( 'Successfully repaired the %s table.' ), "<code>$table</code>" );
 			} else {
+<<<<<<< HEAD
 				/* translators: 1: table name, 2: error message, */
 				echo sprintf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" ) . '<br />';
+=======
+				/* translators: 1: Table name, 2: Error message. */
+				printf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" ) . '<br />';
+>>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 				$problems[ $table ] = $check->Msg_text;
 				$okay               = false;
 			}

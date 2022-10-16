@@ -197,8 +197,13 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		<p><strong><?php _e( 'Did you know?' ); ?></strong></p>
 		<p>
 			<?php
+<<<<<<< HEAD
 			echo sprintf(
 				/* translators: %s: link to Custom CSS section in the Customizer */
+=======
+			printf(
+				/* translators: %s: Link to Custom CSS section in the Customizer. */
+>>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 				__( 'There&#8217;s no need to change your CSS here &mdash; you can edit and live preview CSS changes in the <a href="%s">built-in CSS editor</a>.' ),
 				esc_url( add_query_arg( 'autofocus[section]', 'custom_css', admin_url( 'customize.php' ) ) )
 			);
@@ -341,10 +346,23 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) :
 				<h1><?php _e( 'Heads up!' ); ?></h1>
 				<p>
 					<?php
+<<<<<<< HEAD
 					echo sprintf(
 						/* translators: %s: Codex URL */
 						__( 'You appear to be making direct edits to your theme in the ClassicPress dashboard. We recommend that you don&#8217;t! Editing your theme directly could break your site and your changes may be lost in future updates. If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
 						esc_url( __( 'https://codex.wordpress.org/Child_Themes' ) )
+=======
+						_e( 'You appear to be making direct edits to your theme in the WordPress dashboard. We recommend that you don&#8217;t! Editing your theme directly could break your site and your changes may be lost in future updates.' );
+						?>
+					</p>
+						<?php
+						if ( ! $theme->parent() ) {
+							echo '<p>';
+							printf(
+								/* translators: %s: Link to documentation on child themes. */
+								__( 'If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
+								esc_url( __( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' ) )
+>>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 					);
 					?>
 				</p>

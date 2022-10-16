@@ -360,8 +360,13 @@ class WP_Customize_Panel {
 			<div class="accordion-section-title">
 				<span class="preview-notice">
 				<?php
+<<<<<<< HEAD
 					/* translators: %s: the site/panel title in the Customizer */
 					echo sprintf( __( 'You are customizing %s' ), '<strong class="panel-title">{{ data.title }}</strong>' );
+=======
+					/* translators: %s: The site/panel title in the Customizer. */
+					printf( __( 'You are customizing %s' ), '<strong class="panel-title">{{ data.title }}</strong>' );
+>>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 				?>
 				</span>
 				<# if ( data.description ) { #>
