@@ -1335,13 +1335,8 @@ function wp_dashboard_plugins_output( $rss, $args = array() ) {
 
 		// Pick a random, non-installed plugin
 		while ( true ) {
-<<<<<<< HEAD
-			// Abort this foreach loop iteration if there's no plugins left of this type
-			if ( 0 == count($items) )
-=======
 			// Abort this foreach loop iteration if there's no plugins left of this type.
-			if ( 0 === count($items) )
->>>>>>> 772a11b72a (Coding Standards: Use strict comparison for `count()` calls.)
+			if ( 0 === count( $items ) )
 				continue 2;
 
 			$item_key = array_rand($items);
