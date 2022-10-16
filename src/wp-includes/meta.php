@@ -848,23 +848,29 @@ function update_meta_cache( $meta_type, $object_ids ) {
 	$object_ids = array_map( 'intval', $object_ids );
 
 	$cache_key = $meta_type . '_meta';
-	$ids       = array();
+	$non_cached_ids = array();
 	$cache     = array();
 	$cache_values = wp_cache_get_multiple( $object_ids, $cache_key );
+
 	foreach ( $cache_values as $id => $cached_object ) {
 		if ( false === $cached_object ) {
-			$ids[] = $id;
+			$non_cached_ids[] = $id;
 		} else {
 			$cache[ $id ] = $cached_object;
 		}
 	}
 
-	if ( empty( $ids ) ) {
+	if ( empty( $non_cached_ids ) ) {
 		return $cache;
 	}
 
+<<<<<<< HEAD
 	// Get meta info
 	$id_list   = join( ',', $ids );
+=======
+	// Get meta info.
+	$id_list   = join( ',', $non_cached_ids );
+>>>>>>> eff94648d7 (Coding Standards: Rename the `$clean` or `$ids` variable in several functions to `$non_cached_ids` for clarity.)
 	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	$meta_list = $wpdb->get_results( "SELECT $column, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
@@ -888,7 +894,7 @@ function update_meta_cache( $meta_type, $object_ids ) {
 		}
 	}
 
-	foreach ( $ids as $id ) {
+	foreach ( $non_cached_ids as $id ) {
 		if ( ! isset( $cache[ $id ] ) ) {
 			$cache[ $id ] = array();
 		}
