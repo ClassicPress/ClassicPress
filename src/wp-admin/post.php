@@ -316,21 +316,6 @@ switch ( $action ) {
 		wp_redirect( $url );
 		exit;
 
-<<<<<<< HEAD
-=======
-	case 'toggle-custom-fields':
-		check_admin_referer( 'toggle-custom-fields' );
-
-		$current_user_id = get_current_user_id();
-		if ( $current_user_id ) {
-			$enable_custom_fields = (bool) get_user_meta( $current_user_id, 'enable_custom_fields', true );
-			update_user_meta( $current_user_id, 'enable_custom_fields', ! $enable_custom_fields );
-		}
-
-		wp_safe_redirect( wp_get_referer() );
-		exit;
-
->>>>>>> 2c75752c88 (Coding Standards: Fix instances of `Generic.WhiteSpace.ArbitraryParenthesesSpacing.FoundEmpty`.)
 	default:
 		/**
 		 * Fires for a given custom post action request.
@@ -344,13 +329,7 @@ switch ( $action ) {
 		do_action( "post_action_{$action}", $post_id );
 
 		wp_redirect( admin_url( 'edit.php' ) );
-<<<<<<< HEAD
-		exit();
-} // end switch
-require ABSPATH . 'wp-admin/admin-footer.php';
-=======
 		exit;
 } // End switch.
 
 require_once ABSPATH . 'wp-admin/admin-footer.php';
->>>>>>> 2c75752c88 (Coding Standards: Fix instances of `Generic.WhiteSpace.ArbitraryParenthesesSpacing.FoundEmpty`.)

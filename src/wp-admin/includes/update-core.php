@@ -677,13 +677,8 @@ window.location = 'about.php?updated';
 	<?php
 
 	// Include admin-footer.php and exit.
-<<<<<<< HEAD
-	include ABSPATH . 'wp-admin/admin-footer.php';
-	exit();
-=======
 	require_once ABSPATH . 'wp-admin/admin-footer.php';
 	exit;
->>>>>>> 2c75752c88 (Coding Standards: Fix instances of `Generic.WhiteSpace.ArbitraryParenthesesSpacing.FoundEmpty`.)
 }
 
 /**
