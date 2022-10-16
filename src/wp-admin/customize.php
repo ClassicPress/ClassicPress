@@ -218,12 +218,8 @@ do_action( 'customize_controls_print_scripts' );
 					<div class="accordion-section-title">
 						<span class="preview-notice">
 						<?php
-<<<<<<< HEAD
-							echo sprintf( __( 'You are customizing %s' ), '<strong class="panel-title site-title">' . get_bloginfo( 'name', 'display' ) . '</strong>' );
-=======
 							/* translators: %s: The site/panel title in the Customizer. */
 							printf( __( 'You are customizing %s' ), '<strong class="panel-title site-title">' . get_bloginfo( 'name', 'display' ) . '</strong>' );
->>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 						?>
 						</span>
 						<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false"><span class="screen-reader-text"><?php _e( 'Help' ); ?></span></button>

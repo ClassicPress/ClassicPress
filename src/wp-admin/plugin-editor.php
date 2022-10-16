@@ -195,21 +195,6 @@ if ( ! is_file( $real_file ) ) {
 	<?php
 	if ( is_plugin_active( $plugin ) ) {
 		if ( is_writeable( $real_file ) ) {
-<<<<<<< HEAD
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Editing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
-		} else {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Browsing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
-		}
-	} else {
-		if ( is_writeable( $real_file ) ) {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Editing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
-		} else {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Browsing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
-=======
 			/* translators: %s: Plugin file name. */
 			printf( __( 'Editing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
 		} else {
@@ -223,7 +208,6 @@ if ( ! is_file( $real_file ) ) {
 		} else {
 			/* translators: %s: Plugin file name. */
 			printf( __( 'Browsing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
->>>>>>> 8909a914c7 (Coding Standards: Replace `echo sprintf()` with `printf()`.)
 		}
 	}
 	?>
