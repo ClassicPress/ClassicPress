@@ -139,19 +139,11 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 			return false;
 		}
 
-<<<<<<< HEAD
-		fseek( $temp, 0 ); // Skip back to the start of the file being written to
-		$contents = '';
-
-		while ( ! feof( $temp ) ) {
-			$contents .= fread( $temp, 8192 );
-=======
 		fseek( $temphandle, 0 ); // Skip back to the start of the file being written to.
 		$contents = '';
 
 		while ( ! feof( $temphandle ) ) {
 			$contents .= fread( $temphandle, 8 * KB_IN_BYTES );
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		}
 
 		fclose( $temphangle );
@@ -198,11 +190,7 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 			return false;
 		}
 
-<<<<<<< HEAD
-		fseek( $temp, 0 ); // Skip back to the start of the file being written to
-=======
 		fseek( $temphandle, 0 ); // Skip back to the start of the file being written to.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 
 		$ret = ftp_fput( $this->link, $file, $temphandle, FTP_BINARY );
 
@@ -573,8 +561,6 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 					$b['time'] = mktime( $b['hour'], $b['minute'], 0, $b['month'], $b['day'], $b['year'] );
 					$b['name'] = $lucifer[7];
 				} else {
-<<<<<<< HEAD
-=======
 					$b['month'] = $lucifer[5];
 					$b['day']   = $lucifer[6];
 
@@ -583,14 +569,14 @@ class WP_Filesystem_FTPext extends WP_Filesystem_Base {
 						$b['hour']   = $l2[1];
 						$b['minute'] = $l2[2];
 					} else {
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
-					$b['year']   = $lucifer[7];
-					$b['hour']   = 0;
-					$b['minute'] = 0;
-				}
+						$b['year']   = $lucifer[7];
+						$b['hour']   = 0;
+						$b['minute'] = 0;
+					}
 
-				$b['time'] = strtotime( sprintf( '%d %s %d %02d:%02d', $b['day'], $b['month'], $b['year'], $b['hour'], $b['minute'] ) );
-				$b['name'] = $lucifer[8];
+					$b['time'] = strtotime( sprintf( '%d %s %d %02d:%02d', $b['day'], $b['month'], $b['year'], $b['hour'], $b['minute'] ) );
+					$b['name'] = $lucifer[8];
+				}
 			}
 		}
 

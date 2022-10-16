@@ -126,12 +126,8 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $this->is_dir( $file ) ) {
 			return chgrp( $file, $group );
 		}
-<<<<<<< HEAD
-		// Is a directory, and we want recursive
-=======
 
 		// Is a directory, and we want recursive.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$file     = trailingslashit( $file );
 		$filelist = $this->dirlist( $file );
 
@@ -166,12 +162,8 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $recursive || ! $this->is_dir( $file ) ) {
 			return chmod( $file, $mode );
 		}
-<<<<<<< HEAD
-		// Is a directory, and we want recursive
-=======
 
 		// Is a directory, and we want recursive.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$file     = trailingslashit( $file );
 		$filelist = $this->dirlist( $file );
 
@@ -204,12 +196,8 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $this->is_dir( $file ) ) {
 			return chown( $file, $owner );
 		}
-<<<<<<< HEAD
-		// Is a directory, and we want recursive
-=======
 
 		// Is a directory, and we want recursive.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$filelist = $this->dirlist( $file );
 
 		foreach ( $filelist as $filename ) {
@@ -343,12 +331,8 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( empty( $file ) ) { // Some filesystems report this as /, which can cause non-expected recursive deletion of all files in the filesystem.
 			return false;
 		}
-<<<<<<< HEAD
-		$file = str_replace( '\\', '/', $file ); // for win32, occasional problems deleting files otherwise
-=======
 
 		$file = str_replace( '\\', '/', $file ); // For Win32, occasional problems deleting files otherwise.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 
 		if ( 'f' === $type || $this->is_file( $file ) ) {
 			return @unlink( $file );

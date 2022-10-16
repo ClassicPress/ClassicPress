@@ -54,13 +54,9 @@ class WP_Filesystem_Base {
 	 */
 	public function abspath() {
 		$folder = $this->find_folder( ABSPATH );
-<<<<<<< HEAD
-		// Perhaps the FTP folder is rooted at the ClassicPress install, Check for wp-includes folder in root, Could have some false positives, but rare.
-=======
 
 		// Perhaps the FTP folder is rooted at the WordPress install.
 		// Check for wp-includes folder in root. Could have some false positives, but rare.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		if ( ! $folder && $this->is_dir( '/' . WPINC ) ) {
 			$folder = '/';
 		}
@@ -203,12 +199,8 @@ class WP_Filesystem_Base {
 				if ( ! defined( $constant ) ) {
 					continue;
 				}
-<<<<<<< HEAD
-				if ( 0 === stripos( $folder, $dir ) ) { // $folder starts with $dir
-=======
 
 				if ( 0 === stripos( $folder, $dir ) ) { // $folder starts with $dir.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 					$potential_folder = preg_replace( '#^' . preg_quote( $dir, '#' ) . '/#i', trailingslashit( constant( $constant ) ), $folder );
 					$potential_folder = trailingslashit( $potential_folder );
 
@@ -348,12 +340,8 @@ class WP_Filesystem_Base {
 	 */
 	public function gethchmod( $file ) {
 		$perms = intval( $this->getchmod( $file ), 8 );
-<<<<<<< HEAD
-		if ( ( $perms & 0xC000 ) == 0xC000 ) { // Socket
-=======
 
 		if ( ( $perms & 0xC000 ) == 0xC000 ) { // Socket.
->>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 			$info = 's';
 		} elseif ( ( $perms & 0xA000 ) == 0xA000 ) { // Symbolic Link
 			$info = 'l';
