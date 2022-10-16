@@ -129,7 +129,7 @@ function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
 /**
  * Gets multiple values from cache in one call.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  * @see WP_Object_Cache::get_multiple()
  *
  * @param array       $keys   Array of keys to get from group.

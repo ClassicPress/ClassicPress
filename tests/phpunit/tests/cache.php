@@ -332,7 +332,7 @@ class Tests_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 20875
+	 * @see https://core.trac.wordpress.org/ticket/20875
 	 */
 	public function test_get_multiple() {
 		wp_cache_set( 'foo1', 'bar', 'group1' );

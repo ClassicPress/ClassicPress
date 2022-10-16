@@ -305,7 +305,7 @@ class WP_Object_Cache {
 	/**
 	 * Retrieves multiple values from the cache.
 	 *
-	 * @since  5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param array $keys        Array of keys to fetch.
 	 * @param bool  $force       Optional. Unused. Whether to force a refetch rather than relying on the local
