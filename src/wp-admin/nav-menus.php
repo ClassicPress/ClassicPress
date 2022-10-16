@@ -348,8 +348,6 @@ switch ( $action ) {
 					if ( isset( $_REQUEST['menu-item'] ) ) {
 						wp_save_nav_menu_items( $nav_menu_selected_id, absint( $_REQUEST['menu-item'] ) );
 					}
-<<<<<<< HEAD
-=======
 
 					// Set the menu_location value correctly for the newly created menu.
 					foreach ( $menu_locations as $location => $id ) {
@@ -365,7 +363,6 @@ switch ( $action ) {
 						wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selected_title );
 					}
 
->>>>>>> f30b219147 (Coding Standards: Fix WPCS issues in `wp-admin/nav-menus.php`.)
 					if ( isset( $_REQUEST['zero-menu-state'] ) ) {
 						// If there are menu items, add them
 						wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selected_title );
@@ -401,8 +398,6 @@ switch ( $action ) {
 
 			// Update existing menu.
 		} else {
-<<<<<<< HEAD
-=======
 			// Remove menu locations that have been unchecked.
 			foreach ( $locations as $location => $description ) {
 				if ( ( empty( $_POST['menu-locations'] ) || empty( $_POST['menu-locations'][ $location ] ) )
@@ -414,7 +409,6 @@ switch ( $action ) {
 
 			// Set menu locations.
 			set_theme_mod( 'nav_menu_locations', $menu_locations );
->>>>>>> f30b219147 (Coding Standards: Fix WPCS issues in `wp-admin/nav-menus.php`.)
 
 			$_menu_object = wp_get_nav_menu_object( $nav_menu_selected_id );
 
@@ -694,13 +688,9 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	endif;
 
 	$nav_tab_active_class = '';
-<<<<<<< HEAD
-	if ( ! isset( $_GET['action'] ) || isset( $_GET['action'] ) && 'locations' != $_GET['action'] ) {
-=======
 	$nav_aria_current     = '';
 
 	if ( ! isset( $_GET['action'] ) || isset( $_GET['action'] ) && 'locations' !== $_GET['action'] ) {
->>>>>>> f30b219147 (Coding Standards: Fix WPCS issues in `wp-admin/nav-menus.php`.)
 		$nav_tab_active_class = ' nav-tab-active';
 	}
 	?>
@@ -712,11 +702,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		<?php
 		if ( $num_locations && $menu_count ) {
 			$active_tab_class = '';
-<<<<<<< HEAD
-=======
 			$aria_current     = '';
 
->>>>>>> f30b219147 (Coding Standards: Fix WPCS issues in `wp-admin/nav-menus.php`.)
 			if ( $locations_screen ) {
 				$active_tab_class = ' nav-tab-active';
 			}
@@ -1045,13 +1032,13 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 											<label for="locations-<?php echo esc_attr( $location ); ?>"><?php echo $description; ?></label>
 												<?php if ( ! empty( $menu_locations[ $location ] ) && $menu_locations[ $location ] !== $nav_menu_selected_id ) : ?>
 												<span class="theme-location-set">
-												<?php
+													<?php
 													/* translators: %s: menu name */
 													printf(
 														_x( '(Currently set to: %s)', 'menu location' ),
 														wp_get_nav_menu_object( $menu_locations[ $location ] )->name
 													);
-												?>
+													?>
 												</span>
 											<?php endif; ?>
 										</div>
