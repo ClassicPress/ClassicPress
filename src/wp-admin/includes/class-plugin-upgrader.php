@@ -543,12 +543,8 @@ class Plugin_Upgrader extends WP_Upgrader {
 		}
 
 		// If plugin is in its own directory, recursively delete the directory.
-<<<<<<< HEAD
-		if ( strpos( $plugin, '/' ) && $this_plugin_dir != $plugins_dir ) { //base check on if plugin includes directory separator AND that it's not the root plugin folder
-=======
 		// Base check on if plugin includes directory separator AND that it's not the root plugin folder.
 		if ( strpos( $plugin, '/' ) && $this_plugin_dir !== $plugins_dir ) {
->>>>>>> 5e43c07be4 (Coding Standards: Fix WPCS issues in plugin and theme upgrader classes.)
 			$deleted = $wp_filesystem->delete( $this_plugin_dir, true );
 		} else {
 			$deleted = $wp_filesystem->delete( $plugins_dir . $plugin );

@@ -65,12 +65,8 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 				),
 				admin_url( 'customize.php' )
 			);
-<<<<<<< HEAD
-			if ( get_stylesheet() == $stylesheet ) {
-=======
 
 			if ( get_stylesheet() === $stylesheet ) {
->>>>>>> 5e43c07be4 (Coding Standards: Fix WPCS issues in plugin and theme upgrader classes.)
 				if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
 					$update_actions['preview'] = '<a href="' . esc_url( $customize_url ) . '" class="hide-if-no-customize load-customize"><span aria-hidden="true">' . __( 'Customize' ) . '</span><span class="screen-reader-text">' . sprintf( __( 'Customize &#8220;%s&#8221;' ), $name ) . '</span></a>';
 				}
