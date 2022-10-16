@@ -60,6 +60,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 */
 	public function put_contents( $file, $contents, $mode = false ) {
 		$fp = @fopen( $file, 'wb' );
+
 		if ( ! $fp ) {
 			return false;
 		}
@@ -117,15 +118,23 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $this->exists( $file ) ) {
 			return false;
 		}
+
 		if ( ! $recursive ) {
 			return chgrp( $file, $group );
 		}
+
 		if ( ! $this->is_dir( $file ) ) {
 			return chgrp( $file, $group );
 		}
+<<<<<<< HEAD
 		// Is a directory, and we want recursive
+=======
+
+		// Is a directory, and we want recursive.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$file     = trailingslashit( $file );
 		$filelist = $this->dirlist( $file );
+
 		foreach ( $filelist as $filename ) {
 			$this->chgrp( $file . $filename, $group, $recursive );
 		}
@@ -157,9 +166,15 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $recursive || ! $this->is_dir( $file ) ) {
 			return chmod( $file, $mode );
 		}
+<<<<<<< HEAD
 		// Is a directory, and we want recursive
+=======
+
+		// Is a directory, and we want recursive.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$file     = trailingslashit( $file );
 		$filelist = $this->dirlist( $file );
+
 		foreach ( (array) $filelist as $filename => $filemeta ) {
 			$this->chmod( $file . $filename, $mode, $recursive );
 		}
@@ -181,17 +196,26 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! $this->exists( $file ) ) {
 			return false;
 		}
+
 		if ( ! $recursive ) {
 			return chown( $file, $owner );
 		}
+
 		if ( ! $this->is_dir( $file ) ) {
 			return chown( $file, $owner );
 		}
+<<<<<<< HEAD
 		// Is a directory, and we want recursive
+=======
+
+		// Is a directory, and we want recursive.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		$filelist = $this->dirlist( $file );
+
 		foreach ( $filelist as $filename ) {
 			$this->chown( $file . '/' . $filename, $owner, $recursive );
 		}
+
 		return true;
 	}
 
@@ -204,16 +228,21 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 */
 	public function owner( $file ) {
 		$owneruid = @fileowner( $file );
+
 		if ( ! $owneruid ) {
 			return false;
 		}
+
 		if ( ! function_exists( 'posix_getpwuid' ) ) {
 			return $owneruid;
 		}
+
 		$ownerarray = posix_getpwuid( $owneruid );
+
 		if ( ! $ownerarray ) {
 			return false;
 		}
+
 		return $ownerarray['name'];
 	}
 
@@ -237,16 +266,21 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	 */
 	public function group( $file ) {
 		$gid = @filegroup( $file );
+
 		if ( ! $gid ) {
 			return false;
 		}
+
 		if ( ! function_exists( 'posix_getgrgid' ) ) {
 			return $gid;
 		}
+
 		$grouparray = posix_getgrgid( $gid );
+
 		if ( ! $grouparray ) {
 			return false;
 		}
+
 		return $grouparray['name'];
 	}
 
@@ -264,9 +298,11 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		}
 
 		$rtval = copy( $source, $destination );
+
 		if ( $mode ) {
 			$this->chmod( $destination, $mode );
 		}
+
 		return $rtval;
 	}
 
@@ -289,6 +325,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 
 		if ( $this->copy( $source, $destination, $overwrite ) && $this->exists( $destination ) ) {
 			$this->delete( $source );
+
 			return true;
 		} else {
 			return false;
@@ -306,11 +343,17 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( empty( $file ) ) { // Some filesystems report this as /, which can cause non-expected recursive deletion of all files in the filesystem.
 			return false;
 		}
+<<<<<<< HEAD
 		$file = str_replace( '\\', '/', $file ); // for win32, occasional problems deleting files otherwise
+=======
+
+		$file = str_replace( '\\', '/', $file ); // For Win32, occasional problems deleting files otherwise.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 
 		if ( 'f' === $type || $this->is_file( $file ) ) {
 			return @unlink( $file );
 		}
+
 		if ( ! $recursive && $this->is_dir( $file ) ) {
 			return @rmdir( $file );
 		}
@@ -320,6 +363,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		$filelist = $this->dirlist( $file, true );
 
 		$retval = true;
+
 		if ( is_array( $filelist ) ) {
 			foreach ( $filelist as $filename => $fileinfo ) {
 				if ( ! $this->delete( $file . $filename, $recursive, $fileinfo['type'] ) ) {
@@ -415,9 +459,11 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( 0 == $time ) {
 			$time = time();
 		}
+
 		if ( 0 == $atime ) {
 			$atime = time();
 		}
+
 		return touch( $file, $time, $atime );
 	}
 
@@ -432,6 +478,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 	public function mkdir( $path, $chmod = false, $chown = false, $chgrp = false ) {
 		// Safe mode fails with a trailing slash under certain PHP versions.
 		$path = untrailingslashit( $path );
+
 		if ( empty( $path ) ) {
 			return false;
 		}
@@ -443,13 +490,17 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		if ( ! @mkdir( $path ) ) {
 			return false;
 		}
+
 		$this->chmod( $path, $chmod );
+
 		if ( $chown ) {
 			$this->chown( $path, $chown );
 		}
+
 		if ( $chgrp ) {
 			$this->chgrp( $path, $chgrp );
 		}
+
 		return true;
 	}
 
@@ -483,6 +534,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		}
 
 		$dir = dir( $path );
+
 		if ( ! $dir ) {
 			return false;
 		}
@@ -526,8 +578,10 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 
 			$ret[ $struc['name'] ] = $struc;
 		}
+
 		$dir->close();
 		unset( $dir );
+
 		return $ret;
 	}
 }

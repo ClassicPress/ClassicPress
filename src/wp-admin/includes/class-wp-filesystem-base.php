@@ -54,10 +54,17 @@ class WP_Filesystem_Base {
 	 */
 	public function abspath() {
 		$folder = $this->find_folder( ABSPATH );
+<<<<<<< HEAD
 		// Perhaps the FTP folder is rooted at the ClassicPress install, Check for wp-includes folder in root, Could have some false positives, but rare.
+=======
+
+		// Perhaps the FTP folder is rooted at the WordPress install.
+		// Check for wp-includes folder in root. Could have some false positives, but rare.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 		if ( ! $folder && $this->is_dir( '/' . WPINC ) ) {
 			$folder = '/';
 		}
+
 		return $folder;
 	}
 
@@ -185,6 +192,7 @@ class WP_Filesystem_Base {
 				if ( ! defined( $constant ) ) {
 					continue;
 				}
+
 				if ( $folder === $dir ) {
 					return trailingslashit( constant( $constant ) );
 				}
@@ -195,18 +203,25 @@ class WP_Filesystem_Base {
 				if ( ! defined( $constant ) ) {
 					continue;
 				}
+<<<<<<< HEAD
 				if ( 0 === stripos( $folder, $dir ) ) { // $folder starts with $dir
+=======
+
+				if ( 0 === stripos( $folder, $dir ) ) { // $folder starts with $dir.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 					$potential_folder = preg_replace( '#^' . preg_quote( $dir, '#' ) . '/#i', trailingslashit( constant( $constant ) ), $folder );
 					$potential_folder = trailingslashit( $potential_folder );
 
 					if ( $this->is_dir( $potential_folder ) ) {
 						$this->cache[ $folder ] = $potential_folder;
+
 						return $potential_folder;
 					}
 				}
 			}
 		} elseif ( 'direct' === $this->method ) {
 			$folder = str_replace( '\\', '/', $folder ); // Windows path sanitisation.
+
 			return trailingslashit( $folder );
 		}
 
@@ -220,12 +235,16 @@ class WP_Filesystem_Base {
 		if ( $this->exists( $folder ) ) { // Folder exists at that absolute path.
 			$folder                 = trailingslashit( $folder );
 			$this->cache[ $folder ] = $folder;
+
 			return $folder;
 		}
+
 		$return = $this->search_for_folder( $folder );
+
 		if ( $return ) {
 			$this->cache[ $folder ] = $return;
 		}
+
 		return $return;
 	}
 
@@ -276,6 +295,7 @@ class WP_Filesystem_Base {
 
 				// Let's try that folder:
 				$newdir = trailingslashit( path_join( $base, $key ) );
+
 				if ( $this->verbose ) {
 					/* translators: %s: directory name */
 					printf( "\n" . __( 'Changing to %s' ) . "<br/>\n", $newdir );
@@ -284,6 +304,7 @@ class WP_Filesystem_Base {
 				// Only search for the remaining path tokens in the directory, not the full path again.
 				$newfolder = implode( '/', array_slice( $folder_parts, $index + 1 ) );
 				$ret       = $this->search_for_folder( $newfolder, $newdir, $loop );
+
 				if ( $ret ) {
 					return $ret;
 				}
@@ -297,6 +318,7 @@ class WP_Filesystem_Base {
 				/* translators: %s: directory name */
 				printf( "\n" . __( 'Found %s' ) . "<br/>\n", $base . $last_path );
 			}
+
 			return trailingslashit( $base . $last_path );
 		}
 
@@ -326,7 +348,12 @@ class WP_Filesystem_Base {
 	 */
 	public function gethchmod( $file ) {
 		$perms = intval( $this->getchmod( $file ), 8 );
+<<<<<<< HEAD
 		if ( ( $perms & 0xC000 ) == 0xC000 ) { // Socket
+=======
+
+		if ( ( $perms & 0xC000 ) == 0xC000 ) { // Socket.
+>>>>>>> d4f4f4232c (Coding Standards: Add some space around control structures in `WP_Filesystem_*` classes for consistency and better readability.)
 			$info = 's';
 		} elseif ( ( $perms & 0xA000 ) == 0xA000 ) { // Symbolic Link
 			$info = 'l';
@@ -364,6 +391,7 @@ class WP_Filesystem_Base {
 		$info .= ( ( $perms & 0x0001 ) ?
 					( ( $perms & 0x0200 ) ? 't' : 'x' ) :
 					( ( $perms & 0x0200 ) ? 'T' : '-' ) );
+
 		return $info;
 	}
 
@@ -398,6 +426,7 @@ class WP_Filesystem_Base {
 
 		for ( $i = 0, $c = count( $attarray ); $i < $c; $i++ ) {
 			$key = array_search( $attarray[ $i ], $legal, true );
+
 			if ( $key ) {
 				$realmode .= $legal[ $key ];
 			}
@@ -416,6 +445,7 @@ class WP_Filesystem_Base {
 		$newmode .= $mode[1] + $mode[2] + $mode[3];
 		$newmode .= $mode[4] + $mode[5] + $mode[6];
 		$newmode .= $mode[7] + $mode[8] + $mode[9];
+
 		return $newmode;
 	}
 
