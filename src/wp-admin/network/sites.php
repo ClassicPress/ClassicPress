@@ -219,19 +219,11 @@ if ( isset( $_GET['action'] ) ) {
 					exit();
 				}
 			} else {
-<<<<<<< HEAD
 				$location = network_admin_url( 'sites.php' );
 				if ( ! empty( $_REQUEST['paged'] ) ) {
 					$location = add_query_arg( 'paged', (int) $_REQUEST['paged'], $location );
 				}
-=======
-				// Process query defined by WP_MS_Site_List_Table::extra_table_nav().
-				$location = remove_query_arg(
-					array( '_wp_http_referer', '_wpnonce' ),
-					add_query_arg( $_POST, network_admin_url( 'sites.php' ) )
-				);
 
->>>>>>> 219acea88f (Coding Standards: Use strict comparison in `wp-admin/network` where static strings are involved.)
 				wp_redirect( $location );
 				exit();
 			}

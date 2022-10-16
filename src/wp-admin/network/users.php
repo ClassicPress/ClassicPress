@@ -140,13 +140,8 @@ if ( isset( $_GET['action'] ) ) {
 							continue;
 						}
 
-<<<<<<< HEAD
-						if ( ! empty( $_POST['delete'] ) && 'reassign' == $_POST['delete'][ $blogid ][ $id ] ) {
-							remove_user_from_blog( $id, $blogid, $user_id );
-=======
 						if ( ! empty( $_POST['delete'] ) && 'reassign' === $_POST['delete'][ $blogid ][ $id ] ) {
 							remove_user_from_blog( $id, $blogid, (int) $user_id );
->>>>>>> 219acea88f (Coding Standards: Use strict comparison in `wp-admin/network` where static strings are involved.)
 						} else {
 							remove_user_from_blog( $id, $blogid );
 						}

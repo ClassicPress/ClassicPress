@@ -161,12 +161,8 @@ if ( ! empty( $messages ) ) {
 				</tr>
 				<?php
 			}
-<<<<<<< HEAD
-		} // End foreach
-=======
 		} // End foreach.
 
->>>>>>> 219acea88f (Coding Standards: Use strict comparison in `wp-admin/network` where static strings are involved.)
 		/**
 		 * Fires at the end of the Edit Site form, before the submit button.
 		 *
