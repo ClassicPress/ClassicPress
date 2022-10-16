@@ -4726,15 +4726,9 @@ function wp_guess_url() {
 		if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) !== false || strpos( $_SERVER['REQUEST_URI'], 'wp-login.php' ) !== false ) {
 			$path = preg_replace( '#/(wp-admin/.*|wp-login.php)#i', '', $_SERVER['REQUEST_URI'] );
 
-<<<<<<< HEAD
-			// The request is for a file in ABSPATH
-		} elseif ( $script_filename_dir . '/' == $abspath_fix ) {
-			// Strip off any file/query params in the path
-=======
 			// The request is for a file in ABSPATH.
 		} elseif ( $script_filename_dir . '/' === $abspath_fix ) {
 			// Strip off any file/query params in the path.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$path = preg_replace( '#/[^/]*$#i', '', $_SERVER['PHP_SELF'] );
 
 		} else {

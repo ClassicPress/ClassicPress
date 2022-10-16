@@ -128,13 +128,8 @@ function get_option( $option, $default = false ) {
 		}
 	}
 
-<<<<<<< HEAD
-	// If home is not set use siteurl.
-	if ( 'home' == $option && '' == $value ) {
-=======
 	// If home is not set, use siteurl.
 	if ( 'home' === $option && '' === $value ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		return get_option( 'siteurl' );
 	}
 

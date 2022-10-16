@@ -476,13 +476,8 @@ class WP_oEmbed {
 					if ( ! empty( $atts['type'] ) && ! empty( $linktypes[ $atts['type'] ] ) && ! empty( $atts['href'] ) ) {
 						$providers[ $linktypes[ $atts['type'] ] ] = htmlspecialchars_decode( $atts['href'] );
 
-<<<<<<< HEAD
-						// Stop here if it's JSON (that's all we need)
-						if ( 'json' == $linktypes[ $atts['type'] ] ) {
-=======
 						// Stop here if it's JSON (that's all we need).
 						if ( 'json' === $linktypes[ $atts['type'] ] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 							break;
 						}
 					}

@@ -596,7 +596,7 @@ class WP_User_Query {
 
 		$this->request = "SELECT $this->query_fields $this->query_from $this->query_where $this->query_orderby $this->query_limit";
 
-			if ( is_array( $qv['fields'] ) || 'all' === $qv['fields'] ) {
+		if ( is_array( $qv['fields'] ) || 'all' === $qv['fields'] ) {
 			$this->results = $wpdb->get_results( $this->request );
 		} else {
 			$this->results = $wpdb->get_col( $this->request );
@@ -739,13 +739,8 @@ class WP_User_Query {
 			$_orderby = $orderby;
 		} elseif ( 'name' === $orderby || 'display_name' === $orderby ) {
 			$_orderby = 'display_name';
-<<<<<<< HEAD
-		} elseif ( 'post_count' == $orderby ) {
-			// todo: avoid the JOIN
-=======
 		} elseif ( 'post_count' === $orderby ) {
 			// @todo Avoid the JOIN.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$where             = get_posts_by_author_sql( 'post' );
 			$this->query_from .= " LEFT OUTER JOIN (
 				SELECT post_author, COUNT(*) as post_count

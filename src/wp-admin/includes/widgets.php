@@ -218,13 +218,8 @@ function wp_widget_control( $sidebar_args ) {
 	 * We aren't showing a widget control, we're outputting a template
 	 * for a multi-widget control.
 	 */
-<<<<<<< HEAD
-	if ( isset( $sidebar_args['_display'] ) && 'template' == $sidebar_args['_display'] && $widget_number ) {
-		// number == -1 implies a template where id numbers are replaced by a generic '__i__'
-=======
 	if ( isset( $sidebar_args['_display'] ) && 'template' === $sidebar_args['_display'] && $widget_number ) {
 		// number == -1 implies a template where id numbers are replaced by a generic '__i__'.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$control['params'][0]['number'] = -1;
 		// With id_base widget id's are constructed like {$id_base}-{$id_number}.
 		if ( isset( $control['id_base'] ) ) {

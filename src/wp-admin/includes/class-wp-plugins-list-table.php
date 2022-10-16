@@ -484,12 +484,8 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			if ( current_user_can( 'update_plugins' ) ) {
 				$actions['update-selected'] = __( 'Update' );
 			}
-<<<<<<< HEAD
-			if ( current_user_can( 'delete_plugins' ) && ( 'active' != $status ) ) {
-=======
 
 			if ( current_user_can( 'delete_plugins' ) && ( 'active' !== $status ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$actions['delete-selected'] = __( 'Delete' );
 			}
 		}

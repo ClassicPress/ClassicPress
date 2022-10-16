@@ -104,10 +104,6 @@ function plugins_api( $action, $args = array() ) {
 		$args = (object) $args;
 	}
 
-<<<<<<< HEAD
-=======
-	if ( 'query_plugins' === $action ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	if ( ! isset( $args->per_page ) ) {
 		$args->per_page = 24;
 	}

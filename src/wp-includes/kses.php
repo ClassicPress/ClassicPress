@@ -1039,22 +1039,14 @@ function _wp_kses_split_callback( $match ) {
 function wp_kses_split2( $string, $allowed_html, $allowed_protocols ) {
 	$string = wp_kses_stripslashes( $string );
 
-<<<<<<< HEAD
-	if ( substr( $string, 0, 1 ) != '<' ) {
-=======
 	// It matched a ">" character.
 	if ( '<' !== substr( $string, 0, 1 ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		return '&gt;';
 	}
 	// It matched a ">" character
 
-<<<<<<< HEAD
-	if ( '<!--' == substr( $string, 0, 4 ) ) {
-=======
 	// Allow HTML comments.
 	if ( '<!--' === substr( $string, 0, 4 ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$string = str_replace( array( '<!--', '-->' ), '', $string );
 		while ( ( $newstring = wp_kses( $string, $allowed_html, $allowed_protocols ) ) != $string ) {
 			$string = $newstring;
@@ -1166,9 +1158,6 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 	$allowed_attr = $allowed_html[ strtolower( $element ) ];
 
 	$name_low = strtolower( $name );
-<<<<<<< HEAD
-	if ( ! isset( $allowed_attr[ $name_low ] ) || '' == $allowed_attr[ $name_low ] ) {
-=======
 	$element_low = strtolower( $element );
 
 	if ( ! isset( $allowed_html[ $element_low ] ) ) {
@@ -1198,11 +1187,11 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 			 */
 			$allowed_attr[ $match[0] ] = $allowed_attr['data-*'];
 		} else {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$name  = '';
 			$value = '';
 			$whole = '';
 			return false;
+		}
 	}
 
 	if ( 'style' === $name_low ) {
@@ -2178,47 +2167,8 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 			}
 		}
 
-<<<<<<< HEAD
 		if ( $found ) {
-			if ( '' != $css ) {
-=======
-		if ( $found && $url_attr ) {
-			// Simplified: matches the sequence `url(*)`.
-			preg_match_all( '/url\([^)]+\)/', $parts[1], $url_matches );
-
-			foreach ( $url_matches[0] as $url_match ) {
-				// Clean up the URL from each of the matches above.
-				preg_match( '/^url\(\s*([\'\"]?)(.*)(\g1)\s*\)$/', $url_match, $url_pieces );
-
-				if ( empty( $url_pieces[2] ) ) {
-					$found = false;
-					break;
-				}
-
-				$url = trim( $url_pieces[2] );
-
-				if ( empty( $url ) || wp_kses_bad_protocol( $url, $allowed_protocols ) !== $url ) {
-					$found = false;
-					break;
-				} else {
-					// Remove the whole `url(*)` bit that was matched above from the CSS.
-					$css_test_string = str_replace( $url_match, '', $css_test_string );
-				}
-			}
-		}
-
-		if ( $found && $gradient_attr ) {
-			$css_value = trim( $parts[1] );
-			if ( preg_match( '/^(repeating-)?(linear|radial|conic)-gradient\(([^()]|rgb[a]?\([^()]*\))*\)$/', $css_value ) ) {
-				// Remove the whole `gradient` bit that was matched above from the CSS.
-				$css_test_string = str_replace( $css_value, '', $css_test_string );
-			}
-		}
-
-		// Remove any CSS containing containing \ ( & } = or comments, except for url() useage checked above.
-		if ( $found && ! preg_match( '%[\\\(&=}]|/\*%', $css_test_string ) ) {
 			if ( '' !== $css ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$css .= ';';
 			}
 			$css .= $css_item;

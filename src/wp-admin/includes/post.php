@@ -101,13 +101,8 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 		}
 	}
 
-<<<<<<< HEAD
-	// What to do based on which button they pressed
-	if ( isset( $post_data['saveasdraft'] ) && '' != $post_data['saveasdraft'] ) {
-=======
 	// What to do based on which button they pressed.
 	if ( isset( $post_data['saveasdraft'] ) && '' !== $post_data['saveasdraft'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$post_data['post_status'] = 'draft';
 	}
 	if ( isset( $post_data['saveasprivate'] ) && '' !== $post_data['saveasprivate'] ) {
@@ -381,13 +376,8 @@ function edit_post( $post_data = null ) {
 		}
 	}
 
-<<<<<<< HEAD
-	// Attachment stuff
-	if ( 'attachment' == $post_data['post_type'] ) {
-=======
 	// Attachment stuff.
 	if ( 'attachment' === $post_data['post_type'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		if ( isset( $post_data['_wp_attachment_image_alt'] ) ) {
 			$image_alt = wp_unslash( $post_data['_wp_attachment_image_alt'] );
 
@@ -946,11 +936,7 @@ function add_meta( $post_ID ) {
 		$metavalue = trim( $metavalue );
 	}
 
-<<<<<<< HEAD
-	if ( ( '0' === $metavalue || ! empty( $metavalue ) ) && ( ( ( '#NONE#' != $metakeyselect ) && ! empty( $metakeyselect ) ) || ! empty( $metakeyinput ) ) ) {
-=======
 	if ( ( ( '#NONE#' !== $metakeyselect ) && ! empty( $metakeyselect ) ) || ! empty( $metakeyinput ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		/*
 		 * We have a key/value pair. If both the select and the input
 		 * for the key have data, the input takes precedence.
@@ -1749,13 +1735,8 @@ function _admin_notice_post_locked() {
 	if ( $locked ) {
 		$query_args = array();
 		if ( get_post_type_object( $post->post_type )->public ) {
-<<<<<<< HEAD
-			if ( 'publish' == $post->post_status || $user->ID != $post->post_author ) {
-				// Latest content is in autosave
-=======
 			if ( 'publish' === $post->post_status || $user->ID != $post->post_author ) {
 				// Latest content is in autosave.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$nonce                       = wp_create_nonce( 'post_preview_' . $post->ID );
 				$query_args['preview_id']    = $post->ID;
 				$query_args['preview_nonce'] = $nonce;
@@ -2014,15 +1995,10 @@ function wp_autosave( $post_data ) {
 		$post_data['post_category'] = explode( ',', $post_data['catslist'] );
 	}
 
-<<<<<<< HEAD
-	if ( ! wp_check_post_lock( $post->ID ) && get_current_user_id() == $post->post_author && ( 'auto-draft' == $post->post_status || 'draft' == $post->post_status ) ) {
-		// Drafts and auto-drafts are just overwritten by autosave for the same user if the post is not locked
-=======
 	if ( ! wp_check_post_lock( $post->ID ) && get_current_user_id() == $post->post_author
 		&& ( 'auto-draft' === $post->post_status || 'draft' === $post->post_status )
 	) {
 		// Drafts and auto-drafts are just overwritten by autosave for the same user if the post is not locked.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		return edit_post( wp_slash( $post_data ) );
 	} else {
 		// Non drafts or other users drafts are not overwritten. The autosave is stored in a special post revision for each user.

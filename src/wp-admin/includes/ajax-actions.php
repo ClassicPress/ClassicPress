@@ -1181,13 +1181,8 @@ function wp_ajax_replyto_comment( $action ) {
 		wp_die( __( 'Sorry, you must be logged in to reply to a comment.' ) );
 	}
 
-<<<<<<< HEAD
-	if ( '' == $comment_content ) {
-		wp_die( __( 'ERROR: please type a comment.' ) );
-=======
 	if ( '' === $comment_content ) {
-		wp_die( __( 'Error: Please type a comment.' ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+		wp_die( __( 'ERROR: please type a comment.' ) );
 	}
 
 	$comment_parent = 0;
@@ -1282,13 +1277,8 @@ function wp_ajax_edit_comment() {
 		wp_die( -1 );
 	}
 
-<<<<<<< HEAD
-	if ( '' == $_POST['content'] ) {
-		wp_die( __( 'ERROR: please type a comment.' ) );
-=======
 	if ( '' === $_POST['content'] ) {
-		wp_die( __( 'Error: Please type a comment.' ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+		wp_die( __( 'ERROR: please type a comment.' ) );
 	}
 
 	if ( isset( $_POST['status'] ) ) {
@@ -1422,12 +1412,8 @@ function wp_ajax_add_meta() {
 		if ( ! current_user_can( 'edit_post', $pid ) ) {
 			wp_die( -1 );
 		}
-<<<<<<< HEAD
-		if ( isset( $_POST['metakeyselect'] ) && '#NONE#' == $_POST['metakeyselect'] && empty( $_POST['metakeyinput'] ) ) {
-=======
 
 		if ( isset( $_POST['metakeyselect'] ) && '#NONE#' === $_POST['metakeyselect'] && empty( $_POST['metakeyinput'] ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			wp_die( 1 );
 		}
 
@@ -1484,12 +1470,8 @@ function wp_ajax_add_meta() {
 		$mid   = (int) key( $_POST['meta'] );
 		$key   = wp_unslash( $_POST['meta'][ $mid ]['key'] );
 		$value = wp_unslash( $_POST['meta'][ $mid ]['value'] );
-<<<<<<< HEAD
-		if ( '' == trim( $key ) ) {
-=======
 
 		if ( '' === trim( $key ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			wp_die( __( 'Please provide a custom field name.' ) );
 		}
 		if ( '' == trim( $value ) ) {
@@ -2946,12 +2928,8 @@ function wp_ajax_save_attachment_order() {
 		if ( ! $attachment ) {
 			continue;
 		}
-<<<<<<< HEAD
-		if ( 'attachment' != $attachment->post_type ) {
-=======
 
 		if ( 'attachment' !== $attachment->post_type ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			continue;
 		}
 

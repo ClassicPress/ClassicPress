@@ -390,13 +390,8 @@ function update_core( $from, $to ) {
 	// Remove maintenance file, we're done with potential site-breaking changes
 	$wp_filesystem->delete( $maintenance_file );
 
-<<<<<<< HEAD
-	// WP-3.5 -> WP-3.5+ - an empty twentytwelve directory was created upon upgrade to WP-3.5 for some users, preventing installation of Twenty Twelve.
-	if ( '3.5' == $old_wp_version ) {
-=======
 	// 3.5 -> 3.5+ - an empty twentytwelve directory was created upon upgrade to 3.5 for some users, preventing installation of Twenty Twelve.
 	if ( '3.5' === $old_wp_version ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		if ( is_dir( WP_CONTENT_DIR . '/themes/twentytwelve' ) && ! file_exists( WP_CONTENT_DIR . '/themes/twentytwelve/style.css' ) ) {
 			$wp_filesystem->delete( $wp_filesystem->wp_themes_dir() . 'twentytwelve/' );
 		}
@@ -420,14 +415,9 @@ function update_core( $from, $to ) {
 
 				if ( 'plugins' === $type ) {
 					$dest = $wp_filesystem->wp_plugins_dir();
-<<<<<<< HEAD
-				} elseif ( 'themes' == $type ) {
-					$dest = trailingslashit( $wp_filesystem->wp_themes_dir() ); // Back-compat, ::wp_themes_dir() did not return trailingslash'd pre-3.2
-=======
 				} elseif ( 'themes' === $type ) {
 					// Back-compat, ::wp_themes_dir() did not return trailingslash'd pre-3.2.
 					$dest = trailingslashit( $wp_filesystem->wp_themes_dir() );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				} else {
 					continue;
 				}
@@ -620,7 +610,6 @@ function cp_get_update_directory_root( $working_dir ) {
 	$distro  = null;
 	$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
 
-<<<<<<< HEAD
 	if (
 		count( $entries ) === 1 &&
 		(
@@ -636,28 +625,6 @@ function cp_get_update_directory_root( $working_dir ) {
 			! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
 		) {
 			$distro = null;
-=======
-	$from = trailingslashit( $from );
-	$to   = trailingslashit( $to );
-
-	foreach ( (array) $dirlist as $filename => $fileinfo ) {
-		if ( in_array( $filename, $skip_list, true ) ) {
-			continue;
-		}
-
-		if ( 'f' === $fileinfo['type'] ) {
-			if ( ! $wp_filesystem->copy( $from . $filename, $to . $filename, true, FS_CHMOD_FILE ) ) {
-				// If copy failed, chmod file to 0644 and try again.
-				$wp_filesystem->chmod( $to . $filename, FS_CHMOD_FILE );
-				if ( ! $wp_filesystem->copy( $from . $filename, $to . $filename, true, FS_CHMOD_FILE ) ) {
-					return new WP_Error( 'copy_failed__copy_dir', __( 'Could not copy file.' ), $to . $filename );
-				}
-			}
-		} elseif ( 'd' === $fileinfo['type'] ) {
-			if ( ! $wp_filesystem->is_dir( $to . $filename ) ) {
-				if ( ! $wp_filesystem->mkdir( $to . $filename, FS_CHMOD_DIR ) ) {
-					return new WP_Error( 'mkdir_failed__copy_dir', __( 'Could not create directory.' ), $to . $filename );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		}
 	}
 

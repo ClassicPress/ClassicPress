@@ -71,28 +71,16 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 		);
 
 		$original_title = false;
-<<<<<<< HEAD
-		if ( 'taxonomy' == $item->type ) {
-			$original_title = get_term_field( 'name', $item->object_id, $item->object, 'raw' );
-			if ( is_wp_error( $original_title ) ) {
-				$original_title = false;
-=======
 
 		if ( 'taxonomy' === $item->type ) {
 			$original_object = get_term( (int) $item->object_id, $item->object );
 			if ( $original_object && ! is_wp_error( $original_title ) ) {
 				$original_title = $original_object->name;
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			}
 		} elseif ( 'post_type' === $item->type ) {
 			$original_object = get_post( $item->object_id );
 			$original_title  = get_the_title( $original_object->ID );
-<<<<<<< HEAD
-		} elseif ( 'post_type_archive' == $item->type ) {
-=======
-			}
 		} elseif ( 'post_type_archive' === $item->type ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$original_object = get_post_type_object( $item->object );
 			if ( $original_object ) {
 				$original_title = $original_object->labels->archives;

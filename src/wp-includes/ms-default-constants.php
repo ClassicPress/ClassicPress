@@ -35,13 +35,8 @@ function ms_upload_constants() {
 
 		define( 'UPLOADS', UPLOADBLOGSDIR . '/' . $site_id . '/files/' );
 
-<<<<<<< HEAD
-		// Uploads dir relative to ABSPATH
-		if ( 'wp-content/blogs.dir' == UPLOADBLOGSDIR && ! defined( 'BLOGUPLOADDIR' ) ) {
-=======
 		// Uploads dir relative to ABSPATH.
 		if ( 'wp-content/blogs.dir' === UPLOADBLOGSDIR && ! defined( 'BLOGUPLOADDIR' ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			define( 'BLOGUPLOADDIR', WP_CONTENT_DIR . '/blogs.dir/' . $site_id . '/files/' );
 		}
 	}

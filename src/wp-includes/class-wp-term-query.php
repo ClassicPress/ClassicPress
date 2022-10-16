@@ -413,16 +413,7 @@ class WP_Term_Query {
 			}
 
 			if ( ! $in_hierarchy ) {
-<<<<<<< HEAD
 				return array();
-=======
-				if ( 'count' === $args['fields'] ) {
-					return 0;
-				} else {
-					$this->terms = array();
-					return $this->terms;
-				}
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			}
 		}
 

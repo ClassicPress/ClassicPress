@@ -1384,13 +1384,8 @@ function wp_page_menu( $args = array() ) {
 			$class = 'class="current_page_item"';
 		}
 		$menu .= '<li ' . $class . '><a href="' . home_url( '/' ) . '">' . $args['link_before'] . $text . $args['link_after'] . '</a></li>';
-<<<<<<< HEAD
-		// If the front page is a page, add it to the exclude list
-		if ( get_option( 'show_on_front' ) == 'page' ) {
-=======
 		// If the front page is a page, add it to the exclude list.
 		if ( 'page' === get_option( 'show_on_front' ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			if ( ! empty( $list_args['exclude'] ) ) {
 				$list_args['exclude'] .= ',';
 			} else {

@@ -935,19 +935,12 @@ function upgrade_110() {
 	// Add a gmt_offset option, with value $gmt_offset
 	add_option( 'gmt_offset', $gmt_offset );
 
-<<<<<<< HEAD
-	// Check if we already set the GMT fields (if we did, then
-	// MAX(post_date_gmt) can't be '0000-00-00 00:00:00'
-	// <michel_v> I just slapped myself silly for not thinking about it earlier
-	$got_gmt_fields = ! ( $wpdb->get_var( "SELECT MAX(post_date_gmt) FROM $wpdb->posts" ) == '0000-00-00 00:00:00' );
-=======
 	/*
 	 * Check if we already set the GMT fields. If we did, then
 	 * MAX(post_date_gmt) can't be '0000-00-00 00:00:00'.
 	 * <michel_v> I just slapped myself silly for not thinking about it earlier.
 	 */
 	$got_gmt_fields = ( '0000-00-00 00:00:00' !== $wpdb->get_var( "SELECT MAX(post_date_gmt) FROM $wpdb->posts" ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 
 	if ( ! $got_gmt_fields ) {
 

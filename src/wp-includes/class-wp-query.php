@@ -944,19 +944,11 @@ class WP_Query {
 			$this->is_home = true;
 		}
 
-<<<<<<< HEAD
-		// Correct is_* for page_on_front and page_for_posts
-		if ( $this->is_home && 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ) {
-			$_query = wp_parse_args( $this->query );
-			// pagename can be set and empty depending on matched rewrite rules. Ignore an empty pagename.
-			if ( isset( $_query['pagename'] ) && '' == $_query['pagename'] ) {
-=======
 		// Correct `is_*` for 'page_on_front' and 'page_for_posts'.
 		if ( $this->is_home && 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ) {
 			$_query = wp_parse_args( $this->query );
 			// 'pagename' can be set and empty depending on matched rewrite rules. Ignore an empty 'pagename'.
 			if ( isset( $_query['pagename'] ) && '' === $_query['pagename'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				unset( $_query['pagename'] );
 			}
 
@@ -1077,13 +1069,8 @@ class WP_Query {
 		}
 
 		foreach ( get_taxonomies( array(), 'objects' ) as $taxonomy => $t ) {
-<<<<<<< HEAD
-			if ( 'post_tag' == $taxonomy ) {
-				continue;   // Handled further down in the $q['tag'] block
-=======
 			if ( 'post_tag' === $taxonomy ) {
 				continue; // Handled further down in the $q['tag'] block.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			}
 
 			if ( $t->query_var && ! empty( $q[ $t->query_var ] ) ) {
@@ -1211,14 +1198,9 @@ class WP_Query {
 			$q['tag'] = implode( ',', $q['tag'] );
 		}
 
-<<<<<<< HEAD
-		// Tag stuff
-		if ( '' != $q['tag'] && ! $this->is_singular && $this->query_vars_changed ) {
-=======
 		// Tag stuff.
 
 		if ( '' !== $q['tag'] && ! $this->is_singular && $this->query_vars_changed ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			if ( strpos( $q['tag'], ',' ) !== false ) {
 				$tags = preg_split( '/[,\r\n\t ]+/', $q['tag'] );
 				foreach ( (array) $tags as $tag ) {
@@ -3042,7 +3024,7 @@ class WP_Query {
 							$this->posts = array();
 						} else {
 							$this->is_preview = true;
-								if ( 'future' !== $status ) {
+							if ( 'future' !== $status ) {
 								$this->posts[0]->post_date = current_time( 'mysql' );
 							}
 						}
@@ -3846,13 +3828,8 @@ class WP_Query {
 	 * @return bool True, if front of site.
 	 */
 	public function is_front_page() {
-<<<<<<< HEAD
-		// most likely case
-		if ( 'posts' == get_option( 'show_on_front' ) && $this->is_home() ) {
-=======
 		// Most likely case.
 		if ( 'posts' === get_option( 'show_on_front' ) && $this->is_home() ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			return true;
 		} elseif ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' )
 			&& $this->is_page( get_option( 'page_on_front' ) )
@@ -3884,32 +3861,6 @@ class WP_Query {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Is the query for the Privacy Policy page?
-	 *
-	 * This is the page which shows the Privacy Policy content of your site.
-	 *
-	 * Depends on the site's "Change your Privacy Policy page" Privacy Settings 'wp_page_for_privacy_policy'.
-	 *
-	 * This function will return true only on the page you set as the "Privacy Policy page".
-	 *
-	 * @since 5.2.0
-	 *
-	 * @return bool True, if Privacy Policy page.
-	 */
-	public function is_privacy_policy() {
-		if ( get_option( 'wp_page_for_privacy_policy' )
-			&& $this->is_page( get_option( 'wp_page_for_privacy_policy' ) )
-		) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	 * Is the query for an existing month archive?
 	 *
 	 * @since WP-3.1.0

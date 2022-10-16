@@ -484,13 +484,8 @@ function wp_update_nav_menu_item( $menu_id = 0, $menu_item_db_id = 0, $menu_item
 			$args['menu-item-title'] = '';
 		}
 
-<<<<<<< HEAD
-		// hack to get wp to create a post object when too many properties are empty
-		if ( '' == $args['menu-item-title'] && '' == $args['menu-item-description'] ) {
-=======
 		// Hack to get wp to create a post object when too many properties are empty.
 		if ( '' === $args['menu-item-title'] && '' === $args['menu-item-description'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$args['menu-item-description'] = ' ';
 		}
 	}
@@ -847,12 +842,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 				$post_content          = wp_trim_words( $menu_item->post_content, 200 );
 				$post_type_description = '' == $post_content ? $post_type_description : $post_content;
 				$menu_item->url        = get_post_type_archive_link( $menu_item->object );
-<<<<<<< HEAD
-			} elseif ( 'taxonomy' == $menu_item->type ) {
-=======
-
 			} elseif ( 'taxonomy' === $menu_item->type ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$object = get_taxonomy( $menu_item->object );
 				if ( $object ) {
 					$menu_item->type_label = $object->labels->singular_name;

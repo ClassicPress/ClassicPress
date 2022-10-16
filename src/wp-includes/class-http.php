@@ -201,13 +201,8 @@ class WP_Http {
 		// Pre-parse for the HEAD checks.
 		$args = wp_parse_args( $args );
 
-<<<<<<< HEAD
-		// By default, Head requests do not cause redirections.
-		if ( isset( $args['method'] ) && 'HEAD' == $args['method'] ) {
-=======
 		// By default, HEAD requests do not cause redirections.
 		if ( isset( $args['method'] ) && 'HEAD' === $args['method'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$defaults['redirection'] = 0;
 		}
 

@@ -206,16 +206,8 @@ if ( ! is_multisite() ) {
  */
 $whitelist_options = apply_filters( 'whitelist_options', $whitelist_options );
 
-<<<<<<< HEAD
-/*
- * If $_GET['action'] == 'update' we are saving settings sent from a settings page
- */
-if ( 'update' == $action ) {
-	if ( 'options' == $option_page && ! isset( $_POST['option_page'] ) ) { // This is for back compat and will eventually be removed.
-=======
 if ( 'update' === $action ) { // We are saving settings sent from a settings page.
 	if ( 'options' === $option_page && ! isset( $_POST['option_page'] ) ) { // This is for back compat and will eventually be removed.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$unregistered = true;
 		check_admin_referer( 'update-options' );
 	} else {
@@ -341,12 +333,8 @@ $options = $wpdb->get_results( "SELECT * FROM $wpdb->options ORDER BY option_nam
 
 foreach ( (array) $options as $option ) :
 	$disabled = false;
-<<<<<<< HEAD
-	if ( $option->option_name == '' ) {
-=======
 
 	if ( '' === $option->option_name ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		continue;
 	}
 

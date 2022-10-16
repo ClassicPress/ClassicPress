@@ -369,9 +369,6 @@ function wp_remote_retrieve_cookie_value( $response, $name ) {
  * @return bool
  */
 function wp_http_supports( $capabilities = array(), $url = null ) {
-<<<<<<< HEAD
-	return true;
-=======
 	$http = _wp_http_get_object();
 
 	$capabilities = wp_parse_args( $capabilities );
@@ -391,7 +388,6 @@ function wp_http_supports( $capabilities = array(), $url = null ) {
 	}
 
 	return (bool) $http->_get_first_available_transport( $capabilities );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 }
 
 /**

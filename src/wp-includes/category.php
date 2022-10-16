@@ -39,13 +39,8 @@ function get_categories( $args = '' ) {
 	 */
 	$taxonomy = apply_filters( 'get_categories_taxonomy', $taxonomy, $args );
 
-<<<<<<< HEAD
-	// Back compat
-	if ( isset( $args['type'] ) && 'link' == $args['type'] ) {
-=======
 	// Back compat.
 	if ( isset( $args['type'] ) && 'link' === $args['type'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',

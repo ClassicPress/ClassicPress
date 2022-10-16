@@ -205,13 +205,8 @@ if ( isset( $_GET['action'] ) ) {
 		$upgrader = new Theme_Upgrader( new Theme_Upgrader_Skin( compact( 'title', 'nonce', 'url', 'theme' ) ) );
 		$upgrader->upgrade( $theme );
 
-<<<<<<< HEAD
-		include ABSPATH . 'wp-admin/admin-footer.php';
-	} elseif ( 'update-selected-themes' == $action ) {
-=======
 		require_once ABSPATH . 'wp-admin/admin-footer.php';
 	} elseif ( 'update-selected-themes' === $action ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		if ( ! current_user_can( 'update_themes' ) ) {
 			wp_die( __( 'Sorry, you are not allowed to update themes for this site.' ) );
 		}

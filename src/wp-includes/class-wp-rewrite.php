@@ -1263,12 +1263,6 @@ class WP_Rewrite {
 		$home_path      = parse_url( home_url() );
 		$robots_rewrite = ( empty( $home_path['path'] ) || '/' === $home_path['path'] ) ? array( 'robots\.txt$' => $this->index . '?robots=1' ) : array();
 
-<<<<<<< HEAD
-=======
-		// favicon.ico -- only if installed at the root.
-		$favicon_rewrite = ( empty( $home_path['path'] ) || '/' === $home_path['path'] ) ? array( 'favicon\.ico$' => $this->index . '?favicon=1' ) : array();
-
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		// Old feed and service files.
 		$deprecated_files = array(
 			'.*wp-(atom|rdf|rss|rss2|feed|commentsrss2)\.php$' => $this->index . '?feed=old',

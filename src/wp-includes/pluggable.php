@@ -366,11 +366,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		if ( ! isset( $from_email ) ) {
 			// Get the site domain and get rid of www.
-<<<<<<< HEAD
 			$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
-=======
-			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 				$sitename = substr( $sitename, 4 );
 			}
@@ -472,13 +468,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 
 		$phpmailer->ContentType = $content_type;
 
-<<<<<<< HEAD
-		// Set whether it's plaintext, depending on $content_type
-		if ( 'text/html' == $content_type ) {
-=======
 		// Set whether it's plaintext, depending on $content_type.
 		if ( 'text/html' === $content_type ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$phpmailer->isHTML( true );
 		}
 
@@ -685,13 +676,8 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 		$expired    = $cookie_elements['expiration'];
 		$expiration = $cookie_elements['expiration'];
 
-<<<<<<< HEAD
-		// Allow a grace period for POST and Ajax requests
-		if ( wp_doing_ajax() || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-=======
 		// Allow a grace period for POST and Ajax requests.
 		if ( wp_doing_ajax() || 'POST' === $_SERVER['REQUEST_METHOD'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$expired += HOUR_IN_SECONDS;
 		}
 
@@ -1296,29 +1282,8 @@ if ( ! function_exists( 'wp_redirect' ) ) :
 
 		$location = wp_sanitize_redirect( $location );
 
-<<<<<<< HEAD
-		if ( ! $is_IIS && PHP_SAPI != 'cgi-fcgi' ) {
-			status_header( $status ); // This causes problems on IIS and some FastCGI setups
-=======
 		if ( ! $is_IIS && 'cgi-fcgi' !== PHP_SAPI ) {
 			status_header( $status ); // This causes problems on IIS and some FastCGI setups.
-		}
-
-		/**
-		 * Filters the X-Redirect-By header.
-		 *
-		 * Allows applications to identify themselves when they're doing a redirect.
-		 *
-		 * @since 5.1.0
-		 *
-		 * @param string $x_redirect_by The application doing the redirect.
-		 * @param int    $status        Status code to use.
-		 * @param string $location      The path to redirect to.
-		 */
-		$x_redirect_by = apply_filters( 'x_redirect_by', $x_redirect_by, $status, $location );
-		if ( is_string( $x_redirect_by ) ) {
-			header( "X-Redirect-By: $x_redirect_by" );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		}
 
 		header( "Location: $location", true, $status );
@@ -1428,15 +1393,9 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 	 * @return string redirect-sanitized URL
 	 **/
 	function wp_validate_redirect( $location, $default = '' ) {
-<<<<<<< HEAD
 		$location = wp_sanitize_redirect( trim( $location, " \t\n\r\0\x08\x0B" ) );
-		// browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'
-		if ( substr( $location, 0, 2 ) == '//' ) {
-=======
-		$location = trim( $location, " \t\n\r\0\x08\x0B" );
 		// Browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'.
 		if ( '//' === substr( $location, 0, 2 ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$location = 'http:' . $location;
 		}
 
@@ -1452,13 +1411,8 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 			return $default;
 		}
 
-<<<<<<< HEAD
-		// Allow only http and https schemes. No data:, etc.
-		if ( isset( $lp['scheme'] ) && ! ( 'http' == $lp['scheme'] || 'https' == $lp['scheme'] ) ) {
-=======
 		// Allow only 'http' and 'https' schemes. No 'data:', etc.
 		if ( isset( $lp['scheme'] ) && ! ( 'http' === $lp['scheme'] || 'https' === $lp['scheme'] ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			return $default;
 		}
 

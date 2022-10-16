@@ -94,13 +94,8 @@ class WP_Filesystem_Base {
 	public function wp_themes_dir( $theme = false ) {
 		$theme_root = get_theme_root( $theme );
 
-<<<<<<< HEAD
-		// Account for relative theme roots
-		if ( '/themes' == $theme_root || ! is_dir( $theme_root ) ) {
-=======
 		// Account for relative theme roots.
 		if ( '/themes' === $theme_root || ! is_dir( $theme_root ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 		}
 
@@ -210,13 +205,8 @@ class WP_Filesystem_Base {
 					}
 				}
 			}
-<<<<<<< HEAD
-		} elseif ( 'direct' == $this->method ) {
-			$folder = str_replace( '\\', '/', $folder ); // Windows path sanitisation
-=======
 		} elseif ( 'direct' === $this->method ) {
 			$folder = str_replace( '\\', '/', $folder ); // Windows path sanitisation.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			return trailingslashit( $folder );
 		}
 
@@ -311,13 +301,8 @@ class WP_Filesystem_Base {
 		}
 
 		// Prevent this function from looping again.
-<<<<<<< HEAD
-		// No need to proceed if we've just searched in /
-		if ( $loop || '/' == $base ) {
-=======
 		// No need to proceed if we've just searched in `/`.
 		if ( $loop || '/' === $base ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			return false;
 		}
 

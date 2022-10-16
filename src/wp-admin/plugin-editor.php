@@ -160,11 +160,7 @@ if ( ! is_file( $real_file ) ) {
 		$content = file_get_contents( $real_file );
 	}
 
-<<<<<<< HEAD
-	if ( '.php' == substr( $real_file, strrpos( $real_file, '.' ) ) ) {
-=======
-if ( '.php' === substr( $real_file, strrpos( $real_file, '.' ) ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+	if ( '.php' === substr( $real_file, strrpos( $real_file, '.' ) ) ) {
 		$functions = wp_doc_link_parse( $content );
 
 		if ( ! empty( $functions ) ) {

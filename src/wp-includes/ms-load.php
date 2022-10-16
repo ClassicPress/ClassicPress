@@ -45,15 +45,9 @@ function wp_get_active_network_plugins() {
 	sort( $active_plugins );
 
 	foreach ( $active_plugins as $plugin ) {
-<<<<<<< HEAD
-		if ( ! validate_file( $plugin ) // $plugin must validate as file
-			&& '.php' == substr( $plugin, -4 ) // $plugin must end with '.php'
-			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist
-=======
 		if ( ! validate_file( $plugin )                     // $plugin must validate as file.
 			&& '.php' === substr( $plugin, -4 )             // $plugin must end with '.php'.
 			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			) {
 			$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
 		}

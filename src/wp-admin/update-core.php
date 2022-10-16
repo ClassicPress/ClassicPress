@@ -717,11 +717,7 @@ $action = isset( $_GET['action'] ) ? $_GET['action'] : 'upgrade-core';
 $upgrade_error = false;
 if ( ( 'do-theme-upgrade' === $action || ( 'do-plugin-upgrade' === $action && ! isset( $_GET['plugins'] ) ) )
 	&& ! isset( $_POST['checked'] ) ) {
-<<<<<<< HEAD
-	$upgrade_error = $action == 'do-theme-upgrade' ? 'themes' : 'plugins';
-=======
 	$upgrade_error = ( 'do-theme-upgrade' === $action ) ? 'themes' : 'plugins';
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$action        = 'upgrade-core';
 }
 
@@ -760,13 +756,8 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
-<<<<<<< HEAD
-if ( 'upgrade-core' == $action ) {
-	// Force a update check when requested
-=======
 if ( 'upgrade-core' === $action ) {
 	// Force a update check when requested.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$force_check = ! empty( $_GET['force-check'] );
 	wp_version_check( array(), $force_check );
 

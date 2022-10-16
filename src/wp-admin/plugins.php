@@ -62,16 +62,10 @@ if ( $action ) {
 				update_site_option( 'recently_activated', $recent );
 			}
 
-<<<<<<< HEAD
-			if ( isset( $_GET['from'] ) && 'import' == $_GET['from'] ) {
-				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) ); // overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix
-			} elseif ( isset( $_GET['from'] ) && 'press-this' == $_GET['from'] ) {
-=======
 			if ( isset( $_GET['from'] ) && 'import' === $_GET['from'] ) {
 				// Overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix.
 				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) );
 			} elseif ( isset( $_GET['from'] ) && 'press-this' === $_GET['from'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				wp_redirect( self_admin_url( 'press-this.php' ) );
 			} else {
 				wp_redirect( self_admin_url( "plugins.php?activate=true&plugin_status=$status&paged=$page&s=$s" ) ); // overrides the ?error=true one above
@@ -549,13 +543,8 @@ elseif ( isset( $_GET['deleted'] ) ) :
 <?php elseif ( isset( $_GET['deactivate'] ) ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Plugin <strong>deactivated</strong>.' ); ?></p></div>
 <?php elseif ( isset( $_GET['deactivate-multi'] ) ) : ?>
-<<<<<<< HEAD
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Selected plugins <strong>deactivated</strong>.' ); ?></p></div>
-<?php elseif ( 'update-selected' == $action ) : ?>
-=======
-	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Selected plugins deactivated.' ); ?></p></div>
 <?php elseif ( 'update-selected' === $action ) : ?>
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'All selected plugins are up to date.' ); ?></p></div>
 <?php endif; ?>
 

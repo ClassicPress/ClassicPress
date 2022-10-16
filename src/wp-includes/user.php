@@ -2625,13 +2625,8 @@ function register_new_user( $user_login, $user_email ) {
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
 	// Check the username.
-<<<<<<< HEAD
-	if ( '' == $sanitized_user_login ) {
-		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
-=======
 	if ( '' === $sanitized_user_login ) {
-		$errors->add( 'empty_username', __( '<strong>Error</strong>: Please enter a username.' ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	} elseif ( ! validate_username( $user_login ) ) {
 		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
 		$sanitized_user_login = '';
@@ -2647,13 +2642,8 @@ function register_new_user( $user_login, $user_email ) {
 	}
 
 	// Check the email address.
-<<<<<<< HEAD
-	if ( '' == $user_email ) {
-		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your email address.' ) );
-=======
 	if ( '' === $user_email ) {
-		$errors->add( 'empty_email', __( '<strong>Error</strong>: Please type your email address.' ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your email address.' ) );
 	} elseif ( ! is_email( $user_email ) ) {
 		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
 		$user_email = '';

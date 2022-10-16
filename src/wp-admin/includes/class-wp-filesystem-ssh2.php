@@ -619,13 +619,8 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$struc         = array();
 			$struc['name'] = $entry;
 
-<<<<<<< HEAD
-			if ( '.' == $struc['name'] || '..' == $struc['name'] ) {
-				continue; //Do not care about these folders.
-=======
 			if ( '.' === $struc['name'] || '..' === $struc['name'] ) {
 				continue; // Do not care about these folders.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			}
 
 			if ( ! $include_hidden && '.' === $struc['name'][0] ) {

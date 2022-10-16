@@ -118,13 +118,8 @@ function meta_box_prefs( $screen ) {
 				if ( false == $box || ! $box['title'] ) {
 					continue;
 				}
-<<<<<<< HEAD
-				// Submit box cannot be hidden
-				if ( 'submitdiv' == $box['id'] || 'linksubmitdiv' == $box['id'] ) {
-=======
 				// Submit box cannot be hidden.
 				if ( 'submitdiv' === $box['id'] || 'linksubmitdiv' === $box['id'] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 					continue;
 				}
 

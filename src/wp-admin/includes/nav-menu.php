@@ -358,9 +358,6 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 		$args = array_merge( $args, (array) $box['args']->_default_query );
 	}
 
-<<<<<<< HEAD
-	// @todo transient caching of these results with proper invalidation on updating of a post of this type
-=======
 	/*
 	 * If we're dealing with pages, let's prioritize the Front Page,
 	 * Posts Page and Privacy Policy Page at the top of the list.
@@ -428,7 +425,6 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 	}
 
 	// @todo Transient caching of these results with proper invalidation on updating of a post of this type.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$get_posts = new WP_Query;
 	$posts     = $get_posts->query( $args );
 	if ( ! $get_posts->post_count ) {
@@ -514,11 +510,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</li>
 		</ul><!-- .posttype-tabs -->
 
-<<<<<<< HEAD
-		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel <?php echo ( 'most-recent' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
-=======
 		<div id="tabs-panel-posttype-<?php echo $post_type_name; ?>-most-recent" class="tabs-panel <?php echo ( 'most-recent' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" role="region" aria-label="<?php _e( 'Most Recent' ); ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<ul id="<?php echo $post_type_name; ?>checklist-most-recent" class="categorychecklist form-no-clear">
 				<?php
 				$recent_args    = array_merge(
@@ -553,11 +545,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-<<<<<<< HEAD
-		<div class="tabs-panel <?php echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" id="tabs-panel-posttype-<?php echo $post_type_name; ?>-search">
-=======
 		<div class="tabs-panel <?php echo ( 'search' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" id="tabs-panel-posttype-<?php echo $post_type_name; ?>-search" role="region" aria-label="<?php echo $post_type->labels->search_items; ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<?php
 			if ( isset( $_REQUEST[ 'quick-search-posttype-' . $post_type_name ] ) ) {
 				$searched       = esc_attr( $_REQUEST[ 'quick-search-posttype-' . $post_type_name ] );
@@ -595,11 +583,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-<<<<<<< HEAD
-		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all <?php echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>">
-=======
 		<div id="<?php echo $post_type_name; ?>-all" class="tabs-panel tabs-panel-view-all <?php echo ( 'all' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" role="region" aria-label="<?php echo $post_type->labels->all_items; ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<?php if ( ! empty( $page_links ) ) : ?>
 				<div class="add-menu-item-pagelinks">
 					<?php echo $page_links; ?>
@@ -842,11 +826,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			</li>
 		</ul><!-- .taxonomy-tabs -->
 
-<<<<<<< HEAD
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel <?php echo ( 'most-used' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?> ">
-=======
 		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-pop" class="tabs-panel <?php echo ( 'most-used' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" role="region" aria-label="<?php echo $taxonomy->labels->most_used; ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<ul id="<?php echo $taxonomy_name; ?>checklist-pop" class="categorychecklist form-no-clear" >
 				<?php
 				$popular_terms  = get_terms(
@@ -864,11 +844,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			</ul>
 		</div><!-- /.tabs-panel -->
 
-<<<<<<< HEAD
-		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all <?php echo ( 'all' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?> ">
-=======
 		<div id="tabs-panel-<?php echo $taxonomy_name; ?>-all" class="tabs-panel tabs-panel-view-all <?php echo ( 'all' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" role="region" aria-label="<?php echo $taxonomy->labels->all_items; ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<?php if ( ! empty( $page_links ) ) : ?>
 				<div class="add-menu-item-pagelinks">
 					<?php echo $page_links; ?>
@@ -887,11 +863,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			<?php endif; ?>
 		</div><!-- /.tabs-panel -->
 
-<<<<<<< HEAD
-		<div class="tabs-panel <?php echo ( 'search' == $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" id="tabs-panel-search-taxonomy-<?php echo $taxonomy_name; ?>">
-=======
 		<div class="tabs-panel <?php echo ( 'search' === $current_tab ? 'tabs-panel-active' : 'tabs-panel-inactive' ); ?>" id="tabs-panel-search-taxonomy-<?php echo $taxonomy_name; ?>" role="region" aria-label="<?php echo $taxonomy->labels->search_items; ?>" tabindex="0">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			<?php
 			if ( isset( $_REQUEST[ 'quick-search-taxonomy-' . $taxonomy_name ] ) ) {
 				$searched       = esc_attr( $_REQUEST[ 'quick-search-taxonomy-' . $taxonomy_name ] );
@@ -1223,13 +1195,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 	if ( ! empty( $_POST['menu-item-db-id'] ) ) {
 		foreach ( (array) $_POST['menu-item-db-id'] as $_key => $k ) {
 
-<<<<<<< HEAD
-			// Menu item title can't be blank
-			if ( ! isset( $_POST['menu-item-title'][ $_key ] ) || '' == $_POST['menu-item-title'][ $_key ] ) {
-=======
 			// Menu item title can't be blank.
 			if ( ! isset( $_POST['menu-item-title'][ $_key ] ) || '' === $_POST['menu-item-title'][ $_key ] ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				continue;
 			}
 

@@ -143,11 +143,6 @@ function _get_plugin_data_markup_translate( $plugin_file, $plugin_data, $markup 
 					load_plugin_textdomain( $textdomain, false, dirname( $plugin_file ) );
 				}
 			}
-<<<<<<< HEAD
-=======
-		} elseif ( 'hello.php' === basename( $plugin_file ) ) {
-			$textdomain = 'default';
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		}
 		if ( $textdomain ) {
 			foreach ( array( 'Name', 'PluginURI', 'Description', 'Author', 'AuthorURI', 'Version' ) as $field ) {

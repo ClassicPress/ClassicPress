@@ -625,13 +625,8 @@ function wp_tempnam( $filename = '', $dir = '' ) {
 		$dir = get_temp_dir();
 	}
 
-<<<<<<< HEAD
-	if ( empty( $filename ) || '.' == $filename || '/' == $filename || '\\' == $filename ) {
-		$filename = time();
-=======
 	if ( empty( $filename ) || in_array( $filename, array( '.', '/', '\\' ), true ) ) {
 		$filename = uniqid();
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	}
 
 	// Use the basename of the given file without the extension as the name for the temporary directory
@@ -1016,87 +1011,6 @@ function download_url( $url, $timeout = 300 ) {
 		}
 	}
 
-<<<<<<< HEAD
-=======
-	// If the caller expects signature verification to occur, check to see if this URL supports it.
-	if ( $signature_verification ) {
-		/**
-		 * Filters the list of hosts which should have Signature Verification attempted on.
-		 *
-		 * @since 5.2.0
-		 *
-		 * @param string[] $hostnames List of hostnames.
-		 */
-		$signed_hostnames       = apply_filters( 'wp_signature_hosts', array( 'wordpress.org', 'downloads.wordpress.org', 's.w.org' ) );
-		$signature_verification = in_array( parse_url( $url, PHP_URL_HOST ), $signed_hostnames, true );
-	}
-
-	// Perform signature valiation if supported.
-	if ( $signature_verification ) {
-		$signature = wp_remote_retrieve_header( $response, 'x-content-signature' );
-		if ( ! $signature ) {
-			// Retrieve signatures from a file if the header wasn't included.
-			// WordPress.org stores signatures at $package_url.sig.
-
-			$signature_url = false;
-			$url_path      = parse_url( $url, PHP_URL_PATH );
-
-			if ( '.zip' === substr( $url_path, -4 ) || '.tar.gz' === substr( $url_path, -7 ) ) {
-				$signature_url = str_replace( $url_path, $url_path . '.sig', $url );
-			}
-
-			/**
-			 * Filter the URL where the signature for a file is located.
-			 *
-			 * @since 5.2.0
-			 *
-			 * @param false|string $signature_url The URL where signatures can be found for a file, or false if none are known.
-			 * @param string $url                 The URL being verified.
-			 */
-			$signature_url = apply_filters( 'wp_signature_url', $signature_url, $url );
-
-			if ( $signature_url ) {
-				$signature_request = wp_safe_remote_get(
-					$signature_url,
-					array(
-						'limit_response_size' => 10 * KB_IN_BYTES, // 10KB should be large enough for quite a few signatures.
-					)
-				);
-
-				if ( ! is_wp_error( $signature_request ) && 200 === wp_remote_retrieve_response_code( $signature_request ) ) {
-					$signature = explode( "\n", wp_remote_retrieve_body( $signature_request ) );
-				}
-			}
-		}
-
-		// Perform the checks.
-		$signature_verification = verify_file_signature( $tmpfname, $signature, basename( parse_url( $url, PHP_URL_PATH ) ) );
-	}
-
-	if ( is_wp_error( $signature_verification ) ) {
-		if (
-			/**
-			 * Filters whether Signature Verification failures should be allowed to soft fail.
-			 *
-			 * WARNING: This may be removed from a future release.
-			 *
-			 * @since 5.2.0
-			 *
-			 * @param bool   $signature_softfail If a softfail is allowed.
-			 * @param string $url                The url being accessed.
-			 */
-			apply_filters( 'wp_signature_softfail', true, $url )
-		) {
-			$signature_verification->add_data( $tmpfname, 'softfail-filename' );
-		} else {
-			// Hard-fail.
-			unlink( $tmpfname );
-		}
-
-		return $signature_verification;
-	}
-
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	return $tmpfname;
 }
 
@@ -1302,11 +1216,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
-<<<<<<< HEAD
-		if ( '/' == substr( $info['name'], -1 ) ) { // directory
-=======
 		if ( '/' === substr( $info['name'], -1 ) ) { // Directory.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			continue;
 		}
 
@@ -1659,11 +1569,7 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 		}
 	}
 
-<<<<<<< HEAD
-	if ( ! $method && isset( $args['connection_type'] ) && 'ssh' == $args['connection_type'] && extension_loaded( 'ssh2' ) && function_exists( 'stream_get_contents' ) ) {
-=======
-	if ( ! $method && isset( $args['connection_type'] ) && 'ssh' === $args['connection_type'] && extension_loaded( 'ssh2' ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
+	if ( ! $method && isset( $args['connection_type'] ) && 'ssh' === $args['connection_type'] && extension_loaded( 'ssh2' ) && function_exists( 'stream_get_contents' ) ) {
 		$method = 'ssh2';
 	}
 	if ( ! $method && extension_loaded( 'ftp' ) ) {
@@ -1799,11 +1705,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 
 	if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' === FS_METHOD ) ) {
 		$credentials['connection_type'] = 'ssh';
-<<<<<<< HEAD
-	} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) { //Only the FTP Extension understands SSL
-=======
 	} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' === $type ) { // Only the FTP Extension understands SSL.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$credentials['connection_type'] = 'ftps';
 	} elseif ( ! empty( $submitted_form['connection_type'] ) ) {
 		$credentials['connection_type'] = $submitted_form['connection_type'];
@@ -1816,12 +1718,8 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 		)
 	) {
 		$stored_credentials = $credentials;
-<<<<<<< HEAD
-		if ( ! empty( $stored_credentials['port'] ) ) { //save port as part of hostname to simplify above code.
-=======
 
 		if ( ! empty( $stored_credentials['port'] ) ) { // Save port as part of hostname to simplify above code.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
 		}
 

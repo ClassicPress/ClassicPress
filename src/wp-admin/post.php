@@ -55,15 +55,9 @@ if ( isset( $_POST['deletepost'] ) ) {
 
 $sendback = wp_get_referer();
 if ( ! $sendback ||
-<<<<<<< HEAD
-	 strpos( $sendback, 'post.php' ) !== false ||
-	 strpos( $sendback, 'post-new.php' ) !== false ) {
-	if ( 'attachment' == $post_type ) {
-=======
 	false !== strpos( $sendback, 'post.php' ) ||
 	false !== strpos( $sendback, 'post-new.php' ) ) {
 	if ( 'attachment' === $post_type ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$sendback = admin_url( 'upload.php' );
 	} else {
 		$sendback = admin_url( 'edit.php' );

@@ -1280,12 +1280,8 @@ function image_attachment_fields_to_save( $post, $attachment ) {
  */
 function image_media_send_to_editor( $html, $attachment_id, $attachment ) {
 	$post = get_post( $attachment_id );
-<<<<<<< HEAD
-	if ( substr( $post->post_mime_type, 0, 5 ) == 'image' ) {
-=======
 
 	if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$url   = $attachment['url'];
 		$align = ! empty( $attachment['align'] ) ? $attachment['align'] : 'none';
 		$size  = ! empty( $attachment['image-size'] ) ? $attachment['image-size'] : 'medium';
@@ -1661,18 +1657,12 @@ function get_media_item( $attachment_id, $args = null ) {
 	} elseif ( isset( $_POST ) && count( $_POST ) ) {// Like for async-upload where $_GET['post_id'] isn't set
 		$calling_post_id = $post->post_parent;
 	}
-<<<<<<< HEAD
-	if ( 'image' == $type && $calling_post_id && current_theme_supports( 'post-thumbnails', get_post_type( $calling_post_id ) )
-		&& post_type_supports( get_post_type( $calling_post_id ), 'thumbnail' ) && get_post_thumbnail_id( $calling_post_id ) != $attachment_id ) {
-=======
 
 	if ( 'image' === $type && $calling_post_id
 		&& current_theme_supports( 'post-thumbnails', get_post_type( $calling_post_id ) )
 		&& post_type_supports( get_post_type( $calling_post_id ), 'thumbnail' )
 		&& get_post_thumbnail_id( $calling_post_id ) != $attachment_id
 	) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
-
 		$calling_post             = get_post( $calling_post_id );
 		$calling_post_type_object = get_post_type_object( $calling_post->post_type );
 

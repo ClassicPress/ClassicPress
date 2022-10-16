@@ -147,16 +147,6 @@ final class WP_Customize_Nav_Menus {
 			}
 
 			if ( 0 === $page && 'page' === $object ) {
-<<<<<<< HEAD
-=======
-				// Insert Front Page or custom "Home" link.
-				$front_page = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
-				if ( ! empty( $front_page ) ) {
-					$front_page_obj      = get_post( $front_page );
-					$important_pages[]   = $front_page_obj;
-					$suppress_page_ids[] = $front_page_obj->ID;
-				} else {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				// Add "Home" link. Treat as a page, but switch to custom on add.
 				$items[] = array(
 					'id'         => 'home',
@@ -166,28 +156,6 @@ final class WP_Customize_Nav_Menus {
 					'object'     => '',
 					'url'        => home_url(),
 				);
-<<<<<<< HEAD
-=======
-				}
-
-				// Insert Posts Page.
-				$posts_page = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_for_posts' ) : 0;
-				if ( ! empty( $posts_page ) ) {
-					$posts_page_obj      = get_post( $posts_page );
-					$important_pages[]   = $posts_page_obj;
-					$suppress_page_ids[] = $posts_page_obj->ID;
-				}
-
-				// Insert Privacy Policy Page.
-				$privacy_policy_page_id = (int) get_option( 'wp_page_for_privacy_policy' );
-				if ( ! empty( $privacy_policy_page_id ) ) {
-					$privacy_policy_page = get_post( $privacy_policy_page_id );
-					if ( $privacy_policy_page instanceof WP_Post && 'publish' === $privacy_policy_page->post_status ) {
-						$important_pages[]   = $privacy_policy_page;
-						$suppress_page_ids[] = $privacy_policy_page->ID;
-					}
-				}
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			} elseif ( 'post' !== $object && 0 === $page && $post_type->has_archive ) {
 				// Add a post type archive link.
 				$items[] = array(
@@ -422,12 +390,6 @@ final class WP_Customize_Nav_Menus {
 
 		// Add "Home" link if search term matches. Treat as a page, but switch to custom on add.
 		if ( isset( $args['s'] ) ) {
-<<<<<<< HEAD
-=======
-			// Only insert custom "Home" link if there's no Front Page
-			$front_page = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
-			if ( empty( $front_page ) ) {
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$title   = _x( 'Home', 'nav menu home label' );
 			$matches = function_exists( 'mb_stripos' ) ? false !== mb_stripos( $title, $args['s'] ) : false !== stripos( $title, $args['s'] );
 			if ( $matches ) {

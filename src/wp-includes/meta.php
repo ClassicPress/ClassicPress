@@ -967,12 +967,8 @@ function _get_meta_table( $type ) {
  * @return bool True if the key is protected, false otherwise.
  */
 function is_protected_meta( $meta_key, $meta_type = '' ) {
-<<<<<<< HEAD
 	$sanitized_key = preg_replace( "/[^\x20-\x7E\p{L}]/", '', $meta_key );
 	$protected     = strlen( $sanitized_key ) > 0 && ( '_' === $sanitized_key[0] );
-=======
-	$protected = ( '_' === $meta_key[0] );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 
 	/**
 	 * Filters whether a meta key is protected.

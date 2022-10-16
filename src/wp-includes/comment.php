@@ -1301,13 +1301,8 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
 
 	$mod_keys = trim( get_option( 'blacklist_keys' ) );
-<<<<<<< HEAD
-	if ( '' == $mod_keys ) {
-		return false; // If moderation keys are empty
-=======
 	if ( '' === $mod_keys ) {
 		return false; // If moderation keys are empty.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	}
 
 	// Ensure HTML tags are not being used to bypass the blacklist.
@@ -2963,13 +2958,8 @@ function weblog_ping( $server = '', $path = '' ) {
 	include_once ABSPATH . WPINC . '/class-IXR.php';
 	include_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 
-<<<<<<< HEAD
-	// using a timeout of 3 seconds should be enough to cover slow servers
-	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' == $path ) ) ? false : $path ) );
-=======
 	// Using a timeout of 3 seconds should be enough to cover slow servers.
 	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' === $path ) ) ? false : $path ) );
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$client->timeout    = 3;
 	$client->useragent .= ' -- ' . classicpress_user_agent();
 

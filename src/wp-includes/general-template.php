@@ -209,10 +209,6 @@ function get_search_form( $echo = true ) {
 		require $search_form_template;
 		$form = ob_get_clean();
 	} else {
-<<<<<<< HEAD
-		if ( 'html5' == $format ) {
-			$form = '<form role="search" method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
-=======
 		// Build a string containing an aria-label to use for the search form.
 		if ( isset( $args['aria_label'] ) && $args['aria_label'] ) {
 			$aria_label = 'aria-label="' . esc_attr( $args['aria_label'] ) . '" ';
@@ -225,7 +221,6 @@ function get_search_form( $echo = true ) {
 		}
 		if ( 'html5' === $format ) {
 			$form = '<form role="search" ' . $aria_label . 'method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				<label>
 					<span class="screen-reader-text">' . _x( 'Search for:', 'label' ) . '</span>
 					<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" />
@@ -1239,13 +1234,8 @@ function wp_title( $sep = '&raquo;', $display = true, $seplocation = '' ) {
 	 */
 	$title_array = apply_filters( 'wp_title_parts', explode( $t_sep, $title ) );
 
-<<<<<<< HEAD
-	// Determines position of the separator and direction of the breadcrumb
-	if ( 'right' == $seplocation ) { // sep on right, so reverse the order
-=======
 	// Determines position of the separator and direction of the breadcrumb.
 	if ( 'right' === $seplocation ) { // Separator on right, so reverse the order.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$title_array = array_reverse( $title_array );
 		$title       = implode( " $sep ", $title_array ) . $prefix;
 	} else {
@@ -3121,11 +3111,7 @@ function user_can_richedit() {
 	if ( ! isset( $wp_rich_edit ) ) {
 		$wp_rich_edit = false;
 
-<<<<<<< HEAD
-		if ( get_user_option( 'rich_editing' ) == 'true' || ! is_user_logged_in() ) { // default to 'true' for logged out users
-=======
 		if ( 'true' === get_user_option( 'rich_editing' ) || ! is_user_logged_in() ) { // Default to 'true' for logged out users.
->>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			if ( $is_safari ) {
 				$wp_rich_edit = ! wp_is_mobile() || ( preg_match( '!AppleWebKit/(\d+)!', $_SERVER['HTTP_USER_AGENT'], $match ) && intval( $match[1] ) >= 534 );
 			} elseif ( $is_IE ) {
