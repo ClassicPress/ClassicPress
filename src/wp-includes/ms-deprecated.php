@@ -199,7 +199,7 @@ function get_blog_list( $start = 0, $num = 10, $deprecated = '' ) {
 		return array();
 	}
 
-	if ( $num == 'all' ) {
+	if ( 'all' === $num ) {
 		return array_slice( $blog_list, $start, count( $blog_list ) );
 	} else {
 		return array_slice( $blog_list, $start, $num );
@@ -293,7 +293,7 @@ function wpmu_admin_do_redirect( $url = '' ) {
 	if ( isset( $_GET['redirect'] ) && isset( $_POST['redirect'] ) && $_GET['redirect'] !== $_POST['redirect'] ) {
 		wp_die( __( 'A variable mismatch has been detected.' ), __( 'Sorry, you are not allowed to view this item.' ), 400 );
 	} elseif ( isset( $_GET['redirect'] ) ) {
-		if ( substr( $_GET['redirect'], 0, 2 ) == 's_' )
+		if ( 's_' === substr( $_GET['redirect'], 0, 2 ) )
 			$url .= '&action=blogs&s='. esc_html( substr( $_GET['redirect'], 2 ) );
 	} elseif ( isset( $_POST['redirect'] ) ) {
 		$url = wpmu_admin_redirect_add_updated_param( $_POST['redirect'] );
@@ -371,8 +371,13 @@ function get_blogaddress_by_domain( $domain, $path ) {
 		if ( $domain != $_SERVER['HTTP_HOST'] ) {
 			$blogname = substr( $domain, 0, strpos( $domain, '.' ) );
 			$url = 'http://' . substr( $domain, strpos( $domain, '.' ) + 1 ) . $path;
+<<<<<<< HEAD
 			// we're not installing the main blog
 			if ( $blogname != 'www.' )
+=======
+			// We're not installing the main blog.
+			if ( 'www.' !== $blogname )
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$url .= $blogname . '/';
 		} else { // main blog
 			$url = 'http://' . $domain . $path;
@@ -551,3 +556,185 @@ function is_user_option_local( $key, $user_id = 0, $blog_id = 0 ) {
 
 	return isset( $current_user->$local_key );
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Store basic site info in the blogs table.
+ *
+ * This function creates a row in the wp_blogs table and returns
+ * the new blog's ID. It is the first step in creating a new blog.
+ *
+ * @since MU (3.0.0)
+ * @deprecated 5.1.0 Use `wp_insert_site()`
+ * @see wp_insert_site()
+ *
+ * @param string $domain  The domain of the new site.
+ * @param string $path    The path of the new site.
+ * @param int    $site_id Unless you're running a multi-network install, be sure to set this value to 1.
+ * @return int|false The ID of the new row
+ */
+function insert_blog($domain, $path, $site_id) {
+	_deprecated_function( __FUNCTION__, '5.1.0', 'wp_insert_site()' );
+
+	$data = array(
+		'domain'  => $domain,
+		'path'    => $path,
+		'site_id' => $site_id,
+	);
+
+	$site_id = wp_insert_site( $data );
+	if ( is_wp_error( $site_id ) ) {
+		return false;
+	}
+
+	clean_blog_cache( $site_id );
+
+	return $site_id;
+}
+
+/**
+ * Install an empty blog.
+ *
+ * Creates the new blog tables and options. If calling this function
+ * directly, be sure to use switch_to_blog() first, so that $wpdb
+ * points to the new blog.
+ *
+ * @since MU (3.0.0)
+ * @deprecated 5.1.0
+ *
+ * @global wpdb     $wpdb     WordPress database abstraction object.
+ * @global WP_Roles $wp_roles WordPress role management object.
+ *
+ * @param int    $blog_id    The value returned by wp_insert_site().
+ * @param string $blog_title The title of the new site.
+ */
+function install_blog( $blog_id, $blog_title = '' ) {
+	global $wpdb, $wp_roles;
+
+	_deprecated_function( __FUNCTION__, '5.1.0' );
+
+	// Cast for security.
+	$blog_id = (int) $blog_id;
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+	$suppress = $wpdb->suppress_errors();
+	if ( $wpdb->get_results( "DESCRIBE {$wpdb->posts}" ) ) {
+		die( '<h1>' . __( 'Already Installed' ) . '</h1><p>' . __( 'You appear to have already installed WordPress. To reinstall please clear your old database tables first.' ) . '</p></body></html>' );
+	}
+	$wpdb->suppress_errors( $suppress );
+
+	$url = get_blogaddress_by_id( $blog_id );
+
+	// Set everything up.
+	make_db_current_silent( 'blog' );
+	populate_options();
+	populate_roles();
+
+	// populate_roles() clears previous role definitions so we start over.
+	$wp_roles = new WP_Roles();
+
+	$siteurl = $home = untrailingslashit( $url );
+
+	if ( ! is_subdomain_install() ) {
+
+		if ( 'https' === parse_url( get_site_option( 'siteurl' ), PHP_URL_SCHEME ) ) {
+			$siteurl = set_url_scheme( $siteurl, 'https' );
+		}
+		if ( 'https' === parse_url( get_home_url( get_network()->site_id ), PHP_URL_SCHEME ) ) {
+			$home = set_url_scheme( $home, 'https' );
+		}
+	}
+
+	update_option( 'siteurl', $siteurl );
+	update_option( 'home', $home );
+
+	if ( get_site_option( 'ms_files_rewriting' ) ) {
+		update_option( 'upload_path', UPLOADBLOGSDIR . "/$blog_id/files" );
+	} else {
+		update_option( 'upload_path', get_blog_option( get_network()->site_id, 'upload_path' ) );
+	}
+
+	update_option( 'blogname', wp_unslash( $blog_title ) );
+	update_option( 'admin_email', '' );
+
+	// Remove all permissions.
+	$table_prefix = $wpdb->get_blog_prefix();
+	delete_metadata( 'user', 0, $table_prefix . 'user_level', null, true );   // Delete all.
+	delete_metadata( 'user', 0, $table_prefix . 'capabilities', null, true ); // Delete all.
+}
+
+/**
+ * Set blog defaults.
+ *
+ * This function creates a row in the wp_blogs table.
+ *
+ * @since MU (3.0.0)
+ * @deprecated MU
+ * @deprecated Use wp_install_defaults()
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param int $blog_id Ignored in this function.
+ * @param int $user_id
+ */
+function install_blog_defaults( $blog_id, $user_id ) {
+	global $wpdb;
+
+	_deprecated_function( __FUNCTION__, 'MU' );
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+	$suppress = $wpdb->suppress_errors();
+
+	wp_install_defaults( $user_id );
+
+	$wpdb->suppress_errors( $suppress );
+}
+
+/**
+ * Update the status of a user in the database.
+ *
+ * Previously used in core to mark a user as spam or "ham" (not spam) in Multisite.
+ *
+ * @since 3.0.0
+ * @deprecated 5.3.0 Use wp_update_user()
+ * @see wp_update_user()
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param int    $id         The user ID.
+ * @param string $pref       The column in the wp_users table to update the user's status
+ *                           in (presumably user_status, spam, or deleted).
+ * @param int    $value      The new status for the user.
+ * @param null   $deprecated Deprecated as of 3.0.2 and should not be used.
+ * @return int   The initially passed $value.
+ */
+function update_user_status( $id, $pref, $value, $deprecated = null ) {
+	global $wpdb;
+
+	_deprecated_function( __FUNCTION__, '5.3.0', 'wp_update_user()' );
+
+	if ( null !== $deprecated ) {
+		_deprecated_argument( __FUNCTION__, '3.0.2' );
+	}
+
+	$wpdb->update( $wpdb->users, array( sanitize_key( $pref ) => $value ), array( 'ID' => $id ) );
+
+	$user = new WP_User( $id );
+	clean_user_cache( $user );
+
+	if ( 'spam' === $pref ) {
+		if ( $value == 1 ) {
+			/** This filter is documented in wp-includes/user.php */
+			do_action( 'make_spam_user', $id );
+		} else {
+			/** This filter is documented in wp-includes/user.php */
+			do_action( 'make_ham_user', $id );
+		}
+	}
+
+	return $value;
+}
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)

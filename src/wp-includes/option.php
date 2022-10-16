@@ -128,8 +128,13 @@ function get_option( $option, $default = false ) {
 		}
 	}
 
+<<<<<<< HEAD
 	// If home is not set use siteurl.
 	if ( 'home' == $option && '' == $value ) {
+=======
+	// If home is not set, use siteurl.
+	if ( 'home' === $option && '' === $value ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		return get_option( 'siteurl' );
 	}
 
@@ -499,7 +504,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	}
 
 	if ( ! wp_installing() ) {
-		if ( 'yes' == $autoload ) {
+		if ( 'yes' === $autoload ) {
 			$alloptions            = wp_load_alloptions( true );
 			$alloptions[ $option ] = $serialized_value;
 			wp_cache_set( 'alloptions', $alloptions, 'options' );
@@ -577,7 +582,7 @@ function delete_option( $option ) {
 
 	$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $option ) );
 	if ( ! wp_installing() ) {
-		if ( 'yes' == $row->autoload ) {
+		if ( 'yes' === $row->autoload ) {
 			$alloptions = wp_load_alloptions( true );
 			if ( is_array( $alloptions ) && isset( $alloptions[ $option ] ) ) {
 				unset( $alloptions[ $option ] );
@@ -2144,7 +2149,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 		$wp_registered_settings = array();
 	}
 
-	if ( 'misc' == $option_group ) {
+	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -2157,7 +2162,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 		$option_group = 'general';
 	}
 
-	if ( 'privacy' == $option_group ) {
+	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',
@@ -2196,7 +2201,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	global $new_whitelist_options, $wp_registered_settings;
 
-	if ( 'misc' == $option_group ) {
+	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -2209,7 +2214,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 		$option_group = 'general';
 	}
 
-	if ( 'privacy' == $option_group ) {
+	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',

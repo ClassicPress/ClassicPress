@@ -38,15 +38,15 @@ function post_submit_meta_box( $post, $args = array() ) {
 <div id="minor-publishing-actions">
 <div id="save-action">
 	<?php
-	if ( 'publish' != $post->post_status && 'future' != $post->post_status && 'pending' != $post->post_status ) {
+	if ( ! in_array( $post->post_status, array( 'publish', 'future', 'pending' ), true ) ) {
 		$private_style = '';
-		if ( 'private' == $post->post_status ) {
+		if ( 'private' === $post->post_status ) {
 			$private_style = 'style="display:none"';
 		}
 		?>
 <input <?php echo $private_style; ?> type="submit" name="save" id="save-post" value="<?php esc_attr_e( 'Save Draft' ); ?>" class="button" />
 <span class="spinner"></span>
-<?php } elseif ( 'pending' == $post->post_status && $can_publish ) { ?>
+<?php } elseif ( 'pending' === $post->post_status && $can_publish ) { ?>
 <input type="submit" name="save" id="save-post" value="<?php esc_attr_e( 'Save as Pending' ); ?>" class="button" />
 <span class="spinner"></span>
 <?php } ?>
@@ -55,7 +55,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 <div id="preview-action">
 		<?php
 		$preview_link = esc_url( get_preview_post_link( $post ) );
-		if ( 'publish' == $post->post_status ) {
+		if ( 'publish' === $post->post_status ) {
 			$preview_button_text = __( 'Preview Changes' );
 		} else {
 			$preview_button_text = __( 'Preview' );
@@ -112,26 +112,26 @@ function post_submit_meta_box( $post, $args = array() ) {
 			?>
 </span>
 	<?php
-	if ( 'publish' == $post->post_status || 'private' == $post->post_status || $can_publish ) {
+	if ( 'publish' === $post->post_status || 'private' === $post->post_status || $can_publish ) {
 		$private_style = '';
-		if ( 'private' == $post->post_status ) {
+		if ( 'private' === $post->post_status ) {
 			$private_style = 'style="display:none"';
 		}
 		?>
 <a href="#post_status" <?php echo $private_style; ?> class="edit-post-status hide-if-no-js" role="button"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit status' ); ?></span></a>
 <div id="post-status-select" class="hide-if-js">
-<input type="hidden" name="hidden_post_status" id="hidden_post_status" value="<?php echo esc_attr( ( 'auto-draft' == $post->post_status ) ? 'draft' : $post->post_status ); ?>" />
+<input type="hidden" name="hidden_post_status" id="hidden_post_status" value="<?php echo esc_attr( ( 'auto-draft' === $post->post_status ) ? 'draft' : $post->post_status ); ?>" />
 <label for="post_status" class="screen-reader-text"><?php _e( 'Set status' ); ?></label>
 <select name="post_status" id="post_status">
-		<?php if ( 'publish' == $post->post_status ) : ?>
+		<?php if ( 'publish' === $post->post_status ) : ?>
 <option<?php selected( $post->post_status, 'publish' ); ?> value='publish'><?php _e( 'Published' ); ?></option>
-<?php elseif ( 'private' == $post->post_status ) : ?>
+<?php elseif ( 'private' === $post->post_status ) : ?>
 <option<?php selected( $post->post_status, 'private' ); ?> value='publish'><?php _e( 'Privately Published' ); ?></option>
-<?php elseif ( 'future' == $post->post_status ) : ?>
+<?php elseif ( 'future' === $post->post_status ) : ?>
 <option<?php selected( $post->post_status, 'future' ); ?> value='future'><?php _e( 'Scheduled' ); ?></option>
 <?php endif; ?>
 <option<?php selected( $post->post_status, 'pending' ); ?> value='pending'><?php _e( 'Pending Review' ); ?></option>
-		<?php if ( 'auto-draft' == $post->post_status ) : ?>
+		<?php if ( 'auto-draft' === $post->post_status ) : ?>
 <option<?php selected( $post->post_status, 'auto-draft' ); ?> value='draft'><?php _e( 'Draft' ); ?></option>
 <?php else : ?>
 <option<?php selected( $post->post_status, 'draft' ); ?> value='draft'><?php _e( 'Draft' ); ?></option>
@@ -196,6 +196,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 	/* translators: Publish box date format, see https://secure.php.net/date */
 	$datef = __( 'M j, Y @ H:i' );
 	if ( 0 != $post->ID ) {
+<<<<<<< HEAD
 		if ( 'future' == $post->post_status ) { // scheduled for publishing at a future date
 			/* translators: Post date information. 1: Date on which the post is currently scheduled to be published */
 			$stamp = __( 'Scheduled for: <b>%1$s</b>' );
@@ -203,6 +204,15 @@ function post_submit_meta_box( $post, $args = array() ) {
 			/* translators: Post date information. 1: Date on which the post was published */
 			$stamp = __( 'Published on: <b>%1$s</b>' );
 		} elseif ( '0000-00-00 00:00:00' == $post->post_date_gmt ) { // draft, 1 or more saves, no date specified
+=======
+		if ( 'future' === $post->post_status ) { // Scheduled for publishing at a future date.
+			/* translators: Post date information. %s: Date on which the post is currently scheduled to be published. */
+			$stamp = __( 'Scheduled for: %s' );
+		} elseif ( 'publish' === $post->post_status || 'private' === $post->post_status ) { // Already published.
+			/* translators: Post date information. %s: Date on which the post was published. */
+			$stamp = __( 'Published on: %s' );
+		} elseif ( '0000-00-00 00:00:00' === $post->post_date_gmt ) { // Draft, 1 or more saves, no date specified.
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$stamp = __( 'Publish <b>immediately</b>' );
 		} elseif ( time() < strtotime( $post->post_date_gmt . ' +0000' ) ) { // draft, 1 or more saves, future date specified
 			/* translators: Post date information. 1: Date on which the post is to be published */
@@ -682,7 +692,8 @@ function post_excerpt_meta_box( $post ) {
 function post_trackback_meta_box( $post ) {
 	$form_trackback = '<input type="text" name="trackback_url" id="trackback_url" class="code" value="' .
 		esc_attr( str_replace( "\n", ' ', $post->to_ping ) ) . '" aria-describedby="trackback-url-desc" />';
-	if ( '' != $post->pinged ) {
+
+	if ( '' !== $post->pinged ) {
 		$pings          = '<p>' . __( 'Already pinged:' ) . '</p><ul>';
 		$already_pinged = explode( "\n", trim( $post->pinged ) );
 		foreach ( $already_pinged as $pinged_url ) {
@@ -974,9 +985,14 @@ function page_attributes_meta_box( $post ) {
 			 */
 			do_action( 'page_attributes_misc_attributes', $post );
 		?>
+<<<<<<< HEAD
 		<?php if ( 'page' == $post->post_type && get_current_screen()->get_help_tabs() ) : ?>
 			<p><?php _e( 'Need help? Use the Help tab above the screen title.' ); ?></p>
 		<?php endif; ?>
+=======
+		<?php if ( 'page' === $post->post_type && get_current_screen()->get_help_tabs() ) : ?>
+<p class="post-attributes-help-text"><?php _e( 'Need help? Use the Help tab above the screen title.' ); ?></p>
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		<?php
 	endif;
 }
@@ -1025,7 +1041,19 @@ function link_submit_meta_box( $link ) {
 	?>
 <div id="delete-action">
 	<?php
+<<<<<<< HEAD
 	if ( ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] && current_user_can( 'manage_links' ) ) {
+=======
+	if ( ! empty( $_GET['action'] ) && 'edit' === $_GET['action'] && current_user_can( 'manage_links' ) ) {
+		printf(
+			'<a class="submitdelete deletion" href="%s" onclick="return confirm( \'%s\' );">%s</a>',
+			wp_nonce_url( "link.php?action=delete&amp;link_id=$link->link_id", 'delete-bookmark_' . $link->link_id ),
+			/* translators: %s: Link name. */
+			esc_js( sprintf( __( "You are about to delete this link '%s'\n  'Cancel' to stop, 'OK' to delete." ), $link->link_name ) ),
+			__( 'Delete' )
+		);
+	}
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		?>
 	<a class="submitdelete deletion" href="<?php echo wp_nonce_url( "link.php?action=delete&amp;link_id=$link->link_id", 'delete-bookmark_' . $link->link_id ); ?>" onclick="if ( confirm('<?php echo esc_js( sprintf( __( "You are about to delete this link '%s'\n  'Cancel' to stop, 'OK' to delete." ), $link->link_name ) ); ?>') ) {return true;}return false;"><?php _e( 'Delete' ); ?></a>
 	<?php } ?>
@@ -1145,21 +1173,21 @@ function xfn_check( $class, $value = '', $deprecated = '' ) {
 	$link_rel = isset( $link->link_rel ) ? $link->link_rel : ''; // In PHP 5.3: $link_rel = $link->link_rel ?: '';
 	$rels     = preg_split( '/\s+/', $link_rel );
 
-	if ( '' != $value && in_array( $value, $rels, true ) ) {
+	if ( '' !== $value && in_array( $value, $rels, true ) ) {
 		echo ' checked="checked"';
 	}
 
-	if ( '' == $value ) {
-		if ( 'family' == $class && strpos( $link_rel, 'child' ) === false && strpos( $link_rel, 'parent' ) === false && strpos( $link_rel, 'sibling' ) === false && strpos( $link_rel, 'spouse' ) === false && strpos( $link_rel, 'kin' ) === false ) {
+	if ( '' === $value ) {
+		if ( 'family' === $class && strpos( $link_rel, 'child' ) === false && strpos( $link_rel, 'parent' ) === false && strpos( $link_rel, 'sibling' ) === false && strpos( $link_rel, 'spouse' ) === false && strpos( $link_rel, 'kin' ) === false ) {
 			echo ' checked="checked"';
 		}
-		if ( 'friendship' == $class && strpos( $link_rel, 'friend' ) === false && strpos( $link_rel, 'acquaintance' ) === false && strpos( $link_rel, 'contact' ) === false ) {
+		if ( 'friendship' === $class && strpos( $link_rel, 'friend' ) === false && strpos( $link_rel, 'acquaintance' ) === false && strpos( $link_rel, 'contact' ) === false ) {
 			echo ' checked="checked"';
 		}
-		if ( 'geographical' == $class && strpos( $link_rel, 'co-resident' ) === false && strpos( $link_rel, 'neighbor' ) === false ) {
+		if ( 'geographical' === $class && strpos( $link_rel, 'co-resident' ) === false && strpos( $link_rel, 'neighbor' ) === false ) {
 			echo ' checked="checked"';
 		}
-		if ( 'identity' == $class && in_array( 'me', $rels, true ) ) {
+		if ( 'identity' === $class && in_array( 'me', $rels, true ) ) {
 			echo ' checked="checked"';
 		}
 	}
@@ -1362,3 +1390,198 @@ function attachment_id3_data_meta_box( $post ) {
 		<?php
 	endforeach;
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Registers the default post meta boxes, and runs the `do_meta_boxes` actions.
+ *
+ * @since 5.0.0
+ *
+ * @param WP_Post $post The post object that these meta boxes are being generated for.
+ */
+function register_and_do_post_meta_boxes( $post ) {
+	$post_type        = $post->post_type;
+	$post_type_object = get_post_type_object( $post_type );
+
+	$thumbnail_support = current_theme_supports( 'post-thumbnails', $post_type ) && post_type_supports( $post_type, 'thumbnail' );
+	if ( ! $thumbnail_support && 'attachment' === $post_type && $post->post_mime_type ) {
+		if ( wp_attachment_is( 'audio', $post ) ) {
+			$thumbnail_support = post_type_supports( 'attachment:audio', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:audio' );
+		} elseif ( wp_attachment_is( 'video', $post ) ) {
+			$thumbnail_support = post_type_supports( 'attachment:video', 'thumbnail' ) || current_theme_supports( 'post-thumbnails', 'attachment:video' );
+		}
+	}
+
+	$publish_callback_args = array( '__back_compat_meta_box' => true );
+	if ( post_type_supports( $post_type, 'revisions' ) && 'auto-draft' !== $post->post_status ) {
+		$revisions = wp_get_post_revisions( $post->ID );
+
+		// We should aim to show the revisions meta box only when there are revisions.
+		if ( count( $revisions ) > 1 ) {
+			reset( $revisions ); // Reset pointer for key().
+			$publish_callback_args = array(
+				'revisions_count'        => count( $revisions ),
+				'revision_id'            => key( $revisions ),
+				'__back_compat_meta_box' => true,
+			);
+			add_meta_box( 'revisionsdiv', __( 'Revisions' ), 'post_revisions_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+		}
+	}
+
+	if ( 'attachment' === $post_type ) {
+		wp_enqueue_script( 'image-edit' );
+		wp_enqueue_style( 'imgareaselect' );
+		add_meta_box( 'submitdiv', __( 'Save' ), 'attachment_submit_meta_box', null, 'side', 'core', array( '__back_compat_meta_box' => true ) );
+		add_action( 'edit_form_after_title', 'edit_form_image_editor' );
+
+		if ( wp_attachment_is( 'audio', $post ) ) {
+			add_meta_box( 'attachment-id3', __( 'Metadata' ), 'attachment_id3_data_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+		}
+	} else {
+		add_meta_box( 'submitdiv', __( 'Publish' ), 'post_submit_meta_box', null, 'side', 'core', $publish_callback_args );
+	}
+
+	if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post_type, 'post-formats' ) ) {
+		add_meta_box( 'formatdiv', _x( 'Format', 'post format' ), 'post_format_meta_box', null, 'side', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	// All taxonomies.
+	foreach ( get_object_taxonomies( $post ) as $tax_name ) {
+		$taxonomy = get_taxonomy( $tax_name );
+		if ( ! $taxonomy->show_ui || false === $taxonomy->meta_box_cb ) {
+			continue;
+		}
+
+		$label = $taxonomy->labels->name;
+
+		if ( ! is_taxonomy_hierarchical( $tax_name ) ) {
+			$tax_meta_box_id = 'tagsdiv-' . $tax_name;
+		} else {
+			$tax_meta_box_id = $tax_name . 'div';
+		}
+
+		add_meta_box(
+			$tax_meta_box_id,
+			$label,
+			$taxonomy->meta_box_cb,
+			null,
+			'side',
+			'core',
+			array(
+				'taxonomy'               => $tax_name,
+				'__back_compat_meta_box' => true,
+			)
+		);
+	}
+
+	if ( post_type_supports( $post_type, 'page-attributes' ) || count( get_page_templates( $post ) ) > 0 ) {
+		add_meta_box( 'pageparentdiv', $post_type_object->labels->attributes, 'page_attributes_meta_box', null, 'side', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	if ( $thumbnail_support && current_user_can( 'upload_files' ) ) {
+		add_meta_box( 'postimagediv', esc_html( $post_type_object->labels->featured_image ), 'post_thumbnail_meta_box', null, 'side', 'low', array( '__back_compat_meta_box' => true ) );
+	}
+
+	if ( post_type_supports( $post_type, 'excerpt' ) ) {
+		add_meta_box( 'postexcerpt', __( 'Excerpt' ), 'post_excerpt_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	if ( post_type_supports( $post_type, 'trackbacks' ) ) {
+		add_meta_box( 'trackbacksdiv', __( 'Send Trackbacks' ), 'post_trackback_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	if ( post_type_supports( $post_type, 'custom-fields' ) ) {
+		add_meta_box(
+			'postcustom',
+			__( 'Custom Fields' ),
+			'post_custom_meta_box',
+			null,
+			'normal',
+			'core',
+			array(
+				'__back_compat_meta_box'             => ! (bool) get_user_meta( get_current_user_id(), 'enable_custom_fields', true ),
+				'__block_editor_compatible_meta_box' => true,
+			)
+		);
+	}
+
+	/**
+	 * Fires in the middle of built-in meta box registration.
+	 *
+	 * @since 2.1.0
+	 * @deprecated 3.7.0 Use {@see 'add_meta_boxes'} instead.
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	do_action_deprecated( 'dbx_post_advanced', array( $post ), '3.7.0', 'add_meta_boxes' );
+
+	// Allow the Discussion meta box to show up if the post type supports comments,
+	// or if comments or pings are open.
+	if ( comments_open( $post ) || pings_open( $post ) || post_type_supports( $post_type, 'comments' ) ) {
+		add_meta_box( 'commentstatusdiv', __( 'Discussion' ), 'post_comment_status_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	$stati = get_post_stati( array( 'public' => true ) );
+	if ( empty( $stati ) ) {
+		$stati = array( 'publish' );
+	}
+	$stati[] = 'private';
+
+	if ( in_array( get_post_status( $post ), $stati, true ) ) {
+		// If the post type support comments, or the post has comments,
+		// allow the Comments meta box.
+		if ( comments_open( $post ) || pings_open( $post ) || $post->comment_count > 0 || post_type_supports( $post_type, 'comments' ) ) {
+			add_meta_box( 'commentsdiv', __( 'Comments' ), 'post_comment_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+		}
+	}
+
+	if ( ! ( 'pending' === get_post_status( $post ) && ! current_user_can( $post_type_object->cap->publish_posts ) ) ) {
+		add_meta_box( 'slugdiv', __( 'Slug' ), 'post_slug_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	if ( post_type_supports( $post_type, 'author' ) && current_user_can( $post_type_object->cap->edit_others_posts ) ) {
+		add_meta_box( 'authordiv', __( 'Author' ), 'post_author_meta_box', null, 'normal', 'core', array( '__back_compat_meta_box' => true ) );
+	}
+
+	/**
+	 * Fires after all built-in meta boxes have been added.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string  $post_type Post type.
+	 * @param WP_Post $post      Post object.
+	 */
+	do_action( 'add_meta_boxes', $post_type, $post );
+
+	/**
+	 * Fires after all built-in meta boxes have been added, contextually for the given post type.
+	 *
+	 * The dynamic portion of the hook, `$post_type`, refers to the post type of the post.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	do_action( "add_meta_boxes_{$post_type}", $post );
+
+	/**
+	 * Fires after meta boxes have been added.
+	 *
+	 * Fires once for each of the default meta box contexts: normal, advanced, and side.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string                $post_type Post type of the post on Edit Post screen, 'link' on Edit Link screen,
+	 *                                         'dashboard' on Dashboard screen.
+	 * @param string                $context   Meta box context. Possible values include 'normal', 'advanced', 'side'.
+	 * @param WP_Post|object|string $post      Post object on Edit Post screen, link object on Edit Link screen,
+	 *                                         an empty string on Dashboard screen.
+	 */
+	do_action( 'do_meta_boxes', $post_type, 'normal', $post );
+	/** This action is documented in wp-admin/includes/meta-boxes.php */
+	do_action( 'do_meta_boxes', $post_type, 'advanced', $post );
+	/** This action is documented in wp-admin/includes/meta-boxes.php */
+	do_action( 'do_meta_boxes', $post_type, 'side', $post );
+}
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)

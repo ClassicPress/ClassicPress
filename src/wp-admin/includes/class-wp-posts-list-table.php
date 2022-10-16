@@ -1150,7 +1150,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				$out = array();
 				foreach ( $terms as $t ) {
 					$posts_in_term_qv = array();
-					if ( 'post' != $post->post_type ) {
+					if ( 'post' !== $post->post_type ) {
 						$posts_in_term_qv['post_type'] = $post->post_type;
 					}
 					if ( $taxonomy_object->query_var ) {
@@ -1281,7 +1281,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 		$actions          = array();
 		$title            = _draft_or_post_title();
 
-		if ( $can_edit_post && 'trash' != $post->post_status ) {
+		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			$actions['edit'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				get_edit_post_link( $post->ID ),
@@ -1338,7 +1338,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 						__( 'Preview' )
 					);
 				}
-			} elseif ( 'trash' != $post->post_status ) {
+			} elseif ( 'trash' !== $post->post_status ) {
 				$actions['view'] = sprintf(
 					'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
 					get_permalink( $post->ID ),

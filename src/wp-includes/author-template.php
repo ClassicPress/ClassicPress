@@ -347,7 +347,7 @@ function get_author_posts_url( $author_id, $author_nicename = '' ) {
 		$file = home_url( '/' );
 		$link = $file . '?author=' . $auth_ID;
 	} else {
-		if ( '' == $author_nicename ) {
+		if ( '' === $author_nicename ) {
 			$user = get_userdata( $author_id );
 			if ( ! empty( $user->user_nicename ) ) {
 				$author_nicename = $user->user_nicename;
@@ -464,7 +464,7 @@ function wp_list_authors( $args = '' ) {
 			continue; // No need to go further to process HTML.
 		}
 
-		if ( 'list' == $args['style'] ) {
+		if ( 'list' === $args['style'] ) {
 			$return .= '<li>';
 		}
 
@@ -510,7 +510,7 @@ function wp_list_authors( $args = '' ) {
 		}
 
 		$return .= $link;
-		$return .= ( 'list' == $args['style'] ) ? '</li>' : ', ';
+		$return .= ( 'list' === $args['style'] ) ? '</li>' : ', ';
 	}
 
 	$return = rtrim( $return, ', ' );

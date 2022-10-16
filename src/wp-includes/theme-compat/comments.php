@@ -16,8 +16,13 @@ _deprecated_file(
 	sprintf( __( 'Please include a %s template in your theme.' ), basename( __FILE__ ) )
 );
 
+<<<<<<< HEAD
 // Do not delete these lines
 if ( ! empty( $_SERVER['SCRIPT_FILENAME'] ) && 'comments.php' == basename( $_SERVER['SCRIPT_FILENAME'] ) ) {
+=======
+// Do not delete these lines.
+if ( ! empty( $_SERVER['SCRIPT_FILENAME'] ) && 'comments.php' === basename( $_SERVER['SCRIPT_FILENAME'] ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	die( 'Please do not load this page directly. Thanks!' );
 }
 

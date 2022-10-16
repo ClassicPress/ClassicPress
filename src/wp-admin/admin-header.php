@@ -143,7 +143,11 @@ do_action( "admin_head-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConven
  */
 do_action( 'admin_head' );
 
+<<<<<<< HEAD
 if ( get_user_setting( 'mfold' ) == 'f' ) {
+=======
+if ( 'f' === get_user_setting( 'mfold' ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$admin_body_class .= ' folded';
 }
 

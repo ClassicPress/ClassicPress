@@ -127,7 +127,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 	 * email address. If both checks pass, return true. Otherwise, return false.
 	 */
 	if ( 1 == get_option( 'comment_whitelist' ) ) {
-		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' != $author && '' != $email ) {
+		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' !== $author && '' !== $email ) {
 			$comment_user = get_user_by( 'email', wp_unslash( $email ) );
 			if ( ! empty( $comment_user->ID ) ) {
 				$ok_to_comment = $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM $wpdb->comments WHERE user_id = %d AND comment_approved = '1' LIMIT 1", $comment_user->ID ) );
@@ -941,14 +941,19 @@ function separate_comments( &$comments ) {
 		'pingback'  => array(),
 		'pings'     => array(),
 	);
+
 	$count            = count( $comments );
+
 	for ( $i = 0; $i < $count; $i++ ) {
 		$type = $comments[ $i ]->comment_type;
+
 		if ( empty( $type ) ) {
 			$type = 'comment';
 		}
+
 		$comments_by_type[ $type ][] = &$comments[ $i ];
-		if ( 'trackback' == $type || 'pingback' == $type ) {
+
+		if ( 'trackback' === $type || 'pingback' === $type ) {
 			$comments_by_type['pings'][] = &$comments[ $i ];
 		}
 	}
@@ -1296,8 +1301,13 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
 
 	$mod_keys = trim( get_option( 'blacklist_keys' ) );
+<<<<<<< HEAD
 	if ( '' == $mod_keys ) {
 		return false; // If moderation keys are empty
+=======
+	if ( '' === $mod_keys ) {
+		return false; // If moderation keys are empty.
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	}
 
 	// Ensure HTML tags are not being used to bypass the blacklist.
@@ -1688,9 +1698,9 @@ function wp_get_comment_status( $comment_id ) {
 		return 'approved';
 	} elseif ( '0' == $approved ) {
 		return 'unapproved';
-	} elseif ( 'spam' == $approved ) {
+	} elseif ( 'spam' === $approved ) {
 		return 'spam';
-	} elseif ( 'trash' == $approved ) {
+	} elseif ( 'trash' === $approved ) {
 		return 'trash';
 	} else {
 		return false;
@@ -2093,8 +2103,10 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 	}
 
 	$commentdata['comment_parent'] = isset( $commentdata['comment_parent'] ) ? absint( $commentdata['comment_parent'] ) : 0;
-	$parent_status                 = ( 0 < $commentdata['comment_parent'] ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
-	$commentdata['comment_parent'] = ( 'approved' == $parent_status || 'unapproved' == $parent_status ) ? $commentdata['comment_parent'] : 0;
+
+	$parent_status = ( $commentdata['comment_parent'] > 0 ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
+
+	$commentdata['comment_parent'] = ( 'approved' === $parent_status || 'unapproved' === $parent_status ) ? $commentdata['comment_parent'] : 0;
 
 	if ( ! isset( $commentdata['comment_author_IP'] ) ) {
 		$commentdata['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
@@ -2350,9 +2362,9 @@ function wp_update_comment( $commentarr ) {
 
 	if ( ! isset( $data['comment_approved'] ) ) {
 		$data['comment_approved'] = 1;
-	} elseif ( 'hold' == $data['comment_approved'] ) {
+	} elseif ( 'hold' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 0;
-	} elseif ( 'approve' == $data['comment_approved'] ) {
+	} elseif ( 'approve' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 1;
 	}
 
@@ -2770,7 +2782,7 @@ function generic_ping( $post_id = 0 ) {
 	$services = explode( "\n", $services );
 	foreach ( (array) $services as $service ) {
 		$service = trim( $service );
-		if ( '' != $service ) {
+		if ( '' !== $service ) {
 			weblog_ping( $service );
 		}
 	}
@@ -2951,8 +2963,13 @@ function weblog_ping( $server = '', $path = '' ) {
 	include_once ABSPATH . WPINC . '/class-IXR.php';
 	include_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 
+<<<<<<< HEAD
 	// using a timeout of 3 seconds should be enough to cover slow servers
 	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' == $path ) ) ? false : $path ) );
+=======
+	// Using a timeout of 3 seconds should be enough to cover slow servers.
+	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' === $path ) ) ? false : $path ) );
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$client->timeout    = 3;
 	$client->useragent .= ' -- ' . classicpress_user_agent();
 
@@ -3233,7 +3250,7 @@ function wp_handle_comment_submission( $comment_data ) {
 	// get_post_status() will get the parent status for attachments.
 	$status = get_post_status( $post );
 
-	if ( ( 'private' == $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
+	if ( ( 'private' === $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
 		return new WP_Error( 'comment_id_not_found' );
 	}
 
@@ -3252,7 +3269,7 @@ function wp_handle_comment_submission( $comment_data ) {
 
 		return new WP_Error( 'comment_closed', __( 'Sorry, comments are closed for this item.' ), 403 );
 
-	} elseif ( 'trash' == $status ) {
+	} elseif ( 'trash' === $status ) {
 
 		/**
 		 * Fires when a comment is attempted on a trashed post.

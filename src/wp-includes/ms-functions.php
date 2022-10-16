@@ -910,13 +910,21 @@ function wpmu_signup_blog_notification( $domain, $path, $title, $user_login, $us
 	}
 
 	$activate_url = esc_url( $activate_url );
+
 	$admin_email = get_site_option( 'admin_email' );
 
 	if ( '' === $admin_email ) {
+<<<<<<< HEAD
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
 	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
+=======
+		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	}
+
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 
 	$user            = get_user_by( 'login', $user_login );
@@ -1038,10 +1046,17 @@ function wpmu_signup_user_notification( $user_login, $user_email, $key, $meta = 
 	$admin_email = get_site_option( 'admin_email' );
 
 	if ( '' === $admin_email ) {
+<<<<<<< HEAD
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
 	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'ClassicPress';
+=======
+		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	}
+
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 	$message         = sprintf(
 		/**
@@ -1185,9 +1200,18 @@ function wpmu_activate_signup( $key ) {
 
 	// TODO: What to do if we create a user but cannot create a blog?
 	if ( is_wp_error( $blog_id ) ) {
+<<<<<<< HEAD
 		// If blog is taken, that means a previous attempt to activate this blog failed in between creating the blog and
 		// setting the activation flag. Let's just set the active flag and instruct the user to reset their password.
 		if ( 'blog_taken' == $blog_id->get_error_code() ) {
+=======
+		/*
+		 * If blog is taken, that means a previous attempt to activate this blog
+		 * failed in between creating the blog and setting the activation flag.
+		 * Let's just set the active flag and instruct the user to reset their password.
+		 */
+		if ( 'blog_taken' === $blog_id->get_error_code() ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			$blog_id->add_data( $signup );
 			$wpdb->update(
 				$wpdb->signups,
@@ -1397,11 +1421,20 @@ function wpmu_create_blog( $domain, $path, $title, $user_id, $meta = array(), $n
  * @return bool
  */
 function newblog_notify_siteadmin( $blog_id, $deprecated = '' ) {
+<<<<<<< HEAD
 	if ( get_site_option( 'registrationnotification' ) != 'yes' ) {
+=======
+	if ( is_object( $blog_id ) ) {
+		$blog_id = $blog_id->blog_id;
+	}
+
+	if ( 'yes' !== get_site_option( 'registrationnotification' ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		return false;
 	}
 
 	$email = get_site_option( 'admin_email' );
+
 	if ( is_email( $email ) == false ) {
 		return false;
 	}
@@ -1453,7 +1486,7 @@ Disable these notifications: %4$s'
  * @return bool
  */
 function newuser_notify_siteadmin( $user_id ) {
-	if ( get_site_option( 'registrationnotification' ) != 'yes' ) {
+	if ( 'yes' !== get_site_option( 'registrationnotification' ) ) {
 		return false;
 	}
 
@@ -1759,13 +1792,21 @@ We hope you enjoy your new site. Thanks!
 	 * @param array  $meta          Signup meta data. By default, contains the requested privacy setting and lang_id.
 	 */
 	$welcome_email = apply_filters( 'update_welcome_email', $welcome_email, $blog_id, $user_id, $password, $title, $meta );
+
 	$admin_email   = get_site_option( 'admin_email' );
 
 	if ( '' === $admin_email ) {
+<<<<<<< HEAD
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
+=======
+		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	}
+
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 	$message         = $welcome_email;
 
@@ -1853,10 +1894,17 @@ function wpmu_welcome_user_notification( $user_id, $password, $meta = array() ) 
 	$admin_email = get_site_option( 'admin_email' );
 
 	if ( '' === $admin_email ) {
+<<<<<<< HEAD
 		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
 	}
 
 	$from_name       = get_site_option( 'site_name' ) == '' ? 'ClassicPress' : esc_html( get_site_option( 'site_name' ) );
+=======
+		$admin_email = 'support@' . $_SERVER['SERVER_NAME'];
+	}
+
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
 	$message         = $welcome_email;
 
@@ -2044,7 +2092,7 @@ function check_upload_mimes( $mimes ) {
 	$site_mimes = array();
 	foreach ( $site_exts as $ext ) {
 		foreach ( $mimes as $ext_pattern => $mime ) {
-			if ( '' != $ext && false !== strpos( $ext_pattern, $ext ) ) {
+			if ( '' !== $ext && false !== strpos( $ext_pattern, $ext ) ) {
 				$site_mimes[ $ext_pattern ] = $mime;
 			}
 		}
@@ -2299,7 +2347,7 @@ function maybe_add_existing_user_to_blog() {
 	$parts = explode( '/', $_SERVER['REQUEST_URI'] );
 	$key   = array_pop( $parts );
 
-	if ( '' == $key ) {
+	if ( '' === $key ) {
 		$key = array_pop( $parts );
 	}
 
@@ -2479,7 +2527,7 @@ Thanks!
 function force_ssl_content( $force = '' ) {
 	static $forced_content = false;
 
-	if ( '' != $force ) {
+	if ( ! $force ) {
 		$old_forced     = $forced_content;
 		$forced_content = $force;
 		return $old_forced;
@@ -2763,7 +2811,7 @@ function wp_is_large_network( $using = 'sites', $network_id = null ) {
 		$network_id = get_current_network_id();
 	}
 
-	if ( 'users' == $using ) {
+	if ( 'users' === $using ) {
 		$count = get_user_count( $network_id );
 		/**
 		 * Filters whether the network is considered large.
@@ -2780,6 +2828,7 @@ function wp_is_large_network( $using = 'sites', $network_id = null ) {
 	}
 
 	$count = get_blog_count( $network_id );
+
 	/** This filter is documented in wp-includes/ms-functions.php */
 	return apply_filters( 'wp_is_large_network', $count > 10000, 'sites', $count, $network_id );
 }

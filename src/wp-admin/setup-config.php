@@ -327,7 +327,11 @@ switch ( $step ) {
 
 		$key = 0;
 		foreach ( $config_file as $line_num => $line ) {
+<<<<<<< HEAD
 			if ( '$table_prefix  =' == substr( $line, 0, 16 ) ) {
+=======
+			if ( '$table_prefix =' === substr( $line, 0, 15 ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$config_file[ $line_num ] = '$table_prefix  = \'' . addcslashes( $prefix, "\\'" ) . "';\r\n";
 				continue;
 			}

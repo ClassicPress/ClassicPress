@@ -104,6 +104,10 @@ function plugins_api( $action, $args = array() ) {
 		$args = (object) $args;
 	}
 
+<<<<<<< HEAD
+=======
+	if ( 'query_plugins' === $action ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	if ( ! isset( $args->per_page ) ) {
 		$args->per_page = 24;
 	}
@@ -472,7 +476,7 @@ function install_plugin_install_status( $api, $loop = false ) {
 		}
 	}
 
-	if ( 'install' == $status ) {
+	if ( 'install' === $status ) {
 		if ( is_dir( WP_PLUGIN_DIR . '/' . $api->slug ) ) {
 			$installed_plugin = get_plugins( '/' . $api->slug );
 			if ( empty( $installed_plugin ) ) {

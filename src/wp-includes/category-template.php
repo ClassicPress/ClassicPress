@@ -155,7 +155,7 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 	$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'rel="category tag"' : 'rel="category"';
 
 	$thelist = '';
-	if ( '' == $separator ) {
+	if ( '' === $separator ) {
 		$thelist .= '<ul class="post-categories">';
 		foreach ( $categories as $category ) {
 			$thelist .= "\n\t<li>";
@@ -347,7 +347,7 @@ function wp_dropdown_categories( $args = '' ) {
 	$defaults['selected'] = ( is_category() ) ? get_query_var( 'cat' ) : 0;
 
 	// Back compat.
-	if ( isset( $args['type'] ) && 'link' == $args['type'] ) {
+	if ( isset( $args['type'] ) && 'link' === $args['type'] ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -557,7 +557,7 @@ function wp_list_categories( $args = '' ) {
 	}
 
 	if ( ! isset( $parsed_args['class'] ) ) {
-		$parsed_args['class'] = ( 'category' == $parsed_args['taxonomy'] ) ? 'categories' : $parsed_args['taxonomy'];
+		$parsed_args['class'] = ( 'category' === $parsed_args['taxonomy'] ) ? 'categories' : $parsed_args['taxonomy'];
 	}
 
 	if ( ! taxonomy_exists( $parsed_args['taxonomy'] ) ) {
@@ -570,12 +570,16 @@ function wp_list_categories( $args = '' ) {
 	$categories = get_categories( $parsed_args );
 
 	$output = '';
-	if ( $parsed_args['title_li'] && 'list' == $parsed_args['style'] && ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] ) ) {
+
+	if ( $parsed_args['title_li'] && 'list' === $parsed_args['style']
+		&& ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] )
+	) {
 		$output = '<li class="' . esc_attr( $parsed_args['class'] ) . '">' . $parsed_args['title_li'] . '<ul>';
 	}
+
 	if ( empty( $categories ) ) {
 		if ( ! empty( $show_option_none ) ) {
-			if ( 'list' == $parsed_args['style'] ) {
+			if ( 'list' === $parsed_args['style'] ) {
 				$output .= '<li class="cat-item-none">' . $show_option_none . '</li>';
 			} else {
 				$output .= $show_option_none;
@@ -602,7 +606,7 @@ function wp_list_categories( $args = '' ) {
 
 			// Fallback for the 'All' link is the posts page.
 			if ( ! $posts_page ) {
-				if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
+				if ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
 					$posts_page = get_permalink( get_option( 'page_for_posts' ) );
 				} else {
 					$posts_page = home_url( '/' );
@@ -610,7 +614,7 @@ function wp_list_categories( $args = '' ) {
 			}
 
 			$posts_page = esc_url( $posts_page );
-			if ( 'list' == $parsed_args['style'] ) {
+			if ( 'list' === $parsed_args['style'] ) {
 				$output .= "<li class='cat-item-all'><a href='$posts_page'>$show_option_all</a></li>";
 			} else {
 				$output .= "<a href='$posts_page'>$show_option_all</a>";
@@ -632,7 +636,9 @@ function wp_list_categories( $args = '' ) {
 		$output .= walk_category_tree( $categories, $depth, $parsed_args );
 	}
 
-	if ( $parsed_args['title_li'] && 'list' == $parsed_args['style'] && ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] ) ) {
+	if ( $parsed_args['title_li'] && 'list' === $parsed_args['style']
+		&& ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] )
+	) {
 		$output .= '</ul></li>';
 	}
 
@@ -724,7 +730,7 @@ function wp_tag_cloud( $args = '' ) {
 	}
 
 	foreach ( $tags as $key => $tag ) {
-		if ( 'edit' == $args['link'] ) {
+		if ( 'edit' === $args['link'] ) {
 			$link = get_edit_term_link( $tag->term_id, $tag->taxonomy, $args['post_type'] );
 		} else {
 			$link = get_term_link( intval( $tag->term_id ), $tag->taxonomy );
@@ -749,7 +755,7 @@ function wp_tag_cloud( $args = '' ) {
 	 */
 	$return = apply_filters( 'wp_tag_cloud', $return, $args );
 
-	if ( 'array' == $args['format'] || empty( $args['echo'] ) ) {
+	if ( 'array' === $args['format'] || empty( $args['echo'] ) ) {
 		return $return;
 	}
 
@@ -947,8 +953,8 @@ function wp_generate_tag_cloud( $tags, $args = '' ) {
 
 		$tags_data[] = array(
 			'id'              => $tag_id,
-			'url'             => '#' != $tag->link ? $tag->link : '#',
-			'role'            => '#' != $tag->link ? '' : ' role="button"',
+			'url'             => ( '#' !== $tag->link ) ? $tag->link : '#',
+			'role'            => ( '#' !== $tag->link ) ? '' : ' role="button"',
 			'name'            => $tag->name,
 			'formatted_count' => $formatted_count,
 			'slug'            => $tag->slug,

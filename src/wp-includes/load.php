@@ -39,8 +39,13 @@ function wp_fix_server_vars() {
 
 	$_SERVER = array_merge( $default_server_values, $_SERVER );
 
+<<<<<<< HEAD
 	// Fix for IIS when running with PHP ISAPI
 	if ( empty( $_SERVER['REQUEST_URI'] ) || ( PHP_SAPI != 'cgi-fcgi' && preg_match( '/^Microsoft-IIS\//', $_SERVER['SERVER_SOFTWARE'] ) ) ) {
+=======
+	// Fix for IIS when running with PHP ISAPI.
+	if ( empty( $_SERVER['REQUEST_URI'] ) || ( 'cgi-fcgi' !== PHP_SAPI && preg_match( '/^Microsoft-IIS\//', $_SERVER['SERVER_SOFTWARE'] ) ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 
 		if ( isset( $_SERVER['HTTP_X_ORIGINAL_URL'] ) ) {
 			// IIS Mod-Rewrite
@@ -136,7 +141,7 @@ function wp_check_php_mysql_versions() {
  * @since WP-3.0.0
  */
 function wp_favicon_request() {
-	if ( '/favicon.ico' == $_SERVER['REQUEST_URI'] ) {
+	if ( '/favicon.ico' === $_SERVER['REQUEST_URI'] ) {
 		header( 'Content-Type: image/vnd.microsoft.icon' );
 		exit;
 	}
@@ -607,7 +612,7 @@ function wp_get_mu_plugins() {
 		return $mu_plugins;
 	}
 	while ( ( $plugin = readdir( $dh ) ) !== false ) {
-		if ( substr( $plugin, -4 ) == '.php' ) {
+		if ( '.php' === substr( $plugin, -4 ) ) {
 			$mu_plugins[] = WPMU_PLUGIN_DIR . '/' . $plugin;
 		}
 	}
@@ -649,7 +654,7 @@ function wp_get_active_and_valid_plugins() {
 
 	foreach ( $active_plugins as $plugin ) {
 		if ( ! validate_file( $plugin )                     // $plugin must validate as file.
-			&& '.php' == substr( $plugin, -4 )              // $plugin must end with '.php'.
+			&& '.php' === substr( $plugin, -4 )             // $plugin must end with '.php'.
 			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist.
 			// Not already included as a network plugin.
 			&& ( ! $network_plugins || ! in_array( WP_PLUGIN_DIR . '/' . $plugin, $network_plugins, true ) )
@@ -926,7 +931,7 @@ function wp_load_translations_early() {
 
 	while ( true ) {
 		if ( defined( 'WPLANG' ) ) {
-			if ( '' == WPLANG ) {
+			if ( '' === WPLANG ) {
 				break;
 			}
 			$locales[] = WPLANG;
@@ -1021,7 +1026,7 @@ function wp_installing( $is_installing = null ) {
  */
 function is_ssl() {
 	if ( isset( $_SERVER['HTTPS'] ) ) {
-		if ( 'on' == strtolower( $_SERVER['HTTPS'] ) ) {
+		if ( 'on' === strtolower( $_SERVER['HTTPS'] ) ) {
 			return true;
 		}
 

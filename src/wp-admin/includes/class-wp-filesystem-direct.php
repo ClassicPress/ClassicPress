@@ -308,7 +308,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 		}
 		$file = str_replace( '\\', '/', $file ); // for win32, occasional problems deleting files otherwise
 
-		if ( 'f' == $type || $this->is_file( $file ) ) {
+		if ( 'f' === $type || $this->is_file( $file ) ) {
 			return @unlink( $file );
 		}
 		if ( ! $recursive && $this->is_dir( $file ) ) {
@@ -493,11 +493,11 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$struc         = array();
 			$struc['name'] = $entry;
 
-			if ( '.' == $struc['name'] || '..' == $struc['name'] ) {
+			if ( '.' === $struc['name'] || '..' === $struc['name'] ) {
 				continue;
 			}
 
-			if ( ! $include_hidden && '.' == $struc['name'][0] ) {
+			if ( ! $include_hidden && '.' === $struc['name'][0] ) {
 				continue;
 			}
 
@@ -516,7 +516,7 @@ class WP_Filesystem_Direct extends WP_Filesystem_Base {
 			$struc['time']        = date( 'h:i:s', $struc['lastmodunix'] );
 			$struc['type']        = $this->is_dir( $path . '/' . $entry ) ? 'd' : 'f';
 
-			if ( 'd' == $struc['type'] ) {
+			if ( 'd' === $struc['type'] ) {
 				if ( $recursive ) {
 					$struc['files'] = $this->dirlist( $path . '/' . $struc['name'], $include_hidden, $recursive );
 				} else {

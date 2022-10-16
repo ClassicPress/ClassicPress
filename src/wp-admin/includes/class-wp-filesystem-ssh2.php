@@ -224,7 +224,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			fclose( $stream );
 
 			if ( $returnbool ) {
-				return ( false === $data ) ? false : '' != trim( $data );
+				return ( false === $data ) ? false : '' !== trim( $data );
 			} else {
 				return $data;
 			}
@@ -452,7 +452,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 * @return bool
 	 */
 	public function delete( $file, $recursive = false, $type = false ) {
-		if ( 'f' == $type || $this->is_file( $file ) ) {
+		if ( 'f' === $type || $this->is_file( $file ) ) {
 			return ssh2_sftp_unlink( $this->sftp_link, $file );
 		}
 		if ( ! $recursive ) {
@@ -619,11 +619,16 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$struc         = array();
 			$struc['name'] = $entry;
 
+<<<<<<< HEAD
 			if ( '.' == $struc['name'] || '..' == $struc['name'] ) {
 				continue; //Do not care about these folders.
+=======
+			if ( '.' === $struc['name'] || '..' === $struc['name'] ) {
+				continue; // Do not care about these folders.
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 			}
 
-			if ( ! $include_hidden && '.' == $struc['name'][0] ) {
+			if ( ! $include_hidden && '.' === $struc['name'][0] ) {
 				continue;
 			}
 
@@ -642,7 +647,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$struc['time']        = date( 'h:i:s', $struc['lastmodunix'] );
 			$struc['type']        = $this->is_dir( $path . '/' . $entry ) ? 'd' : 'f';
 
-			if ( 'd' == $struc['type'] ) {
+			if ( 'd' === $struc['type'] ) {
 				if ( $recursive ) {
 					$struc['files'] = $this->dirlist( $path . '/' . $struc['name'], $include_hidden, $recursive );
 				} else {

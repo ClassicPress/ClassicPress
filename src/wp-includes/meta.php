@@ -172,7 +172,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 	$meta_subtype = get_object_subtype( $meta_type, $object_id );
 
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// expected_slashed ($meta_key)
 	$raw_meta_key = $meta_key;
@@ -248,7 +248,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 */
 		do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/**
 			 * Fires immediately before updating a post's metadata.
 			 *
@@ -286,7 +286,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 */
 		do_action( "updated_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/**
 			 * Fires immediately after updating a post's metadata.
 			 *
@@ -342,7 +342,8 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	}
 
 	$type_column = sanitize_key( $meta_type . '_id' );
-	$id_column   = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column   = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
+
 	// expected_slashed ($meta_key)
 	$meta_key   = wp_unslash( $meta_key );
 	$meta_value = wp_unslash( $meta_value );
@@ -411,7 +412,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	do_action( "delete_{$meta_type}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
 
 	// Old-style action.
-	if ( 'post' == $meta_type ) {
+	if ( 'post' === $meta_type ) {
 		/**
 		 * Fires immediately before deleting metadata for a post.
 		 *
@@ -454,7 +455,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	do_action( "deleted_{$meta_type}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
 
 	// Old-style action.
-	if ( 'post' == $meta_type ) {
+	if ( 'post' === $meta_type ) {
 		/**
 		 * Fires immediately after deleting metadata for a post.
 		 *
@@ -614,7 +615,7 @@ function get_metadata_by_mid( $meta_type, $meta_id ) {
 		return false;
 	}
 
-	$id_column = ( 'user' == $meta_type ) ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	$meta = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE $id_column = %d", $meta_id ) );
 
@@ -661,7 +662,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 	}
 
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
 	$meta = get_metadata_by_mid( $meta_type, $meta_id );
@@ -697,7 +698,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 		/** This action is documented in wp-includes/meta.php */
 		do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/** This action is documented in wp-includes/meta.php */
 			do_action( 'update_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 		}
@@ -714,7 +715,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 		/** This action is documented in wp-includes/meta.php */
 		do_action( "updated_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/** This action is documented in wp-includes/meta.php */
 			do_action( 'updated_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 		}
@@ -757,7 +758,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 
 	// object and id columns
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
 	$meta = get_metadata_by_mid( $meta_type, $meta_id );
@@ -768,7 +769,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 		do_action( "delete_{$meta_type}_meta", (array) $meta_id, $object_id, $meta->meta_key, $meta->meta_value );
 
 		// Old-style action.
-		if ( 'post' == $meta_type || 'comment' == $meta_type ) {
+		if ( 'post' === $meta_type || 'comment' === $meta_type ) {
 			/**
 			 * Fires immediately before deleting post or comment metadata of a specific type.
 			 *
@@ -792,7 +793,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 		do_action( "deleted_{$meta_type}_meta", (array) $meta_id, $object_id, $meta->meta_key, $meta->meta_value );
 
 		// Old-style action.
-		if ( 'post' == $meta_type || 'comment' == $meta_type ) {
+		if ( 'post' === $meta_type || 'comment' === $meta_type ) {
 			/**
 			 * Fires immediately after deleting post or comment metadata of a specific type.
 			 *
@@ -864,7 +865,8 @@ function update_meta_cache( $meta_type, $object_ids ) {
 
 	// Get meta info
 	$id_list   = join( ',', $ids );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
+
 	$meta_list = $wpdb->get_results( "SELECT $column, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
 
 	if ( ! empty( $meta_list ) ) {
@@ -965,8 +967,12 @@ function _get_meta_table( $type ) {
  * @return bool True if the key is protected, false otherwise.
  */
 function is_protected_meta( $meta_key, $meta_type = '' ) {
+<<<<<<< HEAD
 	$sanitized_key = preg_replace( "/[^\x20-\x7E\p{L}]/", '', $meta_key );
 	$protected     = strlen( $sanitized_key ) > 0 && ( '_' === $sanitized_key[0] );
+=======
+	$protected = ( '_' === $meta_key[0] );
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 
 	/**
 	 * Filters whether a meta key is protected.

@@ -119,7 +119,7 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( $widget_id, $name, $wp_registered_widgets[ $widget_id ]['callback'], $wp_registered_widget_controls[ $widget_id ]['callback'] );
 	}
 
-	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget_id'] ) ) {
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget_id'] ) ) {
 		check_admin_referer( 'edit-dashboard-widget_' . $_POST['widget_id'], 'dashboard-widget-nonce' );
 		ob_start(); // hack - but the same hack wp-admin/widgets.php uses
 		wp_dashboard_trigger_widget_control( $_POST['widget_id'] );
@@ -262,7 +262,12 @@ function wp_dashboard_right_now() {
 	foreach ( array( 'post', 'page' ) as $post_type ) {
 		$num_posts = wp_count_posts( $post_type );
 		if ( $num_posts && $num_posts->publish ) {
+<<<<<<< HEAD
 			if ( 'post' == $post_type ) {
+=======
+			if ( 'post' === $post_type ) {
+				/* translators: %s: Number of posts. */
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$text = _n( '%s Post', '%s Posts', $num_posts->publish );
 			} else {
 				$text = _n( '%s Page', '%s Pages', $num_posts->publish );
@@ -676,16 +681,27 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 		$i = 0;
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			( ( ( 'approve' == $action || 'unapprove' == $action ) && 2 === $i ) || 1 === $i ) ? $sep = '' : $sep = ' | ';
 
+			if ( ( ( 'approve' === $action || 'unapprove' === $action ) && 2 === $i ) || 1 === $i ) {
+				$sep = '';
+			} else {
+				$sep = ' | ';
+			}
+
+<<<<<<< HEAD
 			// Reply and quickedit need a hide-if-no-js span
 			if ( 'reply' == $action || 'quickedit' == $action ) {
+=======
+			// Reply and quickedit need a hide-if-no-js span.
+			if ( 'reply' === $action || 'quickedit' === $action ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$action .= ' hide-if-no-js';
 			}
 
 			if ( 'view' === $action && '1' !== $comment->comment_approved ) {
 				$action .= ' hidden';
 			}
+
 			$actions_string .= "<span class='$action'>$sep$link</span>";
 		}
 	}
@@ -695,7 +711,7 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 
 			<?php echo get_avatar( $comment, 50, 'mystery' ); ?>
 
-			<?php if ( ! $comment->comment_type || 'comment' == $comment->comment_type ) : ?>
+			<?php if ( ! $comment->comment_type || 'comment' === $comment->comment_type ) : ?>
 
 			<div class="dashboard-comment-wrap has-row-actions">
 			<p class="comment-meta">
@@ -1081,7 +1097,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 	$number                                 = 1; // Hack to use wp_widget_rss_form()
 	$widget_options[ $widget_id ]['number'] = $number;
 
-	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget-rss'][ $number ] ) ) {
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget-rss'][ $number ] ) ) {
 		$_POST['widget-rss'][ $number ]         = wp_unslash( $_POST['widget-rss'][ $number ] );
 		$widget_options[ $widget_id ]           = wp_widget_rss_process( $_POST['widget-rss'][ $number ] );
 		$widget_options[ $widget_id ]['number'] = $number;
@@ -1404,6 +1420,7 @@ function wp_welcome_panel() {
 		);
 		?>
 	</p>
+<<<<<<< HEAD
 	<p>
 	<?php
 	if ( get_locale() === 'en_US' ) {
@@ -1506,6 +1523,27 @@ function cp_dashboard_petitions_output( $widget_id, $feeds ) {
 	?>
 	<div class="sub">
 		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
+=======
+		<?php endif; ?>
+	</div>
+	<div class="welcome-panel-column">
+		<h3><?php _e( 'Next Steps' ); ?></h3>
+		<ul>
+		<?php if ( 'page' === get_option( 'show_on_front' ) && ! get_option( 'page_for_posts' ) ) : ?>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Edit your front page' ) . '</a>', get_edit_post_link( get_option( 'page_on_front' ) ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add additional pages' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
+		<?php elseif ( 'page' === get_option( 'show_on_front' ) ) : ?>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-edit-page">' . __( 'Edit your front page' ) . '</a>', get_edit_post_link( get_option( 'page_on_front' ) ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add additional pages' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-write-blog">' . __( 'Add a blog post' ) . '</a>', admin_url( 'post-new.php' ) ); ?></li>
+		<?php else : ?>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-write-blog">' . __( 'Write your first blog post' ) . '</a>', admin_url( 'post-new.php' ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-add-page">' . __( 'Add an About page' ) . '</a>', admin_url( 'post-new.php?post_type=page' ) ); ?></li>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-setup-home">' . __( 'Set up your homepage' ) . '</a>', current_user_can( 'customize' ) ? add_query_arg( 'autofocus[section]', 'static_front_page', admin_url( 'customize.php' ) ) : admin_url( 'options-reading.php' ) ); ?></li>
+		<?php endif; ?>
+			<li><?php printf( '<a href="%s" class="welcome-icon welcome-view-site">' . __( 'View your site' ) . '</a>', home_url( '/' ) ); ?></li>
+		</ul>
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	</div>
 
 	<ul class="petitions-tabs">

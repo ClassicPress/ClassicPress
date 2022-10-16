@@ -66,7 +66,7 @@ if ( ! $theme->exists() ) {
 	wp_die( __( 'The requested theme does not exist.' ) );
 }
 
-if ( $theme->errors() && 'theme_no_stylesheet' == $theme->errors()->get_error_code() ) {
+if ( $theme->errors() && 'theme_no_stylesheet' === $theme->errors()->get_error_code() ) {
 	wp_die( __( 'The requested theme does not exist.' ) . ' ' . $theme->errors()->get_error_message() );
 }
 
@@ -158,7 +158,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		$f       = fopen( $file, 'r' );
 		$content = fread( $f, filesize( $file ) );
 
-		if ( '.php' == substr( $file, strrpos( $file, '.' ) ) ) {
+	if ( '.php' === substr( $file, strrpos( $file, '.' ) ) ) {
 			$functions = wp_doc_link_parse( $content );
 
 			$docs_select  = '<select name="docs-list" id="docs-list">';
@@ -221,9 +221,15 @@ if ( $description ) {
 	<form action="theme-editor.php" method="get">
 		<strong><label for="theme"><?php _e( 'Select theme to edit:' ); ?> </label></strong>
 		<select name="theme" id="theme">
+<<<<<<< HEAD
 <?php
 foreach ( wp_get_themes( array( 'errors' => null ) ) as $a_stylesheet => $a_theme ) {
 	if ( $a_theme->errors() && 'theme_no_stylesheet' == $a_theme->errors()->get_error_code() ) {
+=======
+		<?php
+		foreach ( wp_get_themes( array( 'errors' => null ) ) as $a_stylesheet => $a_theme ) {
+			if ( $a_theme->errors() && 'theme_no_stylesheet' === $a_theme->errors()->get_error_code() ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		continue;
 	}
 

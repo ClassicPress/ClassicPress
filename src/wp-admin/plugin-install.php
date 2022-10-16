@@ -5,8 +5,13 @@
  * @package ClassicPress
  * @subpackage Administration
  */
+<<<<<<< HEAD
 // TODO route this pages via a specific iframe handler instead of the do_action below
 if ( ! defined( 'IFRAME_REQUEST' ) && isset( $_GET['tab'] ) && ( 'plugin-information' == $_GET['tab'] ) ) {
+=======
+// TODO: Route this page via a specific iframe handler instead of the do_action below.
+if ( ! defined( 'IFRAME_REQUEST' ) && isset( $_GET['tab'] ) && ( 'plugin-information' === $_GET['tab'] ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	define( 'IFRAME_REQUEST', true );
 }
 

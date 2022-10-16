@@ -18,7 +18,7 @@ if ( ! current_user_can( 'switch_themes' ) && ! current_user_can( 'edit_theme_op
 }
 
 if ( current_user_can( 'switch_themes' ) && isset( $_GET['action'] ) ) {
-	if ( 'activate' == $_GET['action'] ) {
+	if ( 'activate' === $_GET['action'] ) {
 		check_admin_referer( 'switch-theme_' . $_GET['stylesheet'] );
 		$theme = wp_get_theme( $_GET['stylesheet'] );
 
@@ -33,7 +33,31 @@ if ( current_user_can( 'switch_themes' ) && isset( $_GET['action'] ) ) {
 		switch_theme( $theme->get_stylesheet() );
 		wp_redirect( admin_url( 'themes.php?activated=true' ) );
 		exit;
+<<<<<<< HEAD
 	} elseif ( 'delete' == $_GET['action'] ) {
+=======
+	} elseif ( 'resume' === $_GET['action'] ) {
+		check_admin_referer( 'resume-theme_' . $_GET['stylesheet'] );
+		$theme = wp_get_theme( $_GET['stylesheet'] );
+
+		if ( ! current_user_can( 'resume_theme', $_GET['stylesheet'] ) ) {
+			wp_die(
+				'<h1>' . __( 'You need a higher level of permission.' ) . '</h1>' .
+				'<p>' . __( 'Sorry, you are not allowed to resume this theme.' ) . '</p>',
+				403
+			);
+		}
+
+		$result = resume_theme( $theme->get_stylesheet(), self_admin_url( 'themes.php?error=resuming' ) );
+
+		if ( is_wp_error( $result ) ) {
+			wp_die( $result );
+		}
+
+		wp_redirect( admin_url( 'themes.php?resumed=true' ) );
+		exit;
+	} elseif ( 'delete' === $_GET['action'] ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		check_admin_referer( 'delete-theme_' . $_GET['stylesheet'] );
 		$theme = wp_get_theme( $_GET['stylesheet'] );
 
@@ -210,7 +234,7 @@ if ( ! $ct->errors() || ( 1 == count( $ct->errors()->get_error_codes() )
 if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 	foreach ( (array) $submenu['themes.php'] as $item ) {
 		$class = '';
-		if ( 'themes.php' == $item[2] || 'theme-editor.php' == $item[2] || 0 === strpos( $item[2], 'customize.php' ) ) {
+		if ( 'themes.php' === $item[2] || 'theme-editor.php' === $item[2] || 0 === strpos( $item[2], 'customize.php' ) ) {
 			continue;
 		}
 		// 0 = name, 1 = capability, 2 = file

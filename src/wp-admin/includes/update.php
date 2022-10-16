@@ -91,6 +91,13 @@ function find_core_auto_update() {
 	$auto_update = false;
 	$upgrader    = new WP_Automatic_Updater;
 	foreach ( $updates->updates as $update ) {
+<<<<<<< HEAD
+=======
+		if ( 'autoupdate' !== $update->response ) {
+			continue;
+		}
+
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		if ( ! $upgrader->should_update( 'core', $update, ABSPATH ) ) {
 			continue;
 		}
@@ -258,7 +265,7 @@ function update_nag() {
 
 	global $pagenow;
 
-	if ( 'update-core.php' == $pagenow ) {
+	if ( 'update-core.php' === $pagenow ) {
 		return;
 	}
 

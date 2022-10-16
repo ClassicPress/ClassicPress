@@ -330,7 +330,7 @@ class WP_Upgrader {
 
 		if ( is_wp_error( $result ) ) {
 			$wp_filesystem->delete( $working_dir, true );
-			if ( 'incompatible_archive' == $result->get_error_code() ) {
+			if ( 'incompatible_archive' === $result->get_error_code() ) {
 				return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], $result->get_error_data() );
 			}
 			return $result;
@@ -397,7 +397,7 @@ class WP_Upgrader {
 		foreach ( $files as $filename => $file_details ) {
 			if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
 				// Attempt to alter permissions to allow writes and try again.
-				$wp_filesystem->chmod( $remote_destination . $filename, ( 'd' == $file_details['type'] ? FS_CHMOD_DIR : FS_CHMOD_FILE ) );
+				$wp_filesystem->chmod( $remote_destination . $filename, ( 'd' === $file_details['type'] ? FS_CHMOD_DIR : FS_CHMOD_FILE ) );
 				if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
 					$unwritable_files[] = $filename;
 				}
@@ -597,7 +597,7 @@ class WP_Upgrader {
 		}
 
 		$destination_name = basename( str_replace( $local_destination, '', $destination ) );
-		if ( '.' == $destination_name ) {
+		if ( '.' === $destination_name ) {
 			$destination_name = '';
 		}
 
@@ -731,7 +731,34 @@ class WP_Upgrader {
 		 * Download the package (Note, This just returns the filename
 		 * of the file if the package is a local file)
 		 */
+<<<<<<< HEAD
 		$download = $this->download_package( $options['package'] );
+=======
+		$download = $this->download_package( $options['package'], true );
+
+		// Allow for signature soft-fail.
+		// WARNING: This may be removed in the future.
+		if ( is_wp_error( $download ) && $download->get_error_data( 'softfail-filename' ) ) {
+
+			// Don't output the 'no signature could be found' failure message for now.
+			if ( 'signature_verification_no_signature' !== $download->get_error_code() || WP_DEBUG ) {
+				// Output the failure error as a normal feedback, and not as an error.
+				$this->skin->feedback( $download->get_error_message() );
+
+				// Report this failure back to WordPress.org for debugging purposes.
+				wp_version_check(
+					array(
+						'signature_failure_code' => $download->get_error_code(),
+						'signature_failure_data' => $download->get_error_data(),
+					)
+				);
+			}
+
+			// Pretend this error didn't happen.
+			$download = $download->get_error_data( 'softfail-filename' );
+		}
+
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		if ( is_wp_error( $download ) ) {
 			$this->skin->error( $download );
 			$this->skin->after();

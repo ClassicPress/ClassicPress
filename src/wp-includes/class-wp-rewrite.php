@@ -526,7 +526,7 @@ class WP_Rewrite {
 		preg_match_all( '/%.+?%/', $this->permalink_structure, $tokens );
 		$tok_index = 1;
 		foreach ( (array) $tokens[0] as $token ) {
-			if ( '%post_id%' == $token && ( $tok_index <= 3 ) ) {
+			if ( '%post_id%' === $token && ( $tok_index <= 3 ) ) {
 				$front = $front . 'date/';
 				break;
 			}
@@ -1261,8 +1261,14 @@ class WP_Rewrite {
 
 		// robots.txt -only if installed at the root
 		$home_path      = parse_url( home_url() );
-		$robots_rewrite = ( empty( $home_path['path'] ) || '/' == $home_path['path'] ) ? array( 'robots\.txt$' => $this->index . '?robots=1' ) : array();
+		$robots_rewrite = ( empty( $home_path['path'] ) || '/' === $home_path['path'] ) ? array( 'robots\.txt$' => $this->index . '?robots=1' ) : array();
 
+<<<<<<< HEAD
+=======
+		// favicon.ico -- only if installed at the root.
+		$favicon_rewrite = ( empty( $home_path['path'] ) || '/' === $home_path['path'] ) ? array( 'favicon\.ico$' => $this->index . '?favicon=1' ) : array();
+
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		// Old feed and service files.
 		$deprecated_files = array(
 			'.*wp-(atom|rdf|rss|rss2|feed|commentsrss2)\.php$' => $this->index . '?feed=old',
@@ -1401,7 +1407,8 @@ class WP_Rewrite {
 			 * @param array $rules The rewrite rules generated for the current permastruct.
 			 */
 			$rules = apply_filters( "{$permastructname}_rewrite_rules", $rules );
-			if ( 'post_tag' == $permastructname ) {
+
+			if ( 'post_tag' === $permastructname ) {
 
 				/**
 				 * Filters rewrite rules used specifically for Tags.
@@ -1644,7 +1651,7 @@ class WP_Rewrite {
 		if ( $external ) {
 			$this->add_external_rule( $regex, $query );
 		} else {
-			if ( 'bottom' == $after ) {
+			if ( 'bottom' === $after ) {
 				$this->extra_rules = array_merge( $this->extra_rules, array( $regex => $query ) );
 			} else {
 				$this->extra_rules_top = array_merge( $this->extra_rules_top, array( $regex => $query ) );
@@ -1851,7 +1858,8 @@ class WP_Rewrite {
 		unset( $this->search_structure );
 		unset( $this->feed_structure );
 		unset( $this->comment_feed_structure );
-		$this->use_trailing_slashes = ( '/' == substr( $this->permalink_structure, -1, 1 ) );
+
+		$this->use_trailing_slashes = ( '/' === substr( $this->permalink_structure, -1, 1 ) );
 
 		// Enable generic rules for pages if permalink structure doesn't begin with a wildcard.
 		if ( preg_match( '/^[^%]*%(?:postname|category|tag|author)%/', $this->permalink_structure ) ) {

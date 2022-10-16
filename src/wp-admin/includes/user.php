@@ -124,7 +124,7 @@ function edit_user( $user_id = 0 ) {
 		}
 	}
 
-	$user->comment_shortcuts = isset( $_POST['comment_shortcuts'] ) && 'true' == $_POST['comment_shortcuts'] ? 'true' : '';
+	$user->comment_shortcuts = isset( $_POST['comment_shortcuts'] ) && 'true' === $_POST['comment_shortcuts'] ? 'true' : '';
 
 	$user->use_ssl = 0;
 	if ( ! empty( $_POST['use_ssl'] ) ) {
@@ -134,8 +134,13 @@ function edit_user( $user_id = 0 ) {
 	$errors = new WP_Error();
 
 	/* checking that username has been typed */
+<<<<<<< HEAD
 	if ( '' == $user->user_login ) {
 		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
+=======
+	if ( '' === $user->user_login ) {
+		$errors->add( 'user_login', __( '<strong>Error</strong>: Please enter a username.' ) );
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	}
 
 	/* checking that nickname has been typed */
@@ -469,8 +474,15 @@ function default_password_nag_handler( $errors = false ) {
 		return;
 	}
 
+<<<<<<< HEAD
 	// get_user_setting = JS saved UI setting. else no-js-fallback code.
 	if ( 'hide' == get_user_setting( 'default_password_nag' ) || isset( $_GET['default_password_nag'] ) && '0' == $_GET['default_password_nag'] ) {
+=======
+	// get_user_setting() = JS-saved UI setting. Else no-js-fallback code.
+	if ( 'hide' === get_user_setting( 'default_password_nag' )
+		|| isset( $_GET['default_password_nag'] ) && '0' == $_GET['default_password_nag']
+	) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		delete_user_setting( 'default_password_nag' );
 		update_user_option( $user_ID, 'default_password_nag', false, true );
 	}
@@ -505,7 +517,7 @@ function default_password_nag_edit_user( $user_ID, $old_data ) {
 function default_password_nag() {
 	global $pagenow;
 	// Short-circuit it.
-	if ( 'profile.php' == $pagenow || ! get_user_option( 'default_password_nag' ) ) {
+	if ( 'profile.php' === $pagenow || ! get_user_option( 'default_password_nag' ) ) {
 		return;
 	}
 

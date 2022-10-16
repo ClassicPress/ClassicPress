@@ -428,6 +428,10 @@ function themes_api( $action, $args = array() ) {
 		$args = (object) $args;
 	}
 
+<<<<<<< HEAD
+=======
+	if ( 'query_themes' === $action ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 	if ( ! isset( $args->per_page ) ) {
 		$args->per_page = 24;
 	}
@@ -520,6 +524,24 @@ function themes_api( $action, $args = array() ) {
 					wp_remote_retrieve_body( $request )
 				);
 			}
+<<<<<<< HEAD
+=======
+
+			if ( isset( $res->error ) ) {
+				$res = new WP_Error( 'themes_api_failed', $res->error );
+			}
+		}
+
+		// Back-compat for info/1.2 API, upgrade the theme objects in query_themes to objects.
+		if ( 'query_themes' === $action ) {
+			foreach ( $res->themes as $i => $theme ) {
+				$res->themes[ $i ] = (object) $theme;
+			}
+		}
+		// Back-compat for info/1.2 API, downgrade the feature_list result back to an array.
+		if ( 'feature_list' === $action ) {
+			$res = (array) $res;
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		}
 	}
 

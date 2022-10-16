@@ -472,11 +472,11 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 		$actions = array();
 
-		if ( 'active' != $status ) {
+		if ( 'active' !== $status ) {
 			$actions['activate-selected'] = $this->screen->in_admin( 'network' ) ? __( 'Network Activate' ) : __( 'Activate' );
 		}
 
-		if ( 'inactive' != $status && 'recent' != $status ) {
+		if ( 'inactive' !== $status && 'recent' !== $status ) {
 			$actions['deactivate-selected'] = $this->screen->in_admin( 'network' ) ? __( 'Network Deactivate' ) : __( 'Deactivate' );
 		}
 
@@ -484,7 +484,12 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			if ( current_user_can( 'update_plugins' ) ) {
 				$actions['update-selected'] = __( 'Update' );
 			}
+<<<<<<< HEAD
 			if ( current_user_can( 'delete_plugins' ) && ( 'active' != $status ) ) {
+=======
+
+			if ( current_user_can( 'delete_plugins' ) && ( 'active' !== $status ) ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 				$actions['delete-selected'] = __( 'Delete' );
 			}
 		}
@@ -519,7 +524,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 
 		echo '<div class="alignleft actions">';
 
-		if ( 'recently_activated' == $status ) {
+		if ( 'recently_activated' === $status ) {
 			submit_button( __( 'Clear List' ), '', 'clear-recent-list', false );
 		} elseif ( 'top' === $which && 'mustuse' === $status ) {
 			/* translators: %s: mu-plugins directory name */
@@ -756,7 +761,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			$checkbox = "<label class='screen-reader-text' for='" . $checkbox_id . "' >" . sprintf( __( 'Select %s' ), $plugin_data['Name'] ) . '</label>'
 				. "<input type='checkbox' name='checked[]' value='" . esc_attr( $plugin_file ) . "' id='" . $checkbox_id . "' />";
 		}
-		if ( 'dropins' != $context ) {
+		if ( 'dropins' !== $context ) {
 			$description = '<p>' . ( $plugin_data['Description'] ? $plugin_data['Description'] : '&nbsp;' ) . '</p>';
 			$plugin_name = $plugin_data['Name'];
 		}

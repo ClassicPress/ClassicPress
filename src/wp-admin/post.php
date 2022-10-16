@@ -49,15 +49,21 @@ if ( isset( $_POST['post_type'] ) && $post && $post_type !== $_POST['post_type']
 
 if ( isset( $_POST['deletepost'] ) ) {
 	$action = 'delete';
-} elseif ( isset( $_POST['wp-preview'] ) && 'dopreview' == $_POST['wp-preview'] ) {
+} elseif ( isset( $_POST['wp-preview'] ) && 'dopreview' === $_POST['wp-preview'] ) {
 	$action = 'preview';
 }
 
 $sendback = wp_get_referer();
 if ( ! $sendback ||
+<<<<<<< HEAD
 	 strpos( $sendback, 'post.php' ) !== false ||
 	 strpos( $sendback, 'post-new.php' ) !== false ) {
 	if ( 'attachment' == $post_type ) {
+=======
+	false !== strpos( $sendback, 'post.php' ) ||
+	false !== strpos( $sendback, 'post-new.php' ) ) {
+	if ( 'attachment' === $post_type ) {
+>>>>>>> 6742d0d7a6 (Coding Standards: Use strict comparison where static strings are involved.)
 		$sendback = admin_url( 'upload.php' );
 	} else {
 		$sendback = admin_url( 'edit.php' );
@@ -103,7 +109,7 @@ switch ( $action ) {
 	case 'postajaxpost':
 	case 'post':
 		check_admin_referer( 'add-' . $post_type );
-		$post_id = 'postajaxpost' == $action ? edit_post() : write_post();
+		$post_id = 'postajaxpost' === $action ? edit_post() : write_post();
 		redirect_post( $post_id );
 		exit();
 
@@ -131,7 +137,7 @@ switch ( $action ) {
 			wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
 		}
 
-		if ( 'trash' == $post->post_status ) {
+		if ( 'trash' === $post->post_status ) {
 			wp_die( __( 'You can&#8217;t edit this item because it is in the Trash. Please restore it and try again.' ) );
 		}
 
@@ -143,11 +149,11 @@ switch ( $action ) {
 		}
 
 		$post_type = $post->post_type;
-		if ( 'post' == $post_type ) {
+		if ( 'post' === $post_type ) {
 			$parent_file   = 'edit.php';
 			$submenu_file  = 'edit.php';
 			$post_new_file = 'post-new.php';
-		} elseif ( 'attachment' == $post_type ) {
+		} elseif ( 'attachment' === $post_type ) {
 			$parent_file   = 'upload.php';
 			$submenu_file  = 'upload.php';
 			$post_new_file = 'media-new.php';

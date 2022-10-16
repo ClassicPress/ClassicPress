@@ -129,7 +129,7 @@ class WP_Meta_Query {
 			return;
 		}
 
-		if ( isset( $meta_query['relation'] ) && strtoupper( $meta_query['relation'] ) == 'OR' ) {
+		if ( isset( $meta_query['relation'] ) && 'OR' === strtoupper( $meta_query['relation'] ) ) {
 			$this->relation = 'OR';
 		} else {
 			$this->relation = 'AND';
@@ -286,7 +286,7 @@ class WP_Meta_Query {
 			return 'CHAR';
 		}
 
-		if ( 'NUMERIC' == $meta_type ) {
+		if ( 'NUMERIC' === $meta_type ) {
 			$meta_type = 'SIGNED';
 		}
 
