@@ -172,17 +172,10 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		$content = esc_textarea( $content );
 	}
 
-<<<<<<< HEAD
 	$file_description = get_file_description( $relative_file );
 	$file_show        = array_search( $file, array_filter( $allowed_files ), true );
 	$description      = esc_html( $file_description );
-	if ( $file_description != $file_show ) {
-=======
-$file_description = get_file_description( $relative_file );
-$file_show        = array_search( $file, array_filter( $allowed_files ), true );
-$description      = esc_html( $file_description );
-if ( $file_description !== $file_show ) {
->>>>>>> 1ce6af5284 (Coding Standards: Fix WPCS issues in `wp-admin/plugin-editor.php` and `wp-admin/theme-editor.php`.)
+	if ( $file_description !== $file_show ) {
 		$description .= ' <span>(' . esc_html( $file_show ) . ')</span>';
 	}
 	?>
