@@ -120,7 +120,7 @@ if ( ! class_exists( 'PO', false ) ) :
 			$po = $quote . implode( "${slash}n$quote$newline$quote", explode( $newline, $string ) ) . $quote;
 			// add empty string on first line for readbility
 			if ( false !== strpos( $string, $newline ) &&
-				( substr_count( $string, $newline ) > 1 || ! ( $newline === substr( $string, -strlen( $newline ) ) ) ) ) {
+				( substr_count( $string, $newline ) > 1 || substr( $string, -strlen( $newline ) ) !== $newline ) ) {
 				$po = "$quote$quote$newline$po";
 			}
 			// remove empty strings
@@ -296,7 +296,7 @@ if ( ! class_exists( 'PO', false ) ) :
 				if ( ! $res ) {
 					break;
 				}
-				if ( $res['entry']->singular == '' ) {
+				if ( '' == $res['entry']->singular ) {
 					$this->set_headers( $this->make_headers( $res['entry']->translations[0] ) );
 				} else {
 					$this->add_entry( $res['entry'] );
@@ -318,7 +318,7 @@ if ( ! class_exists( 'PO', false ) ) :
 		 * @return bool
 		 */
 		protected static function is_final( $context ) {
-			return ( $context === 'msgstr' ) || ( $context === 'msgstr_plural' );
+			return ( 'msgstr' === $context ) || ( 'msgstr_plural' === $context );
 		}
 
 		/**
@@ -348,7 +348,7 @@ if ( ! class_exists( 'PO', false ) ) :
 						return false;
 					}
 				}
-				if ( $line == "\n" ) {
+				if ( "\n" === $line ) {
 					continue;
 				}
 				$line = trim( $line );
@@ -359,8 +359,8 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					// comments have to be at the beginning
-					if ( $context && $context != 'comment' ) {
+					// Comments have to be at the beginning.
+					if ( $context && 'comment' !== $context ) {
 						return false;
 					}
 					// add comment
@@ -371,7 +371,7 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					if ( $context && $context != 'comment' ) {
+					if ( $context && 'comment' !== $context ) {
 						return false;
 					}
 					$context         = 'msgctxt';
@@ -382,26 +382,26 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					if ( $context && $context != 'msgctxt' && $context != 'comment' ) {
+					if ( $context && 'msgctxt' !== $context && 'comment' !== $context ) {
 						return false;
 					}
 					$context          = 'msgid';
 					$entry->singular .= PO::unpoify( $m[1] );
 				} elseif ( preg_match( '/^msgid_plural\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid' ) {
+					if ( 'msgid' !== $context ) {
 						return false;
 					}
 					$context          = 'msgid_plural';
 					$entry->is_plural = true;
 					$entry->plural   .= PO::unpoify( $m[1] );
 				} elseif ( preg_match( '/^msgstr\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid' ) {
+					if ( 'msgid' !== $context ) {
 						return false;
 					}
 					$context             = 'msgstr';
 					$entry->translations = array( PO::unpoify( $m[1] ) );
 				} elseif ( preg_match( '/^msgstr\[(\d+)\]\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid_plural' && $context != 'msgstr_plural' ) {
+					if ( 'msgid_plural' !== $context && 'msgstr_plural' !== $context ) {
 						return false;
 					}
 					$context                      = 'msgstr_plural';

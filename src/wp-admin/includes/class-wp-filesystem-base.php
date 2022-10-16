@@ -222,7 +222,8 @@ class WP_Filesystem_Base {
 			$this->cache[ $folder ] = $folder;
 			return $folder;
 		}
-		if ( $return = $this->search_for_folder( $folder ) ) {
+		$return = $this->search_for_folder( $folder );
+		if ( $return ) {
 			$this->cache[ $folder ] = $return;
 		}
 		return $return;
@@ -282,7 +283,8 @@ class WP_Filesystem_Base {
 
 				// Only search for the remaining path tokens in the directory, not the full path again.
 				$newfolder = implode( '/', array_slice( $folder_parts, $index + 1 ) );
-				if ( $ret = $this->search_for_folder( $newfolder, $newdir, $loop ) ) {
+				$ret       = $this->search_for_folder( $newfolder, $newdir, $loop );
+				if ( $ret ) {
 					return $ret;
 				}
 			}
@@ -395,7 +397,8 @@ class WP_Filesystem_Base {
 		$attarray = preg_split( '//', $mode );
 
 		for ( $i = 0, $c = count( $attarray ); $i < $c; $i++ ) {
-			if ( $key = array_search( $attarray[ $i ], $legal ) ) {
+			$key = array_search( $attarray[ $i ], $legal );
+			if ( $key ) {
 				$realmode .= $legal[ $key ];
 			}
 		}

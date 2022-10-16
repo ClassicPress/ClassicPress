@@ -73,7 +73,7 @@ class WP_Automatic_Updater {
 	 */
 	public function is_vcs_checkout( $context ) {
 		$context_dirs = array( untrailingslashit( $context ) );
-		if ( $context !== ABSPATH ) {
+		if ( ABSPATH !== $context ) {
 			$context_dirs[] = untrailingslashit( ABSPATH );
 		}
 
@@ -86,7 +86,7 @@ class WP_Automatic_Updater {
 				$check_dirs[] = $context_dir;
 
 				// Once we've hit '/' or 'C:\', we need to stop. dirname will keep returning the input here.
-				if ( $context_dir == dirname( $context_dir ) ) {
+				if ( dirname( $context_dir ) === $context_dir ) {
 					break;
 				}
 
@@ -99,7 +99,8 @@ class WP_Automatic_Updater {
 		// Search all directories we've found for evidence of version control.
 		foreach ( $vcs_dirs as $vcs_dir ) {
 			foreach ( $check_dirs as $check_dir ) {
-				if ( $checkout = @is_dir( rtrim( $check_dir, '\\/' ) . "/$vcs_dir" ) ) {
+				$checkout = @is_dir( rtrim( $check_dir, '\\/' ) . "/$vcs_dir" );
+				if ( $checkout ) {
 					break 2;
 				}
 			}
@@ -223,7 +224,7 @@ class WP_Automatic_Updater {
 		$notified = get_site_option( 'auto_core_update_notified' );
 
 		// Don't notify if we've already notified the same email address of the same version.
-		if ( $notified && $notified['email'] == get_site_option( 'admin_email' ) && $notified['version'] == $item->current ) {
+		if ( $notified && get_site_option( 'admin_email' ) === $notified['email'] && $notified['version'] == $item->current ) {
 			return false;
 		}
 
@@ -526,9 +527,9 @@ class WP_Automatic_Updater {
 		// Any of these WP_Error codes are critical failures, as in they occurred after we started to copy core files.
 		// We should not try to perform a background update again until there is a successful one-click update performed by the user.
 		$critical = false;
-		if ( $error_code === 'disk_full' || false !== strpos( $error_code, '__copy_dir' ) ) {
+		if ( 'disk_full' === $error_code || false !== strpos( $error_code, '__copy_dir' ) ) {
 			$critical = true;
-		} elseif ( $error_code === 'rollback_was_required' && is_wp_error( $result->get_error_data()->rollback ) ) {
+		} elseif ( 'rollback_was_required' === $error_code && is_wp_error( $result->get_error_data()->rollback ) ) {
 			// A rollback is only critical if it failed too.
 			$critical        = true;
 			$rollback_result = $result->get_error_data()->rollback;
@@ -574,7 +575,7 @@ class WP_Automatic_Updater {
 
 		$n = get_site_option( 'auto_core_update_notified' );
 		// Don't notify if we've already notified the same email address of the same version of the same notification type.
-		if ( $n && 'fail' == $n['type'] && $n['email'] == get_site_option( 'admin_email' ) && $n['version'] == $core_update->current ) {
+		if ( $n && 'fail' === $n['type'] && get_site_option( 'admin_email' ) === $n['email'] && $n['version'] == $core_update->current ) {
 			$send = false;
 		}
 
@@ -726,7 +727,7 @@ class WP_Automatic_Updater {
 		}
 
 		// Updates are important!
-		if ( $type != 'success' || $newer_version_available ) {
+		if ( 'success' !== $type || $newer_version_available ) {
 			$body .= "\n\n" . __( 'Keeping your site updated is important for security. It also makes the internet a safer place for you and your readers.' );
 		}
 
@@ -735,7 +736,7 @@ class WP_Automatic_Updater {
 		}
 
 		// If things are successful and we're now on the latest, mention plugins and themes if any are out of date.
-		if ( $type == 'success' && ! $newer_version_available && ( get_plugin_updates() || get_theme_updates() ) ) {
+		if ( 'success' === $type && ! $newer_version_available && ( get_plugin_updates() || get_theme_updates() ) ) {
 			$body .= "\n\n" . __( 'You also have some plugins or themes with updates available. Update them now:' );
 			$body .= "\n" . network_admin_url();
 		}

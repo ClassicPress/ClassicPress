@@ -103,7 +103,7 @@ do_action( 'admin_enqueue_scripts', $hook_suffix );
  *
  * @since WP-2.6.0
  */
-do_action( "admin_print_styles-{$hook_suffix}" );
+do_action( "admin_print_styles-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 /**
  * Fires when styles are printed for all admin pages.
@@ -117,7 +117,7 @@ do_action( 'admin_print_styles' );
  *
  * @since WP-2.1.0
  */
-do_action( "admin_print_scripts-{$hook_suffix}" );
+do_action( "admin_print_scripts-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 /**
  * Fires when scripts are printed for all admin pages.
@@ -134,7 +134,7 @@ do_action( 'admin_print_scripts' );
  *
  * @since WP-2.1.0
  */
-do_action( "admin_head-{$hook_suffix}" );
+do_action( "admin_head-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 /**
  * Fires in head section for all admin pages.
@@ -273,6 +273,6 @@ if ( is_network_admin() ) {
  */
 do_action( 'all_admin_notices' );
 
-if ( $parent_file == 'options-general.php' ) {
+if ( 'options-general.php' === $parent_file ) {
 	require ABSPATH . 'wp-admin/options-head.php';
 }

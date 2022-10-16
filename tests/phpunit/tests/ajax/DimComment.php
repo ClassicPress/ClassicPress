@@ -24,8 +24,8 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 	/**
 	 * Set up the test fixture
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$post_id         = self::factory()->post->create();
 		$this->_comments = self::factory()->comment->create_post_comments( $post_id, 15 );
 		$this->_comments = array_map( 'get_comment', $this->_comments );
@@ -79,18 +79,18 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Ensure everything is correct
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
-		$this->assertEquals( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
+		// Ensure everything is correct.
+		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
+		$this->assertSame( 'dim-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
 		$this->assertGreaterThanOrEqual( time() - 10, (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 		$this->assertLessThanOrEqual( time(), (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 
 		// Check the status
 		$current = wp_get_comment_status( $comment->comment_ID );
-		if ( in_array( $prev_status, array( 'unapproved', 'spam' ) ) ) {
-			$this->assertEquals( 'approved', $current );
+		if ( in_array( $prev_status, array( 'unapproved', 'spam' ), true ) ) {
+			$this->assertSame( 'approved', $current );
 		} else {
-			$this->assertEquals( 'unapproved', $current );
+			$this->assertSame( 'unapproved', $current );
 		}
 
 		// The total is calculated based on a page break -OR- a random number.  Let's look for both possible outcomes
@@ -101,7 +101,7 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 		$total = $_POST['_total'] - 1;
 
 		// Check for either possible total
-		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], array( $total, $recalc_total ) ) );
+		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], array( $total, $recalc_total ), true ) );
 	}
 
 	/**
@@ -188,10 +188,10 @@ class Tests_Ajax_DimComment extends WP_Ajax_UnitTestCase {
 			// Get the response
 			$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-			// Ensure everything is correct
-			$this->assertEquals( '0', (string) $xml->response[0]->comment['id'] );
-			$this->assertEquals( 'dim-comment_0', (string) $xml->response['action'] );
-			$this->assertContains( 'Comment ' . $_POST['id'] . ' does not exist', $this->_last_response );
+			// Ensure everything is correct.
+			$this->assertSame( '0', (string) $xml->response[0]->comment['id'] );
+			$this->assertSame( 'dim-comment_0', (string) $xml->response['action'] );
+			$this->assertStringContainsString( 'Comment ' . $_POST['id'] . ' does not exist', $this->_last_response );
 
 		} catch ( Exception $e ) {
 			$this->fail( 'Unexpected exception type: ' . get_class( $e ) );

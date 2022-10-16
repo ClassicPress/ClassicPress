@@ -57,8 +57,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		self::delete_user( self::$uploader_id );
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		// Add an uploader role to test upload capabilities.
 		add_role( 'uploader', 'File upload role' );
@@ -68,10 +68,10 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$role->add_cap( 'level_0' );
 
 		$orig_file       = DIR_TESTDATA . '/images/canola.jpg';
-		$this->test_file = '/tmp/canola.jpg';
+		$this->test_file = get_temp_dir() . 'canola.jpg';
 		copy( $orig_file, $this->test_file );
 		$orig_file2       = DIR_TESTDATA . '/images/codeispoetry.png';
-		$this->test_file2 = '/tmp/codeispoetry.png';
+		$this->test_file2 = get_temp_dir() . 'codeispoetry.png';
 		copy( $orig_file2, $this->test_file2 );
 	}
 
@@ -121,7 +121,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	public function test_parse_disposition( $header, $expected ) {
 		$header_list = array( $header );
 		$parsed      = WP_REST_Attachments_Controller::get_filename_from_disposition( $header_list );
-		$this->assertEquals( $expected, $parsed );
+		$this->assertSame( $expected, $parsed );
 	}
 
 	public function test_context_param() {
@@ -129,9 +129,9 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request  = new WP_REST_Request( 'OPTIONS', '/wp/v2/media' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
-		// Single
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
+		// Single.
 		$attachment_id = $this->factory->attachment->create_object(
 			$this->test_file,
 			0,
@@ -140,11 +140,12 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 				'post_excerpt'   => 'A sample caption',
 			)
 		);
-		$request       = new WP_REST_Request( 'OPTIONS', '/wp/v2/media/' . $attachment_id );
-		$response      = $this->server->dispatch( $request );
-		$data          = $response->get_data();
-		$this->assertEquals( 'view', $data['endpoints'][0]['args']['context']['default'] );
-		$this->assertEquals( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
+
+		$request  = new WP_REST_Request( 'OPTIONS', '/wp/v2/media/' . $attachment_id );
+		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertSame( 'view', $data['endpoints'][0]['args']['context']['default'] );
+		$this->assertSame( array( 'view', 'embed', 'edit' ), $data['endpoints'][0]['args']['context']['enum'] );
 	}
 
 	public function test_registered_query_params() {
@@ -153,7 +154,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$data     = $response->get_data();
 		$keys     = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'after',
 				'author',
@@ -186,7 +187,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		if ( ! is_multisite() ) {
 			$media_types[] = 'text';
 		}
-		$this->assertEqualSets( $media_types, $data['endpoints'][0]['args']['media_type']['enum'] );
+		$this->assertSameSets( $media_types, $data['endpoints'][0]['args']['media_type']['enum'] );
 	}
 
 	public function test_registered_get_item_params() {
@@ -203,7 +204,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$data     = $response->get_data();
 		$keys     = array_keys( $data['endpoints'][0]['args'] );
 		sort( $keys );
-		$this->assertEquals( array( 'context', 'id' ), $keys );
+		$this->assertSame( array( 'context', 'id' ), $keys );
 	}
 
 	public function test_get_items() {
@@ -296,8 +297,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// media_type=video
+		$this->assertSame( $id1, $data[0]['id'] );
+		// 'media_type' => 'video'.
 		$request->set_param( 'media_type', 'video' );
 		$response = $this->server->dispatch( $request );
 		$this->assertCount( 0, $response->get_data() );
@@ -305,7 +306,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_param( 'media_type', 'image' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( $id1, $data[0]['id'] );
+		$this->assertSame( $id1, $data[0]['id'] );
 	}
 
 	public function test_get_items_mime_type() {
@@ -319,8 +320,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( $id1, $data[0]['id'] );
-		// mime_type=image/png
+		$this->assertSame( $id1, $data[0]['id'] );
+		// 'mime_type' => 'image/png'.
 		$request->set_param( 'mime_type', 'image/png' );
 		$response = $this->server->dispatch( $request );
 		$this->assertCount( 0, $response->get_data() );
@@ -328,7 +329,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_param( 'mime_type', 'image/jpeg' );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( $id1, $data[0]['id'] );
+		$this->assertSame( $id1, $data[0]['id'] );
 	}
 
 	public function test_get_items_parent() {
@@ -352,27 +353,27 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		// all attachments
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 2, count( $response->get_data() ) );
+		$this->assertSame( 2, count( $response->get_data() ) );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		// attachments without a parent
 		$request->set_param( 'parent', 0 );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $attachment_id2, $data[0]['id'] );
-		// attachments with parent=post_id
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( $attachment_id2, $data[0]['id'] );
+		// Attachments with parent=post_id.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$request->set_param( 'parent', $post_id );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( 1, count( $data ) );
-		$this->assertEquals( $attachment_id, $data[0]['id'] );
-		// attachments with invalid parent
+		$this->assertSame( 1, count( $data ) );
+		$this->assertSame( $attachment_id, $data[0]['id'] );
+		// Attachments with invalid parent.
 		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$request->set_param( 'parent', REST_TESTS_IMPOSSIBLY_HIGH_NUMBER );
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
-		$this->assertEquals( 0, count( $data ) );
+		$this->assertSame( 0, count( $data ) );
 	}
 
 	public function test_get_items_invalid_status_param_is_error_response() {
@@ -391,7 +392,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 3, $data );
-		$this->assertEquals( 'rest_invalid_param', $data['code'] );
+		$this->assertSame( 'rest_invalid_param', $data['code'] );
 	}
 
 	public function test_get_items_private_status() {
@@ -413,9 +414,9 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		// Properly authorized users can make the request
 		wp_set_current_user( self::$editor_id );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertEquals( $attachment_id1, $data[0]['id'] );
+		$this->assertSame( $attachment_id1, $data[0]['id'] );
 	}
 
 	public function test_get_items_multiple_statuses() {
@@ -446,15 +447,15 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		// Properly authorized users can make the request
 		wp_set_current_user( self::$editor_id );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
+		$this->assertSame( 2, count( $data ) );
 		$ids = array(
 			$data[0]['id'],
 			$data[1]['id'],
 		);
 		sort( $ids );
-		$this->assertEquals( array( $attachment_id1, $attachment_id2 ), $ids );
+		$this->assertSame( array( $attachment_id1, $attachment_id2 ), $ids );
 	}
 
 	public function test_get_items_invalid_date() {
@@ -499,7 +500,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 1, $data );
-		$this->assertEquals( $id2, $data[0]['id'] );
+		$this->assertSame( $id2, $data[0]['id'] );
 	}
 
 	public function test_get_item() {
@@ -516,7 +517,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$this->check_get_post_response( $response );
 		$data = $response->get_data();
-		$this->assertEquals( 'image/jpeg', $data['mime_type'] );
+		$this->assertSame( 'image/jpeg', $data['mime_type'] );
 	}
 
 	public function test_get_item_sizes() {
@@ -540,10 +541,11 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$original_image_src = wp_get_attachment_image_src( $attachment_id, 'full' );
 		remove_image_size( 'rest-api-test' );
 
-		$this->assertEquals( $image_src[0], $data['media_details']['sizes']['rest-api-test']['source_url'] );
-		$this->assertEquals( 'image/jpeg', $data['media_details']['sizes']['rest-api-test']['mime_type'] );
-		$this->assertEquals( $original_image_src[0], $data['media_details']['sizes']['full']['source_url'] );
-		$this->assertEquals( 'image/jpeg', $data['media_details']['sizes']['full']['mime_type'] );
+		$this->assertIsArray( $data['media_details']['sizes'] );
+		$this->assertSame( $image_src[0], $data['media_details']['sizes']['rest-api-test']['source_url'] );
+		$this->assertSame( 'image/jpeg', $data['media_details']['sizes']['rest-api-test']['mime_type'] );
+		$this->assertSame( $original_image_src[0], $data['media_details']['sizes']['full']['source_url'] );
+		$this->assertSame( 'image/jpeg', $data['media_details']['sizes']['full']['mime_type'] );
 	}
 
 	public function test_get_item_sizes_with_no_url() {
@@ -568,6 +570,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		remove_filter( 'wp_get_attachment_image_src', '__return_false' );
 		remove_image_size( 'rest-api-test' );
 
+		$this->assertIsArray( $data['media_details']['sizes'] );
 		$this->assertFalse( isset( $data['media_details']['sizes']['rest-api-test']['source_url'] ) );
 	}
 
@@ -584,7 +587,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		);
 		$request    = new WP_REST_Request( 'GET', '/wp/v2/media/' . $id1 );
 		$response   = $this->server->dispatch( $request );
-		$this->assertEquals( 401, $response->get_status() );
+		$this->assertSame( 401, $response->get_status() );
 	}
 
 	public function test_get_item_inherit_status_with_invalid_parent() {
@@ -600,8 +603,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response      = $this->server->dispatch( $request );
 		$data          = $response->get_data();
 
-		$this->assertEquals( 200, $response->get_status() );
-		$this->assertEquals( $attachment_id, $data['id'] );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( $attachment_id, $data['id'] );
 	}
 
 	public function test_get_item_auto_status_with_invalid_parent_not_authenticated_returns_error() {
@@ -635,18 +638,18 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 
-		$this->assertEquals( 201, $response->get_status() );
-		$this->assertEquals( 'image', $data['media_type'] );
+		$this->assertSame( 201, $response->get_status() );
+		$this->assertSame( 'image', $data['media_type'] );
 
 		$attachment = get_post( $data['id'] );
-		$this->assertEquals( 'My title is very cool', $data['title']['raw'] );
-		$this->assertEquals( 'My title is very cool', $attachment->post_title );
-		$this->assertEquals( 'This is a better caption.', $data['caption']['raw'] );
-		$this->assertEquals( 'This is a better caption.', $attachment->post_excerpt );
-		$this->assertEquals( 'Without a description, my attachment is descriptionless.', $data['description']['raw'] );
-		$this->assertEquals( 'Without a description, my attachment is descriptionless.', $attachment->post_content );
-		$this->assertEquals( 'Alt text is stored outside post schema.', $data['alt_text'] );
-		$this->assertEquals( 'Alt text is stored outside post schema.', get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ) );
+		$this->assertSame( 'My title is very cool', $data['title']['raw'] );
+		$this->assertSame( 'My title is very cool', $attachment->post_title );
+		$this->assertSame( 'This is a better caption.', $data['caption']['raw'] );
+		$this->assertSame( 'This is a better caption.', $attachment->post_excerpt );
+		$this->assertSame( 'Without a description, my attachment is descriptionless.', $data['description']['raw'] );
+		$this->assertSame( 'Without a description, my attachment is descriptionless.', $attachment->post_content );
+		$this->assertSame( 'Alt text is stored outside post schema.', $data['alt_text'] );
+		$this->assertSame( 'Alt text is stored outside post schema.', get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ) );
 	}
 
 	public function test_create_item_default_filename_title() {
@@ -664,9 +667,9 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		);
 		$request->set_header( 'Content-MD5', md5_file( $this->test_file2 ) );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
+		$this->assertSame( 201, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertEquals( 'codeispoetry', $data['title']['raw'] );
+		$this->assertSame( 'codeispoetry', $data['title']['raw'] );
 	}
 
 	public function test_create_item_with_files() {
@@ -684,7 +687,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		);
 		$request->set_header( 'Content-MD5', md5_file( $this->test_file ) );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
+		$this->assertSame( 201, $response->get_status() );
 	}
 
 	public function test_create_item_with_upload_files_role() {
@@ -702,7 +705,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		);
 		$request->set_header( 'Content-MD5', md5_file( $this->test_file ) );
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
+		$this->assertSame( 201, $response->get_status() );
 	}
 
 	public function test_create_item_empty_body() {
@@ -811,7 +814,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_param( 'alt_text', 'test alt text' );
 		$response   = $this->server->dispatch( $request );
 		$attachment = $response->get_data();
-		$this->assertEquals( 'test alt text', $attachment['alt_text'] );
+		$this->assertSame( 'test alt text', $attachment['alt_text'] );
 	}
 
 	public function test_create_item_unsafe_alt_text() {
@@ -823,7 +826,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_param( 'alt_text', '<script>alert(document.cookie)</script>' );
 		$response   = $this->server->dispatch( $request );
 		$attachment = $response->get_data();
-		$this->assertEquals( '', $attachment['alt_text'] );
+		$this->assertSame( '', $attachment['alt_text'] );
 	}
 
 	/**
@@ -837,7 +840,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_body( file_get_contents( $this->test_file ) );
 		$response   = rest_get_server()->dispatch( $request );
 		$attachment = $response->get_data();
-		$this->assertNotContains( ABSPATH, get_post_meta( $attachment['id'], '_wp_attached_file', true ) );
+		$this->assertStringNotContainsString( ABSPATH, get_post_meta( $attachment['id'], '_wp_attached_file', true ) );
 	}
 
 	public function test_update_item() {
@@ -859,14 +862,14 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response   = $this->server->dispatch( $request );
 		$data       = $response->get_data();
 		$attachment = get_post( $data['id'] );
-		$this->assertEquals( 'My title is very cool', $data['title']['raw'] );
-		$this->assertEquals( 'My title is very cool', $attachment->post_title );
-		$this->assertEquals( 'This is a better caption.', $data['caption']['raw'] );
-		$this->assertEquals( 'This is a better caption.', $attachment->post_excerpt );
-		$this->assertEquals( 'Without a description, my attachment is descriptionless.', $data['description']['raw'] );
-		$this->assertEquals( 'Without a description, my attachment is descriptionless.', $attachment->post_content );
-		$this->assertEquals( 'Alt text is stored outside post schema.', $data['alt_text'] );
-		$this->assertEquals( 'Alt text is stored outside post schema.', get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ) );
+		$this->assertSame( 'My title is very cool', $data['title']['raw'] );
+		$this->assertSame( 'My title is very cool', $attachment->post_title );
+		$this->assertSame( 'This is a better caption.', $data['caption']['raw'] );
+		$this->assertSame( 'This is a better caption.', $attachment->post_excerpt );
+		$this->assertSame( 'Without a description, my attachment is descriptionless.', $data['description']['raw'] );
+		$this->assertSame( 'Without a description, my attachment is descriptionless.', $attachment->post_content );
+		$this->assertSame( 'Alt text is stored outside post schema.', $data['alt_text'] );
+		$this->assertSame( 'Alt text is stored outside post schema.', get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ) );
 	}
 
 	public function test_update_item_parent() {
@@ -883,7 +886,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		);
 
 		$attachment = get_post( $attachment_id );
-		$this->assertEquals( $original_parent, $attachment->post_parent );
+		$this->assertSame( $original_parent, $attachment->post_parent );
 
 		$new_parent = $this->factory->post->create( array() );
 		$request    = new WP_REST_Request( 'POST', '/wp/v2/media/' . $attachment_id );
@@ -891,7 +894,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->server->dispatch( $request );
 
 		$attachment = get_post( $attachment_id );
-		$this->assertEquals( $new_parent, $attachment->post_parent );
+		$this->assertSame( $new_parent, $attachment->post_parent );
 	}
 
 	public function test_update_item_invalid_permissions() {
@@ -946,7 +949,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 			$request->set_param( $name, $value );
 		}
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 201, $response->get_status() );
+		$this->assertSame( 201, $response->get_status() );
 		$actual_output = $response->get_data();
 
 		// Remove <p class="attachment"> from rendered description
@@ -958,19 +961,19 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 			$actual_output['description']['rendered'] = $content;
 		}
 
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['title']['raw'], $actual_output['title']['raw'] );
-		$this->assertEquals( $expected_output['title']['rendered'], trim( $actual_output['title']['rendered'] ) );
-		$this->assertEquals( $expected_output['description']['raw'], $actual_output['description']['raw'] );
-		$this->assertEquals( $expected_output['description']['rendered'], trim( $actual_output['description']['rendered'] ) );
-		$this->assertEquals( $expected_output['caption']['raw'], $actual_output['caption']['raw'] );
-		$this->assertEquals( $expected_output['caption']['rendered'], trim( $actual_output['caption']['rendered'] ) );
+		// Compare expected API output to actual API output.
+		$this->assertSame( $expected_output['title']['raw'], $actual_output['title']['raw'] );
+		$this->assertSame( $expected_output['title']['rendered'], trim( $actual_output['title']['rendered'] ) );
+		$this->assertSame( $expected_output['description']['raw'], $actual_output['description']['raw'] );
+		$this->assertSame( $expected_output['description']['rendered'], trim( $actual_output['description']['rendered'] ) );
+		$this->assertSame( $expected_output['caption']['raw'], $actual_output['caption']['raw'] );
+		$this->assertSame( $expected_output['caption']['rendered'], trim( $actual_output['caption']['rendered'] ) );
 
 		// Compare expected API output to WP internal values
 		$post = get_post( $actual_output['id'] );
-		$this->assertEquals( $expected_output['title']['raw'], $post->post_title );
-		$this->assertEquals( $expected_output['description']['raw'], $post->post_content );
-		$this->assertEquals( $expected_output['caption']['raw'], $post->post_excerpt );
+		$this->assertSame( $expected_output['title']['raw'], $post->post_title );
+		$this->assertSame( $expected_output['description']['raw'], $post->post_content );
+		$this->assertSame( $expected_output['caption']['raw'], $post->post_excerpt );
 
 		// Update the post
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/media/%d', $actual_output['id'] ) );
@@ -978,7 +981,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 			$request->set_param( $name, $value );
 		}
 		$response = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 		$actual_output = $response->get_data();
 
 		// Remove <p class="attachment"> from rendered description
@@ -990,19 +993,19 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 			$actual_output['description']['rendered'] = $content;
 		}
 
-		// Compare expected API output to actual API output
-		$this->assertEquals( $expected_output['title']['raw'], $actual_output['title']['raw'] );
-		$this->assertEquals( $expected_output['title']['rendered'], trim( $actual_output['title']['rendered'] ) );
-		$this->assertEquals( $expected_output['description']['raw'], $actual_output['description']['raw'] );
-		$this->assertEquals( $expected_output['description']['rendered'], trim( $actual_output['description']['rendered'] ) );
-		$this->assertEquals( $expected_output['caption']['raw'], $actual_output['caption']['raw'] );
-		$this->assertEquals( $expected_output['caption']['rendered'], trim( $actual_output['caption']['rendered'] ) );
+		// Compare expected API output to actual API output.
+		$this->assertSame( $expected_output['title']['raw'], $actual_output['title']['raw'] );
+		$this->assertSame( $expected_output['title']['rendered'], trim( $actual_output['title']['rendered'] ) );
+		$this->assertSame( $expected_output['description']['raw'], $actual_output['description']['raw'] );
+		$this->assertSame( $expected_output['description']['rendered'], trim( $actual_output['description']['rendered'] ) );
+		$this->assertSame( $expected_output['caption']['raw'], $actual_output['caption']['raw'] );
+		$this->assertSame( $expected_output['caption']['rendered'], trim( $actual_output['caption']['rendered'] ) );
 
 		// Compare expected API output to WP internal values
 		$post = get_post( $actual_output['id'] );
-		$this->assertEquals( $expected_output['title']['raw'], $post->post_title );
-		$this->assertEquals( $expected_output['description']['raw'], $post->post_content );
-		$this->assertEquals( $expected_output['caption']['raw'], $post->post_excerpt );
+		$this->assertSame( $expected_output['title']['raw'], $post->post_title );
+		$this->assertSame( $expected_output['description']['raw'], $post->post_content );
+		$this->assertSame( $expected_output['caption']['raw'], $post->post_excerpt );
 	}
 
 	public static function attachment_roundtrip_provider() {
@@ -1201,7 +1204,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request          = new WP_REST_Request( 'DELETE', '/wp/v2/media/' . $attachment_id );
 		$request['force'] = true;
 		$response         = $this->server->dispatch( $request );
-		$this->assertEquals( 200, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
 	}
 
 	public function test_delete_item_no_trash() {
@@ -1281,7 +1284,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$request->set_param( '_fields', 'id,slug' );
 		$obj      = get_post( $attachment_id );
 		$response = $endpoint->prepare_item_for_response( $obj, $request );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'id',
 				'slug',
@@ -1295,7 +1298,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response   = $this->server->dispatch( $request );
 		$data       = $response->get_data();
 		$properties = $data['schema']['properties'];
-		$this->assertEquals( 24, count( $properties ) );
+		$this->assertSame( 24, count( $properties ) );
 		$this->assertArrayHasKey( 'author', $properties );
 		$this->assertArrayHasKey( 'alt_text', $properties );
 		$this->assertArrayHasKey( 'caption', $properties );
@@ -1351,7 +1354,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = $this->server->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertArrayHasKey( 'my_custom_int', $data['schema']['properties'] );
-		$this->assertEquals( $schema, $data['schema']['properties']['my_custom_int'] );
+		$this->assertSame( $schema, $data['schema']['properties']['my_custom_int'] );
 
 		$attachment_id = $this->factory->attachment->create_object(
 			$this->test_file,
@@ -1431,7 +1434,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 			)
 		);
 
-		$filename = basename( $this->test_file2 );
+		$filename = wp_basename( $this->test_file2 );
 
 		$request = new WP_REST_Request( 'GET', '/wp/v2/media' );
 		$request->set_param( 'search', $filename );
@@ -1439,8 +1442,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$data     = $response->get_data();
 
 		$this->assertCount( 1, $data );
-		$this->assertEquals( $id2, $data[0]['id'] );
-		$this->assertEquals( 'image/png', $data[0]['mime_type'] );
+		$this->assertSame( $id2, $data[0]['id'] );
+		$this->assertSame( 'image/png', $data[0]['mime_type'] );
 	}
 
 	public function additional_field_get_callback( $object, $request ) {
@@ -1497,8 +1500,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertArrayNotHasKey( 'https://api.w.org/action-publish', $links );
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		if ( file_exists( $this->test_file ) ) {
 			unlink( $this->test_file );
 		}
@@ -1515,10 +1518,10 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertArrayNotHasKey( 'content', $data );
 		$this->assertArrayNotHasKey( 'excerpt', $data );
 
-		$this->assertEquals( get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ), $data['alt_text'] );
+		$this->assertSame( get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ), $data['alt_text'] );
 		if ( 'edit' === $context ) {
-			$this->assertEquals( $attachment->post_excerpt, $data['caption']['raw'] );
-			$this->assertEquals( $attachment->post_content, $data['description']['raw'] );
+			$this->assertSame( $attachment->post_excerpt, $data['caption']['raw'] );
+			$this->assertSame( $attachment->post_content, $data['description']['raw'] );
 		} else {
 			$this->assertFalse( isset( $data['caption']['raw'] ) );
 			$this->assertFalse( isset( $data['description']['raw'] ) );
@@ -1526,12 +1529,12 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertTrue( isset( $data['media_details'] ) );
 
 		if ( $attachment->post_parent ) {
-			$this->assertEquals( $attachment->post_parent, $data['post'] );
+			$this->assertSame( $attachment->post_parent, $data['post'] );
 		} else {
 			$this->assertNull( $data['post'] );
 		}
 
-		$this->assertEquals( wp_get_attachment_url( $attachment->ID ), $data['source_url'] );
+		$this->assertSame( wp_get_attachment_url( $attachment->ID ), $data['source_url'] );
 
 	}
 
@@ -1636,5 +1639,4 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response = rest_get_server()->dispatch( $request );
 		$this->assertErrorResponse( 'rest_upload_limited_space', $response, 400 );
 	}
-
 }

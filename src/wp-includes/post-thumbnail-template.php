@@ -29,14 +29,14 @@ function has_post_thumbnail( $post = null ) {
  * @since WP-4.4.0 `$post` can be a post ID or WP_Post object.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
- * @return string|int Post thumbnail ID or empty string.
+ * @return int|string Post thumbnail ID or empty string if the post does not exist.
  */
 function get_post_thumbnail_id( $post = null ) {
 	$post = get_post( $post );
 	if ( ! $post ) {
 		return '';
 	}
-	return get_post_meta( $post->ID, '_thumbnail_id', true );
+	return (int) get_post_meta( $post->ID, '_thumbnail_id', true );
 }
 
 /**
@@ -82,7 +82,8 @@ function update_post_thumbnail_cache( $wp_query = null ) {
 
 	$thumb_ids = array();
 	foreach ( $wp_query->posts as $post ) {
-		if ( $id = get_post_thumbnail_id( $post->ID ) ) {
+		$id = get_post_thumbnail_id( $post->ID );
+		if ( $id ) {
 			$thumb_ids[] = $id;
 		}
 	}

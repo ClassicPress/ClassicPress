@@ -19,8 +19,8 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		);
 	}
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->theme_root     = DIR_TESTDATA . '/themedir1';
 		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
@@ -38,7 +38,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		_get_path_to_translation( null, true );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
 		remove_filter( 'theme_root', array( $this, 'filter_theme_root' ) );
 		remove_filter( 'stylesheet_root', array( $this, 'filter_theme_root' ) );
@@ -49,7 +49,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		unset( $GLOBALS['l10n_unloaded'] );
 		_get_path_to_translation( null, true );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -175,15 +175,15 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 		require_once DIR_TESTDATA . '/plugins/internationalized-plugin.php';
 
 		switch_to_locale( 'de_DE' );
-		$expected_de_DE = i18n_plugin_test();
+		$expected_de_de = i18n_plugin_test();
 
 		switch_to_locale( 'es_ES' );
-		$expected_es_ES = i18n_plugin_test();
+		$expected_es_es = i18n_plugin_test();
 
 		restore_current_locale();
 
-		$this->assertSame( 'Das ist ein Dummy Plugin', $expected_de_DE );
-		$this->assertSame( 'This is a dummy plugin', $expected_es_ES );
+		$this->assertSame( 'Das ist ein Dummy Plugin', $expected_de_de );
+		$this->assertSame( 'This is a dummy plugin', $expected_es_es );
 	}
 
 	/**

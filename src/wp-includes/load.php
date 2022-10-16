@@ -42,12 +42,11 @@ function wp_fix_server_vars() {
 	// Fix for IIS when running with PHP ISAPI
 	if ( empty( $_SERVER['REQUEST_URI'] ) || ( PHP_SAPI != 'cgi-fcgi' && preg_match( '/^Microsoft-IIS\//', $_SERVER['SERVER_SOFTWARE'] ) ) ) {
 
-		// IIS Mod-Rewrite
 		if ( isset( $_SERVER['HTTP_X_ORIGINAL_URL'] ) ) {
+			// IIS Mod-Rewrite
 			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
-		}
-		// IIS Isapi_Rewrite
-		elseif ( isset( $_SERVER['HTTP_X_REWRITE_URL'] ) ) {
+		} elseif ( isset( $_SERVER['HTTP_X_REWRITE_URL'] ) ) {
+			// IIS Isapi_Rewrite
 			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
 		} else {
 			// Use ORIG_PATH_INFO if there is no PATH_INFO
@@ -84,7 +83,8 @@ function wp_fix_server_vars() {
 	// Fix empty PHP_SELF
 	$PHP_SELF = $_SERVER['PHP_SELF'];
 	if ( empty( $PHP_SELF ) ) {
-		$_SERVER['PHP_SELF'] = $PHP_SELF = preg_replace( '/(\?.*)?$/', '', $_SERVER['REQUEST_URI'] );
+		$_SERVER['PHP_SELF'] = preg_replace( '/(\?.*)?$/', '', $_SERVER['REQUEST_URI'] );
+		$PHP_SELF            = $_SERVER['PHP_SELF'];
 	}
 }
 
@@ -113,7 +113,12 @@ function wp_check_php_mysql_versions() {
 		die( sprintf( __( 'Your server is running PHP version %1$s but ClassicPress %2$s requires at least %3$s.' ), $php_version, classicpress_version(), $required_php_version ) );
 	}
 
-	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! extension_loaded( 'mysqlnd' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' ) ) {
+	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! extension_loaded( 'mysqlnd' )
+		// This runs before default constants are defined, so we can't assume WP_CONTENT_DIR is set yet.
+		&& ( defined( 'WP_CONTENT_DIR' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' )
+			|| ! file_exists( ABSPATH . 'wp-content/db.php' ) )
+	) {
+		require_once ABSPATH . WPINC . '/functions.php';
 		wp_load_translations_early();
 
 		$protocol = wp_get_server_protocol();
@@ -597,7 +602,8 @@ function wp_get_mu_plugins() {
 	if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
 		return $mu_plugins;
 	}
-	if ( ! $dh = opendir( WPMU_PLUGIN_DIR ) ) {
+	$dh = opendir( WPMU_PLUGIN_DIR );
+	if ( ! $dh ) {
 		return $mu_plugins;
 	}
 	while ( ( $plugin = readdir( $dh ) ) !== false ) {
@@ -915,7 +921,8 @@ function wp_load_translations_early() {
 	// General libraries
 	require_once ABSPATH . WPINC . '/plugin.php';
 
-	$locales = $locations = array();
+	$locales   = array();
+	$locations = array();
 
 	while ( true ) {
 		if ( defined( 'WPLANG' ) ) {

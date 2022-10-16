@@ -223,7 +223,7 @@ function get_object_taxonomies( $object, $output = 'names' ) {
 	global $wp_taxonomies;
 
 	if ( is_object( $object ) ) {
-		if ( $object->post_type == 'attachment' ) {
+		if ( 'attachment' === $object->post_type ) {
 			return get_attachment_taxonomies( $object, $output );
 		}
 		$object = $object->post_type;
@@ -840,9 +840,9 @@ function get_term( $term, $taxonomy = '', $output = OBJECT, $filter = 'raw' ) {
 	// Sanitize term, according to the specified filter.
 	$_term->filter( $filter );
 
-	if ( $output == ARRAY_A ) {
+	if ( ARRAY_A === $output ) {
 		return $_term->to_array();
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N === $output ) {
 		return array_values( $_term->to_array() );
 	}
 
@@ -1050,10 +1050,14 @@ function get_term_to_edit( $id, $taxonomy ) {
 }
 
 /**
- * Retrieve the terms in a given taxonomy or list of taxonomies.
+ * Retrieves the terms in a given taxonomy or list of taxonomies.
  *
  * You can fully inject any customizations to the query before it is sent, as
  * well as control the output with a filter.
+ *
+ * The return type varies depending on the value passed to `$args['fields']`. See
+ * WP_Term_Query::get_terms() for details. In all cases, a `WP_Error` object will
+ * be returned if an invalid taxonomy is requested.
  *
  * The {@see 'get_terms'} filter will be called when the cache has the term and will
  * pass the found term along with the array of $taxonomies and array of $args.
@@ -1090,13 +1094,15 @@ function get_term_to_edit( $id, $taxonomy ) {
  *
  * @internal The `$deprecated` parameter is parsed for backward compatibility only.
  *
- * @param string|array $args       Optional. Array or string of arguments. See WP_Term_Query::__construct()
- *                                 for information on accepted arguments. Default empty.
- * @param array        $deprecated Argument array, when using the legacy function parameter format. If present, this
- *                                 parameter will be interpreted as `$args`, and the first function parameter will
- *                                 be parsed as a taxonomy or array of taxonomies.
- * @return array|int|WP_Error List of WP_Term instances and their children. Will return WP_Error, if any of $taxonomies
- *                            do not exist.
+ * @param array|string $args       Optional. Array or string of arguments. See WP_Term_Query::__construct()
+ *                                 for information on accepted arguments. Default empty array.
+ * @param array|string $deprecated Optional. Argument array, when using the legacy function parameter format.
+ *                                 If present, this parameter will be interpreted as `$args`, and the first
+ *                                 function parameter will be parsed as a taxonomy or array of taxonomies.
+ *                                 Default empty.
+ * @return WP_Term[]|int[]|string[]|string|WP_Error Array of terms, a count thereof as a numeric string,
+ *                                                  or WP_Error if any of the taxonomies do not exist.
+ *                                                  See the function description for more information.
  */
 function get_terms( $args = array(), $deprecated = '' ) {
 	$term_query = new WP_Term_Query();
@@ -1711,7 +1717,12 @@ function sanitize_term_field( $field, $value, $term_id, $taxonomy, $context ) {
  * @param string       $taxonomy Taxonomy name.
  * @param array|string $args     Optional. Array of arguments that get passed to get_terms().
  *                               Default empty array.
- * @return array|int|WP_Error Number of terms in that taxonomy or WP_Error if the taxonomy does not exist.
+ * @param array|string $deprecated Optional. Argument array, when using the legacy function parameter format.
+ *                                 If present, this parameter will be interpreted as `$args`, and the first
+ *                                 function parameter will be parsed as a taxonomy or array of taxonomies.
+ *                                 Default empty.
+ * @return string|WP_Error Numeric string containing the number of terms in that
+ *                         taxonomy or WP_Error if the taxonomy does not exist.
  */
 function wp_count_terms( $taxonomy, $args = array() ) {
 	$defaults = array( 'hide_empty' => false );
@@ -1786,7 +1797,8 @@ function wp_delete_term( $term, $taxonomy, $args = array() ) {
 
 	$term = (int) $term;
 
-	if ( ! $ids = term_exists( $term, $taxonomy ) ) {
+	$ids = term_exists( $term, $taxonomy );
+	if ( ! $ids ) {
 		return false;
 	}
 	if ( is_wp_error( $ids ) ) {
@@ -2032,7 +2044,7 @@ function wp_get_object_terms( $object_ids, $taxonomies, $args = array() ) {
 	if ( count( $taxonomies ) > 1 ) {
 		foreach ( $taxonomies as $index => $taxonomy ) {
 			$t = get_taxonomy( $taxonomy );
-			if ( isset( $t->args ) && is_array( $t->args ) && $args != array_merge( $args, $t->args ) ) {
+			if ( isset( $t->args ) && is_array( $t->args ) && array_merge( $args, $t->args ) != $args ) {
 				unset( $taxonomies[ $index ] );
 				$terms = array_merge( $terms, wp_get_object_terms( $object_ids, $taxonomy, array_merge( $args, $t->args ) ) );
 			}
@@ -2167,7 +2179,7 @@ function wp_insert_term( $term, $taxonomy, $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	if ( $args['parent'] > 0 && ! term_exists( (int) $args['parent'] ) ) {
+	if ( (int) $args['parent'] > 0 && ! term_exists( (int) $args['parent'] ) ) {
 		return new WP_Error( 'missing_parent', __( 'Parent term does not exist.' ) );
 	}
 
@@ -2459,7 +2471,8 @@ function wp_set_object_terms( $object_id, $terms, $taxonomy, $append = false ) {
 			continue;
 		}
 
-		if ( ! $term_info = term_exists( $term, $taxonomy ) ) {
+		$term_info = term_exists( $term, $taxonomy );
+		if ( ! $term_info ) {
 			// Skip if a non-existent term ID is passed.
 			if ( is_int( $term ) ) {
 				continue;
@@ -2611,7 +2624,8 @@ function wp_remove_object_terms( $object_id, $terms, $taxonomy ) {
 			continue;
 		}
 
-		if ( ! $term_info = term_exists( $term, $taxonomy ) ) {
+		$term_info = term_exists( $term, $taxonomy );
+		if ( ! $term_info ) {
 			// Skip if a non-existent term ID is passed.
 			if ( is_int( $term ) ) {
 				continue;
@@ -2846,7 +2860,7 @@ function wp_update_term( $term_id, $taxonomy, $args = array() ) {
 		return new WP_Error( 'empty_term_name', __( 'A name is required for this term.' ) );
 	}
 
-	if ( $parsed_args['parent'] > 0 && ! term_exists( (int) $parsed_args['parent'] ) ) {
+	if ( (int) $parsed_args['parent'] > 0 && ! term_exists( (int) $parsed_args['parent'] ) ) {
 		return new WP_Error( 'missing_parent', __( 'Parent term does not exist.' ) );
 	}
 
@@ -3136,8 +3150,8 @@ function wp_update_term_count_now( $terms, $taxonomy ) {
 			}
 		}
 
-		if ( $object_types == array_filter( $object_types, 'post_type_exists' ) ) {
-			// Only post types are attached to this taxonomy
+		if ( array_filter( $object_types, 'post_type_exists' ) == $object_types ) {
+			// Only post types are attached to this taxonomy.
 			_update_post_term_count( $terms, $taxonomy );
 		} else {
 			// Default count updater
@@ -3546,7 +3560,8 @@ function _get_term_children( $term_id, $terms, $taxonomy, &$ancestors = array() 
 
 			$ancestors[ $term->term_id ] = 1;
 
-			if ( $children = _get_term_children( $term->term_id, $terms, $taxonomy, $ancestors ) ) {
+			$children = _get_term_children( $term->term_id, $terms, $taxonomy, $ancestors );
+			if ( $children ) {
 				$term_list = array_merge( $term_list, $children );
 			}
 		}
@@ -3683,7 +3698,8 @@ function _update_post_term_count( $terms, $taxonomy ) {
 
 	$object_types = array_unique( $object_types );
 
-	if ( false !== ( $check_attachments = array_search( 'attachment', $object_types ) ) ) {
+	$check_attachments = array_search( 'attachment', $object_types );
+	if ( false !== $check_attachments ) {
 		unset( $object_types[ $check_attachments ] );
 		$check_attachments = true;
 	}
@@ -3701,6 +3717,7 @@ function _update_post_term_count( $terms, $taxonomy ) {
 		}
 
 		if ( $object_types ) {
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
 			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status = 'publish' AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
 		}
 
@@ -3951,7 +3968,8 @@ function _wp_batch_split_terms() {
 
 	// Split term data recording is slow, so we do it just once, outside the loop.
 	$split_term_data    = get_option( '_split_terms', array() );
-	$skipped_first_term = $taxonomies = array();
+	$skipped_first_term = array();
+	$taxonomies         = array();
 	foreach ( $shared_tts as $shared_tt ) {
 		$term_id = intval( $shared_tt->term_id );
 
@@ -4015,7 +4033,7 @@ function _wp_check_split_default_terms( $term_id, $new_term_id, $term_taxonomy_i
 	}
 
 	foreach ( array( 'default_category', 'default_link_category', 'default_email_category' ) as $option ) {
-		if ( $term_id == get_option( $option, -1 ) ) {
+		if ( (int) get_option( $option, -1 ) === $term_id ) {
 			update_option( $option, $new_term_id );
 		}
 	}
@@ -4286,9 +4304,9 @@ function the_taxonomies( $args = array() ) {
 		'after'  => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	echo $r['before'] . join( $r['sep'], get_the_taxonomies( $r['post'], $r ) ) . $r['after'];
+	echo $parsed_args['before'] . join( $parsed_args['sep'], get_the_taxonomies( $parsed_args['post'], $parsed_args ) ) . $parsed_args['after'];
 }
 
 /**
@@ -4388,7 +4406,8 @@ function get_post_taxonomies( $post = 0 ) {
  * @return bool|WP_Error WP_Error on input error.
  */
 function is_object_in_term( $object_id, $taxonomy, $terms = null ) {
-	if ( ! $object_id = (int) $object_id ) {
+	$object_id = (int) $object_id;
+	if ( ! $object_id ) {
 		return new WP_Error( 'invalid_object', __( 'Invalid object ID.' ) );
 	}
 
@@ -4414,7 +4433,8 @@ function is_object_in_term( $object_id, $taxonomy, $terms = null ) {
 
 	$terms = (array) $terms;
 
-	if ( $ints = array_filter( $terms, 'is_int' ) ) {
+	$ints = array_filter( $terms, 'is_int' );
+	if ( $ints ) {
 		$strs = array_diff( $terms, $ints );
 	} else {
 		$strs =& $terms;
@@ -4561,7 +4581,8 @@ function wp_check_term_hierarchy_for_loops( $parent, $term_id, $taxonomy ) {
 	}
 
 	// Now look for larger loops.
-	if ( ! $loop = wp_find_hierarchy_loop( 'wp_get_term_taxonomy_parent_id', $term_id, $parent, array( $taxonomy ) ) ) {
+	$loop = wp_find_hierarchy_loop( 'wp_get_term_taxonomy_parent_id', $term_id, $parent, array( $taxonomy ) );
+	if ( ! $loop ) {
 		return $parent; // No loop
 	}
 

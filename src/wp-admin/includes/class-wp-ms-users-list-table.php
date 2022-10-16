@@ -57,7 +57,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 			$args['search'] = '*' . $args['search'] . '*';
 		}
 
-		if ( $role === 'super' ) {
+		if ( 'super' === $role ) {
 			$logins          = implode( "', '", get_super_admins() );
 			$args['include'] = $wpdb->get_col( "SELECT ID FROM $wpdb->users WHERE user_login IN ('$logins')" );
 		}
@@ -69,10 +69,12 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		 */
 		if ( ! $usersearch && wp_is_large_network( 'users' ) ) {
 			if ( ! isset( $_REQUEST['orderby'] ) ) {
-				$_GET['orderby'] = $_REQUEST['orderby'] = 'id';
+				$_GET['orderby']     = 'id';
+				$_REQUEST['orderby'] = 'id';
 			}
 			if ( ! isset( $_REQUEST['order'] ) ) {
-				$_GET['order'] = $_REQUEST['order'] = 'DESC';
+				$_GET['order']     = 'DESC';
+				$_REQUEST['order'] = 'DESC';
 			}
 			$args['count_total'] = false;
 		}
@@ -86,7 +88,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		}
 
 		if ( ! empty( $_REQUEST['mode'] ) ) {
-			$mode = $_REQUEST['mode'] === 'excerpt' ? 'excerpt' : 'list';
+			$mode = 'excerpt' === $_REQUEST['mode'] ? 'excerpt' : 'list';
 			set_user_setting( 'network_users_list_mode', $mode );
 		} else {
 			$mode = get_user_setting( 'network_users_list_mode', 'list' );
@@ -141,11 +143,37 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		$super_admins = get_super_admins();
 		$total_admins = count( $super_admins );
 
-		$current_link_attributes = $role !== 'super' ? ' class="current" aria-current="page"' : '';
+		$current_link_attributes = 'super' !== $role ? ' class="current" aria-current="page"' : '';
 		$role_links              = array();
-		$role_links['all']       = "<a href='" . network_admin_url( 'users.php' ) . "'$current_link_attributes>" . sprintf( _nx( 'All <span class="count">(%s)</span>', 'All <span class="count">(%s)</span>', $total_users, 'users' ), number_format_i18n( $total_users ) ) . '</a>';
-		$current_link_attributes = $role === 'super' ? ' class="current" aria-current="page"' : '';
-		$role_links['super']     = "<a href='" . network_admin_url( 'users.php?role=super' ) . "'$current_link_attributes>" . sprintf( _n( 'Super Admin <span class="count">(%s)</span>', 'Super Admins <span class="count">(%s)</span>', $total_admins ), number_format_i18n( $total_admins ) ) . '</a>';
+		$role_links['all']       = sprintf(
+			'<a href="%s"%s>%s</a>',
+			network_admin_url( 'users.php' ),
+			$current_link_attributes,
+			sprintf(
+				/* translators: Number of users. */
+				_nx(
+					'All <span class="count">(%s)</span>',
+					'All <span class="count">(%s)</span>',
+					$total_users,
+					'users'
+				),
+				number_format_i18n( $total_users )
+			)
+		);
+		$role_links['super']     = sprintf(
+			'<a href="%s"%s>%s</a>',
+			network_admin_url( 'users.php?role=super' ),
+			$current_link_attributes,
+			sprintf(
+				/* translators: Number of users. */
+				_n(
+					'Super Admin <span class="count">(%s)</span>',
+					'Super Admins <span class="count">(%s)</span>',
+					$total_admins
+				),
+				number_format_i18n( $total_admins )
+			)
+		);
 
 		return $role_links;
 	}
@@ -214,7 +242,9 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 			return;
 		}
 		?>
-		<label class="screen-reader-text" for="blog_<?php echo $user->ID; ?>"><?php echo sprintf( __( 'Select %s' ), $user->user_login ); ?></label>
+		<label class="screen-reader-text" for="blog_<?php echo $user->ID; ?>">
+			<?php printf( __( 'Select %s' ), $user->user_login ); ?>
+		</label>
 		<input type="checkbox" id="blog_<?php echo $user->ID; ?>" name="allusers[]" value="<?php echo esc_attr( $user->ID ); ?>" />
 		<?php
 	}
@@ -337,7 +367,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 				continue;
 			}
 
-			$path = ( $val->path === '/' ) ? '' : $val->path;
+			$path = ( '/' === $val->path ) ? '' : $val->path;
 			echo '<span class="site-' . $val->site_id . '" >';
 			echo '<a href="' . esc_url( network_admin_url( 'site-info.php?id=' . $val->userblog_id ) ) . '">' . str_replace( '.' . get_network()->domain, '', $val->domain . $path ) . '</a>';
 			echo ' <small class="row-actions">';
@@ -345,16 +375,16 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 			$actions['edit'] = '<a href="' . esc_url( network_admin_url( 'site-info.php?id=' . $val->userblog_id ) ) . '">' . __( 'Edit' ) . '</a>';
 
 			$class = '';
-			if ( $val->spam == 1 ) {
+			if ( 1 == $val->spam ) {
 				$class .= 'site-spammed ';
 			}
-			if ( $val->mature == 1 ) {
+			if ( 1 == $val->mature ) {
 				$class .= 'site-mature ';
 			}
-			if ( $val->deleted == 1 ) {
+			if ( 1 == $val->deleted ) {
 				$class .= 'site-deleted ';
 			}
-			if ( $val->archived == 1 ) {
+			if ( 1 == $val->archived ) {
 				$class .= 'site-archived ';
 			}
 
@@ -452,7 +482,7 @@ class WP_MS_Users_List_Table extends WP_List_Table {
 		$actions['edit'] = '<a href="' . $edit_link . '">' . __( 'Edit' ) . '</a>';
 
 		if ( current_user_can( 'delete_user', $user->ID ) && ! in_array( $user->user_login, $super_admins ) ) {
-			$actions['delete'] = '<a href="' . $delete = esc_url( network_admin_url( add_query_arg( '_wp_http_referer', urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ), wp_nonce_url( 'users.php', 'deleteuser' ) . '&amp;action=deleteuser&amp;id=' . $user->ID ) ) ) . '" class="delete">' . __( 'Delete' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( network_admin_url( add_query_arg( '_wp_http_referer', urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ), wp_nonce_url( 'users.php', 'deleteuser' ) . '&amp;action=deleteuser&amp;id=' . $user->ID ) ) ) . '" class="delete">' . __( 'Delete' ) . '</a>';
 		}
 
 		/**

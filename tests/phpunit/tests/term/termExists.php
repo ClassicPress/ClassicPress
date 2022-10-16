@@ -116,7 +116,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'array', $found );
+		$this->assertIsArray( $found );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -150,7 +150,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertSame( null, $found );
+		$this->assertNull( $found );
 	}
 
 	public function test_term_exists_taxonomy_nonempty_parent_nonempty_match_name() {
@@ -180,7 +180,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'array', $found );
+		$this->assertIsArray( $found );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -198,7 +198,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'array', $found );
+		$this->assertIsArray( $found );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -216,7 +216,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'array', $found );
+		$this->assertIsArray( $found );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -234,7 +234,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'string', $found );
+		$this->assertIsString( $found );
 		$this->assertEquals( $t, $found );
 	}
 
@@ -252,7 +252,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 
 		_unregister_taxonomy( 'foo' );
 
-		$this->assertInternalType( 'string', $found );
+		$this->assertIsString( $found );
 		$this->assertEquals( $t, $found );
 	}
 
@@ -262,7 +262,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 		// insert a term
 		$term = rand_str();
 		$t    = wp_insert_term( $term, 'wptests_tax' );
-		$this->assertInternalType( 'array', $t );
+		$this->assertIsArray( $t );
 		$this->assertEquals( $t['term_id'], term_exists( $t['term_id'] ) );
 		$this->assertEquals( $t['term_id'], term_exists( $term ) );
 

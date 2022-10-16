@@ -84,18 +84,18 @@ class Tests_Ajax_DeleteComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Ensure everything is correct
-		$this->assertEquals( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
-		$this->assertEquals( 'delete-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
+		// Ensure everything is correct.
+		$this->assertSame( $comment->comment_ID, (string) $xml->response[0]->comment['id'] );
+		$this->assertSame( 'delete-comment_' . $comment->comment_ID, (string) $xml->response['action'] );
 		$this->assertGreaterThanOrEqual( time() - 10, (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 		$this->assertLessThanOrEqual( time(), (int) $xml->response[0]->comment[0]->supplemental[0]->time[0] );
 
 		// trash, spam, delete should make the total go down
-		if ( in_array( $action, array( 'trash', 'spam', 'delete' ) ) ) {
+		if ( in_array( $action, array( 'trash', 'spam', 'delete' ), true ) ) {
 			$total = $_POST['_total'] - 1;
 
 			// unspam, untrash should make the total go up
-		} elseif ( in_array( $action, array( 'untrash', 'unspam' ) ) ) {
+		} elseif ( in_array( $action, array( 'untrash', 'unspam' ), true ) ) {
 			$total = $_POST['_total'] + 1;
 		}
 
@@ -105,7 +105,7 @@ class Tests_Ajax_DeleteComment extends WP_Ajax_UnitTestCase {
 
 		// Check for either possible total
 		$message = sprintf( 'returned value: %1$d $total: %2$d  $recalc_total: %3$d', (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], $total, $recalc_total );
-		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], array( $total, $recalc_total ) ), $message );
+		$this->assertTrue( in_array( (int) $xml->response[0]->comment[0]->supplemental[0]->total[0], array( $total, $recalc_total ), true ), $message );
 	}
 
 	/**
@@ -196,7 +196,7 @@ class Tests_Ajax_DeleteComment extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'delete-comment' );
 			$this->fail( 'Expected exception: WPAjaxDieStopException' );
 		} catch ( WPAjaxDieStopException $e ) {
-			$this->assertEquals( 10, strlen( $e->getMessage() ) );
+			$this->assertSame( 10, strlen( $e->getMessage() ) );
 			$this->assertTrue( is_numeric( $e->getMessage() ) );
 		} catch ( Exception $e ) {
 			$this->fail( 'Unexpected exception type: ' . get_class( $e ) );
@@ -236,7 +236,7 @@ class Tests_Ajax_DeleteComment extends WP_Ajax_UnitTestCase {
 		$this->_last_response = '';
 
 		// Force delete the comment
-		if ( 'delete' == $action ) {
+		if ( 'delete' === $action ) {
 			wp_delete_comment( $comment->comment_ID, true );
 		}
 
@@ -245,7 +245,7 @@ class Tests_Ajax_DeleteComment extends WP_Ajax_UnitTestCase {
 			$this->_handleAjax( 'delete-comment' );
 			$this->fail( 'Expected exception: WPAjaxDieStopException' );
 		} catch ( WPAjaxDieStopException $e ) {
-			$this->assertEquals( 10, strlen( $e->getMessage() ) );
+			$this->assertSame( 10, strlen( $e->getMessage() ) );
 			$this->assertTrue( is_numeric( $e->getMessage() ) );
 		} catch ( Exception $e ) {
 			$this->fail( 'Unexpected exception type: ' . get_class( $e ) );

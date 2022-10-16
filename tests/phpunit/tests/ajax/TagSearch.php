@@ -55,8 +55,8 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Ensure we found the right match
-		$this->assertEquals( $this->_last_response, 'chattels' );
+		// Ensure we found the right match.
+		$this->assertSame( $this->_last_response, 'chattels' );
 	}
 
 	/**
@@ -96,8 +96,8 @@ class Tests_Ajax_TagSearch extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Ensure we found the right match
-		$this->assertEquals( $this->_last_response, 'chattels' );
+		// Ensure we found the right match.
+		$this->assertSame( $this->_last_response, 'chattels' );
 	}
 
 	/**

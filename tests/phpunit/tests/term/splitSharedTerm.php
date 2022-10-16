@@ -19,10 +19,10 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	 *   'wptests_tax_2' taxonomy. This term is a child of t2, and is used to test parent/child relationships
 	 *   after term splitting.
 	 */
-	public function setUp() {
+	public function set_up() {
 		global $wpdb;
 
-		parent::setUp();
+		parent::set_up();
 
 		register_taxonomy( 'wptests_tax', 'post' );
 		register_taxonomy(
@@ -101,7 +101,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $this->terms['t2_child']['term_taxonomy_id'], $children[0]->term_taxonomy_id );
+		$this->assertSame( $this->terms['t2_child']['term_taxonomy_id'], $children[0]->term_taxonomy_id );
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $this->terms['t2_child']['term_taxonomy_id'], $children[0]->term_taxonomy_id );
+		$this->assertSame( $this->terms['t2_child']['term_taxonomy_id'], $children[0]->term_taxonomy_id );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 		$new_term_id = _split_shared_term( $t1['term_id'], $t3['term_taxonomy_id'] );
 
 		$t2_children = get_term_children( $t2['term_id'], 'wptests_tax_4' );
-		$this->assertEquals( array( $new_term_id ), $t2_children );
+		$this->assertSame( array( $new_term_id ), $t2_children );
 	}
 
 	/**
@@ -183,12 +183,12 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 		);
 		clean_term_cache( $t1['term_id'], 'category' );
 
-		$this->assertEquals( $t1['term_id'], get_option( 'default_category', -1 ) );
+		$this->assertSame( $t1['term_id'], get_option( 'default_category', -1 ) );
 
 		$new_term_id = _split_shared_term( $t1['term_id'], $t1['term_taxonomy_id'] );
 
 		$this->assertNotEquals( $new_term_id, $t1['term_id'] );
-		$this->assertEquals( $new_term_id, get_option( 'default_category', -1 ) );
+		$this->assertSame( $new_term_id, get_option( 'default_category', -1 ) );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 		$new_term_id = _split_shared_term( $shared_term_id, $nav_term->term_taxonomy_id );
 
 		$locations = get_nav_menu_locations();
-		$this->assertEquals( $new_term_id, $locations['foo'] );
+		$this->assertSame( $new_term_id, $locations['foo'] );
 	}
 
 	/**
@@ -307,7 +307,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 		$this->assertSame( 'Updated Foo Menu', $menu->description );
 
 		$menu_items = wp_get_nav_menu_items( $new_nav_menu_id );
-		$this->assertEquals( array( $cat_menu_item ), wp_list_pluck( $menu_items, 'ID' ) );
+		$this->assertSame( array( $cat_menu_item ), wp_list_pluck( $menu_items, 'ID' ) );
 	}
 
 	public function test_wp_get_split_terms() {
@@ -318,11 +318,11 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 			'wptests_tax_3' => $this->terms['t3']['term_id'],
 		);
 
-		$this->assertEqualSets( $expected, $found );
+		$this->assertSameSets( $expected, $found );
 	}
 
 	public function test_wp_get_split_term() {
 		$found = wp_get_split_term( $this->terms['t1']['term_id'], 'wptests_tax_3' );
-		$this->assertEquals( $this->terms['t3']['term_id'], $found );
+		$this->assertSame( $this->terms['t3']['term_id'], $found );
 	}
 }

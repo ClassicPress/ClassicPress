@@ -256,7 +256,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		}
 
 		// Headers
-		$cc = $bcc = $reply_to = array();
+		$cc       = array();
+		$bcc      = array();
+		$reply_to = array();
 
 		if ( empty( $headers ) ) {
 			$headers = array();
@@ -292,7 +294,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 						// Mainly for legacy -- process a From: header if it's there
 						case 'from':
 							$bracket_pos = strpos( $content, '<' );
-							if ( $bracket_pos !== false ) {
+							if ( false !== $bracket_pos ) {
 								// Text before the bracketed email is the "From" name.
 								if ( $bracket_pos > 0 ) {
 									$from_name = substr( $content, 0, $bracket_pos - 1 );
@@ -364,8 +366,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		if ( ! isset( $from_email ) ) {
 			// Get the site domain and get rid of www.
-			$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-			if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+			$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
+			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
 				$sitename = substr( $sitename, 4 );
 			}
 
@@ -520,13 +522,28 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
+		$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+
 		// Send!
 		try {
-			return $phpmailer->send();
-		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$send = $phpmailer->send();
 
-			$mail_error_data                             = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
-			$mail_error_data['phpmailer_exception_code'] = $e->getCode();
+			/**
+			 * Fires after PHPMailer has successfully sent a mail.
+			 *
+			 * The firing of this action does not necessarily mean that the recipient received the
+			 * email successfully. It only means that the `send` method above was able to
+			 * process the request without any errors.
+			 *
+			 * @since WP-5.9.0
+			 *
+			 * @param array $mail_data An array containing the mail recipient, subject, message, headers, and attachments.
+			 */
+			do_action( 'wp_mail_succeeded', $mail_data );
+
+			return $send;
+		} catch ( PHPMailer\PHPMailer\Exception $e ) {
+			$mail_data['phpmailer_exception_code'] = $e->getCode();
 
 			/**
 			 * Fires after a PHPMailer\PHPMailer\Exception is caught.
@@ -536,7 +553,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			 * @param WP_Error $error A WP_Error object with the phpmailerException message, and an array
 			 *                        containing the mail recipient, subject, message, headers, and attachments.
 			 */
-			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_error_data ) );
+			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $e->getMessage(), $mail_data ) );
 
 			return false;
 		}
@@ -575,8 +592,8 @@ if ( ! function_exists( 'wp_authenticate' ) ) :
 		 */
 		$user = apply_filters( 'authenticate', null, $username, $password );
 
-		if ( $user == null ) {
-			// TODO what should the error message be? (Or would these even happen?)
+		if ( null == $user ) {
+			// TODO: What should the error message be? (Or would these even happen?)
 			// Only needed if all authentication handlers fail to return anything.
 			$user = new WP_Error( 'authentication_failed', __( '<strong>ERROR</strong>: Invalid username, email address or incorrect password.' ) );
 		}
@@ -637,7 +654,8 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 	 * @return false|int False if invalid cookie, User ID if valid.
 	 */
 	function wp_validate_auth_cookie( $cookie = '', $scheme = '' ) {
-		if ( ! $cookie_elements = wp_parse_auth_cookie( $cookie, $scheme ) ) {
+		$cookie_elements = wp_parse_auth_cookie( $cookie, $scheme );
+		if ( ! $cookie_elements ) {
 			/**
 			 * Fires if an authentication cookie is malformed.
 			 *
@@ -655,7 +673,8 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 		$username = $cookie_elements['username'];
 		$hmac     = $cookie_elements['hmac'];
 		$token    = $cookie_elements['token'];
-		$expired  = $expiration = $cookie_elements['expiration'];
+		$expired    = $cookie_elements['expiration'];
+		$expiration = $cookie_elements['expiration'];
 
 		// Allow a grace period for POST and Ajax requests
 		if ( wp_doing_ajax() || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
@@ -1074,7 +1093,8 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		 */
 		$scheme = apply_filters( 'auth_redirect_scheme', '' );
 
-		if ( $user_id = wp_validate_auth_cookie( '', $scheme ) ) {
+		$user_id = wp_validate_auth_cookie( '', $scheme );
+		if ( $user_id ) {
 			/**
 			 * Fires before the authentication redirect.
 			 *
@@ -1379,8 +1399,9 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 			$location = 'http:' . $location;
 		}
 
-		// In php 5 parse_url may fail if the URL query part contains http://, bug https://core.trac.wordpress.org/ticket/38143
-		$test = ( $cut = strpos( $location, '?' ) ) ? substr( $location, 0, $cut ) : $location;
+		// In php 5 parse_url may fail if the URL query part contains http://, bug #38143
+		$cut  = strpos( $location, '?' );
+		$test = $cut ? substr( $location, 0, $cut ) : $location;
 
 		// @-operator is used to prevent possible warnings in PHP < 5.3.3.
 		$lp = @parse_url( $test );
@@ -1427,7 +1448,7 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 		 */
 		$allowed_hosts = (array) apply_filters( 'allowed_redirect_hosts', array( $wpp['host'] ), isset( $lp['host'] ) ? $lp['host'] : '' );
 
-		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts ) && $lp['host'] != strtolower( $wpp['host'] ) ) ) {
+		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts ) && strtolower( $wpp['host'] ) !== $lp['host'] ) ) {
 			$location = $default;
 		}
 
@@ -1505,8 +1526,8 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 			unset( $emails[ $author->user_email ] );
 		}
 
-		// The author moderated a comment on their own post
-		if ( $author && ! $notify_author && $post->post_author == get_current_user_id() ) {
+		// The author moderated a comment on their own post.
+		if ( $author && ! $notify_author && get_current_user_id() == $post->post_author ) {
 			unset( $emails[ $author->user_email ] );
 		}
 
@@ -1581,7 +1602,7 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 			$notify_message .= sprintf( __( 'Spam it: %s' ), admin_url( "comment.php?action=spam&c={$comment->comment_ID}#wpbody-content" ) ) . "\r\n";
 		}
 
-		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', strtolower( $_SERVER['SERVER_NAME'] ) );
+		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
 		if ( '' == $comment->comment_author ) {
 			$from = "From: \"$blogname\" <$wp_email>";
@@ -1893,7 +1914,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 	 *                           string (admin only), 'user', or 'both' (admin and user). Default empty.
 	 */
 	function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) {
-		if ( $deprecated !== null ) {
+		if ( null !== $deprecated ) {
 			_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
 		}
 
@@ -2459,8 +2480,8 @@ if ( ! function_exists( 'wp_rand' ) ) :
 
 		$value = abs( hexdec( $value ) );
 
-		// Reduce the value to be within the min - max range
-		if ( $max != 0 ) {
+		// Reduce the value to be within the min - max range.
+		if ( 0 != $max ) {
 			$value = $min + ( $max - $min + 1 ) * $value / ( $max_random_number + 1 );
 		}
 

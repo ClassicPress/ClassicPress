@@ -132,7 +132,7 @@ if ( isset( $_GET['action'] ) ) {
 			}
 
 			$updated_action = 'not_deleted';
-			if ( $id != '0' && $id != get_network()->site_id && current_user_can( 'delete_site', $id ) ) {
+			if ( '0' != $id && get_network()->site_id != $id && current_user_can( 'delete_site', $id ) ) {
 				wpmu_delete_blog( $id, true );
 				$updated_action = 'delete';
 			}
@@ -144,7 +144,7 @@ if ( isset( $_GET['action'] ) ) {
 			foreach ( (array) $_POST['site_ids'] as $site_id ) {
 				$site_id = (int) $site_id;
 
-				if ( $site_id == get_network()->site_id ) {
+				if ( get_network()->site_id == $site_id ) {
 					continue;
 				}
 
@@ -165,7 +165,7 @@ if ( isset( $_GET['action'] ) ) {
 				$doaction = $_POST['action'];
 
 				foreach ( (array) $_POST['allblogs'] as $key => $val ) {
-					if ( $val != '0' && $val != get_network()->site_id ) {
+					if ( '0' != $val && get_network()->site_id != $val ) {
 						switch ( $doaction ) {
 							case 'delete':
 								require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -211,7 +211,7 @@ if ( isset( $_GET['action'] ) ) {
 					$redirect_to = wp_get_referer();
 					$blogs       = (array) $_POST['allblogs'];
 					/** This action is documented in wp-admin/network/site-themes.php */
-					$redirect_to = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $blogs, $id );
+					$redirect_to = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $blogs, $id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 					wp_safe_redirect( $redirect_to );
 					exit();
 				}

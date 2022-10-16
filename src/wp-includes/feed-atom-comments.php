@@ -75,7 +75,8 @@ do_action( 'rss_tag_pre', 'atom-comments' );
 if ( have_comments() ) :
 	while ( have_comments() ) :
 		the_comment();
-		$comment_post = $GLOBALS['post'] = get_post( $comment->comment_post_ID );
+		$comment_post    = get_post( $comment->comment_post_ID );
+		$GLOBALS['post'] = $comment_post;
 		?>
 	<entry>
 		<title>
@@ -112,8 +113,8 @@ if ( have_comments() ) :
 		<content type="html" xml:base="<?php comment_link(); ?>"><![CDATA[<?php comment_text(); ?>]]></content>
 			<?php
 		endif; // post pass
-		// Return comment threading information (https://www.ietf.org/rfc/rfc4685.txt)
-		if ( $comment->comment_parent == 0 ) : // This comment is top level
+		// Return comment threading information (https://www.ietf.org/rfc/rfc4685.txt).
+		if ( 0 == $comment->comment_parent ) : // This comment is top-level.
 			?>
 		<thr:in-reply-to ref="<?php the_guid(); ?>" href="<?php the_permalink_rss(); ?>" type="<?php bloginfo_rss( 'html_type' ); ?>" />
 			<?php

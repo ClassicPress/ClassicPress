@@ -77,7 +77,8 @@ require ABSPATH . 'wp-admin/admin-header.php';
 
 <?php
 if ( ! is_multisite() ) {
-	$wp_site_url_class = $wp_home_class = '';
+	$wp_site_url_class = '';
+	$wp_home_class     = '';
 	if ( defined( 'WP_SITEURL' ) ) {
 		$wp_site_url_class = ' disabled';
 	}
@@ -116,7 +117,7 @@ if ( ! is_multisite() ) {
 <p class="description" id="new-admin-email-description"><?php _e( 'This address is used for admin purposes. If you change this we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ); ?></p>
 <?php
 $new_admin_email = get_option( 'new_admin_email' );
-if ( $new_admin_email && $new_admin_email != get_option( 'admin_email' ) ) :
+if ( $new_admin_email && get_option( 'admin_email' ) !== $new_admin_email ) :
 	?>
 	<div class="updated inline">
 	<p>
@@ -257,7 +258,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 			);
 
 			// Add note about deprecated WPLANG constant.
-			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && $locale !== WPLANG ) {
+			if ( defined( 'WPLANG' ) && ( '' !== WPLANG ) && WPLANG !== $locale ) {
 				if ( is_multisite() && current_user_can( 'manage_network_options' )
 					|| ! is_multisite() && current_user_can( 'manage_options' ) ) {
 					?>

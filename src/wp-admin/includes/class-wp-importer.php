@@ -65,7 +65,7 @@ class WP_Importer {
 
 		// Get count of permalinks
 		$meta_key = $importer_name . '_' . $bid . '_permalink';
-		$sql      = $wpdb->prepare( "SELECT COUNT( post_id ) AS cnt FROM $wpdb->postmeta WHERE meta_key = '%s'", $meta_key );
+		$sql      = $wpdb->prepare( "SELECT COUNT( post_id ) AS cnt FROM $wpdb->postmeta WHERE meta_key = %s", $meta_key );
 
 		$result = $wpdb->get_results( $sql );
 
@@ -133,7 +133,8 @@ class WP_Importer {
 			$blog_id = (int) $blog_id;
 		} else {
 			$blog = 'http://' . preg_replace( '#^https?://#', '', $blog_id );
-			if ( ( ! $parsed = parse_url( $blog ) ) || empty( $parsed['host'] ) ) {
+			$parsed = parse_url( $blog );
+			if ( ! $parsed || empty( $parsed['host'] ) ) {
 				fwrite( STDERR, "Error: can not determine blog_id from $blog_id\n" );
 				exit();
 			}
@@ -311,7 +312,7 @@ function get_cli_args( $param, $required = false ) {
 			}
 
 			$last_arg = $key;
-		} elseif ( $last_arg !== null ) {
+		} elseif ( null !== $last_arg ) {
 			$out[ $last_arg ] = $args[ $i ];
 		}
 	}

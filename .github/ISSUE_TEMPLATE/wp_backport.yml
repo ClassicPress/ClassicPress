@@ -1,0 +1,54 @@
+name: 📋 WP Backport
+description: Request a feature from WordPress to be backported to ClassicPress.
+title: "📋 "
+labels: ["type: wp backport", "status: needs triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a general summary of the backport in the title above.
+  - type: textarea
+    id: trac-tickets
+    attributes:
+      label: WordPress trac tickets
+      description: |
+        Provide links to all relevant WordPress trac tickets.
+      placeholder: |
+        - https://core.trac.wordpress.org/ticket/49412
+        - https://core.trac.wordpress.org/ticket/43773
+    validations:
+      required: true
+  - type: textarea
+    id: changesets
+    attributes:
+      label: WordPress changesets
+      description: |
+        Provide links to all relevant WordPress changesets that must be backported, if you know what they are.
+      placeholder: |
+        - https://core.trac.wordpress.org/changeset/53380
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: |
+        Why do you need this feature backported to ClassicPress? How will it help you?
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: Provide additional information.
+    validations:
+      required: false
+  - type: dropdown
+    attributes:
+      label: Can you help?
+      description: |
+        Can you help backport changeset(s)?
+        *Planning to submit a PR? Read our [contributing guidelines](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md#tips-for-good-prs) for details.*
+      multiple: false
+      options:
+        - Yes, I will submit a PR
+        - I can help test backports
+        - No, I can't help
+    validations:
+      required: true

@@ -53,16 +53,21 @@ function get_locale() {
 	// If multisite, check options.
 	if ( is_multisite() ) {
 		// Don't check blog option when installing.
-		if ( wp_installing() || ( false === $ms_locale = get_option( 'WPLANG' ) ) ) {
+		if ( wp_installing() ) {
 			$ms_locale = get_site_option( 'WPLANG' );
+		} else {
+			$ms_locale = get_option( 'WPLANG' );
+			if ( false === $ms_locale ) {
+				$ms_locale = get_site_option( 'WPLANG' );
+			}
 		}
 
-		if ( $ms_locale !== false ) {
+		if ( false !== $ms_locale ) {
 			$locale = $ms_locale;
 		}
 	} else {
 		$db_locale = get_option( 'WPLANG' );
-		if ( $db_locale !== false ) {
+		if ( false !== $db_locale ) {
 			$locale = $db_locale;
 		}
 	}
@@ -1066,7 +1071,7 @@ function get_available_languages( $dir = null ) {
  * @return array Array of language data.
  */
 function wp_get_installed_translations( $type ) {
-	if ( $type !== 'themes' && $type !== 'plugins' && $type !== 'core' ) {
+	if ( 'themes' !== $type && 'plugins' !== $type && 'core' !== $type ) {
 		return array();
 	}
 

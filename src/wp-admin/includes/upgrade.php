@@ -145,7 +145,7 @@ if ( ! function_exists( 'wp_install_defaults' ) ) :
 
 		if ( global_terms_enabled() ) {
 			$cat_id = $wpdb->get_var( $wpdb->prepare( "SELECT cat_ID FROM {$wpdb->sitecategories} WHERE category_nicename = %s", $cat_slug ) );
-			if ( $cat_id == null ) {
+			if ( null == $cat_id ) {
 				$wpdb->insert(
 					$wpdb->sitecategories,
 					array(
@@ -460,8 +460,9 @@ As a new ClassicPress user, you should go to <a href=\"%s\">your dashboard</a> t
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'user_level' ) );
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE user_id != %d AND meta_key = %s", $user_id, $table_prefix . 'capabilities' ) );
 
-			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.) TODO: Get previous_blog_id.
-			if ( ! is_super_admin( $user_id ) && $user_id != 1 ) {
+			// Delete any caps that snuck into the previously active blog. (Hardcoded to blog 1 for now.)
+			// TODO: Get previous_blog_id.
+			if ( ! is_super_admin( $user_id ) && 1 != $user_id ) {
 				$wpdb->delete(
 					$wpdb->usermeta,
 					array(
@@ -532,7 +533,7 @@ function wp_install_maybe_enable_pretty_permalinks() {
 		  */
 		$response          = wp_remote_get( $test_url, array( 'timeout' => 5 ) );
 		$x_pingback_header = wp_remote_retrieve_header( $response, 'x-pingback' );
-		$pretty_permalinks = $x_pingback_header && $x_pingback_header === get_bloginfo( 'pingback_url' );
+		$pretty_permalinks = $x_pingback_header && get_bloginfo( 'pingback_url' ) === $x_pingback_header;
 
 		if ( $pretty_permalinks ) {
 			return true;
@@ -1087,22 +1088,22 @@ function upgrade_160() {
 
 		if ( isset( $user->user_idmode ) ) :
 			$idmode = $user->user_idmode;
-			if ( $idmode == 'nickname' ) {
+			if ( 'nickname' === $idmode ) {
 				$id = $user->user_nickname;
 			}
-			if ( $idmode == 'login' ) {
+			if ( 'login' === $idmode ) {
 				$id = $user->user_login;
 			}
-			if ( $idmode == 'firstname' ) {
+			if ( 'firstname' === $idmode ) {
 				$id = $user->user_firstname;
 			}
-			if ( $idmode == 'lastname' ) {
+			if ( 'lastname' === $idmode ) {
 				$id = $user->user_lastname;
 			}
-			if ( $idmode == 'namefl' ) {
+			if ( 'namefl' === $idmode ) {
 				$id = $user->user_firstname . ' ' . $user->user_lastname;
 			}
-			if ( $idmode == 'namelf' ) {
+			if ( 'namelf' === $idmode ) {
 				$id = $user->user_lastname . ' ' . $user->user_firstname;
 			}
 			if ( ! $idmode ) {
@@ -1241,7 +1242,8 @@ function upgrade_230() {
 		$term_group  = 0;
 
 		// Associate terms with the same slug in a term group and make slugs unique.
-		if ( $exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) ) ) {
+		$exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) );
+		if ( $exists ) {
 			$term_group = $exists[0]->term_group;
 			$id         = $exists[0]->term_id;
 			$num        = 2;
@@ -1346,7 +1348,8 @@ function upgrade_230() {
 			$term_group = 0;
 
 			// Associate terms with the same slug in a term group and make slugs unique.
-			if ( $exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) ) ) {
+			$exists = $wpdb->get_results( $wpdb->prepare( "SELECT term_id, term_group FROM $wpdb->terms WHERE slug = %s", $slug ) );
+			if ( $exists ) {
 				$term_group = $exists[0]->term_group;
 				$term_id    = $exists[0]->term_id;
 			}
@@ -1730,6 +1733,7 @@ function upgrade_330() {
 			$sidebars_widgets                   = $_sidebars_widgets;
 			unset( $_sidebars_widgets );
 
+			// intentional fall-through to upgrade to the next version.
 		case 2:
 			$sidebars_widgets                  = retrieve_widgets();
 			$sidebars_widgets['array_version'] = 3;
@@ -1803,8 +1807,11 @@ function upgrade_350() {
 		}
 	}
 
-	if ( $wp_current_db_version < 22422 && $term = get_term_by( 'slug', 'post-format-standard', 'post_format' ) ) {
-		wp_delete_term( $term->term_id, 'post_format' );
+	if ( $wp_current_db_version < 22422 ) {
+		$term = get_term_by( 'slug', 'post-format-standard', 'post_format' );
+		if ( $term ) {
+			wp_delete_term( $term->term_id, 'post_format' );
+		}
 	}
 }
 
@@ -2167,7 +2174,7 @@ function upgrade_network() {
 	}
 
 	// 4.2
-	if ( $wp_current_db_version < 31351 && $wpdb->charset === 'utf8mb4' ) {
+	if ( $wp_current_db_version < 31351 && 'utf8mb4' === $wpdb->charset ) {
 		if ( wp_should_upgrade_global_tables() ) {
 			$wpdb->query( "ALTER TABLE $wpdb->usermeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))" );
 			$wpdb->query( "ALTER TABLE $wpdb->site DROP INDEX domain, ADD INDEX domain(domain(140),path(51))" );
@@ -2383,7 +2390,8 @@ function maybe_convert_table_to_utf8mb4( $table ) {
 function get_alloptions_110() {
 	global $wpdb;
 	$all_options = new stdClass;
-	if ( $options = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" ) ) {
+	$options     = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" );
+	if ( $options ) {
 		foreach ( $options as $option ) {
 			if ( 'siteurl' == $option->option_name || 'home' == $option->option_name || 'category_base' == $option->option_name ) {
 				$option->option_value = untrailingslashit( $option->option_value );
@@ -2409,21 +2417,21 @@ function get_alloptions_110() {
 function __get_option( $setting ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	global $wpdb;
 
-	if ( $setting == 'home' && defined( 'WP_HOME' ) ) {
+	if ( 'home' === $setting && defined( 'WP_HOME' ) ) {
 		return untrailingslashit( WP_HOME );
 	}
 
-	if ( $setting == 'siteurl' && defined( 'WP_SITEURL' ) ) {
+	if ( 'siteurl' === $setting && defined( 'WP_SITEURL' ) ) {
 		return untrailingslashit( WP_SITEURL );
 	}
 
 	$option = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s", $setting ) );
 
-	if ( 'home' == $setting && '' == $option ) {
+	if ( 'home' === $setting && '' == $option ) {
 		return __get_option( 'siteurl' );
 	}
 
-	if ( 'siteurl' == $setting || 'home' == $setting || 'category_base' == $setting || 'tag_base' == $setting ) {
+	if ( 'siteurl' === $setting || 'home' === $setting || 'category_base' === $setting || 'tag_base' === $setting ) {
 		$option = untrailingslashit( $option );
 	}
 
@@ -2465,6 +2473,8 @@ function deslash( $content ) {
  * Useful for creating new tables and updating existing tables to a new structure.
  *
  * @since WP-1.5.0
+ * @since WP-6.1.0 Ignores display width for integer data types on MySQL 8.0.17 or later,
+ *              to match MySQL behavior. Note: This does not affect MariaDB.
  *
  * @global wpdb  $wpdb
  *
@@ -2475,7 +2485,7 @@ function deslash( $content ) {
  *                              Default true.
  * @return array Strings containing the results of the various update queries.
  */
-function dbDelta( $queries = '', $execute = true ) {
+function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	global $wpdb;
 
 	if ( in_array( $queries, array( '', 'all', 'blog', 'global', 'ms_global' ), true ) ) {
@@ -2541,8 +2551,12 @@ function dbDelta( $queries = '', $execute = true ) {
 
 	$text_fields = array( 'tinytext', 'text', 'mediumtext', 'longtext' );
 	$blob_fields = array( 'tinyblob', 'blob', 'mediumblob', 'longblob' );
+	$int_fields  = array( 'tinyint', 'smallint', 'mediumint', 'int', 'integer', 'bigint' );
 
 	$global_tables = $wpdb->tables( 'global' );
+	$db_version     = $wpdb->db_version();
+	$db_server_info = $wpdb->db_server_info();
+
 	foreach ( $cqueries as $table => $qry ) {
 		// Upgrade global tables only for the main site. Don't upgrade at all if conditions are not optimal.
 		if ( in_array( $table, $global_tables ) && ! wp_should_upgrade_global_tables() ) {
@@ -2560,7 +2574,9 @@ function dbDelta( $queries = '', $execute = true ) {
 		}
 
 		// Clear the field and index arrays.
-		$cfields = $indices = $indices_without_subparts = array();
+		$cfields                  = array();
+		$indices                  = array();
+		$indices_without_subparts = array();
 
 		// Get all of the field names in the query from between the parentheses.
 		preg_match( '|\((.*)\)|ms', $qry, $match2 );
@@ -2633,7 +2649,8 @@ function dbDelta( $queries = '', $execute = true ) {
 					$index_name = ( 'PRIMARY KEY' === $index_type ) ? '' : '`' . strtolower( $index_matches['index_name'] ) . '`';
 
 					// Parse the columns. Multiple columns are separated by a comma.
-					$index_columns = $index_columns_without_subparts = array_map( 'trim', explode( ',', $index_matches['index_columns'] ) );
+					$index_columns                  = array_map( 'trim', explode( ',', $index_matches['index_columns'] ) );
+					$index_columns_without_subparts = $index_columns;
 
 					// Normalize columns.
 					foreach ( $index_columns as $id => &$index_column ) {
@@ -2693,13 +2710,39 @@ function dbDelta( $queries = '', $execute = true ) {
 			$tablefield_field_lowercased = strtolower( $tablefield->Field );
 			$tablefield_type_lowercased  = strtolower( $tablefield->Type );
 
-			// If the table field exists in the field array ...
+			$tablefield_type_without_parentheses = preg_replace(
+				'/'
+				. '(.+)'       // Field type, e.g. `int`.
+				. '\(\d*\)'    // Display width.
+				. '(.*)'       // Optional attributes, e.g. `unsigned`.
+				. '/',
+				'$1$2',
+				$tablefield_type_lowercased
+			);
+
+			// Get the type without attributes, e.g. `int`.
+			$tablefield_type_base = strtok( $tablefield_type_without_parentheses, ' ' );
+
+			// If the table field exists in the field array...
 			if ( array_key_exists( $tablefield_field_lowercased, $cfields ) ) {
 
 				// Get the field type from the query.
 				preg_match( '|`?' . $tablefield->Field . '`? ([^ ]*( unsigned)?)|i', $cfields[ $tablefield_field_lowercased ], $matches );
 				$fieldtype            = $matches[1];
 				$fieldtype_lowercased = strtolower( $fieldtype );
+
+				$fieldtype_without_parentheses = preg_replace(
+					'/'
+					. '(.+)'       // Field type, e.g. `int`.
+					. '\(\d*\)'    // Display width.
+					. '(.*)'       // Optional attributes, e.g. `unsigned`.
+					. '/',
+					'$1$2',
+					$fieldtype_lowercased
+				);
+
+				// Get the type without attributes, e.g. `int`.
+				$fieldtype_base = strtok( $fieldtype_without_parentheses, ' ' );
 
 				// Is actual field type different from the field type in query?
 				if ( $tablefield->Type != $fieldtype ) {
@@ -2712,6 +2755,21 @@ function dbDelta( $queries = '', $execute = true ) {
 
 					if ( in_array( $fieldtype_lowercased, $blob_fields ) && in_array( $tablefield_type_lowercased, $blob_fields ) ) {
 						if ( array_search( $fieldtype_lowercased, $blob_fields ) < array_search( $tablefield_type_lowercased, $blob_fields ) ) {
+							$do_change = false;
+						}
+					}
+
+					if ( in_array( $fieldtype_base, $int_fields, true ) && in_array( $tablefield_type_base, $int_fields, true )
+						&& $fieldtype_without_parentheses === $tablefield_type_without_parentheses
+					) {
+						/*
+						 * MySQL 8.0.17 or later does not support display width for integer data types,
+						 * so if display width is the only difference, it can be safely ignored.
+						 * Note: This is specific to MySQL and does not affect MariaDB.
+						 */
+						if ( version_compare( $db_version, '8.0.17', '>=' )
+							&& ! str_contains( $db_server_info, 'MariaDB' )
+						) {
 							$do_change = false;
 						}
 					}
@@ -2763,7 +2821,7 @@ function dbDelta( $queries = '', $execute = true ) {
 					'fieldname' => $tableindex->Column_name,
 					'subpart'   => $tableindex->Sub_part,
 				);
-				$index_ary[ $keyname ]['unique']     = ( $tableindex->Non_unique == 0 ) ? true : false;
+				$index_ary[ $keyname ]['unique']     = ( 0 == $tableindex->Non_unique ) ? true : false;
 				$index_ary[ $keyname ]['index_type'] = $tableindex->Index_type;
 			}
 
@@ -2772,7 +2830,7 @@ function dbDelta( $queries = '', $execute = true ) {
 
 				// Build a create string to compare to the query.
 				$index_string = '';
-				if ( $index_name == 'primary' ) {
+				if ( 'primary' === $index_name ) {
 					$index_string .= 'PRIMARY ';
 				} elseif ( $index_data['unique'] ) {
 					$index_string .= 'UNIQUE ';
@@ -2791,7 +2849,7 @@ function dbDelta( $queries = '', $execute = true ) {
 
 				// For each column in the index.
 				foreach ( $index_data['columns'] as $column_data ) {
-					if ( $index_columns != '' ) {
+					if ( '' != $index_columns ) {
 						$index_columns .= ',';
 					}
 
@@ -2803,7 +2861,8 @@ function dbDelta( $queries = '', $execute = true ) {
 				$index_string .= " ($index_columns)";
 
 				// Check if the index definition exists, ignoring subparts.
-				if ( ! ( ( $aindex = array_search( $index_string, $indices_without_subparts ) ) === false ) ) {
+				$aindex = array_search( $index_string, $indices_without_subparts );
+				if ( false !== $aindex ) {
 					// If the index already exists (even with different subparts), we don't need to create it.
 					unset( $indices_without_subparts[ $aindex ] );
 					unset( $indices[ $aindex ] );
@@ -2900,14 +2959,14 @@ function make_site_theme_from_oldschool( $theme_name, $template ) {
 	);
 
 	foreach ( $files as $oldfile => $newfile ) {
-		if ( $oldfile == 'index.php' ) {
+		if ( 'index.php' === $oldfile ) {
 			$oldpath = $home_path;
 		} else {
 			$oldpath = ABSPATH;
 		}
 
 		// Check to make sure it's not a new index.
-		if ( $oldfile == 'index.php' ) {
+		if ( 'index.php' === $oldfile ) {
 			$index = implode( '', file( "$oldpath/$oldfile" ) );
 			if ( strpos( $index, 'WP_USE_THEMES' ) !== false ) {
 				if ( ! copy( WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile" ) ) {
@@ -3081,7 +3140,7 @@ function make_site_theme() {
 
 	// Make the new site theme active.
 	$current_template = __get_option( 'template' );
-	if ( $current_template == WP_DEFAULT_THEME ) {
+	if ( WP_DEFAULT_THEME == $current_template ) {
 		update_option( 'template', $template );
 		update_option( 'stylesheet', $template );
 	}

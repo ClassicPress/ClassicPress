@@ -474,8 +474,8 @@ function wpautop( $pee, $br = true ) {
 		foreach ( $pee_parts as $pee_part ) {
 			$start = strpos( $pee_part, '<pre' );
 
-			// Malformed html?
-			if ( $start === false ) {
+			// Malformed HTML?
+			if ( false === $start ) {
 				$pee .= $pee_part;
 				continue;
 			}
@@ -835,6 +835,7 @@ function shortcode_unautop( $pee ) {
 	$tagregexp = join( '|', array_map( 'preg_quote', array_keys( $shortcode_tags ) ) );
 	$spaces    = wp_spaces_regexp();
 
+	// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound,WordPress.WhiteSpace.PrecisionAlignment.Found -- don't remove regex indentation
 	$pattern =
 		  '/'
 		. '<p>'                              // Opening paragraph
@@ -970,10 +971,10 @@ function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = fals
 
 	$_quote_style = $quote_style;
 
-	if ( $quote_style === 'double' ) {
+	if ( 'double' === $quote_style ) {
 		$quote_style  = ENT_COMPAT;
 		$_quote_style = ENT_COMPAT;
-	} elseif ( $quote_style === 'single' ) {
+	} elseif ( 'single' === $quote_style ) {
 		$quote_style = ENT_NOQUOTES;
 	}
 
@@ -1066,16 +1067,16 @@ function wp_specialchars_decode( $string, $quote_style = ENT_NOQUOTES ) {
 		'/&#x0*26;/i' => '&#x26;',
 	);
 
-	if ( $quote_style === ENT_QUOTES ) {
+	if ( ENT_QUOTES === $quote_style ) {
 		$translation      = array_merge( $single, $double, $others );
 		$translation_preg = array_merge( $single_preg, $double_preg, $others_preg );
-	} elseif ( $quote_style === ENT_COMPAT || $quote_style === 'double' ) {
+	} elseif ( ENT_COMPAT === $quote_style || 'double' === $quote_style ) {
 		$translation      = array_merge( $double, $others );
 		$translation_preg = array_merge( $double_preg, $others_preg );
-	} elseif ( $quote_style === 'single' ) {
+	} elseif ( 'single' === $quote_style ) {
 		$translation      = array_merge( $single, $others );
 		$translation_preg = array_merge( $single_preg, $others_preg );
-	} elseif ( $quote_style === ENT_NOQUOTES ) {
+	} elseif ( ENT_NOQUOTES === $quote_style ) {
 		$translation      = $others;
 		$translation_preg = $others_preg;
 	}
@@ -2133,23 +2134,26 @@ function sanitize_user( $username, $strict = false ) {
  *
  * @since WP-3.0.0
  *
- * @param string $key String key
- * @return string Sanitized key
+ * @param string $key String key.
+ * @return string Sanitized key.
  */
 function sanitize_key( $key ) {
-	$raw_key = $key;
-	$key     = strtolower( $key );
-	$key     = preg_replace( '/[^a-z0-9_\-]/', '', $key );
+	$sanitized_key = '';
+
+	if ( is_scalar( $key ) ) {
+		$sanitized_key = strtolower( $key );
+		$sanitized_key = preg_replace( '/[^a-z0-9_\-]/', '', $sanitized_key );
+	}
 
 	/**
 	 * Filters a sanitized key string.
 	 *
 	 * @since WP-3.0.0
 	 *
-	 * @param string $key     Sanitized key.
-	 * @param string $raw_key The key prior to sanitization.
+	 * @param string $sanitized_key Sanitized key.
+	 * @param string $key           The key prior to sanitization.
 	 */
-	return apply_filters( 'sanitize_key', $key, $raw_key );
+	return apply_filters( 'sanitize_key', $sanitized_key, $key );
 }
 
 /**
@@ -2437,7 +2441,7 @@ function convert_invalid_entities( $content ) {
  * @param bool   $force If true, forces balancing, ignoring the value of the option. Default false.
  * @return string Balanced text
  */
-function balanceTags( $text, $force = false ) {
+function balanceTags( $text, $force = false ) {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	if ( $force || get_option( 'use_balanceTags' ) == 1 ) {
 		return force_balance_tags( $text );
 	} else {
@@ -2468,10 +2472,11 @@ function force_balance_tags( $text ) {
 	$stacksize = 0;
 	$tagqueue  = '';
 	$newtext   = '';
-	// Known single-entity/self-closing tags
-	$single_tags = array( 'area', 'base', 'basefont', 'br', 'col', 'command', 'embed', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param', 'source' );
-	// Tags that can be immediately nested within themselves
-	$nestable_tags = array( 'blockquote', 'div', 'object', 'q', 'span' );
+
+	// Known single-entity/self-closing tags.
+	$single_tags = array( 'area', 'base', 'basefont', 'br', 'col', 'command', 'embed', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param', 'source', 'track', 'wbr' );
+	// Tags that can be immediately nested within themselves.
+	$nestable_tags = array( 'article', 'aside', 'blockquote', 'details', 'div', 'figure', 'object', 'q', 'section', 'span' );
 
 	// WP bug fix for comments - in case you REALLY meant to type '< !--'
 	$text = str_replace( '< !--', '<    !--', $text );
@@ -2493,9 +2498,8 @@ function force_balance_tags( $text ) {
 			if ( $stacksize <= 0 ) {
 				$tag = '';
 				// or close to be safe $tag = '/' . $tag;
-			}
-			// if stacktop value = tag close value then pop
-			elseif ( $tagstack[ $stacksize - 1 ] == $tag ) { // found closing tag
+				// if stacktop value = tag close value then pop
+			} elseif ( $tagstack[ $stacksize - 1 ] == $tag ) { // found closing tag
 				$tag = '</' . $tag . '>'; // Close Tag
 				// Pop
 				array_pop( $tagstack );
@@ -2521,21 +2525,15 @@ function force_balance_tags( $text ) {
 			// If it's an empty tag "< >", do nothing
 			if ( '' == $tag ) {
 				// do nothing
-			}
-			// ElseIf it presents itself as a self-closing tag...
-			elseif ( substr( $regex[2], -1 ) == '/' ) {
+			} elseif ( substr( $regex[2], -1 ) == '/' ) { // ElseIf it presents itself as a self-closing tag...
 				// ...but it isn't a known single-entity self-closing tag, then don't let it be treated as such and
 				// immediately close it with a closing tag (the tag will encapsulate no text as a result)
 				if ( ! in_array( $tag, $single_tags ) ) {
 					$regex[2] = trim( substr( $regex[2], 0, -1 ) ) . "></$tag";
 				}
-			}
-			// ElseIf it's a known single-entity tag but it doesn't close itself, do so
-			elseif ( in_array( $tag, $single_tags ) ) {
+			} elseif ( in_array( $tag, $single_tags ) ) { // ElseIf it's a known single-entity tag but it doesn't close itself, do so
 				$regex[2] .= '/';
-			}
-			// Else it's not a single-entity tag
-			else {
+			} else { // Else it's not a single-entity tag
 				// If the top of the stack is the same as the tag we want to push, close previous tag
 				if ( $stacksize > 0 && ! in_array( $tag, $nestable_tags ) && $tagstack[ $stacksize - 1 ] == $tag ) {
 					$tagqueue = '</' . array_pop( $tagstack ) . '>';
@@ -2768,11 +2766,11 @@ function antispambot( $email_address, $hex_encoding = 0 ) {
 	$email_no_spam_address = '';
 	for ( $i = 0, $len = strlen( $email_address ); $i < $len; $i++ ) {
 		$j = rand( 0, 1 + $hex_encoding );
-		if ( $j == 0 ) {
+		if ( 0 == $j ) {
 			$email_no_spam_address .= '&#' . ord( $email_address[ $i ] ) . ';';
-		} elseif ( $j == 1 ) {
+		} elseif ( 1 == $j ) {
 			$email_no_spam_address .= $email_address[ $i ];
-		} elseif ( $j == 2 ) {
+		} elseif ( 2 == $j ) {
 			$email_no_spam_address .= '%' . zeroise( dechex( ord( $email_address[ $i ] ) ), 2 );
 		}
 	}
@@ -2886,7 +2884,7 @@ function make_clickable( $text ) {
 			$nested_code_pre--;
 		}
 
-		if ( $nested_code_pre || empty( $piece ) || ( $piece[0] === '<' && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
+		if ( $nested_code_pre || empty( $piece ) || ( '<' === $piece[0] && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
 			$r .= $piece;
 			continue;
 		}
@@ -2916,7 +2914,8 @@ function make_clickable( $text ) {
 					)*
 				)
 				(\)?)                                                  # 3: Trailing closing parenthesis (for parethesis balancing post processing)
-			~xS'; // The regex is a non-anchored pattern and does not have a single fixed starting character.
+			~xS';
+			// The regex is a non-anchored pattern and does not have a single fixed starting character.
 				  // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
 
 			$ret = preg_replace_callback( $url_clickable, '_make_url_clickable_cb', $ret );
@@ -3351,8 +3350,8 @@ function get_date_from_gmt( $string, $format = 'Y-m-d H:i:s' ) {
  * @return int|float The offset in seconds.
  */
 function iso8601_timezone_to_offset( $timezone ) {
-	// $timezone is either 'Z' or '[+|-]hhmm'
-	if ( $timezone == 'Z' ) {
+	// $timezone is either 'Z' or '[+|-]hhmm'.
+	if ( 'Z' === $timezone ) {
 		$offset = 0;
 	} else {
 		$sign    = ( substr( $timezone, 0, 1 ) == '+' ) ? 1 : -1;
@@ -4413,8 +4412,8 @@ function sanitize_option( $option, $value ) {
 
 		case 'default_ping_status':
 		case 'default_comment_status':
-			// Options that if not there have 0 value but need to be something like "closed"
-			if ( $value == '0' || $value == '' ) {
+			// Options that if not there have 0 value but need to be something like "closed".
+			if ( '0' == $value || '' == $value ) {
 				$value = 'closed';
 			}
 			break;
@@ -4731,9 +4730,9 @@ function wp_sprintf( $pattern ) {
 		}
 		$fragment = substr( $pattern, $start, $end - $start );
 
-		// Fragment has a specifier
-		if ( $pattern[ $start ] == '%' ) {
-			// Find numbered arguments or take the next one in order
+		// Fragment has a specifier.
+		if ( '%' === $pattern[ $start ] ) {
+			// Find numbered arguments or take the next one in order.
 			if ( preg_match( '/^%(\d+)\$/', $fragment, $matches ) ) {
 				$arg      = isset( $args[ $matches[1] ] ) ? $args[ $matches[1] ] : '';
 				$fragment = str_replace( "%{$matches[1]}$", '%', $fragment );
@@ -5720,7 +5719,8 @@ function sanitize_hex_color_no_hash( $color ) {
  * @return string
  */
 function maybe_hash_hex_color( $color ) {
-	if ( $unhashed = sanitize_hex_color_no_hash( $color ) ) {
+	$unhashed = sanitize_hex_color_no_hash( $color );
+	if ( $unhashed ) {
 		return '#' . $unhashed;
 	}
 

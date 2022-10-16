@@ -21,12 +21,12 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 
 		$object = $scripts->query( 'jquery', 'registered' );
 		$this->assertInstanceOf( '_WP_Dependency', $object );
-		$this->assertEqualSets( $object->deps, array_keys( $jquery_scripts ) );
+		$this->assertSameSets( $object->deps, array_keys( $jquery_scripts ) );
 		foreach ( $object->deps as $dep ) {
 			$o = $scripts->query( $dep, 'registered' );
 			$this->assertInstanceOf( '_WP_Dependency', $object );
 			$this->assertTrue( isset( $jquery_scripts[ $dep ] ) );
-			$this->assertEquals( $jquery_scripts[ $dep ], $o->src );
+			$this->assertSame( $jquery_scripts[ $dep ], $o->src );
 		}
 	}
 
@@ -34,7 +34,7 @@ class Tests_Dependencies_jQuery extends WP_UnitTestCase {
 		$contents   = trim( file_get_contents( ABSPATH . WPINC . '/js/jquery/jquery.js' ) );
 		$noconflict = 'jQuery.noConflict();';
 		$end        = substr( $contents, - strlen( $noconflict ) );
-		$this->assertEquals( $noconflict, $end );
+		$this->assertSame( $noconflict, $end );
 	}
 
 	/**

@@ -109,7 +109,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 			$_GET['author'] = get_current_user_id();
 		}
 
-		if ( 'post' === $post_type && $sticky_posts = get_option( 'sticky_posts' ) ) {
+		$sticky_posts = get_option( 'sticky_posts' );
+		if ( 'post' === $post_type && $sticky_posts ) {
 			$sticky_posts             = implode( ', ', array_map( 'absint', (array) $sticky_posts ) );
 			$this->sticky_posts_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT( 1 ) FROM $wpdb->posts WHERE post_type = %s AND post_status NOT IN ('trash', 'auto-draft') AND ID IN ($sticky_posts)", $post_type ) );
 		}
@@ -166,7 +167,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				$total_items = $post_counts[ $_REQUEST['post_status'] ];
 			} elseif ( isset( $_REQUEST['show_sticky'] ) && $_REQUEST['show_sticky'] ) {
 				$total_items = $this->sticky_posts_count;
-			} elseif ( isset( $_GET['author'] ) && $_GET['author'] == get_current_user_id() ) {
+			} elseif ( isset( $_GET['author'] ) && get_current_user_id() == $_GET['author'] ) {
 				$total_items = $this->user_posts_count;
 			} else {
 				$total_items = array_sum( $post_counts );
@@ -179,13 +180,13 @@ class WP_Posts_List_Table extends WP_List_Table {
 		}
 
 		if ( ! empty( $_REQUEST['mode'] ) ) {
-			$mode = $_REQUEST['mode'] === 'excerpt' ? 'excerpt' : 'list';
+			$mode = 'excerpt' === $_REQUEST['mode'] ? 'excerpt' : 'list';
 			set_user_setting( 'posts_list_mode', $mode );
 		} else {
 			$mode = get_user_setting( 'posts_list_mode', 'list' );
 		}
 
-		$this->is_trash = isset( $_REQUEST['post_status'] ) && $_REQUEST['post_status'] === 'trash';
+		$this->is_trash = isset( $_REQUEST['post_status'] ) && 'trash' === $_REQUEST['post_status'];
 
 		$this->set_pagination_args(
 			array(
@@ -246,7 +247,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 	protected function get_edit_link( $args, $label, $class = '' ) {
 		$url = add_query_arg( $args, 'edit.php' );
 
-		$class_html = $aria_current = '';
+		$class_html   = '';
+		$aria_current = '';
 		if ( ! empty( $class ) ) {
 			$class_html = sprintf(
 				' class="%s"',
@@ -862,9 +864,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 		if ( current_user_can( 'edit_post', $post->ID ) ) :
 			?>
 			<label class="screen-reader-text" for="cb-select-<?php the_ID(); ?>">
-																			 <?php
-																				printf( __( 'Select %s' ), _draft_or_post_title() );
-																				?>
+				<?php printf( __( 'Select %s' ), _draft_or_post_title() ); ?>
 			</label>
 			<input id="cb-select-<?php the_ID(); ?>" type="checkbox" name="post[]" value="<?php the_ID(); ?>" />
 			<div class="locked-indicator">
@@ -934,7 +934,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 		$can_edit_post = current_user_can( 'edit_post', $post->ID );
 
-		if ( $can_edit_post && $post->post_status != 'trash' ) {
+		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			$lock_holder = wp_check_post_lock( $post->ID );
 
 			if ( $lock_holder ) {
@@ -942,7 +942,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 				$locked_avatar = get_avatar( $lock_holder->ID, 18 );
 				$locked_text   = esc_html( sprintf( __( '%s is currently editing' ), $lock_holder->display_name ) );
 			} else {
-				$locked_avatar = $locked_text = '';
+				$locked_avatar = '';
+				$locked_text   = '';
 			}
 
 			echo '<div class="locked-info"><span class="locked-avatar">' . $locked_avatar . '</span> <span class="locked-text">' . $locked_text . "</span></div>\n";
@@ -967,7 +968,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 		$title = _draft_or_post_title();
 
-		if ( $can_edit_post && $post->post_status != 'trash' ) {
+		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			printf(
 				'<a class="row-title" href="%s" aria-label="%s">%s%s</a>',
 				get_edit_post_link( $post->ID ),
@@ -1022,7 +1023,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 		global $mode;
 
 		if ( '0000-00-00 00:00:00' === $post->post_date ) {
-			$t_time    = $h_time = __( 'Unpublished' );
+			$t_time    = __( 'Unpublished' );
+			$h_time    = $t_time;
 			$time_diff = 0;
 		} else {
 			$t_time = get_the_time( __( 'Y/m/d g:i:s a' ) );
@@ -1508,7 +1510,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 						$users_opt['show_option_none'] = __( '&mdash; No Change &mdash;' );
 					}
 
-					if ( $authors = wp_dropdown_users( $users_opt ) ) :
+					$authors = wp_dropdown_users( $users_opt );
+					if ( $authors ) :
 						$authors_dropdown  = '<label class="inline-edit-author">';
 						$authors_dropdown .= '<span class="title">' . __( 'Author' ) . '</span>';
 						$authors_dropdown .= $authors;
@@ -1555,7 +1558,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 				<?php foreach ( $hierarchical_taxonomies as $taxonomy ) : ?>
 
 			<span class="title inline-edit-categories-label"><?php echo esc_html( $taxonomy->labels->name ); ?></span>
-			<input type="hidden" name="<?php echo ( $taxonomy->name === 'category' ) ? 'post_category[]' : 'tax_input[' . esc_attr( $taxonomy->name ) . '][]'; ?>" value="0" />
+						<input type="hidden" name="<?php echo ( 'category' === $taxonomy->name ) ? 'post_category[]' : 'tax_input[' . esc_attr( $taxonomy->name ) . '][]'; ?>" value="0" />
 			<ul class="cat-checklist <?php echo esc_attr( $taxonomy->name ); ?>-checklist">
 					<?php wp_terms_checklist( null, array( 'taxonomy' => $taxonomy->name ) ); ?>
 			</ul>

@@ -236,7 +236,8 @@ if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 				}
 			}
 
-			if ( false !== ( $pos = strpos( $menu_file, '?' ) ) ) {
+			$pos = strpos( $menu_file, '?' );
+			if ( false !== $pos ) {
 				$menu_file = substr( $menu_file, 0, $pos );
 			}
 
@@ -375,7 +376,8 @@ foreach ( $themes as $theme ) :
 
 <?php
 // List broken themes, if any.
-if ( ! is_multisite() && current_user_can( 'edit_themes' ) && $broken_themes = wp_get_themes( array( 'errors' => true ) ) ) {
+$broken_themes = wp_get_themes( array( 'errors' => true ) );
+if ( ! is_multisite() && current_user_can( 'edit_themes' ) && $broken_themes ) {
 	?>
 
 <div class="broken-themes">

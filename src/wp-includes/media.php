@@ -66,7 +66,7 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 	if ( is_array( $size ) ) {
 		$max_width  = $size[0];
 		$max_height = $size[1];
-	} elseif ( $size == 'thumb' || $size == 'thumbnail' ) {
+	} elseif ( 'thumb' === $size || 'thumbnail' === $size ) {
 		$max_width  = intval( get_option( 'thumbnail_size_w' ) );
 		$max_height = intval( get_option( 'thumbnail_size_h' ) );
 		// last chance thumbnail size defaults
@@ -74,18 +74,18 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 			$max_width  = 128;
 			$max_height = 96;
 		}
-	} elseif ( $size == 'medium' ) {
+	} elseif ( 'medium' === $size ) {
 		$max_width  = intval( get_option( 'medium_size_w' ) );
 		$max_height = intval( get_option( 'medium_size_h' ) );
 
-	} elseif ( $size == 'medium_large' ) {
+	} elseif ( 'medium_large' === $size ) {
 		$max_width  = intval( get_option( 'medium_large_size_w' ) );
 		$max_height = intval( get_option( 'medium_large_size_h' ) );
 
 		if ( intval( $content_width ) > 0 ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	} elseif ( $size == 'large' ) {
+	} elseif ( 'large' === $size ) {
 		/*
 		 * We're inserting a large size image into the editor. If it's a really
 		 * big image we'll scale it down to fit reasonably within the editor
@@ -104,9 +104,7 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 		if ( intval( $content_width ) > 0 && 'edit' === $context ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	}
-	// $size == 'full' has no constraint
-	else {
+	} else { // $size == 'full' has no constraint
 		$max_width  = $width;
 		$max_height = $height;
 	}
@@ -226,8 +224,8 @@ function image_downsize( $id, $size = 'medium' ) {
 		$width           = $intermediate['width'];
 		$height          = $intermediate['height'];
 		$is_intermediate = true;
-	} elseif ( $size == 'thumbnail' ) {
-		// fall back to the old thumbnail
+	} elseif ( 'thumbnail' === $size ) {
+		// Fall back to the old thumbnail.
 		$thumb_file = wp_get_attachment_thumb_file( $id );
 		$info       = null;
 
@@ -993,7 +991,7 @@ function _wp_get_attachment_relative_path( $file ) {
  *                    or false if the size doesn't exist.
  */
 function _wp_get_image_size_from_meta( $size_name, $image_meta ) {
-	if ( $size_name === 'full' ) {
+	if ( 'full' === $size_name ) {
 		return array(
 			absint( $image_meta['width'] ),
 			absint( $image_meta['height'] ),
@@ -1403,7 +1401,7 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 		 */
 		$image_filename = wp_basename( $image_src );
 
-		if ( $image_filename === wp_basename( $image_meta['file'] ) ) {
+		if ( wp_basename( $image_meta['file'] ) === $image_filename ) {
 			$width  = (int) $image_meta['width'];
 			$height = (int) $image_meta['height'];
 		} else {
@@ -1848,12 +1846,13 @@ function gallery_shortcode( $attr ) {
 				</{$captiontag}>";
 		}
 		$output .= "</{$itemtag}>";
-		if ( ! $html5 && $columns > 0 && ++$i % $columns == 0 ) {
+
+		if ( ! $html5 && $columns > 0 && 0 === ++$i % $columns ) {
 			$output .= '<br style="clear: both" />';
 		}
 	}
 
-	if ( ! $html5 && $columns > 0 && $i % $columns !== 0 ) {
+	if ( ! $html5 && $columns > 0 && 0 !== $i % $columns ) {
 		$output .= "
 			<br style='clear: both' />";
 	}
@@ -2019,7 +2018,7 @@ function wp_playlist_shortcode( $attr ) {
 
 	$id = intval( $atts['id'] );
 
-	if ( $atts['type'] !== 'audio' ) {
+	if ( 'audio' !== $atts['type'] ) {
 		$atts['type'] = 'video';
 	}
 
@@ -2841,7 +2840,7 @@ function get_attachment_taxonomies( $attachment, $output = 'names' ) {
 	}
 
 	$file     = get_attached_file( $attachment->ID );
-	$filename = basename( $file );
+	$filename = wp_basename( $file );
 
 	$objects = array( 'attachment' );
 
@@ -2905,6 +2904,29 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
 }
 
 /**
+ * Determines whether the value is an acceptable type for GD image functions.
+ *
+ * In PHP 8.0, the GD extension uses GdImage objects for its data structures.
+ * This function checks if the passed value is either a resource of type `gd`
+ * or a GdImage object instance. Any other type will return false.
+ *
+ * @since WP-5.6.0
+ *
+ * @param resource|GdImage|false $image A value to check the type for.
+ * @return bool True if $image is either a GD image resource or GdImage instance,
+ *              false otherwise.
+ */
+function is_gd_image( $image ) {
+	if ( is_resource( $image ) && 'gd' === get_resource_type( $image )
+		|| is_object( $image ) && $image instanceof GdImage
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Create new GD image resource with transparency support
  *
  * @todo: Deprecate if possible.
@@ -2912,15 +2934,17 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
  * @since WP-2.9.0
  *
  * @param int $width  Image width in pixels.
- * @param int $height Image height in pixels..
- * @return resource The GD image resource.
+ * @param int $height Image height in pixels.
+ * @return resource|GdImage The GD image resource or GdImage instance.
  */
 function wp_imagecreatetruecolor( $width, $height ) {
 	$img = imagecreatetruecolor( $width, $height );
-	if ( is_resource( $img ) && function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
+
+	if ( is_gd_image( $img ) && function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
 		imagealphablending( $img, false );
 		imagesavealpha( $img, true );
 	}
+
 	return $img;
 }
 
@@ -3241,7 +3265,7 @@ function wp_prepare_attachment_for_js( $attachment ) {
 	if ( isset( $meta['filesize'] ) ) {
 		$bytes = $meta['filesize'];
 	} elseif ( file_exists( $attached_file ) ) {
-		$bytes = filesize( $attached_file );
+		$bytes = wp_filesize( $attached_file );
 	} else {
 		$bytes = '';
 	}

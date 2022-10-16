@@ -143,7 +143,7 @@ require ABSPATH . WPINC . '/class-wp-role.php';
 require ABSPATH . WPINC . '/class-wp-user.php';
 require ABSPATH . WPINC . '/class-wp-query.php';
 require ABSPATH . WPINC . '/query.php';
-require ABSPATH . WPINC . '/date.php';
+require ABSPATH . WPINC . '/class-wp-date-query.php';
 require ABSPATH . WPINC . '/theme.php';
 require ABSPATH . WPINC . '/class-wp-theme.php';
 require ABSPATH . WPINC . '/template.php';
@@ -194,7 +194,7 @@ require ABSPATH . WPINC . '/canonical.php';
 require ABSPATH . WPINC . '/shortcodes.php';
 require ABSPATH . WPINC . '/embed.php';
 require ABSPATH . WPINC . '/class-wp-embed.php';
-require ABSPATH . WPINC . '/class-oembed.php';
+require ABSPATH . WPINC . '/class-wp-oembed.php';
 require ABSPATH . WPINC . '/class-wp-oembed-controller.php';
 require ABSPATH . WPINC . '/media.php';
 require ABSPATH . WPINC . '/http.php';
@@ -233,6 +233,9 @@ require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-comment-meta-fields.ph
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-post-meta-fields.php';
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-term-meta-fields.php';
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-user-meta-fields.php';
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require ABSPATH . WPINC . '/class-fix-wpcli.php';
+}
 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
@@ -450,7 +453,8 @@ do_action( 'init' );
 
 // Check site status
 if ( is_multisite() ) {
-	if ( true !== ( $file = ms_site_check() ) ) {
+	$file = ms_site_check();
+	if ( true !== $file ) {
 		require $file;
 		die();
 	}

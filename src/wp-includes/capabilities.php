@@ -514,7 +514,7 @@ function map_meta_cap( $cap, $user_id ) {
 				break;
 			}
 
-			if ( 'delete_term' === $cap && ( $term->term_id == get_option( 'default_' . $term->taxonomy ) ) ) {
+			if ( 'delete_term' === $cap && ( get_option( 'default_' . $term->taxonomy ) == $term->term_id ) ) {
 				$caps[] = 'do_not_allow';
 				break;
 			}
@@ -661,7 +661,8 @@ function current_user_can_for_blog( $blog_id, $capability ) {
  * @return bool Whether the post author has the given capability.
  */
 function author_can( $post, $capability ) {
-	if ( ! $post = get_post( $post ) ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
 		return false;
 	}
 
@@ -787,7 +788,7 @@ function get_super_admins() {
  * @return bool True if the user is a site admin.
  */
 function is_super_admin( $user_id = false ) {
-	if ( ! $user_id || $user_id == get_current_user_id() ) {
+	if ( ! $user_id || get_current_user_id() == $user_id ) {
 		$user = wp_get_current_user();
 	} else {
 		$user = get_userdata( $user_id );
@@ -889,7 +890,8 @@ function revoke_super_admin( $user_id ) {
 
 	$user = get_userdata( $user_id );
 	if ( $user && 0 !== strcasecmp( $user->user_email, get_site_option( 'admin_email' ) ) ) {
-		if ( false !== ( $key = array_search( $user->user_login, $super_admins ) ) ) {
+		$key = array_search( $user->user_login, $super_admins );
+		if ( false !== $key ) {
 			unset( $super_admins[ $key ] );
 			update_site_option( 'site_admins', $super_admins );
 

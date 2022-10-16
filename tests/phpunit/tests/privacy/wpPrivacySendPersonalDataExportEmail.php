@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 
 /**
@@ -13,13 +13,13 @@
  * @group privacy
  * @covers wp_privacy_send_personal_data_export_email
  *
- * @since 4.9.6
+ * @since WP-4.9.6
  */
 class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase {
 	/**
 	 * Request ID.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var int $request_id
 	 */
@@ -28,7 +28,7 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	/**
 	 * Requester Email.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @var string $requester_email
 	 */
@@ -37,27 +37,28 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	/**
 	 * Reset the mocked phpmailer instance before each test method.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
-	function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		reset_phpmailer_instance();
 	}
 
 	/**
 	 * Reset the mocked phpmailer instance after each test method.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
-	function tearDown() {
+	public function tear_down() {
 		reset_phpmailer_instance();
-		parent::tearDown();
+		restore_previous_locale();
+		parent::tear_down();
 	}
 
 	/**
 	 * Create user request fixtures shared by test methods.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param WP_UnitTest_Factory $factory Factory.
 	 */
@@ -80,16 +81,16 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 
 		$this->assertSame( 'request-confirmed', get_post_status( self::$request_id ) );
 		$this->assertSame( self::$requester_email, $mailer->get_recipient( 'to' )->address );
-		$this->assertContains( 'Personal Data Export', $mailer->get_sent()->subject );
-		$this->assertContains( $archive_url, $mailer->get_sent()->body );
-		$this->assertContains( 'please download it', $mailer->get_sent()->body );
+		$this->assertStringContainsString( 'Personal Data Export', $mailer->get_sent()->subject );
+		$this->assertStringContainsString( $archive_url, $mailer->get_sent()->body );
+		$this->assertStringContainsString( 'please download it', $mailer->get_sent()->body );
 		$this->assertTrue( $email_sent );
 	}
 
 	/**
 	 * The function should error when the request ID is invalid.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_function_should_error_when_request_id_invalid() {
 		$request_id = 0;
@@ -106,7 +107,7 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	/**
 	 * The function should error when the email was not sent.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_return_wp_error_when_send_fails() {
 		add_filter( 'wp_mail_from', '__return_empty_string' ); // Cause `wp_mail()` to return false.
@@ -120,7 +121,7 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	/**
 	 * The export expiration should be filterable.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_export_expiration_should_be_filterable() {
 		add_filter( 'wp_privacy_export_expiration', array( $this, 'modify_export_expiration' ) );
@@ -128,13 +129,13 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 		remove_filter( 'wp_privacy_export_expiration', array( $this, 'modify_export_expiration' ) );
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		$this->assertContains( 'we will automatically delete the file on December 18, 2017,', $mailer->get_sent()->body );
+		$this->assertStringContainsString( 'we will automatically delete the file on December 18, 2017,', $mailer->get_sent()->body );
 	}
 
 	/**
 	 * Filter callback that modifies the lifetime, in seconds, of a personal data export file.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param int $expiration The expiration age of the export, in seconds.
 	 * @return int $expiration The expiration age of the export, in seconds.
@@ -147,7 +148,7 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 	/**
 	 * The email content should be filterable.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 */
 	public function test_email_content_should_be_filterable() {
 		add_filter( 'wp_privacy_personal_data_email_content', array( $this, 'modify_email_content' ), 10, 2 );
@@ -155,13 +156,13 @@ class Tests_Privacy_WpPrivacySendPersonalDataExportEmail extends WP_UnitTestCase
 		remove_filter( 'wp_privacy_personal_data_email_content', array( $this, 'modify_email_content' ) );
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		$this->assertContains( 'Custom content for request ID: ' . self::$request_id, $mailer->get_sent()->body );
+		$this->assertStringContainsString( 'Custom content for request ID: ' . self::$request_id, $mailer->get_sent()->body );
 	}
 
 	/**
 	 * Filter callback that modifies the text of the email sent with a personal data export file.
 	 *
-	 * @since 4.9.6
+	 * @since WP-4.9.6
 	 *
 	 * @param string $email_text Text in the email.
 	 * @param int    $request_id The request ID for this personal data export.

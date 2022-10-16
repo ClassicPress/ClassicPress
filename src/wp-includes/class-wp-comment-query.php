@@ -429,7 +429,8 @@ class WP_Comment_Query {
 		// Fetch full comment objects from the primed cache.
 		$_comments = array();
 		foreach ( $comment_ids as $comment_id ) {
-			if ( $_comment = get_comment( $comment_id ) ) {
+			$_comment = get_comment( $comment_id );
+			if ( $_comment ) {
 				$_comments[] = $_comment;
 			}
 		}
@@ -555,7 +556,7 @@ class WP_Comment_Query {
 				preg_split( '/[,\s]/', $this->query_vars['orderby'] );
 
 			$orderby_array            = array();
-			$found_orderby_comment_ID = false;
+			$found_orderby_comment_id = false;
 			foreach ( $ordersby as $_key => $_value ) {
 				if ( ! $_value ) {
 					continue;
@@ -569,8 +570,8 @@ class WP_Comment_Query {
 					$_order   = $_value;
 				}
 
-				if ( ! $found_orderby_comment_ID && in_array( $_orderby, array( 'comment_ID', 'comment__in' ) ) ) {
-					$found_orderby_comment_ID = true;
+				if ( ! $found_orderby_comment_id && in_array( $_orderby, array( 'comment_ID', 'comment__in' ) ) ) {
+					$found_orderby_comment_id = true;
 				}
 
 				$parsed = $this->parse_orderby( $_orderby );
@@ -593,24 +594,24 @@ class WP_Comment_Query {
 			}
 
 			// To ensure determinate sorting, always include a comment_ID clause.
-			if ( ! $found_orderby_comment_ID ) {
-				$comment_ID_order = '';
+			if ( ! $found_orderby_comment_id ) {
+				$comment_id_order = '';
 
 				// Inherit order from comment_date or comment_date_gmt, if available.
 				foreach ( $orderby_array as $orderby_clause ) {
 					if ( preg_match( '/comment_date(?:_gmt)*\ (ASC|DESC)/', $orderby_clause, $match ) ) {
-						$comment_ID_order = $match[1];
+						$comment_id_order = $match[1];
 						break;
 					}
 				}
 
 				// If no date-related order is available, use the date from the first available clause.
-				if ( ! $comment_ID_order ) {
+				if ( ! $comment_id_order ) {
 					foreach ( $orderby_array as $orderby_clause ) {
 						if ( false !== strpos( 'ASC', $orderby_clause ) ) {
-							$comment_ID_order = 'ASC';
+							$comment_id_order = 'ASC';
 						} else {
-							$comment_ID_order = 'DESC';
+							$comment_id_order = 'DESC';
 						}
 
 						break;
@@ -618,11 +619,11 @@ class WP_Comment_Query {
 				}
 
 				// Default to DESC.
-				if ( ! $comment_ID_order ) {
-					$comment_ID_order = 'DESC';
+				if ( ! $comment_id_order ) {
+					$comment_id_order = 'DESC';
 				}
 
-				$orderby_array[] = "$wpdb->comments.comment_ID $comment_ID_order";
+				$orderby_array[] = "$wpdb->comments.comment_ID $comment_id_order";
 			}
 
 			$orderby = implode( ', ', $orderby_array );
@@ -771,6 +772,8 @@ class WP_Comment_Query {
 			foreach ( $post_fields as $field_name => $field_value ) {
 				// $field_value may be an array.
 				$esses                                     = array_fill( 0, count( (array) $field_value ), '%s' );
+
+				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$this->sql_clauses['where'][ $field_name ] = $wpdb->prepare( " {$wpdb->posts}.{$field_name} IN (" . implode( ',', $esses ) . ')', $field_value );
 			}
 		}
@@ -792,6 +795,8 @@ class WP_Comment_Query {
 				$join_posts_table = true;
 
 				$esses                                     = array_fill( 0, count( $q_values ), '%s' );
+
+				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$this->sql_clauses['where'][ $field_name ] = $wpdb->prepare( " {$wpdb->posts}.{$field_name} IN (" . implode( ',', $esses ) . ')', $q_values );
 			}
 		}
@@ -950,7 +955,8 @@ class WP_Comment_Query {
 		$exclude_keys = array( 'parent', 'parent__in', 'parent__not_in' );
 		do {
 			// Parent-child relationships may be cached. Only query for those that are not.
-			$child_ids   = $uncached_parent_ids = array();
+			$child_ids           = array();
+			$uncached_parent_ids = array();
 			$_parent_ids = $levels[ $level ];
 			foreach ( $_parent_ids as $parent_id ) {
 				$cache_key        = "get_comment_child_ids:$parent_id:$key:$last_changed";
@@ -1009,7 +1015,8 @@ class WP_Comment_Query {
 
 		// If a threaded representation was requested, build the tree.
 		if ( 'threaded' === $this->query_vars['hierarchical'] ) {
-			$threaded_comments = $ref = array();
+			$threaded_comments = array();
+			$ref               = array();
 			foreach ( $all_comments as $k => $c ) {
 				$_c = get_comment( $c->comment_ID );
 
@@ -1106,11 +1113,11 @@ class WP_Comment_Query {
 		}
 
 		$parsed = false;
-		if ( $orderby == $this->query_vars['meta_key'] || $orderby == 'meta_value' ) {
+		if ( $this->query_vars['meta_key'] === $orderby || 'meta_value' === $orderby ) {
 			$parsed = "$wpdb->commentmeta.meta_value";
-		} elseif ( $orderby == 'meta_value_num' ) {
+		} elseif ( 'meta_value_num' === $orderby ) {
 			$parsed = "$wpdb->commentmeta.meta_value+0";
-		} elseif ( $orderby == 'comment__in' ) {
+		} elseif ( 'comment__in' === $orderby ) {
 			$comment__in = implode( ',', array_map( 'absint', $this->query_vars['comment__in'] ) );
 			$parsed      = "FIELD( {$wpdb->comments}.comment_ID, $comment__in )";
 		} elseif ( in_array( $orderby, $allowed_keys ) ) {

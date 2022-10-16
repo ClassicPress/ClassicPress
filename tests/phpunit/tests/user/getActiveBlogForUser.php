@@ -43,8 +43,8 @@ if ( is_multisite() ) :
 			$site_id_one = self::factory()->blog->create( array( 'user_id' => self::$user_id ) );
 			$site_id_two = self::factory()->blog->create( array( 'user_id' => self::$user_id ) );
 
-			$sites           = get_blogs_of_user( self::$user_id );
-			$site_ids        = array_keys( $sites );
+			$sites = get_blogs_of_user( self::$user_id );
+			$site_ids = array_keys( $sites );
 			$primary_site_id = $site_ids[1];
 
 			update_user_meta( self::$user_id, 'primary_blog', $primary_site_id );
@@ -54,15 +54,15 @@ if ( is_multisite() ) :
 			wpmu_delete_blog( $site_id_one, true );
 			wpmu_delete_blog( $site_id_two, true );
 
-			$this->assertEquals( $primary_site_id, $result->id );
+				$this->assertSame( $primary_site_id, $result->id );
 		}
 
 		/**
 		 * @see https://core.trac.wordpress.org/ticket/38355
 		 */
 		public function test_get_active_blog_for_user_without_primary_site() {
-			$sites           = get_blogs_of_user( self::$user_id );
-			$site_ids        = array_keys( $sites );
+			$sites = get_blogs_of_user( self::$user_id );
+			$site_ids = array_keys( $sites );
 			$primary_site_id = $site_ids[0];
 
 			delete_user_meta( self::$user_id, 'primary_blog' );
@@ -71,7 +71,7 @@ if ( is_multisite() ) :
 
 			wpmu_delete_blog( $primary_site_id, true );
 
-			$this->assertEquals( $primary_site_id, $result->id );
+				$this->assertSame( $primary_site_id, $result->id );
 		}
 
 		/**
@@ -94,7 +94,7 @@ if ( is_multisite() ) :
 
 			wpmu_delete_blog( $site_id, true );
 
-			$this->assertEquals( $current_site_id, $result->id );
+				$this->assertSame( $current_site_id, $result->id );
 		}
 	}
 

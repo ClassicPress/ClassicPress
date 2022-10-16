@@ -112,7 +112,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 
 		// setIteratorIndex is optional unless mime is an animated format.
 		// Here, we just say no if you are missing it and aren't loading a jpeg.
-		if ( ! method_exists( 'Imagick', 'setIteratorIndex' ) && $mime_type != 'image/jpeg' ) {
+		if ( ! method_exists( 'Imagick', 'setIteratorIndex' ) && 'image/jpeg' !== $mime_type ) {
 				return false;
 		}
 
@@ -527,6 +527,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 		} catch ( Exception $e ) {
 			return new WP_Error( 'image_crop_error', $e->getMessage() );
 		}
+
 		return $this->update_size();
 	}
 
@@ -561,6 +562,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 		} catch ( Exception $e ) {
 			return new WP_Error( 'image_rotate_error', $e->getMessage() );
 		}
+
 		return true;
 	}
 
@@ -653,6 +655,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 			'width'     => $this->size['width'],
 			'height'    => $this->size['height'],
 			'mime-type' => $mime_type,
+			'filesize'  => wp_filesize( $filename ),
 		);
 	}
 
