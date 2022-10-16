@@ -676,13 +676,19 @@ function meta_form( $post = null ) {
 		 * @param int $limit Number of custom fields to retrieve. Default 30.
 		 */
 		$limit = apply_filters( 'postmeta_form_limit', 30 );
-		$sql   = "SELECT DISTINCT meta_key
+
+		$keys = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT DISTINCT meta_key
 			FROM $wpdb->postmeta
 			WHERE meta_key NOT BETWEEN '_' AND '_z'
 			HAVING meta_key NOT LIKE %s
 			ORDER BY meta_key
-			LIMIT %d";
-		$keys  = $wpdb->get_col( $wpdb->prepare( $sql, $wpdb->esc_like( '_' ) . '%', $limit ) );
+				LIMIT %d",
+				$wpdb->esc_like( '_' ) . '%',
+				$limit
+			)
+		);
 	}
 
 	if ( $keys ) {
@@ -769,7 +775,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$post = get_post();
 
 	if ( $for_post ) {
-		$edit = ! ( in_array( $post->post_status, array( 'draft', 'pending' ), true ) && ( ! $post->post_date_gmt || '0000-00-00 00:00:00' == $post->post_date_gmt ) );
+		$edit = ! ( in_array( $post->post_status, array( 'draft', 'pending' ), true ) && ( ! $post->post_date_gmt || '0000-00-00 00:00:00' === $post->post_date_gmt ) );
 	}
 
 	$tab_index_attribute = '';
@@ -883,13 +889,14 @@ function page_template_dropdown( $default = '', $post_type = 'page' ) {
  */
 function parent_dropdown( $default = 0, $parent = 0, $level = 0, $post = null ) {
 	global $wpdb;
+
 	$post  = get_post( $post );
 	$items = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_parent, post_title FROM $wpdb->posts WHERE post_parent = %d AND post_type = 'page' ORDER BY menu_order", $parent ) );
 
 	if ( $items ) {
 		foreach ( $items as $item ) {
 			// A page cannot be its own parent.
-			if ( $post && $post->ID && $item->ID == $post->ID ) {
+			if ( $post && $post->ID && (int) $item->ID === $post->ID ) {
 				continue;
 			}
 
@@ -918,8 +925,13 @@ function wp_dropdown_roles( $selected = '' ) {
 
 	foreach ( $editable_roles as $role => $details ) {
 		$name = translate_user_role( $details['name'] );
+<<<<<<< HEAD
 		// preselect specified role
 		if ( $selected == $role ) {
+=======
+		// Preselect specified role.
+		if ( $selected === $role ) {
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 			$r .= "\n\t<option selected='selected' value='" . esc_attr( $role ) . "'>$name</option>";
 		} else {
 			$r .= "\n\t<option value='" . esc_attr( $role ) . "'>$name</option>";
@@ -1036,11 +1048,18 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 				continue;
 			}
 
+<<<<<<< HEAD
 			// If a core box was previously removed, don't add.
 			if (
 				( 'core' === $priority || 'sorted' === $priority ) &&
 				false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ]
 			) {
+=======
+			// If a core box was previously added or removed by a plugin, don't add.
+			if ( 'core' === $priority ) {
+				// If core box previously deleted, don't add.
+				if ( false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ] ) {
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 				return;
 			}
 
@@ -1050,7 +1069,7 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 				 * If the box was added with default priority, give it core priority
 				 * to maintain sort order.
 				 */
-				if ( 'default' == $a_priority ) {
+				if ( 'default' === $a_priority ) {
 					$wp_meta_boxes[ $page ][ $a_context ]['core'][ $id ] = $wp_meta_boxes[ $page ][ $a_context ]['default'][ $id ];
 					unset( $wp_meta_boxes[ $page ][ $a_context ]['default'][ $id ] );
 				}
@@ -1102,13 +1121,21 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
  *
  * @staticvar bool $already_sorted
  *
- * @param string|WP_Screen $screen  Screen identifier. If you have used add_menu_page() or
+ * @param string|WP_Screen $screen  The screen identifier. If you have used add_menu_page() or
  *                                  add_submenu_page() to create a new screen (and hence screen_id)
  *                                  make sure your menu slug conforms to the limits of sanitize_key()
  *                                  otherwise the 'screen' menu may not correctly render on your page.
+<<<<<<< HEAD
  * @param string           $context box context
  * @param mixed            $object  gets passed to the box callback function as first parameter
  * @return int number of meta_boxes
+=======
+ * @param string           $context The screen context for which to display meta boxes.
+ * @param mixed            $object  Gets passed to the meta box callback function as the first parameter.
+ *                                  Often this is the object that's the focus of the current screen, for
+ *                                  example a `WP_Post` or `WP_Comment` object.
+ * @return int Number of meta_boxes.
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
  */
 function do_meta_boxes( $screen, $context, $object ) {
 	global $wp_meta_boxes;
@@ -1147,13 +1174,13 @@ function do_meta_boxes( $screen, $context, $object ) {
 		foreach ( array( 'high', 'sorted', 'core', 'default', 'low' ) as $priority ) {
 			if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
 				foreach ( (array) $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
-					if ( false == $box || ! $box['title'] ) {
+					if ( false === $box || ! $box['title'] ) {
 						continue;
 					}
 					$i++;
 					$hidden_class = in_array( $box['id'], $hidden, true ) ? ' hide-if-js' : '';
 					echo '<div id="' . $box['id'] . '" class="postbox ' . postbox_classes( $box['id'], $page ) . $hidden_class . '" ' . '>' . "\n";
-					if ( 'dashboard_browser_nag' != $box['id'] ) {
+					if ( 'dashboard_browser_nag' !== $box['id'] ) {
 						$widget_title = $box['title'];
 
 						if ( is_array( $box['args'] ) && isset( $box['args']['__widget_basename'] ) ) {
@@ -1247,9 +1274,9 @@ function remove_meta_box( $id, $screen, $context ) {
  * @uses global $wp_meta_boxes Used to retrieve registered meta boxes.
  *
  * @param string|object $screen  The screen identifier.
- * @param string        $context The meta box context.
- * @param mixed         $object  gets passed to the section callback function as first parameter.
- * @return int number of meta boxes as accordion sections.
+ * @param string        $context The screen context for which to display accordion sections.
+ * @param mixed         $object  Gets passed to the section callback function as the first parameter.
+ * @return int Number of meta boxes as accordion sections.
  */
 function do_accordion_sections( $screen, $context, $object ) {
 	global $wp_meta_boxes;
@@ -1276,9 +1303,10 @@ function do_accordion_sections( $screen, $context, $object ) {
 		foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
 			if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
 				foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
-					if ( false == $box || ! $box['title'] ) {
+					if ( false === $box || ! $box['title'] ) {
 						continue;
 					}
+
 					$i++;
 					$hidden_class = in_array( $box['id'], $hidden, true ) ? 'hide-if-js' : '';
 
@@ -1336,7 +1364,7 @@ function do_accordion_sections( $screen, $context, $object ) {
 function add_settings_section( $id, $title, $callback, $page ) {
 	global $wp_settings_sections;
 
-	if ( 'misc' == $page ) {
+	if ( 'misc' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -1349,7 +1377,7 @@ function add_settings_section( $id, $title, $callback, $page ) {
 		$page = 'general';
 	}
 
-	if ( 'privacy' == $page ) {
+	if ( 'privacy' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',
@@ -1407,7 +1435,7 @@ function add_settings_section( $id, $title, $callback, $page ) {
 function add_settings_field( $id, $title, $callback, $page, $section = 'default', $args = array() ) {
 	global $wp_settings_fields;
 
-	if ( 'misc' == $page ) {
+	if ( 'misc' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -1420,7 +1448,7 @@ function add_settings_field( $id, $title, $callback, $page, $section = 'default'
 		$page = 'general';
 	}
 
-	if ( 'privacy' == $page ) {
+	if ( 'privacy' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',
@@ -1608,7 +1636,7 @@ function get_settings_errors( $setting = '', $sanitize = false ) {
 		$setting_errors = array();
 
 		foreach ( (array) $wp_settings_errors as $key => $details ) {
-			if ( $setting == $details['setting'] ) {
+			if ( $setting === $details['setting'] ) {
 				$setting_errors[] = $wp_settings_errors[ $key ];
 			}
 		}
@@ -1884,7 +1912,43 @@ function iframe_footer() {
  * @param WP_Post $post The post to retrieve states for.
  * @return string Post states string.
  */
+<<<<<<< HEAD
 function _post_states( $post ) {
+=======
+function _post_states( $post, $echo = true ) {
+	$post_states        = get_post_states( $post );
+	$post_states_string = '';
+
+	if ( ! empty( $post_states ) ) {
+		$state_count = count( $post_states );
+		$i           = 0;
+
+		$post_states_string .= ' &mdash; ';
+
+		foreach ( $post_states as $state ) {
+			$sep = ( ++$i === $state_count ) ? '' : ', ';
+
+			$post_states_string .= "<span class='post-state'>$state$sep</span>";
+		}
+	}
+
+	if ( $echo ) {
+		echo $post_states_string;
+	}
+
+	return $post_states_string;
+}
+
+/**
+ * Retrieves an array of post states from a post.
+ *
+ * @since 5.3.0
+ *
+ * @param WP_Post $post The post to retrieve states for.
+ * @return string[] Array of post state labels keyed by their state.
+ */
+function get_post_states( $post ) {
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 	$post_states = array();
 	if ( isset( $_REQUEST['post_status'] ) ) {
 		$post_status = $_REQUEST['post_status'];
@@ -1895,8 +1959,14 @@ function _post_states( $post ) {
 	if ( ! empty( $post->post_password ) ) {
 		$post_states['protected'] = __( 'Password protected' );
 	}
+<<<<<<< HEAD
 	if ( 'private' == $post->post_status && 'private' != $post_status ) {
 		$post_states['private'] = __( 'Private' );
+=======
+
+	if ( 'private' === $post->post_status && 'private' !== $post_status ) {
+		$post_states['private'] = _x( 'Private', 'post status' );
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 	}
 	if ( 'draft' === $post->post_status ) {
 		if ( get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) {
@@ -1907,7 +1977,12 @@ function _post_states( $post ) {
 	} elseif ( 'trash' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) {
 		$post_states[] = __( 'Customization Draft' );
 	}
+<<<<<<< HEAD
 	if ( 'pending' == $post->post_status && 'pending' != $post_status ) {
+=======
+
+	if ( 'pending' === $post->post_status && 'pending' !== $post_status ) {
+>>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 		$post_states['pending'] = _x( 'Pending', 'post status' );
 	}
 	if ( is_sticky( $post->ID ) ) {
@@ -1970,7 +2045,7 @@ function _media_states( $post ) {
 		if ( is_random_header_image() ) {
 			$header_images = wp_list_pluck( get_uploaded_header_images(), 'attachment_id' );
 
-			if ( $meta_header == $stylesheet && in_array( $post->ID, $header_images, true ) ) {
+			if ( $meta_header === $stylesheet && in_array( $post->ID, $header_images, true ) ) {
 				$media_states[] = __( 'Header Image' );
 			}
 		} else {
@@ -2001,11 +2076,11 @@ function _media_states( $post ) {
 		}
 	}
 
-	if ( get_option( 'site_icon' ) == $post->ID ) {
+	if ( (int) get_option( 'site_icon' ) === $post->ID ) {
 		$media_states[] = __( 'Site Icon' );
 	}
 
-	if ( get_theme_mod( 'custom_logo' ) == $post->ID ) {
+	if ( (int) get_theme_mod( 'custom_logo' ) === $post->ID ) {
 		$media_states[] = __( 'Logo' );
 	}
 
@@ -2028,8 +2103,8 @@ function _media_states( $post ) {
 		echo ' &mdash; ';
 
 		foreach ( $media_states as $state ) {
-			++$i;
-			( $i == $state_count ) ? $sep = '' : $sep = ', ';
+			$sep = ( ++$i === $state_count ) ? '' : ', ';
+
 			echo "<span class='post-state'>$state$sep</span>";
 		}
 	}
