@@ -75,7 +75,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 		<a class="preview button" href="<?php echo $preview_link; ?>" target="wp-preview-<?php echo (int) $post->ID; ?>" id="post-preview"><?php echo $preview_button; ?></a>
 		<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 		</div>
-		<?php endif; // public post type ?>
+		<?php endif; // public post type
 
 		/**
 		 * Fires before the post time/date setting in the Publish meta box.
@@ -227,10 +227,10 @@ function post_submit_meta_box( $post, $args = array() ) {
 				/* translators: Post date information. 1: Date on which the post is to be published */
 				$stamp = __( 'Publish on: %1$s' );
 			}
-			$date = date_i18n( $datef, strtotime( $post->post_date ) );
+			$date = date_i18n( $date_format, strtotime( $post->post_date ) );
 		} else { // draft (no saves, and thus no date specified)
 			$stamp = __( 'Publish <b>immediately</b>' );
-			$date  = date_i18n( $datef, strtotime( current_time( 'mysql' ) ) );
+			$date  = date_i18n( $date_format, strtotime( current_time( 'mysql' ) ) );
 		}
 
 		if ( ! empty( $args['args']['revisions_count'] ) ) :
