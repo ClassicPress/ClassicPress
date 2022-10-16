@@ -5,11 +5,7 @@
  *
  * @package    ClassicPress
  * @subpackage Unit Tests
-<<<<<<< HEAD
  * @since      WP-3.5
-=======
- * @since      3.5.0
->>>>>>> c395d6fcd9 (Coding Standards: Rename some files and classes in `phpunit/tests/functions/` per the naming conventions.)
  * @group      deprecated
  */
 class Tests_Functions_Deprecated extends WP_UnitTestCase {
