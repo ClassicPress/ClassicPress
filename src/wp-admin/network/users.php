@@ -27,7 +27,7 @@ if ( isset( $_GET['action'] ) ) {
 			check_admin_referer( 'deleteuser' );
 
 			$id = intval( $_GET['id'] );
-			if ( '0' != $id && '1' != $id ) {
+			if ( $id > 1 ) {
 				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle arrays.
 				$title             = __( 'Users' );
 				$parent_file       = 'users.php';
@@ -99,8 +99,8 @@ if ( isset( $_GET['action'] ) ) {
 
 				if ( ! in_array( $doaction, array( 'delete', 'spam', 'notspam' ), true ) ) {
 					$sendback = wp_get_referer();
-
 					$user_ids = (array) $_POST['allusers'];
+
 					/** This action is documented in wp-admin/network/site-themes.php */
 					$sendback = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $user_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -140,15 +140,22 @@ if ( isset( $_GET['action'] ) ) {
 							continue;
 						}
 
+<<<<<<< HEAD
 						if ( ! empty( $_POST['delete'] ) && 'reassign' == $_POST['delete'][ $blogid ][ $id ] ) {
 							remove_user_from_blog( $id, $blogid, $user_id );
+=======
+						if ( ! empty( $_POST['delete'] ) && 'reassign' === $_POST['delete'][ $blogid ][ $id ] ) {
+							remove_user_from_blog( $id, $blogid, (int) $user_id );
+>>>>>>> 219acea88f (Coding Standards: Use strict comparison in `wp-admin/network` where static strings are involved.)
 						} else {
 							remove_user_from_blog( $id, $blogid );
 						}
 					}
 				}
 			}
+
 			$i = 0;
+
 			if ( is_array( $_POST['user'] ) && ! empty( $_POST['user'] ) ) {
 				foreach ( $_POST['user'] as $id ) {
 					if ( ! current_user_can( 'delete_user', $id ) ) {
@@ -159,7 +166,7 @@ if ( isset( $_GET['action'] ) ) {
 				}
 			}
 
-			if ( 1 == $i ) {
+			if ( 1 === $i ) {
 				$deletefunction = 'delete';
 			} else {
 				$deletefunction = 'all_delete';
