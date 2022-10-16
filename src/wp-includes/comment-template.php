@@ -1862,42 +1862,28 @@ function cancel_comment_reply_link( $text = '' ) {
  *
  * @since WP-3.0.0
  *
- * @param int $id Optional. Post ID. Default current post ID.
+ * @param int $post_id Optional. Post ID. Default current post ID.
  * @return string Hidden input HTML for replying to comments
  */
-function get_comment_id_fields( $id = 0 ) {
-	if ( empty( $id ) ) {
-		$id = get_the_ID();
+function get_comment_id_fields( $post_id = 0 ) {
+	if ( empty( $post_id ) ) {
+		$post_id = get_the_ID();
 	}
 
-<<<<<<< HEAD
-	$replytoid = isset( $_GET['replytocom'] ) ? (int) $_GET['replytocom'] : 0;
-	$result    = "<input type='hidden' name='comment_post_ID' value='$id' id='comment_post_ID' />\n";
-	$result   .= "<input type='hidden' name='comment_parent' id='comment_parent' value='$replytoid' />\n";
-=======
 	$reply_to_id = isset( $_GET['replytocom'] ) ? (int) $_GET['replytocom'] : 0;
 	$result      = "<input type='hidden' name='comment_post_ID' value='$post_id' id='comment_post_ID' />\n";
 	$result     .= "<input type='hidden' name='comment_parent' id='comment_parent' value='$reply_to_id' />\n";
->>>>>>> a3427e3bb6 (Coding Standards: Use a consistent naming pattern for variables in `wp-includes/comment-template.php`.)
 
 	/**
 	 * Filters the returned comment id fields.
 	 *
 	 * @since WP-3.0.0
 	 *
-<<<<<<< HEAD
-	 * @param string $result    The HTML-formatted hidden id field comment elements.
-	 * @param int    $id        The post ID.
-	 * @param int    $replytoid The id of the comment being replied to.
-	 */
-	return apply_filters( 'comment_id_fields', $result, $id, $replytoid );
-=======
 	 * @param string $result      The HTML-formatted hidden ID field comment elements.
 	 * @param int    $post_id     The post ID.
 	 * @param int    $reply_to_id The ID of the comment being replied to.
 	 */
 	return apply_filters( 'comment_id_fields', $result, $post_id, $reply_to_id );
->>>>>>> a3427e3bb6 (Coding Standards: Use a consistent naming pattern for variables in `wp-includes/comment-template.php`.)
 }
 
 /**
@@ -1937,15 +1923,10 @@ function comment_form_title( $no_reply_text = false, $reply_text = false, $link_
 	if ( false === $no_reply_text ) {
 		$no_reply_text = __( 'Leave a Reply' );
 	}
-<<<<<<< HEAD
-	if ( false === $replytext ) {
-		$replytext = __( 'Leave a Reply to %s' );
-=======
 
 	if ( false === $reply_text ) {
 		/* translators: %s: Author of the comment being replied to. */
 		$reply_text = __( 'Leave a Reply to %s' );
->>>>>>> a3427e3bb6 (Coding Standards: Use a consistent naming pattern for variables in `wp-includes/comment-template.php`.)
 	}
 
 	$reply_to_id = isset( $_GET['replytocom'] ) ? (int) $_GET['replytocom'] : 0;
