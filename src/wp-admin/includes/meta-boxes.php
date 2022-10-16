@@ -22,6 +22,7 @@
 function post_submit_meta_box( $post, $args = array() ) {
 	global $action;
 
+	$post_id          = (int) $post->ID;
 	$post_type        = $post->post_type;
 	$post_type_object = get_post_type_object( $post_type );
 	$can_publish      = current_user_can( $post_type_object->cap->publish_posts );
@@ -30,7 +31,11 @@ function post_submit_meta_box( $post, $args = array() ) {
 
 	<div id="minor-publishing">
 
+<<<<<<< HEAD
 	<?php // Hidden submit button early on so that the browser chooses the right button when form is submitted with Return key ?>
+=======
+	<?php // Hidden submit button early on so that the browser chooses the right button when form is submitted with Return key. ?>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 	<div style="display:none;">
 	<?php submit_button( __( 'Save' ), '', 'save' ); ?>
 	</div>
@@ -51,7 +56,14 @@ function post_submit_meta_box( $post, $args = array() ) {
 		<span class="spinner"></span>
 	<?php } ?>
 	</div>
+<<<<<<< HEAD
 	<?php if ( is_post_type_viewable( $post_type_object ) ) : ?>
+=======
+
+		<?php
+		if ( is_post_type_viewable( $post_type_object ) ) :
+			?>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 		<div id="preview-action">
 		<?php
 		$preview_link = esc_url( get_preview_post_link( $post ) );
@@ -68,11 +80,19 @@ function post_submit_meta_box( $post, $args = array() ) {
 			__( '(opens in a new window)' )
 		);
 		?>
+<<<<<<< HEAD
 		<a class="preview button" href="<?php echo $preview_link; ?>" target="wp-preview-<?php echo (int) $post->ID; ?>" id="post-preview"><?php echo $preview_button; ?></a>
 		<input type="hidden" name="wp-preview" id="wp-preview" value="" />
 		</div>
 		<?php endif; // public post type ?>
+=======
+				<a class="preview button" href="<?php echo $preview_link; ?>" target="wp-preview-<?php echo $post_id; ?>" id="post-preview"><?php echo $preview_button; ?></a>
+				<input type="hidden" name="wp-preview" id="wp-preview" value="" />
+			</div>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 			<?php
+		endif;
+
 			/**
 			 * Fires before the post time/date setting in the Publish meta box.
 			 *
@@ -83,10 +103,16 @@ function post_submit_meta_box( $post, $args = array() ) {
 			do_action( 'post_submitbox_minor_actions', $post );
 			?>
 			<div class="clear"></div>
+<<<<<<< HEAD
 			</div><!-- #minor-publishing-actions -->
 
 			<div id="misc-publishing-actions">
 
+=======
+	</div>
+
+	<div id="misc-publishing-actions">
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 			<div class="misc-pub-section misc-pub-post-status">
 			<?php _e( 'Status:' ); ?>
 			<span id="post-status-display">
@@ -111,6 +137,10 @@ function post_submit_meta_box( $post, $args = array() ) {
 			}
 			?>
 			</span>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 			<?php
 			if ( 'publish' === $post->post_status || 'private' === $post->post_status || $can_publish ) {
 				$private_style = '';
@@ -119,6 +149,10 @@ function post_submit_meta_box( $post, $args = array() ) {
 				}
 				?>
 				<a href="#post_status" <?php echo $private_style; ?> class="edit-post-status hide-if-no-js" role="button"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit status' ); ?></span></a>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 				<div id="post-status-select" class="hide-if-js">
 				<input type="hidden" name="hidden_post_status" id="hidden_post_status" value="<?php echo esc_attr( ( 'auto-draft' === $post->post_status ) ? 'draft' : $post->post_status ); ?>" />
 				<label for="post_status" class="screen-reader-text"><?php _e( 'Set status' ); ?></label>
@@ -140,14 +174,24 @@ function post_submit_meta_box( $post, $args = array() ) {
 				<a href="#post_status" class="save-post-status hide-if-no-js button"><?php _e( 'OK' ); ?></a>
 				<a href="#post_status" class="cancel-post-status hide-if-no-js button-cancel"><?php _e( 'Cancel' ); ?></a>
 				</div>
+<<<<<<< HEAD
 
 				<?php } ?>
 				</div><!-- .misc-pub-section -->
 
 				<div class="misc-pub-section misc-pub-visibility" id="visibility">
 				<?php _e( 'Visibility:' ); ?> <span id="post-visibility-display">
+=======
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 				<?php
+			}
+			?>
+		</div>
 
+		<div class="misc-pub-section misc-pub-visibility" id="visibility">
+			<?php _e( 'Visibility:' ); ?>
+			<span id="post-visibility-display">
+				<?php
 				if ( 'private' === $post->post_status ) {
 					$post->post_password = '';
 					$visibility          = 'private';
@@ -155,7 +199,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 				} elseif ( ! empty( $post->post_password ) ) {
 					$visibility       = 'password';
 					$visibility_trans = __( 'Password protected' );
-				} elseif ( 'post' === $post_type && is_sticky( $post->ID ) ) {
+				} elseif ( 'post' === $post_type && is_sticky( $post_id ) ) {
 					$visibility       = 'public';
 					$visibility_trans = __( 'Public, Sticky' );
 				} else {
@@ -166,12 +210,17 @@ function post_submit_meta_box( $post, $args = array() ) {
 				echo esc_html( $visibility_trans );
 				?>
 				</span>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 				<?php if ( $can_publish ) { ?>
 					<a href="#visibility" class="edit-visibility hide-if-no-js" role="button"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text"><?php _e( 'Edit visibility' ); ?></span></a>
 
 					<div id="post-visibility-select" class="hide-if-js">
 					<input type="hidden" name="hidden_post_password" id="hidden-post-password" value="<?php echo esc_attr( $post->post_password ); ?>" />
 							<?php if ( 'post' === $post_type ) : ?>
+<<<<<<< HEAD
 					<input type="checkbox" style="display:none" name="hidden_post_sticky" id="hidden-post-sticky" value="sticky" <?php checked( is_sticky( $post->ID ) ); ?> />
 						<?php endif; ?>
 					<input type="hidden" name="hidden_post_visibility" id="hidden-post-visibility" value="<?php echo esc_attr( $visibility ); ?>" />
@@ -183,12 +232,30 @@ function post_submit_meta_box( $post, $args = array() ) {
 					<span id="password-span"><label for="post_password"><?php _e( 'Password:' ); ?></label> <input type="text" name="post_password" id="post_password" value="<?php echo esc_attr( $post->post_password ); ?>"  maxlength="255" /><br /></span>
 					<input type="radio" name="visibility" id="visibility-radio-private" value="private" <?php checked( $visibility, 'private' ); ?> /> <label for="visibility-radio-private" class="selectit"><?php _e( 'Private' ); ?></label><br />
 
+=======
+						<input type="checkbox" style="display:none" name="hidden_post_sticky" id="hidden-post-sticky" value="sticky" <?php checked( is_sticky( $post_id ) ); ?> />
+					<?php endif; ?>
+
+					<input type="hidden" name="hidden_post_visibility" id="hidden-post-visibility" value="<?php echo esc_attr( $visibility ); ?>" />
+					<input type="radio" name="visibility" id="visibility-radio-public" value="public" <?php checked( $visibility, 'public' ); ?> /> <label for="visibility-radio-public" class="selectit"><?php _e( 'Public' ); ?></label><br />
+
+					<?php if ( 'post' === $post_type && current_user_can( 'edit_others_posts' ) ) : ?>
+						<span id="sticky-span"><input id="sticky" name="sticky" type="checkbox" value="sticky" <?php checked( is_sticky( $post_id ) ); ?> /> <label for="sticky" class="selectit"><?php _e( 'Stick this post to the front page' ); ?></label><br /></span>
+					<?php endif; ?>
+
+					<input type="radio" name="visibility" id="visibility-radio-password" value="password" <?php checked( $visibility, 'password' ); ?> /> <label for="visibility-radio-password" class="selectit"><?php _e( 'Password protected' ); ?></label><br />
+					<span id="password-span"><label for="post_password"><?php _e( 'Password:' ); ?></label> <input type="text" name="post_password" id="post_password" value="<?php echo esc_attr( $post->post_password ); ?>"  maxlength="255" /><br /></span>
+
+					<input type="radio" name="visibility" id="visibility-radio-private" value="private" <?php checked( $visibility, 'private' ); ?> /> <label for="visibility-radio-private" class="selectit"><?php _e( 'Private' ); ?></label><br />
+
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 					<p>
 					 <a href="#visibility" class="save-post-visibility hide-if-no-js button"><?php _e( 'OK' ); ?></a>
 					 <a href="#visibility" class="cancel-post-visibility hide-if-no-js button-cancel"><?php _e( 'Cancel' ); ?></a>
 					</p>
 					</div>
 				<?php } ?>
+<<<<<<< HEAD
 
 				</div><!-- .misc-pub-section -->
 
@@ -196,6 +263,19 @@ function post_submit_meta_box( $post, $args = array() ) {
 				/* translators: Publish box date format, see https://secure.php.net/date */
 				$datef = __( 'M j, Y @ H:i' );
 				if ( 0 != $post->ID ) {
+=======
+		</div>
+
+		<?php
+		/* translators: Publish box date string. 1: Date, 2: Time. See https://www.php.net/date */
+		$date_string = __( '%1$s at %2$s' );
+		/* translators: Publish box date format, see https://www.php.net/date */
+		$date_format = _x( 'M j, Y', 'publish box date format' );
+		/* translators: Publish box time format, see https://www.php.net/date */
+		$time_format = _x( 'H:i', 'publish box time format' );
+
+		if ( 0 !== $post_id ) {
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 					if ( 'future' === $post->post_status ) { // Scheduled for publishing at a future date.
 						/* translators: Post date information. %s: Date on which the post is currently scheduled to be published. */
 						$stamp = __( 'Scheduled for: %s' );
@@ -239,20 +319,32 @@ function post_submit_meta_box( $post, $args = array() ) {
 						<legend class="screen-reader-text"><?php _e( 'Date and time' ); ?></legend>
 						<?php touch_time( ( 'edit' === $action ), 1 ); ?>
 					</fieldset>
+<<<<<<< HEAD
 					</div><?php // /misc-pub-section ?>
 				<?php endif; ?>
+=======
+			</div>
+			<?php
+		endif;
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 
-				<?php if ( 'draft' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) : ?>
+		if ( 'draft' === $post->post_status && get_post_meta( $post_id, '_customize_changeset_uuid', true ) ) :
+			?>
 				<div class="notice notice-info notice-alt inline">
 					<p>
 							<?php
+<<<<<<< HEAD
 							echo sprintf(
 							/* translators: %s: URL to the Customizer */
+=======
+					printf(
+						/* translators: %s: URL to the Customizer. */
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 								__( 'This draft comes from your <a href="%s">unpublished customization changes</a>. You can edit, but there&#8217;s no need to publish now. It will be published automatically with those changes.' ),
 								esc_url(
 									add_query_arg(
 										'changeset_uuid',
-										rawurlencode( get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ),
+								rawurlencode( get_post_meta( $post_id, '_customize_changeset_uuid', true ) ),
 										admin_url( 'customize.php' )
 									)
 								)
@@ -260,9 +352,9 @@ function post_submit_meta_box( $post, $args = array() ) {
 							?>
 					</p>
 				</div>
-				<?php endif; ?>
-
 				<?php
+		endif;
+
 				/**
 				 * Fires after the post time/date setting in the Publish meta box.
 				 *
@@ -275,7 +367,11 @@ function post_submit_meta_box( $post, $args = array() ) {
 				?>
 				</div>
 				<div class="clear"></div>
+<<<<<<< HEAD
 				</div>
+=======
+</div>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 
 				<div id="major-publishing-actions">
 					<?php
@@ -292,14 +388,18 @@ function post_submit_meta_box( $post, $args = array() ) {
 					?>
 					<div id="delete-action">
 						<?php
-						if ( current_user_can( 'delete_post', $post->ID ) ) {
+		if ( current_user_can( 'delete_post', $post_id ) ) {
 							if ( ! EMPTY_TRASH_DAYS ) {
 								$delete_text = __( 'Delete Permanently' );
 							} else {
 								$delete_text = __( 'Move to Trash' );
 							}
 							?>
+<<<<<<< HEAD
 					<a class="submitdelete deletion" href="<?php echo get_delete_post_link( $post->ID ); ?>"><?php echo $delete_text; ?></a>
+=======
+			<a class="submitdelete deletion" href="<?php echo get_delete_post_link( $post_id ); ?>"><?php echo $delete_text; ?></a>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 																	  <?php
 						}
 						?>
@@ -308,13 +408,15 @@ function post_submit_meta_box( $post, $args = array() ) {
 					<div id="publishing-action">
 					<span class="spinner"></span>
 						<?php
-						if ( ! in_array( $post->post_status, array( 'publish', 'future', 'private' ), true ) || 0 == $post->ID ) {
+		if ( ! in_array( $post->post_status, array( 'publish', 'future', 'private' ), true ) || 0 === $post_id ) {
 							if ( $can_publish ) :
 								if ( ! empty( $post->post_date_gmt ) && time() < strtotime( $post->post_date_gmt . ' +0000' ) ) :
 									?>
 							<input name="original_publish" type="hidden" id="original_publish" value="<?php echo esc_attr_x( 'Schedule', 'post action/button label' ); ?>" />
 									<?php submit_button( _x( 'Schedule', 'post action/button label' ), 'primary large', 'publish', false ); ?>
-						<?php	else : ?>
+					<?php
+				else :
+					?>
 							<input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e( 'Publish' ); ?>" />
 								<?php submit_button( __( 'Publish' ), 'primary large', 'publish', false ); ?>
 							<?php
@@ -328,15 +430,20 @@ function post_submit_meta_box( $post, $args = array() ) {
 						} else {
 							?>
 							<input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e( 'Update' ); ?>" />
-							<input name="save" type="submit" class="button button-primary button-large" id="publish" value="<?php esc_attr_e( 'Update' ); ?>" />
+			<?php submit_button( __( 'Update' ), 'primary large', 'save', false, array( 'id' => 'publish' ) ); ?>
 							<?php
 						}
 						?>
 					</div>
 				<div class="clear"></div>
+<<<<<<< HEAD
 				</div>
 			</div>
+=======
+</div>
+>>>>>>> 5b31b4eee4 (Coding Standards: Fix code indentation in `post_submit_meta_box()` to improve readability.)
 
+</div>
 	<?php
 }
 
