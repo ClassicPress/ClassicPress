@@ -106,11 +106,6 @@ class WP_List_Util {
 
 			$matched = 0;
 			foreach ( $args as $m_key => $m_value ) {
-<<<<<<< HEAD
-				if ( array_key_exists( $m_key, $to_match ) && $m_value == $to_match[ $m_key ] ) {
-					$matched++;
-				}
-=======
 				if ( is_array( $obj ) ) {
 					// Treat object as an array.
 					if ( array_key_exists( $m_key, $obj ) && ( $m_value == $obj[ $m_key ] ) ) {
@@ -122,7 +117,6 @@ class WP_List_Util {
 						$matched++;
 					}
 				}
->>>>>>> 73d3e9cfd9 (Coding Standards: Use strict comparison in `WP_List_Util::filter()`.)
 			}
 
 			if ( ( 'AND' === $operator && $matched === $count )
