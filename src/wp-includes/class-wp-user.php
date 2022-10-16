@@ -595,7 +595,7 @@ class WP_User {
 	 * @param string $role Role name.
 	 */
 	public function set_role( $role ) {
-		if ( 1 == count( $this->roles ) && current( $this->roles ) == $role ) {
+		if ( 1 === count( $this->roles ) && current( $this->roles ) == $role ) {
 			return;
 		}
 

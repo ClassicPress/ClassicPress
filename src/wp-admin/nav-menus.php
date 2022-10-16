@@ -424,12 +424,19 @@ $add_new_screen = ( isset( $_GET['menu'] ) && 0 == $_GET['menu'] ) ? true : fals
 
 $locations_screen = ( isset( $_GET['action'] ) && 'locations' === $_GET['action'] ) ? true : false;
 
+$page_count = wp_count_posts( 'page' );
+
 /*
  * If we have one theme location, and zero menus, we take them right
  * into editing their first menu.
  */
-$page_count                  = wp_count_posts( 'page' );
-$one_theme_location_no_menus = ( 1 == count( get_registered_nav_menus() ) && ! $add_new_screen && empty( $nav_menus ) && ! empty( $page_count->publish ) ) ? true : false;
+if ( 1 === count( get_registered_nav_menus() ) && ! $add_new_screen
+	&& empty( $nav_menus ) && ! empty( $page_count->publish )
+) {
+	$one_theme_location_no_menus = true;
+} else {
+	$one_theme_location_no_menus = false;
+}
 
 $nav_menus_l10n = array(
 	'oneThemeLocationNoMenus' => $one_theme_location_no_menus,
@@ -898,7 +905,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 							<h3><?php _e( 'Menu Structure' ); ?></h3>
 								<?php
 								$hide_style = '';
-								if ( isset( $menu_items ) && 0 == count( $menu_items ) ) {
+								if ( isset( $menu_items ) && 0 === count( $menu_items ) ) {
 									$hide_style = 'style="display: none;"';
 								}
 								$starter_copy = ( $one_theme_location_no_menus ) ? __( 'Edit your default menu by adding or removing items. Drag each item into the order you prefer. Click Create Menu to save your changes.' ) : __( 'Drag each item into the order you prefer. Click the arrow on the right of the item to reveal additional configuration options.' );

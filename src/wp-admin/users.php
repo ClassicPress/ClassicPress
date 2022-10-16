@@ -254,7 +254,11 @@ switch ( $wp_list_table->current_action() ) {
 	</div>
 <?php endif; ?>
 
+<<<<<<< HEAD
 		<?php if ( 1 == count( $userids ) ) : ?>
+=======
+		<?php if ( 1 === count( $all_userids ) ) : ?>
+>>>>>>> 772a11b72a (Coding Standards: Use strict comparison for `count()` calls.)
 	<p><?php _e( 'You have specified this user for deletion:' ); ?></p>
 <?php else : ?>
 	<p><?php _e( 'You have specified these users for deletion:' ); ?></p>
@@ -391,7 +395,7 @@ switch ( $wp_list_table->current_action() ) {
 <div class="wrap">
 <h1><?php _e( 'Remove Users from Site' ); ?></h1>
 
-		<?php if ( 1 == count( $userids ) ) : ?>
+		<?php if ( 1 === count( $userids ) ) : ?>
 	<p><?php _e( 'You have specified this user for removal:' ); ?></p>
 <?php else : ?>
 	<p><?php _e( 'You have specified these users for removal:' ); ?></p>
