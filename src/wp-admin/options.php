@@ -204,7 +204,26 @@ if ( ! is_multisite() ) {
  *
  * @param array $whitelist_options White list options.
  */
+<<<<<<< HEAD
 $whitelist_options = apply_filters( 'whitelist_options', $whitelist_options );
+=======
+$allowed_options = apply_filters_deprecated(
+	'whitelist_options',
+	array( $allowed_options ),
+	'5.5.0',
+	'apply_filters_deprecated',
+	__( 'Please consider writing more inclusive code.' )
+);
+
+/**
+ * Filters the allowed options list.
+ *
+ * @since 5.5.0
+ *
+ * @param array $allowed_options The allowed options list.
+ */
+$allowed_options = apply_filters( 'allowed_options', $allowed_options );
+>>>>>>> e65d19b9ed (Coding Standards: Reformat some long `apply_filters_deprecated()` and `do_action_deprecated()` calls for better readability.)
 
 if ( 'update' === $action ) { // We are saving settings sent from a settings page.
 	if ( 'options' === $option_page && ! isset( $_POST['option_page'] ) ) { // This is for back compat and will eventually be removed.

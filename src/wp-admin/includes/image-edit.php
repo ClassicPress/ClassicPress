@@ -357,7 +357,16 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 		 * @param string          $mime_type Image mime type.
 		 * @param int             $post_id   Post ID.
 		 */
+<<<<<<< HEAD
 		$saved = apply_filters( 'wp_save_image_file', null, $filename, $image, $mime_type, $post_id );
+=======
+		$saved = apply_filters_deprecated(
+			'wp_save_image_file',
+			array( null, $filename, $image, $mime_type, $post_id ),
+			'3.5.0',
+			'wp_save_image_editor_file'
+		);
+>>>>>>> e65d19b9ed (Coding Standards: Reformat some long `apply_filters_deprecated()` and `do_action_deprecated()` calls for better readability.)
 
 		if ( null !== $saved ) {
 			return $saved;

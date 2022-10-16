@@ -1298,7 +1298,17 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	 * @param string $user_ip    Comment author's IP address.
 	 * @param string $user_agent Comment author's browser user agent.
 	 */
+<<<<<<< HEAD
 	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
+=======
+	do_action_deprecated(
+		'wp_blacklist_check',
+		array( $author, $email, $url, $comment, $user_ip, $user_agent ),
+		'5.5.0',
+		'wp_blocklist_check',
+		__( 'Please consider writing more inclusive code.' )
+	);
+>>>>>>> e65d19b9ed (Coding Standards: Reformat some long `apply_filters_deprecated()` and `do_action_deprecated()` calls for better readability.)
 
 	$mod_keys = trim( get_option( 'blacklist_keys' ) );
 	if ( '' === $mod_keys ) {
