@@ -890,7 +890,7 @@ final class WP_Customize_Manager {
 	 * @return bool
 	 */
 	public function is_theme_active() {
-		return $this->get_stylesheet() == $this->original_stylesheet;
+		return $this->get_stylesheet() === $this->original_stylesheet;
 	}
 
 	/**
@@ -5835,10 +5835,17 @@ final class WP_Customize_Manager {
 				// Map available theme properties to installed theme properties.
 				$theme->id            = $theme->slug;
 				$theme->screenshot    = array( $theme->screenshot_url );
+<<<<<<< HEAD
 				$theme->authorAndUri  = $theme->author;
 				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires );
 				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php );
 				// The .org API can return the full parent theme details if passed the 'parent' arg, or if passed the 'template' option it'll return that in the event it's a child theme.
+=======
+				$theme->authorAndUri  = wp_kses( $theme->author['display_name'], $themes_allowedtags );
+				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
+>>>>>>> 78a308ea84 (Coding Standards: Fix WPCS issues in `wp-includes/class-wp-customize-manager.php`.)
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
 				} else {
