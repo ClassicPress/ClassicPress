@@ -925,13 +925,8 @@ function wp_dropdown_roles( $selected = '' ) {
 
 	foreach ( $editable_roles as $role => $details ) {
 		$name = translate_user_role( $details['name'] );
-<<<<<<< HEAD
-		// preselect specified role
-		if ( $selected == $role ) {
-=======
 		// Preselect specified role.
 		if ( $selected === $role ) {
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 			$r .= "\n\t<option selected='selected' value='" . esc_attr( $role ) . "'>$name</option>";
 		} else {
 			$r .= "\n\t<option value='" . esc_attr( $role ) . "'>$name</option>";
@@ -1048,18 +1043,11 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 				continue;
 			}
 
-<<<<<<< HEAD
-			// If a core box was previously removed, don't add.
+			// If a core box was previously added or removed by a plugin, don't add.
 			if (
 				( 'core' === $priority || 'sorted' === $priority ) &&
 				false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ]
 			) {
-=======
-			// If a core box was previously added or removed by a plugin, don't add.
-			if ( 'core' === $priority ) {
-				// If core box previously deleted, don't add.
-				if ( false === $wp_meta_boxes[ $page ][ $a_context ][ $a_priority ][ $id ] ) {
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 				return;
 			}
 
@@ -1125,17 +1113,11 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
  *                                  add_submenu_page() to create a new screen (and hence screen_id)
  *                                  make sure your menu slug conforms to the limits of sanitize_key()
  *                                  otherwise the 'screen' menu may not correctly render on your page.
-<<<<<<< HEAD
- * @param string           $context box context
- * @param mixed            $object  gets passed to the box callback function as first parameter
- * @return int number of meta_boxes
-=======
  * @param string           $context The screen context for which to display meta boxes.
  * @param mixed            $object  Gets passed to the meta box callback function as the first parameter.
  *                                  Often this is the object that's the focus of the current screen, for
  *                                  example a `WP_Post` or `WP_Comment` object.
  * @return int Number of meta_boxes.
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
  */
 function do_meta_boxes( $screen, $context, $object ) {
 	global $wp_meta_boxes;
@@ -1912,43 +1894,7 @@ function iframe_footer() {
  * @param WP_Post $post The post to retrieve states for.
  * @return string Post states string.
  */
-<<<<<<< HEAD
 function _post_states( $post ) {
-=======
-function _post_states( $post, $echo = true ) {
-	$post_states        = get_post_states( $post );
-	$post_states_string = '';
-
-	if ( ! empty( $post_states ) ) {
-		$state_count = count( $post_states );
-		$i           = 0;
-
-		$post_states_string .= ' &mdash; ';
-
-		foreach ( $post_states as $state ) {
-			$sep = ( ++$i === $state_count ) ? '' : ', ';
-
-			$post_states_string .= "<span class='post-state'>$state$sep</span>";
-		}
-	}
-
-	if ( $echo ) {
-		echo $post_states_string;
-	}
-
-	return $post_states_string;
-}
-
-/**
- * Retrieves an array of post states from a post.
- *
- * @since 5.3.0
- *
- * @param WP_Post $post The post to retrieve states for.
- * @return string[] Array of post state labels keyed by their state.
- */
-function get_post_states( $post ) {
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 	$post_states = array();
 	if ( isset( $_REQUEST['post_status'] ) ) {
 		$post_status = $_REQUEST['post_status'];
@@ -1959,14 +1905,9 @@ function get_post_states( $post ) {
 	if ( ! empty( $post->post_password ) ) {
 		$post_states['protected'] = __( 'Password protected' );
 	}
-<<<<<<< HEAD
-	if ( 'private' == $post->post_status && 'private' != $post_status ) {
-		$post_states['private'] = __( 'Private' );
-=======
 
 	if ( 'private' === $post->post_status && 'private' !== $post_status ) {
 		$post_states['private'] = _x( 'Private', 'post status' );
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 	}
 	if ( 'draft' === $post->post_status ) {
 		if ( get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) {
@@ -1977,12 +1918,8 @@ function get_post_states( $post ) {
 	} elseif ( 'trash' === $post->post_status && get_post_meta( $post->ID, '_customize_changeset_uuid', true ) ) {
 		$post_states[] = __( 'Customization Draft' );
 	}
-<<<<<<< HEAD
-	if ( 'pending' == $post->post_status && 'pending' != $post_status ) {
-=======
 
 	if ( 'pending' === $post->post_status && 'pending' !== $post_status ) {
->>>>>>> 24b71985b8 (Coding Standards: Fix WPCS issues in `wp-admin/includes/template.php`.)
 		$post_states['pending'] = _x( 'Pending', 'post status' );
 	}
 	if ( is_sticky( $post->ID ) ) {
