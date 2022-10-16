@@ -207,7 +207,7 @@ class WP_Styles extends WP_Dependencies {
 			/** This filter is documented in wp-includes/class.wp-styles.php */
 			$rtl_tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-rtl-css' $title href='$rtl_href' type='text/css' media='$media' />\n", $handle, $rtl_href, $media );
 
-			if ( $obj->extra['rtl'] === 'replace' ) {
+			if ( 'replace' === $obj->extra['rtl'] ) {
 				$tag = $rtl_tag;
 			} else {
 				$tag .= $rtl_tag;

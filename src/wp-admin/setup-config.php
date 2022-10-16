@@ -108,13 +108,16 @@ switch ( $step ) {
 
 	// Just getting started? Display the language picker.
 	case -1:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
-			setup_config_display_header( 'language-chooser' );
-			echo '<h1 class="screen-reader-text">Select a default language</h1>';
-			echo '<form id="setup" method="post" action="?step=1">';
-			wp_install_language_form( $languages );
-			echo '</form>';
-			break; // end switch ( $step ), case -1
+		if ( wp_can_install_language_pack() && empty( $language ) ) {
+			$languages = wp_get_available_translations();
+			if ( $languages ) {
+				setup_config_display_header( 'language-chooser' );
+				echo '<h1 class="screen-reader-text">Select a default language</h1>';
+				echo '<form id="setup" method="post" action="?step=1">';
+				wp_install_language_form( $languages );
+				echo '</form>';
+				break; // end switch ( $step ), case -1
+			}
 		}
 
 		// Notably, there is no longer a step 0 here.

@@ -31,7 +31,7 @@ function wp_image_editor( $post_id, $msg = false ) {
 	$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
 	$can_restore = false;
 	if ( ! empty( $backup_sizes ) && isset( $backup_sizes['full-orig'], $meta['file'] ) ) {
-		$can_restore = $backup_sizes['full-orig']['file'] != wp_basename( $meta['file'] );
+		$can_restore = wp_basename( $meta['file'] ) !== $backup_sizes['full-orig']['file'];
 	}
 
 	if ( $msg ) {
@@ -571,7 +571,7 @@ function image_edit_apply_changes( $image, $changes ) {
 	foreach ( $changes as $operation ) {
 		switch ( $operation->type ) {
 			case 'rotate':
-				if ( $operation->angle != 0 ) {
+				if ( 0 != $operation->angle ) {
 					if ( $image instanceof WP_Image_Editor ) {
 						$image->rotate( $operation->angle );
 					} else {
@@ -580,7 +580,7 @@ function image_edit_apply_changes( $image, $changes ) {
 				}
 				break;
 			case 'flip':
-				if ( $operation->axis != 0 ) {
+				if ( 0 != $operation->axis ) {
 					if ( $image instanceof WP_Image_Editor ) {
 						$image->flip( ( $operation->axis & 1 ) != 0, ( $operation->axis & 2 ) != 0 );
 					} else {
@@ -660,7 +660,8 @@ function stream_preview_image( $post_id ) {
 function wp_restore_image( $post_id ) {
 	$meta         = wp_get_attachment_metadata( $post_id );
 	$file         = get_attached_file( $post_id );
-	$backup_sizes = $old_backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
+	$backup_sizes     = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
+	$old_backup_sizes = $backup_sizes;
 	$restored     = false;
 	$msg          = new stdClass;
 
@@ -749,7 +750,10 @@ function wp_save_image( $post_id ) {
 	$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
 	$return  = new stdClass;
-	$success = $delete = $scaled = $nocrop = false;
+	$success = false;
+	$delete  = false;
+	$scaled  = false;
+	$nocrop  = false;
 	$post    = get_post( $post_id );
 
 	$img = wp_get_image_editor( _load_image_to_edit_path( $post_id, 'full' ) );
@@ -876,7 +880,9 @@ function wp_save_image( $post_id ) {
 		$return->fh = $meta['height'];
 	} elseif ( 'thumbnail' == $target ) {
 		$sizes   = array( 'thumbnail' );
-		$success = $delete = $nocrop = true;
+		$success = true;
+		$delete  = true;
+		$nocrop  = true;
 	}
 
 	/*
@@ -939,14 +945,15 @@ function wp_save_image( $post_id ) {
 		wp_update_attachment_metadata( $post_id, $meta );
 		update_post_meta( $post_id, '_wp_attachment_backup_sizes', $backup_sizes );
 
-		if ( $target == 'thumbnail' || $target == 'all' || $target == 'full' ) {
-			// Check if it's an image edit from attachment edit screen
+		if ( 'thumbnail' === $target || 'all' === $target || 'full' === $target ) {
+			// Check if it's an image edit from attachment edit screen.
 			if ( ! empty( $_REQUEST['context'] ) && 'edit-attachment' == $_REQUEST['context'] ) {
 				$thumb_url         = wp_get_attachment_image_src( $post_id, array( 900, 600 ), true );
 				$return->thumbnail = $thumb_url[0];
 			} else {
 				$file_url = wp_get_attachment_url( $post_id );
-				if ( ! empty( $meta['sizes']['thumbnail'] ) && $thumb = $meta['sizes']['thumbnail'] ) {
+				if ( ! empty( $meta['sizes']['thumbnail'] ) ) {
+					$thumb             = $meta['sizes']['thumbnail'];
 					$return->thumbnail = path_join( dirname( $file_url ), $thumb['file'] );
 				} else {
 					$return->thumbnail = "$file_url?w=128&h=128";

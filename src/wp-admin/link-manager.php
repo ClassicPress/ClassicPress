@@ -33,7 +33,7 @@ if ( $doaction && isset( $_REQUEST['linkcheck'] ) ) {
 		$redirect_to = add_query_arg( 'deleted', count( $bulklinks ), $redirect_to );
 	} else {
 		/** This action is documented in wp-admin/edit-comments.php */
-		$redirect_to = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $bulklinks );
+		$redirect_to = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $bulklinks ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	}
 	wp_redirect( $redirect_to );
 	exit;
@@ -45,7 +45,8 @@ if ( $doaction && isset( $_REQUEST['linkcheck'] ) ) {
 $wp_list_table->prepare_items();
 
 $title     = __( 'Links' );
-$this_file = $parent_file = 'link-manager.php';
+$this_file   = 'link-manager.php';
+$parent_file = $this_file;
 
 get_current_screen()->add_help_tab(
 	array(

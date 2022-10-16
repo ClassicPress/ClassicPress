@@ -36,7 +36,9 @@ if ( is_multisite() ) {
 }
 
 wp_enqueue_script( 'post' );
-$_wp_editor_expand = $_content_editor_dfw = false;
+
+$_wp_editor_expand   = false;
+$_content_editor_dfw = false;
 
 /**
  * Filters whether to enable the 'expand' functionality in the post editor.
@@ -69,7 +71,7 @@ $post_ID = isset( $post_ID ) ? (int) $post_ID : 0;
 $user_ID = isset( $user_ID ) ? (int) $user_ID : 0;
 $action  = isset( $action ) ? $action : '';
 
-if ( $post_ID == get_option( 'page_for_posts' ) && empty( $post->post_content ) ) {
+if ( get_option( 'page_for_posts' ) == $post_ID && empty( $post->post_content ) ) {
 	add_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 	remove_post_type_support( $post_type, 'editor' );
 }
@@ -101,8 +103,13 @@ if ( ! $permalink ) {
 
 $messages = array();
 
-$preview_post_link_html = $scheduled_post_link_html = $view_post_link_html = '';
-$preview_page_link_html = $scheduled_page_link_html = $view_page_link_html = '';
+$preview_post_link_html   = '';
+$scheduled_post_link_html = '';
+$view_post_link_html      = '';
+
+$preview_page_link_html   = '';
+$scheduled_page_link_html = '';
+$view_page_link_html      = '';
 
 $preview_url = get_preview_post_link( $post );
 
@@ -648,7 +655,7 @@ do_action( 'edit_form_top', $post );
 		if ( has_filter( 'pre_get_shortlink' ) || has_filter( 'get_shortlink' ) ) {
 			$shortlink = wp_get_shortlink( $post->ID, 'post' );
 
-			if ( ! empty( $shortlink ) && $shortlink !== $permalink && $permalink !== home_url( '?page_id=' . $post->ID ) ) {
+			if ( ! empty( $shortlink ) && $shortlink !== $permalink && home_url( '?page_id=' . $post->ID ) !== $permalink ) {
 				$sample_permalink_html .= '<input id="shortlink" type="hidden" value="' . esc_attr( $shortlink ) . '" /><button type="button" class="button button-small" onclick="prompt(&#39;URL:&#39;, jQuery(\'#shortlink\').val());">' . __( 'Get Shortlink' ) . '</button>';
 			}
 		}
@@ -716,7 +723,8 @@ if ( post_type_supports( $post_type, 'editor' ) ) {
 	<?php
 	if ( 'auto-draft' != $post->post_status ) {
 		echo '<span id="last-edit">';
-		if ( $last_user = get_userdata( get_post_meta( $post_ID, '_edit_last', true ) ) ) {
+		$last_user = get_userdata( get_post_meta( $post_ID, '_edit_last', true ) );
+		if ( $last_user ) {
 			/* translators: 1: Name of most recent post author, 2: Post edited date, 3: Post edited time */
 			printf( __( 'Last edited by %1$s on %2$s at %3$s' ), esc_html( $last_user->display_name ), mysql2date( __( 'F j, Y' ), $post->post_modified ), mysql2date( __( 'g:i a' ), $post->post_modified ) );
 		} else {

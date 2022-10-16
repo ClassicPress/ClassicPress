@@ -159,7 +159,8 @@ final class _WP_Editors {
 		$editor_class   = ' class="' . trim( esc_attr( $set['editor_class'] ) . ' wp-editor-area' ) . '"';
 		$tabindex       = $set['tabindex'] ? ' tabindex="' . (int) $set['tabindex'] . '"' : '';
 		$default_editor = 'html';
-		$buttons        = $autocomplete = '';
+		$buttons        = '';
+		$autocomplete   = '';
 		$editor_id_attr = esc_attr( $editor_id );
 
 		if ( $set['drag_drop_upload'] ) {
@@ -243,7 +244,7 @@ final class _WP_Editors {
 		$quicktags_toolbar = '';
 
 		if ( self::$this_quicktags ) {
-			if ( 'content' === $editor_id && ! empty( $GLOBALS['current_screen'] ) && $GLOBALS['current_screen']->base === 'post' ) {
+			if ( 'content' === $editor_id && ! empty( $GLOBALS['current_screen'] ) && 'post' === $GLOBALS['current_screen']->base ) {
 				$toolbar_id = 'ed_toolbar';
 			} else {
 				$toolbar_id = 'qt_' . $editor_id_attr . '_toolbar';
@@ -438,7 +439,8 @@ final class _WP_Editors {
 					 */
 					$plugins = array_unique( apply_filters( 'tiny_mce_plugins', $plugins ) );
 
-					if ( ( $key = array_search( 'spellchecker', $plugins ) ) !== false ) {
+					$key = array_search( 'spellchecker', $plugins );
+					if ( false !== $key ) {
 						// Remove 'spellchecker' from the internal plugins if added with 'tiny_mce_plugins' filter to prevent errors.
 						// It can be added with 'mce_external_plugins'.
 						unset( $plugins[ $key ] );
@@ -582,7 +584,9 @@ final class _WP_Editors {
 				 * @param string $editor_id Unique editor identifier, e.g. 'content'.
 				 */
 				$mce_buttons   = apply_filters( 'teeny_mce_buttons', array( 'bold', 'italic', 'underline', 'blockquote', 'strikethrough', 'bullist', 'numlist', 'alignleft', 'aligncenter', 'alignright', 'undo', 'redo', 'link', 'fullscreen' ), $editor_id );
-				$mce_buttons_2 = $mce_buttons_3 = $mce_buttons_4 = array();
+				$mce_buttons_2 = array();
+				$mce_buttons_3 = array();
+				$mce_buttons_4 = array();
 			} else {
 				$mce_buttons = array( 'formatselect', 'bold', 'italic', 'bullist', 'numlist', 'blockquote', 'alignleft', 'aligncenter', 'alignright', 'link', 'wp_more', 'spellchecker' );
 
@@ -645,7 +649,8 @@ final class _WP_Editors {
 
 			$body_class = $editor_id;
 
-			if ( $post = get_post() ) {
+			$post = get_post();
+			if ( $post ) {
 				$body_class .= ' post-type-' . sanitize_html_class( $post->post_type ) . ' post-status-' . sanitize_html_class( $post->post_status );
 
 				if ( post_type_supports( $post->post_type, 'post-formats' ) ) {
@@ -659,7 +664,7 @@ final class _WP_Editors {
 
 				$page_template = get_page_template_slug( $post );
 
-				if ( $page_template !== false ) {
+				if ( false !== $page_template ) {
 					$page_template = empty( $page_template ) ? 'default' : str_replace( '.', '-', basename( $page_template, '.php' ) );
 					$body_class   .= ' page-template-' . sanitize_html_class( $page_template );
 				}
@@ -1459,7 +1464,8 @@ final class _WP_Editors {
 		global $tinymce_version;
 
 		$tmce_on = ! empty( self::$mce_settings );
-		$mceInit = $qtInit = '';
+		$mceInit = '';
+		$qtInit  = '';
 
 		if ( $tmce_on ) {
 			foreach ( self::$mce_settings as $editor_id => $init ) {

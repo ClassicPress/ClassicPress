@@ -237,17 +237,19 @@ class WP_User {
 		}
 
 		if ( false !== $user_id ) {
-			if ( $user = wp_cache_get( $user_id, 'users' ) ) {
+			$user = wp_cache_get( $user_id, 'users' );
+			if ( $user ) {
 				return $user;
 			}
 		}
 
-		if ( ! $user = $wpdb->get_row(
+		$user = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM $wpdb->users WHERE $db_field = %s",
 				$value
 			)
-		) ) {
+		);
+		if ( ! $user ) {
 			return false;
 		}
 
@@ -496,7 +498,7 @@ class WP_User {
 	 */
 	public function get_role_caps() {
 		$switch_site = false;
-		if ( is_multisite() && $this->site_id != get_current_blog_id() ) {
+		if ( is_multisite() && get_current_blog_id() != $this->site_id ) {
 			$switch_site = true;
 
 			switch_to_blog( $this->site_id );
@@ -593,7 +595,7 @@ class WP_User {
 	 * @param string $role Role name.
 	 */
 	public function set_role( $role ) {
-		if ( 1 == count( $this->roles ) && $role == current( $this->roles ) ) {
+		if ( 1 == count( $this->roles ) && current( $this->roles ) == $role ) {
 			return;
 		}
 

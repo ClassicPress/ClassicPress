@@ -27,8 +27,8 @@ if ( isset( $_GET['action'] ) ) {
 			check_admin_referer( 'deleteuser' );
 
 			$id = intval( $_GET['id'] );
-			if ( $id != '0' && $id != '1' ) {
-				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle with arrays
+			if ( '0' != $id && '1' != $id ) {
+				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle arrays.
 				$title             = __( 'Users' );
 				$parent_file       = 'users.php';
 				require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -77,7 +77,7 @@ if ( isset( $_GET['action'] ) ) {
 								$userfunction = 'all_spam';
 								$blogs        = get_blogs_of_user( $user_id, true );
 								foreach ( (array) $blogs as $details ) {
-									if ( $details->userblog_id != get_network()->site_id ) { // main blog not a spam !
+									if ( get_network()->site_id != $details->userblog_id ) { // Main blog is not a spam!
 										update_blog_status( $details->userblog_id, 'spam', '1' );
 									}
 								}
@@ -102,7 +102,7 @@ if ( isset( $_GET['action'] ) ) {
 
 					$user_ids = (array) $_POST['allusers'];
 					/** This action is documented in wp-admin/network/site-themes.php */
-					$sendback = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $user_ids );
+					$sendback = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $user_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 					wp_safe_redirect( $sendback );
 					exit();
@@ -159,7 +159,7 @@ if ( isset( $_GET['action'] ) ) {
 				}
 			}
 
-			if ( $i == 1 ) {
+			if ( 1 == $i ) {
 				$deletefunction = 'delete';
 			} else {
 				$deletefunction = 'all_delete';
@@ -222,7 +222,7 @@ get_current_screen()->set_screen_reader_content(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
-if ( isset( $_REQUEST['updated'] ) && $_REQUEST['updated'] == 'true' && ! empty( $_REQUEST['action'] ) ) {
+if ( isset( $_REQUEST['updated'] ) && 'true' == $_REQUEST['updated'] && ! empty( $_REQUEST['action'] ) ) {
 	?>
 	<div id="message" class="updated notice is-dismissible"><p>
 		<?php

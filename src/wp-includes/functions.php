@@ -498,7 +498,7 @@ function is_serialized_string( $data ) {
 		return false;
 	} elseif ( ';' !== substr( $data, -1 ) ) {
 		return false;
-	} elseif ( $data[0] !== 's' ) {
+	} elseif ( 's' !== $data[0] ) {
 		return false;
 	} elseif ( '"' !== substr( $data, -2, 1 ) ) {
 		return false;
@@ -705,7 +705,8 @@ function do_enclose( $content, $post ) {
 	foreach ( (array) $post_links as $url ) {
 		if ( '' !== $url && ! $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s", $post->ID, $wpdb->esc_like( $url ) . '%' ) ) ) {
 
-			if ( $headers = wp_get_http_headers( $url ) ) {
+			$headers = wp_get_http_headers( $url );
+			if ( $headers ) {
 				$len           = isset( $headers['content-length'] ) ? (int) $headers['content-length'] : 0;
 				$type          = isset( $headers['content-type'] ) ? $headers['content-type'] : '';
 				$allowed_types = array( 'video', 'audio' );
@@ -820,15 +821,15 @@ function _http_build_query( $data, $prefix = null, $sep = null, $key = '', $urle
 		if ( $urlencode ) {
 			$k = urlencode( $k );
 		}
-		if ( is_int( $k ) && $prefix != null ) {
+		if ( is_int( $k ) && null != $prefix ) {
 			$k = $prefix . $k;
 		}
 		if ( ! empty( $key ) ) {
 			$k = $key . '%5B' . $k . '%5D';
 		}
-		if ( $v === null ) {
+		if ( null === $v ) {
 			continue;
-		} elseif ( $v === false ) {
+		} elseif ( false === $v ) {
 			$v = '0';
 		}
 
@@ -899,7 +900,8 @@ function add_query_arg() {
 		}
 	}
 
-	if ( $frag = strstr( $uri, '#' ) ) {
+	$frag = strstr( $uri, '#' );
+	if ( $frag ) {
 		$uri = substr( $uri, 0, -strlen( $frag ) );
 	} else {
 		$frag = '';
@@ -937,7 +939,7 @@ function add_query_arg() {
 	}
 
 	foreach ( $qs as $k => $v ) {
-		if ( $v === false ) {
+		if ( false === $v ) {
 			unset( $qs[ $k ] );
 		}
 	}
@@ -1338,7 +1340,7 @@ function do_feed() {
 	// Remove the pad, if present.
 	$feed = preg_replace( '/^_+/', '', $feed );
 
-	if ( $feed == '' || $feed == 'feed' ) {
+	if ( '' == $feed || 'feed' === $feed ) {
 		$feed = get_default_feed();
 	}
 
@@ -1639,7 +1641,8 @@ function wp_referer_field( $echo = true ) {
  * @return string Original referer field.
  */
 function wp_original_referer_field( $echo = true, $jump_back_to = 'current' ) {
-	if ( ! $ref = wp_get_original_referer() ) {
+	$ref = wp_get_original_referer();
+	if ( ! $ref ) {
 		$ref = 'previous' == $jump_back_to ? wp_get_referer() : wp_unslash( $_SERVER['REQUEST_URI'] );
 	}
 	$orig_referer_field = '<input type="hidden" name="_wp_original_http_referer" value="' . esc_attr( $ref ) . '" />';
@@ -1665,7 +1668,7 @@ function wp_get_referer() {
 
 	$ref = wp_get_raw_referer();
 
-	if ( $ref && $ref !== wp_unslash( $_SERVER['REQUEST_URI'] ) && $ref !== home_url() . wp_unslash( $_SERVER['REQUEST_URI'] ) ) {
+	if ( $ref && wp_unslash( $_SERVER['REQUEST_URI'] ) !== $ref && home_url() . wp_unslash( $_SERVER['REQUEST_URI'] ) !== $ref ) {
 		return wp_validate_redirect( $ref, false );
 	}
 
@@ -1727,7 +1730,7 @@ function wp_mkdir_p( $target ) {
 	$target = str_replace( '//', '/', $target );
 
 	// Put the wrapper back on the target.
-	if ( $wrapper !== null ) {
+	if ( null !== $wrapper ) {
 		$target = $wrapper . '://' . $target;
 	}
 
@@ -1756,7 +1759,8 @@ function wp_mkdir_p( $target ) {
 	}
 
 	// Get the permission bits.
-	if ( $stat = @stat( $target_parent ) ) {
+	$stat = @stat( $target_parent );
+	if ( $stat ) {
 		$dir_perms = $stat['mode'] & 0007777;
 	} else {
 		$dir_perms = 0777;
@@ -1768,7 +1772,7 @@ function wp_mkdir_p( $target ) {
 		 * If a umask is set that modifies $dir_perms, we'll have to re-set
 		 * the $dir_perms correctly with chmod()
 		 */
-		if ( $dir_perms != ( $dir_perms & ~umask() ) ) {
+		if ( ( $dir_perms & ~umask() ) != $dir_perms ) {
 			$folder_parts = explode( '/', substr( $target, strlen( $target_parent ) + 1 ) );
 			for ( $i = 1, $c = count( $folder_parts ); $i <= $c; $i++ ) {
 				chmod( $target_parent . '/' . implode( '/', array_slice( $folder_parts, 0, $i ) ), $dir_perms );
@@ -1800,7 +1804,7 @@ function path_is_absolute( $path ) {
 		return true;
 	}
 
-	if ( strlen( $path ) == 0 || $path[0] == '.' ) {
+	if ( strlen( $path ) == 0 || '.' === $path[0] ) {
 		return false;
 	}
 
@@ -1810,7 +1814,7 @@ function path_is_absolute( $path ) {
 	}
 
 	// A path starting with / or \ is absolute; anything else is relative.
-	return ( $path[0] == '/' || $path[0] == '\\' );
+	return ( '/' === $path[0] || '\\' === $path[0] );
 }
 
 /**
@@ -1954,8 +1958,8 @@ function wp_is_writable( $path ) {
  * @return bool Whether the path is writable.
  */
 function win_is_writable( $path ) {
-
-	if ( $path[ strlen( $path ) - 1 ] == '/' ) { // if it looks like a directory, check a random file within the directory
+	if ( '/' === $path[ strlen( $path ) - 1 ] ) {
+		// If it looks like a directory, check a random file within the directory.
 		return win_is_writable( $path . uniqid( mt_rand() ) . '.tmp' );
 	} elseif ( is_dir( $path ) ) { // If it's a directory (and not a file) check a random file within the directory
 		return win_is_writable( $path . '/' . uniqid( mt_rand() ) . '.tmp' );
@@ -1963,7 +1967,7 @@ function win_is_writable( $path ) {
 	// check tmp file for read/write capabilities
 	$should_delete_tmp_file = ! file_exists( $path );
 	$f                      = @fopen( $path, 'a' );
-	if ( $f === false ) {
+	if ( false === $f ) {
 		return false;
 	}
 	fclose( $f );
@@ -2097,7 +2101,8 @@ function _wp_upload_dir( $time = null ) {
 		$dir = $upload_path;
 	}
 
-	if ( ! $url = get_option( 'upload_url_path' ) ) {
+	$url = get_option( 'upload_url_path' );
+	if ( ! $url ) {
 		if ( empty( $upload_path ) || ( 'wp-content/uploads' == $upload_path ) || ( $upload_path == $dir ) ) {
 			$url = WP_CONTENT_URL . '/uploads';
 		} else {
@@ -2309,7 +2314,7 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 
 	$upload = wp_upload_dir( $time );
 
-	if ( $upload['error'] !== false ) {
+	if ( false !== $upload['error'] ) {
 		return $upload;
 	}
 
@@ -2537,7 +2542,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		if ( in_array( $real_mime, $nonspecific_types, true ) ) {
 			// File is a non-specific binary type. That's ok if it's a type that generally tends to be binary.
 			if ( ! in_array( substr( $type, 0, strcspn( $type, '/' ) ), array( 'application', 'video', 'audio' ) ) ) {
-				$type = $ext = false;
+				$type = false;
+				$ext  = false;
 			}
 		} elseif ( 0 === strpos( $real_mime, 'video/' ) || 0 === strpos( $real_mime, 'audio/' ) ) {
 			/*
@@ -2546,7 +2552,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 			 * and some media files are commonly named with the wrong extension (.mov instead of .mp4)
 			 */
 			if ( substr( $real_mime, 0, strcspn( $real_mime, '/' ) ) !== substr( $type, 0, strcspn( $type, '/' ) ) ) {
-				$type = $ext = false;
+				$type = false;
+				$ext  = false;
 			}
 		} elseif ( 'text/plain' === $real_mime ) {
 			// A few common file types are occasionally detected as text/plain; allow those.
@@ -2562,7 +2569,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				)
 			)
 			) {
-				$type = $ext = false;
+				$type = false;
+				$ext  = false;
 			}
 		} elseif ( 'application/csv' === $real_mime ) {
 			// Special casing for CSV files.
@@ -2590,7 +2598,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				)
 			)
 			) {
-				$type = $ext = false;
+				$type = false;
+				$ext  = false;
 			}
 		} else {
 			if ( $type !== $real_mime ) {
@@ -2598,7 +2607,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				 * Everything else including image/* and application/*:
 				 * If the real content type doesn't match the file extension, assume it's dangerous.
 				 */
-				$type = $ext = false;
+				$type = false;
+				$ext  = false;
 			}
 		}
 	}
@@ -2608,7 +2618,8 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		$allowed = get_allowed_mime_types();
 
 		if ( ! in_array( $type, $allowed ) ) {
-			$type = $ext = false;
+			$type = false;
+			$ext  = false;
 		}
 	}
 
@@ -3027,8 +3038,8 @@ function wp_die( $message = '', $title = '', $args = array() ) {
  * @param string|array    $args    Optional. Arguments to control behavior. Default empty array.
  */
 function _default_wp_die_handler( $message, $title = '', $args = array() ) {
-	$defaults = array( 'response' => 500 );
-	$r        = wp_parse_args( $args, $defaults );
+	$defaults    = array( 'response' => 500 );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
 	$have_gettext = function_exists( '__' );
 
@@ -3055,14 +3066,14 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 		$message = "<p>$message</p>";
 	}
 
-	if ( isset( $r['back_link'] ) && $r['back_link'] ) {
+	if ( isset( $parsed_args['back_link'] ) && $parsed_args['back_link'] ) {
 		$back_text = $have_gettext ? __( '&laquo; Back' ) : '&laquo; Back';
 		$message  .= "\n<p><a href='javascript:history.back()'>$back_text</a></p>";
 	}
 
 	if ( ! did_action( 'admin_head' ) ) :
 		if ( ! headers_sent() ) {
-			status_header( $r['response'] );
+			status_header( $parsed_args['response'] );
 			nocache_headers();
 			header( 'Content-Type: text/html; charset=utf-8' );
 		}
@@ -3072,7 +3083,7 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 		}
 
 		$text_direction = 'ltr';
-		if ( isset( $r['text_direction'] ) && 'rtl' == $r['text_direction'] ) {
+		if ( isset( $parsed_args['text_direction'] ) && 'rtl' == $parsed_args['text_direction'] ) {
 			$text_direction = 'rtl';
 		} elseif ( function_exists( 'is_rtl' ) && is_rtl() ) {
 			$text_direction = 'rtl';
@@ -3239,12 +3250,13 @@ function _xmlrpc_wp_die_handler( $message, $title = '', $args = array() ) {
 	global $wp_xmlrpc_server;
 	$defaults = array( 'response' => 500 );
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
 	if ( $wp_xmlrpc_server ) {
-		$error = new IXR_Error( $r['response'], $message );
+		$error = new IXR_Error( $parsed_args['response'], $message );
 		$wp_xmlrpc_server->output( $error->getXml() );
 	}
+
 	die();
 }
 
@@ -3264,10 +3276,11 @@ function _ajax_wp_die_handler( $message, $title = '', $args = array() ) {
 	$defaults = array(
 		'response' => 200,
 	);
-	$r        = wp_parse_args( $args, $defaults );
 
-	if ( ! headers_sent() && null !== $r['response'] ) {
-		status_header( $r['response'] );
+	$parsed_args = wp_parse_args( $args, $defaults );
+
+	if ( ! headers_sent() && null !== $parsed_args['response'] ) {
+		status_header( $parsed_args['response'] );
 	}
 
 	if ( is_scalar( $message ) ) {
@@ -3789,9 +3802,9 @@ function smilies_init() {
 
 		// new subpattern?
 		if ( $firstchar != $subchar ) {
-			if ( $subchar != '' ) {
-				$wp_smiliessearch .= ')(?=' . $spaces . '|$)';  // End previous "subpattern"
-				$wp_smiliessearch .= '|(?<=' . $spaces . '|^)'; // Begin another "subpattern"
+			if ( '' != $subchar ) {
+				$wp_smiliessearch .= ')(?=' . $spaces . '|$)';  // End previous "subpattern".
+				$wp_smiliessearch .= '|(?<=' . $spaces . '|^)'; // Begin another "subpattern".
 			}
 			$subchar           = $firstchar;
 			$wp_smiliessearch .= preg_quote( $firstchar, '/' ) . '(?:';
@@ -3820,17 +3833,17 @@ function smilies_init() {
  */
 function wp_parse_args( $args, $defaults = '' ) {
 	if ( is_object( $args ) ) {
-		$r = get_object_vars( $args );
+		$parsed_args = get_object_vars( $args );
 	} elseif ( is_array( $args ) ) {
-		$r =& $args;
+		$parsed_args =& $args;
 	} else {
-		wp_parse_str( $args, $r );
+		wp_parse_str( $args, $parsed_args );
 	}
 
 	if ( is_array( $defaults ) ) {
-		return array_merge( $defaults, $r );
+		return array_merge( $defaults, $parsed_args );
 	}
-	return $r;
+	return $parsed_args;
 }
 
 /**
@@ -4804,7 +4817,7 @@ function is_main_site( $site_id = null, $network_id = null ) {
 
 	$site_id = (int) $site_id;
 
-	return $site_id === get_main_site_id( $network_id );
+	return get_main_site_id( $network_id ) === $site_id;
 }
 
 /**
@@ -4848,7 +4861,7 @@ function is_main_network( $network_id = null ) {
 
 	$network_id = (int) $network_id;
 
-	return ( $network_id === get_main_network_id() );
+	return ( get_main_network_id() === $network_id );
 }
 
 /**
@@ -4937,7 +4950,8 @@ function global_terms_enabled() {
  * @return float|false Timezone GMT offset, false otherwise.
  */
 function wp_timezone_override_offset() {
-	if ( ! $timezone_string = get_option( 'timezone_string' ) ) {
+	$timezone_string = get_option( 'timezone_string' );
+	if ( ! $timezone_string ) {
 		return false;
 	}
 
@@ -5306,7 +5320,8 @@ function get_file_data( $file, $default_headers, $context = '' ) {
 	 *
 	 * @param array $extra_context_headers Empty array by default.
 	 */
-	if ( $context && $extra_headers = apply_filters( "extra_{$context}_headers", array() ) ) {
+	$extra_headers = $context ? apply_filters( "extra_{$context}_headers", array() ) : array();
+	if ( $extra_headers ) {
 		$extra_headers = array_combine( $extra_headers, $extra_headers ); // keys equal values
 		$all_headers   = array_merge( $extra_headers, (array) $default_headers );
 	} else {
@@ -5430,7 +5445,8 @@ function send_nosniff_header() {
  * @return string SQL clause.
  */
 function _wp_mysql_week( $column ) {
-	switch ( $start_of_week = (int) get_option( 'start_of_week' ) ) {
+	$start_of_week = (int) get_option( 'start_of_week' );
+	switch ( $start_of_week ) {
 		case 1:
 			return "WEEK( $column, 1 )";
 		case 2:
@@ -5461,7 +5477,8 @@ function _wp_mysql_week( $column ) {
 function wp_find_hierarchy_loop( $callback, $start, $start_parent, $callback_args = array() ) {
 	$override = is_null( $start_parent ) ? array() : array( $start => $start_parent );
 
-	if ( ! $arbitrary_loop_member = wp_find_hierarchy_loop_tortoise_hare( $callback, $start, $override, $callback_args ) ) {
+	$arbitrary_loop_member = wp_find_hierarchy_loop_tortoise_hare( $callback, $start, $override, $callback_args );
+	if ( ! $arbitrary_loop_member ) {
 		return array();
 	}
 
@@ -5489,7 +5506,9 @@ function wp_find_hierarchy_loop( $callback, $start, $start_parent, $callback_arg
  *               $_return_loop
  */
 function wp_find_hierarchy_loop_tortoise_hare( $callback, $start, $override = array(), $callback_args = array(), $_return_loop = false ) {
-	$tortoise = $hare = $evanescent_hare = $start;
+	$tortoise        = $start;
+	$hare            = $start;
+	$evanescent_hare = $start;
 	$return   = array();
 
 	// Set evanescent_hare to one past hare
@@ -5502,7 +5521,9 @@ function wp_find_hierarchy_loop_tortoise_hare( $callback, $start, $override = ar
 		( $hare = isset( $override[ $evanescent_hare ] ) ? $override[ $evanescent_hare ] : call_user_func_array( $callback, array_merge( array( $evanescent_hare ), $callback_args ) ) )
 	) {
 		if ( $_return_loop ) {
-			$return[ $tortoise ] = $return[ $evanescent_hare ] = $return[ $hare ] = true;
+			$return[ $tortoise ]        = true;
+			$return[ $evanescent_hare ] = true;
+			$return[ $hare ]            = true;
 		}
 
 		// tortoise got lapped - must be a loop

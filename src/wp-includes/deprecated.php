@@ -430,9 +430,9 @@ function wp_get_linksbyname($category, $args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -635,24 +635,24 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 function wp_list_cats($args = '') {
 	_deprecated_function( __FUNCTION__, 'WP-2.1.0', 'wp_list_categories()' );
 
-	$r = wp_parse_args( $args );
+	$parsed_args = wp_parse_args( $args );
 
 	// Map to new names.
-	if ( isset($r['optionall']) && isset($r['all']))
-		$r['show_option_all'] = $r['all'];
-	if ( isset($r['sort_column']) )
-		$r['orderby'] = $r['sort_column'];
-	if ( isset($r['sort_order']) )
-		$r['order'] = $r['sort_order'];
-	if ( isset($r['optiondates']) )
-		$r['show_last_update'] = $r['optiondates'];
-	if ( isset($r['optioncount']) )
-		$r['show_count'] = $r['optioncount'];
-	if ( isset($r['list']) )
-		$r['style'] = $r['list'] ? 'list' : 'break';
-	$r['title_li'] = '';
+	if ( isset($parsed_args['optionall']) && isset($parsed_args['all']))
+		$parsed_args['show_option_all'] = $parsed_args['all'];
+	if ( isset($parsed_args['sort_column']) )
+		$parsed_args['orderby'] = $parsed_args['sort_column'];
+	if ( isset($parsed_args['sort_order']) )
+		$parsed_args['order'] = $parsed_args['sort_order'];
+	if ( isset($parsed_args['optiondates']) )
+		$parsed_args['show_last_update'] = $parsed_args['optiondates'];
+	if ( isset($parsed_args['optioncount']) )
+		$parsed_args['show_count'] = $parsed_args['optioncount'];
+	if ( isset($parsed_args['list']) )
+		$parsed_args['style'] = $parsed_args['list'] ? 'list' : 'break';
+	$parsed_args['title_li'] = '';
 
-	return wp_list_categories($r);
+	return wp_list_categories($parsed_args);
 }
 
 /**
@@ -892,9 +892,9 @@ function wp_get_links($args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -3957,6 +3957,51 @@ function wp_make_content_images_responsive( $content ) {
 
 	// This will also add the `loading` attribute to `img` tags, if enabled.
 	return wp_filter_content_tags( $content );
+}
+
+/**
+ * Display or retrieve page title for post archive based on date.
+ *
+ * Useful for when the template only needs to display the month and year,
+ * if either are available. The prefix does not automatically place a space
+ * between the prefix, so if there should be a space, the parameter value
+ * will need to have it at the end.
+ *
+ * @since WP-0.71
+ * @deprecated CP-1.5.0
+ *
+ * @global WP_Locale $wp_locale
+ *
+ * @param string $prefix  Optional. What to display before the title.
+ * @param bool   $display Optional, default is true. Whether to display or retrieve title.
+ * @return string|void Title when retrieving.
+ */
+function single_month_title( $prefix = '', $display = true ) {
+	_deprecated_function( __FUNCTION__, 'CP-1.5.0' );
+	global $wp_locale;
+
+	$m        = get_query_var( 'm' );
+	$year     = get_query_var( 'year' );
+	$monthnum = get_query_var( 'monthnum' );
+
+	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
+		$my_year  = $year;
+		$my_month = $wp_locale->get_month( $monthnum );
+	} elseif ( ! empty( $m ) ) {
+		$my_year  = substr( $m, 0, 4 );
+		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
+	}
+
+	if ( empty( $my_month ) ) {
+		return false;
+	}
+
+	$result = $prefix . $my_month . $prefix . $my_year;
+
+	if ( ! $display ) {
+		return $result;
+	}
+	echo $result;
 }
 
 /**

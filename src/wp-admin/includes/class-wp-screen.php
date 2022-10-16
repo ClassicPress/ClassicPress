@@ -199,7 +199,8 @@ final class WP_Screen {
 			return $hook_name;
 		}
 
-		$post_type = $taxonomy = null;
+		$post_type       = null;
+		$taxonomy        = null;
 		$in_admin  = false;
 		$action    = '';
 
@@ -346,7 +347,7 @@ final class WP_Screen {
 
 		if ( isset( self::$_registry[ $id ] ) ) {
 			$screen = self::$_registry[ $id ];
-			if ( $screen === get_current_screen() ) {
+			if ( get_current_screen() === $screen ) {
 				return $screen;
 			}
 		} else {
@@ -985,7 +986,10 @@ final class WP_Screen {
 			)
 		);
 
-		$wrapper_start = $wrapper_end = $form_start = $form_end = '';
+		$wrapper_start = '';
+		$wrapper_end   = '';
+		$form_start    = '';
+		$form_end      = '';
 
 		// Output optional wrapper.
 		if ( $options['wrap'] ) {

@@ -34,11 +34,14 @@ function get_bookmark( $bookmark, $output = OBJECT, $filter = 'raw' ) {
 	} else {
 		if ( isset( $GLOBALS['link'] ) && ( $GLOBALS['link']->link_id == $bookmark ) ) {
 			$_bookmark = & $GLOBALS['link'];
-		} elseif ( ! $_bookmark = wp_cache_get( $bookmark, 'bookmark' ) ) {
-			$_bookmark = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->links WHERE link_id = %d LIMIT 1", $bookmark ) );
-			if ( $_bookmark ) {
-				$_bookmark->link_category = array_unique( wp_get_object_terms( $_bookmark->link_id, 'link_category', array( 'fields' => 'ids' ) ) );
-				wp_cache_add( $_bookmark->link_id, $_bookmark, 'bookmark' );
+		} else {
+			$_bookmark = wp_cache_get( $bookmark, 'bookmark' );
+			if ( ! $_bookmark ) {
+				$_bookmark = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->links WHERE link_id = %d LIMIT 1", $bookmark ) );
+				if ( $_bookmark ) {
+					$_bookmark->link_category = array_unique( wp_get_object_terms( $_bookmark->link_id, 'link_category', array( 'fields' => 'ids' ) ) );
+					wp_cache_add( $_bookmark->link_id, $_bookmark, 'bookmark' );
+				}
 			}
 		}
 	}
@@ -49,11 +52,11 @@ function get_bookmark( $bookmark, $output = OBJECT, $filter = 'raw' ) {
 
 	$_bookmark = sanitize_bookmark( $_bookmark, $filter );
 
-	if ( $output == OBJECT ) {
+	if ( OBJECT == $output ) {
 		return $_bookmark;
-	} elseif ( $output == ARRAY_A ) {
+	} elseif ( ARRAY_A == $output ) {
 		return get_object_vars( $_bookmark );
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		return array_values( get_object_vars( $_bookmark ) );
 	} else {
 		return $_bookmark;
@@ -136,11 +139,12 @@ function get_bookmarks( $args = '' ) {
 		'search'         => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	$key   = md5( serialize( $r ) );
-	$cache = false;
-	if ( 'rand' !== $r['orderby'] && $cache = wp_cache_get( 'get_bookmarks', 'bookmark' ) ) {
+	$key   = md5( serialize( $parsed_args ) );
+	$cache = wp_cache_get( 'get_bookmarks', 'bookmark' );
+
+	if ( 'rand' !== $parsed_args['orderby'] && $cache ) {
 		if ( is_array( $cache ) && isset( $cache[ $key ] ) ) {
 			$bookmarks = $cache[ $key ];
 			/**
@@ -156,9 +160,9 @@ function get_bookmarks( $args = '' ) {
 			 * @see get_bookmarks()
 			 *
 			 * @param array $bookmarks List of the cached bookmarks.
-			 * @param array $r         An array of bookmark query arguments.
+			 * @param array $parsed_args         An array of bookmark query arguments.
 			 */
-			return apply_filters( 'get_bookmarks', $bookmarks, $r );
+			return apply_filters( 'get_bookmarks', $bookmarks, $parsed_args );
 		}
 	}
 
@@ -167,11 +171,13 @@ function get_bookmarks( $args = '' ) {
 	}
 
 	$inclusions = '';
-	if ( ! empty( $r['include'] ) ) {
-		$r['exclude']       = '';  //ignore exclude, category, and category_name params if using include
-		$r['category']      = '';
-		$r['category_name'] = '';
+
+	if ( ! empty( $parsed_args['include'] ) ) {
+		$parsed_args['exclude']       = '';  //ignore exclude, category, and category_name params if using include
+		$parsed_args['category']      = '';
+		$parsed_args['category_name'] = '';
 		$inclinks           = preg_split( '/[\s,]+/', $r['include'] );
+
 		if ( count( $inclinks ) ) {
 			foreach ( $inclinks as $inclink ) {
 				if ( empty( $inclusions ) ) {
@@ -187,7 +193,7 @@ function get_bookmarks( $args = '' ) {
 	}
 
 	$exclusions = '';
-	if ( ! empty( $r['exclude'] ) ) {
+	if ( ! empty( $parsed_args['exclude'] ) ) {
 		$exlinks = preg_split( '/[\s,]+/', $r['exclude'] );
 		if ( count( $exlinks ) ) {
 			foreach ( $exlinks as $exlink ) {
@@ -203,26 +209,28 @@ function get_bookmarks( $args = '' ) {
 		$exclusions .= ')';
 	}
 
-	if ( ! empty( $r['category_name'] ) ) {
-		if ( $r['category'] = get_term_by( 'name', $r['category_name'], 'link_category' ) ) {
-			$r['category'] = $r['category']->term_id;
+	if ( ! empty( $parsed_args['category_name'] ) ) {
+		$parsed_args['category'] = get_term_by( 'name', $parsed_args['category_name'], 'link_category' );
+		if ( $parsed_args['category'] ) {
+			$parsed_args['category'] = $parsed_args['category']->term_id;
 		} else {
 			$cache[ $key ] = array();
 			wp_cache_set( 'get_bookmarks', $cache, 'bookmark' );
 			/** This filter is documented in wp-includes/bookmark.php */
-			return apply_filters( 'get_bookmarks', array(), $r );
+			return apply_filters( 'get_bookmarks', array(), $parsed_args );
 		}
 	}
 
 	$search = '';
-	if ( ! empty( $r['search'] ) ) {
-		$like   = '%' . $wpdb->esc_like( $r['search'] ) . '%';
+	if ( ! empty( $parsed_args['search'] ) ) {
+		$like   = '%' . $wpdb->esc_like( $parsed_args['search'] ) . '%';
 		$search = $wpdb->prepare( ' AND ( (link_url LIKE %s) OR (link_name LIKE %s) OR (link_description LIKE %s) ) ', $like, $like, $like );
 	}
 
 	$category_query = '';
 	$join           = '';
-	if ( ! empty( $r['category'] ) ) {
+
+	if ( ! empty( $parsed_args['category'] ) ) {
 		$incategories = preg_split( '/[\s,]+/', $r['category'] );
 		if ( count( $incategories ) ) {
 			foreach ( $incategories as $incat ) {
@@ -239,15 +247,15 @@ function get_bookmarks( $args = '' ) {
 		$join            = " INNER JOIN $wpdb->term_relationships AS tr ON ($wpdb->links.link_id = tr.object_id) INNER JOIN $wpdb->term_taxonomy as tt ON tt.term_taxonomy_id = tr.term_taxonomy_id";
 	}
 
-	if ( $r['show_updated'] ) {
+	if ( $parsed_args['show_updated'] ) {
 		$recently_updated_test = ', IF (DATE_ADD(link_updated, INTERVAL 120 MINUTE) >= NOW(), 1,0) as recently_updated ';
 	} else {
 		$recently_updated_test = '';
 	}
 
-	$get_updated = ( $r['show_updated'] ) ? ', UNIX_TIMESTAMP(link_updated) AS link_updated_f ' : '';
+	$get_updated = ( $parsed_args['show_updated'] ) ? ', UNIX_TIMESTAMP(link_updated) AS link_updated_f ' : '';
 
-	$orderby = strtolower( $r['orderby'] );
+	$orderby = strtolower( $parsed_args['orderby'] );
 	$length  = '';
 	switch ( $orderby ) {
 		case 'length':
@@ -278,21 +286,22 @@ function get_bookmarks( $args = '' ) {
 		$orderby = 'link_name';
 	}
 
-	$order = strtoupper( $r['order'] );
+	$order = strtoupper( $parsed_args['order'] );
 	if ( '' !== $order && ! in_array( $order, array( 'ASC', 'DESC' ) ) ) {
 		$order = 'ASC';
 	}
 
 	$visible = '';
-	if ( $r['hide_invisible'] ) {
+	if ( $parsed_args['hide_invisible'] ) {
 		$visible = "AND link_visible = 'Y'";
 	}
 
 	$query  = "SELECT * $length $recently_updated_test $get_updated FROM $wpdb->links $join WHERE 1=1 $visible $category_query";
 	$query .= " $exclusions $inclusions $search";
 	$query .= " ORDER BY $orderby $order";
-	if ( $r['limit'] != -1 ) {
-		$query .= ' LIMIT ' . absint( $r['limit'] );
+
+	if ( -1 != $parsed_args['limit'] ) {
+		$query .= ' LIMIT ' . $r['limit'];
 	}
 
 	$results = $wpdb->get_results( $query );
@@ -303,7 +312,7 @@ function get_bookmarks( $args = '' ) {
 	}
 
 	/** This filter is documented in wp-includes/bookmark.php */
-	return apply_filters( 'get_bookmarks', $results, $r );
+	return apply_filters( 'get_bookmarks', $results, $parsed_args );
 }
 
 /**

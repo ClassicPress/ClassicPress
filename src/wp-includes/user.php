@@ -484,7 +484,8 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
 		$user = get_current_user_id();
 	}
 
-	if ( ! $user = get_userdata( $user ) ) {
+	$user = get_userdata( $user );
+	if ( ! $user ) {
 		return false;
 	}
 
@@ -775,7 +776,7 @@ function is_user_member_of_blog( $user_id = 0, $blog_id = 0 ) {
 	$base_capabilities_key = $wpdb->base_prefix . 'capabilities';
 	$site_capabilities_key = $wpdb->base_prefix . $blog_id . '_capabilities';
 
-	if ( isset( $keys[ $base_capabilities_key ] ) && $blog_id == 1 ) {
+	if ( isset( $keys[ $base_capabilities_key ] ) && 1 == $blog_id ) {
 		return true;
 	}
 
@@ -886,7 +887,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
 	$result      = array();
 
 	if ( 'time' == $strategy ) {
-		if ( is_multisite() && $site_id != get_current_blog_id() ) {
+		if ( is_multisite() && get_current_blog_id() != $site_id ) {
 			switch_to_blog( $site_id );
 			$avail_roles = wp_roles()->get_names();
 			restore_current_blog();
@@ -1001,7 +1002,10 @@ function setup_userdata( $for_user_id = '' ) {
 		$user_ID    = 0;
 		$user_level = 0;
 		$userdata   = null;
-		$user_login = $user_email = $user_url = $user_identity = '';
+		$user_login    = '';
+		$user_email    = '';
+		$user_url      = '';
+		$user_identity = '';
 		return;
 	}
 
@@ -1115,20 +1119,20 @@ function wp_dropdown_users( $args = '' ) {
 
 	$defaults['selected'] = is_author() ? get_query_var( 'author' ) : 0;
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	$query_args = wp_array_slice_assoc( $r, array( 'blog_id', 'include', 'exclude', 'orderby', 'order', 'who', 'role', 'role__in', 'role__not_in' ) );
+	$query_args = wp_array_slice_assoc( $parsed_args, array( 'blog_id', 'include', 'exclude', 'orderby', 'order', 'who', 'role', 'role__in', 'role__not_in' ) );
 
 	$fields = array( 'ID', 'user_login' );
 
-	$show = ! empty( $r['show'] ) ? $r['show'] : 'display_name';
+	$show = ! empty( $parsed_args['show'] ) ? $parsed_args['show'] : 'display_name';
 	if ( 'display_name_with_login' === $show ) {
 		$fields[] = 'display_name';
 	} else {
 		$fields[] = $show;
 	}
 
-	$value_field = ! empty( $r['value_field'] ) ? $r['value_field'] : 'ID';
+	$value_field = ! empty( $parsed_args['value_field'] ) ? $parsed_args['value_field'] : 'ID';
 	// Only allow selecting users by fields that should be unique per user.
 	// Otherwise, a user dropdown is not the right data model for the problem
 	// that the developer is attempting to solve.
@@ -1148,9 +1152,9 @@ function wp_dropdown_users( $args = '' ) {
 
 	$query_args['fields'] = array_unique( $fields );
 
-	$show_option_all   = $r['show_option_all'];
-	$show_option_none  = $r['show_option_none'];
-	$option_none_value = $r['option_none_value'];
+	$show_option_all   = $parsed_args['show_option_all'];
+	$show_option_none  = $parsed_args['show_option_none'];
+	$option_none_value = $parsed_args['option_none_value'];
 
 	/**
 	 * Filters the query arguments for the list of users in the dropdown.
@@ -1158,49 +1162,49 @@ function wp_dropdown_users( $args = '' ) {
 	 * @since WP-4.4.0
 	 *
 	 * @param array $query_args The query arguments for get_users().
-	 * @param array $r          The arguments passed to wp_dropdown_users() combined with the defaults.
+	 * @param array $parsed_args          The arguments passed to wp_dropdown_users() combined with the defaults.
 	 */
-	$query_args = apply_filters( 'wp_dropdown_users_args', $query_args, $r );
+	$query_args = apply_filters( 'wp_dropdown_users_args', $query_args, $parsed_args );
 
 	$users = get_users( $query_args );
 
 	$output = '';
-	if ( ! empty( $users ) && ( empty( $r['hide_if_only_one_author'] ) || count( $users ) > 1 ) ) {
-		$name = esc_attr( $r['name'] );
-		if ( $r['multi'] && ! $r['id'] ) {
+	if ( ! empty( $users ) && ( empty( $parsed_args['hide_if_only_one_author'] ) || count( $users ) > 1 ) ) {
+		$name = esc_attr( $parsed_args['name'] );
+		if ( $parsed_args['multi'] && ! $parsed_args['id'] ) {
 			$id = '';
 		} else {
-			$id = $r['id'] ? " id='" . esc_attr( $r['id'] ) . "'" : " id='$name'";
+			$id = $parsed_args['id'] ? " id='" . esc_attr( $parsed_args['id'] ) . "'" : " id='$name'";
 		}
-		if ( $r['select_multiple'] === true ) {
+		if ( $parsed_args['select_multiple'] === true ) {
 			$name         .= '[]';
 			$multiple_attr = ' multiple';
 		} else {
 			$multiple_attr = '';
 		}
-		$output = "<select name='{$name}'{$id} class='" . $r['class'] . "'$multiple_attr>\n";
+		$output = "<select name='{$name}'{$id} class='" . $parsed_args['class'] . "'$multiple_attr>\n";
 
 		if ( $show_option_all ) {
 			$output .= "\t<option value='0'>$show_option_all</option>\n";
 		}
 
 		if ( $show_option_none ) {
-			$_selected = selected( $option_none_value, $r['selected'], false );
+			$_selected = selected( $option_none_value, $parsed_args['selected'], false );
 			$output   .= "\t<option value='" . esc_attr( $option_none_value ) . "'$_selected>$show_option_none</option>\n";
 		}
 
-		if ( $r['include_selected'] && ( $r['selected'] > 0 ) ) {
+		if ( $parsed_args['include_selected'] && ( $parsed_args['selected'] > 0 ) ) {
 			$found_selected = false;
-			$r['selected']  = (int) $r['selected'];
+			$parsed_args['selected'] = (int) $parsed_args['selected'];
 			foreach ( (array) $users as $user ) {
 				$user->ID = (int) $user->ID;
-				if ( $user->ID === $r['selected'] ) {
+				if ( $user->ID === $parsed_args['selected'] ) {
 					$found_selected = true;
 				}
 			}
 
 			if ( ! $found_selected ) {
-				$selected_user = get_userdata( $r['selected'] );
+				$selected_user = get_userdata( $parsed_args['selected'] );
 				if ( $selected_user ) {
 					$users[] = $selected_user;
 				} elseif ( $value_field === 'ID' ) {
@@ -1210,7 +1214,7 @@ function wp_dropdown_users( $args = '' ) {
 					// of knowing what the 'value' should be for this user!
 					$users[] = (object) array(
 						'_invalid' => true,
-						'ID'       => $r['selected'],
+						'ID'       => $parsed_args['selected'],
 					);
 				}
 			}
@@ -1229,7 +1233,7 @@ function wp_dropdown_users( $args = '' ) {
 				$display = '(' . $user->user_login . ')';
 			}
 
-			$_selected    = selected( $user->ID, $r['selected'], false );
+			$_selected    = selected( $user->ID, $parsed_args['selected'], false );
 			$select_value = esc_attr( $user->$value_field );
 			$output      .= "\t<option value='$select_value'$_selected>" . esc_html( $display ) . "</option>\n";
 		}
@@ -1246,7 +1250,7 @@ function wp_dropdown_users( $args = '' ) {
 	 */
 	$html = apply_filters( 'wp_dropdown_users', $output );
 
-	if ( $r['echo'] ) {
+	if ( $parsed_args['echo'] ) {
 		echo $html;
 	}
 	return $html;
@@ -2620,8 +2624,8 @@ function register_new_user( $user_login, $user_email ) {
 	 */
 	$user_email = apply_filters( 'user_registration_email', $user_email );
 
-	// Check the username
-	if ( $sanitized_user_login == '' ) {
+	// Check the username.
+	if ( '' == $sanitized_user_login ) {
 		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	} elseif ( ! validate_username( $user_login ) ) {
 		$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
@@ -2637,8 +2641,8 @@ function register_new_user( $user_login, $user_email ) {
 		}
 	}
 
-	// Check the email address
-	if ( $user_email == '' ) {
+	// Check the email address.
+	if ( '' == $user_email ) {
 		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your email address.' ) );
 	} elseif ( ! is_email( $user_email ) ) {
 		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
@@ -2798,7 +2802,7 @@ function wp_get_users_with_no_role( $site_id = null ) {
 
 	$prefix = $wpdb->get_blog_prefix( $site_id );
 
-	if ( is_multisite() && $site_id != get_current_blog_id() ) {
+	if ( is_multisite() && get_current_blog_id() != $site_id ) {
 		switch_to_blog( $site_id );
 		$role_names = wp_roles()->get_names();
 		restore_current_blog();

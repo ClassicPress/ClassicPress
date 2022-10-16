@@ -52,7 +52,7 @@ function get_core_updates( $options = array() ) {
 	$updates = $from_api->updates;
 	$result  = array();
 	foreach ( $updates as $update ) {
-		if ( $update->response == 'autoupdate' ) {
+		if ( 'autoupdate' === $update->response ) {
 			continue;
 		}
 
@@ -264,7 +264,7 @@ function update_nag() {
 
 	$cur = get_preferred_from_update_core();
 
-	if ( ! isset( $cur->response ) || $cur->response != 'upgrade' ) {
+	if ( ! isset( $cur->response ) || 'upgrade' !== $cur->response ) {
 		return false;
 	}
 
@@ -308,8 +308,13 @@ function update_right_now_message() {
 	if ( current_user_can( 'update_core' ) ) {
 		$cur = get_preferred_from_update_core();
 
-		if ( isset( $cur->response ) && $cur->response == 'upgrade' ) {
-			$msg .= '<a href="' . network_admin_url( 'update-core.php' ) . '" class="button" aria-describedby="wp-version">' . sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) ) . '</a> ';
+		if ( isset( $cur->response ) && 'upgrade' === $cur->response ) {
+			$msg .= sprintf(
+				'<a href="%s" class="button" aria-describedby="wp-version">%s</a> ',
+				network_admin_url( 'update-core.php' ),
+				/* translators: %s: WordPress version number, or 'Latest' string. */
+				sprintf( __( 'Update to %s' ), $cur->current ? $cur->current : __( 'Latest' ) )
+			);
 		}
 	}
 
@@ -396,7 +401,24 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 	);
 
 	$plugin_name = wp_kses( $plugin_data['Name'], $plugins_allowedtags );
-	$details_url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $response->slug . '&section=changelog&TB_iframe=true&width=600&height=800' );
+	$plugin_slug = isset( $response->slug ) ? $response->slug : $response->id;
+
+	if ( isset( $response->slug ) ) {
+		$details_url = self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&section=changelog' );
+	} elseif ( isset( $response->url ) ) {
+		$details_url = $response->url;
+	} else {
+		$details_url = $plugin_data['PluginURI'];
+	}
+
+	$details_url = add_query_arg(
+		array(
+			'TB_iframe' => 'true',
+			'width'     => 600,
+			'height'    => 800,
+		),
+		$details_url
+	);
 
 	/** @var WP_Plugins_List_Table $wp_list_table */
 	$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
@@ -412,7 +434,17 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		$compatible_php = is_php_version_compatible( $requires_php );
 		$notice_type    = $compatible_php ? 'notice-warning' : 'notice-error';
 
-		echo '<tr class="plugin-update-tr' . $active_class . '" id="' . esc_attr( $response->slug . '-update' ) . '" data-slug="' . esc_attr( $response->slug ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice inline ' . $notice_type . ' notice-alt"><p>';
+		printf(
+			'<tr class="plugin-update-tr%s" id="%s" data-slug="%s" data-plugin="%s">' .
+			'<td colspan="%s" class="plugin-update colspanchange">' .
+			'<div class="update-message notice inline %s notice-alt"><p>',
+			$active_class,
+			esc_attr( $plugin_slug . '-update' ),
+			esc_attr( $plugin_slug ),
+			esc_attr( $file ),
+			esc_attr( $wp_list_table->get_column_count() ),
+			$notice_type
+		);
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number */
@@ -496,7 +528,7 @@ function wp_plugin_update_row( $file, $plugin_data ) {
 		 *     @type string $package     Plugin update package URL.
 		 * }
 		 */
-		do_action( "in_plugin_update_message-{$file}", $plugin_data, $response );
+		do_action( "in_plugin_update_message-{$file}", $plugin_data, $response ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		echo '</p></div></td></tr>';
 	}
@@ -689,7 +721,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 	 *     @type string $package     Theme update package URL.
 	 * }
 	 */
-	do_action( "in_theme_update_message-{$theme_key}", $theme, $response );
+	do_action( "in_theme_update_message-{$theme_key}", $theme, $response ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 	echo '</p></div></td></tr>';
 }

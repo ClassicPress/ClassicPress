@@ -66,7 +66,7 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 	if ( is_array( $size ) ) {
 		$max_width  = $size[0];
 		$max_height = $size[1];
-	} elseif ( $size == 'thumb' || $size == 'thumbnail' ) {
+	} elseif ( 'thumb' === $size || 'thumbnail' === $size ) {
 		$max_width  = intval( get_option( 'thumbnail_size_w' ) );
 		$max_height = intval( get_option( 'thumbnail_size_h' ) );
 		// last chance thumbnail size defaults
@@ -74,18 +74,18 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 			$max_width  = 128;
 			$max_height = 96;
 		}
-	} elseif ( $size == 'medium' ) {
+	} elseif ( 'medium' === $size ) {
 		$max_width  = intval( get_option( 'medium_size_w' ) );
 		$max_height = intval( get_option( 'medium_size_h' ) );
 
-	} elseif ( $size == 'medium_large' ) {
+	} elseif ( 'medium_large' === $size ) {
 		$max_width  = intval( get_option( 'medium_large_size_w' ) );
 		$max_height = intval( get_option( 'medium_large_size_h' ) );
 
 		if ( intval( $content_width ) > 0 ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	} elseif ( $size == 'large' ) {
+	} elseif ( 'large' === $size ) {
 		/*
 		 * We're inserting a large size image into the editor. If it's a really
 		 * big image we'll scale it down to fit reasonably within the editor
@@ -224,8 +224,8 @@ function image_downsize( $id, $size = 'medium' ) {
 		$width           = $intermediate['width'];
 		$height          = $intermediate['height'];
 		$is_intermediate = true;
-	} elseif ( $size == 'thumbnail' ) {
-		// fall back to the old thumbnail
+	} elseif ( 'thumbnail' === $size ) {
+		// Fall back to the old thumbnail.
 		$thumb_file = wp_get_attachment_thumb_file( $id );
 		$info       = null;
 
@@ -1010,7 +1010,7 @@ function _wp_get_attachment_relative_path( $file ) {
  *                    or false if the size doesn't exist.
  */
 function _wp_get_image_size_from_meta( $size_name, $image_meta ) {
-	if ( $size_name === 'full' ) {
+	if ( 'full' === $size_name ) {
 		return array(
 			absint( $image_meta['width'] ),
 			absint( $image_meta['height'] ),
@@ -1398,12 +1398,24 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 	$width  = preg_match( '/ width="([0-9]+)"/', $image, $match_width ) ? (int) $match_width[1] : 0;
 	$height = preg_match( '/ height="([0-9]+)"/', $image, $match_height ) ? (int) $match_height[1] : 0;
 
-	if ( $width && $height ) {
-		$size_array = array( $width, $height );
-	} else {
-		$size_array = wp_image_src_get_dimensions( $image_src, $image_meta );
-		if ( ! $size_array ) {
-			return $image;
+	if ( ! $width || ! $height ) {
+		/*
+		 * If attempts to parse the size value failed, attempt to use the image meta data to match
+		 * the image file name from 'src' against the available sizes for an attachment.
+		 */
+		$image_filename = wp_basename( $image_src );
+
+		if ( wp_basename( $image_meta['file'] ) === $image_filename ) {
+			$width  = (int) $image_meta['width'];
+			$height = (int) $image_meta['height'];
+		} else {
+			foreach ( $image_meta['sizes'] as $image_size_data ) {
+				if ( $image_filename === $image_size_data['file'] ) {
+					$width  = (int) $image_size_data['width'];
+					$height = (int) $image_size_data['height'];
+					break;
+				}
+			}
 		}
 	}
 
@@ -2164,12 +2176,13 @@ function gallery_shortcode( $attr ) {
 				</{$captiontag}>";
 		}
 		$output .= "</{$itemtag}>";
-		if ( ! $html5 && $columns > 0 && ++$i % $columns == 0 ) {
+
+		if ( ! $html5 && $columns > 0 && 0 === ++$i % $columns ) {
 			$output .= '<br style="clear: both" />';
 		}
 	}
 
-	if ( ! $html5 && $columns > 0 && $i % $columns !== 0 ) {
+	if ( ! $html5 && $columns > 0 && 0 !== $i % $columns ) {
 		$output .= "
 			<br style='clear: both' />";
 	}
@@ -2335,7 +2348,7 @@ function wp_playlist_shortcode( $attr ) {
 
 	$id = intval( $atts['id'] );
 
-	if ( $atts['type'] !== 'audio' ) {
+	if ( 'audio' !== $atts['type'] ) {
 		$atts['type'] = 'video';
 	}
 

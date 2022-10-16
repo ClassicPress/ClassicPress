@@ -37,11 +37,16 @@ function list_core_update( $update ) {
 	static $first_pass = true;
 
 	$wp_version = get_bloginfo( 'version' );
+	$version_string = sprintf( '%s&ndash;<strong>%s</strong>', $update->current, $update->locale );
 
 	if ( 'en_US' == $update->locale && 'en_US' == get_locale() ) {
 		$version_string = $update->current;
-	} elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version && ( $updates = get_core_updates() ) && 1 == count( $updates ) ) {
-		// If the only available update is a partial builds, it doesn't need a language-specific version string.
+	} elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version ) {
+		$updates = get_core_updates();
+		if ( $updates && 1 == count( $updates ) ) {
+			// If the only available update is a partial builds, it doesn't need a language-specific version string.
+			$version_string = $update->current;
+		}
 		$version_string = $update->current;
 	} else {
 		$version_string = sprintf( '%s&ndash;<strong>%s</strong>', $update->current, $update->locale );
@@ -589,7 +594,8 @@ function do_core_upgrade( $reinstall = false ) {
 	<h1><?php _e( 'Update ClassicPress' ); ?></h1>
 	<?php
 
-	if ( false === ( $credentials = request_filesystem_credentials( $url, '', false, ABSPATH, array( 'version', 'locale' ), $allow_relaxed_file_ownership ) ) ) {
+	$credentials = request_filesystem_credentials( $url, '', false, ABSPATH, array( 'version', 'locale' ), $allow_relaxed_file_ownership );
+	if ( false === $credentials ) {
 		echo '</div>';
 		return;
 	}
@@ -967,5 +973,5 @@ if ( 'upgrade-core' == $action ) {
 	 *
 	 * @since WP-3.2.0
 	 */
-	do_action( "update-core-custom_{$action}" );
+	do_action( "update-core-custom_{$action}" );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }

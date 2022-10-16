@@ -490,7 +490,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 	$last_post_id = (int) get_user_option( 'dashboard_quick_press_last_post_id' ); // Get the last post_ID
 	if ( $last_post_id ) {
 		$post = get_post( $last_post_id );
-		if ( empty( $post ) || $post->post_status != 'auto-draft' ) { // auto-draft doesn't exists anymore
+		if ( empty( $post ) || 'auto-draft' !== $post->post_status ) { // auto-draft doesn't exist anymore.
 			$post = get_default_post_to_edit( 'post', true );
 			update_user_option( get_current_user_id(), 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID
 		} else {
@@ -591,7 +591,8 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 		/* translators: %s: post title */
 		echo '<div class="draft-title"><a href="' . esc_url( $url ) . '" aria-label="' . esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;' ), $title ) ) . '">' . esc_html( $title ) . '</a>';
 		echo '<time datetime="' . get_the_time( 'c', $draft ) . '">' . get_the_time( __( 'F j, Y' ), $draft ) . '</time></div>';
-		if ( $the_content = wp_trim_words( $draft->post_content, 10 ) ) {
+		$the_content = wp_trim_words( $draft->post_content, $draft_length );
+		if ( $the_content ) {
 			echo '<p>' . $the_content . '</p>';
 		}
 		echo "</li>\n";
@@ -1006,7 +1007,8 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
 
 	$locale    = get_user_locale();
 	$cache_key = 'dash_v2_' . md5( $widget_id . '_' . $locale );
-	if ( false !== ( $output = get_transient( $cache_key ) ) ) {
+	$output    = get_transient( $cache_key );
+	if ( false !== $output ) {
 		echo $output;
 		return true;
 	}
@@ -1067,7 +1069,8 @@ function wp_dashboard_trigger_widget_control( $widget_control_id = false ) {
  * @param array $form_inputs
  */
 function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
-	if ( ! $widget_options = get_option( 'dashboard_widget_options' ) ) {
+	$widget_options = get_option( 'dashboard_widget_options' );
+	if ( ! $widget_options ) {
 		$widget_options = array();
 	}
 
@@ -1304,7 +1307,7 @@ function wp_dashboard_browser_nag() {
 	* @param string $notice   The notice content.
 	* @param array  $response An array containing web browser information.
 	*/
-	echo apply_filters( 'browse-happy-notice', $notice, $response );
+	echo apply_filters( 'browse-happy-notice', $notice, $response );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }
 
 /**
@@ -1337,7 +1340,8 @@ function wp_check_browser_version() {
 
 	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
 
-	if ( false === ( $response = get_site_transient( 'browser_' . $key ) ) ) {
+	$response = get_site_transient( 'browser_' . $key );
+	if ( false === $response ) {
 		// include an unmodified $wp_version
 		include ABSPATH . WPINC . '/version.php';
 
