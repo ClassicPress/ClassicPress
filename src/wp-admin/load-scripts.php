@@ -42,7 +42,7 @@ if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_
 		$protocol = 'HTTP/1.0';
 	}
 	header( "$protocol 304 Not Modified" );
-	exit();
+	exit;
 }
 
 foreach ( $load as $handle ) {

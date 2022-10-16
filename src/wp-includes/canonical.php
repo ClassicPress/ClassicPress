@@ -739,7 +739,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		// protect against chained redirects
 		if ( ! redirect_canonical( $redirect_url, false ) ) {
 			wp_redirect( $redirect_url, 301 );
-			exit();
+			exit;
 		} else {
 			// Debug
 			// die("1: $redirect_url<br />2: " . redirect_canonical( $redirect_url, false ) );

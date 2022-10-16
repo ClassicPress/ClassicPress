@@ -504,7 +504,7 @@ class WP {
 		}
 
 		if ( $exit_required ) {
-			exit();
+			exit;
 		}
 
 		/**

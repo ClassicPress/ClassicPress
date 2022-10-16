@@ -105,14 +105,14 @@ switch ( $action ) {
 		check_admin_referer( 'add-' . $post_type );
 		$post_id = 'postajaxpost' === $action ? edit_post() : write_post();
 		redirect_post( $post_id );
-		exit();
+		exit;
 
 	case 'edit':
 		$editing = true;
 
 		if ( empty( $post_id ) ) {
 			wp_redirect( admin_url( 'post.php' ) );
-			exit();
+			exit;
 		}
 
 		if ( ! $post ) {
@@ -139,7 +139,7 @@ switch ( $action ) {
 			check_admin_referer( 'lock-post_' . $post_id );
 			wp_set_post_lock( $post_id );
 			wp_redirect( get_edit_post_link( $post_id, 'url' ) );
-			exit();
+			exit;
 		}
 
 		$post_type = $post->post_type;
@@ -219,7 +219,7 @@ switch ( $action ) {
 
 		redirect_post( $post_id ); // Send user on their way while we keep working
 
-		exit();
+		exit;
 
 	case 'trash':
 		check_admin_referer( 'trash-post_' . $post_id );
@@ -255,7 +255,7 @@ switch ( $action ) {
 				$sendback
 			)
 		);
-		exit();
+		exit;
 
 	case 'untrash':
 		check_admin_referer( 'untrash-post_' . $post_id );
@@ -277,7 +277,7 @@ switch ( $action ) {
 		}
 
 		wp_redirect( add_query_arg( 'untrashed', 1, $sendback ) );
-		exit();
+		exit;
 
 	case 'delete':
 		check_admin_referer( 'delete-post_' . $post_id );
@@ -306,7 +306,7 @@ switch ( $action ) {
 		}
 
 		wp_redirect( add_query_arg( 'deleted', 1, $sendback ) );
-		exit();
+		exit;
 
 	case 'preview':
 		check_admin_referer( 'update-post_' . $post_id );
@@ -314,8 +314,23 @@ switch ( $action ) {
 		$url = post_preview();
 
 		wp_redirect( $url );
-		exit();
+		exit;
 
+<<<<<<< HEAD
+=======
+	case 'toggle-custom-fields':
+		check_admin_referer( 'toggle-custom-fields' );
+
+		$current_user_id = get_current_user_id();
+		if ( $current_user_id ) {
+			$enable_custom_fields = (bool) get_user_meta( $current_user_id, 'enable_custom_fields', true );
+			update_user_meta( $current_user_id, 'enable_custom_fields', ! $enable_custom_fields );
+		}
+
+		wp_safe_redirect( wp_get_referer() );
+		exit;
+
+>>>>>>> 2c75752c88 (Coding Standards: Fix instances of `Generic.WhiteSpace.ArbitraryParenthesesSpacing.FoundEmpty`.)
 	default:
 		/**
 		 * Fires for a given custom post action request.
@@ -329,6 +344,13 @@ switch ( $action ) {
 		do_action( "post_action_{$action}", $post_id );
 
 		wp_redirect( admin_url( 'edit.php' ) );
+<<<<<<< HEAD
 		exit();
 } // end switch
 require ABSPATH . 'wp-admin/admin-footer.php';
+=======
+		exit;
+} // End switch.
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';
+>>>>>>> 2c75752c88 (Coding Standards: Fix instances of `Generic.WhiteSpace.ArbitraryParenthesesSpacing.FoundEmpty`.)

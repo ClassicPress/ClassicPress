@@ -114,7 +114,7 @@ if ( isset( $_GET['action'] ) ) {
 			</div>
 		<?php
 		require_once ABSPATH . 'wp-admin/admin-footer.php';
-		exit();
+		exit;
 	} elseif ( array_key_exists( $_GET['action'], $manage_actions ) ) {
 		$action = $_GET['action'];
 		check_admin_referer( $action . '_' . $id );
@@ -194,7 +194,7 @@ if ( isset( $_GET['action'] ) ) {
 								</div>
 								<?php
 								require_once ABSPATH . 'wp-admin/admin-footer.php';
-								exit();
+								exit;
 							break;
 
 							case 'spam':
@@ -216,7 +216,7 @@ if ( isset( $_GET['action'] ) ) {
 					$redirect_to = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $blogs, $id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 					wp_safe_redirect( $redirect_to );
-					exit();
+					exit;
 				}
 			} else {
 				$location = network_admin_url( 'sites.php' );
@@ -277,7 +277,7 @@ if ( isset( $_GET['action'] ) ) {
 
 	if ( ! empty( $updated_action ) ) {
 		wp_safe_redirect( add_query_arg( array( 'updated' => $updated_action ), wp_get_referer() ) );
-		exit();
+		exit;
 	}
 }
 

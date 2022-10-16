@@ -354,7 +354,7 @@ switch ( $action ) {
 
 					// $messages[] = '<div id="message" class="updated"><p>' . sprintf( __( '<strong>%s</strong> has been created.' ), $nav_menu_selected_title ) . '</p></div>';
 					wp_redirect( admin_url( 'nav-menus.php?menu=' . $_nav_menu_selected_id ) );
-					exit();
+					exit;
 				}
 			} else {
 				$messages[] = '<div id="message" class="error notice is-dismissible"><p>' . __( 'Please enter a valid menu name.' ) . '</p></div>';
@@ -389,7 +389,7 @@ switch ( $action ) {
 				// If the menu ID changed, redirect to the new URL.
 				if ( $nav_menu_selected_id != $_nav_menu_selected_id ) {
 					wp_redirect( admin_url( 'nav-menus.php?menu=' . intval( $_nav_menu_selected_id ) ) );
-					exit();
+					exit;
 				}
 			}
 		}
@@ -397,7 +397,7 @@ switch ( $action ) {
 	case 'locations':
 		if ( ! $num_locations ) {
 			wp_redirect( admin_url( 'nav-menus.php' ) );
-			exit();
+			exit;
 		}
 
 		add_filter( 'screen_options_show_screen', '__return_false' );
