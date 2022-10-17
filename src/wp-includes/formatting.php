@@ -5102,6 +5102,7 @@ function wp_basename( $path, $suffix = '' ) {
 	return urldecode( basename( str_replace( array( '%2F', '%5C' ), '/', urlencode( $path ) ), $suffix ) );
 }
 
+// phpcs:disable WordPress.WP.CapitalPDangit.Misspelled, WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 /**
  * Forever eliminate "Classicpress" from the planet (or at least the little bit we can influence).
  *
@@ -5131,6 +5132,7 @@ function capital_P_dangit( $text ) {
 		$text
 	);
 }
+// phpcs:enable
 
 /**
  * Sanitize a mime type
