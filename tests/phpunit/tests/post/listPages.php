@@ -430,7 +430,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			</ul></li></ul></li>';
 
 		$expected = str_replace( array( "\r\n", "\n", "\t" ), '', $expected['default'] );
-		$actual= wp_list_pages( $args );
+		$actual   = wp_list_pages( $args );
 		$this->assertSame( $expected, $actual );
 	}
 }
