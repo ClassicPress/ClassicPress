@@ -4375,23 +4375,23 @@ function cp_attributes( $element, $attrs = array(), $context = '' ) {
 	 * @param string   $element The HTML element the attributes are for.
 	 */
 	$attrs = apply_filters( "cp_attributes_{$context}", $attrs, $element );
+
 	$out = '';
 	foreach ( $attrs as $attr => $value ) {
 		if ( is_array( $value ) ) {
 			$value = array_map( 'esc_attr', $value );
 			$value = implode( ' ', array_unique( $value ) );
 			if ( ! empty( $value ) ) {
-				$out .= esc_attr( $attr ) . '="' . $value . '" ';
+				$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 			}
 		}
 		else {
 			$value = ( 'href' === $attr || 'src' === $attr ) ?
 				esc_url( $value ) : esc_attr( $value );
-			$out .= esc_attr( $attr ) . '="' . $value . '" ';
+			$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 		}
 	}
-	$out = trim( $out );
-	return $out;
+	return trim ( $out );
 }
 
 /**
