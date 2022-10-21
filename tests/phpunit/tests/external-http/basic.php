@@ -45,14 +45,17 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 			$readme,
 			$matches
 		);
+
 		$this->assertNotEmpty( $matches );
 
-		$response = wp_remote_get(
-			"https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/"
-		);
+		$response = wp_remote_get( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
+
+		$this->skipTestOnTimeout( $response );
+
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			$this->fail( 'Could not contact dev.mysql.com to check versions.' );
 		}
+
 		$mysql = wp_remote_retrieve_body( $response );
 
 		preg_match(

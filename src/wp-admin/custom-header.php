@@ -824,7 +824,6 @@ class Custom_Image_Header {
 			return $this->finished();
 		} elseif ( $width > $max_width ) {
 			$oitar = $width / $max_width;
-
 			$image = wp_crop_image(
 				$attachment_id,
 				0,
@@ -834,7 +833,7 @@ class Custom_Image_Header {
 				$max_width,
 				$height / $oitar,
 				false,
-				str_replace( basename( $file ), 'midsize-' . basename( $file ), $file )
+				str_replace( wp_basename( $file ), 'midsize-' . wp_basename( $file ), $file )
 			);
 
 			if ( ! $image || is_wp_error( $image ) ) {
@@ -844,7 +843,7 @@ class Custom_Image_Header {
 			/** This filter is documented in wp-admin/custom-header.php */
 			$image = apply_filters( 'wp_create_file_in_uploads', $image, $attachment_id ); // For replication
 
-			$url    = str_replace( basename( $url ), basename( $image ), $url );
+			$url    = str_replace( wp_basename( $url ), wp_basename( $image ), $url );
 			$width  = $width / $oitar;
 			$height = $height / $oitar;
 		} else {
@@ -911,7 +910,7 @@ class Custom_Image_Header {
 		$url      = $file['url'];
 		$type     = $file['type'];
 		$file     = $file['file'];
-		$filename = basename( $file );
+		$filename = wp_basename( $file );
 
 		// Construct the object array
 		$object = array(
@@ -1008,7 +1007,7 @@ class Custom_Image_Header {
 		$this->set_header_image( compact( 'url', 'attachment_id', 'width', 'height' ) );
 
 		// Cleanup.
-		$medium = str_replace( basename( $original ), 'midsize-' . basename( $original ), $original );
+		$medium = str_replace( wp_basename( $original ), 'midsize-' . wp_basename( $original ), $original );
 		if ( file_exists( $medium ) ) {
 			wp_delete_file( $medium );
 		}
@@ -1232,14 +1231,14 @@ class Custom_Image_Header {
 	final public function create_attachment_object( $cropped, $parent_attachment_id ) {
 		$parent     = get_post( $parent_attachment_id );
 		$parent_url = wp_get_attachment_url( $parent->ID );
-		$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+		$url        = str_replace( wp_basename( $parent_url ), wp_basename( $cropped ), $parent_url );
 
 		$size       = @getimagesize( $cropped );
 		$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
 
 		$object = array(
 			'ID'             => $parent_attachment_id,
-			'post_title'     => basename( $cropped ),
+			'post_title'     => wp_basename( $cropped ),
 			'post_mime_type' => $image_type,
 			'guid'           => $url,
 			'context'        => 'custom-header',

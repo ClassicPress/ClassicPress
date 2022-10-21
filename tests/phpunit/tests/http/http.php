@@ -13,7 +13,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	 */
 	function test_make_absolute_url( $relative_url, $absolute_url, $expected ) {
 		$actual = WP_Http::make_absolute_url( $relative_url, $absolute_url );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function make_absolute_url_testcases() {
@@ -69,7 +69,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	 */
 	function test_wp_parse_url( $url, $expected ) {
 		$actual = wp_parse_url( $url );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function parse_url_testcases() {
@@ -180,7 +180,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	 */
 	function test_wp_parse_url_with_default_component() {
 		$actual = wp_parse_url( self::FULL_TEST_URL, -1 );
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'scheme'   => 'http',
 				'host'     => 'host.name',
@@ -268,7 +268,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 		// This primes the `$wp_header_to_desc` global:
 		get_status_header_desc( 200 );
 
-		$this->assertEquals( array_keys( $wp_header_to_desc ), array_values( $constants ) );
+		$this->assertSame( array_keys( $wp_header_to_desc ), array_values( $constants ) );
 
 	}
 
@@ -398,7 +398,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 			$ua_full
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'&ver=' . classicpress_version_short() . '&site=',
 			$ua_full
 		);

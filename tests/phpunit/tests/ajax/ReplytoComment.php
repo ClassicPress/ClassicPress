@@ -35,9 +35,9 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		self::$draft_post   = $factory->post->create_and_get( array( 'post_status' => 'draft' ) );
 	}
 
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'query', array( $this, '_block_comments' ) );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -74,8 +74,8 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 		// Get the response
 		$xml = simplexml_load_string( $this->_last_response, 'SimpleXMLElement', LIBXML_NOCDATA );
 
-		// Check the meta data
-		$this->assertEquals( -1, (string) $xml->response[0]->comment['position'] );
+		// Check the meta data.
+		$this->assertSame( '-1', (string) $xml->response[0]->comment['position'] );
 		$this->assertGreaterThan( 0, (int) $xml->response[0]->comment['id'] );
 		$this->assertNotEmpty( (string) $xml->response['action'] );
 
@@ -212,7 +212,7 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 			$this->fail();
 		} catch ( WPAjaxDieStopException $e ) {
 			$wpdb->suppress_errors( false );
-			$this->assertContains( '1', $e->getMessage() );
+			$this->assertStringContainsString( '1', $e->getMessage() );
 		}
 	}
 

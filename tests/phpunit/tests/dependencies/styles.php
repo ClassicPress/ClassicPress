@@ -9,13 +9,14 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	public $classicpress_asset_version_calls    = array();
 	public $classicpress_asset_version_override = null;
 
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 		self::$asset_version = classicpress_asset_version( 'style' );
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
+
 		if ( empty( $GLOBALS['wp_styles'] ) ) {
 			$GLOBALS['wp_styles'] = null;
 		}
@@ -33,16 +34,18 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$GLOBALS['wp_styles']->default_version  = self::$asset_version;
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_styles'] = $this->old_wp_styles;
 		add_action( 'wp_default_styles', 'wp_default_styles' );
 		add_action( 'wp_print_styles', 'print_emoji_styles' );
+
 		remove_filter(
 			'classicpress_asset_version',
 			array( $this, 'classicpress_asset_version_handler' ),
 			10
 		);
-		parent::tearDown();
+
+		parent::tear_down();
 	}
 
 	function classicpress_asset_version_handler( $version, $type, $handle ) {
@@ -78,13 +81,13 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$expected .= "<link rel='stylesheet' id='no-deps-null-version-css'  href='http://example.com' type='text/css' media='all' />\n";
 		$expected .= "<link rel='stylesheet' id='no-deps-null-version-print-media-css'  href='http://example.com' type='text/css' media='print' />\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
 		// No styles left to print
-		$this->assertEquals( '', get_echo( 'wp_print_styles' ) );
+		$this->assertSame( '', get_echo( 'wp_print_styles' ) );
 
 		// 'classicpress_asset_version' filter called as expected
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				array(
 					'version' => $ver,
@@ -195,8 +198,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$this->classicpress_asset_version_override = 'oooo';
 		wp_enqueue_style( 'filter-null-version', 'example.com', array(), null );
 		$expected = "<link rel='stylesheet' id='filter-null-version-css'  href='http://example.com?ver=oooo' type='text/css' media='all' />\n";
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
-		$this->assertEquals(
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame(
 			array(
 				array(
 					'version' => '',
@@ -244,10 +247,10 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		$expected .= "<link rel='stylesheet' id='reset-css-ftp-css'  href='{$wp_styles->base_url}ftp://yui.yahooapis.com/2.8.1/build/reset/reset-min.css?ver=$ver' type='text/css' media='all' />\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
-		// No styles left to print
-		$this->assertEquals( '', get_echo( 'wp_print_styles' ) );
+		// No styles left to print.
+		$this->assertSame( '', get_echo( 'wp_print_styles' ) );
 
 		// Cleanup
 		$wp_styles->base_url = $base_url_backup;
@@ -271,8 +274,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		wp_enqueue_style( 'handle', 'http://example.com', array(), 1 );
 		wp_add_inline_style( 'handle', $style );
 
-		// No styles left to print
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		// No styles left to print.
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	/**
@@ -300,7 +303,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		wp_add_inline_style( 'handle', $style );
 
 		wp_print_styles();
-		$this->assertEquals( $expected, $wp_styles->print_html );
+		$this->assertSame( $expected, $wp_styles->print_html );
 
 	}
 
@@ -328,8 +331,8 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		wp_add_inline_style( 'handle', $style1 );
 		wp_add_inline_style( 'handle', $style2 );
 
-		// No styles left to print
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		// No styles left to print.
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
 	}
 
@@ -354,7 +357,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 		wp_add_inline_style( 'handle', $style );
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
 	}
 
@@ -368,7 +371,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 		wp_enqueue_style( 'handle', 'http://example.com', array(), 1 );
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 
 	}
 
@@ -390,7 +393,7 @@ CSS;
 		wp_style_add_data( 'handle', 'conditional', 'IE' );
 		wp_add_inline_style( 'handle', 'a { color: blue; }' );
 
-		$this->assertEqualsIgnoreEOL( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSameIgnoreEOL( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	/**
@@ -422,7 +425,7 @@ CSS;
 		wp_enqueue_style( 'handle-three' );
 		wp_add_inline_style( 'handle-three', $style );
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	/**
@@ -431,7 +434,7 @@ CSS;
 	 */
 	function test_wp_enqueue_style_with_media( $expected, $media ) {
 		wp_enqueue_style( 'handle', 'http://example.com', array(), 1, $media );
-		$this->assertContains( $expected, get_echo( 'wp_print_styles' ) );
+		$this->assertStringContainsString( $expected, get_echo( 'wp_print_styles' ) );
 	}
 
 	function data_styles_with_media() {

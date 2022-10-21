@@ -56,8 +56,8 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 	/**
 	 * Setup.
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		$this->post_count   = (int) get_option( 'posts_per_rss' );
 		$this->excerpt_only = get_option( 'rss_use_excerpt' );
@@ -101,27 +101,27 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 
 		// Verify the <feed> element is present and contains a <title> child element.
 		$title = xml_find( $xml, 'feed', 'title' );
-		$this->assertEquals( get_option( 'blogname' ), $title[0]['content'] );
+		$this->assertSame( get_option( 'blogname' ), $title[0]['content'] );
 
 		// Verify the <feed> element is present and contains a <updated> child element.
 		$updated = xml_find( $xml, 'feed', 'updated' );
-		$this->assertEquals( strtotime( get_lastpostmodified() ), strtotime( $updated[0]['content'] ) );
+		$this->assertSame( strtotime( get_lastpostmodified() ), strtotime( $updated[0]['content'] ) );
 
 		// Verify the <feed> element is present and contains a <subtitle> child element.
 		$subtitle = xml_find( $xml, 'feed', 'subtitle' );
-		$this->assertEquals( get_option( 'blogdescription' ), $subtitle[0]['content'] );
+		$this->assertSame( get_option( 'blogdescription' ), $subtitle[0]['content'] );
 
 		// Verify the <feed> element is present and contains two <link> child elements.
 		$link = xml_find( $xml, 'feed', 'link' );
 		$this->assertCount( 2, $link );
 
 		// Verify the <feed> element is present and contains a <link rel="alternate"> child element.
-		$this->assertEquals( 'alternate', $link[0]['attributes']['rel'] );
-		$this->assertEquals( home_url(), $link[0]['attributes']['href'] );
+		$this->assertSame( 'alternate', $link[0]['attributes']['rel'] );
+		$this->assertSame( home_url(), $link[0]['attributes']['href'] );
 
 		// Verify the <feed> element is present and contains a <link rel="href"> child element.
-		$this->assertEquals( 'self', $link[1]['attributes']['rel'] );
-		$this->assertEquals( home_url( '/?feed=atom' ), $link[1]['attributes']['href'] );
+		$this->assertSame( 'self', $link[1]['attributes']['rel'] );
+		$this->assertSame( home_url( '/?feed=atom' ), $link[1]['attributes']['href'] );
 	}
 
 	/**
@@ -152,31 +152,31 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 			// Author
 			$author = xml_find( $entries[ $key ]['child'], 'author', 'name' );
 			$user   = new WP_User( $post->post_author );
-			$this->assertEquals( $user->display_name, $author[0]['content'] );
+			$this->assertSame( $user->display_name, $author[0]['content'] );
 
-			// Title
+			// Title.
 			$title = xml_find( $entries[ $key ]['child'], 'title' );
-			$this->assertEquals( $post->post_title, $title[0]['content'] );
+			$this->assertSame( $post->post_title, $title[0]['content'] );
 
 			// Link rel="alternate"
 			$link_alts = xml_find( $entries[ $key ]['child'], 'link' );
 			foreach ( $link_alts as $link_alt ) {
-				if ( 'alternate' == $link_alt['attributes']['rel'] ) {
-					$this->assertEquals( get_permalink( $post ), $link_alt['attributes']['href'] );
+				if ( 'alternate' === $link_alt['attributes']['rel'] ) {
+					$this->assertSame( get_permalink( $post ), $link_alt['attributes']['href'] );
 				}
 			}
 
-			// Id
+			// ID.
 			$guid = xml_find( $entries[ $key ]['child'], 'id' );
-			$this->assertEquals( $post->guid, $id[0]['content'] );
+			$this->assertSame( $post->guid, $id[0]['content'] );
 
-			// Updated
+			// Updated.
 			$updated = xml_find( $entries[ $key ]['child'], 'updated' );
-			$this->assertEquals( strtotime( $post->post_modified_gmt ), strtotime( $updated[0]['content'] ) );
+			$this->assertSame( strtotime( $post->post_modified_gmt ), strtotime( $updated[0]['content'] ) );
 
-			// Published
+			// Published.
 			$published = xml_find( $entries[ $key ]['child'], 'published' );
-			$this->assertEquals( strtotime( $post->post_date_gmt ), strtotime( $published[0]['content'] ) );
+			$this->assertSame( strtotime( $post->post_date_gmt ), strtotime( $published[0]['content'] ) );
 
 			// Category
 			foreach ( get_the_category( $post->ID ) as $term ) {
@@ -191,14 +191,14 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 			// Content
 			if ( ! $this->excerpt_only ) {
 				$content = xml_find( $entries[ $key ]['child'], 'content' );
-				$this->assertEquals( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
+				$this->assertSame( trim( apply_filters( 'the_content', $post->post_content ) ), trim( $content[0]['content'] ) );
 			}
 
 			// Link rel="replies"
 			$link_replies = xml_find( $entries[ $key ]['child'], 'link' );
 			foreach ( $link_replies as $link_reply ) {
-				if ( 'replies' == $link_reply['attributes']['rel'] && 'application/atom+xml' == $link_reply['attributes']['type'] ) {
-					$this->assertEquals( get_post_comments_feed_link( $post->ID, 'atom' ), $link_reply['attributes']['href'] );
+				if ( 'replies' === $link_reply['attributes']['rel'] && 'application/atom+xml' === $link_reply['attributes']['type'] ) {
+					$this->assertSame( get_post_comments_feed_link( $post->ID, 'atom' ), $link_reply['attributes']['href'] );
 				}
 			}
 		}
