@@ -27,7 +27,7 @@
  *
  * @global string $cp_version
  */
-$cp_version = '1.3.0+dev';
+$cp_version = '1.4.3+dev';
 
 /**
  * The WordPress version string
@@ -40,7 +40,7 @@ $cp_version = '1.3.0+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '4.9.18';
+$wp_version = '4.9.20';
 
 /**
  * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
@@ -54,7 +54,7 @@ $wp_db_version = 38590;
  *
  * @global string $tinymce_version
  */
-$tinymce_version = '4800-20180716';
+$tinymce_version = '49110-20201110';
 
 /**
  * Holds the required PHP version

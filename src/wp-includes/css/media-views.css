@@ -443,7 +443,6 @@
 }
 
 .attachment-details .setting + .description {
-	clear: both;
 	font-size: 12px;
 	font-style: normal;
 	margin-bottom: 0.5em;
@@ -542,7 +541,6 @@
 	border-right-color: #ccc;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -589,7 +587,6 @@
 	clear: both;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -832,10 +829,7 @@
 	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
-	width: 25%;
-	box-sizing: border-box;
 }
 
 .wp-core-ui .attachment:focus,

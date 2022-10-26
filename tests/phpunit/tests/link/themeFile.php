@@ -5,8 +5,17 @@
 class Test_Theme_File extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		symlink( DIR_TESTDATA . '/theme-file-parent', WP_CONTENT_DIR . '/themes/theme-file-parent' );
-		symlink( DIR_TESTDATA . '/theme-file-child', WP_CONTENT_DIR . '/themes/theme-file-child' );
+		if ( ! function_exists( 'symlink' ) ) {
+			self::markTestSkipped( 'symlink() is not available.' );
+		}
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @symlink( DIR_TESTDATA . '/theme-file-parent', WP_CONTENT_DIR . '/themes/theme-file-parent' ) ) {
+			self::markTestSkipped( 'Could not create parent symlink.' );
+		}
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @symlink( DIR_TESTDATA . '/theme-file-child', WP_CONTENT_DIR . '/themes/theme-file-child' ) ) {
+			self::markTestSkipped( 'Could not create child symlink.' );
+		}
 	}
 
 	public static function wpTearDownAfterClass() {
@@ -82,13 +91,13 @@ class Test_Theme_File extends WP_UnitTestCase {
 		if ( in_array( 'theme-file-child', $existence, true ) ) {
 			$this->assertFileExists( WP_CONTENT_DIR . "/themes/theme-file-child/{$file}" );
 		} else {
-			$this->assertFileNotExists( WP_CONTENT_DIR . "/themes/theme-file-child/{$file}" );
+			$this->assertFileDoesNotExist( WP_CONTENT_DIR . "/themes/theme-file-child/{$file}" );
 		}
 
 		if ( in_array( 'theme-file-parent', $existence, true ) ) {
 			$this->assertFileExists( WP_CONTENT_DIR . "/themes/theme-file-parent/{$file}" );
 		} else {
-			$this->assertFileNotExists( WP_CONTENT_DIR . "/themes/theme-file-parent/{$file}" );
+			$this->assertFileDoesNotExist( WP_CONTENT_DIR . "/themes/theme-file-parent/{$file}" );
 		}
 
 	}
@@ -99,7 +108,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 	 * @dataProvider data_theme_files
 	 */
 	public function test_theme_file_uri_returns_valid_uri( $file, $expected_theme, $existence ) {
-		$uri = get_theme_file_uri( $file );
+		$uri        = get_theme_file_uri( $file );
 		$parent_uri = get_parent_theme_file_uri( $file );
 
 		$this->assertSame( esc_url_raw( $uri ), $uri );
@@ -136,8 +145,7 @@ class Test_Theme_File extends WP_UnitTestCase {
 			array(
 				'neither.php',
 				$parent,
-				array(
-				),
+				array(),
 			),
 		);
 	}

@@ -32,16 +32,16 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * Set up the test fixture
 	 * @return void
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->_deprecated_functions = array();
 		$this->_deprecated_arguments = array();
-		$this->_deprecated_files = array();
-		add_action( 'deprecated_function_run' , array( $this, 'deprecated_function' ), 10, 3 );
+		$this->_deprecated_files     = array();
+		add_action( 'deprecated_function_run', array( $this, 'deprecated_function' ), 10, 3 );
 		add_action( 'deprecated_function_trigger_error', '__return_false' );
-		add_action( 'deprecated_argument_run' , array( $this, 'deprecated_argument' ), 10, 3 );
+		add_action( 'deprecated_argument_run', array( $this, 'deprecated_argument' ), 10, 3 );
 		add_action( 'deprecated_argument_trigger_error', '__return_false' );
-		add_action( 'deprecated_file_included' , array( $this, 'deprecated_file' ), 10, 4 );
+		add_action( 'deprecated_file_included', array( $this, 'deprecated_file' ), 10, 4 );
 		add_action( 'deprecated_file_trigger_error', '__return_false' );
 	}
 
@@ -49,14 +49,14 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * Tear down the test fixture
 	 * @return void
 	 */
-	public function teardown() {
-		remove_action( 'deprecated_function_run' , array( $this, 'deprecated_function' ), 10, 3 );
+	public function tear_down() {
+		remove_action( 'deprecated_function_run', array( $this, 'deprecated_function' ), 10, 3 );
 		remove_action( 'deprecated_function_trigger_error', '__return_false' );
-		remove_action( 'deprecated_argument_run' , array( $this, 'deprecated_argument' ), 10, 3 );
+		remove_action( 'deprecated_argument_run', array( $this, 'deprecated_argument' ), 10, 3 );
 		remove_action( 'deprecated_argument_trigger_error', '__return_false' );
-		remove_action( 'deprecated_file_included' , array( $this, 'deprecated_argument' ), 10, 4 );
+		remove_action( 'deprecated_file_included', array( $this, 'deprecated_argument' ), 10, 4 );
 		remove_action( 'deprecated_file_trigger_error', '__return_false' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -70,7 +70,7 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 		$this->_deprecated_functions[] = array(
 			'function'    => $function,
 			'replacement' => $replacement,
-			'version'     => $version
+			'version'     => $version,
 		);
 	}
 
@@ -85,7 +85,7 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 		$this->_deprecated_arguments[] = array(
 			'argument' => $argument,
 			'message'  => $message,
-			'version'  => $version
+			'version'  => $version,
 		);
 	}
 
@@ -101,7 +101,7 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 			'file'        => $file,
 			'version'     => $version,
 			'replacement' => $replacement,
-			'message'     => $message
+			'message'     => $message,
 		);
 	}
 
@@ -113,20 +113,20 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 */
 	protected function was_deprecated( $type, $name ) {
 		switch ( $type ) {
-			case 'argument' :
+			case 'argument':
 				$search = $this->_deprecated_arguments;
 				$key    = 'argument';
 				break;
-			case 'function' :
+			case 'function':
 				$search = $this->_deprecated_functions;
 				$key    = 'function';
 				break;
-			default :
+			default:
 				$search = $this->_deprecated_files;
 				$key    = 'file';
 		}
 		foreach ( $search as $v ) {
-			if ( $name == $v[$key] ) {
+			if ( $name === $v[ $key ] ) {
 				return $v;
 			}
 		}
@@ -139,13 +139,14 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * @expectedDeprecated wp_save_image_file
 	 */
 	public function test_wp_save_image_file_deprecated_with_gd_resource() {
-		if ( !function_exists( 'imagejpeg' ) )
+		if ( ! function_exists( 'imagejpeg' ) ) {
 			$this->fail( 'jpeg support unavailable' );
+		}
 
 		// Call wp_save_image_file
-		include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
+		include_once ABSPATH . 'wp-admin/includes/image-edit.php';
 		$file = wp_tempnam();
-		$img = imagecreatefromjpeg( DIR_TESTDATA . '/images/canola.jpg' );
+		$img  = imagecreatefromjpeg( DIR_TESTDATA . '/images/canola.jpg' );
 		wp_save_image_file( $file, $img, 'image/jpeg', 1 );
 		imagedestroy( $img );
 		unlink( $file );
@@ -160,13 +161,14 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/6821
 	 */
 	public function test_wp_save_image_file_not_deprecated_with_wp_image_editor() {
-		if ( !function_exists( 'imagejpeg' ) )
+		if ( ! function_exists( 'imagejpeg' ) ) {
 			$this->fail( 'jpeg support unavailable' );
+		}
 
 		// Call wp_save_image_file
-		include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
+		include_once ABSPATH . 'wp-admin/includes/image-edit.php';
 		$file = wp_tempnam();
-		$img = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
+		$img  = wp_get_image_editor( DIR_TESTDATA . '/images/canola.jpg' );
 		wp_save_image_file( $file, $img, 'image/jpeg', 1 );
 		unset( $img );
 		unlink( $file );

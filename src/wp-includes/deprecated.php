@@ -430,9 +430,9 @@ function wp_get_linksbyname($category, $args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -635,24 +635,24 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 function wp_list_cats($args = '') {
 	_deprecated_function( __FUNCTION__, 'WP-2.1.0', 'wp_list_categories()' );
 
-	$r = wp_parse_args( $args );
+	$parsed_args = wp_parse_args( $args );
 
 	// Map to new names.
-	if ( isset($r['optionall']) && isset($r['all']))
-		$r['show_option_all'] = $r['all'];
-	if ( isset($r['sort_column']) )
-		$r['orderby'] = $r['sort_column'];
-	if ( isset($r['sort_order']) )
-		$r['order'] = $r['sort_order'];
-	if ( isset($r['optiondates']) )
-		$r['show_last_update'] = $r['optiondates'];
-	if ( isset($r['optioncount']) )
-		$r['show_count'] = $r['optioncount'];
-	if ( isset($r['list']) )
-		$r['style'] = $r['list'] ? 'list' : 'break';
-	$r['title_li'] = '';
+	if ( isset($parsed_args['optionall']) && isset($parsed_args['all']))
+		$parsed_args['show_option_all'] = $parsed_args['all'];
+	if ( isset($parsed_args['sort_column']) )
+		$parsed_args['orderby'] = $parsed_args['sort_column'];
+	if ( isset($parsed_args['sort_order']) )
+		$parsed_args['order'] = $parsed_args['sort_order'];
+	if ( isset($parsed_args['optiondates']) )
+		$parsed_args['show_last_update'] = $parsed_args['optiondates'];
+	if ( isset($parsed_args['optioncount']) )
+		$parsed_args['show_count'] = $parsed_args['optioncount'];
+	if ( isset($parsed_args['list']) )
+		$parsed_args['style'] = $parsed_args['list'] ? 'list' : 'break';
+	$parsed_args['title_li'] = '';
 
-	return wp_list_categories($r);
+	return wp_list_categories($parsed_args);
 }
 
 /**
@@ -892,9 +892,9 @@ function wp_get_links($args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -1792,10 +1792,9 @@ function _nc( $single, $plural, $number, $domain = 'default' ) {
  * @deprecated WP-2.8.0 Use _n()
  * @see _n()
  */
-function __ngettext() {
+function __ngettext( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n()' );
-	$args = func_get_args();
-	return call_user_func_array('_n', $args);
+	return _n( ...$args );
 }
 
 /**
@@ -1805,10 +1804,9 @@ function __ngettext() {
  * @deprecated WP-2.8.0 Use _n_noop()
  * @see _n_noop()
  */
-function __ngettext_noop() {
+function __ngettext_noop( ...$args ) { // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', '_n_noop()' );
-	$args = func_get_args();
-	return call_user_func_array('_n_noop', $args);
+	return _n_noop( ...$args );
 
 }
 
@@ -1878,7 +1876,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 	if ( !$fullsize && $src = wp_get_attachment_thumb_url( $post->ID ) ) {
 		// We have a thumbnail desired, specified and existing
 
-		$src_file = basename($src);
+		$src_file = wp_basename($src);
 	} elseif ( wp_attachment_is_image( $post->ID ) ) {
 		// We have an image without a thumbnail
 
@@ -1888,7 +1886,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 		// No thumb, no image. We'll look for a mime-related icon instead.
 
 		$icon_dir = apply_filters( 'icon_dir', get_template_directory() . '/images' );
-		$src_file = $icon_dir . '/' . basename($src);
+		$src_file = $icon_dir . '/' . wp_basename($src);
 	}
 
 	if ( !isset($src) || !$src )
@@ -1923,7 +1921,7 @@ function get_attachment_icon( $id = 0, $fullsize = false, $max_dims = false ) {
 	// Do we need to constrain the image?
 	if ( ($max_dims = apply_filters('attachment_max_dims', $max_dims)) && file_exists($src_file) ) {
 
-		$imagesize = getimagesize($src_file);
+		$imagesize = @getimagesize($src_file);
 
 		if (($imagesize[0] > $max_dims[0]) || $imagesize[1] > $max_dims[1] ) {
 			$actual_aspect = $imagesize[0] / $imagesize[1];
@@ -2070,8 +2068,7 @@ function js_escape( $text ) {
 function wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = false, $double_encode = false ) {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'esc_html()' );
 	if ( func_num_args() > 1 ) { // Maintain back-compat for people passing additional arguments.
-		$args = func_get_args();
-		return call_user_func_array( '_wp_specialchars', $args );
+		return _wp_specialchars( $string, $quote_style, $charset, $double_encode );
 	} else {
 		return esc_html( $string );
 	}
@@ -2111,26 +2108,24 @@ function attribute_escape( $text ) {
  * @param string     $classname       Optional. Classname widget option. Default empty.
  * @param mixed      $params ,...     Widget parameters.
  */
-function register_sidebar_widget($name, $output_callback, $classname = '') {
+function register_sidebar_widget($name, $output_callback, $classname = '', ...$params) {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_sidebar_widget()' );
 	// Compat
-	if ( is_array($name) ) {
-		if ( count($name) == 3 )
-			$name = sprintf($name[0], $name[2]);
-		else
+	if ( is_array( $name ) ) {
+		if ( count( $name ) === 3 ) {
+			$name = sprintf( $name[0], $name[2] );
+		} else {
 			$name = $name[0];
 	}
+	}
 
-	$id = sanitize_title($name);
+	$id      = sanitize_title( $name );
 	$options = array();
-	if ( !empty($classname) && is_string($classname) )
+	if ( ! empty( $classname ) && is_string( $classname ) ) {
 		$options['classname'] = $classname;
-	$params = array_slice(func_get_args(), 2);
-	$args = array($id, $name, $output_callback, $options);
-	if ( !empty($params) )
-		$args = array_merge($args, $params);
+	}
 
-	call_user_func_array('wp_register_sidebar_widget', $args);
+	wp_register_sidebar_widget( $id, $name, $output_callback, $options, ...$params );
 }
 
 /**
@@ -2165,29 +2160,29 @@ function unregister_sidebar_widget($id) {
  * @param callable $control_callback Widget control callback to display and process form.
  * @param int $width Widget width.
  * @param int $height Widget height.
+ * @param mixed      ...$params        Widget parameters.
  */
-function register_widget_control($name, $control_callback, $width = '', $height = '') {
+function register_widget_control($name, $control_callback, $width = '', $height = '', ...$params) {
 	_deprecated_function( __FUNCTION__, 'WP-2.8.0', 'wp_register_widget_control()' );
 	// Compat
-	if ( is_array($name) ) {
-		if ( count($name) == 3 )
-			$name = sprintf($name[0], $name[2]);
-		else
+	if ( is_array( $name ) ) {
+		if ( count( $name ) === 3 ) {
+			$name = sprintf( $name[0], $name[2] );
+		} else {
 			$name = $name[0];
 	}
+	}
 
-	$id = sanitize_title($name);
+	$id      = sanitize_title( $name );
 	$options = array();
-	if ( !empty($width) )
+	if ( ! empty( $width ) ) {
 		$options['width'] = $width;
-	if ( !empty($height) )
+	}
+	if ( ! empty( $height ) ) {
 		$options['height'] = $height;
-	$params = array_slice(func_get_args(), 4);
-	$args = array($id, $name, $control_callback, $options);
-	if ( !empty($params) )
-		$args = array_merge($args, $params);
+	}
 
-	call_user_func_array('wp_register_widget_control', $args);
+	wp_register_widget_control( $id, $name, $control_callback, $options, ...$params );
 }
 
 /**
@@ -3054,7 +3049,7 @@ function remove_custom_background() {
  */
 function get_theme_data( $theme_file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.4.0', 'wp_get_theme()' );
-	$theme = new WP_Theme( basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
+	$theme = new WP_Theme( wp_basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
 
 	$theme_data = array(
 		'Name' => $theme->get('Name'),
@@ -3169,7 +3164,8 @@ function _get_post_ancestors( &$post ) {
  * @see wp_get_image_editor()
  *
  * @param string $file Filename of the image to load.
- * @return resource The resulting image resource on success, Error string on failure.
+ * @return resource|GdImage|string The resulting image resource or GdImage instance on success,
+ *                                 error string on failure.
  */
 function wp_load_image( $file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'wp_get_image_editor()' );
@@ -3190,8 +3186,8 @@ function wp_load_image( $file ) {
 
 	$image = imagecreatefromstring( file_get_contents( $file ) );
 
-	if ( ! is_resource( $image ) ) {
-		/* translators: %s: file name */
+	if ( ! is_gd_image( $image ) ) {
+		/* translators: %s: File name. */
 		return sprintf( __( 'File &#8220;%s&#8221; is not an image.' ), $file );
 	}
 
@@ -3943,4 +3939,62 @@ function wp_ajax_press_this_add_category() {
 	} else {
 		wp_send_json_error( array( 'errorMessage' => __( 'The Press This plugin is required.' ) ) );
 	}
+}
+
+/**
+ * Display or retrieve page title for post archive based on date.
+ *
+ * Useful for when the template only needs to display the month and year,
+ * if either are available. The prefix does not automatically place a space
+ * between the prefix, so if there should be a space, the parameter value
+ * will need to have it at the end.
+ *
+ * @since WP-0.71
+ * @deprecated CP-1.5.0
+ *
+ * @global WP_Locale $wp_locale
+ *
+ * @param string $prefix  Optional. What to display before the title.
+ * @param bool   $display Optional, default is true. Whether to display or retrieve title.
+ * @return string|void Title when retrieving.
+ */
+function single_month_title( $prefix = '', $display = true ) {
+	_deprecated_function( __FUNCTION__, 'CP-1.5.0' );
+	global $wp_locale;
+
+	$m        = get_query_var( 'm' );
+	$year     = get_query_var( 'year' );
+	$monthnum = get_query_var( 'monthnum' );
+
+	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
+		$my_year  = $year;
+		$my_month = $wp_locale->get_month( $monthnum );
+	} elseif ( ! empty( $m ) ) {
+		$my_year  = substr( $m, 0, 4 );
+		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
+	}
+
+	if ( empty( $my_month ) ) {
+		return false;
+	}
+
+	$result = $prefix . $my_month . $prefix . $my_year;
+
+	if ( ! $display ) {
+		return $result;
+	}
+	echo $result;
+}
+
+
+/**
+ * Turn register globals off.
+ *
+ * @since WP-2.1.0
+ * @access private
+ * @deprecated WP-5.5.0
+ */
+function wp_unregister_GLOBALS() {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+	// register_globals was deprecated in PHP 5.3 and removed entirely in PHP 5.4.
+	_deprecated_function( __FUNCTION__, 'WP-5.5.0' );
 }

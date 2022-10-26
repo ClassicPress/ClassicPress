@@ -5,31 +5,31 @@
  */
 class Tests_Taxonomy extends WP_UnitTestCase {
 	function test_get_post_taxonomies() {
-		$this->assertEquals(array('category', 'post_tag', 'post_format'), get_object_taxonomies('post'));
+		$this->assertSame( array( 'category', 'post_tag', 'post_format' ), get_object_taxonomies( 'post' ) );
 	}
 
 	function test_get_link_taxonomies() {
-		$this->assertEquals(array('link_category'), get_object_taxonomies('link'));
+		$this->assertSame( array( 'link_category' ), get_object_taxonomies( 'link' ) );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5417
 	 */
 	function test_get_unknown_taxonomies() {
-		// taxonomies for an unknown object type
-		$this->assertEquals( array(), get_object_taxonomies(rand_str()) );
-		$this->assertEquals( array(), get_object_taxonomies('') );
-		$this->assertEquals( array(), get_object_taxonomies(0) );
-		$this->assertEquals( array(), get_object_taxonomies(NULL) );
+		// Taxonomies for an unknown object type.
+		$this->assertSame( array(), get_object_taxonomies( rand_str() ) );
+		$this->assertSame( array(), get_object_taxonomies( '' ) );
+		$this->assertSame( array(), get_object_taxonomies( 0 ) );
+		$this->assertSame( array(), get_object_taxonomies( null ) );
 	}
 
 	function test_get_post_taxonomy() {
-		foreach ( get_object_taxonomies('post') as $taxonomy ) {
-			$tax = get_taxonomy($taxonomy);
+		foreach ( get_object_taxonomies( 'post' ) as $taxonomy ) {
+			$tax = get_taxonomy( $taxonomy );
 			// should return an object with the correct taxonomy object type
 			$this->assertTrue( is_object( $tax ) );
 			$this->assertTrue( is_array( $tax->object_type ) );
-			$this->assertEquals( array( 'post' ), $tax->object_type );
+			$this->assertSame( array( 'post' ), $tax->object_type );
 		}
 	}
 
@@ -38,7 +38,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		$taxes = get_the_taxonomies( $post_id );
 		$this->assertNotEmpty( $taxes );
-		$this->assertEquals( array( 'category' ), array_keys( $taxes ) );
+		$this->assertSame( array( 'category' ), array_keys( $taxes ) );
 
 		$id = self::factory()->tag->create();
 		wp_set_post_tags( $post_id, array( $id ) );
@@ -46,7 +46,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$taxes = get_the_taxonomies( $post_id );
 		$this->assertNotEmpty( $taxes );
 		$this->assertCount( 2, $taxes );
-		$this->assertEquals( array( 'category', 'post_tag' ), array_keys( $taxes ) );
+		$this->assertSame( array( 'category', 'post_tag' ), array_keys( $taxes ) );
 	}
 
 	/**
@@ -56,11 +56,11 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$post_id = self::factory()->post->create();
 
 		$taxes = get_the_taxonomies( $post_id, array( 'term_template' => '%2$s' ) );
-		$this->assertEquals( 'Categories: Uncategorized.', $taxes['category'] );
+		$this->assertSame( 'Categories: Uncategorized.', $taxes['category'] );
 
 		$taxes = get_the_taxonomies( $post_id, array( 'term_template' => '<span class="foo"><a href="%1$s">%2$s</a></span>' ) );
-		$link = get_category_link( 1 );
-		$this->assertEquals( 'Categories: <span class="foo"><a href="' . $link . '">Uncategorized</a></span>.', $taxes['category'] );
+		$link  = get_category_link( 1 );
+		$this->assertSame( 'Categories: <span class="foo"><a href="' . $link . '">Uncategorized</a></span>.', $taxes['category'] );
 	}
 
 	function test_the_taxonomies() {
@@ -70,7 +70,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		the_taxonomies( array( 'post' => $post_id ) );
 		$output = ob_get_clean();
 
-		$link = get_category_link( 1 );
+		$link     = get_category_link( 1 );
 		$expected = 'Categories: <a href="' . $link . '">Uncategorized</a>.';
 		$this->assertEquals( $expected, $output );
 	}
@@ -81,76 +81,92 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	function test_the_taxonomies_term_template() {
 		$post_id = self::factory()->post->create();
 
-		$output = get_echo( 'the_taxonomies', array( array( 'post' => $post_id, 'term_template' => '%2$s' ) ) );
-		$this->assertEquals( 'Categories: Uncategorized.', $output );
+		$output = get_echo(
+			'the_taxonomies',
+			array(
+				array(
+					'post'          => $post_id,
+					'term_template' => '%2$s',
+				),
+			)
+		);
+		$this->assertSame( 'Categories: Uncategorized.', $output );
 
-		$output = get_echo( 'the_taxonomies', array( array( 'post' => $post_id, 'term_template' => '<span class="foo"><a href="%1$s">%2$s</a></span>' ) ) );
-		$link = get_category_link( 1 );
-		$this->assertEquals( 'Categories: <span class="foo"><a href="' . $link . '">Uncategorized</a></span>.', $output );
+		$output = get_echo(
+			'the_taxonomies',
+			array(
+				array(
+					'post'          => $post_id,
+					'term_template' => '<span class="foo"><a href="%1$s">%2$s</a></span>',
+				),
+			)
+		);
+		$link   = get_category_link( 1 );
+		$this->assertSame( 'Categories: <span class="foo"><a href="' . $link . '">Uncategorized</a></span>.', $output );
 	}
 
 	function test_get_link_taxonomy() {
-		foreach ( get_object_taxonomies('link') as $taxonomy ) {
-			$tax = get_taxonomy($taxonomy);
+		foreach ( get_object_taxonomies( 'link' ) as $taxonomy ) {
+			$tax = get_taxonomy( $taxonomy );
 			// should return an object with the correct taxonomy object type
-			$this->assertTrue( is_object($tax) );
+			$this->assertTrue( is_object( $tax ) );
 			$this->assertTrue( is_array( $tax->object_type ) );
-			$this->assertEquals( array( 'link' ), $tax->object_type );
+			$this->assertSame( array( 'link' ), $tax->object_type );
 		}
 	}
 
 	function test_taxonomy_exists_known() {
-		$this->assertTrue( taxonomy_exists('category') );
-		$this->assertTrue( taxonomy_exists('post_tag') );
-		$this->assertTrue( taxonomy_exists('link_category') );
+		$this->assertTrue( taxonomy_exists( 'category' ) );
+		$this->assertTrue( taxonomy_exists( 'post_tag' ) );
+		$this->assertTrue( taxonomy_exists( 'link_category' ) );
 	}
 
 	function test_taxonomy_exists_unknown() {
-		$this->assertFalse( taxonomy_exists(rand_str()) );
-		$this->assertFalse( taxonomy_exists('') );
-		$this->assertFalse( taxonomy_exists(0) );
-		$this->assertFalse( taxonomy_exists(NULL) );
+		$this->assertFalse( taxonomy_exists( rand_str() ) );
+		$this->assertFalse( taxonomy_exists( '' ) );
+		$this->assertFalse( taxonomy_exists( 0 ) );
+		$this->assertFalse( taxonomy_exists( null ) );
 	}
 
 	function test_is_taxonomy_hierarchical() {
-		$this->assertTrue( is_taxonomy_hierarchical('category') );
-		$this->assertFalse( is_taxonomy_hierarchical('post_tag') );
-		$this->assertFalse( is_taxonomy_hierarchical('link_category') );
+		$this->assertTrue( is_taxonomy_hierarchical( 'category' ) );
+		$this->assertFalse( is_taxonomy_hierarchical( 'post_tag' ) );
+		$this->assertFalse( is_taxonomy_hierarchical( 'link_category' ) );
 	}
 
 	function test_is_taxonomy_hierarchical_unknown() {
-		$this->assertFalse( is_taxonomy_hierarchical(rand_str()) );
-		$this->assertFalse( is_taxonomy_hierarchical('') );
-		$this->assertFalse( is_taxonomy_hierarchical(0) );
-		$this->assertFalse( is_taxonomy_hierarchical(NULL) );
+		$this->assertFalse( is_taxonomy_hierarchical( rand_str() ) );
+		$this->assertFalse( is_taxonomy_hierarchical( '' ) );
+		$this->assertFalse( is_taxonomy_hierarchical( 0 ) );
+		$this->assertFalse( is_taxonomy_hierarchical( null ) );
 	}
 
 	function test_register_taxonomy() {
 
 		// make up a new taxonomy name, and ensure it's unused
 		$tax = rand_str();
-		$this->assertFalse( taxonomy_exists($tax) );
+		$this->assertFalse( taxonomy_exists( $tax ) );
 
 		register_taxonomy( $tax, 'post' );
-		$this->assertTrue( taxonomy_exists($tax) );
-		$this->assertFalse( is_taxonomy_hierarchical($tax) );
+		$this->assertTrue( taxonomy_exists( $tax ) );
+		$this->assertFalse( is_taxonomy_hierarchical( $tax ) );
 
 		// clean up
-		unset($GLOBALS['wp_taxonomies'][$tax]);
+		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
 	}
 
 	function test_register_hierarchical_taxonomy() {
 
 		// make up a new taxonomy name, and ensure it's unused
 		$tax = rand_str();
-		$this->assertFalse( taxonomy_exists($tax) );
+		$this->assertFalse( taxonomy_exists( $tax ) );
 
-		register_taxonomy( $tax, 'post', array('hierarchical'=>true) );
-		$this->assertTrue( taxonomy_exists($tax) );
-		$this->assertTrue( is_taxonomy_hierarchical($tax) );
+		register_taxonomy( $tax, 'post', array( 'hierarchical' => true ) );
+		$this->assertTrue( taxonomy_exists( $tax ) );
+		$this->assertTrue( is_taxonomy_hierarchical( $tax ) );
 
 		// clean up
-		unset($GLOBALS['wp_taxonomies'][$tax]);
+		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
 	}
 
 	/**
@@ -175,13 +191,21 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/26948
 	 */
 	public function test_register_taxonomy_show_in_quick_edit_should_default_to_value_of_show_ui() {
-		register_taxonomy( 'wptests_tax_1', 'post', array(
-			'show_ui' => true,
-		) );
+		register_taxonomy(
+			'wptests_tax_1',
+			'post',
+			array(
+				'show_ui' => true,
+			)
+		);
 
-		register_taxonomy( 'wptests_tax_2', 'post', array(
-			'show_ui' => false,
-		) );
+		register_taxonomy(
+			'wptests_tax_2',
+			'post',
+			array(
+				'show_ui' => false,
+			)
+		);
 
 		$tax_1 = get_taxonomy( 'wptests_tax_1' );
 		$this->assertTrue( $tax_1->show_in_quick_edit );
@@ -196,7 +220,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	function test_registering_taxonomies_to_object_types() {
 		// Create a taxonomy to test with
 		$tax = 'test_tax';
-		$this->assertFalse( taxonomy_exists($tax) );
+		$this->assertFalse( taxonomy_exists( $tax ) );
 		register_taxonomy( $tax, 'post', array( 'hierarchical' => true ) );
 
 		// Create a post type to test with
@@ -234,7 +258,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$this->assertFalse( register_taxonomy_for_object_type( $tax, 'user' ) );
 		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
 
-		unset($GLOBALS['wp_taxonomies'][$tax]);
+		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
 		_unregister_post_type( $post_type );
 
 	}
@@ -248,23 +272,23 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$tax = get_taxonomy( 'wptests_tax' );
 
 		$expected = array( 'post' );
-		$this->assertEqualSets( $expected, $tax->object_type );
+		$this->assertSameSets( $expected, $tax->object_type );
 	}
 
 	public function test_get_objects_in_term_should_return_invalid_taxonomy_error() {
 		$terms = get_objects_in_term( 1, 'invalid_taxonomy' );
 		$this->assertInstanceOf( 'WP_Error', $terms );
-		$this->assertEquals( 'invalid_taxonomy', $terms->get_error_code() );
+		$this->assertSame( 'invalid_taxonomy', $terms->get_error_code() );
 	}
 
 	public function test_get_objects_in_term_should_return_empty_array() {
-		$this->assertEquals( array(), get_objects_in_term( 1, 'post_tag' ) );
+		$this->assertSame( array(), get_objects_in_term( 1, 'post_tag' ) );
 	}
 
 	public function test_get_objects_in_term_should_return_objects_ids() {
-		$tag_id = self::factory()->tag->create();
-		$cat_id = self::factory()->category->create();
-		$posts_with_tag = array();
+		$tag_id              = self::factory()->tag->create();
+		$cat_id              = self::factory()->category->create();
+		$posts_with_tag      = array();
 		$posts_with_category = array();
 
 		for ( $i = 0; $i < 3; $i++ ) {
@@ -297,10 +321,12 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	public function test_term_assignment_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
 
-		$posts = self::factory()->post->create_many( 2 );
-		$term_id = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$posts   = self::factory()->post->create_many( 2 );
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		wp_set_object_terms( $posts[1], $term_id, 'wptests_tax' );
 
@@ -320,10 +346,12 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	public function test_term_deletion_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
 
-		$posts = self::factory()->post->create_many( 2 );
-		$term_id = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$posts   = self::factory()->post->create_many( 2 );
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		wp_set_object_terms( $posts[1], $term_id, 'wptests_tax' );
 
@@ -343,10 +371,12 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	public function test_post_deletion_should_invalidate_get_objects_in_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
 
-		$posts = self::factory()->post->create_many( 2 );
-		$term_id = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$posts   = self::factory()->post->create_many( 2 );
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		wp_set_object_terms( $posts[1], $term_id, 'wptests_tax' );
 
@@ -379,104 +409,131 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 	function test_insert_category_create() {
 		$cat = array(
-			'cat_ID' => 0,
+			'cat_ID'   => 0,
 			'taxonomy' => 'category',
-			'cat_name' => 'test1'
+			'cat_name' => 'test1',
 		);
 		$this->assertTrue( is_numeric( wp_insert_category( $cat, true ) ) );
 	}
 
 	function test_insert_category_update() {
 		$cat = array(
-			'cat_ID' => 1,
+			'cat_ID'   => 1,
 			'taxonomy' => 'category',
-			'cat_name' => 'Updated Name'
+			'cat_name' => 'Updated Name',
 		);
-		$this->assertEquals( 1, wp_insert_category( $cat ) );
+		$this->assertSame( 1, wp_insert_category( $cat ) );
 	}
 
 	function test_insert_category_force_error_handle() {
 		$cat = array(
-			'cat_ID' => 0,
+			'cat_ID'   => 0,
 			'taxonomy' => 'force_error',
-			'cat_name' => 'Error'
+			'cat_name' => 'Error',
 		);
 		$this->assertTrue( is_a( wp_insert_category( $cat, true ), 'WP_Error' ) );
 	}
 
 	function test_insert_category_force_error_no_handle() {
 		$cat = array(
-			'cat_ID' => 0,
+			'cat_ID'   => 0,
 			'taxonomy' => 'force_error',
-			'cat_name' => 'Error'
+			'cat_name' => 'Error',
 		);
-		$this->assertEquals( 0, wp_insert_category( $cat, false ) );
+		$this->assertSame( 0, wp_insert_category( $cat, false ) );
 	}
 
 	public function test_get_ancestors_taxonomy_non_hierarchical() {
 		register_taxonomy( 'wptests_tax', 'post' );
-		$t = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$this->assertSame( array(), get_ancestors( $t, 'wptests_tax' ) );
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
 	public function test_get_ancestors_taxonomy() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'hierarchical' => true,
-		) );
-		$t1 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-		) );
-		$t2 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-			'parent' => $t1,
-		) );
-		$t3 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-			'parent' => $t2,
-		) );
-		$t4 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_tax',
-			'parent' => $t1,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'hierarchical' => true,
+			)
+		);
+		$t1 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+		$t2 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $t1,
+			)
+		);
+		$t3 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $t2,
+			)
+		);
+		$t4 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $t1,
+			)
+		);
 
-		$this->assertEqualSets( array( $t2, $t1 ), get_ancestors( $t3, 'wptests_tax' ) );
+		$this->assertSameSets( array( $t2, $t1 ), get_ancestors( $t3, 'wptests_tax' ) );
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
 	public function test_get_ancestors_post_type_non_hierarchical() {
 		register_post_type( 'wptests_pt' );
-		$p = self::factory()->post->create( array(
-			'taxonomy' => 'wptests_pt',
-		) );
+		$p = self::factory()->post->create(
+			array(
+				'taxonomy' => 'wptests_pt',
+			)
+		);
 
-		$this->assertEqualSets( array(), get_ancestors( $p, 'wptests_tax' ) );
+		$this->assertSameSets( array(), get_ancestors( $p, 'wptests_tax' ) );
 	}
 
 	public function test_get_ancestors_post_type() {
-		register_post_type( 'wptests_pt', array(
-			'hierarchical' => true,
-		) );
-		$p1 = self::factory()->post->create( array(
-			'post_type' => 'wptests_pt',
-		) );
-		$p2 = self::factory()->post->create( array(
-			'post_type' => 'wptests_pt',
-			'post_parent' => $p1,
-		) );
-		$p3 = self::factory()->post->create( array(
-			'post_type' => 'wptests_pt',
-			'post_parent' => $p2,
-		) );
-		$p4 = self::factory()->post->create( array(
-			'post_type' => 'wptests_pt',
-			'post_parent' => $p1,
-		) );
+		register_post_type(
+			'wptests_pt',
+			array(
+				'hierarchical' => true,
+			)
+		);
+		$p1 = self::factory()->post->create(
+			array(
+				'post_type' => 'wptests_pt',
+			)
+		);
+		$p2 = self::factory()->post->create(
+			array(
+				'post_type'   => 'wptests_pt',
+				'post_parent' => $p1,
+			)
+		);
+		$p3 = self::factory()->post->create(
+			array(
+				'post_type'   => 'wptests_pt',
+				'post_parent' => $p2,
+			)
+		);
+		$p4 = self::factory()->post->create(
+			array(
+				'post_type'   => 'wptests_pt',
+				'post_parent' => $p1,
+			)
+		);
 
-		$this->assertEqualSets( array( $p2, $p1 ), get_ancestors( $p3, 'wptests_pt' ) );
+		$this->assertSameSets( array( $p2, $p1 ), get_ancestors( $p3, 'wptests_pt' ) );
 		_unregister_post_type( 'wptests_pt' );
 	}
 
@@ -484,31 +541,46 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/15029
 	 */
 	public function test_get_ancestors_taxonomy_post_type_conflict_resource_type_taxonomy() {
-		register_post_type( 'wptests_conflict', array(
-			'hierarchical' => true,
-		) );
-		$p1 = self::factory()->post->create( array(
-			'post_type' => 'wptests_conflict',
-		) );
-		$p2 = self::factory()->post->create( array(
-			'post_type' => 'wptests_conflict',
-			'post_parent' => $p1,
-		) );
+		register_post_type(
+			'wptests_conflict',
+			array(
+				'hierarchical' => true,
+			)
+		);
+		$p1 = self::factory()->post->create(
+			array(
+				'post_type' => 'wptests_conflict',
+			)
+		);
+		$p2 = self::factory()->post->create(
+			array(
+				'post_type'   => 'wptests_conflict',
+				'post_parent' => $p1,
+			)
+		);
 
-		register_taxonomy( 'wptests_conflict', 'post', array(
-			'hierarchical' => true,
-		) );
-		$t1 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_conflict',
-		) );
-		$t2 = self::factory()->term->create( array(
-			'taxonomy' => 'wptests_conflict',
-			'parent' => $t1,
-		) );
+		register_taxonomy(
+			'wptests_conflict',
+			'post',
+			array(
+				'hierarchical' => true,
+			)
+		);
+		$t1 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_conflict',
+			)
+		);
+		$t2 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_conflict',
+				'parent'   => $t1,
+			)
+		);
 
-		$this->assertEqualSets( array( $p1 ), get_ancestors( $p2, 'wptests_conflict', 'post_type' ) );
-		$this->assertEqualSets( array( $t1 ), get_ancestors( $t2, 'wptests_conflict', 'taxonomy' ) );
-		$this->assertEqualSets( array( $t1 ), get_ancestors( $t2, 'wptests_conflict' ) );
+		$this->assertSameSets( array( $p1 ), get_ancestors( $p2, 'wptests_conflict', 'post_type' ) );
+		$this->assertSameSets( array( $t1 ), get_ancestors( $t2, 'wptests_conflict', 'taxonomy' ) );
+		$this->assertSameSets( array( $t1 ), get_ancestors( $t2, 'wptests_conflict' ) );
 		_unregister_post_type( 'wptests_pt' );
 	}
 
@@ -516,13 +588,19 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21949
 	 */
 	public function test_nonpublicly_queryable_taxonomy_should_not_be_queryable_using_taxname_query_var() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'publicly_queryable' => false,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'publicly_queryable' => false,
+			)
+		);
 
-		$t = self::factory()->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = self::factory()->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -538,12 +616,18 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	public function test_it_should_be_possible_to_register_a_query_var_that_matches_the_name_of_a_nonpublicly_queryable_taxonomy() {
 		global $wp;
 
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'publicly_queryable' => false,
-		) );
-		$t = $this->factory->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'publicly_queryable' => false,
+			)
+		);
+		$t = $this->factory->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = $this->factory->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -571,13 +655,19 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/21949
 	 */
 	public function test_nonpublicly_queryable_taxonomy_should_not_be_queryable_using_taxonomy_and_term_vars() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'publicly_queryable' => false,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'publicly_queryable' => false,
+			)
+		);
 
-		$t = self::factory()->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = self::factory()->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -591,15 +681,21 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_public_taxonomy_should_be_publicly_queryable() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'public' => true,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'public' => true,
+			)
+		);
 
 		$this->assertContains( 'wptests_tax', get_taxonomies( array( 'publicly_queryable' => true ) ) );
 
-		$t = self::factory()->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = self::factory()->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -613,15 +709,21 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_private_taxonomy_should_not_be_publicly_queryable() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'public' => false,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'public' => false,
+			)
+		);
 
 		$this->assertContains( 'wptests_tax', get_taxonomies( array( 'publicly_queryable' => false ) ) );
 
-		$t = self::factory()->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = self::factory()->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -635,16 +737,22 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/34491
 	 */
 	public function test_private_taxonomy_should_be_overridden_by_publicly_queryable() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'public' => false,
-			'publicly_queryable' => true,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'public'             => false,
+				'publicly_queryable' => true,
+			)
+		);
 
 		$this->assertContains( 'wptests_tax', get_taxonomies( array( 'publicly_queryable' => true ) ) );
 
-		$t = self::factory()->term->create_and_get( array(
-			'taxonomy' => 'wptests_tax',
-		) );
+		$t = self::factory()->term->create_and_get(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
 
 		$p = self::factory()->post->create();
 		wp_set_object_terms( $p, $t->slug, 'wptests_tax' );
@@ -658,10 +766,14 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/35089
 	 */
 	public function test_query_var_should_be_forced_to_false_for_non_public_taxonomy() {
-		register_taxonomy( 'wptests_tax', 'post', array(
-			'public' => false,
-			'query_var' => true,
-		) );
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'public'    => false,
+				'query_var' => true,
+			)
+		);
 
 		$tax = get_taxonomy( 'wptests_tax' );
 		$this->assertFalse( $tax->query_var );
@@ -699,9 +811,9 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post', array( 'query_var' => 'bar' ) );
 
-		$this->assertInternalType( 'int', array_search( 'bar', $wp->public_query_vars ) );
+		$this->assertIsInt( array_search( 'bar', $wp->public_query_vars, true ) );
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
-		$this->assertFalse( array_search( 'bar', $wp->public_query_vars ) );
+		$this->assertFalse( array_search( 'bar', $wp->public_query_vars, true ) );
 	}
 
 	/**
@@ -712,11 +824,18 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		global $wp_rewrite;
 
-		register_taxonomy( 'foo', 'post', array( 'query_var' => 'bar', 'rewrite' => true ) );
+		register_taxonomy(
+			'foo',
+			'post',
+			array(
+				'query_var' => 'bar',
+				'rewrite'   => true,
+			)
+		);
 
-		$this->assertInternalType( 'array', $wp_rewrite->extra_permastructs['foo'] );
+		$this->assertIsArray( $wp_rewrite->extra_permastructs['foo'] );
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
-		$this->assertFalse( isset($wp_rewrite->extra_permastructs['foo'] ) );
+		$this->assertFalse( isset( $wp_rewrite->extra_permastructs['foo'] ) );
 	}
 
 	/**
@@ -747,8 +866,8 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 
 		register_taxonomy( 'foo', 'post' );
 
-		$this->assertInternalType( 'object', $wp_taxonomies['foo'] );
-		$this->assertInternalType( 'object', get_taxonomy( 'foo' ) );
+		$this->assertIsObject( $wp_taxonomies['foo'] );
+		$this->assertIsObject( get_taxonomy( 'foo' ) );
 
 		$this->assertTrue( unregister_taxonomy( 'foo' ) );
 

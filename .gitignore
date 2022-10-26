@@ -1,4 +1,4 @@
-# gitignore file for WordPress Core
+# gitignore file for ClassicPress Core
 
 # Configuration files with possibly sensitive information
 wp-config.php
@@ -6,6 +6,7 @@ wp-tests-config.php
 .htaccess
 
 # Files and folders related to build/test tools
+.phpunit.result.cache
 /phpunit.xml
 /tests/qunit/compiled.html
 /src/.wp-tests-version
@@ -21,6 +22,8 @@ wp-tests-config.php
 /src/wp-content/languages
 /src/wp-content/mu-plugins
 /src/wp-content/plugins
+!/src/wp-content/plugins/hello.php
+!/src/wp-content/plugins/index.php
 /src/wp-content/themes/*
 !/src/wp-content/themes/twentyfifteen
 !/src/wp-content/themes/classicpress-twentyfifteen
