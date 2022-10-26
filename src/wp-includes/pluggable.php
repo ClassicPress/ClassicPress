@@ -346,6 +346,8 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 	$phpmailer->clearAttachments();
 	$phpmailer->clearCustomHeaders();
 	$phpmailer->clearReplyTos();
+	$phpmailer->Body    = '';
+	$phpmailer->AltBody = '';
 
 	// From email and name
 

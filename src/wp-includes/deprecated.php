@@ -3941,6 +3941,23 @@ function wp_ajax_press_this_add_category() {
 }
 
 /**
+* Filter the SQL clauses of an attachment query to include filenames.
+ *
+ * @since WP-4.7.0
+ * @deprecated WP-6.0.3
+ * @access private
+ *
+ * @param array $clauses An array including WHERE, GROUP BY, JOIN, ORDER BY,
+ *                       DISTINCT, fields (SELECT), and LIMITS clauses.
+ * @return array The unmodified clauses.
+ */
+function _filter_query_attachment_filenames( $clauses ) {
+	_deprecated_function( __FUNCTION__, 'WP-6.0.3', 'add_filter( "wp_allow_query_attachment_by_filename", "__return_true" )');
+	remove_filter( 'posts_clauses', __FUNCTION__ );
+	return $clauses;
+}
+
+/**
  * Turn register globals off.
  *
  * @since WP-2.1.0
