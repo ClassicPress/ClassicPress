@@ -924,11 +924,11 @@ function wp_media_upload_handler() {
 /**
  * Downloads an image from the specified URL and attaches it to a post.
  *
- * @since 2.6.0
- * @since 4.2.0 Introduced the `$return` parameter.
- * @since 4.8.0 Introduced the 'id' option within the `$return` parameter.
- * @since 5.3.0 The `$post_id` parameter was made optional.
- * @since 5.4.0 The original URL of the attachment is stored in the `_source_url`
+ * @since WP-2.6.0
+ * @since WP-4.2.0 Introduced the `$return` parameter.
+ * @since WP-4.8.0 Introduced the 'id' option within the `$return` parameter.
+ * @since WP-5.3.0 The `$post_id` parameter was made optional.
+ * @since WP-5.4.0 The original URL of the attachment is stored in the `_source_url`
  *              post meta value.
  *
  * @param string $file    The URL of the image to download.

@@ -137,7 +137,7 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if the terms for a post can be read.
 	 *
-	 * @since 6.0.3
+	 * @since WP-6.0.3
 	 *
 	 * @param WP_Post         $post    Post object.
 	 * @param WP_REST_Request $request Full details about the request.

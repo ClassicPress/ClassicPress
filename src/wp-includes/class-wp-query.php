@@ -440,7 +440,7 @@ class WP_Query {
 	/**
 	 * Controls whether an attachment query should include filenames or not.
 	 *
-	 * @since 6.0.3
+	 * @since WP-6.0.3
 	 * @var bool
 	 */
 	protected $allow_query_attachment_by_filename = false;
@@ -1730,7 +1730,7 @@ class WP_Query {
 		/**
 		 * Filters whether an attachment query should include filenames or not.
 		 *
-		 * @since 6.0.3
+		 * @since WP-6.0.3
 		 *
 		 * @param bool $allow_query_attachment_by_filename Whether or not to include filenames.
 		 */

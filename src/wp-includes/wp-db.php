@@ -3546,7 +3546,7 @@ class wpdb {
 	/**
 	 * Retrieves full MySQL server information.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @return string|false Server info on success, false on failure.
 	 */

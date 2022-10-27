@@ -1838,7 +1838,7 @@ function is_post_type_viewable( $post_type ) {
 	 * potential type errors in PHP 8.1+. Non-boolean values (even falsey
 	 * and truthy values) will result in the function returning false.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param bool         $is_viewable Whether the post type is "viewable" (strict type).
 	 * @param WP_Post_Type $post_type   Post type object.
@@ -1852,8 +1852,8 @@ function is_post_type_viewable( $post_type ) {
  * For built-in post statuses such as publish and private, the 'public' value will be evaluated.
  * For all others, the 'publicly_queryable' value will be used.
  *
- * @since 5.7.0
- * @since 5.9.0 Added `is_post_status_viewable` hook to filter the result.
+ * @since WP-5.7.0
+ * @since WP-5.9.0 Added `is_post_status_viewable` hook to filter the result.
  *
  * @param string|stdClass $post_status Post status name or object.
  * @return bool Whether the post status should be considered viewable.
@@ -1886,7 +1886,7 @@ function is_post_status_viewable( $post_status ) {
 	 * potential type errors in PHP 8.1+. Non-boolean values (even falsey
 	 * and truthy values) will result in the function returning false.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param bool     $is_viewable Whether the post status is "viewable" (strict type).
 	 * @param stdClass $post_status Post status object.
@@ -1900,7 +1900,7 @@ function is_post_status_viewable( $post_status ) {
  * Posts are considered publicly viewable if both the post status and post type
  * are viewable.
  *
- * @since 5.7.0
+ * @since WP-5.7.0
  *
  * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
  * @return bool Whether the post is publicly viewable.
