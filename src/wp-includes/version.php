@@ -40,7 +40,7 @@ $cp_version = '1.4.4+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '4.9.20';
+$wp_version = '4.9.22';
 
 /**
  * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
