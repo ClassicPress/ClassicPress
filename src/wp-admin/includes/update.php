@@ -258,7 +258,7 @@ function update_nag() {
 
 	global $pagenow;
 
-	if ( 'update-core.php' == $pagenow ) {
+	if ( 'update-core.php' === $pagenow ) {
 		return;
 	}
 

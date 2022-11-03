@@ -44,6 +44,7 @@ wp_initial_constants();
 wp_check_php_mysql_versions();
 
 // ClassicPress calculates offsets from UTC.
+// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 date_default_timezone_set( 'UTC' );
 
 // Standardize $_SERVER variables across setups.

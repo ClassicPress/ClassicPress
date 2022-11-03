@@ -49,15 +49,15 @@ if ( isset( $_POST['post_type'] ) && $post && $post_type !== $_POST['post_type']
 
 if ( isset( $_POST['deletepost'] ) ) {
 	$action = 'delete';
-} elseif ( isset( $_POST['wp-preview'] ) && 'dopreview' == $_POST['wp-preview'] ) {
+} elseif ( isset( $_POST['wp-preview'] ) && 'dopreview' === $_POST['wp-preview'] ) {
 	$action = 'preview';
 }
 
 $sendback = wp_get_referer();
 if ( ! $sendback ||
-	 strpos( $sendback, 'post.php' ) !== false ||
-	 strpos( $sendback, 'post-new.php' ) !== false ) {
-	if ( 'attachment' == $post_type ) {
+	false !== strpos( $sendback, 'post.php' ) ||
+	false !== strpos( $sendback, 'post-new.php' ) ) {
+	if ( 'attachment' === $post_type ) {
 		$sendback = admin_url( 'upload.php' );
 	} else {
 		$sendback = admin_url( 'edit.php' );
@@ -103,16 +103,16 @@ switch ( $action ) {
 	case 'postajaxpost':
 	case 'post':
 		check_admin_referer( 'add-' . $post_type );
-		$post_id = 'postajaxpost' == $action ? edit_post() : write_post();
+		$post_id = 'postajaxpost' === $action ? edit_post() : write_post();
 		redirect_post( $post_id );
-		exit();
+		exit;
 
 	case 'edit':
 		$editing = true;
 
 		if ( empty( $post_id ) ) {
 			wp_redirect( admin_url( 'post.php' ) );
-			exit();
+			exit;
 		}
 
 		if ( ! $post ) {
@@ -123,7 +123,7 @@ switch ( $action ) {
 			wp_die( __( 'Invalid post type.' ) );
 		}
 
-		if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
+		if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ), true ) ) {
 			wp_die( __( 'Sorry, you are not allowed to edit posts in this post type.' ) );
 		}
 
@@ -131,7 +131,7 @@ switch ( $action ) {
 			wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
 		}
 
-		if ( 'trash' == $post->post_status ) {
+		if ( 'trash' === $post->post_status ) {
 			wp_die( __( 'You can&#8217;t edit this item because it is in the Trash. Please restore it and try again.' ) );
 		}
 
@@ -139,15 +139,15 @@ switch ( $action ) {
 			check_admin_referer( 'lock-post_' . $post_id );
 			wp_set_post_lock( $post_id );
 			wp_redirect( get_edit_post_link( $post_id, 'url' ) );
-			exit();
+			exit;
 		}
 
 		$post_type = $post->post_type;
-		if ( 'post' == $post_type ) {
+		if ( 'post' === $post_type ) {
 			$parent_file   = 'edit.php';
 			$submenu_file  = 'edit.php';
 			$post_new_file = 'post-new.php';
-		} elseif ( 'attachment' == $post_type ) {
+		} elseif ( 'attachment' === $post_type ) {
 			$parent_file   = 'upload.php';
 			$submenu_file  = 'upload.php';
 			$post_new_file = 'media-new.php';
@@ -219,7 +219,7 @@ switch ( $action ) {
 
 		redirect_post( $post_id ); // Send user on their way while we keep working
 
-		exit();
+		exit;
 
 	case 'trash':
 		check_admin_referer( 'trash-post_' . $post_id );
@@ -255,7 +255,7 @@ switch ( $action ) {
 				$sendback
 			)
 		);
-		exit();
+		exit;
 
 	case 'untrash':
 		check_admin_referer( 'untrash-post_' . $post_id );
@@ -277,7 +277,7 @@ switch ( $action ) {
 		}
 
 		wp_redirect( add_query_arg( 'untrashed', 1, $sendback ) );
-		exit();
+		exit;
 
 	case 'delete':
 		check_admin_referer( 'delete-post_' . $post_id );
@@ -306,7 +306,7 @@ switch ( $action ) {
 		}
 
 		wp_redirect( add_query_arg( 'deleted', 1, $sendback ) );
-		exit();
+		exit;
 
 	case 'preview':
 		check_admin_referer( 'update-post_' . $post_id );
@@ -314,7 +314,7 @@ switch ( $action ) {
 		$url = post_preview();
 
 		wp_redirect( $url );
-		exit();
+		exit;
 
 	default:
 		/**
@@ -329,6 +329,7 @@ switch ( $action ) {
 		do_action( "post_action_{$action}", $post_id );
 
 		wp_redirect( admin_url( 'edit.php' ) );
-		exit();
-} // end switch
-require ABSPATH . 'wp-admin/admin-footer.php';
+		exit;
+} // End switch.
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';

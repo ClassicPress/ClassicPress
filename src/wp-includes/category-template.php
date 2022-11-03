@@ -36,14 +36,14 @@ function get_category_link( $category ) {
  * @since WP-1.2.0
  * @since WP-4.8.0 The `$visited` parameter was deprecated and renamed to `$deprecated`.
  *
- * @param int $id Category ID.
- * @param bool $link Optional, default is false. Whether to format with link.
- * @param string $separator Optional, default is '/'. How to separate categories.
- * @param bool $nicename Optional, default is false. Whether to use nice name for display.
+ * @param int    $category_id Category ID.
+ * @param bool   $link        Optional. Whether to format with link. Default false.
+ * @param string $separator   Optional. How to separate categories. Default '/'.
+ * @param bool   $nicename    Optional. Whether to use nice name for display. Default false.
  * @param array $deprecated Not used.
  * @return string|WP_Error A list of category parents on success, WP_Error on failure.
  */
-function get_category_parents( $id, $link = false, $separator = '/', $nicename = false, $deprecated = array() ) {
+function get_category_parents( $category_id, $link = false, $separator = '/', $nicename = false, $deprecated = array() ) {
 
 	if ( ! empty( $deprecated ) ) {
 		_deprecated_argument( __FUNCTION__, 'WP-4.8.0' );
@@ -57,7 +57,7 @@ function get_category_parents( $id, $link = false, $separator = '/', $nicename =
 		'format'    => $format,
 	);
 
-	return get_term_parents_list( $id, 'category', $args );
+	return get_term_parents_list( $category_id, 'category', $args );
 }
 
 /**
@@ -70,11 +70,11 @@ function get_category_parents( $id, $link = false, $separator = '/', $nicename =
  *
  * @since WP-0.71
  *
- * @param int $id Optional, default to current post ID. The post ID.
- * @return array Array of WP_Term objects, one for each category assigned to the post.
+ * @param int $post_id Optional. The post ID. Defaults to current post ID.
+ * @return WP_Term[] Array of WP_Term objects, one for each category assigned to the post.
  */
-function get_the_category( $id = false ) {
-	$categories = get_the_terms( $id, 'category' );
+function get_the_category( $post_id = false ) {
+	$categories = get_the_terms( $post_id, 'category' );
 	if ( ! $categories || is_wp_error( $categories ) ) {
 		$categories = array();
 	}
@@ -89,12 +89,12 @@ function get_the_category( $id = false ) {
 	 * Filters the array of categories to return for a post.
 	 *
 	 * @since WP-3.1.0
-	 * @since WP-4.4.0 Added `$id` parameter.
+	 * @since WP-4.4.0 Added `$post_id` parameter.
 	 *
-	 * @param array $categories An array of categories to return for the post.
-	 * @param int   $id         ID of the post.
+	 * @param WP_Term[] $categories An array of categories to return for the post.
+	 * @param int|false $post_id    ID of the post.
 	 */
-	return apply_filters( 'get_the_categories', $categories, $id );
+	return apply_filters( 'get_the_categories', $categories, $post_id );
 }
 
 /**
@@ -131,6 +131,7 @@ function get_the_category_by_ID( $cat_ID ) { // phpcs:ignore WordPress.NamingCon
  */
 function get_the_category_list( $separator = '', $parents = '', $post_id = false ) {
 	global $wp_rewrite;
+
 	if ( ! is_object_in_taxonomy( get_post_type( $post_id ), 'category' ) ) {
 		/** This filter is documented in wp-includes/category-template.php */
 		return apply_filters( 'the_category', '', $separator, $parents );
@@ -155,7 +156,7 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 	$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'rel="category tag"' : 'rel="category"';
 
 	$thelist = '';
-	if ( '' == $separator ) {
+	if ( '' === $separator ) {
 		$thelist .= '<ul class="post-categories">';
 		foreach ( $categories as $category ) {
 			$thelist .= "\n\t<li>";
@@ -347,7 +348,7 @@ function wp_dropdown_categories( $args = '' ) {
 	$defaults['selected'] = ( is_category() ) ? get_query_var( 'cat' ) : 0;
 
 	// Back compat.
-	if ( isset( $args['type'] ) && 'link' == $args['type'] ) {
+	if ( isset( $args['type'] ) && 'link' === $args['type'] ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -557,7 +558,7 @@ function wp_list_categories( $args = '' ) {
 	}
 
 	if ( ! isset( $parsed_args['class'] ) ) {
-		$parsed_args['class'] = ( 'category' == $parsed_args['taxonomy'] ) ? 'categories' : $parsed_args['taxonomy'];
+		$parsed_args['class'] = ( 'category' === $parsed_args['taxonomy'] ) ? 'categories' : $parsed_args['taxonomy'];
 	}
 
 	if ( ! taxonomy_exists( $parsed_args['taxonomy'] ) ) {
@@ -570,12 +571,16 @@ function wp_list_categories( $args = '' ) {
 	$categories = get_categories( $parsed_args );
 
 	$output = '';
-	if ( $parsed_args['title_li'] && 'list' == $parsed_args['style'] && ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] ) ) {
+
+	if ( $parsed_args['title_li'] && 'list' === $parsed_args['style']
+		&& ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] )
+	) {
 		$output = '<li class="' . esc_attr( $parsed_args['class'] ) . '">' . $parsed_args['title_li'] . '<ul>';
 	}
+
 	if ( empty( $categories ) ) {
 		if ( ! empty( $show_option_none ) ) {
-			if ( 'list' == $parsed_args['style'] ) {
+			if ( 'list' === $parsed_args['style'] ) {
 				$output .= '<li class="cat-item-none">' . $show_option_none . '</li>';
 			} else {
 				$output .= $show_option_none;
@@ -588,7 +593,7 @@ function wp_list_categories( $args = '' ) {
 
 			// For taxonomies that belong only to custom post types, point to a valid archive.
 			$taxonomy_object = get_taxonomy( $parsed_args['taxonomy'] );
-			if ( ! in_array( 'post', $taxonomy_object->object_type ) && ! in_array( 'page', $taxonomy_object->object_type ) ) {
+			if ( ! in_array( 'post', $taxonomy_object->object_type, true ) && ! in_array( 'page', $taxonomy_object->object_type, true ) ) {
 				foreach ( $taxonomy_object->object_type as $object_type ) {
 					$_object_type = get_post_type_object( $object_type );
 
@@ -602,7 +607,7 @@ function wp_list_categories( $args = '' ) {
 
 			// Fallback for the 'All' link is the posts page.
 			if ( ! $posts_page ) {
-				if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
+				if ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
 					$posts_page = get_permalink( get_option( 'page_for_posts' ) );
 				} else {
 					$posts_page = home_url( '/' );
@@ -610,7 +615,7 @@ function wp_list_categories( $args = '' ) {
 			}
 
 			$posts_page = esc_url( $posts_page );
-			if ( 'list' == $parsed_args['style'] ) {
+			if ( 'list' === $parsed_args['style'] ) {
 				$output .= "<li class='cat-item-all'><a href='$posts_page'>$show_option_all</a></li>";
 			} else {
 				$output .= "<a href='$posts_page'>$show_option_all</a>";
@@ -632,7 +637,9 @@ function wp_list_categories( $args = '' ) {
 		$output .= walk_category_tree( $categories, $depth, $parsed_args );
 	}
 
-	if ( $parsed_args['title_li'] && 'list' == $parsed_args['style'] && ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] ) ) {
+	if ( $parsed_args['title_li'] && 'list' === $parsed_args['style']
+		&& ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] )
+	) {
 		$output .= '</ul></li>';
 	}
 
@@ -724,7 +731,7 @@ function wp_tag_cloud( $args = '' ) {
 	}
 
 	foreach ( $tags as $key => $tag ) {
-		if ( 'edit' == $args['link'] ) {
+		if ( 'edit' === $args['link'] ) {
 			$link = get_edit_term_link( $tag->term_id, $tag->taxonomy, $args['post_type'] );
 		} else {
 			$link = get_term_link( intval( $tag->term_id ), $tag->taxonomy );
@@ -749,7 +756,7 @@ function wp_tag_cloud( $args = '' ) {
 	 */
 	$return = apply_filters( 'wp_tag_cloud', $return, $args );
 
-	if ( 'array' == $args['format'] || empty( $args['echo'] ) ) {
+	if ( 'array' === $args['format'] || empty( $args['echo'] ) ) {
 		return $return;
 	}
 
@@ -947,8 +954,8 @@ function wp_generate_tag_cloud( $tags, $args = '' ) {
 
 		$tags_data[] = array(
 			'id'              => $tag_id,
-			'url'             => '#' != $tag->link ? $tag->link : '#',
-			'role'            => '#' != $tag->link ? '' : ' role="button"',
+			'url'             => ( '#' !== $tag->link ) ? $tag->link : '#',
+			'role'            => ( '#' !== $tag->link ) ? '' : ' role="button"',
 			'name'            => $tag->name,
 			'formatted_count' => $formatted_count,
 			'slug'            => $tag->slug,
@@ -1125,10 +1132,11 @@ function get_tag_link( $tag ) {
  *
  * @since WP-2.3.0
  *
- * @param int $id Post ID.
+ * @param int $post_id Post ID.
  * @return array|false|WP_Error Array of tag objects on success, false on failure.
  */
-function get_the_tags( $id = 0 ) {
+function get_the_tags( $post_id = 0 ) {
+	$terms = get_the_terms( $post_id, 'post_tag' );
 
 	/**
 	 * Filters the array of tags for the given post.
@@ -1139,7 +1147,7 @@ function get_the_tags( $id = 0 ) {
 	 *
 	 * @param array $terms An array of tags for the given post.
 	 */
-	return apply_filters( 'get_the_tags', get_the_terms( $id, 'post_tag' ) );
+	return apply_filters( 'get_the_tags', $terms );
 }
 
 /**
@@ -1147,13 +1155,14 @@ function get_the_tags( $id = 0 ) {
  *
  * @since WP-2.3.0
  *
- * @param string $before Optional. Before tags.
- * @param string $sep Optional. Between tags.
- * @param string $after Optional. After tags.
- * @param int $id Optional. Post ID. Defaults to the current post.
+ * @param string $before  Optional. String to use before tags.
+ * @param string $sep     Optional. String to use between the tags.
+ * @param string $after   Optional. String to use after tags.
+ * @param int    $post_id Optional. Post ID. Defaults to the current post.
  * @return string|false|WP_Error A list of tags on success, false if there are no terms, WP_Error on failure.
  */
-function get_the_tag_list( $before = '', $sep = '', $after = '', $id = 0 ) {
+function get_the_tag_list( $before = '', $sep = '', $after = '', $post_id = 0 ) {
+	$tag_list = get_the_term_list( $post_id, 'post_tag', $before, $sep, $after );
 
 	/**
 	 * Filters the tags list for a given post.
@@ -1164,9 +1173,9 @@ function get_the_tag_list( $before = '', $sep = '', $after = '', $id = 0 ) {
 	 * @param string $before   String to use before tags.
 	 * @param string $sep      String to use between the tags.
 	 * @param string $after    String to use after tags.
-	 * @param int    $id       Post ID.
+	 * @param int    $post_id  Post ID.
 	 */
-	return apply_filters( 'the_tags', get_the_term_list( $id, 'post_tag', $before, $sep, $after ), $before, $sep, $after, $id );
+	return apply_filters( 'the_tags', $tag_list, $before, $sep, $after, $post_id );
 }
 
 /**
@@ -1271,15 +1280,15 @@ function get_the_terms( $post, $taxonomy ) {
  *
  * @since WP-2.5.0
  *
- * @param int $id Post ID.
+ * @param int    $post_id  Post ID.
  * @param string $taxonomy Taxonomy name.
  * @param string $before Optional. Before list.
  * @param string $sep Optional. Separate items using this.
  * @param string $after Optional. After list.
  * @return string|false|WP_Error A list of terms on success, false if there are no terms, WP_Error on failure.
  */
-function get_the_term_list( $id, $taxonomy, $before = '', $sep = '', $after = '' ) {
-	$terms = get_the_terms( $id, $taxonomy );
+function get_the_term_list( $post_id, $taxonomy, $before = '', $sep = '', $after = '' ) {
+	$terms = get_the_terms( $post_id, $taxonomy );
 
 	if ( is_wp_error( $terms ) ) {
 		return $terms;
@@ -1396,15 +1405,15 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
  *
  * @since WP-2.5.0
  *
- * @param int $id Post ID.
+ * @param int    $post_id  Post ID.
  * @param string $taxonomy Taxonomy name.
  * @param string $before Optional. Before list.
  * @param string $sep Optional. Separate items using this.
  * @param string $after Optional. After list.
  * @return false|void False on ClassicPress error.
  */
-function the_terms( $id, $taxonomy, $before = '', $sep = ', ', $after = '' ) {
-	$term_list = get_the_term_list( $id, $taxonomy, $before, $sep, $after );
+function the_terms( $post_id, $taxonomy, $before = '', $sep = ', ', $after = '' ) {
+	$term_list = get_the_term_list( $post_id, $taxonomy, $before, $sep, $after );
 
 	if ( is_wp_error( $term_list ) ) {
 		return false;

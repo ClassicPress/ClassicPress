@@ -205,7 +205,9 @@ final class WP_Theme implements ArrayAccess {
 		$this->stylesheet = $theme_dir;
 
 		// Correct a situation where the theme is 'some-directory/some-theme' but 'some-directory' was passed in as part of the theme root instead.
-		if ( ! in_array( $theme_root, (array) $wp_theme_directories ) && in_array( dirname( $theme_root ), (array) $wp_theme_directories ) ) {
+		if ( ! in_array( $theme_root, (array) $wp_theme_directories, true )
+			&& in_array( dirname( $theme_root ), (array) $wp_theme_directories, true )
+		) {
 			$this->stylesheet = basename( $this->theme_root ) . '/' . $this->stylesheet;
 			$this->theme_root = dirname( $theme_root );
 		}
@@ -266,7 +268,7 @@ final class WP_Theme implements ArrayAccess {
 			$this->headers = get_file_data( $this->theme_root . '/' . $theme_file, self::$file_headers, 'theme' );
 			// Default themes always trump their pretenders.
 			// Properly identify default themes that are inside a directory within wp-content/themes.
-			$default_theme_slug = array_search( $this->headers['Name'], self::$default_themes );
+			$default_theme_slug = array_search( $this->headers['Name'], self::$default_themes, true );
 			if ( $default_theme_slug ) {
 				if ( basename( $this->stylesheet ) != $default_theme_slug ) {
 					$this->headers['Name'] .= '/' . $this->stylesheet;
@@ -324,7 +326,8 @@ final class WP_Theme implements ArrayAccess {
 			// wp-content/themes/directory-of-themes/*
 			$parent_dir = dirname( $this->stylesheet );
 			$directories = search_theme_directories();
-			if ( '.' != $parent_dir && file_exists( $this->theme_root . '/' . $parent_dir . '/' . $this->template . '/index.php' ) ) {
+
+			if ( '.' !== $parent_dir && file_exists( $this->theme_root . '/' . $parent_dir . '/' . $this->template . '/index.php' ) ) {
 				$this->template = $parent_dir . '/' . $this->template;
 			} elseif ( $directories && isset( $directories[ $this->template ] ) ) {
 				// Look for the template in the search_theme_directories() results, in case it is in another theme root.
@@ -436,7 +439,7 @@ final class WP_Theme implements ArrayAccess {
 			'theme_root_uri',
 		);
 
-		return in_array( $offset, $properties );
+		return in_array( $offset, $properties, true );
 	}
 
 	/**
@@ -535,7 +538,7 @@ final class WP_Theme implements ArrayAccess {
 			'Parent Theme',
 		);
 
-		return in_array( $offset, $keys );
+		return in_array( $offset, $keys, true );
 	}
 
 	/**
@@ -622,7 +625,7 @@ final class WP_Theme implements ArrayAccess {
 	 * @return bool Whether the theme exists.
 	 */
 	public function exists() {
-		return ! ( $this->errors() && in_array( 'theme_not_found', $this->errors()->get_error_codes() ) );
+		return ! ( $this->errors() && in_array( 'theme_not_found', $this->errors()->get_error_codes(), true ) );
 	}
 
 	/**
@@ -983,7 +986,7 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string Absolute path of the stylesheet directory.
 	 */
 	public function get_stylesheet_directory() {
-		if ( $this->errors() && in_array( 'theme_root_missing', $this->errors()->get_error_codes() ) ) {
+		if ( $this->errors() && in_array( 'theme_root_missing', $this->errors()->get_error_codes(), true ) ) {
 			return '';
 		}
 
@@ -1091,7 +1094,7 @@ final class WP_Theme implements ArrayAccess {
 	public function get_screenshot( $uri = 'uri' ) {
 		$screenshot = $this->cache_get( 'screenshot' );
 		if ( $screenshot ) {
-			if ( 'relative' == $uri ) {
+			if ( 'relative' === $uri ) {
 				return $screenshot;
 			}
 			return $this->get_stylesheet_directory_uri() . '/' . $screenshot;
@@ -1102,7 +1105,7 @@ final class WP_Theme implements ArrayAccess {
 		foreach ( array( 'png', 'gif', 'jpg', 'jpeg' ) as $ext ) {
 			if ( file_exists( $this->get_stylesheet_directory() . "/screenshot.$ext" ) ) {
 				$this->cache_add( 'screenshot', 'screenshot.' . $ext );
-				if ( 'relative' == $uri ) {
+				if ( 'relative' === $uri ) {
 					return 'screenshot.' . $ext;
 				}
 				return $this->get_stylesheet_directory_uri() . '/' . 'screenshot.' . $ext;
@@ -1270,7 +1273,7 @@ final class WP_Theme implements ArrayAccess {
 		}
 
 		$relative_path = trailingslashit( $relative_path );
-		if ( '/' == $relative_path ) {
+		if ( '/' === $relative_path ) {
 			$relative_path = '';
 		}
 
@@ -1287,7 +1290,7 @@ final class WP_Theme implements ArrayAccess {
 		$exclusions = (array) apply_filters( 'theme_scandir_exclusions', array( 'CVS', 'node_modules', 'vendor', 'bower_components' ) );
 
 		foreach ( $results as $result ) {
-			if ( '.' == $result[0] || in_array( $result, $exclusions, true ) ) {
+			if ( '.' === $result[0] || in_array( $result, $exclusions, true ) ) {
 				continue;
 			}
 			if ( is_dir( $path . '/' . $result ) ) {
@@ -1358,14 +1361,14 @@ final class WP_Theme implements ArrayAccess {
 			return true;
 		}
 
-		if ( 'both' == $check || 'network' == $check ) {
+		if ( 'both' === $check || 'network' === $check ) {
 			$allowed = self::get_allowed_on_network();
 			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) ) {
 				return true;
 			}
 		}
 
-		if ( 'both' == $check || 'site' == $check ) {
+		if ( 'both' === $check || 'site' === $check ) {
 			$allowed = self::get_allowed_on_site( $blog_id );
 			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) ) {
 				return true;

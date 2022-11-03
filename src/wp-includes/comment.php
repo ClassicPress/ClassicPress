@@ -127,7 +127,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 	 * email address. If both checks pass, return true. Otherwise, return false.
 	 */
 	if ( 1 == get_option( 'comment_whitelist' ) ) {
-		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' != $author && '' != $email ) {
+		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' !== $author && '' !== $email ) {
 			$comment_user = get_user_by( 'email', wp_unslash( $email ) );
 			if ( ! empty( $comment_user->ID ) ) {
 				$ok_to_comment = $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM $wpdb->comments WHERE user_id = %d AND comment_approved = '1' LIMIT 1", $comment_user->ID ) );
@@ -941,14 +941,19 @@ function separate_comments( &$comments ) {
 		'pingback'  => array(),
 		'pings'     => array(),
 	);
+
 	$count            = count( $comments );
+
 	for ( $i = 0; $i < $count; $i++ ) {
 		$type = $comments[ $i ]->comment_type;
+
 		if ( empty( $type ) ) {
 			$type = 'comment';
 		}
+
 		$comments_by_type[ $type ][] = &$comments[ $i ];
-		if ( 'trackback' == $type || 'pingback' == $type ) {
+
+		if ( 'trackback' === $type || 'pingback' === $type ) {
 			$comments_by_type['pings'][] = &$comments[ $i ];
 		}
 	}
@@ -1296,8 +1301,8 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
 
 	$mod_keys = trim( get_option( 'blacklist_keys' ) );
-	if ( '' == $mod_keys ) {
-		return false; // If moderation keys are empty
+	if ( '' === $mod_keys ) {
+		return false; // If moderation keys are empty.
 	}
 
 	// Ensure HTML tags are not being used to bypass the blacklist.
@@ -1412,7 +1417,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 		return false;
 	}
 
-	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ) ) ) {
+	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ), true ) ) {
 		return wp_trash_comment( $comment_id );
 	}
 
@@ -1688,9 +1693,9 @@ function wp_get_comment_status( $comment_id ) {
 		return 'approved';
 	} elseif ( '0' == $approved ) {
 		return 'unapproved';
-	} elseif ( 'spam' == $approved ) {
+	} elseif ( 'spam' === $approved ) {
 		return 'spam';
-	} elseif ( 'trash' == $approved ) {
+	} elseif ( 'trash' === $approved ) {
 		return 'trash';
 	} else {
 		return false;
@@ -2093,8 +2098,10 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 	}
 
 	$commentdata['comment_parent'] = isset( $commentdata['comment_parent'] ) ? absint( $commentdata['comment_parent'] ) : 0;
-	$parent_status                 = ( 0 < $commentdata['comment_parent'] ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
-	$commentdata['comment_parent'] = ( 'approved' == $parent_status || 'unapproved' == $parent_status ) ? $commentdata['comment_parent'] : 0;
+
+	$parent_status = ( $commentdata['comment_parent'] > 0 ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
+
+	$commentdata['comment_parent'] = ( 'approved' === $parent_status || 'unapproved' === $parent_status ) ? $commentdata['comment_parent'] : 0;
 
 	if ( ! isset( $commentdata['comment_author_IP'] ) ) {
 		$commentdata['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
@@ -2363,9 +2370,9 @@ function wp_update_comment( $commentarr ) {
 
 	if ( ! isset( $data['comment_approved'] ) ) {
 		$data['comment_approved'] = 1;
-	} elseif ( 'hold' == $data['comment_approved'] ) {
+	} elseif ( 'hold' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 0;
-	} elseif ( 'approve' == $data['comment_approved'] ) {
+	} elseif ( 'approve' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 1;
 	}
 
@@ -2752,7 +2759,7 @@ function do_trackbacks( $post_id ) {
 	if ( $to_ping ) {
 		foreach ( (array) $to_ping as $tb_ping ) {
 			$tb_ping = trim( $tb_ping );
-			if ( ! in_array( $tb_ping, $pinged ) ) {
+			if ( ! in_array( $tb_ping, $pinged, true ) ) {
 				trackback( $tb_ping, $post_title, $excerpt, $post->ID );
 				$pinged[] = $tb_ping;
 			} else {
@@ -2783,7 +2790,7 @@ function generic_ping( $post_id = 0 ) {
 	$services = explode( "\n", $services );
 	foreach ( (array) $services as $service ) {
 		$service = trim( $service );
-		if ( '' != $service ) {
+		if ( '' !== $service ) {
 			weblog_ping( $service );
 		}
 	}
@@ -2822,18 +2829,22 @@ function pingback( $content, $post_id ) {
 	// Parsing the post, external links (if any) are stored in the $post_links array
 	$post_links_temp = wp_extract_urls( $content );
 
-	// Step 2.
-	// Walking thru the links array
-	// first we get rid of links pointing to sites, not to specific files
-	// Example:
-	// http://dummy-weblog.org
-	// http://dummy-weblog.org/
-	// http://dummy-weblog.org/post.php
-	// We don't wanna ping first and second types, even if they have a valid <link/>
-
-	foreach ( (array) $post_links_temp as $link_test ) :
-		if ( ! in_array( $link_test, $pung ) && ( url_to_postid( $link_test ) != $post->ID ) // If we haven't pung it already and it isn't a link to itself
-				&& ! is_local_attachment( $link_test ) ) : // Also, let's never ping local attachments.
+	/*
+	 * Step 2.
+	 * Walking through the links array.
+	 * First we get rid of links pointing to sites, not to specific files.
+	 * Example:
+	 * http://dummy-weblog.org
+	 * http://dummy-weblog.org/
+	 * http://dummy-weblog.org/post.php
+	 * We don't wanna ping first and second types, even if they have a valid <link/>.
+	 */
+	foreach ( (array) $post_links_temp as $link_test ) {
+		// If we haven't pung it already and it isn't a link to itself.
+		if ( ! in_array( $link_test, $pung, true ) && ( url_to_postid( $link_test ) != $post->ID )
+			// Also, let's never ping local attachments.
+			&& ! is_local_attachment( $link_test )
+		) {
 			$test = @parse_url( $link_test );
 			if ( $test ) {
 				if ( isset( $test['query'] ) ) {
@@ -2842,8 +2853,8 @@ function pingback( $content, $post_id ) {
 					$post_links[] = $link_test;
 				}
 			}
-		endif;
-	endforeach;
+		}
+	}
 
 	$post_links = array_unique( $post_links );
 	/**
@@ -2960,8 +2971,8 @@ function weblog_ping( $server = '', $path = '' ) {
 	include_once ABSPATH . WPINC . '/class-IXR.php';
 	include_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 
-	// using a timeout of 3 seconds should be enough to cover slow servers
-	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' == $path ) ) ? false : $path ) );
+	// Using a timeout of 3 seconds should be enough to cover slow servers.
+	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' === $path ) ) ? false : $path ) );
 	$client->timeout    = 3;
 	$client->useragent .= ' -- ' . classicpress_user_agent();
 
@@ -3111,7 +3122,7 @@ function _close_comments_for_old_posts( $posts, $query ) {
 	 * @param array $post_types An array of registered post types. Default array with 'post'.
 	 */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $posts[0]->post_type, $post_types ) ) {
+	if ( ! in_array( $posts[0]->post_type, $post_types, true ) ) {
 		return $posts;
 	}
 
@@ -3156,7 +3167,7 @@ function _close_comments_for_old_post( $open, $post_id ) {
 
 	/** This filter is documented in wp-includes/comment.php */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $post->post_type, $post_types ) ) {
+	if ( ! in_array( $post->post_type, $post_types, true ) ) {
 		return $open;
 	}
 
@@ -3242,7 +3253,7 @@ function wp_handle_comment_submission( $comment_data ) {
 	// get_post_status() will get the parent status for attachments.
 	$status = get_post_status( $post );
 
-	if ( ( 'private' == $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
+	if ( ( 'private' === $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
 		return new WP_Error( 'comment_id_not_found' );
 	}
 
@@ -3261,7 +3272,7 @@ function wp_handle_comment_submission( $comment_data ) {
 
 		return new WP_Error( 'comment_closed', __( 'Sorry, comments are closed for this item.' ), 403 );
 
-	} elseif ( 'trash' == $status ) {
+	} elseif ( 'trash' === $status ) {
 
 		/**
 		 * Fires when a comment is attempted on a trashed post.

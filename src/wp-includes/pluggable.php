@@ -470,8 +470,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 
 		$phpmailer->ContentType = $content_type;
 
-		// Set whether it's plaintext, depending on $content_type
-		if ( 'text/html' == $content_type ) {
+		// Set whether it's plaintext, depending on $content_type.
+		if ( 'text/html' === $content_type ) {
 			$phpmailer->isHTML( true );
 		}
 
@@ -495,7 +495,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		if ( ! empty( $headers ) ) {
 			foreach ( (array) $headers as $name => $content ) {
 				// Only add custom headers not added automatically by PHPMailer.
-				if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ) ) ) {
+				if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ), true ) ) {
 					$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
 				}
 			}
@@ -602,7 +602,7 @@ if ( ! function_exists( 'wp_authenticate' ) ) :
 
 		$ignore_codes = array( 'empty_username', 'empty_password' );
 
-		if ( is_wp_error( $user ) && ! in_array( $user->get_error_code(), $ignore_codes ) ) {
+		if ( is_wp_error( $user ) && ! in_array( $user->get_error_code(), $ignore_codes, true ) ) {
 			/**
 			 * Fires after a user login has failed.
 			 *
@@ -678,8 +678,8 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 		$expired    = $cookie_elements['expiration'];
 		$expiration = $cookie_elements['expiration'];
 
-		// Allow a grace period for POST and Ajax requests
-		if ( wp_doing_ajax() || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
+		// Allow a grace period for POST and Ajax requests.
+		if ( wp_doing_ajax() || 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$expired += HOUR_IN_SECONDS;
 		}
 
@@ -1079,10 +1079,10 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		if ( $secure && ! is_ssl() && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
 			if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
 				wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-				exit();
+				exit;
 			} else {
 				wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-				exit();
+				exit;
 			}
 		}
 
@@ -1110,10 +1110,10 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 			if ( ! $secure && get_user_option( 'use_ssl', $user_id ) && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
 				if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
 					wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-					exit();
+					exit;
 				} else {
 					wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-					exit();
+					exit;
 				}
 			}
 
@@ -1128,7 +1128,7 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		$login_url = wp_login_url( $redirect, true );
 
 		wp_redirect( $login_url );
-		exit();
+		exit;
 	}
 endif;
 
@@ -1284,8 +1284,8 @@ if ( ! function_exists( 'wp_redirect' ) ) :
 
 		$location = wp_sanitize_redirect( $location );
 
-		if ( ! $is_IIS && PHP_SAPI != 'cgi-fcgi' ) {
-			status_header( $status ); // This causes problems on IIS and some FastCGI setups
+		if ( ! $is_IIS && 'cgi-fcgi' !== PHP_SAPI ) {
+			status_header( $status ); // This causes problems on IIS and some FastCGI setups.
 		}
 
 		header( "Location: $location", true, $status );
@@ -1396,8 +1396,8 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 	 **/
 	function wp_validate_redirect( $location, $default = '' ) {
 		$location = wp_sanitize_redirect( trim( $location, " \t\n\r\0\x08\x0B" ) );
-		// browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'
-		if ( substr( $location, 0, 2 ) == '//' ) {
+		// Browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'.
+		if ( '//' === substr( $location, 0, 2 ) ) {
 			$location = 'http:' . $location;
 		}
 
@@ -1413,8 +1413,8 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 			return $default;
 		}
 
-		// Allow only http and https schemes. No data:, etc.
-		if ( isset( $lp['scheme'] ) && ! ( 'http' == $lp['scheme'] || 'https' == $lp['scheme'] ) ) {
+		// Allow only 'http' and 'https' schemes. No 'data:', etc.
+		if ( isset( $lp['scheme'] ) && ! ( 'http' === $lp['scheme'] || 'https' === $lp['scheme'] ) ) {
 			return $default;
 		}
 
@@ -1450,7 +1450,7 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 		 */
 		$allowed_hosts = (array) apply_filters( 'allowed_redirect_hosts', array( $wpp['host'] ), isset( $lp['host'] ) ? $lp['host'] : '' );
 
-		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts ) && strtolower( $wpp['host'] ) !== $lp['host'] ) ) {
+		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts, true ) && strtolower( $wpp['host'] ) !== $lp['host'] ) ) {
 			$location = $default;
 		}
 
@@ -1606,14 +1606,14 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 
 		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
-		if ( '' == $comment->comment_author ) {
+		if ( '' === $comment->comment_author ) {
 			$from = "From: \"$blogname\" <$wp_email>";
-			if ( '' != $comment->comment_author_email ) {
+			if ( '' !== $comment->comment_author_email ) {
 				$reply_to = "Reply-To: $comment->comment_author_email";
 			}
 		} else {
 			$from = "From: \"$comment->comment_author\" <$wp_email>";
-			if ( '' != $comment->comment_author_email ) {
+			if ( '' !== $comment->comment_author_email ) {
 				$reply_to = "Reply-To: \"$comment->comment_author_email\" <$comment->comment_author_email>";
 			}
 		}
@@ -2231,11 +2231,11 @@ if ( ! function_exists( 'wp_salt' ) ) :
 		if ( defined( 'SECRET_KEY' ) && SECRET_KEY && empty( $duplicated_keys[ SECRET_KEY ] ) ) {
 			$values['key'] = SECRET_KEY;
 		}
-		if ( 'auth' == $scheme && defined( 'SECRET_SALT' ) && SECRET_SALT && empty( $duplicated_keys[ SECRET_SALT ] ) ) {
+		if ( 'auth' === $scheme && defined( 'SECRET_SALT' ) && SECRET_SALT && empty( $duplicated_keys[ SECRET_SALT ] ) ) {
 			$values['salt'] = SECRET_SALT;
 		}
 
-		if ( in_array( $scheme, array( 'auth', 'secure_auth', 'logged_in', 'nonce' ) ) ) {
+		if ( in_array( $scheme, array( 'auth', 'secure_auth', 'logged_in', 'nonce' ), true ) ) {
 			foreach ( array( 'key', 'salt' ) as $type ) {
 				$const = strtoupper( "{$scheme}_{$type}" );
 				if ( defined( $const ) && constant( $const ) && empty( $duplicated_keys[ constant( $const ) ] ) ) {

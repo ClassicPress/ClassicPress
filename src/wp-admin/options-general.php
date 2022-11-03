@@ -232,7 +232,7 @@ if ( $login_custom_image_src ) {
 
 $languages    = get_available_languages();
 $translations = wp_get_available_translations();
-if ( ! is_multisite() && defined( 'WPLANG' ) && '' !== WPLANG && 'en_US' !== WPLANG && ! in_array( WPLANG, $languages ) ) {
+if ( ! is_multisite() && defined( 'WPLANG' ) && '' !== WPLANG && 'en_US' !== WPLANG && ! in_array( WPLANG, $languages, true ) ) {
 	$languages[] = WPLANG;
 }
 if ( ! empty( $languages ) || ! empty( $translations ) ) {
@@ -242,7 +242,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 		<td>
 			<?php
 			$locale = get_locale();
-			if ( ! in_array( $locale, $languages ) ) {
+			if ( ! in_array( $locale, $languages, true ) ) {
 				$locale = '';
 			}
 
