@@ -303,11 +303,31 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		// First, test with deprecated wp_load_image function
 		$editor1 = wp_load_image( DIR_TESTDATA );
+<<<<<<< HEAD
 
 		$this->assertIsString( $editor1 );
 
 		$editor2 = wp_get_image_editor( DIR_TESTDATA );
 		$this->assertInstanceOf( 'WP_Error', $editor2 );
+=======
+		$this->assertInternalType( 'string', $editor1 );
+
+		$editor2 = wp_get_image_editor( DIR_TESTDATA );
+		$this->assertInstanceOf( 'WP_Error', $editor2 );
+
+		$classes = array( 'WP_Image_Editor_GD', 'WP_Image_Editor_Imagick' );
+
+		foreach ( $classes as $class ) {
+			if ( ! call_user_func( array( $class, 'test' ) ) ) {
+				// If the image editor isn't available, skip it.
+				unset( $classes[ $class ] );
+			}
+		}
+
+		if ( ! $classes ) {
+			$this->markTestSkipped( sprintf( 'The image editor engine %s is not supported on this system.', 'WP_Image_Editor_GD' ) );
+		}
+>>>>>>> e92ddaa2c3 (Tests: Use more specific assertions in `Tests_Image_Functions::test_load_directory()`.)
 
 		// Then, test with editors.
 		$classes = array( 'WP_Image_Editor_GD', 'WP_Image_Editor_Imagick' );
