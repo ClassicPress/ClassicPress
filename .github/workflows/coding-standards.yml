@@ -81,7 +81,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
