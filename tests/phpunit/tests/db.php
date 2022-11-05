@@ -337,7 +337,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	public function filter_allowed_incompatible_sql_mode( $modes ) {
-		$pos = array_search( 'ONLY_FULL_GROUP_BY', $modes );
+		$pos = array_search( 'ONLY_FULL_GROUP_BY', $modes, true );
 		$this->assertGreaterThanOrEqual( 0, $pos );
 
 		if ( false === $pos ) {
@@ -356,6 +356,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 		$id = 0;
 		// This, obviously, is an incorrect prepare.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = $id", $id );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0", $prepared );
 	}
@@ -579,6 +580,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$wpdb->last_result = $last_result;
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$result = $wpdb->get_col( $query, $column );
 
 		if ( $query ) {
@@ -1035,7 +1037,7 @@ class Tests_DB extends WP_UnitTestCase {
 			$expected_charset = $wpdb->get_col_charset( $wpdb->posts, 'post_content' );
 		}
 
-		if ( ! in_array( $expected_charset, array( 'utf8', 'utf8mb4', 'latin1' ) ) ) {
+		if ( ! in_array( $expected_charset, array( 'utf8', 'utf8mb4', 'latin1' ), true ) ) {
 			$this->markTestSkipped( 'This test only works with utf8, utf8mb4 or latin1 character sets' );
 		}
 
@@ -1108,7 +1110,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertNull( $row->meta_value );
 	}
@@ -1131,7 +1133,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertSame( $value, $row->meta_value );
 
@@ -1146,7 +1148,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertNull( $row->meta_value );
 	}
@@ -1169,7 +1171,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertNull( $row->meta_value );
 
@@ -1184,7 +1186,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertSame( $value, $row->meta_value );
 	}
@@ -1207,7 +1209,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertNull( $row->meta_value );
 
@@ -1220,7 +1222,7 @@ class Tests_DB extends WP_UnitTestCase {
 			array( '%s', '%s' )
 		);
 
-		$row = $wpdb->get_row( "SELECT * FROM $wpdb->postmeta WHERE meta_key='$key'" );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key=%s", $key ) );
 
 		$this->assertNull( $row );
 	}
@@ -1564,6 +1566,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$sql = str_replace( '{ESCAPE}', $escape, $sql );
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$actual = $wpdb->prepare( $sql, $values );
 
 		$this->assertSame( $expected, $actual );
@@ -1613,6 +1616,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			1.1,
 			2.2
@@ -1627,6 +1631,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			array( 1.1, 2.2 )
 		);
@@ -1643,6 +1648,8 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$wpdb->query( "CREATE TABLE {$wpdb->prefix}test_placeholder( a VARCHAR(100) );" );
 		$sql = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}test_placeholder VALUES(%s)", $value );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $sql );
 
 		$actual = $wpdb->get_var( "SELECT a FROM {$wpdb->prefix}test_placeholder" );
@@ -1657,6 +1664,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$sql = $wpdb->prepare( ' %s %1$c ', 'foo' );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$sql = $wpdb->prepare( " $sql %s ", 'foo' );
 
 		$this->assertSame( "  'foo' {$wpdb->placeholder_escape()}1\$c  'foo' ", $sql );

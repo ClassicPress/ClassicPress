@@ -61,7 +61,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		$tax = get_taxonomy( $taxonomy );
 
 		// @todo Still needed? Maybe just the show_ui part.
-		if ( empty( $post_type ) || ! in_array( $post_type, get_post_types( array( 'show_ui' => true ) ) ) ) {
+		if ( empty( $post_type ) || ! in_array( $post_type, get_post_types( array( 'show_ui' => true ) ), true ) ) {
 			$post_type = 'post';
 		}
 
@@ -232,14 +232,16 @@ class WP_Terms_List_Table extends WP_List_Table {
 		// Set variable because $args['number'] can be subsequently overridden.
 		$number = $args['number'];
 
-		$args['offset'] = $offset = ( $page - 1 ) * $number;
+		$offset         = ( $page - 1 ) * $number;
+		$args['offset'] = $offset;
 
 		// Convert it to table rows.
 		$count = 0;
 
 		if ( is_taxonomy_hierarchical( $taxonomy ) && ! isset( $args['orderby'] ) ) {
 			// We'll need the full set of terms then.
-			$args['number'] = $args['offset'] = 0;
+			$args['number'] = 0;
+			$args['offset'] = $args['number'];
 		}
 		$terms = get_terms( $taxonomy, $args );
 
@@ -291,13 +293,14 @@ class WP_Terms_List_Table extends WP_List_Table {
 
 			// If the page starts in a subtree, print the parents.
 			if ( $count == $start && $term->parent > 0 && empty( $_REQUEST['s'] ) ) {
-				$my_parents = $parent_ids = array();
+				$my_parents = array();
+				$parent_ids = array();
 				$p          = $term->parent;
 				while ( $p ) {
 					$my_parent    = get_term( $p, $taxonomy );
 					$my_parents[] = $my_parent;
 					$p            = $my_parent->parent;
-					if ( in_array( $p, $parent_ids ) ) { // Prevent parent loops.
+					if ( in_array( $p, $parent_ids, true ) ) { // Prevent parent loops.
 						break;
 					}
 					$parent_ids[] = $p;
@@ -551,7 +554,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			);
 		}
 
-		if ( 'post' != $this->screen->post_type ) {
+		if ( 'post' !== $this->screen->post_type ) {
 			$args['post_type'] = $this->screen->post_type;
 		}
 

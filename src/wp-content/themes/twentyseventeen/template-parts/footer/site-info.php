@@ -16,6 +16,9 @@
 	}
 	?>
 	<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentyseventeen' ) ); ?>" class="imprint">
-		<?php printf( __( 'Proudly powered by %s', 'twentyseventeen' ), 'ClassicPress' ); ?>
+		<?php
+		/* translators: %s: ClassicPress */
+		printf( __( 'Proudly powered by %s', 'twentyseventeen' ), 'ClassicPress' );
+		?>
 	</a>
 </div><!-- .site-info -->

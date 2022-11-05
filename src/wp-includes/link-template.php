@@ -131,7 +131,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 		$leavename ? '' : '%pagename%',
 	);
 
-	if ( is_object( $post ) && isset( $post->filter ) && 'sample' == $post->filter ) {
+	if ( is_object( $post ) && isset( $post->filter ) && 'sample' === $post->filter ) {
 		$sample = true;
 	} else {
 		$post   = get_post( $post );
@@ -142,11 +142,11 @@ function get_permalink( $post = 0, $leavename = false ) {
 		return false;
 	}
 
-	if ( $post->post_type == 'page' ) {
+	if ( 'page' === $post->post_type ) {
 		return get_page_link( $post, $leavename, $sample );
-	} elseif ( $post->post_type == 'attachment' ) {
+	} elseif ( 'attachment' === $post->post_type ) {
 		return get_attachment_link( $post, $leavename );
-	} elseif ( in_array( $post->post_type, get_post_types( array( '_builtin' => false ) ) ) ) {
+	} elseif ( in_array( $post->post_type, get_post_types( array( '_builtin' => false ) ), true ) ) {
 		return get_post_permalink( $post, $leavename, $sample );
 	}
 
@@ -165,7 +165,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 	 */
 	$permalink = apply_filters( 'pre_post_link', $permalink, $post, $leavename );
 
-	if ( '' != $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+	if ( $permalink && ! in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ), true ) ) {
 		$unixtime = strtotime( $post->post_date );
 
 		$category = '';
@@ -272,7 +272,7 @@ function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
 
 	$slug = $post->post_name;
 
-	$draft_or_pending = get_post_status( $post ) && in_array( get_post_status( $post ), array( 'draft', 'pending', 'auto-draft', 'future' ) );
+	$draft_or_pending = get_post_status( $post ) && in_array( get_post_status( $post ), array( 'draft', 'pending', 'auto-draft', 'future' ), true );
 
 	$post_type = get_post_type_object( $post->post_type );
 
@@ -329,7 +329,7 @@ function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
 function get_page_link( $post = false, $leavename = false, $sample = false ) {
 	$post = get_post( $post );
 
-	if ( 'page' == get_option( 'show_on_front' ) && $post->ID == get_option( 'page_on_front' ) ) {
+	if ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
 		$link = home_url( '/' );
 	} else {
 		$link = _get_page_link( $post, $leavename, $sample );
@@ -368,7 +368,7 @@ function _get_page_link( $post = false, $leavename = false, $sample = false ) {
 
 	$post = get_post( $post );
 
-	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ) );
+	$draft_or_pending = in_array( $post->post_status, array( 'draft', 'pending', 'auto-draft' ), true );
 
 	$link = $wp_rewrite->get_page_permastruct();
 
@@ -414,13 +414,13 @@ function get_attachment_link( $post = null, $leavename = false ) {
 
 	$post   = get_post( $post );
 	$parent = ( $post->post_parent > 0 && $post->post_parent != $post->ID ) ? get_post( $post->post_parent ) : false;
-	if ( $parent && ! in_array( $parent->post_type, get_post_types() ) ) {
+	if ( $parent && ! in_array( $parent->post_type, get_post_types(), true ) ) {
 		$parent = false;
 	}
 
 	if ( $wp_rewrite->using_permalinks() && $parent ) {
-		if ( 'page' == $parent->post_type ) {
-			$parentlink = _get_page_link( $post->post_parent ); // Ignores page_on_front
+		if ( 'page' === $parent->post_type ) {
+			$parentlink = _get_page_link( $post->post_parent ); // Ignores page_on_front.
 		} else {
 			$parentlink = get_permalink( $post->post_parent );
 		}
@@ -615,7 +615,8 @@ function get_feed_link( $feed = '' ) {
 	global $wp_rewrite;
 
 	$permalink = $wp_rewrite->get_feed_permastruct();
-	if ( '' != $permalink ) {
+
+	if ( '' !== $permalink ) {
 		if ( false !== strpos( $feed, 'comments_' ) ) {
 			$feed      = str_replace( 'comments_', '', $feed );
 			$permalink = $wp_rewrite->get_comment_feed_permastruct();
@@ -674,8 +675,8 @@ function get_post_comments_feed_link( $post_id = 0, $feed = '' ) {
 	$post       = get_post( $post_id );
 	$unattached = 'attachment' === $post->post_type && 0 === (int) $post->post_parent;
 
-	if ( '' != get_option( 'permalink_structure' ) ) {
-		if ( 'page' == get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' ) ) {
+	if ( get_option( 'permalink_structure' ) ) {
+		if ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post_id ) {
 			$url = _get_page_link( $post_id );
 		} else {
 			$url = get_permalink( $post_id );
@@ -683,13 +684,13 @@ function get_post_comments_feed_link( $post_id = 0, $feed = '' ) {
 
 		if ( $unattached ) {
 			$url = home_url( '/feed/' );
-			if ( $feed !== get_default_feed() ) {
+			if ( get_default_feed() !== $feed ) {
 				$url .= "$feed/";
 			}
 			$url = add_query_arg( 'attachment_id', $post_id, $url );
 		} else {
 			$url = trailingslashit( $url ) . 'feed';
-			if ( $feed != get_default_feed() ) {
+			if ( get_default_feed() != $feed ) {
 				$url .= "/$feed";
 			}
 			$url = user_trailingslashit( $url, 'single_feed' );
@@ -703,7 +704,7 @@ function get_post_comments_feed_link( $post_id = 0, $feed = '' ) {
 				),
 				home_url( '/' )
 			);
-		} elseif ( 'page' == $post->post_type ) {
+		} elseif ( 'page' === $post->post_type ) {
 			$url = add_query_arg(
 				array(
 					'feed'    => $feed,
@@ -784,11 +785,11 @@ function get_author_feed_link( $author_id, $feed = '' ) {
 		$feed = get_default_feed();
 	}
 
-	if ( '' == $permalink_structure ) {
+	if ( ! $permalink_structure ) {
 		$link = home_url( "?feed=$feed&amp;author=" . $author_id );
 	} else {
 		$link = get_author_posts_url( $author_id );
-		if ( $feed == get_default_feed() ) {
+		if ( get_default_feed() == $feed ) {
 			$feed_link = 'feed';
 		} else {
 			$feed_link = "feed/$feed";
@@ -854,10 +855,10 @@ function get_term_feed_link( $term_id, $taxonomy = 'category', $feed = '' ) {
 
 	$permalink_structure = get_option( 'permalink_structure' );
 
-	if ( '' == $permalink_structure ) {
-		if ( 'category' == $taxonomy ) {
+	if ( ! $permalink_structure ) {
+		if ( 'category' === $taxonomy ) {
 			$link = home_url( "?feed=$feed&amp;cat=$term_id" );
-		} elseif ( 'post_tag' == $taxonomy ) {
+		} elseif ( 'post_tag' === $taxonomy ) {
 			$link = home_url( "?feed=$feed&amp;tag=$term->slug" );
 		} else {
 			$t    = get_taxonomy( $taxonomy );
@@ -865,7 +866,7 @@ function get_term_feed_link( $term_id, $taxonomy = 'category', $feed = '' ) {
 		}
 	} else {
 		$link = get_term_link( $term_id, $term->taxonomy );
-		if ( $feed == get_default_feed() ) {
+		if ( get_default_feed() == $feed ) {
 			$feed_link = 'feed';
 		} else {
 			$feed_link = "feed/$feed";
@@ -874,7 +875,7 @@ function get_term_feed_link( $term_id, $taxonomy = 'category', $feed = '' ) {
 		$link = trailingslashit( $link ) . user_trailingslashit( $feed_link, 'feed' );
 	}
 
-	if ( 'category' == $taxonomy ) {
+	if ( 'category' === $taxonomy ) {
 		/**
 		 * Filters the category feed link.
 		 *
@@ -884,7 +885,7 @@ function get_term_feed_link( $term_id, $taxonomy = 'category', $feed = '' ) {
 		 * @param string $feed Feed type.
 		 */
 		$link = apply_filters( 'category_feed_link', $link, $feed );
-	} elseif ( 'post_tag' == $taxonomy ) {
+	} elseif ( 'post_tag' === $taxonomy ) {
 		/**
 		 * Filters the post tag feed link.
 		 *
@@ -1197,7 +1198,9 @@ function get_search_comments_feed_link( $search_query = '', $feed = '' ) {
  */
 function get_post_type_archive_link( $post_type ) {
 	global $wp_rewrite;
-	if ( ! $post_type_obj = get_post_type_object( $post_type ) ) {
+
+	$post_type_obj = get_post_type_object( $post_type );
+	if ( ! $post_type_obj ) {
 		return false;
 	}
 
@@ -1205,7 +1208,7 @@ function get_post_type_archive_link( $post_type ) {
 		$show_on_front  = get_option( 'show_on_front' );
 		$page_for_posts = get_option( 'page_for_posts' );
 
-		if ( 'page' == $show_on_front && $page_for_posts ) {
+		if ( 'page' === $show_on_front && $page_for_posts ) {
 			$link = get_permalink( $page_for_posts );
 		} else {
 			$link = get_home_url();
@@ -1256,7 +1259,8 @@ function get_post_type_archive_feed_link( $post_type, $feed = '' ) {
 		$feed = $default_feed;
 	}
 
-	if ( ! $link = get_post_type_archive_link( $post_type ) ) {
+	$link = get_post_type_archive_link( $post_type );
+	if ( ! $link ) {
 		return false;
 	}
 
@@ -1338,13 +1342,14 @@ function get_preview_post_link( $post = null, $query_args = array(), $preview_li
  *                     not allow an editing UI.
  */
 function get_edit_post_link( $id = 0, $context = 'display' ) {
-	if ( ! $post = get_post( $id ) ) {
+	$post = get_post( $id );
+	if ( ! $post ) {
 		return;
 	}
 
 	if ( 'revision' === $post->post_type ) {
 		$action = '';
-	} elseif ( 'display' == $context ) {
+	} elseif ( 'display' === $context ) {
 		$action = '&amp;action=edit';
 	} else {
 		$action = '&action=edit';
@@ -1391,11 +1396,13 @@ function get_edit_post_link( $id = 0, $context = 'display' ) {
  * @param string      $class  Optional. Add custom class to link. Default 'post-edit-link'.
  */
 function edit_post_link( $text = null, $before = '', $after = '', $id = 0, $class = 'post-edit-link' ) {
-	if ( ! $post = get_post( $id ) ) {
+	$post = get_post( $id );
+	if ( ! $post ) {
 		return;
 	}
 
-	if ( ! $url = get_edit_post_link( $post->ID ) ) {
+	$url = get_edit_post_link( $post->ID );
+	if ( ! $url ) {
 		return;
 	}
 
@@ -1434,7 +1441,8 @@ function get_delete_post_link( $id = 0, $deprecated = '', $force_delete = false 
 		_deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
 	}
 
-	if ( ! $post = get_post( $id ) ) {
+	$post = get_post( $id );
+	if ( ! $post ) {
 		return;
 	}
 
@@ -1677,7 +1685,8 @@ function get_next_post( $in_same_term = false, $excluded_terms = '', $taxonomy =
 function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'category' ) {
 	global $wpdb;
 
-	if ( ( ! $post = get_post() ) || ! taxonomy_exists( $taxonomy ) ) {
+	$post = get_post();
+	if ( ! $post || ! taxonomy_exists( $taxonomy ) ) {
 		return null;
 	}
 
@@ -1859,7 +1868,8 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
  * @return string|void The adjacent post relational link URL.
  */
 function get_adjacent_post_rel_link( $title = '%title', $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'category' ) {
-	if ( $previous && is_attachment() && $post = get_post() ) {
+	$post = get_post();
+	if ( $previous && is_attachment() && $post ) {
 		$post = get_post( $post->post_parent );
 	} else {
 		$post = get_adjacent_post( $in_same_term, $excluded_terms, $previous, $taxonomy );
@@ -2233,7 +2243,7 @@ function get_pagenum_link( $pagenum = 1, $escape = true ) {
 
 		$base = trailingslashit( get_bloginfo( 'url' ) );
 
-		if ( $wp_rewrite->using_index_permalinks() && ( $pagenum > 1 || '' != $request ) ) {
+		if ( $wp_rewrite->using_index_permalinks() && ( $pagenum > 1 || '' !== $request ) ) {
 			$base .= $wp_rewrite->index . '/';
 		}
 
@@ -2667,7 +2677,7 @@ function get_the_posts_pagination( $args = array() ) {
 		);
 
 		// Make sure we get a string back. Plain is the next best thing.
-		if ( isset( $args['type'] ) && 'array' == $args['type'] ) {
+		if ( isset( $args['type'] ) && 'array' === $args['type'] ) {
 			$args['type'] = 'plain';
 		}
 
@@ -2757,7 +2767,7 @@ function get_comments_pagenum_link( $pagenum = 1, $max_page = 0 ) {
 
 	$result = get_permalink();
 
-	if ( 'newest' == get_option( 'default_comments_page' ) ) {
+	if ( 'newest' === get_option( 'default_comments_page' ) ) {
 		if ( $pagenum != $max_page ) {
 			if ( $wp_rewrite->using_permalinks() ) {
 				$result = user_trailingslashit( trailingslashit( $result ) . $wp_rewrite->comments_pagination_base . '-' . $pagenum, 'commentpaged' );
@@ -3023,7 +3033,7 @@ function get_the_comments_pagination( $args = array() ) {
 	$args['echo'] = false;
 
 	// Make sure we get a string back. Plain is the next best thing.
-	if ( isset( $args['type'] ) && 'array' == $args['type'] ) {
+	if ( isset( $args['type'] ) && 'array' === $args['type'] ) {
 		$args['type'] = 'plain';
 	}
 
@@ -3095,7 +3105,7 @@ function get_home_url( $blog_id = null, $path = '', $scheme = null ) {
 		restore_current_blog();
 	}
 
-	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ) ) ) {
+	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ), true ) ) {
 		if ( is_ssl() && ! is_admin() && 'wp-login.php' !== $pagenow ) {
 			$scheme = 'https';
 		} else {
@@ -3318,7 +3328,7 @@ function plugins_url( $path = '', $plugin = '' ) {
 
 	if ( ! empty( $plugin ) && is_string( $plugin ) ) {
 		$folder = dirname( plugin_basename( $plugin ) );
-		if ( '.' != $folder ) {
+		if ( '.' !== $folder ) {
 			$url .= '/' . ltrim( $folder, '/' );
 		}
 	}
@@ -3364,7 +3374,7 @@ function network_site_url( $path = '', $scheme = null ) {
 
 	$current_network = get_network();
 
-	if ( 'relative' == $scheme ) {
+	if ( 'relative' === $scheme ) {
 		$url = $current_network->path;
 	} else {
 		$url = set_url_scheme( 'http://' . $current_network->domain . $current_network->path, $scheme );
@@ -3410,11 +3420,11 @@ function network_home_url( $path = '', $scheme = null ) {
 	$current_network = get_network();
 	$orig_scheme     = $scheme;
 
-	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ) ) ) {
+	if ( ! in_array( $scheme, array( 'http', 'https', 'relative' ), true ) ) {
 		$scheme = is_ssl() && ! is_admin() ? 'https' : 'http';
 	}
 
-	if ( 'relative' == $scheme ) {
+	if ( 'relative' === $scheme ) {
 		$url = $current_network->path;
 	} else {
 		$url = set_url_scheme( 'http://' . $current_network->domain . $current_network->path, $scheme );
@@ -3547,9 +3557,9 @@ function set_url_scheme( $url, $scheme = null ) {
 
 	if ( ! $scheme ) {
 		$scheme = is_ssl() ? 'https' : 'http';
-	} elseif ( $scheme === 'admin' || $scheme === 'login' || $scheme === 'login_post' || $scheme === 'rpc' ) {
+	} elseif ( 'admin' === $scheme || 'login' === $scheme || 'login_post' === $scheme || 'rpc' === $scheme ) {
 		$scheme = is_ssl() || force_ssl_admin() ? 'https' : 'http';
-	} elseif ( $scheme !== 'http' && $scheme !== 'https' && $scheme !== 'relative' ) {
+	} elseif ( 'http' !== $scheme && 'https' !== $scheme && 'relative' !== $scheme ) {
 		$scheme = is_ssl() ? 'https' : 'http';
 	}
 
@@ -3558,9 +3568,9 @@ function set_url_scheme( $url, $scheme = null ) {
 		$url = 'http:' . $url;
 	}
 
-	if ( 'relative' == $scheme ) {
+	if ( 'relative' === $scheme ) {
 		$url = ltrim( preg_replace( '#^\w+://[^/]*#', '', $url ) );
-		if ( $url !== '' && $url[0] === '/' ) {
+		if ( '' !== $url && '/' === $url[0] ) {
 			$url = '/' . ltrim( $url, "/ \t\n\r\0\x0B" );
 		}
 	} else {
@@ -3600,13 +3610,15 @@ function get_dashboard_url( $user_id = 0, $path = '', $scheme = 'admin' ) {
 	$user_id = $user_id ? (int) $user_id : get_current_user_id();
 
 	$blogs = get_blogs_of_user( $user_id );
+
 	if ( is_multisite() && ! user_can( $user_id, 'manage_network' ) && empty( $blogs ) ) {
 		$url = user_admin_url( $path, $scheme );
 	} elseif ( ! is_multisite() ) {
 		$url = admin_url( $path, $scheme );
 	} else {
 		$current_blog = get_current_blog_id();
-		if ( $current_blog && ( user_can( $user_id, 'manage_network' ) || in_array( $current_blog, array_keys( $blogs ) ) ) ) {
+
+		if ( $current_blog && ( user_can( $user_id, 'manage_network' ) || in_array( $current_blog, array_keys( $blogs ), true ) ) ) {
 			$url = admin_url( $path, $scheme );
 		} else {
 			$active = get_active_blog_for_user( $user_id );
@@ -3692,10 +3704,10 @@ function wp_get_canonical_url( $post = null ) {
 	$canonical_url = get_permalink( $post );
 
 	// If a canonical is being generated for the current page, make sure it has pagination if needed.
-	if ( $post->ID === get_queried_object_id() ) {
+	if ( get_queried_object_id() === $post->ID ) {
 		$page = get_query_var( 'page', 0 );
 		if ( $page >= 2 ) {
-			if ( '' == get_option( 'permalink_structure' ) ) {
+			if ( ! get_option( 'permalink_structure' ) ) {
 				$canonical_url = add_query_arg( 'page', $page, $canonical_url );
 			} else {
 				$canonical_url = trailingslashit( $canonical_url ) . user_trailingslashit( $page, 'single_paged' );
@@ -3784,10 +3796,10 @@ function wp_get_shortlink( $id = 0, $context = 'post', $allow_slugs = true ) {
 	}
 
 	$post_id = 0;
-	if ( 'query' == $context && is_singular() ) {
+	if ( 'query' === $context && is_singular() ) {
 		$post_id = get_queried_object_id();
 		$post    = get_post( $post_id );
-	} elseif ( 'post' == $context ) {
+	} elseif ( 'post' === $context ) {
 		$post = get_post( $id );
 		if ( ! empty( $post->ID ) ) {
 			$post_id = $post->ID;
@@ -3800,7 +3812,7 @@ function wp_get_shortlink( $id = 0, $context = 'post', $allow_slugs = true ) {
 	if ( ! empty( $post_id ) ) {
 		$post_type = get_post_type_object( $post->post_type );
 
-		if ( 'page' === $post->post_type && $post->ID == get_option( 'page_on_front' ) && 'page' == get_option( 'show_on_front' ) ) {
+		if ( 'page' === $post->post_type && get_option( 'page_on_front' ) == $post->ID && 'page' === get_option( 'show_on_front' ) ) {
 			$shortlink = home_url( '/' );
 		} elseif ( $post_type->public ) {
 			$shortlink = home_url( '?p=' . $post_id );
@@ -4057,7 +4069,8 @@ function get_avatar_data( $id_or_email, $args = null ) {
 	}
 
 	$email_hash = '';
-	$user       = $email = false;
+	$user       = false;
+	$email      = false;
 
 	if ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) {
 		$id_or_email = get_comment( $id_or_email );

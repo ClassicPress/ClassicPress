@@ -28,11 +28,7 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 
 		self::$_wpdb = new wpdb_exposed_methods_for_testing();
 
-		if ( self::$_wpdb->use_mysqli ) {
-			self::$server_info = mysqli_get_server_info( self::$_wpdb->dbh );
-		} else {
-			self::$server_info = mysql_get_server_info( self::$_wpdb->dbh );
-		}
+		self::$server_info = self::$_wpdb->db_server_info();
 	}
 
 	/**
@@ -453,7 +449,9 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		}
 
 		// The data above is easy to edit. Now, prepare it for the data provider.
-		$data_provider = $multiple = $multiple_expected = array();
+		$data_provider     = array();
+		$multiple          = array();
+		$multiple_expected = array();
 		foreach ( $fields as $test_case => $field ) {
 			$expected          = $field;
 			$expected['value'] = $expected['expected'];
@@ -577,7 +575,8 @@ class Tests_DB_Charset extends WP_UnitTestCase {
 		$vars = get_defined_vars();
 		unset( $vars['charset'] );
 		foreach ( $vars as $var_name => $var ) {
-			$data = $expected = $var;
+			$data     = $var;
+			$expected = $var;
 			foreach ( $data as &$datum ) {
 				// 'charset' and 'ascii' are part of the expected return only.
 				unset( $datum['charset'], $datum['ascii'] );

@@ -1,0 +1,20 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🐛 Documentation Issue Tracker
+    url: https://github.com/ClassicPress/Documentation-Issue-Tracker/issues/new
+    about: Submit issues/errors with documentation and code reference here to get help.
+  - name: 📃 Documentation & Code Reference
+    url: https://docs.classicpress.net
+    about: ClassicPress documentation and code reference can be found here.
+  - name: 🛠️ Migration Issues?
+    url: https://forums.classicpress.net/c/support/migration-plugin/6
+    about: Are you having trouble migrating from WordPress? Get help here.
+  - name: 🤔 Questions, Help, and Support
+    url: https://forums.classicpress.net
+    about: Not a developer and need help? Start a discussion in the community forum.
+  - name: 🙏🏻 Support ClassicPress
+    url: https://opencollective.com/classicpress
+    about: Please consider supporting ClassicPress via Open Collective. Donations are tax-deductible in the US.
+  - name: 👔 Become a Sponsor
+    url: https://opencollective.com/classicpress
+    about: Become a sponsor to support ClassicPress and promote your business. Donations are tax-deductible in the US.

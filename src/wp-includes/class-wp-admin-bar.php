@@ -144,7 +144,8 @@ class WP_Admin_Bar {
 		);
 
 		// If the node already exists, keep any data that isn't provided.
-		if ( $maybe_defaults = $this->get_node( $args['id'] ) ) {
+		$maybe_defaults = $this->get_node( $args['id'] );
+		if ( $maybe_defaults ) {
 			$defaults = get_object_vars( $maybe_defaults );
 		}
 
@@ -183,7 +184,8 @@ class WP_Admin_Bar {
 	 * @return object Node.
 	 */
 	final public function get_node( $id ) {
-		if ( $node = $this->_get_node( $id ) ) {
+		$node = $this->_get_node( $id );
+		if ( $node ) {
 			return clone $node;
 		}
 	}
@@ -210,7 +212,8 @@ class WP_Admin_Bar {
 	 * @return array|void
 	 */
 	final public function get_nodes() {
-		if ( ! $nodes = $this->_get_nodes() ) {
+		$nodes = $this->_get_nodes();
+		if ( ! $nodes ) {
 			return;
 		}
 
@@ -307,19 +310,20 @@ class WP_Admin_Bar {
 		}
 
 		foreach ( $this->_get_nodes() as $node ) {
-			if ( 'root' == $node->id ) {
+			if ( 'root' === $node->id ) {
 				continue;
 			}
 
 			// Fetch the parent node. If it isn't registered, ignore the node.
-			if ( ! $parent = $this->_get_node( $node->parent ) ) {
+			$parent = $this->_get_node( $node->parent );
+			if ( ! $parent ) {
 				continue;
 			}
 
 			// Generate the group class (we distinguish between top level and other level groups).
-			$group_class = ( $node->parent == 'root' ) ? 'ab-top-menu' : 'ab-submenu';
+			$group_class = ( 'root' === $node->parent ) ? 'ab-top-menu' : 'ab-submenu';
 
-			if ( $node->type == 'group' ) {
+			if ( 'group' === $node->type ) {
 				if ( empty( $node->meta['class'] ) ) {
 					$node->meta['class'] = $group_class;
 				} else {
@@ -328,7 +332,7 @@ class WP_Admin_Bar {
 			}
 
 			// Items in items aren't allowed. Wrap nested items in 'default' groups.
-			if ( $parent->type == 'item' && $node->type == 'item' ) {
+			if ( 'item' === $parent->type && 'item' === $node->type ) {
 				$default_id = $parent->id . '-default';
 				$default    = $this->_get_node( $default_id );
 
@@ -357,7 +361,7 @@ class WP_Admin_Bar {
 
 				// Groups in groups aren't allowed. Add a special 'container' node.
 				// The container will invisibly wrap both groups.
-			} elseif ( $parent->type == 'group' && $node->type == 'group' ) {
+			} elseif ( 'group' === $parent->type && 'group' === $node->type ) {
 				$container_id = $parent->id . '-container';
 				$container    = $this->_get_node( $container_id );
 
@@ -386,7 +390,7 @@ class WP_Admin_Bar {
 						$container->parent = $grandparent->id;
 
 						$index = array_search( $parent, $grandparent->children, true );
-						if ( $index === false ) {
+						if ( false === $index ) {
 							$grandparent->children[] = $container;
 						} else {
 							array_splice( $grandparent->children, $index, 1, array( $container ) );
@@ -458,7 +462,7 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_container( $node ) {
-		if ( $node->type != 'container' || empty( $node->children ) ) {
+		if ( 'container' !== $node->type || empty( $node->children ) ) {
 			return;
 		}
 
@@ -473,11 +477,11 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_group( $node ) {
-		if ( $node->type == 'container' ) {
+		if ( 'container' === $node->type ) {
 			$this->_render_container( $node );
 			return;
 		}
-		if ( $node->type != 'group' || empty( $node->children ) ) {
+		if ( 'group' !== $node->type || empty( $node->children ) ) {
 			return;
 		}
 
@@ -498,7 +502,7 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	final protected function _render_item( $node ) {
-		if ( $node->type != 'item' ) {
+		if ( 'item' !== $node->type ) {
 			return;
 		}
 

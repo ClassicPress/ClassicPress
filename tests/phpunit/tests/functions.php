@@ -897,8 +897,9 @@ class Tests_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'mbstring extension not available.' );
 		}
 
-		$old_charsets = $charsets = mb_detect_order();
-		if ( ! in_array( 'EUC-JP', $charsets ) ) {
+		$charsets     = mb_detect_order();
+		$old_charsets = $charsets;
+		if ( ! in_array( 'EUC-JP', $charsets, true ) ) {
 			$charsets[] = 'EUC-JP';
 			mb_detect_order( $charsets );
 		}
@@ -921,8 +922,9 @@ class Tests_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'mbstring extension not available.' );
 		}
 
-		$old_charsets = $charsets = mb_detect_order();
-		if ( ! in_array( 'EUC-JP', $charsets ) ) {
+		$charsets     = mb_detect_order();
+		$old_charsets = $charsets;
+		if ( ! in_array( 'EUC-JP', $charsets, true ) ) {
 			$charsets[] = 'EUC-JP';
 			mb_detect_order( $charsets );
 		}

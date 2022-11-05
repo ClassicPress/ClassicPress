@@ -18,7 +18,7 @@ if ( ! current_user_can( 'switch_themes' ) && ! current_user_can( 'edit_theme_op
 }
 
 if ( current_user_can( 'switch_themes' ) && isset( $_GET['action'] ) ) {
-	if ( 'activate' == $_GET['action'] ) {
+	if ( 'activate' === $_GET['action'] ) {
 		check_admin_referer( 'switch-theme_' . $_GET['stylesheet'] );
 		$theme = wp_get_theme( $_GET['stylesheet'] );
 
@@ -33,7 +33,7 @@ if ( current_user_can( 'switch_themes' ) && isset( $_GET['action'] ) ) {
 		switch_theme( $theme->get_stylesheet() );
 		wp_redirect( admin_url( 'themes.php?activated=true' ) );
 		exit;
-	} elseif ( 'delete' == $_GET['action'] ) {
+	} elseif ( 'delete' === $_GET['action'] ) {
 		check_admin_referer( 'delete-theme_' . $_GET['stylesheet'] );
 		$theme = wp_get_theme( $_GET['stylesheet'] );
 
@@ -201,7 +201,7 @@ if ( $ct->errors() && ( ! is_multisite() || current_user_can( 'manage_network_th
 
 /*
 // Certain error codes are less fatal than others. We can still display theme information in most cases.
-if ( ! $ct->errors() || ( 1 == count( $ct->errors()->get_error_codes() )
+if ( ! $ct->errors() || ( 1 === count( $ct->errors()->get_error_codes() )
 	&& in_array( $ct->errors()->get_error_code(), array( 'theme_no_parent', 'theme_parent_invalid', 'theme_no_index' ) ) ) ) : ?>
 */
 
@@ -210,7 +210,7 @@ if ( ! $ct->errors() || ( 1 == count( $ct->errors()->get_error_codes() )
 if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 	foreach ( (array) $submenu['themes.php'] as $item ) {
 		$class = '';
-		if ( 'themes.php' == $item[2] || 'theme-editor.php' == $item[2] || 0 === strpos( $item[2], 'customize.php' ) ) {
+		if ( 'themes.php' === $item[2] || 'theme-editor.php' === $item[2] || 0 === strpos( $item[2], 'customize.php' ) ) {
 			continue;
 		}
 		// 0 = name, 1 = capability, 2 = file
@@ -236,7 +236,8 @@ if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 				}
 			}
 
-			if ( false !== ( $pos = strpos( $menu_file, '?' ) ) ) {
+			$pos = strpos( $menu_file, '?' );
+			if ( false !== $pos ) {
 				$menu_file = substr( $menu_file, 0, $pos );
 			}
 
@@ -375,7 +376,8 @@ foreach ( $themes as $theme ) :
 
 <?php
 // List broken themes, if any.
-if ( ! is_multisite() && current_user_can( 'edit_themes' ) && $broken_themes = wp_get_themes( array( 'errors' => true ) ) ) {
+$broken_themes = wp_get_themes( array( 'errors' => true ) );
+if ( ! is_multisite() && current_user_can( 'edit_themes' ) && $broken_themes ) {
 	?>
 
 <div class="broken-themes">

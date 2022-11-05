@@ -71,6 +71,7 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 		// Nasty hack! In the future it would better to leverage do_feed( 'atom' ).
 		global $post;
 		try {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@require ABSPATH . 'wp-includes/feed-atom.php';
 			$out = ob_get_clean();
 		} catch ( Exception $e ) {
@@ -184,7 +185,7 @@ class Tests_Feeds_Atom extends WP_UnitTestCase {
 			}
 			$categories = xml_find( $entries[ $key ]['child'], 'category' );
 			foreach ( $categories as $category ) {
-				$this->assertTrue( in_array( $category['attributes']['term'], $terms ) );
+				$this->assertTrue( in_array( $category['attributes']['term'], $terms, true ) );
 			}
 			unset( $terms );
 

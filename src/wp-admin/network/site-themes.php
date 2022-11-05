@@ -136,7 +136,7 @@ if ( $action ) {
 				 * @param array  $items        The items to take the action on.
 				 * @param int    $site_id      The site ID.
 				 */
-				$referer = apply_filters( "handle_network_bulk_actions-{$screen}", $referer, $action, $themes, $id );
+				$referer = apply_filters( "handle_network_bulk_actions-{$screen}", $referer, $action, $themes, $id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			} else {
 				$action = 'error';
 				$n      = 'none';
@@ -158,9 +158,9 @@ if ( $action ) {
 	exit;
 }
 
-if ( isset( $_GET['action'] ) && 'update-site' == $_GET['action'] ) {
+if ( isset( $_GET['action'] ) && 'update-site' === $_GET['action'] ) {
 	wp_safe_redirect( $referer );
-	exit();
+	exit;
 }
 
 add_thickbox();
@@ -188,7 +188,7 @@ network_edit_site_nav(
 
 if ( isset( $_GET['enabled'] ) ) {
 	$enabled = absint( $_GET['enabled'] );
-	if ( 1 == $enabled ) {
+	if ( 1 === $enabled ) {
 		$message = __( 'Theme enabled.' );
 	} else {
 		$message = _n( '%s theme enabled.', '%s themes enabled.', $enabled );
@@ -196,13 +196,13 @@ if ( isset( $_GET['enabled'] ) ) {
 	echo '<div id="message" class="updated notice is-dismissible"><p>' . sprintf( $message, number_format_i18n( $enabled ) ) . '</p></div>';
 } elseif ( isset( $_GET['disabled'] ) ) {
 	$disabled = absint( $_GET['disabled'] );
-	if ( 1 == $disabled ) {
+	if ( 1 === $disabled ) {
 		$message = __( 'Theme disabled.' );
 	} else {
 		$message = _n( '%s theme disabled.', '%s themes disabled.', $disabled );
 	}
 	echo '<div id="message" class="updated notice is-dismissible"><p>' . sprintf( $message, number_format_i18n( $disabled ) ) . '</p></div>';
-} elseif ( isset( $_GET['error'] ) && 'none' == $_GET['error'] ) {
+} elseif ( isset( $_GET['error'] ) && 'none' === $_GET['error'] ) {
 	echo '<div id="message" class="error notice is-dismissible"><p>' . __( 'No theme selected.' ) . '</p></div>';
 }
 ?>

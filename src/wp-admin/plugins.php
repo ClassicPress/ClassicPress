@@ -43,7 +43,7 @@ if ( $action ) {
 
 			$result = activate_plugin( $plugin, self_admin_url( 'plugins.php?error=true&plugin=' . urlencode( $plugin ) ), is_network_admin() );
 			if ( is_wp_error( $result ) ) {
-				if ( 'unexpected_output' == $result->get_error_code() ) {
+				if ( 'unexpected_output' === $result->get_error_code() ) {
 					$redirect = self_admin_url( 'plugins.php?error=true&charsout=' . strlen( $result->get_error_data() ) . '&plugin=' . urlencode( $plugin ) . "&plugin_status=$status&paged=$page&s=$s" );
 					wp_redirect( add_query_arg( '_error_nonce', wp_create_nonce( 'plugin-activation-error_' . $plugin ), $redirect ) );
 					exit;
@@ -62,9 +62,10 @@ if ( $action ) {
 				update_site_option( 'recently_activated', $recent );
 			}
 
-			if ( isset( $_GET['from'] ) && 'import' == $_GET['from'] ) {
-				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) ); // overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix
-			} elseif ( isset( $_GET['from'] ) && 'press-this' == $_GET['from'] ) {
+			if ( isset( $_GET['from'] ) && 'import' === $_GET['from'] ) {
+				// Overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix.
+				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) );
+			} elseif ( isset( $_GET['from'] ) && 'press-this' === $_GET['from'] ) {
 				wp_redirect( self_admin_url( 'press-this.php' ) );
 			} else {
 				wp_redirect( self_admin_url( "plugins.php?activate=true&plugin_status=$status&paged=$page&s=$s" ) ); // overrides the ?error=true one above
@@ -290,8 +291,9 @@ if ( $action ) {
 				foreach ( (array) $plugins as $plugin ) {
 					$plugin_slug = dirname( $plugin );
 
-					if ( '.' == $plugin_slug ) {
-						if ( $data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin ) ) {
+					if ( '.' === $plugin_slug ) {
+						$data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+						if ( $data ) {
 							$plugin_info[ $plugin ]                     = $data;
 							$plugin_info[ $plugin ]['is_uninstallable'] = is_uninstallable_plugin( $plugin );
 							if ( ! $plugin_info[ $plugin ]['Network'] ) {
@@ -300,7 +302,8 @@ if ( $action ) {
 						}
 					} else {
 						// Get plugins list from that folder.
-						if ( $folder_plugins = get_plugins( '/' . $plugin_slug ) ) {
+						$folder_plugins = get_plugins( '/' . $plugin_slug );
+						if ( $folder_plugins ) {
 							foreach ( $folder_plugins as $plugin_file => $data ) {
 								$plugin_info[ $plugin_file ]                     = _get_plugin_data_markup_translate( $plugin_file, $data );
 								$plugin_info[ $plugin_file ]['is_uninstallable'] = is_uninstallable_plugin( $plugin );
@@ -396,7 +399,7 @@ if ( $action ) {
 				$sendback = wp_get_referer();
 
 				/** This action is documented in wp-admin/edit-comments.php */
-				$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $action, $plugins );
+				$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $action, $plugins );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 				wp_safe_redirect( $sendback );
 				exit;
 			}
@@ -541,7 +544,7 @@ elseif ( isset( $_GET['deleted'] ) ) :
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Plugin <strong>deactivated</strong>.' ); ?></p></div>
 <?php elseif ( isset( $_GET['deactivate-multi'] ) ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Selected plugins <strong>deactivated</strong>.' ); ?></p></div>
-<?php elseif ( 'update-selected' == $action ) : ?>
+<?php elseif ( 'update-selected' === $action ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'All selected plugins are up to date.' ); ?></p></div>
 <?php endif; ?>
 
@@ -556,7 +559,7 @@ echo esc_html( $title );
 if ( ( ! is_multisite() || is_network_admin() ) && current_user_can( 'install_plugins' ) ) {
 	?>
 	<a href="<?php echo self_admin_url( 'plugin-install.php?tab=upload' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Upload', 'plugin' ); ?></a>
-	<a href="<?php echo self_admin_url( 'plugin-install.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add WP Plugin', 'plugin' ); ?></a>
+	<a href="<?php echo self_admin_url( 'plugin-install.php?s=classicpress&tab=search&type=term' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add WP Plugin', 'plugin' ); ?></a>
 	<?php
 }
 
