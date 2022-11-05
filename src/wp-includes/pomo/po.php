@@ -211,14 +211,8 @@ if ( ! class_exists( 'PO', false ) ) :
 		/**
 		 * Builds a string from the entry for inclusion in PO file
 		 *
-<<<<<<< HEAD
-		 * @static
-		 * @param Translation_Entry $entry the entry to convert to po string (passed by reference).
-		 * @return false|string PO-style formatted string for the entry or
-=======
 		 * @param Translation_Entry $entry the entry to convert to po string.
 		 * @return string|false PO-style formatted string for the entry or
->>>>>>> 918bebfe3c (Code Modernization: Remove unnecessary reference sign from `PO::export_entry()` definition.)
 		 *  false if the entry is empty
 		 */
 		public static function export_entry( $entry ) {
