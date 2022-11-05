@@ -541,7 +541,11 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$original_image_src = wp_get_attachment_image_src( $attachment_id, 'full' );
 		remove_image_size( 'rest-api-test' );
 
+<<<<<<< HEAD
 		$this->assertIsArray( $data['media_details']['sizes'] );
+=======
+		$this->assertNotEmpty( $data['media_details']['sizes'] );
+>>>>>>> 3bfa4606c7 (Tests: Check if image sizes were successfully retrieved in some REST API attachments controller tests.)
 		$this->assertSame( $image_src[0], $data['media_details']['sizes']['rest-api-test']['source_url'] );
 		$this->assertSame( 'image/jpeg', $data['media_details']['sizes']['rest-api-test']['mime_type'] );
 		$this->assertSame( $original_image_src[0], $data['media_details']['sizes']['full']['source_url'] );
@@ -570,7 +574,11 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		remove_filter( 'wp_get_attachment_image_src', '__return_false' );
 		remove_image_size( 'rest-api-test' );
 
+<<<<<<< HEAD
 		$this->assertIsArray( $data['media_details']['sizes'] );
+=======
+		$this->assertNotEmpty( $data['media_details']['sizes'] );
+>>>>>>> 3bfa4606c7 (Tests: Check if image sizes were successfully retrieved in some REST API attachments controller tests.)
 		$this->assertFalse( isset( $data['media_details']['sizes']['rest-api-test']['source_url'] ) );
 	}
 
