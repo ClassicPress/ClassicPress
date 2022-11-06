@@ -2574,7 +2574,7 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			'alt'           => '',
 			'class'         => null,
 			'force_display' => false,
-				'loading'       => null,
+			'loading'       => null,
 			'extra_attr'    => '',
 		);
 

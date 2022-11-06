@@ -1398,24 +1398,12 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 	$width  = preg_match( '/ width="([0-9]+)"/', $image, $match_width ) ? (int) $match_width[1] : 0;
 	$height = preg_match( '/ height="([0-9]+)"/', $image, $match_height ) ? (int) $match_height[1] : 0;
 
-	if ( ! $width || ! $height ) {
-		/*
-		 * If attempts to parse the size value failed, attempt to use the image meta data to match
-		 * the image file name from 'src' against the available sizes for an attachment.
-		 */
-		$image_filename = wp_basename( $image_src );
-
-		if ( wp_basename( $image_meta['file'] ) === $image_filename ) {
-			$width  = (int) $image_meta['width'];
-			$height = (int) $image_meta['height'];
-		} else {
-			foreach ( $image_meta['sizes'] as $image_size_data ) {
-				if ( $image_filename === $image_size_data['file'] ) {
-					$width  = (int) $image_size_data['width'];
-					$height = (int) $image_size_data['height'];
-					break;
-				}
-			}
+	if ( $width && $height ) {
+		$size_array = array( $width, $height );
+	} else {
+		$size_array = wp_image_src_get_dimensions( $image_src, $image_meta, $attachment_id );
+		if ( ! $size_array ) {
+			return $image;
 		}
 	}
 
