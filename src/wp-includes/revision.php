@@ -113,7 +113,8 @@ function wp_save_post_revision( $post_id ) {
 		return;
 	}
 
-	if ( ! $post = get_post( $post_id ) ) {
+	$post = get_post( $post_id );
+	if ( ! $post ) {
 		return;
 	}
 
@@ -121,7 +122,7 @@ function wp_save_post_revision( $post_id ) {
 		return;
 	}
 
-	if ( 'auto-draft' == $post->post_status ) {
+	if ( 'auto-draft' === $post->post_status ) {
 		return;
 	}
 
@@ -132,7 +133,8 @@ function wp_save_post_revision( $post_id ) {
 	// Compare the proposed update with the last stored revision verifying that
 	// they are different, unless a plugin tells us to always save regardless.
 	// If no previous revisions, save one
-	if ( $revisions = wp_get_post_revisions( $post_id ) ) {
+	$revisions = wp_get_post_revisions( $post_id );
+	if ( $revisions ) {
 		// grab the last revision, but not an autosave
 		foreach ( $revisions as $revision ) {
 			if ( false !== strpos( $revision->post_name, "{$revision->post_parent}-revision" ) ) {
@@ -155,7 +157,7 @@ function wp_save_post_revision( $post_id ) {
 		 * @param WP_Post $post              The post object.
 		 *
 		 */
-		if ( isset( $last_revision ) && apply_filters( 'wp_save_post_revision_check_for_changes', $check_for_changes = true, $last_revision, $post ) ) {
+		if ( isset( $last_revision ) && apply_filters( 'wp_save_post_revision_check_for_changes', true, $last_revision, $post ) ) {
 			$post_has_changed = false;
 
 			foreach ( array_keys( _wp_post_revision_fields( $post ) ) as $field ) {
@@ -256,7 +258,8 @@ function wp_get_post_autosave( $post_id, $user_id = 0 ) {
  * @return false|int False if not a revision, ID of revision's parent otherwise.
  */
 function wp_is_post_revision( $post ) {
-	if ( ! $post = wp_get_post_revision( $post ) ) {
+	$post = wp_get_post_revision( $post );
+	if ( ! $post ) {
 		return false;
 	}
 
@@ -272,7 +275,8 @@ function wp_is_post_revision( $post ) {
  * @return false|int False if not a revision, ID of autosave's parent otherwise
  */
 function wp_is_post_autosave( $post ) {
-	if ( ! $post = wp_get_post_revision( $post ) ) {
+	$post = wp_get_post_revision( $post );
+	if ( ! $post ) {
 		return false;
 	}
 
@@ -304,7 +308,7 @@ function _wp_put_post_revision( $post = null, $autosave = false ) {
 		return new WP_Error( 'invalid_post', __( 'Invalid post ID.' ) );
 	}
 
-	if ( isset( $post['post_type'] ) && 'revision' == $post['post_type'] ) {
+	if ( isset( $post['post_type'] ) && 'revision' === $post['post_type'] ) {
 		return new WP_Error( 'post_type', __( 'Cannot create a revision of a revision' ) );
 	}
 
@@ -342,19 +346,20 @@ function _wp_put_post_revision( $post = null, $autosave = false ) {
  * @return WP_Post|array|null WP_Post (or array) on success, or null on failure.
  */
 function wp_get_post_revision( &$post, $output = OBJECT, $filter = 'raw' ) {
-	if ( ! $revision = get_post( $post, OBJECT, $filter ) ) {
+	$revision = get_post( $post, OBJECT, $filter );
+	if ( ! $revision ) {
 		return $revision;
 	}
 	if ( 'revision' !== $revision->post_type ) {
 		return null;
 	}
 
-	if ( $output == OBJECT ) {
+	if ( OBJECT == $output ) {
 		return $revision;
-	} elseif ( $output == ARRAY_A ) {
+	} elseif ( ARRAY_A == $output ) {
 		$_revision = get_object_vars( $revision );
 		return $_revision;
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		$_revision = array_values( get_object_vars( $revision ) );
 		return $_revision;
 	}
@@ -374,7 +379,8 @@ function wp_get_post_revision( &$post, $output = OBJECT, $filter = 'raw' ) {
  * @return int|false|null Null if error, false if no fields to restore, (int) post ID if success.
  */
 function wp_restore_post_revision( $revision_id, $fields = null ) {
-	if ( ! $revision = wp_get_post_revision( $revision_id, ARRAY_A ) ) {
+	$revision = wp_get_post_revision( $revision_id, ARRAY_A );
+	if ( ! $revision ) {
 		return $revision;
 	}
 
@@ -427,7 +433,8 @@ function wp_restore_post_revision( $revision_id, $fields = null ) {
  * @return array|false|WP_Post|WP_Error|null Null or WP_Error if error, deleted post if success.
  */
 function wp_delete_post_revision( $revision_id ) {
-	if ( ! $revision = wp_get_post_revision( $revision_id ) ) {
+	$revision = wp_get_post_revision( $revision_id );
+	if ( ! $revision ) {
 		return $revision;
 	}
 
@@ -484,7 +491,8 @@ function wp_get_post_revisions( $post_id = 0, $args = null ) {
 		)
 	);
 
-	if ( ! $revisions = get_children( $args ) ) {
+	$revisions = get_children( $args );
+	if ( ! $revisions ) {
 		return array();
 	}
 
@@ -603,18 +611,24 @@ function _show_post_preview() {
  * @return array
  */
 function _wp_preview_terms_filter( $terms, $post_id, $taxonomy ) {
-	if ( ! $post = get_post() ) {
+	$post = get_post();
+	if ( ! $post ) {
 		return $terms;
 	}
 
-	if ( empty( $_REQUEST['post_format'] ) || $post->ID != $post_id || 'post_format' != $taxonomy || 'revision' == $post->post_type ) {
+	if ( empty( $_REQUEST['post_format'] ) || $post->ID != $post_id
+		|| 'post_format' !== $taxonomy || 'revision' === $post->post_type
+	) {
 		return $terms;
 	}
 
-	if ( 'standard' == $_REQUEST['post_format'] ) {
+	if ( 'standard' === $_REQUEST['post_format'] ) {
 		$terms = array();
-	} elseif ( $term = get_term_by( 'slug', 'post-format-' . sanitize_key( $_REQUEST['post_format'] ), 'post_format' ) ) {
-		$terms = array( $term ); // Can only have one post format
+	} else {
+		$term = get_term_by( 'slug', 'post-format-' . sanitize_key( $_REQUEST['post_format'] ), 'post_format' );
+		if ( $term ) {
+			$terms = array( $term ); // Can only have one post format
+		}
 	}
 
 	return $terms;
@@ -632,16 +646,17 @@ function _wp_preview_terms_filter( $terms, $post_id, $taxonomy ) {
  * @return null|array The default return value or the post thumbnail meta array.
  */
 function _wp_preview_post_thumbnail_filter( $value, $post_id, $meta_key ) {
-	if ( ! $post = get_post() ) {
+	$post = get_post();
+	if ( ! $post ) {
 		return $value;
 	}
 
 	if ( empty( $_REQUEST['_thumbnail_id'] ) ||
 		 empty( $_REQUEST['preview_id'] ) ||
 		 $post->ID != $post_id ||
-		 '_thumbnail_id' != $meta_key ||
-		 'revision' == $post->post_type ||
-		 $post_id != $_REQUEST['preview_id']
+		'_thumbnail_id' !== $meta_key ||
+		'revision' === $post->post_type ||
+		$post_id != $_REQUEST['preview_id']
 	) {
 		return $value;
 	}

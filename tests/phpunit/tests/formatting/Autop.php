@@ -416,7 +416,8 @@ Paragraph two.';
 			'select',
 		);
 
-		$content = $expected = array();
+		$content  = array();
+		$expected = array();
 
 		foreach ( $inlines as $inline ) {
 			$content[]  = "<$inline>foo</$inline>";

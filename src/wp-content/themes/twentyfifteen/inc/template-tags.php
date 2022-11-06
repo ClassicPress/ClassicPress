@@ -23,13 +23,15 @@ if ( ! function_exists( 'twentyfifteen_comment_nav' ) ) :
 		<h2 class="screen-reader-text"><?php _e( 'Comment navigation', 'twentyfifteen' ); ?></h2>
 		<div class="nav-links">
 			<?php
-			if ( $prev_link = get_previous_comments_link( __( 'Older Comments', 'twentyfifteen' ) ) ) :
+			$prev_link = get_previous_comments_link( __( 'Older Comments', 'twentyfifteen' ) );
+			if ( $prev_link ) {
 				printf( '<div class="nav-previous">%s</div>', $prev_link );
-				endif;
+			}
 
-			if ( $next_link = get_next_comments_link( __( 'Newer Comments', 'twentyfifteen' ) ) ) :
+			$next_link = get_next_comments_link( __( 'Newer Comments', 'twentyfifteen' ) );
+			if ( $next_link ) {
 				printf( '<div class="nav-next">%s</div>', $next_link );
-				endif;
+			}
 			?>
 		</div><!-- .nav-links -->
 	</nav><!-- .comment-navigation -->
@@ -59,7 +61,7 @@ if ( ! function_exists( 'twentyfifteen_entry_meta' ) ) :
 			);
 		}
 
-		if ( in_array( get_post_type(), array( 'post', 'attachment' ) ) ) {
+		if ( in_array( get_post_type(), array( 'post', 'attachment' ), true ) ) {
 			$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 
 			if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
@@ -82,7 +84,7 @@ if ( ! function_exists( 'twentyfifteen_entry_meta' ) ) :
 			);
 		}
 
-		if ( 'post' == get_post_type() ) {
+		if ( 'post' === get_post_type() ) {
 			if ( is_singular() || is_multi_author() ) {
 				printf(
 					'<span class="byline"><span class="author vcard"><span class="screen-reader-text">%1$s </span><a class="url fn n" href="%2$s">%3$s</a></span></span>',
@@ -141,7 +143,8 @@ endif;
  * @return bool True of there is more than one category, false otherwise.
  */
 function twentyfifteen_categorized_blog() {
-	if ( false === ( $all_the_cool_cats = get_transient( 'twentyfifteen_categories' ) ) ) {
+	$all_the_cool_cats = get_transient( 'twentyfifteen_categories' );
+	if ( false === $all_the_cool_cats ) {
 		// Create an array of all the categories that are attached to posts.
 		$all_the_cool_cats = get_categories(
 			array(

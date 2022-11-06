@@ -84,6 +84,7 @@
 	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
 
 	<!-- These rules are being set as warnings instead of errors, so we can error check the entire codebase. -->
+
 	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
 		<type>warning</type>
 	</rule>
@@ -102,40 +103,13 @@
 	<rule ref="WordPress.WP.I18n">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.Arrays.ArrayIndentation">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.NamingConventions.ValidHookName">
-		<type>warning</type>
-	</rule>
 	<rule ref="WordPress.DateTime.RestrictedFunctions">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.NamingConventions.ValidFunctionName">
 		<type>warning</type>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<type>warning</type>
 	</rule>
-	<rule ref="WordPress.DB.PreparedSQLPlaceholders">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.PHP.DontExtract">
-		<type>warning</type>
-	</rule>
-	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace">
-		<type>warning</type>
-	</rule>
 	<rule ref="Squiz.PHP.DisallowMultipleAssignments">
-		<type>warning</type>
-	</rule>
-	<rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
-		<type>warning</type>
-	</rule>
-	<rule ref="PEAR.NamingConventions.ValidClassName">
-		<type>warning</type>
-	</rule>
-	<rule ref="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment">
 		<type>warning</type>
 	</rule>
 
@@ -343,7 +317,6 @@
 				<element value="WP_Tests_Image_Resize_UnitTestCase"/>
 				<element value="WP_Import_UnitTestCase"/>
 				<element value="Tests_Query_Conditionals"/>
-				<element value="WP_Test_XML_TestCase"/>
 
 				<!-- Mock classes. -->
 				<element value="Spy_REST_Server"/>
@@ -415,6 +388,7 @@
 	</rule>
 
 	<!-- Exclude some old classes that can't be renamed, as it would break back compat. -->
+	<!-- Exclude some old classes that can't be renamed, as it would break back compat -->
 	<rule ref="PEAR.NamingConventions.ValidClassName.Invalid">
 		<exclude-pattern>/src/wp-admin/includes/class-wp-filesystem-ftpsockets\.php</exclude-pattern>
 		<exclude-pattern>/src/wp-includes/class-wp-oembed\.php</exclude-pattern>
@@ -435,8 +409,5 @@
 		<exclude-pattern>/src/wp-admin/includes/class-wp-list-table-compat\.php</exclude-pattern>
 		<exclude-pattern>/src/wp-includes/class-wp-dependency\.php</exclude-pattern>
 		<exclude-pattern>/src/wp-includes/class-wp-editor\.php</exclude-pattern>
-		<exclude-pattern>/src/wp-content/themes/twentyeleven/inc/widgets\.php</exclude-pattern>
-		<exclude-pattern>/src/wp-content/themes/twentyfourteen/inc/widgets\.php</exclude-pattern>
-		<exclude-pattern>/src/wp-content/themes/twentyfourteen/inc/featured-content\.php</exclude-pattern>
 	</rule>
 </ruleset>

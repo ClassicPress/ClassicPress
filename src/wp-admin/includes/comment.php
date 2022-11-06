@@ -104,7 +104,8 @@ function edit_comment() {
  * @return WP_Comment|false Comment if found. False on failure.
  */
 function get_comment_to_edit( $id ) {
-	if ( ! $comment = get_comment( $id ) ) {
+	$comment = get_comment( $id );
+	if ( ! $comment ) {
 		return false;
 	}
 
@@ -195,7 +196,7 @@ function floated_admin_avatar( $name ) {
  * @since WP-2.7.0
  */
 function enqueue_comment_hotkeys_js() {
-	if ( 'true' == get_user_option( 'comment_shortcuts' ) ) {
+	if ( 'true' === get_user_option( 'comment_shortcuts' ) ) {
 		wp_enqueue_script( 'jquery-table-hotkeys' );
 	}
 }

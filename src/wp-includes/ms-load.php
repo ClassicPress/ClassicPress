@@ -20,7 +20,7 @@ function is_subdomain_install() {
 		return SUBDOMAIN_INSTALL;
 	}
 
-	return ( defined( 'VHOST' ) && VHOST == 'yes' );
+	return ( defined( 'VHOST' ) && 'yes' === VHOST );
 }
 
 /**
@@ -45,9 +45,9 @@ function wp_get_active_network_plugins() {
 	sort( $active_plugins );
 
 	foreach ( $active_plugins as $plugin ) {
-		if ( ! validate_file( $plugin ) // $plugin must validate as file
-			&& '.php' == substr( $plugin, -4 ) // $plugin must end with '.php'
-			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist
+		if ( ! validate_file( $plugin )                     // $plugin must validate as file.
+			&& '.php' === substr( $plugin, -4 )             // $plugin must end with '.php'.
+			&& file_exists( WP_PLUGIN_DIR . '/' . $plugin ) // $plugin must exist.
 			) {
 			$plugins[] = WP_PLUGIN_DIR . '/' . $plugin;
 		}
@@ -114,7 +114,7 @@ function ms_site_check() {
 		}
 	}
 
-	if ( $blog->archived == '1' || $blog->spam == '1' ) {
+	if ( '1' == $blog->archived || '1' == $blog->spam ) {
 		if ( file_exists( WP_CONTENT_DIR . '/blog-suspended.php' ) ) {
 			return WP_CONTENT_DIR . '/blog-suspended.php';
 		} else {
@@ -318,7 +318,8 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
 		 * If we're not dealing with one of these installations, then the important part is determining
 		 * the network first, because we need the network's path to identify any sites.
 		 */
-		if ( ! $current_site = wp_cache_get( 'current_network', 'site-options' ) ) {
+		$current_site = wp_cache_get( 'current_network', 'site-options' );
+		if ( ! $current_site ) {
 			// Are there even two networks installed?
 			$networks = get_networks( array( 'number' => 2 ) );
 			if ( count( $networks ) === 1 ) {
@@ -382,7 +383,8 @@ function ms_load_current_site_and_network( $domain, $path, $subdomain = false ) 
 	// During activation of a new subdomain, the requested site does not yet exist.
 	if ( empty( $current_blog ) && wp_installing() ) {
 		$current_blog          = new stdClass;
-		$current_blog->blog_id = $blog_id = 1;
+		$current_blog->blog_id = 1;
+		$blog_id               = 1;
 		$current_blog->public  = 1;
 	}
 
@@ -488,7 +490,7 @@ function ms_not_installed( $domain, $path ) {
 	);
 	$msg .= ' ' . __( 'If you&#8217;re still stuck with this message, then check that your database contains the following tables:' ) . '</p><ul>';
 	foreach ( $wpdb->tables( 'global' ) as $t => $table ) {
-		if ( 'sitecategories' == $t ) {
+		if ( 'sitecategories' === $t ) {
 			continue;
 		}
 		$msg .= '<li>' . $table . '</li>';

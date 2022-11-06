@@ -120,7 +120,7 @@ if ( ! class_exists( 'PO', false ) ) :
 			$po = $quote . implode( "${slash}n$quote$newline$quote", explode( $newline, $string ) ) . $quote;
 			// add empty string on first line for readbility
 			if ( false !== strpos( $string, $newline ) &&
-				( substr_count( $string, $newline ) > 1 || ! ( $newline === substr( $string, -strlen( $newline ) ) ) ) ) {
+				( substr_count( $string, $newline ) > 1 || substr( $string, -strlen( $newline ) ) !== $newline ) ) {
 				$po = "$quote$quote$newline$po";
 			}
 			// remove empty strings
@@ -151,7 +151,7 @@ if ( ! class_exists( 'PO', false ) ) :
 				$chars = $chars[0];
 				foreach ( $chars as $char ) {
 					if ( ! $previous_is_backslash ) {
-						if ( '\\' == $char ) {
+						if ( '\\' === $char ) {
 							$previous_is_backslash = true;
 						} else {
 							$unpoified .= $char;
@@ -296,7 +296,7 @@ if ( ! class_exists( 'PO', false ) ) :
 				if ( ! $res ) {
 					break;
 				}
-				if ( $res['entry']->singular == '' ) {
+				if ( '' === $res['entry']->singular ) {
 					$this->set_headers( $this->make_headers( $res['entry']->translations[0] ) );
 				} else {
 					$this->add_entry( $res['entry'] );
@@ -318,7 +318,7 @@ if ( ! class_exists( 'PO', false ) ) :
 		 * @return bool
 		 */
 		protected static function is_final( $context ) {
-			return ( $context === 'msgstr' ) || ( $context === 'msgstr_plural' );
+			return ( 'msgstr' === $context ) || ( 'msgstr_plural' === $context );
 		}
 
 		/**
@@ -348,7 +348,7 @@ if ( ! class_exists( 'PO', false ) ) :
 						return false;
 					}
 				}
-				if ( $line == "\n" ) {
+				if ( "\n" === $line ) {
 					continue;
 				}
 				$line = trim( $line );
@@ -359,8 +359,8 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					// comments have to be at the beginning
-					if ( $context && $context != 'comment' ) {
+					// Comments have to be at the beginning.
+					if ( $context && 'comment' !== $context ) {
 						return false;
 					}
 					// add comment
@@ -371,7 +371,7 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					if ( $context && $context != 'comment' ) {
+					if ( $context && 'comment' !== $context ) {
 						return false;
 					}
 					$context         = 'msgctxt';
@@ -382,26 +382,26 @@ if ( ! class_exists( 'PO', false ) ) :
 						$lineno--;
 						break;
 					}
-					if ( $context && $context != 'msgctxt' && $context != 'comment' ) {
+					if ( $context && 'msgctxt' !== $context && 'comment' !== $context ) {
 						return false;
 					}
 					$context          = 'msgid';
 					$entry->singular .= PO::unpoify( $m[1] );
 				} elseif ( preg_match( '/^msgid_plural\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid' ) {
+					if ( 'msgid' !== $context ) {
 						return false;
 					}
 					$context          = 'msgid_plural';
 					$entry->is_plural = true;
 					$entry->plural   .= PO::unpoify( $m[1] );
 				} elseif ( preg_match( '/^msgstr\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid' ) {
+					if ( 'msgid' !== $context ) {
 						return false;
 					}
 					$context             = 'msgstr';
 					$entry->translations = array( PO::unpoify( $m[1] ) );
 				} elseif ( preg_match( '/^msgstr\[(\d+)\]\s+(".*")/', $line, $m ) ) {
-					if ( $context != 'msgid_plural' && $context != 'msgstr_plural' ) {
+					if ( 'msgid_plural' !== $context && 'msgstr_plural' !== $context ) {
 						return false;
 					}
 					$context                      = 'msgstr_plural';
@@ -461,16 +461,16 @@ if ( ! class_exists( 'PO', false ) ) :
 		function read_line( $f, $action = 'read' ) {
 			static $last_line     = '';
 			static $use_last_line = false;
-			if ( 'clear' == $action ) {
+			if ( 'clear' === $action ) {
 				$last_line = '';
 				return true;
 			}
-			if ( 'put-back' == $action ) {
+			if ( 'put-back' === $action ) {
 				$use_last_line = true;
 				return true;
 			}
 			$line          = $use_last_line ? $last_line : fgets( $f );
-			$line          = ( "\r\n" == substr( $line, -2 ) ) ? rtrim( $line, "\r\n" ) . "\n" : $line;
+			$line          = ( "\r\n" === substr( $line, -2 ) ) ? rtrim( $line, "\r\n" ) . "\n" : $line;
 			$last_line     = $line;
 			$use_last_line = false;
 			return $line;
@@ -483,11 +483,11 @@ if ( ! class_exists( 'PO', false ) ) :
 		function add_comment_to_entry( &$entry, $po_comment_line ) {
 			$first_two = substr( $po_comment_line, 0, 2 );
 			$comment   = trim( substr( $po_comment_line, 2 ) );
-			if ( '#:' == $first_two ) {
+			if ( '#:' === $first_two ) {
 				$entry->references = array_merge( $entry->references, preg_split( '/\s+/', $comment ) );
-			} elseif ( '#.' == $first_two ) {
+			} elseif ( '#.' === $first_two ) {
 				$entry->extracted_comments = trim( $entry->extracted_comments . "\n" . $comment );
-			} elseif ( '#,' == $first_two ) {
+			} elseif ( '#,' === $first_two ) {
 				$entry->flags = array_merge( $entry->flags, preg_split( '/,\s*/', $comment ) );
 			} else {
 				$entry->translator_comments = trim( $entry->translator_comments . "\n" . $comment );
@@ -499,10 +499,10 @@ if ( ! class_exists( 'PO', false ) ) :
 		 * @return sring
 		 */
 		public static function trim_quotes( $s ) {
-			if ( substr( $s, 0, 1 ) == '"' ) {
+			if ( '"' === substr( $s, 0, 1 ) ) {
 				$s = substr( $s, 1 );
 			}
-			if ( substr( $s, -1, 1 ) == '"' ) {
+			if ( '"' === substr( $s, -1, 1 ) ) {
 				$s = substr( $s, 0, -1 );
 			}
 			return $s;

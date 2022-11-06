@@ -713,7 +713,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	 * @param mixed     $fraction The fraction to convert.
 	 * @param int|float $expect   The expected result.
 	 *
-	 * @ticket 54385
+	 * @see https://core.trac.wordpress.org/ticket/54385
 	 * @dataProvider data_wp_exif_frac2dec
 	 *
 	 * @covers ::wp_exif_frac2dec

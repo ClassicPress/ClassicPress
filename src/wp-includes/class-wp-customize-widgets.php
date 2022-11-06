@@ -333,10 +333,10 @@ final class WP_Customize_Widgets {
 	 */
 	public function customize_controls_init() {
 		/** This action is documented in wp-admin/includes/ajax-actions.php */
-		do_action( 'load-widgets.php' );
+		do_action( 'load-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/includes/ajax-actions.php */
-		do_action( 'widgets.php' );
+		do_action( 'widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/widgets.php */
 		do_action( 'sidebar_admin_setup' );
@@ -450,7 +450,7 @@ final class WP_Customize_Widgets {
 					$section_args = array(
 						'title'       => $wp_registered_sidebars[ $sidebar_id ]['name'],
 						'description' => $wp_registered_sidebars[ $sidebar_id ]['description'],
-						'priority'    => array_search( $sidebar_id, array_keys( $wp_registered_sidebars ) ),
+						'priority'    => array_search( $sidebar_id, array_keys( $wp_registered_sidebars ), true ),
 						'panel'       => 'widgets',
 						'sidebar_id'  => $sidebar_id,
 					);
@@ -577,7 +577,7 @@ final class WP_Customize_Widgets {
 
 		$parsed_widget_id = $this->parse_widget_id( $widget_id );
 		$width            = $wp_registered_widget_controls[ $widget_id ]['width'];
-		$is_core          = in_array( $parsed_widget_id['id_base'], $this->core_widget_id_bases );
+		$is_core          = in_array( $parsed_widget_id['id_base'], $this->core_widget_id_bases, true );
 		$is_wide          = ( $width > 250 && ! $is_core );
 
 		/**
@@ -643,7 +643,7 @@ final class WP_Customize_Widgets {
 	 */
 	public function print_styles() {
 		/** This action is documented in wp-admin/admin-header.php */
-		do_action( 'admin_print_styles-widgets.php' );
+		do_action( 'admin_print_styles-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/admin-header.php */
 		do_action( 'admin_print_styles' );
@@ -657,7 +657,7 @@ final class WP_Customize_Widgets {
 	 */
 	public function print_scripts() {
 		/** This action is documented in wp-admin/admin-header.php */
-		do_action( 'admin_print_scripts-widgets.php' );
+		do_action( 'admin_print_scripts-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/admin-header.php */
 		do_action( 'admin_print_scripts' );
@@ -825,8 +825,8 @@ final class WP_Customize_Widgets {
 				<h3>
 					<span class="customize-action">
 					<?php
-						/* translators: &#9656; is the unicode right-pointing triangle, and %s is the section title in the Customizer */
-						echo sprintf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
+						/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+						printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
 					?>
 					</span>
 					<?php _e( 'Add a Widget' ); ?>
@@ -860,13 +860,13 @@ final class WP_Customize_Widgets {
 	 */
 	public function print_footer_scripts() {
 		/** This action is documented in wp-admin/admin-footer.php */
-		do_action( 'admin_print_footer_scripts-widgets.php' );
+		do_action( 'admin_print_footer_scripts-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/admin-footer.php */
 		do_action( 'admin_print_footer_scripts' );
 
 		/** This action is documented in wp-admin/admin-footer.php */
-		do_action( 'admin_footer-widgets.php' );
+		do_action( 'admin_footer-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	}
 
 	/**
@@ -1007,7 +1007,7 @@ final class WP_Customize_Widgets {
 					'temp_id'      => isset( $args['_temp_id'] ) ? $args['_temp_id'] : null,
 					'is_multi'     => $is_multi_widget,
 					'control_tpl'  => $control_tpl,
-					'multi_number' => ( $args['_add'] === 'multi' ) ? $args['_multi_num'] : false,
+					'multi_number' => ( 'multi' === $args['_add'] ) ? $args['_multi_num'] : false,
 					'is_disabled'  => $is_disabled,
 					'id_base'      => $id_base,
 					'transport'    => $this->is_widget_selective_refreshable( $id_base ) ? 'postMessage' : 'refresh',
@@ -1220,7 +1220,7 @@ final class WP_Customize_Widgets {
 	 * @return bool Whether the widget is rendered.
 	 */
 	public function is_widget_rendered( $widget_id ) {
-		return in_array( $widget_id, $this->rendered_widgets );
+		return in_array( $widget_id, $this->rendered_widgets, true );
 	}
 
 	/**
@@ -1232,7 +1232,7 @@ final class WP_Customize_Widgets {
 	 * @return bool Whether the sidebar is rendered.
 	 */
 	public function is_sidebar_rendered( $sidebar_id ) {
-		return in_array( $sidebar_id, $this->rendered_sidebars );
+		return in_array( $sidebar_id, $this->rendered_sidebars, true );
 	}
 
 	/**
@@ -1313,7 +1313,7 @@ final class WP_Customize_Widgets {
 	 * @return array|void Sanitized widget instance.
 	 */
 	public function sanitize_widget_instance( $value ) {
-		if ( $value === array() ) {
+		if ( array() === $value ) {
 			return $value;
 		}
 
@@ -1438,11 +1438,13 @@ final class WP_Customize_Widgets {
 				$value                         = array();
 				$value[ $parsed_id['number'] ] = $instance;
 				$key                           = 'widget-' . $parsed_id['id_base'];
-				$_REQUEST[ $key ]              = $_POST[ $key ] = wp_slash( $value );
+				$_REQUEST[ $key ]              = wp_slash( $value );
+				$_POST[ $key ]                 = $_REQUEST[ $key ];
 				$added_input_vars[]            = $key;
 			} else {
 				foreach ( $instance as $key => $value ) {
-					$_REQUEST[ $key ]   = $_POST[ $key ] = wp_slash( $value );
+					$_REQUEST[ $key ]   = wp_slash( $value );
+					$_POST[ $key ]      = $_REQUEST[ $key ];
 					$added_input_vars[] = $key;
 				}
 			}
@@ -1536,10 +1538,10 @@ final class WP_Customize_Widgets {
 		}
 
 		/** This action is documented in wp-admin/includes/ajax-actions.php */
-		do_action( 'load-widgets.php' );
+		do_action( 'load-widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/includes/ajax-actions.php */
-		do_action( 'widgets.php' );
+		do_action( 'widgets.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		/** This action is documented in wp-admin/widgets.php */
 		do_action( 'sidebar_admin_setup' );
@@ -1854,7 +1856,8 @@ final class WP_Customize_Widgets {
 
 		// Render the widget.
 		ob_start();
-		dynamic_sidebar( $this->rendering_sidebar_id = $context['sidebar_id'] );
+		$this->rendering_sidebar_id = $context['sidebar_id'];
+		dynamic_sidebar( $this->rendering_sidebar_id );
 		$container = ob_get_clean();
 
 		// Reset variables for next partial render.

@@ -131,7 +131,7 @@ class Core_Upgrader extends WP_Upgrader {
 		$this->upgrade_strings();
 
 		// Is an update available?
-		if ( ! isset( $current->response ) || $current->response == 'latest' ) {
+		if ( ! isset( $current->response ) || 'latest' === $current->response ) {
 			return new WP_Error( 'up_to_date', $this->strings['up_to_date'] );
 		}
 
@@ -142,7 +142,7 @@ class Core_Upgrader extends WP_Upgrader {
 
 		$wp_dir = trailingslashit( $wp_filesystem->abspath() );
 
-		// Lock to prevent multiple Core Updates occurring
+		// Lock to prevent multiple Core Updates occurring.
 		$lock = WP_Upgrader::create_lock( 'core_updater', 15 * MINUTE_IN_SECONDS );
 		if ( ! $lock ) {
 			return new WP_Error( 'locked', $this->strings['locked'] );
@@ -634,8 +634,8 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		foreach ( $checksums as $file => $checksum ) {
-			// Skip files which get updated
-			if ( 'wp-content' == substr( $file, 0, 10 ) ) {
+			// Skip files which get updated.
+			if ( 'wp-content' === substr( $file, 0, 10 ) ) {
 				continue;
 			}
 			if ( ! file_exists( ABSPATH . $file ) || md5_file( ABSPATH . $file ) !== $checksum ) {

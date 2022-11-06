@@ -128,12 +128,12 @@ function get_option( $option, $default = false ) {
 		}
 	}
 
-	// If home is not set use siteurl.
-	if ( 'home' == $option && '' == $value ) {
+	// If home is not set, use siteurl.
+	if ( 'home' === $option && '' === $value ) {
 		return get_option( 'siteurl' );
 	}
 
-	if ( in_array( $option, array( 'siteurl', 'home', 'category_base', 'tag_base' ) ) ) {
+	if ( in_array( $option, array( 'siteurl', 'home', 'category_base', 'tag_base' ), true ) ) {
 		$value = untrailingslashit( $value );
 	}
 
@@ -203,7 +203,8 @@ function wp_load_alloptions( $force_cache = false ) {
 
 	if ( ! $alloptions ) {
 		$suppress = $wpdb->suppress_errors();
-		if ( ! $alloptions_db = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options WHERE autoload = 'yes'" ) ) {
+		$alloptions_db = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options WHERE autoload = 'yes'" );
+		if ( ! $alloptions_db ) {
 			$alloptions_db = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" );
 		}
 		$wpdb->suppress_errors( $suppress );
@@ -498,7 +499,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	}
 
 	if ( ! wp_installing() ) {
-		if ( 'yes' == $autoload ) {
+		if ( 'yes' === $autoload ) {
 			$alloptions            = wp_load_alloptions( true );
 			$alloptions[ $option ] = $serialized_value;
 			wp_cache_set( 'alloptions', $alloptions, 'options' );
@@ -576,7 +577,7 @@ function delete_option( $option ) {
 
 	$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $option ) );
 	if ( ! wp_installing() ) {
-		if ( 'yes' == $row->autoload ) {
+		if ( 'yes' === $row->autoload ) {
 			$alloptions = wp_load_alloptions( true );
 			if ( is_array( $alloptions ) && isset( $alloptions[ $option ] ) ) {
 				unset( $alloptions[ $option ] );
@@ -917,7 +918,8 @@ function wp_user_settings() {
 		return;
 	}
 
-	if ( ! $user_id = get_current_user_id() ) {
+	$user_id = get_current_user_id();
+	if ( ! $user_id ) {
 		return;
 	}
 
@@ -1039,7 +1041,8 @@ function delete_user_setting( $names ) {
 function get_all_user_settings() {
 	global $_updated_user_settings;
 
-	if ( ! $user_id = get_current_user_id() ) {
+	$user_id = get_current_user_id();
+	if ( ! $user_id ) {
 		return array();
 	}
 
@@ -1082,7 +1085,8 @@ function get_all_user_settings() {
 function wp_set_all_user_settings( $user_settings ) {
 	global $_updated_user_settings;
 
-	if ( ! $user_id = get_current_user_id() ) {
+	$user_id = get_current_user_id();
+	if ( ! $user_id ) {
 		return false;
 	}
 
@@ -1115,7 +1119,8 @@ function wp_set_all_user_settings( $user_settings ) {
  * @since WP-2.7.0
  */
 function delete_all_user_settings() {
-	if ( ! $user_id = get_current_user_id() ) {
+	$user_id = get_current_user_id();
+	if ( ! $user_id ) {
 		return;
 	}
 
@@ -1744,7 +1749,7 @@ function get_site_transient( $transient ) {
 		// Core transients that do not have a timeout. Listed here so querying timeouts can be avoided.
 		$no_timeout       = array( 'update_core', 'update_plugins', 'update_themes' );
 		$transient_option = '_site_transient_' . $transient;
-		if ( ! in_array( $transient, $no_timeout ) ) {
+		if ( ! in_array( $transient, $no_timeout, true ) ) {
 			$transient_timeout = '_site_transient_timeout_' . $transient;
 			$timeout           = get_site_option( $transient_timeout );
 			if ( false !== $timeout && $timeout < time() ) {
@@ -2139,7 +2144,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 		$wp_registered_settings = array();
 	}
 
-	if ( 'misc' == $option_group ) {
+	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -2152,7 +2157,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 		$option_group = 'general';
 	}
 
-	if ( 'privacy' == $option_group ) {
+	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',
@@ -2191,7 +2196,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	global $new_whitelist_options, $wp_registered_settings;
 
-	if ( 'misc' == $option_group ) {
+	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.0.0',
@@ -2204,7 +2209,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 		$option_group = 'general';
 	}
 
-	if ( 'privacy' == $option_group ) {
+	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
 			'WP-3.5.0',
@@ -2217,8 +2222,8 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 		$option_group = 'reading';
 	}
 
-	$pos = array_search( $option_name, (array) $new_whitelist_options[ $option_group ] );
-	if ( $pos !== false ) {
+	$pos = array_search( $option_name, (array) $new_whitelist_options[ $option_group ], true );
+	if ( false !== $pos ) {
 		unset( $new_whitelist_options[ $option_group ][ $pos ] );
 	}
 	if ( '' !== $deprecated ) {

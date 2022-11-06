@@ -43,7 +43,8 @@ function edit_user( $user_id = 0 ) {
 		$user->user_login = sanitize_user( $_POST['user_login'], true );
 	}
 
-	$pass1 = $pass2 = '';
+	$pass1 = '';
+	$pass2 = '';
 	if ( isset( $_POST['pass1'] ) ) {
 		$pass1 = $_POST['pass1'];
 	}
@@ -71,7 +72,7 @@ function edit_user( $user_id = 0 ) {
 		$user->user_email = sanitize_text_field( wp_unslash( $_POST['email'] ) );
 	}
 	if ( isset( $_POST['url'] ) ) {
-		if ( empty( $_POST['url'] ) || $_POST['url'] == 'http://' ) {
+		if ( empty( $_POST['url'] ) || 'http://' === $_POST['url'] ) {
 			$user->user_url = '';
 		} else {
 			$user->user_url = esc_url_raw( $_POST['url'] );
@@ -123,7 +124,7 @@ function edit_user( $user_id = 0 ) {
 		}
 	}
 
-	$user->comment_shortcuts = isset( $_POST['comment_shortcuts'] ) && 'true' == $_POST['comment_shortcuts'] ? 'true' : '';
+	$user->comment_shortcuts = isset( $_POST['comment_shortcuts'] ) && 'true' === $_POST['comment_shortcuts'] ? 'true' : '';
 
 	$user->use_ssl = 0;
 	if ( ! empty( $_POST['use_ssl'] ) ) {
@@ -133,7 +134,7 @@ function edit_user( $user_id = 0 ) {
 	$errors = new WP_Error();
 
 	/* checking that username has been typed */
-	if ( $user->user_login == '' ) {
+	if ( '' === $user->user_login ) {
 		$errors->add( 'user_login', __( '<strong>ERROR</strong>: Please enter a username.' ) );
 	}
 
@@ -192,8 +193,11 @@ function edit_user( $user_id = 0 ) {
 		$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please enter an email address.' ), array( 'form-field' => 'email' ) );
 	} elseif ( ! is_email( $user->user_email ) ) {
 		$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ), array( 'form-field' => 'email' ) );
-	} elseif ( ( $owner_id = email_exists( $user->user_email ) ) && ( ! $update || ( $owner_id != $user->ID ) ) ) {
-		$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ), array( 'form-field' => 'email' ) );
+	} else {
+		$owner_id = email_exists( $user->user_email );
+		if ( $owner_id && ( ! $update || ( $owner_id != $user->ID ) ) ) {
+			$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ), array( 'form-field' => 'email' ) );
+		}
 	}
 
 	/**
@@ -465,8 +469,10 @@ function default_password_nag_handler( $errors = false ) {
 		return;
 	}
 
-	// get_user_setting = JS saved UI setting. else no-js-fallback code.
-	if ( 'hide' == get_user_setting( 'default_password_nag' ) || isset( $_GET['default_password_nag'] ) && '0' == $_GET['default_password_nag'] ) {
+	// get_user_setting() = JS-saved UI setting. Else no-js-fallback code.
+	if ( 'hide' === get_user_setting( 'default_password_nag' )
+		|| isset( $_GET['default_password_nag'] ) && '0' == $_GET['default_password_nag']
+	) {
 		delete_user_setting( 'default_password_nag' );
 		update_user_option( $user_ID, 'default_password_nag', false, true );
 	}
@@ -501,7 +507,7 @@ function default_password_nag_edit_user( $user_ID, $old_data ) {
 function default_password_nag() {
 	global $pagenow;
 	// Short-circuit it.
-	if ( 'profile.php' == $pagenow || ! get_user_option( 'default_password_nag' ) ) {
+	if ( 'profile.php' === $pagenow || ! get_user_option( 'default_password_nag' ) ) {
 		return;
 	}
 

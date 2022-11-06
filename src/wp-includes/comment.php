@@ -48,7 +48,8 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 	$comment = apply_filters( 'comment_text', $comment, null, array() );
 
 	// Check for the number of external links if a max allowed number is set.
-	if ( $max_links = get_option( 'comment_max_links' ) ) {
+	$max_links = get_option( 'comment_max_links' );
+	if ( $max_links ) {
 		$num_links = preg_match_all( '/<a [^>]*href/i', $comment, $out );
 
 		/**
@@ -126,7 +127,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 	 * email address. If both checks pass, return true. Otherwise, return false.
 	 */
 	if ( 1 == get_option( 'comment_whitelist' ) ) {
-		if ( 'trackback' != $comment_type && 'pingback' != $comment_type && $author != '' && $email != '' ) {
+		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' !== $author && '' !== $email ) {
 			$comment_user = get_user_by( 'email', wp_unslash( $email ) );
 			if ( ! empty( $comment_user->ID ) ) {
 				$ok_to_comment = $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM $wpdb->comments WHERE user_id = %d AND comment_approved = '1' LIMIT 1", $comment_user->ID ) );
@@ -168,10 +169,10 @@ function get_approved_comments( $post_id, $args = array() ) {
 		'post_id' => $post_id,
 		'order'   => 'ASC',
 	);
-	$r        = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
 	$query = new WP_Comment_Query;
-	return $query->query( $r );
+	return $query->query( $parsed_args );
 }
 
 /**
@@ -216,11 +217,11 @@ function get_comment( $comment = null, $output = OBJECT ) {
 	 */
 	$_comment = apply_filters( 'get_comment', $_comment );
 
-	if ( $output == OBJECT ) {
+	if ( OBJECT == $output ) {
 		return $_comment;
-	} elseif ( $output == ARRAY_A ) {
+	} elseif ( ARRAY_A == $output ) {
 		return $_comment->to_array();
-	} elseif ( $output == ARRAY_N ) {
+	} elseif ( ARRAY_N == $output ) {
 		return array_values( $_comment->to_array() );
 	}
 	return $_comment;
@@ -940,14 +941,19 @@ function separate_comments( &$comments ) {
 		'pingback'  => array(),
 		'pings'     => array(),
 	);
+
 	$count            = count( $comments );
+
 	for ( $i = 0; $i < $count; $i++ ) {
 		$type = $comments[ $i ]->comment_type;
+
 		if ( empty( $type ) ) {
 			$type = 'comment';
 		}
+
 		$comments_by_type[ $type ][] = &$comments[ $i ];
-		if ( 'trackback' == $type || 'pingback' == $type ) {
+
+		if ( 'trackback' === $type || 'pingback' === $type ) {
 			$comments_by_type['pings'][] = &$comments[ $i ];
 		}
 	}
@@ -1038,7 +1044,8 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 
 	$page = null;
 
-	if ( ! $comment = get_comment( $comment_ID ) ) {
+	$comment = get_comment( $comment_ID );
+	if ( ! $comment ) {
 		return;
 	}
 
@@ -1294,8 +1301,8 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
 
 	$mod_keys = trim( get_option( 'blacklist_keys' ) );
-	if ( '' == $mod_keys ) {
-		return false; // If moderation keys are empty
+	if ( '' === $mod_keys ) {
+		return false; // If moderation keys are empty.
 	}
 
 	// Ensure HTML tags are not being used to bypass the blacklist.
@@ -1405,11 +1412,12 @@ function wp_count_comments( $post_id = 0 ) {
  */
 function wp_delete_comment( $comment_id, $force_delete = false ) {
 	global $wpdb;
-	if ( ! $comment = get_comment( $comment_id ) ) {
+	$comment = get_comment( $comment_id );
+	if ( ! $comment ) {
 		return false;
 	}
 
-	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ) ) ) {
+	if ( ! $force_delete && EMPTY_TRASH_DAYS && ! in_array( wp_get_comment_status( $comment ), array( 'trash', 'spam' ), true ) ) {
 		return wp_trash_comment( $comment_id );
 	}
 
@@ -1453,7 +1461,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 	do_action( 'deleted_comment', $comment->comment_ID, $comment );
 
 	$post_id = $comment->comment_post_ID;
-	if ( $post_id && $comment->comment_approved == 1 ) {
+	if ( $post_id && 1 == $comment->comment_approved ) {
 		wp_update_comment_count( $post_id );
 	}
 
@@ -1481,7 +1489,8 @@ function wp_trash_comment( $comment_id ) {
 		return wp_delete_comment( $comment_id, true );
 	}
 
-	if ( ! $comment = get_comment( $comment_id ) ) {
+	$comment = get_comment( $comment_id );
+	if ( ! $comment ) {
 		return false;
 	}
 
@@ -1678,15 +1687,15 @@ function wp_get_comment_status( $comment_id ) {
 
 	$approved = $comment->comment_approved;
 
-	if ( $approved == null ) {
+	if ( null == $approved ) {
 		return false;
-	} elseif ( $approved == '1' ) {
+	} elseif ( '1' == $approved ) {
 		return 'approved';
-	} elseif ( $approved == '0' ) {
+	} elseif ( '0' == $approved ) {
 		return 'unapproved';
-	} elseif ( $approved == 'spam' ) {
+	} elseif ( 'spam' === $approved ) {
 		return 'spam';
-	} elseif ( $approved == 'trash' ) {
+	} elseif ( 'trash' === $approved ) {
 		return 'trash';
 	} else {
 		return false;
@@ -1901,7 +1910,7 @@ function wp_insert_comment( $commentdata ) {
 
 	$id = (int) $wpdb->insert_id;
 
-	if ( $comment_approved == 1 ) {
+	if ( 1 == $comment_approved ) {
 		wp_update_comment_count( $comment_post_ID );
 
 		foreach ( array( 'server', 'gmt', 'blog' ) as $timezone ) {
@@ -2065,7 +2074,8 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 	global $wpdb;
 
 	if ( isset( $commentdata['user_ID'] ) ) {
-		$commentdata['user_id'] = $commentdata['user_ID'] = (int) $commentdata['user_ID'];
+		$commentdata['user_ID'] = (int) $commentdata['user_ID'];
+		$commentdata['user_id'] = $commentdata['user_ID'];
 	}
 
 	$prefiltered_user_id = ( isset( $commentdata['user_id'] ) ) ? (int) $commentdata['user_id'] : 0;
@@ -2081,14 +2091,17 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 
 	$commentdata['comment_post_ID'] = (int) $commentdata['comment_post_ID'];
 	if ( isset( $commentdata['user_ID'] ) && $prefiltered_user_id !== (int) $commentdata['user_ID'] ) {
-		$commentdata['user_id'] = $commentdata['user_ID'] = (int) $commentdata['user_ID'];
+		$commentdata['user_ID'] = (int) $commentdata['user_ID'];
+		$commentdata['user_id'] = $commentdata['user_ID'];
 	} elseif ( isset( $commentdata['user_id'] ) ) {
 		$commentdata['user_id'] = (int) $commentdata['user_id'];
 	}
 
 	$commentdata['comment_parent'] = isset( $commentdata['comment_parent'] ) ? absint( $commentdata['comment_parent'] ) : 0;
-	$parent_status                 = ( 0 < $commentdata['comment_parent'] ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
-	$commentdata['comment_parent'] = ( 'approved' == $parent_status || 'unapproved' == $parent_status ) ? $commentdata['comment_parent'] : 0;
+
+	$parent_status = ( $commentdata['comment_parent'] > 0 ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
+
+	$commentdata['comment_parent'] = ( 'approved' === $parent_status || 'unapproved' === $parent_status ) ? $commentdata['comment_parent'] : 0;
 
 	if ( ! isset( $commentdata['comment_author_IP'] ) ) {
 		$commentdata['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
@@ -2318,6 +2331,15 @@ function wp_update_comment( $commentarr ) {
 		return 0;
 	}
 
+	$filter_comment = false;
+	if ( ! has_filter( 'pre_comment_content', 'wp_filter_kses' ) ) {
+		$filter_comment = ! user_can( isset( $comment['user_id'] ) ? $comment['user_id'] : 0, 'unfiltered_html' );
+	}
+
+	if ( $filter_comment ) {
+		add_filter( 'pre_comment_content', 'wp_filter_kses' );
+	}
+
 	// Escape data pulled from DB.
 	$comment = wp_slash( $comment );
 
@@ -2327,6 +2349,10 @@ function wp_update_comment( $commentarr ) {
 	$commentarr = array_merge( $comment, $commentarr );
 
 	$commentarr = wp_filter_comment( $commentarr );
+
+	if ( $filter_comment ) {
+		remove_filter( 'pre_comment_content', 'wp_filter_kses' );
+	}
 
 	// Now extract the merged array.
 	$data = wp_unslash( $commentarr );
@@ -2344,9 +2370,9 @@ function wp_update_comment( $commentarr ) {
 
 	if ( ! isset( $data['comment_approved'] ) ) {
 		$data['comment_approved'] = 1;
-	} elseif ( 'hold' == $data['comment_approved'] ) {
+	} elseif ( 'hold' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 0;
-	} elseif ( 'approve' == $data['comment_approved'] ) {
+	} elseif ( 'approve' === $data['comment_approved'] ) {
 		$data['comment_approved'] = 1;
 	}
 
@@ -2491,7 +2517,8 @@ function wp_update_comment_count_now( $post_id ) {
 	wp_cache_delete( 'comments-0', 'counts' );
 	wp_cache_delete( "comments-{$post_id}", 'counts' );
 
-	if ( ! $post = get_post( $post_id ) ) {
+	$post = get_post( $post_id );
+	if ( ! $post ) {
 		return false;
 	}
 
@@ -2612,7 +2639,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	$pingback_link_offset_squote = strpos( $contents, $pingback_str_squote );
 	if ( $pingback_link_offset_dquote || $pingback_link_offset_squote ) {
 		$quote                   = ( $pingback_link_offset_dquote ) ? '"' : '\'';
-		$pingback_link_offset    = ( $quote == '"' ) ? $pingback_link_offset_dquote : $pingback_link_offset_squote;
+		$pingback_link_offset    = ( '"' === $quote ) ? $pingback_link_offset_dquote : $pingback_link_offset_squote;
 		$pingback_href_pos       = strpos( $contents, 'href=', $pingback_link_offset );
 		$pingback_href_start     = $pingback_href_pos + 6;
 		$pingback_href_end       = strpos( $contents, $quote, $pingback_href_start );
@@ -2732,7 +2759,7 @@ function do_trackbacks( $post_id ) {
 	if ( $to_ping ) {
 		foreach ( (array) $to_ping as $tb_ping ) {
 			$tb_ping = trim( $tb_ping );
-			if ( ! in_array( $tb_ping, $pinged ) ) {
+			if ( ! in_array( $tb_ping, $pinged, true ) ) {
 				trackback( $tb_ping, $post_title, $excerpt, $post->ID );
 				$pinged[] = $tb_ping;
 			} else {
@@ -2763,7 +2790,7 @@ function generic_ping( $post_id = 0 ) {
 	$services = explode( "\n", $services );
 	foreach ( (array) $services as $service ) {
 		$service = trim( $service );
-		if ( '' != $service ) {
+		if ( '' !== $service ) {
 			weblog_ping( $service );
 		}
 	}
@@ -2802,27 +2829,32 @@ function pingback( $content, $post_id ) {
 	// Parsing the post, external links (if any) are stored in the $post_links array
 	$post_links_temp = wp_extract_urls( $content );
 
-	// Step 2.
-	// Walking thru the links array
-	// first we get rid of links pointing to sites, not to specific files
-	// Example:
-	// http://dummy-weblog.org
-	// http://dummy-weblog.org/
-	// http://dummy-weblog.org/post.php
-	// We don't wanna ping first and second types, even if they have a valid <link/>
-
-	foreach ( (array) $post_links_temp as $link_test ) :
-		if ( ! in_array( $link_test, $pung ) && ( url_to_postid( $link_test ) != $post->ID ) // If we haven't pung it already and it isn't a link to itself
-				&& ! is_local_attachment( $link_test ) ) : // Also, let's never ping local attachments.
-			if ( $test = @parse_url( $link_test ) ) {
+	/*
+	 * Step 2.
+	 * Walking through the links array.
+	 * First we get rid of links pointing to sites, not to specific files.
+	 * Example:
+	 * http://dummy-weblog.org
+	 * http://dummy-weblog.org/
+	 * http://dummy-weblog.org/post.php
+	 * We don't wanna ping first and second types, even if they have a valid <link/>.
+	 */
+	foreach ( (array) $post_links_temp as $link_test ) {
+		// If we haven't pung it already and it isn't a link to itself.
+		if ( ! in_array( $link_test, $pung, true ) && ( url_to_postid( $link_test ) != $post->ID )
+			// Also, let's never ping local attachments.
+			&& ! is_local_attachment( $link_test )
+		) {
+			$test = @parse_url( $link_test );
+			if ( $test ) {
 				if ( isset( $test['query'] ) ) {
 					$post_links[] = $link_test;
-				} elseif ( isset( $test['path'] ) && ( $test['path'] != '/' ) && ( $test['path'] != '' ) ) {
+				} elseif ( isset( $test['path'] ) && ( '/' !== $test['path'] ) && ( '' !== $test['path'] ) ) {
 					$post_links[] = $link_test;
 				}
 			}
-		endif;
-	endforeach;
+		}
+	}
 
 	$post_links = array_unique( $post_links );
 	/**
@@ -2939,8 +2971,8 @@ function weblog_ping( $server = '', $path = '' ) {
 	include_once ABSPATH . WPINC . '/class-IXR.php';
 	include_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 
-	// using a timeout of 3 seconds should be enough to cover slow servers
-	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' == $path ) ) ? false : $path ) );
+	// Using a timeout of 3 seconds should be enough to cover slow servers.
+	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' === $path ) ) ? false : $path ) );
 	$client->timeout    = 3;
 	$client->useragent .= ' -- ' . classicpress_user_agent();
 
@@ -2978,7 +3010,7 @@ function pingback_ping_source_uri( $source_uri ) {
  * @return IXR_Error
  */
 function xmlrpc_pingback_error( $ixr_error ) {
-	if ( $ixr_error->code === 48 ) {
+	if ( 48 === $ixr_error->code ) {
 		return $ixr_error;
 	}
 	return new IXR_Error( 0, '' );
@@ -3090,7 +3122,7 @@ function _close_comments_for_old_posts( $posts, $query ) {
 	 * @param array $post_types An array of registered post types. Default array with 'post'.
 	 */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $posts[0]->post_type, $post_types ) ) {
+	if ( ! in_array( $posts[0]->post_type, $post_types, true ) ) {
 		return $posts;
 	}
 
@@ -3135,7 +3167,7 @@ function _close_comments_for_old_post( $open, $post_id ) {
 
 	/** This filter is documented in wp-includes/comment.php */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
-	if ( ! in_array( $post->post_type, $post_types ) ) {
+	if ( ! in_array( $post->post_type, $post_types, true ) ) {
 		return $open;
 	}
 
@@ -3174,8 +3206,13 @@ function _close_comments_for_old_post( $open, $post_id ) {
  */
 function wp_handle_comment_submission( $comment_data ) {
 
-	$comment_post_ID = $comment_parent = $user_ID = 0;
-	$comment_author  = $comment_author_email = $comment_author_url = $comment_content = null;
+	$comment_post_ID      = 0;
+	$comment_parent       = 0;
+	$user_ID              = 0;
+	$comment_author       = null;
+	$comment_author_email = null;
+	$comment_author_url   = null;
+	$comment_content      = null;
 
 	if ( isset( $comment_data['comment_post_ID'] ) ) {
 		$comment_post_ID = (int) $comment_data['comment_post_ID'];
@@ -3216,7 +3253,7 @@ function wp_handle_comment_submission( $comment_data ) {
 	// get_post_status() will get the parent status for attachments.
 	$status = get_post_status( $post );
 
-	if ( ( 'private' == $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
+	if ( ( 'private' === $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
 		return new WP_Error( 'comment_id_not_found' );
 	}
 
@@ -3235,7 +3272,7 @@ function wp_handle_comment_submission( $comment_data ) {
 
 		return new WP_Error( 'comment_closed', __( 'Sorry, comments are closed for this item.' ), 403 );
 
-	} elseif ( 'trash' == $status ) {
+	} elseif ( 'trash' === $status ) {
 
 		/**
 		 * Fires when a comment is attempted on a trashed post.

@@ -118,7 +118,7 @@ foreach ( array( 'the_content', 'the_title', 'wp_title' ) as $filter ) {
 add_filter( 'comment_text', 'capital_P_dangit', 31 );
 
 // Format titles
-foreach ( array( 'single_post_title', 'single_cat_title', 'single_tag_title', 'single_month_title', 'nav_menu_attr_title', 'nav_menu_description' ) as $filter ) {
+foreach ( array( 'single_post_title', 'single_cat_title', 'single_tag_title', 'nav_menu_attr_title', 'nav_menu_description' ) as $filter ) {
 	add_filter( $filter, 'wptexturize' );
 	add_filter( $filter, 'strip_tags' );
 }
