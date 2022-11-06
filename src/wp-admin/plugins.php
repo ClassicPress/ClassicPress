@@ -43,7 +43,7 @@ if ( $action ) {
 
 			$result = activate_plugin( $plugin, self_admin_url( 'plugins.php?error=true&plugin=' . urlencode( $plugin ) ), is_network_admin() );
 			if ( is_wp_error( $result ) ) {
-				if ( 'unexpected_output' == $result->get_error_code() ) {
+				if ( 'unexpected_output' === $result->get_error_code() ) {
 					$redirect = self_admin_url( 'plugins.php?error=true&charsout=' . strlen( $result->get_error_data() ) . '&plugin=' . urlencode( $plugin ) . "&plugin_status=$status&paged=$page&s=$s" );
 					wp_redirect( add_query_arg( '_error_nonce', wp_create_nonce( 'plugin-activation-error_' . $plugin ), $redirect ) );
 					exit;
@@ -62,9 +62,10 @@ if ( $action ) {
 				update_site_option( 'recently_activated', $recent );
 			}
 
-			if ( isset( $_GET['from'] ) && 'import' == $_GET['from'] ) {
-				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) ); // overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix
-			} elseif ( isset( $_GET['from'] ) && 'press-this' == $_GET['from'] ) {
+			if ( isset( $_GET['from'] ) && 'import' === $_GET['from'] ) {
+				// Overrides the ?error=true one above and redirects to the Imports page, stripping the -importer suffix.
+				wp_redirect( self_admin_url( 'import.php?import=' . str_replace( '-importer', '', dirname( $plugin ) ) ) );
+			} elseif ( isset( $_GET['from'] ) && 'press-this' === $_GET['from'] ) {
 				wp_redirect( self_admin_url( 'press-this.php' ) );
 			} else {
 				wp_redirect( self_admin_url( "plugins.php?activate=true&plugin_status=$status&paged=$page&s=$s" ) ); // overrides the ?error=true one above
@@ -290,7 +291,7 @@ if ( $action ) {
 				foreach ( (array) $plugins as $plugin ) {
 					$plugin_slug = dirname( $plugin );
 
-					if ( '.' == $plugin_slug ) {
+					if ( '.' === $plugin_slug ) {
 						$data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 						if ( $data ) {
 							$plugin_info[ $plugin ]                     = $data;
@@ -543,7 +544,7 @@ elseif ( isset( $_GET['deleted'] ) ) :
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Plugin <strong>deactivated</strong>.' ); ?></p></div>
 <?php elseif ( isset( $_GET['deactivate-multi'] ) ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'Selected plugins <strong>deactivated</strong>.' ); ?></p></div>
-<?php elseif ( 'update-selected' == $action ) : ?>
+<?php elseif ( 'update-selected' === $action ) : ?>
 	<div id="message" class="updated notice is-dismissible"><p><?php _e( 'All selected plugins are up to date.' ); ?></p></div>
 <?php endif; ?>
 

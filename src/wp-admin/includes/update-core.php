@@ -244,7 +244,7 @@ function update_core( $from, $to ) {
 
 		if ( is_array( $checksums ) ) {
 			foreach ( $checksums as $file => $checksum ) {
-				if ( 'wp-content' == substr( $file, 0, 10 ) ) {
+				if ( 'wp-content' === substr( $file, 0, 10 ) ) {
 					continue;
 				}
 				if ( ! file_exists( ABSPATH . $file ) ) {
@@ -253,7 +253,7 @@ function update_core( $from, $to ) {
 				if ( ! file_exists( $working_dir_local . $file ) ) {
 					continue;
 				}
-				if ( '.' === dirname( $file ) && in_array( pathinfo( $file, PATHINFO_EXTENSION ), array( 'html', 'txt' ) ) ) {
+				if ( '.' === dirname( $file ) && in_array( pathinfo( $file, PATHINFO_EXTENSION ), array( 'html', 'txt' ), true ) ) {
 					continue;
 				}
 				if ( md5_file( ABSPATH . $file ) === $checksum ) {
@@ -318,13 +318,13 @@ function update_core( $from, $to ) {
 	$failed = array();
 	if ( isset( $checksums ) && is_array( $checksums ) ) {
 		foreach ( $checksums as $file => $checksum ) {
-			if ( 'wp-content' == substr( $file, 0, 10 ) ) {
+			if ( 'wp-content' === substr( $file, 0, 10 ) ) {
 				continue;
 			}
 			if ( ! file_exists( $working_dir_local . $file ) ) {
 				continue;
 			}
-			if ( '.' === dirname( $file ) && in_array( pathinfo( $file, PATHINFO_EXTENSION ), array( 'html', 'txt' ) ) ) {
+			if ( '.' === dirname( $file ) && in_array( pathinfo( $file, PATHINFO_EXTENSION ), array( 'html', 'txt' ), true ) ) {
 				$skip[] = $file;
 				continue;
 			}
@@ -390,8 +390,8 @@ function update_core( $from, $to ) {
 	// Remove maintenance file, we're done with potential site-breaking changes
 	$wp_filesystem->delete( $maintenance_file );
 
-	// WP-3.5 -> WP-3.5+ - an empty twentytwelve directory was created upon upgrade to WP-3.5 for some users, preventing installation of Twenty Twelve.
-	if ( '3.5' == $old_wp_version ) {
+	// 3.5 -> 3.5+ - an empty twentytwelve directory was created upon upgrade to 3.5 for some users, preventing installation of Twenty Twelve.
+	if ( '3.5' === $old_wp_version ) {
 		if ( is_dir( WP_CONTENT_DIR . '/themes/twentytwelve' ) && ! file_exists( WP_CONTENT_DIR . '/themes/twentytwelve/style.css' ) ) {
 			$wp_filesystem->delete( $wp_filesystem->wp_themes_dir() . 'twentytwelve/' );
 		}
@@ -404,18 +404,20 @@ function update_core( $from, $to ) {
 		foreach ( (array) $_new_bundled_files as $file => $introduced_version ) {
 			// If a $development_build or if $introduced version is greater than what the site was previously running
 			if ( $development_build || version_compare( $introduced_version, $old_wp_version, '>' ) ) {
-				$directory             = ( '/' == $file[ strlen( $file ) - 1 ] );
-				list($type, $filename) = explode( '/', $file, 2 );
+				$directory = ( '/' === $file[ strlen( $file ) - 1 ] );
+
+				list( $type, $filename ) = explode( '/', $file, 2 );
 
 				// Check to see if the bundled items exist before attempting to copy them
 				if ( ! $wp_filesystem->exists( $from . $distro . 'wp-content/' . $file ) ) {
 					continue;
 				}
 
-				if ( 'plugins' == $type ) {
+				if ( 'plugins' === $type ) {
 					$dest = $wp_filesystem->wp_plugins_dir();
-				} elseif ( 'themes' == $type ) {
-					$dest = trailingslashit( $wp_filesystem->wp_themes_dir() ); // Back-compat, ::wp_themes_dir() did not return trailingslash'd pre-3.2
+				} elseif ( 'themes' === $type ) {
+					// Back-compat, ::wp_themes_dir() did not return trailingslash'd pre-3.2.
+					$dest = trailingslashit( $wp_filesystem->wp_themes_dir() );
 				} else {
 					continue;
 				}
@@ -650,11 +652,11 @@ function _redirect_to_about_wordpress( $new_version ) {
 	}
 
 	// Ensure we only run this on the update-core.php page. The Core_Upgrader may be used in other contexts.
-	if ( 'update-core.php' != $pagenow ) {
+	if ( 'update-core.php' !== $pagenow ) {
 		return;
 	}
 
-	if ( 'do-core-upgrade' != $action && 'do-core-reinstall' != $action ) {
+	if ( 'do-core-upgrade' !== $action && 'do-core-reinstall' !== $action ) {
 		return;
 	}
 
@@ -675,8 +677,8 @@ window.location = 'about.php?updated';
 	<?php
 
 	// Include admin-footer.php and exit.
-	include ABSPATH . 'wp-admin/admin-footer.php';
-	exit();
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
+	exit;
 }
 
 /**

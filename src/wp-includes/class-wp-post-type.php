@@ -444,7 +444,9 @@ final class WP_Post_Type {
 		}
 
 		// Back compat with quirky handling in version 3.0. https://core.trac.wordpress.org/ticket/14122.
-		if ( empty( $args['capabilities'] ) && null === $args['map_meta_cap'] && in_array( $args['capability_type'], array( 'post', 'page' ) ) ) {
+		if ( empty( $args['capabilities'] )
+			&& null === $args['map_meta_cap'] && in_array( $args['capability_type'], array( 'post', 'page' ), true )
+		) {
 			$args['map_meta_cap'] = true;
 		}
 
@@ -473,7 +475,7 @@ final class WP_Post_Type {
 			}
 		}
 
-		if ( false !== $args['rewrite'] && ( is_admin() || '' != get_option( 'permalink_structure' ) ) ) {
+		if ( false !== $args['rewrite'] && ( is_admin() || get_option( 'permalink_structure' ) ) ) {
 			if ( ! is_array( $args['rewrite'] ) ) {
 				$args['rewrite'] = array();
 			}
@@ -536,7 +538,7 @@ final class WP_Post_Type {
 			$wp->add_query_var( $this->query_var );
 		}
 
-		if ( false !== $this->rewrite && ( is_admin() || '' != get_option( 'permalink_structure' ) ) ) {
+		if ( false !== $this->rewrite && ( is_admin() || get_option( 'permalink_structure' ) ) ) {
 			if ( $this->hierarchical ) {
 				add_rewrite_tag( "%$this->name%", '(.+?)', $this->query_var ? "{$this->query_var}=" : "post_type=$this->name&pagename=" );
 			} else {

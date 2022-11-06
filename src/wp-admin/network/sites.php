@@ -108,13 +108,13 @@ if ( isset( $_GET['action'] ) ) {
 					<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 					<input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr( wp_get_referer() ); ?>" />
 					<?php wp_nonce_field( $site_action . '_' . $id, '_wpnonce', false ); ?>
-					<p><?php echo sprintf( $manage_actions[ $site_action ], $site_address ); ?></p>
+					<p><?php printf( $manage_actions[ $site_action ], $site_address ); ?></p>
 					<?php submit_button( __( 'Confirm' ), 'primary' ); ?>
 				</form>
 			</div>
 		<?php
 		require_once ABSPATH . 'wp-admin/admin-footer.php';
-		exit();
+		exit;
 	} elseif ( array_key_exists( $_GET['action'], $manage_actions ) ) {
 		$action = $_GET['action'];
 		check_admin_referer( $action . '_' . $id );
@@ -194,7 +194,7 @@ if ( isset( $_GET['action'] ) ) {
 								</div>
 								<?php
 								require_once ABSPATH . 'wp-admin/admin-footer.php';
-								exit();
+								exit;
 							break;
 
 							case 'spam':
@@ -207,19 +207,23 @@ if ( isset( $_GET['action'] ) ) {
 						wp_die( __( 'Sorry, you are not allowed to change the current site.' ) );
 					}
 				}
+
 				if ( ! in_array( $doaction, array( 'delete', 'spam', 'notspam' ), true ) ) {
 					$redirect_to = wp_get_referer();
 					$blogs       = (array) $_POST['allblogs'];
+
 					/** This action is documented in wp-admin/network/site-themes.php */
 					$redirect_to = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $redirect_to, $doaction, $blogs, $id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+
 					wp_safe_redirect( $redirect_to );
-					exit();
+					exit;
 				}
 			} else {
 				$location = network_admin_url( 'sites.php' );
 				if ( ! empty( $_REQUEST['paged'] ) ) {
 					$location = add_query_arg( 'paged', (int) $_REQUEST['paged'], $location );
 				}
+
 				wp_redirect( $location );
 				exit();
 			}
@@ -252,6 +256,7 @@ if ( isset( $_GET['action'] ) ) {
 			 * @param string $id The ID of the site being deactivated.
 			 */
 			do_action( 'deactivate_blog', $id );
+
 			update_blog_status( $id, 'deleted', '1' );
 			break;
 
@@ -272,7 +277,7 @@ if ( isset( $_GET['action'] ) ) {
 
 	if ( ! empty( $updated_action ) ) {
 		wp_safe_redirect( add_query_arg( array( 'updated' => $updated_action ), wp_get_referer() ) );
-		exit();
+		exit;
 	}
 }
 

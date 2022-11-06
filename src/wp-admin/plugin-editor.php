@@ -11,7 +11,7 @@ require_once dirname( __FILE__ ) . '/admin.php';
 
 if ( is_multisite() && ! is_network_admin() ) {
 	wp_redirect( network_admin_url( 'plugin-editor.php' ) );
-	exit();
+	exit;
 }
 
 if ( ! current_user_can( 'edit_plugins' ) ) {
@@ -110,8 +110,8 @@ if ( ! is_file( $real_file ) ) {
 	// Get the extension of the file
 	if ( preg_match( '/\.([^.]+)$/', $real_file, $matches ) ) {
 		$ext = strtolower( $matches[1] );
-		// If extension is not in the acceptable list, skip it
-		if ( ! in_array( $ext, $editable_extensions ) ) {
+		// If extension is not in the acceptable list, skip it.
+		if ( ! in_array( $ext, $editable_extensions, true ) ) {
 			wp_die( sprintf( '<p>%s</p>', __( 'Files of this type are not editable.' ) ) );
 		}
 	}
@@ -160,7 +160,7 @@ if ( ! is_file( $real_file ) ) {
 		$content = file_get_contents( $real_file );
 	}
 
-	if ( '.php' == substr( $real_file, strrpos( $real_file, '.' ) ) ) {
+	if ( '.php' === substr( $real_file, strrpos( $real_file, '.' ) ) ) {
 		$functions = wp_doc_link_parse( $content );
 
 		if ( ! empty( $functions ) ) {
@@ -195,19 +195,19 @@ if ( ! is_file( $real_file ) ) {
 	<?php
 	if ( is_plugin_active( $plugin ) ) {
 		if ( is_writeable( $real_file ) ) {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Editing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
+			/* translators: %s: Plugin file name. */
+			printf( __( 'Editing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
 		} else {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Browsing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
+			/* translators: %s: Plugin file name. */
+			printf( __( 'Browsing %s (active)' ), '<strong>' . esc_html( $file ) . '</strong>' );
 		}
 	} else {
 		if ( is_writeable( $real_file ) ) {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Editing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
+			/* translators: %s: Plugin file name. */
+			printf( __( 'Editing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
 		} else {
-			/* translators: %s: plugin file name */
-			echo sprintf( __( 'Browsing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
+			/* translators: %s: Plugin file name. */
+			printf( __( 'Browsing %s (inactive)' ), '<strong>' . esc_html( $file ) . '</strong>' );
 		}
 	}
 	?>
@@ -220,7 +220,7 @@ if ( ! is_file( $real_file ) ) {
 <?php
 foreach ( $plugins as $plugin_key => $a_plugin ) {
 	$plugin_name = $a_plugin['Name'];
-	if ( $plugin_key == $plugin ) {
+	if ( $plugin_key === $plugin ) {
 		$selected = " selected='selected'";
 	} else {
 		$selected = '';
@@ -243,7 +243,7 @@ foreach ( $plugins as $plugin_key => $a_plugin ) {
 	<?php
 	$plugin_editable_files = array();
 	foreach ( $plugin_files as $plugin_file ) {
-		if ( preg_match( '/\.([^.]+)$/', $plugin_file, $matches ) && in_array( $matches[1], $editable_extensions ) ) {
+		if ( preg_match( '/\.([^.]+)$/', $plugin_file, $matches ) && in_array( $matches[1], $editable_extensions, true ) ) {
 			$plugin_editable_files[] = $plugin_file;
 		}
 	}
@@ -269,7 +269,7 @@ foreach ( $plugins as $plugin_key => $a_plugin ) {
 		<?php endif; ?>
 <?php if ( is_writeable( $real_file ) ) : ?>
 	<div class="editor-notices">
-		<?php if ( in_array( $plugin, (array) get_option( 'active_plugins', array() ) ) ) { ?>
+		<?php if ( in_array( $plugin, (array) get_option( 'active_plugins', array() ), true ) ) { ?>
 			<div class="notice notice-warning inline active-plugin-edit-warning">
 			<p><?php _e( '<strong>Warning:</strong> Making changes to active plugins is not recommended.' ); ?></p>
 		</div>

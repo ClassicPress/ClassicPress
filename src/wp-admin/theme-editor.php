@@ -11,7 +11,7 @@ require_once dirname( __FILE__ ) . '/admin.php';
 
 if ( is_multisite() && ! is_network_admin() ) {
 	wp_redirect( network_admin_url( 'theme-editor.php' ) );
-	exit();
+	exit;
 }
 
 if ( ! current_user_can( 'edit_themes' ) ) {
@@ -66,7 +66,7 @@ if ( ! $theme->exists() ) {
 	wp_die( __( 'The requested theme does not exist.' ) );
 }
 
-if ( $theme->errors() && 'theme_no_stylesheet' == $theme->errors()->get_error_code() ) {
+if ( $theme->errors() && 'theme_no_stylesheet' === $theme->errors()->get_error_code() ) {
 	wp_die( __( 'The requested theme does not exist.' ) . ' ' . $theme->errors()->get_error_message() );
 }
 
@@ -158,7 +158,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		$f       = fopen( $file, 'r' );
 		$content = fread( $f, filesize( $file ) );
 
-		if ( '.php' == substr( $file, strrpos( $file, '.' ) ) ) {
+		if ( '.php' === substr( $file, strrpos( $file, '.' ) ) ) {
 			$functions = wp_doc_link_parse( $content );
 
 			$docs_select  = '<select name="docs-list" id="docs-list">';
@@ -173,9 +173,9 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 	}
 
 	$file_description = get_file_description( $relative_file );
-	$file_show        = array_search( $file, array_filter( $allowed_files ) );
+	$file_show        = array_search( $file, array_filter( $allowed_files ), true );
 	$description      = esc_html( $file_description );
-	if ( $file_description != $file_show ) {
+	if ( $file_description !== $file_show ) {
 		$description .= ' <span>(' . esc_html( $file_show ) . ')</span>';
 	}
 	?>
@@ -197,8 +197,8 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 		<p><strong><?php _e( 'Did you know?' ); ?></strong></p>
 		<p>
 			<?php
-			echo sprintf(
-				/* translators: %s: link to Custom CSS section in the Customizer */
+			printf(
+				/* translators: %s: Link to Custom CSS section in the Customizer. */
 				__( 'There&#8217;s no need to change your CSS here &mdash; you can edit and live preview CSS changes in the <a href="%s">built-in CSS editor</a>.' ),
 				esc_url( add_query_arg( 'autofocus[section]', 'custom_css', admin_url( 'customize.php' ) ) )
 			);
@@ -221,16 +221,16 @@ if ( $description ) {
 	<form action="theme-editor.php" method="get">
 		<strong><label for="theme"><?php _e( 'Select theme to edit:' ); ?> </label></strong>
 		<select name="theme" id="theme">
-<?php
-foreach ( wp_get_themes( array( 'errors' => null ) ) as $a_stylesheet => $a_theme ) {
-	if ( $a_theme->errors() && 'theme_no_stylesheet' == $a_theme->errors()->get_error_code() ) {
-		continue;
-	}
+		<?php
+		foreach ( wp_get_themes( array( 'errors' => null ) ) as $a_stylesheet => $a_theme ) {
+			if ( $a_theme->errors() && 'theme_no_stylesheet' === $a_theme->errors()->get_error_code() ) {
+				continue;
+			}
 
-	$selected = $a_stylesheet == $stylesheet ? ' selected="selected"' : '';
-	echo "\n\t" . '<option value="' . esc_attr( $a_stylesheet ) . '"' . $selected . '>' . $a_theme->display( 'Name' ) . '</option>';
-}
-?>
+			$selected = ( $a_stylesheet === $stylesheet ) ? ' selected="selected"' : '';
+			echo "\n\t" . '<option value="' . esc_attr( $a_stylesheet ) . '"' . $selected . '>' . $a_theme->display( 'Name' ) . '</option>';
+		}
+		?>
 		</select>
 		<?php submit_button( __( 'Select' ), '', 'Submit', false ); ?>
 	</form>
@@ -292,7 +292,7 @@ else :
 
 	<div>
 		<div class="editor-notices">
-			<?php if ( is_child_theme() && $theme->get_stylesheet() == get_template() ) : ?>
+				<?php if ( is_child_theme() && $theme->get_stylesheet() === get_template() ) : ?>
 				<div class="notice notice-warning inline">
 					<p>
 						<?php
@@ -341,15 +341,22 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) :
 				<h1><?php _e( 'Heads up!' ); ?></h1>
 				<p>
 					<?php
-					echo sprintf(
-						/* translators: %s: Codex URL */
-						__( 'You appear to be making direct edits to your theme in the ClassicPress dashboard. We recommend that you don&#8217;t! Editing your theme directly could break your site and your changes may be lost in future updates. If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
-						esc_url( __( 'https://codex.wordpress.org/Child_Themes' ) )
-					);
+					_e( 'You appear to be making direct edits to your theme in the ClassicPress dashboard. We recommend that you don&#8217;t! Editing your theme directly could break your site and your changes may be lost in future updates.' );
+					?>
+					</p>
+					<?php
+					if ( ! $theme->parent() ) {
+						echo '<p>';
+						printf(
+							/* translators: %s: Link to documentation on child themes. */
+							__( 'If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
+							esc_url( __( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' ) )
+						);
+					}
 					?>
 				</p>
 				<p><?php _e( 'If you decide to go ahead with direct edits anyway, use a file manager to create a copy with a new name and hang on to the original. That way, you can re-enable a functional version if something goes wrong.' ); ?></p>
-				
+
 			</div>
 			<p>
 				<a class="button file-editor-warning-go-back" href="<?php echo esc_url( $return_url ); ?>"><?php _e( 'Go back' ); ?></a>

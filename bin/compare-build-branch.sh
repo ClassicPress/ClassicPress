@@ -46,7 +46,7 @@ npm install
 grunt build
 
 mv build/ build-branch/
-cp -var build-branch/ build-branch-unminified/
+cp -vaR build-branch/ build-branch-unminified/
 
 unminify_build_dir build-branch-unminified/
 
@@ -59,7 +59,7 @@ rm -rf node_modules/
 npm install
 grunt build
 
-cp -var build/ build-unminified/
+cp -vaR build/ build-unminified/
 
 unminify_build_dir build-unminified/
 
