@@ -45,7 +45,7 @@ function wp_get_themes( $args = array() ) {
 		$current_theme = get_stylesheet();
 		if ( isset( $theme_directories[ $current_theme ] ) ) {
 			$root_of_current_theme = get_raw_theme_root( $current_theme );
-			if ( ! in_array( $root_of_current_theme, $wp_theme_directories ) ) {
+			if ( ! in_array( $root_of_current_theme, $wp_theme_directories, true ) ) {
 				$root_of_current_theme = WP_CONTENT_DIR . $root_of_current_theme;
 			}
 			$theme_directories[ $current_theme ]['theme_root'] = $root_of_current_theme;
@@ -115,7 +115,7 @@ function wp_get_theme( $stylesheet = null, $theme_root = null ) {
 		$theme_root = get_raw_theme_root( $stylesheet );
 		if ( false === $theme_root ) {
 			$theme_root = WP_CONTENT_DIR . '/themes';
-		} elseif ( ! in_array( $theme_root, (array) $wp_theme_directories ) ) {
+		} elseif ( ! in_array( $theme_root, (array) $wp_theme_directories, true ) ) {
 			$theme_root = WP_CONTENT_DIR . $theme_root;
 		}
 	}
@@ -407,7 +407,7 @@ function register_theme_directory( $directory ) {
 	}
 
 	$untrailed = untrailingslashit( $directory );
-	if ( ! empty( $untrailed ) && ! in_array( $untrailed, $wp_theme_directories ) ) {
+	if ( ! empty( $untrailed ) && ! in_array( $untrailed, $wp_theme_directories, true ) ) {
 		$wp_theme_directories[] = $untrailed;
 	}
 
@@ -576,7 +576,7 @@ function get_theme_root( $stylesheet_or_template = false ) {
 		if ( $theme_root ) {
 			// Always prepend WP_CONTENT_DIR unless the root currently registered as a theme directory.
 			// This gives relative theme roots the benefit of the doubt when things go haywire.
-			if ( ! in_array( $theme_root, (array) $wp_theme_directories ) ) {
+			if ( ! in_array( $theme_root, (array) $wp_theme_directories, true ) ) {
 				$theme_root = WP_CONTENT_DIR . $theme_root;
 			}
 		}
@@ -619,7 +619,7 @@ function get_theme_root_uri( $stylesheet_or_template = false, $theme_root = fals
 	}
 
 	if ( $stylesheet_or_template && $theme_root ) {
-		if ( in_array( $theme_root, (array) $wp_theme_directories ) ) {
+		if ( in_array( $theme_root, (array) $wp_theme_directories, true ) ) {
 			// Absolute path. Make an educated guess. YMMV -- but note the filter below.
 			if ( 0 === strpos( $theme_root, WP_CONTENT_DIR ) ) {
 				$theme_root_uri = content_url( str_replace( WP_CONTENT_DIR, '', $theme_root ) );
@@ -1139,7 +1139,7 @@ function has_header_image() {
 function get_header_image() {
 	$url = get_theme_mod( 'header_image', get_theme_support( 'custom-header', 'default-image' ) );
 
-	if ( 'remove-header' == $url ) {
+	if ( 'remove-header' === $url ) {
 		return false;
 	}
 
@@ -1248,10 +1248,10 @@ function _get_random_header_data() {
 		$header_image_mod = get_theme_mod( 'header_image', '' );
 		$headers          = array();
 
-		if ( 'random-uploaded-image' == $header_image_mod ) {
+		if ( 'random-uploaded-image' === $header_image_mod ) {
 			$headers = get_uploaded_header_images();
 		} elseif ( ! empty( $_wp_default_headers ) ) {
-			if ( 'random-default-image' == $header_image_mod ) {
+			if ( 'random-default-image' === $header_image_mod ) {
 				$headers = $_wp_default_headers;
 			} else {
 				if ( current_theme_supports( 'custom-header', 'random-default' ) ) {
@@ -1269,6 +1269,7 @@ function _get_random_header_data() {
 		$_wp_random_header->url           = sprintf( $_wp_random_header->url, get_template_directory_uri(), get_stylesheet_directory_uri() );
 		$_wp_random_header->thumbnail_url = sprintf( $_wp_random_header->thumbnail_url, get_template_directory_uri(), get_stylesheet_directory_uri() );
 	}
+
 	return $_wp_random_header;
 }
 
@@ -1281,9 +1282,11 @@ function _get_random_header_data() {
  */
 function get_random_header_image() {
 	$random_image = _get_random_header_data();
+
 	if ( empty( $random_image->url ) ) {
 		return '';
 	}
+
 	return $random_image->url;
 }
 
@@ -1302,14 +1305,17 @@ function get_random_header_image() {
 function is_random_header_image( $type = 'any' ) {
 	$header_image_mod = get_theme_mod( 'header_image', get_theme_support( 'custom-header', 'default-image' ) );
 
-	if ( 'any' == $type ) {
-		if ( 'random-default-image' == $header_image_mod || 'random-uploaded-image' == $header_image_mod || ( '' != get_random_header_image() && empty( $header_image_mod ) ) ) {
+	if ( 'any' === $type ) {
+		if ( 'random-default-image' === $header_image_mod
+			|| 'random-uploaded-image' === $header_image_mod
+			|| ( '' !== get_random_header_image() && empty( $header_image_mod ) )
+		) {
 			return true;
 		}
 	} else {
-		if ( "random-$type-image" == $header_image_mod ) {
+		if ( "random-$type-image" === $header_image_mod ) {
 			return true;
-		} elseif ( 'default' == $type && empty( $header_image_mod ) && '' != get_random_header_image() ) {
+		} elseif ( 'default' === $type && empty( $header_image_mod ) && '' !== get_random_header_image() ) {
 			return true;
 		}
 	}
@@ -1324,6 +1330,7 @@ function is_random_header_image( $type = 'any' ) {
  */
 function header_image() {
 	$image = get_header_image();
+
 	if ( $image ) {
 		echo esc_url( $image );
 	}
@@ -1518,6 +1525,7 @@ function get_header_video_url() {
  */
 function the_header_video_url() {
 	$video = get_header_video_url();
+
 	if ( $video ) {
 		echo esc_url( $video );
 	}
@@ -2753,7 +2761,7 @@ function get_theme_support( $feature ) {
  */
 function remove_theme_support( $feature ) {
 	// Blacklist: for internal registrations not used directly by themes.
-	if ( in_array( $feature, array( 'editor-style', 'widgets', 'menus' ) ) ) {
+	if ( in_array( $feature, array( 'editor-style', 'widgets', 'menus' ), true ) ) {
 		return false;
 	}
 
@@ -2831,7 +2839,7 @@ function _remove_theme_support( $feature ) {
 function current_theme_supports( $feature ) {
 	global $_wp_theme_features;
 
-	if ( 'custom-header-uploads' == $feature ) {
+	if ( 'custom-header-uploads' === $feature ) {
 		return current_theme_supports( 'custom-header', 'uploads' );
 	}
 
@@ -2848,14 +2856,16 @@ function current_theme_supports( $feature ) {
 
 	switch ( $feature ) {
 		case 'post-thumbnails':
-			// post-thumbnails can be registered for only certain content/post types by passing
-			// an array of types to add_theme_support(). If no array was passed, then
-			// any type is accepted
-			if ( true === $_wp_theme_features[ $feature ] ) {  // Registered for all types
+			/*
+			 * post-thumbnails can be registered for only certain content/post types
+			 * by passing an array of types to add_theme_support().
+			 * If no array was passed, then any type is accepted.
+			 */
+			if ( true === $_wp_theme_features[ $feature ] ) {  // Registered for all types.
 				return true;
 			}
 			$content_type = $args[0];
-			return in_array( $content_type, $_wp_theme_features[ $feature ][0] );
+			return in_array( $content_type, $_wp_theme_features[ $feature ][0], true );
 
 		case 'html5':
 		case 'post-formats':
@@ -2865,7 +2875,7 @@ function current_theme_supports( $feature ) {
 			// Specific areas of HTML5 support *must* be passed via an array to add_theme_support()
 
 			$type = $args[0];
-			return in_array( $type, $_wp_theme_features[ $feature ][0] );
+			return in_array( $type, $_wp_theme_features[ $feature ][0], true );
 
 		case 'custom-logo':
 		case 'custom-header':
@@ -3001,11 +3011,11 @@ function check_theme_switched() {
  */
 function _wp_customize_include() {
 
-	$is_customize_admin_page = ( is_admin() && 'customize.php' == basename( $_SERVER['PHP_SELF'] ) );
+	$is_customize_admin_page = ( is_admin() && 'customize.php' === basename( $_SERVER['PHP_SELF'] ) );
 	$should_include          = (
 		$is_customize_admin_page
 		||
-		( isset( $_REQUEST['wp_customize'] ) && 'on' == $_REQUEST['wp_customize'] )
+		( isset( $_REQUEST['wp_customize'] ) && 'on' === $_REQUEST['wp_customize'] )
 		||
 		( ! empty( $_GET['customize_changeset_uuid'] ) || ! empty( $_POST['customize_changeset_uuid'] ) )
 	);

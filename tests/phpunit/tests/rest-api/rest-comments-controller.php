@@ -2703,14 +2703,16 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 					'content'           => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 					'author_name'       => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 					'author_user_agent' => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
+					'author'            => self::$editor_id,
 				),
 				array(
-					'content'           => array(
+					'content' => array(
 						'raw'      => 'div <strong>strong</strong> oh noes',
 						'rendered' => '<p>div <strong>strong</strong> oh noes</p>',
 					),
 					'author_name'       => 'div strong',
 					'author_user_agent' => 'div strong',
+					'author'            => self::$editor_id,
 				)
 			);
 		} else {
@@ -2720,14 +2722,16 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 					'content'           => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 					'author_name'       => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 					'author_user_agent' => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
+					'author'            => self::$editor_id,
 				),
 				array(
-					'content'           => array(
+					'content' => array(
 						'raw'      => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 						'rendered' => "<div>div</div>\n<p> <strong>strong</strong> <script>oh noes</script></p>",
 					),
 					'author_name'       => 'div strong',
 					'author_user_agent' => 'div strong',
+					'author'            => self::$editor_id,
 				)
 			);
 		}
@@ -2741,14 +2745,16 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 				'content'           => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
 				'author_name'       => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
 				'author_user_agent' => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
+				'author'            => self::$superadmin_id,
 			),
 			array(
-				'content'           => array(
+				'content' => array(
 					'raw'      => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
 					'rendered' => '<p>\\\&#038;\\\ &amp; &invalid; < &lt; &amp;lt;' . "\n</p>",
 				),
 				'author_name'       => '\\\&amp;\\\ &amp; &amp;invalid; &lt; &lt; &amp;lt;',
 				'author_user_agent' => '\\\&\\\ &amp; &invalid; &lt; &lt; &amp;lt;',
+				'author'            => self::$superadmin_id,
 			)
 		);
 	}
@@ -2761,14 +2767,16 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 				'content'           => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 				'author_name'       => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 				'author_user_agent' => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
+				'author'            => self::$superadmin_id,
 			),
 			array(
-				'content'           => array(
+				'content' => array(
 					'raw'      => '<div>div</div> <strong>strong</strong> <script>oh noes</script>',
 					'rendered' => "<div>div</div>\n<p> <strong>strong</strong> <script>oh noes</script></p>",
 				),
 				'author_name'       => 'div strong',
 				'author_user_agent' => 'div strong',
+				'author'            => self::$superadmin_id,
 			)
 		);
 	}

@@ -105,7 +105,7 @@ class WP_Widget_Links extends WP_Widget {
 		}
 
 		$instance['orderby'] = 'name';
-		if ( in_array( $new_instance['orderby'], array( 'name', 'rating', 'id', 'rand' ) ) ) {
+		if ( in_array( $new_instance['orderby'], array( 'name', 'rating', 'id', 'rand' ), true ) ) {
 			$instance['orderby'] = $new_instance['orderby'];
 		}
 
@@ -147,13 +147,11 @@ class WP_Widget_Links extends WP_Widget {
 		<label for="<?php echo $this->get_field_id( 'category' ); ?>"><?php _e( 'Select Link Category:' ); ?></label>
 		<select class="widefat" id="<?php echo $this->get_field_id( 'category' ); ?>" name="<?php echo $this->get_field_name( 'category' ); ?>">
 		<option value=""><?php _ex( 'All Links', 'links widget' ); ?></option>
-		<?php
-		foreach ( $link_cats as $link_cat ) {
-			echo '<option value="' . intval( $link_cat->term_id ) . '"'
-				. selected( $instance['category'], $link_cat->term_id, false )
-				. '>' . $link_cat->name . "</option>\n";
-		}
-		?>
+				<?php foreach ( $link_cats as $link_cat ) : ?>
+					<option value="<?php echo intval( $link_cat->term_id ); ?>" <?php selected( $instance['category'], $link_cat->term_id ); ?>>
+						<?php echo esc_html( $link_cat->name ); ?>
+					</option>
+				<?php endforeach; ?>
 		</select>
 		<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><?php _e( 'Sort by:' ); ?></label>
 		<select name="<?php echo $this->get_field_name( 'orderby' ); ?>" id="<?php echo $this->get_field_id( 'orderby' ); ?>" class="widefat">
@@ -163,16 +161,24 @@ class WP_Widget_Links extends WP_Widget {
 			<option value="rand"<?php selected( $instance['orderby'], 'rand' ); ?>><?php _ex( 'Random', 'Links widget' ); ?></option>
 		</select>
 		</p>
+
 		<p>
 		<input class="checkbox" type="checkbox"<?php checked( $instance['images'], true ); ?> id="<?php echo $this->get_field_id( 'images' ); ?>" name="<?php echo $this->get_field_name( 'images' ); ?>" />
-		<label for="<?php echo $this->get_field_id( 'images' ); ?>"><?php _e( 'Show Link Image' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'images' ); ?>"><?php _e( 'Show Link Image' ); ?></label>
+			<br />
+
 		<input class="checkbox" type="checkbox"<?php checked( $instance['name'], true ); ?> id="<?php echo $this->get_field_id( 'name' ); ?>" name="<?php echo $this->get_field_name( 'name' ); ?>" />
-		<label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e( 'Show Link Name' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e( 'Show Link Name' ); ?></label>
+			<br />
+
 		<input class="checkbox" type="checkbox"<?php checked( $instance['description'], true ); ?> id="<?php echo $this->get_field_id( 'description' ); ?>" name="<?php echo $this->get_field_name( 'description' ); ?>" />
-		<label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Show Link Description' ); ?></label><br />
+			<label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Show Link Description' ); ?></label>
+			<br />
+
 		<input class="checkbox" type="checkbox"<?php checked( $instance['rating'], true ); ?> id="<?php echo $this->get_field_id( 'rating' ); ?>" name="<?php echo $this->get_field_name( 'rating' ); ?>" />
 		<label for="<?php echo $this->get_field_id( 'rating' ); ?>"><?php _e( 'Show Link Rating' ); ?></label>
 		</p>
+
 		<p>
 		<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Number of links to show:' ); ?></label>
 		<input id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" type="text" value="<?php echo $limit == -1 ? '' : intval( $limit ); ?>" size="3" />
