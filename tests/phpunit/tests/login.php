@@ -35,8 +35,6 @@ class Tests_Login extends WP_UnitTestCase {
 			. '\r?$/mi'
 		);
 
-		$test = preg_match( $regex, $mailer->get_sent()->body );
-
-		$this->assertEquals( $test, 1 );
+		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );
 	}
 }
