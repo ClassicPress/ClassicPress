@@ -18,9 +18,6 @@ class Tests_Login extends WP_UnitTestCase {
 		parent::tear_down();
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
 	public function test_reset_password() {
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
