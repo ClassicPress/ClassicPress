@@ -3942,6 +3942,24 @@ function wp_ajax_press_this_add_category() {
 }
 
 /**
+ * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
+ *
+ * @since WP-4.4.0
+ * @deprecated WP-5.5.0
+ *
+ * @see wp_image_add_srcset_and_sizes()
+ *
+ * @param string $content The raw post content to be filtered.
+ * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
+ */
+function wp_make_content_images_responsive( $content ) {
+	_deprecated_function( __FUNCTION__, 'WP-5.5.0', 'wp_filter_content_tags()' );
+
+	// This will also add the `loading` attribute to `img` tags, if enabled.
+	return wp_filter_content_tags( $content );
+}
+
+/**
  * Display or retrieve page title for post archive based on date.
  *
  * Useful for when the template only needs to display the month and year,
@@ -3985,7 +4003,6 @@ function single_month_title( $prefix = '', $display = true ) {
 	}
 	echo $result;
 }
-
 
 /**
  * Filter the SQL clauses of an attachment query to include filenames.
