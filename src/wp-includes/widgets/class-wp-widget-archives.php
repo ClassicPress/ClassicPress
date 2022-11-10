@@ -98,12 +98,29 @@ class WP_Widget_Archives extends WP_Widget {
 					$label = __( 'Select Post' );
 					break;
 			}
+
+			$type_attr = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 			?>
 
 			<option value=""><?php echo esc_attr( $label ); ?></option>
 			<?php wp_get_archives( $dropdown_args ); ?>
 
 		</select>
+
+<script<?php echo $type_attr; ?>>
+/* <![CDATA[ */
+(function() {
+	var dropdown = document.getElementById( "<?php echo esc_js( $dropdown_id ); ?>" );
+	function onSelectChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value !== '' ) {
+			document.location.href = this.options[ this.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onSelectChange;
+})();
+/* ]]> */
+</script>
+
 		<?php } else { ?>
 		<ul>
 			<?php
