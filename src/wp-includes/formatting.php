@@ -4382,14 +4382,13 @@ function cp_attributes( $element, $attrs = array(), $context = '' ) {
 			if ( ! empty( $value ) ) {
 				$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 			}
-		}
-		else {
+		} else {
 			$value = ( 'href' === $attr || 'src' === $attr ) ?
 				esc_url( $value ) : esc_attr( $value );
 			$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 		}
 	}
-	return trim ( $out );
+	return trim( $out );
 }
 
 /**
