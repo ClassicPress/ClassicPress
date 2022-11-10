@@ -625,8 +625,8 @@ function wp_tempnam( $filename = '', $dir = '' ) {
 		$dir = get_temp_dir();
 	}
 
-	if ( empty( $filename ) || '.' == $filename || '/' == $filename || '\\' == $filename ) {
-		$filename = time();
+	if ( empty( $filename ) || in_array( $filename, array( '.', '/', '\\' ), true ) ) {
+		$filename = uniqid();
 	}
 
 	// Use the basename of the given file without the extension as the name for the temporary directory
@@ -819,7 +819,8 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	 * A writable uploads dir will pass this test. Again, there's no point
 	 * overriding this one.
 	 */
-	if ( ! ( ( $uploads = wp_upload_dir( $time ) ) && false === $uploads['error'] ) ) {
+	$uploads = wp_upload_dir( $time );
+	if ( ! ( $uploads && false === $uploads['error'] ) ) {
 		return call_user_func_array( $upload_error_handler, array( &$file, $uploads['error'] ) );
 	}
 
@@ -1101,7 +1102,7 @@ function unzip_file( $file, $to ) {
 		if ( true === $result ) {
 			return $result;
 		} elseif ( is_wp_error( $result ) ) {
-			if ( 'incompatible_archive' != $result->get_error_code() ) {
+			if ( 'incompatible_archive' !== $result->get_error_code() ) {
 				return $result;
 			}
 		}
@@ -1138,7 +1139,8 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	$uncompressed_size = 0;
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
@@ -1153,10 +1155,12 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 
 		$uncompressed_size += $info['size'];
 
+		$dirname = dirname( $info['name'] );
+
 		if ( '/' === substr( $info['name'], -1 ) ) {
 			// Directory.
 			$needed_dirs[] = $to . untrailingslashit( $info['name'] );
-		} elseif ( '.' !== $dirname = dirname( $info['name'] ) ) {
+		} elseif ( '.' !== $dirname ) {
 			// Path to a file.
 			$needed_dirs[] = $to . untrailingslashit( $dirname );
 		}
@@ -1190,7 +1194,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 		}
 
 		$parent_folder = dirname( $dir );
-		while ( ! empty( $parent_folder ) && untrailingslashit( $to ) != $parent_folder && ! in_array( $parent_folder, $needed_dirs ) ) {
+		while ( ! empty( $parent_folder ) && untrailingslashit( $to ) != $parent_folder && ! in_array( $parent_folder, $needed_dirs, true ) ) {
 			$needed_dirs[] = $parent_folder;
 			$parent_folder = dirname( $parent_folder );
 		}
@@ -1207,11 +1211,12 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 	unset( $needed_dirs );
 
 	for ( $i = 0; $i < $z->numFiles; $i++ ) {
-		if ( ! $info = $z->statIndex( $i ) ) {
+		$info = $z->statIndex( $i );
+		if ( ! $info ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
-		if ( '/' == substr( $info['name'], -1 ) ) { // directory
+		if ( '/' === substr( $info['name'], -1 ) ) { // Directory.
 			continue;
 		}
 
@@ -1272,7 +1277,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 		return new WP_Error( 'incompatible_archive', __( 'Incompatible Archive.' ), $archive->errorInfo( true ) );
 	}
 
-	if ( 0 == count( $archive_files ) ) {
+	if ( 0 === count( $archive_files ) ) {
 		return new WP_Error( 'empty_archive_pclzip', __( 'Empty archive.' ) );
 	}
 
@@ -1317,7 +1322,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 		}
 
 		$parent_folder = dirname( $dir );
-		while ( ! empty( $parent_folder ) && untrailingslashit( $to ) != $parent_folder && ! in_array( $parent_folder, $needed_dirs ) ) {
+		while ( ! empty( $parent_folder ) && untrailingslashit( $to ) != $parent_folder && ! in_array( $parent_folder, $needed_dirs, true ) ) {
 			$needed_dirs[] = $parent_folder;
 			$parent_folder = dirname( $parent_folder );
 		}
@@ -1381,7 +1386,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
 			continue;
 		}
 
-		if ( 'f' == $fileinfo['type'] ) {
+		if ( 'f' === $fileinfo['type'] ) {
 			if ( ! $wp_filesystem->copy( $from . $filename, $to . $filename, true, FS_CHMOD_FILE ) ) {
 				// If copy failed, chmod file to 0644 and try again.
 				$wp_filesystem->chmod( $to . $filename, FS_CHMOD_FILE );
@@ -1389,7 +1394,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
 					return new WP_Error( 'copy_failed_copy_dir', __( 'Could not copy file.' ), $to . $filename );
 				}
 			}
-		} elseif ( 'd' == $fileinfo['type'] ) {
+		} elseif ( 'd' === $fileinfo['type'] ) {
 			if ( ! $wp_filesystem->is_dir( $to . $filename ) ) {
 				if ( ! $wp_filesystem->mkdir( $to . $filename, FS_CHMOD_DIR ) ) {
 					return new WP_Error( 'mkdir_failed_copy_dir', __( 'Could not create directory.' ), $to . $filename );
@@ -1410,6 +1415,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -1430,7 +1436,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
  * @param bool         $allow_relaxed_file_ownership Optional. Whether to allow Group/World writable. Default false.
  * @return null|bool false on failure, true on success.
  */
-function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) {
+function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_ownership = false ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	global $wp_filesystem;
 
 	require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
@@ -1538,14 +1544,15 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 		$temp_handle    = @fopen( $temp_file_name, 'w' );
 		if ( $temp_handle ) {
 
-			// Attempt to determine the file owner of the ClassicPress files, and that of newly created files
-			$wp_file_owner = $temp_file_owner = false;
+			// Attempt to determine the file owner of the WordPress files, and that of newly created files
+			$wp_file_owner   = false;
+			$temp_file_owner = false;
 			if ( function_exists( 'fileowner' ) ) {
 				$wp_file_owner   = @fileowner( __FILE__ );
 				$temp_file_owner = @fileowner( $temp_file_name );
 			}
 
-			if ( $wp_file_owner !== false && $wp_file_owner === $temp_file_owner ) {
+			if ( false !== $wp_file_owner && $wp_file_owner === $temp_file_owner ) {
 				// ClassicPress is creating files as the same owner as the ClassicPress files,
 				// this means it's safe to modify & create new files via PHP.
 				$method                                  = 'direct';
@@ -1562,7 +1569,7 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 		}
 	}
 
-	if ( ! $method && isset( $args['connection_type'] ) && 'ssh' == $args['connection_type'] && extension_loaded( 'ssh2' ) && function_exists( 'stream_get_contents' ) ) {
+	if ( ! $method && isset( $args['connection_type'] ) && 'ssh' === $args['connection_type'] && extension_loaded( 'ssh2' ) && function_exists( 'stream_get_contents' ) ) {
 		$method = 'ssh2';
 	}
 	if ( ! $method && extension_loaded( 'ftp' ) ) {
@@ -1645,7 +1652,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 		$type = get_filesystem_method( array(), $context, $allow_relaxed_file_ownership );
 	}
 
-	if ( 'direct' == $type ) {
+	if ( 'direct' === $type ) {
 		return true;
 	}
 
@@ -1696,29 +1703,32 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 		unset( $credentials['port'] );
 	}
 
-	if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
+	if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' === FS_METHOD ) ) {
 		$credentials['connection_type'] = 'ssh';
-	} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) { //Only the FTP Extension understands SSL
+	} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' === $type ) { // Only the FTP Extension understands SSL.
 		$credentials['connection_type'] = 'ftps';
 	} elseif ( ! empty( $submitted_form['connection_type'] ) ) {
 		$credentials['connection_type'] = $submitted_form['connection_type'];
 	} elseif ( ! isset( $credentials['connection_type'] ) ) { //All else fails (And it's not defaulted to something else saved), Default to FTP
 		$credentials['connection_type'] = 'ftp';
 	}
-	if ( ! $error &&
-			(
-				( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) ) ||
-				( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) )
-			) ) {
+	if ( ! $error
+		&& ( ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) )
+			|| ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) )
+		)
+	) {
 		$stored_credentials = $credentials;
-		if ( ! empty( $stored_credentials['port'] ) ) { //save port as part of hostname to simplify above code.
+
+		if ( ! empty( $stored_credentials['port'] ) ) { // Save port as part of hostname to simplify above code.
 			$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
 		}
 
 		unset( $stored_credentials['password'], $stored_credentials['port'], $stored_credentials['private_key'], $stored_credentials['public_key'] );
+
 		if ( ! wp_installing() ) {
 			update_option( 'ftp_credentials', $stored_credentials );
 		}
+
 		return $credentials;
 	}
 	$hostname        = isset( $credentials['hostname'] ) ? $credentials['hostname'] : '';
@@ -1844,7 +1854,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	<?php
 	if ( isset( $types['ssh'] ) ) {
 		$hidden_class = '';
-		if ( 'ssh' != $connection_type || empty( $connection_type ) ) {
+		if ( 'ssh' !== $connection_type || empty( $connection_type ) ) {
 			$hidden_class = ' class="hidden"';
 		}
 		?>
@@ -1887,10 +1897,12 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
  */
 function wp_print_request_filesystem_credentials_modal() {
 	$filesystem_method = get_filesystem_method();
+
 	ob_start();
 	$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
 	ob_end_clean();
-	$request_filesystem_credentials = ( $filesystem_method != 'direct' && ! $filesystem_credentials_are_stored );
+
+	$request_filesystem_credentials = ( 'direct' !== $filesystem_method && ! $filesystem_credentials_are_stored );
 	if ( ! $request_filesystem_credentials ) {
 		return;
 	}

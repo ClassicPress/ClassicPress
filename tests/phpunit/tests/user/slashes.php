@@ -29,7 +29,9 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 	 *
 	 */
 	function test_add_user() {
-		$_POST                 = $_GET = $_REQUEST = array();
+		$_POST                 = array();
+		$_GET                  = array();
+		$_REQUEST              = array();
 		$_POST['user_login']   = 'slash_example_user_1';
 		$_POST['pass1']        = 'password';
 		$_POST['pass2']        = 'password';
@@ -51,7 +53,9 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 		$this->assertSame( $this->slash_7, $user->display_name );
 		$this->assertSame( $this->slash_3, $user->description );
 
-		$_POST                 = $_GET = $_REQUEST = array();
+		$_POST                 = array();
+		$_GET                  = array();
+		$_REQUEST              = array();
 		$_POST['user_login']   = 'slash_example_user_2';
 		$_POST['pass1']        = 'password';
 		$_POST['pass2']        = 'password';
@@ -81,7 +85,9 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 	function test_edit_user() {
 		$id = self::factory()->user->create();
 
-		$_POST                 = $_GET = $_REQUEST = array();
+		$_POST                 = array();
+		$_GET                  = array();
+		$_REQUEST              = array();
 		$_POST['role']         = 'subscriber';
 		$_POST['email']        = 'user1@example.com';
 		$_POST['first_name']   = $this->slash_1;
@@ -100,7 +106,9 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 		$this->assertSame( $this->slash_7, $user->display_name );
 		$this->assertSame( $this->slash_3, $user->description );
 
-		$_POST                 = $_GET = $_REQUEST = array();
+		$_POST                 = array();
+		$_GET                  = array();
+		$_REQUEST              = array();
 		$_POST['role']         = 'subscriber';
 		$_POST['email']        = 'user2@example.com';
 		$_POST['first_name']   = $this->slash_2;

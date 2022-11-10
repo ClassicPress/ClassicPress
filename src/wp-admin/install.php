@@ -158,16 +158,18 @@ $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 0;
 
 // React to the current step.
 switch ( $step ) {
-
 	// Just getting started? Display the language picker.
-	case 0:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
-			$scripts_to_print[] = 'language-chooser';
-			display_header( 'language-chooser' );
-			echo '<form id="setup" method="post" action="?step=1">';
-			wp_install_language_form( $languages );
-			echo '</form>';
-			break;
+	case 0: // Step 0
+		if ( wp_can_install_language_pack() && empty( $language ) ) {
+			$languages = wp_get_available_translations();
+			if ( $languages ) {
+				$scripts_to_print[] = 'language-chooser';
+				display_header( 'language-chooser' );
+				echo '<form id="setup" method="post" action="?step=1">';
+				wp_install_language_form( $languages );
+				echo '</form>';
+				break;
+			}
 		}
 
 		// Display the final setup screen (site title, admin user).

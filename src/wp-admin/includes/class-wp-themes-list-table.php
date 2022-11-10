@@ -210,15 +210,16 @@ class WP_Themes_List_Table extends WP_List_Table {
 			$delete_action = isset( $actions['delete'] ) ? '<div class="delete-theme">' . $actions['delete'] . '</div>' : '';
 			unset( $actions['delete'] );
 
+			$screenshot = $theme->get_screenshot();
 			?>
 
 			<span class="screenshot hide-if-customize">
-				<?php if ( $screenshot = $theme->get_screenshot() ) : ?>
+				<?php if ( $screenshot ) : ?>
 					<img src="<?php echo esc_url( $screenshot ); ?>" alt="" />
 				<?php endif; ?>
 			</span>
 			<a href="<?php echo wp_customize_url( $stylesheet ); ?>" class="screenshot load-customize hide-if-no-customize">
-				<?php if ( $screenshot = $theme->get_screenshot() ) : ?>
+				<?php if ( $screenshot ) : ?>
 					<img src="<?php echo esc_url( $screenshot ); ?>" alt="" />
 				<?php endif; ?>
 			</a>
@@ -263,14 +264,14 @@ class WP_Themes_List_Table extends WP_List_Table {
 	public function search_theme( $theme ) {
 		// Search the features
 		foreach ( $this->features as $word ) {
-			if ( ! in_array( $word, $theme->get( 'Tags' ) ) ) {
+			if ( ! in_array( $word, $theme->get( 'Tags' ), true ) ) {
 				return false;
 			}
 		}
 
 		// Match all phrases
 		foreach ( $this->search_terms as $word ) {
-			if ( in_array( $word, $theme->get( 'Tags' ) ) ) {
+			if ( in_array( $word, $theme->get( 'Tags' ), true ) ) {
 				continue;
 			}
 

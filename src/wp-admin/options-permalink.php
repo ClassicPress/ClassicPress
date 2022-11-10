@@ -57,7 +57,8 @@ $home_path           = get_home_path();
 $iis7_permalinks     = iis7_supports_permalinks();
 $permalink_structure = get_option( 'permalink_structure' );
 
-$prefix = $blog_prefix = '';
+$prefix      = '';
+$blog_prefix = '';
 if ( ! got_url_rewrite() ) {
 	$prefix = '/index.php';
 }
@@ -218,7 +219,7 @@ $structures = array(
 	</tr>
 	<tr>
 		<th>
-			<label><input name="selection" id="custom_selection" type="radio" value="custom" <?php checked( ! in_array( $permalink_structure, $structures ) ); ?> />
+			<label><input name="selection" id="custom_selection" type="radio" value="custom" <?php checked( ! in_array( $permalink_structure, $structures, true ) ); ?> />
 			<?php _e( 'Custom Structure' ); ?>
 			</label>
 		</th>

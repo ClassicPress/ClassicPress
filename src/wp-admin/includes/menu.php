@@ -43,7 +43,8 @@ if ( is_network_admin() ) {
 
 // Create list of page plugin hook names.
 foreach ( $menu as $menu_page ) {
-	if ( false !== $pos = strpos( $menu_page[2], '?' ) ) {
+	$pos = strpos( $menu_page[2], '?' );
+	if ( false !== $pos ) {
 		// Handle post_type=post|page|foo pages.
 		$hook_name = substr( $menu_page[2], 0, $pos );
 		$hook_args = substr( $menu_page[2], $pos + 1 );
@@ -167,7 +168,7 @@ foreach ( $menu as $id => $data ) {
 	 * If there is only one submenu and it is has same destination as the parent,
 	 * remove the submenu.
 	 */
-	if ( ! empty( $submenu[ $data[2] ] ) && 1 == count( $submenu[ $data[2] ] ) ) {
+	if ( ! empty( $submenu[ $data[2] ] ) && 1 === count( $submenu[ $data[2] ] ) ) {
 		$subs      = $submenu[ $data[2] ];
 		$first_sub = reset( $subs );
 		if ( $data[2] == $first_sub[2] ) {
@@ -202,7 +203,8 @@ function add_cssclass( $add, $class ) {
  * @return array
  */
 function add_menu_classes( $menu ) {
-	$first = $lastorder = false;
+	$first     = false;
+	$lastorder = false;
 	$i     = 0;
 	$mc    = count( $menu );
 	foreach ( $menu as $order => $top ) {
@@ -334,7 +336,7 @@ unset( $id, $data, $prev_menu_was_separator );
 // Remove the last menu item if it is a separator.
 $last_menu_key = array_keys( $menu );
 $last_menu_key = array_pop( $last_menu_key );
-if ( ! empty( $menu ) && 'wp-menu-separator' == $menu[ $last_menu_key ][4] ) {
+if ( ! empty( $menu ) && 'wp-menu-separator' === $menu[ $last_menu_key ][4] ) {
 	unset( $menu[ $last_menu_key ] );
 }
 unset( $last_menu_key );

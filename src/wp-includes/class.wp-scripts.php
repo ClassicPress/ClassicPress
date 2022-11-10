@@ -196,7 +196,8 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool|string|void Void if no data exists, extra scripts if `$echo` is true, true otherwise.
 	 */
 	public function print_extra_script( $handle, $echo = true ) {
-		if ( ! $output = $this->get_data( $handle, 'data' ) ) {
+		$output = $this->get_data( $handle, 'data' );
+		if ( ! $output ) {
 			return;
 		}
 
@@ -255,7 +256,8 @@ class WP_Scripts extends WP_Dependencies {
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'script', $handle );
 
 		$src         = $obj->src;
-		$cond_before = $cond_after = '';
+		$cond_before = '';
+		$cond_after  = '';
 		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
 
 		if ( $conditional ) {
@@ -421,7 +423,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool
 	 */
 	public function localize( $handle, $object_name, $l10n ) {
-		if ( $handle === 'jquery' ) {
+		if ( 'jquery' === $handle ) {
 			$handle = 'jquery-core';
 		}
 
@@ -466,7 +468,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool Not already in the group or a lower group
 	 */
 	public function set_group( $handle, $recursion, $group = false ) {
-		if ( isset( $this->registered[ $handle ]->args ) && $this->registered[ $handle ]->args === 1 ) {
+		if ( isset( $this->registered[ $handle ]->args ) && 1 === $this->registered[ $handle ]->args ) {
 			$grp = 1;
 		} else {
 			$grp = (int) $this->get_data( $handle, 'group' );

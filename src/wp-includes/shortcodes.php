@@ -63,7 +63,7 @@ $shortcode_tags = array();
 function add_shortcode( $tag, $callback ) {
 	global $shortcode_tags;
 
-	if ( '' == trim( $tag ) ) {
+	if ( '' === trim( $tag ) ) {
 		$message = __( 'Invalid shortcode name: Empty name given.' );
 		_doing_it_wrong( __FUNCTION__, $message, 'WP-4.4.0' );
 		return;
@@ -282,8 +282,8 @@ function get_shortcode_regex( $tagnames = null ) {
 function do_shortcode_tag( $m ) {
 	global $shortcode_tags;
 
-	// allow [[foo]] syntax for escaping a tag
-	if ( $m[1] == '[' && $m[6] == ']' ) {
+	// Allow [[foo]] syntax for escaping a tag.
+	if ( '[' === $m[1] && ']' === $m[6] ) {
 		return substr( $m[0], 1, -1 );
 	}
 
@@ -363,7 +363,7 @@ function do_shortcodes_in_html_tags( $content, $ignore_html, $tagnames ) {
 	$textarr = wp_html_split( $content );
 
 	foreach ( $textarr as &$element ) {
-		if ( '' == $element || '<' !== $element[0] ) {
+		if ( '' === $element || '<' !== $element[0] ) {
 			continue;
 		}
 
@@ -485,8 +485,8 @@ function get_shortcode_atts_regex() {
  *
  * @param string $text
  * @return array|string List of attribute values.
- *                      Returns empty array if trim( $text ) == '""'.
- *                      Returns empty string if trim( $text ) == ''.
+ *                      Returns empty array if '""' === trim( $text ).
+ *                      Returns empty string if '' === trim( $text ).
  *                      All other matches are checked for not empty().
  */
 function shortcode_parse_atts( $text ) {
@@ -634,8 +634,8 @@ function strip_shortcodes( $content ) {
  * @return string|false The content stripped of the tag, otherwise false.
  */
 function strip_shortcode_tag( $m ) {
-	// allow [[foo]] syntax for escaping a tag
-	if ( $m[1] == '[' && $m[6] == ']' ) {
+	// Allow [[foo]] syntax for escaping a tag.
+	if ( '[' === $m[1] && ']' === $m[6] ) {
 		return substr( $m[0], 1, -1 );
 	}
 

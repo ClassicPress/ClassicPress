@@ -65,7 +65,7 @@ class WP_Importer {
 
 		// Get count of permalinks
 		$meta_key = $importer_name . '_' . $bid . '_permalink';
-		$sql      = $wpdb->prepare( "SELECT COUNT( post_id ) AS cnt FROM $wpdb->postmeta WHERE meta_key = '%s'", $meta_key );
+		$sql      = $wpdb->prepare( "SELECT COUNT( post_id ) AS cnt FROM $wpdb->postmeta WHERE meta_key = %s", $meta_key );
 
 		$result = $wpdb->get_results( $sql );
 
@@ -133,9 +133,10 @@ class WP_Importer {
 			$blog_id = (int) $blog_id;
 		} else {
 			$blog = 'http://' . preg_replace( '#^https?://#', '', $blog_id );
-			if ( ( ! $parsed = parse_url( $blog ) ) || empty( $parsed['host'] ) ) {
+			$parsed = parse_url( $blog );
+			if ( ! $parsed || empty( $parsed['host'] ) ) {
 				fwrite( STDERR, "Error: can not determine blog_id from $blog_id\n" );
-				exit();
+				exit;
 			}
 			if ( empty( $parsed['path'] ) ) {
 				$parsed['path'] = '/';
@@ -149,7 +150,7 @@ class WP_Importer {
 			);
 			if ( ! $blogs ) {
 				fwrite( STDERR, "Error: Could not find blog\n" );
-				exit();
+				exit;
 			}
 			$blog    = array_shift( $blogs );
 			$blog_id = (int) $blog->blog_id;
@@ -178,7 +179,7 @@ class WP_Importer {
 
 		if ( ! $user_id || ! wp_set_current_user( $user_id ) ) {
 			fwrite( STDERR, "Error: can not find user\n" );
-			exit();
+			exit;
 		}
 
 		return $user_id;
@@ -311,7 +312,7 @@ function get_cli_args( $param, $required = false ) {
 			}
 
 			$last_arg = $key;
-		} elseif ( $last_arg !== null ) {
+		} elseif ( null !== $last_arg ) {
 			$out[ $last_arg ] = $args[ $i ];
 		}
 	}
@@ -326,7 +327,7 @@ function get_cli_args( $param, $required = false ) {
 	if ( ! isset( $out[ $param ] ) && $required ) {
 		// Display message and exit
 		echo "\"$param\" parameter is required but was not specified\n";
-		exit();
+		exit;
 	}
 
 	return $return;

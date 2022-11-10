@@ -42,7 +42,8 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 		$this->decrement_update_count( 'theme' );
 
 		$update_actions = array();
-		if ( ! empty( $this->upgrader->result['destination_name'] ) && $theme_info = $this->upgrader->theme_info() ) {
+		$theme_info     = $this->upgrader->theme_info();
+		if ( $theme_info ) {
 			$name       = $theme_info->display( 'Name' );
 			$stylesheet = $this->upgrader->result['destination_name'];
 			$template   = $theme_info->get_template();
@@ -64,7 +65,8 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 				),
 				admin_url( 'customize.php' )
 			);
-			if ( get_stylesheet() == $stylesheet ) {
+
+			if ( get_stylesheet() === $stylesheet ) {
 				if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
 					$update_actions['preview'] = '<a href="' . esc_url( $customize_url ) . '" class="hide-if-no-customize load-customize"><span aria-hidden="true">' . __( 'Customize' ) . '</span><span class="screen-reader-text">' . sprintf( __( 'Customize &#8220;%s&#8221;' ), $name ) . '</span></a>';
 				}
