@@ -144,8 +144,8 @@ class Walker {
 		$cb_args = array_merge( array( &$output, $element, $depth ), $args );
 		call_user_func_array( array( $this, 'start_el' ), $cb_args );
 
-		// descend only when the depth is right and there are childrens for this element
-		if ( ( $max_depth == 0 || $max_depth > $depth + 1 ) && isset( $children_elements[ $id ] ) ) {
+		// Descend only when the depth is right and there are childrens for this element.
+		if ( ( 0 == $max_depth || $max_depth > $depth + 1 ) && isset( $children_elements[ $id ] ) ) {
 
 			foreach ( $children_elements[ $id ] as $child ) {
 
@@ -250,7 +250,7 @@ class Walker {
 		 * If we are displaying all levels, and remaining children_elements is not empty,
 		 * then we got orphans, which should be displayed regardless.
 		 */
-		if ( ( $max_depth == 0 ) && count( $children_elements ) > 0 ) {
+		if ( ( 0 == $max_depth ) && count( $children_elements ) > 0 ) {
 			$empty_array = array();
 			foreach ( $children_elements as $orphans ) {
 				foreach ( $orphans as $op ) {

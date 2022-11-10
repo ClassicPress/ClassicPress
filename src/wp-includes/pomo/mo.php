@@ -219,7 +219,7 @@ if ( ! class_exists( 'MO', false ) ) :
 			}
 			$reader->setEndian( $endian_string );
 
-			$endian = ( 'big' == $endian_string ) ? 'N' : 'V';
+			$endian = ( 'big' === $endian_string ) ? 'N' : 'V';
 
 			$header = $reader->read( 24 );
 			if ( $reader->strlen( $header ) != 24 ) {
@@ -232,8 +232,8 @@ if ( ! class_exists( 'MO', false ) ) :
 				return false;
 			}
 
-			// support revision 0 of MO format specs, only
-			if ( $header['revision'] != 0 ) {
+			// Support revision 0 of MO format specs, only.
+			if ( 0 != $header['revision'] ) {
 				return false;
 			}
 

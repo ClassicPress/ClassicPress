@@ -890,7 +890,7 @@ final class WP_Customize_Manager {
 	 * @return bool
 	 */
 	public function is_theme_active() {
-		return $this->get_stylesheet() == $this->original_stylesheet;
+		return $this->get_stylesheet() === $this->original_stylesheet;
 	}
 
 	/**
@@ -1225,6 +1225,8 @@ final class WP_Customize_Manager {
 						$settings = $settings->getArrayCopy();
 					}
 
+					unset( $settings['_multiwidget'] );
+
 					// Find the max widget number for this type.
 					$widget_numbers = array_keys( $settings );
 					if ( count( $widget_numbers ) > 0 ) {
@@ -1360,7 +1362,7 @@ final class WP_Customize_Manager {
 				if ( ! $attachment_id ) {
 
 					// Copy file to temp location so that original file won't get deleted from theme after sideloading.
-					$temp_file_name = wp_tempnam( basename( $file_path ) );
+					$temp_file_name = wp_tempnam( wp_basename( $file_path ) );
 					if ( $temp_file_name && copy( $file_path, $temp_file_name ) ) {
 						$file_array['tmp_name'] = $temp_file_name;
 					}
@@ -1614,7 +1616,7 @@ final class WP_Customize_Manager {
 			} else {
 				continue;
 			}
-			$file_name = basename( $attachment['file'] );
+			$file_name = wp_basename( $attachment['file'] );
 
 			// Skip file types that are not recognized.
 			$checked_filetype = wp_check_filetype( $file_name );
@@ -4614,7 +4616,7 @@ final class WP_Customize_Manager {
 
 		if ( $this->return_url ) {
 			$return_url = $this->return_url;
-		} elseif ( $referer && ! in_array( basename( parse_url( $referer, PHP_URL_PATH ) ), $excluded_referer_basenames, true ) ) {
+		} elseif ( $referer && ! in_array( wp_basename( parse_url( $referer, PHP_URL_PATH ) ), $excluded_referer_basenames, true ) ) {
 			$return_url = $referer;
 		} elseif ( $this->preview_url ) {
 			$return_url = $this->preview_url;
@@ -5834,9 +5836,9 @@ final class WP_Customize_Manager {
 				$theme->id            = $theme->slug;
 				$theme->screenshot    = array( $theme->screenshot_url );
 				$theme->authorAndUri  = $theme->author;
-				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires );
-				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php );
-				// The .org API can return the full parent theme details if passed the 'parent' arg, or if passed the 'template' option it'll return that in the event it's a child theme.
+				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
 				} else {
@@ -5906,11 +5908,11 @@ final class WP_Customize_Manager {
 	 */
 	public function _sanitize_background_setting( $value, $setting ) {
 		if ( 'background_repeat' === $setting->id ) {
-			if ( ! in_array( $value, array( 'repeat-x', 'repeat-y', 'repeat', 'no-repeat' ) ) ) {
+			if ( ! in_array( $value, array( 'repeat-x', 'repeat-y', 'repeat', 'no-repeat' ), true ) ) {
 				return new WP_Error( 'invalid_value', __( 'Invalid value for background repeat.' ) );
 			}
 		} elseif ( 'background_attachment' === $setting->id ) {
-			if ( ! in_array( $value, array( 'fixed', 'scroll' ) ) ) {
+			if ( ! in_array( $value, array( 'fixed', 'scroll' ), true ) ) {
 				return new WP_Error( 'invalid_value', __( 'Invalid value for background attachment.' ) );
 			}
 		} elseif ( 'background_position_x' === $setting->id ) {

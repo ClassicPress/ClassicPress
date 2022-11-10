@@ -268,7 +268,7 @@ class WP_Styles extends WP_Dependencies {
 				$media
 			);
 
-			if ( $obj->extra['rtl'] === 'replace' ) {
+			if ( 'replace' === $obj->extra['rtl'] ) {
 				$tag = $rtl_tag;
 			} else {
 				$tag .= $rtl_tag;

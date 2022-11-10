@@ -16,7 +16,7 @@ if ( ! current_user_can( 'upload_files' ) ) {
 $mode  = get_user_option( 'media_library_mode', get_current_user_id() ) ? get_user_option( 'media_library_mode', get_current_user_id() ) : 'grid';
 $modes = array( 'grid', 'list' );
 
-if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes ) ) {
+if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 	$mode = $_GET['mode'];
 	update_user_option( get_current_user_id(), 'media_library_mode', $mode );
 }
@@ -34,7 +34,7 @@ if ( 'grid' === $mode ) {
 	$vars   = wp_edit_attachments_query_vars( $q );
 	$ignore = array( 'mode', 'post_type', 'post_status', 'posts_per_page' );
 	foreach ( $vars as $key => $value ) {
-		if ( ! $value || in_array( $key, $ignore ) ) {
+		if ( ! $value || in_array( $key, $ignore, true ) ) {
 			unset( $vars[ $key ] );
 		}
 	}
@@ -120,7 +120,7 @@ $doaction = $wp_list_table->current_action();
 if ( $doaction ) {
 	check_admin_referer( 'bulk-media' );
 
-	if ( 'delete_all' == $doaction ) {
+	if ( 'delete_all' === $doaction ) {
 		$post_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type='attachment' AND post_status = 'trash'" );
 		$doaction = 'delete';
 	} elseif ( isset( $_REQUEST['media'] ) ) {
@@ -130,7 +130,8 @@ if ( $doaction ) {
 	}
 
 	$location = 'upload.php';
-	if ( $referer = wp_get_referer() ) {
+	$referer  = wp_get_referer();
+	if ( $referer ) {
 		if ( false !== strpos( $referer, 'upload.php' ) ) {
 			$location = remove_query_arg( array( 'trashed', 'untrashed', 'deleted', 'message', 'ids', 'posted' ), $referer );
 		}
@@ -201,7 +202,7 @@ if ( $doaction ) {
 			break;
 		default:
 			/** This action is documented in wp-admin/edit-comments.php */
-			$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $doaction, $post_ids );
+			$location = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $location, $doaction, $post_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	}
 
 	wp_redirect( $location );
@@ -289,7 +290,8 @@ if ( ! empty( $_GET['posted'] ) ) {
 	$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'posted' ), $_SERVER['REQUEST_URI'] );
 }
 
-if ( ! empty( $_GET['attached'] ) && $attached = absint( $_GET['attached'] ) ) {
+if ( ! empty( $_GET['attached'] ) && absint( $_GET['attached'] ) ) {
+	$attached = absint( $_GET['attached'] );
 	if ( 1 == $attached ) {
 		$message = __( 'Media file attached.' );
 	} else {
@@ -300,7 +302,8 @@ if ( ! empty( $_GET['attached'] ) && $attached = absint( $_GET['attached'] ) ) {
 	$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'detach', 'attached' ), $_SERVER['REQUEST_URI'] );
 }
 
-if ( ! empty( $_GET['detach'] ) && $detached = absint( $_GET['detach'] ) ) {
+if ( ! empty( $_GET['detach'] ) && absint( $_GET['detach'] ) ) {
+	$detached = absint( $_GET['detach'] );
 	if ( 1 == $detached ) {
 		$message = __( 'Media file detached.' );
 	} else {
@@ -311,7 +314,8 @@ if ( ! empty( $_GET['detach'] ) && $detached = absint( $_GET['detach'] ) ) {
 	$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'detach', 'attached' ), $_SERVER['REQUEST_URI'] );
 }
 
-if ( ! empty( $_GET['deleted'] ) && $deleted = absint( $_GET['deleted'] ) ) {
+if ( ! empty( $_GET['deleted'] ) && absint( $_GET['deleted'] ) ) {
+	$deleted = absint( $_GET['deleted'] );
 	if ( 1 == $deleted ) {
 		$message = __( 'Media file permanently deleted.' );
 	} else {
@@ -322,7 +326,8 @@ if ( ! empty( $_GET['deleted'] ) && $deleted = absint( $_GET['deleted'] ) ) {
 	$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'deleted' ), $_SERVER['REQUEST_URI'] );
 }
 
-if ( ! empty( $_GET['trashed'] ) && $trashed = absint( $_GET['trashed'] ) ) {
+if ( ! empty( $_GET['trashed'] ) && absint( $_GET['trashed'] ) ) {
+	$trashed = absint( $_GET['trashed'] );
 	if ( 1 == $trashed ) {
 		$message = __( 'Media file moved to the trash.' );
 	} else {
@@ -334,7 +339,8 @@ if ( ! empty( $_GET['trashed'] ) && $trashed = absint( $_GET['trashed'] ) ) {
 	$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'trashed' ), $_SERVER['REQUEST_URI'] );
 }
 
-if ( ! empty( $_GET['untrashed'] ) && $untrashed = absint( $_GET['untrashed'] ) ) {
+if ( ! empty( $_GET['untrashed'] ) && absint( $_GET['untrashed'] ) ) {
+	$untrashed = absint( $_GET['untrashed'] );
 	if ( 1 == $untrashed ) {
 		$message = __( 'Media file restored from the trash.' );
 	} else {

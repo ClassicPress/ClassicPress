@@ -4,9 +4,24 @@ require_once dirname( __FILE__ ) . '/class-basic-object.php';
 require_once dirname( __FILE__ ) . '/class-basic-subclass.php';
 
 /**
+ * Retrieves PHPUnit runner version.
+ */
+function tests_get_phpunit_version() {
+	if ( class_exists( 'PHPUnit_Runner_Version' ) ) {
+		$version = PHPUnit_Runner_Version::id();
+	} elseif ( class_exists( 'PHPUnit\Runner\Version' ) ) {
+		$version = PHPUnit\Runner\Version::id();
+	} else {
+		$version = 0;
+	}
+
+	return $version;
+}
+
+/**
  * Resets various `$_SERVER` variables that can get altered during tests.
  */
-function tests_reset__SERVER() {
+function tests_reset__SERVER() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$_SERVER['HTTP_HOST']       = WP_TESTS_DOMAIN;
 	$_SERVER['REMOTE_ADDR']     = '127.0.0.1';
 	$_SERVER['REQUEST_METHOD']  = 'GET';
@@ -66,6 +81,7 @@ function _delete_all_data() {
 		$wpdb->term_relationships,
 		$wpdb->termmeta,
 	) as $table ) {
+		//phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DELETE FROM {$table}" );
 	}
 
@@ -73,6 +89,7 @@ function _delete_all_data() {
 		$wpdb->terms,
 		$wpdb->term_taxonomy,
 	) as $table ) {
+		//phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DELETE FROM {$table} WHERE term_id != 1" );
 	}
 

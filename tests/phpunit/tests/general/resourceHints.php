@@ -8,8 +8,8 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	private $old_wp_scripts;
 	private $old_wp_styles;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		$this->old_wp_styles  = isset( $GLOBALS['wp_styles'] ) ? $GLOBALS['wp_styles'] : null;
 
@@ -22,12 +22,13 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 		$GLOBALS['wp_styles']->default_version  = get_bloginfo( 'version' );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
 		$GLOBALS['wp_styles']  = $this->old_wp_styles;
+
 		add_action( 'wp_default_scripts', 'wp_default_scripts' );
 		add_action( 'wp_default_styles', 'wp_default_styles' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function test_should_have_defaults_on_frontend() {
@@ -50,7 +51,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		remove_filter( 'wp_resource_hints', array( $this, '_add_dns_prefetch_domains' ) );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_dns_prefetch_domains( $hints, $method ) {
@@ -82,7 +83,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		remove_filter( 'wp_resource_hints', array( $this, '_add_preconnect_domains' ) );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_preconnect_domains( $hints, $method ) {
@@ -109,7 +110,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		remove_filter( 'wp_resource_hints', array( $this, '_add_prerender_urls' ) );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_prerender_urls( $hints, $method ) {
@@ -133,7 +134,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		remove_filter( 'wp_resource_hints', array( $this, '_add_dns_prefetch_long_urls' ) );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_dns_prefetch_long_urls( $hints, $method ) {
@@ -159,7 +160,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		wp_dequeue_style( 'googlefonts' );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 
 	}
 
@@ -178,7 +179,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		wp_dequeue_style( 'googlefonts' );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function test_dns_prefetch_scripts_does_not_included_registered_only() {
@@ -191,8 +192,8 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		wp_deregister_script( 'jquery-elsewhere' );
 
-		$this->assertEquals( $expected, $actual );
-		$this->assertNotContains( $unexpected, $actual );
+		$this->assertSame( $expected, $actual );
+		$this->assertStringNotContainsString( $unexpected, $actual );
 	}
 
 	/**
@@ -205,7 +206,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 		wp_deregister_script( 'test-script' );
 
 		$actual = get_echo( 'wp_resource_hints' );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	/**
@@ -218,13 +219,13 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 		add_filter( 'wp_resource_hints', array( $this, '_add_malformed_url_errant_colon' ), 10, 2 );
 		$actual = get_echo( 'wp_resource_hints' );
 		remove_filter( 'wp_resource_hints', array( $this, '_add_malformed_url_errant_colon' ) );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 
 		// Unsupported Scheme.
 		add_filter( 'wp_resource_hints', array( $this, '_add_malformed_url_unsupported_scheme' ), 10, 2 );
 		$actual = get_echo( 'wp_resource_hints' );
 		remove_filter( 'wp_resource_hints', array( $this, '_add_malformed_url_unsupported_scheme' ) );
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_malformed_url_errant_colon( $hints, $method ) {
@@ -259,7 +260,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 
 		remove_filter( 'wp_resource_hints', array( $this, '_add_url_with_attributes' ) );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	function _add_url_with_attributes( $hints, $method ) {

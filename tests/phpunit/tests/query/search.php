@@ -8,8 +8,8 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	protected $q;
 	protected $post_type;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->post_type = rand_str( 12 );
 		register_post_type( $this->post_type );
@@ -17,11 +17,11 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->q = new WP_Query();
 	}
 
-	function tearDown() {
+	function tear_down() {
 		_unregister_post_type( $this->post_type );
 		unset( $this->q );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function get_search_results( $terms ) {
@@ -51,14 +51,14 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		);
 
 		$posts = $this->get_search_results( 'About' );
-		$this->assertEquals( $post_id, reset( $posts )->ID );
+		$this->assertSame( $post_id, reset( $posts )->ID );
 	}
 
 	function test_search_terms_query_var() {
 		$terms = 'This is a search term';
 		$query = new WP_Query( array( 's' => 'This is a search term' ) );
 		$this->assertNotEquals( explode( ' ', $terms ), $query->get( 'search_terms' ) );
-		$this->assertEquals( array( 'search', 'term' ), $query->get( 'search_terms' ) );
+		$this->assertSame( array( 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
 	function test_filter_stopwords() {
@@ -68,7 +68,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		remove_filter( 'wp_search_stopwords', array( $this, 'filter_wp_search_stopwords' ) );
 
 		$this->assertNotEquals( array( 'search', 'term' ), $query->get( 'search_terms' ) );
-		$this->assertEquals( array( 'This', 'is', 'search', 'term' ), $query->get( 'search_terms' ) );
+		$this->assertSame( array( 'This', 'is', 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
 	function filter_wp_search_stopwords() {
@@ -89,14 +89,14 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		// By default, we can use the hyphen prefix to exclude results
-		$this->assertEquals( array(), $this->get_search_results( $title ) );
+		// By default, we can use the hyphen prefix to exclude results.
+		$this->assertSame( array(), $this->get_search_results( $title ) );
 
 		// After we disable the feature using the filter, we should get the result
 		add_filter( 'wp_query_search_exclusion_prefix', '__return_false' );
 		$result = $this->get_search_results( $title );
 		$post   = array_pop( $result );
-		$this->assertEquals( $post->ID, $post_id );
+		$this->assertSame( $post->ID, $post_id );
 		remove_filter( 'wp_query_search_exclusion_prefix', '__return_false' );
 	}
 
@@ -117,13 +117,13 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		// By default, we should get the result.
 		$result = $this->get_search_results( $title );
 		$post   = array_pop( $result );
-		$this->assertEquals( $post->ID, $post_id );
+		$this->assertSame( $post->ID, $post_id );
 
 		// After we change the prefix, the result should be excluded.
 		add_filter( 'wp_query_search_exclusion_prefix', array( $this, 'filter_search_exclusion_prefix_octothorpe' ) );
 		$found = $this->get_search_results( $title );
 		remove_filter( 'wp_query_search_exclusion_prefix', array( $this, 'filter_search_exclusion_prefix_octothorpe' ) );
-		$this->assertEquals( array(), $found );
+		$this->assertSame( array(), $found );
 	}
 
 	function filter_search_exclusion_prefix_octothorpe() {
@@ -154,7 +154,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -181,7 +181,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -214,7 +214,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p3 ), $q->posts );
+		$this->assertSameSets( array( $p3 ), $q->posts );
 	}
 
 	/**
@@ -247,7 +247,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p1, $p3 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p3 ), $q->posts );
 	}
 
 	/**
@@ -261,7 +261,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNotRegExp( '|ORDER BY \(CASE[^\)]+\)|', $q->request );
+		$this->assertDoesNotMatchRegularExpression( '|ORDER BY \(CASE[^\)]+\)|', $q->request );
 	}
 
 	/**
@@ -293,7 +293,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -311,7 +311,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		remove_filter( 'posts_search', array( $this, 'filter_posts_search' ) );
 		remove_filter( 'posts_search_orderby', array( $this, 'filter_posts_search' ) );
 
-		$this->assertNotContains( 'posts_search', $q->request );
+		$this->assertStringNotContainsString( 'posts_search', $q->request );
 	}
 
 	/**
@@ -346,7 +346,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p1, $p3 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p3 ), $q->posts );
 
 		$q = new WP_Query(
 			array(
@@ -355,7 +355,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p1, $p2 ), $q->posts );
+		$this->assertSameSets( array( $p1, $p2 ), $q->posts );
 
 		$q = new WP_Query(
 			array(
@@ -364,7 +364,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEqualSets( array( $p2 ), $q->posts );
+		$this->assertSameSets( array( $p2 ), $q->posts );
 	}
 
 	/**
@@ -456,7 +456,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		);
 
 		add_post_meta( $attachment, '_wp_attached_file', 'some-image1.png', true );
-		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
+		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 
 		// Pass post_type a string value.
 		$q = new WP_Query(
@@ -486,7 +486,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		);
 
 		add_post_meta( $attachment, '_wp_attached_file', 'some-image2.png', true );
-		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
+		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 
 		// Pass post_type an array value.
 		$q = new WP_Query(
@@ -545,7 +545,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 
 		add_post_meta( $attachment, '_wp_attached_file', 'some-image4.png', true );
 		add_post_meta( $attachment, '_test_meta_key', 'value', true );
-		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
+		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 
 		// Pass post_type a string value.
 		$q = new WP_Query(
@@ -585,7 +585,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		wp_set_post_terms( $attachment, 'test', 'post_tag' );
 
 		add_post_meta( $attachment, '_wp_attached_file', 'some-image5.png', true );
-		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
+		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 
 		// Pass post_type a string value.
 		$q = new WP_Query(
@@ -610,25 +610,37 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/22744
 	 */
-	public function test_filter_query_attachment_filenames_unhooks_itself() {
-		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
-
-		apply_filters(
-			'posts_clauses',
+	public function test_wp_query_removes_filter_wp_allow_query_attachment_by_filename() {
+		$attachment = self::factory()->post->create(
 			array(
-				'where'    => '',
-				'groupby'  => '',
-				'join'     => '',
-				'orderby'  => '',
-				'distinct' => '',
-				'fields'   => '',
-				'limit'    => '',
+				'post_type'    => 'attachment',
+				'post_status'  => 'publish',
+				'post_title'   => 'bar foo',
+				'post_content' => 'foo bar',
+				'post_excerpt' => 'This post has foo',
 			)
 		);
 
-		$result = has_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
+		add_post_meta( $attachment, '_wp_attached_file', 'some-image1.png', true );
+		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 
-		$this->assertFalse( $result );
+		$q = new WP_Query(
+			array(
+				's'           => 'image1',
+				'fields'      => 'ids',
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+			)
+		);
+
+		$this->assertSame( array( $attachment ), $q->posts );
+
+		/*
+		 * WP_Query should have removed the wp_allow_query_attachment_by_filename filter
+		 * and thus not match the attachment created above
+		 */
+		$q->get_posts();
+		$this->assertEmpty( $q->posts );
 	}
 
 	public function filter_posts_search( $sql ) {

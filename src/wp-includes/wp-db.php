@@ -18,6 +18,7 @@ define( 'EZSQL_VERSION', 'WP1.25' );
  * @since WP-0.71
  */
 define( 'OBJECT', 'OBJECT' );
+// phpcs:ignore Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase
 define( 'object', 'OBJECT' ); // Back compat.
 
 /**
@@ -856,7 +857,7 @@ class wpdb {
 		$incompatible_modes = (array) apply_filters( 'incompatible_sql_modes', $this->incompatible_modes );
 
 		foreach ( $modes as $i => $mode ) {
-			if ( in_array( $mode, $incompatible_modes ) ) {
+			if ( in_array( $mode, $incompatible_modes, true ) ) {
 				unset( $modes[ $i ] );
 			}
 		}
@@ -1030,7 +1031,7 @@ class wpdb {
 			$base_prefix   = $this->base_prefix;
 			$global_tables = array_merge( $this->global_tables, $this->ms_global_tables );
 			foreach ( $tables as $k => $table ) {
-				if ( in_array( $table, $global_tables ) ) {
+				if ( in_array( $table, $global_tables, true ) ) {
 					$tables[ $table ] = $base_prefix . $table;
 				} else {
 					$tables[ $table ] = $blog_prefix . $table;
@@ -1144,6 +1145,10 @@ class wpdb {
 	 * @return string escaped
 	 */
 	function _real_escape( $string ) {
+		if ( ! is_scalar( $string ) && ! is_null( $string ) ) {
+			return '';
+		}
+
 		if ( $this->dbh ) {
 			if ( $this->use_mysqli ) {
 				$escaped = mysqli_real_escape_string( $this->dbh, $string );
@@ -1328,7 +1333,9 @@ class wpdb {
 		// Count the number of valid placeholders in the query.
 		$placeholders = preg_match_all( "/(^|[^%]|(%%)+)%($allowed_format)?[sdF]/", $query, $matches );
 
-		if ( count( $args ) !== $placeholders ) {
+		$args_count = count( $args );
+
+		if ( $args_count !== $placeholders ) {
 			if ( 1 === $placeholders && $passed_as_array ) {
 				// If the passed query only expected one argument, but the wrong number of arguments were sent as an array, bail.
 				wp_load_translations_early();
@@ -1347,10 +1354,22 @@ class wpdb {
 					sprintf(
 						__( 'The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d).' ),
 						$placeholders,
-						count( $args )
+						$args_count
 					),
 					'WP-4.8.3'
 				);
+
+				/*
+				 * If we don't have enough arguments to match the placeholders,
+				 * return an empty string to avoid a fatal error on PHP 8.
+				 */
+				if ( $args_count < $placeholders ) {
+					$max_numbered_placeholder = ! empty( $matches[3] ) ? max( array_map( 'intval', $matches[3] ) ) : 0;
+
+					if ( ! $max_numbered_placeholder || $args_count < $max_numbered_placeholder ) {
+						return '';
+					}
+				}
 			}
 		}
 
@@ -1417,7 +1436,8 @@ class wpdb {
 
 		wp_load_translations_early();
 
-		if ( $caller = $this->get_caller() ) {
+		$caller = $this->get_caller();
+		if ( $caller ) {
 			/* translators: 1: Database error message, 2: SQL query, 3: Name of the calling function */
 			$error_str = sprintf( __( 'ClassicPress database error %1$s for query %2$s made by %3$s' ), $str, $this->last_query, $caller );
 		} else {
@@ -1522,7 +1542,8 @@ class wpdb {
 		$this->last_result   = array();
 		$this->col_info      = null;
 		$this->last_query    = null;
-		$this->rows_affected = $this->num_rows = 0;
+		$this->rows_affected = 0;
+		$this->num_rows      = 0;
 		$this->last_error    = '';
 
 		if ( $this->use_mysqli && $this->result instanceof mysqli_result ) {
@@ -1566,6 +1587,13 @@ class wpdb {
 		$client_flags = defined( 'MYSQL_CLIENT_FLAGS' ) ? MYSQL_CLIENT_FLAGS : 0;
 
 		if ( $this->use_mysqli ) {
+			/*
+			 * Set the MySQLi error reporting off because WordPress handles its own.
+			 * This is due to the default value change from `MYSQLI_REPORT_OFF`
+			 * to `MYSQLI_REPORT_ERROR|MYSQLI_REPORT_STRICT` in PHP 8.1.
+			 */
+			mysqli_report( MYSQLI_REPORT_OFF );
+
 			$this->dbh = mysqli_init();
 
 			$host    = $this->dbhost;
@@ -1573,7 +1601,8 @@ class wpdb {
 			$socket  = null;
 			$is_ipv6 = false;
 
-			if ( $host_data = $this->parse_db_host( $this->dbhost ) ) {
+			$host_data = $this->parse_db_host( $this->dbhost );
+			if ( $host_data ) {
 				list( $host, $port, $socket, $is_ipv6 ) = $host_data;
 			}
 
@@ -1700,7 +1729,7 @@ class wpdb {
 
 		// First peel off the socket parameter from the right, if it exists.
 		$socket_pos = strpos( $host, ':/' );
-		if ( $socket_pos !== false ) {
+		if ( false !== $socket_pos ) {
 			$socket = substr( $host, $socket_pos + 1 );
 			$host   = substr( $host, 0, $socket_pos );
 		}
@@ -1849,6 +1878,11 @@ class wpdb {
 		 * @param string $query Database query.
 		 */
 		$query = apply_filters( 'query', $query );
+
+		if ( ! $query ) {
+			$this->insert_id = 0;
+			return false;
+		}
 
 		$this->flush();
 
@@ -2127,7 +2161,7 @@ class wpdb {
 	function _insert_replace_helper( $table, $data, $format = null, $type = 'INSERT' ) {
 		$this->insert_id = 0;
 
-		if ( ! in_array( strtoupper( $type ), array( 'REPLACE', 'INSERT' ) ) ) {
+		if ( ! in_array( strtoupper( $type ), array( 'REPLACE', 'INSERT' ), true ) ) {
 			return false;
 		}
 
@@ -2136,7 +2170,8 @@ class wpdb {
 			return false;
 		}
 
-		$formats = $values = array();
+		$formats = array();
+		$values  = array();
 		foreach ( $data as $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$formats[] = 'NULL';
@@ -2200,7 +2235,9 @@ class wpdb {
 			return false;
 		}
 
-		$fields = $conditions = $values = array();
+		$fields     = array();
+		$conditions = array();
+		$values     = array();
 		foreach ( $data as $field => $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$fields[] = "`$field` = NULL";
@@ -2261,7 +2298,8 @@ class wpdb {
 			return false;
 		}
 
-		$conditions = $values = array();
+		$conditions = array();
+		$values     = array();
 		foreach ( $where as $field => $value ) {
 			if ( is_null( $value['value'] ) ) {
 				$conditions[] = "`$field` IS NULL";
@@ -2333,7 +2371,8 @@ class wpdb {
 	 *               of 'value' and 'format' keys.
 	 */
 	protected function process_field_formats( $data, $format ) {
-		$formats = $original_formats = (array) $format;
+		$formats          = (array) $format;
+		$original_formats = $formats;
 
 		foreach ( $data as $field => $value ) {
 			$value = array(
@@ -2448,8 +2487,8 @@ class wpdb {
 			$values = array_values( get_object_vars( $this->last_result[ $y ] ) );
 		}
 
-		// If there is a value return it else return null
-		return ( isset( $values[ $x ] ) && $values[ $x ] !== '' ) ? $values[ $x ] : null;
+		// If there is a value return it else return null.
+		return ( isset( $values[ $x ] ) && '' !== $values[ $x ] ) ? $values[ $x ] : null;
 	}
 
 	/**
@@ -2482,14 +2521,14 @@ class wpdb {
 			return null;
 		}
 
-		if ( $output == OBJECT ) {
+		if ( OBJECT == $output ) {
 			return $this->last_result[ $y ] ? $this->last_result[ $y ] : null;
-		} elseif ( $output == ARRAY_A ) {
+		} elseif ( ARRAY_A == $output ) {
 			return $this->last_result[ $y ] ? get_object_vars( $this->last_result[ $y ] ) : null;
-		} elseif ( $output == ARRAY_N ) {
+		} elseif ( ARRAY_N == $output ) {
 			return $this->last_result[ $y ] ? array_values( get_object_vars( $this->last_result[ $y ] ) ) : null;
-		} elseif ( strtoupper( $output ) === OBJECT ) {
-			// Back compat for OBJECT being previously case insensitive.
+		} elseif ( OBJECT === strtoupper( $output ) ) {
+			// Back compat for OBJECT being previously case-insensitive.
 			return $this->last_result[ $y ] ? $this->last_result[ $y ] : null;
 		} else {
 			$this->print_error( ' $db->get_row(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N' );
@@ -2557,12 +2596,12 @@ class wpdb {
 		}
 
 		$new_array = array();
-		if ( $output == OBJECT ) {
-			// Return an integer-keyed array of row objects
+		if ( OBJECT == $output ) {
+			// Return an integer-keyed array of row objects.
 			return $this->last_result;
-		} elseif ( $output == OBJECT_K ) {
-			// Return an array of row objects with keys from column 1
-			// (Duplicates are discarded)
+		} elseif ( OBJECT_K == $output ) {
+			// Return an array of row objects with keys from column 1.
+			// (Duplicates are discarded.)
 			if ( $this->last_result ) {
 				foreach ( $this->last_result as $row ) {
 					$var_by_ref = get_object_vars( $row );
@@ -2573,12 +2612,12 @@ class wpdb {
 				}
 			}
 			return $new_array;
-		} elseif ( $output == ARRAY_A || $output == ARRAY_N ) {
+		} elseif ( ARRAY_A == $output || ARRAY_N == $output ) {
 			// Return an integer-keyed array of...
 			if ( $this->last_result ) {
 				foreach ( (array) $this->last_result as $row ) {
-					if ( $output == ARRAY_N ) {
-						// ...integer-keyed row arrays
+					if ( ARRAY_N == $output ) {
+						// ...integer-keyed row arrays.
 						$new_array[] = array_values( get_object_vars( $row ) );
 					} else {
 						// ...column name-keyed row arrays
@@ -2625,7 +2664,8 @@ class wpdb {
 			return $this->table_charset[ $tablekey ];
 		}
 
-		$charsets = $columns = array();
+		$charsets = array();
+		$columns  = array();
 
 		$table_parts = explode( '.', $table );
 		$table       = '`' . implode( '`.`', $table_parts ) . '`';
@@ -2655,7 +2695,7 @@ class wpdb {
 			list( $type ) = explode( '(', $column->Type );
 
 			// A binary/blob means the whole query gets treated like this.
-			if ( in_array( strtoupper( $type ), array( 'BINARY', 'VARBINARY', 'TINYBLOB', 'MEDIUMBLOB', 'BLOB', 'LONGBLOB' ) ) ) {
+			if ( in_array( strtoupper( $type ), array( 'BINARY', 'VARBINARY', 'TINYBLOB', 'MEDIUMBLOB', 'BLOB', 'LONGBLOB' ), true ) ) {
 				$this->table_charset[ $tablekey ] = 'binary';
 				return 'binary';
 			}
@@ -3023,7 +3063,8 @@ class wpdb {
 			}
 
 			// We couldn't use any local conversions, send it to the DB.
-			$value['db'] = $db_check_string = true;
+			$value['db']     = true;
+			$db_check_string = true;
 		}
 		unset( $value ); // Remove by reference.
 
@@ -3281,7 +3322,7 @@ class wpdb {
 		$this->load_col_info();
 
 		if ( $this->col_info ) {
-			if ( $col_offset == -1 ) {
+			if ( -1 == $col_offset ) {
 				$i         = 0;
 				$new_array = array();
 				foreach ( (array) $this->col_info as $col ) {
@@ -3496,14 +3537,26 @@ class wpdb {
 	 *
 	 * @since WP-2.7.0
 	 *
-	 * @return null|string Null on failure, version number on success.
+	 * @return string|null Version number on success, null on failure.
 	 */
 	public function db_version() {
+		return preg_replace( '/[^0-9.].*/', '', $this->db_server_info() );
+	}
+
+	/**
+	 * Retrieves full MySQL server information.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @return string|false Server info on success, false on failure.
+	 */
+	public function db_server_info() {
 		if ( $this->use_mysqli ) {
 			$server_info = mysqli_get_server_info( $this->dbh );
 		} else {
 			$server_info = mysql_get_server_info( $this->dbh );
 		}
-		return preg_replace( '/[^0-9.].*/', '', $server_info );
+
+		return $server_info;
 	}
 }

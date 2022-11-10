@@ -526,7 +526,7 @@ class WP_Rewrite {
 		preg_match_all( '/%.+?%/', $this->permalink_structure, $tokens );
 		$tok_index = 1;
 		foreach ( (array) $tokens[0] as $token ) {
-			if ( '%post_id%' == $token && ( $tok_index <= 3 ) ) {
+			if ( '%post_id%' === $token && ( $tok_index <= 3 ) ) {
 				$front = $front . 'date/';
 				break;
 			}
@@ -797,7 +797,7 @@ class WP_Rewrite {
 	 * @param string $query String to append to the rewritten query. Must end in '='.
 	 */
 	public function add_rewrite_tag( $tag, $regex, $query ) {
-		$position = array_search( $tag, $this->rewritecode );
+		$position = array_search( $tag, $this->rewritecode, true );
 		if ( false !== $position && null !== $position ) {
 			$this->rewritereplace[ $position ] = $regex;
 			$this->queryreplace[ $position ]   = $query;
@@ -821,7 +821,7 @@ class WP_Rewrite {
 	 * @param string $tag Name of the rewrite tag to remove.
 	 */
 	public function remove_rewrite_tag( $tag ) {
-		$position = array_search( $tag, $this->rewritecode );
+		$position = array_search( $tag, $this->rewritecode, true );
 		if ( false !== $position && null !== $position ) {
 			unset( $this->rewritecode[ $position ] );
 			unset( $this->rewritereplace[ $position ] );
@@ -920,7 +920,7 @@ class WP_Rewrite {
 
 		// Get the structure, minus any cruft (stuff that isn't tags) at the front.
 		$structure = $permalink_structure;
-		if ( $front != '/' ) {
+		if ( '/' !== $front ) {
 			$structure = str_replace( $front, '', $structure );
 		}
 
@@ -1261,7 +1261,7 @@ class WP_Rewrite {
 
 		// robots.txt -only if installed at the root
 		$home_path      = parse_url( home_url() );
-		$robots_rewrite = ( empty( $home_path['path'] ) || '/' == $home_path['path'] ) ? array( 'robots\.txt$' => $this->index . '?robots=1' ) : array();
+		$robots_rewrite = ( empty( $home_path['path'] ) || '/' === $home_path['path'] ) ? array( 'robots\.txt$' => $this->index . '?robots=1' ) : array();
 
 		// Old feed and service files.
 		$deprecated_files = array(
@@ -1401,7 +1401,8 @@ class WP_Rewrite {
 			 * @param array $rules The rewrite rules generated for the current permastruct.
 			 */
 			$rules = apply_filters( "{$permastructname}_rewrite_rules", $rules );
-			if ( 'post_tag' == $permastructname ) {
+
+			if ( 'post_tag' === $permastructname ) {
 
 				/**
 				 * Filters rewrite rules used specifically for Tags.
@@ -1644,7 +1645,7 @@ class WP_Rewrite {
 		if ( $external ) {
 			$this->add_external_rule( $regex, $query );
 		} else {
-			if ( 'bottom' == $after ) {
+			if ( 'bottom' === $after ) {
 				$this->extra_rules = array_merge( $this->extra_rules, array( $regex => $query ) );
 			} else {
 				$this->extra_rules_top = array_merge( $this->extra_rules_top, array( $regex => $query ) );
@@ -1834,7 +1835,9 @@ class WP_Rewrite {
 	 * @since WP-1.5.0
 	 */
 	public function init() {
-		$this->extra_rules         = $this->non_wp_rules = $this->endpoints = array();
+		$this->extra_rules         = array();
+		$this->non_wp_rules        = array();
+		$this->endpoints           = array();
 		$this->permalink_structure = get_option( 'permalink_structure' );
 		$this->front               = substr( $this->permalink_structure, 0, strpos( $this->permalink_structure, '%' ) );
 		$this->root                = '';
@@ -1849,7 +1852,8 @@ class WP_Rewrite {
 		unset( $this->search_structure );
 		unset( $this->feed_structure );
 		unset( $this->comment_feed_structure );
-		$this->use_trailing_slashes = ( '/' == substr( $this->permalink_structure, -1, 1 ) );
+
+		$this->use_trailing_slashes = ( '/' === substr( $this->permalink_structure, -1, 1 ) );
 
 		// Enable generic rules for pages if permalink structure doesn't begin with a wildcard.
 		if ( preg_match( '/^[^%]*%(?:postname|category|tag|author)%/', $this->permalink_structure ) ) {
@@ -1904,7 +1908,7 @@ class WP_Rewrite {
 	 * @param string $category_base Category permalink structure base.
 	 */
 	public function set_category_base( $category_base ) {
-		if ( $category_base != get_option( 'category_base' ) ) {
+		if ( get_option( 'category_base' ) !== $category_base ) {
 			update_option( 'category_base', $category_base );
 			$this->init();
 		}
@@ -1922,7 +1926,7 @@ class WP_Rewrite {
 	 * @param string $tag_base Tag permalink structure base.
 	 */
 	public function set_tag_base( $tag_base ) {
-		if ( $tag_base != get_option( 'tag_base' ) ) {
+		if ( get_option( 'tag_base' ) !== $tag_base ) {
 			update_option( 'tag_base', $tag_base );
 			$this->init();
 		}

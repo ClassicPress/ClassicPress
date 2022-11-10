@@ -19,7 +19,7 @@
 function translations_api( $type, $args = null ) {
 	include ABSPATH . WPINC . '/version.php'; // include an unmodified $wp_version
 
-	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ) ) ) {
+	if ( ! in_array( $type, array( 'plugins', 'themes', 'core' ), true ) ) {
 		return new WP_Error( 'invalid_type', __( 'Invalid translation type.' ) );
 	}
 
@@ -124,8 +124,11 @@ function translations_api( $type, $args = null ) {
  *               in an error, an empty array will be returned.
  */
 function wp_get_available_translations() {
-	if ( ! wp_installing() && false !== ( $translations = get_site_transient( 'available_translations' ) ) ) {
-		return $translations;
+	if ( ! wp_installing() ) {
+		$translations = get_site_transient( 'available_translations' );
+		if ( false !== $translations ) {
+			return $translations;
+		}
 	}
 
 	include ABSPATH . WPINC . '/version.php'; // include an unmodified $wp_version
@@ -175,7 +178,7 @@ function wp_install_language_form( $languages ) {
 				esc_attr( $language['language'] ),
 				esc_attr( current( $language['iso'] ) ),
 				esc_attr( $language['strings']['continue'] ),
-				in_array( $language['language'], $installed_languages ) ? ' data-installed="1"' : '',
+				in_array( $language['language'], $installed_languages, true ) ? ' data-installed="1"' : '',
 				esc_html( $language['native_name'] )
 			);
 
@@ -189,7 +192,7 @@ function wp_install_language_form( $languages ) {
 			esc_attr( $language['language'] ),
 			esc_attr( current( $language['iso'] ) ),
 			esc_attr( $language['strings']['continue'] ),
-			in_array( $language['language'], $installed_languages ) ? ' data-installed="1"' : '',
+			in_array( $language['language'], $installed_languages, true ) ? ' data-installed="1"' : '',
 			esc_html( $language['native_name'] )
 		);
 	}
@@ -210,7 +213,7 @@ function wp_install_language_form( $languages ) {
  */
 function wp_download_language_pack( $download ) {
 	// Check if the translation is already installed.
-	if ( in_array( $download, get_available_languages() ) ) {
+	if ( in_array( $download, get_available_languages(), true ) ) {
 		return $download;
 	}
 

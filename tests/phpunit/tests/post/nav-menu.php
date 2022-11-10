@@ -9,8 +9,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	 */
 	public $menu_id;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->menu_id = wp_create_nav_menu( rand_str() );
 	}
@@ -40,7 +40,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( 0, strpos( $menu, '<ul' ) );
+		$this->assertSame( 0, strpos( $menu, '<ul' ) );
 	}
 
 	function test_wp_get_associated_nav_menu_items() {
@@ -106,35 +106,35 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		);
 
 		$tag_items = wp_get_associated_nav_menu_items( $tag_id, 'taxonomy', 'post_tag' );
-		$this->assertEqualSets( array( $tag_insert ), $tag_items );
+		$this->assertSameSets( array( $tag_insert ), $tag_items );
 		$cat_items = wp_get_associated_nav_menu_items( $cat_id, 'taxonomy', 'category' );
-		$this->assertEqualSets( array( $cat_insert ), $cat_items );
+		$this->assertSameSets( array( $cat_insert ), $cat_items );
 		$post_items = wp_get_associated_nav_menu_items( $post_id );
-		$this->assertEqualSets( array( $post_insert ), $post_items );
+		$this->assertSameSets( array( $post_insert ), $post_items );
 		$post_2_items = wp_get_associated_nav_menu_items( $post_2_id );
-		$this->assertEqualSets( array( $post_2_insert ), $post_2_items );
+		$this->assertSameSets( array( $post_2_insert ), $post_2_items );
 		$page_items = wp_get_associated_nav_menu_items( $page_id );
-		$this->assertEqualSets( array( $page_insert ), $page_items );
+		$this->assertSameSets( array( $page_insert ), $page_items );
 
 		wp_delete_term( $tag_id, 'post_tag' );
 		$tag_items = wp_get_associated_nav_menu_items( $tag_id, 'taxonomy', 'post_tag' );
-		$this->assertEqualSets( array(), $tag_items );
+		$this->assertSameSets( array(), $tag_items );
 
 		wp_delete_term( $cat_id, 'category' );
 		$cat_items = wp_get_associated_nav_menu_items( $cat_id, 'taxonomy', 'category' );
-		$this->assertEqualSets( array(), $cat_items );
+		$this->assertSameSets( array(), $cat_items );
 
 		wp_delete_post( $post_id, true );
 		$post_items = wp_get_associated_nav_menu_items( $post_id );
-		$this->assertEqualSets( array(), $post_items );
+		$this->assertSameSets( array(), $post_items );
 
 		wp_delete_post( $post_2_id, true );
 		$post_2_items = wp_get_associated_nav_menu_items( $post_2_id );
-		$this->assertEqualSets( array(), $post_2_items );
+		$this->assertSameSets( array(), $post_2_items );
 
 		wp_delete_post( $page_id, true );
 		$page_items = wp_get_associated_nav_menu_items( $page_id );
-		$this->assertEqualSets( array(), $page_items );
+		$this->assertSameSets( array(), $page_items );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 
 		// Confirm it saved properly
 		$custom_item = wp_setup_nav_menu_item( get_post( $custom_item_id ) );
-		$this->assertEquals( 'Wordpress.org', $custom_item->title );
+		$this->assertSame( 'Wordpress.org', $custom_item->title );
 
 		// Update the orphan with an associated nav menu
 		wp_update_nav_menu_item(
@@ -169,7 +169,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		$menu_items  = wp_get_nav_menu_items( $this->menu_id );
 		$custom_item = wp_filter_object_list( $menu_items, array( 'db_id' => $custom_item_id ) );
 		$custom_item = array_pop( $custom_item );
-		$this->assertEquals( 'WordPress.org', $custom_item->title );
+		$this->assertSame( 'WordPress.org', $custom_item->title );
 
 	}
 
@@ -218,7 +218,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		$locations['primary'] = $menu_obj->term_id;
 		set_theme_mod( 'nav_menu_locations', $locations );
 
-		$this->assertEquals( 'My Menu', wp_get_nav_menu_name( 'primary' ) );
+		$this->assertSame( 'My Menu', wp_get_nav_menu_name( 'primary' ) );
 	}
 
 	/**
@@ -247,7 +247,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		// And this is what we got when calling wp_get_nav_menus()
 		$nav_menus_names = wp_list_pluck( wp_get_nav_menus(), 'name' );
 
-		$this->assertEquals( $nav_menus_names, $expected_nav_menus_names );
+		$this->assertSame( $nav_menus_names, $expected_nav_menus_names );
 	}
 
 	/**
@@ -279,8 +279,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		);
 		$post_type_archive_item    = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-		$this->assertEquals( $post_type_slug, $post_type_archive_item->title );
-		$this->assertEquals( $post_type_description, $post_type_archive_item->description );
+		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
+		$this->assertSame( $post_type_description, $post_type_archive_item->description );
 	}
 
 	/**
@@ -310,8 +310,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		);
 		$post_type_archive_item    = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-		$this->assertEquals( $post_type_slug, $post_type_archive_item->title );
-		$this->assertEquals( $post_type_description, $post_type_archive_item->description ); //fail!!!
+		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
+		$this->assertSame( $post_type_description, $post_type_archive_item->description ); // Fail!
 	}
 
 	/**
@@ -345,8 +345,8 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		);
 		$post_type_archive_item    = wp_setup_nav_menu_item( get_post( $post_type_archive_item_id ) );
 
-		$this->assertEquals( $post_type_slug, $post_type_archive_item->title );
-		$this->assertEquals( $menu_item_description, $post_type_archive_item->description );
+		$this->assertSame( $post_type_slug, $post_type_archive_item->title );
+		$this->assertSame( $menu_item_description, $post_type_archive_item->description );
 	}
 
 	/**
@@ -459,9 +459,9 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 
-		// The markup should include whitespace between <li>s
-		$this->assertRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
-		$this->assertNotRegExp( '/<\/li><li.*>/U', $menu );
+		// The markup should include whitespace between <li>'s.
+		$this->assertMatchesRegularExpression( '/\s<li.*>|<\/li>\s/U', $menu );
+		$this->assertDoesNotMatchRegularExpression( '/<\/li><li.*>/U', $menu );
 
 		// Whitepsace suppressed.
 		$menu = wp_nav_menu(
@@ -472,9 +472,9 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 
-		// The markup should not include whitespace around <li>s
-		$this->assertNotRegExp( '/\s<li.*>|<\/li>\s/U', $menu );
-		$this->assertRegExp( '/><li.*>|<\/li></U', $menu );
+		// The markup should not include whitespace around <li>'s.
+		$this->assertDoesNotMatchRegularExpression( '/\s<li.*>|<\/li>\s/U', $menu );
+		$this->assertMatchesRegularExpression( '/><li.*>|<\/li></U', $menu );
 	}
 
 	/*
@@ -651,9 +651,9 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		);
 		$tag_id  = self::factory()->tag->create();
 
-		$wpdb->query( "UPDATE $wpdb->posts SET ID=$new_id WHERE ID=$page_id" );
-		$wpdb->query( "UPDATE $wpdb->terms SET term_id=$new_id WHERE term_id=$tag_id" );
-		$wpdb->query( "UPDATE $wpdb->term_taxonomy SET term_id=$new_id WHERE term_id=$tag_id" );
+		$wpdb->update( $wpdb->posts, array( 'ID' => $new_id ), array( 'ID' => $page_id ) );
+		$wpdb->update( $wpdb->terms, array( 'term_id' => $new_id ), array( 'term_id' => $tag_id ) );
+		$wpdb->update( $wpdb->term_taxonomy, array( 'term_id' => $new_id ), array( 'term_id' => $tag_id ) );
 
 		update_option( 'page_on_front', $new_id );
 
@@ -723,13 +723,13 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 				'data' => $data,
 			)
 		);
-		$this->assertEquals( 'auto-draft', get_post_status( $auto_draft_post_id ) );
-		$this->assertEquals( 'draft', get_post_status( $draft_post_id ) );
-		$this->assertEquals( 'private', get_post_status( $private_post_id ) );
+		$this->assertSame( 'auto-draft', get_post_status( $auto_draft_post_id ) );
+		$this->assertSame( 'draft', get_post_status( $draft_post_id ) );
+		$this->assertSame( 'private', get_post_status( $private_post_id ) );
 		wp_delete_post( $wp_customize->changeset_post_id(), true );
 		$this->assertFalse( get_post_status( $auto_draft_post_id ) );
-		$this->assertEquals( 'trash', get_post_status( $draft_post_id ) );
-		$this->assertEquals( 'private', get_post_status( $private_post_id ) );
+		$this->assertSame( 'trash', get_post_status( $draft_post_id ) );
+		$this->assertSame( 'private', get_post_status( $private_post_id ) );
 	}
 
 	/**
@@ -817,5 +817,4 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 		$this->assertNotContains( 'current-menu-parent', $post_archive_menu_item->classes );
 		$this->assertNotContains( 'current-menu-ancestor', $post_archive_menu_item->classes );
 	}
-
 }

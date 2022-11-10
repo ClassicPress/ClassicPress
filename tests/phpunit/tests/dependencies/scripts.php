@@ -9,13 +9,13 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	public $classicpress_asset_version_calls    = array();
 	public $classicpress_asset_version_override = null;
 
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 		self::$asset_version = classicpress_asset_version( 'script' );
-		parent::setUpBeforeClass();
+		parent::set_up_before_class();
 	}
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		remove_action( 'wp_default_scripts', 'wp_default_scripts' );
 		add_filter(
@@ -29,7 +29,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$GLOBALS['wp_scripts']->default_version = self::$asset_version;
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_scripts'] = $this->old_wp_scripts;
 		add_action( 'wp_default_scripts', 'wp_default_scripts' );
 		remove_filter(
@@ -37,7 +37,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array( $this, 'classicpress_asset_version_handler' ),
 			10
 		);
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	function classicpress_asset_version_handler( $version, $type, $handle ) {
@@ -75,13 +75,13 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com?ver=1.2'></script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 
 		// 'classicpress_asset_version' filter called as expected
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				array(
 					'version' => $ver,
@@ -192,8 +192,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$this->classicpress_asset_version_override = 'oooo';
 		wp_enqueue_script( 'filter-null-version', 'example.com', array(), null );
 		$expected = "<script type='text/javascript' src='http://example.com?ver=oooo'></script>\n";
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals(
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame(
 			array(
 				array(
 					'version' => '',
@@ -258,10 +258,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='{$wp_scripts->base_url}ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver'></script>\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 
 		// Cleanup
 		$wp_scripts->base_url = $base_url_backup;
@@ -286,7 +286,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$ver      = self::$asset_version;
 		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=one,two,three&amp;ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, $print_scripts );
+		$this->assertSame( $expected, $print_scripts );
 	}
 
 	/**
@@ -301,10 +301,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -318,10 +318,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected = "<!--[if gt IE 7]>\n<script type='text/javascript' src='http://example.com'></script>\n<![endif]-->\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -337,10 +337,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<!--[if lt IE 9]>\n<script type='text/javascript' src='http://example.com'></script>\n<![endif]-->\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -354,10 +354,10 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected = "<script type='text/javascript' src='http://example.com'></script>\n";
 
 		// Go!
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
-		// No scripts left to print
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		// No scripts left to print.
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -383,7 +383,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		wp_enqueue_script( 'handle-three' );
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -400,8 +400,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$footer = get_echo( 'wp_print_footer_scripts' );
 
 		$this->assertEmpty( $header );
-		$this->assertContains( home_url( 'bar.js' ), $footer );
-		$this->assertContains( home_url( 'baz.js' ), $footer );
+		$this->assertStringContainsString( home_url( 'bar.js' ), $footer );
+		$this->assertStringContainsString( home_url( 'baz.js' ), $footer );
 	}
 
 	/**
@@ -467,8 +467,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected_header .= "<script type='text/javascript' src='/child-head.js'></script>\n";
 		$expected_footer  = "<script type='text/javascript' src='/parent.js'></script>\n";
 
-		$this->assertEquals( $expected_header, $header );
-		$this->assertEquals( $expected_footer, $footer );
+		$this->assertSame( $expected_header, $header );
+		$this->assertSame( $expected_footer, $footer );
 	}
 
 	/**
@@ -488,8 +488,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected_footer  = "<script type='text/javascript' src='/child-footer.js'></script>\n";
 		$expected_footer .= "<script type='text/javascript' src='/parent.js'></script>\n";
 
-		$this->assertEquals( $expected_header, $header );
-		$this->assertEquals( $expected_footer, $footer );
+		$this->assertSame( $expected_header, $header );
+		$this->assertSame( $expected_footer, $footer );
 	}
 
 	/**
@@ -519,8 +519,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected_footer .= "<script type='text/javascript' src='/child2-footer.js'></script>\n";
 		$expected_footer .= "<script type='text/javascript' src='/parent-footer.js'></script>\n";
 
-		$this->assertEquals( $expected_header, $header );
-		$this->assertEquals( $expected_footer, $footer );
+		$this->assertSame( $expected_header, $header );
+		$this->assertSame( $expected_footer, $footer );
 	}
 
 	/**
@@ -537,7 +537,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	 */
 	function test_wp_add_inline_script_unknown_handle() {
 		$this->assertFalse( wp_add_inline_script( 'test-invalid', 'console.log("before");', 'before' ) );
-		$this->assertEquals( '', get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -550,7 +550,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected  = "<script type='text/javascript'>\nconsole.log(\"before\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -563,7 +563,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected  = "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\n</script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -578,7 +578,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\n</script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -595,7 +595,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\nconsole.log(\"after\");\n</script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -612,7 +612,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\n</script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -638,7 +638,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -662,7 +662,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -690,7 +690,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after three\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='/directory/four.js?ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -718,8 +718,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 		wp_script_add_data( 'test-example', 'conditional', 'gte IE 9' );
 
-		$this->assertEquals( $expected_localized, get_echo( 'wp_print_scripts' ) );
-		$this->assertEquals( $expected, $wp_scripts->print_html );
+		$this->assertSame( $expected_localized, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, $wp_scripts->print_html );
 		$this->assertTrue( $wp_scripts->do_concat );
 	}
 
@@ -745,7 +745,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$this->assertEquals( $expected, $print_scripts );
+		$this->assertSame( $expected, $print_scripts );
 	}
 
 	/**
@@ -773,7 +773,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$this->assertEquals( $expected, $print_scripts );
+		$this->assertSame( $expected, $print_scripts );
 	}
 
 	/**
@@ -798,7 +798,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$this->assertEquals( $expected, $print_scripts );
+		$this->assertSame( $expected, $print_scripts );
 	}
 
 	/**
@@ -827,7 +827,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
 
-		$this->assertEquals( $expected, $print_scripts );
+		$this->assertSameIgnoreEOL( $expected, $print_scripts );
 	}
 
 	/**
@@ -855,7 +855,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$print_scripts = get_echo( '_print_scripts' );
 
 		$tail = substr( $print_scripts, strrpos( $print_scripts, '<![endif]-->' ) );
-		$this->assertEquals( $expected_tail, $tail );
+		$this->assertSame( $expected_tail, $tail );
 	}
 
 	/**
@@ -880,7 +880,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script3.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script4.js?ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -904,7 +904,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script3.js?ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript' src='/wp-includes/js/script4.js?ver={$ver}'></script>\n";
 
-		$this->assertEquals( $expected, get_echo( 'wp_print_scripts' ) );
+		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
 
 	/**
@@ -918,8 +918,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( array( 'file' => $real_file ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'autoCloseTags',
@@ -941,7 +941,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		);
 		$this->assertEmpty( $wp_enqueue_code_editor['codemirror']['gutters'] );
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -953,7 +953,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -975,7 +975,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -1005,8 +1005,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_enqueue_code_editor = wp_enqueue_code_editor( compact( 'file' ) );
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'continueComments',
 				'direction',
@@ -1024,7 +1024,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		);
 		$this->assertEmpty( $wp_enqueue_code_editor['codemirror']['gutters'] );
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1036,7 +1036,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1058,7 +1058,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -1099,8 +1099,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'continueComments',
@@ -1121,7 +1121,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['codemirror'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1133,7 +1133,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1155,7 +1155,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',
@@ -1193,8 +1193,8 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 		$this->assertNonEmptyMultidimensionalArray( $wp_enqueue_code_editor );
 
-		$this->assertEqualSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
-		$this->assertEqualSets(
+		$this->assertSameSets( array( 'codemirror', 'csslint', 'jshint', 'htmlhint' ), array_keys( $wp_enqueue_code_editor ) );
+		$this->assertSameSets(
 			array(
 				'autoCloseBrackets',
 				'continueComments',
@@ -1215,7 +1215,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['codemirror'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'errors',
 				'box-model',
@@ -1227,7 +1227,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['csslint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'boss',
 				'curly',
@@ -1249,7 +1249,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 			array_keys( $wp_enqueue_code_editor['jshint'] )
 		);
 
-		$this->assertEqualSets(
+		$this->assertSameSets(
 			array(
 				'tagname-lowercase',
 				'attr-lowercase',

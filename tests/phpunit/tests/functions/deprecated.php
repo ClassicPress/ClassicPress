@@ -8,7 +8,7 @@
  * @since      WP-3.5
  * @group      deprecated
  */
-class Test_Functions_Deprecated extends WP_UnitTestCase {
+class Tests_Functions_Deprecated extends WP_UnitTestCase {
 
 	/**
 	 * List of functions that have been passed through _deprecated_function()
@@ -32,8 +32,8 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * Set up the test fixture
 	 * @return void
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		$this->_deprecated_functions = array();
 		$this->_deprecated_arguments = array();
 		$this->_deprecated_files     = array();
@@ -49,14 +49,14 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 	 * Tear down the test fixture
 	 * @return void
 	 */
-	public function teardown() {
+	public function tear_down() {
 		remove_action( 'deprecated_function_run', array( $this, 'deprecated_function' ), 10, 3 );
 		remove_action( 'deprecated_function_trigger_error', '__return_false' );
 		remove_action( 'deprecated_argument_run', array( $this, 'deprecated_argument' ), 10, 3 );
 		remove_action( 'deprecated_argument_trigger_error', '__return_false' );
 		remove_action( 'deprecated_file_included', array( $this, 'deprecated_argument' ), 10, 4 );
 		remove_action( 'deprecated_file_trigger_error', '__return_false' );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -126,7 +126,7 @@ class Test_Functions_Deprecated extends WP_UnitTestCase {
 				$key    = 'file';
 		}
 		foreach ( $search as $v ) {
-			if ( $name == $v[ $key ] ) {
+			if ( $name === $v[ $key ] ) {
 				return $v;
 			}
 		}

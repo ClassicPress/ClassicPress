@@ -173,6 +173,7 @@ switch ( $action ) {
 			exit;
 		}
 
+		// Intentional fall-through to display $errors.
 	default:
 		$profileuser = get_user_to_edit( $user_id );
 
@@ -203,7 +204,7 @@ switch ( $action ) {
 <?php endif; ?>
 		<?php if ( isset( $_GET['error'] ) ) : ?>
 <div class="notice notice-error">
-			<?php if ( 'new-email' == $_GET['error'] ) : ?>
+			<?php if ( 'new-email' === $_GET['error'] ) : ?>
 	<p><?php _e( 'Error while saving the new email address. Please try again.' ); ?></p>
 	<?php endif; ?>
 </div>
@@ -462,7 +463,7 @@ switch ( $action ) {
 			$public_display['display_lastfirst'] = $profileuser->last_name . ' ' . $profileuser->first_name;
 		}
 
-		if ( ! in_array( $profileuser->display_name, $public_display ) ) { // Only add this if it isn't duplicated elsewhere
+		if ( ! in_array( $profileuser->display_name, $public_display, true ) ) { // Only add this if it isn't duplicated elsewhere.
 			$public_display = array( 'display_displayname' => $profileuser->display_name ) + $public_display;
 		}
 
@@ -594,7 +595,8 @@ switch ( $action ) {
 		 * @param bool    $show        Whether to show the password fields. Default true.
 		 * @param WP_User $profileuser User object for the current user to edit.
 		 */
-		if ( $show_password_fields = apply_filters( 'show_password_fields', true, $profileuser ) ) :
+		$show_password_fields = apply_filters( 'show_password_fields', true, $profileuser );
+		if ( $show_password_fields ) :
 			?>
 </table>
 

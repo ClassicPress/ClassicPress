@@ -16,7 +16,7 @@ add_thickbox();
 
 if ( is_multisite() && ! is_network_admin() ) {
 	wp_redirect( network_admin_url( 'update-core.php' ) );
-	exit();
+	exit;
 }
 
 if ( ! current_user_can( 'update_core' ) && ! current_user_can( 'update_themes' ) && ! current_user_can( 'update_plugins' ) && ! current_user_can( 'update_languages' ) ) {
@@ -37,12 +37,16 @@ function list_core_update( $update ) {
 	static $first_pass = true;
 
 	$wp_version = get_bloginfo( 'version' );
+	$version_string = sprintf( '%s&ndash;<strong>%s</strong>', $update->current, $update->locale );
 
 	if ( 'en_US' == $update->locale && 'en_US' == get_locale() ) {
 		$version_string = $update->current;
-	}
-	// If the only available update is a partial builds, it doesn't need a language-specific version string.
-	elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version && ( $updates = get_core_updates() ) && 1 == count( $updates ) ) {
+	} elseif ( 'en_US' == $update->locale && $update->packages->partial && $wp_version == $update->partial_version ) {
+		$updates = get_core_updates();
+		if ( $updates && 1 === count( $updates ) ) {
+			// If the only available update is a partial builds, it doesn't need a language-specific version string.
+			$version_string = $update->current;
+		}
 		$version_string = $update->current;
 	} else {
 		$version_string = sprintf( '%s&ndash;<strong>%s</strong>', $update->current, $update->locale );
@@ -116,10 +120,9 @@ function list_core_update( $update ) {
 	echo '</p>';
 	if ( 'en_US' != $update->locale && ( ! isset( $wp_local_package ) || $wp_local_package != $update->locale ) ) {
 		echo '<p class="hint">' . __( 'This localized version contains both the translation and various other localization fixes. You can skip upgrading if you want to keep your current translation.' ) . '</p>';
-	}
-	// Partial builds don't need language-specific warnings.
-	elseif ( 'en_US' == $update->locale && get_locale() != 'en_US' && ( ! $update->packages->partial && $wp_version == $update->partial_version ) ) {
-		echo '<p class="hint">' . sprintf( __( 'You are about to install ClassicPress %s <strong>in English (US).</strong> There is a chance this update will break your translation. You may prefer to wait for the localized version to be released.' ), $update->response != 'development' ? $update->current : '' ) . '</p>';
+	} elseif ( 'en_US' == $update->locale && get_locale() != 'en_US' && ( ! $update->packages->partial && $wp_version == $update->partial_version ) ) {
+		// Partial builds don't need language-specific warnings.
+		echo '<p class="hint">' . sprintf( __( 'You are about to install WordPress %s <strong>in English (US).</strong> There is a chance this update will break your translation. You may prefer to wait for the localized version to be released.' ), $update->response != 'development' ? $update->current : '' ) . '</p>';
 	}
 	echo '</form>';
 
@@ -591,7 +594,8 @@ function do_core_upgrade( $reinstall = false ) {
 	<h1><?php _e( 'Update ClassicPress' ); ?></h1>
 	<?php
 
-	if ( false === ( $credentials = request_filesystem_credentials( $url, '', false, ABSPATH, array( 'version', 'locale' ), $allow_relaxed_file_ownership ) ) ) {
+	$credentials = request_filesystem_credentials( $url, '', false, ABSPATH, array( 'version', 'locale' ), $allow_relaxed_file_ownership );
+	if ( false === $credentials ) {
 		echo '</div>';
 		return;
 	}
@@ -711,9 +715,9 @@ function do_undismiss_core_update() {
 $action = isset( $_GET['action'] ) ? $_GET['action'] : 'upgrade-core';
 
 $upgrade_error = false;
-if ( ( 'do-theme-upgrade' == $action || ( 'do-plugin-upgrade' == $action && ! isset( $_GET['plugins'] ) ) )
+if ( ( 'do-theme-upgrade' === $action || ( 'do-plugin-upgrade' === $action && ! isset( $_GET['plugins'] ) ) )
 	&& ! isset( $_POST['checked'] ) ) {
-	$upgrade_error = $action == 'do-theme-upgrade' ? 'themes' : 'plugins';
+	$upgrade_error = ( 'do-theme-upgrade' === $action ) ? 'themes' : 'plugins';
 	$action        = 'upgrade-core';
 }
 
@@ -752,8 +756,8 @@ get_current_screen()->set_help_sidebar(
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
-if ( 'upgrade-core' == $action ) {
-	// Force a update check when requested
+if ( 'upgrade-core' === $action ) {
+	// Force a update check when requested.
 	$force_check = ! empty( $_GET['force-check'] );
 	wp_version_check( array(), $force_check );
 
@@ -816,7 +820,7 @@ if ( 'upgrade-core' == $action ) {
 
 	include ABSPATH . 'wp-admin/admin-footer.php';
 
-} elseif ( 'do-core-upgrade' == $action || 'do-core-reinstall' == $action ) {
+} elseif ( 'do-core-upgrade' === $action || 'do-core-reinstall' === $action ) {
 
 	if ( ! current_user_can( 'update_core' ) ) {
 		wp_die( __( 'Sorry, you are not allowed to update this site.' ) );
@@ -832,7 +836,7 @@ if ( 'upgrade-core' == $action ) {
 	}
 
 	require_once ABSPATH . 'wp-admin/admin-header.php';
-	if ( 'do-core-reinstall' == $action ) {
+	if ( 'do-core-reinstall' === $action ) {
 		$reinstall = true;
 	} else {
 		$reinstall = false;
@@ -852,7 +856,7 @@ if ( 'upgrade-core' == $action ) {
 
 	include ABSPATH . 'wp-admin/admin-footer.php';
 
-} elseif ( 'do-plugin-upgrade' == $action ) {
+} elseif ( 'do-plugin-upgrade' === $action ) {
 
 	if ( ! current_user_can( 'update_plugins' ) ) {
 		wp_die( __( 'Sorry, you are not allowed to update this site.' ) );
@@ -890,7 +894,7 @@ if ( 'upgrade-core' == $action ) {
 
 	include ABSPATH . 'wp-admin/admin-footer.php';
 
-} elseif ( 'do-theme-upgrade' == $action ) {
+} elseif ( 'do-theme-upgrade' === $action ) {
 
 	if ( ! current_user_can( 'update_themes' ) ) {
 		wp_die( __( 'Sorry, you are not allowed to update this site.' ) );
@@ -930,7 +934,7 @@ if ( 'upgrade-core' == $action ) {
 
 	include ABSPATH . 'wp-admin/admin-footer.php';
 
-} elseif ( 'do-translation-upgrade' == $action ) {
+} elseif ( 'do-translation-upgrade' === $action ) {
 
 	if ( ! current_user_can( 'update_languages' ) ) {
 		wp_die( __( 'Sorry, you are not allowed to update this site.' ) );
@@ -969,5 +973,5 @@ if ( 'upgrade-core' == $action ) {
 	 *
 	 * @since WP-3.2.0
 	 */
-	do_action( "update-core-custom_{$action}" );
+	do_action( "update-core-custom_{$action}" );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }

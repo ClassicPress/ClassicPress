@@ -237,7 +237,7 @@ abstract class WP_Image_Editor {
 			 */
 			$quality = apply_filters( 'wp_editor_set_quality', $this->default_quality, $this->mime_type );
 
-			if ( 'image/jpeg' == $this->mime_type ) {
+			if ( 'image/jpeg' === $this->mime_type ) {
 				/**
 				 * Filters the JPEG compression quality for backward-compatibility.
 				 *
@@ -361,8 +361,11 @@ abstract class WP_Image_Editor {
 		$name    = wp_basename( $this->file, ".$ext" );
 		$new_ext = strtolower( $extension ? $extension : $ext );
 
-		if ( ! is_null( $dest_path ) && $_dest_path = realpath( $dest_path ) ) {
-			$dir = $_dest_path;
+		if ( ! is_null( $dest_path ) ) {
+			$_dest_path = realpath( $dest_path );
+			if ( $_dest_path ) {
+				$dir = $_dest_path;
+			}
 		}
 
 		return trailingslashit( $dir ) . "{$name}-{$suffix}.{$new_ext}";
@@ -394,7 +397,8 @@ abstract class WP_Image_Editor {
 	 * @return bool
 	 */
 	protected function make_image( $filename, $function, $arguments ) {
-		if ( $stream = wp_is_stream( $filename ) ) {
+		$stream = wp_is_stream( $filename );
+		if ( $stream ) {
 			ob_start();
 		} else {
 			// The directory containing the original file may no longer exist when using a replication plugin.
@@ -464,7 +468,7 @@ abstract class WP_Image_Editor {
 	 * @return string|false
 	 */
 	protected static function get_extension( $mime_type = null ) {
-		$extensions = explode( '|', array_search( $mime_type, wp_get_mime_types() ) );
+		$extensions = explode( '|', array_search( $mime_type, wp_get_mime_types(), true ) );
 
 		if ( empty( $extensions[0] ) ) {
 			return false;

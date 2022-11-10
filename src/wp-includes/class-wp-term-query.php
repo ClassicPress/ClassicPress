@@ -253,7 +253,7 @@ class WP_Term_Query {
 			$query['child_of'] = false;
 		}
 
-		if ( 'all' == $query['get'] ) {
+		if ( 'all' === $query['get'] ) {
 			$query['childless']    = false;
 			$query['child_of']     = 0;
 			$query['hide_empty']   = 0;
@@ -276,12 +276,16 @@ class WP_Term_Query {
 	}
 
 	/**
-	 * Sets up the query for retrieving terms.
+	 * Sets up the query and retrieves the results.
+	 *
+	 * The return type varies depending on the value passed to `$args['fields']`. See
+	 * WP_Term_Query::get_terms() for details.
 	 *
 	 * @since WP-4.6.0
 	 *
 	 * @param string|array $query Array or URL query string of parameters.
-	 * @return array|int List of terms, or number of terms when 'count' is passed as a query var.
+	 * @return WP_Term[]|int[]|string[]|string Array of terms, or number of terms as numeric string
+	 *                                         when 'count' is passed as a query var.
 	 */
 	public function query( $query ) {
 		$this->query_vars = wp_parse_args( $query );
@@ -289,13 +293,43 @@ class WP_Term_Query {
 	}
 
 	/**
-	 * Get terms, based on query_vars.
+	 * Retrieves the query results.
+	 *
+	 * The return type varies depending on the value passed to `$args['fields']`.
+	 *
+	 * The following will result in an array of `WP_Term` objects being returned:
+	 *
+	 *   - 'all'
+	 *   - 'all_with_object_id'
+	 *
+	 * The following will result in a numeric string being returned:
+	 *
+	 *   - 'count'
+	 *
+	 * The following will result in an array of text strings being returned:
+	 *
+	 *   - 'id=>name'
+	 *   - 'id=>slug'
+	 *   - 'names'
+	 *   - 'slugs'
+	 *
+	 * The following will result in an array of numeric strings being returned:
+	 *
+	 *   - 'id=>parent'
+	 *
+	 * The following will result in an array of integers being returned:
+	 *
+	 *   - 'ids'
+	 *   - 'tt_ids'
+	 *
+	 * In all cases, a `WP_Error` object will be returned if an invalid taxonomy is used.
 	 *
 	 * @since WP-4.6.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
-	 * @return array List of terms.
+	 * @return WP_Term[]|int[]|string[]|string Array of terms, or number of terms as numeric string
+	 *                                         when 'count' is passed as a query var.
 	 */
 	public function get_terms() {
 		global $wpdb;
@@ -338,7 +372,7 @@ class WP_Term_Query {
 			$args['child_of'] = false;
 		}
 
-		if ( 'all' == $args['get'] ) {
+		if ( 'all' === $args['get'] ) {
 			$args['childless']    = false;
 			$args['child_of']     = 0;
 			$args['hide_empty']   = 0;
@@ -537,7 +571,7 @@ class WP_Term_Query {
 		}
 
 		$hierarchical = $args['hierarchical'];
-		if ( 'count' == $args['fields'] ) {
+		if ( 'count' === $args['fields'] ) {
 			$hierarchical = false;
 		}
 		if ( $args['hide_empty'] && ! $hierarchical ) {
@@ -681,14 +715,15 @@ class WP_Term_Query {
 			return $this->terms;
 		}
 
-		if ( 'count' == $_fields ) {
+		if ( 'count' === $_fields ) {
 			$count = $wpdb->get_var( $this->request );
 			wp_cache_set( $cache_key, $count, 'terms' );
 			return $count;
 		}
 
 		$terms = $wpdb->get_results( $this->request );
-		if ( 'all' == $_fields || 'all_with_object_id' === $_fields ) {
+
+		if ( 'all' === $_fields || 'all_with_object_id' === $_fields ) {
 			update_term_cache( $terms );
 		}
 
@@ -713,7 +748,7 @@ class WP_Term_Query {
 		}
 
 		// Update term counts to include children.
-		if ( $args['pad_counts'] && 'all' == $_fields ) {
+		if ( $args['pad_counts'] && 'all' === $_fields ) {
 			foreach ( $taxonomies as $_tax ) {
 				_pad_term_counts( $terms, $_tax );
 			}
@@ -745,8 +780,9 @@ class WP_Term_Query {
 		 * `$fields` is 'all_with_object_id', but should otherwise be
 		 * removed.
 		 */
-		if ( ! empty( $args['object_ids'] ) && 'all_with_object_id' != $_fields ) {
-			$_tt_ids = $_terms = array();
+		if ( ! empty( $args['object_ids'] ) && 'all_with_object_id' !== $_fields ) {
+			$_tt_ids = array();
+			$_terms  = array();
 			foreach ( $terms as $term ) {
 				if ( isset( $_tt_ids[ $term->term_id ] ) ) {
 					continue;
@@ -760,31 +796,31 @@ class WP_Term_Query {
 		}
 
 		$_terms = array();
-		if ( 'id=>parent' == $_fields ) {
+		if ( 'id=>parent' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[ $term->term_id ] = $term->parent;
 			}
-		} elseif ( 'ids' == $_fields ) {
+		} elseif ( 'ids' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[] = (int) $term->term_id;
 			}
-		} elseif ( 'tt_ids' == $_fields ) {
+		} elseif ( 'tt_ids' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[] = (int) $term->term_taxonomy_id;
 			}
-		} elseif ( 'names' == $_fields ) {
+		} elseif ( 'names' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[] = $term->name;
 			}
-		} elseif ( 'slugs' == $_fields ) {
+		} elseif ( 'slugs' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[] = $term->slug;
 			}
-		} elseif ( 'id=>name' == $_fields ) {
+		} elseif ( 'id=>name' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[ $term->term_id ] = $term->name;
 			}
-		} elseif ( 'id=>slug' == $_fields ) {
+		} elseif ( 'id=>slug' === $_fields ) {
 			foreach ( $terms as $term ) {
 				$_terms[ $term->term_id ] = $term->slug;
 			}
@@ -833,15 +869,15 @@ class WP_Term_Query {
 			$orderby = "tt.$_orderby";
 		} elseif ( 'term_order' === $_orderby ) {
 			$orderby = 'tr.term_order';
-		} elseif ( 'include' == $_orderby && ! empty( $this->query_vars['include'] ) ) {
+		} elseif ( 'include' === $_orderby && ! empty( $this->query_vars['include'] ) ) {
 			$include = implode( ',', wp_parse_id_list( $this->query_vars['include'] ) );
 			$orderby = "FIELD( t.term_id, $include )";
-		} elseif ( 'slug__in' == $_orderby && ! empty( $this->query_vars['slug'] ) && is_array( $this->query_vars['slug'] ) ) {
+		} elseif ( 'slug__in' === $_orderby && ! empty( $this->query_vars['slug'] ) && is_array( $this->query_vars['slug'] ) ) {
 			$slugs   = implode( "', '", array_map( 'sanitize_title_for_query', $this->query_vars['slug'] ) );
 			$orderby = "FIELD( t.slug, '" . $slugs . "')";
-		} elseif ( 'none' == $_orderby ) {
+		} elseif ( 'none' === $_orderby ) {
 			$orderby = '';
-		} elseif ( empty( $_orderby ) || 'id' == $_orderby || 'term_id' === $_orderby ) {
+		} elseif ( empty( $_orderby ) || 'id' === $_orderby || 'term_id' === $_orderby ) {
 			$orderby = 't.term_id';
 		} else {
 			$orderby = 't.name';

@@ -297,7 +297,8 @@ function get_theme_feature_list( $api = true ) {
 		return $features;
 	}
 
-	if ( ! $feature_list = get_site_transient( 'wporg_theme_feature_list' ) ) {
+	$feature_list = get_site_transient( 'wporg_theme_feature_list' );
+	if ( ! $feature_list ) {
 		set_site_transient( 'wporg_theme_feature_list', array(), 3 * HOUR_IN_SECONDS );
 	}
 
