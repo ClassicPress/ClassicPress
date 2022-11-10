@@ -1459,6 +1459,62 @@ function do_robots() {
 }
 
 /**
+ * Display the HTML for the start of a page.
+ *
+ * @since CP-1.5.0
+ */
+function do_html5_header() {
+	if ( did_action( 'wp_body_open' ) ) {
+		_doing_it_wrong(
+			"add_theme_support( 'body-only' )",
+			/* translators: 1: Theme support 2: hook name */
+			sprintf( __( 'Theme support for %1$s should not invoke the %2$s hook.' ), '<code>body-only</code>', '<code>wp_body_open</code>' ),
+			'CP-1.5.0'
+		);
+		return;
+	}
+	echo "<!DOCTYPE html>\n"; ?>
+<html <?php echo cp_attributes( 'html', get_language_attributes() ); ?>>
+	<head <?php echo cp_attributes( 'head' ); ?>>
+		<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<?php
+	echo '<meta ' . cp_attributes(
+		'meta',
+		array(
+			'name' => 'viewport',
+			'content' => 'width=device-width, initial-scale=1',
+		)
+	) . ">\n";
+
+	if ( is_singular() && pings_open() ) {
+		echo '<link ' . cp_attributes(
+			'link',
+			array(
+				'rel' => 'pingback',
+				'href' => get_bloginfo( 'pingback_url' ),
+			)
+		) . ">\n";
+	}
+	wp_head();
+	?>
+	</head>
+
+	<body <?php echo cp_attributes( 'body', array( 'class' => get_body_class() ) ); ?>>
+	<?php
+	wp_body_open();
+}
+
+/**
+ * Display the HTML for the end of a page.
+ *
+ * @since CP-1.5.0
+ */
+function do_html5_footer() {
+	wp_footer();
+	echo "</body>\n</html>";
+}
+
+/**
  * Test whether ClassicPress is already installed.
  *
  * The cache will be checked first. If you have a cache plugin, which saves

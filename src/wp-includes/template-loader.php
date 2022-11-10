@@ -93,7 +93,13 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
 	 */
 	$template = apply_filters( 'template_include', $template );
 	if ( $template ) {
+		if ( current_theme_supports( 'body-only' ) ) {
+			do_html5_header();
+		}
 		include( $template );
+		if ( current_theme_supports( 'body-only' ) ) {
+			do_html5_footer();
+		}
 	} elseif ( current_user_can( 'switch_themes' ) ) {
 		$theme = wp_get_theme();
 		if ( $theme->errors() ) {
