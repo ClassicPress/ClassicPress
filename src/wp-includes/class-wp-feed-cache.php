@@ -4,17 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Feed
-<<<<<<< HEAD
  * @since WP-4.7.0
-=======
- * @since 4.7.0
- * @deprecated 5.6.0
->>>>>>> e8e031d2dd (Feeds: Register transient feed cache handler using the recommended method for SimplePie 1.3 or later.)
+ * @deprecated WP-5.6.0
  */
 
 _deprecated_file(
 	basename( __FILE__ ),
-	'5.6.0',
+	'WP-5.6.0',
 	'',
 	__( 'This file is only loaded for backward compatibility with SimplePie 1.2.x. Please consider switching to a recent SimplePie version.' )
 );
