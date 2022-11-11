@@ -705,7 +705,7 @@ function fetch_feed( $url ) {
 	} else {
 		// Back-compat for SimplePie 1.2.x.
 		require_once ABSPATH . WPINC . '/class-wp-feed-cache.php';
-	$feed->set_cache_class( 'WP_Feed_Cache' );
+		$feed->set_cache_class( 'WP_Feed_Cache' );
 	}
 
 	$feed->set_file_class( 'WP_SimplePie_File' );
