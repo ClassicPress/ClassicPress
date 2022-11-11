@@ -1720,9 +1720,10 @@ function _custom_background_cb() {
 		$color = false;
 	}
 
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
 	if ( ! $background && ! $color ) {
 		if ( is_customize_preview() ) {
-			$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 			printf( '<style%s id="custom-background-css"></style>', $type_attr );
 		}
 		return;
@@ -1775,8 +1776,6 @@ function _custom_background_cb() {
 		$attachment = " background-attachment: $attachment;";
 
 		$style .= $image . $position . $size . $repeat . $attachment;
-
-		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	}
 	?>
 <style<?php echo $type_attr; ?> id="custom-background-css">
