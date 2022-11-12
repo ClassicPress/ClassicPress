@@ -396,6 +396,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 * @param mixed $offset An offset to check for.
 	 * @return bool True if the offset exists, false otherwise.
 	 */
+	#[ReturnTypeWillChange]
 	public function offsetExists( $offset ) {
 		return isset( $this->callbacks[ $offset ] );
 	}
@@ -410,6 +411,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 * @param mixed $offset The offset to retrieve.
 	 * @return mixed If set, the value at the specified offset, null otherwise.
 	 */
+	#[ReturnTypeWillChange]
 	public function offsetGet( $offset ) {
 		return isset( $this->callbacks[ $offset ] ) ? $this->callbacks[ $offset ] : null;
 	}
@@ -424,6 +426,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 * @param mixed $offset The offset to assign the value to.
 	 * @param mixed $value The value to set.
 	 */
+	#[ReturnTypeWillChange]
 	public function offsetSet( $offset, $value ) {
 		if ( is_null( $offset ) ) {
 			$this->callbacks[] = $value;
@@ -441,6 +444,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @param mixed $offset The offset to unset.
 	 */
+	#[ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
 		unset( $this->callbacks[ $offset ] );
 	}
@@ -454,6 +458,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @return array Of callbacks at current priority.
 	 */
+	#[ReturnTypeWillChange]
 	public function current() {
 		return current( $this->callbacks );
 	}
@@ -467,6 +472,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @return array Of callbacks at next priority.
 	 */
+	#[ReturnTypeWillChange]
 	public function next() {
 		return next( $this->callbacks );
 	}
@@ -480,6 +486,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @return mixed Returns current priority on success, or NULL on failure
 	 */
+	#[ReturnTypeWillChange]
 	public function key() {
 		return key( $this->callbacks );
 	}
@@ -493,6 +500,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @return boolean
 	 */
+	#[ReturnTypeWillChange]
 	public function valid() {
 		return key( $this->callbacks ) !== null;
 	}
@@ -504,6 +512,7 @@ final class WP_Hook implements Iterator, ArrayAccess {
 	 *
 	 * @link https://secure.php.net/manual/en/iterator.rewind.php
 	 */
+	#[ReturnTypeWillChange]
 	public function rewind() {
 		reset( $this->callbacks );
 	}
