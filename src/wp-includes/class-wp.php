@@ -175,7 +175,7 @@ class WP {
 			$home_path_regex = '';
 			if ( is_string( $home_path ) && '' !== $home_path ) {
 				$home_path       = trim( $home_path, '/' );
-			$home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
+				$home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
 			}
 
 			// Trim path info from the end and the leading home path from the
@@ -188,12 +188,12 @@ class WP {
 			$self     = trim( $self, '/' );
 
 			if ( ! empty( $home_path_regex ) ) {
-			$req_uri  = preg_replace( $home_path_regex, '', $req_uri );
-			$req_uri  = trim( $req_uri, '/' );
-			$pathinfo = preg_replace( $home_path_regex, '', $pathinfo );
-			$pathinfo = trim( $pathinfo, '/' );
-			$self     = preg_replace( $home_path_regex, '', $self );
-			$self     = trim( $self, '/' );
+				$req_uri  = preg_replace( $home_path_regex, '', $req_uri );
+				$req_uri  = trim( $req_uri, '/' );
+				$pathinfo = preg_replace( $home_path_regex, '', $pathinfo );
+				$pathinfo = trim( $pathinfo, '/' );
+				$self     = preg_replace( $home_path_regex, '', $self );
+				$self     = trim( $self, '/' );
 			}
 
 			// The requested permalink is in $pathinfo for path info requests and
