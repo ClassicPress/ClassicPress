@@ -52,14 +52,8 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	 */
 	static $default_version;
 
-<<<<<<< HEAD
 	if ( empty( $default_version ) ) {
 		$default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
-=======
-	if ( ! empty( $timezone_string ) ) {
-		$timezone_date = new DateTime( 'now', new DateTimeZone( $timezone_string ) );
-		$timezone_abbr = $timezone_date->format( 'T' );
->>>>>>> a5de731f9e (Code Modernization: Pass correct default value to `new DateTime()` in `wp_default_packages_inline_scripts()`.)
 	}
 
 	/**
