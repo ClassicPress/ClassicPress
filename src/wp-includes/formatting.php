@@ -4722,7 +4722,12 @@ function map_deep( $value, $callback ) {
  * @param array  $array  Variables will be stored in this array.
  */
 function wp_parse_str( $string, &$array ) {
+<<<<<<< HEAD
 	parse_str( $string, $array );
+=======
+	parse_str( (string) $string, $array );
+
+>>>>>>> d93f76dca8 (Code Modernization: Correct handling of `null` in `wp_parse_str()`.)
 	/**
 	 * Filters the array of variables derived from a parsed string.
 	 *
