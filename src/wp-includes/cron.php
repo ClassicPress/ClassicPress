@@ -223,7 +223,7 @@ function wp_reschedule_event( $timestamp, $recurrence, $hook, $args = array() ) 
 		$scheduled_event = wp_get_scheduled_event( $hook, $args, $timestamp );
 		if ( $scheduled_event && isset( $scheduled_event->interval ) ) {
 			$interval = $scheduled_event->interval;
-	}
+		}
 	}
 
 	$event = (object) array(
@@ -573,12 +573,12 @@ function wp_next_scheduled( $hook, $args = array() ) {
 	$next  = false;
 
 	if ( ! empty( $crons ) ) {
-	foreach ( $crons as $timestamp => $cron ) {
-		if ( isset( $cron[ $hook ][ $key ] ) ) {
-				$next = $timestamp;
-				break;
+		foreach ( $crons as $timestamp => $cron ) {
+			if ( isset( $cron[ $hook ][ $key ] ) ) {
+					$next = $timestamp;
+					break;
+			}
 		}
-	}
 	}
 
 	/**
@@ -843,58 +843,6 @@ function wp_get_schedule( $hook, $args = array() ) {
 	return apply_filters( 'get_schedule', $schedule, $hook, $args );
 }
 
-<<<<<<< HEAD
-=======
-/**
- * Retrieve cron jobs ready to be run.
- *
- * Returns the results of _get_cron_array() limited to events ready to be run,
- * ie, with a timestamp in the past.
- *
- * @since 5.1.0
- *
- * @return array Cron jobs ready to be run.
- */
-function wp_get_ready_cron_jobs() {
-	/**
-	 * Filter to preflight or hijack retrieving ready cron jobs.
-	 *
-	 * Returning an array will short-circuit the normal retrieval of ready
-	 * cron jobs, causing the function to return the filtered value instead.
-	 *
-	 * @since 5.1.0
-	 *
-	 * @param null|array $pre Array of ready cron tasks to return instead. Default null
-	 *                        to continue using results from _get_cron_array().
-	 */
-	$pre = apply_filters( 'pre_get_ready_cron_jobs', null );
-	if ( null !== $pre ) {
-		return $pre;
-	}
-
-	$crons = _get_cron_array();
-	if ( ! is_array( $crons ) ) {
-		return array();
-	}
-
-	$gmt_time = microtime( true );
-	$keys     = array_keys( $crons );
-	if ( isset( $keys[0] ) && $keys[0] > $gmt_time ) {
-		return array();
-	}
-
-	$results = array();
-	foreach ( $crons as $timestamp => $cronhooks ) {
-		if ( $timestamp > $gmt_time ) {
-			break;
-		}
-		$results[ $timestamp ] = $cronhooks;
-	}
-
-	return $results;
-}
-
->>>>>>> c9df4f75a2 (Code Modernization: Check the return type of `_get_cron_array()` in `wp_schedule_event()`.)
 //
 // Private functions
 //

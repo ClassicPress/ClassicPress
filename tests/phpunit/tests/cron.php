@@ -111,7 +111,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * The warning that we should not see:
 	 * `Deprecated: Automatic conversion of false to array is deprecated`.
 	 *
-	 * @ticket 53635
+	 * @see https://core.trac.wordpress.org/ticket/53635
 	 *
 	 * @covers ::wp_schedule_event
 	 */

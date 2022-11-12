@@ -2475,9 +2475,9 @@ class wpdb {
 		$this->func_call = "\$db->get_var(\"$query\", $x, $y)";
 
 		if ( $query ) {
-		if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
-			$this->check_current_query = false;
-		}
+			if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
+				$this->check_current_query = false;
+			}
 
 			$this->query( $query );
 		}
@@ -2508,9 +2508,9 @@ class wpdb {
 		$this->func_call = "\$db->get_row(\"$query\",$output,$y)";
 
 		if ( $query ) {
-		if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
-			$this->check_current_query = false;
-		}
+			if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
+				$this->check_current_query = false;
+			}
 
 			$this->query( $query );
 		} else {
@@ -2550,9 +2550,9 @@ class wpdb {
 	 */
 	public function get_col( $query = null, $x = 0 ) {
 		if ( $query ) {
-		if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
-			$this->check_current_query = false;
-		}
+			if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
+				$this->check_current_query = false;
+			}
 
 			$this->query( $query );
 		}
@@ -2586,9 +2586,9 @@ class wpdb {
 		$this->func_call = "\$db->get_results(\"$query\", $output)";
 
 		if ( $query ) {
-		if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
-			$this->check_current_query = false;
-		}
+			if ( $this->check_current_query && $this->check_safe_collation( $query ) ) {
+				$this->check_current_query = false;
+			}
 
 			$this->query( $query );
 		} else {
