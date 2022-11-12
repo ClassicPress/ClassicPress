@@ -6,11 +6,6 @@
  * @group cron
  */
 class Tests_Cron extends WP_UnitTestCase {
-<<<<<<< HEAD
-	function set_up() {
-		parent::set_up();
-		// Make sure the schedule is clear.
-=======
 	/**
 	 * @var array Cron array for testing preflight filters.
 	 */
@@ -21,10 +16,9 @@ class Tests_Cron extends WP_UnitTestCase {
 	 */
 	private $plus_thirty_minutes;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 		// make sure the schedule is clear
->>>>>>> a32ea2d35d (Cron: Add hooks and a function to allow hijacking cron implementation.)
 		_set_cron_array( array() );
 		$this->preflight_cron_array = array();
 		$this->plus_thirty_minutes = strtotime( '+30 minutes' );
@@ -332,7 +326,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * Ensure the pre_scheduled_event filter prevents
 	 * modification of the cron_array_option.
 	 *
-	 * @ticket 32656
+	 * @see https://core.trac.wordpress.org/ticket/32656
 	 */
 	function test_pre_schedule_event_filter() {
 		$hook = __FUNCTION__;
@@ -384,7 +378,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * Ensure the pre_reschedule_event filter prevents
 	 * modification of the cron_array_option.
 	 *
-	 * @ticket 32656
+	 * @see https://core.trac.wordpress.org/ticket/ 32656
 	 */
 	function test_pre_reschedule_event_filter() {
 		$hook = __FUNCTION__;
@@ -408,7 +402,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * Ensure the pre_unschedule_event filter prevents
 	 * modification of the cron_array_option.
 	 *
-	 * @ticket 32656
+	 * @see https://core.trac.wordpress.org/ticket/ 32656
 	 */
 	function test_pre_unschedule_event_filter() {
 		$hook = __FUNCTION__;
@@ -432,7 +426,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * Ensure the clearing scheduled hooks filter prevents
 	 * modification of the cron_array_option.
 	 *
-	 * @ticket 32656
+	 * @see https://core.trac.wordpress.org/ticket/ 32656
 	 */
 	function test_pre_clear_scheduled_hook_filters() {
 		$hook = __FUNCTION__;
@@ -463,7 +457,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * Ensure the preflight hooks for scheduled events
 	 * return a filtered value as expected.
 	 *
-	 * @ticket 32656
+	 * @see https://core.trac.wordpress.org/ticket/ 32656
 	 */
 	function test_pre_scheduled_event_hooks() {
 		add_filter( 'pre_get_scheduled_event', array( $this, 'filter_pre_scheduled_event_hooks' ) );
