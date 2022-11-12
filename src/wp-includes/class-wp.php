@@ -170,8 +170,13 @@ class WP {
 
 			list( $req_uri ) = explode( '?', $_SERVER['REQUEST_URI'] );
 			$self            = $_SERVER['PHP_SELF'];
-			$home_path       = trim( parse_url( home_url(), PHP_URL_PATH ), '/' );
+
+			$home_path       = parse_url( home_url(), PHP_URL_PATH );
+			$home_path_regex = '';
+			if ( is_string( $home_path ) && '' !== $home_path ) {
+				$home_path       = trim( $home_path, '/' );
 			$home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
+			}
 
 			// Trim path info from the end and the leading home path from the
 			// front. For path info requests, this leaves us with the requesting
@@ -179,14 +184,17 @@ class WP {
 			// requested permalink.
 			$req_uri  = str_replace( $pathinfo, '', $req_uri );
 			$req_uri  = trim( $req_uri, '/' );
+			$pathinfo = trim( $pathinfo, '/' );
+			$self     = trim( $self, '/' );
+
+			if ( ! empty( $home_path_regex ) ) {
 			$req_uri  = preg_replace( $home_path_regex, '', $req_uri );
 			$req_uri  = trim( $req_uri, '/' );
-			$pathinfo = trim( $pathinfo, '/' );
 			$pathinfo = preg_replace( $home_path_regex, '', $pathinfo );
 			$pathinfo = trim( $pathinfo, '/' );
-			$self     = trim( $self, '/' );
 			$self     = preg_replace( $home_path_regex, '', $self );
 			$self     = trim( $self, '/' );
+			}
 
 			// The requested permalink is in $pathinfo for path info requests and
 			//  $req_uri for other requests.
