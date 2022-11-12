@@ -30,7 +30,12 @@ class Tests_Cron extends WP_UnitTestCase {
 		$timestamp = strtotime( '+1 hour' );
 
 		$scheduled = wp_schedule_single_event( $timestamp, $hook );
+<<<<<<< HEAD
 		$this->assertSame( $timestamp, wp_next_scheduled( $hook ) );
+=======
+		$this->assertTrue( $scheduled );
+		$this->assertEquals( $timestamp, wp_next_scheduled( $hook ) );
+>>>>>>> e73af26e92 (Cron API: Return meaningful values from cron functions.)
 
 		// It's a non-recurring event.
 		$this->assertFalse( wp_get_schedule( $hook ) );
@@ -44,11 +49,20 @@ class Tests_Cron extends WP_UnitTestCase {
 		$args      = array( 'foo' );
 
 		$scheduled = wp_schedule_single_event( $timestamp, $hook, $args );
+<<<<<<< HEAD
 		// This returns the timestamp only if we provide matching args.
 		$this->assertSame( $timestamp, wp_next_scheduled( $hook, $args ) );
 		// These don't match so return nothing.
 		$this->assertFalse( wp_next_scheduled( $hook ) );
 		$this->assertFalse( wp_next_scheduled( $hook, array( 'bar' ) ) );
+=======
+		$this->assertTrue( $scheduled );
+		// this returns the timestamp only if we provide matching args
+		$this->assertEquals( $timestamp, wp_next_scheduled( $hook, $args ) );
+		// these don't match so return nothing
+		$this->assertEquals( false, wp_next_scheduled( $hook ) );
+		$this->assertEquals( false, wp_next_scheduled( $hook, array( 'bar' ) ) );
+>>>>>>> e73af26e92 (Cron API: Return meaningful values from cron functions.)
 
 		// It's a non-recurring event.
 		$this->assertFalse( wp_get_schedule( $hook, $args ) );
@@ -61,10 +75,18 @@ class Tests_Cron extends WP_UnitTestCase {
 		$timestamp = strtotime( '+1 hour' );
 
 		$scheduled = wp_schedule_event( $timestamp, $recur, $hook );
+<<<<<<< HEAD
 		// It's scheduled for the right time.
 		$this->assertSame( $timestamp, wp_next_scheduled( $hook ) );
 		// It's a recurring event.
 		$this->assertSame( $recur, wp_get_schedule( $hook ) );
+=======
+		$this->assertTrue( $scheduled );
+		// it's scheduled for the right time
+		$this->assertEquals( $timestamp, wp_next_scheduled( $hook ) );
+		// it's a recurring event
+		$this->assertEquals( $recur, wp_get_schedule( $hook ) );
+>>>>>>> e73af26e92 (Cron API: Return meaningful values from cron functions.)
 	}
 
 	function test_schedule_event_args() {
@@ -75,11 +97,20 @@ class Tests_Cron extends WP_UnitTestCase {
 		$args      = array( 'foo' );
 
 		$scheduled = wp_schedule_event( $timestamp, 'hourly', $hook, $args );
+<<<<<<< HEAD
 		// This returns the timestamp only if we provide matching args.
 		$this->assertSame( $timestamp, wp_next_scheduled( $hook, $args ) );
 		// These don't match so return nothing.
 		$this->assertFalse( wp_next_scheduled( $hook ) );
 		$this->assertFalse( wp_next_scheduled( $hook, array( 'bar' ) ) );
+=======
+		$this->assertTrue( $scheduled );
+		// this returns the timestamp only if we provide matching args
+		$this->assertEquals( $timestamp, wp_next_scheduled( $hook, $args ) );
+		// these don't match so return nothing
+		$this->assertEquals( false, wp_next_scheduled( $hook ) );
+		$this->assertEquals( false, wp_next_scheduled( $hook, array( 'bar' ) ) );
+>>>>>>> e73af26e92 (Cron API: Return meaningful values from cron functions.)
 
 		$this->assertSame( $recur, wp_get_schedule( $hook, $args ) );
 
@@ -93,9 +124,16 @@ class Tests_Cron extends WP_UnitTestCase {
 		wp_schedule_single_event( $timestamp, $hook );
 		$this->assertSame( $timestamp, wp_next_scheduled( $hook ) );
 
+<<<<<<< HEAD
 		// Now unschedule it and make sure it's gone.
 		$unscheduled = wp_unschedule_event( $timestamp, $hook );
 		$this->assertFalse( wp_next_scheduled( $hook ) );
+=======
+		// now unschedule it and make sure it's gone
+		$unscheduled = wp_unschedule_event( $timestamp, $hook );
+		$this->assertTrue( $unscheduled );
+		$this->assertEquals( false, wp_next_scheduled( $hook ) );
+>>>>>>> e73af26e92 (Cron API: Return meaningful values from cron functions.)
 	}
 
 	function test_clear_schedule() {
@@ -113,7 +151,8 @@ class Tests_Cron extends WP_UnitTestCase {
 		$this->assertTrue( wp_next_scheduled( $hook, $args ) > 0 );
 
 		// clear the schedule for the no args events and make sure it's gone
-		wp_clear_scheduled_hook( $hook );
+		$hook_unscheduled = wp_clear_scheduled_hook( $hook );
+		$this->assertSame( 2, $hook_unscheduled );
 		$this->assertFalse( wp_next_scheduled( $hook ) );
 		// the args events should still be there
 		$this->assertTrue( wp_next_scheduled( $hook, $args ) > 0 );
@@ -122,6 +161,18 @@ class Tests_Cron extends WP_UnitTestCase {
 		// note: wp_clear_scheduled_hook() expects args passed directly, rather than as an array
 		wp_clear_scheduled_hook( $hook, $args );
 		$this->assertFalse( wp_next_scheduled( $hook, $args ) );
+	}
+
+	function test_clear_undefined_schedule() {
+		$hook = __FUNCTION__;
+		$args = array( 'arg1' );
+
+		wp_schedule_single_event( strtotime( '+1 hour' ), $hook, $args );
+		wp_schedule_single_event( strtotime( '+2 hour' ), $hook, $args );
+
+		// clear the schedule for no args events and ensure no events are cleared.
+		$hook_unscheduled = wp_clear_scheduled_hook( $hook );
+		$this->assertSame( 0, $hook_unscheduled );
 	}
 
 	function test_clear_schedule_multiple_args() {
@@ -206,7 +257,26 @@ class Tests_Cron extends WP_UnitTestCase {
 		$this->assertTrue( wp_next_scheduled( $hook, $args ) > 0 );
 
 		// clear the schedule and make sure it's gone.
-		wp_unschedule_hook( $hook );
+		$unschedule_hook = wp_unschedule_hook( $hook );
+		$this->assertSame( 4, $unschedule_hook );
+		$this->assertFalse( wp_next_scheduled( $hook ) );
+	}
+
+	function test_unschedule_undefined_hook() {
+		$hook           = __FUNCTION__;
+		$unrelated_hook = __FUNCTION__ . '_two';
+
+		// Attempt to clear schedule on non-existant hook.
+		$unschedule_hook = wp_unschedule_hook( $hook );
+		$this->assertSame( 0, $unschedule_hook );
+		$this->assertFalse( wp_next_scheduled( $hook ) );
+
+		// Repeat tests with populated cron array.
+		wp_schedule_single_event( strtotime( '+1 hour' ), $unrelated_hook );
+		wp_schedule_single_event( strtotime( '+2 hour' ), $unrelated_hook );
+
+		$unschedule_hook = wp_unschedule_hook( $hook );
+		$this->assertSame( 0, $unschedule_hook );
 		$this->assertFalse( wp_next_scheduled( $hook ) );
 	}
 
@@ -221,9 +291,9 @@ class Tests_Cron extends WP_UnitTestCase {
 		$ts2  = strtotime( '+3 minutes' );
 
 		// first one works
-		wp_schedule_single_event( $ts1, $hook, $args );
+		$this->assertTrue( wp_schedule_single_event( $ts1, $hook, $args ) );
 		// second one is ignored
-		wp_schedule_single_event( $ts2, $hook, $args );
+		$this->assertFalse( wp_schedule_single_event( $ts2, $hook, $args ) );
 
 		// The next event should be at +5 minutes, not +3.
 		$this->assertSame( $ts1, wp_next_scheduled( $hook, $args ) );
@@ -240,9 +310,9 @@ class Tests_Cron extends WP_UnitTestCase {
 		$ts2  = strtotime( '+3 minutes' );
 
 		// first one works
-		wp_schedule_single_event( $ts1, $hook, $args );
+		$this->assertTrue( wp_schedule_single_event( $ts1, $hook, $args ) );
 		// second works too
-		wp_schedule_single_event( $ts2, $hook, $args );
+		$this->assertTrue( wp_schedule_single_event( $ts2, $hook, $args ) );
 
 		// The next event should be at +3 minutes, even though that one was scheduled second.
 		$this->assertSame( $ts2, wp_next_scheduled( $hook, $args ) );
@@ -259,9 +329,9 @@ class Tests_Cron extends WP_UnitTestCase {
 		$ts2  = strtotime( '+30 minutes' );
 
 		// first one works
-		wp_schedule_single_event( $ts1, $hook, $args );
+		$this->assertTrue( wp_schedule_single_event( $ts1, $hook, $args ) );
 		// second works too
-		wp_schedule_single_event( $ts2, $hook, $args );
+		$this->assertTrue( wp_schedule_single_event( $ts2, $hook, $args ) );
 
 		// The next event should be at +3 minutes.
 		$this->assertSame( $ts1, wp_next_scheduled( $hook, $args ) );
