@@ -1820,14 +1820,9 @@ add_shortcode( 'caption', 'img_caption_shortcode' );
  * The supported attributes for the shortcode are 'id', 'align', 'width', and
  * 'caption'.
  *
-<<<<<<< HEAD
  * @since WP-2.6.0
-=======
- * @since 2.6.0
- * @since 3.9.0 The `class` attribute was added.
- * @since 5.1.0 The `caption_id` attribute was added.
- * @since 5.9.0 The `$content` parameter default value changed from `null` to `''`.
->>>>>>> c0b328a74d (Media: Fix `$content` parameter default value in `img_caption_shortcode()`.)
+ * @since WP-3.9.0 The `class` attribute was added.
+ * @since WP-5.9.0 The `$content` parameter default value changed from `null` to `''`.
  *
  * @param array  $attr {
  *     Attributes of the caption shortcode.
