@@ -83,7 +83,7 @@ CAP;
 
 	function test_img_caption_shortcode_with_empty_params() {
 		$result = img_caption_shortcode( array() );
-		$this->assertNull( $result );
+		$this->assertSame( '', $result );
 	}
 
 	/**
@@ -133,7 +133,7 @@ CAP;
 				'caption' => '',
 			)
 		);
-		$this->assertNull( $result );
+		$this->assertSame( '', $result );
 	}
 
 	/**
