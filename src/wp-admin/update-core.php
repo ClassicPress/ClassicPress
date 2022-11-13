@@ -607,7 +607,11 @@ function do_core_upgrade( $reinstall = false ) {
 		return;
 	}
 
+<<<<<<< HEAD
 	if ( $wp_filesystem->errors->get_error_code() ) {
+=======
+if ( $wp_filesystem->errors->has_errors() ) {
+>>>>>>> 1cc516f2e8 (General: Introduce `WP_Error::has_errors()` method and use it where appropriate.)
 		foreach ( $wp_filesystem->errors->get_error_messages() as $message ) {
 			show_message( $message );
 		}

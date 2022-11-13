@@ -3785,7 +3785,7 @@ function wp_ajax_install_theme() {
 		$status['errorCode']    = $skin->result->get_error_code();
 		$status['errorMessage'] = $skin->result->get_error_message();
 		wp_send_json_error( $status );
-	} elseif ( $skin->get_errors()->get_error_code() ) {
+	} elseif ( $skin->get_errors()->has_errors() ) {
 		$status['errorMessage'] = $skin->get_error_messages();
 		wp_send_json_error( $status );
 	} elseif ( is_null( $result ) ) {
@@ -3795,7 +3795,7 @@ function wp_ajax_install_theme() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
@@ -3901,7 +3901,7 @@ function wp_ajax_update_theme() {
 		$status['errorCode']    = $skin->result->get_error_code();
 		$status['errorMessage'] = $skin->result->get_error_message();
 		wp_send_json_error( $status );
-	} elseif ( $skin->get_errors()->get_error_code() ) {
+	} elseif ( $skin->get_errors()->has_errors() ) {
 		$status['errorMessage'] = $skin->get_error_messages();
 		wp_send_json_error( $status );
 	} elseif ( is_array( $result ) && ! empty( $result[ $stylesheet ] ) ) {
@@ -3925,7 +3925,7 @@ function wp_ajax_update_theme() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
@@ -3987,7 +3987,7 @@ function wp_ajax_delete_theme() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
@@ -4077,7 +4077,7 @@ function wp_ajax_install_plugin() {
 		$status['errorCode']    = $skin->result->get_error_code();
 		$status['errorMessage'] = $skin->result->get_error_message();
 		wp_send_json_error( $status );
-	} elseif ( $skin->get_errors()->get_error_code() ) {
+	} elseif ( $skin->get_errors()->has_errors() ) {
 		$status['errorMessage'] = $skin->get_error_messages();
 		wp_send_json_error( $status );
 	} elseif ( is_null( $result ) ) {
@@ -4087,7 +4087,7 @@ function wp_ajax_install_plugin() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
@@ -4179,7 +4179,7 @@ function wp_ajax_update_plugin() {
 		$status['errorCode']    = $skin->result->get_error_code();
 		$status['errorMessage'] = $skin->result->get_error_message();
 		wp_send_json_error( $status );
-	} elseif ( $skin->get_errors()->get_error_code() ) {
+	} elseif ( $skin->get_errors()->has_errors() ) {
 		$status['errorMessage'] = $skin->get_error_messages();
 		wp_send_json_error( $status );
 	} elseif ( is_array( $result ) && ! empty( $result[ $plugin ] ) ) {
@@ -4213,7 +4213,7 @@ function wp_ajax_update_plugin() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
@@ -4280,7 +4280,7 @@ function wp_ajax_delete_plugin() {
 		$status['errorMessage'] = __( 'Unable to connect to the filesystem. Please confirm your credentials.' );
 
 		// Pass through the error from WP_Filesystem if one was raised.
-		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->has_errors() ) {
 			$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 		}
 
