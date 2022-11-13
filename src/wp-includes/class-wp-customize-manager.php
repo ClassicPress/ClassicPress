@@ -2299,11 +2299,7 @@ final class WP_Customize_Manager {
 			if ( ! is_wp_error( $validity ) ) {
 				/** This filter is documented in wp-includes/class-wp-customize-setting.php */
 				$late_validity = apply_filters( "customize_validate_{$setting->id}", new WP_Error(), $unsanitized_value, $setting );
-<<<<<<< HEAD
-				if ( is_wp_error( $late_validity ) && ! empty( $late_validity->errors ) ) {
-=======
 				if ( $late_validity->has_errors() ) {
->>>>>>> 1cc516f2e8 (General: Introduce `WP_Error::has_errors()` method and use it where appropriate.)
 					$validity = $late_validity;
 				}
 			}
