@@ -149,10 +149,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @see https://core.trac.wordpress.org/ticket/23289
-=======
-	 * @ticket 53635
+	 * @see https://core.trac.wordpress.org/ticket/53635
 	 *
 	 * @dataProvider data_valid_but_undesired_option_names
 	 *
@@ -163,7 +160,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 53635
+	 * @see https://core.trac.wordpress.org/ticket/53635
 	 *
 	 * @dataProvider data_valid_but_undesired_option_names
 	 *
@@ -174,7 +171,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 53635
+	 * @see https://core.trac.wordpress.org/ticket/53635
 	 *
 	 * @dataProvider data_valid_but_undesired_option_names
 	 *
@@ -185,7 +182,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 53635
+	 * @see https://core.trac.wordpress.org/ticket/53635
 	 *
 	 * @dataProvider data_valid_but_undesired_option_names
 	 *
@@ -212,8 +209,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23289
->>>>>>> 97790af164 (Options, Meta APIs: Fix "passing null to non-nullable" deprecations to `(get|add|update|delete)_option()`.)
+	 * @see https://core.trac.wordpress.org/ticket/23289
 	 */
 	function test_special_option_name_alloption() {
 		$this->expectException( 'WPDieException' );
