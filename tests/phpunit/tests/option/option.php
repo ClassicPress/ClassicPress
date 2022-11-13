@@ -88,22 +88,18 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/23289
-=======
-	 * @ticket 23289
 	 *
 	 * @dataProvider data_bad_option_names
 	 *
 	 * @param mixed $option_name Option name.
->>>>>>> 07a7b4262b (Build/Test Tools: Reworks `Tests_Option_Option::test_bad_option_names()` into data provider.)
 	 */
 	public function test_get_option_bad_option_name( $option_name ) {
 		$this->assertFalse( get_option( $option_name ) );
-		}
+	}
 
 	/**
-	 * @ticket 23289
+	 * @see https://core.trac.wordpress.org/ticket/23289
 	 *
 	 * @dataProvider data_bad_option_names
 	 *
@@ -114,7 +110,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23289
+	 * @see https://core.trac.wordpress.org/ticket/23289
 	 *
 	 * @dataProvider data_bad_option_names
 	 *
@@ -125,7 +121,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 23289
+	 * @see https://core.trac.wordpress.org/ticket/23289
 	 *
 	 * @dataProvider data_bad_option_names
 	 *
