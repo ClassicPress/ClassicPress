@@ -781,60 +781,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/34997
-=======
-	 * @ticket 49236
-	 */
-	public function test_submitting_comment_with_empty_type_results_in_correct_type() {
-		if ( PHP_VERSION_ID >= 80100 ) {
-			/*
-			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
-			 * via hooked in filter functions until a more structural solution to the
-			 * "missing input validation" conundrum has been architected and implemented.
-			 */
-			$this->expectDeprecation();
-			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
-		}
-
-		$data    = array(
-			'comment_post_ID' => self::$post->ID,
-			'comment'         => 'Comment',
-			'author'          => 'Comment Author',
-			'email'           => 'comment@example.org',
-			'comment_type'    => '',
-		);
-		$comment = wp_handle_comment_submission( $data );
-
-		$this->assertNotWPError( $comment );
-		$this->assertInstanceOf( 'WP_Comment', $comment );
-
-		$this->assertSame( 'comment', $comment->comment_type );
-	}
-
-	/**
-	 * @ticket 49236
-	 */
-	public function test_inserting_comment_with_empty_type_results_in_correct_type() {
-		$data       = array(
-			'comment_post_ID' => self::$post->ID,
-			'comment'         => 'Comment',
-			'author'          => 'Comment Author',
-			'email'           => 'comment@example.org',
-			'comment_type'    => '',
-		);
-		$comment_id = wp_insert_comment( $data );
-		$comment    = get_comment( $comment_id );
-
-		$this->assertNotWPError( $comment );
-		$this->assertInstanceOf( 'WP_Comment', $comment );
-
-		$this->assertSame( 'comment', $comment->comment_type );
-	}
-
-	/**
-	 * @ticket 34997
->>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
 	 */
 	public function test_comment_submission_sends_all_expected_parameters_to_preprocess_comment_filter() {
 
@@ -884,13 +831,6 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/36901
 	 */
 	public function test_submitting_duplicate_comments() {
-<<<<<<< HEAD
-		$post           = self::factory()->post->create_and_get(
-			array(
-				'post_status' => 'publish',
-			)
-		);
-=======
 		if ( PHP_VERSION_ID >= 80100 ) {
 			/*
 			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
@@ -901,13 +841,19 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
 		}
 
->>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
-		$data           = array(
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'publish',
+			)
+		);
+
+		$data = array(
 			'comment_post_ID' => $post->ID,
 			'comment'         => 'Did I say that?',
 			'author'          => 'Repeat myself',
 			'email'           => 'mail@example.com',
 		);
+
 		$first_comment  = wp_handle_comment_submission( $data );
 		$second_comment = wp_handle_comment_submission( $data );
 		$this->assertWPError( $second_comment );
@@ -918,13 +864,6 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/36901
 	 */
 	public function test_comments_flood() {
-<<<<<<< HEAD
-		$post          = self::factory()->post->create_and_get(
-			array(
-				'post_status' => 'publish',
-			)
-		);
-=======
 		if ( PHP_VERSION_ID >= 80100 ) {
 			/*
 			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
@@ -935,13 +874,19 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
 		}
 
->>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
-		$data          = array(
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'publish',
+			)
+		);
+
+		$data = array(
 			'comment_post_ID' => $post->ID,
 			'comment'         => 'Did I say that?',
 			'author'          => 'Repeat myself',
 			'email'           => 'mail@example.com',
 		);
+
 		$first_comment = wp_handle_comment_submission( $data );
 
 		$data['comment'] = 'Wow! I am quick!';
