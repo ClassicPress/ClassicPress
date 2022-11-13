@@ -751,13 +751,8 @@ class WP_Comment_Query {
 			$this->sql_clauses['where']['user_id'] = $wpdb->prepare( 'user_id = %d', $this->query_vars['user_id'] );
 		}
 
-<<<<<<< HEAD
-		// Falsy search strings are ignored.
-		if ( strlen( $this->query_vars['search'] ) ) {
-=======
 		// Falsey search strings are ignored.
 		if ( isset( $this->query_vars['search'] ) && strlen( $this->query_vars['search'] ) ) {
->>>>>>> 08fe0469f9 (Code Modernization: Fix "passing null to non-nullable" deprecation notice in `WP_Comment_Query::get_comment_ids()`.)
 			$search_sql = $this->get_search_sql(
 				$this->query_vars['search'],
 				array( 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_author_IP', 'comment_content' )
