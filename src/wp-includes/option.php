@@ -31,7 +31,7 @@ function get_option( $option, $default = false ) {
 	global $wpdb;
 
 	if ( is_scalar( $option ) ) {
-	$option = trim( $option );
+		$option = trim( $option );
 	}
 
 	if ( empty( $option ) ) {
@@ -301,7 +301,7 @@ function update_option( $option, $value, $autoload = null ) {
 	global $wpdb;
 
 	if ( is_scalar( $option ) ) {
-	$option = trim( $option );
+		$option = trim( $option );
 	}
 
 	if ( empty( $option ) ) {
@@ -465,7 +465,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	}
 
 	if ( is_scalar( $option ) ) {
-	$option = trim( $option );
+		$option = trim( $option );
 	}
 
 	if ( empty( $option ) ) {
@@ -563,7 +563,7 @@ function delete_option( $option ) {
 	global $wpdb;
 
 	if ( is_scalar( $option ) ) {
-	$option = trim( $option );
+		$option = trim( $option );
 	}
 
 	if ( empty( $option ) ) {
