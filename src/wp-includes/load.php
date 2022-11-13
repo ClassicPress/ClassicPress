@@ -1137,11 +1137,7 @@ function wp_doing_cron() {
 }
 
 /**
-<<<<<<< HEAD
  * Check whether variable is a ClassicPress Error.
-=======
- * Checks whether the given variable is a WordPress Error.
->>>>>>> 2b742beb5c (General: Introduce the `wp_error_added` and `wp_error_checked` actions.)
  *
  * Returns whether `$thing` is an instance of the `WP_Error` class.
  *
@@ -1157,7 +1153,7 @@ function is_wp_error( $thing ) {
 		/**
 		 * Fires when `is_wp_error()` is called and it's an instance of `WP_Error`.
 		 *
-		 * @since 5.6.0
+		 * @since WP-5.6.0
 		 *
 		 * @param WP_Error $thing The error object passed to `is_wp_error()`.
 		 */
