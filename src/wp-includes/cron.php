@@ -525,16 +525,10 @@ function wp_unschedule_event( $timestamp, $hook, $args = array(), $wp_error = fa
  * {@link https://php.net/manual/en/language.types.boolean.php PHP documentation}. Use
  * the `===` operator for testing the return value of this function.
  *
-<<<<<<< HEAD
  * @since WP-2.1.0
  * @since WP-5.0.0 Return value modified to indicate success or failure,
  *                 {@see pre_clear_scheduled_hook} filter added to short-circuit the function.
-=======
- * @since 2.1.0
- * @since 5.1.0 Return value modified to indicate success or failure,
- *              {@see 'pre_clear_scheduled_hook'} filter added to short-circuit the function.
- * @since 5.7.0 The `$wp_error` parameter was added.
->>>>>>> 7d0367b851 (Docs: Add a `@since` note to `wp_clear_scheduled_hook()` for the `$wp_error` parameter.)
+ * @since WP-5.7.0 The `$wp_error` parameter was added.
  *
  * @param string $hook Action hook, the execution of which will be unscheduled.
  * @param array  $args Optional. Array containing each separate argument to pass to the hook's callback function.
