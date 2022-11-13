@@ -2574,8 +2574,13 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			'alt'           => '',
 			'class'         => null,
 			'force_display' => false,
+			'loading'       => null,
 			'extra_attr'    => '',
 		);
+
+		if ( wp_lazy_loading_enabled( 'img', 'get_avatar' ) ) {
+			$defaults['loading'] = wp_get_loading_attr_default( 'get_avatar' );
+		}
 
 		if ( empty( $args ) ) {
 			$args = array();
@@ -2646,6 +2651,18 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			}
 		}
 
+		// Add `loading` attribute.
+		$extra_attr = $args['extra_attr'];
+		$loading    = $args['loading'];
+
+		if ( in_array( $loading, array( 'lazy', 'eager' ), true ) && ! preg_match( '/\bloading\s*=/', $extra_attr ) ) {
+			if ( ! empty( $extra_attr ) ) {
+				$extra_attr .= ' ';
+			}
+
+			$extra_attr .= "loading='{$loading}'";
+		}
+
 		$avatar = sprintf(
 			"<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>",
 			esc_attr( $args['alt'] ),
@@ -2654,7 +2671,7 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			esc_attr( join( ' ', $class ) ),
 			(int) $args['height'],
 			(int) $args['width'],
-			$args['extra_attr']
+			$extra_attr
 		);
 
 		/**

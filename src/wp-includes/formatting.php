@@ -4327,6 +4327,73 @@ function tag_escape( $tag_name ) {
 }
 
 /**
+ * Provide a way to filter and escape the HTML attributes being output.
+ * To preserve spaces, quotes, ampersands, pass an array instead of string.
+ *
+ * @since CP-1.5.0
+ * @param string       $element The HTML tag the attributes are for.
+ * @param array|string $attrs   Optional. Array of attributes for the element.
+ *                              Default empty.
+ * @param string       $context Optional. Name to use on filter.
+ *                              Default '', which is expanded to calling function.
+ * @return string All the attributes, escaped.
+ */
+function cp_attributes( $element, $attrs = array(), $context = '' ) {
+	if ( ! is_array( $attrs ) ) {
+		// This can mess up nested quotes, but wp_parse_args will mess up all quotes.
+		$attrs = str_replace(
+			array( '="', "='", '" ', "' " ),
+			array( '=', '=', '&', '&' ),
+			trim( $attrs, "' \"" )
+		);
+	}
+	$attrs = wp_parse_args( $attrs );
+	if ( empty( $context ) ) {
+		$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 2 );
+		$context = isset( $trace[1]['function'] ) ? $trace[1]['function'] : '';
+		if ( in_array( $context, array( 'include', 'include_once', 'require', 'require_once' ) ) ) {
+			$context = wp_basename( $trace[1]['args'][0] );
+		}
+	}
+	/**
+	 * Filters the attribute array.
+	 *
+	 * @since CP-1.5.0
+	 *
+	 * @param string[] $attrs   Key is attribute name, value is attribute value.
+	 * @param string   $element The HTML element the attributes are for.
+	 * @param string   $context Identifying information for this element.
+	 */
+	$attrs = apply_filters( 'cp_attributes', $attrs, $element, $context );
+	/**
+	 * Filters the attribute array, specifically using context.
+	 * The dynamic portion of the hook name, `$context`, refers to the context.
+	 *
+	 * @since CP-1.5.0
+	 *
+	 * @param string[] $attrs   Key is attribute name, value is attribute value.
+	 * @param string   $element The HTML element the attributes are for.
+	 */
+	$attrs = apply_filters( "cp_attributes_{$context}", $attrs, $element );
+
+	$out = '';
+	foreach ( $attrs as $attr => $value ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( 'esc_attr', $value );
+			$value = implode( ' ', array_unique( $value ) );
+			if ( ! empty( $value ) ) {
+				$out .= sanitize_key( $attr ) . '="' . $value . '" ';
+			}
+		} else {
+			$value = ( 'href' === $attr || 'src' === $attr ) ?
+				esc_url( $value ) : esc_attr( $value );
+			$out .= sanitize_key( $attr ) . '="' . $value . '" ';
+		}
+	}
+	return trim( $out );
+}
+
+/**
  * Convert full URL paths to absolute paths.
  *
  * Removes the http or https protocols and the domain. Keeps the path '/' at the
@@ -5300,8 +5367,10 @@ function print_emoji_styles() {
 	}
 
 	$printed = true;
+
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
-<style type="text/css">
+<style<?php echo $type_attr; ?>>
 img.wp-smiley,
 img.emoji {
 	display: inline !important;
@@ -5382,6 +5451,8 @@ function _print_emoji_detection_script() {
 		'svgExt'  => apply_filters( 'emoji_svg_ext', '.svg' ),
 	);
 
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/javascript"';
+
 	if ( SCRIPT_DEBUG ) {
 		$version_wpemoji = 'ver=' . classicpress_asset_version( 'script', 'wpemoji' );
 		$version_twemoji = 'ver=' . classicpress_asset_version( 'script', 'twemoji' );
@@ -5394,7 +5465,7 @@ function _print_emoji_detection_script() {
 		);
 
 		?>
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			window._wpemojiSettings = <?php echo wp_json_encode( $settings ); ?>;
 			<?php readfile( ABSPATH . WPINC . '/js/wp-emoji-loader.js' ); ?>
 		</script>
@@ -5417,7 +5488,7 @@ function _print_emoji_detection_script() {
 		 * and edit wp-emoji-loader.js directly.
 		 */
 		?>
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			window._wpemojiSettings = <?php echo wp_json_encode( $settings ); ?>;
 			include "js/wp-emoji-loader.min.js"
 		</script>

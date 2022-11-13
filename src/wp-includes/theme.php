@@ -699,7 +699,14 @@ function locale_stylesheet() {
 	if ( empty( $stylesheet ) ) {
 		return;
 	}
-	echo '<link rel="stylesheet" href="' . $stylesheet . '" type="text/css" media="screen" />';
+
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
+	printf(
+		'<link rel="stylesheet" href="%s"%s media="screen" />',
+		$stylesheet,
+		$type_attr
+	);
 }
 
 /**
@@ -1713,9 +1720,11 @@ function _custom_background_cb() {
 		$color = false;
 	}
 
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
 	if ( ! $background && ! $color ) {
 		if ( is_customize_preview() ) {
-			echo '<style type="text/css" id="custom-background-css"></style>';
+			printf( '<style%s id="custom-background-css"></style>', $type_attr );
 		}
 		return;
 	}
@@ -1769,7 +1778,7 @@ function _custom_background_cb() {
 		$style .= $image . $position . $size . $repeat . $attachment;
 	}
 	?>
-<style type="text/css" id="custom-background-css">
+<style<?php echo $type_attr; ?> id="custom-background-css">
 body.custom-background { <?php echo trim( $style ); ?> }
 </style>
 	<?php
@@ -1783,8 +1792,9 @@ body.custom-background { <?php echo trim( $style ); ?> }
 function wp_custom_css_cb() {
 	$styles = wp_get_custom_css();
 	if ( $styles || is_customize_preview() ) :
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 		?>
-		<style type="text/css" id="wp-custom-css">
+		<style<?php echo $type_attr; ?> id="wp-custom-css">
 			<?php echo strip_tags( $styles ); // Note that esc_html() cannot be used because `div &gt; span` is not interpreted properly. ?>
 		</style>
 		<?php
@@ -2402,18 +2412,29 @@ function get_theme_starter_content() {
  * If attached to a hook, it must be {@see 'after_setup_theme'}.
  * The {@see 'init'} hook may be too late for some features.
  *
+ * Example usage:
+ *
+ *     add_theme_support( 'title-tag' );
+ *     add_theme_support( 'custom-logo', array(
+ *         'height' => 480,
+ *         'width'  => 720,
+ *     ) );
+ *
  * @since WP-2.9.0
  * @since WP-3.6.0 The `html5` feature was added
  * @since WP-3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'
  * @since WP-4.1.0 The `title-tag` feature was added
  * @since WP-4.5.0 The `customize-selective-refresh-widgets` feature was added
  * @since WP-4.7.0 The `starter-content` feature was added
+ * @since WP-5.3.0 The `html5` feature now also accepts 'script' and 'style'.
+ * @since CP-1.5.0 The `body-only` feature was added
  *
  * @global array $_wp_theme_features
  *
  * @param string $feature  The feature being added. Likely core values include 'post-formats',
  *                         'post-thumbnails', 'html5', 'custom-logo', 'custom-header-uploads',
- *                         'custom-header', 'custom-background', 'title-tag', 'starter-content', etc.
+ *                         'custom-header', 'custom-background', 'title-tag', 'starter-content',
+ *                         'body-only', etc.
  * @param mixed  $args,... Optional extra arguments to pass along with certain features.
  * @return void|bool False on failure, void otherwise.
  */
@@ -2643,6 +2664,26 @@ function add_theme_support( $feature ) {
 
 				return false;
 			}
+
+			break;
+
+		case 'body-only':
+			add_theme_support( 'automatic-feed-links' );
+			add_theme_support( 'title-tag' );
+			add_theme_support(
+				'html5',
+				array(
+					'comment-list',
+					'comment-form',
+					'gallery',
+					'caption',
+					'search-form',
+					'script',
+					'style',
+					'navigation-widgets',
+				)
+			);
+
 	}
 
 	$_wp_theme_features[ $feature ] = $args;
@@ -2701,9 +2742,10 @@ function _custom_logo_header_styles() {
 		$classes = array_map( 'sanitize_html_class', $classes );
 		$classes = '.' . implode( ', .', $classes );
 
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 		?>
 		<!-- Custom Logo: hide header text -->
-		<style id="custom-logo-css" type="text/css">
+		<style id="custom-logo-css"<?php echo $type_attr; ?>>
 			<?php echo $classes; ?> {
 				position: absolute;
 				clip: rect(1px, 1px, 1px, 1px);
@@ -3253,15 +3295,15 @@ function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
 	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
-
+	$type_attr    = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 	?>
 	<!--[if lte IE 8]>
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			document.body.className = document.body.className.replace( /(^|\s)(no-)?customize-support(?=\s|$)/, '' ) + ' no-customize-support';
 		</script>
 	<![endif]-->
 	<!--[if gte IE 9]><!-->
-		<script type="text/javascript">
+		<script<?php echo $type_attr; ?>>
 			(function() {
 				var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
 

@@ -337,6 +337,8 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 	global $_nav_menu_placeholder, $nav_menu_selected_id;
 
 	$post_type_name = $box['args']->name;
+	$tab_name       = $post_type_name . '-tab';
+	$post_type      = get_post_type_object( $post_type_name );
 
 	// Paginate browsing for large numbers of post objects.
 	$per_page = 50;
@@ -439,9 +441,9 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			'base'               => add_query_arg(
 				array(
 					$tab_name     => 'all',
-					'paged'                  => '%#%',
-					'item-type'              => 'post_type',
-					'item-object'            => $post_type_name,
+					'paged'       => '%#%',
+					'item-type'   => 'post_type',
+					'item-object' => $post_type_name,
 				)
 			),
 			'format'             => '',
@@ -623,8 +625,6 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 					}
 				}
 
-				$post_type = get_post_type_object( $post_type_name );
-
 				if ( $post_type->has_archive ) {
 					$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval( $_nav_menu_placeholder ) - 1 : -1;
 					array_unshift(
@@ -708,6 +708,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
  */
 function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 	global $nav_menu_selected_id;
+
 	$taxonomy_name = $box['args']->name;
 	$taxonomy      = get_taxonomy( $taxonomy_name );
 	$tab_name      = $taxonomy_name . '-tab';

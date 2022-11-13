@@ -18,9 +18,6 @@ class Tests_Login extends WP_UnitTestCase {
 		parent::tear_down();
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
 	public function test_reset_password() {
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
@@ -32,11 +29,9 @@ class Tests_Login extends WP_UnitTestCase {
 			. preg_quote( WP_TESTS_DOMAIN, '/' )
 			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
 			. preg_quote( $_POST['user_login'], '/' )
-			. '$/mi'
+			. '\r?$/mi'
 		);
 
-		$test = preg_match( $regex, $mailer->get_sent()->body );
-
-		$this->assertEquals( $test, 1 );
+		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );
 	}
 }
