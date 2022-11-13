@@ -128,22 +128,14 @@ class Tests_WP_Error extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @covers WP_Error:get_error_code()
-=======
 	 * @covers ::get_error_code()
->>>>>>> 311531a964 (Tests: Simplify `@covers` annotations for `WP_Error` test coverage. Also fix a typo in a test method name.)
 	 */
 	public function test_get_error_code_with_no_errors_should_return_an_empty_string() {
 		$this->assertSame( '', $this->WP_Error->get_error_code() );
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @covers WP_Error:get_error_code()
-=======
 	 * @covers ::get_error_code()
->>>>>>> 311531a964 (Tests: Simplify `@covers` annotations for `WP_Error` test coverage. Also fix a typo in a test method name.)
 	 */
 	public function test_get_error_code_with_one_error_should_return_that_error_code() {
 		$this->WP_Error->add( 'code', 'message' );
@@ -152,11 +144,7 @@ class Tests_WP_Error extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-	 * @covers WP_Error:get_error_code()
-=======
 	 * @covers ::get_error_code()
->>>>>>> 311531a964 (Tests: Simplify `@covers` annotations for `WP_Error` test coverage. Also fix a typo in a test method name.)
 	 */
 	public function test_get_error_code_with_multiple_errors_should_return_only_the_first_error_code() {
 		$this->WP_Error->add( 'code', 'message' );
