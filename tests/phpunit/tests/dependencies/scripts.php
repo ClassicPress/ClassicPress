@@ -812,20 +812,73 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
+<<<<<<< HEAD
 		$ver       = self::$asset_version;
 		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery-core,jquery-migrate,wp-a11y&amp;ver={$ver}'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"before\");\n</script>\n";
 		$expected .= "<script type='text/javascript' src='http://example.com'></script>\n";
 		$expected .= "<script type='text/javascript' src='http://example2.com'></script>\n";
 		$expected .= "<script type='text/javascript'>\nconsole.log(\"after\");\n</script>\n";
+=======
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$ver       = get_bloginfo( 'version' );
+		$suffix    = wp_scripts_get_suffix();
+		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate,regenerator-runtime,wp-polyfill,wp-dom-ready,wp-hooks&amp;ver={$ver}'></script>\n";
+		$expected .= "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script type='text/javascript' src='/wp-includes/js/dist/i18n{$suffix}.js' id='wp-i18n-js'></script>\n";
+		$expected .= "<script type='text/javascript' id='wp-i18n-js-after'>\n";
+		$expected .= "wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );\n";
+		$expected .= "</script>\n";
+		$expected .= "<script type='text/javascript' id='wp-a11y-js-translations'>\n";
+		$expected .= "( function( domain, translations ) {\n";
+		$expected .= "	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;\n";
+		$expected .= "	localeData[\"\"].domain = domain;\n";
+		$expected .= "	wp.i18n.setLocaleData( localeData, domain );\n";
+		$expected .= "} )( \"default\", { \"locale_data\": { \"messages\": { \"\": {} } } } );\n";
+		$expected .= "</script>\n";
+		$expected .= "<script type='text/javascript' src='/wp-includes/js/dist/a11y{$suffix}.js' id='wp-a11y-js'></script>\n";
+		$expected .= "<script type='text/javascript' src='http://example2.com' id='test-example2-js'></script>\n";
+		$expected .= "<script type='text/javascript' id='test-example2-js-after'>\nconsole.log(\"after\");\n</script>\n";
+>>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 		wp_enqueue_script( 'test-example2', 'http://example2.com', array( 'wp-a11y' ), null );
 		wp_add_inline_script( 'test-example2', 'console.log("after");', 'after' );
 
+<<<<<<< HEAD
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
+=======
+		// Effectively ignore the output until retrieving it later via `getActualOutput()`.
+		$this->expectOutputRegex( '`.`' );
+
+		wp_print_scripts();
+		_print_scripts();
+		$print_scripts = $this->getActualOutput();
+
+		/*
+		 * We've replaced wp-a11y.js with @wordpress/a11y package (see #45066),
+		 * and `wp-polyfill` is now a dependency of the packaged wp-a11y.
+		 * The packaged scripts contain various version numbers, which are not exposed,
+		 * so we will remove all version args from the output.
+		 */
+		$print_scripts = preg_replace(
+			'~js\?ver=([^"\']*)~', // Matches `js?ver=X.X.X` and everything to single or double quote.
+			'js',                  // The replacement, `js` without the version arg.
+			$print_scripts         // Printed scripts.
+		);
+>>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
 
 		$this->assertSameIgnoreEOL( $expected, $print_scripts );
 	}
@@ -841,9 +894,24 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
+<<<<<<< HEAD
 		$expected_tail  = "<![endif]-->\n";
 		$expected_tail .= "<script type='text/javascript' src='/customize-dependency.js'></script>\n";
 		$expected_tail .= "<script type='text/javascript'>\n";
+=======
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$expected_tail  = "<script type='text/javascript' src='/customize-dependency.js' id='customize-dependency-js'></script>\n";
+		$expected_tail .= "<script type='text/javascript' id='customize-dependency-js-after'>\n";
+>>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
 		$expected_tail .= "tryCustomizeDependency()\n";
 		$expected_tail .= "</script>\n";
 
@@ -851,8 +919,17 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		wp_enqueue_script( $handle, '/customize-dependency.js', array( 'customize-controls' ), null );
 		wp_add_inline_script( $handle, 'tryCustomizeDependency()' );
 
+<<<<<<< HEAD
 		wp_print_scripts();
 		$print_scripts = get_echo( '_print_scripts' );
+=======
+		// Effectively ignore the output until retrieving it later via `getActualOutput()`.
+		$this->expectOutputRegex( '`.`' );
+
+		wp_print_scripts();
+		_print_scripts();
+		$print_scripts = $this->getActualOutput();
+>>>>>>> 400982add8 (Build/Test Tools: Ignore "null to nullable" deprecations for select tests.)
 
 		$tail = substr( $print_scripts, strrpos( $print_scripts, '<![endif]-->' ) );
 		$this->assertSame( $expected_tail, $tail );
