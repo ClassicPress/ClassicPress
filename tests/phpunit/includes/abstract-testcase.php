@@ -652,11 +652,46 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 *
 	 * @since WP-5.6.0
 	 *
+<<<<<<< HEAD
 	 * @param string $expected The expected value.
 	 * @param string $actual   The actual value.
 	 */
 	public function assertSameIgnoreEOL( $expected, $actual ) {
 		$this->assertSame( str_replace( "\r\n", "\n", $expected ), str_replace( "\r\n", "\n", $actual ) );
+=======
+	 * @param mixed  $expected The expected value.
+	 * @param mixed  $actual   The actual value.
+	 * @param string $message  Optional. Message to display when the assertion fails.
+	 */
+	public function assertSameIgnoreEOL( $expected, $actual, $message = '' ) {
+		if ( null !== $expected ) {
+			$expected = map_deep(
+				$expected,
+				static function ( $value ) {
+					if ( is_string( $value ) ) {
+						return str_replace( "\r\n", "\n", $value );
+					}
+
+					return $value;
+				}
+			);
+		}
+
+		if ( null !== $actual ) {
+			$actual = map_deep(
+				$actual,
+				static function ( $value ) {
+					if ( is_string( $value ) ) {
+						return str_replace( "\r\n", "\n", $value );
+					}
+
+					return $value;
+				}
+			);
+		}
+
+		$this->assertSame( $expected, $actual, $message );
+>>>>>>> 81ade4da65 (Build/Test Tools: Fix null handling and string type casting in `WP_UnitTestCase_Base::assertSameIgnoreEOL()`.)
 	}
 
 	/**
@@ -665,8 +700,14 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	 * @since WP-5.4.0
 	 * @since WP-5.6.0 Turned into an alias for `::assertSameIgnoreEOL()`.
 	 *
+<<<<<<< HEAD
 	 * @param string $expected The expected value.
 	 * @param string $actual   The actual value.
+=======
+	 * @param mixed  $expected The expected value.
+	 * @param mixed  $actual   The actual value.
+	 * @param string $message  Optional. Message to display when the assertion fails.
+>>>>>>> 81ade4da65 (Build/Test Tools: Fix null handling and string type casting in `WP_UnitTestCase_Base::assertSameIgnoreEOL()`.)
 	 */
 	public function assertEqualsIgnoreEOL( $expected, $actual ) {
 		$this->assertSameIgnoreEOL( $expected, $actual );
