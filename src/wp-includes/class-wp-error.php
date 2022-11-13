@@ -2,13 +2,9 @@
 /**
  * ClassicPress Error API.
  *
-<<<<<<< HEAD
  * Contains the WP_Error class and the is_wp_error() function.
  *
  * @package ClassicPress
-=======
- * @package WordPress
->>>>>>> df7554985d (General: Introduce the ability to merge multiple `WP_Error` objects into one another, and to store more than one item of data for an error.)
  */
 
 /**
@@ -41,7 +37,7 @@ class WP_Error {
 	/**
 	 * Stores previously added data added for error codes, oldest-to-newest by code.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 * @var array[]
 	 */
 	protected $additional_data = array();
@@ -172,7 +168,7 @@ class WP_Error {
 	/**
 	 * Verifies if the instance contains errors.
 	 *
-	 * @since 5.1.0
+	 * @since WP-5.1.0
 	 *
 	 * @return bool If the instance contains errors.
 	 */
@@ -202,7 +198,7 @@ class WP_Error {
 		/**
 		 * Fires when an error is added to a WP_Error object.
 		 *
-		 * @since 5.6.0
+		 * @since WP-5.6.0
 		 *
 		 * @param string|int $code     Error code.
 		 * @param string     $message  Error message.
@@ -215,12 +211,8 @@ class WP_Error {
 	/**
 	 * Adds data to an error with the given code.
 	 *
-<<<<<<< HEAD
 	 * @since WP-2.1.0
-=======
-	 * @since 2.1.0
-	 * @since 5.6.0 Errors can now contain more than one item of error data. {@see WP_Error::$additional_data}.
->>>>>>> df7554985d (General: Introduce the ability to merge multiple `WP_Error` objects into one another, and to store more than one item of data for an error.)
+	 * @since WP-5.6.0 Errors can now contain more than one item of error data. {@see WP_Error::$additional_data}.
 	 *
 	 * @param mixed $data Error data.
 	 * @param string|int $code Error code.
@@ -240,7 +232,7 @@ class WP_Error {
 	/**
 	 * Retrieves all error data for an error code in the order in which the data was added.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param string|int $code Error code.
 	 * @return mixed[] Array of error data, if it exists.
@@ -282,7 +274,7 @@ class WP_Error {
 	/**
 	 * Merges the errors in the given error object into this one.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param WP_Error $error Error object to merge.
 	 */
@@ -293,7 +285,7 @@ class WP_Error {
 	/**
 	 * Exports the errors in this object into the given one.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param WP_Error $error Error object to export into.
 	 */
@@ -304,7 +296,7 @@ class WP_Error {
 	/**
 	 * Copies errors from one WP_Error instance to another.
 	 *
-	 * @since 5.6.0
+	 * @since WP-5.6.0
 	 *
 	 * @param WP_Error $from From.
 	 * @param WP_Error $to   To.
