@@ -298,12 +298,8 @@ class Tests_Cron extends WP_UnitTestCase {
 
 		// first one works
 		$this->assertTrue( wp_schedule_single_event( $ts1, $hook, $args ) );
-<<<<<<< HEAD
-		// second one is ignored
-=======
 
 		// Subsequent ones are ignored.
->>>>>>> 75d2020f3f (Cron API: Introduce a `$wp_error` parameter to functions that write to the cron array.)
 		$this->assertFalse( wp_schedule_single_event( $ts2, $hook, $args ) );
 		$subsequent = wp_schedule_single_event( $ts2, $hook, $args, true );
 		$this->assertWPError( $subsequent );
@@ -517,8 +513,6 @@ class Tests_Cron extends WP_UnitTestCase {
 			'args'      => array(),
 		);
 	}
-<<<<<<< HEAD
-=======
 
 	/**
 	 * Ensure wp_get_scheduled_event() returns the expected one off events.
@@ -526,7 +520,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * When no timestamp is specified, the next event should be returned.
 	 * When a timestamp is specified, a particular event should be returned.
 	 *
-	 * @ticket 45976.
+	 * @see https://core.trac.wordpress.org/ticket/45976.
 	 */
 	function test_get_scheduled_event_singles() {
 		$hook    = __FUNCTION__;
@@ -569,7 +563,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	 * When no timestamp is specified, the next event should be returned.
 	 * When a timestamp is specified, a particular event should be returned.
 	 *
-	 * @ticket 45976.
+	 * @see https://core.trac.wordpress.org/ticket/45976.
 	 */
 	function test_get_scheduled_event_recurring() {
 		$hook     = __FUNCTION__;
@@ -613,7 +607,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	/**
 	 * Ensure wp_get_scheduled_event() returns false when expected.
 	 *
-	 * @ticket 45976.
+	 * @see https://core.trac.wordpress.org/ticket/45976.
 	 */
 	function test_get_scheduled_event_false() {
 		$hook = __FUNCTION__;
@@ -638,7 +632,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	/**
 	 * Ensure any past event counts as a duplicate.
 	 *
-	 * @ticket 44818
+	 * @see https://core.trac.wordpress.org/ticket/44818
 	 */
 	function test_duplicate_past_event() {
 		$hook = __FUNCTION__;
@@ -665,7 +659,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	/**
 	 * Ensure any near future event counts as a duplicate.
 	 *
-	 * @ticket 44818
+	 * @see https://core.trac.wordpress.org/ticket/44818
 	 */
 	function test_duplicate_near_future_event() {
 		$hook = __FUNCTION__;
@@ -693,7 +687,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	/**
 	 * Duplicate future events are disallowed.
 	 *
-	 * @ticket 44818
+	 * @see https://core.trac.wordpress.org/ticket/44818
 	 */
 	function test_duplicate_future_event() {
 		$hook = __FUNCTION__;
@@ -717,7 +711,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	/**
 	 * Future events are allowed.
 	 *
-	 * @ticket 44818
+	 * @see https://core.trac.wordpress.org/ticket/44818
 	 */
 	function test_not_duplicate_future_event() {
 		$hook = __FUNCTION__;
@@ -735,7 +729,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_invalid_timestamp_for_event_returns_error() {
 		$single_event      = wp_schedule_single_event( -50, 'hook', array(), true );
@@ -757,7 +751,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_invalid_recurrence_for_event_returns_error() {
 		$event             = wp_schedule_event( time(), 'invalid', 'hook', array(), true );
@@ -771,7 +765,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_disallowed_event_returns_false_when_wp_error_is_set_to_false() {
 		add_filter( 'schedule_event', '__return_false' );
@@ -786,7 +780,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_disallowed_event_returns_error_when_wp_error_is_set_to_true() {
 		add_filter( 'schedule_event', '__return_false' );
@@ -806,7 +800,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_schedule_short_circuit_with_error_returns_false_when_wp_error_is_set_to_false() {
 		$return_error = function() {
@@ -832,7 +826,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_schedule_short_circuit_with_error_returns_error_when_wp_error_is_set_to_true() {
 		$return_error = function() {
@@ -863,7 +857,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_schedule_short_circuit_with_false_returns_false_when_wp_error_is_set_to_false() {
 		// Add filters which return false:
@@ -882,7 +876,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_schedule_short_circuit_with_false_returns_error_when_wp_error_is_set_to_true() {
 		// Add filters which return false:
@@ -906,7 +900,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 * @expectedDeprecated wp_clear_scheduled_hook
 	 */
 	public function test_deprecated_argument_usage_of_wp_clear_scheduled_hook() {
@@ -928,7 +922,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_clear_scheduled_hook_returns_default_pre_filter_error_when_wp_error_is_set_to_true() {
 		add_filter( 'pre_unschedule_event', '__return_false' );
@@ -949,7 +943,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_clear_scheduled_hook_returns_custom_pre_filter_error_when_wp_error_is_set_to_true() {
 		add_filter(
@@ -981,7 +975,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_unschedule_short_circuit_with_error_returns_false_when_wp_error_is_set_to_false() {
 		$return_error = function() {
@@ -1002,7 +996,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_unschedule_short_circuit_with_error_returns_error_when_wp_error_is_set_to_true() {
 		$return_error = function() {
@@ -1024,7 +1018,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_unschedule_short_circuit_with_false_returns_false_when_wp_error_is_set_to_false() {
 		// Add a filter which returns false:
@@ -1038,7 +1032,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_unschedule_short_circuit_with_false_returns_error_when_wp_error_is_set_to_true() {
 		// Add a filter which returns false:
@@ -1053,7 +1047,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_cron_array_error_is_returned_when_scheduling_single_event() {
 		// Force update_option() to fail by setting the new value to match the existing:
@@ -1073,7 +1067,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_cron_array_error_is_returned_when_scheduling_event() {
 		// Force update_option() to fail by setting the new value to match the existing:
@@ -1093,7 +1087,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_cron_array_error_is_returned_when_unscheduling_hook() {
 		// Schedule a valid event:
@@ -1117,7 +1111,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 49961
+	 * @see https://core.trac.wordpress.org/ticket/49961
 	 */
 	public function test_cron_array_error_is_returned_when_unscheduling_event() {
 		// Schedule a valid event:
@@ -1140,5 +1134,4 @@ class Tests_Cron extends WP_UnitTestCase {
 		$this->assertSame( 'could_not_set', $unscheduled->get_error_code() );
 	}
 
->>>>>>> 75d2020f3f (Cron API: Introduce a `$wp_error` parameter to functions that write to the cron array.)
 }
