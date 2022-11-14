@@ -14,7 +14,7 @@ if ( ! function_exists( 'wp_cache_get_multiple' ) ) :
 	 * Retrieves multiple values from the cache.
 	 *
 	 * @ignore
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @see wp_cache_get_multiple()
 	 *

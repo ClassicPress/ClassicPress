@@ -1711,7 +1711,7 @@ function wp_img_tag_add_srcset_and_sizes_attr( $image, $context, $attachment_id 
 /**
  * Adds `loading` attribute to an `iframe` HTML tag.
  *
- * @since 5.7.0
+ * @since WP-5.7.0
  *
  * @param string $iframe  The HTML `iframe` tag where the attribute should be added.
  * @param string $context Additional context to pass to the filters.
@@ -1739,7 +1739,7 @@ function wp_iframe_tag_add_loading_attr( $iframe, $context ) {
 	 * Returning `false` or an empty string will not add the attribute.
 	 * Returning `true` will add the default value.
 	 *
-	 * @since 5.7.0
+	 * @since WP-5.7.0
 	 *
 	 * @param string|bool $value   The `loading` attribute value. Returning a falsey value will result in
 	 *                             the attribute being omitted for the iframe.
@@ -4576,7 +4576,7 @@ function wp_omit_loading_attr_threshold( $force = false ) {
 		 * For these first content media elements, the `loading` attribute will be omitted. By default, this is the case
 		 * for only the very first content media element.
 		 *
-		 * @since 5.9.0
+		 * @since WP-5.9.0
 		 *
 		 * @param int $omit_threshold The number of media elements where the `loading` attribute will not be added. Default 1.
 		 */

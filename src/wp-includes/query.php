@@ -1013,7 +1013,7 @@ function setup_postdata( $post ) {
 /**
  * Generates post data.
  *
- * @since 5.2.0
+ * @since WP-5.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
