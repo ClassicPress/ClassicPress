@@ -52,15 +52,26 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 		$this->skipTestOnTimeout( $response );
 
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$this->fail( 'Could not contact dev.mysql.com to check versions.' );
-		}
+		$response_code = wp_remote_retrieve_response_code( $response )
+		$response_body = wp_remote_retrieve_body( $response );
 
-		$mysql = wp_remote_retrieve_body( $response );
+		if ( 200 !== $response_code ) {
+			$error_message = sprintf(
+				'Could not contact dev.MySQL.com to check versions. Response code: %s. Response body: %s',
+				$response_code,
+				$response_body
+			);
+
+			if ( 503 === $response_code ) {
+				$this->markTestSkipped( $error_message );
+			}
+
+			$this->fail( $error_message );
+		}
 
 		preg_match(
 			'#(\d{4}-\d{2}-\d{2}), General Availability#',
-			$mysql,
+			$response_body,
 			$mysqlmatches
 		);
 		$this->assertNotEmpty( $mysqlmatches );
