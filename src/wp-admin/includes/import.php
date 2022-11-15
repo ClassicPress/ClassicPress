@@ -142,7 +142,7 @@ function wp_get_popular_importers() {
 				'locale'  => $locale,
 				'version' => $wp_version,
 			),
-			'https://api.wordpress.org/core/importers/1.1/'
+			'https://api-v1.classicpress.net/core/importers/1.0/'
 		);
 		$options = array( 'user-agent' => classicpress_user_agent() );
 
