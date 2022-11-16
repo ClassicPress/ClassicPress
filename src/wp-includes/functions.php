@@ -6654,7 +6654,7 @@ function wp_get_update_php_url() {
 	 * Providing an empty string is not allowed and will result in the default URL being used. Furthermore
 	 * the page the URL links to should preferably be localized in the site language.
 	 *
-	 * @since 5.1.0
+	 * @since WP-5.1.0
 	 *
 	 * @param string $update_url URL to learn more about updating PHP.
 	 */
@@ -6674,7 +6674,7 @@ function wp_get_update_php_url() {
  * This function does not allow modifying the returned URL, and is only used to compare the actually used URL with the
  * default one.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  * @access private
  *
  * @return string Default URL to learn more about updating PHP.

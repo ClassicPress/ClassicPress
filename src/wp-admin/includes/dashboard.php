@@ -1403,7 +1403,7 @@ function wp_check_browser_version() {
 /**
  * Displays the PHP update nag.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  */
 function wp_dashboard_php_nag() {
 	$response = wp_check_php_version();
@@ -1458,7 +1458,7 @@ function wp_dashboard_php_nag() {
 /**
  * Adds an additional class to the PHP nag if the current version is insecure.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  *
  * @param array $classes Metabox classes.
  * @return array Modified metabox classes.
@@ -1476,7 +1476,7 @@ function dashboard_php_nag_class( $classes ) {
 /**
  * Checks if the user needs to update PHP.
  *
- * @since 5.1.0
+ * @since WP-5.1.0
  *
  * @return array|false $response Array of PHP version data. False on failure.
  */
