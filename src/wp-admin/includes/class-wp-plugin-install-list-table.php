@@ -613,11 +613,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					_e( 'This plugin doesn&#8217;t work with your version of PHP or support ClassicPress. ' );
 					if ( current_user_can( 'update_php' ) ) {
 						printf(
-<<<<<<< HEAD
-							/* translators: %s: "Update PHP" page URL */
-							__( '<a href="%s">Learn more about updating PHP</a>.' ),
-							esc_url( wp_get_update_php_url() )
-=======
 							/* translators: 1: "Update WordPress" screen URL, 2: "Updating PHP" page URL */
 							__( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 							self_admin_url( 'update-core.php' ),
@@ -628,7 +623,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 							/* translators: %s: "Updating PHP" page URL */
 							__( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( __( 'https://wordpress.org/support/update-php/' ) )
->>>>>>> 6d8e3c5864 (Plugins: Use newer "Updating PHP" page URL in the notice displayed when a plugin requires a higher PHP version.)
 						);
 						wp_update_php_annotation();
 					}
@@ -640,11 +634,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 						printf(
 							/* translators: %s: "Update PHP" page URL */
 							__( '<a href="%s">Learn more about updating PHP</a>.' ),
-<<<<<<< HEAD
-							esc_url( wp_get_update_php_url() )
-=======
-						esc_url( __( 'https://wordpress.org/support/update-php/' ) )
->>>>>>> 6d8e3c5864 (Plugins: Use newer "Updating PHP" page URL in the notice displayed when a plugin requires a higher PHP version.)
+							esc_url( __( 'https://wordpress.org/support/update-php/' ) )
 						);
 						wp_update_php_annotation();
 					}
