@@ -1413,16 +1413,21 @@ function wp_dashboard_php_nag() {
 	}
 
 	if ( isset( $response['is_secure'] ) && ! $response['is_secure'] ) {
-		$msg = __( 'WordPress has detected that your site is running on an insecure version of PHP.' );
+		printf(
+			__( 'WordPress has detected that your site is running on an insecure version of PHP (%s).' ),
+			phpversion()
+		);
 	} else {
-		$msg = __( 'WordPress has detected that your site is running on an outdated version of PHP.' );
+		printf(
+			__( 'WordPress has detected that your site is running on an outdated version of PHP (%s).' ),
+			phpversion()
+		);
 	}
 
 	$update_url  = wp_get_update_php_url();
 	$default_url = wp_get_default_update_php_url();
 
 	?>
-	<p><?php echo $msg; ?></p>
 
 	<h3><?php _e( 'What is PHP and how does it affect my site?' ); ?></h3>
 	<p><?php _e( 'PHP is the programming language we use to build and maintain WordPress. Newer versions of PHP are both faster and more secure, so updating will have a positive effect on your site’s performance.' ); ?></p>
@@ -1486,7 +1491,7 @@ function wp_check_php_version() {
 
 	$response = get_site_transient( 'php_check_' . $key );
 	if ( false === $response ) {
-		$url = 'http://api.wordpress.org/core/serve-happy/1.0/';
+		$url = 'https://api-v1.classicpress.net/core/support-check/1.0/';
 		if ( wp_http_supports( array( 'ssl' ) ) ) {
 			$url = set_url_scheme( $url, 'https' );
 		}

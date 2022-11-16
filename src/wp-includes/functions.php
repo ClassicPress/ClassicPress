@@ -6680,7 +6680,7 @@ function wp_get_update_php_url() {
  * @return string Default URL to learn more about updating PHP.
  */
 function wp_get_default_update_php_url() {
-	return _x( 'https://wordpress.org/support/update-php/', 'localized PHP upgrade information page' );
+	return _x( 'https://docs.classicpress.net/user-guides/update-php/', 'localized PHP upgrade information page' );
 }
 
 /**
