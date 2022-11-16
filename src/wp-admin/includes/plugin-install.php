@@ -792,9 +792,15 @@ function install_plugin_information() {
 		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
 		if ( current_user_can( 'update_php' ) ) {
 			printf(
+<<<<<<< HEAD
 				/* translators: %s: "Update PHP" page URL */
 				' ' . __( '<a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
 				esc_url( wp_get_update_php_url() )
+=======
+			/* translators: "Updating PHP" page URL */
+			__( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>, so unfortunately you cannot install it. <a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
+			esc_url( __( 'https://wordpress.org/support/update-php/' ) )
+>>>>>>> 6d8e3c5864 (Plugins: Use newer "Updating PHP" page URL in the notice displayed when a plugin requires a higher PHP version.)
 			);
 			echo '</p>';
 			wp_update_php_annotation();
