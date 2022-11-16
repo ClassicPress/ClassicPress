@@ -262,7 +262,11 @@ class Test_WP_Widget_Media_Video extends WP_UnitTestCase {
 
 		// Custom attributes.
 		$this->assertStringContainsString( 'preload="metadata"', $output );
+<<<<<<< HEAD
 		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=OQSNhk5ICTI', $output );
+=======
+		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=72xdCU__XCk', $output );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringContainsString( $content, $output );
 	}
 

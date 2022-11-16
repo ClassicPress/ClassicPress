@@ -134,8 +134,13 @@ class Tests_WP_Generate_Tag_Cloud extends WP_UnitTestCase {
 			)
 		);
 
+<<<<<<< HEAD
 		$this->assertMatchesRegularExpression( "|^<ul class='wp-tag-cloud' role='list'>|", $found );
 		$this->assertMatchesRegularExpression( "|</ul>\n|", $found );
+=======
+		$this->assertRegExp( "|^<ul class='wp-tag-cloud' role='list'>|", $found );
+		$this->assertRegExp( "|</ul>\n|", $found );
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringContainsString( '>' . $tags[0]->name . '<', $found );
 	}
 

@@ -586,7 +586,10 @@ class WP_Test_REST_Tags_Controller extends WP_Test_REST_Controller_Testcase {
 			rest_url( 'wp/v2/tags' )
 		);
 		$this->assertStringContainsString( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+<<<<<<< HEAD
 
+=======
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$next_link = add_query_arg(
 			array(
 				'page' => 4,

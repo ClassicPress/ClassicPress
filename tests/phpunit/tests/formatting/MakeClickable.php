@@ -398,4 +398,39 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			),
 		);
 	}
+<<<<<<< HEAD
+=======
+
+	/**
+	 * @ticket 48022
+	 * @dataProvider data_add_rel_ugc_in_comments
+	 */
+	public function test_add_rel_ugc_in_comments( $content, $expected ) {
+		$comment_id = self::factory()->comment->create(
+			array(
+				'comment_content' => $content,
+			)
+		);
+
+		ob_start();
+		comment_text( $comment_id );
+		$comment_text = ob_get_clean();
+
+		$this->assertStringContainsString( $expected, make_clickable( $comment_text ) );
+	}
+
+	public function data_add_rel_ugc_in_comments() {
+		return array(
+			array(
+				'http://wordpress.org',
+				'<a href="http://wordpress.org" rel="nofollow ugc">http://wordpress.org</a>',
+			),
+			array(
+				'www.wordpress.org',
+				'<p><a href="http://www.wordpress.org" rel="nofollow ugc">http://www.wordpress.org</a>',
+			),
+		);
+	}
+
+>>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 }
