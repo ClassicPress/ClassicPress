@@ -970,6 +970,7 @@ a.rsswidget {
 	font-size: 16px;
 }
 
+<<<<<<< HEAD
 /* ---------------------------------------------------------
 	Dashboard Petitions Widget
 ------------------------------------------------------------*/
@@ -1088,6 +1089,22 @@ table.cp_petitions span.started {
 	padding: 2px 4px;
 }
 
+=======
+/* PHP Nag */
+#dashboard_php_nag h2.hndle {
+	border-left: 4px solid #dc3232;
+}
+
+#dashboard_php_nag h3 {
+	font-weight: 600;
+}
+
+#dashboard_php_nag .button.button-hero {
+	display: block;
+	text-align: center;
+}
+
+>>>>>>> 5f56921131 (General: Introduce dashboard widget to inform administrators about outdated PHP versions.)
 /* =Media Queries
 -------------------------------------------------------------- */
 

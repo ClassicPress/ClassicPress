@@ -558,10 +558,19 @@ function map_meta_cap( $cap, $user_id ) {
 				$caps[] = 'manage_options';
 			}
 			break;
+<<<<<<< HEAD
 		case 'export_others_personal_data':
 		case 'erase_others_personal_data':
 		case 'manage_privacy_options':
 			$caps[] = is_multisite() ? 'manage_network' : 'manage_options';
+=======
+		case 'upgrade_php':
+			if ( is_multisite() && ! is_super_admin( $user_id ) ) {
+				$caps[] = 'do_not_allow';
+			} else {
+				$caps[] = 'update_core';
+			}
+>>>>>>> 5f56921131 (General: Introduce dashboard widget to inform administrators about outdated PHP versions.)
 			break;
 		default:
 			// Handle meta capabilities for custom post types.
