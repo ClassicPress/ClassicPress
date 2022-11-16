@@ -6636,11 +6636,7 @@ function wp_privacy_delete_old_export_files() {
  * default URL being used. Furthermore the page the URL links to should preferably be localized in the
  * site language.
  *
-<<<<<<< HEAD
  * @since WP-5.1.0
-=======
- * @since 5.1.0
->>>>>>> aea4b2765a (General: Make Update PHP notice link customizable.)
  *
  * @return string URL to learn more about updating PHP.
  */
@@ -6658,11 +6654,7 @@ function wp_get_update_php_url() {
 	 * Providing an empty string is not allowed and will result in the default URL being used. Furthermore
 	 * the page the URL links to should preferably be localized in the site language.
 	 *
-<<<<<<< HEAD
-	 * @since WP-5.1.0
-=======
 	 * @since 5.1.0
->>>>>>> aea4b2765a (General: Make Update PHP notice link customizable.)
 	 *
 	 * @param string $update_url URL to learn more about updating PHP.
 	 */
@@ -6682,11 +6674,7 @@ function wp_get_update_php_url() {
  * This function does not allow modifying the returned URL, and is only used to compare the actually used URL with the
  * default one.
  *
-<<<<<<< HEAD
- * @since WP-5.1.0
-=======
  * @since 5.1.0
->>>>>>> aea4b2765a (General: Make Update PHP notice link customizable.)
  * @access private
  *
  * @return string Default URL to learn more about updating PHP.
@@ -6694,7 +6682,6 @@ function wp_get_update_php_url() {
 function wp_get_default_update_php_url() {
 	return _x( 'https://wordpress.org/support/update-php/', 'localized PHP upgrade information page' );
 }
-<<<<<<< HEAD
 
 /**
  * Prints the default annotation for the web host altering the "Update PHP" page URL.
@@ -6830,5 +6817,3 @@ function is_wp_version_compatible( $required ) {
 function is_php_version_compatible( $required ) {
 	return empty( $required ) || version_compare( phpversion(), $required, '>=' );
 }
-=======
->>>>>>> aea4b2765a (General: Make Update PHP notice link customizable.)
