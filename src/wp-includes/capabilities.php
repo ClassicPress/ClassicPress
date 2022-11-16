@@ -562,6 +562,7 @@ function map_meta_cap( $cap, $user_id ) {
 		case 'erase_others_personal_data':
 		case 'manage_privacy_options':
 			$caps[] = is_multisite() ? 'manage_network' : 'manage_options';
+			break;
 		case 'upgrade_php':
 			if ( is_multisite() && ! is_super_admin( $user_id ) ) {
 				$caps[] = 'do_not_allow';
