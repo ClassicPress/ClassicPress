@@ -123,7 +123,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * * @see https://core.trac.wordpress.org/ticket/38632
+	 * @see https://core.trac.wordpress.org/ticket/38632
 	 */
 	function test_wp_dropdown_languages_en_US_selected() {
 		$args   = array(
