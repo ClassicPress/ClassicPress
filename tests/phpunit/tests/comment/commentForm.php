@@ -108,29 +108,6 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		remove_filter( 'option_show_comments_cookies_opt_in', '__return_true' );
 
-<<<<<<< HEAD
 		$this->assertMatchesRegularExpression( '|<p class="comment\-form\-cookies\-consent">.*?</p>|', $form );
-=======
-		$this->assertRegExp( '|<p class="comment\-form\-cookies\-consent">.*?</p>|', $form );
-	}
-
-	/**
-	 * @ticket 47975
-	 */
-	public function test_aria_describedby_email_notes_should_not_be_added_if_no_email_notes() {
-		$p = self::factory()->post->create();
-
-		$form_with_aria = get_echo( 'comment_form', array( array(), $p ) );
-
-		$this->assertStringContainsString( 'aria-describedby="email-notes"', $form_with_aria );
-
-		$args = array(
-			'comment_notes_before' => '',
-		);
-
-		$form_without_aria = get_echo( 'comment_form', array( $args, $p ) );
-
-		$this->assertStringNotContainsString( 'aria-describedby="email-notes"', $form_without_aria );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 }

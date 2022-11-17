@@ -509,10 +509,6 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 
 		$this->assertStringContainsString( '<a href="https://example.org"', $output );
 		$this->assertStringContainsString( 'target="_blank"', $output );
-<<<<<<< HEAD
-=======
-		$this->assertStringContainsString( 'rel="noopener"', $output );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 
 		// Populate caption in attachment.
 		wp_update_post(
@@ -556,24 +552,6 @@ class Test_WP_Widget_Media_Image extends WP_UnitTestCase {
 		$output = ob_get_clean();
 		$this->assertStringContainsString( 'class="wp-caption alignnone"', $output );
 		$this->assertStringContainsString( '<p class="wp-caption-text">Custom caption</p>', $output );
-<<<<<<< HEAD
-=======
-
-		// Attachments with custom sizes can render captions.
-		ob_start();
-		$widget->render_media(
-			array(
-				'attachment_id' => $attachment_id,
-				'size'          => 'custom',
-				'width'         => '300',
-				'height'        => '200',
-				'caption'       => 'Caption for an image with custom size',
-			)
-		);
-		$output = ob_get_clean();
-		$this->assertStringContainsString( 'style="width: 310px"', $output );
-		$this->assertStringContainsString( '<p class="wp-caption-text">Caption for an image with custom size</p>', $output );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

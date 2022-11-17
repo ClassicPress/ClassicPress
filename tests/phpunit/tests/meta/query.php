@@ -888,11 +888,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
 		// Use regex because we don't care about the whitespace before OR.
-<<<<<<< HEAD
 		$this->assertMatchesRegularExpression( "/{$wpdb->postmeta}\.meta_key = \'exclude\'\s+OR/", $sql['where'] );
-=======
-		$this->assertRegExp( "/{$wpdb->postmeta}\.meta_key = \'exclude\'\s+OR/", $sql['where'] );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringNotContainsString( "{$wpdb->postmeta}.post_id IS NULL", $sql['where'] );
 	}
 

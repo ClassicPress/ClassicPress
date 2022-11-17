@@ -213,7 +213,6 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 			)
 		);
 
-<<<<<<< HEAD
 		$user0 = get_userdata( $users[0] );
 		$user1 = get_userdata( $users[1] );
 		$this->assertStringContainsString( "<option value='{$user0->user_nicename}' selected='selected'>$user0->user_login</option>", $found );
@@ -307,9 +306,6 @@ class Tests_User_WpDropdownUsers extends WP_UnitTestCase {
 		$this->assertStringContainsString( "<option value='{$user0->user_login}'>{$user0->display_name}</option>", $found );
 		$this->assertStringContainsString( "<option value='{$user1->user_login}'>{$user1->display_name}</option>", $found );
 		$this->assertStringNotContainsString( 'Invalid user:', $found );
-=======
-		$this->assertStringNotContainsString( (string) PHP_INT_MAX, $found );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

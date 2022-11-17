@@ -101,8 +101,6 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( "cat-item-$c1", $found );
 		$this->assertStringNotContainsString( 'Test Cat 1', $found );
-<<<<<<< HEAD
-=======
 	}
 
 	public function list_cats_callback( $cat ) {
@@ -111,28 +109,6 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 		}
 
 		return $cat;
-	}
-
-	/**
-	 * @ticket 44872
-	 */
-	public function test_should_create_element_when_cat_name_is_zero() {
-		$c = self::factory()->category->create(
-			array(
-				'name' => '0',
-			)
-		);
-
-		$found = wp_list_categories(
-			array(
-				'hide_empty' => false,
-				'echo'       => false,
-			)
-		);
-
-		$this->assertStringContainsString( "cat-item-$c", $found );
-		$this->assertStringContainsString( '0', $found );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	public function test_show_option_all_link_should_go_to_home_page_when_show_on_front_is_false() {
@@ -277,17 +253,6 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 		$url = home_url( '/' );
 
 		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . $url . "'>All</a></li>", $found );
-<<<<<<< HEAD
-	}
-
-	public function list_cats_callback( $cat ) {
-		if ( 'Test Cat 1' === $cat ) {
-			return '';
-		}
-
-		return $cat;
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	/**

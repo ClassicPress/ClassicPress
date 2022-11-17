@@ -7,7 +7,6 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 		$this->assertEquals( ' selected=\'selected\'', selected( 'foo', 'foo', false ) );
 		$this->assertEquals( ' checked=\'checked\'', checked( 'foo', 'foo', false ) );
 
-<<<<<<< HEAD
 		$this->assertEquals( ' selected=\'selected\'', selected( '1', 1, false ) );
 		$this->assertEquals( ' checked=\'checked\'', checked( '1', 1, false ) );
 
@@ -34,38 +33,6 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 
 		$this->assertEquals( ' selected=\'selected\'', selected( false, false, false ) );
 		$this->assertEquals( ' checked=\'checked\'', checked( false, false, false ) );
-=======
-	/**
-	 * @ticket 51147
-	 * @dataProvider data_wp_terms_checklist_with_selected_cats
-	 */
-	public function test_wp_terms_checklist_with_selected_cats( $term_id ) {
-		$output = wp_terms_checklist(
-			0,
-			array(
-				'selected_cats' => array( $term_id ),
-				'echo'          => false,
-			)
-		);
-
-		$this->assertStringContainsString( "checked='checked'", $output );
-	}
-
-	/**
-	 * @ticket 51147
-	 * @dataProvider data_wp_terms_checklist_with_selected_cats
-	 */
-	public function test_wp_terms_checklist_with_popular_cats( $term_id ) {
-		$output = wp_terms_checklist(
-			0,
-			array(
-				'popular_cats' => array( $term_id ),
-				'echo'         => false,
-			)
-		);
-
-		$this->assertStringContainsString( 'class="popular-category"', $output );
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	}
 
 	function test_notequal() {
@@ -159,120 +126,4 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 		// Check that the meta box was not re-added.
 		$this->assertFalse( $wp_meta_boxes[ $current_screen ]['advanced']['default']['testbox1'] );
 	}
-<<<<<<< HEAD
-=======
-
-	/**
-	 * Test calling get_settings_errors() with variations on where it gets errors from.
-	 *
-	 * @ticket 42498
-	 * @covers ::get_settings_errors
-	 * @global array $wp_settings_errors
-	 */
-	public function test_get_settings_errors_sources() {
-		global $wp_settings_errors;
-
-		$blogname_error        = array(
-			'setting' => 'blogname',
-			'code'    => 'blogname',
-			'message' => 'Capital P dangit!',
-			'type'    => 'error',
-		);
-		$blogdescription_error = array(
-			'setting' => 'blogdescription',
-			'code'    => 'blogdescription',
-			'message' => 'Too short',
-			'type'    => 'error',
-		);
-
-		$wp_settings_errors = null;
-		$this->assertSame( array(), get_settings_errors( 'blogname' ) );
-
-		// Test getting errors from transient.
-		$_GET['settings-updated'] = '1';
-		set_transient( 'settings_errors', array( $blogname_error ) );
-		$wp_settings_errors = null;
-		$this->assertSame( array( $blogname_error ), get_settings_errors( 'blogname' ) );
-
-		// Test getting errors from transient and from global.
-		$_GET['settings-updated'] = '1';
-		set_transient( 'settings_errors', array( $blogname_error ) );
-		$wp_settings_errors = null;
-		add_settings_error( $blogdescription_error['setting'], $blogdescription_error['code'], $blogdescription_error['message'], $blogdescription_error['type'] );
-		$this->assertSameSets( array( $blogname_error, $blogdescription_error ), get_settings_errors() );
-
-		$wp_settings_errors = null;
-	}
-
-	/**
-	 * @ticket 44941
-	 * @covers ::settings_errors
-	 * @global array $wp_settings_errors
-	 * @dataProvider settings_errors_css_classes_provider
-	 */
-	public function test_settings_errors_css_classes( $type, $expected ) {
-		global $wp_settings_errors;
-
-		add_settings_error( 'foo', 'bar', 'Capital P dangit!', $type );
-
-		ob_start();
-		settings_errors();
-		$output = ob_get_clean();
-
-		$wp_settings_errors = null;
-
-		$expected = sprintf( 'notice %s settings-error is-dismissible', $expected );
-
-		$this->assertStringContainsString( $expected, $output );
-		$this->assertStringNotContainsString( 'notice-notice-', $output );
-	}
-
-	public function settings_errors_css_classes_provider() {
-		return array(
-			array( 'error', 'notice-error' ),
-			array( 'success', 'notice-success' ),
-			array( 'warning', 'notice-warning' ),
-			array( 'info', 'notice-info' ),
-			array( 'updated', 'notice-success' ),
-			array( 'notice-error', 'notice-error' ),
-			array( 'error my-own-css-class hello world', 'error my-own-css-class hello world' ),
-		);
-	}
-
-	/**
-	 * @ticket 42791
-	 */
-	public function test_wp_add_dashboard_widget() {
-		global $wp_meta_boxes;
-
-		set_current_screen( 'dashboard' );
-
-		if ( ! function_exists( 'wp_add_dashboard_widget' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/dashboard.php';
-		}
-
-		// Some hardcoded defaults for core widgets.
-		wp_add_dashboard_widget( 'dashboard_quick_press', 'Quick', '__return_false' );
-		wp_add_dashboard_widget( 'dashboard_browser_nag', 'Nag', '__return_false' );
-
-		$this->assertArrayHasKey( 'dashboard_quick_press', $wp_meta_boxes['dashboard']['side']['core'] );
-		$this->assertArrayHasKey( 'dashboard_browser_nag', $wp_meta_boxes['dashboard']['normal']['high'] );
-
-		// Location and priority defaults.
-		wp_add_dashboard_widget( 'dashboard1', 'Widget 1', '__return_false', null, null, 'foo' );
-		wp_add_dashboard_widget( 'dashboard2', 'Widget 2', '__return_false', null, null, null, 'bar' );
-
-		$this->assertArrayHasKey( 'dashboard1', $wp_meta_boxes['dashboard']['foo']['core'] );
-		$this->assertArrayHasKey( 'dashboard2', $wp_meta_boxes['dashboard']['normal']['bar'] );
-
-		// Cleanup.
-		remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
-		remove_meta_box( 'dashboard_browser_nag', 'dashboard', 'normal' );
-		remove_meta_box( 'dashboard1', 'dashboard', 'foo' );
-
-		// This doesn't actually get removed due to the invalid priority.
-		remove_meta_box( 'dashboard2', 'dashboard', 'normal' );
-	}
-
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 }

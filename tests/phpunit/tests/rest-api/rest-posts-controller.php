@@ -1383,35 +1383,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 		$this->assertErrorResponse( 'rest_forbidden', $response, 401 );
 	}
 
-<<<<<<< HEAD
-=======
-	public function test_get_post_draft_edit_context() {
-		$post_content = 'Hello World!';
-		$this->factory->post->create(
-			array(
-				'post_title'    => 'Hola',
-				'post_password' => 'password',
-				'post_content'  => $post_content,
-				'post_excerpt'  => $post_content,
-				'post_author'   => self::$editor_id,
-			)
-		);
-		$draft_id = $this->factory->post->create(
-			array(
-				'post_status'  => 'draft',
-				'post_author'  => self::$contributor_id,
-				'post_content' => '<!-- wp:latest-posts {"displayPostContent":true} /--> <!-- wp:latest-posts {"displayPostContent":true,"displayPostContentRadio":"full_post"} /-->',
-			)
-		);
-		wp_set_current_user( self::$contributor_id );
-		$request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', $draft_id ) );
-		$request->set_param( 'context', 'edit' );
-		$response = rest_get_server()->dispatch( $request );
-		$data     = $response->get_data();
-		$this->assertStringNotContainsString( $post_content, $data['content']['rendered'] );
-	}
-
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 	public function test_get_post_invalid_id() {
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/posts/' . REST_TESTS_IMPOSSIBLY_HIGH_NUMBER );
 		$response = $this->server->dispatch( $request );

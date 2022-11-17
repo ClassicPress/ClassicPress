@@ -2496,10 +2496,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => false,
 			)
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2513,10 +2509,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => null,
 			)
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2530,10 +2522,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => false,
 			)
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2548,10 +2536,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => 0,
 			)
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringContainsString( "comment_author LIKE '%0%'", $wpdb->remove_placeholder_escape( $q->request ) );
 	}
 
@@ -2566,10 +2550,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => '0',
 			)
 		);
-<<<<<<< HEAD
-
-=======
->>>>>>> c70fe62ed1 (Tests: Replace `assertContains()` with `assertStringContainsString()` when used with strings.)
 		$this->assertStringContainsString( "comment_author LIKE '%0%'", $wpdb->remove_placeholder_escape( $q->request ) );
 	}
 
