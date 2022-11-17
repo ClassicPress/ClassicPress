@@ -217,11 +217,5 @@ function wp_get_popular_importers() {
 			'plugin-slug' => 'tumblr-importer',
 			'importer-id' => 'tumblr',
 		),
-		'wordpress'   => array(
-			'name'        => 'ClassicPress',
-			'description' => __( 'Import posts, pages, comments, custom fields, categories, and tags from a ClassicPress export file.' ),
-			'plugin-slug' => 'wordpress-importer',
-			'importer-id' => 'wordpress',
-		),
 	);
 }
