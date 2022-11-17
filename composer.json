@@ -24,6 +24,9 @@
 		}
 	},
 	"scripts": {
-		"backport": "bin/backport-wp-commit.sh"
+		"backport": "bin/backport-wp-commit.sh",
+		"phpcs": "vendor/bin/phpcs -n",
+		"phpcs-tests": "vendor/bin/phpcs -n",
+		"phpunit": "vendor/bin/phpunit"
 	}
 }
