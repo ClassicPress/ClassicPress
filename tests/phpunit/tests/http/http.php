@@ -403,7 +403,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 			$ua_full
 		);
 
-		$this->assertRegExp(
+		$this->assertMatchesRegularExpression(
 			'#&site=[0-9a-f]{40}$#',
 			$ua_full
 		);

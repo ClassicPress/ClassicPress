@@ -2496,7 +2496,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => false,
 			)
 		);
-
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2510,7 +2509,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => null,
 			)
 		);
-
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2524,7 +2522,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => false,
 			)
 		);
-
 		$this->assertStringNotContainsString( 'comment_author LIKE', $q->request );
 	}
 
@@ -2539,7 +2536,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => 0,
 			)
 		);
-
 		$this->assertStringContainsString( "comment_author LIKE '%0%'", $wpdb->remove_placeholder_escape( $q->request ) );
 	}
 
@@ -2554,7 +2550,6 @@ class Tests_Comment_Query extends WP_UnitTestCase {
 				'search' => '0',
 			)
 		);
-
 		$this->assertStringContainsString( "comment_author LIKE '%0%'", $wpdb->remove_placeholder_escape( $q->request ) );
 	}
 

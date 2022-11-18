@@ -2687,7 +2687,7 @@ EOF;
 		$img = '<img src="example.png" alt=" width="300" height="225" />';
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
-		$this->assertContains( ' loading="lazy"', $img );
+		$this->assertStringContainsString( ' loading="lazy"', $img );
 	}
 
 	/**
@@ -2698,7 +2698,7 @@ EOF;
 		$img = '<img alt=" width="300" height="225" />';
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
-		$this->assertNotContains( ' loading=', $img );
+		$this->assertStringNotContainsString( ' loading=', $img );
 	}
 
 	/**
@@ -2709,11 +2709,11 @@ EOF;
 		$img = "<img src='example.png' alt=' width='300' height='225' />";
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
-		$this->assertNotContains( ' loading=', $img );
+		$this->assertStringNotContainsString( ' loading=', $img );
 
 		// Test specifically that the attribute is not there with double-quotes,
 		// to avoid regressions.
-		$this->assertNotContains( ' loading="lazy"', $img );
+		$this->assertStringNotContainsString( ' loading="lazy"', $img );
 	}
 
 	/**
@@ -2724,7 +2724,7 @@ EOF;
 		$img = '<img src="example.png" alt=" width="300" height="225" />';
 		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
 
-		$this->assertNotContains( ' loading=', $img );
+		$this->assertStringNotContainsString( ' loading=', $img );
 	}
 
 	/**
@@ -2734,7 +2734,7 @@ EOF;
 		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
 		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
 
-		$this->assertContains( ' loading="lazy"', $iframe );
+		$this->assertStringContainsString( ' loading="lazy"', $iframe );
 	}
 
 	/**
@@ -2744,7 +2744,7 @@ EOF;
 		$iframe = '<iframe width="640" height="360"></iframe>';
 		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
 
-		$this->assertNotContains( ' loading=', $iframe );
+		$this->assertStringNotContainsString( ' loading=', $iframe );
 	}
 
 	/**
@@ -2754,11 +2754,11 @@ EOF;
 		$iframe = "<iframe src='https://www.example.com' width='640' height='360'></iframe>";
 		$iframe = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
 
-		$this->assertNotContains( ' loading=', $iframe );
+		$this->assertStringNotContainsString( ' loading=', $iframe );
 
 		// Test specifically that the attribute is not there with double-quotes,
 		// to avoid regressions.
-		$this->assertNotContains( ' loading="lazy"', $iframe );
+		$this->assertStringNotContainsString( ' loading="lazy"', $iframe );
 	}
 
 	/**
@@ -2768,7 +2768,7 @@ EOF;
 		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
 		add_filter( 'wp_iframe_tag_add_loading_attr', '__return_false' );
 
-		$this->assertNotContains( ' loading=', $iframe );
+		$this->assertStringNotContainsString( ' loading=', $iframe );
 	}
 
 	/**
@@ -2778,7 +2778,7 @@ EOF;
 	function test_wp_get_attachment_image_loading() {
 		$img = wp_get_attachment_image( self::$large_id );
 
-		$this->assertContains( ' loading="lazy"', $img );
+		$this->assertStringContainsString( ' loading="lazy"', $img );
 	}
 
 	/**
@@ -2790,7 +2790,7 @@ EOF;
 		$img = wp_get_attachment_image( self::$large_id );
 
 		// There should not be any loading attribute in this case.
-		$this->assertNotContains( ' loading=', $img );
+		$this->assertStringNotContainsString( ' loading=', $img );
 	}
 
 	/**
@@ -2805,7 +2805,7 @@ EOF;
 		$img = wp_get_attachment_image( self::$large_id, 'thumbnail', false, array( 'loading' => false ) );
 
 		// There should not be any loading attribute in this case.
-		$this->assertNotContains( ' loading=', $img );
+		$this->assertStringNotContainsString( ' loading=', $img );
 	}
 
 	/**
