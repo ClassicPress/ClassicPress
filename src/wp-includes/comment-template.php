@@ -550,11 +550,9 @@ function get_comment_class( $class = '', $comment_id = null, $post_id = null ) {
 function get_comment_date( $format = '', $comment_ID = 0 ) {
 	$comment = get_comment( $comment_ID );
 
-	if ( '' === $format ) {
-		$date = mysql2date( get_option( 'date_format' ), $comment->comment_date );
-	} else {
-		$date = mysql2date( $format, $comment->comment_date );
-	}
+	$_format = ! empty( $format ) ? $format : get_option( 'date_format' );
+
+	$date = mysql2date( $_format, $comment->comment_date );
 
 	/**
 	 * Filters the returned comment date.
@@ -1027,9 +1025,9 @@ function get_comment_time( $format = '', $gmt = false, $translate = true ) {
 
 	$comment_date = $gmt ? $comment->comment_date_gmt : $comment->comment_date;
 
-	$_format = ! empty( $format ) ? $format : get_option( 'date_format' );
+	$_format = ! empty( $format ) ? $format : get_option( 'time_format' );
 
-	$the_date = get_post_time( $_format, false, $post, true );
+	$date = mysql2date( $_format, $comment_date, $translate );
 
 	/**
 	 * Filters the returned comment time.

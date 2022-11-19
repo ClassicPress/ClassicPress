@@ -145,6 +145,10 @@ class WP_Date_Query {
 	 *                               'comment_date', 'comment_date_gmt'.
 	 */
 	public function __construct( $date_query, $default_column = 'post_date' ) {
+		if ( empty( $date_query ) || ! is_array( $date_query ) ) {
+			return;
+		}
+
 		if ( isset( $date_query['relation'] ) && 'OR' === strtoupper( $date_query['relation'] ) ) {
 			$this->relation = 'OR';
 		} else {
