@@ -510,7 +510,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/41782
+=======
+	 * @ticket 41782
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	 *
 	 * @dataProvider mysql_datetime_input_provider
 	 *
@@ -524,7 +528,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found = $q->build_mysql_datetime( $datetime, $default_to_max );
 
 		$message = "Expected {$expected}, got {$found}";
+<<<<<<< HEAD
 		$this->assertEqualsWithDelta( strtotime( $expected ), strtotime( $found ), 10, $message );
+=======
+		$this->assertEquals( strtotime( $expected ), strtotime( $found ), $message, 10 );
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	}
 
 	public function mysql_datetime_input_provider() {
@@ -543,7 +551,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/41782
+=======
+	 * @ticket 41782
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	 *
 	 * @dataProvider mysql_datetime_input_provider_custom_timezone
 	 *
@@ -559,7 +571,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found = $q->build_mysql_datetime( $datetime, $default_to_max );
 
 		$message = "Expected {$expected}, got {$found}";
+<<<<<<< HEAD
 		$this->assertEqualsWithDelta( strtotime( $expected ), strtotime( $found ), 10, $message );
+=======
+		$this->assertEquals( strtotime( $expected ), strtotime( $found ), $message, 10 );
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 
 	}
 
@@ -571,7 +587,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/41782
+=======
+	 * @ticket 41782
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	 */
 	public function test_build_mysql_datetime_with_relative_date() {
 		update_option( 'timezone_string', 'Europe/Kiev' );
@@ -583,7 +603,11 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		$found     = $q->build_mysql_datetime( '-1 day' );
 
 		$message = "Expected {$expected}, got {$found}";
+<<<<<<< HEAD
 		$this->assertEqualsWithDelta( strtotime( $expected ), strtotime( $found ), 10, $message );
+=======
+		$this->assertEquals( strtotime( $expected ), strtotime( $found ), $message, 10 );
+>>>>>>> 4e129d1506 (Date/Time: Use `wp_timezone()` in `WP_Date_Query::build_mysql_datetime()` to address timezone issues.)
 	}
 
 	public function test_build_time_query_insufficient_time_values() {
