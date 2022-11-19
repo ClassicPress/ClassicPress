@@ -48,7 +48,8 @@ class Tests_Post extends WP_UnitTestCase {
 	function _unset_current_user() {
 		global $current_user, $user_ID;
 
-		$current_user = $user_ID = null;
+		$current_user = null;
+		$user_ID      = null;
 	}
 
 	// test simple valid behavior: insert and get a post
@@ -124,7 +125,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 		#dmp(_get_cron_array());
 		$this->assertTrue( is_numeric( $id ) );
 		$this->assertTrue( $id > 0 );
@@ -159,7 +161,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
@@ -201,7 +204,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
@@ -241,7 +245,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 		#dmp(_get_cron_array());
 		$this->assertTrue( is_numeric( $id ) );
 		$this->assertTrue( $id > 0 );
@@ -273,7 +278,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
@@ -314,7 +320,8 @@ class Tests_Post extends WP_UnitTestCase {
 			);
 
 			// insert a post and make sure the ID is ok
-			$id = $this->post_ids[] = wp_insert_post( $post );
+			$id               = wp_insert_post( $post );
+			$this->post_ids[] = $id;
 
 			// Fetch the post and make sure has the correct date and status.
 			$out = get_post( $id );
@@ -354,7 +361,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 		#dmp(_get_cron_array());
 		$this->assertTrue( is_numeric( $id ) );
 		$this->assertTrue( $id > 0 );
@@ -408,7 +416,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		// Fetch the post and make sure has the correct date and status.
 		$out = get_post( $id );
@@ -512,7 +521,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		// Check that there's a publish_future_post job scheduled at the right time.
 		$this->assertSame( $future_date, $this->_next_schedule_for_post( 'publish_future_post', $id ) );
@@ -541,7 +551,8 @@ class Tests_Post extends WP_UnitTestCase {
 		);
 
 		// insert a post and make sure the ID is ok
-		$id = $this->post_ids[] = wp_insert_post( $post );
+		$id               = wp_insert_post( $post );
+		$this->post_ids[] = $id;
 
 		$plink = get_permalink( $id );
 

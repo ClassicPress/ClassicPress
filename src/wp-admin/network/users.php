@@ -27,8 +27,8 @@ if ( isset( $_GET['action'] ) ) {
 			check_admin_referer( 'deleteuser' );
 
 			$id = intval( $_GET['id'] );
-			if ( $id != '0' && $id != '1' ) {
-				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle with arrays
+			if ( $id > 1 ) {
+				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle arrays.
 				$title             = __( 'Users' );
 				$parent_file       = 'users.php';
 				require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -39,7 +39,7 @@ if ( isset( $_GET['action'] ) ) {
 			} else {
 				wp_redirect( network_admin_url( 'users.php' ) );
 			}
-			exit();
+			exit;
 
 		case 'allusers':
 			if ( ! current_user_can( 'manage_network_users' ) ) {
@@ -66,7 +66,7 @@ if ( isset( $_GET['action'] ) ) {
 								confirm_delete_users( $_POST['allusers'] );
 								echo '</div>';
 								require_once ABSPATH . 'wp-admin/admin-footer.php';
-								exit();
+								exit;
 
 							case 'spam':
 								$user = get_userdata( $user_id );
@@ -77,7 +77,7 @@ if ( isset( $_GET['action'] ) ) {
 								$userfunction = 'all_spam';
 								$blogs        = get_blogs_of_user( $user_id, true );
 								foreach ( (array) $blogs as $details ) {
-									if ( $details->userblog_id != get_network()->site_id ) { // main blog not a spam !
+									if ( get_network()->site_id != $details->userblog_id ) { // Main blog is not a spam!
 										update_blog_status( $details->userblog_id, 'spam', '1' );
 									}
 								}
@@ -99,13 +99,13 @@ if ( isset( $_GET['action'] ) ) {
 
 				if ( ! in_array( $doaction, array( 'delete', 'spam', 'notspam' ), true ) ) {
 					$sendback = wp_get_referer();
-
 					$user_ids = (array) $_POST['allusers'];
+
 					/** This action is documented in wp-admin/network/site-themes.php */
-					$sendback = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $user_ids );
+					$sendback = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $user_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 					wp_safe_redirect( $sendback );
-					exit();
+					exit;
 				}
 
 				wp_safe_redirect(
@@ -125,7 +125,7 @@ if ( isset( $_GET['action'] ) ) {
 				}
 				wp_redirect( $location );
 			}
-			exit();
+			exit;
 
 		case 'dodelete':
 			check_admin_referer( 'ms-users-delete' );
@@ -140,15 +140,17 @@ if ( isset( $_GET['action'] ) ) {
 							continue;
 						}
 
-						if ( ! empty( $_POST['delete'] ) && 'reassign' == $_POST['delete'][ $blogid ][ $id ] ) {
-							remove_user_from_blog( $id, $blogid, $user_id );
+						if ( ! empty( $_POST['delete'] ) && 'reassign' === $_POST['delete'][ $blogid ][ $id ] ) {
+							remove_user_from_blog( $id, $blogid, (int) $user_id );
 						} else {
 							remove_user_from_blog( $id, $blogid );
 						}
 					}
 				}
 			}
+
 			$i = 0;
+
 			if ( is_array( $_POST['user'] ) && ! empty( $_POST['user'] ) ) {
 				foreach ( $_POST['user'] as $id ) {
 					if ( ! current_user_can( 'delete_user', $id ) ) {
@@ -159,7 +161,7 @@ if ( isset( $_GET['action'] ) ) {
 				}
 			}
 
-			if ( $i == 1 ) {
+			if ( 1 === $i ) {
 				$deletefunction = 'delete';
 			} else {
 				$deletefunction = 'all_delete';
@@ -174,7 +176,7 @@ if ( isset( $_GET['action'] ) ) {
 					network_admin_url( 'users.php' )
 				)
 			);
-			exit();
+			exit;
 	}
 }
 
@@ -222,7 +224,7 @@ get_current_screen()->set_screen_reader_content(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
-if ( isset( $_REQUEST['updated'] ) && $_REQUEST['updated'] == 'true' && ! empty( $_REQUEST['action'] ) ) {
+if ( isset( $_REQUEST['updated'] ) && 'true' == $_REQUEST['updated'] && ! empty( $_REQUEST['action'] ) ) {
 	?>
 	<div id="message" class="updated notice is-dismissible"><p>
 		<?php

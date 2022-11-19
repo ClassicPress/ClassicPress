@@ -82,11 +82,13 @@ function allow_subdirectory_install() {
  * @return string Base domain.
  */
 function get_clean_basedomain() {
-	if ( $existing_domain = network_domain_check() ) {
+	$existing_domain = network_domain_check();
+	if ( $existing_domain ) {
 		return $existing_domain;
 	}
 	$domain = preg_replace( '|https?://|', '', get_option( 'siteurl' ) );
-	if ( $slash = strpos( $domain, '/' ) ) {
+	$slash  = strpos( $domain, '/' );
+	if ( $slash ) {
 		$domain = substr( $domain, 0, $slash );
 	}
 	return $domain;
@@ -133,7 +135,7 @@ function network_step1( $errors = false ) {
 
 	$hostname  = get_clean_basedomain();
 	$has_ports = strstr( $hostname, ':' );
-	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ) ) ) ) {
+	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ), true ) ) ) {
 		echo '<div class="error"><p><strong>' . __( 'ERROR:' ) . '</strong> ' . __( 'You cannot install a network of sites with your server address.' ) . '</p></div>';
 		echo '<p>' . sprintf(
 			/* translators: %s: port number */
@@ -160,14 +162,14 @@ function network_step1( $errors = false ) {
 		$error_codes = $errors->get_error_codes();
 	}
 
-	if ( ! empty( $_POST['sitename'] ) && ! in_array( 'empty_sitename', $error_codes ) ) {
+	if ( ! empty( $_POST['sitename'] ) && ! in_array( 'empty_sitename', $error_codes, true ) ) {
 		$site_name = $_POST['sitename'];
 	} else {
 		/* translators: %s: Default network name */
 		$site_name = sprintf( __( '%s Sites' ), get_option( 'blogname' ) );
 	}
 
-	if ( ! empty( $_POST['email'] ) && ! in_array( 'invalid_email', $error_codes ) ) {
+	if ( ! empty( $_POST['email'] ) && ! in_array( 'invalid_email', $error_codes, true ) ) {
 		$admin_email = $_POST['email'];
 	} else {
 		$admin_email = get_option( 'admin_email' );
@@ -185,7 +187,8 @@ function network_step1( $errors = false ) {
 		$subdomain_install = true;
 	} else {
 		$subdomain_install = false;
-		if ( $got_mod_rewrite = got_mod_rewrite() ) { // dangerous assumptions
+		$got_mod_rewrite   = got_mod_rewrite();
+		if ( $got_mod_rewrite ) { // dangerous assumptions
 			echo '<div class="updated inline"><p><strong>' . __( 'Note:' ) . '</strong> ';
 			/* translators: %s: mod_rewrite */
 			printf(

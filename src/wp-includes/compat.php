@@ -89,7 +89,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 	 * The solution below works only for UTF-8, so in case of a different
 	 * charset just use built-in substr().
 	 */
-	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
+	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true ) ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
@@ -173,7 +173,7 @@ function _mb_strlen( $str, $encoding = null ) {
 	 * The solution below works only for UTF-8, so in case of a different charset
 	 * just use built-in strlen().
 	 */
-	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
+	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true ) ) {
 		return strlen( $str );
 	}
 
@@ -359,7 +359,7 @@ if ( ! function_exists( 'hash_equals' ) ) :
 	 */
 	function hash_equals( $a, $b ) {
 		$a_length = strlen( $a );
-		if ( $a_length !== strlen( $b ) ) {
+		if ( strlen( $b ) !== $a_length ) {
 			return false;
 		}
 		$result = 0;
@@ -374,7 +374,7 @@ if ( ! function_exists( 'hash_equals' ) ) :
 			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
 		}
 
-		return $result === 0;
+		return 0 === $result;
 	}
 endif;
 
@@ -452,6 +452,7 @@ if ( ! interface_exists( 'JsonSerializable' ) ) {
 	 * @since WP-4.4.0
 	 */
 	interface JsonSerializable {
+		// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		public function jsonSerialize();
 	}
 }

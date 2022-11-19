@@ -13,7 +13,7 @@ if ( ! $typenow ) {
 	wp_die( __( 'Invalid post type.' ) );
 }
 
-if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
+if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ), true ) ) {
 	wp_die( __( 'Sorry, you are not allowed to edit posts in this post type.' ) );
 }
 
@@ -103,7 +103,8 @@ if ( $doaction ) {
 
 	switch ( $doaction ) {
 		case 'trash':
-			$trashed = $locked = 0;
+			$trashed = 0;
+			$locked  = 0;
 
 			foreach ( (array) $post_ids as $post_id ) {
 				if ( ! current_user_can( 'delete_post', $post_id ) ) {
@@ -182,14 +183,14 @@ if ( $doaction ) {
 			break;
 		default:
 			/** This action is documented in wp-admin/edit-comments.php */
-			$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $post_ids );
+			$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $doaction, $post_ids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			break;
 	}
 
 	$sendback = remove_query_arg( array( 'action', 'action2', 'tags_input', 'post_author', 'comment_status', 'ping_status', '_status', 'post', 'bulk_edit', 'post_view' ), $sendback );
 
 	wp_redirect( $sendback );
-	exit();
+	exit;
 } elseif ( ! empty( $_REQUEST['_wp_http_referer'] ) ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
 	 exit;

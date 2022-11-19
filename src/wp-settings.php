@@ -44,6 +44,7 @@ wp_initial_constants();
 wp_check_php_mysql_versions();
 
 // ClassicPress calculates offsets from UTC.
+// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 date_default_timezone_set( 'UTC' );
 
 // Standardize $_SERVER variables across setups.
@@ -143,7 +144,7 @@ require ABSPATH . WPINC . '/class-wp-role.php';
 require ABSPATH . WPINC . '/class-wp-user.php';
 require ABSPATH . WPINC . '/class-wp-query.php';
 require ABSPATH . WPINC . '/query.php';
-require ABSPATH . WPINC . '//class-wp-date-query.php';
+require ABSPATH . WPINC . '/class-wp-date-query.php';
 require ABSPATH . WPINC . '/theme.php';
 require ABSPATH . WPINC . '/class-wp-theme.php';
 require ABSPATH . WPINC . '/template.php';
@@ -194,7 +195,7 @@ require ABSPATH . WPINC . '/canonical.php';
 require ABSPATH . WPINC . '/shortcodes.php';
 require ABSPATH . WPINC . '/embed.php';
 require ABSPATH . WPINC . '/class-wp-embed.php';
-require ABSPATH . WPINC . '/class-oembed.php';
+require ABSPATH . WPINC . '/class-wp-oembed.php';
 require ABSPATH . WPINC . '/class-wp-oembed-controller.php';
 require ABSPATH . WPINC . '/media.php';
 require ABSPATH . WPINC . '/http.php';
@@ -453,7 +454,8 @@ do_action( 'init' );
 
 // Check site status
 if ( is_multisite() ) {
-	if ( true !== ( $file = ms_site_check() ) ) {
+	$file = ms_site_check();
+	if ( true !== $file ) {
 		require $file;
 		die();
 	}

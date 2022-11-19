@@ -15,10 +15,10 @@ require dirname( __FILE__ ) . '/wp-load.php';
 if ( force_ssl_admin() && ! is_ssl() ) {
 	if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
 		wp_safe_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-		exit();
+		exit;
 	} else {
 		wp_safe_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-		exit();
+		exit;
 	}
 }
 
@@ -302,7 +302,8 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set
 	}
 
 	$url = dirname( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] ) );
-	if ( $url != get_option( 'siteurl' ) ) {
+
+	if ( get_option( 'siteurl' ) !== $url ) {
 		update_option( 'siteurl', $url );
 	}
 }
@@ -382,7 +383,7 @@ switch ( $action ) {
 		}
 
 		wp_safe_redirect( wp_get_referer() );
-		exit();
+		exit;
 
 	case 'logout':
 		check_admin_referer( 'log-out' );
@@ -392,7 +393,8 @@ switch ( $action ) {
 		wp_logout();
 
 		if ( ! empty( $_REQUEST['redirect_to'] ) ) {
-			$redirect_to = $requested_redirect_to = $_REQUEST['redirect_to'];
+			$redirect_to           = $_REQUEST['redirect_to'];
+			$requested_redirect_to = $redirect_to;
 		} else {
 			$redirect_to           = 'wp-login.php?loggedout=true';
 			$requested_redirect_to = '';
@@ -413,7 +415,7 @@ switch ( $action ) {
 		 */
 		$redirect_to = apply_filters( 'logout_redirect', $redirect_to, $requested_redirect_to, $user );
 		wp_safe_redirect( $redirect_to );
-		exit();
+		exit;
 
 	case 'lostpassword':
 	case 'retrievepassword':
@@ -422,7 +424,7 @@ switch ( $action ) {
 			if ( ! is_wp_error( $errors ) ) {
 				$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : 'wp-login.php?checkemail=confirm';
 				wp_safe_redirect( $redirect_to );
-				exit();
+				exit;
 			}
 		}
 
@@ -647,7 +649,7 @@ switch ( $action ) {
 
 		if ( ! get_option( 'users_can_register' ) ) {
 			wp_redirect( site_url( 'wp-login.php?registration=disabled' ) );
-			exit();
+			exit;
 		}
 
 		$user_login = '';
@@ -666,7 +668,7 @@ switch ( $action ) {
 			if ( ! is_wp_error( $errors ) ) {
 				$redirect_to = ! empty( $_POST['redirect_to'] ) ? $_POST['redirect_to'] : 'wp-login.php?checkemail=registered';
 				wp_safe_redirect( $redirect_to );
-				exit();
+				exit;
 			}
 		}
 
@@ -850,7 +852,8 @@ switch ( $action ) {
 				exit;
 			}
 
-			if ( ( empty( $redirect_to ) || $redirect_to == 'wp-admin/' || $redirect_to == admin_url() ) ) {
+
+			if ( ( empty( $redirect_to ) || 'wp-admin/' === $redirect_to || admin_url() === $redirect_to ) ) {
 				// If the user doesn't belong to a blog, send them to user admin. If the user can't edit posts, send them to their profile.
 				if ( is_multisite() && ! get_active_blog_for_user( $user->ID ) && ! is_super_admin( $user->ID ) ) {
 					$redirect_to = user_admin_url();

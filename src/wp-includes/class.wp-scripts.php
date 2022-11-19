@@ -35,7 +35,7 @@ class WP_Scripts extends WP_Dependencies {
 	public $content_url;
 
 	/**
-	 * Default version string for stylesheets.
+	 * Default version string for scripts.
 	 *
 	 * @since WP-2.6.0
 	 * @var string
@@ -123,6 +123,17 @@ class WP_Scripts extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
+	 * Holds a string which contains the type attribute for script tag.
+	 *
+	 * If the current theme does not declare HTML5 support for 'script',
+	 * then it initializes as `type='text/javascript'`.
+	 *
+	 * @since WP-5.3.0
+	 * @var string
+	 */
+	private $type_attr = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since WP-2.6.0
@@ -138,6 +149,14 @@ class WP_Scripts extends WP_Dependencies {
 	 * @since WP-3.4.0
 	 */
 	public function init() {
+		if (
+			function_exists( 'is_admin' ) && ! is_admin()
+		&&
+			function_exists( 'current_theme_supports' ) && ! current_theme_supports( 'html5', 'script' )
+		) {
+			$this->type_attr = " type='text/javascript'";
+		}
+
 		/**
 		 * Fires when the WP_Scripts instance is initialized.
 		 *
@@ -196,7 +215,8 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool|string|void Void if no data exists, extra scripts if `$echo` is true, true otherwise.
 	 */
 	public function print_extra_script( $handle, $echo = true ) {
-		if ( ! $output = $this->get_data( $handle, 'data' ) ) {
+		$output = $this->get_data( $handle, 'data' );
+		if ( ! $output ) {
 			return;
 		}
 
@@ -204,10 +224,19 @@ class WP_Scripts extends WP_Dependencies {
 			return $output;
 		}
 
-		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5
-		echo "/* <![CDATA[ */\n";
+		echo "<script{$this->type_attr}>\n";
+
+		// CDATA is not needed for HTML 5.
+		if ( $this->type_attr ) {
+			echo "/* <![CDATA[ */\n";
+		}
+
 		echo "$output\n";
-		echo "/* ]]> */\n";
+
+		if ( $this->type_attr ) {
+			echo "/* ]]> */\n";
+		}
+
 		echo "</script>\n";
 
 		return true;
@@ -255,7 +284,8 @@ class WP_Scripts extends WP_Dependencies {
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'script', $handle );
 
 		$src         = $obj->src;
-		$cond_before = $cond_after = '';
+		$cond_before = '';
+		$cond_after  = '';
 		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
 
 		if ( $conditional ) {
@@ -267,11 +297,11 @@ class WP_Scripts extends WP_Dependencies {
 		$after_handle  = $this->print_inline_script( $handle, 'after', false );
 
 		if ( $before_handle ) {
-			$before_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $before_handle );
+			$before_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $before_handle );
 		}
 
 		if ( $after_handle ) {
-			$after_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $after_handle );
+			$after_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $after_handle );
 		}
 
 		if ( $this->do_concat ) {
@@ -334,7 +364,9 @@ class WP_Scripts extends WP_Dependencies {
 			return true;
 		}
 
-		$tag = "{$cond_before}{$before_handle}<script type='text/javascript' src='$src'></script>\n{$after_handle}{$cond_after}";
+		$tag  = $cond_before . $before_handle;
+		$tag .= sprintf( "<script%s src='%s'></script>\n", $this->type_attr, $src );
+		$tag .= $after_handle . $cond_after;
 
 		/**
 		 * Filters the HTML script tag of an enqueued script.
@@ -404,7 +436,7 @@ class WP_Scripts extends WP_Dependencies {
 		$output = trim( implode( "\n", $output ), "\n" );
 
 		if ( $echo ) {
-			printf( "<script type='text/javascript'>\n%s\n</script>\n", $output );
+			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
 		}
 
 		return $output;
@@ -421,7 +453,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool
 	 */
 	public function localize( $handle, $object_name, $l10n ) {
-		if ( $handle === 'jquery' ) {
+		if ( 'jquery' === $handle ) {
 			$handle = 'jquery-core';
 		}
 
@@ -466,7 +498,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool Not already in the group or a lower group
 	 */
 	public function set_group( $handle, $recursion, $group = false ) {
-		if ( isset( $this->registered[ $handle ]->args ) && $this->registered[ $handle ]->args === 1 ) {
+		if ( isset( $this->registered[ $handle ]->args ) && 1 === $this->registered[ $handle ]->args ) {
 			$grp = 1;
 		} else {
 			$grp = (int) $this->get_data( $handle, 'group' );

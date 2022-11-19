@@ -108,7 +108,7 @@ switch ( $wp_list_table->current_action() ) {
 
 		if ( empty( $_REQUEST['users'] ) ) {
 			wp_redirect( $redirect );
-			exit();
+			exit;
 		}
 
 		$editable_roles = get_editable_roles();
@@ -147,7 +147,7 @@ switch ( $wp_list_table->current_action() ) {
 		}
 
 		wp_redirect( add_query_arg( 'update', $update, $redirect ) );
-		exit();
+		exit;
 
 	case 'dodelete':
 		if ( is_multisite() ) {
@@ -158,7 +158,7 @@ switch ( $wp_list_table->current_action() ) {
 
 		if ( empty( $_REQUEST['users'] ) ) {
 			wp_redirect( $redirect );
-			exit();
+			exit;
 		}
 
 		$userids = array_map( 'intval', (array) $_REQUEST['users'] );
@@ -205,7 +205,7 @@ switch ( $wp_list_table->current_action() ) {
 			$redirect
 		);
 		wp_redirect( $redirect );
-		exit();
+		exit;
 
 	case 'delete':
 		if ( is_multisite() ) {
@@ -216,7 +216,7 @@ switch ( $wp_list_table->current_action() ) {
 
 		if ( empty( $_REQUEST['users'] ) && empty( $_REQUEST['user'] ) ) {
 			wp_redirect( $redirect );
-			exit();
+			exit;
 		}
 
 		if ( ! current_user_can( 'delete_users' ) ) {
@@ -369,7 +369,7 @@ switch ( $wp_list_table->current_action() ) {
 
 		if ( empty( $_REQUEST['users'] ) && empty( $_REQUEST['user'] ) ) {
 			wp_redirect( $redirect );
-			exit();
+			exit;
 		}
 
 		if ( ! current_user_can( 'remove_users' ) ) {
@@ -391,7 +391,7 @@ switch ( $wp_list_table->current_action() ) {
 <div class="wrap">
 <h1><?php _e( 'Remove Users from Site' ); ?></h1>
 
-		<?php if ( 1 == count( $userids ) ) : ?>
+		<?php if ( 1 === count( $userids ) ) : ?>
 	<p><?php _e( 'You have specified this user for removal:' ); ?></p>
 <?php else : ?>
 	<p><?php _e( 'You have specified these users for removal:' ); ?></p>
@@ -437,7 +437,7 @@ switch ( $wp_list_table->current_action() ) {
 			$sendback = wp_get_referer();
 
 			/** This action is documented in wp-admin/edit-comments.php */
-			$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $wp_list_table->current_action(), $userids );
+			$sendback = apply_filters( 'handle_bulk_actions-' . get_current_screen()->id, $sendback, $wp_list_table->current_action(), $userids ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 			wp_safe_redirect( $sendback );
 			exit;
@@ -466,21 +466,24 @@ switch ( $wp_list_table->current_action() ) {
 					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . sprintf( $message, number_format_i18n( $delete_count ) ) . '</p></div>';
 					break;
 				case 'add':
-					if ( isset( $_GET['id'] ) && ( $user_id = $_GET['id'] ) && current_user_can( 'edit_user', $user_id ) ) {
-						/* translators: %s: edit page url */
-						$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . sprintf(
-							__( 'New user created. <a href="%s">Edit user</a>' ),
+					$message = __( 'New user created.' );
+
+					$user_id = isset( $_GET['id'] ) ? $_GET['id'] : false;
+					if ( $user_id && current_user_can( 'edit_user', $user_id ) ) {
+						$message .= sprintf(
+							' <a href="%s">%s</a>',
 							esc_url(
 								add_query_arg(
 									'wp_http_referer',
 									urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ),
 									self_admin_url( 'user-edit.php?user_id=' . $user_id )
 								)
-							)
-						) . '</p></div>';
-					} else {
-						$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'New user created.' ) . '</p></div>';
+							),
+							__( 'Edit user' )
+						);
 					}
+
+					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . $message . '</p></div>';
 					break;
 				case 'promote':
 					$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' . __( 'Changed roles.' ) . '</p></div>';

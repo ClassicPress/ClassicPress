@@ -33,9 +33,9 @@ class Tests_Formatting_MapDeep extends WP_UnitTestCase {
 		$this->assertSame(
 			array(
 				'ababa',
-					array(
-						'xbaba',
-					),
+				array(
+					'xbaba',
+				),
 			),
 			map_deep(
 				array(

@@ -56,15 +56,18 @@ class WP_Http_Encoding {
 			return $compressed;
 		}
 
-		if ( false !== ( $decompressed = @gzinflate( $compressed ) ) ) {
+		$decompressed = @gzinflate( $compressed );
+		if ( false !== $decompressed ) {
 			return $decompressed;
 		}
 
-		if ( false !== ( $decompressed = self::compatible_gzinflate( $compressed ) ) ) {
+		$decompressed = self::compatible_gzinflate( $compressed );
+		if ( false !== $decompressed ) {
 			return $decompressed;
 		}
 
-		if ( false !== ( $decompressed = @gzuncompress( $compressed ) ) ) {
+		$decompressed = @gzuncompress( $compressed );
+		if ( false !== $decompressed ) {
 			return $decompressed;
 		}
 
@@ -104,7 +107,7 @@ class WP_Http_Encoding {
 	public static function compatible_gzinflate( $gzData ) {
 
 		// Compressed data might contain a full header, if so strip it for gzinflate().
-		if ( substr( $gzData, 0, 3 ) == "\x1f\x8b\x08" ) {
+		if ( "\x1f\x8b\x08" === substr( $gzData, 0, 3 ) ) {
 			$i   = 10;
 			$flg = ord( substr( $gzData, 3, 1 ) );
 			if ( $flg > 0 ) {

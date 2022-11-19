@@ -119,7 +119,7 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( $widget_id, $name, $wp_registered_widgets[ $widget_id ]['callback'], $wp_registered_widget_controls[ $widget_id ]['callback'] );
 	}
 
-	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget_id'] ) ) {
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget_id'] ) ) {
 		check_admin_referer( 'edit-dashboard-widget_' . $_POST['widget_id'], 'dashboard-widget-nonce' );
 		ob_start(); // hack - but the same hack wp-admin/widgets.php uses
 		wp_dashboard_trigger_widget_control( $_POST['widget_id'] );
@@ -177,7 +177,7 @@ function wp_add_dashboard_widget( $widget_id, $widget_name, $callback, $control_
 	$side_widgets = array( 'dashboard_quick_press', 'dashboard_primary' );
 
 	$location = 'normal';
-	if ( in_array( $widget_id, $side_widgets ) ) {
+	if ( in_array( $widget_id, $side_widgets, true ) ) {
 		$location = 'side';
 	}
 
@@ -262,7 +262,8 @@ function wp_dashboard_right_now() {
 	foreach ( array( 'post', 'page' ) as $post_type ) {
 		$num_posts = wp_count_posts( $post_type );
 		if ( $num_posts && $num_posts->publish ) {
-			if ( 'post' == $post_type ) {
+			if ( 'post' === $post_type ) {
+				/* translators: %s: Number of posts. */
 				$text = _n( '%s Post', '%s Posts', $num_posts->publish );
 			} else {
 				$text = _n( '%s Page', '%s Pages', $num_posts->publish );
@@ -490,7 +491,7 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 	$last_post_id = (int) get_user_option( 'dashboard_quick_press_last_post_id' ); // Get the last post_ID
 	if ( $last_post_id ) {
 		$post = get_post( $last_post_id );
-		if ( empty( $post ) || $post->post_status != 'auto-draft' ) { // auto-draft doesn't exists anymore
+		if ( empty( $post ) || 'auto-draft' !== $post->post_status ) { // auto-draft doesn't exist anymore.
 			$post = get_default_post_to_edit( 'post', true );
 			update_user_option( get_current_user_id(), 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID
 		} else {
@@ -500,8 +501,8 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 		$post    = get_default_post_to_edit( 'post', true );
 		$user_id = get_current_user_id();
 		// Don't create an option if this is a super admin who does not belong to this site.
-		if ( in_array( get_current_blog_id(), array_keys( get_blogs_of_user( $user_id ) ) ) ) {
-			update_user_option( $user_id, 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID
+		if ( in_array( get_current_blog_id(), array_keys( get_blogs_of_user( $user_id ) ), true ) ) {
+			update_user_option( $user_id, 'dashboard_quick_press_last_post_id', (int) $post->ID ); // Save post_ID.
 		}
 	}
 
@@ -583,6 +584,9 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 	}
 	echo '<h2 class="hide-if-no-js">' . __( 'Your Recent Drafts' ) . "</h2>\n<ul>";
 
+	/* translators: Maximum number of words used in a preview of a draft on the dashboard. */
+	$draft_length = (int) _x( '10', 'draft_length' );
+
 	$drafts = array_slice( $drafts, 0, 3 );
 	foreach ( $drafts as $draft ) {
 		$url   = get_edit_post_link( $draft->ID );
@@ -591,7 +595,8 @@ function wp_dashboard_recent_drafts( $drafts = false ) {
 		/* translators: %s: post title */
 		echo '<div class="draft-title"><a href="' . esc_url( $url ) . '" aria-label="' . esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;' ), $title ) ) . '">' . esc_html( $title ) . '</a>';
 		echo '<time datetime="' . get_the_time( 'c', $draft ) . '">' . get_the_time( __( 'F j, Y' ), $draft ) . '</time></div>';
-		if ( $the_content = wp_trim_words( $draft->post_content, 10 ) ) {
+		$the_content = wp_trim_words( $draft->post_content, $draft_length );
+		if ( $the_content ) {
 			echo '<p>' . $the_content . '</p>';
 		}
 		echo "</li>\n";
@@ -675,16 +680,22 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 		$i = 0;
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			( ( ( 'approve' == $action || 'unapprove' == $action ) && 2 === $i ) || 1 === $i ) ? $sep = '' : $sep = ' | ';
 
-			// Reply and quickedit need a hide-if-no-js span
-			if ( 'reply' == $action || 'quickedit' == $action ) {
+			if ( ( ( 'approve' === $action || 'unapprove' === $action ) && 2 === $i ) || 1 === $i ) {
+				$sep = '';
+			} else {
+				$sep = ' | ';
+			}
+
+			// Reply and quickedit need a hide-if-no-js span.
+			if ( 'reply' === $action || 'quickedit' === $action ) {
 				$action .= ' hide-if-no-js';
 			}
 
 			if ( 'view' === $action && '1' !== $comment->comment_approved ) {
 				$action .= ' hidden';
 			}
+
 			$actions_string .= "<span class='$action'>$sep$link</span>";
 		}
 	}
@@ -694,7 +705,7 @@ function _wp_dashboard_recent_comments_row( &$comment, $show_date = true ) {
 
 			<?php echo get_avatar( $comment, 50, 'mystery' ); ?>
 
-			<?php if ( ! $comment->comment_type || 'comment' == $comment->comment_type ) : ?>
+			<?php if ( ! $comment->comment_type || 'comment' === $comment->comment_type ) : ?>
 
 			<div class="dashboard-comment-wrap has-row-actions">
 			<p class="comment-meta">
@@ -1007,7 +1018,8 @@ function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = ar
 
 	$locale    = get_user_locale();
 	$cache_key = 'dash_v2_' . md5( $widget_id . '_' . $locale );
-	if ( false !== ( $output = get_transient( $cache_key ) ) ) {
+	$output    = get_transient( $cache_key );
+	if ( false !== $output ) {
 		echo $output;
 		return true;
 	}
@@ -1068,7 +1080,8 @@ function wp_dashboard_trigger_widget_control( $widget_control_id = false ) {
  * @param array $form_inputs
  */
 function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
-	if ( ! $widget_options = get_option( 'dashboard_widget_options' ) ) {
+	$widget_options = get_option( 'dashboard_widget_options' );
+	if ( ! $widget_options ) {
 		$widget_options = array();
 	}
 
@@ -1079,7 +1092,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 	$number                                 = 1; // Hack to use wp_widget_rss_form()
 	$widget_options[ $widget_id ]['number'] = $number;
 
-	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget-rss'][ $number ] ) ) {
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['widget-rss'][ $number ] ) ) {
 		$_POST['widget-rss'][ $number ]         = wp_unslash( $_POST['widget-rss'][ $number ] );
 		$widget_options[ $widget_id ]           = wp_widget_rss_process( $_POST['widget-rss'][ $number ] );
 		$widget_options[ $widget_id ]['number'] = $number;
@@ -1305,7 +1318,7 @@ function wp_dashboard_browser_nag() {
 	* @param string $notice   The notice content.
 	* @param array  $response An array containing web browser information.
 	*/
-	echo apply_filters( 'browse-happy-notice', $notice, $response );
+	echo apply_filters( 'browse-happy-notice', $notice, $response );  // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }
 
 /**
@@ -1338,7 +1351,8 @@ function wp_check_browser_version() {
 
 	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
 
-	if ( false === ( $response = get_site_transient( 'browser_' . $key ) ) ) {
+	$response = get_site_transient( 'browser_' . $key );
+	if ( false === $response ) {
 		// include an unmodified $wp_version
 		include ABSPATH . WPINC . '/version.php';
 

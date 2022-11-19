@@ -125,11 +125,11 @@ EOT;
 			'string',
 			$heredoc,
 			// object data
-			/*21*/ new classA(),
-			// undefined data
-			/*22*/ @$undefined_var,
-			// unset data
-			/*23*/ @$unset_var,
+			new ClassA(),
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentionally undefined data
+			@$undefined_var,
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentionally unset data
+			@$unset_var,
 		);
 		$outputs  = array(
 			'0',
@@ -181,7 +181,7 @@ EOT;
 	}
 
 	function test_json_encode_decode() {
-		$this->expectException( 'PHPUnit\Framework\Error\Notice' );
+		$this->expectNotice( 'PHPUnit\Framework\Error\Notice' );
 
 		require_once ABSPATH . WPINC . '/class-json.php';
 		$json = new Services_JSON();
@@ -313,7 +313,7 @@ EOT;
 }
 
 /* used in test_mb_substr_phpcore */
-class classA {
+class ClassA {
 	public function __toString() {
 		return 'Class A object';
 	}

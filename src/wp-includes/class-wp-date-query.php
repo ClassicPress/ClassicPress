@@ -140,15 +140,11 @@ class WP_Date_Query {
 	 *         }
 	 *     }
 	 * }
-	 * @param string $default_column Optional. Default column to query against. See WP_Date_Query::validate_column()
-	 *                               and the {@see 'date_query_valid_columns'} filter for the list of accepted values.
-	 *                               Default 'post_date'.
+	 * @param string $default_column Optional. Default column to query against. Default 'post_date'.
+	 *                               Accepts 'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt',
+	 *                               'comment_date', 'comment_date_gmt'.
 	 */
 	public function __construct( $date_query, $default_column = 'post_date' ) {
-		if ( empty( $date_query ) || ! is_array( $date_query ) ) {
-			return;
-		}
-
 		if ( isset( $date_query['relation'] ) && 'OR' === strtoupper( $date_query['relation'] ) ) {
 			$this->relation = 'OR';
 		} else {
@@ -259,7 +255,9 @@ class WP_Date_Query {
 	 * @return string The comparison operator.
 	 */
 	public function get_compare( $query ) {
-		if ( ! empty( $query['compare'] ) && in_array( $query['compare'], array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
+		if ( ! empty( $query['compare'] )
+			&& in_array( $query['compare'], array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true )
+		) {
 			return strtoupper( $query['compare'] );
 		}
 
@@ -273,7 +271,7 @@ class WP_Date_Query {
 	 * continue (though of course no items will be found for impossible dates).
 	 * This method only generates debug notices for these cases.
 	 *
-	 * @since  4.1.0
+	 * @since WP- 4.1.0
 	 *
 	 * @param  array $date_query The date_query array.
 	 * @return bool  True if all values in the query are valid, false if one or more fail.
@@ -404,7 +402,7 @@ class WP_Date_Query {
 						'<code>' . esc_html( $check['max'] ) . '</code>'
 					);
 
-					_doing_it_wrong( __CLASS__, $error, '4.1.0' );
+					_doing_it_wrong( __CLASS__, $error, 'WP-4.1.0' );
 
 					$valid = false;
 				}
@@ -453,7 +451,7 @@ class WP_Date_Query {
 		}
 
 		if ( ! empty( $day_month_year_error_msg ) ) {
-			_doing_it_wrong( __CLASS__, $day_month_year_error_msg, '4.1.0' );
+			_doing_it_wrong( __CLASS__, $day_month_year_error_msg, 'WP-4.1.0' );
 		}
 
 		return $valid;
@@ -501,7 +499,7 @@ class WP_Date_Query {
 			 *                                'post_modified_gmt', 'comment_date', 'comment_date_gmt',
 			 *                                'user_registered', 'registered', 'last_updated'.
 			 */
-			if ( ! in_array( $column, apply_filters( 'date_query_valid_columns', $valid_columns ) ) ) {
+			if ( ! in_array( $column, apply_filters( 'date_query_valid_columns', $valid_columns ), true ) ) {
 				$column = 'post_date';
 			}
 
@@ -527,7 +525,7 @@ class WP_Date_Query {
 
 			// If it's a known column name, add the appropriate table prefix.
 			foreach ( $known_columns as $table_name => $table_columns ) {
-				if ( in_array( $column, $table_columns ) ) {
+				if ( in_array( $column, $table_columns, true ) ) {
 					$column = $table_name . '.' . $column;
 					break;
 				}
@@ -676,7 +674,7 @@ class WP_Date_Query {
 	 * A wrapper for get_sql_for_clause(), included here for backward
 	 * compatibility while retaining the naming convention across Query classes.
 	 *
-	 * @since  3.7.0
+	 * @since WP- 3.7.0
 	 *
 	 * @param  array $query Date query arguments.
 	 * @return array {
@@ -693,7 +691,7 @@ class WP_Date_Query {
 	/**
 	 * Turns a first-order date query into SQL for a WHERE clause.
 	 *
-	 * @since  4.1.0
+	 * @since WP- 4.1.0
 	 *
 	 * @param  array $query        Date query clause.
 	 * @param  array $parent_query Parent query of the current date query.
@@ -823,7 +821,7 @@ class WP_Date_Query {
 
 			case 'BETWEEN':
 			case 'NOT BETWEEN':
-				if ( ! is_array( $value ) || 2 != count( $value ) ) {
+				if ( ! is_array( $value ) || 2 !== count( $value ) ) {
 					$value = array( $value, $value );
 				} else {
 					$value = array_values( $value );
@@ -972,8 +970,8 @@ class WP_Date_Query {
 			return false;
 		}
 
-		// Complex combined queries aren't supported for multi-value queries
-		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
+		// Complex combined queries aren't supported for multi-value queries.
+		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true ) ) {
 			$return = array();
 
 			$value = $this->build_value( $compare, $hour );

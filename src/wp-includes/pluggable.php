@@ -256,7 +256,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		}
 
 		// Headers
-		$cc = $bcc = $reply_to = array();
+		$cc       = array();
+		$bcc      = array();
+		$reply_to = array();
 
 		if ( empty( $headers ) ) {
 			$headers = array();
@@ -292,7 +294,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 						// Mainly for legacy -- process a From: header if it's there
 						case 'from':
 							$bracket_pos = strpos( $content, '<' );
-							if ( $bracket_pos !== false ) {
+							if ( false !== $bracket_pos ) {
 								// Text before the bracketed email is the "From" name.
 								if ( $bracket_pos > 0 ) {
 									$from_name = substr( $content, 0, $bracket_pos - 1 );
@@ -348,6 +350,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		$phpmailer->clearAttachments();
 		$phpmailer->clearCustomHeaders();
 		$phpmailer->clearReplyTos();
+		$phpmailer->Body    = '';
+		$phpmailer->AltBody = '';
 
 		// From email and name
 
@@ -466,8 +470,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 
 		$phpmailer->ContentType = $content_type;
 
-		// Set whether it's plaintext, depending on $content_type
-		if ( 'text/html' == $content_type ) {
+		// Set whether it's plaintext, depending on $content_type.
+		if ( 'text/html' === $content_type ) {
 			$phpmailer->isHTML( true );
 		}
 
@@ -491,7 +495,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		if ( ! empty( $headers ) ) {
 			foreach ( (array) $headers as $name => $content ) {
 				// Only add custom headers not added automatically by PHPMailer.
-				if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ) ) ) {
+				if ( ! in_array( $name, array( 'MIME-Version', 'X-Mailer' ), true ) ) {
 					$phpmailer->addCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
 				}
 			}
@@ -590,15 +594,15 @@ if ( ! function_exists( 'wp_authenticate' ) ) :
 		 */
 		$user = apply_filters( 'authenticate', null, $username, $password );
 
-		if ( $user == null ) {
-			// TODO what should the error message be? (Or would these even happen?)
+		if ( null == $user ) {
+			// TODO: What should the error message be? (Or would these even happen?)
 			// Only needed if all authentication handlers fail to return anything.
 			$user = new WP_Error( 'authentication_failed', __( '<strong>ERROR</strong>: Invalid username, email address or incorrect password.' ) );
 		}
 
 		$ignore_codes = array( 'empty_username', 'empty_password' );
 
-		if ( is_wp_error( $user ) && ! in_array( $user->get_error_code(), $ignore_codes ) ) {
+		if ( is_wp_error( $user ) && ! in_array( $user->get_error_code(), $ignore_codes, true ) ) {
 			/**
 			 * Fires after a user login has failed.
 			 *
@@ -652,7 +656,8 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 	 * @return false|int False if invalid cookie, User ID if valid.
 	 */
 	function wp_validate_auth_cookie( $cookie = '', $scheme = '' ) {
-		if ( ! $cookie_elements = wp_parse_auth_cookie( $cookie, $scheme ) ) {
+		$cookie_elements = wp_parse_auth_cookie( $cookie, $scheme );
+		if ( ! $cookie_elements ) {
 			/**
 			 * Fires if an authentication cookie is malformed.
 			 *
@@ -670,10 +675,11 @@ if ( ! function_exists( 'wp_validate_auth_cookie' ) ) :
 		$username = $cookie_elements['username'];
 		$hmac     = $cookie_elements['hmac'];
 		$token    = $cookie_elements['token'];
-		$expired  = $expiration = $cookie_elements['expiration'];
+		$expired    = $cookie_elements['expiration'];
+		$expiration = $cookie_elements['expiration'];
 
-		// Allow a grace period for POST and Ajax requests
-		if ( wp_doing_ajax() || 'POST' == $_SERVER['REQUEST_METHOD'] ) {
+		// Allow a grace period for POST and Ajax requests.
+		if ( wp_doing_ajax() || 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			$expired += HOUR_IN_SECONDS;
 		}
 
@@ -1073,10 +1079,10 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		if ( $secure && ! is_ssl() && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
 			if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
 				wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-				exit();
+				exit;
 			} else {
 				wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-				exit();
+				exit;
 			}
 		}
 
@@ -1089,7 +1095,8 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		 */
 		$scheme = apply_filters( 'auth_redirect_scheme', '' );
 
-		if ( $user_id = wp_validate_auth_cookie( '', $scheme ) ) {
+		$user_id = wp_validate_auth_cookie( '', $scheme );
+		if ( $user_id ) {
 			/**
 			 * Fires before the authentication redirect.
 			 *
@@ -1103,10 +1110,10 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 			if ( ! $secure && get_user_option( 'use_ssl', $user_id ) && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
 				if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
 					wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
-					exit();
+					exit;
 				} else {
 					wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-					exit();
+					exit;
 				}
 			}
 
@@ -1121,7 +1128,7 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		$login_url = wp_login_url( $redirect, true );
 
 		wp_redirect( $login_url );
-		exit();
+		exit;
 	}
 endif;
 
@@ -1277,8 +1284,8 @@ if ( ! function_exists( 'wp_redirect' ) ) :
 
 		$location = wp_sanitize_redirect( $location );
 
-		if ( ! $is_IIS && PHP_SAPI != 'cgi-fcgi' ) {
-			status_header( $status ); // This causes problems on IIS and some FastCGI setups
+		if ( ! $is_IIS && 'cgi-fcgi' !== PHP_SAPI ) {
+			status_header( $status ); // This causes problems on IIS and some FastCGI setups.
 		}
 
 		header( "Location: $location", true, $status );
@@ -1389,13 +1396,14 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 	 **/
 	function wp_validate_redirect( $location, $default = '' ) {
 		$location = wp_sanitize_redirect( trim( $location, " \t\n\r\0\x08\x0B" ) );
-		// browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'
-		if ( substr( $location, 0, 2 ) == '//' ) {
+		// Browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'.
+		if ( '//' === substr( $location, 0, 2 ) ) {
 			$location = 'http:' . $location;
 		}
 
-		// In php 5 parse_url may fail if the URL query part contains http://, bug https://core.trac.wordpress.org/ticket/38143
-		$test = ( $cut = strpos( $location, '?' ) ) ? substr( $location, 0, $cut ) : $location;
+		// In php 5 parse_url may fail if the URL query part contains http://, bug #38143
+		$cut  = strpos( $location, '?' );
+		$test = $cut ? substr( $location, 0, $cut ) : $location;
 
 		// @-operator is used to prevent possible warnings in PHP < 5.3.3.
 		$lp = @parse_url( $test );
@@ -1405,8 +1413,8 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 			return $default;
 		}
 
-		// Allow only http and https schemes. No data:, etc.
-		if ( isset( $lp['scheme'] ) && ! ( 'http' == $lp['scheme'] || 'https' == $lp['scheme'] ) ) {
+		// Allow only 'http' and 'https' schemes. No 'data:', etc.
+		if ( isset( $lp['scheme'] ) && ! ( 'http' === $lp['scheme'] || 'https' === $lp['scheme'] ) ) {
 			return $default;
 		}
 
@@ -1442,7 +1450,7 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 		 */
 		$allowed_hosts = (array) apply_filters( 'allowed_redirect_hosts', array( $wpp['host'] ), isset( $lp['host'] ) ? $lp['host'] : '' );
 
-		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts ) && $lp['host'] != strtolower( $wpp['host'] ) ) ) {
+		if ( isset( $lp['host'] ) && ( ! in_array( $lp['host'], $allowed_hosts, true ) && strtolower( $wpp['host'] ) !== $lp['host'] ) ) {
 			$location = $default;
 		}
 
@@ -1520,8 +1528,8 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 			unset( $emails[ $author->user_email ] );
 		}
 
-		// The author moderated a comment on their own post
-		if ( $author && ! $notify_author && $post->post_author == get_current_user_id() ) {
+		// The author moderated a comment on their own post.
+		if ( $author && ! $notify_author && get_current_user_id() == $post->post_author ) {
 			unset( $emails[ $author->user_email ] );
 		}
 
@@ -1598,14 +1606,14 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 
 		$wp_email = 'classicpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
-		if ( '' == $comment->comment_author ) {
+		if ( '' === $comment->comment_author ) {
 			$from = "From: \"$blogname\" <$wp_email>";
-			if ( '' != $comment->comment_author_email ) {
+			if ( '' !== $comment->comment_author_email ) {
 				$reply_to = "Reply-To: $comment->comment_author_email";
 			}
 		} else {
 			$from = "From: \"$comment->comment_author\" <$wp_email>";
-			if ( '' != $comment->comment_author_email ) {
+			if ( '' !== $comment->comment_author_email ) {
 				$reply_to = "Reply-To: \"$comment->comment_author_email\" <$comment->comment_author_email>";
 			}
 		}
@@ -1908,7 +1916,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 	 *                           string (admin only), 'user', or 'both' (admin and user). Default empty.
 	 */
 	function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) {
-		if ( $deprecated !== null ) {
+		if ( null !== $deprecated ) {
 			_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
 		}
 
@@ -2223,11 +2231,11 @@ if ( ! function_exists( 'wp_salt' ) ) :
 		if ( defined( 'SECRET_KEY' ) && SECRET_KEY && empty( $duplicated_keys[ SECRET_KEY ] ) ) {
 			$values['key'] = SECRET_KEY;
 		}
-		if ( 'auth' == $scheme && defined( 'SECRET_SALT' ) && SECRET_SALT && empty( $duplicated_keys[ SECRET_SALT ] ) ) {
+		if ( 'auth' === $scheme && defined( 'SECRET_SALT' ) && SECRET_SALT && empty( $duplicated_keys[ SECRET_SALT ] ) ) {
 			$values['salt'] = SECRET_SALT;
 		}
 
-		if ( in_array( $scheme, array( 'auth', 'secure_auth', 'logged_in', 'nonce' ) ) ) {
+		if ( in_array( $scheme, array( 'auth', 'secure_auth', 'logged_in', 'nonce' ), true ) ) {
 			foreach ( array( 'key', 'salt' ) as $type ) {
 				$const = strtoupper( "{$scheme}_{$type}" );
 				if ( defined( $const ) && constant( $const ) && empty( $duplicated_keys[ constant( $const ) ] ) ) {
@@ -2474,8 +2482,8 @@ if ( ! function_exists( 'wp_rand' ) ) :
 
 		$value = abs( hexdec( $value ) );
 
-		// Reduce the value to be within the min - max range
-		if ( $max != 0 ) {
+		// Reduce the value to be within the min - max range.
+		if ( 0 != $max ) {
 			$value = $min + ( $max - $min + 1 ) * $value / ( $max_random_number + 1 );
 		}
 
@@ -2566,8 +2574,13 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			'alt'           => '',
 			'class'         => null,
 			'force_display' => false,
+			'loading'       => null,
 			'extra_attr'    => '',
 		);
+
+		if ( wp_lazy_loading_enabled( 'img', 'get_avatar' ) ) {
+			$defaults['loading'] = wp_get_loading_attr_default( 'get_avatar' );
+		}
 
 		if ( empty( $args ) ) {
 			$args = array();
@@ -2638,6 +2651,18 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			}
 		}
 
+		// Add `loading` attribute.
+		$extra_attr = $args['extra_attr'];
+		$loading    = $args['loading'];
+
+		if ( in_array( $loading, array( 'lazy', 'eager' ), true ) && ! preg_match( '/\bloading\s*=/', $extra_attr ) ) {
+			if ( ! empty( $extra_attr ) ) {
+				$extra_attr .= ' ';
+			}
+
+			$extra_attr .= "loading='{$loading}'";
+		}
+
 		$avatar = sprintf(
 			"<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>",
 			esc_attr( $args['alt'] ),
@@ -2646,7 +2671,7 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			esc_attr( join( ' ', $class ) ),
 			(int) $args['height'],
 			(int) $args['width'],
-			$args['extra_attr']
+			$extra_attr
 		);
 
 		/**

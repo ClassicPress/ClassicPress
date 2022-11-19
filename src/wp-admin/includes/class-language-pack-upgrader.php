@@ -186,7 +186,7 @@ class Language_Pack_Upgrader extends WP_Upgrader {
 			return true;
 		}
 
-		if ( 'upgrader_process_complete' == current_filter() ) {
+		if ( 'upgrader_process_complete' === current_filter() ) {
 			$this->skin->feedback( 'starting_upgrade' );
 		}
 
@@ -230,9 +230,9 @@ class Language_Pack_Upgrader extends WP_Upgrader {
 			$this->skin->language_update = $language_update;
 
 			$destination = WP_LANG_DIR;
-			if ( 'plugin' == $language_update->type ) {
+			if ( 'plugin' === $language_update->type ) {
 				$destination .= '/plugins';
-			} elseif ( 'theme' == $language_update->type ) {
+			} elseif ( 'theme' === $language_update->type ) {
 				$destination .= '/themes';
 			}
 
@@ -330,11 +330,12 @@ class Language_Pack_Upgrader extends WP_Upgrader {
 		$files = $wp_filesystem->dirlist( $remote_source );
 
 		// Check to see if a .po and .mo exist in the folder.
-		$po = $mo = false;
+		$po = false;
+		$mo = false;
 		foreach ( (array) $files as $file => $filedata ) {
-			if ( '.po' == substr( $file, -3 ) ) {
+			if ( '.po' === substr( $file, -3 ) ) {
 				$po = true;
-			} elseif ( '.mo' == substr( $file, -3 ) ) {
+			} elseif ( '.mo' === substr( $file, -3 ) ) {
 				$mo = true;
 			}
 		}

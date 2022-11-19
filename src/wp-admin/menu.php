@@ -103,7 +103,7 @@ $builtin = array( 'post', 'page' );
 foreach ( array_merge( $builtin, $types ) as $ptype ) {
 	$ptype_obj = get_post_type_object( $ptype );
 	// Check if it should be a submenu.
-	if ( $ptype_obj->show_in_menu !== true ) {
+	if ( true !== $ptype_obj->show_in_menu ) {
 		continue;
 	}
 	$ptype_menu_position = is_int( $ptype_obj->menu_position ) ? $ptype_obj->menu_position : ++$_wp_last_object_menu; // If we're to use $_wp_last_object_menu, increment it first.
@@ -117,7 +117,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 		} else {
 			$menu_icon = esc_url( $ptype_obj->menu_icon );
 		}
-	} elseif ( in_array( $ptype, $builtin ) ) {
+	} elseif ( in_array( $ptype, $builtin, true ) ) {
 		$menu_icon = 'dashicons-admin-' . $ptype;
 	}
 
@@ -134,7 +134,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 		$edit_tags_file = "edit-tags.php?taxonomy=%s&amp;post_type=$ptype";
 	}
 
-	if ( in_array( $ptype, $builtin ) ) {
+	if ( in_array( $ptype, $builtin, true ) ) {
 		$ptype_menu_id = 'menu-' . $ptype_for_id . 's';
 	} else {
 		$ptype_menu_id = 'menu-posts-' . $ptype_for_id;
@@ -144,7 +144,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 	 * by a hard-coded value below, increment the position.
 	 */
 	$core_menu_positions = array( 59, 60, 65, 70, 75, 80, 85, 99 );
-	while ( isset( $menu[ $ptype_menu_position ] ) || in_array( $ptype_menu_position, $core_menu_positions ) ) {
+	while ( isset( $menu[ $ptype_menu_position ] ) || in_array( $ptype_menu_position, $core_menu_positions, true ) ) {
 		$ptype_menu_position++;
 	}
 
@@ -222,7 +222,7 @@ if ( ! is_multisite() ) {
 	/* translators: upload new plugin */
 	$submenu['plugins.php'][7] = array( _x( 'Upload', 'plugin' ), 'install_plugins', 'plugin-install.php?tab=upload' );
 	/* translators: add new plugin from WP plugin repository */
-	$submenu['plugins.php'][10] = array( _x( 'Add WP Plugin', 'plugin' ), 'install_plugins', 'plugin-install.php' );
+	$submenu['plugins.php'][10] = array( _x( 'Add WP Plugin', 'plugin' ), 'install_plugins', 'plugin-install.php?s=classicpress&tab=search&type=term' );
 	$submenu['plugins.php'][15] = array( _x( 'Editor', 'plugin editor' ), 'edit_plugins', 'plugin-editor.php' );
 }
 

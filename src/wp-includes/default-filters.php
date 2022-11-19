@@ -118,7 +118,7 @@ foreach ( array( 'the_content', 'the_title', 'wp_title' ) as $filter ) {
 add_filter( 'comment_text', 'capital_P_dangit', 31 );
 
 // Format titles
-foreach ( array( 'single_post_title', 'single_cat_title', 'single_tag_title', 'single_month_title', 'nav_menu_attr_title', 'nav_menu_description' ) as $filter ) {
+foreach ( array( 'single_post_title', 'single_cat_title', 'single_tag_title', 'nav_menu_attr_title', 'nav_menu_description' ) as $filter ) {
 	add_filter( $filter, 'wptexturize' );
 	add_filter( $filter, 'strip_tags' );
 }
@@ -148,14 +148,15 @@ add_filter( 'the_content', 'convert_smilies', 20 );
 add_filter( 'the_content', 'wpautop' );
 add_filter( 'the_content', 'shortcode_unautop' );
 add_filter( 'the_content', 'prepend_attachment' );
-add_filter( 'the_content', 'wp_make_content_images_responsive' );
+add_filter( 'the_content', 'wp_filter_content_tags' );
 
 add_filter( 'the_excerpt', 'wptexturize' );
 add_filter( 'the_excerpt', 'convert_smilies' );
 add_filter( 'the_excerpt', 'convert_chars' );
 add_filter( 'the_excerpt', 'wpautop' );
 add_filter( 'the_excerpt', 'shortcode_unautop' );
-add_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
+add_filter( 'the_excerpt', 'wp_filter_content_tags' );
+add_filter( 'get_the_excerpt', 'wp_trim_excerpt', 10, 2 );
 
 add_filter( 'the_post_thumbnail_caption', 'wptexturize' );
 add_filter( 'the_post_thumbnail_caption', 'convert_smilies' );
@@ -180,6 +181,7 @@ add_filter( 'widget_text_content', 'wptexturize' );
 add_filter( 'widget_text_content', 'convert_smilies', 20 );
 add_filter( 'widget_text_content', 'wpautop' );
 add_filter( 'widget_text_content', 'shortcode_unautop' );
+add_filter( 'widget_text_content', 'wp_filter_content_tags' );
 add_filter( 'widget_text_content', 'do_shortcode', 11 ); // Runs after wpautop(); note that $post global will be null when shortcodes run.
 
 // RSS filters

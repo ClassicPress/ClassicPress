@@ -1138,11 +1138,11 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$foundCount    = count( $q->get_results() );
-		$expectedCount = 10; // 13 total users minus 3 from query
+		$found_count    = count( $q->get_results() );
+		$expected_count = 10; // 13 total users minus 3 from query
 
 		$this->assertStringContainsString( "AND user_nicename NOT IN ( 'peter','paul','mary' )", $q->query_where );
-		$this->assertSame( $expectedCount, $foundCount );
+		$this->assertSame( $expected_count, $found_count );
 	}
 
 	/**
@@ -1239,11 +1239,11 @@ class Tests_User_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$foundCount    = count( $q->get_results() );
-		$expectedCount = 10; // 13 total users minus 3 from query
+		$found_count    = count( $q->get_results() );
+		$expected_count = 10; // 13 total users minus 3 from query
 
 		$this->assertStringContainsString( "AND user_login NOT IN ( '$user_login1','$user_login2','$user_login3' )", $q->query_where );
-		$this->assertSame( $expectedCount, $foundCount );
+		$this->assertSame( $expected_count, $found_count );
 	}
 
 	/**
