@@ -65,10 +65,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( 'UTC' );
-<<<<<<< HEAD
-		$this->assertEquals( gmdate( $format ), current_time( $format, true ) );
-		$this->assertEquals( $datetime->format( $format ), current_time( $format ) );
-=======
 
 		$current_time_gmt = current_time( $format, true );
 		$current_time     = current_time( $format );
@@ -77,7 +73,6 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$this->assertEqualsWithDelta( strtotime( $datetime->format( $format ) ), strtotime( $current_time_custom_timezone ), 2, 'The dates should be equal' );
 		$this->assertEqualsWithDelta( strtotime( gmdate( $format ) ), strtotime( $current_time_gmt ), 2, 'The dates should be equal' );
 		$this->assertEqualsWithDelta( strtotime( $datetime->format( $format ) ), strtotime( $current_time ), 2, 'The dates should be equal' );
->>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 
 	/**
@@ -115,12 +110,7 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 		$datetime_utc = new DateTime( '@' . $timestamp );
 		$datetime_utc->setTimezone( new DateTimeZone( 'UTC' ) );
 
-<<<<<<< HEAD
-		$this->assertEquals( $datetime_local->format( DATE_W3C ), current_time( DATE_W3C ), '', 2 );
-		$this->assertEquals( $datetime_utc->format( DATE_W3C ), current_time( DATE_W3C, true ), '', 2 );
-=======
 		$this->assertEqualsWithDelta( strtotime( $datetime_local->format( DATE_W3C ) ), strtotime( current_time( DATE_W3C ) ), 2, 'The dates should be equal' );
 		$this->assertEqualsWithDelta( strtotime( $datetime_utc->format( DATE_W3C ) ), strtotime( current_time( DATE_W3C, true ) ), 2, 'The dates should be equal' );
->>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 }
