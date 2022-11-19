@@ -16,11 +16,15 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$datetime     = new DateTime( 'now', new DateTimeZone( $timezone ) );
 		$wp_timestamp = $datetime->getTimestamp() + $datetime->getOffset();
 
-		$this->assertEquals( $wp_timestamp, date_i18n( 'U', 'invalid' ), '', 5 );
+		$this->assertEqualsWithDelta( $wp_timestamp, date_i18n( 'U', 'invalid' ), 5, 'The dates should be equal' );
 	}
 
 	public function test_should_format_date() {
+<<<<<<< HEAD
 		$this->assertEqualsWithDelta( strtotime( date( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
+=======
+		$this->assertEqualsWithDelta( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
+>>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 
 	public function test_should_use_custom_timestamp() {
@@ -40,7 +44,11 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_date_should_be_in_gmt_with_custom_timezone_setting() {
 		update_option( 'timezone_string', 'America/Regina' );
 
+<<<<<<< HEAD
 		$this->assertEqualsWithDelta( strtotime( date( 'Y-m-d H:i:s', time() + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
+=======
+		$this->assertEqualsWithDelta( strtotime( gmdate( DATE_RFC3339 ) ), strtotime( date_i18n( DATE_RFC3339, false, true ) ), 2, 'The dates should be equal' );
+>>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 
 	public function test_date_should_be_in_gmt_with_custom_timezone_setting_and_timestamp() {
@@ -103,8 +111,13 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_date_i18n_handles_shorthand_formats( $short, $full ) {
 		update_option( 'timezone_string', 'America/Regina' );
 
+<<<<<<< HEAD
 		$this->assertEquals( strtotime( date_i18n( $full ) ), strtotime( date_i18n( $short ) ), 'The dates should be equal', 2 );
 		$this->assertEquals( $short, date_i18n( '\\' . $short ) );
+=======
+		$this->assertEqualsWithDelta( strtotime( date_i18n( $full ) ), strtotime( date_i18n( $short ) ), 2, 'The dates should be equal' );
+		$this->assertSame( $short, date_i18n( '\\' . $short ) );
+>>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 
 	public function data_formats() {
@@ -130,9 +143,15 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$timestamp    = $datetime->getTimestamp();
 		$wp_timestamp = $timestamp + $datetime->getOffset();
 
+<<<<<<< HEAD
 		$this->assertEquals( $wp_timestamp, date_i18n( 'U' ), 'The dates should be equal', 2 );
 		$this->assertEquals( $timestamp, date_i18n( 'U', false, true ), 'The dates should be equal', 2 );
 		$this->assertEquals( $wp_timestamp, date_i18n( 'U', $wp_timestamp ) );
+=======
+		$this->assertEqualsWithDelta( $wp_timestamp, date_i18n( 'U' ), 2, 'The dates should be equal' );
+		$this->assertEqualsWithDelta( $timestamp, date_i18n( 'U', false, true ), 2, 'The dates should be equal' );
+		$this->assertSame( $wp_timestamp, date_i18n( 'U', $wp_timestamp ) );
+>>>>>>> 5bad67bccf (Tests: Add a polyfill for `assertEqualsWithDelta()` to `WP_UnitTestCase` and use it where appropriate.)
 	}
 
 	/**
