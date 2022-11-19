@@ -55,7 +55,7 @@ function mysql2date( $format, $date, $translate = true ) {
  *
  *  - The 'mysql' type will return the time in the format for MySQL DATETIME field.
  *  - The 'timestamp' or 'U' types will return the current timestamp or a sum of timestamp
- * and timezone offset, depending on `$gmt`.
+ *    and timezone offset, depending on `$gmt`.
  *  - Other strings will be interpreted as PHP date formats (e.g. 'Y-m-d').
  *
  * If `$gmt` is a truthy value then both types will use GMT time, otherwise the
@@ -186,9 +186,9 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
 	 */
 	if ( 'U' === $format ) {
 		$date = $timestamp;
-	} elseif ( $gmt && ! $timestamp_with_offset ) { // Current time in UTC.
+	} elseif ( $gmt && false === $timestamp_with_offset ) { // Current time in UTC.
 		$date = wp_date( $format, null, new DateTimeZone( 'UTC' ) );
-	} elseif ( ! $timestamp_with_offset ) { // Current time in site's timezone.
+	} elseif ( false === $timestamp_with_offset ) { // Current time in site's timezone.
 		$date = wp_date( $format );
 	} else {
 		/*
@@ -233,7 +233,7 @@ function date_i18n( $format, $timestamp_with_offset = false, $gmt = false ) {
  * @param DateTimeZone $timezone  Optional. Timezone to output result in. Defaults to timezone
  *                                from site settings.
  * @return string|false The date, translated if locale specifies it. False on invalid timestamp input.
-	 */
+ */
 function wp_date( $format, $timestamp = null, $timezone = null ) {
 	global $wp_locale;
 
@@ -258,8 +258,8 @@ function wp_date( $format, $timestamp = null, $timezone = null ) {
 
 		$new_format    = '';
 		$format_length = strlen( $format );
-		$month   = $wp_locale->get_month( $datetime->format( 'm' ) );
-		$weekday = $wp_locale->get_weekday( $datetime->format( 'w' ) );
+		$month         = $wp_locale->get_month( $datetime->format( 'm' ) );
+		$weekday       = $wp_locale->get_weekday( $datetime->format( 'w' ) );
 
 		for ( $i = 0; $i < $format_length; $i ++ ) {
 			switch ( $format[ $i ] ) {

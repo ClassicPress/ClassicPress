@@ -7,6 +7,17 @@
 class Tests_Date_I18n extends WP_UnitTestCase {
 
 	/**
+	 * Cleans up.
+	 */
+	public function tear_down() {
+		// Reset changed options to their default value.
+		update_option( 'gmt_offset', 0 );
+		update_option( 'timezone_string', '' );
+
+		parent::tear_down();
+	}
+
+	/**
 	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_return_current_time_on_invalid_timestamp() {
@@ -19,10 +30,8 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$this->assertEqualsWithDelta( $wp_timestamp, date_i18n( 'U', 'invalid' ), 5, 'The dates should be equal' );
 	}
 
-<<<<<<< HEAD
-=======
 	/**
-	 * @ticket 28636
+	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_handle_zero_timestamp() {
 		$timezone = 'Europe/Helsinki';
@@ -39,7 +48,6 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$this->assertSame( $rfc3339, date_i18n( DATE_RFC3339, 0 ) );
 	}
 
->>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 	public function test_should_format_date() {
 		$this->assertEqualsWithDelta( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
 	}

@@ -80,12 +80,8 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/40653
 	 */
 	public function test_should_return_wp_timestamp() {
-<<<<<<< HEAD
-		update_option( 'timezone_string', 'Europe/Kiev' );
-=======
 		update_option( 'timezone_string', 'Europe/Helsinki' );
 
->>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		$timestamp = time();
 		$datetime  = new DateTime( '@' . $timestamp );
 		$datetime->setTimezone( wp_timezone() );
@@ -109,12 +105,8 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/40653
 	 */
 	public function test_should_return_correct_local_time() {
-<<<<<<< HEAD
-		update_option( 'timezone_string', 'Europe/Kiev' );
-=======
 		update_option( 'timezone_string', 'Europe/Helsinki' );
 
->>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 		$timestamp      = time();
 		$datetime_local = new DateTime( '@' . $timestamp );
 		$datetime_local->setTimezone( wp_timezone() );
