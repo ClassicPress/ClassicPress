@@ -60,8 +60,9 @@ class Tests_Date_Current_Time extends WP_UnitTestCase {
 
 		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( $timezone_string );
-		$this->assertEquals( gmdate( $format ), current_time( $format, true ) );
-		$this->assertEquals( $datetime->format( $format ), current_time( $format ) );
+
+		$current_time_custom_timezone_gmt = current_time( $format, true );
+		$current_time_custom_timezone     = current_time( $format );
 
 		// phpcs:ignore WordPress.DateTime.RestrictedFunctions.timezone_change_date_default_timezone_set
 		date_default_timezone_set( 'UTC' );

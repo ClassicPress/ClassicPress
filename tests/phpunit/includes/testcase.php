@@ -22,7 +22,7 @@ abstract class WP_UnitTestCase extends WP_UnitTestCase_Base {
 	 * @throws ExpectationFailedException
 	 * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
 	 */
-	public static function assertEqualsWithDelta( $expected, $actual, $delta, $message = '' ) {
+	public static function assertEqualsWithDelta( $expected, $actual, $delta, $message = '' ): void {
 		$constraint = new PHPUnit_Framework_Constraint_IsEqual(
 			$expected,
 			$delta
