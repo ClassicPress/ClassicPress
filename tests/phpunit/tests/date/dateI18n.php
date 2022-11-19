@@ -10,7 +10,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/28636
 	 */
 	public function test_should_return_current_time_on_invalid_timestamp() {
-		$timezone = 'Europe/Kiev';
+		$timezone = 'Europe/Helsinki';
 		update_option( 'timezone_string', $timezone );
 
 		$datetime     = new DateTime( 'now', new DateTimeZone( $timezone ) );
@@ -19,6 +19,27 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 		$this->assertEqualsWithDelta( $wp_timestamp, date_i18n( 'U', 'invalid' ), 5, 'The dates should be equal' );
 	}
 
+<<<<<<< HEAD
+=======
+	/**
+	 * @ticket 28636
+	 */
+	public function test_should_handle_zero_timestamp() {
+		$timezone = 'Europe/Helsinki';
+		update_option( 'timezone_string', $timezone );
+
+		$datetime = DateTimeImmutable::createFromFormat(
+			'Y-m-d H:i:s',
+			'1970-01-01 00:00:00',
+			new DateTimeZone( $timezone )
+		);
+		$rfc3339  = $datetime->format( DATE_RFC3339 );
+
+		$this->assertSame( 0, date_i18n( 'U', 0 ) );
+		$this->assertSame( $rfc3339, date_i18n( DATE_RFC3339, 0 ) );
+	}
+
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 	public function test_should_format_date() {
 		$this->assertEqualsWithDelta( strtotime( gmdate( 'Y-m-d H:i:s' ) ), strtotime( date_i18n( 'Y-m-d H:i:s' ) ), 2, 'The dates should be equal' );
 	}
@@ -124,7 +145,7 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/25768
 	 */
 	public function test_should_return_wp_timestamp() {
-		update_option( 'timezone_string', 'Europe/Kiev' );
+		update_option( 'timezone_string', 'Europe/Helsinki' );
 
 		$datetime     = new DateTimeImmutable( 'now', wp_timezone() );
 		$timestamp    = $datetime->getTimestamp();
@@ -174,10 +195,10 @@ class Tests_Date_I18n extends WP_UnitTestCase {
 
 	public function dst_times() {
 		return array(
-			'Before DST start' => array( '2019-03-31 02:59:00', 'Europe/Kiev' ),
-			'After DST start'  => array( '2019-03-31 04:01:00', 'Europe/Kiev' ),
-			'Before DST end'   => array( '2019-10-27 02:59:00', 'Europe/Kiev' ),
-			'After DST end'    => array( '2019-10-27 04:01:00', 'Europe/Kiev' ),
+			'Before DST start' => array( '2019-03-31 02:59:00', 'Europe/Helsinki' ),
+			'After DST start'  => array( '2019-03-31 04:01:00', 'Europe/Helsinki' ),
+			'Before DST end'   => array( '2019-10-27 02:59:00', 'Europe/Helsinki' ),
+			'After DST end'    => array( '2019-10-27 04:01:00', 'Europe/Helsinki' ),
 		);
 	}
 }

@@ -29,13 +29,21 @@ class Tests_Date_WP_Timezone extends WP_UnitTestCase {
 	 * @see https://core.trac.wordpress.org/ticket/24730
 	 */
 	public function test_should_return_timezone_string() {
-		update_option( 'timezone_string', 'Europe/Kiev' );
+		update_option( 'timezone_string', 'Europe/Helsinki' );
 
+<<<<<<< HEAD
 		$this->assertEquals( 'Europe/Kiev', wp_timezone_string() );
 
 		$timezone = wp_timezone();
 
 		$this->assertEquals( 'Europe/Kiev', $timezone->getName() );
+=======
+		$this->assertSame( 'Europe/Helsinki', wp_timezone_string() );
+
+		$timezone = wp_timezone();
+
+		$this->assertSame( 'Europe/Helsinki', $timezone->getName() );
+>>>>>>> 8127aaed05 (Tests: Replace the timezone used in date/time tests.)
 	}
 
 	/**
