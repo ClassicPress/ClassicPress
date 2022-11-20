@@ -52,7 +52,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 		$this->skipTestOnTimeout( $response );
 
-		$response_code = wp_remote_retrieve_response_code( $response )
+		$response_code = wp_remote_retrieve_response_code( $response );
 		$response_body = wp_remote_retrieve_body( $response );
 
 		if ( 200 !== $response_code ) {
