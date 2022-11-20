@@ -19,7 +19,9 @@ class Tests_Admin_includesMisc extends WP_UnitTestCase {
 			'http://wordpress.org/about/philosophy/#decisions'
 				=> 'wordpress.org/about/philosophy/#&hellip;', // shorten to 32 if > 35 after cleaning
 		);
-		foreach ( $tests as $k => $v )
-			$this->assertEquals( $v, url_shorten( $k ) );
+
+		foreach ( $tests as $k => $v ) {
+			$this->assertSame( $v, url_shorten( $k ) );
+		}
 	}
 }

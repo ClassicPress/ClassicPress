@@ -35,10 +35,9 @@ class WP_SimplePie_Sanitize_KSES extends SimplePie_Sanitize {
 	public function sanitize( $data, $type, $base = '' ) {
 		$data = trim( $data );
 		if ( $type & SIMPLEPIE_CONSTRUCT_MAYBE_HTML ) {
-			if (preg_match('/(&(#(x[0-9a-fA-F]+|[0-9]+)|[a-zA-Z0-9]+)|<\/[A-Za-z][^\x09\x0A\x0B\x0C\x0D\x20\x2F\x3E]*' . SIMPLEPIE_PCRE_HTML_ATTRIBUTE . '>)/', $data)) {
+			if ( preg_match( '/(&(#(x[0-9a-fA-F]+|[0-9]+)|[a-zA-Z0-9]+)|<\/[A-Za-z][^\x09\x0A\x0B\x0C\x0D\x20\x2F\x3E]*' . SIMPLEPIE_PCRE_HTML_ATTRIBUTE . '>)/', $data ) ) {
 				$type |= SIMPLEPIE_CONSTRUCT_HTML;
-			}
-			else {
+			} else {
 				$type |= SIMPLEPIE_CONSTRUCT_TEXT;
 			}
 		}
@@ -47,7 +46,7 @@ class WP_SimplePie_Sanitize_KSES extends SimplePie_Sanitize {
 		}
 		if ( $type & ( SIMPLEPIE_CONSTRUCT_HTML | SIMPLEPIE_CONSTRUCT_XHTML ) ) {
 			$data = wp_kses_post( $data );
-			if ( $this->output_encoding !== 'UTF-8' ) {
+			if ( 'UTF-8' !== $this->output_encoding ) {
 				$data = $this->registry->call( 'Misc', 'change_encoding', array( $data, 'UTF-8', $this->output_encoding ) );
 			}
 			return $data;

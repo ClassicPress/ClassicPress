@@ -98,7 +98,7 @@ At this point you have a working local development environment. Here are some fu
 
 ## How to review a PR
 
-1. See the instructions on [setting up a local development environment](#setting-up-local-testing-and-dev-environment) above.
+1. See the instructions on [setting up a local development environment](#setting-up-a-local-development-environment) above.
 2. Set up a remote link to the user who submitted the PR. For example, if GitHub user `bahiirwa` submitted the PR:
    ```
    git remote add bahiirwa https://github.com/bahiirwa/ClassicPress

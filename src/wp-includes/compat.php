@@ -7,8 +7,8 @@
  */
 
 // If gettext isn't available
-if ( !function_exists('_') ) {
-	function _($string) {
+if ( ! function_exists( '_' ) ) {
+	function _( $string ) {
 		return $string;
 	}
 }
@@ -89,7 +89,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 	 * The solution below works only for UTF-8, so in case of a different
 	 * charset just use built-in substr().
 	 */
-	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
+	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true ) ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
@@ -126,7 +126,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 
 		$chars = array_merge( $chars, $pieces );
 
-	// If there's anything left over, repeat the loop.
+		// If there's anything left over, repeat the loop.
 	} while ( count( $pieces ) > 1 && $str = array_pop( $pieces ) );
 
 	return join( '', array_slice( $chars, $start, $length ) );
@@ -173,7 +173,7 @@ function _mb_strlen( $str, $encoding = null ) {
 	 * The solution below works only for UTF-8, so in case of a different charset
 	 * just use built-in strlen().
 	 */
-	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ) ) ) {
+	if ( ! in_array( $encoding, array( 'utf8', 'utf-8', 'UTF8', 'UTF-8' ), true ) ) {
 		return strlen( $str );
 	}
 
@@ -210,7 +210,7 @@ function _mb_strlen( $str, $encoding = null ) {
 		// Increment.
 		$count += count( $pieces );
 
-	// If there's anything left over, repeat the loop.
+		// If there's anything left over, repeat the loop.
 	} while ( $str = array_pop( $pieces ) );
 
 	// Fencepost: preg_split() always returns one extra item in the array.
@@ -260,35 +260,41 @@ endif;
  * @return string|false The hash in output determined by `$raw_output`. False if `$algo`
  *                      is unknown or invalid.
  */
-function _hash_hmac($algo, $data, $key, $raw_output = false) {
-	$packs = array('md5' => 'H32', 'sha1' => 'H40');
+function _hash_hmac( $algo, $data, $key, $raw_output = false ) {
+	$packs = array(
+		'md5'  => 'H32',
+		'sha1' => 'H40',
+	);
 
-	if ( !isset($packs[$algo]) )
+	if ( ! isset( $packs[ $algo ] ) ) {
 		return false;
+	}
 
-	$pack = $packs[$algo];
+	$pack = $packs[ $algo ];
 
-	if (strlen($key) > 64)
-		$key = pack($pack, $algo($key));
+	if ( strlen( $key ) > 64 ) {
+		$key = pack( $pack, $algo( $key ) );
+	}
 
-	$key = str_pad($key, 64, chr(0));
+	$key = str_pad( $key, 64, chr( 0 ) );
 
-	$ipad = (substr($key, 0, 64) ^ str_repeat(chr(0x36), 64));
-	$opad = (substr($key, 0, 64) ^ str_repeat(chr(0x5C), 64));
+	$ipad = ( substr( $key, 0, 64 ) ^ str_repeat( chr( 0x36 ), 64 ) );
+	$opad = ( substr( $key, 0, 64 ) ^ str_repeat( chr( 0x5C ), 64 ) );
 
-	$hmac = $algo($opad . pack($pack, $algo($ipad . $data)));
+	$hmac = $algo( $opad . pack( $pack, $algo( $ipad . $data ) ) );
 
-	if ( $raw_output )
+	if ( $raw_output ) {
 		return pack( $pack, $hmac );
+	}
 	return $hmac;
 }
 
-if ( !function_exists('json_encode') ) {
+if ( ! function_exists( 'json_encode' ) ) {
 	function json_encode( $string ) {
 		global $wp_json;
 
 		if ( ! ( $wp_json instanceof Services_JSON ) ) {
-			require_once( ABSPATH . WPINC . '/class-json.php' );
+			require_once ABSPATH . WPINC . '/class-json.php';
 			$wp_json = new Services_JSON();
 		}
 
@@ -296,7 +302,7 @@ if ( !function_exists('json_encode') ) {
 	}
 }
 
-if ( !function_exists('json_decode') ) {
+if ( ! function_exists( 'json_decode' ) ) {
 	/**
 	 * @global Services_JSON $wp_json
 	 * @param string $string
@@ -306,14 +312,15 @@ if ( !function_exists('json_decode') ) {
 	function json_decode( $string, $assoc_array = false ) {
 		global $wp_json;
 
-		if ( ! ($wp_json instanceof Services_JSON ) ) {
-			require_once( ABSPATH . WPINC . '/class-json.php' );
+		if ( ! ( $wp_json instanceof Services_JSON ) ) {
+			require_once ABSPATH . WPINC . '/class-json.php';
 			$wp_json = new Services_JSON();
 		}
 
 		$res = $wp_json->decode( $string );
-		if ( $assoc_array )
+		if ( $assoc_array ) {
 			$res = _json_decode_object_helper( $res );
+		}
 		return $res;
 	}
 
@@ -321,10 +328,11 @@ if ( !function_exists('json_decode') ) {
 	 * @param object $data
 	 * @return array
 	 */
-	function _json_decode_object_helper($data) {
-		if ( is_object($data) )
-			$data = get_object_vars($data);
-		return is_array($data) ? array_map(__FUNCTION__, $data) : $data;
+	function _json_decode_object_helper( $data ) {
+		if ( is_object( $data ) ) {
+			$data = get_object_vars( $data );
+		}
+		return is_array( $data ) ? array_map( __FUNCTION__, $data ) : $data;
 	}
 }
 
@@ -351,7 +359,7 @@ if ( ! function_exists( 'hash_equals' ) ) :
 	 */
 	function hash_equals( $a, $b ) {
 		$a_length = strlen( $a );
-		if ( $a_length !== strlen( $b ) ) {
+		if ( strlen( $b ) !== $a_length ) {
 			return false;
 		}
 		$result = 0;
@@ -366,7 +374,7 @@ if ( ! function_exists( 'hash_equals' ) ) :
 			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
 		}
 
-		return $result === 0;
+		return 0 === $result;
 	}
 endif;
 
@@ -444,6 +452,7 @@ if ( ! interface_exists( 'JsonSerializable' ) ) {
 	 * @since WP-4.4.0
 	 */
 	interface JsonSerializable {
+		// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		public function jsonSerialize();
 	}
 }

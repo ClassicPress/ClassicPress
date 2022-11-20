@@ -8,7 +8,7 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once dirname( __FILE__ ) . '/admin.php';
 
 if ( empty( $_REQUEST['tag_ID'] ) ) {
 	$sendback = admin_url( 'edit-tags.php' );
@@ -30,8 +30,8 @@ $tax      = get_taxonomy( $tag->taxonomy );
 $taxonomy = $tax->name;
 $title    = $tax->labels->edit_item;
 
-if ( ! in_array( $taxonomy, get_taxonomies( array( 'show_ui' => true ) ) ) ||
-     ! current_user_can( 'edit_term', $tag->term_id )
+if ( ! in_array( $taxonomy, get_taxonomies( array( 'show_ui' => true ) ), true )
+	|| ! current_user_can( 'edit_term', $tag->term_id )
 ) {
 	wp_die(
 		'<h1>' . __( 'You need a higher level of permission.' ) . '</h1>' .
@@ -58,11 +58,13 @@ if ( 'post' != $post_type ) {
 	$submenu_file = "edit-tags.php?taxonomy=$taxonomy";
 }
 
-get_current_screen()->set_screen_reader_content( array(
-	'heading_pagination' => $tax->labels->items_list_navigation,
-	'heading_list'       => $tax->labels->items_list,
-) );
+get_current_screen()->set_screen_reader_content(
+	array(
+		'heading_pagination' => $tax->labels->items_list_navigation,
+		'heading_list'       => $tax->labels->items_list,
+	)
+);
 wp_enqueue_script( 'admin-tags' );
-require_once( ABSPATH . 'wp-admin/admin-header.php' );
-include( ABSPATH . 'wp-admin/edit-tag-form.php' );
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
+require ABSPATH . 'wp-admin/edit-tag-form.php';
+require ABSPATH . 'wp-admin/admin-footer.php';

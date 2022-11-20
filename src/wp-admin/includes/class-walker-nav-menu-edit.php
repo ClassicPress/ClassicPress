@@ -60,7 +60,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 		$_wp_nav_menu_max_depth = $depth > $_wp_nav_menu_max_depth ? $depth : $_wp_nav_menu_max_depth;
 
 		ob_start();
-		$item_id = esc_attr( $item->ID );
+		$item_id      = esc_attr( $item->ID );
 		$removed_args = array(
 			'action',
 			'customlink-tab',
@@ -71,14 +71,16 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 		);
 
 		$original_title = false;
-		if ( 'taxonomy' == $item->type ) {
-			$original_title = get_term_field( 'name', $item->object_id, $item->object, 'raw' );
-			if ( is_wp_error( $original_title ) )
-				$original_title = false;
-		} elseif ( 'post_type' == $item->type ) {
+
+		if ( 'taxonomy' === $item->type ) {
+			$original_object = get_term( (int) $item->object_id, $item->object );
+			if ( $original_object && ! is_wp_error( $original_title ) ) {
+				$original_title = $original_object->name;
+			}
+		} elseif ( 'post_type' === $item->type ) {
 			$original_object = get_post( $item->object_id );
-			$original_title = get_the_title( $original_object->ID );
-		} elseif ( 'post_type_archive' == $item->type ) {
+			$original_title  = get_the_title( $original_object->ID );
+		} elseif ( 'post_type_archive' === $item->type ) {
 			$original_object = get_post_type_object( $item->object );
 			if ( $original_object ) {
 				$original_title = $original_object->labels->archives;
@@ -88,7 +90,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 		$classes = array(
 			'menu-item menu-item-depth-' . $depth,
 			'menu-item-' . esc_attr( $item->object ),
-			'menu-item-edit-' . ( ( isset( $_GET['edit-menu-item'] ) && $item_id == $_GET['edit-menu-item'] ) ? 'active' : 'inactive'),
+			'menu-item-edit-' . ( ( isset( $_GET['edit-menu-item'] ) && $item_id == $_GET['edit-menu-item'] ) ? 'active' : 'inactive' ),
 		);
 
 		$title = $item->title;
@@ -97,61 +99,87 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 			$classes[] = 'menu-item-invalid';
 			/* translators: %s: title of menu item which is invalid */
 			$title = sprintf( __( '%s (Invalid)' ), $item->title );
-		} elseif ( isset( $item->post_status ) && 'draft' == $item->post_status ) {
+		} elseif ( isset( $item->post_status ) && 'draft' === $item->post_status ) {
 			$classes[] = 'pending';
 			/* translators: %s: title of menu item in draft status */
-			$title = sprintf( __('%s (Pending)'), $item->title );
+			$title = sprintf( __( '%s (Pending)' ), $item->title );
 		}
 
-		$title = ( ! isset( $item->label ) || '' == $item->label ) ? $title : $item->label;
+		$title = ( ! isset( $item->label ) || '' === $item->label ) ? $title : $item->label;
 
 		$submenu_text = '';
-		if ( 0 == $depth )
+		if ( 0 == $depth ) {
 			$submenu_text = 'style="display: none;"';
+		}
 
 		?>
-		<li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode(' ', $classes ); ?>">
+		<li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode( ' ', $classes ); ?>">
 			<div class="menu-item-bar">
 				<div class="menu-item-handle">
 					<span class="item-title"><span class="menu-item-title"><?php echo esc_html( $title ); ?></span> <span class="is-submenu" <?php echo $submenu_text; ?>><?php _e( 'sub item' ); ?></span></span>
 					<span class="item-controls">
 						<span class="item-type"><?php echo esc_html( $item->type_label ); ?></span>
 						<span class="item-order hide-if-js">
-							<a href="<?php
-								echo wp_nonce_url(
+							<?php
+							printf(
+								'<a href="%s" class="item-move-up" aria-label="%s">&#8593;</a>',
+								wp_nonce_url(
 									add_query_arg(
 										array(
-											'action' => 'move-up-menu-item',
+											'action'    => 'move-up-menu-item',
 											'menu-item' => $item_id,
 										),
-										remove_query_arg($removed_args, admin_url( 'nav-menus.php' ) )
+										remove_query_arg( $removed_args, admin_url( 'nav-menus.php' ) )
 									),
 									'move-menu_item'
-								);
-							?>" class="item-move-up" aria-label="<?php esc_attr_e( 'Move up' ) ?>">&#8593;</a>
+								),
+								esc_attr__( 'Move up' )
+							);
+							?>
 							|
-							<a href="<?php
-								echo wp_nonce_url(
+							<?php
+							printf(
+								'<a href="%s" class="item-move-down" aria-label="%s">&#8595;</a>',
+								wp_nonce_url(
 									add_query_arg(
 										array(
-											'action' => 'move-down-menu-item',
+											'action'    => 'move-down-menu-item',
 											'menu-item' => $item_id,
 										),
-										remove_query_arg($removed_args, admin_url( 'nav-menus.php' ) )
+										remove_query_arg( $removed_args, admin_url( 'nav-menus.php' ) )
 									),
 									'move-menu_item'
-								);
-							?>" class="item-move-down" aria-label="<?php esc_attr_e( 'Move down' ) ?>">&#8595;</a>
+								),
+								esc_attr__( 'Move down' )
+							);
+							?>
 						</span>
-						<a class="item-edit" id="edit-<?php echo $item_id; ?>" href="<?php
-							echo ( isset( $_GET['edit-menu-item'] ) && $item_id == $_GET['edit-menu-item'] ) ? admin_url( 'nav-menus.php' ) : add_query_arg( 'edit-menu-item', $item_id, remove_query_arg( $removed_args, admin_url( 'nav-menus.php#menu-item-settings-' . $item_id ) ) );
-						?>" aria-label="<?php esc_attr_e( 'Edit menu item' ); ?>"><span class="screen-reader-text"><?php _e( 'Edit' ); ?></span></a>
+						<?php
+						if ( isset( $_GET['edit-menu-item'] ) && $item_id == $_GET['edit-menu-item'] ) {
+							$edit_url = admin_url( 'nav-menus.php' );
+						} else {
+							$edit_url = add_query_arg(
+								array(
+									'edit-menu-item' => $item_id,
+								),
+								remove_query_arg( $removed_args, admin_url( 'nav-menus.php#menu-item-settings-' . $item_id ) )
+							);
+						}
+
+						printf(
+							'<a class="item-edit" id="edit-%s" href="%s" aria-label="%s"><span class="screen-reader-text">%s</span></a>',
+							$item_id,
+							$edit_url,
+							esc_attr__( 'Edit menu item' ),
+							__( 'Edit' )
+						);
+						?>
 					</span>
 				</div>
 			</div>
 
 			<div class="menu-item-settings wp-clearfix" id="menu-item-settings-<?php echo $item_id; ?>">
-				<?php if ( 'custom' == $item->type ) : ?>
+				<?php if ( 'custom' === $item->type ) : ?>
 					<p class="field-url description description-wide">
 						<label for="edit-menu-item-url-<?php echo $item_id; ?>">
 							<?php _e( 'URL' ); ?><br />
@@ -180,7 +208,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 				<p class="field-css-classes description description-thin">
 					<label for="edit-menu-item-classes-<?php echo $item_id; ?>">
 						<?php _e( 'CSS Classes (optional)' ); ?><br />
-						<input type="text" id="edit-menu-item-classes-<?php echo $item_id; ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo $item_id; ?>]" value="<?php echo esc_attr( implode(' ', $item->classes ) ); ?>" />
+						<input type="text" id="edit-menu-item-classes-<?php echo $item_id; ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo $item_id; ?>]" value="<?php echo esc_attr( implode( ' ', $item->classes ) ); ?>" />
 					</label>
 				</p>
 				<p class="field-xfn description description-thin">
@@ -193,7 +221,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 					<label for="edit-menu-item-description-<?php echo $item_id; ?>">
 						<?php _e( 'Description' ); ?><br />
 						<textarea id="edit-menu-item-description-<?php echo $item_id; ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description[<?php echo $item_id; ?>]"><?php echo esc_html( $item->description ); // textarea_escaped ?></textarea>
-						<span class="description"><?php _e('The description will be displayed in the menu if the current theme supports it.'); ?></span>
+						<span class="description"><?php _e( 'The description will be displayed in the menu if the current theme supports it.' ); ?></span>
 					</label>
 				</p>
 
@@ -209,21 +237,45 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 				<div class="menu-item-actions description-wide submitbox">
 					<?php if ( 'custom' != $item->type && $original_title !== false ) : ?>
 						<p class="link-to-original">
-							<?php printf( __('Original: %s'), '<a href="' . esc_attr( $item->url ) . '">' . esc_html( $original_title ) . '</a>' ); ?>
+							<?php printf( __( 'Original: %s' ), '<a href="' . esc_attr( $item->url ) . '">' . esc_html( $original_title ) . '</a>' ); ?>
 						</p>
 					<?php endif; ?>
-					<a class="item-delete submitdelete deletion" id="delete-<?php echo $item_id; ?>" href="<?php
-					echo wp_nonce_url(
-						add_query_arg(
-							array(
-								'action' => 'delete-menu-item',
-								'menu-item' => $item_id,
+
+					<?php
+					printf(
+						'<a class="item-delete submitdelete deletion" id="delete-%s" href="%s">%s</a>',
+						$item_id,
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'action'    => 'delete-menu-item',
+									'menu-item' => $item_id,
+								),
+								admin_url( 'nav-menus.php' )
 							),
-							admin_url( 'nav-menus.php' )
+							'delete-menu_item_' . $item_id
 						),
-						'delete-menu_item_' . $item_id
-					); ?>"><?php _e( 'Remove' ); ?></a> <span class="meta-sep hide-if-no-js"> | </span> <a class="item-cancel submitcancel hide-if-no-js" id="cancel-<?php echo $item_id; ?>" href="<?php echo esc_url( add_query_arg( array( 'edit-menu-item' => $item_id, 'cancel' => time() ), admin_url( 'nav-menus.php' ) ) );
-						?>#menu-item-settings-<?php echo $item_id; ?>"><?php _e('Cancel'); ?></a>
+						__( 'Remove' )
+					);
+					?>
+					<span class="meta-sep hide-if-no-js"> | </span>
+					<?php
+					printf(
+						'<a class="item-cancel submitcancel hide-if-no-js" id="cancel-%s" href="%s#menu-item-settings-%s">%s</a>',
+						$item_id,
+						esc_url(
+							add_query_arg(
+								array(
+									'edit-menu-item' => $item_id,
+									'cancel'         => time(),
+								),
+								admin_url( 'nav-menus.php' )
+							)
+						),
+						$item_id,
+						__( 'Cancel' )
+					);
+					?>
 				</div>
 
 				<input class="menu-item-data-db-id" type="hidden" name="menu-item-db-id[<?php echo $item_id; ?>]" value="<?php echo $item_id; ?>" />

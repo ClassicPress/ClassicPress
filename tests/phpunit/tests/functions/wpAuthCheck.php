@@ -5,7 +5,7 @@
  *
  * Tests for the behavior of `wp_auth_check()`
  */
-class Tests_Functions_WP_Auth_Check extends WP_UnitTestCase {
+class Tests_Functions_wpAuthCheck extends WP_UnitTestCase {
 
 	/**
 	 * Run with user not logged in.
@@ -49,10 +49,10 @@ class Tests_Functions_WP_Auth_Check extends WP_UnitTestCase {
 
 		$GLOBALS['login_grace_period'] = 1;
 
-		$expected = array(
+		$expected  = array(
 			'wp-auth-check' => false,
 		);
-		$actual = wp_auth_check( array() );
+		$actual    = wp_auth_check( array() );
 		$logged_in = is_user_logged_in();
 
 		// Leave the global state unchanged

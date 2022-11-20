@@ -36,7 +36,7 @@ function register_rest_route( $namespace, $route, $args = array(), $override = f
 		 */
 		_doing_it_wrong( 'register_rest_route', __( 'Routes must be namespaced with plugin or theme name and version.' ), 'WP-4.4.0' );
 		return false;
-	} else if ( empty( $route ) ) {
+	} elseif ( empty( $route ) ) {
 		_doing_it_wrong( 'register_rest_route', __( 'Route must be specified.' ), 'WP-4.4.0' );
 		return false;
 	}
@@ -54,9 +54,9 @@ function register_rest_route( $namespace, $route, $args = array(), $override = f
 	}
 
 	$defaults = array(
-		'methods'         => 'GET',
-		'callback'        => null,
-		'args'            => array(),
+		'methods'  => 'GET',
+		'callback' => null,
+		'args'     => array(),
 	);
 	foreach ( $args as $key => &$arg_group ) {
 		if ( ! is_numeric( $key ) ) {
@@ -64,7 +64,7 @@ function register_rest_route( $namespace, $route, $args = array(), $override = f
 			continue;
 		}
 
-		$arg_group = array_merge( $defaults, $arg_group );
+		$arg_group         = array_merge( $defaults, $arg_group );
 		$arg_group['args'] = array_merge( $common_args, $arg_group['args'] );
 
 		if ( ! isset( $arg_group['permission_callback'] ) ) {
@@ -155,10 +155,10 @@ function rest_api_init() {
 function rest_api_register_rewrites() {
 	global $wp_rewrite;
 
-	add_rewrite_rule( '^' . rest_get_url_prefix() . '/?$','index.php?rest_route=/','top' );
-	add_rewrite_rule( '^' . rest_get_url_prefix() . '/(.*)?','index.php?rest_route=/$matches[1]','top' );
-	add_rewrite_rule( '^' . $wp_rewrite->index . '/' . rest_get_url_prefix() . '/?$','index.php?rest_route=/','top' );
-	add_rewrite_rule( '^' . $wp_rewrite->index . '/' . rest_get_url_prefix() . '/(.*)?','index.php?rest_route=/$matches[1]','top' );
+	add_rewrite_rule( '^' . rest_get_url_prefix() . '/?$', 'index.php?rest_route=/', 'top' );
+	add_rewrite_rule( '^' . rest_get_url_prefix() . '/(.*)?', 'index.php?rest_route=/$matches[1]', 'top' );
+	add_rewrite_rule( '^' . $wp_rewrite->index . '/' . rest_get_url_prefix() . '/?$', 'index.php?rest_route=/', 'top' );
+	add_rewrite_rule( '^' . $wp_rewrite->index . '/' . rest_get_url_prefix() . '/(.*)?', 'index.php?rest_route=/$matches[1]', 'top' );
 }
 
 /**
@@ -346,7 +346,7 @@ function get_rest_url( $blog_id = null, $path = '/', $scheme = 'rest' ) {
 
 	if ( is_ssl() ) {
 		// If the current host is the same as the REST URL host, force the REST URL scheme to HTTPS.
-		if ( $_SERVER['SERVER_NAME'] === parse_url( get_home_url( $blog_id ), PHP_URL_HOST ) ) {
+		if ( parse_url( get_home_url( $blog_id ), PHP_URL_HOST ) === $_SERVER['SERVER_NAME'] ) {
 			$url = set_url_scheme( $url, 'https' );
 		}
 	}
@@ -431,7 +431,7 @@ function rest_get_server() {
 		 * @param string $class_name The name of the server class. Default 'WP_REST_Server'.
 		 */
 		$wp_rest_server_class = apply_filters( 'wp_rest_server_class', 'WP_REST_Server' );
-		$wp_rest_server = new $wp_rest_server_class;
+		$wp_rest_server       = new $wp_rest_server_class;
 
 		/**
 		 * Fires when preparing to serve an API request.
@@ -585,7 +585,7 @@ function rest_handle_options_request( $response, $handler, $request ) {
 	}
 
 	$response = new WP_REST_Response();
-	$data = array();
+	$data     = array();
 
 	foreach ( $handler->get_routes() as $route => $endpoints ) {
 		$match = preg_match( '@^' . $route . '$@i', $request->get_route() );
@@ -667,7 +667,7 @@ function rest_filter_response_fields( $response, $server, $request ) {
 
 	$data = $response->get_data();
 
-	$fields = is_array( $request['_fields']  ) ? $request['_fields'] : preg_split( '/[\s,]+/', $request['_fields'] );
+	$fields = is_array( $request['_fields'] ) ? $request['_fields'] : preg_split( '/[\s,]+/', $request['_fields'] );
 
 	if ( 0 === count( $fields ) ) {
 		return $response;
@@ -883,9 +883,9 @@ function rest_get_date_with_gmt( $date, $is_utc = false ) {
 	// cases.
 	if ( ! $is_utc && ! $has_timezone ) {
 		$local = date( 'Y-m-d H:i:s', $date );
-		$utc = get_gmt_from_date( $local );
+		$utc   = get_gmt_from_date( $local );
 	} else {
-		$utc = date( 'Y-m-d H:i:s', $date );
+		$utc   = date( 'Y-m-d H:i:s', $date );
 		$local = get_date_from_gmt( $utc );
 	}
 
@@ -998,7 +998,7 @@ function rest_is_ip_address( $ip ) {
  */
 function rest_sanitize_boolean( $value ) {
 	// String values are translated to `true`; make sure 'false' is false.
-	if ( is_string( $value )  ) {
+	if ( is_string( $value ) ) {
 		$value = strtolower( $value );
 		if ( in_array( $value, array( 'false', '0' ), true ) ) {
 			$value = false;
@@ -1006,7 +1006,7 @@ function rest_sanitize_boolean( $value ) {
 	}
 
 	// Everything else will map nicely to boolean.
-	return (boolean) $value;
+	return (bool) $value;
 }
 
 /**
@@ -1140,8 +1140,8 @@ function rest_validate_value_from_schema( $value, $args, $param = '' ) {
 		}
 	}
 
-	if ( in_array( $args['type'], array( 'integer', 'number' ) ) && ! is_numeric( $value ) ) {
-		/* translators: 1: parameter, 2: type name */
+	if ( in_array( $args['type'], array( 'integer', 'number' ), true ) && ! is_numeric( $value ) ) {
+		/* translators: 1: Parameter, 2: Type name. */
 		return new WP_Error( 'rest_invalid_param', sprintf( __( '%1$s is not of type %2$s.' ), $param, $args['type'] ) );
 	}
 
@@ -1162,18 +1162,18 @@ function rest_validate_value_from_schema( $value, $args, $param = '' ) {
 
 	if ( isset( $args['format'] ) ) {
 		switch ( $args['format'] ) {
-			case 'date-time' :
+			case 'date-time':
 				if ( ! rest_parse_date( $value ) ) {
 					return new WP_Error( 'rest_invalid_date', __( 'Invalid date.' ) );
 				}
 				break;
 
-			case 'email' :
+			case 'email':
 				if ( ! is_email( $value ) ) {
 					return new WP_Error( 'rest_invalid_email', __( 'Invalid email address.' ) );
 				}
 				break;
-			case 'ip' :
+			case 'ip':
 				if ( ! rest_is_ip_address( $value ) ) {
 					/* translators: %s: IP address */
 					return new WP_Error( 'rest_invalid_param', sprintf( __( '%s is not a valid IP address.' ), $value ) );
@@ -1286,19 +1286,19 @@ function rest_sanitize_value_from_schema( $value, $args ) {
 
 	if ( isset( $args['format'] ) ) {
 		switch ( $args['format'] ) {
-			case 'date-time' :
+			case 'date-time':
 				return sanitize_text_field( $value );
 
-			case 'email' :
+			case 'email':
 				/*
 				 * sanitize_email() validates, which would be unexpected.
 				 */
 				return sanitize_text_field( $value );
 
-			case 'uri' :
+			case 'uri':
 				return esc_url_raw( $value );
 
-			case 'ip' :
+			case 'ip':
 				return sanitize_text_field( $value );
 		}
 	}

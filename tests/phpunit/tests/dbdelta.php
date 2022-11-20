@@ -15,49 +15,87 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	protected $max_index_length = 191;
 
 	/**
+	 * Database engine used for creating tables.
+	 *
+	 * Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
+	 */
+	protected $db_engine = '';
+
+	/**
+	 * The database server version.
+	 *
+	 * @var string
+	 */
+	private static $db_version;
+
+	/**
+	 * Full database server information.
+	 *
+	 * @var string
+	 */
+	private static $db_server_info;
+
+	/**
 	 * Make sure the upgrade code is loaded before the tests are run.
 	 */
-	public static function setUpBeforeClass() {
+	public static function set_up_before_class() {
 
-		parent::setUpBeforeClass();
+		global $wpdb;
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		parent::set_up_before_class();
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		self::$db_version     = $wpdb->db_version();
+		self::$db_server_info = $wpdb->db_server_info();
 	}
 
 	/**
 	 * Create a custom table to be used in each test.
 	 */
-	public function setUp() {
+	public function set_up() {
 
 		global $wpdb;
 
-		// Forcing MyISAM, because InnoDB only started supporting FULLTEXT indexes in MySQL 5.7.
+		if ( version_compare( self::$db_version, '5.7', '<' ) ) {
+			// Prior to MySQL 5.7, InnoDB did not support FULLTEXT indexes, so MyISAM is used instead.
+			$this->db_engine = 'ENGINE=MyISAM';
+		}
+
 		$wpdb->query(
-			"
-			CREATE TABLE {$wpdb->prefix}dbdelta_test (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				column_1 varchar(255) NOT NULL,
-				column_2 text,
-				column_3 blob,
-				PRIMARY KEY  (id),
-				KEY key_1 (column_1($this->max_index_length)),
-				KEY compound_key (id,column_1($this->max_index_length)),
-				FULLTEXT KEY fulltext_key (column_1)
-			) ENGINE=MyISAM
-			"
+			$wpdb->prepare(
+				"
+				CREATE TABLE {$wpdb->prefix}dbdelta_test (" .
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					'id bigint(20) NOT NULL AUTO_INCREMENT,
+					column_1 varchar(255) NOT NULL,
+					column_2 text,
+					column_3 blob,
+					PRIMARY KEY  (id),
+					KEY key_1 (column_1(%d)),
+					KEY compound_key (id,column_1(%d)),
+					FULLTEXT KEY fulltext_key (column_1)' .
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				") {$this->db_engine}
+				",
+				$this->max_index_length,
+				$this->max_index_length
+			)
 		);
 
-		parent::setUp();
+		// This has to be called after the `CREATE TABLE` above as the `_create_temporary_tables` filter
+		// causes it to create a temporary table, and a temporary table cannot use a FULLTEXT index.
+		parent::set_up();
 	}
 
 	/**
 	 * Delete the custom table on teardown.
 	 */
-	public function tearDown() {
+	public function tear_down() {
 
 		global $wpdb;
 
-		parent::tearDown();
+		parent::tear_down();
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dbdelta_test" );
 	}
@@ -81,17 +119,17 @@ class Tests_dbDelta extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			"{$wpdb->prefix}dbdelta_create_test" => "Created table {$wpdb->prefix}dbdelta_create_test"
+			"{$wpdb->prefix}dbdelta_create_test" => "Created table {$wpdb->prefix}dbdelta_create_test",
 		);
 
-		$this->assertEquals( $expected, $updates );
+		$this->assertSame( $expected, $updates );
 
-		$this->assertEquals(
-			"{$wpdb->prefix}dbdelta_create_test"
-			, $wpdb->get_var(
+		$this->assertSame(
+			"{$wpdb->prefix}dbdelta_create_test",
+			$wpdb->get_var(
 				$wpdb->prepare(
-					'SHOW TABLES LIKE %s'
-					, $wpdb->esc_like( "{$wpdb->prefix}dbdelta_create_test" )
+					'SHOW TABLES LIKE %s',
+					$wpdb->esc_like( "{$wpdb->prefix}dbdelta_create_test" )
 				)
 			)
 		);
@@ -118,7 +156,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 	}
 
 	/**
@@ -141,12 +179,25 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$bigint_display_width = '(20)';
+
+		/*
+		 * MySQL 8.0.17 or later does not support display width for integer data types,
+		 * so if display width is the only difference, it can be safely ignored.
+		 * Note: This is specific to MySQL and does not affect MariaDB.
+		 */
+		if ( version_compare( self::$db_version, '8.0.17', '>=' )
+			&& ! str_contains( self::$db_server_info, 'MariaDB' )
+		) {
+			$bigint_display_width = '';
+		}
+
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.id"
-					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint(20) to int(11)"
-			)
-			, $updates
+					=> "Changed type of {$wpdb->prefix}dbdelta_test.id from bigint{$bigint_display_width} to int(11)",
+			),
+			$updates
 		);
 	}
 
@@ -170,16 +221,16 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
-					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col"
-			)
-			, $updates
+					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
+			),
+			$updates
 		);
 
 		$this->assertTableHasColumn( 'column_1', $wpdb->prefix . 'dbdelta_test' );
-		$this->assertTableHasPrimaryKey( 'id' , $wpdb->prefix . 'dbdelta_test' );
+		$this->assertTableHasPrimaryKey( 'id', $wpdb->prefix . 'dbdelta_test' );
 	}
 
 	/**
@@ -203,7 +254,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 		);
 
-		$this->assertEquals( array(), $updates );
+		$this->assertSame( array(), $updates );
 
 		$this->assertTableHasColumn( 'column_1', $wpdb->prefix . 'dbdelta_test' );
 	}
@@ -226,16 +277,16 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY key_1 (column_1({$this->max_index_length})),
 				KEY compound_key (id,column_1($this->max_index_length))
 			)
-			"
-			, false // Don't execute.
+			",
+			false // Don't execute.
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.extra_col"
-					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col"
-			)
-			, $updates
+					=> "Added column {$wpdb->prefix}dbdelta_test.extra_col",
+			),
+			$updates
 		);
 
 		$this->assertTableHasNotColumn( 'extra_col', $wpdb->prefix . 'dbdelta_test' );
@@ -244,19 +295,19 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * Test inserting into the database
 	 */
-	public function test_insert_into_table(){
+	public function test_insert_into_table() {
 		global $wpdb;
 
 		$insert = dbDelta(
 			"INSERT INTO {$wpdb->prefix}dbdelta_test (column_1) VALUES ('wcphilly2015')"
 		);
 
-		$this->assertEquals(
-			array( )
-			, $insert
+		$this->assertSame(
+			array(),
+			$insert
 		);
 
-		$this->assertTableRowHasValue( 'column_1', 'wcphilly2015',  $wpdb->prefix . 'dbdelta_test' );
+		$this->assertTableRowHasValue( 'column_1', 'wcphilly2015', $wpdb->prefix . 'dbdelta_test' );
 
 	}
 
@@ -277,7 +328,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			)
-			", false
+			",
+			false
 		);
 
 		$this->assertEmpty( $updates );
@@ -297,10 +349,11 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	protected function assertTableRowHasValue( $column, $value, $table ) {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$table_row = $wpdb->get_row( "select $column from {$table} where $column = '$value'" );
 
 		$expected = (object) array(
-		    $column => $value
+			$column => $value,
 		);
 
 		$this->assertEquals( $expected, $table_row );
@@ -315,7 +368,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	protected function assertTableHasColumn( $column, $table ) {
 		global $wpdb;
 
-		$table_fields = $wpdb->get_results( "DESCRIBE {$table}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$table_fields = $wpdb->get_results( "DESCRIBE $table" );
 
 		$this->assertCount( 1, wp_list_filter( $table_fields, array( 'Field' => $column ) ) );
 	}
@@ -328,12 +382,23 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	 * @param string $column The column for the primary key.
 	 * @param string $table  The database table name.
 	 */
-	protected function assertTableHasPrimaryKey( $column , $table ) {
+	protected function assertTableHasPrimaryKey( $column, $table ) {
 		global $wpdb;
 
-		$table_indices = $wpdb->get_results( "SHOW INDEX FROM {$table}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$table_indices = $wpdb->get_results( "SHOW INDEX FROM $table" );
 
-		$this->assertCount( 1, wp_list_filter( $table_indices, array( 'Key_name' => 'PRIMARY' , 'Column_name' => $column ) , 'AND' ) );
+		$this->assertCount(
+			1,
+			wp_list_filter(
+				$table_indices,
+				array(
+					'Key_name'    => 'PRIMARY',
+					'Column_name' => $column,
+				),
+				'AND'
+			)
+		);
 	}
 
 	/**
@@ -346,7 +411,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		global $wpdb;
 
-		$table_fields = $wpdb->get_results( "DESCRIBE {$table}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$table_fields = $wpdb->get_results( "DESCRIBE $table" );
 
 		$this->assertCount( 0, wp_list_filter( $table_fields, array( 'Field' => $column ) ) );
 	}
@@ -373,16 +439,19 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY a_key (a)
 			) ENGINE=InnoDB ROW_FORMAT=DYNAMIC";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $create );
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$index = $wpdb->get_row( "SHOW INDEXES FROM $table_name WHERE Key_name='a_key';" );
 
 		$actual = dbDelta( $create, false );
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DROP TABLE IF EXISTS $table_name;" );
 
-		if ( 191 != $index->Sub_part ) {
-			$this->markTestSkipped( "This test requires the index to be truncated." );
+		if ( 191 !== $index->Sub_part ) {
+			$this->markTestSkipped( 'This test requires the index to be truncated.' );
 		}
 
 		$this->assertSame( array(), $actual );
@@ -406,7 +475,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertSame( array(), $result );
 	}
@@ -429,7 +500,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertSame( array(), $result );
 	}
@@ -452,13 +525,17 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.column_2"
-					=> "Changed type of {$wpdb->prefix}dbdelta_test.column_2 from text to bigtext"
-			), $result );
+					=> "Changed type of {$wpdb->prefix}dbdelta_test.column_2 from text to bigtext",
+			),
+			$result
+		);
 	}
 
 	/**
@@ -479,13 +556,17 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.column_3"
-					=> "Changed type of {$wpdb->prefix}dbdelta_test.column_3 from blob to mediumblob"
-			), $result );
+					=> "Changed type of {$wpdb->prefix}dbdelta_test.column_3 from blob to mediumblob",
+			),
+			$result
+		);
 	}
 
 	/**
@@ -503,6 +584,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			)
 		";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $schema );
 
 		$updates = dbDelta( $schema, false );
@@ -518,20 +600,34 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	function test_spatial_indices() {
 		global $wpdb;
 
-		if ( version_compare( $wpdb->db_version(), '5.4', '<' ) ) {
+		if ( version_compare( self::$db_version, '5.4', '<' ) ) {
 			$this->markTestSkipped( 'Spatial indices require MySQL 5.4 and above.' );
+		}
+
+		$geometrycollection_name = 'geometrycollection';
+
+		if ( version_compare( self::$db_version, '8.0.11', '>=' )
+			&& ! str_contains( self::$db_server_info, 'MariaDB' )
+		) {
+			/*
+			 * MySQL 8.0.11 or later uses GeomCollection data type name
+			 * as the preferred synonym for GeometryCollection.
+			 * Note: This is specific to MySQL and does not affect MariaDB.
+			 */
+			$geometrycollection_name = 'geomcollection';
 		}
 
 		$schema =
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-				spatial_value geometrycollection NOT NULL,
+				spatial_value {$geometrycollection_name} NOT NULL,
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 			) ENGINE=MyISAM;
 			";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $schema );
 
 		$updates = dbDelta( $schema, false );
@@ -542,8 +638,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			"
 			CREATE TABLE {$wpdb->prefix}spatial_index_test (
 				non_spatial bigint(20) unsigned NOT NULL,
-				spatial_value geometrycollection NOT NULL,
-				spatial_value2 geometrycollection NOT NULL,
+				spatial_value {$geometrycollection_name} NOT NULL,
+				spatial_value2 {$geometrycollection_name} NOT NULL,
 				KEY non_spatial (non_spatial),
 				SPATIAL KEY spatial_key (spatial_value)
 				SPATIAL KEY spatial_key2 (spatial_value2)
@@ -552,10 +648,13 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		$updates = dbDelta( $schema, false );
 
-		$this->assertSame( array(
-			"{$wpdb->prefix}spatial_index_test.spatial_value2" => "Added column {$wpdb->prefix}spatial_index_test.spatial_value2",
-			"Added index {$wpdb->prefix}spatial_index_test SPATIAL KEY `spatial_key2` (`spatial_value2`)"
-			), $updates );
+		$this->assertSame(
+			array(
+				"{$wpdb->prefix}spatial_index_test.spatial_value2" => "Added column {$wpdb->prefix}spatial_index_test.spatial_value2",
+				"Added index {$wpdb->prefix}spatial_index_test SPATIAL KEY `spatial_key2` (`spatial_value2`)",
+			),
+			$updates
+		);
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}spatial_index_test" );
 	}
@@ -575,11 +674,12 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			)
 		";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $schema );
 
 		$updates = dbDelta( $schema );
 
-		$table_indices = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dbdelta_test2" );
+		$table_indices      = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dbdelta_test2" );
 		$compound_key_index = wp_list_filter( $table_indices, array( 'Key_name' => 'compound_key' ) );
 
 		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dbdelta_test2" );
@@ -613,12 +713,12 @@ class Tests_dbDelta extends WP_UnitTestCase {
 
 		$table_indices = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dbdelta_test" );
 
-		$this->assertCount( 2, wp_list_filter( $table_indices, array( 'Key_name' => 'compound_key2' ) , 'AND' ) );
+		$this->assertCount( 2, wp_list_filter( $table_indices, array( 'Key_name' => 'compound_key2' ), 'AND' ) );
 
 		$this->assertSame(
 			array(
 				"{$wpdb->prefix}dbdelta_test.references" => "Added column {$wpdb->prefix}dbdelta_test.references",
-				0 => "Added index {$wpdb->prefix}dbdelta_test KEY `compound_key2` (`id`,`references`($this->max_index_length))",
+				0                                        => "Added index {$wpdb->prefix}dbdelta_test KEY `compound_key2` (`id`,`references`($this->max_index_length))",
 			),
 			$updates
 		);
@@ -627,7 +727,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/20263
 	 */
-	function test_wp_get_db_schema_does_no_alter_queries_on_existing_install() {
+	public function test_wp_get_db_schema_does_not_alter_queries_on_existing_install() {
 		$updates = dbDelta( wp_get_db_schema() );
 
 		$this->assertEmpty( $updates );
@@ -843,7 +943,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compOUND_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY FULLtext_kEY (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertEmpty( $updates );
 	}
@@ -866,7 +968,9 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY compound_key (id,column_1($this->max_index_length)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			", false );
+			",
+			false
+		);
 
 		$this->assertEmpty( $updates );
 	}
@@ -890,11 +994,15 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY changing_key_length (column_1(20)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			" );
+			"
+		);
 
-		$this->assertSame( array(
-			"Added index {$wpdb->prefix}dbdelta_test KEY `changing_key_length` (`column_1`(20))"
-		), $updates );
+		$this->assertSame(
+			array(
+				"Added index {$wpdb->prefix}dbdelta_test KEY `changing_key_length` (`column_1`(20))",
+			),
+			$updates
+		);
 
 		$updates = dbDelta(
 			"
@@ -909,7 +1017,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY changing_key_length (column_1(50)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			" );
+			"
+		);
 
 		$this->assertEmpty( $updates );
 
@@ -926,7 +1035,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY changing_key_length (column_1(1)),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			" );
+			"
+		);
 
 		$this->assertEmpty( $updates );
 
@@ -943,7 +1053,8 @@ class Tests_dbDelta extends WP_UnitTestCase {
 				KEY changing_key_length (column_1),
 				FULLTEXT KEY fulltext_key (column_1)
 			) ENGINE=MyISAM
-			" );
+			"
+		);
 
 		$this->assertEmpty( $updates );
 	}
@@ -960,6 +1071,7 @@ class Tests_dbDelta extends WP_UnitTestCase {
 			)
 		";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $schema );
 
 		$schema_update = "

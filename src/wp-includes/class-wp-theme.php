@@ -193,8 +193,9 @@ final class WP_Theme implements ArrayAccess {
 			self::$persistently_cache = apply_filters( 'wp_cache_themes_persistently', false, 'WP_Theme' );
 			if ( self::$persistently_cache ) {
 				wp_cache_add_global_groups( 'themes' );
-				if ( is_int( self::$persistently_cache ) )
+				if ( is_int( self::$persistently_cache ) ) {
 					self::$cache_expiration = self::$persistently_cache;
+				}
 			} else {
 				wp_cache_add_non_persistent_groups( 'themes' );
 			}
@@ -204,62 +205,98 @@ final class WP_Theme implements ArrayAccess {
 		$this->stylesheet = $theme_dir;
 
 		// Correct a situation where the theme is 'some-directory/some-theme' but 'some-directory' was passed in as part of the theme root instead.
-		if ( ! in_array( $theme_root, (array) $wp_theme_directories ) && in_array( dirname( $theme_root ), (array) $wp_theme_directories ) ) {
+		if ( ! in_array( $theme_root, (array) $wp_theme_directories, true )
+			&& in_array( dirname( $theme_root ), (array) $wp_theme_directories, true )
+		) {
 			$this->stylesheet = basename( $this->theme_root ) . '/' . $this->stylesheet;
 			$this->theme_root = dirname( $theme_root );
 		}
 
 		$this->cache_hash = md5( $this->theme_root . '/' . $this->stylesheet );
-		$theme_file = $this->stylesheet . '/style.css';
+		$theme_file       = $this->stylesheet . '/style.css';
 
 		$cache = $this->cache_get( 'theme' );
 
 		if ( is_array( $cache ) ) {
 			foreach ( array( 'errors', 'headers', 'template' ) as $key ) {
-				if ( isset( $cache[ $key ] ) )
+				if ( isset( $cache[ $key ] ) ) {
 					$this->$key = $cache[ $key ];
+				}
 			}
-			if ( $this->errors )
+			if ( $this->errors ) {
 				return;
-			if ( isset( $cache['theme_root_template'] ) )
+			}
+			if ( isset( $cache['theme_root_template'] ) ) {
 				$theme_root_template = $cache['theme_root_template'];
+			}
 		} elseif ( ! file_exists( $this->theme_root . '/' . $theme_file ) ) {
 			$this->headers['Name'] = $this->stylesheet;
-			if ( ! file_exists( $this->theme_root . '/' . $this->stylesheet ) )
+			if ( ! file_exists( $this->theme_root . '/' . $this->stylesheet ) ) {
 				$this->errors = new WP_Error( 'theme_not_found', sprintf( __( 'The theme directory "%s" does not exist.' ), esc_html( $this->stylesheet ) ) );
-			else
+			} else {
 				$this->errors = new WP_Error( 'theme_no_stylesheet', __( 'Stylesheet is missing.' ) );
+			}
 			$this->template = $this->stylesheet;
-			$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template ) );
-			if ( ! file_exists( $this->theme_root ) ) // Don't cache this one.
+			$this->cache_add(
+				'theme',
+				array(
+					'headers'    => $this->headers,
+					'errors'     => $this->errors,
+					'stylesheet' => $this->stylesheet,
+					'template'   => $this->template,
+				)
+			);
+			if ( ! file_exists( $this->theme_root ) ) { // Don't cache this one.
 				$this->errors->add( 'theme_root_missing', __( 'ERROR: The themes directory is either empty or doesn&#8217;t exist. Please check your installation.' ) );
+			}
 			return;
 		} elseif ( ! is_readable( $this->theme_root . '/' . $theme_file ) ) {
 			$this->headers['Name'] = $this->stylesheet;
-			$this->errors = new WP_Error( 'theme_stylesheet_not_readable', __( 'Stylesheet is not readable.' ) );
-			$this->template = $this->stylesheet;
-			$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template ) );
+			$this->errors          = new WP_Error( 'theme_stylesheet_not_readable', __( 'Stylesheet is not readable.' ) );
+			$this->template        = $this->stylesheet;
+			$this->cache_add(
+				'theme',
+				array(
+					'headers'    => $this->headers,
+					'errors'     => $this->errors,
+					'stylesheet' => $this->stylesheet,
+					'template'   => $this->template,
+				)
+			);
 			return;
 		} else {
 			$this->headers = get_file_data( $this->theme_root . '/' . $theme_file, self::$file_headers, 'theme' );
 			// Default themes always trump their pretenders.
 			// Properly identify default themes that are inside a directory within wp-content/themes.
-			if ( $default_theme_slug = array_search( $this->headers['Name'], self::$default_themes ) ) {
-				if ( basename( $this->stylesheet ) != $default_theme_slug )
+			$default_theme_slug = array_search( $this->headers['Name'], self::$default_themes, true );
+			if ( $default_theme_slug ) {
+				if ( basename( $this->stylesheet ) != $default_theme_slug ) {
 					$this->headers['Name'] .= '/' . $this->stylesheet;
+				}
 			}
 		}
 
 		if ( ! $this->template && $this->stylesheet === $this->headers['Template'] ) {
 			/* translators: %s: Template */
 			$this->errors = new WP_Error( 'theme_child_invalid', sprintf( __( 'The theme defines itself as its parent theme. Please check the %s header.' ), '<code>Template</code>' ) );
-			$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet ) );
+			$this->cache_add(
+				'theme',
+				array(
+					'headers'    => $this->headers,
+					'errors'     => $this->errors,
+					'stylesheet' => $this->stylesheet,
+				)
+			);
 
 			return;
 		}
 
 		// (If template is set from cache [and there are no errors], we know it's good.)
-		if ( ! $this->template && ! ( $this->template = $this->headers['Template'] ) ) {
+		if ( ! $this->template ) {
+			$this->template = $this->headers['Template'];
+		}
+
+		if ( ! $this->template ) {
 			$this->template = $this->stylesheet;
 			if ( ! file_exists( $this->theme_root . '/' . $this->stylesheet . '/index.php' ) ) {
 				$error_message = sprintf(
@@ -270,7 +307,15 @@ final class WP_Theme implements ArrayAccess {
 					'<code>style.css</code>'
 				);
 				$this->errors = new WP_Error( 'theme_no_index', $error_message );
-				$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template ) );
+				$this->cache_add(
+					'theme',
+					array(
+						'headers'    => $this->headers,
+						'errors'     => $this->errors,
+						'stylesheet' => $this->stylesheet,
+						'template'   => $this->template,
+					)
+				);
 				return;
 			}
 		}
@@ -280,16 +325,26 @@ final class WP_Theme implements ArrayAccess {
 			// If we're in a directory of themes inside /themes, look for the parent nearby.
 			// wp-content/themes/directory-of-themes/*
 			$parent_dir = dirname( $this->stylesheet );
-			if ( '.' != $parent_dir && file_exists( $this->theme_root . '/' . $parent_dir . '/' . $this->template . '/index.php' ) ) {
+			$directories = search_theme_directories();
+
+			if ( '.' !== $parent_dir && file_exists( $this->theme_root . '/' . $parent_dir . '/' . $this->template . '/index.php' ) ) {
 				$this->template = $parent_dir . '/' . $this->template;
-			} elseif ( ( $directories = search_theme_directories() ) && isset( $directories[ $this->template ] ) ) {
+			} elseif ( $directories && isset( $directories[ $this->template ] ) ) {
 				// Look for the template in the search_theme_directories() results, in case it is in another theme root.
 				// We don't look into directories of themes, just the theme root.
 				$theme_root_template = $directories[ $this->template ]['theme_root'];
 			} else {
 				// Parent theme is missing.
 				$this->errors = new WP_Error( 'theme_no_parent', sprintf( __( 'The parent theme is missing. Please install the "%s" parent theme.' ), esc_html( $this->template ) ) );
-				$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template ) );
+				$this->cache_add(
+					'theme',
+					array(
+						'headers'    => $this->headers,
+						'errors'     => $this->errors,
+						'stylesheet' => $this->stylesheet,
+						'template'   => $this->template,
+					)
+				);
 				$this->parent = new WP_Theme( $this->template, $this->theme_root, $this );
 				return;
 			}
@@ -301,11 +356,27 @@ final class WP_Theme implements ArrayAccess {
 			if ( $_child instanceof WP_Theme && $_child->template == $this->stylesheet ) {
 				$_child->parent = null;
 				$_child->errors = new WP_Error( 'theme_parent_invalid', sprintf( __( 'The "%s" theme is not a valid parent theme.' ), esc_html( $_child->template ) ) );
-				$_child->cache_add( 'theme', array( 'headers' => $_child->headers, 'errors' => $_child->errors, 'stylesheet' => $_child->stylesheet, 'template' => $_child->template ) );
+				$_child->cache_add(
+					'theme',
+					array(
+						'headers'    => $_child->headers,
+						'errors'     => $_child->errors,
+						'stylesheet' => $_child->stylesheet,
+						'template'   => $_child->template,
+					)
+				);
 				// The two themes actually reference each other with the Template header.
 				if ( $_child->stylesheet == $this->template ) {
 					$this->errors = new WP_Error( 'theme_parent_invalid', sprintf( __( 'The "%s" theme is not a valid parent theme.' ), esc_html( $this->template ) ) );
-					$this->cache_add( 'theme', array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template ) );
+					$this->cache_add(
+						'theme',
+						array(
+							'headers'    => $this->headers,
+							'errors'     => $this->errors,
+							'stylesheet' => $this->stylesheet,
+							'template'   => $this->template,
+						)
+					);
 				}
 				return;
 			}
@@ -315,10 +386,16 @@ final class WP_Theme implements ArrayAccess {
 
 		// We're good. If we didn't retrieve from cache, set it.
 		if ( ! is_array( $cache ) ) {
-			$cache = array( 'headers' => $this->headers, 'errors' => $this->errors, 'stylesheet' => $this->stylesheet, 'template' => $this->template );
+			$cache = array(
+				'headers'    => $this->headers,
+				'errors'     => $this->errors,
+				'stylesheet' => $this->stylesheet,
+				'template'   => $this->template,
+			);
 			// If the parent theme is in another root, we'll want to cache this. Avoids an entire branch of filesystem calls above.
-			if ( isset( $theme_root_template ) )
+			if ( isset( $theme_root_template ) ) {
 				$cache['theme_root_template'] = $theme_root_template;
+			}
 			$this->cache_add( 'theme', $cache );
 		}
 	}
@@ -331,7 +408,7 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string Theme name, ready for display (translated)
 	 */
 	public function __toString() {
-		return (string) $this->display('Name');
+		return (string) $this->display( 'Name' );
 	}
 
 	/**
@@ -346,11 +423,23 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	public function __isset( $offset ) {
 		static $properties = array(
-			'name', 'title', 'version', 'parent_theme', 'template_dir', 'stylesheet_dir', 'template', 'stylesheet',
-			'screenshot', 'description', 'author', 'tags', 'theme_root', 'theme_root_uri',
+			'name',
+			'title',
+			'version',
+			'parent_theme',
+			'template_dir',
+			'stylesheet_dir',
+			'template',
+			'stylesheet',
+			'screenshot',
+			'description',
+			'author',
+			'tags',
+			'theme_root',
+			'theme_root_uri',
 		);
 
-		return in_array( $offset, $properties );
+		return in_array( $offset, $properties, true );
 	}
 
 	/**
@@ -363,36 +452,36 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	public function __get( $offset ) {
 		switch ( $offset ) {
-			case 'name' :
-			case 'title' :
-				return $this->get('Name');
-			case 'version' :
-				return $this->get('Version');
-			case 'parent_theme' :
-				return $this->parent() ? $this->parent()->get('Name') : '';
-			case 'template_dir' :
+			case 'name':
+			case 'title':
+				return $this->get( 'Name' );
+			case 'version':
+				return $this->get( 'Version' );
+			case 'parent_theme':
+				return $this->parent() ? $this->parent()->get( 'Name' ) : '';
+			case 'template_dir':
 				return $this->get_template_directory();
-			case 'stylesheet_dir' :
+			case 'stylesheet_dir':
 				return $this->get_stylesheet_directory();
-			case 'template' :
+			case 'template':
 				return $this->get_template();
-			case 'stylesheet' :
+			case 'stylesheet':
 				return $this->get_stylesheet();
-			case 'screenshot' :
+			case 'screenshot':
 				return $this->get_screenshot( 'relative' );
 			// 'author' and 'description' did not previously return translated data.
-			case 'description' :
-				return $this->display('Description');
-			case 'author' :
-				return $this->display('Author');
-			case 'tags' :
+			case 'description':
+				return $this->display( 'Description' );
+			case 'author':
+				return $this->display( 'Author' );
+			case 'tags':
 				return $this->get( 'Tags' );
-			case 'theme_root' :
+			case 'theme_root':
 				return $this->get_theme_root();
-			case 'theme_root_uri' :
+			case 'theme_root_uri':
 				return $this->get_theme_root_uri();
 			// For cases where the array was converted to an object.
-			default :
+			default:
 				return $this->offsetGet( $offset );
 		}
 	}
@@ -428,12 +517,28 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	public function offsetExists( $offset ) {
 		static $keys = array(
-			'Name', 'Version', 'Status', 'Title', 'Author', 'Author Name', 'Author URI', 'Description',
-			'Template', 'Stylesheet', 'Template Files', 'Stylesheet Files', 'Template Dir', 'Stylesheet Dir',
-			'Screenshot', 'Tags', 'Theme Root', 'Theme Root URI', 'Parent Theme',
+			'Name',
+			'Version',
+			'Status',
+			'Title',
+			'Author',
+			'Author Name',
+			'Author URI',
+			'Description',
+			'Template',
+			'Stylesheet',
+			'Template Files',
+			'Stylesheet Files',
+			'Template Dir',
+			'Stylesheet Dir',
+			'Screenshot',
+			'Tags',
+			'Theme Root',
+			'Theme Root URI',
+			'Parent Theme',
 		);
 
-		return in_array( $offset, $keys );
+		return in_array( $offset, $keys, true );
 	}
 
 	/**
@@ -453,47 +558,47 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	public function offsetGet( $offset ) {
 		switch ( $offset ) {
-			case 'Name' :
-			case 'Title' :
+			case 'Name':
+			case 'Title':
 				/*
 				 * See note above about using translated data. get() is not ideal.
 				 * It is only for backward compatibility. Use display().
 				 */
-				return $this->get('Name');
-			case 'Author' :
-				return $this->display( 'Author');
-			case 'Author Name' :
-				return $this->display( 'Author', false);
-			case 'Author URI' :
-				return $this->display('AuthorURI');
-			case 'Description' :
-				return $this->display( 'Description');
-			case 'Version' :
-			case 'Status' :
+				return $this->get( 'Name' );
+			case 'Author':
+				return $this->display( 'Author' );
+			case 'Author Name':
+				return $this->display( 'Author', false );
+			case 'Author URI':
+				return $this->display( 'AuthorURI' );
+			case 'Description':
+				return $this->display( 'Description' );
+			case 'Version':
+			case 'Status':
 				return $this->get( $offset );
-			case 'Template' :
+			case 'Template':
 				return $this->get_template();
-			case 'Stylesheet' :
+			case 'Stylesheet':
 				return $this->get_stylesheet();
-			case 'Template Files' :
+			case 'Template Files':
 				return $this->get_files( 'php', 1, true );
-			case 'Stylesheet Files' :
+			case 'Stylesheet Files':
 				return $this->get_files( 'css', 0, false );
-			case 'Template Dir' :
+			case 'Template Dir':
 				return $this->get_template_directory();
-			case 'Stylesheet Dir' :
+			case 'Stylesheet Dir':
 				return $this->get_stylesheet_directory();
-			case 'Screenshot' :
+			case 'Screenshot':
 				return $this->get_screenshot( 'relative' );
-			case 'Tags' :
-				return $this->get('Tags');
-			case 'Theme Root' :
+			case 'Tags':
+				return $this->get( 'Tags' );
+			case 'Theme Root':
 				return $this->get_theme_root();
-			case 'Theme Root URI' :
+			case 'Theme Root URI':
 				return $this->get_theme_root_uri();
-			case 'Parent Theme' :
-				return $this->parent() ? $this->parent()->get('Name') : '';
-			default :
+			case 'Parent Theme':
+				return $this->parent() ? $this->parent()->get( 'Name' ) : '';
+			default:
 				return null;
 		}
 	}
@@ -520,7 +625,7 @@ final class WP_Theme implements ArrayAccess {
 	 * @return bool Whether the theme exists.
 	 */
 	public function exists() {
-		return ! ( $this->errors() && in_array( 'theme_not_found', $this->errors()->get_error_codes() ) );
+		return ! ( $this->errors() && in_array( 'theme_not_found', $this->errors()->get_error_codes(), true ) );
 	}
 
 	/**
@@ -569,10 +674,17 @@ final class WP_Theme implements ArrayAccess {
 	 * @since WP-3.4.0
 	 */
 	public function cache_delete() {
-		foreach ( array( 'theme', 'screenshot', 'headers', 'post_templates' ) as $key )
+		foreach ( array( 'theme', 'screenshot', 'headers', 'post_templates' ) as $key ) {
 			wp_cache_delete( $key . '-' . $this->cache_hash, 'themes' );
-		$this->template = $this->textdomain_loaded = $this->theme_root_uri = $this->parent = $this->errors = $this->headers_sanitized = $this->name_translated = null;
-		$this->headers = array();
+		}
+		$this->template          = null;
+		$this->textdomain_loaded = null;
+		$this->theme_root_uri    = null;
+		$this->parent            = null;
+		$this->errors            = null;
+		$this->headers_sanitized = null;
+		$this->name_translated   = null;
+		$this->headers  = array();
 		$this->__construct( $this->stylesheet, $this->theme_root );
 	}
 
@@ -593,22 +705,26 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string|false String on success, false on failure.
 	 */
 	public function get( $header ) {
-		if ( ! isset( $this->headers[ $header ] ) )
+		if ( ! isset( $this->headers[ $header ] ) ) {
 			return false;
+		}
 
 		if ( ! isset( $this->headers_sanitized ) ) {
 			$this->headers_sanitized = $this->cache_get( 'headers' );
-			if ( ! is_array( $this->headers_sanitized ) )
+			if ( ! is_array( $this->headers_sanitized ) ) {
 				$this->headers_sanitized = array();
+			}
 		}
 
-		if ( isset( $this->headers_sanitized[ $header ] ) )
+		if ( isset( $this->headers_sanitized[ $header ] ) ) {
 			return $this->headers_sanitized[ $header ];
+		}
 
 		// If themes are a persistent group, sanitize everything and cache it. One cache add is better than many cache sets.
 		if ( self::$persistently_cache ) {
-			foreach ( array_keys( $this->headers ) as $_header )
+			foreach ( array_keys( $this->headers ) as $_header ) {
 				$this->headers_sanitized[ $_header ] = $this->sanitize_header( $_header, $this->headers[ $_header ] );
+			}
 			$this->cache_add( 'headers', $this->headers_sanitized );
 		} else {
 			$this->headers_sanitized[ $header ] = $this->sanitize_header( $header, $this->headers[ $header ] );
@@ -633,14 +749,17 @@ final class WP_Theme implements ArrayAccess {
 			return false;
 		}
 
-		if ( $translate && ( empty( $value ) || ! $this->load_textdomain() ) )
+		if ( $translate && ( empty( $value ) || ! $this->load_textdomain() ) ) {
 			$translate = false;
+		}
 
-		if ( $translate )
+		if ( $translate ) {
 			$value = $this->translate_header( $header, $value );
+		}
 
-		if ( $markup )
+		if ( $markup ) {
 			$value = $this->markup_header( $header, $value, $translate );
+		}
 
 		return $value;
 	}
@@ -659,13 +778,13 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	private function sanitize_header( $header, $value ) {
 		switch ( $header ) {
-			case 'Status' :
+			case 'Status':
 				if ( ! $value ) {
 					$value = 'publish';
 					break;
 				}
 				// Fall through otherwise.
-			case 'Name' :
+			case 'Name':
 				static $header_tags = array(
 					'abbr'    => array( 'title' => true ),
 					'acronym' => array( 'title' => true ),
@@ -673,29 +792,32 @@ final class WP_Theme implements ArrayAccess {
 					'em'      => true,
 					'strong'  => true,
 				);
-				$value = wp_kses( $value, $header_tags );
+				$value              = wp_kses( $value, $header_tags );
 				break;
-			case 'Author' :
+			case 'Author':
 				// There shouldn't be anchor tags in Author, but some themes like to be challenging.
-			case 'Description' :
+			case 'Description':
 				static $header_tags_with_a = array(
-					'a'       => array( 'href' => true, 'title' => true ),
+					'a'       => array(
+						'href'  => true,
+						'title' => true,
+					),
 					'abbr'    => array( 'title' => true ),
 					'acronym' => array( 'title' => true ),
 					'code'    => true,
 					'em'      => true,
 					'strong'  => true,
 				);
-				$value = wp_kses( $value, $header_tags_with_a );
+				$value                     = wp_kses( $value, $header_tags_with_a );
 				break;
-			case 'ThemeURI' :
-			case 'AuthorURI' :
+			case 'ThemeURI':
+			case 'AuthorURI':
 				$value = esc_url_raw( $value );
 				break;
-			case 'Tags' :
+			case 'Tags':
 				$value = array_filter( array_map( 'trim', explode( ',', strip_tags( $value ) ) ) );
 				break;
-			case 'Version' :
+			case 'Version':
 				$value = strip_tags( $value );
 				break;
 		}
@@ -706,7 +828,7 @@ final class WP_Theme implements ArrayAccess {
 	/**
 	 * Mark up a theme header.
 	 *
-     * @since WP-3.4.0
+	 * @since WP-3.4.0
 	 *
 	 * @staticvar string $comma
 	 *
@@ -717,22 +839,22 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	private function markup_header( $header, $value, $translate ) {
 		switch ( $header ) {
-			case 'Name' :
+			case 'Name':
 				if ( empty( $value ) ) {
 					$value = esc_html( $this->get_stylesheet() );
 				}
 				break;
-			case 'Description' :
+			case 'Description':
 				$value = wptexturize( $value );
 				break;
-			case 'Author' :
-				if ( $this->get('AuthorURI') ) {
+			case 'Author':
+				if ( $this->get( 'AuthorURI' ) ) {
 					$value = sprintf( '<a href="%1$s">%2$s</a>', $this->display( 'AuthorURI', true, $translate ), $value );
 				} elseif ( ! $value ) {
 					$value = __( 'Anonymous' );
 				}
 				break;
-			case 'Tags' :
+			case 'Tags':
 				static $comma = null;
 				if ( ! isset( $comma ) ) {
 					/* translators: used between list items, there is a space after the comma */
@@ -740,8 +862,8 @@ final class WP_Theme implements ArrayAccess {
 				}
 				$value = implode( $comma, $value );
 				break;
-			case 'ThemeURI' :
-			case 'AuthorURI' :
+			case 'ThemeURI':
+			case 'AuthorURI':
 				$value = esc_url( $value );
 				break;
 		}
@@ -762,13 +884,15 @@ final class WP_Theme implements ArrayAccess {
 	 */
 	private function translate_header( $header, $value ) {
 		switch ( $header ) {
-			case 'Name' :
+			case 'Name':
 				// Cached for sorting reasons.
-				if ( isset( $this->name_translated ) )
+				if ( isset( $this->name_translated ) ) {
 					return $this->name_translated;
-				$this->name_translated = translate( $value, $this->get('TextDomain' ) );
+				}
+				// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain
+				$this->name_translated = translate( $value, $this->get( 'TextDomain' ) );
 				return $this->name_translated;
-			case 'Tags' :
+			case 'Tags':
 				if ( empty( $value ) || ! function_exists( 'get_theme_feature_list' ) ) {
 					return $value;
 				}
@@ -777,14 +901,27 @@ final class WP_Theme implements ArrayAccess {
 				if ( ! isset( $tags_list ) ) {
 					$tags_list = array(
 						// As of 4.6, deprecated tags which are only used to provide translation for older themes.
-						'black' => __( 'Black' ), 'blue' => __( 'Blue' ), 'brown'  => __( 'Brown' ),
-						'gray' => __( 'Gray' ), 'green'  => __( 'Green' ), 'orange' => __( 'Orange' ),
-						'pink' => __( 'Pink' ), 'purple' => __( 'Purple' ), 'red' => __( 'Red' ),
-						'silver' => __( 'Silver' ), 'tan' => __( 'Tan' ), 'white' => __( 'White' ),
-						'yellow' => __( 'Yellow' ), 'dark' => __( 'Dark' ), 'light' => __( 'Light' ),
-						'fixed-layout' => __( 'Fixed Layout' ), 'fluid-layout' => __( 'Fluid Layout' ),
-						'responsive-layout' => __( 'Responsive Layout' ), 'blavatar' => __( 'Blavatar' ),
-						'photoblogging' => __( 'Photoblogging' ), 'seasonal' => __( 'Seasonal' ),
+						'black'             => __( 'Black' ),
+						'blue'              => __( 'Blue' ),
+						'brown'             => __( 'Brown' ),
+						'gray'              => __( 'Gray' ),
+						'green'             => __( 'Green' ),
+						'orange'            => __( 'Orange' ),
+						'pink'              => __( 'Pink' ),
+						'purple'            => __( 'Purple' ),
+						'red'               => __( 'Red' ),
+						'silver'            => __( 'Silver' ),
+						'tan'               => __( 'Tan' ),
+						'white'             => __( 'White' ),
+						'yellow'            => __( 'Yellow' ),
+						'dark'              => __( 'Dark' ),
+						'light'             => __( 'Light' ),
+						'fixed-layout'      => __( 'Fixed Layout' ),
+						'fluid-layout'      => __( 'Fluid Layout' ),
+						'responsive-layout' => __( 'Responsive Layout' ),
+						'blavatar'          => __( 'Blavatar' ),
+						'photoblogging'     => __( 'Photoblogging' ),
+						'seasonal'          => __( 'Seasonal' ),
 					);
 
 					$feature_list = get_theme_feature_list( false ); // No API
@@ -803,8 +940,9 @@ final class WP_Theme implements ArrayAccess {
 
 				return $value;
 
-			default :
-				$value = translate( $value, $this->get('TextDomain') );
+			default:
+				// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain
+				$value = translate( $value, $this->get( 'TextDomain' ) );
 		}
 		return $value;
 	}
@@ -848,8 +986,9 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string Absolute path of the stylesheet directory.
 	 */
 	public function get_stylesheet_directory() {
-		if ( $this->errors() && in_array( 'theme_root_missing', $this->errors()->get_error_codes() ) )
+		if ( $this->errors() && in_array( 'theme_root_missing', $this->errors()->get_error_codes(), true ) ) {
 			return '';
+		}
 
 		return $this->theme_root . '/' . $this->stylesheet;
 	}
@@ -865,10 +1004,11 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string Absolute path of the template directory.
 	 */
 	public function get_template_directory() {
-		if ( $this->parent() )
+		if ( $this->parent() ) {
 			$theme_root = $this->parent()->theme_root;
-		else
+		} else {
 			$theme_root = $this->theme_root;
+		}
 
 		return $theme_root . '/' . $this->template;
 	}
@@ -898,10 +1038,11 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string URL to the template directory.
 	 */
 	public function get_template_directory_uri() {
-		if ( $this->parent() )
+		if ( $this->parent() ) {
 			$theme_root_uri = $this->parent()->get_theme_root_uri();
-		else
+		} else {
 			$theme_root_uri = $this->get_theme_root_uri();
+		}
 
 		return $theme_root_uri . '/' . str_replace( '%2F', '/', rawurlencode( $this->template ) );
 	}
@@ -931,8 +1072,9 @@ final class WP_Theme implements ArrayAccess {
 	 * @return string Theme root URI.
 	 */
 	public function get_theme_root_uri() {
-		if ( ! isset( $this->theme_root_uri ) )
+		if ( ! isset( $this->theme_root_uri ) ) {
 			$this->theme_root_uri = get_theme_root_uri( $this->stylesheet, $this->theme_root );
+		}
 		return $this->theme_root_uri;
 	}
 
@@ -952,8 +1094,9 @@ final class WP_Theme implements ArrayAccess {
 	public function get_screenshot( $uri = 'uri' ) {
 		$screenshot = $this->cache_get( 'screenshot' );
 		if ( $screenshot ) {
-			if ( 'relative' == $uri )
+			if ( 'relative' === $uri ) {
 				return $screenshot;
+			}
 			return $this->get_stylesheet_directory_uri() . '/' . $screenshot;
 		} elseif ( 0 === $screenshot ) {
 			return false;
@@ -962,8 +1105,9 @@ final class WP_Theme implements ArrayAccess {
 		foreach ( array( 'png', 'gif', 'jpg', 'jpeg' ) as $ext ) {
 			if ( file_exists( $this->get_stylesheet_directory() . "/screenshot.$ext" ) ) {
 				$this->cache_add( 'screenshot', 'screenshot.' . $ext );
-				if ( 'relative' == $uri )
+				if ( 'relative' === $uri ) {
 					return 'screenshot.' . $ext;
+				}
 				return $this->get_stylesheet_directory_uri() . '/' . 'screenshot.' . $ext;
 			}
 		}
@@ -1012,7 +1156,7 @@ final class WP_Theme implements ArrayAccess {
 		if ( ! is_array( $post_templates ) ) {
 			$post_templates = array();
 
-			$files = (array) $this->get_files( 'php', 1, true);
+			$files = (array) $this->get_files( 'php', 1, true );
 
 			foreach ( $files as $file => $full_path ) {
 				if ( ! preg_match( '|Template Name:(.*)$|mi', file_get_contents( $full_path ), $header ) ) {
@@ -1124,17 +1268,17 @@ final class WP_Theme implements ArrayAccess {
 		}
 
 		if ( $extensions ) {
-			$extensions = (array) $extensions;
+			$extensions  = (array) $extensions;
 			$_extensions = implode( '|', $extensions );
 		}
 
 		$relative_path = trailingslashit( $relative_path );
-		if ( '/' == $relative_path ) {
+		if ( '/' === $relative_path ) {
 			$relative_path = '';
 		}
 
 		$results = scandir( $path );
-		$files = array();
+		$files   = array();
 
 		/**
 		 * Filters the array of excluded directories and files while scanning theme folder.
@@ -1146,14 +1290,14 @@ final class WP_Theme implements ArrayAccess {
 		$exclusions = (array) apply_filters( 'theme_scandir_exclusions', array( 'CVS', 'node_modules', 'vendor', 'bower_components' ) );
 
 		foreach ( $results as $result ) {
-			if ( '.' == $result[0] || in_array( $result, $exclusions, true ) ) {
+			if ( '.' === $result[0] || in_array( $result, $exclusions, true ) ) {
 				continue;
 			}
 			if ( is_dir( $path . '/' . $result ) ) {
 				if ( ! $depth ) {
 					continue;
 				}
-				$found = self::scandir( $path . '/' . $result, $extensions, $depth - 1 , $relative_path . $result );
+				$found = self::scandir( $path . '/' . $result, $extensions, $depth - 1, $relative_path . $result );
 				$files = array_merge_recursive( $files, $found );
 			} elseif ( ! $extensions || preg_match( '~\.(' . $_extensions . ')$~', $result ) ) {
 				$files[ $relative_path . $result ] = $path . '/' . $result;
@@ -1172,13 +1316,14 @@ final class WP_Theme implements ArrayAccess {
 	 * @since WP-3.4.0
 	 *
 	 * @return bool True if the textdomain was successfully loaded or has already been loaded.
-	 * 	False if no textdomain was specified in the file headers, or if the domain could not be loaded.
+	 *  False if no textdomain was specified in the file headers, or if the domain could not be loaded.
 	 */
 	public function load_textdomain() {
-		if ( isset( $this->textdomain_loaded ) )
+		if ( isset( $this->textdomain_loaded ) ) {
 			return $this->textdomain_loaded;
+		}
 
-		$textdomain = $this->get('TextDomain');
+		$textdomain = $this->get( 'TextDomain' );
 		if ( ! $textdomain ) {
 			$this->textdomain_loaded = false;
 			return false;
@@ -1190,10 +1335,12 @@ final class WP_Theme implements ArrayAccess {
 		}
 
 		$path = $this->get_stylesheet_directory();
-		if ( $domainpath = $this->get('DomainPath') )
+		$domainpath = $this->get( 'DomainPath' );
+		if ( $domainpath ) {
 			$path .= $domainpath;
-		else
+		} else {
 			$path .= '/languages';
+		}
 
 		$this->textdomain_loaded = load_theme_textdomain( $textdomain, $path );
 		return $this->textdomain_loaded;
@@ -1205,24 +1352,27 @@ final class WP_Theme implements ArrayAccess {
 	 * @since WP-3.4.0
 	 *
 	 * @param string $check Optional. Whether to check only the 'network'-wide settings, the 'site'
-	 * 	settings, or 'both'. Defaults to 'both'.
+	 *  settings, or 'both'. Defaults to 'both'.
 	 * @param int $blog_id Optional. Ignored if only network-wide settings are checked. Defaults to current site.
 	 * @return bool Whether the theme is allowed for the network. Returns true in single-site.
 	 */
 	public function is_allowed( $check = 'both', $blog_id = null ) {
-		if ( ! is_multisite() )
+		if ( ! is_multisite() ) {
 			return true;
-
-		if ( 'both' == $check || 'network' == $check ) {
-			$allowed = self::get_allowed_on_network();
-			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) )
-				return true;
 		}
 
-		if ( 'both' == $check || 'site' == $check ) {
-			$allowed = self::get_allowed_on_site( $blog_id );
-			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) )
+		if ( 'both' === $check || 'network' === $check ) {
+			$allowed = self::get_allowed_on_network();
+			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) ) {
 				return true;
+			}
+		}
+
+		if ( 'both' === $check || 'site' === $check ) {
+			$allowed = self::get_allowed_on_site( $blog_id );
+			if ( ! empty( $allowed[ $this->get_stylesheet() ] ) ) {
+				return true;
+			}
 		}
 
 		return false;
@@ -1317,8 +1467,9 @@ final class WP_Theme implements ArrayAccess {
 	public static function get_allowed_on_site( $blog_id = null ) {
 		static $allowed_themes = array();
 
-		if ( ! $blog_id || ! is_multisite() )
+		if ( ! $blog_id || ! is_multisite() ) {
 			$blog_id = get_current_blog_id();
+		}
 
 		if ( isset( $allowed_themes[ $blog_id ] ) ) {
 			/**
@@ -1332,7 +1483,7 @@ final class WP_Theme implements ArrayAccess {
 			return (array) apply_filters( 'site_allowed_themes', $allowed_themes[ $blog_id ], $blog_id );
 		}
 
-		$current = $blog_id == get_current_blog_id();
+		$current = get_current_blog_id() == $blog_id;
 
 		if ( $current ) {
 			$allowed_themes[ $blog_id ] = get_option( 'allowedthemes' );
@@ -1357,10 +1508,11 @@ final class WP_Theme implements ArrayAccess {
 				$allowed_themes[ $blog_id ] = array();
 			} else {
 				$converted = array();
-				$themes = wp_get_themes();
+				$themes    = wp_get_themes();
 				foreach ( $themes as $stylesheet => $theme_data ) {
-					if ( isset( $allowed_themes[ $blog_id ][ $theme_data->get('Name') ] ) )
+					if ( isset( $allowed_themes[ $blog_id ][ $theme_data->get( 'Name' ) ] ) ) {
 						$converted[ $stylesheet ] = true;
+					}
 				}
 				$allowed_themes[ $blog_id ] = $converted;
 			}

@@ -7,9 +7,10 @@ class Tests_Upload extends WP_UnitTestCase {
 
 	var $siteurl;
 
-	function setUp() {
+	function set_up() {
+		parent::set_up();
 		$this->_reset_options();
-		parent::setUp();
+		parent::set_up();
 	}
 
 	function _reset_options() {
@@ -21,32 +22,32 @@ class Tests_Upload extends WP_UnitTestCase {
 
 	function test_upload_dir_default() {
 		// wp_upload_dir() with default parameters
-		$info = wp_upload_dir();
-		$subdir = gmstrftime('/%Y/%m');
+		$info   = wp_upload_dir();
+		$subdir = gmstrftime( '/%Y/%m' );
 
-		$this->assertEquals( get_option( 'siteurl' ) . '/wp-content/uploads' . $subdir, $info['url'] );
-		$this->assertEquals( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
-		$this->assertEquals( $subdir, $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( get_option( 'siteurl' ) . '/wp-content/uploads' . $subdir, $info['url'] );
+		$this->assertSame( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
+		$this->assertSame( $subdir, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	function test_upload_dir_relative() {
 		// wp_upload_dir() with a relative upload path that is not 'wp-content/uploads'
 		update_option( 'upload_path', 'foo/bar' );
-		$info = _wp_upload_dir();
-		$subdir = gmstrftime('/%Y/%m');
+		$info   = _wp_upload_dir();
+		$subdir = gmstrftime( '/%Y/%m' );
 
-		$this->assertEquals( get_option( 'siteurl' ) . '/foo/bar' . $subdir, $info['url'] );
-		$this->assertEquals( ABSPATH . 'foo/bar' . $subdir, $info['path'] );
-		$this->assertEquals( $subdir, $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( get_option( 'siteurl' ) . '/foo/bar' . $subdir, $info['url'] );
+		$this->assertSame( ABSPATH . 'foo/bar' . $subdir, $info['path'] );
+		$this->assertSame( $subdir, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	/**
 	 * @see https://core.trac.wordpress.org/ticket/5953
 	 */
 	function test_upload_dir_absolute() {
-		$path = '/tmp/wp-unit-test';
+		$path = get_temp_dir() . 'wp-unit-test';
 
 		// wp_upload_dir() with an absolute upload path
 		update_option( 'upload_path', $path );
@@ -56,13 +57,13 @@ class Tests_Upload extends WP_UnitTestCase {
 
 		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
 		// It doesn't create the /year/month directories.
-		$info = _wp_upload_dir();
-		$subdir = gmstrftime('/%Y/%m');
+		$info   = _wp_upload_dir();
+		$subdir = gmstrftime( '/%Y/%m' );
 
-		$this->assertEquals( '/baz' . $subdir, $info['url'] );
-		$this->assertEquals( $path . $subdir, $info['path'] );
-		$this->assertEquals( $subdir, $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( '/baz' . $subdir, $info['url'] );
+		$this->assertSame( $path . $subdir, $info['path'] );
+		$this->assertSame( $subdir, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	function test_upload_dir_no_yearnum() {
@@ -71,10 +72,10 @@ class Tests_Upload extends WP_UnitTestCase {
 		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
 		$info = _wp_upload_dir();
 
-		$this->assertEquals( get_option( 'siteurl' ) . '/wp-content/uploads', $info['url'] );
-		$this->assertEquals( ABSPATH . 'wp-content/uploads', $info['path'] );
-		$this->assertEquals( '', $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( get_option( 'siteurl' ) . '/wp-content/uploads', $info['url'] );
+		$this->assertSame( ABSPATH . 'wp-content/uploads', $info['path'] );
+		$this->assertSame( '', $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	function test_upload_path_absolute() {
@@ -82,28 +83,28 @@ class Tests_Upload extends WP_UnitTestCase {
 
 		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
 		// It doesn't create the /year/month directories.
-		$info = _wp_upload_dir();
-		$subdir = gmstrftime('/%Y/%m');
+		$info   = _wp_upload_dir();
+		$subdir = gmstrftime( '/%Y/%m' );
 
-		$this->assertEquals( 'http://' . WP_TESTS_DOMAIN . '/asdf' . $subdir, $info['url'] );
-		$this->assertEquals( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
-		$this->assertEquals( $subdir, $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/asdf' . $subdir, $info['url'] );
+		$this->assertSame( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
+		$this->assertSame( $subdir, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 	function test_upload_dir_empty() {
 		// upload path setting is empty - it should default to 'wp-content/uploads'
-		update_option('upload_path', '');
+		update_option( 'upload_path', '' );
 
 		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
 		// It doesn't create the /year/month directories.
-		$info = _wp_upload_dir();
-		$subdir = gmstrftime('/%Y/%m');
+		$info   = _wp_upload_dir();
+		$subdir = gmstrftime( '/%Y/%m' );
 
-		$this->assertEquals( get_option( 'siteurl' ) . '/wp-content/uploads' . $subdir, $info['url'] );
-		$this->assertEquals( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
-		$this->assertEquals( $subdir, $info['subdir'] );
-		$this->assertEquals( false, $info['error'] );
+		$this->assertSame( get_option( 'siteurl' ) . '/wp-content/uploads' . $subdir, $info['url'] );
+		$this->assertSame( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
+		$this->assertSame( $subdir, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
 	}
 
 }

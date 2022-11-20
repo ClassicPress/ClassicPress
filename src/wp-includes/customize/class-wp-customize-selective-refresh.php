@@ -62,7 +62,7 @@ final class WP_Customize_Selective_Refresh {
 	 */
 	public function __construct( WP_Customize_Manager $manager ) {
 		$this->manager = $manager;
-		require_once( ABSPATH . WPINC . '/customize/class-wp-customize-partial.php' );
+		require_once ABSPATH . WPINC . '/customize/class-wp-customize-partial.php';
 
 		add_action( 'customize_preview_init', array( $this, 'init_preview' ) );
 	}
@@ -188,12 +188,12 @@ final class WP_Customize_Selective_Refresh {
 		}
 
 		$switched_locale = switch_to_locale( get_user_locale() );
-		$l10n = array(
+		$l10n            = array(
 			'shiftClickToEdit' => __( 'Shift-click to edit this element.' ),
-			'clickEditMenu' => __( 'Click to edit this menu.' ),
-			'clickEditWidget' => __( 'Click to edit this widget.' ),
-			'clickEditTitle' => __( 'Click to edit the site title.' ),
-			'clickEditMisc' => __( 'Click to edit this element.' ),
+			'clickEditMenu'    => __( 'Click to edit this menu.' ),
+			'clickEditWidget'  => __( 'Click to edit this widget.' ),
+			'clickEditTitle'   => __( 'Click to edit the site title.' ),
+			'clickEditMisc'    => __( 'Click to edit this element.' ),
 			/* translators: %s: document.write() */
 			'badDocumentWrite' => sprintf( __( '%s is forbidden' ), 'document.write()' ),
 		);
@@ -208,7 +208,7 @@ final class WP_Customize_Selective_Refresh {
 		);
 
 		// Export data to JS.
-		echo sprintf( '<script>var _customizePartialRefreshExports = %s;</script>', wp_json_encode( $exports ) );
+		printf( '<script>var _customizePartialRefreshExports = %s;</script>', wp_json_encode( $exports ) );
 	}
 
 	/**
@@ -232,7 +232,7 @@ final class WP_Customize_Selective_Refresh {
 				continue;
 			}
 
-			$partial_args = false;
+			$partial_args  = false;
 			$partial_class = 'WP_Customize_Partial';
 
 			/**
@@ -415,8 +415,8 @@ final class WP_Customize_Selective_Refresh {
 			$response['errors'] = $this->triggered_errors;
 		}
 
-		$setting_validities = $this->manager->validate_setting_values( $this->manager->unsanitized_post_values() );
-		$exported_setting_validities = array_map( array( $this->manager, 'prepare_setting_validity_for_js' ), $setting_validities );
+		$setting_validities             = $this->manager->validate_setting_values( $this->manager->unsanitized_post_values() );
+		$exported_setting_validities    = array_map( array( $this->manager, 'prepare_setting_validity_for_js' ), $setting_validities );
 		$response['setting_validities'] = $exported_setting_validities;
 
 		/**

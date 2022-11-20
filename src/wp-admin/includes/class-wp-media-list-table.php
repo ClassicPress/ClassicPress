@@ -42,13 +42,15 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$this->modes = array(
 			'list' => __( 'List View' ),
-			'grid' => __( 'Grid View' )
+			'grid' => __( 'Grid View' ),
 		);
 
-		parent::__construct( array(
-			'plural' => 'media',
-			'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
-		) );
+		parent::__construct(
+			array(
+				'plural' => 'media',
+				'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
+			)
+		);
 	}
 
 	/**
@@ -56,7 +58,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @return bool
 	 */
 	public function ajax_user_can() {
-		return current_user_can('upload_files');
+		return current_user_can( 'upload_files' );
 	}
 
 	/**
@@ -71,15 +73,17 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		list( $post_mime_types, $avail_post_mime_types ) = wp_edit_attachments_query( $_REQUEST );
 
- 		$this->is_trash = isset( $_REQUEST['attachment-filter'] ) && 'trash' === $_REQUEST['attachment-filter'];
+		$this->is_trash = isset( $_REQUEST['attachment-filter'] ) && 'trash' === $_REQUEST['attachment-filter'];
 
- 		$mode = empty( $_REQUEST['mode'] ) ? 'list' : $_REQUEST['mode'];
+		$mode = empty( $_REQUEST['mode'] ) ? 'list' : $_REQUEST['mode'];
 
-		$this->set_pagination_args( array(
-			'total_items' => $wp_query->found_posts,
-			'total_pages' => $wp_query->max_num_pages,
-			'per_page' => $wp_query->query_vars['posts_per_page'],
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $wp_query->found_posts,
+				'total_pages' => $wp_query->max_num_pages,
+				'per_page'    => $wp_query->query_vars['posts_per_page'],
+			)
+		);
 	}
 
 	/**
@@ -112,7 +116,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				false
 			);
 
-			$type_links[$mime_type] = sprintf(
+			$type_links[ $mime_type ] = sprintf(
 				'<option value="post_mime_type:%s"%s>%s</option>',
 				esc_attr( $mime_type ),
 				$selected,
@@ -128,7 +132,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			_x( 'Mine', 'media items' )
 		);
 
-		if ( $this->is_trash || ( defined( 'MEDIA_TRASH') && MEDIA_TRASH ) ) {
+		if ( $this->is_trash || ( defined( 'MEDIA_TRASH' ) && MEDIA_TRASH ) ) {
 			$type_links['trash'] = sprintf(
 				'<option value="trash"%s>%s</option>',
 				selected( 'trash' === $filter, true, false ),
@@ -148,7 +152,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( MEDIA_TRASH ) {
 			if ( $this->is_trash ) {
 				$actions['untrash'] = __( 'Restore' );
-				$actions['delete'] = __( 'Delete Permanently' );
+				$actions['delete']  = __( 'Delete Permanently' );
 			} else {
 				$actions['trash'] = _x( 'Trash', 'verb' );
 			}
@@ -156,8 +160,9 @@ class WP_Media_List_Table extends WP_List_Table {
 			$actions['delete'] = __( 'Delete Permanently' );
 		}
 
-		if ( $this->detached )
+		if ( $this->detached ) {
 			$actions['attach'] = __( 'Attach' );
+		}
 
 		return $actions;
 	}
@@ -169,9 +174,9 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( 'bar' !== $which ) {
 			return;
 		}
-?>
+		?>
 		<div class="actions">
-<?php
+		<?php
 		if ( ! $this->is_trash ) {
 			$this->months_dropdown( 'attachment' );
 		}
@@ -183,9 +188,10 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		if ( $this->is_trash && current_user_can( 'edit_others_posts' ) && $this->has_items() ) {
 			submit_button( __( 'Empty Trash' ), 'apply', 'delete_all', false );
-		} ?>
+		}
+		?>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -193,14 +199,17 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @return string
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['found_post_id'] ) && isset( $_REQUEST['media'] ) )
+		if ( isset( $_REQUEST['found_post_id'] ) && isset( $_REQUEST['media'] ) ) {
 			return 'attach';
+		}
 
-		if ( isset( $_REQUEST['parent_post_id'] ) && isset( $_REQUEST['media'] ) )
+		if ( isset( $_REQUEST['parent_post_id'] ) && isset( $_REQUEST['media'] ) ) {
 			return 'detach';
+		}
 
-		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) )
+		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) {
 			return 'delete_all';
+		}
 
 		return parent::current_action();
 	}
@@ -230,7 +239,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		$views = $this->get_views();
 
 		$this->screen->render_screen_reader_content( 'heading_views' );
-?>
+		?>
 <div class="wp-filter">
 	<div class="filter-items">
 		<?php $this->view_switcher( $mode ); ?>
@@ -246,7 +255,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			?>
 		</select>
 
-<?php
+		<?php
 		$this->extra_tablenav( 'bar' );
 
 		/** This filter is documented in wp-admin/inclues/class-wp-list-table.php */
@@ -260,14 +269,14 @@ class WP_Media_List_Table extends WP_List_Table {
 			}
 			echo '</ul>';
 		}
-?>
+		?>
 	</div>
 
 	<div class="search-form">
 		<label for="media-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Media' ); ?></label>
-		<input type="search" placeholder="<?php esc_attr_e( 'Search media items...' ) ?>" id="media-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>"></div>
+		<input type="search" placeholder="<?php esc_attr_e( 'Search media items...' ); ?>" id="media-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>"></div>
 	</div>
-	<?php
+		<?php
 	}
 
 	/**
@@ -275,10 +284,10 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @return array
 	 */
 	public function get_columns() {
-		$posts_columns = array();
+		$posts_columns       = array();
 		$posts_columns['cb'] = '<input type="checkbox" />';
 		/* translators: column name */
-		$posts_columns['title'] = _x( 'File', 'column name' );
+		$posts_columns['title']  = _x( 'File', 'column name' );
 		$posts_columns['author'] = __( 'Author' );
 
 		$taxonomies = get_taxonomies_for_attachments( 'objects' );
@@ -307,10 +316,11 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: column name */
-		if ( !$this->detached ) {
+		if ( ! $this->detached ) {
 			$posts_columns['parent'] = _x( 'Uploaded to', 'column name' );
-			if ( post_type_supports( 'attachment', 'comments' ) )
+			if ( post_type_supports( 'attachment', 'comments' ) ) {
 				$posts_columns['comments'] = '<span class="vers comment-grey-bubble" title="' . esc_attr__( 'Comments' ) . '"><span class="screen-reader-text">' . __( 'Comments' ) . '</span></span>';
+			}
 		}
 		/* translators: column name */
 		$posts_columns['date'] = _x( 'Date', 'column name' );
@@ -348,12 +358,14 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @param WP_Post $post The current WP_Post object.
 	 */
 	public function column_cb( $post ) {
-		if ( current_user_can( 'edit_post', $post->ID ) ) { ?>
-			<label class="screen-reader-text" for="cb-select-<?php echo $post->ID; ?>"><?php
-				echo sprintf( __( 'Select %s' ), _draft_or_post_title() );
-			?></label>
+		if ( current_user_can( 'edit_post', $post->ID ) ) {
+			?>
+			<label class="screen-reader-text" for="cb-select-<?php echo $post->ID; ?>">
+				<?php printf( __( 'Select %s' ), _draft_or_post_title() ); ?>
+			</label>
 			<input type="checkbox" name="media[]" id="cb-select-<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
-		<?php }
+			<?php
+		}
 	}
 
 	/**
@@ -366,9 +378,10 @@ class WP_Media_List_Table extends WP_List_Table {
 	public function column_title( $post ) {
 		list( $mime ) = explode( '/', $post->post_mime_type );
 
-		$title = _draft_or_post_title();
-		$thumb = wp_get_attachment_image( $post->ID, array( 60, 60 ), true, array( 'alt' => '' ) );
-		$link_start = $link_end = '';
+		$title      = _draft_or_post_title();
+		$thumb      = wp_get_attachment_image( $post->ID, array( 60, 60 ), true, array( 'alt' => '' ) );
+		$link_start = '';
+		$link_end   = '';
 
 		if ( current_user_can( 'edit_post', $post->ID ) && ! $this->is_trash ) {
 			$link_start = sprintf(
@@ -385,9 +398,11 @@ class WP_Media_List_Table extends WP_List_Table {
 		<strong<?php echo $class; ?>>
 			<?php
 			echo $link_start;
-			if ( $thumb ) : ?>
+			if ( $thumb ) :
+				?>
 				<span class="media-icon <?php echo sanitize_html_class( $mime . '-icon' ); ?>"><?php echo $thumb; ?></span>
-			<?php endif;
+				<?php
+			endif;
 			echo $title . $link_end;
 			_media_states( $post );
 			?>
@@ -410,8 +425,9 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @param WP_Post $post The current WP_Post object.
 	 */
 	public function column_author( $post ) {
-		printf( '<a href="%s">%s</a>',
-			esc_url( add_query_arg( array( 'author' => get_the_author_meta('ID') ), 'upload.php' ) ),
+		printf(
+			'<a href="%s">%s</a>',
+			esc_url( add_query_arg( array( 'author' => get_the_author_meta( 'ID' ) ), 'upload.php' ) ),
 			get_the_author()
 		);
 	}
@@ -439,8 +455,9 @@ class WP_Media_List_Table extends WP_List_Table {
 			$h_time = __( 'Unpublished' );
 		} else {
 			$m_time = $post->post_date;
-			$time = get_post_time( 'G', true, $post, false );
-			if ( ( abs( $t_diff = time() - $time ) ) < DAY_IN_SECONDS ) {
+			$time   = get_post_time( 'G', true, $post, false );
+			$t_diff = time() - $time;
+			if ( ( abs( $t_diff ) ) < DAY_IN_SECONDS ) {
 				if ( $t_diff < 0 ) {
 					$h_time = sprintf( __( '%s from now' ), human_time_diff( $time ) );
 				} else {
@@ -471,26 +488,31 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		if ( $parent ) {
-			$title = _draft_or_post_title( $post->post_parent );
+			$title       = _draft_or_post_title( $post->post_parent );
 			$parent_type = get_post_type_object( $parent->post_type );
 
 			if ( $parent_type && $parent_type->show_ui && current_user_can( 'edit_post', $post->post_parent ) ) {
-?>
+				?>
 				<strong><a href="<?php echo get_edit_post_link( $post->post_parent ); ?>">
-					<?php echo $title ?></a></strong><?php
+					<?php echo $title; ?></a></strong>
+							   <?php
 			} elseif ( $parent_type && current_user_can( 'read_post', $post->post_parent ) ) {
-?>
-				<strong><?php echo $title ?></strong><?php
+				?>
+				<strong><?php echo $title; ?></strong>
+								   <?php
 			} else {
 				_e( '(Private post)' );
 			}
 
-			if ( $user_can_edit ):
-				$detach_url = add_query_arg( array(
-					'parent_post_id' => $post->post_parent,
-					'media[]' => $post->ID,
-					'_wpnonce' => wp_create_nonce( 'bulk-' . $this->_args['plural'] )
-				), 'upload.php' );
+			if ( $user_can_edit ) :
+				$detach_url = add_query_arg(
+					array(
+						'parent_post_id' => $post->post_parent,
+						'media[]'        => $post->ID,
+						'_wpnonce'       => wp_create_nonce( 'bulk-' . $this->_args['plural'] ),
+					),
+					'upload.php'
+				);
 				printf(
 					'<br /><a href="%s" class="hide-if-no-js detach-from-parent" aria-label="%s">%s</a>',
 					$detach_url,
@@ -500,8 +522,10 @@ class WP_Media_List_Table extends WP_List_Table {
 				);
 			endif;
 		} else {
-			_e( '(Unattached)' ); ?>
-			<?php if ( $user_can_edit ) {
+			_e( '(Unattached)' );
+			?>
+			<?php
+			if ( $user_can_edit ) {
 				$title = _draft_or_post_title( $post->post_parent );
 				printf(
 					'<br /><a href="#the-list" onclick="findPosts.open( \'media[]\', \'%s\' ); return false;" class="hide-if-no-js aria-button-if-js" aria-label="%s">%s</a>',
@@ -559,11 +583,12 @@ class WP_Media_List_Table extends WP_List_Table {
 			if ( is_array( $terms ) ) {
 				$out = array();
 				foreach ( $terms as $t ) {
-					$posts_in_term_qv = array();
+					$posts_in_term_qv             = array();
 					$posts_in_term_qv['taxonomy'] = $taxonomy;
-					$posts_in_term_qv['term'] = $t->slug;
+					$posts_in_term_qv['term']     = $t->slug;
 
-					$out[] = sprintf( '<a href="%s">%s</a>',
+					$out[] = sprintf(
+						'<a href="%s">%s</a>',
 						esc_url( add_query_arg( $posts_in_term_qv, 'upload.php' ) ),
 						esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, $taxonomy, 'display' ) )
 					);
@@ -602,21 +627,22 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$this->comment_pending_count = get_pending_comments_num( $post_ids );
 
-		add_filter( 'the_title','esc_html' );
+		add_filter( 'the_title', 'esc_html' );
 
-		while ( have_posts() ) : the_post();
+		while ( have_posts() ) :
+			the_post();
 			if (
-				( $this->is_trash && $post->post_status != 'trash' )
-				|| ( ! $this->is_trash && $post->post_status === 'trash' )
+				( $this->is_trash && 'trash' !== $post->post_status )
+				|| ( ! $this->is_trash && 'trash' === $post->post_status )
 			) {
 				continue;
 			}
 			$post_owner = ( get_current_user_id() == $post->post_author ) ? 'self' : 'other';
-		?>
+			?>
 			<tr id="post-<?php echo $post->ID; ?>" class="<?php echo trim( ' author-' . $post_owner . ' status-' . $post->post_status ); ?>">
 				<?php $this->single_row_columns( $post ); ?>
 			</tr>
-		<?php
+			<?php
 		endwhile;
 	}
 
@@ -660,7 +686,7 @@ class WP_Media_List_Table extends WP_List_Table {
 						_x( 'Trash', 'verb' )
 					);
 				} else {
-					$delete_ays = ! MEDIA_TRASH ? " onclick='return showNotice.warn();'" : '';
+					$delete_ays        = ! MEDIA_TRASH ? " onclick='return showNotice.warn();'" : '';
 					$actions['delete'] = sprintf(
 						'<a href="%s" class="submitdelete aria-button-if-js"%s aria-label="%s">%s</a>',
 						wp_nonce_url( "post.php?action=delete&amp;post=$post->ID", 'delete-post_' . $post->ID ),
@@ -688,9 +714,8 @@ class WP_Media_List_Table extends WP_List_Table {
 					__( 'Attach' )
 				);
 			}
-		}
-		else {
-			if ( current_user_can( 'edit_post', $post->ID ) && !$this->is_trash ) {
+		} else {
+			if ( current_user_can( 'edit_post', $post->ID ) && ! $this->is_trash ) {
 				$actions['edit'] = sprintf(
 					'<a href="%s" aria-label="%s">%s</a>',
 					get_edit_post_link( $post->ID ),
@@ -718,7 +743,7 @@ class WP_Media_List_Table extends WP_List_Table {
 					);
 				}
 				if ( $this->is_trash || ! EMPTY_TRASH_DAYS || ! MEDIA_TRASH ) {
-					$delete_ays = ( !$this->is_trash && !MEDIA_TRASH ) ? " onclick='return showNotice.warn();'" : '';
+					$delete_ays        = ( ! $this->is_trash && ! MEDIA_TRASH ) ? " onclick='return showNotice.warn();'" : '';
 					$actions['delete'] = sprintf(
 						'<a href="%s" class="submitdelete aria-button-if-js"%s aria-label="%s">%s</a>',
 						wp_nonce_url( "post.php?action=delete&amp;post=$post->ID", 'delete-post_' . $post->ID ),

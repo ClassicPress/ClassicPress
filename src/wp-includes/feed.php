@@ -23,8 +23,8 @@
  * @param string $show See get_bloginfo() for possible values.
  * @return string
  */
-function get_bloginfo_rss($show = '') {
-	$info = strip_tags(get_bloginfo($show));
+function get_bloginfo_rss( $show = '' ) {
+	$info = strip_tags( get_bloginfo( $show ) );
 	/**
 	 * Filters the bloginfo for use in RSS feeds.
 	 *
@@ -51,7 +51,7 @@ function get_bloginfo_rss($show = '') {
  *
  * @param string $show See get_bloginfo() for possible values.
  */
-function bloginfo_rss($show = '') {
+function bloginfo_rss( $show = '' ) {
 	/**
 	 * Filters the bloginfo for display in RSS feeds.
 	 *
@@ -85,7 +85,8 @@ function get_default_feed() {
 	 *                          Default 'rss2'.
 	 */
 	$default_feed = apply_filters( 'default_feed', 'rss2' );
-	return 'rss' == $default_feed ? 'rss2' : $default_feed;
+
+	return ( 'rss' === $default_feed ) ? 'rss2' : $default_feed;
 }
 
 /**
@@ -160,8 +161,7 @@ function get_the_title_rss() {
 	 *
 	 * @param string $title The current post title.
 	 */
-	$title = apply_filters( 'the_title_rss', $title );
-	return $title;
+	return apply_filters( 'the_title_rss', $title );
 }
 
 /**
@@ -182,13 +182,15 @@ function the_title_rss() {
  * @param string $feed_type The type of feed. rss2 | atom | rss | rdf
  * @return string The filtered content.
  */
-function get_the_content_feed($feed_type = null) {
-	if ( !$feed_type )
+function get_the_content_feed( $feed_type = null ) {
+	if ( ! $feed_type ) {
 		$feed_type = get_default_feed();
+	}
 
 	/** This filter is documented in wp-includes/post-template.php */
 	$content = apply_filters( 'the_content', get_the_content() );
-	$content = str_replace(']]>', ']]&gt;', $content);
+	$content = str_replace( ']]>', ']]&gt;', $content );
+
 	/**
 	 * Filters the post content for use in feeds.
 	 *
@@ -208,8 +210,8 @@ function get_the_content_feed($feed_type = null) {
  *
  * @param string $feed_type The type of feed. rss2 | atom | rss | rdf
  */
-function the_content_feed($feed_type = null) {
-	echo get_the_content_feed($feed_type);
+function the_content_feed( $feed_type = null ) {
+	echo get_the_content_feed( $feed_type );
 }
 
 /**
@@ -270,8 +272,8 @@ function comments_link_feed() {
  *
  * @param int|WP_Comment $comment_id Optional comment object or id. Defaults to global comment object.
  */
-function comment_guid($comment_id = null) {
-	echo esc_url( get_comment_guid($comment_id) );
+function comment_guid( $comment_id = null ) {
+	echo esc_url( get_comment_guid( $comment_id ) );
 }
 
 /**
@@ -282,13 +284,14 @@ function comment_guid($comment_id = null) {
  * @param int|WP_Comment $comment_id Optional comment object or id. Defaults to global comment object.
  * @return false|string false on failure or guid for comment on success.
  */
-function get_comment_guid($comment_id = null) {
-	$comment = get_comment($comment_id);
+function get_comment_guid( $comment_id = null ) {
+	$comment = get_comment( $comment_id );
 
-	if ( !is_object($comment) )
+	if ( ! is_object( $comment ) ) {
 		return false;
+	}
 
-	return get_the_guid($comment->comment_post_ID) . '#comment-' . $comment->comment_ID;
+	return get_the_guid( $comment->comment_post_ID ) . '#comment-' . $comment->comment_ID;
 }
 
 /**
@@ -371,32 +374,38 @@ function comment_text_rss() {
  * @param string $type Optional, default is the type returned by get_default_feed().
  * @return string All of the post categories for displaying in the feed.
  */
-function get_the_category_rss($type = null) {
-	if ( empty($type) )
+function get_the_category_rss( $type = null ) {
+	if ( empty( $type ) ) {
 		$type = get_default_feed();
+	}
 	$categories = get_the_category();
-	$tags = get_the_tags();
-	$the_list = '';
-	$cat_names = array();
+	$tags       = get_the_tags();
+	$the_list   = '';
+	$cat_names  = array();
 
 	$filter = 'rss';
-	if ( 'atom' == $type )
+	if ( 'atom' === $type ) {
 		$filter = 'raw';
-
-	if ( !empty($categories) ) foreach ( (array) $categories as $category ) {
-		$cat_names[] = sanitize_term_field('name', $category->name, $category->term_id, 'category', $filter);
 	}
 
-	if ( !empty($tags) ) foreach ( (array) $tags as $tag ) {
-		$cat_names[] = sanitize_term_field('name', $tag->name, $tag->term_id, 'post_tag', $filter);
+	if ( ! empty( $categories ) ) {
+		foreach ( (array) $categories as $category ) {
+			$cat_names[] = sanitize_term_field( 'name', $category->name, $category->term_id, 'category', $filter );
+		}
 	}
 
-	$cat_names = array_unique($cat_names);
+	if ( ! empty( $tags ) ) {
+		foreach ( (array) $tags as $tag ) {
+			$cat_names[] = sanitize_term_field( 'name', $tag->name, $tag->term_id, 'post_tag', $filter );
+		}
+	}
+
+	$cat_names = array_unique( $cat_names );
 
 	foreach ( $cat_names as $cat_name ) {
-		if ( 'rdf' == $type ) {
+		if ( 'rdf' === $type ) {
 			$the_list .= "\t\t<dc:subject><![CDATA[$cat_name]]></dc:subject>\n";
-		} elseif ( 'atom' == $type ) {
+		} elseif ( 'atom' === $type ) {
 			$the_list .= sprintf( '<category scheme="%1$s" term="%2$s" />', esc_attr( get_bloginfo_rss( 'url' ) ), esc_attr( $cat_name ) );
 		} else {
 			$the_list .= "\t\t<category><![CDATA[" . html_entity_decode( $cat_name, ENT_COMPAT, get_option( 'blog_charset' ) ) . "]]></category>\n";
@@ -423,8 +432,8 @@ function get_the_category_rss($type = null) {
  *
  * @param string $type Optional, default is the type returned by get_default_feed().
  */
-function the_category_rss($type = null) {
-	echo get_the_category_rss($type);
+function the_category_rss( $type = null ) {
+	echo get_the_category_rss( $type );
 }
 
 /**
@@ -435,11 +444,12 @@ function the_category_rss($type = null) {
  * @since WP-2.2.0
  */
 function html_type_rss() {
-	$type = get_bloginfo('html_type');
-	if (strpos($type, 'xhtml') !== false)
+	$type = get_bloginfo( 'html_type' );
+	if ( strpos( $type, 'xhtml' ) !== false ) {
 		$type = 'xhtml';
-	else
+	} else {
 		$type = 'html';
+	}
 	echo $type;
 }
 
@@ -458,16 +468,17 @@ function html_type_rss() {
  * @since WP-1.5.0
  */
 function rss_enclosure() {
-	if ( post_password_required() )
+	if ( post_password_required() ) {
 		return;
+	}
 
-	foreach ( (array) get_post_custom() as $key => $val) {
-		if ($key == 'enclosure') {
+	foreach ( (array) get_post_custom() as $key => $val ) {
+		if ( 'enclosure' === $key ) {
 			foreach ( (array) $val as $enc ) {
-				$enclosure = explode("\n", $enc);
+				$enclosure = explode( "\n", $enc );
 
 				// only get the first element, e.g. audio/mpeg from 'audio/mpeg mpga mp2 mp3'
-				$t = preg_split('/[ \t]/', trim($enclosure[2]) );
+				$t    = preg_split( '/[ \t]/', trim( $enclosure[2] ) );
 				$type = $t[0];
 
 				/**
@@ -497,13 +508,14 @@ function rss_enclosure() {
  * @since WP-2.2.0
  */
 function atom_enclosure() {
-	if ( post_password_required() )
+	if ( post_password_required() ) {
 		return;
+	}
 
 	foreach ( (array) get_post_custom() as $key => $val ) {
-		if ($key == 'enclosure') {
+		if ( 'enclosure' === $key ) {
 			foreach ( (array) $val as $enc ) {
-				$enclosure = explode("\n", $enc);
+				$enclosure = explode( "\n", $enc );
 				/**
 				 * Filters the atom enclosure HTML link tag for the current post.
 				 *
@@ -534,9 +546,9 @@ function atom_enclosure() {
  * @param string $data Input string
  * @return array array(type, value)
  */
-function prep_atom_text_construct($data) {
-	if (strpos($data, '<') === false && strpos($data, '&') === false) {
-		return array('text', $data);
+function prep_atom_text_construct( $data ) {
+	if ( strpos( $data, '<' ) === false && strpos( $data, '&' ) === false ) {
+		return array( 'text', $data );
 	}
 
 	if ( ! function_exists( 'xml_parser_create' ) ) {
@@ -546,23 +558,23 @@ function prep_atom_text_construct($data) {
 	}
 
 	$parser = xml_parser_create();
-	xml_parse($parser, '<div>' . $data . '</div>', true);
-	$code = xml_get_error_code($parser);
-	xml_parser_free($parser);
+	xml_parse( $parser, '<div>' . $data . '</div>', true );
+	$code = xml_get_error_code( $parser );
+	xml_parser_free( $parser );
 
-	if (!$code) {
-		if (strpos($data, '<') === false) {
-			return array('text', $data);
+	if ( ! $code ) {
+		if ( strpos( $data, '<' ) === false ) {
+			return array( 'text', $data );
 		} else {
 			$data = "<div xmlns='http://www.w3.org/1999/xhtml'>$data</div>";
-			return array('xhtml', $data);
+			return array( 'xhtml', $data );
 		}
 	}
 
-	if (strpos($data, ']]>') === false) {
-		return array('html', "<![CDATA[$data]]>");
+	if ( strpos( $data, ']]>' ) === false ) {
+		return array( 'html', "<![CDATA[$data]]>" );
 	} else {
-		return array('html', htmlspecialchars($data));
+		return array( 'html', htmlspecialchars( $data ) );
 	}
 }
 
@@ -612,7 +624,7 @@ function rss2_site_icon() {
  * @since WP-2.5.0
  */
 function self_link() {
-	$host = @parse_url(home_url());
+	$host = @parse_url( home_url() );
 	/**
 	 * Filters the current feed URL.
 	 *
@@ -634,18 +646,19 @@ function self_link() {
  * @param string $type Type of feed. Possible values include 'rss', rss2', 'atom', and 'rdf'.
  */
 function feed_content_type( $type = '' ) {
-	if ( empty($type) )
+	if ( empty( $type ) ) {
 		$type = get_default_feed();
+	}
 
 	$types = array(
 		'rss'      => 'application/rss+xml',
 		'rss2'     => 'application/rss+xml',
 		'rss-http' => 'text/xml',
 		'atom'     => 'application/atom+xml',
-		'rdf'      => 'application/rdf+xml'
+		'rdf'      => 'application/rdf+xml',
 	);
 
-	$content_type = ( !empty($types[$type]) ) ? $types[$type] : 'application/octet-stream';
+	$content_type = ( ! empty( $types[ $type ] ) ) ? $types[ $type ] : 'application/octet-stream';
 
 	/**
 	 * Filters the content type for a specific feed type.
@@ -671,13 +684,12 @@ function feed_content_type( $type = '' ) {
  */
 function fetch_feed( $url ) {
 	if ( ! class_exists( 'SimplePie', false ) ) {
-		require_once( ABSPATH . WPINC . '/class-simplepie.php' );
+		require_once ABSPATH . WPINC . '/class-simplepie.php';
 	}
 
-	require_once( ABSPATH . WPINC . '/class-wp-feed-cache.php' );
-	require_once( ABSPATH . WPINC . '/class-wp-feed-cache-transient.php' );
-	require_once( ABSPATH . WPINC . '/class-wp-simplepie-file.php' );
-	require_once( ABSPATH . WPINC . '/class-wp-simplepie-sanitize-kses.php' );
+	require_once ABSPATH . WPINC . '/class-wp-feed-cache-transient.php';
+	require_once ABSPATH . WPINC . '/class-wp-simplepie-file.php';
+	require_once ABSPATH . WPINC . '/class-wp-simplepie-sanitize-kses.php';
 
 	$feed = new SimplePie();
 
@@ -686,7 +698,16 @@ function fetch_feed( $url ) {
 	// constructor sets it before we have a chance to set the sanitization class
 	$feed->sanitize = new WP_SimplePie_Sanitize_KSES();
 
-	$feed->set_cache_class( 'WP_Feed_Cache' );
+	// Register the cache handler using the recommended method for SimplePie 1.3 or later.
+	if ( method_exists( 'SimplePie_Cache', 'register' ) ) {
+		SimplePie_Cache::register( 'wp_transient', 'WP_Feed_Cache_Transient' );
+		$feed->set_cache_location( 'wp_transient' );
+	} else {
+		// Back-compat for SimplePie 1.2.x.
+		require_once ABSPATH . WPINC . '/class-wp-feed-cache.php';
+		$feed->set_cache_class( 'WP_Feed_Cache' );
+	}
+
 	$feed->set_file_class( 'WP_SimplePie_File' );
 
 	$feed->set_feed_url( $url );
@@ -704,8 +725,9 @@ function fetch_feed( $url ) {
 	$feed->init();
 	$feed->set_output_encoding( get_option( 'blog_charset' ) );
 
-	if ( $feed->error() )
+	if ( $feed->error() ) {
 		return new WP_Error( 'simplepie-error', $feed->error() );
+	}
 
 	return $feed;
 }

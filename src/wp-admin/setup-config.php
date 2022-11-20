@@ -14,12 +14,12 @@
 /**
  * We are installing.
  */
-define('WP_INSTALLING', true);
+define( 'WP_INSTALLING', true );
 
 /**
  * We are blissfully unaware of anything.
  */
-define('WP_SETUP_CONFIG', true);
+define( 'WP_SETUP_CONFIG', true );
 
 /**
  * Disable error reporting
@@ -34,13 +34,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // WP settings.
-require( ABSPATH . 'wp-settings.php' );
+require ABSPATH . 'wp-settings.php';
 
 /** Load ClassicPress Administration Upgrade API */
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 /** Load ClassicPress Translation Installation API */
-require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
 // Prevent browser caching.
 nocache_headers();
@@ -59,7 +59,7 @@ if ( ! $config_file ) {
 	echo '<h1>' . __( 'Sample Config File Missing' ) . '</h1>';
 	echo '<p>' . sprintf(
 		/* translators: 1: wp-config-sample.php, 2: link to the contents of this file */
-		__( 'A %s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%s" target="_blank" rel="noopener">fresh copy</a>?' ),
+		__( 'A %1$s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%2$s" target="_blank" rel="noopener">fresh copy</a>?' ),
 		'<code>wp-config-sample.php</code>',
 		esc_url( 'https://raw.githubusercontent.com/ClassicPress/ClassicPress-release/master/wp-config-sample.php' )
 	) . '</p>';
@@ -85,10 +85,10 @@ if ( @file_exists( ABSPATH . '../wp-config.php' ) && ! @file_exists( ABSPATH . '
 	echo '<h1>' . __( 'Config File Found' ) . '</h1>';
 	echo '<p>' . sprintf(
 			/* translators: 1: wp-config.php 2: install.php */
-			__( 'A %1$s file was found one level above your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
-			'<code>wp-config.php</code>',
-			'install.php'
-		) . '</p>';
+		__( 'A %1$s file was found one level above your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
+		'<code>wp-config.php</code>',
+		'install.php'
+	) . '</p>';
 	setup_config_display_footer();
 }
 
@@ -108,20 +108,22 @@ switch ( $step ) {
 
 	// Just getting started? Display the language picker.
 	case -1:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
-			setup_config_display_header( 'language-chooser' );
-			echo '<h1 class="screen-reader-text">Select a default language</h1>';
-			echo '<form id="setup" method="post" action="?step=1">';
-			wp_install_language_form( $languages );
-			echo '</form>';
-			break; // end switch ( $step ), case -1
+		if ( wp_can_install_language_pack() && empty( $language ) ) {
+			$languages = wp_get_available_translations();
+			if ( $languages ) {
+				setup_config_display_header( 'language-chooser' );
+				echo '<h1 class="screen-reader-text">Select a default language</h1>';
+				echo '<form id="setup" method="post" action="?step=1">';
+				wp_install_language_form( $languages );
+				echo '</form>';
+				break; // end switch ( $step ), case -1
+			}
 		}
 
-	// Notably, there is no longer a step 0 here.
+		// Notably, there is no longer a step 0 here.
 
-	// Display the database setup screen.
+		// Display the database setup screen.
 	case 1:
-
 		// Ensure language is loaded.
 		if ( ! empty( $language ) ) {
 			$loaded_language = wp_download_language_pack( $language );
@@ -135,7 +137,7 @@ switch ( $step ) {
 		setup_config_display_header();
 
 		// Create a string depicting step 2.
-		$step_2 = 'setup-config.php?step=2';
+		$step_2  = 'setup-config.php?step=2';
 		$step_2 .= ( isset( $_REQUEST['noapi'] ) ) ? '&amp;noapi' : '';
 		$step_2 .= ( ! empty( $loaded_language ) ) ? '&amp;language=' . $loaded_language : '';
 
@@ -147,7 +149,7 @@ switch ( $step ) {
 		echo '<h2>' . __( 'Database Setup' ) . '</h2>';
 
 		// Description.
-		echo '<p>' .  sprintf(
+		echo '<p>' . sprintf(
 			/* translators: link to support forums for more help */
 			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
 			'https://forums.classicpress.net/c/support'
@@ -176,7 +178,7 @@ switch ( $step ) {
 		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> ' .
 			sprintf(
 				'<a href="%s" target="_blank" rel="noopener">' . __( 'Learn More' ) . '</a>',
-				esc_url('https://docs.classicpress.net/installing-classicpress/#installation-steps')
+				esc_url( 'https://docs.classicpress.net/installing-classicpress/#installation-steps' )
 			) .
 			'</td>';
 		echo '	</tr>';
@@ -197,17 +199,16 @@ switch ( $step ) {
 
 	// Display the site setup (title/admin/SEO) screen.
 	case 2:
-
 		// Handle language.
 		load_default_textdomain( $language );
 		$GLOBALS['wp_locale'] = new WP_Locale();
 
 		// Get and pare submitted data.
-		$dbname = trim( wp_unslash( $_POST[ 'dbname' ] ) );
-		$uname = trim( wp_unslash( $_POST[ 'uname' ] ) );
-		$pwd = trim( wp_unslash( $_POST[ 'pwd' ] ) );
-		$dbhost = trim( wp_unslash( $_POST[ 'dbhost' ] ) );
-		$prefix = trim( wp_unslash( $_POST[ 'prefix' ] ) );
+		$dbname = trim( wp_unslash( $_POST['dbname'] ) );
+		$uname  = trim( wp_unslash( $_POST['uname'] ) );
+		$pwd    = trim( wp_unslash( $_POST['pwd'] ) );
+		$dbhost = trim( wp_unslash( $_POST['dbhost'] ) );
+		$prefix = trim( wp_unslash( $_POST['prefix'] ) );
 
 		// Base of setup URL.
 		$step_1 = 'setup-config.php?step=1';
@@ -223,7 +224,7 @@ switch ( $step ) {
 		// Language check.
 		if ( ! empty( $language ) ) {
 			// Append language to setup URL and install URL.
-			$step_1 .= '&amp;language=' . $language;
+			$step_1  .= '&amp;language=' . $language;
 			$install .= '?language=' . $language;
 		} else {
 			// Only append to the install URL.
@@ -295,7 +296,7 @@ switch ( $step ) {
 		// Generate keys and salts using secure CSPRNG; fallback to API if enabled; further fallback to original wp_generate_password().
 		try {
 			$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_ []{}<>~`+=,.;:/?|';
-			$max = strlen( $chars ) - 1;
+			$max   = strlen( $chars ) - 1;
 			for ( $i = 0; $i < 8; $i++ ) {
 				$key = '';
 				for ( $j = 0; $j < 64; $j++ ) {
@@ -326,7 +327,7 @@ switch ( $step ) {
 
 		$key = 0;
 		foreach ( $config_file as $line_num => $line ) {
-			if ( '$table_prefix  =' == substr( $line, 0, 16 ) ) {
+			if ( '$table_prefix =' === substr( $line, 0, 15 ) ) {
 				$config_file[ $line_num ] = '$table_prefix  = \'' . addcslashes( $prefix, "\\'" ) . "';\r\n";
 				continue;
 			}
@@ -339,25 +340,25 @@ switch ( $step ) {
 			$padding  = $match[2];
 
 			switch ( $constant ) {
-				case 'DB_NAME'     :
-				case 'DB_USER'     :
-				case 'DB_PASSWORD' :
-				case 'DB_HOST'     :
+				case 'DB_NAME':
+				case 'DB_USER':
+				case 'DB_PASSWORD':
+				case 'DB_HOST':
 					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . addcslashes( constant( $constant ), "\\'" ) . "');\r\n";
 					break;
-				case 'DB_CHARSET'  :
+				case 'DB_CHARSET':
 					if ( 'utf8mb4' === $wpdb->charset || ( ! $wpdb->charset && $wpdb->has_cap( 'utf8mb4' ) ) ) {
 						$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'utf8mb4');\r\n";
 					}
 					break;
-				case 'AUTH_KEY'         :
-				case 'SECURE_AUTH_KEY'  :
-				case 'LOGGED_IN_KEY'    :
-				case 'NONCE_KEY'        :
-				case 'AUTH_SALT'        :
-				case 'SECURE_AUTH_SALT' :
-				case 'LOGGED_IN_SALT'   :
-				case 'NONCE_SALT'       :
+				case 'AUTH_KEY':
+				case 'SECURE_AUTH_KEY':
+				case 'LOGGED_IN_KEY':
+				case 'NONCE_KEY':
+				case 'AUTH_SALT':
+				case 'SECURE_AUTH_SALT':
+				case 'LOGGED_IN_SALT':
+				case 'NONCE_SALT':
 					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . $secret_keys[ $key++ ] . "');\r\n";
 					break;
 			}

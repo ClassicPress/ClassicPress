@@ -19,8 +19,8 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 	 * Set up the test fixture.
 	 * Override wp_die(), pretend to be ajax, and suppres E_WARNINGs
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		add_filter( 'wp_die_ajax_handler', array( $this, 'getDieHandler' ), 1, 1 );
 		add_filter( 'wp_doing_ajax', '__return_true' );
@@ -34,10 +34,10 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 	 * Tear down the test fixture.
 	 * Remove the wp_die() override, restore error reporting
 	 */
-	public function tearDown() {
+	public function tear_down() {
 		remove_filter( 'wp_die_ajax_handler', array( $this, 'getDieHandler' ), 1, 1 );
 		error_reporting( $this->_error_level );
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 	 */
 	public function test_response_charset_in_header() {
 
-		if ( !function_exists( 'xdebug_get_headers' ) ) {
+		if ( ! function_exists( 'xdebug_get_headers' ) ) {
 			$this->markTestSkipped( 'xdebug is required for this test' );
 		}
 
@@ -81,7 +81,7 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 		$headers = xdebug_get_headers();
 		ob_end_clean();
 
-		$this->assertTrue( in_array( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), $headers ) );
+		$this->assertTrue( in_array( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), $headers, true ) );
 	}
 
 	/**
@@ -97,6 +97,6 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 
 		// Check the XML tag
 		$contents = ob_get_clean();
-		$this->assertRegExp( '/<\?xml\s+version=\'1.0\'\s+encoding=\'' . preg_quote( get_option( 'blog_charset' ) ) . '\'\s+standalone=\'yes\'\?>/', $contents );
+		$this->assertMatchesRegularExpression( '/<\?xml\s+version=\'1.0\'\s+encoding=\'' . preg_quote( get_option( 'blog_charset' ) ) . '\'\s+standalone=\'yes\'\?>/', $contents );
 	}
 }

@@ -5,7 +5,7 @@
  *
  * Set this to error_reporting( -1 ) for debugging
  */
-error_reporting(0);
+error_reporting( 0 );
 
 /** Set ABSPATH for execution */
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'WPINC', 'wp-includes' );
 
-require( ABSPATH . 'wp-admin/includes/noop.php' );
-require( ABSPATH . WPINC . '/script-loader.php' );
-require( ABSPATH . WPINC . '/version.php' );
+require ABSPATH . 'wp-admin/includes/noop.php';
+require ABSPATH . WPINC . '/script-loader.php';
+require ABSPATH . WPINC . '/version.php';
 
 $load = $_GET['load'];
 if ( is_array( $load ) ) {
@@ -25,30 +25,32 @@ if ( is_array( $load ) ) {
 $load = preg_replace( '/[^a-z0-9,_-]+/i', '', $load );
 $load = array_unique( explode( ',', $load ) );
 
-if ( empty($load) )
+if ( empty( $load ) ) {
 	exit;
+}
 
-$rtl = ( isset($_GET['dir']) && 'rtl' == $_GET['dir'] );
+$rtl            = ( isset( $_GET['dir'] ) && 'rtl' == $_GET['dir'] );
 $expires_offset = 31536000; // 1 year
-$out = '';
+$out            = '';
 
 $wp_styles = new WP_Styles();
-wp_default_styles($wp_styles);
+wp_default_styles( $wp_styles );
 
 if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) === $wp_version ) {
 	$protocol = $_SERVER['SERVER_PROTOCOL'];
-	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ) ) ) {
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0' ), true ) ) {
 		$protocol = 'HTTP/1.0';
 	}
 	header( "$protocol 304 Not Modified" );
-	exit();
+	exit;
 }
 
 foreach ( $load as $handle ) {
-	if ( !array_key_exists($handle, $wp_styles->registered) )
+	if ( ! array_key_exists( $handle, $wp_styles->registered ) ) {
 		continue;
+	}
 
-	$style = $wp_styles->registered[$handle];
+	$style = $wp_styles->registered[ $handle ];
 
 	if ( empty( $style->src ) ) {
 		continue;
@@ -67,16 +69,16 @@ foreach ( $load as $handle ) {
 		$content = str_replace( '../images/', '../' . WPINC . '/images/', $content );
 		$content = str_replace( '../js/tinymce/', '../' . WPINC . '/js/tinymce/', $content );
 		$content = str_replace( '../fonts/', '../' . WPINC . '/fonts/', $content );
-		$out .= $content;
+		$out    .= $content;
 	} else {
 		$out .= str_replace( '../images/', 'images/', $content );
 	}
 }
 
-header("Etag: $wp_version");
-header('Content-Type: text/css; charset=UTF-8');
-header('Expires: ' . gmdate( "D, d M Y H:i:s", time() + $expires_offset ) . ' GMT');
-header("Cache-Control: public, max-age=$expires_offset");
+header( "Etag: $wp_version" );
+header( 'Content-Type: text/css; charset=UTF-8' );
+header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + $expires_offset ) . ' GMT' );
+header( "Cache-Control: public, max-age=$expires_offset" );
 
 echo $out;
 exit;

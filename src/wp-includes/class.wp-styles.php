@@ -101,11 +101,30 @@ class WP_Styles extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
+	 * Holds a string which contains the type attribute for style tag.
+	 *
+	 * If the current theme does not declare HTML5 support for 'style',
+	 * then it initializes as `type='text/css'`.
+	 *
+	 * @since WP-5.3.0
+	 * @var string
+	 */
+	private $type_attr = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since WP-2.6.0
 	 */
 	public function __construct() {
+		if (
+			function_exists( 'is_admin' ) && ! is_admin()
+		&&
+			function_exists( 'current_theme_supports' ) && ! current_theme_supports( 'html5', 'style' )
+		) {
+			$this->type_attr = " type='text/css'";
+		}
+
 		/**
 		 * Fires when the WP_Styles instance is initialized.
 		 *
@@ -113,7 +132,7 @@ class WP_Styles extends WP_Dependencies {
 		 *
 		 * @param WP_Styles $this WP_Styles instance (passed by reference).
 		 */
-		do_action_ref_array( 'wp_default_styles', array(&$this) );
+		do_action_ref_array( 'wp_default_styles', array( &$this ) );
 	}
 
 	/**
@@ -127,57 +146,94 @@ class WP_Styles extends WP_Dependencies {
 	 * @return bool True on success, false on failure.
 	 */
 	public function do_item( $handle ) {
-		if ( !parent::do_item($handle) )
+		if ( ! parent::do_item( $handle ) ) {
 			return false;
+		}
 
-		$obj = $this->registered[$handle];
-		if ( null === $obj->ver )
+		$obj = $this->registered[ $handle ];
+
+		if ( null === $obj->ver ) {
 			$ver = '';
-		else
+		} else {
 			$ver = $obj->ver ? $obj->ver : $this->default_version;
+		}
 
-		if ( isset($this->args[$handle]) )
-			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
+		if ( isset( $this->args[ $handle ] ) ) {
+			$ver = $ver ? $ver . '&amp;' . $this->args[ $handle ] : $this->args[ $handle ];
+		}
 
 		/** This filter is documented in wp-includes/script-loader.php */
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'style', $handle );
 
+		$src         = $obj->src;
+		$cond_before = $cond_after = '';
+		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
+
+		if ( $conditional ) {
+			$cond_before = "<!--[if {$conditional}]>\n";
+			$cond_after  = "<![endif]-->\n";
+		}
+
+		$inline_style = $this->print_inline_style( $handle, false );
+
+		if ( $inline_style ) {
+			$inline_style_tag = sprintf(
+				"<style id='%s-inline-css'%s>\n%s\n</style>\n",
+				esc_attr( $handle ),
+				$this->type_attr,
+				$inline_style
+			);
+		} else {
+			$inline_style_tag = '';
+		}
+
 		if ( $this->do_concat ) {
-			if ( $this->in_default_dir($obj->src) && !isset($obj->extra['conditional']) && !isset($obj->extra['alt']) ) {
-				$this->concat .= "$handle,";
+			if ( $this->in_default_dir( $src ) && ! $conditional && ! isset( $obj->extra['alt'] ) ) {
+				$this->concat         .= "$handle,";
 				$this->concat_version .= "$handle$ver";
 
-				$this->print_code .= $this->print_inline_style( $handle, false );
+				$this->print_code .= $inline_style;
 
 				return true;
 			}
 		}
 
-		if ( isset($obj->args) )
+		if ( isset( $obj->args ) ) {
 			$media = esc_attr( $obj->args );
-		else
+		} else {
 			$media = 'all';
+		}
 
 		// A single item may alias a set of items, by having dependencies, but no source.
-		if ( ! $obj->src ) {
-			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$inline_style = sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+		if ( ! $src ) {
+			if ( $inline_style_tag ) {
 				if ( $this->do_concat ) {
-					$this->print_html .= $inline_style;
+					$this->print_html .= $inline_style_tag;
 				} else {
-					echo $inline_style;
+					echo $inline_style_tag;
 				}
 			}
+
 			return true;
 		}
 
-		$href = $this->_css_href( $obj->src, $ver, $handle );
+		$href = $this->_css_href( $src, $ver, $handle );
 		if ( ! $href ) {
 			return true;
 		}
 
-		$rel = isset($obj->extra['alt']) && $obj->extra['alt'] ? 'alternate stylesheet' : 'stylesheet';
-		$title = isset($obj->extra['title']) ? "title='" . esc_attr( $obj->extra['title'] ) . "'" : '';
+		$rel   = isset( $obj->extra['alt'] ) && $obj->extra['alt'] ? 'alternate stylesheet' : 'stylesheet';
+		$title = isset( $obj->extra['title'] ) ? sprintf( "title='%s'", esc_attr( $obj->extra['title'] ) ) : '';
+
+		$tag = sprintf(
+			"<link rel='%s' id='%s-css' %s href='%s'%s media='%s' />\n",
+			$rel,
+			$handle,
+			$title,
+			$href,
+			$this->type_attr,
+			$media
+		);
 
 		/**
 		 * Filters the HTML link tag of an enqueued style.
@@ -186,48 +242,51 @@ class WP_Styles extends WP_Dependencies {
 		 * @since WP-4.3.0 Introduced the `$href` parameter.
 		 * @since WP-4.5.0 Introduced the `$media` parameter.
 		 *
-		 * @param string $html   The link tag for the enqueued style.
+		 * @param string $tag   The link tag for the enqueued style.
 		 * @param string $handle The style's registered handle.
 		 * @param string $href   The stylesheet's source URL.
 		 * @param string $media  The stylesheet's media attribute.
 		 */
-		$tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-css' $title href='$href' type='text/css' media='$media' />\n", $handle, $href, $media);
-		if ( 'rtl' === $this->text_direction && isset($obj->extra['rtl']) && $obj->extra['rtl'] ) {
+		$tag = apply_filters( 'style_loader_tag', $tag, $handle, $href, $media );
+
+		if ( 'rtl' === $this->text_direction && isset( $obj->extra['rtl'] ) && $obj->extra['rtl'] ) {
 			if ( is_bool( $obj->extra['rtl'] ) || 'replace' === $obj->extra['rtl'] ) {
-				$suffix = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
-				$rtl_href = str_replace( "{$suffix}.css", "-rtl{$suffix}.css", $this->_css_href( $obj->src , $ver, "$handle-rtl" ));
+				$suffix   = isset( $obj->extra['suffix'] ) ? $obj->extra['suffix'] : '';
+				$rtl_href = str_replace( "{$suffix}.css", "-rtl{$suffix}.css", $this->_css_href( $src, $ver, "$handle-rtl" ) );
 			} else {
 				$rtl_href = $this->_css_href( $obj->extra['rtl'], $ver, "$handle-rtl" );
 			}
 
 			/** This filter is documented in wp-includes/class.wp-styles.php */
-			$rtl_tag = apply_filters( 'style_loader_tag', "<link rel='$rel' id='$handle-rtl-css' $title href='$rtl_href' type='text/css' media='$media' />\n", $handle, $rtl_href, $media );
+			$rtl_tag = sprintf(
+				"<link rel='%s' id='%s-rtl-css' %s href='%s'%s media='%s' />\n",
+				$rel,
+				$handle,
+				$title,
+				$rtl_href,
+				$this->type_attr,
+				$media
+			);
 
-			if ( $obj->extra['rtl'] === 'replace' ) {
+			if ( 'replace' === $obj->extra['rtl'] ) {
 				$tag = $rtl_tag;
 			} else {
 				$tag .= $rtl_tag;
 			}
 		}
 
-		$conditional_pre = $conditional_post = '';
-		if ( isset( $obj->extra['conditional'] ) && $obj->extra['conditional'] ) {
-			$conditional_pre  = "<!--[if {$obj->extra['conditional']}]>\n";
-			$conditional_post = "<![endif]-->\n";
-		}
-
 		if ( $this->do_concat ) {
-			$this->print_html .= $conditional_pre;
+			$this->print_html .= $cond_before;
 			$this->print_html .= $tag;
-			if ( $inline_style = $this->print_inline_style( $handle, false ) ) {
-				$this->print_html .= sprintf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $inline_style );
+			if ( $inline_style_tag ) {
+				$this->print_html .= $inline_style_tag;
 			}
-			$this->print_html .= $conditional_post;
+			$this->print_html .= $cond_after;
 		} else {
-			echo $conditional_pre;
+			echo $cond_before;
 			echo $tag;
 			$this->print_inline_style( $handle );
-			echo $conditional_post;
+			echo $cond_after;
 		}
 
 		return true;
@@ -280,7 +339,12 @@ class WP_Styles extends WP_Dependencies {
 			return $output;
 		}
 
-		printf( "<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n", esc_attr( $handle ), $output );
+		printf(
+			"<style id='%s-inline-css'%s>\n%s\n</style>\n",
+			esc_attr( $handle ),
+			$this->type_attr,
+			$output
+		);
 
 		return true;
 	}
@@ -323,12 +387,13 @@ class WP_Styles extends WP_Dependencies {
 	 * @return string Style's fully-qualified URL.
 	 */
 	public function _css_href( $src, $ver, $handle ) {
-		if ( !is_bool($src) && !preg_match('|^(https?:)?//|', $src) && ! ( $this->content_url && 0 === strpos($src, $this->content_url) ) ) {
+		if ( ! is_bool( $src ) && ! preg_match( '|^(https?:)?//|', $src ) && ! ( $this->content_url && 0 === strpos( $src, $this->content_url ) ) ) {
 			$src = $this->base_url . $src;
 		}
 
-		if ( !empty($ver) )
-			$src = add_query_arg('ver', $ver, $src);
+		if ( ! empty( $ver ) ) {
+			$src = add_query_arg( 'ver', $ver, $src );
+		}
 
 		/**
 		 * Filters an enqueued style's fully-qualified URL.
@@ -351,12 +416,14 @@ class WP_Styles extends WP_Dependencies {
 	 * @return bool True if found, false if not.
 	 */
 	public function in_default_dir( $src ) {
-		if ( ! $this->default_dirs )
+		if ( ! $this->default_dirs ) {
 			return true;
+		}
 
 		foreach ( (array) $this->default_dirs as $test ) {
-			if ( 0 === strpos($src, $test) )
+			if ( 0 === strpos( $src, $test ) ) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -373,7 +440,7 @@ class WP_Styles extends WP_Dependencies {
 	 * @return array Handles of items that have been processed.
 	 */
 	public function do_footer_items() {
-		$this->do_items(false, 1);
+		$this->do_items( false, 1 );
 		return $this->done;
 	}
 
@@ -383,9 +450,9 @@ class WP_Styles extends WP_Dependencies {
 	 * @since WP-3.3.0
 	 */
 	public function reset() {
-		$this->do_concat = false;
-		$this->concat = '';
+		$this->do_concat      = false;
+		$this->concat         = '';
 		$this->concat_version = '';
-		$this->print_html = '';
+		$this->print_html     = '';
 	}
 }

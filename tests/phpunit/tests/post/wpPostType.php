@@ -22,19 +22,28 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$post_type_object->remove_supports();
 		$post_type_supports_after = get_all_post_type_supports( $post_type );
 
-		$this->assertEqualSets( array( 'title' => true, 'editor' => true ), $post_type_supports );
-		$this->assertEqualSets( array(), $post_type_supports_after );
+		$this->assertSameSets(
+			array(
+				'title'  => true,
+				'editor' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
 	}
 
 	public function test_add_supports_custom() {
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array(
-			'supports' => array(
-				'editor',
-				'comments',
-				'revisions',
-			),
-		) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'supports' => array(
+					'editor',
+					'comments',
+					'revisions',
+				),
+			)
+		);
 
 		$post_type_object->add_supports();
 		$post_type_supports = get_all_post_type_supports( $post_type );
@@ -42,12 +51,15 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$post_type_object->remove_supports();
 		$post_type_supports_after = get_all_post_type_supports( $post_type );
 
-		$this->assertEqualSets( array(
-			'editor'    => true,
-			'comments'  => true,
-			'revisions' => true,
-		), $post_type_supports );
-		$this->assertEqualSets( array(), $post_type_supports_after );
+		$this->assertSameSets(
+			array(
+				'editor'    => true,
+				'comments'  => true,
+				'revisions' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
 	}
 
 	public function test_does_not_add_query_var_if_not_public() {
@@ -57,10 +69,16 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array( 'rewrite' => false, 'query_var' => 'foobar' ) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'rewrite'   => false,
+				'query_var' => 'foobar',
+			)
+		);
 		$post_type_object->add_rewrite_rules();
 
-		$this->assertFalse( in_array( 'foobar', $wp->public_query_vars ) );
+		$this->assertFalse( in_array( 'foobar', $wp->public_query_vars, true ) );
 	}
 
 	public function test_adds_query_var_if_public() {
@@ -70,17 +88,20 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array(
-			'public'    => true,
-			'rewrite'   => false,
-			'query_var' => 'foobar',
-		) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'public'    => true,
+				'rewrite'   => false,
+				'query_var' => 'foobar',
+			)
+		);
 
 		$post_type_object->add_rewrite_rules();
-		$in_array = in_array( 'foobar', $wp->public_query_vars );
+		$in_array = in_array( 'foobar', $wp->public_query_vars, true );
 
 		$post_type_object->remove_rewrite_rules();
-		$in_array_after = in_array( 'foobar', $wp->public_query_vars );
+		$in_array_after = in_array( 'foobar', $wp->public_query_vars, true );
 
 		$this->assertTrue( $in_array );
 		$this->assertFalse( $in_array_after );
@@ -93,7 +114,13 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		global $wp_rewrite;
 
 		$post_type        = 'cpt';
-		$post_type_object = new WP_Post_Type( $post_type, array( 'public' => true, 'rewrite' => true ) );
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'public'  => true,
+				'rewrite' => true,
+			)
+		);
 
 		$post_type_object->add_rewrite_rules();
 		$rewrite_tags = $wp_rewrite->rewritecode;
@@ -101,8 +128,8 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$post_type_object->remove_rewrite_rules();
 		$rewrite_tags_after = $wp_rewrite->rewritecode;
 
-		$this->assertNotFalse( array_search( "%$post_type%", $rewrite_tags ) );
-		$this->assertFalse( array_search( "%$post_type%", $rewrite_tags_after ) );
+		$this->assertNotFalse( array_search( "%$post_type%", $rewrite_tags, true ) );
+		$this->assertFalse( array_search( "%$post_type%", $rewrite_tags_after, true ) );
 	}
 
 	public function test_register_meta_boxes() {
@@ -145,7 +172,7 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 
 		unset( $wp_post_types[ $post_type ] );
 
-		$this->assertEqualSets( array( 'post_tag' ), $taxonomies );
-		$this->assertEqualSets( array(), $taxonomies_after );
+		$this->assertSameSets( array( 'post_tag' ), $taxonomies );
+		$this->assertSameSets( array(), $taxonomies_after );
 	}
 }

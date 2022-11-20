@@ -17,12 +17,12 @@ class Tests_Comment_DateQuery extends WP_UnitTestCase {
 
 	public $posts = array();
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		// Just some dummy posts to use as parents for comments
 		for ( $i = 1; $i <= 2; $i++ ) {
-			$this->posts[$i] = self::factory()->post->create();
+			$this->posts[ $i ] = self::factory()->post->create();
 		}
 
 		// Be careful modifying this. Tests are coded to expect this exact sample data.
@@ -39,37 +39,44 @@ class Tests_Comment_DateQuery extends WP_UnitTestCase {
 		);
 
 		foreach ( $comment_dates as $comment_date => $comment_parent ) {
-			$result = self::factory()->comment->create( array(
-				'comment_date'    => $comment_date,
-				'comment_post_ID' => $this->posts[ $comment_parent ],
-			) );
+			$result = self::factory()->comment->create(
+				array(
+					'comment_date'    => $comment_date,
+					'comment_post_ID' => $this->posts[ $comment_parent ],
+				)
+			);
 		}
 	}
 
 	public function _get_query_result( $args = array() ) {
-		$args = wp_parse_args( $args, array(
-			'post_id' => $this->posts[1],
-			'orderby' => 'comment_ID',  // Same order they were created
-			'order'   => 'ASC',
-		) );
+		$args = wp_parse_args(
+			$args,
+			array(
+				'post_id' => $this->posts[1],
+				'orderby' => 'comment_ID',  // Same order they were created
+				'order'   => 'ASC',
+			)
+		);
 
 		return get_comments( $args );
 	}
 
 	public function test_year() {
-		$comments = $this->_get_query_result( array(
-			'date_query' => array(
-				array(
-					'year' => 2008,
+		$comments = $this->_get_query_result(
+			array(
+				'date_query' => array(
+					array(
+						'year' => 2008,
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$expected_dates = array(
 			'2008-03-29 09:04:25',
 			'2008-12-10 13:06:27',
 		);
 
-		$this->assertEquals( $expected_dates, wp_list_pluck( $comments, 'comment_date' ) );
+		$this->assertSame( $expected_dates, wp_list_pluck( $comments, 'comment_date' ) );
 	}
 }
