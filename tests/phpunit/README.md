@@ -27,27 +27,27 @@ Once the dependencies are installed you can use the following commands:
 - to run PHPUnit tests
 
 ```
-composer run phpunit
+composer phpunit
 ```
 
 - to run coding standards checks on core files
 
 ```
-composer run phpcs
+composer phpcs
 ```
 
 - to run coding standards checks on the test files
 
 ```
-composer run phpcs-tests
+composer phpcs-tests
 ```
 
 To execute only particular test file, groups or specific test (useful when debugging):
 
 ```
-./vendor/bin/phpunit tests/phpunit/tests/test_case.php
-./vendor/bin/phpunit --group=date
-./vendor/bin/phpunit --filter=test_should_format_date
+composer phpunit -- tests/phpunit/tests/date/query.php
+composer phpunit -- --group=date
+composer phpunit -- --filter=test_should_format_date
 ```
 
 7. **Explore the existing tests** in the `tests/phpunit/tests` directory, look at how they work, edit them and break them, and write your own.
