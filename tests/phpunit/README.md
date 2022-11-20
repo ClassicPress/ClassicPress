@@ -4,36 +4,50 @@
 
 1. **Be sure your PHP installation supports the `mbstring` module.** If you're not sure, run `php -m` and look for `mbstring` in the list. If it's not present, and you're on Ubuntu or Debian Linux, you can run `sudo apt-get install php-mbstring` to fix this.
 
-2. **Install `phpunit` version `6.x`.** Example terminal commands:
-
-```
-wget https://phar.phpunit.de/phpunit-6.5.9.phar
-chmod +x phpunit-6.5.9.phar
-sudo mv phpunit-6.5.9.phar /usr/local/bin/phpunit
-phpunit --version
-```
-
-3. **Clone the ClassicPress `git` repository to your computer:**
+2. **Clone the ClassicPress `git` repository to your computer, if needed:**
 
 ```
 git clone https://github.com/ClassicPress/ClassicPress.git
 cd ClassicPress
 ```
+3. **Install MySQL and create an empty MySQL database.** The test suite will **delete all data** from all tables for whichever MySQL database is configured. *Use a separate database from any ClassicPress or WordPress installations on your computer*.
 
-4. **Install MySQL and create an empty MySQL database.** The test suite will **delete all data** from all tables for whichever MySQL database is configured. *Use a separate database from any ClassicPress or WordPress installations on your computer*.
+4. **Set up a config file for the tests.** In your repository folder (`ClassicPress`), copy `wp-tests-config-sample.php` to `wp-tests-config.php`, and enter your database credentials from the step above. *Use a separate database from any ClassicPress or WordPress installations on your computer*, because data in this database **will be deleted** with each test run. You may want to check everything works at this stage on your `localhost` by following a similar process using copying the `wp-config-sample.php` to `wp-config.php` and accessing the ClassicPress code locally.
 
-5. **Set up a config file for the tests.** In your repository folder (`ClassicPress`), copy `wp-tests-config-sample.php` to `wp-tests-config.php`, and enter your database credentials from the step above. *Use a separate database from any ClassicPress or WordPress installations on your computer*, because data in this database **will be deleted** with each test run.
+5. **Install** the automated test files:
+
+```composer install```
+
+You will need to have the [composer](https://getcomposer.org)  available on your system first.
 
 6. **Run the tests:**
 
-```
-phpunit
-```
+Once the dependencies are installed you can use the following commands:
 
-To execute only a particular test file (useful when debugging):
+- to run PHPUnit tests
 
 ```
-phpunit tests/phpunit/tests/test_case.php
+composer run phpunit
+```
+
+- to run coding standards checks on core files
+
+```
+composer run phpcs
+```
+
+- to run coding standards checks on the test files
+
+```
+composer run phpcs-tests
+```
+
+To execute only particular test file, groups or specific test (useful when debugging):
+
+```
+./vendor/bin/phpunit tests/phpunit/tests/test_case.php
+./vendor/bin/phpunit --group=date
+./vendor/bin/phpunit --filter=test_should_format_date
 ```
 
 7. **Explore the existing tests** in the `tests/phpunit/tests` directory, look at how they work, edit them and break them, and write your own.

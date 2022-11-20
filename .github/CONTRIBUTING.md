@@ -83,7 +83,7 @@ At this point you have a working local development environment. Here are some fu
 
 - A good pull request (PR) should be for a single, specific change. The change should be explained using the template provided on GitHub.
 - Any new or modified code should have automated tests, especially if the way it works is at all complicated.
-- It is good `git` practice to create a new branch when starting work on a potential change.
+- It is good `git` practice to create a new branch when starting work on a potential change, `git checkout -b your-pr-branch`.
 - It is always a good idea to look at the "Files" view on GitHub after submitting your PR to verify that the changes look as expected. Generally, there should be no "extra" changes that are not related to the purpose of your PR like reformatting or re-aligning files. Such changes are best done in a separate PR just for that purpose. If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
 - Generally it is best to only use one pull request for each change, even if the initial code needs revision after review and feedback. Closing the initial pull request and opening a new one makes it more difficult to follow the history of the change, and it is much better to just update the existing PR in response to any feedback received.
 - To be accepted, a PR **must** pass the automated tests which are run using GitHub Actions. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Usually, when this happens we start a separate PR to resolve the failure, and once that is merged, your PR will need to be updated as per the next bullet point.
@@ -137,7 +137,7 @@ Any change that introduces new code or changes behavior should have automated te
 
 If you're not familiar with automated tests, the concept is basically **code that runs other code** and verifies its behavior.
 
-Documentation for running and updating our existing tests, as well as the code for the tests themselves, can be found in the [`tests/phpunit`](../tests/phpunit) subdirectory of this repository.
+Further documentation for running and updating our existing tests, as well as the code for the tests themselves, can be found in the [`tests/phpunit`](../tests/phpunit) subdirectory of this repository.
 
 ## Backporting changes from WordPress
 
@@ -160,29 +160,29 @@ When you're ready to backport a code change:
 1. Identify the WordPress **changeset number** that you'd like to port such as `43123`.
 2. Run `bin/backport-wp-commit.sh` script in your terminal/command prompt to apply the change to your code:
 
-   ```
-   bin/backport-wp-commit.sh CHANGESET_NUMBER
-   ```
+	```
+	bin/backport-wp-commit.sh CHANGESET_NUMBER
+	```
 
-	 or use composer:
+	or use composer:
 
-	 ```
-	 composer run backport CHANGESET_NUMBER
-	 ```
+	```
+	composer run backport CHANGESET_NUMBER
+	```
 
-   This will create a new branch and apply the WordPress changeset to it. If you're porting multiple changesets, you can create a new `git` branch first and use the `-c` option to this script to apply each changeset to your current branch instead:
+	This will create a new branch and apply the WordPress changeset to it. If you're porting multiple changesets, you can create a new `git` branch first and use the `-c` option to this script to apply each changeset to your current branch instead:
 
-   ```
-   bin/backport-wp-commit.sh -c CHANGESET_NUMBER
-   ```
+	```
+	bin/backport-wp-commit.sh -c CHANGESET_NUMBER
+	```
 
-	 or use composer:
+	or use composer:
 
-	 ```
-	 composer run backport -c CHANGESET_NUMBER
-	 ```
+	```
+	composer run backport -c CHANGESET_NUMBER
+	```
 
-   Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
+	Using this script for all backports saves time for you and for the maintainers. It uses a standardized format for commit messages, which makes it possible for us to track which WordPress changes we've already included.
 
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
