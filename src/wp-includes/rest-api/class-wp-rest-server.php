@@ -385,7 +385,8 @@ class WP_REST_Server {
 			}
 
 			// Embed links inside the request.
-			$result = $this->response_to_data( $result, isset( $_GET['_embed'] ) );
+			$embed  = isset( $_GET['_embed'] ) ? rest_parse_embed_param( $_GET['_embed'] ) : false;
+			$result = $this->response_to_data( $result, $embed );
 
 			/**
 			 * Filters the API response.
@@ -424,10 +425,15 @@ class WP_REST_Server {
 	/**
 	 * Converts a response to data to send.
 	 *
+<<<<<<< HEAD
 	 * @since WP-4.4.0
+=======
+	 * @since 4.4.0
+	 * @since 5.4.0 The $embed parameter can now contain a list of link relations to include.
+>>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
 	 *
 	 * @param WP_REST_Response $response Response object.
-	 * @param bool             $embed    Whether links should be embedded.
+	 * @param bool|string[]    $embed    Whether to embed all links, a filtered list of link relations, or no links.
 	 * @return array {
 	 *     Data with sub-requests embedded.
 	 *
@@ -446,9 +452,11 @@ class WP_REST_Server {
 		if ( $embed ) {
 			// Determine if this is a numeric array.
 			if ( wp_is_numeric_array( $data ) ) {
-				$data = array_map( array( $this, 'embed_links' ), $data );
+				foreach ( $data as $key => $item ) {
+					$data[ $key ] = $this->embed_links( $item, $embed );
+				}
 			} else {
-				$data = $this->embed_links( $data );
+				$data = $this->embed_links( $data, $embed );
 			}
 		}
 
@@ -543,9 +551,15 @@ class WP_REST_Server {
 	/**
 	 * Embeds the links from the data into the request.
 	 *
+<<<<<<< HEAD
 	 * @since WP-4.4.0
+=======
+	 * @since 4.4.0
+	 * @since 5.4.0 The $embed parameter can now contain a list of link relations to include.
+>>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
 	 *
 	 * @param array $data Data from the request.
+	 * @param bool|string[] $embed Whether to embed all links or a filtered list of link relations.
 	 * @return array {
 	 *     Data with sub-requests embedded.
 	 *
@@ -553,7 +567,7 @@ class WP_REST_Server {
 	 *     @type array [$_embedded] Embeddeds.
 	 * }
 	 */
-	protected function embed_links( $data ) {
+	protected function embed_links( $data, $embed = true ) {
 		if ( empty( $data['_links'] ) ) {
 			return $data;
 		}
@@ -561,8 +575,13 @@ class WP_REST_Server {
 		$embedded = array();
 
 		foreach ( $data['_links'] as $rel => $links ) {
+<<<<<<< HEAD
 			// Ignore links to self, for obvious reasons.
 			if ( 'self' === $rel ) {
+=======
+			// If a list of relations was specified, and the link relation is not in the whitelist, don't process the link.
+			if ( is_array( $embed ) && ! in_array( $rel, $embed, true ) ) {
+>>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
 				continue;
 			}
 

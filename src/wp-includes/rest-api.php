@@ -1309,3 +1309,97 @@ function rest_sanitize_value_from_schema( $value, $args ) {
 
 	return $value;
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * Append result of internal request to REST API for purpose of preloading data to be attached to a page.
+ * Expected to be called in the context of `array_reduce`.
+ *
+ * @since 5.0.0
+ *
+ * @param  array  $memo Reduce accumulator.
+ * @param  string $path REST API path to preload.
+ * @return array        Modified reduce accumulator.
+ */
+function rest_preload_api_request( $memo, $path ) {
+	// array_reduce() doesn't support passing an array in PHP 5.2,
+	// so we need to make sure we start with one.
+	if ( ! is_array( $memo ) ) {
+		$memo = array();
+	}
+
+	if ( empty( $path ) ) {
+		return $memo;
+	}
+
+	$method = 'GET';
+	if ( is_array( $path ) && 2 === count( $path ) ) {
+		$method = end( $path );
+		$path   = reset( $path );
+
+		if ( ! in_array( $method, array( 'GET', 'OPTIONS' ), true ) ) {
+			$method = 'GET';
+		}
+	}
+
+	$path_parts = parse_url( $path );
+	if ( false === $path_parts ) {
+		return $memo;
+	}
+
+	$request = new WP_REST_Request( $method, $path_parts['path'] );
+	if ( ! empty( $path_parts['query'] ) ) {
+		parse_str( $path_parts['query'], $query_params );
+		$request->set_query_params( $query_params );
+	}
+
+	$response = rest_do_request( $request );
+	if ( 200 === $response->status ) {
+		$server = rest_get_server();
+		$data   = (array) $response->get_data();
+		$links  = $server::get_compact_response_links( $response );
+		if ( ! empty( $links ) ) {
+			$data['_links'] = $links;
+		}
+
+		if ( 'OPTIONS' === $method ) {
+			$response = rest_send_allow_header( $response, $server, $request );
+
+			$memo[ $method ][ $path ] = array(
+				'body'    => $data,
+				'headers' => $response->headers,
+			);
+		} else {
+			$memo[ $path ] = array(
+				'body'    => $data,
+				'headers' => $response->headers,
+			);
+		}
+	}
+
+	return $memo;
+}
+
+/**
+ * Parses the "_embed" parameter into the list of resources to embed.
+ *
+ * @since 5.4.0
+ *
+ * @param string|array $embed Raw "_embed" parameter value.
+ * @return true|string[] Either true to embed all embeds, or a list of relations to embed.
+ */
+function rest_parse_embed_param( $embed ) {
+	if ( ! $embed || 'true' === $embed || '1' === $embed ) {
+		return true;
+	}
+
+	$rels = wp_parse_list( $embed );
+
+	if ( ! $rels ) {
+		return true;
+	}
+
+	return $rels;
+}
+>>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)

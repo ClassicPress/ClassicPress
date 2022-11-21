@@ -705,4 +705,31 @@ class Tests_REST_API extends WP_UnitTestCase {
 		$routes = $GLOBALS['wp_rest_server']->get_routes();
 		$this->assertSame( $routes['/test-ns/test'][0]['methods'], array( 'GET' => true ) );
 	}
+
+	/**
+	 * @dataProvider _dp_rest_parse_embed_param
+	 */
+	public function test_rest_parse_embed_param( $expected, $embed ) {
+		$this->assertEquals( $expected, rest_parse_embed_param( $embed ) );
+	}
+
+	public function _dp_rest_parse_embed_param() {
+		return array(
+			array( true, '' ),
+			array( true, null ),
+			array( true, '1' ),
+			array( true, 'true' ),
+			array( true, array() ),
+			array( array( 'author' ), 'author' ),
+			array( array( 'author', 'replies' ), 'author,replies' ),
+			array( array( 'author', 'replies' ), 'author,replies ' ),
+			array( array( 'wp:term' ), 'wp:term' ),
+			array( array( 'wp:term', 'wp:attachment' ), 'wp:term,wp:attachment' ),
+			array( array( 'author' ), array( 'author' ) ),
+			array( array( 'author', 'replies' ), array( 'author', 'replies' ) ),
+			array( array( 'https://api.w.org/term' ), 'https://api.w.org/term' ),
+			array( array( 'https://api.w.org/term', 'https://api.w.org/attachment' ), 'https://api.w.org/term,https://api.w.org/attachment' ),
+			array( array( 'https://api.w.org/term', 'https://api.w.org/attachment' ), array( 'https://api.w.org/term', 'https://api.w.org/attachment' ) ),
+		);
+	}
 }
