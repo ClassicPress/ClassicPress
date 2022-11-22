@@ -3912,6 +3912,23 @@ function wp_parse_args( $args, $defaults = '' ) {
 }
 
 /**
+ * Converts a comma- or space-separated list of scalar values to an array.
+ *
+ * @since WP-5.1.0
+ * @param array|string $list List of values.
+ * @return array Array of values.
+ */
+function wp_parse_list( $list ) {
+	if ( ! is_array( $list ) ) {
+		return preg_split( '/[\s,]+/', $list, -1, PREG_SPLIT_NO_EMPTY );
+	}
+	// Validate all entries of the list are scalar.
+	$list = array_filter( $list, 'is_scalar' );
+
+	return $list;
+}
+
+/**
  * Clean up an array, comma- or space-separated list of IDs.
  *
  * @since WP-3.0.0
