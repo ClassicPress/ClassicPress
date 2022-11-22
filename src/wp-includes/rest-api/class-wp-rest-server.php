@@ -425,12 +425,8 @@ class WP_REST_Server {
 	/**
 	 * Converts a response to data to send.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.4.0
-=======
-	 * @since 4.4.0
-	 * @since 5.4.0 The $embed parameter can now contain a list of link relations to include.
->>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
+	 * @since WP-5.4.0 The $embed parameter can now contain a list of link relations to include.
 	 *
 	 * @param WP_REST_Response $response Response object.
 	 * @param bool|string[]    $embed    Whether to embed all links, a filtered list of link relations, or no links.
@@ -551,12 +547,8 @@ class WP_REST_Server {
 	/**
 	 * Embeds the links from the data into the request.
 	 *
-<<<<<<< HEAD
 	 * @since WP-4.4.0
-=======
-	 * @since 4.4.0
-	 * @since 5.4.0 The $embed parameter can now contain a list of link relations to include.
->>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
+	 * @since WP-5.4.0 The $embed parameter can now contain a list of link relations to include.
 	 *
 	 * @param array $data Data from the request.
 	 * @param bool|string[] $embed Whether to embed all links or a filtered list of link relations.
@@ -575,13 +567,8 @@ class WP_REST_Server {
 		$embedded = array();
 
 		foreach ( $data['_links'] as $rel => $links ) {
-<<<<<<< HEAD
-			// Ignore links to self, for obvious reasons.
-			if ( 'self' === $rel ) {
-=======
 			// If a list of relations was specified, and the link relation is not in the whitelist, don't process the link.
 			if ( is_array( $embed ) && ! in_array( $rel, $embed, true ) ) {
->>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
 				continue;
 			}
 

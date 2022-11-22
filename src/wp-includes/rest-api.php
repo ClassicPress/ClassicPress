@@ -1309,14 +1309,12 @@ function rest_sanitize_value_from_schema( $value, $args ) {
 
 	return $value;
 }
-<<<<<<< HEAD
-=======
 
 /**
  * Append result of internal request to REST API for purpose of preloading data to be attached to a page.
  * Expected to be called in the context of `array_reduce`.
  *
- * @since 5.0.0
+ * @since WP-5.0.0
  *
  * @param  array  $memo Reduce accumulator.
  * @param  string $path REST API path to preload.
@@ -1384,7 +1382,7 @@ function rest_preload_api_request( $memo, $path ) {
 /**
  * Parses the "_embed" parameter into the list of resources to embed.
  *
- * @since 5.4.0
+ * @since WP-5.4.0
  *
  * @param string|array $embed Raw "_embed" parameter value.
  * @return true|string[] Either true to embed all embeds, or a list of relations to embed.
@@ -1402,4 +1400,3 @@ function rest_parse_embed_param( $embed ) {
 
 	return $rels;
 }
->>>>>>> 98e5dd52de (REST API: Introduce selective link embedding.)
