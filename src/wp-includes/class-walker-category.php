@@ -148,7 +148,13 @@ class Walker_Category extends Walker {
 			if ( empty( $args['feed_image'] ) ) {
 				$link .= $name;
 			} else {
-				$link .= '<img ' . cp_attributes( 'img', array( 'src' => $args['feed_image'], 'alt' =>  $alt ) ) . ' />';
+				$link .= '<img ' . cp_attributes(
+					'img',
+					array(
+						'src' => $args['feed_image'],
+						'alt' => $alt,
+					)
+				) . ' />';
 			}
 			$link .= '</a>';
 
@@ -207,7 +213,7 @@ class Walker_Category extends Walker {
 			 */
 			$css_classes = apply_filters( 'category_css_class', $css_classes, $category, $depth, $args );
 
-			$output .= cp_attributes('li', array( 'class' => $css_classes ) );
+			$output .= cp_attributes( 'li', array( 'class' => $css_classes ) );
 			$output .= ">$link\n";
 		} elseif ( isset( $args['separator'] ) ) {
 			$output .= "\t$link" . $args['separator'] . "\n";

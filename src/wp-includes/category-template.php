@@ -160,7 +160,13 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 		$thelist .= '<ul ' . cp_attributes( 'ul', 'class="post-categories"' ) . '>';
 		foreach ( $categories as $category ) {
 			$thelist .= "\n\t<li " . cp_attributes( 'li' ) . '>';
-			$alink = '<a ' . cp_attributes( 'a', array( 'href' => get_category_link( $category->term_id ), 'rel' => $rel ) ) . '>';
+			$alink = '<a ' . cp_attributes(
+				'a',
+				array(
+					'href' => get_category_link( $category->term_id ),
+					'rel' => $rel,
+				)
+			) . '>';
 			switch ( strtolower( $parents ) ) {
 				case 'multiple':
 					if ( $category->parent ) {
@@ -187,7 +193,13 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 			if ( 0 < $i ) {
 				$thelist .= $separator;
 			}
-			$alink = '<a ' . cp_attributes( 'a', array( 'href' => get_category_link( $category->term_id ), 'rel' => $rel ) ) . '>';
+			$alink = '<a ' . cp_attributes(
+				'a',
+				array(
+					'href' => get_category_link( $category->term_id ),
+					'rel' => $rel,
+				)
+			) . '>';
 			switch ( strtolower( $parents ) ) {
 				case 'multiple':
 					if ( $category->parent ) {
@@ -390,7 +402,7 @@ function wp_dropdown_categories( $args = '' ) {
 	}
 
 	if ( ! $parsed_args['hide_if_empty'] || ! empty( $categories ) ) {
-		$output = '<select '. cp_attributes( 'select', $attr ) . ">\n";
+		$output = '<select ' . cp_attributes( 'select', $attr ) . ">\n";
 	} else {
 		$output = '';
 	}
@@ -616,7 +628,7 @@ function wp_list_categories( $args = '' ) {
 				}
 			}
 
-			$posts_page_link = '<a ' . cp_attributes( 'a', array( 'href' =>  $posts_page ) ) . ">$show_option_all</a>";
+			$posts_page_link = '<a ' . cp_attributes( 'a', array( 'href' => $posts_page ) ) . ">$show_option_all</a>";
 			if ( 'list' === $parsed_args['style'] ) {
 				$output .= '<li ' . cp_attributes( 'li', array( 'class' => 'cat-item-all' ) ) . '>';
 				$output .= $posts_page_link . '</li>';
@@ -1006,7 +1018,13 @@ function wp_generate_tag_cloud( $tags, $args = '' ) {
 			 * technologies the default role when the list is styled with `list-style: none`.
 			 * Note: this is redundant but doesn't harm.
 			 */
-			$return  = '<ul ' . cp_attributes( 'ul', array( 'class' => 'wp-tag-cloud', 'role' => 'list' ) ) . ">\n\t<li>";
+			$return  = '<ul ' . cp_attributes(
+				'ul',
+				array(
+					'class' => 'wp-tag-cloud',
+					'role'  => 'list',
+				)
+			) . ">\n\t<li>";
 			$return .= join( "</li>\n\t<li>", $a );
 			$return .= "</li>\n</ul>\n";
 			break;
@@ -1308,7 +1326,13 @@ function get_the_term_list( $post_id, $taxonomy, $before = '', $sep = '', $after
 		if ( is_wp_error( $link ) ) {
 			return $link;
 		}
-		$links[] = '<a ' . cp_attributes( 'a', array( 'href' => $link, 'rel' => 'tag' ) ) . '>' . $term->name . '</a>';
+		$links[] = '<a ' . cp_attributes(
+			'a',
+			array(
+				'href' => $link,
+				'rel'  => 'tag',
+			)
+		) . '>' . $term->name . '</a>';
 	}
 
 	/**

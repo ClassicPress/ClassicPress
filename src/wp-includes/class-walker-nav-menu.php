@@ -164,7 +164,13 @@ class Walker_Nav_Menu extends Walker {
 		 */
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
 
-		$output .= $indent . '<li ' . cp_attributes( 'li', array( 'id' => $id, 'class' => $class_names ) ) . '>';
+		$output .= $indent . '<li ' . cp_attributes(
+			'li',
+			array(
+				'id' => $id,
+				'class' => $class_names,
+			)
+		) . '>';
 
 		$atts                 = array();
 		$atts['title']        = ! empty( $item->attr_title ) ? $item->attr_title : '';
