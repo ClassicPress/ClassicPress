@@ -58,7 +58,7 @@ class Walker_Category extends Walker {
 		}
 
 		$indent  = str_repeat( "\t", $depth );
-		$output .= "$indent<ul class='children'>\n";
+		$output .= "$indent<ul " . cp_attributes( 'ul', 'class=children' ) . ">\n";
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Walker_Category extends Walker {
 			return;
 		}
 
-		$link = '<a href="' . esc_url( get_term_link( $category ) ) . '" ';
+		$attr = array( 'href' => get_term_link( $category ) );
 		if ( $args['use_desc_for_title'] && ! empty( $category->description ) ) {
 			/**
 			 * Filters the category description for display.
@@ -118,10 +118,10 @@ class Walker_Category extends Walker {
 			 * @param string $description Category description.
 			 * @param object $category    Category object.
 			 */
-			$link .= 'title="' . esc_attr( strip_tags( apply_filters( 'category_description', $category->description, $category ) ) ) . '"';
+			$attr['title'] = strip_tags( apply_filters( 'category_description', $category->description, $category ) );
 		}
 
-		$link .= '>';
+		$link = '<a ' . cp_attributes( 'a', $attr ) . '>';
 		$link .= $cat_name . '</a>';
 
 		if ( ! empty( $args['feed_image'] ) || ! empty( $args['feed'] ) ) {
@@ -131,22 +131,24 @@ class Walker_Category extends Walker {
 				$link .= '(';
 			}
 
-			$link .= '<a href="' . esc_url( get_term_feed_link( $category->term_id, $category->taxonomy, $args['feed_type'] ) ) . '"';
+			$attr = array( 'href' => get_term_feed_link( $category->term_id, $category->taxonomy, $args['feed_type'] ) );
 
 			if ( empty( $args['feed'] ) ) {
 				$alt = ' alt="' . sprintf( __( 'Feed for all posts filed under %s' ), $cat_name ) . '"';
 			} else {
 				$alt   = ' alt="' . $args['feed'] . '"';
 				$name  = $args['feed'];
-				$link .= empty( $args['title'] ) ? '' : $args['title'];
+				if ( ! empty( $args['title'] ) ) {
+					$attr['title'] = $args['title'];
+				}
 			}
 
-			$link .= '>';
+			$link .= '<a ' . cp_attributes( 'a', $attr ) . '>';
 
 			if ( empty( $args['feed_image'] ) ) {
 				$link .= $name;
 			} else {
-				$link .= "<img src='" . $args['feed_image'] . "'$alt" . ' />';
+				$link .= '<img ' . cp_attributes( 'img', array( 'src' => $args['feed_image'], 'alt' =>  $alt ) ) . ' />';
 			}
 			$link .= '</a>';
 
@@ -159,7 +161,7 @@ class Walker_Category extends Walker {
 			$link .= ' (' . number_format_i18n( $category->count ) . ')';
 		}
 		if ( 'list' === $args['style'] ) {
-			$output     .= "\t<li";
+			$output     .= "\t<li ";
 			$css_classes = array(
 				'cat-item',
 				'cat-item-' . $category->term_id,
@@ -203,9 +205,9 @@ class Walker_Category extends Walker {
 			 * @param int    $depth       Depth of page, used for padding.
 			 * @param array  $args        An array of wp_list_categories() arguments.
 			 */
-			$css_classes = implode( ' ', apply_filters( 'category_css_class', $css_classes, $category, $depth, $args ) );
+			$css_classes = apply_filters( 'category_css_class', $css_classes, $category, $depth, $args );
 
-			$output .= ' class="' . $css_classes . '"';
+			$output .= cp_attributes('li', array( 'class' => $css_classes ) );
 			$output .= ">$link\n";
 		} elseif ( isset( $args['separator'] ) ) {
 			$output .= "\t$link" . $args['separator'] . "\n";

@@ -227,10 +227,16 @@ function the_author_meta( $field = '', $user_id = false ) {
 function get_the_author_link() {
 	if ( get_the_author_meta( 'url' ) ) {
 		return sprintf(
-			'<a href="%1$s" title="%2$s" rel="author external">%3$s</a>',
-			esc_url( get_the_author_meta( 'url' ) ),
-			/* translators: %s: author's display name */
-			esc_attr( sprintf( __( 'Visit %s&#8217;s website' ), get_the_author() ) ),
+			'<a %1$s>%2$s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'href' => get_the_author_meta( 'url' ),
+					/* translators: %s: author's display name */
+					'title' => sprintf( __( 'Visit %s&#8217;s website' ), get_the_author() ),
+					'rel' => 'author external',
+				)
+			),
 			get_the_author()
 		);
 	} else {
@@ -295,10 +301,16 @@ function get_the_author_posts_link() {
 	}
 
 	$link = sprintf(
-		'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
-		esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
-		/* translators: %s: author's display name */
-		esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
+		'<a %1$s>%2$s</a>',
+		cp_attributes(
+			'a',
+			array(
+				'href' => get_author_posts_url( $authordata->ID, $authordata->user_nicename ),
+				/* translators: %s: author's display name */
+				'title' => sprintf( __( 'Posts by %s' ), get_the_author() ),
+				'rel' => 'author',
+			)
+		),
 		get_the_author()
 	);
 
@@ -465,14 +477,19 @@ function wp_list_authors( $args = '' ) {
 		}
 
 		if ( 'list' === $args['style'] ) {
-			$return .= '<li>';
+			$return .= '<li ' . cp_attributes( 'li' ) . '>';
 		}
 
 		$link = sprintf(
-			'<a href="%1$s" title="%2$s">%3$s</a>',
-			get_author_posts_url( $author->ID, $author->user_nicename ),
-			/* translators: %s: author's display name */
-			esc_attr( sprintf( __( 'Posts by %s' ), $author->display_name ) ),
+			'<a %1$s>%2$s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'href' => get_author_posts_url( $author->ID, $author->user_nicename ),
+					/* translators: %s: author's display name */
+					'title' => sprintf( __( 'Posts by %s' ), $author->display_name )
+				)
+			),
 			$name
 		);
 
@@ -493,7 +510,8 @@ function wp_list_authors( $args = '' ) {
 			$link .= '>';
 
 			if ( ! empty( $args['feed_image'] ) ) {
-				$link .= '<img src="' . esc_url( $args['feed_image'] ) . '" style="border: none;"' . $alt . ' />';
+				$attr = cp_attributes( 'img', array( 'src' => $args['feed_image'], 'alt' => $alt, 'style' => 'border: none;' ) );
+				$link .= '<img ' . $attr . ' />';
 			} else {
 				$link .= $name;
 			}

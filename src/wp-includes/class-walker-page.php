@@ -61,7 +61,7 @@ class Walker_Page extends Walker {
 			$n = '';
 		}
 		$indent  = str_repeat( $t, $depth );
-		$output .= "{$n}{$indent}<ul class='children'>{$n}";
+		$output .= "{$n}{$indent}<ul " . cp_attributes( 'ul', 'class=children' ) . ">{$n}";
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Walker_Page extends Walker {
 		 * @param array   $args         An array of arguments.
 		 * @param int     $current_page ID of the current page.
 		 */
-		$css_classes = implode( ' ', apply_filters( 'page_css_class', $css_class, $page, $depth, $args, $current_page ) );
+		$css_classes = apply_filters( 'page_css_class', $css_class, $page, $depth, $args, $current_page );
 
 		if ( '' === $page->post_title ) {
 			/* translators: %d: ID of a post */
@@ -182,17 +182,11 @@ class Walker_Page extends Walker {
 		 */
 		$atts = apply_filters( 'page_menu_link_attributes', $atts, $page, $depth, $args, $current_page );
 
-		$attributes = '';
-		foreach ( $atts as $attr => $value ) {
-			if ( ! empty( $value ) ) {
-				$value       = esc_attr( $value );
-				$attributes .= ' ' . $attr . '="' . $value . '"';
-			}
-		}
+		$attributes = cp_attributes( 'a', $atts );
 
 		$output .= $indent . sprintf(
-			'<li class="%s"><a%s>%s%s%s</a>',
-			$css_classes,
+			'<li %s><a %s>%s%s%s</a>',
+			cp_attributes( 'li', array( 'class' => $css_classes ) ),
 			$attributes,
 			$args['link_before'],
 			/** This filter is documented in wp-includes/post-template.php */

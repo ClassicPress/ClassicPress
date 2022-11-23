@@ -72,10 +72,9 @@ class Walker_Nav_Menu extends Walker {
 		 * @param stdClass $args    An object of `wp_nav_menu()` arguments.
 		 * @param int      $depth   Depth of menu item. Used for padding.
 		 */
-		$class_names = join( ' ', apply_filters( 'nav_menu_submenu_css_class', $classes, $args, $depth ) );
-		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+		$class_names = apply_filters( 'nav_menu_submenu_css_class', $classes, $args, $depth );
 
-		$output .= "{$n}{$indent}<ul$class_names>{$n}";
+		$output .= "{$n}{$indent}<ul " . cp_attributes( 'ul', array( 'class' => $class_names ) ) . ">{$n}";
 	}
 
 	/**
@@ -150,8 +149,7 @@ class Walker_Nav_Menu extends Walker {
 		 * @param stdClass $args    An object of wp_nav_menu() arguments.
 		 * @param int      $depth   Depth of menu item. Used for padding.
 		 */
-		$class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
-		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+		$class_names = apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth );
 
 		/**
 		 * Filters the ID applied to a menu item's list item element.
@@ -165,9 +163,8 @@ class Walker_Nav_Menu extends Walker {
 		 * @param int      $depth   Depth of menu item. Used for padding.
 		 */
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
-		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
-		$output .= $indent . '<li' . $id . $class_names . '>';
+		$output .= $indent . '<li ' . cp_attributes( 'li', array( 'id' => $id, 'class' => $class_names ) ) . '>';
 
 		$atts                 = array();
 		$atts['title']        = ! empty( $item->attr_title ) ? $item->attr_title : '';
@@ -197,13 +194,7 @@ class Walker_Nav_Menu extends Walker {
 		 */
 		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
 
-		$attributes = '';
-		foreach ( $atts as $attr => $value ) {
-			if ( ! empty( $value ) ) {
-				$value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
-				$attributes .= ' ' . $attr . '="' . $value . '"';
-			}
-		}
+		$attributes = cp_attributes( 'a', $atts );
 
 		/** This filter is documented in wp-includes/post-template.php */
 		$title = apply_filters( 'the_title', $item->title, $item->ID );
@@ -221,7 +212,7 @@ class Walker_Nav_Menu extends Walker {
 		$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
 
 		$item_output  = $args->before;
-		$item_output .= '<a' . $attributes . '>';
+		$item_output .= '<a ' . $attributes . '>';
 		$item_output .= $args->link_before . $title . $args->link_after;
 		$item_output .= '</a>';
 		$item_output .= $args->after;

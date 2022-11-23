@@ -153,22 +153,23 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 		return apply_filters( 'the_category', __( 'Uncategorized' ), $separator, $parents );
 	}
 
-	$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'rel="category tag"' : 'rel="category"';
+	$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'category tag' : 'category';
 
 	$thelist = '';
 	if ( '' === $separator ) {
-		$thelist .= '<ul class="post-categories">';
+		$thelist .= '<ul ' . cp_attributes( 'ul', 'class="post-categories"' ) . '>';
 		foreach ( $categories as $category ) {
-			$thelist .= "\n\t<li>";
+			$thelist .= "\n\t<li " . cp_attributes( 'li' ) . '>';
+			$alink = '<a ' . cp_attributes( 'a', array( 'href' => get_category_link( $category->term_id ), 'rel' => $rel ) ) . '>';
 			switch ( strtolower( $parents ) ) {
 				case 'multiple':
 					if ( $category->parent ) {
 						$thelist .= get_category_parents( $category->parent, true, $separator );
 					}
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" ' . $rel . '>' . $category->name . '</a></li>';
+					$thelist .= $alink . $category->name . '</a></li>';
 					break;
 				case 'single':
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '"  ' . $rel . '>';
+					$thelist .= $alink;
 					if ( $category->parent ) {
 						$thelist .= get_category_parents( $category->parent, false, $separator );
 					}
@@ -176,7 +177,7 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 					break;
 				case '':
 				default:
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" ' . $rel . '>' . $category->name . '</a></li>';
+					$thelist .= $alink . $category->name . '</a></li>';
 			}
 		}
 		$thelist .= '</ul>';
@@ -186,15 +187,16 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 			if ( 0 < $i ) {
 				$thelist .= $separator;
 			}
+			$alink = '<a ' . cp_attributes( 'a', array( 'href' => get_category_link( $category->term_id ), 'rel' => $rel ) ) . '>';
 			switch ( strtolower( $parents ) ) {
 				case 'multiple':
 					if ( $category->parent ) {
 						$thelist .= get_category_parents( $category->parent, true, $separator );
 					}
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" ' . $rel . '>' . $category->name . '</a>';
+					$thelist .= $alink . $category->name . '</a>';
 					break;
 				case 'single':
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" ' . $rel . '>';
+					$thelist .= $alink;
 					if ( $category->parent ) {
 						$thelist .= get_category_parents( $category->parent, false, $separator );
 					}
@@ -202,7 +204,7 @@ function get_the_category_list( $separator = '', $parents = '', $post_id = false
 					break;
 				case '':
 				default:
-					$thelist .= '<a href="' . esc_url( get_category_link( $category->term_id ) ) . '" ' . $rel . '>' . $category->name . '</a>';
+					$thelist .= $alink . $category->name . '</a>';
 			}
 			++$i;
 		}
@@ -370,25 +372,25 @@ function wp_dropdown_categories( $args = '' ) {
 		$parsed_args['pad_counts'] = true;
 	}
 
-	$tab_index = $parsed_args['tab_index'];
-
-	$tab_index_attribute = '';
-	if ( (int) $tab_index > 0 ) {
-		$tab_index_attribute = " tabindex=\"$tab_index\"";
-	}
-
 	// Avoid clashes with the 'name' param of get_terms().
 	$get_terms_args = $parsed_args;
 	unset( $get_terms_args['name'] );
 	$categories = get_terms( $parsed_args['taxonomy'], $get_terms_args );
-
-	$name     = esc_attr( $parsed_args['name'] );
-	$class    = esc_attr( $parsed_args['class'] );
-	$id       = $parsed_args['id'] ? esc_attr( $parsed_args['id'] ) : $name;
-	$required = $parsed_args['required'] ? 'required' : '';
+	$attr       = array(
+		'name'    => $parsed_args['name'],
+		'class'   => $parsed_args['class'],
+		'id'      => $parsed_args['id'] ? $parsed_args['id'] : $parsed_args['name'],
+	);
+	if ( $parsed_args['required'] ) {
+		$attr['required'] = 'required';
+	}
+	$tab_index = $parsed_args['tab_index'];
+	if ( (int) $tab_index > 0 ) {
+		$attr['tabindex'] = $tab_index;
+	}
 
 	if ( ! $parsed_args['hide_if_empty'] || ! empty( $categories ) ) {
-		$output = "<select $required name='$name' id='$id' class='$class' $tab_index_attribute>\n";
+		$output = '<select '. cp_attributes( 'select', $attr ) . ">\n";
 	} else {
 		$output = '';
 	}
@@ -575,13 +577,13 @@ function wp_list_categories( $args = '' ) {
 	if ( $parsed_args['title_li'] && 'list' === $parsed_args['style']
 		&& ( ! empty( $categories ) || ! $parsed_args['hide_title_if_empty'] )
 	) {
-		$output = '<li class="' . esc_attr( $parsed_args['class'] ) . '">' . $parsed_args['title_li'] . '<ul>';
+		$output = '<li ' . cp_attributes( 'li', array( 'class' => $parsed_args['class'] ) ) . '>' . $parsed_args['title_li'] . '<ul>';
 	}
 
 	if ( empty( $categories ) ) {
 		if ( ! empty( $show_option_none ) ) {
 			if ( 'list' === $parsed_args['style'] ) {
-				$output .= '<li class="cat-item-none">' . $show_option_none . '</li>';
+				$output .= '<li ' . cp_attributes( 'li', array( 'class' => 'cat-item-none' ) ) . '>' . $show_option_none . '</li>';
 			} else {
 				$output .= $show_option_none;
 			}
@@ -614,11 +616,12 @@ function wp_list_categories( $args = '' ) {
 				}
 			}
 
-			$posts_page = esc_url( $posts_page );
+			$posts_page_link = '<a ' . cp_attributes( 'a', array( 'href' =>  $posts_page ) ) . ">$show_option_all</a>";
 			if ( 'list' === $parsed_args['style'] ) {
-				$output .= "<li class='cat-item-all'><a href='$posts_page'>$show_option_all</a></li>";
+				$output .= '<li ' . cp_attributes( 'li', array( 'class' => 'cat-item-all' ) ) . '>';
+				$output .= $posts_page_link . '</li>';
 			} else {
-				$output .= "<a href='$posts_page'>$show_option_all</a>";
+				$output .= $posts_page_link;
 			}
 		}
 
@@ -1003,7 +1006,7 @@ function wp_generate_tag_cloud( $tags, $args = '' ) {
 			 * technologies the default role when the list is styled with `list-style: none`.
 			 * Note: this is redundant but doesn't harm.
 			 */
-			$return  = "<ul class='wp-tag-cloud' role='list'>\n\t<li>";
+			$return  = '<ul ' . cp_attributes( 'ul', array( 'class' => 'wp-tag-cloud', 'role' => 'list' ) ) . ">\n\t<li>";
 			$return .= join( "</li>\n\t<li>", $a );
 			$return .= "</li>\n</ul>\n";
 			break;
@@ -1305,7 +1308,7 @@ function get_the_term_list( $post_id, $taxonomy, $before = '', $sep = '', $after
 		if ( is_wp_error( $link ) ) {
 			return $link;
 		}
-		$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a>';
+		$links[] = '<a ' . cp_attributes( 'a', array( 'href' => $link, 'rel' => 'tag' ) ) . '>' . $term->name . '</a>';
 	}
 
 	/**
@@ -1391,7 +1394,7 @@ function get_term_parents_list( $term_id, $taxonomy, $args = array() ) {
 		$name   = ( 'slug' === $args['format'] ) ? $parent->slug : $parent->name;
 
 		if ( $args['link'] ) {
-			$list .= '<a href="' . esc_url( get_term_link( $parent->term_id, $taxonomy ) ) . '">' . $name . '</a>' . $args['separator'];
+			$list .= '<a ' . cp_attributes( 'a', array( 'href' => get_term_link( $parent->term_id, $taxonomy ) ) ) . '>' . $name . '</a>' . $args['separator'];
 		} else {
 			$list .= $name . $args['separator'];
 		}

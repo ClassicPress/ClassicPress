@@ -195,7 +195,7 @@ function get_comment_author_email_link( $linktext = '', $before = '', $after = '
 	if ( ( ! empty( $email ) ) && ( '@' !== $email ) ) {
 		$display = ( '' !== $linktext ) ? $linktext : $email;
 		$return  = $before;
-		$return .= sprintf( '<a href="%1$s">%2$s</a>', esc_url( 'mailto:' . $email ), esc_html( $display ) );
+		$return .= sprintf( '<a %1$s>%2$s</a>', cp_attributes( 'a', array( 'href' => 'mailto:' . $email ) ), esc_html( $display ) );
 		$return .= $after;
 		return $return;
 	} else {
@@ -224,7 +224,7 @@ function get_comment_author_link( $comment_ID = 0 ) {
 	if ( empty( $url ) || 'http://' === $url ) {
 		$return = $author;
 	} else {
-		$return = "<a href='$url' rel='external nofollow' class='url'>$author</a>";
+		$return = '<a ' . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external nofollow', 'class' => 'url' ) ) . ">$author</a>";
 	}
 
 	/**
@@ -384,7 +384,7 @@ function get_comment_author_url_link( $linktext = '', $before = '', $after = '',
 		$display = substr( $display, 0, -1 );
 	}
 
-	$return = "$before<a href='$url' rel='external'>$display</a>$after";
+	$return = "$before<a " . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external' ) ) . ">$display</a>$after";
 
 	/**
 	 * Filters the comment author's returned URL link.
@@ -1554,7 +1554,7 @@ function comments_popup_link( $zero = false, $one = false, $more = false, $css_c
 	}
 
 	if ( 0 == $number && ! comments_open() && ! pings_open() ) {
-		echo '<span' . ( ( ! empty( $css_class ) ) ? ' class="' . esc_attr( $css_class ) . '"' : '' ) . '>' . $none . '</span>';
+		echo '<span ' . cp_attributes( 'span', array( 'class' => $css_class ) ) . '>' . $none . '</span>';
 		return;
 	}
 
@@ -1563,9 +1563,8 @@ function comments_popup_link( $zero = false, $one = false, $more = false, $css_c
 		return;
 	}
 
-	echo '<a href="';
 	if ( 0 == $number ) {
-		$respond_link = get_permalink() . '#respond';
+		$link = get_permalink() . '#respond';
 		/**
 		 * Filters the respond link when a post has no comments.
 		 *
@@ -1574,15 +1573,11 @@ function comments_popup_link( $zero = false, $one = false, $more = false, $css_c
 		 * @param string $respond_link The default response link.
 		 * @param integer $id The post ID.
 		 */
-		echo apply_filters( 'respond_link', $respond_link, $id );
+		$link = apply_filters( 'respond_link', $link, $id );
 	} else {
-		comments_link();
+		$link = get_comments_link();
 	}
-	echo '"';
-
-	if ( ! empty( $css_class ) ) {
-		echo ' class="' . $css_class . '" ';
-	}
+	echo '<a ' . cp_attributes( 'a', array( 'href' => $link, 'class' => $css_class ) );
 
 	$attributes = '';
 	/**
@@ -1673,8 +1668,15 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 
 	if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
 		$link = sprintf(
-			'<a rel="nofollow" class="comment-reply-login" href="%s">%s</a>',
-			esc_url( wp_login_url( get_permalink() ) ),
+			'<a %s>%s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'rel' => 'nofollow',
+					'href' => wp_login_url( get_permalink() ),
+					'class' => 'comment-reply-login',
+				)
+			),
 			$args['login_text']
 		);
 	} else {
@@ -1687,10 +1689,17 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 		);
 
 		$link = sprintf(
-			"<a rel='nofollow' class='comment-reply-link' href='%s' onclick='%s' aria-label='%s'>%s</a>",
-			esc_url( add_query_arg( 'replytocom', $comment->comment_ID, get_permalink( $post->ID ) ) ) . '#' . $args['respond_id'],
-			$onclick,
-			esc_attr( sprintf( $args['reply_to_text'], $comment->comment_author ) ),
+			"<a %s>%s</a>",
+			cp_attributes(
+				'a',
+				array(
+					'rel' => 'nofollow',
+					'href' => add_query_arg( 'replytocom', $comment->comment_ID, get_permalink( $post->ID ) )  . '#' . $args['respond_id'],
+					'class' => 'comment-reply-link',
+					'onclick' => $onclick,
+					'aria-label' => sprintf( $args['reply_to_text'], $comment->comment_author ),
+				)
+			),
 			$args['reply_text']
 		);
 	}
@@ -1768,8 +1777,15 @@ function get_post_reply_link( $args = array(), $post = null ) {
 
 	if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
 		$link = sprintf(
-			'<a rel="nofollow" class="comment-reply-login" href="%s">%s</a>',
-			wp_login_url( get_permalink() ),
+			'<a %s>%s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'rel' => 'nofollow',
+					'href' => wp_login_url( get_permalink() ),
+					'class' => 'comment-reply-login',
+				)
+			),
 			$args['login_text']
 		);
 	} else {
@@ -1781,9 +1797,16 @@ function get_post_reply_link( $args = array(), $post = null ) {
 		);
 
 		$link = sprintf(
-			"<a rel='nofollow' class='comment-reply-link' href='%s' onclick='%s'>%s</a>",
-			get_permalink( $post->ID ) . '#' . $args['respond_id'],
-			$onclick,
+			"<a %s>%s</a>",
+			cp_attributes(
+				'a',
+				array(
+					'rel' => 'nofollow',
+					'href' => get_permalink( $post->ID ) . '#' . $args['respond_id'],
+					'class' => 'comment-reply-link',
+					'onclick' => $onclick,
+				)
+			),
 			$args['reply_text']
 		);
 	}
@@ -1829,10 +1852,10 @@ function get_cancel_comment_reply_link( $text = '' ) {
 		$text = __( 'Click here to cancel reply.' );
 	}
 
-	$style = isset( $_GET['replytocom'] ) ? '' : ' style="display:none;"';
-	$link  = esc_html( remove_query_arg( 'replytocom' ) ) . '#respond';
+	$style = isset( $_GET['replytocom'] ) ? '' : 'display:none;';
+	$link  = remove_query_arg( 'replytocom' ) . '#respond';
 
-	$formatted_link = '<a rel="nofollow" id="cancel-comment-reply-link" href="' . $link . '"' . $style . '>' . $text . '</a>';
+	$formatted_link = '<a ' . cp_attributes( 'a', array( 'rel' => 'nofollow', 'id' => 'cancel-comment-reply-link', 'href' => $link, 'style' => $style ) ) . '>' . $text . '</a>';
 
 	/**
 	 * Filters the cancel comment reply link HTML.
@@ -1871,8 +1894,8 @@ function get_comment_id_fields( $post_id = 0 ) {
 	}
 
 	$reply_to_id = isset( $_GET['replytocom'] ) ? (int) $_GET['replytocom'] : 0;
-	$result      = "<input type='hidden' name='comment_post_ID' value='$post_id' id='comment_post_ID' />\n";
-	$result     .= "<input type='hidden' name='comment_parent' id='comment_parent' value='$reply_to_id' />\n";
+	$result      = '<input ' . cp_attributes( 'input', array( 'type' => 'hidden', 'name' => 'comment_post_ID', 'value' => $post_id, 'id' => 'comment_post_ID' ) ) . " />\n";
+	$result     .= '<input ' . cp_attributes( 'input', array( 'type' => 'hidden',  'name' => 'comment_parent', 'id' => 'comment_parent', 'value' => $reply_to_id ) ) . " />\n";
 
 	/**
 	 * Filters the returned comment id fields.
@@ -1938,7 +1961,7 @@ function comment_form_title( $no_reply_text = false, $reply_text = false, $link_
 		$comment = get_comment( $reply_to_id );
 
 		if ( $link_to_parent ) {
-			$author = '<a href="#comment-' . get_comment_ID() . '">' . get_comment_author( $comment ) . '</a>';
+			$author = '<a ' . cp_attributes( 'a', 'href=#comment-' . get_comment_ID() ) . '>' . get_comment_author( $comment ) . '</a>';
 		} else {
 			$author = get_comment_author( $comment );
 		}
@@ -2359,9 +2382,9 @@ function comment_form( $args = array(), $post_id = null ) {
 	 * @since WP-3.0.0
 	 */
 	do_action( 'comment_form_before' );
-	?>
-	<div id="respond" class="comment-respond">
-		<?php
+
+	echo '<div ' . cp_attributes( 'div', 'id=respond&class=comment-respond' ) . ">\n";
+
 		echo $args['title_reply_before'];
 
 		comment_form_title( $args['title_reply'], $args['title_reply_to'] );
@@ -2383,9 +2406,17 @@ function comment_form( $args = array(), $post_id = null ) {
 			 */
 			do_action( 'comment_form_must_log_in_after' );
 		else :
-			?>
-			<form action="<?php echo esc_url( $args['action'] ); ?>" method="post" id="<?php echo esc_attr( $args['id_form'] ); ?>" class="<?php echo esc_attr( $args['class_form'] ); ?>"<?php echo $html5 ? ' novalidate' : ''; ?>>
-				<?php
+			$attr = array(
+				'action' => $args['action'],
+				'method' => 'post',
+				'id' => $args['id_form'],
+				'class' => $args['class_form'],
+			);
+			if ( $html5 ) {
+				$attr['novalidate'] = '';
+			}
+			echo '<form ' . cp_attributes( 'form', $attr ) . ">\n";
+
 				/**
 				 * Fires at the top of the comment form, inside the form tag.
 				 *
