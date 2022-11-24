@@ -160,9 +160,11 @@ class Walker_Page extends Walker {
 		$args['link_before'] = empty( $args['link_before'] ) ? '' : $args['link_before'];
 		$args['link_after']  = empty( $args['link_after'] ) ? '' : $args['link_after'];
 
-		$atts                 = array();
-		$atts['href']         = get_permalink( $page->ID );
-		$atts['aria-current'] = ( $page->ID == $current_page ) ? 'page' : '';
+		$atts                = array();
+		$atts['href']        = get_permalink( $page->ID );
+		if ( $page->ID == $current_page ) {
+			$atts['aria-current'] = 'page';
+		}
 
 		/**
 		 * Filters the HTML attributes applied to a page menu item's anchor element.

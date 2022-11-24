@@ -278,14 +278,8 @@ class Walker_Comment extends Walker {
 			)
 		) . ">\n";
 		if ( 'div' !== $args['style'] ) :
-		?>
-		<div<?php echo cp_attributes(
-			'div',
-			array(
-				'id' => 'div-comment-' . get_comment_ID(),
-				'class' => 'comment-body',
-			)
-		); ?>>
+			?>
+		<div<?php echo cp_attributes( 'div', 'id=div-comment-' . get_comment_ID() . '&class=comment-body' ); ?>>
 		<?php endif; ?>
 		<div<?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
 			<?php
@@ -372,13 +366,7 @@ class Walker_Comment extends Walker {
 			)
 		) . ">\n";
 		?>
-			<article<?php echo cp_attributes(
-				'article',
-				array(
-					'id'    => 'div-comment-' . get_comment_ID(),
-					'class' => 'comment-body',
-				)
-			); ?>>
+			<article<?php echo cp_attributes( 'article', 'id=div-comment-' . get_comment_ID() . '&class=comment-body' ); ?>>
 				<footer<?php echo cp_attributes( 'footer', 'class=comment-meta' ); ?>>
 					<div<?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
 						<?php
@@ -389,7 +377,7 @@ class Walker_Comment extends Walker {
 							/* translators: %s: comment author link */
 							printf(
 								__( '%s <span class="says">says:</span>' ),
-								sprintf( '<b'. cp_attributes( 'b', 'class="fn"' ) . '>%s</b>', get_comment_author_link( $comment ) )
+								sprintf( '<b' . cp_attributes( 'b', 'class="fn"' ) . '>%s</b>', get_comment_author_link( $comment ) )
 							);
 						?>
 					</div><!-- .comment-author -->

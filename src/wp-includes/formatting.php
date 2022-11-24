@@ -3094,7 +3094,15 @@ function translate_smiley( $matches ) {
 	 */
 	$src_url = apply_filters( 'smilies_src', includes_url( "images/smilies/$img" ), $img, site_url() );
 
-	return '<img' . cp_attributes( 'img', array( 'src' => $src_url, 'alt' => $smiley, 'class' => 'wp-smiley', 'style' => 'height: 1em; max-height: 1em;' ) ) . ' />';
+	return '<img' . cp_attributes(
+		'img',
+		array(
+			'src'   => $src_url,
+			'alt'   => $smiley,
+			'class' => 'wp-smiley',
+			'style' => 'height: 1em; max-height: 1em;',
+		)
+	) . ' />';
 }
 
 /**
@@ -5604,7 +5612,15 @@ function wp_staticize_emoji( $text ) {
 				$file = str_replace( ';&#x', '-', $emojum );
 				$file = str_replace( array( '&#x', ';' ), '', $file );
 
-				$entity = '<img' . cp_attributes( 'img', array( 'src' => $cdn_url . $file . $ext, 'alt' => $emoji_char, 'class' => 'wp-smiley', 'style' => 'height: 1em; max-height: 1em;' ) ) . ' />';
+				$entity = '<img' . cp_attributes(
+					'img',
+					array(
+						'src'   => $cdn_url . $file . $ext,
+						'alt'   => $emoji_char,
+						'class' => 'wp-smiley',
+						'style' => 'height: 1em; max-height: 1em;',
+					)
+				) . ' />';
 
 				$content = str_replace( $emojum, $entity, $content );
 			}

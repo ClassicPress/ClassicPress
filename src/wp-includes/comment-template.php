@@ -224,7 +224,14 @@ function get_comment_author_link( $comment_ID = 0 ) {
 	if ( empty( $url ) || 'http://' === $url ) {
 		$return = $author;
 	} else {
-		$return = '<a' . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external nofollow', 'class' => 'url' ) ) . ">$author</a>";
+		$return = '<a' . cp_attributes(
+			'a',
+			array(
+				'href'  => $url,
+				'rel'   => 'external nofollow',
+				'class' => 'url',
+			)
+		) . ">$author</a>";
 	}
 
 	/**
@@ -1706,7 +1713,7 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 				'a',
 				array(
 					'rel' => 'nofollow',
-					'href' => add_query_arg( 'replytocom', $comment->comment_ID, get_permalink( $post->ID ) )  . '#' . $args['respond_id'],
+					'href' => add_query_arg( 'replytocom', $comment->comment_ID, get_permalink( $post->ID ) ) . '#' . $args['respond_id'],
 					'class' => 'comment-reply-link',
 					'onclick' => $onclick,
 					'aria-label' => sprintf( $args['reply_to_text'], $comment->comment_author ),

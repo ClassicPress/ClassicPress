@@ -487,7 +487,7 @@ function wp_list_authors( $args = '' ) {
 				array(
 					'href' => get_author_posts_url( $author->ID, $author->user_nicename ),
 					/* translators: %s: author's display name */
-					'title' => sprintf( __( 'Posts by %s' ), $author->display_name )
+					'title' => sprintf( __( 'Posts by %s' ), $author->display_name ),
 				)
 			),
 			$name
@@ -501,17 +501,18 @@ function wp_list_authors( $args = '' ) {
 
 			$link .= '<a href="' . get_author_feed_link( $author->ID, $args['feed_type'] ) . '"';
 
-			$alt = '';
+			$attr  = array();
 			if ( ! empty( $args['feed'] ) ) {
-				$alt  = ' alt="' . esc_attr( $args['feed'] ) . '"';
+				$attr['alt'] = $args['feed'];
 				$name = $args['feed'];
 			}
 
 			$link .= '>';
 
 			if ( ! empty( $args['feed_image'] ) ) {
-				$attr = cp_attributes( 'img', array( 'src' => $args['feed_image'], 'alt' => $alt, 'style' => 'border: none;' ) );
-				$link .= '<img' . $attr . ' />';
+				$attr['src']   = $args['feed_image'];
+				$attr['style'] = 'border: none;';
+				$link .= '<img' . cp_attributes( 'img', $attr ) . ' />';
 			} else {
 				$link .= $name;
 			}
