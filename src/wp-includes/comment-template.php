@@ -195,7 +195,7 @@ function get_comment_author_email_link( $linktext = '', $before = '', $after = '
 	if ( ( ! empty( $email ) ) && ( '@' !== $email ) ) {
 		$display = ( '' !== $linktext ) ? $linktext : $email;
 		$return  = $before;
-		$return .= sprintf( '<a %1$s>%2$s</a>', cp_attributes( 'a', array( 'href' => 'mailto:' . $email ) ), esc_html( $display ) );
+		$return .= sprintf( '<a%1$s>%2$s</a>', cp_attributes( 'a', array( 'href' => 'mailto:' . $email ) ), esc_html( $display ) );
 		$return .= $after;
 		return $return;
 	} else {
@@ -224,7 +224,7 @@ function get_comment_author_link( $comment_ID = 0 ) {
 	if ( empty( $url ) || 'http://' === $url ) {
 		$return = $author;
 	} else {
-		$return = '<a ' . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external nofollow', 'class' => 'url' ) ) . ">$author</a>";
+		$return = '<a' . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external nofollow', 'class' => 'url' ) ) . ">$author</a>";
 	}
 
 	/**
@@ -384,7 +384,13 @@ function get_comment_author_url_link( $linktext = '', $before = '', $after = '',
 		$display = substr( $display, 0, -1 );
 	}
 
-	$return = "$before<a " . cp_attributes( 'a', array( 'href' => $url, 'rel' => 'external' ) ) . ">$display</a>$after";
+	$return = "$before<a" . cp_attributes(
+		'a',
+		array(
+			'href' => $url,
+			'rel'  => 'external',
+		)
+	) . ">$display</a>$after";
 
 	/**
 	 * Filters the comment author's returned URL link.
@@ -1554,7 +1560,7 @@ function comments_popup_link( $zero = false, $one = false, $more = false, $css_c
 	}
 
 	if ( 0 == $number && ! comments_open() && ! pings_open() ) {
-		echo '<span ' . cp_attributes( 'span', array( 'class' => $css_class ) ) . '>' . $none . '</span>';
+		echo '<span' . cp_attributes( 'span', array( 'class' => $css_class ) ) . '>' . $none . '</span>';
 		return;
 	}
 
@@ -1577,7 +1583,13 @@ function comments_popup_link( $zero = false, $one = false, $more = false, $css_c
 	} else {
 		$link = get_comments_link();
 	}
-	echo '<a ' . cp_attributes( 'a', array( 'href' => $link, 'class' => $css_class ) );
+	echo '<a' . cp_attributes(
+		'a',
+		array(
+			'href'  => $link,
+			'class' => $css_class,
+		)
+	);
 
 	$attributes = '';
 	/**
@@ -1668,7 +1680,7 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 
 	if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
 		$link = sprintf(
-			'<a %s>%s</a>',
+			'<a%s>%s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -1689,7 +1701,7 @@ function get_comment_reply_link( $args = array(), $comment = null, $post = null 
 		);
 
 		$link = sprintf(
-			"<a %s>%s</a>",
+			'<a%s>%s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -1777,7 +1789,7 @@ function get_post_reply_link( $args = array(), $post = null ) {
 
 	if ( get_option( 'comment_registration' ) && ! is_user_logged_in() ) {
 		$link = sprintf(
-			'<a %s>%s</a>',
+			'<a%s>%s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -1797,7 +1809,7 @@ function get_post_reply_link( $args = array(), $post = null ) {
 		);
 
 		$link = sprintf(
-			"<a %s>%s</a>",
+			'<a%s>%s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -1855,7 +1867,15 @@ function get_cancel_comment_reply_link( $text = '' ) {
 	$style = isset( $_GET['replytocom'] ) ? '' : 'display:none;';
 	$link  = remove_query_arg( 'replytocom' ) . '#respond';
 
-	$formatted_link = '<a ' . cp_attributes( 'a', array( 'rel' => 'nofollow', 'id' => 'cancel-comment-reply-link', 'href' => $link, 'style' => $style ) ) . '>' . $text . '</a>';
+	$formatted_link = '<a' . cp_attributes(
+		'a',
+		array(
+			'rel'   => 'nofollow',
+			'id'    => 'cancel-comment-reply-link',
+			'href'  => $link,
+			'style' => $style,
+		)
+	) . '>' . $text . '</a>';
 
 	/**
 	 * Filters the cancel comment reply link HTML.
@@ -1894,8 +1914,24 @@ function get_comment_id_fields( $post_id = 0 ) {
 	}
 
 	$reply_to_id = isset( $_GET['replytocom'] ) ? (int) $_GET['replytocom'] : 0;
-	$result      = '<input ' . cp_attributes( 'input', array( 'type' => 'hidden', 'name' => 'comment_post_ID', 'value' => $post_id, 'id' => 'comment_post_ID' ) ) . " />\n";
-	$result     .= '<input ' . cp_attributes( 'input', array( 'type' => 'hidden',  'name' => 'comment_parent', 'id' => 'comment_parent', 'value' => $reply_to_id ) ) . " />\n";
+	$result      = '<input' . cp_attributes(
+		'input',
+		array(
+			'type'  => 'hidden',
+			'name'  => 'comment_post_ID',
+			'value' => $post_id,
+			'id'    => 'comment_post_ID',
+		)
+	) . " />\n";
+	$result     .= '<input' . cp_attributes(
+		'input',
+		array(
+			'type'  => 'hidden',
+			'name'  => 'comment_parent',
+			'id'    => 'comment_parent',
+			'value' => $reply_to_id,
+		)
+	) . " />\n";
 
 	/**
 	 * Filters the returned comment id fields.
@@ -1961,7 +1997,7 @@ function comment_form_title( $no_reply_text = false, $reply_text = false, $link_
 		$comment = get_comment( $reply_to_id );
 
 		if ( $link_to_parent ) {
-			$author = '<a ' . cp_attributes( 'a', 'href=#comment-' . get_comment_ID() ) . '>' . get_comment_author( $comment ) . '</a>';
+			$author = '<a' . cp_attributes( 'a', 'href=#comment-' . get_comment_ID() ) . '>' . get_comment_author( $comment ) . '</a>';
 		} else {
 			$author = get_comment_author( $comment );
 		}
@@ -2382,9 +2418,9 @@ function comment_form( $args = array(), $post_id = null ) {
 	 * @since WP-3.0.0
 	 */
 	do_action( 'comment_form_before' );
-
-	echo '<div ' . cp_attributes( 'div', 'id=respond&class=comment-respond' ) . ">\n";
-
+	?>
+	<div<?php echo cp_attributes( 'div', 'id=respond&class=comment-respond' ); ?>>
+		<?php
 		echo $args['title_reply_before'];
 
 		comment_form_title( $args['title_reply'], $args['title_reply_to'] );
@@ -2415,8 +2451,9 @@ function comment_form( $args = array(), $post_id = null ) {
 			if ( $html5 ) {
 				$attr['novalidate'] = '';
 			}
-			echo '<form ' . cp_attributes( 'form', $attr ) . ">\n";
-
+			?>
+			<form<?php echo cp_attributes( 'form', $attr ); ?>>
+				<?php
 				/**
 				 * Fires at the top of the comment form, inside the form tag.
 				 *

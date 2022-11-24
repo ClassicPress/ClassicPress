@@ -74,7 +74,7 @@ class Walker_Nav_Menu extends Walker {
 		 */
 		$class_names = apply_filters( 'nav_menu_submenu_css_class', $classes, $args, $depth );
 
-		$output .= "{$n}{$indent}<ul " . cp_attributes( 'ul', array( 'class' => $class_names ) ) . ">{$n}";
+		$output .= "{$n}{$indent}<ul" . cp_attributes( 'ul', array( 'class' => $class_names ) ) . ">{$n}";
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Walker_Nav_Menu extends Walker {
 		 */
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
 
-		$output .= $indent . '<li ' . cp_attributes(
+		$output .= $indent . '<li' . cp_attributes(
 			'li',
 			array(
 				'id' => $id,
@@ -218,7 +218,7 @@ class Walker_Nav_Menu extends Walker {
 		$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
 
 		$item_output  = $args->before;
-		$item_output .= '<a ' . $attributes . '>';
+		$item_output .= '<a' . $attributes . '>';
 		$item_output .= $args->link_before . $title . $args->link_after;
 		$item_output .= '</a>';
 		$item_output .= $args->after;

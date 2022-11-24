@@ -59,11 +59,11 @@ class Walker_Comment extends Walker {
 			case 'div':
 				break;
 			case 'ol':
-				$output .= '<ol ' . cp_attributes( 'ol', 'class=children' ) . ">\n";
+				$output .= '<ol' . cp_attributes( 'ol', 'class=children' ) . ">\n";
 				break;
 			case 'ul':
 			default:
-				$output .= '<ul ' . cp_attributes( 'ul', 'class=children' ) . ">\n";
+				$output .= '<ul' . cp_attributes( 'ul', 'class=children' ) . ">\n";
 				break;
 		}
 	}
@@ -236,10 +236,16 @@ class Walker_Comment extends Walker {
 	 */
 	protected function ping( $comment, $depth, $args ) {
 		$tag = ( 'div' === $args['style'] ) ? 'div' : 'li';
-		echo "<$tag " . cp_attributes( $tag, array( 'id' => 'comment-'. get_comment_ID(), 'class' => get_comment_class( '', $comment ) ) ) . ">\n";
-		echo '<div ' . cp_attributes( 'div', 'class="comment-body"' ) . ">\n";
+		echo "<$tag" . cp_attributes(
+			$tag,
+			array(
+				'id' => 'comment-' . get_comment_ID(),
+				'class' => get_comment_class( '', $comment ),
+			)
+		) . ">\n";
+		echo '<div' . cp_attributes( 'div', 'class="comment-body"' ) . ">\n";
 		?>
-				<?php _e( 'Pingback:' ); ?> <?php comment_author_link( $comment ); ?> <?php edit_comment_link( __( 'Edit' ), '<span ' . cp_attributes( 'span', 'class="edit-link"' ) . '>', '</span>' ); ?>
+				<?php _e( 'Pingback:' ); ?> <?php comment_author_link( $comment ); ?> <?php edit_comment_link( __( 'Edit' ), '<span' . cp_attributes( 'span', 'class="edit-link"' ) . '>', '</span>' ); ?>
 			</div>
 		<?php
 	}
@@ -264,11 +270,24 @@ class Walker_Comment extends Walker {
 			$add_below = 'div-comment';
 		}
 
-		echo "<$tag " . cp_attributes( $tag, array( 'id' => 'comment-'. get_comment_ID(), 'class' => get_comment_class( $this->has_children ? 'parent' : '', $comment ) ) ) . ">\n";
-		if ( 'div' !== $args['style'] ) : ?>
-		<div <?php echo cp_attributes( 'div', array( 'id' => 'div-comment-'. get_comment_ID(), 'class' => 'comment-body' ) ); ?>>
+		echo "<$tag" . cp_attributes(
+			$tag,
+			array(
+				'id'    => 'comment-' . get_comment_ID(),
+				'class' => get_comment_class( $this->has_children ? 'parent' : '', $comment ),
+			)
+		) . ">\n";
+		if ( 'div' !== $args['style'] ) :
+		?>
+		<div<?php echo cp_attributes(
+			'div',
+			array(
+				'id' => 'div-comment-' . get_comment_ID(),
+				'class' => 'comment-body',
+			)
+		); ?>>
 		<?php endif; ?>
-		<div <?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
+		<div<?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
 			<?php
 			if ( 0 != $args['avatar_size'] ) {
 				echo get_avatar( $comment, $args['avatar_size'] );}
@@ -277,7 +296,7 @@ class Walker_Comment extends Walker {
 				/* translators: %s: comment author link */
 				printf(
 					__( '%s <span class="says">says:</span>' ),
-					sprintf( '<cite '. cp_attributes( 'cite', 'class="fn"' ) . '>%s</cite>', get_comment_author_link( $comment ) )
+					sprintf( '<cite' . cp_attributes( 'cite', 'class="fn"' ) . '>%s</cite>', get_comment_author_link( $comment ) )
 				);
 			?>
 		</div>
@@ -286,7 +305,7 @@ class Walker_Comment extends Walker {
 		<br />
 		<?php endif; ?>
 
-		<div <?php echo cp_attributes( 'div', array( 'class' => 'comment-meta commentmetadata' ) ); ?>><a <?php echo cp_attributes( 'a', array( 'href' => get_comment_link( $comment, $args ) ) ); ?>>
+		<div<?php echo cp_attributes( 'div', array( 'class' => 'comment-meta commentmetadata' ) ); ?>><a<?php echo cp_attributes( 'a', array( 'href' => get_comment_link( $comment, $args ) ) ); ?>>
 			<?php
 				/* translators: 1: comment date, 2: comment time */
 				printf( __( '%1$s at %2$s' ), get_comment_date( '', $comment ), get_comment_time() );
@@ -319,7 +338,7 @@ class Walker_Comment extends Walker {
 					'add_below' => $add_below,
 					'depth'     => $depth,
 					'max_depth' => $args['max_depth'],
-					'before'    => '<div ' . cp_attributes( 'div', 'class="reply"' ) . '>',
+					'before'    => '<div' . cp_attributes( 'div', 'class="reply"' ) . '>',
 					'after'     => '</div>',
 				)
 			)
@@ -345,11 +364,23 @@ class Walker_Comment extends Walker {
 	 */
 	protected function html5_comment( $comment, $depth, $args ) {
 		$tag = ( 'div' === $args['style'] ) ? 'div' : 'li';
-		echo "<$tag " . cp_attributes( $tag, array( 'id' => 'comment-' . get_comment_ID(), 'class' => get_comment_class( $this->has_children ? 'parent' : '', $comment ) ) ) . ">\n";
+		echo "<$tag" . cp_attributes(
+			$tag,
+			array(
+				'id'    => 'comment-' . get_comment_ID(),
+				'class' => get_comment_class( $this->has_children ? 'parent' : '', $comment ),
+			)
+		) . ">\n";
 		?>
-			<article <?php echo cp_attributes( 'article', array( 'id' => 'div-comment-' . get_comment_ID(), 'class' => 'comment-body' ) ); ?>>
-				<footer <?php echo cp_attributes( 'footer', 'class=comment-meta' ); ?>>
-					<div <?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
+			<article<?php echo cp_attributes(
+				'article',
+				array(
+					'id'    => 'div-comment-' . get_comment_ID(),
+					'class' => 'comment-body',
+				)
+			); ?>>
+				<footer<?php echo cp_attributes( 'footer', 'class=comment-meta' ); ?>>
+					<div<?php echo cp_attributes( 'div', array( 'class' => 'comment-author vcard' ) ); ?>>
 						<?php
 						if ( 0 != $args['avatar_size'] ) {
 							echo get_avatar( $comment, $args['avatar_size'] );}
@@ -358,21 +389,21 @@ class Walker_Comment extends Walker {
 							/* translators: %s: comment author link */
 							printf(
 								__( '%s <span class="says">says:</span>' ),
-								sprintf( '<b '. cp_attributes( 'b', 'class="fn"' ) . '>%s</b>', get_comment_author_link( $comment ) )
+								sprintf( '<b'. cp_attributes( 'b', 'class="fn"' ) . '>%s</b>', get_comment_author_link( $comment ) )
 							);
 						?>
 					</div><!-- .comment-author -->
 
-					<div <?php echo cp_attributes( 'div', 'class="comment-metadata"' ); ?>>
-						<a <?php echo cp_attributes( 'a', array( 'href' => get_comment_link( $comment, $args ) ) ); ?>>
-							<time <?php echo cp_attributes( 'time', array( 'datetime' => comment_time( 'c' ) ) ); ?>>
+					<div<?php echo cp_attributes( 'div', 'class="comment-metadata"' ); ?>>
+						<a<?php echo cp_attributes( 'a', array( 'href' => get_comment_link( $comment, $args ) ) ); ?>>
+							<time<?php echo cp_attributes( 'time', array( 'datetime' => comment_time( 'c' ) ) ); ?>>
 								<?php
 									/* translators: 1: comment date, 2: comment time */
 									printf( __( '%1$s at %2$s' ), get_comment_date( '', $comment ), get_comment_time() );
 								?>
 							</time>
 						</a>
-						<?php edit_comment_link( __( 'Edit' ), '<span ' . cp_attributes( 'span', 'class="edit-link"' ) . '>', '</span>' ); ?>
+						<?php edit_comment_link( __( 'Edit' ), '<span' . cp_attributes( 'span', 'class="edit-link"' ) . '>', '</span>' ); ?>
 					</div><!-- .comment-metadata -->
 
 					<?php if ( '0' == $comment->comment_approved ) : ?>
@@ -380,7 +411,7 @@ class Walker_Comment extends Walker {
 					<?php endif; ?>
 				</footer><!-- .comment-meta -->
 
-				<div <?php echo cp_attributes( 'div', 'class="comment-content"' ); ?>>
+				<div<?php echo cp_attributes( 'div', 'class="comment-content"' ); ?>>
 					<?php comment_text(); ?>
 				</div><!-- .comment-content -->
 
@@ -392,7 +423,7 @@ class Walker_Comment extends Walker {
 							'add_below' => 'div-comment',
 							'depth'     => $depth,
 							'max_depth' => $args['max_depth'],
-							'before'    => '<div ' . cp_attributes( 'div', 'class="reply"' ) . '>',
+							'before'    => '<div' . cp_attributes( 'div', 'class="reply"' ) . '>',
 							'after'     => '</div>',
 						)
 					)

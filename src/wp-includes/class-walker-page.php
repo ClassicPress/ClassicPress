@@ -61,7 +61,7 @@ class Walker_Page extends Walker {
 			$n = '';
 		}
 		$indent  = str_repeat( $t, $depth );
-		$output .= "{$n}{$indent}<ul " . cp_attributes( 'ul', 'class=children' ) . ">{$n}";
+		$output .= "{$n}{$indent}<ul" . cp_attributes( 'ul', 'class=children' ) . ">{$n}";
 	}
 
 	/**
@@ -185,7 +185,7 @@ class Walker_Page extends Walker {
 		$attributes = cp_attributes( 'a', $atts );
 
 		$output .= $indent . sprintf(
-			'<li %s><a %s>%s%s%s</a>',
+			'<li%s><a%s>%s%s%s</a>',
 			cp_attributes( 'li', array( 'class' => $css_classes ) ),
 			$attributes,
 			$args['link_before'],

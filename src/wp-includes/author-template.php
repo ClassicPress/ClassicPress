@@ -227,7 +227,7 @@ function the_author_meta( $field = '', $user_id = false ) {
 function get_the_author_link() {
 	if ( get_the_author_meta( 'url' ) ) {
 		return sprintf(
-			'<a %1$s>%2$s</a>',
+			'<a%1$s>%2$s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -301,7 +301,7 @@ function get_the_author_posts_link() {
 	}
 
 	$link = sprintf(
-		'<a %1$s>%2$s</a>',
+		'<a%1$s>%2$s</a>',
 		cp_attributes(
 			'a',
 			array(
@@ -477,11 +477,11 @@ function wp_list_authors( $args = '' ) {
 		}
 
 		if ( 'list' === $args['style'] ) {
-			$return .= '<li ' . cp_attributes( 'li' ) . '>';
+			$return .= '<li' . cp_attributes( 'li' ) . '>';
 		}
 
 		$link = sprintf(
-			'<a %1$s>%2$s</a>',
+			'<a%1$s>%2$s</a>',
 			cp_attributes(
 				'a',
 				array(
@@ -511,7 +511,7 @@ function wp_list_authors( $args = '' ) {
 
 			if ( ! empty( $args['feed_image'] ) ) {
 				$attr = cp_attributes( 'img', array( 'src' => $args['feed_image'], 'alt' => $alt, 'style' => 'border: none;' ) );
-				$link .= '<img ' . $attr . ' />';
+				$link .= '<img' . $attr . ' />';
 			} else {
 				$link .= $name;
 			}

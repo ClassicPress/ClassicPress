@@ -58,7 +58,7 @@ class Walker_Category extends Walker {
 		}
 
 		$indent  = str_repeat( "\t", $depth );
-		$output .= "$indent<ul " . cp_attributes( 'ul', 'class=children' ) . ">\n";
+		$output .= "$indent<ul" . cp_attributes( 'ul', 'class=children' ) . ">\n";
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Walker_Category extends Walker {
 			$attr['title'] = strip_tags( apply_filters( 'category_description', $category->description, $category ) );
 		}
 
-		$link = '<a ' . cp_attributes( 'a', $attr ) . '>';
+		$link = '<a' . cp_attributes( 'a', $attr ) . '>';
 		$link .= $cat_name . '</a>';
 
 		if ( ! empty( $args['feed_image'] ) || ! empty( $args['feed'] ) ) {
@@ -143,12 +143,12 @@ class Walker_Category extends Walker {
 				}
 			}
 
-			$link .= '<a ' . cp_attributes( 'a', $attr ) . '>';
+			$link .= '<a' . cp_attributes( 'a', $attr ) . '>';
 
 			if ( empty( $args['feed_image'] ) ) {
 				$link .= $name;
 			} else {
-				$link .= '<img ' . cp_attributes(
+				$link .= '<img' . cp_attributes(
 					'img',
 					array(
 						'src' => $args['feed_image'],
@@ -167,7 +167,7 @@ class Walker_Category extends Walker {
 			$link .= ' (' . number_format_i18n( $category->count ) . ')';
 		}
 		if ( 'list' === $args['style'] ) {
-			$output     .= "\t<li ";
+			$output     .= "\t<li";
 			$css_classes = array(
 				'cat-item',
 				'cat-item-' . $category->term_id,
