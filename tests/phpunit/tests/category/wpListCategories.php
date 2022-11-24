@@ -123,7 +123,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . home_url( '/' ) . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . home_url( '/' ) . '">All</a></li>', $found );
 	}
 
 	public function test_show_option_all_link_should_respect_page_for_posts() {
@@ -142,7 +142,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . get_permalink( $p ) . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . get_permalink( $p ) . '">All</a></li>', $found );
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 
 		$pt_archive = get_post_type_archive_link( 'wptests_pt' );
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . $pt_archive . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . $pt_archive . '">All</a></li>', $found );
 	}
 
 	/**
@@ -200,7 +200,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 
 		$pt_archive = get_post_type_archive_link( 'wptests_pt2' );
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . $pt_archive . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . $pt_archive . '">All</a></li>', $found );
 	}
 
 	public function test_show_option_all_link_should_link_to_post_archive_if_available() {
@@ -226,7 +226,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 
 		$url = home_url( '/' );
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . $url . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . $url . '">All</a></li>', $found );
 	}
 
 	public function test_show_option_all_link_should_link_to_post_archive_if_no_associated_post_types_have_archives() {
@@ -252,7 +252,7 @@ class Tests_Category_WpListCategories extends WP_UnitTestCase {
 
 		$url = home_url( '/' );
 
-		$this->assertStringContainsString( "<li class='cat-item-all'><a href='" . $url . "'>All</a></li>", $found );
+		$this->assertStringContainsString( '<li class="cat-item-all"><a href="' . $url . '">All</a></li>', $found );
 	}
 
 	/**

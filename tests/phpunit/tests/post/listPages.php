@@ -89,21 +89,21 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'echo' => false,
 		);
 		$expected['default'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li>
 	<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 	<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li>
@@ -152,21 +152,21 @@ class Tests_List_Pages extends WP_UnitTestCase {
 		);
 		$date                    = date( $args['date_format'], $this->time );
 		$expected['date_format'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a> ' . $date . '
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a> ' . $date . '</li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a> ' . $date . '</li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a> ' . $date . '</li>
 </ul>
 </li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a> ' . $date . '
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a> ' . $date . '</li>
 	<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a> ' . $date . '</li>
 	<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a> ' . $date . '</li>
 </ul>
 </li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a> ' . $date . '
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a> ' . $date . '</li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a> ' . $date . '</li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a> ' . $date . '</li>
@@ -198,14 +198,14 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'exclude' => '2, 2',
 		);
 		$expected['exclude'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li>
@@ -282,21 +282,21 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'sort_order'  => 'DESC',
 		);
 		$expected['sort_column'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li>
 	<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 	<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
@@ -314,21 +314,21 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'link_before' => 'BEFORE',
 		);
 		$expected['link_before'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">BEFOREParent 1</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">BEFOREChild 1</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">BEFOREChild 2</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">BEFOREChild 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">BEFOREParent 2</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">BEFOREChild 1</a></li>
 	<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">BEFOREChild 2</a></li>
 	<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">BEFOREChild 3</a></li>
 </ul>
 </li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">BEFOREParent 3</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">BEFOREChild 1</a></li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">BEFOREChild 2</a></li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">BEFOREChild 3</a></li>
@@ -346,21 +346,21 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'link_after' => 'AFTER',
 		);
 		$expected['link_after'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1AFTER</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1AFTER</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2AFTER</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3AFTER</a></li>
 </ul>
 </li>
 <li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2AFTER</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1AFTER</a></li>
 	<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2AFTER</a></li>
 	<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3AFTER</a></li>
 </ul>
 </li>
 <li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3AFTER</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1AFTER</a></li>
 	<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2AFTER</a></li>
 	<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3AFTER</a></li>
@@ -392,7 +392,7 @@ class Tests_List_Pages extends WP_UnitTestCase {
 			'exclude_tree' => '2, 3',
 		);
 		$expected['exclude'] = '<li class="pagenav">Pages<ul><li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a>
-<ul class=\'children\'>
+<ul class="children">
 	<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 	<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li>
 	<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li>
@@ -412,18 +412,18 @@ class Tests_List_Pages extends WP_UnitTestCase {
 
 		$expected['default'] = '<li class="pagenav">Pages<ul>
 			<li class="page_item page-item-1 page_item_has_children"><a href="' . get_permalink( 1 ) . '">Parent 1</a>
-			<ul class=\'children\'>
+			<ul class="children">
 				<li class="page_item page-item-4"><a href="' . get_permalink( 4 ) . '">Child 1</a></li>
 				<li class="page_item page-item-5"><a href="' . get_permalink( 5 ) . '">Child 2</a></li>
 				<li class="page_item page-item-6"><a href="' . get_permalink( 6 ) . '">Child 3</a></li>
 			</ul>
 			</li><li class="page_item page-item-2 page_item_has_children"><a href="' . get_permalink( 2 ) . '">Parent 2</a>
-			<ul class=\'children\'><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li>
+			<ul class="children"><li class="page_item page-item-7"><a href="' . get_permalink( 7 ) . '">Child 1</a></li>
 				<li class="page_item page-item-8"><a href="' . get_permalink( 8 ) . '">Child 2</a></li>
 				<li class="page_item page-item-9"><a href="' . get_permalink( 9 ) . '">Child 3</a></li>
 			</ul>
 			</li><li class="page_item page-item-3 page_item_has_children"><a href="' . get_permalink( 3 ) . '">Parent 3</a>
-			<ul class=\'children\'>
+			<ul class="children">
 				<li class="page_item page-item-10"><a href="' . get_permalink( 10 ) . '">Child 1</a></li>
 				<li class="page_item page-item-11"><a href="' . get_permalink( 11 ) . '">Child 2</a></li>
 				<li class="page_item page-item-12"><a href="' . get_permalink( 12 ) . '">Child 3</a></li>

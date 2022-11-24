@@ -134,7 +134,7 @@ class Tests_WP_Generate_Tag_Cloud extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertMatchesRegularExpression( "|^<ul class='wp-tag-cloud' role='list'>|", $found );
+		$this->assertMatchesRegularExpression( '|^<ul class="wp-tag-cloud" role="list">|', $found );
 		$this->assertMatchesRegularExpression( "|</ul>\n|", $found );
 		$this->assertStringContainsString( '>' . $tags[0]->name . '<', $found );
 	}
@@ -189,7 +189,7 @@ class Tests_WP_Generate_Tag_Cloud extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertMatchesRegularExpression( "|^<ul class='wp-tag-cloud' role='list'>|", $found );
+		$this->assertMatchesRegularExpression( '|^<ul class="wp-tag-cloud" role="list">|', $found );
 		$this->assertMatchesRegularExpression( "|</ul>\n|", $found );
 
 		foreach ( $tags as $tag ) {
