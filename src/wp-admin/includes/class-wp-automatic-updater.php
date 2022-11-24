@@ -891,9 +891,10 @@ class WP_Automatic_Updater {
 
 This debugging email is sent when you are using a development version of ClassicPress.
 
-If you think these failures might be due to a bug in ClassicPress, could you report it?
- * If you need general support: https://docs.classicpress.net/faq-support/
- * Or, if you're comfortable writing a bug report: https://docs.classicpress.net/testing-classicpress/#reporting-bugs
+If you think these failures might be due to a bug in ClassicPress, could you report it please?
+ * General support and questions: https://forums.classicpress.net/c/support/5
+ * Documentation and code reference: https://docs.classicpress.net/
+ * If you're comfortable filing a bug report: https://github.com/ClassicPress/ClassicPress/issues/new/choose
 
 Thanks! -- The ClassicPress Team"
 				)
