@@ -21,7 +21,7 @@ jobs:
   # - todo: Configure Slack notifications for failing tests.
   test-js:
     name: QUnit Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
     steps:
@@ -72,5 +72,5 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
-      #- name: Run QUnit tests
-        #run: grunt qunit:compiled
+      - name: Run QUnit tests
+        run: grunt qunit:compiled
