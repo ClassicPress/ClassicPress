@@ -72,5 +72,5 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
-      - name: Run QUnit tests
-        run: grunt qunit:compiled
+      #- name: Run QUnit tests
+        #run: grunt qunit:compiled
