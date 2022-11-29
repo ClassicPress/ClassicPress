@@ -1337,7 +1337,7 @@ function wp_calculate_image_sizes( $size, $image_src = null, $image_meta = null,
  * attachment post IDs that are in post_content for the exported website may not match
  * the same attachments at the new website.
  *
- * @since 5.5.0
+ * @since WP-5.5.0
  *
  * @param string $image_location  The full path or URI to the image file.
  * @param array  $image_meta      The attachment meta data as returned by 'wp_get_attachment_metadata()'.
@@ -1376,7 +1376,7 @@ function wp_image_file_matches_image_meta( $image_location, $image_meta ) {
 	/**
 	 * Filter whether an image path or URI matches image meta.
 	 *
-	 * @since 5.5.0
+	 * @since WP-5.5.0
 	 *
 	 * @param bool   $match          Whether the image relative path from the image meta
 	 *                               matches the end of the URI or path to the image file.
