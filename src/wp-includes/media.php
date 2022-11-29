@@ -1412,14 +1412,14 @@ function wp_image_src_get_dimensions( $image_src, $image_meta ) {
 	if ( ! empty( $image_meta['sizes'] ) ) {
 		$src_filename = wp_basename( $image_src );
 
-	foreach ( $image_meta['sizes'] as $image_size_data ) {
+		foreach ( $image_meta['sizes'] as $image_size_data ) {
 			if ( $src_filename === $image_size_data['file'] ) {
-			return array(
-				(int) $image_size_data['width'],
-				(int) $image_size_data['height'],
-			);
+				return array(
+					(int) $image_size_data['width'],
+					(int) $image_size_data['height'],
+				);
+			}
 		}
-	}
 	}
 
 	return false;
