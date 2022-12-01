@@ -2702,8 +2702,8 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/44427
-	 * @https://core.trac.wordpress.org/ticket/50367
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50367
 	 */
 	function test_wp_img_tag_add_loading_attr_with_single_quotes() {
 		$img = "<img src='example.png' alt=' width='300' height='225' />";
@@ -2717,8 +2717,8 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/44427
-	 * @https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_img_tag_add_loading_attr_opt_out() {
 		$img = '<img src="example.png" alt=" width="300" height="225" />';
@@ -2728,7 +2728,7 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_iframe_tag_add_loading_attr() {
 		$iframe = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
@@ -2782,8 +2782,8 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/44427
-	 * @https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_get_attachment_image_loading_opt_out() {
 		add_filter( 'wp_lazy_loading_enabled', '__return_false' );
@@ -2794,8 +2794,8 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/44427
-	 * @https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/44427
+	 * @see https://core.trac.wordpress.org/ticket/50425
 	 */
 	function test_wp_get_attachment_image_loading_opt_out_individual() {
 		// The default is already tested above, the filter below ensures that
@@ -2834,9 +2834,9 @@ EOF;
 	}
 
 	/**
-	 * @https://core.trac.wordpress.org/ticket/50425
-	 * @https://core.trac.wordpress.org/ticket/53463
-	 * @https://core.trac.wordpress.org/ticket/53675
+	 * @see https://core.trac.wordpress.org/ticket/50425
+	 * @see https://core.trac.wordpress.org/ticket/53463
+	 * @see https://core.trac.wordpress.org/ticket/53675
 	 * @dataProvider data_wp_lazy_loading_enabled_context_defaults
 	 *
 	 * @param string $context  Function context.
@@ -2863,175 +2863,47 @@ EOF;
 	}
 
 	/**
-	 * @ticket 53675
-	 * @dataProvider data_wp_get_loading_attr_default
-	 *
-	 * @param string $context
+	 * @see https://core.trac.wordpress.org/ticket/50543
 	 */
-	function test_wp_get_loading_attr_default( $context ) {
-		global $wp_query, $wp_the_query;
+	function test_wp_image_file_matches_image_meta() {
+		$image_meta       = wp_get_attachment_metadata( self::$large_id );
+		$image_src_full   = wp_get_attachment_image_url( self::$large_id, 'full' );
+		$image_src_medium = wp_get_attachment_image_url( self::$large_id, 'medium' );
 
-		// Return 'lazy' by default.
-		$this->assertSame( 'lazy', wp_get_loading_attr_default( 'test' ) );
-		$this->assertSame( 'lazy', wp_get_loading_attr_default( 'wp_get_attachment_image' ) );
-
-		// Return 'lazy' if not in the loop or the main query.
-		$this->assertSame( 'lazy', wp_get_loading_attr_default( $context ) );
-
-		$wp_query = new WP_Query( array( 'post__in' => array( self::$post_ids['publish'] ) ) );
-		$this->reset_content_media_count();
-		$this->reset_omit_loading_attr_filter();
-
-		while ( have_posts() ) {
-			the_post();
-
-			// Return 'lazy' if in the loop but not in the main query.
-			$this->assertSame( 'lazy', wp_get_loading_attr_default( $context ) );
-
-			// Set as main query.
-			$wp_the_query = $wp_query;
-
-			// For contexts other than for the main content, still return 'lazy' even in the loop
-			// and in the main query, and do not increase the content media count.
-			$this->assertSame( 'lazy', wp_get_loading_attr_default( 'wp_get_attachment_image' ) );
-
-			// Return `false` if in the loop and in the main query and it is the first element.
-			$this->assertFalse( wp_get_loading_attr_default( $context ) );
-
-			// Return 'lazy' if in the loop and in the main query for any subsequent elements.
-			$this->assertSame( 'lazy', wp_get_loading_attr_default( $context ) );
-
-			// Yes, for all subsequent elements.
-			$this->assertSame( 'lazy', wp_get_loading_attr_default( $context ) );
-		}
-	}
-
-	function data_wp_get_loading_attr_default() {
-		return array(
-			array( 'the_content' ),
-			array( 'the_post_thumbnail' ),
-		);
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_full, $image_meta ) );
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src_medium, $image_meta ) );
 	}
 
 	/**
-	 * @ticket 53675
+	 * @see https://core.trac.wordpress.org/ticket/50543
 	 */
-	function test_wp_omit_loading_attr_threshold_filter() {
-		global $wp_query, $wp_the_query;
+	function test_wp_image_file_matches_image_meta_no_subsizes() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_src  = wp_get_attachment_image_url( self::$large_id, 'full' );
 
-		$wp_query     = new WP_Query( array( 'post__in' => array( self::$post_ids['publish'] ) ) );
-		$wp_the_query = $wp_query;
-		$this->reset_content_media_count();
-		$this->reset_omit_loading_attr_filter();
+		$image_meta['sizes'] = array();
 
-		// Use the filter to alter the threshold for not lazy-loading to the first three elements.
-		add_filter(
-			'wp_omit_loading_attr_threshold',
-			function() {
-				return 3;
-			}
-		);
-
-		while ( have_posts() ) {
-			the_post();
-
-			// Due to the filter, now the first three elements should not be lazy-loaded, i.e. return `false`.
-			for ( $i = 0; $i < 3; $i++ ) {
-				$this->assertFalse( wp_get_loading_attr_default( 'the_content' ) );
-			}
-
-			// For following elements, lazy-load them again.
-			$this->assertSame( 'lazy', wp_get_loading_attr_default( 'the_content' ) );
-		}
+		$this->assertTrue( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
 	}
 
 	/**
-	 * @ticket 53675
+	 * @see https://core.trac.wordpress.org/ticket/50543
 	 */
-	function test_wp_filter_content_tags_with_wp_get_loading_attr_default() {
-		global $wp_query, $wp_the_query;
+	function test_wp_image_file_matches_image_meta_invalid_meta() {
+		$image_meta = ''; // Attachment is not an image.
+		$image_src  = $this->img_url;
 
-		$img1         = get_image_tag( self::$large_id, '', '', '', 'large' );
-		$iframe1      = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
-		$img2         = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$img3         = get_image_tag( self::$large_id, '', '', '', 'thumbnail' );
-		$iframe2      = '<iframe src="https://wordpress.org" width="640" height="360"></iframe>';
-		$lazy_img2    = wp_img_tag_add_loading_attr( $img2, 'the_content' );
-		$lazy_img3    = wp_img_tag_add_loading_attr( $img3, 'the_content' );
-		$lazy_iframe2 = wp_iframe_tag_add_loading_attr( $iframe2, 'the_content' );
-
-		// Use a threshold of 2.
-		add_filter(
-			'wp_omit_loading_attr_threshold',
-			function() {
-				return 2;
-			}
-		);
-
-		// Following the threshold of 2, the first two content media elements should not be lazy-loaded.
-		$content_unfiltered = $img1 . $iframe1 . $img2 . $img3 . $iframe2;
-		$content_expected   = $img1 . $iframe1 . $lazy_img2 . $lazy_img3 . $lazy_iframe2;
-
-		$wp_query     = new WP_Query( array( 'post__in' => array( self::$post_ids['publish'] ) ) );
-		$wp_the_query = $wp_query;
-		$this->reset_content_media_count();
-		$this->reset_omit_loading_attr_filter();
-
-		while ( have_posts() ) {
-			the_post();
-
-			add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-			$content_filtered = wp_filter_content_tags( $content_unfiltered, 'the_content' );
-			remove_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-		}
-
-		// After filtering, the first image should not be lazy-loaded while the other ones should be.
-		$this->assertSame( $content_expected, $content_filtered );
+		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
 	}
 
 	/**
-	 * @ticket 53675
+	 * @see https://core.trac.wordpress.org/ticket/50543
 	 */
-	public function test_wp_omit_loading_attr_threshold() {
-		$this->reset_omit_loading_attr_filter();
+	function test_wp_image_file_matches_image_meta_different_meta() {
+		$image_meta = wp_get_attachment_metadata( self::$large_id );
+		$image_src  = $this->img_url; // Different image.
 
-		// Apply filter, ensure default value of 1.
-		$omit_threshold = wp_omit_loading_attr_threshold();
-		$this->assertSame( 1, $omit_threshold );
-
-		// Add a filter that changes the value to 3. However, the filter is not applied a subsequent time in a single
-		// page load by default, so the value is still 1.
-		add_filter(
-			'wp_omit_loading_attr_threshold',
-			function() {
-				return 3;
-			}
-		);
-		$omit_threshold = wp_omit_loading_attr_threshold();
-		$this->assertSame( 1, $omit_threshold );
-
-		// Only by enforcing a fresh check, the filter gets re-applied.
-		$omit_threshold = wp_omit_loading_attr_threshold( true );
-		$this->assertSame( 3, $omit_threshold );
-	}
-
-	private function reset_content_media_count() {
-		// Get current value without increasing.
-		$content_media_count = wp_increase_content_media_count( 0 );
-
-		// Decrease it by its current value to "reset" it back to 0.
-		wp_increase_content_media_count( - $content_media_count );
-	}
-
-	private function reset_omit_loading_attr_filter() {
-		// Add filter to "reset" omit threshold back to null (unset).
-		add_filter( 'wp_omit_loading_attr_threshold', '__return_null', 100 );
-
-		// Force filter application to re-run.
-		wp_omit_loading_attr_threshold( true );
-
-		// Clean up the above filter.
-		remove_filter( 'wp_omit_loading_attr_threshold', '__return_null', 100 );
+		$this->assertFalse( wp_image_file_matches_image_meta( $image_src, $image_meta ) );
 	}
 }
 
