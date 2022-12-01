@@ -625,12 +625,12 @@ class Tests_General_Template extends WP_UnitTestCase {
 		// Simulate private site (search engines discouraged).
 		update_option( 'blog_public', '0' );
 		$actual_private = get_echo( 'wp_no_robots' );
-		$this->assertSame( "<meta name='robots' content='noindex,nofollow' />\n", $actual_private );
+		$this->assertSame( "<meta name=\"robots\" content=\"noindex,nofollow\" />\n", $actual_private );
 
 		// Simulate public site.
 		update_option( 'blog_public', '1' );
 		$actual_public = get_echo( 'wp_no_robots' );
-		$this->assertSame( "<meta name='robots' content='noindex,follow' />\n", $actual_public );
+		$this->assertSame( "<meta name=\"robots\" content=\"noindex,follow\" />\n", $actual_public );
 	}
 
 	/*

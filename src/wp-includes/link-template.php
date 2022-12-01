@@ -80,11 +80,11 @@ function permalink_anchor( $mode = 'id' ) {
 	switch ( strtolower( $mode ) ) {
 		case 'title':
 			$title = sanitize_title( $post->post_title ) . '-' . $post->ID;
-			echo '<a id="' . $title . '"></a>';
+			echo '<a' . cp_attributes( 'a', 'id=' . $title ) . '></a>';
 			break;
 		case 'id':
 		default:
-			echo '<a id="post-' . $post->ID . '"></a>';
+			echo '<a' . cp_attributes( 'a', 'id=post-' . $post->ID ) . '></a>';
 			break;
 	}
 }
@@ -587,7 +587,7 @@ function get_day_link( $year, $month, $day ) {
  * @param string $feed   Optional. Feed type. Default empty.
  */
 function the_feed_link( $anchor, $feed = '' ) {
-	$link = '<a href="' . esc_url( get_feed_link( $feed ) ) . '">' . $anchor . '</a>';
+	$link = '<a' . cp_attributes( 'a', array( 'href' => get_feed_link( $feed ) ) ) . '>' . $anchor . '</a>';
 
 	/**
 	 * Filters the feed link anchor tag.
@@ -752,7 +752,7 @@ function post_comments_feed_link( $link_text = '', $post_id = '', $feed = '' ) {
 		$link_text = __( 'Comments Feed' );
 	}
 
-	$link = '<a href="' . esc_url( $url ) . '">' . $link_text . '</a>';
+	$link = '<a' . cp_attributes( 'a', array( 'href' => $url ) ) . '>' . $link_text . '</a>';
 	/**
 	 * Filters the post comment feed link anchor tag.
 	 *
@@ -1053,7 +1053,7 @@ function edit_term_link( $link = '', $before = '', $after = '', $term = null, $e
 		$link = __( 'Edit This' );
 	}
 
-	$link = '<a href="' . get_edit_term_link( $term->term_id, $term->taxonomy ) . '">' . $link . '</a>';
+	$link = '<a' . cp_attributes( 'a', array( 'href' => get_edit_term_link( $term->term_id, $term->taxonomy ) ) ) . '>' . $link . '</a>';
 
 	/**
 	 * Filters the anchor tag for the edit link of a term.
@@ -1410,7 +1410,13 @@ function edit_post_link( $text = null, $before = '', $after = '', $id = 0, $clas
 		$text = __( 'Edit This' );
 	}
 
-	$link = '<a class="' . esc_attr( $class ) . '" href="' . esc_url( $url ) . '">' . $text . '</a>';
+	$link = '<a' . cp_attributes(
+		'a',
+		array(
+			'class' => $class,
+			'href' => $url,
+		)
+	) . '>' . $text . '</a>';
 
 	/**
 	 * Filters the post edit link anchor tag.
@@ -1518,7 +1524,13 @@ function edit_comment_link( $text = null, $before = '', $after = '' ) {
 		$text = __( 'Edit This' );
 	}
 
-	$link = '<a class="comment-edit-link" href="' . esc_url( get_edit_comment_link( $comment ) ) . '">' . $text . '</a>';
+	$link = '<a' . cp_attributes(
+		'a',
+		array(
+			'class' => 'comment-edit-link',
+			'href' => get_edit_comment_link( $comment ),
+		)
+	) . '>' . $text . '</a>';
 
 	/**
 	 * Filters the comment edit link anchor tag.
@@ -1581,7 +1593,7 @@ function edit_bookmark_link( $link = '', $before = '', $after = '', $bookmark = 
 		$link = __( 'Edit This' );
 	}
 
-	$link = '<a href="' . esc_url( get_edit_bookmark_link( $bookmark ) ) . '">' . $link . '</a>';
+	$link = '<a' . cp_attributes( 'a', array( 'href' => get_edit_bookmark_link( $bookmark ) ) ) . '>' . $link . '</a>';
 
 	/**
 	 * Filters the bookmark edit link anchor tag.
@@ -1895,9 +1907,14 @@ function get_adjacent_post_rel_link( $title = '%title', $in_same_term = false, $
 	$title = str_replace( '%title', $post_title, $title );
 	$title = str_replace( '%date', $date, $title );
 
-	$link  = $previous ? "<link rel='prev' title='" : "<link rel='next' title='";
-	$link .= esc_attr( $title );
-	$link .= "' href='" . get_permalink( $post ) . "' />\n";
+	$link  = '<link' . cp_attributes(
+		'link',
+		array(
+			'rel' => $previous ? 'prev' : 'next',
+			'title' => $title,
+			'href' => get_permalink( $post ),
+		)
+	) . " />\n";
 
 	$adjacent = $previous ? 'previous' : 'next';
 
@@ -2146,7 +2163,13 @@ function get_adjacent_post_link( $format, $link, $in_same_term = false, $exclude
 		$date = mysql2date( get_option( 'date_format' ), $post->post_date );
 		$rel  = $previous ? 'prev' : 'next';
 
-		$string = '<a href="' . get_permalink( $post ) . '" rel="' . $rel . '">';
+		$string = '<a' . cp_attributes(
+			'a',
+			array(
+				'href' => get_permalink( $post ),
+				'rel' => $rel,
+			)
+		) . '>';
 		$inlink = str_replace( '%title', $title, $link );
 		$inlink = str_replace( '%date', $date, $inlink );
 		$inlink = $string . $inlink . '</a>';

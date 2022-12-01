@@ -272,9 +272,9 @@ function get_search_form( $echo = true ) {
  */
 function wp_loginout( $redirect = '', $echo = true ) {
 	if ( ! is_user_logged_in() ) {
-		$link = '<a href="' . esc_url( wp_login_url( $redirect ) ) . '">' . __( 'Log in' ) . '</a>';
+		$link = '<a' . cp_attributes( 'a', array( 'href' => wp_login_url( $redirect ) ) ) . '>' . __( 'Log in' ) . '</a>';
 	} else {
-		$link = '<a href="' . esc_url( wp_logout_url( $redirect ) ) . '">' . __( 'Log out' ) . '</a>';
+		$link = '<a' . cp_attributes( 'a', array( 'href' => wp_logout_url( $redirect ) ) ) . '>' . __( 'Log out' ) . '</a>';
 	}
 
 	if ( $echo ) {
@@ -474,19 +474,19 @@ function wp_login_form( $args = array() ) {
 	$login_form_bottom = apply_filters( 'login_form_bottom', '', $args );
 
 	$form = '
-		<form name="' . $args['form_id'] . '" id="' . $args['form_id'] . '" action="' . esc_url( site_url( 'wp-login.php', 'login_post' ) ) . '" method="post">
+		<form' . cp_attributes( 'form', array( 'name' => $args['form_id'], 'id' => $args['form_id'], 'action' => site_url( 'wp-login.php', 'login_post' ), 'method' => 'post' ) ) . '>
 			' . $login_form_top . '
-			<p class="login-username">
-				<label for="' . esc_attr( $args['id_username'] ) . '">' . esc_html( $args['label_username'] ) . '</label>
-				<input type="text" name="log" id="' . esc_attr( $args['id_username'] ) . '" class="input" value="' . esc_attr( $args['value_username'] ) . '" size="20" />
+			<p' . cp_attributes( 'p', 'class=login-username' ) . '>
+				<label' . cp_attributes( 'label', 'for=' . $args['id_username'] ) . '>' . esc_html( $args['label_username'] ) . '</label>
+				<input' . cp_attributes( 'input', array( 'type' => 'text', 'name' => 'log', 'id' => $args['id_username'], 'class' => 'input', 'value' => $args['value_username'], 'size' => '20' ) ) . ' />
 			</p>
-			<p class="login-password">
-				<label for="' . esc_attr( $args['id_password'] ) . '">' . esc_html( $args['label_password'] ) . '</label>
-				<input type="password" name="pwd" id="' . esc_attr( $args['id_password'] ) . '" class="input" value="" size="20" />
+			<p' . cp_attributes( 'p', 'class=login-password' ) . '>
+				<label' . cp_attributes( 'label', 'for=' . $args['id_password'] ) . '>' . esc_html( $args['label_password'] ) . '</label>
+				<input' . cp_attributes( 'input', array( 'type' => 'password', 'name' => 'pwd', 'id' => $args['id_password'], 'class' => 'input', 'value' => '', 'size' => '20' ) ) . ' />
 			</p>
 			' . $login_form_middle . '
-			' . ( $args['remember'] ? '<p class="login-remember"><label><input name="rememberme" type="checkbox" id="' . esc_attr( $args['id_remember'] ) . '" value="forever"' . ( $args['value_remember'] ? ' checked="checked"' : '' ) . ' /> ' . esc_html( $args['label_remember'] ) . '</label></p>' : '' ) . '
-			<p class="login-submit">
+			' . ( $args['remember'] ? '<p' . cp_attributes( 'p', 'class=login-remember' ) . '><label><input name="rememberme" type="checkbox" id="' . esc_attr( $args['id_remember'] ) . '" value="forever"' . ( $args['value_remember'] ? ' checked="checked"' : '' ) . ' /> ' . esc_html( $args['label_remember'] ) . '</label></p>' : '' ) . '
+			<p' . cp_attributes( 'p', 'class=login-submit' ) . '>
 				<input type="submit" name="wp-submit" id="' . esc_attr( $args['id_submit'] ) . '" class="button button-primary" value="' . esc_attr( $args['label_log_in'] ) . '" />
 				<input type="hidden" name="redirect_to" value="' . esc_url( $args['redirect'] ) . '" />
 			</p>
@@ -543,12 +543,12 @@ function wp_lostpassword_url( $redirect = '' ) {
 function wp_register( $before = '<li>', $after = '</li>', $echo = true ) {
 	if ( ! is_user_logged_in() ) {
 		if ( get_option( 'users_can_register' ) ) {
-			$link = $before . '<a href="' . esc_url( wp_registration_url() ) . '">' . __( 'Register' ) . '</a>' . $after;
+			$link = $before . '<a' . cp_attributes( 'a', array( 'href' => wp_registration_url() ) ) . '>' . __( 'Register' ) . '</a>' . $after;
 		} else {
 			$link = '';
 		}
 	} elseif ( current_user_can( 'read' ) ) {
-		$link = $before . '<a href="' . admin_url() . '">' . __( 'Site Admin' ) . '</a>' . $after;
+		$link = $before . '<a' . cp_attributes( 'a', array( 'href' => admin_url() ) ) . '>' . __( 'Site Admin' ) . '</a>' . $after;
 	} else {
 		$link = '';
 	}
@@ -927,8 +927,16 @@ function get_custom_logo( $blog_id = 0 ) {
 		 * it because wp_get_attachment_image() already adds the alt attribute.
 		 */
 		$html = sprintf(
-			'<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
-			esc_url( home_url( '/' ) ),
+			'<a%1$s>%2$s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'href' => home_url( '/' ),
+					'class' => 'custom-logo-link',
+					'rel' => 'home',
+					'itemprop' => 'url',
+				)
+			),
 			wp_get_attachment_image( $custom_logo_id, 'full', false, $custom_logo_attr )
 		);
 	} elseif ( is_customize_preview() ) {
@@ -1106,7 +1114,7 @@ function _wp_render_title_tag() {
 		return;
 	}
 
-	echo '<title>' . wp_get_document_title() . '</title>' . "\n";
+	echo '<title' . cp_attributes( 'title' ) . '>' . wp_get_document_title() . '</title>' . "\n";
 }
 
 /**
@@ -1471,7 +1479,7 @@ function get_the_archive_title() {
 		$title = sprintf( __( 'Tag: %s' ), single_tag_title( '', false ) );
 	} elseif ( is_author() ) {
 		/* translators: Author archive title. 1: Author name */
-		$title = sprintf( __( 'Author: %s' ), '<span class="vcard">' . get_the_author() . '</span>' );
+		$title = sprintf( __( 'Author: %s' ), '<span' . cp_attributes( 'span', 'class=vcard' ) . '>' . get_the_author() . '</span>' );
 	} elseif ( is_year() ) {
 		/* translators: Yearly archive title. 1: Year */
 		$title = sprintf( __( 'Year: %s' ), get_the_date( _x( 'Y', 'yearly archives date format' ) ) );
@@ -1641,13 +1649,20 @@ function get_archives_link( $url, $text, $format = 'html', $before = '', $after 
 	$url  = esc_url( $url );
 
 	if ( 'link' == $format ) {
-		$link_html = "\t<link rel='archives' title='" . esc_attr( $text ) . "' href='$url' />\n";
+		$link_html = "\t<link" . cp_attributes(
+			'link',
+			array(
+				'rel' => 'archives',
+				'title' => $text,
+				'href' => $url,
+			)
+		) . " />\n";
 	} elseif ( 'option' == $format ) {
-		$link_html = "\t<option value='$url'>$before $text $after</option>\n";
+		$link_html = "\t<option" . cp_attributes( 'option', array( 'value' => $url ) ) . ">$before $text $after</option>\n";
 	} elseif ( 'html' == $format ) {
-		$link_html = "\t<li>$before<a href='$url'>$text</a>$after</li>\n";
+		$link_html = "\t<li" . cp_attributes( 'li' ) . ">$before<a" . cp_attributes( 'a', array( 'href' => $url ) ) . ">$text</a>$after</li>\n";
 	} else { // custom
-		$link_html = "\t$before<a href='$url'>$text</a>$after\n";
+		$link_html = "\t$before<a" . cp_attributes( 'a', array( 'href' => $url ) ) . ">$text</a>$after\n";
 	}
 
 	/**
@@ -2032,14 +2047,14 @@ function get_calendar( $initial = true, $echo = true ) {
 
 	/* translators: Calendar caption: 1: month name, 2: 4-digit year */
 	$calendar_caption = _x( '%1$s %2$s', 'calendar caption' );
-	$calendar_output  = '<table id="wp-calendar">
-	<caption>' . sprintf(
+	$calendar_output  = '<table' . cp_attributes( 'table', 'id=wp-calendar' ) . '>
+	<caption' . cp_attributes( 'caption' ) . '>' . sprintf(
 		$calendar_caption,
 		$wp_locale->get_month( $thismonth ),
 		date( 'Y', $unixmonth )
 	) . '</caption>
-	<thead>
-	<tr>';
+	<thead' . cp_attributes( 'thead' ) . '>
+	<tr' . cp_attributes( 'tr' ) . '>';
 
 	$myweek = array();
 
@@ -2050,32 +2065,38 @@ function get_calendar( $initial = true, $echo = true ) {
 	foreach ( $myweek as $wd ) {
 		$day_name         = $initial ? $wp_locale->get_weekday_initial( $wd ) : $wp_locale->get_weekday_abbrev( $wd );
 		$wd               = esc_attr( $wd );
-		$calendar_output .= "\n\t\t<th scope=\"col\" title=\"$wd\">$day_name</th>";
+		$calendar_output .= "\n\t\t<th" . cp_attributes(
+			'th',
+			array(
+				'scope' => 'col',
+				'title' => $wd,
+			)
+		) . ">$day_name</th>";
 	}
 
 	$calendar_output .= '
 	</tr>
 	</thead>
 
-	<tfoot>
-	<tr>';
+	<tfoot' . cp_attributes( 'tfoot' ) . '>
+	<tr' . cp_attributes( 'tr' ) . '>';
 
 	if ( $previous ) {
-		$calendar_output .= "\n\t\t" . '<td colspan="3" id="prev"><a href="' . get_month_link( $previous->year, $previous->month ) . '">&laquo; ' .
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'colspan=3&id=prev' ) . '><a' . cp_attributes( 'a', array( 'href' => get_month_link( $previous->year, $previous->month ) ) ) . '>&laquo; ' .
 			$wp_locale->get_month_abbrev( $wp_locale->get_month( $previous->month ) ) .
 		'</a></td>';
 	} else {
-		$calendar_output .= "\n\t\t" . '<td colspan="3" id="prev" class="pad">&nbsp;</td>';
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'colspan=3&id=prev&class=pad' ) . '>&nbsp;</td>';
 	}
 
-	$calendar_output .= "\n\t\t" . '<td class="pad">&nbsp;</td>';
+	$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'class=pad' ) . '>&nbsp;</td>';
 
 	if ( $next ) {
-		$calendar_output .= "\n\t\t" . '<td colspan="3" id="next"><a href="' . get_month_link( $next->year, $next->month ) . '">' .
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'colspan=3&id=next' ) . '><a' . cp_attributes( 'a', array( 'href' => get_month_link( $next->year, $next->month ) ) ) . '>' .
 			$wp_locale->get_month_abbrev( $wp_locale->get_month( $next->month ) ) .
 		' &raquo;</a></td>';
 	} else {
-		$calendar_output .= "\n\t\t" . '<td colspan="3" id="next" class="pad">&nbsp;</td>';
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'colspan=3&id=next&class=pad' ) . '>&nbsp;</td>';
 	}
 
 	$calendar_output .= '
@@ -2105,7 +2126,7 @@ function get_calendar( $initial = true, $echo = true ) {
 	// See how much we should pad in the beginning
 	$pad = calendar_week_mod( date( 'w', $unixmonth ) - $week_begins );
 	if ( 0 != $pad ) {
-		$calendar_output .= "\n\t\t" . '<td colspan="' . esc_attr( $pad ) . '" class="pad">&nbsp;</td>';
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'colspan=' . $pad . '&class=pad' ) . '>&nbsp;</td>';
 	}
 
 	$newrow      = false;
@@ -2113,16 +2134,16 @@ function get_calendar( $initial = true, $echo = true ) {
 
 	for ( $day = 1; $day <= $daysinmonth; ++$day ) {
 		if ( isset( $newrow ) && $newrow ) {
-			$calendar_output .= "\n\t</tr>\n\t<tr>\n\t\t";
+			$calendar_output .= "\n\t</tr>\n\t<tr" . cp_attributes( 'tr' ) . ">\n\t\t";
 		}
 		$newrow = false;
 
 		if ( gmdate( 'j', $ts ) == $day &&
 			gmdate( 'm', $ts ) == $thismonth &&
 			gmdate( 'Y', $ts ) == $thisyear ) {
-			$calendar_output .= '<td id="today">';
+			$calendar_output .= '<td' . cp_attributes( 'td', 'id=today' ) . '>';
 		} else {
-			$calendar_output .= '<td>';
+			$calendar_output .= '<td' . cp_attributes( 'td' ) . '>';
 		}
 
 		if ( in_array( $day, $daywithpost, true ) ) {
@@ -2131,9 +2152,14 @@ function get_calendar( $initial = true, $echo = true ) {
 			/* translators: Post calendar label. %s: Date. */
 			$label            = sprintf( __( 'Posts published on %s' ), $date_format );
 			$calendar_output .= sprintf(
-				'<a href="%s" aria-label="%s">%s</a>',
-				get_day_link( $thisyear, $thismonth, $day ),
-				esc_attr( $label ),
+				'<a%s>%s</a>',
+				cp_attributes(
+					'a',
+					array(
+						'href'       => get_day_link( $thisyear, $thismonth, $day ),
+						'aria-label' => $label,
+					)
+				),
 				$day
 			);
 		} else {
@@ -2149,7 +2175,7 @@ function get_calendar( $initial = true, $echo = true ) {
 
 	$pad = 7 - calendar_week_mod( date( 'w', mktime( 0, 0, 0, $thismonth, $day, $thisyear ) ) - $week_begins );
 	if ( 0 != $pad && 7 != $pad ) {
-		$calendar_output .= "\n\t\t" . '<td class="pad" colspan="' . esc_attr( $pad ) . '">&nbsp;</td>';
+		$calendar_output .= "\n\t\t" . '<td' . cp_attributes( 'td', 'class=pad&colspan=' . $pad ) . '">&nbsp;</td>';
 	}
 	$calendar_output .= "\n\t</tr>\n\t</tbody>\n\t</table>";
 
@@ -2871,11 +2897,11 @@ function noindex() {
  */
 function wp_no_robots() {
 	if ( get_option( 'blog_public' ) ) {
-		echo "<meta name='robots' content='noindex,follow' />\n";
+		echo '<meta' . cp_attributes( 'meta', 'name=robots&content=noindex,follow' ) . " />\n";
 		return;
 	}
 
-	echo "<meta name='robots' content='noindex,nofollow' />\n";
+	echo '<meta' . cp_attributes( 'meta', 'name=robots&content=noindex,nofollow' ) . " />\n";
 }
 
 /**
@@ -2891,8 +2917,8 @@ function wp_no_robots() {
  */
 function wp_sensitive_page_meta() {
 	?>
-	<meta name='robots' content='noindex,noarchive' />
-	<meta name='referrer' content='strict-origin-when-cross-origin' />
+	<meta<?php echo cp_attributes( 'meta', 'name=robots&content=noindex,noarchive' ); ?> />
+	<meta<?php echo cp_attributes( 'meta', 'name=referrer&content=strict-origin-when-cross-origin' ); ?> />
 	<?php
 }
 
@@ -3904,11 +3930,23 @@ function paginate_links( $args = '' ) {
 		 *
 		 * @param string $link The paginated link URL.
 		 */
-		$page_links[] = '<a class="prev page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['prev_text'] . '</a>';
+		$page_links[] = '<a' . cp_attributes(
+			'a',
+			array(
+				'class' => 'prev page-numbers',
+				'href' => apply_filters( 'paginate_links', $link ),
+			)
+		) . '>' . $args['prev_text'] . '</a>';
 	endif;
 	for ( $n = 1; $n <= $total; $n++ ) :
 		if ( $n == $current ) :
-			$page_links[] = "<span aria-current='" . esc_attr( $args['aria_current'] ) . "' class='page-numbers current'>" . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</span>';
+			$page_links[] = '<span' . cp_attributes(
+				'span',
+				array(
+					'aria-current' => $args['aria_current'],
+					'class' => 'page-numbers current',
+				)
+			) . '>' . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</span>';
 			$dots         = true;
 		else :
 			if ( $args['show_all'] || ( $n <= $end_size || ( $current && $n >= $current - $mid_size && $n <= $current + $mid_size ) || $n > $total - $end_size ) ) :
@@ -3920,10 +3958,16 @@ function paginate_links( $args = '' ) {
 				$link .= $args['add_fragment'];
 
 				/** This filter is documented in wp-includes/general-template.php */
-				$page_links[] = "<a class='page-numbers' href='" . esc_url( apply_filters( 'paginate_links', $link ) ) . "'>" . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</a>';
+				$page_links[] = '<a' . cp_attributes(
+					'a',
+					array(
+						'class' => 'page-numbers',
+						'href' => apply_filters( 'paginate_links', $link ),
+					)
+				) . '>' . $args['before_page_number'] . number_format_i18n( $n ) . $args['after_page_number'] . '</a>';
 				$dots         = true;
 			elseif ( $dots && ! $args['show_all'] ) :
-				$page_links[] = '<span class="page-numbers dots">' . __( '&hellip;' ) . '</span>';
+				$page_links[] = '<span' . cp_attributes( 'span', array( 'class' => 'page-numbers dots' ) ) . '>' . __( '&hellip;' ) . '</span>';
 				$dots         = false;
 			endif;
 		endif;
@@ -3937,15 +3981,22 @@ function paginate_links( $args = '' ) {
 		$link .= $args['add_fragment'];
 
 		/** This filter is documented in wp-includes/general-template.php */
-		$page_links[] = '<a class="next page-numbers" href="' . esc_url( apply_filters( 'paginate_links', $link ) ) . '">' . $args['next_text'] . '</a>';
+		$page_links[] = '<a' . cp_attributes(
+			'a',
+			array(
+				'class' => 'next page-numbers',
+				'href' => apply_filters( 'paginate_links', $link ),
+			)
+		) . '>' . $args['next_text'] . '</a>';
 	endif;
 	switch ( $args['type'] ) {
 		case 'array':
 			return $page_links;
 
 		case 'list':
-			$r .= "<ul class='page-numbers'>\n\t<li>";
-			$r .= join( "</li>\n\t<li>", $page_links );
+			$li = '<li' . cp_attributes( 'li' ) . '>';
+			$r .= '<ul' . cp_attributes( 'ul', 'class=page-numbers' ) . ">\n\t$li";
+			$r .= join( "</li>\n\t$li", $page_links );
 			$r .= "</li>\n</ul>\n";
 			break;
 
@@ -4300,7 +4351,13 @@ function get_the_generator( $type = '' ) {
 
 	switch ( $type ) {
 		case 'html':
-			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
+			$gen = '<meta' . cp_attributes(
+				'meta',
+				array(
+					'name' => 'generator',
+					'content' => "WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)",
+				)
+			) . '>';
 			break;
 		case 'xhtml':
 			$gen = "<meta name=\"generator\" content=\"WordPress $esc_wp_version (compatible; ClassicPress $esc_cp_version)\">";
