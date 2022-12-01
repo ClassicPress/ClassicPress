@@ -4385,12 +4385,12 @@ function cp_attributes( $element, $attrs = array(), $context = '' ) {
 				$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 			}
 		} else {
-			$value = ( 'href' === $attr || 'src' === $attr ) ?
+			$value = ( 'href' === $attr || 'src' === $attr || 'action' === $attr ) ?
 				esc_url( $value ) : esc_attr( $value );
 			$out .= sanitize_key( $attr ) . '="' . $value . '" ';
 		}
 	}
-	return trim( $out );
+	return empty( $out ) ? $out : ' ' . trim( $out );
 }
 
 /**
