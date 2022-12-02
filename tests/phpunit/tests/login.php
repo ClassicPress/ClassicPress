@@ -55,9 +55,7 @@ class Tests_Login extends WP_UnitTestCase {
 			. '\r?$/mi'
 		);
 
-		$test = preg_match( $regex, $mailer->get_sent()->body );
-
-		$this->assertNotEquals( $test, 1 );
+		$this->assertDoesNotMatchRegularExpression( $regex, $mailer->get_sent()->body );
 
 		$encoded_user_login = str_replace( '.', '%2e', rawurlencode( $user->user_login ) );
 
