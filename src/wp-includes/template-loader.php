@@ -23,7 +23,7 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
  * @param bool $exit Whether to exit without generating any content for 'HEAD' requests. Default true.
  */
 if ( 'HEAD' === $_SERVER['REQUEST_METHOD'] && apply_filters( 'exit_on_http_head', true ) ) {
-	exit();
+	exit;
 }
 
 // Process feeds and trackbacks even if not using themes.
@@ -93,7 +93,13 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
 	 */
 	$template = apply_filters( 'template_include', $template );
 	if ( $template ) {
+		if ( current_theme_supports( 'body-only' ) ) {
+			do_html5_header();
+		}
 		include( $template );
+		if ( current_theme_supports( 'body-only' ) ) {
+			do_html5_footer();
+		}
 	} elseif ( current_user_can( 'switch_themes' ) ) {
 		$theme = wp_get_theme();
 		if ( $theme->errors() ) {

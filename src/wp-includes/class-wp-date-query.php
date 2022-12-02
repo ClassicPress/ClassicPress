@@ -263,7 +263,9 @@ class WP_Date_Query {
 	 * @return string The comparison operator.
 	 */
 	public function get_compare( $query ) {
-		if ( ! empty( $query['compare'] ) && in_array( $query['compare'], array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
+		if ( ! empty( $query['compare'] )
+			&& in_array( $query['compare'], array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true )
+		) {
 			return strtoupper( $query['compare'] );
 		}
 
@@ -504,7 +506,7 @@ class WP_Date_Query {
 			 *                                'post_modified_gmt', 'comment_date', 'comment_date_gmt',
 			 *                                'user_registered'
 			 */
-			if ( ! in_array( $column, apply_filters( 'date_query_valid_columns', $valid_columns ) ) ) {
+			if ( ! in_array( $column, apply_filters( 'date_query_valid_columns', $valid_columns ), true ) ) {
 				$column = 'post_date';
 			}
 
@@ -530,7 +532,7 @@ class WP_Date_Query {
 
 			// If it's a known column name, add the appropriate table prefix.
 			foreach ( $known_columns as $table_name => $table_columns ) {
-				if ( in_array( $column, $table_columns ) ) {
+				if ( in_array( $column, $table_columns, true ) ) {
 					$column = $table_name . '.' . $column;
 					break;
 				}
@@ -826,7 +828,7 @@ class WP_Date_Query {
 
 			case 'BETWEEN':
 			case 'NOT BETWEEN':
-				if ( ! is_array( $value ) || 2 != count( $value ) ) {
+				if ( ! is_array( $value ) || 2 !== count( $value ) ) {
 					$value = array( $value, $value );
 				} else {
 					$value = array_values( $value );
@@ -969,8 +971,8 @@ class WP_Date_Query {
 			return false;
 		}
 
-		// Complex combined queries aren't supported for multi-value queries
-		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
+		// Complex combined queries aren't supported for multi-value queries.
+		if ( in_array( $compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ), true ) ) {
 			$return = array();
 
 			$value = $this->build_value( $compare, $hour );

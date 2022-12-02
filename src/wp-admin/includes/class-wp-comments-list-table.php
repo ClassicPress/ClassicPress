@@ -79,7 +79,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 		global $post_id, $comment_status, $search, $comment_type;
 
 		$comment_status = isset( $_REQUEST['comment_status'] ) ? $_REQUEST['comment_status'] : 'all';
-		if ( ! in_array( $comment_status, array( 'all', 'moderated', 'approved', 'spam', 'trash' ) ) ) {
+		if ( ! in_array( $comment_status, array( 'all', 'moderated', 'approved', 'spam', 'trash' ), true ) ) {
 			$comment_status = 'all';
 		}
 
@@ -252,7 +252,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 		}
 
 		$link = admin_url( 'edit-comments.php' );
-		if ( ! empty( $comment_type ) && 'all' != $comment_type ) {
+		if ( ! empty( $comment_type ) && 'all' !== $comment_type ) {
 			$link = add_query_arg( 'comment_type', $comment_type, $link );
 		}
 
@@ -306,13 +306,13 @@ class WP_Comments_List_Table extends WP_List_Table {
 		global $comment_status;
 
 		$actions = array();
-		if ( in_array( $comment_status, array( 'all', 'approved' ) ) ) {
+		if ( in_array( $comment_status, array( 'all', 'approved' ), true ) ) {
 			$actions['unapprove'] = __( 'Unapprove' );
 		}
-		if ( in_array( $comment_status, array( 'all', 'moderated' ) ) ) {
+		if ( in_array( $comment_status, array( 'all', 'moderated' ), true ) ) {
 			$actions['approve'] = __( 'Approve' );
 		}
-		if ( in_array( $comment_status, array( 'all', 'moderated', 'approved', 'trash' ) ) ) {
+		if ( in_array( $comment_status, array( 'all', 'moderated', 'approved', 'trash' ), true ) ) {
 			$actions['spam'] = _x( 'Mark as Spam', 'comment' );
 		}
 
@@ -322,7 +322,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 			$actions['unspam'] = _x( 'Not Spam', 'comment' );
 		}
 
-		if ( in_array( $comment_status, array( 'trash', 'spam' ) ) || ! EMPTY_TRASH_DAYS ) {
+		if ( in_array( $comment_status, array( 'trash', 'spam' ), true ) || ! EMPTY_TRASH_DAYS ) {
 			$actions['delete'] = __( 'Delete Permanently' );
 		} else {
 			$actions['trash'] = __( 'Move to Trash' );
@@ -586,7 +586,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 		);
 
 		// Not looking at all comments.
-		if ( $comment_status && 'all' != $comment_status ) {
+		if ( $comment_status && 'all' !== $comment_status ) {
 			if ( 'approved' === $the_comment_status ) {
 				$actions['unapprove'] = "<a href='$unapprove_url' data-wp-lists='delete:the-comment-list:comment-$comment->comment_ID:e7e7d3:action=dim-comment&amp;new=unapproved' class='vim-u vim-destructive' aria-label='" . esc_attr__( 'Unapprove this comment' ) . "'>" . __( 'Unapprove' ) . '</a>';
 			} elseif ( 'unapproved' === $the_comment_status ) {

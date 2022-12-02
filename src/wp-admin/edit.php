@@ -13,7 +13,7 @@ if ( ! $typenow ) {
 	wp_die( __( 'Invalid post type.' ) );
 }
 
-if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ) ) ) {
+if ( ! in_array( $typenow, get_post_types( array( 'show_ui' => true ) ), true ) ) {
 	wp_die( __( 'Sorry, you are not allowed to edit posts in this post type.' ) );
 }
 
@@ -190,7 +190,7 @@ if ( $doaction ) {
 	$sendback = remove_query_arg( array( 'action', 'action2', 'tags_input', 'post_author', 'comment_status', 'ping_status', '_status', 'post', 'bulk_edit', 'post_view' ), $sendback );
 
 	wp_redirect( $sendback );
-	exit();
+	exit;
 } elseif ( ! empty( $_REQUEST['_wp_http_referer'] ) ) {
 	 wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
 	 exit;

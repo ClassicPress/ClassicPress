@@ -129,6 +129,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 					$this->options['hostname'] . ':' . $this->options['port']
 				)
 			);
+
 			return false;
 		}
 
@@ -142,6 +143,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 						$this->options['username']
 					)
 				);
+
 				return false;
 			}
 		} else {
@@ -154,11 +156,13 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 						$this->options['username']
 					)
 				);
+
 				return false;
 			}
 		}
 
 		$this->sftp_link = ssh2_sftp( $this->link );
+
 		if ( ! $this->sftp_link ) {
 			$this->errors->add(
 				'connect',
@@ -168,6 +172,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 					$this->options['hostname'] . ':' . $this->options['port']
 				)
 			);
+
 			return false;
 		}
 
@@ -192,6 +197,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( '/' === $path ) {
 			$path = '/./';
 		}
+
 		return 'ssh2.sftp://' . $this->sftp_link . '/' . ltrim( $path, '/' );
 	}
 
@@ -208,6 +214,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		}
 
 		$stream = ssh2_exec( $this->link, $command );
+
 		if ( ! $stream ) {
 			$this->errors->add(
 				'command',
@@ -224,11 +231,12 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			fclose( $stream );
 
 			if ( $returnbool ) {
-				return ( false === $data ) ? false : '' != trim( $data );
+				return ( false === $data ) ? false : '' !== trim( $data );
 			} else {
 				return $data;
 			}
 		}
+
 		return false;
 	}
 
@@ -275,9 +283,11 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 */
 	public function cwd() {
 		$cwd = ssh2_sftp_realpath( $this->sftp_link, '.' );
+
 		if ( $cwd ) {
 			$cwd = trailingslashit( trim( $cwd ) );
 		}
+
 		return $cwd;
 	}
 
@@ -302,9 +312,11 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $this->exists( $file ) ) {
 			return false;
 		}
+
 		if ( ! $recursive || ! $this->is_dir( $file ) ) {
 			return $this->run_command( sprintf( 'chgrp %s %s', escapeshellarg( $group ), escapeshellarg( $file ) ), true );
 		}
+
 		return $this->run_command( sprintf( 'chgrp -R %s %s', escapeshellarg( $group ), escapeshellarg( $file ) ), true );
 	}
 
@@ -333,6 +345,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $recursive || ! $this->is_dir( $file ) ) {
 			return $this->run_command( sprintf( 'chmod %o %s', $mode, escapeshellarg( $file ) ), true );
 		}
+
 		return $this->run_command( sprintf( 'chmod -R %o %s', $mode, escapeshellarg( $file ) ), true );
 	}
 
@@ -349,9 +362,11 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $this->exists( $file ) ) {
 			return false;
 		}
+
 		if ( ! $recursive || ! $this->is_dir( $file ) ) {
 			return $this->run_command( sprintf( 'chown %s %s', escapeshellarg( $owner ), escapeshellarg( $file ) ), true );
 		}
+
 		return $this->run_command( sprintf( 'chown -R %s %s', escapeshellarg( $owner ), escapeshellarg( $file ) ), true );
 	}
 
@@ -362,16 +377,21 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 */
 	public function owner( $file ) {
 		$owneruid = @fileowner( $this->sftp_path( $file ) );
+
 		if ( ! $owneruid ) {
 			return false;
 		}
+
 		if ( ! function_exists( 'posix_getpwuid' ) ) {
 			return $owneruid;
 		}
+
 		$ownerarray = posix_getpwuid( $owneruid );
+
 		if ( ! $ownerarray ) {
 			return false;
 		}
+
 		return $ownerarray['name'];
 	}
 
@@ -391,16 +411,21 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 */
 	public function group( $file ) {
 		$gid = @filegroup( $this->sftp_path( $file ) );
+
 		if ( ! $gid ) {
 			return false;
 		}
+
 		if ( ! function_exists( 'posix_getgrgid' ) ) {
 			return $gid;
 		}
+
 		$grouparray = posix_getgrgid( $gid );
+
 		if ( ! $grouparray ) {
 			return false;
 		}
+
 		return $grouparray['name'];
 	}
 
@@ -416,10 +441,13 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $overwrite && $this->exists( $destination ) ) {
 			return false;
 		}
+
 		$content = $this->get_contents( $source );
+
 		if ( false === $content ) {
 			return false;
 		}
+
 		return $this->put_contents( $destination, $content, $mode );
 	}
 
@@ -452,18 +480,22 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 * @return bool
 	 */
 	public function delete( $file, $recursive = false, $type = false ) {
-		if ( 'f' == $type || $this->is_file( $file ) ) {
+		if ( 'f' === $type || $this->is_file( $file ) ) {
 			return ssh2_sftp_unlink( $this->sftp_link, $file );
 		}
+
 		if ( ! $recursive ) {
 			 return ssh2_sftp_rmdir( $this->sftp_link, $file );
 		}
+
 		$filelist = $this->dirlist( $file );
+
 		if ( is_array( $filelist ) ) {
 			foreach ( $filelist as $filename => $fileinfo ) {
 				$this->delete( $file . '/' . $filename, $recursive, $fileinfo['type'] );
 			}
 		}
+
 		return ssh2_sftp_rmdir( $this->sftp_link, $file );
 	}
 
@@ -560,6 +592,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	 */
 	public function mkdir( $path, $chmod = false, $chown = false, $chgrp = false ) {
 		$path = untrailingslashit( $path );
+
 		if ( empty( $path ) ) {
 			return false;
 		}
@@ -567,15 +600,19 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $chmod ) {
 			$chmod = FS_CHMOD_DIR;
 		}
+
 		if ( ! ssh2_sftp_mkdir( $this->sftp_link, $path, $chmod, true ) ) {
 			return false;
 		}
+
 		if ( $chown ) {
 			$this->chown( $path, $chown );
 		}
+
 		if ( $chgrp ) {
 			$this->chgrp( $path, $chgrp );
 		}
+
 		return true;
 	}
 
@@ -619,11 +656,11 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$struc         = array();
 			$struc['name'] = $entry;
 
-			if ( '.' == $struc['name'] || '..' == $struc['name'] ) {
-				continue; //Do not care about these folders.
+			if ( '.' === $struc['name'] || '..' === $struc['name'] ) {
+				continue; // Do not care about these folders.
 			}
 
-			if ( ! $include_hidden && '.' == $struc['name'][0] ) {
+			if ( ! $include_hidden && '.' === $struc['name'][0] ) {
 				continue;
 			}
 
@@ -642,7 +679,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 			$struc['time']        = date( 'h:i:s', $struc['lastmodunix'] );
 			$struc['type']        = $this->is_dir( $path . '/' . $entry ) ? 'd' : 'f';
 
-			if ( 'd' == $struc['type'] ) {
+			if ( 'd' === $struc['type'] ) {
 				if ( $recursive ) {
 					$struc['files'] = $this->dirlist( $path . '/' . $struc['name'], $include_hidden, $recursive );
 				} else {
@@ -652,8 +689,10 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 
 			$ret[ $struc['name'] ] = $struc;
 		}
+
 		$dir->close();
 		unset( $dir );
+
 		return $ret;
 	}
 }

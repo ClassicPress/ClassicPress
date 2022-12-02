@@ -85,7 +85,8 @@ function get_default_feed() {
 	 *                          Default 'rss2'.
 	 */
 	$default_feed = apply_filters( 'default_feed', 'rss2' );
-	return 'rss' == $default_feed ? 'rss2' : $default_feed;
+
+	return ( 'rss' === $default_feed ) ? 'rss2' : $default_feed;
 }
 
 /**
@@ -160,8 +161,7 @@ function get_the_title_rss() {
 	 *
 	 * @param string $title The current post title.
 	 */
-	$title = apply_filters( 'the_title_rss', $title );
-	return $title;
+	return apply_filters( 'the_title_rss', $title );
 }
 
 /**
@@ -190,6 +190,7 @@ function get_the_content_feed( $feed_type = null ) {
 	/** This filter is documented in wp-includes/post-template.php */
 	$content = apply_filters( 'the_content', get_the_content() );
 	$content = str_replace( ']]>', ']]&gt;', $content );
+
 	/**
 	 * Filters the post content for use in feeds.
 	 *
@@ -383,7 +384,7 @@ function get_the_category_rss( $type = null ) {
 	$cat_names  = array();
 
 	$filter = 'rss';
-	if ( 'atom' == $type ) {
+	if ( 'atom' === $type ) {
 		$filter = 'raw';
 	}
 
@@ -402,9 +403,9 @@ function get_the_category_rss( $type = null ) {
 	$cat_names = array_unique( $cat_names );
 
 	foreach ( $cat_names as $cat_name ) {
-		if ( 'rdf' == $type ) {
+		if ( 'rdf' === $type ) {
 			$the_list .= "\t\t<dc:subject><![CDATA[$cat_name]]></dc:subject>\n";
-		} elseif ( 'atom' == $type ) {
+		} elseif ( 'atom' === $type ) {
 			$the_list .= sprintf( '<category scheme="%1$s" term="%2$s" />', esc_attr( get_bloginfo_rss( 'url' ) ), esc_attr( $cat_name ) );
 		} else {
 			$the_list .= "\t\t<category><![CDATA[" . html_entity_decode( $cat_name, ENT_COMPAT, get_option( 'blog_charset' ) ) . "]]></category>\n";
@@ -686,7 +687,6 @@ function fetch_feed( $url ) {
 		require_once ABSPATH . WPINC . '/class-simplepie.php';
 	}
 
-	require_once ABSPATH . WPINC . '/class-wp-feed-cache.php';
 	require_once ABSPATH . WPINC . '/class-wp-feed-cache-transient.php';
 	require_once ABSPATH . WPINC . '/class-wp-simplepie-file.php';
 	require_once ABSPATH . WPINC . '/class-wp-simplepie-sanitize-kses.php';
@@ -698,7 +698,16 @@ function fetch_feed( $url ) {
 	// constructor sets it before we have a chance to set the sanitization class
 	$feed->sanitize = new WP_SimplePie_Sanitize_KSES();
 
-	$feed->set_cache_class( 'WP_Feed_Cache' );
+	// Register the cache handler using the recommended method for SimplePie 1.3 or later.
+	if ( method_exists( 'SimplePie_Cache', 'register' ) ) {
+		SimplePie_Cache::register( 'wp_transient', 'WP_Feed_Cache_Transient' );
+		$feed->set_cache_location( 'wp_transient' );
+	} else {
+		// Back-compat for SimplePie 1.2.x.
+		require_once ABSPATH . WPINC . '/class-wp-feed-cache.php';
+		$feed->set_cache_class( 'WP_Feed_Cache' );
+	}
+
 	$feed->set_file_class( 'WP_SimplePie_File' );
 
 	$feed->set_feed_url( $url );

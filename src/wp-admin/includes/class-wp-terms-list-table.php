@@ -61,7 +61,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		$tax = get_taxonomy( $taxonomy );
 
 		// @todo Still needed? Maybe just the show_ui part.
-		if ( empty( $post_type ) || ! in_array( $post_type, get_post_types( array( 'show_ui' => true ) ) ) ) {
+		if ( empty( $post_type ) || ! in_array( $post_type, get_post_types( array( 'show_ui' => true ) ), true ) ) {
 			$post_type = 'post';
 		}
 
@@ -300,7 +300,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 					$my_parent    = get_term( $p, $taxonomy );
 					$my_parents[] = $my_parent;
 					$p            = $my_parent->parent;
-					if ( in_array( $p, $parent_ids ) ) { // Prevent parent loops.
+					if ( in_array( $p, $parent_ids, true ) ) { // Prevent parent loops.
 						break;
 					}
 					$parent_ids[] = $p;
@@ -554,7 +554,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			);
 		}
 
-		if ( 'post' != $this->screen->post_type ) {
+		if ( 'post' !== $this->screen->post_type ) {
 			$args['post_type'] = $this->screen->post_type;
 		}
 

@@ -172,7 +172,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 	$meta_subtype = get_object_subtype( $meta_type, $object_id );
 
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// expected_slashed ($meta_key)
 	$raw_meta_key = $meta_key;
@@ -248,7 +248,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 */
 		do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/**
 			 * Fires immediately before updating a post's metadata.
 			 *
@@ -286,7 +286,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 */
 		do_action( "updated_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/**
 			 * Fires immediately after updating a post's metadata.
 			 *
@@ -342,7 +342,8 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	}
 
 	$type_column = sanitize_key( $meta_type . '_id' );
-	$id_column   = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column   = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
+
 	// expected_slashed ($meta_key)
 	$meta_key   = wp_unslash( $meta_key );
 	$meta_value = wp_unslash( $meta_value );
@@ -411,7 +412,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	do_action( "delete_{$meta_type}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
 
 	// Old-style action.
-	if ( 'post' == $meta_type ) {
+	if ( 'post' === $meta_type ) {
 		/**
 		 * Fires immediately before deleting metadata for a post.
 		 *
@@ -454,7 +455,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	do_action( "deleted_{$meta_type}_meta", $meta_ids, $object_id, $meta_key, $_meta_value );
 
 	// Old-style action.
-	if ( 'post' == $meta_type ) {
+	if ( 'post' === $meta_type ) {
 		/**
 		 * Fires immediately after deleting metadata for a post.
 		 *
@@ -614,7 +615,7 @@ function get_metadata_by_mid( $meta_type, $meta_id ) {
 		return false;
 	}
 
-	$id_column = ( 'user' == $meta_type ) ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	$meta = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE $id_column = %d", $meta_id ) );
 
@@ -661,7 +662,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 	}
 
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
 	$meta = get_metadata_by_mid( $meta_type, $meta_id );
@@ -697,7 +698,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 		/** This action is documented in wp-includes/meta.php */
 		do_action( "update_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/** This action is documented in wp-includes/meta.php */
 			do_action( 'update_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 		}
@@ -714,7 +715,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 		/** This action is documented in wp-includes/meta.php */
 		do_action( "updated_{$meta_type}_meta", $meta_id, $object_id, $meta_key, $_meta_value );
 
-		if ( 'post' == $meta_type ) {
+		if ( 'post' === $meta_type ) {
 			/** This action is documented in wp-includes/meta.php */
 			do_action( 'updated_postmeta', $meta_id, $object_id, $meta_key, $meta_value );
 		}
@@ -757,7 +758,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 
 	// object and id columns
 	$column    = sanitize_key( $meta_type . '_id' );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
 
 	// Fetch the meta and go on if it's found.
 	$meta = get_metadata_by_mid( $meta_type, $meta_id );
@@ -768,7 +769,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 		do_action( "delete_{$meta_type}_meta", (array) $meta_id, $object_id, $meta->meta_key, $meta->meta_value );
 
 		// Old-style action.
-		if ( 'post' == $meta_type || 'comment' == $meta_type ) {
+		if ( 'post' === $meta_type || 'comment' === $meta_type ) {
 			/**
 			 * Fires immediately before deleting post or comment metadata of a specific type.
 			 *
@@ -792,7 +793,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 		do_action( "deleted_{$meta_type}_meta", (array) $meta_id, $object_id, $meta->meta_key, $meta->meta_value );
 
 		// Old-style action.
-		if ( 'post' == $meta_type || 'comment' == $meta_type ) {
+		if ( 'post' === $meta_type || 'comment' === $meta_type ) {
 			/**
 			 * Fires immediately after deleting post or comment metadata of a specific type.
 			 *
@@ -847,24 +848,26 @@ function update_meta_cache( $meta_type, $object_ids ) {
 	$object_ids = array_map( 'intval', $object_ids );
 
 	$cache_key = $meta_type . '_meta';
-	$ids       = array();
+	$non_cached_ids = array();
 	$cache     = array();
-	foreach ( $object_ids as $id ) {
-		$cached_object = wp_cache_get( $id, $cache_key );
+	$cache_values = wp_cache_get_multiple( $object_ids, $cache_key );
+
+	foreach ( $cache_values as $id => $cached_object ) {
 		if ( false === $cached_object ) {
-			$ids[] = $id;
+			$non_cached_ids[] = $id;
 		} else {
 			$cache[ $id ] = $cached_object;
 		}
 	}
 
-	if ( empty( $ids ) ) {
+	if ( empty( $non_cached_ids ) ) {
 		return $cache;
 	}
 
-	// Get meta info
-	$id_list   = join( ',', $ids );
-	$id_column = 'user' == $meta_type ? 'umeta_id' : 'meta_id';
+	// Get meta info.
+	$id_list   = join( ',', $non_cached_ids );
+	$id_column = ( 'user' === $meta_type ) ? 'umeta_id' : 'meta_id';
+
 	$meta_list = $wpdb->get_results( "SELECT $column, meta_key, meta_value FROM $table WHERE $column IN ($id_list) ORDER BY $id_column ASC", ARRAY_A );
 
 	if ( ! empty( $meta_list ) ) {
@@ -886,7 +889,7 @@ function update_meta_cache( $meta_type, $object_ids ) {
 		}
 	}
 
-	foreach ( $ids as $id ) {
+	foreach ( $non_cached_ids as $id ) {
 		if ( ! isset( $cache[ $id ] ) ) {
 			$cache[ $id ] = array();
 		}

@@ -330,7 +330,7 @@ class WP_Upgrader {
 
 		if ( is_wp_error( $result ) ) {
 			$wp_filesystem->delete( $working_dir, true );
-			if ( 'incompatible_archive' == $result->get_error_code() ) {
+			if ( 'incompatible_archive' === $result->get_error_code() ) {
 				return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], $result->get_error_data() );
 			}
 			return $result;
@@ -397,7 +397,7 @@ class WP_Upgrader {
 		foreach ( $files as $filename => $file_details ) {
 			if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
 				// Attempt to alter permissions to allow writes and try again.
-				$wp_filesystem->chmod( $remote_destination . $filename, ( 'd' == $file_details['type'] ? FS_CHMOD_DIR : FS_CHMOD_FILE ) );
+				$wp_filesystem->chmod( $remote_destination . $filename, ( 'd' === $file_details['type'] ? FS_CHMOD_DIR : FS_CHMOD_FILE ) );
 				if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
 					$unwritable_files[] = $filename;
 				}
@@ -496,8 +496,9 @@ class WP_Upgrader {
 		$source_files       = array_keys( $wp_filesystem->dirlist( $remote_source ) );
 		$remote_destination = $wp_filesystem->find_folder( $local_destination );
 
-		//Locate which directory to copy to the new folder, This is based on the actual folder holding the files.
-		if ( 1 == count( $source_files ) && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) { //Only one folder? Then we want its contents.
+		// Locate which directory to copy to the new folder. This is based on the actual folder holding the files.
+		if ( 1 === count( $source_files ) && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) {
+			// Only one folder? Then we want its contents.
 			$source = trailingslashit( $args['source'] ) . trailingslashit( $source_files[0] );
 		} elseif ( count( $source_files ) == 0 ) {
 			return new WP_Error( 'incompatible_archive_empty', $this->strings['incompatible_archive'], $this->strings['no_files'] ); // There are no files?
@@ -540,7 +541,7 @@ class WP_Upgrader {
 			$protected_directories = array_merge( $protected_directories, $wp_theme_directories );
 		}
 
-		if ( in_array( $destination, $protected_directories ) ) {
+		if ( in_array( $destination, $protected_directories, true ) ) {
 			$remote_destination = trailingslashit( $remote_destination ) . trailingslashit( basename( $source ) );
 			$destination        = trailingslashit( $destination ) . trailingslashit( basename( $source ) );
 		}
@@ -597,7 +598,7 @@ class WP_Upgrader {
 		}
 
 		$destination_name = basename( str_replace( $local_destination, '', $destination ) );
-		if ( '.' == $destination_name ) {
+		if ( '.' === $destination_name ) {
 			$destination_name = '';
 		}
 
@@ -732,6 +733,7 @@ class WP_Upgrader {
 		 * of the file if the package is a local file)
 		 */
 		$download = $this->download_package( $options['package'] );
+
 		if ( is_wp_error( $download ) ) {
 			$this->skin->error( $download );
 			$this->skin->after();

@@ -136,7 +136,7 @@ function get_the_title( $post = 0 ) {
 			 */
 			$protected_title_format = apply_filters( 'protected_title_format', __( 'Protected: %s' ), $post );
 			$title                  = sprintf( $protected_title_format, $title );
-		} elseif ( isset( $post->post_status ) && 'private' == $post->post_status ) {
+		} elseif ( isset( $post->post_status ) && 'private' === $post->post_status ) {
 
 			/**
 			 * Filters the text prepended to the post title of private posts.
@@ -253,6 +253,7 @@ function the_content( $more_link_text = null, $strip_teaser = false ) {
  * Retrieve the post content.
  *
  * @since WP-0.71
+ * @since WP-5.2.0 Added the `$post` parameter.
  *
  * @global int   $page      Page number of a single post/page.
  * @global int   $more      Boolean indicator for whether single post/page is being viewed.
@@ -262,12 +263,25 @@ function the_content( $more_link_text = null, $strip_teaser = false ) {
  *
  * @param string $more_link_text Optional. Content for when there is more text.
  * @param bool   $strip_teaser   Optional. Strip teaser content before the more text. Default is false.
+ * @param WP_Post|object|int $post           Optional. WP_Post instance or Post ID/object. Default is null.
  * @return string
  */
-function get_the_content( $more_link_text = null, $strip_teaser = false ) {
+function get_the_content( $more_link_text = null, $strip_teaser = false, $post = null ) {
 	global $page, $more, $preview, $pages, $multipage;
 
-	$post = get_post();
+	$_post = get_post( $post );
+
+	if ( ! ( $_post instanceof WP_Post ) ) {
+		return '';
+	}
+
+	// Use the globals if the $post parameter was not specified,
+	// but only after they have been set up in setup_postdata().
+	if ( null === $post && did_action( 'the_post' ) ) {
+		$elements = compact( 'page', 'more', 'preview', 'pages', 'multipage' );
+	} else {
+		$elements = generate_postdata( $_post );
+	}
 
 	if ( null === $more_link_text ) {
 		$more_link_text = sprintf(
@@ -275,7 +289,12 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 			sprintf(
 				/* translators: %s: Name of current post */
 				__( 'Continue reading %s' ),
-				the_title_attribute( array( 'echo' => false ) )
+				the_title_attribute(
+					array(
+						'echo' => false,
+						'post' => $_post,
+					)
+				)
 			),
 			__( '(more&hellip;)' )
 		);
@@ -285,15 +304,16 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 	$has_teaser = false;
 
 	// If post password required and it doesn't match the cookie.
-	if ( post_password_required( $post ) ) {
-		return get_the_password_form( $post );
+	if ( post_password_required( $_post ) ) {
+		return get_the_password_form( $_post );
 	}
 
-	if ( $page > count( $pages ) ) { // if the requested page doesn't exist
-		$page = count( $pages ); // give them the highest numbered page that DOES exist
+	if ( $elements['page'] > count( $elements['pages'] ) ) { // if the requested page doesn't exist
+		$elements['page'] = count( $elements['pages'] ); // give them the highest numbered page that DOES exist
 	}
 
-	$content = $pages[ $page - 1 ];
+	$page_no = $elements['page'];
+	$content = $elements['pages'][ $page_no - 1 ];
 	if ( preg_match( '/<!--more(.*?)?-->/', $content, $matches ) ) {
 		$content = explode( $matches[0], $content, 2 );
 		if ( ! empty( $matches[1] ) && ! empty( $more_link_text ) ) {
@@ -305,21 +325,21 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 		$content = array( $content );
 	}
 
-	if ( false !== strpos( $post->post_content, '<!--noteaser-->' ) && ( ! $multipage || 1 == $page ) ) {
+	if ( false !== strpos( $_post->post_content, '<!--noteaser-->' ) && ( ! $elements['multipage'] || $elements['page'] == 1 ) ) {
 		$strip_teaser = true;
 	}
 
 	$teaser = $content[0];
 
-	if ( $more && $strip_teaser && $has_teaser ) {
+	if ( $elements['more'] && $strip_teaser && $has_teaser ) {
 		$teaser = '';
 	}
 
 	$output .= $teaser;
 
 	if ( count( $content ) > 1 ) {
-		if ( $more ) {
-			$output .= '<span id="more-' . $post->ID . '"></span>' . $content[1];
+		if ( $elements['more'] ) {
+			$output .= '<span id="more-' . $_post->ID . '"></span>' . $content[1];
 		} else {
 			if ( ! empty( $more_link_text ) ) {
 
@@ -331,7 +351,7 @@ function get_the_content( $more_link_text = null, $strip_teaser = false ) {
 				 * @param string $more_link_element Read More link element.
 				 * @param string $more_link_text    Read More text.
 				 */
-				$output .= apply_filters( 'the_content_more_link', ' <a href="' . get_permalink() . "#more-{$post->ID}\" class=\"more-link\">$more_link_text</a>", $more_link_text );
+				$output .= apply_filters( 'the_content_more_link', ' <a href="' . get_permalink( $_post ) . "#more-{$_post->ID}\" class=\"more-link\">$more_link_text</a>", $more_link_text );
 			}
 			$output = force_balance_tags( $output );
 		}
@@ -519,7 +539,7 @@ function get_post_class( $class = '', $post_id = null ) {
 				}
 
 				// 'post_tag' uses the 'tag' prefix for backward compatibility.
-				if ( 'post_tag' == $taxonomy ) {
+				if ( 'post_tag' === $taxonomy ) {
 					$classes[] = 'tag-' . $term_class;
 				} else {
 					$classes[] = sanitize_html_class( $taxonomy . '-' . $term_class, $taxonomy . '-' . $term->term_id );
@@ -905,7 +925,7 @@ function wp_link_pages( $args = '' ) {
 
 	$output = '';
 	if ( $multipage ) {
-		if ( 'number' == $parsed_args['next_or_number'] ) {
+		if ( 'number' === $parsed_args['next_or_number'] ) {
 			$output .= $parsed_args['before'];
 			for ( $i = 1; $i <= $numpages; $i++ ) {
 				$link = $parsed_args['link_before'] . str_replace( '%', $i, $parsed_args['pagelink'] ) . $parsed_args['link_after'];
@@ -987,9 +1007,9 @@ function _wp_link_page( $i ) {
 	if ( 1 == $i ) {
 		$url = get_permalink();
 	} else {
-		if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
+		if ( ! get_option( 'permalink_structure' ) || in_array( $post->post_status, array( 'draft', 'pending' ), true ) ) {
 			$url = add_query_arg( 'page', $i, get_permalink() );
-		} elseif ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
+		} elseif ( 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
 			$url = trailingslashit( get_permalink() ) . user_trailingslashit( "$wp_rewrite->pagination_base/" . $i, 'single_paged' );
 		} else {
 			$url = trailingslashit( get_permalink() ) . user_trailingslashit( $i, 'single_paged' );
@@ -1026,7 +1046,7 @@ function post_custom( $key = '' ) {
 
 	if ( ! isset( $custom[ $key ] ) ) {
 		return false;
-	} elseif ( 1 == count( $custom[ $key ] ) ) {
+	} elseif ( 1 === count( $custom[ $key ] ) ) {
 		return $custom[ $key ][0];
 	} else {
 		return $custom[ $key ];
@@ -1344,8 +1364,8 @@ function wp_page_menu( $args = array() ) {
 	);
 	$args     = wp_parse_args( $args, $defaults );
 
-	if ( ! in_array( $args['item_spacing'], array( 'preserve', 'discard' ) ) ) {
-		// invalid value, fall back to default.
+	if ( ! in_array( $args['item_spacing'], array( 'preserve', 'discard' ), true ) ) {
+		// Invalid value, fall back to default.
 		$args['item_spacing'] = $defaults['item_spacing'];
 	}
 
@@ -1384,8 +1404,8 @@ function wp_page_menu( $args = array() ) {
 			$class = 'class="current_page_item"';
 		}
 		$menu .= '<li ' . $class . '><a href="' . home_url( '/' ) . '">' . $args['link_before'] . $text . $args['link_after'] . '</a></li>';
-		// If the front page is a page, add it to the exclude list
-		if ( get_option( 'show_on_front' ) == 'page' ) {
+		// If the front page is a page, add it to the exclude list.
+		if ( 'page' === get_option( 'show_on_front' ) ) {
 			if ( ! empty( $list_args['exclude'] ) ) {
 				$list_args['exclude'] .= ',';
 			} else {
@@ -1559,7 +1579,7 @@ function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = fals
 
 	if ( $text ) {
 		$link_text = $text;
-	} elseif ( $size && 'none' != $size ) {
+	} elseif ( $size && 'none' !== $size ) {
 		$link_text = wp_get_attachment_image( $_post->ID, $size, $icon, $attr );
 	} else {
 		$link_text = '';
@@ -1730,7 +1750,7 @@ function get_page_template_slug( $post = null ) {
 
 	$template = get_post_meta( $post->ID, '_wp_page_template', true );
 
-	if ( ! $template || 'default' == $template ) {
+	if ( ! $template || 'default' === $template ) {
 		return '';
 	}
 
@@ -1752,7 +1772,7 @@ function wp_post_revision_title( $revision, $link = true ) {
 		return $revision;
 	}
 
-	if ( ! in_array( $revision->post_type, array( 'post', 'page', 'revision' ) ) ) {
+	if ( ! in_array( $revision->post_type, array( 'post', 'page', 'revision' ), true ) ) {
 		return false;
 	}
 
@@ -1793,7 +1813,7 @@ function wp_post_revision_title_expanded( $revision, $link = true ) {
 		return $revision;
 	}
 
-	if ( ! in_array( $revision->post_type, array( 'post', 'page', 'revision' ) ) ) {
+	if ( ! in_array( $revision->post_type, array( 'post', 'page', 'revision' ), true ) ) {
 		return false;
 	}
 

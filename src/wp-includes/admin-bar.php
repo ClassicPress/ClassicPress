@@ -681,19 +681,20 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 	if ( is_admin() ) {
 		$current_screen = get_current_screen();
 		$post           = get_post();
-		if ( 'post' == $current_screen->base ) {
+
+		if ( 'post' === $current_screen->base ) {
 			$post_type_object = get_post_type_object( $post->post_type );
-		} elseif ( 'edit' == $current_screen->base ) {
+		} elseif ( 'edit' === $current_screen->base ) {
 			$post_type_object = get_post_type_object( $current_screen->post_type );
 		}
 
-		if ( 'post' == $current_screen->base
-			&& 'add' != $current_screen->action
+		if ( 'post' === $current_screen->base
+			&& 'add' !== $current_screen->action
 			&& ( $post_type_object )
 			&& current_user_can( 'read_post', $post->ID )
 			&& ( $post_type_object->public )
 			&& ( $post_type_object->show_in_admin_bar ) ) {
-			if ( 'draft' == $post->post_status ) {
+			if ( 'draft' === $post->post_status ) {
 				$preview_link = get_preview_post_link( $post );
 				$wp_admin_bar->add_menu(
 					array(
@@ -712,7 +713,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					)
 				);
 			}
-		} elseif ( 'edit' == $current_screen->base
+		} elseif ( 'edit' === $current_screen->base
 			&& ( $post_type_object )
 			&& ( $post_type_object->public )
 			&& ( $post_type_object->show_in_admin_bar )
@@ -725,7 +726,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					'href'  => get_post_type_archive_link( $current_screen->post_type ),
 				)
 			);
-		} elseif ( 'term' == $current_screen->base && isset( $tag ) && is_object( $tag ) && ! is_wp_error( $tag ) ) {
+		} elseif ( 'term' === $current_screen->base && isset( $tag ) && is_object( $tag ) && ! is_wp_error( $tag ) ) {
 			$tax = get_taxonomy( $tag->taxonomy );
 			if ( is_taxonomy_viewable( $tax ) ) {
 				$wp_admin_bar->add_menu(
@@ -736,7 +737,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 					)
 				);
 			}
-		} elseif ( 'user-edit' == $current_screen->base && isset( $user_id ) ) {
+		} elseif ( 'user-edit' === $current_screen->base && isset( $user_id ) ) {
 			$user_object = get_userdata( $user_id );
 			$view_link   = get_author_posts_url( $user_object->ID );
 			if ( $user_object->exists() && $view_link ) {
@@ -1079,8 +1080,10 @@ function wp_admin_bar_add_secondary_groups( $wp_admin_bar ) {
  *
  * @since WP-3.1.0
  */
-function wp_admin_bar_header() { ?>
-<style type="text/css" media="print">#wpadminbar { display:none; }</style>
+function wp_admin_bar_header() {
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+	?>
+	<style<?php echo $type_attr; ?> media="print">#wpadminbar { display:none; }</style>
 	<?php
 }
 
@@ -1090,15 +1093,16 @@ function wp_admin_bar_header() { ?>
  * @since WP-3.1.0
  */
 function _admin_bar_bump_cb() {
+	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
-<style type="text/css" media="screen">
-	html { margin-top: 32px !important; }
-	* html body { margin-top: 32px !important; }
-	@media screen and ( max-width: 782px ) {
-		html { margin-top: 46px !important; }
-		* html body { margin-top: 46px !important; }
-	}
-</style>
+	<style<?php echo $type_attr; ?> media="screen">
+		html { margin-top: 32px !important; }
+		* html body { margin-top: 32px !important; }
+		@media screen and ( max-width: 782px ) {
+			html { margin-top: 46px !important; }
+			* html body { margin-top: 46px !important; }
+		}
+	</style>
 	<?php
 }
 
@@ -1147,7 +1151,7 @@ function is_admin_bar_showing() {
 	}
 
 	if ( ! isset( $show_admin_bar ) ) {
-		if ( ! is_user_logged_in() || 'wp-login.php' == $pagenow ) {
+		if ( ! is_user_logged_in() || 'wp-login.php' === $pagenow ) {
 			$show_admin_bar = false;
 		} else {
 			$show_admin_bar = _get_admin_bar_pref();

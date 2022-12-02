@@ -436,6 +436,7 @@ function _clean_term_filters() {
 /**
  * Special class for exposing protected wpdb methods we need to access
  */
+ // phpcs:ignore PEAR.NamingConventions.ValidClassName
 class wpdb_exposed_methods_for_testing extends wpdb {
 	public function __construct() {
 		global $wpdb;

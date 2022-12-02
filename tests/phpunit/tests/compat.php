@@ -181,7 +181,7 @@ EOT;
 	}
 
 	function test_json_encode_decode() {
-		$this->expectException( 'PHPUnit\Framework\Error\Notice' );
+		$this->expectNotice( 'PHPUnit\Framework\Error\Notice' );
 
 		require_once ABSPATH . WPINC . '/class-json.php';
 		$json = new Services_JSON();
