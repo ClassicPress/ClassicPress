@@ -225,7 +225,7 @@ function login_footer( $input_id = '' ) {
 
 		/* translators: %s: Site title. */
 		printf( _x( '&larr; Go to %s', 'site' ), get_bloginfo( 'title', 'display' ) );
-
+		echo '</a></p>';
 	}
 	?>
 
