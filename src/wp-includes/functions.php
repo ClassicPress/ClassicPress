@@ -1474,11 +1474,11 @@ function do_html5_header() {
 		return;
 	}
 	echo "<!DOCTYPE html>\n"; ?>
-<html <?php echo cp_attributes( 'html', get_language_attributes() ); ?>>
-	<head <?php echo cp_attributes( 'head' ); ?>>
+<html<?php echo cp_attributes( 'html', get_language_attributes() ); ?>>
+	<head<?php echo cp_attributes( 'head' ); ?>>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<?php
-	echo '<meta ' . cp_attributes(
+	echo '<meta' . cp_attributes(
 		'meta',
 		array(
 			'name' => 'viewport',
@@ -1487,7 +1487,7 @@ function do_html5_header() {
 	) . ">\n";
 
 	if ( is_singular() && pings_open() ) {
-		echo '<link ' . cp_attributes(
+		echo '<link' . cp_attributes(
 			'link',
 			array(
 				'rel' => 'pingback',
@@ -1499,7 +1499,7 @@ function do_html5_header() {
 	?>
 	</head>
 
-	<body <?php echo cp_attributes( 'body', array( 'class' => get_body_class() ) ); ?>>
+	<body<?php echo cp_attributes( 'body', array( 'class' => get_body_class() ) ); ?>>
 	<?php
 	wp_body_open();
 }
