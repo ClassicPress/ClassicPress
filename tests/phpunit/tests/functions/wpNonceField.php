@@ -3,7 +3,7 @@
 /**
  * Tests for the wp_nonce_field() function.
  *
- * @since 6.1.0
+ * @since WP-6.1.0
  *
  * @group functions.php
  * @covers ::wp_nonce_field
@@ -11,7 +11,7 @@
 class Tests_Functions_wpNonceField extends WP_UnitTestCase {
 
 	/**
-	 * @ticket 55578
+	 * @see https://core.trac.wordpress.org/ticket/55578
 	 */
 	public function test_wp_nonce_field() {
 
@@ -20,7 +20,7 @@ class Tests_Functions_wpNonceField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 55578
+	 * @see https://core.trac.wordpress.org/ticket/55578
 	 *
 	 * @dataProvider data_wp_nonce_field
 	 *
