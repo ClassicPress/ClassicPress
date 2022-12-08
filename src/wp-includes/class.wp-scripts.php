@@ -35,7 +35,7 @@ class WP_Scripts extends WP_Dependencies {
 	public $content_url;
 
 	/**
-	 * Default version string for stylesheets.
+	 * Default version string for scripts.
 	 *
 	 * @since WP-2.6.0
 	 * @var string
@@ -123,6 +123,17 @@ class WP_Scripts extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
+	 * Holds a string which contains the type attribute for script tag.
+	 *
+	 * If the current theme does not declare HTML5 support for 'script',
+	 * then it initializes as `type='text/javascript'`.
+	 *
+	 * @since WP-5.3.0
+	 * @var string
+	 */
+	private $type_attr = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since WP-2.6.0
@@ -138,6 +149,14 @@ class WP_Scripts extends WP_Dependencies {
 	 * @since WP-3.4.0
 	 */
 	public function init() {
+		if (
+			function_exists( 'is_admin' ) && ! is_admin()
+		&&
+			function_exists( 'current_theme_supports' ) && ! current_theme_supports( 'html5', 'script' )
+		) {
+			$this->type_attr = " type='text/javascript'";
+		}
+
 		/**
 		 * Fires when the WP_Scripts instance is initialized.
 		 *
@@ -145,7 +164,7 @@ class WP_Scripts extends WP_Dependencies {
 		 *
 		 * @param WP_Scripts $this WP_Scripts instance (passed by reference).
 		 */
-		do_action_ref_array( 'wp_default_scripts', array(&$this) );
+		do_action_ref_array( 'wp_default_scripts', array( &$this ) );
 	}
 
 	/**
@@ -196,16 +215,28 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool|string|void Void if no data exists, extra scripts if `$echo` is true, true otherwise.
 	 */
 	public function print_extra_script( $handle, $echo = true ) {
-		if ( !$output = $this->get_data( $handle, 'data' ) )
+		$output = $this->get_data( $handle, 'data' );
+		if ( ! $output ) {
 			return;
+		}
 
-		if ( !$echo )
+		if ( ! $echo ) {
 			return $output;
+		}
 
-		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5
-		echo "/* <![CDATA[ */\n";
+		echo "<script{$this->type_attr}>\n";
+
+		// CDATA is not needed for HTML 5.
+		if ( $this->type_attr ) {
+			echo "/* <![CDATA[ */\n";
+		}
+
 		echo "$output\n";
-		echo "/* ]]> */\n";
+
+		if ( $this->type_attr ) {
+			echo "/* ]]> */\n";
+		}
+
 		echo "</script>\n";
 
 		return true;
@@ -224,18 +255,20 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool True on success, false on failure.
 	 */
 	public function do_item( $handle, $group = false ) {
-		if ( !parent::do_item($handle) )
+		if ( ! parent::do_item( $handle ) ) {
 			return false;
+		}
 
-		if ( 0 === $group && $this->groups[$handle] > 0 ) {
+		if ( 0 === $group && $this->groups[ $handle ] > 0 ) {
 			$this->in_footer[] = $handle;
 			return false;
 		}
 
-		if ( false === $group && in_array($handle, $this->in_footer, true) )
+		if ( false === $group && in_array( $handle, $this->in_footer, true ) ) {
 			$this->in_footer = array_diff( $this->in_footer, (array) $handle );
+		}
 
-		$obj = $this->registered[$handle];
+		$obj = $this->registered[ $handle ];
 
 		if ( null === $obj->ver ) {
 			$ver = '';
@@ -243,30 +276,32 @@ class WP_Scripts extends WP_Dependencies {
 			$ver = $obj->ver ? $obj->ver : $this->default_version;
 		}
 
-		if ( isset($this->args[$handle]) )
-			$ver = $ver ? $ver . '&amp;' . $this->args[$handle] : $this->args[$handle];
+		if ( isset( $this->args[ $handle ] ) ) {
+			$ver = $ver ? $ver . '&amp;' . $this->args[ $handle ] : $this->args[ $handle ];
+		}
 
 		/** This filter is documented in wp-includes/script-loader.php */
 		$ver = apply_filters( 'classicpress_asset_version', $ver, 'script', $handle );
 
-		$src = $obj->src;
-		$cond_before = $cond_after = '';
+		$src         = $obj->src;
+		$cond_before = '';
+		$cond_after  = '';
 		$conditional = isset( $obj->extra['conditional'] ) ? $obj->extra['conditional'] : '';
 
 		if ( $conditional ) {
 			$cond_before = "<!--[if {$conditional}]>\n";
-			$cond_after = "<![endif]-->\n";
+			$cond_after  = "<![endif]-->\n";
 		}
 
 		$before_handle = $this->print_inline_script( $handle, 'before', false );
-		$after_handle = $this->print_inline_script( $handle, 'after', false );
+		$after_handle  = $this->print_inline_script( $handle, 'after', false );
 
 		if ( $before_handle ) {
-			$before_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $before_handle );
+			$before_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $before_handle );
 		}
 
 		if ( $after_handle ) {
-			$after_handle = sprintf( "<script type='text/javascript'>\n%s\n</script>\n", $after_handle );
+			$after_handle = sprintf( "<script%s>\n%s\n</script>\n", $this->type_attr, $after_handle );
 		}
 
 		if ( $this->do_concat ) {
@@ -287,8 +322,8 @@ class WP_Scripts extends WP_Dependencies {
 				_print_scripts();
 				$this->reset();
 			} elseif ( $this->in_default_dir( $srce ) && ! $conditional ) {
-				$this->print_code .= $this->print_extra_script( $handle, false );
-				$this->concat .= "$handle,";
+				$this->print_code     .= $this->print_extra_script( $handle, false );
+				$this->concat         .= "$handle,";
 				$this->concat_version .= "$handle$ver";
 				return true;
 			} else {
@@ -318,16 +353,20 @@ class WP_Scripts extends WP_Dependencies {
 			$src = $this->base_url . $src;
 		}
 
-		if ( ! empty( $ver ) )
+		if ( ! empty( $ver ) ) {
 			$src = add_query_arg( 'ver', $ver, $src );
+		}
 
 		/** This filter is documented in wp-includes/class.wp-scripts.php */
 		$src = esc_url( apply_filters( 'script_loader_src', $src, $handle ) );
 
-		if ( ! $src )
+		if ( ! $src ) {
 			return true;
+		}
 
-		$tag = "{$cond_before}{$before_handle}<script type='text/javascript' src='$src'></script>\n{$after_handle}{$cond_after}";
+		$tag  = $cond_before . $before_handle;
+		$tag .= sprintf( "<script%s src='%s'></script>\n", $this->type_attr, $src );
+		$tag .= $after_handle . $cond_after;
 
 		/**
 		 * Filters the HTML script tag of an enqueued script.
@@ -397,7 +436,7 @@ class WP_Scripts extends WP_Dependencies {
 		$output = trim( implode( "\n", $output ), "\n" );
 
 		if ( $echo ) {
-			printf( "<script type='text/javascript'>\n%s\n</script>\n", $output );
+			printf( "<script%s>\n%s\n</script>\n", $this->type_attr, $output );
 		}
 
 		return $output;
@@ -414,30 +453,34 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool
 	 */
 	public function localize( $handle, $object_name, $l10n ) {
-		if ( $handle === 'jquery' )
+		if ( 'jquery' === $handle ) {
 			$handle = 'jquery-core';
+		}
 
-		if ( is_array($l10n) && isset($l10n['l10n_print_after']) ) { // back compat, preserve the code in 'l10n_print_after' if present
+		if ( is_array( $l10n ) && isset( $l10n['l10n_print_after'] ) ) { // back compat, preserve the code in 'l10n_print_after' if present
 			$after = $l10n['l10n_print_after'];
-			unset($l10n['l10n_print_after']);
+			unset( $l10n['l10n_print_after'] );
 		}
 
 		foreach ( (array) $l10n as $key => $value ) {
-			if ( !is_scalar($value) )
+			if ( ! is_scalar( $value ) ) {
 				continue;
+			}
 
-			$l10n[$key] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8');
+			$l10n[ $key ] = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
 		}
 
 		$script = "var $object_name = " . wp_json_encode( $l10n ) . ';';
 
-		if ( !empty($after) )
+		if ( ! empty( $after ) ) {
 			$script .= "\n$after;";
+		}
 
 		$data = $this->get_data( $handle, 'data' );
 
-		if ( !empty( $data ) )
+		if ( ! empty( $data ) ) {
 			$script = "$data\n$script";
+		}
 
 		return $this->add_data( $handle, 'data', $script );
 	}
@@ -455,20 +498,22 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool Not already in the group or a lower group
 	 */
 	public function set_group( $handle, $recursion, $group = false ) {
-		if ( isset( $this->registered[$handle]->args ) && $this->registered[$handle]->args === 1 )
+		if ( isset( $this->registered[ $handle ]->args ) && 1 === $this->registered[ $handle ]->args ) {
 			$grp = 1;
-		else
+		} else {
 			$grp = (int) $this->get_data( $handle, 'group' );
+		}
 
-		if ( false !== $group && $grp > $group )
+		if ( false !== $group && $grp > $group ) {
 			$grp = $group;
+		}
 
 		return parent::set_group( $handle, $recursion, $grp );
 	}
 
 	/**
 	 * Determines script dependencies.
-     *
+	 *
 	 * @since WP-2.1.0
 	 *
 	 * @see WP_Dependencies::all_deps()
@@ -503,7 +548,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return array Handles of items that have been processed.
 	 */
 	public function do_head_items() {
-		$this->do_items(false, 0);
+		$this->do_items( false, 0 );
 		return $this->done;
 	}
 
@@ -517,7 +562,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return array Handles of items that have been processed.
 	 */
 	public function do_footer_items() {
-		$this->do_items(false, 1);
+		$this->do_items( false, 1 );
 		return $this->done;
 	}
 
@@ -552,12 +597,12 @@ class WP_Scripts extends WP_Dependencies {
 	 * @since WP-2.8.0
 	 */
 	public function reset() {
-		$this->do_concat = false;
-		$this->print_code = '';
-		$this->concat = '';
+		$this->do_concat      = false;
+		$this->print_code     = '';
+		$this->concat         = '';
 		$this->concat_version = '';
-		$this->print_html = '';
-		$this->ext_version = '';
-		$this->ext_handles = '';
+		$this->print_html     = '';
+		$this->ext_version    = '';
+		$this->ext_handles    = '';
 	}
 }

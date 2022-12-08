@@ -10,7 +10,7 @@
 
 // Sanity check. Is there a saner way to do this?
 if ( false ) {
-?>
+	?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -23,7 +23,7 @@ if ( false ) {
 	<p>ClassicPress requires that your web server is running PHP. Your server does not have PHP installed, or PHP is turned off.</p>
 </body>
 </html>
-<?php
+	<?php
 }
 
 /**
@@ -35,16 +35,16 @@ if ( false ) {
 define( 'WP_INSTALLING', true );
 
 /** Load ClassicPress Bootstrap */
-require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
+require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php';
 
 /** Load ClassicPress Administration Upgrade API */
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 /** Load ClassicPress Translation Install API */
-require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
 /** Load wpdb */
-require_once( ABSPATH . WPINC . '/wp-db.php' );
+require_once ABSPATH . WPINC . '/wp-db.php';
 
 // Prevent browser caching.
 nocache_headers();
@@ -123,7 +123,7 @@ if ( ! is_string( $wpdb->base_prefix ) || '' === $wpdb->base_prefix ) {
 		/* translators: %s: wp-config.php */
 		__( 'Your %s file has an empty database table prefix, which is not supported.' ),
 		'<code>wp-config.php</code>'
-		) . '</p>';
+	) . '</p>';
 	display_footer();
 }
 
@@ -135,7 +135,7 @@ if ( defined( 'DO_NOT_UPGRADE_GLOBAL_TABLES' ) ) {
 		/* translators: %s: DO_NOT_UPGRADE_GLOBAL_TABLES */
 		__( 'The constant %s cannot be defined when installing ClassicPress.' ),
 		'<code>DO_NOT_UPGRADE_GLOBAL_TABLES</code>'
-		) . '</p>';
+	) . '</p>';
 	display_footer();
 }
 
@@ -157,20 +157,22 @@ $scripts_to_print = array( 'jquery' );
 $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 0;
 
 // React to the current step.
-switch($step) {
-
+switch ( $step ) {
 	// Just getting started? Display the language picker.
-	case 0:
-		if ( wp_can_install_language_pack() && empty( $language ) && ( $languages = wp_get_available_translations() ) ) {
-			$scripts_to_print[] = 'language-chooser';
-			display_header( 'language-chooser' );
-			echo '<form id="setup" method="post" action="?step=1">';
-			wp_install_language_form( $languages );
-			echo '</form>';
-			break;
+	case 0: // Step 0
+		if ( wp_can_install_language_pack() && empty( $language ) ) {
+			$languages = wp_get_available_translations();
+			if ( $languages ) {
+				$scripts_to_print[] = 'language-chooser';
+				display_header( 'language-chooser' );
+				echo '<form id="setup" method="post" action="?step=1">';
+				wp_install_language_form( $languages );
+				echo '</form>';
+				break;
+			}
 		}
 
-	// Display the final setup screen (site title, admin user).
+		// Display the final setup screen (site title, admin user).
 	case 1:
 		// If language is present, ensure it's loaded.
 		if ( ! empty( $language ) ) {
@@ -185,7 +187,7 @@ switch($step) {
 		// Display the page header.
 		display_header();
 		// Add a main title.
-		echo '<h1>' . __( 'Admin Setup' ) .'</h1>';
+		echo '<h1>' . __( 'Admin Setup' ) . '</h1>';
 		// Add descriptive text.
 		echo '<p>' . __( 'Give your site a great title and fill out your administrator account details. Take note of your username and password – you will need these again in a moment.' ) . '</p>';
 		// Print the setup form.
@@ -197,7 +199,7 @@ switch($step) {
 	case 2:
 		// Ensure a language is loaded.
 		if ( ! empty( $language ) && load_default_textdomain( $language ) ) {
-			$loaded_language = $language;
+			$loaded_language      = $language;
 			$GLOBALS['wp_locale'] = new WP_Locale();
 		} else {
 			$loaded_language = 'en_US';
@@ -214,12 +216,12 @@ switch($step) {
 		// Print the branded page header.
 		display_header();
 		// Get and clean submitted data.
-		$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
-		$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
-		$admin_password = isset($_POST['admin_password']) ? wp_unslash( $_POST['admin_password'] ) : '';
-		$admin_password_check = isset($_POST['admin_password2']) ? wp_unslash( $_POST['admin_password2'] ) : '';
-		$admin_email  = isset( $_POST['admin_email'] ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
-		$public       = isset( $_POST['blog_public'] ) ? (int) $_POST['blog_public'] : 1;
+		$weblog_title         = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
+		$user_name            = isset( $_POST['user_name'] ) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
+		$admin_password       = isset( $_POST['admin_password'] ) ? wp_unslash( $_POST['admin_password'] ) : '';
+		$admin_password_check = isset( $_POST['admin_password2'] ) ? wp_unslash( $_POST['admin_password2'] ) : '';
+		$admin_email          = isset( $_POST['admin_email'] ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
+		$public               = isset( $_POST['blog_public'] ) ? (int) $_POST['blog_public'] : 1;
 		// Initialize an error flag.
 		$error = false;
 		// Validate input; toggle error flag if any problems validating.
@@ -323,7 +325,7 @@ function display_setup_form( $error = null ) {
 
 	// Check for users table.
 	global $wpdb;
-	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
+	$sql        = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->users ) );
 	$user_table = ( $wpdb->get_var( $sql ) != null );
 
 	// Ensure that sites appear in search engines by default.
@@ -334,8 +336,8 @@ function display_setup_form( $error = null ) {
 		$blog_public = isset( $_POST['blog_public'] ) ? 1 : 0;
 	}
 	$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
-	$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
-	$admin_email  = isset( $_POST['admin_email']  ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
+	$user_name    = isset( $_POST['user_name'] ) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
+	$admin_email  = isset( $_POST['admin_email'] ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
 
 	// Print input error, if any.
 	if ( ! is_null( $error ) ) {
@@ -443,7 +445,7 @@ function display_setup_form( $error = null ) {
 /**
  * Add footer scripts; close body/html tags; kill script with fire.
  */
-function display_footer( $scripts_to_print = array( ) ) {
+function display_footer( $scripts_to_print = array() ) {
 	if ( ! wp_is_mobile() ) {
 		echo '<script type="text/javascript">var t = document.getElementById("weblog_title"); if (t){ t.focus(); }</script>' . "\n";
 	}

@@ -7,35 +7,55 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 	public $q;
 	static $post_type = 'page'; // can be anything
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 		unset( $this->q );
 		$this->q = new WP_Query();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
 		unset( $this->q );
+		parent::tear_down();
 	}
 
 	public static function wpSetUpBeforeClass( $factory ) {
-		$post_id = self::factory()->post->create( array( 'post_content' => 1 . rand_str() . ' about', 'post_type' => self::$post_type ) );
+		$post_id             = self::factory()->post->create(
+			array(
+				'post_content' => 1 . rand_str() . ' about',
+				'post_type'    => self::$post_type,
+			)
+		);
 		self::$post_ids[1][] = $post_id;
 		self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
 
-		$post_id = self::factory()->post->create( array( 'post_content' => 1 . rand_str() . ' about', 'post_type' => self::$post_type ) );
+		$post_id             = self::factory()->post->create(
+			array(
+				'post_content' => 1 . rand_str() . ' about',
+				'post_type'    => self::$post_type,
+			)
+		);
 		self::$post_ids[4][] = $post_id;
 		for ( $i = 0; $i < 4; $i++ ) {
 			self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
 		}
 
-		$post_id = self::factory()->post->create( array( 'post_content' => 1 . rand_str() . ' about', 'post_type' => self::$post_type ) );
+		$post_id             = self::factory()->post->create(
+			array(
+				'post_content' => 1 . rand_str() . ' about',
+				'post_type'    => self::$post_type,
+			)
+		);
 		self::$post_ids[5][] = $post_id;
 		for ( $i = 0; $i < 5; $i++ ) {
 			self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
 		}
 
-		$post_id = self::factory()->post->create( array( 'post_content' => 1 . rand_str() . ' about', 'post_type' => self::$post_type ) );
+		$post_id             = self::factory()->post->create(
+			array(
+				'post_content' => 1 . rand_str() . ' about',
+				'post_type'    => self::$post_type,
+			)
+		);
 		self::$post_ids[5][] = $post_id;
 		for ( $i = 0; $i < 5; $i++ ) {
 			self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
@@ -48,10 +68,10 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 	public function test_operator_equals() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 4,
+			'comment_count'  => array(
+				'value'   => 4,
 				'compare' => '=',
 			),
 		);
@@ -61,15 +81,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = self::$post_ids[4];
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_greater_than() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 4,
+			'comment_count'  => array(
+				'value'   => 4,
 				'compare' => '>',
 			),
 		);
@@ -79,15 +99,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = self::$post_ids[5];
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_greater_than_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 6,
+			'comment_count'  => array(
+				'value'   => 6,
 				'compare' => '>',
 			),
 		);
@@ -97,14 +117,14 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = array();
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 	public function test_operator_less_than() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 6,
+			'comment_count'  => array(
+				'value'   => 6,
 				'compare' => '<',
 			),
 		);
@@ -123,15 +143,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_less_than_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 1,
+			'comment_count'  => array(
+				'value'   => 1,
 				'compare' => '<',
 			),
 		);
@@ -141,16 +161,16 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = array();
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 
 	public function test_operator_not_equal() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 15,
+			'comment_count'  => array(
+				'value'   => 15,
 				'compare' => '!=',
 			),
 		);
@@ -169,15 +189,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 
 	}
 	public function test_operator_equal_or_greater_than() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 4,
+			'comment_count'  => array(
+				'value'   => 4,
 				'compare' => '>=',
 			),
 		);
@@ -193,15 +213,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_equal_or_greater_than_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 7,
+			'comment_count'  => array(
+				'value'   => 7,
 				'compare' => '>=',
 			),
 		);
@@ -211,15 +231,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = array();
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_equal_or_less_than() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 4,
+			'comment_count'  => array(
+				'value'   => 4,
 				'compare' => '<=',
 			),
 		);
@@ -235,15 +255,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_operator_equal_or_less_than_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 0,
+			'comment_count'  => array(
+				'value'   => 0,
 				'compare' => '<=',
 			),
 		);
@@ -253,15 +273,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = array();
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_invalid_operator_should_fall_back_on_equals() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 5,
+			'comment_count'  => array(
+				'value'   => 5,
 				'compare' => '@',
 			),
 		);
@@ -274,15 +294,15 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_wrong_count_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
-				'value' => 'abc',
+			'comment_count'  => array(
+				'value'   => 'abc',
 				'compare' => '=',
 			),
 		);
@@ -292,14 +312,14 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = array();
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_no_operator_no_results() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => array(
+			'comment_count'  => array(
 				'value' => 5,
 			),
 		);
@@ -309,14 +329,14 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = self::$post_ids[5];
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_empty_non_numeric_string_should_be_ignored() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => '',
+			'comment_count'  => '',
 		);
 		$this->q->query( $args );
 
@@ -333,14 +353,14 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 			$expected[] = $expected_id;
 		}
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 
 	public function test_simple_count() {
 		$args = array(
-			'post_type' => self::$post_type,
+			'post_type'      => self::$post_type,
 			'posts_per_page' => -1,
-			'comment_count' => 5,
+			'comment_count'  => 5,
 		);
 		$this->q->query( $args );
 
@@ -348,7 +368,7 @@ class Tests_Query_CommentCount extends WP_UnitTestCase {
 
 		$expected = self::$post_ids[5];
 
-		$this->assertEqualSets( $found_post_ids, $expected );
+		$this->assertSameSets( $found_post_ids, $expected );
 	}
 }
 

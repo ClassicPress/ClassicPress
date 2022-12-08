@@ -15,40 +15,48 @@ jobs:
   #
   # Performs the following steps:
   # - Cancel workflow if PR updated.
+  # - Checkout ClassicPress.
   # - Set environment variables.
   # - Read .nvmrc.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
-  # - Checkout ClassicPress.
-  # - Enable and start MySQL.
+  # - Setup, wait for and initialise MySQL.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
   # - Set up locale.
-  # - Install PHPUnit.
+  # - Install PHPUnit and Composer dependencies.
+  # - Make Composer packages available globally.
   # - Log debug information.
   # - Create config file.
   # - Set up object cache if needed for memcached tests.
   # - Set up a Memcached server if needed.
+  # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}
-    runs-on: ${{ matrix.os }}
+    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
+      fail-fast: false
       matrix:
-        php: [ '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
-        os: [ ubuntu-18.04 ]
+        php: [ '8.0', '7.4', '7.3', '7.2', '7.1', '7.0', '5.6.20' ]
+        mysql: [ '5.7' ]
         memcached: [ false ]
+        experimental: [ false ]
         include:
           - php: '7.2'
-            os: ubuntu-18.04
+            mysql: '5.7'
             memcached: true
-      fail-fast: false
+            experimental: false
+          - php: '8.1'
+            mysql: '5.7'
+            memcached: false
+            experimental: true
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
         if: ${{ github.event_name == 'pull_request' }}
-        uses: styfle/cancel-workflow-action@0.5.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ github.token }}
 
@@ -57,17 +65,20 @@ jobs:
           echo "PHP_FPM_UID=$(id -u)" >> $GITHUB_ENV
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Read .nvmrc
-        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
       - name: Use cached Node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -77,15 +88,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql root password: "password"
+          mysql version: "${{ matrix.mysql }}"
 
-      - name: Enable, start and initialise MySQL
+      - name: Wait for MySQL
         run: |
-          sudo systemctl enable mysql.service
-          sudo systemctl start mysql.service
-          mysql -u root -proot < tools/local-env/mysql-init.sql
-          mysql -u root -proot -e "SHOW DATABASES"
+          while ! mysqladmin ping --host=127.0.0.1 --port 3306 -u root -ppassword --silent; do
+            sleep 1
+          done
+
+      - name: Initialise MySQL
+        run: |
+          mysql --host 127.0.0.1 --port 3306 -u root -ppassword -e "SELECT @@VERSION"
+          mysql --host 127.0.0.1 --port 3306 -u root -ppassword < tools/local-env/mysql-init.sql
+          mysql --host 127.0.0.1 --port 3306 -u root -ppassword -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
@@ -126,15 +145,20 @@ jobs:
           sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8
           sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
 
-      - name: Install PHPUnit
+      - name: Install PHPUnit and Composer dependencies
         run: |
           if [ ${{ matrix.php }} == '5.6.20' ]; then
-            wget -O phpunit https://phar.phpunit.de/phpunit-5.phar
+            composer require phpunit/phpunit "5.*" -W --no-progress --no-ansi --no-interaction
+          elif [ ${{ matrix.php }} == '7.0' ]; then
+            composer require phpunit/phpunit "6.*" -W --no-progress --no-ansi --no-interaction
+          elif [ ${{ matrix.php }} == '7.1' ]; then
+            composer require phpunit/phpunit "7.*" -W --no-progress --no-ansi --no-interaction
           else
-            wget -O phpunit https://phar.phpunit.de/phpunit-6.phar
+            composer require phpunit/phpunit "8.*" -W --no-progress --no-ansi --no-interaction
           fi
-          chmod +x phpunit
-          sudo mv phpunit /usr/bin/
+
+      - name: Make Composer packages available globally
+        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
       - name: Show debug information
         run: |
@@ -149,7 +173,6 @@ jobs:
           phpunit --version
           composer --version
           grunt --version
-          mysql --version
           lsb_release -a
           localectl list-locales
 
@@ -158,7 +181,8 @@ jobs:
           cp wp-tests-config-sample.php wp-tests-config.php
           sed -i 's/youremptytestdbnamehere/classicpress_develop_tests/g' wp-tests-config.php
           sed -i 's/yourusernamehere/root/g' wp-tests-config.php
-          sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
+          sed -i 's/yourpasswordhere/password/g' wp-tests-config.php
+          sed -i 's/localhost/127.0.0.1/g' wp-tests-config.php
 
       - name: Set up object cache
         if: ${{ matrix.memcached }}
@@ -178,35 +202,42 @@ jobs:
 
       - name: Run PHPUnit default
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ajax
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ajax
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit ms-files
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:ms-files
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit restapi-jsclient
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:restapi-jsclient
+        continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit wp-api-client-fixtures
         env:
-          WP_DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
+          WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:wp-api-client-fixtures
+        continue-on-error: ${{ matrix.experimental }}

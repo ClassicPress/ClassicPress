@@ -13,40 +13,57 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	 */
 	public function test_count_users_is_accurate( $strategy ) {
 		// Setup users
-		$admin = self::factory()->user->create( array(
-			'role' => 'administrator',
-		) );
-		$editor = self::factory()->user->create( array(
-			'role' => 'editor',
-		) );
-		$author = self::factory()->user->create( array(
-			'role' => 'author',
-		) );
-		$contributor = self::factory()->user->create( array(
-			'role' => 'contributor',
-		) );
-		$subscriber = self::factory()->user->create( array(
-			'role' => 'subscriber',
-		) );
-		$none = self::factory()->user->create( array(
-			'role' => '',
-		) );
-		$nobody = self::factory()->user->create( array(
-			'role' => '',
-		) );
+		$admin       = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		$editor      = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+		$author      = self::factory()->user->create(
+			array(
+				'role' => 'author',
+			)
+		);
+		$contributor = self::factory()->user->create(
+			array(
+				'role' => 'contributor',
+			)
+		);
+		$subscriber  = self::factory()->user->create(
+			array(
+				'role' => 'subscriber',
+			)
+		);
+		$none        = self::factory()->user->create(
+			array(
+				'role' => '',
+			)
+		);
+		$nobody      = self::factory()->user->create(
+			array(
+				'role' => '',
+			)
+		);
 
 		// Test user counts
 		$count = count_users( $strategy );
 
-		$this->assertEquals( 8, $count['total_users'] );
-		$this->assertEquals( array(
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'contributor'   => 1,
-			'subscriber'    => 1,
-			'none'          => 2,
-		), $count['avail_roles'] );
+		$this->assertSame( 8, $count['total_users'] );
+		$this->assertEquals(
+			array(
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'contributor'   => 1,
+				'subscriber'    => 1,
+				'none'          => 2,
+			),
+			$count['avail_roles']
+		);
 
 	}
 
@@ -60,35 +77,53 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	 */
 	public function test_count_users_multisite_is_accurate( $strategy ) {
 		// Setup users
-		$admin = self::factory()->user->create( array(
-			'role' => 'administrator',
-		) );
-		$editor = self::factory()->user->create( array(
-			'role' => 'editor',
-		) );
-		$author = self::factory()->user->create( array(
-			'role' => 'author',
-		) );
-		$contributor = self::factory()->user->create( array(
-			'role' => 'contributor',
-		) );
-		$subscriber = self::factory()->user->create( array(
-			'role' => 'subscriber',
-		) );
-		$none = self::factory()->user->create( array(
-			'role' => '',
-		) );
-		$nobody = self::factory()->user->create( array(
-			'role' => '',
-		) );
+		$admin       = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		$editor      = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
+		$author      = self::factory()->user->create(
+			array(
+				'role' => 'author',
+			)
+		);
+		$contributor = self::factory()->user->create(
+			array(
+				'role' => 'contributor',
+			)
+		);
+		$subscriber  = self::factory()->user->create(
+			array(
+				'role' => 'subscriber',
+			)
+		);
+		$none        = self::factory()->user->create(
+			array(
+				'role' => '',
+			)
+		);
+		$nobody      = self::factory()->user->create(
+			array(
+				'role' => '',
+			)
+		);
 
 		// Setup blogs
-		$blog_1 = (int) self::factory()->blog->create( array(
-			'user_id' => $editor,
-		) );
-		$blog_2 = (int) self::factory()->blog->create( array(
-			'user_id' => $author,
-		) );
+		$blog_1 = (int) self::factory()->blog->create(
+			array(
+				'user_id' => $editor,
+			)
+		);
+		$blog_2 = (int) self::factory()->blog->create(
+			array(
+				'user_id' => $author,
+			)
+		);
 
 		// Add users to blogs
 		add_user_to_blog( $blog_1, $subscriber, 'editor' );
@@ -97,39 +132,48 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 		// Test users counts on root site
 		$count = count_users( $strategy );
 
-		$this->assertEquals( 8, $count['total_users'] );
-		$this->assertEquals( array(
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'contributor'   => 1,
-			'subscriber'    => 1,
-			'none'          => 2,
-		), $count['avail_roles'] );
+		$this->assertSame( 8, $count['total_users'] );
+		$this->assertEquals(
+			array(
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'contributor'   => 1,
+				'subscriber'    => 1,
+				'none'          => 2,
+			),
+			$count['avail_roles']
+		);
 
 		// Test users counts on blog 1
 		switch_to_blog( $blog_1 );
 		$count = count_users( $strategy );
 		restore_current_blog();
 
-		$this->assertEquals( 2, $count['total_users'] );
-		$this->assertEquals( array(
-			'administrator' => 1,
-			'editor'        => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+		$this->assertSame( 2, $count['total_users'] );
+		$this->assertEquals(
+			array(
+				'administrator' => 1,
+				'editor'        => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 		// Test users counts on blog 2
 		switch_to_blog( $blog_2 );
 		$count = count_users( $strategy );
 		restore_current_blog();
 
-		$this->assertEquals( 2, $count['total_users'] );
-		$this->assertEquals( array(
-			'administrator' => 1,
-			'contributor'   => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+		$this->assertSame( 2, $count['total_users'] );
+		$this->assertEquals(
+			array(
+				'administrator' => 1,
+				'contributor'   => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 	}
 
@@ -145,16 +189,21 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 
 		switch_to_blog( $site_id );
 		wp_roles()->add_role( 'tester', 'Tester', array( 'test' => true ) );
-		$user_id = self::factory()->user->create( array(
-			'role' => 'tester',
-		) );
+		$user_id = self::factory()->user->create(
+			array(
+				'role' => 'tester',
+			)
+		);
 		restore_current_blog();
 
 		$count = count_users( $strategy, $site_id );
-		$this->assertEqualSetsWithIndex( array(
-			'tester' => 1,
-			'none'   => 0,
-		), $count['avail_roles'] );
+		$this->assertSameSetsWithIndex(
+			array(
+				'tester' => 1,
+				'none'   => 0,
+			),
+			$count['avail_roles']
+		);
 	}
 
 	/**
@@ -165,30 +214,40 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	public function test_count_users_is_accurate_with_multiple_roles( $strategy ) {
 
 		// Setup users
-		$admin = self::factory()->user->create( array(
-			'role' => 'administrator',
-		) );
-		$editor = self::factory()->user->create( array(
-			'role' => 'editor',
-		) );
+		$admin  = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		$editor = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
 
 		get_userdata( $editor )->add_role( 'author' );
 
-		$this->assertEquals( array(
-			'editor',
-			'author'
-		), get_userdata( $editor )->roles );
+		$this->assertSame(
+			array(
+				'editor',
+				'author',
+			),
+			get_userdata( $editor )->roles
+		);
 
 		// Test user counts
 		$count = count_users( $strategy );
 
-		$this->assertEquals( 3, $count['total_users'] );
-		$this->assertEquals( array(
-			'administrator' => 2,
-			'editor'        => 1,
-			'author'        => 1,
-			'none'          => 0,
-		), $count['avail_roles'] );
+		$this->assertSame( 3, $count['total_users'] );
+		$this->assertEquals(
+			array(
+				'administrator' => 2,
+				'editor'        => 1,
+				'author'        => 1,
+				'none'          => 0,
+			),
+			$count['avail_roles']
+		);
 
 	}
 
@@ -203,18 +262,23 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 		// Get a 'before' count for comparison.
 		$count = count_users( $strategy );
 
-		$u = self::factory()->user->create( array(
-			'role' => 'editor',
-		) );
+		$u = self::factory()->user->create(
+			array(
+				'role' => 'editor',
+			)
+		);
 
 		// Manually delete the user, but leave the capabilities usermeta.
-		$wpdb->delete( $wpdb->users, array(
-			'ID' => $u,
-		) );
+		$wpdb->delete(
+			$wpdb->users,
+			array(
+				'ID' => $u,
+			)
+		);
 
 		$count2 = count_users( $strategy );
 
-		$this->assertEqualSets( $count, $count2 );
+		$this->assertSameSets( $count, $count2 );
 	}
 
 	function data_count_users_strategies() {

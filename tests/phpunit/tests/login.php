@@ -3,43 +3,70 @@
  * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
-	function setUp() {
-		// This is not done when loading the login page, but parent::setUp()
-		// needs it when WP_TRAVIS_OBJECT_CACHE=true.
+	public function set_up() {
+		// Something about these tests (@runInSeparateProcess maybe?) requires
+		// the object cache to be (re)initialized.
 		if ( wp_using_ext_object_cache() ) {
 			wp_cache_init();
 		}
-		parent::setUp();
+		parent::set_up();
 		reset_phpmailer_instance();
 	}
 
-	function tearDown() {
+	public function tear_down() {
 		reset_phpmailer_instance();
-		parent::tearDown();
+		parent::tear_down();
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
 	public function test_reset_password() {
-		ob_start();
-		include_once( ABSPATH . '/wp-login.php' );
 		$_POST['user_login'] = 'admin';
 		retrieve_password();
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		ob_end_clean();
 
 		$regex = (
 			'/^http:\/\/'
 			. preg_quote( WP_TESTS_DOMAIN, '/' )
 			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
 			. preg_quote( $_POST['user_login'], '/' )
-			. '$/mi'
+			. '\r?$/mi'
 		);
 
-		$test = preg_match( $regex, $mailer->get_sent()->body );
+		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );
+	}
 
-		$this->assertEquals( $test, 1 );
+	public function test_reset_password_for_dotted_username() {
+		$user = self::factory()->user->create_and_get(
+			array(
+				'user_login' => 'user1.',
+			)
+		);
+
+		$_POST['user_login'] = $user->user_login;
+		retrieve_password();
+
+		$mailer = tests_retrieve_phpmailer_instance();
+
+		$regex = (
+			'/^http:\/\/'
+			. preg_quote( WP_TESTS_DOMAIN, '/' )
+			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
+			. preg_quote( $_POST['user_login'], '/' )
+			. '\r?$/mi'
+		);
+
+		$this->assertDoesNotMatchRegularExpression( $regex, $mailer->get_sent()->body );
+
+		$encoded_user_login = str_replace( '.', '%2e', rawurlencode( $user->user_login ) );
+
+		$regex = (
+			'/^http:\/\/'
+			. preg_quote( WP_TESTS_DOMAIN, '/' )
+			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
+			. preg_quote( $encoded_user_login, '/' )
+			. '\r?$/mi'
+		);
+
+		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );
 	}
 }

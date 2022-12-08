@@ -26,8 +26,9 @@ header('Vary: Accept-Encoding'); // Handle proxies
 header('Expires: ' . gmdate( "D, d M Y H:i:s", time() + $expires_offset ) . ' GMT');
 header("Cache-Control: public, max-age=$expires_offset");
 
-if ( isset($_GET['c']) && 1 == $_GET['c'] && isset($_SERVER['HTTP_ACCEPT_ENCODING'])
-	&& false !== stripos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && ( $file = get_file($basepath . '/wp-tinymce.js.gz') ) ) {
+$file = get_file( $basepath . '/wp-tinymce.js' );
+if ( isset( $_GET['c'] ) && 1 == $_GET['c'] && isset( $_SERVER['HTTP_ACCEPT_ENCODING'] )
+	&& false !== stripos( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) && $file ) {
 
 	header('Content-Encoding: gzip');
 	echo $file;

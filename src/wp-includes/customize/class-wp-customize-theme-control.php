@@ -82,10 +82,12 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 
 			<span class="more-details theme-details" id="{{ data.section }}-{{ data.theme.id }}-action" aria-label="<?php echo esc_attr( $details_label ); ?>"><?php _e( 'Theme Details' ); ?></span>
 
-			<div class="theme-author"><?php
+			<div class="theme-author">
+			<?php
 				/* translators: Theme author name */
 				printf( _x( 'By %s', 'theme author' ), '{{ data.theme.author }}' );
-			?></div>
+			?>
+			</div>
 
 			<# if ( 'installed' === data.theme.type && data.theme.hasUpdate ) { #>
 				<# if ( data.theme.updateResponse.compatibleWP && data.theme.updateResponse.compatiblePHP ) { #>
@@ -162,15 +164,20 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<# } #>
 			<# } #>
 					<# if ( data.theme.preferredChildName ) { #>
-						<div class="notice inline notice-info notice-alt"><p><?php printf(
+						<div class="notice inline notice-info notice-alt"><p>
+						<?php
+						printf(
 								/* translators: %s: ClassicPress child theme name */
-								__( 'Use the "%s" child theme instead!' ),
-								'{{ data.theme.preferredChildName }}'
-							); ?>
-							<span class="cut"><?php
+							__( 'Use the "%s" child theme instead!' ),
+							'{{ data.theme.preferredChildName }}'
+						);
+						?>
+							<span class="cut">
+							<?php
 								/* translators: Advanced part of the ClassicPress child theme notice text, hidden on mobiles */
 								_e( 'This is a parent theme that says "Powered by WordPress" in its footer.' );
-							?></span>
+							?>
+							</span>
 						</p></div>
 					<# } #>
 				</div>
@@ -214,6 +221,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				</div>
 			<# } #>
 		</div>
-	<?php
+		<?php
 	}
 }

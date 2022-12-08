@@ -54,8 +54,8 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 * @return array Exported parameters.
 	 */
 	public function json() {
-		$exported = parent::json();
-		$exported['action'] = $this->action;
+		$exported                = parent::json();
+		$exported['action']      = $this->action;
 		$exported['filter_type'] = $this->filter_type;
 
 		return $exported;
@@ -88,7 +88,8 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 					<p class="no-themes-local">
 						<?php
 						/* translators: %s: "Search WordPress.org themes" button */
-						printf( __( 'No themes found. Try a different search, or %s.' ),
+						printf(
+							__( 'No themes found. Try a different search, or %s.' ),
 							sprintf( '<button type="button" class="button-link search-dotorg-themes">%s</button>', __( 'Search WordPress.org themes' ) )
 						);
 						?>
@@ -137,8 +138,8 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 		<div class="filter-themes-count">
 			<span class="themes-displayed">
 				<?php
-				/* translators: %s: number of themes displayed. */
-				echo sprintf( __( '%s themes' ), '<span class="theme-count">0</span>' );
+				/* translators: %s: Number of themes displayed. */
+				printf( __( '%s themes' ), '<span class="theme-count">0</span>' );
 				?>
 			</span>
 		</div>

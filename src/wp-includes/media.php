@@ -59,58 +59,53 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
 
 	$_wp_additional_image_sizes = wp_get_additional_image_sizes();
 
-	if ( ! $context )
+	if ( ! $context ) {
 		$context = is_admin() ? 'edit' : 'display';
-
-	if ( is_array($size) ) {
-		$max_width = $size[0];
-		$max_height = $size[1];
 	}
-	elseif ( $size == 'thumb' || $size == 'thumbnail' ) {
-		$max_width = intval(get_option('thumbnail_size_w'));
-		$max_height = intval(get_option('thumbnail_size_h'));
+
+	if ( is_array( $size ) ) {
+		$max_width  = $size[0];
+		$max_height = $size[1];
+	} elseif ( 'thumb' === $size || 'thumbnail' === $size ) {
+		$max_width  = intval( get_option( 'thumbnail_size_w' ) );
+		$max_height = intval( get_option( 'thumbnail_size_h' ) );
 		// last chance thumbnail size defaults
-		if ( !$max_width && !$max_height ) {
-			$max_width = 128;
+		if ( ! $max_width && ! $max_height ) {
+			$max_width  = 128;
 			$max_height = 96;
 		}
-	}
-	elseif ( $size == 'medium' ) {
-		$max_width = intval(get_option('medium_size_w'));
-		$max_height = intval(get_option('medium_size_h'));
+	} elseif ( 'medium' === $size ) {
+		$max_width  = intval( get_option( 'medium_size_w' ) );
+		$max_height = intval( get_option( 'medium_size_h' ) );
 
-	}
-	elseif ( $size == 'medium_large' ) {
-		$max_width = intval( get_option( 'medium_large_size_w' ) );
+	} elseif ( 'medium_large' === $size ) {
+		$max_width  = intval( get_option( 'medium_large_size_w' ) );
 		$max_height = intval( get_option( 'medium_large_size_h' ) );
 
 		if ( intval( $content_width ) > 0 ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	}
-	elseif ( $size == 'large' ) {
+	} elseif ( 'large' === $size ) {
 		/*
 		 * We're inserting a large size image into the editor. If it's a really
 		 * big image we'll scale it down to fit reasonably within the editor
 		 * itself, and within the theme's content width if it's known. The user
 		 * can resize it in the editor if they wish.
 		 */
-		$max_width = intval(get_option('large_size_w'));
-		$max_height = intval(get_option('large_size_h'));
-		if ( intval($content_width) > 0 ) {
-			$max_width = min( intval($content_width), $max_width );
+		$max_width  = intval( get_option( 'large_size_w' ) );
+		$max_height = intval( get_option( 'large_size_h' ) );
+		if ( intval( $content_width ) > 0 ) {
+			$max_width = min( intval( $content_width ), $max_width );
 		}
 	} elseif ( ! empty( $_wp_additional_image_sizes ) && in_array( $size, array_keys( $_wp_additional_image_sizes ) ) ) {
-		$max_width = intval( $_wp_additional_image_sizes[$size]['width'] );
-		$max_height = intval( $_wp_additional_image_sizes[$size]['height'] );
+		$max_width  = intval( $_wp_additional_image_sizes[ $size ]['width'] );
+		$max_height = intval( $_wp_additional_image_sizes[ $size ]['height'] );
 		// Only in admin. Assume that theme authors know what they're doing.
 		if ( intval( $content_width ) > 0 && 'edit' === $context ) {
 			$max_width = min( intval( $content_width ), $max_width );
 		}
-	}
-	// $size == 'full' has no constraint
-	else {
-		$max_width = $width;
+	} else { // $size == 'full' has no constraint
+		$max_width  = $width;
 		$max_height = $height;
 	}
 
@@ -150,10 +145,12 @@ function image_constrain_size_for_editor( $width, $height, $size = 'medium', $co
  */
 function image_hwstring( $width, $height ) {
 	$out = '';
-	if ($width)
-		$out .= 'width="'.intval($width).'" ';
-	if ($height)
-		$out .= 'height="'.intval($height).'" ';
+	if ( $width ) {
+		$out .= 'width="' . intval( $width ) . '" ';
+	}
+	if ( $height ) {
+		$out .= 'height="' . intval( $height ) . '" ';
+	}
 	return $out;
 }
 
@@ -202,34 +199,33 @@ function image_downsize( $id, $size = 'medium' ) {
 		return $out;
 	}
 
-	$img_url = wp_get_attachment_url($id);
-	$meta = wp_get_attachment_metadata($id);
-	$width = $height = 0;
-	$is_intermediate = false;
-	$img_url_basename = wp_basename($img_url);
+	$img_url          = wp_get_attachment_url( $id );
+	$meta             = wp_get_attachment_metadata( $id );
+	$width            = $height = 0;
+	$is_intermediate  = false;
+	$img_url_basename = wp_basename( $img_url );
 
 	// If the file isn't an image, attempt to replace its URL with a rendered image from its meta.
 	// Otherwise, a non-image type could be returned.
 	if ( ! $is_image ) {
 		if ( ! empty( $meta['sizes'] ) ) {
-			$img_url = str_replace( $img_url_basename, $meta['sizes']['full']['file'], $img_url );
+			$img_url          = str_replace( $img_url_basename, $meta['sizes']['full']['file'], $img_url );
 			$img_url_basename = $meta['sizes']['full']['file'];
-			$width = $meta['sizes']['full']['width'];
-			$height = $meta['sizes']['full']['height'];
+			$width            = $meta['sizes']['full']['width'];
+			$height           = $meta['sizes']['full']['height'];
 		} else {
 			return false;
 		}
 	}
 
 	// try for a new style intermediate size
-	if ( $intermediate = image_get_intermediate_size($id, $size) ) {
-		$img_url = str_replace($img_url_basename, $intermediate['file'], $img_url);
-		$width = $intermediate['width'];
-		$height = $intermediate['height'];
+	if ( $intermediate = image_get_intermediate_size( $id, $size ) ) {
+		$img_url         = str_replace( $img_url_basename, $intermediate['file'], $img_url );
+		$width           = $intermediate['width'];
+		$height          = $intermediate['height'];
 		$is_intermediate = true;
-	}
-	elseif ( $size == 'thumbnail' ) {
-		// fall back to the old thumbnail
+	} elseif ( 'thumbnail' === $size ) {
+		// Fall back to the old thumbnail.
 		$thumb_file = wp_get_attachment_thumb_file( $id );
 		$info       = null;
 
@@ -239,18 +235,18 @@ function image_downsize( $id, $size = 'medium' ) {
 
 		if ( $thumb_file && $info ) {
 			$img_url         = str_replace( $img_url_basename, wp_basename( $thumb_file ), $img_url );
-			$width = $info[0];
-			$height = $info[1];
+			$width           = $info[0];
+			$height          = $info[1];
 			$is_intermediate = true;
 		}
 	}
-	if ( !$width && !$height && isset( $meta['width'], $meta['height'] ) ) {
+	if ( ! $width && ! $height && isset( $meta['width'], $meta['height'] ) ) {
 		// any other type: use the real image
-		$width = $meta['width'];
+		$width  = $meta['width'];
 		$height = $meta['height'];
 	}
 
-	if ( $img_url) {
+	if ( $img_url ) {
 		// we have the actual image size, but might need to further constrain it if content_width is narrower
 		list( $width, $height ) = image_constrain_size_for_editor( $width, $height, $size );
 
@@ -366,12 +362,12 @@ function set_post_thumbnail_size( $width = 0, $height = 0, $crop = false ) {
  */
 function get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
 
-	list( $img_src, $width, $height ) = image_downsize($id, $size);
-	$hwstring = image_hwstring($width, $height);
+	list( $img_src, $width, $height ) = image_downsize( $id, $size );
+	$hwstring                         = image_hwstring( $width, $height );
 
 	$title = $title ? 'title="' . esc_attr( $title ) . '" ' : '';
 
-	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' wp-image-' . $id;
+	$class = 'align' . esc_attr( $align ) . ' size-' . esc_attr( $size ) . ' wp-image-' . $id;
 
 	/**
 	 * Filters the value of the attachment's image tag class attribute.
@@ -386,7 +382,7 @@ function get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
 	 */
 	$class = apply_filters( 'get_image_tag_class', $class, $id, $align, $size );
 
-	$html = '<img src="' . esc_attr($img_src) . '" alt="' . esc_attr($alt) . '" ' . $title . $hwstring . 'class="' . $class . '" />';
+	$html = '<img src="' . esc_attr( $img_src ) . '" alt="' . esc_attr( $alt ) . '" ' . $title . $hwstring . 'class="' . $class . '" />';
 
 	/**
 	 * Filters the HTML content for the image tag.
@@ -419,20 +415,21 @@ function get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
  * @return array First item is the width, the second item is the height.
  */
 function wp_constrain_dimensions( $current_width, $current_height, $max_width = 0, $max_height = 0 ) {
-	if ( !$max_width && !$max_height )
+	if ( ! $max_width && ! $max_height ) {
 		return array( $current_width, $current_height );
+	}
 
 	$width_ratio = $height_ratio = 1.0;
-	$did_width = $did_height = false;
+	$did_width   = $did_height = false;
 
 	if ( $max_width > 0 && $current_width > 0 && $current_width > $max_width ) {
 		$width_ratio = $max_width / $current_width;
-		$did_width = true;
+		$did_width   = true;
 	}
 
 	if ( $max_height > 0 && $current_height > 0 && $current_height > $max_height ) {
 		$height_ratio = $max_height / $current_height;
-		$did_height = true;
+		$did_height   = true;
 	}
 
 	// Calculate the larger/smaller ratios
@@ -440,7 +437,7 @@ function wp_constrain_dimensions( $current_width, $current_height, $max_width = 
 	$larger_ratio  = max( $width_ratio, $height_ratio );
 
 	if ( (int) round( $current_width * $larger_ratio ) > $max_width || (int) round( $current_height * $larger_ratio ) > $max_height ) {
- 		// The larger ratio is too big. It would result in an overflow.
+		// The larger ratio is too big. It would result in an overflow.
 		$ratio = $smaller_ratio;
 	} else {
 		// The larger ratio fits, and is likely to be a more "snug" fit.
@@ -448,8 +445,8 @@ function wp_constrain_dimensions( $current_width, $current_height, $max_width = 
 	}
 
 	// Very small dimensions may result in 0, 1 should be the minimum.
-	$w = max ( 1, (int) round( $current_width  * $ratio ) );
-	$h = max ( 1, (int) round( $current_height * $ratio ) );
+	$w = max( 1, (int) round( $current_width * $ratio ) );
+	$h = max( 1, (int) round( $current_height * $ratio ) );
 
 	// Sometimes, due to rounding, we'll end up with a result like this: 465x700 in a 177x177 box is 117x176... a pixel short
 	// We also have issues with recursive calls resulting in an ever-changing result. Constraining to the result of a constraint should yield the original result.
@@ -471,10 +468,10 @@ function wp_constrain_dimensions( $current_width, $current_height, $max_width = 
 	 * @since WP-4.1.0
 	 *
 	 * @param array $dimensions     The image width and height.
-	 * @param int 	$current_width  The current width of the image.
-	 * @param int 	$current_height The current height of the image.
-	 * @param int 	$max_width      The maximum width permitted.
-	 * @param int 	$max_height     The maximum height permitted.
+	 * @param int   $current_width  The current width of the image.
+	 * @param int   $current_height The current height of the image.
+	 * @param int   $max_width      The maximum width permitted.
+	 * @param int   $max_height     The maximum height permitted.
 	 */
 	return apply_filters( 'wp_constrain_dimensions', array( $w, $h ), $current_width, $current_height, $max_width, $max_height );
 }
@@ -505,11 +502,13 @@ function wp_constrain_dimensions( $current_width, $current_height, $max_width = 
  */
 function image_resize_dimensions( $orig_w, $orig_h, $dest_w, $dest_h, $crop = false ) {
 
-	if ($orig_w <= 0 || $orig_h <= 0)
+	if ( $orig_w <= 0 || $orig_h <= 0 ) {
 		return false;
+	}
 	// at least one of dest_w or dest_h must be specific
-	if ($dest_w <= 0 && $dest_h <= 0)
+	if ( $dest_w <= 0 && $dest_h <= 0 ) {
 		return false;
+	}
 
 	/**
 	 * Filters whether to preempt calculating the image resize dimensions.
@@ -528,14 +527,15 @@ function image_resize_dimensions( $orig_w, $orig_h, $dest_w, $dest_h, $crop = fa
 	 *                           An array can specify positioning of the crop area. Default false.
 	 */
 	$output = apply_filters( 'image_resize_dimensions', null, $orig_w, $orig_h, $dest_w, $dest_h, $crop );
-	if ( null !== $output )
+	if ( null !== $output ) {
 		return $output;
+	}
 
 	if ( $crop ) {
 		// crop the largest possible portion of the original image that we can size to $dest_w x $dest_h
 		$aspect_ratio = $orig_w / $orig_h;
-		$new_w = min($dest_w, $orig_w);
-		$new_h = min($dest_h, $orig_h);
+		$new_w        = min( $dest_w, $orig_w );
+		$new_h        = min( $dest_h, $orig_h );
 
 		if ( ! $new_w ) {
 			$new_w = (int) round( $new_h * $aspect_ratio );
@@ -545,10 +545,10 @@ function image_resize_dimensions( $orig_w, $orig_h, $dest_w, $dest_h, $crop = fa
 			$new_h = (int) round( $new_w / $aspect_ratio );
 		}
 
-		$size_ratio = max($new_w / $orig_w, $new_h / $orig_h);
+		$size_ratio = max( $new_w / $orig_w, $new_h / $orig_h );
 
-		$crop_w = round($new_w / $size_ratio);
-		$crop_h = round($new_h / $size_ratio);
+		$crop_w = round( $new_w / $size_ratio );
+		$crop_h = round( $new_h / $size_ratio );
 
 		if ( ! is_array( $crop ) || count( $crop ) !== 2 ) {
 			$crop = array( 'center', 'center' );
@@ -613,8 +613,9 @@ function image_make_intermediate_size( $file, $width, $height, $crop = false ) {
 	if ( $width || $height ) {
 		$editor = wp_get_image_editor( $file );
 
-		if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) )
+		if ( is_wp_error( $editor ) || is_wp_error( $editor->resize( $width, $height, $crop ) ) ) {
 			return false;
+		}
 
 		$resized_file = $editor->save();
 
@@ -644,10 +645,10 @@ function wp_image_matches_ratio( $source_width, $source_height, $target_width, $
 	 */
 	if ( $source_width > $target_width ) {
 		$constrained_size = wp_constrain_dimensions( $source_width, $source_height, $target_width );
-		$expected_size = array( $target_width, $target_height );
+		$expected_size    = array( $target_width, $target_height );
 	} else {
 		$constrained_size = wp_constrain_dimensions( $target_width, $target_height, $source_width );
-		$expected_size = array( $source_width, $source_height );
+		$expected_size    = array( $source_width, $source_height );
 	}
 
 	// If the image dimensions are within 1px of the expected size, we consider it a match.
@@ -693,7 +694,7 @@ function wp_image_matches_ratio( $source_width, $source_height, $target_width, $
  * }
  */
 function image_get_intermediate_size( $post_id, $size = 'thumbnail' ) {
-	if ( ! $size || ! is_array( $imagedata = wp_get_attachment_metadata( $post_id ) ) || empty( $imagedata['sizes'] )  ) {
+	if ( ! $size || ! is_array( $imagedata = wp_get_attachment_metadata( $post_id ) ) || empty( $imagedata['sizes'] ) ) {
 		return false;
 	}
 
@@ -737,11 +738,11 @@ function image_get_intermediate_size( $post_id, $size = 'thumbnail' ) {
 			}
 
 			$data = array_shift( $candidates );
-		/*
-		 * When the size requested is smaller than the thumbnail dimensions, we
-		 * fall back to the thumbnail size to maintain backwards compatibility with
-		 * pre 4.6 versions of WordPress.
-		 */
+			/*
+			* When the size requested is smaller than the thumbnail dimensions, we
+			* fall back to the thumbnail size to maintain backwards compatibility with
+			* pre 4.6 versions of WordPress.
+			*/
 		} elseif ( ! empty( $imagedata['sizes']['thumbnail'] ) && $imagedata['sizes']['thumbnail']['width'] >= $size[0] && $imagedata['sizes']['thumbnail']['width'] >= $size[1] ) {
 			$data = $imagedata['sizes']['thumbnail'];
 		} else {
@@ -762,9 +763,9 @@ function image_get_intermediate_size( $post_id, $size = 'thumbnail' ) {
 
 	// include the full filesystem path of the intermediate file
 	if ( empty( $data['path'] ) && ! empty( $data['file'] ) && ! empty( $imagedata['file'] ) ) {
-		$file_url = wp_get_attachment_url($post_id);
-		$data['path'] = path_join( dirname($imagedata['file']), $data['file'] );
-		$data['url'] = path_join( dirname($file_url), $data['file'] );
+		$file_url     = wp_get_attachment_url( $post_id );
+		$data['path'] = path_join( dirname( $imagedata['file'] ), $data['file'] );
+		$data['url']  = path_join( dirname( $file_url ), $data['file'] );
 	}
 
 	/**
@@ -792,7 +793,7 @@ function image_get_intermediate_size( $post_id, $size = 'thumbnail' ) {
  */
 function get_intermediate_image_sizes() {
 	$_wp_additional_image_sizes = wp_get_additional_image_sizes();
-	$image_sizes = array('thumbnail', 'medium', 'medium_large', 'large'); // Standard sizes
+	$image_sizes                = array( 'thumbnail', 'medium', 'medium_large', 'large' ); // Standard sizes
 	if ( ! empty( $_wp_additional_image_sizes ) ) {
 		$image_sizes = array_merge( $image_sizes, array_keys( $_wp_additional_image_sizes ) );
 	}
@@ -836,7 +837,7 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
 			/** This filter is documented in wp-includes/post.php */
 			$icon_dir = apply_filters( 'icon_dir', ABSPATH . WPINC . '/images/media' );
 
-			$src_file = $icon_dir . '/' . wp_basename( $src );
+			$src_file               = $icon_dir . '/' . wp_basename( $src );
 			list( $width, $height ) = @getimagesize( $src_file );
 		}
 
@@ -875,24 +876,39 @@ function wp_get_attachment_image_src( $attachment_id, $size = 'thumbnail', $icon
  * @param string|array $attr          Optional. Attributes for the image markup. Default empty.
  * @return string HTML img element or empty string on failure.
  */
-function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
-	$html = '';
-	$image = wp_get_attachment_image_src($attachment_id, $size, $icon);
+function wp_get_attachment_image( $attachment_id, $size = 'thumbnail', $icon = false, $attr = '' ) {
+	$html  = '';
+	$image = wp_get_attachment_image_src( $attachment_id, $size, $icon );
+
 	if ( $image ) {
-		list($src, $width, $height) = $image;
-		$hwstring = image_hwstring($width, $height);
-		$size_class = $size;
+		list( $src, $width, $height ) = $image;
+
+		$attachment   = get_post( $attachment_id );
+		$hwstring     = image_hwstring( $width, $height );
+		$size_class   = $size;
+
 		if ( is_array( $size_class ) ) {
 			$size_class = join( 'x', $size_class );
 		}
-		$attachment = get_post($attachment_id);
+
 		$default_attr = array(
-			'src'	=> $src,
-			'class'	=> "attachment-$size_class size-$size_class",
-			'alt'	=> trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) ),
+			'src'   => $src,
+			'class' => "attachment-$size_class size-$size_class",
+			'alt'   => trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) ),
 		);
 
+		// Add `loading` attribute.
+		if ( wp_lazy_loading_enabled( 'img', 'wp_get_attachment_image' ) ) {
+			$default_attr['loading'] = wp_get_loading_attr_default( 'wp_get_attachment_image' );
+		}
+
 		$attr = wp_parse_args( $attr, $default_attr );
+
+		// If `loading` attribute default of `lazy` is overridden for this
+		// image to omit the attribute, ensure it is not included.
+		if ( array_key_exists( 'loading', $attr ) && ! $attr['loading'] ) {
+			unset( $attr['loading'] );
+		}
 
 		// Generate 'srcset' and 'sizes' if not already present.
 		if ( empty( $attr['srcset'] ) ) {
@@ -900,8 +916,8 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 
 			if ( is_array( $image_meta ) ) {
 				$size_array = array( absint( $width ), absint( $height ) );
-				$srcset = wp_calculate_image_srcset( $size_array, $src, $image_meta, $attachment_id );
-				$sizes = wp_calculate_image_sizes( $size_array, $src, $image_meta, $attachment_id );
+				$srcset     = wp_calculate_image_srcset( $size_array, $src, $image_meta, $attachment_id );
+				$sizes      = wp_calculate_image_sizes( $size_array, $src, $image_meta, $attachment_id );
 
 				if ( $srcset && ( $sizes || ! empty( $attr['sizes'] ) ) ) {
 					$attr['srcset'] = $srcset;
@@ -918,17 +934,21 @@ function wp_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 		 *
 		 * @since WP-2.8.0
 		 *
-		 * @param array        $attr       Attributes for the image markup.
+		 * @param array        $attr       Array of attribute values for the image markup, keyed by attribute name.
+		 *                                 See wp_get_attachment_image().
 		 * @param WP_Post      $attachment Image attachment post.
 		 * @param string|array $size       Requested size. Image size or array of width and height values
 		 *                                 (in that order). Default 'thumbnail'.
 		 */
 		$attr = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment, $size );
+
 		$attr = array_map( 'esc_attr', $attr );
-		$html = rtrim("<img $hwstring");
+		$html = rtrim( "<img $hwstring" );
+
 		foreach ( $attr as $name => $value ) {
 			$html .= " $name=" . '"' . $value . '"';
 		}
+
 		$html .= ' />';
 	}
 
@@ -990,15 +1010,15 @@ function _wp_get_attachment_relative_path( $file ) {
  *                    or false if the size doesn't exist.
  */
 function _wp_get_image_size_from_meta( $size_name, $image_meta ) {
-	if ( $size_name === 'full' ) {
+	if ( 'full' === $size_name ) {
 		return array(
 			absint( $image_meta['width'] ),
 			absint( $image_meta['height'] ),
 		);
-	} elseif ( ! empty( $image_meta['sizes'][$size_name] ) ) {
+	} elseif ( ! empty( $image_meta['sizes'][ $size_name ] ) ) {
 		return array(
-			absint( $image_meta['sizes'][$size_name]['width'] ),
-			absint( $image_meta['sizes'][$size_name]['height'] ),
+			absint( $image_meta['sizes'][ $size_name ]['width'] ),
+			absint( $image_meta['sizes'][ $size_name ]['height'] ),
 		);
 	}
 
@@ -1028,10 +1048,10 @@ function wp_get_attachment_image_srcset( $attachment_id, $size = 'medium', $imag
 		$image_meta = wp_get_attachment_metadata( $attachment_id );
 	}
 
-	$image_src = $image[0];
+	$image_src  = $image[0];
 	$size_array = array(
 		absint( $image[1] ),
-		absint( $image[2] )
+		absint( $image[2] ),
 	);
 
 	return wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attachment_id );
@@ -1068,7 +1088,7 @@ function wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attac
 	$image_sizes = $image_meta['sizes'];
 
 	// Get the width and height of the image.
-	$image_width = (int) $size_array[0];
+	$image_width  = (int) $size_array[0];
 	$image_height = (int) $size_array[1];
 
 	// Bail early if error/no width.
@@ -1100,7 +1120,7 @@ function wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attac
 		$dirname = trailingslashit( $dirname );
 	}
 
-	$upload_dir = wp_get_upload_dir();
+	$upload_dir    = wp_get_upload_dir();
 	$image_baseurl = trailingslashit( $upload_dir['baseurl'] ) . $dirname;
 
 	/*
@@ -1246,10 +1266,10 @@ function wp_get_attachment_image_sizes( $attachment_id, $size = 'medium', $image
 		$image_meta = wp_get_attachment_metadata( $attachment_id );
 	}
 
-	$image_src = $image[0];
+	$image_src  = $image[0];
 	$size_array = array(
 		absint( $image[1] ),
-		absint( $image[2] )
+		absint( $image[2] ),
 	);
 
 	return wp_calculate_image_sizes( $size_array, $image_src, $image_meta, $attachment_id );
@@ -1310,50 +1330,99 @@ function wp_calculate_image_sizes( $size, $image_src = null, $image_meta = null,
 }
 
 /**
- * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
+ * Determines if the image meta data is for the image source file.
  *
- * @since WP-4.4.0
+ * The image meta data is retrieved by attachment post ID. In some cases the post IDs may change.
+ * For example when the website is exported and imported at another website. Then the
+ * attachment post IDs that are in post_content for the exported website may not match
+ * the same attachments at the new website.
  *
- * @see wp_image_add_srcset_and_sizes()
+ * @since WP-5.5.0
  *
- * @param string $content The raw post content to be filtered.
- * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
+ * @param string $image_location  The full path or URI to the image file.
+ * @param array  $image_meta      The attachment meta data as returned by 'wp_get_attachment_metadata()'.
+ * @return bool Whether the image meta is for this image file.
  */
-function wp_make_content_images_responsive( $content ) {
-	if ( ! preg_match_all( '/<img [^>]+>/', $content, $matches ) ) {
-		return $content;
-	}
+function wp_image_file_matches_image_meta( $image_location, $image_meta ) {
+	$match = false;
 
-	$selected_images = $attachment_ids = array();
+	// Ensure the $image_meta is valid.
+	if ( isset( $image_meta['file'] ) && strlen( $image_meta['file'] ) > 4 ) {
+		// Remove quiery args if image URI.
+		list( $image_location ) = explode( '?', $image_location );
 
-	foreach( $matches[0] as $image ) {
-		if ( false === strpos( $image, ' srcset=' ) && preg_match( '/wp-image-([0-9]+)/i', $image, $class_id ) &&
-			( $attachment_id = absint( $class_id[1] ) ) ) {
+		// Check if the relative image path from the image meta is at the end of $image_location.
+		if ( strrpos( $image_location, $image_meta['file'] ) === strlen( $image_location ) - strlen( $image_meta['file'] ) ) {
+			$match = true;
+		} elseif ( ! empty( $image_meta['sizes'] ) ) {
+			// Retrieve the uploads sub-directory from the full size image.
+			$dirname = _wp_get_attachment_relative_path( $image_meta['file'] );
 
-			/*
-			 * If exactly the same image tag is used more than once, overwrite it.
-			 * All identical tags will be replaced later with 'str_replace()'.
-			 */
-			$selected_images[ $image ] = $attachment_id;
-			// Overwrite the ID when the same image is included more than once.
-			$attachment_ids[ $attachment_id ] = true;
+			if ( $dirname ) {
+				$dirname = trailingslashit( $dirname );
+			}
+
+			foreach ( $image_meta['sizes'] as $image_size_data ) {
+				$relative_path = $dirname . $image_size_data['file'];
+
+				if ( strrpos( $image_location, $relative_path ) === strlen( $image_location ) - strlen( $relative_path ) ) {
+					$match = true;
+					break;
+				}
+			}
 		}
 	}
 
-	if ( count( $attachment_ids ) > 1 ) {
-		/*
-		 * Warm the object cache with post and meta information for all found
-		 * images to avoid making individual database calls.
-		 */
-		_prime_post_caches( array_keys( $attachment_ids ), false, true );
+	/**
+	 * Filter whether an image path or URI matches image meta.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param bool   $match          Whether the image relative path from the image meta
+	 *                               matches the end of the URI or path to the image file.
+	 * @param string $image_location Full path or URI to the tested image file.
+	 * @param array  $image_meta     The image meta data being tested.
+	 */
+	return apply_filters( 'wp_image_file_matches_image_meta', $match, $image_location, $image_meta );
+}
+
+/**
+ * Determines an image's width and height dimensions based on the source file.
+ *
+ * @since WP-5.5.0
+ *
+ * @param string $image_src  The image source file.
+ * @param array  $image_meta The image meta data as returned by 'wp_get_attachment_metadata()'.
+ * @return array|false Array with first element being the width and second element being the height,
+ *                     or false if dimensions cannot be determined.
+ */
+function wp_image_src_get_dimensions( $image_src, $image_meta ) {
+	if ( ! wp_image_file_matches_image_meta( $image_src, $image_meta ) ) {
+		return false;
 	}
 
-	foreach ( $selected_images as $image => $attachment_id ) {
-		$image_meta = wp_get_attachment_metadata( $attachment_id );
-		$content = str_replace( $image, wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ), $content );
+	// Is it a full size image?
+	if ( strpos( $image_src, $image_meta['file'] ) !== false ) {
+		return array(
+			(int) $image_meta['width'],
+			(int) $image_meta['height'],
+		);
 	}
 
-	return $content;
+	if ( ! empty( $image_meta['sizes'] ) ) {
+		$src_filename = wp_basename( $image_src );
+
+		foreach ( $image_meta['sizes'] as $image_size_data ) {
+			if ( $src_filename === $image_size_data['file'] ) {
+				return array(
+					(int) $image_size_data['width'],
+					(int) $image_size_data['height'],
+				);
+			}
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -1375,7 +1444,7 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 		return $image;
 	}
 
-	$image_src = preg_match( '/src="([^"]+)"/', $image, $match_src ) ? $match_src[1] : '';
+	$image_src         = preg_match( '/src="([^"]+)"/', $image, $match_src ) ? $match_src[1] : '';
 	list( $image_src ) = explode( '?', $image_src );
 
 	// Return early if we couldn't get the image source.
@@ -1390,35 +1459,18 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 		return $image;
 	}
 
-	$width  = preg_match( '/ width="([0-9]+)"/',  $image, $match_width  ) ? (int) $match_width[1]  : 0;
+	$width  = preg_match( '/ width="([0-9]+)"/', $image, $match_width ) ? (int) $match_width[1] : 0;
 	$height = preg_match( '/ height="([0-9]+)"/', $image, $match_height ) ? (int) $match_height[1] : 0;
 
-	if ( ! $width || ! $height ) {
-		/*
-		 * If attempts to parse the size value failed, attempt to use the image meta data to match
-		 * the image file name from 'src' against the available sizes for an attachment.
-		 */
-		$image_filename = wp_basename( $image_src );
-
-		if ( $image_filename === wp_basename( $image_meta['file'] ) ) {
-			$width = (int) $image_meta['width'];
-			$height = (int) $image_meta['height'];
-		} else {
-			foreach( $image_meta['sizes'] as $image_size_data ) {
-				if ( $image_filename === $image_size_data['file'] ) {
-					$width = (int) $image_size_data['width'];
-					$height = (int) $image_size_data['height'];
-					break;
-				}
-			}
+	if ( $width && $height ) {
+		$size_array = array( $width, $height );
+	} else {
+		$size_array = wp_image_src_get_dimensions( $image_src, $image_meta, $attachment_id );
+		if ( ! $size_array ) {
+			return $image;
 		}
 	}
 
-	if ( ! $width || ! $height ) {
-		return $image;
-	}
-
-	$size_array = array( $width, $height );
 	$srcset = wp_calculate_image_srcset( $size_array, $image_src, $image_meta, $attachment_id );
 
 	if ( $srcset ) {
@@ -1438,11 +1490,342 @@ function wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id ) {
 			$attr .= sprintf( ' sizes="%s"', esc_attr( $sizes ) );
 		}
 
-		// Add 'srcset' and 'sizes' attributes to the image markup.
-		$image = preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
+		// Add the srcset and sizes attributes to the image markup.
+		return preg_replace( '/<img ([^>]+?)[\/ ]*>/', '<img $1' . $attr . ' />', $image );
 	}
 
 	return $image;
+}
+
+/**
+ * Determine whether to add the `loading` attribute to the specified tag in the specified context.
+ *
+ * @since WP-5.5.0
+ * @since WP-5.7.0 Now returns `true` by default for `iframe` tags.
+ *
+ * @param string $tag_name The tag name.
+ * @param string $context Additional context, like the current filter name or the function name from where this was called.
+ * @return bool Whether to add the attribute.
+ */
+function wp_lazy_loading_enabled( $tag_name, $context ) {
+	// By default add to all 'img' and 'iframe' tags.
+	// See https://html.spec.whatwg.org/multipage/embedded-content.html#attr-img-loading
+	// See https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-loading
+	$default = ( 'img' === $tag_name || 'iframe' === $tag_name );
+
+	/**
+	 * Filters whether to add the `loading` attribute to the specified tag in the specified context.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param bool   $default Default value.
+	 * @param string $tag_name The tag name.
+	 * @param string $context Additional context, like the current filter name or the function name from where this was called.
+	 */
+	return (bool) apply_filters( 'wp_lazy_loading_enabled', $default, $tag_name, $context );
+}
+
+/**
+ * Filters specific tags in post content and modifies their markup.
+ *
+ * Modifies HTML tags in post content to include new browser and HTML technologies
+ * that may not have existed at the time of post creation. These modifications currently
+ * include adding `srcset`, `sizes`, and `loading` attributes to `img` HTML tags, as well
+ * as adding `loading` attributes to `iframe` HTML tags.
+ * Future similar optimizations should be added/expected here.
+ *
+ * @since WP-5.5.0
+ * @since WP-5.7.0 Now supports adding `loading` attributes to `iframe` tags.
+ *
+ * @see wp_img_tag_add_width_and_height_attr()
+ * @see wp_img_tag_add_srcset_and_sizes_attr()
+ * @see wp_img_tag_add_loading_attr()
+ * @see wp_iframe_tag_add_loading_attr()
+ *
+ * @param string $content The HTML content to be filtered.
+ * @param string $context Optional. Additional context to pass to the filters. Defaults to `current_filter()` when not set.
+ * @return string Converted content with images modified.
+ */
+function wp_filter_content_tags( $content, $context = null ) {
+	if ( null === $context ) {
+		$context = current_filter();
+	}
+
+	$add_img_loading_attr    = wp_lazy_loading_enabled( 'img', $context );
+	$add_iframe_loading_attr = wp_lazy_loading_enabled( 'iframe', $context );
+
+	if ( ! preg_match_all( '/<(img|iframe)\s[^>]+>/', $content, $matches, PREG_SET_ORDER ) ) {
+		return $content;
+	}
+
+	// List of the unique `img` tags found in $content.
+	$images = array();
+
+	// List of the unique `iframe` tags found in $content.
+	$iframes = array();
+
+	foreach ( $matches as $match ) {
+		list( $tag, $tag_name ) = $match;
+
+		switch ( $tag_name ) {
+			case 'img':
+				if ( preg_match( '/wp-image-([0-9]+)/i', $tag, $class_id ) ) {
+					$attachment_id = absint( $class_id[1] );
+
+					if ( $attachment_id ) {
+						// If exactly the same image tag is used more than once, overwrite it.
+						// All identical tags will be replaced later with 'str_replace()'.
+								$images[ $tag ] = $attachment_id;
+								break;
+					}
+				}
+				$images[ $tag ] = 0;
+				break;
+			case 'iframe':
+				$iframes[ $tag ] = 0;
+				break;
+		}
+	}
+
+	// Reduce the array to unique attachment IDs.
+	$attachment_ids = array_unique( array_filter( array_values( $images ) ) );
+
+	if ( count( $attachment_ids ) > 1 ) {
+		/*
+		 * Warm the object cache with post and meta information for all found
+		 * images to avoid making individual database calls.
+		 */
+		_prime_post_caches( $attachment_ids, false, true );
+	}
+
+	// Iterate through the matches in order of occurrence as it is relevant for whether or not to lazy-load.
+	foreach ( $matches as $match ) {
+		// Filter an image match.
+		if ( isset( $images[ $match[0] ] ) ) {
+			$filtered_image = $match[0];
+			$attachment_id  = $images[ $match[0] ];
+
+			// Add 'width' and 'height' attributes if applicable.
+			if ( $attachment_id > 0 && false === strpos( $filtered_image, ' width=' ) && false === strpos( $filtered_image, ' height=' ) ) {
+				$filtered_image = wp_img_tag_add_width_and_height_attr( $filtered_image, $context, $attachment_id );
+			}
+
+			// Add 'srcset' and 'sizes' attributes if applicable.
+			if ( $attachment_id > 0 && false === strpos( $filtered_image, ' srcset=' ) ) {
+				$filtered_image = wp_img_tag_add_srcset_and_sizes_attr( $filtered_image, $context, $attachment_id );
+			}
+
+			// Add 'loading' attribute if applicable.
+			if ( $add_img_loading_attr && false === strpos( $filtered_image, ' loading=' ) ) {
+				$filtered_image = wp_img_tag_add_loading_attr( $filtered_image, $context );
+			}
+
+			if ( $filtered_image !== $match[0] ) {
+				$content = str_replace( $match[0], $filtered_image, $content );
+			}
+		}
+
+		// Filter an iframe match.
+		if ( isset( $iframes[ $match[0] ] ) ) {
+			$filtered_iframe = $match[0];
+
+			// Add 'loading' attribute if applicable.
+			if ( $add_iframe_loading_attr && false === strpos( $filtered_iframe, ' loading=' ) ) {
+				$filtered_iframe = wp_iframe_tag_add_loading_attr( $filtered_iframe, $context );
+			}
+
+			if ( $filtered_iframe !== $match[0] ) {
+				$content = str_replace( $match[0], $filtered_iframe, $content );
+			}
+		}
+	}
+
+	return $content;
+}
+
+/**
+ * Adds `loading` attribute to an `img` HTML tag.
+ *
+ * @since WP-5.5.0
+ *
+ * @param string $image   The HTML `img` tag where the attribute should be added.
+ * @param string $context Additional context to pass to the filters.
+ * @return string Converted `img` tag with `loading` attribute added.
+ */
+function wp_img_tag_add_loading_attr( $image, $context ) {
+	// Get loading attribute value to use. This must occur before the conditional check below so that even images that
+	// are ineligible for being lazy-loaded are considered.
+	$value = wp_get_loading_attr_default( $context );
+
+	// Images should have source and dimension attributes for the `loading` attribute to be added.
+	if ( false === strpos( $image, ' src="' ) || false === strpos( $image, ' width="' ) || false === strpos( $image, ' height="' ) ) {
+		return $image;
+	}
+
+	/**
+	 * Filters the `loading` attribute value to add to an image. Default `lazy`.
+	 *
+	 * Returning `false` or an empty string will not add the attribute.
+	 * Returning `true` will add the default value.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param string|bool $value   The `loading` attribute value. Returning a falsey value will result in
+	 *                             the attribute being omitted for the image.
+	 * @param string $image   The HTML `img` tag to be filtered.
+	 * @param string $context Additional context about how the function was called or where the img tag is.
+	 */
+	$value = apply_filters( 'wp_img_tag_add_loading_attr', $value, $image, $context );
+
+	if ( $value ) {
+		if ( ! in_array( $value, array( 'lazy', 'eager' ), true ) ) {
+			$value = 'lazy';
+		}
+
+		// Images should have source and dimension attributes for the `loading` attribute to be added.
+		if ( false === strpos( $image, ' src="' ) || false === strpos( $image, ' width="' ) || false === strpos( $image, ' height="' ) ) {
+			return $image;
+		}
+
+		return str_replace( '<img', '<img loading="' . esc_attr( $value ) . '"', $image );
+	}
+
+	return $image;
+}
+
+/**
+ * Adds `width` and `height` attributes to an `img` HTML tag.
+ *
+ * @since WP-5.5.0
+ *
+ * @param string $image         The HTML `img` tag where the attribute should be added.
+ * @param string $context       Additional context to pass to the filters.
+ * @param int    $attachment_id Image attachment ID.
+ * @return string Converted 'img' element with 'width' and 'height' attributes added.
+ */
+function wp_img_tag_add_width_and_height_attr( $image, $context, $attachment_id ) {
+	$image_src         = preg_match( '/src="([^"]+)"/', $image, $match_src ) ? $match_src[1] : '';
+	list( $image_src ) = explode( '?', $image_src );
+
+	// Return early if we couldn't get the image source.
+	if ( ! $image_src ) {
+		return $image;
+	}
+
+	/**
+	 * Filters whether to add the missing `width` and `height` HTML attributes to the img tag. Default `true`.
+	 *
+	 * Returning anything else than `true` will not add the attributes.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param bool   $value         The filtered value, defaults to `true`.
+	 * @param string $image         The HTML `img` tag where the attribute should be added.
+	 * @param string $context       Additional context about how the function was called or where the img tag is.
+	 * @param int    $attachment_id The image attachment ID.
+	 */
+	$add = apply_filters( 'wp_img_tag_add_width_and_height_attr', true, $image, $context, $attachment_id );
+
+	if ( true === $add ) {
+		$image_meta = wp_get_attachment_metadata( $attachment_id );
+		$size_array = wp_image_src_get_dimensions( $image_src, $image_meta );
+
+		if ( $size_array ) {
+			$hw = trim( image_hwstring( $size_array[0], $size_array[1] ) );
+			return str_replace( '<img', "<img {$hw}", $image );
+		}
+	}
+
+	return $image;
+}
+
+/**
+ * Adds `srcset` and `sizes` attributes to an existing `img` HTML tag.
+ *
+ * @since WP-5.5.0
+ *
+ * @param string $image         The HTML `img` tag where the attribute should be added.
+ * @param string $context       Additional context to pass to the filters.
+ * @param int    $attachment_id Image attachment ID.
+ * @return string Converted 'img' element with 'loading' attribute added.
+ */
+function wp_img_tag_add_srcset_and_sizes_attr( $image, $context, $attachment_id ) {
+	/**
+	 * Filters whether to add the `srcset` and `sizes` HTML attributes to the img tag. Default `true`.
+	 *
+	 * Returning anything else than `true` will not add the attributes.
+	 *
+	 * @since WP-5.5.0
+	 *
+	 * @param bool   $value         The filtered value, defaults to `true`.
+	 * @param string $image         The HTML `img` tag where the attribute should be added.
+	 * @param string $context       Additional context about how the function was called or where the img tag is.
+	 * @param int    $attachment_id The image attachment ID.
+	 */
+	$add = apply_filters( 'wp_img_tag_add_srcset_and_sizes_attr', true, $image, $context, $attachment_id );
+
+	if ( true === $add ) {
+		$image_meta = wp_get_attachment_metadata( $attachment_id );
+		return wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
+	}
+
+	return $image;
+}
+
+/**
+ * Adds `loading` attribute to an `iframe` HTML tag.
+ *
+ * @since WP-5.7.0
+ *
+ * @param string $iframe  The HTML `iframe` tag where the attribute should be added.
+ * @param string $context Additional context to pass to the filters.
+ * @return string Converted `iframe` tag with `loading` attribute added.
+ */
+function wp_iframe_tag_add_loading_attr( $iframe, $context ) {
+	// Iframes with fallback content (see `wp_filter_oembed_result()`) should not be lazy-loaded because they are
+	// visually hidden initially.
+	if ( false !== strpos( $iframe, ' data-secret="' ) ) {
+		return $iframe;
+	}
+
+	// Get loading attribute value to use. This must occur before the conditional check below so that even iframes that
+	// are ineligible for being lazy-loaded are considered.
+	$value = wp_get_loading_attr_default( $context );
+
+	// Iframes should have source and dimension attributes for the `loading` attribute to be added.
+	if ( false === strpos( $iframe, ' src="' ) || false === strpos( $iframe, ' width="' ) || false === strpos( $iframe, ' height="' ) ) {
+		return $iframe;
+	}
+
+	/**
+	 * Filters the `loading` attribute value to add to an iframe. Default `lazy`.
+	 *
+	 * Returning `false` or an empty string will not add the attribute.
+	 * Returning `true` will add the default value.
+	 *
+	 * @since WP-5.7.0
+	 *
+	 * @param string|bool $value   The `loading` attribute value. Returning a falsey value will result in
+	 *                             the attribute being omitted for the iframe.
+	 * @param string      $iframe  The HTML `iframe` tag to be filtered.
+	 * @param string      $context Additional context about how the function was called or where the iframe tag is.
+	 */
+	$value = apply_filters( 'wp_iframe_tag_add_loading_attr', $value, $iframe, $context );
+
+	if ( $value ) {
+		if ( ! in_array( $value, array( 'lazy', 'eager' ), true ) ) {
+			$value = 'lazy';
+		}
+
+		// Iframes should have source and dimension attributes for the `loading` attribute to be added.
+		if ( false === strpos( $iframe, ' src="' ) || false === strpos( $iframe, ' width="' ) || false === strpos( $iframe, ' height="' ) ) {
+			return $iframe;
+		}
+
+		return str_replace( '<iframe', '<iframe loading="' . esc_attr( $value ) . '"', $iframe );
+	}
+
+	return $iframe;
 }
 
 /**
@@ -1488,8 +1871,8 @@ function _wp_post_thumbnail_class_filter_remove( $attr ) {
 	remove_filter( 'wp_get_attachment_image_attributes', '_wp_post_thumbnail_class_filter' );
 }
 
-add_shortcode('wp_caption', 'img_caption_shortcode');
-add_shortcode('caption', 'img_caption_shortcode');
+add_shortcode( 'wp_caption', 'img_caption_shortcode' );
+add_shortcode( 'caption', 'img_caption_shortcode' );
 
 /**
  * Builds the Caption shortcode output.
@@ -1520,7 +1903,7 @@ function img_caption_shortcode( $attr, $content = null ) {
 	// New-style shortcode with the caption inside the shortcode with the link and image tags.
 	if ( ! isset( $attr['caption'] ) ) {
 		if ( preg_match( '#((?:<a [^>]+>\s*)?<img [^>]+>(?:\s*</a>)?)(.*)#is', $content, $matches ) ) {
-			$content = $matches[1];
+			$content         = $matches[1];
 			$attr['caption'] = trim( $matches[2] );
 		}
 	} elseif ( strpos( $attr['caption'], '<' ) !== false ) {
@@ -1542,23 +1925,30 @@ function img_caption_shortcode( $attr, $content = null ) {
 	 * @param string $content The image element, possibly wrapped in a hyperlink.
 	 */
 	$output = apply_filters( 'img_caption_shortcode', '', $attr, $content );
-	if ( $output != '' )
+	if ( $output != '' ) {
 		return $output;
+	}
 
-	$atts = shortcode_atts( array(
-		'id'	  => '',
-		'align'	  => 'alignnone',
-		'width'	  => '',
-		'caption' => '',
-		'class'   => '',
-	), $attr, 'caption' );
+	$atts = shortcode_atts(
+		array(
+			'id'      => '',
+			'align'   => 'alignnone',
+			'width'   => '',
+			'caption' => '',
+			'class'   => '',
+		),
+		$attr,
+		'caption'
+	);
 
 	$atts['width'] = (int) $atts['width'];
-	if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
+	if ( $atts['width'] < 1 || empty( $atts['caption'] ) ) {
 		return $content;
+	}
 
-	if ( ! empty( $atts['id'] ) )
+	if ( ! empty( $atts['id'] ) ) {
 		$atts['id'] = 'id="' . esc_attr( sanitize_html_class( $atts['id'] ) ) . '" ';
+	}
 
 	$class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
 
@@ -1599,7 +1989,7 @@ function img_caption_shortcode( $attr, $content = null ) {
 	return $html;
 }
 
-add_shortcode('gallery', 'gallery_shortcode');
+add_shortcode( 'gallery', 'gallery_shortcode' );
 
 /**
  * Builds the Gallery shortcode output.
@@ -1670,33 +2060,65 @@ function gallery_shortcode( $attr ) {
 	}
 
 	$html5 = current_theme_supports( 'html5', 'gallery' );
-	$atts = shortcode_atts( array(
-		'order'      => 'ASC',
-		'orderby'    => 'menu_order ID',
-		'id'         => $post ? $post->ID : 0,
-		'itemtag'    => $html5 ? 'figure'     : 'dl',
-		'icontag'    => $html5 ? 'div'        : 'dt',
-		'captiontag' => $html5 ? 'figcaption' : 'dd',
-		'columns'    => 3,
-		'size'       => 'thumbnail',
-		'include'    => '',
-		'exclude'    => '',
-		'link'       => ''
-	), $attr, 'gallery' );
+	$atts  = shortcode_atts(
+		array(
+			'order'      => 'ASC',
+			'orderby'    => 'menu_order ID',
+			'id'         => $post ? $post->ID : 0,
+			'itemtag'    => $html5 ? 'figure' : 'dl',
+			'icontag'    => $html5 ? 'div' : 'dt',
+			'captiontag' => $html5 ? 'figcaption' : 'dd',
+			'columns'    => 3,
+			'size'       => 'thumbnail',
+			'include'    => '',
+			'exclude'    => '',
+			'link'       => '',
+		),
+		$attr,
+		'gallery'
+	);
 
 	$id = intval( $atts['id'] );
 
 	if ( ! empty( $atts['include'] ) ) {
-		$_attachments = get_posts( array( 'include' => $atts['include'], 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $atts['order'], 'orderby' => $atts['orderby'] ) );
+		$_attachments = get_posts(
+			array(
+				'include'        => $atts['include'],
+				'post_status'    => 'inherit',
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'order'          => $atts['order'],
+				'orderby'        => $atts['orderby'],
+			)
+		);
 
 		$attachments = array();
 		foreach ( $_attachments as $key => $val ) {
-			$attachments[$val->ID] = $_attachments[$key];
+			$attachments[ $val->ID ] = $_attachments[ $key ];
 		}
 	} elseif ( ! empty( $atts['exclude'] ) ) {
-		$attachments = get_children( array( 'post_parent' => $id, 'exclude' => $atts['exclude'], 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $atts['order'], 'orderby' => $atts['orderby'] ) );
+		$attachments = get_children(
+			array(
+				'post_parent'    => $id,
+				'exclude'        => $atts['exclude'],
+				'post_status'    => 'inherit',
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'order'          => $atts['order'],
+				'orderby'        => $atts['orderby'],
+			)
+		);
 	} else {
-		$attachments = get_children( array( 'post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $atts['order'], 'orderby' => $atts['orderby'] ) );
+		$attachments = get_children(
+			array(
+				'post_parent'    => $id,
+				'post_status'    => 'inherit',
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'order'          => $atts['order'],
+				'orderby'        => $atts['orderby'],
+			)
+		);
 	}
 
 	if ( empty( $attachments ) ) {
@@ -1711,9 +2133,9 @@ function gallery_shortcode( $attr ) {
 		return $output;
 	}
 
-	$itemtag = tag_escape( $atts['itemtag'] );
+	$itemtag    = tag_escape( $atts['itemtag'] );
 	$captiontag = tag_escape( $atts['captiontag'] );
-	$icontag = tag_escape( $atts['icontag'] );
+	$icontag    = tag_escape( $atts['icontag'] );
 	$valid_tags = wp_kses_allowed_html( 'post' );
 	if ( ! isset( $valid_tags[ $itemtag ] ) ) {
 		$itemtag = 'dl';
@@ -1725,9 +2147,9 @@ function gallery_shortcode( $attr ) {
 		$icontag = 'dt';
 	}
 
-	$columns = intval( $atts['columns'] );
-	$itemwidth = $columns > 0 ? floor(100/$columns) : 100;
-	$float = is_rtl() ? 'right' : 'left';
+	$columns   = intval( $atts['columns'] );
+	$itemwidth = $columns > 0 ? floor( 100 / $columns ) : 100;
+	$float     = is_rtl() ? 'right' : 'left';
 
 	$selector = "gallery-{$instance}";
 
@@ -1743,8 +2165,10 @@ function gallery_shortcode( $attr ) {
 	 *                    Otherwise, defaults to true.
 	 */
 	if ( apply_filters( 'use_default_gallery_style', ! $html5 ) ) {
+		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
+
 		$gallery_style = "
-		<style type='text/css'>
+		<style{$type_attr}>
 			#{$selector} {
 				margin: auto;
 			}
@@ -1764,7 +2188,7 @@ function gallery_shortcode( $attr ) {
 		</style>\n\t\t";
 	}
 
-	$size_class = sanitize_html_class( $atts['size'] );
+	$size_class  = sanitize_html_class( $atts['size'] );
 	$gallery_div = "<div id='$selector' class='gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}'>";
 
 	/**
@@ -1788,7 +2212,7 @@ function gallery_shortcode( $attr ) {
 		} else {
 			$image_output = wp_get_attachment_link( $id, $atts['size'], true, false, false, $attr );
 		}
-		$image_meta  = wp_get_attachment_metadata( $id );
+		$image_meta = wp_get_attachment_metadata( $id );
 
 		$orientation = '';
 		if ( isset( $image_meta['height'], $image_meta['width'] ) ) {
@@ -1799,19 +2223,20 @@ function gallery_shortcode( $attr ) {
 			<{$icontag} class='gallery-icon {$orientation}'>
 				$image_output
 			</{$icontag}>";
-		if ( $captiontag && trim($attachment->post_excerpt) ) {
+		if ( $captiontag && trim( $attachment->post_excerpt ) ) {
 			$output .= "
 				<{$captiontag} class='wp-caption-text gallery-caption' id='$selector-$id'>
-				" . wptexturize($attachment->post_excerpt) . "
+				" . wptexturize( $attachment->post_excerpt ) . "
 				</{$captiontag}>";
 		}
 		$output .= "</{$itemtag}>";
-		if ( ! $html5 && $columns > 0 && ++$i % $columns == 0 ) {
+
+		if ( ! $html5 && $columns > 0 && 0 === ++$i % $columns ) {
 			$output .= '<br style="clear: both" />';
 		}
 	}
 
-	if ( ! $html5 && $columns > 0 && $i % $columns !== 0 ) {
+	if ( ! $html5 && $columns > 0 && 0 !== $i % $columns ) {
 		$output .= "
 			<br style='clear: both' />";
 	}
@@ -1828,16 +2253,18 @@ function gallery_shortcode( $attr ) {
  * @since WP-3.9.0
  */
 function wp_underscore_playlist_templates() {
-?>
+	?>
 <script type="text/html" id="tmpl-wp-playlist-current-item">
 	<# if ( data.image ) { #>
 	<img src="{{ data.thumb.src }}" alt="" />
 	<# } #>
 	<div class="wp-playlist-caption">
-		<span class="wp-playlist-item-meta wp-playlist-item-title"><?php
+		<span class="wp-playlist-item-meta wp-playlist-item-title">
+		<?php
 			/* translators: playlist item title */
 			printf( _x( '&#8220;%s&#8221;', 'playlist item title' ), '{{ data.title }}' );
-		?></span>
+		?>
+		</span>
 		<# if ( data.meta.album ) { #><span class="wp-playlist-item-meta wp-playlist-item-album">{{ data.meta.album }}</span><# } #>
 		<# if ( data.meta.artist ) { #><span class="wp-playlist-item-meta wp-playlist-item-artist">{{ data.meta.artist }}</span><# } #>
 	</div>
@@ -1849,10 +2276,12 @@ function wp_underscore_playlist_templates() {
 			<# if ( data.caption ) { #>
 				{{ data.caption }}
 			<# } else { #>
-				<span class="wp-playlist-item-title"><?php
+				<span class="wp-playlist-item-title">
+				<?php
 					/* translators: playlist item title */
 					printf( _x( '&#8220;%s&#8221;', 'playlist item title' ), '{{{ data.title }}}' );
-				?></span>
+				?>
+				</span>
 				<# if ( data.artists && data.meta.artist ) { #>
 				<span class="wp-playlist-item-artist"> &mdash; {{ data.meta.artist }}</span>
 				<# } #>
@@ -1863,7 +2292,7 @@ function wp_underscore_playlist_templates() {
 		<# } #>
 	</div>
 </script>
-<?php
+	<?php
 }
 
 /**
@@ -1876,9 +2305,9 @@ function wp_underscore_playlist_templates() {
 function wp_playlist_scripts( $type ) {
 	wp_enqueue_style( 'wp-mediaelement' );
 	wp_enqueue_script( 'wp-playlist' );
-?>
-<!--[if lt IE 9]><script>document.createElement('<?php echo esc_js( $type ) ?>');</script><![endif]-->
-<?php
+	?>
+<!--[if lt IE 9]><script>document.createElement('<?php echo esc_js( $type ); ?>');</script><![endif]-->
+	<?php
 	add_action( 'wp_footer', 'wp_underscore_playlist_templates', 0 );
 	add_action( 'admin_footer', 'wp_underscore_playlist_templates', 0 );
 }
@@ -1953,49 +2382,53 @@ function wp_playlist_shortcode( $attr ) {
 		return $output;
 	}
 
-	$atts = shortcode_atts( array(
-		'type'		=> 'audio',
-		'order'		=> 'ASC',
-		'orderby'	=> 'menu_order ID',
-		'id'		=> $post ? $post->ID : 0,
-		'include'	=> '',
-		'exclude'   => '',
-		'style'		=> 'light',
-		'tracklist' => true,
-		'tracknumbers' => true,
-		'images'	=> true,
-		'artists'	=> true
-	), $attr, 'playlist' );
+	$atts = shortcode_atts(
+		array(
+			'type'         => 'audio',
+			'order'        => 'ASC',
+			'orderby'      => 'menu_order ID',
+			'id'           => $post ? $post->ID : 0,
+			'include'      => '',
+			'exclude'      => '',
+			'style'        => 'light',
+			'tracklist'    => true,
+			'tracknumbers' => true,
+			'images'       => true,
+			'artists'      => true,
+		),
+		$attr,
+		'playlist'
+	);
 
 	$id = intval( $atts['id'] );
 
-	if ( $atts['type'] !== 'audio' ) {
+	if ( 'audio' !== $atts['type'] ) {
 		$atts['type'] = 'video';
 	}
 
 	$args = array(
-		'post_status' => 'inherit',
-		'post_type' => 'attachment',
+		'post_status'    => 'inherit',
+		'post_type'      => 'attachment',
 		'post_mime_type' => $atts['type'],
-		'order' => $atts['order'],
-		'orderby' => $atts['orderby']
+		'order'          => $atts['order'],
+		'orderby'        => $atts['orderby'],
 	);
 
 	if ( ! empty( $atts['include'] ) ) {
 		$args['include'] = $atts['include'];
-		$_attachments = get_posts( $args );
+		$_attachments    = get_posts( $args );
 
 		$attachments = array();
 		foreach ( $_attachments as $key => $val ) {
-			$attachments[$val->ID] = $_attachments[$key];
+			$attachments[ $val->ID ] = $_attachments[ $key ];
 		}
 	} elseif ( ! empty( $atts['exclude'] ) ) {
 		$args['post_parent'] = $id;
-		$args['exclude'] = $atts['exclude'];
-		$attachments = get_children( $args );
+		$args['exclude']     = $atts['exclude'];
+		$attachments         = get_children( $args );
 	} else {
 		$args['post_parent'] = $id;
-		$attachments = get_children( $args );
+		$attachments         = get_children( $args );
 	}
 
 	if ( empty( $attachments ) ) {
@@ -2012,35 +2445,35 @@ function wp_playlist_shortcode( $attr ) {
 
 	$outer = 22; // default padding and border of wrapper
 
-	$default_width = 640;
+	$default_width  = 640;
 	$default_height = 360;
 
-	$theme_width = empty( $content_width ) ? $default_width : ( $content_width - $outer );
+	$theme_width  = empty( $content_width ) ? $default_width : ( $content_width - $outer );
 	$theme_height = empty( $content_width ) ? $default_height : round( ( $default_height * $theme_width ) / $default_width );
 
 	$data = array(
-		'type' => $atts['type'],
+		'type'         => $atts['type'],
 		// don't pass strings to JSON, will be truthy in JS
-		'tracklist' => wp_validate_boolean( $atts['tracklist'] ),
+		'tracklist'    => wp_validate_boolean( $atts['tracklist'] ),
 		'tracknumbers' => wp_validate_boolean( $atts['tracknumbers'] ),
-		'images' => wp_validate_boolean( $atts['images'] ),
-		'artists' => wp_validate_boolean( $atts['artists'] ),
+		'images'       => wp_validate_boolean( $atts['images'] ),
+		'artists'      => wp_validate_boolean( $atts['artists'] ),
 	);
 
 	$tracks = array();
 	foreach ( $attachments as $attachment ) {
-		$url = wp_get_attachment_url( $attachment->ID );
+		$url   = wp_get_attachment_url( $attachment->ID );
 		$ftype = wp_check_filetype( $url, wp_get_mime_types() );
 		$track = array(
-			'src' => $url,
-			'type' => $ftype['type'],
-			'title' => $attachment->post_title,
-			'caption' => $attachment->post_excerpt,
-			'description' => $attachment->post_content
+			'src'         => $url,
+			'type'        => $ftype['type'],
+			'title'       => $attachment->post_title,
+			'caption'     => $attachment->post_excerpt,
+			'description' => $attachment->post_content,
 		);
 
 		$track['meta'] = array();
-		$meta = wp_get_attachment_metadata( $attachment->ID );
+		$meta          = wp_get_attachment_metadata( $attachment->ID );
 		if ( ! empty( $meta ) ) {
 
 			foreach ( wp_get_attachment_id3_keys( $attachment ) as $key => $label ) {
@@ -2051,20 +2484,20 @@ function wp_playlist_shortcode( $attr ) {
 
 			if ( 'video' === $atts['type'] ) {
 				if ( ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
-					$width = $meta['width'];
-					$height = $meta['height'];
+					$width        = $meta['width'];
+					$height       = $meta['height'];
 					$theme_height = round( ( $height * $theme_width ) / $width );
 				} else {
-					$width = $default_width;
+					$width  = $default_width;
 					$height = $default_height;
 				}
 
 				$track['dimensions'] = array(
 					'original' => compact( 'width', 'height' ),
-					'resized' => array(
-						'width' => $theme_width,
-						'height' => $theme_height
-					)
+					'resized'  => array(
+						'width'  => $theme_width,
+						'height' => $theme_height,
+					),
 				);
 			}
 		}
@@ -2073,13 +2506,13 @@ function wp_playlist_shortcode( $attr ) {
 			$thumb_id = get_post_thumbnail_id( $attachment->ID );
 			if ( ! empty( $thumb_id ) ) {
 				list( $src, $width, $height ) = wp_get_attachment_image_src( $thumb_id, 'full' );
-				$track['image'] = compact( 'src', 'width', 'height' );
+				$track['image']               = compact( 'src', 'width', 'height' );
 				list( $src, $width, $height ) = wp_get_attachment_image_src( $thumb_id, 'thumbnail' );
-				$track['thumb'] = compact( 'src', 'width', 'height' );
+				$track['thumb']               = compact( 'src', 'width', 'height' );
 			} else {
-				$src = wp_mime_type_icon( $attachment->ID );
-				$width = 48;
-				$height = 64;
+				$src            = wp_mime_type_icon( $attachment->ID );
+				$width          = 48;
+				$height         = 64;
 				$track['image'] = compact( 'src', 'width', 'height' );
 				$track['thumb'] = compact( 'src', 'width', 'height' );
 			}
@@ -2089,7 +2522,7 @@ function wp_playlist_shortcode( $attr ) {
 	}
 	$data['tracks'] = $tracks;
 
-	$safe_type = esc_attr( $atts['type'] );
+	$safe_type  = esc_attr( $atts['type'] );
 	$safe_style = esc_attr( $atts['style'] );
 
 	ob_start();
@@ -2104,26 +2537,35 @@ function wp_playlist_shortcode( $attr ) {
 		 * @param string $style The 'theme' for the playlist. Core provides 'light' and 'dark'.
 		 */
 		do_action( 'wp_playlist_scripts', $atts['type'], $atts['style'] );
-	} ?>
-<div class="wp-playlist wp-<?php echo $safe_type ?>-playlist wp-playlist-<?php echo $safe_style ?>">
-	<?php if ( 'audio' === $atts['type'] ): ?>
+	}
+	?>
+<div class="wp-playlist wp-<?php echo $safe_type; ?>-playlist wp-playlist-<?php echo $safe_style; ?>">
+	<?php if ( 'audio' === $atts['type'] ) : ?>
 	<div class="wp-playlist-current-item"></div>
 	<?php endif ?>
-	<<?php echo $safe_type ?> controls="controls" preload="none" width="<?php
-		echo (int) $theme_width;
-	?>"<?php if ( 'video' === $safe_type ):
+	<<?php echo $safe_type; ?> controls="controls" preload="none" width="
+				<?php
+				echo (int) $theme_width;
+				?>
+	"
+	<?php
+	if ( 'video' === $safe_type ) :
 		echo ' height="', (int) $theme_height, '"';
-	endif; ?>></<?php echo $safe_type ?>>
+	endif;
+	?>
+	></<?php echo $safe_type; ?>>
 	<div class="wp-playlist-next"></div>
 	<div class="wp-playlist-prev"></div>
 	<noscript>
-	<ol><?php
+	<ol>
+	<?php
 	foreach ( $attachments as $att_id => $attachment ) {
 		printf( '<li>%s</li>', wp_get_attachment_link( $att_id ) );
 	}
-	?></ol>
+	?>
+	</ol>
 	</noscript>
-	<script type="application/json" class="wp-playlist-script"><?php echo wp_json_encode( $data ) ?></script>
+	<script type="application/json" class="wp-playlist-script"><?php echo wp_json_encode( $data ); ?></script>
 </div>
 	<?php
 	return ob_get_clean();
@@ -2181,7 +2623,7 @@ function wp_get_audio_extensions() {
 function wp_get_attachment_id3_keys( $attachment, $context = 'display' ) {
 	$fields = array(
 		'artist' => __( 'Artist' ),
-		'album' => __( 'Album' ),
+		'album'  => __( 'Album' ),
 	);
 
 	if ( 'display' === $context ) {
@@ -2189,8 +2631,8 @@ function wp_get_attachment_id3_keys( $attachment, $context = 'display' ) {
 		$fields['year']             = __( 'Year' );
 		$fields['length_formatted'] = _x( 'Length', 'video or audio' );
 	} elseif ( 'js' === $context ) {
-		$fields['bitrate']          = __( 'Bitrate' );
-		$fields['bitrate_mode']     = __( 'Bitrate Mode' );
+		$fields['bitrate']      = __( 'Bitrate' );
+		$fields['bitrate_mode'] = __( 'Bitrate Mode' );
 	}
 
 	/**
@@ -2259,10 +2701,10 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 		'autoplay' => '',
 		'preload'  => 'none',
 		'class'    => 'wp-audio-shortcode',
-		'style'    => 'width: 100%;'
+		'style'    => 'width: 100%;',
 	);
 	foreach ( $default_types as $type ) {
-		$defaults_atts[$type] = '';
+		$defaults_atts[ $type ] = '';
 	}
 
 	$atts = shortcode_atts( $defaults_atts, $attr, 'audio' );
@@ -2292,7 +2734,7 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 			return;
 		}
 
-		$audio = reset( $audios );
+		$audio       = reset( $audios );
 		$atts['src'] = wp_get_attachment_url( $audio->ID );
 		if ( empty( $atts['src'] ) ) {
 			return;
@@ -2336,8 +2778,8 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 
 	// These ones should just be omitted altogether if they are blank
 	foreach ( array( 'loop', 'autoplay', 'preload' ) as $a ) {
-		if ( empty( $html_atts[$a] ) ) {
-			unset( $html_atts[$a] );
+		if ( empty( $html_atts[ $a ] ) ) {
+			unset( $html_atts[ $a ] );
 		}
 	}
 
@@ -2353,14 +2795,14 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 	$html .= sprintf( '<audio %s controls="controls">', join( ' ', $attr_strings ) );
 
 	$fileurl = '';
-	$source = '<source type="%s" src="%s" />';
+	$source  = '<source type="%s" src="%s" />';
 	foreach ( $default_types as $fallback ) {
 		if ( ! empty( $atts[ $fallback ] ) ) {
 			if ( empty( $fileurl ) ) {
 				$fileurl = $atts[ $fallback ];
 			}
-			$type = wp_check_filetype( $atts[ $fallback ], wp_get_mime_types() );
-			$url = add_query_arg( '_', $instance, $atts[ $fallback ] );
+			$type  = wp_check_filetype( $atts[ $fallback ], wp_get_mime_types() );
+			$url   = add_query_arg( '_', $instance, $atts[ $fallback ] );
 			$html .= sprintf( $source, $type['type'], esc_url( $url ) );
 		}
 	}
@@ -2474,7 +2916,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 	);
 
 	foreach ( $default_types as $type ) {
-		$defaults_atts[$type] = '';
+		$defaults_atts[ $type ] = '';
 	}
 
 	$atts = shortcode_atts( $defaults_atts, $attr, 'video' );
@@ -2483,24 +2925,24 @@ function wp_video_shortcode( $attr, $content = '' ) {
 		// shrink the video so it isn't huge in the admin
 		if ( $atts['width'] > $defaults_atts['width'] ) {
 			$atts['height'] = round( ( $atts['height'] * $defaults_atts['width'] ) / $atts['width'] );
-			$atts['width'] = $defaults_atts['width'];
+			$atts['width']  = $defaults_atts['width'];
 		}
 	} else {
 		// if the video is bigger than the theme
 		if ( ! empty( $content_width ) && $atts['width'] > $content_width ) {
 			$atts['height'] = round( ( $atts['height'] * $content_width ) / $atts['width'] );
-			$atts['width'] = $content_width;
+			$atts['width']  = $content_width;
 		}
 	}
 
-	$is_vimeo = $is_youtube = false;
-	$yt_pattern = '#^https?://(?:www\.)?(?:youtube\.com/watch|youtu\.be/)#';
+	$is_vimeo      = $is_youtube = false;
+	$yt_pattern    = '#^https?://(?:www\.)?(?:youtube\.com/watch|youtu\.be/)#';
 	$vimeo_pattern = '#^https?://(.+\.)?vimeo\.com/.*#';
 
 	$primary = false;
 	if ( ! empty( $atts['src'] ) ) {
-		$is_vimeo = ( preg_match( $vimeo_pattern, $atts['src'] ) );
-		$is_youtube = (  preg_match( $yt_pattern, $atts['src'] ) );
+		$is_vimeo   = ( preg_match( $vimeo_pattern, $atts['src'] ) );
+		$is_youtube = ( preg_match( $yt_pattern, $atts['src'] ) );
 		if ( ! $is_youtube && ! $is_vimeo ) {
 			$type = wp_check_filetype( $atts['src'], wp_get_mime_types() );
 			if ( ! in_array( strtolower( $type['ext'] ), $default_types ) ) {
@@ -2509,7 +2951,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 		}
 
 		if ( $is_vimeo ) {
-		    wp_enqueue_script( 'mediaelement-vimeo' );
+			wp_enqueue_script( 'mediaelement-vimeo' );
 		}
 
 		$primary = true;
@@ -2531,7 +2973,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 			return;
 		}
 
-		$video = reset( $videos );
+		$video       = reset( $videos );
 		$atts['src'] = wp_get_attachment_url( $video->ID );
 		if ( empty( $atts['src'] ) ) {
 			return;
@@ -2564,10 +3006,10 @@ function wp_video_shortcode( $attr, $content = '' ) {
 		} elseif ( $is_vimeo ) {
 			// Remove all query arguments and force SSL - see https://core.trac.wordpress.org/ticket/40866.
 			$parsed_vimeo_url = wp_parse_url( $atts['src'] );
-			$vimeo_src = 'https://' . $parsed_vimeo_url['host'] . $parsed_vimeo_url['path'];
+			$vimeo_src        = 'https://' . $parsed_vimeo_url['host'] . $parsed_vimeo_url['path'];
 
 			// Add loop param for mejs bug - see https://core.trac.wordpress.org/ticket/40977, not needed after https://core.trac.wordpress.org/ticket/39686.
-			$loop = $atts['loop'] ? '1' : '0';
+			$loop        = $atts['loop'] ? '1' : '0';
 			$atts['src'] = add_query_arg( 'loop', $loop, $vimeo_src );
 		}
 	}
@@ -2596,8 +3038,8 @@ function wp_video_shortcode( $attr, $content = '' ) {
 
 	// These ones should just be omitted altogether if they are blank
 	foreach ( array( 'poster', 'loop', 'autoplay', 'preload' ) as $a ) {
-		if ( empty( $html_atts[$a] ) ) {
-			unset( $html_atts[$a] );
+		if ( empty( $html_atts[ $a ] ) ) {
+			unset( $html_atts[ $a ] );
 		}
 	}
 
@@ -2613,7 +3055,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 	$html .= sprintf( '<video %s controls="controls">', join( ' ', $attr_strings ) );
 
 	$fileurl = '';
-	$source = '<source type="%s" src="%s" />';
+	$source  = '<source type="%s" src="%s" />';
 	foreach ( $default_types as $fallback ) {
 		if ( ! empty( $atts[ $fallback ] ) ) {
 			if ( empty( $fileurl ) ) {
@@ -2626,7 +3068,7 @@ function wp_video_shortcode( $attr, $content = '' ) {
 			} else {
 				$type = wp_check_filetype( $atts[ $fallback ], wp_get_mime_types() );
 			}
-			$url = add_query_arg( '_', $instance, $atts[ $fallback ] );
+			$url   = add_query_arg( '_', $instance, $atts[ $fallback ] );
 			$html .= sprintf( $source, $type['type'], esc_url( $url ) );
 		}
 	}
@@ -2677,7 +3119,7 @@ add_shortcode( 'video', 'wp_video_shortcode' );
  * @param string       $text Optional. Link text. Default false.
  */
 function previous_image_link( $size = 'thumbnail', $text = false ) {
-	adjacent_image_link(true, $size, $text);
+	adjacent_image_link( true, $size, $text );
 }
 
 /**
@@ -2693,7 +3135,7 @@ function previous_image_link( $size = 'thumbnail', $text = false ) {
  * @param string       $text Optional. Link text. Default false.
  */
 function next_image_link( $size = 'thumbnail', $text = false ) {
-	adjacent_image_link(false, $size, $text);
+	adjacent_image_link( false, $size, $text );
 }
 
 /**
@@ -2709,8 +3151,19 @@ function next_image_link( $size = 'thumbnail', $text = false ) {
  * @param bool         $text Optional. Link text. Default false.
  */
 function adjacent_image_link( $prev = true, $size = 'thumbnail', $text = false ) {
-	$post = get_post();
-	$attachments = array_values( get_children( array( 'post_parent' => $post->post_parent, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID' ) ) );
+	$post        = get_post();
+	$attachments = array_values(
+		get_children(
+			array(
+				'post_parent'    => $post->post_parent,
+				'post_status'    => 'inherit',
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'order'          => 'ASC',
+				'orderby'        => 'menu_order ID',
+			)
+		)
+	);
 
 	foreach ( $attachments as $k => $attachment ) {
 		if ( $attachment->ID == $post->ID ) {
@@ -2718,7 +3171,7 @@ function adjacent_image_link( $prev = true, $size = 'thumbnail', $text = false )
 		}
 	}
 
-	$output = '';
+	$output        = '';
 	$attachment_id = 0;
 
 	if ( $attachments ) {
@@ -2726,7 +3179,7 @@ function adjacent_image_link( $prev = true, $size = 'thumbnail', $text = false )
 
 		if ( isset( $attachments[ $k ] ) ) {
 			$attachment_id = $attachments[ $k ]->ID;
-			$output = wp_get_attachment_link( $attachment_id, $size, true, false, $text );
+			$output        = wp_get_attachment_link( $attachment_id, $size, true, false, $text );
 		}
 	}
 
@@ -2766,22 +3219,27 @@ function get_attachment_taxonomies( $attachment, $output = 'names' ) {
 	} elseif ( is_array( $attachment ) ) {
 		$attachment = (object) $attachment;
 	}
-	if ( ! is_object($attachment) )
+	if ( ! is_object( $attachment ) ) {
 		return array();
+	}
 
-	$file = get_attached_file( $attachment->ID );
-	$filename = basename( $file );
+	$file     = get_attached_file( $attachment->ID );
+	$filename = wp_basename( $file );
 
-	$objects = array('attachment');
+	$objects = array( 'attachment' );
 
-	if ( false !== strpos($filename, '.') )
-		$objects[] = 'attachment:' . substr($filename, strrpos($filename, '.') + 1);
-	if ( !empty($attachment->post_mime_type) ) {
+	if ( false !== strpos( $filename, '.' ) ) {
+		$objects[] = 'attachment:' . substr( $filename, strrpos( $filename, '.' ) + 1 );
+	}
+	if ( ! empty( $attachment->post_mime_type ) ) {
 		$objects[] = 'attachment:' . $attachment->post_mime_type;
-		if ( false !== strpos($attachment->post_mime_type, '/') )
-			foreach ( explode('/', $attachment->post_mime_type) as $token )
-				if ( !empty($token) )
+		if ( false !== strpos( $attachment->post_mime_type, '/' ) ) {
+			foreach ( explode( '/', $attachment->post_mime_type ) as $token ) {
+				if ( ! empty( $token ) ) {
 					$objects[] = "attachment:$token";
+				}
+			}
+		}
 	}
 
 	$taxonomies = array();
@@ -2816,16 +3274,40 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
 	foreach ( get_taxonomies( array(), 'objects' ) as $taxonomy ) {
 		foreach ( $taxonomy->object_type as $object_type ) {
 			if ( 'attachment' == $object_type || 0 === strpos( $object_type, 'attachment:' ) ) {
-				if ( 'names' == $output )
+				if ( 'names' == $output ) {
 					$taxonomies[] = $taxonomy->name;
-				else
+				} else {
 					$taxonomies[ $taxonomy->name ] = $taxonomy;
+				}
 				break;
 			}
 		}
 	}
 
 	return $taxonomies;
+}
+
+/**
+ * Determines whether the value is an acceptable type for GD image functions.
+ *
+ * In PHP 8.0, the GD extension uses GdImage objects for its data structures.
+ * This function checks if the passed value is either a resource of type `gd`
+ * or a GdImage object instance. Any other type will return false.
+ *
+ * @since WP-5.6.0
+ *
+ * @param resource|GdImage|false $image A value to check the type for.
+ * @return bool True if $image is either a GD image resource or GdImage instance,
+ *              false otherwise.
+ */
+function is_gd_image( $image ) {
+	if ( is_resource( $image ) && 'gd' === get_resource_type( $image )
+		|| is_object( $image ) && $image instanceof GdImage
+	) {
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -2836,15 +3318,17 @@ function get_taxonomies_for_attachments( $output = 'names' ) {
  * @since WP-2.9.0
  *
  * @param int $width  Image width in pixels.
- * @param int $height Image height in pixels..
- * @return resource The GD image resource.
+ * @param int $height Image height in pixels.
+ * @return resource|GdImage The GD image resource or GdImage instance.
  */
-function wp_imagecreatetruecolor($width, $height) {
-	$img = imagecreatetruecolor($width, $height);
-	if ( is_resource($img) && function_exists('imagealphablending') && function_exists('imagesavealpha') ) {
-		imagealphablending($img, false);
-		imagesavealpha($img, true);
+function wp_imagecreatetruecolor( $width, $height ) {
+	$img = imagecreatetruecolor( $width, $height );
+
+	if ( is_gd_image( $img ) && function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
+		imagealphablending( $img, false );
+		imagesavealpha( $img, true );
 	}
+
 	return $img;
 }
 
@@ -2912,8 +3396,9 @@ function wp_get_image_editor( $path, $args = array() ) {
 
 		// If $file_info['type'] is false, then we let the editor attempt to
 		// figure out the file type, rather than forcing a failure based on extension.
-		if ( isset( $file_info ) && $file_info['type'] )
+		if ( isset( $file_info ) && $file_info['type'] ) {
 			$args['mime_type'] = $file_info['type'];
+		}
 	}
 
 	$implementation = _wp_image_editor_choose( $args );
@@ -2922,13 +3407,14 @@ function wp_get_image_editor( $path, $args = array() ) {
 		$editor = new $implementation( $path );
 		$loaded = $editor->load();
 
-		if ( is_wp_error( $loaded ) )
+		if ( is_wp_error( $loaded ) ) {
 			return $loaded;
+		}
 
 		return $editor;
 	}
 
-	return new WP_Error( 'image_no_editor', __('No editor could be selected.') );
+	return new WP_Error( 'image_no_editor', __( 'No editor could be selected.' ) );
 }
 
 /**
@@ -2969,13 +3455,15 @@ function _wp_image_editor_choose( $args = array() ) {
 	$implementations = apply_filters( 'wp_image_editors', array( 'WP_Image_Editor_Imagick', 'WP_Image_Editor_GD' ) );
 
 	foreach ( $implementations as $implementation ) {
-		if ( ! call_user_func( array( $implementation, 'test' ), $args ) )
+		if ( ! call_user_func( array( $implementation, 'test' ), $args ) ) {
 			continue;
+		}
 
 		if ( isset( $args['mime_type'] ) &&
 			! call_user_func(
 				array( $implementation, 'supports_mime_type' ),
-				$args['mime_type'] ) ) {
+				$args['mime_type']
+			) ) {
 			continue;
 		}
 
@@ -2999,12 +3487,13 @@ function wp_plupload_default_settings() {
 	$wp_scripts = wp_scripts();
 
 	$data = $wp_scripts->get_data( 'wp-plupload', 'data' );
-	if ( $data && false !== strpos( $data, '_wpPluploadSettings' ) )
+	if ( $data && false !== strpos( $data, '_wpPluploadSettings' ) ) {
 		return;
+	}
 
-	$max_upload_size = wp_max_upload_size();
+	$max_upload_size    = wp_max_upload_size();
 	$allowed_extensions = array_keys( get_allowed_mime_types() );
-	$extensions = array();
+	$extensions         = array();
 	foreach ( $allowed_extensions as $extension ) {
 		$extensions = array_merge( $extensions, explode( '|', $extension ) );
 	}
@@ -3014,11 +3503,11 @@ function wp_plupload_default_settings() {
 	 * and the `flash_swf_url` and `silverlight_xap_url` are not used.
 	 */
 	$defaults = array(
-		'file_data_name'      => 'async-upload', // key passed to $_FILE.
-		'url'                 => admin_url( 'async-upload.php', 'relative' ),
-		'filters' => array(
-			'max_file_size'   => $max_upload_size . 'b',
-			'mime_types'      => array( array( 'extensions' => implode( ',', $extensions ) ) ),
+		'file_data_name' => 'async-upload', // key passed to $_FILE.
+		'url'            => admin_url( 'async-upload.php', 'relative' ),
+		'filters'        => array(
+			'max_file_size' => $max_upload_size . 'b',
+			'mime_types'    => array( array( 'extensions' => implode( ',', $extensions ) ) ),
 		),
 	);
 
@@ -3050,23 +3539,24 @@ function wp_plupload_default_settings() {
 	 *
 	 * @param array $params Default Plupload parameters array.
 	 */
-	$params = apply_filters( 'plupload_default_params', $params );
-	$params['_wpnonce'] = wp_create_nonce( 'media-form' );
+	$params                       = apply_filters( 'plupload_default_params', $params );
+	$params['_wpnonce']           = wp_create_nonce( 'media-form' );
 	$defaults['multipart_params'] = $params;
 
 	$settings = array(
-		'defaults' => $defaults,
-		'browser'  => array(
+		'defaults'      => $defaults,
+		'browser'       => array(
 			'mobile'    => wp_is_mobile(),
 			'supported' => _device_can_upload(),
 		),
-		'limitExceeded' => is_multisite() && ! is_upload_space_available()
+		'limitExceeded' => is_multisite() && ! is_upload_space_available(),
 	);
 
 	$script = 'var _wpPluploadSettings = ' . wp_json_encode( $settings ) . ';';
 
-	if ( $data )
+	if ( $data ) {
 		$script = "$data\n$script";
+	}
 
 	$wp_scripts->add_data( 'wp-plupload', 'data', $script );
 }
@@ -3081,49 +3571,52 @@ function wp_plupload_default_settings() {
  * @return array|void Array of attachment details.
  */
 function wp_prepare_attachment_for_js( $attachment ) {
-	if ( ! $attachment = get_post( $attachment ) )
+	if ( ! $attachment = get_post( $attachment ) ) {
 		return;
+	}
 
-	if ( 'attachment' != $attachment->post_type )
+	if ( 'attachment' != $attachment->post_type ) {
 		return;
+	}
 
 	$meta = wp_get_attachment_metadata( $attachment->ID );
-	if ( false !== strpos( $attachment->post_mime_type, '/' ) )
+	if ( false !== strpos( $attachment->post_mime_type, '/' ) ) {
 		list( $type, $subtype ) = explode( '/', $attachment->post_mime_type );
-	else
+	} else {
 		list( $type, $subtype ) = array( $attachment->post_mime_type, '' );
+	}
 
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
-	$base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+	$base_url       = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
 
 	$response = array(
-		'id'          => $attachment->ID,
-		'title'       => $attachment->post_title,
-		'filename'    => wp_basename( get_attached_file( $attachment->ID ) ),
-		'url'         => $attachment_url,
-		'link'        => get_attachment_link( $attachment->ID ),
-		'alt'         => get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
-		'author'      => $attachment->post_author,
-		'description' => $attachment->post_content,
-		'caption'     => $attachment->post_excerpt,
-		'name'        => $attachment->post_name,
-		'status'      => $attachment->post_status,
-		'uploadedTo'  => $attachment->post_parent,
-		'date'        => strtotime( $attachment->post_date_gmt ) * 1000,
-		'modified'    => strtotime( $attachment->post_modified_gmt ) * 1000,
-		'menuOrder'   => $attachment->menu_order,
-		'mime'        => $attachment->post_mime_type,
-		'type'        => $type,
-		'subtype'     => $subtype,
-		'icon'        => wp_mime_type_icon( $attachment->ID ),
+		'id'            => $attachment->ID,
+		'title'         => $attachment->post_title,
+		'filename'      => wp_basename( get_attached_file( $attachment->ID ) ),
+		'url'           => $attachment_url,
+		'link'          => get_attachment_link( $attachment->ID ),
+		'alt'           => get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
+		'author'        => $attachment->post_author,
+		'description'   => $attachment->post_content,
+		'caption'       => $attachment->post_excerpt,
+		'name'          => $attachment->post_name,
+		'status'        => $attachment->post_status,
+		'uploadedTo'    => $attachment->post_parent,
+		'date'          => strtotime( $attachment->post_date_gmt ) * 1000,
+		'modified'      => strtotime( $attachment->post_modified_gmt ) * 1000,
+		'menuOrder'     => $attachment->menu_order,
+		'mime'          => $attachment->post_mime_type,
+		'type'          => $type,
+		'subtype'       => $subtype,
+		'icon'          => wp_mime_type_icon( $attachment->ID ),
 		'dateFormatted' => mysql2date( __( 'F j, Y' ), $attachment->post_date ),
-		'nonces'      => array(
+		'nonces'        => array(
 			'update' => false,
 			'delete' => false,
-			'edit'   => false
+			'edit'   => false,
 		),
-		'editLink'   => false,
-		'meta'       => false,
+		'editLink'      => false,
+		'meta'          => false,
 	);
 
 	$author = new WP_User( $attachment->post_author );
@@ -3156,38 +3649,42 @@ function wp_prepare_attachment_for_js( $attachment ) {
 	if ( isset( $meta['filesize'] ) ) {
 		$bytes = $meta['filesize'];
 	} elseif ( file_exists( $attached_file ) ) {
-		$bytes = filesize( $attached_file );
+		$bytes = wp_filesize( $attached_file );
 	} else {
 		$bytes = '';
 	}
 
 	if ( $bytes ) {
-		$response['filesizeInBytes'] = $bytes;
+		$response['filesizeInBytes']       = $bytes;
 		$response['filesizeHumanReadable'] = size_format( $bytes );
 	}
 
-	$context = get_post_meta( $attachment->ID, '_wp_attachment_context', true );
+	$context             = get_post_meta( $attachment->ID, '_wp_attachment_context', true );
 	$response['context'] = ( $context ) ? $context : '';
 
 	if ( current_user_can( 'edit_post', $attachment->ID ) ) {
 		$response['nonces']['update'] = wp_create_nonce( 'update-post_' . $attachment->ID );
-		$response['nonces']['edit'] = wp_create_nonce( 'image_editor-' . $attachment->ID );
-		$response['editLink'] = get_edit_post_link( $attachment->ID, 'raw' );
+		$response['nonces']['edit']   = wp_create_nonce( 'image_editor-' . $attachment->ID );
+		$response['editLink']         = get_edit_post_link( $attachment->ID, 'raw' );
 	}
 
-	if ( current_user_can( 'delete_post', $attachment->ID ) )
+	if ( current_user_can( 'delete_post', $attachment->ID ) ) {
 		$response['nonces']['delete'] = wp_create_nonce( 'delete-post_' . $attachment->ID );
+	}
 
 	if ( $meta && ( 'image' === $type || ! empty( $meta['sizes'] ) ) ) {
 		$sizes = array();
 
 		/** This filter is documented in wp-admin/includes/media.php */
-		$possible_sizes = apply_filters( 'image_size_names_choose', array(
-			'thumbnail' => __('Thumbnail'),
-			'medium'    => __('Medium'),
-			'large'     => __('Large'),
-			'full'      => __('Full Size'),
-		) );
+		$possible_sizes = apply_filters(
+			'image_size_names_choose',
+			array(
+				'thumbnail' => __( 'Thumbnail' ),
+				'medium'    => __( 'Medium' ),
+				'large'     => __( 'Large' ),
+				'full'      => __( 'Full Size' ),
+			)
+		);
 		unset( $possible_sizes['full'] );
 
 		// Loop through all potential sizes that may be chosen. Try to do this with some efficiency.
@@ -3229,8 +3726,8 @@ function wp_prepare_attachment_for_js( $attachment ) {
 			$sizes['full'] = array( 'url' => $attachment_url );
 
 			if ( isset( $meta['height'], $meta['width'] ) ) {
-				$sizes['full']['height'] = $meta['height'];
-				$sizes['full']['width'] = $meta['width'];
+				$sizes['full']['height']      = $meta['height'];
+				$sizes['full']['width']       = $meta['width'];
 				$sizes['full']['orientation'] = $meta['height'] > $meta['width'] ? 'portrait' : 'landscape';
 			}
 
@@ -3240,7 +3737,7 @@ function wp_prepare_attachment_for_js( $attachment ) {
 				'url'         => $base_url . $meta['sizes']['full']['file'],
 				'height'      => $meta['sizes']['full']['height'],
 				'width'       => $meta['sizes']['full']['width'],
-				'orientation' => $meta['sizes']['full']['height'] > $meta['sizes']['full']['width'] ? 'portrait' : 'landscape'
+				'orientation' => $meta['sizes']['full']['height'] > $meta['sizes']['full']['width'] ? 'portrait' : 'landscape',
 			);
 		}
 
@@ -3248,10 +3745,12 @@ function wp_prepare_attachment_for_js( $attachment ) {
 	}
 
 	if ( $meta && 'video' === $type ) {
-		if ( isset( $meta['width'] ) )
+		if ( isset( $meta['width'] ) ) {
 			$response['width'] = (int) $meta['width'];
-		if ( isset( $meta['height'] ) )
+		}
+		if ( isset( $meta['height'] ) ) {
 			$response['height'] = (int) $meta['height'];
+		}
 	}
 
 	if ( $meta && ( 'audio' === $type || 'video' === $type ) ) {
@@ -3272,20 +3771,21 @@ function wp_prepare_attachment_for_js( $attachment ) {
 		$id = get_post_thumbnail_id( $attachment->ID );
 		if ( ! empty( $id ) ) {
 			list( $src, $width, $height ) = wp_get_attachment_image_src( $id, 'full' );
-			$response['image'] = compact( 'src', 'width', 'height' );
+			$response['image']            = compact( 'src', 'width', 'height' );
 			list( $src, $width, $height ) = wp_get_attachment_image_src( $id, 'thumbnail' );
-			$response['thumb'] = compact( 'src', 'width', 'height' );
+			$response['thumb']            = compact( 'src', 'width', 'height' );
 		} else {
-			$src = wp_mime_type_icon( $attachment->ID );
-			$width = 48;
-			$height = 64;
+			$src               = wp_mime_type_icon( $attachment->ID );
+			$width             = 48;
+			$height            = 64;
 			$response['image'] = compact( 'src', 'width', 'height' );
 			$response['thumb'] = compact( 'src', 'width', 'height' );
 		}
 	}
 
-	if ( function_exists('get_compat_media_markup') )
+	if ( function_exists( 'get_compat_media_markup' ) ) {
 		$response['compat'] = get_compat_media_markup( $attachment->ID, array( 'in_modal' => true ) );
+	}
 
 	/**
 	 * Filters the attachment data prepared for JavaScript.
@@ -3317,15 +3817,16 @@ function wp_prepare_attachment_for_js( $attachment ) {
  */
 function wp_enqueue_media( $args = array() ) {
 	// Enqueue me just once per page, please.
-	if ( did_action( 'wp_enqueue_media' ) )
+	if ( did_action( 'wp_enqueue_media' ) ) {
 		return;
+	}
 
 	global $content_width, $wpdb, $wp_locale;
 
 	$defaults = array(
 		'post' => null,
 	);
-	$args = wp_parse_args( $args, $defaults );
+	$args     = wp_parse_args( $args, $defaults );
 
 	// We're going to pass the old thickbox media tabs to `media_upload_tabs`
 	// to ensure plugins will work. We will then unset those tabs.
@@ -3347,8 +3848,8 @@ function wp_enqueue_media( $args = array() ) {
 		'size'  => get_option( 'image_default_size' ),  // empty default
 	);
 
-	$exts = array_merge( wp_get_audio_extensions(), wp_get_video_extensions() );
-	$mimes = get_allowed_mime_types();
+	$exts      = array_merge( wp_get_audio_extensions(), wp_get_video_extensions() );
+	$mimes     = get_allowed_mime_types();
 	$ext_mimes = array();
 	foreach ( $exts as $ext ) {
 		foreach ( $mimes as $ext_preg => $mime_match ) {
@@ -3378,13 +3879,15 @@ function wp_enqueue_media( $args = array() ) {
 	 */
 	$show_audio_playlist = apply_filters( 'media_library_show_audio_playlist', true );
 	if ( null === $show_audio_playlist ) {
-		$show_audio_playlist = $wpdb->get_var( "
+		$show_audio_playlist = $wpdb->get_var(
+			"
 			SELECT ID
 			FROM $wpdb->posts
 			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'audio%'
 			LIMIT 1
-		" );
+		"
+		);
 	}
 
 	/**
@@ -3406,13 +3909,15 @@ function wp_enqueue_media( $args = array() ) {
 	 */
 	$show_video_playlist = apply_filters( 'media_library_show_video_playlist', true );
 	if ( null === $show_video_playlist ) {
-		$show_video_playlist = $wpdb->get_var( "
+		$show_video_playlist = $wpdb->get_var(
+			"
 			SELECT ID
 			FROM $wpdb->posts
 			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'video%'
 			LIMIT 1
-		" );
+		"
+		);
 	}
 
 	/**
@@ -3433,47 +3938,52 @@ function wp_enqueue_media( $args = array() ) {
 	 */
 	$months = apply_filters( 'media_library_months_with_files', null );
 	if ( ! is_array( $months ) ) {
-		$months = $wpdb->get_results( $wpdb->prepare( "
+		$months = $wpdb->get_results(
+			$wpdb->prepare(
+				"
 			SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
 			FROM $wpdb->posts
 			WHERE post_type = %s
 			ORDER BY post_date DESC
-		", 'attachment' ) );
+		",
+				'attachment'
+			)
+		);
 	}
 	foreach ( $months as $month_year ) {
 		$month_year->text = sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month_year->month ), $month_year->year );
 	}
 
 	$settings = array(
-		'tabs'      => $tabs,
-		'tabUrl'    => add_query_arg( array( 'chromeless' => true ), admin_url('media-upload.php') ),
-		'mimeTypes' => wp_list_pluck( get_post_mime_types(), 0 ),
+		'tabs'             => $tabs,
+		'tabUrl'           => add_query_arg( array( 'chromeless' => true ), admin_url( 'media-upload.php' ) ),
+		'mimeTypes'        => wp_list_pluck( get_post_mime_types(), 0 ),
 		/** This filter is documented in wp-admin/includes/media.php */
-		'captions'  => ! apply_filters( 'disable_captions', '' ),
-		'nonce'     => array(
+		'captions'         => ! apply_filters( 'disable_captions', '' ),
+		'nonce'            => array(
 			'sendToEditor' => wp_create_nonce( 'media-send-to-editor' ),
 		),
-		'post'    => array(
+		'post'             => array(
 			'id' => 0,
 		),
-		'defaultProps' => $props,
+		'defaultProps'     => $props,
 		'attachmentCounts' => array(
 			'audio' => ( $show_audio_playlist ) ? 1 : 0,
 			'video' => ( $show_video_playlist ) ? 1 : 0,
 		),
-		'oEmbedProxyUrl' => rest_url( 'oembed/1.0/proxy' ),
-		'embedExts'    => $exts,
-		'embedMimes'   => $ext_mimes,
-		'contentWidth' => $content_width,
-		'months'       => $months,
-		'mediaTrash'   => MEDIA_TRASH ? 1 : 0,
+		'oEmbedProxyUrl'   => rest_url( 'oembed/1.0/proxy' ),
+		'embedExts'        => $exts,
+		'embedMimes'       => $ext_mimes,
+		'contentWidth'     => $content_width,
+		'months'           => $months,
+		'mediaTrash'       => MEDIA_TRASH ? 1 : 0,
 	);
 
 	$post = null;
 	if ( isset( $args['post'] ) ) {
-		$post = get_post( $args['post'] );
+		$post             = get_post( $args['post'] );
 		$settings['post'] = array(
-			'id' => $post->ID,
+			'id'    => $post->ID,
 			'nonce' => wp_create_nonce( 'update-post_' . $post->ID ),
 		);
 
@@ -3487,7 +3997,7 @@ function wp_enqueue_media( $args = array() ) {
 		}
 
 		if ( $thumbnail_support ) {
-			$featured_image_id = get_post_meta( $post->ID, '_thumbnail_id', true );
+			$featured_image_id                   = get_post_meta( $post->ID, '_thumbnail_id', true );
 			$settings['post']['featuredImageId'] = $featured_image_id ? $featured_image_id : -1;
 		}
 	}
@@ -3500,15 +4010,15 @@ function wp_enqueue_media( $args = array() ) {
 
 	$strings = array(
 		// Generic
-		'url'         => __( 'URL' ),
-		'addMedia'    => __( 'Add Media' ),
-		'search'      => __( 'Search' ),
-		'select'      => __( 'Select' ),
-		'cancel'      => __( 'Cancel' ),
-		'update'      => __( 'Update' ),
-		'replace'     => __( 'Replace' ),
-		'remove'      => __( 'Remove' ),
-		'back'        => __( 'Back' ),
+		'url'                         => __( 'URL' ),
+		'addMedia'                    => __( 'Add Media' ),
+		'search'                      => __( 'Search' ),
+		'select'                      => __( 'Select' ),
+		'cancel'                      => __( 'Cancel' ),
+		'update'                      => __( 'Update' ),
+		'replace'                     => __( 'Replace' ),
+		'remove'                      => __( 'Remove' ),
+		'back'                        => __( 'Back' ),
 		/* translators: This is a would-be plural string used in the media manager.
 		   If there is not a word you can use in your language to avoid issues with the
 		   lack of plural support here, turn it into "selected: %d" then translate it.
@@ -3552,7 +4062,7 @@ function wp_enqueue_media( $args = array() ) {
 		'noMedia'                     => __( 'No media files found.' ),
 
 		// Library Details
-		'attachmentDetails'  => __( 'Attachment Details' ),
+		'attachmentDetails'           => __( 'Attachment Details' ),
 
 		// From URL
 		'insertFromUrlTitle'          => __( 'Insert from URL' ),
@@ -3602,7 +4112,7 @@ function wp_enqueue_media( $args = array() ) {
 		'videoSelectPosterImageTitle' => __( 'Select Poster Image' ),
 		'videoAddTrackTitle'          => __( 'Add Subtitles' ),
 
- 		// Playlist
+		// Playlist
 		'playlistDragInfo'            => __( 'Drag and drop to reorder tracks.' ),
 		'createPlaylistTitle'         => __( 'Create Audio Playlist' ),
 		'editPlaylistTitle'           => __( 'Edit Audio Playlist' ),
@@ -3620,7 +4130,7 @@ function wp_enqueue_media( $args = array() ) {
 		'insertVideoPlaylist'         => __( 'Insert video playlist' ),
 		'updateVideoPlaylist'         => __( 'Update video playlist' ),
 		'addToVideoPlaylist'          => __( 'Add to video playlist' ),
- 		'addToVideoPlaylistTitle'     => __( 'Add to Video Playlist' ),
+		'addToVideoPlaylistTitle'     => __( 'Add to Video Playlist' ),
 
 	);
 
@@ -3642,7 +4152,7 @@ function wp_enqueue_media( $args = array() ) {
 	 * @param array   $strings List of media view strings.
 	 * @param WP_Post $post    Post object.
 	 */
-	$strings = apply_filters( 'media_view_strings', $strings,  $post );
+	$strings = apply_filters( 'media_view_strings', $strings, $post );
 
 	$strings['settings'] = $settings;
 
@@ -3683,16 +4193,17 @@ function wp_enqueue_media( $args = array() ) {
  * @return array Found attachments.
  */
 function get_attached_media( $type, $post = 0 ) {
-	if ( ! $post = get_post( $post ) )
+	if ( ! $post = get_post( $post ) ) {
 		return array();
+	}
 
 	$args = array(
-		'post_parent' => $post->ID,
-		'post_type' => 'attachment',
+		'post_parent'    => $post->ID,
+		'post_type'      => 'attachment',
 		'post_mime_type' => $type,
 		'posts_per_page' => -1,
-		'orderby' => 'menu_order',
-		'order' => 'ASC',
+		'orderby'        => 'menu_order',
+		'order'          => 'ASC',
 	);
 
 	/**
@@ -3772,11 +4283,13 @@ function get_media_embedded_in_content( $content, $types = null ) {
  *               from the expanded shortcode.
  */
 function get_post_galleries( $post, $html = true ) {
-	if ( ! $post = get_post( $post ) )
+	if ( ! $post = get_post( $post ) ) {
 		return array();
+	}
 
-	if ( ! has_shortcode( $post->post_content, 'gallery' ) )
+	if ( ! has_shortcode( $post->post_content, 'gallery' ) ) {
 		return array();
+	}
 
 	$galleries = array();
 	if ( preg_match_all( '/' . get_shortcode_regex() . '/s', $post->post_content, $matches, PREG_SET_ORDER ) ) {
@@ -3808,7 +4321,7 @@ function get_post_galleries( $post, $html = true ) {
 					$galleries[] = array_merge(
 						$shortcode_attrs,
 						array(
-							'src' => array_values( array_unique( $srcs ) )
+							'src' => array_values( array_unique( $srcs ) ),
 						)
 					);
 				}
@@ -3838,7 +4351,7 @@ function get_post_galleries( $post, $html = true ) {
  */
 function get_post_gallery( $post = 0, $html = true ) {
 	$galleries = get_post_galleries( $post, $html );
-	$gallery = reset( $galleries );
+	$gallery   = reset( $galleries );
 
 	/**
 	 * Filters the first-found post gallery.
@@ -3898,7 +4411,7 @@ function wp_maybe_generate_attachment_metadata( $attachment ) {
 	$file = get_attached_file( $attachment_id );
 	$meta = wp_get_attachment_metadata( $attachment_id );
 	if ( empty( $meta ) && file_exists( $file ) ) {
-		$_meta = get_post_meta( $attachment_id );
+		$_meta             = get_post_meta( $attachment_id );
 		$regeneration_lock = 'wp_generating_att_' . $attachment_id;
 		if ( ! array_key_exists( '_wp_attachment_metadata', $_meta ) && ! get_transient( $regeneration_lock ) ) {
 			set_transient( $regeneration_lock, $file );
@@ -3921,10 +4434,10 @@ function wp_maybe_generate_attachment_metadata( $attachment ) {
 function attachment_url_to_postid( $url ) {
 	global $wpdb;
 
-	$dir = wp_get_upload_dir();
+	$dir  = wp_get_upload_dir();
 	$path = $url;
 
-	$site_url = parse_url( $dir['url'] );
+	$site_url   = parse_url( $dir['url'] );
 	$image_path = parse_url( $path );
 
 	//force the protocols to match if needed
@@ -3936,7 +4449,7 @@ function attachment_url_to_postid( $url ) {
 		$path = substr( $path, strlen( $dir['baseurl'] . '/' ) );
 	}
 
-	$sql = $wpdb->prepare(
+	$sql     = $wpdb->prepare(
 		"SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value = %s",
 		$path
 	);
@@ -3961,9 +4474,9 @@ function attachment_url_to_postid( $url ) {
  * @return array The relevant CSS file URLs.
  */
 function wpview_media_sandbox_styles() {
- 	$version = 'ver=' . get_bloginfo( 'version' );
- 	$mediaelement = includes_url( "js/mediaelement/mediaelementplayer-legacy.min.css?$version" );
- 	$wpmediaelement = includes_url( "js/mediaelement/wp-mediaelement.css?$version" );
+	$version        = 'ver=' . get_bloginfo( 'version' );
+	$mediaelement   = includes_url( "js/mediaelement/mediaelementplayer-legacy.min.css?$version" );
+	$wpmediaelement = includes_url( "js/mediaelement/wp-mediaelement.css?$version" );
 
 	return array( $mediaelement, $wpmediaelement );
 }
@@ -3999,7 +4512,7 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
 
 	$data_to_export = array();
 
-	$user = get_user_by( 'email' , $email_address );
+	$user = get_user_by( 'email', $email_address );
 	if ( false === $user ) {
 		return array(
 			'data' => $data_to_export,
@@ -4024,7 +4537,10 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
 
 		if ( $attachment_url ) {
 			$post_data_to_export = array(
-				array( 'name'  => __( 'URL' ), 'value' => $attachment_url ),
+				array(
+					'name'  => __( 'URL' ),
+					'value' => $attachment_url,
+				),
 			);
 
 			$data_to_export[] = array(
@@ -4055,4 +4571,98 @@ function wp_media_personal_data_exporter( $email_address, $page = 1 ) {
 function wp_show_heic_upload_error( $plupload_settings ) {
 	$plupload_settings['heic_upload_error'] = true;
 	return $plupload_settings;
+}
+
+/**
+ * Gets the default value to use for a `loading` attribute on an element.
+ *
+ * This function should only be called for a tag and context if lazy-loading is generally enabled.
+ *
+ * The function usually returns 'lazy', but uses certain heuristics to guess whether the current element is likely to
+ * appear above the fold, in which case it returns a boolean `false`, which will lead to the `loading` attribute being
+ * omitted on the element. The purpose of this refinement is to avoid lazy-loading elements that are within the initial
+ * viewport, which can have a negative performance impact.
+ *
+ * Under the hood, the function uses {@see wp_increase_content_media_count()} every time it is called for an element
+ * within the main content. If the element is the very first content element, the `loading` attribute will be omitted.
+ * This default threshold of 1 content element to omit the `loading` attribute for can be customized using the
+ * {@see 'wp_omit_loading_attr_threshold'} filter.
+ *
+ * @since WP-5.9.0
+ *
+ * @param string $context Context for the element for which the `loading` attribute value is requested.
+ * @return string|bool The default `loading` attribute value. Either 'lazy', 'eager', or a boolean `false`, to indicate
+ *                     that the `loading` attribute should be skipped.
+ */
+function wp_get_loading_attr_default( $context ) {
+	// Only elements with 'the_content' or 'the_post_thumbnail' context have special handling.
+	if ( 'the_content' !== $context && 'the_post_thumbnail' !== $context ) {
+		return 'lazy';
+	}
+
+	// Only elements within the main query loop have special handling.
+	if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
+		return 'lazy';
+	}
+
+	// Increase the counter since this is a main query content element.
+	$content_media_count = wp_increase_content_media_count();
+
+	// If the count so far is below the threshold, return `false` so that the `loading` attribute is omitted.
+	if ( $content_media_count <= wp_omit_loading_attr_threshold() ) {
+		return false;
+	}
+
+	// For elements after the threshold, lazy-load them as usual.
+	return 'lazy';
+}
+
+/**
+ * Gets the threshold for how many of the first content media elements to not lazy-load.
+ *
+ * This function runs the {@see 'wp_omit_loading_attr_threshold'} filter, which uses a default threshold value of 1.
+ * The filter is only run once per page load, unless the `$force` parameter is used.
+ *
+ * @since WP-5.9.0
+ *
+ * @param bool $force Optional. If set to true, the filter will be (re-)applied even if it already has been before.
+ *                    Default false.
+ * @return int The number of content media elements to not lazy-load.
+ */
+function wp_omit_loading_attr_threshold( $force = false ) {
+	static $omit_threshold;
+
+	// This function may be called multiple times. Run the filter only once per page load.
+	if ( ! isset( $omit_threshold ) || $force ) {
+		/**
+		 * Filters the threshold for how many of the first content media elements to not lazy-load.
+		 *
+		 * For these first content media elements, the `loading` attribute will be omitted. By default, this is the case
+		 * for only the very first content media element.
+		 *
+		 * @since WP-5.9.0
+		 *
+		 * @param int $omit_threshold The number of media elements where the `loading` attribute will not be added. Default 1.
+		 */
+		$omit_threshold = apply_filters( 'wp_omit_loading_attr_threshold', 1 );
+	}
+
+	return $omit_threshold;
+}
+
+/**
+ * Increases an internal content media count variable.
+ *
+ * @since WP-5.9.0
+ * @access private
+ *
+ * @param int $amount Optional. Amount to increase by. Default 1.
+ * @return int The latest content media count, after the increase.
+ */
+function wp_increase_content_media_count( $amount = 1 ) {
+	static $content_media_count = 0;
+
+	$content_media_count += $amount;
+
+	return $content_media_count;
 }

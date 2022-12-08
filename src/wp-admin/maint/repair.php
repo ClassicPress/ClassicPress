@@ -5,9 +5,9 @@
  * @package ClassicPress
  * @subpackage Database
  */
-define('WP_REPAIRING', true);
+define( 'WP_REPAIRING', true );
 
-require_once( dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-load.php' );
+require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-load.php';
 
 header( 'Content-Type: text/html; charset=utf-8' );
 ?>
@@ -68,19 +68,18 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 		// Translators: 1: wp-config.php; 2: Secret key service URL.
 		echo '<p>' . sprintf( __( 'While you are editing your %1$s file, take a moment to make sure you have all 8 keys and that they are unique. You can generate these using the <a href="%2$s">ClassicPress.net secret key service</a>.' ), '<code>wp-config.php</code>', 'https://api.classicpress.net/secret-key/1.0/salt/' ) . '</p>';
 	}
-
 } elseif ( isset( $_GET['repair'] ) ) {
 
 	echo '<h1 class="screen-reader-text">' . __( 'Database repair results' ) . '</h1>';
 
 	$optimize = 2 == $_GET['repair'];
-	$okay = true;
+	$okay     = true;
 	$problems = array();
 
 	$tables = $wpdb->tables();
 
 	// Sitecategories may not exist if global terms are disabled.
-	$query = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->sitecategories ) );
+	$query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->sitecategories ) );
 	if ( is_multisite() && ! $wpdb->get_var( $query ) ) {
 		unset( $tables['sitecategories'] );
 	}
@@ -99,24 +98,24 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 		$check = $wpdb->get_row( "CHECK TABLE $table" );
 
 		echo '<p>';
-		if ( 'OK' == $check->Msg_text ) {
-			/* translators: %s: table name */
+		if ( 'OK' === $check->Msg_text ) {
+			/* translators: %s: Table name. */
 			printf( __( 'The %s table is okay.' ), "<code>$table</code>" );
 		} else {
 			/* translators: 1: table name, 2: error message, */
-			printf( __( 'The %1$s table is not okay. It is reporting the following error: %2$s. ClassicPress will attempt to repair this table&hellip;' ) , "<code>$table</code>", "<code>$check->Msg_text</code>" );
+			printf( __( 'The %1$s table is not okay. It is reporting the following error: %2$s. ClassicPress will attempt to repair this table&hellip;' ), "<code>$table</code>", "<code>$check->Msg_text</code>" );
 
 			$repair = $wpdb->get_row( "REPAIR TABLE $table" );
 
 			echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-			if ( 'OK' == $check->Msg_text ) {
-				/* translators: %s: table name */
+			if ( 'OK' === $check->Msg_text ) {
+				/* translators: %s: Table name. */
 				printf( __( 'Successfully repaired the %s table.' ), "<code>$table</code>" );
 			} else {
-				/* translators: 1: table name, 2: error message, */
-				echo sprintf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" ) . '<br />';
-				$problems[$table] = $check->Msg_text;
-				$okay = false;
+				/* translators: 1: Table name, 2: Error message. */
+				printf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" ) . '<br />';
+				$problems[ $table ] = $check->Msg_text;
+				$okay               = false;
 			}
 		}
 
@@ -124,15 +123,15 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 			$check = $wpdb->get_row( "ANALYZE TABLE $table" );
 
 			echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-			if ( 'Table is already up to date' == $check->Msg_text )  {
-				/* translators: %s: table name */
+			if ( 'Table is already up to date' === $check->Msg_text ) {
+				/* translators: %s: Table name. */
 				printf( __( 'The %s table is already optimized.' ), "<code>$table</code>" );
 			} else {
 				$check = $wpdb->get_row( "OPTIMIZE TABLE $table" );
 
 				echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-				if ( 'OK' == $check->Msg_text || 'Table is already up to date' == $check->Msg_text ) {
-					/* translators: %s: table name */
+				if ( 'OK' === $check->Msg_text || 'Table is already up to date' === $check->Msg_text ) {
+					/* translators: %s: Table name. */
 					printf( __( 'Successfully optimized the %s table.' ), "<code>$table</code>" );
 				} else {
 					/* translators: 1: table name, 2: error message, */
@@ -144,10 +143,11 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	}
 
 	if ( $problems ) {
-		printf( '<p>' . __('Some database problems could not be repaired. Please copy-and-paste the following list of errors into the <a href="%s">support forum</a> for additional assistance.') . '</p>', __( 'https://forums.classicpress.net/c/support/' ) );
+		printf( '<p>' . __( 'Some database problems could not be repaired. Please copy-and-paste the following list of errors into the <a href="%s">support forum</a> for additional assistance.' ) . '</p>', __( 'https://forums.classicpress.net/c/support/' ) );
 		$problem_output = '';
-		foreach ( $problems as $table => $problem )
+		foreach ( $problems as $table => $problem ) {
 			$problem_output .= "$table: $problem\n";
+		}
 		echo '<p><textarea name="errors" id="errors" rows="20" cols="60">' . esc_textarea( $problem_output ) . '</textarea></p>';
 	} else {
 		echo '<p>' . __( 'Repairs complete. Please remove the following line from wp-config.php to prevent this page from being used by unauthorized users.' ) . "</p><p><code>define('WP_ALLOW_REPAIR', true);</code></p>";
@@ -156,15 +156,16 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 
 	echo '<h1 class="screen-reader-text">' . __( 'ClassicPress database repair' ) . '</h1>';
 
-	if ( isset( $_GET['referrer'] ) && 'is_blog_installed' == $_GET['referrer'] )
+	if ( isset( $_GET['referrer'] ) && 'is_blog_installed' === $_GET['referrer'] ) {
 		echo '<p>' . __( 'One or more database tables are unavailable. To allow ClassicPress to attempt to repair these tables, press the &#8220;Repair Database&#8221; button. Repairing can take a while, so please be patient.' ) . '</p>';
-	else
+	} else {
 		echo '<p>' . __( 'ClassicPress can automatically look for some common database problems and repair them. Repairing can take a while, so please be patient.' ) . '</p>';
-?>
+	}
+	?>
 	<p class="step"><a class="button button-large" href="repair.php?repair=1"><?php _e( 'Repair Database' ); ?></a></p>
 	<p><?php _e( 'ClassicPress can also attempt to optimize the database. This improves performance in some situations. Repairing and optimizing the database can take a long time and the database will be locked while optimizing.' ); ?></p>
 	<p class="step"><a class="button button-large" href="repair.php?repair=2"><?php _e( 'Repair and Optimize Database' ); ?></a></p>
-<?php
+	<?php
 }
 ?>
 </body>

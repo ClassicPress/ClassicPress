@@ -11,7 +11,7 @@
  *
  * @var bool
  */
-define('WP_USE_THEMES', true);
+define( 'WP_USE_THEMES', true );
 
 /** Loads the ClassicPress Environment and Template */
-require( dirname( __FILE__ ) . '/wp-blog-header.php' );
+require dirname( __FILE__ ) . '/wp-blog-header.php';

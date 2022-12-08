@@ -3,7 +3,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing ajax compression test functionality
@@ -47,8 +47,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Ensure we found the right match
-		$this->assertContains( 'wpCompressionTest', $this->_last_response );
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', $this->_last_response );
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_gzdeflate() {
 
-		if ( !function_exists( 'gzdeflate' ) ) {
+		if ( ! function_exists( 'gzdeflate' ) ) {
 			$this->fail( 'gzdeflate function not available' );
 		}
 
@@ -64,7 +64,7 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Set up a default request
-		$_GET['test'] = 2;
+		$_GET['test']                    = 2;
 		$_SERVER['HTTP_ACCEPT_ENCODING'] = 'deflate';
 
 		// Make the request
@@ -74,8 +74,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Ensure we found the right match
-		$this->assertContains( 'wpCompressionTest', gzinflate( $this->_last_response ) );
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', gzinflate( $this->_last_response ) );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_gzencode() {
 
-		if ( !function_exists('gzencode') ) {
+		if ( ! function_exists( 'gzencode' ) ) {
 			$this->fail( 'gzencode function not available' );
 		}
 
@@ -91,7 +91,7 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Set up a default request
-		$_GET['test'] = 2;
+		$_GET['test']                    = 2;
 		$_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
 
 		// Make the request
@@ -101,8 +101,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Ensure we found the right match
-		$this->assertContains( 'wpCompressionTest', $this->_gzdecode( $this->_last_response ) );
+		// Ensure we found the right match.
+		$this->assertStringContainsString( 'wpCompressionTest', $this->_gzdecode( $this->_last_response ) );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 		$this->_setRole( 'administrator' );
 
 		// Set up a default request
-		$_GET['test'] = 2;
+		$_GET['test']                    = 2;
 		$_SERVER['HTTP_ACCEPT_ENCODING'] = 'unknown';
 
 		// Make the request
@@ -143,8 +143,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Check the site option is not changed due to lack of nonce
-		$this->assertEquals( 0, get_site_option( 'can_compress_scripts' ) );
+		// Check the site option is not changed due to lack of nonce.
+		$this->assertSame( 0, get_site_option( 'can_compress_scripts' ) );
 
 		// Add a nonce
 		$_GET['_ajax_nonce'] = wp_create_nonce( 'update_can_compress_scripts' );
@@ -156,8 +156,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Check the site option is changed
-		$this->assertEquals( 1, get_site_option( 'can_compress_scripts' ) );
+		// Check the site option is changed.
+		$this->assertSame( 1, get_site_option( 'can_compress_scripts' ) );
 	}
 
 	/**
@@ -181,8 +181,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Check the site option is not changed due to lack of nonce
-		$this->assertEquals( 1, get_site_option( 'can_compress_scripts' ) );
+		// Check the site option is not changed due to lack of nonce.
+		$this->assertSame( 1, get_site_option( 'can_compress_scripts' ) );
 
 		// Add a nonce
 		$_GET['_ajax_nonce'] = wp_create_nonce( 'update_can_compress_scripts' );
@@ -194,8 +194,8 @@ class Tests_Ajax_CompressionTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		// Check the site option is changed
-		$this->assertEquals( 0, get_site_option( 'can_compress_scripts' ) );
+		// Check the site option is changed.
+		$this->assertSame( 0, get_site_option( 'can_compress_scripts' ) );
 	}
 
 	/**

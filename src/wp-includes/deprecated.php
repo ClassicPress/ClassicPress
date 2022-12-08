@@ -430,9 +430,9 @@ function wp_get_linksbyname($category, $args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -635,24 +635,24 @@ function list_cats($optionall = 1, $all = 'All', $sort_column = 'ID', $sort_orde
 function wp_list_cats($args = '') {
 	_deprecated_function( __FUNCTION__, 'WP-2.1.0', 'wp_list_categories()' );
 
-	$r = wp_parse_args( $args );
+	$parsed_args = wp_parse_args( $args );
 
 	// Map to new names.
-	if ( isset($r['optionall']) && isset($r['all']))
-		$r['show_option_all'] = $r['all'];
-	if ( isset($r['sort_column']) )
-		$r['orderby'] = $r['sort_column'];
-	if ( isset($r['sort_order']) )
-		$r['order'] = $r['sort_order'];
-	if ( isset($r['optiondates']) )
-		$r['show_last_update'] = $r['optiondates'];
-	if ( isset($r['optioncount']) )
-		$r['show_count'] = $r['optioncount'];
-	if ( isset($r['list']) )
-		$r['style'] = $r['list'] ? 'list' : 'break';
-	$r['title_li'] = '';
+	if ( isset($parsed_args['optionall']) && isset($parsed_args['all']))
+		$parsed_args['show_option_all'] = $parsed_args['all'];
+	if ( isset($parsed_args['sort_column']) )
+		$parsed_args['orderby'] = $parsed_args['sort_column'];
+	if ( isset($parsed_args['sort_order']) )
+		$parsed_args['order'] = $parsed_args['sort_order'];
+	if ( isset($parsed_args['optiondates']) )
+		$parsed_args['show_last_update'] = $parsed_args['optiondates'];
+	if ( isset($parsed_args['optioncount']) )
+		$parsed_args['show_count'] = $parsed_args['optioncount'];
+	if ( isset($parsed_args['list']) )
+		$parsed_args['style'] = $parsed_args['list'] ? 'list' : 'break';
+	$parsed_args['title_li'] = '';
 
-	return wp_list_categories($r);
+	return wp_list_categories($parsed_args);
 }
 
 /**
@@ -892,9 +892,9 @@ function wp_get_links($args = '') {
 		'title_li' => '',
 	);
 
-	$r = wp_parse_args( $args, $defaults );
+	$parsed_args = wp_parse_args( $args, $defaults );
 
-	return wp_list_bookmarks($r);
+	return wp_list_bookmarks($parsed_args);
 }
 
 /**
@@ -1876,7 +1876,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 	if ( !$fullsize && $src = wp_get_attachment_thumb_url( $post->ID ) ) {
 		// We have a thumbnail desired, specified and existing
 
-		$src_file = basename($src);
+		$src_file = wp_basename($src);
 	} elseif ( wp_attachment_is_image( $post->ID ) ) {
 		// We have an image without a thumbnail
 
@@ -1886,7 +1886,7 @@ function get_attachment_icon_src( $id = 0, $fullsize = false ) {
 		// No thumb, no image. We'll look for a mime-related icon instead.
 
 		$icon_dir = apply_filters( 'icon_dir', get_template_directory() . '/images' );
-		$src_file = $icon_dir . '/' . basename($src);
+		$src_file = $icon_dir . '/' . wp_basename($src);
 	}
 
 	if ( !isset($src) || !$src )
@@ -3049,7 +3049,7 @@ function remove_custom_background() {
  */
 function get_theme_data( $theme_file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.4.0', 'wp_get_theme()' );
-	$theme = new WP_Theme( basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
+	$theme = new WP_Theme( wp_basename( dirname( $theme_file ) ), dirname( dirname( $theme_file ) ) );
 
 	$theme_data = array(
 		'Name' => $theme->get('Name'),
@@ -3164,7 +3164,8 @@ function _get_post_ancestors( &$post ) {
  * @see wp_get_image_editor()
  *
  * @param string $file Filename of the image to load.
- * @return resource The resulting image resource on success, Error string on failure.
+ * @return resource|GdImage|string The resulting image resource or GdImage instance on success,
+ *                                 error string on failure.
  */
 function wp_load_image( $file ) {
 	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'wp_get_image_editor()' );
@@ -3185,8 +3186,8 @@ function wp_load_image( $file ) {
 
 	$image = imagecreatefromstring( file_get_contents( $file ) );
 
-	if ( ! is_resource( $image ) ) {
-		/* translators: %s: file name */
+	if ( ! is_gd_image( $image ) ) {
+		/* translators: %s: File name. */
 		return sprintf( __( 'File &#8220;%s&#8221; is not an image.' ), $file );
 	}
 
@@ -3941,7 +3942,70 @@ function wp_ajax_press_this_add_category() {
 }
 
 /**
-* Filter the SQL clauses of an attachment query to include filenames.
+ * Filters 'img' elements in post content to add 'srcset' and 'sizes' attributes.
+ *
+ * @since WP-4.4.0
+ * @deprecated WP-5.5.0
+ *
+ * @see wp_image_add_srcset_and_sizes()
+ *
+ * @param string $content The raw post content to be filtered.
+ * @return string Converted content with 'srcset' and 'sizes' attributes added to images.
+ */
+function wp_make_content_images_responsive( $content ) {
+	_deprecated_function( __FUNCTION__, 'WP-5.5.0', 'wp_filter_content_tags()' );
+
+	// This will also add the `loading` attribute to `img` tags, if enabled.
+	return wp_filter_content_tags( $content );
+}
+
+/**
+ * Display or retrieve page title for post archive based on date.
+ *
+ * Useful for when the template only needs to display the month and year,
+ * if either are available. The prefix does not automatically place a space
+ * between the prefix, so if there should be a space, the parameter value
+ * will need to have it at the end.
+ *
+ * @since WP-0.71
+ * @deprecated CP-1.5.0
+ *
+ * @global WP_Locale $wp_locale
+ *
+ * @param string $prefix  Optional. What to display before the title.
+ * @param bool   $display Optional, default is true. Whether to display or retrieve title.
+ * @return string|void Title when retrieving.
+ */
+function single_month_title( $prefix = '', $display = true ) {
+	_deprecated_function( __FUNCTION__, 'CP-1.5.0' );
+	global $wp_locale;
+
+	$m        = get_query_var( 'm' );
+	$year     = get_query_var( 'year' );
+	$monthnum = get_query_var( 'monthnum' );
+
+	if ( ! empty( $monthnum ) && ! empty( $year ) ) {
+		$my_year  = $year;
+		$my_month = $wp_locale->get_month( $monthnum );
+	} elseif ( ! empty( $m ) ) {
+		$my_year  = substr( $m, 0, 4 );
+		$my_month = $wp_locale->get_month( substr( $m, 4, 2 ) );
+	}
+
+	if ( empty( $my_month ) ) {
+		return false;
+	}
+
+	$result = $prefix . $my_month . $prefix . $my_year;
+
+	if ( ! $display ) {
+		return $result;
+	}
+	echo $result;
+}
+
+/**
+ * Filter the SQL clauses of an attachment query to include filenames.
  *
  * @since WP-4.7.0
  * @deprecated WP-6.0.3

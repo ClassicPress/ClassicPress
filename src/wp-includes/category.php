@@ -25,7 +25,7 @@
  */
 function get_categories( $args = '' ) {
 	$defaults = array( 'taxonomy' => 'category' );
-	$args = wp_parse_args( $args, $defaults );
+	$args     = wp_parse_args( $args, $defaults );
 
 	$taxonomy = $args['taxonomy'];
 
@@ -39,16 +39,20 @@ function get_categories( $args = '' ) {
 	 */
 	$taxonomy = apply_filters( 'get_categories_taxonomy', $taxonomy, $args );
 
-	// Back compat
-	if ( isset($args['type']) && 'link' == $args['type'] ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0',
+	// Back compat.
+	if ( isset( $args['type'] ) && 'link' === $args['type'] ) {
+		_deprecated_argument(
+			__FUNCTION__,
+			'WP-3.0.0',
 			/* translators: 1: "type => link", 2: "taxonomy => link_category" */
-			sprintf( __( '%1$s is deprecated. Use %2$s instead.' ),
+			sprintf(
+				__( '%1$s is deprecated. Use %2$s instead.' ),
 				'<code>type => link</code>',
 				'<code>taxonomy => link_category</code>'
 			)
 		);
-		$taxonomy = $args['taxonomy'] = 'link_category';
+		$taxonomy         = 'link_category';
+		$args['taxonomy'] = $taxonomy;
 	}
 
 	$categories = get_terms( $taxonomy, $args );
@@ -91,8 +95,9 @@ function get_categories( $args = '' ) {
 function get_category( $category, $output = OBJECT, $filter = 'raw' ) {
 	$category = get_term( $category, 'category', $output, $filter );
 
-	if ( is_wp_error( $category ) )
+	if ( is_wp_error( $category ) ) {
 		return $category;
+	}
 
 	_make_cat_compat( $category );
 
@@ -120,26 +125,34 @@ function get_category( $category, $output = OBJECT, $filter = 'raw' ) {
  * @return WP_Term|array|WP_Error|null Type is based on $output value.
  */
 function get_category_by_path( $category_path, $full_match = true, $output = OBJECT ) {
-	$category_path = rawurlencode( urldecode( $category_path ) );
-	$category_path = str_replace( '%2F', '/', $category_path );
-	$category_path = str_replace( '%20', ' ', $category_path );
+	$category_path  = rawurlencode( urldecode( $category_path ) );
+	$category_path  = str_replace( '%2F', '/', $category_path );
+	$category_path  = str_replace( '%20', ' ', $category_path );
 	$category_paths = '/' . trim( $category_path, '/' );
-	$leaf_path  = sanitize_title( basename( $category_paths ) );
+	$leaf_path      = sanitize_title( basename( $category_paths ) );
 	$category_paths = explode( '/', $category_paths );
-	$full_path = '';
+	$full_path      = '';
+
 	foreach ( (array) $category_paths as $pathdir ) {
-		$full_path .= ( $pathdir != '' ? '/' : '' ) . sanitize_title( $pathdir );
+		$full_path .= ( '' !== $pathdir ? '/' : '' ) . sanitize_title( $pathdir );
 	}
-	$categories = get_terms( 'category', array('get' => 'all', 'slug' => $leaf_path) );
+
+	$categories = get_terms(
+		'category',
+		array(
+			'get'  => 'all',
+			'slug' => $leaf_path,
+		)
+	);
 
 	if ( empty( $categories ) ) {
 		return;
 	}
 
 	foreach ( $categories as $category ) {
-		$path = '/' . $leaf_path;
+		$path        = '/' . $leaf_path;
 		$curcategory = $category;
-		while ( ( $curcategory->parent != 0 ) && ( $curcategory->parent != $curcategory->term_id ) ) {
+		while ( ( 0 != $curcategory->parent ) && ( $curcategory->parent != $curcategory->term_id ) ) {
 			$curcategory = get_term( $curcategory->parent, 'category' );
 			if ( is_wp_error( $curcategory ) ) {
 				return $curcategory;
@@ -170,10 +183,11 @@ function get_category_by_path( $category_path, $full_match = true, $output = OBJ
  * @param string $slug The category slug.
  * @return object Category data object
  */
-function get_category_by_slug( $slug  ) {
+function get_category_by_slug( $slug ) {
 	$category = get_term_by( 'slug', $slug, 'category' );
-	if ( $category )
+	if ( $category ) {
 		_make_cat_compat( $category );
+	}
 
 	return $category;
 }
@@ -186,10 +200,11 @@ function get_category_by_slug( $slug  ) {
  * @param string $cat_name Category name.
  * @return int 0, if failure and ID of category on success.
  */
-function get_cat_ID( $cat_name ) {
+function get_cat_ID( $cat_name ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	$cat = get_term_by( 'name', $cat_name, 'category' );
-	if ( $cat )
+	if ( $cat ) {
 		return $cat->term_id;
+	}
 	return 0;
 }
 
@@ -202,10 +217,11 @@ function get_cat_ID( $cat_name ) {
  * @return string Category name, or an empty string if category doesn't exist.
  */
 function get_cat_name( $cat_id ) {
-	$cat_id = (int) $cat_id;
+	$cat_id   = (int) $cat_id;
 	$category = get_term( $cat_id, 'category' );
-	if ( ! $category || is_wp_error( $category ) )
+	if ( ! $category || is_wp_error( $category ) ) {
 		return '';
+	}
 	return $category->name;
 }
 
@@ -343,18 +359,18 @@ function clean_category_cache( $id ) {
  */
 function _make_cat_compat( &$category ) {
 	if ( is_object( $category ) && ! is_wp_error( $category ) ) {
-		$category->cat_ID = $category->term_id;
-		$category->category_count = $category->count;
+		$category->cat_ID               = $category->term_id;
+		$category->category_count       = $category->count;
 		$category->category_description = $category->description;
-		$category->cat_name = $category->name;
-		$category->category_nicename = $category->slug;
-		$category->category_parent = $category->parent;
+		$category->cat_name             = $category->name;
+		$category->category_nicename    = $category->slug;
+		$category->category_parent      = $category->parent;
 	} elseif ( is_array( $category ) && isset( $category['term_id'] ) ) {
-		$category['cat_ID'] = &$category['term_id'];
-		$category['category_count'] = &$category['count'];
+		$category['cat_ID']               = &$category['term_id'];
+		$category['category_count']       = &$category['count'];
 		$category['category_description'] = &$category['description'];
-		$category['cat_name'] = &$category['name'];
-		$category['category_nicename'] = &$category['slug'];
-		$category['category_parent'] = &$category['parent'];
+		$category['cat_name']             = &$category['name'];
+		$category['category_nicename']    = &$category['slug'];
+		$category['category_parent']      = &$category['parent'];
 	}
 }

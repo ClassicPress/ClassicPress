@@ -2,7 +2,7 @@
 /**
  * Admin ajax functions to be tested
  */
-require_once( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 /**
  * Testing Ajax handler for instlaling, updating, and deleting themes.
@@ -13,8 +13,8 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 	private $orig_theme_dir;
 	private $theme_root;
 
-	function setUp() {
-		parent::setUp();
+	function set_up() {
+		parent::set_up();
 
 		$this->theme_root     = DIR_TESTDATA . '/themedir1';
 		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
@@ -22,23 +22,23 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 		// /themes is necessary as theme.php functions assume /themes is the root if there is only one root.
 		$GLOBALS['wp_theme_directories'] = array( WP_CONTENT_DIR . '/themes', $this->theme_root );
 
-		add_filter( 'theme_root',      array( $this, 'filter_theme_root' ) );
+		add_filter( 'theme_root', array( $this, 'filter_theme_root' ) );
 		add_filter( 'stylesheet_root', array( $this, 'filter_theme_root' ) );
-		add_filter( 'template_root',   array( $this, 'filter_theme_root' ) );
+		add_filter( 'template_root', array( $this, 'filter_theme_root' ) );
 
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
 	}
 
-	function tearDown() {
+	function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
-		remove_filter( 'theme_root',      array( $this, 'filter_theme_root' ) );
+		remove_filter( 'theme_root', array( $this, 'filter_theme_root' ) );
 		remove_filter( 'stylesheet_root', array( $this, 'filter_theme_root' ) );
-		remove_filter( 'template_root',   array( $this, 'filter_theme_root' ) );
+		remove_filter( 'template_root', array( $this, 'filter_theme_root' ) );
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
 
-		parent::tearDown();
+		parent::tear_down();
 	}
 
 	/**
@@ -70,7 +70,7 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 			),
 		);
 
-		$this->assertEqualSets( $expected, $response );
+		$this->assertSameSets( $expected, $response );
 	}
 
 	public function test_missing_capability() {
@@ -92,13 +92,13 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 			'data'    => array(
 				'update'       => 'theme',
 				'slug'         => 'foo',
-				'errorMessage' => 'Sorry, you are not allowed to update themes for this site.',
 				'oldVersion'   => '',
 				'newVersion'   => '',
+				'errorMessage' => 'Sorry, you are not allowed to update themes for this site.',
 			),
 		);
 
-		$this->assertEqualSets( $expected, $response );
+		$this->assertSameSets( $expected, $response );
 	}
 
 	public function test_update_theme() {
@@ -123,19 +123,25 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response, true );
 
 		$theme = wp_get_theme( 'twentyten' );
+		// Hack.
+		$theme_old_version = $theme->get( 'Version' );
+		if ( $theme_old_version === false ) {
+			$theme_old_version = '';
+		}
+
 		$expected = array(
 			'success' => false,
 			'data'    => array(
 				'update'       => 'theme',
 				'slug'         => 'twentyten',
-				'errorMessage' => 'The theme is at the latest version.',
-				'oldVersion'   => $theme->get( 'Version' ),
+				'oldVersion'   => $theme_old_version,
 				'newVersion'   => '',
 				'debug'        => array( 'The theme is at the latest version.' ),
+				'errorMessage' => 'The theme is at the latest version.',
 			),
 		);
 
-		$this->assertEqualSets( $expected, $response );
+		$this->assertSameSets( $expected, $response );
 	}
 
 	function test_uppercase_theme_slug() {
@@ -161,11 +167,11 @@ class Tests_Ajax_Manage_Themes extends WP_Ajax_UnitTestCase {
 				'slug'         => 'camelCase',
 				'oldVersion'   => '1.0',
 				'newVersion'   => '',
-				'errorMessage' => 'The theme is at the latest version.',
 				'debug'        => array( 'The theme is at the latest version.' ),
+				'errorMessage' => 'The theme is at the latest version.',
 			),
 		);
 
-		$this->assertEqualSets( $expected, $response );
+		$this->assertSameSets( $expected, $response );
 	}
 }

@@ -8,7 +8,7 @@ class Tests_Admin_IncludesUpdateCore extends WP_UnitTestCase {
 	public function data_old_files() {
 		global $_old_files;
 
-		require_once( ABSPATH . 'wp-admin/includes/update-core.php' );
+		require_once ABSPATH . 'wp-admin/includes/update-core.php';
 
 		$files = $_old_files;
 
@@ -29,6 +29,6 @@ class Tests_Admin_IncludesUpdateCore extends WP_UnitTestCase {
 	 * @param string $file File name.
 	 */
 	public function test_new_files_are_not_in_old_files_array_compiled( $file ) {
-		$this->assertFileNotExists( dirname( ABSPATH ) . '/build/' . $file );
+		$this->assertFileDoesNotExist( dirname( ABSPATH ) . '/build/' . $file );
 	}
 }

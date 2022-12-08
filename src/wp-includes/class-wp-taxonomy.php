@@ -285,12 +285,15 @@ final class WP_Taxonomy {
 			$args['query_var'] = false;
 		}
 
-		if ( false !== $args['rewrite'] && ( is_admin() || '' != get_option( 'permalink_structure' ) ) ) {
-			$args['rewrite'] = wp_parse_args( $args['rewrite'], array(
-				'with_front'   => true,
-				'hierarchical' => false,
-				'ep_mask'      => EP_NONE,
-			) );
+		if ( false !== $args['rewrite'] && ( is_admin() || get_option( 'permalink_structure' ) ) ) {
+			$args['rewrite'] = wp_parse_args(
+				$args['rewrite'],
+				array(
+					'with_front'   => true,
+					'hierarchical' => false,
+					'ep_mask'      => EP_NONE,
+				)
+			);
 
 			if ( empty( $args['rewrite']['slug'] ) ) {
 				$args['rewrite']['slug'] = sanitize_title_with_dashes( $this->name );
@@ -350,7 +353,7 @@ final class WP_Taxonomy {
 		}
 
 		$this->labels = get_taxonomy_labels( $this );
-		$this->label = $this->labels->name;
+		$this->label  = $this->labels->name;
 	}
 
 	/**
@@ -369,7 +372,7 @@ final class WP_Taxonomy {
 			$wp->add_query_var( $this->query_var );
 		}
 
-		if ( false !== $this->rewrite && ( is_admin() || '' != get_option( 'permalink_structure' ) ) ) {
+		if ( false !== $this->rewrite && ( is_admin() || get_option( 'permalink_structure' ) ) ) {
 			if ( $this->hierarchical && $this->rewrite['hierarchical'] ) {
 				$tag = '(.+?)';
 			} else {

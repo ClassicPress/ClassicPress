@@ -29,14 +29,14 @@ function has_post_thumbnail( $post = null ) {
  * @since WP-4.4.0 `$post` can be a post ID or WP_Post object.
  *
  * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.
- * @return string|int Post thumbnail ID or empty string.
+ * @return int|string Post thumbnail ID or empty string if the post does not exist.
  */
 function get_post_thumbnail_id( $post = null ) {
 	$post = get_post( $post );
 	if ( ! $post ) {
 		return '';
 	}
-	return get_post_meta( $post->ID, '_thumbnail_id', true );
+	return (int) get_post_meta( $post->ID, '_thumbnail_id', true );
 }
 
 /**
@@ -72,19 +72,23 @@ function the_post_thumbnail( $size = 'post-thumbnail', $attr = '' ) {
  * @param WP_Query $wp_query Optional. A WP_Query instance. Defaults to the $wp_query global.
  */
 function update_post_thumbnail_cache( $wp_query = null ) {
-	if ( ! $wp_query )
+	if ( ! $wp_query ) {
 		$wp_query = $GLOBALS['wp_query'];
+	}
 
-	if ( $wp_query->thumbnails_cached )
+	if ( $wp_query->thumbnails_cached ) {
 		return;
+	}
 
 	$thumb_ids = array();
 	foreach ( $wp_query->posts as $post ) {
-		if ( $id = get_post_thumbnail_id( $post->ID ) )
+		$id = get_post_thumbnail_id( $post->ID );
+		if ( $id ) {
 			$thumb_ids[] = $id;
+		}
 	}
 
-	if ( ! empty ( $thumb_ids ) ) {
+	if ( ! empty( $thumb_ids ) ) {
 		_prime_post_caches( $thumb_ids, false, true );
 	}
 
@@ -145,8 +149,23 @@ function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr =
 		 *                                        and height values (in that order). Default 'post-thumbnail'.
 		 */
 		do_action( 'begin_fetch_post_thumbnail_html', $post->ID, $post_thumbnail_id, $size );
-		if ( in_the_loop() )
+		if ( in_the_loop() ) {
 			update_post_thumbnail_cache();
+		}
+
+		// Get the 'loading' attribute value to use as default, taking precedence over the default from
+		// `wp_get_attachment_image()`.
+		$loading = wp_get_loading_attr_default( 'the_post_thumbnail' );
+
+		// Add the default to the given attributes unless they already include a 'loading' directive.
+		if ( empty( $attr ) ) {
+			$attr = array( 'loading' => $loading );
+		} elseif ( is_array( $attr ) && ! array_key_exists( 'loading', $attr ) ) {
+			$attr['loading'] = $loading;
+		} elseif ( is_string( $attr ) && ! preg_match( '/(^|&)loading=', $attr ) ) {
+			$attr .= '&loading=' . $loading;
+		}
+
 		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, $attr );
 
 		/**
