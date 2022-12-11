@@ -410,9 +410,23 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Test HTTP Redirects with multiple Location headers specified
 	 *
+<<<<<<< HEAD
 	 * @see https://core.trac.wordpress.org/ticket/16890
 	 */
 	function test_multiple_location_headers() {
+=======
+	 * This test has been disabled due to api.wordpress.org failing to
+	 * send two Location headers. See #57306.
+	 *
+	 * @ticket 16890
+	 *
+	 * @covers ::wp_remote_head
+	 * @covers ::wp_remote_retrieve_header
+	 * @covers ::wp_remote_get
+	 * @covers ::wp_remote_retrieve_body
+	 */
+	public function disabled_test_multiple_location_headers() {
+>>>>>>> 1b42990b0c (Tests: Temporarily disable a `WP_Http` test for multiple `Location` headers.)
 		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?multiple-location-headers=1';
 		$res = wp_remote_head( $url, array( 'timeout' => 30 ) );
 
