@@ -10,7 +10,7 @@
   "license": "GPL-2.0+",
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
-    "@rollup/plugin-commonjs": "23.0.3",
+    "@rollup/plugin-commonjs": "23.0.4",
     "autoprefixer": "10.4.13",
     "grunt": "1.5.3",
     "grunt-banner": "0.6.0",
