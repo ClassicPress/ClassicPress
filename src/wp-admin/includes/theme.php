@@ -431,9 +431,9 @@ function themes_api( $action, $args = array() ) {
 	}
 
 	if ( 'query_themes' == $action ) {
-	if ( ! isset( $args->per_page ) ) {
-		$args->per_page = 24;
-	}
+		if ( ! isset( $args->per_page ) ) {
+			$args->per_page = 24;
+		}
 	}
 
 	if ( ! isset( $args->locale ) ) {
