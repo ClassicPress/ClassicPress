@@ -94,6 +94,7 @@ class Theme_Upgrader extends WP_Upgrader {
 		/* translators: %s: Theme error. */
 		$this->strings['current_theme_has_errors'] = __( 'The current theme has the following error: "%s".' );
 
+		if ( ! empty( $this->skin->overwrite ) ) {
 		if ( 'update-theme' === $this->skin->overwrite ) {
 			$this->strings['installing_package'] = __( 'Updating the theme&#8230;' );
 			$this->strings['process_failed']     = __( 'Theme update failed.' );
@@ -105,6 +106,7 @@ class Theme_Upgrader extends WP_Upgrader {
 			$this->strings['process_failed']     = __( 'Theme downgrade failed.' );
 			$this->strings['process_success']    = __( 'Theme downgraded successfully.' );
 		}
+	}
 	}
 
 	/**
