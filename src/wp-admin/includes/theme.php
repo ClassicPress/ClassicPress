@@ -475,19 +475,6 @@ function themes_api( $action, $args = array() ) {
 	$res = apply_filters( 'themes_api', false, $action, $args );
 
 	if ( ! $res ) {
-<<<<<<< HEAD
-		// include an unmodified $wp_version
-		include ABSPATH . WPINC . '/version.php';
-
-		$url = 'https://api.wordpress.org/themes/info/1.0/';
-
-		$http_args = array(
-			'user-agent' => classicpress_user_agent(),
-			'body'       => array(
-				'action'  => $action,
-				'request' => serialize( $args ),
-			),
-=======
 		$url = 'http://api.wordpress.org/themes/info/1.2/';
 		$url = add_query_arg(
 			array(
@@ -504,7 +491,6 @@ function themes_api( $action, $args = array() ) {
 
 		$http_args = array(
 			'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
->>>>>>> 212c880d71 (Themes: Use `api.wordpress.org/themes/info/1.2/` to query theme information.)
 		);
 		$request   = wp_remote_get( $url, $http_args );
 
@@ -519,13 +505,7 @@ function themes_api( $action, $args = array() ) {
 					headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 				);
 			}
-<<<<<<< HEAD
-
-			// Retry request
-			$request = wp_remote_post( $url, $http_args );
-=======
 			$request = wp_remote_get( $http_url, $http_args );
->>>>>>> 212c880d71 (Themes: Use `api.wordpress.org/themes/info/1.2/` to query theme information.)
 		}
 
 		if ( is_wp_error( $request ) ) {

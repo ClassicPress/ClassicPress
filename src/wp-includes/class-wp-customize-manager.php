@@ -5820,13 +5820,9 @@ final class WP_Customize_Manager {
 				// Map available theme properties to installed theme properties.
 				$theme->id            = $theme->slug;
 				$theme->screenshot    = array( $theme->screenshot_url );
-<<<<<<< HEAD
-				$theme->authorAndUri  = $theme->author;
+				$theme->authorAndUri  = wp_kses( $theme->author['display_name'], $themes_allowedtags );
 				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
 				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
-=======
-				$theme->authorAndUri = wp_kses( $theme->author['display_name'], $themes_allowedtags );
->>>>>>> 212c880d71 (Themes: Use `api.wordpress.org/themes/info/1.2/` to query theme information.)
 
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
