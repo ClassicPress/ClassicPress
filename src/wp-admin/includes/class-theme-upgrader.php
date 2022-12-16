@@ -106,7 +106,7 @@ class Theme_Upgrader extends WP_Upgrader {
 				$this->strings['process_failed']     = __( 'Theme downgrade failed.' );
 				$this->strings['process_success']    = __( 'Theme downgraded successfully.' );
 			}
-	}
+		}
 	}
 
 	/**
