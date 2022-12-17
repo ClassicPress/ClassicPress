@@ -32,7 +32,7 @@
     "grunt-sass": "3.1.0",
     "ink-docstrap": "1.3.2",
     "postcss": "8.4.20",
-    "rollup": "3.7.4",
+    "rollup": "3.7.5",
     "sync-request": "6.1.0",
     "terser": "5.16.0"
   },
