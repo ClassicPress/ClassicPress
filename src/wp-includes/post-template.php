@@ -285,15 +285,20 @@ function get_the_content( $more_link_text = null, $strip_teaser = false, $post =
 
 	if ( null === $more_link_text ) {
 		$more_link_text = sprintf(
-			'<span aria-label="%1$s">%2$s</span>',
-			sprintf(
-				/* translators: %s: Name of current post */
-				__( 'Continue reading %s' ),
-				the_title_attribute(
-					array(
-						'echo' => false,
-						'post' => $_post,
-					)
+			'<span%1$s>%2$s</span>',
+			cp_attributes(
+				'span',
+				array(
+					'aria-label' => sprintf(
+						/* translators: %s: Name of current post */
+						__( 'Continue reading %s' ),
+						the_title_attribute(
+							array(
+								'echo' => false,
+								'post' => $_post,
+							)
+						)
+					),
 				)
 			),
 			__( '(more&hellip;)' )
@@ -339,7 +344,7 @@ function get_the_content( $more_link_text = null, $strip_teaser = false, $post =
 
 	if ( count( $content ) > 1 ) {
 		if ( $elements['more'] ) {
-			$output .= '<span id="more-' . $_post->ID . '"></span>' . $content[1];
+			$output .= '<span' . cp_attributes( 'span', 'id=more-' . $_post->ID ) . '></span>' . $content[1];
 		} else {
 			if ( ! empty( $more_link_text ) ) {
 
@@ -932,7 +937,13 @@ function wp_link_pages( $args = '' ) {
 				if ( $i != $page || ! $more && 1 == $page ) {
 					$link = _wp_link_page( $i ) . $link . '</a>';
 				} elseif ( $i === $page ) {
-					$link = '<span class="post-page-numbers current" aria-current="' . esc_attr( $parsed_args['aria_current'] ) . '">' . $link . '</span>';
+					$link = '<span' . cp_attributes(
+						'span',
+						array(
+							'class'        => 'post-page-numbers current',
+							'aria-current' => $parsed_args['aria_current'],
+						)
+					) . '>' . $link . '</span>';
 				}
 				/**
 				 * Filters the HTML output of individual page number links.
@@ -1026,7 +1037,13 @@ function _wp_link_page( $i ) {
 		$url = get_preview_post_link( $post, $query_args, $url );
 	}
 
-	return '<a href="' . esc_url( $url ) . '" class="post-page-numbers">';
+	return '<a' . cp_attributes(
+		'a',
+		array(
+			'href'  => $url,
+			'class' => 'post-page-numbers',
+		)
+	) . '>';
 }
 
 //
@@ -1065,7 +1082,7 @@ function the_meta() {
 	_deprecated_function( __FUNCTION__, 'WP-6.0.2', 'get_post_meta()' );
 	$keys = get_post_custom_keys();
 	if ( $keys ) {
-		echo "<ul class='post-meta'>\n";
+		echo '<ul' . cp_attributes( 'ul', 'class=post-meta' ) . ">\n";
 		foreach ( (array) $keys as $key ) {
 			$keyt = trim( $key );
 			if ( is_protected_meta( $keyt, 'post' ) ) {
@@ -1076,7 +1093,9 @@ function the_meta() {
 			$value  = implode( ', ', $values );
 
 			$html = sprintf(
-				"<li><span class='post-meta-key'>%s</span> %s</li>\n",
+				"<li%s><span%s>%s</span> %s</li>\n",
+				cp_attributes( 'li' ),
+				cp_attributes( 'span', 'class=post-meta-key' ),
 				/* translators: %s: Post custom field name. */
 				esc_html( sprintf( _x( '%s:', 'Post custom field name' ), $key ) ),
 				esc_html( $value )
@@ -1277,7 +1296,8 @@ function wp_list_pages( $args = '' ) {
 
 	if ( ! empty( $pages ) ) {
 		if ( $parsed_args['title_li'] ) {
-			$output .= '<li class="pagenav">' . $parsed_args['title_li'] . '<ul>';
+			$output .= '<li' . cp_attributes( 'li', 'class=pagenav' ) . '>'
+				. $parsed_args['title_li'] . '<ul' . cp_attributes( 'ul' ) . '>';
 		}
 		global $wp_query;
 		if ( is_page() || is_attachment() || $wp_query->is_posts_page ) {
@@ -1403,7 +1423,7 @@ function wp_page_menu( $args = array() ) {
 		if ( is_front_page() && ! is_paged() ) {
 			$class = 'class="current_page_item"';
 		}
-		$menu .= '<li ' . $class . '><a href="' . home_url( '/' ) . '">' . $args['link_before'] . $text . $args['link_after'] . '</a></li>';
+		$menu .= '<li' . cp_attributes( 'li', $class ) . '><a' . cp_attributes( 'a', array( 'href' => home_url( '/' ) ) ) . '>' . $args['link_before'] . $text . $args['link_after'] . '</a></li>';
 		// If the front page is a page, add it to the exclude list.
 		if ( 'page' === get_option( 'show_on_front' ) ) {
 			if ( ! empty( $list_args['exclude'] ) ) {
@@ -1432,23 +1452,23 @@ function wp_page_menu( $args = array() ) {
 		if ( isset( $args['fallback_cb'] ) &&
 			'wp_page_menu' === $args['fallback_cb'] &&
 			'ul' !== $container ) {
-			$args['before'] = "<ul>{$n}";
+			$args['before'] = '<ul' . cp_attributes( 'ul' ) . ">{$n}";
 			$args['after']  = '</ul>';
 		}
 
 		$menu = $args['before'] . $menu . $args['after'];
 	}
 
-	$attrs = '';
+	$attrs = array();
 	if ( ! empty( $args['menu_id'] ) ) {
-		$attrs .= ' id="' . esc_attr( $args['menu_id'] ) . '"';
+		$attrs['id'] = $args['menu_id'];
 	}
 
 	if ( ! empty( $args['menu_class'] ) ) {
-		$attrs .= ' class="' . esc_attr( $args['menu_class'] ) . '"';
+		$attrs['class'] = $args['menu_class'];
 	}
 
-	$menu = "<{$container}{$attrs}>" . $menu . "</{$container}>{$n}";
+	$menu = "<{$container}" . cp_attributes( $container, $attrs ) . '>' . $menu . "</{$container}>{$n}";
 
 	/**
 	 * Filters the HTML output of a page-based menu.
@@ -1605,7 +1625,7 @@ function wp_get_attachment_link( $id = 0, $size = 'thumbnail', $permalink = fals
 	 * @param bool         $icon      Whether to include an icon. Default false.
 	 * @param string|bool  $text      If string, will be link text. Default false.
 	 */
-	return apply_filters( 'wp_get_attachment_link', "<a href='" . esc_url( $url ) . "'>$link_text</a>", $id, $size, $permalink, $icon, $text );
+	return apply_filters( 'wp_get_attachment_link', '<a' . cp_attributes( 'a', array( 'href' => $url ) ) . ">$link_text</a>", $id, $size, $permalink, $icon, $text );
 }
 
 /**
@@ -1637,7 +1657,7 @@ function prepend_attachment( $content ) {
 	} elseif ( wp_attachment_is( 'audio', $post ) ) {
 		$p = wp_audio_shortcode( array( 'src' => wp_get_attachment_url() ) );
 	} else {
-		$p = '<p class="attachment">';
+		$p = '<p' . cp_attributes( 'p', 'class=attachment' ) . '>';
 		// show the medium sized image representation of the attachment if available, and link to the raw file
 		$p .= wp_get_attachment_link( 0, 'medium', false );
 		$p .= '</p>';

@@ -53,11 +53,11 @@ class WP_Widget_Meta extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		?>
-			<ul>
+			<ul<?php echo cp_attributes( 'ul' ); ?>>
 			<?php wp_register(); ?>
-			<li><?php wp_loginout(); ?></li>
-			<li><a href="<?php echo esc_url( get_bloginfo( 'rss2_url' ) ); ?>"><?php _e( 'Entries <abbr title="Really Simple Syndication">RSS</abbr>' ); ?></a></li>
-			<li><a href="<?php echo esc_url( get_bloginfo( 'comments_rss2_url' ) ); ?>"><?php _e( 'Comments <abbr title="Really Simple Syndication">RSS</abbr>' ); ?></a></li>
+			<li<?php echo cp_attributes( 'li' ); ?>><?php wp_loginout(); ?></li>
+			<li<?php echo cp_attributes( 'li' ); ?>><a<?php echo cp_attributes( 'a', array( 'href' => get_bloginfo( 'rss2_url' ) ) ); ?>><?php _e( 'Entries <abbr title="Really Simple Syndication">RSS</abbr>' ); ?></a></li>
+			<li<?php echo cp_attributes( 'li' ); ?>><a<?php echo cp_attributes( 'a', array( 'href' => get_bloginfo( 'comments_rss2_url' ) ) ); ?>><?php _e( 'Comments <abbr title="Really Simple Syndication">RSS</abbr>' ); ?></a></li>
 			<?php
 			/**
 			 * Filters the "Powered by ClassicPress" text in the Meta widget.
@@ -71,8 +71,9 @@ class WP_Widget_Meta extends WP_Widget {
 			echo apply_filters(
 				'widget_meta_poweredby',
 				sprintf(
-					'<li><a href="%s" title="%s">%s</a></li>',
-					esc_url( 'https://www.classicpress.net/' ),
+					'<li%s><a href="%s" title="%s">%s</a></li>',
+					cp_attributes( 'li' ),
+					'https://www.classicpress.net/',
 					esc_attr__( 'Powered by ClassicPress, state-of-the-art semantic personal publishing platform.' ),
 					_x( 'ClassicPress.net', 'meta widget link text' )
 				),

@@ -2574,7 +2574,7 @@ function get_the_post_navigation( $args = array() ) {
 	$navigation = '';
 
 	$previous = get_previous_post_link(
-		'<div class="nav-previous">%link</div>',
+		'<div' . cp_attributes( 'div', 'class=nav-previous' ) . '>%link</div>',
 		$args['prev_text'],
 		$args['in_same_term'],
 		$args['excluded_terms'],
@@ -2582,7 +2582,7 @@ function get_the_post_navigation( $args = array() ) {
 	);
 
 	$next = get_next_post_link(
-		'<div class="nav-next">%link</div>',
+		'<div' . cp_attributes( 'div', 'class=nav-next' ) . '>%link</div>',
 		$args['next_text'],
 		$args['in_same_term'],
 		$args['excluded_terms'],
@@ -2646,11 +2646,11 @@ function get_the_posts_navigation( $args = array() ) {
 		$prev_link = get_next_posts_link( $args['prev_text'] );
 
 		if ( $prev_link ) {
-			$navigation .= '<div class="nav-previous">' . $prev_link . '</div>';
+			$navigation .= '<div' . cp_attributes( 'div', 'class=nav-previous' ) . '>' . $prev_link . '</div>';
 		}
 
 		if ( $next_link ) {
-			$navigation .= '<div class="nav-next">' . $next_link . '</div>';
+			$navigation .= '<div' . cp_attributes( 'div', 'class=nav-next' ) . '>' . $next_link . '</div>';
 		}
 
 		$navigation = _navigation_markup( $navigation, 'posts-navigation', $args['screen_reader_text'] );
@@ -3007,11 +3007,11 @@ function get_the_comments_navigation( $args = array() ) {
 		$next_link = get_next_comments_link( $args['next_text'] );
 
 		if ( $prev_link ) {
-			$navigation .= '<div class="nav-previous">' . $prev_link . '</div>';
+			$navigation .= '<div' . cp_attributes( 'div', 'class=nav-previous' ) . '>' . $prev_link . '</div>';
 		}
 
 		if ( $next_link ) {
-			$navigation .= '<div class="nav-next">' . $next_link . '</div>';
+			$navigation .= '<div' . cp_attributes( 'div', 'class=nav-next' ) . '>' . $next_link . '</div>';
 		}
 
 		$navigation = _navigation_markup( $navigation, 'comment-navigation', $args['screen_reader_text'] );
@@ -4378,8 +4378,14 @@ function get_the_privacy_policy_link( $before = '', $after = '' ) {
 
 	if ( $privacy_policy_url && $page_title ) {
 		$link = sprintf(
-			'<a class="privacy-policy-link" href="%s">%s</a>',
-			esc_url( $privacy_policy_url ),
+			'<a%s>%s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'class' => 'privacy-policy-link',
+					'href'  => $privacy_policy_url,
+				)
+			),
 			esc_html( $page_title )
 		);
 	}

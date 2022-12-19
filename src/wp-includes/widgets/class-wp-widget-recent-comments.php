@@ -116,19 +116,19 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			$output .= $args['before_title'] . $title . $args['after_title'];
 		}
 
-		$output .= '<ul id="recentcomments">';
+		$output .= '<ul' . cp_attributes( 'ul', 'id=recentcomments' ) . '>';
 		if ( is_array( $comments ) && $comments ) {
 			// Prime cache for associated posts. (Prime post term cache if we need it for permalinks.)
 			$post_ids = array_unique( wp_list_pluck( $comments, 'comment_post_ID' ) );
 			_prime_post_caches( $post_ids, strpos( get_option( 'permalink_structure' ), '%category%' ), false );
 
 			foreach ( (array) $comments as $comment ) {
-				$output .= '<li class="recentcomments">';
+				$output .= '<li' . cp_attributes( 'li', 'class=recentcomments' ) . '>';
 				/* translators: comments widget: 1: comment author, 2: post link */
 				$output .= sprintf(
 					_x( '%1$s on %2$s', 'widgets' ),
-					'<span class="comment-author-link">' . get_comment_author_link( $comment ) . '</span>',
-					'<a href="' . esc_url( get_comment_link( $comment ) ) . '">' . get_the_title( $comment->comment_post_ID ) . '</a>'
+					'<span' . cp_attributes( 'span', 'class=comment-author-link' ) . '>' . get_comment_author_link( $comment ) . '</span>',
+					'<a' . cp_attributes( 'a', array( 'href' => get_comment_link( $comment ) ) ) . '>' . get_the_title( $comment->comment_post_ID ) . '</a>'
 				);
 				$output .= '</li>';
 			}

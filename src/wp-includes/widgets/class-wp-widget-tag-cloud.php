@@ -90,7 +90,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
-		echo '<div class="tagcloud">';
+		echo '<div' . cp_attributes( 'div', 'class=tagcloud' ) . '>';
 
 		echo $tag_cloud;
 

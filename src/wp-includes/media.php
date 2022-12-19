@@ -382,7 +382,14 @@ function get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
 	 */
 	$class = apply_filters( 'get_image_tag_class', $class, $id, $align, $size );
 
-	$html = '<img src="' . esc_attr( $img_src ) . '" alt="' . esc_attr( $alt ) . '" ' . $title . $hwstring . 'class="' . $class . '" />';
+	$html = '<img' . cp_attributes(
+		'img',
+		array(
+			'src'   => $img_src,
+			'alt'   => $alt,
+			'class' => $class,
+		)
+	) . ' ' . $title . $hwstring . '/>';
 
 	/**
 	 * Filters the HTML content for the image tag.
@@ -1946,11 +1953,13 @@ function img_caption_shortcode( $attr, $content = null ) {
 		return $content;
 	}
 
-	if ( ! empty( $atts['id'] ) ) {
-		$atts['id'] = 'id="' . esc_attr( sanitize_html_class( $atts['id'] ) ) . '" ';
-	}
-
 	$class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
+	$container_attr = array( 'class' => $class );
+
+	if ( ! empty( $atts['id'] ) ) {
+		$atts['id'] = sanitize_html_class( $atts['id'] );
+		$container_attr['id'] = $atts['id'];
+	}
 
 	$html5 = current_theme_supports( 'html5', 'caption' );
 	// HTML5 captions never added the extra 10px to the image width
@@ -1973,17 +1982,16 @@ function img_caption_shortcode( $attr, $content = null ) {
 	 */
 	$caption_width = apply_filters( 'img_caption_shortcode_width', $width, $atts, $content );
 
-	$style = '';
 	if ( $caption_width ) {
-		$style = 'style="width: ' . (int) $caption_width . 'px" ';
+		$container_attr['style'] = 'width: ' . (int) $caption_width . 'px';
 	}
 
 	if ( $html5 ) {
-		$html = '<figure ' . $atts['id'] . $style . 'class="' . esc_attr( $class ) . '">'
-		. do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
+		$html = '<figure' . cp_attributes( 'figure', $container_attr ) . '>'
+		. do_shortcode( $content ) . '<figcaption' . cp_attributes( 'figcaption', 'class=wp-caption-text' ) . '>' . $atts['caption'] . '</figcaption></figure>';
 	} else {
-		$html = '<div ' . $atts['id'] . $style . 'class="' . esc_attr( $class ) . '">'
-		. do_shortcode( $content ) . '<p class="wp-caption-text">' . $atts['caption'] . '</p></div>';
+		$html = '<div' . cp_attributes( 'div', $container_attr ) . '>'
+		. do_shortcode( $content ) . '<p' . cp_attributes( 'p', 'class=wp-caption-text' ) . '>' . $atts['caption'] . '</p></div>';
 	}
 
 	return $html;
@@ -2189,7 +2197,13 @@ function gallery_shortcode( $attr ) {
 	}
 
 	$size_class  = sanitize_html_class( $atts['size'] );
-	$gallery_div = "<div id='$selector' class='gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}'>";
+	$gallery_div = '<div' . cp_attributes(
+		'div',
+		array(
+			'id'    => $selector,
+			'class' => "gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}",
+		)
+	) . '>';
 
 	/**
 	 * Filters the default gallery shortcode CSS styles.
@@ -2218,27 +2232,33 @@ function gallery_shortcode( $attr ) {
 		if ( isset( $image_meta['height'], $image_meta['width'] ) ) {
 			$orientation = ( $image_meta['height'] > $image_meta['width'] ) ? 'portrait' : 'landscape';
 		}
-		$output .= "<{$itemtag} class='gallery-item'>";
+		$output .= "<{$itemtag}" . cp_attributes( $itemtag, 'class=gallery-item' ) . '>';
 		$output .= "
-			<{$icontag} class='gallery-icon {$orientation}'>
+			<{$icontag}" . cp_attributes( $icontag, array( 'class' => "gallery-icon {$orientation}" ) ) . ">
 				$image_output
 			</{$icontag}>";
 		if ( $captiontag && trim( $attachment->post_excerpt ) ) {
 			$output .= "
-				<{$captiontag} class='wp-caption-text gallery-caption' id='$selector-$id'>
-				" . wptexturize( $attachment->post_excerpt ) . "
+				<{$captiontag}" . cp_attributes(
+					$captiontag,
+					array(
+						'class' => 'wp-caption-text gallery-caption',
+						'id'    => "$selector-$id",
+						)
+					) . '>
+				' . wptexturize( $attachment->post_excerpt ) . "
 				</{$captiontag}>";
 		}
 		$output .= "</{$itemtag}>";
 
 		if ( ! $html5 && $columns > 0 && 0 === ++$i % $columns ) {
-			$output .= '<br style="clear: both" />';
+			$output .= '<br' . cp_attributes( 'br', array( 'style' => 'clear: both' ) ) . ' />';
 		}
 	}
 
 	if ( ! $html5 && $columns > 0 && 0 !== $i % $columns ) {
-		$output .= "
-			<br style='clear: both' />";
+		$output .= '
+			<br' . cp_attributes( 'br', array( 'style' => 'clear: both' ) ) . '/>';
 	}
 
 	$output .= "
@@ -2539,9 +2559,9 @@ function wp_playlist_shortcode( $attr ) {
 		do_action( 'wp_playlist_scripts', $atts['type'], $atts['style'] );
 	}
 	?>
-<div class="wp-playlist wp-<?php echo $safe_type; ?>-playlist wp-playlist-<?php echo $safe_style; ?>">
+<div<?php echo cp_attributes( 'div', array( 'class' => "wp-playlist wp-$safe_type-playlist wp-playlist-$safe_style" ) ); ?>>
 	<?php if ( 'audio' === $atts['type'] ) : ?>
-	<div class="wp-playlist-current-item"></div>
+	<div<?php echo cp_attributes( 'div', 'class=wp-playlist-current-item' ); ?>></div>
 	<?php endif ?>
 	<<?php echo $safe_type; ?> controls="controls" preload="none" width="
 				<?php
@@ -2554,13 +2574,13 @@ function wp_playlist_shortcode( $attr ) {
 	endif;
 	?>
 	></<?php echo $safe_type; ?>>
-	<div class="wp-playlist-next"></div>
-	<div class="wp-playlist-prev"></div>
+	<div<?php echo cp_attributes( 'div', 'class=wp-playlist-next' ); ?>></div>
+	<div<?php echo cp_attributes( 'div', 'class=wp-playlist-prev' ); ?>></div>
 	<noscript>
-	<ol>
+	<ol<?php echo cp_attributes( 'ol' ); ?>>
 	<?php
 	foreach ( $attachments as $att_id => $attachment ) {
-		printf( '<li>%s</li>', wp_get_attachment_link( $att_id ) );
+		printf( '<li%s>%s</li>', cp_attributes( 'li' ), wp_get_attachment_link( $att_id ) );
 	}
 	?>
 	</ol>
@@ -2774,25 +2794,16 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 		'autoplay' => wp_validate_boolean( $atts['autoplay'] ),
 		'preload'  => $atts['preload'],
 		'style'    => $atts['style'],
+		'controls' => 'controls',
 	);
 
-	// These ones should just be omitted altogether if they are blank
-	foreach ( array( 'loop', 'autoplay', 'preload' ) as $a ) {
-		if ( empty( $html_atts[ $a ] ) ) {
-			unset( $html_atts[ $a ] );
-		}
-	}
-
-	$attr_strings = array();
-	foreach ( $html_atts as $k => $v ) {
-		$attr_strings[] = $k . '="' . esc_attr( $v ) . '"';
-	}
+	$html_atts = array_filter( $html_atts );
 
 	$html = '';
 	if ( 'mediaelement' === $library && 1 === $instance ) {
 		$html .= "<!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->\n";
 	}
-	$html .= sprintf( '<audio %s controls="controls">', join( ' ', $attr_strings ) );
+	$html .= sprintf( '<audio%s>', cp_attributes( 'audio', $html_atts ) );
 
 	$fileurl = '';
 	$source  = '<source type="%s" src="%s" />';
@@ -3034,25 +3045,16 @@ function wp_video_shortcode( $attr, $content = '' ) {
 		'loop'     => wp_validate_boolean( $atts['loop'] ),
 		'autoplay' => wp_validate_boolean( $atts['autoplay'] ),
 		'preload'  => $atts['preload'],
+		'controls' => 'controls',
 	);
 
-	// These ones should just be omitted altogether if they are blank
-	foreach ( array( 'poster', 'loop', 'autoplay', 'preload' ) as $a ) {
-		if ( empty( $html_atts[ $a ] ) ) {
-			unset( $html_atts[ $a ] );
-		}
-	}
-
-	$attr_strings = array();
-	foreach ( $html_atts as $k => $v ) {
-		$attr_strings[] = $k . '="' . esc_attr( $v ) . '"';
-	}
+	$html_atts = array_filter( $html_atts );
 
 	$html = '';
 	if ( 'mediaelement' === $library && 1 === $instance ) {
 		$html .= "<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n";
 	}
-	$html .= sprintf( '<video %s controls="controls">', join( ' ', $attr_strings ) );
+	$html .= sprintf( '<video%s>', cp_attributes( 'video', $html_atts ) );
 
 	$fileurl = '';
 	$source  = '<source type="%s" src="%s" />';

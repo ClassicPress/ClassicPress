@@ -234,12 +234,17 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			}
 
 			$image = sprintf(
-				'<img class="%1$s" src="%2$s" alt="%3$s" width="%4$s" height="%5$s" />',
-				esc_attr( $classes ),
-				esc_url( $instance['url'] ),
-				esc_attr( $instance['alt'] ),
-				esc_attr( $instance['width'] ),
-				esc_attr( $instance['height'] )
+				'<img%s />',
+				cp_attributes(
+					'img',
+					array(
+						'class'  => $classes,
+						'src'    => $instance['url'],
+						'alt'    => $instance['alt'],
+						'width'  => $instance['width'],
+						'height' => $instance['height'],
+					)
+				)
 			);
 		} // End if().
 

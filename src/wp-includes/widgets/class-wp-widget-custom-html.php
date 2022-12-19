@@ -165,7 +165,7 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 		if ( ! empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
-		echo '<div class="textwidget custom-html-widget">'; // The textwidget class is for theme styling compatibility.
+		echo '<div' . cp_attributes( 'div', array( 'class' => 'textwidget custom-html-widget' ) ) . '>'; // The textwidget class is for theme styling compatibility.
 		echo $content;
 		echo '</div>';
 		echo $args['after_widget'];

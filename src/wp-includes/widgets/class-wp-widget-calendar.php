@@ -59,9 +59,9 @@ class WP_Widget_Calendar extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		if ( 0 === self::$instance ) {
-			echo '<div id="calendar_wrap" class="calendar_wrap">';
+			echo '<div' . cp_attributes( 'div', 'id=calendar_wrap&class=calendar_wrap' ) . '>';
 		} else {
-			echo '<div class="calendar_wrap">';
+			echo '<div' . cp_attributes( 'div', 'class=calendar_wrap' ) . '>';
 		}
 		get_calendar();
 		echo '</div>';

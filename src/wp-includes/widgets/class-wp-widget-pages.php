@@ -90,7 +90,7 @@ class WP_Widget_Pages extends WP_Widget {
 				echo $args['before_title'] . $title . $args['after_title'];
 			}
 			?>
-		<ul>
+		<ul<?php echo cp_attributes( 'ul' ); ?>>
 			<?php echo $out; ?>
 		</ul>
 			<?php

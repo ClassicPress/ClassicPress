@@ -57,7 +57,7 @@ class WP_Widget_Archives extends WP_Widget {
 		if ( $dropdown ) {
 			$dropdown_id = "{$this->id_base}-dropdown-{$this->number}";
 			?>
-		<label class="screen-reader-text" for="<?php echo esc_attr( $dropdown_id ); ?>"><?php echo $title; ?></label>
+		<label<?php echo cp_attributes( 'label', 'class=screen-reader-text&for=' . $dropdown_id ); ?>><?php echo $title; ?></label>
 		<select id="<?php echo esc_attr( $dropdown_id ); ?>" name="archive-dropdown" onchange='document.location.href=this.options[this.selectedIndex].value;'>
 			<?php
 			/**
@@ -122,7 +122,7 @@ class WP_Widget_Archives extends WP_Widget {
 </script>
 
 		<?php } else { ?>
-		<ul>
+		<ul<?php echo cp_attributes( 'ul' ); ?>>
 			<?php
 			/**
 			 * Filters the arguments for the Archives widget.

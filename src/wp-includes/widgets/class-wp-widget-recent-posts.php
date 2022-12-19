@@ -90,16 +90,16 @@ class WP_Widget_Recent_Posts extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		?>
-		<ul>
+		<ul<?php echo cp_attributes( 'ul' ); ?>>
 			<?php foreach ( $r->posts as $recent_post ) : ?>
 				<?php
 				$post_title = get_the_title( $recent_post->ID );
 				$title      = ( ! empty( $post_title ) ) ? $post_title : __( '(no title)' );
 				?>
-				<li>
-					<a href="<?php the_permalink( $recent_post->ID ); ?>"><?php echo $title; ?></a>
+				<li<?php echo cp_attributes( 'li' ); ?>>
+					<a<?php echo cp_attributes( 'a', array( 'href' => get_the_permalink( $recent_post->ID ) ) ); ?>><?php echo $title; ?></a>
 					<?php if ( $show_date ) : ?>
-						<span class="post-date"><?php echo get_the_date( '', $recent_post->ID ); ?></span>
+						<span<?php echo cp_attributes( 'span', 'class=post-date' ); ?>><?php echo get_the_date( '', $recent_post->ID ); ?></span>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>

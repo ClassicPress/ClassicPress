@@ -1203,14 +1203,7 @@ function get_header_image_tag( $attr = array() ) {
 		}
 	}
 
-	$attr = array_map( 'esc_attr', $attr );
-	$html = '<img';
-
-	foreach ( $attr as $name => $value ) {
-		$html .= ' ' . $name . '="' . $value . '"';
-	}
-
-	$html .= ' />';
+	$html = '<img' . cp_attributes( 'img', $attr ) . ' />';
 
 	/**
 	 * Filters the markup of header images.
@@ -1637,7 +1630,8 @@ function get_custom_header_markup() {
 	}
 
 	return sprintf(
-		'<div id="wp-custom-header" class="wp-custom-header">%s</div>',
+		'<div%s>%s</div>',
+		cp_attributes( 'div', 'id=wp-custom-header&class=wp-custom-header' ),
 		get_header_image_tag()
 	);
 }

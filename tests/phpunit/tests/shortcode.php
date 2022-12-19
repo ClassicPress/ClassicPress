@@ -545,7 +545,7 @@ EOF;
 			),
 			array(
 				'[caption caption="test" width="2"]<div>hello</div>[/caption]',
-				'<div style="width: 12px" class="wp-caption alignnone"><div>hello</div><p class="wp-caption-text">test</p></div>',
+				'<div class="wp-caption alignnone" style="width: 12px"><div>hello</div><p class="wp-caption-text">test</p></div>',
 			),
 			array(
 				'<div [gallery]>',

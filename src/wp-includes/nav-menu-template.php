@@ -176,9 +176,14 @@ function wp_nav_menu( $args = array() ) {
 
 		if ( is_string( $args->container ) && in_array( $args->container, $allowed_tags, true ) ) {
 			$show_container = true;
-			$class          = $args->container_class ? ' class="' . esc_attr( $args->container_class ) . '"' : ' class="menu-' . $menu->slug . '-container"';
-			$id             = $args->container_id ? ' id="' . esc_attr( $args->container_id ) . '"' : '';
-			$nav_menu      .= '<' . $args->container . $id . $class . '>';
+			$attr           = array(
+				'class' => $args->container_class ? $args->container_class : 'menu-' . $menu->slug . '-container',
+			);
+			if ( $args->container_id ) {
+				$attr['id']   = $args->container_id;
+			}
+
+			$nav_menu      .= '<' . $args->container . cp_attributes( $args->container, $attr ) . '>';
 		}
 	}
 

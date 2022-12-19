@@ -2103,8 +2103,8 @@ function get_calendar( $initial = true, $echo = true ) {
 	</tr>
 	</tfoot>
 
-	<tbody>
-	<tr>';
+	<tbody' . cp_attributes( 'tbody' ) . '>
+	<tr' . cp_attributes( 'tr' ) . '>';
 
 	$daywithpost = array();
 
@@ -2743,7 +2743,15 @@ function feed_links( $args = array() ) {
 	 * @param bool $show Whether to display the posts feed link. Default true.
 	 */
 	if ( apply_filters( 'feed_links_show_posts_feed', true ) ) {
-		echo '<link rel="alternate" type="' . feed_content_type() . '" title="' . esc_attr( sprintf( $args['feedtitle'], get_bloginfo( 'name' ), $args['separator'] ) ) . '" href="' . esc_url( get_feed_link() ) . "\" />\n";
+		echo '<link' . cp_attributes(
+			'link',
+			array(
+				'rel'   => 'alternate',
+				'type'  => feed_content_type(),
+				'title' => sprintf( $args['feedtitle'], get_bloginfo( 'name' ), $args['separator'] ),
+				'href'  => get_feed_link(),
+			)
+		) . " />\n";
 	}
 
 	/**
@@ -2754,7 +2762,15 @@ function feed_links( $args = array() ) {
 	 * @param bool $show Whether to display the comments feed link. Default true.
 	 */
 	if ( apply_filters( 'feed_links_show_comments_feed', true ) ) {
-		echo '<link rel="alternate" type="' . feed_content_type() . '" title="' . esc_attr( sprintf( $args['comstitle'], get_bloginfo( 'name' ), $args['separator'] ) ) . '" href="' . esc_url( get_feed_link( 'comments_' . get_default_feed() ) ) . "\" />\n";
+		echo '<link' . cp_attributes(
+			'link',
+			array(
+				'rel'   => 'alternate',
+				'type'  => feed_content_type(),
+				'title' => sprintf( $args['comstitle'], get_bloginfo( 'name' ), $args['separator'] ),
+				'href'  => get_feed_link( 'comments_' . get_default_feed() ),
+			)
+		) . " />\n";
 	}
 }
 
@@ -2840,7 +2856,15 @@ function feed_links_extra( $args = array() ) {
 	}
 
 	if ( isset( $title ) && isset( $href ) ) {
-		echo '<link rel="alternate" type="' . feed_content_type() . '" title="' . esc_attr( $title ) . '" href="' . esc_url( $href ) . '" />' . "\n";
+		echo '<link' . cp_attributes(
+			'link',
+			array(
+				'rel'   => 'alternate',
+				'type'  => feed_content_type(),
+				'title' => $title,
+				'href'  => $href,
+			)
+		) . '" />' . "\n";
 	}
 }
 
@@ -2851,7 +2875,15 @@ function feed_links_extra( $args = array() ) {
  * @since WP-2.0.0
  */
 function rsd_link() {
-	echo '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="' . esc_url( site_url( 'xmlrpc.php?rsd', 'rpc' ) ) . '" />' . "\n";
+	echo '<link' . cp_attributes(
+		'link',
+		array(
+			'rel'   => 'EditURI',
+			'type'  => 'application/rsd+xml',
+			'title' => 'RSD',
+			'href'  => site_url( 'xmlrpc.php?rsd', 'rpc' ),
+		)
+	) . " />\n";
 }
 
 /**
@@ -2861,7 +2893,14 @@ function rsd_link() {
  * @since WP-2.3.1
  */
 function wlwmanifest_link() {
-	echo '<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="' . includes_url( 'wlwmanifest.xml' ) . '" /> ' . "\n";
+	echo '<link' . cp_attributes(
+		'link',
+		array(
+			'rel'  => 'wlwmanifest',
+			'type' => 'application/wlwmanifest+xml',
+			'href' => includes_url( 'wlwmanifest.xml' ),
+		)
+	) . " />\n";
 }
 
 /**
@@ -4592,10 +4631,17 @@ function get_login_image_html() {
 			$login_image_class .= ' banner';
 		}
 		$login_image_html  = sprintf(
-			'<a href="%s" class="%s" rel="home" itemprop="url" title="%s">%s</a>',
-			esc_url( $login_header_url ),
-			$login_image_class,
-			esc_attr( $login_header_title ),
+			'<a%s>%s</a>',
+			cp_attributes(
+				'a',
+				array(
+					'href'     => $login_header_url,
+					'class'    => $login_image_class,
+					'rel'      => 'home',
+					'itemprop' => 'url',
+					'title'    => $login_header_title,
+				)
+			),
 			$login_custom_image_html
 		);
 		$login_header_text = null;
@@ -4615,15 +4661,17 @@ function get_login_image_html() {
 			$login_header_text = $login_header_title;
 		}
 
-		$login_image_html = (
-			'<h1>'
-			. '<a href="' . esc_url( $login_header_url ) . '"'
-			. ' title="' . esc_attr( $login_header_title ) . '"'
-			. ' tabindex="-1">'
+		$login_image_html =
+			'<h1' . cp_attributes( 'h1' ) . '><a' . cp_attributes(
+				'a',
+				array(
+					'href'  => $login_header_url,
+					'title' => $login_header_title,
+					'tabindex' => '-1',
+				)
+			) . '>'
 			. $login_header_text
-			. '</a>'
-			. '</h1>'
-		);
+			. '</a></h1>';
 
 	}
 
