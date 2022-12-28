@@ -85,6 +85,7 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 		'DomainPath'  => 'Domain Path',
 		'Network'     => 'Network',
 		'RequiresWP'  => 'Requires at least',
+		'RequiresCP'  => 'Requires CP',
 		'RequiresPHP' => 'Requires PHP',
 		'UpdateURI'   => 'Update URI',
 		// Site Wide Only is deprecated in favor of Network.
