@@ -728,7 +728,7 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 			);
 		} elseif ( 'term' === $current_screen->base && isset( $tag ) && is_object( $tag ) && ! is_wp_error( $tag ) ) {
 			$tax = get_taxonomy( $tag->taxonomy );
-			if ( is_taxonomy_viewable( $tax ) ) {
+			if ( $tax->public ) {
 				$wp_admin_bar->add_menu(
 					array(
 						'id'    => 'view',
