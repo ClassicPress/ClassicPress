@@ -357,13 +357,16 @@ $menu = add_menu_classes( $menu );
 
 /**
   * Remove the ClassicPress Security Page Menu when it is not used.
+  *
   * The page itself is still accessible if calling the direct URL, or,
   * if a plugin uses add_security_page()
   *
+  * The way we unhook the menu is by checking if the $submenu global holds the key `security.php`,
+  * which is only the case if a plugin added another submenu with `add_security_page` on the `admin_menu` hook.
+  * Note that plugins COULD also add said menu on `init`, but that is `doing_it_wrong` and will actually produce an erroneus menu sequence, even if it "works"
+  *
   * @since CP-1.6.0
   */
- if ( isset( $menu[85] )
- 	&& isset( $menu[85][2] )
- 	&& 'security.php' === $menu[85][2] ) {
+ if ( ! isset( $submenu['security.php'] ) )  {
  	unset( $menu[85] );
  }
