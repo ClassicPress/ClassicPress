@@ -501,8 +501,6 @@ if ( ! function_exists( 'is_iterable' ) ) {
 		return ( is_array( $var ) || $var instanceof Traversable );
 	}
 }
-<<<<<<< HEAD
-=======
 
 if ( ! function_exists( 'array_key_first' ) ) {
 	/**
@@ -511,7 +509,7 @@ if ( ! function_exists( 'array_key_first' ) ) {
 	 * Get the first key of the given array without affecting
 	 * the internal array pointer.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param array $arr An array.
 	 * @return string|int|null The first key of array if the array
@@ -531,7 +529,7 @@ if ( ! function_exists( 'array_key_last' ) ) {
 	 * Get the last key of the given array without affecting the
 	 * internal array pointer.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param array $arr An array.
 	 * @return string|int|null The last key of array if the array
@@ -553,7 +551,7 @@ if ( ! function_exists( 'str_contains' ) ) {
 	 * Performs a case-sensitive check indicating if needle is
 	 * contained in haystack.
 	 *
-	 * @since 5.9.0
+	 * @since WP-5.9.0
 	 *
 	 * @param string $haystack The string to search in.
 	 * @param string $needle   The substring to search for in the haystack.
@@ -573,4 +571,3 @@ if ( ! defined( 'IMAGETYPE_WEBP' ) ) {
 if ( ! defined( 'IMG_WEBP' ) ) {
 	define( 'IMG_WEBP', IMAGETYPE_WEBP ); // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
 }
->>>>>>> 3cc8f1237a (General: Introduce polyfill for `str_contains()` added in PHP 8.0.)
