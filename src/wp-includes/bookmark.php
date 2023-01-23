@@ -176,7 +176,7 @@ function get_bookmarks( $args = '' ) {
 		$parsed_args['exclude']       = '';  //ignore exclude, category, and category_name params if using include
 		$parsed_args['category']      = '';
 		$parsed_args['category_name'] = '';
-		$inclinks           = preg_split( '/[\s,]+/', $r['include'] );
+		$inclinks           = preg_split( '/[\s,]+/', $parsed_args['include'] );
 
 		if ( count( $inclinks ) ) {
 			foreach ( $inclinks as $inclink ) {
@@ -194,7 +194,7 @@ function get_bookmarks( $args = '' ) {
 
 	$exclusions = '';
 	if ( ! empty( $parsed_args['exclude'] ) ) {
-		$exlinks = preg_split( '/[\s,]+/', $r['exclude'] );
+		$exlinks = preg_split( '/[\s,]+/', $parsed_args['exclude'] );
 		if ( count( $exlinks ) ) {
 			foreach ( $exlinks as $exlink ) {
 				if ( empty( $exclusions ) ) {
@@ -231,7 +231,7 @@ function get_bookmarks( $args = '' ) {
 	$join           = '';
 
 	if ( ! empty( $parsed_args['category'] ) ) {
-		$incategories = preg_split( '/[\s,]+/', $r['category'] );
+		$incategories = preg_split( '/[\s,]+/', $parsed_args['category'] );
 		if ( count( $incategories ) ) {
 			foreach ( $incategories as $incat ) {
 				if ( empty( $category_query ) ) {
@@ -301,7 +301,7 @@ function get_bookmarks( $args = '' ) {
 	$query .= " ORDER BY $orderby $order";
 
 	if ( -1 != $parsed_args['limit'] ) {
-		$query .= ' LIMIT ' . $r['limit'];
+		$query .= ' LIMIT ' . $parsed_args['limit'];
 	}
 
 	$results = $wpdb->get_results( $query );
