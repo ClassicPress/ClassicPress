@@ -50,6 +50,8 @@
  * @since WP-1.5.0
  * @since WP-5.3.0 Added support for `Requires at least` and `Requires PHP` headers.
  * @since WP-5.8.0 Added support for `Update URI` header.
+ * @since 1.5.0    Added support for `Requires CP` header.
+ * @since 1.6.0    Added fallback for `Requires CP` header.
  *
  * @param string $plugin_file Path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
@@ -68,6 +70,7 @@
  *     @type string $DomainPath  Plugins relative directory path to .mo files.
  *     @type bool   $Network     Whether the plugin can only be activated network-wide.
  *     @type string $RequiresWP  Minimum required version of WordPress.
+ *     @type string $RequiresCP  Minimum required version of ClassicPress.
  *     @type string $RequiresPHP Minimum required version of PHP.
  *     @type string $UpdateURI   ID of the plugin for update purposes, should be a URI.
  * }
