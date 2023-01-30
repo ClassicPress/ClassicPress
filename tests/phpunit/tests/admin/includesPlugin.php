@@ -33,6 +33,36 @@ class Tests_Admin_includesPlugin extends WP_UnitTestCase {
 			$this->assertTrue( isset( $data[ $name ] ) );
 			$this->assertSame( $value, $data[ $name ] );
 		}
+
+		$data = get_plugin_data( DIR_TESTDATA . '/plugins/requirescp.php' );
+
+		$default_headers = array(
+			'Name'        => 'With requires CP and without Update URI',
+			'RequiresCP'  => '1.5',
+			'UpdateURI'   => 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=plugins',
+		);
+
+		$this->assertTrue( is_array( $data ) );
+
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
+		}
+
+		$data = get_plugin_data( DIR_TESTDATA . '/plugins/updateuri.php' );
+
+		$default_headers = array(
+			'Name'        => 'With requires CP and with Update URI',
+			'RequiresCP'  => '1.5',
+			'UpdateURI'   => 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=keep-it-safe',
+		);
+
+		$this->assertTrue( is_array( $data ) );
+
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
+		}
 	}
 
 	function test_menu_page_url() {
