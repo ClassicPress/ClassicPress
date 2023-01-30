@@ -116,7 +116,7 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 
 	// If no Update URI is defined and Requires CP is set fall back to ClassicPress directory URL.
 	if ( ! $plugin_data['UpdateURI'] ) {
-		$plugin_slug = dirname( plugin_basename( $plugin_file ) );
+		$plugin_slug = basename( dirname( plugin_basename( $plugin_file ) ) );
 		if ( filter_var( $plugin_data['RequiresCP'], FILTER_VALIDATE_FLOAT ) !== false ) {
 			$plugin_data['UpdateURI'] = 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=' . preg_replace( '/[^a-zA-Z0-9_\-]/', '', $plugin_slug );
 		}
