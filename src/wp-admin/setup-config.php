@@ -332,7 +332,7 @@ switch ( $step ) {
 				continue;
 			}
 
-			if ( ! preg_match( '/^define\(\'([A-Z_]+)\',([ ]+)/', $line, $match ) ) {
+			if ( ! preg_match( '/^define\(\s*\'([A-Z_]+)\',([ ]+)/', $line, $match ) ) {
 				continue;
 			}
 
