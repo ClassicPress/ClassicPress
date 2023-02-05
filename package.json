@@ -12,7 +12,7 @@
     "@lodder/grunt-postcss": "3.1.1",
     "@rollup/plugin-commonjs": "24.0.1",
     "autoprefixer": "10.4.13",
-    "grunt": "1.5.3",
+    "grunt": "1.6.1",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.1",
     "grunt-contrib-compress": "2.0.0",
