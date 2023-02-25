@@ -15,13 +15,13 @@
  * core ClassicPress functions pass this class in the event of an error and
  * if not handled properly will result in code errors.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 class WP_Error {
 	/**
 	 * Stores the list of errors.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var array
 	 */
 	public $errors = array();
@@ -29,7 +29,7 @@ class WP_Error {
 	/**
 	 * Stores the list of data for error codes.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var array
 	 */
 	public $error_data = array();
@@ -45,7 +45,7 @@ class WP_Error {
 	 * Though the class is constructed with a single error code and
 	 * message, multiple codes can be added using the `add()` method.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string|int $code Error code
 	 * @param string $message Error message
@@ -66,7 +66,7 @@ class WP_Error {
 	/**
 	 * Retrieve all error codes.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @return array List of error codes, if available.
 	 */
@@ -81,7 +81,7 @@ class WP_Error {
 	/**
 	 * Retrieve first error code available.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @return string|int Empty string, if no error codes.
 	 */
@@ -98,7 +98,7 @@ class WP_Error {
 	/**
 	 * Retrieve all error messages or error messages matching code.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string|int $code Optional. Retrieve messages matching code, if exists.
 	 * @return array Error strings on success, or empty array on failure (if using code parameter).
@@ -127,7 +127,7 @@ class WP_Error {
 	 * This will get the first message available for the code. If no code is
 	 * given then the first code available will be used.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string|int $code Optional. Error code to retrieve message.
 	 * @return string
@@ -146,7 +146,7 @@ class WP_Error {
 	/**
 	 * Retrieve error data for error code.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string|int $code Optional. Error code.
 	 * @return mixed Error data, if it exists.
@@ -164,7 +164,7 @@ class WP_Error {
 	/**
 	 * Add an error or append additional message to an existing error.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string|int $code Error code.
 	 * @param string $message Error message.
@@ -182,7 +182,7 @@ class WP_Error {
 	 *
 	 * The error code can only contain one error data.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param mixed $data Error data.
 	 * @param string|int $code Error code.
@@ -201,7 +201,7 @@ class WP_Error {
 	 * This function removes all error messages associated with the specified
 	 * error code, along with any error data for that code.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param string|int $code Error code.
 	 */

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 
 _deprecated_file( basename( __FILE__ ), 'WP-4.7.0', 'class-wp-upgrader.php' );

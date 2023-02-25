@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * This skin is designed to be used for Ajax updates.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @see Automatic_Upgrader_Skin
  */
@@ -21,7 +21,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Holds the WP_Error object.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var null|WP_Error
 	 */
 	protected $errors = null;
@@ -29,7 +29,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param array $args Options for the upgrader, see WP_Upgrader_Skin::__construct().
 	 */
@@ -42,7 +42,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Retrieves the list of errors.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @return WP_Error Errors during an upgrade.
 	 */
@@ -53,7 +53,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Retrieves a string for error messages.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @return string Error messages during an upgrade.
 	 */
@@ -74,7 +74,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Stores a log entry for an error.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string|WP_Error $errors Errors.
 	 * @param mixed           ...$args Optional text replacements.
@@ -108,7 +108,7 @@ class WP_Ajax_Upgrader_Skin extends Automatic_Upgrader_Skin {
 	/**
 	 * Stores a log entry.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string|array|WP_Error $data Log entry data.
 	 * @param mixed                 ...$args Optional text replacements.

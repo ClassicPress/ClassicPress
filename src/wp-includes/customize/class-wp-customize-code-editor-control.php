@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 
 /**
  * Customize Code Editor Control class.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @see WP_Customize_Control
  */
@@ -19,7 +19,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Customize control type.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var string
 	 */
 	public $type = 'code_editor';
@@ -27,7 +27,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Type of code that is being edited.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var string
 	 */
 	public $code_type = '';
@@ -36,7 +36,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	 * Code editor settings.
 	 *
 	 * @see wp_enqueue_code_editor()
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var array|false
 	 */
 	public $editor_settings = array();
@@ -44,7 +44,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Enqueue control related scripts/styles.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function enqueue() {
 		$this->editor_settings = wp_enqueue_code_editor(
@@ -64,7 +64,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @see WP_Customize_Control::json()
 	 *
 	 * @return array Array of parameters passed to the JavaScript.
@@ -79,14 +79,14 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Don't render the control content from PHP, as it's rendered via JS on load.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * Render a JS template for control display.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function content_template() {
 		?>

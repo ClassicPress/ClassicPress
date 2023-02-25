@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage List_Table
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Helper class to be used only by back compat functions
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 class _WP_List_Table_Compat extends WP_List_Table {
 	public $_screen;

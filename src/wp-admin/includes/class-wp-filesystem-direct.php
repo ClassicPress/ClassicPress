@@ -9,7 +9,7 @@
 /**
  * ClassicPress Filesystem Class for direct PHP file and folder manipulation.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @see WP_Filesystem_Base
  */

@@ -132,7 +132,7 @@ if ( has_action( 'welcome_panel' ) && current_user_can( 'edit_theme_options' ) )
 		 *
 		 *     remove_action( 'welcome_panel', 'wp_welcome_panel' );
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 */
 		do_action( 'welcome_panel' );
 		?>

@@ -14,7 +14,7 @@
  * the use of locate_template(). Allows for more generic template location
  * without the use of the other get_*_template() functions.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @param string $type      Filename without extension.
  * @param array  $templates An optional list of template candidates
@@ -35,7 +35,7 @@ function get_query_template( $type, $templates = array() ) {
 	 * Possible values for `$type` include: 'index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date',
 	 * 'embed', 'home', 'frontpage', 'page', 'paged', 'search', 'single', 'singular', and 'attachment'.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array $templates A list of template candidates, in descending order of priority.
 	 */
@@ -53,8 +53,8 @@ function get_query_template( $type, $templates = array() ) {
 	 * Possible values for `$type` include: 'index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date',
 	 * 'embed', 'home', 'frontpage', 'page', 'paged', 'search', 'single', 'singular', and 'attachment'.
 	 *
-	 * @since WP-1.5.0
-	 * @since WP-4.8.0 The `$type` and `$templates` parameters were added.
+	 * @since 1.5.0
+	 * @since 4.8.0 The `$type` and `$templates` parameters were added.
 	 *
 	 * @param string $template  Path to the template. See locate_template().
 	 * @param string $type      Filename without extension.
@@ -69,7 +69,7 @@ function get_query_template( $type, $templates = array() ) {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'index'.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @see get_query_template()
  *
@@ -85,7 +85,7 @@ function get_index_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is '404'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -101,7 +101,7 @@ function get_404_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'archive'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -127,7 +127,7 @@ function get_archive_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'archive'.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @see get_archive_template()
  *
@@ -165,7 +165,7 @@ function get_post_type_archive_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'author'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -203,8 +203,8 @@ function get_author_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'category'.
  *
- * @since WP-1.5.0
- * @since WP-4.7.0 The decoded form of `category-{slug}.php` was added to the top of the
+ * @since 1.5.0
+ * @since 4.7.0 The decoded form of `category-{slug}.php` was added to the top of the
  *              template hierarchy when the category slug contains multibyte characters.
  *
  * @see get_query_template()
@@ -249,8 +249,8 @@ function get_category_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'tag'.
  *
- * @since WP-2.3.0
- * @since WP-4.7.0 The decoded form of `tag-{slug}.php` was added to the top of the
+ * @since 2.3.0
+ * @since 4.7.0 The decoded form of `tag-{slug}.php` was added to the top of the
  *              template hierarchy when the tag slug contains multibyte characters.
  *
  * @see get_query_template()
@@ -295,8 +295,8 @@ function get_tag_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'taxonomy'.
  *
- * @since WP-2.5.0
- * @since WP-4.7.0 The decoded form of `taxonomy-{taxonomy_slug}-{term_slug}.php` was added to the top of the
+ * @since 2.5.0
+ * @since 4.7.0 The decoded form of `taxonomy-{taxonomy_slug}-{term_slug}.php` was added to the top of the
  *              template hierarchy when the term slug contains multibyte characters.
  *
  * @see get_query_template()
@@ -330,7 +330,7 @@ function get_taxonomy_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'date'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -346,7 +346,7 @@ function get_date_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'home'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -364,7 +364,7 @@ function get_home_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'frontpage'.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @see get_query_template()
  *
@@ -396,8 +396,8 @@ function get_front_page_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'page'.
  *
- * @since WP-1.5.0
- * @since WP-4.7.0 The decoded form of `page-{page_name}.php` was added to the top of the
+ * @since 1.5.0
+ * @since 4.7.0 The decoded form of `page-{page_name}.php` was added to the top of the
  *              template hierarchy when the page name contains multibyte characters.
  *
  * @see get_query_template()
@@ -442,7 +442,7 @@ function get_page_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'search'.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see get_query_template()
  *
@@ -473,11 +473,11 @@ function get_search_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'single'.
  *
- * @since WP-1.5.0
- * @since WP-4.4.0 `single-{post_type}-{post_name}.php` was added to the top of the template hierarchy.
- * @since WP-4.7.0 The decoded form of `single-{post_type}-{post_name}.php` was added to the top of the
+ * @since 1.5.0
+ * @since 4.4.0 `single-{post_type}-{post_name}.php` was added to the top of the template hierarchy.
+ * @since 4.7.0 The decoded form of `single-{post_type}-{post_name}.php` was added to the top of the
  *              template hierarchy when the post name contains multibyte characters.
- * @since WP-4.7.0 {Post Type Template}.php was added to the top of the template hierarchy.
+ * @since 4.7.0 {Post Type Template}.php was added to the top of the template hierarchy.
  *
  * @see get_query_template()
  *
@@ -526,7 +526,7 @@ function get_single_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'embed'.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  *
  * @see get_query_template()
  *
@@ -556,7 +556,7 @@ function get_embed_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'singular'.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * @see get_query_template()
  *
@@ -586,8 +586,8 @@ function get_singular_template() {
  * The template hierarchy and template path are filterable via the {@see '$type_template_hierarchy'}
  * and {@see '$type_template'} dynamic hooks, where `$type` is 'attachment'.
  *
- * @since WP-2.0.0
- * @since WP-4.3.0 The order of the mime type logic was reversed so the hierarchy is more logical.
+ * @since 2.0.0
+ * @since 4.3.0 The order of the mime type logic was reversed so the hierarchy is more logical.
  *
  * @see get_query_template()
  *
@@ -624,7 +624,7 @@ function get_attachment_template() {
  * Searches in the STYLESHEETPATH before TEMPLATEPATH and wp-includes/theme-compat
  * so that themes which inherit from a parent theme can just overload one file.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string|array $template_names Template file(s) to search for, in order.
  * @param bool         $load           If true the template file will be loaded if it is found.
@@ -663,7 +663,7 @@ function locate_template( $template_names, $load = false, $require_once = true )
  * environment is available from within the function. The query variables are
  * also available.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global array      $posts
  * @global WP_Post    $post

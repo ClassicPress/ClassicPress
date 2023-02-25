@@ -192,7 +192,7 @@ if ( apply_filters( 'enable_post_by_email_configuration', true ) ) {
 /**
  * Filters whether to enable the Update Services section in the Writing settings screen.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param bool $enable Whether to enable the Update Services settings area. Default true.
  */

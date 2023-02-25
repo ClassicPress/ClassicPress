@@ -9,7 +9,7 @@
  * Including this file on PHP >= 8.1 results in a fatal error.
  *
  * @package WordPress
- * @since WP-5.9.0
+ * @since 5.9.0
  */
 
 /**
@@ -19,7 +19,7 @@
  *
  * This function is deprecated, and cannot be used on PHP >= 8.1.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  * @deprecated WP-5.9.0 Use `wp_readonly` introduced in WP-5.9.0.
  *
  * @see wp_readonly()

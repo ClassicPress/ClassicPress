@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.5.0
+ * @since 4.5.0
  */
 
 /** ClassicPress Administration Bootstrap */

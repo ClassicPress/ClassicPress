@@ -9,7 +9,7 @@
 /**
  * ClassicPress Filesystem Class for implementing FTP Sockets.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @see WP_Filesystem_Base
  */
@@ -120,7 +120,7 @@ class WP_Filesystem_ftpsockets extends WP_Filesystem_Base {
 	/**
 	 * Retrieves the file contents.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $file Filename.
 	 * @return string|false File contents on success, false if no temp file could be opened,

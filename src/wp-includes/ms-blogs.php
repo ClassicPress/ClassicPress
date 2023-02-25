@@ -5,13 +5,13 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 
 /**
  * Update the last_updated field for the current site.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function wpmu_update_blogs_date() {
 	$site_id = get_current_blog_id();
@@ -20,7 +20,7 @@ function wpmu_update_blogs_date() {
 	/**
 	 * Fires after the blog details are updated.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param int $blog_id Site ID.
 	 */
@@ -30,7 +30,7 @@ function wpmu_update_blogs_date() {
 /**
  * Get a full blog URL, given a blog id.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int $blog_id Blog ID
  * @return string Full URL of the blog if found. Empty string if not.
@@ -51,7 +51,7 @@ function get_blogaddress_by_id( $blog_id ) {
 /**
  * Get a full blog URL, given a blog name.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string $blogname The (subdomain or directory) name
  * @return string
@@ -74,8 +74,8 @@ function get_blogaddress_by_name( $blogname ) {
 /**
  * Retrieves a sites ID given its (subdomain or directory) slug.
  *
- * @since WP-MU (3.0.0)
- * @since WP-4.7.0 Converted to use get_sites().
+ * @since MU (3.0.0)
+ * @since 4.7.0 Converted to use get_sites().
  *
  * @param string $slug A site's slug.
  * @return int|null The site ID, or null if no site is found for the given slug.
@@ -111,7 +111,7 @@ function get_id_from_blogname( $slug ) {
 /**
  * Retrieve the details for a blog from the blogs table and blog options.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -244,7 +244,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	/**
 	 * Filters a blog's details.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 * @deprecated WP-4.7.0 Use site_details
 	 *
 	 * @param object $details The blog details.
@@ -262,7 +262,7 @@ function get_blog_details( $fields = null, $get_all = true ) {
 /**
  * Clear the blog details cache.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int $blog_id Optional. Blog ID. Defaults to current blog.
  */
@@ -278,7 +278,7 @@ function refresh_blog_details( $blog_id = 0 ) {
 /**
  * Update the details for a blog. Updates the blogs table for a given blog id.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -329,7 +329,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'spam' status is added to a blog.
 			 *
-			 * @since WP-MU (3.0.0)
+			 * @since MU (3.0.0)
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -338,7 +338,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'spam' status is removed from a blog.
 			 *
-			 * @since WP-MU (3.0.0)
+			 * @since MU (3.0.0)
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -352,7 +352,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'mature' status is added to a blog.
 			 *
-			 * @since WP-3.1.0
+			 * @since 3.1.0
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -361,7 +361,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'mature' status is removed from a blog.
 			 *
-			 * @since WP-3.1.0
+			 * @since 3.1.0
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -375,7 +375,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'archived' status is added to a blog.
 			 *
-			 * @since WP-MU (3.0.0)
+			 * @since MU (3.0.0)
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -384,7 +384,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'archived' status is removed from a blog.
 			 *
-			 * @since WP-MU (3.0.0)
+			 * @since MU (3.0.0)
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -398,7 +398,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'deleted' status is added to a blog.
 			 *
-			 * @since WP-3.5.0
+			 * @since 3.5.0
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -407,7 +407,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 			/**
 			 * Fires when the 'deleted' status is removed from a blog.
 			 *
-			 * @since WP-3.5.0
+			 * @since 3.5.0
 			 *
 			 * @param int $blog_id Blog ID.
 			 */
@@ -429,7 +429,7 @@ function update_blog_details( $blog_id, $details = array() ) {
 /**
  * Clean the blog cache
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  *
  * @global bool $_wp_suspend_cache_invalidation
  *
@@ -478,7 +478,7 @@ function clean_blog_cache( $blog ) {
 	/**
 	 * Fires immediately after a site has been removed from the object cache.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param int     $id              Blog ID.
 	 * @param WP_Site $blog            Site object.
@@ -491,7 +491,7 @@ function clean_blog_cache( $blog ) {
 	/**
 	 * Fires after the blog details cache is cleared.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @deprecated WP-4.9.0 Use clean_site_cache
 	 *
 	 * @param int $blog_id Blog ID.
@@ -502,7 +502,7 @@ function clean_blog_cache( $blog ) {
 /**
  * Cleans the site details cache for a site.
  *
- * @since WP-4.7.4
+ * @since 4.7.4
  *
  * @param int $site_id Optional. Site ID. Default is the current site ID.
  */
@@ -522,7 +522,7 @@ function clean_site_details_cache( $site_id = 0 ) {
  * Site data will be cached and returned after being passed through a filter.
  * If the provided site is empty, the current site global will be used.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param WP_Site|int|null $site Optional. Site to retrieve. Default is the current site.
  * @return WP_Site|null The site object or null if not found.
@@ -547,7 +547,7 @@ function get_site( $site = null ) {
 	/**
 	 * Fires after a site is retrieved.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param WP_Site $_site Site data.
 	 */
@@ -559,7 +559,7 @@ function get_site( $site = null ) {
 /**
  * Adds any sites from the given ids to the cache that do not already exist in cache.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  * @access private
  *
  * @see update_site_cache()
@@ -581,7 +581,7 @@ function _prime_site_caches( $ids ) {
 /**
  * Updates sites in cache.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param array $sites Array of site objects.
  */
@@ -599,8 +599,8 @@ function update_site_cache( $sites ) {
 /**
  * Retrieves a list of sites matching requested arguments.
  *
- * @since WP-4.6.0
- * @since WP-4.8.0 Introduced the 'lang_id', 'lang__in', and 'lang__not_in' parameters.
+ * @since 4.6.0
+ * @since 4.8.0 Introduced the 'lang_id', 'lang__in', and 'lang__not_in' parameters.
  *
  * @see WP_Site_Query::parse_query()
  *
@@ -668,7 +668,7 @@ function get_sites( $args = array() ) {
  *
  * If the option was serialized then it will be unserialized when it is returned.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int    $id      A blog ID. Can be null to refer to the current blog.
  * @param string $option  Name of option to retrieve. Expected to not be SQL-escaped.
@@ -695,7 +695,7 @@ function get_blog_option( $id, $option, $default = false ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the blog option name.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
 	 * @param string  $value The option value.
 	 * @param int     $id    Blog ID.
@@ -715,7 +715,7 @@ function get_blog_option( $id, $option, $default = false ) {
  * aren't adding a protected ClassicPress option. Care should be taken to not name
  * options the same as the ones which are protected.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int    $id     A blog ID. Can be null to refer to the current blog.
  * @param string $option Name of option to add. Expected to not be SQL-escaped.
@@ -743,7 +743,7 @@ function add_blog_option( $id, $option, $value ) {
 /**
  * Removes option by name for a given blog id. Prevents removal of protected ClassicPress options.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int    $id     A blog ID. Can be null to refer to the current blog.
  * @param string $option Name of option to remove. Expected to not be SQL-escaped.
@@ -770,7 +770,7 @@ function delete_blog_option( $id, $option ) {
 /**
  * Update an option for a particular blog.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int    $id         The blog id.
  * @param string $option     The option key.
@@ -806,7 +806,7 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
  *  - plugins. See https://core.trac.wordpress.org/ticket/14941
  *
  * @see restore_current_blog()
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb            $wpdb
  * @global int             $blog_id
@@ -838,7 +838,7 @@ function switch_to_blog( $new_blog, $deprecated = null ) {
 		/**
 		 * Fires when the blog is switched.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param int $new_blog New blog ID.
 		 * @param int $new_blog Blog ID.
@@ -886,7 +886,7 @@ function switch_to_blog( $new_blog, $deprecated = null ) {
  * Restore the current blog, after calling switch_to_blog()
  *
  * @see switch_to_blog()
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb            $wpdb
  * @global array           $_wp_switched_stack
@@ -955,7 +955,7 @@ function restore_current_blog() {
 /**
  * Switches the initialized roles and current user capabilities to another site.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param int $new_site_id New site ID.
  * @param int $old_site_id Old site ID.
@@ -976,7 +976,7 @@ function wp_switch_roles_and_user( $new_site_id, $old_site_id ) {
 /**
  * Determines if switch_to_blog() is in effect
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  *
  * @global array $_wp_switched_stack
  *
@@ -989,7 +989,7 @@ function ms_is_switched() {
 /**
  * Check if a particular blog is archived.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int $id The blog id
  * @return string Whether the blog is archived or not
@@ -1001,7 +1001,7 @@ function is_archived( $id ) {
 /**
  * Update the 'archived' status of a particular blog.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int    $id       The blog id
  * @param string $archived The new status
@@ -1015,7 +1015,7 @@ function update_archived( $id, $archived ) {
 /**
  * Update a blog details field.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -1092,7 +1092,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 		/**
 		 * Fires after the current blog's 'public' setting is updated.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param int    $blog_id Blog ID.
 		 * @param string $value   The value of blog status.
@@ -1106,7 +1106,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 /**
  * Get a blog details field.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -1128,7 +1128,7 @@ function get_blog_status( $id, $pref ) {
 /**
  * Get a list of most recently updated blogs.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -1150,7 +1150,7 @@ function get_last_updated( $deprecated = '', $start = 0, $quantity = 40 ) {
 /**
  * Retrieves a list of networks.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param string|array $args Optional. Array or string of arguments. See WP_Network_Query::parse_query()
  *                           for information on accepted arguments. Default empty array.
@@ -1169,7 +1169,7 @@ function get_networks( $args = array() ) {
  * Network data will be cached and returned after being passed through a filter.
  * If the provided network is empty, the current network global will be used.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @global WP_Network $current_site
  *
@@ -1197,7 +1197,7 @@ function get_network( $network = null ) {
 	/**
 	 * Fires after a network is retrieved.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param WP_Network $_network Network data.
 	 */
@@ -1209,7 +1209,7 @@ function get_network( $network = null ) {
 /**
  * Removes a network from the object cache.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @global bool $_wp_suspend_cache_invalidation
  *
@@ -1228,7 +1228,7 @@ function clean_network_cache( $ids ) {
 		/**
 		 * Fires immediately after a network has been removed from the object cache.
 		 *
-		 * @since WP-4.6.0
+		 * @since 4.6.0
 		 *
 		 * @param int $id Network ID.
 		 */
@@ -1245,7 +1245,7 @@ function clean_network_cache( $ids ) {
  * in the network cache then it will not be updated. The network is added to the
  * cache using the network group with the key using the ID of the networks.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param array $networks Array of network row objects.
  */
@@ -1258,7 +1258,7 @@ function update_network_cache( $networks ) {
 /**
  * Adds any networks from the given IDs to the cache that do not already exist in cache.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  * @access private
  *
  * @see update_network_cache()
@@ -1281,7 +1281,7 @@ function _prime_network_caches( $network_ids ) {
  * Handler for updating the site's last updated date when a post is published or
  * an already published post is changed.
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @param string $new_status The new post status
  * @param string $old_status The old post status
@@ -1306,7 +1306,7 @@ function _update_blog_date_on_post_publish( $new_status, $old_status, $post ) {
  * Handler for updating the current site's last updated date when a published
  * post is deleted.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  *
  * @param int $post_id Post ID
  */
@@ -1328,7 +1328,7 @@ function _update_blog_date_on_post_delete( $post_id ) {
 /**
  * Handler for updating the current site's posts count when a post is deleted.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  *
  * @param int $post_id Post ID.
  */
@@ -1345,8 +1345,8 @@ function _update_posts_count_on_delete( $post_id ) {
 /**
  * Handler for updating the current site's posts count when a post status changes.
  *
- * @since WP-4.0.0
- * @since WP-4.9.0 Added the `$post` parameter.
+ * @since 4.0.0
+ * @since 4.9.0 Added the `$post` parameter.
  *
  * @param string  $new_status The status the post is changing to.
  * @param string  $old_status The status the post is changing from.

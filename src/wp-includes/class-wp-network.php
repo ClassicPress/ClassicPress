@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -16,7 +16,7 @@
  * This class is most useful in ClassicPress multi-network installations where the
  * ability to interact with any network of sites is required.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @property int $id
  * @property int $site_id
@@ -26,8 +26,8 @@ class WP_Network {
 	/**
 	 * Network ID.
 	 *
-	 * @since WP-4.4.0
-	 * @since WP-4.6.0 Converted from public to private to explicitly enable more intuitive
+	 * @since 4.4.0
+	 * @since 4.6.0 Converted from public to private to explicitly enable more intuitive
 	 *              access via magic methods. As part of the access change, the type was
 	 *              also changed from `string` to `int`.
 	 * @var int
@@ -37,7 +37,7 @@ class WP_Network {
 	/**
 	 * Domain of the network.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $domain = '';
@@ -45,7 +45,7 @@ class WP_Network {
 	/**
 	 * Path of the network.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $path = '';
@@ -58,7 +58,7 @@ class WP_Network {
 	 *
 	 * A numeric string, for compatibility reasons.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	private $blog_id = '0';
@@ -66,7 +66,7 @@ class WP_Network {
 	/**
 	 * Domain used to set cookies for this network.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $cookie_domain = '';
@@ -76,7 +76,7 @@ class WP_Network {
 	 *
 	 * Named "site" vs. "network" for legacy reasons.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $site_name = '';
@@ -84,7 +84,7 @@ class WP_Network {
 	/**
 	 * Retrieve a network from the database by its ID.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -120,7 +120,7 @@ class WP_Network {
 	 * Will populate object properties from the object provided and assign other
 	 * default properties based on that information.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param WP_Network|object $network A network object.
 	 */
@@ -138,7 +138,7 @@ class WP_Network {
 	 *
 	 * Allows current multisite naming conventions when getting properties.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string $key Property to get.
 	 * @return mixed Value of the property. Null if not available.
@@ -161,7 +161,7 @@ class WP_Network {
 	 *
 	 * Allows current multisite naming conventions when checking for properties.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string $key Property to check if set.
 	 * @return bool Whether the property is set.
@@ -182,7 +182,7 @@ class WP_Network {
 	 *
 	 * Allows current multisite naming conventions while setting properties.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string $key   Property to set.
 	 * @param mixed  $value Value to assign to the property.
@@ -207,7 +207,7 @@ class WP_Network {
 	 * Internal method used by the magic getter for the 'blog_id' and 'site_id'
 	 * properties.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @return int The ID of the main site.
 	 */
@@ -217,7 +217,7 @@ class WP_Network {
 		 *
 		 * Returning a positive integer will effectively short-circuit the function.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param int|null   $main_site_id If a positive integer is returned, it is interpreted as the main site ID.
 		 * @param WP_Network $network      The network object for which the main site was detected.
@@ -277,7 +277,7 @@ class WP_Network {
 	/**
 	 * Set the site name assigned to the network if one has not been populated.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 */
 	private function _set_site_name() {
 		if ( ! empty( $this->site_name ) ) {
@@ -294,7 +294,7 @@ class WP_Network {
 	 *
 	 * @todo What if the domain of the network doesn't match the current site?
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 */
 	private function _set_cookie_domain() {
 		if ( ! empty( $this->cookie_domain ) ) {
@@ -317,7 +317,7 @@ class WP_Network {
 	 * The intent of this method is to match a network during bootstrap for a
 	 * requested site address.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @static
 	 *
 	 * @param string   $domain   Domain to check.
@@ -370,7 +370,7 @@ class WP_Network {
 			/**
 			 * Filters the number of path segments to consider when searching for a site.
 			 *
-			 * @since WP-3.9.0
+			 * @since 3.9.0
 			 *
 			 * @param int|null $segments The number of path segments to consider. ClassicPress by default looks at
 			 *                           one path segment. The function default of null only makes sense when you
@@ -402,7 +402,7 @@ class WP_Network {
 		 * can be found at the requested domain and path. Otherwise, return
 		 * an object from wp_get_network().
 		 *
-		 * @since WP-3.9.0
+		 * @since 3.9.0
 		 *
 		 * @param null|bool|object $network  Network value to return by path.
 		 * @param string           $domain   The requested domain.

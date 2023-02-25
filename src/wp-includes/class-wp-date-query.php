@@ -12,7 +12,7 @@
  *
  * @link https://developer.wordpress.org/reference/classes/wp_query/
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  */
 class WP_Date_Query {
 	/**
@@ -20,7 +20,7 @@ class WP_Date_Query {
 	 *
 	 * See WP_Date_Query::__construct() for information on date query arguments.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @var array
 	 */
 	public $queries = array();
@@ -28,7 +28,7 @@ class WP_Date_Query {
 	/**
 	 * The default relation between top-level queries. Can be either 'AND' or 'OR'.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @var string
 	 */
 	public $relation = 'AND';
@@ -36,7 +36,7 @@ class WP_Date_Query {
 	/**
 	 * The column to query against. Can be changed via the query arguments.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @var string
 	 */
 	public $column = 'post_date';
@@ -44,7 +44,7 @@ class WP_Date_Query {
 	/**
 	 * The value comparison operator. Can be changed via the query arguments.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @var array
 	 */
 	public $compare = '=';
@@ -52,7 +52,7 @@ class WP_Date_Query {
 	/**
 	 * Supported time-related parameter keys.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 * @var array
 	 */
 	public $time_keys = array( 'after', 'before', 'year', 'month', 'monthnum', 'week', 'w', 'dayofyear', 'day', 'dayofweek', 'dayofweek_iso', 'hour', 'minute', 'second' );
@@ -65,9 +65,9 @@ class WP_Date_Query {
 	 * 'compare'. When 'compare' is 'IN' or 'NOT IN', arrays are accepted; when 'compare' is 'BETWEEN' or 'NOT
 	 * BETWEEN', arrays of two valid values are required. See individual argument descriptions for accepted values.
 	 *
-	 * @since WP-3.7.0
-	 * @since WP-4.0.0 The $inclusive logic was updated to include all times within the date range.
-	 * @since WP-4.1.0 Introduced 'dayofweek_iso' time type parameter.
+	 * @since 3.7.0
+	 * @since 4.0.0 The $inclusive logic was updated to include all times within the date range.
+	 * @since 4.1.0 Introduced 'dayofweek_iso' time type parameter.
 	 *
 	 * @param array $date_query {
 	 *     Array of date query clauses.
@@ -184,7 +184,7 @@ class WP_Date_Query {
 	 * each first-order clause contains all the necessary keys from
 	 * `$defaults`.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param array $queries
 	 * @param array $parent_query
@@ -244,7 +244,7 @@ class WP_Date_Query {
 	 * Checks to see if the current clause has any time-related keys.
 	 * If so, it's first-order.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param  array $query Query clause.
 	 * @return bool True if this is a first-order clause.
@@ -257,7 +257,7 @@ class WP_Date_Query {
 	/**
 	 * Determines and validates what comparison operator to use.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param array $query A date query or a date subquery.
 	 * @return string The comparison operator.
@@ -279,7 +279,7 @@ class WP_Date_Query {
 	 * continue (though of course no items will be found for impossible dates).
 	 * This method only generates debug notices for these cases.
 	 *
-	 * @since WP- 4.1.0
+	 * @since  4.1.0
 	 *
 	 * @param  array $date_query The date_query array.
 	 * @return bool  True if all values in the query are valid, false if one or more fail.
@@ -473,7 +473,7 @@ class WP_Date_Query {
 	 * Prefixed column names (such as 'wp_posts.post_date') bypass this whitelist check,
 	 * and are only sanitized to remove illegal characters.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param string $column The user-supplied column name.
 	 * @return string A validated column name value.
@@ -498,8 +498,8 @@ class WP_Date_Query {
 			/**
 			 * Filters the list of valid date query columns.
 			 *
-			 * @since WP-3.7.0
-			 * @since WP-4.1.0 Added 'user_registered' to the default recognized columns.
+			 * @since 3.7.0
+			 * @since 4.1.0 Added 'user_registered' to the default recognized columns.
 			 *
 			 * @param string[] $valid_columns An array of valid date query columns. Defaults
 			 *                                are 'post_date', 'post_date_gmt', 'post_modified',
@@ -546,7 +546,7 @@ class WP_Date_Query {
 	/**
 	 * Generate WHERE clause to be appended to a main query.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @return string MySQL WHERE clause.
 	 */
@@ -558,7 +558,7 @@ class WP_Date_Query {
 		/**
 		 * Filters the date query WHERE clause.
 		 *
-		 * @since WP-3.7.0
+		 * @since 3.7.0
 		 *
 		 * @param string        $where WHERE clause of the date query.
 		 * @param WP_Date_Query $this  The WP_Date_Query instance.
@@ -572,7 +572,7 @@ class WP_Date_Query {
 	 * Called by the public WP_Date_Query::get_sql(), this method is abstracted
 	 * out to maintain parity with the other Query classes.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @return array {
 	 *     Array containing JOIN and WHERE SQL clauses to append to the main query.
@@ -597,7 +597,7 @@ class WP_Date_Query {
 	 * If nested subqueries are found, this method recurses the tree to
 	 * produce the properly nested SQL.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param array $query Query to parse.
 	 * @param int   $depth Optional. Number of tree levels deep we currently are.
@@ -681,7 +681,7 @@ class WP_Date_Query {
 	 * A wrapper for get_sql_for_clause(), included here for backward
 	 * compatibility while retaining the naming convention across Query classes.
 	 *
-	 * @since WP- 3.7.0
+	 * @since  3.7.0
 	 *
 	 * @param  array $query Date query arguments.
 	 * @return array {
@@ -698,7 +698,7 @@ class WP_Date_Query {
 	/**
 	 * Turns a first-order date query into SQL for a WHERE clause.
 	 *
-	 * @since WP- 4.1.0
+	 * @since  4.1.0
 	 *
 	 * @param  array $query        Date query clause.
 	 * @param  array $parent_query Parent query of the current date query.
@@ -801,7 +801,7 @@ class WP_Date_Query {
 	/**
 	 * Builds and validates a value string based on the comparison operator.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param string $compare The compare operator to use
 	 * @param string|array $value The value
@@ -861,7 +861,7 @@ class WP_Date_Query {
 	 * either the maximum or minimum values (controlled by the $default_to parameter). Alternatively you can
 	 * pass a string that will be run through strtotime().
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param string|array $datetime       An array of parameters or a strotime() string
 	 * @param bool         $default_to_max Whether to round up incomplete dates. Supported by values
@@ -954,7 +954,7 @@ class WP_Date_Query {
 	 * However if multiple values are passed, a pseudo-decimal time will be created
 	 * in order to be able to accurately compare against.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param string $column The column to query against. Needs to be pre-validated!
 	 * @param string $compare The comparison operator. Needs to be pre-validated!
@@ -1011,7 +1011,7 @@ class WP_Date_Query {
 			}
 		}
 
-		// Single units were already handled. since WP-hour & second isn't allowed, minute must to be set.
+		// Single units were already handled. since hour & second isn't allowed, minute must to be set.
 		if ( ! isset( $minute ) ) {
 			return false;
 		}

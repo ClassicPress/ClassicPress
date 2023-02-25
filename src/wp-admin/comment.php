@@ -341,7 +341,7 @@ switch ( $action ) {
 		/**
 		 * Filters the URI the user is redirected to after editing a comment in the admin.
 		 *
-		 * @since WP-2.1.0
+		 * @since 2.1.0
 		 *
 		 * @param string $location The URI the user will be redirected to.
 		 * @param int $comment_id The ID of the comment being edited.

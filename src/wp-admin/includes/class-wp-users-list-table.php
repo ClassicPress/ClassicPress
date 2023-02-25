@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /**
  * Core class used to implement displaying users in a list table.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -20,7 +20,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Site ID to generate the Users list table for.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 * @var int
 	 */
 	public $site_id;
@@ -28,7 +28,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Whether or not the current Users list table is for Multisite.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 * @var bool
 	 */
 	public $is_site_users;
@@ -36,7 +36,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -61,7 +61,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Check the current user's permissions.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @return bool
 	 */
@@ -76,7 +76,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Prepare the users list for display.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @global string $role
 	 * @global string $usersearch
@@ -130,7 +130,7 @@ class WP_Users_List_Table extends WP_List_Table {
 		/**
 		 * Filters the query arguments used to retrieve users for the current users list table.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param array $args Arguments passed to WP_User_Query to retrieve items for the current
 		 *                    users list table.
@@ -153,7 +153,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Output 'no users' message.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		_e( 'No users found.' );
@@ -256,7 +256,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Output the controls to allow user roles to be changed in bulk.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param string $which Whether this is being invoked above ("top")
 	 *                      or below the table ("bottom").
@@ -280,8 +280,8 @@ class WP_Users_List_Table extends WP_List_Table {
 		 * Fires just before the closing div containing the bulk role-change controls
 		 * in the Users list table.
 		 *
-		 * @since WP-3.5.0
-		 * @since WP-4.6.0 The `$which` parameter was added.
+		 * @since 3.5.0
+		 * @since 4.6.0 The `$which` parameter was added.
 		 *
 		 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
 		 */
@@ -293,7 +293,7 @@ class WP_Users_List_Table extends WP_List_Table {
 		 * Fires immediately following the closing "actions" div in the tablenav for the users
 		 * list table.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
 		 */
@@ -346,7 +346,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Get a list of sortable columns for the list table.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @return array Array of sortable columns.
 	 */
@@ -362,7 +362,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Generate the list table rows.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 */
 	public function display_rows() {
 		// Query the post counts for this page
@@ -378,9 +378,9 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Generate HTML for a single row on the users.php admin panel.
 	 *
-	 * @since WP-3.1.0
-	 * @since WP-4.2.0 The `$style` parameter was deprecated.
-	 * @since WP-4.4.0 The `$role` parameter was deprecated.
+	 * @since 3.1.0
+	 * @since 4.2.0 The `$style` parameter was deprecated.
+	 * @since 4.4.0 The `$role` parameter was deprecated.
 	 *
 	 * @param WP_User $user_object The current user object.
 	 * @param string  $style       Deprecated. Not used.
@@ -449,7 +449,7 @@ class WP_Users_List_Table extends WP_List_Table {
 			/**
 			 * Filters the action links displayed under each user in the Users list table.
 			 *
-			 * @since WP-2.8.0
+			 * @since 2.8.0
 			 *
 			 * @param array   $actions     An array of action links to be displayed.
 			 *                             Default 'Edit', 'Delete' for single site, and
@@ -533,7 +533,7 @@ class WP_Users_List_Table extends WP_List_Table {
 						/**
 						 * Filters the display output of custom columns in the Users list table.
 						 *
-						 * @since WP-2.8.0
+						 * @since 2.8.0
 						 *
 						 * @param string $output      Custom column output. Default empty.
 						 * @param string $column_name Column name.
@@ -556,7 +556,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the default primary column.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @return string Name of the default primary column, in this case, 'username'.
 	 */
@@ -567,7 +567,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Returns an array of user roles for a given user object.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param WP_User $user_object The WP_User object.
 	 * @return array An array of user roles.
@@ -590,7 +590,7 @@ class WP_Users_List_Table extends WP_List_Table {
 		/**
 		 * Filters the returned array of roles for a user.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param array   $role_list   An array of user roles.
 		 * @param WP_User $user_object A WP_User object.

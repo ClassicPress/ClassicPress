@@ -7,7 +7,7 @@
  *
  * @package ClassicPress
  * @subpackage oEmbed
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 get_header( 'embed' );

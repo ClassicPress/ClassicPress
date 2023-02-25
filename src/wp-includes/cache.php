@@ -14,7 +14,7 @@ require_once ABSPATH . WPINC . '/class-wp-object-cache.php';
 /**
  * Adds data to the cache, if the cache key doesn't already exist.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::add()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -42,7 +42,7 @@ function wp_cache_add( $key, $data, $group = '', $expire = 0 ) {
  * This does not mean that plugins can't implement this function when they need
  * to make sure that the cache is cleaned up after ClassicPress no longer needs it.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @return true Always returns true.
  */
@@ -53,7 +53,7 @@ function wp_cache_close() {
 /**
  * Decrements numeric cache item's value.
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @see WP_Object_Cache::decr()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -72,7 +72,7 @@ function wp_cache_decr( $key, $offset = 1, $group = '' ) {
 /**
  * Removes the cache contents matching key and group.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::delete()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -90,7 +90,7 @@ function wp_cache_delete( $key, $group = '' ) {
 /**
  * Removes all cache items.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::flush()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -106,7 +106,7 @@ function wp_cache_flush() {
 /**
  * Retrieves the cache contents from the cache by key and group.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::get()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -129,7 +129,7 @@ function wp_cache_get( $key, $group = '', $force = false, &$found = null ) {
 /**
  * Gets multiple values from cache in one call.
  *
- * @since WP-5.5.0
+ * @since 5.5.0
  * @see WP_Object_Cache::get_multiple()
  *
  * @param array       $keys   Array of keys to get from group.
@@ -147,7 +147,7 @@ function wp_cache_get_multiple( $keys, $group = '', $force = false ) {
 /**
  * Increment numeric cache item's value
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @see WP_Object_Cache::incr()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -166,7 +166,7 @@ function wp_cache_incr( $key, $offset = 1, $group = '' ) {
 /**
  * Sets up Object Cache Global and assigns it.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global WP_Object_Cache $wp_object_cache
  */
@@ -177,7 +177,7 @@ function wp_cache_init() {
 /**
  * Replaces the contents of the cache with new data.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::replace()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -201,7 +201,7 @@ function wp_cache_replace( $key, $data, $group = '', $expire = 0 ) {
  *
  * Differs from wp_cache_add() and wp_cache_replace() in that it will always write data.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see WP_Object_Cache::set()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -225,7 +225,7 @@ function wp_cache_set( $key, $data, $group = '', $expire = 0 ) {
  *
  * This changes the blog id used to create keys in blog specific groups.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  *
  * @see WP_Object_Cache::switch_to_blog()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -241,7 +241,7 @@ function wp_cache_switch_to_blog( $blog_id ) {
 /**
  * Adds a group or set of groups to the list of global groups.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @see WP_Object_Cache::add_global_groups()
  * @global WP_Object_Cache $wp_object_cache Object cache global instance.
@@ -257,7 +257,7 @@ function wp_cache_add_global_groups( $groups ) {
 /**
  * Adds a group or set of groups to the list of non-persistent groups.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param string|array $groups A group or an array of groups to add.
  */
@@ -278,7 +278,7 @@ function wp_cache_add_non_persistent_groups( $groups ) {
  * recommended outside of unit tests as the performance penalty for using it is
  * high.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  * @deprecated WP-3.5.0 WP_Object_Cache::reset()
  * @see WP_Object_Cache::reset()
  *

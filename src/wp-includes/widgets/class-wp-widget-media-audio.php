@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.8.0
+ * @since 4.8.0
  */
 
 /**
  * Core class that implements an audio widget.
  *
- * @since WP-4.8.0
+ * @since 4.8.0
  *
  * @see WP_Widget
  */
@@ -130,7 +130,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 	 * selective refresh, and so it is important to unconditionally enqueue them in
 	 * case a widget does get added.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function enqueue_preview_scripts() {
 		/** This filter is documented in wp-includes/media.php */
@@ -143,7 +143,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function enqueue_admin_scripts() {
 		parent::enqueue_admin_scripts();
@@ -184,7 +184,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 	/**
 	 * Render form template scripts.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function render_control_template_scripts() {
 		parent::render_control_template_scripts()

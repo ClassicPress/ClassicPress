@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Template
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to create an HTML dropdown list of Categories.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @see Walker
  */
@@ -19,7 +19,7 @@ class Walker_CategoryDropdown extends Walker {
 	/**
 	 * What the class handles.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var string
 	 *
 	 * @see Walker::$tree_type
@@ -29,7 +29,7 @@ class Walker_CategoryDropdown extends Walker {
 	/**
 	 * Database fields to use.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @todo Decouple this
 	 * @var array
 	 *
@@ -43,7 +43,7 @@ class Walker_CategoryDropdown extends Walker {
 	/**
 	 * Starts the element output.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @see Walker::start_el()
 	 *

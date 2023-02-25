@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to implement a Search widget.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @see WP_Widget
  */
@@ -19,7 +19,7 @@ class WP_Widget_Search extends WP_Widget {
 	/**
 	 * Sets up a new Search widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function __construct() {
 		$widget_ops = array(
@@ -33,7 +33,7 @@ class WP_Widget_Search extends WP_Widget {
 	/**
 	 * Outputs the content for the current Search widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
@@ -59,7 +59,7 @@ class WP_Widget_Search extends WP_Widget {
 	/**
 	 * Outputs the settings form for the Search widget.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $instance Current settings.
 	 */
@@ -77,7 +77,7 @@ class WP_Widget_Search extends WP_Widget {
 	/**
 	 * Handles updating settings for the current Search widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $new_instance New settings for this instance as input by the user via
 	 *                            WP_Widget::form().

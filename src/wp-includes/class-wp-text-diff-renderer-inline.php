@@ -4,20 +4,20 @@
  *
  * @package ClassicPress
  * @subpackage Diff
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Better word splitting than the PEAR package provides.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  * @uses Text_Diff_Renderer_inline Extends
  */
 class WP_Text_Diff_Renderer_inline extends Text_Diff_Renderer_inline {
 
 	/**
 	 * @ignore
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 *
 	 * @param string $string
 	 * @param string $newlineEscape

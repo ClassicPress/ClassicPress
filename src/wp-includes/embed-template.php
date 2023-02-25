@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage oEmbed
- * @since WP-4.4.0
+ * @since 4.4.0
  * @deprecated WP-4.5.0 Moved to wp-includes/theme-compat/embed.php
  */
 

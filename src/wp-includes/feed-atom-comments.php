@@ -22,7 +22,7 @@ do_action( 'rss_tag_pre', 'atom-comments' );
 		/**
 		 * Fires inside the feed tag in the Atom comment feed.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 */
 		do_action( 'atom_comments_ns' );
 	?>
@@ -67,7 +67,7 @@ do_action( 'rss_tag_pre', 'atom-comments' );
 	/**
 	 * Fires at the end of the Atom comment feed header.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	do_action( 'comments_atom_head' );
 ?>
@@ -128,7 +128,7 @@ if ( have_comments() ) :
 	/**
 	 * Fires at the end of each Atom comment feed item.
 	 *
-	 * @since WP-2.2.0
+	 * @since 2.2.0
 	 *
 	 * @param int $comment_id      ID of the current comment.
 	 * @param int $comment_post_id ID of the post the current comment is connected to.

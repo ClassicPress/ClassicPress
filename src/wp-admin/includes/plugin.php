@@ -47,9 +47,9 @@
  * the file. This is not checked however and the file is only opened for
  * reading.
  *
- * @since WP-1.5.0
- * @since WP-5.3.0 Added support for `Requires at least` and `Requires PHP` headers.
- * @since WP-5.8.0 Added support for `Update URI` header.
+ * @since 1.5.0
+ * @since 5.3.0 Added support for `Requires at least` and `Requires PHP` headers.
+ * @since 5.8.0 Added support for `Update URI` header.
  *
  * @param string $plugin_file Path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
@@ -124,7 +124,7 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 /**
  * Sanitizes plugin data, optionally adds markup, optionally translates.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  * @access private
  * @see get_plugin_data()
  */
@@ -203,7 +203,7 @@ function _get_plugin_data_markup_translate( $plugin_file, $plugin_data, $markup 
 /**
  * Get a list of a plugin's files.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return array List of files relative to the plugin root.
@@ -219,7 +219,7 @@ function get_plugin_files( $plugin ) {
 		/**
 		 * Filters the array of excluded directories and files while scanning the folder.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param array $exclusions Array of excluded directories and files.
 		 */
@@ -250,7 +250,7 @@ function get_plugin_files( $plugin ) {
  * be split for maintainability. Keep everything in one file for extreme
  * optimization purposes.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @param string $plugin_folder Optional. Relative path to single plugin folder.
  * @return array Key is the plugin file path and the value is an array of the plugin data.
@@ -338,7 +338,7 @@ function get_plugins( $plugin_folder = '' ) {
  *
  * ClassicPress only includes mu-plugin files in the base mu-plugins directory (wp-content/mu-plugins).
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @return array Key is the mu-plugin file path and the value is an array of the mu-plugin data.
  */
 function get_mu_plugins() {
@@ -392,7 +392,7 @@ function get_mu_plugins() {
 /**
  * Callback to sort array by a 'Name' key.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  */
 function _sort_uname_callback( $a, $b ) {
@@ -402,7 +402,7 @@ function _sort_uname_callback( $a, $b ) {
 /**
  * Check the wp-content directory and retrieve all drop-ins with any plugin data.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @return array Key is the file path and the value is an array of the plugin data.
  */
 function get_dropins() {
@@ -450,7 +450,7 @@ function get_dropins() {
  *
  * Includes Multisite drop-ins only when is_multisite()
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @return array Key is file name. The value is an array, with the first value the
  *  purpose of the drop-in and the second value the name of the constant that must be
  *  true for the drop-in to be used, or true if no constant is required.
@@ -483,7 +483,7 @@ function _get_dropins() {
  * Plugins in the mu-plugins/ folder can't be "activated," so this function will
  * return false for those plugins.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return bool True, if in the active plugins list. False, not in the list.
@@ -497,7 +497,7 @@ function is_plugin_active( $plugin ) {
  *
  * Reverse of is_plugin_active(). Used as a callback.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @see is_plugin_active()
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
@@ -515,7 +515,7 @@ function is_plugin_inactive( $plugin ) {
  * Plugins in the mu-plugins/ folder can't be "activated," so this function will
  * return false for those plugins.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return bool True, if active for the network, otherwise false.
@@ -540,7 +540,7 @@ function is_plugin_active_for_network( $plugin ) {
  *
  * Checks for "Site Wide Only: true" for backward compatibility.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return bool True if plugin is network only, false otherwise.
@@ -571,7 +571,7 @@ function is_network_only_plugin( $plugin ) {
  * If any errors are found or text is outputted, then it will be captured to
  * ensure that the success redirection will update the error redirection.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $plugin       Path to the main plugin file from plugins directory.
  * @param string $redirect     Optional. URL to redirect to.
@@ -613,7 +613,7 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 			 * If a plugin is silently activated (such as during an update),
 			 * this hook does not fire.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param string $plugin       Path to the main plugin file from plugins directory.
 			 * @param bool   $network_wide Whether to enable the plugin for all sites in the network
@@ -629,7 +629,7 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 			 *
 			 * If a plugin is silently activated (such as during an update), this hook does not fire.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param bool $network_wide Whether to enable the plugin for all sites in the network
 			 *                           or just the current site. Multisite only. Default is false.
@@ -655,7 +655,7 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
 			 * If a plugin is silently activated (such as during an update),
 			 * this hook does not fire.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param string $plugin       Path to the main plugin file from plugins directory.
 			 * @param bool   $network_wide Whether to enable the plugin for all sites in the network
@@ -680,7 +680,7 @@ function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silen
  * The deactivation hook is disabled by the plugin upgrader by using the $silent
  * parameter.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string|array $plugins Single plugin or list of plugins to deactivate.
  * @param bool $silent Prevent calling deactivation hooks. Default is false.
@@ -710,7 +710,7 @@ function deactivate_plugins( $plugins, $silent = false, $network_wide = null ) {
 			 * If a plugin is silently deactivated (such as during an update),
 			 * this hook does not fire.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param string $plugin               Path to the main plugin file from plugins directory.
 			 * @param bool   $network_deactivating Whether the plugin is deactivated for all sites in the network
@@ -745,7 +745,7 @@ function deactivate_plugins( $plugins, $silent = false, $network_wide = null ) {
 			 *
 			 * If a plugin is silently deactivated (such as during an update), this hook does not fire.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param bool $network_deactivating Whether the plugin is deactivated for all sites in the network
 			 *                                   or just the current site. Multisite only. Default is false.
@@ -758,7 +758,7 @@ function deactivate_plugins( $plugins, $silent = false, $network_wide = null ) {
 			 * If a plugin is silently deactivated (such as during an update),
 			 * this hook does not fire.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param string $plugin               Path to the main plugin file from plugins directory.
 			 * @param bool   $network_deactivating Whether the plugin is deactivated for all sites in the network.
@@ -784,7 +784,7 @@ function deactivate_plugins( $plugins, $silent = false, $network_wide = null ) {
  *
  * The execution will be halted as soon as one of the plugins has an error.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param string|array $plugins Single plugin or list of plugins to activate.
  * @param string $redirect Redirect to page after successful activation.
@@ -818,7 +818,7 @@ function activate_plugins( $plugins, $redirect = '', $network_wide = false, $sil
 /**
  * Remove directory and files of a plugin for a list of plugins.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @global WP_Filesystem_Base $wp_filesystem
  *
@@ -898,7 +898,7 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 		/**
 		 * Fires immediately before a plugin deletion attempt.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param string $plugin_file Plugin file name.
 		 */
@@ -916,7 +916,7 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 		/**
 		 * Fires immediately after a plugin deletion attempt.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param string $plugin_file Plugin file name.
 		 * @param bool   $deleted     Whether the plugin deletion was successful.
@@ -974,7 +974,7 @@ function delete_plugins( $plugins, $deprecated = '' ) {
  * Validate all active plugins, deactivates invalid and
  * returns an array of deactivated ones.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  * @return array invalid plugins, plugin as key, error as value
  */
 function validate_active_plugins() {
@@ -1012,7 +1012,7 @@ function validate_active_plugins() {
  *
  * Checks that the main plugin file exists and is a valid plugin. See validate_file().
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return WP_Error|int 0 on success, WP_Error on failure.
@@ -1035,7 +1035,7 @@ function validate_plugin( $plugin ) {
 /**
  * Validate the plugin requirements for WP version and PHP version.
  *
- * @since WP-5.2.0
+ * @since 5.2.0
  *
  * @param string $plugin Path to the plugin file relative to the plugins directory.
  * @return true|WP_Error True if requirements are met, WP_Error on failure.
@@ -1102,7 +1102,7 @@ function validate_plugin_requirements( $plugin ) {
 /**
  * Whether the plugin can be uninstalled.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return bool Whether plugin can be uninstalled.
@@ -1123,7 +1123,7 @@ function is_uninstallable_plugin( $plugin ) {
  *
  * Calls the uninstall hook, if it is available.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string $plugin Path to the main plugin file from plugins directory.
  * @return true True if a plugin's uninstall.php file has been found and included.
@@ -1136,7 +1136,7 @@ function uninstall_plugin( $plugin ) {
 	/**
 	 * Fires in uninstall_plugin() immediately before the plugin is uninstalled.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
 	 * @param string $plugin                Path to the main plugin file from plugins directory.
 	 * @param array  $uninstallable_plugins Uninstallable plugins.
@@ -1174,7 +1174,7 @@ function uninstall_plugin( $plugin ) {
 		 * The action concatenates the 'uninstall_' prefix with the basename of the
 		 * plugin passed to uninstall_plugin() to create a dynamically-named action.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 */
 		do_action( "uninstall_{$file}" );
 	}
@@ -1630,7 +1630,7 @@ function add_security_page( $page_title, $menu_title, $menu_slug, $function = ''
 /**
  * Remove a top-level admin menu.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global array $menu
  *
@@ -1653,7 +1653,7 @@ function remove_menu_page( $menu_slug ) {
 /**
  * Remove an admin submenu.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global array $submenu
  *
@@ -1683,7 +1683,7 @@ function remove_submenu_page( $menu_slug, $submenu_slug ) {
  *
  * If the slug hasn't been registered properly no url will be returned
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $_parent_pages
  *
@@ -1874,7 +1874,7 @@ function get_admin_page_title() {
 }
 
 /**
- * @since WP-2.3.0
+ * @since 2.3.0
  *
  * @param string $plugin_page
  * @param string $parent_page
@@ -2014,7 +2014,7 @@ function user_can_access_admin_page() {
  *
  * See the {@see 'whitelist_options'} filter.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @global array $new_whitelist_options
  *
@@ -2034,7 +2034,7 @@ function option_update_filter( $options ) {
 /**
  * Adds an array of options to the options whitelist.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @global array $whitelist_options
  *
@@ -2069,7 +2069,7 @@ function add_option_whitelist( $new_options, $options = '' ) {
 /**
  * Removes a list of options from the options whitelist.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @global array $whitelist_options
  *
@@ -2101,7 +2101,7 @@ function remove_option_whitelist( $del_options, $options = '' ) {
 /**
  * Output nonce, action, and option_page fields for a settings page.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string $option_group A settings group name. This should match the group name used in register_setting().
  */
@@ -2114,7 +2114,7 @@ function settings_fields( $option_group ) {
 /**
  * Clears the Plugins cache used by get_plugins() and by default, the Plugin Update cache.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param bool $clear_update_cache Whether to clear the Plugin updates cache
  */
@@ -2128,8 +2128,8 @@ function wp_clean_plugins_cache( $clear_update_cache = true ) {
 /**
  * Load a given plugin attempt to generate errors.
  *
- * @since WP-3.0.0
- * @since WP-4.4.0 Function was moved into the `wp-admin/includes/plugin.php` file.
+ * @since 3.0.0
+ * @since 4.4.0 Function was moved into the `wp-admin/includes/plugin.php` file.
  *
  * @param string $plugin Plugin file to load.
  */
@@ -2153,7 +2153,7 @@ function plugin_sandbox_scrape( $plugin ) {
  *
  * Intended for use with the `'admin_init'` action.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $plugin_name The name of the plugin or theme that is suggesting content for the site's privacy policy.
  * @param string $policy_text The suggested content for inclusion in the policy.

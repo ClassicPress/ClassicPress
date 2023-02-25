@@ -81,7 +81,7 @@ $user_can_edit = current_user_can( 'edit_posts' ) || current_user_can( 'edit_pag
  *
  * The filter was introduced to replace the EDIT_ANY_USER constant.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param bool $allow Whether to allow editing of any user. Default true.
  */
@@ -131,7 +131,7 @@ switch ( $action ) {
 			 *
 			 * The action only fires if the current user is editing their own profile.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param int $user_id The user ID.
 			 */
@@ -140,7 +140,7 @@ switch ( $action ) {
 			/**
 			 * Fires before the page loads on the 'Edit User' screen.
 			 *
-			 * @since WP-2.7.0
+			 * @since 2.7.0
 			 *
 			 * @param int $user_id The user ID.
 			 */
@@ -239,7 +239,7 @@ switch ( $action ) {
 											/**
 											 * Fires inside the your-profile form tag on the user editing screen.
 											 *
-											 * @since WP-3.0.0
+											 * @since 3.0.0
 											 */
 											do_action( 'user_edit_form_tag' );
 											?>
@@ -293,8 +293,8 @@ switch ( $action ) {
 			 * The section is only enabled if a callback is hooked to the action,
 			 * and if there is more than one defined color scheme for the admin.
 			 *
-			 * @since WP-3.0.0
-			 * @since WP-3.8.1 Added `$user_id` parameter.
+			 * @since 3.0.0
+			 * @since 3.8.1 Added `$user_id` parameter.
 			 *
 			 * @param int $user_id The user ID.
 			 */
@@ -361,7 +361,7 @@ switch ( $action ) {
 		/**
 		 * Fires at the end of the 'Personal Options' settings table on the user editing screen.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 *
 		 * @param WP_User $profileuser The current WP_User object.
 		 */
@@ -376,7 +376,7 @@ switch ( $action ) {
 			 *
 			 * The action only fires if the current user is editing their own profile.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param WP_User $profileuser The current WP_User object.
 			 */
@@ -528,7 +528,7 @@ switch ( $action ) {
 			 * The dynamic portion of the filter hook, `$name`, refers to
 			 * each of the keys in the contactmethods array.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param string $desc The translatable label for the contactmethod.
 			 */
@@ -571,8 +571,8 @@ switch ( $action ) {
 			/**
 			 * Filters the user profile picture description displayed under the Gravatar.
 			 *
-			 * @since WP-4.4.0
-			 * @since WP-4.7.0 Added the `$profileuser` parameter.
+			 * @since 4.4.0
+			 * @since 4.7.0 Added the `$profileuser` parameter.
 			 *
 			 * @param string  $description The description that will be printed.
 			 * @param WP_User $profileuser The current WP_User object.
@@ -588,9 +588,9 @@ switch ( $action ) {
 		/**
 		 * Filters the display of the password fields.
 		 *
-		 * @since WP-1.5.1
-		 * @since WP-2.8.0 Added the `$profileuser` parameter.
-		 * @since WP-4.4.0 Now evaluated only in user-edit.php.
+		 * @since 1.5.1
+		 * @since 2.8.0 Added the `$profileuser` parameter.
+		 * @since 4.4.0 Now evaluated only in user-edit.php.
 		 *
 		 * @param bool    $show        Whether to show the password fields. Default true.
 		 * @param WP_User $profileuser User object for the current user to edit.
@@ -686,7 +686,7 @@ switch ( $action ) {
 			 *
 			 * The action only fires if the current user is editing their own profile.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param WP_User $profileuser The current WP_User object.
 			 */
@@ -695,7 +695,7 @@ switch ( $action ) {
 			/**
 			 * Fires after the 'About the User' settings table on the 'Edit User' screen.
 			 *
-			 * @since WP-2.0.0
+			 * @since 2.0.0
 			 *
 			 * @param WP_User $profileuser The current WP_User object.
 			 */
@@ -711,7 +711,7 @@ switch ( $action ) {
 		 * the number of the user's capabilities exceeds their number of
 		 * roles.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 *
 		 * @param bool    $enable      Whether to display the capabilities. Default true.
 		 * @param WP_User $profileuser The current WP_User object.

@@ -8,7 +8,7 @@
  *
  * @package ClassicPress
  * @subpackage Filesystem
- * @since WP-2.3.0
+ * @since 2.3.0
  */
 
 /** The descriptions for theme files. */
@@ -67,7 +67,7 @@ $wp_file_descriptions = array(
  * Get the description for standard ClassicPress theme files and other various standard
  * ClassicPress files
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global array $wp_file_descriptions Theme file descriptions.
  * @global array $allowed_files        List of allowed files.
@@ -96,7 +96,7 @@ function get_file_description( $file ) {
 /**
  * Get the absolute filesystem path to the root of the ClassicPress installation
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @return string Full filesystem path to the root of the ClassicPress installation
  */
@@ -119,8 +119,8 @@ function get_home_path() {
  * Returns a listing of all files in the specified folder and all subdirectories up to 100 levels deep.
  * The depth of the recursiveness can be controlled by the $levels param.
  *
- * @since WP-2.6.0
- * @since WP-4.9.0 Added the `$exclusions` parameter.
+ * @since 2.6.0
+ * @since 4.9.0 Added the `$exclusions` parameter.
  *
  * @param string $folder Optional. Full path to folder. Default empty.
  * @param int    $levels Optional. Levels of folders to follow, Default 100 (PHP Loop limit).
@@ -174,7 +174,7 @@ function list_files( $folder = '', $levels = 100, $exclusions = array() ) {
 /**
  * Get list of file extensions that are editable in plugins.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param string $plugin Plugin.
  * @return array File extensions.
@@ -219,8 +219,8 @@ function wp_get_plugin_file_editable_extensions( $plugin ) {
 	/**
 	 * Filters file type extensions editable in the plugin editor.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-4.9.0 Adds $plugin param.
+	 * @since 2.8.0
+	 * @since 4.9.0 Adds $plugin param.
 	 *
 	 * @param string $plugin Plugin file.
 	 * @param array $editable_extensions An array of editable plugin file extensions.
@@ -276,7 +276,7 @@ function wp_get_theme_file_editable_extensions( $theme ) {
 	/**
 	 * Filters the list of file types allowed for editing in the Theme editor.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array    $default_types List of file types. Default types include 'php' and 'css'.
 	 * @param WP_Theme $theme         The current Theme object.
@@ -290,7 +290,7 @@ function wp_get_theme_file_editable_extensions( $theme ) {
 /**
  * Print file editor templates (for plugins and themes).
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 function wp_print_file_editor_templates() {
 	?>
@@ -336,7 +336,7 @@ function wp_print_file_editor_templates() {
  * to attempt to see if there is a fatal error introduced. If so, the PHP change will be
  * reverted.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param array $args {
  *     Args. Note that all of the arg values are already unslashed. They are, however,
@@ -614,7 +614,7 @@ function wp_edit_theme_plugin_file( $args ) {
  * The filename is based off the passed parameter or defaults to the current unix timestamp,
  * while the directory can either be passed as well, or by leaving it blank, default to a writable temporary directory.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param string $filename Optional. Filename to base the Unique file off. Default empty.
  * @param string $dir      Optional. Directory to store the file in. Default empty.
@@ -659,7 +659,7 @@ function wp_tempnam( $filename = '', $dir = '' ) {
  *
  * Function will die if you are not allowed to edit the file.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @param string $file          File the user is attempting to edit.
  * @param array  $allowed_files Optional. Array of allowed files to edit, $file must match an entry exactly.
@@ -689,7 +689,7 @@ function validate_file_to_edit( $file, $allowed_files = array() ) {
  * and moving the file to the appropriate directory within the uploads directory.
  *
  * @access private
- * @since WP-4.0.0
+ * @since 4.0.0
  *
  * @see wp_handle_upload_error
  *
@@ -713,8 +713,8 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	 *
 	 * The dynamic portion of the hook name, `$action`, refers to the post action.
 	 *
-	 * @since WP-2.9.0 as 'wp_handle_upload_prefilter'.
-	 * @since WP-4.0.0 Converted to a dynamic hook with `$action`.
+	 * @since 2.9.0 as 'wp_handle_upload_prefilter'.
+	 * @since 4.0.0 Converted to a dynamic hook with `$action`.
 	 *
 	 * @param array $file An array of data for a single file.
 	 */
@@ -835,7 +835,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	 * If a non-null value is passed to the filter, moving the file and any related error
 	 * reporting will be completely skipped.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param string $move_new_file If null (default) move the file after the upload.
 	 * @param string $file          An array of data for a single file.
@@ -879,7 +879,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 	/**
 	 * Filters the data array for the uploaded file.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param array  $upload {
 	 *     Array of upload data.
@@ -906,7 +906,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
  *
  * Passes the {@see 'wp_handle_upload'} action.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see _wp_handle_upload()
  *
@@ -936,7 +936,7 @@ function wp_handle_upload( &$file, $overrides = false, $time = null ) {
  *
  * Passes the {@see 'wp_handle_sideload'} action.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @see _wp_handle_upload()
  *
@@ -964,7 +964,7 @@ function wp_handle_sideload( &$file, $overrides = false, $time = null ) {
  * Downloads a URL to a local temporary file using the ClassicPress HTTP Class.
  * Please note, That the calling function must unlink() the file.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $url the URL of the file to download
  * @param int $timeout The timeout for the request to download the file default 300 seconds
@@ -1017,7 +1017,7 @@ function download_url( $url, $timeout = 300 ) {
 /**
  * Calculates and compares the MD5 of a file to its expected value.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param string $filename The filename to check the MD5 of.
  * @param string $expected_md5 The expected MD5 of the file, either a base64 encoded raw md5, or a hex-encoded md5
@@ -1048,7 +1048,7 @@ function verify_file_md5( $filename, $expected_md5 ) {
  * Attempts to increase the PHP Memory limit to 256M before uncompressing,
  * However, The most memory required shouldn't be much larger than the Archive itself.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global WP_Filesystem_Base $wp_filesystem Subclass
  *
@@ -1093,7 +1093,7 @@ function unzip_file( $file, $to ) {
 	/**
 	 * Filters whether to use ZipArchive to unzip archives.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param bool $ziparchive Whether to use ZipArchive. Default true.
 	 */
@@ -1115,7 +1115,7 @@ function unzip_file( $file, $to ) {
  * This function should not be called directly, use unzip_file instead. Attempts to unzip an archive using the ZipArchive class.
  * Assumes that WP_Filesystem() has already been called and set up.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @see unzip_file
  * @access private
  *
@@ -1248,7 +1248,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
  * This function should not be called directly, use unzip_file instead. Attempts to unzip an archive using the PclZip library.
  * Assumes that WP_Filesystem() has already been called and set up.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @see unzip_file
  * @access private
  *
@@ -1364,7 +1364,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
  * Copies a directory from one location to another via the ClassicPress Filesystem Abstraction.
  * Assumes that WP_Filesystem() has already been called and setup.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global WP_Filesystem_Base $wp_filesystem Subclass
  *
@@ -1426,7 +1426,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
  * Plugins may add extra transports, And force ClassicPress to use them by returning
  * the filename via the {@see 'filesystem_method_file'} filter.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global WP_Filesystem_Base $wp_filesystem Subclass
  *
@@ -1452,7 +1452,7 @@ function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_own
 		/**
 		 * Filters the path for a specific filesystem method class file.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 *
 		 * @see get_filesystem_method()
 		 *
@@ -1513,7 +1513,7 @@ function WP_Filesystem( $args = false, $context = false, $allow_relaxed_file_own
  *
  * Plugins may define a custom transport handler, See WP_Filesystem().
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global callable $_wp_filesystem_direct_method
  *
@@ -1582,7 +1582,7 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
 	/**
 	 * Filters the filesystem method to use.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 *
 	 * @param string $method  Filesystem method to return.
 	 * @param array  $args    An array of connection details for the method.
@@ -1603,8 +1603,8 @@ function get_filesystem_method( $args = array(), $context = '', $allow_relaxed_f
  *
  * Plugins may override this form by returning true|false via the {@see 'request_filesystem_credentials'} filter.
  *
- * @since WP-2.5.0
- * @since WP-4.6.0 The `$context` parameter default changed from `false` to an empty string.
+ * @since 2.5.0
+ * @since 4.6.0 The `$context` parameter default changed from `false` to an empty string.
  *
  * @global string $pagenow
  *
@@ -1629,8 +1629,8 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	 * Returning anything other than an empty string will effectively short-circuit
 	 * output of the filesystem credentials form, returning that value instead.
 	 *
-	 * @since WP-2.5.0
-	 * @since WP-4.6.0 The `$context` parameter default changed from `false` to an empty string.
+	 * @since 2.5.0
+	 * @since 4.6.0 The `$context` parameter default changed from `false` to an empty string.
 	 *
 	 * @param mixed  $output                       Form output to return instead. Default empty.
 	 * @param string $form_post                    The URL to post the form to.
@@ -1760,8 +1760,8 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	/**
 	 * Filters the connection types to output to the filesystem credentials form.
 	 *
-	 * @since WP-2.9.0
-	 * @since WP-4.6.0 The `$context` parameter default changed from `false` to an empty string.
+	 * @since 2.9.0
+	 * @since 4.6.0 The `$context` parameter default changed from `false` to an empty string.
 	 *
 	 * @param array  $types       Types of connections.
 	 * @param array  $credentials Credentials to connect with.
@@ -1893,7 +1893,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 /**
  * Print the filesystem credentials modal when needed.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  */
 function wp_print_request_filesystem_credentials_modal() {
 	$filesystem_method = get_filesystem_method();
@@ -1921,7 +1921,7 @@ function wp_print_request_filesystem_credentials_modal() {
 /**
  * Generate a single group for the personal data export report.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param array $group_data {
  *     The group data to render.
@@ -1983,7 +1983,7 @@ function wp_privacy_generate_personal_data_export_group_html( $group_data ) {
 /**
  * Generate the personal data export file.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id The export request ID.
  */
@@ -2145,7 +2145,7 @@ function wp_privacy_generate_personal_data_export_file( $request_id ) {
 			/**
 			 * Fires right after all personal data has been written to the export file.
 			 *
-			 * @since WP-4.9.6
+			 * @since 4.9.6
 			 *
 			 * @param string $archive_pathname     The full path to the export file on the filesystem.
 			 * @param string $archive_url          The URL of the archive file.
@@ -2169,7 +2169,7 @@ function wp_privacy_generate_personal_data_export_file( $request_id ) {
 /**
  * Send an email to the user with a link to the personal data export file
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id The request ID for this personal data export.
  * @return true|WP_Error True on success or `WP_Error` on failure.
@@ -2211,7 +2211,7 @@ All at ###SITENAME###
 	 * ###SITENAME###           The name of the site.
 	 * ###SITEURL###            The URL to the site.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $email_text     Text in the email.
 	 * @param int    $request_id     The request ID for this personal data export.
@@ -2248,7 +2248,7 @@ All at ###SITENAME###
 /**
  * Intercept personal data exporter page ajax responses in order to assemble the personal data export file.
  * @see wp_privacy_personal_data_export_page
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param array  $response        The response from the personal data exporter for the given page.
  * @param int    $exporter_index  The index of the personal data exporter. Begins at 1.
@@ -2340,7 +2340,7 @@ function wp_privacy_process_personal_data_export_page( $response, $exporter_inde
 	/**
 	 * Generate the export file from the collected, grouped personal data.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param int $request_id The export request ID.
 	 */

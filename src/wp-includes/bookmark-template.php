@@ -19,7 +19,7 @@
  * This function is used internally by wp_list_bookmarks() and should not be
  * used by themes.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @access private
  *
  * @param array $bookmarks List of bookmarks to traverse.
@@ -160,7 +160,7 @@ function _walk_bookmarks( $bookmarks, $args = '' ) {
  * links are displayed, if 'categorize' is 1. If 'categorize' is 0, then it will
  * display for only the 'title_li' string and only if 'title_li' is not empty.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @see _walk_bookmarks()
  *
@@ -268,7 +268,7 @@ function wp_list_bookmarks( $args = '' ) {
 			/**
 			 * Filters the bookmarks category name.
 			 *
-			 * @since WP-2.2.0
+			 * @since 2.2.0
 			 *
 			 * @param string $cat_name The category name of bookmarks.
 			 */
@@ -309,7 +309,7 @@ function wp_list_bookmarks( $args = '' ) {
 	/**
 	 * Filters the bookmarks list before it is echoed or returned.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $html The HTML list of bookmarks.
 	 */

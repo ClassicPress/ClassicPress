@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
  * Bulk Theme Upgrader Skin for ClassicPress Theme Upgrades.
  *
- * @since WP-3.0.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since 3.0.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  *
  * @see Bulk_Upgrader_Skin
  */
@@ -64,7 +64,7 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
 		/**
 		 * Filters the list of action links available following bulk theme updates.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param array $update_actions Array of theme action links.
 		 * @param array $theme_info     Array of information for the last-updated theme.

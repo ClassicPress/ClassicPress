@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
  * Generic Skin for the ClassicPress Upgrader classes. This skin is designed to be extended for specific purposes.
  *
- * @since WP-2.8.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since 2.8.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  */
 class WP_Upgrader_Skin {
 
@@ -22,7 +22,7 @@ class WP_Upgrader_Skin {
 	/**
 	 * Holds the result of an upgrade.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 * @var string|bool|WP_Error
 	 */
 	public $result  = false;
@@ -61,7 +61,7 @@ class WP_Upgrader_Skin {
 	/**
 	 * Sets the result of an upgrade.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param string|bool|WP_Error $result The result of an upgrade.
 	 */
@@ -73,8 +73,8 @@ class WP_Upgrader_Skin {
 	 * Displays a form to the user to request for their FTP/SSH details in order
 	 * to connect to the filesystem.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-4.6.0 The `$context` parameter default changed from `false` to an empty string.
+	 * @since 2.8.0
+	 * @since 4.6.0 The `$context` parameter default changed from `false` to an empty string.
 	 *
 	 * @see request_filesystem_credentials()
 	 *
@@ -175,7 +175,7 @@ class WP_Upgrader_Skin {
 	/**
 	 * Output JavaScript that calls function to decrement the update counts.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 *
 	 * @param string $type Type of update count to decrement. Likely values include 'plugin',
 	 *                     'theme', 'translation', etc.
@@ -213,7 +213,7 @@ class WP_Upgrader_Skin {
 	/**
 	 * Hides the `process_failed` error message when updating by uploading a zip file.
 	 *
-	 * @since WP-5.5.0
+	 * @since 5.5.0
 	 *
 	 * @param $wp_error WP_Error
 	 * @return bool

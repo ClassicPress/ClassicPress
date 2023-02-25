@@ -4,20 +4,20 @@
  *
  * @package ClassicPress
  * @subpackage Feed
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core class used to implement feed cache transients.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 class WP_Feed_Cache_Transient {
 
 	/**
 	 * Holds the transient name.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 * @var string
 	 */
 	public $name;
@@ -25,7 +25,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Holds the transient mod name.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 * @var string
 	 */
 	public $mod_name;
@@ -35,7 +35,7 @@ class WP_Feed_Cache_Transient {
 	 *
 	 * Defaults to 43200 seconds (12 hours).
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 * @var int
 	 */
 	public $lifetime = 43200;
@@ -43,8 +43,8 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-3.2.0 Updated to use a PHP5 constructor.
+	 * @since 2.8.0
+	 * @since 3.2.0 Updated to use a PHP5 constructor.
 	 *
 	 * @param string $location  URL location (scheme is used to determine handler).
 	 * @param string $filename  Unique identifier for cache object.
@@ -58,7 +58,7 @@ class WP_Feed_Cache_Transient {
 		/**
 		 * Filters the transient lifetime of the feed cache.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 *
 		 * @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).
 		 * @param string $filename Unique identifier for the cache object.
@@ -69,7 +69,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Sets the transient.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param SimplePie $data Data to save.
 	 * @return true Always true.
@@ -87,7 +87,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Gets the transient.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return mixed Transient value.
 	 */
@@ -98,7 +98,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Gets mod transient.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return mixed Transient value.
 	 */
@@ -109,7 +109,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Sets mod transient.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return bool False if value was not set and true if value was set.
 	 */
@@ -120,7 +120,7 @@ class WP_Feed_Cache_Transient {
 	/**
 	 * Deletes transients.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return true Always true.
 	 */

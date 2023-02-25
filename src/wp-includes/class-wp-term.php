@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Taxonomy
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to implement the WP_Term object.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @property-read object $data Sanitized term data.
  */
@@ -19,7 +19,7 @@ final class WP_Term {
 	/**
 	 * Term ID.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $term_id;
@@ -27,7 +27,7 @@ final class WP_Term {
 	/**
 	 * The term's name.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $name = '';
@@ -35,7 +35,7 @@ final class WP_Term {
 	/**
 	 * The term's slug.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $slug = '';
@@ -43,7 +43,7 @@ final class WP_Term {
 	/**
 	 * The term's term_group.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $term_group = '';
@@ -51,7 +51,7 @@ final class WP_Term {
 	/**
 	 * Term Taxonomy ID.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $term_taxonomy_id = 0;
@@ -59,7 +59,7 @@ final class WP_Term {
 	/**
 	 * The term's taxonomy name.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $taxonomy = '';
@@ -67,7 +67,7 @@ final class WP_Term {
 	/**
 	 * The term's description.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $description = '';
@@ -75,7 +75,7 @@ final class WP_Term {
 	/**
 	 * ID of a term's parent term.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $parent = 0;
@@ -83,7 +83,7 @@ final class WP_Term {
 	/**
 	 * Cached object count for this term.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $count = 0;
@@ -93,7 +93,7 @@ final class WP_Term {
 	 *
 	 * Does not correspond to a database field.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var string
 	 */
 	public $filter = 'raw';
@@ -101,7 +101,7 @@ final class WP_Term {
 	/**
 	 * Retrieve WP_Term instance.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @static
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
@@ -190,7 +190,7 @@ final class WP_Term {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param WP_Term|object $term Term object.
 	 */
@@ -203,7 +203,7 @@ final class WP_Term {
 	/**
 	 * Sanitizes term fields, according to the filter type provided.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param string $filter Filter context. Accepts 'edit', 'db', 'display', 'attribute', 'js', 'raw'.
 	 */
@@ -214,7 +214,7 @@ final class WP_Term {
 	/**
 	 * Converts an object to array.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @return array Object as array.
 	 */
@@ -225,7 +225,7 @@ final class WP_Term {
 	/**
 	 * Getter.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param string $key Property to get.
 	 * @return mixed Property value.

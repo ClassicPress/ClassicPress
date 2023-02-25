@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  * @deprecated WP-4.9.0 This file is no longer used as of the menu creation UX introduced in https://core.trac.wordpress.org/ticket/40104.
  */
 
 /**
  * Customize control class for new menus.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  * @deprecated WP-4.9.0 This class is no longer used as of the menu creation UX introduced in https://core.trac.wordpress.org/ticket/40104.
  *
  * @see WP_Customize_Control
@@ -21,7 +21,7 @@ class WP_Customize_New_Menu_Control extends WP_Customize_Control {
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var string
 	 */
 	public $type = 'new_menu';
@@ -29,7 +29,7 @@ class WP_Customize_New_Menu_Control extends WP_Customize_Control {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param WP_Customize_Manager $manager Manager.
 	 * @param string               $id      ID.
@@ -43,7 +43,7 @@ class WP_Customize_New_Menu_Control extends WP_Customize_Control {
 	/**
 	 * Render the control's content.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 */
 	public function render_content() {
 		?>

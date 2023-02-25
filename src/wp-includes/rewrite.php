@@ -9,112 +9,112 @@
 /**
  * Endpoint Mask for default, which is nothing.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_NONE', 0 );
 
 /**
  * Endpoint Mask for Permalink.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_PERMALINK', 1 );
 
 /**
  * Endpoint Mask for Attachment.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_ATTACHMENT', 2 );
 
 /**
  * Endpoint Mask for date.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_DATE', 4 );
 
 /**
  * Endpoint Mask for year
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_YEAR', 8 );
 
 /**
  * Endpoint Mask for month.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_MONTH', 16 );
 
 /**
  * Endpoint Mask for day.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_DAY', 32 );
 
 /**
  * Endpoint Mask for root.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_ROOT', 64 );
 
 /**
  * Endpoint Mask for comments.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_COMMENTS', 128 );
 
 /**
  * Endpoint Mask for searches.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_SEARCH', 256 );
 
 /**
  * Endpoint Mask for categories.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_CATEGORIES', 512 );
 
 /**
  * Endpoint Mask for tags.
  *
- * @since WP-2.3.0
+ * @since 2.3.0
  */
 define( 'EP_TAGS', 1024 );
 
 /**
  * Endpoint Mask for authors.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_AUTHORS', 2048 );
 
 /**
  * Endpoint Mask for pages.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_PAGES', 4096 );
 
 /**
  * Endpoint Mask for all archive views.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  */
 define( 'EP_ALL_ARCHIVES', EP_DATE | EP_YEAR | EP_MONTH | EP_DAY | EP_CATEGORIES | EP_TAGS | EP_AUTHORS );
 
 /**
  * Endpoint Mask for everything.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 define( 'EP_ALL', EP_PERMALINK | EP_ATTACHMENT | EP_ROOT | EP_COMMENTS | EP_SEARCH | EP_PAGES | EP_ALL_ARCHIVES );
 
@@ -124,8 +124,8 @@ define( 'EP_ALL', EP_PERMALINK | EP_ATTACHMENT | EP_ROOT | EP_COMMENTS | EP_SEAR
  * Any value in the $after parameter that isn't 'bottom' will result in the rule
  * being placed at the top of the rewrite rules.
  *
- * @since WP-2.1.0
- * @since WP-4.4.0 Array support was added to the `$query` parameter.
+ * @since 2.1.0
+ * @since 4.4.0 Array support was added to the `$query` parameter.
  *
  * @global WP_Rewrite $wp_rewrite ClassicPress Rewrite Component.
  *
@@ -147,7 +147,7 @@ function add_rewrite_rule( $regex, $query, $after = 'bottom' ) {
  * you call this on, or before, the {@see 'init'} hook. This is because $query defaults
  * to "$tag=", and for this to work a new query var has to be added.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @global WP_Rewrite $wp_rewrite
  * @global WP         $wp
@@ -176,7 +176,7 @@ function add_rewrite_tag( $tag, $regex, $query = '' ) {
 /**
  * Removes an existing rewrite tag (like %postname%).
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  *
  * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
  *
@@ -190,7 +190,7 @@ function remove_rewrite_tag( $tag ) {
 /**
  * Add permalink structure.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @see WP_Rewrite::add_permastruct()
  * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
@@ -220,7 +220,7 @@ function add_permastruct( $name, $struct, $args = array() ) {
  * Can only be used to remove permastructs that were added using add_permastruct().
  * Built-in permastructs cannot be removed.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  *
  * @see WP_Rewrite::remove_permastruct()
  * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
@@ -236,7 +236,7 @@ function remove_permastruct( $name ) {
 /**
  * Add a new feed type like /atom1/.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -264,7 +264,7 @@ function add_feed( $feedname, $function ) {
 /**
  * Remove rewrite rules and then recreate rewrite rules.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -298,8 +298,8 @@ function flush_rewrite_rules( $hard = true ) {
  * Be sure to flush the rewrite rules - see flush_rewrite_rules() - when your plugin gets
  * activated and deactivated.
  *
- * @since WP-2.1.0
- * @since WP-4.3.0 Added support for skipping query var registration by passing `false` to `$query_var`.
+ * @since 2.1.0
+ * @since 4.3.0 Added support for skipping query var registration by passing `false` to `$query_var`.
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -319,7 +319,7 @@ function add_rewrite_endpoint( $name, $places, $query_var = true ) {
  * To remove any manually prepended /index.php/.
  *
  * @access private
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param string $base The taxonomy base that we're going to filter
  * @return string
@@ -343,12 +343,12 @@ function _wp_filter_taxonomy_base( $base ) {
  * This function detects conflicts of this type and resolves them in favor of the
  * post permalink.
  *
- * Note that, since WP-4.3.0, wp_unique_post_slug() prevents the creation of post slugs
+ * Note that, since 4.3.0, wp_unique_post_slug() prevents the creation of post slugs
  * that would result in a date archive conflict. The resolution performed in this
  * function is primarily for legacy content, as well as cases when the admin has changed
  * the site's permalink structure in a way that introduces URL conflicts.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * @param array $query_vars Optional. Query variables for setting up the loop, as determined in
  *                          WP::parse_request(). Default empty array.
@@ -454,7 +454,7 @@ function wp_resolve_numeric_slug_conflicts( $query_vars = array() ) {
  *
  * Checks are supposedly from the hosted site blog.
  *
- * @since WP-1.0.0
+ * @since 1.0.0
  *
  * @global WP_Rewrite $wp_rewrite
  * @global WP         $wp
@@ -468,7 +468,7 @@ function url_to_postid( $url ) {
 	/**
 	 * Filters the URL to derive the post ID from.
 	 *
-	 * @since WP-2.2.0
+	 * @since 2.2.0
 	 *
 	 * @param string $url The URL to derive the post ID from.
 	 */

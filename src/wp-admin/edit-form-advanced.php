@@ -43,8 +43,8 @@ $_content_editor_dfw = false;
 /**
  * Filters whether to enable the 'expand' functionality in the post editor.
  *
- * @since WP-4.0.0
- * @since WP-4.1.0 Added the `$post_type` parameter.
+ * @since 4.0.0
+ * @since 4.1.0 Added the `$post_type` parameter.
  *
  * @param bool   $expand    Whether to enable the 'expand' functionality. Default true.
  * @param string $post_type Post type.
@@ -197,7 +197,7 @@ $messages['attachment'] = array_fill( 1, 10, __( 'Media file updated.' ) ); // H
 /**
  * Filters the post updated messages.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array $messages Post updated messages. For defaults @see $messages declarations above.
  */
@@ -323,7 +323,7 @@ if ( post_type_supports( $post_type, 'custom-fields' ) ) {
 /**
  * Fires in the middle of built-in meta box registration.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @deprecated WP-3.7.0 Use 'add_meta_boxes' instead.
  *
  * @param WP_Post $post Post object.
@@ -361,7 +361,7 @@ if ( post_type_supports( $post_type, 'author' ) && current_user_can( $post_type_
 /**
  * Fires after all built-in meta boxes have been added.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string  $post_type Post type.
  * @param WP_Post $post      Post object.
@@ -373,7 +373,7 @@ do_action( 'add_meta_boxes', $post_type, $post );
  *
  * The dynamic portion of the hook, `$post_type`, refers to the post type of the post.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param WP_Post $post Post object.
  */
@@ -384,7 +384,7 @@ do_action( "add_meta_boxes_{$post_type}", $post );
  *
  * Fires once for each of the default meta box contexts: normal, advanced, and side.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string  $post_type Post type of the post.
  * @param string  $context   string  Meta box context.
@@ -571,7 +571,7 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 /**
  * Fires inside the post editor form tag.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param WP_Post $post Post object.
  */
@@ -608,7 +608,7 @@ wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
  *
  * At this point, the required hidden fields and nonces have already been output.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param WP_Post $post Post object.
  */
@@ -626,7 +626,7 @@ do_action( 'edit_form_top', $post );
 	/**
 	 * Filters the title field placeholder text.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param string  $text Placeholder text. Default 'Enter title here'.
 	 * @param WP_Post $post Post object.
@@ -640,7 +640,7 @@ do_action( 'edit_form_top', $post );
 	/**
 	 * Fires before the permalink field in the edit form.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -684,7 +684,7 @@ endif;
 /**
  * Fires after the title field.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  *
  * @param WP_Post $post Post object.
  */
@@ -744,7 +744,7 @@ if ( post_type_supports( $post_type, 'editor' ) ) {
 /**
  * Fires after the content editor.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  *
  * @param WP_Post $post Post object.
  */
@@ -761,7 +761,7 @@ if ( 'page' == $post_type ) {
 	 *
 	 * The submitpage box is a meta box with 'side' context, so this hook fires just before it is output.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -772,7 +772,7 @@ if ( 'page' == $post_type ) {
 	 *
 	 * The submitpost box is a meta box with 'side' context, so this hook fires just before it is output.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -793,7 +793,7 @@ if ( 'page' == $post_type ) {
 	/**
 	 * Fires after 'normal' context meta boxes have been output for the 'page' post type.
 	 *
-	 * @since WP-1.5.0
+	 * @since 1.5.0
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -802,7 +802,7 @@ if ( 'page' == $post_type ) {
 	/**
 	 * Fires after 'normal' context meta boxes have been output for all post types other than 'page'.
 	 *
-	 * @since WP-1.5.0
+	 * @since 1.5.0
 	 *
 	 * @param WP_Post $post Post object.
 	 */
@@ -818,7 +818,7 @@ do_meta_boxes( null, 'advanced', $post );
 /**
  * Fires after all meta box sections have been output, before the closing #post-body div.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param WP_Post $post Post object.
  */

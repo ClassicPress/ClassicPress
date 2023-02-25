@@ -9,7 +9,7 @@
 /**
  * In ClassicPress Administration Screens
  *
- * @since WP-2.3.2
+ * @since 2.3.2
  */
 if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
@@ -42,7 +42,7 @@ if ( get_option( 'db_upgraded' ) ) {
 	/**
 	 * Fires on the next page load after a successful DB upgrade.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	do_action( 'after_db_upgrade' );
 } elseif ( get_option( 'db_version' ) != $wp_db_version && empty( $_POST ) ) {
@@ -60,7 +60,7 @@ if ( get_option( 'db_upgraded' ) ) {
 		 * If the network is 50 sites or less, it will run every time. Otherwise,
 		 * it will throttle itself to reduce load.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param bool $do_mu_upgrade Whether to perform the Multisite upgrade routine. Default true.
 		 */
@@ -164,7 +164,7 @@ if ( current_user_can( 'manage_options' ) ) {
  *
  * This is roughly analogous to the more general {@see 'init'} hook, which fires earlier.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  */
 do_action( 'admin_init' );
 
@@ -224,7 +224,7 @@ if ( isset( $plugin_page ) ) {
 		 *
 		 * @see get_plugin_page_hook()
 		 *
-		 * @since WP-2.1.0
+		 * @since 2.1.0
 		 */
 		do_action( "load-{$page_hook}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		if ( ! isset( $_GET['noheader'] ) ) {
@@ -235,7 +235,7 @@ if ( isset( $plugin_page ) ) {
 		 * Used to call the registered callback for a plugin screen.
 		 *
 		 * @ignore
-		 * @since WP-1.5.0
+		 * @since 1.5.0
 		 */
 		do_action( $page_hook );
 	} else {
@@ -257,7 +257,7 @@ if ( isset( $plugin_page ) ) {
 		 *
 		 * @see plugin_basename()
 		 *
-		 * @since WP-1.5.0
+		 * @since 1.5.0
 		 */
 		do_action( "load-{$plugin_page}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -298,7 +298,7 @@ if ( isset( $plugin_page ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$importer`, refers to the importer slug.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 */
 	do_action( "load-importer-{$importer}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -320,7 +320,7 @@ if ( isset( $plugin_page ) ) {
 	 * Multisite uses this hook to filter all data through kses by default,
 	 * as a super administrator may be assisting an untrusted user.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param bool $force Whether to force data to be filtered through kses. Default false.
 	 */
@@ -347,7 +347,7 @@ if ( isset( $plugin_page ) ) {
 	 * 'post-new.php' etc. A complete hook for the latter would be
 	 * 'load-post-new.php'.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 */
 	do_action( "load-{$pagenow}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -379,7 +379,7 @@ if ( ! empty( $_REQUEST['action'] ) ) {
 	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
 	 * refers to the action derived from the `GET` or `POST` request.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 */
 	do_action( 'admin_action_' . $_REQUEST['action'] );
 }

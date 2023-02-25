@@ -4,19 +4,19 @@
  *
  * @package ClassicPress
  * @subpackage i18n
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core class used for switching locales.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 class WP_Locale_Switcher {
 	/**
 	 * Locale stack.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string[]
 	 */
 	private $locales = array();
@@ -24,7 +24,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Original locale.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string
 	 */
 	private $original_locale;
@@ -32,7 +32,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Holds all available languages.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var array An array of language codes (file names without the .mo extension).
 	 */
 	private $available_languages = array();
@@ -42,7 +42,7 @@ class WP_Locale_Switcher {
 	 *
 	 * Stores the original locale as well as a list of all available languages.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 */
 	public function __construct() {
 		$this->original_locale     = is_admin() ? get_user_locale() : get_locale();
@@ -61,7 +61,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Switches the translations according to the given locale.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string $locale The locale to switch to.
 	 * @return bool True on success, false on failure.
@@ -83,7 +83,7 @@ class WP_Locale_Switcher {
 		/**
 		 * Fires when the locale is switched.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param string $locale The new locale.
 		 */
@@ -95,7 +95,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Restores the translations according to the previous locale.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return string|false Locale on success, false on failure.
 	 */
@@ -119,7 +119,7 @@ class WP_Locale_Switcher {
 		/**
 		 * Fires when the locale is restored to the previous one.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param string $locale          The new locale.
 		 * @param string $previous_locale The previous locale.
@@ -132,7 +132,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Restores the translations according to the original locale.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return string|false Locale on success, false on failure.
 	 */
@@ -149,7 +149,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Whether switch_to_locale() is in effect.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return bool True if the locale has been switched, false otherwise.
 	 */
@@ -160,7 +160,7 @@ class WP_Locale_Switcher {
 	/**
 	 * Filters the locale of the ClassicPress installation.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string $locale The locale of the ClassicPress installation.
 	 * @return string The locale currently being switched to.
@@ -180,7 +180,7 @@ class WP_Locale_Switcher {
 	 *
 	 * When switching to a locale, translations for this locale must be loaded from scratch.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @global Mo[] $l10n An array of all currently loaded text domains.
 	 *
@@ -209,7 +209,7 @@ class WP_Locale_Switcher {
 	 * Loads the translations, changes the global `$wp_locale` object and updates
 	 * all post type labels.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @global WP_Locale $wp_locale The ClassicPress date and time locale object.
 	 *
@@ -226,7 +226,7 @@ class WP_Locale_Switcher {
 		/**
 		 * Fires when the locale is switched to or restored.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param string $locale The new locale.
 		 */

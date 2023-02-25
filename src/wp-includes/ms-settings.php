@@ -7,7 +7,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 /**
@@ -27,7 +27,7 @@
  * @global bool       $public       Deprecated. Whether the site found on load is public.
  *                                  Use `get_site()->public` instead.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 global $current_site, $current_blog, $domain, $path, $site_id, $public;
 
@@ -118,6 +118,6 @@ ms_upload_constants();
  * Fires after the current site and network have been detected and loaded
  * in multisite's bootstrap.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 do_action( 'ms_loaded' );

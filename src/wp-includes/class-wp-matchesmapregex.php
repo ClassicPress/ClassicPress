@@ -3,13 +3,13 @@
  * WP_MatchesMapRegex helper class
  *
  * @package ClassicPress
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Helper class to remove the need to use eval to replace $matches[] in query strings.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  */
 class WP_MatchesMapRegex {
 	/**

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Users
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -21,13 +21,13 @@
  *          )
  *     )
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  */
 class WP_Roles {
 	/**
 	 * List of roles and capabilities.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 * @var array
 	 */
 	public $roles;
@@ -35,7 +35,7 @@ class WP_Roles {
 	/**
 	 * List of the role objects.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 * @var array
 	 */
 	public $role_objects = array();
@@ -43,7 +43,7 @@ class WP_Roles {
 	/**
 	 * List of role names.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 * @var array
 	 */
 	public $role_names = array();
@@ -51,7 +51,7 @@ class WP_Roles {
 	/**
 	 * Option name for storing role list.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 * @var string
 	 */
 	public $role_key;
@@ -59,7 +59,7 @@ class WP_Roles {
 	/**
 	 * Whether to use the database for retrieval and storage.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var bool
 	 */
 	public $use_db = true;
@@ -67,7 +67,7 @@ class WP_Roles {
 	/**
 	 * The site ID the roles are initialized for.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var int
 	 */
 	protected $site_id = 0;
@@ -75,8 +75,8 @@ class WP_Roles {
 	/**
 	 * Constructor
 	 *
-	 * @since WP-2.0.0
-	 * @since WP-4.9.0 The $site_id argument was added.
+	 * @since 2.0.0
+	 * @since 4.9.0 The $site_id argument was added.
 	 *
 	 * @global array $wp_user_roles Used to set the 'roles' property value.
 	 *
@@ -93,7 +93,7 @@ class WP_Roles {
 	/**
 	 * Make private/protected methods readable for backward compatibility.
 	 *
-	 * @since WP-4.0.0
+	 * @since 4.0.0
 	 *
 	 * @param callable $name      Method to call.
 	 * @param array    $arguments Arguments to pass when calling.
@@ -113,7 +113,7 @@ class WP_Roles {
 	 * 'user_roles' appended. If the $wp_user_roles global is set, then it will
 	 * be used and the role option will not be updated or used.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @deprecated WP-4.9.0 Use WP_Roles::for_site()
 	 */
 	protected function _init() {
@@ -128,7 +128,7 @@ class WP_Roles {
 	 * Recreates the role objects. This is typically called only by switch_to_blog()
 	 * after switching wpdb to a new site ID.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 * @deprecated WP-4.7.0 Use WP_Roles::for_site()
 	 */
 	public function reinit() {
@@ -145,7 +145,7 @@ class WP_Roles {
 	 * The capabilities are defined in the following format `array( 'read' => true );`
 	 * To explicitly deny a role a capability you set the value for that capability to false.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name.
 	 * @param string $display_name Role display name.
@@ -172,7 +172,7 @@ class WP_Roles {
 	/**
 	 * Remove role by name.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name.
 	 */
@@ -197,7 +197,7 @@ class WP_Roles {
 	/**
 	 * Add capability to role.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name.
 	 * @param string $cap Capability name.
@@ -217,7 +217,7 @@ class WP_Roles {
 	/**
 	 * Remove capability from role.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name.
 	 * @param string $cap Capability name.
@@ -236,7 +236,7 @@ class WP_Roles {
 	/**
 	 * Retrieve role object by name.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name.
 	 * @return WP_Role|null WP_Role object if found, null if the role does not exist.
@@ -252,7 +252,7 @@ class WP_Roles {
 	/**
 	 * Retrieve list of role names.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array List of role names.
 	 */
@@ -263,7 +263,7 @@ class WP_Roles {
 	/**
 	 * Whether role name is currently in the list of available roles.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role name to look up.
 	 * @return bool
@@ -275,7 +275,7 @@ class WP_Roles {
 	/**
 	 * Initializes all of the available roles.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function init_roles() {
 		if ( empty( $this->roles ) ) {
@@ -292,7 +292,7 @@ class WP_Roles {
 		/**
 		 * After the roles have been initialized, allow plugins to add their own roles.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_Roles $this A reference to the WP_Roles object.
 		 */
@@ -302,7 +302,7 @@ class WP_Roles {
 	/**
 	 * Sets the site to operate on. Defaults to the current site.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -331,7 +331,7 @@ class WP_Roles {
 	/**
 	 * Gets the ID of the site for which roles are currently initialized.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @return int Site ID.
 	 */
@@ -342,7 +342,7 @@ class WP_Roles {
 	/**
 	 * Gets the available roles data.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @global array $wp_user_roles Used to set the 'roles' property value.
 	 *

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Customize Background Position Control class.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see WP_Customize_Control
  */
@@ -19,7 +19,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	/**
 	 * Type.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string
 	 */
 	public $type = 'background_position';
@@ -27,14 +27,14 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	/**
 	 * Don't render the control content from PHP, as it's rendered via JS on load.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * Render a JS template for the content of the position control.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 */
 	public function content_template() {
 		$options = array(

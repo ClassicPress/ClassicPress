@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage HTTP
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Bridge to connect Requests internal hooks to ClassicPress actions.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see Requests_Hooks
  */

@@ -74,7 +74,7 @@ $wp_query->is_404 = false;
 /**
  * Fires before the Site Activation page is loaded.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 do_action( 'activate_header' );
 
@@ -83,7 +83,7 @@ do_action( 'activate_header' );
  *
  * Fires on {@see 'wp_head'}.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function do_activate_header() {
 	/**
@@ -91,7 +91,7 @@ function do_activate_header() {
 	 *
 	 * Fires on the {@see 'wp_head'} action.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 */
 	do_action( 'activate_wp_head' );
 }
@@ -100,7 +100,7 @@ add_action( 'wp_head', 'do_activate_header' );
 /**
  * Loads styles specific to this page.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function wpmu_activate_stylesheet() {
 	?>

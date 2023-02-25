@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
@@ -13,8 +13,8 @@
  * This skin is designed to be used when no output is intended, all output
  * is captured and stored for the caller to process and log/email/discard.
  *
- * @since WP-3.7.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since 3.7.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  *
  * @see Bulk_Upgrader_Skin
  */
@@ -25,8 +25,8 @@ class Automatic_Upgrader_Skin extends WP_Upgrader_Skin {
 	 * Determines whether the upgrader needs FTP/SSH details in order to connect
 	 * to the filesystem.
 	 *
-	 * @since WP-3.7.0
-	 * @since WP-4.6.0 The `$context` parameter default changed from `false` to an empty string.
+	 * @since 3.7.0
+	 * @since 4.6.0 The `$context` parameter default changed from `false` to an empty string.
 	 *
 	 * @see request_filesystem_credentials()
 	 *

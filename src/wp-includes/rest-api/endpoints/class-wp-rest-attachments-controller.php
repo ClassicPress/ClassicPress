@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage REST_API
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core controller used to access attachments via the REST API.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see WP_REST_Posts_Controller
  */
@@ -20,7 +20,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	 * Determines the allowed query_vars for a get_items() response and
 	 * prepares for WP_Query.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array           $prepared_args Optional. Array of prepared arguments. Default empty array.
 	 * @param WP_REST_Request $request       Optional. Request to prepare items for.
@@ -57,7 +57,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Checks if a given request has access to create an attachment.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|true Boolean true if the attachment may be created, or a WP_Error if not.
@@ -89,7 +89,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Creates a single attachment.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|WP_REST_Response Response object on success, WP_Error object on failure.
@@ -160,7 +160,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		/**
 		 * Fires after a single attachment is created or updated via the REST API.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_Post         $attachment Inserted or updated attachment
 		 *                                    object.
@@ -196,7 +196,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Updates a single attachment.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_Error|WP_REST_Response Response object on success, WP_Error object on failure.
@@ -240,7 +240,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Prepares a single attachment for create or update.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_Error|stdClass $prepared_attachment Post object.
@@ -276,7 +276,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Prepares a single attachment output for response.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_Post         $post    Attachment object.
 	 * @param WP_REST_Request $request Request object.
@@ -379,7 +379,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 		 *
 		 * Allows modification of the attachment right before it is returned.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_REST_Response $response The response object.
 		 * @param WP_Post          $post     The original attachment post.
@@ -391,7 +391,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Retrieves the attachment's schema, conforming to JSON Schema.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Item schema as an array.
 	 */
@@ -498,7 +498,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Handles an upload via raw POST data.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array $data    Supplied file data.
 	 * @param array $headers HTTP headers from the request.
@@ -600,7 +600,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	 *                         | ext-token "=" ext-value
 	 *     ext-token           = <the characters in token, followed by "*">
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @link http://tools.ietf.org/html/rfc2388
 	 * @link http://tools.ietf.org/html/rfc6266
@@ -652,7 +652,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Retrieves the query params for collections of attachments.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Query parameters for the attachment collection as an array.
 	 */
@@ -681,7 +681,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Validates whether the user can query private statuses.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param mixed           $value     Status value.
 	 * @param WP_REST_Request $request   Request object.
@@ -699,7 +699,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	/**
 	 * Handles an upload via multipart/form-data ($_FILES).
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array $files   Data from the `$_FILES` superglobal.
 	 * @param array $headers HTTP headers from the request.
@@ -753,7 +753,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	 *
 	 * Media types are considered the MIME type category.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Array of supported media types.
 	 */
@@ -778,7 +778,7 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 	 *
 	 * Replicates check_upload_size().
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @param array $file $_FILES array for a given file.
 	 * @return true|WP_Error True if can upload, error for errors.

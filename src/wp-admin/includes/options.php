@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Output JavaScript to toggle display of additional settings if avatars are disabled.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  */
 function options_discussion_add_js() {
 	?>
@@ -29,7 +29,7 @@ function options_discussion_add_js() {
 /**
  * Display JavaScript on the page.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  */
 function options_general_add_js() {
 	?>
@@ -95,7 +95,7 @@ function options_general_add_js() {
 /**
  * Display JavaScript on the page.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  */
 function options_reading_add_js() {
 	?>
@@ -117,7 +117,7 @@ function options_reading_add_js() {
 /**
  * Render the site charset setting.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  */
 function options_reading_blog_charset() {
 	echo '<input name="blog_charset" type="text" id="blog_charset" value="' . esc_attr( get_option( 'blog_charset' ) ) . '" class="regular-text" />';

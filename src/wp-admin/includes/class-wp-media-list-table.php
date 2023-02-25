@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /**
  * Core class used to implement displaying media items in a list table.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -19,7 +19,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Holds the number of pending comments for each post.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var array
 	 */
 	protected $comment_pending_count = array();
@@ -31,7 +31,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -296,7 +296,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		/**
 		 * Filters the taxonomy columns for attachments in the Media list table.
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 *
 		 * @param array  $taxonomies An array of registered taxonomies to show for attachments.
 		 * @param string $post_type  The post type. Default 'attachment'.
@@ -327,7 +327,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		/**
 		 * Filters the Media list table columns.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 *
 		 * @param array $posts_columns An array of columns displayed in the Media list table.
 		 * @param bool  $detached      Whether the list table contains media not attached
@@ -353,7 +353,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the checkbox column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -371,7 +371,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the title column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -420,7 +420,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the author column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -435,7 +435,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the description column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -446,7 +446,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the date column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -474,7 +474,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the parent column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -541,7 +541,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles the comments column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
@@ -562,7 +562,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Handles output for the default column.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Post $post        The current WP_Post object.
 	 * @param string  $column_name Current column name.
@@ -607,7 +607,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		 *
 		 * Custom columns are registered using the {@see 'manage_media_columns'} filter.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 *
 		 * @param string $column_name Name of the custom column.
 		 * @param int    $post_id     Attachment ID.
@@ -649,7 +649,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the default primary column.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @return string Name of the default primary column, in this case, 'title'.
 	 */
@@ -768,7 +768,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		/**
 		 * Filters the action links for each attachment in the Media list table.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 *
 		 * @param array   $actions  An array of action links for each attachment.
 		 *                          Default 'Edit', 'Delete Permanently', 'View'.
@@ -782,7 +782,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	/**
 	 * Generates and displays row action links.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param object $post        Attachment being acted upon.
 	 * @param string $column_name Current column name.

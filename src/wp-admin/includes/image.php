@@ -9,7 +9,7 @@
 /**
  * Crop an Image to a given size.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string|int $src The source file or Attachment ID.
  * @param int $src_x The start x position to crop from.
@@ -69,7 +69,7 @@ function wp_crop_image( $src, $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $s
 /**
  * Generate post thumbnail attachment meta data.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $attachment_id Attachment Id to process.
  * @param string $file Filepath of the Attached image.
@@ -128,8 +128,8 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		/**
 		 * Filters the image sizes automatically generated when uploading an image.
 		 *
-		 * @since WP-2.9.0
-		 * @since WP-4.4.0 Added the `$metadata` argument.
+		 * @since 2.9.0
+		 * @since 4.4.0 Added the `$metadata` argument.
 		 *
 		 * @param array $sizes    An associative array of image sizes.
 		 * @param array $metadata An associative array of image metadata: width, height, file.
@@ -198,7 +198,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 				/**
 				 * Filters the parameters for the attachment thumbnail creation.
 				 *
-				 * @since WP-3.9.0
+				 * @since 3.9.0
 				 *
 				 * @param array $image_attachment An array of parameters to create the thumbnail.
 				 * @param array $metadata         Current attachment metadata.
@@ -225,7 +225,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		/**
 		 * Filters the image sizes generated for non-image mime types.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param array $fallback_sizes An array of image size names.
 		 * @param array $metadata       Current attachment metadata.
@@ -301,7 +301,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 	/**
 	 * Filters the generated attachment meta data.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param array $metadata      An array of attachment meta data.
 	 * @param int   $attachment_id Current attachment ID.
@@ -312,7 +312,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 /**
  * Convert a fraction string to a decimal.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $str Fraction string.
  * @return int|float Returns calculated fraction or integer 0 on invalid input.
@@ -353,7 +353,7 @@ function wp_exif_frac2dec( $str ) {
 /**
  * Convert the exif date format to a unix timestamp.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $str
  * @return int
@@ -376,7 +376,7 @@ function wp_exif_date2ts( $str ) {
  * DateTimeDigitized, FocalLength, ISOSpeedRatings, and ExposureTime.
  *
  * @todo Try other exif libraries if available.
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $file
  * @return bool|array False on failure. Image metadata array on success.
@@ -471,7 +471,7 @@ function wp_read_image_metadata( $file ) {
 	/**
 	 * Filters the image types to check for exif data.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param array $image_types Image types to check for exif data.
 	 */
@@ -559,9 +559,9 @@ function wp_read_image_metadata( $file ) {
 	/**
 	 * Filters the array of meta data read from an image's exif data.
 	 *
-	 * @since WP-2.5.0
-	 * @since WP-4.4.0 The `$iptc` parameter was added.
-	 * @since WP-5.0.0 The `$exif` parameter was added.
+	 * @since 2.5.0
+	 * @since 4.4.0 The `$iptc` parameter was added.
+	 * @since 5.0.0 The `$exif` parameter was added.
 	 *
 	 * @param array  $meta            Image meta data.
 	 * @param string $file            Path to image file.
@@ -576,7 +576,7 @@ function wp_read_image_metadata( $file ) {
 /**
  * Validate that file is an image.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $path File path to test if valid image.
  * @return bool True if valid image, false if not valid image.
@@ -589,7 +589,7 @@ function file_is_valid_image( $path ) {
 /**
  * Validate that file is suitable for displaying within a web page.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $path File path to test.
  * @return bool True if suitable, false if not suitable.
@@ -609,7 +609,7 @@ function file_is_displayable_image( $path ) {
 	/**
 	 * Filters whether the current image is displayable in the browser.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param bool   $result Whether the image can be displayed. Default true.
 	 * @param string $path   Path to the image.
@@ -620,7 +620,7 @@ function file_is_displayable_image( $path ) {
 /**
  * Load an image resource for editing.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param string $attachment_id Attachment ID.
  * @param string $mime_type     Image mime type.
@@ -653,7 +653,7 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
 		/**
 		 * Filters the current image being loaded for editing.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param resource|GdImage $image         Current image.
 		 * @param string           $attachment_id Attachment ID.
@@ -676,7 +676,7 @@ function load_image_to_edit( $attachment_id, $mime_type, $size = 'full' ) {
  * If the attached file is not present on the local filesystem (usually due to replication plugins),
  * then the url of the file is returned if url fopen is supported.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  * @access private
  *
  * @param string $attachment_id Attachment ID.
@@ -693,7 +693,7 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
 			 *
 			 * The filter is evaluated for all image sizes except 'full'.
 			 *
-			 * @since WP-3.1.0
+			 * @since 3.1.0
 			 *
 			 * @param string $path          Path to the current image.
 			 * @param string $attachment_id Attachment ID.
@@ -707,7 +707,7 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
 		 *
 		 * The filter is only evaluated if fopen is enabled on the server.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param string $image_url     Current image URL.
 		 * @param string $attachment_id Attachment ID.
@@ -719,7 +719,7 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
 	/**
 	 * Filters the returned path or URL of the current image.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param string|bool $filepath      File path or URL to current image, or false.
 	 * @param string      $attachment_id Attachment ID.
@@ -731,7 +731,7 @@ function _load_image_to_edit_path( $attachment_id, $size = 'full' ) {
 /**
  * Copy an existing image file.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  * @access private
  *
  * @param string $attachment_id Attachment ID.

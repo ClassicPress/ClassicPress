@@ -4,7 +4,7 @@
  *
  * A multi-step process allowing the user to enable a network of ClassicPress sites.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @package ClassicPress
  * @subpackage Administration

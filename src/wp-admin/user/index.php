@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /** Load ClassicPress Administration Bootstrap */

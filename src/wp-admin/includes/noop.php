@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**

@@ -37,7 +37,7 @@ if ( empty( $option_page ) ) {
 	 * By default, the options groups for all registered settings require the manage_options capability.
 	 * This filter is required to change the capability required for a certain options page.
 	 *
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 *
 	 * @param string $capability The capability used for the page, which is manage_options by default.
 	 */
@@ -188,7 +188,7 @@ if ( ! is_multisite() ) {
 	/**
 	 * Filters whether the post-by-email functionality is enabled.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param bool $enabled Whether post-by-email configuration is enabled. Default true.
 	 */
@@ -200,7 +200,7 @@ if ( ! is_multisite() ) {
 /**
  * Filters the options white list.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param array $whitelist_options White list options.
  */

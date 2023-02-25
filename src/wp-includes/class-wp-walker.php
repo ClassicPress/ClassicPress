@@ -6,7 +6,7 @@
  * do not need to implement all of the abstract methods in the class. The child
  * only needs to implement the methods that are needed.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @package ClassicPress
  * @abstract
@@ -15,7 +15,7 @@ class Walker {
 	/**
 	 * What the class handles.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var string
 	 */
 	public $tree_type;
@@ -23,7 +23,7 @@ class Walker {
 	/**
 	 * DB fields to use.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @var array
 	 */
 	public $db_fields;
@@ -31,7 +31,7 @@ class Walker {
 	/**
 	 * Max number of pages walked by the paged walker
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 * @var int
 	 */
 	public $max_pages = 1;
@@ -41,7 +41,7 @@ class Walker {
 	 *
 	 * To be used in start_el().
 	 *
-	 * @since WP-4.0.0
+	 * @since 4.0.0
 	 * @var bool
 	 */
 	public $has_children;
@@ -52,7 +52,7 @@ class Walker {
 	 * The $args parameter holds additional values that may be used with the child
 	 * class methods. This method is called at the start of the output list.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @abstract
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
@@ -67,7 +67,7 @@ class Walker {
 	 * The $args parameter holds additional values that may be used with the child
 	 * class methods. This method finishes the list at the end of output of the elements.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @abstract
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
@@ -82,7 +82,7 @@ class Walker {
 	 * The $args parameter holds additional values that may be used with the child
 	 * class methods. Includes the element output also.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @abstract
 	 *
 	 * @param string $output            Used to append additional content (passed by reference).
@@ -98,7 +98,7 @@ class Walker {
 	 *
 	 * The $args parameter holds additional values that may be used with the child class methods.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 * @abstract
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
@@ -118,7 +118,7 @@ class Walker {
 	 *
 	 * This method should not be called directly, use the walk() method instead.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param object $element           Data object.
 	 * @param array  $children_elements List of elements to continue traversing (passed by reference).
@@ -180,7 +180,7 @@ class Walker {
 	 * $max_depth = 0 means display all levels.
 	 * $max_depth > 0 specifies the number of display levels.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param array $elements  An array of elements.
 	 * @param int   $max_depth The maximum hierarchical depth.
@@ -272,7 +272,7 @@ class Walker {
 	 * $max_depth = 0 means display all levels.
 	 * $max_depth > 0 specifies the number of display levels.
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param array $elements
 	 * @param int   $max_depth The maximum hierarchical depth.
@@ -402,7 +402,7 @@ class Walker {
 	/**
 	 * Calculates the total number of root elements.
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param array $elements Elements to list.
 	 * @return int Number of root elements.
@@ -422,7 +422,7 @@ class Walker {
 	/**
 	 * Unset all the children for a given top level element.
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param object $e
 	 * @param array $children_elements

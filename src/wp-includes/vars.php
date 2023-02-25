@@ -73,7 +73,7 @@ if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 			/**
 			 * Filters whether Google Chrome Frame should be used, if available.
 			 *
-			 * @since WP-3.2.0
+			 * @since 3.2.0
 			 *
 			 * @param bool $is_admin Whether to use the Google Chrome Frame. Default is the value of is_admin().
 			 */
@@ -135,7 +135,7 @@ $is_iis7 = $is_IIS && intval( substr( $_SERVER['SERVER_SOFTWARE'], strpos( $_SER
 /**
  * Test if the current browser runs on a mobile device (smart phone, tablet, etc.)
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  *
  * @return bool
  */
@@ -157,7 +157,7 @@ function wp_is_mobile() {
 	/**
 	 * Filters whether the request should be treated as coming from a mobile device or not.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param bool $is_mobile Whether the request is from a mobile device or not.
 	 */

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-3.4.0
+ * @since 3.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * A UI container for controls, managed by the WP_Customize_Manager class.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  *
  * @see WP_Customize_Manager
  */
@@ -23,7 +23,7 @@ class WP_Customize_Section {
 	 *
 	 * Used when sorting two instances whose priorities are equal.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @static
 	 * @var int
@@ -33,7 +33,7 @@ class WP_Customize_Section {
 	/**
 	 * Order in which this instance was created in relation to other instances.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 * @var int
 	 */
 	public $instance_number;
@@ -41,7 +41,7 @@ class WP_Customize_Section {
 	/**
 	 * WP_Customize_Manager instance.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var WP_Customize_Manager
 	 */
 	public $manager;
@@ -49,7 +49,7 @@ class WP_Customize_Section {
 	/**
 	 * Unique identifier.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var string
 	 */
 	public $id;
@@ -57,7 +57,7 @@ class WP_Customize_Section {
 	/**
 	 * Priority of the section which informs load order of sections.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var integer
 	 */
 	public $priority = 160;
@@ -65,7 +65,7 @@ class WP_Customize_Section {
 	/**
 	 * Panel in which to show the section, making it a sub-section.
 	 *
-	 * @since WP-4.0.0
+	 * @since 4.0.0
 	 * @var string
 	 */
 	public $panel = '';
@@ -73,7 +73,7 @@ class WP_Customize_Section {
 	/**
 	 * Capability required for the section.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var string
 	 */
 	public $capability = 'edit_theme_options';
@@ -81,7 +81,7 @@ class WP_Customize_Section {
 	/**
 	 * Theme feature support for the section.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var string|array
 	 */
 	public $theme_supports = '';
@@ -89,7 +89,7 @@ class WP_Customize_Section {
 	/**
 	 * Title of the section to show in UI.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var string
 	 */
 	public $title = '';
@@ -97,7 +97,7 @@ class WP_Customize_Section {
 	/**
 	 * Description to show in the UI.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var string
 	 */
 	public $description = '';
@@ -105,7 +105,7 @@ class WP_Customize_Section {
 	/**
 	 * Customizer controls for this section.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 * @var array
 	 */
 	public $controls;
@@ -113,7 +113,7 @@ class WP_Customize_Section {
 	/**
 	 * Type of this section.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 * @var string
 	 */
 	public $type = 'default';
@@ -121,7 +121,7 @@ class WP_Customize_Section {
 	/**
 	 * Active callback.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @see WP_Customize_Section::active()
 	 *
@@ -135,7 +135,7 @@ class WP_Customize_Section {
 	/**
 	 * Show the description or hide it behind the help icon.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @var bool Indicates whether the Section's description should be
 	 *           hidden behind a help icon ("?") in the Section header,
@@ -148,7 +148,7 @@ class WP_Customize_Section {
 	 *
 	 * Any supplied $args override class property defaults.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 *
 	 * @param WP_Customize_Manager $manager Customizer bootstrap instance.
 	 * @param string               $id      An specific ID of the section.
@@ -176,7 +176,7 @@ class WP_Customize_Section {
 	/**
 	 * Check whether section is active to current Customizer preview.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @return bool Whether the section is active to the current preview.
 	 */
@@ -187,7 +187,7 @@ class WP_Customize_Section {
 		/**
 		 * Filters response of WP_Customize_Section::active().
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
 		 * @param bool                 $active  Whether the Customizer section is active.
 		 * @param WP_Customize_Section $section WP_Customize_Section instance.
@@ -203,7 +203,7 @@ class WP_Customize_Section {
 	 * Subclasses can override this with their specific logic, or they may provide
 	 * an 'active_callback' argument to the constructor.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @return true Always true.
 	 */
@@ -214,7 +214,7 @@ class WP_Customize_Section {
 	/**
 	 * Gather the parameters passed to client JavaScript via JSON.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @return array The array to be exported to the client as JSON.
 	 */
@@ -239,7 +239,7 @@ class WP_Customize_Section {
 	 * Checks required user capabilities and whether the theme has the
 	 * feature support required by the section.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 *
 	 * @return bool False if theme doesn't support the section or user doesn't have the capability.
 	 */
@@ -258,7 +258,7 @@ class WP_Customize_Section {
 	/**
 	 * Get the section's content for insertion into the Customizer pane.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @return string Contents of the section.
 	 */
@@ -271,7 +271,7 @@ class WP_Customize_Section {
 	/**
 	 * Check capabilities and render the section.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 */
 	final public function maybe_render() {
 		if ( ! $this->check_capabilities() ) {
@@ -281,7 +281,7 @@ class WP_Customize_Section {
 		/**
 		 * Fires before rendering a Customizer section.
 		 *
-		 * @since WP-3.4.0
+		 * @since 3.4.0
 		 *
 		 * @param WP_Customize_Section $this WP_Customize_Section instance.
 		 */
@@ -292,7 +292,7 @@ class WP_Customize_Section {
 		 * The dynamic portion of the hook name, `$this->id`, refers to the ID
 		 * of the specific Customizer section to be rendered.
 		 *
-		 * @since WP-3.4.0
+		 * @since 3.4.0
 		 */
 		do_action( "customize_render_section_{$this->id}" );
 
@@ -304,7 +304,7 @@ class WP_Customize_Section {
 	 *
 	 * Sections are now rendered in JS by default, see WP_Customize_Section::print_template().
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 */
 	protected function render() {}
 
@@ -314,7 +314,7 @@ class WP_Customize_Section {
 	 * This function is only run for section types that have been registered with
 	 * WP_Customize_Manager::register_section_type().
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @see WP_Customize_Manager::render_template()
 	 */
@@ -332,7 +332,7 @@ class WP_Customize_Section {
 	 * Class variables for this section class are available in the `data` JS object;
 	 * export custom variables by overriding WP_Customize_Section::json().
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @see WP_Customize_Section::print_template()
 	 */

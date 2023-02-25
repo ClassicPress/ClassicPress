@@ -26,7 +26,7 @@ do_action( 'rss_tag_pre', 'rss2-comments' );
 	/**
 	 * Fires at the end of the RSS root to add namespaces.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	do_action( 'rss2_comments_ns' );
 	?>
@@ -71,7 +71,7 @@ do_action( 'rss_tag_pre', 'rss2-comments' );
 	/**
 	 * Fires at the end of the RSS2 comment feed header.
 	 *
-	 * @since WP-2.3.0
+	 * @since 2.3.0
 	 */
 	do_action( 'commentsrss2_head' );
 
@@ -112,7 +112,7 @@ do_action( 'rss_tag_pre', 'rss2-comments' );
 			/**
 			 * Fires at the end of each RSS2 comment feed item.
 			 *
-			 * @since WP-2.1.0
+			 * @since 2.1.0
 			 *
 			 * @param int $comment->comment_ID The ID of the comment being displayed.
 			 * @param int $comment_post->ID    The ID of the post the comment is connected to.

@@ -6,7 +6,7 @@
  *
  * @package ClassicPress
  * @subpackage i18n
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 
 __( 'Africa', 'continents-cities' );

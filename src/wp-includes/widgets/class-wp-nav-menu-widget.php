@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to implement the Navigation Menu widget.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @see WP_Widget
  */
@@ -19,7 +19,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 	/**
 	 * Sets up a new Navigation Menu widget instance.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 */
 	public function __construct() {
 		$widget_ops = array(
@@ -32,7 +32,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 	/**
 	 * Outputs the content for the current Navigation Menu widget instance.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
@@ -65,8 +65,8 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 		/**
 		 * Filters the arguments for the Navigation Menu widget.
 		 *
-		 * @since WP-4.2.0
-		 * @since WP-4.4.0 Added the `$instance` parameter.
+		 * @since 4.2.0
+		 * @since 4.4.0 Added the `$instance` parameter.
 		 *
 		 * @param array    $nav_menu_args {
 		 *     An array of arguments passed to wp_nav_menu() to retrieve a navigation menu.
@@ -86,7 +86,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 	/**
 	 * Handles updating settings for the current Navigation Menu widget instance.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $new_instance New settings for this instance as input by the user via
 	 *                            WP_Widget::form().
@@ -107,7 +107,7 @@ class WP_Nav_Menu_Widget extends WP_Widget {
 	/**
 	 * Outputs the settings form for the Navigation Menu widget.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $instance Current settings.
 	 * @global WP_Customize_Manager $wp_customize

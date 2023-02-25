@@ -2,7 +2,7 @@
 /**
  * Dependencies API: _WP_Dependency class
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @package ClassicPress
  * @subpackage Dependencies
@@ -14,13 +14,13 @@
  * Helper class to register a handle and associated data.
  *
  * @access private
- * @since WP-2.6.0
+ * @since 2.6.0
  */
 class _WP_Dependency {
 	/**
 	 * The handle name.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var null
 	 */
 	public $handle;
@@ -28,7 +28,7 @@ class _WP_Dependency {
 	/**
 	 * The handle source.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var null
 	 */
 	public $src;
@@ -36,7 +36,7 @@ class _WP_Dependency {
 	/**
 	 * An array of handle dependencies.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var array
 	 */
 	public $deps = array();
@@ -46,7 +46,7 @@ class _WP_Dependency {
 	 *
 	 * Used for cache-busting.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var bool|string
 	 */
 	public $ver = false;
@@ -54,7 +54,7 @@ class _WP_Dependency {
 	/**
 	 * Additional arguments for the handle.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var null
 	 */
 	public $args = null;  // Custom property, such as $in_footer or $media.
@@ -62,7 +62,7 @@ class _WP_Dependency {
 	/**
 	 * Extra data to supply to the handle.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 * @var array
 	 */
 	public $extra = array();
@@ -70,7 +70,7 @@ class _WP_Dependency {
 	/**
 	 * Setup dependencies.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 */
 	public function __construct() {
 		list( $this->handle, $this->src, $this->deps, $this->ver, $this->args ) = func_get_args();
@@ -82,7 +82,7 @@ class _WP_Dependency {
 	/**
 	 * Add handle data.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 *
 	 * @param string $name The data key to add.
 	 * @param mixed  $data The data value to add.

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /** Load ClassicPress Administration Bootstrap */
@@ -52,8 +52,8 @@ if ( isset( $_REQUEST['action'] ) && 'update-site' === $_REQUEST['action'] && is
 	/**
 	 * Fires after the site options are updated.
 	 *
-	 * @since WP-3.0.0
-	 * @since WP-4.4.0 Added `$id` parameter.
+	 * @since 3.0.0
+	 * @since 4.4.0 Added `$id` parameter.
 	 *
 	 * @param int $id The ID of the site being updated.
 	 */
@@ -166,7 +166,7 @@ if ( ! empty( $messages ) ) {
 		/**
 		 * Fires at the end of the Edit Site form, before the submit button.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param int $id Site ID.
 		 */

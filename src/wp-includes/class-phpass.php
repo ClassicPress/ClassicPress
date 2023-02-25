@@ -2,7 +2,7 @@
 /**
  * Portable PHP password hashing framework.
  * @package phpass
- * @since WP-2.5.0
+ * @since 2.5.0
  * @version 0.3 / ClassicPress
  * @link http://www.openwall.com/phpass/
  */
@@ -31,7 +31,7 @@
  * @package phpass
  * @version 0.3 / ClassicPress
  * @link http://www.openwall.com/phpass/
- * @since WP-2.5.0
+ * @since 2.5.0
  */
 class PasswordHash {
 	var $itoa64;

@@ -9,7 +9,7 @@
 /**
  * Display list of the available widgets.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $wp_registered_widgets
  * @global array $wp_registered_widget_controls
@@ -64,7 +64,7 @@ function wp_list_widgets() {
 /**
  * Callback to sort array by a 'name' key.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @return int
@@ -77,7 +77,7 @@ function _sort_name_callback( $a, $b ) {
  * Show the widgets and their settings for a sidebar.
  * Used in the admin widget config screen.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $sidebar      Sidebar ID.
  * @param string $sidebar_name Optional. Sidebar name. Default empty.
@@ -117,7 +117,7 @@ function wp_list_widget_controls( $sidebar, $sidebar_name = '' ) {
 /**
  * Retrieves the widget control arguments.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $wp_registered_widgets
  *
@@ -173,7 +173,7 @@ function next_widget_id_number( $id_base ) {
  *
  * Called from dynamic_sidebar().
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $wp_registered_widgets
  * @global array $wp_registered_widget_controls

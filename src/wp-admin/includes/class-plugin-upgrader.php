@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
@@ -13,8 +13,8 @@
  * It is designed to upgrade/install plugins from a local zip, remote zip URL,
  * or uploaded zip file.
  *
- * @since WP-2.8.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
+ * @since 2.8.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  *
  * @see WP_Upgrader
  */
@@ -23,7 +23,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Plugin upgrade result.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 * @var array|WP_Error $result
 	 *
 	 * @see WP_Upgrader::$result
@@ -33,7 +33,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Whether a bulk upgrade/installation is being performed.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 * @var bool $bulk
 	 */
 	public $bulk = false;
@@ -41,7 +41,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * New plugin info.
 	 *
-	 * @since WP-5.5.0
+	 * @since 5.5.0
 	 * @var array $new_plugin_data
 	 *
 	 * @see check_package()
@@ -51,7 +51,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the upgrade strings.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __( 'The plugin is at the latest version.' );
@@ -72,7 +72,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the installation strings.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function install_strings() {
 		$this->strings['no_package'] = __( 'Installation package not available.' );
@@ -105,8 +105,8 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Install a plugin package.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
+	 * @since 2.8.0
+	 * @since 3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
 	 *
 	 * @param string $package The full local path or URI of the package.
 	 * @param array  $args {
@@ -162,7 +162,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 			 * Fires when the upgrader has successfully overwritten a currently installed
 			 * plugin or theme with an uploaded zip package.
 			 *
-			 * @since WP-5.5.0
+			 * @since 5.5.0
 			 *
 			 * @param string  $package          The package file.
 			 * @param array   $new_plugin_data  The new plugin data.
@@ -177,8 +177,8 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Upgrade a plugin.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
+	 * @since 2.8.0
+	 * @since 3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
 	 *
 	 * @param string $plugin The basename path to the main plugin file.
 	 * @param array  $args {
@@ -250,8 +250,8 @@ class Plugin_Upgrader extends WP_Upgrader {
 	/**
 	 * Bulk upgrade several plugins at once.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
+	 * @since 2.8.0
+	 * @since 3.7.0 The `$args` parameter was added, making clearing the plugin update cache optional.
 	 *
 	 * @param array $plugins Array of the basename paths of the plugins' main files.
 	 * @param array $args {
@@ -377,7 +377,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * This function is added to the {@see 'upgrader_source_selection'} filter by
 	 * Plugin_Upgrader::install().
 	 *
-	 * @since WP-3.3.0
+	 * @since 3.3.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
@@ -448,7 +448,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 *
 	 * This isn't used internally in the class, but is called by the skins.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string|false The full path to the main plugin file, or false.
 	 */
@@ -476,8 +476,8 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 *
 	 * Hooked to the {@see 'upgrader_pre_install'} filter by Plugin_Upgrader::upgrade().
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-4.1.0 Added a return value.
+	 * @since 2.8.0
+	 * @since 4.1.0 Added a return value.
 	 *
 	 * @param bool|WP_Error  $return Upgrade offer return.
 	 * @param array          $plugin Plugin package arguments.
@@ -513,7 +513,7 @@ class Plugin_Upgrader extends WP_Upgrader {
 	 * Hooked to the {@see 'upgrader_clear_destination'} filter by
 	 * Plugin_Upgrader::upgrade() and Plugin_Upgrader::bulk_upgrade().
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *

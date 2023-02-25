@@ -3,7 +3,7 @@
  * IXR_ClientMulticall
  *
  * @package IXR
- * @since WP-1.5.0
+ * @since 1.5.0
  */
 class IXR_ClientMulticall extends IXR_Client
 {

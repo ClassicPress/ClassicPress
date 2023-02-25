@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
  * Theme Upgrader Skin for ClassicPress Theme Upgrades.
  *
- * @since WP-2.8.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since 2.8.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  *
  * @see WP_Upgrader_Skin
  */
@@ -91,7 +91,7 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the list of action links available following a single theme update.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 *
 		 * @param array  $update_actions Array of theme action links.
 		 * @param string $theme          Theme directory name.

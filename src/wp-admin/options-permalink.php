@@ -255,7 +255,7 @@ $structures = array(
 				/**
 				 * Filters the list of available permalink structure tags on the Permalinks settings page.
 				 *
-				 * @since WP-4.8.0
+				 * @since 4.8.0
 				 *
 				 * @param array $available_tags A key => value pair of available permalink structure tags.
 				 */

@@ -49,7 +49,7 @@ function classicpress_dev_version_info() {
 /**
  * Returns whether the server is running Apache with the mod_rewrite module loaded.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @return bool
  */
@@ -62,7 +62,7 @@ function got_mod_rewrite() {
 	 * This filter was previously used to force URL rewriting for other servers,
 	 * like nginx. Use the {@see 'got_url_rewrite'} filter in got_url_rewrite() instead.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @see got_url_rewrite()
 	 *
@@ -76,7 +76,7 @@ function got_mod_rewrite() {
  *
  * Detects Apache's mod_rewrite, IIS 7.0+ permalink support, and nginx.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @global bool $is_nginx
  *
@@ -88,7 +88,7 @@ function got_url_rewrite() {
 	/**
 	 * Filters whether URL rewriting is available.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param bool $got_url_rewrite Whether URL rewriting is available.
 	 */
@@ -98,7 +98,7 @@ function got_url_rewrite() {
 /**
  * Extracts strings from between the BEGIN and END markers in the .htaccess file.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  * @since CP-1.0.0 Added $is_regex parameter.
  *
  * @param string $filename  The path to the file to process (e.g. `.htaccess`).
@@ -154,7 +154,7 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
  * Replaces existing marked info. Retains surrounding data. Creates file if
  * none exists.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  * @since CP-1.0.0 Added $marker_out and $is_regex parameters.
  *
  * @param string       $filename   The path to the file to alter (e.g. `.htaccess`).
@@ -287,7 +287,7 @@ function insert_with_markers(
  * Always writes to the file if it exists and is writable to ensure that we
  * blank out old rules.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -330,7 +330,7 @@ function save_mod_rewrite_rules() {
  * Updates the IIS web.config file with the current rules if it is writable.
  * If the permalinks do not require rewrite rules then the rules are deleted from the web.config file.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -364,7 +364,7 @@ function iis7_save_url_rewrite_rules() {
 /**
  * Update the "recently-edited" file for the plugin or theme editor.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @param string $file
  */
@@ -387,7 +387,7 @@ function update_recently_edited( $file ) {
 /**
  * Makes a tree structure for the Theme Editor's file list.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  * @access private
  *
  * @param array $allowed_files List of theme file paths.
@@ -409,7 +409,7 @@ function wp_make_theme_file_tree( $allowed_files ) {
 /**
  * Outputs the formatted file list for the Theme Editor.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  * @access private
  *
  * @param array|string $tree  List of file/folder paths, or filename.
@@ -476,7 +476,7 @@ function wp_print_theme_file_tree( $tree, $level = 2, $size = 1, $index = 1 ) {
 /**
  * Makes a tree structure for the Plugin Editor's file list.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  * @access private
  *
  * @param string $plugin_editable_files List of plugin file paths.
@@ -498,7 +498,7 @@ function wp_make_plugin_file_tree( $plugin_editable_files ) {
 /**
  * Outputs the formatted file list for the Plugin Editor.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  * @access private
  *
  * @param array|string $tree  List of file/folder paths, or filename.
@@ -559,7 +559,7 @@ function wp_print_plugin_file_tree( $tree, $label = '', $level = 2, $size = 1, $
 /**
  * Flushes rewrite rules if siteurl, home or page_on_front changed.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $old_value
  * @param string $value
@@ -584,7 +584,7 @@ function update_home_siteurl( $old_value, $value ) {
  * in the $vars array to the value of $_POST[$var] or $_GET[$var] or ''
  * if neither is defined.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param array $vars An array of globals to reset.
  */
@@ -605,7 +605,7 @@ function wp_reset_vars( $vars ) {
 /**
  * Displays the given administration message.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string|WP_Error $message
  */
@@ -623,7 +623,7 @@ function show_message( $message ) {
 }
 
 /**
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $content
  * @return array
@@ -664,7 +664,7 @@ function wp_doc_link_parse( $content ) {
 	/**
 	 * Filters the list of functions and classes to be ignored from the documentation lookup.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $ignore_functions Functions and classes to be ignored.
 	 */
@@ -686,7 +686,7 @@ function wp_doc_link_parse( $content ) {
 /**
  * Saves option for number of rows when listing posts, pages, comments, etc.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 function set_screen_options() {
 
@@ -748,8 +748,8 @@ function set_screen_options() {
 					 *
 					 * Returning false to the filter will skip saving the current option.
 					 *
-					 * @since WP-2.8.0
-					 * @since WP-4.9.15 Only applied to options ending with '_page',
+					 * @since 2.8.0
+					 * @since 4.9.15 Only applied to options ending with '_page',
 					 *              or the 'layout_columns' option.
 					 *
 					 * @see set_screen_options()
@@ -769,7 +769,7 @@ function set_screen_options() {
 				 *
 				 * Returning false to the filter will skip saving the current option.
 				 *
-				 * @since WP-4.9.15
+				 * @since 4.9.15
 				 *
 				 * @see set_screen_options()
 				 *
@@ -801,7 +801,7 @@ function set_screen_options() {
 /**
  * Check if rewrite rule for ClassicPress already exists in the IIS 7+ configuration file
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @return bool
  * @param string $filename The file path to the configuration file
@@ -830,7 +830,7 @@ function iis7_rewrite_rule_exists( $filename ) {
 /**
  * Delete ClassicPress rewrite rule from web.config file if it exists there
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $filename Name of the configuration file
  * @return bool
@@ -866,7 +866,7 @@ function iis7_delete_rewrite_rule( $filename ) {
 /**
  * Add ClassicPress rewrite rule to the IIS 7+ configuration file.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $filename The file path to the configuration file
  * @param string $rewrite_rule The XML fragment with URL Rewrite rule
@@ -949,7 +949,7 @@ function iis7_add_rewrite_rule( $filename, $rewrite_rule ) {
 /**
  * Saves the XML document into a file
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param DOMDocument $doc
  * @param string $filename
@@ -965,7 +965,7 @@ function saveDomDocument( $doc, $filename ) { // phpcs:ignore WordPress.NamingCo
 /**
  * Display the default admin color scheme picker (Used in user-edit.php)
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $_wp_admin_css_colors
  *
@@ -1062,7 +1062,7 @@ function wp_color_scheme_settings() {
 }
 
 /**
- * @since WP-3.3.0
+ * @since 3.3.0
  */
 function _ipad_meta() {
 	if ( wp_is_mobile() ) {
@@ -1075,7 +1075,7 @@ function _ipad_meta() {
 /**
  * Check lock status for posts displayed on the Posts screen
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -1119,7 +1119,7 @@ function wp_check_locked_posts( $response, $data, $screen_id ) {
 /**
  * Check lock status on the New/Edit Post screen and refresh the lock
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -1171,7 +1171,7 @@ function wp_refresh_post_lock( $response, $data, $screen_id ) {
 /**
  * Check nonce expiration on the New/Edit Post screen and refresh if needed
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @param array  $response  The Heartbeat response.
  * @param array  $data      The $_POST data sent.
@@ -1210,7 +1210,7 @@ function wp_refresh_post_nonces( $response, $data, $screen_id ) {
 /**
  * Disable suspension of Heartbeat on the Add/Edit Post screens.
  *
- * @since WP-3.8.0
+ * @since 3.8.0
  *
  * @global string $pagenow
  *
@@ -1230,7 +1230,7 @@ function wp_heartbeat_set_suspension( $settings ) {
 /**
  * Autosave with heartbeat
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @param array $response The Heartbeat response.
  * @param array $data     The $_POST data sent.
@@ -1270,7 +1270,7 @@ function heartbeat_autosave( $response, $data ) {
  * Remove specific query string parameters from a URL, create the canonical link,
  * put it in the admin header, and change the current URL to match.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  */
 function wp_admin_canonical_url() {
 	$removable_query_args = wp_removable_query_args();
@@ -1295,7 +1295,7 @@ function wp_admin_canonical_url() {
 /**
  * Send a referrer policy header so referrers are not sent externally from administration screens.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 function wp_admin_headers() {
 	$policy = 'strict-origin-when-cross-origin';
@@ -1303,8 +1303,8 @@ function wp_admin_headers() {
 	/**
 	 * Filters the admin referrer policy header value.
 	 *
-	 * @since WP-4.9.0
-	 * @since WP-4.9.5 The default value was changed to 'strict-origin-when-cross-origin'.
+	 * @since 4.9.0
+	 * @since 4.9.5 The default value was changed to 'strict-origin-when-cross-origin'.
 	 *
 	 * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	 *
@@ -1321,7 +1321,7 @@ function wp_admin_headers() {
  * Used on the Edit Post and Add New Post screens. Needed to ensure the page is not loaded from browser cache,
  * so the post title and editor content are the last saved versions. Ideally this script should run first in the head.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 function wp_page_reload_on_back_button_js() {
 	?>
@@ -1338,8 +1338,8 @@ function wp_page_reload_on_back_button_js() {
  *
  * The new site admin address will not become active until confirmed.
  *
- * @since WP-3.0.0
- * @since WP-4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
+ * @since 3.0.0
+ * @since 4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
  *
  * @param string $old_value The old site admin email address.
  * @param string $value     The proposed new site admin email address.
@@ -1388,8 +1388,8 @@ All at ###SITENAME###
 	 * ###SITENAME###  The name of the site.
 	 * ###SITEURL###   The URL to the site.
 	 *
-	 * @since WP-MU (3.0.0)
-	 * @since WP-4.9.0 This filter is no longer Multisite specific.
+	 * @since MU (3.0.0)
+	 * @since 4.9.0 This filter is no longer Multisite specific.
 	 *
 	 * @param string $email_text      Text in the email.
 	 * @param array  $new_admin_email {
@@ -1419,7 +1419,7 @@ All at ###SITENAME###
  * Appends '(Draft)' to draft page titles in the privacy page dropdown
  * so that unpublished content is obvious.
  *
- * @since WP-4.9.8
+ * @since 4.9.8
  * @access private
  *
  * @param string  $title Page title.
@@ -1440,7 +1440,7 @@ function _wp_privacy_settings_filter_draft_page_titles( $title, $page ) {
  * WP_Privacy_Policy_Content class.
  * TODO: move this to a new file.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  */
 final class WP_Privacy_Policy_Content {
 
@@ -1449,7 +1449,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Constructor
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	private function __construct() {}
 
@@ -1462,7 +1462,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * Intended for use from `wp_add_privacy_policy_content()`.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $plugin_name The name of the plugin or theme that is suggesting content for the site's privacy policy.
 	 * @param string $policy_text The suggested content for inclusion in the policy.
@@ -1485,7 +1485,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Quick check if any privacy info has changed.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public static function text_change_check() {
 
@@ -1559,7 +1559,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Output a warning when some privacy info has changed.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public static function policy_text_changed_notice() {
 		global $post;
@@ -1588,7 +1588,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Update the cached policy info when the policy page is updated.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 * @access private
 	 */
 	public static function _policy_page_updated( $post_id ) {
@@ -1637,7 +1637,7 @@ final class WP_Privacy_Policy_Content {
 	 *
 	 * Caches the current info in post_meta of the policy page.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @return array The privacy policy text/informtion added by core and plugins.
 	 */
@@ -1732,7 +1732,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Add a notice with a link to the guide when editing the privacy policy page.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param WP_Post $post The currently edited post.
 	 */
@@ -1776,7 +1776,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Output the privacy policy guide together with content from the theme and plugins.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public static function privacy_policy_guide() {
 
@@ -1866,7 +1866,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Return the default suggested privacy policy content.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param bool $descr Whether to include the descriptions under the section headings. Default false.
 	 * @return string The default policy content.
@@ -1998,7 +1998,7 @@ final class WP_Privacy_Policy_Content {
 		/**
 		 * Filters the default content suggested for inclusion in a privacy policy.
 		 *
-		 * @since WP-4.9.6
+		 * @since 4.9.6
 		 *
 		 * @param $content string The default policy content.
 		 */
@@ -2008,7 +2008,7 @@ final class WP_Privacy_Policy_Content {
 	/**
 	 * Add the suggested privacy policy text to the policy postbox.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public static function add_suggested_content() {
 		$content = self::get_default_content( true );

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /** Load ClassicPress Administration Bootstrap */
@@ -129,7 +129,7 @@ if ( $action ) {
 				 *
 				 * The dynamic portion of the hook name, `$screen`, refers to the current screen ID.
 				 *
-				 * @since WP-4.7.0
+				 * @since 4.7.0
 				 *
 				 * @param string $redirect_url The redirect URL.
 				 * @param string $action       The action being taken.

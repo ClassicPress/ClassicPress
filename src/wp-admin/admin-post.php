@@ -36,7 +36,7 @@ if ( ! wp_validate_auth_cookie() ) {
 		/**
 		 * Fires on a non-authenticated admin post request where no action was supplied.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 */
 		do_action( 'admin_post_nopriv' );
 	} else {
@@ -46,7 +46,7 @@ if ( ! wp_validate_auth_cookie() ) {
 		 * The dynamic portion of the hook name, `$action`, refers to the given
 		 * request action.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 */
 		do_action( "admin_post_nopriv_{$action}" );
 	}
@@ -55,7 +55,7 @@ if ( ! wp_validate_auth_cookie() ) {
 		/**
 		 * Fires on an authenticated admin post request where no action was supplied.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 */
 		do_action( 'admin_post' );
 	} else {
@@ -65,7 +65,7 @@ if ( ! wp_validate_auth_cookie() ) {
 		 * The dynamic portion of the hook name, `$action`, refers to the given
 		 * request action.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 */
 		do_action( "admin_post_{$action}" );
 	}

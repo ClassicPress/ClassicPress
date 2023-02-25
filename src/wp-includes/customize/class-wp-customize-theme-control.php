@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize Theme Control class.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  *
  * @see WP_Customize_Control
  */
@@ -19,7 +19,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	/**
 	 * Customize control type.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var string
 	 */
 	public $type = 'theme';
@@ -27,7 +27,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	/**
 	 * Theme object.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var WP_Theme
 	 */
 	public $theme;
@@ -35,7 +35,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @see WP_Customize_Control::to_json()
 	 */
@@ -47,14 +47,14 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	/**
 	 * Don't render the control content from PHP, as it's rendered via JS on load.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * Render a JS template for theme display.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 */
 	public function content_template() {
 		/* translators: %s: theme name */

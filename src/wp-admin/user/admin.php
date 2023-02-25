@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 define( 'WP_USER_ADMIN', true );
@@ -20,7 +20,7 @@ $redirect_user_admin_request = ( ( $current_blog->domain != $current_site->domai
 /**
  * Filters whether to redirect the request to the User Admin in Multisite.
  *
- * @since WP-3.2.0
+ * @since 3.2.0
  *
  * @param bool $redirect_user_admin_request Whether the request should be redirected.
  */

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Comments
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used for querying comments.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @see WP_Comment_Query::__construct() for accepted arguments.
  */
@@ -19,7 +19,7 @@ class WP_Comment_Query {
 	/**
 	 * SQL for database query.
 	 *
-	 * @since WP-4.0.1
+	 * @since 4.0.1
 	 * @var string
 	 */
 	public $request;
@@ -27,7 +27,7 @@ class WP_Comment_Query {
 	/**
 	 * Metadata query container
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 * @var object WP_Meta_Query
 	 */
 	public $meta_query = false;
@@ -35,7 +35,7 @@ class WP_Comment_Query {
 	/**
 	 * Metadata query clauses.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var array
 	 */
 	protected $meta_query_clauses;
@@ -43,7 +43,7 @@ class WP_Comment_Query {
 	/**
 	 * SQL query clauses.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var array
 	 */
 	protected $sql_clauses = array(
@@ -60,7 +60,7 @@ class WP_Comment_Query {
 	 *
 	 * Stored after the {@see 'comments_clauses'} filter is run on the compiled WHERE sub-clauses.
 	 *
-	 * @since WP-4.4.2
+	 * @since 4.4.2
 	 * @var string
 	 */
 	protected $filtered_where_clause;
@@ -68,7 +68,7 @@ class WP_Comment_Query {
 	/**
 	 * Date query container
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @var object WP_Date_Query
 	 */
 	public $date_query = false;
@@ -76,7 +76,7 @@ class WP_Comment_Query {
 	/**
 	 * Query vars set by the user.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 * @var array
 	 */
 	public $query_vars;
@@ -84,7 +84,7 @@ class WP_Comment_Query {
 	/**
 	 * Default values for query vars.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var array
 	 */
 	public $query_var_defaults;
@@ -92,7 +92,7 @@ class WP_Comment_Query {
 	/**
 	 * List of comments located by the query.
 	 *
-	 * @since WP-4.0.0
+	 * @since 4.0.0
 	 * @var array
 	 */
 	public $comments;
@@ -100,7 +100,7 @@ class WP_Comment_Query {
 	/**
 	 * The amount of found comments for the current query.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $found_comments = 0;
@@ -108,7 +108,7 @@ class WP_Comment_Query {
 	/**
 	 * The number of pages.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 * @var int
 	 */
 	public $max_num_pages = 0;
@@ -116,7 +116,7 @@ class WP_Comment_Query {
 	/**
 	 * Make private/protected methods readable for backward compatibility.
 	 *
-	 * @since WP-4.0.0
+	 * @since 4.0.0
 	 *
 	 * @param callable $name      Method to call.
 	 * @param array    $arguments Arguments to pass when calling.
@@ -134,13 +134,13 @@ class WP_Comment_Query {
 	 *
 	 * Sets up the comment query, based on the query vars passed.
 	 *
-	 * @since WP-4.2.0
-	 * @since WP-4.4.0 `$parent__in` and `$parent__not_in` were added.
-	 * @since WP-4.4.0 Order by `comment__in` was added. `$update_comment_meta_cache`, `$no_found_rows`,
+	 * @since 4.2.0
+	 * @since 4.4.0 `$parent__in` and `$parent__not_in` were added.
+	 * @since 4.4.0 Order by `comment__in` was added. `$update_comment_meta_cache`, `$no_found_rows`,
 	 *              `$hierarchical`, and `$update_comment_post_cache` were added.
-	 * @since WP-4.5.0 Introduced the `$author_url` argument.
-	 * @since WP-4.6.0 Introduced the `$cache_domain` argument.
-	 * @since WP-4.9.0 Introduced the `$paged` argument.
+	 * @since 4.5.0 Introduced the `$author_url` argument.
+	 * @since 4.6.0 Introduced the `$cache_domain` argument.
+	 * @since 4.9.0 Introduced the `$paged` argument.
 	 *
 	 * @param string|array $query {
 	 *     Optional. Array or query string of comment query parameters. Default empty.
@@ -306,7 +306,7 @@ class WP_Comment_Query {
 	/**
 	 * Parse arguments passed to the comment query with default query parameters.
 	 *
-	 * @since WP-4.2.0 Extracted from WP_Comment_Query::query().
+	 * @since 4.2.0 Extracted from WP_Comment_Query::query().
 	 *
 	 *
 	 * @param string|array $query WP_Comment_Query arguments. See WP_Comment_Query::__construct()
@@ -321,7 +321,7 @@ class WP_Comment_Query {
 		/**
 		 * Fires after the comment query vars have been parsed.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
 		 * @param WP_Comment_Query $this The WP_Comment_Query instance (passed by reference).
 		 */
@@ -331,12 +331,12 @@ class WP_Comment_Query {
 	/**
 	 * Sets up the ClassicPress query for retrieving comments.
 	 *
-	 * @since WP-3.1.0
-	 * @since WP-4.1.0 Introduced 'comment__in', 'comment__not_in', 'post_author__in',
+	 * @since 3.1.0
+	 * @since 4.1.0 Introduced 'comment__in', 'comment__not_in', 'post_author__in',
 	 *              'post_author__not_in', 'author__in', 'author__not_in', 'post__in',
 	 *              'post__not_in', 'include_unapproved', 'type__in', and 'type__not_in'
 	 *              arguments to $query_vars.
-	 * @since WP-4.2.0 Moved parsing to WP_Comment_Query::parse_query().
+	 * @since 4.2.0 Moved parsing to WP_Comment_Query::parse_query().
 	 *
 	 * @param string|array $query Array or URL query string of parameters.
 	 * @return array|int List of comments, or number of comments when 'count' is passed as a query var.
@@ -349,7 +349,7 @@ class WP_Comment_Query {
 	/**
 	 * Get a list of comments matching the query vars.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -367,7 +367,7 @@ class WP_Comment_Query {
 		/**
 		 * Fires before comments are retrieved.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param WP_Comment_Query $this Current instance of WP_Comment_Query (passed by reference).
 		 */
@@ -448,7 +448,7 @@ class WP_Comment_Query {
 		/**
 		 * Filters the comment query results.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param array            $_comments An array of comments.
 		 * @param WP_Comment_Query $this     Current instance of WP_Comment_Query (passed by reference).
@@ -469,7 +469,7 @@ class WP_Comment_Query {
 	/**
 	 * Used internally to get a list of comment IDs matching the query vars.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
@@ -852,7 +852,7 @@ class WP_Comment_Query {
 		/**
 		 * Filters the comment query clauses.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param array            $pieces A compacted array of comment query clauses.
 		 * @param WP_Comment_Query $this  Current instance of WP_Comment_Query (passed by reference).
@@ -905,7 +905,7 @@ class WP_Comment_Query {
 	 * Populates found_comments and max_num_pages properties for the current
 	 * query if the limit clause was used.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 */
@@ -916,7 +916,7 @@ class WP_Comment_Query {
 			/**
 			 * Filters the query used to retrieve found comment count.
 			 *
-			 * @since WP-4.4.0
+			 * @since 4.4.0
 			 *
 			 * @param string           $found_comments_query SQL query. Default 'SELECT FOUND_ROWS()'.
 			 * @param WP_Comment_Query $comment_query        The `WP_Comment_Query` instance.
@@ -933,7 +933,7 @@ class WP_Comment_Query {
 	 * Instead of calling `get_children()` separately on each child comment, we do a single set of queries to fetch
 	 * the descendant trees for all matched top-level comments.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -1049,7 +1049,7 @@ class WP_Comment_Query {
 	/**
 	 * Used internally to generate an SQL string for searching across multiple columns
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -1073,7 +1073,7 @@ class WP_Comment_Query {
 	/**
 	 * Parse and sanitize 'orderby' keys passed to the comment query.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -1136,7 +1136,7 @@ class WP_Comment_Query {
 	/**
 	 * Parse an 'order' query variable and cast it to ASC or DESC as necessary.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @param string $order The 'order' query variable.
 	 * @return string The sanitized 'order' query variable.

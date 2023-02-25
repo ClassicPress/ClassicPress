@@ -29,7 +29,7 @@ if ( false ) {
 /**
  * We are installing ClassicPress.
  *
- * @since WP-1.5.1
+ * @since 1.5.1
  * @var bool
  */
 define( 'WP_INSTALLING', true );
@@ -276,7 +276,7 @@ display_footer( $scripts_to_print );
 /**
  * Display ClassicPress-branded installation header.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string|array $body_classes
  */
@@ -315,7 +315,7 @@ function display_header( $body_classes = array() ) {
 /**
  * Display installer setup form.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *

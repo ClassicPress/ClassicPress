@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /**
  * Core class used to implement displaying installed themes in a list table.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -23,7 +23,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -299,7 +299,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 	/**
 	 * Send required variables to JavaScript land
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 *
 	 * @param array $extra_args
 	 */

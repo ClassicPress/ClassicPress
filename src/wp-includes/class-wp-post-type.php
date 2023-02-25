@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Post
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
  * Core class used for interacting with post types.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @see register_post_type()
  */
@@ -18,7 +18,7 @@ final class WP_Post_Type {
 	/**
 	 * Post type key.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $name
 	 */
 	public $name;
@@ -26,7 +26,7 @@ final class WP_Post_Type {
 	/**
 	 * Name of the post type shown in the menu. Usually plural.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $label
 	 */
 	public $label;
@@ -39,7 +39,7 @@ final class WP_Post_Type {
 	 *
 	 * @see get_post_type_labels()
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var object $labels
 	 */
 	public $labels;
@@ -49,7 +49,7 @@ final class WP_Post_Type {
 	 *
 	 * Default empty.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $description
 	 */
 	public $description = '';
@@ -62,7 +62,7 @@ final class WP_Post_Type {
 	 *
 	 * Default false.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $public
 	 */
 	public $public = false;
@@ -72,7 +72,7 @@ final class WP_Post_Type {
 	 *
 	 * Default false.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $hierarchical
 	 */
 	public $hierarchical = false;
@@ -83,7 +83,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the opposite value of $public.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $exclude_from_search
 	 */
 	public $exclude_from_search = null;
@@ -98,7 +98,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the value of $public.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $publicly_queryable
 	 */
 	public $publicly_queryable = null;
@@ -108,7 +108,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the value of $public.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $show_ui
 	 */
 	public $show_ui = null;
@@ -122,7 +122,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the value of $show_ui.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $show_in_menu
 	 */
 	public $show_in_menu = null;
@@ -132,7 +132,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the value $public.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $show_in_nav_menus
 	 */
 	public $show_in_nav_menus = null;
@@ -142,7 +142,7 @@ final class WP_Post_Type {
 	 *
 	 * Default is the value of $show_in_menu.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $show_in_admin_bar
 	 */
 	public $show_in_admin_bar = null;
@@ -152,7 +152,7 @@ final class WP_Post_Type {
 	 *
 	 * To work, $show_in_menu must be true. Default null (at the bottom).
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var int $menu_position
 	 */
 	public $menu_position = null;
@@ -167,7 +167,7 @@ final class WP_Post_Type {
 	 *
 	 * Defaults to use the posts icon.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $menu_icon
 	 */
 	public $menu_icon = null;
@@ -179,7 +179,7 @@ final class WP_Post_Type {
 	 * this argument as a base to construct the capabilities, e.g.
 	 * array( 'story', 'stories' ). Default 'post'.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $capability_type
 	 */
 	public $capability_type = 'post';
@@ -189,7 +189,7 @@ final class WP_Post_Type {
 	 *
 	 * Default false.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $map_meta_cap
 	 */
 	public $map_meta_cap = false;
@@ -199,7 +199,7 @@ final class WP_Post_Type {
 	 *
 	 * Do `remove_meta_box()` and `add_meta_box()` calls in the callback. Default null.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $register_meta_box_cb
 	 */
 	public $register_meta_box_cb = null;
@@ -211,7 +211,7 @@ final class WP_Post_Type {
 	 *
 	 * Default empty array.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var array $taxonomies
 	 */
 	public $taxonomies = array();
@@ -221,7 +221,7 @@ final class WP_Post_Type {
 	 *
 	 * Will generate the proper rewrite rules if $rewrite is enabled. Default false.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool|string $has_archive
 	 */
 	public $has_archive = false;
@@ -232,7 +232,7 @@ final class WP_Post_Type {
 	 * Defaults to $post_type key. If false, a post type cannot be loaded at `?{query_var}={post_slug}`.
 	 * If specified as a string, the query `?{query_var_string}={post_slug}` will be valid.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string|bool $query_var
 	 */
 	public $query_var;
@@ -242,7 +242,7 @@ final class WP_Post_Type {
 	 *
 	 * Default true.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $can_export
 	 */
 	public $can_export = true;
@@ -255,7 +255,7 @@ final class WP_Post_Type {
 	 * If not set (the default), posts are trashed if post_type_supports( 'author' ).
 	 * Otherwise posts are not trashed or deleted. Default null.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $delete_with_user
 	 */
 	public $delete_with_user = null;
@@ -265,7 +265,7 @@ final class WP_Post_Type {
 	 *
 	 * Default false.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var bool $_builtin
 	 */
 	public $_builtin = false;
@@ -275,7 +275,7 @@ final class WP_Post_Type {
 	 *
 	 * Default 'post.php?post=%d'.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var string $_edit_link
 	 */
 	public $_edit_link = 'post.php?post=%d';
@@ -283,7 +283,7 @@ final class WP_Post_Type {
 	/**
 	 * Post type capabilities.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var object $cap
 	 */
 	public $cap;
@@ -293,7 +293,7 @@ final class WP_Post_Type {
 	 *
 	 * Defaults to true, using $post_type as slug.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var array|false $rewrite
 	 */
 	public $rewrite;
@@ -301,7 +301,7 @@ final class WP_Post_Type {
 	/**
 	 * The features supported by the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 * @var array|bool $supports
 	 */
 	public $supports;
@@ -312,7 +312,7 @@ final class WP_Post_Type {
 	 * Default false. If true, standard endpoints will be registered with
 	 * respect to $rest_base and $rest_controller_class.
 	 *
-	 * @since WP-4.7.4
+	 * @since 4.7.4
 	 * @var bool $show_in_rest
 	 */
 	public $show_in_rest;
@@ -320,7 +320,7 @@ final class WP_Post_Type {
 	/**
 	 * The base path for this post type's REST API endpoints.
 	 *
-	 * @since WP-4.7.4
+	 * @since 4.7.4
 	 * @var string|bool $rest_base
 	 */
 	public $rest_base;
@@ -330,7 +330,7 @@ final class WP_Post_Type {
 	 *
 	 * Custom controllers must extend WP_REST_Controller.
 	 *
-	 * @since WP-4.7.4
+	 * @since 4.7.4
 	 * @var string|bool $rest_controller_class
 	 */
 	public $rest_controller_class;
@@ -341,7 +341,7 @@ final class WP_Post_Type {
 	 * Will populate object properties from the provided arguments and assign other
 	 * default properties based on that information.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @see register_post_type()
 	 *
@@ -358,7 +358,7 @@ final class WP_Post_Type {
 	/**
 	 * Sets post type properties.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param array|string $args Array or string of arguments for registering a post type.
 	 */
@@ -368,7 +368,7 @@ final class WP_Post_Type {
 		/**
 		 * Filters the arguments for registering a post type.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param array  $args      Array of arguments for registering a post type.
 		 * @param string $post_type Post type key.
@@ -511,7 +511,7 @@ final class WP_Post_Type {
 	/**
 	 * Sets the features support for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function add_supports() {
 		if ( ! empty( $this->supports ) ) {
@@ -526,7 +526,7 @@ final class WP_Post_Type {
 	/**
 	 * Adds the necessary rewrite rules for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @global WP_Rewrite $wp_rewrite ClassicPress Rewrite Component.
 	 * @global WP         $wp         Current ClassicPress environment instance.
@@ -573,7 +573,7 @@ final class WP_Post_Type {
 	/**
 	 * Registers the post type meta box if a custom callback was specified.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function register_meta_boxes() {
 		if ( $this->register_meta_box_cb ) {
@@ -584,7 +584,7 @@ final class WP_Post_Type {
 	/**
 	 * Adds the future post hook action for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function add_hooks() {
 		add_action( 'future_' . $this->name, '_future_post_hook', 5, 2 );
@@ -593,7 +593,7 @@ final class WP_Post_Type {
 	/**
 	 * Registers the taxonomies for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function register_taxonomies() {
 		foreach ( $this->taxonomies as $taxonomy ) {
@@ -604,7 +604,7 @@ final class WP_Post_Type {
 	/**
 	 * Removes the features support for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @global array $_wp_post_type_features Post type features.
 	 */
@@ -617,7 +617,7 @@ final class WP_Post_Type {
 	/**
 	 * Removes any rewrite rules, permastructs, and rules for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @global WP_Rewrite $wp_rewrite          ClassicPress rewrite component.
 	 * @global WP         $wp                  Current ClassicPress environment instance.
@@ -651,7 +651,7 @@ final class WP_Post_Type {
 	/**
 	 * Unregisters the post type meta box if a custom callback was specified.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function unregister_meta_boxes() {
 		if ( $this->register_meta_box_cb ) {
@@ -662,7 +662,7 @@ final class WP_Post_Type {
 	/**
 	 * Removes the post type from all taxonomies.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function unregister_taxonomies() {
 		foreach ( get_object_taxonomies( $this->name ) as $taxonomy ) {
@@ -673,7 +673,7 @@ final class WP_Post_Type {
 	/**
 	 * Removes the future post hook action for the post type.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 */
 	public function remove_hooks() {
 		remove_action( 'future_' . $this->name, '_future_post_hook', 5 );

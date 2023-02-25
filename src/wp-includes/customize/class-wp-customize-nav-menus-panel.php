@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * Needed to add screen options.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * @see WP_Customize_Panel
  */
@@ -21,7 +21,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var string
 	 */
 	public $type = 'nav_menus';
@@ -29,7 +29,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	/**
 	 * Render screen options for Menus.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 */
 	public function render_screen_options() {
 		// Adds the screen options.
@@ -46,7 +46,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	 *
 	 * Link title attribute added as it's a relatively advanced concept for new users.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @deprecated WP-4.5.0 Deprecated in favor of wp_nav_menu_manage_columns().
 	 */
 	public function wp_nav_menu_manage_columns() {
@@ -61,7 +61,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	 * Class variables for this panel class are available in the `data` JS object;
 	 * export custom variables by overriding WP_Customize_Panel::json().
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @see WP_Customize_Panel::print_template()
 	 */

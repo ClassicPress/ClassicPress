@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Embeds
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -13,19 +13,19 @@
  * Registers the API route and delivers the response data.
  * The output format (XML or JSON) is handled by the REST API.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 final class WP_oEmbed_Controller {
 	/**
 	 * Register the oEmbed REST API route.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 */
 	public function register_routes() {
 		/**
 		 * Filters the maxwidth oEmbed parameter.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param int $maxwidth Maximum allowed width. Default 600.
 		 */
@@ -109,7 +109,7 @@ final class WP_oEmbed_Controller {
 	 *
 	 * Returns the JSON object for the post.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return WP_Error|array oEmbed response data or WP_Error on failure.
@@ -120,7 +120,7 @@ final class WP_oEmbed_Controller {
 		/**
 		 * Filters the determined post ID.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param int    $post_id The post ID.
 		 * @param string $url     The requested URL.
@@ -139,7 +139,7 @@ final class WP_oEmbed_Controller {
 	/**
 	 * Checks if current user can make a proxy oEmbed request.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @return true|WP_Error True if the request has read access, WP_Error object otherwise.
 	 */
@@ -155,7 +155,7 @@ final class WP_oEmbed_Controller {
 	 *
 	 * Returns the JSON object for the proxied item.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @see WP_oEmbed::get_html()
 	 * @param WP_REST_Request $request Full data about the request.
@@ -198,7 +198,7 @@ final class WP_oEmbed_Controller {
 		 * Similar to the {@see 'oembed_ttl'} filter, but for the REST API
 		 * oEmbed proxy endpoint.
 		 *
-		 * @since WP-4.8.0
+		 * @since 4.8.0
 		 *
 		 * @param int    $time    Time to live (in seconds).
 		 * @param string $url     The attempted embed URL.

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize Upload Control Class.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  *
  * @see WP_Customize_Media_Control
  */
@@ -25,7 +25,7 @@ class WP_Customize_Upload_Control extends WP_Customize_Media_Control {
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 *
 	 * @uses WP_Customize_Media_Control::to_json()
 	 */

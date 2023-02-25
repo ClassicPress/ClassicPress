@@ -16,7 +16,7 @@
  * with the same action hook will be ignored unless you pass unique `$args` values
  * for each scheduled event.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @link https://codex.wordpress.org/Function_Reference/wp_schedule_single_event
  *
  * @param int $timestamp Unix timestamp (UTC) for when to run the event.
@@ -46,7 +46,7 @@ function wp_schedule_single_event( $timestamp, $hook, $args = array() ) {
 	/**
 	 * Filters a single event before it is scheduled.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param stdClass $event {
 	 *     An object containing an event's data.
@@ -86,7 +86,7 @@ function wp_schedule_single_event( $timestamp, $hook, $args = array() ) {
  *
  * Use wp_next_scheduled() to prevent duplicates
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $timestamp Unix timestamp (UTC) for when to run the event.
  * @param string $recurrence How often the event should recur.
@@ -136,7 +136,7 @@ function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array() ) {
 /**
  * Reschedule a recurring event.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $timestamp Unix timestamp (UTC) for when to run the event.
  * @param string $recurrence How often the event should recur.
@@ -185,7 +185,7 @@ function wp_reschedule_event( $timestamp, $recurrence, $hook, $args = array() ) 
  * The $timestamp and $hook parameters are required so that the event can be
  * identified.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $timestamp Unix timestamp (UTC) for when to run the event.
  * @param string $hook Action hook, the execution of which will be unscheduled.
@@ -216,7 +216,7 @@ function wp_unschedule_event( $timestamp, $hook, $args = array() ) {
 /**
  * Unschedules all events attached to the hook with the specified arguments.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $hook Action hook, the execution of which will be unscheduled.
  * @param array $args Optional. Arguments that were to be passed to the hook's callback function.
@@ -250,7 +250,7 @@ function wp_clear_scheduled_hook( $hook, $args = array() ) {
  *
  * Can be useful for plugins when deactivating to clean up the cron queue.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param string $hook Action hook, the execution of which will be unscheduled.
  */
@@ -271,7 +271,7 @@ function wp_unschedule_hook( $hook ) {
 /**
  * Retrieve the next timestamp for an event.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $hook Action hook to execute when event is run.
  * @param array $args Optional. Arguments to pass to the hook's callback function.
@@ -294,7 +294,7 @@ function wp_next_scheduled( $hook, $args = array() ) {
 /**
  * Sends a request to run cron through HTTP request that doesn't halt page loading.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $gmt_time Optional. Unix timestamp (UTC). Default 0 (current time is used).
  */
@@ -363,8 +363,8 @@ function spawn_cron( $gmt_time = 0 ) {
 	/**
 	 * Filters the cron request arguments.
 	 *
-	 * @since WP-3.5.0
-	 * @since WP-4.5.0 The `$doing_wp_cron` parameter was added.
+	 * @since 3.5.0
+	 * @since 4.5.0 The `$doing_wp_cron` parameter was added.
 	 *
 	 * @param array $cron_request_array {
 	 *     An array of cron request URL arguments.
@@ -402,7 +402,7 @@ function spawn_cron( $gmt_time = 0 ) {
 /**
  * Run scheduled callbacks or spawn cron for all scheduled events.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 function wp_cron() {
 	// Prevent infinite loops caused by lack of wp-cron.php
@@ -461,7 +461,7 @@ function wp_cron() {
  *     );
  *
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @return array
  */
@@ -483,7 +483,7 @@ function wp_get_schedules() {
 	/**
 	 * Filters the non-default cron schedules.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param array $new_schedules An array of non-default cron schedules. Default empty.
 	 */
@@ -495,7 +495,7 @@ function wp_get_schedules() {
  *
  * @see wp_get_schedules() for available schedules.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $hook Action hook to identify the event.
  * @param array $args Optional. Arguments passed to the event's callback function.
@@ -522,7 +522,7 @@ function wp_get_schedule( $hook, $args = array() ) {
 /**
  * Retrieve cron info array option.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @access private
  *
  * @return false|array CRON info array.
@@ -545,7 +545,7 @@ function _get_cron_array() {
 /**
  * Updates the CRON option with the new CRON array.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @access private
  *
  * @param array $cron Cron info array from _get_cron_array().
@@ -560,7 +560,7 @@ function _set_cron_array( $cron ) {
  *
  * This function upgrades the Cron info array to version 2.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  * @access private
  *
  * @param array $cron Cron info array from _get_cron_array().

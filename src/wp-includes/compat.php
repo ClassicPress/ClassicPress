@@ -17,7 +17,7 @@ if ( ! function_exists( '_' ) ) {
  * Returns whether PCRE/u (PCRE_UTF8 modifier) is available for use.
  *
  * @ignore
- * @since WP-4.2.2
+ * @since 4.2.2
  * @access private
  *
  * @staticvar string $utf8_pcre
@@ -47,7 +47,7 @@ if ( ! function_exists( 'mb_substr' ) ) :
 	 * Compat function to mimic mb_substr().
 	 *
 	 * @ignore
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 *
 	 * @see _mb_substr()
 	 *
@@ -71,7 +71,7 @@ endif;
  * The behavior of this function for invalid inputs is undefined.
  *
  * @ignore
- * @since WP-3.2.0
+ * @since 3.2.0
  *
  * @param string      $str      The string to extract the substring from.
  * @param int         $start    Position to being extraction from in `$str`.
@@ -137,7 +137,7 @@ if ( ! function_exists( 'mb_strlen' ) ) :
 	 * Compat function to mimic mb_strlen().
 	 *
 	 * @ignore
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @see _mb_strlen()
 	 *
@@ -158,7 +158,7 @@ endif;
  * sequence. The behavior of this function for invalid inputs is undefined.
  *
  * @ignore
- * @since WP-4.2.0
+ * @since 4.2.0
  *
  * @param string      $str      The string to retrieve the character length from.
  * @param string|null $encoding Optional. Character encoding to use. Default null.
@@ -229,7 +229,7 @@ if ( ! function_exists( 'hash_hmac' ) ) :
 	 * and the associated `_hash_hmac()` function can be safely removed.
 	 *
 	 * @ignore
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 *
 	 * @see _hash_hmac()
 	 *
@@ -250,7 +250,7 @@ endif;
  * Internal compat function to mimic hash_hmac().
  *
  * @ignore
- * @since WP-3.2.0
+ * @since 3.2.0
  *
  * @param string $algo       Hash algorithm. Accepts 'md5' or 'sha1'.
  * @param string $data       Data to be hashed.
@@ -351,7 +351,7 @@ if ( ! function_exists( 'hash_equals' ) ) :
 	 * I.e. when PHP 7.4.0 becomes the minimum requirement, this polyfill
 	 * can be safely removed.
 	 *
-	 * @since WP-3.9.2
+	 * @since 3.9.2
 	 *
 	 * @param string $a Expected string.
 	 * @param string $b Actual, user supplied, string.
@@ -388,7 +388,7 @@ if ( ! function_exists( 'json_last_error_msg' ) ) :
 	/**
 	 * Retrieves the error string of the last json_encode() or json_decode() call.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @internal This is a compatibility function for PHP <5.5
 	 *
@@ -449,7 +449,7 @@ if ( ! interface_exists( 'JsonSerializable' ) ) {
 	 *
 	 * @link https://secure.php.net/jsonserializable
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 */
 	interface JsonSerializable {
 		// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
@@ -469,7 +469,7 @@ if ( ! function_exists( 'is_countable' ) ) {
 	 * Verify that the content of a variable is an array or an object
 	 * implementing the Countable interface.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param mixed $var The value to check.
 	 *
@@ -491,7 +491,7 @@ if ( ! function_exists( 'is_iterable' ) ) {
 	 * Verify that the content of a variable is an array or an object
 	 * implementing the Traversable interface.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param mixed $var The value to check.
 	 *
@@ -509,7 +509,7 @@ if ( ! function_exists( 'array_key_first' ) ) {
 	 * Get the first key of the given array without affecting
 	 * the internal array pointer.
 	 *
-	 * @since WP-5.9.0
+	 * @since 5.9.0
 	 *
 	 * @param array $arr An array.
 	 * @return string|int|null The first key of array if the array
@@ -529,7 +529,7 @@ if ( ! function_exists( 'array_key_last' ) ) {
 	 * Get the last key of the given array without affecting the
 	 * internal array pointer.
 	 *
-	 * @since WP-5.9.0
+	 * @since 5.9.0
 	 *
 	 * @param array $arr An array.
 	 * @return string|int|null The last key of array if the array
@@ -551,7 +551,7 @@ if ( ! function_exists( 'str_contains' ) ) {
 	 * Performs a case-sensitive check indicating if needle is
 	 * contained in haystack.
 	 *
-	 * @since WP-5.9.0
+	 * @since 5.9.0
 	 *
 	 * @param string $haystack The string to search in.
 	 * @param string $needle   The substring to search for in the haystack.

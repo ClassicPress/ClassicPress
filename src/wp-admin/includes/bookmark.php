@@ -9,7 +9,7 @@
 /**
  * Add a link to using values provided in $_POST.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @return int|WP_Error Value 0 or WP_Error on failure. The link ID on success.
  */
@@ -20,7 +20,7 @@ function add_link() {
 /**
  * Updates or inserts a link using values provided in $_POST.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param int $link_id Optional. ID of the link to edit. Default 0.
  * @return int|WP_Error Value 0 or WP_Error on failure. The link ID on success.
@@ -54,7 +54,7 @@ function edit_link( $link_id = 0 ) {
 /**
  * Retrieves the default link for editing.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @return stdClass Default link object.
  */
@@ -80,7 +80,7 @@ function get_default_link_to_edit() {
 /**
  * Deletes a specified link from the database.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -92,7 +92,7 @@ function wp_delete_link( $link_id ) {
 	/**
 	 * Fires before a link is deleted.
 	 *
-	 * @since WP-2.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $link_id ID of the link to delete.
 	 */
@@ -105,7 +105,7 @@ function wp_delete_link( $link_id ) {
 	/**
 	 * Fires after a link has been deleted.
 	 *
-	 * @since WP-2.2.0
+	 * @since 2.2.0
 	 *
 	 * @param int $link_id ID of the deleted link.
 	 */
@@ -119,7 +119,7 @@ function wp_delete_link( $link_id ) {
 /**
  * Retrieves the link categories associated with the link specified.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int $link_id Link ID to look up
  * @return array The requested link's categories
@@ -132,7 +132,7 @@ function wp_get_link_cats( $link_id = 0 ) {
 /**
  * Retrieves link data based on its ID.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param int|stdClass $link Link ID or object to retrieve.
  * @return object Link object for editing.
@@ -144,7 +144,7 @@ function get_link_to_edit( $link ) {
 /**
  * Inserts/updates links into/in the database.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -227,7 +227,7 @@ function wp_insert_link( $linkdata, $wp_error = false ) {
 		/**
 		 * Fires after a link was updated in the database.
 		 *
-		 * @since WP-2.0.0
+		 * @since 2.0.0
 		 *
 		 * @param int $link_id ID of the link that was updated.
 		 */
@@ -236,7 +236,7 @@ function wp_insert_link( $linkdata, $wp_error = false ) {
 		/**
 		 * Fires after a link was added to the database.
 		 *
-		 * @since WP-2.0.0
+		 * @since 2.0.0
 		 *
 		 * @param int $link_id ID of the link that was added.
 		 */
@@ -250,7 +250,7 @@ function wp_insert_link( $linkdata, $wp_error = false ) {
 /**
  * Update link with the specified link categories.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param int   $link_id         ID of the link to update.
  * @param array $link_categories Array of link categories to add the link to.
@@ -272,7 +272,7 @@ function wp_set_link_cats( $link_id = 0, $link_categories = array() ) {
 /**
  * Updates a link in the database.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param array $linkdata Link data to update.
  * @return int|WP_Error Value 0 or WP_Error on failure. The updated link ID on success.
@@ -304,7 +304,7 @@ function wp_update_link( $linkdata ) {
 /**
  * Outputs the 'disabled' message for the ClassicPress Link Manager.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  * @access private
  *
  * @global string $pagenow

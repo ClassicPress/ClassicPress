@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Nav_Menus
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 /**
  * Returns a navigation menu object.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int|string|WP_Term $menu Menu ID, slug, name, or object.
  * @return WP_Term|false False if $menu param isn't supplied or term does not exist, menu object if successful.
@@ -41,7 +41,7 @@ function wp_get_nav_menu_object( $menu ) {
 	/**
 	 * Filters the nav_menu term retrieved for wp_get_nav_menu_object().
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Term|false      $menu_obj Term from nav_menu taxonomy, or false if nothing had been found.
 	 * @param int|string|WP_Term $menu     The menu ID, slug, name, or object passed to wp_get_nav_menu_object().
@@ -54,7 +54,7 @@ function wp_get_nav_menu_object( $menu ) {
  *
  * Returns true if it is; false otherwise.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int|string|WP_Term $menu Menu ID, slug, name, or object of menu to check.
  * @return bool Whether the menu exists.
@@ -81,7 +81,7 @@ function is_nav_menu( $menu ) {
 /**
  * Registers navigation menu locations for a theme.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $_wp_registered_nav_menus
  *
@@ -98,7 +98,7 @@ function register_nav_menus( $locations = array() ) {
 /**
  * Unregisters a navigation menu location for a theme.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @global array $_wp_registered_nav_menus
  *
  * @param string $location The menu location identifier.
@@ -120,7 +120,7 @@ function unregister_nav_menu( $location ) {
 /**
  * Registers a navigation menu location for a theme.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $location    Menu location identifier, like a slug.
  * @param string $description Menu location descriptive text.
@@ -131,7 +131,7 @@ function register_nav_menu( $location, $description ) {
 /**
  * Retrieves all registered navigation menu locations in a theme.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $_wp_registered_nav_menus
  *
@@ -148,7 +148,7 @@ function get_registered_nav_menus() {
 /**
  * Retrieves all registered navigation menu locations and the menus assigned to them.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @return array Registered navigation menu locations and the menus assigned them.
  *               If none are registered, an empty array.
@@ -162,7 +162,7 @@ function get_nav_menu_locations() {
 /**
  * Determines whether a registered nav menu location has a menu assigned to it.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $location Menu location identifier.
  * @return bool Whether location has a menu.
@@ -179,7 +179,7 @@ function has_nav_menu( $location ) {
 	/**
 	 * Filters whether a nav menu is assigned to the specified location.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param bool   $has_nav_menu Whether there is a menu assigned to a location.
 	 * @param string $location     Menu location.
@@ -190,7 +190,7 @@ function has_nav_menu( $location ) {
 /**
  * Returns the name of a navigation menu.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param string $location Menu location identifier.
  * @return string Menu name.
@@ -211,7 +211,7 @@ function wp_get_nav_menu_name( $location ) {
 	/**
 	 * Filters the navigation menu name being returned.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param string $menu_name Menu name.
 	 * @param string $location  Menu location identifier.
@@ -222,7 +222,7 @@ function wp_get_nav_menu_name( $location ) {
 /**
  * Determines whether the given ID is a nav menu item.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int $menu_item_id The ID of the potential nav menu item.
  * @return bool Whether the given ID is that of a nav menu item.
@@ -236,7 +236,7 @@ function is_nav_menu_item( $menu_item_id = 0 ) {
  *
  * Note that `$menu_name` is expected to be pre-slashed.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $menu_name Menu name.
  * @return int|WP_Error Menu ID on success, WP_Error object on failure.
@@ -249,7 +249,7 @@ function wp_create_nav_menu( $menu_name ) {
 /**
  * Delete a Navigation Menu.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int|string|WP_Term $menu Menu ID, slug, name, or object.
  * @return bool|WP_Error True on success, false or WP_Error object on failure.
@@ -283,7 +283,7 @@ function wp_delete_nav_menu( $menu ) {
 		/**
 		 * Fires after a navigation menu has been successfully deleted.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param int $term_id ID of the deleted menu.
 		 */
@@ -298,7 +298,7 @@ function wp_delete_nav_menu( $menu ) {
  *
  * Note that `$menu_data` is expected to be pre-slashed.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int   $menu_id   The ID of the menu or "0" to create a new menu.
  * @param array $menu_data The array of menu data.
@@ -359,7 +359,7 @@ function wp_update_nav_menu_object( $menu_id = 0, $menu_data = array() ) {
 		/**
 		 * Fires after a navigation menu is successfully created.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param int   $term_id   ID of the new menu.
 		 * @param array $menu_data An array of menu data.
@@ -386,7 +386,7 @@ function wp_update_nav_menu_object( $menu_id = 0, $menu_data = array() ) {
 	/**
 	 * Fires after a navigation menu has been successfully updated.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param int   $menu_id   ID of the updated menu.
 	 * @param array $menu_data An array of menu data.
@@ -401,7 +401,7 @@ function wp_update_nav_menu_object( $menu_id = 0, $menu_data = array() ) {
  * The menu-item-title, menu-item-description, and menu-item-attr-title are expected
  * to be pre-slashed since they are passed directly into `wp_insert_post()`.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int   $menu_id         The ID of the menu. Required. If "0", makes the menu item a draft orphan.
  * @param int   $menu_item_db_id The ID of the menu item. If "0", creates a new menu item.
@@ -515,7 +515,7 @@ function wp_update_nav_menu_item( $menu_id = 0, $menu_item_db_id = 0, $menu_item
 		/**
 		 * Fires immediately after a new navigation menu item has been added.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @see wp_update_nav_menu_item()
 		 *
@@ -567,7 +567,7 @@ function wp_update_nav_menu_item( $menu_id = 0, $menu_item_db_id = 0, $menu_item
 	/**
 	 * Fires after a navigation menu item has been updated.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see wp_update_nav_menu_item()
 	 *
@@ -583,8 +583,8 @@ function wp_update_nav_menu_item( $menu_id = 0, $menu_item_db_id = 0, $menu_item
 /**
  * Returns all navigation menu objects.
  *
- * @since WP-3.0.0
- * @since WP-4.1.0 Default value of the 'orderby' argument was changed from 'none'
+ * @since 3.0.0
+ * @since 4.1.0 Default value of the 'orderby' argument was changed from 'none'
  *              to 'name'.
  *
  * @param array $args Optional. Array of arguments passed on to get_terms().
@@ -601,7 +601,7 @@ function wp_get_nav_menus( $args = array() ) {
 	/**
 	 * Filters the navigation menu objects being returned.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see get_terms()
 	 *
@@ -616,7 +616,7 @@ function wp_get_nav_menus( $args = array() ) {
  *
  * @link https://core.trac.wordpress.org/ticket/13958
  *
- * @since WP-3.2.0
+ * @since 3.2.0
  * @access private
  *
  * @param object $item The menu item to check.
@@ -634,7 +634,7 @@ function _is_valid_nav_menu_item( $item ) {
  * indirectly affect the ultimate ordering and content of the resulting nav menu
  * items that get returned from this function.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global string $_menu_item_sort_prop
  * @staticvar array $fetched
@@ -757,7 +757,7 @@ function wp_get_nav_menu_items( $menu, $args = array() ) {
 	/**
 	 * Filters the navigation menu items being returned.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array  $items An array of menu item post objects.
 	 * @param object $menu  The menu object.
@@ -788,7 +788,7 @@ function wp_get_nav_menu_items( $menu, $args = array() ) {
  * - xfn:              The XFN relationship expressed in the link of this menu item.
  * - _invalid:         Whether the menu item represents an object that no longer exists.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param object $menu_item The menu item to modify.
  * @return object $menu_item The menu item with standard menu item properties.
@@ -871,7 +871,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 			/**
 			 * Filters a navigation menu item's title attribute.
 			 *
-			 * @since WP-3.0.0
+			 * @since 3.0.0
 			 *
 			 * @param string $item_title The menu item title attribute.
 			 */
@@ -881,7 +881,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 				/**
 				 * Filters a navigation menu item's description.
 				 *
-				 * @since WP-3.0.0
+				 * @since 3.0.0
 				 *
 				 * @param string $description The menu item description.
 				 */
@@ -942,7 +942,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 	/**
 	 * Filters a navigation menu item object.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param object $menu_item The menu item object.
 	 */
@@ -952,7 +952,7 @@ function wp_setup_nav_menu_item( $menu_item ) {
 /**
  * Get the menu items associated with a particular object.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int    $object_id   The ID of the original object.
  * @param string $object_type The type of object, such as "taxonomy" or "post_type."
@@ -997,7 +997,7 @@ function wp_get_associated_nav_menu_items( $object_id = 0, $object_type = 'post_
 /**
  * Callback for handling a menu item when its original object is deleted.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @access private
  *
  * @param int $object_id The ID of the original object being trashed.
@@ -1016,7 +1016,7 @@ function _wp_delete_post_menu_item( $object_id ) {
 /**
  * Serves as a callback for handling a menu item when its original object is deleted.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @access private
  *
  * @param int    $object_id The ID of the original object being trashed.
@@ -1036,7 +1036,7 @@ function _wp_delete_tax_menu_item( $object_id, $tt_id, $taxonomy ) {
 /**
  * Automatically add newly published page objects to menus with that as an option.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @access private
  *
  * @param string $new_status The new status of the post object.
@@ -1083,7 +1083,7 @@ function _wp_auto_add_pages_to_menu( $new_status, $old_status, $post ) {
 /**
  * Delete auto-draft posts associated with the supplied changeset.
  *
- * @since WP-4.8.0
+ * @since 4.8.0
  * @access private
  *
  * @param int $post_id Post ID for the customize_changeset.
@@ -1118,7 +1118,7 @@ function _wp_delete_customize_changeset_dependent_auto_drafts( $post_id ) {
  * Handle menu config after theme change.
  *
  * @access private
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 function _wp_menus_changed() {
 	$old_nav_menu_locations    = get_option( 'theme_switch_menu_locations', array() );
@@ -1132,7 +1132,7 @@ function _wp_menus_changed() {
 /**
  * Maps nav menu locations according to assignments in previously active theme.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @param array $new_nav_menu_locations New nav menu locations assignments.
  * @param array $old_nav_menu_locations Old nav menu locations assignments.

@@ -18,7 +18,7 @@
  *
  * @package ClassicPress
  * @subpackage Plugin
- * @since WP-1.5.0
+ * @since 1.5.0
  */
 
 // Initialize the filter globals.
@@ -91,7 +91,7 @@ if ( ! isset( $wp_current_filter ) ) {
  * It is up to you to take care. This is done for optimization purposes, so
  * everything is as quick as possible.
  *
- * @since WP-0.71
+ * @since 0.71
  *
  * @global array $wp_filter      A multidimensional array of all hooks and the callbacks hooked to them.
  *
@@ -117,7 +117,7 @@ function add_filter( $tag, $function_to_add, $priority = 10, $accepted_args = 1 
 /**
  * Check if any filter has been registered for a hook.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $wp_filter Stores all of the filters.
  *
@@ -165,7 +165,7 @@ function has_filter( $tag, $function_to_check = false ) {
  *      * - $arg1 and $arg2 are the additional arguments passed to the callback.
  *     $value = apply_filters( 'example_filter', 'filter me', $arg1, $arg2 );
  *
- * @since WP-0.71
+ * @since 0.71
  *
  * @global array $wp_filter         Stores all of the filters.
  * @global array $wp_current_filter Stores the list of current filters with the current one last.
@@ -210,7 +210,7 @@ function apply_filters( $tag, $value ) {
 /**
  * Execute functions hooked on a specific filter hook, specifying arguments in an array.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @see apply_filters() This function is identical, but the arguments passed to the
  * functions hooked to `$tag` are supplied using an array.
@@ -261,7 +261,7 @@ function apply_filters_ref_array( $tag, $args ) {
  * when the hook was added. This goes for both filters and actions. No warning
  * will be given on removal failure.
  *
- * @since WP-1.2.0
+ * @since 1.2.0
  *
  * @global array $wp_filter         Stores all of the filters
  *
@@ -287,7 +287,7 @@ function remove_filter( $tag, $function_to_remove, $priority = 10 ) {
 /**
  * Remove all of the hooks from a filter.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @global array $wp_filter  Stores all of the filters
  *
@@ -311,7 +311,7 @@ function remove_all_filters( $tag, $priority = false ) {
 /**
  * Retrieve the name of the current filter or action.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $wp_current_filter Stores the list of current filters with the current one last
  *
@@ -325,7 +325,7 @@ function current_filter() {
 /**
  * Retrieve the name of the current action.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @return string Hook name of the current action.
  */
@@ -344,7 +344,7 @@ function current_action() {
  * executed (despite not being the most recent filter to fire, in the case of
  * hooks called from hook callbacks) to be verified.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @see current_filter()
  * @see did_action()
@@ -367,7 +367,7 @@ function doing_filter( $filter = null ) {
 /**
  * Retrieve the name of an action currently being processed.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @param string|null $action Optional. Action to check. Defaults to null, which checks
  *                            if any action is currently being run.
@@ -385,7 +385,7 @@ function doing_action( $action = null ) {
  * one or more of its PHP functions are executed at these points, using the
  * Action API.
  *
- * @since WP-1.2.0
+ * @since 1.2.0
  *
  * @param string   $tag             The name of the action to which the $function_to_add is hooked.
  * @param callable $function_to_add The name of the function you wish to be called.
@@ -410,7 +410,7 @@ function add_action( $tag, $function_to_add, $priority = 10, $accepted_args = 1 
  *
  * You can pass extra arguments to the hooks, much like you can with apply_filters().
  *
- * @since WP-1.2.0
+ * @since 1.2.0
  *
  * @global array $wp_filter         Stores all of the filters
  * @global array $wp_actions        Increments the amount of times action was triggered.
@@ -463,7 +463,7 @@ function do_action( $tag, $arg = '' ) {
 /**
  * Retrieve the number of times an action is fired.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @global array $wp_actions Increments the amount of times action was triggered.
  *
@@ -483,7 +483,7 @@ function did_action( $tag ) {
 /**
  * Execute functions hooked on a specific action hook, specifying arguments in an array.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @see do_action() This function is identical, but the arguments passed to the
  *                  functions hooked to $tag< are supplied using an array.
@@ -529,7 +529,7 @@ function do_action_ref_array( $tag, $args ) {
 /**
  * Check if any action has been registered for a hook.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @see has_filter() has_action() is an alias of has_filter().
  *
@@ -553,7 +553,7 @@ function has_action( $tag, $function_to_check = false ) {
  * method can be used to remove default functions attached to a specific filter
  * hook and possibly replace them with a substitute.
  *
- * @since WP-1.2.0
+ * @since 1.2.0
  *
  * @param string   $tag                The action hook to which the function to be removed is hooked.
  * @param callable $function_to_remove The name of the function which should be removed.
@@ -567,7 +567,7 @@ function remove_action( $tag, $function_to_remove, $priority = 10 ) {
 /**
  * Remove all of the hooks from an action.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string   $tag      The action to remove hooks from.
  * @param int|bool $priority The priority number to remove them from. Default false.
@@ -593,7 +593,7 @@ function remove_all_actions( $tag, $priority = false ) {
  *     // Deprecated.
  *     return apply_filters_deprecated( 'wpdocs_filter', array( $value, $extra_arg ), 'WP-4.9', 'wpdocs_new_filter' );
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @see _deprecated_hook()
  *
@@ -620,7 +620,7 @@ function apply_filters_deprecated( $tag, $args, $version, $replacement = false, 
  * do_action_deprecated(), which triggers a deprecation notice and then fires
  * the original hook.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @see _deprecated_hook()
  *
@@ -649,7 +649,7 @@ function do_action_deprecated( $tag, $args, $version, $replacement = false, $mes
  *
  * This method extracts the name of a plugin from its filename.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global array $wp_plugin_paths
  *
@@ -682,7 +682,7 @@ function plugin_basename( $file ) {
  *
  * This is used in plugin_basename() to resolve symlinked paths.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @see wp_normalize_path()
  *
@@ -721,7 +721,7 @@ function wp_register_plugin_realpath( $file ) {
 /**
  * Get the filesystem directory path (with trailing slash) for the plugin __FILE__ passed in.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $file The filename of the plugin (__FILE__).
  * @return string the filesystem path of the directory that contains the plugin.
@@ -733,7 +733,7 @@ function plugin_dir_path( $file ) {
 /**
  * Get the URL directory path (with trailing slash) for the plugin __FILE__ passed in.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $file The filename of the plugin (__FILE__).
  * @return string the URL path of the directory that contains the plugin.
@@ -755,7 +755,7 @@ function plugin_dir_url( $file ) {
  * wp-content/plugins/sample.php the name of this hook will be
  * 'activate_sample.php'.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param string   $file     The filename of the plugin including the path.
  * @param callable $function The function hooked to the 'activate_PLUGIN' action.
@@ -778,7 +778,7 @@ function register_activation_hook( $file, $function ) {
  * wp-content/plugins/sample.php the name of this hook will be
  * 'deactivate_sample.php'.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param string   $file     The filename of the plugin including the path.
  * @param callable $function The function hooked to the 'deactivate_PLUGIN' action.
@@ -808,7 +808,7 @@ function register_deactivation_hook( $file, $function ) {
  * should always check for the 'WP_UNINSTALL_PLUGIN' constant, before
  * executing.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param string   $file     Plugin file.
  * @param callable $callback The callback to run when the hook is called. Must be
@@ -842,7 +842,7 @@ function register_uninstall_hook( $file, $callback ) {
  * functions. This function does not check for the existence of the all hook, so
  * it will fail unless the all hook exists prior to this function call.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  * @access private
  *
  * @global array $wp_filter  Stores all of the filters
@@ -874,7 +874,7 @@ function _wp_call_all_hook( $args ) {
  *
  * @link https://core.trac.wordpress.org/ticket/3875
  *
- * @since WP-2.2.3
+ * @since 2.2.3
  * @access private
  *
  * @global array $wp_filter Storage for all of the filters and actions.

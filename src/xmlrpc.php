@@ -50,7 +50,7 @@ if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/r
 		 *
 		 * @link http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 */
 		do_action( 'xmlrpc_rsd_apis' );
 		?>
@@ -75,7 +75,7 @@ $post_default_title = '';
 /**
  * Filters the class used for handling XML-RPC requests.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @param string $class The name of the XML-RPC server class.
  */

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage HTTP
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -14,14 +14,14 @@
  *
  * Requires the Curl extension to be installed.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  */
 class WP_Http_Curl {
 
 	/**
 	 * Temporary header storage for during requests.
 	 *
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 * @var string
 	 */
 	private $headers = '';
@@ -29,7 +29,7 @@ class WP_Http_Curl {
 	/**
 	 * Temporary body storage for during requests.
 	 *
-	 * @since WP-3.6.0
+	 * @since 3.6.0
 	 * @var string
 	 */
 	private $body = '';
@@ -37,7 +37,7 @@ class WP_Http_Curl {
 	/**
 	 * The maximum amount of data to receive from the remote server.
 	 *
-	 * @since WP-3.6.0
+	 * @since 3.6.0
 	 * @var int
 	 */
 	private $max_body_length = false;
@@ -45,7 +45,7 @@ class WP_Http_Curl {
 	/**
 	 * The file resource used for streaming to file.
 	 *
-	 * @since WP-3.6.0
+	 * @since 3.6.0
 	 * @var resource
 	 */
 	private $stream_handle = false;
@@ -53,7 +53,7 @@ class WP_Http_Curl {
 	/**
 	 * The total bytes written in the current request.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 * @var int
 	 */
 	private $bytes_written_total = 0;
@@ -61,7 +61,7 @@ class WP_Http_Curl {
 	/**
 	 * Send a HTTP request to a URI using cURL extension.
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param string $url The request URL.
 	 * @param string|array $args Optional. Override the defaults.
@@ -223,7 +223,7 @@ class WP_Http_Curl {
 		 * Cookies are not currently handled by the HTTP API. This action allows
 		 * plugins to handle cookies themselves.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 *
 		 * @param resource $handle  The cURL handle returned by curl_init() (passed by reference).
 		 * @param array    $parsed_args       The HTTP request arguments.
@@ -329,7 +329,7 @@ class WP_Http_Curl {
 	 * Each header is sent individually to this callback, so we append to the `$header` property
 	 * for temporary storage
 	 *
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 *
 	 * @param resource $handle  cURL handle.
 	 * @param string   $headers cURL request headers.
@@ -347,7 +347,7 @@ class WP_Http_Curl {
 	 * property for temporary storage. Returning a length shorter than the length of
 	 * `$data` passed in will cause cURL to abort the request with `CURLE_WRITE_ERROR`.
 	 *
-	 * @since WP-3.6.0
+	 * @since 3.6.0
 	 *
 	 * @param resource $handle  cURL handle.
 	 * @param string   $data    cURL request body.
@@ -378,7 +378,7 @@ class WP_Http_Curl {
 	 * Determines whether this class can be used for retrieving a URL.
 	 *
 	 * @static
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param array $args Optional. Array of request arguments. Default empty array.
 	 * @return bool False means this class can not be used, true means it can.
@@ -401,7 +401,7 @@ class WP_Http_Curl {
 		/**
 		 * Filters whether cURL can be used as a transport for retrieving a URL.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 *
 		 * @param bool  $use_class Whether the class can be used. Default true.
 		 * @param array $args      An array of request arguments.

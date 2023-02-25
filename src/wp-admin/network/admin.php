@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 define( 'WP_NETWORK_ADMIN', true );
@@ -22,7 +22,7 @@ $redirect_network_admin_request = 0 !== strcasecmp( $current_blog->domain, $curr
 /**
  * Filters whether to redirect the request to the Network Admin.
  *
- * @since WP-3.2.0
+ * @since 3.2.0
  *
  * @param bool $redirect_network_admin_request Whether the request should be redirected.
  */

@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Check for an existing network.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -29,7 +29,7 @@ function network_domain_check() {
 /**
  * Allow subdomain installation
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @return bool Whether subdomain installation is allowed
  */
 function allow_subdomain_install() {
@@ -44,7 +44,7 @@ function allow_subdomain_install() {
 /**
  * Allow subdirectory installation.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -55,7 +55,7 @@ function allow_subdirectory_install() {
 		/**
 		 * Filters whether to enable the subdirectory installation feature in Multisite.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param bool $allow Whether to enable the subdirectory installation feature in Multisite. Default is false.
 		 */
@@ -78,7 +78,7 @@ function allow_subdirectory_install() {
 /**
  * Get base domain of network.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @return string Base domain.
  */
 function get_clean_basedomain() {
@@ -100,7 +100,7 @@ function get_clean_basedomain() {
  * @todo Realistically, step 1 should be a welcome screen explaining what a Network is and such. Navigating to Tools > Network
  *  should not be a sudden "Welcome to a new install process! Fill this out and click here." See also contextual help todo.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global bool $is_apache
  *
@@ -376,7 +376,7 @@ function network_step1( $errors = false ) {
 /**
  * Prints step 2 for Network installation process.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *

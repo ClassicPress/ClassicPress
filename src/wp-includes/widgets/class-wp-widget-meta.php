@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * Displays log in/out, RSS feed links, etc.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @see WP_Widget
  */
@@ -21,7 +21,7 @@ class WP_Widget_Meta extends WP_Widget {
 	/**
 	 * Sets up a new Meta widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function __construct() {
 		$widget_ops = array(
@@ -35,7 +35,7 @@ class WP_Widget_Meta extends WP_Widget {
 	/**
 	 * Outputs the content for the current Meta widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
@@ -62,8 +62,8 @@ class WP_Widget_Meta extends WP_Widget {
 			/**
 			 * Filters the "Powered by ClassicPress" text in the Meta widget.
 			 *
-			 * @since WP-3.6.0
-			 * @since WP-4.9.0 Added the `$instance` parameter.
+			 * @since 3.6.0
+			 * @since 4.9.0 Added the `$instance` parameter.
 			 *
 			 * @param string $title_text Default title text for the ClassicPress.net link.
 			 * @param array  $instance   Array of settings for the current widget.
@@ -90,7 +90,7 @@ class WP_Widget_Meta extends WP_Widget {
 	/**
 	 * Handles updating settings for the current Meta widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $new_instance New settings for this instance as input by the user via
 	 *                            WP_Widget::form().
@@ -107,7 +107,7 @@ class WP_Widget_Meta extends WP_Widget {
 	/**
 	 * Outputs the settings form for the Meta widget.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $instance Current settings.
 	 */

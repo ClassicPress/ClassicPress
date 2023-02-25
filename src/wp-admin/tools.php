@@ -69,7 +69,7 @@ if ( $is_privacy_guide ) {
 	/**
 	 * Fires at the end of the Tools Administration screen.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	do_action( 'tool_box' );
 }

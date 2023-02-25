@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to implement a Tag cloud widget.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @see WP_Widget
  */
@@ -19,7 +19,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 	/**
 	 * Sets up a new Tag Cloud widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function __construct() {
 		$widget_ops = array(
@@ -32,7 +32,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 	/**
 	 * Outputs the content for the current Tag Cloud widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
@@ -57,9 +57,9 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 		/**
 		 * Filters the taxonomy used in the Tag Cloud widget.
 		 *
-		 * @since WP-2.8.0
-		 * @since WP-3.0.0 Added taxonomy drop-down.
-		 * @since WP-4.9.0 Added the `$instance` parameter.
+		 * @since 2.8.0
+		 * @since 3.0.0 Added taxonomy drop-down.
+		 * @since 4.9.0 Added the `$instance` parameter.
 		 *
 		 * @see wp_tag_cloud()
 		 *
@@ -101,7 +101,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 	/**
 	 * Handles updating settings for the current Tag Cloud widget instance.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $new_instance New settings for this instance as input by the user via
 	 *                            WP_Widget::form().
@@ -119,7 +119,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 	/**
 	 * Outputs the Tag Cloud widget settings form.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param array $instance Current settings.
 	 */
@@ -185,7 +185,7 @@ class WP_Widget_Tag_Cloud extends WP_Widget {
 	/**
 	 * Retrieves the taxonomy for the current Tag cloud widget instance.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $instance Current settings.
 	 * @return string Name of the current taxonomy if set, otherwise 'post_tag'.

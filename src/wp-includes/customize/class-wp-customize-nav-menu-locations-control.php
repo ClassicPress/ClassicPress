@@ -4,20 +4,20 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 
 /**
  * Customize Nav Menu Locations Control Class.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 class WP_Customize_Nav_Menu_Locations_Control extends WP_Customize_Control {
 
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var string
 	 */
 	public $type = 'nav_menu_locations';
@@ -25,14 +25,14 @@ class WP_Customize_Nav_Menu_Locations_Control extends WP_Customize_Control {
 	/**
 	 * Don't render the control's content - it uses a JS template instead.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * JS/Underscore template for the control UI.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function content_template() {
 		if ( current_theme_supports( 'menus' ) ) :

@@ -261,7 +261,7 @@ class WP_Importer {
 	/**
 	 * Resets global variables that grow out of control during imports.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @global wpdb  $wpdb       ClassicPress database abstraction object.
 	 * @global array $wp_actions

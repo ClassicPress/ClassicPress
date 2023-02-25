@@ -258,7 +258,7 @@ function wp_stream_image( $image, $mime_type, $attachment_id ) {
 		/**
 		 * Filters the WP_Image_Editor instance for the image to be streamed to the browser.
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 *
 		 * @param WP_Image_Editor $image         The image editor instance.
 		 * @param int             $attachment_id The attachment post ID.
@@ -276,7 +276,7 @@ function wp_stream_image( $image, $mime_type, $attachment_id ) {
 		/**
 		 * Filters the GD image resource to be streamed to the browser.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 * @deprecated WP-3.5.0 Use image_editor_save_pre instead.
 		 *
 		 * @param resource|GdImage $image         Image resource to be streamed.
@@ -321,7 +321,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 		 * Returning a non-null value will short-circuit the save method,
 		 * returning that value instead.
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 *
 		 * @param mixed           $override  Value to return instead of saving. Default null.
 		 * @param string          $filename  Name of the file to be saved.
@@ -348,7 +348,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 		 * Returning a non-null value will short-circuit the save method,
 		 * returning that value instead.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 * @deprecated WP-3.5.0 Use wp_save_image_editor_file instead.
 		 *
 		 * @param mixed           $override  Value to return instead of saving. Default null.
@@ -385,7 +385,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 /**
  * Image preview ratio. Internal use only.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @ignore
  * @param int $w Image width in pixels.
@@ -400,7 +400,7 @@ function _image_get_preview_ratio( $w, $h ) {
 /**
  * Returns an image resource. Internal use only.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  * @deprecated WP-3.5.0 Use WP_Image_Editor::rotate()
  * @see WP_Image_Editor::rotate()
  *
@@ -427,7 +427,7 @@ function _rotate_image_resource( $img, $angle ) {
 /**
  * Flips an image resource. Internal use only.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  * @deprecated WP-3.5.0 Use WP_Image_Editor::flip()
  * @see WP_Image_Editor::flip()
  *
@@ -462,7 +462,7 @@ function _flip_image_resource( $img, $horz, $vert ) {
 /**
  * Crops an image resource. Internal use only.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @ignore
  * @param resource|GdImage $img Image resource or GdImage instance.
@@ -488,7 +488,7 @@ function _crop_image_resource( $img, $x, $y, $w, $h ) {
 /**
  * Performs group of changes on Editor specified.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param WP_Image_Editor $image   WP_Image_Editor instance.
  * @param array           $changes Array of change operations.
@@ -553,7 +553,7 @@ function image_edit_apply_changes( $image, $changes ) {
 		/**
 		 * Filters the WP_Image_Editor instance before applying changes to the image.
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 *
 		 * @param WP_Image_Editor $image   WP_Image_Editor instance.
 		 * @param array           $changes Array of change operations.
@@ -564,7 +564,7 @@ function image_edit_apply_changes( $image, $changes ) {
 		/**
 		 * Filters the GD image resource before applying changes to the image.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 * @deprecated WP-3.5.0 Use wp_image_editor_before_change instead.
 		 *
 		 * @param resource|GdImage $image   GD image resource or GdImage instance.
@@ -657,7 +657,7 @@ function stream_preview_image( $post_id ) {
 /**
  * Restores the metadata for a given attachment.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param int $post_id Attachment post ID.
  * @return stdClass Image restoration message object.

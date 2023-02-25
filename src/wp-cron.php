@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Returns the uncached `doing_cron` transient.
  *
  * @ignore
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -125,7 +125,7 @@ foreach ( $crons as $timestamp => $cronhooks ) {
 			 * Fires scheduled events.
 			 *
 			 * @ignore
-			 * @since WP-2.1.0
+			 * @since 2.1.0
 			 *
 			 * @param string $hook Name of the hook that was scheduled to be fired.
 			 * @param array  $args The arguments to be passed to the hook.

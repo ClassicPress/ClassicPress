@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage REST_API
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core class to access posts via the REST API.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see WP_REST_Controller
  */
@@ -19,7 +19,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Post type.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string
 	 */
 	protected $post_type;
@@ -27,7 +27,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Instance of a post meta fields object.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var WP_REST_Post_Meta_Fields
 	 */
 	protected $meta;
@@ -35,7 +35,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Passwordless post access permitted.
 	 *
-	 * @since WP-5.7.1
+	 * @since 5.7.1
 	 * @var int[]
 	 */
 	protected $password_check_passed = array();
@@ -43,7 +43,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string $post_type Post type.
 	 */
@@ -59,7 +59,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes for the objects of the controller.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @see register_rest_route()
 	 */
@@ -137,7 +137,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to read posts.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True if the request has read access, WP_Error object otherwise.
@@ -160,7 +160,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * previously passed a permission check or if they have the `edit_post` capability
 	 * for the post being checked.
 	 *
-	 * @since WP-5.7.1
+	 * @since 5.7.1
 	 *
 	 * @param bool    $required Whether the post requires a password check.
 	 * @param WP_Post $post     The post been password checked.
@@ -188,7 +188,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves a collection of posts.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -299,7 +299,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * Enables adding extra arguments or setting defaults for a post collection request.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @link https://developer.wordpress.org/reference/classes/wp_query/
 		 *
@@ -408,7 +408,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Get the post, if the ID is valid.
 	 *
-	 * @since WP-4.7.2
+	 * @since 4.7.2
 	 *
 	 * @param int $id Supplied ID.
 	 * @return WP_Post|WP_Error Post object if ID is valid, WP_Error otherwise.
@@ -430,7 +430,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to read a post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has read access for the item, WP_Error object otherwise.
@@ -470,7 +470,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * This method determines whether we need to override the regular password
 	 * check in core with a filter.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_Post         $post    Post to check against.
 	 * @param WP_REST_Request $request Request data to check.
@@ -505,7 +505,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves a single post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -529,7 +529,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to create a post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True if the request has access to create items, WP_Error object otherwise.
@@ -563,7 +563,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Creates a single post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -601,7 +601,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_Post         $post     Inserted or updated post object.
 		 * @param WP_REST_Request $request  Request object.
@@ -666,7 +666,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to update a post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True if the request has access to update the item, WP_Error object otherwise.
@@ -701,7 +701,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Updates a single post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -788,7 +788,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to delete a post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True if the request has access to delete the item, WP_Error object otherwise.
@@ -809,7 +809,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Deletes a single post.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -836,7 +836,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * Pass false to disable trash support for the post.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param bool    $supports_trash Whether the post type support trashing.
 		 * @param WP_Post $post           The Post object being considered for trashing support.
@@ -888,7 +888,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * They dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param object           $post     The deleted or trashed post.
 		 * @param WP_REST_Response $response The response data.
@@ -903,7 +903,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * Determines the allowed query_vars for a get_items() response and prepares
 	 * them for WP_Query.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array           $prepared_args Optional. Prepared WP_Query arguments. Default empty array.
 	 * @param WP_REST_Request $request       Optional. Full details about the request.
@@ -918,7 +918,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 			 *
 			 * The dynamic portion of the hook name, `$key`, refers to the query_var key.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 *
 			 * @param string $value The query_var value.
 			 */
@@ -950,7 +950,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * Checks the post_date_gmt or modified_gmt and prepare any post or
 	 * modified date for single post output.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string      $date_gmt GMT publication time.
 	 * @param string|null $date     Optional. Local publication time. Default null.
@@ -974,7 +974,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a single post for create or update.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 * @return stdClass|WP_Error Post object or WP_Error.
@@ -1139,7 +1139,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param stdClass        $prepared_post An object representing a single post prepared
 		 *                                       for inserting or updating the database.
@@ -1152,7 +1152,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Determines validity and normalizes the given status parameter.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string $post_status Post status.
 	 * @param object $post_type   Post type.
@@ -1188,7 +1188,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Determines the featured media based on a request param.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param int $featured_media Featured Media ID.
 	 * @param int $post_id        Post ID.
@@ -1213,7 +1213,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Check whether the template is valid for the given post.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param string          $template Page template filename.
 	 * @param WP_REST_Request $request  Request.
@@ -1250,8 +1250,8 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Sets the template for a post.
 	 *
-	 * @since WP-4.7.0
-	 * @since WP-4.9.0 Introduced the $validate parameter.
+	 * @since 4.7.0
+	 * @since 4.9.0 Introduced the $validate parameter.
 	 *
 	 * @param string  $template Page template filename.
 	 * @param integer $post_id  Post ID.
@@ -1269,7 +1269,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Updates the post's terms from a REST request.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param int             $post_id The post ID to update the terms form.
 	 * @param WP_REST_Request $request The request object with post and terms data.
@@ -1296,7 +1296,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks whether current user can assign all terms sent with the current request.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request The request object with post and terms data.
 	 * @return bool Whether the current user can assign the provided terms.
@@ -1328,7 +1328,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given post type can be viewed or managed.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param object|string $post_type Post type name or object.
 	 * @return bool Whether the post type is allowed in REST.
@@ -1350,7 +1350,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 *
 	 * Correctly handles posts with the inherit status.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param object $post Post object.
 	 * @return bool Whether the post can be read.
@@ -1393,7 +1393,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a post can be edited.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param object $post Post object.
 	 * @return bool Whether the post can be edited.
@@ -1411,7 +1411,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a post can be created.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param object $post Post object.
 	 * @return bool Whether the post can be created.
@@ -1429,7 +1429,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a post can be deleted.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param object $post Post object.
 	 * @return bool Whether the post can be deleted.
@@ -1447,7 +1447,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a single post output for response.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_Post         $post    Post object.
 	 * @param WP_REST_Request $request Request object.
@@ -1660,7 +1660,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 *
 		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_REST_Response $response The response object.
 		 * @param WP_Post          $post     Post object.
@@ -1676,7 +1676,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * "Protected: %s", as the REST API communicates the protected status of a post
 	 * in a machine readable format, we remove the "Protected: " prefix.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return string Protected title format.
 	 */
@@ -1687,7 +1687,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares links for the request.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_Post $post Post object.
 	 * @return array Links for the given post.
@@ -1809,7 +1809,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Get the link relations available for the post and current user.
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @param WP_Post $post Post object.
 	 * @param WP_REST_Request Request object.
@@ -1863,7 +1863,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the post's schema, conforming to JSON Schema.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Item schema data.
 	 */
@@ -2212,7 +2212,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieve Link Description Objects that should be added to the Schema for the posts collection.
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @return array
 	 */
@@ -2322,7 +2322,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the query params for the posts collection.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Collection parameters.
 	 */
@@ -2505,7 +2505,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		 * collection parameter to an internal WP_Query parameter. Use the
 		 * `rest_{$this->post_type}_query` filter to set WP_Query parameters.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param array        $query_params JSON Schema-formatted collection parameters.
 		 * @param WP_Post_Type $post_type    Post type object.
@@ -2517,7 +2517,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 	 * Sanitizes and validates the list of post statuses, including whether the
 	 * user can query private statuses.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param  string|array    $statuses  One or more post statuses.
 	 * @param  WP_REST_Request $request   Full details about the request.

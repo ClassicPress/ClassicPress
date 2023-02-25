@@ -2,7 +2,7 @@
 /**
  * Session API
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  */
 
 _deprecated_file( basename( __FILE__ ), 'WP-4.7.0' );

@@ -19,7 +19,7 @@ require ABSPATH . WPINC . '/SimplePie/Author.php';
 /**
  * ClassicPress autoloader for SimplePie.
  *
- * @since WP-3.5.0
+ * @since 3.5.0
  */
 function wp_simplepie_autoload( $class ) {
 	if ( 0 !== strpos( $class, 'SimplePie_' ) )

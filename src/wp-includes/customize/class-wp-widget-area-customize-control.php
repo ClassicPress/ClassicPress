@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-3.4.0
+ * @since 3.4.0
  */
 
 /**
  * Widget Area Customize Control class.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @see WP_Customize_Control
  */
@@ -19,7 +19,7 @@ class WP_Widget_Area_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Customize control type.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 * @var string
 	 */
 	public $type = 'sidebar_widgets';
@@ -27,7 +27,7 @@ class WP_Widget_Area_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Sidebar ID.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 * @var int|string
 	 */
 	public $sidebar_id;
@@ -35,7 +35,7 @@ class WP_Widget_Area_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Refreshes the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 */
 	public function to_json() {
 		parent::to_json();
@@ -48,7 +48,7 @@ class WP_Widget_Area_Customize_Control extends WP_Customize_Control {
 	/**
 	 * Renders the control's content.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 */
 	public function render_content() {
 		$id = 'reorder-widgets-desc-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );

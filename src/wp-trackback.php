@@ -2,7 +2,7 @@
 /**
  * Handle Trackbacks and Pingbacks Sent to ClassicPress
  *
- * @since WP-0.71
+ * @since 0.71
  *
  * @package ClassicPress
  * @subpackage Trackbacks
@@ -21,7 +21,7 @@ wp_set_current_user( 0 );
  *
  * Responds with an error or success XML message.
  *
- * @since WP-0.71
+ * @since 0.71
  *
  * @param mixed  $error         Whether there was an error.
  *                              Default '0'. Accepts '0' or '1', true or false.
@@ -101,7 +101,7 @@ if ( ! empty( $tb_url ) && ! empty( $title ) ) {
 	/**
 	* Fires before the trackback is added to a post.
 	*
-	* @since WP-4.7.0
+	* @since 4.7.0
 	*
 	* @param int    $tb_id     Post ID related to the trackback.
 	* @param string $tb_url    Trackback URL.
@@ -146,7 +146,7 @@ if ( ! empty( $tb_url ) && ! empty( $title ) ) {
 	/**
 	 * Fires after a trackback is added to a post.
 	 *
-	 * @since WP-1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param int $trackback_id Trackback ID.
 	 */

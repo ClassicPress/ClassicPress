@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Create HTML list of nav menu input items.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @uses Walker_Nav_Menu
  */
 class Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
@@ -29,7 +29,7 @@ class Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
 	 *
 	 * @see Walker_Nav_Menu::start_lvl()
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
 	 * @param int    $depth  Depth of page. Used for padding.
@@ -45,7 +45,7 @@ class Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
 	 *
 	 * @see Walker_Nav_Menu::end_lvl()
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
 	 * @param int    $depth  Depth of page. Used for padding.
@@ -61,7 +61,7 @@ class Walker_Nav_Menu_Checklist extends Walker_Nav_Menu {
 	 *
 	 * @see Walker_Nav_Menu::start_el()
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @global int $_nav_menu_placeholder
 	 *

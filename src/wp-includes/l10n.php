@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage i18n
- * @since WP-1.2.0
+ * @since 1.2.0
  */
 
 /**
@@ -20,7 +20,7 @@
  * The process to get the locale should only be done once, but the locale will
  * always be filtered using the {@see 'locale'} hook.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global string $locale
  * @global string $wp_local_package
@@ -34,7 +34,7 @@ function get_locale() {
 		/**
 		 * Filters the locale ID of the ClassicPress installation.
 		 *
-		 * @since WP-1.5.0
+		 * @since 1.5.0
 		 *
 		 * @param string $locale The locale ID.
 		 */
@@ -86,7 +86,7 @@ function get_locale() {
  * If the user has a locale set to a non-empty string then it will be
  * returned. Otherwise it returns the locale of get_locale().
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @param int|WP_User $user_id User's ID or a WP_User object. Defaults to current user.
  * @return string The locale of the user.
@@ -116,7 +116,7 @@ function get_user_locale( $user_id = 0 ) {
  *
  * *Note:* Don't use translate() directly, use __() or related functions.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -130,7 +130,7 @@ function translate( $text, $domain = 'default' ) {
 	/**
 	 * Filters text with its translation.
 	 *
-	 * @since WP-2.0.11
+	 * @since 2.0.11
 	 *
 	 * @param string $translation  Translated text.
 	 * @param string $text         Text to translate.
@@ -145,7 +145,7 @@ function translate( $text, $domain = 'default' ) {
  * Meant for removing the last item in a string, such as 'Role name|User role'. The original
  * string will be returned if no pipe '|' characters are found in the string.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $string A pipe-delimited string.
  * @return string Either $string or everything before the last pipe.
@@ -167,7 +167,7 @@ function before_last_bar( $string ) {
  *
  * *Note:* Don't use translate_with_gettext_context() directly, use _x() or related functions.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text    Text to translate.
  * @param string $context Context information for the translators.
@@ -181,7 +181,7 @@ function translate_with_gettext_context( $text, $context, $domain = 'default' ) 
 	/**
 	 * Filters text with its translation based on context information.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param string $translation  Translated text.
 	 * @param string $text         Text to translate.
@@ -196,7 +196,7 @@ function translate_with_gettext_context( $text, $context, $domain = 'default' ) 
  *
  * If there is no translation, or the text domain isn't loaded, the original text is returned.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -212,7 +212,7 @@ function __( $text, $domain = 'default' ) {
  *
  * If there is no translation, or the text domain isn't loaded, the original text is returned.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -229,7 +229,7 @@ function esc_attr__( $text, $domain = 'default' ) {
  * If there is no translation, or the text domain isn't loaded, the original text
  * is escaped and returned..
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -243,7 +243,7 @@ function esc_html__( $text, $domain = 'default' ) {
 /**
  * Display translated text.
  *
- * @since WP-1.2.0
+ * @since 1.2.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -256,7 +256,7 @@ function _e( $text, $domain = 'default' ) {
 /**
  * Display translated text that has been escaped for safe use in an attribute.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -269,7 +269,7 @@ function esc_attr_e( $text, $domain = 'default' ) {
 /**
  * Display translated text that has been escaped for safe use in HTML output.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text   Text to translate.
  * @param string $domain Optional. Text domain. Unique identifier for retrieving translated strings.
@@ -288,7 +288,7 @@ function esc_html_e( $text, $domain = 'default' ) {
  * By including the context in the pot file, translators can translate the two
  * strings differently.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text    Text to translate.
  * @param string $context Context information for the translators.
@@ -303,7 +303,7 @@ function _x( $text, $context, $domain = 'default' ) {
 /**
  * Display translated string with gettext context.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $text    Text to translate.
  * @param string $context Context information for the translators.
@@ -318,7 +318,7 @@ function _ex( $text, $context, $domain = 'default' ) {
 /**
  * Translate string with gettext context, and escapes it for safe use in an attribute.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $text    Text to translate.
  * @param string $context Context information for the translators.
@@ -333,7 +333,7 @@ function esc_attr_x( $text, $context, $domain = 'default' ) {
 /**
  * Translate string with gettext context, and escapes it for safe use in HTML output.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param string $text    Text to translate.
  * @param string $context Context information for the translators.
@@ -355,7 +355,7 @@ function esc_html_x( $text, $context, $domain = 'default' ) {
  *
  *     printf( _n( '%s person', '%s people', $count, 'text-domain' ), number_format_i18n( $count ) );
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $single The text to be used if the number is singular.
  * @param string $plural The text to be used if the number is plural.
@@ -371,7 +371,7 @@ function _n( $single, $plural, $number, $domain = 'default' ) {
 	/**
 	 * Filters the singular or plural form of a string.
 	 *
-	 * @since WP-2.2.0
+	 * @since 2.2.0
 	 *
 	 * @param string $translation Translated text.
 	 * @param string $single      The text to be used if the number is singular.
@@ -395,7 +395,7 @@ function _n( $single, $plural, $number, $domain = 'default' ) {
  *     printf( _nx( '%s group', '%s groups', $people, 'group of people', 'text-domain' ), number_format_i18n( $people ) );
  *     printf( _nx( '%s group', '%s groups', $animals, 'group of animals', 'text-domain' ), number_format_i18n( $animals ) );
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $single  The text to be used if the number is singular.
  * @param string $plural  The text to be used if the number is plural.
@@ -412,7 +412,7 @@ function _nx( $single, $plural, $number, $context, $domain = 'default' ) {
 	/**
 	 * Filters the singular or plural form of a string with gettext context.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param string $translation Translated text.
 	 * @param string $single      The text to be used if the number is singular.
@@ -436,7 +436,7 @@ function _nx( $single, $plural, $number, $context, $domain = 'default' ) {
  *     ...
  *     printf( translate_nooped_plural( $message, $count, 'text-domain' ), number_format_i18n( $count ) );
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $singular Singular form to be localized.
  * @param string $plural   Plural form to be localized.
@@ -480,7 +480,7 @@ function _n_noop( $singular, $plural, $domain = null ) {
  *     $message = $messages[ $type ];
  *     printf( translate_nooped_plural( $message, $count, 'text-domain' ), number_format_i18n( $count ) );
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $singular Singular form to be localized.
  * @param string $plural   Plural form to be localized.
@@ -523,7 +523,7 @@ function _nx_noop( $singular, $plural, $context, $domain = null ) {
  *     ...
  *     printf( translate_nooped_plural( $message, $count, 'text-domain' ), number_format_i18n( $count ) );
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @param array  $nooped_plural Array with singular, plural, and context keys, usually the result of _n_noop() or _nx_noop().
  * @param int    $count         Number of objects.
@@ -552,7 +552,7 @@ function translate_nooped_plural( $nooped_plural, $count, $domain = 'default' ) 
  * On success, the .mo file will be placed in the $l10n global by $domain
  * and will be a MO object.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global array $l10n          An array of all currently loaded text domains.
  * @global array $l10n_unloaded An array of all text domains that have been unloaded again.
@@ -569,7 +569,7 @@ function load_textdomain( $domain, $mofile ) {
 	/**
 	 * Filters whether to override the .mo file loading.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param bool   $override Whether to override the .mo file loading. Default false.
 	 * @param string $domain   Text domain. Unique identifier for retrieving translated strings.
@@ -586,7 +586,7 @@ function load_textdomain( $domain, $mofile ) {
 	/**
 	 * Fires before the MO translation file is loaded.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param string $domain Text domain. Unique identifier for retrieving translated strings.
 	 * @param string $mofile Path to the .mo file.
@@ -596,7 +596,7 @@ function load_textdomain( $domain, $mofile ) {
 	/**
 	 * Filters MO file path for loading translations for a specific text domain.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param string $mofile Path to the MO file.
 	 * @param string $domain Text domain. Unique identifier for retrieving translated strings.
@@ -626,7 +626,7 @@ function load_textdomain( $domain, $mofile ) {
 /**
  * Unload translations for a text domain.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $l10n          An array of all currently loaded text domains.
  * @global array $l10n_unloaded An array of all text domains that have been unloaded again.
@@ -642,7 +642,7 @@ function unload_textdomain( $domain ) {
 	/**
 	 * Filters whether to override the text domain unloading.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param bool   $override Whether to override the text domain unloading. Default false.
 	 * @param string $domain   Text domain. Unique identifier for retrieving translated strings.
@@ -658,7 +658,7 @@ function unload_textdomain( $domain ) {
 	/**
 	 * Fires before the text domain is unloaded.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $domain Text domain. Unique identifier for retrieving translated strings.
 	 */
@@ -683,7 +683,7 @@ function unload_textdomain( $domain ) {
  *
  * @see load_textdomain()
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @param string $locale Optional. Locale to load. Default is the value of get_locale().
  * @return bool Whether the textdomain was loaded.
@@ -721,8 +721,8 @@ function load_default_textdomain( $locale = null ) {
  *
  * The .mo file should be named based on the text domain with a dash, and then the locale exactly.
  *
- * @since WP-1.5.0
- * @since WP-4.6.0 The function now tries to load the .mo file from the languages directory first.
+ * @since 1.5.0
+ * @since 4.6.0 The function now tries to load the .mo file from the languages directory first.
  *
  * @param string $domain          Unique identifier for retrieving translated strings
  * @param string $deprecated      Optional. Use the $plugin_rel_path parameter instead. Default false.
@@ -734,7 +734,7 @@ function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path 
 	/**
 	 * Filters a plugin's locale.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $locale The plugin's current locale.
 	 * @param string $domain Text domain. Unique identifier for retrieving translated strings.
@@ -763,8 +763,8 @@ function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path 
 /**
  * Load the translated strings for a plugin residing in the mu-plugins directory.
  *
- * @since WP-3.0.0
- * @since WP-4.6.0 The function now tries to load the .mo file from the languages directory first.
+ * @since 3.0.0
+ * @since 4.6.0 The function now tries to load the .mo file from the languages directory first.
  *
  * @param string $domain             Text domain. Unique identifier for retrieving translated strings.
  * @param string $mu_plugin_rel_path Optional. Relative to `WPMU_PLUGIN_DIR` directory in which the .mo
@@ -795,8 +795,8 @@ function load_muplugin_textdomain( $domain, $mu_plugin_rel_path = '' ) {
  *
  * The .mo files must be named based on the locale exactly.
  *
- * @since WP-1.5.0
- * @since WP-4.6.0 The function now tries to load the .mo file from the languages directory first.
+ * @since 1.5.0
+ * @since 4.6.0 The function now tries to load the .mo file from the languages directory first.
  *
  * @param string $domain Text domain. Unique identifier for retrieving translated strings.
  * @param string $path   Optional. Path to the directory containing the .mo file.
@@ -807,7 +807,7 @@ function load_theme_textdomain( $domain, $path = false ) {
 	/**
 	 * Filters a theme's locale.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $locale The theme's current locale.
 	 * @param string $domain Text domain. Unique identifier for retrieving translated strings.
@@ -836,7 +836,7 @@ function load_theme_textdomain( $domain, $path = false ) {
  *
  * The .mo files must be named based on the locale exactly.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param string $domain Text domain. Unique identifier for retrieving translated strings.
  * @param string $path   Optional. Path to the directory containing the .mo file.
@@ -857,7 +857,7 @@ function load_child_theme_textdomain( $domain, $path = false ) {
  * the translation file from `wp-content/languages`, removing the need
  * to call load_plugin_texdomain() or load_theme_texdomain().
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  * @access private
  *
  * @see get_translations_for_domain()
@@ -889,7 +889,7 @@ function _load_textdomain_just_in_time( $domain ) {
  *
  * Caches the retrieved results internally.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  * @access private
  *
  * @see _load_textdomain_just_in_time()
@@ -917,7 +917,7 @@ function _get_path_to_translation( $domain, $reset = false ) {
  *
  * Holds a cached list of available .mo files to improve performance.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  * @access private
  *
  * @see _get_path_to_translation()
@@ -965,7 +965,7 @@ function _get_path_to_translation_from_lang_dir( $domain ) {
  *
  * If there isn't one, returns empty Translations instance.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @global array $l10n
  *
@@ -989,7 +989,7 @@ function get_translations_for_domain( $domain ) {
 /**
  * Whether there are translations for the text domain.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global array $l10n
  *
@@ -1013,7 +1013,7 @@ function is_textdomain_loaded( $domain ) {
  * content after the last bar is easier than fixing them in the DB. New installations
  * won't suffer from that problem.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param string $name The role name.
  * @return string Translated role name on success, original name on failure.
@@ -1027,8 +1027,8 @@ function translate_user_role( $name ) {
  *
  * The default directory is WP_LANG_DIR.
  *
- * @since WP-3.0.0
- * @since WP-4.7.0 The results are now filterable with the {@see 'get_available_languages'} filter.
+ * @since 3.0.0
+ * @since 4.7.0 The results are now filterable with the {@see 'get_available_languages'} filter.
  *
  * @param string $dir A directory to search for language files.
  *                    Default WP_LANG_DIR.
@@ -1051,7 +1051,7 @@ function get_available_languages( $dir = null ) {
 	/**
 	 * Filters the list of available language codes.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array  $languages An array of available language codes.
 	 * @param string $dir       The directory where the language files were found.
@@ -1065,7 +1065,7 @@ function get_available_languages( $dir = null ) {
  * Looks in the wp-content/languages directory for translations of
  * plugins or themes.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param string $type What to search for. Accepts 'plugins', 'themes', 'core'.
  * @return array Array of language data.
@@ -1118,7 +1118,7 @@ function wp_get_installed_translations( $type ) {
 /**
  * Extract headers from a PO file.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param string $po_file Path to PO file.
  * @return array PO file headers.
@@ -1143,9 +1143,9 @@ function wp_get_pomo_file_data( $po_file ) {
 /**
  * Language selector.
  *
- * @since WP-4.0.0
- * @since WP-4.3.0 Introduced the `echo` argument.
- * @since WP-4.7.0 Introduced the `show_option_site_default` argument.
+ * @since 4.0.0
+ * @since 4.3.0 Introduced the `echo` argument.
+ * @since 4.7.0 Introduced the `show_option_site_default` argument.
  *
  * @see get_available_languages()
  * @see wp_get_available_translations()
@@ -1293,7 +1293,7 @@ function wp_dropdown_languages( $args = array() ) {
 /**
  * Checks if current locale is RTL.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global WP_Locale $wp_locale
  *
@@ -1310,7 +1310,7 @@ function is_rtl() {
 /**
  * Switches the translations according to the given locale.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @global WP_Locale_Switcher $wp_locale_switcher
  *
@@ -1327,7 +1327,7 @@ function switch_to_locale( $locale ) {
 /**
  * Restores the translations according to the previous locale.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @global WP_Locale_Switcher $wp_locale_switcher
  *
@@ -1343,7 +1343,7 @@ function restore_previous_locale() {
 /**
  * Restores the translations according to the original locale.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @global WP_Locale_Switcher $wp_locale_switcher
  *
@@ -1359,7 +1359,7 @@ function restore_current_locale() {
 /**
  * Whether switch_to_locale() is in effect.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @global WP_Locale_Switcher $wp_locale_switcher
  *

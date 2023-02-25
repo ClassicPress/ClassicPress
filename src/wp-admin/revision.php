@@ -6,7 +6,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int    revision Optional. The revision ID.
  * @param string action   The action to take.

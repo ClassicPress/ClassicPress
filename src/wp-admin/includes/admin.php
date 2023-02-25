@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-2.3.0
+ * @since 2.3.0
  */
 
 if ( ! defined( 'WP_ADMIN' ) ) {

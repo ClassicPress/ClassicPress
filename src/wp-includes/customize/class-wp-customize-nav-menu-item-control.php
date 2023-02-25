@@ -4,20 +4,20 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize control to represent the name field for a given menu.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  */
 class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var string
 	 */
 	public $type = 'nav_menu_item';
@@ -25,7 +25,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * The nav menu item setting.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var WP_Customize_Nav_Menu_Item_Setting
 	 */
 	public $setting;
@@ -33,7 +33,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @see WP_Customize_Control::__construct()
 	 *
@@ -48,14 +48,14 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Don't render the control's content - it's rendered with a JS template.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 */
 	public function render_content() {}
 
 	/**
 	 * JS/Underscore template for the control UI.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 */
 	public function content_template() {
 		?>
@@ -153,7 +153,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Return parameters for this control.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @return array Exported parameters.
 	 */

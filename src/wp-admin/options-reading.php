@@ -165,7 +165,7 @@ else :
 	 * Hooking to this action also converts the 'Search Engine Visibility' heading to the more
 	 * open-ended 'Site Visibility' heading.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 */
 	do_action( 'blog_privacy_selector' );
 	?>

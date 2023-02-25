@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 require_once dirname( __FILE__ ) . '/admin.php';
@@ -87,7 +87,7 @@ else :
 	/**
 	 * Fires before the sites list on the My Sites screen.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 */
 	do_action( 'myblogs_allblogs_options' );
 	?>
@@ -101,7 +101,7 @@ else :
 	 * string to this filter will enable the section, and allow new settings
 	 * to be added, either globally or for specific sites.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param string $settings_html The settings HTML markup. Default empty.
 	 * @param object $context       Context of the setting (global or site-specific). Default 'global'.
@@ -128,7 +128,7 @@ else :
 		/**
 		 * Filters the row links displayed for each site on the My Sites screen.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param string $actions   The HTML site link markup.
 		 * @param object $user_blog An object containing the site data.

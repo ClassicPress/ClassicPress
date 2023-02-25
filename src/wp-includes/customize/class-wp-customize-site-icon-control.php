@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * Used only for custom functionality in JavaScript.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * @see WP_Customize_Cropped_Image_Control
  */
@@ -21,7 +21,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var string
 	 */
 	public $type = 'site_icon';
@@ -29,7 +29,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param WP_Customize_Manager $manager Customizer bootstrap instance.
 	 * @param string               $id      Control ID.
@@ -43,7 +43,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	/**
 	 * Renders a JS template for the content of the site icon control.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 */
 	public function content_template() {
 		?>

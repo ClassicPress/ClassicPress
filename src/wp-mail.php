@@ -24,7 +24,7 @@ if ( 'mail.example.com' === $mailserver_url || empty( $mailserver_url ) ) {
 /**
  * Fires to allow a plugin to do a complete takeover of Post by Email.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  */
 do_action( 'wp-mail.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
@@ -182,7 +182,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 	 * Give Post-By-Email extending plugins full access to the content, either
 	 * the raw content, or the content of the last quoted-printable section.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @param string $content The original email content.
 	 */
@@ -205,7 +205,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 	/**
 	 * Filters the content of the post submitted by email before saving.
 	 *
-	 * @since WP-1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param string $content The email content.
 	 */
@@ -235,7 +235,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 	/**
 	 * Fires after a post submitted by email is published.
 	 *
-	 * @since WP-1.2.0
+	 * @since 1.2.0
 	 *
 	 * @param int $post_ID The post ID.
 	 */

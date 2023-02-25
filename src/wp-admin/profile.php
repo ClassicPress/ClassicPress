@@ -9,7 +9,7 @@
 /**
  * This is a profile page.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  * @var bool
  */
 define( 'IS_PROFILE_PAGE', true );

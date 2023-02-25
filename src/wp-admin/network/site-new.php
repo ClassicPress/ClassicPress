@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /** Load ClassicPress Administration Bootstrap */
@@ -108,7 +108,7 @@ if ( isset( $_REQUEST['action'] ) && 'add-site' === $_REQUEST['action'] ) {
 		/**
 		 * Fires immediately before a new user is created via the network site-new.php page.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
 		 *
 		 * @param string $email Email of the non-existent user.
 		 */
@@ -127,7 +127,7 @@ if ( isset( $_REQUEST['action'] ) && 'add-site' === $_REQUEST['action'] ) {
 		/**
 		  * Fires after a new user has been created via the network site-new.php page.
 		  *
-		  * @since WP-4.4.0
+		  * @since 4.4.0
 		  *
 		  * @param int $user_id ID of the newly created user.
 		  */
@@ -290,7 +290,7 @@ printf(
 	/**
 	 * Fires at the end of the new site form in network admin.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 */
 	do_action( 'network_site_new_form' );
 

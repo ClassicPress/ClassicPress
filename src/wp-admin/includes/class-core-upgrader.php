@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
@@ -13,8 +13,8 @@
  * It allows for ClassicPress to upgrade itself in combination with
  * the wp-admin/includes/update-core.php file.
  *
- * @since WP-2.8.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
+ * @since 2.8.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader.php.
  *
  * @see WP_Upgrader
  */
@@ -23,7 +23,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Initialize the upgrade strings.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __( 'ClassicPress is at the latest version.' );
@@ -94,7 +94,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Upgrade ClassicPress core.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 * @global callable           $_wp_filesystem_direct_method
@@ -278,7 +278,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * Determines if the current ClassicPress Core version should update to an
 	 * offered version or not.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 *
 	 * @param string $offered_ver The offered version, of the format x.y.z.
 	 * @return bool True if we should update to the offered version, otherwise false.
@@ -451,7 +451,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * ClassicPress may contain breaking changes.
 			 * @see https://semver.org/
 			 *
-			 * @since WP-3.7.0
+			 * @since 3.7.0
 			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
@@ -476,7 +476,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * Filters whether to enable automatic core updates to a newer
 			 * semver minor release.
 			 *
-			 * @since WP-3.7.0
+			 * @since 3.7.0
 			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
@@ -529,7 +529,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * and the offered version is a newer pre-release of the same
 			 * semver version, or the final release of the same semver version.
 			 *
-			 * @since WP-3.7.0
+			 * @since 3.7.0
 			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
@@ -608,7 +608,7 @@ class Core_Upgrader extends WP_Upgrader {
 	/**
 	 * Compare the disk file checksums against the expected checksums.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 * @since CP-1.3.0 Correctly uses the checksums for the current ClassicPress
 	 * version, not the equivalent WordPress version. This function is no
 	 * longer used during the core update process.

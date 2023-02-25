@@ -65,7 +65,7 @@ wp_enqueue_script( 'updates' );
  * The dynamic portion of the action hook, `$tab`, allows for targeting
  * individual tabs, for instance 'install_plugins_pre_plugin-information'.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  */
 do_action( "install_plugins_pre_{$tab}" );
 
@@ -163,7 +163,7 @@ if ( 'upload' !== $tab ) {
  * The dynamic portion of the action hook, `$tab`, allows for targeting
  * individual tabs, for instance 'install_plugins_plugin-information'.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @param int $paged The current page number of the plugins list table.
  */

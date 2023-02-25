@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core class used to implement displaying post comments in a list table.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @see WP_Comments_List_Table

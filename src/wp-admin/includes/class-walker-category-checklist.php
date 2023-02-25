@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Core walker class to output an unordered list of category checkbox input elements.
  *
- * @since WP-2.5.1
+ * @since 2.5.1
  *
  * @see Walker
  * @see wp_category_checklist()
@@ -30,7 +30,7 @@ class Walker_Category_Checklist extends Walker {
 	 *
 	 * @see Walker:start_lvl()
 	 *
-	 * @since WP-2.5.1
+	 * @since 2.5.1
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
 	 * @param int    $depth  Depth of category. Used for tab indentation.
@@ -46,7 +46,7 @@ class Walker_Category_Checklist extends Walker {
 	 *
 	 * @see Walker::end_lvl()
 	 *
-	 * @since WP-2.5.1
+	 * @since 2.5.1
 	 *
 	 * @param string $output Used to append additional content (passed by reference).
 	 * @param int    $depth  Depth of category. Used for tab indentation.
@@ -62,7 +62,7 @@ class Walker_Category_Checklist extends Walker {
 	 *
 	 * @see Walker::start_el()
 	 *
-	 * @since WP-2.5.1
+	 * @since 2.5.1
 	 *
 	 * @param string $output   Used to append additional content (passed by reference).
 	 * @param object $category The current term object.
@@ -121,7 +121,7 @@ class Walker_Category_Checklist extends Walker {
 	 *
 	 * @see Walker::end_el()
 	 *
-	 * @since WP-2.5.1
+	 * @since 2.5.1
 	 *
 	 * @param string $output   Used to append additional content (passed by reference).
 	 * @param object $category The current term object.

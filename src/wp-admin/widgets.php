@@ -42,7 +42,7 @@ if ( 'on' == $widgets_access ) {
  * Fires early before the Widgets administration screen loads,
  * after scripts are enqueued.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  */
 do_action( 'sidebar_admin_setup' );
 
@@ -176,7 +176,7 @@ if ( isset( $_POST['savewidget'] ) || isset( $_POST['removewidget'] ) ) {
 		/**
 		 * Fires immediately after a widget has been marked for deletion.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param string $widget_id  ID of the widget marked for deletion.
 		 * @param string $sidebar_id ID of the sidebar the widget was deleted from.
@@ -420,7 +420,7 @@ $nonce = wp_create_nonce( 'widgets-access' );
 /**
  * Fires before the Widgets administration page content loads.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 do_action( 'widgets_admin_page' );
 ?>
@@ -564,7 +564,7 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 /**
  * Fires after the available widgets and sidebars have loaded, before the admin footer.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  */
 do_action( 'sidebar_admin_page' );
 require_once ABSPATH . 'wp-admin/admin-footer.php';

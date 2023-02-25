@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.8.0
+ * @since 4.8.0
  */
 
 /**
  * Core class that implements a video widget.
  *
- * @since WP-4.8.0
+ * @since 4.8.0
  *
  * @see WP_Widget
  */
@@ -151,7 +151,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Inject max-width and remove height for videos too constrained to fit inside sidebars on frontend.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @param string $html Video shortcode HTML output.
 	 * @return string HTML Output.
@@ -171,7 +171,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	 * selective refresh, and so it is important to unconditionally enqueue them in
 	 * case a widget does get added.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function enqueue_preview_scripts() {
 		/** This filter is documented in wp-includes/media.php */
@@ -185,7 +185,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Loads the required scripts and styles for the widget control.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function enqueue_admin_scripts() {
 		parent::enqueue_admin_scripts();
@@ -223,7 +223,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Render form template scripts.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 */
 	public function render_control_template_scripts() {
 		parent::render_control_template_scripts()

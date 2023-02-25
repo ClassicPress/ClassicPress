@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Nav_Menus
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 /** Walker_Nav_Menu class */
@@ -13,8 +13,8 @@ require_once ABSPATH . WPINC . '/class-walker-nav-menu.php';
 /**
  * Displays a navigation menu.
  *
- * @since WP-3.0.0
- * @since WP-4.7.0 Added the `item_spacing` argument.
+ * @since 3.0.0
+ * @since 4.7.0 Added the `item_spacing` argument.
  *
  * @staticvar array $menu_id_slugs
  *
@@ -78,7 +78,7 @@ function wp_nav_menu( $args = array() ) {
 	/**
 	 * Filters the arguments used to display a navigation menu.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see wp_nav_menu()
 	 *
@@ -94,7 +94,7 @@ function wp_nav_menu( $args = array() ) {
 	 * wp_nav_menu(), echoing that value if $args->echo is true,
 	 * returning that value otherwise.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 *
 	 * @see wp_nav_menu()
 	 *
@@ -167,7 +167,7 @@ function wp_nav_menu( $args = array() ) {
 		/**
 		 * Filters the list of HTML tags that are valid for use as menu containers.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param array $tags The acceptable HTML tags for use as menu containers.
 		 *                    Default is array containing 'div' and 'nav'.
@@ -208,7 +208,7 @@ function wp_nav_menu( $args = array() ) {
 	/**
 	 * Filters the sorted list of menu item objects before generating the menu's HTML.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param array    $sorted_menu_items The menu items, sorted by each menu item's menu order.
 	 * @param stdClass $args              An object containing wp_nav_menu() arguments.
@@ -239,7 +239,7 @@ function wp_nav_menu( $args = array() ) {
 	/**
 	 * Filters the HTML list content for navigation menus.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see wp_nav_menu()
 	 *
@@ -250,7 +250,7 @@ function wp_nav_menu( $args = array() ) {
 	/**
 	 * Filters the HTML list content for a specific navigation menu.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see wp_nav_menu()
 	 *
@@ -274,7 +274,7 @@ function wp_nav_menu( $args = array() ) {
 	/**
 	 * Filters the HTML content for navigation menus.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @see wp_nav_menu()
 	 *
@@ -294,7 +294,7 @@ function wp_nav_menu( $args = array() ) {
  * Add the class property classes for the current context, if applicable.
  *
  * @access private
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global WP_Query   $wp_query
  * @global WP_Rewrite $wp_rewrite
@@ -578,7 +578,7 @@ function _wp_menu_item_classes_by_context( &$menu_items ) {
  * Retrieve the HTML list content for nav menu items.
  *
  * @uses Walker_Nav_Menu to create HTML list content.
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array    $items The menu items, sorted by each menu item's menu order.
  * @param int      $depth Depth of the item in reference to parents.
@@ -595,7 +595,7 @@ function walk_nav_menu_tree( $items, $depth, $r ) {
 /**
  * Prevents a menu item ID from being used more than once.
  *
- * @since WP-3.0.1
+ * @since 3.0.1
  * @access private
  *
  * @staticvar array $used_ids

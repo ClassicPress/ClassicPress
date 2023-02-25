@@ -13,7 +13,7 @@
 /**
  * Add metadata for the specified object.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -60,7 +60,7 @@ function add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $unique =
 	 * object type (comment, post, term, or user). Returning a non-null value
 	 * will effectively short-circuit the function.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param null|bool $check      Whether to allow adding metadata for the given type.
 	 * @param int       $object_id  Object ID.
@@ -93,7 +93,7 @@ function add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $unique =
 	 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 	 * object type (comment, post, term, or user).
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param int    $object_id  Object ID.
 	 * @param string $meta_key   Meta key.
@@ -124,7 +124,7 @@ function add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $unique =
 	 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 	 * object type (comment, post, term, or user).
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param int    $mid        The meta ID after successful update.
 	 * @param int    $object_id  Object ID.
@@ -140,7 +140,7 @@ function add_metadata( $meta_type, $object_id, $meta_key, $meta_value, $unique =
  * Update metadata for the specified object. If no value already exists for the specified object
  * ID and metadata key, the metadata will be added.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -188,7 +188,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 	 * object type (comment, post, term, or user). Returning a non-null value
 	 * will effectively short-circuit the function.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param null|bool $check      Whether to allow updating metadata for the given type.
 	 * @param int       $object_id  Object ID.
@@ -239,7 +239,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 		 * object type (comment, post, term, or user).
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param int    $meta_id    ID of the metadata entry to update.
 		 * @param int    $object_id  Object ID.
@@ -252,7 +252,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 			/**
 			 * Fires immediately before updating a post's metadata.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param int    $meta_id    ID of metadata entry to update.
 			 * @param int    $object_id  Object ID.
@@ -277,7 +277,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 		 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 		 * object type (comment, post, term, or user).
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param int    $meta_id    ID of updated metadata entry.
 		 * @param int    $object_id  Object ID.
@@ -290,7 +290,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 			/**
 			 * Fires immediately after updating a post's metadata.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param int    $meta_id    ID of updated metadata entry.
 			 * @param int    $object_id  Object ID.
@@ -307,7 +307,7 @@ function update_metadata( $meta_type, $object_id, $meta_key, $meta_value, $prev_
 /**
  * Delete metadata for the specified object.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -355,7 +355,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	 * object type (comment, post, term, or user). Returning a non-null value
 	 * will effectively short-circuit the function.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param null|bool $delete     Whether to allow metadata deletion of the given type.
 	 * @param int       $object_id  Object ID.
@@ -402,7 +402,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 	 * object type (comment, post, term, or user).
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param array  $meta_ids   An array of metadata entry IDs to delete.
 	 * @param int    $object_id  Object ID.
@@ -416,7 +416,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 		/**
 		 * Fires immediately before deleting metadata for a post.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param array $meta_ids An array of post metadata entry IDs to delete.
 		 */
@@ -445,7 +445,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 	 * The dynamic portion of the hook name, `$meta_type`, refers to the meta
 	 * object type (comment, post, term, or user).
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param array  $meta_ids   An array of deleted metadata entry IDs.
 	 * @param int    $object_id  Object ID.
@@ -459,7 +459,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 		/**
 		 * Fires immediately after deleting metadata for a post.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @param array $meta_ids An array of deleted post metadata entry IDs.
 		 */
@@ -472,7 +472,7 @@ function delete_metadata( $meta_type, $object_id, $meta_key, $meta_value = '', $
 /**
  * Retrieve metadata for the specified object.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @param string $meta_type Type of object metadata is for (e.g., comment, post, term, or user).
  * @param int    $object_id ID of the object metadata is for
@@ -500,7 +500,7 @@ function get_metadata( $meta_type, $object_id, $meta_key = '', $single = false )
 	 * object type (comment, post, term, or user). Returning a non-null value
 	 * will effectively short-circuit the function.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param null|array|string $value     The value get_metadata() should return - a single metadata value,
 	 *                                     or an array of values.
@@ -550,7 +550,7 @@ function get_metadata( $meta_type, $object_id, $meta_key = '', $single = false )
 /**
  * Determine if a meta key is set for a given object
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @param string $meta_type Type of object metadata is for (e.g., comment, post, term, or user).
  * @param int    $object_id ID of the object metadata is for
@@ -590,7 +590,7 @@ function metadata_exists( $meta_type, $object_id, $meta_key ) {
 /**
  * Get meta data by meta ID
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -633,7 +633,7 @@ function get_metadata_by_mid( $meta_type, $meta_id ) {
 /**
  * Update meta data by meta ID
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -730,7 +730,7 @@ function update_metadata_by_mid( $meta_type, $meta_id, $meta_value, $meta_key = 
 /**
  * Delete meta data by meta ID
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -776,7 +776,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 			 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 			 * object type (post or comment).
 			 *
-			 * @since WP-3.4.0
+			 * @since 3.4.0
 			 *
 			 * @param int $meta_id ID of the metadata entry to delete.
 			 */
@@ -800,7 +800,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 			 * The dynamic portion of the hook, `$meta_type`, refers to the meta
 			 * object type (post or comment).
 			 *
-			 * @since WP-3.4.0
+			 * @since 3.4.0
 			 *
 			 * @param int $meta_ids Deleted metadata entry ID.
 			 */
@@ -818,7 +818,7 @@ function delete_metadata_by_mid( $meta_type, $meta_id ) {
 /**
  * Update the metadata cache for the specified objects.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -902,7 +902,7 @@ function update_meta_cache( $meta_type, $object_ids ) {
 /**
  * Retrieves the queue for lazy-loading metadata.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  *
  * @return WP_Metadata_Lazyloader $lazyloader Metadata lazyloader queue.
  */
@@ -919,7 +919,7 @@ function wp_metadata_lazyloader() {
 /**
  * Given a meta query, generates SQL clauses to be appended to a main query.
  *
- * @since WP-3.2.0
+ * @since 3.2.0
  *
  * @see WP_Meta_Query
  *
@@ -938,7 +938,7 @@ function get_meta_sql( $meta_query, $type, $primary_table, $primary_id_column, $
 /**
  * Retrieve the name of the metadata table for the specified object type.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -960,7 +960,7 @@ function _get_meta_table( $type ) {
 /**
  * Determine whether a meta key is protected.
  *
- * @since WP-3.1.3
+ * @since 3.1.3
  *
  * @param string      $meta_key  Meta key
  * @param string|null $meta_type Optional. Type of object metadata is for (e.g., comment, post,
@@ -974,7 +974,7 @@ function is_protected_meta( $meta_key, $meta_type = '' ) {
 	/**
 	 * Filters whether a meta key is protected.
 	 *
-	 * @since WP-3.2.0
+	 * @since 3.2.0
 	 *
 	 * @param bool   $protected Whether the key is protected. Default false.
 	 * @param string $meta_key  Meta key.
@@ -986,8 +986,8 @@ function is_protected_meta( $meta_key, $meta_type = '' ) {
 /**
  * Sanitize meta value.
  *
- * @since WP-3.1.3
- * @since WP-4.9.8 The `$object_subtype` parameter was added.
+ * @since 3.1.3
+ * @since 4.9.8 The `$object_subtype` parameter was added.
  *
  * @param string $meta_key       Meta key.
  * @param mixed  $meta_value     Meta value to sanitize.
@@ -1005,7 +1005,7 @@ function sanitize_meta( $meta_key, $meta_value, $object_type, $object_subtype = 
 		 * and `$object_subtype`, refer to the metadata object type (comment, post, term or user),
 		 * the meta key value, and the object subtype respectively.
 		 *
-		 * @since WP-4.9.8
+		 * @since 4.9.8
 		 *
 		 * @param mixed  $meta_value     Meta value to sanitize.
 		 * @param string $meta_key       Meta key.
@@ -1022,7 +1022,7 @@ function sanitize_meta( $meta_key, $meta_value, $object_type, $object_subtype = 
 	 * refer to the metadata object type (comment, post, term, or user) and the meta
 	 * key value, respectively.
 	 *
-	 * @since WP-3.3.0
+	 * @since 3.3.0
 	 *
 	 * @param mixed  $meta_value      Meta value to sanitize.
 	 * @param string $meta_key        Meta key.
@@ -1041,11 +1041,11 @@ function sanitize_meta( $meta_key, $meta_value, $object_type, $object_subtype = 
  * If an object type does not support any subtypes, such as users or comments, you should commonly call this function
  * without passing a subtype.
  *
- * @since WP-3.3.0
- * @since WP-4.6.0 {@link https://core.trac.wordpress.org/ticket/35658 Modified
+ * @since 3.3.0
+ * @since 4.6.0 {@link https://core.trac.wordpress.org/ticket/35658 Modified
  *              to support an array of data to attach to registered meta keys}. Previous arguments for
  *              `$sanitize_callback` and `$auth_callback` have been folded into this array.
- * @since WP-4.9.8 The `$object_subtype` argument was added to the arguments array.
+ * @since 4.9.8 The `$object_subtype` argument was added to the arguments array.
  *
  * @param string $object_type    Type of object this meta is registered to.
  * @param string $meta_key       Meta key to register.
@@ -1107,7 +1107,7 @@ function register_meta( $object_type, $meta_key, $args, $deprecated = null ) {
 	/**
 	 * Filters the registration arguments when registering meta.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param array  $args        Array of meta registration arguments.
 	 * @param array  $defaults    Array of default arguments.
@@ -1160,8 +1160,8 @@ function register_meta( $object_type, $meta_key, $args, $deprecated = null ) {
 /**
  * Checks if a meta key is registered.
  *
- * @since WP-4.6.0
- * @since WP-4.9.8 The `$object_subtype` parameter was added.
+ * @since 4.6.0
+ * @since 4.9.8 The `$object_subtype` parameter was added.
  *
  * @param string $object_type    The type of object.
  * @param string $meta_key       The meta key.
@@ -1179,8 +1179,8 @@ function registered_meta_key_exists( $object_type, $meta_key, $object_subtype = 
 /**
  * Unregisters a meta key from the list of registered keys.
  *
- * @since WP-4.6.0
- * @since WP-4.9.8 The `$object_subtype` parameter was added.
+ * @since 4.6.0
+ * @since 4.9.8 The `$object_subtype` parameter was added.
  *
  * @param string $object_type    The type of object.
  * @param string $meta_key       The meta key.
@@ -1228,8 +1228,8 @@ function unregister_meta_key( $object_type, $meta_key, $object_subtype = '' ) {
 /**
  * Retrieves a list of registered meta keys for an object type.
  *
- * @since WP-4.6.0
- * @since WP-4.9.8 The `$object_subtype` parameter was added.
+ * @since 4.6.0
+ * @since 4.9.8 The `$object_subtype` parameter was added.
  *
  * @param string $object_type    The type of object. Post, comment, user, term.
  * @param string $object_subtype Optional. The subtype of the object type.
@@ -1251,7 +1251,7 @@ function get_registered_meta_keys( $object_type, $object_subtype = '' ) {
  * The results include both meta that is registered specifically for the
  * object's subtype and meta that is registered for the entire object type.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param string $object_type Type of object to request metadata for. (e.g. comment, post, term, user)
  * @param int    $object_id   ID of the object the metadata is for.
@@ -1299,7 +1299,7 @@ function get_registered_metadata( $object_type, $object_id, $meta_key = '' ) {
  * to be explicitly turned off is a warranty seal of sorts.
  *
  * @access private
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param array $args         Arguments from `register_meta()`.
  * @param array $default_args Default arguments for `register_meta()`.
@@ -1313,7 +1313,7 @@ function _wp_register_meta_args_whitelist( $args, $default_args ) {
 /**
  * Returns the object subtype for a given object ID of a specific type.
  *
- * @since WP-4.9.8
+ * @since 4.9.8
  *
  * @param string $object_type Type of object to request metadata for. (e.g. comment, post, term, user)
  * @param int    $object_id   ID of the object to retrieve its subtype.
@@ -1366,7 +1366,7 @@ function get_object_subtype( $object_type, $object_id ) {
 	 * The dynamic portion of the hook, `$object_type`, refers to the object
 	 * type (post, comment, term, or user).
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @param string $object_subtype Empty string to override.
 	 * @param int    $object_id      ID of the object to get the subtype for.

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 /** Load ClassicPress Administration Bootstrap */

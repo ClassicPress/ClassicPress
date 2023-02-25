@@ -56,7 +56,7 @@ if ( isset( $_GET['type'] ) ) {
 	/**
 	 * Filters the default media upload type in the legacy (pre-3.5.0) media popup.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $type The default media upload type. Possible values include
 	 *                     'image', 'audio', 'video', 'file', etc. Default 'file'.
@@ -71,7 +71,7 @@ if ( isset( $_GET['tab'] ) ) {
 	/**
 	 * Filters the default tab in the legacy (pre-3.5.0) media popup.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $type The default media popup tab. Default 'type' (From Computer).
 	 */
@@ -94,7 +94,7 @@ if ( $tab == 'type' || $tab == 'type_url' || ! array_key_exists( $tab, media_upl
 	 * 'type_url' (From URL), or, if the tab does not exist (i.e., has not
 	 * been registered via the {@see 'media_upload_tabs'} filter.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 */
 	do_action( "media_upload_{$type}" );
 } else {
@@ -106,7 +106,7 @@ if ( $tab == 'type' || $tab == 'type_url' || ! array_key_exists( $tab, media_upl
 	 * media upload tab. Possible values include 'library' (Media Library),
 	 * or any custom tab registered via the {@see 'media_upload_tabs'} filter.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 */
 	do_action( "media_upload_{$tab}" );
 }

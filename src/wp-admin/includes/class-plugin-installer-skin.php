@@ -4,14 +4,14 @@
  *
  * @package ClassicPress
  * @subpackage Upgrader
- * @since WP-4.6.0
+ * @since 4.6.0
  */
 
 /**
  * Plugin Installer Skin for ClassicPress Plugin Installer.
  *
- * @since WP-2.8.0
- * @since WP-4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
+ * @since 2.8.0
+ * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.
  *
  * @see WP_Upgrader_Skin
  */
@@ -57,7 +57,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Hides the `process_failed` error when updating a plugin by uploading a zip file.
 	 *
-	 * @since WP-5.5.0
+	 * @since 5.5.0
 	 *
 	 * @param $wp_error WP_Error.
 	 * @return bool
@@ -144,7 +144,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the list of action links available following a single plugin installation.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 *
 		 * @param array  $install_actions Array of plugin action links.
 		 * @param object $api             Object containing ClassicPress.net API plugin data. Empty
@@ -162,7 +162,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 	/**
 	 * Check if the plugin can be overwritten and output the HTML for overwriting a plugin on upload.
 	 *
-	 * @since WP-5.5.0
+	 * @since 5.5.0
 	 *
 	 * @return bool Whether the plugin can be overwritten and HTML was outputted.
 	 */
@@ -228,7 +228,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		/**
 		 * Filters the compare table output for overwrite a plugin package on upload.
 		 *
-		 * @since WP-5.5.0
+		 * @since 5.5.0
 		 *
 		 * @param string   $table                The output table with Name, Version, Author, RequiresWP and RequiresPHP info.
 		 * @param array    $current_plugin_data  Array with current plugin data.
@@ -309,7 +309,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		 * Filters the list of action links available following a single plugin installation
 		 * failure when overwriting is allowed.
 		 *
-		 * @since WP-5.5.0
+		 * @since 5.5.0
 		 *
 		 * @param string[] $install_actions Array of plugin action links.
 		 * @param object   $api             Object containing WordPress.org API plugin data.

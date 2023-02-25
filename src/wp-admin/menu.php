@@ -199,7 +199,7 @@ if ( ! is_multisite() ) {
  * Adds the (theme) 'Editor' link to the bottom of the Appearance menu.
  *
  * @access private
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 function _add_themes_utility_last() {
 	// Must use API on the admin_menu hook, direct modification is only possible on/before the _admin_menu hook

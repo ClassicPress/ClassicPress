@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize Media Control class.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  *
  * @see WP_Customize_Control
  */
@@ -18,7 +18,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var string
 	 */
 	public $type = 'media';
@@ -26,7 +26,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Media control mime type.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var string
 	 */
 	public $mime_type = '';
@@ -34,7 +34,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Button labels.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var array
 	 */
 	public $button_labels = array();
@@ -42,8 +42,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.1.0
-	 * @since WP-4.2.0 Moved from WP_Customize_Upload_Control.
+	 * @since 4.1.0
+	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 *
 	 * @param WP_Customize_Manager $manager Customizer bootstrap instance.
 	 * @param string               $id      Control ID.
@@ -58,8 +58,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Enqueue control related scripts/styles.
 	 *
-	 * @since WP-3.4.0
-	 * @since WP-4.2.0 Moved from WP_Customize_Upload_Control.
+	 * @since 3.4.0
+	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 */
 	public function enqueue() {
 		wp_enqueue_media();
@@ -68,8 +68,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-3.4.0
-	 * @since WP-4.2.0 Moved from WP_Customize_Upload_Control.
+	 * @since 3.4.0
+	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 *
 	 * @see WP_Customize_Control::to_json()
 	 */
@@ -118,8 +118,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Don't render any content for this control from PHP.
 	 *
-	 * @since WP-3.4.0
-	 * @since WP-4.2.0 Moved from WP_Customize_Upload_Control.
+	 * @since 3.4.0
+	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 *
 	 * @see WP_Customize_Media_Control::content_template()
 	 */
@@ -128,8 +128,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Render a JS template for the content of the media control.
 	 *
-	 * @since WP-4.1.0
-	 * @since WP-4.2.0 Moved from WP_Customize_Upload_Control.
+	 * @since 4.1.0
+	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 */
 	public function content_template() {
 		?>
@@ -211,7 +211,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	 *
 	 * Provides an array of the default button labels based on the mime type of the current control.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @return array An associative array of default button labels.
 	 */

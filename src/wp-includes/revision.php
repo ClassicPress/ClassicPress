@@ -9,9 +9,9 @@
 /**
  * Determines which fields of posts are to be saved in revisions.
  *
- * @since WP-2.6.0
- * @since WP-4.5.0 A `WP_Post` object can now be passed to the `$post` parameter.
- * @since WP-4.5.0 The optional `$autosave` parameter was deprecated and renamed to `$deprecated`.
+ * @since 2.6.0
+ * @since 4.5.0 A `WP_Post` object can now be passed to the `$post` parameter.
+ * @since 4.5.0 The optional `$autosave` parameter was deprecated and renamed to `$deprecated`.
  * @access private
  *
  * @staticvar array $fields
@@ -46,8 +46,8 @@ function _wp_post_revision_fields( $post = array(), $deprecated = false ) {
 	 * 'post_date_gmt', 'post_status', 'post_type', 'comment_count',
 	 * and 'post_author'.
 	 *
-	 * @since WP-2.6.0
-	 * @since WP-4.5.0 The `$post` parameter was added.
+	 * @since 2.6.0
+	 * @since 4.5.0 The `$post` parameter was added.
 	 *
 	 * @param array $fields List of fields to revision. Contains 'post_title',
 	 *                      'post_content', and 'post_excerpt' by default.
@@ -66,7 +66,7 @@ function _wp_post_revision_fields( $post = array(), $deprecated = false ) {
 /**
  * Returns a post array ready to be inserted into the posts table as a post revision.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  * @access private
  *
  * @param array|WP_Post $post     Optional. A post array or a WP_Post object to be processed
@@ -103,7 +103,7 @@ function _wp_post_revision_data( $post = array(), $autosave = false ) {
  * Typically used immediately after a post update, as every update is a revision,
  * and the most recent revision always matches the current post.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int $post_id The ID of the post to save as a revision.
  * @return int|WP_Error|void Void or 0 if error, new revision ID, if success.
@@ -149,7 +149,7 @@ function wp_save_post_revision( $post_id ) {
 		 * By default a revision is saved only if one of the revisioned fields has changed.
 		 * This filter can override that so a revision is saved even if nothing has changed.
 		 *
-		 * @since WP-3.6.0
+		 * @since 3.6.0
 		 *
 		 * @param bool    $check_for_changes Whether to check for changes before saving a new revision.
 		 *                                   Default true.
@@ -173,7 +173,7 @@ function wp_save_post_revision( $post_id ) {
 			 * By default a revision is saved only if one of the revisioned fields has changed.
 			 * This filter allows for additional checks to determine if there were changes.
 			 *
-			 * @since WP-4.1.0
+			 * @since 4.1.0
 			 *
 			 * @param bool    $post_has_changed Whether the post has changed.
 			 * @param WP_Post $last_revision    The last revision post object.
@@ -227,7 +227,7 @@ function wp_save_post_revision( $post_id ) {
  * specified post. If the optional $user_id is passed, returns the autosave for that user
  * otherwise returns the latest autosave.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int $post_id The post ID.
  * @param int $user_id Optional The post author ID.
@@ -252,7 +252,7 @@ function wp_get_post_autosave( $post_id, $user_id = 0 ) {
 /**
  * Determines if the specified post is a revision.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int|WP_Post $post Post ID or post object.
  * @return false|int False if not a revision, ID of revision's parent otherwise.
@@ -269,7 +269,7 @@ function wp_is_post_revision( $post ) {
 /**
  * Determines if the specified post is an autosave.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int|WP_Post $post Post ID or post object.
  * @return false|int False if not a revision, ID of autosave's parent otherwise
@@ -290,7 +290,7 @@ function wp_is_post_autosave( $post ) {
 /**
  * Inserts post data into the posts table as a post revision.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  * @access private
  *
  * @param int|WP_Post|array|null $post     Post ID, post object OR post array.
@@ -324,7 +324,7 @@ function _wp_put_post_revision( $post = null, $autosave = false ) {
 		/**
 		 * Fires once a revision has been saved.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 *
 		 * @param int $revision_id Post revision ID.
 		 */
@@ -337,7 +337,7 @@ function _wp_put_post_revision( $post = null, $autosave = false ) {
 /**
  * Gets a post revision.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int|WP_Post $post   The post ID or object.
  * @param string      $output Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
@@ -372,7 +372,7 @@ function wp_get_post_revision( &$post, $output = OBJECT, $filter = 'raw' ) {
  *
  * Can restore a past revision using all fields of the post revision, or only selected fields.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int|WP_Post $revision_id Revision ID or revision object.
  * @param array       $fields      Optional. What fields to restore from. Defaults to all.
@@ -412,7 +412,7 @@ function wp_restore_post_revision( $revision_id, $fields = null ) {
 	/**
 	 * Fires after a post revision has been restored.
 	 *
-	 * @since WP-2.6.0
+	 * @since 2.6.0
 	 *
 	 * @param int $post_id     Post ID.
 	 * @param int $revision_id Post revision ID.
@@ -427,7 +427,7 @@ function wp_restore_post_revision( $revision_id, $fields = null ) {
  *
  * Deletes the row from the posts table corresponding to the specified revision.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @param int|WP_Post $revision_id Revision ID or revision object.
  * @return array|false|WP_Post|WP_Error|null Null or WP_Error if error, deleted post if success.
@@ -443,7 +443,7 @@ function wp_delete_post_revision( $revision_id ) {
 		/**
 		 * Fires once a post revision has been deleted.
 		 *
-		 * @since WP-2.6.0
+		 * @since 2.6.0
 		 *
 		 * @param int          $revision_id Post revision ID.
 		 * @param object|array $revision    Post revision object or array.
@@ -457,7 +457,7 @@ function wp_delete_post_revision( $revision_id ) {
 /**
  * Returns all revisions of specified post.
  *
- * @since WP-2.6.0
+ * @since 2.6.0
  *
  * @see get_children()
  *
@@ -502,7 +502,7 @@ function wp_get_post_revisions( $post_id = 0, $args = null ) {
 /**
  * Determine if revisions are enabled for a given post.
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @param WP_Post $post The post object.
  * @return bool True if number of revisions to keep isn't zero, false otherwise.
@@ -519,7 +519,7 @@ function wp_revisions_enabled( $post ) {
  * The constant WP_POST_REVISIONS can be set in wp-config to specify the limit
  * of revisions to keep.
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @param WP_Post $post The post object.
  * @return int The number of revisions to keep.
@@ -542,7 +542,7 @@ function wp_revisions_to_keep( $post ) {
 	 *
 	 * Overrides the value of WP_POST_REVISIONS.
 	 *
-	 * @since WP-3.6.0
+	 * @since 3.6.0
 	 *
 	 * @param int     $num  Number of revisions to store.
 	 * @param WP_Post $post Post object.
@@ -553,7 +553,7 @@ function wp_revisions_to_keep( $post ) {
 /**
  * Sets up the post object for preview based on the post autosave.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  * @access private
  *
  * @param WP_Post $post
@@ -584,7 +584,7 @@ function _set_preview( $post ) {
 /**
  * Filters the latest content for preview from the post autosave.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  * @access private
  */
 function _show_post_preview() {
@@ -602,7 +602,7 @@ function _show_post_preview() {
 /**
  * Filters terms lookup to set the post format.
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  * @access private
  *
  * @param array  $terms
@@ -637,7 +637,7 @@ function _wp_preview_terms_filter( $terms, $post_id, $taxonomy ) {
 /**
  * Filters post thumbnail lookup to set the post thumbnail.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  * @access private
  *
  * @param null|array|string $value    The value to return - a single metadata value, or an array of values.
@@ -672,7 +672,7 @@ function _wp_preview_post_thumbnail_filter( $value, $post_id, $meta_key ) {
 /**
  * Gets the post revision version.
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  * @access private
  *
  * @param WP_Post $revision
@@ -695,7 +695,7 @@ function _wp_get_post_revision_version( $revision ) {
 /**
  * Upgrade the revisions author, add the current post as a revision and set the revisions version to 1
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  * @access private
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.

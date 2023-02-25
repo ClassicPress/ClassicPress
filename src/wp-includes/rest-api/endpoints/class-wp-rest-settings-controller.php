@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage REST_API
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core class used to manage a site's settings via the REST API.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see WP_REST_Controller
  */
@@ -19,7 +19,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 */
 	public function __construct() {
 		$this->namespace = 'wp/v2';
@@ -29,7 +29,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Registers the routes for the objects of the controller.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @see register_rest_route()
 	 */
@@ -60,7 +60,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to read and manage settings.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool True if the request has read access for the item, otherwise false.
@@ -72,7 +72,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the settings.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return array|WP_Error Array on success, or WP_Error object on failure.
@@ -88,7 +88,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 			 * Allow hijacking the setting value and overriding the built-in behavior by returning a
 			 * non-null value.  The returned value will be presented as the setting value instead.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 *
 			 * @param mixed  $result Value to use for the requested setting. Can be a scalar
 			 *                       matching the registered schema for the setting, or null to
@@ -116,7 +116,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares a value for output based off a schema array.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param mixed $value  Value to prepare.
 	 * @param array $schema Schema to match.
@@ -135,7 +135,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Updates settings for the settings object.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return array|WP_Error Array on success, or error object on failure.
@@ -156,7 +156,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 			 * Allows hijacking the setting update logic and overriding the built-in behavior by
 			 * returning true.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 *
 			 * @param bool   $result Whether to override the default behavior for updating the
 			 *                       value of a setting.
@@ -207,7 +207,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves all of the registered options for the Settings API.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Array of registered options.
 	 */
@@ -265,7 +265,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the site setting schema, conforming to JSON Schema.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Item schema data.
 	 */
@@ -296,7 +296,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	 * `null` as it's not a valid value for something like "type => string". We
 	 * provide a wrapper sanitizer to whitelist the use of `null`.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param  mixed           $value   The value for the setting.
 	 * @param  WP_REST_Request $request The request object.
@@ -317,7 +317,7 @@ class WP_REST_Settings_Controller extends WP_REST_Controller {
 	 * registered items, as the REST API will allow additional properties by
 	 * default.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param array $schema The schema array.
 	 * @return array

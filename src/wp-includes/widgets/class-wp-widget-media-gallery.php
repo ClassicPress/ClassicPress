@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 
 /**
  * Core class that implements a gallery widget.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @see WP_Widget
  */
@@ -19,7 +19,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function __construct() {
 		parent::__construct(
@@ -45,7 +45,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Get schema for properties of a widget instance (item).
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @see WP_REST_Controller::get_item_schema()
 	 * @see WP_REST_Controller::get_additional_fields()
@@ -104,7 +104,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Render the media on the frontend.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param array $instance Widget instance props.
 	 * @return void
@@ -131,7 +131,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function enqueue_admin_scripts() {
 		parent::enqueue_admin_scripts();
@@ -169,7 +169,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Render form template scripts.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	public function render_control_template_scripts() {
 		parent::render_control_template_scripts();
@@ -215,7 +215,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	/**
 	 * Whether the widget has content to show.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @access protected
 	 *
 	 * @param array $instance Widget instance props.

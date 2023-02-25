@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize Header Image Control class.
  *
- * @since WP-3.4.0
+ * @since 3.4.0
  *
  * @see WP_Customize_Image_Control
  */
@@ -22,7 +22,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-3.4.0
+	 * @since 3.4.0
 	 *
 	 * @param WP_Customize_Manager $manager Customizer bootstrap instance.
 	 */

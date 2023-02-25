@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-2.7.0
+ * @since 2.7.0
  */
 
 /**
  * Stores files to be deleted.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  * @global array $_old_files
  * @var array
  * @name $_old_files
@@ -78,8 +78,8 @@ $_old_files = array(
  * Filename (relative to wp-content) => Introduced version
  * Directories should be noted by suffixing it with a trailing slash (/)
  *
- * @since WP-3.2.0
- * @since WP-4.7.0 New themes were not automatically installed for 4.4-4.6 on
+ * @since 3.2.0
+ * @since 4.7.0 New themes were not automatically installed for 4.4-4.6 on
  *              upgrade. New themes are now installed again. To disable new
  *              themes from being installed on upgrade, explicitly define
  *              CORE_UPGRADE_SKIP_NEW_BUNDLED as false.
@@ -141,7 +141,7 @@ $_new_bundled_files = array(
  * themes, then if you edit the default theme, you should rename it, so that
  * your changes remain.
  *
- * @since WP-2.7.0
+ * @since 2.7.0
  *
  * @global WP_Filesystem_Base $wp_filesystem
  * @global array              $_old_files
@@ -173,7 +173,7 @@ function update_core( $from, $to ) {
 	 * 4. Before Maintenance Mode is disabled.
 	 * 5. Before the database is upgraded.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $feedback The core update feedback messages.
 	 */
@@ -512,7 +512,7 @@ function update_core( $from, $to ) {
 	 *
 	 * @see 'classicpress_core_updated_successfully'
 	 *
-	 * @since WP-3.3.0
+	 * @since 3.3.0
 	 *
 	 * @param string $wp_version The current equivalent WordPress version, for compatibility.
 	 */
@@ -636,7 +636,7 @@ function cp_get_update_directory_root( $working_dir ) {
  *
  * This function is only needed when the existing installation is older than 3.4.0.
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global string $wp_version
  * @global string $pagenow
@@ -684,7 +684,7 @@ window.location = 'about.php?updated';
 /**
  * Cleans up Genericons example files.
  *
- * @since WP-4.2.2
+ * @since 4.2.2
  *
  * @global array              $wp_theme_directories
  * @global WP_Filesystem_Base $wp_filesystem
@@ -728,7 +728,7 @@ function _upgrade_422_remove_genericons() {
  * Recursively find Genericons example files in a given folder.
  *
  * @ignore
- * @since WP-4.2.2
+ * @since 4.2.2
  *
  * @param string $directory Directory path. Expects trailingslashed.
  * @return array
@@ -753,7 +753,7 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 
 /**
  * @ignore
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 function _upgrade_440_force_deactivate_incompatible_plugins() {
 	if ( defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION, '2.0-beta4', '<=' ) ) {

@@ -437,7 +437,7 @@ setup_config_display_footer();
  * Display setup wp-config.php file header.
  *
  * @ignore
- * @since WP-2.3.0
+ * @since 2.3.0
  *
  * @global string    $wp_local_package
  * @global WP_Locale $wp_locale

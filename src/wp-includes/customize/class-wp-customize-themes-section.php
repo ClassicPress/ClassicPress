@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -12,7 +12,7 @@
  *
  * A UI container for theme controls, which are displayed within sections.
  *
- * @since WP-4.2.0
+ * @since 4.2.0
  *
  * @see WP_Customize_Section
  */
@@ -21,7 +21,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	/**
 	 * Section type.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 * @var string
 	 */
 	public $type = 'themes';
@@ -31,7 +31,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 *
 	 * Defines the type of themes to load (installed, wporg, etc.).
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var string
 	 */
 	public $action = '';
@@ -42,7 +42,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 * Determines whether filters are applied to loaded (local) themes or by initiating a new remote query (remote).
 	 * When filtering is local, the initial themes query is not paginated by default.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @var string
 	 */
 	public $filter_type = 'local';
@@ -50,7 +50,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	/**
 	 * Get section parameters for JS.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 * @return array Exported parameters.
 	 */
 	public function json() {
@@ -66,7 +66,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 *
 	 * The template is only rendered by PHP once, so all actions are prepared at once on the server side.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	protected function render_template() {
 		?>
@@ -107,7 +107,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 * The template is only rendered by PHP once, so all actions are prepared at once on the server side.
 	 * The filter bar container is rendered by @see `render_template()`.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	protected function filter_bar_content_template() {
 		?>
@@ -151,7 +151,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 	 *
 	 * The filter bar container is rendered by @see `render_template()`.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 */
 	protected function filter_drawer_content_template() {
 		$feature_list = get_theme_feature_list( false ); // @todo: Use the .org API instead of the local core feature list. The .org API is currently outdated and will be reconciled when the .org themes directory is next redesigned.

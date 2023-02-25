@@ -2,7 +2,7 @@
 /**
  * Multisite upload handler.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @package ClassicPress
  * @subpackage Multisite

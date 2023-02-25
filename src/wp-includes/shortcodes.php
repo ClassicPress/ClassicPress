@@ -27,13 +27,13 @@
  *
  * @package ClassicPress
  * @subpackage Shortcodes
- * @since WP-2.5.0
+ * @since 2.5.0
  */
 
 /**
  * Container for storing shortcode tags and their hook to call for the shortcode
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @name $shortcode_tags
  * @var array
@@ -49,7 +49,7 @@ $shortcode_tags = array();
  * already-added shortcode tags. In the event of a duplicated tag, the tag
  * loaded last will take precedence.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $shortcode_tags
  *
@@ -82,7 +82,7 @@ function add_shortcode( $tag, $callback ) {
 /**
  * Removes hook for shortcode.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $shortcode_tags
  *
@@ -101,7 +101,7 @@ function remove_shortcode( $tag ) {
  * shortcodes global by a empty array. This is actually a very efficient method
  * for removing all shortcodes.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $shortcode_tags
  */
@@ -114,7 +114,7 @@ function remove_all_shortcodes() {
 /**
  * Whether a registered shortcode exists named $tag
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @global array $shortcode_tags List of shortcode tags and their callback hooks.
  *
@@ -129,7 +129,7 @@ function shortcode_exists( $tag ) {
 /**
  * Whether the passed content contains the specified shortcode
  *
- * @since WP-3.6.0
+ * @since 3.6.0
  *
  * @global array $shortcode_tags
  *
@@ -166,7 +166,7 @@ function has_shortcode( $content, $tag ) {
  * without any filtering. This might cause issues when plugins are disabled but
  * the shortcode will still show up in the post or content.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $shortcode_tags List of shortcode tags and their callback hooks.
  *
@@ -219,8 +219,8 @@ function do_shortcode( $content, $ignore_html = false ) {
  * 5 - The content of a shortcode when it wraps some content.
  * 6 - An extra ] to allow for escaping shortcodes with double [[]]
  *
- * @since WP-2.5.0
- * @since WP-4.4.0 Added the `$tagnames` parameter.
+ * @since 2.5.0
+ * @since 4.4.0 Added the `$tagnames` parameter.
  *
  * @global array $shortcode_tags
  *
@@ -271,7 +271,7 @@ function get_shortcode_regex( $tagnames = null ) {
  * Regular Expression callable for do_shortcode() for calling shortcode hook.
  * @see get_shortcode_regex for details of the match array contents.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  * @access private
  *
  * @global array $shortcode_tags
@@ -303,7 +303,7 @@ function do_shortcode_tag( $m ) {
 	 * Passing a truthy value to the filter will effectively short-circuit the
 	 * shortcode generation process, returning that value instead.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param bool|string $return      Short-circuit return value. Either false or the value to replace the shortcode with.
 	 * @param string       $tag         Shortcode name.
@@ -322,7 +322,7 @@ function do_shortcode_tag( $m ) {
 	/**
 	 * Filters the output created by a shortcode callback.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string       $output Shortcode output.
 	 * @param string       $tag    Shortcode name.
@@ -340,7 +340,7 @@ function do_shortcode_tag( $m ) {
  * Assumes $content processed by KSES already.  Users with unfiltered_html
  * capability may get unexpected output if angle braces are nested in tags.
  *
- * @since WP-4.2.3
+ * @since 4.2.3
  *
  * @param string $content Content to search for shortcodes
  * @param bool $ignore_html When true, all square braces inside elements will be encoded.
@@ -447,7 +447,7 @@ function do_shortcodes_in_html_tags( $content, $ignore_html, $tagnames ) {
 /**
  * Remove placeholders added by do_shortcodes_in_html_tags().
  *
- * @since WP-4.2.3
+ * @since 4.2.3
  *
  * @param string $content Content to search for placeholders.
  * @return string Content with placeholders removed.
@@ -466,7 +466,7 @@ function unescape_invalid_shortcodes( $content ) {
 /**
  * Retrieve the shortcode attributes regex.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @return string The shortcode attribute regular expression
  */
@@ -481,7 +481,7 @@ function get_shortcode_atts_regex() {
  * attribute as the value in the key/value pair. This allows for easier
  * retrieval of the attributes, since all attributes have to be known.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $text
  * @return array|string List of attribute values.
@@ -534,7 +534,7 @@ function shortcode_parse_atts( $text ) {
  * If the $atts list has unsupported attributes, then they will be ignored and
  * removed from the final returned list.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param array  $pairs     Entire list of supported attributes and their defaults.
  * @param array  $atts      User defined attributes in shortcode tag.
@@ -557,8 +557,8 @@ function shortcode_atts( $pairs, $atts, $shortcode = '' ) {
 	 * If the third parameter of the shortcode_atts() function is present then this filter is available.
 	 * The third parameter, $shortcode, is the name of the shortcode.
 	 *
-	 * @since WP-3.6.0
-	 * @since WP-4.4.0 Added the `$shortcode` parameter.
+	 * @since 3.6.0
+	 * @since 4.4.0 Added the `$shortcode` parameter.
 	 *
 	 * @param array  $out       The output array of shortcode attributes.
 	 * @param array  $pairs     The supported attributes and their defaults.
@@ -575,7 +575,7 @@ function shortcode_atts( $pairs, $atts, $shortcode = '' ) {
 /**
  * Remove all shortcode tags from the given content.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global array $shortcode_tags
  *
@@ -601,7 +601,7 @@ function strip_shortcodes( $content ) {
 	/**
 	 * Filters the list of shortcode tags to remove from the content.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param array  $tag_array Array of shortcode tags to remove.
 	 * @param string $content   Content shortcodes are being removed from.
@@ -628,7 +628,7 @@ function strip_shortcodes( $content ) {
 /**
  * Strips a shortcode tag based on RegEx matches against post content.
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @param array $m RegEx matches against post content.
  * @return string|false The content stripped of the tag, otherwise false.

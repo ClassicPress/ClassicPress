@@ -14,8 +14,8 @@
 /**
  * Retrieve variable in the WP_Query class.
  *
- * @since WP-1.5.0
- * @since WP-3.9.0 The `$default` argument was introduced.
+ * @since 1.5.0
+ * @since 3.9.0 The `$default` argument was introduced.
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -33,7 +33,7 @@ function get_query_var( $var, $default = '' ) {
  *
  * Wrapper for WP_Query::get_queried_object().
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -49,7 +49,7 @@ function get_queried_object() {
  *
  * Wrapper for WP_Query::get_queried_object_id().
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -63,7 +63,7 @@ function get_queried_object_id() {
 /**
  * Set query variable.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -86,7 +86,7 @@ function set_query_var( $var, $value ) {
  *
  * This must not be used within the ClassicPress Loop.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -105,7 +105,7 @@ function query_posts( $query ) {
  * This will remove obscure bugs that occur when the previous WP_Query object
  * is not destroyed properly before another is set up.
  *
- * @since WP-2.3.0
+ * @since 2.3.0
  *
  * @global WP_Query $wp_query     Global WP_Query instance.
  * @global WP_Query $wp_the_query Copy of the global WP_Query instance created during wp_reset_query().
@@ -119,7 +119,7 @@ function wp_reset_query() {
  * After looping through a separate query, this function restores
  * the $post global to the current post in the main query.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  */
@@ -140,7 +140,7 @@ function wp_reset_postdata() {
  *
  * Month, Year, Category, Author, Post Type archive...
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -160,7 +160,7 @@ function is_archive() {
 /**
  * Is the query for an existing post type archive page?
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -181,7 +181,7 @@ function is_post_type_archive( $post_types = '' ) {
 /**
  * Is the query for an existing attachment page?
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -205,7 +205,7 @@ function is_attachment( $attachment = '' ) {
  * If the $author parameter is specified, this function will additionally
  * check if the query is for one of the authors specified.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -229,7 +229,7 @@ function is_author( $author = '' ) {
  * If the $category parameter is specified, this function will additionally
  * check if the query is for one of the categories specified.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -253,7 +253,7 @@ function is_category( $category = '' ) {
  * If the $tag parameter is specified, this function will additionally
  * check if the query is for one of the tags specified.
  *
- * @since WP-2.3.0
+ * @since 2.3.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -281,7 +281,7 @@ function is_tag( $tag = '' ) {
  * this function will additionally check if the query is for one of the terms
  * specified.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -303,7 +303,7 @@ function is_tax( $taxonomy = '', $term = '' ) {
 /**
  * Is the query for an existing date archive?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -323,7 +323,7 @@ function is_date() {
 /**
  * Is the query for an existing day archive?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -343,7 +343,7 @@ function is_day() {
 /**
  * Is the query for a feed?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -364,7 +364,7 @@ function is_feed( $feeds = '' ) {
 /**
  * Is the query for a comments feed?
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -393,7 +393,7 @@ function is_comment_feed() {
  *
  * Otherwise the same as @see is_home()
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -421,7 +421,7 @@ function is_front_page() {
  * If a static page is set for the front page of the site, this function will return true only
  * on the page you set as the "Posts page".
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @see is_front_page()
  * @global WP_Query $wp_query Global WP_Query instance.
@@ -442,7 +442,7 @@ function is_home() {
 /**
  * Determines whether the query is for an existing month archive.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -468,7 +468,7 @@ function is_month() {
  * @see is_single()
  * @see is_singular()
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -489,7 +489,7 @@ function is_page( $page = '' ) {
 /**
  * Is the query for paged result and not for the first page?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -509,7 +509,7 @@ function is_paged() {
 /**
  * Is the query for a post or page preview?
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -529,7 +529,7 @@ function is_preview() {
 /**
  * Is the query for the robots file?
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -549,7 +549,7 @@ function is_robots() {
 /**
  * Is the query for a search?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -577,7 +577,7 @@ function is_search() {
  * @see is_page()
  * @see is_singular()
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -605,7 +605,7 @@ function is_single( $post = '' ) {
  * @see is_page()
  * @see is_single()
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -626,7 +626,7 @@ function is_singular( $post_types = '' ) {
 /**
  * Is the query for a specific time?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -646,7 +646,7 @@ function is_time() {
 /**
  * Is the query for a trackback endpoint call?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -666,7 +666,7 @@ function is_trackback() {
 /**
  * Is the query for an existing year archive?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -686,7 +686,7 @@ function is_year() {
 /**
  * Is the query a 404 (returns no results)?
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -706,7 +706,7 @@ function is_404() {
 /**
  * Is the query for an embedded post?
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -726,7 +726,7 @@ function is_embed() {
 /**
  * Is the query the main query?
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -756,7 +756,7 @@ function is_main_query() {
 /**
  * Whether current ClassicPress query has results to loop over.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -770,7 +770,7 @@ function have_posts() {
 /**
  * Whether the caller is in the Loop.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -784,7 +784,7 @@ function in_the_loop() {
 /**
  * Rewind the loop posts.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  */
@@ -796,7 +796,7 @@ function rewind_posts() {
 /**
  * Iterate the post index in the loop.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  */
@@ -812,7 +812,7 @@ function the_post() {
 /**
  * Whether there are comments to loop over.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -826,7 +826,7 @@ function have_comments() {
 /**
  * Iterate comment index in the comment loop.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -842,7 +842,7 @@ function the_comment() {
  *
  * Attempts to find the current slug from the past slugs.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  */
 function wp_old_slug_redirect() {
 	if ( is_404() && '' !== get_query_var( 'name' ) ) {
@@ -878,7 +878,7 @@ function wp_old_slug_redirect() {
 		/**
 		 * Filters the old slug redirect post ID.
 		 *
-		 * @since WP-4.9.3
+		 * @since 4.9.3
 		 *
 		 * @param int $id The redirect post ID.
 		 */
@@ -899,7 +899,7 @@ function wp_old_slug_redirect() {
 		/**
 		 * Filters the old slug redirect URL.
 		 *
-		 * @since WP-4.4.0
+		 * @since 4.4.0
 		 *
 		 * @param string $link The redirect URL.
 		 */
@@ -919,7 +919,7 @@ function wp_old_slug_redirect() {
  *
  * @see wp_old_slug_redirect()
  *
- * @since WP-4.9.3
+ * @since 4.9.3
  * @access private
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
@@ -954,7 +954,7 @@ function _find_post_by_old_slug( $post_type ) {
  *
  * @see wp_old_slug_redirect()
  *
- * @since WP-4.9.3
+ * @since 4.9.3
  * @access private
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
@@ -992,8 +992,8 @@ function _find_post_by_old_date( $post_type ) {
 /**
  * Set up global post data.
  *
- * @since WP-1.5.0
- * @since WP-4.4.0 Added the ability to pass a post ID to `$post`.
+ * @since 1.5.0
+ * @since 4.4.0 Added the ability to pass a post ID to `$post`.
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *
@@ -1013,7 +1013,7 @@ function setup_postdata( $post ) {
 /**
  * Generates post data.
  *
- * @since WP-5.2.0
+ * @since 5.2.0
  *
  * @global WP_Query $wp_query Global WP_Query instance.
  *

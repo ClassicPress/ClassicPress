@@ -316,7 +316,7 @@ if ( isset( $_GET['action'] ) ) {
 		 * provided in the request for wp-admin/update.php. Can be used to
 		 * provide custom update functionality for themes and plugins.
 		 *
-		 * @since WP-2.8.0
+		 * @since 2.8.0
 		 */
 		do_action( "update-custom_{$action}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	}

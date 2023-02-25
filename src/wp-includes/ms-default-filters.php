@@ -10,7 +10,7 @@
  * @package ClassicPress
  * @subpackage Multisite
  * @see default-filters.php
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 add_action( 'init', 'ms_subdomain_constants' );

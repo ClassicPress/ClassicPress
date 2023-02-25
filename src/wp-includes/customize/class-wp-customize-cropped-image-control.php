@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
  * Customize Cropped Image Control class.
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * @see WP_Customize_Image_Control
  */
@@ -19,7 +19,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Control type.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var string
 	 */
 	public $type = 'cropped_image';
@@ -27,7 +27,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Suggested width for cropped image.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var int
 	 */
 	public $width = 150;
@@ -35,7 +35,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Suggested height for cropped image.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var int
 	 */
 	public $height = 150;
@@ -43,7 +43,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Whether the width is flexible.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var bool
 	 */
 	public $flex_width = false;
@@ -51,7 +51,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Whether the height is flexible.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var bool
 	 */
 	public $flex_height = false;
@@ -59,7 +59,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Enqueue control related scripts/styles.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 */
 	public function enqueue() {
 		wp_enqueue_script( 'customize-views' );
@@ -70,7 +70,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @see WP_Customize_Control::to_json()
 	 */

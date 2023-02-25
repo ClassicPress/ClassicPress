@@ -17,13 +17,13 @@ if ( is_array( get_site_option( 'illegal_names' ) ) && isset( $_GET['new'] ) && 
 /**
  * Prints signup_header via wp_head
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function do_signup_header() {
 	/**
 	 * Fires within the head section of the site sign-up screen.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 */
 	do_action( 'signup_header' );
 }
@@ -45,14 +45,14 @@ $wp_query->is_404 = false;
 /**
  * Fires before the Site Signup page is loaded.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 do_action( 'before_signup_header' );
 
 /**
  * Prints styles for front-end Multisite signup pages
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function wpmu_signup_stylesheet() {
 	?>
@@ -81,7 +81,7 @@ get_header( 'wp-signup' );
 /**
  * Fires before the site sign-up form.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 do_action( 'before_signup_form' );
 ?>
@@ -91,7 +91,7 @@ do_action( 'before_signup_form' );
 /**
  * Generates and displays the Signup and Create Site forms
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string          $blogname   The new site name.
  * @param string          $blog_title The new site title.
@@ -206,7 +206,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	/**
 	 * Fires after the site sign-up form.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param WP_Error $errors A WP_Error object possibly containing 'blogname' or 'blog_title' errors.
 	 */
@@ -216,7 +216,7 @@ function show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 /**
  * Validate the new site signup
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return array Contains the new site data and error messages.
  */
@@ -232,7 +232,7 @@ function validate_blog_form() {
 /**
  * Display user registration form
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string          $user_name  The entered username.
  * @param string          $user_email The entered email address.
@@ -264,7 +264,7 @@ function show_user_form( $user_name = '', $user_email = '', $errors = '' ) {
 	/**
 	 * Fires at the end of the user registration form on the site sign-up form.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param WP_Error $errors A WP_Error object containing 'user_name' or 'user_email' errors.
 	 */
@@ -274,7 +274,7 @@ function show_user_form( $user_name = '', $user_email = '', $errors = '' ) {
 /**
  * Validate user signup name and email
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return array Contains username, email, and error messages.
  */
@@ -285,7 +285,7 @@ function validate_user_form() {
 /**
  * Allow returning users to sign up for another site
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string          $blogname   The new site name
  * @param string          $blog_title The new site title.
@@ -307,7 +307,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 	/**
 	 * Filters the default site sign-up variables.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $signup_defaults {
 	 *     An array of default site sign-up variables.
@@ -354,7 +354,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 		/**
 		 * Hidden sign-up form fields output when creating another site or user.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param string $context A string describing the steps of the sign-up process. The value can be
 		 *                        'create-another-site', 'validate-user', or 'validate-site'.
@@ -370,7 +370,7 @@ function signup_another_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 /**
  * Validate a new site signup.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return null|bool True if site signup was validated, false if error.
  *                   The function halts all execution if the user is not logged in.
@@ -422,7 +422,7 @@ function validate_another_blog_signup() {
 	 *
 	 * Use the {@see 'add_signup_meta'} filter instead.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 * @deprecated WP-3.0.0 Use the {@see 'add_signup_meta'} filter instead.
 	 *
 	 * @param array $blog_meta_defaults An array of default blog meta variables.
@@ -432,7 +432,7 @@ function validate_another_blog_signup() {
 	/**
 	 * Filters the new default site meta variables.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $meta {
 	 *     An array of default site meta variables.
@@ -456,8 +456,8 @@ function validate_another_blog_signup() {
 /**
  * Confirm a new site signup.
  *
- * @since WP-MU (3.0.0)
- * @since WP-4.4.0 Added the `$blog_id` parameter.
+ * @since MU (3.0.0)
+ * @since 4.4.0 Added the `$blog_id` parameter.
  *
  * @param string $domain     The domain URL.
  * @param string $path       The site root path.
@@ -511,7 +511,7 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
 	/**
 	 * Fires when the site or user sign-up process is complete.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 */
 	do_action( 'signup_finished' );
 }
@@ -519,7 +519,7 @@ function confirm_another_blog_signup( $domain, $path, $blog_title, $user_name, $
 /**
  * Setup the new user signup process
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string          $user_name  The username.
  * @param string          $user_email The user's email.
@@ -543,7 +543,7 @@ function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
 	/**
 	 * Filters the default user variables used on the user sign-up form.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $signup_user_defaults {
 	 *     An array of default user variables.
@@ -596,7 +596,7 @@ function signup_user( $user_name = '', $user_email = '', $errors = '' ) {
 /**
  * Validate the new user signup
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return bool True if new user signup was validated, false if error
  */
@@ -626,7 +626,7 @@ function validate_user_signup() {
 /**
  * New user signup confirmation
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string $user_name The username
  * @param string $user_email The user's email address
@@ -655,7 +655,7 @@ function confirm_user_signup( $user_name, $user_email ) {
 /**
  * Setup the new site signup
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string          $user_name  The username.
  * @param string          $user_email The user's email address.
@@ -679,7 +679,7 @@ function signup_blog( $user_name = '', $user_email = '', $blogname = '', $blog_t
 	/**
 	 * Filters the default site creation variables for the site sign-up form.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $signup_blog_defaults {
 	 *     An array of default site creation variables.
@@ -720,7 +720,7 @@ function signup_blog( $user_name = '', $user_email = '', $blogname = '', $blog_t
 /**
  * Validate new site signup
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return bool True if the site signup was validated, false if error
  */
@@ -779,7 +779,7 @@ function validate_blog_signup() {
 /**
  * New site signup confirmation
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param string $domain The domain URL
  * @param string $path The site root path
@@ -827,7 +827,7 @@ function confirm_blog_signup( $domain, $path, $blog_title, $user_name = '', $use
 /**
  * Retrieves languages available during the site/user signup process.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @see get_available_languages()
  *
@@ -842,7 +842,7 @@ function signup_get_available_languages() {
 	 *
 	 * Languages not already installed will be stripped.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $available_languages Available languages.
 	 */
@@ -863,7 +863,7 @@ $active_signup = get_site_option( 'registration', 'none' );
 /**
  * Filters the type of site sign-up.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $active_signup String that returns registration type. The value can be
  *                              'all', 'none', 'blog', or 'user'.
@@ -932,7 +932,7 @@ if ( $active_signup == 'none' ) {
 			/**
 			 * Fires when the site sign-up form is sent.
 			 *
-			 * @since WP-3.0.0
+			 * @since 3.0.0
 			 */
 			do_action( 'preprocess_signup_form' );
 			if ( is_user_logged_in() && ( $active_signup == 'all' || $active_signup == 'blog' ) ) {
@@ -971,7 +971,7 @@ if ( $active_signup == 'none' ) {
 /**
  * Fires after the sign-up forms, before wp_footer.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 do_action( 'after_signup_form' );
 ?>

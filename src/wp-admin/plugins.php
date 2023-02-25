@@ -580,7 +580,7 @@ if ( strlen( $s ) ) {
  * Please note: The 'active' portion of the hook name does not refer to whether the current
  * view is for active plugins, but rather all plugins actively-installed.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array $plugins_all An array containing all installed plugins.
  */

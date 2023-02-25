@@ -7,7 +7,7 @@
  *
  * @package ClassicPress
  * @subpackage Theme_Compat
- * @since WP-4.5.0
+ * @since 4.5.0
  */
 ?>
 <div class="wp-embed">

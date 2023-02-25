@@ -21,7 +21,7 @@ if ( !function_exists('set_current_user') ) :
  *
  * Set $id to null and specify a name if you do not know a user's ID.
  *
- * @since WP-2.0.1
+ * @since 2.0.1
  * @deprecated WP-3.0.0 Use wp_set_current_user()
  * @see wp_set_current_user()
  *
@@ -39,7 +39,7 @@ if ( !function_exists('get_currentuserinfo') ) :
 /**
  * Populate global variables with information about the currently logged in user.
  *
- * @since WP-0.71
+ * @since 0.71
  * @deprecated WP-4.5.0 Use wp_get_current_user()
  * @see wp_get_current_user()
  *
@@ -56,7 +56,7 @@ if ( !function_exists('get_userdatabylogin') ) :
 /**
  * Retrieve user info by login name.
  *
- * @since WP-0.71
+ * @since 0.71
  * @deprecated WP-3.3.0 Use get_user_by()
  * @see get_user_by()
  *
@@ -73,7 +73,7 @@ if ( !function_exists('get_user_by_email') ) :
 /**
  * Retrieve user info by email.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  * @deprecated WP-3.3.0 Use get_user_by()
  * @see get_user_by()
  *
@@ -90,7 +90,7 @@ if ( !function_exists('wp_setcookie') ) :
 /**
  * Sets a cookie for a user who just logged in. This function is deprecated.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  * @deprecated WP-2.5.0 Use wp_set_auth_cookie()
  * @see wp_set_auth_cookie()
  *
@@ -114,7 +114,7 @@ if ( !function_exists('wp_clearcookie') ) :
 /**
  * Clears the authentication cookie, logging the user out. This function is deprecated.
  *
- * @since WP-1.5.0
+ * @since 1.5.0
  * @deprecated WP-2.5.0 Use wp_clear_auth_cookie()
  * @see wp_clear_auth_cookie()
  */
@@ -133,7 +133,7 @@ if ( !function_exists('wp_get_cookie_login') ):
  * This function is deprecated and should no longer be extended as it won't be
  * used anywhere in ClassicPress. Also, plugins shouldn't use it either.
  *
- * @since WP-2.0.3
+ * @since 2.0.3
  * @deprecated WP-2.5.0
  *
  * @return bool Always returns false
@@ -157,7 +157,7 @@ if ( !function_exists('wp_login') ) :
  * what the error is, so that those checking the global for why there was a
  * failure can utilize it later.
  *
- * @since WP-1.2.2
+ * @since 1.2.2
  * @deprecated WP-2.5.0 Use wp_signon()
  * @see wp_signon()
  *
@@ -190,7 +190,7 @@ endif;
  * Originally stored in wp-app.php, and later wp-includes/class-wp-atom-server.php.
  * It is kept here in case a plugin directly referred to the class.
  *
- * @since WP-2.2.0
+ * @since 2.2.0
  * @deprecated WP-3.5.0
  *
  * @link https://wordpress.org/plugins/atom-publishing-protocol/

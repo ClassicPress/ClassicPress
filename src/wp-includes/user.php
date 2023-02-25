@@ -22,7 +22,7 @@
  * evaluate as false until that point. If is_user_logged_in() is needed in conjunction
  * with wp_signon(), wp_set_current_user() should be called explicitly.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @global string $auth_secure_cookie
  *
@@ -57,7 +57,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 	 * The variables passed to the callbacks are passed by reference,
 	 * and can be modified by callback functions.
 	 *
-	 * @since WP-1.5.1
+	 * @since 1.5.1
 	 *
 	 * @todo Decide whether to deprecate the wp_authenticate action.
 	 *
@@ -73,7 +73,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 	/**
 	 * Filters whether to use a secure sign-on cookie.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param bool  $secure_cookie Whether to use a secure sign-on cookie.
 	 * @param array $credentials {
@@ -106,7 +106,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 	/**
 	 * Fires after the user has successfully logged in.
 	 *
-	 * @since WP-1.5.0
+	 * @since 1.5.0
 	 *
 	 * @param string  $user_login Username.
 	 * @param WP_User $user       WP_User object of the logged-in user.
@@ -118,7 +118,7 @@ function wp_signon( $credentials = array(), $secure_cookie = '' ) {
 /**
  * Authenticate a user, confirming the username and password are valid.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @param WP_User|WP_Error|null $user     WP_User or WP_Error object from a previous callback. Default null.
  * @param string                $username Username for authentication.
@@ -163,7 +163,7 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 	/**
 	 * Filters whether the given user can be authenticated with the provided $password.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param WP_User|WP_Error $user     WP_User or WP_Error object if a previous
 	 *                                   callback failed authentication.
@@ -194,7 +194,7 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 /**
  * Authenticates a user using the email and password.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  *
  * @param WP_User|WP_Error|null $user     WP_User or WP_Error object if a previous
  *                                        callback failed authentication.
@@ -268,7 +268,7 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 /**
  * Authenticate the user using the ClassicPress auth cookie.
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  *
  * @global string $auth_secure_cookie
  *
@@ -310,7 +310,7 @@ function wp_authenticate_cookie( $user, $username, $password ) {
  * For Multisite blogs, check if the authenticated user has been marked as a
  * spammer, or if the user's primary blog has been marked as spam.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param WP_User|WP_Error|null $user WP_User or WP_Error object from a previous callback. Default null.
  * @return WP_User|WP_Error WP_User on success, WP_Error if the user is considered a spammer.
@@ -320,7 +320,7 @@ function wp_authenticate_spam_check( $user ) {
 		/**
 		 * Filters whether the user has been marked as a spammer.
 		 *
-		 * @since WP-3.7.0
+		 * @since 3.7.0
 		 *
 		 * @param bool    $spammed Whether the user is considered a spammer.
 		 * @param WP_User $user    User to check against.
@@ -342,7 +342,7 @@ function wp_authenticate_spam_check( $user ) {
  *
  * This is a callback for the {@see 'determine_current_user'} filter, rather than API.
  *
- * @since WP-3.9.0
+ * @since 3.9.0
  *
  * @param int|bool $user_id The user ID (or false) as received from the
  *                       determine_current_user filter.
@@ -364,9 +364,9 @@ function wp_validate_logged_in_cookie( $user_id ) {
 /**
  * Number of posts user has written.
  *
- * @since WP-3.0.0
- * @since WP-4.1.0 Added `$post_type` argument.
- * @since WP-4.3.0 Added `$public_only` argument. Added the ability to pass an array
+ * @since 3.0.0
+ * @since 4.1.0 Added `$post_type` argument.
+ * @since 4.3.0 Added `$public_only` argument. Added the ability to pass an array
  *              of post types to `$post_type`.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
@@ -386,9 +386,9 @@ function count_user_posts( $userid, $post_type = 'post', $public_only = false ) 
 	/**
 	 * Filters the number of posts a user has written.
 	 *
-	 * @since WP-2.7.0
-	 * @since WP-4.1.0 Added `$post_type` argument.
-	 * @since WP-4.3.1 Added `$public_only` argument.
+	 * @since 2.7.0
+	 * @since 4.1.0 Added `$post_type` argument.
+	 * @since 4.3.1 Added `$public_only` argument.
 	 *
 	 * @param int          $count       The user's post count.
 	 * @param int          $userid      User ID.
@@ -401,7 +401,7 @@ function count_user_posts( $userid, $post_type = 'post', $public_only = false ) 
 /**
  * Number of posts written by a list of users.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -442,7 +442,7 @@ function count_many_users_posts( $users, $post_type = 'post', $public_only = fal
 /**
  * Get the current user's ID
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @return int The current user's ID, or 0 if no user is logged in.
  */
@@ -464,7 +464,7 @@ function get_current_user_id() {
  *
  * The option will first check for the per site name and then the per Network name.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -503,7 +503,7 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
 	 *
 	 * The dynamic portion of the hook name, `$option`, refers to the user option name.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param mixed   $result Value for the user's option.
 	 * @param string  $option Name of the option being retrieved.
@@ -521,7 +521,7 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
  *
  * Deletes the user option if $newvalue is empty.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -550,7 +550,7 @@ function update_user_option( $user_id, $option_name, $newvalue, $global = false 
  * global blog options. If the 'global' parameter is false, which it is by default
  * it will prepend the ClassicPress table prefix to the option name.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -572,7 +572,7 @@ function delete_user_option( $user_id, $option_name, $global = false ) {
 /**
  * Retrieve list of users matching criteria.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @see WP_User_Query
  *
@@ -593,8 +593,8 @@ function get_users( $args = array() ) {
 /**
  * Get the sites a user belongs to.
  *
- * @since WP-3.0.0
- * @since WP-4.7.0 Converted to use get_sites().
+ * @since 3.0.0
+ * @since 4.7.0 Converted to use get_sites().
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -620,7 +620,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 	 * Passing a non-null value to the filter will effectively short circuit
 	 * get_blogs_of_user(), returning that value instead.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param null|array $sites   An array of site objects of which the user is a member.
 	 * @param int        $user_id User ID.
@@ -711,7 +711,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 	/**
 	 * Filters the list of sites a user belongs to.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param array $sites   An array of site objects belonging to the user.
 	 * @param int   $user_id User ID.
@@ -724,7 +724,7 @@ function get_blogs_of_user( $user_id, $all = false ) {
 /**
  * Find out whether a user is a member of a given blog.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -790,7 +790,7 @@ function is_user_member_of_blog( $user_id = 0, $blog_id = 0 ) {
 /**
  * Adds meta data to a user.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int    $user_id    User ID.
  * @param string $meta_key   Metadata name.
@@ -809,7 +809,7 @@ function add_user_meta( $user_id, $meta_key, $meta_value, $unique = false ) {
  * value, will keep from removing duplicate metadata with the same key. It also
  * allows removing all metadata matching key, if needed.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @link https://codex.wordpress.org/Function_Reference/delete_user_meta
  *
  * @param int    $user_id    User ID
@@ -824,7 +824,7 @@ function delete_user_meta( $user_id, $meta_key, $meta_value = '' ) {
 /**
  * Retrieve user meta field for a user.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @link https://codex.wordpress.org/Function_Reference/get_user_meta
  *
  * @param int    $user_id User ID.
@@ -844,7 +844,7 @@ function get_user_meta( $user_id, $key = '', $single = false ) {
  *
  * If the meta field for the user does not exist, it will be added.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  * @link https://codex.wordpress.org/Function_Reference/update_user_meta
  *
  * @param int    $user_id    User ID.
@@ -865,9 +865,9 @@ function update_user_meta( $user_id, $meta_key, $meta_value, $prev_value = '' ) 
  * Using $strategy = 'time' this is CPU-intensive and should handle around 10^7 users.
  * Using $strategy = 'memory' this is memory-intensive and should handle around 10^5 users, but see https://core.trac.wordpress.org/ticket/12257.
  *
- * @since WP-3.0.0
- * @since WP-4.4.0 The number of users with no role is now included in the `none` element.
- * @since WP-4.9.0 The `$site_id` parameter was added to support multisite.
+ * @since 3.0.0
+ * @since 4.4.0 The number of users with no role is now included in the `none` element.
+ * @since 4.9.0 The `$site_id` parameter was added to support multisite.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -978,7 +978,7 @@ function count_users( $strategy = 'time', $site_id = null ) {
  *
  * Used by wp_set_current_user() for back compat. Might be deprecated in the future.
  *
- * @since WP-2.0.4
+ * @since 2.0.4
  *
  * @global string  $user_login    The user username for logging in
  * @global WP_User $userdata      User data.
@@ -1028,9 +1028,9 @@ function setup_userdata( $for_user_id = '' ) {
  *
  * The available arguments are as follows:
  *
- * @since WP-2.3.0
- * @since WP-4.5.0 Added the 'display_name_with_login' value for 'show'.
- * @since WP-4.7.0 Added the `$role`, `$role__in`, and `$role__not_in` parameters.
+ * @since 2.3.0
+ * @since 4.5.0 Added the 'display_name_with_login' value for 'show'.
+ * @since 4.7.0 Added the `$role`, `$role__in`, and `$role__not_in` parameters.
  * @since 1.4.0 Added the `$select_multiple` and `$value_field` parameters.
  *
  * @param array|string $args {
@@ -1159,7 +1159,7 @@ function wp_dropdown_users( $args = '' ) {
 	/**
 	 * Filters the query arguments for the list of users in the dropdown.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $query_args The query arguments for get_users().
 	 * @param array $parsed_args          The arguments passed to wp_dropdown_users() combined with the defaults.
@@ -1244,7 +1244,7 @@ function wp_dropdown_users( $args = '' ) {
 	/**
 	 * Filters the wp_dropdown_users() HTML output.
 	 *
-	 * @since WP-2.3.0
+	 * @since 2.3.0
 	 *
 	 * @param string $output HTML output generated by wp_dropdown_users().
 	 */
@@ -1263,7 +1263,7 @@ function wp_dropdown_users( $args = '' ) {
  * 'display' context is used by default. 'attribute' and 'js' contexts are treated like 'display'
  * when calling filters.
  *
- * @since WP-2.3.0
+ * @since 2.3.0
  *
  * @param string $field   The user Object field name.
  * @param mixed  $value   The user Object value.
@@ -1301,7 +1301,7 @@ function sanitize_user_field( $field, $value, $user_id, $context ) {
 			 * The dynamic portion of the hook name, `$field`, refers to the prefixed user
 			 * field being filtered, such as 'user_login', 'user_email', 'first_name', etc.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param mixed $value   Value of the prefixed user field.
 			 * @param int   $user_id User ID.
@@ -1326,7 +1326,7 @@ function sanitize_user_field( $field, $value, $user_id, $context ) {
 			 * The dynamic portion of the hook name, `$field`, refers to the prefixed user
 			 * field being filtered, such as 'user_login', 'user_email', 'first_name', etc.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param mixed $value Value of the prefixed user field.
 			 */
@@ -1346,7 +1346,7 @@ function sanitize_user_field( $field, $value, $user_id, $context ) {
 			 * The dynamic portion of the hook name, `$field`, refers to the prefixed user
 			 * field being filtered, such as 'user_login', 'user_email', 'first_name', etc.
 			 *
-			 * @since WP-2.9.0
+			 * @since 2.9.0
 			 *
 			 * @param mixed  $value   The user object value to sanitize.
 			 * @param int    $user_id User ID.
@@ -1371,7 +1371,7 @@ function sanitize_user_field( $field, $value, $user_id, $context ) {
 /**
  * Update all user caches
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param WP_User $user User object to be cached
  * @return bool|null Returns false on failure.
@@ -1394,8 +1394,8 @@ function update_user_caches( $user ) {
 /**
  * Clean all user caches
  *
- * @since WP-3.0.0
- * @since WP-4.4.0 'clean_user_cache' action was added.
+ * @since 3.0.0
+ * @since 4.4.0 'clean_user_cache' action was added.
  *
  * @param WP_User|int $user User object or ID to be cleaned from the cache
  */
@@ -1416,7 +1416,7 @@ function clean_user_cache( $user ) {
 	/**
 	 * Fires immediately after the given user's cache is cleaned.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param int     $user_id User ID.
 	 * @param WP_User $user    User object.
@@ -1427,7 +1427,7 @@ function clean_user_cache( $user ) {
 /**
  * Checks whether the given username exists.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @param string $username Username.
  * @return int|false The user's ID on success, and false on failure.
@@ -1442,7 +1442,7 @@ function username_exists( $username ) {
 	/**
 	 * Filters whether the given username exists or not.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param int|false $user_id  The user's ID on success, and false on failure.
 	 * @param string    $username Username to check.
@@ -1453,7 +1453,7 @@ function username_exists( $username ) {
 /**
  * Checks whether the given email exists.
  *
- * @since WP-2.1.0
+ * @since 2.1.0
  *
  * @param string $email Email.
  * @return int|false The user's ID on success, and false on failure.
@@ -1468,8 +1468,8 @@ function email_exists( $email ) {
 /**
  * Checks whether a username is valid.
  *
- * @since WP-2.0.1
- * @since WP-4.4.0 Empty sanitized usernames are now considered invalid
+ * @since 2.0.1
+ * @since 4.4.0 Empty sanitized usernames are now considered invalid
  *
  * @param string $username Username.
  * @return bool Whether username given is valid
@@ -1481,7 +1481,7 @@ function validate_username( $username ) {
 	/**
 	 * Filters whether the provided username is valid or not.
 	 *
-	 * @since WP-2.0.1
+	 * @since 2.0.1
 	 *
 	 * @param bool   $valid    Whether given username is valid.
 	 * @param string $username Username to check.
@@ -1498,10 +1498,10 @@ function validate_username( $username ) {
  * name. An example using 'description' would have the filter called, 'pre_user_description' that
  * can be hooked into.
  *
- * @since WP-2.0.0
- * @since WP-3.6.0 The `aim`, `jabber`, and `yim` fields were removed as default user contact
+ * @since 2.0.0
+ * @since 3.6.0 The `aim`, `jabber`, and `yim` fields were removed as default user contact
  *              methods for new installations. See wp_get_user_contact_methods().
- * @since WP-4.7.0 The user's locale can be passed to `$userdata`.
+ * @since 4.7.0 The user's locale can be passed to `$userdata`.
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -1577,7 +1577,7 @@ function wp_insert_user( $userdata ) {
 	 *
 	 * This filter is called before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $sanitized_user_login Username after it has been sanitized.
 	 */
@@ -1600,7 +1600,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters the list of blacklisted usernames.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $usernames Array of blacklisted usernames.
 	 */
@@ -1631,7 +1631,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's nicename before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $user_nicename The user's nicename.
 	 */
@@ -1642,7 +1642,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's URL before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $raw_user_url The user's URL.
 	 */
@@ -1653,7 +1653,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's email before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $raw_user_email The user's email.
 	 */
@@ -1675,7 +1675,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's nickname before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $nickname The user's nickname.
 	 */
@@ -1686,7 +1686,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's first name before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $first_name The user's first name.
 	 */
@@ -1697,7 +1697,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's last name before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $last_name The user's last name.
 	 */
@@ -1723,7 +1723,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's display name before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $display_name The user's display name.
 	 */
@@ -1734,7 +1734,7 @@ function wp_insert_user( $userdata ) {
 	/**
 	 * Filters a user's description before the user is created or updated.
 	 *
-	 * @since WP-2.0.3
+	 * @since 2.0.3
 	 *
 	 * @param string $description The user's description.
 	 */
@@ -1783,7 +1783,7 @@ function wp_insert_user( $userdata ) {
 	 *
 	 * It only includes data in the wp_users table wp_user, not any user metadata.
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
 	 * @param array    $data {
 	 *     Values and keys for the user.
@@ -1821,7 +1821,7 @@ function wp_insert_user( $userdata ) {
 	 *
 	 * Does not include contact methods. These are added using `wp_get_user_contact_methods( $user )`.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $meta {
 	 *     Default meta values and keys for the user.
@@ -1867,7 +1867,7 @@ function wp_insert_user( $userdata ) {
 		/**
 		 * Fires immediately after an existing user is updated.
 		 *
-		 * @since WP-2.0.0
+		 * @since 2.0.0
 		 *
 		 * @param int     $user_id       User ID.
 		 * @param WP_User $old_user_data Object containing user's data prior to update.
@@ -1877,7 +1877,7 @@ function wp_insert_user( $userdata ) {
 		/**
 		 * Fires immediately after a new user is registered.
 		 *
-		 * @since WP-1.5.0
+		 * @since 1.5.0
 		 *
 		 * @param int $user_id User ID.
 		 */
@@ -1896,7 +1896,7 @@ function wp_insert_user( $userdata ) {
  * If current user's password is being updated, then the cookies will be
  * cleared.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  *
  * @see wp_insert_user() For what fields can be set in $userdata.
  *
@@ -1939,7 +1939,7 @@ function wp_update_user( $userdata ) {
 		/**
 		 * Filters whether to send the password change email.
 		 *
-		 * @since WP-4.3.0
+		 * @since 4.3.0
 		 *
 		 * @see wp_insert_user() For `$user` and `$userdata` fields.
 		 *
@@ -1955,7 +1955,7 @@ function wp_update_user( $userdata ) {
 		/**
 		 * Filters whether to send the email change email.
 		 *
-		 * @since WP-4.3.0
+		 * @since 4.3.0
 		 *
 		 * @see wp_insert_user() For `$user` and `$userdata` fields.
 		 *
@@ -2011,7 +2011,7 @@ All at ###SITENAME###
 			/**
 			 * Filters the contents of the email sent when the user's password is changed.
 			 *
-			 * @since WP-4.3.0
+			 * @since 4.3.0
 			 *
 			 * @param array $pass_change_email {
 			 *            Used to build wp_mail().
@@ -2069,7 +2069,7 @@ All at ###SITENAME###
 			/**
 			 * Filters the contents of the email sent when the user's email is changed.
 			 *
-			 * @since WP-4.3.0
+			 * @since 4.3.0
 			 *
 			 * @param array $email_change_email {
 			 *            Used to build wp_mail().
@@ -2134,7 +2134,7 @@ All at ###SITENAME###
  * Creates a new user with just the username, password, and email. For more
  * complex user creation use wp_insert_user() to specify more information.
  *
- * @since WP-2.0.0
+ * @since 2.0.0
  * @see wp_insert_user() More complete way to create a new user
  *
  * @param string $username The user's username.
@@ -2158,7 +2158,7 @@ function wp_create_user( $username, $password, $email = '' ) {
  * The list of keys returned via this function are dependent on the presence
  * of those keys in the user meta data to be set.
  *
- * @since WP-3.3.0
+ * @since 3.3.0
  * @access private
  *
  * @param WP_User $user WP_User instance.
@@ -2174,7 +2174,7 @@ function _get_additional_user_keys( $user ) {
  *
  * Default contact methods were removed in WP-3.6. A filter dictates contact methods.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param WP_User $user Optional. WP_User object.
  * @return array Array of contact methods and their labels.
@@ -2192,7 +2192,7 @@ function wp_get_user_contact_methods( $user = null ) {
 	/**
 	 * Filters the user contact methods.
 	 *
-	 * @since WP-2.9.0
+	 * @since 2.9.0
 	 *
 	 * @param array   $methods Array of contact methods and their labels.
 	 * @param WP_User $user    WP_User object.
@@ -2205,7 +2205,7 @@ function wp_get_user_contact_methods( $user = null ) {
  *
  * Use wp_get_user_contact_methods() instead.
  *
- * @since WP-2.9.0
+ * @since 2.9.0
  * @access private
  *
  * @param WP_User $user Optional. WP_User object. Default null.
@@ -2218,7 +2218,7 @@ function _wp_get_user_contactmethods( $user = null ) {
 /**
  * Gets the text suggesting how to create strong passwords.
  *
- * @since WP-4.1.0
+ * @since 4.1.0
  *
  * @return string The password hint text.
  */
@@ -2228,7 +2228,7 @@ function wp_get_password_hint() {
 	/**
 	 * Filters the text describing the site's password complexity policy.
 	 *
-	 * @since WP-4.1.0
+	 * @since 4.1.0
 	 *
 	 * @param string $hint The password hint text.
 	 */
@@ -2238,7 +2238,7 @@ function wp_get_password_hint() {
 /**
  * Creates, stores, then returns a password reset key for user.
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
  * @global wpdb         $wpdb      ClassicPress database abstraction object.
  * @global PasswordHash $wp_hasher Portable PHP password hashing framework.
@@ -2255,7 +2255,7 @@ function get_password_reset_key( $user ) {
 	 *
 	 * Use the {@see 'retrieve_password'} hook instead.
 	 *
-	 * @since WP-1.5.0
+	 * @since 1.5.0
 	 * @deprecated WP-1.5.1 Misspelled. Use 'retrieve_password' hook instead.
 	 *
 	 * @param string $user_login The user login name.
@@ -2265,7 +2265,7 @@ function get_password_reset_key( $user ) {
 	/**
 	 * Fires before a new password is retrieved.
 	 *
-	 * @since WP-1.5.1
+	 * @since 1.5.1
 	 *
 	 * @param string $user_login The user login name.
 	 */
@@ -2279,7 +2279,7 @@ function get_password_reset_key( $user ) {
 	/**
 	 * Filters whether to allow a password to be reset.
 	 *
-	 * @since WP-2.7.0
+	 * @since 2.7.0
 	 *
 	 * @param bool $allow         Whether to allow the password to be reset. Default true.
 	 * @param int  $user_data->ID The ID of the user attempting to reset a password.
@@ -2298,7 +2298,7 @@ function get_password_reset_key( $user ) {
 	/**
 	 * Fires when a password reset key is generated.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 *
 	 * @param string $user_login The username for the user.
 	 * @param string $key        The generated password reset key.
@@ -2327,7 +2327,7 @@ function get_password_reset_key( $user ) {
  * hashing process. This field is now hashed; old values are no longer accepted
  * but have a different WP_Error code so good user feedback can be provided.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @global wpdb         $wpdb      ClassicPress database object for queries.
  * @global PasswordHash $wp_hasher Portable PHP password hashing framework instance.
@@ -2362,7 +2362,7 @@ function check_password_reset_key( $key, $login ) {
 	/**
 	 * Filters the expiration time of password reset keys.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param int $expiration The expiration time in seconds.
 	 */
@@ -2397,8 +2397,8 @@ function check_password_reset_key( $key, $login ) {
 		 * Filters the return value of check_password_reset_key() when an
 		 * old-style key is used.
 		 *
-		 * @since WP-3.7.0 Previously plain-text keys were stored in the database.
-		 * @since WP-4.3.0 Previously key hashes were stored without an expiration time.
+		 * @since 3.7.0 Previously plain-text keys were stored in the database.
+		 * @since 4.3.0 Previously key hashes were stored without an expiration time.
 		 *
 		 * @param WP_Error $return  A WP_Error object denoting an expired key.
 		 *                          Return a WP_User object to validate the key.
@@ -2413,8 +2413,8 @@ function check_password_reset_key( $key, $login ) {
 /**
  * Handles sending a password retrieval email to a user.
  *
- * @since WP-2.5.0
- * @since WP-5.7.0 Added `$user_login` parameter.
+ * @since 2.5.0
+ * @since 5.7.0 Added `$user_login` parameter.
  *
  * @global wpdb         $wpdb       WordPress database abstraction object.
  * @global PasswordHash $wp_hasher  Portable PHP password hashing framework.
@@ -2448,7 +2448,7 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * Allows, for example, custom validation using data other than username or email address.
 	 *
-	 * @since WP-5.7.0
+	 * @since 5.7.0
 	 *
 	 * @param WP_User|false $user_data WP_User object if found, false if the user does not exist.
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
@@ -2459,9 +2459,9 @@ function retrieve_password( $user_login = null ) {
 	/**
 	 * Fires before errors are returned from a password reset request.
 	 *
-	 * @since WP-2.1.0
-	 * @since WP-4.4.0 Added the `$errors` parameter.
-	 * @since WP-5.4.0 Added the `$user_data` parameter.
+	 * @since 2.1.0
+	 * @since 4.4.0 Added the `$errors` parameter.
+	 * @since 5.4.0 Added the `$user_data` parameter.
 	 *
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
 	 *                                 by using invalid credentials.
@@ -2478,7 +2478,7 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * If any errors are present in $errors, this will abort the password reset request.
 	 *
-	 * @since WP-5.5.0
+	 * @since 5.5.0
 	 *
 	 * @param WP_Error      $errors    A WP_Error object containing any errors generated
 	 *                                 by using invalid credentials.
@@ -2538,8 +2538,8 @@ function retrieve_password( $user_login = null ) {
 	/**
 	 * Filters the subject of the password reset email.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-4.4.0 Added the `$user_login` and `$user_data` parameters.
+	 * @since 2.8.0
+	 * @since 4.4.0 Added the `$user_login` and `$user_data` parameters.
 	 *
 	 * @param string  $title      Email subject.
 	 * @param string  $user_login The username for the user.
@@ -2552,8 +2552,8 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * If the filtered message is empty, the password reset email will not be sent.
 	 *
-	 * @since WP-2.8.0
-	 * @since WP-4.1.0 Added `$user_login` and `$user_data` parameters.
+	 * @since 2.8.0
+	 * @since 4.1.0 Added `$user_login` and `$user_data` parameters.
 	 *
 	 * @param string  $message    Email message.
 	 * @param string  $key        The activation key.
@@ -2572,7 +2572,7 @@ function retrieve_password( $user_login = null ) {
 /**
  * Handles resetting the user's password.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param WP_User $user     The user
  * @param string $new_pass New password for the user in plaintext
@@ -2581,7 +2581,7 @@ function reset_password( $user, $new_pass ) {
 	/**
 	 * Fires before the user's password is reset.
 	 *
-	 * @since WP-1.5.0
+	 * @since 1.5.0
 	 *
 	 * @param object $user     The user.
 	 * @param string $new_pass New user password.
@@ -2594,7 +2594,7 @@ function reset_password( $user, $new_pass ) {
 	/**
 	 * Fires after the user's password is reset.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param WP_User $user     The user.
 	 * @param string  $new_pass New user password.
@@ -2605,7 +2605,7 @@ function reset_password( $user, $new_pass ) {
 /**
  * Handles registering a new user.
  *
- * @since WP-2.5.0
+ * @since 2.5.0
  *
  * @param string $user_login User's username for logging in
  * @param string $user_email User's email address to send password and add
@@ -2618,7 +2618,7 @@ function register_new_user( $user_login, $user_email ) {
 	/**
 	 * Filters the email address of a user being registered.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string $user_email The email address of the new user.
 	 */
@@ -2654,7 +2654,7 @@ function register_new_user( $user_login, $user_email ) {
 	/**
 	 * Fires when submitting registration form data, before the user is created.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param string   $sanitized_user_login The submitted username after being sanitized.
 	 * @param string   $user_email           The submitted email.
@@ -2673,7 +2673,7 @@ function register_new_user( $user_login, $user_email ) {
 	 *
 	 * If any errors are present in $errors, this will abort the user's registration.
 	 *
-	 * @since WP-2.1.0
+	 * @since 2.1.0
 	 *
 	 * @param WP_Error $errors               A WP_Error object containing any errors encountered
 	 *                                       during registration.
@@ -2698,7 +2698,7 @@ function register_new_user( $user_login, $user_email ) {
 	/**
 	 * Fires after a new user registration has been recorded.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param int $user_id ID of the newly registered user.
 	 */
@@ -2712,8 +2712,8 @@ function register_new_user( $user_login, $user_email ) {
  *
  * Notifications are sent both to the site admin and to the newly created user.
  *
- * @since WP-4.4.0
- * @since WP-4.6.0 Converted the `$notify` parameter to accept 'user' for sending
+ * @since 4.4.0
+ * @since 4.6.0 Converted the `$notify` parameter to accept 'user' for sending
  *              notifications only to the user created.
  *
  * @param int    $user_id ID of the newly created user.
@@ -2728,7 +2728,7 @@ function wp_send_new_user_notifications( $user_id, $notify = 'both' ) {
 /**
  * Retrieve the current session token from the logged_in cookie.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  *
  * @return string Token.
  */
@@ -2740,7 +2740,7 @@ function wp_get_session_token() {
 /**
  * Retrieve a list of sessions for the current user.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  * @return array Array of sessions.
  */
 function wp_get_all_sessions() {
@@ -2751,7 +2751,7 @@ function wp_get_all_sessions() {
 /**
  * Remove the current session token from the database.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  */
 function wp_destroy_current_session() {
 	$token = wp_get_session_token();
@@ -2764,7 +2764,7 @@ function wp_destroy_current_session() {
 /**
  * Remove all but the current session token for the current user for the database.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  */
 function wp_destroy_other_sessions() {
 	$token = wp_get_session_token();
@@ -2777,7 +2777,7 @@ function wp_destroy_other_sessions() {
 /**
  * Remove all session tokens for the current user from the database.
  *
- * @since WP-4.0.0
+ * @since 4.0.0
  */
 function wp_destroy_all_sessions() {
 	$manager = WP_Session_Tokens::get_instance( get_current_user_id() );
@@ -2787,8 +2787,8 @@ function wp_destroy_all_sessions() {
 /**
  * Get the user IDs of all users with no role on this site.
  *
- * @since WP-4.4.0
- * @since WP-4.9.0 The `$site_id` parameter was added to support multisite.
+ * @since 4.4.0
+ * @since 4.9.0 The `$site_id` parameter was added to support multisite.
  *
  * @param int|null $site_id Optional. The site ID to get users with no role for. Defaults to the current site.
  * @return array Array of user IDs.
@@ -2838,7 +2838,7 @@ function wp_get_users_with_no_role( $site_id = null ) {
  * get_currentuserinfo(), the latter of which is deprecated but used for backward
  * compatibility.
  *
- * @since WP-4.5.0
+ * @since 4.5.0
  * @access private
  *
  * @see wp_get_current_user()
@@ -2882,7 +2882,7 @@ function _wp_get_current_user() {
 	 * Returning a value of false will effectively short-circuit setting
 	 * the current user.
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
 	 *
 	 * @param int|bool $user_id User ID if one has been determined, false otherwise.
 	 */
@@ -2900,8 +2900,8 @@ function _wp_get_current_user() {
 /**
  * Send a confirmation request email when a change of user email address is attempted.
  *
- * @since WP-3.0.0
- * @since WP-4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
+ * @since 3.0.0
+ * @since 4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
  *
  * @global WP_Error $errors WP_Error object.
  * @global wpdb     $wpdb   ClassicPress database object.
@@ -2982,8 +2982,8 @@ All at ###SITENAME###
 		 * ###SITENAME###  The name of the site.
 		 * ###SITEURL###   The URL to the site.
 		 *
-		 * @since WP-MU (3.0.0)
-		 * @since WP-4.9.0 This filter is no longer Multisite specific.
+		 * @since MU (3.0.0)
+		 * @since 4.9.0 This filter is no longer Multisite specific.
 		 *
 		 * @param string $email_text     Text in the email.
 		 * @param array  $new_user_email {
@@ -3011,8 +3011,8 @@ All at ###SITENAME###
  * Adds an admin notice alerting the user to check for confirmation request email
  * after email address change.
  *
- * @since WP-3.0.0
- * @since WP-4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
+ * @since 3.0.0
+ * @since 4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
  *
  * @global string $pagenow
  */
@@ -3027,7 +3027,7 @@ function new_user_email_admin_notice() {
 /**
  * Get all user privacy request types.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  * @access private
  *
  * @return array List of core privacy action types.
@@ -3042,7 +3042,7 @@ function _wp_privacy_action_request_types() {
 /**
  * Registers the personal data exporter for users.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param array $exporters  An array of personal data exporters.
  * @return array An array of personal data exporters.
@@ -3059,7 +3059,7 @@ function wp_register_user_personal_data_exporter( $exporters ) {
 /**
  * Finds and exports personal data associated with an email address from the user and user_meta table.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $email_address  The users email address.
  * @return array An array of personal data.
@@ -3141,7 +3141,7 @@ function wp_user_personal_data_exporter( $email_address ) {
 /**
  * Update log when privacy request is confirmed.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  * @access private
  *
  * @param int $request_id ID of the request.
@@ -3172,7 +3172,7 @@ function _wp_privacy_account_request_confirmed( $request_id ) {
  * Without this, the admin would have to manually check the site to see if any
  * action was needed on their part yet.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id The ID of the request.
  */
@@ -3201,7 +3201,7 @@ function _wp_privacy_send_request_confirmation_notification( $request_id ) {
 	 * delegate those capabilities to a single-site admin, or a dedicated person
 	 * responsible for managing privacy requests.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string          $admin_email  The email address of the notification recipient.
 	 * @param WP_User_Request $request_data The request that is initiating the notification.
@@ -3248,7 +3248,7 @@ All at ###SITENAME###
 	 * ###MANAGE_URL###  The URL to manage requests.
 	 * ###SITEURL###     The URL to the site.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $email_text Text in the email.
 	 * @param array  $email_data {
@@ -3281,7 +3281,7 @@ All at ###SITENAME###
 	/**
 	 * Filters the subject of the user request confirmation email.
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @param string $subject    The email subject.
 	 * @param string $sitename   The name of the site.
@@ -3311,7 +3311,7 @@ All at ###SITENAME###
  *
  * Without this, the user would never know if their data was actually erased.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id The privacy request post ID associated with this request.
  */
@@ -3331,7 +3331,7 @@ function _wp_privacy_send_erasure_fulfillment_notification( $request_id ) {
 	/**
 	 * Filters the recipient of the data erasure fulfillment notification.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string          $user_email   The email address of the notification recipient.
 	 * @param WP_User_Request $request_data The request that is initiating the notification.
@@ -3355,7 +3355,7 @@ function _wp_privacy_send_erasure_fulfillment_notification( $request_id ) {
 	/**
 	 * Filters the subject of the email sent when an erasure request is completed.
 	 *
-	 * @since WP-4.9.8
+	 * @since 4.9.8
 	 *
 	 * @param string $subject    The email subject.
 	 * @param string $sitename   The name of the site.
@@ -3415,7 +3415,7 @@ All at ###SITENAME###
 	 * ###PRIVACY_POLICY_URL### Privacy policy page URL.
 	 * ###SITEURL###            The URL to the site.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $email_text Text in the email.
 	 * @param array  $email_data {
@@ -3446,7 +3446,7 @@ All at ###SITENAME###
 /**
  * Return request confirmation message HTML.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  * @access private
  *
  * @param int $request_id The request ID being confirmed.
@@ -3471,7 +3471,7 @@ function _wp_privacy_account_request_confirmed_message( $request_id ) {
 	/**
 	 * Filters the message displayed to a user when they confirm a data request.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $message    The message to the user.
 	 * @param int    $request_id The ID of the request being confirmed.
@@ -3487,7 +3487,7 @@ function _wp_privacy_account_request_confirmed_message( $request_id ) {
  * Requests are stored inside a post type named `user_request` since they can apply to both
  * users on the site, or guests without a user account.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $email_address User email address. This can be the address of a registered or non-registered user.
  * @param string $action_name   Name of the action that is being confirmed. Required.
@@ -3544,7 +3544,7 @@ function wp_create_user_request( $email_address = '', $action_name = '', $reques
 /**
  * Get action description from the name and return a string.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $action_name Action name of the request.
  * @return string Human readable action name.
@@ -3566,7 +3566,7 @@ function wp_user_request_action_description( $action_name ) {
 	/**
 	 * Filters the user action description.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $description The default description.
 	 * @param string $action_name The name of the request.
@@ -3579,7 +3579,7 @@ function wp_user_request_action_description( $action_name ) {
  *
  * If the request is not already pending, it will be updated.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $request_id ID of the request created via wp_create_user_request().
  * @return WP_Error|bool Will return true/false based on the success of sending the email, or a WP_Error object.
@@ -3637,7 +3637,7 @@ All at ###SITENAME###
 	 * ###SITENAME###    The name of the site.
 	 * ###SITEURL###     The URL to the site.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $email_text Text in the email.
 	 * @param array  $email_data {
@@ -3665,7 +3665,7 @@ All at ###SITENAME###
 	/**
 	 * Filters the subject of the email sent when an account action is attempted.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $subject    The email subject.
 	 * @param string $sitename   The name of the site.
@@ -3688,7 +3688,7 @@ All at ###SITENAME###
 /**
  * Returns a confirmation key for a user action and stores the hashed version for future comparison.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id Request ID.
  * @return string Confirmation key.
@@ -3721,7 +3721,7 @@ function wp_generate_user_request_key( $request_id ) {
 /**
  * Validate a user request by comparing the key with the request's key.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param string $request_id ID of the request being confirmed.
  * @param string $key        Provided key to validate.
@@ -3764,7 +3764,7 @@ function wp_validate_user_request_key( $request_id, $key ) {
 	/**
 	 * Filters the expiration time of confirm keys.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param int $expiration The expiration time in seconds.
 	 */
@@ -3785,7 +3785,7 @@ function wp_validate_user_request_key( $request_id, $key ) {
 /**
  * Return data about a user request.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  *
  * @param int $request_id Request ID to get data about.
  * @return WP_User_Request|false
@@ -3806,7 +3806,7 @@ function wp_get_user_request_data( $request_id ) {
  *
  * Represents user request data loaded from a WP_Post object.
  *
- * @since WP-4.9.6
+ * @since 4.9.6
  */
 final class WP_User_Request {
 	/**
@@ -3890,7 +3890,7 @@ final class WP_User_Request {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param WP_Post|object $post Post object.
 	 */

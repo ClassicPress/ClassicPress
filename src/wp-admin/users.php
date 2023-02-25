@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-1.0.0
+ * @since 1.0.0
  */
 
 /** ClassicPress Administration Bootstrap */
@@ -309,8 +309,8 @@ switch ( $wp_list_table->current_action() ) {
 			/**
 			 * Fires at the end of the delete users form prior to the confirm button.
 			 *
-			 * @since WP-4.0.0
-			 * @since WP-4.5.0 The `$userids` parameter was added.
+			 * @since 4.0.0
+			 * @since 4.5.0 The `$userids` parameter was added.
 			 *
 			 * @param WP_User $current_user WP_User object for the current user.
 			 * @param array   $userids      Array of IDs for users being deleted.

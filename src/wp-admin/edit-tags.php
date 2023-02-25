@@ -217,7 +217,7 @@ if ( $location ) {
 	/**
 	 * Filters the taxonomy redirect destination URL.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param string $location The destination URL.
 	 * @param object $tax      The taxonomy object.
@@ -366,7 +366,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires before the Add Category form.
 		 *
-		 * @since WP-2.1.0
+		 * @since 2.1.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_add_form instead.
 		 *
 		 * @param object $arg Optional arguments cast to an object.
@@ -376,7 +376,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires before the link category form.
 		 *
-		 * @since WP-2.3.0
+		 * @since 2.3.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_add_form instead.
 		 *
 		 * @param object $arg Optional arguments cast to an object.
@@ -386,7 +386,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires before the Add Tag form.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_add_form instead.
 		 *
 		 * @param string $taxonomy The taxonomy slug.
@@ -399,7 +399,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $taxonomy The taxonomy slug.
 	 */
@@ -415,7 +415,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 	 *
-	 * @since WP-3.7.0
+	 * @since 3.7.0
 	 */
 	do_action( "{$taxonomy}_term_new_form_tag" );
 	?>
@@ -455,8 +455,8 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Filters the taxonomy parent drop-down on the Edit Term page.
 		 *
-		 * @since WP-3.7.0
-		 * @since WP-4.2.0 Added `$context` parameter.
+		 * @since 3.7.0
+		 * @since 4.2.0 Added `$context` parameter.
 		 *
 		 * @param array  $dropdown_args {
 		 *     An array of taxonomy parent drop-down arguments.
@@ -495,7 +495,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires after the Add Tag form fields for non-hierarchical taxonomies.
 		 *
-		 * @since WP-3.0.0
+		 * @since 3.0.0
 		 *
 		 * @param string $taxonomy The taxonomy slug.
 		 */
@@ -507,7 +507,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $taxonomy The taxonomy slug.
 	 */
@@ -519,7 +519,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires at the end of the Edit Category form.
 		 *
-		 * @since WP-2.1.0
+		 * @since 2.1.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_add_form instead.
 		 *
 		 * @param object $arg Optional arguments cast to an object.
@@ -529,7 +529,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires at the end of the Edit Link form.
 		 *
-		 * @since WP-2.3.0
+		 * @since 2.3.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_add_form instead.
 		 *
 		 * @param object $arg Optional arguments cast to an object.
@@ -539,7 +539,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 		/**
 		 * Fires at the end of the Add Tag form.
 		 *
-		 * @since WP-2.7.0
+		 * @since 2.7.0
 		 * @deprecated WP-3.0.0 Use {$taxonomy}_add_form instead.
 		 *
 		 * @param string $taxonomy The taxonomy slug.
@@ -552,7 +552,7 @@ if ( current_user_can( $tax->cap->edit_terms ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param string $taxonomy The taxonomy slug.
 	 */
@@ -606,7 +606,7 @@ endif;
  *
  * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $taxonomy The taxonomy name.
  */

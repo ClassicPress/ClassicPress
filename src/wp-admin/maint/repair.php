@@ -87,7 +87,7 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	/**
 	 * Filters additional database tables to repair.
 	 *
-	 * @since WP-3.0.0
+	 * @since 3.0.0
 	 *
 	 * @param array $tables Array of prefixed table names to be repaired.
 	 */

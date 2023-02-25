@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 $messages = array();
@@ -42,7 +42,7 @@ $messages['post_tag'] = array(
 /**
  * Filters the messages displayed when a tag is updated.
  *
- * @since WP-3.7.0
+ * @since 3.7.0
  *
  * @param array $messages The messages to be displayed.
  */

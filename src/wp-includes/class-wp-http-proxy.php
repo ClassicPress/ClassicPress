@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage HTTP
- * @since WP-4.4.0
+ * @since 4.4.0
  */
 
 /**
@@ -37,14 +37,14 @@
  * @link https://core.trac.wordpress.org/ticket/4011 Proxy support ticket in ClassicPress.
  * @link https://core.trac.wordpress.org/ticket/14636 Allow wildcard domains in WP_PROXY_BYPASS_HOSTS
  *
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 class WP_HTTP_Proxy {
 
 	/**
 	 * Whether proxy connection should be used.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @use WP_PROXY_HOST
 	 * @use WP_PROXY_PORT
@@ -58,7 +58,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Whether authentication should be used.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @use WP_PROXY_USERNAME
 	 * @use WP_PROXY_PASSWORD
@@ -72,7 +72,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve the host for the proxy server.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -87,7 +87,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve the port for the proxy server.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -102,7 +102,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve the username for proxy authentication.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -117,7 +117,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve the password for proxy authentication.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -132,7 +132,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve authentication string for proxy authentication.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -143,7 +143,7 @@ class WP_HTTP_Proxy {
 	/**
 	 * Retrieve header string for proxy authentication.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @return string
 	 */
@@ -158,7 +158,7 @@ class WP_HTTP_Proxy {
 	 * some proxies can not handle this. We also have the constant available for defining other
 	 * hosts that won't be sent through the proxy.
 	 *
-	 * @since WP-2.8.0
+	 * @since 2.8.0
 	 *
 	 * @staticvar array|null $bypass_hosts
 	 * @staticvar array      $wildcard_regex
@@ -186,7 +186,7 @@ class WP_HTTP_Proxy {
 		 * Returning false will bypass the proxy; returning true will send
 		 * the request through the proxy. Returning null bypasses the filter.
 		 *
-		 * @since WP-3.5.0
+		 * @since 3.5.0
 		 *
 		 * @param null   $override Whether to override the request result. Default null.
 		 * @param string $uri      URL to check.

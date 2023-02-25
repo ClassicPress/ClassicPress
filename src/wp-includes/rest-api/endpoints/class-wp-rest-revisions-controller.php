@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage REST_API
- * @since WP-4.7.0
+ * @since 4.7.0
  */
 
 /**
  * Core class used to access revisions via the REST API.
  *
- * @since WP-4.7.0
+ * @since 4.7.0
  *
  * @see WP_REST_Controller
  */
@@ -19,7 +19,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Parent post type.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string
 	 */
 	private $parent_post_type;
@@ -27,7 +27,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Parent controller.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var WP_REST_Controller
 	 */
 	private $parent_controller;
@@ -35,7 +35,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * The base of the parent controller's route.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 * @var string
 	 */
 	private $parent_base;
@@ -43,7 +43,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string $parent_post_type Post type of the parent.
 	 */
@@ -59,7 +59,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Registers routes for revisions based on post types supporting revisions.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @see register_rest_route()
 	 */
@@ -128,7 +128,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Get the parent post, if the ID is valid.
 	 *
-	 * @since WP-4.7.2
+	 * @since 4.7.2
 	 *
 	 * @param int $id Supplied ID.
 	 * @return WP_Post|WP_Error Post object if ID is valid, WP_Error otherwise.
@@ -150,7 +150,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to get revisions.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return true|WP_Error True if the request has read access, WP_Error object otherwise.
@@ -172,7 +172,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Get the revision, if the ID is valid.
 	 *
-	 * @since WP-4.7.2
+	 * @since 4.7.2
 	 *
 	 * @param int $id Supplied ID.
 	 * @return WP_Post|WP_Error Revision post object if ID is valid, WP_Error otherwise.
@@ -194,7 +194,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Gets a collection of revisions.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -218,7 +218,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to get a specific revision.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return bool|WP_Error True if the request has read access for the item, WP_Error object otherwise.
@@ -230,7 +230,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves one revision from the collection.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -253,7 +253,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Checks if a given request has access to delete a revision.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True if the request has access to delete the item, WP_Error object otherwise.
@@ -281,7 +281,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Deletes a single revision.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True on success, or WP_Error object on failure.
@@ -307,7 +307,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 		/**
 		 * Fires after a revision is deleted via the REST API.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param (mixed) $result The revision object (if it was deleted or moved to the trash successfully)
 		 *                        or false (failure). If the revision was moved to the trash, $result represents
@@ -333,7 +333,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Prepares the revision for the REST response.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param WP_Post         $post    Post revision object.
 	 * @param WP_REST_Request $request Request object.
@@ -424,7 +424,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 		 *
 		 * Allows modification of the revision right before it is returned.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 *
 		 * @param WP_REST_Response $response The response object.
 		 * @param WP_Post          $post     The original revision object.
@@ -437,7 +437,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	 * Checks the post_date_gmt or modified_gmt and prepare any post or
 	 * modified date for single post output.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string      $date_gmt GMT publication time.
 	 * @param string|null $date     Optional. Local publication time. Default null.
@@ -458,7 +458,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the revision's schema, conforming to JSON Schema.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Item schema data.
 	 */
@@ -545,7 +545,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Retrieves the query params for collections.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @return array Collection parameters.
 	 */
@@ -558,7 +558,7 @@ class WP_REST_Revisions_Controller extends WP_REST_Controller {
 	/**
 	 * Checks the post excerpt and prepare it for single post output.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
 	 * @param string  $excerpt The post excerpt.
 	 * @param WP_Post $post    Post revision object.

@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Widgets
- * @since WP-2.8.0
+ * @since 2.8.0
  */
 
 /** WP_Widget_Pages class */

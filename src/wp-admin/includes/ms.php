@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 
 /**
  * Determine if uploaded file exceeds space quota.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array $file $_FILES array for a given file.
  * @return array $_FILES array with 'error' key set if file exceeds quota. 'error' is empty otherwise.
@@ -55,7 +55,7 @@ function check_upload_size( $file ) {
 /**
  * Delete a site.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -75,7 +75,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 	/**
 	 * Fires before a site is deleted.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param int  $blog_id The site ID.
 	 * @param bool $drop    True if site's table should be dropped. Default is false.
@@ -124,7 +124,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 		/**
 		 * Filters the tables to drop when the site is deleted.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param array $tables  The site tables to be dropped.
 		 * @param int   $blog_id The ID of the site to drop tables for.
@@ -140,7 +140,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 		/**
 		 * Filters the upload base directory to delete when the site is deleted.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param string $uploads['basedir'] Uploads path without subdirectory. @see wp_upload_dir()
 		 * @param int    $blog_id            The site ID.
@@ -186,7 +186,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 	/**
 	 * Fires after the site is deleted from the network.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @param int  $blog_id The site ID.
 	 * @param bool $drop    True if site's tables should be dropped. Default is false.
@@ -201,7 +201,7 @@ function wpmu_delete_blog( $blog_id, $drop = false ) {
 /**
  * Delete a user from the network and remove from all sites.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @todo Merge with wp_delete_user() ?
  *
@@ -233,8 +233,8 @@ function wpmu_delete_user( $id ) {
 	/**
 	 * Fires before a user is deleted from the network.
 	 *
-	 * @since WP-MU (3.0.0)
-	 * @since WP-5.5.0 Added the `$user` parameter.
+	 * @since MU (3.0.0)
+	 * @since 5.5.0 Added the `$user` parameter.
 	 *
 	 * @param int     $id   ID of the user about to be deleted from the network.
 	 * @param WP_User $user WP_User object of the user about to be deleted from the network.
@@ -284,7 +284,7 @@ function wpmu_delete_user( $id ) {
 /**
  * Check whether a site has used its allotted upload space.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param bool $echo Optional. If $echo is set and the quota is exceeded, a warning message is echoed. Default is true.
  * @return bool True if user is over upload space quota, otherwise false.
@@ -313,7 +313,7 @@ function upload_is_user_over_quota( $echo = true ) {
 /**
  * Displays the amount of disk space used by the current site. Not used in core.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  */
 function display_space_usage() {
 	$space_allowed = get_space_allowed();
@@ -343,7 +343,7 @@ function display_space_usage() {
 /**
  * Get the remaining upload space for this site.
  *
- * @since WP-MU (3.0.0)
+ * @since MU (3.0.0)
  *
  * @param int $size Current max size in bytes
  * @return int Max size in bytes
@@ -359,7 +359,7 @@ function fix_import_form_size( $size ) {
 /**
  * Displays the site upload space quota setting form on the Edit Site Settings screen.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int $id The ID of the site to display the setting for.
  */
@@ -388,7 +388,7 @@ function upload_space_setting( $id ) {
  *
  * Used in core to mark a user as spam or "ham" (not spam) in Multisite.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global wpdb $wpdb ClassicPress database abstraction object.
  *
@@ -416,7 +416,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 			/**
 			 * Fires after the user is marked as a SPAM user.
 			 *
-			 * @since WP-3.0.0
+			 * @since 3.0.0
 			 *
 			 * @param int $id ID of the user marked as SPAM.
 			 */
@@ -425,7 +425,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 			/**
 			 * Fires after the user is marked as a HAM user. Opposite of SPAM.
 			 *
-			 * @since WP-3.0.0
+			 * @since 3.0.0
 			 *
 			 * @param int $id ID of the user marked as HAM.
 			 */
@@ -439,7 +439,7 @@ function update_user_status( $id, $pref, $value, $deprecated = null ) {
 /**
  * Cleans the user cache for a specific user.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param int $id The user ID.
  * @return bool|int The ID of the refreshed user or false if the user does not exist.
@@ -460,7 +460,7 @@ function refresh_user_details( $id ) {
 /**
  * Returns the language for a language code.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $code Optional. The two-letter language code. Default empty.
  * @return string The language corresponding to $code if it exists. If it does not exist,
@@ -659,7 +659,7 @@ function format_code_lang( $code = '' ) {
 	/**
 	 * Filters the language codes.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param array  $lang_codes Key/value pair of language codes where key is the short version.
 	 * @param string $code       A two-letter designation of the language.
@@ -671,7 +671,7 @@ function format_code_lang( $code = '' ) {
 /**
  * Synchronize category and post tag slugs when global terms are enabled.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param object $term     The term.
  * @param string $taxonomy The taxonomy for `$term`. Should be 'category' or 'post_tag', as these are
@@ -695,7 +695,7 @@ function sync_category_tag_slugs( $term, $taxonomy ) {
  * Displays an access denied message when a user tries to view a site's dashboard they
  * do not have access to.
  *
- * @since WP-3.2.0
+ * @since 3.2.0
  * @access private
  */
 function _access_denied_splash() {
@@ -737,7 +737,7 @@ function _access_denied_splash() {
 /**
  * Checks if the current user has permissions to import new users.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param string $permission A permission to be checked. Currently not used.
  * @return bool True if the user has proper permissions, false if they do not.
@@ -754,7 +754,7 @@ function check_import_new_users( $permission ) {
 /**
  * Generates and displays a drop-down of available languages.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array  $lang_files Optional. An array of the language files. Default empty array.
  * @param string $current    Optional. The current language code. Default empty.
@@ -790,7 +790,7 @@ function mu_dropdown_languages( $lang_files = array(), $current = '' ) {
 	/**
 	 * Filters the languages available in the dropdown.
 	 *
-	 * @since WP-MU (3.0.0)
+	 * @since MU (3.0.0)
 	 *
 	 * @param array $output     HTML output of the dropdown.
 	 * @param array $lang_files Available language files.
@@ -804,7 +804,7 @@ function mu_dropdown_languages( $lang_files = array(), $current = '' ) {
 /**
  * Displays an admin notice to upgrade all sites after a core upgrade.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @global int    $wp_db_version The version number of the database.
  * @global string $pagenow
@@ -833,7 +833,7 @@ function site_admin_notice() {
  * In a subdirectory installation this will make sure that a site and a post do not use the
  * same subdirectory by checking for a site with the same name as a new post.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  *
  * @param array $data    An array of post data.
  * @param array $postarr An array of posts. Not currently used.
@@ -871,7 +871,7 @@ function avoid_blog_page_permalink_collision( $data, $postarr ) {
  * This displays the user's primary site and allows the user to choose
  * which site is primary.
  *
- * @since WP-3.0.0
+ * @since 3.0.0
  */
 function choose_primary_blog() {
 	?>
@@ -925,7 +925,7 @@ function choose_primary_blog() {
  * By default editing of network is restricted to the Network Admin for that `$network_id`.
  * This function allows for this to be overridden.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @param int $network_id The network ID to check.
  * @return bool True if network can be edited, otherwise false.
@@ -940,7 +940,7 @@ function can_edit_network( $network_id ) {
 	/**
 	 * Filters whether this network can be edited from this page.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @param bool $result     Whether the network can be edited from this page.
 	 * @param int  $network_id The network ID to check.
@@ -951,7 +951,7 @@ function can_edit_network( $network_id ) {
 /**
  * Thickbox image paths for Network Admin.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  *
  * @access private
  */
@@ -1103,7 +1103,7 @@ function confirm_delete_users( $users ) {
 /**
  * Print JavaScript in the header on the Network Settings screen.
  *
- * @since WP-4.1.0
+ * @since 4.1.0
  */
 function network_settings_add_js() {
 	?>
@@ -1125,7 +1125,7 @@ jQuery(document).ready( function($) {
 /**
  * Outputs the HTML for a network's "Edit Site" tabular interface.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @param $args {
  *     Optional. Array or string of Query parameters. Default empty array.
@@ -1142,7 +1142,7 @@ function network_edit_site_nav( $args = array() ) {
 	 *
 	 * Default links: 'site-info', 'site-users', 'site-themes', and 'site-settings'.
 	 *
-	 * @since WP-4.6.0
+	 * @since 4.6.0
 	 *
 	 * @param array $links {
 	 *     An array of link data representing individual network admin pages.
@@ -1230,7 +1230,7 @@ function network_edit_site_nav( $args = array() ) {
 /**
  * Returns the arguments for the help tab on the Edit Site screens.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @return array Help tab arguments.
  */
@@ -1250,7 +1250,7 @@ function get_site_screen_help_tab_args() {
 /**
  * Returns the content for the help sidebar on the Edit Site screens.
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  *
  * @return string Help sidebar content.
  */

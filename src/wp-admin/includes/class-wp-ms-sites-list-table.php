@@ -4,13 +4,13 @@
  *
  * @package ClassicPress
  * @subpackage Administration
- * @since WP-3.1.0
+ * @since 3.1.0
  */
 
 /**
  * Core class used to implement displaying sites in a list table for the network admin.
  *
- * @since WP-3.1.0
+ * @since 3.1.0
  * @access private
  *
  * @see WP_List_Table
@@ -20,7 +20,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Site status list.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 * @var array
 	 */
 	public $status_list;
@@ -28,7 +28,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Constructor.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @see WP_List_Table::__construct() for more information on default arguments.
 	 *
@@ -61,7 +61,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Prepares the list of sites for display.
 	 *
-	 * @since WP-3.1.0
+	 * @since 3.1.0
 	 *
 	 * @global string $s
 	 * @global string $mode
@@ -164,7 +164,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		/**
 		 * Filters the arguments for the site query in the sites list table.
 		 *
-		 * @since WP-4.6.0
+		 * @since 4.6.0
 		 *
 		 * @param array $args An array of get_sites() arguments.
 		 */
@@ -251,7 +251,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		/**
 		 * Filters the displayed site columns in Sites list table.
 		 *
-		 * @since WP-MU (3.0.0)
+		 * @since MU (3.0.0)
 		 *
 		 * @param array $sites_columns An array of displayed site columns. Default 'cb',
 		 *                             'blogname', 'lastupdated', 'registered', 'users'.
@@ -273,7 +273,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the checkbox column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param array $blog Current site.
 	 */
@@ -292,7 +292,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the ID column output.
 	 *
-	 * @since WP-4.4.0
+	 * @since 4.4.0
 	 *
 	 * @param array $blog Current site.
 	 */
@@ -303,7 +303,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the site name column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @global string $mode List table view mode.
 	 *
@@ -356,7 +356,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the lastupdated column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @global string $mode List table view mode.
 	 *
@@ -377,7 +377,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the registered column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @global string $mode List table view mode.
 	 *
@@ -402,7 +402,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the users column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param array $blog Current site.
 	 */
@@ -430,7 +430,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles the plugins column output.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param array $blog Current site.
 	 */
@@ -441,7 +441,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			 *
 			 * By default this column is hidden unless something is hooked to the action.
 			 *
-			 * @since WP-MU (3.0.0)
+			 * @since MU (3.0.0)
 			 *
 			 * @param int $blog_id The site ID.
 			 */
@@ -452,7 +452,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Handles output for the default column.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param array  $blog        Current site.
 	 * @param string $column_name Current column name.
@@ -461,7 +461,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		/**
 		 * Fires for each registered custom column in the Sites list table.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param string $column_name The name of the column to display.
 		 * @param int    $blog_id     The site ID.
@@ -496,7 +496,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the default primary column.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @return string Name of the default primary column, in this case, 'blogname'.
 	 */
@@ -507,7 +507,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * Generates and displays row action links.
 	 *
-	 * @since WP-4.3.0
+	 * @since 4.3.0
 	 *
 	 * @param object $blog        Site being acted upon.
 	 * @param string $column_name Current column name.
@@ -571,7 +571,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		 * 'Activate' or 'Deactivate' link, 'Unarchive' or 'Archive' links, and
 		 * 'Not Spam' or 'Spam' link for each site.
 		 *
-		 * @since WP-3.1.0
+		 * @since 3.1.0
 		 *
 		 * @param array  $actions  An array of action links to be displayed.
 		 * @param int    $blog_id  The site ID.
