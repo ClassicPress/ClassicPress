@@ -2580,7 +2580,7 @@ function wp_update_comment_count_now( $post_id ) {
  */
 function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.7.0' );
+		_deprecated_argument( __FUNCTION__, '2.7.0' );
 	}
 
 	$pingback_str_dquote = 'rel="pingback"';

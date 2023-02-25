@@ -1148,7 +1148,7 @@ if ( ! function_exists( 'check_admin_referer' ) ) :
 	 */
 	function check_admin_referer( $action = -1, $query_arg = '_wpnonce' ) {
 		if ( -1 === $action ) {
-			_doing_it_wrong( __FUNCTION__, __( 'You should specify a nonce action to be verified by using the first parameter.' ), 'WP-3.2.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'You should specify a nonce action to be verified by using the first parameter.' ), '3.2.0' );
 		}
 
 		$adminurl = strtolower( admin_url() );
@@ -1192,7 +1192,7 @@ if ( ! function_exists( 'check_ajax_referer' ) ) :
 	 */
 	function check_ajax_referer( $action = -1, $query_arg = false, $die = true ) {
 		if ( -1 == $action ) {
-			_doing_it_wrong( __FUNCTION__, __( 'You should specify a nonce action to be verified by using the first parameter.' ), 'WP-4.7' );
+			_doing_it_wrong( __FUNCTION__, __( 'You should specify a nonce action to be verified by using the first parameter.' ), '4.7' );
 		}
 
 		$nonce = '';
@@ -1470,7 +1470,7 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 	 */
 	function wp_notify_postauthor( $comment_id, $deprecated = null ) {
 		if ( null !== $deprecated ) {
-			_deprecated_argument( __FUNCTION__, 'WP-3.8.0' );
+			_deprecated_argument( __FUNCTION__, '3.8.0' );
 		}
 
 		$comment = get_comment( $comment_id );
@@ -1917,7 +1917,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 	 */
 	function wp_new_user_notification( $user_id, $deprecated = null, $notify = '' ) {
 		if ( null !== $deprecated ) {
-			_deprecated_argument( __FUNCTION__, 'WP-4.3.1' );
+			_deprecated_argument( __FUNCTION__, '4.3.1' );
 		}
 
 		global $wpdb, $wp_hasher;

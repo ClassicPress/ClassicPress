@@ -639,7 +639,7 @@ function wp_get_active_and_valid_plugins() {
 
 	// Check for hacks file if the option is enabled
 	if ( get_option( 'hack_file' ) && file_exists( ABSPATH . 'my-hacks.php' ) ) {
-		_deprecated_file( 'my-hacks.php', 'WP-1.5.0' );
+		_deprecated_file( 'my-hacks.php', '1.5.0' );
 		array_unshift( $plugins, ABSPATH . 'my-hacks.php' );
 	}
 
@@ -722,7 +722,7 @@ function shutdown_action_hook() {
  * Copy an object.
  *
  * @since 2.7.0
- * @deprecated WP-3.2.0
+ * @deprecated 3.2.0
  *
  * @param object $object The object to clone.
  * @return object The cloned object.

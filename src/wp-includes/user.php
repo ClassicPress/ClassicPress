@@ -477,7 +477,7 @@ function get_user_option( $option, $user = 0, $deprecated = '' ) {
 	global $wpdb;
 
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
+		_deprecated_argument( __FUNCTION__, '3.0.0' );
 	}
 
 	if ( empty( $user ) ) {
@@ -2172,7 +2172,7 @@ function _get_additional_user_keys( $user ) {
 /**
  * Set up the user contact methods.
  *
- * Default contact methods were removed in WP-3.6. A filter dictates contact methods.
+ * Default contact methods were removed in 3.6. A filter dictates contact methods.
  *
  * @since 3.7.0
  *
@@ -2256,7 +2256,7 @@ function get_password_reset_key( $user ) {
 	 * Use the {@see 'retrieve_password'} hook instead.
 	 *
 	 * @since 1.5.0
-	 * @deprecated WP-1.5.1 Misspelled. Use 'retrieve_password' hook instead.
+	 * @deprecated 1.5.1 Misspelled. Use 'retrieve_password' hook instead.
 	 *
 	 * @param string $user_login The user login name.
 	 */

@@ -1075,7 +1075,7 @@ function edit_term_link( $link = '', $before = '', $after = '', $term = null, $e
 /**
  * Retrieves the permalink for a search.
  *
- * @since  WP-3.0.0
+ * @since  3.0.0
  *
  * @global WP_Rewrite $wp_rewrite
  *
@@ -1438,7 +1438,7 @@ function edit_post_link( $text = null, $before = '', $after = '', $id = 0, $clas
  */
 function get_delete_post_link( $id = 0, $deprecated = '', $force_delete = false ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
+		_deprecated_argument( __FUNCTION__, '3.0.0' );
 	}
 
 	$post = get_post( $id );
@@ -1700,7 +1700,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 		if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) {
 			// back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
 			if ( false !== strpos( $excluded_terms, ' and ' ) ) {
-				_deprecated_argument( __FUNCTION__, 'WP-3.3.0', sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
+				_deprecated_argument( __FUNCTION__, '3.3.0', sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
 				$excluded_terms = explode( ' and ', $excluded_terms );
 			} else {
 				$excluded_terms = explode( ',', $excluded_terms );
@@ -2273,7 +2273,7 @@ function get_pagenum_link( $pagenum = 1, $escape = true ) {
 /**
  * Retrieves the next posts page link.
  *
- * Backported from WP-2.1.3 to WP-2.0.10.
+ * Backported from 2.1.3 to 2.0.10.
  *
  * @since 2.0.10
  *
@@ -2375,7 +2375,7 @@ function next_posts_link( $label = null, $max_page = 0 ) {
  *
  * Will only return string, if not on a single page or post.
  *
- * Backported from WP-2.1.3 to WP-2.0.10.
+ * Backported from 2.1.3 to 2.0.10.
  *
  * @since 2.0.10
  *

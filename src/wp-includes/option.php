@@ -455,7 +455,7 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	global $wpdb;
 
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.3.0' );
+		_deprecated_argument( __FUNCTION__, '2.3.0' );
 	}
 
 	$option = trim( $option );
@@ -1149,7 +1149,7 @@ function get_site_option( $option, $default = false, $deprecated = true ) {
 /**
  * Add a new option for the current network.
  *
- * Existing options will not be updated. Note that prior to WP-3.3 this wasn't the case.
+ * Existing options will not be updated. Note that prior to 3.3 this wasn't the case.
  *
  * @since 2.8.0
  * @since 4.4.0 Modified into wrapper for add_network_option()
@@ -2147,7 +2147,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.0.0',
+			'3.0.0',
 			/* translators: %s: misc */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -2160,7 +2160,7 @@ function register_setting( $option_group, $option_name, $args = array() ) {
 	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.5.0',
+			'3.5.0',
 			/* translators: %s: privacy */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -2199,7 +2199,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	if ( 'misc' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.0.0',
+			'3.0.0',
 			/* translators: %s: misc */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -2212,7 +2212,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	if ( 'privacy' === $option_group ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.5.0',
+			'3.5.0',
 			/* translators: %s: privacy */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -2229,7 +2229,7 @@ function unregister_setting( $option_group, $option_name, $deprecated = '' ) {
 	if ( '' !== $deprecated ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-4.7.0',
+			'4.7.0',
 			/* translators: 1: $sanitize_callback, 2: register_setting() */
 			sprintf(
 				__( '%1$s is deprecated. The callback from %2$s is used instead.' ),

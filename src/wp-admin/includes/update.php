@@ -324,7 +324,7 @@ function update_right_now_message() {
 	/**
 	 * Filters the text displayed in the 'At a Glance' dashboard widget.
 	 *
-	 * Prior to WP-3.8.0, the widget was named 'Right Now'.
+	 * Prior to 3.8.0, the widget was named 'Right Now'.
 	 *
 	 * @since 4.4.0
 	 *

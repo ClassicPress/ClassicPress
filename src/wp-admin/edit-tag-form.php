@@ -17,7 +17,7 @@ if ( 'category' == $taxonomy ) {
 	 * Fires before the Edit Category form.
 	 *
 	 * @since 2.1.0
-	 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_edit_form instead.
+	 * @deprecated 3.0.0 Use {$taxonomy}_pre_edit_form instead.
 	 *
 	 * @param object $tag Current category term object.
 	 */
@@ -27,7 +27,7 @@ if ( 'category' == $taxonomy ) {
 	 * Fires before the Edit Link Category form.
 	 *
 	 * @since 2.3.0
-	 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_edit_form instead.
+	 * @deprecated 3.0.0 Use {$taxonomy}_pre_edit_form instead.
 	 *
 	 * @param object $tag Current link category term object.
 	 */
@@ -37,7 +37,7 @@ if ( 'category' == $taxonomy ) {
 	 * Fires before the Edit Tag form.
 	 *
 	 * @since 2.5.0
-	 * @deprecated WP-3.0.0 Use {$taxonomy}_pre_edit_form instead.
+	 * @deprecated 3.0.0 Use {$taxonomy}_pre_edit_form instead.
 	 *
 	 * @param object $tag Current tag term object.
 	 */
@@ -193,7 +193,7 @@ if ( isset( $tag->name ) ) {
 			 * Fires after the Edit Category form fields are displayed.
 			 *
 			 * @since 2.9.0
-			 * @deprecated WP-3.0.0 Use {$taxonomy}_edit_form_fields instead.
+			 * @deprecated 3.0.0 Use {$taxonomy}_edit_form_fields instead.
 			 *
 			 * @param object $tag Current category term object.
 			 */
@@ -203,7 +203,7 @@ if ( isset( $tag->name ) ) {
 			 * Fires after the Edit Link Category form fields are displayed.
 			 *
 			 * @since 2.9.0
-			 * @deprecated WP-3.0.0 Use {$taxonomy}_edit_form_fields instead.
+			 * @deprecated 3.0.0 Use {$taxonomy}_edit_form_fields instead.
 			 *
 			 * @param object $tag Current link category term object.
 			 */
@@ -213,7 +213,7 @@ if ( isset( $tag->name ) ) {
 			 * Fires after the Edit Tag form fields are displayed.
 			 *
 			 * @since 2.9.0
-			 * @deprecated WP-3.0.0 Use {$taxonomy}_edit_form_fields instead.
+			 * @deprecated 3.0.0 Use {$taxonomy}_edit_form_fields instead.
 			 *
 			 * @param object $tag Current tag term object.
 			 */
@@ -246,7 +246,7 @@ if ( 'category' == $taxonomy ) {
 	 * Fires at the end of the Edit Term form.
 	 *
 	 * @since 2.5.0
-	 * @deprecated WP-3.0.0 Use {$taxonomy}_edit_form instead.
+	 * @deprecated 3.0.0 Use {$taxonomy}_edit_form instead.
 	 *
 	 * @param object $tag Current taxonomy term object.
 	 */

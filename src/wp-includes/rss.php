@@ -10,19 +10,19 @@
  *
  * @package External
  * @subpackage MagpieRSS
- * @deprecated WP-3.0.0 Use SimplePie instead.
+ * @deprecated 3.0.0 Use SimplePie instead.
  */
 
 /**
  * Deprecated. Use SimplePie (class-simplepie.php) instead.
  */
-_deprecated_file( basename( __FILE__ ), 'WP-3.0.0', WPINC . '/class-simplepie.php' );
+_deprecated_file( basename( __FILE__ ), '3.0.0', WPINC . '/class-simplepie.php' );
 
 /**
  * Fires before MagpieRSS is loaded, to optionally replace it.
  *
  * @since 2.3.0
- * @deprecated WP-3.0.0
+ * @deprecated 3.0.0
  */
 do_action( 'load_feed_engine' );
 

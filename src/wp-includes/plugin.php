@@ -591,7 +591,7 @@ function remove_all_actions( $tag, $priority = false ) {
  *     return apply_filters( 'wpdocs_filter', $value, $extra_arg );
  *
  *     // Deprecated.
- *     return apply_filters_deprecated( 'wpdocs_filter', array( $value, $extra_arg ), 'WP-4.9', 'wpdocs_new_filter' );
+ *     return apply_filters_deprecated( 'wpdocs_filter', array( $value, $extra_arg ), '4.9', 'wpdocs_new_filter' );
  *
  * @since 4.6.0
  *
@@ -816,7 +816,7 @@ function register_deactivation_hook( $file, $function ) {
  */
 function register_uninstall_hook( $file, $callback ) {
 	if ( is_array( $callback ) && is_object( $callback[0] ) ) {
-		_doing_it_wrong( __FUNCTION__, __( 'Only a static class method or function can be used in an uninstall hook.' ), 'WP-3.1.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Only a static class method or function can be used in an uninstall hook.' ), '3.1.0' );
 		return;
 	}
 

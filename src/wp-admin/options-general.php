@@ -267,7 +267,7 @@ if ( ! empty( $languages ) || ! empty( $translations ) ) {
 					</p>
 					<?php
 				}
-				_deprecated_argument( 'define()', 'WP-4.0.0', sprintf( __( 'The %1$s constant in your %2$s file is no longer needed.' ), 'WPLANG', 'wp-config.php' ) );
+				_deprecated_argument( 'define()', '4.0.0', sprintf( __( 'The %1$s constant in your %2$s file is no longer needed.' ), 'WPLANG', 'wp-config.php' ) );
 			}
 			?>
 		</td>

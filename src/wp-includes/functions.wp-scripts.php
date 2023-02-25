@@ -47,7 +47,7 @@ function _wp_scripts_maybe_doing_it_wrong( $function ) {
 			'<code>admin_enqueue_scripts</code>',
 			'<code>login_enqueue_scripts</code>'
 		),
-		'WP-3.3.0'
+		'3.3.0'
 	);
 }
 
@@ -120,7 +120,7 @@ function wp_add_inline_script( $handle, $data, $position = 'after' ) {
 				'<code>&lt;script&gt;</code>',
 				'<code>wp_add_inline_script()</code>'
 			),
-			'WP-4.5.0'
+			'4.5.0'
 		);
 		$data = trim( preg_replace( '#<script[^>]*>(.*)</script>#is', '$1', $data ) );
 	}
@@ -258,7 +258,7 @@ function wp_deregister_script( $handle ) {
 				"<code>$handle</code>",
 				'<code>wp_enqueue_scripts</code>'
 			);
-			_doing_it_wrong( __FUNCTION__, $message, 'WP-3.6.0' );
+			_doing_it_wrong( __FUNCTION__, $message, '3.6.0' );
 			return;
 		}
 	}

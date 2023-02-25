@@ -550,7 +550,7 @@ class Custom_Background {
 
 	/**
 	 * @since 3.4.0
-	 * @deprecated WP-3.5.0
+	 * @deprecated 3.5.0
 	 *
 	 * @param array $form_fields
 	 * @return array $form_fields
@@ -561,7 +561,7 @@ class Custom_Background {
 
 	/**
 	 * @since 3.4.0
-	 * @deprecated WP-3.5.0
+	 * @deprecated 3.5.0
 	 *
 	 * @param array $tabs
 	 * @return array $tabs
@@ -572,7 +572,7 @@ class Custom_Background {
 
 	/**
 	 * @since 3.4.0
-	 * @deprecated WP-3.5.0
+	 * @deprecated 3.5.0
 	 */
 	public function wp_set_background_image() {
 		check_ajax_referer( 'custom-background' );

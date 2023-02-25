@@ -235,7 +235,7 @@ class WP_REST_Server {
 		 * https://miki.it/blog/2014/7/8/abusing-jsonp-with-rosetta-flash/
 		 */
 		$this->send_header( 'X-Content-Type-Options', 'nosniff' );
-		$this->send_header( 'Access-Control-Expose-Headers', 'X-WP-Total, X-WP-TotalPages' );
+		$this->send_header( 'Access-Control-Expose-Headers', 'X-Total, X-TotalPages' );
 		$this->send_header( 'Access-Control-Allow-Headers', 'Authorization, Content-Type' );
 
 		/**
@@ -260,14 +260,14 @@ class WP_REST_Server {
 		 * Filters whether the REST API is enabled.
 		 *
 		 * @since 4.4.0
-		 * @deprecated WP-4.7.0 Use the rest_authentication_errors filter to restrict access to the API
+		 * @deprecated 4.7.0 Use the rest_authentication_errors filter to restrict access to the API
 		 *
 		 * @param bool $rest_enabled Whether the REST API is enabled. Default true.
 		 */
 		apply_filters_deprecated(
 			'rest_enabled',
 			array( true ),
-			'WP-4.7.0',
+			'4.7.0',
 			'rest_authentication_errors',
 			__( 'The REST API can no longer be completely disabled, the rest_authentication_errors filter can be used to restrict access to the API, instead.' )
 		);

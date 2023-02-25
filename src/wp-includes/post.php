@@ -1294,7 +1294,7 @@ function register_post_type( $post_type, $args = array() ) {
 	$post_type = sanitize_key( $post_type );
 
 	if ( empty( $post_type ) || strlen( $post_type ) > 20 ) {
-		_doing_it_wrong( __FUNCTION__, __( 'Post type names must be between 1 and 20 characters in length.' ), 'WP-4.2.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Post type names must be between 1 and 20 characters in length.' ), '4.2.0' );
 		return new WP_Error( 'post_type_length_invalid', __( 'Post type names must be between 1 and 20 characters in length.' ) );
 	}
 
@@ -3341,7 +3341,7 @@ function wp_get_post_terms( $post_id = 0, $taxonomy = 'post_tag', $args = array(
 function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
 
 	if ( is_numeric( $args ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.1.0', __( 'Passing an integer number of posts is deprecated. Pass an array of arguments instead.' ) );
+		_deprecated_argument( __FUNCTION__, '3.1.0', __( 'Passing an integer number of posts is deprecated. Pass an array of arguments instead.' ) );
 		$args = array( 'numberposts' => absint( $args ) );
 	}
 
@@ -3365,7 +3365,7 @@ function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
 
 	$results = get_posts( $parsed_args );
 
-	// Backward compatibility. Prior to WP-3.1 expected posts to be returned in array.
+	// Backward compatibility. Prior to 3.1 expected posts to be returned in array.
 	if ( ARRAY_A == $output ) {
 		foreach ( $results as $key => $result ) {
 			$results[ $key ] = get_object_vars( $result );
@@ -3829,7 +3829,7 @@ function wp_insert_post( $postarr, $wp_error = false ) {
 			$taxonomy_obj = get_taxonomy( $taxonomy );
 			if ( ! $taxonomy_obj ) {
 				/* translators: %s: taxonomy name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), 'WP-4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'Invalid taxonomy: %s.' ), $taxonomy ), '4.4.0' );
 				continue;
 			}
 
@@ -4726,7 +4726,7 @@ function get_all_page_ids() {
  * Use get_post() instead of get_page().
  *
  * @since 1.5.1
- * @deprecated WP-3.5.0 Use get_post()
+ * @deprecated 3.5.0 Use get_post()
  *
  * @param mixed  $page   Page object or page ID. Passed by reference.
  * @param string $output Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
@@ -6176,7 +6176,7 @@ function get_posts_by_author_sql( $post_type, $full = true, $post_author = null,
 		 * when generating SQL for getting posts by author.
 		 *
 		 * @since 2.2.0
-		 * @deprecated WP-3.2.0 The hook transitioned from "somewhat useless" to "totally useless".
+		 * @deprecated 3.2.0 The hook transitioned from "somewhat useless" to "totally useless".
 		 *
 		 * @param string $cap Capability.
 		 */
@@ -6585,7 +6585,7 @@ function _transition_post_status( $new_status, $old_status, $post ) {
 		 * Fires when a post's status is transitioned from private to published.
 		 *
 		 * @since 1.5.0
-		 * @deprecated WP-2.3.0 Use 'private_to_publish' instead.
+		 * @deprecated 2.3.0 Use 'private_to_publish' instead.
 		 *
 		 * @param int $post_id Post ID.
 		 */

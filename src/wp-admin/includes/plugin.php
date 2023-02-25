@@ -97,7 +97,7 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 	// Site Wide Only is the old header for Network
 	if ( ! $plugin_data['Network'] && $plugin_data['_sitewide'] ) {
 		/* translators: 1: Site Wide Only: true, 2: Network: true */
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0', sprintf( __( 'The %1$s plugin header is deprecated. Use %2$s instead.' ), '<code>Site Wide Only: true</code>', '<code>Network: true</code>' ) );
+		_deprecated_argument( __FUNCTION__, '3.0.0', sprintf( __( 'The %1$s plugin header is deprecated. Use %2$s instead.' ), '<code>Site Wide Only: true</code>', '<code>Network: true</code>' ) );
 		$plugin_data['Network'] = $plugin_data['_sitewide'];
 	}
 	$plugin_data['Network'] = ( 'true' === strtolower( $plugin_data['Network'] ) );
@@ -2167,7 +2167,7 @@ function wp_add_privacy_policy_content( $plugin_name, $policy_text ) {
 				__( 'The suggested privacy policy content should be added only in wp-admin by using the %s (or later) action.' ),
 				'<code>admin_init</code>'
 			),
-			'WP-4.9.7'
+			'4.9.7'
 		);
 		return;
 	} elseif ( ! doing_action( 'admin_init' ) && ! did_action( 'admin_init' ) ) {
@@ -2178,7 +2178,7 @@ function wp_add_privacy_policy_content( $plugin_name, $policy_text ) {
 				__( 'The suggested privacy policy content should be added by using the %s (or later) action. Please see the inline documentation.' ),
 				'<code>admin_init</code>'
 			),
-			'WP-4.9.7'
+			'4.9.7'
 		);
 		return;
 	}

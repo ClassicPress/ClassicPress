@@ -317,7 +317,7 @@ final class WP_Customize_Manager {
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php'; // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
+		require_once ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-control.php'; // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php';
 
@@ -325,7 +325,7 @@ final class WP_Customize_Manager {
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php'; // @todo Remove in WP-5.0. See https://core.trac.wordpress.org/ticket/42364.
+		require_once ABSPATH . WPINC . '/customize/class-wp-customize-new-menu-section.php'; // @todo Remove in 5.0. See https://core.trac.wordpress.org/ticket/42364.
 
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-custom-css-setting.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-filter-setting.php';
@@ -480,12 +480,12 @@ final class WP_Customize_Manager {
 	 * Return the Ajax wp_die() handler if it's a customized request.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 *
 	 * @return callable Die handler.
 	 */
 	public function wp_die_handler() {
-		_deprecated_function( __METHOD__, 'WP-4.7.0' );
+		_deprecated_function( __METHOD__, '4.7.0' );
 
 		if ( $this->doing_ajax() || isset( $_POST['customized'] ) ) {
 			return '_ajax_wp_die_handler';
@@ -945,13 +945,13 @@ final class WP_Customize_Manager {
 	 * Instead, the JS will sniff out the location header.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 *
 	 * @param int $status Status.
 	 * @return int
 	 */
 	public function wp_redirect_status( $status ) {
-		_deprecated_function( __FUNCTION__, 'WP-4.7.0' );
+		_deprecated_function( __FUNCTION__, '4.7.0' );
 
 		if ( $this->is_preview() && ! is_admin() ) {
 			return 200;
@@ -1761,8 +1761,8 @@ final class WP_Customize_Manager {
 	 * @see WP_REST_Request::has_valid_params()
 	 *
 	 * @param WP_Customize_Setting $setting A WP_Customize_Setting derived object.
-	 * @param mixed                $default Value returned $setting has no post value (added in WP-4.2.0)
-	 *                                      or the post value is invalid (added in WP-4.6.0).
+	 * @param mixed                $default Value returned $setting has no post value (added in 4.2.0)
+	 *                                      or the post value is invalid (added in 4.6.0).
 	 * @return string|mixed $post_value Sanitized value or the $default provided.
 	 */
 	public function post_value( $setting, $default = null ) {
@@ -1945,30 +1945,30 @@ final class WP_Customize_Manager {
 	 * preview, since it causes the jQuery Ajax to fail. Send 200 instead.
 	 *
 	 * @since 4.0.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_override_404_status() {
-		_deprecated_function( __METHOD__, 'WP-4.7.0' );
+		_deprecated_function( __METHOD__, '4.7.0' );
 	}
 
 	/**
 	 * Print base element for preview frame.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_base() {
-		_deprecated_function( __METHOD__, 'WP-4.7.0' );
+		_deprecated_function( __METHOD__, '4.7.0' );
 	}
 
 	/**
 	 * Print a workaround to handle HTML5 tags in IE < 9.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0 Customizer no longer supports IE8, so all supported browsers recognize HTML5.
+	 * @deprecated 4.7.0 Customizer no longer supports IE8, so all supported browsers recognize HTML5.
 	 */
 	public function customize_preview_html5() {
-		_deprecated_function( __FUNCTION__, 'WP-4.7.0' );
+		_deprecated_function( __FUNCTION__, '4.7.0' );
 	}
 
 	/**
@@ -2160,23 +2160,23 @@ final class WP_Customize_Manager {
 	 * Prints a signature so we can ensure the Customizer was properly executed.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 */
 	public function customize_preview_signature() {
-		_deprecated_function( __METHOD__, 'WP-4.7.0' );
+		_deprecated_function( __METHOD__, '4.7.0' );
 	}
 
 	/**
 	 * Removes the signature in case we experience a case where the Customizer was not properly executed.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0
+	 * @deprecated 4.7.0
 	 *
 	 * @param mixed $return Value passed through for {@see 'wp_die_handler'} filter.
 	 * @return mixed Value passed through for {@see 'wp_die_handler'} filter.
 	 */
 	public function remove_preview_signature( $return = null ) {
-		_deprecated_function( __METHOD__, 'WP-4.7.0' );
+		_deprecated_function( __METHOD__, '4.7.0' );
 
 		return $return;
 	}
@@ -3849,7 +3849,7 @@ final class WP_Customize_Manager {
 				'<a href="' . esc_url( 'https://developer.wordpress.org/reference/hooks/customize_loaded_components/' ) . '"><code>customize_loaded_components</code></a>'
 			);
 
-			_doing_it_wrong( __METHOD__, $message, 'WP-4.5.0' );
+			_doing_it_wrong( __METHOD__, $message, '4.5.0' );
 		}
 		unset( $this->panels[ $id ] );
 	}
@@ -4319,14 +4319,14 @@ final class WP_Customize_Manager {
 	 * Helper function to compare two objects by priority, ensuring sort stability via instance_number.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.7.0 Use wp_list_sort()
+	 * @deprecated 4.7.0 Use wp_list_sort()
 	 *
 	 * @param WP_Customize_Panel|WP_Customize_Section|WP_Customize_Control $a Object A.
 	 * @param WP_Customize_Panel|WP_Customize_Section|WP_Customize_Control $b Object B.
 	 * @return int
 	 */
 	protected function _cmp_priority( $a, $b ) {
-		_deprecated_function( __METHOD__, 'WP-4.7.0', 'wp_list_sort' );
+		_deprecated_function( __METHOD__, '4.7.0', 'wp_list_sort' );
 
 		if ( $a->priority === $b->priority ) {
 			return $a->instance_number - $b->instance_number;

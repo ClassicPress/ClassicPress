@@ -92,7 +92,7 @@ function wp_add_inline_style( $handle, $data ) {
 				'<code>&lt;style&gt;</code>',
 				'<code>wp_add_inline_style()</code>'
 			),
-			'WP-3.7.0'
+			'3.7.0'
 		);
 		$data = trim( preg_replace( '#<style[^>]*>(.*)</style>#is', '$1', $data ) );
 	}

@@ -271,7 +271,7 @@ function get_taxonomy( $taxonomy ) {
 /**
  * Checks that the taxonomy name exists.
  *
- * Formerly is_taxonomy(), introduced in WP-2.3.0.
+ * Formerly is_taxonomy(), introduced in 2.3.0.
  *
  * @since 3.0.0
  *
@@ -407,7 +407,7 @@ function register_taxonomy( $taxonomy, $object_type, $args = array() ) {
 	$args = wp_parse_args( $args );
 
 	if ( empty( $taxonomy ) || strlen( $taxonomy ) > 32 ) {
-		_doing_it_wrong( __FUNCTION__, __( 'Taxonomy names must be between 1 and 32 characters in length.' ), 'WP-4.2.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Taxonomy names must be between 1 and 32 characters in length.' ), '4.2.0' );
 		return new WP_Error( 'taxonomy_length_invalid', __( 'Taxonomy names must be between 1 and 32 characters in length.' ) );
 	}
 
@@ -1070,13 +1070,13 @@ function get_term_to_edit( $id, $taxonomy ) {
  * The {@see 'get_terms_orderby'} filter passes the `ORDER BY` clause for the query
  * along with the $args array.
  *
- * Prior to WP-4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
+ * Prior to 4.5.0, the first parameter of `get_terms()` was a taxonomy or list of taxonomies:
  *
  *     $terms = get_terms( 'post_tag', array(
  *         'hide_empty' => false,
  *     ) );
  *
- * Since WP-4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
+ * Since 4.5.0, taxonomies should be passed via the 'taxonomy' argument in the `$args` array:
  *
  *     $terms = get_terms( array(
  *         'taxonomy' => 'post_tag',
@@ -1362,7 +1362,7 @@ function unregister_term_meta( $taxonomy, $meta_key ) {
 /**
  * Check if Term exists.
  *
- * Formerly is_term(), introduced in WP-2.3.0.
+ * Formerly is_term(), introduced in 2.3.0.
  *
  * @since 3.0.0
  * @since 6.0.0 Converted to use `get_terms()`.
@@ -4174,7 +4174,7 @@ function wp_get_split_term( $old_term_id, $taxonomy ) {
 /**
  * Determines whether a term is shared between multiple taxonomies.
  *
- * Shared taxonomy terms began to be split in WP-4.3, but failed cron tasks or
+ * Shared taxonomy terms began to be split in 4.3, but failed cron tasks or
  * other delays in upgrade routines may cause shared terms to remain.
  *
  * @since 4.4.0
@@ -4274,7 +4274,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 		 * Filters the tag link.
 		 *
 		 * @since 2.3.0
-		 * @deprecated WP-2.5.0 Use 'term_link' instead.
+		 * @deprecated 2.5.0 Use 'term_link' instead.
 		 *
 		 * @param string $termlink Tag link URL.
 		 * @param int    $term_id  Term ID.
@@ -4286,7 +4286,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 		 * Filters the category link.
 		 *
 		 * @since 1.5.0
-		 * @deprecated WP-2.5.0 Use 'term_link' instead.
+		 * @deprecated 2.5.0 Use 'term_link' instead.
 		 *
 		 * @param string $termlink Category link URL.
 		 * @param int    $term_id  Term ID.

@@ -682,7 +682,7 @@ function get_html_split_regex() {
  *
  * @access private
  * @ignore
- * @internal This function will be removed in WP-4.5.0 per Shortcode API Roadmap.
+ * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
  * @since 4.4.0
  *
  * @staticvar string $html_regex
@@ -725,7 +725,7 @@ function _get_wptexturize_split_regex( $shortcode_regex = '' ) {
  *
  * @access private
  * @ignore
- * @internal This function will be removed in WP-4.5.0 per Shortcode API Roadmap.
+ * @internal This function will be removed in 4.5.0 per Shortcode API Roadmap.
  * @since 4.4.0
  *
  * @param array $tagnames List of shortcodes to find.
@@ -2371,7 +2371,7 @@ function sanitize_html_class( $class, $fallback = '' ) {
  */
 function convert_chars( $content, $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-0.71' );
+		_deprecated_argument( __FUNCTION__, '0.71' );
 	}
 
 	if ( strpos( $content, '&' ) !== false ) {
@@ -2781,7 +2781,7 @@ function antispambot( $email_address, $hex_encoding = 0 ) {
 /**
  * Callback to convert URI match to HTML A element.
  *
- * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
  * @since 2.3.2
  * @access private
@@ -2818,7 +2818,7 @@ function _make_url_clickable_cb( $matches ) {
 /**
  * Callback to convert URL match to HTML A element.
  *
- * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
  * @since 2.3.2
  * @access private
@@ -2849,7 +2849,7 @@ function _make_web_ftp_clickable_cb( $matches ) {
 /**
  * Callback to convert email address match to HTML A element.
  *
- * This function was backported from WP-2.5.0 to WP-2.3.2. Regex callback for make_clickable().
+ * This function was backported from 2.5.0 to 2.3.2. Regex callback for make_clickable().
  *
  * @since 2.3.2
  * @access private
@@ -3162,7 +3162,7 @@ function convert_smilies( $text ) {
  */
 function is_email( $email, $deprecated = false ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
+		_deprecated_argument( __FUNCTION__, '3.0.0' );
 	}
 
 	// Test for the minimum length the email can be
@@ -4044,7 +4044,7 @@ function _deep_replace( $search, $subject ) {
  * Sometimes, spot-escaping is required or useful. One example
  * is preparing an array for use in an IN clause.
  *
- * NOTE: Since WP-4.8.3, '%' characters will be replaced with a placeholder string,
+ * NOTE: Since 4.8.3, '%' characters will be replaced with a placeholder string,
  * this prevents certain SQLi attacks from taking place. This change in behaviour
  * may cause issues for code that expects the return value of esc_sql() to be useable
  * for other purposes.

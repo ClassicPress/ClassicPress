@@ -1349,7 +1349,7 @@ function add_settings_section( $id, $title, $callback, $page ) {
 	if ( 'misc' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.0.0',
+			'3.0.0',
 			/* translators: %s: misc */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -1362,7 +1362,7 @@ function add_settings_section( $id, $title, $callback, $page ) {
 	if ( 'privacy' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.5.0',
+			'3.5.0',
 			/* translators: %s: privacy */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -1420,7 +1420,7 @@ function add_settings_field( $id, $title, $callback, $page, $section = 'default'
 	if ( 'misc' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.0.0',
+			'3.0.0',
 			/* translators: %s: misc */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -1433,7 +1433,7 @@ function add_settings_field( $id, $title, $callback, $page, $section = 'default'
 	if ( 'privacy' === $page ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.5.0',
+			'3.5.0',
 			/* translators: %s: privacy */
 			sprintf(
 				__( 'The "%s" options group has been removed. Use another settings group.' ),
@@ -2272,7 +2272,7 @@ function convert_to_screen( $hook_name ) {
 				'<code>add_meta_box()</code>',
 				'<code>add_meta_boxes</code>'
 			),
-			'WP-3.3.0'
+			'3.3.0'
 		);
 		return (object) array(
 			'id'   => '_invalid',

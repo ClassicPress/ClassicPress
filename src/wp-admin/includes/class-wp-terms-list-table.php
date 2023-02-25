@@ -94,7 +94,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 			 * Filters the number of terms displayed per page for the Tags list table.
 			 *
 			 * @since 2.7.0
-			 * @deprecated WP-2.8.0 Use edit_tags_per_page instead.
+			 * @deprecated 2.8.0 Use edit_tags_per_page instead.
 			 *
 			 * @param int $tags_per_page Number of tags to be displayed. Default 20.
 			 */
@@ -486,7 +486,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 * Filters the action links displayed for each term in the Tags list table.
 		 *
 		 * @since 2.8.0
-		 * @deprecated WP-3.0.0 Use {$taxonomy}_row_actions instead.
+		 * @deprecated 3.0.0 Use {$taxonomy}_row_actions instead.
 		 *
 		 * @param array  $actions An array of action links to be displayed. Default
 		 *                        'Edit', 'Quick Edit', 'Delete', and 'View'.

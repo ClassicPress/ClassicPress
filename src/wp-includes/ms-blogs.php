@@ -245,11 +245,11 @@ function get_blog_details( $fields = null, $get_all = true ) {
 	 * Filters a blog's details.
 	 *
 	 * @since MU (3.0.0)
-	 * @deprecated WP-4.7.0 Use site_details
+	 * @deprecated 4.7.0 Use site_details
 	 *
 	 * @param object $details The blog details.
 	 */
-	$details = apply_filters_deprecated( 'blog_details', array( $details ), 'WP-4.7.0', 'site_details' );
+	$details = apply_filters_deprecated( 'blog_details', array( $details ), '4.7.0', 'site_details' );
 
 	wp_cache_set( $blog_id . $all, $details, 'blog-details' );
 
@@ -492,11 +492,11 @@ function clean_blog_cache( $blog ) {
 	 * Fires after the blog details cache is cleared.
 	 *
 	 * @since 3.4.0
-	 * @deprecated WP-4.9.0 Use clean_site_cache
+	 * @deprecated 4.9.0 Use clean_site_cache
 	 *
 	 * @param int $blog_id Blog ID.
 	 */
-	do_action_deprecated( 'refresh_blog_details', array( $blog_id ), 'WP-4.9.0', 'clean_site_cache' );
+	do_action_deprecated( 'refresh_blog_details', array( $blog_id ), '4.9.0', 'clean_site_cache' );
 }
 
 /**
@@ -782,7 +782,7 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
 	$id = (int) $id;
 
 	if ( null !== $deprecated ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.1.0' );
+		_deprecated_argument( __FUNCTION__, '3.1.0' );
 	}
 
 	if ( get_current_blog_id() == $id ) {
@@ -1029,7 +1029,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 	global $wpdb;
 
 	if ( null !== $deprecated ) {
-		_deprecated_argument( __FUNCTION__, 'WP-3.1.0' );
+		_deprecated_argument( __FUNCTION__, '3.1.0' );
 	}
 
 	$pref_whitelist = array( 'site_id', 'domain', 'path', 'registered', 'last_updated', 'public', 'archived', 'mature', 'spam', 'deleted', 'lang_id' );
@@ -1141,7 +1141,7 @@ function get_last_updated( $deprecated = '', $start = 0, $quantity = 40 ) {
 	global $wpdb;
 
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-MU' ); // never used
+		_deprecated_argument( __FUNCTION__, 'MU' ); // never used
 	}
 
 	return $wpdb->get_results( $wpdb->prepare( "SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' AND last_updated != '0000-00-00 00:00:00' ORDER BY last_updated DESC limit %d, %d", get_current_network_id(), $start, $quantity ), ARRAY_A );

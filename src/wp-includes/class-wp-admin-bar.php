@@ -27,7 +27,7 @@ class WP_Admin_Bar {
 				return is_ssl() ? 'https://' : 'http://';
 
 			case 'menu':
-				_deprecated_argument( 'WP_Admin_Bar', 'WP-3.3.0', 'Modify admin bar nodes with WP_Admin_Bar::get_node(), WP_Admin_Bar::add_node(), and WP_Admin_Bar::remove_node(), not the <code>menu</code> property.' );
+				_deprecated_argument( 'WP_Admin_Bar', '3.3.0', 'Modify admin bar nodes with WP_Admin_Bar::get_node(), WP_Admin_Bar::add_node(), and WP_Admin_Bar::remove_node(), not the <code>menu</code> property.' );
 				return array(); // Sorry, folks.
 		}
 	}
@@ -129,7 +129,7 @@ class WP_Admin_Bar {
 				return;
 			}
 
-			_doing_it_wrong( __METHOD__, __( 'The menu ID should not be empty.' ), 'WP-3.3.0' );
+			_doing_it_wrong( __METHOD__, __( 'The menu ID should not be empty.' ), '3.3.0' );
 			// Deprecated: Generate an ID from the title.
 			$args['id'] = esc_attr( sanitize_title( trim( $args['title'] ) ) );
 		}
@@ -577,7 +577,7 @@ class WP_Admin_Bar {
 	 * Renders toolbar items recursively.
 	 *
 	 * @since 3.1.0
-	 * @deprecated WP-3.3.0 Use WP_Admin_Bar::_render_item() or WP_Admin_bar::render() instead.
+	 * @deprecated 3.3.0 Use WP_Admin_Bar::_render_item() or WP_Admin_bar::render() instead.
 	 * @see WP_Admin_Bar::_render_item()
 	 * @see WP_Admin_Bar::render()
 	 *
@@ -585,7 +585,7 @@ class WP_Admin_Bar {
 	 * @param object $node
 	 */
 	public function recursive_render( $id, $node ) {
-		_deprecated_function( __METHOD__, 'WP-3.3.0', 'WP_Admin_bar::render(), WP_Admin_Bar::_render_item()' );
+		_deprecated_function( __METHOD__, '3.3.0', 'WP_Admin_bar::render(), WP_Admin_Bar::_render_item()' );
 		$this->_render_item( $node );
 	}
 

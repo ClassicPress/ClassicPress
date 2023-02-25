@@ -379,8 +379,8 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 
 		$response = rest_ensure_response( $posts );
 
-		$response->header( 'X-WP-Total', (int) $total_posts );
-		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+		$response->header( 'X-Total', (int) $total_posts );
+		$response->header( 'X-TotalPages', (int) $max_pages );
 
 		$request_params = $request->get_query_params();
 		$base           = add_query_arg( $request_params, rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ) );

@@ -162,7 +162,7 @@ class WP_User {
 	/**
 	 * Sets up object properties, including capabilities.
 	 *
-	 * @since  WP-3.3.0
+	 * @since  3.3.0
 	 *
 	 * @param object $data    User DB row object.
 	 * @param int    $site_id Optional. The site ID to initialize for.
@@ -270,7 +270,7 @@ class WP_User {
 		if ( 'id' === $key ) {
 			_deprecated_argument(
 				'WP_User->id',
-				'WP-2.1.0',
+				'2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -303,7 +303,7 @@ class WP_User {
 		if ( 'id' === $key ) {
 			_deprecated_argument(
 				'WP_User->id',
-				'WP-2.1.0',
+				'2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -344,7 +344,7 @@ class WP_User {
 		if ( 'id' === $key ) {
 			_deprecated_argument(
 				'WP_User->id',
-				'WP-2.1.0',
+				'2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -369,7 +369,7 @@ class WP_User {
 		if ( 'id' === $key ) {
 			_deprecated_argument(
 				'WP_User->id',
-				'WP-2.1.0',
+				'2.1.0',
 				sprintf(
 					/* translators: %s: WP_User->ID */
 					__( 'Use %s instead.' ),
@@ -462,7 +462,7 @@ class WP_User {
 	 * used.
 	 *
 	 * @since 2.1.0
-	 * @deprecated WP-4.9.0 Use WP_User::for_site()
+	 * @deprecated 4.9.0 Use WP_User::for_site()
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
@@ -471,7 +471,7 @@ class WP_User {
 	protected function _init_caps( $cap_key = '' ) {
 		global $wpdb;
 
-		_deprecated_function( __METHOD__, 'WP-4.9.0', 'WP_User::for_site()' );
+		_deprecated_function( __METHOD__, '4.9.0', 'WP_User::for_site()' );
 
 		if ( empty( $cap_key ) ) {
 			$this->cap_key = $wpdb->get_blog_prefix( $this->site_id ) . 'capabilities';
@@ -738,7 +738,7 @@ class WP_User {
 	 */
 	public function has_cap( $cap ) {
 		if ( is_numeric( $cap ) ) {
-			_deprecated_argument( __FUNCTION__, 'WP-2.0.0', __( 'Usage of user levels is deprecated. Use capabilities instead.' ) );
+			_deprecated_argument( __FUNCTION__, '2.0.0', __( 'Usage of user levels is deprecated. Use capabilities instead.' ) );
 			$cap = $this->translate_level_to_cap( $cap );
 		}
 
@@ -801,14 +801,14 @@ class WP_User {
 	 * Set the site to operate on. Defaults to the current site.
 	 *
 	 * @since 3.0.0
-	 * @deprecated WP-4.9.0 Use WP_User::for_site()
+	 * @deprecated 4.9.0 Use WP_User::for_site()
 	 *
 	 * @global wpdb $wpdb ClassicPress database abstraction object.
 	 *
 	 * @param int $blog_id Optional. Site ID, defaults to current site.
 	 */
 	public function for_blog( $blog_id = '' ) {
-		_deprecated_function( __METHOD__, 'WP-4.9.0', 'WP_User::for_site()' );
+		_deprecated_function( __METHOD__, '4.9.0', 'WP_User::for_site()' );
 
 		$this->for_site( $blog_id );
 	}

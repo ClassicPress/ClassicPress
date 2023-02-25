@@ -410,7 +410,7 @@ class WP_Date_Query {
 						'<code>' . esc_html( $check['max'] ) . '</code>'
 					);
 
-					_doing_it_wrong( __CLASS__, $error, 'WP-4.1.0' );
+					_doing_it_wrong( __CLASS__, $error, '4.1.0' );
 
 					$valid = false;
 				}
@@ -459,7 +459,7 @@ class WP_Date_Query {
 		}
 
 		if ( ! empty( $day_month_year_error_msg ) ) {
-			_doing_it_wrong( __CLASS__, $day_month_year_error_msg, 'WP-4.1.0' );
+			_doing_it_wrong( __CLASS__, $day_month_year_error_msg, '4.1.0' );
 		}
 
 		return $valid;

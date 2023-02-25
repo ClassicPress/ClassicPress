@@ -62,7 +62,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * Holds a string which contains script handles and their version.
 	 *
 	 * @since 2.8.0
-	 * @deprecated WP-3.4.0
+	 * @deprecated 3.4.0
 	 * @var string
 	 */
 	public $concat_version = '';
@@ -190,7 +190,7 @@ class WP_Scripts extends WP_Dependencies {
 	 *
 	 * @since 2.1.0
 	 * @since 2.8.0 Added the `$echo` parameter.
-	 * @deprecated WP-3.3.0
+	 * @deprecated 3.3.0
 	 *
 	 * @see print_extra_script()
 	 *
@@ -200,7 +200,7 @@ class WP_Scripts extends WP_Dependencies {
 	 * @return bool|string|void Void if no data exists, extra scripts if `$echo` is true, true otherwise.
 	 */
 	public function print_scripts_l10n( $handle, $echo = true ) {
-		_deprecated_function( __FUNCTION__, 'WP-3.3.0', 'WP_Scripts::print_extra_script()' );
+		_deprecated_function( __FUNCTION__, '3.3.0', 'WP_Scripts::print_extra_script()' );
 		return $this->print_extra_script( $handle, $echo );
 	}
 

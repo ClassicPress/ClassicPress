@@ -62,7 +62,7 @@ class WP_Styles extends WP_Dependencies {
 	 * Holds a string which contains style handles and their version.
 	 *
 	 * @since 2.8.0
-	 * @deprecated WP-3.4.0
+	 * @deprecated 3.4.0
 	 * @var string
 	 */
 	public $concat_version = '';

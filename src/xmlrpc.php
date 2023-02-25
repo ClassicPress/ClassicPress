@@ -90,14 +90,14 @@ exit;
 /**
  * logIO() - Writes logging info to a file.
  *
- * @deprecated WP-3.4.0 Use error_log()
+ * @deprecated 3.4.0 Use error_log()
  * @see error_log()
  *
  * @param string $io Whether input or output
  * @param string $msg Information describing logging reason.
  */
 function logIO( $io, $msg ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-	_deprecated_function( __FUNCTION__, 'WP-3.4.0', 'error_log()' );
+	_deprecated_function( __FUNCTION__, '3.4.0', 'error_log()' );
 	if ( ! empty( $GLOBALS['xmlrpc_logging'] ) ) {
 		error_log( $io . ' - ' . $msg );
 	}

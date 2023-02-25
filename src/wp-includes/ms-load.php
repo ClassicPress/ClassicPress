@@ -130,7 +130,7 @@ function ms_site_check() {
  *
  * @since 3.9.0
  *
- * @internal In WP-4.4.0, converted to a wrapper for WP_Network::get_by_path()
+ * @internal In 4.4.0, converted to a wrapper for WP_Network::get_by_path()
  *
  * @param string   $domain   Domain to check.
  * @param string   $path     Path to check.
@@ -261,7 +261,7 @@ function get_site_by_path( $domain, $path, $segments = null ) {
  * Identifies the network and site of a requested domain and path and populates the
  * corresponding network and site global objects as part of the multisite bootstrap process.
  *
- * Prior to WP-4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
+ * Prior to 4.6.0, this was a procedural block in `ms-settings.php`. It was wrapped into
  * a function to facilitate unit tests. It should not be used outside of core.
  *
  * Usually, it's easier to query the site first, which then declares its network.
@@ -508,13 +508,13 @@ function ms_not_installed( $domain, $path ) {
  *
  * @access private
  * @since 3.0.0
- * @deprecated WP-3.9.0 Use get_current_site() instead.
+ * @deprecated 3.9.0 Use get_current_site() instead.
  *
  * @param object $current_site
  * @return object
  */
 function get_current_site_name( $current_site ) {
-	_deprecated_function( __FUNCTION__, 'WP-3.9.0', 'get_current_site()' );
+	_deprecated_function( __FUNCTION__, '3.9.0', 'get_current_site()' );
 	return $current_site;
 }
 
@@ -526,7 +526,7 @@ function get_current_site_name( $current_site ) {
  *
  * @access private
  * @since 3.0.0
- * @deprecated WP-3.9.0
+ * @deprecated 3.9.0
  *
  * @global object $current_site
  *
@@ -534,7 +534,7 @@ function get_current_site_name( $current_site ) {
  */
 function wpmu_current_site() {
 	global $current_site;
-	_deprecated_function( __FUNCTION__, 'WP-3.9.0' );
+	_deprecated_function( __FUNCTION__, '3.9.0' );
 	return $current_site;
 }
 
@@ -542,16 +542,16 @@ function wpmu_current_site() {
  * Retrieve an object containing information about the requested network.
  *
  * @since 3.9.0
- * @deprecated WP-4.7.0 Use `get_network()`
+ * @deprecated 4.7.0 Use `get_network()`
  * @see get_network()
  *
- * @internal In WP-4.6.0, converted to use get_network()
+ * @internal In 4.6.0, converted to use get_network()
  *
  * @param object|int $network The network's database row or ID.
  * @return WP_Network|false Object containing network information if found, false if not.
  */
 function wp_get_network( $network ) {
-	_deprecated_function( __FUNCTION__, 'WP-4.7.0', 'get_network()' );
+	_deprecated_function( __FUNCTION__, '4.7.0', 'get_network()' );
 
 	$network = get_network( $network );
 	if ( null === $network ) {

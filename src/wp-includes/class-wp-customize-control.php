@@ -774,7 +774,7 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-
  * release, the require_once() here will be removed and _deprecated_file() will be called if file is
  * required at all.
  *
- * @deprecated WP-4.9.0 This file is no longer used due to new menu creation UX.
+ * @deprecated 4.9.0 This file is no longer used due to new menu creation UX.
  */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
 

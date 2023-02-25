@@ -38,7 +38,7 @@ class WP_Widget_Factory {
 	 * @since 2.8.0
 	 */
 	public function WP_Widget_Factory() {
-		_deprecated_constructor( 'WP_Widget_Factory', 'WP-4.2.0' );
+		_deprecated_constructor( 'WP_Widget_Factory', '4.2.0' );
 		self::__construct();
 	}
 

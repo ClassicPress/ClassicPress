@@ -101,7 +101,7 @@ function get_default_feed() {
 function get_wp_title_rss( $deprecated = '&#8211;' ) {
 	if ( '&#8211;' !== $deprecated ) {
 		/* translators: %s: 'document_title_separator' filter name */
-		_deprecated_argument( __FUNCTION__, 'WP-4.4.0', sprintf( __( 'Use the %s filter instead.' ), '<code>document_title_separator</code>' ) );
+		_deprecated_argument( __FUNCTION__, '4.4.0', sprintf( __( 'Use the %s filter instead.' ), '<code>document_title_separator</code>' ) );
 	}
 
 	/**
@@ -127,7 +127,7 @@ function get_wp_title_rss( $deprecated = '&#8211;' ) {
 function wp_title_rss( $deprecated = '&#8211;' ) {
 	if ( '&#8211;' !== $deprecated ) {
 		/* translators: %s: 'document_title_separator' filter name */
-		_deprecated_argument( __FUNCTION__, 'WP-4.4.0', sprintf( __( 'Use the %s filter instead.' ), '<code>document_title_separator</code>' ) );
+		_deprecated_argument( __FUNCTION__, '4.4.0', sprintf( __( 'Use the %s filter instead.' ), '<code>document_title_separator</code>' ) );
 	}
 
 	/**

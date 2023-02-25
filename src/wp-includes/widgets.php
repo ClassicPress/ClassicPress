@@ -261,7 +261,7 @@ function register_sidebar( $args = array() ) {
 
 	if ( $id_is_empty ) {
 		/* translators: 1: the id argument, 2: sidebar name, 3: recommended id value */
-		_doing_it_wrong( __FUNCTION__, sprintf( __( 'No %1$s was set in the arguments array for the "%2$s" sidebar. Defaulting to "%3$s". Manually set the %1$s to "%3$s" to silence this notice and keep existing sidebar content.' ), '<code>id</code>', $sidebar['name'], $sidebar['id'] ), 'WP-4.2.0' );
+		_doing_it_wrong( __FUNCTION__, sprintf( __( 'No %1$s was set in the arguments array for the "%2$s" sidebar. Defaulting to "%3$s". Manually set the %1$s to "%3$s" to silence this notice and keep existing sidebar content.' ), '<code>id</code>', $sidebar['name'], $sidebar['id'] ), '4.2.0' );
 	}
 
 	$wp_registered_sidebars[ $sidebar['id'] ] = $sidebar;
@@ -920,7 +920,7 @@ function is_active_sidebar( $index ) {
  */
 function wp_get_sidebars_widgets( $deprecated = true ) {
 	if ( $deprecated !== true ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.8.1' );
+		_deprecated_argument( __FUNCTION__, '2.8.1' );
 	}
 
 	global $_wp_sidebars_widgets, $sidebars_widgets;
@@ -1090,7 +1090,7 @@ function the_widget( $widget, $instance = array(), $args = array() ) {
 
 	if ( ! isset( $wp_widget_factory->widgets[ $widget ] ) ) {
 		/* translators: %s: register_widget() */
-		_doing_it_wrong( __FUNCTION__, sprintf( __( 'Widgets need to be registered using %s, before they can be displayed.' ), '<code>register_widget()</code>' ), 'WP-4.9.0' );
+		_doing_it_wrong( __FUNCTION__, sprintf( __( 'Widgets need to be registered using %s, before they can be displayed.' ), '<code>register_widget()</code>' ), '4.9.0' );
 		return;
 	}
 

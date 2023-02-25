@@ -1,13 +1,13 @@
 <?php
 /**
- * API used to fix WP-CLI compatibility issues.
+ * API used to fix CLI compatibility issues.
  *
  * @package ClassicPress
  * @subpackage Fix_WPCLI
  */
 
 /**
- * Core class used to fix WP-CLI compatibility issues.
+ * Core class used to fix CLI compatibility issues.
  *
  * @since CP-1.5.0
  */

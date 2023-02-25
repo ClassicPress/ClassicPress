@@ -328,7 +328,7 @@ function wp_ssl_constants() {
 
 	/**
 	 * @since 2.6.0
-	 * @deprecated WP-4.0.0
+	 * @deprecated 4.0.0
 	 */
 	if ( defined( 'FORCE_SSL_LOGIN' ) && FORCE_SSL_LOGIN ) {
 		force_ssl_admin( true );

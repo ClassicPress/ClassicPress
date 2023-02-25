@@ -60,7 +60,7 @@ $theme_field_defaults = array(
  * @return array
  */
 function install_themes_feature_list() {
-	_deprecated_function( __FUNCTION__, 'WP-3.1.0', 'get_theme_feature_list()' );
+	_deprecated_function( __FUNCTION__, '3.1.0', 'get_theme_feature_list()' );
 
 	$cache = get_transient( 'wporg_theme_feature_list' );
 	if ( ! $cache ) {
@@ -192,14 +192,14 @@ function install_themes_upload() {
 /**
  * Prints a theme on the Install Themes pages.
  *
- * @deprecated WP-3.4.0
+ * @deprecated 3.4.0
  *
  * @global WP_Theme_Install_List_Table $wp_list_table
  *
  * @param object $theme
  */
 function display_theme( $theme ) {
-	_deprecated_function( __FUNCTION__, 'WP-3.4.0' );
+	_deprecated_function( __FUNCTION__, '3.4.0' );
 	global $wp_list_table;
 	if ( ! isset( $wp_list_table ) ) {
 		$wp_list_table = _get_list_table( 'WP_Theme_Install_List_Table' );

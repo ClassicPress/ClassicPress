@@ -57,7 +57,7 @@ final class _WP_Editors {
 	 *     @type string     $editor_class      Extra classes to add to the editor textarea element. Default empty.
 	 *     @type bool       $teeny             Whether to output the minimal editor config. Examples include
 	 *                                         Press This and the Comment editor. Default false.
-	 *     @type bool       $dfw               Deprecated in WP-4.1. Since WP-4.3 used only to enqueue wp-fullscreen-stub.js
+	 *     @type bool       $dfw               Deprecated in 4.1. Since 4.3 used only to enqueue wp-fullscreen-stub.js
 	 *                                         for backward compatibility.
 	 *     @type bool|array $tinymce           Whether to load TinyMCE. Can be used to pass settings directly to
 	 *                                         TinyMCE using an array. Default true.
@@ -106,7 +106,7 @@ final class _WP_Editors {
 		if ( self::$this_tinymce ) {
 			if ( false !== strpos( $editor_id, '[' ) ) {
 				self::$this_tinymce = false;
-				_deprecated_argument( 'wp_editor()', 'WP-3.9.0', 'TinyMCE editor IDs cannot have brackets.' );
+				_deprecated_argument( 'wp_editor()', '3.9.0', 'TinyMCE editor IDs cannot have brackets.' );
 			}
 		}
 
@@ -292,10 +292,10 @@ final class _WP_Editors {
 		// Back-compat for the `htmledit_pre` and `richedit_pre` filters
 		if ( 'html' === $default_editor && has_filter( 'htmledit_pre' ) ) {
 			/** This filter is documented in wp-includes/deprecated.php */
-			$content = apply_filters_deprecated( 'htmledit_pre', array( $content ), 'WP-4.3.0', 'format_for_editor' );
+			$content = apply_filters_deprecated( 'htmledit_pre', array( $content ), '4.3.0', 'format_for_editor' );
 		} elseif ( 'tinymce' === $default_editor && has_filter( 'richedit_pre' ) ) {
 			/** This filter is documented in wp-includes/deprecated.php */
-			$content = apply_filters_deprecated( 'richedit_pre', array( $content ), 'WP-4.3.0', 'format_for_editor' );
+			$content = apply_filters_deprecated( 'richedit_pre', array( $content ), '4.3.0', 'format_for_editor' );
 		}
 
 		if ( false !== stripos( $content, 'textarea' ) ) {
@@ -1613,12 +1613,12 @@ final class _WP_Editors {
 	 * Outputs the HTML for distraction-free writing mode.
 	 *
 	 * @since 3.2.0
-	 * @deprecated WP-4.3.0
+	 * @deprecated 4.3.0
 	 *
 	 * @static
 	 */
 	public static function wp_fullscreen_html() {
-		_deprecated_function( __FUNCTION__, 'WP-4.3.0' );
+		_deprecated_function( __FUNCTION__, '4.3.0' );
 	}
 
 	/**

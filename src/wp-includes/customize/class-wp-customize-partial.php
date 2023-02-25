@@ -204,7 +204,7 @@ class WP_Customize_Partial {
 			$ob_render     = ob_get_clean();
 
 			if ( null !== $return_render && '' !== $ob_render ) {
-				_doing_it_wrong( __FUNCTION__, __( 'Partial render must echo the content or return the content string (or array), but not both.' ), 'WP-4.5.0' );
+				_doing_it_wrong( __FUNCTION__, __( 'Partial render must echo the content or return the content string (or array), but not both.' ), '4.5.0' );
 			}
 
 			/*

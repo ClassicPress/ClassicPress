@@ -81,7 +81,7 @@ function map_meta_cap( $cap, $user_id ) {
 			$post_type = get_post_type_object( $post->post_type );
 			if ( ! $post_type ) {
 				/* translators: 1: post type, 2: capability name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), 'WP-4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
 				$caps[] = 'edit_others_posts';
 				break;
 			}
@@ -152,7 +152,7 @@ function map_meta_cap( $cap, $user_id ) {
 			$post_type = get_post_type_object( $post->post_type );
 			if ( ! $post_type ) {
 				/* translators: 1: post type, 2: capability name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), 'WP-4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
 				$caps[] = 'edit_others_posts';
 				break;
 			}
@@ -221,7 +221,7 @@ function map_meta_cap( $cap, $user_id ) {
 			$post_type = get_post_type_object( $post->post_type );
 			if ( ! $post_type ) {
 				/* translators: 1: post type, 2: capability name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), 'WP-4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
 				$caps[] = 'edit_others_posts';
 				break;
 			}
@@ -259,7 +259,7 @@ function map_meta_cap( $cap, $user_id ) {
 			$post_type = get_post_type_object( $post->post_type );
 			if ( ! $post_type ) {
 				/* translators: 1: post type, 2: capability name */
-				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), 'WP-4.4.0' );
+				_doing_it_wrong( __FUNCTION__, sprintf( __( 'The post type %1$s is not registered, so it may not be reliable to check the capability "%2$s" against a post of that type.' ), $post->post_type, $cap ), '4.4.0' );
 				$caps[] = 'edit_others_posts';
 				break;
 			}
@@ -349,7 +349,7 @@ function map_meta_cap( $cap, $user_id ) {
 					 *
 					 * @since 4.6.0 As `auth_post_{$post_type}_meta_{$meta_key}`.
 					 * @since 4.7.0
-					 * @deprecated WP-4.9.8 Use `auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}`
+					 * @deprecated 4.9.8 Use `auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}`
 					 *
 					 * @param bool     $allowed   Whether the user can add the object meta. Default false.
 					 * @param string   $meta_key  The meta key.
@@ -361,7 +361,7 @@ function map_meta_cap( $cap, $user_id ) {
 					$allowed = apply_filters_deprecated(
 						"auth_{$object_type}_{$object_subtype}_meta_{$meta_key}",
 						array( $allowed, $meta_key, $object_id, $user_id, $cap, $caps ),
-						'WP-4.9.8',
+						'4.9.8',
 						"auth_{$object_type}_meta_{$meta_key}_for_{$object_subtype}"
 					);
 				}

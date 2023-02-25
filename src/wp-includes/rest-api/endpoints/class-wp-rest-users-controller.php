@@ -324,11 +324,11 @@ class WP_REST_Users_Controller extends WP_REST_Controller {
 			$total_users = $count_query->get_total();
 		}
 
-		$response->header( 'X-WP-Total', (int) $total_users );
+		$response->header( 'X-Total', (int) $total_users );
 
 		$max_pages = ceil( $total_users / $per_page );
 
-		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+		$response->header( 'X-TotalPages', (int) $max_pages );
 
 		$base = add_query_arg( $request->get_query_params(), rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ) );
 		if ( $page > 1 ) {

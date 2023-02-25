@@ -657,7 +657,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 		case 'siteurl': // DEPRECATED
 			_deprecated_argument(
 				__FUNCTION__,
-				'WP-2.2.0',
+				'2.2.0',
 				sprintf(
 				/* translators: 1: 'siteurl'/'home' argument, 2: bloginfo() function name, 3: 'url' argument */
 					__( 'The %1$s option is deprecated for the family of %2$s functions. Use the %3$s option instead.' ),
@@ -737,7 +737,7 @@ function get_bloginfo( $show = '', $filter = 'raw' ) {
 		case 'text_direction':
 			_deprecated_argument(
 				__FUNCTION__,
-				'WP-2.2.0',
+				'2.2.0',
 				sprintf(
 				/* translators: 1: 'text_direction' argument, 2: bloginfo() function name, 3: is_rtl() function name */
 					__( 'The %1$s option is deprecated for the family of %2$s functions. Use the %3$s function instead.' ),

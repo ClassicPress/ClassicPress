@@ -65,14 +65,14 @@ function add_shortcode( $tag, $callback ) {
 
 	if ( '' === trim( $tag ) ) {
 		$message = __( 'Invalid shortcode name: Empty name given.' );
-		_doing_it_wrong( __FUNCTION__, $message, 'WP-4.4.0' );
+		_doing_it_wrong( __FUNCTION__, $message, '4.4.0' );
 		return;
 	}
 
 	if ( 0 !== preg_match( '@[<>&/\[\]\x00-\x20=]@', $tag ) ) {
 		/* translators: 1: shortcode name, 2: space separated list of reserved characters */
 		$message = sprintf( __( 'Invalid shortcode name: %1$s. Do not use spaces or reserved characters: %2$s' ), $tag, '& / < > [ ] =' );
-		_doing_it_wrong( __FUNCTION__, $message, 'WP-4.4.0' );
+		_doing_it_wrong( __FUNCTION__, $message, '4.4.0' );
 		return;
 	}
 
@@ -293,7 +293,7 @@ function do_shortcode_tag( $m ) {
 	if ( ! is_callable( $shortcode_tags[ $tag ] ) ) {
 		/* translators: %s: shortcode tag */
 		$message = sprintf( __( 'Attempting to parse a shortcode without a valid callback: %s' ), $tag );
-		_doing_it_wrong( __FUNCTION__, $message, 'WP-4.3.0' );
+		_doing_it_wrong( __FUNCTION__, $message, '4.3.0' );
 		return $m[0];
 	}
 

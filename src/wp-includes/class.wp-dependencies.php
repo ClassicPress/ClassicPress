@@ -70,7 +70,7 @@ class WP_Dependencies {
 	 * A handle group to enqueue.
 	 *
 	 * @since 2.8.0
-	 * @deprecated WP-4.5.0
+	 * @deprecated 4.5.0
 	 * @var int
 	 */
 	public $group = 0;

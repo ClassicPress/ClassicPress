@@ -34,10 +34,10 @@ function register_rest_route( $namespace, $route, $args = array(), $override = f
 		 * and namespace indexes. If you really need to register a
 		 * non-namespaced route, call `WP_REST_Server::register_route` directly.
 		 */
-		_doing_it_wrong( 'register_rest_route', __( 'Routes must be namespaced with plugin or theme name and version.' ), 'WP-4.4.0' );
+		_doing_it_wrong( 'register_rest_route', __( 'Routes must be namespaced with plugin or theme name and version.' ), '4.4.0' );
 		return false;
 	} elseif ( empty( $route ) ) {
-		_doing_it_wrong( 'register_rest_route', __( 'Route must be specified.' ), 'WP-4.4.0' );
+		_doing_it_wrong( 'register_rest_route', __( 'Route must be specified.' ), '4.4.0' );
 		return false;
 	}
 
@@ -512,7 +512,7 @@ function rest_handle_deprecated_function( $function, $replacement, $version ) {
 		$string = sprintf( __( '%1$s (since %2$s; no alternative available)' ), $function, $version );
 	}
 
-	header( sprintf( 'X-WP-DeprecatedFunction: %s', $string ) );
+	header( sprintf( 'X-DeprecatedFunction: %s', $string ) );
 }
 
 /**
@@ -536,7 +536,7 @@ function rest_handle_deprecated_argument( $function, $message, $version ) {
 		$string = sprintf( __( '%1$s (since %2$s; no alternative available)' ), $function, $version );
 	}
 
-	header( sprintf( 'X-WP-DeprecatedParam: %s', $string ) );
+	header( sprintf( 'X-DeprecatedParam: %s', $string ) );
 }
 
 /**
@@ -706,7 +706,7 @@ function rest_output_rsd() {
 		return;
 	}
 	?>
-	<api name="WP-API" blogID="1" preferred="false" apiLink="<?php echo esc_url( $api_root ); ?>" />
+	<api name="API" blogID="1" preferred="false" apiLink="<?php echo esc_url( $api_root ); ?>" />
 	<?php
 }
 
@@ -801,7 +801,7 @@ function rest_cookie_check_errors( $result ) {
 	}
 
 	// Send a refreshed nonce in header.
-	rest_get_server()->send_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
+	rest_get_server()->send_header( 'X-Nonce', wp_create_nonce( 'wp_rest' ) );
 
 	return true;
 }

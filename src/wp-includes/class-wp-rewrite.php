@@ -1408,7 +1408,7 @@ class WP_Rewrite {
 				 * Filters rewrite rules used specifically for Tags.
 				 *
 				 * @since 2.3.0
-				 * @deprecated WP-3.1.0 Use 'post_tag_rewrite_rules' instead
+				 * @deprecated 3.1.0 Use 'post_tag_rewrite_rules' instead
 				 *
 				 * @param array $rules The rewrite rules generated for tags.
 				 */
@@ -1557,7 +1557,7 @@ class WP_Rewrite {
 		 * Filters the list of rewrite rules formatted for output to an .htaccess file.
 		 *
 		 * @since 1.5.0
-		 * @deprecated WP-1.5.0 Use the mod_rewrite_rules filter instead.
+		 * @deprecated 1.5.0 Use the mod_rewrite_rules filter instead.
 		 *
 		 * @param string $rules mod_rewrite Rewrite rules formatted for .htaccess.
 		 */

@@ -2479,7 +2479,7 @@ function add_theme_support( $feature ) {
 				// Build an array of types for back-compat.
 				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
 			} elseif ( ! isset( $args[0] ) || ! is_array( $args[0] ) ) {
-				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), 'WP-3.6.1' );
+				_doing_it_wrong( "add_theme_support( 'html5' )", __( 'You need to pass an array of types.' ), '3.6.1' );
 				return false;
 			}
 
@@ -2659,7 +2659,7 @@ function add_theme_support( $feature ) {
 						'<code>title-tag</code>',
 						'<code>wp_loaded</code>'
 					),
-					'WP-4.1.0'
+					'4.1.0'
 				);
 
 				return false;

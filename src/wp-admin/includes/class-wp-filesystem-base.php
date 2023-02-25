@@ -120,7 +120,7 @@ class WP_Filesystem_Base {
 	 * Locate a folder on the remote filesystem.
 	 *
 	 * @since 2.5.0
-	 * @deprecated WP-2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() instead.
+	 * @deprecated 2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() instead.
 	 * @see WP_Filesystem::abspath()
 	 * @see WP_Filesystem::wp_content_dir()
 	 * @see WP_Filesystem::wp_plugins_dir()
@@ -133,7 +133,7 @@ class WP_Filesystem_Base {
 	 * @return string The location of the remote path.
 	 */
 	public function find_base_dir( $base = '.', $echo = false ) {
-		_deprecated_function( __FUNCTION__, 'WP-2.7.0', 'WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()' );
+		_deprecated_function( __FUNCTION__, '2.7.0', 'WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()' );
 		$this->verbose = $echo;
 		return $this->abspath();
 	}
@@ -142,7 +142,7 @@ class WP_Filesystem_Base {
 	 * Locate a folder on the remote filesystem.
 	 *
 	 * @since 2.5.0
-	 * @deprecated WP-2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() methods instead.
+	 * @deprecated 2.7.0 use WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir() methods instead.
 	 * @see WP_Filesystem::abspath()
 	 * @see WP_Filesystem::wp_content_dir()
 	 * @see WP_Filesystem::wp_plugins_dir()
@@ -154,7 +154,7 @@ class WP_Filesystem_Base {
 	 * @return string The location of the remote path.
 	 */
 	public function get_base_dir( $base = '.', $echo = false ) {
-		_deprecated_function( __FUNCTION__, 'WP-2.7.0', 'WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()' );
+		_deprecated_function( __FUNCTION__, '2.7.0', 'WP_Filesystem::abspath() or WP_Filesystem::wp_*_dir()' );
 		$this->verbose = $echo;
 		return $this->abspath();
 	}

@@ -135,7 +135,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		}
 	}
 
-	// These tests give us a WP-generated permalink
+	// These tests give us a generated permalink
 	if ( is_404() ) {
 
 		// Redirect ?page_id, ?p=, ?attachment_id= to their respective URLs.

@@ -166,7 +166,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 * Provides a list of roles and user count for that role for easy
 	 * Filtersing of the user table.
 	 *
-	 * @since  WP-3.1.0
+	 * @since  3.1.0
 	 *
 	 * @global string $role
 	 *
@@ -233,7 +233,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Retrieve an associative array of bulk actions available on this table.
 	 *
-	 * @since  WP-3.1.0
+	 * @since  3.1.0
 	 *
 	 * @return array Array of bulk actions.
 	 */
@@ -306,7 +306,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 * Overridden from the base class implementation to capture
 	 * the role change drop-down.
 	 *
-	 * @since  WP-3.1.0
+	 * @since  3.1.0
 	 *
 	 * @return string The bulk action required.
 	 */
@@ -321,7 +321,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	/**
 	 * Get a list of columns for the list table.
 	 *
-	 * @since  WP-3.1.0
+	 * @since  3.1.0
 	 *
 	 * @return array Array in which the key is the ID of the column,
 	 *               and the value is the description.

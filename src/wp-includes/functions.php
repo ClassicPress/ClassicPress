@@ -745,7 +745,7 @@ function do_enclose( $content, $post ) {
  */
 function wp_get_http_headers( $url, $deprecated = false ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.7.0' );
+		_deprecated_argument( __FUNCTION__, '2.7.0' );
 	}
 
 	$response = wp_safe_remote_head( $url );
@@ -2362,7 +2362,7 @@ function wp_unique_filename( $dir, $filename, $unique_filename_callback = null )
  */
 function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.0.0' );
+		_deprecated_argument( __FUNCTION__, '2.0.0' );
 	}
 
 	if ( empty( $name ) ) {
@@ -4439,7 +4439,7 @@ function _deprecated_file( $file, $version, $replacement = null, $message = '' )
  * For example:
  *
  *     if ( ! empty( $deprecated ) ) {
- *         _deprecated_argument( __FUNCTION__, 'WP-3.0.0' );
+ *         _deprecated_argument( __FUNCTION__, '3.0.0' );
  *     }
  *
  *
@@ -6285,7 +6285,7 @@ function wp_is_uuid( $uuid, $version = null ) {
 
 	if ( is_numeric( $version ) ) {
 		if ( 4 !== (int) $version ) {
-			_doing_it_wrong( __FUNCTION__, __( 'Only UUID V4 is supported at this time.' ), 'WP-4.9.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'Only UUID V4 is supported at this time.' ), '4.9.0' );
 			return false;
 		}
 		$regex = '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';

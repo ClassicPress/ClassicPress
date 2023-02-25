@@ -336,11 +336,11 @@ class WP_REST_Terms_Controller extends WP_REST_Controller {
 		$per_page = (int) $prepared_args['number'];
 		$page     = ceil( ( ( (int) $prepared_args['offset'] ) / $per_page ) + 1 );
 
-		$response->header( 'X-WP-Total', (int) $total_terms );
+		$response->header( 'X-Total', (int) $total_terms );
 
 		$max_pages = ceil( $total_terms / $per_page );
 
-		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+		$response->header( 'X-TotalPages', (int) $max_pages );
 
 		$base = add_query_arg( $request->get_query_params(), rest_url( $this->namespace . '/' . $this->rest_base ) );
 		if ( $page > 1 ) {

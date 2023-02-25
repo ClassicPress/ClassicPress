@@ -43,7 +43,7 @@ function get_categories( $args = '' ) {
 	if ( isset( $args['type'] ) && 'link' === $args['type'] ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-3.0.0',
+			'3.0.0',
 			/* translators: 1: "type => link", 2: "taxonomy => link_category" */
 			sprintf(
 				__( '%1$s is deprecated. Use %2$s instead.' ),

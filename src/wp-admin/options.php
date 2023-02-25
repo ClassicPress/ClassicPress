@@ -269,7 +269,7 @@ if ( 'update' === $action ) { // We are saving settings sent from a settings pag
 			if ( $unregistered ) {
 				_deprecated_argument(
 					'options.php',
-					'WP-2.7.0',
+					'2.7.0',
 					sprintf(
 						/* translators: %s: the option/setting */
 						__( 'The %s setting is unregistered. Unregistered settings are deprecated. See https://codex.wordpress.org/Settings_API' ),

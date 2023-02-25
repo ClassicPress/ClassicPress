@@ -2593,7 +2593,7 @@ function wp_mediaelement_fallback( $url ) {
 }
 
 /**
- * Returns a filtered list of WP-supported audio formats.
+ * Returns a filtered list of supported audio formats.
  *
  * @since 3.6.0
  *
@@ -2828,7 +2828,7 @@ function wp_audio_shortcode( $attr, $content = '' ) {
 add_shortcode( 'audio', 'wp_audio_shortcode' );
 
 /**
- * Returns a filtered list of WP-supported video formats.
+ * Returns a filtered list of supported video formats.
  *
  * @since 3.6.0
  *
@@ -3499,7 +3499,7 @@ function wp_plupload_default_settings() {
 	}
 
 	/*
-	 * Since WP-4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
+	 * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
 	 * and the `flash_swf_url` and `silverlight_xap_url` are not used.
 	 */
 	$defaults = array(

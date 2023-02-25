@@ -271,13 +271,13 @@ function wp_stream_image( $image, $mime_type, $attachment_id ) {
 
 		return true;
 	} else {
-		_deprecated_argument( __FUNCTION__, 'WP-3.5.0', __( '$image needs to be an WP_Image_Editor object' ) );
+		_deprecated_argument( __FUNCTION__, '3.5.0', __( '$image needs to be an WP_Image_Editor object' ) );
 
 		/**
 		 * Filters the GD image resource to be streamed to the browser.
 		 *
 		 * @since 2.9.0
-		 * @deprecated WP-3.5.0 Use image_editor_save_pre instead.
+		 * @deprecated 3.5.0 Use image_editor_save_pre instead.
 		 *
 		 * @param resource|GdImage $image         Image resource to be streamed.
 		 * @param int              $attachment_id The attachment post ID.
@@ -337,7 +337,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 
 		return $image->save( $filename, $mime_type );
 	} else {
-		_deprecated_argument( __FUNCTION__, 'WP-3.5.0', __( '$image needs to be an WP_Image_Editor object' ) );
+		_deprecated_argument( __FUNCTION__, '3.5.0', __( '$image needs to be an WP_Image_Editor object' ) );
 
 		/** This filter is documented in wp-admin/includes/image-edit.php */
 		$image = apply_filters( 'image_save_pre', $image, $post_id );
@@ -349,7 +349,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 		 * returning that value instead.
 		 *
 		 * @since 2.9.0
-		 * @deprecated WP-3.5.0 Use wp_save_image_editor_file instead.
+		 * @deprecated 3.5.0 Use wp_save_image_editor_file instead.
 		 *
 		 * @param mixed           $override  Value to return instead of saving. Default null.
 		 * @param string          $filename  Name of the file to be saved.
@@ -360,7 +360,7 @@ function wp_save_image_file( $filename, $image, $mime_type, $post_id ) {
 		$saved = apply_filters_deprecated(
 			'wp_save_image_file',
 			array( null, $filename, $image, $mime_type, $post_id ),
-			'WP-3.5.0',
+			'3.5.0',
 			'wp_save_image_editor_file'
 		);
 
@@ -401,7 +401,7 @@ function _image_get_preview_ratio( $w, $h ) {
  * Returns an image resource. Internal use only.
  *
  * @since 2.9.0
- * @deprecated WP-3.5.0 Use WP_Image_Editor::rotate()
+ * @deprecated 3.5.0 Use WP_Image_Editor::rotate()
  * @see WP_Image_Editor::rotate()
  *
  * @ignore
@@ -410,7 +410,7 @@ function _image_get_preview_ratio( $w, $h ) {
  * @return resource|GdImage|false GD image resource or GdImage instance, false otherwise.
  */
 function _rotate_image_resource( $img, $angle ) {
-	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::rotate()' );
+	_deprecated_function( __FUNCTION__, '3.5.0', 'WP_Image_Editor::rotate()' );
 
 	if ( function_exists( 'imagerotate' ) ) {
 		$rotated = imagerotate( $img, $angle, 0 );
@@ -428,7 +428,7 @@ function _rotate_image_resource( $img, $angle ) {
  * Flips an image resource. Internal use only.
  *
  * @since 2.9.0
- * @deprecated WP-3.5.0 Use WP_Image_Editor::flip()
+ * @deprecated 3.5.0 Use WP_Image_Editor::flip()
  * @see WP_Image_Editor::flip()
  *
  * @ignore
@@ -438,7 +438,7 @@ function _rotate_image_resource( $img, $angle ) {
  * @return resource|GdImage (maybe) flipped image resource or GdImage instance.
  */
 function _flip_image_resource( $img, $horz, $vert ) {
-	_deprecated_function( __FUNCTION__, 'WP-3.5.0', 'WP_Image_Editor::flip()' );
+	_deprecated_function( __FUNCTION__, '3.5.0', 'WP_Image_Editor::flip()' );
 
 	$w   = imagesx( $img );
 	$h   = imagesy( $img );
@@ -497,7 +497,7 @@ function _crop_image_resource( $img, $x, $y, $w, $h ) {
 function image_edit_apply_changes( $image, $changes ) {
 	if ( is_gd_image( $image ) ) {
 		/* translators: 1: $image, 2: WP_Image_Editor */
-		_deprecated_argument( __FUNCTION__, 'WP-3.5.0', sprintf( __( '%1$s needs to be a %2$s object.' ), '$image', 'WP_Image_Editor' ) );
+		_deprecated_argument( __FUNCTION__, '3.5.0', sprintf( __( '%1$s needs to be a %2$s object.' ), '$image', 'WP_Image_Editor' ) );
 	}
 
 	if ( ! is_array( $changes ) ) {
@@ -565,7 +565,7 @@ function image_edit_apply_changes( $image, $changes ) {
 		 * Filters the GD image resource before applying changes to the image.
 		 *
 		 * @since 2.9.0
-		 * @deprecated WP-3.5.0 Use wp_image_editor_before_change instead.
+		 * @deprecated 3.5.0 Use wp_image_editor_before_change instead.
 		 *
 		 * @param resource|GdImage $image   GD image resource or GdImage instance.
 		 * @param array            $changes Array of change operations.

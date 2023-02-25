@@ -19,7 +19,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Constructor.
 	 *
-	 * @since  WP-4.8.0
+	 * @since  4.8.0
 	 */
 	public function __construct() {
 		parent::__construct(
@@ -55,7 +55,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Get schema for properties of a widget instance (item).
 	 *
-	 * @since  WP-4.8.0
+	 * @since  4.8.0
 	 *
 	 * @see WP_REST_Controller::get_item_schema()
 	 * @see WP_REST_Controller::get_additional_fields()
@@ -105,7 +105,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	/**
 	 * Render the media on the frontend.
 	 *
-	 * @since  WP-4.8.0
+	 * @since  4.8.0
 	 *
 	 * @param array $instance Widget instance props.
 	 *

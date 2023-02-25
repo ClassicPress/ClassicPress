@@ -18,7 +18,7 @@
 global $_old_files;
 
 $_old_files = array(
-	// Added in WP-5.0.0, not included in ClassicPress
+	// Added in 5.0.0, not included in ClassicPress
 	'wp-admin/includes/credits.php',
 	'wp-admin/edit-form-blocks.php',
 	'wp-includes/blocks',
@@ -36,7 +36,7 @@ $_old_files = array(
 	'wp-includes/class-wp-block-type-registry.php',
 	// Removed in 1.0.0-rc1
 	'wp-admin/includes/class-wp-community-events.php',
-	// Added in WP-5.2.3 or older, not included in ClassicPress
+	// Added in 5.2.3 or older, not included in ClassicPress
 	'wp-admin/css/site-health-rtl.css',
 	'wp-admin/css/site-health-rtl.min.css',
 	'wp-admin/css/site-health.css',

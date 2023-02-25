@@ -423,7 +423,7 @@ function validate_another_blog_signup() {
 	 * Use the {@see 'add_signup_meta'} filter instead.
 	 *
 	 * @since MU (3.0.0)
-	 * @deprecated WP-3.0.0 Use the {@see 'add_signup_meta'} filter instead.
+	 * @deprecated 3.0.0 Use the {@see 'add_signup_meta'} filter instead.
 	 *
 	 * @param array $blog_meta_defaults An array of default blog meta variables.
 	 */

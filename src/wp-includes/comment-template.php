@@ -836,10 +836,10 @@ function get_comments_link( $post_id = 0 ) {
  */
 function comments_link( $deprecated = '', $deprecated_2 = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-0.72' );
+		_deprecated_argument( __FUNCTION__, '0.72' );
 	}
 	if ( ! empty( $deprecated_2 ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-1.3.0' );
+		_deprecated_argument( __FUNCTION__, '1.3.0' );
 	}
 	echo esc_url( get_comments_link() );
 }
@@ -886,7 +886,7 @@ function get_comments_number( $post_id = 0 ) {
  */
 function comments_number( $zero = false, $one = false, $more = false, $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-1.3.0' );
+		_deprecated_argument( __FUNCTION__, '1.3.0' );
 	}
 	echo get_comments_number_text( $zero, $one, $more );
 }
@@ -1161,7 +1161,7 @@ function trackback_url( $deprecated_echo = true ) {
 	if ( true !== $deprecated_echo ) {
 		_deprecated_argument(
 			__FUNCTION__,
-			'WP-2.5.0',
+			'2.5.0',
 			/* translators: %s: get_trackback_url() */
 			sprintf(
 				__( 'Use %s instead if you do not want the value echoed.' ),
@@ -1180,7 +1180,7 @@ function trackback_url( $deprecated_echo = true ) {
 /**
  * Generate and display the RDF for the trackback information of current post.
  *
- * Deprecated in WP-3.0.0, and restored in WP-3.0.1.
+ * Deprecated in 3.0.0, and restored in 3.0.1.
  *
  * @since 0.71
  *
@@ -1188,7 +1188,7 @@ function trackback_url( $deprecated_echo = true ) {
  */
 function trackback_rdf( $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
-		_deprecated_argument( __FUNCTION__, 'WP-2.5.0' );
+		_deprecated_argument( __FUNCTION__, '2.5.0' );
 	}
 
 	if ( isset( $_SERVER['HTTP_USER_AGENT'] ) && false !== stripos( $_SERVER['HTTP_USER_AGENT'], 'W3C_Validator' ) ) {
@@ -1267,11 +1267,11 @@ function pings_open( $post_id = null ) {
  * Will only display nonce token if the current user has permissions for
  * unfiltered html. Won't display the token for other users.
  *
- * The function was backported to WP-2.0.10 and was added to versions WP-2.1.3 and
- * above. Does not exist in versions prior to WP-2.0.10 in the WP-2.0 branch and in
- * the WP-2.1 branch, prior to WP-2.1.3. Technically added in WP-2.2.0.
+ * The function was backported to 2.0.10 and was added to versions 2.1.3 and
+ * above. Does not exist in versions prior to 2.0.10 in the 2.0 branch and in
+ * the 2.1 branch, prior to 2.1.3. Technically added in 2.2.0.
  *
- * Backported to WP-2.0.10.
+ * Backported to 2.0.10.
  *
  * @since 2.1.3
  */

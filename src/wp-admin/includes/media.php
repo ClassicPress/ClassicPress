@@ -626,7 +626,7 @@ function media_buttons( $editor_id = 'content' ) {
 	 * Use {@see 'media_buttons'} action instead.
 	 *
 	 * @since 2.5.0
-	 * @deprecated WP-3.5.0 Use {@see 'media_buttons'} action instead.
+	 * @deprecated 3.5.0 Use {@see 'media_buttons'} action instead.
 	 *
 	 * @param string $string Media buttons context. Default empty.
 	 */
@@ -2047,7 +2047,7 @@ function media_upload_form( $errors = null ) {
 	$post_params = apply_filters( 'upload_post_params', $post_params );
 
 	/*
-	* Since WP-4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
+	* Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
 	* and the `flash_swf_url` and `silverlight_xap_url` are not used.
 	*/
 	$plupload_init = array(
