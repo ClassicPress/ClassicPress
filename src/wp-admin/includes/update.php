@@ -106,7 +106,7 @@ function find_core_auto_update() {
  * Gets the checksums for the given version of ClassicPress.
  *
  * @since WP-3.7.0
- * @since 1.3.0 Correctly returns checksums for the given ClassicPress version,
+ * @since CP-1.3.0 Correctly returns checksums for the given ClassicPress version,
  * not the WordPress version. The $locale parameter is now ignored.
  *
  * @param string $version Version string to query.

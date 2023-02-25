@@ -499,7 +499,7 @@ function update_core( $from, $to ) {
 	/**
 	 * Fires after ClassicPress core has been successfully updated.
 	 *
-	 * @since 1.0.0
+	 * @since CP-1.0.0
 	 *
 	 * @param string $cp_version The current ClassicPress version.
 	 */
@@ -532,7 +532,7 @@ function update_core( $from, $to ) {
  * This function is a duplicate copy of `get_core_checksums()` to ensure the
  * new code is loaded and used when updating from a pre-1.3.0 version.
  *
- * @since 1.3.0
+ * @since CP-1.3.0
  *
  * @param string $version Version string to query.
  * @return bool|array False on failure. An array of checksums on success.
@@ -596,7 +596,7 @@ function cp_get_core_checksums( $version ) {
  * complicated and this is the simplest way to make sure that this code is
  * always available.
  *
- * @since 1.0.0
+ * @since CP-1.0.0
  *
  * @param string $working_dir The directory where a ClassicPress update package
  *                            has been extracted.

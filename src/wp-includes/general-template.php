@@ -4465,7 +4465,7 @@ function wp_heartbeat_settings( $settings ) {
  * showing the ClassicPress logo (the default) or the site's custom login image
  * (if enabled).
  *
- * @since 1.2.0
+ * @since CP-1.2.0
  */
 function get_login_image_html() {
 	/**
@@ -4573,7 +4573,7 @@ function get_login_image_html() {
 	/**
 	 * Filters the HTML for the image displayed on the login page.
 	 *
-	 * @since 1.1.0
+	 * @since CP-1.1.0
 	 *
 	 * @param string $html The proposed login image HTML.
 	 * @param array  $args {

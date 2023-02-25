@@ -37,7 +37,7 @@ require ABSPATH . WPINC . '/functions.wp-styles.php';
 /**
  * Returns a cache buster string for an enqueued script or stylesheet.
  *
- * @since 1.0.0
+ * @since CP-1.0.0
  *
  * @param string $type    The type of asset being enqueued ('script' or 'style').
  * @param string $handle  The handle of the asset being enqueued (or `null` to
@@ -59,7 +59,7 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	/**
 	 * Allows modifying the asset version for each script and style.
 	 *
-	 * @since 1.0.0
+	 * @since CP-1.0.0
 	 *
 	 * @param string $version The default version for this asset.
 	 * @param string $type    The type of asset being enqueued ('script' or 'style').

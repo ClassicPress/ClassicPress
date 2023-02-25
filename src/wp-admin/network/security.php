@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Multisite
- * @since 1.1.0
+ * @since CP-1.1.0
  */
 
 /** Load ClassicPress Administration Bootstrap */

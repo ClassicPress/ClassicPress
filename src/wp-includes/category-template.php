@@ -1327,7 +1327,7 @@ function get_the_term_list( $post_id, $taxonomy, $before = '', $sep = '', $after
  * Retrieve term parents with separator.
  *
  * @since WP-4.8.0
- * @since 1.4.0 Added the `$parents_first` parameter.
+ * @since CP-1.4.0 Added the `$parents_first` parameter.
  *
  * @param int     $term_id  Term ID.
  * @param string  $taxonomy Taxonomy name.

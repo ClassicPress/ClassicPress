@@ -102,7 +102,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * Please exercise extreme caution.
 	 *
 	 * @since WP-4.9.0
-	 * @since 1.0.0 Added `extra_stats`, `failure_data`, and `translations`
+	 * @since CP-1.0.0 Added `extra_stats`, `failure_data`, and `translations`
 	 * parameters to query (in WP these are passed in a POST body).
 	 *
 	 * @param array $query {

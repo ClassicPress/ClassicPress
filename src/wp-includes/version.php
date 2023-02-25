@@ -76,7 +76,7 @@ $required_mysql_version = '5.0';
  * `function_exists( 'classicpress_version' )` is the recommended way for
  * plugins and themes to determine whether they are running under ClassicPress.
  *
- * @since 1.0.0
+ * @since CP-1.0.0
  *
  * @return string The ClassicPress version string.
  */
@@ -90,7 +90,7 @@ if ( ! function_exists( 'classicpress_version' ) ) {
 /**
  * Return the ClassicPress version number without any alpha/beta/etc suffixes.
  *
- * @since 1.0.0
+ * @since CP-1.0.0
  *
  * @return string The ClassicPress version number with no suffix.
  */
@@ -108,7 +108,7 @@ if ( ! function_exists( 'classicpress_version_short' ) ) {
  * This is mostly supported, but there are a few things that need to work
  * slightly differently or need to be disabled.
  *
- * @since 1.0.0
+ * @since CP-1.0.0
  *
  * @return bool Whether ClassicPress is running as a source install.
  */

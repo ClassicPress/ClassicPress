@@ -56,7 +56,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * complicated and this is the simplest way to make sure that this code is
 	 * always available.
 	 *
-	 * @since 1.0.0
+	 * @since CP-1.0.0
 	 *
 	 * @param string $working_dir The directory where a ClassicPress update package
 	 *                            has been extracted.
@@ -300,7 +300,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @note This method is intended for internal use only!  It is only public
 	 * so that it can be unit-tested.
 	 *
-	 * @since 1.0.0
+	 * @since CP-1.0.0
 	 *
 	 * @param string $ver_current      The current version of ClassicPress.
 	 * @param string $ver_offered      The proposed version of ClassicPress.
@@ -392,7 +392,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * Filters whether to enable automatic core updates for nightly
 			 * releases.
 			 *
-			 * @since 1.0.0
+			 * @since CP-1.0.0
 			 *
 			 * @param bool $upgrade_nightly Whether to enable automatic updates
 			 *                              for nightly releases.
@@ -452,7 +452,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * @see https://semver.org/
 			 *
 			 * @since WP-3.7.0
-			 * @since 1.0.0 Version numbering scheme changed from WordPress
+			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
 			 * @param bool $upgrade_major Whether to enable automatic updates
@@ -477,7 +477,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * semver minor release.
 			 *
 			 * @since WP-3.7.0
-			 * @since 1.0.0 Version numbering scheme changed from WordPress
+			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
 			 * @param bool $upgrade_minor Whether to enable automatic updates
@@ -499,7 +499,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * Filters whether to enable automatic core updates to a newer
 			 * semver patch release.
 			 *
-			 * @since 1.0.0
+			 * @since CP-1.0.0
 			 *
 			 * @param bool $upgrade_patch Whether to enable automatic updates
 			 *                            to a newer semver patch release.
@@ -530,7 +530,7 @@ class Core_Upgrader extends WP_Upgrader {
 			 * semver version, or the final release of the same semver version.
 			 *
 			 * @since WP-3.7.0
-			 * @since 1.0.0 Version numbering scheme changed from WordPress
+			 * @since CP-1.0.0 Version numbering scheme changed from WordPress
 			 * to ClassicPress (semver). New parameters $current and $offered.
 			 *
 			 * @param bool $upgrade_dev Whether to enable automatic updates
@@ -609,7 +609,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * Compare the disk file checksums against the expected checksums.
 	 *
 	 * @since WP-3.7.0
-	 * @since 1.3.0 Correctly uses the checksums for the current ClassicPress
+	 * @since CP-1.3.0 Correctly uses the checksums for the current ClassicPress
 	 * version, not the equivalent WordPress version. This function is no
 	 * longer used during the core update process.
 	 *
